@@ -1,0 +1,5 @@
+\mainpage
+
+#####################
+Hesiod documentation!
+#####################

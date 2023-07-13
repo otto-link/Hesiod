@@ -1,0 +1,14 @@
+AlignConsecutiveDeclarations: true
+AllowAllArgumentsOnNextLine: false
+AllowAllParametersOfDeclarationOnNextLine: false
+AllowShortFunctionsOnASingleLine: None
+
+BasedOnStyle: llvm
+BinPackArguments: false
+BinPackParameters: false
+BreakBeforeBraces: Allman
+
+ColumnLimit: 80
+
+PenaltyBreakAssignment: 100
+PenaltyReturnTypeOnItsOwnLine: 1000
