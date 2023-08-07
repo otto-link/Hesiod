@@ -1,3 +1,15 @@
 [submodule "external/HighMap"]
 	path = external/HighMap
 	url = git@github.com:otto-link/HighMap.git
+[submodule "external/gnode"]
+	path = external/GNode
+	url = git@github.com:otto-link/GNode.git
+[submodule "external/macro-logger"]
+	path = external/macro-logger
+	url = git@github.com:dmcrodrigues/macro-logger.git
+[submodule "external/imgui"]
+	path = external/imgui
+	url = git@github.com:ocornut/imgui.git
+[submodule "external/imnodes_fork"]
+	path = external/imnodes_fork
+	url = git@github.com:otto-link/imnodes.git

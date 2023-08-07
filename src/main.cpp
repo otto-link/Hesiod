@@ -1,5 +1,8 @@
 #include <iostream>
 
+#include "macrologger.h"
+
+#include "gnode.hpp"
 #include "highmap.hpp"
 
 int main()
