@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # directories to be formatted (recursive search)
-DIRS="include src examples tests"
+DIRS="include src"
 # FORMAT_CMD="clang-format --style=LLVM -i {}"
 FORMAT_CMD="clang-format -style=file:scripts/clang_style -i {}"
 
