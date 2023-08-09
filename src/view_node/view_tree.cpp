@@ -43,6 +43,17 @@ GNodeMapping ViewTree::get_control_nodes_map()
   return this->p_control_tree->get_nodes_map();
 }
 
+Link *ViewTree::get_link_ref_by_id(int link_id)
+{
+  if (this->links.contains(link_id))
+    return &(this->links[link_id]);
+  else
+  {
+    LOG_ERROR("link id [%d] is not known", link_id);
+    throw std::runtime_error("unknonw link Id");
+  }
+}
+
 void ViewTree::generate_all_links(bool force_update)
 {
   LOG_DEBUG("generating Links...");
@@ -99,6 +110,17 @@ void ViewTree::generate_view_node_from_control_node(std::string control_node_id)
         generate_view_from_control<hesiod::cnode::Perlin,
                                    hesiod::vnode::ViewPerlin>(p_cnode);
   }
+}
+
+void ViewTree::remove_link(int link_id)
+{
+  Link *p_link = this->get_link_ref_by_id(link_id);
+  this->p_control_tree->unlink(p_link->node_id_from,
+                               p_link->port_id_from,
+                               p_link->node_id_to,
+                               p_link->port_id_to);
+
+  this->links.erase(link_id);
 }
 
 void ViewTree::render_links()

@@ -44,11 +44,15 @@ public:
 
   GNodeMapping get_control_nodes_map();
 
+  Link *get_link_ref_by_id(int link_id);
+
   void generate_all_links(bool force_update = false);
 
   void generate_all_view_nodes(bool force_update = false);
 
   void generate_view_node_from_control_node(std::string control_node_id);
+
+  void remove_link(int link_id);
 
   void render_links();
 

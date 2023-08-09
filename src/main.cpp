@@ -108,6 +108,23 @@ int main()
 
     ImGui::End();
 
+    // --- links management
+    const int num_selected_links = ImNodes::NumSelectedLinks();
+
+    if ((num_selected_links > 0) & (ImGui::IsKeyReleased(ImGuiKey_Delete) or
+                                    ImGui::IsKeyReleased(ImGuiKey_X)))
+    {
+      std::vector<int> selected_links;
+      selected_links.resize(num_selected_links);
+      ImNodes::GetSelectedLinks(selected_links.data());
+
+      for (auto &v : selected_links)
+      {
+        std::cout << v << "\n";
+        gui_tree.remove_link(v);
+      }
+    }
+
     // --- Rendering
     ImGui::Render();
     int display_w, display_h;
