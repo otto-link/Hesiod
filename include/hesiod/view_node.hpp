@@ -27,12 +27,15 @@ public:
     throw std::runtime_error("undefined 'render' method");
   }
 
+  void render_node();
+
   bool render_settings_header();
 
   bool render_settings_footer();
 
 private:
   gnode::Node *p_control_node;
+  float        node_width = 128.f;
 };
 
 class ViewGammaCorrection : public ViewNode

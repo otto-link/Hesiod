@@ -2,6 +2,7 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include "gnode.hpp"
+#include "imnodes.h"
 
 #include "hesiod/view_node.hpp"
 
@@ -13,6 +14,61 @@ ViewNode::ViewNode(gnode::Node *p_control_node) : p_control_node(p_control_node)
   this->id = this->p_control_node->id;
   this->label = this->p_control_node->label;
   this->auto_update = this->p_control_node->auto_update;
+}
+
+void ViewNode::render_node()
+{
+  ImNodes::BeginNode(this->p_control_node->hash_id);
+  ImNodes::BeginNodeTitleBar();
+  ImGui::TextUnformatted(this->p_control_node->label.c_str());
+  ImNodes::EndNodeTitleBar();
+
+  // inputs
+  for (auto &[port_id, port] : this->p_control_node->get_ports())
+    if (port.direction == gnode::direction::in)
+    {
+      ImNodes::BeginInputAttribute(port.hash_id);
+      if (port.is_optional)
+        ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.f), port.label.c_str());
+      else
+        ImGui::TextUnformatted(port.label.c_str());
+      ImNodes::EndInputAttribute();
+    }
+
+  // outputs
+  for (auto &[port_id, port] : this->p_control_node->get_ports())
+    if (port.direction == gnode::direction::out)
+    {
+      const char *txt = port.label.c_str();
+      ImNodes::BeginOutputAttribute(port.hash_id);
+      const float text_width = ImGui::CalcTextSize(txt).x;
+      ImGui::Indent(this->node_width - text_width);
+      ImGui::TextUnformatted(txt);
+      ImNodes::EndOutputAttribute();
+    }
+
+  // // preview
+  // ImGui::Checkbox("Preview", &this->show_preview);
+  // if (this->show_preview)
+  // {
+  //   if (preview_port_id != "")
+  //     this->update_preview(); // TODO optimize: update only when
+  //                             // underlying data are modified
+
+  //   ImVec2 img_size = {(float)shape_preview.x, (float)shape_preview.y};
+  //   ImGui::Image((void *)(intptr_t)image_texture, img_size);
+
+  //   if (ImGui::BeginPopupContextItem("Preview type"))
+  //   {
+  //     if (ImGui::Selectable("grayscale"))
+  //       this->preview_type = preview_type::grayscale;
+  //     if (ImGui::Selectable("histogram"))
+  //       this->preview_type = preview_type::histogram;
+  //     ImGui::EndPopup();
+  //   }
+  // }
+
+  ImNodes::EndNode();
 }
 
 bool ViewNode::render_settings_header()

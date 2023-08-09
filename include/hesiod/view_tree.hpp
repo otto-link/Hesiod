@@ -19,8 +19,19 @@ struct Link
   // related to GNode and Hesiod
   std::string node_id_from;
   std::string port_id_from;
+  int         port_hash_id_from;
   std::string node_id_to;
   std::string port_id_to;
+  int         port_hash_id_to;
+
+  Link();
+
+  Link(std::string node_id_from,
+       std::string port_id_from,
+       int         port_hash_id_from,
+       std::string node_id_to,
+       std::string port_id_to,
+       int         port_hash_id_to);
 };
 
 class ViewTree
@@ -33,9 +44,15 @@ public:
 
   GNodeMapping get_control_nodes_map();
 
+  void generate_all_links(bool force_update = false);
+
   void generate_all_view_nodes(bool force_update = false);
 
   void generate_view_node_from_control_node(std::string control_node_id);
+
+  void render_links();
+
+  void render_view_nodes();
 
   void update();
 

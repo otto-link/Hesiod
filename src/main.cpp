@@ -26,6 +26,7 @@ int main()
                                                         overlap));
 
   tree.add_node(std::make_shared<hesiod::cnode::GammaCorrection>("gamma"));
+  tree.add_node(std::make_shared<hesiod::cnode::GammaCorrection>("gamma2"));
 
   tree.get_node_ref_by_id("perlin")->infos();
   tree.get_node_ref_by_id("gamma")->infos();
@@ -34,6 +35,7 @@ int main()
       ->set_gamma(4.f);
 
   tree.link("perlin", "output", "gamma", "input");
+  tree.link("gamma", "output", "gamma2", "input");
 
   // tree.update_node("perlin");
 
@@ -53,12 +55,10 @@ int main()
 
   gui_tree.update();
   gui_tree.generate_all_view_nodes();
+  gui_tree.generate_all_links();
 
   // gui_tree.view_nodes_mapping["gamma"].get()->render_settings();
   // gui_tree.view_nodes_mapping["perlin"].get()->render_settings();
-
-  hesiod::vnode::Link link =
-      hesiod::vnode::Link("perlin", "output", "gamma", "input");
 
   // DBG
   {
@@ -66,6 +66,8 @@ int main()
     hmap::HeightMap *p_h = (hmap::HeightMap *)p_node->get_p_data("output");
     p_h->to_array().to_png("out.png", hmap::cmap::inferno);
   }
+
+  tree.print_node_links();
 
   // ----------------------------------- Main GUI
 
@@ -84,6 +86,15 @@ int main()
     ImGui::NewFrame();
 
     // --- GUI content
+
+    ImGui::Begin("Node editor");
+    ImNodes::BeginNodeEditor();
+
+    gui_tree.render_view_nodes();
+    gui_tree.render_links();
+
+    ImNodes::EndNodeEditor();
+    ImGui::End();
 
     ImGui::Begin("Toto");
 
