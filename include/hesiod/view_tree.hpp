@@ -44,6 +44,8 @@ public:
 
   GNodeMapping get_control_nodes_map();
 
+  ViewNodeMapping get_view_nodes_map();
+
   Link *get_link_ref_by_id(int link_id);
 
   void generate_all_links(bool force_update = false);
@@ -60,7 +62,7 @@ public:
 
   void update();
 
-  // private: // TODO
+private:
   gnode::Tree        *p_control_tree;
   ViewNodeMapping     view_nodes_mapping;
   std::map<int, Link> links = {};

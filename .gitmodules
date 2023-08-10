@@ -4,6 +4,7 @@
 [submodule "external/gnode"]
 	path = external/GNode
 	url = git@github.com:otto-link/GNode.git
+	ignore = untracked
 [submodule "external/macro-logger"]
 	path = external/macro-logger
 	url = git@github.com:dmcrodrigues/macro-logger.git

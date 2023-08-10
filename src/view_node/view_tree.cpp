@@ -43,6 +43,11 @@ GNodeMapping ViewTree::get_control_nodes_map()
   return this->p_control_tree->get_nodes_map();
 }
 
+ViewNodeMapping ViewTree::get_view_nodes_map()
+{
+  return this->view_nodes_mapping;
+}
+
 Link *ViewTree::get_link_ref_by_id(int link_id)
 {
   if (this->links.contains(link_id))
@@ -59,8 +64,8 @@ void ViewTree::generate_all_links(bool force_update)
   LOG_DEBUG("generating Links...");
 
   for (auto &[id, cnode] : this->get_control_nodes_map())
-    for (auto &[port_id, port] :
-         cnode.get()->get_ports()) // scan control node outputs
+    // scan control node outputs
+    for (auto &[port_id, port] : cnode.get()->get_ports())
       if ((port.direction == gnode::direction::out) & port.is_connected)
       {
         // inputs are uniquely linked so that we can use their hash_id

@@ -38,6 +38,20 @@ void ViewNode::set_preview_port_id(std::string new_port_id)
   }
 }
 
+void ViewNode::set_preview_type(int new_preview_type)
+{
+  this->preview_type = new_preview_type;
+  this->update_preview();
+}
+
+void ViewNode::post_control_node_update()
+{
+  LOG_DEBUG("post-update, node [%s]", this->id.c_str());
+
+  if (this->preview_port_id != "")
+    this->update_preview();
+}
+
 void ViewNode::render_node()
 {
   ImNodes::BeginNode(this->p_control_node->hash_id);
@@ -81,11 +95,10 @@ void ViewNode::render_node()
     if (ImGui::BeginPopupContextItem("Preview type"))
     {
       if (ImGui::Selectable("grayscale"))
-        this->preview_type = preview_type::grayscale;
+        this->set_preview_type(preview_type::grayscale);
       if (ImGui::Selectable("histogram"))
-        this->preview_type = preview_type::histogram;
+        this->set_preview_type(preview_type::histogram);
       ImGui::EndPopup();
-      LOG_DEBUG("%d", this->preview_type);
     }
   }
 
@@ -147,24 +160,21 @@ bool ViewNode::render_settings_footer()
 void ViewNode::update_preview()
 {
   if (this->preview_port_id != "")
-  // if (this->p_control_node->get_p_data(this->preview_port_id))
-  {
-    LOG_DEBUG("%s", this->p_control_node->id.c_str());
-    hmap::HeightMap *p_h = (hmap::HeightMap *)this->p_control_node->get_p_data(
-        this->preview_port_id);
+    if (this->p_control_node->get_p_data(this->preview_port_id))
+    {
+      LOG_DEBUG("%s", this->p_control_node->id.c_str());
+      hmap::HeightMap *p_h = (hmap::HeightMap *)this->p_control_node
+                                 ->get_p_data(this->preview_port_id);
 
-    p_h->to_array().to_png(this->p_control_node->id + ".png",
-                           hmap::cmap::inferno);
+      std::vector<uint8_t> img = {};
 
-    std::vector<uint8_t> img = {};
+      if (this->preview_type == preview_type::grayscale)
+        img = hmap::colorize_grayscale(p_h->to_array(shape_preview));
+      else if (this->preview_type == preview_type::histogram)
+        img = hmap::colorize_histogram(p_h->to_array(shape_preview));
 
-    if (this->preview_type == preview_type::grayscale)
-      img = hmap::colorize_grayscale(p_h->to_array(shape_preview));
-    else if (this->preview_type == preview_type::histogram)
-      img = hmap::colorize_histogram(p_h->to_array(shape_preview));
-
-    img_to_texture(img, this->shape_preview, this->image_texture);
-  }
+      img_to_texture(img, this->shape_preview, this->image_texture);
+    }
 }
 
 // HELPERS

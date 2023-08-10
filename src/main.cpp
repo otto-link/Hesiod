@@ -87,13 +87,8 @@ int main()
 
     ImGui::Begin("Toto");
 
-    if (gui_tree.view_nodes_mapping["perlin"].get()->render_settings())
-    {
-      LOG_DEBUG("has changed");
-      gnode::Node     *p_node = tree.get_node_ref_by_id("perlin");
-      hmap::HeightMap *p_h = (hmap::HeightMap *)p_node->get_p_data("output");
-      p_h->to_array().to_png("out.png", hmap::cmap::inferno);
-    }
+    for (auto &[id, vnode] : gui_tree.get_view_nodes_map())
+      vnode.get()->render_settings();
 
     ImGui::End();
 

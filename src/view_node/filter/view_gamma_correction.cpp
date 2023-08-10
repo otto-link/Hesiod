@@ -18,8 +18,15 @@ ViewGammaCorrection::ViewGammaCorrection(
 bool ViewGammaCorrection::render_settings()
 {
   bool has_changed = false;
+  has_changed |= this->render_settings_header();
 
-  LOG_DEBUG("rendering settings...");
+  if (ImGui::SliderFloat("gamma", &this->gamma, 0.01f, 10.f))
+  {
+    this->p_control_node->set_gamma(this->gamma);
+    has_changed = true;
+  }
+
+  has_changed |= this->render_settings_footer();
   return has_changed;
 }
 

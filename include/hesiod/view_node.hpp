@@ -32,13 +32,9 @@ public:
 
   void set_preview_port_id(std::string new_port_id);
 
-  void post_control_node_update()
-  {
-    LOG_DEBUG("post-update, node [%s]", this->id.c_str());
+  void set_preview_type(int new_preview_type);
 
-    if (this->preview_port_id != "")
-      this->update_preview();
-  }
+  void post_control_node_update();
 
   virtual bool render_settings()
   {
@@ -70,6 +66,8 @@ private:
 class ViewGammaCorrection : public ViewNode
 {
 public:
+  float gamma = 1.f;
+
   ViewGammaCorrection(hesiod::cnode::GammaCorrection *p_control_node);
 
   bool render_settings();
