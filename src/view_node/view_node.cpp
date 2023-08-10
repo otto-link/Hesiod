@@ -9,11 +9,21 @@
 namespace hesiod::vnode
 {
 
+void post_update_callback_wrapper(ViewNode *p_vnode, gnode::Node *p_cnode)
+{
+  p_vnode->post_control_node_update();
+}
+
 ViewNode::ViewNode(gnode::Node *p_control_node) : p_control_node(p_control_node)
 {
   this->id = this->p_control_node->id;
   this->label = this->p_control_node->label;
   this->auto_update = this->p_control_node->auto_update;
+
+  auto lambda = [this](gnode::Node *p_cnode)
+  { post_update_callback_wrapper(this, p_cnode); };
+
+  this->p_control_node->set_post_update_callback(lambda);
 }
 
 void ViewNode::render_node()

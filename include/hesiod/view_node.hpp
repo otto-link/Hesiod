@@ -20,6 +20,11 @@ public:
 
   ViewNode(gnode::Node *p_control_node);
 
+  virtual void post_control_node_update()
+  {
+    LOG_DEBUG("post-update, node [%s]", this->id.c_str());
+  }
+
   virtual bool render_settings()
   {
     LOG_ERROR("Settings rendering not defined for generic node GUI [%s])",
@@ -66,5 +71,7 @@ private:
   hesiod::cnode::Perlin *p_control_node;
   bool                   link_kxy = true;
 };
+
+void post_update_callback_wrapper(ViewNode *p_vnode, gnode::Node *p_cnode);
 
 } // namespace hesiod::vnode
