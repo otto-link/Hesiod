@@ -42,7 +42,13 @@ public:
 
   ViewTree(gnode::Tree *p_control_tree);
 
+  gnode::Node *get_control_node_ref_by_hash_id(int control_node_hash_id);
+
   GNodeMapping get_control_nodes_map();
+
+  void get_ids_by_port_hash_id(int          port_hash_id,
+                               std::string &node_id,
+                               std::string &port_id);
 
   ViewNodeMapping get_view_nodes_map();
 
@@ -54,6 +60,8 @@ public:
 
   void generate_view_node_from_control_node(std::string control_node_id);
 
+  void new_link(int port_hash_id_from, int port_hash_id_to);
+
   void remove_link(int link_id);
 
   void render_links();
@@ -61,6 +69,8 @@ public:
   void render_view_nodes();
 
   void update();
+
+  void update_node(std::string node_id);
 
 private:
   gnode::Tree        *p_control_tree;

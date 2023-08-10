@@ -92,7 +92,15 @@ int main()
 
     ImGui::End();
 
-    // --- links management
+    // --- links management // new
+    int port_hash_id_from, port_hash_id_to;
+    if (ImNodes::IsLinkCreated(&port_hash_id_from, &port_hash_id_to))
+    {
+      LOG_DEBUG("link created: %d <-> %d", port_hash_id_from, port_hash_id_to);
+      gui_tree.new_link(port_hash_id_from, port_hash_id_to);
+    }
+
+    // --- links management // destruction
     const int num_selected_links = ImNodes::NumSelectedLinks();
 
     if ((num_selected_links > 0) & (ImGui::IsKeyReleased(ImGuiKey_Delete) or

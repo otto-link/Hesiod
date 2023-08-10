@@ -38,9 +38,45 @@ ViewTree::ViewTree(gnode::Tree *p_control_tree) : p_control_tree(p_control_tree)
   this->label = this->p_control_tree->label;
 }
 
+gnode::Node *ViewTree::get_control_node_ref_by_hash_id(int control_node_hash_id)
+{
+  gnode::Node *p_cnode = nullptr;
+
+  // scan control nodes and their ports to find the
+  for (auto &[id, cnode] : this->get_control_nodes_map())
+    if (cnode.get()->hash_id == control_node_hash_id)
+    {
+      p_cnode = cnode.get();
+      break;
+    }
+
+  if (!p_cnode)
+  {
+    LOG_ERROR("node hash id [%d] is not known", control_node_hash_id);
+    throw std::runtime_error("unknonw node hash_id");
+  }
+
+  return p_cnode;
+}
+
 GNodeMapping ViewTree::get_control_nodes_map()
 {
   return this->p_control_tree->get_nodes_map();
+}
+
+void ViewTree::get_ids_by_port_hash_id(int          port_hash_id,
+                                       std::string &node_id,
+                                       std::string &port_id)
+{
+  // scan control nodes and their ports to find the
+  for (auto &[nid, cnode] : this->get_control_nodes_map())
+    for (auto &[pid, port] : cnode.get()->get_ports())
+      if (port.hash_id == port_hash_id)
+      {
+        node_id = nid;
+        port_id = pid;
+        break;
+      }
 }
 
 ViewNodeMapping ViewTree::get_view_nodes_map()
@@ -117,6 +153,41 @@ void ViewTree::generate_view_node_from_control_node(std::string control_node_id)
   }
 }
 
+void ViewTree::new_link(int port_hash_id_from, int port_hash_id_to)
+{
+  LOG_DEBUG("%d -> %d", port_hash_id_from, port_hash_id_to);
+
+  // find corresponding nodes
+  std::string node_id_from;
+  std::string port_id_from;
+  std::string node_id_to;
+  std::string port_id_to;
+
+  this->get_ids_by_port_hash_id(port_hash_id_from, node_id_from, port_id_from);
+
+  this->get_ids_by_port_hash_id(port_hash_id_to, node_id_to, port_id_to);
+
+  // generate link (in GNode)
+  this->p_control_tree->link(node_id_from,
+                             port_id_from,
+                             node_id_to,
+                             port_id_to);
+
+  // use input hash id for the link id
+  Link link = Link(node_id_from,
+                   port_id_from,
+                   port_hash_id_from,
+                   node_id_to,
+                   port_id_to,
+                   port_hash_id_to);
+
+  int link_id = port_hash_id_to;
+  this->links[link_id] = link;
+
+  // propagate from the source
+  this->update_node(node_id_from);
+}
+
 void ViewTree::remove_link(int link_id)
 {
   Link *p_link = this->get_link_ref_by_id(link_id);
@@ -126,6 +197,9 @@ void ViewTree::remove_link(int link_id)
                                p_link->port_id_to);
 
   this->links.erase(link_id);
+
+  // only nodes downstream "from" node (excluded) are affected
+  this->update_node(p_link->node_id_to);
 }
 
 void ViewTree::render_links()
@@ -143,6 +217,11 @@ void ViewTree::render_view_nodes()
 void ViewTree::update()
 {
   this->p_control_tree->update();
+}
+
+void ViewTree::update_node(std::string node_id)
+{
+  this->p_control_tree->update_node(node_id);
 }
 
 template <class TControl, class TView>
