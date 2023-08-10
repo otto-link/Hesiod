@@ -94,6 +94,23 @@ private:
   bool                   link_kxy = true;
 };
 
+class ViewWhiteDensityMap : public ViewNode
+{
+public:
+  int   seed;
+  float vmin;
+  float vmax;
+
+  ViewWhiteDensityMap(hesiod::cnode::WhiteDensityMap *p_control_node);
+
+  bool render_settings();
+
+private:
+  hesiod::cnode::WhiteDensityMap *p_control_node;
+};
+
+// HELPERS
+
 void img_to_texture(std::vector<uint8_t> img,
                     hmap::Vec2<int>      shape,
                     GLuint              &image_texture);

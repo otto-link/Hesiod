@@ -28,14 +28,12 @@ int main()
   tree.add_node(std::make_shared<hesiod::cnode::GammaCorrection>("gamma"));
   tree.add_node(std::make_shared<hesiod::cnode::GammaCorrection>("gamma2"));
 
+  tree.add_node(std::make_shared<hesiod::cnode::WhiteDensityMap>("whitedmap"));
+
   tree.get_node_ref_by_id("perlin")->infos();
   tree.get_node_ref_by_id("gamma")->infos();
 
-  ((hesiod::cnode::GammaCorrection *)tree.get_node_ref_by_id("gamma"))
-      ->set_gamma(2.f);
-
-  ((hesiod::cnode::GammaCorrection *)tree.get_node_ref_by_id("gamma2"))
-      ->set_gamma(4.f);
+  tree.get_node_ref_by_id("whitedmap")->infos();
 
   tree.link("perlin", "output", "gamma", "input");
   tree.link("gamma", "output", "gamma2", "input");

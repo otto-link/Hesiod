@@ -151,6 +151,17 @@ void ViewTree::generate_view_node_from_control_node(std::string control_node_id)
         generate_view_from_control<hesiod::cnode::Perlin,
                                    hesiod::vnode::ViewPerlin>(p_cnode);
   }
+  else if (p_cnode->get_node_type() == "WhiteDensityMap")
+  {
+    this->view_nodes_mapping[p_cnode->id] =
+        generate_view_from_control<hesiod::cnode::WhiteDensityMap,
+                                   hesiod::vnode::ViewWhiteDensityMap>(p_cnode);
+  }
+  else
+  {
+    LOG_ERROR("unknown node type: [%s]", p_cnode->get_node_type().c_str());
+    throw std::runtime_error("unknown node type");
+  }
 }
 
 void ViewTree::new_link(int port_hash_id_from, int port_hash_id_to)

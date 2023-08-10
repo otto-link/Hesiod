@@ -56,7 +56,9 @@ void ViewNode::render_node()
 {
   ImNodes::BeginNode(this->p_control_node->hash_id);
   ImNodes::BeginNodeTitleBar();
-  ImGui::TextUnformatted(this->p_control_node->label.c_str());
+
+  ImGui::TextUnformatted(this->p_control_node->get_node_type().c_str());
+  ImGui::TextUnformatted(this->p_control_node->label.c_str()); // TODO remove
   ImNodes::EndNodeTitleBar();
 
   // inputs
@@ -84,21 +86,24 @@ void ViewNode::render_node()
     }
 
   // preview
-  ImGui::Checkbox("Preview", &this->show_preview);
-  if (this->show_preview & (this->preview_port_id != ""))
+  if (this->preview_port_id != "")
   {
-    ImVec2 img_size = {(float)this->shape_preview.x,
-                       (float)this->shape_preview.y};
-
-    ImGui::Image((void *)(intptr_t)this->image_texture, img_size);
-
-    if (ImGui::BeginPopupContextItem("Preview type"))
+    ImGui::Checkbox("Preview", &this->show_preview);
+    if (this->show_preview)
     {
-      if (ImGui::Selectable("grayscale"))
-        this->set_preview_type(preview_type::grayscale);
-      if (ImGui::Selectable("histogram"))
-        this->set_preview_type(preview_type::histogram);
-      ImGui::EndPopup();
+      ImVec2 img_size = {(float)this->shape_preview.x,
+                         (float)this->shape_preview.y};
+
+      ImGui::Image((void *)(intptr_t)this->image_texture, img_size);
+
+      if (ImGui::BeginPopupContextItem("Preview type"))
+      {
+        if (ImGui::Selectable("grayscale"))
+          this->set_preview_type(preview_type::grayscale);
+        if (ImGui::Selectable("histogram"))
+          this->set_preview_type(preview_type::histogram);
+        ImGui::EndPopup();
+      }
     }
   }
 

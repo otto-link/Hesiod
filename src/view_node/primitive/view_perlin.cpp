@@ -35,7 +35,7 @@ bool ViewPerlin::render_settings()
     has_changed = true;
   }
 
-  if (ImGui::DragInt("Seed", &this->seed))
+  if (ImGui::DragInt("seed", &this->seed))
   {
     this->p_control_node->set_seed((uint)this->seed);
     has_changed = true;

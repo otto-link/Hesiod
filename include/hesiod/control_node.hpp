@@ -134,4 +134,25 @@ private:
   uint              seed = DEFAULT_SEED;
 };
 
+class WhiteDensityMap : public gnode::Node
+{
+public:
+  WhiteDensityMap(std::string id);
+
+  uint get_seed();
+
+  void set_seed(uint new_seed);
+
+  void update_inner_bindings();
+
+  void compute();
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap();
+
+private:
+  hmap::Vec2<int> shape = {0, 0};
+  uint            seed = DEFAULT_SEED;
+};
+
 } // namespace hesiod::cnode
