@@ -2,14 +2,24 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #pragma once
+// #include "GL/gl.h"
 #include <string>
 
-#include "imgui.h"
+#include <GLFW/glfw3.h>
+#include <imgui.h>
+#include <imgui_impl_glfw.h>
+#include <imgui_impl_opengl3.h>
 
 #include "hesiod/control_node.hpp"
 
 namespace hesiod::vnode
 {
+
+enum preview_type : int
+{
+  grayscale,
+  histogram
+};
 
 class ViewNode
 {
@@ -20,9 +30,14 @@ public:
 
   ViewNode(gnode::Node *p_control_node);
 
-  virtual void post_control_node_update()
+  void set_preview_port_id(std::string new_port_id);
+
+  void post_control_node_update()
   {
     LOG_DEBUG("post-update, node [%s]", this->id.c_str());
+
+    if (this->preview_port_id != "")
+      this->update_preview();
   }
 
   virtual bool render_settings()
@@ -38,9 +53,18 @@ public:
 
   bool render_settings_footer();
 
+  void update_preview();
+
+protected:
+  std::string preview_port_id = "";
+
 private:
-  gnode::Node *p_control_node;
-  float        node_width = 128.f;
+  gnode::Node    *p_control_node;
+  float           node_width = 128.f;
+  bool            show_preview = true;
+  hmap::Vec2<int> shape_preview = {128, 128};
+  int             preview_type = preview_type::grayscale;
+  GLuint          image_texture = 0;
 };
 
 class ViewGammaCorrection : public ViewNode
@@ -71,6 +95,10 @@ private:
   hesiod::cnode::Perlin *p_control_node;
   bool                   link_kxy = true;
 };
+
+void img_to_texture(std::vector<uint8_t> img,
+                    hmap::Vec2<int>      shape,
+                    GLuint              &image_texture);
 
 void post_update_callback_wrapper(ViewNode *p_vnode, gnode::Node *p_cnode);
 

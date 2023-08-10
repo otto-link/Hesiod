@@ -32,40 +32,29 @@ int main()
   tree.get_node_ref_by_id("gamma")->infos();
 
   ((hesiod::cnode::GammaCorrection *)tree.get_node_ref_by_id("gamma"))
+      ->set_gamma(2.f);
+
+  ((hesiod::cnode::GammaCorrection *)tree.get_node_ref_by_id("gamma2"))
       ->set_gamma(4.f);
 
   tree.link("perlin", "output", "gamma", "input");
   tree.link("gamma", "output", "gamma2", "input");
 
-  // tree.update_node("perlin");
-
-  // GUI
-  // hesiod::vnode::ViewPerlin gui_perlin = hesiod::vnode::ViewPerlin(
-  //     (hesiod::cnode::Perlin *)tree.get_node_ref_by_id("perlin"));
-
-  // hesiod::vnode::ViewGammaCorrection gui_gamma =
-  //     hesiod::vnode::ViewGammaCorrection(
-  //         (hesiod::cnode::GammaCorrection
-  //         *)tree.get_node_ref_by_id("gamma"));
-
-  // gui_perlin.render_settings();
-  // gui_gamma.render_settings();
-
   hesiod::vnode::ViewTree gui_tree = hesiod::vnode::ViewTree(&tree);
 
-  gui_tree.update();
   gui_tree.generate_all_view_nodes();
   gui_tree.generate_all_links();
+  gui_tree.update();
 
   // gui_tree.view_nodes_mapping["gamma"].get()->render_settings();
   // gui_tree.view_nodes_mapping["perlin"].get()->render_settings();
 
-  // DBG
-  {
-    gnode::Node     *p_node = tree.get_node_ref_by_id("perlin");
-    hmap::HeightMap *p_h = (hmap::HeightMap *)p_node->get_p_data("output");
-    p_h->to_array().to_png("out.png", hmap::cmap::inferno);
-  }
+  // // DBG
+  // {
+  //   gnode::Node     *p_node = tree.get_node_ref_by_id("perlin");
+  //   hmap::HeightMap *p_h = (hmap::HeightMap *)p_node->get_p_data("output");
+  //   p_h->to_array().to_png("out.png", hmap::cmap::inferno);
+  // }
 
   tree.print_node_links();
 

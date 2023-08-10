@@ -9,21 +9,33 @@
 namespace hesiod::vnode
 {
 
-void post_update_callback_wrapper(ViewNode *p_vnode, gnode::Node *p_cnode)
-{
-  p_vnode->post_control_node_update();
-}
-
 ViewNode::ViewNode(gnode::Node *p_control_node) : p_control_node(p_control_node)
 {
   this->id = this->p_control_node->id;
   this->label = this->p_control_node->label;
   this->auto_update = this->p_control_node->auto_update;
 
-  auto lambda = [this](gnode::Node *p_cnode)
-  { post_update_callback_wrapper(this, p_cnode); };
+  // uplink connection between control and view node: when the control
+  // node is updated/computed this wrapper is triggered (with the view
+  // node as reference parameter) and it then triggers the
+  // 'post_control_node_update' method of the node
+  this->p_control_node->set_post_update_callback(
+      [this](gnode::Node *p_cnode)
+      { post_update_callback_wrapper(this, p_cnode); });
+}
 
-  this->p_control_node->set_post_update_callback(lambda);
+void ViewNode::set_preview_port_id(std::string new_port_id)
+{
+  if (this->p_control_node->is_port_id_in_keys(new_port_id))
+  {
+    this->preview_port_id = new_port_id;
+    this->update_preview();
+  }
+  else
+  {
+    LOG_ERROR("port id [%s] not found", new_port_id.c_str());
+    throw std::runtime_error("unknown port id");
+  }
 }
 
 void ViewNode::render_node()
@@ -57,26 +69,25 @@ void ViewNode::render_node()
       ImNodes::EndOutputAttribute();
     }
 
-  // // preview
-  // ImGui::Checkbox("Preview", &this->show_preview);
-  // if (this->show_preview)
-  // {
-  //   if (preview_port_id != "")
-  //     this->update_preview(); // TODO optimize: update only when
-  //                             // underlying data are modified
+  // preview
+  ImGui::Checkbox("Preview", &this->show_preview);
+  if (this->show_preview & (this->preview_port_id != ""))
+  {
+    ImVec2 img_size = {(float)this->shape_preview.x,
+                       (float)this->shape_preview.y};
 
-  //   ImVec2 img_size = {(float)shape_preview.x, (float)shape_preview.y};
-  //   ImGui::Image((void *)(intptr_t)image_texture, img_size);
+    ImGui::Image((void *)(intptr_t)this->image_texture, img_size);
 
-  //   if (ImGui::BeginPopupContextItem("Preview type"))
-  //   {
-  //     if (ImGui::Selectable("grayscale"))
-  //       this->preview_type = preview_type::grayscale;
-  //     if (ImGui::Selectable("histogram"))
-  //       this->preview_type = preview_type::histogram;
-  //     ImGui::EndPopup();
-  //   }
-  // }
+    if (ImGui::BeginPopupContextItem("Preview type"))
+    {
+      if (ImGui::Selectable("grayscale"))
+        this->preview_type = preview_type::grayscale;
+      if (ImGui::Selectable("histogram"))
+        this->preview_type = preview_type::histogram;
+      ImGui::EndPopup();
+      LOG_DEBUG("%d", this->preview_type);
+    }
+  }
 
   ImNodes::EndNode();
 }
@@ -131,6 +142,63 @@ bool ViewNode::render_settings_footer()
 
   ImGui::PopID();
   return has_changed;
+}
+
+void ViewNode::update_preview()
+{
+  if (this->preview_port_id != "")
+  // if (this->p_control_node->get_p_data(this->preview_port_id))
+  {
+    LOG_DEBUG("%s", this->p_control_node->id.c_str());
+    hmap::HeightMap *p_h = (hmap::HeightMap *)this->p_control_node->get_p_data(
+        this->preview_port_id);
+
+    p_h->to_array().to_png(this->p_control_node->id + ".png",
+                           hmap::cmap::inferno);
+
+    std::vector<uint8_t> img = {};
+
+    if (this->preview_type == preview_type::grayscale)
+      img = hmap::colorize_grayscale(p_h->to_array(shape_preview));
+    else if (this->preview_type == preview_type::histogram)
+      img = hmap::colorize_histogram(p_h->to_array(shape_preview));
+
+    img_to_texture(img, this->shape_preview, this->image_texture);
+  }
+}
+
+// HELPERS
+
+void img_to_texture(std::vector<uint8_t> img,
+                    hmap::Vec2<int>      shape,
+                    GLuint              &image_texture)
+{
+  glGenTextures(1, &image_texture);
+  glBindTexture(GL_TEXTURE_2D, image_texture);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+
+  // Upload pixels into texture
+#if defined(GL_UNPACK_ROW_LENGTH) && !defined(__EMSCRIPTEN__)
+  glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+#endif
+
+  glTexImage2D(GL_TEXTURE_2D,
+               0,
+               GL_RGBA,
+               shape.x,
+               shape.y,
+               0,
+               GL_LUMINANCE,
+               GL_UNSIGNED_BYTE,
+               img.data());
+}
+
+void post_update_callback_wrapper(ViewNode *p_vnode, gnode::Node *p_cnode)
+{
+  p_vnode->post_control_node_update();
 }
 
 } // namespace hesiod::vnode

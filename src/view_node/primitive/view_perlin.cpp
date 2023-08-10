@@ -17,6 +17,7 @@ ViewPerlin::ViewPerlin(hesiod::cnode::Perlin *p_control_node)
   this->seed = p_control_node->get_seed();
   this->vmin = p_control_node->get_vmin();
   this->vmax = p_control_node->get_vmax();
+  this->set_preview_port_id("output");
 }
 
 bool ViewPerlin::render_settings()

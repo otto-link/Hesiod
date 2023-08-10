@@ -12,6 +12,7 @@ ViewGammaCorrection::ViewGammaCorrection(
     hesiod::cnode::GammaCorrection *p_control_node)
     : ViewNode((gnode::Node *)p_control_node), p_control_node(p_control_node)
 {
+  this->set_preview_port_id("output");
 }
 
 bool ViewGammaCorrection::render_settings()
