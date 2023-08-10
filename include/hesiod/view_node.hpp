@@ -38,7 +38,7 @@ public:
 
   virtual bool render_settings()
   {
-    LOG_ERROR("Settings rendering not defined for generic node GUI [%s])",
+    LOG_ERROR("Settings rendering not defined for view node [%s])",
               this->id.c_str());
     throw std::runtime_error("undefined 'render' method");
   }
