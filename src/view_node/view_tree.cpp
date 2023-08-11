@@ -43,6 +43,13 @@ ViewTree::ViewTree(gnode::Tree    *p_control_tree,
   this->label = this->p_control_tree->label;
 }
 
+std::string ViewTree::get_control_node_id_by_hash_id(int control_node_hash_id)
+{
+  gnode::Node *p_node = this->get_control_node_ref_by_hash_id(
+      control_node_hash_id);
+  return p_node->id;
+}
+
 gnode::Node *ViewTree::get_control_node_ref_by_hash_id(int control_node_hash_id)
 {
   gnode::Node *p_cnode = nullptr;
@@ -105,6 +112,19 @@ ViewNodeMapping ViewTree::get_view_nodes_map()
   return this->view_nodes_mapping;
 }
 
+ViewNode *ViewTree::get_view_node_ref_by_id(std::string node_id)
+{
+  if (this->view_nodes_mapping.contains(node_id))
+  {
+    return this->view_nodes_mapping[node_id].get();
+  }
+  else
+  {
+    LOG_ERROR("view node id [%s] is not known", node_id.c_str());
+    throw std::runtime_error("unknonw node Id");
+  }
+}
+
 void ViewTree::add_node(std::string control_node_type)
 {
   std::string uid = this->get_new_id();
@@ -114,14 +134,14 @@ void ViewTree::add_node(std::string control_node_type)
 
   if (control_node_type == "Perlin")
   {
-    std::string     id = control_node_type + uid;
+    std::string     id = control_node_type + "##" + uid;
     std::shared_ptr p_node = std::make_shared<hesiod::cnode::Perlin>(
         id,
         this->shape,
         this->tiling,
         this->overlap);
-    this->p_control_tree->add_node(p_node);
 
+    this->p_control_tree->add_node(p_node);
     this->view_nodes_mapping[id] =
         generate_view_from_control<hesiod::cnode::Perlin,
                                    hesiod::vnode::ViewPerlin>(p_node.get());
@@ -261,6 +281,11 @@ void ViewTree::render_view_nodes()
 {
   for (auto &[id, vnode] : this->view_nodes_mapping)
     vnode.get()->render_node();
+}
+
+void ViewTree::render_settings(std::string node_id)
+{
+  this->get_view_node_ref_by_id(node_id)->render_settings();
 }
 
 void ViewTree::update()

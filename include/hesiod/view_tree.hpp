@@ -45,6 +45,8 @@ public:
            hmap::Vec2<int> tiling,
            float           overlap);
 
+  std::string get_control_node_id_by_hash_id(int control_node_hash_id);
+
   gnode::Node *get_control_node_ref_by_hash_id(int control_node_hash_id);
 
   GNodeMapping get_control_nodes_map();
@@ -54,6 +56,8 @@ public:
                                std::string &port_id);
 
   ViewNodeMapping get_view_nodes_map();
+
+  ViewNode *get_view_node_ref_by_id(std::string node_id);
 
   Link *get_link_ref_by_id(int link_id);
 
@@ -72,6 +76,8 @@ public:
   void remove_link(int link_id);
 
   void render_links();
+
+  void render_settings(std::string node_id);
 
   void render_view_nodes();
 

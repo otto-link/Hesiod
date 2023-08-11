@@ -54,11 +54,10 @@ void ViewNode::post_control_node_update()
 
 void ViewNode::render_node()
 {
+  // ImGui::SetWindowFontScale(0.8f);
   ImNodes::BeginNode(this->p_control_node->hash_id);
   ImNodes::BeginNodeTitleBar();
-
   ImGui::TextUnformatted(this->p_control_node->get_node_type().c_str());
-  ImGui::TextUnformatted(this->p_control_node->label.c_str()); // TODO remove
   ImNodes::EndNodeTitleBar();
 
   // inputs
@@ -108,6 +107,7 @@ void ViewNode::render_node()
   }
 
   ImNodes::EndNode();
+  ImGui::SetWindowFontScale(1.f);
 }
 
 bool ViewNode::render_settings_header()

@@ -42,20 +42,11 @@ int main()
       hesiod::vnode::ViewTree(&tree, shape, tiling, overlap);
 
   gui_tree.add_node("Perlin");
+  gui_tree.add_node("Perlin");
 
   gui_tree.generate_all_view_nodes();
   gui_tree.generate_all_links();
   gui_tree.update();
-
-  // gui_tree.view_nodes_mapping["gamma"].get()->render_settings();
-  // gui_tree.view_nodes_mapping["perlin"].get()->render_settings();
-
-  // // DBG
-  // {
-  //   gnode::Node     *p_node = tree.get_node_ref_by_id("perlin");
-  //   hmap::HeightMap *p_h = (hmap::HeightMap *)p_node->get_p_data("output");
-  //   p_h->to_array().to_png("out.png", hmap::cmap::inferno);
-  // }
 
   tree.print_node_links();
 
@@ -86,13 +77,6 @@ int main()
     ImNodes::EndNodeEditor();
     ImGui::End();
 
-    ImGui::Begin("Toto");
-
-    for (auto &[id, vnode] : gui_tree.get_view_nodes_map())
-      vnode.get()->render_settings();
-
-    ImGui::End();
-
     // --- links management // new
     int port_hash_id_from, port_hash_id_to;
     if (ImNodes::IsLinkCreated(&port_hash_id_from, &port_hash_id_to))
@@ -117,6 +101,42 @@ int main()
         gui_tree.remove_link(v);
       }
     }
+
+    // --- settings window
+    const int num_selected_nodes = ImNodes::NumSelectedNodes();
+
+    ImGui::Begin("Settings");
+    if (num_selected_nodes > 0)
+    {
+      std::vector<int> selected_nodes;
+      selected_nodes.resize(num_selected_nodes);
+      ImNodes::GetSelectedNodes(selected_nodes.data());
+
+      for (auto &node_hash_id : selected_nodes)
+      {
+        std::string node_id = gui_tree.get_control_node_id_by_hash_id(
+            node_hash_id);
+
+        ImGui::SeparatorText(node_id.c_str());
+
+        // // TODO foldable sections?
+        // // ImGui::BeginChild("child", ImVec2(0, 50), true);
+        gui_tree.render_settings(node_id);
+        // // ImGui::EndChild();
+        // ImGui::Spacing();
+      }
+    }
+    ImGui::End();
+
+    //   ImGui::Begin("Toto");
+
+    // for (auto &[id, vnode] : gui_tree.get_view_nodes_map())
+    //   {
+    // 	ImGui::SeparatorText(id.c_str());
+    // 	vnode.get()->render_settings();
+    //   }
+
+    // ImGui::End();
 
     // --- Rendering
     ImGui::Render();
