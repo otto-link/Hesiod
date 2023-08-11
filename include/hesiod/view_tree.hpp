@@ -40,7 +40,10 @@ public:
   std::string id;
   std::string label;
 
-  ViewTree(gnode::Tree *p_control_tree);
+  ViewTree(gnode::Tree    *p_control_tree,
+           hmap::Vec2<int> shape,
+           hmap::Vec2<int> tiling,
+           float           overlap);
 
   gnode::Node *get_control_node_ref_by_hash_id(int control_node_hash_id);
 
@@ -53,6 +56,10 @@ public:
   ViewNodeMapping get_view_nodes_map();
 
   Link *get_link_ref_by_id(int link_id);
+
+  std::string get_new_id();
+
+  void add_node(std::string control_node_type);
 
   void generate_all_links(bool force_update = false);
 
@@ -73,9 +80,14 @@ public:
   void update_node(std::string node_id);
 
 private:
-  gnode::Tree        *p_control_tree;
+  gnode::Tree    *p_control_tree;
+  hmap::Vec2<int> shape;
+  hmap::Vec2<int> tiling;
+  float           overlap;
+
   ViewNodeMapping     view_nodes_mapping;
   std::map<int, Link> links = {};
+  int                 id_counter = 0;
 };
 
 template <class TControl, class TView>

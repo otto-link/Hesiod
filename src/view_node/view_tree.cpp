@@ -32,7 +32,12 @@ Link::Link(std::string node_id_from,
             port_id_to.c_str());
 }
 
-ViewTree::ViewTree(gnode::Tree *p_control_tree) : p_control_tree(p_control_tree)
+ViewTree::ViewTree(gnode::Tree    *p_control_tree,
+                   hmap::Vec2<int> shape,
+                   hmap::Vec2<int> tiling,
+                   float           overlap)
+    : p_control_tree(p_control_tree), shape(shape), tiling(tiling),
+      overlap(overlap)
 {
   this->id = this->p_control_tree->id;
   this->label = this->p_control_tree->label;
@@ -79,11 +84,6 @@ void ViewTree::get_ids_by_port_hash_id(int          port_hash_id,
       }
 }
 
-ViewNodeMapping ViewTree::get_view_nodes_map()
-{
-  return this->view_nodes_mapping;
-}
-
 Link *ViewTree::get_link_ref_by_id(int link_id)
 {
   if (this->links.contains(link_id))
@@ -92,6 +92,44 @@ Link *ViewTree::get_link_ref_by_id(int link_id)
   {
     LOG_ERROR("link id [%d] is not known", link_id);
     throw std::runtime_error("unknonw link Id");
+  }
+}
+
+std::string ViewTree::get_new_id()
+{
+  return std::to_string(this->id_counter++);
+}
+
+ViewNodeMapping ViewTree::get_view_nodes_map()
+{
+  return this->view_nodes_mapping;
+}
+
+void ViewTree::add_node(std::string control_node_type)
+{
+  std::string uid = this->get_new_id();
+
+  LOG_DEBUG("adding node type: %s", control_node_type.c_str());
+  LOG_DEBUG("uid: %s", uid.c_str());
+
+  if (control_node_type == "Perlin")
+  {
+    std::string     id = control_node_type + uid;
+    std::shared_ptr p_node = std::make_shared<hesiod::cnode::Perlin>(
+        id,
+        this->shape,
+        this->tiling,
+        this->overlap);
+    this->p_control_tree->add_node(p_node);
+
+    this->view_nodes_mapping[id] =
+        generate_view_from_control<hesiod::cnode::Perlin,
+                                   hesiod::vnode::ViewPerlin>(p_node.get());
+  }
+  else
+  {
+    LOG_ERROR("unknown node type: [%s]", control_node_type.c_str());
+    throw std::runtime_error("unknown node type");
   }
 }
 

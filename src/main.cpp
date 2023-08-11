@@ -38,7 +38,10 @@ int main()
   tree.link("perlin", "output", "gamma", "input");
   tree.link("gamma", "output", "gamma2", "input");
 
-  hesiod::vnode::ViewTree gui_tree = hesiod::vnode::ViewTree(&tree);
+  hesiod::vnode::ViewTree gui_tree =
+      hesiod::vnode::ViewTree(&tree, shape, tiling, overlap);
+
+  gui_tree.add_node("Perlin");
 
   gui_tree.generate_all_view_nodes();
   gui_tree.generate_all_links();
