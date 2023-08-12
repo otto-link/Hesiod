@@ -110,6 +110,15 @@ void ViewNode::render_node()
   ImGui::SetWindowFontScale(1.f);
 }
 
+bool ViewNode::render_settings()
+{
+  // just the header and the footer
+  bool has_changed = false;
+  has_changed |= this->render_settings_header();
+  has_changed |= this->render_settings_footer();
+  return has_changed;
+}
+
 bool ViewNode::render_settings_header()
 {
   // return value, is true if anything has been changed with the GUI

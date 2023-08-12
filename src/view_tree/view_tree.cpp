@@ -125,34 +125,6 @@ ViewNode *ViewTree::get_view_node_ref_by_id(std::string node_id)
   }
 }
 
-void ViewTree::add_node(std::string control_node_type)
-{
-  std::string uid = this->get_new_id();
-
-  LOG_DEBUG("adding node type: %s", control_node_type.c_str());
-  LOG_DEBUG("uid: %s", uid.c_str());
-
-  if (control_node_type == "Perlin")
-  {
-    std::string     id = control_node_type + "##" + uid;
-    std::shared_ptr p_node = std::make_shared<hesiod::cnode::Perlin>(
-        id,
-        this->shape,
-        this->tiling,
-        this->overlap);
-
-    this->p_control_tree->add_node(p_node);
-    this->view_nodes_mapping[id] =
-        generate_view_from_control<hesiod::cnode::Perlin,
-                                   hesiod::vnode::ViewPerlin>(p_node.get());
-  }
-  else
-  {
-    LOG_ERROR("unknown node type: [%s]", control_node_type.c_str());
-    throw std::runtime_error("unknown node type");
-  }
-}
-
 void ViewTree::generate_all_links(bool force_update)
 {
   LOG_DEBUG("generating Links...");
@@ -186,40 +158,6 @@ void ViewTree::generate_all_view_nodes(bool force_update)
   for (auto &[id, cnode] : this->get_control_nodes_map())
     if (force_update or (!this->view_nodes_mapping.contains(id)))
       this->generate_view_node_from_control_node(id);
-}
-
-void ViewTree::generate_view_node_from_control_node(std::string control_node_id)
-{
-  gnode::Node *p_cnode = this->p_control_tree->get_node_ref_by_id(
-      control_node_id);
-
-  LOG_DEBUG("control node [%s], type: %s",
-            p_cnode->id.c_str(),
-            p_cnode->get_node_type().c_str());
-
-  if (p_cnode->get_node_type() == "GammaCorrection")
-  {
-    this->view_nodes_mapping[p_cnode->id] =
-        generate_view_from_control<hesiod::cnode::GammaCorrection,
-                                   hesiod::vnode::ViewGammaCorrection>(p_cnode);
-  }
-  else if (p_cnode->get_node_type() == "Perlin")
-  {
-    this->view_nodes_mapping[p_cnode->id] =
-        generate_view_from_control<hesiod::cnode::Perlin,
-                                   hesiod::vnode::ViewPerlin>(p_cnode);
-  }
-  else if (p_cnode->get_node_type() == "WhiteDensityMap")
-  {
-    this->view_nodes_mapping[p_cnode->id] =
-        generate_view_from_control<hesiod::cnode::WhiteDensityMap,
-                                   hesiod::vnode::ViewWhiteDensityMap>(p_cnode);
-  }
-  else
-  {
-    LOG_ERROR("unknown node type: [%s]", p_cnode->get_node_type().c_str());
-    throw std::runtime_error("unknown node type");
-  }
 }
 
 void ViewTree::new_link(int port_hash_id_from, int port_hash_id_to)
@@ -296,13 +234,6 @@ void ViewTree::update()
 void ViewTree::update_node(std::string node_id)
 {
   this->p_control_tree->update_node(node_id);
-}
-
-template <class TControl, class TView>
-std::shared_ptr<TView> generate_view_from_control(gnode::Node *p_gnode_node)
-{
-  TControl *p_control_node = (TControl *)p_gnode_node;
-  return std::make_shared<TView>(p_control_node);
 }
 
 } // namespace hesiod::vnode

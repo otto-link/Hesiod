@@ -43,6 +43,7 @@ int main()
 
   gui_tree.add_node("Perlin");
   gui_tree.add_node("Perlin");
+  gui_tree.add_node("GradientTalus");
 
   gui_tree.generate_all_view_nodes();
   gui_tree.generate_all_links();

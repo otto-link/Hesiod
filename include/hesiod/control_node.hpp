@@ -21,16 +21,40 @@ enum dtype : int
   dHeightMap
 };
 
+class Unary : public gnode::Node // most basic, 1 in / 1 out
+{
+public:
+  Unary(std::string id);
+
+  void update_inner_bindings();
+
+  void compute();
+
+  virtual void compute_in_out(hmap::HeightMap &, hmap::HeightMap *)
+  {
+    LOG_ERROR("Compute not defined for generic in/out [%s])", this->id.c_str());
+    throw std::runtime_error("undefined 'compute_in_out' method");
+  }
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap();
+
+private:
+  hmap::Vec2<int> shape = {0, 0};
+};
+
+class GradientTalus : public Unary
+{
+public:
+  GradientTalus(std::string id);
+
+  void compute_in_out(hmap::HeightMap &h, hmap::HeightMap *p_talus);
+};
+
 class Filter : public gnode::Node
 {
 public:
   Filter(std::string id);
-
-  // debugging
-  ~Filter()
-  {
-    std::cout << "Filter::~Filter() " << this->id.c_str() << "\n";
-  }
 
   void update_inner_bindings();
 
@@ -54,12 +78,6 @@ class GammaCorrection : public Filter
 public:
   GammaCorrection(std::string id);
 
-  // debugging
-  ~GammaCorrection()
-  {
-    std::cout << "GammaCorrection::~GammaCorrection()\n";
-  }
-
   float get_gamma();
 
   void set_gamma(float new_gamma);
@@ -77,12 +95,6 @@ public:
             hmap::Vec2<int> shape,
             hmap::Vec2<int> tiling,
             float           overlap);
-
-  // debugging
-  ~Primitive()
-  {
-    std::cout << "Primitive::~Primitive() " << this->id.c_str() << "\n";
-  }
 
   hmap::Vec2<int> get_shape();
 

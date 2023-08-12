@@ -36,12 +36,7 @@ public:
 
   void post_control_node_update();
 
-  virtual bool render_settings()
-  {
-    LOG_ERROR("Settings rendering not defined for view node [%s])",
-              this->id.c_str());
-    throw std::runtime_error("undefined 'render' method");
-  }
+  virtual bool render_settings();
 
   void render_node();
 
@@ -74,6 +69,15 @@ public:
 
 private:
   hesiod::cnode::GammaCorrection *p_control_node;
+};
+
+class ViewGradientTalus : public ViewNode
+{
+public:
+  ViewGradientTalus(hesiod::cnode::GradientTalus *p_control_node);
+
+private:
+  hesiod::cnode::GradientTalus *p_control_node;
 };
 
 class ViewPerlin : public ViewNode

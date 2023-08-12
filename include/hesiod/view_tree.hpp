@@ -96,6 +96,8 @@ private:
   int                 id_counter = 0;
 };
 
+// HELPERS
+
 template <class TControl, class TView>
 std::shared_ptr<TView> generate_view_from_control(gnode::Node *p_control_node);
 
