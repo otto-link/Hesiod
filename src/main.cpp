@@ -122,8 +122,7 @@ int main()
       selected_nodes.resize(num_selected_nodes);
       ImNodes::GetSelectedNodes(selected_nodes.data());
 
-      std::vector<std::string> removed_nodes = {};
-      std::vector<int>         removed_nodes_hash_id = {};
+      std::vector<std::string> node_id_to_remove = {};
 
       for (auto &node_hash_id : selected_nodes)
       {
@@ -137,11 +136,11 @@ int main()
             ImGui::IsKeyReleased(ImGuiKey_X))
         {
           LOG_DEBUG("%s", node_id.c_str());
-          removed_nodes.push_back(node_id);
+          node_id_to_remove.push_back(node_id);
         }
       }
 
-      for (auto &node_id : removed_nodes)
+      for (auto &node_id : node_id_to_remove)
       {
         gui_tree.remove_node(node_id);
         ImNodes::ClearNodeSelection();
