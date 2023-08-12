@@ -78,6 +78,17 @@ void ViewTree::add_node(std::string control_node_type)
         generate_view_from_control<hesiod::cnode::Remap,
                                    hesiod::vnode::ViewRemap>(p_node.get());
   }
+  else if (control_node_type == "SmoothCpulse")
+  {
+    std::string     id = control_node_type + "##" + uid;
+    std::shared_ptr p_node = std::make_shared<hesiod::cnode::SmoothCpulse>(id);
+
+    this->p_control_tree->add_node(p_node);
+    this->view_nodes_mapping[id] =
+        generate_view_from_control<hesiod::cnode::SmoothCpulse,
+                                   hesiod::vnode::ViewSmoothCpulse>(
+            p_node.get());
+  }
   else if (control_node_type == "WhiteDensityMap")
   {
     std::string     id = control_node_type + "##" + uid;

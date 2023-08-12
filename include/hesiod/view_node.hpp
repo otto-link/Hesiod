@@ -63,7 +63,7 @@ private:
 class ViewGammaCorrection : public ViewNode
 {
 public:
-  float gamma = 1.f;
+  float gamma;
 
   ViewGammaCorrection(hesiod::cnode::GammaCorrection *p_control_node);
 
@@ -107,6 +107,19 @@ public:
 private:
   hesiod::cnode::Perlin *p_control_node;
   bool                   link_kxy = true;
+};
+
+class ViewSmoothCpulse : public ViewNode
+{
+public:
+  int ir;
+
+  ViewSmoothCpulse(hesiod::cnode::SmoothCpulse *p_control_node);
+
+  bool render_settings();
+
+private:
+  hesiod::cnode::SmoothCpulse *p_control_node;
 };
 
 class ViewRemap : public ViewNode

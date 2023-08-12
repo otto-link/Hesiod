@@ -8,22 +8,21 @@
 namespace hesiod::vnode
 {
 
-ViewGammaCorrection::ViewGammaCorrection(
-    hesiod::cnode::GammaCorrection *p_control_node)
+ViewSmoothCpulse::ViewSmoothCpulse(hesiod::cnode::SmoothCpulse *p_control_node)
     : ViewNode((gnode::Node *)p_control_node), p_control_node(p_control_node)
 {
-  this->gamma = p_control_node->get_gamma();
+  this->ir = p_control_node->get_ir();
   this->set_preview_port_id("output");
 }
 
-bool ViewGammaCorrection::render_settings()
+bool ViewSmoothCpulse::render_settings()
 {
   bool has_changed = false;
   has_changed |= this->render_settings_header();
 
-  if (ImGui::SliderFloat("gamma", &this->gamma, 0.01f, 10.f))
+  if (ImGui::SliderInt("int", &this->ir, 1, 256))
   {
-    this->p_control_node->set_gamma(this->gamma);
+    this->p_control_node->set_ir(this->ir);
     has_changed = true;
   }
 

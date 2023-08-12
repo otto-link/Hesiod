@@ -27,6 +27,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"GammaCorrection", "Filter/Recurve"},
     {"Perlin", "Primitive/Coherent Noise"},
     {"Remap", "Filter/Range"},
+    {"SmoothCpulse", "Filter/Smoothing"},
     {"WhiteDensityMap", "Primitive/Random"}};
 
 //----------------------------------------
@@ -188,6 +189,21 @@ public:
 private:
   float vmin = 0.f;
   float vmax = 1.f;
+};
+
+class SmoothCpulse : public Filter
+{
+public:
+  SmoothCpulse(std::string id);
+
+  int get_ir();
+
+  void set_ir(float new_ir);
+
+  void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
+
+private:
+  int ir = 8;
 };
 
 class WhiteDensityMap : public gnode::Node
