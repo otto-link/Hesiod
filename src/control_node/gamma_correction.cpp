@@ -10,8 +10,8 @@ namespace hesiod::cnode
 
 GammaCorrection::GammaCorrection(std::string id) : Filter(id)
 {
-  this->category += "/Recurve";
   this->node_type = "GammaCorrection";
+  this->category = category_mapping.at(this->node_type);
 }
 
 float GammaCorrection::get_gamma()

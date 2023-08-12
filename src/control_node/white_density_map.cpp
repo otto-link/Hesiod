@@ -12,8 +12,8 @@ WhiteDensityMap::WhiteDensityMap(std::string id) : gnode::Node(id)
 {
   LOG_DEBUG("WhiteDensityMap::WhiteDensityMapFilter()");
 
-  this->category += "/Primitive/Random";
   this->node_type = "WhiteDensityMap";
+  this->category = category_mapping.at(this->node_type);
   this->add_port(
       gnode::Port("density map", gnode::direction::in, dtype::dHeightMap));
   this->add_port(

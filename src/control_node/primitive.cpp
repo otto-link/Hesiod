@@ -15,7 +15,6 @@ Primitive::Primitive(std::string     id,
     : gnode::Node(id), shape(shape), tiling(tiling), overlap(overlap)
 {
   LOG_DEBUG("Primitive::Primitive()");
-  this->category += "/Primitive";
   this->add_port(gnode::Port("dx",
                              gnode::direction::in,
                              dtype::dHeightMap,

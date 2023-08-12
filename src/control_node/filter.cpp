@@ -11,7 +11,6 @@ namespace hesiod::cnode
 Filter::Filter(std::string id) : gnode::Node(id)
 {
   LOG_DEBUG("Filter::Filter()");
-  this->category += "/Operator/Filter";
   this->add_port(gnode::Port("input", gnode::direction::in, dtype::dHeightMap));
   this->add_port(gnode::Port("mask",
                              gnode::direction::in,

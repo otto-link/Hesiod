@@ -21,6 +21,14 @@ enum dtype : int
   dHeightMap
 };
 
+static const std::map<std::string, std::string> category_mapping = {
+    {"GradientNorm", "Math/Gradient"},
+    {"GradientTalus", "Math/Gradient"},
+    {"GammaCorrection", "Filter/Recurve"},
+    {"Perlin", "Primitive/Coherent Noise"},
+    {"Remap", "Filter/Range"},
+    {"WhiteDensityMap", "Primitive/Random"}};
+
 //----------------------------------------
 // Generic nodes
 //----------------------------------------
