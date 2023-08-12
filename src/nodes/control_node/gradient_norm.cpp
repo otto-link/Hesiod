@@ -10,8 +10,8 @@ namespace hesiod::cnode
 
 GradientNorm::GradientNorm(std::string id) : Unary(id)
 {
-  this->category += "/Operator/Gradient";
   this->node_type = "GradientNorm";
+  this->category = category_mapping.at(this->node_type);
   this->update_inner_bindings();
 }
 

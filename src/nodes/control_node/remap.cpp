@@ -10,8 +10,8 @@ namespace hesiod::cnode
 
 Remap::Remap(std::string id) : Unary(id)
 {
-  this->category += "/Range";
   this->node_type = "Remap";
+  this->category = category_mapping.at(this->node_type);
   this->update_inner_bindings();
 }
 

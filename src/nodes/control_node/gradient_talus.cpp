@@ -10,8 +10,8 @@ namespace hesiod::cnode
 
 GradientTalus::GradientTalus(std::string id) : Unary(id)
 {
-  this->category += "/Operator/Gradient";
   this->node_type = "GradientTalus";
+  this->category = category_mapping.at(this->node_type);
   this->update_inner_bindings();
 }
 

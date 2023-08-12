@@ -14,8 +14,8 @@ Perlin::Perlin(std::string     id,
                float           overlap)
     : Primitive(id, shape, tiling, overlap)
 {
-  this->category += "/Coherent Noise";
   this->node_type = "Perlin";
+  this->category = category_mapping.at(this->node_type);
   this->value_out.set_shape(shape);
   this->update_inner_bindings();
 }
