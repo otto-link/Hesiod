@@ -20,31 +20,31 @@ int main()
 
   gnode::Tree tree = gnode::Tree("tree_1");
 
-  tree.add_node(std::make_shared<hesiod::cnode::Perlin>("perlin",
-                                                        shape,
-                                                        tiling,
-                                                        overlap));
+  // tree.add_node(std::make_shared<hesiod::cnode::Perlin>("perlin",
+  //                                                       shape,
+  //                                                       tiling,
+  //                                                       overlap));
 
-  tree.add_node(std::make_shared<hesiod::cnode::GammaCorrection>("gamma"));
-  tree.add_node(std::make_shared<hesiod::cnode::GammaCorrection>("gamma2"));
+  // tree.add_node(std::make_shared<hesiod::cnode::GammaCorrection>("gamma"));
+  // tree.add_node(std::make_shared<hesiod::cnode::GammaCorrection>("gamma2"));
 
-  tree.add_node(std::make_shared<hesiod::cnode::WhiteDensityMap>("whitedmap"));
+  // tree.add_node(std::make_shared<hesiod::cnode::WhiteDensityMap>("whitedmap"));
 
-  tree.get_node_ref_by_id("perlin")->infos();
-  tree.get_node_ref_by_id("gamma")->infos();
-  tree.get_node_ref_by_id("whitedmap")->infos();
+  // tree.get_node_ref_by_id("perlin")->infos();
+  // tree.get_node_ref_by_id("gamma")->infos();
+  // tree.get_node_ref_by_id("whitedmap")->infos();
 
-  tree.link("perlin", "output", "gamma", "input");
-  tree.link("gamma", "output", "gamma2", "input");
+  // tree.link("perlin", "output", "gamma", "input");
+  // tree.link("gamma", "output", "gamma2", "input");
 
   hesiod::vnode::ViewTree gui_tree =
       hesiod::vnode::ViewTree(&tree, shape, tiling, overlap);
 
-  gui_tree.add_node("Perlin");
-  gui_tree.add_node("Perlin");
-  gui_tree.add_node("GradientTalus");
-  gui_tree.add_node("GradientNorm");
-  gui_tree.add_node("Remap");
+  // gui_tree.add_node("Perlin");
+  // gui_tree.add_node("Perlin");
+  // gui_tree.add_node("GradientTalus");
+  // gui_tree.add_node("GradientNorm");
+  // gui_tree.add_node("Remap");
 
   gui_tree.generate_all_view_nodes();
   gui_tree.generate_all_links();
@@ -99,13 +99,20 @@ int main()
       ImNodes::GetSelectedLinks(selected_links.data());
 
       for (auto &v : selected_links)
-      {
-        std::cout << v << "\n";
         gui_tree.remove_link(v);
-      }
     }
 
-    // --- settings window
+    // --- nodes // new
+    ImGui::Begin("New node");
+    gui_tree.render_new_node_treeview();
+    ImGui::End();
+
+    // --- nodes DEBUG node list
+    ImGui::Begin("Node list");
+    gui_tree.render_node_list();
+    ImGui::End();
+
+    // --- nodes // settings
     const int num_selected_nodes = ImNodes::NumSelectedNodes();
 
     ImGui::Begin("Settings");
@@ -115,14 +122,29 @@ int main()
       selected_nodes.resize(num_selected_nodes);
       ImNodes::GetSelectedNodes(selected_nodes.data());
 
+      std::vector<std::string> removed_nodes = {};
+      std::vector<int>         removed_nodes_hash_id = {};
+
       for (auto &node_hash_id : selected_nodes)
       {
         std::string node_id = gui_tree.get_control_node_id_by_hash_id(
             node_hash_id);
-
         ImGui::SeparatorText(node_id.c_str());
-
         gui_tree.render_settings(node_id);
+
+        // delete node
+        if (ImGui::IsKeyReleased(ImGuiKey_Delete) or
+            ImGui::IsKeyReleased(ImGuiKey_X))
+        {
+          LOG_DEBUG("%s", node_id.c_str());
+          removed_nodes.push_back(node_id);
+        }
+      }
+
+      for (auto &node_id : removed_nodes)
+      {
+        gui_tree.remove_node(node_id);
+        ImNodes::ClearNodeSelection();
       }
     }
     ImGui::End();

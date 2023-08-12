@@ -30,6 +30,8 @@ public:
 
   ViewNode(gnode::Node *p_control_node);
 
+  gnode::Node *get_p_control_node();
+
   void set_preview_port_id(std::string new_port_id);
 
   void set_preview_type(int new_preview_type);

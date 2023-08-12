@@ -75,7 +75,15 @@ public:
 
   void remove_link(int link_id);
 
+  // void remove_node(int node_hash_id);
+
+  void remove_node(std::string node_id);
+
   void render_links();
+
+  void render_new_node_treeview();
+
+  void render_node_list();
 
   void render_settings(std::string node_id);
 

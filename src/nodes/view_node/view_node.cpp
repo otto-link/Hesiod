@@ -24,6 +24,11 @@ ViewNode::ViewNode(gnode::Node *p_control_node) : p_control_node(p_control_node)
       { post_update_callback_wrapper(this, p_cnode); });
 }
 
+gnode::Node *ViewNode::get_p_control_node()
+{
+  return this->p_control_node;
+}
+
 void ViewNode::set_preview_port_id(std::string new_port_id)
 {
   if (this->p_control_node->is_port_id_in_keys(new_port_id))

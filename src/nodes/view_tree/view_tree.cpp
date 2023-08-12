@@ -203,16 +203,125 @@ void ViewTree::remove_link(int link_id)
                                p_link->node_id_to,
                                p_link->port_id_to);
 
-  this->links.erase(link_id);
-
   // only nodes downstream "from" node (excluded) are affected
   this->update_node(p_link->node_id_to);
+
+  // eventually remove link from the link directory
+  this->links.erase(link_id);
+}
+
+void ViewTree::remove_node(std::string node_id)
+{
+
+  // for the TreeView, we need to do everything by hand: first remove
+  // all the links from and to the node
+  for (auto &[link_id, link] : this->links)
+  {
+    if ((link.node_id_from == node_id) | (link.node_id_to == node_id))
+      this->remove_link(link_id);
+  }
+
+  // remove view node
+  if (this->get_view_nodes_map().contains(node_id))
+  {
+    LOG_DEBUG("erase view node");
+    this->view_nodes_mapping.erase(node_id);
+  }
+  else
+  {
+    LOG_ERROR("view node id [%s] is not known", node_id.c_str());
+    throw std::runtime_error("unknonw node Id");
+  }
+
+  for (auto &[id, n] : this->view_nodes_mapping)
+    LOG_DEBUG("id: %s", id.c_str());
+
+  // for the control node handled by GNode, everything is taken care
+  // of by this method
+  this->p_control_tree->remove_node(node_id);
 }
 
 void ViewTree::render_links()
 {
   for (auto &[link_id, link] : this->links)
     ImNodes::Link(link_id, link.port_hash_id_from, link.port_hash_id_to);
+}
+
+void ViewTree::render_new_node_treeview()
+{
+  const float TEXT_BASE_WIDTH = ImGui::CalcTextSize("A").x;
+  const float TEXT_BASE_HEIGHT = ImGui::GetTextLineHeightWithSpacing();
+
+  static ImGuiTableFlags flags = // ImGuiTableFlags_Resizable |
+      ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable |
+      // ImGuiTableFlags_Sortable |
+      // ImGuiTableFlags_SortMulti |
+      // ImGuiTableFlags_RowBg |
+      ImGuiTableFlags_BordersOuter | ImGuiTableFlags_BordersV |
+      ImGuiTableFlags_NoBordersInBody | ImGuiTableFlags_ScrollY;
+
+  if (ImGui::BeginTable("table_sorting",
+                        2,
+                        flags,
+                        ImVec2(0.f, 0.f), // TEXT_BASE_HEIGHT * 15),
+                        0.f))
+  {
+    ImGui::TableSetupColumn("Type",
+                            ImGuiTableColumnFlags_DefaultSort |
+                                ImGuiTableColumnFlags_WidthFixed,
+                            0.f,
+                            0);
+    ImGui::TableSetupColumn("Category",
+                            ImGuiTableColumnFlags_WidthFixed,
+                            0.f,
+                            1);
+    ImGui::TableSetupScrollFreeze(0, 1); // Make row always visible
+    ImGui::TableHeadersRow();
+
+    ImGuiListClipper clipper;
+    clipper.Begin((int)hesiod::cnode::category_mapping.size());
+
+    while (clipper.Step())
+    {
+      int k = 0;
+      for (auto &[node_type, node_category] : hesiod::cnode::category_mapping)
+      {
+        if ((k >= clipper.DisplayStart) & (k < clipper.DisplayEnd))
+        {
+          ImGui::PushID(k);
+          ImGui::TableNextRow();
+          ImGui::TableNextColumn();
+
+          const bool item_is_selected = false;
+
+          if (ImGui::Selectable(node_type.c_str(),
+                                item_is_selected,
+                                ImGuiSelectableFlags_SpanAllColumns))
+          {
+            LOG_DEBUG("selected node type: %s", node_type.c_str());
+            this->add_node(node_type);
+            this->p_control_tree->print_node_list();
+          }
+
+          ImGui::TableNextColumn();
+          ImGui::TextUnformatted(node_category.c_str());
+          ImGui::PopID();
+        }
+        k++;
+      }
+    }
+    ImGui::EndTable();
+  }
+}
+
+void ViewTree::render_node_list()
+{
+  for (auto &[id, vnode] : this->view_nodes_mapping)
+  {
+    ImGui::Text("id: %s, hash_id: %d",
+                id.c_str(),
+                vnode.get()->get_p_control_node()->hash_id);
+  }
 }
 
 void ViewTree::render_view_nodes()
