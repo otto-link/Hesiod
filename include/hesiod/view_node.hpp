@@ -71,6 +71,15 @@ private:
   hesiod::cnode::GammaCorrection *p_control_node;
 };
 
+class ViewGradientNorm : public ViewNode
+{
+public:
+  ViewGradientNorm(hesiod::cnode::GradientNorm *p_control_node);
+
+private:
+  hesiod::cnode::GradientNorm *p_control_node;
+};
+
 class ViewGradientTalus : public ViewNode
 {
 public:

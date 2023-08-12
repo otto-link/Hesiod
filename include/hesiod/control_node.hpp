@@ -43,6 +43,14 @@ private:
   hmap::Vec2<int> shape = {0, 0};
 };
 
+class GradientNorm : public Unary
+{
+public:
+  GradientNorm(std::string id);
+
+  void compute_in_out(hmap::HeightMap &h, hmap::HeightMap *p_talus);
+};
+
 class GradientTalus : public Unary
 {
 public:
