@@ -32,7 +32,6 @@ int main()
 
   tree.get_node_ref_by_id("perlin")->infos();
   tree.get_node_ref_by_id("gamma")->infos();
-
   tree.get_node_ref_by_id("whitedmap")->infos();
 
   tree.link("perlin", "output", "gamma", "input");
@@ -45,6 +44,7 @@ int main()
   gui_tree.add_node("Perlin");
   gui_tree.add_node("GradientTalus");
   gui_tree.add_node("GradientNorm");
+  gui_tree.add_node("Remap");
 
   gui_tree.generate_all_view_nodes();
   gui_tree.generate_all_links();
@@ -54,8 +54,9 @@ int main()
 
   // ----------------------------------- Main GUI
 
-  GLFWwindow *window = init_gui(1400, 800, "Hesiod v0.0.x (c) 2023 Otto Link");
-  ImVec4      clear_color = ImVec4(0.15f, 0.25f, 0.30f, 1.00f);
+  GLFWwindow *window =
+      hesiod::gui::init_gui(1400, 800, "Hesiod v0.0.x (c) 2023 Otto Link");
+  ImVec4 clear_color = ImVec4(0.15f, 0.25f, 0.30f, 1.00f);
 
   ImNodes::CreateContext();
   ImNodes::StyleColorsDark();
@@ -121,24 +122,10 @@ int main()
 
         ImGui::SeparatorText(node_id.c_str());
 
-        // // TODO foldable sections?
-        // // ImGui::BeginChild("child", ImVec2(0, 50), true);
         gui_tree.render_settings(node_id);
-        // // ImGui::EndChild();
-        // ImGui::Spacing();
       }
     }
     ImGui::End();
-
-    //   ImGui::Begin("Toto");
-
-    // for (auto &[id, vnode] : gui_tree.get_view_nodes_map())
-    //   {
-    // 	ImGui::SeparatorText(id.c_str());
-    // 	vnode.get()->render_settings();
-    //   }
-
-    // ImGui::End();
 
     // --- Rendering
     ImGui::Render();

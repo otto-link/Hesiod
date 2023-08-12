@@ -107,6 +107,20 @@ private:
   bool                   link_kxy = true;
 };
 
+class ViewRemap : public ViewNode
+{
+public:
+  float vmin;
+  float vmax;
+
+  ViewRemap(hesiod::cnode::Remap *p_control_node);
+
+  bool render_settings();
+
+private:
+  hesiod::cnode::Remap *p_control_node;
+};
+
 class ViewWhiteDensityMap : public ViewNode
 {
 public:

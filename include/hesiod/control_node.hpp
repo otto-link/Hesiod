@@ -21,43 +21,9 @@ enum dtype : int
   dHeightMap
 };
 
-class Unary : public gnode::Node // most basic, 1 in / 1 out
-{
-public:
-  Unary(std::string id);
-
-  void update_inner_bindings();
-
-  void compute();
-
-  virtual void compute_in_out(hmap::HeightMap &, hmap::HeightMap *)
-  {
-    LOG_ERROR("Compute not defined for generic in/out [%s])", this->id.c_str());
-    throw std::runtime_error("undefined 'compute_in_out' method");
-  }
-
-protected:
-  hmap::HeightMap value_out = hmap::HeightMap();
-
-private:
-  hmap::Vec2<int> shape = {0, 0};
-};
-
-class GradientNorm : public Unary
-{
-public:
-  GradientNorm(std::string id);
-
-  void compute_in_out(hmap::HeightMap &h, hmap::HeightMap *p_talus);
-};
-
-class GradientTalus : public Unary
-{
-public:
-  GradientTalus(std::string id);
-
-  void compute_in_out(hmap::HeightMap &h, hmap::HeightMap *p_talus);
-};
+//----------------------------------------
+// Generic nodes
+//----------------------------------------
 
 class Filter : public gnode::Node
 {
@@ -79,21 +45,6 @@ protected:
 
 private:
   hmap::Vec2<int> shape = {0, 0};
-};
-
-class GammaCorrection : public Filter
-{
-public:
-  GammaCorrection(std::string id);
-
-  float get_gamma();
-
-  void set_gamma(float new_gamma);
-
-  void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
-
-private:
-  float gamma = 1.f;
 };
 
 class Primitive : public gnode::Node
@@ -131,6 +82,63 @@ private:
   float           vmax = 1.f;
 };
 
+class Unary : public gnode::Node // most basic, 1 in / 1 out
+{
+public:
+  Unary(std::string id);
+
+  void update_inner_bindings();
+
+  void compute();
+
+  virtual void compute_in_out(hmap::HeightMap &, hmap::HeightMap *)
+  {
+    LOG_ERROR("Compute not defined for generic in/out [%s])", this->id.c_str());
+    throw std::runtime_error("undefined 'compute_in_out' method");
+  }
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap();
+
+private:
+  hmap::Vec2<int> shape = {0, 0};
+};
+
+//----------------------------------------
+// End-user nodes
+//----------------------------------------
+
+class GradientNorm : public Unary
+{
+public:
+  GradientNorm(std::string id);
+
+  void compute_in_out(hmap::HeightMap &h, hmap::HeightMap *p_talus);
+};
+
+class GradientTalus : public Unary
+{
+public:
+  GradientTalus(std::string id);
+
+  void compute_in_out(hmap::HeightMap &h, hmap::HeightMap *p_talus);
+};
+
+class GammaCorrection : public Filter
+{
+public:
+  GammaCorrection(std::string id);
+
+  float get_gamma();
+
+  void set_gamma(float new_gamma);
+
+  void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
+
+private:
+  float gamma = 1.f;
+};
+
 class Perlin : public Primitive
 {
 public:
@@ -152,6 +160,26 @@ public:
 private:
   hmap::Vec2<float> kw = DEFAULT_KW;
   uint              seed = DEFAULT_SEED;
+};
+
+class Remap : public Unary
+{
+public:
+  Remap(std::string id);
+
+  void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
+
+  float get_vmin();
+
+  float get_vmax();
+
+  void set_vmin(float new_vmin);
+
+  void set_vmax(float new_vmax);
+
+private:
+  float vmin = 0.f;
+  float vmax = 1.f;
 };
 
 class WhiteDensityMap : public gnode::Node

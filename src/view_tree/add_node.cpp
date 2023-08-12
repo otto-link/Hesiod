@@ -20,7 +20,19 @@ void ViewTree::add_node(std::string control_node_type)
   LOG_DEBUG("adding node type: %s", control_node_type.c_str());
   LOG_DEBUG("uid: %s", uid.c_str());
 
-  if (control_node_type == "GradientNorm")
+  if (control_node_type == "GammaCorrection")
+  {
+    std::string     id = control_node_type + "##" + uid;
+    std::shared_ptr p_node = std::make_shared<hesiod::cnode::GammaCorrection>(
+        id);
+
+    this->p_control_tree->add_node(p_node);
+    this->view_nodes_mapping[id] =
+        generate_view_from_control<hesiod::cnode::GammaCorrection,
+                                   hesiod::vnode::ViewGammaCorrection>(
+            p_node.get());
+  }
+  else if (control_node_type == "GradientNorm")
   {
     std::string     id = control_node_type + "##" + uid;
     std::shared_ptr p_node = std::make_shared<hesiod::cnode::GradientNorm>(id);
@@ -55,6 +67,28 @@ void ViewTree::add_node(std::string control_node_type)
     this->view_nodes_mapping[id] =
         generate_view_from_control<hesiod::cnode::Perlin,
                                    hesiod::vnode::ViewPerlin>(p_node.get());
+  }
+  else if (control_node_type == "Remap")
+  {
+    std::string     id = control_node_type + "##" + uid;
+    std::shared_ptr p_node = std::make_shared<hesiod::cnode::Remap>(id);
+
+    this->p_control_tree->add_node(p_node);
+    this->view_nodes_mapping[id] =
+        generate_view_from_control<hesiod::cnode::Remap,
+                                   hesiod::vnode::ViewRemap>(p_node.get());
+  }
+  else if (control_node_type == "WhiteDensityMap")
+  {
+    std::string     id = control_node_type + "##" + uid;
+    std::shared_ptr p_node = std::make_shared<hesiod::cnode::WhiteDensityMap>(
+        id);
+
+    this->p_control_tree->add_node(p_node);
+    this->view_nodes_mapping[id] =
+        generate_view_from_control<hesiod::cnode::WhiteDensityMap,
+                                   hesiod::vnode::ViewWhiteDensityMap>(
+            p_node.get());
   }
   else
   {
