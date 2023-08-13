@@ -215,11 +215,14 @@ void ViewTree::remove_node(std::string node_id)
 
   // for the TreeView, we need to do everything by hand: first remove
   // all the links from and to the node
+  std::vector<int> link_id_to_remove = {};
+
   for (auto &[link_id, link] : this->links)
-  {
     if ((link.node_id_from == node_id) | (link.node_id_to == node_id))
-      this->remove_link(link_id);
-  }
+      link_id_to_remove.push_back(link_id);
+
+  for (auto &link_id : link_id_to_remove)
+    this->remove_link(link_id);
 
   // remove view node
   if (this->get_view_nodes_map().contains(node_id))
