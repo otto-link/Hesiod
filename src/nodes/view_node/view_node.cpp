@@ -59,11 +59,17 @@ void ViewNode::post_control_node_update()
 
 void ViewNode::render_node()
 {
+  std::string node_type = this->p_control_node->get_node_type();
+  // ImNodes::PushColorStyle(ImNodesCol_TitleBar, IM_COL32(15, 15, 15, 255));
+
   // ImGui::SetWindowFontScale(0.8f);
+
   ImNodes::BeginNode(this->p_control_node->hash_id);
   ImNodes::BeginNodeTitleBar();
   ImGui::TextUnformatted(this->p_control_node->get_node_type().c_str());
   ImNodes::EndNodeTitleBar();
+
+  // ImNodes::PopColorStyle();
 
   // inputs
   for (auto &[port_id, port] : this->p_control_node->get_ports())
@@ -181,7 +187,6 @@ void ViewNode::update_preview()
   if (this->preview_port_id != "")
     if (this->p_control_node->get_p_data(this->preview_port_id))
     {
-      LOG_DEBUG("%s", this->p_control_node->id.c_str());
       hmap::HeightMap *p_h = (hmap::HeightMap *)this->p_control_node
                                  ->get_p_data(this->preview_port_id);
 

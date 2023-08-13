@@ -252,13 +252,15 @@ void ViewTree::render_new_node_treeview()
   const float TEXT_BASE_WIDTH = ImGui::CalcTextSize("A").x;
   const float TEXT_BASE_HEIGHT = ImGui::GetTextLineHeightWithSpacing();
 
-  static ImGuiTableFlags flags = // ImGuiTableFlags_Resizable |
-      ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable |
-      // ImGuiTableFlags_Sortable |
-      // ImGuiTableFlags_SortMulti |
-      // ImGuiTableFlags_RowBg |
-      ImGuiTableFlags_BordersOuter | ImGuiTableFlags_BordersV |
-      ImGuiTableFlags_NoBordersInBody | ImGuiTableFlags_ScrollY;
+  static ImGuiTableFlags flags = ImGuiTableFlags_Reorderable |
+                                 ImGuiTableFlags_Hideable |
+                                 // ImGuiTableFlags_Sortable |
+                                 // ImGuiTableFlags_SortMulti |
+                                 // ImGuiTableFlags_RowBg |
+                                 ImGuiTableFlags_BordersOuter |
+                                 ImGuiTableFlags_BordersV |
+                                 ImGuiTableFlags_NoBordersInBody |
+                                 ImGuiTableFlags_ScrollY;
 
   if (ImGui::BeginTable("table_sorting",
                         2,
