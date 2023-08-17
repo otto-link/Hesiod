@@ -54,6 +54,18 @@ void ViewTree::add_node(std::string control_node_type)
                                    hesiod::vnode::ViewGradientTalus>(
             p_node.get());
   }
+  else if (control_node_type == "HydraulicParticle")
+  {
+    std::string     id = control_node_type + "##" + uid;
+    std::shared_ptr p_node = std::make_shared<hesiod::cnode::HydraulicParticle>(
+        id);
+
+    this->p_control_tree->add_node(p_node);
+    this->view_nodes_mapping[id] =
+        generate_view_from_control<hesiod::cnode::HydraulicParticle,
+                                   hesiod::vnode::ViewHydraulicParticle>(
+            p_node.get());
+  }
   else if (control_node_type == "Perlin")
   {
     std::string     id = control_node_type + "##" + uid;

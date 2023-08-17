@@ -91,6 +91,24 @@ private:
   hesiod::cnode::GradientTalus *p_control_node;
 };
 
+class ViewHydraulicParticle : public ViewNode
+{
+public:
+  int   c_radius;
+  float c_capacity;
+  float c_erosion;
+  float c_deposition;
+  float drag_rate;
+  float evap_rate;
+
+  ViewHydraulicParticle(hesiod::cnode::HydraulicParticle *p_control_node);
+
+  bool render_settings();
+
+private:
+  hesiod::cnode::HydraulicParticle *p_control_node;
+};
+
 class ViewPerlin : public ViewNode
 {
 public:

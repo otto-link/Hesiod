@@ -52,6 +52,7 @@ void Filter::update_inner_bindings()
         this->shape = p_input_hmap->shape;
         this->value_out.set_shape(this->shape);
         this->value_out.set_tiling(p_input_hmap->tiling);
+        this->value_out.set_overlap(p_input_hmap->overlap);
         LOG_DEBUG("node [%s]: reshape inner storage to {%d, %d}",
                   this->id.c_str(),
                   this->shape.x,
