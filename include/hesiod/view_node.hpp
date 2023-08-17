@@ -94,6 +94,8 @@ private:
 class ViewHydraulicParticle : public ViewNode
 {
 public:
+  int   seed;
+  int   nparticles;
   int   c_radius;
   float c_capacity;
   float c_erosion;

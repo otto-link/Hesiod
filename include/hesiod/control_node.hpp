@@ -184,6 +184,38 @@ class HydraulicParticle : public Erosion
 public:
   HydraulicParticle(std::string id);
 
+  uint get_seed();
+
+  int get_nparticles();
+
+  int get_c_radius();
+
+  float get_c_capacity();
+
+  float get_c_erosion();
+
+  float get_c_deposition();
+
+  float get_drag_rate();
+
+  float get_evap_rate();
+
+  void set_seed(uint new_seed);
+
+  void set_nparticles(int new_nparticles);
+
+  void set_c_radius(int new_c_radius);
+
+  void set_c_capacity(float new_c_capacity);
+
+  void set_c_erosion(float new_c_erosion);
+
+  void set_c_deposition(float new_c_deposition);
+
+  void set_drag_rate(float new_drag_rate);
+
+  void set_evap_rate(float new_evap_rate);
+
   void compute_erosion(hmap::HeightMap &h,
                        hmap::HeightMap *p_bedrock,
                        hmap::HeightMap *p_moisture_map,
@@ -192,6 +224,8 @@ public:
                        hmap::HeightMap *p_deposition_map);
 
 private:
+  uint  seed = 1;
+  int   nparticles = 10000;
   int   c_radius = 0;
   float c_capacity = 10.f;
   float c_erosion = 0.05f;
