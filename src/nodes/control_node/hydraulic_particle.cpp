@@ -135,7 +135,7 @@ void HydraulicParticle::compute_erosion(hmap::HeightMap &h,
 {
   LOG_DEBUG("computing erosion node [%s]", this->id.c_str());
 
-  int nparticles_tile = this->nparticles / (float)h.get_ntiles();
+  int nparticles_tile = (int) (this->nparticles / (float)h.get_ntiles());
 
   hmap::transform(h,
                   p_bedrock,
