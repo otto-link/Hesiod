@@ -134,10 +134,12 @@ int main()
         // delete node
         if (ImGui::IsKeyReleased(ImGuiKey_Delete) or
             ImGui::IsKeyReleased(ImGuiKey_X))
-        {
-          LOG_DEBUG("%s", node_id.c_str());
           node_id_to_remove.push_back(node_id);
-        }
+
+        // duplicate node
+        if (ImGui::IsKeyReleased(ImGuiKey_D))
+          gui_tree.add_view_node(
+              gui_tree.get_node_ref_by_id(node_id)->get_node_type());
       }
 
       for (auto &node_id : node_id_to_remove)
