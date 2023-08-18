@@ -22,6 +22,7 @@ enum dtype : int
 };
 
 static const std::map<std::string, std::string> category_mapping = {
+    {"Debug", "Debug"},
     {"GradientNorm", "Math/Gradient"},
     {"GradientTalus", "Math/Gradient"},
     {"GammaCorrection", "Filter/Recurve"},
@@ -35,6 +36,14 @@ static const std::map<std::string, std::string> category_mapping = {
 //----------------------------------------
 // Generic nodes
 //----------------------------------------
+
+class Debug : public gnode::Node
+{
+public:
+  Debug(std::string id);
+
+  void compute();
+};
 
 class Erosion : public gnode::Node
 {

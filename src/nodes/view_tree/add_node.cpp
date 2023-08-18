@@ -20,7 +20,15 @@ void ViewTree::add_view_node(std::string control_node_type)
   LOG_DEBUG("adding node type: %s", control_node_type.c_str());
   LOG_DEBUG("uid: %s", uid.c_str());
 
-  if (control_node_type == "GammaCorrection")
+  if (control_node_type == "Debug")
+  {
+    std::string     id = control_node_type + "##" + uid;
+    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewDebug>(
+        id);
+
+    this->add_node(p_view_node);
+  }
+  else if (control_node_type == "GammaCorrection")
   {
     std::string     id = control_node_type + "##" + uid;
     std::shared_ptr p_view_node =

@@ -36,7 +36,7 @@ public:
 
   void set_preview_type(int new_preview_type);
 
-  void post_control_node_update();
+  virtual void post_control_node_update();
 
   virtual bool render_settings();
 
@@ -70,6 +70,21 @@ public:
   {
     this->set_p_control_node((gnode::Node *)this);
   }
+};
+
+class ViewDebug : public ViewNode, public hesiod::cnode::Debug
+{
+public:
+  std::string log = "";
+  bool        auto_export_png = false;
+
+  ViewDebug(std::string id);
+
+  void export_to_png();
+
+  void post_control_node_update();
+
+  bool render_settings();
 };
 
 class ViewGammaCorrection : public ViewNode,

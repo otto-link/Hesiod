@@ -18,37 +18,12 @@ int main()
   hmap::Vec2<int> tiling = {4, 2};
   float           overlap = 0.25;
 
-  gnode::Tree tree = gnode::Tree("tree_1");
-
-  // tree.add_node(std::make_shared<hesiod::cnode::Perlin>("perlin",
-  //                                                       shape,
-  //                                                       tiling,
-  //                                                       overlap));
-
-  // tree.add_node(std::make_shared<hesiod::cnode::GammaCorrection>("gamma"));
-  // tree.add_node(std::make_shared<hesiod::cnode::GammaCorrection>("gamma2"));
-
-  // tree.add_node(std::make_shared<hesiod::cnode::WhiteDensityMap>("whitedmap"));
-
-  // tree.get_node_ref_by_id("perlin")->infos();
-  // tree.get_node_ref_by_id("gamma")->infos();
-  // tree.get_node_ref_by_id("whitedmap")->infos();
-
-  // tree.link("perlin", "output", "gamma", "input");
-  // tree.link("gamma", "output", "gamma2", "input");
-
-  hesiod::vnode::ViewTree gui_tree =
+  hesiod::vnode::ViewTree tree =
       hesiod::vnode::ViewTree("tree_1", shape, tiling, overlap);
 
-  // gui_tree.add_node("Perlin");
-  // gui_tree.add_node("Perlin");
-  // gui_tree.add_node("GradientTalus");
-  // gui_tree.add_node("GradientNorm");
-  // gui_tree.add_node("Remap");
-
-  gui_tree.generate_all_view_nodes();
-  gui_tree.generate_all_links();
-  gui_tree.update();
+  // tree.generate_all_view_nodes();
+  // tree.generate_all_links();
+  tree.update();
 
   tree.print_node_links();
 
@@ -74,9 +49,8 @@ int main()
     ImGui::Begin("Node editor");
     ImNodes::BeginNodeEditor();
 
-    gui_tree.render_view_nodes();
-
-    gui_tree.render_links();
+    tree.render_view_nodes();
+    tree.render_links();
 
     ImNodes::EndNodeEditor();
     ImGui::End();
@@ -86,7 +60,7 @@ int main()
     if (ImNodes::IsLinkCreated(&port_hash_id_from, &port_hash_id_to))
     {
       LOG_DEBUG("link created: %d <-> %d", port_hash_id_from, port_hash_id_to);
-      gui_tree.new_link(port_hash_id_from, port_hash_id_to);
+      tree.new_link(port_hash_id_from, port_hash_id_to);
     }
 
     // --- links management // destruction
@@ -100,17 +74,17 @@ int main()
       ImNodes::GetSelectedLinks(selected_links.data());
 
       for (auto &v : selected_links)
-        gui_tree.remove_link(v);
+        tree.remove_link(v);
     }
 
     // --- nodes // new
     ImGui::Begin("New node");
-    gui_tree.render_new_node_treeview();
+    tree.render_new_node_treeview();
     ImGui::End();
 
     // --- nodes DEBUG node list
     ImGui::Begin("Node list");
-    gui_tree.render_node_list();
+    tree.render_node_list();
     ImGui::End();
 
     // --- nodes // settings
@@ -127,9 +101,9 @@ int main()
 
       for (auto &node_hash_id : selected_nodes)
       {
-        std::string node_id = gui_tree.get_node_id_by_hash_id(node_hash_id);
+        std::string node_id = tree.get_node_id_by_hash_id(node_hash_id);
         ImGui::SeparatorText(node_id.c_str());
-        gui_tree.render_settings(node_id);
+        tree.render_settings(node_id);
 
         // delete node
         if (ImGui::IsKeyReleased(ImGuiKey_Delete) or
@@ -138,13 +112,12 @@ int main()
 
         // duplicate node
         if (ImGui::IsKeyReleased(ImGuiKey_D))
-          gui_tree.add_view_node(
-              gui_tree.get_node_ref_by_id(node_id)->get_node_type());
+          tree.add_view_node(tree.get_node_ref_by_id(node_id)->get_node_type());
       }
 
       for (auto &node_id : node_id_to_remove)
       {
-        gui_tree.remove_view_node(node_id);
+        tree.remove_view_node(node_id);
         ImNodes::ClearNodeSelection();
       }
     }
