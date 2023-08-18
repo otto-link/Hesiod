@@ -147,6 +147,18 @@ public:
   bool render_settings();
 };
 
+class ViewValueNoiseDelaunay : public ViewNode,
+                               public hesiod::cnode::ValueNoiseDelaunay
+{
+public:
+  ViewValueNoiseDelaunay(std::string     id,
+                         hmap::Vec2<int> shape,
+                         hmap::Vec2<int> tiling,
+                         float           overlap);
+
+  bool render_settings();
+};
+
 class ViewWhiteDensityMap : public ViewNode,
                             public hesiod::cnode::WhiteDensityMap
 {

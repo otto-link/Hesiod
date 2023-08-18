@@ -87,6 +87,17 @@ void ViewTree::add_view_node(std::string control_node_type)
 
     this->add_node(p_view_node);
   }
+  else if (control_node_type == "ValueNoiseDelaunay")
+  {
+    std::string     id = control_node_type + "##" + uid;
+    std::shared_ptr p_view_node =
+        std::make_shared<hesiod::vnode::ViewValueNoiseDelaunay>(id,
+                                                                this->shape,
+                                                                this->tiling,
+                                                                this->overlap);
+
+    this->add_node(p_view_node);
+  }
   else if (control_node_type == "WhiteDensityMap")
   {
     std::string     id = control_node_type + "##" + uid;

@@ -8,7 +8,7 @@
 #include "highmap.hpp"
 
 // clang-format off
-#define DEFAULT_KW {2.f, 2.f}
+#define DEFAULT_KW 2.f
 #define DEFAULT_SEED 1
 // clang-format on
 
@@ -30,6 +30,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Perlin", "Primitive/Coherent Noise"},
     {"Remap", "Filter/Range"},
     {"SmoothCpulse", "Filter/Smoothing"},
+    {"ValueNoiseDelaunay", "Primitive/Coherent Noise"},
     {"WhiteDensityMap", "Primitive/Random"},
     {"Worley", "Primitive/Coherent Noise"}};
 
@@ -205,7 +206,7 @@ public:
   void compute();
 
 protected:
-  hmap::Vec2<float> kw = DEFAULT_KW;
+  hmap::Vec2<float> kw = {DEFAULT_KW, DEFAULT_KW};
   int               seed = DEFAULT_SEED;
 };
 
@@ -230,6 +231,21 @@ public:
 
 protected:
   int ir = 8;
+};
+
+class ValueNoiseDelaunay : public Primitive
+{
+public:
+  ValueNoiseDelaunay(std::string     id,
+                     hmap::Vec2<int> shape,
+                     hmap::Vec2<int> tiling,
+                     float           overlap);
+
+  void compute();
+
+protected:
+  float kw = DEFAULT_KW;
+  int   seed = DEFAULT_SEED;
 };
 
 class WhiteDensityMap : public gnode::Node
@@ -260,7 +276,7 @@ public:
   void compute();
 
 protected:
-  hmap::Vec2<float> kw = DEFAULT_KW;
+  hmap::Vec2<float> kw = {DEFAULT_KW, DEFAULT_KW};
   int               seed = DEFAULT_SEED;
 };
 
