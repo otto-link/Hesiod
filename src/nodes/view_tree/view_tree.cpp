@@ -102,8 +102,45 @@ void ViewTree::new_link(int port_hash_id_from, int port_hash_id_to)
   std::string port_id_to;
 
   this->get_ids_by_port_hash_id(port_hash_id_from, node_id_from, port_id_from);
-
   this->get_ids_by_port_hash_id(port_hash_id_to, node_id_to, port_id_to);
+
+  // check if links already exist for the ports that are to be
+  // connected
+  if (this->get_node_ref_by_id(node_id_from)
+          ->get_port_ref_by_id(port_id_from)
+          ->is_connected)
+  {
+    LOG_DEBUG("already connected, disconnecting [%s] / [%s]",
+              node_id_from.c_str(),
+              port_id_from.c_str());
+
+    // the link Id for the view tree is actually the hash id of the
+    // port on the end of the link (since the 'from' port is an output
+    // port), we use it to remove the link from the link map
+    int hid = this->get_node_ref_by_id(node_id_from)
+                  ->get_port_ref_by_id(port_id_from)
+                  ->p_linked_port->hash_id;
+
+    this->remove_link(hid);
+  }
+
+  if (this->get_node_ref_by_id(node_id_to)
+          ->get_port_ref_by_id(port_id_to)
+          ->is_connected)
+  {
+    LOG_DEBUG("already connected, disconnecting [%s] / [%s]",
+              node_id_to.c_str(),
+              port_id_to.c_str());
+
+    // the link Id for the view tree is actually the hash id of the
+    // port on this side of the link (since this is an input port), we
+    // use it to remove the link from the link map
+    int hid = this->get_node_ref_by_id(node_id_to)
+                  ->get_port_ref_by_id(port_id_to)
+                  ->hash_id;
+
+    this->remove_link(hid);
+  }
 
   // generate link (in GNode)
   this->link(node_id_from, port_id_from, node_id_to, port_id_to);

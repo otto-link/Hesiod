@@ -29,7 +29,8 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Perlin", "Primitive/Coherent Noise"},
     {"Remap", "Filter/Range"},
     {"SmoothCpulse", "Filter/Smoothing"},
-    {"WhiteDensityMap", "Primitive/Random"}};
+    {"WhiteDensityMap", "Primitive/Random"},
+    {"Worley", "Primitive/Coherent Noise"}};
 
 //----------------------------------------
 // Generic nodes
@@ -237,6 +238,21 @@ protected:
 
 private:
   hmap::Vec2<int> shape = {0, 0};
+};
+
+class Worley : public Primitive
+{
+public:
+  Worley(std::string     id,
+         hmap::Vec2<int> shape,
+         hmap::Vec2<int> tiling,
+         float           overlap);
+
+  void compute();
+
+protected:
+  hmap::Vec2<float> kw = DEFAULT_KW;
+  int               seed = DEFAULT_SEED;
 };
 
 } // namespace hesiod::cnode

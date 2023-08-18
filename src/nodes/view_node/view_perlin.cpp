@@ -62,7 +62,7 @@ bool ViewPerlin::render_settings()
   else
   {
     // if (ImGui::DragFloat2("kx, ky",
-    //                       &this->kw.x, // TODO
+    //                       (float *) this->kw, // TODO
     //                       0.1f,
     //                       0.f,
     //                       64.f,
