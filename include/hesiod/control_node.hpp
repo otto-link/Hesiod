@@ -94,31 +94,17 @@ public:
             hmap::Vec2<int> tiling,
             float           overlap);
 
-  hmap::Vec2<int> get_shape();
-
-  float get_vmin();
-
-  float get_vmax();
-
-  void set_shape(hmap::Vec2<int> new_shape);
-
-  void set_tiling(hmap::Vec2<int> new_tiling);
-
-  void set_vmax(float new_vmax);
-
-  void set_vmin(float new_vmin);
-
   void update_inner_bindings();
 
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
+  float           vmin = 0.f;
+  float           vmax = 1.f;
 
 private:
   hmap::Vec2<int> shape;
   hmap::Vec2<int> tiling;
   float           overlap;
-  float           vmin = 0.f;
-  float           vmax = 1.f;
 };
 
 class Unary : public gnode::Node // most basic, 1 in / 1 out
@@ -169,13 +155,9 @@ class GammaCorrection : public Filter
 public:
   GammaCorrection(std::string id);
 
-  float get_gamma();
-
-  void set_gamma(float new_gamma);
-
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
 
-private:
+protected:
   float gamma = 1.f;
 };
 
@@ -184,38 +166,6 @@ class HydraulicParticle : public Erosion
 public:
   HydraulicParticle(std::string id);
 
-  uint get_seed();
-
-  int get_nparticles();
-
-  int get_c_radius();
-
-  float get_c_capacity();
-
-  float get_c_erosion();
-
-  float get_c_deposition();
-
-  float get_drag_rate();
-
-  float get_evap_rate();
-
-  void set_seed(uint new_seed);
-
-  void set_nparticles(int new_nparticles);
-
-  void set_c_radius(int new_c_radius);
-
-  void set_c_capacity(float new_c_capacity);
-
-  void set_c_erosion(float new_c_erosion);
-
-  void set_c_deposition(float new_c_deposition);
-
-  void set_drag_rate(float new_drag_rate);
-
-  void set_evap_rate(float new_evap_rate);
-
   void compute_erosion(hmap::HeightMap &h,
                        hmap::HeightMap *p_bedrock,
                        hmap::HeightMap *p_moisture_map,
@@ -223,8 +173,8 @@ public:
                        hmap::HeightMap *p_erosion_map,
                        hmap::HeightMap *p_deposition_map);
 
-private:
-  uint  seed = 1;
+protected:
+  int   seed = 1;
   int   nparticles = 10000;
   int   c_radius = 0;
   float c_capacity = 10.f;
@@ -242,19 +192,11 @@ public:
          hmap::Vec2<int> tiling,
          float           overlap);
 
-  hmap::Vec2<float> get_kw();
-
-  uint get_seed();
-
-  void set_kw(hmap::Vec2<float> new_kw);
-
-  void set_seed(uint new_seed);
-
   void compute();
 
-private:
+protected:
   hmap::Vec2<float> kw = DEFAULT_KW;
-  uint              seed = DEFAULT_SEED;
+  int               seed = DEFAULT_SEED;
 };
 
 class Remap : public Unary
@@ -264,15 +206,7 @@ public:
 
   void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
 
-  float get_vmin();
-
-  float get_vmax();
-
-  void set_vmin(float new_vmin);
-
-  void set_vmax(float new_vmax);
-
-private:
+protected:
   float vmin = 0.f;
   float vmax = 1.f;
 };
@@ -282,13 +216,9 @@ class SmoothCpulse : public Filter
 public:
   SmoothCpulse(std::string id);
 
-  int get_ir();
-
-  void set_ir(float new_ir);
-
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
 
-private:
+protected:
   int ir = 8;
 };
 
@@ -297,20 +227,16 @@ class WhiteDensityMap : public gnode::Node
 public:
   WhiteDensityMap(std::string id);
 
-  uint get_seed();
-
-  void set_seed(uint new_seed);
-
   void update_inner_bindings();
 
   void compute();
 
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
+  int             seed = DEFAULT_SEED;
 
 private:
   hmap::Vec2<int> shape = {0, 0};
-  uint            seed = DEFAULT_SEED;
 };
 
 } // namespace hesiod::cnode

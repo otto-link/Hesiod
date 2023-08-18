@@ -8,10 +8,10 @@
 namespace hesiod::vnode
 {
 
-ViewSmoothCpulse::ViewSmoothCpulse(hesiod::cnode::SmoothCpulse *p_control_node)
-    : ViewNode((gnode::Node *)p_control_node), p_control_node(p_control_node)
+ViewSmoothCpulse::ViewSmoothCpulse(std::string id)
+    : ViewNode(), hesiod::cnode::SmoothCpulse(id)
 {
-  this->ir = p_control_node->get_ir();
+  this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
 }
 
@@ -22,7 +22,7 @@ bool ViewSmoothCpulse::render_settings()
 
   if (ImGui::SliderInt("int", &this->ir, 1, 256))
   {
-    this->p_control_node->set_ir(this->ir);
+    this->force_update();
     has_changed = true;
   }
 

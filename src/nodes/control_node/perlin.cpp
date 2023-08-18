@@ -14,38 +14,11 @@ Perlin::Perlin(std::string     id,
                float           overlap)
     : Primitive(id, shape, tiling, overlap)
 {
+  LOG_DEBUG("Perlin::Perlin()");
   this->node_type = "Perlin";
   this->category = category_mapping.at(this->node_type);
   this->value_out.set_shape(shape);
   this->update_inner_bindings();
-}
-
-hmap::Vec2<float> Perlin::get_kw()
-{
-  return this->kw;
-}
-
-uint Perlin::get_seed()
-{
-  return this->seed;
-}
-
-void Perlin::set_kw(hmap::Vec2<float> new_kw)
-{
-  if (new_kw != this->kw)
-  {
-    this->kw = new_kw;
-    this->force_update();
-  }
-}
-
-void Perlin::set_seed(uint new_seed)
-{
-  if (new_seed != this->seed)
-  {
-    this->seed = new_seed;
-    this->force_update();
-  }
 }
 
 void Perlin::compute()
@@ -63,7 +36,7 @@ void Perlin::compute()
              {
                return hmap::perlin(shape,
                                    this->kw,
-                                   this->seed,
+                                   (uint)this->seed,
                                    p_noise_x,
                                    p_noise_y,
                                    shift,
@@ -71,7 +44,7 @@ void Perlin::compute()
              });
 
   // remap the output
-  this->value_out.remap(this->get_vmin(), this->get_vmax());
+  this->value_out.remap(this->vmin, this->vmax);
 }
 
 } // namespace hesiod::cnode

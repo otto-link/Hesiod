@@ -4,19 +4,20 @@
 #include "imgui.h"
 #include "macrologger.h"
 
+#include "hesiod/control_node.hpp"
 #include "hesiod/view_node.hpp"
 
 namespace hesiod::vnode
 {
 
-ViewPerlin::ViewPerlin(hesiod::cnode::Perlin *p_control_node)
-    : ViewNode((gnode::Node *)p_control_node), p_control_node(p_control_node)
+ViewPerlin::ViewPerlin(std::string     id,
+                       hmap::Vec2<int> shape,
+                       hmap::Vec2<int> tiling,
+                       float           overlap)
+    : ViewNode(), hesiod::cnode::Perlin(id, shape, tiling, overlap)
 {
-  this->shape = p_control_node->get_shape();
-  this->kw = p_control_node->get_kw();
-  this->seed = p_control_node->get_seed();
-  this->vmin = p_control_node->get_vmin();
-  this->vmax = p_control_node->get_vmax();
+  LOG_DEBUG("ViewPerlin::ViewPerlin()");
+  this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
 }
 
@@ -31,13 +32,13 @@ bool ViewPerlin::render_settings()
   {
     // TODO to do in the node itself
     this->seed = (int)time(NULL);
-    this->p_control_node->set_seed((uint)this->seed);
+    this->force_update();
     has_changed = true;
   }
 
   if (ImGui::DragInt("seed", &this->seed))
   {
-    this->p_control_node->set_seed((uint)this->seed);
+    this->force_update();
     has_changed = true;
   }
 
@@ -54,25 +55,23 @@ bool ViewPerlin::render_settings()
                          ImGuiSliderFlags_None))
     {
       this->kw.y = this->kw.x;
-      this->p_control_node->set_kw(this->kw);
+      this->force_update();
       has_changed = true;
     }
   }
   else
   {
-    ImVec2 kxy = {this->kw.x, this->kw.y};
-    if (ImGui::DragFloat2("kx, ky",
-                          (float *)&kxy,
-                          0.1f,
-                          0.f,
-                          64.f,
-                          "%.1f",
-                          ImGuiSliderFlags_None))
-    {
-      this->kw = {kxy.x, kxy.y};
-      this->p_control_node->set_kw(this->kw);
-      has_changed = true;
-    }
+    // if (ImGui::DragFloat2("kx, ky",
+    //                       &this->kw.x, // TODO
+    //                       0.1f,
+    //                       0.f,
+    //                       64.f,
+    //                       "%.1f",
+    //                       ImGuiSliderFlags_None))
+    // {
+    //   this->force_update();
+    //   has_changed = true;
+    // }
   }
 
   // output range
@@ -87,9 +86,9 @@ bool ViewPerlin::render_settings()
                              "vmax: %.2f",
                              ImGuiSliderFlags_AlwaysClamp))
   {
-    this->p_control_node->set_vmin(this->vmin);
-    this->p_control_node->set_vmax(this->vmax);
+    this->force_update();
     has_changed = true;
+    LOG_DEBUG("%f %f", this->vmin, this->vmax);
   }
 
   has_changed |= this->render_settings_footer();

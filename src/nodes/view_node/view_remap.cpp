@@ -8,11 +8,10 @@
 namespace hesiod::vnode
 {
 
-ViewRemap::ViewRemap(hesiod::cnode::Remap *p_control_node)
-    : ViewNode((gnode::Node *)p_control_node), p_control_node(p_control_node)
+ViewRemap::ViewRemap(std::string id) : ViewNode(), hesiod::cnode::Remap(id)
 {
-  this->vmin = p_control_node->get_vmin();
-  this->vmax = p_control_node->get_vmax();
+  this->set_p_control_node((gnode::Node *)this);
+  this->set_preview_port_id("output");
 }
 
 bool ViewRemap::render_settings()
@@ -33,8 +32,7 @@ bool ViewRemap::render_settings()
                              "vmax: %.2f",
                              ImGuiSliderFlags_AlwaysClamp))
   {
-    this->p_control_node->set_vmin(this->vmin);
-    this->p_control_node->set_vmax(this->vmax);
+    this->force_update();
     has_changed = true;
   }
 

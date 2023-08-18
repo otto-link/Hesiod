@@ -14,20 +14,6 @@ SmoothCpulse::SmoothCpulse(std::string id) : Filter(id)
   this->category = category_mapping.at(this->node_type);
 }
 
-int SmoothCpulse::get_ir()
-{
-  return this->ir;
-}
-
-void SmoothCpulse::set_ir(float new_ir)
-{
-  if (new_ir != this->ir)
-  {
-    this->ir = new_ir;
-    this->force_update();
-  }
-}
-
 void SmoothCpulse::compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask)
 {
   LOG_DEBUG("computing filter node [%s]", this->id.c_str());

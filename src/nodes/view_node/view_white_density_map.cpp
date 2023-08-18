@@ -9,11 +9,10 @@
 namespace hesiod::vnode
 {
 
-ViewWhiteDensityMap::ViewWhiteDensityMap(
-    hesiod::cnode::WhiteDensityMap *p_control_node)
-    : ViewNode((gnode::Node *)p_control_node), p_control_node(p_control_node)
+ViewWhiteDensityMap::ViewWhiteDensityMap(std::string id)
+    : ViewNode(), hesiod::cnode::WhiteDensityMap(id)
 {
-  this->seed = p_control_node->get_seed();
+  this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
 }
 
@@ -28,13 +27,13 @@ bool ViewWhiteDensityMap::render_settings()
   {
     // TODO to do in the node itself
     this->seed = (int)time(NULL);
-    this->p_control_node->set_seed((uint)this->seed);
+    this->force_update();
     has_changed = true;
   }
 
   if (ImGui::DragInt("seed", &this->seed))
   {
-    this->p_control_node->set_seed((uint)this->seed);
+    this->force_update();
     has_changed = true;
   }
 

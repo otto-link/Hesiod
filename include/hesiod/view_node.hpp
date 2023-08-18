@@ -2,9 +2,9 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #pragma once
-// #include "GL/gl.h"
 #include <string>
 
+#include "gnode.hpp"
 #include <GLFW/glfw3.h>
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
@@ -24,13 +24,13 @@ enum preview_type : int
 class ViewNode
 {
 public:
-  bool        auto_update;
-  std::string id;
-  std::string label;
+  ViewNode();
 
   ViewNode(gnode::Node *p_control_node);
 
   gnode::Node *get_p_control_node();
+
+  void set_p_control_node(gnode::Node *new_p_control_node);
 
   void set_preview_port_id(std::string new_port_id);
 
@@ -58,120 +58,90 @@ private:
   hmap::Vec2<int> shape_preview = {128, 128};
   int             preview_type = preview_type::grayscale;
   GLuint          image_texture = 0;
+
+  void init_from_control_node();
 };
 
-class ViewGammaCorrection : public ViewNode
+class ViewControlNode : public ViewNode,
+                        public gnode::Node // used to recast derived ViewNode
 {
 public:
-  float gamma;
+  ViewControlNode(std::string id) : ViewNode(), gnode::Node(id)
+  {
+    this->set_p_control_node((gnode::Node *)this);
+  }
+};
 
-  ViewGammaCorrection(hesiod::cnode::GammaCorrection *p_control_node);
+class ViewGammaCorrection : public ViewNode,
+                            public hesiod::cnode::GammaCorrection
+{
+public:
+  ViewGammaCorrection(std::string id);
+
+  bool render_settings();
+};
+
+class ViewGradientNorm : public ViewNode, public hesiod::cnode::GradientNorm
+{
+public:
+  ViewGradientNorm(std::string id);
+};
+
+class ViewGradientTalus : public ViewNode, public hesiod::cnode::GradientTalus
+{
+public:
+  ViewGradientTalus(std::string id);
+};
+
+class ViewHydraulicParticle : public ViewNode,
+                              public hesiod::cnode::HydraulicParticle
+{
+public:
+  ViewHydraulicParticle(std::string id);
+
+  bool render_settings();
+};
+
+class ViewPerlin : public ViewNode, public hesiod::cnode::Perlin
+{
+public:
+  ViewPerlin(std::string     id,
+             hmap::Vec2<int> shape,
+             hmap::Vec2<int> tiling,
+             float           overlap);
 
   bool render_settings();
 
 private:
-  hesiod::cnode::GammaCorrection *p_control_node;
+  bool link_kxy = true;
 };
 
-class ViewGradientNorm : public ViewNode
+class ViewSmoothCpulse : public ViewNode, public hesiod::cnode::SmoothCpulse
 {
 public:
-  ViewGradientNorm(hesiod::cnode::GradientNorm *p_control_node);
-
-private:
-  hesiod::cnode::GradientNorm *p_control_node;
-};
-
-class ViewGradientTalus : public ViewNode
-{
-public:
-  ViewGradientTalus(hesiod::cnode::GradientTalus *p_control_node);
-
-private:
-  hesiod::cnode::GradientTalus *p_control_node;
-};
-
-class ViewHydraulicParticle : public ViewNode
-{
-public:
-  int   seed;
-  int   nparticles;
-  int   c_radius;
-  float c_capacity;
-  float c_erosion;
-  float c_deposition;
-  float drag_rate;
-  float evap_rate;
-
-  ViewHydraulicParticle(hesiod::cnode::HydraulicParticle *p_control_node);
+  ViewSmoothCpulse(std::string id);
 
   bool render_settings();
-
-private:
-  hesiod::cnode::HydraulicParticle *p_control_node;
 };
 
-class ViewPerlin : public ViewNode
+class ViewRemap : public ViewNode, public hesiod::cnode::Remap
 {
 public:
-  hmap::Vec2<int>   shape;
-  hmap::Vec2<float> kw;
-  int               seed;
-  float             vmin;
-  float             vmax;
-
-  ViewPerlin(hesiod::cnode::Perlin *p_control_node);
+  ViewRemap(std::string id);
 
   bool render_settings();
-
-private:
-  hesiod::cnode::Perlin *p_control_node;
-  bool                   link_kxy = true;
 };
 
-class ViewSmoothCpulse : public ViewNode
+class ViewWhiteDensityMap : public ViewNode,
+                            public hesiod::cnode::WhiteDensityMap
 {
 public:
-  int ir;
-
-  ViewSmoothCpulse(hesiod::cnode::SmoothCpulse *p_control_node);
+  ViewWhiteDensityMap(std::string id);
 
   bool render_settings();
-
-private:
-  hesiod::cnode::SmoothCpulse *p_control_node;
 };
 
-class ViewRemap : public ViewNode
-{
-public:
-  float vmin;
-  float vmax;
-
-  ViewRemap(hesiod::cnode::Remap *p_control_node);
-
-  bool render_settings();
-
-private:
-  hesiod::cnode::Remap *p_control_node;
-};
-
-class ViewWhiteDensityMap : public ViewNode
-{
-public:
-  int   seed;
-  float vmin;
-  float vmax;
-
-  ViewWhiteDensityMap(hesiod::cnode::WhiteDensityMap *p_control_node);
-
-  bool render_settings();
-
-private:
-  hesiod::cnode::WhiteDensityMap *p_control_node;
-};
-
-// HELPERS
+// // HELPERS
 
 void img_to_texture(std::vector<uint8_t> img,
                     hmap::Vec2<int>      shape,

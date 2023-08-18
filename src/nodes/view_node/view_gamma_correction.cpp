@@ -8,11 +8,12 @@
 namespace hesiod::vnode
 {
 
-ViewGammaCorrection::ViewGammaCorrection(
-    hesiod::cnode::GammaCorrection *p_control_node)
-    : ViewNode((gnode::Node *)p_control_node), p_control_node(p_control_node)
+ViewGammaCorrection::ViewGammaCorrection(std::string id)
+    : ViewNode(), hesiod::cnode::GammaCorrection(id)
 {
-  this->gamma = p_control_node->get_gamma();
+  LOG_DEBUG("hash_id: %d", this->hash_id);
+  LOG_DEBUG("label: %s", this->label.c_str());
+  this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
 }
 
@@ -23,7 +24,7 @@ bool ViewGammaCorrection::render_settings()
 
   if (ImGui::SliderFloat("gamma", &this->gamma, 0.01f, 10.f))
   {
-    this->p_control_node->set_gamma(this->gamma);
+    this->GammaCorrection::force_update();
     has_changed = true;
   }
 

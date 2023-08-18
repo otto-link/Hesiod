@@ -9,11 +9,6 @@
 namespace hesiod::vnode
 {
 
-typedef std::map<std::string, std::shared_ptr<gnode::Node>> GNodeMapping;
-
-typedef std::map<std::string, std::shared_ptr<hesiod::vnode::ViewNode>>
-    ViewNodeMapping;
-
 struct Link
 {
   // related to GNode and Hesiod
@@ -34,36 +29,19 @@ struct Link
        int         port_hash_id_to);
 };
 
-class ViewTree
+class ViewTree : public gnode::Tree
 {
 public:
-  std::string id;
-  std::string label;
-
-  ViewTree(gnode::Tree    *p_control_tree,
+  ViewTree(std::string     id,
            hmap::Vec2<int> shape,
            hmap::Vec2<int> tiling,
            float           overlap);
-
-  std::string get_control_node_id_by_hash_id(int control_node_hash_id);
-
-  gnode::Node *get_control_node_ref_by_hash_id(int control_node_hash_id);
-
-  GNodeMapping get_control_nodes_map();
-
-  void get_ids_by_port_hash_id(int          port_hash_id,
-                               std::string &node_id,
-                               std::string &port_id);
-
-  ViewNodeMapping get_view_nodes_map();
-
-  ViewNode *get_view_node_ref_by_id(std::string node_id);
 
   Link *get_link_ref_by_id(int link_id);
 
   std::string get_new_id();
 
-  void add_node(std::string control_node_type);
+  void add_view_node(std::string control_node_type);
 
   void generate_all_links(bool force_update = false);
 
@@ -75,9 +53,7 @@ public:
 
   void remove_link(int link_id);
 
-  // void remove_node(int node_hash_id);
-
-  void remove_node(std::string node_id);
+  void remove_view_node(std::string node_id);
 
   void render_links();
 
@@ -89,24 +65,13 @@ public:
 
   void render_view_nodes();
 
-  void update();
-
-  void update_node(std::string node_id);
-
 private:
-  gnode::Tree    *p_control_tree;
   hmap::Vec2<int> shape;
   hmap::Vec2<int> tiling;
   float           overlap;
 
-  ViewNodeMapping     view_nodes_mapping;
   std::map<int, Link> links = {};
   int                 id_counter = 0;
 };
-
-// HELPERS
-
-template <class TControl, class TView>
-std::shared_ptr<TView> generate_view_from_control(gnode::Node *p_control_node);
 
 } // namespace hesiod::vnode

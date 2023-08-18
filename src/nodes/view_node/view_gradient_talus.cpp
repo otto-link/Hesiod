@@ -8,10 +8,10 @@
 namespace hesiod::vnode
 {
 
-ViewGradientTalus::ViewGradientTalus(
-    hesiod::cnode::GradientTalus *p_control_node)
-    : ViewNode((gnode::Node *)p_control_node), p_control_node(p_control_node)
+ViewGradientTalus::ViewGradientTalus(std::string id)
+    : ViewNode(), hesiod::cnode::GradientTalus(id)
 {
+  this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
 }
 

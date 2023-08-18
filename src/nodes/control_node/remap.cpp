@@ -15,34 +15,6 @@ Remap::Remap(std::string id) : Unary(id)
   this->update_inner_bindings();
 }
 
-float Remap::get_vmin()
-{
-  return this->vmin;
-}
-
-float Remap::get_vmax()
-{
-  return this->vmax;
-}
-
-void Remap::set_vmin(float new_vmin)
-{
-  if (new_vmin != this->vmin)
-  {
-    this->vmin = new_vmin;
-    this->force_update();
-  }
-}
-
-void Remap::set_vmax(float new_vmax)
-{
-  if (new_vmax != this->vmax)
-  {
-    this->vmax = new_vmax;
-    this->force_update();
-  }
-}
-
 void Remap::compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in)
 {
   LOG_DEBUG("computing node [%s]", this->id.c_str());

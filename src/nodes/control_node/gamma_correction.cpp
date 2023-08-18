@@ -10,22 +10,9 @@ namespace hesiod::cnode
 
 GammaCorrection::GammaCorrection(std::string id) : Filter(id)
 {
+  LOG_DEBUG("GammaCorrection::GammaCorrection()");
   this->node_type = "GammaCorrection";
   this->category = category_mapping.at(this->node_type);
-}
-
-float GammaCorrection::get_gamma()
-{
-  return this->gamma;
-}
-
-void GammaCorrection::set_gamma(float new_gamma)
-{
-  if (new_gamma != this->gamma)
-  {
-    this->gamma = new_gamma;
-    this->force_update();
-  }
 }
 
 void GammaCorrection::compute_filter(hmap::HeightMap &h,

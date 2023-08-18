@@ -9,24 +9,25 @@
 namespace hesiod::vnode
 {
 
+ViewNode::ViewNode() : p_control_node(nullptr)
+{
+}
+
 ViewNode::ViewNode(gnode::Node *p_control_node) : p_control_node(p_control_node)
 {
-  this->id = this->p_control_node->id;
-  this->label = this->p_control_node->label;
-  this->auto_update = this->p_control_node->auto_update;
-
-  // uplink connection between control and view node: when the control
-  // node is updated/computed this wrapper is triggered (with the view
-  // node as reference parameter) and it then triggers the
-  // 'post_control_node_update' method of the node
-  this->p_control_node->set_post_update_callback(
-      [this](gnode::Node *p_cnode)
-      { post_update_callback_wrapper(this, p_cnode); });
+  this->init_from_control_node();
 }
 
 gnode::Node *ViewNode::get_p_control_node()
 {
   return this->p_control_node;
+}
+
+void ViewNode::set_p_control_node(gnode::Node *new_p_control_node)
+{
+  this->p_control_node = new_p_control_node;
+  this->init_from_control_node();
+  LOG_DEBUG("hash_id: %d", this->p_control_node->hash_id);
 }
 
 void ViewNode::set_preview_port_id(std::string new_port_id)
@@ -49,9 +50,20 @@ void ViewNode::set_preview_type(int new_preview_type)
   this->update_preview();
 }
 
+void ViewNode::init_from_control_node()
+{
+  // uplink connection between control and view node: when the control
+  // node is updated/computed this wrapper is triggered (with the view
+  // node as reference parameter) and it then triggers the
+  // 'post_control_node_update' method of the node
+  this->p_control_node->set_post_update_callback(
+      [this](gnode::Node *p_cnode)
+      { post_update_callback_wrapper(this, p_cnode); });
+}
+
 void ViewNode::post_control_node_update()
 {
-  LOG_DEBUG("post-update, node [%s]", this->id.c_str());
+  LOG_DEBUG("post-update, node [%s]", this->p_control_node->id.c_str());
 
   if (this->preview_port_id != "")
     this->update_preview();
@@ -139,15 +151,13 @@ bool ViewNode::render_settings_header()
   // object
   ImGui::PushID((void *)this);
 
-  if (ImGui::Checkbox("Auto-update", &this->auto_update))
-  {
-    this->p_control_node->auto_update = this->auto_update;
+  if (ImGui::Checkbox("Auto-update", &this->p_control_node->auto_update))
     has_changed = true;
-  }
+
   ImGui::SameLine();
 
   // auto-update button
-  bool disabled_update_button = this->auto_update &
+  bool disabled_update_button = this->p_control_node->auto_update &
                                 this->p_control_node->is_up_to_date;
   if (disabled_update_button)
     ImGui::BeginDisabled();

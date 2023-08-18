@@ -38,7 +38,7 @@ int main()
   // tree.link("gamma", "output", "gamma2", "input");
 
   hesiod::vnode::ViewTree gui_tree =
-      hesiod::vnode::ViewTree(&tree, shape, tiling, overlap);
+      hesiod::vnode::ViewTree("tree_1", shape, tiling, overlap);
 
   // gui_tree.add_node("Perlin");
   // gui_tree.add_node("Perlin");
@@ -75,6 +75,7 @@ int main()
     ImNodes::BeginNodeEditor();
 
     gui_tree.render_view_nodes();
+
     gui_tree.render_links();
 
     ImNodes::EndNodeEditor();
@@ -126,8 +127,7 @@ int main()
 
       for (auto &node_hash_id : selected_nodes)
       {
-        std::string node_id = gui_tree.get_control_node_id_by_hash_id(
-            node_hash_id);
+        std::string node_id = gui_tree.get_node_id_by_hash_id(node_hash_id);
         ImGui::SeparatorText(node_id.c_str());
         gui_tree.render_settings(node_id);
 
@@ -142,7 +142,7 @@ int main()
 
       for (auto &node_id : node_id_to_remove)
       {
-        gui_tree.remove_node(node_id);
+        gui_tree.remove_view_node(node_id);
         ImNodes::ClearNodeSelection();
       }
     }

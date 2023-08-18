@@ -24,20 +24,6 @@ WhiteDensityMap::WhiteDensityMap(std::string id) : gnode::Node(id)
   this->set_thru(false); // this node cannot be thru
 }
 
-uint WhiteDensityMap::get_seed()
-{
-  return this->seed;
-}
-
-void WhiteDensityMap::set_seed(uint new_seed)
-{
-  if (new_seed != this->seed)
-  {
-    this->seed = new_seed;
-    this->force_update();
-  }
-}
-
 void WhiteDensityMap::update_inner_bindings()
 {
   LOG_DEBUG("inner bindings [%s]", this->id.c_str());
@@ -78,11 +64,11 @@ void WhiteDensityMap::compute()
   hmap::HeightMap *p_input_hmap = static_cast<hmap::HeightMap *>(
       (void *)this->get_p_data("density map"));
 
-  hmap::transform(this->value_out,
-                  *p_input_hmap,
-                  [this](hmap::Array &h_out, hmap::Array &density_map) {
-                    h_out = hmap::white_density_map(density_map, this->seed);
-                  });
+  hmap::transform(
+      this->value_out,
+      *p_input_hmap,
+      [this](hmap::Array &h_out, hmap::Array &density_map)
+      { h_out = hmap::white_density_map(density_map, (uint)this->seed); });
 }
 
 } // namespace hesiod::cnode
