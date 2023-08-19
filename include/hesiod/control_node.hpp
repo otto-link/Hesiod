@@ -142,7 +142,6 @@ private:
 
 //----------------------------------------
 // End-user nodes
-
 //----------------------------------------
 
 class GradientNorm : public Unary
