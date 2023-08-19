@@ -47,8 +47,6 @@ public:
 
   void generate_all_view_nodes(bool force_update = false);
 
-  void generate_view_node_from_control_node(std::string control_node_id);
-
   void new_link(int port_hash_id_from, int port_hash_id_to);
 
   void remove_link(int link_id);

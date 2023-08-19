@@ -124,38 +124,4 @@ void ViewTree::add_view_node(std::string control_node_type)
   }
 }
 
-void ViewTree::generate_view_node_from_control_node(std::string control_node_id)
-{
-  // gnode::Node *p_cnode = this->get_node_ref_by_id(
-  //     control_node_id);
-
-  // LOG_DEBUG("control node [%s], type: %s",
-  //           p_cnode->id.c_str(),
-  //           p_cnode->get_node_type().c_str());
-
-  // if (p_cnode->get_node_type() == "GammaCorrection")
-  // {
-  //   this->view_nodes_mapping[p_cnode->id] =
-  //       generate_view_from_control<hesiod::cnode::GammaCorrection,
-  //                                  hesiod::vnode::ViewGammaCorrection>(p_cnode);
-  // }
-  // else if (p_cnode->get_node_type() == "Perlin")
-  // {
-  //   this->view_nodes_mapping[p_cnode->id] =
-  //       generate_view_from_control<hesiod::cnode::Perlin,
-  //                                  hesiod::vnode::ViewPerlin>(p_cnode);
-  // }
-  // else if (p_cnode->get_node_type() == "WhiteDensityMap")
-  // {
-  //   this->view_nodes_mapping[p_cnode->id] =
-  //       generate_view_from_control<hesiod::cnode::WhiteDensityMap,
-  //                                  hesiod::vnode::ViewWhiteDensityMap>(p_cnode);
-  // }
-  // else
-  // {
-  //   LOG_ERROR("unknown node type: [%s]", p_cnode->get_node_type().c_str());
-  //   throw std::runtime_error("unknown node type");
-  // }
-}
-
 } // namespace hesiod::vnode

@@ -52,6 +52,13 @@ int main()
     tree.render_view_nodes();
     tree.render_links();
 
+    for (auto &[id, vnode] : tree.get_nodes_map())
+    {
+      LOG_DEBUG("%s %d", id.c_str(), vnode.get()->hash_id);
+      ImVec2 npos = ImNodes::GetNodeGridSpacePos(vnode.get()->hash_id);
+      LOG_DEBUG("%f %f", npos.x, npos.y);
+    }
+
     ImNodes::EndNodeEditor();
     ImGui::End();
 
