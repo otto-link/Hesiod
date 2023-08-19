@@ -63,6 +63,8 @@ public:
 
   void render_view_nodes();
 
+  void view_node_layout();
+
 private:
   hmap::Vec2<int> shape;
   hmap::Vec2<int> tiling;

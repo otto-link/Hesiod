@@ -51,12 +51,21 @@ int main()
     tree.render_view_nodes();
     tree.render_links();
 
-    for (auto &[id, vnode] : tree.get_nodes_map())
-    {
-      LOG_DEBUG("%s %d", id.c_str(), vnode.get()->hash_id);
-      ImVec2 npos = ImNodes::GetNodeGridSpacePos(vnode.get()->hash_id);
-      LOG_DEBUG("%f %f", npos.x, npos.y);
-    }
+    // if (tree.size() > 1)
+    // {
+    //   std::vector<gnode::Point> positions = tree.compute_graph_layout();
+
+    //   size_t k = 0;
+    //   for (auto &[id, vnode] : tree.get_nodes_map())
+    //   {
+    //     LOG_DEBUG("%s %d", id.c_str(), vnode.get()->hash_id);
+    //     // ImVec2 npos = ImNodes::GetNodeGridSpacePos(vnode.get()->hash_id);
+    //     ImNodes::SetNodeGridSpacePos(vnode.get()->hash_id,
+    //                                  {300 * positions[k].x, 300 * positions[k].y});
+    //     k++;
+    //     // LOG_DEBUG("%f %f", npos.x, npos.y);
+    //   }
+    // }
 
     ImNodes::EndNodeEditor();
     ImGui::End();
