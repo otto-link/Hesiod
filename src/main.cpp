@@ -21,7 +21,6 @@ int main()
   hesiod::vnode::ViewTree tree =
       hesiod::vnode::ViewTree("tree_1", shape, tiling, overlap);
 
-  // tree.generate_all_view_nodes();
   // tree.generate_all_links();
   tree.update();
 

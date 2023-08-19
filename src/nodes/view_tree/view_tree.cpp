@@ -82,15 +82,6 @@ void ViewTree::generate_all_links(bool force_update)
       }
 }
 
-void ViewTree::generate_all_view_nodes(bool force_update)
-{
-  LOG_DEBUG("generating ViewNodes...");
-
-  for (auto &[id, cnode] : this->get_nodes_map())
-    if (force_update or (!this->get_nodes_map().contains(id)))
-      this->generate_view_node_from_control_node(id);
-}
-
 void ViewTree::new_link(int port_hash_id_from, int port_hash_id_to)
 {
   LOG_DEBUG("%d -> %d", port_hash_id_from, port_hash_id_to);
