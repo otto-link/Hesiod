@@ -4,6 +4,8 @@
 #pragma once
 #include <string>
 
+#include "imnodes.h"
+
 #include "hesiod/control_node.hpp"
 
 namespace hesiod::vnode
@@ -37,6 +39,8 @@ public:
            hmap::Vec2<int> tiling,
            float           overlap);
 
+  ~ViewTree();
+
   Link *get_link_ref_by_id(int link_id);
 
   std::string get_new_id();
@@ -57,6 +61,8 @@ public:
 
   void render_new_node_treeview();
 
+  void render_node_editor();
+
   void render_node_list();
 
   void render_settings(std::string node_id);
@@ -72,6 +78,8 @@ private:
 
   std::map<int, Link> links = {};
   int                 id_counter = 0;
+
+  ImNodesEditorContext *p_node_editor_context = nullptr;
 };
 
 } // namespace hesiod::vnode

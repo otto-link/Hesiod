@@ -38,6 +38,21 @@ ViewTree::ViewTree(std::string     id,
                    float           overlap)
     : gnode::Tree(id), shape(shape), tiling(tiling), overlap(overlap)
 {
+  // initialize node editor
+  this->p_node_editor_context = ImNodes::EditorContextCreate();
+
+  ImNodes::PushAttributeFlag(
+      ImNodesAttributeFlags_EnableLinkDetachWithDragClick);
+
+  ImNodesIO &io = ImNodes::GetIO();
+  io.LinkDetachWithModifierClick.Modifier = &ImGui::GetIO().KeyCtrl;
+  io.MultipleSelectModifier.Modifier = &ImGui::GetIO().KeyCtrl;
+}
+
+ViewTree::~ViewTree()
+{
+  // shutdown node editor
+  ImNodes::EditorContextFree(this->p_node_editor_context);
 }
 
 Link *ViewTree::get_link_ref_by_id(int link_id)
@@ -224,7 +239,7 @@ void ViewTree::render_new_node_treeview()
   if (ImGui::BeginTable("table_sorting",
                         2,
                         flags,
-                        ImVec2(0.f, 0.f), // TEXT_BASE_HEIGHT * 15),
+                        ImVec2(0.f, TEXT_BASE_HEIGHT * 10),
                         0.f))
   {
     ImGui::TableSetupColumn("Type",
@@ -273,6 +288,91 @@ void ViewTree::render_new_node_treeview()
     }
     ImGui::EndTable();
   }
+}
+
+void ViewTree::render_node_editor()
+{
+  ImNodes::EditorContextSet(this->p_node_editor_context);
+
+  ImGui::Begin(("Node editor / " + this->id).c_str());
+
+  {
+    ImGui::BeginChild("left pane", ImVec2(256, 0), true);
+    this->render_new_node_treeview();
+    this->render_node_list();
+    ImGui::EndChild();
+    ImGui::SameLine();
+  }
+
+  {
+    ImGui::BeginChild("right pane", ImVec2(256, 0), true);
+    const int num_selected_nodes = ImNodes::NumSelectedNodes();
+
+    if (num_selected_nodes > 0)
+    {
+      std::vector<int> selected_nodes;
+      selected_nodes.resize(num_selected_nodes);
+      ImNodes::GetSelectedNodes(selected_nodes.data());
+
+      std::vector<std::string> node_id_to_remove = {};
+
+      for (auto &node_hash_id : selected_nodes)
+      {
+        std::string node_id = this->get_node_id_by_hash_id(node_hash_id);
+        ImGui::SeparatorText(node_id.c_str());
+        this->render_settings(node_id);
+
+        // delete node
+        if (ImGui::IsKeyReleased(ImGuiKey_Delete) or
+            ImGui::IsKeyReleased(ImGuiKey_X))
+          node_id_to_remove.push_back(node_id);
+
+        // duplicate node
+        if (ImGui::IsKeyReleased(ImGuiKey_D))
+          this->add_view_node(
+              this->get_node_ref_by_id(node_id)->get_node_type());
+      }
+
+      for (auto &node_id : node_id_to_remove)
+      {
+        this->remove_view_node(node_id);
+        ImNodes::ClearNodeSelection();
+      }
+    }
+    ImGui::EndChild();
+    ImGui::SameLine();
+  }
+
+  {
+    ImNodes::BeginNodeEditor();
+    this->render_view_nodes();
+    this->render_links();
+    ImNodes::EndNodeEditor();
+  }
+
+  // --- links management // new
+  int port_hash_id_from, port_hash_id_to;
+  if (ImNodes::IsLinkCreated(&port_hash_id_from, &port_hash_id_to))
+  {
+    LOG_DEBUG("link created: %d <-> %d", port_hash_id_from, port_hash_id_to);
+    this->new_link(port_hash_id_from, port_hash_id_to);
+  }
+
+  // --- links management // destruction
+  const int num_selected_links = ImNodes::NumSelectedLinks();
+
+  if ((num_selected_links > 0) & (ImGui::IsKeyReleased(ImGuiKey_Delete) or
+                                  ImGui::IsKeyReleased(ImGuiKey_X)))
+  {
+    std::vector<int> selected_links;
+    selected_links.resize(num_selected_links);
+    ImNodes::GetSelectedLinks(selected_links.data());
+
+    for (auto &v : selected_links)
+      this->remove_link(v);
+  }
+
+  ImGui::End();
 }
 
 void ViewTree::render_node_list()
