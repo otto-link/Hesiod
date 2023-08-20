@@ -221,7 +221,7 @@ void ViewTree::render_links()
     ImNodes::Link(link_id, link.port_hash_id_from, link.port_hash_id_to);
 }
 
-void ViewTree::render_new_node_treeview()
+void ViewTree::render_new_node_treeview(const hmap::Vec2<float> node_position)
 {
   const float TEXT_BASE_WIDTH = ImGui::CalcTextSize("A").x;
   const float TEXT_BASE_HEIGHT = ImGui::GetTextLineHeightWithSpacing();
@@ -275,7 +275,13 @@ void ViewTree::render_new_node_treeview()
                                 ImGuiSelectableFlags_SpanAllColumns))
           {
             LOG_DEBUG("selected node type: %s", node_type.c_str());
-            this->add_view_node(node_type);
+            std::string new_node_id = this->add_view_node(node_type);
+
+            // TODO : has to be done after the node has been rendered
+            // ImNodes::SetNodeScreenSpacePos(
+            //     this->get_node_ref_by_id(new_node_id)->hash_id,
+            //     ImVec2(node_position.x, node_position.y));
+
             this->print_node_list();
           }
 
@@ -297,15 +303,9 @@ void ViewTree::render_node_editor()
   ImGui::Begin(("Node editor / " + this->id).c_str());
 
   {
-    ImGui::BeginChild("left pane", ImVec2(256, 0), true);
-    this->render_new_node_treeview();
-    this->render_node_list();
-    ImGui::EndChild();
-    ImGui::SameLine();
-  }
+    ImGui::BeginChild("settings", ImVec2(256, 0), true);
+    ImGui::TextUnformatted("Settings");
 
-  {
-    ImGui::BeginChild("right pane", ImVec2(256, 0), true);
     const int num_selected_nodes = ImNodes::NumSelectedNodes();
 
     if (num_selected_nodes > 0)
@@ -347,6 +347,27 @@ void ViewTree::render_node_editor()
     ImNodes::BeginNodeEditor();
     this->render_view_nodes();
     this->render_links();
+
+    {
+      const bool open_popup = ImGui::IsWindowFocused(
+                                  ImGuiFocusedFlags_RootAndChildWindows) &&
+                              ImNodes::IsEditorHovered() &&
+                              ImGui::IsMouseClicked(ImGuiMouseButton_Right);
+
+      ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(8.f, 8.f));
+      if (!ImGui::IsAnyItemHovered() && open_popup)
+      {
+        ImGui::OpenPopup("add node");
+      }
+
+      if (ImGui::BeginPopup("add node"))
+      {
+        const ImVec2 click_pos = ImGui::GetMousePosOnOpeningCurrentPopup();
+        this->render_new_node_treeview({click_pos.x, click_pos.y});
+        ImGui::EndPopup();
+      }
+    }
+
     ImNodes::EndNodeEditor();
   }
 

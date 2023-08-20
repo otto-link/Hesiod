@@ -13,16 +13,17 @@
 namespace hesiod::vnode
 {
 
-void ViewTree::add_view_node(std::string control_node_type)
+std::string ViewTree::add_view_node(std::string control_node_type)
 {
   std::string uid = this->get_new_id();
+  std::string id;
 
   LOG_DEBUG("adding node type: %s", control_node_type.c_str());
   LOG_DEBUG("uid: %s", uid.c_str());
 
   if (control_node_type == "Debug")
   {
-    std::string     id = control_node_type + "##" + uid;
+    id = control_node_type + "##" + uid;
     std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewDebug>(
         id);
 
@@ -30,7 +31,7 @@ void ViewTree::add_view_node(std::string control_node_type)
   }
   else if (control_node_type == "GammaCorrection")
   {
-    std::string     id = control_node_type + "##" + uid;
+    id = control_node_type + "##" + uid;
     std::shared_ptr p_view_node =
         std::make_shared<hesiod::vnode::ViewGammaCorrection>(id);
 
@@ -38,7 +39,7 @@ void ViewTree::add_view_node(std::string control_node_type)
   }
   else if (control_node_type == "Perlin")
   {
-    std::string     id = control_node_type + "##" + uid;
+    id = control_node_type + "##" + uid;
     std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewPerlin>(
         id,
         this->shape,
@@ -49,7 +50,7 @@ void ViewTree::add_view_node(std::string control_node_type)
   }
   else if (control_node_type == "SmoothCpulse")
   {
-    std::string     id = control_node_type + "##" + uid;
+    id = control_node_type + "##" + uid;
     std::shared_ptr p_view_node =
         std::make_shared<hesiod::vnode::ViewSmoothCpulse>(id);
 
@@ -57,7 +58,7 @@ void ViewTree::add_view_node(std::string control_node_type)
   }
   else if (control_node_type == "GradientNorm")
   {
-    std::string     id = control_node_type + "##" + uid;
+    id = control_node_type + "##" + uid;
     std::shared_ptr p_view_node =
         std::make_shared<hesiod::vnode::ViewGradientNorm>(id);
 
@@ -65,7 +66,7 @@ void ViewTree::add_view_node(std::string control_node_type)
   }
   else if (control_node_type == "GradientTalus")
   {
-    std::string     id = control_node_type + "##" + uid;
+    id = control_node_type + "##" + uid;
     std::shared_ptr p_view_node =
         std::make_shared<hesiod::vnode::ViewGradientTalus>(id);
 
@@ -73,7 +74,7 @@ void ViewTree::add_view_node(std::string control_node_type)
   }
   else if (control_node_type == "HydraulicParticle")
   {
-    std::string     id = control_node_type + "##" + uid;
+    id = control_node_type + "##" + uid;
     std::shared_ptr p_view_node =
         std::make_shared<hesiod::vnode::ViewHydraulicParticle>(id);
 
@@ -81,7 +82,7 @@ void ViewTree::add_view_node(std::string control_node_type)
   }
   else if (control_node_type == "Remap")
   {
-    std::string     id = control_node_type + "##" + uid;
+    id = control_node_type + "##" + uid;
     std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewRemap>(
         id);
 
@@ -89,7 +90,7 @@ void ViewTree::add_view_node(std::string control_node_type)
   }
   else if (control_node_type == "ValueNoiseDelaunay")
   {
-    std::string     id = control_node_type + "##" + uid;
+    id = control_node_type + "##" + uid;
     std::shared_ptr p_view_node =
         std::make_shared<hesiod::vnode::ViewValueNoiseDelaunay>(id,
                                                                 this->shape,
@@ -100,7 +101,7 @@ void ViewTree::add_view_node(std::string control_node_type)
   }
   else if (control_node_type == "WhiteDensityMap")
   {
-    std::string     id = control_node_type + "##" + uid;
+    id = control_node_type + "##" + uid;
     std::shared_ptr p_view_node =
         std::make_shared<hesiod::vnode::ViewWhiteDensityMap>(id);
 
@@ -108,7 +109,7 @@ void ViewTree::add_view_node(std::string control_node_type)
   }
   else if (control_node_type == "Worley")
   {
-    std::string     id = control_node_type + "##" + uid;
+    id = control_node_type + "##" + uid;
     std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewWorley>(
         id,
         this->shape,
@@ -122,6 +123,8 @@ void ViewTree::add_view_node(std::string control_node_type)
     LOG_ERROR("unknown node type: [%s]", control_node_type.c_str());
     throw std::runtime_error("unknown node type");
   }
+
+  return id;
 }
 
 } // namespace hesiod::vnode

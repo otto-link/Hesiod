@@ -45,7 +45,7 @@ public:
 
   std::string get_new_id();
 
-  void add_view_node(std::string control_node_type);
+  std::string add_view_node(std::string control_node_type);
 
   void generate_all_links(bool force_update = false);
 
@@ -59,7 +59,8 @@ public:
 
   void render_links();
 
-  void render_new_node_treeview();
+  void render_new_node_treeview(const hmap::Vec2<float> node_position = {0.f,
+                                                                         0.f});
 
   void render_node_editor();
 
