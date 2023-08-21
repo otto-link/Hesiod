@@ -162,8 +162,16 @@ void ViewTree::new_link(int port_hash_id_from, int port_hash_id_to)
   int link_id = port_hash_id_to;
   this->links[link_id] = link;
 
-  // propagate from the source
-  this->update_node(node_id_from);
+  if (this->is_cyclic())
+  {
+    // TODO the resulting tree is cyclic, revert what's just been
+    // done above
+    LOG_DEBUG("%d", this->is_cyclic());
+    throw std::runtime_error("cyclic graph");
+  }
+  else
+    // not cyclic, carry on and propagate from the source
+    this->update_node(node_id_from);
 }
 
 void ViewTree::remove_link(int link_id)

@@ -77,17 +77,13 @@ std::string ViewTree::render_new_node_treeview(
             LOG_DEBUG("selected node type: %s", node_type.c_str());
             new_node_id = this->add_view_node(node_type);
 
-            // the node needs to be rendered in order to set its position
+            // set node position: the node needs to be rendered first
             this->render_view_node(new_node_id);
-
-            ImVec2 npos = ImVec2(node_position.x, node_position.y);
-
-            LOG_DEBUG("%f %f", npos.x, npos.y);
-
             ImNodes::SetNodeScreenSpacePos(
                 this->get_node_ref_by_id(new_node_id)->hash_id,
-                npos);
+                ImVec2(node_position.x, node_position.y));
 
+            // DEBUG
             this->print_node_list();
           }
 
