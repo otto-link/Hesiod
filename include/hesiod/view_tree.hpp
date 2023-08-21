@@ -70,6 +70,8 @@ public:
 
   void render_settings(std::string node_id);
 
+  void render_view_node(std::string node_id);
+
   void render_view_nodes();
 
   void view_node_layout();
@@ -83,6 +85,7 @@ private:
   int                 id_counter = 0;
 
   ImNodesEditorContext *p_node_editor_context = nullptr;
+  bool                  link_has_been_dropped = false;
 };
 
 } // namespace hesiod::vnode

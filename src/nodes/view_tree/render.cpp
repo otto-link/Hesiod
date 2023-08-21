@@ -77,10 +77,16 @@ std::string ViewTree::render_new_node_treeview(
             LOG_DEBUG("selected node type: %s", node_type.c_str());
             new_node_id = this->add_view_node(node_type);
 
-            // TODO : has to be done after the node has been rendered
-            // ImNodes::SetNodeScreenSpacePos(
-            //     this->get_node_ref_by_id(new_node_id)->hash_id,
-            //     ImVec2(node_position.x, node_position.y));
+            // the node needs to be rendered in order to set its position
+            this->render_view_node(new_node_id);
+
+            ImVec2 npos = ImVec2(node_position.x, node_position.y);
+
+            LOG_DEBUG("%f %f", npos.x, npos.y);
+
+            ImNodes::SetNodeScreenSpacePos(
+                this->get_node_ref_by_id(new_node_id)->hash_id,
+                npos);
 
             this->print_node_list();
           }
@@ -122,6 +128,7 @@ void ViewTree::render_node_editor()
 
   ImGui::Begin(("Node editor / " + this->id).c_str());
 
+  // --- settings
   {
     ImGui::BeginChild("settings", ImVec2(256, 0), true);
     ImGui::TextUnformatted("Settings");
@@ -163,17 +170,26 @@ void ViewTree::render_node_editor()
     ImGui::SameLine();
   }
 
+  // --- editor canvas
   {
     ImNodes::BeginNodeEditor();
     this->render_view_nodes();
     this->render_links();
 
-    {
+    { // add node
       bool open_popup = ImGui::IsWindowFocused(
                             ImGuiFocusedFlags_RootAndChildWindows) &&
                         ImNodes::IsEditorHovered() &&
                         ImGui::IsMouseClicked(ImGuiMouseButton_Right);
+      open_popup |= this->link_has_been_dropped;
+
       this->render_new_node_popup(open_popup);
+      this->link_has_been_dropped = open_popup;
+      // (set "dropped link" indicator to false when a node has
+      // been created)
+
+      // TODO : automatically connect to default in or out when a link
+      // is dropped
     }
 
     ImNodes::EndNodeEditor();
@@ -182,18 +198,13 @@ void ViewTree::render_node_editor()
   // --- links management // new
   int port_hash_id_from, port_hash_id_to;
   if (ImNodes::IsLinkCreated(&port_hash_id_from, &port_hash_id_to))
-  {
-    LOG_DEBUG("link created: %d <-> %d", port_hash_id_from, port_hash_id_to);
     this->new_link(port_hash_id_from, port_hash_id_to);
-  }
 
-  static bool open = false;
+  // --- links management // drop
   if (ImNodes::IsLinkDropped(&port_hash_id_from))
-  {
-    open = true;
-    LOG_DEBUG("drop from: %d", port_hash_id_from);
-  }
-  this->render_new_node_popup(open);
+    // rendering the new node selection GUI is postponed because it
+    // can only be done within the node editor context
+    this->link_has_been_dropped = true;
 
   // --- links management // destruction
   const int num_selected_links = ImNodes::NumSelectedLinks();
@@ -216,6 +227,13 @@ void ViewTree::render_node_list()
 {
   for (auto &[id, vnode] : this->get_nodes_map())
     ImGui::Text("id: %s, hash_id: %d", id.c_str(), vnode.get()->hash_id);
+}
+
+void ViewTree::render_view_node(std::string node_id)
+{
+  hesiod::vnode::ViewControlNode *p_vnode =
+      (hesiod::vnode::ViewControlNode *)(this->get_node_ref_by_id(node_id));
+  p_vnode->render_node();
 }
 
 void ViewTree::render_view_nodes()
