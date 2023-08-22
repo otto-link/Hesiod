@@ -3,6 +3,7 @@
  * this software. */
 #pragma once
 #include <string>
+#include <vector>
 
 #include "imnodes.h"
 #include <GLFW/glfw3.h>
@@ -16,5 +17,7 @@ namespace hesiod::gui
 static void glfw_error_callback(int error, const char *description);
 
 GLFWwindow *init_gui(int width, int height, std::string window_title);
+
+bool drag_float_matrix(std::vector<std::vector<float>> &matrix);
 
 } // namespace hesiod::gui

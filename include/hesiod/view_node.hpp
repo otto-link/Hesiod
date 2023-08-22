@@ -72,6 +72,19 @@ public:
   }
 };
 
+//
+
+class ViewBaseElevation : public ViewNode, public hesiod::cnode::BaseElevation
+{
+public:
+  ViewBaseElevation(std::string     id,
+                    hmap::Vec2<int> shape,
+                    hmap::Vec2<int> tiling,
+                    float           overlap);
+
+  bool render_settings();
+};
+
 class ViewDebug : public ViewNode, public hesiod::cnode::Debug
 {
 public:

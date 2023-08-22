@@ -21,7 +21,18 @@ std::string ViewTree::add_view_node(std::string control_node_type)
   LOG_DEBUG("adding node type: %s", control_node_type.c_str());
   LOG_DEBUG("uid: %s", uid.c_str());
 
-  if (control_node_type == "Debug")
+  if (control_node_type == "BaseElevation")
+  {
+    id = control_node_type + "##" + uid;
+    std::shared_ptr p_view_node =
+        std::make_shared<hesiod::vnode::ViewBaseElevation>(id,
+                                                           this->shape,
+                                                           this->tiling,
+                                                           this->overlap);
+
+    this->add_node(p_view_node);
+  }
+  else if (control_node_type == "Debug")
   {
     id = control_node_type + "##" + uid;
     std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewDebug>(

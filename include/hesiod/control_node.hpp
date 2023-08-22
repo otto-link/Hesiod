@@ -22,6 +22,7 @@ enum dtype : int
 };
 
 static const std::map<std::string, std::string> category_mapping = {
+    {"BaseElevation", "Primitive/Manual"},
     {"Debug", "Debug"},
     {"GradientNorm", "Math/Gradient"},
     {"GradientTalus", "Math/Gradient"},
@@ -143,6 +144,21 @@ private:
 //----------------------------------------
 // End-user nodes
 //----------------------------------------
+
+class BaseElevation : public Primitive
+{
+public:
+  BaseElevation(std::string     id,
+                hmap::Vec2<int> shape,
+                hmap::Vec2<int> tiling,
+                float           overlap);
+
+  void compute();
+
+protected:
+  std::vector<std::vector<float>> values = {{0.f, 0.f}, {1.f, 1.f}};
+  float                           width_factor = 1.f;
+};
 
 class GradientNorm : public Unary
 {
