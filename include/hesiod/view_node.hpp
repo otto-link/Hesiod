@@ -110,6 +110,14 @@ public:
   bool render_settings();
 };
 
+class ViewExpand : public ViewNode, public hesiod::cnode::Expand
+{
+public:
+  ViewExpand(std::string id);
+
+  bool render_settings();
+};
+
 class ViewFbmPerlin : public ViewNode, public hesiod::cnode::FbmPerlin
 {
 public:
@@ -166,6 +174,14 @@ public:
 
 private:
   bool link_kxy = true;
+};
+
+class ViewShrink : public ViewNode, public hesiod::cnode::Shrink
+{
+public:
+  ViewShrink(std::string id);
+
+  bool render_settings();
 };
 
 class ViewSmoothCpulse : public ViewNode, public hesiod::cnode::SmoothCpulse

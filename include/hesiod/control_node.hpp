@@ -25,6 +25,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"BaseElevation", "Primitive/Manual"},
     {"Blend", "Operator/Blend"},
     {"Debug", "Debug"},
+    {"Expand", "Filter/Recast"},
     {"FbmPerlin", "Primitive/Coherent Noise"},
     {"GradientNorm", "Math/Gradient"},
     {"GradientTalus", "Math/Gradient"},
@@ -32,6 +33,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"HydraulicParticle", "Erosion/Hydraulic"},
     {"Perlin", "Primitive/Coherent Noise"},
     {"Remap", "Filter/Range"},
+    {"Shrink", "Filter/Recast"},
     {"SmoothCpulse", "Filter/Smoothing"},
     {"ValueNoiseDelaunay", "Primitive/Coherent Noise"},
     {"WhiteDensityMap", "Primitive/Random"},
@@ -222,6 +224,17 @@ protected:
   float k = 0.1f; // smooth intensity for smooth min and max
 };
 
+class Expand : public Filter
+{
+public:
+  Expand(std::string id);
+
+  void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
+
+protected:
+  int ir = 4;
+};
+
 class FbmPerlin : public Primitive
 {
 public:
@@ -316,6 +329,17 @@ public:
 protected:
   float vmin = 0.f;
   float vmax = 1.f;
+};
+
+class Shrink : public Filter
+{
+public:
+  Shrink(std::string id);
+
+  void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
+
+protected:
+  int ir = 4;
 };
 
 class SmoothCpulse : public Filter
