@@ -58,7 +58,7 @@ bool ViewHydraulicParticle::render_settings()
     has_changed = true;
   }
 
-  if (ImGui::SliderFloat("c_deposition", &this->c_deposition, 0.001f, 0.1f))
+  if (ImGui::SliderFloat("c_deposition", &this->c_deposition, 0.001f, 0.5f))
   {
     this->force_update();
     has_changed = true;

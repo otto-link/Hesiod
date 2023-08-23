@@ -80,29 +80,19 @@ bool ViewFbmPerlin::render_settings()
     has_changed = true;
   }
 
-  if (ImGui::DragFloat("weight", &this->weight, 0.01f, 0.f, 1.f, "%.2f"))
+  if (ImGui::SliderFloat("weight", &this->weight, 0.f, 1.f, "%.2f"))
   {
     this->force_update();
     has_changed = true;
   }
 
-  if (ImGui::DragFloat("persistence",
-                       &this->persistence,
-                       0.01f,
-                       0.01f,
-                       1.f,
-                       "%.2f"))
+  if (ImGui::SliderFloat("persistence", &this->persistence, 0.01f, 1.f, "%.2f"))
   {
     this->force_update();
     has_changed = true;
   }
 
-  if (ImGui::DragFloat("lacunarity",
-                       &this->lacunarity,
-                       0.01f,
-                       0.01f,
-                       4.f,
-                       "%.2f"))
+  if (ImGui::SliderFloat("lacunarity", &this->lacunarity, 0.01f, 4.f, "%.2f"))
   {
     this->force_update();
     has_changed = true;

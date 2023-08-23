@@ -158,6 +158,11 @@ void ViewTree::render_node_editor()
               this->get_node_ref_by_id(node_id)->get_node_type());
       }
 
+      // TODO clean-up / keep view window open / show last node selected
+      // int          node_hash_id = selected_nodes.back();
+      // gnode::Node *p_node = this->get_node_ref_by_hash_id(node_hash_id);
+      // ((hesiod::vnode::ViewControlNode *)p_node)->render_view2d("output");
+
       for (auto &node_id : node_id_to_remove)
       {
         this->remove_view_node(node_id);

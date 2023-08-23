@@ -192,6 +192,27 @@ bool ViewNode::render_settings_footer()
   return has_changed;
 }
 
+bool ViewNode::render_view2d(std::string port_id)
+{
+  bool has_changed = false;
+  ImGui::PushID((void *)this);
+
+  ImGui::Begin("test view");
+
+  // LOG_DEBUG("2D view: %s", this->p_control_node->id.c_str());
+
+  // TODO create specific data structure and callback (similar to prevoew
+  if (this->p_control_node->get_p_data(port_id))
+  {
+    ImGui::Image((void *)(intptr_t)this->image_texture, ImVec2(1024, 1024));
+  }
+
+  ImGui::End();
+
+  ImGui::PopID();
+  return has_changed;
+}
+
 void ViewNode::update_preview()
 {
   if (this->preview_port_id != "")

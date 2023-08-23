@@ -21,14 +21,6 @@ enum dtype : int
   dHeightMap
 };
 
-enum blending_method : int
-{
-  maximum,
-  maximum_smooth,
-  minimum,
-  minimum_smooth
-};
-
 static const std::map<std::string, std::string> category_mapping = {
     {"BaseElevation", "Primitive/Manual"},
     {"Blend", "Operator/Blend"},
@@ -44,6 +36,17 @@ static const std::map<std::string, std::string> category_mapping = {
     {"ValueNoiseDelaunay", "Primitive/Coherent Noise"},
     {"WhiteDensityMap", "Primitive/Random"},
     {"Worley", "Primitive/Coherent Noise"}};
+
+enum blending_method : int
+{
+  add,
+  maximum,
+  maximum_smooth,
+  minimum,
+  minimum_smooth,
+  multiply,
+  substract
+};
 
 //----------------------------------------
 // Generic nodes
@@ -207,10 +210,13 @@ public:
 
 protected:
   std::map<std::string, int> blending_method_map = {
+      {"add", blending_method::add},
       {"maximum", blending_method::maximum},
       {"maximum_smooth", blending_method::maximum_smooth},
       {"minimum", blending_method::minimum},
-      {"minimum_smooth", blending_method::minimum_smooth}};
+      {"minimum_smooth", blending_method::minimum_smooth},
+      {"multiply", blending_method::multiply},
+      {"substract", blending_method::substract}};
   int method = 0;
 
   float k = 0.1f; // smooth intensity for smooth min and max
@@ -276,11 +282,11 @@ public:
 
 protected:
   int   seed = 1;
-  int   nparticles = 10000;
+  int   nparticles = 40000;
   int   c_radius = 0;
-  float c_capacity = 10.f;
+  float c_capacity = 100.f;
   float c_erosion = 0.05f;
-  float c_deposition = 0.01f;
+  float c_deposition = 0.1f;
   float drag_rate = 0.01f;
   float evap_rate = 0.001f;
 };

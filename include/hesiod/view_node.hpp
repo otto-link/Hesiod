@@ -46,6 +46,8 @@ public:
 
   bool render_settings_footer();
 
+  bool render_view2d(std::string port_id);
+
   void update_preview();
 
 protected:

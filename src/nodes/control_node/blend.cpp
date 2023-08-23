@@ -25,6 +25,11 @@ void Blend::compute_in_out(hmap::HeightMap &h_out,
 
   switch (this->method)
   {
+  case blending_method::add:
+    lambda = [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
+    { m = a1 + a2; };
+    break;
+
   case blending_method::maximum:
     lambda = [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
     { m = hmap::maximum(a1, a2); };
@@ -43,6 +48,16 @@ void Blend::compute_in_out(hmap::HeightMap &h_out,
   case blending_method::minimum_smooth:
     lambda = [this](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
     { m = hmap::minimum_smooth(a1, a2, this->k); };
+    break;
+
+  case blending_method::multiply:
+    lambda = [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
+    { m = a1 * a2; };
+    break;
+
+  case blending_method::substract:
+    lambda = [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
+    { m = a1 - a2; };
     break;
   }
 
