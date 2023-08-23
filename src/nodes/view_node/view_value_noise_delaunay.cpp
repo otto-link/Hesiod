@@ -31,7 +31,6 @@ bool ViewValueNoiseDelaunay::render_settings()
   ImGui::AlignTextToFramePadding();
   if (ImGui::Button("Re-seed"))
   {
-    // TODO to do in the node itself
     this->seed = (int)time(NULL);
     this->force_update();
     has_changed = true;
