@@ -41,6 +41,14 @@ bool ViewBlend::render_settings()
     }
   ImGui::EndListBox();
 
+  if (this->method == hesiod::cnode::blending_method::maximum_smooth ||
+      this->method == hesiod::cnode::blending_method::minimum_smooth)
+    if (ImGui::SliderFloat("k", &this->k, 0.01f, 1.f, "%.2f"))
+    {
+      this->force_update();
+      has_changed = true;
+    }
+
   has_changed |= this->render_settings_footer();
 
   return has_changed;

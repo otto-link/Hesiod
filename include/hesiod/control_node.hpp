@@ -24,7 +24,9 @@ enum dtype : int
 enum blending_method : int
 {
   maximum,
-  minimum
+  maximum_smooth,
+  minimum,
+  minimum_smooth
 };
 
 static const std::map<std::string, std::string> category_mapping = {
@@ -206,9 +208,12 @@ public:
 protected:
   std::map<std::string, int> blending_method_map = {
       {"maximum", blending_method::maximum},
+      {"maximum_smooth", blending_method::maximum_smooth},
       {"minimum", blending_method::minimum},
-  };
+      {"minimum_smooth", blending_method::minimum_smooth}};
   int method = 0;
+
+  float k = 0.1f; // smooth intensity for smooth min and max
 };
 
 class FbmPerlin : public Primitive

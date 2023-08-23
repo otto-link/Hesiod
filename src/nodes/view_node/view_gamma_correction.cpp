@@ -22,7 +22,7 @@ bool ViewGammaCorrection::render_settings()
   bool has_changed = false;
   has_changed |= this->render_settings_header();
 
-  if (ImGui::SliderFloat("gamma", &this->gamma, 0.01f, 10.f))
+  if (ImGui::SliderFloat("gamma", &this->gamma, 0.01f, 10.f, "%.2f"))
   {
     this->GammaCorrection::force_update();
     has_changed = true;
