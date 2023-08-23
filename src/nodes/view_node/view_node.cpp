@@ -76,9 +76,14 @@ void ViewNode::render_node()
 
   // ImGui::SetWindowFontScale(0.8f);
 
+  std::string title = this->p_control_node->get_node_type();
+  if (this->p_control_node->frozen_outputs ||
+      !this->p_control_node->auto_update)
+    title += " [!]";
+
   ImNodes::BeginNode(this->p_control_node->hash_id);
   ImNodes::BeginNodeTitleBar();
-  ImGui::TextUnformatted(this->p_control_node->get_node_type().c_str());
+  ImGui::TextUnformatted(title.c_str());
   ImNodes::EndNodeTitleBar();
 
   // ImNodes::PopColorStyle();
@@ -156,7 +161,7 @@ bool ViewNode::render_settings_header()
 
   ImGui::SameLine();
 
-  // auto-update button
+  // --- auto-update button
   bool disabled_update_button = this->p_control_node->auto_update &
                                 this->p_control_node->is_up_to_date;
   if (disabled_update_button)
@@ -176,6 +181,18 @@ bool ViewNode::render_settings_header()
     ImGui::TextColored(ImVec4(0.5, 0.5, 0.5, 1), "Up to date");
   else
     ImGui::TextColored(ImVec4(1, 1, 0, 1), "To be updated");
+
+  // --- frozen outputs button
+  if (ImGui::Checkbox("Frozen outputs", &this->p_control_node->frozen_outputs))
+  {
+    // ignite force update when the node is unfrozzen to update
+    // downstream nodes
+    if (!this->p_control_node->frozen_outputs)
+      this->p_control_node->force_update();
+    has_changed = true;
+  }
+
+  ImGui::Separator();
 
   return has_changed;
 }

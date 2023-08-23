@@ -55,7 +55,8 @@ bool ViewValueNoiseDelaunay::render_settings()
     has_changed = true;
   }
 
-  ImGui::Spacing();
+  ImGui::Separator();
+
   if (hesiod::gui::slider_vmin_vmax(vmin, vmax))
   {
     this->force_update();

@@ -16,7 +16,19 @@ namespace hesiod::vnode
 void ViewTree::render_links()
 {
   for (auto &[link_id, link] : this->links)
+  {
+    // change color of "dead" links when a node upstream is frozen
+    bool is_link_frozen =
+        this->get_node_ref_by_id(link.node_id_from)->frozen_outputs;
+
+    if (is_link_frozen)
+      ImNodes::PushColorStyle(ImNodesCol_Link, IM_COL32(50, 50, 50, 255));
+
     ImNodes::Link(link_id, link.port_hash_id_from, link.port_hash_id_to);
+
+    if (is_link_frozen)
+      ImNodes::PopColorStyle();
+  }
 }
 
 std::string ViewTree::render_new_node_treeview(
@@ -82,9 +94,6 @@ std::string ViewTree::render_new_node_treeview(
             ImNodes::SetNodeScreenSpacePos(
                 this->get_node_ref_by_id(new_node_id)->hash_id,
                 ImVec2(node_position.x, node_position.y));
-
-            // DEBUG
-            this->print_node_list();
           }
 
           ImGui::TableNextColumn();

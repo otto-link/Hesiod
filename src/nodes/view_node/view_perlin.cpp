@@ -74,7 +74,8 @@ bool ViewPerlin::render_settings()
     // }
   }
 
-  ImGui::Spacing();
+  ImGui::Separator();
+
   if (hesiod::gui::slider_vmin_vmax(vmin, vmax))
   {
     this->force_update();
