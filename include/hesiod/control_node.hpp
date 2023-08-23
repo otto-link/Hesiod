@@ -21,8 +21,15 @@ enum dtype : int
   dHeightMap
 };
 
+enum blending_method : int
+{
+  maximum,
+  minimum
+};
+
 static const std::map<std::string, std::string> category_mapping = {
     {"BaseElevation", "Primitive/Manual"},
+    {"Blend", "Operator/Blend"},
     {"Debug", "Debug"},
     {"FbmPerlin", "Primitive/Coherent Noise"},
     {"GradientNorm", "Math/Gradient"},
@@ -142,6 +149,30 @@ private:
   hmap::Vec2<int> shape = {0, 0};
 };
 
+class Binary : public gnode::Node // basic, 2 in / 1 out
+{
+public:
+  Binary(std::string id);
+
+  void update_inner_bindings();
+
+  void compute();
+
+  virtual void compute_in_out(hmap::HeightMap &,
+                              hmap::HeightMap *,
+                              hmap::HeightMap *)
+  {
+    LOG_ERROR("Compute not defined for generic in/out [%s])", this->id.c_str());
+    throw std::runtime_error("undefined 'compute_in_out' method");
+  }
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap();
+
+private:
+  hmap::Vec2<int> shape = {0, 0};
+};
+
 //----------------------------------------
 // End-user nodes
 //----------------------------------------
@@ -161,6 +192,23 @@ protected:
                                             {0.f, 0.f, 0.f},
                                             {0.f, 0.f, 0.f}};
   float                           width_factor = 1.f;
+};
+
+class Blend : public Binary
+{
+public:
+  Blend(std::string id);
+
+  void compute_in_out(hmap::HeightMap &h_out,
+                      hmap::HeightMap *p_h_in1,
+                      hmap::HeightMap *p_h_in2);
+
+protected:
+  std::map<std::string, int> blending_method_map = {
+      {"maximum", blending_method::maximum},
+      {"minimum", blending_method::minimum},
+  };
+  int method = 0;
 };
 
 class FbmPerlin : public Primitive

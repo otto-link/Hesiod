@@ -151,6 +151,8 @@ void ViewTree::render_node_editor()
           node_id_to_remove.push_back(node_id);
 
         // duplicate node
+        // TODO : move node to mouse position after creation
+        // const ImVec2 click_pos = ImGui::GetMousePosOnOpeningCurrentPopup();
         if (ImGui::IsKeyReleased(ImGuiKey_D))
           this->add_view_node(
               this->get_node_ref_by_id(node_id)->get_node_type());

@@ -85,6 +85,14 @@ public:
   bool render_settings();
 };
 
+class ViewBlend : public ViewNode, public hesiod::cnode::Blend
+{
+public:
+  ViewBlend(std::string id);
+
+  bool render_settings();
+};
+
 class ViewDebug : public ViewNode, public hesiod::cnode::Debug
 {
 public:
