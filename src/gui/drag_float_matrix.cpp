@@ -19,20 +19,15 @@ bool drag_float_matrix(std::vector<std::vector<float>> &matrix)
 
   ImGui::TextUnformatted("Value matrix");
 
-  if (ImGui::Button("Reset"))
-  {
-    ret = true;
-    for (auto &row : matrix)
-      for (auto &v : row)
-        v = 0.f;
-  }
-
   if (ImGui::InputInt("nx", &ni) || ImGui::InputInt("ny", &nj))
   {
-    ret = true;
+    ni = ni < 1 ? 1 : ni;
+    nj = nj < 1 ? 1 : nj;
+
     matrix.resize(ni);
     for (auto &row : matrix)
       row.resize(nj);
+    ret = true;
   }
 
   ImGui::PushItemWidth(0.8f * ImGui::GetWindowWidth() / (float)ni);
@@ -47,6 +42,14 @@ bool drag_float_matrix(std::vector<std::vector<float>> &matrix)
       ImGui::PopID();
     }
   ImGui::PopItemWidth();
+
+  if (ImGui::Button("Reset"))
+  {
+    ret = true;
+    for (auto &row : matrix)
+      for (auto &v : row)
+        v = 0.f;
+  }
 
   ImGui::EndGroup();
   ImGui::PopID();
