@@ -156,7 +156,9 @@ public:
   void compute();
 
 protected:
-  std::vector<std::vector<float>> values = {{0.f, 0.f}, {0.f, 0.f}};
+  std::vector<std::vector<float>> values = {{0.f, 0.f, 0.f},
+                                            {0.f, 0.f, 0.f},
+                                            {0.f, 0.f, 0.f}};
   float                           width_factor = 1.f;
 };
 
