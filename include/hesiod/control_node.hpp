@@ -24,6 +24,7 @@ enum dtype : int
 static const std::map<std::string, std::string> category_mapping = {
     {"BaseElevation", "Primitive/Manual"},
     {"Debug", "Debug"},
+    {"FbmPerlin", "Primitive/Coherent Noise"},
     {"GradientNorm", "Math/Gradient"},
     {"GradientTalus", "Math/Gradient"},
     {"GammaCorrection", "Filter/Recurve"},
@@ -160,6 +161,25 @@ protected:
                                             {0.f, 0.f, 0.f},
                                             {0.f, 0.f, 0.f}};
   float                           width_factor = 1.f;
+};
+
+class FbmPerlin : public Primitive
+{
+public:
+  FbmPerlin(std::string     id,
+            hmap::Vec2<int> shape,
+            hmap::Vec2<int> tiling,
+            float           overlap);
+
+  void compute();
+
+protected:
+  hmap::Vec2<float> kw = {DEFAULT_KW, DEFAULT_KW};
+  int               seed = DEFAULT_SEED;
+  int               octaves = 8;
+  float             weight = 0.7f;
+  float             persistence = 0.5f;
+  float             lacunarity = 2.f;
 };
 
 class GradientNorm : public Unary

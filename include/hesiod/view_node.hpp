@@ -100,6 +100,20 @@ public:
   bool render_settings();
 };
 
+class ViewFbmPerlin : public ViewNode, public hesiod::cnode::FbmPerlin
+{
+public:
+  ViewFbmPerlin(std::string     id,
+                hmap::Vec2<int> shape,
+                hmap::Vec2<int> tiling,
+                float           overlap);
+
+  bool render_settings();
+
+private:
+  bool link_kxy = true;
+};
+
 class ViewGammaCorrection : public ViewNode,
                             public hesiod::cnode::GammaCorrection
 {
