@@ -213,6 +213,17 @@ bool ViewNode::render_view2d(std::string port_id)
   return has_changed;
 }
 
+bool ViewNode::trigger_update_after_edit()
+{
+  if (ImGui::IsItemDeactivatedAfterEdit())
+  {
+    this->p_control_node->force_update();
+    return true;
+  }
+  else
+    return false;
+}
+
 void ViewNode::update_preview()
 {
   if (this->preview_port_id != "")

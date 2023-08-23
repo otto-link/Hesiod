@@ -21,11 +21,8 @@ bool ViewExpand::render_settings()
   bool has_changed = false;
   has_changed |= this->render_settings_header();
 
-  if (ImGui::SliderInt("ir", &this->ir, 1, 128))
-  {
-    this->force_update();
-    has_changed = true;
-  }
+  ImGui::SliderInt("ir", &this->ir, 1, 128);
+  has_changed |= this->trigger_update_after_edit();
 
   has_changed |= this->render_settings_footer();
   return has_changed;

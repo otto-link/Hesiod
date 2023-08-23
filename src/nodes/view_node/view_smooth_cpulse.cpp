@@ -20,11 +20,8 @@ bool ViewSmoothCpulse::render_settings()
   bool has_changed = false;
   has_changed |= this->render_settings_header();
 
-  if (ImGui::SliderInt("int", &this->ir, 1, 256))
-  {
-    this->force_update();
-    has_changed = true;
-  }
+  ImGui::SliderInt("int", &this->ir, 1, 256);
+  has_changed |= this->trigger_update_after_edit();
 
   has_changed |= this->render_settings_footer();
   return has_changed;

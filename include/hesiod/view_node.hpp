@@ -48,6 +48,8 @@ public:
 
   bool render_view2d(std::string port_id);
 
+  bool trigger_update_after_edit();
+
   void update_preview();
 
 protected:
