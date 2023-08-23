@@ -178,6 +178,14 @@ private:
   bool link_kxy = true;
 };
 
+class ViewRemap : public ViewNode, public hesiod::cnode::Remap
+{
+public:
+  ViewRemap(std::string id);
+
+  bool render_settings();
+};
+
 class ViewShrink : public ViewNode, public hesiod::cnode::Shrink
 {
 public:
@@ -194,10 +202,11 @@ public:
   bool render_settings();
 };
 
-class ViewRemap : public ViewNode, public hesiod::cnode::Remap
+class ViewSteepenConvective : public ViewNode,
+                              public hesiod::cnode::SteepenConvective
 {
 public:
-  ViewRemap(std::string id);
+  ViewSteepenConvective(std::string id);
 
   bool render_settings();
 };

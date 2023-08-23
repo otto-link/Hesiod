@@ -29,28 +29,24 @@ std::string ViewTree::add_view_node(std::string control_node_type)
                                                            this->shape,
                                                            this->tiling,
                                                            this->overlap);
-
     this->add_node(p_view_node);
   }
   else if (control_node_type == "Blend")
   {
     std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewBlend>(
         id);
-
     this->add_node(p_view_node);
   }
   else if (control_node_type == "Debug")
   {
     std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewDebug>(
         id);
-
     this->add_node(p_view_node);
   }
   else if (control_node_type == "Expand")
   {
     std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewExpand>(
         id);
-
     this->add_node(p_view_node);
   }
   else if (control_node_type == "FbmPerlin")
@@ -60,36 +56,30 @@ std::string ViewTree::add_view_node(std::string control_node_type)
                                                        this->shape,
                                                        this->tiling,
                                                        this->overlap);
-
     this->add_node(p_view_node);
   }
   else if (control_node_type == "GammaCorrection")
   {
     std::shared_ptr p_view_node =
         std::make_shared<hesiod::vnode::ViewGammaCorrection>(id);
-
     this->add_node(p_view_node);
   }
-
   else if (control_node_type == "GradientNorm")
   {
     std::shared_ptr p_view_node =
         std::make_shared<hesiod::vnode::ViewGradientNorm>(id);
-
     this->add_node(p_view_node);
   }
   else if (control_node_type == "GradientTalus")
   {
     std::shared_ptr p_view_node =
         std::make_shared<hesiod::vnode::ViewGradientTalus>(id);
-
     this->add_node(p_view_node);
   }
   else if (control_node_type == "HydraulicParticle")
   {
     std::shared_ptr p_view_node =
         std::make_shared<hesiod::vnode::ViewHydraulicParticle>(id);
-
     this->add_node(p_view_node);
   }
   else if (control_node_type == "Perlin")
@@ -99,14 +89,12 @@ std::string ViewTree::add_view_node(std::string control_node_type)
         this->shape,
         this->tiling,
         this->overlap);
-
     this->add_node(p_view_node);
   }
   else if (control_node_type == "Remap")
   {
     std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewRemap>(
         id);
-
     this->add_node(p_view_node);
   }
   else if (control_node_type == "Shrink")
@@ -119,6 +107,12 @@ std::string ViewTree::add_view_node(std::string control_node_type)
   {
     std::shared_ptr p_view_node =
         std::make_shared<hesiod::vnode::ViewSmoothCpulse>(id);
+    this->add_node(p_view_node);
+  }
+  else if (control_node_type == "SteepenConvective")
+  {
+    std::shared_ptr p_view_node =
+        std::make_shared<hesiod::vnode::ViewSteepenConvective>(id);
     this->add_node(p_view_node);
   }
   else if (control_node_type == "ValueNoiseDelaunay")

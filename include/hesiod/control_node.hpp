@@ -35,6 +35,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Remap", "Filter/Range"},
     {"Shrink", "Filter/Recast"},
     {"SmoothCpulse", "Filter/Smoothing"},
+    {"SteepenConvective", "Filter/Recast"},
     {"ValueNoiseDelaunay", "Primitive/Coherent Noise"},
     {"WhiteDensityMap", "Primitive/Random"},
     {"Worley", "Primitive/Coherent Noise"}};
@@ -351,6 +352,20 @@ public:
 
 protected:
   int ir = 8;
+};
+
+class SteepenConvective : public Filter
+{
+public:
+  SteepenConvective(std::string id);
+
+  void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
+
+protected:
+  float angle = 0.f;
+  int   iterations = 1;
+  int   ir = 0;
+  float dt = 1.f;
 };
 
 class ValueNoiseDelaunay : public Primitive

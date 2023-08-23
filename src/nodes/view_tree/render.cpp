@@ -22,12 +22,19 @@ void ViewTree::render_links()
         this->get_node_ref_by_id(link.node_id_from)->frozen_outputs;
 
     if (is_link_frozen)
-      ImNodes::PushColorStyle(ImNodesCol_Link, IM_COL32(50, 50, 50, 255));
+    {
+      ImNodes::PushColorStyle(ImNodesCol_Link, IM_COL32(150, 50, 50, 255));
+      ImNodes::PushColorStyle(ImNodesCol_LinkHovered,
+                              IM_COL32(200, 50, 50, 255));
+    }
 
     ImNodes::Link(link_id, link.port_hash_id_from, link.port_hash_id_to);
 
     if (is_link_frozen)
+    {
       ImNodes::PopColorStyle();
+      ImNodes::PopColorStyle();
+    }
   }
 }
 
