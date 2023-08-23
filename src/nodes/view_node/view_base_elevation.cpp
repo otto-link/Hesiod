@@ -40,21 +40,11 @@ bool ViewBaseElevation::render_settings()
     has_changed = true;
   }
 
-  // output range
   ImGui::Spacing();
-  if (ImGui::DragFloatRange2("Range",
-                             &this->vmin,
-                             &this->vmax,
-                             0.01f,
-                             -FLT_MAX,
-                             FLT_MAX,
-                             "vmin: %.2f",
-                             "vmax: %.2f",
-                             ImGuiSliderFlags_AlwaysClamp))
+  if (hesiod::gui::slider_vmin_vmax(vmin, vmax))
   {
     this->force_update();
     has_changed = true;
-    LOG_DEBUG("%f %f", this->vmin, this->vmax);
   }
 
   has_changed |= this->render_settings_footer();

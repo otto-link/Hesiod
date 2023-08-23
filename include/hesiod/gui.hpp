@@ -18,6 +18,10 @@ static void glfw_error_callback(int error, const char *description);
 
 GLFWwindow *init_gui(int width, int height, std::string window_title);
 
+// custom ImGui widgets
+
 bool drag_float_matrix(std::vector<std::vector<float>> &matrix);
+
+bool slider_vmin_vmax(float &vmin, float &vmax);
 
 } // namespace hesiod::gui

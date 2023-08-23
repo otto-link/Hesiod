@@ -3,6 +3,7 @@
  * this software. */
 #include "macrologger.h"
 
+#include "hesiod/gui.hpp"
 #include "hesiod/view_node.hpp"
 
 namespace hesiod::vnode
@@ -19,17 +20,7 @@ bool ViewRemap::render_settings()
 
   has_changed |= this->render_settings_header();
 
-  // output range
-  ImGui::Spacing();
-  if (ImGui::DragFloatRange2("Range",
-                             &this->vmin,
-                             &this->vmax,
-                             0.01f,
-                             -FLT_MAX,
-                             FLT_MAX,
-                             "vmin: %.2f",
-                             "vmax: %.2f",
-                             ImGuiSliderFlags_AlwaysClamp))
+  if (hesiod::gui::slider_vmin_vmax(vmin, vmax))
   {
     this->force_update();
     has_changed = true;
