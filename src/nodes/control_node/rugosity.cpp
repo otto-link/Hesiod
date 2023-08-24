@@ -8,19 +8,22 @@
 namespace hesiod::cnode
 {
 
-Remap::Remap(std::string id) : Unary(id)
+Rugosity::Rugosity(std::string id) : Unary(id)
 {
-  this->node_type = "Remap";
+  this->node_type = "Rugosity";
   this->category = category_mapping.at(this->node_type);
 }
 
-void Remap::compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in)
+void Rugosity::compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in)
 {
   LOG_DEBUG("computing node [%s]", this->id.c_str());
 
   // make a copy of the input and applied range remapping
-  h_out = *p_h_in;
-  h_out.remap(this->vmin, this->vmax);
+  hmap::transform(h_out,
+                  *p_h_in,
+                  [this](hmap::Array &out, hmap::Array &in)
+                  { out = hmap::rugosity(in, this->ir); });
+  h_out.smooth_overlap_buffers();
 }
 
 } // namespace hesiod::cnode

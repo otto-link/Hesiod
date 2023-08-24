@@ -14,6 +14,7 @@ Unary::Unary(std::string id) : gnode::Node(id)
   this->add_port(gnode::Port("input", gnode::direction::in, dtype::dHeightMap));
   this->add_port(
       gnode::Port("output", gnode::direction::out, dtype::dHeightMap));
+  this->update_inner_bindings();
 }
 
 void Unary::update_inner_bindings()

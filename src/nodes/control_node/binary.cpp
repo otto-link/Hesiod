@@ -17,6 +17,7 @@ Binary::Binary(std::string id) : gnode::Node(id)
       gnode::Port("input##2", gnode::direction::in, dtype::dHeightMap));
   this->add_port(
       gnode::Port("output", gnode::direction::out, dtype::dHeightMap));
+  this->update_inner_bindings();
 }
 
 void Binary::update_inner_bindings()

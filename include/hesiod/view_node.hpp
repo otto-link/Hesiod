@@ -217,6 +217,14 @@ public:
   bool render_settings();
 };
 
+class ViewRugosity : public ViewNode, public hesiod::cnode::Rugosity
+{
+public:
+  ViewRugosity(std::string id);
+
+  bool render_settings();
+};
+
 class ViewSmoothCpulse : public ViewNode, public hesiod::cnode::SmoothCpulse
 {
 public:

@@ -36,6 +36,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"HydraulicParticle", "Erosion/Hydraulic"},
     {"Perlin", "Primitive/Coherent Noise"},
     {"Remap", "Filter/Range"},
+    {"Rugosity", "Features"},
     {"SmoothCpulse", "Filter/Smoothing"},
     {"SteepenConvective", "Filter/Recast"},
     {"ValueNoiseDelaunay", "Primitive/Coherent Noise"},
@@ -385,6 +386,17 @@ public:
 protected:
   float vmin = 0.f;
   float vmax = 1.f;
+};
+
+class Rugosity : public Unary
+{
+public:
+  Rugosity(std::string id);
+
+  void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
+
+protected:
+  int ir = 4;
 };
 
 class SmoothCpulse : public Filter

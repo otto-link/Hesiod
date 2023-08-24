@@ -12,7 +12,6 @@ Blend::Blend(std::string id) : Binary(id)
 {
   this->node_type = "Blend";
   this->category = category_mapping.at(this->node_type);
-  this->update_inner_bindings();
 }
 
 void Blend::compute_in_out(hmap::HeightMap &h_out,
