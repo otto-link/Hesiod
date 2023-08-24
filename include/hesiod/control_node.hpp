@@ -30,6 +30,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"FbmPerlin", "Primitive/Coherent Noise"},
     {"Gain", "Filter/Recurve"},
     {"GammaCorrection", "Filter/Recurve"},
+    {"GammaCorrectionLocal", "Filter/Recurve"},
     {"GradientNorm", "Math/Gradient"},
     {"GradientTalus", "Math/Gradient"},
     {"HydraulicParticle", "Erosion/Hydraulic"},
@@ -305,6 +306,19 @@ public:
 
 protected:
   float gamma = 1.f;
+};
+
+class GammaCorrectionLocal : public Filter
+{
+public:
+  GammaCorrectionLocal(std::string id);
+
+  void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
+
+protected:
+  float gamma = 1.f;
+  int   ir = 4;
+  float k = 0.1f;
 };
 
 class GradientNorm : public Unary

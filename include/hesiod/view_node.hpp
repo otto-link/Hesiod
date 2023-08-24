@@ -165,6 +165,15 @@ public:
   bool render_settings();
 };
 
+class ViewGammaCorrectionLocal : public ViewNode,
+                                 public hesiod::cnode::GammaCorrectionLocal
+{
+public:
+  ViewGammaCorrectionLocal(std::string id);
+
+  bool render_settings();
+};
+
 class ViewGradientNorm : public ViewNode, public hesiod::cnode::GradientNorm
 {
 public:
