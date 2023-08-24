@@ -72,21 +72,16 @@ void ViewNode::post_control_node_update()
 void ViewNode::render_node()
 {
   std::string node_type = this->p_control_node->get_node_type();
-  // ImNodes::PushColorStyle(ImNodesCol_TitleBar, IM_COL32(15, 15, 15, 255));
 
   // ImGui::SetWindowFontScale(0.8f);
 
-  std::string title = this->p_control_node->get_node_type();
-  if (this->p_control_node->frozen_outputs ||
-      !this->p_control_node->auto_update)
-    title += " [!]";
-
   ImNodes::BeginNode(this->p_control_node->hash_id);
   ImNodes::BeginNodeTitleBar();
-  ImGui::TextUnformatted(title.c_str());
+  if (this->p_control_node->frozen_outputs)
+    ImGui::TextColored(ImColor(IM_COL32(150, 50, 50, 255)), node_type.c_str());
+  else
+    ImGui::TextUnformatted(node_type.c_str());
   ImNodes::EndNodeTitleBar();
-
-  // ImNodes::PopColorStyle();
 
   // inputs
   for (auto &[port_id, port] : this->p_control_node->get_ports())
