@@ -3,12 +3,14 @@
  * this software. */
 #include "macrologger.h"
 
+#include "hesiod/gui.hpp"
 #include "hesiod/view_node.hpp"
 
 namespace hesiod::vnode
 {
 
-ViewShrink::ViewShrink(std::string id) : ViewNode(), hesiod::cnode::Shrink(id)
+ViewExpandShrink::ViewExpandShrink(std::string id)
+    : ViewNode(), hesiod::cnode::ExpandShrink(id)
 {
   LOG_DEBUG("hash_id: %d", this->hash_id);
   LOG_DEBUG("label: %s", this->label.c_str());
@@ -16,13 +18,22 @@ ViewShrink::ViewShrink(std::string id) : ViewNode(), hesiod::cnode::Shrink(id)
   this->set_preview_port_id("output");
 }
 
-bool ViewShrink::render_settings()
+bool ViewExpandShrink::render_settings()
 {
   bool has_changed = false;
   has_changed |= this->render_settings_header();
 
+  ImGui::Checkbox("shrink", &this->shrink);
+  has_changed |= this->trigger_update_after_edit();
+
   ImGui::SliderInt("ir", &this->ir, 1, 128);
   has_changed |= this->trigger_update_after_edit();
+
+  if (hesiod::gui::listbox_map_enum(this->kernel_map, this->kernel))
+  {
+    this->force_update();
+    has_changed = true;
+  }
 
   has_changed |= this->render_settings_footer();
   return has_changed;

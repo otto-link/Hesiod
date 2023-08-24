@@ -126,10 +126,10 @@ public:
   bool render_settings();
 };
 
-class ViewExpand : public ViewNode, public hesiod::cnode::Expand
+class ViewExpandShrink : public ViewNode, public hesiod::cnode::ExpandShrink
 {
 public:
-  ViewExpand(std::string id);
+  ViewExpandShrink(std::string id);
 
   bool render_settings();
 };
@@ -196,14 +196,6 @@ class ViewRemap : public ViewNode, public hesiod::cnode::Remap
 {
 public:
   ViewRemap(std::string id);
-
-  bool render_settings();
-};
-
-class ViewShrink : public ViewNode, public hesiod::cnode::Shrink
-{
-public:
-  ViewShrink(std::string id);
 
   bool render_settings();
 };

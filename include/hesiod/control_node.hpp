@@ -26,7 +26,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Blend", "Operator/Blend"},
     {"Checkerboard", "Primitive/Coherent Noise"},
     {"Debug", "Debug"},
-    {"Expand", "Filter/Recast"},
+    {"ExpandShrink", "Filter/Recast"},
     {"FbmPerlin", "Primitive/Coherent Noise"},
     {"GradientNorm", "Math/Gradient"},
     {"GradientTalus", "Math/Gradient"},
@@ -34,7 +34,6 @@ static const std::map<std::string, std::string> category_mapping = {
     {"HydraulicParticle", "Erosion/Hydraulic"},
     {"Perlin", "Primitive/Coherent Noise"},
     {"Remap", "Filter/Range"},
-    {"Shrink", "Filter/Recast"},
     {"SmoothCpulse", "Filter/Smoothing"},
     {"SteepenConvective", "Filter/Recast"},
     {"ValueNoiseDelaunay", "Primitive/Coherent Noise"},
@@ -50,6 +49,14 @@ enum blending_method : int
   minimum_smooth,
   multiply,
   substract
+};
+
+enum kernel : int
+{
+  cone,
+  cubic_pulse,
+  lorentzian,
+  smooth_cosine
 };
 
 //----------------------------------------
@@ -240,15 +247,22 @@ protected:
   hmap::Vec2<float> kw = {DEFAULT_KW, DEFAULT_KW};
 };
 
-class Expand : public Filter
+class ExpandShrink : public Filter
 {
 public:
-  Expand(std::string id);
+  ExpandShrink(std::string id);
 
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
 
 protected:
-  int ir = 4;
+  int                        ir = 4;
+  bool                       shrink = false;
+  std::map<std::string, int> kernel_map = {
+      {"cone", kernel::cone},
+      {"cubic_pulse", kernel::cubic_pulse},
+      {"lorentzian", kernel::lorentzian},
+      {"smooth_cosine", kernel::smooth_cosine}};
+  int kernel = kernel::cubic_pulse;
 };
 
 class FbmPerlin : public Primitive
@@ -345,17 +359,6 @@ public:
 protected:
   float vmin = 0.f;
   float vmax = 1.f;
-};
-
-class Shrink : public Filter
-{
-public:
-  Shrink(std::string id);
-
-  void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
-
-protected:
-  int ir = 4;
 };
 
 class SmoothCpulse : public Filter

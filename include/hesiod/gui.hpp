@@ -2,6 +2,7 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #pragma once
+#include <map>
 #include <string>
 #include <vector>
 
@@ -21,6 +22,8 @@ GLFWwindow *init_gui(int width, int height, std::string window_title);
 // custom ImGui widgets
 
 bool drag_float_matrix(std::vector<std::vector<float>> &matrix);
+
+bool listbox_map_enum(std::map<std::string, int> &map, int &selected);
 
 bool slider_vmin_vmax(float &vmin, float &vmax);
 

@@ -52,10 +52,10 @@ std::string ViewTree::add_view_node(std::string control_node_type)
         id);
     this->add_node(p_view_node);
   }
-  else if (control_node_type == "Expand")
+  else if (control_node_type == "ExpandShrink")
   {
-    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewExpand>(
-        id);
+    std::shared_ptr p_view_node =
+        std::make_shared<hesiod::vnode::ViewExpandShrink>(id);
     this->add_node(p_view_node);
   }
   else if (control_node_type == "FbmPerlin")
@@ -103,12 +103,6 @@ std::string ViewTree::add_view_node(std::string control_node_type)
   else if (control_node_type == "Remap")
   {
     std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewRemap>(
-        id);
-    this->add_node(p_view_node);
-  }
-  else if (control_node_type == "Shrink")
-  {
-    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewShrink>(
         id);
     this->add_node(p_view_node);
   }
