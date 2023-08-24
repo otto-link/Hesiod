@@ -24,6 +24,7 @@ enum dtype : int
 static const std::map<std::string, std::string> category_mapping = {
     {"BaseElevation", "Primitive/Manual"},
     {"Blend", "Operator/Blend"},
+    {"Checkerboard", "Primitive/Coherent Noise"},
     {"Debug", "Debug"},
     {"Expand", "Filter/Recast"},
     {"FbmPerlin", "Primitive/Coherent Noise"},
@@ -223,6 +224,20 @@ protected:
   int method = 0;
 
   float k = 0.1f; // smooth intensity for smooth min and max
+};
+
+class Checkerboard : public Primitive
+{
+public:
+  Checkerboard(std::string     id,
+               hmap::Vec2<int> shape,
+               hmap::Vec2<int> tiling,
+               float           overlap);
+
+  void compute();
+
+protected:
+  hmap::Vec2<float> kw = {DEFAULT_KW, DEFAULT_KW};
 };
 
 class Expand : public Filter

@@ -37,6 +37,15 @@ std::string ViewTree::add_view_node(std::string control_node_type)
         id);
     this->add_node(p_view_node);
   }
+  else if (control_node_type == "Checkerboard")
+  {
+    std::shared_ptr p_view_node =
+        std::make_shared<hesiod::vnode::ViewCheckerboard>(id,
+                                                          this->shape,
+                                                          this->tiling,
+                                                          this->overlap);
+    this->add_node(p_view_node);
+  }
   else if (control_node_type == "Debug")
   {
     std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewDebug>(
