@@ -28,9 +28,10 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Debug", "Debug"},
     {"ExpandShrink", "Filter/Recast"},
     {"FbmPerlin", "Primitive/Coherent Noise"},
+    {"Gain", "Filter/Recurve"},
+    {"GammaCorrection", "Filter/Recurve"},
     {"GradientNorm", "Math/Gradient"},
     {"GradientTalus", "Math/Gradient"},
-    {"GammaCorrection", "Filter/Recurve"},
     {"HydraulicParticle", "Erosion/Hydraulic"},
     {"Perlin", "Primitive/Coherent Noise"},
     {"Remap", "Filter/Range"},
@@ -284,6 +285,28 @@ protected:
   float             lacunarity = 2.f;
 };
 
+class Gain : public Filter
+{
+public:
+  Gain(std::string id);
+
+  void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
+
+protected:
+  float gain = 1.f;
+};
+
+class GammaCorrection : public Filter
+{
+public:
+  GammaCorrection(std::string id);
+
+  void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
+
+protected:
+  float gamma = 1.f;
+};
+
 class GradientNorm : public Unary
 {
 public:
@@ -298,17 +321,6 @@ public:
   GradientTalus(std::string id);
 
   void compute_in_out(hmap::HeightMap &h, hmap::HeightMap *p_talus);
-};
-
-class GammaCorrection : public Filter
-{
-public:
-  GammaCorrection(std::string id);
-
-  void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
-
-protected:
-  float gamma = 1.f;
 };
 
 class HydraulicParticle : public Erosion

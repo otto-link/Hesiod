@@ -148,6 +148,14 @@ private:
   bool link_kxy = true;
 };
 
+class ViewGain : public ViewNode, public hesiod::cnode::Gain
+{
+public:
+  ViewGain(std::string id);
+
+  bool render_settings();
+};
+
 class ViewGammaCorrection : public ViewNode,
                             public hesiod::cnode::GammaCorrection
 {
