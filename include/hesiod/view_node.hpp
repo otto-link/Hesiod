@@ -29,8 +29,8 @@ struct viewnode_color_set
 
   viewnode_color_set(hmap::Vec4<int> rgba)
   {
-    this->base = IM_COL32(rgba.a, rgba.b, rgba.c, int(0.3f * rgba.d));
-    this->hovered = IM_COL32(rgba.a, rgba.b, rgba.c, rgba.d);
+    this->base = IM_COL32(rgba.a, rgba.b, rgba.c, (int)(0.3f * rgba.d));
+    this->hovered = IM_COL32(rgba.a, rgba.b, rgba.c, (int)(0.7f * rgba.d));
     this->selected = IM_COL32(rgba.a, rgba.b, rgba.c, rgba.d);
   }
 };
@@ -43,7 +43,7 @@ static const std::map<std::string, viewnode_color_set> category_colors = {
     {"Filter", viewnode_color_set({94, 79, 162, 255})},
     {"Hydrology", viewnode_color_set({101, 176, 234, 255})},
     {"Math", viewnode_color_set({20, 20, 20, 255})},
-    {"Operator", viewnode_color_set({50, 136, 189, 255})},
+    {"Operator", viewnode_color_set({122, 136, 189, 255})},
     {"Primitive", viewnode_color_set({12, 84, 92, 255})},
     {"Roads", viewnode_color_set({102, 108, 111, 255})}};
 

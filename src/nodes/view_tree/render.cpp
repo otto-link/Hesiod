@@ -104,7 +104,14 @@ std::string ViewTree::render_new_node_treeview(
           }
 
           ImGui::TableNextColumn();
+
+          std::string main_category = node_category.substr(
+              0,
+              node_category.find("/"));
+
           ImGui::TextUnformatted(node_category.c_str());
+          ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg,
+                                 category_colors.at(main_category).hovered);
           ImGui::PopID();
         }
         k++;

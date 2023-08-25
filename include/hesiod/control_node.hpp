@@ -36,7 +36,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"HydraulicParticle", "Erosion/Hydraulic"},
     {"Perlin", "Primitive/Coherent Noise"},
     {"Remap", "Filter/Range"},
-    {"Rugosity", "Biome/Features"},
+    {"Rugosity", "Features"},
     {"SmoothCpulse", "Filter/Smoothing"},
     {"SteepenConvective", "Filter/Recast"},
     {"ValueNoiseDelaunay", "Primitive/Coherent Noise"},
