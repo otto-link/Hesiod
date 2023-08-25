@@ -254,6 +254,14 @@ public:
   bool render_settings();
 };
 
+class ViewMakeBinary : public ViewNode, public hesiod::cnode::MakeBinary
+{
+public:
+  ViewMakeBinary(std::string id);
+
+  bool render_settings();
+};
+
 class ViewPerlin : public ViewNode, public hesiod::cnode::Perlin
 {
 public:

@@ -21,34 +21,6 @@ enum dtype : int
   dHeightMap
 };
 
-static const std::map<std::string, std::string> category_mapping = {
-    {"BaseElevation", "Primitive/Manual"},
-    {"Blend", "Operator/Blend"},
-    {"Checkerboard", "Primitive/Coherent Noise"},
-    {"Clamp", "Filter/Range"},
-    {"Debug", "Debug"},
-    {"ExpandShrink", "Filter/Recast"},
-    {"FbmPerlin", "Primitive/Coherent Noise"},
-    {"Gain", "Filter/Recurve"},
-    {"GammaCorrection", "Filter/Recurve"},
-    {"GammaCorrectionLocal", "Filter/Recurve"},
-    {"Gradient", "Math/Gradient"},
-    {"GradientNorm", "Math/Gradient"},
-    {"GradientTalus", "Math/Gradient"},
-    {"HydraulicParticle", "Erosion/Hydraulic"},
-    {"KmeansClustering2", "Features"},
-    {"Lerp", "Operator/Blend"},
-    {"Perlin", "Primitive/Coherent Noise"},
-    {"Remap", "Filter/Range"},
-    {"Rugosity", "Features"},
-    {"SmoothCpulse", "Filter/Smoothing"},
-    {"SteepenConvective", "Filter/Recast"},
-    {"ValleyWidth", "Features"},
-    {"ValueNoiseDelaunay", "Primitive/Coherent Noise"},
-    {"White", "Primitive/Random"},
-    {"WhiteDensityMap", "Primitive/Random"},
-    {"Worley", "Primitive/Coherent Noise"}};
-
 enum blending_method : int
 {
   add,
@@ -72,6 +44,39 @@ enum kernel : int
   lorentzian,
   smooth_cosine
 };
+
+//----------------------------------------
+// Node types / categories
+//----------------------------------------
+
+static const std::map<std::string, std::string> category_mapping = {
+    {"BaseElevation", "Primitive/Manual"},
+    {"Blend", "Operator/Blend"},
+    {"Checkerboard", "Primitive/Coherent Noise"},
+    {"Clamp", "Filter/Range"},
+    {"Debug", "Debug"},
+    {"ExpandShrink", "Filter/Recast"},
+    {"FbmPerlin", "Primitive/Coherent Noise"},
+    {"Gain", "Filter/Recurve"},
+    {"GammaCorrection", "Filter/Recurve"},
+    {"GammaCorrectionLocal", "Filter/Recurve"},
+    {"Gradient", "Math/Gradient"},
+    {"GradientNorm", "Math/Gradient"},
+    {"GradientTalus", "Math/Gradient"},
+    {"HydraulicParticle", "Erosion/Hydraulic"},
+    {"KmeansClustering2", "Features"},
+    {"Lerp", "Operator/Blend"},
+    {"MakeBinary", "Filter/Recurve"},
+    {"Perlin", "Primitive/Coherent Noise"},
+    {"Remap", "Filter/Range"},
+    {"Rugosity", "Features"},
+    {"SmoothCpulse", "Filter/Smoothing"},
+    {"SteepenConvective", "Filter/Recast"},
+    {"ValleyWidth", "Features"},
+    {"ValueNoiseDelaunay", "Primitive/Coherent Noise"},
+    {"White", "Primitive/Random"},
+    {"WhiteDensityMap", "Primitive/Random"},
+    {"Worley", "Primitive/Coherent Noise"}};
 
 //----------------------------------------
 // Generic nodes
@@ -446,6 +451,17 @@ private:
   hmap::Vec2<int> shape = {0, 0};
 };
 
+class MakeBinary : public Unary
+{
+public:
+  MakeBinary(std::string id);
+
+  void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
+
+protected:
+  float threshold = 0.f;
+};
+
 class Perlin : public Primitive
 {
 public:
@@ -471,11 +487,6 @@ public:
 protected:
   float vmin = 0.f;
   float vmax = 1.f;
-
-private:
-  hmap::Vec2<int> shape;
-  hmap::Vec2<int> tiling;
-  float           overlap;
 };
 
 class Rugosity : public Unary
