@@ -289,6 +289,20 @@ public:
   bool render_settings();
 };
 
+class ViewRidgedPerlin : public ViewNode, public hesiod::cnode::RidgedPerlin
+{
+public:
+  ViewRidgedPerlin(std::string     id,
+                   hmap::Vec2<int> shape,
+                   hmap::Vec2<int> tiling,
+                   float           overlap);
+
+  bool render_settings();
+
+private:
+  bool link_kxy = true;
+};
+
 class ViewRugosity : public ViewNode, public hesiod::cnode::Rugosity
 {
 public:

@@ -69,6 +69,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"MakeBinary", "Filter/Recurve"},
     {"Perlin", "Primitive/Coherent Noise"},
     {"Remap", "Filter/Range"},
+    {"RidgedPerlin", "Primitive/Coherent Noise"},
     {"Rugosity", "Features"},
     {"SmoothCpulse", "Filter/Smoothing"},
     {"SteepenConvective", "Filter/Recast"},
@@ -487,6 +488,25 @@ public:
 protected:
   float vmin = 0.f;
   float vmax = 1.f;
+};
+
+class RidgedPerlin : public Primitive
+{
+public:
+  RidgedPerlin(std::string     id,
+               hmap::Vec2<int> shape,
+               hmap::Vec2<int> tiling,
+               float           overlap);
+
+  void compute();
+
+protected:
+  hmap::Vec2<float> kw = {DEFAULT_KW, DEFAULT_KW};
+  int               seed = DEFAULT_SEED;
+  int               octaves = 8;
+  float             weight = 0.7f;
+  float             persistence = 0.5f;
+  float             lacunarity = 2.f;
 };
 
 class Rugosity : public Unary

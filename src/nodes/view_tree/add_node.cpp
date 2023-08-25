@@ -146,6 +146,15 @@ std::string ViewTree::add_view_node(std::string control_node_type)
         id);
     this->add_node(p_view_node);
   }
+  else if (control_node_type == "RidgedPerlin")
+  {
+    std::shared_ptr p_view_node =
+        std::make_shared<hesiod::vnode::ViewRidgedPerlin>(id,
+                                                          this->shape,
+                                                          this->tiling,
+                                                          this->overlap);
+    this->add_node(p_view_node);
+  }
   else if (control_node_type == "Rugosity")
   {
     std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewRugosity>(
@@ -206,7 +215,7 @@ std::string ViewTree::add_view_node(std::string control_node_type)
   else
   {
     LOG_ERROR("unknown node type: [%s]", control_node_type.c_str());
-    throw std::runtime_error("unknown node type");
+    throw std::runtime_error("adding an unknown node type");
   }
 
   return id;
