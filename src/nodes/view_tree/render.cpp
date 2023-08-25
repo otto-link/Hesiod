@@ -288,8 +288,9 @@ void ViewTree::render_node_editor()
 
     ImGuiTableFlags flags = ImGuiTableFlags_BordersOuter |
                             ImGuiTableFlags_BordersV;
+    const int ncol = 7;
 
-    if (ImGui::BeginTable(("table##" + this->id).c_str(), 7, flags))
+    if (ImGui::BeginTable(("table##" + this->id).c_str(), ncol, flags))
     {
       ImGui::TableSetupColumn("Hash Id");
       ImGui::TableSetupColumn("Node Id");
@@ -300,6 +301,15 @@ void ViewTree::render_node_editor()
       ImGui::TableSetupColumn("Port Id");
       ImGui::TableSetupScrollFreeze(0, 1);
       ImGui::TableHeadersRow();
+
+      // separation
+      ImGui::TableNextRow();
+      for (int i = 0; i < ncol; i++)
+      {
+        ImGui::TableNextColumn();
+        ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg,
+                               IM_COL32(120, 120, 120, 255));
+      }
 
       for (auto &[id, vnode] : this->get_nodes_map())
       {
@@ -353,6 +363,15 @@ void ViewTree::render_node_editor()
             ImGui::TableNextColumn();
             ImGui::TableNextColumn();
           }
+        }
+
+        // separation
+        ImGui::TableNextRow();
+        for (int i = 0; i < ncol; i++)
+        {
+          ImGui::TableNextColumn();
+          ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg,
+                                 IM_COL32(120, 120, 120, 255));
         }
       }
 

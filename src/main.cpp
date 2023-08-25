@@ -17,7 +17,7 @@ int main()
 {
   hmap::Vec2<int> shape = {512, 512};
   hmap::Vec2<int> tiling = {4, 2};
-  float           overlap = 0.25;
+  float           overlap = 0.25f;
 
   // ----------------------------------- Main GUI
 
