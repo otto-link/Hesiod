@@ -137,6 +137,14 @@ private:
   bool link_kxy = true;
 };
 
+class ViewClamp : public ViewNode, public hesiod::cnode::Clamp
+{
+public:
+  ViewClamp(std::string id);
+
+  bool render_settings();
+};
+
 class ViewDebug : public ViewNode, public hesiod::cnode::Debug
 {
 public:
@@ -225,6 +233,14 @@ class ViewHydraulicParticle : public ViewNode,
 {
 public:
   ViewHydraulicParticle(std::string id);
+
+  bool render_settings();
+};
+
+class ViewLerp : public ViewNode, public hesiod::cnode::Lerp
+{
+public:
+  ViewLerp(std::string id);
 
   bool render_settings();
 };

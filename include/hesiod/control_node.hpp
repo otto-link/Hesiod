@@ -25,6 +25,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"BaseElevation", "Primitive/Manual"},
     {"Blend", "Operator/Blend"},
     {"Checkerboard", "Primitive/Coherent Noise"},
+    {"Clamp", "Filter/Range"},
     {"Debug", "Debug"},
     {"ExpandShrink", "Filter/Recast"},
     {"FbmPerlin", "Primitive/Coherent Noise"},
@@ -35,6 +36,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"GradientNorm", "Math/Gradient"},
     {"GradientTalus", "Math/Gradient"},
     {"HydraulicParticle", "Erosion/Hydraulic"},
+    {"Lerp", "Operator/Blend"},
     {"Perlin", "Primitive/Coherent Noise"},
     {"Remap", "Filter/Range"},
     {"Rugosity", "Features"},
@@ -72,6 +74,28 @@ enum kernel : int
 //----------------------------------------
 // Generic nodes
 //----------------------------------------
+
+class Unary : public gnode::Node // most basic, 1 in / 1 out
+{
+public:
+  Unary(std::string id);
+
+  void update_inner_bindings();
+
+  void compute();
+
+  virtual void compute_in_out(hmap::HeightMap &, hmap::HeightMap *)
+  {
+    LOG_ERROR("Compute not defined for generic in/out [%s])", this->id.c_str());
+    throw std::runtime_error("undefined 'compute_in_out' method");
+  }
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap();
+
+private:
+  hmap::Vec2<int> shape = {0, 0};
+};
 
 class Binary : public gnode::Node // basic, 2 in / 1 out
 {
@@ -177,28 +201,6 @@ private:
   float           overlap;
 };
 
-class Unary : public gnode::Node // most basic, 1 in / 1 out
-{
-public:
-  Unary(std::string id);
-
-  void update_inner_bindings();
-
-  void compute();
-
-  virtual void compute_in_out(hmap::HeightMap &, hmap::HeightMap *)
-  {
-    LOG_ERROR("Compute not defined for generic in/out [%s])", this->id.c_str());
-    throw std::runtime_error("undefined 'compute_in_out' method");
-  }
-
-protected:
-  hmap::HeightMap value_out = hmap::HeightMap();
-
-private:
-  hmap::Vec2<int> shape = {0, 0};
-};
-
 //----------------------------------------
 // End-user nodes
 //----------------------------------------
@@ -260,6 +262,18 @@ public:
 
 protected:
   hmap::Vec2<float> kw = {DEFAULT_KW, DEFAULT_KW};
+};
+
+class Clamp : public Unary
+{
+public:
+  Clamp(std::string id);
+
+  void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
+
+protected:
+  float vmin = 0.f;
+  float vmax = 1.f;
 };
 
 class ExpandShrink : public Filter
@@ -393,6 +407,23 @@ protected:
   float c_deposition = 0.1f;
   float drag_rate = 0.01f;
   float evap_rate = 0.001f;
+};
+
+class Lerp : public gnode::Node
+{
+public:
+  Lerp(std::string id);
+
+  void update_inner_bindings();
+
+  void compute();
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap();
+  float           t = 0.5f;
+
+private:
+  hmap::Vec2<int> shape = {0, 0};
 };
 
 class Perlin : public Primitive
