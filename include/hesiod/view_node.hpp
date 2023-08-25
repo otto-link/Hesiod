@@ -200,6 +200,14 @@ public:
   bool render_settings();
 };
 
+class ViewGradient : public ViewNode, public hesiod::cnode::Gradient
+{
+public:
+  ViewGradient(std::string id);
+
+  bool render_settings();
+};
+
 class ViewGradientNorm : public ViewNode, public hesiod::cnode::GradientNorm
 {
 public:

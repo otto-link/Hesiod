@@ -31,6 +31,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Gain", "Filter/Recurve"},
     {"GammaCorrection", "Filter/Recurve"},
     {"GammaCorrectionLocal", "Filter/Recurve"},
+    {"Gradient", "Math/Gradient"},
     {"GradientNorm", "Math/Gradient"},
     {"GradientTalus", "Math/Gradient"},
     {"HydraulicParticle", "Erosion/Hydraulic"},
@@ -321,6 +322,28 @@ protected:
   float gamma = 1.f;
   int   ir = 4;
   float k = 0.1f;
+};
+
+class Gradient : public gnode::Node
+{
+public:
+  Gradient(std::string id);
+
+  void update_inner_bindings();
+
+  void compute();
+
+protected:
+  hmap::HeightMap value_out_dx = hmap::HeightMap();
+  hmap::HeightMap value_out_dy = hmap::HeightMap();
+  bool            normalize = true;
+  float           vmin_x = 0.f;
+  float           vmax_x = 1.f;
+  float           vmin_y = 0.f;
+  float           vmax_y = 1.f;
+
+private:
+  hmap::Vec2<int> shape = {0, 0};
 };
 
 class GradientNorm : public Unary
