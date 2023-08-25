@@ -31,11 +31,8 @@ bool ViewWhiteDensityMap::render_settings()
     has_changed = true;
   }
 
-  if (ImGui::DragInt("seed", &this->seed))
-  {
-    this->force_update();
-    has_changed = true;
-  }
+  ImGui::DragInt("seed", &this->seed);
+  has_changed |= this->trigger_update_after_edit();
 
   has_changed |= this->render_settings_footer();
 

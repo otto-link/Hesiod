@@ -36,23 +36,21 @@ bool ViewFbmPerlin::render_settings()
     has_changed = true;
   }
 
-  if (ImGui::DragInt("seed", &this->seed))
-  {
-    this->force_update();
-    has_changed = true;
-  }
+  ImGui::DragInt("seed", &this->seed);
+  has_changed |= this->trigger_update_after_edit();
 
   // wavenumber(s)
   ImGui::Checkbox("Link x and y", &this->link_kxy);
   if (this->link_kxy)
   {
-    if (ImGui::DragFloat("kx, ky",
-                         &this->kw.x,
-                         0.1f,
-                         0.f,
-                         64.f,
-                         "%.1f",
-                         ImGuiSliderFlags_None))
+    ImGui::DragFloat("kx, ky",
+                     &this->kw.x,
+                     0.1f,
+                     0.f,
+                     64.f,
+                     "%.1f",
+                     ImGuiSliderFlags_None);
+    if (ImGui::IsItemDeactivatedAfterEdit())
     {
       this->kw.y = this->kw.x;
       this->force_update();
@@ -74,29 +72,17 @@ bool ViewFbmPerlin::render_settings()
     // }
   }
 
-  if (ImGui::InputInt("octaves", &this->octaves))
-  {
-    this->force_update();
-    has_changed = true;
-  }
+  ImGui::InputInt("octaves", &this->octaves);
+  has_changed |= this->trigger_update_after_edit();
 
-  if (ImGui::SliderFloat("weight", &this->weight, 0.f, 1.f, "%.2f"))
-  {
-    this->force_update();
-    has_changed = true;
-  }
+  ImGui::SliderFloat("weight", &this->weight, 0.f, 1.f, "%.2f");
+  has_changed |= this->trigger_update_after_edit();
 
-  if (ImGui::SliderFloat("persistence", &this->persistence, 0.01f, 1.f, "%.2f"))
-  {
-    this->force_update();
-    has_changed = true;
-  }
+  ImGui::SliderFloat("persistence", &this->persistence, 0.01f, 1.f, "%.2f");
+  has_changed |= this->trigger_update_after_edit();
 
-  if (ImGui::SliderFloat("lacunarity", &this->lacunarity, 0.01f, 4.f, "%.2f"))
-  {
-    this->force_update();
-    has_changed = true;
-  }
+  ImGui::SliderFloat("lacunarity", &this->lacunarity, 0.01f, 4.f, "%.2f");
+  has_changed |= this->trigger_update_after_edit();
 
   ImGui::Separator();
 

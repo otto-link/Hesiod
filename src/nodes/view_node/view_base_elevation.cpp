@@ -28,11 +28,8 @@ bool ViewBaseElevation::render_settings()
 
   has_changed |= this->render_settings_header();
 
-  if (ImGui::SliderFloat("width_factor", &this->width_factor, 0.01f, 2.f))
-  {
-    this->BaseElevation::force_update();
-    has_changed = true;
-  }
+  ImGui::SliderFloat("width_factor", &this->width_factor, 0.01f, 2.f);
+  has_changed |= this->trigger_update_after_edit();
 
   if (hesiod::gui::drag_float_matrix(this->values))
   {

@@ -29,11 +29,10 @@ bool ViewBlend::render_settings()
 
   if (this->method == hesiod::cnode::blending_method::maximum_smooth ||
       this->method == hesiod::cnode::blending_method::minimum_smooth)
-    if (ImGui::SliderFloat("k", &this->k, 0.01f, 1.f, "%.2f"))
-    {
-      this->force_update();
-      has_changed = true;
-    }
+  {
+    ImGui::SliderFloat("k", &this->k, 0.01f, 1.f, "%.2f");
+    has_changed |= this->trigger_update_after_edit();
+  }
 
   has_changed |= this->render_settings_footer();
 
