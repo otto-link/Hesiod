@@ -72,10 +72,20 @@ void ViewNode::post_control_node_update()
 void ViewNode::render_node()
 {
   std::string node_type = this->p_control_node->get_node_type();
+  int         pos = this->p_control_node->get_category().find("/");
+  std::string main_category = this->p_control_node->get_category().substr(0,
+                                                                          pos);
 
-  // ImGui::SetWindowFontScale(0.8f);
+  ImNodes::PushColorStyle(ImNodesCol_TitleBar,
+                          category_colors.at(main_category).base);
+  ImNodes::PushColorStyle(ImNodesCol_TitleBarHovered,
+                          category_colors.at(main_category).hovered);
+  ImNodes::PushColorStyle(ImNodesCol_TitleBarSelected,
+                          category_colors.at(main_category).selected);
 
   ImNodes::BeginNode(this->p_control_node->hash_id);
+
+  // title
   ImNodes::BeginNodeTitleBar();
   if (this->p_control_node->frozen_outputs)
     ImGui::TextColored(ImColor(IM_COL32(150, 50, 50, 255)), node_type.c_str());
@@ -130,7 +140,8 @@ void ViewNode::render_node()
   }
 
   ImNodes::EndNode();
-  ImGui::SetWindowFontScale(1.f);
+  for (int i = 0; i < 3; i++)
+    ImNodes::PopColorStyle();
 }
 
 bool ViewNode::render_settings()
