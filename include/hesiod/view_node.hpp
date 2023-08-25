@@ -29,9 +29,14 @@ struct viewnode_color_set
 
   viewnode_color_set(hmap::Vec4<int> rgba)
   {
+    uint8_t dc = 50;
+
     this->base = IM_COL32(rgba.a, rgba.b, rgba.c, (int)(0.3f * rgba.d));
     this->hovered = IM_COL32(rgba.a, rgba.b, rgba.c, (int)(0.7f * rgba.d));
-    this->selected = IM_COL32(rgba.a, rgba.b, rgba.c, rgba.d);
+    this->selected = IM_COL32(std::min(255, rgba.a + dc),
+                              std::min(255, rgba.b + dc),
+                              std::min(255, rgba.c + dc),
+                              rgba.d);
   }
 };
 

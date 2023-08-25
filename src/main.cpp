@@ -6,7 +6,9 @@
 #include "macrologger.h"
 
 #include "gnode.hpp"
-// #include "highmap.hpp"
+#define IMGUI_DEFINE_MATH_OPERATORS
+#include "imnodes.h"
+#include "imnodes_internal.h"
 
 #include "hesiod/control_node.hpp"
 #include "hesiod/gui.hpp"
@@ -28,6 +30,10 @@ int main()
   ImNodes::CreateContext();
   ImNodes::StyleColorsDark();
   // ImNodes::StyleColorsClassic();
+  // ImNodes::StyleColorsLight();
+
+  // ImNodes::GetCurrentContext()->Style.Colors[ImNodesCol_NodeOutline] =
+  //     IM_COL32(150, 100, 100, 255);
 
   hesiod::vnode::ViewTree tree =
       hesiod::vnode::ViewTree("tree_1", shape, tiling, overlap);
