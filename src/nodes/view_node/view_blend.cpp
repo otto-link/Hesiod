@@ -34,6 +34,12 @@ bool ViewBlend::render_settings()
     has_changed |= this->trigger_update_after_edit();
   }
 
+  if (this->method == hesiod::cnode::blending_method::gradients)
+  {
+    ImGui::SliderInt("ir", &this->ir, 1, 128);
+    has_changed |= this->trigger_update_after_edit();
+  }
+
   has_changed |= this->render_settings_footer();
 
   return has_changed;

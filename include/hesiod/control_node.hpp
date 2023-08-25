@@ -48,11 +48,16 @@ static const std::map<std::string, std::string> category_mapping = {
 enum blending_method : int
 {
   add,
+  exclusion,
+  gradients,
   maximum,
   maximum_smooth,
   minimum,
   minimum_smooth,
   multiply,
+  negate,
+  overlay,
+  soft,
   substract
 };
 
@@ -67,6 +72,30 @@ enum kernel : int
 //----------------------------------------
 // Generic nodes
 //----------------------------------------
+
+class Binary : public gnode::Node // basic, 2 in / 1 out
+{
+public:
+  Binary(std::string id);
+
+  void update_inner_bindings();
+
+  void compute();
+
+  virtual void compute_in_out(hmap::HeightMap &,
+                              hmap::HeightMap *,
+                              hmap::HeightMap *)
+  {
+    LOG_ERROR("Compute not defined for generic in/out [%s])", this->id.c_str());
+    throw std::runtime_error("undefined 'compute_in_out' method");
+  }
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap();
+
+private:
+  hmap::Vec2<int> shape = {0, 0};
+};
 
 class Debug : public gnode::Node
 {
@@ -170,30 +199,6 @@ private:
   hmap::Vec2<int> shape = {0, 0};
 };
 
-class Binary : public gnode::Node // basic, 2 in / 1 out
-{
-public:
-  Binary(std::string id);
-
-  void update_inner_bindings();
-
-  void compute();
-
-  virtual void compute_in_out(hmap::HeightMap &,
-                              hmap::HeightMap *,
-                              hmap::HeightMap *)
-  {
-    LOG_ERROR("Compute not defined for generic in/out [%s])", this->id.c_str());
-    throw std::runtime_error("undefined 'compute_in_out' method");
-  }
-
-protected:
-  hmap::HeightMap value_out = hmap::HeightMap();
-
-private:
-  hmap::Vec2<int> shape = {0, 0};
-};
-
 //----------------------------------------
 // End-user nodes
 //----------------------------------------
@@ -227,15 +232,20 @@ public:
 protected:
   std::map<std::string, int> blending_method_map = {
       {"add", blending_method::add},
+      {"exclusion", blending_method::exclusion},
+      {"gradients", blending_method::gradients},
       {"maximum", blending_method::maximum},
       {"maximum_smooth", blending_method::maximum_smooth},
       {"minimum", blending_method::minimum},
       {"minimum_smooth", blending_method::minimum_smooth},
       {"multiply", blending_method::multiply},
+      {"negate", blending_method::negate},
+      {"overlay", blending_method::overlay},
+      {"soft", blending_method::soft},
       {"substract", blending_method::substract}};
-  int method = 0;
-
+  int   method = 0;
   float k = 0.1f; // smooth intensity for smooth min and max
+  int   ir = 4;   // for gradients
 };
 
 class Checkerboard : public Primitive

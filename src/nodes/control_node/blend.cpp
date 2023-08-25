@@ -29,6 +29,16 @@ void Blend::compute_in_out(hmap::HeightMap &h_out,
     { m = a1 + a2; };
     break;
 
+  case blending_method::exclusion:
+    lambda = [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
+    { m = hmap::blend_exclusion(a1, a2); };
+    break;
+
+  case blending_method::gradients:
+    lambda = [this](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
+    { m = hmap::blend_gradients(a1, a2, this->ir); };
+    break;
+
   case blending_method::maximum:
     lambda = [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
     { m = hmap::maximum(a1, a2); };
@@ -52,6 +62,21 @@ void Blend::compute_in_out(hmap::HeightMap &h_out,
   case blending_method::multiply:
     lambda = [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
     { m = a1 * a2; };
+    break;
+
+  case blending_method::negate:
+    lambda = [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
+    { m = hmap::blend_negate(a1, a2); };
+    break;
+
+  case blending_method::overlay:
+    lambda = [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
+    { m = hmap::blend_overlay(a1, a2); };
+    break;
+
+  case blending_method::soft:
+    lambda = [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
+    { m = hmap::blend_soft(a1, a2); };
     break;
 
   case blending_method::substract:
