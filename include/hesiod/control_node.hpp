@@ -39,6 +39,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Rugosity", "Features"},
     {"SmoothCpulse", "Filter/Smoothing"},
     {"SteepenConvective", "Filter/Recast"},
+    {"ValleyWidth", "Features"},
     {"ValueNoiseDelaunay", "Primitive/Coherent Noise"},
     {"WhiteDensityMap", "Primitive/Random"},
     {"Worley", "Primitive/Coherent Noise"}};
@@ -422,6 +423,17 @@ protected:
   int   iterations = 1;
   int   ir = 0;
   float dt = 1.f;
+};
+
+class ValleyWidth : public Unary
+{
+public:
+  ValleyWidth(std::string id);
+
+  void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
+
+protected:
+  int ir = 4;
 };
 
 class ValueNoiseDelaunay : public Primitive

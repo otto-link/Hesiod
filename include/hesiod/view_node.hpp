@@ -268,6 +268,14 @@ public:
   bool render_settings();
 };
 
+class ViewValleyWidth : public ViewNode, public hesiod::cnode::ValleyWidth
+{
+public:
+  ViewValleyWidth(std::string id);
+
+  bool render_settings();
+};
+
 class ViewValueNoiseDelaunay : public ViewNode,
                                public hesiod::cnode::ValueNoiseDelaunay
 {
