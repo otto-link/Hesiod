@@ -45,13 +45,13 @@ std::string ViewTree::render_new_node_treeview(
   const float TEXT_BASE_WIDTH = ImGui::CalcTextSize("A").x;
   const float TEXT_BASE_HEIGHT = ImGui::GetTextLineHeightWithSpacing();
 
-  static ImGuiTableFlags flags = ImGuiTableFlags_Reorderable |
-                                 ImGuiTableFlags_Hideable |
-                                 // ImGuiTableFlags_Sortable |
-                                 ImGuiTableFlags_BordersOuter |
-                                 ImGuiTableFlags_BordersV |
-                                 ImGuiTableFlags_NoBordersInBody |
-                                 ImGuiTableFlags_ScrollY;
+  ImGuiTableFlags flags = ImGuiTableFlags_Reorderable |
+                          ImGuiTableFlags_Hideable |
+                          // ImGuiTableFlags_Sortable |
+                          ImGuiTableFlags_BordersOuter |
+                          ImGuiTableFlags_BordersV |
+                          ImGuiTableFlags_NoBordersInBody |
+                          ImGuiTableFlags_ScrollY;
 
   if (ImGui::BeginTable("table_sorting",
                         2,
@@ -141,9 +141,45 @@ void ViewTree::render_node_editor()
 {
   ImNodes::EditorContextSet(this->p_node_editor_context);
 
-  ImGui::Begin(("Node editor / " + this->id).c_str());
+  ImGui::Begin(("Node editor / " + this->id).c_str(),
+               nullptr,
+               ImGuiWindowFlags_MenuBar);
+
+  // --- menu bar
+
+  {
+    ImGui::PushItemWidth(ImGui::GetFontSize() * -12);
+    if (ImGui::BeginMenuBar())
+    {
+      if (ImGui::BeginMenu("View"))
+      {
+        if (ImGui::MenuItem("Node list [N]",
+                            nullptr,
+                            this->open_node_list_window))
+          this->open_node_list_window = !this->open_node_list_window;
+
+        if (ImGui::MenuItem("Settings [S]", nullptr, this->show_settings))
+          this->show_settings = !this->show_settings;
+
+        ImGui::EndMenu();
+      }
+      ImGui::EndMenuBar();
+    }
+    ImGui::PopItemWidth();
+
+    // key bindings
+    if (ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows))
+    {
+      if (ImGui::IsKeyReleased(ImGuiKey_N))
+        this->open_node_list_window = !this->open_node_list_window;
+      if (ImGui::IsKeyReleased(ImGuiKey_S))
+        this->show_settings = !this->show_settings;
+    }
+  }
 
   // --- settings
+
+  if (this->show_settings)
   {
     ImGui::BeginChild("settings", ImVec2(256, 0), true);
     ImGui::TextUnformatted("Settings");
@@ -243,6 +279,88 @@ void ViewTree::render_node_editor()
   }
 
   ImGui::End();
+
+  // --- node list window
+  if (this->open_node_list_window)
+  {
+    ImGui::Begin(("Node list / " + this->id).c_str(),
+                 &this->open_node_list_window);
+
+    ImGuiTableFlags flags = ImGuiTableFlags_BordersOuter |
+                            ImGuiTableFlags_BordersV;
+
+    if (ImGui::BeginTable(("table##" + this->id).c_str(), 7, flags))
+    {
+      ImGui::TableSetupColumn("Hash Id");
+      ImGui::TableSetupColumn("Node Id");
+      ImGui::TableSetupColumn("Port Id");
+      ImGui::TableSetupColumn("Port Direction");
+      ImGui::TableSetupColumn("Link");
+      ImGui::TableSetupColumn("Node Id");
+      ImGui::TableSetupColumn("Port Id");
+      ImGui::TableSetupScrollFreeze(0, 1);
+      ImGui::TableHeadersRow();
+
+      for (auto &[id, vnode] : this->get_nodes_map())
+      {
+        ImGui::TableNextRow();
+
+        ImGui::TableNextColumn();
+        ImGui::TextColored(ImColor(IM_COL32(255, 255, 255, 100)),
+                           "%d",
+                           vnode.get()->hash_id);
+        ImGui::TableNextColumn();
+        ImGui::Text("%s", id.c_str());
+        ImGui::TableNextColumn(); // empty (port id)
+        ImGui::TableNextColumn(); // empty
+        ImGui::TableNextColumn(); // empty
+        ImGui::TableNextColumn(); // empty
+        ImGui::TableNextColumn(); // empty
+
+        // ports
+        for (auto &[port_id, port] : vnode.get()->get_ports())
+        {
+          ImGui::TableNextRow();
+          ImGui::TableNextColumn();
+          ImGui::TextColored(ImColor(IM_COL32(255, 255, 255, 100)),
+                             "%d",
+                             port.hash_id);
+          ImGui::TableNextColumn(); // empty (node id)
+          ImGui::TableNextColumn();
+          ImGui::Text("%s", port_id.c_str());
+
+          ImGui::TableNextColumn();
+          if (port.direction == gnode::direction::in)
+            ImGui::TextUnformatted("Input");
+          else
+            ImGui::TextUnformatted("Output");
+
+          ImGui::TableNextColumn();
+          if (port.is_connected)
+          {
+            if (port.direction == gnode::direction::in)
+              ImGui::TextUnformatted("<--");
+            else
+              ImGui::TextUnformatted("-->");
+            ImGui::TableNextColumn();
+            ImGui::Text("%s", port.p_linked_node->id.c_str());
+            ImGui::TableNextColumn();
+            ImGui::Text("%s", port.p_linked_port->id.c_str());
+          }
+          else
+          {
+            ImGui::TextUnformatted(" x");
+            ImGui::TableNextColumn();
+            ImGui::TableNextColumn();
+          }
+        }
+      }
+
+      ImGui::EndTable();
+    }
+
+    ImGui::End();
+  }
 }
 
 void ViewTree::render_node_list()

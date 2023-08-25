@@ -86,6 +86,9 @@ private:
 
   ImNodesEditorContext *p_node_editor_context = nullptr;
   bool                  link_has_been_dropped = false;
+
+  bool open_node_list_window = false;
+  bool show_settings = true;
 };
 
 } // namespace hesiod::vnode

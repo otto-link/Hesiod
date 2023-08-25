@@ -50,13 +50,6 @@ int main()
     // --- GUI content
 
     tree.render_node_editor();
-
-    // ImGui::Begin("test");
-    // static std::vector<std::vector<float>> mat = {{0.f, 0.5f, 0.f},
-    //                                               {0.1f, 0.5f, 0.7f}};
-    // hesiod::gui::drag_float_matrix(mat);
-    // ImGui::End();
-
     // tree2.render_node_editor();
 
     // --- Rendering
