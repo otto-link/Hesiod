@@ -237,6 +237,15 @@ public:
   bool render_settings();
 };
 
+class ViewKmeansClustering2 : public ViewNode,
+                              public hesiod::cnode::KmeansClustering2
+{
+public:
+  ViewKmeansClustering2(std::string id);
+
+  bool render_settings();
+};
+
 class ViewLerp : public ViewNode, public hesiod::cnode::Lerp
 {
 public:

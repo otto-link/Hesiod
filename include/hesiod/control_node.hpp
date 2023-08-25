@@ -36,6 +36,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"GradientNorm", "Math/Gradient"},
     {"GradientTalus", "Math/Gradient"},
     {"HydraulicParticle", "Erosion/Hydraulic"},
+    {"KmeansClustering2", "Features"},
     {"Lerp", "Operator/Blend"},
     {"Perlin", "Primitive/Coherent Noise"},
     {"Remap", "Filter/Range"},
@@ -411,6 +412,20 @@ protected:
   float c_deposition = 0.1f;
   float drag_rate = 0.01f;
   float evap_rate = 0.001f;
+};
+
+class KmeansClustering2 : public Binary
+{
+public:
+  KmeansClustering2(std::string id);
+
+  void compute_in_out(hmap::HeightMap &h_out,
+                      hmap::HeightMap *p_h_in1,
+                      hmap::HeightMap *p_h_in2);
+
+protected:
+  int nclusters = 4;
+  int seed = DEFAULT_SEED;
 };
 
 class Lerp : public gnode::Node
