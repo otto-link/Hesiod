@@ -48,7 +48,7 @@ static const std::map<std::string, viewnode_color_set> category_colors = {
     {"Filter", viewnode_color_set({94, 79, 162, 255})},
     {"Hydrology", viewnode_color_set({101, 176, 234, 255})},
     {"Math", viewnode_color_set({20, 20, 20, 255})},
-    {"Operator", viewnode_color_set({122, 136, 189, 255})},
+    {"Operator", viewnode_color_set({142, 156, 189, 255})},
     {"Primitive", viewnode_color_set({12, 84, 92, 255})},
     {"Roads", viewnode_color_set({102, 108, 111, 255})}};
 
@@ -274,6 +274,20 @@ public:
              hmap::Vec2<int> shape,
              hmap::Vec2<int> tiling,
              float           overlap);
+
+  bool render_settings();
+
+private:
+  bool link_kxy = true;
+};
+
+class ViewPerlinBillow : public ViewNode, public hesiod::cnode::PerlinBillow
+{
+public:
+  ViewPerlinBillow(std::string     id,
+                   hmap::Vec2<int> shape,
+                   hmap::Vec2<int> tiling,
+                   float           overlap);
 
   bool render_settings();
 

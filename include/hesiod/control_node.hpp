@@ -68,6 +68,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Lerp", "Operator/Blend"},
     {"MakeBinary", "Filter/Recurve"},
     {"Perlin", "Primitive/Coherent Noise"},
+    {"PerlinBillow", "Primitive/Coherent Noise"},
     {"Remap", "Filter/Range"},
     {"RidgedPerlin", "Primitive/Coherent Noise"},
     {"Rugosity", "Features"},
@@ -470,6 +471,21 @@ public:
          hmap::Vec2<int> shape,
          hmap::Vec2<int> tiling,
          float           overlap);
+
+  void compute();
+
+protected:
+  hmap::Vec2<float> kw = {DEFAULT_KW, DEFAULT_KW};
+  int               seed = DEFAULT_SEED;
+};
+
+class PerlinBillow : public Primitive
+{
+public:
+  PerlinBillow(std::string     id,
+               hmap::Vec2<int> shape,
+               hmap::Vec2<int> tiling,
+               float           overlap);
 
   void compute();
 
