@@ -48,8 +48,6 @@ std::string ViewTree::render_new_node_treeview(
   static ImGuiTableFlags flags = ImGuiTableFlags_Reorderable |
                                  ImGuiTableFlags_Hideable |
                                  // ImGuiTableFlags_Sortable |
-                                 // ImGuiTableFlags_SortMulti |
-                                 // ImGuiTableFlags_RowBg |
                                  ImGuiTableFlags_BordersOuter |
                                  ImGuiTableFlags_BordersV |
                                  ImGuiTableFlags_NoBordersInBody |
@@ -58,7 +56,7 @@ std::string ViewTree::render_new_node_treeview(
   if (ImGui::BeginTable("table_sorting",
                         2,
                         flags,
-                        ImVec2(0.f, TEXT_BASE_HEIGHT * 10),
+                        ImVec2(0.f, TEXT_BASE_HEIGHT * 15),
                         0.f))
   {
     ImGui::TableSetupColumn("Type",
