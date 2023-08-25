@@ -20,9 +20,33 @@ void Clamp::compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in)
   LOG_DEBUG("computing filter node [%s]", this->id.c_str());
 
   h_out = *p_h_in; // copy the input
-  hmap::transform(h_out,
-                  [this](hmap::Array &x)
-                  { hmap::clamp(x, this->vmin, this->vmax); });
+
+  if (!this->smooth_min && !this->smooth_max)
+  {
+    hmap::transform(h_out,
+                    [this](hmap::Array &x)
+                    { hmap::clamp(x, this->vmin, this->vmax); });
+  }
+  else
+  {
+    if (this->smooth_min)
+      hmap::transform(h_out,
+                      [this](hmap::Array &x)
+                      { hmap::clamp_min_smooth(x, this->vmin, this->k_min); });
+    else
+      hmap::transform(h_out,
+                      [this](hmap::Array &x)
+                      { hmap::clamp_min(x, this->vmin); });
+
+    if (this->smooth_max)
+      hmap::transform(h_out,
+                      [this](hmap::Array &x)
+                      { hmap::clamp_max_smooth(x, this->vmax, this->k_max); });
+    else
+      hmap::transform(h_out,
+                      [this](hmap::Array &x)
+                      { hmap::clamp_max(x, this->vmax); });
+  }
 }
 
 } // namespace hesiod::cnode

@@ -274,6 +274,10 @@ public:
 protected:
   float vmin = 0.f;
   float vmax = 1.f;
+  bool  smooth_min = false;
+  bool  smooth_max = false;
+  float k_min = 0.2f;
+  float k_max = 0.2f;
 };
 
 class ExpandShrink : public Filter
