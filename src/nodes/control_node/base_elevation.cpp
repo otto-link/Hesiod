@@ -17,7 +17,7 @@ BaseElevation::BaseElevation(std::string     id,
   LOG_DEBUG("BaseElevation::BaseElevation()");
   this->node_type = "BaseElevation";
   this->category = category_mapping.at(this->node_type);
-  this->value_out.set_shape(shape);
+  this->value_out.set_sto(shape, tiling, overlap);
   this->update_inner_bindings();
 }
 

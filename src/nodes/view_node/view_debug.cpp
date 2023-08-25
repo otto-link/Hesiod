@@ -30,6 +30,12 @@ void ViewDebug::post_control_node_update()
               "\n";
   this->log += "min: " + std::to_string(p_h->min()) + "\n";
   this->log += "max: " + std::to_string(p_h->max()) + "\n";
+  this->log += "shape: {" + std::to_string(p_h->shape.x) + ", " +
+               std::to_string(p_h->shape.y) + "}\n";
+  this->log += "tiling: {" + std::to_string(p_h->tiling.x) + ", " +
+               std::to_string(p_h->tiling.y) + "}\n";
+  this->log += "overlap: " + std::to_string(p_h->overlap) + "\n";
+  // this->log += "" + std::to_string() + "\n";
 
   if (this->auto_export_png)
     this->export_to_png();

@@ -17,7 +17,7 @@ ValueNoiseDelaunay::ValueNoiseDelaunay(std::string     id,
   LOG_DEBUG("ValueNoiseDelaunay::ValueNoiseDelaunay()");
   this->node_type = "ValueNoiseDelaunay";
   this->category = category_mapping.at(this->node_type);
-  this->value_out.set_shape(shape);
+  this->value_out.set_sto(shape, tiling, overlap);
   this->update_inner_bindings();
 }
 

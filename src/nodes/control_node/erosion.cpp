@@ -54,9 +54,9 @@ void Erosion::update_inner_bindings()
     if (this->shape != p_input_hmap->shape)
     {
       this->shape = p_input_hmap->shape;
-      this->value_out.set_shape(this->shape);
-      this->value_out.set_tiling(p_input_hmap->tiling);
-      this->value_out.set_overlap(p_input_hmap->overlap);
+      this->value_out.set_sto(p_input_hmap->shape,
+                              p_input_hmap->tiling,
+                              p_input_hmap->overlap);
       LOG_DEBUG("node [%s]: reshape inner storage to {%d, %d}",
                 this->id.c_str(),
                 this->shape.x,
@@ -71,9 +71,9 @@ void Erosion::update_inner_bindings()
     // erosion output map
     if (true) // (this->get_port_ref_by_id("erosion map")->is_connected) //TODO
     {
-      this->erosion_map.set_shape(this->shape);
-      this->erosion_map.set_tiling(p_input_hmap->tiling);
-      this->erosion_map.set_overlap(p_input_hmap->overlap);
+      this->erosion_map.set_sto(p_input_hmap->shape,
+                                p_input_hmap->tiling,
+                                p_input_hmap->overlap);
       this->set_p_data("erosion map", (void *)&(this->erosion_map));
 
       LOG_DEBUG("node [%s]: reshape erosion inner storage to {%d, %d}",
@@ -92,9 +92,9 @@ void Erosion::update_inner_bindings()
     // deposition output map
     if (true) // TODO (this->get_port_ref_by_id("deposition map")->is_connected)
     {
-      this->deposition_map.set_shape(this->shape);
-      this->deposition_map.set_tiling(p_input_hmap->tiling);
-      this->deposition_map.set_overlap(p_input_hmap->overlap);
+      this->deposition_map.set_sto(p_input_hmap->shape,
+                                   p_input_hmap->tiling,
+                                   p_input_hmap->overlap);
       this->set_p_data("deposition map", (void *)&(this->deposition_map));
 
       LOG_DEBUG("node [%s]: reshape deposition inner storage to {%d, %d}",

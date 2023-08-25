@@ -179,6 +179,15 @@ std::string ViewTree::add_view_node(std::string control_node_type)
         std::make_shared<hesiod::vnode::ViewWhiteDensityMap>(id);
     this->add_node(p_view_node);
   }
+  else if (control_node_type == "White")
+  {
+    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewWhite>(
+        id,
+        this->shape,
+        this->tiling,
+        this->overlap);
+    this->add_node(p_view_node);
+  }
   else if (control_node_type == "Worley")
   {
     std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewWorley>(

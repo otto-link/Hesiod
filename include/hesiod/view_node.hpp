@@ -321,6 +321,17 @@ public:
   bool render_settings();
 };
 
+class ViewWhite : public ViewNode, public hesiod::cnode::White
+{
+public:
+  ViewWhite(std::string     id,
+            hmap::Vec2<int> shape,
+            hmap::Vec2<int> tiling,
+            float           overlap);
+
+  bool render_settings();
+};
+
 class ViewWhiteDensityMap : public ViewNode,
                             public hesiod::cnode::WhiteDensityMap
 {

@@ -45,6 +45,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"SteepenConvective", "Filter/Recast"},
     {"ValleyWidth", "Features"},
     {"ValueNoiseDelaunay", "Primitive/Coherent Noise"},
+    {"White", "Primitive/Random"},
     {"WhiteDensityMap", "Primitive/Random"},
     {"Worley", "Primitive/Coherent Noise"}};
 
@@ -470,6 +471,11 @@ public:
 protected:
   float vmin = 0.f;
   float vmax = 1.f;
+
+private:
+  hmap::Vec2<int> shape;
+  hmap::Vec2<int> tiling;
+  float           overlap;
 };
 
 class Rugosity : public Unary
@@ -532,6 +538,30 @@ public:
 protected:
   float kw = DEFAULT_KW;
   int   seed = DEFAULT_SEED;
+};
+
+class White : public gnode::Node
+{
+public:
+  White(std::string     id,
+        hmap::Vec2<int> shape,
+        hmap::Vec2<int> tiling,
+        float           overlap);
+
+  void update_inner_bindings();
+
+  void compute();
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap();
+  int             seed = DEFAULT_SEED;
+  float           vmin = 0.f;
+  float           vmax = 1.f;
+
+private:
+  hmap::Vec2<int> shape;
+  hmap::Vec2<int> tiling;
+  float           overlap;
 };
 
 class WhiteDensityMap : public gnode::Node
