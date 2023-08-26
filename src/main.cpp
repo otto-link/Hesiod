@@ -35,6 +35,11 @@ int main()
   // ImNodes::GetCurrentContext()->Style.Colors[ImNodesCol_NodeOutline] =
   //     IM_COL32(150, 100, 100, 255);
 
+  ImNodes::GetCurrentContext()->Style.Colors[ImNodesCol_LinkHovered] =
+      IM_COL32(66, 150, 250, 255);
+  ImNodes::GetCurrentContext()->Style.Colors[ImNodesCol_LinkSelected] =
+      IM_COL32(71, 227, 255, 255);
+
   hesiod::vnode::ViewTree tree =
       hesiod::vnode::ViewTree("tree_1", shape, tiling, overlap);
 

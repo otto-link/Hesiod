@@ -329,6 +329,32 @@ void ViewTree::render_node_editor()
       this->remove_link(v);
   }
 
+  // insert Clone node
+  if ((num_selected_links > 0) && ImGui::IsKeyReleased(ImGuiKey_C))
+  {
+    std::vector<int> selected_links;
+    selected_links.resize(num_selected_links);
+    ImNodes::GetSelectedLinks(selected_links.data());
+
+    for (auto &link_id : selected_links)
+    {
+      // backup link infos
+      Link link_bckp = *(this->get_link_ref_by_id(link_id));
+
+      // place a new "Clone" in-between
+      this->remove_link(link_id);
+      std::string  new_node_id = this->add_view_node("Clone");
+      gnode::Node *p_new_node = this->get_node_ref_by_id(new_node_id);
+
+      this->new_link(link_bckp.port_hash_id_from,
+                     p_new_node->get_port_ref_by_id("input")->hash_id);
+      this->new_link(p_new_node->get_port_ref_by_id("thru##0")->hash_id,
+                     link_bckp.port_hash_id_to);
+      // TODO : move to the new node to the right position
+    }
+    ImNodes::ClearLinkSelection();
+  }
+
   // remove the selected nodes for removal (has to be done AFTER the
   // links removal)
   for (auto &node_id : node_id_to_remove)

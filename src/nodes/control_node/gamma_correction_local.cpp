@@ -30,6 +30,7 @@ void GammaCorrectionLocal::compute_filter(hmap::HeightMap &h,
         hmap::gamma_correction_local(x, this->gamma, this->ir, p_mask, this->k);
       });
   h.remap(hmin, hmax, 0.f, 1.f);
+  h.smooth_overlap_buffers();
 }
 
 } // namespace hesiod::cnode
