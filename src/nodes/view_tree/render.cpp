@@ -178,58 +178,41 @@ void ViewTree::render_node_editor()
     }
   }
 
-  // --- settings
+  // --- node selection
+  const int num_selected_nodes = ImNodes::NumSelectedNodes();
+  this->selected_node_ids.clear();
 
+  if (num_selected_nodes > 0)
+  {
+    this->selected_node_hash_ids.resize(num_selected_nodes);
+    this->selected_node_ids.reserve(num_selected_nodes);
+    ImNodes::GetSelectedNodes(this->selected_node_hash_ids.data());
+
+    // convert hash ids to node ids
+    for (auto &node_hash_id : this->selected_node_hash_ids)
+    {
+      std::string node_id = this->get_node_id_by_hash_id(node_hash_id);
+      this->selected_node_ids.push_back(node_id);
+    }
+  }
+
+  // --- settings
   if (this->show_settings)
   {
     ImGui::BeginChild("settings", ImVec2(256, 0), true);
     ImGui::TextUnformatted("Settings");
-
-    const int num_selected_nodes = ImNodes::NumSelectedNodes();
-
-    if (num_selected_nodes > 0)
+    for (auto &node_id : this->selected_node_ids)
     {
-      std::vector<int> selected_nodes;
-      selected_nodes.resize(num_selected_nodes);
-      ImNodes::GetSelectedNodes(selected_nodes.data());
-
-      std::vector<std::string> node_id_to_remove = {};
-
-      for (auto &node_hash_id : selected_nodes)
-      {
-        std::string node_id = this->get_node_id_by_hash_id(node_hash_id);
-        ImGui::SeparatorText(node_id.c_str());
-        this->render_settings(node_id);
-
-        // delete node
-        if (ImGui::IsKeyReleased(ImGuiKey_Delete) or
-            ImGui::IsKeyReleased(ImGuiKey_X))
-          node_id_to_remove.push_back(node_id);
-
-        // duplicate node
-        // TODO : move node to mouse position after creation
-        // const ImVec2 click_pos = ImGui::GetMousePosOnOpeningCurrentPopup();
-        if (ImGui::IsKeyReleased(ImGuiKey_D))
-          this->add_view_node(
-              this->get_node_ref_by_id(node_id)->get_node_type());
-      }
-
-      // TODO clean-up / keep view window open / show last node selected
-      // int          node_hash_id = selected_nodes.back();
-      // gnode::Node *p_node = this->get_node_ref_by_hash_id(node_hash_id);
-      // ((hesiod::vnode::ViewControlNode *)p_node)->render_view2d("output");
-
-      for (auto &node_id : node_id_to_remove)
-      {
-        this->remove_view_node(node_id);
-        ImNodes::ClearNodeSelection();
-      }
+      ImGui::SeparatorText(node_id.c_str());
+      this->render_settings(node_id);
     }
     ImGui::EndChild();
     ImGui::SameLine();
   }
 
   // --- editor canvas
+  std::vector<std::string> node_id_to_remove = {};
+
   {
     ImNodes::BeginNodeEditor();
     this->render_view_nodes();
@@ -243,9 +226,73 @@ void ViewTree::render_node_editor()
       open_popup |= this->link_has_been_dropped;
 
       this->render_new_node_popup(open_popup);
+      // set "dropped link" indicator to false when a node has been
+      // created
       this->link_has_been_dropped = open_popup;
-      // (set "dropped link" indicator to false when a node has
-      // been created)
+
+      // node selection management
+      for (auto &node_id : this->selected_node_ids)
+      {
+        // duplicate node(s)
+        if (ImGui::IsKeyReleased(ImGuiKey_D))
+        {
+          std::string new_node_id = this->add_view_node(
+              this->get_node_ref_by_id(node_id)->get_node_type());
+          // render the node before moving it
+          this->render_view_node(new_node_id);
+
+          ImVec2 pos = ImNodes::GetNodeScreenSpacePos(
+              this->get_node_ref_by_id(node_id)->hash_id);
+          ImNodes::SetNodeScreenSpacePos(
+              this->get_node_ref_by_id(new_node_id)->hash_id,
+              ImVec2(pos.x + 200.f, pos.y));
+        }
+
+        // delete node(s)
+        if (ImGui::IsKeyReleased(ImGuiKey_Delete) or
+            ImGui::IsKeyReleased(ImGuiKey_X))
+          node_id_to_remove.push_back(node_id);
+
+        // create a "Clone" node
+        if (ImGui::IsKeyReleased(ImGuiKey_C))
+        {
+          std::string new_node_id = this->add_view_node("Clone");
+          this->render_view_node(new_node_id);
+
+          ImVec2 pos = ImNodes::GetNodeScreenSpacePos(
+              this->get_node_ref_by_id(node_id)->hash_id);
+          ImNodes::SetNodeScreenSpacePos(
+              this->get_node_ref_by_id(new_node_id)->hash_id,
+              ImVec2(pos.x + 200.f, pos.y));
+
+          // automatic reconnection (only if there is an output named
+          // "output")
+          gnode::Node *p_node = this->get_node_ref_by_id(node_id);
+          gnode::Node *p_clone = this->get_node_ref_by_id(new_node_id);
+
+          if (p_node->is_port_id_in_keys("output"))
+          {
+            // hash id of the port on the other end of the link (if connected)
+            int  port_hash_id_to;
+            bool previously_connected = false;
+            if (p_node->get_port_ref_by_id("output")->is_connected)
+            {
+              port_hash_id_to =
+                  p_node->get_port_ref_by_id("output")->p_linked_port->hash_id;
+              previously_connected = true;
+            }
+
+            // selected node -> new Clone node
+            this->new_link(p_node->get_port_ref_by_id("output")->hash_id,
+                           p_clone->get_port_ref_by_id("input")->hash_id);
+
+            // new Clone node -> previously connected input (if any)
+            if (previously_connected)
+              this->new_link(p_clone->get_port_ref_by_id("thru##0")->hash_id,
+                             port_hash_id_to);
+          }
+        }
+      }
 
       // TODO : automatically connect to default in or out when a link
       // is dropped
@@ -277,6 +324,14 @@ void ViewTree::render_node_editor()
 
     for (auto &v : selected_links)
       this->remove_link(v);
+  }
+
+  // remove the selected nodes for removal (has to be done AFTER the
+  // links removal)
+  for (auto &node_id : node_id_to_remove)
+  {
+    this->remove_view_node(node_id);
+    ImNodes::ClearNodeSelection();
   }
 
   ImGui::End();

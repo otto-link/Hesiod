@@ -84,8 +84,10 @@ private:
   std::map<int, Link> links = {};
   int                 id_counter = 0;
 
-  ImNodesEditorContext *p_node_editor_context = nullptr;
-  bool                  link_has_been_dropped = false;
+  ImNodesEditorContext    *p_node_editor_context = nullptr;
+  bool                     link_has_been_dropped = false;
+  std::vector<int>         selected_node_hash_ids = {};
+  std::vector<std::string> selected_node_ids = {};
 
   bool open_node_list_window = false;
   bool show_settings = true;
