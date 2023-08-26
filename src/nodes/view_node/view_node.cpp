@@ -35,6 +35,7 @@ void ViewNode::set_preview_port_id(std::string new_port_id)
   if (this->p_control_node->is_port_id_in_keys(new_port_id))
   {
     this->preview_port_id = new_port_id;
+    this->p_control_node->update();
     this->update_preview();
   }
   else
