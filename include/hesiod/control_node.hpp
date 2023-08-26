@@ -54,6 +54,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Blend", "Operator/Blend"},
     {"Checkerboard", "Primitive/Coherent Noise"},
     {"Clamp", "Filter/Range"},
+    {"Clone", "Routing"},
     {"Debug", "Debug"},
     {"ExpandShrink", "Filter/Recast"},
     {"FbmPerlin", "Primitive/Coherent Noise"},
@@ -208,6 +209,24 @@ private:
   hmap::Vec2<int> shape;
   hmap::Vec2<int> tiling;
   float           overlap;
+};
+
+//----------------------------------------
+// Data routing nodes
+//----------------------------------------
+
+class Clone : public gnode::Node
+{
+public:
+  Clone(std::string id);
+
+  void update_inner_bindings();
+
+  void compute();
+
+protected:
+  int             id_count = 0;
+  hmap::HeightMap value_out = hmap::HeightMap();
 };
 
 //----------------------------------------

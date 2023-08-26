@@ -18,10 +18,7 @@ WhiteDensityMap::WhiteDensityMap(std::string id) : gnode::Node(id)
       gnode::Port("density map", gnode::direction::in, dtype::dHeightMap));
   this->add_port(
       gnode::Port("output", gnode::direction::out, dtype::dHeightMap));
-  this->add_port(gnode::Port("thru", gnode::direction::out, dtype::dHeightMap));
   this->update_inner_bindings();
-
-  this->set_thru(false); // this node cannot be thru
 }
 
 void WhiteDensityMap::update_inner_bindings()
@@ -29,10 +26,8 @@ void WhiteDensityMap::update_inner_bindings()
   LOG_DEBUG("inner bindings [%s]", this->id.c_str());
   void *p_input_data = this->get_p_data("density map");
 
-  // can be used to pass a reference to the input to any downstrean
-  // node
-  this->set_p_data("thru", p_input_data);
-
+  // density map is passed by reference, it needs to be instanciated
+  // first (for the output, we use a copy of this input heightmap)
   if (p_input_data != nullptr)
   {
     hmap::HeightMap *p_input_hmap = static_cast<hmap::HeightMap *>(

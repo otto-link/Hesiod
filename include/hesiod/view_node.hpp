@@ -50,7 +50,8 @@ static const std::map<std::string, viewnode_color_set> category_colors = {
     {"Math", viewnode_color_set({20, 20, 20, 255})},
     {"Operator", viewnode_color_set({142, 156, 189, 255})},
     {"Primitive", viewnode_color_set({12, 84, 92, 255})},
-    {"Roads", viewnode_color_set({102, 108, 111, 255})}};
+    {"Roads", viewnode_color_set({102, 108, 111, 255})},
+    {"Routing", viewnode_color_set({200, 50, 0, 255})}};
 
 class ViewNode
 {
@@ -146,6 +147,14 @@ class ViewClamp : public ViewNode, public hesiod::cnode::Clamp
 {
 public:
   ViewClamp(std::string id);
+
+  bool render_settings();
+};
+
+class ViewClone : public ViewNode, public hesiod::cnode::Clone
+{
+public:
+  ViewClone(std::string id);
 
   bool render_settings();
 };

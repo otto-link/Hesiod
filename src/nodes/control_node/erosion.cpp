@@ -31,7 +31,6 @@ Erosion::Erosion(std::string id) : gnode::Node(id)
       gnode::Port("erosion map", gnode::direction::out, dtype::dHeightMap));
   this->add_port(
       gnode::Port("deposition map", gnode::direction::out, dtype::dHeightMap));
-  this->add_port(gnode::Port("thru", gnode::direction::out, dtype::dHeightMap));
   this->update_inner_bindings();
 }
 
@@ -40,33 +39,13 @@ void Erosion::update_inner_bindings()
   LOG_DEBUG("inner bindings [%s]", this->id.c_str());
   void *p_input_data = this->get_p_data("input");
 
-  // can be used to pass a reference to the input to any downstrean
-  // node
-  this->set_p_data("thru", p_input_data);
-
   if (p_input_data != nullptr)
   {
     hmap::HeightMap *p_input_hmap = static_cast<hmap::HeightMap *>(
         p_input_data);
 
-    // reshape the storage based on the input heightmap, if not
-    // already done
-    if (this->shape != p_input_hmap->shape)
-    {
-      this->shape = p_input_hmap->shape;
-      this->value_out.set_sto(p_input_hmap->shape,
-                              p_input_hmap->tiling,
-                              p_input_hmap->overlap);
-      LOG_DEBUG("node [%s]: reshape inner storage to {%d, %d}",
-                this->id.c_str(),
-                this->shape.x,
-                this->shape.y);
-    }
-
-    // TODO check shape before
-
-    // memory for the erosion and deposition maps is allocated only
-    // if their ports is connected
+    // splatmap are passed by reference, they need to be instanciated
+    // first (for the output, we use a copy of this input heightmap)
 
     // erosion output map
     if (true) // (this->get_port_ref_by_id("erosion map")->is_connected) //TODO
