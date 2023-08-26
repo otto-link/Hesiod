@@ -45,6 +45,8 @@ public:
 
   std::string get_new_id();
 
+  void set_view2d_node_id(std::string node_id);
+
   std::string add_view_node(std::string control_node_type);
 
   void generate_all_links(bool force_update = false);
@@ -89,8 +91,10 @@ private:
   std::vector<int>         selected_node_hash_ids = {};
   std::vector<std::string> selected_node_ids = {};
 
-  bool open_node_list_window = false;
-  bool show_settings = true;
+  bool        open_node_list_window = false;
+  bool        open_view2d_window = false;
+  std::string view2d_node_id = "";
+  bool        show_settings = true;
 };
 
 } // namespace hesiod::vnode

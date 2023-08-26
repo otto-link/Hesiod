@@ -144,7 +144,8 @@ void ViewTree::render_node_editor()
 
   ImGui::Begin(("Node editor / " + this->id).c_str(),
                nullptr,
-               ImGuiWindowFlags_MenuBar);
+               ImGuiWindowFlags_MenuBar |
+                   ImGuiWindowFlags_NoBringToFrontOnFocus);
 
   // --- menu bar
 
@@ -175,6 +176,8 @@ void ViewTree::render_node_editor()
         this->open_node_list_window = !this->open_node_list_window;
       if (ImGui::IsKeyReleased(ImGuiKey_S))
         this->show_settings = !this->show_settings;
+      if (ImGui::IsKeyReleased(ImGuiKey_1))
+        this->open_view2d_window = !this->open_view2d_window;
     }
   }
 
@@ -335,6 +338,24 @@ void ViewTree::render_node_editor()
   }
 
   ImGui::End();
+
+  // --- 2D viewer
+  if (this->open_view2d_window)
+  {
+    ImGui::Begin(("View 2D / " + this->id).c_str(), &this->open_view2d_window);
+
+    if (this->selected_node_ids.size() > 0)
+    {
+      hesiod::vnode::ViewControlNode *p_vnode =
+          (hesiod::vnode::ViewControlNode *)this->get_node_ref_by_id(
+              this->selected_node_ids.back());
+
+      // this->set_view2d_node_id(this->selected_node_ids.back());
+      // p_vnode->render_view2d("output");
+    }
+
+    ImGui::End();
+  }
 
   // --- node list window
   if (this->open_node_list_window)

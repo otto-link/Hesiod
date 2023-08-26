@@ -86,16 +86,15 @@ public:
 
 protected:
   std::string preview_port_id = "";
+  bool        show_preview = true;
 
 private:
   gnode::Node    *p_control_node;
   float           node_width = 128.f;
-  bool            show_preview = true;
   hmap::Vec2<int> shape_preview = {128, 128};
   int             preview_type = preview_type::grayscale;
-  GLuint          image_texture = 0;
-
-  void init_from_control_node();
+  GLuint          image_texture_preview = 0;
+  void            init_from_control_node();
 };
 
 class ViewControlNode : public ViewNode,
@@ -410,6 +409,10 @@ private:
 void img_to_texture(std::vector<uint8_t> img,
                     hmap::Vec2<int>      shape,
                     GLuint              &image_texture);
+
+void img_to_texture_rgb(std::vector<uint8_t> img,
+                        hmap::Vec2<int>      shape,
+                        GLuint              &image_texture);
 
 void post_update_callback_wrapper(ViewNode *p_vnode, gnode::Node *p_cnode);
 

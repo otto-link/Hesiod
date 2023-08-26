@@ -121,13 +121,17 @@ void ViewNode::render_node()
   // preview
   if (this->preview_port_id != "")
   {
-    ImGui::Checkbox("Preview", &this->show_preview);
+    if (ImGui::Checkbox("Preview", &this->show_preview))
+      if (this->show_preview)
+        // update only when toggle to true
+        this->update_preview();
+
     if (this->show_preview)
     {
       ImVec2 img_size = {(float)this->shape_preview.x,
                          (float)this->shape_preview.y};
 
-      ImGui::Image((void *)(intptr_t)this->image_texture, img_size);
+      ImGui::Image((void *)(intptr_t)this->image_texture_preview, img_size);
 
       if (ImGui::BeginPopupContextItem("Preview type"))
       {
@@ -216,26 +220,23 @@ bool ViewNode::render_settings_footer()
   return has_changed;
 }
 
-bool ViewNode::render_view2d(std::string port_id)
-{
-  bool has_changed = false;
-  ImGui::PushID((void *)this);
+// bool ViewNode::render_view2d(std::string port_id)
+// {
+//   bool has_changed = false;
+//   ImGui::PushID((void *)this);
 
-  ImGui::Begin("test view");
+//   this->view2d_port_id = port_id;
 
-  // LOG_DEBUG("2D view: %s", this->p_control_node->id.c_str());
+//   // TODO create specific data structure and callback (similar to prevoew
+//   if (this->p_control_node->get_p_data(port_id))
+//   {
+//     ImGui::Image((void *)(intptr_t)this->image_texture_view2d,
+//                  ImVec2(this->shape_view2d.x, this->shape_view2d.y));
+//   }
 
-  // TODO create specific data structure and callback (similar to prevoew
-  if (this->p_control_node->get_p_data(port_id))
-  {
-    ImGui::Image((void *)(intptr_t)this->image_texture, ImVec2(1024, 1024));
-  }
-
-  ImGui::End();
-
-  ImGui::PopID();
-  return has_changed;
-}
+//   ImGui::PopID();
+//   return has_changed;
+// }
 
 bool ViewNode::trigger_update_after_edit()
 {
@@ -250,7 +251,7 @@ bool ViewNode::trigger_update_after_edit()
 
 void ViewNode::update_preview()
 {
-  if (this->preview_port_id != "")
+  if (this->preview_port_id != "" && this->show_preview)
     if (this->p_control_node->get_p_data(this->preview_port_id))
     {
       hmap::HeightMap *p_h = (hmap::HeightMap *)this->p_control_node
@@ -263,8 +264,27 @@ void ViewNode::update_preview()
       else if (this->preview_type == preview_type::histogram)
         img = hmap::colorize_histogram(p_h->to_array(shape_preview));
 
-      img_to_texture(img, this->shape_preview, this->image_texture);
+      img_to_texture(img, this->shape_preview, this->image_texture_preview);
     }
+
+  // if (this->view2d_port_id != "" &&
+  //     this->show_view2d) // TODO deactivate when not used
+  //   if (this->p_control_node->get_p_data(this->view2d_port_id))
+  //   {
+  //     hmap::HeightMap *p_h = (hmap::HeightMap *)this->p_control_node
+  //                                ->get_p_data(this->view2d_port_id);
+
+  //     this->shape_view2d = p_h->shape;
+  //     hmap::Array array = p_h->to_array(this->shape_view2d);
+
+  //     std::vector<uint8_t> img = hmap::colorize(array,
+  //                                               array.min(),
+  //                                               array.max(),
+  //                                               hmap::cmap::inferno,
+  //                                               false);
+  //     img_to_texture_rgb(img, this->shape_view2d,
+  //     this->image_texture_view2d);
+  //   }
 }
 
 // HELPERS
@@ -292,6 +312,33 @@ void img_to_texture(std::vector<uint8_t> img,
                shape.y,
                0,
                GL_LUMINANCE,
+               GL_UNSIGNED_BYTE,
+               img.data());
+}
+
+void img_to_texture_rgb(std::vector<uint8_t> img,
+                        hmap::Vec2<int>      shape,
+                        GLuint              &image_texture)
+{
+  glGenTextures(1, &image_texture);
+  glBindTexture(GL_TEXTURE_2D, image_texture);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+
+  // Upload pixels into texture
+#if defined(GL_UNPACK_ROW_LENGTH) && !defined(__EMSCRIPTEN__)
+  glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+#endif
+
+  glTexImage2D(GL_TEXTURE_2D,
+               0,
+               GL_RGBA,
+               shape.x,
+               shape.y,
+               0,
+               GL_RGB,
                GL_UNSIGNED_BYTE,
                img.data());
 }
