@@ -45,6 +45,9 @@ public:
 
   std::string get_new_id();
 
+  hesiod::vnode::ViewControlNode *get_view_control_node_ref_by_id(
+      std::string node_id);
+
   void set_view2d_node_id(std::string node_id);
 
   std::string add_view_node(std::string control_node_type);
@@ -75,6 +78,8 @@ public:
   void render_view_node(std::string node_id);
 
   void render_view_nodes();
+
+  void render_view2d(std::string node_id);
 
   void view_node_layout();
 

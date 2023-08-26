@@ -68,6 +68,10 @@ public:
 
   void set_preview_type(int new_preview_type);
 
+  void set_show_view2d(bool new_show_view2d);
+
+  void set_view2d_port_id(std::string new_port_id);
+
   virtual void post_control_node_update();
 
   virtual bool render_settings();
@@ -78,7 +82,7 @@ public:
 
   bool render_settings_footer();
 
-  bool render_view2d(std::string port_id);
+  bool render_view2d();
 
   bool trigger_update_after_edit();
 
@@ -86,14 +90,18 @@ public:
 
 protected:
   std::string preview_port_id = "";
+  std::string view2d_port_id = "";
   bool        show_preview = true;
+  bool        show_view2d = false;
 
 private:
   gnode::Node    *p_control_node;
   float           node_width = 128.f;
   hmap::Vec2<int> shape_preview = {128, 128};
+  hmap::Vec2<int> shape_view2d = {128, 128};
   int             preview_type = preview_type::grayscale;
   GLuint          image_texture_preview = 0;
+  GLuint          image_texture_view2d = 0;
   void            init_from_control_node();
 };
 

@@ -51,6 +51,26 @@ void ViewNode::set_preview_type(int new_preview_type)
   this->update_preview();
 }
 
+void ViewNode::set_show_view2d(bool new_show_view2d)
+{
+  this->show_view2d = new_show_view2d;
+}
+
+void ViewNode::set_view2d_port_id(std::string new_port_id)
+{
+  if (this->p_control_node->is_port_id_in_keys(new_port_id))
+  {
+    this->view2d_port_id = new_port_id;
+    this->p_control_node->update();
+    this->update_preview();
+  }
+  else
+  {
+    LOG_ERROR("port id [%s] not found", new_port_id.c_str());
+    throw std::runtime_error("unknown port id");
+  }
+}
+
 void ViewNode::init_from_control_node()
 {
   // uplink connection between control and view node: when the control
@@ -220,23 +240,23 @@ bool ViewNode::render_settings_footer()
   return has_changed;
 }
 
-// bool ViewNode::render_view2d(std::string port_id)
-// {
-//   bool has_changed = false;
-//   ImGui::PushID((void *)this);
+bool ViewNode::render_view2d()
+{
+  bool has_changed = false;
+  ImGui::PushID((void *)this);
 
-//   this->view2d_port_id = port_id;
+  ImGui::Text("%s", this->p_control_node->id.c_str());
 
-//   // TODO create specific data structure and callback (similar to prevoew
-//   if (this->p_control_node->get_p_data(port_id))
-//   {
-//     ImGui::Image((void *)(intptr_t)this->image_texture_view2d,
-//                  ImVec2(this->shape_view2d.x, this->shape_view2d.y));
-//   }
+  if (this->view2d_port_id != "" && this->show_view2d)
+    if (this->p_control_node->get_p_data(this->view2d_port_id))
+    {
+      ImGui::Image((void *)(intptr_t)this->image_texture_view2d,
+                   ImVec2(this->shape_view2d.x, this->shape_view2d.y));
+    }
 
-//   ImGui::PopID();
-//   return has_changed;
-// }
+  ImGui::PopID();
+  return has_changed;
+}
 
 bool ViewNode::trigger_update_after_edit()
 {
@@ -267,24 +287,23 @@ void ViewNode::update_preview()
       img_to_texture(img, this->shape_preview, this->image_texture_preview);
     }
 
-  // if (this->view2d_port_id != "" &&
-  //     this->show_view2d) // TODO deactivate when not used
-  //   if (this->p_control_node->get_p_data(this->view2d_port_id))
-  //   {
-  //     hmap::HeightMap *p_h = (hmap::HeightMap *)this->p_control_node
-  //                                ->get_p_data(this->view2d_port_id);
+  if (this->view2d_port_id != "" && this->show_view2d &&
+      this->p_control_node->is_up_to_date)
+    if (this->p_control_node->get_p_data(this->view2d_port_id))
+    {
+      hmap::HeightMap *p_h = (hmap::HeightMap *)this->p_control_node
+                                 ->get_p_data(this->view2d_port_id);
 
-  //     this->shape_view2d = p_h->shape;
-  //     hmap::Array array = p_h->to_array(this->shape_view2d);
+      this->shape_view2d = p_h->shape;
+      hmap::Array array = p_h->to_array(this->shape_view2d);
 
-  //     std::vector<uint8_t> img = hmap::colorize(array,
-  //                                               array.min(),
-  //                                               array.max(),
-  //                                               hmap::cmap::inferno,
-  //                                               false);
-  //     img_to_texture_rgb(img, this->shape_view2d,
-  //     this->image_texture_view2d);
-  //   }
+      std::vector<uint8_t> img = hmap::colorize(array,
+                                                array.min(),
+                                                array.max(),
+                                                hmap::cmap::inferno,
+                                                false);
+      img_to_texture_rgb(img, this->shape_view2d, this->image_texture_view2d);
+    }
 }
 
 // HELPERS

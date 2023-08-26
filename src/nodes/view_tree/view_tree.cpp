@@ -66,6 +66,12 @@ Link *ViewTree::get_link_ref_by_id(int link_id)
   }
 }
 
+hesiod::vnode::ViewControlNode *ViewTree::get_view_control_node_ref_by_id(
+    std::string node_id)
+{
+  return (hesiod::vnode::ViewControlNode *)(this->get_node_ref_by_id(node_id));
+}
+
 std::string ViewTree::get_new_id()
 {
   return std::to_string(this->id_counter++);
@@ -95,6 +101,25 @@ void ViewTree::generate_all_links(bool force_update)
           this->links[link_id] = link;
         }
       }
+}
+
+void ViewTree::set_view2d_node_id(std::string node_id)
+{
+  if (node_id != this->view2d_node_id)
+  {
+    // reset previous node
+    if (this->is_node_id_in_keys(this->view2d_node_id))
+    {
+      this->get_view_control_node_ref_by_id(this->view2d_node_id)
+          ->set_show_view2d(false);
+    }
+
+    this->view2d_node_id = node_id;
+    this->get_view_control_node_ref_by_id(this->view2d_node_id)
+        ->set_show_view2d(true);
+    this->get_view_control_node_ref_by_id(this->view2d_node_id)
+        ->update_preview();
+  }
 }
 
 void ViewTree::new_link(int port_hash_id_from, int port_hash_id_to)

@@ -276,7 +276,7 @@ void ViewTree::render_node_editor()
           if (p_node->is_port_id_in_keys("output"))
           {
             // hash id of the port on the other end of the link (if connected)
-            int  port_hash_id_to;
+            int  port_hash_id_to = 0;
             bool previously_connected = false;
             if (p_node->get_port_ref_by_id("output")->is_connected)
             {
@@ -361,6 +361,7 @@ void ViewTree::render_node_editor()
   {
     this->remove_view_node(node_id);
     ImNodes::ClearNodeSelection();
+    this->selected_node_ids.clear();
   }
 
   ImGui::End();
@@ -369,17 +370,11 @@ void ViewTree::render_node_editor()
   if (this->open_view2d_window)
   {
     ImGui::Begin(("View 2D / " + this->id).c_str(), &this->open_view2d_window);
-
     if (this->selected_node_ids.size() > 0)
     {
-      hesiod::vnode::ViewControlNode *p_vnode =
-          (hesiod::vnode::ViewControlNode *)this->get_node_ref_by_id(
-              this->selected_node_ids.back());
-
-      // this->set_view2d_node_id(this->selected_node_ids.back());
-      // p_vnode->render_view2d("output");
+      this->set_view2d_node_id(this->selected_node_ids.back());
+      this->render_view2d(this->selected_node_ids.back());
     }
-
     ImGui::End();
   }
 
@@ -493,26 +488,23 @@ void ViewTree::render_node_list()
 
 void ViewTree::render_view_node(std::string node_id)
 {
-  hesiod::vnode::ViewControlNode *p_vnode =
-      (hesiod::vnode::ViewControlNode *)(this->get_node_ref_by_id(node_id));
-  p_vnode->render_node();
+  this->get_view_control_node_ref_by_id(node_id)->render_node();
 }
 
 void ViewTree::render_view_nodes()
 {
   for (auto &[id, node] : this->get_nodes_map())
-  {
-    hesiod::vnode::ViewControlNode *p_vnode =
-        (hesiod::vnode::ViewControlNode *)(node.get());
-    p_vnode->render_node();
-  }
+    this->render_view_node(id);
+}
+
+void ViewTree::render_view2d(std::string node_id)
+{
+  this->get_view_control_node_ref_by_id(node_id)->render_view2d();
 }
 
 void ViewTree::render_settings(std::string node_id)
 {
-  hesiod::vnode::ViewControlNode *p_vnode =
-      (hesiod::vnode::ViewControlNode *)this->get_node_ref_by_id(node_id);
-  p_vnode->render_settings();
+  this->get_view_control_node_ref_by_id(node_id)->render_settings();
 }
 
 } // namespace hesiod::vnode
