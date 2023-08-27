@@ -79,6 +79,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"SteepenConvective", "Filter/Recast"},
     {"ValleyWidth", "Features"},
     {"ValueNoiseDelaunay", "Primitive/Coherent Noise"},
+    {"Warp", "Operator/Transform"},
     {"White", "Primitive/Random"},
     {"WhiteDensityMap", "Primitive/Random"},
     {"Worley", "Primitive/Coherent Noise"}};
@@ -636,6 +637,23 @@ public:
 protected:
   float kw = DEFAULT_KW;
   int   seed = DEFAULT_SEED;
+};
+
+class Warp : public gnode::Node
+{
+public:
+  Warp(std::string id);
+
+  void update_inner_bindings();
+
+  void compute();
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap();
+  float           scale = 1.f;
+
+private:
+  hmap::Vec2<int> shape = {0, 0};
 };
 
 class White : public gnode::Node

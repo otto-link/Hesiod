@@ -400,6 +400,14 @@ public:
   bool render_settings();
 };
 
+class ViewWarp : public ViewNode, public hesiod::cnode::Warp
+{
+public:
+  ViewWarp(std::string id);
+
+  bool render_settings();
+};
+
 class ViewWhite : public ViewNode, public hesiod::cnode::White
 {
 public:
