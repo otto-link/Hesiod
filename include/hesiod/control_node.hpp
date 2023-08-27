@@ -52,6 +52,7 @@ enum kernel : int
 static const std::map<std::string, std::string> category_mapping = {
     {"BaseElevation", "Primitive/Manual"},
     {"Blend", "Operator/Blend"},
+    {"Bump", "Primitive/Function"},
     {"Checkerboard", "Primitive/Coherent Noise"},
     {"Clamp", "Filter/Range"},
     {"Clone", "Routing"},
@@ -61,6 +62,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Gain", "Filter/Recurve"},
     {"GammaCorrection", "Filter/Recurve"},
     {"GammaCorrectionLocal", "Filter/Recurve"},
+    {"GaussianPulse", "Primitive/Function"},
     {"Gradient", "Math/Gradient"},
     {"GradientNorm", "Math/Gradient"},
     {"GradientTalus", "Math/Gradient"},
@@ -278,6 +280,21 @@ protected:
   int   ir = 4;   // for gradients
 };
 
+class Bump : public Primitive
+{
+public:
+  Bump(std::string     id,
+       hmap::Vec2<int> shape,
+       hmap::Vec2<int> tiling,
+       float           overlap);
+
+  void compute();
+
+protected:
+  float gain = 1.f;
+  bool  inverse = false;
+};
+
 class Checkerboard : public Primitive
 {
 public:
@@ -378,6 +395,21 @@ protected:
   float gamma = 1.f;
   int   ir = 4;
   float k = 0.1f;
+};
+
+class GaussianPulse : public Primitive
+{
+public:
+  GaussianPulse(std::string     id,
+                hmap::Vec2<int> shape,
+                hmap::Vec2<int> tiling,
+                float           overlap);
+
+  void compute();
+
+protected:
+  float sigma = 32;
+  bool  inverse = false;
 };
 
 class Gradient : public gnode::Node

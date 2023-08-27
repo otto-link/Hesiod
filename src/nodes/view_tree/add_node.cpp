@@ -37,6 +37,15 @@ std::string ViewTree::add_view_node(std::string control_node_type)
         id);
     this->add_node(p_view_node);
   }
+  else if (control_node_type == "Bump")
+  {
+    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewBump>(
+        id,
+        this->shape,
+        this->tiling,
+        this->overlap);
+    this->add_node(p_view_node);
+  }
   else if (control_node_type == "Checkerboard")
   {
     std::shared_ptr p_view_node =
@@ -94,6 +103,15 @@ std::string ViewTree::add_view_node(std::string control_node_type)
   {
     std::shared_ptr p_view_node =
         std::make_shared<hesiod::vnode::ViewGammaCorrectionLocal>(id);
+    this->add_node(p_view_node);
+  }
+  else if (control_node_type == "GaussianPulse")
+  {
+    std::shared_ptr p_view_node =
+        std::make_shared<hesiod::vnode::ViewGaussianPulse>(id,
+                                                           this->shape,
+                                                           this->tiling,
+                                                           this->overlap);
     this->add_node(p_view_node);
   }
   else if (control_node_type == "Gradient")

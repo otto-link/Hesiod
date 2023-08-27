@@ -136,6 +136,17 @@ public:
   bool render_settings();
 };
 
+class ViewBump : public ViewNode, public hesiod::cnode::Bump
+{
+public:
+  ViewBump(std::string     id,
+           hmap::Vec2<int> shape,
+           hmap::Vec2<int> tiling,
+           float           overlap);
+
+  bool render_settings();
+};
+
 class ViewCheckerboard : public ViewNode, public hesiod::cnode::Checkerboard
 {
 public:
@@ -247,6 +258,17 @@ class ViewGradientTalus : public ViewNode, public hesiod::cnode::GradientTalus
 {
 public:
   ViewGradientTalus(std::string id);
+};
+
+class ViewGaussianPulse : public ViewNode, public hesiod::cnode::GaussianPulse
+{
+public:
+  ViewGaussianPulse(std::string     id,
+                    hmap::Vec2<int> shape,
+                    hmap::Vec2<int> tiling,
+                    float           overlap);
+
+  bool render_settings();
 };
 
 class ViewHydraulicParticle : public ViewNode,
