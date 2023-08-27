@@ -163,6 +163,9 @@ void ViewTree::render_node_editor()
         if (ImGui::MenuItem("Settings [S]", nullptr, this->show_settings))
           this->show_settings = !this->show_settings;
 
+        if (ImGui::MenuItem("View 2D [1]", nullptr, this->open_view2d_window))
+          this->open_view2d_window = !this->open_view2d_window;
+
         ImGui::EndMenu();
       }
       ImGui::EndMenuBar();
