@@ -484,8 +484,9 @@ public:
                       hmap::HeightMap *p_h_in2);
 
 protected:
-  int nclusters = 4;
-  int seed = DEFAULT_SEED;
+  int             nclusters = 4;
+  int             seed = DEFAULT_SEED;
+  hmap::Vec2<int> shape_clustering = {256, 256};
 };
 
 class Lerp : public gnode::Node

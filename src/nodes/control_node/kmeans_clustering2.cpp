@@ -20,10 +20,22 @@ void KmeansClustering2::compute_in_out(hmap::HeightMap &h_out,
 {
   LOG_DEBUG("computing node [%s]", this->id.c_str());
 
-  auto lambda = [this](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
-  { m = kmeans_clustering2(a1, a2, this->nclusters, (uint)this->seed); };
+  // work on a subset of the data
+  hmap::Array labels;
+  {
+    // make sure the shapes are compatible
+    if (this->shape_clustering.x > h_out.shape.x ||
+        this->shape_clustering.y > h_out.shape.y)
+      this->shape_clustering = h_out.shape;
 
-  hmap::transform(h_out, *p_h_in1, *p_h_in2, lambda);
+    hmap::Array z = h_out.to_array(this->shape_clustering);
+    hmap::Array a1 = p_h_in1->to_array(this->shape_clustering);
+    hmap::Array a2 = p_h_in2->to_array(this->shape_clustering);
+    labels =
+        hmap::kmeans_clustering2(a1, a2, this->nclusters, (uint)this->seed);
+  }
+
+  h_out.from_array_interp(labels);
 }
 
 } // namespace hesiod::cnode

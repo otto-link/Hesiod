@@ -287,6 +287,9 @@ public:
   ViewKmeansClustering2(std::string id);
 
   bool render_settings();
+
+private:
+  int shape_clustering_choice = 1;
 };
 
 class ViewLerp : public ViewNode, public hesiod::cnode::Lerp
