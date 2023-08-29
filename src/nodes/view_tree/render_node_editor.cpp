@@ -81,12 +81,31 @@ void ViewTree::render_node_editor()
   if (this->show_settings)
   {
     ImGui::BeginChild("settings", ImVec2(256, 0), true);
+
+    if (ImGui::Button("Automatic layout"))
+    {
+      std::vector<gnode::Point> positions =
+          this->compute_graph_layout_sugiyama();
+
+      int k = 0;
+      for (auto &[node_id, node] : this->get_nodes_map())
+      {
+        ImNodes::SetNodeScreenSpacePos(
+            this->get_node_ref_by_id(node_id)->hash_id,
+            ImVec2(512.f + 256.f * positions[k].x,
+                   256.f + 256.f * positions[k].y));
+        k++;
+      }
+    }
+    ImGui::Separator();
+
     ImGui::TextUnformatted("Settings");
     for (auto &node_id : this->selected_node_ids)
     {
       ImGui::SeparatorText(node_id.c_str());
       this->render_settings(node_id);
     }
+
     ImGui::EndChild();
     ImGui::SameLine();
   }

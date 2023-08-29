@@ -19,6 +19,19 @@ void ViewTree::render_node_list()
                           ImGuiTableFlags_BordersV;
   const int ncol = 7;
 
+  // if (ImGui::Button("focus"))
+  // {
+  //   ImVec2 size = ImGui::GetContentRegionAvail();
+  //   LOG_DEBUG("%f %f", size.x, size.y);
+
+  //   ImVec2 panning = ImNodes::EditorContextGetPanning();
+  //   LOG_DEBUG("%f %f", panning.x, panning.y);
+
+  //   std::string nid = this->get_nodes_map().begin()->first;
+  //   ImNodes::EditorContextMoveToNode(this->get_node_ref_by_id(nid)->hash_id);
+  //   // TODO get canvas widget with ImGui and centre
+  // }
+
   if (ImGui::BeginTable(("table##" + this->id).c_str(), ncol, flags))
   {
     ImGui::TableSetupColumn("Hash Id");
