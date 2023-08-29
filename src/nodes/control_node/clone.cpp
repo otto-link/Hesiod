@@ -20,17 +20,15 @@ Clone::Clone(std::string id) : gnode::Node(id)
   this->update_inner_bindings();
 }
 
-void Clone::update_inner_bindings()
+void Clone::remove_unused_outputs()
 {
-  LOG_DEBUG("inner bindings [%s]", this->id.c_str());
-
   // --- make sure there is always only one available output ready for
   // connection
   int n_outputs = this->get_nports_by_direction(gnode::direction::out);
-  int n_connected_outputs = 0;
-  for (auto &[port_id, port] : this->get_ports())
-    if (port.direction == gnode::direction::out && port.is_connected)
-      n_connected_outputs++;
+  int n_connected_outputs = this->get_nports_by_direction(
+      gnode::direction::out,
+      false, // do not skip optional
+      true); // skip unconnected
 
   if (n_outputs > n_connected_outputs)
   {
@@ -53,7 +51,19 @@ void Clone::update_inner_bindings()
     for (auto &port_id : port_id_to_remove)
       this->remove_port(port_id);
   }
-  else
+}
+
+void Clone::update_inner_bindings()
+{
+  LOG_DEBUG("inner bindings [%s]", this->id.c_str());
+
+  int n_outputs = this->get_nports_by_direction(gnode::direction::out);
+  int n_connected_outputs = this->get_nports_by_direction(
+      gnode::direction::out,
+      false, // do not skip optional
+      true); // skip unconnected
+
+  if (n_outputs == n_connected_outputs)
     this->add_port(gnode::Port("thru##" + std::to_string(this->id_count++),
                                gnode::direction::out,
                                dtype::dHeightMap));

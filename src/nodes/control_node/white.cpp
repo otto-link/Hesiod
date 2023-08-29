@@ -35,9 +35,7 @@ void White::compute()
   LOG_DEBUG("computing node [%s]", this->id.c_str());
 
   hmap::fill(this->value_out,
-             [this](hmap::Vec2<int>   shape,
-                    hmap::Vec2<float> shift,
-                    hmap::Vec2<float> scale)
+             [this](hmap::Vec2<int> shape)
              { return hmap::white(shape, 0.f, 1.f, (uint)this->seed++); });
 
   // remap the output

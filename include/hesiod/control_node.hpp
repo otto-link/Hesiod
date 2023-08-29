@@ -223,6 +223,8 @@ class Clone : public gnode::Node
 public:
   Clone(std::string id);
 
+  void remove_unused_outputs();
+
   void update_inner_bindings();
 
   void compute();

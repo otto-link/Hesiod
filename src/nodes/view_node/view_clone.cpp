@@ -28,6 +28,9 @@ bool ViewClone::render_settings()
     this->update_inner_bindings();
   }
 
+  if (ImGui::Button("Remove unused outputs"))
+    this->remove_unused_outputs();
+
   has_changed |= this->render_settings_footer();
 
   return has_changed;
