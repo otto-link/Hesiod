@@ -41,7 +41,9 @@ void Bump::compute()
                                  scale);
              });
 
-  // remap the output
+  if (this->inverse)
+    hmap::transform(this->value_out, [](hmap::Array &x) { x = 1.f - x; });
+
   this->value_out.remap(this->vmin, this->vmax);
 }
 

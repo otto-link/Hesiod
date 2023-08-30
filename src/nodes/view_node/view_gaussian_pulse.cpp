@@ -3,6 +3,7 @@
  * this software. */
 #include "macrologger.h"
 
+#include "hesiod/gui.hpp"
 #include "hesiod/view_node.hpp"
 
 namespace hesiod::vnode
@@ -29,6 +30,14 @@ bool ViewGaussianPulse::render_settings()
 
   ImGui::SliderFloat("sigma", &this->sigma, 1.f, 512.f, "%.1f");
   has_changed |= this->trigger_update_after_edit();
+
+  ImGui::Separator();
+
+  if (hesiod::gui::slider_vmin_vmax(vmin, vmax))
+  {
+    this->force_update();
+    has_changed = true;
+  }
 
   has_changed |= this->render_settings_footer();
   return has_changed;
