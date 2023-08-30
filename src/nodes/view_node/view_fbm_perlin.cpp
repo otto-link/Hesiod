@@ -40,37 +40,10 @@ bool ViewFbmPerlin::render_settings()
   ImGui::DragInt("seed", &this->seed);
   has_changed |= this->trigger_update_after_edit();
 
-  // wavenumber(s)
-  ImGui::Checkbox("Link x and y", &this->link_kxy);
-  if (this->link_kxy)
+  if (hesiod::gui::drag_float_vec2(this->kw, this->link_kxy))
   {
-    ImGui::DragFloat("kx, ky",
-                     &this->kw.x,
-                     0.1f,
-                     0.f,
-                     64.f,
-                     "%.1f",
-                     ImGuiSliderFlags_None);
-    if (ImGui::IsItemDeactivatedAfterEdit())
-    {
-      this->kw.y = this->kw.x;
-      this->force_update();
-      has_changed = true;
-    }
-  }
-  else
-  {
-    // if (ImGui::DragFloat2("kx, ky",
-    //                       (float *) this->kw, // TODO
-    //                       0.1f,
-    //                       0.f,
-    //                       64.f,
-    //                       "%.1f",
-    //                       ImGuiSliderFlags_None))
-    // {
-    //   this->force_update();
-    //   has_changed = true;
-    // }
+    has_changed = true;
+    this->force_update();
   }
 
   ImGui::InputInt("octaves", &this->octaves);

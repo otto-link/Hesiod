@@ -6,6 +6,8 @@
 #include <string>
 #include <vector>
 
+#include "highmap.hpp"
+
 #include "imnodes.h"
 #include <GLFW/glfw3.h>
 #include <imgui.h>
@@ -22,6 +24,8 @@ GLFWwindow *init_gui(int width, int height, std::string window_title);
 // custom ImGui widgets
 
 bool drag_float_matrix(std::vector<std::vector<float>> &matrix);
+
+bool drag_float_vec2(hmap::Vec2<float> &kw, bool &link_xy);
 
 bool listbox_map_enum(std::map<std::string, int> &map, int &selected);
 

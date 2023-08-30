@@ -39,7 +39,6 @@ bool ViewValueNoiseDelaunay::render_settings()
   ImGui::DragInt("seed", &this->seed);
   has_changed |= this->trigger_update_after_edit();
 
-  // wavenumber(s)
   if (ImGui::DragFloat("k",
                        &this->kw,
                        0.1f,

@@ -22,7 +22,6 @@ void Debug::compute()
 
 void post_control_node_update()
 {
-  LOG_DEBUG("toto");
 }
 
 } // namespace hesiod::cnode
