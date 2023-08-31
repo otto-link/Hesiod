@@ -83,8 +83,6 @@ std::string ViewTree::render_new_node_treeview(
     ImGui::TableHeadersRow();
 
     // sorting
-    static std::vector<std::string> key_sort;
-
     if (ImGuiTableSortSpecs *sorts_specs = ImGui::TableGetSortSpecs())
       if (sorts_specs->SpecsDirty)
       {
@@ -96,13 +94,13 @@ std::string ViewTree::render_new_node_treeview(
 
         // sorting
         if (sorts_specs->Specs->ColumnIndex == 1)
-          key_sort = sort(hesiod::cnode::category_mapping, reverse);
+          this->key_sort = sort(hesiod::cnode::category_mapping, reverse);
         else
         {
-          key_sort.clear();
+          this->key_sort.clear();
           for (auto &[node_type, node_category] :
                hesiod::cnode::category_mapping)
-            key_sort.push_back(node_type);
+            this->key_sort.push_back(node_type);
         }
 
         sorts_specs->SpecsDirty = false;
@@ -115,9 +113,9 @@ std::string ViewTree::render_new_node_treeview(
     {
       for (int k = clipper.DisplayStart; k < clipper.DisplayEnd; k++)
       {
-        std::string node_type = key_sort[k];
+        std::string node_type = this->key_sort[k];
         std::string node_category = hesiod::cnode::category_mapping.at(
-            key_sort[k]);
+            this->key_sort[k]);
 
         ImGui::PushID(k);
         ImGui::TableNextRow();

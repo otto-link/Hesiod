@@ -96,10 +96,11 @@ private:
   std::vector<int>         selected_node_hash_ids = {};
   std::vector<std::string> selected_node_ids = {};
 
-  bool        open_node_list_window = false;
-  bool        open_view2d_window = false;
-  std::string view2d_node_id = "";
-  bool        show_settings = true;
+  bool                     open_node_list_window = false;
+  bool                     open_view2d_window = false;
+  std::string              view2d_node_id = "";
+  bool                     show_settings = true;
+  std::vector<std::string> key_sort;
 };
 
 } // namespace hesiod::vnode
