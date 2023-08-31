@@ -27,6 +27,14 @@ bool drag_float_matrix(std::vector<std::vector<float>> &matrix);
 
 bool drag_float_vec2(hmap::Vec2<float> &kw, bool &link_xy);
 
+bool drag_float_vector(std::vector<float> &vector,
+                       bool                monotonic = false,
+                       bool                variable_size = true,
+                       float               vmin = 0.f,
+                       float               vmax = 1.f,
+                       bool horizontal = true,
+                       float               height = 160.f);
+
 bool listbox_map_enum(std::map<std::string, int> &map, int &selected);
 
 bool slider_vmin_vmax(float &vmin, float &vmax);
