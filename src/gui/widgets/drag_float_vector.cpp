@@ -13,9 +13,9 @@ namespace hesiod::gui
 bool drag_float_vector(std::vector<float> &vector,
                        bool                monotonic,
                        bool                variable_size,
-		       float               vmin,
+                       float               vmin,
                        float               vmax,
-                       bool horizontal,
+                       bool                horizontal,
                        float               height)
 {
   bool ret = false;
@@ -48,33 +48,29 @@ bool drag_float_vector(std::vector<float> &vector,
 
   if (horizontal)
     ImGui::PushItemWidth(ImGui::GetContentRegionAvail().x);
-  
+
   for (size_t k = 0; k < vector.size(); k++)
   {
     std::string stext = "##vslider" + std::to_string(k);
 
     if (horizontal)
-      {
-	ImGui::SliderFloat(stext.c_str(),
-			   &vector[k],
-			   vmin,
-			   vmax,
-			   "");
-      }
+    {
+      ImGui::SliderFloat(stext.c_str(), &vector[k], vmin, vmax, "");
+    }
     else
-      {
-	ImGui::VSliderFloat(stext.c_str(),
-			    ImVec2(width, height),
-			    &vector[k],
-			    vmin,
-			    vmax,
-			    "");
-	if (ImGui::IsItemDeactivatedAfterEdit())
-	  ret = true;
-	if (k < vector.size() - 1)
-	  ImGui::SameLine();
-      }
-	
+    {
+      ImGui::VSliderFloat(stext.c_str(),
+                          ImVec2(width, height),
+                          &vector[k],
+                          vmin,
+                          vmax,
+                          "");
+      if (ImGui::IsItemDeactivatedAfterEdit())
+        ret = true;
+      if (k < vector.size() - 1)
+        ImGui::SameLine();
+    }
+
     if (ImGui::IsItemActive())
     {
       if (monotonic)
@@ -89,7 +85,7 @@ bool drag_float_vector(std::vector<float> &vector,
       }
     }
   }
-  
+
   if (horizontal)
     ImGui::PopItemWidth();
 

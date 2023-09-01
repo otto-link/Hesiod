@@ -51,6 +51,12 @@ int main()
 
   tree.print_node_links();
 
+  hmap::Cloud cloud = hmap::Cloud(5, 2);
+  hmap::Cloud cloud2 = hmap::Cloud(15, 3);
+
+  for (auto &p : cloud.points)
+    std::cout << p.x << " " << p.y << "\n";
+
   while (!glfwWindowShouldClose(window))
   {
     glfwPollEvents();
@@ -62,6 +68,16 @@ int main()
 
     tree.render_node_editor();
     // tree2.render_node_editor();
+
+    // ImGui::Begin("test Point Editor");
+    // if (hesiod::gui::canvas_point_editor(cloud))
+    //   cloud.print();
+    // ImGui::End();
+
+    // ImGui::Begin("test Point Editor2");
+    // if (hesiod::gui::canvas_point_editor(cloud2))
+    //   cloud2.print();
+    // ImGui::End();
 
     // --- Rendering
     ImGui::Render();

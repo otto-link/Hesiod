@@ -23,6 +23,8 @@ GLFWwindow *init_gui(int width, int height, std::string window_title);
 
 // custom ImGui widgets
 
+bool canvas_point_editor(hmap::Cloud &cloud);
+
 bool drag_float_matrix(std::vector<std::vector<float>> &matrix);
 
 bool drag_float_vec2(hmap::Vec2<float> &kw, bool &link_xy);
@@ -32,7 +34,7 @@ bool drag_float_vector(std::vector<float> &vector,
                        bool                variable_size = true,
                        float               vmin = 0.f,
                        float               vmax = 1.f,
-                       bool horizontal = true,
+                       bool                horizontal = true,
                        float               height = 160.f);
 
 bool listbox_map_enum(std::map<std::string, int> &map, int &selected);
