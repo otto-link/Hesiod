@@ -186,6 +186,18 @@ public:
   bool render_settings();
 };
 
+class ViewCloudToArrayInterp : public ViewNode,
+                               public hesiod::cnode::CloudToArrayInterp
+{
+public:
+  ViewCloudToArrayInterp(std::string     id,
+                         hmap::Vec2<int> shape,
+                         hmap::Vec2<int> tiling,
+                         float           overlap);
+
+  bool render_settings();
+};
+
 class ViewDebug : public ViewNode, public hesiod::cnode::Debug
 {
 public:

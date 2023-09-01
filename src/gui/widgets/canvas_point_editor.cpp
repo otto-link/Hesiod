@@ -81,7 +81,7 @@ bool canvas_point_editor(hmap::Cloud &cloud)
   for (auto &p : cloud.points)
   {
     float x_canvas = canvas_p0.x + p.x * canvas_sz.x;
-    float y_canvas = canvas_p0.y + p.y * canvas_sz.y;
+    float y_canvas = canvas_p0.y + (1.f - p.y) * canvas_sz.y;
 
     draw_list->AddCircle(ImVec2(x_canvas, y_canvas), radius, IM_COL32_WHITE);
 
@@ -105,7 +105,7 @@ bool canvas_point_editor(hmap::Cloud &cloud)
       if (!ImGui::IsMouseDown(ImGuiMouseButton_Left) && ImGui::IsItemHovered())
       {
         float x_canvas = canvas_p0.x + cloud.points[k].x * canvas_sz.x;
-        float y_canvas = canvas_p0.y + cloud.points[k].y * canvas_sz.y;
+        float y_canvas = canvas_p0.y + (1.f - cloud.points[k].y) * canvas_sz.y;
 
         float dist = (io.MousePos.x - x_canvas) * (io.MousePos.x - x_canvas) +
                      (io.MousePos.y - y_canvas) * (io.MousePos.y - y_canvas);
@@ -125,7 +125,7 @@ bool canvas_point_editor(hmap::Cloud &cloud)
                   canvas_sz.x; // remap to [0, 1]
         float y = (io.MousePos.y - canvas_p0.y) / canvas_sz.y;
         cloud.points[hovered_point_index].x = std::clamp(x, 0.f, 1.f);
-        cloud.points[hovered_point_index].y = std::clamp(y, 0.f, 1.f);
+        cloud.points[hovered_point_index].y = 1.f - std::clamp(y, 0.f, 1.f);
       }
       else if (ImGui::IsMouseReleased(ImGuiMouseButton_Left))
       {
@@ -154,7 +154,7 @@ bool canvas_point_editor(hmap::Cloud &cloud)
       if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) // add
       {
         float x = (io.MousePos.x - canvas_p0.x) / canvas_sz.x;
-        float y = (io.MousePos.y - canvas_p0.y) / canvas_sz.y;
+        float y = 1.f - (io.MousePos.y - canvas_p0.y) / canvas_sz.y;
         cloud.add_point(hmap::Point(x, y));
         ret = true;
       }

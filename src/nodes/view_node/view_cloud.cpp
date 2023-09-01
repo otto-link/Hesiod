@@ -39,7 +39,8 @@ bool ViewCloud::render_settings()
   bool has_changed = false;
   has_changed |= this->render_settings_header();
 
-  hesiod::gui::canvas_point_editor(this->value_out);
+  if (hesiod::gui::canvas_point_editor(this->value_out))
+    this->force_update();
 
   has_changed |= this->render_settings_footer();
   return has_changed;

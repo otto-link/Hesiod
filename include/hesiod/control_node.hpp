@@ -58,6 +58,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Clamp", "Filter/Range"},
     {"Clone", "Routing"},
     {"Cloud", "Geometry"},
+    {"CloudToArrayInterp", "Primitive/Manual"},
     {"Debug", "Debug"},
     {"ExpandShrink", "Filter/Recast"},
     {"FbmPerlin", "Primitive/Coherent Noise"},
@@ -341,6 +342,20 @@ public:
 
 protected:
   hmap::Cloud value_out = hmap::Cloud();
+};
+
+class CloudToArrayInterp : public Primitive
+{
+public:
+  CloudToArrayInterp(std::string     id,
+                     hmap::Vec2<int> shape,
+                     hmap::Vec2<int> tiling,
+                     float           overlap);
+
+  void compute();
+
+protected:
+  int interpolation_method = 0;
 };
 
 class ExpandShrink : public Filter

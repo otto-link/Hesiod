@@ -54,7 +54,6 @@ std::string ViewTree::render_new_node_treeview(
     const hmap::Vec2<float> node_position)
 {
   std::string new_node_id = "";
-  const float TEXT_BASE_WIDTH = ImGui::CalcTextSize("A").x;
   const float TEXT_BASE_HEIGHT = ImGui::GetTextLineHeightWithSpacing();
 
   ImGuiTableFlags flags = ImGuiTableFlags_Reorderable |
@@ -140,6 +139,7 @@ std::string ViewTree::render_new_node_treeview(
             0,
             node_category.find("/"));
         ImGui::TextColored(ImColor(category_colors.at(main_category).selected),
+                           "%s",
                            node_category.c_str());
         ImGui::PopID();
       }
