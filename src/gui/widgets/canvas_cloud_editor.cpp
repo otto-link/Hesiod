@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include "highmap.hpp"
+#include "imgui_internal.h"
 #include "macrologger.h"
 
 #include "hesiod/gui.hpp"
@@ -64,6 +65,8 @@ bool canvas_cloud_editor(hmap::Cloud &cloud)
                          canvas_sz,
                          ImGuiButtonFlags_MouseButtonLeft |
                              ImGuiButtonFlags_MouseButtonRight);
+  ImGui::SetItemKeyOwner(ImGuiKey_MouseWheelX);
+  ImGui::SetItemKeyOwner(ImGuiKey_MouseWheelY);
   bool is_canvas_hovered = ImGui::IsItemHovered();
 
   ImGuiIO     &io = ImGui::GetIO();
