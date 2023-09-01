@@ -23,7 +23,7 @@ GLFWwindow *init_gui(int width, int height, std::string window_title);
 
 // custom ImGui widgets
 
-bool canvas_point_editor(hmap::Cloud &cloud);
+bool canvas_cloud_editor(hmap::Cloud &cloud);
 
 bool drag_float_matrix(std::vector<std::vector<float>> &matrix);
 

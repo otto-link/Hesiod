@@ -17,7 +17,7 @@
 namespace hesiod::gui
 {
 
-bool canvas_point_editor(hmap::Cloud &cloud)
+bool canvas_cloud_editor(hmap::Cloud &cloud)
 {
   ImGuiStorage *imgui_storage = ImGui::GetStateStorage();
 
