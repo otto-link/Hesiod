@@ -109,7 +109,9 @@ void ViewNode::render_node()
   // title
   ImNodes::BeginNodeTitleBar();
   if (this->p_control_node->frozen_outputs)
-    ImGui::TextColored(ImColor(IM_COL32(150, 50, 50, 255)), node_type.c_str());
+    ImGui::TextColored(ImColor(IM_COL32(150, 50, 50, 255)),
+                       "%s",
+                       node_type.c_str());
   else
     ImGui::TextUnformatted(node_type.c_str());
   ImNodes::EndNodeTitleBar();
@@ -120,7 +122,9 @@ void ViewNode::render_node()
     {
       ImNodes::BeginInputAttribute(port.hash_id);
       if (port.is_optional)
-        ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.f), port.label.c_str());
+        ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.f),
+                           "%s",
+                           port.label.c_str());
       else
         ImGui::TextUnformatted(port.label.c_str());
       ImNodes::EndInputAttribute();
@@ -362,7 +366,7 @@ void img_to_texture_rgb(std::vector<uint8_t> img,
                img.data());
 }
 
-void post_update_callback_wrapper(ViewNode *p_vnode, gnode::Node *p_cnode)
+void post_update_callback_wrapper(ViewNode *p_vnode, gnode::Node *)
 {
   p_vnode->post_control_node_update();
 }

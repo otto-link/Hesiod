@@ -51,7 +51,7 @@ bool ViewDebug::render_settings()
   if (ImGui::Button("to png"))
     this->export_to_png();
 
-  ImGui::Text(this->log.c_str());
+  ImGui::Text("%s", this->log.c_str());
 
   has_changed |= this->render_settings_footer();
   return has_changed;

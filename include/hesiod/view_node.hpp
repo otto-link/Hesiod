@@ -46,6 +46,7 @@ static const std::map<std::string, viewnode_color_set> category_colors = {
     {"Erosion", viewnode_color_set({58, 46, 26, 255})},
     {"Features", viewnode_color_set({244, 109, 67, 255})},
     {"Filter", viewnode_color_set({94, 79, 162, 255})},
+    {"Geometry", viewnode_color_set({255, 255, 255, 255})},
     {"Hydrology", viewnode_color_set({101, 176, 234, 255})},
     {"Math", viewnode_color_set({20, 20, 20, 255})},
     {"Operator", viewnode_color_set({142, 156, 189, 255})},
@@ -173,6 +174,14 @@ class ViewClone : public ViewNode, public hesiod::cnode::Clone
 {
 public:
   ViewClone(std::string id);
+
+  bool render_settings();
+};
+
+class ViewCloud : public ViewNode, public hesiod::cnode::Cloud
+{
+public:
+  ViewCloud(std::string id);
 
   bool render_settings();
 };

@@ -18,6 +18,7 @@ namespace hesiod::cnode
 // define hesiod's own data types
 enum dtype : int
 {
+  dCloud,
   dHeightMap
 };
 
@@ -56,6 +57,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Checkerboard", "Primitive/Coherent Noise"},
     {"Clamp", "Filter/Range"},
     {"Clone", "Routing"},
+    {"Cloud", "Geometry"},
     {"Debug", "Debug"},
     {"ExpandShrink", "Filter/Recast"},
     {"FbmPerlin", "Primitive/Coherent Noise"},
@@ -326,6 +328,19 @@ protected:
   bool  smooth_max = false;
   float k_min = 0.2f;
   float k_max = 0.2f;
+};
+
+class Cloud : public gnode::Node
+{
+public:
+  Cloud(std::string id);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::Cloud value_out = hmap::Cloud();
 };
 
 class ExpandShrink : public Filter

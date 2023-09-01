@@ -162,7 +162,7 @@ bool canvas_point_editor(hmap::Cloud &cloud)
   }
 
   // update colorscale amplitude if there has been some interations
-  if (ret)
+  if (ret && cloud.get_npoints() > 0)
     vmax = std::max(std::abs(cloud.get_values_min()),
                     std::abs(cloud.get_values_max()));
 
