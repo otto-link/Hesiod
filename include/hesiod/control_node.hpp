@@ -51,6 +51,7 @@ enum kernel : int
 //----------------------------------------
 
 static const std::map<std::string, std::string> category_mapping = {
+    {"AlterElevation", "Operator/Transform"},
     {"BaseElevation", "Primitive/Manual"},
     {"Blend", "Operator/Blend"},
     {"Bump", "Primitive/Function"},
@@ -240,6 +241,26 @@ protected:
 //----------------------------------------
 // End-user nodes
 //----------------------------------------
+
+class AlterElevation : public gnode::Node
+{
+public:
+  AlterElevation(std::string id);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap();
+  int             ir = 64;
+  float           footprint_ratio = 1.f;
+  float           vmin = 0.f;
+  float           vmax = 1.f;
+
+private:
+  hmap::Vec2<int> shape = {0, 0};
+};
 
 class BaseElevation : public Primitive
 {

@@ -118,6 +118,14 @@ public:
 
 //
 
+class ViewAlterElevation : public ViewNode, public hesiod::cnode::AlterElevation
+{
+public:
+  ViewAlterElevation(std::string id);
+
+  bool render_settings();
+};
+
 class ViewBaseElevation : public ViewNode, public hesiod::cnode::BaseElevation
 {
 public:
