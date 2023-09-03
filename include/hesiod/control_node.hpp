@@ -77,6 +77,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"MinimumLocal", "Filter/Smoothing"},
     {"Perlin", "Primitive/Coherent Noise"},
     {"PerlinBillow", "Primitive/Coherent Noise"},
+    {"Recurve", "Filter/Recurve"},
     {"Remap", "Filter/Range"},
     {"RidgedPerlin", "Primitive/Coherent Noise"},
     {"Rugosity", "Features"},
@@ -610,6 +611,17 @@ public:
 protected:
   hmap::Vec2<float> kw = {DEFAULT_KW, DEFAULT_KW};
   int               seed = DEFAULT_SEED;
+};
+
+class Recurve : public Filter
+{
+public:
+  Recurve(std::string id);
+
+  void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
+
+protected:
+  std::vector<float> curve = {0.f, 0.25f, 0.5f, 0.75f, 1.f};
 };
 
 class Remap : public Unary

@@ -373,6 +373,14 @@ private:
   bool link_kxy = true;
 };
 
+class ViewRecurve : public ViewNode, public hesiod::cnode::Recurve
+{
+public:
+  ViewRecurve(std::string id);
+
+  bool render_settings();
+};
+
 class ViewRemap : public ViewNode, public hesiod::cnode::Remap
 {
 public:

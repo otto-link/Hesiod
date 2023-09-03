@@ -34,7 +34,7 @@ bool drag_float_vector(std::vector<float> &vector,
                        bool                variable_size = true,
                        float               vmin = 0.f,
                        float               vmax = 1.f,
-                       bool                horizontal = true,
+                       bool                horizontal = false,
                        float               height = 160.f);
 
 bool listbox_map_enum(std::map<std::string, int> &map, int &selected);
