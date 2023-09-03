@@ -20,10 +20,10 @@ int main()
   hmap::Vec2<int> shape = {512, 512};
 
   hmap::Vec2<int> tiling = {4, 2};
-  float           overlap = 0.f;
+  float           overlap = 0.25f;
 
   // hmap::Vec2<int> tiling = {1, 1};
-  // float           overlap = 0.25f;
+  // float           overlap = 0.f;
 
   // ----------------------------------- Main GUI
 
@@ -74,12 +74,12 @@ int main()
     // tree2.render_node_editor();
 
     // ImGui::Begin("test Point Editor");
-    // if (hesiod::gui::canvas_point_editor(cloud))
+    // if (hesiod::gui::canvas_cloud_editor(cloud))
     //   cloud.print();
     // ImGui::End();
 
     // ImGui::Begin("test Point Editor2");
-    // if (hesiod::gui::canvas_point_editor(cloud2))
+    // if (hesiod::gui::canvas_cloud_editor(cloud2))
     //   cloud2.print();
     // ImGui::End();
 

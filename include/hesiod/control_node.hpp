@@ -74,6 +74,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"KmeansClustering2", "Features"},
     {"Lerp", "Operator/Blend"},
     {"MakeBinary", "Filter/Recurve"},
+    {"MinimumLocal", "Filter/Smoothing"},
     {"Perlin", "Primitive/Coherent Noise"},
     {"PerlinBillow", "Primitive/Coherent Noise"},
     {"Remap", "Filter/Range"},
@@ -568,6 +569,17 @@ public:
 
 protected:
   float threshold = 0.f;
+};
+
+class MinimumLocal : public Unary
+{
+public:
+  MinimumLocal(std::string id);
+
+  void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
+
+protected:
+  int ir = 4;
 };
 
 class Perlin : public Primitive

@@ -43,7 +43,7 @@ bool ViewHydraulicParticle::render_settings()
   ImGui::SliderFloat("c_erosion", &this->c_erosion, 0.001f, 0.1f);
   has_changed |= this->trigger_update_after_edit();
 
-  ImGui::SliderFloat("c_deposition", &this->c_deposition, 0.001f, 0.5f);
+  ImGui::SliderFloat("c_deposition", &this->c_deposition, 0.001f, 0.1f);
   has_changed |= this->trigger_update_after_edit();
 
   ImGui::SliderFloat("drag_rate", &this->drag_rate, 0.f, 1.f);

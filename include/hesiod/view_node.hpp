@@ -337,6 +337,14 @@ public:
   bool render_settings();
 };
 
+class ViewMinimumLocal : public ViewNode, public hesiod::cnode::MinimumLocal
+{
+public:
+  ViewMinimumLocal(std::string id);
+
+  bool render_settings();
+};
+
 class ViewPerlin : public ViewNode, public hesiod::cnode::Perlin
 {
 public:
