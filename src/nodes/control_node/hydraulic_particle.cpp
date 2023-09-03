@@ -55,6 +55,12 @@ void HydraulicParticle::compute_erosion(hmap::HeightMap &h,
                   });
 
   h.smooth_overlap_buffers();
+
+  if (p_erosion_map)
+    (*p_erosion_map).smooth_overlap_buffers();
+
+  if (p_deposition_map)
+    (*p_deposition_map).smooth_overlap_buffers();
 }
 
 } // namespace hesiod::cnode
