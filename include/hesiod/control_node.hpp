@@ -521,7 +521,7 @@ protected:
   int   seed = 1;
   int   nparticles = 40000;
   int   c_radius = 0;
-  float c_capacity = 100.f;
+  float c_capacity = 40.f;
   float c_erosion = 0.05f;
   float c_deposition = 0.1f;
   float drag_rate = 0.01f;

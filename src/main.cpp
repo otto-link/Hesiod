@@ -82,7 +82,14 @@ int main()
     // if (hesiod::gui::canvas_cloud_editor(cloud2))
     //   cloud2.print();
     // ImGui::End();
-
+    
+    ImGui::Begin("FPS");
+    auto &io = ImGui::GetIO();
+    ImGui::Text("FPS: %.2f (%.2gms)",
+                io.Framerate,
+                io.Framerate ? 1000.0f / io.Framerate : 0.0f);
+    ImGui::End();
+    
     // --- Rendering
     ImGui::Render();
     int display_w, display_h;
