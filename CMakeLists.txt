@@ -27,6 +27,16 @@ set(IMGUI_INCLUDE
 	external/imgui
 	external/imgui/backends)
 
+set(IMGUI_NODE_EDITOR_SRC
+  ${PROJECT_SOURCE_DIR}/external/imgui-node-editor/crude_json.cpp
+  ${PROJECT_SOURCE_DIR}/external/imgui-node-editor/imgui_canvas.cpp
+  ${PROJECT_SOURCE_DIR}/external/imgui-node-editor/imgui_node_editor_api.cpp
+  ${PROJECT_SOURCE_DIR}/external/imgui-node-editor/imgui_node_editor.cpp)
+
+set(IMGUI_NODE_EDITOR_INCLUDE
+  ${PROJECT_SOURCE_DIR}/external/imgui-node-editor
+)
+
 set(IMNODES_DIR external/imnodes_fork)
 
 set(IMNODES_SRC
@@ -42,6 +52,7 @@ file(GLOB_RECURSE SOURCES
 add_executable(${PROJECT_NAME}
     ${SOURCES}
     ${IMGUI_SRC}
+    ${IMGUI_NODE_EDITOR_SRC}
     ${IMNODES_SRC}
 )
 
@@ -51,6 +62,7 @@ target_include_directories(${PROJECT_NAME}
 			   PRIVATE
 			     ${PROJECT_SOURCE_DIR}/external/macro-logger
 			     ${IMGUI_INCLUDE}
+           ${IMGUI_NODE_EDITOR_INCLUDE}
 			     ${IMNODES_INCLUDE}
 			    )
 			     

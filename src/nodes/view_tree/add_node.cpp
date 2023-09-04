@@ -4,7 +4,6 @@
 #include <functional>
 
 #include "gnode.hpp"
-#include "imnodes.h"
 #include "macrologger.h"
 
 #include "hesiod/view_node.hpp"

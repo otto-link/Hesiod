@@ -11,6 +11,6 @@
 [submodule "external/imgui"]
 	path = external/imgui
 	url = git@github.com:ocornut/imgui.git
-[submodule "external/imnodes_fork"]
-	path = external/imnodes_fork
-	url = git@github.com:otto-link/imnodes.git
+[submodule "external/imgui-node-editor"]
+	path = external/imgui-node-editor
+	url = git@github.com:thedmd/imgui-node-editor.git

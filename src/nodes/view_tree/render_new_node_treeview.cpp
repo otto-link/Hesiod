@@ -4,8 +4,8 @@
 #include <functional>
 
 #include "gnode.hpp"
-#include "imnodes.h"
 #include "macrologger.h"
+#include <imgui_node_editor.h>
 
 #include "hesiod/view_node.hpp"
 #include "hesiod/view_tree.hpp"
@@ -50,8 +50,7 @@ std::vector<std::string> sort(const std::map<std::string, std::string> &amap,
   return keys_sorted;
 }
 
-std::string ViewTree::render_new_node_treeview(
-    const hmap::Vec2<float> node_position)
+std::string ViewTree::render_new_node_treeview(const ImVec2 node_position)
 {
   std::string new_node_id = "";
   const float TEXT_BASE_HEIGHT = ImGui::GetTextLineHeightWithSpacing();
@@ -129,9 +128,9 @@ std::string ViewTree::render_new_node_treeview(
 
           // set node position: the node needs to be rendered first
           this->render_view_node(new_node_id);
-          ImNodes::SetNodeScreenSpacePos(
+          ax::NodeEditor::SetNodePosition(
               this->get_node_ref_by_id(new_node_id)->hash_id,
-              ImVec2(node_position.x, node_position.y));
+              node_position);
         }
 
         ImGui::TableNextColumn();

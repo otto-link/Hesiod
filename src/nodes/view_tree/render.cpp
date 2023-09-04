@@ -4,8 +4,8 @@
 #include <functional>
 
 #include "gnode.hpp"
-#include "imnodes.h"
 #include "macrologger.h"
+#include <imgui_node_editor.h>
 
 #include "hesiod/view_node.hpp"
 #include "hesiod/view_tree.hpp"
@@ -21,39 +21,28 @@ void ViewTree::render_links()
     bool is_link_frozen =
         this->get_node_ref_by_id(link.node_id_from)->frozen_outputs;
 
+    ImVec4 color = ImVec4(1.f, 1.f, 1.f, 1.f);
     if (is_link_frozen)
-    {
-      ImNodes::PushColorStyle(ImNodesCol_Link, IM_COL32(150, 50, 50, 255));
-      ImNodes::PushColorStyle(ImNodesCol_LinkHovered,
-                              IM_COL32(200, 50, 50, 255));
-    }
+      color = ImVec4(0.6f, 0.2f, 0.2f, 1.f);
 
-    ImNodes::Link(link_id, link.port_hash_id_from, link.port_hash_id_to);
-
-    if (is_link_frozen)
-    {
-      ImNodes::PopColorStyle();
-      ImNodes::PopColorStyle();
-    }
+    ax::NodeEditor::Link(ax::NodeEditor::LinkId(link_id),
+                         ax::NodeEditor::PinId(link.port_hash_id_from),
+                         ax::NodeEditor::PinId(link.port_hash_id_to),
+                         color);
   }
 }
 
-void ViewTree::render_new_node_popup(bool &open_popup)
+void ViewTree::render_new_node_popup()
 {
-  if (!ImGui::IsAnyItemHovered() && open_popup)
-    ImGui::OpenPopup("add node");
-
   if (ImGui::BeginPopup("add node"))
   {
-    const ImVec2 click_pos = ImGui::GetMousePosOnOpeningCurrentPopup();
+    const ImVec2 mouse_pos = ImGui::GetMousePosOnOpeningCurrentPopup();
 
-    if (this->render_new_node_treeview({click_pos.x, click_pos.y}) != "")
+    if (this->render_new_node_treeview({mouse_pos.x, mouse_pos.y}) != "")
       ImGui::CloseCurrentPopup();
 
     ImGui::EndPopup();
   }
-
-  open_popup = false;
 }
 
 void ViewTree::render_view_node(std::string node_id)

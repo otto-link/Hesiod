@@ -4,7 +4,7 @@
 #pragma once
 #include <string>
 
-#include "imnodes.h"
+#include <imgui_node_editor.h>
 
 #include "hesiod/control_node.hpp"
 
@@ -52,9 +52,7 @@ public:
 
   std::string add_view_node(std::string control_node_type);
 
-  void generate_all_links(bool force_update = false);
-
-  void generate_all_view_nodes(bool force_update = false);
+  void insert_clone_node(std::string node_id);
 
   void new_link(int port_hash_id_from, int port_hash_id_to);
 
@@ -64,10 +62,9 @@ public:
 
   void render_links();
 
-  void render_new_node_popup(bool &open_popup);
+  void render_new_node_popup();
 
-  std::string render_new_node_treeview(
-      const hmap::Vec2<float> node_position = {0.f, 0.f});
+  std::string render_new_node_treeview(const ImVec2 node_position = {0.f, 0.f});
 
   void render_node_editor();
 
@@ -91,10 +88,9 @@ private:
   std::map<int, Link> links = {};
   int                 id_counter = 0;
 
-  ImNodesEditorContext    *p_node_editor_context = nullptr;
-  bool                     link_has_been_dropped = false;
-  std::vector<int>         selected_node_hash_ids = {};
-  std::vector<std::string> selected_node_ids = {};
+  std::vector<ax::NodeEditor::NodeId> selected_node_hid = {};
+
+  ax::NodeEditor::EditorContext *p_node_editor_context = nullptr;
 
   bool                     open_node_list_window = false;
   bool                     open_view2d_window = false;

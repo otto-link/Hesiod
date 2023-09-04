@@ -6,9 +6,6 @@
 #include "macrologger.h"
 
 #include "gnode.hpp"
-#define IMGUI_DEFINE_MATH_OPERATORS
-#include "imnodes.h"
-#include "imnodes_internal.h"
 
 #include "hesiod/control_node.hpp"
 #include "hesiod/gui.hpp"
@@ -31,24 +28,15 @@ int main()
       hesiod::gui::init_gui(1800, 800, "Hesiod v0.0.x (c) 2023 Otto Link");
   ImVec4 clear_color = ImVec4(0.15f, 0.25f, 0.30f, 1.00f);
 
-  ImNodes::CreateContext();
-  ImNodes::StyleColorsDark();
-  // ImNodes::StyleColorsClassic();
-  // ImNodes::StyleColorsLight();
-
-  // ImNodes::GetCurrentContext()->Style.Colors[ImNodesCol_NodeOutline] =
-  //     IM_COL32(150, 100, 100, 255);
-
-  ImNodes::GetCurrentContext()->Style.Colors[ImNodesCol_LinkHovered] =
-      IM_COL32(66, 150, 250, 255);
-  ImNodes::GetCurrentContext()->Style.Colors[ImNodesCol_LinkSelected] =
-      IM_COL32(71, 227, 255, 255);
-
   hesiod::vnode::ViewTree tree =
       hesiod::vnode::ViewTree("tree_1", shape, tiling, overlap);
 
   hesiod::vnode::ViewTree tree2 =
       hesiod::vnode::ViewTree("tree_2", shape, tiling, overlap);
+
+  tree.add_view_node("Perlin");
+  tree.add_view_node("FbmPerlin");
+  tree.add_view_node("Gain");
 
   // tree.generate_all_links();
   tree.update();
@@ -104,8 +92,6 @@ int main()
 
     glfwSwapBuffers(window);
   }
-
-  ImNodes::DestroyContext();
 
   // --- Cleanup
   ImGui_ImplOpenGL3_Shutdown();

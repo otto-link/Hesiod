@@ -2,7 +2,7 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include "gnode.hpp"
-#include "imnodes.h"
+#include <imgui_node_editor.h>
 
 #include "hesiod/view_node.hpp"
 
@@ -92,42 +92,47 @@ void ViewNode::post_control_node_update()
 
 void ViewNode::render_node()
 {
+  ImGui::PushID((void *)this);
+
   std::string node_type = this->p_control_node->get_node_type();
   int         pos = this->p_control_node->get_category().find("/");
   std::string main_category = this->p_control_node->get_category().substr(0,
                                                                           pos);
 
-  ImNodes::PushColorStyle(ImNodesCol_TitleBar,
-                          category_colors.at(main_category).base);
-  ImNodes::PushColorStyle(ImNodesCol_TitleBarHovered,
-                          category_colors.at(main_category).hovered);
-  ImNodes::PushColorStyle(ImNodesCol_TitleBarSelected,
-                          category_colors.at(main_category).selected);
+  // ax::NodeEditor::NodeId nid =
 
-  ImNodes::BeginNode(this->p_control_node->hash_id);
+  ax::NodeEditor::BeginNode(
+      ax::NodeEditor::NodeId(this->p_control_node->hash_id));
 
-  // title
-  ImNodes::BeginNodeTitleBar();
   if (this->p_control_node->frozen_outputs)
     ImGui::TextColored(ImColor(IM_COL32(150, 50, 50, 255)),
                        "%s",
                        node_type.c_str());
   else
     ImGui::TextUnformatted(node_type.c_str());
-  ImNodes::EndNodeTitleBar();
+
+  // ImNodes::PushColorStyle(ImNodesCol_TitleBar,
+  //                         category_colors.at(main_category).base);
+  // ImNodes::PushColorStyle(ImNodesCol_TitleBarHovered,
+  //                         category_colors.at(main_category).hovered);
+  // ImNodes::PushColorStyle(ImNodesCol_TitleBarSelected,
+  //                         category_colors.at(main_category).selected);
 
   // inputs
   for (auto &[port_id, port] : this->p_control_node->get_ports())
     if (port.direction == gnode::direction::in)
     {
-      ImNodes::BeginInputAttribute(port.hash_id);
+      ax::NodeEditor::BeginPin(ax::NodeEditor::PinId(port.hash_id),
+                               ax::NodeEditor::PinKind::Input);
+
       if (port.is_optional)
         ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.f),
                            "%s",
                            port.label.c_str());
       else
         ImGui::TextUnformatted(port.label.c_str());
-      ImNodes::EndInputAttribute();
+
+      ax::NodeEditor::EndPin();
     }
 
   // outputs
@@ -135,11 +140,14 @@ void ViewNode::render_node()
     if (port.direction == gnode::direction::out)
     {
       const char *txt = port.label.c_str();
-      ImNodes::BeginOutputAttribute(port.hash_id);
       const float text_width = ImGui::CalcTextSize(txt).x;
-      ImGui::Indent(this->node_width - text_width);
+      ImGui::Dummy(ImVec2(this->node_width - text_width - 8.f, 0)); // TODO
+      ImGui::SameLine();
+
+      ax::NodeEditor::BeginPin(ax::NodeEditor::PinId(port.hash_id),
+                               ax::NodeEditor::PinKind::Output);
       ImGui::TextUnformatted(txt);
-      ImNodes::EndOutputAttribute();
+      ax::NodeEditor::EndPin();
     }
 
   // preview
@@ -168,9 +176,8 @@ void ViewNode::render_node()
     }
   }
 
-  ImNodes::EndNode();
-  for (int i = 0; i < 3; i++)
-    ImNodes::PopColorStyle();
+  ax::NodeEditor::EndNode();
+  ImGui::PopID();
 }
 
 bool ViewNode::render_settings()
