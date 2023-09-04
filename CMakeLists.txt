@@ -37,14 +37,6 @@ set(IMGUI_NODE_EDITOR_INCLUDE
   ${PROJECT_SOURCE_DIR}/external/imgui-node-editor
 )
 
-set(IMNODES_DIR external/imnodes_fork)
-
-set(IMNODES_SRC
-    ${IMNODES_DIR}/imnodes.cpp)
-    
-set(IMNODES_INCLUDE
-	${IMNODES_DIR})
-
 # --- sources
 file(GLOB_RECURSE SOURCES
      ${PROJECT_SOURCE_DIR}/src/*.cpp)
@@ -53,7 +45,6 @@ add_executable(${PROJECT_NAME}
     ${SOURCES}
     ${IMGUI_SRC}
     ${IMGUI_NODE_EDITOR_SRC}
-    ${IMNODES_SRC}
 )
 
 target_include_directories(${PROJECT_NAME}
@@ -63,7 +54,6 @@ target_include_directories(${PROJECT_NAME}
 			     ${PROJECT_SOURCE_DIR}/external/macro-logger
 			     ${IMGUI_INCLUDE}
            ${IMGUI_NODE_EDITOR_INCLUDE}
-			     ${IMNODES_INCLUDE}
 			    )
 			     
 # Link libraries
