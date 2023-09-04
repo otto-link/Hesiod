@@ -130,7 +130,7 @@ std::string ViewTree::render_new_node_treeview(const ImVec2 node_position)
           this->render_view_node(new_node_id);
           ax::NodeEditor::SetNodePosition(
               this->get_node_ref_by_id(new_node_id)->hash_id,
-              node_position);
+              ax::NodeEditor::ScreenToCanvas(node_position));
         }
 
         ImGui::TableNextColumn();

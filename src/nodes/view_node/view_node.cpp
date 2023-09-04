@@ -99,8 +99,6 @@ void ViewNode::render_node()
   std::string main_category = this->p_control_node->get_category().substr(0,
                                                                           pos);
 
-  // ax::NodeEditor::NodeId nid =
-
   ax::NodeEditor::BeginNode(
       ax::NodeEditor::NodeId(this->p_control_node->hash_id));
 

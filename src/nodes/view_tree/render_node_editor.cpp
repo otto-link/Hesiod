@@ -58,27 +58,23 @@ void ViewTree::render_node_editor()
   }
 
   // --- settings
+  bool fit_to_content = false;
+  bool fit_to_selection = false;
+  bool automatic_layout = false;
+
   if (this->show_settings)
   {
     ImGui::BeginChild("settings", ImVec2(256, 0), true);
 
-    if (ImGui::Button("Automatic layout"))
-    {
-      std::vector<gnode::Point> positions =
-          this->compute_graph_layout_sugiyama();
+    if (ImGui::Button("Fit to content"))
+      fit_to_content = true;
 
-      int k = 0;
-      for (auto &[node_id, node] : this->get_nodes_map())
-      {
-        LOG_DEBUG("%f %f", positions[k].x, positions[k].y);
-        // TODO
-        // ax::NodeEditor::SetNodePosition(
-        //     this->get_node_ref_by_id(node_id)->hash_id,
-        //     ImVec2(512.f + 256.f * positions[k].x,
-        //            256.f + 256.f * positions[k].y));
-        k++;
-      }
-    }
+    if (ImGui::Button("Fit to selection"))
+      fit_to_selection = true;
+
+    if (ImGui::Button("Automatic layout"))
+      automatic_layout = true;
+
     ImGui::Separator();
 
     ImGui::TextUnformatted("Settings");
@@ -100,6 +96,32 @@ void ViewTree::render_node_editor()
     ax::NodeEditor::Begin(id.c_str(), ImVec2(0.0, 0.0f));
     this->render_view_nodes();
     this->render_links();
+
+    // --- panning
+    if (fit_to_content)
+      ax::NodeEditor::NavigateToContent(1);
+
+    if (fit_to_selection)
+      ax::NodeEditor::NavigateToSelection(true, 1);
+
+    if (automatic_layout)
+    {
+      std::vector<gnode::Point> positions =
+          this->compute_graph_layout_sugiyama();
+      int k = 0;
+
+      for (auto &[node_id, node] : this->get_nodes_map())
+      {
+        LOG_DEBUG("%f %f", positions[k].x, positions[k].y);
+        // TODO
+        ax::NodeEditor::SetNodePosition(
+            this->get_node_ref_by_id(node_id)->hash_id,
+            ImVec2(512.f + 256.f * positions[k].x,
+                   256.f + 256.f * positions[k].y));
+        k++;
+      }
+      ax::NodeEditor::NavigateToContent(1);
+    }
 
     // --- creation
     if (ax::NodeEditor::BeginCreate())
