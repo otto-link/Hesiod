@@ -28,6 +28,9 @@ int main()
       hesiod::gui::init_gui(1800, 800, "Hesiod v0.0.x (c) 2023 Otto Link");
   ImVec4 clear_color = ImVec4(0.15f, 0.25f, 0.30f, 1.00f);
 
+  ImGuiIO &io = ImGui::GetIO();
+  io.Fonts->AddFontDefault();
+
   hesiod::vnode::ViewTree tree =
       hesiod::vnode::ViewTree("tree_1", shape, tiling, overlap);
 

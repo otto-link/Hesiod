@@ -95,7 +95,8 @@ private:
   bool                     open_node_list_window = false;
   bool                     open_view2d_window = false;
   std::string              view2d_node_id = "";
-  bool                     show_settings = true;
+  bool                     show_settings = false;
+  ax::NodeEditor::NodeId   context_menu_node_hid;
   std::vector<std::string> key_sort;
 };
 

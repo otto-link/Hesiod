@@ -102,12 +102,17 @@ void ViewNode::render_node()
   ax::NodeEditor::BeginNode(
       ax::NodeEditor::NodeId(this->p_control_node->hash_id));
 
+  // ImGui::SetWindowFontScale(1.1f);
   if (this->p_control_node->frozen_outputs)
     ImGui::TextColored(ImColor(IM_COL32(150, 50, 50, 255)),
                        "%s",
                        node_type.c_str());
   else
-    ImGui::TextUnformatted(node_type.c_str());
+    // ImGui::TextUnformatted(node_type.c_str());
+    ImGui::TextColored(ImColor(category_colors.at(main_category).selected),
+                       "%s",
+                       node_type.c_str());
+  // ImGui::SetWindowFontScale(1.f);
 
   // ImNodes::PushColorStyle(ImNodesCol_TitleBar,
   //                         category_colors.at(main_category).base);
@@ -162,15 +167,6 @@ void ViewNode::render_node()
                          (float)this->shape_preview.y};
 
       ImGui::Image((void *)(intptr_t)this->image_texture_preview, img_size);
-
-      if (ImGui::BeginPopupContextItem("Preview type"))
-      {
-        if (ImGui::Selectable("grayscale"))
-          this->set_preview_type(preview_type::grayscale);
-        if (ImGui::Selectable("histogram"))
-          this->set_preview_type(preview_type::histogram);
-        ImGui::EndPopup();
-      }
     }
   }
 
@@ -244,6 +240,23 @@ bool ViewNode::render_settings_footer()
   // if (this->postprocess_port_id != "")
   // {
   // }
+
+  ImGui::Separator();
+
+  // preview type
+  if (this->preview_port_id != "" && this->show_preview)
+  {
+    float height = ImGui::GetStyle().ItemSpacing.y +
+                   2.f * ImGui::GetTextLineHeightWithSpacing();
+    if (ImGui::BeginListBox("Preview type", ImVec2(0.f, height)))
+    {
+      if (ImGui::Selectable("grayscale"))
+        this->set_preview_type(preview_type::grayscale);
+      if (ImGui::Selectable("histogram"))
+        this->set_preview_type(preview_type::histogram);
+      ImGui::EndListBox();
+    }
+  }
 
   ImGui::PopID();
   return has_changed;

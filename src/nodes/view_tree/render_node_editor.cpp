@@ -138,6 +138,7 @@ void ViewTree::render_node_editor()
         if (ax::NodeEditor::AcceptNewItem())
         {
           ImGui::OpenPopup("add node");
+          // TODO
           LOG_DEBUG("%d", port_hid_1.Get());
         }
     }
@@ -146,10 +147,26 @@ void ViewTree::render_node_editor()
     // --- pop-up contextual menus
     {
       ax::NodeEditor::Suspend();
+
+      // add node
       if (ax::NodeEditor::ShowBackgroundContextMenu())
         ImGui::OpenPopup("add node");
-
       this->render_new_node_popup();
+
+      // settings
+      if (ax::NodeEditor::ShowNodeContextMenu(&this->context_menu_node_hid))
+        ImGui::OpenPopup("node settings");
+
+      if (ImGui::BeginPopup("node settings"))
+      {
+        std::string node_id = this->get_node_id_by_hash_id(
+            this->context_menu_node_hid.Get());
+        ImGui::Text("%s",
+                    this->get_node_ref_by_id(node_id)->get_node_type().c_str());
+        this->render_settings(node_id);
+        ImGui::EndPopup();
+      }
+
       ax::NodeEditor::Resume();
     }
 

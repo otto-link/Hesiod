@@ -86,6 +86,9 @@ void Blend::compute_in_out(hmap::HeightMap &h_out,
   }
 
   hmap::transform(h_out, *p_h_in1, *p_h_in2, lambda);
+
+  if (this->method == blending_method::gradients)
+    h_out.smooth_overlap_buffers();
 }
 
 } // namespace hesiod::cnode
