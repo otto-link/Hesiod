@@ -25,6 +25,7 @@ void MinimumLocal::compute_in_out(hmap::HeightMap &h_out,
                   *p_h_in,
                   [this](hmap::Array &x, hmap::Array &y)
                   { x = hmap::minimum_local(y, this->ir); });
+  h_out.smooth_overlap_buffers();
 }
 
 } // namespace hesiod::cnode

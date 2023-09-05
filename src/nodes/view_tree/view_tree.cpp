@@ -147,12 +147,18 @@ void ViewTree::new_link(int port_hash_id_from, int port_hash_id_to)
   this->get_ids_by_port_hash_id(port_hash_id_to, node_id_to, port_id_to);
 
   // do anything only if the ports do not have the same direction (to
-  // avoid linking two inputs or two outputs)
+  // avoid linking two inputs or two outputs) and have the same data
+  // type
   if (this->get_node_ref_by_id(node_id_from)
-          ->get_port_ref_by_id(port_id_from)
-          ->direction != this->get_node_ref_by_id(node_id_to)
+              ->get_port_ref_by_id(port_id_from)
+              ->direction != this->get_node_ref_by_id(node_id_to)
+                                 ->get_port_ref_by_id(port_id_to)
+                                 ->direction &&
+      this->get_node_ref_by_id(node_id_from)
+              ->get_port_ref_by_id(port_id_from)
+              ->dtype == this->get_node_ref_by_id(node_id_to)
                              ->get_port_ref_by_id(port_id_to)
-                             ->direction)
+                             ->dtype)
   {
 
     // swap from and to if the link has been drawn from an input to and
