@@ -180,12 +180,12 @@ void ViewNode::render_node()
 
   ax::NodeEditor::EndNode();
 
+  // title bar background
   ImRect node_content_rect = ImGui_GetItemRect();
+  float  height = text_content_rect.GetBR().y - text_content_rect.GetTL().y;
 
   ImDrawList *draw_list = ax::NodeEditor::GetNodeBackgroundDrawList(
       this->p_control_node->hash_id);
-
-  float height = text_content_rect.GetBR().y - text_content_rect.GetTL().y;
 
   draw_list->AddRectFilled(ImVec2(node_content_rect.GetTL().x + 1.f,
                                   node_content_rect.GetTL().y + 1.f),

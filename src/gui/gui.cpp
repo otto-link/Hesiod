@@ -63,6 +63,21 @@ GLFWwindow *init_gui(int width, int height, std::string window_title)
   return window;
 }
 
+void flip_vertically(int width, int height, uint8_t *data)
+{
+  char rgb[3];
+  for (int y = 0; y < height / 2; ++y)
+    for (int x = 0; x < width; ++x)
+    {
+      int top = (x + y * width) * 3;
+      int bottom = (x + (height - y - 1) * width) * 3;
+
+      memcpy(rgb, data + top, sizeof(rgb));
+      memcpy(data + top, data + bottom, sizeof(rgb));
+      memcpy(data + bottom, rgb, sizeof(rgb));
+    }
+}
+
 void save_screenshot(std::string fname)
 {
   // https://github.com/vallentin/GLCollection/blob/master/screenshot.cpp
@@ -78,6 +93,7 @@ void save_screenshot(std::string fname)
   glPixelStorei(GL_PACK_ALIGNMENT, 1);
   glReadPixels(x, y, width, height, GL_RGB, GL_UNSIGNED_BYTE, img.data());
 
+  flip_vertically(width, height, img.data());
   hmap::write_png_8bit(fname, img, hmap::Vec2<int>(width, height));
 }
 
