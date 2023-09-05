@@ -94,6 +94,8 @@ int main()
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
     glfwSwapBuffers(window);
+
+    // hesiod::gui::save_screenshot("screenshot.png");
   }
 
   // --- Cleanup

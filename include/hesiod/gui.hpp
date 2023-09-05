@@ -20,6 +20,8 @@ void glfw_error_callback(int error, const char *description);
 
 GLFWwindow *init_gui(int width, int height, std::string window_title);
 
+void save_screenshot(std::string fname);
+
 // custom ImGui widgets
 
 bool canvas_cloud_editor(hmap::Cloud &cloud);

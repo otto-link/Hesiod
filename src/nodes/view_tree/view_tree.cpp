@@ -72,12 +72,12 @@ std::string ViewTree::get_new_id()
 {
   return std::to_string(this->id_counter++);
 }
-  
+
 std::string ViewTree::get_node_type(std::string node_id)
 {
   return this->get_node_ref_by_id(node_id)->get_node_type();
 }
-  
+
 void ViewTree::insert_clone_node(std::string node_id)
 {
   std::string new_node_id = this->add_view_node("Clone");

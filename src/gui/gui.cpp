@@ -63,4 +63,22 @@ GLFWwindow *init_gui(int width, int height, std::string window_title)
   return window;
 }
 
+void save_screenshot(std::string fname)
+{
+  // https://github.com/vallentin/GLCollection/blob/master/screenshot.cpp
+  GLint viewport[4];
+  glGetIntegerv(GL_VIEWPORT, viewport);
+  int x = viewport[0];
+  int y = viewport[1];
+  int width = viewport[2];
+  int height = viewport[3];
+
+  std::vector<uint8_t> img(width * height * 3);
+
+  glPixelStorei(GL_PACK_ALIGNMENT, 1);
+  glReadPixels(x, y, width, height, GL_RGB, GL_UNSIGNED_BYTE, img.data());
+
+  hmap::write_png_8bit(fname, img, hmap::Vec2<int>(width, height));
+}
+
 } // namespace hesiod::gui
