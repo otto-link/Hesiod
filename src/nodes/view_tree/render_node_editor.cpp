@@ -162,7 +162,7 @@ void ViewTree::render_node_editor()
         std::string node_id = this->get_node_id_by_hash_id(
             this->context_menu_node_hid.Get());
         ImGui::Text("%s",
-                    this->get_node_ref_by_id(node_id)->get_node_type().c_str());
+                    this->get_node_type(node_id).c_str());
         this->render_settings(node_id);
         ImGui::EndPopup();
       }

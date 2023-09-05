@@ -45,6 +45,8 @@ public:
 
   std::string get_new_id();
 
+  std::string get_node_type(std::string node_id);
+
   hesiod::vnode::ViewControlNode *get_view_control_node_ref_by_id(
       std::string node_id);
 
