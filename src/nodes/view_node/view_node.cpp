@@ -2,9 +2,16 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include "gnode.hpp"
+#include <imgui_internal.h>
 #include <imgui_node_editor.h>
 
 #include "hesiod/view_node.hpp"
+
+// HELPER
+static inline ImRect ImGui_GetItemRect()
+{
+  return ImRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax());
+}
 
 namespace hesiod::vnode
 {
@@ -108,10 +115,9 @@ void ViewNode::render_node()
                        "%s",
                        node_type.c_str());
   else
-    // ImGui::TextUnformatted(node_type.c_str());
-    ImGui::TextColored(ImColor(category_colors.at(main_category).selected),
-                       "%s",
-                       node_type.c_str());
+    ImGui::TextUnformatted(node_type.c_str());
+
+  ImRect text_content_rect = ImGui_GetItemRect();
   // ImGui::SetWindowFontScale(1.f);
 
   // ImNodes::PushColorStyle(ImNodesCol_TitleBar,
@@ -120,6 +126,8 @@ void ViewNode::render_node()
   //                         category_colors.at(main_category).hovered);
   // ImNodes::PushColorStyle(ImNodesCol_TitleBarSelected,
   //                         category_colors.at(main_category).selected);
+
+  ImGui::Spacing();
 
   // inputs
   for (auto &[port_id, port] : this->p_control_node->get_ports())
@@ -171,6 +179,22 @@ void ViewNode::render_node()
   }
 
   ax::NodeEditor::EndNode();
+
+  ImRect node_content_rect = ImGui_GetItemRect();
+
+  ImDrawList *draw_list = ax::NodeEditor::GetNodeBackgroundDrawList(
+      this->p_control_node->hash_id);
+
+  float height = text_content_rect.GetBR().y - text_content_rect.GetTL().y;
+
+  draw_list->AddRectFilled(ImVec2(node_content_rect.GetTL().x + 1.f,
+                                  node_content_rect.GetTL().y + 1.f),
+                           ImVec2(node_content_rect.GetBR().x - 1.f,
+                                  text_content_rect.GetBR().y + 0.3f * height),
+                           category_colors.at(main_category).hovered,
+                           ax::NodeEditor::GetStyle().NodeRounding,
+                           ImDrawFlags_RoundCornersTop);
+
   ImGui::PopID();
 }
 
