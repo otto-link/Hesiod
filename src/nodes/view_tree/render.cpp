@@ -32,19 +32,6 @@ void ViewTree::render_links()
   }
 }
 
-void ViewTree::render_new_node_popup()
-{
-  if (ImGui::BeginPopup("add node"))
-  {
-    const ImVec2 mouse_pos = ImGui::GetMousePosOnOpeningCurrentPopup();
-
-    if (this->render_new_node_treeview({mouse_pos.x, mouse_pos.y}) != "")
-      ImGui::CloseCurrentPopup();
-
-    ImGui::EndPopup();
-  }
-}
-
 void ViewTree::render_view_node(std::string node_id)
 {
   this->get_view_control_node_ref_by_id(node_id)->render_node();

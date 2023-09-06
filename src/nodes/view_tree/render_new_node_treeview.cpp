@@ -18,14 +18,14 @@ bool cmp_inf(std::pair<std::string, std::string> &a,
              std::pair<std::string, std::string> &b)
 {
   return (a.second < b.second) |
-         ((a.second == b.second) & (a.first < b.second));
+         ((a.second == b.second) & (a.first < b.first));
 }
 
 bool cmp_sup(std::pair<std::string, std::string> &a,
              std::pair<std::string, std::string> &b)
 {
   return (a.second > b.second) |
-         ((a.second == b.second) & (a.first > b.second));
+         ((a.second == b.second) & (a.first > b.first));
 }
 
 // HELPER Function to sort the map according to value in a (key-value)
@@ -48,6 +48,19 @@ std::vector<std::string> sort(const std::map<std::string, std::string> &amap,
   for (auto &it : pairs)
     keys_sorted.push_back(it.first);
   return keys_sorted;
+}
+
+void ViewTree::render_new_node_popup()
+{
+  if (ImGui::BeginPopup("add node"))
+  {
+    const ImVec2 mouse_pos = ImGui::GetMousePosOnOpeningCurrentPopup();
+
+    if (this->render_new_node_treeview({mouse_pos.x, mouse_pos.y}) != "")
+      ImGui::CloseCurrentPopup();
+
+    ImGui::EndPopup();
+  }
 }
 
 std::string ViewTree::render_new_node_treeview(const ImVec2 node_position)
