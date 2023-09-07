@@ -232,6 +232,12 @@ std::string ViewTree::add_view_node(std::string control_node_type)
         std::make_shared<hesiod::vnode::ViewSmoothCpulse>(id);
     this->add_node(p_view_node);
   }
+  else if (control_node_type == "SmoothFill")
+  {
+    std::shared_ptr p_view_node =
+        std::make_shared<hesiod::vnode::ViewSmoothFill>(id);
+    this->add_node(p_view_node);
+  }
   else if (control_node_type == "SteepenConvective")
   {
     std::shared_ptr p_view_node =

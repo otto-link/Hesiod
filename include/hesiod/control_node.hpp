@@ -82,6 +82,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"RidgedPerlin", "Primitive/Coherent Noise"},
     {"Rugosity", "Features"},
     {"SmoothCpulse", "Filter/Smoothing"},
+    {"SmoothFill", "Filter/Smoothing"},
     {"SteepenConvective", "Filter/Recast"},
     {"ValleyWidth", "Features"},
     {"ValueNoiseDelaunay", "Primitive/Coherent Noise"},
@@ -675,6 +676,18 @@ public:
 
 protected:
   int ir = 8;
+};
+
+class SmoothFill : public Filter
+{
+public:
+  SmoothFill(std::string id);
+
+  void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
+
+protected:
+  int   ir = 8;
+  float k = 0.1f;
 };
 
 class SteepenConvective : public Filter

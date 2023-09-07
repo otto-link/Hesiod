@@ -419,6 +419,14 @@ public:
   bool render_settings();
 };
 
+class ViewSmoothFill : public ViewNode, public hesiod::cnode::SmoothFill
+{
+public:
+  ViewSmoothFill(std::string id);
+
+  bool render_settings();
+};
+
 class ViewSteepenConvective : public ViewNode,
                               public hesiod::cnode::SteepenConvective
 {

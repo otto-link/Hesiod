@@ -8,20 +8,23 @@
 namespace hesiod::vnode
 {
 
-ViewSmoothCpulse::ViewSmoothCpulse(std::string id)
-    : ViewNode(), hesiod::cnode::SmoothCpulse(id)
+ViewSmoothFill::ViewSmoothFill(std::string id)
+    : ViewNode(), hesiod::cnode::SmoothFill(id)
 {
   this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
   this->set_view2d_port_id("output");
 }
 
-bool ViewSmoothCpulse::render_settings()
+bool ViewSmoothFill::render_settings()
 {
   bool has_changed = false;
   has_changed |= this->render_settings_header();
 
   ImGui::SliderInt("int", &this->ir, 1, 256);
+  has_changed |= this->trigger_update_after_edit();
+
+  ImGui::SliderFloat("k", &this->k, 0.01f, 1.f, "%.2f");
   has_changed |= this->trigger_update_after_edit();
 
   has_changed |= this->render_settings_footer();
