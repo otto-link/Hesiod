@@ -60,37 +60,49 @@ int main()
       SNAPSHOT_SIZE,
       "Hesiod v0.0.x (c) 2023 Otto Link");
 
-  // for (auto &[type, cat] : hesiod::cnode::category_mapping)
-  //   {
-  //     LOG_DEBUG("type: %s", type.c_str());
-  //     std::string fname = "snapshot_" + type + ".png";
+  for (auto &[type, cat] : hesiod::cnode::category_mapping)
+  {
+    LOG_DEBUG("type: %s", type.c_str());
+    std::string fname = "snapshot_" + type + ".png";
 
-  //     hesiod::vnode::ViewTree tree =
-  // 	hesiod::vnode::ViewTree("tree", shape, tiling, overlap);
-  //     tree.add_view_node(type);
+    hesiod::vnode::ViewTree tree =
+        hesiod::vnode::ViewTree("tree", shape, tiling, overlap);
+    tree.add_view_node(type);
 
-  //     export_png(window, tree, fname);
-  //  }
+    export_png(window, tree, fname);
+  }
 
   // template
-  hesiod::vnode::ViewTree tree =
-      hesiod::vnode::ViewTree("tree", shape, tiling, overlap);
 
-  tree.add_view_node("Clone");
-  tree.add_view_node("GradientNorm");
-  tree.add_view_node("KmeansClustering2");
-  tree.add_view_node("FbmPerlin");
-  tree.print_node_list();
-  tree.new_link("FbmPerlin##3", "output", "Clone##0", "input");
-  tree.new_link("Clone##0", "thru##0", "GradientNorm##1", "input");
-  tree.new_link("Clone##0", "thru##1", "KmeansClustering2##2", "input##2");
-  tree.new_link("GradientNorm##1",
-                "output",
-                "KmeansClustering2##2",
-                "input##1");
+  // --- Clamp
+  {
+    hesiod::vnode::ViewTree tree =
+        hesiod::vnode::ViewTree("tree", shape, tiling, overlap);
+    tree.add_view_node("FbmPerlin");
+    tree.add_view_node("Clamp");
+    tree.new_link("FbmPerlin##0", "output", "Clamp##1", "input");
+    export_png(window, tree, "ex_Clamp.png");
+  }
 
-  //  tree.generate_view_links();
-  export_png(window, tree, "test.png");
+  // --- KmeansClustering2
+  {
+    hesiod::vnode::ViewTree tree =
+        hesiod::vnode::ViewTree("tree", shape, tiling, overlap);
+
+    tree.add_view_node("Clone");
+    tree.add_view_node("GradientNorm");
+    tree.add_view_node("KmeansClustering2");
+    tree.add_view_node("FbmPerlin");
+    tree.print_node_list();
+    tree.new_link("FbmPerlin##3", "output", "Clone##0", "input");
+    tree.new_link("Clone##0", "thru##0", "GradientNorm##1", "input");
+    tree.new_link("Clone##0", "thru##1", "KmeansClustering2##2", "input##2");
+    tree.new_link("GradientNorm##1",
+                  "output",
+                  "KmeansClustering2##2",
+                  "input##1");
+    export_png(window, tree, "ex_KmeansClustering2.png");
+  }
 
   // --- Cleanup
   ImGui_ImplOpenGL3_Shutdown();
