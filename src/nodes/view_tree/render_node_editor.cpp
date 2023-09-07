@@ -62,20 +62,20 @@ void ViewTree::render_node_editor()
   bool fit_to_selection = false;
   bool automatic_layout = false;
 
+  if (ImGui::Button("Fit to content"))
+    fit_to_content = true;
+  ImGui::SameLine();
+
+  if (ImGui::Button("Fit to selection"))
+    fit_to_selection = true;
+  ImGui::SameLine();
+
+  if (ImGui::Button("Automatic layout"))
+    automatic_layout = true;
+
   if (this->show_settings)
   {
     ImGui::BeginChild("settings", ImVec2(256, 0), true);
-
-    if (ImGui::Button("Fit to content"))
-      fit_to_content = true;
-
-    if (ImGui::Button("Fit to selection"))
-      fit_to_selection = true;
-
-    if (ImGui::Button("Automatic layout"))
-      automatic_layout = true;
-
-    ImGui::Separator();
 
     ImGui::TextUnformatted("Settings");
     for (auto &node_hid : selected_node_hid)
