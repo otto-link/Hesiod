@@ -12,14 +12,16 @@
 namespace hesiod::vnode
 {
 
-std::string ViewTree::add_view_node(std::string control_node_type)
+std::string ViewTree::add_view_node(std::string control_node_type,
+                                    std::string node_id)
 {
-  std::string uid = this->get_new_id();
-  std::string id = control_node_type + "##" + uid;
-  ;
+  std::string id;
+  if (node_id == "")
+    id = control_node_type + "##" + this->get_new_id();
+  else
+    id = node_id;
 
   LOG_DEBUG("adding node type: %s", control_node_type.c_str());
-  LOG_DEBUG("uid: %s", uid.c_str());
 
   if (control_node_type == "AlterElevation")
   {

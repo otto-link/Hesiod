@@ -143,6 +143,16 @@ void ViewTree::render_node_editor()
       // settings
       if (ax::NodeEditor::ShowNodeContextMenu(&this->context_menu_node_hid))
         ImGui::OpenPopup("node settings");
+      else
+      {
+        ax::NodeEditor::NodeId dclick_nid =
+            ax::NodeEditor::GetDoubleClickedNode();
+        if (dclick_nid)
+        {
+          this->context_menu_node_hid = dclick_nid;
+          ImGui::OpenPopup("node settings");
+        }
+      }
 
       if (ImGui::BeginPopup("node settings"))
       {

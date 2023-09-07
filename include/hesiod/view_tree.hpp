@@ -54,7 +54,8 @@ public:
 
   void set_view2d_node_id(std::string node_id);
 
-  std::string add_view_node(std::string control_node_type);
+  std::string add_view_node(std::string control_node_type,
+                            std::string node_id = "");
 
   void automatic_node_layout();
 
