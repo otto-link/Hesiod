@@ -348,6 +348,7 @@ void ViewNode::update_preview()
                                                 array.max(),
                                                 hmap::cmap::inferno,
                                                 false);
+
       img_to_texture_rgb(img, this->shape_view2d, this->image_texture_view2d);
     }
 }

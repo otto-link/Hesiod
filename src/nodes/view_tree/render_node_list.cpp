@@ -48,7 +48,13 @@ void ViewTree::render_node_list()
                          "%d",
                          vnode.get()->hash_id);
       ImGui::TableNextColumn();
-      ImGui::Text("%s", id.c_str());
+      if (ImGui::Button(id.c_str()))
+      {
+        ax::NodeEditor::SetCurrentEditor(this->get_p_node_editor_context());
+        ax::NodeEditor::SelectNode(vnode.get()->hash_id);
+        ax::NodeEditor::NavigateToSelection(false, 1);
+        ax::NodeEditor::SetCurrentEditor(nullptr);
+      }
       ImGui::TableNextColumn(); // empty (port id)
       ImGui::TableNextColumn(); // empty
       ImGui::TableNextColumn(); // empty
@@ -81,7 +87,13 @@ void ViewTree::render_node_list()
           else
             ImGui::TextUnformatted("-->");
           ImGui::TableNextColumn();
-          ImGui::Text("%s", port.p_linked_node->id.c_str());
+          if (ImGui::Button((port.p_linked_node->id + "##link").c_str()))
+          {
+            ax::NodeEditor::SetCurrentEditor(this->get_p_node_editor_context());
+            ax::NodeEditor::SelectNode(port.p_linked_node->hash_id);
+            ax::NodeEditor::NavigateToSelection(false, 1);
+            ax::NodeEditor::SetCurrentEditor(nullptr);
+          }
           ImGui::TableNextColumn();
           ImGui::Text("%s", port.p_linked_port->id.c_str());
         }
