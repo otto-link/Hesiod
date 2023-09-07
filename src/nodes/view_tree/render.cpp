@@ -53,4 +53,18 @@ void ViewTree::render_settings(std::string node_id)
   this->get_view_control_node_ref_by_id(node_id)->render_settings();
 }
 
+void ViewTree::automatic_node_layout()
+{
+  std::vector<gnode::Point> positions = this->compute_graph_layout_sugiyama();
+  int                       k = 0;
+
+  for (auto &[node_id, node] : this->get_nodes_map())
+  {
+    ax::NodeEditor::SetNodePosition(
+        this->get_node_ref_by_id(node_id)->hash_id,
+        ImVec2(512.f + 256.f * positions[k].x, 256.f + 256.f * positions[k].y));
+    k++;
+  }
+}
+
 } // namespace hesiod::vnode

@@ -22,34 +22,6 @@ Gradient::Gradient(std::string id) : gnode::Node(id)
 void Gradient::update_inner_bindings()
 {
   LOG_DEBUG("inner bindings [%s]", this->id.c_str());
-  void *p_input_data = this->get_p_data("input");
-
-  if (p_input_data != nullptr)
-  {
-    hmap::HeightMap *p_input_hmap = static_cast<hmap::HeightMap *>(
-        p_input_data);
-
-    // reshape the storage based on the input heightmap, if not
-    // already done
-    if (this->shape != p_input_hmap->shape)
-    {
-      this->shape = p_input_hmap->shape;
-      this->value_out_dx.set_sto(p_input_hmap->shape,
-                                 p_input_hmap->tiling,
-                                 p_input_hmap->overlap);
-      this->value_out_dy.set_sto(p_input_hmap->shape,
-                                 p_input_hmap->tiling,
-                                 p_input_hmap->overlap);
-
-      LOG_DEBUG("node [%s]: reshape inner storage to {%d, %d}",
-                this->id.c_str(),
-                this->shape.x,
-                this->shape.y);
-    }
-  }
-  else
-    LOG_DEBUG("input not ready (connected or value set)");
-
   this->set_p_data("dx", (void *)&(this->value_out_dx));
   this->set_p_data("dy", (void *)&(this->value_out_dy));
 }
@@ -59,6 +31,14 @@ void Gradient::compute()
   LOG_DEBUG("computing node [%s]", this->id.c_str());
   hmap::HeightMap *p_input_hmap = static_cast<hmap::HeightMap *>(
       (void *)this->get_p_data("input"));
+
+  this->value_out_dx.set_sto(p_input_hmap->shape,
+                             p_input_hmap->tiling,
+                             p_input_hmap->overlap);
+
+  this->value_out_dy.set_sto(p_input_hmap->shape,
+                             p_input_hmap->tiling,
+                             p_input_hmap->overlap);
 
   hmap::transform(this->value_out_dx, // output
                   *p_input_hmap,      // input

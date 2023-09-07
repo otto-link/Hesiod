@@ -47,6 +47,8 @@ public:
 
   std::string get_node_type(std::string node_id);
 
+  ax::NodeEditor::EditorContext *get_p_node_editor_context();
+
   hesiod::vnode::ViewControlNode *get_view_control_node_ref_by_id(
       std::string node_id);
 
@@ -54,9 +56,18 @@ public:
 
   std::string add_view_node(std::string control_node_type);
 
+  void automatic_node_layout();
+
+  void generate_view_links();
+
   void insert_clone_node(std::string node_id);
 
   void new_link(int port_hash_id_from, int port_hash_id_to);
+
+  void new_link(std::string node_id_from, // out
+                std::string port_id_from,
+                std::string node_id_to, // in
+                std::string port_id_to);
 
   void remove_link(int link_id);
 
@@ -79,8 +90,6 @@ public:
   void render_view_nodes();
 
   void render_view2d(std::string node_id);
-
-  void view_node_layout();
 
 private:
   hmap::Vec2<int> shape;

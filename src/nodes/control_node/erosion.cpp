@@ -32,67 +32,17 @@ Erosion::Erosion(std::string id) : gnode::Node(id)
   this->add_port(
       gnode::Port("deposition map", gnode::direction::out, dtype::dHeightMap));
   this->update_inner_bindings();
+
+  this->erosion_map = hmap::HeightMap();
+  this->deposition_map = hmap::HeightMap();
 }
 
 void Erosion::update_inner_bindings()
 {
   LOG_DEBUG("inner bindings [%s]", this->id.c_str());
-  void *p_input_data = this->get_p_data("input");
-
-  if (p_input_data != nullptr)
-  {
-    hmap::HeightMap *p_input_hmap = static_cast<hmap::HeightMap *>(
-        p_input_data);
-
-    // splatmap are passed by reference, they need to be instanciated
-    // first (for the output, we use a copy of this input heightmap)
-
-    // erosion output map
-    if (true) // (this->get_port_ref_by_id("erosion map")->is_connected) //TODO
-    {
-      this->erosion_map.set_sto(p_input_hmap->shape,
-                                p_input_hmap->tiling,
-                                p_input_hmap->overlap);
-      this->set_p_data("erosion map", (void *)&(this->erosion_map));
-
-      LOG_DEBUG("node [%s]: reshape erosion inner storage to {%d, %d}",
-                this->id.c_str(),
-                this->shape.x,
-                this->shape.y);
-    }
-    else
-    {
-      this->erosion_map = hmap::HeightMap();
-      this->set_p_data("erosion map", nullptr);
-
-      LOG_DEBUG("no erosion map");
-    }
-
-    // deposition output map
-    if (true) // TODO (this->get_port_ref_by_id("deposition map")->is_connected)
-    {
-      this->deposition_map.set_sto(p_input_hmap->shape,
-                                   p_input_hmap->tiling,
-                                   p_input_hmap->overlap);
-      this->set_p_data("deposition map", (void *)&(this->deposition_map));
-
-      LOG_DEBUG("node [%s]: reshape deposition inner storage to {%d, %d}",
-                this->id.c_str(),
-                this->shape.x,
-                this->shape.y);
-    }
-    else
-    {
-      this->deposition_map = hmap::HeightMap();
-      this->set_p_data("deposition map", nullptr);
-
-      LOG_DEBUG("no deposition map");
-    }
-  }
-  else
-    LOG_DEBUG("input not ready (connected or value set)");
-
   this->set_p_data("output", (void *)&(this->value_out));
+  this->set_p_data("deposition map", (void *)&(this->deposition_map));
+  this->set_p_data("erosion map", (void *)&(this->erosion_map));
 }
 
 void Erosion::compute()
@@ -114,6 +64,17 @@ void Erosion::compute()
 
   // work on a copy of the input
   this->value_out = *p_input_hmap;
+
+  if (p_output_erosion_map)
+    this->erosion_map.set_sto(p_input_hmap->shape,
+                              p_input_hmap->tiling,
+                              p_input_hmap->overlap);
+
+  if (p_output_deposition_map)
+    this->deposition_map.set_sto(p_input_hmap->shape,
+                                 p_input_hmap->tiling,
+                                 p_input_hmap->overlap);
+
   this->compute_erosion(this->value_out,
                         p_input_bedrock,
                         p_input_moisture_map,

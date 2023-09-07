@@ -39,7 +39,6 @@ ViewTree::ViewTree(std::string     id,
 {
   // initialize node editor
   ax::NodeEditor::Config config;
-  config.SettingsFile = (id + ".json").c_str();
   config.NavigateButtonIndex = 2;
   config.ContextMenuButtonIndex = 1;
   this->p_node_editor_context = ax::NodeEditor::CreateEditor(&config);
@@ -76,6 +75,11 @@ std::string ViewTree::get_new_id()
 std::string ViewTree::get_node_type(std::string node_id)
 {
   return this->get_node_ref_by_id(node_id)->get_node_type();
+}
+
+ax::NodeEditor::EditorContext *ViewTree::get_p_node_editor_context()
+{
+  return this->p_node_editor_context;
 }
 
 void ViewTree::insert_clone_node(std::string node_id)
@@ -138,19 +142,11 @@ void ViewTree::set_view2d_node_id(std::string node_id)
   }
 }
 
-void ViewTree::new_link(int port_hash_id_from, int port_hash_id_to)
+void ViewTree::new_link(std::string node_id_from,
+                        std::string port_id_from,
+                        std::string node_id_to,
+                        std::string port_id_to)
 {
-  LOG_DEBUG("%d -> %d", port_hash_id_from, port_hash_id_to);
-
-  // find corresponding nodes
-  std::string node_id_from;
-  std::string port_id_from;
-  std::string node_id_to;
-  std::string port_id_to;
-
-  this->get_ids_by_port_hash_id(port_hash_id_from, node_id_from, port_id_from);
-  this->get_ids_by_port_hash_id(port_hash_id_to, node_id_to, port_id_to);
-
   // do anything only if the ports do not have the same direction (to
   // avoid linking two inputs or two outputs) and have the same data
   // type
@@ -177,8 +173,16 @@ void ViewTree::new_link(int port_hash_id_from, int port_hash_id_to)
       port_id_from.swap(port_id_to);
     }
 
-    // check if links already exist for the ports that are to be
-    // connected
+    int port_hash_id_from = this->get_node_ref_by_id(node_id_from)
+                                ->get_port_ref_by_id(port_id_from)
+                                ->hash_id;
+
+    int port_hash_id_to = this->get_node_ref_by_id(node_id_to)
+                              ->get_port_ref_by_id(port_id_to)
+                              ->hash_id;
+
+    // --- check if links already exist for the ports that are to be
+    // --- connected
     if (this->get_node_ref_by_id(node_id_from)
             ->get_port_ref_by_id(port_id_from)
             ->is_connected)
@@ -215,7 +219,9 @@ void ViewTree::new_link(int port_hash_id_from, int port_hash_id_to)
       this->remove_link(hid);
     }
 
-    // generate link (in GNode)
+    // --- generate link
+
+    // in GNode
     this->link(node_id_from, port_id_from, node_id_to, port_id_to);
 
     // use input hash id for the link id
@@ -240,6 +246,22 @@ void ViewTree::new_link(int port_hash_id_from, int port_hash_id_to)
       // not cyclic, carry on and propagate from the source
       this->update_node(node_id_from);
   }
+}
+
+void ViewTree::new_link(int port_hash_id_from, int port_hash_id_to)
+{
+  LOG_DEBUG("%d -> %d", port_hash_id_from, port_hash_id_to);
+
+  // find corresponding nodes
+  std::string node_id_from;
+  std::string port_id_from;
+  std::string node_id_to;
+  std::string port_id_to;
+
+  this->get_ids_by_port_hash_id(port_hash_id_from, node_id_from, port_id_from);
+  this->get_ids_by_port_hash_id(port_hash_id_to, node_id_to, port_id_to);
+
+  this->new_link(node_id_from, port_id_from, node_id_to, port_id_to);
 }
 
 void ViewTree::remove_link(int link_id)
@@ -289,6 +311,35 @@ void ViewTree::remove_view_node(std::string node_id)
   // for the control node handled by GNode, everything is taken care
   // of by this method
   this->remove_node(node_id);
+}
+
+void ViewTree::generate_view_links()
+{
+  LOG_DEBUG("generating Links from gnode::Tree...");
+
+  for (auto &[id, cnode] : this->get_nodes_map())
+    // scan control node outputs
+    for (auto &[port_id, port] : cnode.get()->get_ports())
+      if ((port.direction == gnode::direction::out) & port.is_connected)
+      {
+        Link link = Link(id,
+                         port_id,
+                         port.hash_id,
+                         port.p_linked_node->id,
+                         port.p_linked_port->id,
+                         port.p_linked_port->hash_id);
+
+        // disconnect in GNode framework
+        this->unlink(id,
+                     port_id,
+                     port.p_linked_node->id,
+                     port.p_linked_port->id);
+
+        // reconnect in viewtree
+        this->new_link(port.hash_id, port.p_linked_port->hash_id);
+
+        cnode.get()->force_update();
+      }
 }
 
 } // namespace hesiod::vnode

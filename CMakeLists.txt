@@ -13,7 +13,7 @@ find_package(glfw3 REQUIRED)
 set(OpenGL_GL_PREFERENCE LEGACY)
 find_package(OpenGL REQUIRED)
 
-set(IMGUI_DIR external/imgui)
+set(IMGUI_DIR ${PROJECT_SOURCE_DIR}/external/imgui)
 
 set(IMGUI_SRC
     ${IMGUI_DIR}/imgui.cpp
@@ -24,8 +24,8 @@ set(IMGUI_SRC
     ${IMGUI_DIR}/backends/imgui_impl_opengl3.cpp)
 
 set(IMGUI_INCLUDE
-	external/imgui
-	external/imgui/backends)
+    ${IMGUI_DIR}
+    ${IMGUI_DIR}/backends)
 
 set(IMGUI_NODE_EDITOR_SRC
   ${PROJECT_SOURCE_DIR}/external/imgui-node-editor/crude_json.cpp
@@ -38,11 +38,11 @@ set(IMGUI_NODE_EDITOR_INCLUDE
 )
 
 # --- sources
-file(GLOB_RECURSE SOURCES
+file(GLOB_RECURSE HESIOD_SOURCES
      ${PROJECT_SOURCE_DIR}/src/*.cpp)
      
 add_executable(${PROJECT_NAME}
-    ${SOURCES}
+    ${HESIOD_SOURCES}
     ${IMGUI_SRC}
     ${IMGUI_NODE_EDITOR_SRC}
 )

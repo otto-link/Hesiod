@@ -80,6 +80,11 @@ void Clone::compute()
   // just make a copy of the input
   hmap::HeightMap *p_input_hmap = static_cast<hmap::HeightMap *>(
       (void *)this->get_p_data("input"));
+
+  this->value_out.set_sto(p_input_hmap->shape,
+                          p_input_hmap->tiling,
+                          p_input_hmap->overlap);
+
   this->value_out = *p_input_hmap;
 }
 

@@ -23,36 +23,6 @@ Binary::Binary(std::string id) : gnode::Node(id)
 void Binary::update_inner_bindings()
 {
   LOG_DEBUG("inner bindings [%s]", this->id.c_str());
-
-  // retrieve infos if one the input is connected
-  void *p_input_data = this->get_p_data("input##1") == nullptr
-                           ? (this->get_p_data("input##2") == nullptr
-                                  ? nullptr
-                                  : this->get_p_data("input##2"))
-                           : this->get_p_data("input##1");
-
-  if (p_input_data != nullptr)
-  {
-    hmap::HeightMap *p_input_hmap = static_cast<hmap::HeightMap *>(
-        p_input_data);
-
-    // reshape the storage based on the input heightmap, if not
-    // already done
-    if (this->shape != p_input_hmap->shape)
-    {
-      this->shape = p_input_hmap->shape;
-      this->value_out.set_sto(p_input_hmap->shape,
-                              p_input_hmap->tiling,
-                              p_input_hmap->overlap);
-      LOG_DEBUG("node [%s]: reshape inner storage to {%d, %d}",
-                this->id.c_str(),
-                this->shape.x,
-                this->shape.y);
-    }
-  }
-  else
-    LOG_DEBUG("input not ready (connected or value set)");
-
   this->set_p_data("output", (void *)&(this->value_out));
 }
 
@@ -63,6 +33,10 @@ void Binary::compute()
       (void *)this->get_p_data("input##1"));
   hmap::HeightMap *p_input_hmap2 = static_cast<hmap::HeightMap *>(
       (void *)this->get_p_data("input##2"));
+
+  this->value_out.set_sto(p_input_hmap1->shape,
+                          p_input_hmap1->tiling,
+                          p_input_hmap1->overlap);
 
   this->compute_in_out(this->value_out, p_input_hmap1, p_input_hmap2);
 }

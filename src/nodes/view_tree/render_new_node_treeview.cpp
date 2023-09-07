@@ -17,15 +17,13 @@ namespace hesiod::vnode
 bool cmp_inf(std::pair<std::string, std::string> &a,
              std::pair<std::string, std::string> &b)
 {
-  return (a.second < b.second) |
-         ((a.second == b.second) & (a.first < b.first));
+  return (a.second < b.second) | ((a.second == b.second) & (a.first < b.first));
 }
 
 bool cmp_sup(std::pair<std::string, std::string> &a,
              std::pair<std::string, std::string> &b)
 {
-  return (a.second > b.second) |
-         ((a.second == b.second) & (a.first > b.first));
+  return (a.second > b.second) | ((a.second == b.second) & (a.first > b.first));
 }
 
 // HELPER Function to sort the map according to value in a (key-value)

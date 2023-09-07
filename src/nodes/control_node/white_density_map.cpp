@@ -24,32 +24,6 @@ WhiteDensityMap::WhiteDensityMap(std::string id) : gnode::Node(id)
 void WhiteDensityMap::update_inner_bindings()
 {
   LOG_DEBUG("inner bindings [%s]", this->id.c_str());
-  void *p_input_data = this->get_p_data("density map");
-
-  // density map is passed by reference, it needs to be instanciated
-  // first (for the output, we use a copy of this input heightmap)
-  if (p_input_data != nullptr)
-  {
-    hmap::HeightMap *p_input_hmap = static_cast<hmap::HeightMap *>(
-        p_input_data);
-
-    // reshape the storage based on the input heightmap, if not
-    // already done
-    if (this->shape != p_input_hmap->shape)
-    {
-      this->shape = p_input_hmap->shape;
-      this->value_out.set_sto(p_input_hmap->shape,
-                              p_input_hmap->tiling,
-                              p_input_hmap->overlap);
-      LOG_DEBUG("node [%s]: reshape inner storage to {%d, %d}",
-                this->id.c_str(),
-                this->shape.x,
-                this->shape.y);
-    }
-  }
-  else
-    LOG_DEBUG("input not ready (connected or value set)");
-
   this->set_p_data("output", (void *)&(this->value_out));
 }
 
@@ -58,6 +32,10 @@ void WhiteDensityMap::compute()
   LOG_DEBUG("computing node [%s]", this->id.c_str());
   hmap::HeightMap *p_input_hmap = static_cast<hmap::HeightMap *>(
       (void *)this->get_p_data("density map"));
+
+  this->value_out.set_sto(p_input_hmap->shape,
+                          p_input_hmap->tiling,
+                          p_input_hmap->overlap);
 
   hmap::transform(
       this->value_out,

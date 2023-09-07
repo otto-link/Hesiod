@@ -20,6 +20,10 @@ void GradientNorm::compute_in_out(hmap::HeightMap &talus,
 {
   LOG_DEBUG("computing node [%s]", this->id.c_str());
 
+  // LOG_DEBUG("%f %f %d %d", talus.min(), talus.max(), talus.shape.x,
+  // talus.shape.y);
+  LOG_DEBUG("%d %d", talus.shape.x, talus.shape.y);
+
   hmap::transform(talus,    // output
                   *p_input, // input
                   [](hmap::Array &z) { return hmap::gradient_norm(z); });
