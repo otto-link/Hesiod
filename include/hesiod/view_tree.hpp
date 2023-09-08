@@ -59,8 +59,6 @@ public:
 
   void automatic_node_layout();
 
-  void generate_view_links();
-
   void insert_clone_node(std::string node_id);
 
   void new_link(int port_hash_id_from, int port_hash_id_to);
@@ -91,6 +89,10 @@ public:
   void render_view_nodes();
 
   void render_view2d(std::string node_id);
+
+  void load_state(std::string fname);
+
+  void save_state(std::string fname);
 
 private:
   hmap::Vec2<int> shape;

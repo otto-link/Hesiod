@@ -21,6 +21,7 @@ target_include_directories(snapshot
                            PUBLIC
                              ${PROJECT_SOURCE_DIR}/include
 			   PRIVATE
+			     ${PROJECT_SOURCE_DIR}/external/json
 			     ${PROJECT_SOURCE_DIR}/external/macro-logger
 			     ${IMGUI_INCLUDE}
                              ${IMGUI_NODE_EDITOR_INCLUDE}

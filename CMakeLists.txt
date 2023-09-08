@@ -51,10 +51,11 @@ target_include_directories(${PROJECT_NAME}
                            PUBLIC
                              ${PROJECT_SOURCE_DIR}/include
 			   PRIVATE
-			     ${PROJECT_SOURCE_DIR}/external/macro-logger
-			     ${IMGUI_INCLUDE}
-           ${IMGUI_NODE_EDITOR_INCLUDE}
-			    )
+         ${PROJECT_SOURCE_DIR}/external/json
+         ${PROJECT_SOURCE_DIR}/external/macro-logger
+         ${IMGUI_INCLUDE}
+        ${IMGUI_NODE_EDITOR_INCLUDE}
+			  )
 			     
 # Link libraries
 target_link_libraries(${PROJECT_NAME}

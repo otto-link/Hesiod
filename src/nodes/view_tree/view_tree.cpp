@@ -313,33 +313,4 @@ void ViewTree::remove_view_node(std::string node_id)
   this->remove_node(node_id);
 }
 
-void ViewTree::generate_view_links()
-{
-  LOG_DEBUG("generating Links from gnode::Tree...");
-
-  for (auto &[id, cnode] : this->get_nodes_map())
-    // scan control node outputs
-    for (auto &[port_id, port] : cnode.get()->get_ports())
-      if ((port.direction == gnode::direction::out) & port.is_connected)
-      {
-        Link link = Link(id,
-                         port_id,
-                         port.hash_id,
-                         port.p_linked_node->id,
-                         port.p_linked_port->id,
-                         port.p_linked_port->hash_id);
-
-        // disconnect in GNode framework
-        this->unlink(id,
-                     port_id,
-                     port.p_linked_node->id,
-                     port.p_linked_port->id);
-
-        // reconnect in viewtree
-        this->new_link(port.hash_id, port.p_linked_port->hash_id);
-
-        cnode.get()->force_update();
-      }
-}
-
 } // namespace hesiod::vnode

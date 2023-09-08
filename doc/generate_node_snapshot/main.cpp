@@ -102,6 +102,17 @@ int main()
                   "KmeansClustering2##2",
                   "input##1");
     export_png(window, tree, "ex_KmeansClustering2.png");
+
+    tree.save_state("state.json");
+  }
+
+  //
+  {
+    hesiod::vnode::ViewTree tree =
+        hesiod::vnode::ViewTree("tree", shape, tiling, overlap);
+
+    tree.load_state("state.json");
+    export_png(window, tree, "out.png");
   }
 
   // --- Cleanup
