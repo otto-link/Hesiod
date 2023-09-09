@@ -89,11 +89,19 @@ void ViewTree::save_state(std::string fname)
   {
     // TODO move eveything into a node method
     ImVec2 pos = ax::NodeEditor::GetNodePosition(vnode->hash_id);
-    j["nodes"].push_back({
-        {"id", id.c_str()},
-        {"position", {pos.x, pos.y}},
-        {"parameters", nullptr} // TODO - node specific
-    });
+    j["nodes"].push_back({{"id", id.c_str()}, {"position", {pos.x, pos.y}}});
+
+    // hesiod::cnode::FbmPerlin * p_node = (hesiod::cnode::FbmPerlin *)
+    // this->get_view_control_node_ref_by_id(id); json jsub;
+    // p_node->save_state(jsub);
+
+    // for (json::iterator it = jsub.begin(); it != jsub.end(); ++it) {
+    //   std::cout << *it << '\n';
+    // }
+
+    // LOG_DEBUG("size: %ld", jsub.size());
+
+    // j["nodes"].back()["parameters"] = jsub;
   }
   ax::NodeEditor::SetCurrentEditor(nullptr);
 
