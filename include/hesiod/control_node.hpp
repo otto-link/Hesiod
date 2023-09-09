@@ -113,9 +113,6 @@ public:
 
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
-
-private:
-  hmap::Vec2<int> shape = {0, 0};
 };
 
 class Binary : public gnode::Node // basic, 2 in / 1 out
@@ -137,9 +134,6 @@ public:
 
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
-
-private:
-  hmap::Vec2<int> shape = {0, 0};
 };
 
 class Debug : public gnode::Node
@@ -174,9 +168,6 @@ protected:
   hmap::HeightMap value_out = hmap::HeightMap(); // eroded heightmap
   hmap::HeightMap erosion_map = hmap::HeightMap();
   hmap::HeightMap deposition_map = hmap::HeightMap();
-
-private:
-  hmap::Vec2<int> shape = {0, 0};
 };
 
 class Filter : public gnode::Node
@@ -196,9 +187,6 @@ public:
 
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
-
-private:
-  hmap::Vec2<int> shape = {0, 0};
 };
 
 class Primitive : public gnode::Node
@@ -262,9 +250,6 @@ protected:
   float           footprint_ratio = 1.f;
   float           vmin = 0.f;
   float           vmax = 1.f;
-
-private:
-  hmap::Vec2<int> shape = {0, 0};
 };
 
 class BaseElevation : public Primitive
@@ -796,9 +781,6 @@ public:
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
   int             seed = DEFAULT_SEED;
-
-private:
-  hmap::Vec2<int> shape = {0, 0};
 };
 
 class Worley : public Primitive
