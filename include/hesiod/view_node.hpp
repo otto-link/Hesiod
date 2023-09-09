@@ -430,6 +430,15 @@ private:
   int                selected_idx = 0;
 };
 
+class ViewSelectTransitions : public ViewNode,
+                              public hesiod::cnode::SelectTransitions
+{
+public:
+  ViewSelectTransitions(std::string id);
+
+  bool render_settings();
+};
+
 class ViewSmoothCpulse : public ViewNode, public hesiod::cnode::SmoothCpulse
 {
 public:

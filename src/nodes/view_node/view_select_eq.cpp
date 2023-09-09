@@ -29,6 +29,16 @@ bool ViewSelectEq::render_settings()
   ImGui::DragFloat("value", &this->value, 0.001f, -FLT_MAX, +FLT_MAX);
   has_changed |= this->trigger_update_after_edit();
 
+  if (ImGui::Checkbox("smoothing", &this->smoothing))
+    this->force_update();
+
+  if (this->smoothing)
+  {
+    ImGui::SliderInt("int", &this->ir, 1, 256);
+    has_changed |= this->trigger_update_after_edit();
+  }
+
+  // unique values
   ImGui::Checkbox("Use input unique values", &this->use_input_unique_values);
 
   if (this->use_input_unique_values)
@@ -61,8 +71,8 @@ bool ViewSelectEq::render_settings()
             this->force_update();
           }
 
-          // Set the initial focus when opening the combo (scrolling + keyboard
-          // navigation focus)
+          // Set the initial focus when opening the combo (scrolling +
+          // keyboard navigation focus)
           if (is_selected)
             ImGui::SetItemDefaultFocus();
         }

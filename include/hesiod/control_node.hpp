@@ -83,6 +83,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"RidgedPerlin", "Primitive/Coherent Noise"},
     {"Rugosity", "Features"},
     {"SelectEq", "Mask"},
+    {"SelectTransitions", "Mask"},
     {"SmoothCpulse", "Filter/Smoothing"},
     {"SmoothFill", "Filter/Smoothing"},
     {"SteepenConvective", "Filter/Recast"},
@@ -666,6 +667,23 @@ public:
 
 protected:
   float value = 0.f;
+  bool  smoothing = false;
+  int   ir = 4;
+};
+
+class SelectTransitions : public gnode::Node
+{
+public:
+  SelectTransitions(std::string id);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap();
+  bool            smoothing = false;
+  int             ir = 4;
 };
 
 class SmoothCpulse : public Filter
