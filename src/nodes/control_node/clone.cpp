@@ -24,13 +24,13 @@ void Clone::remove_unused_outputs()
 {
   // --- make sure there is always only one available output ready for
   // connection
-  int n_outputs = this->get_nports_by_direction(gnode::direction::out);
+  this->n_outputs = this->get_nports_by_direction(gnode::direction::out);
   int n_connected_outputs = this->get_nports_by_direction(
       gnode::direction::out,
       false, // do not skip optional
       true); // skip unconnected
 
-  if (n_outputs > n_connected_outputs)
+  if (this->n_outputs > n_connected_outputs)
   {
     // unconnected outputs are removed until there remains only one
     // unconnected output
@@ -38,7 +38,7 @@ void Clone::remove_unused_outputs()
     std::vector<std::string> port_id_to_remove = {};
     for (auto &[port_id, port] : this->get_ports())
     {
-      if (count > n_outputs - n_connected_outputs - 2)
+      if (count > this->n_outputs - n_connected_outputs - 2)
         break;
 
       if (port.direction == gnode::direction::out && !port.is_connected)
@@ -51,19 +51,21 @@ void Clone::remove_unused_outputs()
     for (auto &port_id : port_id_to_remove)
       this->remove_port(port_id);
   }
+
+  this->n_outputs = this->get_nports_by_direction(gnode::direction::out);
 }
 
 void Clone::update_inner_bindings()
 {
   LOG_DEBUG("inner bindings [%s]", this->id.c_str());
 
-  int n_outputs = this->get_nports_by_direction(gnode::direction::out);
+  this->n_outputs = this->get_nports_by_direction(gnode::direction::out);
   int n_connected_outputs = this->get_nports_by_direction(
       gnode::direction::out,
       false, // do not skip optional
       true); // skip unconnected
 
-  if (n_outputs == n_connected_outputs)
+  if (this->n_outputs == n_connected_outputs)
     this->add_port(gnode::Port("thru##" + std::to_string(this->id_count++),
                                gnode::direction::out,
                                dtype::dHeightMap));
@@ -72,6 +74,8 @@ void Clone::update_inner_bindings()
   for (auto &[port_id, port] : this->get_ports())
     if (port.direction == gnode::direction::out)
       this->set_p_data(port_id, (void *)&(this->value_out));
+
+  this->n_outputs = this->get_nports_by_direction(gnode::direction::out);
 }
 
 void Clone::compute()

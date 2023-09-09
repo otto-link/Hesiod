@@ -238,6 +238,7 @@ public:
 
 protected:
   int             id_count = 0;
+  int             n_outputs = 1;
   hmap::HeightMap value_out = hmap::HeightMap();
 };
 

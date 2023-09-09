@@ -40,7 +40,7 @@ void ViewTree::load_state(std::string fname)
     std::string id = j["nodes"][k]["id"];
     int         cpos = id.find("#");
     std::string node_type = id.substr(0, cpos);
-    ImVec2 pos;
+    ImVec2      pos;
 
     this->add_view_node(node_type, id);
 
@@ -51,7 +51,7 @@ void ViewTree::load_state(std::string fname)
     ax::NodeEditor::SetCurrentEditor(nullptr);
 
     // TODO load node parameters
-    
+
     LOG_DEBUG("%s %s", id.c_str(), node_type.c_str());
   }
 
