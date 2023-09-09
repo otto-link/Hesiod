@@ -81,6 +81,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Remap", "Filter/Range"},
     {"RidgedPerlin", "Primitive/Coherent Noise"},
     {"Rugosity", "Features"},
+    {"SelectEq", "Mask"},
     {"SmoothCpulse", "Filter/Smoothing"},
     {"SmoothFill", "Filter/Smoothing"},
     {"SteepenConvective", "Filter/Recast"},
@@ -666,6 +667,17 @@ public:
 
 protected:
   int ir = 4;
+};
+
+class SelectEq : public Unary
+{
+public:
+  SelectEq(std::string id);
+
+  void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
+
+protected:
+  float value = 0.f;
 };
 
 class SmoothCpulse : public Filter

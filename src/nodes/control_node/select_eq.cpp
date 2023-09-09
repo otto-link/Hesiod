@@ -8,21 +8,21 @@
 namespace hesiod::cnode
 {
 
-GradientNorm::GradientNorm(std::string id) : Unary(id)
+SelectEq::SelectEq(std::string id) : Unary(id)
 {
-  this->node_type = "GradientNorm";
+  this->node_type = "SelectEq";
   this->category = category_mapping.at(this->node_type);
   this->update_inner_bindings();
 }
 
-void GradientNorm::compute_in_out(hmap::HeightMap &talus,
-                                  hmap::HeightMap *p_input)
+void SelectEq::compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_input)
 {
   LOG_DEBUG("computing node [%s]", this->id.c_str());
 
-  hmap::transform(talus,    // output
+  hmap::transform(h_out,    // output
                   *p_input, // input
-                  [](hmap::Array &z) { return hmap::gradient_norm(z); });
+                  [this](hmap::Array &array)
+                  { return hmap::select_eq(array, this->value); });
 }
 
 } // namespace hesiod::cnode

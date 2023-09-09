@@ -49,6 +49,7 @@ static const std::map<std::string, viewnode_color_set> category_colors = {
     {"Geometry", viewnode_color_set({255, 255, 255, 255})},
     {"Hydrology", viewnode_color_set({101, 176, 234, 255})},
     {"Math", viewnode_color_set({20, 20, 20, 255})},
+    {"Mask", viewnode_color_set({0, 0, 255, 255})},
     {"Operator", viewnode_color_set({142, 156, 189, 255})},
     {"Primitive", viewnode_color_set({12, 84, 92, 255})},
     {"Roads", viewnode_color_set({102, 108, 111, 255})},
@@ -409,6 +410,19 @@ public:
   ViewRugosity(std::string id);
 
   bool render_settings();
+};
+
+class ViewSelectEq : public ViewNode, public hesiod::cnode::SelectEq
+{
+public:
+  ViewSelectEq(std::string id);
+
+  bool render_settings();
+
+private:
+  bool               use_input_unique_values = false;
+  std::vector<float> input_unique_values = {};
+  int                selected_idx = 0;
 };
 
 class ViewSmoothCpulse : public ViewNode, public hesiod::cnode::SmoothCpulse
