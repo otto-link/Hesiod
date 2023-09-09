@@ -19,6 +19,10 @@ void ViewTree::load_state(std::string fname)
 {
   LOG_DEBUG("loading state...");
 
+  // clear the tree first
+  this->remove_all_nodes();
+  this->links.clear();
+
   std::stringstream buffer;
 
   std::fstream f;

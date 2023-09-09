@@ -72,7 +72,15 @@ void ViewTree::render_node_editor()
 
   if (ImGui::Button("Automatic layout"))
     automatic_layout = true;
-
+  ImGui::SameLine();
+  
+  if (ImGui::Button("Load"))
+    this->load_state("tree_state.json");
+  ImGui::SameLine();
+ 
+  if (ImGui::Button("Save"))
+    this->save_state("tree_state.json");  
+  
   if (this->show_settings)
   {
     ImGui::BeginChild("settings", ImVec2(256, 0), true);
