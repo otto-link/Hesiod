@@ -27,4 +27,14 @@ bool ViewGain::render_settings()
   return has_changed;
 }
 
+void ViewGain::serialize_save(cereal::JSONOutputArchive &ar)
+{
+  ar(cereal::make_nvp("gain", this->gain));
+}
+
+void ViewGain::serialize_load(cereal::JSONInputArchive &ar)
+{
+  ar(cereal::make_nvp("gain", this->gain));
+}
+
 } // namespace hesiod::vnode

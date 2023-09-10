@@ -3,6 +3,7 @@
  * this software. */
 #include "imgui.h"
 #include "macrologger.h"
+#include <cereal/archives/json.hpp>
 
 #include "hesiod/control_node.hpp"
 #include "hesiod/gui.hpp"
@@ -69,6 +70,28 @@ bool ViewFbmPerlin::render_settings()
   has_changed |= this->render_settings_footer();
 
   return has_changed;
+}
+
+void ViewFbmPerlin::serialize_save(cereal::JSONOutputArchive &ar)
+{
+  ar(cereal::make_nvp("kw.x", this->kw.x));
+  ar(cereal::make_nvp("kw.y", this->kw.y));
+  ar(cereal::make_nvp("seed", this->seed));
+  ar(cereal::make_nvp("octaves", this->octaves));
+  ar(cereal::make_nvp("weight", this->weight));
+  ar(cereal::make_nvp("persistence", this->persistence));
+  ar(cereal::make_nvp("lacunarity", this->lacunarity));
+}
+
+void ViewFbmPerlin::serialize_load(cereal::JSONInputArchive &ar)
+{
+  ar(cereal::make_nvp("kw.x", this->kw.x));
+  ar(cereal::make_nvp("kw.y", this->kw.y));
+  ar(cereal::make_nvp("seed", this->seed));
+  ar(cereal::make_nvp("octaves", this->octaves));
+  ar(cereal::make_nvp("weight", this->weight));
+  ar(cereal::make_nvp("persistence", this->persistence));
+  ar(cereal::make_nvp("lacunarity", this->lacunarity));
 }
 
 } // namespace hesiod::vnode

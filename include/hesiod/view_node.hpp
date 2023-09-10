@@ -88,7 +88,6 @@ public:
   bool render_view2d();
 
   virtual void serialize_load(cereal::JSONInputArchive &);
-
   virtual void serialize_save(cereal::JSONOutputArchive &);
 
   bool trigger_update_after_edit();
@@ -245,19 +244,8 @@ public:
 
   bool render_settings();
 
-  void serialize_save(cereal::JSONOutputArchive &ar)
-  {
-    ar(cereal::make_nvp("seed", this->seed));
-    ar(cereal::make_nvp("kw.x", this->kw.x));
-    ar(cereal::make_nvp("kw.y", this->kw.y));
-  }
-
-  void serialize_load(cereal::JSONInputArchive &ar)
-  {
-    ar(cereal::make_nvp("seed", this->seed));
-    ar(cereal::make_nvp("kw.x", this->kw.x));
-    ar(cereal::make_nvp("kw.y", this->kw.y));
-  }
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
 
 private:
   bool link_kxy = true;
@@ -269,6 +257,9 @@ public:
   ViewGain(std::string id);
 
   bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewGammaCorrection : public ViewNode,
