@@ -4,6 +4,7 @@
 #pragma once
 #include <string>
 
+#include <cereal/archives/json.hpp>
 #include <imgui_node_editor.h>
 
 #include "hesiod/control_node.hpp"
@@ -29,6 +30,16 @@ struct Link
        std::string node_id_to,
        std::string port_id_to,
        int         port_hash_id_to);
+
+  template <class Archive> void serialize(Archive &ar)
+  {
+    ar(cereal::make_nvp("node_id_from", node_id_from),
+       cereal::make_nvp("port_id_from", port_id_from),
+       cereal::make_nvp("port_hash_id_from", port_hash_id_from),
+       cereal::make_nvp("node_id_to", node_id_to),
+       cereal::make_nvp("port_id_to", port_id_to),
+       cereal::make_nvp("port_hash_id_to", port_hash_id_to));
+  }
 };
 
 class ViewTree : public gnode::Tree
@@ -47,7 +58,7 @@ public:
 
   std::string get_node_type(std::string node_id);
 
-  ax::NodeEditor::EditorContext *get_p_node_editor_context();
+  ax::NodeEditor::EditorContext *get_p_node_editor_context() const;
 
   hesiod::vnode::ViewControlNode *get_view_control_node_ref_by_id(
       std::string node_id);
@@ -94,6 +105,10 @@ public:
 
   void save_state(std::string fname);
 
+  template <class Archive> void load(Archive &archive);
+
+  template <class Archive> void save(Archive &archive) const;
+
 private:
   hmap::Vec2<int> shape;
   hmap::Vec2<int> tiling;
@@ -113,5 +128,8 @@ private:
   ax::NodeEditor::NodeId   context_menu_node_hid;
   std::vector<std::string> key_sort;
 };
+
+// HELPERS
+std::string node_type_from_id(std::string node_id);
 
 } // namespace hesiod::vnode

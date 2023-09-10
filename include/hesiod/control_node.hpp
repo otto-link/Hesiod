@@ -6,7 +6,6 @@
 
 #include "gnode.hpp"
 #include "highmap.hpp"
-#include "json.hpp"
 
 // clang-format off
 #define DEFAULT_KW 2.f
@@ -398,8 +397,6 @@ public:
             float           overlap);
 
   void compute();
-
-  virtual void save_state(nlohmann::json &j);
 
 protected:
   hmap::Vec2<float> kw = {DEFAULT_KW, DEFAULT_KW};

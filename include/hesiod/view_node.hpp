@@ -5,8 +5,8 @@
 #include <string>
 
 #include "gnode.hpp"
-#include "json.hpp"
 #include <GLFW/glfw3.h>
+#include <cereal/archives/json.hpp>
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
@@ -75,8 +75,6 @@ public:
 
   void set_view2d_port_id(std::string new_port_id);
 
-  virtual void load_state(nlohmann::json &j);
-
   virtual void post_control_node_update();
 
   virtual bool render_settings();
@@ -88,8 +86,6 @@ public:
   bool render_settings_footer();
 
   bool render_view2d();
-
-  virtual void save_state(nlohmann::json &j);
 
   bool trigger_update_after_edit();
 
@@ -242,6 +238,11 @@ public:
                 hmap::Vec2<int> shape,
                 hmap::Vec2<int> tiling,
                 float           overlap);
+
+  template <class Archive> void serialize(Archive &archive)
+  {
+    archive(cereal::make_nvp("seed", this->seed));
+  }
 
   bool render_settings();
 

@@ -2,7 +2,6 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include "gnode.hpp"
-#include "json.hpp"
 #include <imgui_internal.h>
 #include <imgui_node_editor.h>
 
@@ -77,13 +76,6 @@ void ViewNode::set_view2d_port_id(std::string new_port_id)
     LOG_ERROR("port id [%s] not found", new_port_id.c_str());
     throw std::runtime_error("unknown port id");
   }
-}
-
-void ViewNode::load_state(nlohmann::json &)
-{
-  LOG_ERROR("load state method not defined, node [%s]",
-            this->p_control_node->id.c_str());
-  throw std::runtime_error("load state method not defined");
 }
 
 void ViewNode::init_from_control_node()
@@ -310,13 +302,6 @@ bool ViewNode::render_view2d()
 
   ImGui::PopID();
   return has_changed;
-}
-
-void ViewNode::save_state(nlohmann::json &)
-{
-  LOG_ERROR("save state method not defined, node [%s]",
-            this->p_control_node->id.c_str());
-  throw std::runtime_error("save state method not defined");
 }
 
 bool ViewNode::trigger_update_after_edit()

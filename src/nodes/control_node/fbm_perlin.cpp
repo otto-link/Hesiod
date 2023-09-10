@@ -51,9 +51,4 @@ void FbmPerlin::compute()
   this->value_out.remap(this->vmin, this->vmax);
 }
 
-void FbmPerlin::save_state(nlohmann::json &j)
-{
-  j["seed"] = 1; // this->seed;
-}
-
 } // namespace hesiod::cnode

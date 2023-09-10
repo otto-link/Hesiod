@@ -4,13 +4,14 @@
 #include <fstream>
 
 #include "gnode.hpp"
-#include "json.hpp"
 #include "macrologger.h"
+#include <cereal/archives/json.hpp>
+#include <cereal/types/map.hpp>
+#include <cereal/types/string.hpp>
+#include <cereal/types/vector.hpp>
 
 #include "hesiod/view_node.hpp"
 #include "hesiod/view_tree.hpp"
-
-using json = nlohmann::json;
 
 namespace hesiod::vnode
 {
@@ -23,99 +24,96 @@ void ViewTree::load_state(std::string fname)
   this->remove_all_nodes();
   this->links.clear();
 
-  std::stringstream buffer;
+  std::ifstream            is(fname);
+  cereal::JSONInputArchive iarchive(is);
+  iarchive(*this);
+}
 
-  std::fstream f;
-  f.open(fname, std::ios::in);
-  buffer << f.rdbuf();
-  f.close();
+template <class Archive> void ViewTree::load(Archive &archive)
+{
+  archive(cereal::make_nvp("id", this->id),
+          cereal::make_nvp("overlap ", this->overlap),
+          cereal::make_nvp("shape.x", this->shape.x),
+          cereal::make_nvp("shape.y", this->shape.y));
 
-  json j = json::parse(buffer);
-
-  this->shape.x = j["parameters"]["shape"][0];
-  this->shape.y = j["parameters"]["shape"][1];
-  this->tiling.x = j["parameters"]["tiling"][0];
-  this->tiling.y = j["parameters"]["tiling"][1];
-  this->overlap = j["parameters"]["overlap"];
-
-  // nodes
-  for (size_t k = 0; k < j["nodes"].size(); k++)
   {
-    std::string id = j["nodes"][k]["id"];
-    int         cpos = id.find("#");
-    std::string node_type = id.substr(0, cpos);
-    ImVec2      pos;
-
-    this->add_view_node(node_type, id);
+    std::vector<std::string> node_ids = {};
+    std::vector<float>       pos_x = {};
+    std::vector<float>       pos_y = {};
+    archive(cereal::make_nvp("node_ids", node_ids));
+    archive(cereal::make_nvp("pos_x", pos_x));
+    archive(cereal::make_nvp("pos_y", pos_y));
 
     ax::NodeEditor::SetCurrentEditor(this->get_p_node_editor_context());
-    pos.x = j["nodes"][k]["position"][0];
-    pos.y = j["nodes"][k]["position"][1];
-    ax::NodeEditor::SetNodePosition(this->get_node_ref_by_id(id)->hash_id, pos);
+    for (size_t k = 0; k < node_ids.size(); k++)
+    {
+      this->add_view_node(node_type_from_id(node_ids[k]), node_ids[k]);
+      ax::NodeEditor::SetNodePosition(
+          this->get_node_ref_by_id(node_ids[k])->hash_id,
+          ImVec2(pos_x[k], pos_y[k]));
+    }
     ax::NodeEditor::SetCurrentEditor(nullptr);
 
-    // TODO load node parameters
-
-    LOG_DEBUG("%s %s", id.c_str(), node_type.c_str());
+    // TODO: node parameters
   }
 
   // links
-  for (size_t k = 0; k < j["links"].size(); k++)
-  {
-    std::string node_id_from = j["links"][k]["node_id_from"];
-    std::string port_id_from = j["links"][k]["port_id_from"];
-    std::string node_id_to = j["links"][k]["node_id_to"];
-    std::string port_id_to = j["links"][k]["port_id_to"];
+  archive(cereal::make_nvp("links", this->links));
 
-    this->new_link(node_id_from, port_id_from, node_id_to, port_id_to);
-  }
+  // links from the ViewTree (GUI links) still needs to be replicated
+  // within the GNode framework (data links)
+  for (auto &[id, link] : this->links)
+    this->link(link.node_id_from,
+               link.port_id_from,
+               link.node_id_to,
+               link.port_id_to);
 
   this->update();
+}
+
+template <class Archive> void ViewTree::save(Archive &archive) const
+{
+  archive(cereal::make_nvp("id", this->id),
+          cereal::make_nvp("overlap ", this->overlap),
+          cereal::make_nvp("shape.x", this->shape.x),
+          cereal::make_nvp("shape.y", this->shape.y));
+
+  // node ids and positions
+  {
+    ax::NodeEditor::SetCurrentEditor(this->get_p_node_editor_context());
+
+    std::vector<std::string> node_ids = {};
+    std::vector<float>       pos_x = {};
+    std::vector<float>       pos_y = {};
+    for (auto &[id, vnode] : this->get_nodes_map())
+    {
+      ImVec2 pos = ax::NodeEditor::GetNodePosition(vnode.get()->hash_id);
+      node_ids.push_back(id);
+      pos_x.push_back(pos.x);
+      pos_y.push_back(pos.y);
+    }
+
+    ax::NodeEditor::SetCurrentEditor(nullptr);
+
+    archive(cereal::make_nvp("node_ids", node_ids));
+    archive(cereal::make_nvp("pos_x", pos_x));
+    archive(cereal::make_nvp("pos_y", pos_y));
+  }
+
+  // links
+  archive(cereal::make_nvp("links", this->links));
+
+  // TODO node parameters
 }
 
 void ViewTree::save_state(std::string fname)
 {
   LOG_DEBUG("saving state...");
 
-  json j;
-
-  j["parameters"] = {{"shape", {this->shape.x, this->shape.y}},
-                     {"tiling", {this->tiling.x, this->tiling.y}},
-                     {"overlap", this->overlap}};
-
-  j["nodes"] = {};
-  ax::NodeEditor::SetCurrentEditor(this->get_p_node_editor_context());
-  for (auto &[id, vnode] : this->get_nodes_map())
-  {
-    // TODO move eveything into a node method
-    ImVec2 pos = ax::NodeEditor::GetNodePosition(vnode->hash_id);
-    j["nodes"].push_back({{"id", id.c_str()}, {"position", {pos.x, pos.y}}});
-
-    // hesiod::cnode::FbmPerlin * p_node = (hesiod::cnode::FbmPerlin *)
-    // this->get_view_control_node_ref_by_id(id); json jsub;
-    // p_node->save_state(jsub);
-
-    // for (json::iterator it = jsub.begin(); it != jsub.end(); ++it) {
-    //   std::cout << *it << '\n';
-    // }
-
-    // LOG_DEBUG("size: %ld", jsub.size());
-
-    // j["nodes"].back()["parameters"] = jsub;
-  }
-  ax::NodeEditor::SetCurrentEditor(nullptr);
-
-  j["links"] = {};
-  for (auto &[id, link] : links)
-    j["links"].push_back({{"node_id_from", link.node_id_from.c_str()},
-                          {"port_id_from", link.port_id_from.c_str()},
-                          {"node_id_to", link.node_id_to.c_str()},
-                          {"port_id_to", link.port_id_to.c_str()}});
-
-  std::fstream f;
-  f.open(fname, std::ios::out);
-  f << j.dump(4).c_str() << std::endl;
-  f.close();
+  std::ofstream             os(fname);
+  cereal::JSONOutputArchive oarchive(os);
+  oarchive(cereal::make_nvp("tree", *this));
+  LOG_DEBUG("ok");
 }
 
 } // namespace hesiod::vnode

@@ -77,7 +77,7 @@ std::string ViewTree::get_node_type(std::string node_id)
   return this->get_node_ref_by_id(node_id)->get_node_type();
 }
 
-ax::NodeEditor::EditorContext *ViewTree::get_p_node_editor_context()
+ax::NodeEditor::EditorContext *ViewTree::get_p_node_editor_context() const
 {
   return this->p_node_editor_context;
 }
@@ -311,6 +311,12 @@ void ViewTree::remove_view_node(std::string node_id)
   // for the control node handled by GNode, everything is taken care
   // of by this method
   this->remove_node(node_id);
+}
+
+// HELPERS
+std::string node_type_from_id(std::string node_id)
+{
+  return node_id.substr(0, node_id.find("#"));
 }
 
 } // namespace hesiod::vnode
