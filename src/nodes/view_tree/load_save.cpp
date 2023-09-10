@@ -53,8 +53,6 @@ template <class Archive> void ViewTree::load(Archive &archive)
           ImVec2(pos_x[k], pos_y[k]));
     }
     ax::NodeEditor::SetCurrentEditor(nullptr);
-
-    // TODO: node parameters
   }
 
   // links
@@ -67,6 +65,10 @@ template <class Archive> void ViewTree::load(Archive &archive)
                link.port_id_from,
                link.node_id_to,
                link.port_id_to);
+
+  // nodes parameters
+  for (auto &[id, node] : this->get_nodes_map())
+    this->get_view_control_node_ref_by_id(id)->serialize_load(archive);
 
   this->update();
 }
@@ -103,7 +105,9 @@ template <class Archive> void ViewTree::save(Archive &archive) const
   // links
   archive(cereal::make_nvp("links", this->links));
 
-  // TODO node parameters
+  // nodes parameters
+  for (auto &[id, node] : this->get_nodes_map())
+    this->get_view_control_node_ref_by_id(id)->serialize_save(archive);
 }
 
 void ViewTree::save_state(std::string fname)

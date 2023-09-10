@@ -87,6 +87,10 @@ public:
 
   bool render_view2d();
 
+  virtual void serialize_load(cereal::JSONInputArchive &);
+
+  virtual void serialize_save(cereal::JSONOutputArchive &);
+
   bool trigger_update_after_edit();
 
   void update_preview();
@@ -239,12 +243,21 @@ public:
                 hmap::Vec2<int> tiling,
                 float           overlap);
 
-  template <class Archive> void serialize(Archive &archive)
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar)
   {
-    archive(cereal::make_nvp("seed", this->seed));
+    ar(cereal::make_nvp("seed", this->seed));
+    ar(cereal::make_nvp("kw.x", this->kw.x));
+    ar(cereal::make_nvp("kw.y", this->kw.y));
   }
 
-  bool render_settings();
+  void serialize_load(cereal::JSONInputArchive &ar)
+  {
+    ar(cereal::make_nvp("seed", this->seed));
+    ar(cereal::make_nvp("kw.x", this->kw.x));
+    ar(cereal::make_nvp("kw.y", this->kw.y));
+  }
 
 private:
   bool link_kxy = true;

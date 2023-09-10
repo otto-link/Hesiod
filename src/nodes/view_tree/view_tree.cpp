@@ -62,7 +62,7 @@ Link *ViewTree::get_link_ref_by_id(int link_id)
 }
 
 hesiod::vnode::ViewControlNode *ViewTree::get_view_control_node_ref_by_id(
-    std::string node_id)
+    std::string node_id) const
 {
   return (hesiod::vnode::ViewControlNode *)(this->get_node_ref_by_id(node_id));
 }

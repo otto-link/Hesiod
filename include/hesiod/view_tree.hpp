@@ -61,7 +61,7 @@ public:
   ax::NodeEditor::EditorContext *get_p_node_editor_context() const;
 
   hesiod::vnode::ViewControlNode *get_view_control_node_ref_by_id(
-      std::string node_id);
+      std::string node_id) const;
 
   void set_view2d_node_id(std::string node_id);
 
