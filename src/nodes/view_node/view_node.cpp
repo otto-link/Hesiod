@@ -347,8 +347,7 @@ void ViewNode::update_preview()
       img_to_texture(img, this->shape_preview, this->image_texture_preview);
     }
 
-  if (this->view2d_port_id != "" && this->show_view2d &&
-      this->p_control_node->is_up_to_date)
+  if (this->view2d_port_id != "" && this->show_view2d)
     if (this->p_control_node->get_p_data(this->view2d_port_id))
     {
       hmap::HeightMap *p_h = (hmap::HeightMap *)this->p_control_node
