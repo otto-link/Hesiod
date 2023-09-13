@@ -24,7 +24,7 @@ bool ViewMinimumLocal::render_settings()
   bool has_changed = false;
   has_changed |= this->render_settings_header();
 
-  ImGui::SliderInt("ir", &this->ir, 1, 32);
+  ImGui::SliderInt("ir", &this->ir, 1, 64);
   has_changed |= this->trigger_update_after_edit();
 
   has_changed |= this->render_settings_footer();

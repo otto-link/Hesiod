@@ -320,6 +320,18 @@ public:
   bool render_settings();
 };
 
+class ViewHydraulicStream : public ViewNode,
+                            public hesiod::cnode::HydraulicStream
+{
+public:
+  ViewHydraulicStream(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewKmeansClustering2 : public ViewNode,
                               public hesiod::cnode::KmeansClustering2
 {
