@@ -509,6 +509,20 @@ public:
   bool render_settings();
 };
 
+class ViewWaveSine : public ViewNode, public hesiod::cnode::WaveSine
+{
+public:
+  ViewWaveSine(std::string     id,
+                    hmap::Vec2<int> shape,
+                    hmap::Vec2<int> tiling,
+                    float           overlap);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewWhite : public ViewNode, public hesiod::cnode::White
 {
 public:

@@ -81,6 +81,8 @@ void ViewFbmPerlin::serialize_save(cereal::JSONOutputArchive &ar)
   ar(cereal::make_nvp("weight", this->weight));
   ar(cereal::make_nvp("persistence", this->persistence));
   ar(cereal::make_nvp("lacunarity", this->lacunarity));
+  ar(cereal::make_nvp("vmin", this->vmin));
+  ar(cereal::make_nvp("vmax", this->vmax));
 }
 
 void ViewFbmPerlin::serialize_load(cereal::JSONInputArchive &ar)
@@ -92,6 +94,8 @@ void ViewFbmPerlin::serialize_load(cereal::JSONInputArchive &ar)
   ar(cereal::make_nvp("weight", this->weight));
   ar(cereal::make_nvp("persistence", this->persistence));
   ar(cereal::make_nvp("lacunarity", this->lacunarity));
+  ar(cereal::make_nvp("vmin", this->vmin));
+  ar(cereal::make_nvp("vmax", this->vmax));
 }
 
 } // namespace hesiod::vnode

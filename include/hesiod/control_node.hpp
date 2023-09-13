@@ -90,6 +90,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"ValleyWidth", "Features"},
     {"ValueNoiseDelaunay", "Primitive/Coherent Noise"},
     {"Warp", "Operator/Transform"},
+    {"WaveSine", "Primitive/Function"},
     {"White", "Primitive/Random"},
     {"WhiteDensityMap", "Primitive/Random"},
     {"Worley", "Primitive/Coherent Noise"}};
@@ -781,6 +782,21 @@ protected:
 
 private:
   hmap::Vec2<int> shape = {0, 0};
+};
+
+class WaveSine : public Primitive
+{
+public:
+  WaveSine(std::string     id,
+           hmap::Vec2<int> shape,
+           hmap::Vec2<int> tiling,
+           float           overlap);
+
+  void compute();
+
+protected:
+  float kw = DEFAULT_KW;
+  float angle = 0.f;
 };
 
 class White : public gnode::Node
