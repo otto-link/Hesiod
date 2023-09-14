@@ -72,6 +72,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"GradientTalus", "Math/Gradient"},
     {"HydraulicParticle", "Erosion/Hydraulic"},
     {"HydraulicStream", "Erosion/Hydraulic"},
+    {"HydraulicVpipes", "Erosion/Hydraulic"},
     {"KmeansClustering2", "Features"},
     {"Lerp", "Operator/Blend"},
     {"MakeBinary", "Filter/Recurve"},
@@ -537,6 +538,28 @@ protected:
   float talus_ref = 0.1f;
   int   ir = 1;
   float clipping_ratio = 10;
+};
+
+class HydraulicVpipes : public Erosion
+{
+public:
+  HydraulicVpipes(std::string id);
+
+  void compute_erosion(hmap::HeightMap &h,
+                       hmap::HeightMap *p_bedrock,
+                       hmap::HeightMap *p_moisture_map,
+                       hmap::HeightMap *p_mask,
+                       hmap::HeightMap *p_erosion_map,
+                       hmap::HeightMap *p_deposition_map);
+
+protected:
+  int   iterations = 40;
+  float water_height = 0.005f;
+  float c_capacity = 5.f;
+  float c_erosion = 0.05f;
+  float c_deposition = 0.05f;
+  float rain_rate = 0.f;
+  float evap_rate = 0.001f;
 };
 
 class KmeansClustering2 : public Binary

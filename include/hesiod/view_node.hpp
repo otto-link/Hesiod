@@ -332,6 +332,18 @@ public:
   void serialize_load(cereal::JSONInputArchive &ar);
 };
 
+class ViewHydraulicVpipes : public ViewNode,
+                            public hesiod::cnode::HydraulicVpipes
+{
+public:
+  ViewHydraulicVpipes(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewKmeansClustering2 : public ViewNode,
                               public hesiod::cnode::KmeansClustering2
 {

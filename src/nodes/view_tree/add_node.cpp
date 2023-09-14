@@ -166,6 +166,12 @@ std::string ViewTree::add_view_node(std::string control_node_type,
         std::make_shared<hesiod::vnode::ViewHydraulicStream>(id);
     this->add_node(p_view_node);
   }
+  else if (control_node_type == "HydraulicVpipes")
+  {
+    std::shared_ptr p_view_node =
+        std::make_shared<hesiod::vnode::ViewHydraulicVpipes>(id);
+    this->add_node(p_view_node);
+  }
   else if (control_node_type == "KmeansClustering2")
   {
     std::shared_ptr p_view_node =
