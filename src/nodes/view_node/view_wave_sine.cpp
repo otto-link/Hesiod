@@ -13,9 +13,9 @@ namespace hesiod::vnode
 {
 
 ViewWaveSine::ViewWaveSine(std::string     id,
-                                     hmap::Vec2<int> shape,
-                                     hmap::Vec2<int> tiling,
-                                     float           overlap)
+                           hmap::Vec2<int> shape,
+                           hmap::Vec2<int> tiling,
+                           float           overlap)
     : ViewNode(), hesiod::cnode::WaveSine(id, shape, tiling, overlap)
 {
   this->set_p_control_node((gnode::Node *)this);
@@ -34,9 +34,9 @@ bool ViewWaveSine::render_settings()
   float alpha = this->angle / 180.f * M_PI;
   ImGui::SliderAngle("angle", &alpha, -90.f, 90.f);
   this->angle = alpha / M_PI * 180.f;
-  
+
   has_changed |= this->trigger_update_after_edit();
-  
+
   ImGui::Separator();
 
   if (hesiod::gui::slider_vmin_vmax(vmin, vmax))
@@ -64,5 +64,5 @@ void ViewWaveSine::serialize_load(cereal::JSONInputArchive &ar)
   ar(cereal::make_nvp("vmin", this->vmin));
   ar(cereal::make_nvp("vmax", this->vmax));
 }
-  
+
 } // namespace hesiod::vnode

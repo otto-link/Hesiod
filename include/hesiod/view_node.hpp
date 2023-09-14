@@ -513,9 +513,9 @@ class ViewWaveSine : public ViewNode, public hesiod::cnode::WaveSine
 {
 public:
   ViewWaveSine(std::string     id,
-                    hmap::Vec2<int> shape,
-                    hmap::Vec2<int> tiling,
-                    float           overlap);
+               hmap::Vec2<int> shape,
+               hmap::Vec2<int> tiling,
+               float           overlap);
 
   bool render_settings();
 

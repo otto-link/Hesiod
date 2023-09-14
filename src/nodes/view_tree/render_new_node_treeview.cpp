@@ -76,13 +76,13 @@ std::string ViewTree::render_new_node_treeview(const ImVec2 node_position)
   if (ImGui::BeginTable("table_sorting",
                         2,
                         flags,
-                        ImVec2(0.f, TEXT_BASE_HEIGHT * 15),
+                        ImVec2(400.f, TEXT_BASE_HEIGHT * 15),
                         0.f))
   {
     ImGui::TableSetupColumn("Type",
                             ImGuiTableColumnFlags_DefaultSort |
                                 ImGuiTableColumnFlags_WidthFixed,
-                            0.f,
+                            150.f,
                             0);
     ImGui::TableSetupColumn("Category",
                             ImGuiTableColumnFlags_WidthFixed,
