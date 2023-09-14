@@ -378,6 +378,9 @@ public:
 
   bool render_settings();
 
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+
 private:
   bool link_kxy = true;
 };
@@ -391,6 +394,9 @@ public:
                    float           overlap);
 
   bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
 
 private:
   bool link_kxy = true;
@@ -421,6 +427,9 @@ public:
                    float           overlap);
 
   bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
 
 private:
   bool link_kxy = true;
@@ -552,6 +561,9 @@ public:
              float           overlap);
 
   bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
 
 private:
   bool link_kxy = true;

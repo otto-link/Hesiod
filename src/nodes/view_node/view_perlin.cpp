@@ -59,4 +59,24 @@ bool ViewPerlin::render_settings()
   return has_changed;
 }
 
+void ViewPerlin::serialize_save(cereal::JSONOutputArchive &ar)
+{
+  ar(cereal::make_nvp("kw.x", this->kw.x));
+  ar(cereal::make_nvp("kw.y", this->kw.y));
+  ar(cereal::make_nvp("seed", this->seed));
+  ar(cereal::make_nvp("link_kxy", this->link_kxy));
+  ar(cereal::make_nvp("vmin", this->vmin));
+  ar(cereal::make_nvp("vmax", this->vmax));
+}
+
+void ViewPerlin::serialize_load(cereal::JSONInputArchive &ar)
+{
+  ar(cereal::make_nvp("kw.x", this->kw.x));
+  ar(cereal::make_nvp("kw.y", this->kw.y));
+  ar(cereal::make_nvp("seed", this->seed));
+  ar(cereal::make_nvp("link_kxy", this->link_kxy));
+  ar(cereal::make_nvp("vmin", this->vmin));
+  ar(cereal::make_nvp("vmax", this->vmax));
+}
+
 } // namespace hesiod::vnode
