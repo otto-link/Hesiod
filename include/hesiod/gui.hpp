@@ -23,8 +23,9 @@ GLFWwindow *init_gui(int width, int height, std::string window_title);
 void save_screenshot(std::string fname);
 
 // custom ImGui widgets
+void canvas_cloud(hmap::Cloud &cloud, float width = 0.f, float radius = 4.f);
 
-bool canvas_cloud_editor(hmap::Cloud &cloud);
+bool canvas_cloud_editor(hmap::Cloud &cloud, float width = 0.f);
 
 bool drag_float_matrix(std::vector<std::vector<float>> &matrix);
 

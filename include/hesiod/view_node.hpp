@@ -81,6 +81,8 @@ public:
 
   void render_node();
 
+  virtual void render_node_specific_content(){};
+
   bool render_settings_header();
 
   bool render_settings_footer();
@@ -195,6 +197,8 @@ class ViewCloud : public ViewNode, public hesiod::cnode::Cloud
 {
 public:
   ViewCloud(std::string id);
+
+  void render_node_specific_content();
 
   bool render_settings();
 };

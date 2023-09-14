@@ -18,7 +18,63 @@
 namespace hesiod::gui
 {
 
-bool canvas_cloud_editor(hmap::Cloud &cloud)
+void canvas_cloud(hmap::Cloud &cloud, float width, float radius)
+{
+  ImGui::PushID((void *)&cloud);
+  ImGui::BeginGroup();
+
+  // --- canvas
+  ImVec2 canvas_p0 = ImGui::GetCursorScreenPos();
+
+  ImVec2 canvas_sz;
+  if (width == 0.f)
+  {
+    canvas_sz = ImGui::GetContentRegionAvail();
+    if (canvas_sz.x < 50.0f)
+      canvas_sz.x = 50.0f;
+    canvas_sz.y = canvas_sz.x; // square canvas
+  }
+  else
+    canvas_sz = {128.f, 128.f};
+
+  ImVec2 canvas_p1 = ImVec2(canvas_p0.x + canvas_sz.x,
+                            canvas_p0.y + canvas_sz.y);
+
+  ImGui::InvisibleButton("canvas", canvas_sz);
+
+  // draw canvas
+  ImDrawList *draw_list = ImGui::GetWindowDrawList();
+  draw_list->AddRectFilled(canvas_p0, canvas_p1, IM_COL32(50, 50, 50, 255));
+  // draw_list->AddRect(canvas_p0, canvas_p1, IM_COL32(0, 0, 0, 255));
+
+  float vmax = 1.f;
+  if (cloud.get_npoints() > 0)
+    vmax = std::max(std::abs(cloud.get_values_min()),
+                    std::abs(cloud.get_values_max()));
+
+  for (auto &p : cloud.points)
+  {
+    float x_canvas = canvas_p0.x + p.x * canvas_sz.x;
+    float y_canvas = canvas_p0.y + (1.f - p.y) * canvas_sz.y;
+
+    draw_list->AddCircle(ImVec2(x_canvas, y_canvas), radius, IM_COL32_WHITE);
+
+    int red = (int)(255.f * std::max(0.f, p.v) / vmax);
+    int blue = (int)(-255.f * std::min(0.f, p.v) / vmax);
+
+    draw_list->AddCircleFilled(ImVec2(x_canvas, y_canvas),
+                               radius,
+                               IM_COL32(red, 255 - red - blue, blue, 127));
+    char buffer[10];
+    std::snprintf(buffer, 10, "%.2f", p.v);
+    draw_list->AddText(ImVec2(x_canvas, y_canvas), IM_COL32_WHITE, buffer);
+  }
+
+  ImGui::EndGroup();
+  ImGui::PopID();
+}
+
+bool canvas_cloud_editor(hmap::Cloud &cloud, float width)
 {
   ImGuiStorage *imgui_storage = ImGui::GetStateStorage();
 
@@ -47,10 +103,17 @@ bool canvas_cloud_editor(hmap::Cloud &cloud)
 
   // --- canvas
   ImVec2 canvas_p0 = ImGui::GetCursorScreenPos();
-  ImVec2 canvas_sz = ImGui::GetContentRegionAvail();
-  if (canvas_sz.x < 50.0f)
-    canvas_sz.x = 50.0f;
-  canvas_sz.y = canvas_sz.x; // square canvas
+
+  ImVec2 canvas_sz;
+  if (width == 0.f)
+  {
+    canvas_sz = ImGui::GetContentRegionAvail();
+    if (canvas_sz.x < 50.0f)
+      canvas_sz.x = 50.0f;
+    canvas_sz.y = canvas_sz.x; // square canvas
+  }
+  else
+    canvas_sz = {128.f, 128.f};
 
   ImVec2 canvas_p1 = ImVec2(canvas_p0.x + canvas_sz.x,
                             canvas_p0.y + canvas_sz.y);

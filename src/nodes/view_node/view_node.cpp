@@ -178,6 +178,10 @@ void ViewNode::render_node()
     }
   }
 
+  // add content that can be overloaded and specific to the view node
+  // type
+  this->render_node_specific_content();
+
   ax::NodeEditor::EndNode();
 
   // title bar background

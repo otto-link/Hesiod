@@ -14,6 +14,14 @@ ViewCloud::ViewCloud(std::string id) : ViewNode(), hesiod::cnode::Cloud(id)
   this->set_p_control_node((gnode::Node *)this);
 }
 
+void ViewCloud::render_node_specific_content()
+{
+  ImGui::Checkbox("Preview", &this->show_preview);
+
+  if (this->show_preview)
+    hesiod::gui::canvas_cloud(this->value_out, 128.f);
+}
+
 bool ViewCloud::render_settings()
 {
   bool has_changed = false;
