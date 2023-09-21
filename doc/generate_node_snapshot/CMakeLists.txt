@@ -13,16 +13,5 @@ target_link_libraries(snapshot
   gnode
   glfw
   OpenGL::GL)
-
-message(${PROJECT_SOURCE_DIR})
-message(${IMGUI_INCLUDE})
 	
-target_include_directories(snapshot
-                           PUBLIC
-                             ${PROJECT_SOURCE_DIR}/include
-			   PRIVATE
-           		     ${PROJECT_SOURCE_DIR}/external/cereal/include
-			     ${PROJECT_SOURCE_DIR}/external/macro-logger
-			     ${IMGUI_INCLUDE}
-                             ${IMGUI_NODE_EDITOR_INCLUDE}
-			    )
+target_include_directories(snapshot ${HESIOD_INCLUDE})

@@ -101,10 +101,10 @@ protected:
   std::string view2d_port_id = "";
   bool        show_preview = true;
   bool        show_view2d = false;
+  float       node_width = 128.f;
 
 private:
   gnode::Node    *p_control_node;
-  float           node_width = 128.f;
   hmap::Vec2<int> shape_preview = {128, 128};
   hmap::Vec2<int> shape_view2d = {128, 128};
   int             preview_type = preview_type::grayscale;
@@ -380,6 +380,16 @@ class ViewMinimumLocal : public ViewNode, public hesiod::cnode::MinimumLocal
 {
 public:
   ViewMinimumLocal(std::string id);
+
+  bool render_settings();
+};
+
+class ViewPath : public ViewNode, public hesiod::cnode::Path
+{
+public:
+  ViewPath(std::string id);
+
+  void render_node_specific_content();
 
   bool render_settings();
 };

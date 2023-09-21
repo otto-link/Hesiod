@@ -24,10 +24,10 @@ bool ViewHydraulicVpipes::render_settings()
   ImGui::InputInt("iterations", &this->iterations);
   has_changed |= this->trigger_update_after_edit();
 
-  ImGui::SliderFloat("water_height", &this->water_height, 0.f, 0.2f);
+  ImGui::SliderFloat("water_height", &this->water_height, 0.f, 0.5f);
   has_changed |= this->trigger_update_after_edit();
 
-  ImGui::SliderFloat("c_capacity", &this->c_capacity, 0.1f, 10.f);
+  ImGui::SliderFloat("c_capacity", &this->c_capacity, 0.1f, 0.5f);
   has_changed |= this->trigger_update_after_edit();
 
   ImGui::SliderFloat("c_erosion", &this->c_erosion, 0.001f, 1.f);

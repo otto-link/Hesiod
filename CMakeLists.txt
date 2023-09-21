@@ -47,15 +47,18 @@ add_executable(${PROJECT_NAME}
     ${IMGUI_NODE_EDITOR_SRC}
 )
 
-target_include_directories(${PROJECT_NAME}
-                           PUBLIC
-                             ${PROJECT_SOURCE_DIR}/include
-			   PRIVATE
-         ${PROJECT_SOURCE_DIR}/external/cereal/include
-         ${PROJECT_SOURCE_DIR}/external/macro-logger
-         ${IMGUI_INCLUDE}
-        ${IMGUI_NODE_EDITOR_INCLUDE}
-			  )
+set(HESIOD_INCLUDE
+  PUBLIC
+    ${PROJECT_SOURCE_DIR}/include
+  PRIVATE
+    ${PROJECT_SOURCE_DIR}/external/cereal/include
+    ${PROJECT_SOURCE_DIR}/external/ImguiCandy
+    ${PROJECT_SOURCE_DIR}/external/macro-logger
+    ${IMGUI_INCLUDE}
+    ${IMGUI_NODE_EDITOR_INCLUDE}
+)
+
+target_include_directories(${PROJECT_NAME} ${HESIOD_INCLUDE})
 			     
 # Link libraries
 target_link_libraries(${PROJECT_NAME}

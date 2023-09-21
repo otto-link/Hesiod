@@ -25,7 +25,14 @@ void save_screenshot(std::string fname);
 // custom ImGui widgets
 void canvas_cloud(hmap::Cloud &cloud, float width = 0.f, float radius = 4.f);
 
-bool canvas_cloud_editor(hmap::Cloud &cloud, float width = 0.f);
+bool canvas_cloud_editor(hmap::Cloud &cloud,
+                         float        width = 0.f,
+                         ImVec2      *p_canvas_p0 = nullptr,
+                         ImVec2      *p_canvas_size = nullptr);
+
+void canvas_path(hmap::Path &path, float width = 0.f);
+
+bool canvas_path_editor(hmap::Path &path, float width = 0.f);
 
 bool drag_float_matrix(std::vector<std::vector<float>> &matrix);
 

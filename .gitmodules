@@ -17,3 +17,6 @@
 [submodule "external/cereal"]
 	path = external/cereal
 	url = git@github.com:USCiLab/cereal.git
+[submodule "external/ImguiCandy"]
+	path = external/ImguiCandy
+	url = git@github.com:Raais/ImguiCandy.git

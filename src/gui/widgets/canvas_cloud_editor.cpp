@@ -18,34 +18,35 @@
 namespace hesiod::gui
 {
 
-void canvas_cloud(hmap::Cloud &cloud, float width, float radius)
+// --- HELPERS
+
+void draw_polyline(std::vector<hmap::Point> &points,
+                   ImVec2                    canvas_p0,
+                   ImVec2                    canvas_size)
 {
-  ImGui::PushID((void *)&cloud);
-  ImGui::BeginGroup();
-
-  // --- canvas
-  ImVec2 canvas_p0 = ImGui::GetCursorScreenPos();
-
-  ImVec2 canvas_sz;
-  if (width == 0.f)
-  {
-    canvas_sz = ImGui::GetContentRegionAvail();
-    if (canvas_sz.x < 50.0f)
-      canvas_sz.x = 50.0f;
-    canvas_sz.y = canvas_sz.x; // square canvas
-  }
-  else
-    canvas_sz = {128.f, 128.f};
-
-  ImVec2 canvas_p1 = ImVec2(canvas_p0.x + canvas_sz.x,
-                            canvas_p0.y + canvas_sz.y);
-
-  ImGui::InvisibleButton("canvas", canvas_sz);
-
-  // draw canvas
   ImDrawList *draw_list = ImGui::GetWindowDrawList();
-  draw_list->AddRectFilled(canvas_p0, canvas_p1, IM_COL32(50, 50, 50, 255));
-  // draw_list->AddRect(canvas_p0, canvas_p1, IM_COL32(0, 0, 0, 255));
+
+  if (points.size())
+  {
+    for (size_t k = 0; k < points.size() - 1; k++)
+    {
+      float x1 = canvas_p0.x + points[k].x * canvas_size.x;
+      float y1 = canvas_p0.y + (1.f - points[k].y) * canvas_size.y;
+
+      float x2 = canvas_p0.x + points[k + 1].x * canvas_size.x;
+      float y2 = canvas_p0.y + (1.f - points[k + 1].y) * canvas_size.y;
+
+      draw_list->AddLine(ImVec2(x1, y1), ImVec2(x2, y2), IM_COL32_WHITE);
+    }
+  }
+}
+
+void draw_points(hmap::Cloud &cloud,
+                 float        radius,
+                 ImVec2       canvas_p0,
+                 ImVec2       canvas_size)
+{
+  ImDrawList *draw_list = ImGui::GetWindowDrawList();
 
   float vmax = 1.f;
   if (cloud.get_npoints() > 0)
@@ -54,8 +55,8 @@ void canvas_cloud(hmap::Cloud &cloud, float width, float radius)
 
   for (auto &p : cloud.points)
   {
-    float x_canvas = canvas_p0.x + p.x * canvas_sz.x;
-    float y_canvas = canvas_p0.y + (1.f - p.y) * canvas_sz.y;
+    float x_canvas = canvas_p0.x + p.x * canvas_size.x;
+    float y_canvas = canvas_p0.y + (1.f - p.y) * canvas_size.y;
 
     draw_list->AddCircle(ImVec2(x_canvas, y_canvas), radius, IM_COL32_WHITE);
 
@@ -69,12 +70,47 @@ void canvas_cloud(hmap::Cloud &cloud, float width, float radius)
     std::snprintf(buffer, 10, "%.2f", p.v);
     draw_list->AddText(ImVec2(x_canvas, y_canvas), IM_COL32_WHITE, buffer);
   }
+}
+
+// --- WIDGETS
+
+void canvas_cloud(hmap::Cloud &cloud, float width, float radius)
+{
+  ImGui::PushID((void *)&cloud);
+  ImGui::BeginGroup();
+
+  // --- canvas
+  ImVec2 canvas_p0 = ImGui::GetCursorScreenPos();
+
+  ImVec2 canvas_size;
+  if (width == 0.f)
+  {
+    canvas_size = ImGui::GetContentRegionAvail();
+    if (canvas_size.x < 50.0f)
+      canvas_size.x = 50.0f;
+    canvas_size.y = canvas_size.x; // square canvas
+  }
+  else
+    canvas_size = {128.f, 128.f};
+
+  ImVec2 canvas_p1 = ImVec2(canvas_p0.x + canvas_size.x,
+                            canvas_p0.y + canvas_size.y);
+
+  ImGui::InvisibleButton("canvas", canvas_size);
+
+  // draw canvas and points
+  ImDrawList *draw_list = ImGui::GetWindowDrawList();
+  draw_list->AddRectFilled(canvas_p0, canvas_p1, IM_COL32(50, 50, 50, 255));
+  draw_points(cloud, radius, canvas_p0, canvas_size);
 
   ImGui::EndGroup();
   ImGui::PopID();
 }
 
-bool canvas_cloud_editor(hmap::Cloud &cloud, float width)
+bool canvas_cloud_editor(hmap::Cloud &cloud,
+                         float        width,
+                         ImVec2      *p_canvas_p0,
+                         ImVec2      *p_canvas_size)
 {
   ImGuiStorage *imgui_storage = ImGui::GetStateStorage();
 
@@ -104,28 +140,29 @@ bool canvas_cloud_editor(hmap::Cloud &cloud, float width)
   // --- canvas
   ImVec2 canvas_p0 = ImGui::GetCursorScreenPos();
 
-  ImVec2 canvas_sz;
+  ImVec2 canvas_size;
   if (width == 0.f)
   {
-    canvas_sz = ImGui::GetContentRegionAvail();
-    if (canvas_sz.x < 50.0f)
-      canvas_sz.x = 50.0f;
-    canvas_sz.y = canvas_sz.x; // square canvas
+    canvas_size = ImGui::GetContentRegionAvail();
+    if (canvas_size.x < 50.0f)
+      canvas_size.x = 50.0f;
+    canvas_size.y = canvas_size.x; // square canvas
   }
   else
-    canvas_sz = {128.f, 128.f};
-
-  ImVec2 canvas_p1 = ImVec2(canvas_p0.x + canvas_sz.x,
-                            canvas_p0.y + canvas_sz.y);
+    canvas_size = {128.f, 128.f};
 
   // draw canvas
-  ImDrawList *draw_list = ImGui::GetWindowDrawList();
-  draw_list->AddRectFilled(canvas_p0, canvas_p1, IM_COL32(50, 50, 50, 255));
-  draw_list->AddRect(canvas_p0, canvas_p1, IM_COL32(255, 255, 255, 255));
+  {
+    ImDrawList *draw_list = ImGui::GetWindowDrawList();
+    ImVec2      canvas_p1 = ImVec2(canvas_p0.x + canvas_size.x,
+                              canvas_p0.y + canvas_size.y);
+    draw_list->AddRectFilled(canvas_p0, canvas_p1, IM_COL32(50, 50, 50, 255));
+    draw_list->AddRect(canvas_p0, canvas_p1, IM_COL32(255, 255, 255, 255));
+  }
 
   // mouse interactions
   ImGui::InvisibleButton("canvas",
-                         canvas_sz,
+                         canvas_size,
                          ImGuiButtonFlags_MouseButtonLeft |
                              ImGuiButtonFlags_MouseButtonRight);
   ImGui::SetItemKeyOwner(ImGuiKey_MouseWheelX);
@@ -136,42 +173,28 @@ bool canvas_cloud_editor(hmap::Cloud &cloud, float width)
   const ImVec2 mouse_pos_in_canvas(io.MousePos.x - canvas_p0.x,
                                    io.MousePos.y - canvas_p0.y);
 
-  // --- plot points
-  int hovered_point_index = imgui_storage->GetInt(IMGUI_ID_HOVERED_POINT_INDEX,
-                                                  -1);
-  float vmax = imgui_storage->GetFloat(IMGUI_ID_VMAX, 1.f);
-
-  if (!ImGui::IsMouseDown(ImGuiMouseButton_Left))
-    hovered_point_index = -1;
-
-  for (auto &p : cloud.points)
-  {
-    float x_canvas = canvas_p0.x + p.x * canvas_sz.x;
-    float y_canvas = canvas_p0.y + (1.f - p.y) * canvas_sz.y;
-
-    draw_list->AddCircle(ImVec2(x_canvas, y_canvas), radius, IM_COL32_WHITE);
-
-    int red = (int)(255.f * std::max(0.f, p.v) / vmax);
-    int blue = (int)(-255.f * std::min(0.f, p.v) / vmax);
-
-    draw_list->AddCircleFilled(ImVec2(x_canvas, y_canvas),
-                               radius,
-                               IM_COL32(red, 255 - red - blue, blue, 127));
-    char buffer[10];
-    std::snprintf(buffer, 10, "%.2f", p.v);
-    draw_list->AddText(ImVec2(x_canvas, y_canvas), IM_COL32_WHITE, buffer);
-  }
+  // --- draw points
+  draw_points(cloud, radius, canvas_p0, canvas_size);
 
   // --- handle mouse events
+
   if (is_canvas_hovered)
   {
+    int hovered_point_index = imgui_storage->GetInt(
+        IMGUI_ID_HOVERED_POINT_INDEX,
+        -1);
+
+    if (!ImGui::IsMouseDown(ImGuiMouseButton_Left))
+      hovered_point_index = -1;
+
     // check hovering
     for (int k = 0; k < (int)cloud.get_npoints(); k++)
     {
       if (!ImGui::IsMouseDown(ImGuiMouseButton_Left) && ImGui::IsItemHovered())
       {
-        float x_canvas = canvas_p0.x + cloud.points[k].x * canvas_sz.x;
-        float y_canvas = canvas_p0.y + (1.f - cloud.points[k].y) * canvas_sz.y;
+        float x_canvas = canvas_p0.x + cloud.points[k].x * canvas_size.x;
+        float y_canvas = canvas_p0.y +
+                         (1.f - cloud.points[k].y) * canvas_size.y;
 
         float dist = (io.MousePos.x - x_canvas) * (io.MousePos.x - x_canvas) +
                      (io.MousePos.y - y_canvas) * (io.MousePos.y - y_canvas);
@@ -188,8 +211,8 @@ bool canvas_cloud_editor(hmap::Cloud &cloud, float width)
       if (ImGui::IsMouseDown(ImGuiMouseButton_Left)) // move
       {
         float x = (io.MousePos.x - canvas_p0.x) /
-                  canvas_sz.x; // remap to [0, 1]
-        float y = (io.MousePos.y - canvas_p0.y) / canvas_sz.y;
+                  canvas_size.x; // remap to [0, 1]
+        float y = (io.MousePos.y - canvas_p0.y) / canvas_size.y;
         cloud.points[hovered_point_index].x = std::clamp(x, 0.f, 1.f);
         cloud.points[hovered_point_index].y = 1.f - std::clamp(y, 0.f, 1.f);
       }
@@ -219,25 +242,84 @@ bool canvas_cloud_editor(hmap::Cloud &cloud, float width)
     {
       if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) // add
       {
-        float x = (io.MousePos.x - canvas_p0.x) / canvas_sz.x;
-        float y = 1.f - (io.MousePos.y - canvas_p0.y) / canvas_sz.y;
+        float x = (io.MousePos.x - canvas_p0.x) / canvas_size.x;
+        float y = 1.f - (io.MousePos.y - canvas_p0.y) / canvas_size.y;
         cloud.add_point(hmap::Point(x, y));
         ret = true;
       }
     }
-  }
 
-  // update colorscale amplitude if there has been some interations
-  if (ret && cloud.get_npoints() > 0)
-    vmax = std::max(std::abs(cloud.get_values_min()),
-                    std::abs(cloud.get_values_max()));
+    imgui_storage->SetInt(IMGUI_ID_HOVERED_POINT_INDEX, hovered_point_index);
+  }
 
   ImGui::EndGroup();
   ImGui::PopID();
-  imgui_storage->SetInt(IMGUI_ID_HOVERED_POINT_INDEX, hovered_point_index);
   imgui_storage->SetFloat(IMGUI_ID_RADIUS, radius);
-  imgui_storage->SetFloat(IMGUI_ID_VMAX, vmax);
   imgui_storage->SetInt(IMGUI_ID_SEED, seed);
+
+  if (p_canvas_p0)
+    *p_canvas_p0 = canvas_p0;
+  if (p_canvas_size)
+    *p_canvas_size = canvas_size;
+
+  return ret;
+}
+
+void canvas_path(hmap::Path &path, float width)
+{
+  ImGui::PushID((void *)&path);
+  ImGui::BeginGroup();
+
+  // --- canvas
+  ImVec2 canvas_p0 = ImGui::GetCursorScreenPos();
+
+  ImVec2 canvas_size;
+  if (width == 0.f)
+  {
+    canvas_size = ImGui::GetContentRegionAvail();
+    if (canvas_size.x < 50.0f)
+      canvas_size.x = 50.0f;
+    canvas_size.y = canvas_size.x; // square canvas
+  }
+  else
+    canvas_size = {128.f, 128.f};
+
+  ImVec2 canvas_p1 = ImVec2(canvas_p0.x + canvas_size.x,
+                            canvas_p0.y + canvas_size.y);
+
+  ImGui::InvisibleButton("canvas", canvas_size);
+
+  // draw canvas and points
+  ImDrawList *draw_list = ImGui::GetWindowDrawList();
+  draw_list->AddRectFilled(canvas_p0, canvas_p1, IM_COL32(50, 50, 50, 255));
+  draw_polyline(path.points, canvas_p0, canvas_size);
+
+  ImGui::EndGroup();
+  ImGui::PopID();
+}
+
+bool canvas_path_editor(hmap::Path &path, float width)
+{
+  bool ret = false;
+
+  ImVec2 canvas_p0;
+  ImVec2 canvas_size;
+
+  ret |=
+      canvas_cloud_editor((hmap::Cloud &)path, width, &canvas_p0, &canvas_size);
+
+  draw_polyline(path.points, canvas_p0, canvas_size);
+
+  if (ImGui::Button("Reorder") && path.get_npoints())
+    path.reorder_nns();
+
+  ImGui::SameLine();
+  if (ImGui::Button("Divide") && path.get_npoints())
+    path.divide();
+
+  ImGui::SameLine();
+  if (ImGui::Button("Resample") && path.get_npoints())
+    path.resample_uniform();
 
   return ret;
 }

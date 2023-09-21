@@ -19,7 +19,8 @@ namespace hesiod::cnode
 enum dtype : int
 {
   dCloud,
-  dHeightMap
+  dHeightMap,
+  dPath
 };
 
 enum blending_method : int
@@ -59,6 +60,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Clamp", "Filter/Range"},
     {"Clone", "Routing"},
     {"Cloud", "Geometry"},
+    {"Path", "Geometry"},
     {"CloudToArrayInterp", "Primitive/Manual"},
     {"Debug", "Debug"},
     {"ExpandShrink", "Filter/Recast"},
@@ -553,13 +555,13 @@ public:
                        hmap::HeightMap *p_deposition_map);
 
 protected:
-  int   iterations = 40;
-  float water_height = 0.005f;
-  float c_capacity = 5.f;
+  int   iterations = 100;
+  float water_height = 0.1f;
+  float c_capacity = 0.1f;
   float c_erosion = 0.05f;
   float c_deposition = 0.05f;
   float rain_rate = 0.f;
-  float evap_rate = 0.001f;
+  float evap_rate = 0.01f;
 };
 
 class KmeansClustering2 : public Binary
@@ -614,6 +616,19 @@ public:
 
 protected:
   int ir = 4;
+};
+
+class Path : public gnode::Node
+{
+public:
+  Path(std::string id);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::Path value_out = hmap::Path();
 };
 
 class Perlin : public Primitive

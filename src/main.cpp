@@ -3,9 +3,9 @@
 #include <string>
 #include <vector>
 
-#include "macrologger.h"
-
+#include "ImCandy/candy.h"
 #include "gnode.hpp"
+#include "macrologger.h"
 
 #include "hesiod/control_node.hpp"
 #include "hesiod/gui.hpp"
@@ -28,6 +28,10 @@ int main()
       hesiod::gui::init_gui(1800, 800, "Hesiod v0.0.x (c) 2023 Otto Link");
   ImVec4 clear_color = ImVec4(0.15f, 0.25f, 0.30f, 1.00f);
 
+  // ImCandy::Theme_Nord();
+  ImCandy::Theme_Blender();
+  // ImCandy::Theme_Cyberpunk();
+
   // ImGuiIO &io = ImGui::GetIO();
 
   hesiod::vnode::ViewTree tree =
@@ -41,8 +45,10 @@ int main()
   hmap::Cloud cloud = hmap::Cloud(5, 2);
   hmap::Cloud cloud2 = hmap::Cloud(15, 3);
 
-  for (auto &p : cloud.points)
-    std::cout << p.x << " " << p.y << "\n";
+  hmap::Path path = hmap::Path(15, 3);
+  path.reorder_nns();
+
+  tree.add_view_node("Path");
 
   while (!glfwWindowShouldClose(window))
   {
@@ -59,6 +65,11 @@ int main()
     // ImGui::Begin("test Point Editor");
     // if (hesiod::gui::canvas_cloud_editor(cloud))
     //   cloud.print();
+    // ImGui::End();
+
+    // ImGui::Begin("test Point Editor");
+    // if (hesiod::gui::canvas_path_editor(path))
+    //   path.print();
     // ImGui::End();
 
     // ImGui::Begin("test Point Editor2");
