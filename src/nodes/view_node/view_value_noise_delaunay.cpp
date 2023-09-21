@@ -20,6 +20,7 @@ ViewValueNoiseDelaunay::ViewValueNoiseDelaunay(std::string     id,
   LOG_DEBUG("ViewValueNoiseDelaunay::ViewValueNoiseDelaunay()");
   this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
+  this->set_view2d_port_id("output");
 }
 
 bool ViewValueNoiseDelaunay::render_settings()
