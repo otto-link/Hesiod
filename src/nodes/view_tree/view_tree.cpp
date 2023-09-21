@@ -127,18 +127,8 @@ void ViewTree::set_view2d_node_id(std::string node_id)
 {
   if (node_id != this->view2d_node_id)
   {
-    // reset previous node
-    if (this->is_node_id_in_keys(this->view2d_node_id))
-    {
-      this->get_view_control_node_ref_by_id(this->view2d_node_id)
-          ->set_show_view2d(false);
-    }
-
     this->view2d_node_id = node_id;
-    this->get_view_control_node_ref_by_id(this->view2d_node_id)
-        ->set_show_view2d(true);
-    this->get_view_control_node_ref_by_id(this->view2d_node_id)
-        ->update_preview();
+    this->update_image_texture_view2d();
   }
 }
 
@@ -262,6 +252,11 @@ void ViewTree::new_link(int port_hash_id_from, int port_hash_id_to)
   this->get_ids_by_port_hash_id(port_hash_id_to, node_id_to, port_id_to);
 
   this->new_link(node_id_from, port_id_from, node_id_to, port_id_to);
+}
+
+void ViewTree::post_update()
+{
+  this->update_image_texture_view2d();
 }
 
 void ViewTree::remove_link(int link_id)

@@ -24,22 +24,22 @@ bool ViewHydraulicVpipes::render_settings()
   ImGui::InputInt("iterations", &this->iterations);
   has_changed |= this->trigger_update_after_edit();
 
-  ImGui::SliderFloat("water_height", &this->water_height, 0.f, 0.5f);
+  ImGui::SliderFloat("water_height", &this->water_height, 0.001f, 0.5f);
   has_changed |= this->trigger_update_after_edit();
 
-  ImGui::SliderFloat("c_capacity", &this->c_capacity, 0.1f, 0.5f);
+  ImGui::SliderFloat("c_capacity", &this->c_capacity, 0.001f, 0.5f);
   has_changed |= this->trigger_update_after_edit();
 
-  ImGui::SliderFloat("c_erosion", &this->c_erosion, 0.001f, 1.f);
+  ImGui::SliderFloat("c_erosion", &this->c_erosion, 0.f, 0.5f);
   has_changed |= this->trigger_update_after_edit();
 
-  ImGui::SliderFloat("c_deposition", &this->c_deposition, 0.001f, 1.f);
+  ImGui::SliderFloat("c_deposition", &this->c_deposition, 0.f, 0.5f);
   has_changed |= this->trigger_update_after_edit();
 
   ImGui::SliderFloat("rain_rate", &this->rain_rate, 0.f, 0.1f);
   has_changed |= this->trigger_update_after_edit();
 
-  ImGui::SliderFloat("evap_rate", &this->evap_rate, 0.f, 0.1f);
+  ImGui::SliderFloat("evap_rate", &this->evap_rate, 0.001f, 0.1f);
   has_changed |= this->trigger_update_after_edit();
 
   has_changed |= this->render_settings_footer();

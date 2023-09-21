@@ -48,8 +48,6 @@ int main()
   hmap::Path path = hmap::Path(15, 3);
   path.reorder_nns();
 
-  tree.add_view_node("Path");
-
   while (!glfwWindowShouldClose(window))
   {
     glfwPollEvents();
@@ -97,8 +95,6 @@ int main()
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
     glfwSwapBuffers(window);
-
-    // hesiod::gui::save_screenshot("screenshot.png");
   }
 
   // --- Cleanup

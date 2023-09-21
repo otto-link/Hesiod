@@ -8,7 +8,9 @@
 namespace hesiod::gui
 {
 
-bool listbox_map_enum(std::map<std::string, int> &map, int &selected)
+bool listbox_map_enum(std::map<std::string, int> &map,
+                      int                        &selected,
+                      float                       width)
 {
   bool has_changed = false;
 
@@ -17,7 +19,7 @@ bool listbox_map_enum(std::map<std::string, int> &map, int &selected)
   float height = ImGui::GetStyle().ItemSpacing.y +
                  (float)map.size() * ImGui::GetTextLineHeightWithSpacing();
 
-  if (ImGui::BeginListBox("##method", ImVec2(-FLT_MIN, height)))
+  if (ImGui::BeginListBox("##method", ImVec2(width, height)))
     for (auto &[cname, k] : map)
     {
       bool is_selected = false;

@@ -46,7 +46,9 @@ bool drag_float_vector(std::vector<float> &vector,
                        bool                horizontal = false,
                        float               height = 160.f);
 
-bool listbox_map_enum(std::map<std::string, int> &map, int &selected);
+bool listbox_map_enum(std::map<std::string, int> &map,
+                      int                        &selected,
+                      float                       width = -FLT_MIN);
 
 bool slider_vmin_vmax(float &vmin, float &vmax);
 

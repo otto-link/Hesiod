@@ -65,13 +65,13 @@ public:
 
   gnode::Node *get_p_control_node();
 
+  std::string get_view2d_port_id();
+
   void set_p_control_node(gnode::Node *new_p_control_node);
 
   void set_preview_port_id(std::string new_port_id);
 
   void set_preview_type(int new_preview_type);
-
-  void set_show_view2d(bool new_show_view2d);
 
   void set_view2d_port_id(std::string new_port_id);
 
@@ -87,8 +87,6 @@ public:
 
   bool render_settings_footer();
 
-  bool render_view2d();
-
   virtual void serialize_load(cereal::JSONInputArchive &);
   virtual void serialize_save(cereal::JSONOutputArchive &);
 
@@ -100,16 +98,13 @@ protected:
   std::string preview_port_id = "";
   std::string view2d_port_id = "";
   bool        show_preview = true;
-  bool        show_view2d = false;
   float       node_width = 128.f;
 
 private:
   gnode::Node    *p_control_node;
   hmap::Vec2<int> shape_preview = {128, 128};
-  hmap::Vec2<int> shape_view2d = {128, 128};
   int             preview_type = preview_type::grayscale;
   GLuint          image_texture_preview = 0;
-  GLuint          image_texture_view2d = 0;
   void            init_from_control_node();
 };
 

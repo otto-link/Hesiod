@@ -79,6 +79,8 @@ public:
                 std::string node_id_to, // in
                 std::string port_id_to);
 
+  void post_update();
+
   void remove_link(int link_id);
 
   void remove_view_node(std::string node_id);
@@ -99,7 +101,11 @@ public:
 
   void render_view_nodes();
 
-  void render_view2d(std::string node_id);
+  bool render_view2d();
+
+  void update_image_texture_view2d();
+
+  // serialization
 
   void load_state(std::string fname);
 
@@ -121,9 +127,19 @@ private:
 
   ax::NodeEditor::EditorContext *p_node_editor_context = nullptr;
 
-  bool                     open_node_list_window = false;
-  bool                     open_view2d_window = false;
-  std::string              view2d_node_id = "";
+  bool open_node_list_window = false;
+
+  bool            open_view2d_window = false;
+  std::string     view2d_node_id = "";
+  GLuint          image_texture_view2d = 0;
+  hmap::Vec2<int> shape_view2d = {512, 512};
+  int             cmap_view2d = hmap::cmap::inferno;
+  bool            hillshade_view2d = false;
+
+  std::map<std::string, int> cmap_map = {{"gray", hmap::cmap::gray},
+                                         {"inferno", hmap::cmap::inferno},
+                                         {"terrain", hmap::cmap::terrain}};
+
   bool                     show_settings = false;
   ax::NodeEditor::NodeId   context_menu_node_hid;
   std::vector<std::string> key_sort;
