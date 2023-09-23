@@ -178,6 +178,12 @@ std::string ViewTree::add_view_node(std::string control_node_type,
         std::make_shared<hesiod::vnode::ViewKmeansClustering2>(id);
     this->add_node(p_view_node);
   }
+  else if (control_node_type == "Laplace")
+  {
+    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewLaplace>(
+        id);
+    this->add_node(p_view_node);
+  }
   else if (control_node_type == "Lerp")
   {
     std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewLerp>(id);

@@ -352,6 +352,17 @@ private:
   int shape_clustering_choice = 1;
 };
 
+class ViewLaplace : public ViewNode, public hesiod::cnode::Laplace
+{
+public:
+  ViewLaplace(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewLerp : public ViewNode, public hesiod::cnode::Lerp
 {
 public:

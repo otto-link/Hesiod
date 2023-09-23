@@ -76,6 +76,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"HydraulicStream", "Erosion/Hydraulic"},
     {"HydraulicVpipes", "Erosion/Hydraulic"},
     {"KmeansClustering2", "Features"},
+    {"Laplace", "Filter/Smoothing"},
     {"Lerp", "Operator/Blend"},
     {"MakeBinary", "Filter/Recurve"},
     {"MinimumLocal", "Filter/Smoothing"},
@@ -577,6 +578,18 @@ protected:
   int             nclusters = 4;
   int             seed = DEFAULT_SEED;
   hmap::Vec2<int> shape_clustering = {256, 256};
+};
+
+class Laplace : public Filter
+{
+public:
+  Laplace(std::string id);
+
+  void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
+
+protected:
+  float sigma = 0.2f;
+  int   iterations = 3;
 };
 
 class Lerp : public gnode::Node
