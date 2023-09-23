@@ -6,6 +6,8 @@
 #include "gnode.hpp"
 #include "macrologger.h"
 
+#include "hesiod/viewer.hpp"
+
 #include "hesiod/view_node.hpp"
 #include "hesiod/view_tree.hpp"
 
@@ -42,12 +44,26 @@ ViewTree::ViewTree(std::string     id,
   config.NavigateButtonIndex = 2;
   config.ContextMenuButtonIndex = 1;
   this->p_node_editor_context = ax::NodeEditor::CreateEditor(&config);
+
+  this->update_view3d_basemesh();
+  this->shader_id = hesiod::viewer::load_shaders(
+      "SimpleVertexShader.vertexshader",
+      "SimpleFragmentShader.fragmentshader");
+
+  glGenVertexArrays(1, &this->vertex_array_id);
+  glGenBuffers(1, &this->vertex_buffer);
+  glGenBuffers(1, &this->color_buffer);
 }
 
 ViewTree::~ViewTree()
 {
   // shutdown node editor
   ax::NodeEditor::DestroyEditor(this->p_node_editor_context);
+  glDeleteBuffers(1, &this->vertex_buffer);
+  glDeleteBuffers(1, &this->color_buffer);
+  glDeleteVertexArrays(1, &this->vertex_array_id);
+  glDeleteFramebuffers(1, &this->FBO);
+  glDeleteFramebuffers(1, &this->RBO);
 }
 
 Link *ViewTree::get_link_ref_by_id(int link_id)
@@ -123,12 +139,15 @@ void ViewTree::insert_clone_node(std::string node_id)
   }
 }
 
-void ViewTree::set_view2d_node_id(std::string node_id)
+void ViewTree::set_viewer_node_id(std::string node_id)
 {
-  if (node_id != this->view2d_node_id)
+  if (node_id != this->viewer_node_id)
   {
-    this->view2d_node_id = node_id;
-    this->update_image_texture_view2d();
+    this->viewer_node_id = node_id;
+    if (this->open_view2d_window)
+      this->update_image_texture_view2d();
+    if (this->open_view3d_window)
+      this->update_image_texture_view3d();
   }
 }
 
@@ -257,6 +276,7 @@ void ViewTree::new_link(int port_hash_id_from, int port_hash_id_to)
 void ViewTree::post_update()
 {
   this->update_image_texture_view2d();
+  this->update_image_texture_view3d();
 }
 
 void ViewTree::remove_link(int link_id)
@@ -299,9 +319,6 @@ void ViewTree::remove_view_node(std::string node_id)
     LOG_ERROR("view node id [%s] is not known", node_id.c_str());
     throw std::runtime_error("unknonw node Id");
   }
-
-  for (auto &[id, n] : this->get_nodes_map())
-    LOG_DEBUG("id: %s", id.c_str());
 
   // for the control node handled by GNode, everything is taken care
   // of by this method

@@ -3,6 +3,9 @@
  * this software. */
 #include <iostream>
 
+#include <GL/glew.h>
+#include <GL/glut.h>
+
 #include "hesiod/gui.hpp"
 
 namespace hesiod::gui
@@ -46,6 +49,15 @@ GLFWwindow *init_gui(int width, int height, std::string window_title)
       glfwCreateWindow(width, height, window_title.c_str(), nullptr, nullptr);
   glfwMakeContextCurrent(window);
   glfwSwapInterval(1); // Enable vsync
+
+  // Initialize GLEW
+  glewExperimental = true; // Needed for core profile
+  if (glewInit() != GLEW_OK)
+  {
+    fprintf(stderr, "Failed to initialize GLEW\n");
+    getchar();
+    glfwTerminate();
+  }
 
   //
   IMGUI_CHECKVERSION();

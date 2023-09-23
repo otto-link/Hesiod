@@ -65,15 +65,13 @@ public:
 
   gnode::Node *get_p_control_node();
 
-  std::string get_view2d_port_id();
+  std::string get_preview_port_id();
 
   void set_p_control_node(gnode::Node *new_p_control_node);
 
   void set_preview_port_id(std::string new_port_id);
 
   void set_preview_type(int new_preview_type);
-
-  void set_view2d_port_id(std::string new_port_id);
 
   virtual void post_control_node_update();
 
@@ -96,7 +94,6 @@ public:
 
 protected:
   std::string preview_port_id = "";
-  std::string view2d_port_id = "";
   bool        show_preview = true;
   float       node_width = 128.f;
 

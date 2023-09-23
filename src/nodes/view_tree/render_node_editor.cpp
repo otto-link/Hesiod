@@ -39,6 +39,9 @@ void ViewTree::render_node_editor()
         if (ImGui::MenuItem("View 2D [2]", nullptr, this->open_view2d_window))
           this->open_view2d_window = !this->open_view2d_window;
 
+        if (ImGui::MenuItem("View 3D [3]", nullptr, this->open_view3d_window))
+          this->open_view3d_window = !this->open_view3d_window;
+
         ImGui::EndMenu();
       }
       ImGui::EndMenuBar();
@@ -54,6 +57,8 @@ void ViewTree::render_node_editor()
         this->show_settings = !this->show_settings;
       if (ImGui::IsKeyReleased(ImGuiKey_2))
         this->open_view2d_window = !this->open_view2d_window;
+      if (ImGui::IsKeyReleased(ImGuiKey_3))
+        this->open_view3d_window = !this->open_view3d_window;
     }
   }
 
@@ -220,8 +225,24 @@ void ViewTree::render_node_editor()
     {
       std::string node_id = this->get_node_id_by_hash_id(
           this->selected_node_hid.back().Get());
-      this->set_view2d_node_id(node_id);
+      this->set_viewer_node_id(node_id);
+      this->update_image_texture_view2d();
       this->render_view2d();
+    }
+    ImGui::End();
+  }
+
+  // --- 3D viewer
+  if (this->open_view3d_window)
+  {
+    ImGui::Begin(("View 3D / " + this->id).c_str(), &this->open_view3d_window);
+    if (this->selected_node_hid.size() > 0)
+    {
+      std::string node_id = this->get_node_id_by_hash_id(
+          this->selected_node_hid.back().Get());
+      this->set_viewer_node_id(node_id);
+      this->update_image_texture_view3d();
+      this->render_view3d();
     }
     ImGui::End();
   }

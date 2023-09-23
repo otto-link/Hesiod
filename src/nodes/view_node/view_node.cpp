@@ -30,9 +30,9 @@ gnode::Node *ViewNode::get_p_control_node()
   return this->p_control_node;
 }
 
-std::string ViewNode::get_view2d_port_id()
+std::string ViewNode::get_preview_port_id()
 {
-  return this->view2d_port_id;
+  return this->preview_port_id;
 }
 
 void ViewNode::set_p_control_node(gnode::Node *new_p_control_node)
@@ -61,17 +61,6 @@ void ViewNode::set_preview_type(int new_preview_type)
 {
   this->preview_type = new_preview_type;
   this->update_preview();
-}
-
-void ViewNode::set_view2d_port_id(std::string new_port_id)
-{
-  if (this->p_control_node->is_port_id_in_keys(new_port_id))
-    this->view2d_port_id = new_port_id;
-  else
-  {
-    LOG_ERROR("port id [%s] not found", new_port_id.c_str());
-    throw std::runtime_error("unknown port id");
-  }
 }
 
 void ViewNode::init_from_control_node()

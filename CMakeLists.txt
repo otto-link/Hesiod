@@ -12,6 +12,10 @@ find_package(glfw3 REQUIRED)
 
 set(OpenGL_GL_PREFERENCE LEGACY)
 find_package(OpenGL REQUIRED)
+find_package(GLEW REQUIRED)
+find_package(GLUT REQUIRED)
+
+include_directories(${OPENGL_INCLUDE_DIRS} ${GLEW_INCLUDE_DIRS} ${GLUT_INCLUDE_DIRS})
 
 set(IMGUI_DIR ${PROJECT_SOURCE_DIR}/external/imgui)
 
@@ -65,7 +69,9 @@ target_link_libraries(${PROJECT_NAME}
   highmap
   gnode
   glfw
-  OpenGL::GL)
+  OpenGL::GL
+  ${GLEW_LIBRARIES}
+	${GLUT_LIBRARY})
 
 # documentatio
 add_subdirectory(${PROJECT_SOURCE_DIR}/external/HighMap)

@@ -7,6 +7,8 @@
 #include "gnode.hpp"
 #include "macrologger.h"
 
+#include "hesiod/viewer.hpp"
+
 #include "hesiod/control_node.hpp"
 #include "hesiod/gui.hpp"
 #include "hesiod/view_node.hpp"

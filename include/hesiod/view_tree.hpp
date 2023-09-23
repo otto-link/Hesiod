@@ -4,6 +4,8 @@
 #pragma once
 #include <string>
 
+#include <GL/glut.h>
+
 #include <cereal/archives/json.hpp>
 #include <imgui_node_editor.h>
 
@@ -63,7 +65,7 @@ public:
   hesiod::vnode::ViewControlNode *get_view_control_node_ref_by_id(
       std::string node_id) const;
 
-  void set_view2d_node_id(std::string node_id);
+  void set_viewer_node_id(std::string node_id);
 
   std::string add_view_node(std::string control_node_type,
                             std::string node_id = "");
@@ -101,9 +103,15 @@ public:
 
   void render_view_nodes();
 
-  bool render_view2d();
+  void render_view2d();
+
+  void render_view3d();
 
   void update_image_texture_view2d();
+
+  void update_image_texture_view3d(bool only_matrix_update = false);
+
+  void update_view3d_basemesh();
 
   // serialization
 
@@ -129,9 +137,11 @@ private:
 
   bool open_node_list_window = false;
 
+  std::string viewer_node_id = "";
+
+  // 2D viewer
   bool            open_view2d_window = false;
-  std::string     view2d_node_id = "";
-  GLuint          image_texture_view2d = 0;
+  GLuint          image_texture_view2d;
   hmap::Vec2<int> shape_view2d = {512, 512};
   int             cmap_view2d = hmap::cmap::inferno;
   bool            hillshade_view2d = false;
@@ -139,6 +149,27 @@ private:
   std::map<std::string, int> cmap_map = {{"gray", hmap::cmap::gray},
                                          {"inferno", hmap::cmap::inferno},
                                          {"terrain", hmap::cmap::terrain}};
+
+  // 3D viewer
+  bool                 open_view3d_window = false;
+  GLuint               image_texture_view3d;
+  GLuint               shader_id;
+  GLuint               vertex_array_id;
+  GLuint               vertex_buffer;
+  GLuint               color_buffer;
+  GLuint               FBO;
+  GLuint               RBO;
+  hmap::Vec2<int>      shape_view3d = {512, 512};
+  std::vector<GLfloat> vertices = {};
+  std::vector<GLfloat> colors = {};
+
+  float scale = 0.7f;
+  float h_scale = 0.2f;
+  float alpha_x = 0.f;
+  float alpha_y = 0.f;
+  float delta_x = 0.f;
+  float delta_y = 0.f;
+  bool  wireframe = false;
 
   bool                     show_settings = false;
   ax::NodeEditor::NodeId   context_menu_node_hid;
