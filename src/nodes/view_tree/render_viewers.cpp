@@ -32,6 +32,20 @@ void ViewTree::render_view2d()
 
   if (p_vnode->get_preview_port_id() != "")
   {
+    if (ImGui::Button("Reset view"))
+    {
+      this->view2d_zoom = 100.f;
+      this->view2d_uv0 = {0.f, 0.f};
+    }
+    ImGui::SameLine();
+
+    if (hesiod::gui::listbox_map_enum(this->cmap_map, this->cmap_view2d, 128.f))
+      this->update_image_texture_view2d();
+
+    ImGui::SameLine();
+    if (ImGui::Checkbox("Hillshading", &this->hillshade_view2d))
+      this->update_image_texture_view2d();
+
     {
       bool has_changed = false;
       if (ImGui::Button("256 x 256"))
@@ -56,17 +70,52 @@ void ViewTree::render_view2d()
         this->update_image_texture_view2d();
     }
 
-    if (hesiod::gui::listbox_map_enum(this->cmap_map, this->cmap_view2d, 128.f))
-      this->update_image_texture_view2d();
+    float  window_width = ImGui::GetContentRegionAvail().x;
+    ImVec2 pos = ImGui::GetCursorScreenPos();
 
-    ImGui::SameLine();
-    if (ImGui::Checkbox("Hillshading", &this->hillshade_view2d))
-      this->update_image_texture_view2d();
+    ImVec2 uv1 = {this->view2d_uv0[0] + 100.f / this->view2d_zoom,
+                  this->view2d_uv0[1] + 100.f / this->view2d_zoom};
 
-    float window_width = ImGui::GetContentRegionAvail().x;
+    ImVec2 p0 = ImVec2(pos.x, pos.y);
+    ImVec2 p1 = ImVec2(pos.x + window_width, pos.y + window_width);
 
-    ImGui::Image((void *)(intptr_t)this->image_texture_view2d,
-                 ImVec2(window_width, window_width));
+    ImDrawList *draw_list = ImGui::GetWindowDrawList();
+
+    draw_list->AddRectFilled(p0, p1, IM_COL32(50, 50, 50, 255));
+    draw_list->AddImage((void *)(intptr_t)this->image_texture_view2d,
+                        p0,
+                        p1,
+                        this->view2d_uv0,
+                        uv1);
+    draw_list->AddRect(p0, p1, IM_COL32(255, 255, 255, 255));
+
+    ImGui::InvisibleButton("##image2d", ImVec2(window_width, window_width));
+
+    // zooming and panning
+    ImGuiIO &io = ImGui::GetIO();
+    {
+
+      ImGui::SetItemKeyOwner(ImGuiKey_MouseLeft);
+      ImGui::SetItemKeyOwner(ImGuiKey_MouseWheelY);
+      if (ImGui::IsItemHovered())
+      {
+        // zoom
+        if (io.MouseWheel)
+          this->view2d_zoom = std::max(1.f,
+                                       this->view2d_zoom *
+                                           (1.f + 0.05f * io.MouseWheel));
+
+        // position
+        if (ImGui::IsMouseDown(2))
+        {
+          ImVec2 window_size = ImGui::GetWindowSize();
+          float  du = -io.MouseDelta.x / window_size[0];
+          float  dv = -io.MouseDelta.y / window_size[1];
+          this->view2d_uv0 = {this->view2d_uv0[0] + du,
+                              this->view2d_uv0[1] + dv};
+        }
+      }
+    }
   }
 
   ImGui::PopID();
@@ -136,12 +185,17 @@ void ViewTree::render_view3d()
     {
       ImVec2 pos = ImGui::GetCursorScreenPos();
 
-      ImGui::GetWindowDrawList()->AddImage(
-          (void *)(intptr_t)this->image_texture_view3d,
-          ImVec2(pos.x, pos.y),
-          ImVec2(pos.x + window_width, pos.y + window_width),
-          ImVec2(0, 1),
-          ImVec2(1, 0));
+      ImVec2 p0 = ImVec2(pos.x, pos.y);
+      ImVec2 p1 = ImVec2(pos.x + window_width, pos.y + window_width);
+
+      ImDrawList *draw_list = ImGui::GetWindowDrawList();
+
+      draw_list->AddImage((void *)(intptr_t)this->image_texture_view3d,
+                          p0,
+                          p1,
+                          ImVec2(0, 1),
+                          ImVec2(1, 0));
+      draw_list->AddRect(p0, p1, IM_COL32(255, 255, 255, 255));
       ImGui::InvisibleButton("##image3d", ImVec2(window_width, window_width));
     }
 

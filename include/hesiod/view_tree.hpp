@@ -145,6 +145,8 @@ private:
   hmap::Vec2<int> shape_view2d = {512, 512};
   int             cmap_view2d = hmap::cmap::inferno;
   bool            hillshade_view2d = false;
+  float           view2d_zoom = 100.f;
+  ImVec2          view2d_uv0 = {0.f, 0.f};
 
   std::map<std::string, int> cmap_map = {{"gray", hmap::cmap::gray},
                                          {"inferno", hmap::cmap::inferno},
