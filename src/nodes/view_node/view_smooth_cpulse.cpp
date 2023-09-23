@@ -27,4 +27,14 @@ bool ViewSmoothCpulse::render_settings()
   return has_changed;
 }
 
+void ViewSmoothCpulse::serialize_save(cereal::JSONOutputArchive &ar)
+{
+  ar(cereal::make_nvp("ir", this->ir));
+}
+
+void ViewSmoothCpulse::serialize_load(cereal::JSONInputArchive &ar)
+{
+  ar(cereal::make_nvp("ir", this->ir));
+}
+
 } // namespace hesiod::vnode

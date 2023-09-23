@@ -41,20 +41,56 @@ struct viewnode_color_set
   }
 };
 
+/* // Nord theme
 static const std::map<std::string, viewnode_color_set> category_colors = {
-    {"Biome", viewnode_color_set({83, 147, 127, 255})},
     {"Debug", viewnode_color_set({200, 0, 0, 255})},
-    {"Erosion", viewnode_color_set({58, 46, 26, 255})},
-    {"Features", viewnode_color_set({244, 109, 67, 255})},
-    {"Filter", viewnode_color_set({94, 79, 162, 255})},
-    {"Geometry", viewnode_color_set({255, 255, 255, 255})},
-    {"Hydrology", viewnode_color_set({101, 176, 234, 255})},
-    {"Math", viewnode_color_set({20, 20, 20, 255})},
-    {"Mask", viewnode_color_set({0, 0, 255, 255})},
-    {"Operator", viewnode_color_set({142, 156, 189, 255})},
-    {"Primitive", viewnode_color_set({12, 84, 92, 255})},
-    {"Roads", viewnode_color_set({102, 108, 111, 255})},
-    {"Routing", viewnode_color_set({200, 50, 0, 255})}};
+    {"Math", viewnode_color_set({46, 52, 64, 255})},
+    {"Geometry", viewnode_color_set({67, 76, 94, 255})},
+    {"Roads", viewnode_color_set({76, 86, 106, 255})},
+    {"Routing", viewnode_color_set({216, 222, 233, 255})},
+    {"IO", viewnode_color_set({229, 233, 240, 255})},
+    {"Primitive", viewnode_color_set({143, 188, 187, 255})},
+    {"Hydrology", viewnode_color_set({136, 192, 208, 255})},
+    {"Operator", viewnode_color_set({129, 161, 193, 255})},
+    {"Filter", viewnode_color_set({94, 129, 172, 255})},
+    {"Features", viewnode_color_set({191, 97, 106, 255})},
+    {"Erosion", viewnode_color_set({235, 203, 139, 255})},
+    {"Biomes", viewnode_color_set({163, 190, 140, 255})},
+    {"Mask", viewnode_color_set({180, 142, 173, 255})}}; */
+
+/* // OceanicNext theme
+static const std::map<std::string, viewnode_color_set> category_colors = {
+    {"Debug", viewnode_color_set({200, 0, 0, 255})},
+    {"Math", viewnode_color_set({27, 43, 52, 255})},
+    {"Geometry", viewnode_color_set({52, 61, 70, 255})},
+    {"Roads", viewnode_color_set({79, 91, 102, 255})},
+    {"Filter", viewnode_color_set({101, 115, 126, 255})},
+    {"Operator", viewnode_color_set({167, 173, 186, 255})},
+    {"Routing", viewnode_color_set({192, 197, 206, 255})},
+    {"IO", viewnode_color_set({205, 211, 222, 255})},
+    {"Features", viewnode_color_set({249, 145, 87, 255})},
+    {"Erosion", viewnode_color_set({250, 200, 99, 255})},
+    {"Biomes", viewnode_color_set({153, 199, 148, 255})},
+    {"Primitive", viewnode_color_set({98, 179, 178, 255})},
+    {"Hydrology", viewnode_color_set({102, 153, 204, 255})},
+    {"Mask", viewnode_color_set({197, 148, 197, 255})}}; */
+
+// Solarized
+static const std::map<std::string, viewnode_color_set> category_colors = {
+    {"Debug", viewnode_color_set({200, 0, 0, 255})},
+    {"Math", viewnode_color_set({0, 43, 54, 255})},
+    {"Geometry", viewnode_color_set({101, 123, 131, 255})},
+    {"Roads", viewnode_color_set({147, 161, 161, 255})},
+    {"Routing", viewnode_color_set({238, 232, 213, 255})},
+    {"IO", viewnode_color_set({253, 246, 227, 255})},
+    {"Features", viewnode_color_set({181, 137, 0, 255})},
+    {"Erosion", viewnode_color_set({203, 75, 22, 255})},
+    {"Mask", viewnode_color_set({211, 54, 130, 255})},
+    {"Filter", viewnode_color_set({108, 113, 196, 255})},
+    {"Operator", viewnode_color_set({108, 113, 196, 255})},
+    {"Hydrology", viewnode_color_set({38, 139, 210, 255})},
+    {"Primitive", viewnode_color_set({42, 161, 152, 255})},
+    {"Biomes", viewnode_color_set({133, 153, 0, 255})}};
 
 class ViewNode
 {
@@ -500,6 +536,9 @@ public:
   ViewSmoothCpulse(std::string id);
 
   bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewSmoothFill : public ViewNode, public hesiod::cnode::SmoothFill
@@ -508,6 +547,9 @@ public:
   ViewSmoothFill(std::string id);
 
   bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewSteepenConvective : public ViewNode,

@@ -94,7 +94,6 @@ void ViewNode::render_node()
   ax::NodeEditor::BeginNode(
       ax::NodeEditor::NodeId(this->p_control_node->hash_id));
 
-  // ImGui::SetWindowFontScale(1.1f);
   if (this->p_control_node->frozen_outputs)
     ImGui::TextColored(ImColor(IM_COL32(150, 50, 50, 255)),
                        "%s",
@@ -180,7 +179,7 @@ void ViewNode::render_node()
                                   node_content_rect.GetTL().y + 1.f),
                            ImVec2(node_content_rect.GetBR().x - 1.f,
                                   text_content_rect.GetBR().y + 0.3f * height),
-                           category_colors.at(main_category).hovered,
+                           category_colors.at(main_category).base,
                            ax::NodeEditor::GetStyle().NodeRounding,
                            ImDrawFlags_RoundCornersTop);
 

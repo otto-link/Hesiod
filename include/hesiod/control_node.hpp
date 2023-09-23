@@ -774,8 +774,8 @@ public:
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
 
 protected:
-  int   ir = 8;
-  float k = 0.1f;
+  int   ir = 32;
+  float k = 0.05f;
 };
 
 class SteepenConvective : public Filter

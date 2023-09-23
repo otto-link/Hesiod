@@ -30,4 +30,16 @@ bool ViewSmoothFill::render_settings()
   return has_changed;
 }
 
+void ViewSmoothFill::serialize_save(cereal::JSONOutputArchive &ar)
+{
+  ar(cereal::make_nvp("ir", this->ir));
+  ar(cereal::make_nvp("k", this->k));
+}
+
+void ViewSmoothFill::serialize_load(cereal::JSONInputArchive &ar)
+{
+  ar(cereal::make_nvp("ir", this->ir));
+  ar(cereal::make_nvp("k", this->k));
+}
+
 } // namespace hesiod::vnode

@@ -148,9 +148,13 @@ std::string ViewTree::render_new_node_treeview(const ImVec2 node_position)
         std::string main_category = node_category.substr(
             0,
             node_category.find("/"));
-        ImGui::TextColored(ImColor(category_colors.at(main_category).selected),
-                           "%s",
-                           node_category.c_str());
+        // ImGui::TextColored(ImColor(category_colors.at(main_category).base),
+        //                    "%s",
+        //                    node_category.c_str());
+
+        ImGui::Text("%s", node_category.c_str());
+        ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg,
+                               ImColor(category_colors.at(main_category).base));
         ImGui::PopID();
       }
     }
