@@ -110,6 +110,7 @@ void update_vertex_elevations(hmap::Array          &array,
   hmap::Array hs =
       hillshade(array, 180.f, 45.f, 10.f * array.ptp() / (float)array.shape.y);
   hmap::remap(hs);
+  hs = hmap::pow(hs, 1.5f);
 
   // --- elevations
   int k = 1;

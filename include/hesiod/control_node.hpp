@@ -81,6 +81,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Lerp", "Operator/Blend"},
     {"MakeBinary", "Filter/Recurve"},
     {"MinimumLocal", "Filter/Smoothing"},
+    {"NormalDisplacement", "Filter/Recast"},
     {"Perlin", "Primitive/Coherent Noise"},
     {"PerlinBillow", "Primitive/Coherent Noise"},
     {"Recurve", "Filter/Recurve"},
@@ -638,6 +639,19 @@ public:
 
 protected:
   int ir = 4;
+};
+
+class NormalDisplacement : public Filter
+{
+public:
+  NormalDisplacement(std::string id);
+
+  void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
+
+protected:
+  float amount = 5.f;
+  int   ir = 0;
+  bool  reverse = false;
 };
 
 class Path : public gnode::Node

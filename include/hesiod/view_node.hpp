@@ -434,6 +434,18 @@ public:
   bool render_settings();
 };
 
+class ViewNormalDisplacement : public ViewNode,
+                               public hesiod::cnode::NormalDisplacement
+{
+public:
+  ViewNormalDisplacement(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewPath : public ViewNode, public hesiod::cnode::Path
 {
 public:
