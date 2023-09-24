@@ -60,7 +60,6 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Clamp", "Filter/Range"},
     {"Clone", "Routing"},
     {"Cloud", "Geometry"},
-    {"Path", "Geometry"},
     {"CloudToArrayInterp", "Primitive/Manual"},
     {"Debug", "Debug"},
     {"Equalize", "Filter/Recurve"},
@@ -82,6 +81,8 @@ static const std::map<std::string, std::string> category_mapping = {
     {"MakeBinary", "Filter/Recurve"},
     {"MinimumLocal", "Filter/Smoothing"},
     {"NormalDisplacement", "Filter/Recast"},
+    {"Path", "Geometry"},
+    {"PathFinding", "Roads"},
     {"Perlin", "Primitive/Coherent Noise"},
     {"PerlinBillow", "Primitive/Coherent Noise"},
     {"Recurve", "Filter/Recurve"},
@@ -666,6 +667,22 @@ public:
 
 protected:
   hmap::Path value_out = hmap::Path();
+};
+
+class PathFinding : public gnode::Node
+{
+public:
+  PathFinding(std::string id);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::Path      value_out = hmap::Path();
+  hmap::Vec2<int> wshape = {256, 256};
+  float           elevation_ratio = 0.5f;
+  float           distance_exponent = 1.f;
 };
 
 class Perlin : public Primitive

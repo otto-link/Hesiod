@@ -456,6 +456,19 @@ public:
   bool render_settings();
 };
 
+class ViewPathFinding : public ViewNode, public hesiod::cnode::PathFinding
+{
+public:
+  ViewPathFinding(std::string id);
+
+  void render_node_specific_content();
+
+  bool render_settings();
+
+private:
+  int wshape_choice = 1;
+};
+
 class ViewPerlin : public ViewNode, public hesiod::cnode::Perlin
 {
 public:
