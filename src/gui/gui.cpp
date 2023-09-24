@@ -109,4 +109,25 @@ void save_screenshot(std::string fname)
   hmap::write_png_8bit(fname, img, hmap::Vec2<int>(width, height));
 }
 
+void main_dock()
+{
+  ImGuiIO &io = ImGui::GetIO();
+
+  ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration |
+                                  ImGuiWindowFlags_AlwaysAutoResize |
+                                  ImGuiWindowFlags_NoSavedSettings |
+                                  ImGuiWindowFlags_NoFocusOnAppearing |
+                                  ImGuiWindowFlags_NoNav |
+                                  ImGuiWindowFlags_NoMove;
+
+  ImGui::SetNextWindowPos({0.f, 0.f}, ImGuiCond_Always, {0.f, 0.f});
+  ImGui::SetNextWindowBgAlpha(0.35f);
+
+  if (ImGui::Begin("Example: Simple overlay", nullptr, window_flags))
+  {
+    ImGui::Text("FPS: %.1f", io.Framerate);
+  }
+  ImGui::End();
+}
+
 } // namespace hesiod::gui

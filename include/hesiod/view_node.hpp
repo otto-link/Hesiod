@@ -258,6 +258,17 @@ public:
   bool render_settings();
 };
 
+class ViewEqualize : public ViewNode, public hesiod::cnode::Equalize
+{
+public:
+  ViewEqualize(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewExpandShrink : public ViewNode, public hesiod::cnode::ExpandShrink
 {
 public:

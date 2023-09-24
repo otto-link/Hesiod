@@ -59,6 +59,8 @@ int main()
 
     // --- GUI content
 
+    hesiod::gui::main_dock();
+
     tree.render_node_editor();
     // tree2.render_node_editor();
 

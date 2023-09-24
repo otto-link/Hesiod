@@ -63,6 +63,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Path", "Geometry"},
     {"CloudToArrayInterp", "Primitive/Manual"},
     {"Debug", "Debug"},
+    {"Equalize", "Filter/Recurve"},
     {"ExpandShrink", "Filter/Recast"},
     {"FbmPerlin", "Primitive/Coherent Noise"},
     {"Gain", "Filter/Recurve"},
@@ -374,6 +375,14 @@ public:
 
 protected:
   int interpolation_method = 0;
+};
+
+class Equalize : public Filter
+{
+public:
+  Equalize(std::string id);
+
+  void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
 };
 
 class ExpandShrink : public Filter

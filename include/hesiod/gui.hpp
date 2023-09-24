@@ -22,6 +22,9 @@ GLFWwindow *init_gui(int width, int height, std::string window_title);
 
 void save_screenshot(std::string fname);
 
+// main GUI
+void main_dock();
+
 // custom ImGui widgets
 void canvas_cloud(hmap::Cloud &cloud, float width = 0.f, float radius = 4.f);
 
