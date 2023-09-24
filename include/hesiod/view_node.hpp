@@ -612,6 +612,17 @@ public:
   bool render_settings();
 };
 
+class ViewWarpDownslope : public ViewNode, public hesiod::cnode::WarpDownslope
+{
+public:
+  ViewWarpDownslope(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewWaveSine : public ViewNode, public hesiod::cnode::WaveSine
 {
 public:

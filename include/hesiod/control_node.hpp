@@ -96,6 +96,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"ValleyWidth", "Features"},
     {"ValueNoiseDelaunay", "Primitive/Coherent Noise"},
     {"Warp", "Operator/Transform"},
+    {"WarpDownslope", "Operator/Transform"},
     {"WaveSine", "Primitive/Function"},
     {"White", "Primitive/Random"},
     {"WhiteDensityMap", "Primitive/Random"},
@@ -856,6 +857,19 @@ protected:
 
 private:
   hmap::Vec2<int> shape = {0, 0};
+};
+
+class WarpDownslope : public Filter
+{
+public:
+  WarpDownslope(std::string id);
+
+  void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
+
+protected:
+  float amount = 5.f;
+  int   ir = 0;
+  bool  reverse = false;
 };
 
 class WaveSine : public Primitive

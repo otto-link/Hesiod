@@ -322,6 +322,12 @@ std::string ViewTree::add_view_node(std::string control_node_type,
     std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewWarp>(id);
     this->add_node(p_view_node);
   }
+  else if (control_node_type == "WarpDownslope")
+  {
+    std::shared_ptr p_view_node =
+        std::make_shared<hesiod::vnode::ViewWarpDownslope>(id);
+    this->add_node(p_view_node);
+  }
   else if (control_node_type == "WhiteDensityMap")
   {
     std::shared_ptr p_view_node =
