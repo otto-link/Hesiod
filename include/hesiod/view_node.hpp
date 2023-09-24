@@ -26,18 +26,11 @@ struct viewnode_color_set
 {
   uint32_t base;
   uint32_t hovered;
-  uint32_t selected;
 
   viewnode_color_set(hmap::Vec4<int> rgba)
   {
-    uint8_t dc = 50;
-
     this->base = IM_COL32(rgba.a, rgba.b, rgba.c, (int)(0.3f * rgba.d));
-    this->hovered = IM_COL32(rgba.a, rgba.b, rgba.c, (int)(0.7f * rgba.d));
-    this->selected = IM_COL32(std::min(255, rgba.a + dc),
-                              std::min(255, rgba.b + dc),
-                              std::min(255, rgba.c + dc),
-                              rgba.d);
+    this->hovered = IM_COL32(rgba.a, rgba.b, rgba.c, rgba.d);
   }
 };
 
@@ -91,6 +84,14 @@ static const std::map<std::string, viewnode_color_set> category_colors = {
     {"Hydrology", viewnode_color_set({38, 139, 210, 255})},
     {"Primitive", viewnode_color_set({42, 161, 152, 255})},
     {"Biomes", viewnode_color_set({133, 153, 0, 255})}};
+
+// Dracula theme for links
+static const std::map<int, viewnode_color_set> dtype_colors = {
+    {hesiod::cnode::dCloud, viewnode_color_set({139, 233, 253, 255})},
+    {hesiod::cnode::dHeightMap, viewnode_color_set({255, 255, 255, 255})},
+    {hesiod::cnode::dPath, viewnode_color_set({80, 250, 123, 255})}};
+
+// 255	121	198
 
 class ViewNode
 {

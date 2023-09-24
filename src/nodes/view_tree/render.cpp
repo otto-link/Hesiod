@@ -36,7 +36,12 @@ void ViewTree::render_links()
     bool is_link_frozen =
         this->get_node_ref_by_id(link.node_id_from)->frozen_outputs;
 
-    ImVec4 color = ImVec4(1.f, 1.f, 1.f, 1.f);
+    int dtype = this->get_node_ref_by_id(link.node_id_from)
+                    ->get_port_ref_by_id(link.port_id_from)
+                    ->dtype;
+
+    ImVec4 color = ImColor(dtype_colors.at(dtype).hovered);
+
     if (is_link_frozen)
       color = ImVec4(0.6f, 0.2f, 0.2f, 1.f);
 
