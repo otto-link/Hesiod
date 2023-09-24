@@ -394,6 +394,7 @@ void ViewTree::update_image_texture_view3d(bool only_matrix_update)
 
 void ViewTree::update_view3d_basemesh()
 {
+  LOG_DEBUG("here");
   glBindVertexArray(this->vertex_array_id);
 
   hesiod::viewer::generate_basemesh(this->shape_view3d,

@@ -24,8 +24,6 @@ void generate_basemesh(hmap::Vec2<int>       shape,
     colors.resize(n_vertices);
   }
 
-  LOG_DEBUG("%d", vertices.size());
-
   std::vector<float> x = hmap::linspace(-1.f, 1.f, shape.x);
   std::vector<float> y = hmap::linspace(1.f, -1.f, shape.y);
 
@@ -109,6 +107,7 @@ void update_vertex_elevations(hmap::Array          &array,
 {
   hmap::Array hs =
       hillshade(array, 180.f, 45.f, 10.f * array.ptp() / (float)array.shape.y);
+  hmap::clamp_min(hs, 0.f);
   hmap::remap(hs);
   hs = hmap::pow(hs, 1.5f);
 

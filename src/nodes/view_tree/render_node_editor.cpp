@@ -226,7 +226,6 @@ void ViewTree::render_node_editor()
       std::string node_id = this->get_node_id_by_hash_id(
           this->selected_node_hid.back().Get());
       this->set_viewer_node_id(node_id);
-      this->update_image_texture_view2d();
       this->render_view2d();
     }
     ImGui::End();
@@ -241,7 +240,6 @@ void ViewTree::render_node_editor()
       std::string node_id = this->get_node_id_by_hash_id(
           this->selected_node_hid.back().Get());
       this->set_viewer_node_id(node_id);
-      this->update_image_texture_view3d();
       this->render_view3d();
     }
     ImGui::End();

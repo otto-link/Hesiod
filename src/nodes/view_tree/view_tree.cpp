@@ -144,10 +144,8 @@ void ViewTree::set_viewer_node_id(std::string node_id)
   if (node_id != this->viewer_node_id)
   {
     this->viewer_node_id = node_id;
-    if (this->open_view2d_window)
-      this->update_image_texture_view2d();
-    if (this->open_view3d_window)
-      this->update_image_texture_view3d();
+    this->update_image_texture_view2d();
+    this->update_image_texture_view3d();
   }
 }
 
