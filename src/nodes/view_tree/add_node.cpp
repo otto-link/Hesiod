@@ -172,6 +172,12 @@ std::string ViewTree::add_view_node(std::string control_node_type,
         std::make_shared<hesiod::vnode::ViewHydraulicParticle>(id);
     this->add_node(p_view_node);
   }
+  else if (control_node_type == "HydraulicRidge")
+  {
+    std::shared_ptr p_view_node =
+        std::make_shared<hesiod::vnode::ViewHydraulicRidge>(id);
+    this->add_node(p_view_node);
+  }
   else if (control_node_type == "HydraulicStream")
   {
     std::shared_ptr p_view_node =

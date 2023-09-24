@@ -74,6 +74,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"GradientNorm", "Math/Gradient"},
     {"GradientTalus", "Math/Gradient"},
     {"HydraulicParticle", "Erosion/Hydraulic"},
+    {"HydraulicRidge", "Erosion/Hydraulic"},
     {"HydraulicStream", "Erosion/Hydraulic"},
     {"HydraulicVpipes", "Erosion/Hydraulic"},
     {"KmeansClustering2", "Features"},
@@ -551,6 +552,23 @@ protected:
   float c_deposition = 0.1f;
   float drag_rate = 0.01f;
   float evap_rate = 0.001f;
+};
+
+class HydraulicRidge : public Filter
+{
+public:
+  HydraulicRidge(std::string id);
+
+  void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
+
+protected:
+  float talus = 16.f / 512.f;
+  float intensity = 0.5f;
+  float erosion_factor = 1.5f;
+  float smoothing_factor = 0.5f;
+  float noise_ratio = 0.1f;
+  int   ir = 0;
+  int   seed = DEFAULT_SEED;
 };
 
 class HydraulicStream : public Erosion

@@ -375,6 +375,17 @@ public:
   bool render_settings();
 };
 
+class ViewHydraulicRidge : public ViewNode, public hesiod::cnode::HydraulicRidge
+{
+public:
+  ViewHydraulicRidge(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewHydraulicStream : public ViewNode,
                             public hesiod::cnode::HydraulicStream
 {
