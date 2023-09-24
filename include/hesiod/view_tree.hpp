@@ -172,6 +172,7 @@ private:
   float delta_x = 0.f;
   float delta_y = 0.f;
   bool  wireframe = false;
+  bool  auto_rotate = false;
 
   bool                     show_settings = false;
   ax::NodeEditor::NodeId   context_menu_node_hid;

@@ -176,6 +176,11 @@ void ViewTree::render_view3d()
         this->update_image_texture_view3d(true);
       ImGui::SameLine();
 
+      ImGui::Checkbox("Auto rotate", &this->auto_rotate);
+      if (this->auto_rotate)
+        this->update_image_texture_view3d(true);
+      ImGui::SameLine();
+
       if (ImGui::SliderFloat("h_scale", &this->h_scale, 0.f, 2.f, "%.2f"))
         this->update_image_texture_view3d(true);
     }
@@ -335,6 +340,9 @@ void ViewTree::update_image_texture_view3d(bool only_matrix_update)
 
         glm::mat4 combined_matrix;
         {
+          if (this->auto_rotate)
+            this->alpha_y += 0.1f;
+
           glm::mat4 scale_matrix = glm::scale(
               glm::mat4(1.0f),
               glm::vec3(this->scale, this->scale * this->h_scale, this->scale));
