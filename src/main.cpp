@@ -21,8 +21,8 @@ int main()
   hmap::Vec2<int> tiling = {4, 2};
   float           overlap = 0.25f;
 
-  // hmap::Vec2<int> tiling = {1, 1};
-  // float           overlap = 0.f;
+  tiling = {1, 1};
+  overlap = 0.f;
 
   // ----------------------------------- Main GUI
 
@@ -43,6 +43,8 @@ int main()
       hesiod::vnode::ViewTree("tree_2", shape, tiling, overlap);
 
   tree.add_view_node("FbmPerlin");
+  tree.add_view_node("DigPath");
+  tree.add_view_node("Path");
 
   hmap::Cloud cloud = hmap::Cloud(5, 2);
   hmap::Cloud cloud2 = hmap::Cloud(15, 3);

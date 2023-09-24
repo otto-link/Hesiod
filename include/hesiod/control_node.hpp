@@ -62,6 +62,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Cloud", "Geometry"},
     {"CloudToArrayInterp", "Primitive/Manual"},
     {"Debug", "Debug"},
+    {"DigPath", "Roads"},
     {"Equalize", "Filter/Recurve"},
     {"ExpandShrink", "Filter/Recast"},
     {"FbmPerlin", "Primitive/Coherent Noise"},
@@ -378,6 +379,22 @@ public:
 
 protected:
   int interpolation_method = 0;
+};
+
+class DigPath : public gnode::Node
+{
+public:
+  DigPath(std::string id);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap();
+  int             width = 1;
+  int             decay = 2;
+  int             flattening_radius = 16;
 };
 
 class Equalize : public Filter
