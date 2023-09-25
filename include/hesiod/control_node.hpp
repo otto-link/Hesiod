@@ -83,6 +83,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"MakeBinary", "Filter/Recurve"},
     {"MinimumLocal", "Filter/Smoothing"},
     {"NormalDisplacement", "Filter/Recast"},
+    {"OneMinus", "Math/Base"},
     {"Path", "Geometry"},
     {"PathFinding", "Roads"},
     {"Perlin", "Primitive/Coherent Noise"},
@@ -605,9 +606,9 @@ public:
 protected:
   int   iterations = 100;
   float water_height = 0.1f;
-  float c_capacity = 0.1f;
-  float c_erosion = 0.05f;
-  float c_deposition = 0.05f;
+  float c_capacity = 0.2f;
+  float c_erosion = 0.02f;
+  float c_deposition = 0.02f;
   float rain_rate = 0.f;
   float evap_rate = 0.01f;
 };
@@ -689,6 +690,18 @@ protected:
   float amount = 5.f;
   int   ir = 0;
   bool  reverse = false;
+};
+
+class OneMinus : public Unary
+{
+public:
+  OneMinus(std::string id);
+
+  void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
+
+protected:
+  float vmin = 0.f;
+  float vmax = 1.f;
 };
 
 class Path : public gnode::Node

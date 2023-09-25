@@ -469,6 +469,14 @@ public:
   void serialize_load(cereal::JSONInputArchive &ar);
 };
 
+class ViewOneMinus : public ViewNode, public hesiod::cnode::OneMinus
+{
+public:
+  ViewOneMinus(std::string id);
+
+  bool render_settings();
+};
+
 class ViewPath : public ViewNode, public hesiod::cnode::Path
 {
 public:

@@ -16,6 +16,12 @@
 namespace hesiod::gui
 {
 
+enum icon_type : int
+{
+  circle,
+  square
+};
+
 void glfw_error_callback(int error, const char *description);
 
 GLFWwindow *init_gui(int width, int height, std::string window_title);
@@ -48,6 +54,8 @@ bool drag_float_vector(std::vector<float> &vector,
                        float               vmax = 1.f,
                        bool                horizontal = false,
                        float               height = 160.f);
+
+void draw_icon(int icon_type, ImVec2 size, ImU32 color, bool filled);
 
 bool listbox_map_enum(std::map<std::string, int> &map,
                       int                        &selected,

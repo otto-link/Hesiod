@@ -15,7 +15,8 @@ DigPath::DigPath(std::string id) : gnode::Node(id)
   this->category = category_mapping.at(this->node_type);
   this->add_port(gnode::Port("path", gnode::direction::in, dtype::dPath));
   this->add_port(gnode::Port("input", gnode::direction::in, dtype::dHeightMap));
-  this->add_port(gnode::Port("output", gnode::direction::out, dtype::dPath));
+  this->add_port(
+      gnode::Port("output", gnode::direction::out, dtype::dHeightMap));
   this->update_inner_bindings();
 }
 

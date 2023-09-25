@@ -5,6 +5,7 @@
 #include <imgui_internal.h>
 #include <imgui_node_editor.h>
 
+#include "hesiod/gui.hpp"
 #include "hesiod/view_node.hpp"
 
 // HELPER
@@ -120,14 +121,20 @@ void ViewNode::render_node()
       ax::NodeEditor::BeginPin(ax::NodeEditor::PinId(port.hash_id),
                                ax::NodeEditor::PinKind::Input);
 
+      hesiod::gui::draw_icon(hesiod::gui::square,
+                             {10.f, 10.f},
+                             dtype_colors.at(port.dtype).hovered,
+                             port.is_connected);
+
+      ax::NodeEditor::EndPin();
+      ImGui::SameLine();
+
       if (port.is_optional)
         ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.f),
                            "%s",
                            port.label.c_str());
       else
         ImGui::TextUnformatted(port.label.c_str());
-
-      ax::NodeEditor::EndPin();
     }
 
   // outputs
@@ -136,12 +143,19 @@ void ViewNode::render_node()
     {
       const char *txt = port.label.c_str();
       const float text_width = ImGui::CalcTextSize(txt).x;
-      ImGui::Dummy(ImVec2(this->node_width - text_width - 8.f, 0)); // TODO
+      ImGui::Dummy(
+          ImVec2(this->node_width - text_width - 8.f - 18.f, 0)); // TODO
+      ImGui::SameLine();
+
+      ImGui::TextUnformatted(txt);
       ImGui::SameLine();
 
       ax::NodeEditor::BeginPin(ax::NodeEditor::PinId(port.hash_id),
                                ax::NodeEditor::PinKind::Output);
-      ImGui::TextUnformatted(txt);
+      hesiod::gui::draw_icon(hesiod::gui::square,
+                             {10.f, 10.f},
+                             dtype_colors.at(port.dtype).hovered,
+                             port.is_connected);
       ax::NodeEditor::EndPin();
     }
 
