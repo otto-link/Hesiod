@@ -252,6 +252,10 @@ bool canvas_cloud_editor(hmap::Cloud &cloud,
     imgui_storage->SetInt(IMGUI_ID_HOVERED_POINT_INDEX, hovered_point_index);
   }
 
+  if (cloud.get_npoints())
+    if (ImGui::Button("Clear"))
+      cloud.clear();
+
   ImGui::EndGroup();
   ImGui::PopID();
   imgui_storage->SetFloat(IMGUI_ID_RADIUS, radius);
@@ -310,16 +314,21 @@ bool canvas_path_editor(hmap::Path &path, float width)
 
   draw_polyline(path.points, canvas_p0, canvas_size);
 
-  if (ImGui::Button("Reorder") && path.get_npoints())
-    path.reorder_nns();
+  if (path.get_npoints())
+  {
+    if (ImGui::Button("Reorder"))
+      path.reorder_nns();
 
-  ImGui::SameLine();
-  if (ImGui::Button("Divide") && path.get_npoints())
-    path.divide();
+    ImGui::SameLine();
 
-  ImGui::SameLine();
-  if (ImGui::Button("Resample") && path.get_npoints())
-    path.resample_uniform();
+    if (ImGui::Button("Divide"))
+      path.divide();
+
+    ImGui::SameLine();
+
+    if (ImGui::Button("Resample"))
+      path.resample_uniform();
+  }
 
   return ret;
 }
