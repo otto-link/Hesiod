@@ -1,6 +1,7 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include "ImGuiFileDialog.h"
 #include "macrologger.h"
 
 #include "hesiod/gui.hpp"
@@ -28,8 +29,24 @@ bool ViewExport::render_settings()
 
   ImGui::Checkbox("Auto export", &this->auto_export);
 
+  {
+    if (ImGui::Button(("File: " + this->fname).c_str()))
+      ImGuiFileDialog::Instance()->OpenDialog("DialogId",
+                                              "Choose File",
+                                              ".png",
+                                              ".");
+
+    if (ImGuiFileDialog::Instance()->Display("DialogId"))
+    {
+      if (ImGuiFileDialog::Instance()->IsOk())
+        this->fname = ImGuiFileDialog::Instance()->GetFilePathName(
+            IGFD_ResultMode_AddIfNoFileExt);
+      ImGuiFileDialog::Instance()->Close();
+    }
+  }
+
   ImGui::TextUnformatted("Format");
-  hesiod::gui::listbox_map_enum(this->format_map, this->export_format);
+  hesiod::gui::listbox_map_enum(this->format_map, this->export_format, 128.f);
 
   if (ImGui::Button("export"))
     this->write_file();

@@ -154,19 +154,28 @@ void ViewTree::new_link(std::string node_id_from,
                         std::string node_id_to,
                         std::string port_id_to)
 {
+  // --- check if linking can indeed be made
+  bool do_link = true;
+
+  // prevent a node from linking with itself
+  do_link &= node_id_from != node_id_to;
+
   // do anything only if the ports do not have the same direction (to
   // avoid linking two inputs or two outputs) and have the same data
   // type
-  if (this->get_node_ref_by_id(node_id_from)
-              ->get_port_ref_by_id(port_id_from)
-              ->direction != this->get_node_ref_by_id(node_id_to)
-                                 ->get_port_ref_by_id(port_id_to)
-                                 ->direction &&
-      this->get_node_ref_by_id(node_id_from)
-              ->get_port_ref_by_id(port_id_from)
-              ->dtype == this->get_node_ref_by_id(node_id_to)
-                             ->get_port_ref_by_id(port_id_to)
-                             ->dtype)
+  do_link &= this->get_node_ref_by_id(node_id_from)
+                 ->get_port_ref_by_id(port_id_from)
+                 ->direction != this->get_node_ref_by_id(node_id_to)
+                                    ->get_port_ref_by_id(port_id_to)
+                                    ->direction;
+
+  do_link &= this->get_node_ref_by_id(node_id_from)
+                 ->get_port_ref_by_id(port_id_from)
+                 ->dtype == this->get_node_ref_by_id(node_id_to)
+                                ->get_port_ref_by_id(port_id_to)
+                                ->dtype;
+
+  if (do_link)
   {
 
     // swap from and to if the link has been drawn from an input to and

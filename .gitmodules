@@ -20,3 +20,9 @@
 [submodule "external/ImguiCandy"]
 	path = external/ImguiCandy
 	url = git@github.com:Raais/ImguiCandy.git
+[submodule "external/imgui-filebrowser"]
+	path = external/imgui-filebrowser
+	url = git@github.com:AirGuanZ/imgui-filebrowser.git
+[submodule "external/ImGuiFileDialog"]
+	path = external/ImGuiFileDialog
+	url = git@github.com:aiekick/ImGuiFileDialog.git

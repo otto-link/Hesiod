@@ -303,7 +303,8 @@ public:
 
 protected:
   std::map<std::string, int> format_map = {
-      {"png (8 bit)", hesiod::cnode::export_type::png8bit}};
+      {"png (8 bit)", hesiod::cnode::export_type::png8bit},
+      {"raw", hesiod::cnode::export_type::raw}};
 };
 
 class ViewFbmPerlin : public ViewNode, public hesiod::cnode::FbmPerlin

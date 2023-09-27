@@ -3,7 +3,7 @@ project(hesiod)
 
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -O3 -DLOG_LEVEL=3")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -DLOG_LEVEL=3 -D_GLIBCXX_DEBUG")
 
 set(CMAKE_CXX_STANDARD 20)
 
@@ -43,7 +43,8 @@ set(IMGUI_NODE_EDITOR_INCLUDE
 
 # --- sources
 file(GLOB_RECURSE HESIOD_SOURCES
-     ${PROJECT_SOURCE_DIR}/src/*.cpp)
+     ${PROJECT_SOURCE_DIR}/src/*.cpp
+     ${PROJECT_SOURCE_DIR}/external/ImGuiFileDialog/ImGuiFileDialog.cpp)
      
 add_executable(${PROJECT_NAME}
     ${HESIOD_SOURCES}
@@ -57,6 +58,7 @@ set(HESIOD_INCLUDE
   PRIVATE
     ${PROJECT_SOURCE_DIR}/external/cereal/include
     ${PROJECT_SOURCE_DIR}/external/ImguiCandy
+    ${PROJECT_SOURCE_DIR}/external/ImGuiFileDialog
     ${PROJECT_SOURCE_DIR}/external/macro-logger
     ${IMGUI_INCLUDE}
     ${IMGUI_NODE_EDITOR_INCLUDE}

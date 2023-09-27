@@ -43,6 +43,7 @@ int main()
       hesiod::vnode::ViewTree("tree_2", shape, tiling, overlap);
 
   tree.add_view_node("FbmPerlin");
+  tree.add_view_node("Export");
 
   hmap::Cloud cloud = hmap::Cloud(5, 2);
   hmap::Cloud cloud2 = hmap::Cloud(15, 3);

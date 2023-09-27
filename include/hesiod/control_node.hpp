@@ -41,7 +41,8 @@ enum blending_method : int
 
 enum export_type : int
 {
-  png8bit
+  png8bit,
+  raw
 };
 
 enum kernel : int
@@ -442,7 +443,7 @@ public:
 
 protected:
   bool        auto_export = false;
-  int         export_format = png8bit;
+  int         export_format = export_type::png8bit;
   std::string fname = "export.png";
 };
 
