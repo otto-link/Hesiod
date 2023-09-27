@@ -289,6 +289,23 @@ public:
   bool render_settings();
 };
 
+class ViewExport : public ViewNode, public hesiod::cnode::Export
+{
+public:
+  ViewExport(std::string id);
+
+  bool render_settings();
+
+  void render_node_specific_content();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+
+protected:
+  std::map<std::string, int> format_map = {
+      {"png (8 bit)", hesiod::cnode::export_type::png8bit}};
+};
+
 class ViewFbmPerlin : public ViewNode, public hesiod::cnode::FbmPerlin
 {
 public:

@@ -39,6 +39,11 @@ enum blending_method : int
   substract
 };
 
+enum export_type : int
+{
+  png8bit
+};
+
 enum kernel : int
 {
   cone,
@@ -65,6 +70,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"DigPath", "Roads"},
     {"Equalize", "Filter/Recurve"},
     {"ExpandShrink", "Filter/Recast"},
+    {"Export", "IO/Files"},
     {"FbmPerlin", "Primitive/Coherent Noise"},
     {"Gain", "Filter/Recurve"},
     {"GammaCorrection", "Filter/Recurve"},
@@ -423,6 +429,21 @@ protected:
       {"lorentzian", kernel::lorentzian},
       {"smooth_cosine", kernel::smooth_cosine}};
   int kernel = kernel::cubic_pulse;
+};
+
+class Export : public gnode::Node
+{
+public:
+  Export(std::string id);
+
+  void compute();
+
+  void write_file();
+
+protected:
+  bool        auto_export = false;
+  int         export_format = png8bit;
+  std::string fname = "export.png";
 };
 
 class FbmPerlin : public Primitive

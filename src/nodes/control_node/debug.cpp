@@ -20,8 +20,4 @@ void Debug::compute()
 {
 }
 
-void post_control_node_update()
-{
-}
-
 } // namespace hesiod::cnode
