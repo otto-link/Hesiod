@@ -12,7 +12,7 @@ namespace hesiod::gui
 
 void draw_icon(int icon_type, ImVec2 size, uint32_t color, bool filled)
 {
-  // if (ImGui::IsRectVisible(size))
+  if (ImGui::IsRectVisible(size))
   {
     ImDrawList *drawList = ImGui::GetWindowDrawList();
 

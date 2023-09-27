@@ -42,6 +42,7 @@ void PathFinding::compute()
         this->wshape = (*p_input_hmap).shape;
 
       hmap::Array z = (*p_input_hmap).to_array(this->wshape);
+      hmap::remap(z);
 
       this->value_out.dijkstra(z,
                                {0.f, 1.f, 0.f, 1.f},
