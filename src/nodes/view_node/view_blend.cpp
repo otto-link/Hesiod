@@ -21,7 +21,9 @@ bool ViewBlend::render_settings()
 
   has_changed |= this->render_settings_header();
 
-  if (hesiod::gui::listbox_map_enum(this->blending_method_map, this->method))
+  if (hesiod::gui::listbox_map_enum(this->blending_method_map,
+                                    this->method,
+                                    128.f))
   {
     this->force_update();
     has_changed = true;

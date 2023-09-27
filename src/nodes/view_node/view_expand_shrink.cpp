@@ -29,7 +29,7 @@ bool ViewExpandShrink::render_settings()
   ImGui::SliderInt("ir", &this->ir, 1, 128);
   has_changed |= this->trigger_update_after_edit();
 
-  if (hesiod::gui::listbox_map_enum(this->kernel_map, this->kernel))
+  if (hesiod::gui::listbox_map_enum(this->kernel_map, this->kernel, 128.f))
   {
     this->force_update();
     has_changed = true;

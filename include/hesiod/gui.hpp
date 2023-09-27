@@ -59,7 +59,7 @@ void draw_icon(int icon_type, ImVec2 size, ImU32 color, bool filled);
 
 bool listbox_map_enum(std::map<std::string, int> &map,
                       int                        &selected,
-                      float                       width = -FLT_MIN);
+                      float                       width);
 
 bool slider_vmin_vmax(float &vmin, float &vmax);
 

@@ -121,9 +121,13 @@ void ViewNode::render_node()
       ax::NodeEditor::BeginPin(ax::NodeEditor::PinId(port.hash_id),
                                ax::NodeEditor::PinKind::Input);
 
+      ImU32 color = dtype_colors.at(port.dtype).hovered;
+      if (port.is_optional)
+        color = dtype_colors.at(port.dtype).base;
+
       hesiod::gui::draw_icon(hesiod::gui::square,
                              {10.f, 10.f},
-                             dtype_colors.at(port.dtype).hovered,
+                             color,
                              port.is_connected);
 
       ax::NodeEditor::EndPin();

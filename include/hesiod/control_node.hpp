@@ -877,16 +877,20 @@ protected:
   int ir = 8;
 };
 
-class SmoothFill : public Filter
+class SmoothFill : public gnode::Node
 {
 public:
   SmoothFill(std::string id);
 
-  void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
+  void compute();
+
+  void update_inner_bindings();
 
 protected:
-  int   ir = 32;
-  float k = 0.05f;
+  hmap::HeightMap value_out = hmap::HeightMap();
+  hmap::HeightMap deposition_map = hmap::HeightMap();
+  int             ir = 32;
+  float           k = 0.05f;
 };
 
 class SteepenConvective : public Filter
