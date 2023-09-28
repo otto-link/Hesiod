@@ -73,6 +73,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"ExpandShrink", "Filter/Recast"},
     {"Export", "IO/Files"},
     {"FbmPerlin", "Primitive/Coherent Noise"},
+    {"FractalizePath", "Geometry/Path"},
     {"Gain", "Filter/Recurve"},
     {"GammaCorrection", "Filter/Recurve"},
     {"GammaCorrectionLocal", "Filter/Recurve"},
@@ -465,6 +466,24 @@ protected:
   float             weight = 0.7f;
   float             persistence = 0.5f;
   float             lacunarity = 2.f;
+};
+
+class FractalizePath : public gnode::Node
+{
+public:
+  FractalizePath(std::string id);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::Path value_out = hmap::Path();
+  int        iterations = 1;
+  int        seed = DEFAULT_SEED;
+  float      sigma = 0.3f;
+  int        orientation = 0;
+  float      persistence = 1.f;
 };
 
 class Gain : public Filter

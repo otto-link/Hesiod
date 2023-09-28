@@ -324,6 +324,19 @@ private:
   bool link_kxy = true;
 };
 
+class ViewFractalizePath : public ViewNode, public hesiod::cnode::FractalizePath
+{
+public:
+  ViewFractalizePath(std::string id);
+
+  void render_node_specific_content();
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewGain : public ViewNode, public hesiod::cnode::Gain
 {
 public:

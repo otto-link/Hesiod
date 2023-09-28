@@ -128,6 +128,12 @@ std::string ViewTree::add_view_node(std::string control_node_type,
                                                        this->overlap);
     this->add_node(p_view_node);
   }
+  else if (control_node_type == "FractalizePath")
+  {
+    std::shared_ptr p_view_node =
+        std::make_shared<hesiod::vnode::ViewFractalizePath>(id);
+    this->add_node(p_view_node);
+  }
   else if (control_node_type == "Gain")
   {
     std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewGain>(id);
