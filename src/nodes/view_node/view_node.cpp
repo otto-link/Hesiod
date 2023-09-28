@@ -103,14 +103,6 @@ void ViewNode::render_node()
     ImGui::TextUnformatted(node_type.c_str());
 
   ImRect text_content_rect = ImGui_GetItemRect();
-  // ImGui::SetWindowFontScale(1.f);
-
-  // ImNodes::PushColorStyle(ImNodesCol_TitleBar,
-  //                         category_colors.at(main_category).base);
-  // ImNodes::PushColorStyle(ImNodesCol_TitleBarHovered,
-  //                         category_colors.at(main_category).hovered);
-  // ImNodes::PushColorStyle(ImNodesCol_TitleBarSelected,
-  //                         category_colors.at(main_category).selected);
 
   ImGui::Spacing();
 
@@ -266,10 +258,6 @@ bool ViewNode::render_settings_header()
 bool ViewNode::render_settings_footer()
 {
   bool has_changed = false;
-
-  // if (this->postprocess_port_id != "")
-  // {
-  // }
 
   ImGui::Separator();
 
