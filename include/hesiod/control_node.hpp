@@ -71,6 +71,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"DigPath", "Roads"},
     {"Equalize", "Filter/Recurve"},
     {"ExpandShrink", "Filter/Recast"},
+    {"ExpandShrinkDirectional", "Filter/Recast"},
     {"Export", "IO/Files"},
     {"FbmPerlin", "Primitive/Coherent Noise"},
     {"FractalizePath", "Geometry/Path"},
@@ -361,8 +362,8 @@ protected:
   float vmax = 1.f;
   bool  smooth_min = false;
   bool  smooth_max = false;
-  float k_min = 0.2f;
-  float k_max = 0.2f;
+  float k_min = 0.05f;
+  float k_max = 0.05f;
 };
 
 class Cloud : public gnode::Node
@@ -432,6 +433,21 @@ protected:
       {"lorentzian", kernel::lorentzian},
       {"smooth_cosine", kernel::smooth_cosine}};
   int kernel = kernel::cubic_pulse;
+};
+
+class ExpandShrinkDirectional : public Filter
+{
+public:
+  ExpandShrinkDirectional(std::string id);
+
+  void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
+
+protected:
+  int   ir = 4;
+  float angle = 30.f;
+  float aspect_ratio = 0.2f;
+  float anisotropy = 1.f;
+  bool  shrink = false;
 };
 
 class Export : public gnode::Node

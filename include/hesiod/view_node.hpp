@@ -289,6 +289,19 @@ public:
   bool render_settings();
 };
 
+class ViewExpandShrinkDirectional
+    : public ViewNode,
+      public hesiod::cnode::ExpandShrinkDirectional
+{
+public:
+  ViewExpandShrinkDirectional(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewExport : public ViewNode, public hesiod::cnode::Export
 {
 public:

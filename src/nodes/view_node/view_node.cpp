@@ -92,15 +92,27 @@ void ViewNode::render_node()
   std::string main_category = this->p_control_node->get_category().substr(0,
                                                                           pos);
 
+  std::string node_label = node_type;
+  {
+    // truncate node label to make it fit within the node width
+    float char_width = ImGui::CalcTextSize("A").x;
+    int   nchar = (int)(this->node_width / char_width);
+    if (nchar < (int)node_label.size())
+    {
+      nchar -= 3;
+      node_label = node_label.substr(0, nchar) + "...";
+    }
+  }
+
   ax::NodeEditor::BeginNode(
       ax::NodeEditor::NodeId(this->p_control_node->hash_id));
 
   if (this->p_control_node->frozen_outputs)
     ImGui::TextColored(ImColor(IM_COL32(150, 50, 50, 255)),
                        "%s",
-                       node_type.c_str());
+                       node_label.c_str());
   else
-    ImGui::TextUnformatted(node_type.c_str());
+    ImGui::TextUnformatted(node_label.c_str());
 
   ImRect text_content_rect = ImGui_GetItemRect();
 
