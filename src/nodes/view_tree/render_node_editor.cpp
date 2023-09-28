@@ -49,7 +49,7 @@ void ViewTree::render_node_editor()
     ImGui::PopItemWidth();
 
     // key bindings
-    if (ImGui::IsWindowFocused(ImGuiFocusedFlags_RootAndChildWindows))
+    if (ImGui::IsWindowFocused())
     {
       if (ImGui::IsKeyReleased(ImGuiKey_N))
         this->open_node_list_window = !this->open_node_list_window;
