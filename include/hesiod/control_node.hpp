@@ -84,6 +84,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"HydraulicRidge", "Erosion/Hydraulic"},
     {"HydraulicStream", "Erosion/Hydraulic"},
     {"HydraulicVpipes", "Erosion/Hydraulic"},
+    {"Import", "IO/Files"},
     {"KmeansClustering2", "Features"},
     {"Laplace", "Filter/Smoothing"},
     {"Lerp", "Operator/Blend"},
@@ -633,6 +634,30 @@ protected:
   float c_deposition = 0.02f;
   float rain_rate = 0.f;
   float evap_rate = 0.01f;
+};
+
+class Import : public gnode::Node
+{
+public:
+  Import(std::string     id,
+         hmap::Vec2<int> shape,
+         hmap::Vec2<int> tiling,
+         float           overlap);
+
+  void update_inner_bindings();
+
+  void compute();
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap();
+  float           vmin = 0.f;
+  float           vmax = 1.f;
+  std::string     fname = "export.png";
+
+private:
+  hmap::Vec2<int> shape;
+  hmap::Vec2<int> tiling;
+  float           overlap;
 };
 
 class KmeansClustering2 : public Binary

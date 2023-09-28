@@ -428,6 +428,22 @@ public:
   void serialize_load(cereal::JSONInputArchive &ar);
 };
 
+class ViewImport : public ViewNode, public hesiod::cnode::Import
+{
+public:
+  ViewImport(std::string     id,
+             hmap::Vec2<int> shape,
+             hmap::Vec2<int> tiling,
+             float           overlap);
+
+  bool render_settings();
+
+  void render_node_specific_content();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewKmeansClustering2 : public ViewNode,
                               public hesiod::cnode::KmeansClustering2
 {
