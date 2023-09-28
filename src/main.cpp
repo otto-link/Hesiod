@@ -34,7 +34,11 @@ int main()
   ImCandy::Theme_Blender();
   // ImCandy::Theme_Cyberpunk();
 
-  // ImGuiIO &io = ImGui::GetIO();
+  // ImGuiIO& io = ImGui::GetIO();
+  // ImFontConfig config;
+  // config.OversampleH = 2;
+  // config.OversampleV = 2;
+  // io.Fonts->AddFontFromFileTTF("Roboto-Regular.ttf", 16.f, &config);
 
   hesiod::vnode::ViewTree tree =
       hesiod::vnode::ViewTree("tree_1", shape, tiling, overlap);

@@ -890,7 +890,7 @@ protected:
   hmap::HeightMap value_out = hmap::HeightMap();
   hmap::HeightMap deposition_map = hmap::HeightMap();
   int             ir = 32;
-  float           k = 0.05f;
+  float           k = 0.01f;
 };
 
 class SteepenConvective : public Filter

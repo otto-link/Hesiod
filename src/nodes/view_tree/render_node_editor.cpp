@@ -85,6 +85,14 @@ void ViewTree::render_node_editor()
 
   if (ImGui::Button("Save"))
     this->save_state("tree_state.json");
+  ImGui::SameLine();
+
+  if (ImGui::Button("2D viewer"))
+    this->open_view2d_window = !this->open_view2d_window;
+  ImGui::SameLine();
+
+  if (ImGui::Button("3D viewer"))
+    this->open_view3d_window = !this->open_view3d_window;
 
   if (this->show_settings)
   {
