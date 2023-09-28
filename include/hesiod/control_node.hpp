@@ -65,7 +65,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Checkerboard", "Primitive/Coherent Noise"},
     {"Clamp", "Filter/Range"},
     {"Clone", "Routing"},
-    {"Cloud", "Geometry"},
+    {"Cloud", "Geometry/Cloud"},
     {"CloudToArrayInterp", "Primitive/Manual"},
     {"Debug", "Debug"},
     {"DigPath", "Roads"},
@@ -92,7 +92,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"MinimumLocal", "Filter/Smoothing"},
     {"NormalDisplacement", "Filter/Recast"},
     {"OneMinus", "Math/Base"},
-    {"Path", "Geometry"},
+    {"Path", "Geometry/Path"},
     {"PathFinding", "Roads"},
     {"Perlin", "Primitive/Coherent Noise"},
     {"PerlinBillow", "Primitive/Coherent Noise"},
@@ -762,6 +762,7 @@ public:
 
 protected:
   hmap::Path value_out = hmap::Path();
+  bool       closed = false;
 };
 
 class PathFinding : public gnode::Node

@@ -19,8 +19,7 @@ Path::Path(std::string id) : gnode::Node(id)
 
 void Path::compute()
 {
-  LOG_DEBUG("computing Path node [%s]", this->id.c_str());
-  // nothing here
+  this->value_out.closed = this->closed;
 }
 
 void Path::update_inner_bindings()

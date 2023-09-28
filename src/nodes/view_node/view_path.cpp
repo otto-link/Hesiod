@@ -27,6 +27,9 @@ bool ViewPath::render_settings()
   bool has_changed = false;
   has_changed |= this->render_settings_header();
 
+  ImGui::Checkbox("closed", &this->closed);
+  has_changed |= this->trigger_update_after_edit();
+
   if (hesiod::gui::canvas_path_editor(this->value_out))
     this->force_update();
 

@@ -22,19 +22,25 @@ namespace hesiod::gui
 
 void draw_polyline(std::vector<hmap::Point> &points,
                    ImVec2                    canvas_p0,
-                   ImVec2                    canvas_size)
+                   ImVec2                    canvas_size,
+                   bool                      closed)
 {
   ImDrawList *draw_list = ImGui::GetWindowDrawList();
 
   if (points.size())
   {
-    for (size_t k = 0; k < points.size() - 1; k++)
+    uint kmax = points.size() - 1;
+    if (closed)
+      kmax++;
+
+    for (size_t k = 0; k < kmax; k++)
     {
       float x1 = canvas_p0.x + points[k].x * canvas_size.x;
       float y1 = canvas_p0.y + (1.f - points[k].y) * canvas_size.y;
 
-      float x2 = canvas_p0.x + points[k + 1].x * canvas_size.x;
-      float y2 = canvas_p0.y + (1.f - points[k + 1].y) * canvas_size.y;
+      int   kpp = (k + 1) % points.size();
+      float x2 = canvas_p0.x + points[kpp].x * canvas_size.x;
+      float y2 = canvas_p0.y + (1.f - points[kpp].y) * canvas_size.y;
 
       draw_list->AddLine(ImVec2(x1, y1), ImVec2(x2, y2), IM_COL32_WHITE);
     }
@@ -296,7 +302,7 @@ void canvas_path(hmap::Path &path, float width)
   // draw canvas and points
   ImDrawList *draw_list = ImGui::GetWindowDrawList();
   draw_list->AddRectFilled(canvas_p0, canvas_p1, IM_COL32(50, 50, 50, 255));
-  draw_polyline(path.points, canvas_p0, canvas_size);
+  draw_polyline(path.points, canvas_p0, canvas_size, path.closed);
 
   ImGui::EndGroup();
   ImGui::PopID();
@@ -312,7 +318,7 @@ bool canvas_path_editor(hmap::Path &path, float width)
   ret |=
       canvas_cloud_editor((hmap::Cloud &)path, width, &canvas_p0, &canvas_size);
 
-  draw_polyline(path.points, canvas_p0, canvas_size);
+  draw_polyline(path.points, canvas_p0, canvas_size, path.closed);
 
   if (path.get_npoints())
   {
