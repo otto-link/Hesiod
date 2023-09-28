@@ -42,7 +42,8 @@ void DigPath::compute()
                                      this->width,
                                      this->decay,
                                      this->flattening_radius,
-                                     bbox);
+                                     bbox,
+                                     this->depth);
                     });
 
     this->value_out.smooth_overlap_buffers();

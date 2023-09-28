@@ -407,6 +407,7 @@ protected:
   int             width = 1;
   int             decay = 2;
   int             flattening_radius = 16;
+  float           depth = 0.f;
 };
 
 class Equalize : public Filter

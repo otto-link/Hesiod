@@ -29,6 +29,9 @@ bool ViewDigPath::render_settings()
   ImGui::SliderInt("flattening_radius", &this->flattening_radius, 1, 32);
   has_changed |= this->trigger_update_after_edit();
 
+  ImGui::SliderFloat("depth", &this->depth, -0.2f, 0.2f, "%.2f");
+  has_changed |= this->trigger_update_after_edit();
+
   has_changed |= this->render_settings_footer();
   return has_changed;
 }
