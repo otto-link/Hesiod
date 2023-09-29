@@ -515,11 +515,25 @@ public:
 };
 
 class ViewMakeBinary : public ViewNode, public hesiod::cnode::MakeBinary
+
 {
 public:
   ViewMakeBinary(std::string id);
 
   bool render_settings();
+};
+
+class ViewMeanderizePath : public ViewNode, public hesiod::cnode::MeanderizePath
+{
+public:
+  ViewMeanderizePath(std::string id);
+
+  void render_node_specific_content();
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewMinimumLocal : public ViewNode, public hesiod::cnode::MinimumLocal

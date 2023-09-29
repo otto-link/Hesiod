@@ -92,6 +92,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Laplace", "Filter/Smoothing"},
     {"Lerp", "Operator/Blend"},
     {"MakeBinary", "Filter/Recurve"},
+    {"MeanderizePath", "Geometry/Path"},
     {"MinimumLocal", "Filter/Smoothing"},
     {"NormalDisplacement", "Filter/Recast"},
     {"OneMinus", "Math/Base"},
@@ -765,6 +766,23 @@ public:
 
 protected:
   float threshold = 0.f;
+};
+
+class MeanderizePath : public gnode::Node
+{
+public:
+  MeanderizePath(std::string id);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::Path value_out = hmap::Path();
+  float      radius = 0.05f;
+  float      tangent_contribution = 0.1f;
+  int        iterations = 1;
+  float      transition_length_ratio = 0.2f;
 };
 
 class MinimumLocal : public Unary
