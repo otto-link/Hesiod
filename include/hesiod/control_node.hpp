@@ -680,11 +680,11 @@ public:
                        hmap::HeightMap *p_deposition_map);
 
 protected:
-  int   iterations = 100;
-  float water_height = 0.1f;
-  float c_capacity = 0.2f;
-  float c_erosion = 0.02f;
-  float c_deposition = 0.02f;
+  int   iterations = 200;
+  float water_height = 0.01f;
+  float c_capacity = 0.1f;
+  float c_erosion = 0.01f;
+  float c_deposition = 0.01f;
   float rain_rate = 0.f;
   float evap_rate = 0.01f;
 };
