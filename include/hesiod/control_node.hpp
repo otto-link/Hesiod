@@ -60,6 +60,7 @@ enum kernel : int
 static const std::map<std::string, std::string> category_mapping = {
     {"AlterElevation", "Operator/Transform"},
     {"BaseElevation", "Primitive/Manual"},
+    {"BezierPath", "Geometry/Path"},
     {"Blend", "Operator/Blend"},
     {"Bump", "Primitive/Function"},
     {"Checkerboard", "Primitive/Coherent Noise"},
@@ -291,6 +292,21 @@ protected:
                                             {0.f, 0.f, 0.f},
                                             {0.f, 0.f, 0.f}};
   float                           width_factor = 1.f;
+};
+
+class BezierPath : public gnode::Node
+{
+public:
+  BezierPath(std::string id);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::Path value_out = hmap::Path();
+  float      curvature_ratio = 0.3f;
+  int        edge_divisions = 10;
 };
 
 class Blend : public Binary

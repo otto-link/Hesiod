@@ -173,6 +173,19 @@ public:
   bool render_settings();
 };
 
+class ViewBezierPath : public ViewNode, public hesiod::cnode::BezierPath
+{
+public:
+  ViewBezierPath(std::string id);
+
+  void render_node_specific_content();
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewBlend : public ViewNode, public hesiod::cnode::Blend
 {
 public:
