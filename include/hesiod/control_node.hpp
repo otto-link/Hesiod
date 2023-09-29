@@ -104,11 +104,14 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Remap", "Filter/Range"},
     {"RidgedPerlin", "Primitive/Coherent Noise"},
     {"Rugosity", "Features"},
+    {"SedimentDeposition", "Erosion/Thermal"},
     {"SelectEq", "Mask"},
     {"SelectTransitions", "Mask"},
     {"SmoothCpulse", "Filter/Smoothing"},
     {"SmoothFill", "Filter/Smoothing"},
     {"SteepenConvective", "Filter/Recast"},
+    {"Thermal", "Erosion/Thermal"},
+    {"ThermalAutoBedrock", "Erosion/Thermal"},
     {"ValleyWidth", "Features"},
     {"ValueNoiseDelaunay", "Primitive/Coherent Noise"},
     {"Warp", "Operator/Transform"},
@@ -934,6 +937,24 @@ protected:
   int ir = 4;
 };
 
+class SedimentDeposition : public gnode::Node
+{
+public:
+  SedimentDeposition(std::string id);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap(); // eroded heightmap
+  hmap::HeightMap deposition_map = hmap::HeightMap();
+  float           talus_global = 0.1f;
+  float           max_deposition = 0.01;
+  int             iterations = 5;
+  int             thermal_subiterations = 10;
+};
+
 class SelectEq : public Unary
 {
 public:
@@ -1001,6 +1022,38 @@ protected:
   int   iterations = 1;
   int   ir = 0;
   float dt = 1.f;
+};
+
+class Thermal : public gnode::Node
+{
+public:
+  Thermal(std::string id);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap(); // eroded heightmap
+  hmap::HeightMap deposition_map = hmap::HeightMap();
+  float           talus_global = 0.1f;
+  int             iterations = 10;
+};
+
+class ThermalAutoBedrock : public gnode::Node
+{
+public:
+  ThermalAutoBedrock(std::string id);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap(); // eroded heightmap
+  hmap::HeightMap deposition_map = hmap::HeightMap();
+  float           talus_global = 0.1f;
+  int             iterations = 10;
 };
 
 class ValleyWidth : public Unary

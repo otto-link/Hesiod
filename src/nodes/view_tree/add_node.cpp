@@ -323,6 +323,12 @@ std::string ViewTree::add_view_node(std::string control_node_type,
         id);
     this->add_node(p_view_node);
   }
+  else if (control_node_type == "SedimentDeposition")
+  {
+    std::shared_ptr p_view_node =
+        std::make_shared<hesiod::vnode::ViewSedimentDeposition>(id);
+    this->add_node(p_view_node);
+  }
   else if (control_node_type == "SelectEq")
   {
     std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewSelectEq>(
@@ -351,6 +357,18 @@ std::string ViewTree::add_view_node(std::string control_node_type,
   {
     std::shared_ptr p_view_node =
         std::make_shared<hesiod::vnode::ViewSteepenConvective>(id);
+    this->add_node(p_view_node);
+  }
+  else if (control_node_type == "Thermal")
+  {
+    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewThermal>(
+        id);
+    this->add_node(p_view_node);
+  }
+  else if (control_node_type == "ThermalAutoBedrock")
+  {
+    std::shared_ptr p_view_node =
+        std::make_shared<hesiod::vnode::ViewThermalAutoBedrock>(id);
     this->add_node(p_view_node);
   }
   else if (control_node_type == "ValleyWidth")

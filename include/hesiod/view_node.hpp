@@ -662,6 +662,18 @@ public:
   bool render_settings();
 };
 
+class ViewSedimentDeposition : public ViewNode,
+                               public hesiod::cnode::SedimentDeposition
+{
+public:
+  ViewSedimentDeposition(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewSelectEq : public ViewNode, public hesiod::cnode::SelectEq
 {
 public:
@@ -713,6 +725,29 @@ public:
   ViewSteepenConvective(std::string id);
 
   bool render_settings();
+};
+
+class ViewThermal : public ViewNode, public hesiod::cnode::Thermal
+{
+public:
+  ViewThermal(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
+class ViewThermalAutoBedrock : public ViewNode,
+                               public hesiod::cnode::ThermalAutoBedrock
+{
+public:
+  ViewThermalAutoBedrock(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewValleyWidth : public ViewNode, public hesiod::cnode::ValleyWidth
