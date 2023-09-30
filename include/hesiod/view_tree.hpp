@@ -58,6 +58,8 @@ public:
 
   std::string get_new_id();
 
+  ImU32 get_node_color(std::string node_id);
+
   std::string get_node_type(std::string node_id);
 
   ax::NodeEditor::EditorContext *get_p_node_editor_context() const;

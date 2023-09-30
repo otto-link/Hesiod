@@ -7,6 +7,7 @@
 #include "macrologger.h"
 #include <imgui_node_editor.h>
 
+#include "hesiod/gui.hpp"
 #include "hesiod/view_node.hpp"
 #include "hesiod/view_tree.hpp"
 
@@ -102,8 +103,17 @@ void ViewTree::render_node_editor()
     for (auto &node_hid : selected_node_hid)
     {
       std::string node_id = this->get_node_ref_by_hash_id(node_hid.Get())->id;
-      ImGui::SeparatorText(node_id.c_str());
+
+      ImGui::Separator();
+      hesiod::gui::draw_icon(hesiod::gui::square,
+                             {12.f, 12.f},
+                             this->get_node_color(node_id),
+                             true);
+      ImGui::SameLine();
+      ImGui::Text("%s", this->get_node_type(node_id).c_str());
+
       this->render_settings(node_id);
+      ImGui::Dummy(ImVec2(0.f, 16.f));
     }
 
     ImGui::EndChild();
@@ -188,7 +198,14 @@ void ViewTree::render_node_editor()
       {
         std::string node_id = this->get_node_id_by_hash_id(
             this->context_menu_node_hid.Get());
+
+        hesiod::gui::draw_icon(hesiod::gui::square,
+                               {12.f, 12.f},
+                               this->get_node_color(node_id),
+                               true);
+        ImGui::SameLine();
         ImGui::Text("%s", this->get_node_type(node_id).c_str());
+
         this->render_settings(node_id);
         ImGui::EndPopup();
       }

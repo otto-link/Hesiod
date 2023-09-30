@@ -156,16 +156,14 @@ std::string ViewTree::render_new_node_treeview(const ImVec2 node_position)
             0,
             node_category.find("/"));
 
-	hesiod::gui::draw_icon(hesiod::gui::square,
-			       {12.f, 12.f},
-			       ImColor(category_colors.at(main_category).hovered),
-			       true);
-	ImGui::SameLine();
+        hesiod::gui::draw_icon(
+            hesiod::gui::square,
+            {12.f, 12.f},
+            ImColor(category_colors.at(main_category).hovered),
+            true);
+        ImGui::SameLine();
         ImGui::Text("%s", node_category.c_str());
-	
-       	// ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg,
-        //                        ImColor(category_colors.at(main_category).hovered));
-	
+
         ImGui::PopID();
       }
     }

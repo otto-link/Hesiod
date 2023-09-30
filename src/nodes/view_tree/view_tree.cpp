@@ -88,6 +88,14 @@ std::string ViewTree::get_new_id()
   return std::to_string(this->id_counter++);
 }
 
+ImU32 ViewTree::get_node_color(std::string node_id)
+{
+  std::string node_type = this->get_node_type(node_id);
+  std::string node_category = hesiod::cnode::category_mapping.at(node_type);
+  std::string main_category = node_category.substr(0, node_category.find("/"));
+  return ImColor(category_colors.at(main_category).hovered);
+}
+
 std::string ViewTree::get_node_type(std::string node_id)
 {
   return this->get_node_ref_by_id(node_id)->get_node_type();
