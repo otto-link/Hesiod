@@ -105,6 +105,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Perlin", "Primitive/Coherent Noise"},
     {"PerlinBillow", "Primitive/Coherent Noise"},
     {"Preview", "Debug"},
+    {"RecastCanyon", "Filter/Recast"},
     {"Recurve", "Filter/Recurve"},
     {"Remap", "Filter/Range"},
     {"RidgedPerlin", "Primitive/Coherent Noise"},
@@ -936,6 +937,21 @@ public:
   void compute();
 
   void update_inner_bindings();
+};
+
+class RecastCanyon : public gnode::Node
+{
+public:
+  RecastCanyon(std::string id);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap();
+  float           vcut = 0.7f;
+  float           gamma = 4.f;
 };
 
 class Recurve : public Filter

@@ -52,9 +52,10 @@ int main()
       hesiod::vnode::ViewTree("tree_2", shape, tiling, overlap);
 
   tree.add_view_node("FbmPerlin");
-  // tree.add_view_node("Path");
-  // tree.add_view_node("FractalizePath");
-  tree.add_view_node("ThermalAutoBedrock");
+  // tree.add_view_node("RecastCanyon");
+  // tree.add_view_node("FbmPerlin");
+  // tree.new_link("FbmPerlin##0", "output", "RecastCanyon##1", "input");
+  // tree.new_link("FbmPerlin##2", "output", "RecastCanyon##1", "dz");
 
   hmap::Cloud cloud = hmap::Cloud(5, 2);
   hmap::Cloud cloud2 = hmap::Cloud(15, 3);

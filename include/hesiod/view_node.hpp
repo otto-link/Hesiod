@@ -653,6 +653,17 @@ public:
   void serialize_load(cereal::JSONInputArchive &);
 };
 
+class ViewRecastCanyon : public ViewNode, public hesiod::cnode::RecastCanyon
+{
+public:
+  ViewRecastCanyon(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &);
+  void serialize_load(cereal::JSONInputArchive &);
+};
+
 class ViewRecurve : public ViewNode, public hesiod::cnode::Recurve
 {
 public:

@@ -8,53 +8,51 @@
 namespace hesiod::cnode
 {
 
-ZeroedEdges::ZeroedEdges(std::string id) : gnode::Node(id)
+RecastCanyon::RecastCanyon(std::string id) : gnode::Node(id)
 {
-  this->node_type = "ZeroedEdges";
+  LOG_DEBUG("RecastCanyon::RecastCanyon()");
+  this->node_type = "RecastCanyon";
   this->category = category_mapping.at(this->node_type);
-
   this->add_port(gnode::Port("input", gnode::direction::in, dtype::dHeightMap));
-  this->add_port(gnode::Port("dr",
+  this->add_port(gnode::Port("dz",
                              gnode::direction::in,
                              dtype::dHeightMap,
                              gnode::optional::yes));
-
+  this->add_port(gnode::Port("mask",
+                             gnode::direction::in,
+                             dtype::dHeightMap,
+                             gnode::optional::yes));
   this->add_port(
       gnode::Port("output", gnode::direction::out, dtype::dHeightMap));
   this->update_inner_bindings();
 }
 
-void ZeroedEdges::update_inner_bindings()
+void RecastCanyon::update_inner_bindings()
 {
   LOG_DEBUG("inner bindings [%s]", this->id.c_str());
   this->set_p_data("output", (void *)&(this->value_out));
 }
 
-void ZeroedEdges::compute()
+void RecastCanyon::compute()
 {
   LOG_DEBUG("computing node [%s]", this->id.c_str());
-
   hmap::HeightMap *p_input_hmap = static_cast<hmap::HeightMap *>(
       (void *)this->get_p_data("input"));
-  hmap::HeightMap *p_input_dr = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("dr"));
+  hmap::HeightMap *p_input_dz = static_cast<hmap::HeightMap *>(
+      (void *)this->get_p_data("dz"));
+  hmap::HeightMap *p_input_mask = static_cast<hmap::HeightMap *>(
+      (void *)this->get_p_data("mask"));
 
   this->value_out = *p_input_hmap;
 
-  if (!p_input_dr)
-    hmap::transform(
-        this->value_out,
-        [](hmap::Array &z, hmap::Vec2<float> shift, hmap::Vec2<float> scale)
-        { hmap::zeroed_edges(z, nullptr, shift, scale); });
+  hmap::transform(
+      this->value_out,
+      p_input_dz,
+      p_input_mask,
+      [this](hmap::Array &z, hmap::Array *p_noise, hmap::Array *p_mask)
+      { hmap::recast_canyon(z, this->vcut, p_mask, this->gamma, p_noise); });
 
-  else
-    hmap::transform(this->value_out,
-                    *p_input_dr,
-                    [](hmap::Array      &z,
-                       hmap::Array      &dr,
-                       hmap::Vec2<float> shift,
-                       hmap::Vec2<float> scale)
-                    { hmap::zeroed_edges(z, &dr, shift, scale); });
+  this->value_out.smooth_overlap_buffers();
 }
 
 } // namespace hesiod::cnode
