@@ -7,6 +7,7 @@
 #include "macrologger.h"
 #include <imgui_node_editor.h>
 
+#include "hesiod/gui.hpp"
 #include "hesiod/view_node.hpp"
 #include "hesiod/view_tree.hpp"
 
@@ -154,13 +155,17 @@ std::string ViewTree::render_new_node_treeview(const ImVec2 node_position)
         std::string main_category = node_category.substr(
             0,
             node_category.find("/"));
-        // ImGui::TextColored(ImColor(category_colors.at(main_category).base),
-        //                    "%s",
-        //                    node_category.c_str());
 
+	hesiod::gui::draw_icon(hesiod::gui::square,
+			       {12.f, 12.f},
+			       ImColor(category_colors.at(main_category).hovered),
+			       true);
+	ImGui::SameLine();
         ImGui::Text("%s", node_category.c_str());
-        ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg,
-                               ImColor(category_colors.at(main_category).base));
+	
+       	// ImGui::TableSetBgColor(ImGuiTableBgTarget_CellBg,
+        //                        ImColor(category_colors.at(main_category).hovered));
+	
         ImGui::PopID();
       }
     }
