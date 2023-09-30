@@ -29,12 +29,6 @@ bool ViewKernel::render_settings()
   }
   has_changed |= this->trigger_update_after_edit();
 
-  // ImGui::SliderInt("shape.x", &this->shape.x, 1, 256);
-  // has_changed |= this->trigger_update_after_edit();
-
-  // ImGui::SliderInt("shape.y", &this->shape.y, 1, 256);
-  // has_changed |= this->trigger_update_after_edit();
-
   if (hesiod::gui::listbox_map_enum(this->kernel_map, this->kernel, 128.f))
   {
     this->force_update();

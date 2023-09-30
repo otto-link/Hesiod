@@ -872,6 +872,17 @@ private:
   bool link_kxy = true;
 };
 
+class ViewZeroedEdges : public ViewNode, public hesiod::cnode::ZeroedEdges
+{
+public:
+  ViewZeroedEdges(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 // // HELPERS
 
 void img_to_texture(std::vector<uint8_t> img,

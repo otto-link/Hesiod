@@ -124,7 +124,8 @@ static const std::map<std::string, std::string> category_mapping = {
     {"WaveSine", "Primitive/Function"},
     {"White", "Primitive/Random"},
     {"WhiteDensityMap", "Primitive/Random"},
-    {"Worley", "Primitive/Coherent Noise"}};
+    {"Worley", "Primitive/Coherent Noise"},
+    {"ZeroedEdges", "Math/Boundaries"}};
 
 //----------------------------------------
 // Generic nodes
@@ -1231,6 +1232,19 @@ public:
 protected:
   hmap::Vec2<float> kw = {DEFAULT_KW, DEFAULT_KW};
   int               seed = DEFAULT_SEED;
+};
+
+class ZeroedEdges : public gnode::Node
+{
+public:
+  ZeroedEdges(std::string id);
+
+  void update_inner_bindings();
+
+  void compute();
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap();
 };
 
 } // namespace hesiod::cnode
