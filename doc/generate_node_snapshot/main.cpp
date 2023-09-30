@@ -1,6 +1,10 @@
+#include "ImCandy/candy.h"
 #include "gnode.hpp"
 
+#include "hesiod/viewer.hpp"
+
 #include "hesiod/control_node.hpp"
+#include "hesiod/fonts.hpp"
 #include "hesiod/gui.hpp"
 #include "hesiod/view_node.hpp"
 #include "hesiod/view_tree.hpp"
@@ -60,6 +64,15 @@ int main()
       SNAPSHOT_SIZE,
       "Hesiod v0.0.x (c) 2023 Otto Link");
 
+  ImGuiIO     &io = ImGui::GetIO();
+  ImFontConfig config;
+  config.OversampleH = 2;
+  config.OversampleV = 2;
+  io.Fonts->AddFontFromMemoryTTF(Roboto_Regular_ttf,
+                                 Roboto_Regular_ttf_len,
+                                 16.f,
+                                 &config);
+
   for (auto &[type, cat] : hesiod::cnode::category_mapping)
   {
     LOG_DEBUG("type: %s", type.c_str());
@@ -68,16 +81,6 @@ int main()
     hesiod::vnode::ViewTree tree =
         hesiod::vnode::ViewTree("tree", shape, tiling, overlap);
     std::string node_id = tree.add_view_node(type);
-
-    // // if the node has an input "input", connect it to a primitive
-    // gnode::Node * p_node = tree.get_node_ref_by_id(node_id);
-    // for (auto &[port_id, port] : p_node->get_ports())
-    //   if (port_id == "input")
-    // 	{
-    // 	  std::string fbm_node_id = tree.add_view_node("FbmPerlin");
-    // 	  tree.new_link(fbm_node_id, "output", node_id, port_id);
-    // 	}
-    // tree.update();
 
     export_png(window, tree, fname);
   }

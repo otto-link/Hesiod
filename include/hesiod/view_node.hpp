@@ -232,6 +232,9 @@ public:
   ViewClone(std::string id);
 
   bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &);
+  void serialize_load(cereal::JSONInputArchive &);
 };
 
 class ViewCloud : public ViewNode, public hesiod::cnode::Cloud

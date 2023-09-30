@@ -36,4 +36,14 @@ bool ViewClone::render_settings()
   return has_changed;
 }
 
+void ViewClone::serialize_save(cereal::JSONOutputArchive &ar)
+{
+  // empty
+}
+
+void ViewClone::serialize_load(cereal::JSONInputArchive &ar)
+{
+  // empty
+}
+
 } // namespace hesiod::vnode
