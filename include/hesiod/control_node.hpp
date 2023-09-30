@@ -8,6 +8,7 @@
 #include "highmap.hpp"
 
 // clang-format off
+#define DEFAULT_KERNEL_SHAPE {17, 17}
 #define DEFAULT_KW 2.f
 #define DEFAULT_SEED 1
 // clang-format on
@@ -18,6 +19,7 @@ namespace hesiod::cnode
 // define hesiod's own data types
 enum dtype : int
 {
+  dArray,
   dCloud,
   dHeightMap,
   dPath
@@ -88,6 +90,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"HydraulicStream", "Erosion/Hydraulic"},
     {"HydraulicVpipes", "Erosion/Hydraulic"},
     {"Import", "IO/Files"},
+    {"Kernel", "Primitive/Kernel"},
     {"KmeansClustering2", "Features"},
     {"Laplace", "Filter/Smoothing"},
     {"Lerp", "Operator/Blend"},
@@ -100,6 +103,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"PathFinding", "Roads"},
     {"Perlin", "Primitive/Coherent Noise"},
     {"PerlinBillow", "Primitive/Coherent Noise"},
+    {"Preview", "Debug"},
     {"Recurve", "Filter/Recurve"},
     {"Remap", "Filter/Range"},
     {"RidgedPerlin", "Primitive/Coherent Noise"},
@@ -716,6 +720,30 @@ private:
   float           overlap;
 };
 
+class Kernel : public gnode::Node
+{
+public:
+  Kernel(std::string id);
+
+  void update_inner_bindings();
+
+  void compute();
+
+protected:
+  hmap::Array     value_out = hmap::Array();
+  bool            normalized = true;
+  float           vmin = 0.f;
+  float           vmax = 1.f;
+  hmap::Vec2<int> shape = DEFAULT_KERNEL_SHAPE;
+  int             kernel = kernel::cubic_pulse;
+
+  std::map<std::string, int> kernel_map = {
+      {"cone", kernel::cone},
+      {"cubic_pulse", kernel::cubic_pulse},
+      {"lorentzian", kernel::lorentzian},
+      {"smooth_cosine", kernel::smooth_cosine}};
+};
+
 class KmeansClustering2 : public Binary
 {
 public:
@@ -882,6 +910,16 @@ public:
 protected:
   hmap::Vec2<float> kw = {DEFAULT_KW, DEFAULT_KW};
   int               seed = DEFAULT_SEED;
+};
+
+class Preview : public gnode::Node
+{
+public:
+  Preview(std::string id);
+
+  void compute();
+
+  void update_inner_bindings();
 };
 
 class Recurve : public Filter

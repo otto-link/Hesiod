@@ -201,7 +201,7 @@ void ViewNode::render_node()
                                   node_content_rect.GetTL().y + 1.f),
                            ImVec2(node_content_rect.GetBR().x - 1.f,
                                   text_content_rect.GetBR().y + 0.3f * height),
-                           category_colors.at(main_category).base,
+                           category_colors.at(main_category).hovered,
                            ax::NodeEditor::GetStyle().NodeRounding,
                            ImDrawFlags_RoundCornersTop);
 

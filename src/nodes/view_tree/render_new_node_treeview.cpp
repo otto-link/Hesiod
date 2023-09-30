@@ -48,17 +48,23 @@ std::vector<std::string> sort(const std::map<std::string, std::string> &amap,
   return keys_sorted;
 }
 
-void ViewTree::render_new_node_popup()
+std::string ViewTree::render_new_node_popup()
 {
+  std::string new_node_id = "";
+
   if (ImGui::BeginPopup("add node"))
   {
     const ImVec2 mouse_pos = ImGui::GetMousePosOnOpeningCurrentPopup();
 
-    if (this->render_new_node_treeview({mouse_pos.x, mouse_pos.y}) != "")
+    new_node_id = this->render_new_node_treeview({mouse_pos.x, mouse_pos.y});
+
+    if (new_node_id != "")
       ImGui::CloseCurrentPopup();
 
     ImGui::EndPopup();
   }
+
+  return new_node_id;
 }
 
 std::string ViewTree::render_new_node_treeview(const ImVec2 node_position)

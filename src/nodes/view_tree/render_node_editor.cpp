@@ -132,11 +132,13 @@ void ViewTree::render_node_editor()
     }
 
     // --- creation
+    ax::NodeEditor::PinId *p_port_hid_new = nullptr;
+    ax::NodeEditor::PinId  port_hid_1;
+    ax::NodeEditor::PinId  port_hid_2;
+
     if (ax::NodeEditor::BeginCreate())
     {
       // new link
-      ax::NodeEditor::PinId port_hid_1;
-      ax::NodeEditor::PinId port_hid_2;
       if (ax::NodeEditor::QueryNewLink(&port_hid_1, &port_hid_2))
         if (port_hid_1 && port_hid_2)
           if (ax::NodeEditor::AcceptNewItem())
@@ -146,8 +148,7 @@ void ViewTree::render_node_editor()
         if (ax::NodeEditor::AcceptNewItem())
         {
           ImGui::OpenPopup("add node");
-          // TODO
-          LOG_DEBUG("%d", port_hid_1.Get());
+          p_port_hid_new = &port_hid_1;
         }
     }
     ax::NodeEditor::EndCreate();
@@ -159,7 +160,15 @@ void ViewTree::render_node_editor()
       // add node
       if (ax::NodeEditor::ShowBackgroundContextMenu())
         ImGui::OpenPopup("add node");
-      this->render_new_node_popup();
+      std::string new_node_id = this->render_new_node_popup();
+
+      if ((new_node_id != "") && p_port_hid_new)
+      {
+        // if the node has been created while dragging a new link,
+        // automatically connect the link
+
+        // TODO
+      }
 
       // settings
       if (ax::NodeEditor::ShowNodeContextMenu(&this->context_menu_node_hid))

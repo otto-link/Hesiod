@@ -74,8 +74,8 @@ static const std::map<std::string, viewnode_color_set> category_colors = {
     {"Math", viewnode_color_set({0, 43, 54, 255})},
     {"Geometry", viewnode_color_set({101, 123, 131, 255})},
     {"Roads", viewnode_color_set({147, 161, 161, 255})},
-    {"Routing", viewnode_color_set({238, 232, 213, 255})},
-    {"IO", viewnode_color_set({253, 246, 227, 255})},
+    {"Routing", viewnode_color_set({188, 182, 163, 255})},
+    {"IO", viewnode_color_set({203, 196, 177, 255})},
     {"Features", viewnode_color_set({181, 137, 0, 255})},
     {"Erosion", viewnode_color_set({203, 75, 22, 255})},
     {"Mask", viewnode_color_set({211, 54, 130, 255})},
@@ -87,11 +87,10 @@ static const std::map<std::string, viewnode_color_set> category_colors = {
 
 // Dracula theme for links
 static const std::map<int, viewnode_color_set> dtype_colors = {
+    {hesiod::cnode::dArray, viewnode_color_set({255, 121, 198, 255})},
     {hesiod::cnode::dCloud, viewnode_color_set({139, 233, 253, 255})},
     {hesiod::cnode::dHeightMap, viewnode_color_set({255, 255, 255, 255})},
     {hesiod::cnode::dPath, viewnode_color_set({80, 250, 123, 255})}};
-
-// 255	121	198
 
 class ViewNode
 {
@@ -483,6 +482,17 @@ public:
   void serialize_load(cereal::JSONInputArchive &ar);
 };
 
+class ViewKernel : public ViewNode, public hesiod::cnode::Kernel
+{
+public:
+  ViewKernel(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewKmeansClustering2 : public ViewNode,
                               public hesiod::cnode::KmeansClustering2
 {
@@ -619,6 +629,17 @@ public:
 
 private:
   bool link_kxy = true;
+};
+
+class ViewPreview : public ViewNode, public hesiod::cnode::Preview
+{
+public:
+  ViewPreview(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &);
+  void serialize_load(cereal::JSONInputArchive &);
 };
 
 class ViewRecurve : public ViewNode, public hesiod::cnode::Recurve

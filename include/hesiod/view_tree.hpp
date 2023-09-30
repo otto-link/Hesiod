@@ -89,7 +89,7 @@ public:
 
   void render_links();
 
-  void render_new_node_popup();
+  std::string render_new_node_popup();
 
   std::string render_new_node_treeview(const ImVec2 node_position = {0.f, 0.f});
 

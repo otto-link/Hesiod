@@ -20,25 +20,25 @@ void ExpandShrink::compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask)
   LOG_DEBUG("computing filter node [%s]", this->id.c_str());
 
   // kernel definition
-  hmap::Array     kernel;
+  hmap::Array     kernel_array;
   hmap::Vec2<int> kernel_shape = {2 * this->ir + 1, 2 * this->ir + 1};
 
   switch (this->kernel)
   {
   case kernel::cone:
-    kernel = hmap::cone(kernel_shape);
+    kernel_array = hmap::cone(kernel_shape);
     break;
 
   case kernel::cubic_pulse:
-    kernel = hmap::cubic_pulse(kernel_shape);
+    kernel_array = hmap::cubic_pulse(kernel_shape);
     break;
 
   case kernel::lorentzian:
-    kernel = hmap::lorentzian(kernel_shape);
+    kernel_array = hmap::lorentzian(kernel_shape);
     break;
 
   case kernel::smooth_cosine:
-    kernel = hmap::smooth_cosine(kernel_shape);
+    kernel_array = hmap::smooth_cosine(kernel_shape);
     break;
   }
 
@@ -46,11 +46,11 @@ void ExpandShrink::compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask)
   std::function<void(hmap::Array &, hmap::Array *)> lambda;
 
   if (this->shrink)
-    lambda = [&kernel](hmap::Array &x, hmap::Array *p_mask)
-    { hmap::shrink(x, kernel, p_mask); };
+    lambda = [&kernel_array](hmap::Array &x, hmap::Array *p_mask)
+    { hmap::shrink(x, kernel_array, p_mask); };
   else
-    lambda = [&kernel](hmap::Array &x, hmap::Array *p_mask)
-    { hmap::expand(x, kernel, p_mask); };
+    lambda = [&kernel_array](hmap::Array &x, hmap::Array *p_mask)
+    { hmap::expand(x, kernel_array, p_mask); };
 
   hmap::transform(h, p_mask, lambda);
   h.smooth_overlap_buffers();

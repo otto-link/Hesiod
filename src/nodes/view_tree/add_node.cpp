@@ -220,6 +220,12 @@ std::string ViewTree::add_view_node(std::string control_node_type,
         std::make_shared<hesiod::vnode::ViewImport>(id, shape, tiling, overlap);
     this->add_node(p_view_node);
   }
+  else if (control_node_type == "Kernel")
+  {
+    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewKernel>(
+        id);
+    this->add_node(p_view_node);
+  }
   else if (control_node_type == "KmeansClustering2")
   {
     std::shared_ptr p_view_node =
@@ -294,6 +300,12 @@ std::string ViewTree::add_view_node(std::string control_node_type,
                                                           this->shape,
                                                           this->tiling,
                                                           this->overlap);
+    this->add_node(p_view_node);
+  }
+  else if (control_node_type == "Preview")
+  {
+    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewPreview>(
+        id);
     this->add_node(p_view_node);
   }
   else if (control_node_type == "Recurve")
