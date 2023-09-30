@@ -21,11 +21,19 @@ bool ViewKernel::render_settings()
   bool has_changed = false;
   has_changed |= this->render_settings_header();
 
-  ImGui::SliderInt("shape.x", &this->shape.x, 1, 256);
+  int ir = (this->shape.x - 1) / 2;
+  if (ImGui::SliderInt("ir", &ir, 1, 256))
+  {
+    this->shape.x = 2 * ir + 1;
+    this->shape.y = this->shape.x;
+  }
   has_changed |= this->trigger_update_after_edit();
 
-  ImGui::SliderInt("shape.y", &this->shape.y, 1, 256);
-  has_changed |= this->trigger_update_after_edit();
+  // ImGui::SliderInt("shape.x", &this->shape.x, 1, 256);
+  // has_changed |= this->trigger_update_after_edit();
+
+  // ImGui::SliderInt("shape.y", &this->shape.y, 1, 256);
+  // has_changed |= this->trigger_update_after_edit();
 
   if (hesiod::gui::listbox_map_enum(this->kernel_map, this->kernel, 128.f))
   {

@@ -70,6 +70,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Clone", "Routing"},
     {"Cloud", "Geometry/Cloud"},
     {"CloudToArrayInterp", "Primitive/Manual"},
+    {"ConvolveSVD", "Math/Convolution"},
     {"Debug", "Debug"},
     {"DigPath", "Roads"},
     {"Equalize", "Filter/Recurve"},
@@ -415,6 +416,20 @@ public:
 
 protected:
   int interpolation_method = 0;
+};
+
+class ConvolveSVD : public gnode::Node
+{
+public:
+  ConvolveSVD(std::string id);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap();
+  int             rank = 3;
 };
 
 class DigPath : public gnode::Node
