@@ -10,6 +10,7 @@
 #include "hesiod/viewer.hpp"
 
 #include "hesiod/control_node.hpp"
+#include "hesiod/fonts.hpp"
 #include "hesiod/gui.hpp"
 #include "hesiod/view_node.hpp"
 #include "hesiod/view_tree.hpp"
@@ -34,11 +35,15 @@ int main()
   ImCandy::Theme_Blender();
   // ImCandy::Theme_Cyberpunk();
 
-  // ImGuiIO& io = ImGui::GetIO();
-  // ImFontConfig config;
-  // config.OversampleH = 2;
-  // config.OversampleV = 2;
+  ImGuiIO     &io = ImGui::GetIO();
+  ImFontConfig config;
+  config.OversampleH = 2;
+  config.OversampleV = 2;
   // io.Fonts->AddFontFromFileTTF("Roboto-Regular.ttf", 16.f, &config);
+  io.Fonts->AddFontFromMemoryTTF(Roboto_Regular_ttf,
+                                 Roboto_Regular_ttf_len,
+                                 16.f,
+                                 &config);
 
   hesiod::vnode::ViewTree tree =
       hesiod::vnode::ViewTree("tree_1", shape, tiling, overlap);
