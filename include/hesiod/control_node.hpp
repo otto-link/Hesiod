@@ -78,6 +78,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"ExpandShrinkDirectional", "Filter/Recast"},
     {"Export", "IO/Files"},
     {"FbmPerlin", "Primitive/Coherent Noise"},
+    {"FbmWorley", "Primitive/Coherent Noise"},
     {"FractalizePath", "Geometry/Path"},
     {"Gain", "Filter/Recurve"},
     {"GammaCorrection", "Filter/Recurve"},
@@ -512,6 +513,25 @@ class FbmPerlin : public Primitive
 {
 public:
   FbmPerlin(std::string     id,
+            hmap::Vec2<int> shape,
+            hmap::Vec2<int> tiling,
+            float           overlap);
+
+  void compute();
+
+protected:
+  hmap::Vec2<float> kw = {DEFAULT_KW, DEFAULT_KW};
+  int               seed = DEFAULT_SEED;
+  int               octaves = 8;
+  float             weight = 0.7f;
+  float             persistence = 0.5f;
+  float             lacunarity = 2.f;
+};
+
+class FbmWorley : public Primitive
+{
+public:
+  FbmWorley(std::string     id,
             hmap::Vec2<int> shape,
             hmap::Vec2<int> tiling,
             float           overlap);

@@ -363,6 +363,23 @@ private:
   bool link_kxy = true;
 };
 
+class ViewFbmWorley : public ViewNode, public hesiod::cnode::FbmWorley
+{
+public:
+  ViewFbmWorley(std::string     id,
+                hmap::Vec2<int> shape,
+                hmap::Vec2<int> tiling,
+                float           overlap);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+
+private:
+  bool link_kxy = true;
+};
+
 class ViewFractalizePath : public ViewNode, public hesiod::cnode::FractalizePath
 {
 public:
