@@ -18,6 +18,7 @@
 int main()
 {
   hmap::Vec2<int> shape = {512, 512};
+  shape = {1024, 1024};
 
   hmap::Vec2<int> tiling = {4, 4};
   float           overlap = 0.25f;
@@ -31,15 +32,12 @@ int main()
       hesiod::gui::init_gui(1800, 800, "Hesiod v0.0.x (c) 2023 Otto Link");
   ImVec4 clear_color = ImVec4(0.15f, 0.25f, 0.30f, 1.00f);
 
-  // ImCandy::Theme_Nord();
   ImCandy::Theme_Blender();
-  // ImCandy::Theme_Cyberpunk();
 
   ImGuiIO     &io = ImGui::GetIO();
   ImFontConfig config;
   config.OversampleH = 2;
   config.OversampleV = 2;
-  // io.Fonts->AddFontFromFileTTF("Roboto-Regular.ttf", 16.f, &config);
   io.Fonts->AddFontFromMemoryTTF(Roboto_Regular_ttf,
                                  Roboto_Regular_ttf_len,
                                  16.f,
@@ -52,9 +50,9 @@ int main()
       hesiod::vnode::ViewTree("tree_2", shape, tiling, overlap);
 
   tree.add_view_node("FbmPerlin");
-  // tree.add_view_node("RecastCanyon");
+  tree.add_view_node("ZeroedEdges");
   // tree.add_view_node("FbmPerlin");
-  // tree.new_link("FbmPerlin##0", "output", "RecastCanyon##1", "input");
+  tree.new_link("FbmPerlin##0", "output", "ZeroedEdges##1", "input");
   // tree.new_link("FbmPerlin##2", "output", "RecastCanyon##1", "dz");
 
   hmap::Cloud cloud = hmap::Cloud(5, 2);
@@ -76,28 +74,6 @@ int main()
 
     tree.render_node_editor();
     // tree2.render_node_editor();
-
-    // ImGui::Begin("test Point Editor");
-    // if (hesiod::gui::canvas_cloud_editor(cloud))
-    //   cloud.print();
-    // ImGui::End();
-
-    // ImGui::Begin("test Point Editor");
-    // if (hesiod::gui::canvas_path_editor(path))
-    //   path.print();
-    // ImGui::End();
-
-    // ImGui::Begin("test Point Editor2");
-    // if (hesiod::gui::canvas_cloud_editor(cloud2))
-    //   cloud2.print();
-    // ImGui::End();
-
-    // ImGui::Begin("FPS");
-    // auto &io = ImGui::GetIO();
-    // ImGui::Text("FPS: %.2f (%.2gms)",
-    //             io.Framerate,
-    //             io.Framerate ? 1000.0f / io.Framerate : 0.0f);
-    // ImGui::End();
 
     // --- Rendering
     ImGui::Render();

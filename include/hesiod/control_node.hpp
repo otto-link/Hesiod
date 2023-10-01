@@ -1284,6 +1284,7 @@ public:
 
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
+  float           sigma = 0.25f;
 };
 
 } // namespace hesiod::cnode

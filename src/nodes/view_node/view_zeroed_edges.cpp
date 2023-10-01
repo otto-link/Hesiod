@@ -21,18 +21,21 @@ bool ViewZeroedEdges::render_settings()
   bool has_changed = false;
   has_changed |= this->render_settings_header();
 
+  ImGui::SliderFloat("sigma", &this->sigma, 0.f, 0.5f, "%.2f");
+  has_changed |= this->trigger_update_after_edit();
+
   has_changed |= this->render_settings_footer();
   return has_changed;
 }
 
-void ViewZeroedEdges::serialize_save(cereal::JSONOutputArchive &)
+void ViewZeroedEdges::serialize_save(cereal::JSONOutputArchive &ar)
 {
-  // empty
+  ar(cereal::make_nvp("sigma", this->sigma));
 }
 
-void ViewZeroedEdges::serialize_load(cereal::JSONInputArchive &)
+void ViewZeroedEdges::serialize_load(cereal::JSONInputArchive &ar)
 {
-  // empty
+  ar(cereal::make_nvp("sigma", this->sigma));
 }
 
 } // namespace hesiod::vnode

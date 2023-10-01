@@ -44,17 +44,17 @@ void ZeroedEdges::compute()
   if (!p_input_dr)
     hmap::transform(
         this->value_out,
-        [](hmap::Array &z, hmap::Vec2<float> shift, hmap::Vec2<float> scale)
-        { hmap::zeroed_edges(z, nullptr, shift, scale); });
+        [this](hmap::Array &z, hmap::Vec2<float> shift, hmap::Vec2<float> scale)
+        { hmap::zeroed_edges(z, this->sigma, nullptr, shift, scale); });
 
   else
     hmap::transform(this->value_out,
                     *p_input_dr,
-                    [](hmap::Array      &z,
-                       hmap::Array      &dr,
-                       hmap::Vec2<float> shift,
-                       hmap::Vec2<float> scale)
-                    { hmap::zeroed_edges(z, &dr, shift, scale); });
+                    [this](hmap::Array      &z,
+                           hmap::Array      &dr,
+                           hmap::Vec2<float> shift,
+                           hmap::Vec2<float> scale)
+                    { hmap::zeroed_edges(z, this->sigma, &dr, shift, scale); });
 }
 
 } // namespace hesiod::cnode
