@@ -36,13 +36,10 @@ void create_framebuffer(GLuint &FBO,
                         float   width,
                         float   height);
 
-// here we bind our framebuffer
 void bind_framebuffer(GLuint &FBO);
 
-// here we unbind our framebuffer
 void unbind_framebuffer();
 
-// and we rescale the buffer, so we're able to resize the window
 void rescale_framebuffer(GLuint &RBO,
                          GLuint &texture_id,
                          float   width,
