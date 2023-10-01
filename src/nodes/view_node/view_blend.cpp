@@ -47,4 +47,18 @@ bool ViewBlend::render_settings()
   return has_changed;
 }
 
+void ViewBlend::serialize_save(cereal::JSONOutputArchive &ar)
+{
+  ar(cereal::make_nvp("method", this->method));
+  ar(cereal::make_nvp("k", this->k));
+  ar(cereal::make_nvp("ir", this->ir));
+}
+
+void ViewBlend::serialize_load(cereal::JSONInputArchive &ar)
+{
+  ar(cereal::make_nvp("method", this->method));
+  ar(cereal::make_nvp("k", this->k));
+  ar(cereal::make_nvp("ir", this->ir));
+}
+
 } // namespace hesiod::vnode

@@ -191,6 +191,9 @@ public:
   ViewBlend(std::string id);
 
   bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewBump : public ViewNode, public hesiod::cnode::Bump
