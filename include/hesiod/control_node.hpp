@@ -118,6 +118,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"SteepenConvective", "Filter/Recast"},
     {"Thermal", "Erosion/Thermal"},
     {"ThermalAutoBedrock", "Erosion/Thermal"},
+    {"ThermalScree", "Erosion/Thermal"},
     {"ValleyWidth", "Features"},
     {"ValueNoiseDelaunay", "Primitive/Coherent Noise"},
     {"Warp", "Operator/Transform"},
@@ -1124,6 +1125,28 @@ protected:
   hmap::HeightMap deposition_map = hmap::HeightMap();
   float           talus_global = 0.1f;
   int             iterations = 10;
+};
+
+class ThermalScree : public gnode::Node
+{
+public:
+  ThermalScree(std::string id);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap(); // eroded heightmap
+  hmap::HeightMap deposition_map = hmap::HeightMap();
+  float           talus_global = 3.f;
+  int             seed = DEFAULT_SEED;
+  float           zmax = 0.3f;
+  float           zmin = -1.f;
+  float           noise_ratio = 0.3f;
+  float           landing_talus_ratio = 1.f;
+  float           landing_width_ratio = 0.25f;
+  bool            talus_constraint = true;
 };
 
 class ValleyWidth : public Unary

@@ -796,6 +796,17 @@ public:
   void serialize_load(cereal::JSONInputArchive &ar);
 };
 
+class ViewThermalScree : public ViewNode, public hesiod::cnode::ThermalScree
+{
+public:
+  ViewThermalScree(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewValleyWidth : public ViewNode, public hesiod::cnode::ValleyWidth
 {
 public:

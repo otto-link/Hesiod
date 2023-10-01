@@ -36,12 +36,12 @@ bool ViewClone::render_settings()
   return has_changed;
 }
 
-void ViewClone::serialize_save(cereal::JSONOutputArchive &ar)
+void ViewClone::serialize_save(cereal::JSONOutputArchive &)
 {
   // empty
 }
 
-void ViewClone::serialize_load(cereal::JSONInputArchive &ar)
+void ViewClone::serialize_load(cereal::JSONInputArchive &)
 {
   // empty
 }
