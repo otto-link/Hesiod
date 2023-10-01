@@ -17,19 +17,21 @@ bool slider_vmin_vmax(float &vmin, float &vmax)
 
   ImGui::TextUnformatted("Range selection");
 
-  if (ImGui::DragFloatRange2("Range",
-                             &vmin,
-                             &vmax,
-                             0.01f,
-                             -FLT_MAX,
-                             FLT_MAX,
-                             "vmin: %.2f",
-                             "vmax: %.2f",
-                             ImGuiSliderFlags_AlwaysClamp))
+  ImGui::DragFloatRange2("Range",
+                         &vmin,
+                         &vmax,
+                         0.01f,
+                         -FLT_MAX,
+                         FLT_MAX,
+                         "vmin: %.2f",
+                         "vmax: %.2f",
+                         ImGuiSliderFlags_AlwaysClamp);
+  if (ImGui::IsItemDeactivatedAfterEdit())
     ret = true;
 
   float vmin_before_change = vmin;
-  if (ImGui::DragFloat("offset", &vmin, 0.01f, -FLT_MAX, FLT_MAX, "%.2f"))
+  ImGui::DragFloat("offset", &vmin, 0.01f, -FLT_MAX, FLT_MAX, "%.2f");
+  if (ImGui::IsItemDeactivatedAfterEdit())
   {
     vmax += vmin - vmin_before_change;
     ret = true;

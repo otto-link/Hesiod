@@ -1238,6 +1238,7 @@ public:
 protected:
   float kw = DEFAULT_KW;
   float angle = 0.f;
+  float phase_shift = 0.f;
 };
 
 class White : public gnode::Node

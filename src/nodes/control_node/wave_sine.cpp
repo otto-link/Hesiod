@@ -36,6 +36,7 @@ void WaveSine::compute()
                return hmap::wave_sine(shape,
                                       this->kw,
                                       this->angle,
+                                      this->phase_shift,
                                       p_noise_x,
                                       shift,
                                       scale);

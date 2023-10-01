@@ -36,6 +36,9 @@ bool ViewWaveSine::render_settings()
 
   has_changed |= this->trigger_update_after_edit();
 
+  ImGui::SliderAngle("phase_shift", &phase_shift, -180.f, 180.f);
+  has_changed |= this->trigger_update_after_edit();
+
   ImGui::Separator();
 
   if (hesiod::gui::slider_vmin_vmax(vmin, vmax))
@@ -52,6 +55,7 @@ void ViewWaveSine::serialize_save(cereal::JSONOutputArchive &ar)
 {
   ar(cereal::make_nvp("kw", this->kw));
   ar(cereal::make_nvp("angle", this->angle));
+  ar(cereal::make_nvp("phase_shift", this->phase_shift));
   ar(cereal::make_nvp("vmin", this->vmin));
   ar(cereal::make_nvp("vmax", this->vmax));
 }
@@ -60,6 +64,7 @@ void ViewWaveSine::serialize_load(cereal::JSONInputArchive &ar)
 {
   ar(cereal::make_nvp("kw", this->kw));
   ar(cereal::make_nvp("angle", this->angle));
+  ar(cereal::make_nvp("phase_shift", this->phase_shift));
   ar(cereal::make_nvp("vmin", this->vmin));
   ar(cereal::make_nvp("vmax", this->vmax));
 }
