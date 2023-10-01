@@ -150,9 +150,11 @@ private:
   float           view2d_zoom = 100.f;
   ImVec2          view2d_uv0 = {0.f, 0.f};
 
-  std::map<std::string, int> cmap_map = {{"gray", hmap::cmap::gray},
-                                         {"inferno", hmap::cmap::inferno},
-                                         {"terrain", hmap::cmap::terrain}};
+  std::map<std::string, int> cmap_map = {
+      {"gray", hmap::cmap::gray},
+      {"inferno", hmap::cmap::inferno},
+      {"nipy_spectral", hmap::cmap::nipy_spectral},
+      {"terrain", hmap::cmap::terrain}};
 
   // 3D viewer
   bool                 open_view3d_window = false;
