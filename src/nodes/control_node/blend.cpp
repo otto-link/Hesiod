@@ -64,6 +64,11 @@ void Blend::compute_in_out(hmap::HeightMap &h_out,
     { m = a1 * a2; };
     break;
 
+  case blending_method::multiply_add:
+    lambda = [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
+    { m = a1 + a1 * a2; };
+    break;
+
   case blending_method::negate:
     lambda = [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
     { m = hmap::blend_negate(a1, a2); };
