@@ -793,6 +793,20 @@ public:
   bool render_settings();
 };
 
+class ViewStep : public ViewNode, public hesiod::cnode::Step
+{
+public:
+  ViewStep(std::string     id,
+           hmap::Vec2<int> shape,
+           hmap::Vec2<int> tiling,
+           float           overlap);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewThermal : public ViewNode, public hesiod::cnode::Thermal
 {
 public:

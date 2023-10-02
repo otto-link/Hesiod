@@ -118,6 +118,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"SmoothCpulse", "Filter/Smoothing"},
     {"SmoothFill", "Filter/Smoothing"},
     {"SteepenConvective", "Filter/Recast"},
+    {"Step", "Primitive/Function"},
     {"Thermal", "Erosion/Thermal"},
     {"ThermalAutoBedrock", "Erosion/Thermal"},
     {"ThermalScree", "Erosion/Thermal"},
@@ -1115,6 +1116,21 @@ protected:
   int   iterations = 1;
   int   ir = 0;
   float dt = 1.f;
+};
+
+class Step : public Primitive
+{
+public:
+  Step(std::string     id,
+       hmap::Vec2<int> shape,
+       hmap::Vec2<int> tiling,
+       float           overlap);
+
+  void compute();
+
+protected:
+  float angle = 0.f;
+  float talus_global = 4.f;
 };
 
 class Thermal : public gnode::Node

@@ -25,6 +25,9 @@ void HydraulicParticle::compute_erosion(hmap::HeightMap &h,
 
   int nparticles_tile = (int)(this->nparticles / (float)h.get_ntiles());
 
+  if (p_moisture_map)
+    p_moisture_map->remap();
+    
   hmap::transform(h,
                   p_bedrock,
                   p_moisture_map,
