@@ -31,4 +31,14 @@ bool ViewOneMinus::render_settings()
   return has_changed;
 }
 
+void ViewOneMinus::serialize_save(cereal::JSONOutputArchive &)
+{
+  // empty
+}
+
+void ViewOneMinus::serialize_load(cereal::JSONInputArchive &)
+{
+  // empty
+}
+
 } // namespace hesiod::vnode
