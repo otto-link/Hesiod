@@ -30,8 +30,7 @@ bool slider_vmin_vmax(float &vmin, float &vmax)
     ret = true;
 
   float vmin_before_change = vmin;
-  ImGui::DragFloat("offset", &vmin, 0.01f, -FLT_MAX, FLT_MAX, "%.2f");
-  if (ImGui::IsItemDeactivatedAfterEdit())
+  if (ImGui::DragFloat("offset", &vmin, 0.01f, -FLT_MAX, FLT_MAX, "%.2f"))
   {
     vmax += vmin - vmin_before_change;
     ret = true;

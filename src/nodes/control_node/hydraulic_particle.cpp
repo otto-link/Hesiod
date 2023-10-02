@@ -27,7 +27,7 @@ void HydraulicParticle::compute_erosion(hmap::HeightMap &h,
 
   if (p_moisture_map)
     p_moisture_map->remap();
-    
+
   hmap::transform(h,
                   p_bedrock,
                   p_moisture_map,
