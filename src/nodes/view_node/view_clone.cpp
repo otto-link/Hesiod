@@ -2,7 +2,10 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include "macrologger.h"
+#include <cereal/types/string.hpp>
+#include <cereal/types/vector.hpp>
 
+#include "hesiod/control_node.hpp"
 #include "hesiod/gui.hpp"
 #include "hesiod/view_node.hpp"
 
@@ -36,14 +39,31 @@ bool ViewClone::render_settings()
   return has_changed;
 }
 
-void ViewClone::serialize_save(cereal::JSONOutputArchive &)
+void ViewClone::serialize_save(cereal::JSONOutputArchive &ar)
 {
-  // empty
+  // save output port state
+  std::vector<std::string> output_ids = {};
+
+  for (auto &[port_id, port] : this->get_ports())
+    if (port.direction == gnode::direction::out)
+      output_ids.push_back(port_id.c_str());
+
+  ar(cereal::make_nvp("output_ids", output_ids));
 }
 
-void ViewClone::serialize_load(cereal::JSONInputArchive &)
+void ViewClone::serialize_load(cereal::JSONInputArchive &ar)
 {
-  // empty
+  std::vector<std::string> output_ids = {};
+
+  ar(cereal::make_nvp("output_ids", output_ids));
+
+  for (auto &port_id : output_ids)
+    if (!this->is_port_id_in_keys(port_id))
+      this->add_port(gnode::Port(port_id,
+                                 gnode::direction::out,
+                                 hesiod::cnode::dtype::dHeightMap));
+
+  this->update_inner_bindings();
 }
 
 } // namespace hesiod::vnode
