@@ -28,15 +28,21 @@ void Step::compute()
 
   float talus = this->talus_global / (float)this->value_out.shape.x;
 
-  hmap::fill(
-      this->value_out,
-      (hmap::HeightMap *)this->get_p_data("dx"),
-      [this, &talus](hmap::Vec2<int>   shape,
-                     hmap::Vec2<float> shift,
-                     hmap::Vec2<float> scale,
-                     hmap::Array      *p_noise_x) {
-        return hmap::step(shape, this->angle, talus, p_noise_x, shift, scale);
-      });
+  hmap::fill(this->value_out,
+             (hmap::HeightMap *)this->get_p_data("dx"),
+             [this, &talus](hmap::Vec2<int>   shape,
+                            hmap::Vec2<float> shift,
+                            hmap::Vec2<float> scale,
+                            hmap::Array      *p_noise_x)
+             {
+               return hmap::step(shape,
+                                 this->angle,
+                                 talus,
+                                 p_noise_x,
+                                 this->center,
+                                 shift,
+                                 scale);
+             });
 
   // remap the output
   this->value_out.remap(this->vmin, this->vmax);

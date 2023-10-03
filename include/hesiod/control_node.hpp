@@ -1129,8 +1129,9 @@ public:
   void compute();
 
 protected:
-  float angle = 0.f;
-  float talus_global = 4.f;
+  float             angle = 0.f;
+  float             talus_global = 4.f;
+  hmap::Vec2<float> center = {0.5f, 0.5f};
 };
 
 class Thermal : public gnode::Node
