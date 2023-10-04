@@ -30,6 +30,13 @@ void Export::write_file()
 
     if (this->export_format == hesiod::cnode::png8bit)
       p_h->to_array().to_png(this->fname, hmap::cmap::gray);
+
+    else if (this->export_format == hesiod::cnode::png16bit)
+    {
+      hmap::Array z = p_h->to_array();
+      hmap::remap(z);
+      z.to_png16bit(this->fname);
+    }
   }
 }
 
