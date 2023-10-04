@@ -48,4 +48,24 @@ bool ViewClamp::render_settings()
   return has_changed;
 }
 
+void ViewClamp::serialize_save(cereal::JSONOutputArchive &ar)
+{
+  ar(cereal::make_nvp("vmin", vmin));
+  ar(cereal::make_nvp("vmax", vmax));
+  ar(cereal::make_nvp("smooth_min", smooth_min));
+  ar(cereal::make_nvp("smooth_max", smooth_max));
+  ar(cereal::make_nvp("k_min", k_min));
+  ar(cereal::make_nvp("k_max", k_max));
+}
+
+void ViewClamp::serialize_load(cereal::JSONInputArchive &ar)
+{
+  ar(cereal::make_nvp("vmin", vmin));
+  ar(cereal::make_nvp("vmax", vmax));
+  ar(cereal::make_nvp("smooth_min", smooth_min));
+  ar(cereal::make_nvp("smooth_max", smooth_max));
+  ar(cereal::make_nvp("k_min", k_min));
+  ar(cereal::make_nvp("k_max", k_max));
+}
+
 } // namespace hesiod::vnode

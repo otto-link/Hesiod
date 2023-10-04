@@ -227,6 +227,9 @@ public:
   ViewClamp(std::string id);
 
   bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewClone : public ViewNode, public hesiod::cnode::Clone
