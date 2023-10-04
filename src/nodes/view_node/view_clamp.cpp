@@ -21,12 +21,12 @@ bool ViewClamp::render_settings()
 
   has_changed |= this->render_settings_header();
 
-  if (hesiod::gui::slider_vmin_vmax(vmin, vmax))
-  {
-    this->force_update();
-    has_changed = true;
-  }
-
+  ImGui::SliderFloat("vmin", &this->vmin, -1.f, 2.f, "%.2f");
+  has_changed |= this->trigger_update_after_edit();
+  
+  ImGui::SliderFloat("vmax", &this->vmax, -1.f, 2.f, "%.2f");
+  has_changed |= this->trigger_update_after_edit();
+  
   ImGui::Checkbox("smooth min", &this->smooth_min);
   has_changed |= this->trigger_update_after_edit();
   if (this->smooth_min)
