@@ -6,10 +6,12 @@
 
 #include <GL/glut.h>
 
+#include "highmap.hpp"
 #include <cereal/archives/json.hpp>
 #include <imgui_node_editor.h>
 
 #include "hesiod/control_node.hpp"
+#include "hesiod/view_node.hpp"
 
 namespace hesiod::vnode
 {
@@ -67,12 +69,18 @@ public:
   hesiod::vnode::ViewControlNode *get_view_control_node_ref_by_id(
       std::string node_id) const;
 
+  void set_sto(hmap::Vec2<int> new_shape,
+               hmap::Vec2<int> new_tiling,
+               float           new_overlap);
+
   void set_viewer_node_id(std::string node_id);
 
   std::string add_view_node(std::string control_node_type,
                             std::string node_id = "");
 
   void automatic_node_layout();
+
+  void clear_links();
 
   void insert_clone_node(std::string node_id);
 

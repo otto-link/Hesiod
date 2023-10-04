@@ -13,6 +13,8 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
+#include "hesiod/view_tree.hpp"
+
 namespace hesiod::gui
 {
 
@@ -29,7 +31,7 @@ GLFWwindow *init_gui(int width, int height, std::string window_title);
 void save_screenshot(std::string fname);
 
 // main GUI
-void main_dock();
+void main_dock(hesiod::vnode::ViewTree &view_tree);
 
 // custom ImGui widgets
 void canvas_cloud(hmap::Cloud &cloud, float width = 0.f, float radius = 4.f);

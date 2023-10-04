@@ -109,6 +109,31 @@ ax::NodeEditor::EditorContext *ViewTree::get_p_node_editor_context() const
   return this->p_node_editor_context;
 }
 
+void ViewTree::set_sto(hmap::Vec2<int> new_shape,
+                       hmap::Vec2<int> new_tiling,
+                       float           new_overlap)
+{
+  // TODO quick and dirty, did this only to allow modifications in the
+  // main GUI for demo purpose
+  this->viewer_node_id = "";
+  this->open_view2d_window = false;
+  this->open_view3d_window = false;
+
+  this->shape = new_shape;
+  this->tiling = new_tiling;
+  this->overlap = new_overlap;
+
+  this->shape_view2d = this->shape;
+  this->shape_view3d = this->shape;
+
+  this->update_view3d_basemesh();
+}
+
+void ViewTree::clear_links()
+{
+  this->links.clear();
+}
+
 void ViewTree::insert_clone_node(std::string node_id)
 {
   std::string new_node_id = this->add_view_node("Clone");

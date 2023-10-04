@@ -68,6 +68,9 @@ void ViewTree::render_node_editor()
   bool fit_to_selection = false;
   bool automatic_layout = false;
 
+  ImGui::Text("Size: {%d, %d}", this->shape.x, this->shape.y);
+  ImGui::SameLine();
+
   if (ImGui::Button("Fit to content"))
     fit_to_content = true;
   ImGui::SameLine();

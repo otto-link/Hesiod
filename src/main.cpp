@@ -52,7 +52,7 @@ int main()
   tree.add_view_node("FbmPerlin");
   // tree.add_view_node("ZeroedEdges");
   // tree.add_view_node("FbmPerlin");
-  tree.add_view_node("Clone");
+  // tree.add_view_node("Clone");
   // tree.new_link("FbmPerlin##0", "output", "ZeroedEdges##1", "input");
   // tree.new_link("FbmPerlin##2", "output", "RecastCanyon##1", "dz");
 
@@ -71,7 +71,7 @@ int main()
 
     // --- GUI content
 
-    hesiod::gui::main_dock();
+    hesiod::gui::main_dock(tree);
 
     tree.render_node_editor();
     // tree2.render_node_editor();

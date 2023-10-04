@@ -7,6 +7,7 @@
 #include <GL/glut.h>
 
 #include "hesiod/gui.hpp"
+#include "hesiod/view_tree.hpp"
 
 namespace hesiod::gui
 {
@@ -109,7 +110,7 @@ void save_screenshot(std::string fname)
   hmap::write_png_8bit(fname, img, hmap::Vec2<int>(width, height));
 }
 
-void main_dock()
+void main_dock(hesiod::vnode::ViewTree &view_tree)
 {
   ImGuiIO &io = ImGui::GetIO();
 
@@ -121,11 +122,63 @@ void main_dock()
                                   ImGuiWindowFlags_NoMove;
 
   ImGui::SetNextWindowPos({0.f, 0.f}, ImGuiCond_Always, {0.f, 0.f});
-  ImGui::SetNextWindowBgAlpha(0.35f);
+  ImGui::SetNextWindowBgAlpha(0.5f);
 
   if (ImGui::Begin("Example: Simple overlay", nullptr, window_flags))
   {
     ImGui::Text("FPS: %.1f", io.Framerate);
+    ImGui::SameLine();
+
+    if (ImGui::Button("Erase and start new"))
+      ImGui::OpenPopup("New?");
+
+    ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+    ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+
+    if (ImGui::BeginPopupModal("New?"))
+    {
+      // TODO quick and dirty, should eventually disappear
+      static hmap::Vec2<int> gui_shape = hmap::Vec2<int>(1024, 1024);
+      static hmap::Vec2<int> gui_tiling = hmap::Vec2<int>(4, 4);
+      static float           gui_overlap = 0.25f;
+
+      if (ImGui::Button("256 x 256"))
+        gui_shape = {256, 256};
+      ImGui::SameLine();
+
+      if (ImGui::Button("512 x 512"))
+        gui_shape = {512, 512};
+      ImGui::SameLine();
+
+      if (ImGui::Button("1024 x 1024"))
+        gui_shape = {1024, 1024};
+      ImGui::SameLine();
+
+      if (ImGui::Button("2048 x 2048"))
+        gui_shape = {2048, 2048};
+
+      ImGui::InputInt("tiling.x", &gui_tiling.x);
+      ImGui::InputInt("tiling.y", &gui_tiling.y);
+
+      ImGui::SliderFloat("overlap", &gui_overlap, 0.f, 0.5f, "%.2f");
+
+      if (ImGui::Button("Ok"))
+      {
+        view_tree.set_viewer_node_id("");
+        view_tree.remove_all_nodes();
+        view_tree.clear_links();
+
+        view_tree.set_sto(gui_shape, gui_tiling, gui_overlap);
+
+        ImGui::CloseCurrentPopup();
+      }
+      ImGui::SameLine();
+
+      if (ImGui::Button("Cancel"))
+        ImGui::CloseCurrentPopup();
+
+      ImGui::EndPopup();
+    }
   }
   ImGui::End();
 }
