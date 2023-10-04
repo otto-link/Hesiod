@@ -268,7 +268,7 @@ void ViewTree::new_link(std::string node_id_from,
     }
     else
       // not cyclic, carry on and propagate from the source
-      this->update_node(node_id_from);
+      this->update_node(node_id_to);
   }
 }
 
