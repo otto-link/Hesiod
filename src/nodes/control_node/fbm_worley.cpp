@@ -18,11 +18,11 @@ FbmWorley::FbmWorley(std::string     id,
   this->node_type = "FbmWorley";
   this->category = category_mapping.at(this->node_type);
 
-    this->add_port(gnode::Port("stretching",
+  this->add_port(gnode::Port("stretching",
                              gnode::direction::in,
                              dtype::dHeightMap,
                              gnode::optional::yes));
-    
+
   this->value_out.set_sto(shape, tiling, overlap);
   this->update_inner_bindings();
 }
@@ -34,7 +34,7 @@ void FbmWorley::compute()
   hmap::fill(this->value_out,
              (hmap::HeightMap *)this->get_p_data("dx"),
              (hmap::HeightMap *)this->get_p_data("dy"),
-	     (hmap::HeightMap *)this->get_p_data("stretching"),
+             (hmap::HeightMap *)this->get_p_data("stretching"),
              [this](hmap::Vec2<int>   shape,
                     hmap::Vec2<float> shift,
                     hmap::Vec2<float> scale,
@@ -51,7 +51,7 @@ void FbmWorley::compute()
                                        this->lacunarity,
                                        p_noise_x,
                                        p_noise_y,
-				       p_stretching,
+                                       p_stretching,
                                        shift,
                                        scale);
              });

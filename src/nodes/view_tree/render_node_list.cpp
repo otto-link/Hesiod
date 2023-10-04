@@ -48,13 +48,16 @@ void ViewTree::render_node_list()
                          "%d",
                          vnode.get()->hash_id);
       ImGui::TableNextColumn();
-      if (ImGui::Button(id.c_str()))
+      if (ImGui::Button(("o##" + id).c_str()))
       {
         ax::NodeEditor::SetCurrentEditor(this->get_p_node_editor_context());
         ax::NodeEditor::SelectNode(vnode.get()->hash_id);
         ax::NodeEditor::NavigateToSelection(false, 1);
         ax::NodeEditor::SetCurrentEditor(nullptr);
       }
+      ImGui::SameLine();
+      ImGui::TextUnformatted(id.c_str());
+
       ImGui::TableNextColumn(); // empty (port id)
       ImGui::TableNextColumn(); // empty
       ImGui::TableNextColumn(); // empty

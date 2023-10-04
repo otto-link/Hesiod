@@ -46,29 +46,29 @@ void ViewTree::render_view2d()
     if (ImGui::Checkbox("Hillshading", &this->hillshade_view2d))
       this->update_image_texture_view2d();
 
-    {
-      bool has_changed = false;
-      if (ImGui::Button("256 x 256"))
-      {
-        this->shape_view2d = {256, 256};
-        has_changed = true;
-      }
-      ImGui::SameLine();
-      if (ImGui::Button("512 x 512"))
-      {
-        this->shape_view2d = {512, 512};
-        has_changed = true;
-      }
-      ImGui::SameLine();
-      if (ImGui::Button("1024 x 1024"))
-      {
-        this->shape_view2d = {1024, 1024};
-        has_changed = true;
-      }
+    // {
+    //   bool has_changed = false;
+    //   if (ImGui::Button("256 x 256"))
+    //   {
+    //     this->shape_view2d = {256, 256};
+    //     has_changed = true;
+    //   }
+    //   ImGui::SameLine();
+    //   if (ImGui::Button("512 x 512"))
+    //   {
+    //     this->shape_view2d = {512, 512};
+    //     has_changed = true;
+    //   }
+    //   ImGui::SameLine();
+    //   if (ImGui::Button("1024 x 1024"))
+    //   {
+    //     this->shape_view2d = {1024, 1024};
+    //     has_changed = true;
+    //   }
 
-      if (has_changed)
-        this->update_image_texture_view2d();
-    }
+    //   if (has_changed)
+    //     this->update_image_texture_view2d();
+    // }
 
     float  window_width = ImGui::GetContentRegionAvail().x;
     ImVec2 pos = ImGui::GetCursorScreenPos();
@@ -133,32 +133,32 @@ void ViewTree::render_view3d()
   if (p_vnode->get_preview_port_id() != "")
   {
     // --- controls
-    {
-      bool has_changed = false;
-      if (ImGui::Button("256 x 256"))
-      {
-        this->shape_view3d = {256, 256};
-        has_changed = true;
-      }
-      ImGui::SameLine();
-      if (ImGui::Button("512 x 512"))
-      {
-        this->shape_view3d = {512, 512};
-        has_changed = true;
-      }
-      ImGui::SameLine();
-      if (ImGui::Button("1024 x 1024"))
-      {
-        this->shape_view3d = {1024, 1024};
-        has_changed = true;
-      }
+    // {
+    //   bool has_changed = false;
+    //   if (ImGui::Button("256 x 256"))
+    //   {
+    //     this->shape_view3d = {256, 256};
+    //     has_changed = true;
+    //   }
+    //   ImGui::SameLine();
+    //   if (ImGui::Button("512 x 512"))
+    //   {
+    //     this->shape_view3d = {512, 512};
+    //     has_changed = true;
+    //   }
+    //   ImGui::SameLine();
+    //   if (ImGui::Button("1024 x 1024"))
+    //   {
+    //     this->shape_view3d = {1024, 1024};
+    //     has_changed = true;
+    //   }
 
-      if (has_changed)
-      {
-        this->update_view3d_basemesh();
-        this->update_image_texture_view3d();
-      }
-    }
+    //   if (has_changed)
+    //   {
+    //     this->update_view3d_basemesh();
+    //     this->update_image_texture_view3d();
+    //   }
+    // }
 
     {
       if (ImGui::Button("Top"))

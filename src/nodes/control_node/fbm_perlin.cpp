@@ -22,7 +22,7 @@ FbmPerlin::FbmPerlin(std::string     id,
                              gnode::direction::in,
                              dtype::dHeightMap,
                              gnode::optional::yes));
-    
+
   this->value_out.set_sto(shape, tiling, overlap);
   this->update_inner_bindings();
 }
@@ -35,7 +35,7 @@ void FbmPerlin::compute()
              (hmap::HeightMap *)this->get_p_data("dx"),
              (hmap::HeightMap *)this->get_p_data("dy"),
              (hmap::HeightMap *)this->get_p_data("stretching"),
-	     [this](hmap::Vec2<int>   shape,
+             [this](hmap::Vec2<int>   shape,
                     hmap::Vec2<float> shift,
                     hmap::Vec2<float> scale,
                     hmap::Array      *p_noise_x,
@@ -51,7 +51,7 @@ void FbmPerlin::compute()
                                        this->lacunarity,
                                        p_noise_x,
                                        p_noise_y,
-				       p_stretching,
+                                       p_stretching,
                                        shift,
                                        scale);
              });

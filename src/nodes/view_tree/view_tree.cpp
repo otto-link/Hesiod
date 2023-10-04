@@ -45,6 +45,9 @@ ViewTree::ViewTree(std::string     id,
   config.ContextMenuButtonIndex = 1;
   this->p_node_editor_context = ax::NodeEditor::CreateEditor(&config);
 
+  this->shape_view2d = this->shape;
+  this->shape_view3d = this->shape;
+
   this->update_view3d_basemesh();
   this->shader_id = hesiod::viewer::load_shaders(
       "SimpleVertexShader.vertexshader",
