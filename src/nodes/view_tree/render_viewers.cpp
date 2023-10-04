@@ -292,7 +292,6 @@ void ViewTree::update_image_texture_view3d(bool only_matrix_update)
           hmap::HeightMap *p_h = (hmap::HeightMap *)p_data;
           hmap::Array      array = p_h->to_array(this->shape_view3d);
 
-          hmap::remap(array, -1.f, 1.f);
           hesiod::viewer::update_vertex_elevations(array,
                                                    this->vertices,
                                                    this->colors);

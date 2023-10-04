@@ -170,7 +170,7 @@ private:
   std::vector<GLfloat> colors = {};
 
   float scale = 0.7f;
-  float h_scale = 0.2f;
+  float h_scale = 0.4f;
   float alpha_x = 0.f;
   float alpha_y = 0.f;
   float delta_x = 0.f;
