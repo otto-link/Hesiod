@@ -313,6 +313,17 @@ public:
   void serialize_load(cereal::JSONInputArchive &ar);
 };
 
+class ViewErosionMaps : public ViewNode, public hesiod::cnode::ErosionMaps
+{
+public:
+  ViewErosionMaps(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewExpandShrink : public ViewNode, public hesiod::cnode::ExpandShrink
 {
 public:

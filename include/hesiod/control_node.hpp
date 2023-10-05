@@ -76,6 +76,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Debug", "Debug"},
     {"DigPath", "Roads"},
     {"Equalize", "Filter/Recurve"},
+    {"ErosionMaps", "Erosion/Hydraulic"},
     {"ExpandShrink", "Filter/Recast"},
     {"ExpandShrinkDirectional", "Filter/Recast"},
     {"Export", "IO/Files"},
@@ -464,6 +465,21 @@ public:
   Equalize(std::string id);
 
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
+};
+
+class ErosionMaps : public gnode::Node
+{
+public:
+  ErosionMaps(std::string id);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::HeightMap erosion_map = hmap::HeightMap();
+  hmap::HeightMap deposition_map = hmap::HeightMap();
+  float tolerance = 0.f;
 };
 
 class ExpandShrink : public Filter

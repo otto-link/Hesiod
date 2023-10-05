@@ -119,6 +119,12 @@ std::string ViewTree::add_view_node(std::string control_node_type,
         id);
     this->add_node(p_view_node);
   }
+  else if (control_node_type == "ErosionMaps")
+  {
+    std::shared_ptr p_view_node =
+        std::make_shared<hesiod::vnode::ViewErosionMaps>(id);
+    this->add_node(p_view_node);
+  }
   else if (control_node_type == "ExpandShrinkDirectional")
   {
     std::shared_ptr p_view_node =
