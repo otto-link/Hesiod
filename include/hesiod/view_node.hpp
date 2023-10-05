@@ -815,6 +815,18 @@ public:
   void serialize_load(cereal::JSONInputArchive &ar);
 };
 
+class ViewStratifyMultiscale : public ViewNode,
+                               public hesiod::cnode::StratifyMultiscale
+{
+public:
+  ViewStratifyMultiscale(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewThermal : public ViewNode, public hesiod::cnode::Thermal
 {
 public:

@@ -23,7 +23,7 @@ bool ViewSmoothFill::render_settings()
   ImGui::SliderInt("int", &this->ir, 1, 256);
   has_changed |= this->trigger_update_after_edit();
 
-  ImGui::SliderFloat("k", &this->k, 0.001f, 1.f, "%.2f");
+  ImGui::SliderFloat("k", &this->k, 0.001f, 1.f, "%.3f");
   has_changed |= this->trigger_update_after_edit();
 
   has_changed |= this->render_settings_footer();

@@ -120,6 +120,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"SmoothFill", "Filter/Smoothing"},
     {"SteepenConvective", "Filter/Recast"},
     {"Step", "Primitive/Function"},
+    {"StratifyMultiscale", "Erosion"},
     {"Thermal", "Erosion/Thermal"},
     {"ThermalAutoBedrock", "Erosion/Thermal"},
     {"ThermalScree", "Erosion/Thermal"},
@@ -1133,6 +1134,24 @@ protected:
   float             angle = 0.f;
   float             talus_global = 4.f;
   hmap::Vec2<float> center = {0.5f, 0.5f};
+};
+
+class StratifyMultiscale : public gnode::Node
+{
+public:
+  StratifyMultiscale(std::string id);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::HeightMap    value_out = hmap::HeightMap(); // eroded heightmap
+  std::vector<int>   n_strata = {2, 3, 4};
+  std::vector<float> strata_noise = {0.f, 0.f, 0.f};
+  std::vector<float> gamma_list = {1.5f, 0.5f, 1.f};
+  std::vector<float> gamma_noise = {0.f, 0.f, 0.f};
+  int                seed = DEFAULT_SEED;
 };
 
 class Thermal : public gnode::Node

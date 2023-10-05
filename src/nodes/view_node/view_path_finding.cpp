@@ -31,14 +31,14 @@ bool ViewPathFinding::render_settings()
   ImGui::SliderFloat("elevation_ratio",
                      &this->elevation_ratio,
                      0.f,
-                     0.99f,
+                     0.9f,
                      "%.2f");
   has_changed |= this->trigger_update_after_edit();
 
   ImGui::SliderFloat("distance_exponent",
                      &this->distance_exponent,
-                     0.01f,
-                     2.f,
+                     0.5f,
+                     1.5f,
                      "%.1f");
   has_changed |= this->trigger_update_after_edit();
 
