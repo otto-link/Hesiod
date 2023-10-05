@@ -35,5 +35,5 @@ void ViewErosionMaps::serialize_load(cereal::JSONInputArchive &ar)
 {
   ar(cereal::make_nvp("tolerance", this->tolerance));
 }
-  
+
 } // namespace hesiod::vnode

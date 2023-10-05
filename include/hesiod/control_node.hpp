@@ -479,7 +479,7 @@ public:
 protected:
   hmap::HeightMap erosion_map = hmap::HeightMap();
   hmap::HeightMap deposition_map = hmap::HeightMap();
-  float tolerance = 0.f;
+  float           tolerance = 0.f;
 };
 
 class ExpandShrink : public Filter
