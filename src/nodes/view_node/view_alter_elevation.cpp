@@ -34,4 +34,20 @@ bool ViewAlterElevation::render_settings()
   return has_changed;
 }
 
+void ViewAlterElevation::serialize_save(cereal::JSONOutputArchive &ar)
+{
+  ar(cereal::make_nvp("ir", this->ir));
+  ar(cereal::make_nvp("footprint_ratio", this->footprint_ratio));
+  ar(cereal::make_nvp("vmin", this->vmin));
+  ar(cereal::make_nvp("vmax", this->vmax));
+}
+
+void ViewAlterElevation::serialize_load(cereal::JSONInputArchive &ar)
+{
+  ar(cereal::make_nvp("ir", this->ir));
+  ar(cereal::make_nvp("footprint_ratio", this->footprint_ratio));
+  ar(cereal::make_nvp("vmin", this->vmin));
+  ar(cereal::make_nvp("vmax", this->vmax));
+}
+
 } // namespace hesiod::vnode
