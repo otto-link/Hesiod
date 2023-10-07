@@ -832,6 +832,30 @@ public:
   void serialize_load(cereal::JSONInputArchive &ar);
 };
 
+class ViewSmoothFillHoles : public ViewNode,
+                            public hesiod::cnode::SmoothFillHoles
+{
+public:
+  ViewSmoothFillHoles(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
+class ViewSmoothFillSmearPeaks : public ViewNode,
+                                 public hesiod::cnode::SmoothFillSmearPeaks
+{
+public:
+  ViewSmoothFillSmearPeaks(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewSteepenConvective : public ViewNode,
                               public hesiod::cnode::SteepenConvective
 {

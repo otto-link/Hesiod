@@ -121,6 +121,8 @@ static const std::map<std::string, std::string> category_mapping = {
     {"SelectTransitions", "Mask"},
     {"SmoothCpulse", "Filter/Smoothing"},
     {"SmoothFill", "Filter/Smoothing"},
+    {"SmoothFillHoles", "Filter/Smoothing"},
+    {"SmoothFillSmearPeaks", "Filter/Smoothing"},
     {"SteepenConvective", "Filter/Recast"},
     {"Step", "Primitive/Function"},
     {"StratifyMultiscale", "Erosion"},
@@ -1170,6 +1172,28 @@ protected:
   hmap::HeightMap deposition_map = hmap::HeightMap();
   int             ir = 32;
   float           k = 0.01f;
+};
+
+class SmoothFillHoles : public Filter
+{
+public:
+  SmoothFillHoles(std::string id);
+
+  void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
+
+protected:
+  int ir = 8;
+};
+
+class SmoothFillSmearPeaks : public Filter
+{
+public:
+  SmoothFillSmearPeaks(std::string id);
+
+  void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
+
+protected:
+  int ir = 8;
 };
 
 class SteepenConvective : public Filter

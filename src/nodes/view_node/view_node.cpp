@@ -96,7 +96,7 @@ void ViewNode::render_node()
   std::string node_label = node_type;
   {
     // truncate node label to make it fit within the node width
-    float char_width = ImGui::CalcTextSize("A").x;
+    float char_width = ImGui::CalcTextSize("a").x;
     int   nchar = (int)(this->node_width / char_width);
     if (nchar < (int)node_label.size())
     {
