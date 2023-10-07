@@ -39,4 +39,14 @@ bool ViewWhiteDensityMap::render_settings()
   return has_changed;
 }
 
+void ViewWhiteDensityMap::serialize_save(cereal::JSONOutputArchive &ar)
+{
+  ar(cereal::make_nvp("seed", this->seed));
+}
+
+void ViewWhiteDensityMap::serialize_load(cereal::JSONInputArchive &ar)
+{
+  ar(cereal::make_nvp("seed", this->seed));
+}
+
 } // namespace hesiod::vnode

@@ -83,6 +83,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"FbmPerlin", "Primitive/Coherent Noise"},
     {"FbmWorley", "Primitive/Coherent Noise"},
     {"FractalizePath", "Geometry/Path"},
+    {"GaborNoise", "Primitive/Coherent Noise"},
     {"Gain", "Filter/Recurve"},
     {"GammaCorrection", "Filter/Recurve"},
     {"GammaCorrectionLocal", "Filter/Recurve"},
@@ -132,6 +133,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"WaveSine", "Primitive/Function"},
     {"White", "Primitive/Random"},
     {"WhiteDensityMap", "Primitive/Random"},
+    {"WhiteSparse", "Primitive/Random"},
     {"Worley", "Primitive/Coherent Noise"},
     {"ZeroedEdges", "Math/Boundaries"}};
 
@@ -584,6 +586,34 @@ protected:
   float      sigma = 0.3f;
   int        orientation = 0;
   float      persistence = 1.f;
+};
+
+class GaborNoise : public gnode::Node
+{
+public:
+  GaborNoise(std::string     id,
+             hmap::Vec2<int> shape,
+             hmap::Vec2<int> tiling,
+             float           overlap);
+
+  void update_inner_bindings();
+
+  void compute();
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap();
+  float           kw = 1.f;
+  float           angle = 30.f;
+  int             width = 128;
+  float           density = 0.05f;
+  int             seed = DEFAULT_SEED;
+  float           vmin = 0.f;
+  float           vmax = 1.f;
+
+private:
+  hmap::Vec2<int> shape;
+  hmap::Vec2<int> tiling;
+  float           overlap;
 };
 
 class Gain : public Filter
@@ -1332,6 +1362,31 @@ public:
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
   int             seed = DEFAULT_SEED;
+};
+
+class WhiteSparse : public gnode::Node
+{
+public:
+  WhiteSparse(std::string     id,
+              hmap::Vec2<int> shape,
+              hmap::Vec2<int> tiling,
+              float           overlap);
+
+  void update_inner_bindings();
+
+  void compute();
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap();
+  int             seed = DEFAULT_SEED;
+  float           density = 0.1f;
+  float           vmin = 0.f;
+  float           vmax = 1.f;
+
+private:
+  hmap::Vec2<int> shape;
+  hmap::Vec2<int> tiling;
+  float           overlap;
 };
 
 class Worley : public Primitive

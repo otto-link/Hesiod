@@ -22,7 +22,9 @@ bool ViewSteepenConvective::render_settings()
   bool has_changed = false;
   has_changed |= this->render_settings_header();
 
-  ImGui::SliderAngle("angle", &this->angle);
+  float alpha = this->angle / 180.f * M_PI;
+  ImGui::SliderAngle("angle", &alpha, -90.f, 90.f);
+  this->angle = alpha / M_PI * 180.f;
   has_changed |= this->trigger_update_after_edit();
 
   ImGui::InputInt("iterations", &this->iterations, 1, 100);

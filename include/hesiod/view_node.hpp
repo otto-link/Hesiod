@@ -415,6 +415,20 @@ public:
   void serialize_load(cereal::JSONInputArchive &ar);
 };
 
+class ViewGaborNoise : public ViewNode, public hesiod::cnode::GaborNoise
+{
+public:
+  ViewGaborNoise(std::string     id,
+                 hmap::Vec2<int> shape,
+                 hmap::Vec2<int> tiling,
+                 float           overlap);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewGain : public ViewNode, public hesiod::cnode::Gain
 {
 public:
@@ -940,6 +954,9 @@ public:
             float           overlap);
 
   bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewWhiteDensityMap : public ViewNode,
@@ -949,6 +966,23 @@ public:
   ViewWhiteDensityMap(std::string id);
 
   bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
+class ViewWhiteSparse : public ViewNode, public hesiod::cnode::WhiteSparse
+{
+public:
+  ViewWhiteSparse(std::string     id,
+                  hmap::Vec2<int> shape,
+                  hmap::Vec2<int> tiling,
+                  float           overlap);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewWorley : public ViewNode, public hesiod::cnode::Worley

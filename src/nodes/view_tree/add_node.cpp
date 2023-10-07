@@ -167,6 +167,15 @@ std::string ViewTree::add_view_node(std::string control_node_type,
         std::make_shared<hesiod::vnode::ViewFractalizePath>(id);
     this->add_node(p_view_node);
   }
+  else if (control_node_type == "GaborNoise")
+  {
+    std::shared_ptr p_view_node =
+        std::make_shared<hesiod::vnode::ViewGaborNoise>(id,
+                                                        this->shape,
+                                                        this->tiling,
+                                                        this->overlap);
+    this->add_node(p_view_node);
+  }
   else if (control_node_type == "Gain")
   {
     std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewGain>(id);
@@ -466,12 +475,6 @@ std::string ViewTree::add_view_node(std::string control_node_type,
         std::make_shared<hesiod::vnode::ViewWarpDownslope>(id);
     this->add_node(p_view_node);
   }
-  else if (control_node_type == "WhiteDensityMap")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewWhiteDensityMap>(id);
-    this->add_node(p_view_node);
-  }
   else if (control_node_type == "White")
   {
     std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewWhite>(
@@ -479,6 +482,21 @@ std::string ViewTree::add_view_node(std::string control_node_type,
         this->shape,
         this->tiling,
         this->overlap);
+    this->add_node(p_view_node);
+  }
+  else if (control_node_type == "WhiteDensityMap")
+  {
+    std::shared_ptr p_view_node =
+        std::make_shared<hesiod::vnode::ViewWhiteDensityMap>(id);
+    this->add_node(p_view_node);
+  }
+  else if (control_node_type == "WhiteSparse")
+  {
+    std::shared_ptr p_view_node =
+        std::make_shared<hesiod::vnode::ViewWhiteSparse>(id,
+                                                         this->shape,
+                                                         this->tiling,
+                                                         this->overlap);
     this->add_node(p_view_node);
   }
   else if (control_node_type == "Worley")
