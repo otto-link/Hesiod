@@ -279,6 +279,18 @@ public:
   void serialize_load(cereal::JSONInputArchive &ar);
 };
 
+class ViewCubicPulseTruncated : public ViewNode,
+                                public hesiod::cnode::CubicPulseTruncated
+{
+public:
+  ViewCubicPulseTruncated(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewDebug : public ViewNode, public hesiod::cnode::Debug
 {
 public:

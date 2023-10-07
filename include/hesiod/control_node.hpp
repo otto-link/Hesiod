@@ -73,6 +73,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Cloud", "Geometry/Cloud"},
     {"CloudToArrayInterp", "Primitive/Manual"},
     {"ConvolveSVD", "Math/Convolution"},
+    {"CubicPulseTruncated", "Primitive/Kernel"},
     {"Debug", "Debug"},
     {"DigPath", "Roads"},
     {"Equalize", "Filter/Recurve"},
@@ -442,6 +443,25 @@ public:
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
   int             rank = 3;
+};
+
+class CubicPulseTruncated : public gnode::Node
+{
+public:
+  CubicPulseTruncated(std::string id);
+
+  void update_inner_bindings();
+
+  void compute();
+
+protected:
+  hmap::Array     value_out = hmap::Array();
+  bool            normalized = true;
+  float           slant_ratio = 0.1f;
+  float           angle = 30.f;
+  float           vmin = 0.f;
+  float           vmax = 1.f;
+  hmap::Vec2<int> shape = DEFAULT_KERNEL_SHAPE;
 };
 
 class DigPath : public gnode::Node

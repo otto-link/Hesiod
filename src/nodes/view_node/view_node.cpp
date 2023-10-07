@@ -40,6 +40,7 @@ void ViewNode::set_p_control_node(gnode::Node *new_p_control_node)
 {
   this->p_control_node = new_p_control_node;
   this->init_from_control_node();
+  this->p_control_node->update();
   LOG_DEBUG("hash_id: %d", this->p_control_node->hash_id);
 }
 
@@ -320,19 +321,41 @@ bool ViewNode::trigger_update_after_edit()
 void ViewNode::update_preview()
 {
   if (this->preview_port_id != "" && this->show_preview)
-    if (this->p_control_node->get_p_data(this->preview_port_id))
+  {
+    void *p_data = this->p_control_node->get_p_data(this->preview_port_id);
+    if (p_data)
     {
-      hmap::HeightMap *p_h = (hmap::HeightMap *)this->p_control_node
-                                 ->get_p_data(this->preview_port_id);
-      std::vector<uint8_t> img = {};
+      int port_dtype =
+          this->p_control_node->get_port_ref_by_id(preview_port_id)->dtype;
 
-      if (this->preview_type == preview_type::grayscale)
-        img = hmap::colorize_grayscale(p_h->to_array(shape_preview));
-      else if (this->preview_type == preview_type::histogram)
-        img = hmap::colorize_histogram(p_h->to_array(shape_preview));
+      if (port_dtype == hesiod::cnode::dHeightMap)
+      {
+        hmap::HeightMap     *p_h = (hmap::HeightMap *)p_data;
+        std::vector<uint8_t> img = {};
 
-      img_to_texture(img, this->shape_preview, this->image_texture_preview);
+        if (this->preview_type == preview_type::grayscale)
+          img = hmap::colorize_grayscale(p_h->to_array(this->shape_preview));
+        else if (this->preview_type == preview_type::histogram)
+          img = hmap::colorize_histogram(p_h->to_array(this->shape_preview));
+
+        img_to_texture(img, this->shape_preview, this->image_texture_preview);
+      }
+      else if (port_dtype == hesiod::cnode::dArray)
+      {
+        hmap::Array         *p_a = (hmap::Array *)p_data;
+        std::vector<uint8_t> img = {};
+
+        if (this->preview_type == preview_type::grayscale)
+          img = hmap::colorize_grayscale(
+              p_a->resample_to_shape(this->shape_preview));
+        else if (this->preview_type == preview_type::histogram)
+          img = hmap::colorize_histogram(
+              p_a->resample_to_shape(this->shape_preview));
+
+        img_to_texture(img, this->shape_preview, this->image_texture_preview);
+      }
     }
+  }
 }
 
 // HELPERS
