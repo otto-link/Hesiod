@@ -37,6 +37,7 @@ void SteepenConvective::compute_filter(hmap::HeightMap &h,
                                              this->ir,
                                              this->dt);
                   });
+  h.smooth_overlap_buffers();
   h.remap(hmin, hmax, 0.f, 1.f);
 }
 

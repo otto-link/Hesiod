@@ -1133,7 +1133,7 @@ protected:
   float angle = 0.f;
   int   iterations = 1;
   int   ir = 0;
-  float dt = 1.f;
+  float dt = 0.1f;
 };
 
 class Step : public Primitive
