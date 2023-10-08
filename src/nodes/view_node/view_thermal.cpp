@@ -25,7 +25,7 @@ bool ViewThermal::render_settings()
 
   has_changed |= this->render_settings_header();
 
-  ImGui::SliderFloat("talus_global", &this->talus_global, 0.f, 0.5f, "%.2f");
+  ImGui::SliderFloat("talus_global", &this->talus_global, 0.f, 16.f, "%.2f");
   has_changed |= this->trigger_update_after_edit();
 
   ImGui::SliderInt("iterations", &this->iterations, 1, 200);

@@ -508,6 +508,9 @@ public:
   ViewHydraulicParticle(std::string id);
 
   bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewHydraulicRidge : public ViewNode, public hesiod::cnode::HydraulicRidge
@@ -588,6 +591,18 @@ class ViewLaplace : public ViewNode, public hesiod::cnode::Laplace
 {
 public:
   ViewLaplace(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
+class ViewLaplaceEdgePreserving : public ViewNode,
+                                  public hesiod::cnode::LaplaceEdgePreserving
+{
+public:
+  ViewLaplaceEdgePreserving(std::string id);
 
   bool render_settings();
 

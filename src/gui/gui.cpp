@@ -131,6 +131,10 @@ void main_dock(hesiod::vnode::ViewTree &view_tree)
 
     if (ImGui::Button("Erase and start new"))
       ImGui::OpenPopup("New?");
+    ImGui::SameLine();
+
+    if (ImGui::Button("Screenshot"))
+      hesiod::gui::save_screenshot("screenshot.png");
 
     ImVec2 center = ImGui::GetMainViewport()->GetCenter();
     ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));

@@ -274,6 +274,12 @@ std::string ViewTree::add_view_node(std::string control_node_type,
         id);
     this->add_node(p_view_node);
   }
+  else if (control_node_type == "LaplaceEdgePreserving")
+  {
+    std::shared_ptr p_view_node =
+        std::make_shared<hesiod::vnode::ViewLaplaceEdgePreserving>(id);
+    this->add_node(p_view_node);
+  }
   else if (control_node_type == "Lerp")
   {
     std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewLerp>(id);

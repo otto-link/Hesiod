@@ -100,6 +100,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Kernel", "Primitive/Kernel"},
     {"KmeansClustering2", "Features"},
     {"Laplace", "Filter/Smoothing"},
+    {"LaplaceEdgePreserving", "Filter/Smoothing"},
     {"Lerp", "Operator/Blend"},
     {"MakeBinary", "Filter/Recurve"},
     {"MeanderizePath", "Geometry/Path"},
@@ -798,7 +799,7 @@ public:
                        hmap::HeightMap *p_deposition_map);
 
 protected:
-  int   iterations = 200;
+  int   iterations = 50;
   float water_height = 0.01f;
   float c_capacity = 0.1f;
   float c_erosion = 0.01f;
@@ -880,6 +881,19 @@ public:
 protected:
   float sigma = 0.2f;
   int   iterations = 3;
+};
+
+class LaplaceEdgePreserving : public Filter
+{
+public:
+  LaplaceEdgePreserving(std::string id);
+
+  void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
+
+protected:
+  float sigma = 0.2f;
+  int   iterations = 3;
+  float talus_global = 10.f;
 };
 
 class Lerp : public gnode::Node

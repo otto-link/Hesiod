@@ -55,7 +55,9 @@ bool drag_float_vector(std::vector<float> &vector,
 
     if (horizontal)
     {
-      ImGui::SliderFloat(stext.c_str(), &vector[k], vmin, vmax, "");
+      ImGui::SliderFloat(stext.c_str(), &vector[k], vmin, vmax, "%.2f");
+      if (ImGui::IsItemDeactivatedAfterEdit())
+        ret = true;
     }
     else
     {
@@ -64,7 +66,7 @@ bool drag_float_vector(std::vector<float> &vector,
                           &vector[k],
                           vmin,
                           vmax,
-                          "");
+                          "%.2f");
       if (ImGui::IsItemDeactivatedAfterEdit())
         ret = true;
       if (k < vector.size() - 1)
