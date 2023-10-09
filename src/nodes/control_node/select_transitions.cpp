@@ -57,6 +57,9 @@ void SelectTransitions::compute()
                     { return hmap::smooth_cpulse(array, this->ir); });
     this->value_out.smooth_overlap_buffers();
   }
+
+  if (this->normalize)
+    this->value_out.remap();
 }
 
 } // namespace hesiod::cnode

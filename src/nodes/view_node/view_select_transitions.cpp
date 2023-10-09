@@ -34,9 +34,26 @@ bool ViewSelectTransitions::render_settings()
     has_changed |= this->trigger_update_after_edit();
   }
 
+  if (ImGui::Checkbox("normalize", &this->normalize))
+    this->force_update();
+
   has_changed |= this->render_settings_footer();
 
   return has_changed;
+}
+
+void ViewSelectTransitions::serialize_save(cereal::JSONOutputArchive &ar)
+{
+  ar(cereal::make_nvp("smoothing", this->smoothing));
+  ar(cereal::make_nvp("ir", this->ir));
+  ar(cereal::make_nvp("normalize", this->normalize));
+}
+
+void ViewSelectTransitions::serialize_load(cereal::JSONInputArchive &ar)
+{
+  ar(cereal::make_nvp("smoothing", this->smoothing));
+  ar(cereal::make_nvp("ir", this->ir));
+  ar(cereal::make_nvp("normalize", this->normalize));
 }
 
 } // namespace hesiod::vnode

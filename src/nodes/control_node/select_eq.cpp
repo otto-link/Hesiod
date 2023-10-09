@@ -31,6 +31,9 @@ void SelectEq::compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_input)
                     { return hmap::smooth_cpulse(array, this->ir); });
     h_out.smooth_overlap_buffers();
   }
+
+  if (this->normalize)
+    h_out.remap();
 }
 
 } // namespace hesiod::cnode

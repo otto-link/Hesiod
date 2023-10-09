@@ -53,7 +53,7 @@ int main()
   // tree.add_view_node("ZeroedEdges");
   // tree.add_view_node("FbmPerlin");
   // tree.add_view_node("Clone");
-  tree.add_view_node("StratifyMultiscale");
+  // tree.add_view_node("StratifyMultiscale");
   // tree.new_link("FbmPerlin##0", "output", "ZeroedEdges##1", "input");
   // tree.new_link("FbmPerlin##2", "output", "RecastCanyon##1", "dz");
 

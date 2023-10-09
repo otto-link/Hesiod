@@ -1145,6 +1145,7 @@ protected:
   float value = 0.f;
   bool  smoothing = false;
   int   ir = 4;
+  bool  normalize = false;
 };
 
 class SelectTransitions : public gnode::Node
@@ -1160,6 +1161,7 @@ protected:
   hmap::HeightMap value_out = hmap::HeightMap();
   bool            smoothing = false;
   int             ir = 4;
+  bool            normalize = false;
 };
 
 class SmoothCpulse : public Filter

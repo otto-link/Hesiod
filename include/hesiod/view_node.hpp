@@ -810,6 +810,9 @@ public:
 
   bool render_settings();
 
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+
 private:
   bool               use_input_unique_values = false;
   std::vector<float> input_unique_values = {};
@@ -823,6 +826,9 @@ public:
   ViewSelectTransitions(std::string id);
 
   bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewSmoothCpulse : public ViewNode, public hesiod::cnode::SmoothCpulse

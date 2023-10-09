@@ -37,6 +37,9 @@ bool ViewSelectEq::render_settings()
     has_changed |= this->trigger_update_after_edit();
   }
 
+  if (ImGui::Checkbox("normalize", &this->normalize))
+    this->force_update();
+
   // unique values
   ImGui::Checkbox("Use input unique values", &this->use_input_unique_values);
 
@@ -83,6 +86,22 @@ bool ViewSelectEq::render_settings()
   has_changed |= this->render_settings_footer();
 
   return has_changed;
+}
+
+void ViewSelectEq::serialize_save(cereal::JSONOutputArchive &ar)
+{
+  ar(cereal::make_nvp("value", this->value));
+  ar(cereal::make_nvp("smoothing", this->smoothing));
+  ar(cereal::make_nvp("ir", this->ir));
+  ar(cereal::make_nvp("normalize", this->normalize));
+}
+
+void ViewSelectEq::serialize_load(cereal::JSONInputArchive &ar)
+{
+  ar(cereal::make_nvp("value", this->value));
+  ar(cereal::make_nvp("smoothing", this->smoothing));
+  ar(cereal::make_nvp("ir", this->ir));
+  ar(cereal::make_nvp("normalize", this->normalize));
 }
 
 } // namespace hesiod::vnode
