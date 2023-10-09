@@ -139,6 +139,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"WhiteDensityMap", "Primitive/Random"},
     {"WhiteSparse", "Primitive/Random"},
     {"Worley", "Primitive/Coherent Noise"},
+    {"WorleyDouble", "Primitive/Coherent Noise"},
     {"ZeroedEdges", "Math/Boundaries"}};
 
 //----------------------------------------
@@ -1460,6 +1461,23 @@ public:
 protected:
   hmap::Vec2<float> kw = {DEFAULT_KW, DEFAULT_KW};
   int               seed = DEFAULT_SEED;
+};
+
+class WorleyDouble : public Primitive
+{
+public:
+  WorleyDouble(std::string     id,
+               hmap::Vec2<int> shape,
+               hmap::Vec2<int> tiling,
+               float           overlap);
+
+  void compute();
+
+protected:
+  hmap::Vec2<float> kw = {DEFAULT_KW, DEFAULT_KW};
+  int               seed = DEFAULT_SEED;
+  float             ratio = 0.5f;
+  float             k = 0.05f;
 };
 
 class ZeroedEdges : public gnode::Node
