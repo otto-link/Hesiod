@@ -770,6 +770,9 @@ public:
   ViewRemap(std::string id);
 
   bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewRidgedPerlin : public ViewNode, public hesiod::cnode::RidgedPerlin
