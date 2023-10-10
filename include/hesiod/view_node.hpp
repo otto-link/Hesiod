@@ -459,6 +459,9 @@ public:
   ViewGammaCorrection(std::string id);
 
   bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewGammaCorrectionLocal : public ViewNode,
@@ -468,6 +471,9 @@ public:
   ViewGammaCorrectionLocal(std::string id);
 
   bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewGradient : public ViewNode, public hesiod::cnode::Gradient

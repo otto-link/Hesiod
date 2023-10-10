@@ -29,4 +29,14 @@ bool ViewGammaCorrection::render_settings()
   return has_changed;
 }
 
+void ViewGammaCorrection::serialize_save(cereal::JSONOutputArchive &ar)
+{
+  ar(cereal::make_nvp("gamma", this->gamma));
+}
+
+void ViewGammaCorrection::serialize_load(cereal::JSONInputArchive &ar)
+{
+  ar(cereal::make_nvp("gamma", this->gamma));
+}
+
 } // namespace hesiod::vnode

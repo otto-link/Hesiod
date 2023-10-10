@@ -28,11 +28,25 @@ bool ViewGammaCorrectionLocal::render_settings()
   ImGui::SliderInt("ir", &this->ir, 1, 128);
   has_changed |= this->trigger_update_after_edit();
 
-  ImGui::SliderFloat("k", &this->k, 0.f, 1.f, "%.2f");
+  ImGui::SliderFloat("k", &this->k, 0.001f, 1.f, "%.2f");
   has_changed |= this->trigger_update_after_edit();
 
   has_changed |= this->render_settings_footer();
   return has_changed;
+}
+
+void ViewGammaCorrectionLocal::serialize_save(cereal::JSONOutputArchive &ar)
+{
+  ar(cereal::make_nvp("gamma", this->gamma));
+  ar(cereal::make_nvp("ir", this->ir));
+  ar(cereal::make_nvp("k", this->k));
+}
+
+void ViewGammaCorrectionLocal::serialize_load(cereal::JSONInputArchive &ar)
+{
+  ar(cereal::make_nvp("gamma", this->gamma));
+  ar(cereal::make_nvp("ir", this->ir));
+  ar(cereal::make_nvp("k", this->k));
 }
 
 } // namespace hesiod::vnode
