@@ -42,4 +42,20 @@ bool ViewGaussianPulse::render_settings()
   return has_changed;
 }
 
+void ViewGaussianPulse::serialize_save(cereal::JSONOutputArchive &ar)
+{
+  ar(cereal::make_nvp("sigma", this->sigma));
+  ar(cereal::make_nvp("inverse", this->inverse));
+  ar(cereal::make_nvp("vmin", this->vmin));
+  ar(cereal::make_nvp("vmax", this->vmax));
+}
+
+void ViewGaussianPulse::serialize_load(cereal::JSONInputArchive &ar)
+{
+  ar(cereal::make_nvp("sigma", this->sigma));
+  ar(cereal::make_nvp("inverse", this->inverse));
+  ar(cereal::make_nvp("vmin", this->vmin));
+  ar(cereal::make_nvp("vmax", this->vmax));
+}
+
 } // namespace hesiod::vnode
