@@ -42,4 +42,20 @@ bool ViewBump::render_settings()
   return has_changed;
 }
 
+void ViewBump::serialize_save(cereal::JSONOutputArchive &ar)
+{
+  ar(cereal::make_nvp("gain", this->gain));
+  ar(cereal::make_nvp("inverse", this->inverse));
+  ar(cereal::make_nvp("vmin", this->vmin));
+  ar(cereal::make_nvp("vmax", this->vmax));
+}
+
+void ViewBump::serialize_load(cereal::JSONInputArchive &ar)
+{
+  ar(cereal::make_nvp("gain", this->gain));
+  ar(cereal::make_nvp("inverse", this->inverse));
+  ar(cereal::make_nvp("vmin", this->vmin));
+  ar(cereal::make_nvp("vmax", this->vmax));
+}
+
 } // namespace hesiod::vnode

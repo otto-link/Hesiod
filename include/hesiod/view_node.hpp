@@ -208,6 +208,9 @@ public:
            float           overlap);
 
   bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewCheckerboard : public ViewNode, public hesiod::cnode::Checkerboard
@@ -979,6 +982,9 @@ public:
                          float           overlap);
 
   bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewWarp : public ViewNode, public hesiod::cnode::Warp
