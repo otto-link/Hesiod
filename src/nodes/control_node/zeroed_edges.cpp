@@ -55,6 +55,9 @@ void ZeroedEdges::compute()
                            hmap::Vec2<float> shift,
                            hmap::Vec2<float> scale)
                     { hmap::zeroed_edges(z, this->sigma, &dr, shift, scale); });
+
+  if (remap)
+    this->value_out.remap(this->vmin, this->vmax);
 }
 
 } // namespace hesiod::cnode

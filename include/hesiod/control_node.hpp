@@ -134,6 +134,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"ValueNoiseDelaunay", "Primitive/Coherent Noise"},
     {"Warp", "Operator/Transform"},
     {"WarpDownslope", "Operator/Transform"},
+    {"WaveDune", "Primitive/Function"},
     {"WaveSine", "Primitive/Function"},
     {"White", "Primitive/Random"},
     {"WhiteDensityMap", "Primitive/Random"},
@@ -1371,6 +1372,24 @@ protected:
   bool  reverse = false;
 };
 
+class WaveDune : public Primitive
+{
+public:
+  WaveDune(std::string     id,
+           hmap::Vec2<int> shape,
+           hmap::Vec2<int> tiling,
+           float           overlap);
+
+  void compute();
+
+protected:
+  float kw = DEFAULT_KW;
+  float angle = 0.f;
+  float xtop = 0.7f;
+  float xbottom = 1.f;
+  float phase_shift = 0.f;
+};
+
 class WaveSine : public Primitive
 {
 public:
@@ -1494,6 +1513,9 @@ public:
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
   float           sigma = 0.25f;
+  bool            remap = false;
+  float           vmin = 0.f;
+  float           vmax = 1.f;
 };
 
 } // namespace hesiod::cnode

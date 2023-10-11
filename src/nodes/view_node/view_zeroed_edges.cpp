@@ -24,6 +24,16 @@ bool ViewZeroedEdges::render_settings()
   ImGui::SliderFloat("sigma", &this->sigma, 0.f, 0.5f, "%.2f");
   has_changed |= this->trigger_update_after_edit();
 
+  ImGui::Checkbox("remap", &this->remap);
+  has_changed |= this->trigger_update_after_edit();
+
+  if (this->remap)
+    if (hesiod::gui::slider_vmin_vmax(this->vmin, this->vmax))
+    {
+      this->force_update();
+      has_changed = true;
+    }
+
   has_changed |= this->render_settings_footer();
   return has_changed;
 }
@@ -31,11 +41,17 @@ bool ViewZeroedEdges::render_settings()
 void ViewZeroedEdges::serialize_save(cereal::JSONOutputArchive &ar)
 {
   ar(cereal::make_nvp("sigma", this->sigma));
+  ar(cereal::make_nvp("remap", this->remap));
+  ar(cereal::make_nvp("vmin", this->vmin));
+  ar(cereal::make_nvp("vmax", this->vmax));
 }
 
 void ViewZeroedEdges::serialize_load(cereal::JSONInputArchive &ar)
 {
   ar(cereal::make_nvp("sigma", this->sigma));
+  ar(cereal::make_nvp("remap", this->remap));
+  ar(cereal::make_nvp("vmin", this->vmin));
+  ar(cereal::make_nvp("vmax", this->vmax));
 }
 
 } // namespace hesiod::vnode
