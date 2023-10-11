@@ -132,6 +132,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"ThermalScree", "Erosion/Thermal"},
     {"ValleyWidth", "Features"},
     {"ValueNoiseDelaunay", "Primitive/Coherent Noise"},
+    {"ValueNoiseLinear", "Primitive/Coherent Noise"},
     {"Warp", "Operator/Transform"},
     {"WarpDownslope", "Operator/Transform"},
     {"WaveDune", "Primitive/Function"},
@@ -1340,6 +1341,21 @@ public:
 protected:
   float kw = DEFAULT_KW;
   int   seed = DEFAULT_SEED;
+};
+
+class ValueNoiseLinear : public Primitive
+{
+public:
+  ValueNoiseLinear(std::string     id,
+                   hmap::Vec2<int> shape,
+                   hmap::Vec2<int> tiling,
+                   float           overlap);
+
+  void compute();
+
+protected:
+  hmap::Vec2<float> kw = {DEFAULT_KW, DEFAULT_KW};
+  int               seed = DEFAULT_SEED;
 };
 
 class Warp : public gnode::Node
