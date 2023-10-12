@@ -126,7 +126,8 @@ static const std::map<std::string, std::string> category_mapping = {
     {"SmoothFillSmearPeaks", "Filter/Smoothing"},
     {"SteepenConvective", "Filter/Recast"},
     {"Step", "Primitive/Function"},
-    {"StratifyMultiscale", "Erosion"},
+    {"StratifyMultiscale", "Erosion/Stratify"},
+    {"StratifyOblique", "Erosion/Stratify"},
     {"Thermal", "Erosion/Thermal"},
     {"ThermalAutoBedrock", "Erosion/Thermal"},
     {"ThermalScree", "Erosion/Thermal"},
@@ -1261,6 +1262,26 @@ protected:
   std::vector<float> gamma_list = {1.5f, 0.5f, 1.f};
   std::vector<float> gamma_noise = {0.f, 0.f, 0.f};
   int                seed = DEFAULT_SEED;
+};
+
+class StratifyOblique : public gnode::Node
+{
+public:
+  StratifyOblique(std::string id);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap();
+  int             n_strata = 3;
+  float           strata_noise = 0.f;
+  float           gamma = 0.7f;
+  float           gamma_noise = 0.f;
+  float           talus_global = 2.f;
+  float           angle = 30.f;
+  int             seed = DEFAULT_SEED;
 };
 
 class Thermal : public gnode::Node
