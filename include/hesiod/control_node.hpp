@@ -257,6 +257,7 @@ protected:
   hmap::HeightMap value_out = hmap::HeightMap();
   float           vmin = 0.f;
   float           vmax = 1.f;
+  bool            inverse = false;
 
 private:
   hmap::Vec2<int> shape;
@@ -379,7 +380,6 @@ public:
 
 protected:
   float gain = 1.f;
-  bool  inverse = false;
 };
 
 class Checkerboard : public Primitive

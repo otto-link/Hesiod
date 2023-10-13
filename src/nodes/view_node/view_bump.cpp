@@ -24,10 +24,10 @@ bool ViewBump::render_settings()
   bool has_changed = false;
   has_changed |= this->render_settings_header();
 
-  ImGui::Checkbox("inverse", &this->inverse);
+  ImGui::SliderFloat("gain", &this->gain, 0.01f, 10.f, "%.2f");
   has_changed |= this->trigger_update_after_edit();
 
-  ImGui::SliderFloat("gain", &this->gain, 0.01f, 10.f, "%.2f");
+  ImGui::Checkbox("inverse", &this->inverse);
   has_changed |= this->trigger_update_after_edit();
 
   ImGui::Separator();

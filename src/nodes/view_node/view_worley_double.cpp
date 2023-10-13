@@ -48,6 +48,9 @@ bool ViewWorleyDouble::render_settings()
   ImGui::SliderFloat("k", &this->k, 0.f, 1.f, "%.2f");
   has_changed |= this->trigger_update_after_edit();
 
+  ImGui::Checkbox("inverse", &this->inverse);
+  has_changed |= this->trigger_update_after_edit();
+
   ImGui::Separator();
 
   if (hesiod::gui::slider_vmin_vmax(vmin, vmax))
@@ -71,6 +74,7 @@ void ViewWorleyDouble::serialize_save(cereal::JSONOutputArchive &ar)
   ar(cereal::make_nvp("link_kxy", this->link_kxy));
   ar(cereal::make_nvp("vmin", this->vmin));
   ar(cereal::make_nvp("vmax", this->vmax));
+  ar(cereal::make_nvp("inverse", this->inverse));
 }
 
 void ViewWorleyDouble::serialize_load(cereal::JSONInputArchive &ar)
@@ -83,6 +87,7 @@ void ViewWorleyDouble::serialize_load(cereal::JSONInputArchive &ar)
   ar(cereal::make_nvp("link_kxy", this->link_kxy));
   ar(cereal::make_nvp("vmin", this->vmin));
   ar(cereal::make_nvp("vmax", this->vmax));
+  ar(cereal::make_nvp("inverse", this->inverse));
 }
 
 } // namespace hesiod::vnode

@@ -57,7 +57,10 @@ void FbmPerlin::compute()
              });
 
   // remap the output
-  this->value_out.remap(this->vmin, this->vmax);
+  if (this->inverse)
+    this->value_out.remap(this->vmax, this->vmin);
+  else
+    this->value_out.remap(this->vmin, this->vmax);
 }
 
 } // namespace hesiod::cnode
