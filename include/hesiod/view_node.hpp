@@ -706,6 +706,21 @@ private:
   int wshape_choice = 1;
 };
 
+class ViewPathToHeightmap : public ViewNode,
+                            public hesiod::cnode::PathToHeightmap
+{
+public:
+  ViewPathToHeightmap(std::string     id,
+                      hmap::Vec2<int> shape,
+                      hmap::Vec2<int> tiling,
+                      float           overlap);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewPerlin : public ViewNode, public hesiod::cnode::Perlin
 {
 public:

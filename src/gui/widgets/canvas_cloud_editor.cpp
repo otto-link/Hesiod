@@ -250,7 +250,7 @@ bool canvas_cloud_editor(hmap::Cloud &cloud,
       {
         float x = (io.MousePos.x - canvas_p0.x) / canvas_size.x;
         float y = 1.f - (io.MousePos.y - canvas_p0.y) / canvas_size.y;
-        cloud.add_point(hmap::Point(x, y));
+        cloud.add_point(hmap::Point(x, y, 1.f));
         ret = true;
       }
     }

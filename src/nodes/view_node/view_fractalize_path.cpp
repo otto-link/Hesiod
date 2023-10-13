@@ -35,7 +35,7 @@ bool ViewFractalizePath::render_settings()
     has_changed = true;
   }
 
-  ImGui::SliderInt("iterations", &this->iterations, 1, 8);
+  ImGui::SliderInt("iterations", &this->iterations, 1, 16);
   has_changed |= this->trigger_update_after_edit();
 
   ImGui::SliderFloat("sigma", &this->sigma, 0.f, 1.f, "%.2f");

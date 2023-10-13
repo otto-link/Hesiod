@@ -109,6 +109,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"OneMinus", "Math/Base"},
     {"Path", "Geometry/Path"},
     {"PathFinding", "Roads"},
+    {"PathToHeightmap", "Geometry/Path"},
     {"Perlin", "Primitive/Coherent Noise"},
     {"PerlinBillow", "Primitive/Coherent Noise"},
     {"Preview", "Debug"},
@@ -1009,6 +1010,29 @@ protected:
   hmap::Vec2<int> wshape = {256, 256};
   float           elevation_ratio = 0.5f;
   float           distance_exponent = 1.f;
+};
+
+class PathToHeightmap : public gnode::Node
+{
+public:
+  PathToHeightmap(std::string     id,
+                  hmap::Vec2<int> shape,
+                  hmap::Vec2<int> tiling,
+                  float           overlap);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap();
+  float           vmin = 0.f;
+  float           vmax = 1.f;
+
+private:
+  hmap::Vec2<int> shape;
+  hmap::Vec2<int> tiling;
+  float           overlap;
 };
 
 class Perlin : public Primitive
