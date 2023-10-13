@@ -914,9 +914,6 @@ public:
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
   float           t = 0.5f;
-
-private:
-  hmap::Vec2<int> shape = {0, 0};
 };
 
 class MakeBinary : public Unary

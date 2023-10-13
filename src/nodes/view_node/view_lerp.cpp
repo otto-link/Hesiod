@@ -31,4 +31,14 @@ bool ViewLerp::render_settings()
   return has_changed;
 }
 
+void ViewLerp::serialize_save(cereal::JSONOutputArchive &ar)
+{
+  ar(cereal::make_nvp("t", this->t));
+}
+
+void ViewLerp::serialize_load(cereal::JSONInputArchive &ar)
+{
+  ar(cereal::make_nvp("t", this->t));
+}
+
 } // namespace hesiod::vnode

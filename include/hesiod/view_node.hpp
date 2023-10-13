@@ -628,6 +628,9 @@ public:
   ViewLerp(std::string id);
 
   bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewMakeBinary : public ViewNode, public hesiod::cnode::MakeBinary
