@@ -297,14 +297,14 @@ void ViewNode::serialize_load(cereal::JSONInputArchive &)
 {
   LOG_ERROR("serialize (input) not defined for node [%s]",
             this->p_control_node->id.c_str());
-  throw std::runtime_error("undefined serialization");
+  // throw std::runtime_error("undefined serialization");
 }
 
 void ViewNode::serialize_save(cereal::JSONOutputArchive &)
 {
   LOG_ERROR("serialize (output) not defined for node [%s]",
             this->p_control_node->id.c_str());
-  throw std::runtime_error("undefined serialization");
+  // throw std::runtime_error("undefined serialization");
 }
 
 bool ViewNode::trigger_update_after_edit()
