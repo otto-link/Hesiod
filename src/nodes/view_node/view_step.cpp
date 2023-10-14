@@ -28,7 +28,7 @@ bool ViewStep::render_settings()
   has_changed |= this->render_settings_header();
 
   float alpha = this->angle / 180.f * M_PI;
-  ImGui::SliderAngle("angle", &alpha, -90.f, 90.f);
+  ImGui::SliderAngle("angle", &alpha, -180.f, 180.f);
   this->angle = alpha / M_PI * 180.f;
 
   has_changed |= this->trigger_update_after_edit();

@@ -73,10 +73,10 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Cloud", "Geometry/Cloud"},
     {"CloudToArrayInterp", "Primitive/Manual"},
     {"ConvolveSVD", "Math/Convolution"},
-    {"CubicPulseTruncated", "Primitive/Kernel"},
+    // {"CubicPulseTruncated", "Primitive/Kernel"}, // useless
     {"Debug", "Debug"},
     {"DigPath", "Roads"},
-    {"Equalize", "Filter/Recurve"},
+    // {"Equalize", "Filter/Recurve"}, // BROKEN
     {"ErosionMaps", "Erosion/Hydraulic"},
     {"ExpandShrink", "Filter/Recast"},
     {"ExpandShrinkDirectional", "Filter/Recast"},
@@ -90,13 +90,14 @@ static const std::map<std::string, std::string> category_mapping = {
     {"GammaCorrectionLocal", "Filter/Recurve"},
     {"GaussianPulse", "Primitive/Function"},
     {"Gradient", "Math/Gradient"},
+    {"GradientAngle", "Math/Gradient"},
     {"GradientNorm", "Math/Gradient"},
     {"GradientTalus", "Math/Gradient"},
-    {"HydraulicBenes", "Erosion/Hydraulic"},
+    // {"HydraulicBenes", "Erosion/Hydraulic"}, // BROKEN
     {"HydraulicParticle", "Erosion/Hydraulic"},
     {"HydraulicRidge", "Erosion/Hydraulic"},
     {"HydraulicStream", "Erosion/Hydraulic"},
-    {"HydraulicVpipes", "Erosion/Hydraulic"},
+    // {"HydraulicVpipes", "Erosion/Hydraulic"}, // BROKEN
     {"Import", "IO/Files"},
     {"Kernel", "Primitive/Kernel"},
     {"KmeansClustering2", "Features"},
@@ -713,6 +714,14 @@ protected:
   float           vmax_x = 1.f;
   float           vmin_y = 0.f;
   float           vmax_y = 1.f;
+};
+
+class GradientAngle : public Unary
+{
+public:
+  GradientAngle(std::string id);
+
+  void compute_in_out(hmap::HeightMap &h, hmap::HeightMap *p_talus);
 };
 
 class GradientNorm : public Unary

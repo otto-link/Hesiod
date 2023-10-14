@@ -507,6 +507,15 @@ public:
   void serialize_load(cereal::JSONInputArchive &ar);
 };
 
+class ViewGradientAngle : public ViewNode, public hesiod::cnode::GradientAngle
+{
+public:
+  ViewGradientAngle(std::string id);
+
+  void serialize_save(cereal::JSONOutputArchive &);
+  void serialize_load(cereal::JSONInputArchive &);
+};
+
 class ViewGradientNorm : public ViewNode, public hesiod::cnode::GradientNorm
 {
 public:
