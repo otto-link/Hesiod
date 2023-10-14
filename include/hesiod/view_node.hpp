@@ -173,6 +173,9 @@ public:
                     float           overlap);
 
   bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewBezierPath : public ViewNode, public hesiod::cnode::BezierPath
