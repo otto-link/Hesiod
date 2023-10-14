@@ -64,4 +64,22 @@ bool ViewPathFinding::render_settings()
   return has_changed;
 }
 
+void ViewPathFinding::serialize_save(cereal::JSONOutputArchive &ar)
+{
+  ar(cereal::make_nvp("wshape.x", this->wshape.x));
+  ar(cereal::make_nvp("wshape.y", this->wshape.y));
+  ar(cereal::make_nvp("elevation_ratio", this->elevation_ratio));
+  ar(cereal::make_nvp("distance_exponent", this->distance_exponent));
+  ar(cereal::make_nvp("wshape_choice", this->wshape_choice));
+}
+
+void ViewPathFinding::serialize_load(cereal::JSONInputArchive &ar)
+{
+  ar(cereal::make_nvp("wshape.x", this->wshape.x));
+  ar(cereal::make_nvp("wshape.y", this->wshape.y));
+  ar(cereal::make_nvp("elevation_ratio", this->elevation_ratio));
+  ar(cereal::make_nvp("distance_exponent", this->distance_exponent));
+  ar(cereal::make_nvp("wshape_choice", this->wshape_choice));
+}
+
 } // namespace hesiod::vnode

@@ -29,4 +29,14 @@ bool ViewMakeBinary::render_settings()
   return has_changed;
 }
 
+void ViewMakeBinary::serialize_save(cereal::JSONOutputArchive &ar)
+{
+  ar(cereal::make_nvp("threshold", this->threshold));
+}
+
+void ViewMakeBinary::serialize_load(cereal::JSONInputArchive &ar)
+{
+  ar(cereal::make_nvp("threshold", this->threshold));
+}
+
 } // namespace hesiod::vnode

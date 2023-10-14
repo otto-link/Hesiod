@@ -621,6 +621,9 @@ public:
 
   bool render_settings();
 
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+
 private:
   int shape_clustering_choice = 1;
 };
@@ -666,6 +669,9 @@ public:
   ViewMakeBinary(std::string id);
 
   bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewMeanderizePath : public ViewNode, public hesiod::cnode::MeanderizePath
@@ -698,6 +704,9 @@ public:
   ViewMinimumLocal(std::string id);
 
   bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewNormalDisplacement : public ViewNode,
@@ -741,6 +750,9 @@ public:
   void render_node_specific_content();
 
   bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
 
 private:
   int wshape_choice = 1;
@@ -823,6 +835,9 @@ public:
   ViewRecurve(std::string id);
 
   bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewRemap : public ViewNode, public hesiod::cnode::Remap
@@ -859,6 +874,9 @@ public:
   ViewRugosity(std::string id);
 
   bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewSedimentDeposition : public ViewNode,
@@ -1081,6 +1099,9 @@ public:
   ViewWarp(std::string id);
 
   bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewWarpDownslope : public ViewNode, public hesiod::cnode::WarpDownslope

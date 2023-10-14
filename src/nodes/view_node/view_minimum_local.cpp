@@ -30,4 +30,14 @@ bool ViewMinimumLocal::render_settings()
   return has_changed;
 }
 
+void ViewMinimumLocal::serialize_save(cereal::JSONOutputArchive &ar)
+{
+  ar(cereal::make_nvp("ir", this->ir));
+}
+
+void ViewMinimumLocal::serialize_load(cereal::JSONInputArchive &ar)
+{
+  ar(cereal::make_nvp("ir", this->ir));
+}
+
 } // namespace hesiod::vnode

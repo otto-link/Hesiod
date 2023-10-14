@@ -1418,9 +1418,6 @@ public:
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
   float           scale = 1.f;
-
-private:
-  hmap::Vec2<int> shape = {0, 0};
 };
 
 class WarpDownslope : public Filter
