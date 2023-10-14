@@ -3,6 +3,7 @@
  * this software. */
 #include "imgui.h"
 #include "macrologger.h"
+#include <cereal/types/vector.hpp>
 
 #include "hesiod/control_node.hpp"
 #include "hesiod/gui.hpp"
@@ -48,6 +49,18 @@ bool ViewBaseElevation::render_settings()
   has_changed |= this->render_settings_footer();
 
   return has_changed;
+}
+
+void ViewBaseElevation::serialize_save(cereal::JSONOutputArchive &ar)
+{
+  ar(cereal::make_nvp("values", this->values));
+  ar(cereal::make_nvp("width_factor", this->width_factor));
+}
+
+void ViewBaseElevation::serialize_load(cereal::JSONInputArchive &ar)
+{
+  ar(cereal::make_nvp("values", this->values));
+  ar(cereal::make_nvp("width_factor", this->width_factor));
 }
 
 } // namespace hesiod::vnode

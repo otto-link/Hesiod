@@ -43,4 +43,18 @@ bool ViewCloudToArrayInterp::render_settings()
   return has_changed;
 }
 
+void ViewCloudToArrayInterp::serialize_save(cereal::JSONOutputArchive &ar)
+{
+  ar(cereal::make_nvp("interpolation_method", this->interpolation_method));
+  ar(cereal::make_nvp("vmin", this->vmin));
+  ar(cereal::make_nvp("vmax", this->vmax));
+}
+
+void ViewCloudToArrayInterp::serialize_load(cereal::JSONInputArchive &ar)
+{
+  ar(cereal::make_nvp("interpolation_method", this->interpolation_method));
+  ar(cereal::make_nvp("vmin", this->vmin));
+  ar(cereal::make_nvp("vmax", this->vmax));
+}
+
 } // namespace hesiod::vnode

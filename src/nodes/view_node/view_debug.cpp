@@ -13,6 +13,7 @@ ViewDebug::ViewDebug(std::string id) : ViewNode(), hesiod::cnode::Debug(id)
   LOG_DEBUG("hash_id: %d", this->hash_id);
   LOG_DEBUG("label: %s", this->label.c_str());
   this->set_p_control_node((gnode::Node *)this);
+  this->set_preview_port_id("input");
 }
 
 void ViewDebug::export_to_png()
@@ -39,6 +40,14 @@ void ViewDebug::post_control_node_update()
 
   if (this->auto_export_png)
     this->export_to_png();
+
+  if (this->preview_port_id != "")
+    this->update_preview();
+}
+
+void ViewDebug::render_node_specific_content()
+{
+  ImGui::Text("%s", this->log.c_str());
 }
 
 bool ViewDebug::render_settings()
@@ -55,6 +64,16 @@ bool ViewDebug::render_settings()
 
   has_changed |= this->render_settings_footer();
   return has_changed;
+}
+
+void ViewDebug::serialize_save(cereal::JSONOutputArchive &ar)
+{
+  ar(cereal::make_nvp("auto_export_png", this->auto_export_png));
+}
+
+void ViewDebug::serialize_load(cereal::JSONInputArchive &ar)
+{
+  ar(cereal::make_nvp("auto_export_png", this->auto_export_png));
 }
 
 } // namespace hesiod::vnode

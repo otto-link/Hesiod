@@ -39,4 +39,18 @@ bool ViewExpandShrink::render_settings()
   return has_changed;
 }
 
+void ViewExpandShrink::serialize_save(cereal::JSONOutputArchive &ar)
+{
+  ar(cereal::make_nvp("ir", this->ir));
+  ar(cereal::make_nvp("shrink", this->shrink));
+  ar(cereal::make_nvp("kernel", this->kernel));
+}
+
+void ViewExpandShrink::serialize_load(cereal::JSONInputArchive &ar)
+{
+  ar(cereal::make_nvp("ir", this->ir));
+  ar(cereal::make_nvp("shrink", this->shrink));
+  ar(cereal::make_nvp("kernel", this->kernel));
+}
+
 } // namespace hesiod::vnode

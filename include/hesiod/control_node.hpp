@@ -712,9 +712,6 @@ protected:
   float           vmax_x = 1.f;
   float           vmin_y = 0.f;
   float           vmax_y = 1.f;
-
-private:
-  hmap::Vec2<int> shape = {0, 0};
 };
 
 class GradientNorm : public Unary

@@ -26,7 +26,6 @@ bool ViewGradient::render_settings()
   if (this->normalize)
   {
     ImGui::Text("dx");
-    ImGui::Separator();
     if (hesiod::gui::slider_vmin_vmax(this->vmin_x, this->vmax_x))
     {
       this->force_update();
@@ -43,6 +42,24 @@ bool ViewGradient::render_settings()
 
   has_changed |= this->render_settings_footer();
   return has_changed;
+}
+
+void ViewGradient::serialize_save(cereal::JSONOutputArchive &ar)
+{
+  ar(cereal::make_nvp("normalize", this->normalize));
+  ar(cereal::make_nvp("vmin_x", this->vmin_x));
+  ar(cereal::make_nvp("vmax_x", this->vmax_x));
+  ar(cereal::make_nvp("vmin_y", this->vmin_y));
+  ar(cereal::make_nvp("vmax_y", this->vmax_y));
+}
+
+void ViewGradient::serialize_load(cereal::JSONInputArchive &ar)
+{
+  ar(cereal::make_nvp("normalize", this->normalize));
+  ar(cereal::make_nvp("vmin_x", this->vmin_x));
+  ar(cereal::make_nvp("vmax_x", this->vmax_x));
+  ar(cereal::make_nvp("vmin_y", this->vmin_y));
+  ar(cereal::make_nvp("vmax_y", this->vmax_y));
 }
 
 } // namespace hesiod::vnode
