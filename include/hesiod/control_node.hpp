@@ -92,6 +92,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Gradient", "Math/Gradient"},
     {"GradientNorm", "Math/Gradient"},
     {"GradientTalus", "Math/Gradient"},
+    {"HydraulicBenes", "Erosion/Hydraulic"},
     {"HydraulicParticle", "Erosion/Hydraulic"},
     {"HydraulicRidge", "Erosion/Hydraulic"},
     {"HydraulicStream", "Erosion/Hydraulic"},
@@ -728,6 +729,28 @@ public:
   GradientTalus(std::string id);
 
   void compute_in_out(hmap::HeightMap &h, hmap::HeightMap *p_talus);
+};
+
+class HydraulicBenes : public Erosion
+{
+public:
+  HydraulicBenes(std::string id);
+
+  void compute_erosion(hmap::HeightMap &h,
+                       hmap::HeightMap *p_bedrock,
+                       hmap::HeightMap *p_moisture_map,
+                       hmap::HeightMap *p_mask,
+                       hmap::HeightMap *p_erosion_map,
+                       hmap::HeightMap *p_deposition_map);
+
+protected:
+  int   iterations = 50;
+  float c_capacity = 40.f;
+  float c_erosion = 0.2f;
+  float c_deposition = 0.8f;
+  float water_level = 0.005f;
+  float evap_rate = 0.01f;
+  float rain_rate = 0.5f;
 };
 
 class HydraulicParticle : public Erosion
