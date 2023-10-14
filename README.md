@@ -12,7 +12,7 @@ Work in progress, use at your own risk!
 
 This project is licensed under the GNU General Public License v3.0.
 
-## Getting started
+## Getting started (only on Linux so far)
 
 ### Getting the sources
 
@@ -48,7 +48,7 @@ See https://github.com/otto-link/HighMap.
 - https://github.com/otto-link/HighMap / A C++ library to generate two-dimensional terrain heightmaps for software rendering or video games.
 - https://github.com/otto-link/GNode / A generic node-based data structure for node graph programming in C++
 
- - https://github.com/ocornut/imgui / Dear ImGui: Bloat-free Graphical User interface for C++ with minimal dependencies
+- https://github.com/ocornut/imgui / Dear ImGui: Bloat-free Graphical User interface for C++ with minimal dependencies
 - https://github.com/aiekick/ImGuiFileDialog / File Dialog for Dear ImGui
 - https://github.com/thedmd/imgui-node-editor / Node Editor built using Dear ImGui
 - https://github.com/Raais/ImguiCandy / Color utils, Themes and other cool stuff for Dear ImGui
