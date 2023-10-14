@@ -15,4 +15,12 @@ ViewGradientNorm::ViewGradientNorm(std::string id)
   this->set_preview_port_id("output");
 }
 
+void ViewGradientNorm::serialize_save(cereal::JSONOutputArchive &)
+{
+}
+
+void ViewGradientNorm::serialize_load(cereal::JSONInputArchive &)
+{
+}
+
 } // namespace hesiod::vnode

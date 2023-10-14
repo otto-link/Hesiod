@@ -226,6 +226,9 @@ public:
 
   bool render_settings();
 
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+
 private:
   bool link_kxy = true;
 };
@@ -272,6 +275,9 @@ public:
                          float           overlap);
 
   bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewConvolveSVD : public ViewNode, public hesiod::cnode::ConvolveSVD
@@ -310,6 +316,11 @@ public:
   void post_control_node_update();
 
   bool render_settings();
+
+  void render_node_specific_content();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewDigPath : public ViewNode, public hesiod::cnode::DigPath
@@ -351,6 +362,9 @@ public:
   ViewExpandShrink(std::string id);
 
   bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewExpandShrinkDirectional
@@ -488,18 +502,27 @@ public:
   ViewGradient(std::string id);
 
   bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewGradientNorm : public ViewNode, public hesiod::cnode::GradientNorm
 {
 public:
   ViewGradientNorm(std::string id);
+
+  void serialize_save(cereal::JSONOutputArchive &);
+  void serialize_load(cereal::JSONInputArchive &);
 };
 
 class ViewGradientTalus : public ViewNode, public hesiod::cnode::GradientTalus
 {
 public:
   ViewGradientTalus(std::string id);
+
+  void serialize_save(cereal::JSONOutputArchive &);
+  void serialize_load(cereal::JSONInputArchive &);
 };
 
 class ViewGaussianPulse : public ViewNode, public hesiod::cnode::GaussianPulse

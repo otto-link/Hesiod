@@ -15,4 +15,12 @@ ViewGradientTalus::ViewGradientTalus(std::string id)
   this->set_preview_port_id("output");
 }
 
+void ViewGradientTalus::serialize_save(cereal::JSONOutputArchive &)
+{
+}
+
+void ViewGradientTalus::serialize_load(cereal::JSONInputArchive &)
+{
+}
+
 } // namespace hesiod::vnode
