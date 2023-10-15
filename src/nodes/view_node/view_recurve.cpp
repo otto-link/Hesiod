@@ -2,6 +2,7 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include "macrologger.h"
+#include <cereal/types/vector.hpp>
 
 #include "hesiod/gui.hpp"
 #include "hesiod/view_node.hpp"
@@ -27,6 +28,16 @@ bool ViewRecurve::render_settings()
 
   has_changed |= this->render_settings_footer();
   return has_changed;
+}
+
+void ViewRecurve::serialize_save(cereal::JSONOutputArchive &ar)
+{
+  ar(cereal::make_nvp("curve", this->curve));
+}
+
+void ViewRecurve::serialize_load(cereal::JSONInputArchive &ar)
+{
+  ar(cereal::make_nvp("curve", this->curve));
 }
 
 } // namespace hesiod::vnode

@@ -214,6 +214,12 @@ std::string ViewTree::add_view_node(std::string control_node_type,
         id);
     this->add_node(p_view_node);
   }
+  else if (control_node_type == "GradientAngle")
+  {
+    std::shared_ptr p_view_node =
+        std::make_shared<hesiod::vnode::ViewGradientAngle>(id);
+    this->add_node(p_view_node);
+  }
   else if (control_node_type == "GradientNorm")
   {
     std::shared_ptr p_view_node =
@@ -224,6 +230,12 @@ std::string ViewTree::add_view_node(std::string control_node_type,
   {
     std::shared_ptr p_view_node =
         std::make_shared<hesiod::vnode::ViewGradientTalus>(id);
+    this->add_node(p_view_node);
+  }
+  else if (control_node_type == "HydraulicBenes")
+  {
+    std::shared_ptr p_view_node =
+        std::make_shared<hesiod::vnode::ViewHydraulicBenes>(id);
     this->add_node(p_view_node);
   }
   else if (control_node_type == "HydraulicParticle")
@@ -377,6 +389,12 @@ std::string ViewTree::add_view_node(std::string control_node_type,
         id);
     this->add_node(p_view_node);
   }
+  else if (control_node_type == "RelativeElevation")
+  {
+    std::shared_ptr p_view_node =
+        std::make_shared<hesiod::vnode::ViewRelativeElevation>(id);
+    this->add_node(p_view_node);
+  }
   else if (control_node_type == "Remap")
   {
     std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewRemap>(
@@ -414,6 +432,15 @@ std::string ViewTree::add_view_node(std::string control_node_type,
   {
     std::shared_ptr p_view_node =
         std::make_shared<hesiod::vnode::ViewSelectTransitions>(id);
+    this->add_node(p_view_node);
+  }
+  else if (control_node_type == "Slope")
+  {
+    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewSlope>(
+        id,
+        this->shape,
+        this->tiling,
+        this->overlap);
     this->add_node(p_view_node);
   }
   else if (control_node_type == "SmoothCpulse")

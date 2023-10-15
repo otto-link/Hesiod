@@ -8,35 +8,33 @@
 namespace hesiod::vnode
 {
 
-ViewMakeBinary::ViewMakeBinary(std::string id)
-    : ViewNode(), hesiod::cnode::MakeBinary(id)
+ViewRelativeElevation::ViewRelativeElevation(std::string id)
+    : ViewNode(), hesiod::cnode::RelativeElevation(id)
 {
-  LOG_DEBUG("hash_id: %d", this->hash_id);
-  LOG_DEBUG("label: %s", this->label.c_str());
   this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
 }
 
-bool ViewMakeBinary::render_settings()
+bool ViewRelativeElevation::render_settings()
 {
   bool has_changed = false;
   has_changed |= this->render_settings_header();
 
-  ImGui::SliderFloat("threshold", &this->threshold, -1.f, 1.f, "%.2f");
+  ImGui::SliderInt("int", &this->ir, 1, 256);
   has_changed |= this->trigger_update_after_edit();
 
   has_changed |= this->render_settings_footer();
   return has_changed;
 }
 
-void ViewMakeBinary::serialize_save(cereal::JSONOutputArchive &ar)
+void ViewRelativeElevation::serialize_save(cereal::JSONOutputArchive &ar)
 {
-  ar(cereal::make_nvp("threshold", this->threshold));
+  ar(cereal::make_nvp("ir", this->ir));
 }
 
-void ViewMakeBinary::serialize_load(cereal::JSONInputArchive &ar)
+void ViewRelativeElevation::serialize_load(cereal::JSONInputArchive &ar)
 {
-  ar(cereal::make_nvp("threshold", this->threshold));
+  ar(cereal::make_nvp("ir", this->ir));
 }
 
 } // namespace hesiod::vnode

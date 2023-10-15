@@ -12,17 +12,17 @@
 namespace hesiod::vnode
 {
 
-ViewStep::ViewStep(std::string     id,
-                   hmap::Vec2<int> shape,
-                   hmap::Vec2<int> tiling,
-                   float           overlap)
-    : ViewNode(), hesiod::cnode::Step(id, shape, tiling, overlap)
+ViewSlope::ViewSlope(std::string     id,
+                     hmap::Vec2<int> shape,
+                     hmap::Vec2<int> tiling,
+                     float           overlap)
+    : ViewNode(), hesiod::cnode::Slope(id, shape, tiling, overlap)
 {
   this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
 }
 
-bool ViewStep::render_settings()
+bool ViewSlope::render_settings()
 {
   bool has_changed = false;
   has_changed |= this->render_settings_header();
@@ -33,7 +33,7 @@ bool ViewStep::render_settings()
 
   has_changed |= this->trigger_update_after_edit();
 
-  ImGui::SliderFloat("talus_global", &this->talus_global, 0.f, 32.f, "%.2f");
+  ImGui::SliderFloat("talus_global", &this->talus_global, 0.f, 8.f, "%.2f");
   has_changed |= this->trigger_update_after_edit();
 
   ImGui::SliderFloat("center.x", &this->center.x, -0.5f, 1.5f, "%.2f");
@@ -42,36 +42,24 @@ bool ViewStep::render_settings()
   ImGui::SliderFloat("center.y", &this->center.y, -0.5f, 1.5f, "%.2f");
   has_changed |= this->trigger_update_after_edit();
 
-  ImGui::Separator();
-
-  if (hesiod::gui::slider_vmin_vmax(vmin, vmax))
-  {
-    this->force_update();
-    has_changed = true;
-  }
-
   has_changed |= this->render_settings_footer();
   return has_changed;
 }
 
-void ViewStep::serialize_save(cereal::JSONOutputArchive &ar)
+void ViewSlope::serialize_save(cereal::JSONOutputArchive &ar)
 {
   ar(cereal::make_nvp("angle", this->angle));
   ar(cereal::make_nvp("talus_global", this->talus_global));
   ar(cereal::make_nvp("center.x", this->center.x));
-  ar(cereal::make_nvp("cneter.y", this->center.y));
-  ar(cereal::make_nvp("vmin", this->vmin));
-  ar(cereal::make_nvp("vmax", this->vmax));
+  ar(cereal::make_nvp("center.y", this->center.y));
 }
 
-void ViewStep::serialize_load(cereal::JSONInputArchive &ar)
+void ViewSlope::serialize_load(cereal::JSONInputArchive &ar)
 {
   ar(cereal::make_nvp("angle", this->angle));
   ar(cereal::make_nvp("talus_global", this->talus_global));
   ar(cereal::make_nvp("center.x", this->center.x));
-  ar(cereal::make_nvp("cneter.y", this->center.y));
-  ar(cereal::make_nvp("vmin", this->vmin));
-  ar(cereal::make_nvp("vmax", this->vmax));
+  ar(cereal::make_nvp("center.y", this->center.y));
 }
 
 } // namespace hesiod::vnode

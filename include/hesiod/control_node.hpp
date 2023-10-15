@@ -62,7 +62,7 @@ enum kernel : int
 //----------------------------------------
 
 static const std::map<std::string, std::string> category_mapping = {
-    {"AlterElevation", "Operator/Transform"},
+    // {"AlterElevation", "Operator/Transform"}, // BROKEN
     {"BaseElevation", "Primitive/Manual"},
     {"BezierPath", "Geometry/Path"},
     {"Blend", "Operator/Blend"},
@@ -73,10 +73,10 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Cloud", "Geometry/Cloud"},
     {"CloudToArrayInterp", "Primitive/Manual"},
     {"ConvolveSVD", "Math/Convolution"},
-    {"CubicPulseTruncated", "Primitive/Kernel"},
+    // {"CubicPulseTruncated", "Primitive/Kernel"}, // useless
     {"Debug", "Debug"},
     {"DigPath", "Roads"},
-    {"Equalize", "Filter/Recurve"},
+    // {"Equalize", "Filter/Recurve"}, // BROKEN
     {"ErosionMaps", "Erosion/Hydraulic"},
     {"ExpandShrink", "Filter/Recast"},
     {"ExpandShrinkDirectional", "Filter/Recast"},
@@ -90,10 +90,12 @@ static const std::map<std::string, std::string> category_mapping = {
     {"GammaCorrectionLocal", "Filter/Recurve"},
     {"GaussianPulse", "Primitive/Function"},
     {"Gradient", "Math/Gradient"},
+    {"GradientAngle", "Math/Gradient"},
     {"GradientNorm", "Math/Gradient"},
     {"GradientTalus", "Math/Gradient"},
+    // {"HydraulicBenes", "Erosion/Hydraulic"}, // BROKEN
     {"HydraulicParticle", "Erosion/Hydraulic"},
-    {"HydraulicRidge", "Erosion/Hydraulic"},
+    {"HydraulicRidge", "Erosion/Hydraulic"}, // not distributed
     {"HydraulicStream", "Erosion/Hydraulic"},
     {"HydraulicVpipes", "Erosion/Hydraulic"},
     {"Import", "IO/Files"},
@@ -116,12 +118,14 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Preview", "Debug"},
     {"RecastCanyon", "Filter/Recast"},
     {"Recurve", "Filter/Recurve"},
+    {"RelativeElevation", "Features"},
     {"Remap", "Filter/Range"},
     {"RidgedPerlin", "Primitive/Coherent Noise"},
     {"Rugosity", "Features"},
     {"SedimentDeposition", "Erosion/Thermal"},
     {"SelectEq", "Mask"},
     {"SelectTransitions", "Mask"},
+    {"Slope", "Primitive/Function"},
     {"SmoothCpulse", "Filter/Smoothing"},
     {"SmoothFill", "Filter/Smoothing"},
     {"SmoothFillHoles", "Filter/Smoothing"},
@@ -714,6 +718,14 @@ protected:
   float           vmax_y = 1.f;
 };
 
+class GradientAngle : public Unary
+{
+public:
+  GradientAngle(std::string id);
+
+  void compute_in_out(hmap::HeightMap &h, hmap::HeightMap *p_talus);
+};
+
 class GradientNorm : public Unary
 {
 public:
@@ -728,6 +740,28 @@ public:
   GradientTalus(std::string id);
 
   void compute_in_out(hmap::HeightMap &h, hmap::HeightMap *p_talus);
+};
+
+class HydraulicBenes : public Erosion
+{
+public:
+  HydraulicBenes(std::string id);
+
+  void compute_erosion(hmap::HeightMap &h,
+                       hmap::HeightMap *p_bedrock,
+                       hmap::HeightMap *p_moisture_map,
+                       hmap::HeightMap *p_mask,
+                       hmap::HeightMap *p_erosion_map,
+                       hmap::HeightMap *p_deposition_map);
+
+protected:
+  int   iterations = 50;
+  float c_capacity = 40.f;
+  float c_erosion = 0.2f;
+  float c_deposition = 0.8f;
+  float water_level = 0.005f;
+  float evap_rate = 0.01f;
+  float rain_rate = 0.5f;
 };
 
 class HydraulicParticle : public Erosion
@@ -761,12 +795,12 @@ public:
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
 
 protected:
-  float talus = 16.f / 512.f;
+  float talus_global = 16.f;
   float intensity = 0.5f;
   float erosion_factor = 1.5f;
   float smoothing_factor = 0.5f;
   float noise_ratio = 0.1f;
-  int   ir = 0;
+  int   ir = 16;
   int   seed = DEFAULT_SEED;
 };
 
@@ -1104,6 +1138,17 @@ protected:
   std::vector<float> curve = {0.f, 0.25f, 0.5f, 0.75f, 1.f};
 };
 
+class RelativeElevation : public Unary
+{
+public:
+  RelativeElevation(std::string id);
+
+  void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
+
+protected:
+  int ir = 64;
+};
+
 class Remap : public Unary
 {
 public:
@@ -1192,6 +1237,30 @@ protected:
   bool            smoothing = false;
   int             ir = 4;
   bool            normalize = false;
+};
+
+class Slope : public gnode::Node
+{
+public:
+  Slope(std::string     id,
+        hmap::Vec2<int> shape,
+        hmap::Vec2<int> tiling,
+        float           overlap);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::HeightMap   value_out = hmap::HeightMap();
+  float             angle = 0.f;
+  float             talus_global = 4.f;
+  hmap::Vec2<float> center = {0.5f, 0.5f};
+
+private:
+  hmap::Vec2<int> shape;
+  hmap::Vec2<int> tiling;
+  float           overlap;
 };
 
 class SmoothCpulse : public Filter
@@ -1418,9 +1487,6 @@ public:
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
   float           scale = 1.f;
-
-private:
-  hmap::Vec2<int> shape = {0, 0};
 };
 
 class WarpDownslope : public Filter

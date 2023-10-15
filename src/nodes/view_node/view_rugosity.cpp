@@ -30,4 +30,14 @@ bool ViewRugosity::render_settings()
   return has_changed;
 }
 
+void ViewRugosity::serialize_save(cereal::JSONOutputArchive &ar)
+{
+  ar(cereal::make_nvp("ir", this->ir));
+}
+
+void ViewRugosity::serialize_load(cereal::JSONInputArchive &ar)
+{
+  ar(cereal::make_nvp("ir", this->ir));
+}
+
 } // namespace hesiod::vnode

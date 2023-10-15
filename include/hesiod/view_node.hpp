@@ -507,6 +507,15 @@ public:
   void serialize_load(cereal::JSONInputArchive &ar);
 };
 
+class ViewGradientAngle : public ViewNode, public hesiod::cnode::GradientAngle
+{
+public:
+  ViewGradientAngle(std::string id);
+
+  void serialize_save(cereal::JSONOutputArchive &);
+  void serialize_load(cereal::JSONInputArchive &);
+};
+
 class ViewGradientNorm : public ViewNode, public hesiod::cnode::GradientNorm
 {
 public:
@@ -532,6 +541,17 @@ public:
                     hmap::Vec2<int> shape,
                     hmap::Vec2<int> tiling,
                     float           overlap);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
+class ViewHydraulicBenes : public ViewNode, public hesiod::cnode::HydraulicBenes
+{
+public:
+  ViewHydraulicBenes(std::string id);
 
   bool render_settings();
 
@@ -621,6 +641,9 @@ public:
 
   bool render_settings();
 
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+
 private:
   int shape_clustering_choice = 1;
 };
@@ -666,6 +689,9 @@ public:
   ViewMakeBinary(std::string id);
 
   bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewMeanderizePath : public ViewNode, public hesiod::cnode::MeanderizePath
@@ -698,6 +724,9 @@ public:
   ViewMinimumLocal(std::string id);
 
   bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewNormalDisplacement : public ViewNode,
@@ -741,6 +770,9 @@ public:
   void render_node_specific_content();
 
   bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
 
 private:
   int wshape_choice = 1;
@@ -823,6 +855,21 @@ public:
   ViewRecurve(std::string id);
 
   bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
+class ViewRelativeElevation : public ViewNode,
+                              public hesiod::cnode::RelativeElevation
+{
+public:
+  ViewRelativeElevation(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewRemap : public ViewNode, public hesiod::cnode::Remap
@@ -859,6 +906,9 @@ public:
   ViewRugosity(std::string id);
 
   bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewSedimentDeposition : public ViewNode,
@@ -894,6 +944,20 @@ class ViewSelectTransitions : public ViewNode,
 {
 public:
   ViewSelectTransitions(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
+class ViewSlope : public ViewNode, public hesiod::cnode::Slope
+{
+public:
+  ViewSlope(std::string     id,
+            hmap::Vec2<int> shape,
+            hmap::Vec2<int> tiling,
+            float           overlap);
 
   bool render_settings();
 
@@ -1081,6 +1145,9 @@ public:
   ViewWarp(std::string id);
 
   bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewWarpDownslope : public ViewNode, public hesiod::cnode::WarpDownslope

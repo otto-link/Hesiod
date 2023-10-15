@@ -58,4 +58,24 @@ bool ViewKmeansClustering2::render_settings()
   return has_changed;
 }
 
+void ViewKmeansClustering2::serialize_save(cereal::JSONOutputArchive &ar)
+{
+  ar(cereal::make_nvp("nclusters", this->nclusters));
+  ar(cereal::make_nvp("seed", this->seed));
+  ar(cereal::make_nvp("shape_clustering.x", this->shape_clustering.x));
+  ar(cereal::make_nvp("shape_clustering.y", this->shape_clustering.y));
+  ar(cereal::make_nvp("shape_clustering_choice",
+                      this->shape_clustering_choice));
+}
+
+void ViewKmeansClustering2::serialize_load(cereal::JSONInputArchive &ar)
+{
+  ar(cereal::make_nvp("nclusters", this->nclusters));
+  ar(cereal::make_nvp("seed", this->seed));
+  ar(cereal::make_nvp("shape_clustering.x", this->shape_clustering.x));
+  ar(cereal::make_nvp("shape_clustering.y", this->shape_clustering.y));
+  ar(cereal::make_nvp("shape_clustering_choice",
+                      this->shape_clustering_choice));
+}
+
 } // namespace hesiod::vnode

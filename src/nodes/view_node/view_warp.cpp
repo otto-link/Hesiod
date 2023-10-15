@@ -26,4 +26,14 @@ bool ViewWarp::render_settings()
   return has_changed;
 }
 
+void ViewWarp::serialize_save(cereal::JSONOutputArchive &ar)
+{
+  ar(cereal::make_nvp("scale", this->scale));
+}
+
+void ViewWarp::serialize_load(cereal::JSONInputArchive &ar)
+{
+  ar(cereal::make_nvp("scale", this->scale));
+}
+
 } // namespace hesiod::vnode
