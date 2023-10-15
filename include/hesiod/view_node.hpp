@@ -860,6 +860,18 @@ public:
   void serialize_load(cereal::JSONInputArchive &ar);
 };
 
+class ViewRelativeElevation : public ViewNode,
+                              public hesiod::cnode::RelativeElevation
+{
+public:
+  ViewRelativeElevation(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewRemap : public ViewNode, public hesiod::cnode::Remap
 {
 public:

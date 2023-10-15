@@ -118,6 +118,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Preview", "Debug"},
     {"RecastCanyon", "Filter/Recast"},
     {"Recurve", "Filter/Recurve"},
+    {"RelativeElevation", "Features"},
     {"Remap", "Filter/Range"},
     {"RidgedPerlin", "Primitive/Coherent Noise"},
     {"Rugosity", "Features"},
@@ -1134,6 +1135,17 @@ public:
 
 protected:
   std::vector<float> curve = {0.f, 0.25f, 0.5f, 0.75f, 1.f};
+};
+
+class RelativeElevation : public Unary
+{
+public:
+  RelativeElevation(std::string id);
+
+  void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
+
+protected:
+  int ir = 64;
 };
 
 class Remap : public Unary
