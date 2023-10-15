@@ -434,6 +434,15 @@ std::string ViewTree::add_view_node(std::string control_node_type,
         std::make_shared<hesiod::vnode::ViewSelectTransitions>(id);
     this->add_node(p_view_node);
   }
+  else if (control_node_type == "Slope")
+  {
+    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewSlope>(
+        id,
+        this->shape,
+        this->tiling,
+        this->overlap);
+    this->add_node(p_view_node);
+  }
   else if (control_node_type == "SmoothCpulse")
   {
     std::shared_ptr p_view_node =

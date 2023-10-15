@@ -125,6 +125,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"SedimentDeposition", "Erosion/Thermal"},
     {"SelectEq", "Mask"},
     {"SelectTransitions", "Mask"},
+    {"Slope", "Primitive/Function"},
     {"SmoothCpulse", "Filter/Smoothing"},
     {"SmoothFill", "Filter/Smoothing"},
     {"SmoothFillHoles", "Filter/Smoothing"},
@@ -1236,6 +1237,30 @@ protected:
   bool            smoothing = false;
   int             ir = 4;
   bool            normalize = false;
+};
+
+class Slope : public gnode::Node
+{
+public:
+  Slope(std::string     id,
+        hmap::Vec2<int> shape,
+        hmap::Vec2<int> tiling,
+        float           overlap);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::HeightMap   value_out = hmap::HeightMap();
+  float             angle = 0.f;
+  float             talus_global = 4.f;
+  hmap::Vec2<float> center = {0.5f, 0.5f};
+
+private:
+  hmap::Vec2<int> shape;
+  hmap::Vec2<int> tiling;
+  float           overlap;
 };
 
 class SmoothCpulse : public Filter

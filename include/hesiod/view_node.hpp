@@ -951,6 +951,20 @@ public:
   void serialize_load(cereal::JSONInputArchive &ar);
 };
 
+class ViewSlope : public ViewNode, public hesiod::cnode::Slope
+{
+public:
+  ViewSlope(std::string     id,
+            hmap::Vec2<int> shape,
+            hmap::Vec2<int> tiling,
+            float           overlap);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewSmoothCpulse : public ViewNode, public hesiod::cnode::SmoothCpulse
 {
 public:
