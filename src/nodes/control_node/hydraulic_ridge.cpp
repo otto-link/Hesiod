@@ -17,22 +17,54 @@ HydraulicRidge::HydraulicRidge(std::string id) : Filter(id)
 void HydraulicRidge::compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask)
 {
   LOG_DEBUG("computing filter node [%s]", this->id.c_str());
-  hmap::transform(h,
-                  p_mask,
-                  [this](hmap::Array &x, hmap::Array *p_mask)
-                  {
-                    hmap::hydraulic_ridge(x,
-                                          this->talus,
-                                          p_mask,
-                                          this->intensity,
-                                          this->erosion_factor,
-                                          this->smoothing_factor,
-                                          this->noise_ratio,
-                                          this->ir,
-                                          (uint)this->seed);
-                  });
 
-  h.smooth_overlap_buffers();
+  {
+    // TODO - reactivate distributed calculation when the core procedure
+    // will be compatible with tiling
+
+    // hmap::transform(h,
+    //                 p_mask,
+    //                 [this](hmap::Array &x, hmap::Array *p_mask)
+    //                 {
+    //                   hmap::hydraulic_ridge(x,
+    //                                         this->talus,
+    //                                         p_mask,
+    //                                         this->intensity,
+    //                                         this->erosion_factor,
+    //                                         this->smoothing_factor,
+    //                                         this->noise_ratio,
+    //                                         this->ir,
+    //                                         (uint)this->seed);
+    //                 });
+    // h.smooth_overlap_buffers();
+  }
+
+  // --- work on a single array as a temporary solution
+  hmap::Array z_array = h.to_array();
+
+  // handle masking
+  hmap::Array *p_mask_array = nullptr;
+  hmap::Array  mask_array;
+
+  if (p_mask)
+  {
+    mask_array = p_mask->to_array();
+    p_mask_array = &mask_array;
+  }
+
+  float talus = this->talus_global / (float)this->value_out.shape.x;
+
+  hmap::hydraulic_ridge(z_array,
+                        talus,
+                        p_mask_array,
+                        this->intensity,
+                        this->erosion_factor,
+                        this->smoothing_factor,
+                        this->noise_ratio,
+                        this->ir,
+                        (uint)this->seed);
+
+  h.from_array_interp(z_array);
 }
 
 } // namespace hesiod::cnode

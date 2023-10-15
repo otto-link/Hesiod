@@ -20,7 +20,7 @@ bool ViewHydraulicRidge::render_settings()
   bool has_changed = false;
   has_changed |= this->render_settings_header();
 
-  ImGui::SliderFloat("talus", &this->talus, 0.001f, 10.f);
+  ImGui::SliderFloat("talus_global", &this->talus_global, 0.01f, 32.f);
   has_changed |= this->trigger_update_after_edit();
 
   ImGui::SliderFloat("intensity", &this->intensity, 0.f, 2.f);
@@ -35,7 +35,7 @@ bool ViewHydraulicRidge::render_settings()
   ImGui::SliderFloat("noise_ratio", &this->noise_ratio, 0.f, 1.f);
   has_changed |= this->trigger_update_after_edit();
 
-  ImGui::SliderInt("ir", &this->ir, 0, 16);
+  ImGui::SliderInt("ir", &this->ir, 0, 128);
   has_changed |= this->trigger_update_after_edit();
 
   ImGui::DragInt("seed", &this->seed);
@@ -54,7 +54,7 @@ bool ViewHydraulicRidge::render_settings()
 
 void ViewHydraulicRidge::serialize_save(cereal::JSONOutputArchive &ar)
 {
-  ar(cereal::make_nvp("talus", this->talus));
+  ar(cereal::make_nvp("talus_global", this->talus_global));
   ar(cereal::make_nvp("intensity", this->intensity));
   ar(cereal::make_nvp("erosion_factor", this->erosion_factor));
   ar(cereal::make_nvp("smoothing_factor", this->smoothing_factor));
@@ -65,7 +65,7 @@ void ViewHydraulicRidge::serialize_save(cereal::JSONOutputArchive &ar)
 
 void ViewHydraulicRidge::serialize_load(cereal::JSONInputArchive &ar)
 {
-  ar(cereal::make_nvp("talus", this->talus));
+  ar(cereal::make_nvp("talus_global", this->talus_global));
   ar(cereal::make_nvp("intensity", this->intensity));
   ar(cereal::make_nvp("erosion_factor", this->erosion_factor));
   ar(cereal::make_nvp("smoothing_factor", this->smoothing_factor));

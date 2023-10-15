@@ -62,7 +62,7 @@ enum kernel : int
 //----------------------------------------
 
 static const std::map<std::string, std::string> category_mapping = {
-    {"AlterElevation", "Operator/Transform"},
+    // {"AlterElevation", "Operator/Transform"}, // BROKEN
     {"BaseElevation", "Primitive/Manual"},
     {"BezierPath", "Geometry/Path"},
     {"Blend", "Operator/Blend"},
@@ -95,9 +95,9 @@ static const std::map<std::string, std::string> category_mapping = {
     {"GradientTalus", "Math/Gradient"},
     // {"HydraulicBenes", "Erosion/Hydraulic"}, // BROKEN
     {"HydraulicParticle", "Erosion/Hydraulic"},
-    {"HydraulicRidge", "Erosion/Hydraulic"},
+    {"HydraulicRidge", "Erosion/Hydraulic"}, // not distributed
     {"HydraulicStream", "Erosion/Hydraulic"},
-    // {"HydraulicVpipes", "Erosion/Hydraulic"}, // BROKEN
+    {"HydraulicVpipes", "Erosion/Hydraulic"},
     {"Import", "IO/Files"},
     {"Kernel", "Primitive/Kernel"},
     {"KmeansClustering2", "Features"},
@@ -793,12 +793,12 @@ public:
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
 
 protected:
-  float talus = 16.f / 512.f;
+  float talus_global = 16.f;
   float intensity = 0.5f;
   float erosion_factor = 1.5f;
   float smoothing_factor = 0.5f;
   float noise_ratio = 0.1f;
-  int   ir = 0;
+  int   ir = 16;
   int   seed = DEFAULT_SEED;
 };
 
