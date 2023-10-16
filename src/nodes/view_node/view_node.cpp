@@ -81,7 +81,7 @@ void ViewNode::post_control_node_update()
   LOG_DEBUG("post-update, node [%s]", this->p_control_node->id.c_str());
 
   if (this->preview_port_id != "")
-    this->update_preview();
+      this->update_preview();
 }
 
 void ViewNode::render_node()
@@ -333,7 +333,7 @@ void ViewNode::update_preview()
         hmap::HeightMap     *p_h = (hmap::HeightMap *)p_data;
         std::vector<uint8_t> img = {};
 
-        if (this->preview_type == preview_type::grayscale)
+	if (this->preview_type == preview_type::grayscale)
           img = hmap::colorize_grayscale(p_h->to_array(this->shape_preview));
         else if (this->preview_type == preview_type::histogram)
           img = hmap::colorize_histogram(p_h->to_array(this->shape_preview));

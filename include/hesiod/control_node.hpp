@@ -115,6 +115,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"PathToHeightmap", "Geometry/Path"},
     {"Perlin", "Primitive/Coherent Noise"},
     {"PerlinBillow", "Primitive/Coherent Noise"},
+    {"Plateau", "Filter/Recurve"},
     {"Preview", "Debug"},
     {"RecastCanyon", "Filter/Recast"},
     {"Recurve", "Filter/Recurve"},
@@ -1101,6 +1102,18 @@ public:
 protected:
   hmap::Vec2<float> kw = {DEFAULT_KW, DEFAULT_KW};
   int               seed = DEFAULT_SEED;
+};
+
+class Plateau : public Filter
+{
+public:
+  Plateau(std::string id);
+
+  void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
+
+protected:
+  int   ir = 32;
+  float factor = 4.f;
 };
 
 class Preview : public gnode::Node

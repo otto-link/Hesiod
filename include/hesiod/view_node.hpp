@@ -827,6 +827,17 @@ private:
   bool link_kxy = true;
 };
 
+class ViewPlateau : public ViewNode, public hesiod::cnode::Plateau
+{
+public:
+  ViewPlateau(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewPreview : public ViewNode, public hesiod::cnode::Preview
 {
 public:
