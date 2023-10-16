@@ -1063,6 +1063,7 @@ public:
 
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
+  bool            filled = false;
   float           vmin = 0.f;
   float           vmax = 1.f;
 

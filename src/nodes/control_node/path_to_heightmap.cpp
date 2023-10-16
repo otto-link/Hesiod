@@ -33,22 +33,37 @@ void PathToHeightmap::compute()
 
   if (p_input_path->get_npoints() > 1)
   {
-    hmap::fill(this->value_out,
-               [p_input_path](hmap::Vec2<int>   shape,
-                              hmap::Vec2<float> shift,
-                              hmap::Vec2<float> scale)
-               {
-                 hmap::Array       z = hmap::Array(shape);
-                 hmap::Vec4<float> bbox = hmap::Vec4<float>(shift.x,
-                                                            shift.x + scale.x,
-                                                            shift.y,
-                                                            shift.y + scale.y);
-                 p_input_path->to_array(z, bbox);
-                 return z;
-               });
-  }
+    if (!this->filled)
+    {
+      hmap::fill(this->value_out,
+                 [p_input_path](hmap::Vec2<int>   shape,
+                                hmap::Vec2<float> shift,
+                                hmap::Vec2<float> scale)
+                 {
+                   hmap::Array       z = hmap::Array(shape);
+                   hmap::Vec4<float> bbox = hmap::Vec4<float>(shift.x,
+                                                              shift.x + scale.x,
+                                                              shift.y,
+                                                              shift.y +
+                                                                  scale.y);
+                   p_input_path->to_array(z, bbox);
+                   return z;
+                 });
+    }
+    else
+    {
+      // work on a single array as a temporary solution
+      hmap::Array       z_array = hmap::Array(this->value_out.shape);
+      hmap::Vec4<float> bbox = hmap::Vec4<float>(0.f, 1.f, 0.f, 1.f);
 
-  this->value_out.remap(this->vmin, this->vmax);
+      p_input_path->to_array(z_array, bbox, true);
+      this->value_out.from_array_interp(z_array);
+    }
+    this->value_out.remap(this->vmin, this->vmax);
+  }
+  else
+    // fill with zeros
+    hmap::transform(this->value_out, [](hmap::Array x) { x = 0.f; });
 }
 
 void PathToHeightmap::update_inner_bindings()
