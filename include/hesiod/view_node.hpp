@@ -334,6 +334,21 @@ public:
   void serialize_load(cereal::JSONInputArchive &ar);
 };
 
+class ViewDistanceTransform : public ViewNode,
+                              public hesiod::cnode::DistanceTransform
+{
+public:
+  ViewDistanceTransform(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+
+private:
+  int shape_working_choice = 1;
+};
+
 class ViewEqualize : public ViewNode, public hesiod::cnode::Equalize
 {
 public:

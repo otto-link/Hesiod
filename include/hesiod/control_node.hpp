@@ -76,6 +76,7 @@ static const std::map<std::string, std::string> category_mapping = {
     // {"CubicPulseTruncated", "Primitive/Kernel"}, // useless
     {"Debug", "Debug"},
     {"DigPath", "Roads"},
+    {"DistanceTransform", "Math"},
     // {"Equalize", "Filter/Recurve"}, // BROKEN
     {"ErosionMaps", "Erosion/Hydraulic"},
     {"ExpandShrink", "Filter/Recast"},
@@ -493,6 +494,23 @@ protected:
   int             decay = 2;
   int             flattening_radius = 16;
   float           depth = 0.f;
+};
+
+class DistanceTransform : public gnode::Node
+{
+public:
+  DistanceTransform(std::string id);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap();
+  hmap::Vec2<int> shape_working = {512, 512};
+  bool            reverse = true;
+  float           vmin = 0.f;
+  float           vmax = 1.f;
 };
 
 class Equalize : public Filter
