@@ -61,10 +61,19 @@ void ViewDistanceTransform::serialize_save(cereal::JSONOutputArchive &ar)
   ar(cereal::make_nvp("shape_working.x", this->shape_working.x));
   ar(cereal::make_nvp("shape_working.y", this->shape_working.y));
   ar(cereal::make_nvp("shape_working_choice", this->shape_working_choice));
+  ar(cereal::make_nvp("reverse", this->reverse));
+  ar(cereal::make_nvp("vmin", this->vmin));
+  ar(cereal::make_nvp("vmax", this->vmax));
 }
 
 void ViewDistanceTransform::serialize_load(cereal::JSONInputArchive &ar)
 {
+  ar(cereal::make_nvp("shape_working.x", this->shape_working.x));
+  ar(cereal::make_nvp("shape_working.y", this->shape_working.y));
+  ar(cereal::make_nvp("shape_working_choice", this->shape_working_choice));
+  ar(cereal::make_nvp("reverse", this->reverse));
+  ar(cereal::make_nvp("vmin", this->vmin));
+  ar(cereal::make_nvp("vmax", this->vmax));
 }
 
 } // namespace hesiod::vnode
