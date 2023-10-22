@@ -563,6 +563,18 @@ public:
   void serialize_load(cereal::JSONInputArchive &ar);
 };
 
+class ViewHydraulicAlgebric : public ViewNode,
+                              public hesiod::cnode::HydraulicAlgebric
+{
+public:
+  ViewHydraulicAlgebric(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewHydraulicBenes : public ViewNode, public hesiod::cnode::HydraulicBenes
 {
 public:
