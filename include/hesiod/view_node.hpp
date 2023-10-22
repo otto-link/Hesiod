@@ -1301,6 +1301,23 @@ private:
   bool link_kxy = true;
 };
 
+class ViewWorleyValue : public ViewNode, public hesiod::cnode::WorleyValue
+{
+public:
+  ViewWorleyValue(std::string     id,
+                  hmap::Vec2<int> shape,
+                  hmap::Vec2<int> tiling,
+                  float           overlap);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+
+private:
+  bool link_kxy = true;
+};
+
 class ViewZeroedEdges : public ViewNode, public hesiod::cnode::ZeroedEdges
 {
 public:
