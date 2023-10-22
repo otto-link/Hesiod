@@ -323,6 +323,18 @@ public:
   void serialize_load(cereal::JSONInputArchive &ar);
 };
 
+class ViewDepressionFilling : public ViewNode,
+                              public hesiod::cnode::DepressionFilling
+{
+public:
+  ViewDepressionFilling(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewDigPath : public ViewNode, public hesiod::cnode::DigPath
 {
 public:
@@ -332,6 +344,21 @@ public:
 
   void serialize_save(cereal::JSONOutputArchive &ar);
   void serialize_load(cereal::JSONInputArchive &ar);
+};
+
+class ViewDistanceTransform : public ViewNode,
+                              public hesiod::cnode::DistanceTransform
+{
+public:
+  ViewDistanceTransform(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+
+private:
+  int shape_working_choice = 1;
 };
 
 class ViewEqualize : public ViewNode, public hesiod::cnode::Equalize
@@ -541,6 +568,18 @@ public:
                     hmap::Vec2<int> shape,
                     hmap::Vec2<int> tiling,
                     float           overlap);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
+class ViewHydraulicAlgebric : public ViewNode,
+                              public hesiod::cnode::HydraulicAlgebric
+{
+public:
+  ViewHydraulicAlgebric(std::string id);
 
   bool render_settings();
 
@@ -825,6 +864,17 @@ public:
 
 private:
   bool link_kxy = true;
+};
+
+class ViewPlateau : public ViewNode, public hesiod::cnode::Plateau
+{
+public:
+  ViewPlateau(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewPreview : public ViewNode, public hesiod::cnode::Preview
@@ -1253,6 +1303,23 @@ public:
                    hmap::Vec2<int> shape,
                    hmap::Vec2<int> tiling,
                    float           overlap);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+
+private:
+  bool link_kxy = true;
+};
+
+class ViewWorleyValue : public ViewNode, public hesiod::cnode::WorleyValue
+{
+public:
+  ViewWorleyValue(std::string     id,
+                  hmap::Vec2<int> shape,
+                  hmap::Vec2<int> tiling,
+                  float           overlap);
 
   bool render_settings();
 

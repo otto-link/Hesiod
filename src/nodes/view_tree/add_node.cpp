@@ -113,10 +113,22 @@ std::string ViewTree::add_view_node(std::string control_node_type,
         id);
     this->add_node(p_view_node);
   }
+  else if (control_node_type == "DepressionFilling")
+  {
+    std::shared_ptr p_view_node =
+        std::make_shared<hesiod::vnode::ViewDepressionFilling>(id);
+    this->add_node(p_view_node);
+  }
   else if (control_node_type == "DigPath")
   {
     std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewDigPath>(
         id);
+    this->add_node(p_view_node);
+  }
+  else if (control_node_type == "DistanceTransform")
+  {
+    std::shared_ptr p_view_node =
+        std::make_shared<hesiod::vnode::ViewDistanceTransform>(id);
     this->add_node(p_view_node);
   }
   else if (control_node_type == "Equalize")
@@ -230,6 +242,12 @@ std::string ViewTree::add_view_node(std::string control_node_type,
   {
     std::shared_ptr p_view_node =
         std::make_shared<hesiod::vnode::ViewGradientTalus>(id);
+    this->add_node(p_view_node);
+  }
+  else if (control_node_type == "HydraulicAlgebric")
+  {
+    std::shared_ptr p_view_node =
+        std::make_shared<hesiod::vnode::ViewHydraulicAlgebric>(id);
     this->add_node(p_view_node);
   }
   else if (control_node_type == "HydraulicBenes")
@@ -369,6 +387,12 @@ std::string ViewTree::add_view_node(std::string control_node_type,
                                                           this->shape,
                                                           this->tiling,
                                                           this->overlap);
+    this->add_node(p_view_node);
+  }
+  else if (control_node_type == "Plateau")
+  {
+    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewPlateau>(
+        id);
     this->add_node(p_view_node);
   }
   else if (control_node_type == "Preview")
@@ -605,6 +629,15 @@ std::string ViewTree::add_view_node(std::string control_node_type,
                                                           this->shape,
                                                           this->tiling,
                                                           this->overlap);
+    this->add_node(p_view_node);
+  }
+  else if (control_node_type == "WorleyValue")
+  {
+    std::shared_ptr p_view_node =
+        std::make_shared<hesiod::vnode::ViewWorleyValue>(id,
+                                                         this->shape,
+                                                         this->tiling,
+                                                         this->overlap);
     this->add_node(p_view_node);
   }
   else if (control_node_type == "ZeroedEdges")

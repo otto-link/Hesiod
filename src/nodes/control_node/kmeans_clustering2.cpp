@@ -35,7 +35,7 @@ void KmeansClustering2::compute_in_out(hmap::HeightMap &h_out,
         hmap::kmeans_clustering2(a1, a2, this->nclusters, (uint)this->seed);
   }
 
-  h_out.from_array_interp(labels);
+  h_out.from_array_interp_nearest(labels);
 }
 
 } // namespace hesiod::cnode

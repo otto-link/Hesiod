@@ -43,6 +43,15 @@ bool slider_vmin_vmax(float &vmin, float &vmax)
     ret = true;
   }
 
+  ImGui::SameLine();
+  if (ImGui::Button("Center"))
+  {
+    float span = vmax - vmin;
+    vmin = -0.5f * span;
+    vmax = 0.5f * span;
+    ret = true;
+  }
+
   ImGui::EndGroup();
   ImGui::PopID();
 

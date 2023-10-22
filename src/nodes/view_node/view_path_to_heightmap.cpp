@@ -24,6 +24,9 @@ bool ViewPathToHeightmap::render_settings()
   bool has_changed = false;
   has_changed |= this->render_settings_header();
 
+  ImGui::Checkbox("filled", &this->filled);
+  has_changed |= this->trigger_update_after_edit();
+
   if (hesiod::gui::slider_vmin_vmax(this->vmin, this->vmax))
   {
     this->force_update();
@@ -36,12 +39,14 @@ bool ViewPathToHeightmap::render_settings()
 
 void ViewPathToHeightmap::serialize_save(cereal::JSONOutputArchive &ar)
 {
+  ar(cereal::make_nvp("filled", this->filled));
   ar(cereal::make_nvp("vmin", this->vmin));
   ar(cereal::make_nvp("vmax", this->vmax));
 }
 
 void ViewPathToHeightmap::serialize_load(cereal::JSONInputArchive &ar)
 {
+  ar(cereal::make_nvp("filled", this->filled));
   ar(cereal::make_nvp("vmin", this->vmin));
   ar(cereal::make_nvp("vmax", this->vmax));
 }

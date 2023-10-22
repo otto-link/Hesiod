@@ -75,8 +75,10 @@ static const std::map<std::string, std::string> category_mapping = {
     {"ConvolveSVD", "Math/Convolution"},
     // {"CubicPulseTruncated", "Primitive/Kernel"}, // useless
     {"Debug", "Debug"},
+    {"DepressionFilling", "Erosion"}, // not distributed
     {"DigPath", "Roads"},
-    // {"Equalize", "Filter/Recurve"}, // BROKEN
+    {"DistanceTransform", "Math"},
+    {"Equalize", "Filter/Recurve"}, // not distributed
     {"ErosionMaps", "Erosion/Hydraulic"},
     {"ExpandShrink", "Filter/Recast"},
     {"ExpandShrinkDirectional", "Filter/Recast"},
@@ -93,6 +95,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"GradientAngle", "Math/Gradient"},
     {"GradientNorm", "Math/Gradient"},
     {"GradientTalus", "Math/Gradient"},
+    {"HydraulicAlgebric", "Erosion/Hydraulic"},
     // {"HydraulicBenes", "Erosion/Hydraulic"}, // BROKEN
     {"HydraulicParticle", "Erosion/Hydraulic"},
     {"HydraulicRidge", "Erosion/Hydraulic"}, // not distributed
@@ -100,7 +103,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"HydraulicVpipes", "Erosion/Hydraulic"},
     {"Import", "IO/Files"},
     {"Kernel", "Primitive/Kernel"},
-    {"KmeansClustering2", "Features"},
+    {"KmeansClustering2", "Features"}, // not distributed
     {"Laplace", "Filter/Smoothing"},
     {"LaplaceEdgePreserving", "Filter/Smoothing"},
     {"Lerp", "Operator/Blend"},
@@ -115,6 +118,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"PathToHeightmap", "Geometry/Path"},
     {"Perlin", "Primitive/Coherent Noise"},
     {"PerlinBillow", "Primitive/Coherent Noise"},
+    {"Plateau", "Filter/Recurve"},
     {"Preview", "Debug"},
     {"RecastCanyon", "Filter/Recast"},
     {"Recurve", "Filter/Recurve"},
@@ -149,6 +153,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"WhiteSparse", "Primitive/Random"},
     {"Worley", "Primitive/Coherent Noise"},
     {"WorleyDouble", "Primitive/Coherent Noise"},
+    {"WorleyValue", "Primitive/Coherent Noise"},
     {"ZeroedEdges", "Math/Boundaries"}};
 
 //----------------------------------------
@@ -477,6 +482,18 @@ protected:
   hmap::Vec2<int> shape = DEFAULT_KERNEL_SHAPE;
 };
 
+class DepressionFilling : public Unary
+{
+public:
+  DepressionFilling(std::string id);
+
+  void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
+
+protected:
+  int   iterations = 1000;
+  float epsilon = 1e-4f;
+};
+
 class DigPath : public gnode::Node
 {
 public:
@@ -492,6 +509,23 @@ protected:
   int             decay = 2;
   int             flattening_radius = 16;
   float           depth = 0.f;
+};
+
+class DistanceTransform : public gnode::Node
+{
+public:
+  DistanceTransform(std::string id);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap();
+  hmap::Vec2<int> shape_working = {512, 512};
+  bool            reverse = true;
+  float           vmin = 0.f;
+  float           vmax = 1.f;
 };
 
 class Equalize : public Filter
@@ -740,6 +774,26 @@ public:
   GradientTalus(std::string id);
 
   void compute_in_out(hmap::HeightMap &h, hmap::HeightMap *p_talus);
+};
+
+class HydraulicAlgebric : public Erosion
+{
+public:
+  HydraulicAlgebric(std::string id);
+
+  void compute_erosion(hmap::HeightMap &h,
+                       hmap::HeightMap *p_bedrock,
+                       hmap::HeightMap *p_moisture_map,
+                       hmap::HeightMap *p_mask,
+                       hmap::HeightMap *p_erosion_map,
+                       hmap::HeightMap *p_deposition_map);
+
+protected:
+  float talus_global = 2.f;
+  int   ir = 16;
+  float c_erosion = 0.07f;
+  float c_deposition = 0.01f;
+  int   iterations = 1;
 };
 
 class HydraulicBenes : public Erosion
@@ -1063,6 +1117,7 @@ public:
 
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
+  bool            filled = false;
   float           vmin = 0.f;
   float           vmax = 1.f;
 
@@ -1100,6 +1155,18 @@ public:
 protected:
   hmap::Vec2<float> kw = {DEFAULT_KW, DEFAULT_KW};
   int               seed = DEFAULT_SEED;
+};
+
+class Plateau : public Filter
+{
+public:
+  Plateau(std::string id);
+
+  void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
+
+protected:
+  int   ir = 32;
+  float factor = 4.f;
 };
 
 class Preview : public gnode::Node
@@ -1629,6 +1696,21 @@ protected:
   int               seed = DEFAULT_SEED;
   float             ratio = 0.5f;
   float             k = 0.05f;
+};
+
+class WorleyValue : public Primitive
+{
+public:
+  WorleyValue(std::string     id,
+              hmap::Vec2<int> shape,
+              hmap::Vec2<int> tiling,
+              float           overlap);
+
+  void compute();
+
+protected:
+  hmap::Vec2<float> kw = {DEFAULT_KW, DEFAULT_KW};
+  int               seed = DEFAULT_SEED;
 };
 
 class ZeroedEdges : public gnode::Node
