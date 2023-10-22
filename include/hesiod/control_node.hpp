@@ -75,9 +75,10 @@ static const std::map<std::string, std::string> category_mapping = {
     {"ConvolveSVD", "Math/Convolution"},
     // {"CubicPulseTruncated", "Primitive/Kernel"}, // useless
     {"Debug", "Debug"},
+    {"DepressionFilling", "Erosion"}, // not distributed
     {"DigPath", "Roads"},
     {"DistanceTransform", "Math"},
-    // {"Equalize", "Filter/Recurve"}, // BROKEN
+    {"Equalize", "Filter/Recurve"}, // not distributed
     {"ErosionMaps", "Erosion/Hydraulic"},
     {"ExpandShrink", "Filter/Recast"},
     {"ExpandShrinkDirectional", "Filter/Recast"},
@@ -102,7 +103,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"HydraulicVpipes", "Erosion/Hydraulic"},
     {"Import", "IO/Files"},
     {"Kernel", "Primitive/Kernel"},
-    {"KmeansClustering2", "Features"},
+    {"KmeansClustering2", "Features"}, // not distributed
     {"Laplace", "Filter/Smoothing"},
     {"LaplaceEdgePreserving", "Filter/Smoothing"},
     {"Lerp", "Operator/Blend"},
@@ -479,6 +480,18 @@ protected:
   float           vmin = 0.f;
   float           vmax = 1.f;
   hmap::Vec2<int> shape = DEFAULT_KERNEL_SHAPE;
+};
+
+class DepressionFilling : public Unary
+{
+public:
+  DepressionFilling(std::string id);
+
+  void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
+
+protected:
+  int   iterations = 1000;
+  float epsilon = 1e-4f;
 };
 
 class DigPath : public gnode::Node
