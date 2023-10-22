@@ -122,6 +122,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Preview", "Debug"},
     {"RecastCanyon", "Filter/Recast"},
     {"Recurve", "Filter/Recurve"},
+    {"RecurveKura", "Filter/Recurve"},
     {"RelativeElevation", "Features"},
     {"Remap", "Filter/Range"},
     {"RidgedPerlin", "Primitive/Coherent Noise"},
@@ -1203,6 +1204,18 @@ public:
 
 protected:
   std::vector<float> curve = {0.f, 0.25f, 0.5f, 0.75f, 1.f};
+};
+
+class RecurveKura : public Filter
+{
+public:
+  RecurveKura(std::string id);
+
+  void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
+
+protected:
+  float a = 2.f;
+  float b = 2.f;
 };
 
 class RelativeElevation : public Unary

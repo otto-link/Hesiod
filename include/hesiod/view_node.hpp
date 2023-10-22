@@ -910,6 +910,17 @@ public:
   void serialize_load(cereal::JSONInputArchive &ar);
 };
 
+class ViewRecurveKura : public ViewNode, public hesiod::cnode::RecurveKura
+{
+public:
+  ViewRecurveKura(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewRelativeElevation : public ViewNode,
                               public hesiod::cnode::RelativeElevation
 {
