@@ -916,7 +916,7 @@ protected:
   hmap::HeightMap value_out = hmap::HeightMap();
   float           vmin = 0.f;
   float           vmax = 1.f;
-  std::string     fname = "export.png";
+  std::string     fname = "";
 
 private:
   hmap::Vec2<int> shape;
