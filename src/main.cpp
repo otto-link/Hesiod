@@ -78,11 +78,9 @@ int main()
     tree.render_node_editor();
     // tree2.render_node_editor();
 
-    ImGui::Begin("TEST");
-
-    hesiod::gui::hmap_brush_editor(h);
-
-    ImGui::End();
+    // ImGui::Begin("TEST");
+    // hesiod::gui::hmap_brush_editor(h);
+    // ImGui::End();
 
     // --- Rendering
     ImGui::Render();
