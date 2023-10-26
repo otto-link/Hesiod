@@ -28,8 +28,6 @@ void add_brush(hmap::HeightMap &h, hmap::Array &kernel, float x, float y)
                     int jc = (int)((y - shift.y) / scale.y * (z.shape.y - 1));
                     add_kernel(z, kernel, ic, jc);
                   });
-
-  h.to_array().to_png("tmp.png", hmap::cmap::jet);
 }
 
 bool hmap_brush_editor(hmap::HeightMap &h, float width)
