@@ -99,12 +99,14 @@ bool hmap_brush_editor(hmap::HeightMap &h, float width)
       hmap::Array kernel = hmap::cubic_pulse(
           hmap::Vec2<int>(2 * ir + 1, 2 * ir + 1));
       add_brush(h, kernel, x, y);
+      ret = true;
     }
     else if (ImGui::IsMouseReleased(ImGuiMouseButton_Right))
     {
       hmap::Array kernel = -hmap::cubic_pulse(
           hmap::Vec2<int>(2 * ir + 1, 2 * ir + 1));
       add_brush(h, kernel, x, y);
+      ret = true;
     }
 
     // brush size

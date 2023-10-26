@@ -66,6 +66,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"BaseElevation", "Primitive/Manual"},
     {"BezierPath", "Geometry/Path"},
     {"Blend", "Operator/Blend"},
+    {"Brush", "Primitive/Manual"},
     {"Bump", "Primitive/Function"},
     {"Checkerboard", "Primitive/Coherent Noise"},
     {"Clamp", "Filter/Range"},
@@ -392,6 +393,31 @@ public:
 
 protected:
   float gain = 1.f;
+};
+
+class Brush : public gnode::Node
+{
+public:
+  Brush(std::string     id,
+        hmap::Vec2<int> shape,
+        hmap::Vec2<int> tiling,
+        float           overlap);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap();
+  float           vmin = 0.f;
+  float           vmax = 1.f;
+  bool            inverse = false;
+  bool            remap = false;
+
+private:
+  hmap::Vec2<int> shape;
+  hmap::Vec2<int> tiling;
+  float           overlap;
 };
 
 class Checkerboard : public Primitive

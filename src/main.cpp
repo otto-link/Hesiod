@@ -62,7 +62,7 @@ int main()
   // hmap::Path path = hmap::Path(15, 3);
   // path.reorder_nns();
 
-  hmap::HeightMap h = hmap::HeightMap(shape, tiling, overlap);
+  // hmap::HeightMap h = hmap::HeightMap(shape, tiling, overlap);
 
   while (!glfwWindowShouldClose(window))
   {
