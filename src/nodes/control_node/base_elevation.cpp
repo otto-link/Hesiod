@@ -44,7 +44,8 @@ void BaseElevation::compute()
              });
 
   // remap the output
-  this->value_out.remap(this->vmin, this->vmax);
+  if (this->remap)
+    this->value_out.remap(this->vmin, this->vmax);
 }
 
 } // namespace hesiod::cnode

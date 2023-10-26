@@ -51,10 +51,10 @@ int main()
 
   tree.add_view_node("FbmPerlin");
   // tree.add_view_node("ZeroedEdges");
-  tree.add_view_node("Plateau");
+  // tree.add_view_node("Plateau");
   // tree.add_view_node("Path");
   // tree.add_view_node("PathToHeightmap");
-  tree.new_link("FbmPerlin##0", "output", "Plateau##1", "input");
+  // tree.new_link("FbmPerlin##0", "output", "Plateau##1", "input");
   // tree.new_link("Path##1", "output", "PathToHeightmap##2", "path");
 
   // hmap::Cloud cloud = hmap::Cloud(5, 2);

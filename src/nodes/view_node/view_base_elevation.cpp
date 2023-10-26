@@ -38,13 +38,15 @@ bool ViewBaseElevation::render_settings()
     has_changed = true;
   }
 
-  ImGui::Separator();
+  ImGui::Checkbox("remap", &this->remap);
+  has_changed |= this->trigger_update_after_edit();
 
-  if (hesiod::gui::slider_vmin_vmax(vmin, vmax))
-  {
-    this->force_update();
-    has_changed = true;
-  }
+  if (this->remap)
+    if (hesiod::gui::slider_vmin_vmax(vmin, vmax))
+    {
+      this->force_update();
+      has_changed = true;
+    }
 
   has_changed |= this->render_settings_footer();
 
@@ -55,12 +57,18 @@ void ViewBaseElevation::serialize_save(cereal::JSONOutputArchive &ar)
 {
   ar(cereal::make_nvp("values", this->values));
   ar(cereal::make_nvp("width_factor", this->width_factor));
+  ar(cereal::make_nvp("remap", this->remap));
+  ar(cereal::make_nvp("vmin", this->vmin));
+  ar(cereal::make_nvp("vmax", this->vmax));
 }
 
 void ViewBaseElevation::serialize_load(cereal::JSONInputArchive &ar)
 {
   ar(cereal::make_nvp("values", this->values));
   ar(cereal::make_nvp("width_factor", this->width_factor));
+  ar(cereal::make_nvp("remap", this->remap));
+  ar(cereal::make_nvp("vmin", this->vmin));
+  ar(cereal::make_nvp("vmax", this->vmax));
 }
 
 } // namespace hesiod::vnode

@@ -333,6 +333,7 @@ protected:
                                             {0.f, 0.f, 0.f},
                                             {0.f, 0.f, 0.f}};
   float                           width_factor = 1.f;
+  bool                            remap = false;
 };
 
 class BezierPath : public gnode::Node
