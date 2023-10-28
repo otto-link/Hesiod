@@ -52,6 +52,10 @@ void HydraulicRidge::compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask)
     p_mask_array = &mask_array;
   }
 
+  // backup amplitude for post-process remapping
+  float zmin = z_array.min();
+  float zmax = z_array.max();
+
   float talus = this->talus_global / (float)this->value_out.shape.x;
 
   hmap::hydraulic_ridge(z_array,
@@ -63,6 +67,8 @@ void HydraulicRidge::compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask)
                         this->noise_ratio,
                         this->ir,
                         (uint)this->seed);
+
+  hmap::remap(z_array, zmin, zmax);
 
   h.from_array_interp(z_array);
 }

@@ -66,7 +66,9 @@ static const std::map<std::string, std::string> category_mapping = {
     {"BaseElevation", "Primitive/Manual"},
     {"BezierPath", "Geometry/Path"},
     {"Blend", "Operator/Blend"},
+    {"Brush", "Primitive/Manual"},
     {"Bump", "Primitive/Function"},
+    {"Caldera", "Primitive/Geological"},
     {"Checkerboard", "Primitive/Coherent Noise"},
     {"Clamp", "Filter/Range"},
     {"Clone", "Routing"},
@@ -122,11 +124,13 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Preview", "Debug"},
     {"RecastCanyon", "Filter/Recast"},
     {"Recurve", "Filter/Recurve"},
+    {"RecurveKura", "Filter/Recurve"},
     {"RelativeElevation", "Features"},
     {"Remap", "Filter/Range"},
     {"RidgedPerlin", "Primitive/Coherent Noise"},
     {"Rugosity", "Features"},
     {"SedimentDeposition", "Erosion/Thermal"},
+    {"SelectCavities", "Mask"},
     {"SelectEq", "Mask"},
     {"SelectTransitions", "Mask"},
     {"Slope", "Primitive/Function"},
@@ -332,6 +336,7 @@ protected:
                                             {0.f, 0.f, 0.f},
                                             {0.f, 0.f, 0.f}};
   float                           width_factor = 1.f;
+  bool                            remap = false;
 };
 
 class BezierPath : public gnode::Node
@@ -392,6 +397,31 @@ protected:
   float gain = 1.f;
 };
 
+class Brush : public gnode::Node
+{
+public:
+  Brush(std::string     id,
+        hmap::Vec2<int> shape,
+        hmap::Vec2<int> tiling,
+        float           overlap);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap();
+  float           vmin = 0.f;
+  float           vmax = 1.f;
+  bool            inverse = false;
+  bool            remap = false;
+
+private:
+  hmap::Vec2<int> shape;
+  hmap::Vec2<int> tiling;
+  float           overlap;
+};
+
 class Checkerboard : public Primitive
 {
 public:
@@ -404,6 +434,25 @@ public:
 
 protected:
   hmap::Vec2<float> kw = {DEFAULT_KW, DEFAULT_KW};
+};
+
+class Caldera : public Primitive
+{
+public:
+  Caldera(std::string     id,
+          hmap::Vec2<int> shape,
+          hmap::Vec2<int> tiling,
+          float           overlap);
+
+  void compute();
+
+protected:
+  float radius = 128.f;
+  float sigma_inner = 16.f;
+  float sigma_outer = 32.f;
+  float noise_r_amp = 32.f;
+  float z_bottom = 0.5f;
+  float noise_ratio_z = 0.1f;
 };
 
 class Clamp : public Unary
@@ -915,7 +964,7 @@ protected:
   hmap::HeightMap value_out = hmap::HeightMap();
   float           vmin = 0.f;
   float           vmax = 1.f;
-  std::string     fname = "export.png";
+  std::string     fname = "";
 
 private:
   hmap::Vec2<int> shape;
@@ -1205,6 +1254,18 @@ protected:
   std::vector<float> curve = {0.f, 0.25f, 0.5f, 0.75f, 1.f};
 };
 
+class RecurveKura : public Filter
+{
+public:
+  RecurveKura(std::string id);
+
+  void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
+
+protected:
+  float a = 2.f;
+  float b = 2.f;
+};
+
 class RelativeElevation : public Unary
 {
 public:
@@ -1274,6 +1335,19 @@ protected:
   float           max_deposition = 0.01;
   int             iterations = 5;
   int             thermal_subiterations = 10;
+};
+
+class SelectCavities : public Unary
+{
+public:
+  SelectCavities(std::string id);
+
+  void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
+
+protected:
+  int  ir = 32;
+  bool concave = true;
+  bool normalize = false;
 };
 
 class SelectEq : public Unary

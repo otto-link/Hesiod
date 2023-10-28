@@ -50,9 +50,27 @@ std::string ViewTree::add_view_node(std::string control_node_type,
         id);
     this->add_node(p_view_node);
   }
+  else if (control_node_type == "Brush")
+  {
+    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewBrush>(
+        id,
+        this->shape,
+        this->tiling,
+        this->overlap);
+    this->add_node(p_view_node);
+  }
   else if (control_node_type == "Bump")
   {
     std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewBump>(
+        id,
+        this->shape,
+        this->tiling,
+        this->overlap);
+    this->add_node(p_view_node);
+  }
+  else if (control_node_type == "Caldera")
+  {
+    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewCaldera>(
         id,
         this->shape,
         this->tiling,
@@ -413,6 +431,12 @@ std::string ViewTree::add_view_node(std::string control_node_type,
         id);
     this->add_node(p_view_node);
   }
+  else if (control_node_type == "RecurveKura")
+  {
+    std::shared_ptr p_view_node =
+        std::make_shared<hesiod::vnode::ViewRecurveKura>(id);
+    this->add_node(p_view_node);
+  }
   else if (control_node_type == "RelativeElevation")
   {
     std::shared_ptr p_view_node =
@@ -444,6 +468,12 @@ std::string ViewTree::add_view_node(std::string control_node_type,
   {
     std::shared_ptr p_view_node =
         std::make_shared<hesiod::vnode::ViewSedimentDeposition>(id);
+    this->add_node(p_view_node);
+  }
+  else if (control_node_type == "SelectCavities")
+  {
+    std::shared_ptr p_view_node =
+        std::make_shared<hesiod::vnode::ViewSelectCavities>(id);
     this->add_node(p_view_node);
   }
   else if (control_node_type == "SelectEq")

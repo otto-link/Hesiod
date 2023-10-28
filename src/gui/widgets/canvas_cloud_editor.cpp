@@ -97,7 +97,7 @@ void canvas_cloud(hmap::Cloud &cloud, float width, float radius)
     canvas_size.y = canvas_size.x; // square canvas
   }
   else
-    canvas_size = {128.f, 128.f};
+    canvas_size = {width, width};
 
   ImVec2 canvas_p1 = ImVec2(canvas_p0.x + canvas_size.x,
                             canvas_p0.y + canvas_size.y);
@@ -155,7 +155,7 @@ bool canvas_cloud_editor(hmap::Cloud &cloud,
     canvas_size.y = canvas_size.x; // square canvas
   }
   else
-    canvas_size = {128.f, 128.f};
+    canvas_size = {width, width};
 
   // draw canvas
   {
@@ -216,8 +216,8 @@ bool canvas_cloud_editor(hmap::Cloud &cloud,
     {
       if (ImGui::IsMouseDown(ImGuiMouseButton_Left)) // move
       {
-        float x = (io.MousePos.x - canvas_p0.x) /
-                  canvas_size.x; // remap to [0, 1]
+        // remap to [0, 1]
+        float x = (io.MousePos.x - canvas_p0.x) / canvas_size.x;
         float y = (io.MousePos.y - canvas_p0.y) / canvas_size.y;
         cloud.points[hovered_point_index].x = std::clamp(x, 0.f, 1.f);
         cloud.points[hovered_point_index].y = 1.f - std::clamp(y, 0.f, 1.f);
@@ -292,7 +292,7 @@ void canvas_path(hmap::Path &path, float width)
     canvas_size.y = canvas_size.x; // square canvas
   }
   else
-    canvas_size = {128.f, 128.f};
+    canvas_size = {width, width};
 
   ImVec2 canvas_p1 = ImVec2(canvas_p0.x + canvas_size.x,
                             canvas_p0.y + canvas_size.y);

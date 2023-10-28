@@ -51,17 +51,18 @@ int main()
 
   tree.add_view_node("FbmPerlin");
   // tree.add_view_node("ZeroedEdges");
-  tree.add_view_node("Plateau");
+  // tree.add_view_node("Plateau");
   // tree.add_view_node("Path");
   // tree.add_view_node("PathToHeightmap");
-  tree.new_link("FbmPerlin##0", "output", "Plateau##1", "input");
+  // tree.new_link("FbmPerlin##0", "output", "Plateau##1", "input");
   // tree.new_link("Path##1", "output", "PathToHeightmap##2", "path");
 
-  hmap::Cloud cloud = hmap::Cloud(5, 2);
-  hmap::Cloud cloud2 = hmap::Cloud(15, 3);
+  // hmap::Cloud cloud = hmap::Cloud(5, 2);
+  // hmap::Cloud cloud2 = hmap::Cloud(15, 3);
+  // hmap::Path path = hmap::Path(15, 3);
+  // path.reorder_nns();
 
-  hmap::Path path = hmap::Path(15, 3);
-  path.reorder_nns();
+  // hmap::HeightMap h = hmap::HeightMap(shape, tiling, overlap);
 
   while (!glfwWindowShouldClose(window))
   {
@@ -76,6 +77,10 @@ int main()
 
     tree.render_node_editor();
     // tree2.render_node_editor();
+
+    // ImGui::Begin("TEST");
+    // hesiod::gui::hmap_brush_editor(h);
+    // ImGui::End();
 
     // --- Rendering
     ImGui::Render();

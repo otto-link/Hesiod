@@ -202,6 +202,20 @@ public:
   void serialize_load(cereal::JSONInputArchive &ar);
 };
 
+class ViewBrush : public ViewNode, public hesiod::cnode::Brush
+{
+public:
+  ViewBrush(std::string     id,
+            hmap::Vec2<int> shape,
+            hmap::Vec2<int> tiling,
+            float           overlap);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewBump : public ViewNode, public hesiod::cnode::Bump
 {
 public:
@@ -209,6 +223,20 @@ public:
            hmap::Vec2<int> shape,
            hmap::Vec2<int> tiling,
            float           overlap);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
+class ViewCaldera : public ViewNode, public hesiod::cnode::Caldera
+{
+public:
+  ViewCaldera(std::string     id,
+              hmap::Vec2<int> shape,
+              hmap::Vec2<int> tiling,
+              float           overlap);
 
   bool render_settings();
 
@@ -910,6 +938,17 @@ public:
   void serialize_load(cereal::JSONInputArchive &ar);
 };
 
+class ViewRecurveKura : public ViewNode, public hesiod::cnode::RecurveKura
+{
+public:
+  ViewRecurveKura(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewRelativeElevation : public ViewNode,
                               public hesiod::cnode::RelativeElevation
 {
@@ -966,6 +1005,17 @@ class ViewSedimentDeposition : public ViewNode,
 {
 public:
   ViewSedimentDeposition(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
+class ViewSelectCavities : public ViewNode, public hesiod::cnode::SelectCavities
+{
+public:
+  ViewSelectCavities(std::string id);
 
   bool render_settings();
 

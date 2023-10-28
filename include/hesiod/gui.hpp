@@ -59,6 +59,8 @@ bool drag_float_vector(std::vector<float> &vector,
 
 void draw_icon(int icon_type, ImVec2 size, ImU32 color, bool filled);
 
+bool hmap_brush_editor(hmap::HeightMap &h, float width = 0.f);
+
 bool listbox_map_enum(std::map<std::string, int> &map,
                       int                        &selected,
                       float                       width);

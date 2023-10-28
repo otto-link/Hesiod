@@ -30,6 +30,14 @@ bool ViewPath::render_settings()
   ImGui::Checkbox("closed", &this->closed);
   has_changed |= this->trigger_update_after_edit();
 
+  ImGui::SameLine();
+
+  if (ImGui::Button("reverse"))
+  {
+    this->value_out.reverse();
+    has_changed = true;
+  }
+
   if (hesiod::gui::canvas_path_editor(this->value_out))
     this->force_update();
 
