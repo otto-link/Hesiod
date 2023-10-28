@@ -129,6 +129,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"RidgedPerlin", "Primitive/Coherent Noise"},
     {"Rugosity", "Features"},
     {"SedimentDeposition", "Erosion/Thermal"},
+    {"SelectCavities", "Mask"},
     {"SelectEq", "Mask"},
     {"SelectTransitions", "Mask"},
     {"Slope", "Primitive/Function"},
@@ -1314,6 +1315,19 @@ protected:
   float           max_deposition = 0.01;
   int             iterations = 5;
   int             thermal_subiterations = 10;
+};
+
+class SelectCavities : public Unary
+{
+public:
+  SelectCavities(std::string id);
+
+  void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
+
+protected:
+  int  ir = 32;
+  bool concave = true;
+  bool normalize = false;
 };
 
 class SelectEq : public Unary
