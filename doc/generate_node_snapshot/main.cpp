@@ -73,17 +73,17 @@ int main()
                                  16.f,
                                  &config);
 
-  for (auto &[type, cat] : hesiod::cnode::category_mapping)
-  {
-    LOG_DEBUG("type: %s", type.c_str());
-    std::string fname = "snapshot_" + type + ".png";
+  // for (auto &[type, cat] : hesiod::cnode::category_mapping)
+  // {
+  //   LOG_DEBUG("type: %s", type.c_str());
+  //   std::string fname = "snapshot_" + type + ".png";
 
-    hesiod::vnode::ViewTree tree =
-        hesiod::vnode::ViewTree("tree", shape, tiling, overlap);
-    std::string node_id = tree.add_view_node(type);
+  //   hesiod::vnode::ViewTree tree =
+  //       hesiod::vnode::ViewTree("tree", shape, tiling, overlap);
+  //   std::string node_id = tree.add_view_node(type);
 
-    export_png(window, tree, fname);
-  }
+  //   export_png(window, tree, fname);
+  // }
 
   // template
 

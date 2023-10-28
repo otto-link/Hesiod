@@ -230,6 +230,20 @@ public:
   void serialize_load(cereal::JSONInputArchive &ar);
 };
 
+class ViewCaldera : public ViewNode, public hesiod::cnode::Caldera
+{
+public:
+  ViewCaldera(std::string     id,
+              hmap::Vec2<int> shape,
+              hmap::Vec2<int> tiling,
+              float           overlap);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewCheckerboard : public ViewNode, public hesiod::cnode::Checkerboard
 {
 public:

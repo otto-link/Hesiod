@@ -68,6 +68,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Blend", "Operator/Blend"},
     {"Brush", "Primitive/Manual"},
     {"Bump", "Primitive/Function"},
+    {"Caldera", "Primitive/Geological"},
     {"Checkerboard", "Primitive/Coherent Noise"},
     {"Clamp", "Filter/Range"},
     {"Clone", "Routing"},
@@ -433,6 +434,25 @@ public:
 
 protected:
   hmap::Vec2<float> kw = {DEFAULT_KW, DEFAULT_KW};
+};
+
+class Caldera : public Primitive
+{
+public:
+  Caldera(std::string     id,
+          hmap::Vec2<int> shape,
+          hmap::Vec2<int> tiling,
+          float           overlap);
+
+  void compute();
+
+protected:
+  float radius = 128.f;
+  float sigma_inner = 16.f;
+  float sigma_outer = 32.f;
+  float noise_r_amp = 32.f;
+  float z_bottom = 0.5f;
+  float noise_ratio_z = 0.1f;
 };
 
 class Clamp : public Unary
