@@ -470,12 +470,13 @@ public:
   void compute();
 
 protected:
-  float radius = 128.f;
-  float sigma_inner = 16.f;
-  float sigma_outer = 32.f;
-  float noise_r_amp = 32.f;
-  float z_bottom = 0.5f;
-  float noise_ratio_z = 0.1f;
+  float             radius = 128.f;
+  float             sigma_inner = 16.f;
+  float             sigma_outer = 32.f;
+  float             noise_r_amp = 32.f;
+  float             z_bottom = 0.5f;
+  float             noise_ratio_z = 0.1f;
+  hmap::Vec2<float> center = {0.5f, 0.5f};
 };
 
 class Clamp : public Unary

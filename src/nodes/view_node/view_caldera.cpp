@@ -42,6 +42,12 @@ bool ViewCaldera::render_settings()
   ImGui::SliderFloat("noise_ratio_z", &this->noise_ratio_z, 0.f, 1.f, "%.2f");
   has_changed |= this->trigger_update_after_edit();
 
+  ImGui::SliderFloat("center.x", &this->center.x, -0.5f, 1.5f, "%.2f");
+  has_changed |= this->trigger_update_after_edit();
+
+  ImGui::SliderFloat("center.y", &this->center.y, -0.5f, 1.5f, "%.2f");
+  has_changed |= this->trigger_update_after_edit();
+
   ImGui::Separator();
 
   if (hesiod::gui::slider_vmin_vmax(vmin, vmax))
@@ -62,6 +68,8 @@ void ViewCaldera::serialize_save(cereal::JSONOutputArchive &ar)
   ar(cereal::make_nvp("z_bottom", this->z_bottom));
   ar(cereal::make_nvp("noise_r_amp", this->noise_r_amp));
   ar(cereal::make_nvp("noise_ratio_z", this->noise_ratio_z));
+  ar(cereal::make_nvp("center.x", this->center.x));
+  ar(cereal::make_nvp("cneter.y", this->center.y));
   ar(cereal::make_nvp("vmin", this->vmin));
   ar(cereal::make_nvp("vmax", this->vmax));
 }
@@ -74,6 +82,8 @@ void ViewCaldera::serialize_load(cereal::JSONInputArchive &ar)
   ar(cereal::make_nvp("z_bottom", this->z_bottom));
   ar(cereal::make_nvp("noise_r_amp", this->noise_r_amp));
   ar(cereal::make_nvp("noise_ratio_z", this->noise_ratio_z));
+  ar(cereal::make_nvp("center.x", this->center.x));
+  ar(cereal::make_nvp("cneter.y", this->center.y));
   ar(cereal::make_nvp("vmin", this->vmin));
   ar(cereal::make_nvp("vmax", this->vmax));
 }
