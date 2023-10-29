@@ -132,6 +132,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"SedimentDeposition", "Erosion/Thermal"},
     {"SelectCavities", "Mask"},
     {"SelectEq", "Mask"},
+    {"SelectInterval", "Mask"},
     {"SelectTransitions", "Mask"},
     {"Slope", "Primitive/Function"},
     {"SmoothCpulse", "Filter/Smoothing"},
@@ -1382,6 +1383,18 @@ public:
 
 protected:
   float value = 0.f;
+};
+
+class SelectInterval : public Mask
+{
+public:
+  SelectInterval(std::string id);
+
+  void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
+
+protected:
+  float value1 = 0.f;
+  float value2 = 1.f;
 };
 
 class SelectTransitions : public gnode::Node

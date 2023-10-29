@@ -1039,6 +1039,17 @@ private:
   int                selected_idx = 0;
 };
 
+class ViewSelectInterval : public ViewNode, public hesiod::cnode::SelectInterval
+{
+public:
+  ViewSelectInterval(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewSelectTransitions : public ViewNode,
                               public hesiod::cnode::SelectTransitions
 {
