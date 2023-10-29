@@ -28,18 +28,6 @@ bool ViewSelectEq::render_settings()
   ImGui::DragFloat("value", &this->value, 0.001f, -FLT_MAX, +FLT_MAX);
   has_changed |= this->trigger_update_after_edit();
 
-  if (ImGui::Checkbox("smoothing", &this->smoothing))
-    this->force_update();
-
-  if (this->smoothing)
-  {
-    ImGui::SliderInt("int", &this->ir, 1, 256);
-    has_changed |= this->trigger_update_after_edit();
-  }
-
-  if (ImGui::Checkbox("normalize", &this->normalize))
-    this->force_update();
-
   // unique values
   ImGui::Checkbox("Use input unique values", &this->use_input_unique_values);
 
@@ -83,6 +71,17 @@ bool ViewSelectEq::render_settings()
     }
   }
 
+  ImGui::Separator();
+
+  if (render_settings_mask(this->smoothing,
+                           this->ir_smoothing,
+                           this->normalize,
+                           this->inverse))
+  {
+    this->force_update();
+    has_changed = true;
+  }
+
   has_changed |= this->render_settings_footer();
 
   return has_changed;
@@ -91,17 +90,21 @@ bool ViewSelectEq::render_settings()
 void ViewSelectEq::serialize_save(cereal::JSONOutputArchive &ar)
 {
   ar(cereal::make_nvp("value", this->value));
-  ar(cereal::make_nvp("smoothing", this->smoothing));
-  ar(cereal::make_nvp("ir", this->ir));
+
   ar(cereal::make_nvp("normalize", this->normalize));
+  ar(cereal::make_nvp("inverse", this->inverse));
+  ar(cereal::make_nvp("smoothing", this->smoothing));
+  ar(cereal::make_nvp("ir_smoothing", this->ir_smoothing));
 }
 
 void ViewSelectEq::serialize_load(cereal::JSONInputArchive &ar)
 {
   ar(cereal::make_nvp("value", this->value));
-  ar(cereal::make_nvp("smoothing", this->smoothing));
-  ar(cereal::make_nvp("ir", this->ir));
+
   ar(cereal::make_nvp("normalize", this->normalize));
+  ar(cereal::make_nvp("inverse", this->inverse));
+  ar(cereal::make_nvp("smoothing", this->smoothing));
+  ar(cereal::make_nvp("ir_smoothing", this->ir_smoothing));
 }
 
 } // namespace hesiod::vnode

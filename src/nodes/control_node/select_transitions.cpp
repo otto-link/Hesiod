@@ -50,16 +50,19 @@ void SelectTransitions::compute()
       [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2, hmap::Array &a3)
       { m = hmap::select_transitions(a1, a2, a3); });
 
+  if (this->normalize)
+    this->value_out.remap();
+
+  if (this->inverse)
+    this->value_out.inverse();
+
   if (this->smoothing)
   {
     hmap::transform(this->value_out,
                     [this](hmap::Array &array)
-                    { return hmap::smooth_cpulse(array, this->ir); });
+                    { return hmap::smooth_cpulse(array, this->ir_smoothing); });
     this->value_out.smooth_overlap_buffers();
   }
-
-  if (this->normalize)
-    this->value_out.remap();
 }
 
 } // namespace hesiod::cnode

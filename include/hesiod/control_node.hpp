@@ -257,6 +257,29 @@ protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
 
+class Mask : public gnode::Node
+{
+public:
+  Mask(std::string id);
+
+  void update_inner_bindings();
+
+  void compute();
+
+  virtual void compute_mask(hmap::HeightMap &, hmap::HeightMap *)
+  {
+    LOG_ERROR("Compute not defined for generic mask [%s])", this->id.c_str());
+    throw std::runtime_error("undefined 'compute_mask' method");
+  }
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap();
+  bool            normalize = true;
+  bool            inverse = false;
+  bool            smoothing = false;
+  int             ir_smoothing = 16;
+};
+
 class Primitive : public gnode::Node
 {
 public:
@@ -1337,31 +1360,27 @@ protected:
   int             thermal_subiterations = 10;
 };
 
-class SelectCavities : public Unary
+class SelectCavities : public Mask
 {
 public:
   SelectCavities(std::string id);
 
-  void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
+  void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
 
 protected:
   int  ir = 32;
   bool concave = true;
-  bool normalize = false;
 };
 
-class SelectEq : public Unary
+class SelectEq : public Mask
 {
 public:
   SelectEq(std::string id);
 
-  void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
+  void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
 
 protected:
   float value = 0.f;
-  bool  smoothing = false;
-  int   ir = 4;
-  bool  normalize = false;
 };
 
 class SelectTransitions : public gnode::Node
@@ -1375,9 +1394,10 @@ public:
 
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
+  bool            normalize = true;
+  bool            inverse = false;
   bool            smoothing = false;
-  int             ir = 4;
-  bool            normalize = false;
+  int             ir_smoothing = 16;
 };
 
 class Slope : public gnode::Node

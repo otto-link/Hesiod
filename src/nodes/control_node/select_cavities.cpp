@@ -8,15 +8,15 @@
 namespace hesiod::cnode
 {
 
-SelectCavities::SelectCavities(std::string id) : Unary(id)
+SelectCavities::SelectCavities(std::string id) : Mask(id)
 {
   this->node_type = "SelectCavities";
   this->category = category_mapping.at(this->node_type);
   this->update_inner_bindings();
 }
 
-void SelectCavities::compute_in_out(hmap::HeightMap &h_out,
-                                    hmap::HeightMap *p_input)
+void SelectCavities::compute_mask(hmap::HeightMap &h_out,
+                                  hmap::HeightMap *p_input)
 {
   LOG_DEBUG("computing node [%s]", this->id.c_str());
 
@@ -25,11 +25,6 @@ void SelectCavities::compute_in_out(hmap::HeightMap &h_out,
       *p_input, // input
       [this](hmap::Array &array)
       { return hmap::select_cavities(array, this->ir, this->concave); });
-
-  h_out.smooth_overlap_buffers();
-
-  if (this->normalize)
-    h_out.remap();
 }
 
 } // namespace hesiod::cnode

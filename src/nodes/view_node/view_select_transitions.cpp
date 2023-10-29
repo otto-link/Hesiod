@@ -25,17 +25,14 @@ bool ViewSelectTransitions::render_settings()
 
   has_changed |= this->render_settings_header();
 
-  if (ImGui::Checkbox("smoothing", &this->smoothing))
-    this->force_update();
-
-  if (this->smoothing)
+  if (render_settings_mask(this->smoothing,
+                           this->ir_smoothing,
+                           this->normalize,
+                           this->inverse))
   {
-    ImGui::SliderInt("int", &this->ir, 1, 256);
-    has_changed |= this->trigger_update_after_edit();
-  }
-
-  if (ImGui::Checkbox("normalize", &this->normalize))
     this->force_update();
+    has_changed = true;
+  }
 
   has_changed |= this->render_settings_footer();
 
@@ -44,16 +41,18 @@ bool ViewSelectTransitions::render_settings()
 
 void ViewSelectTransitions::serialize_save(cereal::JSONOutputArchive &ar)
 {
-  ar(cereal::make_nvp("smoothing", this->smoothing));
-  ar(cereal::make_nvp("ir", this->ir));
   ar(cereal::make_nvp("normalize", this->normalize));
+  ar(cereal::make_nvp("inverse", this->inverse));
+  ar(cereal::make_nvp("smoothing", this->smoothing));
+  ar(cereal::make_nvp("ir_smoothing", this->ir_smoothing));
 }
 
 void ViewSelectTransitions::serialize_load(cereal::JSONInputArchive &ar)
 {
-  ar(cereal::make_nvp("smoothing", this->smoothing));
-  ar(cereal::make_nvp("ir", this->ir));
   ar(cereal::make_nvp("normalize", this->normalize));
+  ar(cereal::make_nvp("inverse", this->inverse));
+  ar(cereal::make_nvp("smoothing", this->smoothing));
+  ar(cereal::make_nvp("ir_smoothing", this->ir_smoothing));
 }
 
 } // namespace hesiod::vnode

@@ -1391,6 +1391,12 @@ public:
   void serialize_load(cereal::JSONInputArchive &ar);
 };
 
+// Some generic settings
+bool render_settings_mask(bool &smoothing,
+                          int  &ir_smoothing,
+                          bool &normalize,
+                          bool &inverse);
+
 // // HELPERS
 
 void img_to_texture(std::vector<uint8_t> img,
