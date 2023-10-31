@@ -37,6 +37,14 @@ void Export::write_file()
       hmap::remap(z);
       z.to_png16bit(this->fname);
     }
+
+    else if (this->export_format == hesiod::cnode::binary)
+    {
+      LOG_DEBUG("binary export");
+      hmap::Array z = p_h->to_array();
+      hmap::remap(z);
+      z.to_file(this->fname);
+    }
   }
 }
 

@@ -44,6 +44,7 @@ enum blending_method : int
 
 enum export_type : int
 {
+  binary,
   png8bit,
   png16bit,
   raw

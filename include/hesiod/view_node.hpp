@@ -449,6 +449,7 @@ public:
 
 protected:
   std::map<std::string, int> format_map = {
+      {"binary", hesiod::cnode::export_type::binary},
       {"png (8 bit)", hesiod::cnode::export_type::png8bit},
       {"png (16 bit)", hesiod::cnode::export_type::png16bit}
       // {"raw", hesiod::cnode::export_type::raw}
