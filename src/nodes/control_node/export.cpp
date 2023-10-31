@@ -29,22 +29,16 @@ void Export::write_file()
     hmap::HeightMap *p_h = (hmap::HeightMap *)this->get_p_data("input");
 
     if (this->export_format == hesiod::cnode::png8bit)
-      p_h->to_array().to_png(this->fname, hmap::cmap::gray);
+      p_h->to_array().to_png_grayscale_8bit(this->fname);
 
     else if (this->export_format == hesiod::cnode::png16bit)
-    {
-      hmap::Array z = p_h->to_array();
-      hmap::remap(z);
-      z.to_png16bit(this->fname);
-    }
+      p_h->to_array().to_png_grayscale_16bit(this->fname);
 
     else if (this->export_format == hesiod::cnode::binary)
-    {
-      LOG_DEBUG("binary export");
-      hmap::Array z = p_h->to_array();
-      hmap::remap(z);
-      z.to_file(this->fname);
-    }
+      p_h->to_array().to_file(this->fname);
+
+    else if (this->export_format == hesiod::cnode::raw16bit)
+      hmap::write_raw_16bit(this->fname, p_h->to_array());
   }
 }
 

@@ -47,7 +47,7 @@ enum export_type : int
   binary,
   png8bit,
   png16bit,
-  raw
+  raw16bit
 };
 
 enum kernel : int

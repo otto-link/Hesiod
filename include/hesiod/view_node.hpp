@@ -451,9 +451,8 @@ protected:
   std::map<std::string, int> format_map = {
       {"binary", hesiod::cnode::export_type::binary},
       {"png (8 bit)", hesiod::cnode::export_type::png8bit},
-      {"png (16 bit)", hesiod::cnode::export_type::png16bit}
-      // {"raw", hesiod::cnode::export_type::raw}
-  };
+      {"png (16 bit)", hesiod::cnode::export_type::png16bit},
+      {"raw (16 bit, Unity)", hesiod::cnode::export_type::raw16bit}};
 };
 
 class ViewFbmPerlin : public ViewNode, public hesiod::cnode::FbmPerlin
