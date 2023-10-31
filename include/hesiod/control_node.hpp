@@ -112,6 +112,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Lerp", "Operator/Blend"},
     {"MakeBinary", "Filter/Recurve"},
     {"MeanderizePath", "Geometry/Path"},
+    {"MeanLocal", "Filter/Smoothing"},
     {"Median3x3", "Filter/Smoothing"},
     {"MinimumLocal", "Filter/Smoothing"},
     {"NormalDisplacement", "Filter/Recast"},
@@ -1102,6 +1103,17 @@ protected:
   float      tangent_contribution = 0.1f;
   int        iterations = 1;
   float      transition_length_ratio = 0.2f;
+};
+
+class MeanLocal : public Filter
+{
+public:
+  MeanLocal(std::string id);
+
+  void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
+
+protected:
+  int ir = 8;
 };
 
 class Median3x3 : public Filter

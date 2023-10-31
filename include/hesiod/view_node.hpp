@@ -774,6 +774,17 @@ public:
   void serialize_load(cereal::JSONInputArchive &ar);
 };
 
+class ViewMeanLocal : public ViewNode, public hesiod::cnode::MeanLocal
+{
+public:
+  ViewMeanLocal(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewMedian3x3 : public ViewNode, public hesiod::cnode::Median3x3
 {
 public:

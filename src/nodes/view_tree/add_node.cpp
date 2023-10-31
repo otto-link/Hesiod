@@ -345,6 +345,12 @@ std::string ViewTree::add_view_node(std::string control_node_type,
         std::make_shared<hesiod::vnode::ViewMeanderizePath>(id);
     this->add_node(p_view_node);
   }
+  else if (control_node_type == "MeanLocal")
+  {
+    std::shared_ptr p_view_node =
+        std::make_shared<hesiod::vnode::ViewMeanLocal>(id);
+    this->add_node(p_view_node);
+  }
   else if (control_node_type == "Median3x3")
   {
     std::shared_ptr p_view_node =
