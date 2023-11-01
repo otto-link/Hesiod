@@ -107,6 +107,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Import", "IO/Files"},
     {"Kernel", "Primitive/Kernel"},
     {"KmeansClustering2", "Features"}, // not distributed
+    {"KmeansClustering3", "Features"}, // not distributed
     {"Laplace", "Filter/Smoothing"},
     {"LaplaceEdgePreserving", "Filter/Smoothing"},
     {"Lerp", "Operator/Blend"},
@@ -1033,9 +1034,29 @@ public:
                       hmap::HeightMap *p_h_in2);
 
 protected:
-  int             nclusters = 4;
-  int             seed = DEFAULT_SEED;
-  hmap::Vec2<int> shape_clustering = {256, 256};
+  int               nclusters = 4;
+  hmap::Vec2<float> weights = {1.f, 1.f};
+  int               seed = DEFAULT_SEED;
+  hmap::Vec2<int>   shape_clustering = {256, 256};
+  bool              normalize_inputs = true;
+};
+
+class KmeansClustering3 : public gnode::Node
+{
+public:
+  KmeansClustering3(std::string id);
+
+  void update_inner_bindings();
+
+  void compute();
+
+protected:
+  hmap::HeightMap   value_out = hmap::HeightMap();
+  int               nclusters = 4;
+  hmap::Vec3<float> weights = {1.f, 1.f, 1.f};
+  int               seed = DEFAULT_SEED;
+  hmap::Vec2<int>   shape_clustering = {256, 256};
+  bool              normalize_inputs = true;
 };
 
 class Laplace : public Filter

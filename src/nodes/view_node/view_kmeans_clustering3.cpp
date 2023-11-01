@@ -9,14 +9,14 @@
 namespace hesiod::vnode
 {
 
-ViewKmeansClustering2::ViewKmeansClustering2(std::string id)
-    : ViewNode(), hesiod::cnode::KmeansClustering2(id)
+ViewKmeansClustering3::ViewKmeansClustering3(std::string id)
+    : ViewNode(), hesiod::cnode::KmeansClustering3(id)
 {
   this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
 }
 
-bool ViewKmeansClustering2::render_settings()
+bool ViewKmeansClustering3::render_settings()
 {
   bool has_changed = false;
 
@@ -39,6 +39,9 @@ bool ViewKmeansClustering2::render_settings()
   has_changed |= this->trigger_update_after_edit();
 
   ImGui::SliderFloat("weights.y", &this->weights.y, 0.01f, 2.f, "%.2f");
+  has_changed |= this->trigger_update_after_edit();
+
+  ImGui::SliderFloat("weights.z", &this->weights.z, 0.01f, 2.f, "%.2f");
   has_changed |= this->trigger_update_after_edit();
 
   ImGui::TextUnformatted("Resolution");
@@ -67,11 +70,12 @@ bool ViewKmeansClustering2::render_settings()
   return has_changed;
 }
 
-void ViewKmeansClustering2::serialize_save(cereal::JSONOutputArchive &ar)
+void ViewKmeansClustering3::serialize_save(cereal::JSONOutputArchive &ar)
 {
   ar(cereal::make_nvp("nclusters", this->nclusters));
   ar(cereal::make_nvp("weights.x", this->weights.x));
   ar(cereal::make_nvp("weights.y", this->weights.y));
+  ar(cereal::make_nvp("weights.z", this->weights.z));
   ar(cereal::make_nvp("seed", this->seed));
   ar(cereal::make_nvp("shape_clustering.x", this->shape_clustering.x));
   ar(cereal::make_nvp("shape_clustering.y", this->shape_clustering.y));
@@ -80,11 +84,12 @@ void ViewKmeansClustering2::serialize_save(cereal::JSONOutputArchive &ar)
   ar(cereal::make_nvp("normalize_inputs", this->normalize_inputs));
 }
 
-void ViewKmeansClustering2::serialize_load(cereal::JSONInputArchive &ar)
+void ViewKmeansClustering3::serialize_load(cereal::JSONInputArchive &ar)
 {
   ar(cereal::make_nvp("nclusters", this->nclusters));
   ar(cereal::make_nvp("weights.x", this->weights.x));
   ar(cereal::make_nvp("weights.y", this->weights.y));
+  ar(cereal::make_nvp("weights.z", this->weights.z));
   ar(cereal::make_nvp("seed", this->seed));
   ar(cereal::make_nvp("shape_clustering.x", this->shape_clustering.x));
   ar(cereal::make_nvp("shape_clustering.y", this->shape_clustering.y));

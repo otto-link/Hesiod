@@ -31,8 +31,18 @@ void KmeansClustering2::compute_in_out(hmap::HeightMap &h_out,
     hmap::Array z = h_out.to_array(this->shape_clustering);
     hmap::Array a1 = p_h_in1->to_array(this->shape_clustering);
     hmap::Array a2 = p_h_in2->to_array(this->shape_clustering);
-    labels =
-        hmap::kmeans_clustering2(a1, a2, this->nclusters, (uint)this->seed);
+
+    if (this->normalize_inputs)
+    {
+      hmap::remap(a1);
+      hmap::remap(a2);
+    }
+
+    labels = hmap::kmeans_clustering2(a1,
+                                      a2,
+                                      this->nclusters,
+                                      this->weights,
+                                      (uint)this->seed);
   }
 
   h_out.from_array_interp_nearest(labels);

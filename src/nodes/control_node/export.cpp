@@ -38,7 +38,7 @@ void Export::write_file()
       p_h->to_array().to_file(this->fname);
 
     else if (this->export_format == hesiod::cnode::raw16bit)
-      hmap::write_raw_16bit(this->fname, p_h->to_array());
+      p_h->to_array().to_raw_16bit(this->fname);
   }
 }
 
