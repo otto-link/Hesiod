@@ -34,17 +34,38 @@ void DigPath::compute()
     // work on a copy of the input
     this->value_out = *p_input_hmap;
 
-    hmap::transform(this->value_out,
-                    [this, p_input_path](hmap::Array &z, hmap::Vec4<float> bbox)
-                    {
-                      hmap::dig_path(z,
-                                     *p_input_path,
-                                     this->width,
-                                     this->decay,
-                                     this->flattening_radius,
-                                     bbox,
-                                     this->depth);
-                    });
+    if (!this->force_downhill)
+    {
+      hmap::transform(
+          this->value_out,
+          [this, p_input_path](hmap::Array &z, hmap::Vec4<float> bbox)
+          {
+            hmap::dig_path(z,
+                           *p_input_path,
+                           this->width,
+                           this->decay,
+                           this->flattening_radius,
+                           this->force_downhill,
+                           bbox,
+                           this->depth);
+          });
+    }
+    else
+    {
+      // TODO if downhill is activated, so far not distributed
+      hmap::Array z_array = this->value_out.to_array();
+
+      hmap::dig_path(z_array,
+                     *p_input_path,
+                     this->width,
+                     this->decay,
+                     this->flattening_radius,
+                     this->force_downhill,
+                     hmap::Vec4<float>(0.f, 1.f, 0.f, 1.f), // bbox
+                     this->depth);
+
+      this->value_out.from_array_interp(z_array);
+    }
 
     this->value_out.smooth_overlap_buffers();
   }

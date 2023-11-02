@@ -36,6 +36,7 @@ bool ViewPath::render_settings()
   {
     this->value_out.reverse();
     has_changed = true;
+    this->force_update();
   }
 
   if (hesiod::gui::canvas_path_editor(this->value_out))

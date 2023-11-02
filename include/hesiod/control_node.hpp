@@ -79,7 +79,7 @@ static const std::map<std::string, std::string> category_mapping = {
     // {"CubicPulseTruncated", "Primitive/Kernel"}, // useless
     {"Debug", "Debug"},
     {"DepressionFilling", "Erosion"}, // not distributed
-    {"DigPath", "Roads"},
+    {"DigPath", "Roads"}, // partially distributed
     {"DistanceTransform", "Math"},
     {"Equalize", "Filter/Recurve"}, // not distributed
     {"ErosionMaps", "Erosion/Hydraulic"},
@@ -585,6 +585,7 @@ protected:
   int             width = 1;
   int             decay = 2;
   int             flattening_radius = 16;
+  bool            force_downhill = false;
   float           depth = 0.f;
 };
 

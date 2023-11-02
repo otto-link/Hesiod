@@ -32,6 +32,9 @@ bool ViewDigPath::render_settings()
   ImGui::SliderFloat("depth", &this->depth, -0.2f, 0.2f, "%.2f");
   has_changed |= this->trigger_update_after_edit();
 
+  ImGui::Checkbox("force_downhill", &this->force_downhill);
+  has_changed |= this->trigger_update_after_edit();
+
   has_changed |= this->render_settings_footer();
   return has_changed;
 }
@@ -41,6 +44,7 @@ void ViewDigPath::serialize_save(cereal::JSONOutputArchive &ar)
   ar(cereal::make_nvp("width", this->width));
   ar(cereal::make_nvp("decay", this->decay));
   ar(cereal::make_nvp("flattening_radius", this->flattening_radius));
+  ar(cereal::make_nvp("force_downhill", this->force_downhill));
 }
 
 void ViewDigPath::serialize_load(cereal::JSONInputArchive &ar)
@@ -48,6 +52,7 @@ void ViewDigPath::serialize_load(cereal::JSONInputArchive &ar)
   ar(cereal::make_nvp("width", this->width));
   ar(cereal::make_nvp("decay", this->decay));
   ar(cereal::make_nvp("flattening_radius", this->flattening_radius));
+  ar(cereal::make_nvp("force_downhill", this->force_downhill));
 }
 
 } // namespace hesiod::vnode
