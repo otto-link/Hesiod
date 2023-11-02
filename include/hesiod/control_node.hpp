@@ -79,7 +79,7 @@ static const std::map<std::string, std::string> category_mapping = {
     // {"CubicPulseTruncated", "Primitive/Kernel"}, // useless
     {"Debug", "Debug"},
     {"DepressionFilling", "Erosion"}, // not distributed
-    {"DigPath", "Roads"}, // partially distributed
+    {"DigPath", "Roads"},             // partially distributed
     {"DistanceTransform", "Math"},
     {"Equalize", "Filter/Recurve"}, // not distributed
     {"ErosionMaps", "Erosion/Hydraulic"},

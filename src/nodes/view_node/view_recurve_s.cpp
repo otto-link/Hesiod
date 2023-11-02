@@ -16,17 +16,6 @@ ViewRecurveS::ViewRecurveS(std::string id)
   this->set_preview_port_id("output");
 }
 
-bool ViewRecurveS::render_settings()
-{
-  bool has_changed = false;
-
-  has_changed |= this->render_settings_header();
-
-  has_changed |= this->render_settings_footer();
-
-  return has_changed;
-}
-
 void ViewRecurveS::serialize_save(cereal::JSONOutputArchive &)
 {
   // nothing to do

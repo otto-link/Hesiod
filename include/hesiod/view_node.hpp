@@ -980,8 +980,6 @@ class ViewRecurveS : public ViewNode, public hesiod::cnode::RecurveS
 public:
   ViewRecurveS(std::string id);
 
-  bool render_settings();
-
   void serialize_save(cereal::JSONOutputArchive &ar);
   void serialize_load(cereal::JSONInputArchive &ar);
 };
