@@ -132,6 +132,8 @@ protected:
   std::string preview_port_id = "";
   bool        show_preview = true;
   float       node_width = 128.f;
+  bool        show_help = false;
+  std::string help_text = "No help available.";
 
 private:
   gnode::Node    *p_control_node;

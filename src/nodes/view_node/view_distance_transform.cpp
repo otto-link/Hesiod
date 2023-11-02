@@ -14,6 +14,11 @@ ViewDistanceTransform::ViewDistanceTransform(std::string id)
 {
   this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
+
+  this->help_text =
+      "Apply the distance transform (Euclidean distance) to the input "
+      "heightmap. Cells with null or negative values are assumed to belong to "
+      "the background.";
 }
 
 bool ViewDistanceTransform::render_settings()

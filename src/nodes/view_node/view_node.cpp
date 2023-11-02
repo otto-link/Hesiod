@@ -227,12 +227,26 @@ bool ViewNode::render_settings_header()
   // object
   ImGui::PushID((void *)this);
 
+  // --- buttons
   if (ImGui::Checkbox("Auto-update", &this->p_control_node->auto_update))
     has_changed = true;
 
+  // frozen outputs button
   ImGui::SameLine();
+  if (ImGui::Checkbox("Frozen outputs", &this->p_control_node->frozen_outputs))
+  {
+    // ignite force update when the node is unfrozzen to update
+    // downstream nodes
+    if (!this->p_control_node->frozen_outputs)
+      this->p_control_node->force_update();
+    has_changed = true;
+  }
 
-  // --- auto-update button
+  // help
+  ImGui::SameLine();
+  ImGui::Checkbox("Show help", &this->show_help);
+
+  // auto-update button
   bool disabled_update_button = this->p_control_node->auto_update &
                                 this->p_control_node->is_up_to_date;
   if (disabled_update_button)
@@ -253,14 +267,14 @@ bool ViewNode::render_settings_header()
   else
     ImGui::TextColored(ImVec4(1, 1, 0, 1), "To be updated");
 
-  // --- frozen outputs button
-  if (ImGui::Checkbox("Frozen outputs", &this->p_control_node->frozen_outputs))
+  // help text
+  if (this->show_help)
   {
-    // ignite force update when the node is unfrozzen to update
-    // downstream nodes
-    if (!this->p_control_node->frozen_outputs)
-      this->p_control_node->force_update();
-    has_changed = true;
+    ImGui::Separator();
+    ImGui::TextUnformatted("Help");
+    ImGui::PushTextWrapPos(0.0f);
+    ImGui::TextUnformatted((char *)this->help_text.c_str());
+    ImGui::PopTextWrapPos();
   }
 
   ImGui::Separator();
