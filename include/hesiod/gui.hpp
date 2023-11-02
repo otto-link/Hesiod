@@ -65,6 +65,10 @@ bool listbox_map_enum(std::map<std::string, int> &map,
                       int                        &selected,
                       float                       width);
 
+bool select_shape(std::string      label,
+                  hmap::Vec2<int> &shape,
+                  hmap::Vec2<int>  shape_max);
+
 bool slider_vmin_vmax(float &vmin, float &vmax);
 
 } // namespace hesiod::gui

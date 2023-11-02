@@ -41,23 +41,10 @@ bool ViewKmeansClustering2::render_settings()
   ImGui::SliderFloat("weights.y", &this->weights.y, 0.01f, 2.f, "%.2f");
   has_changed |= this->trigger_update_after_edit();
 
-  ImGui::TextUnformatted("Resolution");
-  bool rbutton = false;
-  rbutton |= ImGui::RadioButton("128 x 128", &this->shape_clustering_choice, 0);
-  rbutton |= ImGui::RadioButton("256 x 256", &this->shape_clustering_choice, 1);
-  rbutton |= ImGui::RadioButton("512 x 512", &this->shape_clustering_choice, 2);
-
-  if (rbutton)
-  {
-    if (this->shape_clustering_choice == 0)
-      this->shape_clustering = {128, 128};
-    else if (this->shape_clustering_choice == 1)
-      this->shape_clustering = {256, 256};
-    else if (this->shape_clustering_choice == 2)
-      this->shape_clustering = {512, 512};
-
+  if (hesiod::gui::select_shape("shape",
+                                this->shape_clustering,
+                                this->value_out.shape))
     this->force_update();
-  }
 
   ImGui::Checkbox("normalize_inputs", &this->normalize_inputs);
   has_changed |= this->trigger_update_after_edit();
@@ -75,8 +62,6 @@ void ViewKmeansClustering2::serialize_save(cereal::JSONOutputArchive &ar)
   ar(cereal::make_nvp("seed", this->seed));
   ar(cereal::make_nvp("shape_clustering.x", this->shape_clustering.x));
   ar(cereal::make_nvp("shape_clustering.y", this->shape_clustering.y));
-  ar(cereal::make_nvp("shape_clustering_choice",
-                      this->shape_clustering_choice));
   ar(cereal::make_nvp("normalize_inputs", this->normalize_inputs));
 }
 
@@ -88,8 +73,6 @@ void ViewKmeansClustering2::serialize_load(cereal::JSONInputArchive &ar)
   ar(cereal::make_nvp("seed", this->seed));
   ar(cereal::make_nvp("shape_clustering.x", this->shape_clustering.x));
   ar(cereal::make_nvp("shape_clustering.y", this->shape_clustering.y));
-  ar(cereal::make_nvp("shape_clustering_choice",
-                      this->shape_clustering_choice));
   ar(cereal::make_nvp("normalize_inputs", this->normalize_inputs));
 }
 

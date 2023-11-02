@@ -25,23 +25,10 @@ bool ViewDistanceTransform::render_settings()
   ImGui::Checkbox("reverse", &this->reverse);
   has_changed |= this->trigger_update_after_edit();
 
-  ImGui::TextUnformatted("Resolution");
-  bool rbutton = false;
-  rbutton |= ImGui::RadioButton("128 x 128", &this->shape_working_choice, 0);
-  rbutton |= ImGui::RadioButton("256 x 256", &this->shape_working_choice, 1);
-  rbutton |= ImGui::RadioButton("512 x 512", &this->shape_working_choice, 2);
-
-  if (rbutton)
-  {
-    if (this->shape_working_choice == 0)
-      this->shape_working = {128, 128};
-    else if (this->shape_working_choice == 1)
-      this->shape_working = {256, 256};
-    else if (this->shape_working_choice == 2)
-      this->shape_working = {512, 512};
-
+  if (hesiod::gui::select_shape("shape",
+                                this->shape_working,
+                                this->value_out.shape))
     this->force_update();
-  }
 
   ImGui::Separator();
 
@@ -60,7 +47,6 @@ void ViewDistanceTransform::serialize_save(cereal::JSONOutputArchive &ar)
 {
   ar(cereal::make_nvp("shape_working.x", this->shape_working.x));
   ar(cereal::make_nvp("shape_working.y", this->shape_working.y));
-  ar(cereal::make_nvp("shape_working_choice", this->shape_working_choice));
   ar(cereal::make_nvp("reverse", this->reverse));
   ar(cereal::make_nvp("vmin", this->vmin));
   ar(cereal::make_nvp("vmax", this->vmax));
@@ -70,7 +56,6 @@ void ViewDistanceTransform::serialize_load(cereal::JSONInputArchive &ar)
 {
   ar(cereal::make_nvp("shape_working.x", this->shape_working.x));
   ar(cereal::make_nvp("shape_working.y", this->shape_working.y));
-  ar(cereal::make_nvp("shape_working_choice", this->shape_working_choice));
   ar(cereal::make_nvp("reverse", this->reverse));
   ar(cereal::make_nvp("vmin", this->vmin));
   ar(cereal::make_nvp("vmax", this->vmax));

@@ -384,9 +384,6 @@ public:
 
   void serialize_save(cereal::JSONOutputArchive &ar);
   void serialize_load(cereal::JSONInputArchive &ar);
-
-private:
-  int shape_working_choice = 1;
 };
 
 class ViewEqualize : public ViewNode, public hesiod::cnode::Equalize
@@ -710,9 +707,6 @@ public:
 
   void serialize_save(cereal::JSONOutputArchive &ar);
   void serialize_load(cereal::JSONInputArchive &ar);
-
-private:
-  int shape_clustering_choice = 1;
 };
 
 class ViewKmeansClustering3 : public ViewNode,
@@ -725,9 +719,6 @@ public:
 
   void serialize_save(cereal::JSONOutputArchive &ar);
   void serialize_load(cereal::JSONInputArchive &ar);
-
-private:
-  int shape_clustering_choice = 1;
 };
 
 class ViewLaplace : public ViewNode, public hesiod::cnode::Laplace
@@ -866,9 +857,6 @@ public:
 
   void serialize_save(cereal::JSONOutputArchive &ar);
   void serialize_load(cereal::JSONInputArchive &ar);
-
-private:
-  int wshape_choice = 1;
 };
 
 class ViewPathToHeightmap : public ViewNode,
