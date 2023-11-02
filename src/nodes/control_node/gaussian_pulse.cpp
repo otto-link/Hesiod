@@ -38,15 +38,25 @@ void GaussianPulse::compute()
                     hmap::Vec2<float> scale,
                     hmap::Array      *p_noise_x)
     {
-      return 1.f -
-             hmap::gaussian_pulse(shape, this->sigma, p_noise_x, shift, scale);
+      return 1.f - hmap::gaussian_pulse(shape,
+                                        this->sigma,
+                                        p_noise_x,
+                                        this->center,
+                                        shift,
+                                        scale);
     };
   else
     lambda = [this](hmap::Vec2<int>   shape,
                     hmap::Vec2<float> shift,
                     hmap::Vec2<float> scale,
-                    hmap::Array      *p_noise_x) {
-      return hmap::gaussian_pulse(shape, this->sigma, p_noise_x, shift, scale);
+                    hmap::Array      *p_noise_x)
+    {
+      return hmap::gaussian_pulse(shape,
+                                  this->sigma,
+                                  p_noise_x,
+                                  this->center,
+                                  shift,
+                                  scale);
     };
 
   hmap::fill(this->value_out,

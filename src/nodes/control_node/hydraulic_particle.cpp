@@ -25,9 +25,6 @@ void HydraulicParticle::compute_erosion(hmap::HeightMap &h,
 
   int nparticles_tile = (int)(this->nparticles / (float)h.get_ntiles());
 
-  if (p_moisture_map)
-    p_moisture_map->remap();
-
   hmap::transform(h,
                   p_bedrock,
                   p_moisture_map,
@@ -56,14 +53,6 @@ void HydraulicParticle::compute_erosion(hmap::HeightMap &h,
                                              this->drag_rate,
                                              this->evap_rate);
                   });
-
-  h.smooth_overlap_buffers();
-
-  if (p_erosion_map)
-    (*p_erosion_map).smooth_overlap_buffers();
-
-  if (p_deposition_map)
-    (*p_deposition_map).smooth_overlap_buffers();
 }
 
 } // namespace hesiod::cnode

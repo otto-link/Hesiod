@@ -23,9 +23,6 @@ void HydraulicStream::compute_erosion(hmap::HeightMap &h,
 {
   LOG_DEBUG("computing erosion node [%s]", this->id.c_str());
 
-  if (p_moisture_map)
-    p_moisture_map->remap();
-
   hmap::transform(h,
                   p_bedrock,
                   p_moisture_map,

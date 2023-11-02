@@ -449,10 +449,10 @@ public:
 
 protected:
   std::map<std::string, int> format_map = {
+      {"binary", hesiod::cnode::export_type::binary},
       {"png (8 bit)", hesiod::cnode::export_type::png8bit},
-      {"png (16 bit)", hesiod::cnode::export_type::png16bit}
-      // {"raw", hesiod::cnode::export_type::raw}
-  };
+      {"png (16 bit)", hesiod::cnode::export_type::png16bit},
+      {"raw (16 bit, Unity)", hesiod::cnode::export_type::raw16bit}};
 };
 
 class ViewFbmPerlin : public ViewNode, public hesiod::cnode::FbmPerlin
@@ -715,6 +715,21 @@ private:
   int shape_clustering_choice = 1;
 };
 
+class ViewKmeansClustering3 : public ViewNode,
+                              public hesiod::cnode::KmeansClustering3
+{
+public:
+  ViewKmeansClustering3(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+
+private:
+  int shape_clustering_choice = 1;
+};
+
 class ViewLaplace : public ViewNode, public hesiod::cnode::Laplace
 {
 public:
@@ -767,6 +782,17 @@ public:
   ViewMeanderizePath(std::string id);
 
   void render_node_specific_content();
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
+class ViewMeanLocal : public ViewNode, public hesiod::cnode::MeanLocal
+{
+public:
+  ViewMeanLocal(std::string id);
 
   bool render_settings();
 
@@ -949,6 +975,17 @@ public:
   void serialize_load(cereal::JSONInputArchive &ar);
 };
 
+class ViewRecurveS : public ViewNode, public hesiod::cnode::RecurveS
+{
+public:
+  ViewRecurveS(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewRelativeElevation : public ViewNode,
                               public hesiod::cnode::RelativeElevation
 {
@@ -1037,6 +1074,17 @@ private:
   bool               use_input_unique_values = false;
   std::vector<float> input_unique_values = {};
   int                selected_idx = 0;
+};
+
+class ViewSelectInterval : public ViewNode, public hesiod::cnode::SelectInterval
+{
+public:
+  ViewSelectInterval(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewSelectTransitions : public ViewNode,
@@ -1390,6 +1438,12 @@ public:
   void serialize_save(cereal::JSONOutputArchive &ar);
   void serialize_load(cereal::JSONInputArchive &ar);
 };
+
+// Some generic settings
+bool render_settings_mask(bool &smoothing,
+                          int  &ir_smoothing,
+                          bool &normalize,
+                          bool &inverse);
 
 // // HELPERS
 

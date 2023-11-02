@@ -11,19 +11,27 @@
 namespace hesiod::vnode
 {
 
-ViewSelectTransitions::ViewSelectTransitions(std::string id)
-    : ViewNode(), hesiod::cnode::SelectTransitions(id)
+ViewSelectInterval::ViewSelectInterval(std::string id)
+    : ViewNode(), hesiod::cnode::SelectInterval(id)
 {
-  LOG_DEBUG("ViewSelectTransitions::ViewSelectTransitions()");
+  LOG_DEBUG("ViewSelectInterval::ViewSelectInterval()");
   this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
 }
 
-bool ViewSelectTransitions::render_settings()
+bool ViewSelectInterval::render_settings()
 {
   bool has_changed = false;
 
   has_changed |= this->render_settings_header();
+
+  if (hesiod::gui::slider_vmin_vmax(this->value1, this->value2))
+  {
+    this->force_update();
+    has_changed = true;
+  }
+
+  ImGui::Separator();
 
   if (render_settings_mask(this->smoothing,
                            this->ir_smoothing,
@@ -39,16 +47,22 @@ bool ViewSelectTransitions::render_settings()
   return has_changed;
 }
 
-void ViewSelectTransitions::serialize_save(cereal::JSONOutputArchive &ar)
+void ViewSelectInterval::serialize_save(cereal::JSONOutputArchive &ar)
 {
+  ar(cereal::make_nvp("value1", this->value1));
+  ar(cereal::make_nvp("value2", this->value2));
+
   ar(cereal::make_nvp("normalize", this->normalize));
   ar(cereal::make_nvp("inverse", this->inverse));
   ar(cereal::make_nvp("smoothing", this->smoothing));
   ar(cereal::make_nvp("ir_smoothing", this->ir_smoothing));
 }
 
-void ViewSelectTransitions::serialize_load(cereal::JSONInputArchive &ar)
+void ViewSelectInterval::serialize_load(cereal::JSONInputArchive &ar)
 {
+  ar(cereal::make_nvp("value1", this->value1));
+  ar(cereal::make_nvp("value2", this->value2));
+
   ar(cereal::make_nvp("normalize", this->normalize));
   ar(cereal::make_nvp("inverse", this->inverse));
   ar(cereal::make_nvp("smoothing", this->smoothing));

@@ -33,7 +33,7 @@ bool ViewExport::render_settings()
     if (ImGui::Button(("File: " + this->fname).c_str()))
       ImGuiFileDialog::Instance()->OpenDialog("DialogId",
                                               "Choose File",
-                                              ".png",
+                                              ".png,.raw,.bin",
                                               ".");
 
     if (ImGuiFileDialog::Instance()->Display("DialogId"))

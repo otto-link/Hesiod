@@ -31,8 +31,16 @@ bool ViewSelectCavities::render_settings()
   if (ImGui::Checkbox("concave", &this->concave))
     this->force_update();
 
-  if (ImGui::Checkbox("normalize", &this->normalize))
+  ImGui::Separator();
+
+  if (render_settings_mask(this->smoothing,
+                           this->ir_smoothing,
+                           this->normalize,
+                           this->inverse))
+  {
     this->force_update();
+    has_changed = true;
+  }
 
   has_changed |= this->render_settings_footer();
 
@@ -43,14 +51,22 @@ void ViewSelectCavities::serialize_save(cereal::JSONOutputArchive &ar)
 {
   ar(cereal::make_nvp("ir", this->ir));
   ar(cereal::make_nvp("concave", this->concave));
+
   ar(cereal::make_nvp("normalize", this->normalize));
+  ar(cereal::make_nvp("inverse", this->inverse));
+  ar(cereal::make_nvp("smoothing", this->smoothing));
+  ar(cereal::make_nvp("ir_smoothing", this->ir_smoothing));
 }
 
 void ViewSelectCavities::serialize_load(cereal::JSONInputArchive &ar)
 {
   ar(cereal::make_nvp("ir", this->ir));
   ar(cereal::make_nvp("concave", this->concave));
+
   ar(cereal::make_nvp("normalize", this->normalize));
+  ar(cereal::make_nvp("inverse", this->inverse));
+  ar(cereal::make_nvp("smoothing", this->smoothing));
+  ar(cereal::make_nvp("ir_smoothing", this->ir_smoothing));
 }
 
 } // namespace hesiod::vnode

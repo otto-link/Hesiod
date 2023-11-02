@@ -41,11 +41,12 @@ void Caldera::compute()
                                     p_noise_x,
                                     this->noise_r_amp,
                                     this->noise_ratio_z,
+                                    this->center,
                                     shift,
                                     scale);
              });
 
-  // remap the output
+  this->value_out.smooth_overlap_buffers();
   this->value_out.remap(this->vmin, this->vmax);
 }
 

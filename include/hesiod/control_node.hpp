@@ -44,9 +44,10 @@ enum blending_method : int
 
 enum export_type : int
 {
+  binary,
   png8bit,
   png16bit,
-  raw
+  raw16bit
 };
 
 enum kernel : int
@@ -78,7 +79,7 @@ static const std::map<std::string, std::string> category_mapping = {
     // {"CubicPulseTruncated", "Primitive/Kernel"}, // useless
     {"Debug", "Debug"},
     {"DepressionFilling", "Erosion"}, // not distributed
-    {"DigPath", "Roads"},
+    {"DigPath", "Roads"}, // partially distributed
     {"DistanceTransform", "Math"},
     {"Equalize", "Filter/Recurve"}, // not distributed
     {"ErosionMaps", "Erosion/Hydraulic"},
@@ -106,11 +107,13 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Import", "IO/Files"},
     {"Kernel", "Primitive/Kernel"},
     {"KmeansClustering2", "Features"}, // not distributed
+    {"KmeansClustering3", "Features"}, // not distributed
     {"Laplace", "Filter/Smoothing"},
     {"LaplaceEdgePreserving", "Filter/Smoothing"},
     {"Lerp", "Operator/Blend"},
     {"MakeBinary", "Filter/Recurve"},
     {"MeanderizePath", "Geometry/Path"},
+    {"MeanLocal", "Filter/Smoothing"},
     {"Median3x3", "Filter/Smoothing"},
     {"MinimumLocal", "Filter/Smoothing"},
     {"NormalDisplacement", "Filter/Recast"},
@@ -125,6 +128,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"RecastCanyon", "Filter/Recast"},
     {"Recurve", "Filter/Recurve"},
     {"RecurveKura", "Filter/Recurve"},
+    {"RecurveS", "Filter/Recurve"},
     {"RelativeElevation", "Features"},
     {"Remap", "Filter/Range"},
     {"RidgedPerlin", "Primitive/Coherent Noise"},
@@ -132,6 +136,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"SedimentDeposition", "Erosion/Thermal"},
     {"SelectCavities", "Mask"},
     {"SelectEq", "Mask"},
+    {"SelectInterval", "Mask"},
     {"SelectTransitions", "Mask"},
     {"Slope", "Primitive/Function"},
     {"SmoothCpulse", "Filter/Smoothing"},
@@ -255,6 +260,29 @@ public:
 
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
+};
+
+class Mask : public gnode::Node
+{
+public:
+  Mask(std::string id);
+
+  void update_inner_bindings();
+
+  void compute();
+
+  virtual void compute_mask(hmap::HeightMap &, hmap::HeightMap *)
+  {
+    LOG_ERROR("Compute not defined for generic mask [%s])", this->id.c_str());
+    throw std::runtime_error("undefined 'compute_mask' method");
+  }
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap();
+  bool            normalize = true;
+  bool            inverse = false;
+  bool            smoothing = false;
+  int             ir_smoothing = 16;
 };
 
 class Primitive : public gnode::Node
@@ -447,12 +475,13 @@ public:
   void compute();
 
 protected:
-  float radius = 128.f;
-  float sigma_inner = 16.f;
-  float sigma_outer = 32.f;
-  float noise_r_amp = 32.f;
-  float z_bottom = 0.5f;
-  float noise_ratio_z = 0.1f;
+  float             radius = 128.f;
+  float             sigma_inner = 16.f;
+  float             sigma_outer = 32.f;
+  float             noise_r_amp = 32.f;
+  float             z_bottom = 0.5f;
+  float             noise_ratio_z = 0.1f;
+  hmap::Vec2<float> center = {0.5f, 0.5f};
 };
 
 class Clamp : public Unary
@@ -557,6 +586,7 @@ protected:
   int             width = 1;
   int             decay = 2;
   int             flattening_radius = 16;
+  bool            force_downhill = false;
   float           depth = 0.f;
 };
 
@@ -778,8 +808,9 @@ public:
   void compute();
 
 protected:
-  float sigma = 32;
-  bool  inverse = false;
+  float             sigma = 32;
+  bool              inverse = false;
+  hmap::Vec2<float> center = {0.5f, 0.5f};
 };
 
 class Gradient : public gnode::Node
@@ -1006,9 +1037,29 @@ public:
                       hmap::HeightMap *p_h_in2);
 
 protected:
-  int             nclusters = 4;
-  int             seed = DEFAULT_SEED;
-  hmap::Vec2<int> shape_clustering = {256, 256};
+  int               nclusters = 4;
+  hmap::Vec2<float> weights = {1.f, 1.f};
+  int               seed = DEFAULT_SEED;
+  hmap::Vec2<int>   shape_clustering = {256, 256};
+  bool              normalize_inputs = true;
+};
+
+class KmeansClustering3 : public gnode::Node
+{
+public:
+  KmeansClustering3(std::string id);
+
+  void update_inner_bindings();
+
+  void compute();
+
+protected:
+  hmap::HeightMap   value_out = hmap::HeightMap();
+  int               nclusters = 4;
+  hmap::Vec3<float> weights = {1.f, 1.f, 1.f};
+  int               seed = DEFAULT_SEED;
+  hmap::Vec2<int>   shape_clustering = {256, 256};
+  bool              normalize_inputs = true;
 };
 
 class Laplace : public Filter
@@ -1076,6 +1127,17 @@ protected:
   float      tangent_contribution = 0.1f;
   int        iterations = 1;
   float      transition_length_ratio = 0.2f;
+};
+
+class MeanLocal : public Filter
+{
+public:
+  MeanLocal(std::string id);
+
+  void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
+
+protected:
+  int ir = 8;
 };
 
 class Median3x3 : public Filter
@@ -1266,6 +1328,14 @@ protected:
   float b = 2.f;
 };
 
+class RecurveS : public Filter
+{
+public:
+  RecurveS(std::string id);
+
+  void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
+};
+
 class RelativeElevation : public Unary
 {
 public:
@@ -1337,31 +1407,39 @@ protected:
   int             thermal_subiterations = 10;
 };
 
-class SelectCavities : public Unary
+class SelectCavities : public Mask
 {
 public:
   SelectCavities(std::string id);
 
-  void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
+  void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
 
 protected:
   int  ir = 32;
   bool concave = true;
-  bool normalize = false;
 };
 
-class SelectEq : public Unary
+class SelectEq : public Mask
 {
 public:
   SelectEq(std::string id);
 
-  void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
+  void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
 
 protected:
   float value = 0.f;
-  bool  smoothing = false;
-  int   ir = 4;
-  bool  normalize = false;
+};
+
+class SelectInterval : public Mask
+{
+public:
+  SelectInterval(std::string id);
+
+  void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
+
+protected:
+  float value1 = 0.f;
+  float value2 = 1.f;
 };
 
 class SelectTransitions : public gnode::Node
@@ -1375,9 +1453,10 @@ public:
 
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
+  bool            normalize = true;
+  bool            inverse = false;
   bool            smoothing = false;
-  int             ir = 4;
-  bool            normalize = false;
+  int             ir_smoothing = 16;
 };
 
 class Slope : public gnode::Node

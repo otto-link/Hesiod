@@ -59,7 +59,7 @@ void ViewStep::serialize_save(cereal::JSONOutputArchive &ar)
   ar(cereal::make_nvp("angle", this->angle));
   ar(cereal::make_nvp("talus_global", this->talus_global));
   ar(cereal::make_nvp("center.x", this->center.x));
-  ar(cereal::make_nvp("cneter.y", this->center.y));
+  ar(cereal::make_nvp("center.y", this->center.y));
   ar(cereal::make_nvp("vmin", this->vmin));
   ar(cereal::make_nvp("vmax", this->vmax));
 }
@@ -69,7 +69,7 @@ void ViewStep::serialize_load(cereal::JSONInputArchive &ar)
   ar(cereal::make_nvp("angle", this->angle));
   ar(cereal::make_nvp("talus_global", this->talus_global));
   ar(cereal::make_nvp("center.x", this->center.x));
-  ar(cereal::make_nvp("cneter.y", this->center.y));
+  ar(cereal::make_nvp("center.y", this->center.y));
   ar(cereal::make_nvp("vmin", this->vmin));
   ar(cereal::make_nvp("vmax", this->vmax));
 }

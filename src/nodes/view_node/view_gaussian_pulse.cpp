@@ -30,6 +30,12 @@ bool ViewGaussianPulse::render_settings()
   ImGui::SliderFloat("sigma", &this->sigma, 1.f, 512.f, "%.1f");
   has_changed |= this->trigger_update_after_edit();
 
+  ImGui::SliderFloat("center.x", &this->center.x, -0.5f, 1.5f, "%.2f");
+  has_changed |= this->trigger_update_after_edit();
+
+  ImGui::SliderFloat("center.y", &this->center.y, -0.5f, 1.5f, "%.2f");
+  has_changed |= this->trigger_update_after_edit();
+
   ImGui::Separator();
 
   if (hesiod::gui::slider_vmin_vmax(vmin, vmax))
@@ -46,6 +52,8 @@ void ViewGaussianPulse::serialize_save(cereal::JSONOutputArchive &ar)
 {
   ar(cereal::make_nvp("sigma", this->sigma));
   ar(cereal::make_nvp("inverse", this->inverse));
+  ar(cereal::make_nvp("center.x", this->center.x));
+  ar(cereal::make_nvp("center.y", this->center.y));
   ar(cereal::make_nvp("vmin", this->vmin));
   ar(cereal::make_nvp("vmax", this->vmax));
 }
@@ -54,6 +62,8 @@ void ViewGaussianPulse::serialize_load(cereal::JSONInputArchive &ar)
 {
   ar(cereal::make_nvp("sigma", this->sigma));
   ar(cereal::make_nvp("inverse", this->inverse));
+  ar(cereal::make_nvp("center.x", this->center.x));
+  ar(cereal::make_nvp("center.y", this->center.y));
   ar(cereal::make_nvp("vmin", this->vmin));
   ar(cereal::make_nvp("vmax", this->vmax));
 }

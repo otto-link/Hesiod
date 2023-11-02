@@ -8,14 +8,14 @@
 namespace hesiod::cnode
 {
 
-SelectCavities::SelectCavities(std::string id) : Mask(id)
+SelectInterval::SelectInterval(std::string id) : Mask(id)
 {
-  this->node_type = "SelectCavities";
+  this->node_type = "SelectInterval";
   this->category = category_mapping.at(this->node_type);
   this->update_inner_bindings();
 }
 
-void SelectCavities::compute_mask(hmap::HeightMap &h_out,
+void SelectInterval::compute_mask(hmap::HeightMap &h_out,
                                   hmap::HeightMap *p_input)
 {
   LOG_DEBUG("computing node [%s]", this->id.c_str());
@@ -24,7 +24,7 @@ void SelectCavities::compute_mask(hmap::HeightMap &h_out,
       h_out,    // output
       *p_input, // input
       [this](hmap::Array &array)
-      { return hmap::select_cavities(array, this->ir, this->concave); });
+      { return hmap::select_interval(array, this->value1, this->value2); });
 }
 
 } // namespace hesiod::cnode

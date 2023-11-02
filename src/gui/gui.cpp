@@ -107,7 +107,7 @@ void save_screenshot(std::string fname)
   glReadPixels(x, y, width, height, GL_RGB, GL_UNSIGNED_BYTE, img.data());
 
   flip_vertically(width, height, img.data());
-  hmap::write_png_8bit(fname, img, hmap::Vec2<int>(width, height));
+  hmap::write_png_rgb_8bit(fname, img, hmap::Vec2<int>(width, height));
 }
 
 void main_dock(hesiod::vnode::ViewTree &view_tree)
