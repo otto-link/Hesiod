@@ -806,8 +806,9 @@ public:
   void compute();
 
 protected:
-  float sigma = 32;
-  bool  inverse = false;
+  float             sigma = 32;
+  bool              inverse = false;
+  hmap::Vec2<float> center = {0.5f, 0.5f};
 };
 
 class Gradient : public gnode::Node
