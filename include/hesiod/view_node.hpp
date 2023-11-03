@@ -16,10 +16,13 @@
 namespace hesiod::vnode
 {
 
+/**
+ * @brief Preview type.
+ */
 enum preview_type : int
 {
-  grayscale,
-  histogram
+  grayscale, ///< grayscale
+  histogram  ///< histogram
 };
 
 struct viewnode_color_set
@@ -92,61 +95,189 @@ static const std::map<int, viewnode_color_set> dtype_colors = {
     {hesiod::cnode::dHeightMap, viewnode_color_set({255, 255, 255, 255})},
     {hesiod::cnode::dPath, viewnode_color_set({80, 250, 123, 255})}};
 
+/**
+ * @brief Base class for all 'View Node' (nodes with a GUI).
+ */
 class ViewNode
 {
 public:
+  /**
+   * @brief Default constructor, exists only to permit declaration of lists of
+   * nodes.
+   */
   ViewNode();
 
+  /**
+   * @brief Construct a new View Node object.
+   *
+   * @param p_control_node Reference to associated 'control node', i.e. the node
+   * carrying out all the computations.
+   */
   ViewNode(gnode::Node *p_control_node);
 
+  /**
+   * @brief Get the reference to the associated control node.
+   *
+   * @return gnode::Node* Associated control node.
+   */
   gnode::Node *get_p_control_node();
 
+  /**
+   * @brief Get the preview port id.
+   *
+   * @return std::string Port id.
+   */
   std::string get_preview_port_id();
 
+  /**
+   * @brief Set the reference to the associated control node.
+   *
+   * @param new_p_control_node Reference to the new associated control node.
+   */
   void set_p_control_node(gnode::Node *new_p_control_node);
 
+  /**
+   * @brief Set the preview port id.
+   *
+   * @param new_port_id New port id.
+   */
   void set_preview_port_id(std::string new_port_id);
 
+  /**
+   * @brief Set the preview type (grayscale, histogram)
+   *
+   * @see preview_type
+   *
+   * @param new_preview_type New preview type.
+   */
   void set_preview_type(int new_preview_type);
 
+  /**
+   * @brief Method called after every update of the control node.
+   */
   virtual void post_control_node_update();
 
+  /**
+   * @brief Render the settings GUI widgets.
+   *
+   * @return true Settings have changed.
+   * @return false Settings have not been changed.
+   */
   virtual bool render_settings();
 
+  /**
+   * @brief Render the node within the current node editor context.
+   */
   void render_node();
 
+  /**
+   * @brief Render any specific content after rendering the node base boyd
+   * (@link render_node).
+   */
   virtual void render_node_specific_content(){};
 
+  /**
+   * @brief Render the generic header of the node settings.
+   *
+   * @return true Settings have changed.
+   * @return false Settings have not been changed.
+   */
   bool render_settings_header();
 
+  /**
+   * @brief Render the generic footer of the node settings.
+   *
+   * @return true Settings have changed.
+   * @return false Settings have not been changed.
+   */
   bool render_settings_footer();
 
+  /**
+   * @brief Serialization of the node parameters (load).
+   */
   virtual void serialize_load(cereal::JSONInputArchive &);
+
+  /**
+   * @brief Serialization of the node parameters (save).
+   */
   virtual void serialize_save(cereal::JSONOutputArchive &);
 
   bool trigger_update_after_edit();
 
+  /**
+   * @brief Update the node preview (regenerate the content displayed in the
+   * node body).
+   */
   void update_preview();
 
 protected:
+  /**
+   * @brief Port id of the data displayed in the preview.
+   */
   std::string preview_port_id = "";
-  bool        show_preview = true;
-  float       node_width = 128.f;
-  bool        show_help = false;
+
+  /**
+   * @brief Defines whether the preview is shown or not in the node body.
+   */
+  bool show_preview = true;
+
+  /**
+   * @brief Node width in pixels.
+   */
+  float node_width = 128.f;
+
+  /**
+   * @brief Defines whether the user help is shown or not in the settings body.
+   */
+  bool show_help = false;
+
+  /**
+   * @brief Default help text.
+   */
   std::string help_text = "No help available.";
 
 private:
-  gnode::Node    *p_control_node;
+  /**
+   * @brief Reference to the associated control node.
+   */
+  gnode::Node *p_control_node;
+
+  /**
+   * @brief Shape preview.
+   */
   hmap::Vec2<int> shape_preview = {128, 128};
-  int             preview_type = preview_type::grayscale;
-  GLuint          image_texture_preview = 0;
-  void            init_from_control_node();
+
+  /**
+   * @brief Preview type.
+   */
+  int preview_type = preview_type::grayscale;
+
+  /**
+   * @brief OpenGL texture used to store the image preview.
+   */
+  GLuint image_texture_preview = 0;
+
+  /**
+   * @brief Set the control node post-update callback to the view node
+   * post-update method.
+   */
+  void init_from_control_node();
 };
 
+/**
+ * @brief Composite class based on ViewNode (view node) and gnode::Node (control
+ * node). Base class used to build all the view nodes.
+ */
 class ViewControlNode : public ViewNode,
                         public gnode::Node // used to recast derived ViewNode
 {
 public:
+  /**
+   * @brief Constructor, instantiate both the view node and the control node,
+   * and associate them.
+   *
+   * @param id Node id.
+   */
   ViewControlNode(std::string id) : ViewNode(), gnode::Node(id)
   {
     this->set_p_control_node((gnode::Node *)this);
@@ -155,6 +286,9 @@ public:
 
 //
 
+/**
+ * @brief ViewAlterElevation class.
+ */
 class ViewAlterElevation : public ViewNode, public hesiod::cnode::AlterElevation
 {
 public:
