@@ -102,15 +102,8 @@ void array_to_vertices(hmap::Array &array, std::vector<GLfloat> &vertices)
 }
 
 void update_vertex_elevations(hmap::Array          &array,
-                              std::vector<GLfloat> &vertices,
-                              std::vector<GLfloat> &colors)
+                              std::vector<GLfloat> &vertices)
 {
-  hmap::Array hs =
-      hillshade(array, 180.f, 45.f, 10.f * array.ptp() / (float)array.shape.y);
-  hmap::clamp(hs);
-  hs = hmap::pow(hs, 1.5f);
-
-  // --- elevations
   int k = 1;
 
   for (int i = 0; i < array.shape.x - 1; i++)
@@ -135,9 +128,16 @@ void update_vertex_elevations(hmap::Array          &array,
       vertices[k] = array(i + 1, j);
       k += 3;
     }
+}
 
-  // --- colors
-  k = 0;
+void update_vertex_colors(hmap::Array &array, std::vector<GLfloat> &colors)
+{
+  hmap::Array hs =
+      hillshade(array, 180.f, 45.f, 10.f * array.ptp() / (float)array.shape.y);
+  hmap::clamp(hs);
+  hs = hmap::pow(hs, 1.5f);
+
+  int k = 0;
 
   for (int i = 0; i < array.shape.x - 1; i++)
     for (int j = 0; j < array.shape.y - 1; j++)
