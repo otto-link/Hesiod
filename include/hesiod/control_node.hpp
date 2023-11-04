@@ -155,6 +155,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"ValleyWidth", "Features"},
     {"ValueNoiseDelaunay", "Primitive/Coherent Noise"},
     {"ValueNoiseLinear", "Primitive/Coherent Noise"},
+    {"ValueNoiseThinplate", "Primitive/Coherent Noise"},
     {"Warp", "Operator/Transform"},
     {"WarpDownslope", "Operator/Transform"},
     {"WaveDune", "Primitive/Function"},
@@ -1729,6 +1730,21 @@ public:
 protected:
   hmap::Vec2<float> kw = {DEFAULT_KW, DEFAULT_KW};
   int               seed = DEFAULT_SEED;
+};
+
+class ValueNoiseThinplate : public Primitive
+{
+public:
+  ValueNoiseThinplate(std::string     id,
+                      hmap::Vec2<int> shape,
+                      hmap::Vec2<int> tiling,
+                      float           overlap);
+
+  void compute();
+
+protected:
+  float kw = DEFAULT_KW;
+  int   seed = DEFAULT_SEED;
 };
 
 class Warp : public gnode::Node

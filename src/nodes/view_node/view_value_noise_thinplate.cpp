@@ -11,18 +11,18 @@
 namespace hesiod::vnode
 {
 
-ViewValueNoiseDelaunay::ViewValueNoiseDelaunay(std::string     id,
-                                               hmap::Vec2<int> shape,
-                                               hmap::Vec2<int> tiling,
-                                               float           overlap)
-    : ViewNode(), hesiod::cnode::ValueNoiseDelaunay(id, shape, tiling, overlap)
+ViewValueNoiseThinplate::ViewValueNoiseThinplate(std::string     id,
+                                                 hmap::Vec2<int> shape,
+                                                 hmap::Vec2<int> tiling,
+                                                 float           overlap)
+    : ViewNode(), hesiod::cnode::ValueNoiseThinplate(id, shape, tiling, overlap)
 {
-  LOG_DEBUG("ViewValueNoiseDelaunay::ViewValueNoiseDelaunay()");
+  LOG_DEBUG("ViewValueNoiseThinplate::ViewValueNoiseThinplate()");
   this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
 }
 
-bool ViewValueNoiseDelaunay::render_settings()
+bool ViewValueNoiseThinplate::render_settings()
 {
   bool has_changed = false;
 
@@ -55,7 +55,7 @@ bool ViewValueNoiseDelaunay::render_settings()
   return has_changed;
 }
 
-void ViewValueNoiseDelaunay::serialize_save(cereal::JSONOutputArchive &ar)
+void ViewValueNoiseThinplate::serialize_save(cereal::JSONOutputArchive &ar)
 {
   ar(cereal::make_nvp("kw", this->kw));
   ar(cereal::make_nvp("seed", this->seed));
@@ -63,7 +63,7 @@ void ViewValueNoiseDelaunay::serialize_save(cereal::JSONOutputArchive &ar)
   ar(cereal::make_nvp("vmax", this->vmax));
 }
 
-void ViewValueNoiseDelaunay::serialize_load(cereal::JSONInputArchive &ar)
+void ViewValueNoiseThinplate::serialize_load(cereal::JSONInputArchive &ar)
 {
   ar(cereal::make_nvp("kw", this->kw));
   ar(cereal::make_nvp("seed", this->seed));

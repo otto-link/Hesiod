@@ -1443,6 +1443,24 @@ private:
   bool link_kxy = true;
 };
 
+class ViewValueNoiseThinplate : public ViewNode,
+                                public hesiod::cnode::ValueNoiseThinplate
+{
+public:
+  ViewValueNoiseThinplate(std::string     id,
+                          hmap::Vec2<int> shape,
+                          hmap::Vec2<int> tiling,
+                          float           overlap);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+
+private:
+  bool link_kxy = true;
+};
+
 class ViewWarp : public ViewNode, public hesiod::cnode::Warp
 {
 public:
