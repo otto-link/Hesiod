@@ -11,20 +11,20 @@
 namespace hesiod::vnode
 {
 
-ViewPerlin::ViewPerlin(std::string     id,
-                       hmap::Vec2<int> shape,
-                       hmap::Vec2<int> tiling,
-                       float           overlap)
-    : ViewNode(), hesiod::cnode::Perlin(id, shape, tiling, overlap)
+ViewSimplex::ViewSimplex(std::string     id,
+                         hmap::Vec2<int> shape,
+                         hmap::Vec2<int> tiling,
+                         float           overlap)
+    : ViewNode(), hesiod::cnode::Simplex(id, shape, tiling, overlap)
 {
-  LOG_DEBUG("ViewPerlin::ViewPerlin()");
+  LOG_DEBUG("ViewSimplex::ViewSimplex()");
   this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
 
-  this->help_text = "Generate a Perlin noise.";
+  this->help_text = "Generate a Simplex noise.";
 }
 
-bool ViewPerlin::render_settings()
+bool ViewSimplex::render_settings()
 {
   bool has_changed = false;
 
@@ -60,7 +60,7 @@ bool ViewPerlin::render_settings()
   return has_changed;
 }
 
-void ViewPerlin::serialize_save(cereal::JSONOutputArchive &ar)
+void ViewSimplex::serialize_save(cereal::JSONOutputArchive &ar)
 {
   ar(cereal::make_nvp("kw.x", this->kw.x));
   ar(cereal::make_nvp("kw.y", this->kw.y));
@@ -70,7 +70,7 @@ void ViewPerlin::serialize_save(cereal::JSONOutputArchive &ar)
   ar(cereal::make_nvp("vmax", this->vmax));
 }
 
-void ViewPerlin::serialize_load(cereal::JSONInputArchive &ar)
+void ViewSimplex::serialize_load(cereal::JSONInputArchive &ar)
 {
   ar(cereal::make_nvp("kw.x", this->kw.x));
   ar(cereal::make_nvp("kw.y", this->kw.y));

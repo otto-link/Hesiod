@@ -605,6 +605,23 @@ private:
   bool link_kxy = true;
 };
 
+class ViewFbmSimplex : public ViewNode, public hesiod::cnode::FbmSimplex
+{
+public:
+  ViewFbmSimplex(std::string     id,
+                 hmap::Vec2<int> shape,
+                 hmap::Vec2<int> tiling,
+                 float           overlap);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+
+private:
+  bool link_kxy = true;
+};
+
 class ViewFbmWorley : public ViewNode, public hesiod::cnode::FbmWorley
 {
 public:
@@ -1219,6 +1236,23 @@ public:
 
   void serialize_save(cereal::JSONOutputArchive &ar);
   void serialize_load(cereal::JSONInputArchive &ar);
+};
+
+class ViewSimplex : public ViewNode, public hesiod::cnode::Simplex
+{
+public:
+  ViewSimplex(std::string     id,
+              hmap::Vec2<int> shape,
+              hmap::Vec2<int> tiling,
+              float           overlap);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+
+private:
+  bool link_kxy = true;
 };
 
 class ViewSlope : public ViewNode, public hesiod::cnode::Slope

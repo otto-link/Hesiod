@@ -188,6 +188,15 @@ std::string ViewTree::add_view_node(std::string control_node_type,
                                                        this->overlap);
     this->add_node(p_view_node);
   }
+  else if (control_node_type == "FbmSimplex")
+  {
+    std::shared_ptr p_view_node =
+        std::make_shared<hesiod::vnode::ViewFbmSimplex>(id,
+                                                        this->shape,
+                                                        this->tiling,
+                                                        this->overlap);
+    this->add_node(p_view_node);
+  }
   else if (control_node_type == "FbmWorley")
   {
     std::shared_ptr p_view_node =
@@ -510,6 +519,15 @@ std::string ViewTree::add_view_node(std::string control_node_type,
   {
     std::shared_ptr p_view_node =
         std::make_shared<hesiod::vnode::ViewSelectTransitions>(id);
+    this->add_node(p_view_node);
+  }
+  else if (control_node_type == "Simplex")
+  {
+    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewSimplex>(
+        id,
+        this->shape,
+        this->tiling,
+        this->overlap);
     this->add_node(p_view_node);
   }
   else if (control_node_type == "Slope")

@@ -87,6 +87,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"ExpandShrinkDirectional", "Filter/Recast"},
     {"Export", "IO/Files"},
     {"FbmPerlin", "Primitive/Coherent Noise"},
+    {"FbmSimplex", "Primitive/Coherent Noise"},
     {"FbmWorley", "Primitive/Coherent Noise"},
     {"FractalizePath", "Geometry/Path"},
     {"GaborNoise", "Primitive/Coherent Noise"},
@@ -138,6 +139,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"SelectEq", "Mask"},
     {"SelectInterval", "Mask"},
     {"SelectTransitions", "Mask"},
+    {"Simplex", "Primitive/Coherent Noise"},
     {"Slope", "Primitive/Function"},
     {"SmoothCpulse", "Filter/Smoothing"},
     {"SmoothFill", "Filter/Smoothing"},
@@ -685,6 +687,25 @@ public:
             hmap::Vec2<int> shape,
             hmap::Vec2<int> tiling,
             float           overlap);
+
+  void compute();
+
+protected:
+  hmap::Vec2<float> kw = {DEFAULT_KW, DEFAULT_KW};
+  int               seed = DEFAULT_SEED;
+  int               octaves = 8;
+  float             weight = 0.7f;
+  float             persistence = 0.5f;
+  float             lacunarity = 2.f;
+};
+
+class FbmSimplex : public Primitive
+{
+public:
+  FbmSimplex(std::string     id,
+             hmap::Vec2<int> shape,
+             hmap::Vec2<int> tiling,
+             float           overlap);
 
   void compute();
 
@@ -1457,6 +1478,21 @@ protected:
   bool            inverse = false;
   bool            smoothing = false;
   int             ir_smoothing = 16;
+};
+
+class Simplex : public Primitive
+{
+public:
+  Simplex(std::string     id,
+          hmap::Vec2<int> shape,
+          hmap::Vec2<int> tiling,
+          float           overlap);
+
+  void compute();
+
+protected:
+  hmap::Vec2<float> kw = {DEFAULT_KW, DEFAULT_KW};
+  int               seed = DEFAULT_SEED;
 };
 
 class Slope : public gnode::Node
