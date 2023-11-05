@@ -1400,12 +1400,12 @@ protected:
   float             lacunarity = 2.f;
 };
 
-class Rugosity : public Unary
+class Rugosity : public Mask
 {
 public:
   Rugosity(std::string id);
 
-  void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
+  void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
 
 protected:
   int ir = 4;
@@ -1691,12 +1691,12 @@ protected:
   bool            talus_constraint = true;
 };
 
-class ValleyWidth : public Unary
+class ValleyWidth : public Mask
 {
 public:
   ValleyWidth(std::string id);
 
-  void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
+  void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
 
 protected:
   int ir = 4;

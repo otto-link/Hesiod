@@ -10,9 +10,12 @@ namespace hesiod::cnode
 
 Preview::Preview(std::string id) : gnode::Node(id)
 {
-  LOG_DEBUG("Preview::Preview()");
   this->node_type = "Preview";
   this->add_port(gnode::Port("input", gnode::direction::in, dtype::dHeightMap));
+  this->add_port(gnode::Port("colorize",
+                             gnode::direction::in,
+                             dtype::dHeightMap,
+                             gnode::optional::yes));
   this->add_port(
       gnode::Port("output", gnode::direction::out, dtype::dHeightMap));
   this->category = category_mapping.at(this->node_type);

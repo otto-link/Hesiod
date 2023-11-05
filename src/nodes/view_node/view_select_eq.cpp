@@ -14,9 +14,10 @@ namespace hesiod::vnode
 ViewSelectEq::ViewSelectEq(std::string id)
     : ViewNode(), hesiod::cnode::SelectEq(id)
 {
-  LOG_DEBUG("ViewSelectEq::ViewSelectEq()");
   this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
+  this->set_view3d_elevation_port_id("input");
+  this->set_view3d_color_port_id("output");
 }
 
 bool ViewSelectEq::render_settings()

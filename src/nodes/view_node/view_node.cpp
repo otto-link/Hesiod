@@ -36,6 +36,16 @@ std::string ViewNode::get_preview_port_id()
   return this->preview_port_id;
 }
 
+std::string ViewNode::get_view3d_elevation_port_id()
+{
+  return this->view3d_elevation_port_id;
+}
+
+std::string ViewNode::get_view3d_color_port_id()
+{
+  return this->view3d_color_port_id;
+}
+
 void ViewNode::set_p_control_node(gnode::Node *new_p_control_node)
 {
   this->p_control_node = new_p_control_node;
@@ -63,6 +73,29 @@ void ViewNode::set_preview_type(int new_preview_type)
 {
   this->preview_type = new_preview_type;
   this->update_preview();
+}
+
+void ViewNode::set_view3d_elevation_port_id(std::string new_port_id)
+{
+  if (this->p_control_node->is_port_id_in_keys(new_port_id))
+    // NB - viewer update is carried out by the ViewTree object (above)
+    this->view3d_elevation_port_id = new_port_id;
+  else
+  {
+    LOG_ERROR("port id [%s] not found", new_port_id.c_str());
+    throw std::runtime_error("unknown port id");
+  }
+}
+
+void ViewNode::set_view3d_color_port_id(std::string new_port_id)
+{
+  if (this->p_control_node->is_port_id_in_keys(new_port_id))
+    this->view3d_color_port_id = new_port_id;
+  else
+  {
+    LOG_ERROR("port id [%s] not found", new_port_id.c_str());
+    throw std::runtime_error("unknown port id");
+  }
 }
 
 void ViewNode::init_from_control_node()
@@ -267,16 +300,6 @@ bool ViewNode::render_settings_header()
   else
     ImGui::TextColored(ImVec4(1, 1, 0, 1), "To be updated");
 
-  // help text
-  if (this->show_help)
-  {
-    ImGui::Separator();
-    ImGui::TextUnformatted("Help");
-    ImGui::PushTextWrapPos(0.0f);
-    ImGui::TextUnformatted((char *)this->help_text.c_str());
-    ImGui::PopTextWrapPos();
-  }
-
   ImGui::Separator();
 
   return has_changed;
@@ -286,11 +309,10 @@ bool ViewNode::render_settings_footer()
 {
   bool has_changed = false;
 
-  ImGui::Separator();
-
   // preview type
   if (this->preview_port_id != "" && this->show_preview)
   {
+    ImGui::Separator();
     float height = ImGui::GetStyle().ItemSpacing.y +
                    2.f * ImGui::GetTextLineHeightWithSpacing();
     if (ImGui::BeginListBox("Preview type", ImVec2(0.f, height)))
@@ -301,6 +323,16 @@ bool ViewNode::render_settings_footer()
         this->set_preview_type(preview_type::histogram);
       ImGui::EndListBox();
     }
+  }
+
+  // help text
+  if (this->show_help)
+  {
+    ImGui::Separator();
+    ImGui::TextUnformatted("Help");
+    ImGui::PushTextWrapPos(0.0f);
+    ImGui::TextUnformatted((char *)this->help_text.c_str());
+    ImGui::PopTextWrapPos();
   }
 
   ImGui::PopID();
@@ -382,8 +414,8 @@ void img_to_texture(std::vector<uint8_t> img,
   glBindTexture(GL_TEXTURE_2D, image_texture);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 
   // Upload pixels into texture
 #if defined(GL_UNPACK_ROW_LENGTH) && !defined(__EMSCRIPTEN__)
@@ -409,8 +441,8 @@ void img_to_texture_rgb(std::vector<uint8_t> img,
   glBindTexture(GL_TEXTURE_2D, image_texture);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 
   // Upload pixels into texture
 #if defined(GL_UNPACK_ROW_LENGTH) && !defined(__EMSCRIPTEN__)

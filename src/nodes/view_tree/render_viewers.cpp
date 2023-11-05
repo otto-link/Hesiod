@@ -114,7 +114,7 @@ void ViewTree::render_view3d()
   hesiod::vnode::ViewControlNode *p_vnode =
       this->get_view_control_node_ref_by_id(this->viewer_node_id);
 
-  if (p_vnode->get_preview_port_id() != "")
+  if (p_vnode->get_view3d_elevation_port_id() != "")
   {
     {
       if (ImGui::Button("Top"))
@@ -124,20 +124,20 @@ void ViewTree::render_view3d()
         delta_x = 0.f;
         delta_y = 0.f;
         scale = 1.f;
-        this->update_image_texture_view3d(false, false);
+        this->update_image_texture_view3d(false);
       }
       ImGui::SameLine();
 
       if (ImGui::Checkbox("Wireframe", &this->wireframe))
-        this->update_image_texture_view3d(false, false);
+        this->update_image_texture_view3d(false);
       ImGui::SameLine();
 
       ImGui::Checkbox("Auto rotate", &this->auto_rotate);
       if (this->auto_rotate)
-        this->update_image_texture_view3d(false, false);
+        this->update_image_texture_view3d(false);
 
       if (ImGui::SliderFloat("h_scale", &this->h_scale, 0.f, 2.f, "%.2f"))
-        this->update_image_texture_view3d(false, false);
+        this->update_image_texture_view3d(false);
 
       if (hesiod::gui::select_shape("shape (render)",
                                     this->shape_view3d,
@@ -182,20 +182,20 @@ void ViewTree::render_view3d()
         {
           float dscale = factor * this->scale * io.MouseWheel * 0.1f;
           this->scale = std::max(0.05f, this->scale + dscale);
-          this->update_image_texture_view3d(false, false);
+          this->update_image_texture_view3d(false);
         }
 
         if (ImGui::IsMouseDown(0))
         {
           this->alpha_y += 100.f * factor * io.MouseDelta.x / window_width;
           this->alpha_x += 100.f * factor * io.MouseDelta.y / window_width;
-          this->update_image_texture_view3d(false, false);
+          this->update_image_texture_view3d(false);
         }
         if (ImGui::IsMouseDown(2))
         {
           this->delta_x += 4.f * factor * io.MouseDelta.x / window_width;
           this->delta_y -= 4.f * factor * io.MouseDelta.y / window_width;
-          this->update_image_texture_view3d(false, false);
+          this->update_image_texture_view3d(false);
         }
       }
     }
@@ -216,14 +216,37 @@ void ViewTree::update_image_texture_view2d()
     hesiod::vnode::ViewControlNode *p_vnode =
         this->get_view_control_node_ref_by_id(this->viewer_node_id);
 
-    if (p_vnode->get_preview_port_id() != "")
+    std::string data_pid = p_vnode->get_preview_port_id();
+
+    if (data_pid != "")
     {
-      void *p_data = p_vnode->get_p_data(p_vnode->get_preview_port_id());
+      void *p_data = p_vnode->get_p_data(data_pid);
 
       if (p_data)
       {
-        hmap::HeightMap *p_h = (hmap::HeightMap *)p_data;
-        hmap::Array      array = p_h->to_array(this->shape_view2d);
+        hmap::Array array;
+
+        switch (p_vnode->get_port_ref_by_id(data_pid)->dtype)
+        {
+        case hesiod::cnode::dtype::dHeightMap:
+        {
+          hmap::HeightMap *p_h = (hmap::HeightMap *)p_data;
+          array = p_h->to_array(this->shape_view2d);
+        }
+        break;
+
+        case hesiod::cnode::dtype::dArray:
+        {
+          array =
+              ((hmap::Array *)p_data)->resample_to_shape(this->shape_view2d);
+        }
+        break;
+
+        default:
+          LOG_ERROR("data type not suitable for 2d viewer");
+        }
+
+        LOG_DEBUG("%f %f", array.min(), array.max());
 
         std::vector<uint8_t> img = hmap::colorize(array,
                                                   array.min(),
@@ -237,46 +260,91 @@ void ViewTree::update_image_texture_view2d()
   }
 }
 
-void ViewTree::update_image_texture_view3d(bool elevation_update,
-                                           bool color_update)
+void ViewTree::update_image_texture_view3d(bool vertex_array_update)
 {
   if (this->is_node_id_in_keys(this->viewer_node_id))
   {
     hesiod::vnode::ViewControlNode *p_vnode =
         this->get_view_control_node_ref_by_id(this->viewer_node_id);
 
-    if (p_vnode->get_preview_port_id() != "")
+    std::string elevation_pid = p_vnode->get_view3d_elevation_port_id();
+    std::string color_pid = p_vnode->get_view3d_color_port_id();
+
+    if (elevation_pid != "")
     {
-      void *p_data = p_vnode->get_p_data(p_vnode->get_preview_port_id());
+      void *p_elev = p_vnode->get_p_data(elevation_pid);
+      void *p_color = color_pid == "" ? nullptr
+                                      : p_vnode->get_p_data(color_pid);
 
-      if (p_data)
+      if (p_elev) // elevation data are actually available
       {
-        if (elevation_update || color_update)
+        if (vertex_array_update)
         {
-          hmap::HeightMap *p_h = (hmap::HeightMap *)p_data;
-          hmap::Array      array = p_h->to_array(this->shape_view3d);
+          // TODO extend to arrays
+          hmap::HeightMap *p_h = (hmap::HeightMap *)p_elev;
+          hmap::Array      z = p_h->to_array(this->shape_view3d);
 
-          if (elevation_update)
+          hesiod::viewer::update_vertex_elevations(z, this->vertices);
+
+          if (!p_color)
+            // color is undefined (on purpose or data not available),
+            // only solid white and hillshading
+            hesiod::viewer::update_vertex_colors(z, this->colors);
+          else
           {
-            hesiod::viewer::update_vertex_elevations(array, this->vertices);
+            switch (p_vnode->get_port_ref_by_id(color_pid)->dtype)
+            {
+            case hesiod::cnode::dtype::dHeightMap:
+            {
+              // the color data are provided as an heightmap => it
+              // is assigned to the Red channel, other channels are
+              // set to zero
+              hmap::HeightMap *p_c = (hmap::HeightMap *)p_color;
+              hmap::Array      c = 1.f - p_c->to_array(this->shape_view3d);
+              hesiod::viewer::update_vertex_colors(z, c, this->colors);
+            }
+            break;
 
-            glBindBuffer(GL_ARRAY_BUFFER, this->vertex_buffer);
-            glBufferData(GL_ARRAY_BUFFER,
-                         sizeof(this->vertices[0]) * this->vertices.size(),
-                         (GLvoid *)&this->vertices[0],
-                         GL_STATIC_DRAW);
+            case hesiod::cnode::dtype::dPath:
+            {
+              LOG_DEBUG("path");
+              // project path to an array (with 0 and 1 only)
+              hmap::Path *p_path = (hmap::Path *)p_color;
+              if (p_path->get_npoints() > 1)
+              {
+                hmap::Array c = hmap::Array(this->shape_view3d);
+                hmap::Path  path_copy = *p_path;
+                path_copy.set_values(1.f);
+                hmap::Vec4<float> bbox = hmap::Vec4<float>(0.f, 1.f, 0.f, 1.f);
+                path_copy.to_array(c, bbox);
+                c = 1.f - c;
+                hesiod::viewer::update_vertex_colors(z, c, this->colors);
+              }
+              else
+                hesiod::viewer::update_vertex_colors(z, this->colors);
+            }
+            break;
+
+              // TODO : case for incoming RGB texture
+
+            default:
+              // render a black surface
+              for (auto &v : this->colors)
+                v = 0.f;
+            }
           }
 
-          if (color_update)
-          {
-            hesiod::viewer::update_vertex_colors(array, this->colors);
+          glBindBuffer(GL_ARRAY_BUFFER, this->vertex_buffer);
+          glBufferData(GL_ARRAY_BUFFER,
+                       sizeof(this->vertices[0]) * this->vertices.size(),
+                       (GLvoid *)&this->vertices[0],
+                       GL_STATIC_DRAW);
 
-            glBindBuffer(GL_ARRAY_BUFFER, this->color_buffer);
-            glBufferData(GL_ARRAY_BUFFER,
-                         sizeof(this->colors[0]) * this->colors.size(),
-                         (GLvoid *)&this->colors[0],
-                         GL_STATIC_DRAW);
-          }
+          glBindBuffer(GL_ARRAY_BUFFER, this->color_buffer);
+          glBufferData(GL_ARRAY_BUFFER,
+                       sizeof(this->colors[0]) * this->colors.size(),
+                       (GLvoid *)&this->colors[0],
+                       GL_STATIC_DRAW);
         }
 
         hesiod::viewer::bind_framebuffer(this->FBO);
@@ -369,7 +437,6 @@ void ViewTree::update_image_texture_view3d(bool elevation_update,
 
 void ViewTree::update_view3d_basemesh()
 {
-  LOG_DEBUG("here");
   glBindVertexArray(this->vertex_array_id);
 
   hesiod::viewer::generate_basemesh(this->shape_view3d,

@@ -14,9 +14,9 @@ namespace hesiod::vnode
 ViewStratifyMultiscale::ViewStratifyMultiscale(std::string id)
     : ViewNode(), hesiod::cnode::StratifyMultiscale(id)
 {
-  LOG_DEBUG("ViewStratifyMultiscale::ViewStratifyMultiscale()");
   this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
+  this->set_view3d_elevation_port_id("output");
 }
 
 bool ViewStratifyMultiscale::render_settings()

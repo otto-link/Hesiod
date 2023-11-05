@@ -14,9 +14,9 @@ namespace hesiod::vnode
 ViewThermalAutoBedrock::ViewThermalAutoBedrock(std::string id)
     : ViewNode(), hesiod::cnode::ThermalAutoBedrock(id)
 {
-  LOG_DEBUG("ViewThermalAutoBedrock::ViewThermalAutoBedrock()");
   this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
+  this->set_view3d_elevation_port_id("output");
 }
 
 bool ViewThermalAutoBedrock::render_settings()

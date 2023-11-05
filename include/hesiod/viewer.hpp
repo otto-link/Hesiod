@@ -20,10 +20,13 @@ void generate_basemesh(hmap::Vec2<int>       shape,
 
 void array_to_vertices(hmap::Array &array, std::vector<GLfloat> &vertices);
 
-void update_vertex_elevations(hmap::Array          &array,
-                              std::vector<GLfloat> &vertices);
+void update_vertex_elevations(hmap::Array &z, std::vector<GLfloat> &vertices);
 
-void update_vertex_colors(hmap::Array &array, std::vector<GLfloat> &colors);
+void update_vertex_colors(hmap::Array &z, std::vector<GLfloat> &colors);
+
+void update_vertex_colors(hmap::Array          &z,
+                          hmap::Array          &color,
+                          std::vector<GLfloat> &colors);
 
 //----------------------------------------
 // frame buffers

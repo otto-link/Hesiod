@@ -119,8 +119,7 @@ public:
 
   void update_image_texture_view2d();
 
-  void update_image_texture_view3d(bool elevation_update = true,
-                                   bool color_update = true);
+  void update_image_texture_view3d(bool vertex_array_update = true);
 
   void update_view3d_basemesh();
 

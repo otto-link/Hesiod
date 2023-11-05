@@ -10,10 +10,9 @@ namespace hesiod::vnode
 
 ViewDebug::ViewDebug(std::string id) : ViewNode(), hesiod::cnode::Debug(id)
 {
-  LOG_DEBUG("hash_id: %d", this->hash_id);
-  LOG_DEBUG("label: %s", this->label.c_str());
   this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("input");
+  this->set_view3d_elevation_port_id("input");
 }
 
 void ViewDebug::export_to_png()

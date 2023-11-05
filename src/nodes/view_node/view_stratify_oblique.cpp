@@ -14,9 +14,9 @@ namespace hesiod::vnode
 ViewStratifyOblique::ViewStratifyOblique(std::string id)
     : ViewNode(), hesiod::cnode::StratifyOblique(id)
 {
-  LOG_DEBUG("ViewStratifyOblique::ViewStratifyOblique()");
   this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
+  this->set_view3d_elevation_port_id("output");
 }
 
 bool ViewStratifyOblique::render_settings()

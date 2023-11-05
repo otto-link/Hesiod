@@ -14,9 +14,9 @@ namespace hesiod::vnode
 ViewThermal::ViewThermal(std::string id)
     : ViewNode(), hesiod::cnode::Thermal(id)
 {
-  LOG_DEBUG("ViewThermal::ViewThermal()");
   this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
+  this->set_view3d_elevation_port_id("output");
 }
 
 bool ViewThermal::render_settings()

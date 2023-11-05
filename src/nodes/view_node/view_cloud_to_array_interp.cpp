@@ -17,9 +17,9 @@ ViewCloudToArrayInterp::ViewCloudToArrayInterp(std::string     id,
                                                float           overlap)
     : ViewNode(), hesiod::cnode::CloudToArrayInterp(id, shape, tiling, overlap)
 {
-  LOG_DEBUG("ViewCloudToArrayInterp::ViewCloudToArrayInterp()");
   this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
+  this->set_view3d_elevation_port_id("output");
 }
 
 bool ViewCloudToArrayInterp::render_settings()

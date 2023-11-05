@@ -13,6 +13,7 @@ ViewHydraulicAlgebric::ViewHydraulicAlgebric(std::string id)
 {
   this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
+  this->set_view3d_elevation_port_id("output");
 }
 
 bool ViewHydraulicAlgebric::render_settings()

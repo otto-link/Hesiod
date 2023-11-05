@@ -1,3 +1,6 @@
+#define _USE_MATH_DEFINES
+typedef unsigned int uint;
+
 #include <iostream>
 #include <memory>
 #include <string>

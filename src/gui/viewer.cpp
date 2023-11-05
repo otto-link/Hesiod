@@ -101,46 +101,42 @@ void array_to_vertices(hmap::Array &array, std::vector<GLfloat> &vertices)
     }
 }
 
-void update_vertex_elevations(hmap::Array          &array,
-                              std::vector<GLfloat> &vertices)
+void update_vertex_elevations(hmap::Array &z, std::vector<GLfloat> &vertices)
 {
   int k = 1;
 
-  for (int i = 0; i < array.shape.x - 1; i++)
-    for (int j = 0; j < array.shape.y - 1; j++)
+  for (int i = 0; i < z.shape.x - 1; i++)
+    for (int j = 0; j < z.shape.y - 1; j++)
     {
-      vertices[k] = array(i, j);
+      vertices[k] = z(i, j);
       k += 3;
 
-      vertices[k] = array(i, j + 1);
+      vertices[k] = z(i, j + 1);
       k += 3;
 
-      vertices[k] = array(i + 1, j + 1);
+      vertices[k] = z(i + 1, j + 1);
       k += 3;
 
       //
-      vertices[k] = array(i, j);
+      vertices[k] = z(i, j);
       k += 3;
 
-      vertices[k] = array(i + 1, j + 1);
+      vertices[k] = z(i + 1, j + 1);
       k += 3;
 
-      vertices[k] = array(i + 1, j);
+      vertices[k] = z(i + 1, j);
       k += 3;
     }
 }
 
-void update_vertex_colors(hmap::Array &array, std::vector<GLfloat> &colors)
+void update_vertex_colors(hmap::Array &z, std::vector<GLfloat> &colors)
 {
-  hmap::Array hs =
-      hillshade(array, 180.f, 45.f, 10.f * array.ptp() / (float)array.shape.y);
-  hmap::clamp(hs);
+  hmap::Array hs = hillshade(z, 180.f, 45.f, 10.f * z.ptp() / (float)z.shape.y);
   hs = hmap::pow(hs, 1.5f);
-
   int k = 0;
 
-  for (int i = 0; i < array.shape.x - 1; i++)
-    for (int j = 0; j < array.shape.y - 1; j++)
+  for (int i = 0; i < z.shape.x - 1; i++)
+    for (int j = 0; j < z.shape.y - 1; j++)
     {
       colors[k++] = hs(i, j);
       colors[k++] = hs(i, j);
@@ -164,6 +160,44 @@ void update_vertex_colors(hmap::Array &array, std::vector<GLfloat> &colors)
 
       colors[k++] = hs(i + 1, j);
       colors[k++] = hs(i + 1, j);
+      colors[k++] = hs(i + 1, j);
+    }
+}
+
+void update_vertex_colors(hmap::Array          &z,
+                          hmap::Array          &c,
+                          std::vector<GLfloat> &colors)
+{
+  hmap::Array hs = hillshade(z, 180.f, 45.f, 10.f * z.ptp() / (float)z.shape.y);
+  hs = hmap::pow(hs, 1.5f);
+
+  int k = 0;
+
+  for (int i = 0; i < z.shape.x - 1; i++)
+    for (int j = 0; j < z.shape.y - 1; j++)
+    {
+      colors[k++] = hs(i, j);
+      colors[k++] = hs(i, j) * c(i, j);
+      colors[k++] = hs(i, j);
+
+      colors[k++] = hs(i, j + 1);
+      colors[k++] = hs(i, j + 1) * c(i, j + 1);
+      colors[k++] = hs(i, j + 1);
+
+      colors[k++] = hs(i + 1, j + 1);
+      colors[k++] = hs(i + 1, j + 1) * c(i + 1, j + 1);
+      colors[k++] = hs(i + 1, j + 1);
+
+      colors[k++] = hs(i, j);
+      colors[k++] = hs(i, j) * c(i, j);
+      colors[k++] = hs(i, j);
+
+      colors[k++] = hs(i + 1, j + 1);
+      colors[k++] = hs(i + 1, j + 1) * c(i + 1, j + 1);
+      colors[k++] = hs(i + 1, j + 1);
+
+      colors[k++] = hs(i + 1, j);
+      colors[k++] = hs(i + 1, j) * c(i + 1, j);
       colors[k++] = hs(i + 1, j);
     }
 }

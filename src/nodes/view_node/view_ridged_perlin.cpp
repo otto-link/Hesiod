@@ -17,9 +17,9 @@ ViewRidgedPerlin::ViewRidgedPerlin(std::string     id,
                                    float           overlap)
     : ViewNode(), hesiod::cnode::RidgedPerlin(id, shape, tiling, overlap)
 {
-  LOG_DEBUG("ViewRidgedPerlin::ViewRidgedPerlin()");
   this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
+  this->set_view3d_elevation_port_id("output");
 }
 
 bool ViewRidgedPerlin::render_settings()

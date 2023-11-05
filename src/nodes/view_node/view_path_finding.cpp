@@ -13,6 +13,18 @@ ViewPathFinding::ViewPathFinding(std::string id)
     : ViewNode(), hesiod::cnode::PathFinding(id)
 {
   this->set_p_control_node((gnode::Node *)this);
+  this->set_view3d_elevation_port_id("heightmap");
+  this->set_view3d_color_port_id("output");
+
+  this->help_text =
+      "Find the lowest elevation and elevation difference path for each edge "
+      "of the input path, assuming this path lies on the input "
+      "heightmap.\n'elevation_ratio': Balance between absolute elevation and "
+      "elevation difference in the cost function.\n'distance_exponent': "
+      "Exponent of the distance calculation between two points. Increasing the "
+      "distance exponent of the cost function increases the cost of elevation "
+      "gaps: path then tends to stay at the same elevation if possible (i.e. "
+      "reduce the overall cumulative elevation gain).";
 }
 
 void ViewPathFinding::render_node_specific_content()

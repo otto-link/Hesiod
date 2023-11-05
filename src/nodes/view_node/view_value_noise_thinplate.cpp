@@ -17,9 +17,9 @@ ViewValueNoiseThinplate::ViewValueNoiseThinplate(std::string     id,
                                                  float           overlap)
     : ViewNode(), hesiod::cnode::ValueNoiseThinplate(id, shape, tiling, overlap)
 {
-  LOG_DEBUG("ViewValueNoiseThinplate::ViewValueNoiseThinplate()");
   this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
+  this->set_view3d_elevation_port_id("output");
 }
 
 bool ViewValueNoiseThinplate::render_settings()

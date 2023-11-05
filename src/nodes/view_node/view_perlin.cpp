@@ -17,9 +17,9 @@ ViewPerlin::ViewPerlin(std::string     id,
                        float           overlap)
     : ViewNode(), hesiod::cnode::Perlin(id, shape, tiling, overlap)
 {
-  LOG_DEBUG("ViewPerlin::ViewPerlin()");
   this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
+  this->set_view3d_elevation_port_id("output");
 
   this->help_text = "Generate a Perlin noise.";
 }

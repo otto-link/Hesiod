@@ -123,11 +123,25 @@ public:
   gnode::Node *get_p_control_node();
 
   /**
-   * @brief Get the preview port id.
+   * @brief Get the view3d port id.
    *
    * @return std::string Port id.
    */
   std::string get_preview_port_id();
+
+  /**
+   * @brief Get the view3d elevation port id.
+   *
+   * @return std::string
+   */
+  std::string get_view3d_elevation_port_id();
+
+  /**
+   * @brief Get the view3d color port id.
+   *
+   * @return std::string
+   */
+  std::string get_view3d_color_port_id();
 
   /**
    * @brief Set the reference to the associated control node.
@@ -151,6 +165,20 @@ public:
    * @param new_preview_type New preview type.
    */
   void set_preview_type(int new_preview_type);
+
+  /**
+   * @brief Set the view3d elevation port id.
+   *
+   * @param new_port_id
+   */
+  void set_view3d_elevation_port_id(std::string new_port_id);
+
+  /**
+   * @brief Set the view3d color port id.
+   *
+   * @param new_port_id
+   */
+  void set_view3d_color_port_id(std::string new_port_id);
 
   /**
    * @brief Method called after every update of the control node.
@@ -215,6 +243,16 @@ protected:
    * @brief Port id of the data displayed in the preview.
    */
   std::string preview_port_id = "";
+
+  /**
+   * @brief Port id of the elevation data displayed in the 3D viewer.
+   */
+  std::string view3d_elevation_port_id = "";
+
+  /**
+   * @brief Port id of the color data displayed in the 3D viewer.
+   */
+  std::string view3d_color_port_id = "";
 
   /**
    * @brief Defines whether the preview is shown or not in the node body.

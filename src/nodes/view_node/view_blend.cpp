@@ -13,6 +13,7 @@ ViewBlend::ViewBlend(std::string id) : ViewNode(), hesiod::cnode::Blend(id)
 {
   this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
+  this->set_view3d_elevation_port_id("output");
 }
 
 bool ViewBlend::render_settings()
