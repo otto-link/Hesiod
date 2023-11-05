@@ -23,7 +23,7 @@ bool ViewRugosity::render_settings()
   bool has_changed = false;
   has_changed |= this->render_settings_header();
 
-  ImGui::SliderInt("ir", &this->ir, 8, 128);
+  ImGui::SliderInt("ir", &this->ir, 1, 128);
   has_changed |= this->trigger_update_after_edit();
 
   ImGui::Separator();

@@ -22,10 +22,7 @@ void Rugosity::compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in)
   hmap::transform(h_out,
                   *p_h_in,
                   [this](hmap::Array &out, hmap::Array &in)
-                  {
-                    out = hmap::rugosity(in, this->ir);
-                    hmap::clamp(out, 0.f, 1e6f);
-                  });
+                  { out = hmap::rugosity(in, this->ir); });
 }
 
 } // namespace hesiod::cnode

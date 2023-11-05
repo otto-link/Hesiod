@@ -246,8 +246,6 @@ void ViewTree::update_image_texture_view2d()
           LOG_ERROR("data type not suitable for 2d viewer");
         }
 
-        LOG_DEBUG("%f %f", array.min(), array.max());
-
         std::vector<uint8_t> img = hmap::colorize(array,
                                                   array.min(),
                                                   array.max(),
