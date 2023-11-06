@@ -1264,6 +1264,17 @@ public:
   void serialize_load(cereal::JSONInputArchive &ar);
 };
 
+class ViewSelectRivers : public ViewNode, public hesiod::cnode::SelectRivers
+{
+public:
+  ViewSelectRivers(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewSelectTransitions : public ViewNode,
                               public hesiod::cnode::SelectTransitions
 {

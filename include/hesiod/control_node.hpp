@@ -138,6 +138,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"SelectCavities", "Mask"},
     {"SelectEq", "Mask"},
     {"SelectInterval", "Mask"},
+    {"SelectRivers", "Mask"}, // not distributed
     {"SelectTransitions", "Mask"},
     {"Simplex", "Primitive/Coherent Noise"},
     {"Slope", "Primitive/Function"},
@@ -976,7 +977,7 @@ protected:
   float c_erosion = 0.05f;
   float talus_ref = 0.1f;
   int   ir = 1;
-  float clipping_ratio = 10;
+  float clipping_ratio = 10.f;
 };
 
 class HydraulicVpipes : public Erosion
@@ -1462,6 +1463,18 @@ public:
 protected:
   float value1 = 0.f;
   float value2 = 1.f;
+};
+
+class SelectRivers : public Mask
+{
+public:
+  SelectRivers(std::string id);
+
+  void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
+
+protected:
+  float talus_ref = 0.1f;
+  float clipping_ratio = 10.f;
 };
 
 class SelectTransitions : public gnode::Node
