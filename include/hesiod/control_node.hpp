@@ -66,6 +66,7 @@ static const std::map<std::string, std::string> category_mapping = {
     // {"AlterElevation", "Operator/Transform"}, // BROKEN
     {"BaseElevation", "Primitive/Manual"},
     {"BezierPath", "Geometry/Path"},
+    {"BiquadPulse", "Primitive/Function"},
     {"Blend", "Operator/Blend"},
     {"Brush", "Primitive/Manual"},
     {"Bump", "Primitive/Function"},
@@ -384,6 +385,20 @@ protected:
   hmap::Path value_out = hmap::Path();
   float      curvature_ratio = 0.3f;
   int        edge_divisions = 10;
+};
+
+class BiquadPulse : public Primitive
+{
+public:
+  BiquadPulse(std::string     id,
+              hmap::Vec2<int> shape,
+              hmap::Vec2<int> tiling,
+              float           overlap);
+
+  void compute();
+
+protected:
+  float gain = 1.f;
 };
 
 class Blend : public Binary
@@ -1474,7 +1489,7 @@ public:
 
 protected:
   float talus_ref = 0.1f;
-  float clipping_ratio = 10.f;
+  float clipping_ratio = 50.f;
 };
 
 class SelectTransitions : public gnode::Node

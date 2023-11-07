@@ -44,6 +44,15 @@ std::string ViewTree::add_view_node(std::string control_node_type,
         std::make_shared<hesiod::vnode::ViewBezierPath>(id);
     this->add_node(p_view_node);
   }
+  else if (control_node_type == "BiquadPulse")
+  {
+    std::shared_ptr p_view_node =
+        std::make_shared<hesiod::vnode::ViewBiquadPulse>(id,
+                                                         this->shape,
+                                                         this->tiling,
+                                                         this->overlap);
+    this->add_node(p_view_node);
+  }
   else if (control_node_type == "Blend")
   {
     std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewBlend>(
