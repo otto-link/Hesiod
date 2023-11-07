@@ -26,6 +26,15 @@ bool ViewRugosity::render_settings()
   ImGui::SliderInt("ir", &this->ir, 1, 128);
   has_changed |= this->trigger_update_after_edit();
 
+  ImGui::Checkbox("clamp_max", &this->clamp_max);
+  has_changed |= this->trigger_update_after_edit();
+
+  if (this->clamp_max)
+  {
+    ImGui::SliderFloat("vc_max", &this->vc_max, 0.f, 10.f, "%.2f");
+    has_changed |= this->trigger_update_after_edit();
+  }
+
   ImGui::Separator();
 
   if (render_settings_mask(this->smoothing,
@@ -44,6 +53,8 @@ bool ViewRugosity::render_settings()
 void ViewRugosity::serialize_save(cereal::JSONOutputArchive &ar)
 {
   ar(cereal::make_nvp("ir", this->ir));
+  ar(cereal::make_nvp("clamp_max", this->clamp_max));
+  ar(cereal::make_nvp("vc_max", this->vc_max));
 
   ar(cereal::make_nvp("normalize", this->normalize));
   ar(cereal::make_nvp("inverse", this->inverse));
@@ -54,6 +65,8 @@ void ViewRugosity::serialize_save(cereal::JSONOutputArchive &ar)
 void ViewRugosity::serialize_load(cereal::JSONInputArchive &ar)
 {
   ar(cereal::make_nvp("ir", this->ir));
+  ar(cereal::make_nvp("clamp_max", this->clamp_max));
+  ar(cereal::make_nvp("vc_max", this->vc_max));
 
   ar(cereal::make_nvp("normalize", this->normalize));
   ar(cereal::make_nvp("inverse", this->inverse));

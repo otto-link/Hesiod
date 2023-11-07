@@ -1424,7 +1424,9 @@ public:
   void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
 
 protected:
-  int ir = 4;
+  int   ir = 8;
+  bool  clamp_max = false;
+  float vc_max = 1.f;
 };
 
 class SedimentDeposition : public gnode::Node
