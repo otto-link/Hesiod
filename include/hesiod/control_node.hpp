@@ -158,6 +158,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Thermal", "Erosion/Thermal"},
     {"ThermalAutoBedrock", "Erosion/Thermal"},
     {"ThermalScree", "Erosion/Thermal"},
+    {"ToMask", "Mask"},
     {"ValleyWidth", "Features"},
     {"ValueNoiseDelaunay", "Primitive/Coherent Noise"},
     {"ValueNoiseLinear", "Primitive/Coherent Noise"},
@@ -1764,6 +1765,14 @@ protected:
   float           landing_talus_ratio = 1.f;
   float           landing_width_ratio = 0.25f;
   bool            talus_constraint = true;
+};
+
+class ToMask : public Mask
+{
+public:
+  ToMask(std::string id);
+
+  void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
 };
 
 class ValleyWidth : public Mask

@@ -1502,6 +1502,17 @@ public:
   void serialize_load(cereal::JSONInputArchive &ar);
 };
 
+class ViewToMask : public ViewNode, public hesiod::cnode::ToMask
+{
+public:
+  ViewToMask(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewValleyWidth : public ViewNode, public hesiod::cnode::ValleyWidth
 {
 public:

@@ -230,13 +230,13 @@ void ViewTree::update_image_texture_view2d()
         {
         case hesiod::cnode::dtype::dHeightMap:
         {
-          hmap::HeightMap     *p_h = (hmap::HeightMap *)p_data;
-          hmap::Array          array = p_h->to_array(this->shape_view2d);
-          std::vector<uint8_t> img = hmap::colorize(array,
-                                                    array.min(),
-                                                    array.max(),
-                                                    this->cmap_view2d,
-                                                    this->hillshade_view2d);
+          hmap::HeightMap *p_h = (hmap::HeightMap *)p_data;
+          hmap::Array      array = p_h->to_array(this->shape_view2d);
+          img = hmap::colorize(array,
+                               array.min(),
+                               array.max(),
+                               this->cmap_view2d,
+                               this->hillshade_view2d);
         }
         break;
 
@@ -252,11 +252,11 @@ void ViewTree::update_image_texture_view2d()
         {
           hmap::Array array =
               ((hmap::Array *)p_data)->resample_to_shape(this->shape_view2d);
-          std::vector<uint8_t> img = hmap::colorize(array,
-                                                    array.min(),
-                                                    array.max(),
-                                                    this->cmap_view2d,
-                                                    this->hillshade_view2d);
+          img = hmap::colorize(array,
+                               array.min(),
+                               array.max(),
+                               this->cmap_view2d,
+                               this->hillshade_view2d);
         }
         break;
 
