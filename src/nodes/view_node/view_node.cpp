@@ -386,6 +386,18 @@ void ViewNode::update_preview()
 
         img_to_texture(img, this->shape_preview, this->image_texture_preview);
       }
+      else if (port_dtype == hesiod::cnode::dHeightMapRGB)
+      {
+        hmap::HeightMapRGB  *p_c = (hmap::HeightMapRGB *)p_data;
+        std::vector<uint8_t> img = {};
+
+        if (p_c->shape.x > 0)
+          img = p_c->to_img_8bit(this->shape_preview);
+
+        img_to_texture_rgb(img,
+                           this->shape_preview,
+                           this->image_texture_preview);
+      }
       else if (port_dtype == hesiod::cnode::dArray)
       {
         hmap::Array         *p_a = (hmap::Array *)p_data;

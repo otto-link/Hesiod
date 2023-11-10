@@ -202,6 +202,46 @@ void update_vertex_colors(hmap::Array          &z,
     }
 }
 
+void update_vertex_colors(hmap::Array          &z,
+                          hmap::Array          &r,
+                          hmap::Array          &g,
+                          hmap::Array          &b,
+                          std::vector<GLfloat> &colors)
+{
+  hmap::Array hs = hillshade(z, 180.f, 45.f, 10.f * z.ptp() / (float)z.shape.y);
+  hs = hmap::pow(hs, 1.5f);
+
+  int k = 0;
+
+  for (int i = 0; i < z.shape.x - 1; i++)
+    for (int j = 0; j < z.shape.y - 1; j++)
+    {
+      colors[k++] = hs(i, j) * r(i, j);
+      colors[k++] = hs(i, j) * g(i, j);
+      colors[k++] = hs(i, j) * b(i, j);
+
+      colors[k++] = hs(i, j + 1) * r(i, j + 1);
+      colors[k++] = hs(i, j + 1) * g(i, j + 1);
+      colors[k++] = hs(i, j + 1) * b(i, j + 1);
+
+      colors[k++] = hs(i + 1, j + 1) * r(i + 1, j + 1);
+      colors[k++] = hs(i + 1, j + 1) * g(i + 1, j + 1);
+      colors[k++] = hs(i + 1, j + 1) * b(i + 1, j + 1);
+
+      colors[k++] = hs(i, j) * r(i, j);
+      colors[k++] = hs(i, j) * g(i, j);
+      colors[k++] = hs(i, j) * b(i, j);
+
+      colors[k++] = hs(i + 1, j + 1) * r(i + 1, j + 1);
+      colors[k++] = hs(i + 1, j + 1) * g(i + 1, j + 1);
+      colors[k++] = hs(i + 1, j + 1) * b(i + 1, j + 1);
+
+      colors[k++] = hs(i + 1, j) * r(i + 1, j);
+      colors[k++] = hs(i + 1, j) * g(i + 1, j);
+      colors[k++] = hs(i + 1, j) * b(i + 1, j);
+    }
+}
+
 //----------------------------------------
 // frame buffers
 //----------------------------------------

@@ -8,25 +8,25 @@
 namespace hesiod::cnode
 {
 
-Preview::Preview(std::string id) : gnode::Node(id)
+PreviewColorize::PreviewColorize(std::string id) : gnode::Node(id)
 {
-  this->node_type = "Preview";
+  this->node_type = "PreviewColorize";
   this->add_port(gnode::Port("input", gnode::direction::in, dtype::dHeightMap));
-  this->add_port(gnode::Port("color mask",
+  this->add_port(gnode::Port("RGB",
                              gnode::direction::in,
-                             dtype::dHeightMap,
+                             dtype::dHeightMapRGB,
                              gnode::optional::yes));
   this->add_port(gnode::Port("thru", gnode::direction::out, dtype::dHeightMap));
   this->category = category_mapping.at(this->node_type);
   this->update_inner_bindings();
 }
 
-void Preview::update_inner_bindings()
+void PreviewColorize::update_inner_bindings()
 {
   this->set_p_data("thru", this->get_p_data("input"));
 }
 
-void Preview::compute()
+void PreviewColorize::compute()
 {
   // nothing here
 }

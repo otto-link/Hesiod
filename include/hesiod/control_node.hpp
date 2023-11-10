@@ -22,6 +22,7 @@ enum dtype : int
   dArray,
   dCloud,
   dHeightMap,
+  dHeightMapRGB,
   dPath
 };
 
@@ -76,6 +77,8 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Clone", "Routing"},
     {"Cloud", "Geometry/Cloud"},
     {"CloudToArrayInterp", "Primitive/Manual"},
+    {"Colorize", "Texture"},
+    {"PreviewColorize", "Texture"},
     {"ConvolveSVD", "Math/Convolution"},
     // {"CubicPulseTruncated", "Primitive/Kernel"}, // useless
     {"Debug", "Debug"},
@@ -87,6 +90,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"ExpandShrink", "Filter/Recast"},
     {"ExpandShrinkDirectional", "Filter/Recast"},
     {"Export", "IO/Files"},
+    {"ExportRGB", "IO/Files"},
     {"FbmPerlin", "Primitive/Coherent Noise"},
     {"FbmSimplex", "Primitive/Coherent Noise"},
     {"FbmWorley", "Primitive/Coherent Noise"},
@@ -546,6 +550,23 @@ protected:
   int interpolation_method = 0;
 };
 
+class Colorize : public gnode::Node
+{
+public:
+  Colorize(std::string id);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::HeightMapRGB value_out = hmap::HeightMapRGB();
+  bool               reverse = false;
+  bool               clamp = false;
+  float              vmin = 0.f;
+  float              vmax = 1.f;
+};
+
 class ConvolveSVD : public gnode::Node
 {
 public:
@@ -695,6 +716,20 @@ protected:
   bool        auto_export = false;
   int         export_format = export_type::png8bit;
   std::string fname = "export.png";
+};
+
+class ExportRGB : public gnode::Node
+{
+public:
+  ExportRGB(std::string id);
+
+  void compute();
+
+  void write_file();
+
+protected:
+  bool        auto_export = false;
+  std::string fname = "export_rgb.png";
 };
 
 class FbmPerlin : public Primitive
@@ -1322,6 +1357,16 @@ class Preview : public gnode::Node
 {
 public:
   Preview(std::string id);
+
+  void compute();
+
+  void update_inner_bindings();
+};
+
+class PreviewColorize : public gnode::Node
+{
+public:
+  PreviewColorize(std::string id);
 
   void compute();
 

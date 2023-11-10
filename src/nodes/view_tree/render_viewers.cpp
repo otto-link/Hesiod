@@ -224,33 +224,45 @@ void ViewTree::update_image_texture_view2d()
 
       if (p_data)
       {
-        hmap::Array array;
+        std::vector<uint8_t> img = {};
 
         switch (p_vnode->get_port_ref_by_id(data_pid)->dtype)
         {
         case hesiod::cnode::dtype::dHeightMap:
         {
-          hmap::HeightMap *p_h = (hmap::HeightMap *)p_data;
-          array = p_h->to_array(this->shape_view2d);
+          hmap::HeightMap     *p_h = (hmap::HeightMap *)p_data;
+          hmap::Array          array = p_h->to_array(this->shape_view2d);
+          std::vector<uint8_t> img = hmap::colorize(array,
+                                                    array.min(),
+                                                    array.max(),
+                                                    this->cmap_view2d,
+                                                    this->hillshade_view2d);
+        }
+        break;
+
+        case hesiod::cnode::dtype::dHeightMapRGB:
+        {
+          hmap::HeightMapRGB *p_c = (hmap::HeightMapRGB *)p_data;
+          if (p_c->shape.x > 0)
+            img = p_c->to_img_8bit(this->shape_view2d);
         }
         break;
 
         case hesiod::cnode::dtype::dArray:
         {
-          array =
+          hmap::Array array =
               ((hmap::Array *)p_data)->resample_to_shape(this->shape_view2d);
+          std::vector<uint8_t> img = hmap::colorize(array,
+                                                    array.min(),
+                                                    array.max(),
+                                                    this->cmap_view2d,
+                                                    this->hillshade_view2d);
         }
         break;
 
         default:
           LOG_ERROR("data type not suitable for 2d viewer");
         }
-
-        std::vector<uint8_t> img = hmap::colorize(array,
-                                                  array.min(),
-                                                  array.max(),
-                                                  this->cmap_view2d,
-                                                  this->hillshade_view2d);
 
         img_to_texture_rgb(img, this->shape_view2d, this->image_texture_view2d);
       }
@@ -300,6 +312,20 @@ void ViewTree::update_image_texture_view3d(bool vertex_array_update)
               hmap::HeightMap *p_c = (hmap::HeightMap *)p_color;
               hmap::Array      c = 1.f - p_c->to_array(this->shape_view3d);
               hesiod::viewer::update_vertex_colors(z, c, this->colors);
+            }
+            break;
+
+            case hesiod::cnode::dtype::dHeightMapRGB:
+            {
+              // the color data are provided as an heightmap => it
+              // is assigned to the Red channel, other channels are
+              // set to zero
+              hmap::HeightMapRGB *p_c = (hmap::HeightMapRGB *)p_color;
+              hmap::Array         r = p_c->rgb[0].to_array(this->shape_view3d);
+              hmap::Array         g = p_c->rgb[1].to_array(this->shape_view3d);
+              hmap::Array         b = p_c->rgb[2].to_array(this->shape_view3d);
+
+              hesiod::viewer::update_vertex_colors(z, r, g, b, this->colors);
             }
             break;
 

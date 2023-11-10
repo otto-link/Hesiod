@@ -122,6 +122,12 @@ std::string ViewTree::add_view_node(std::string control_node_type,
                                                                 this->overlap);
     this->add_node(p_view_node);
   }
+  else if (control_node_type == "Colorize")
+  {
+    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewColorize>(
+        id);
+    this->add_node(p_view_node);
+  }
   else if (control_node_type == "ConvolveSVD")
   {
     std::shared_ptr p_view_node =
@@ -186,6 +192,12 @@ std::string ViewTree::add_view_node(std::string control_node_type,
   {
     std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewExport>(
         id);
+    this->add_node(p_view_node);
+  }
+  else if (control_node_type == "ExportRGB")
+  {
+    std::shared_ptr p_view_node =
+        std::make_shared<hesiod::vnode::ViewExportRGB>(id);
     this->add_node(p_view_node);
   }
   else if (control_node_type == "FbmPerlin")
@@ -447,6 +459,12 @@ std::string ViewTree::add_view_node(std::string control_node_type,
   {
     std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewPreview>(
         id);
+    this->add_node(p_view_node);
+  }
+  else if (control_node_type == "PreviewColorize")
+  {
+    std::shared_ptr p_view_node =
+        std::make_shared<hesiod::vnode::ViewPreviewColorize>(id);
     this->add_node(p_view_node);
   }
   else if (control_node_type == "RecastCanyon")

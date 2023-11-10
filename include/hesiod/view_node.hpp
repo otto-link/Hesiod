@@ -86,13 +86,15 @@ static const std::map<std::string, viewnode_color_set> category_colors = {
     {"Operator", viewnode_color_set({108, 113, 196, 255})},
     {"Hydrology", viewnode_color_set({38, 139, 210, 255})},
     {"Primitive", viewnode_color_set({42, 161, 152, 255})},
-    {"Biomes", viewnode_color_set({133, 153, 0, 255})}};
+    {"Biomes", viewnode_color_set({133, 153, 0, 255})},
+    {"Texture", viewnode_color_set({0, 0, 0, 255})}};
 
 // Dracula theme for links
 static const std::map<int, viewnode_color_set> dtype_colors = {
     {hesiod::cnode::dArray, viewnode_color_set({255, 121, 198, 255})},
     {hesiod::cnode::dCloud, viewnode_color_set({139, 233, 253, 255})},
     {hesiod::cnode::dHeightMap, viewnode_color_set({255, 255, 255, 255})},
+    {hesiod::cnode::dHeightMapRGB, viewnode_color_set({255, 184, 108, 255})},
     {hesiod::cnode::dPath, viewnode_color_set({80, 250, 123, 255})}};
 
 /**
@@ -496,6 +498,19 @@ public:
   void serialize_load(cereal::JSONInputArchive &ar);
 };
 
+class ViewColorize : public ViewNode, public hesiod::cnode::Colorize
+{
+public:
+  ViewColorize(std::string id);
+
+  // void render_node_specific_content();
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewConvolveSVD : public ViewNode, public hesiod::cnode::ConvolveSVD
 {
 public:
@@ -638,6 +653,19 @@ protected:
       {"png (8 bit)", hesiod::cnode::export_type::png8bit},
       {"png (16 bit)", hesiod::cnode::export_type::png16bit},
       {"raw (16 bit, Unity)", hesiod::cnode::export_type::raw16bit}};
+};
+
+class ViewExportRGB : public ViewNode, public hesiod::cnode::ExportRGB
+{
+public:
+  ViewExportRGB(std::string id);
+
+  bool render_settings();
+
+  void render_node_specific_content();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewFbmPerlin : public ViewNode, public hesiod::cnode::FbmPerlin
@@ -1128,6 +1156,18 @@ class ViewPreview : public ViewNode, public hesiod::cnode::Preview
 {
 public:
   ViewPreview(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &);
+  void serialize_load(cereal::JSONInputArchive &);
+};
+
+class ViewPreviewColorize : public ViewNode,
+                            public hesiod::cnode::PreviewColorize
+{
+public:
+  ViewPreviewColorize(std::string id);
 
   bool render_settings();
 

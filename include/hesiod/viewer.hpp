@@ -28,6 +28,12 @@ void update_vertex_colors(hmap::Array          &z,
                           hmap::Array          &color,
                           std::vector<GLfloat> &colors);
 
+void update_vertex_colors(hmap::Array          &z,
+                          hmap::Array          &r,
+                          hmap::Array          &g,
+                          hmap::Array          &b,
+                          std::vector<GLfloat> &colors);
+
 //----------------------------------------
 // frame buffers
 //----------------------------------------
