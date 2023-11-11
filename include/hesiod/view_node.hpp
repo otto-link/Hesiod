@@ -1046,6 +1046,17 @@ public:
   void serialize_load(cereal::JSONInputArchive &ar);
 };
 
+class ViewMixRGB : public ViewNode, public hesiod::cnode::MixRGB
+{
+public:
+  ViewMixRGB(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewNormalDisplacement : public ViewNode,
                                public hesiod::cnode::NormalDisplacement
 {

@@ -399,6 +399,12 @@ std::string ViewTree::add_view_node(std::string control_node_type,
         std::make_shared<hesiod::vnode::ViewMinimumLocal>(id);
     this->add_node(p_view_node);
   }
+  else if (control_node_type == "MixRGB")
+  {
+    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewMixRGB>(
+        id);
+    this->add_node(p_view_node);
+  }
   else if (control_node_type == "NormalDisplacement")
   {
     std::shared_ptr p_view_node =

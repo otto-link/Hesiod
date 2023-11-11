@@ -14,6 +14,7 @@ ViewExportRGB::ViewExportRGB(std::string id)
     : ViewNode(), hesiod::cnode::ExportRGB(id)
 {
   this->set_p_control_node((gnode::Node *)this);
+  this->set_preview_port_id("RGB");
 }
 
 void ViewExportRGB::render_node_specific_content()

@@ -122,6 +122,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"MeanLocal", "Filter/Smoothing"},
     {"Median3x3", "Filter/Smoothing"},
     {"MinimumLocal", "Filter/Smoothing"},
+    {"MixRGB", "Texture"},
     {"NormalDisplacement", "Filter/Recast"},
     {"OneMinus", "Math/Base"},
     {"Path", "Geometry/Path"},
@@ -1231,6 +1232,20 @@ public:
 
 protected:
   int ir = 4;
+};
+
+class MixRGB : public gnode::Node
+{
+public:
+  MixRGB(std::string id);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::HeightMapRGB value_out = hmap::HeightMapRGB();
+  float              t = 0.5f;
 };
 
 class NormalDisplacement : public Filter
