@@ -3,6 +3,7 @@
  * this software. */
 #include "macrologger.h"
 
+#include "hesiod/cmap.hpp"
 #include "hesiod/control_node.hpp"
 
 namespace hesiod::cnode
@@ -18,11 +19,16 @@ Colorize::Colorize(std::string id) : gnode::Node(id)
       gnode::Port("RGB", gnode::direction::out, dtype::dHeightMapRGB));
   this->add_port(gnode::Port("thru", gnode::direction::out, dtype::dHeightMap));
   this->update_inner_bindings();
+
+  this->cmap_map = hesiod::get_colormap_mapping();
 }
 
 void Colorize::compute()
 {
   LOG_DEBUG("computing Colorize node [%s]", this->id.c_str());
+
+  std::vector<std::vector<float>> colormap_colors = hesiod::get_colormap_data(
+      this->cmap_choice);
 
   hmap::HeightMap *p_input_hmap = static_cast<hmap::HeightMap *>(
       (void *)this->get_p_data("input"));
@@ -31,14 +37,14 @@ void Colorize::compute()
                           p_input_hmap->tiling,
                           p_input_hmap->overlap);
 
-  float hmin = p_input_hmap->min();
-  float hmax = p_input_hmap->max();
-
-  float cmin = hmin;
-  float cmax = hmax;
+  float cmin = 0.f;
+  float cmax = 1.f;
 
   if (this->clamp)
   {
+    float hmin = p_input_hmap->min();
+    float hmax = p_input_hmap->max();
+
     cmin = (1.f - this->vmin) * hmin + this->vmin * hmax;
     cmax = (1.f - this->vmax) * hmin + this->vmax * hmax;
   }
@@ -46,7 +52,7 @@ void Colorize::compute()
   this->value_out.colorize(*p_input_hmap,
                            cmin,
                            cmax,
-                           hmap::cmap::terrain,
+                           colormap_colors,
                            this->reverse);
 }
 

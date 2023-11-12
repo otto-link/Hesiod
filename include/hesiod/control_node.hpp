@@ -562,11 +562,13 @@ public:
   void update_inner_bindings();
 
 protected:
-  hmap::HeightMapRGB value_out = hmap::HeightMapRGB();
-  bool               reverse = false;
-  bool               clamp = false;
-  float              vmin = 0.f;
-  float              vmax = 1.f;
+  hmap::HeightMapRGB         value_out = hmap::HeightMapRGB();
+  std::map<std::string, int> cmap_map = {};
+  int                        cmap_choice = 0;
+  bool                       reverse = false;
+  bool                       clamp = false;
+  float                      vmin = 0.f;
+  float                      vmax = 1.f;
 };
 
 class ConvolveSVD : public gnode::Node

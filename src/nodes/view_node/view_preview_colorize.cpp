@@ -14,7 +14,7 @@ ViewPreviewColorize::ViewPreviewColorize(std::string id)
     : ViewNode(), hesiod::cnode::PreviewColorize(id)
 {
   this->set_p_control_node((gnode::Node *)this);
-  this->set_preview_port_id("input");
+  this->set_preview_port_id("RGB");
   this->set_view3d_elevation_port_id("input");
   this->set_view3d_color_port_id("RGB");
 }

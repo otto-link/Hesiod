@@ -39,9 +39,9 @@ void MixRGB::compute()
   {
     hmap::HeightMap *p_input_t = static_cast<hmap::HeightMap *>(
         (void *)this->get_p_data("t"));
-    this->value_out = mix_heightmap_rgb_srqt(*p_input_rgb1,
-                                             *p_input_rgb2,
-                                             *p_input_t);
+    this->value_out = mix_heightmap_rgb_ryb(*p_input_rgb1,
+                                            *p_input_rgb2,
+                                            *p_input_t);
   }
   else
     this->value_out = mix_heightmap_rgb_srqt(*p_input_rgb1,
