@@ -23,7 +23,9 @@ bool ViewColorize::render_settings()
   bool has_changed = false;
   has_changed |= this->render_settings_header();
 
-  if (hesiod::gui::listbox_map_enum(this->cmap_map, this->cmap_choice, 128.f))
+  if (hesiod::gui::listbox_map_enum(this->cmap_map,
+                                    this->cmap_choice,
+                                    this->node_width))
   {
     this->force_update();
     has_changed = true;
@@ -48,7 +50,7 @@ bool ViewColorize::render_settings()
 
 void ViewColorize::serialize_save(cereal::JSONOutputArchive &ar)
 {
-  // TODO update
+  ar(cereal::make_nvp("cmap_choice", this->cmap_choice));
   ar(cereal::make_nvp("reverse", this->reverse));
   ar(cereal::make_nvp("clamp", this->clamp));
   ar(cereal::make_nvp("vmin", this->vmin));
@@ -57,6 +59,7 @@ void ViewColorize::serialize_save(cereal::JSONOutputArchive &ar)
 
 void ViewColorize::serialize_load(cereal::JSONInputArchive &ar)
 {
+  ar(cereal::make_nvp("cmap_choice", this->cmap_choice));
   ar(cereal::make_nvp("reverse", this->reverse));
   ar(cereal::make_nvp("clamp", this->clamp));
   ar(cereal::make_nvp("vmin", this->vmin));

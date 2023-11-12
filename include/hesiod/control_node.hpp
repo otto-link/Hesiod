@@ -1248,6 +1248,7 @@ public:
 protected:
   hmap::HeightMapRGB value_out = hmap::HeightMapRGB();
   float              t = 0.5f;
+  bool               sqrt_mix = true;
 };
 
 class NormalDisplacement : public Filter

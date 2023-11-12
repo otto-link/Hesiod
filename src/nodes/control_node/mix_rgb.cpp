@@ -35,18 +35,37 @@ void MixRGB::compute()
   hmap::HeightMapRGB *p_input_rgb2 = static_cast<hmap::HeightMapRGB *>(
       (void *)this->get_p_data("RGB2"));
 
-  if (this->get_p_data("t"))
+  if (this->sqrt_mix)
   {
-    hmap::HeightMap *p_input_t = static_cast<hmap::HeightMap *>(
-        (void *)this->get_p_data("t"));
-    this->value_out = mix_heightmap_rgb_ryb(*p_input_rgb1,
-                                            *p_input_rgb2,
-                                            *p_input_t);
+    if (this->get_p_data("t"))
+    {
+      hmap::HeightMap *p_input_t = static_cast<hmap::HeightMap *>(
+          (void *)this->get_p_data("t"));
+      this->value_out = mix_heightmap_rgb_sqrt(*p_input_rgb1,
+                                               *p_input_rgb2,
+                                               *p_input_t);
+    }
+    else
+      this->value_out = mix_heightmap_rgb_sqrt(*p_input_rgb1,
+                                               *p_input_rgb2,
+                                               this->t);
   }
   else
-    this->value_out = mix_heightmap_rgb_srqt(*p_input_rgb1,
-                                             *p_input_rgb2,
-                                             this->t);
+  {
+    // linear salpha mix
+    if (this->get_p_data("t"))
+    {
+      hmap::HeightMap *p_input_t = static_cast<hmap::HeightMap *>(
+          (void *)this->get_p_data("t"));
+      this->value_out = mix_heightmap_rgb(*p_input_rgb1,
+                                          *p_input_rgb2,
+                                          *p_input_t);
+    }
+    else
+      this->value_out = mix_heightmap_rgb(*p_input_rgb1,
+                                          *p_input_rgb2,
+                                          this->t);
+  }
 }
 
 void MixRGB::update_inner_bindings()

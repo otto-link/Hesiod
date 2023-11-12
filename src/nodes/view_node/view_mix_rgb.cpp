@@ -26,6 +26,9 @@ bool ViewMixRGB::render_settings()
     has_changed |= this->trigger_update_after_edit();
   }
 
+  ImGui::Checkbox("sqrt_mix", &this->sqrt_mix);
+  has_changed |= this->trigger_update_after_edit();
+
   has_changed |= this->render_settings_footer();
   return has_changed;
 }
@@ -33,11 +36,13 @@ bool ViewMixRGB::render_settings()
 void ViewMixRGB::serialize_save(cereal::JSONOutputArchive &ar)
 {
   ar(cereal::make_nvp("t", this->t));
+  ar(cereal::make_nvp("sqrt_mix", this->sqrt_mix));
 }
 
 void ViewMixRGB::serialize_load(cereal::JSONInputArchive &ar)
 {
   ar(cereal::make_nvp("t", this->t));
+  ar(cereal::make_nvp("sqrt_mix", this->sqrt_mix));
 }
 
 } // namespace hesiod::vnode
