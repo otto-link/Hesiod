@@ -4,6 +4,10 @@ A desktop application for node-based procedural terrain generation.
 
 https://github.com/otto-link/Hesiod/assets/121820229/da3b246e-18af-47d5-bfd2-197c44c670df
 
+Color is coming!
+
+![Screenshot_2023-11-12_23-01-20_1024](https://github.com/otto-link/Hesiod/assets/121820229/27f51a13-737d-4c5c-8dea-dd0f25a3494c)
+
 ## Warning 
 
 Work in progress, use at your own risk!
