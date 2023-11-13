@@ -44,6 +44,15 @@ std::string ViewTree::add_view_node(std::string control_node_type,
         std::make_shared<hesiod::vnode::ViewBezierPath>(id);
     this->add_node(p_view_node);
   }
+  else if (control_node_type == "BiquadPulse")
+  {
+    std::shared_ptr p_view_node =
+        std::make_shared<hesiod::vnode::ViewBiquadPulse>(id,
+                                                         this->shape,
+                                                         this->tiling,
+                                                         this->overlap);
+    this->add_node(p_view_node);
+  }
   else if (control_node_type == "Blend")
   {
     std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewBlend>(
@@ -113,6 +122,12 @@ std::string ViewTree::add_view_node(std::string control_node_type,
                                                                 this->overlap);
     this->add_node(p_view_node);
   }
+  else if (control_node_type == "Colorize")
+  {
+    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewColorize>(
+        id);
+    this->add_node(p_view_node);
+  }
   else if (control_node_type == "ConvolveSVD")
   {
     std::shared_ptr p_view_node =
@@ -179,6 +194,12 @@ std::string ViewTree::add_view_node(std::string control_node_type,
         id);
     this->add_node(p_view_node);
   }
+  else if (control_node_type == "ExportRGB")
+  {
+    std::shared_ptr p_view_node =
+        std::make_shared<hesiod::vnode::ViewExportRGB>(id);
+    this->add_node(p_view_node);
+  }
   else if (control_node_type == "FbmPerlin")
   {
     std::shared_ptr p_view_node =
@@ -186,6 +207,15 @@ std::string ViewTree::add_view_node(std::string control_node_type,
                                                        this->shape,
                                                        this->tiling,
                                                        this->overlap);
+    this->add_node(p_view_node);
+  }
+  else if (control_node_type == "FbmSimplex")
+  {
+    std::shared_ptr p_view_node =
+        std::make_shared<hesiod::vnode::ViewFbmSimplex>(id,
+                                                        this->shape,
+                                                        this->tiling,
+                                                        this->overlap);
     this->add_node(p_view_node);
   }
   else if (control_node_type == "FbmWorley")
@@ -369,6 +399,12 @@ std::string ViewTree::add_view_node(std::string control_node_type,
         std::make_shared<hesiod::vnode::ViewMinimumLocal>(id);
     this->add_node(p_view_node);
   }
+  else if (control_node_type == "MixRGB")
+  {
+    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewMixRGB>(
+        id);
+    this->add_node(p_view_node);
+  }
   else if (control_node_type == "NormalDisplacement")
   {
     std::shared_ptr p_view_node =
@@ -431,6 +467,12 @@ std::string ViewTree::add_view_node(std::string control_node_type,
         id);
     this->add_node(p_view_node);
   }
+  else if (control_node_type == "PreviewColorize")
+  {
+    std::shared_ptr p_view_node =
+        std::make_shared<hesiod::vnode::ViewPreviewColorize>(id);
+    this->add_node(p_view_node);
+  }
   else if (control_node_type == "RecastCanyon")
   {
     std::shared_ptr p_view_node =
@@ -451,8 +493,8 @@ std::string ViewTree::add_view_node(std::string control_node_type,
   }
   else if (control_node_type == "RecurveS")
   {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewRecurveS>(id);
+    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewRecurveS>(
+        id);
     this->add_node(p_view_node);
   }
   else if (control_node_type == "RelativeElevation")
@@ -506,10 +548,25 @@ std::string ViewTree::add_view_node(std::string control_node_type,
         std::make_shared<hesiod::vnode::ViewSelectInterval>(id);
     this->add_node(p_view_node);
   }
+  else if (control_node_type == "SelectRivers")
+  {
+    std::shared_ptr p_view_node =
+        std::make_shared<hesiod::vnode::ViewSelectRivers>(id);
+    this->add_node(p_view_node);
+  }
   else if (control_node_type == "SelectTransitions")
   {
     std::shared_ptr p_view_node =
         std::make_shared<hesiod::vnode::ViewSelectTransitions>(id);
+    this->add_node(p_view_node);
+  }
+  else if (control_node_type == "Simplex")
+  {
+    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewSimplex>(
+        id,
+        this->shape,
+        this->tiling,
+        this->overlap);
     this->add_node(p_view_node);
   }
   else if (control_node_type == "Slope")
@@ -590,6 +647,12 @@ std::string ViewTree::add_view_node(std::string control_node_type,
         std::make_shared<hesiod::vnode::ViewThermalScree>(id);
     this->add_node(p_view_node);
   }
+  else if (control_node_type == "ToMask")
+  {
+    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewToMask>(
+        id);
+    this->add_node(p_view_node);
+  }
   else if (control_node_type == "ValleyWidth")
   {
     std::shared_ptr p_view_node =
@@ -612,6 +675,15 @@ std::string ViewTree::add_view_node(std::string control_node_type,
                                                               this->shape,
                                                               this->tiling,
                                                               this->overlap);
+    this->add_node(p_view_node);
+  }
+  else if (control_node_type == "ValueNoiseThinplate")
+  {
+    std::shared_ptr p_view_node =
+        std::make_shared<hesiod::vnode::ViewValueNoiseThinplate>(id,
+                                                                 this->shape,
+                                                                 this->tiling,
+                                                                 this->overlap);
     this->add_node(p_view_node);
   }
   else if (control_node_type == "WaveDune")

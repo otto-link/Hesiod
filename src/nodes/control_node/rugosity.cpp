@@ -8,13 +8,13 @@
 namespace hesiod::cnode
 {
 
-Rugosity::Rugosity(std::string id) : Unary(id)
+Rugosity::Rugosity(std::string id) : Mask(id)
 {
   this->node_type = "Rugosity";
   this->category = category_mapping.at(this->node_type);
 }
 
-void Rugosity::compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in)
+void Rugosity::compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in)
 {
   LOG_DEBUG("computing node [%s]", this->id.c_str());
 
@@ -23,7 +23,11 @@ void Rugosity::compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in)
                   *p_h_in,
                   [this](hmap::Array &out, hmap::Array &in)
                   { out = hmap::rugosity(in, this->ir); });
-  h_out.smooth_overlap_buffers();
+
+  if (this->clamp_max)
+    hmap::transform(h_out,
+                    [this](hmap::Array &x)
+                    { hmap::clamp_max(x, this->vc_max); });
 }
 
 } // namespace hesiod::cnode

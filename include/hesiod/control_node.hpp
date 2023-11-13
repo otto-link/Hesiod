@@ -22,6 +22,7 @@ enum dtype : int
   dArray,
   dCloud,
   dHeightMap,
+  dHeightMapRGB,
   dPath
 };
 
@@ -66,6 +67,7 @@ static const std::map<std::string, std::string> category_mapping = {
     // {"AlterElevation", "Operator/Transform"}, // BROKEN
     {"BaseElevation", "Primitive/Manual"},
     {"BezierPath", "Geometry/Path"},
+    {"BiquadPulse", "Primitive/Function"},
     {"Blend", "Operator/Blend"},
     {"Brush", "Primitive/Manual"},
     {"Bump", "Primitive/Function"},
@@ -75,18 +77,22 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Clone", "Routing"},
     {"Cloud", "Geometry/Cloud"},
     {"CloudToArrayInterp", "Primitive/Manual"},
+    {"Colorize", "Texture"},
+    {"PreviewColorize", "Texture"},
     {"ConvolveSVD", "Math/Convolution"},
     // {"CubicPulseTruncated", "Primitive/Kernel"}, // useless
     {"Debug", "Debug"},
     {"DepressionFilling", "Erosion"}, // not distributed
-    {"DigPath", "Roads"}, // partially distributed
+    {"DigPath", "Roads"},             // partially distributed
     {"DistanceTransform", "Math"},
     {"Equalize", "Filter/Recurve"}, // not distributed
     {"ErosionMaps", "Erosion/Hydraulic"},
     {"ExpandShrink", "Filter/Recast"},
     {"ExpandShrinkDirectional", "Filter/Recast"},
     {"Export", "IO/Files"},
+    {"ExportRGB", "IO/Files"},
     {"FbmPerlin", "Primitive/Coherent Noise"},
+    {"FbmSimplex", "Primitive/Coherent Noise"},
     {"FbmWorley", "Primitive/Coherent Noise"},
     {"FractalizePath", "Geometry/Path"},
     {"GaborNoise", "Primitive/Coherent Noise"},
@@ -116,6 +122,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"MeanLocal", "Filter/Smoothing"},
     {"Median3x3", "Filter/Smoothing"},
     {"MinimumLocal", "Filter/Smoothing"},
+    {"MixRGB", "Texture"},
     {"NormalDisplacement", "Filter/Recast"},
     {"OneMinus", "Math/Base"},
     {"Path", "Geometry/Path"},
@@ -137,7 +144,9 @@ static const std::map<std::string, std::string> category_mapping = {
     {"SelectCavities", "Mask"},
     {"SelectEq", "Mask"},
     {"SelectInterval", "Mask"},
+    {"SelectRivers", "Mask"}, // not distributed
     {"SelectTransitions", "Mask"},
+    {"Simplex", "Primitive/Coherent Noise"},
     {"Slope", "Primitive/Function"},
     {"SmoothCpulse", "Filter/Smoothing"},
     {"SmoothFill", "Filter/Smoothing"},
@@ -150,9 +159,11 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Thermal", "Erosion/Thermal"},
     {"ThermalAutoBedrock", "Erosion/Thermal"},
     {"ThermalScree", "Erosion/Thermal"},
+    {"ToMask", "Mask"},
     {"ValleyWidth", "Features"},
     {"ValueNoiseDelaunay", "Primitive/Coherent Noise"},
     {"ValueNoiseLinear", "Primitive/Coherent Noise"},
+    {"ValueNoiseThinplate", "Primitive/Coherent Noise"},
     {"Warp", "Operator/Transform"},
     {"WarpDownslope", "Operator/Transform"},
     {"WaveDune", "Primitive/Function"},
@@ -382,6 +393,20 @@ protected:
   int        edge_divisions = 10;
 };
 
+class BiquadPulse : public Primitive
+{
+public:
+  BiquadPulse(std::string     id,
+              hmap::Vec2<int> shape,
+              hmap::Vec2<int> tiling,
+              float           overlap);
+
+  void compute();
+
+protected:
+  float gain = 1.f;
+};
+
 class Blend : public Binary
 {
 public:
@@ -525,6 +550,25 @@ public:
 
 protected:
   int interpolation_method = 0;
+};
+
+class Colorize : public gnode::Node
+{
+public:
+  Colorize(std::string id);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::HeightMapRGB         value_out = hmap::HeightMapRGB();
+  std::map<std::string, int> cmap_map = {};
+  int                        cmap_choice = 0;
+  bool                       reverse = false;
+  bool                       clamp = false;
+  float                      vmin = 0.f;
+  float                      vmax = 1.f;
 };
 
 class ConvolveSVD : public gnode::Node
@@ -678,6 +722,20 @@ protected:
   std::string fname = "export.png";
 };
 
+class ExportRGB : public gnode::Node
+{
+public:
+  ExportRGB(std::string id);
+
+  void compute();
+
+  void write_file();
+
+protected:
+  bool        auto_export = false;
+  std::string fname = "export_rgb.png";
+};
+
 class FbmPerlin : public Primitive
 {
 public:
@@ -685,6 +743,25 @@ public:
             hmap::Vec2<int> shape,
             hmap::Vec2<int> tiling,
             float           overlap);
+
+  void compute();
+
+protected:
+  hmap::Vec2<float> kw = {DEFAULT_KW, DEFAULT_KW};
+  int               seed = DEFAULT_SEED;
+  int               octaves = 8;
+  float             weight = 0.7f;
+  float             persistence = 0.5f;
+  float             lacunarity = 2.f;
+};
+
+class FbmSimplex : public Primitive
+{
+public:
+  FbmSimplex(std::string     id,
+             hmap::Vec2<int> shape,
+             hmap::Vec2<int> tiling,
+             float           overlap);
 
   void compute();
 
@@ -954,7 +1031,7 @@ protected:
   float c_erosion = 0.05f;
   float talus_ref = 0.1f;
   int   ir = 1;
-  float clipping_ratio = 10;
+  float clipping_ratio = 10.f;
 };
 
 class HydraulicVpipes : public Erosion
@@ -1159,6 +1236,21 @@ protected:
   int ir = 4;
 };
 
+class MixRGB : public gnode::Node
+{
+public:
+  MixRGB(std::string id);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::HeightMapRGB value_out = hmap::HeightMapRGB();
+  float              t = 0.5f;
+  bool               sqrt_mix = true;
+};
+
 class NormalDisplacement : public Filter
 {
 public:
@@ -1290,6 +1382,16 @@ public:
   void update_inner_bindings();
 };
 
+class PreviewColorize : public gnode::Node
+{
+public:
+  PreviewColorize(std::string id);
+
+  void compute();
+
+  void update_inner_bindings();
+};
+
 class RecastCanyon : public gnode::Node
 {
 public:
@@ -1378,15 +1480,17 @@ protected:
   float             lacunarity = 2.f;
 };
 
-class Rugosity : public Unary
+class Rugosity : public Mask
 {
 public:
   Rugosity(std::string id);
 
-  void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
+  void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
 
 protected:
-  int ir = 4;
+  int   ir = 8;
+  bool  clamp_max = false;
+  float vc_max = 1.f;
 };
 
 class SedimentDeposition : public gnode::Node
@@ -1442,6 +1546,18 @@ protected:
   float value2 = 1.f;
 };
 
+class SelectRivers : public Mask
+{
+public:
+  SelectRivers(std::string id);
+
+  void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
+
+protected:
+  float talus_ref = 0.1f;
+  float clipping_ratio = 50.f;
+};
+
 class SelectTransitions : public gnode::Node
 {
 public:
@@ -1457,6 +1573,21 @@ protected:
   bool            inverse = false;
   bool            smoothing = false;
   int             ir_smoothing = 16;
+};
+
+class Simplex : public Primitive
+{
+public:
+  Simplex(std::string     id,
+          hmap::Vec2<int> shape,
+          hmap::Vec2<int> tiling,
+          float           overlap);
+
+  void compute();
+
+protected:
+  hmap::Vec2<float> kw = {DEFAULT_KW, DEFAULT_KW};
+  int               seed = DEFAULT_SEED;
 };
 
 class Slope : public gnode::Node
@@ -1654,12 +1785,20 @@ protected:
   bool            talus_constraint = true;
 };
 
-class ValleyWidth : public Unary
+class ToMask : public Mask
+{
+public:
+  ToMask(std::string id);
+
+  void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
+};
+
+class ValleyWidth : public Mask
 {
 public:
   ValleyWidth(std::string id);
 
-  void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
+  void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
 
 protected:
   int ir = 4;
@@ -1693,6 +1832,21 @@ public:
 protected:
   hmap::Vec2<float> kw = {DEFAULT_KW, DEFAULT_KW};
   int               seed = DEFAULT_SEED;
+};
+
+class ValueNoiseThinplate : public Primitive
+{
+public:
+  ValueNoiseThinplate(std::string     id,
+                      hmap::Vec2<int> shape,
+                      hmap::Vec2<int> tiling,
+                      float           overlap);
+
+  void compute();
+
+protected:
+  float kw = DEFAULT_KW;
+  int   seed = DEFAULT_SEED;
 };
 
 class Warp : public gnode::Node

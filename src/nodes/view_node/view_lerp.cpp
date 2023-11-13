@@ -10,10 +10,9 @@ namespace hesiod::vnode
 
 ViewLerp::ViewLerp(std::string id) : ViewNode(), hesiod::cnode::Lerp(id)
 {
-  LOG_DEBUG("hash_id: %d", this->hash_id);
-  LOG_DEBUG("label: %s", this->label.c_str());
   this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
+  this->set_view3d_elevation_port_id("output");
 }
 
 bool ViewLerp::render_settings()

@@ -14,6 +14,7 @@ ViewExport::ViewExport(std::string id) : ViewNode(), hesiod::cnode::Export(id)
 {
   this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("input");
+  this->set_view3d_elevation_port_id("input");
 }
 
 void ViewExport::render_node_specific_content()

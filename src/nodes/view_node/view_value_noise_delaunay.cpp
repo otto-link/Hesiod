@@ -17,9 +17,9 @@ ViewValueNoiseDelaunay::ViewValueNoiseDelaunay(std::string     id,
                                                float           overlap)
     : ViewNode(), hesiod::cnode::ValueNoiseDelaunay(id, shape, tiling, overlap)
 {
-  LOG_DEBUG("ViewValueNoiseDelaunay::ViewValueNoiseDelaunay()");
   this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
+  this->set_view3d_elevation_port_id("output");
 }
 
 bool ViewValueNoiseDelaunay::render_settings()
@@ -39,17 +39,8 @@ bool ViewValueNoiseDelaunay::render_settings()
   ImGui::DragInt("seed", &this->seed);
   has_changed |= this->trigger_update_after_edit();
 
-  if (ImGui::DragFloat("k",
-                       &this->kw,
-                       0.1f,
-                       1.f,
-                       64.f,
-                       "%.1f",
-                       ImGuiSliderFlags_None))
-  {
-    this->force_update();
-    has_changed = true;
-  }
+  ImGui::DragFloat("kw", &this->kw, 0.1f, 1.f, 64.f, "%.1f");
+  has_changed |= this->trigger_update_after_edit();
 
   ImGui::Separator();
 

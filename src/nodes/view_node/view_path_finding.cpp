@@ -13,6 +13,18 @@ ViewPathFinding::ViewPathFinding(std::string id)
     : ViewNode(), hesiod::cnode::PathFinding(id)
 {
   this->set_p_control_node((gnode::Node *)this);
+  this->set_view3d_elevation_port_id("heightmap");
+  this->set_view3d_color_port_id("output");
+
+  this->help_text =
+      "Find the lowest elevation and elevation difference path for each edge "
+      "of the input path, assuming this path lies on the input "
+      "heightmap.\n'elevation_ratio': Balance between absolute elevation and "
+      "elevation difference in the cost function.\n'distance_exponent': "
+      "Exponent of the distance calculation between two points. Increasing the "
+      "distance exponent of the cost function increases the cost of elevation "
+      "gaps: path then tends to stay at the same elevation if possible (i.e. "
+      "reduce the overall cumulative elevation gain).";
 }
 
 void ViewPathFinding::render_node_specific_content()
@@ -42,23 +54,11 @@ bool ViewPathFinding::render_settings()
                      "%.1f");
   has_changed |= this->trigger_update_after_edit();
 
-  ImGui::TextUnformatted("Resolution");
-  bool rbutton = false;
-  rbutton |= ImGui::RadioButton("128 x 128", &this->wshape_choice, 0);
-  rbutton |= ImGui::RadioButton("256 x 256", &this->wshape_choice, 1);
-  rbutton |= ImGui::RadioButton("512 x 512", &this->wshape_choice, 2);
-
-  if (rbutton)
-  {
-    if (this->wshape_choice == 0)
-      this->wshape = {128, 128};
-    else if (this->wshape_choice == 1)
-      this->wshape = {256, 256};
-    else if (this->wshape_choice == 2)
-      this->wshape = {512, 512};
-
+  // TODO - retrieve max shape from input
+  if (hesiod::gui::select_shape("shape",
+                                this->wshape,
+                                hmap::Vec2<int>(1024, 1024)))
     this->force_update();
-  }
 
   has_changed |= this->render_settings_footer();
   return has_changed;
@@ -70,7 +70,6 @@ void ViewPathFinding::serialize_save(cereal::JSONOutputArchive &ar)
   ar(cereal::make_nvp("wshape.y", this->wshape.y));
   ar(cereal::make_nvp("elevation_ratio", this->elevation_ratio));
   ar(cereal::make_nvp("distance_exponent", this->distance_exponent));
-  ar(cereal::make_nvp("wshape_choice", this->wshape_choice));
 }
 
 void ViewPathFinding::serialize_load(cereal::JSONInputArchive &ar)
@@ -79,7 +78,6 @@ void ViewPathFinding::serialize_load(cereal::JSONInputArchive &ar)
   ar(cereal::make_nvp("wshape.y", this->wshape.y));
   ar(cereal::make_nvp("elevation_ratio", this->elevation_ratio));
   ar(cereal::make_nvp("distance_exponent", this->distance_exponent));
-  ar(cereal::make_nvp("wshape_choice", this->wshape_choice));
 }
 
 } // namespace hesiod::vnode

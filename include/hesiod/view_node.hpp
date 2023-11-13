@@ -16,10 +16,13 @@
 namespace hesiod::vnode
 {
 
+/**
+ * @brief Preview type.
+ */
 enum preview_type : int
 {
-  grayscale,
-  histogram
+  grayscale, ///< grayscale
+  histogram  ///< histogram
 };
 
 struct viewnode_color_set
@@ -83,68 +86,238 @@ static const std::map<std::string, viewnode_color_set> category_colors = {
     {"Operator", viewnode_color_set({108, 113, 196, 255})},
     {"Hydrology", viewnode_color_set({38, 139, 210, 255})},
     {"Primitive", viewnode_color_set({42, 161, 152, 255})},
-    {"Biomes", viewnode_color_set({133, 153, 0, 255})}};
+    {"Biomes", viewnode_color_set({133, 153, 0, 255})},
+    {"Texture", viewnode_color_set({0, 0, 0, 255})}};
 
 // Dracula theme for links
 static const std::map<int, viewnode_color_set> dtype_colors = {
     {hesiod::cnode::dArray, viewnode_color_set({255, 121, 198, 255})},
     {hesiod::cnode::dCloud, viewnode_color_set({139, 233, 253, 255})},
     {hesiod::cnode::dHeightMap, viewnode_color_set({255, 255, 255, 255})},
+    {hesiod::cnode::dHeightMapRGB, viewnode_color_set({255, 184, 108, 255})},
     {hesiod::cnode::dPath, viewnode_color_set({80, 250, 123, 255})}};
 
+/**
+ * @brief Base class for all 'View Node' (nodes with a GUI).
+ */
 class ViewNode
 {
 public:
+  /**
+   * @brief Default constructor, exists only to permit declaration of lists of
+   * nodes.
+   */
   ViewNode();
 
+  /**
+   * @brief Construct a new View Node object.
+   *
+   * @param p_control_node Reference to associated 'control node', i.e. the node
+   * carrying out all the computations.
+   */
   ViewNode(gnode::Node *p_control_node);
 
+  /**
+   * @brief Get the reference to the associated control node.
+   *
+   * @return gnode::Node* Associated control node.
+   */
   gnode::Node *get_p_control_node();
 
+  /**
+   * @brief Get the view3d port id.
+   *
+   * @return std::string Port id.
+   */
   std::string get_preview_port_id();
 
+  /**
+   * @brief Get the view3d elevation port id.
+   *
+   * @return std::string
+   */
+  std::string get_view3d_elevation_port_id();
+
+  /**
+   * @brief Get the view3d color port id.
+   *
+   * @return std::string
+   */
+  std::string get_view3d_color_port_id();
+
+  /**
+   * @brief Set the reference to the associated control node.
+   *
+   * @param new_p_control_node Reference to the new associated control node.
+   */
   void set_p_control_node(gnode::Node *new_p_control_node);
 
+  /**
+   * @brief Set the preview port id.
+   *
+   * @param new_port_id New port id.
+   */
   void set_preview_port_id(std::string new_port_id);
 
+  /**
+   * @brief Set the preview type (grayscale, histogram)
+   *
+   * @see preview_type
+   *
+   * @param new_preview_type New preview type.
+   */
   void set_preview_type(int new_preview_type);
 
+  /**
+   * @brief Set the view3d elevation port id.
+   *
+   * @param new_port_id
+   */
+  void set_view3d_elevation_port_id(std::string new_port_id);
+
+  /**
+   * @brief Set the view3d color port id.
+   *
+   * @param new_port_id
+   */
+  void set_view3d_color_port_id(std::string new_port_id);
+
+  /**
+   * @brief Method called after every update of the control node.
+   */
   virtual void post_control_node_update();
 
+  /**
+   * @brief Render the settings GUI widgets.
+   *
+   * @return true Settings have changed.
+   * @return false Settings have not been changed.
+   */
   virtual bool render_settings();
 
+  /**
+   * @brief Render the node within the current node editor context.
+   */
   void render_node();
 
+  /**
+   * @brief Render any specific content after rendering the node base boyd
+   * (@link render_node).
+   */
   virtual void render_node_specific_content(){};
 
+  /**
+   * @brief Render the generic header of the node settings.
+   *
+   * @return true Settings have changed.
+   * @return false Settings have not been changed.
+   */
   bool render_settings_header();
 
+  /**
+   * @brief Render the generic footer of the node settings.
+   *
+   * @return true Settings have changed.
+   * @return false Settings have not been changed.
+   */
   bool render_settings_footer();
 
+  /**
+   * @brief Serialization of the node parameters (load).
+   */
   virtual void serialize_load(cereal::JSONInputArchive &);
+
+  /**
+   * @brief Serialization of the node parameters (save).
+   */
   virtual void serialize_save(cereal::JSONOutputArchive &);
 
   bool trigger_update_after_edit();
 
+  /**
+   * @brief Update the node preview (regenerate the content displayed in the
+   * node body).
+   */
   void update_preview();
 
 protected:
+  /**
+   * @brief Port id of the data displayed in the preview.
+   */
   std::string preview_port_id = "";
-  bool        show_preview = true;
-  float       node_width = 128.f;
+
+  /**
+   * @brief Port id of the elevation data displayed in the 3D viewer.
+   */
+  std::string view3d_elevation_port_id = "";
+
+  /**
+   * @brief Port id of the color data displayed in the 3D viewer.
+   */
+  std::string view3d_color_port_id = "";
+
+  /**
+   * @brief Defines whether the preview is shown or not in the node body.
+   */
+  bool show_preview = true;
+
+  /**
+   * @brief Node width in pixels.
+   */
+  float node_width = 128.f;
+
+  /**
+   * @brief Defines whether the user help is shown or not in the settings body.
+   */
+  bool show_help = false;
+
+  /**
+   * @brief Default help text.
+   */
+  std::string help_text = "No help available.";
 
 private:
-  gnode::Node    *p_control_node;
+  /**
+   * @brief Reference to the associated control node.
+   */
+  gnode::Node *p_control_node;
+
+  /**
+   * @brief Shape preview.
+   */
   hmap::Vec2<int> shape_preview = {128, 128};
-  int             preview_type = preview_type::grayscale;
-  GLuint          image_texture_preview = 0;
-  void            init_from_control_node();
+
+  /**
+   * @brief Preview type.
+   */
+  int preview_type = preview_type::grayscale;
+
+  /**
+   * @brief OpenGL texture used to store the image preview.
+   */
+  GLuint image_texture_preview = 0;
+
+  /**
+   * @brief Set the control node post-update callback to the view node
+   * post-update method.
+   */
+  void init_from_control_node();
 };
 
+/**
+ * @brief Composite class based on ViewNode (view node) and gnode::Node (control
+ * node). Base class used to build all the view nodes.
+ */
 class ViewControlNode : public ViewNode,
                         public gnode::Node // used to recast derived ViewNode
 {
 public:
+  /**
+   * @brief Constructor, instantiate both the view node and the control node,
+   * and associate them.
+   *
+   * @param id Node id.
+   */
   ViewControlNode(std::string id) : ViewNode(), gnode::Node(id)
   {
     this->set_p_control_node((gnode::Node *)this);
@@ -153,6 +326,9 @@ public:
 
 //
 
+/**
+ * @brief ViewAlterElevation class.
+ */
 class ViewAlterElevation : public ViewNode, public hesiod::cnode::AlterElevation
 {
 public:
@@ -184,6 +360,20 @@ public:
   ViewBezierPath(std::string id);
 
   void render_node_specific_content();
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
+class ViewBiquadPulse : public ViewNode, public hesiod::cnode::BiquadPulse
+{
+public:
+  ViewBiquadPulse(std::string     id,
+                  hmap::Vec2<int> shape,
+                  hmap::Vec2<int> tiling,
+                  float           overlap);
 
   bool render_settings();
 
@@ -308,6 +498,19 @@ public:
   void serialize_load(cereal::JSONInputArchive &ar);
 };
 
+class ViewColorize : public ViewNode, public hesiod::cnode::Colorize
+{
+public:
+  ViewColorize(std::string id);
+
+  // void render_node_specific_content();
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewConvolveSVD : public ViewNode, public hesiod::cnode::ConvolveSVD
 {
 public:
@@ -384,9 +587,6 @@ public:
 
   void serialize_save(cereal::JSONOutputArchive &ar);
   void serialize_load(cereal::JSONInputArchive &ar);
-
-private:
-  int shape_working_choice = 1;
 };
 
 class ViewEqualize : public ViewNode, public hesiod::cnode::Equalize
@@ -455,6 +655,19 @@ protected:
       {"raw (16 bit, Unity)", hesiod::cnode::export_type::raw16bit}};
 };
 
+class ViewExportRGB : public ViewNode, public hesiod::cnode::ExportRGB
+{
+public:
+  ViewExportRGB(std::string id);
+
+  bool render_settings();
+
+  void render_node_specific_content();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewFbmPerlin : public ViewNode, public hesiod::cnode::FbmPerlin
 {
 public:
@@ -462,6 +675,23 @@ public:
                 hmap::Vec2<int> shape,
                 hmap::Vec2<int> tiling,
                 float           overlap);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+
+private:
+  bool link_kxy = true;
+};
+
+class ViewFbmSimplex : public ViewNode, public hesiod::cnode::FbmSimplex
+{
+public:
+  ViewFbmSimplex(std::string     id,
+                 hmap::Vec2<int> shape,
+                 hmap::Vec2<int> tiling,
+                 float           overlap);
 
   bool render_settings();
 
@@ -710,9 +940,6 @@ public:
 
   void serialize_save(cereal::JSONOutputArchive &ar);
   void serialize_load(cereal::JSONInputArchive &ar);
-
-private:
-  int shape_clustering_choice = 1;
 };
 
 class ViewKmeansClustering3 : public ViewNode,
@@ -725,9 +952,6 @@ public:
 
   void serialize_save(cereal::JSONOutputArchive &ar);
   void serialize_load(cereal::JSONInputArchive &ar);
-
-private:
-  int shape_clustering_choice = 1;
 };
 
 class ViewLaplace : public ViewNode, public hesiod::cnode::Laplace
@@ -822,6 +1046,17 @@ public:
   void serialize_load(cereal::JSONInputArchive &ar);
 };
 
+class ViewMixRGB : public ViewNode, public hesiod::cnode::MixRGB
+{
+public:
+  ViewMixRGB(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewNormalDisplacement : public ViewNode,
                                public hesiod::cnode::NormalDisplacement
 {
@@ -866,9 +1101,6 @@ public:
 
   void serialize_save(cereal::JSONOutputArchive &ar);
   void serialize_load(cereal::JSONInputArchive &ar);
-
-private:
-  int wshape_choice = 1;
 };
 
 class ViewPathToHeightmap : public ViewNode,
@@ -942,6 +1174,18 @@ public:
   void serialize_load(cereal::JSONInputArchive &);
 };
 
+class ViewPreviewColorize : public ViewNode,
+                            public hesiod::cnode::PreviewColorize
+{
+public:
+  ViewPreviewColorize(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &);
+  void serialize_load(cereal::JSONInputArchive &);
+};
+
 class ViewRecastCanyon : public ViewNode, public hesiod::cnode::RecastCanyon
 {
 public:
@@ -979,8 +1223,6 @@ class ViewRecurveS : public ViewNode, public hesiod::cnode::RecurveS
 {
 public:
   ViewRecurveS(std::string id);
-
-  bool render_settings();
 
   void serialize_save(cereal::JSONOutputArchive &ar);
   void serialize_load(cereal::JSONInputArchive &ar);
@@ -1087,6 +1329,17 @@ public:
   void serialize_load(cereal::JSONInputArchive &ar);
 };
 
+class ViewSelectRivers : public ViewNode, public hesiod::cnode::SelectRivers
+{
+public:
+  ViewSelectRivers(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewSelectTransitions : public ViewNode,
                               public hesiod::cnode::SelectTransitions
 {
@@ -1097,6 +1350,23 @@ public:
 
   void serialize_save(cereal::JSONOutputArchive &ar);
   void serialize_load(cereal::JSONInputArchive &ar);
+};
+
+class ViewSimplex : public ViewNode, public hesiod::cnode::Simplex
+{
+public:
+  ViewSimplex(std::string     id,
+              hmap::Vec2<int> shape,
+              hmap::Vec2<int> tiling,
+              float           overlap);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+
+private:
+  bool link_kxy = true;
 };
 
 class ViewSlope : public ViewNode, public hesiod::cnode::Slope
@@ -1243,6 +1513,17 @@ public:
   void serialize_load(cereal::JSONInputArchive &ar);
 };
 
+class ViewToMask : public ViewNode, public hesiod::cnode::ToMask
+{
+public:
+  ViewToMask(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewValleyWidth : public ViewNode, public hesiod::cnode::ValleyWidth
 {
 public:
@@ -1277,6 +1558,24 @@ public:
                        hmap::Vec2<int> shape,
                        hmap::Vec2<int> tiling,
                        float           overlap);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+
+private:
+  bool link_kxy = true;
+};
+
+class ViewValueNoiseThinplate : public ViewNode,
+                                public hesiod::cnode::ValueNoiseThinplate
+{
+public:
+  ViewValueNoiseThinplate(std::string     id,
+                          hmap::Vec2<int> shape,
+                          hmap::Vec2<int> tiling,
+                          float           overlap);
 
   bool render_settings();
 

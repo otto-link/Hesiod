@@ -16,8 +16,10 @@ bool listbox_map_enum(std::map<std::string, int> &map,
 
   ImGui::PushID((void *)&map);
 
+  int n_items = std::min(8, (int)map.size());
+
   float height = ImGui::GetStyle().ItemSpacing.y +
-                 (float)map.size() * ImGui::GetTextLineHeightWithSpacing();
+                 (float)n_items * ImGui::GetTextLineHeightWithSpacing();
 
   if (ImGui::BeginListBox("##method", ImVec2(width, height)))
     for (auto &[cname, k] : map)

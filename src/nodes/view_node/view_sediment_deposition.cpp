@@ -14,9 +14,9 @@ namespace hesiod::vnode
 ViewSedimentDeposition::ViewSedimentDeposition(std::string id)
     : ViewNode(), hesiod::cnode::SedimentDeposition(id)
 {
-  LOG_DEBUG("ViewSedimentDeposition::ViewSedimentDeposition()");
   this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
+  this->set_view3d_elevation_port_id("output");
 }
 
 bool ViewSedimentDeposition::render_settings()

@@ -14,9 +14,10 @@ namespace hesiod::vnode
 ViewSelectCavities::ViewSelectCavities(std::string id)
     : ViewNode(), hesiod::cnode::SelectCavities(id)
 {
-  LOG_DEBUG("ViewSelectCavities::ViewSelectCavities()");
   this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
+  this->set_view3d_elevation_port_id("input");
+  this->set_view3d_color_port_id("output");
 }
 
 bool ViewSelectCavities::render_settings()

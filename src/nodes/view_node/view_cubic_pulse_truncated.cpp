@@ -12,8 +12,6 @@ namespace hesiod::vnode
 ViewCubicPulseTruncated::ViewCubicPulseTruncated(std::string id)
     : ViewNode(), hesiod::cnode::CubicPulseTruncated(id)
 {
-  LOG_DEBUG("hash_id: %d", this->hash_id);
-  LOG_DEBUG("label: %s", this->label.c_str());
   this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
 }

@@ -12,10 +12,10 @@ namespace hesiod::vnode
 ViewValleyWidth::ViewValleyWidth(std::string id)
     : ViewNode(), hesiod::cnode::ValleyWidth(id)
 {
-  LOG_DEBUG("hash_id: %d", this->hash_id);
-  LOG_DEBUG("label: %s", this->label.c_str());
   this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
+  this->set_view3d_elevation_port_id("input");
+  this->set_view3d_color_port_id("output");
 }
 
 bool ViewValleyWidth::render_settings()
@@ -26,6 +26,15 @@ bool ViewValleyWidth::render_settings()
   ImGui::SliderInt("ir", &this->ir, 1, 128);
   has_changed |= this->trigger_update_after_edit();
 
+  if (render_settings_mask(this->smoothing,
+                           this->ir_smoothing,
+                           this->normalize,
+                           this->inverse))
+  {
+    this->force_update();
+    has_changed = true;
+  }
+
   has_changed |= this->render_settings_footer();
   return has_changed;
 }
@@ -33,11 +42,21 @@ bool ViewValleyWidth::render_settings()
 void ViewValleyWidth::serialize_save(cereal::JSONOutputArchive &ar)
 {
   ar(cereal::make_nvp("ir", this->ir));
+
+  ar(cereal::make_nvp("normalize", this->normalize));
+  ar(cereal::make_nvp("inverse", this->inverse));
+  ar(cereal::make_nvp("smoothing", this->smoothing));
+  ar(cereal::make_nvp("ir_smoothing", this->ir_smoothing));
 }
 
 void ViewValleyWidth::serialize_load(cereal::JSONInputArchive &ar)
 {
   ar(cereal::make_nvp("ir", this->ir));
+
+  ar(cereal::make_nvp("normalize", this->normalize));
+  ar(cereal::make_nvp("inverse", this->inverse));
+  ar(cereal::make_nvp("smoothing", this->smoothing));
+  ar(cereal::make_nvp("ir_smoothing", this->ir_smoothing));
 }
 
 } // namespace hesiod::vnode

@@ -14,9 +14,10 @@ namespace hesiod::vnode
 ViewSelectTransitions::ViewSelectTransitions(std::string id)
     : ViewNode(), hesiod::cnode::SelectTransitions(id)
 {
-  LOG_DEBUG("ViewSelectTransitions::ViewSelectTransitions()");
   this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
+  this->set_view3d_elevation_port_id("blend");
+  this->set_view3d_color_port_id("output");
 }
 
 bool ViewSelectTransitions::render_settings()

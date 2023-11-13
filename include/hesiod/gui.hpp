@@ -59,11 +59,20 @@ bool drag_float_vector(std::vector<float> &vector,
 
 void draw_icon(int icon_type, ImVec2 size, ImU32 color, bool filled);
 
+void help_marker(std::string text);
+
 bool hmap_brush_editor(hmap::HeightMap &h, float width = 0.f);
 
 bool listbox_map_enum(std::map<std::string, int> &map,
                       int                        &selected,
                       float                       width);
+
+void render_colorbar(std::vector<std::vector<float>> colormap_data,
+                     ImVec2                          size);
+
+bool select_shape(std::string      label,
+                  hmap::Vec2<int> &shape,
+                  hmap::Vec2<int>  shape_max);
 
 bool slider_vmin_vmax(float &vmin, float &vmax);
 
