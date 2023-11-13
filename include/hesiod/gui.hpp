@@ -67,6 +67,9 @@ bool listbox_map_enum(std::map<std::string, int> &map,
                       int                        &selected,
                       float                       width);
 
+void render_colorbar(std::vector<std::vector<float>> colormap_data,
+                     ImVec2                          size);
+
 bool select_shape(std::string      label,
                   hmap::Vec2<int> &shape,
                   hmap::Vec2<int>  shape_max);
