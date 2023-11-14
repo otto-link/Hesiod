@@ -513,6 +513,17 @@ public:
   void serialize_load(cereal::JSONInputArchive &ar);
 };
 
+class ViewCombineMask : public ViewNode, public hesiod::cnode::CombineMask
+{
+public:
+  ViewCombineMask(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewConvolveSVD : public ViewNode, public hesiod::cnode::ConvolveSVD
 {
 public:

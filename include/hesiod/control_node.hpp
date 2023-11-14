@@ -78,6 +78,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Cloud", "Geometry/Cloud"},
     {"CloudToArrayInterp", "Primitive/Manual"},
     {"Colorize", "Texture"},
+    {"CombineMask", "Mask"},
     {"PreviewColorize", "Texture"},
     {"ConvolveSVD", "Math/Convolution"},
     // {"CubicPulseTruncated", "Primitive/Kernel"}, // useless
@@ -576,6 +577,20 @@ protected:
   bool                       clamp = false;
   float                      vmin = 0.f;
   float                      vmax = 1.f;
+};
+
+class CombineMask : public gnode::Node
+{
+public:
+  CombineMask(std::string id);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap();
+  int             method = 0;
 };
 
 class ConvolveSVD : public gnode::Node
