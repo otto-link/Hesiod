@@ -808,8 +808,10 @@ class ViewGradientNorm : public ViewNode, public hesiod::cnode::GradientNorm
 public:
   ViewGradientNorm(std::string id);
 
-  void serialize_save(cereal::JSONOutputArchive &);
-  void serialize_load(cereal::JSONInputArchive &);
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewGradientTalus : public ViewNode, public hesiod::cnode::GradientTalus

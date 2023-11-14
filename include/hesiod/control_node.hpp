@@ -930,6 +930,11 @@ public:
   GradientNorm(std::string id);
 
   void compute_in_out(hmap::HeightMap &h, hmap::HeightMap *p_talus);
+
+protected:
+  bool  remap = true;
+  float vmin = 0.f;
+  float vmax = 1.f;
 };
 
 class GradientTalus : public Unary
