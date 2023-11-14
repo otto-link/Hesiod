@@ -34,9 +34,6 @@ void Mask::compute()
   this->compute_mask(this->value_out, p_input);
   this->value_out.smooth_overlap_buffers();
 
-  if (this->normalize)
-    this->value_out.remap();
-
   if (this->inverse)
     this->value_out.inverse();
 
@@ -47,6 +44,30 @@ void Mask::compute()
                     { return hmap::smooth_cpulse(array, this->ir_smoothing); });
     this->value_out.smooth_overlap_buffers();
   }
+
+  if (this->saturate)
+  {
+    float hmin = this->value_out.min();
+    float hmax = this->value_out.max();
+
+    // node parameters are assumed normalized and thus in [0, 1],
+    // they need to be rescaled
+    float smin_n = hmin + this->smin * (hmax - hmin);
+    float smax_n = hmax - (1.f - this->smax) * (hmax - hmin);
+    float k_n = this->k * (hmax - hmin);
+
+    hmap::transform(this->value_out,
+                    [&smin_n, &smax_n, &k_n](hmap::Array &array)
+                    { hmap::clamp_smooth(array, smin_n, smax_n, k_n); });
+
+    LOG_DEBUG("%f %f %f %f", hmin, hmax, smin_n, smax_n);
+
+    // keep original amplitude
+    this->value_out.remap(hmin, hmax);
+  }
+
+  if (this->remap)
+    this->value_out.remap(this->vmin, this->vmax);
 }
 
 } // namespace hesiod::cnode

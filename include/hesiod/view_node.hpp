@@ -324,7 +324,9 @@ public:
   }
 };
 
-//
+//----------------------------------------
+// End-user nodes
+//----------------------------------------
 
 /**
  * @brief ViewAlterElevation class.
@@ -1739,10 +1741,13 @@ public:
 };
 
 // Some generic settings
-bool render_settings_mask(bool &smoothing,
-                          int  &ir_smoothing,
-                          bool &normalize,
-                          bool &inverse);
+bool render_settings_mask(hesiod::cnode::Mask *p_node);
+
+void serialize_load_settings_mask(hesiod::cnode::Mask      *p_node,
+                                  cereal::JSONInputArchive &ar);
+
+void serialize_save_settings_mask(hesiod::cnode::Mask       *p_node,
+                                  cereal::JSONOutputArchive &ar);
 
 // // HELPERS
 

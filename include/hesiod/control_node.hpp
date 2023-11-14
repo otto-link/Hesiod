@@ -276,6 +276,17 @@ protected:
 class Mask : public gnode::Node
 {
 public:
+  bool  inverse = false;
+  bool  smoothing = false;
+  int   ir_smoothing = 16;
+  bool  saturate = false;
+  float smin = 0.f;
+  float smax = 1.f;
+  float k = 0.05f;
+  bool  remap = true;
+  float vmin = 0.f;
+  float vmax = 1.f;
+
   Mask(std::string id);
 
   void update_inner_bindings();
@@ -290,10 +301,6 @@ public:
 
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
-  bool            normalize = true;
-  bool            inverse = false;
-  bool            smoothing = false;
-  int             ir_smoothing = 16;
 };
 
 class Primitive : public gnode::Node

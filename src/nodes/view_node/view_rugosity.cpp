@@ -37,14 +37,8 @@ bool ViewRugosity::render_settings()
 
   ImGui::Separator();
 
-  if (render_settings_mask(this->smoothing,
-                           this->ir_smoothing,
-                           this->normalize,
-                           this->inverse))
-  {
-    this->force_update();
-    has_changed = true;
-  }
+  has_changed |= render_settings_mask(
+      (hesiod::cnode::Mask *)this->get_p_control_node());
 
   has_changed |= this->render_settings_footer();
   return has_changed;
@@ -56,10 +50,9 @@ void ViewRugosity::serialize_save(cereal::JSONOutputArchive &ar)
   ar(cereal::make_nvp("clamp_max", this->clamp_max));
   ar(cereal::make_nvp("vc_max", this->vc_max));
 
-  ar(cereal::make_nvp("normalize", this->normalize));
-  ar(cereal::make_nvp("inverse", this->inverse));
-  ar(cereal::make_nvp("smoothing", this->smoothing));
-  ar(cereal::make_nvp("ir_smoothing", this->ir_smoothing));
+  serialize_save_settings_mask(
+      (hesiod::cnode::Mask *)this->get_p_control_node(),
+      ar);
 }
 
 void ViewRugosity::serialize_load(cereal::JSONInputArchive &ar)
@@ -68,10 +61,9 @@ void ViewRugosity::serialize_load(cereal::JSONInputArchive &ar)
   ar(cereal::make_nvp("clamp_max", this->clamp_max));
   ar(cereal::make_nvp("vc_max", this->vc_max));
 
-  ar(cereal::make_nvp("normalize", this->normalize));
-  ar(cereal::make_nvp("inverse", this->inverse));
-  ar(cereal::make_nvp("smoothing", this->smoothing));
-  ar(cereal::make_nvp("ir_smoothing", this->ir_smoothing));
+  serialize_load_settings_mask(
+      (hesiod::cnode::Mask *)this->get_p_control_node(),
+      ar);
 }
 
 } // namespace hesiod::vnode
