@@ -103,15 +103,30 @@ void ViewNode::init_from_control_node()
   // uplink connection between control and view node: when the control
   // node is updated/computed this wrapper is triggered (with the view
   // node as reference parameter) and it then triggers the
-  // 'post_control_node_update' method of the node
+  // 'post_control_node_update' method of the node (and same for the
+  // pre_update)
+
+  this->p_control_node->set_pre_update_callback(
+      [this](gnode::Node *) { this->pre_control_node_update(); });
+
   this->p_control_node->set_post_update_callback(
-      [this](gnode::Node *p_cnode)
-      { post_update_callback_wrapper(this, p_cnode); });
+      [this](gnode::Node *) { this->post_control_node_update(); });
+}
+
+void ViewNode::pre_control_node_update()
+{
+  LOG_DEBUG("pre-update, node [%s]", this->p_control_node->id.c_str());
+
+  this->timer.reset();
 }
 
 void ViewNode::post_control_node_update()
 {
   LOG_DEBUG("post-update, node [%s]", this->p_control_node->id.c_str());
+
+  this->update_time = this->timer.stop();
+
+  LOG_DEBUG("%f ms", this->update_time);
 
   if (this->preview_port_id != "")
     this->update_preview();
@@ -299,6 +314,8 @@ bool ViewNode::render_settings_header()
     ImGui::TextColored(ImVec4(0.5, 0.5, 0.5, 1), "Up to date");
   else
     ImGui::TextColored(ImVec4(1, 1, 0, 1), "To be updated");
+  ImGui::SameLine();
+  ImGui::TextColored(ImVec4(0.5, 0.5, 0.5, 1), "(%.2f ms)", this->update_time);
 
   ImGui::Separator();
 
@@ -470,11 +487,6 @@ void img_to_texture_rgb(std::vector<uint8_t> img,
                GL_RGB,
                GL_UNSIGNED_BYTE,
                img.data());
-}
-
-void post_update_callback_wrapper(ViewNode *p_vnode, gnode::Node *)
-{
-  p_vnode->post_control_node_update();
 }
 
 } // namespace hesiod::vnode

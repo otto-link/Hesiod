@@ -60,8 +60,6 @@ void Mask::compute()
                     [&smin_n, &smax_n, &k_n](hmap::Array &array)
                     { hmap::clamp_smooth(array, smin_n, smax_n, k_n); });
 
-    LOG_DEBUG("%f %f %f %f", hmin, hmax, smin_n, smax_n);
-
     // keep original amplitude
     this->value_out.remap(hmin, hmax);
   }

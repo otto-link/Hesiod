@@ -12,6 +12,7 @@
 #include <imgui_impl_opengl3.h>
 
 #include "hesiod/control_node.hpp"
+#include "hesiod/timer.hpp"
 
 namespace hesiod::vnode
 {
@@ -183,6 +184,11 @@ public:
   void set_view3d_color_port_id(std::string new_port_id);
 
   /**
+   * @brief Method called before every update of the control node.
+   */
+  virtual void pre_control_node_update();
+
+  /**
    * @brief Method called after every update of the control node.
    */
   virtual void post_control_node_update();
@@ -302,6 +308,16 @@ private:
    * post-update method.
    */
   void init_from_control_node();
+
+  /**
+   * @brief Timer instance use to measure update time of the node.
+   */
+  hesiod::Timer timer = hesiod::Timer();
+
+  /**
+   * @brief Update time of the node (in milliseconds).
+   */
+  float update_time = 0.f;
 };
 
 /**
@@ -1771,7 +1787,5 @@ void img_to_texture(std::vector<uint8_t> img,
 void img_to_texture_rgb(std::vector<uint8_t> img,
                         hmap::Vec2<int>      shape,
                         GLuint              &image_texture);
-
-void post_update_callback_wrapper(ViewNode *p_vnode, gnode::Node *p_cnode);
 
 } // namespace hesiod::vnode
