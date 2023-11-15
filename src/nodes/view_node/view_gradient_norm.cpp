@@ -3,6 +3,7 @@
  * this software. */
 #include "macrologger.h"
 
+#include "hesiod/gui.hpp"
 #include "hesiod/view_node.hpp"
 
 namespace hesiod::vnode
@@ -16,12 +17,39 @@ ViewGradientNorm::ViewGradientNorm(std::string id)
   this->set_view3d_elevation_port_id("output");
 }
 
-void ViewGradientNorm::serialize_save(cereal::JSONOutputArchive &)
+bool ViewGradientNorm::render_settings()
 {
+  bool has_changed = false;
+
+  has_changed |= this->render_settings_header();
+
+  ImGui::Checkbox("remap", &this->remap);
+  has_changed |= this->trigger_update_after_edit();
+
+  if (this->remap)
+    if (hesiod::gui::slider_vmin_vmax(this->vmin, this->vmax))
+    {
+      this->force_update();
+      has_changed = true;
+    }
+
+  has_changed |= this->render_settings_footer();
+
+  return has_changed;
 }
 
-void ViewGradientNorm::serialize_load(cereal::JSONInputArchive &)
+void ViewGradientNorm::serialize_save(cereal::JSONOutputArchive &ar)
 {
+  ar(cereal::make_nvp("remap", this->remap));
+  ar(cereal::make_nvp("vmin", this->vmin));
+  ar(cereal::make_nvp("vmax", this->vmax));
+}
+
+void ViewGradientNorm::serialize_load(cereal::JSONInputArchive &ar)
+{
+  ar(cereal::make_nvp("remap", this->remap));
+  ar(cereal::make_nvp("vmin", this->vmin));
+  ar(cereal::make_nvp("vmax", this->vmax));
 }
 
 } // namespace hesiod::vnode

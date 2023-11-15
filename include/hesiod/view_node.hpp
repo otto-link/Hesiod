@@ -12,6 +12,7 @@
 #include <imgui_impl_opengl3.h>
 
 #include "hesiod/control_node.hpp"
+#include "hesiod/timer.hpp"
 
 namespace hesiod::vnode
 {
@@ -183,6 +184,11 @@ public:
   void set_view3d_color_port_id(std::string new_port_id);
 
   /**
+   * @brief Method called before every update of the control node.
+   */
+  virtual void pre_control_node_update();
+
+  /**
    * @brief Method called after every update of the control node.
    */
   virtual void post_control_node_update();
@@ -302,6 +308,16 @@ private:
    * post-update method.
    */
   void init_from_control_node();
+
+  /**
+   * @brief Timer instance use to measure update time of the node.
+   */
+  hesiod::Timer timer = hesiod::Timer();
+
+  /**
+   * @brief Update time of the node (in milliseconds).
+   */
+  float update_time = 0.f;
 };
 
 /**
@@ -324,7 +340,9 @@ public:
   }
 };
 
-//
+//----------------------------------------
+// End-user nodes
+//----------------------------------------
 
 /**
  * @brief ViewAlterElevation class.
@@ -504,6 +522,17 @@ public:
   ViewColorize(std::string id);
 
   // void render_node_specific_content();
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
+class ViewCombineMask : public ViewNode, public hesiod::cnode::CombineMask
+{
+public:
+  ViewCombineMask(std::string id);
 
   bool render_settings();
 
@@ -806,8 +835,10 @@ class ViewGradientNorm : public ViewNode, public hesiod::cnode::GradientNorm
 public:
   ViewGradientNorm(std::string id);
 
-  void serialize_save(cereal::JSONOutputArchive &);
-  void serialize_load(cereal::JSONInputArchive &);
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewGradientTalus : public ViewNode, public hesiod::cnode::GradientTalus
@@ -1739,10 +1770,13 @@ public:
 };
 
 // Some generic settings
-bool render_settings_mask(bool &smoothing,
-                          int  &ir_smoothing,
-                          bool &normalize,
-                          bool &inverse);
+bool render_settings_mask(hesiod::cnode::Mask *p_node);
+
+void serialize_load_settings_mask(hesiod::cnode::Mask      *p_node,
+                                  cereal::JSONInputArchive &ar);
+
+void serialize_save_settings_mask(hesiod::cnode::Mask       *p_node,
+                                  cereal::JSONOutputArchive &ar);
 
 // // HELPERS
 
@@ -1753,7 +1787,5 @@ void img_to_texture(std::vector<uint8_t> img,
 void img_to_texture_rgb(std::vector<uint8_t> img,
                         hmap::Vec2<int>      shape,
                         GLuint              &image_texture);
-
-void post_update_callback_wrapper(ViewNode *p_vnode, gnode::Node *p_cnode);
 
 } // namespace hesiod::vnode

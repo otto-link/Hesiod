@@ -78,6 +78,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Cloud", "Geometry/Cloud"},
     {"CloudToArrayInterp", "Primitive/Manual"},
     {"Colorize", "Texture"},
+    {"CombineMask", "Mask"},
     {"PreviewColorize", "Texture"},
     {"ConvolveSVD", "Math/Convolution"},
     // {"CubicPulseTruncated", "Primitive/Kernel"}, // useless
@@ -276,6 +277,17 @@ protected:
 class Mask : public gnode::Node
 {
 public:
+  bool  inverse = false;
+  bool  smoothing = false;
+  int   ir_smoothing = 16;
+  bool  saturate = false;
+  float smin = 0.f;
+  float smax = 1.f;
+  float k = 0.05f;
+  bool  remap = true;
+  float vmin = 0.f;
+  float vmax = 1.f;
+
   Mask(std::string id);
 
   void update_inner_bindings();
@@ -290,10 +302,6 @@ public:
 
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
-  bool            normalize = true;
-  bool            inverse = false;
-  bool            smoothing = false;
-  int             ir_smoothing = 16;
 };
 
 class Primitive : public gnode::Node
@@ -569,6 +577,20 @@ protected:
   bool                       clamp = false;
   float                      vmin = 0.f;
   float                      vmax = 1.f;
+};
+
+class CombineMask : public gnode::Node
+{
+public:
+  CombineMask(std::string id);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap();
+  int             method = 0;
 };
 
 class ConvolveSVD : public gnode::Node
@@ -923,6 +945,11 @@ public:
   GradientNorm(std::string id);
 
   void compute_in_out(hmap::HeightMap &h, hmap::HeightMap *p_talus);
+
+protected:
+  bool  remap = true;
+  float vmin = 0.f;
+  float vmax = 1.f;
 };
 
 class GradientTalus : public Unary

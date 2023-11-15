@@ -48,7 +48,7 @@ void ViewTree::render_node_list()
                          "%d",
                          vnode.get()->hash_id);
       ImGui::TableNextColumn();
-      if (ImGui::Button(("o##" + id).c_str()))
+      if (ImGui::Button(("Go##" + id).c_str()))
       {
         ax::NodeEditor::SetCurrentEditor(this->get_p_node_editor_context());
         ax::NodeEditor::SelectNode(vnode.get()->hash_id);

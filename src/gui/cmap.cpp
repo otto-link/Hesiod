@@ -22,6 +22,8 @@ std::vector<std::vector<float>> get_colormap_data(int cmap)
     return CMAP_ANGGHORE;
   case hesiod::cmap::anilyftp:
     return CMAP_ANILYFTP;
+  case hesiod::cmap::anthatly:
+    return CMAP_ANTHATLY;
   case hesiod::cmap::ascaired:
     return CMAP_ASCAIRED;
   case hesiod::cmap::aselllfa:
@@ -34,6 +36,8 @@ std::vector<std::vector<float>> get_colormap_data(int cmap)
     return CMAP_BLYWIXPS;
   case hesiod::cmap::boustous:
     return CMAP_BOUSTOUS;
+  case hesiod::cmap::byapsahi:
+    return CMAP_BYAPSAHI;
   case hesiod::cmap::bychpmem:
     return CMAP_BYCHPMEM;
   case hesiod::cmap::cecelldf:
@@ -52,8 +56,12 @@ std::vector<std::vector<float>> get_colormap_data(int cmap)
     return CMAP_DFVIERYO;
   case hesiod::cmap::drctheet:
     return CMAP_DRCTHEET;
+  case hesiod::cmap::drfftiee:
+    return CMAP_DRFFTIEE;
   case hesiod::cmap::dwinthed:
     return CMAP_DWINTHED;
+  case hesiod::cmap::eafbissf:
+    return CMAP_EAFBISSF;
   case hesiod::cmap::eporepop:
     return CMAP_EPOREPOP;
   case hesiod::cmap::ewntherb:
@@ -82,6 +90,10 @@ std::vector<std::vector<float>> get_colormap_data(int cmap)
     return CMAP_INDTHSAD;
   case hesiod::cmap::inosulul:
     return CMAP_INOSULUL;
+  case hesiod::cmap::intoshee:
+    return CMAP_INTOSHEE;
+  case hesiod::cmap::iresetyl:
+    return CMAP_IRESETYL;
   case hesiod::cmap::isungror:
     return CMAP_ISUNGROR;
   case hesiod::cmap::itteloud:
@@ -118,14 +130,22 @@ std::vector<std::vector<float>> get_colormap_data(int cmap)
     return CMAP_OUTTSTHE;
   case hesiod::cmap::owwheplu:
     return CMAP_OWWHEPLU;
+  case hesiod::cmap::pechrede:
+    return CMAP_PECHREDE;
+  case hesiod::cmap::pellaine:
+    return CMAP_PELLAINE;
   case hesiod::cmap::piventon:
     return CMAP_PIVENTON;
   case hesiod::cmap::plfgsthi:
     return CMAP_PLFGSTHI;
   case hesiod::cmap::rbonblnc:
     return CMAP_RBONBLNC;
+  case hesiod::cmap::rredtthe:
+    return CMAP_RREDTTHE;
   case hesiod::cmap::sarermat:
     return CMAP_SARERMAT;
+  case hesiod::cmap::seclytme:
+    return CMAP_SECLYTME;
   case hesiod::cmap::sfreante:
     return CMAP_SFREANTE;
   case hesiod::cmap::sheshesa:
@@ -166,6 +186,8 @@ std::vector<std::vector<float>> get_colormap_data(int cmap)
     return CMAP_TIOMITHE;
   case hesiod::cmap::tnymeewh:
     return CMAP_TNYMEEWH;
+  case hesiod::cmap::tonndind:
+    return CMAP_TONNDIND;
   case hesiod::cmap::trererat:
     return CMAP_TRERERAT;
   case hesiod::cmap::ttyaveft:
@@ -188,12 +210,16 @@ std::vector<std::vector<float>> get_colormap_data(int cmap)
     return CMAP_WADSUTHE;
   case hesiod::cmap::wbegweic:
     return CMAP_WBEGWEIC;
+  case hesiod::cmap::whetitat:
+    return CMAP_WHETITAT;
   case hesiod::cmap::whhorefr:
     return CMAP_WHHOREFR;
   case hesiod::cmap::wminamin:
     return CMAP_WMINAMIN;
   case hesiod::cmap::wsatavin:
     return CMAP_WSATAVIN;
+  case hesiod::cmap::yierahon:
+    return CMAP_YIERAHON;
   }
 }
 
@@ -204,12 +230,14 @@ std::map<std::string, int> get_colormap_mapping()
       {"aneprosi", hesiod::cmap::aneprosi},
       {"angghore", hesiod::cmap::angghore},
       {"anilyftp", hesiod::cmap::anilyftp},
+      {"anthatly", hesiod::cmap::anthatly},
       {"ascaired", hesiod::cmap::ascaired},
       {"aselllfa", hesiod::cmap::aselllfa},
       {"aveflili", hesiod::cmap::aveflili},
       {"blesiblh", hesiod::cmap::blesiblh},
       {"blywixps", hesiod::cmap::blywixps},
       {"boustous", hesiod::cmap::boustous},
+      {"byapsahi", hesiod::cmap::byapsahi},
       {"bychpmem", hesiod::cmap::bychpmem},
       {"cecelldf", hesiod::cmap::cecelldf},
       {"ceitwope", hesiod::cmap::ceitwope},
@@ -219,7 +247,9 @@ std::map<std::string, int> get_colormap_mapping()
       {"dffygutu", hesiod::cmap::dffygutu},
       {"dfvieryo", hesiod::cmap::dfvieryo},
       {"drctheet", hesiod::cmap::drctheet},
+      {"drfftiee", hesiod::cmap::drfftiee},
       {"dwinthed", hesiod::cmap::dwinthed},
+      {"eafbissf", hesiod::cmap::eafbissf},
       {"eporepop", hesiod::cmap::eporepop},
       {"ewntherb", hesiod::cmap::ewntherb},
       {"feredwnt", hesiod::cmap::feredwnt},
@@ -234,6 +264,8 @@ std::map<std::string, int> get_colormap_mapping()
       {"imongsir", hesiod::cmap::imongsir},
       {"indthsad", hesiod::cmap::indthsad},
       {"inosulul", hesiod::cmap::inosulul},
+      {"intoshee", hesiod::cmap::intoshee},
+      {"iresetyl", hesiod::cmap::iresetyl},
       {"isungror", hesiod::cmap::isungror},
       {"itteloud", hesiod::cmap::itteloud},
       {"ivericed", hesiod::cmap::ivericed},
@@ -252,10 +284,14 @@ std::map<std::string, int> get_colormap_mapping()
       {"ontomayw", hesiod::cmap::ontomayw},
       {"outtsthe", hesiod::cmap::outtsthe},
       {"owwheplu", hesiod::cmap::owwheplu},
+      {"pechrede", hesiod::cmap::pechrede},
+      {"pellaine", hesiod::cmap::pellaine},
       {"piventon", hesiod::cmap::piventon},
       {"plfgsthi", hesiod::cmap::plfgsthi},
       {"rbonblnc", hesiod::cmap::rbonblnc},
+      {"rredtthe", hesiod::cmap::rredtthe},
       {"sarermat", hesiod::cmap::sarermat},
+      {"seclytme", hesiod::cmap::seclytme},
       {"sfreante", hesiod::cmap::sfreante},
       {"sheshesa", hesiod::cmap::sheshesa},
       {"sinabuse", hesiod::cmap::sinabuse},
@@ -276,6 +312,7 @@ std::map<std::string, int> get_colormap_mapping()
       {"tinusprr", hesiod::cmap::tinusprr},
       {"tiomithe", hesiod::cmap::tiomithe},
       {"tnymeewh", hesiod::cmap::tnymeewh},
+      {"tonndind", hesiod::cmap::tonndind},
       {"trererat", hesiod::cmap::trererat},
       {"ttyaveft", hesiod::cmap::ttyaveft},
       {"tyfotinm", hesiod::cmap::tyfotinm},
@@ -287,9 +324,11 @@ std::map<std::string, int> get_colormap_mapping()
       {"verdeisu", hesiod::cmap::verdeisu},
       {"wadsuthe", hesiod::cmap::wadsuthe},
       {"wbegweic", hesiod::cmap::wbegweic},
+      {"whetitat", hesiod::cmap::whetitat},
       {"whhorefr", hesiod::cmap::whhorefr},
       {"wminamin", hesiod::cmap::wminamin},
       {"wsatavin", hesiod::cmap::wsatavin},
+      {"yierahon", hesiod::cmap::yierahon},
   };
 }
 

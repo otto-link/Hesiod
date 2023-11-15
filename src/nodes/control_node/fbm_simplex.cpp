@@ -4,6 +4,7 @@
 #include "macrologger.h"
 
 #include "hesiod/control_node.hpp"
+#include "hesiod/timer.hpp"
 
 namespace hesiod::cnode
 {
