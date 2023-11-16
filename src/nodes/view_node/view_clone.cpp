@@ -49,6 +49,7 @@ void ViewClone::serialize_save(cereal::JSONOutputArchive &ar)
       output_ids.push_back(port_id.c_str());
 
   ar(cereal::make_nvp("output_ids", output_ids));
+  ar(cereal::make_nvp("id_count", id_count));
 }
 
 void ViewClone::serialize_load(cereal::JSONInputArchive &ar)
@@ -62,8 +63,9 @@ void ViewClone::serialize_load(cereal::JSONInputArchive &ar)
       this->add_port(gnode::Port(port_id,
                                  gnode::direction::out,
                                  hesiod::cnode::dtype::dHeightMap));
-
   this->update_inner_bindings();
+
+  ar(cereal::make_nvp("id_count", id_count));
 }
 
 } // namespace hesiod::vnode
