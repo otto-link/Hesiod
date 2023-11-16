@@ -28,7 +28,9 @@ void PreviewColorize::update_inner_bindings()
 
 void PreviewColorize::compute()
 {
-  // nothing here
+  // for thru port
+  this->update_inner_bindings();
+  this->update_links();
 }
 
 } // namespace hesiod::cnode
