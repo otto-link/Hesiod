@@ -27,6 +27,10 @@ void Colorize::compute()
 {
   LOG_DEBUG("computing Colorize node [%s]", this->id.c_str());
 
+  // for thru port
+  this->update_inner_bindings();
+  this->update_links();
+
   std::vector<std::vector<float>> colormap_colors = hesiod::get_colormap_data(
       this->cmap_choice);
 

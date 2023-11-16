@@ -126,8 +126,6 @@ void ViewNode::post_control_node_update()
 
   this->update_time = this->timer.stop();
 
-  LOG_DEBUG("%f ms", this->update_time);
-
   if (this->preview_port_id != "")
     this->update_preview();
 }
