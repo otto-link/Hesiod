@@ -34,7 +34,8 @@ template <class Archive> void ViewTree::load(Archive &archive)
   archive(cereal::make_nvp("id", this->id),
           cereal::make_nvp("overlap ", this->overlap),
           cereal::make_nvp("shape.x", this->shape.x),
-          cereal::make_nvp("shape.y", this->shape.y));
+          cereal::make_nvp("shape.y", this->shape.y),
+          cereal::make_nvp("id_counter", this->id_counter));
 
   {
     std::vector<std::string> node_ids = {};
@@ -78,7 +79,8 @@ template <class Archive> void ViewTree::save(Archive &archive) const
   archive(cereal::make_nvp("id", this->id),
           cereal::make_nvp("overlap ", this->overlap),
           cereal::make_nvp("shape.x", this->shape.x),
-          cereal::make_nvp("shape.y", this->shape.y));
+          cereal::make_nvp("shape.y", this->shape.y),
+          cereal::make_nvp("id_counter", this->id_counter));
 
   // node ids and positions
   {
