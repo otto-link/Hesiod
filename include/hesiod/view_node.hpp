@@ -1349,6 +1349,18 @@ private:
   int                selected_idx = 0;
 };
 
+class ViewSelectGradientNorm : public ViewNode,
+                               public hesiod::cnode::SelectGradientNorm
+{
+public:
+  ViewSelectGradientNorm(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewSelectInterval : public ViewNode, public hesiod::cnode::SelectInterval
 {
 public:
