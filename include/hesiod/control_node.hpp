@@ -110,6 +110,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"HydraulicParticle", "Erosion/Hydraulic"},
     {"HydraulicRidge", "Erosion/Hydraulic"}, // not distributed
     {"HydraulicStream", "Erosion/Hydraulic"},
+    {"HydraulicStreamLog", "Erosion/Hydraulic"},
     {"HydraulicVpipes", "Erosion/Hydraulic"},
     {"Import", "IO/Files"},
     {"Kernel", "Primitive/Kernel"},
@@ -1060,6 +1061,25 @@ protected:
   float talus_ref = 0.1f;
   int   ir = 1;
   float clipping_ratio = 10.f;
+};
+
+class HydraulicStreamLog : public Erosion
+{
+public:
+  HydraulicStreamLog(std::string id);
+
+  void compute_erosion(hmap::HeightMap &h,
+                       hmap::HeightMap *p_bedrock,
+                       hmap::HeightMap *p_moisture_map,
+                       hmap::HeightMap *p_mask,
+                       hmap::HeightMap *p_erosion_map,
+                       hmap::HeightMap *p_deposition_map);
+
+protected:
+  float c_erosion = 0.05f;
+  float talus_ref = 0.1f;
+  float gamma = 1.f;
+  int   ir = 1;
 };
 
 class HydraulicVpipes : public Erosion

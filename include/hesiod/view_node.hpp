@@ -922,6 +922,18 @@ public:
   void serialize_load(cereal::JSONInputArchive &ar);
 };
 
+class ViewHydraulicStreamLog : public ViewNode,
+                            public hesiod::cnode::HydraulicStreamLog
+{
+public:
+  ViewHydraulicStreamLog(std::string id);
+
+  bool render_settings();
+
+  void serialize_save(cereal::JSONOutputArchive &ar);
+  void serialize_load(cereal::JSONInputArchive &ar);
+};
+
 class ViewHydraulicVpipes : public ViewNode,
                             public hesiod::cnode::HydraulicVpipes
 {
