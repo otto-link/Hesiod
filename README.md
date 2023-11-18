@@ -47,6 +47,10 @@ bin/./hesiod
 
 ### Windows
 
+#### Standalone executable
+
+Available here: https://sourceforge.net/projects/hesiod/files/Hesiod_win64_20231118_60ad80b.zip/download
+
 #### Getting the sources
 
 Use `PowerShell` to clone the repository (because Visual Studio won't clone the submodules) using `git` command lines:
