@@ -5,7 +5,7 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     # MSVC compiler options
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /RTC1- /W4 /Od")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4 /Od")
 else()
     # GNU compiler options
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -O3 -pthread -DLOG_LEVEL=3")
