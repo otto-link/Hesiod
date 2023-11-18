@@ -16,9 +16,11 @@ Work in progress, use at your own risk!
 
 This project is licensed under the GNU General Public License v3.0.
 
-## Getting started (only on Linux so far)
+## Getting started
 
-### Getting the sources
+### Linux
+
+#### Getting the sources
 
 Use `git` to retrieve the sources: 
 ``` bash
@@ -27,7 +29,7 @@ cd Hesiod
 git submodule update --init --recursive
 ```
 
-### Building
+#### Building
 
 Build by making a build directory (i.e. `build/`), run `cmake` in that dir, and then use `make` to build the desired target.
 
@@ -42,6 +44,24 @@ Start the main executable:
 ```
 bin/./hesiod
 ```
+
+### Windows
+
+#### Getting the sources
+
+Use `PowerShell` to clone the repository (because Visual Studio won't clone the submodules) using `git` command lines:
+``` bash
+git clone git@github.com:otto-link/Hesiod.git
+cd Hesiod
+git submodule update --init --recursive
+```
+
+Install the missing OpenSource dependencies using `vcpkg`:
+```
+vcpkg install glfw3 opengl gsl glew freeglut eigen3 glm libpng boost-range boost-type-erasure boost-geometry glm
+```
+
+You should then be able to build the sources using Visual Studio.
 
 ## Development roadmap
 
