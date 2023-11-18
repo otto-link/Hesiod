@@ -3,7 +3,13 @@ project(hesiod)
 
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -O3 -DLOG_LEVEL=3")
+if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+    # MSVC compiler options
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4 /Od")
+else()
+    # GNU compiler options
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -O3 -pthread -DLOG_LEVEL=3")
+endif()
 
 set(CMAKE_CXX_STANDARD 20)
 
@@ -72,8 +78,8 @@ target_link_libraries(${PROJECT_NAME}
   gnode
   glfw
   OpenGL::GL
-  ${GLEW_LIBRARIES}
-	${GLUT_LIBRARY})
+  GLEW::GLEW
+	GLUT::GLUT)
 
 # documentatio
 add_subdirectory(${PROJECT_SOURCE_DIR}/external/HighMap)
