@@ -923,7 +923,7 @@ public:
 };
 
 class ViewHydraulicStreamLog : public ViewNode,
-                            public hesiod::cnode::HydraulicStreamLog
+                               public hesiod::cnode::HydraulicStreamLog
 {
 public:
   ViewHydraulicStreamLog(std::string id);
