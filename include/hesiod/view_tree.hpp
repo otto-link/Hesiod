@@ -166,6 +166,7 @@ private:
 
   // 3D viewer
   bool                 open_view3d_window = false;
+  bool                 show_view3d_on_background = false;
   GLuint               image_texture_view3d;
   GLuint               shader_id;
   GLuint               vertex_array_id;

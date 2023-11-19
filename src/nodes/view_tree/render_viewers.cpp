@@ -136,6 +136,9 @@ void ViewTree::render_view3d()
       if (this->auto_rotate)
         this->update_image_texture_view3d(false);
 
+      ImGui::SameLine();
+      ImGui::Checkbox("Show on background", &this->show_view3d_on_background);
+
       if (ImGui::SliderFloat("h_scale", &this->h_scale, 0.f, 2.f, "%.2f"))
         this->update_image_texture_view3d(false);
 
@@ -149,6 +152,8 @@ void ViewTree::render_view3d()
     }
 
     // --- 3D rendering viewport
+    ImGuiIO &io = ImGui::GetIO();
+
     float window_width = ImGui::GetContentRegionAvail().x;
     {
       ImVec2 pos = ImGui::GetCursorScreenPos();
@@ -165,9 +170,20 @@ void ViewTree::render_view3d()
                           ImVec2(1, 0));
       draw_list->AddRect(p0, p1, IM_COL32(255, 255, 255, 255));
       ImGui::InvisibleButton("##image3d", ImVec2(window_width, window_width));
+
+      if (this->show_view3d_on_background)
+      {
+        float display_width = std::min(io.DisplaySize.x, io.DisplaySize.y);
+
+        ImGui::GetBackgroundDrawList()->AddImage(
+            (void *)(intptr_t)this->image_texture_view3d,
+            ImVec2(0, 0),
+            ImVec2(display_width, display_width),
+            ImVec2(0, 1),
+            ImVec2(1, 0));
+      }
     }
 
-    ImGuiIO &io = ImGui::GetIO();
     {
       ImGui::SetItemKeyOwner(ImGuiKey_MouseLeft);
       ImGui::SetItemKeyOwner(ImGuiKey_MouseWheelY);

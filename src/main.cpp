@@ -52,6 +52,8 @@ int main()
   hesiod::vnode::ViewTree tree2 =
       hesiod::vnode::ViewTree("tree_2", shape, tiling, overlap);
 
+  tree2.add_view_node("FbmPerlin");
+
   tree.add_view_node("FbmSimplex");
   // tree.add_view_node("ZeroedEdges");
   // tree.add_view_node("Plateau");
