@@ -73,7 +73,15 @@ bool ViewColorize::render_settings()
 
 void ViewColorize::serialize_save(cereal::JSONOutputArchive &ar)
 {
-  ar(cereal::make_nvp("cmap_choice", this->cmap_choice));
+  std::string cmap_name = "";
+  for (auto &[cname, k] : this->cmap_map)
+    if (k == this->cmap_choice)
+    {
+      cmap_name = cname;
+      break;
+    }
+  ar(cereal::make_nvp("cmap_name", cmap_name));
+
   ar(cereal::make_nvp("reverse", this->reverse));
   ar(cereal::make_nvp("clamp", this->clamp));
   ar(cereal::make_nvp("vmin", this->vmin));
@@ -82,7 +90,10 @@ void ViewColorize::serialize_save(cereal::JSONOutputArchive &ar)
 
 void ViewColorize::serialize_load(cereal::JSONInputArchive &ar)
 {
-  ar(cereal::make_nvp("cmap_choice", this->cmap_choice));
+  std::string cmap_name = "";
+  ar(cereal::make_nvp("cmap_name", cmap_name));
+  this->cmap_choice = this->cmap_map[cmap_name];
+
   ar(cereal::make_nvp("reverse", this->reverse));
   ar(cereal::make_nvp("clamp", this->clamp));
   ar(cereal::make_nvp("vmin", this->vmin));
