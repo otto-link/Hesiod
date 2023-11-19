@@ -322,10 +322,10 @@ private:
 
 /**
  * @brief Composite class based on ViewNode (view node) and gnode::Node (control
- * node). Base class used to build all the view nodes.
+ * node). Base class used to used to recast the classes derived from ViewNode to
+ * a single common class.
  */
-class ViewControlNode : public ViewNode,
-                        public gnode::Node // used to recast derived ViewNode
+class ViewControlNode : public ViewNode, public gnode::Node
 {
 public:
   /**
