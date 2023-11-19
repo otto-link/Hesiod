@@ -527,12 +527,15 @@ public:
   void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
 
 protected:
-  float vmin = 0.f;
-  float vmax = 1.f;
+  float cmin = 0.f;
+  float cmax = 1.f;
   bool  smooth_min = false;
   bool  smooth_max = false;
   float k_min = 0.05f;
   float k_max = 0.05f;
+  bool  remap = false;
+  float vmin = 0.f;
+  float vmax = 1.f;
 };
 
 class Cloud : public gnode::Node

@@ -25,28 +25,31 @@ void Clamp::compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in)
   {
     hmap::transform(h_out,
                     [this](hmap::Array &x)
-                    { hmap::clamp(x, this->vmin, this->vmax); });
+                    { hmap::clamp(x, this->cmin, this->cmax); });
   }
   else
   {
     if (this->smooth_min)
       hmap::transform(h_out,
                       [this](hmap::Array &x)
-                      { hmap::clamp_min_smooth(x, this->vmin, this->k_min); });
+                      { hmap::clamp_min_smooth(x, this->cmin, this->k_min); });
     else
       hmap::transform(h_out,
                       [this](hmap::Array &x)
-                      { hmap::clamp_min(x, this->vmin); });
+                      { hmap::clamp_min(x, this->cmin); });
 
     if (this->smooth_max)
       hmap::transform(h_out,
                       [this](hmap::Array &x)
-                      { hmap::clamp_max_smooth(x, this->vmax, this->k_max); });
+                      { hmap::clamp_max_smooth(x, this->cmax, this->k_max); });
     else
       hmap::transform(h_out,
                       [this](hmap::Array &x)
-                      { hmap::clamp_max(x, this->vmax); });
+                      { hmap::clamp_max(x, this->cmax); });
   }
+
+  if (this->remap)
+    h_out.remap(this->vmin, this->vmax);
 }
 
 } // namespace hesiod::cnode
