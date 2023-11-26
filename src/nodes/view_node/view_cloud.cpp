@@ -9,9 +9,9 @@
 namespace hesiod::vnode
 {
 
-ViewCloud::ViewCloud(std::string id) : ViewNode(), hesiod::cnode::Cloud(id)
+ViewCloud::ViewCloud(std::string id)
+    : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Cloud(id)
 {
-  this->set_p_control_node((gnode::Node *)this);
 }
 
 void ViewCloud::render_node_specific_content()

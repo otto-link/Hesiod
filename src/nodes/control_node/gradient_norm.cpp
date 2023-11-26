@@ -12,6 +12,9 @@ GradientNorm::GradientNorm(std::string id) : Unary(id)
 {
   this->node_type = "GradientNorm";
   this->category = category_mapping.at(this->node_type);
+
+  this->attr["remap"] = NEW_ATTR_RANGE();
+
   this->update_inner_bindings();
 }
 
@@ -24,8 +27,7 @@ void GradientNorm::compute_in_out(hmap::HeightMap &gradient_norm,
                   *p_input,      // input
                   [](hmap::Array &z) { return hmap::gradient_norm(z); });
 
-  if (this->remap)
-    gradient_norm.remap(this->vmin, this->vmax);
+  this->post_process_heightmap(this->value_out);
 }
 
 } // namespace hesiod::cnode

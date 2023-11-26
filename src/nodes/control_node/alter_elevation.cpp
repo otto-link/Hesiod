@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-AlterElevation::AlterElevation(std::string id) : gnode::Node(id)
+AlterElevation::AlterElevation(std::string id) : ControlNode(id)
 {
   LOG_DEBUG("AlterElevation::AlterElevation()");
   this->node_type = "AlterElevation";

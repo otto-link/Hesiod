@@ -9,9 +9,9 @@ namespace hesiod::vnode
 {
 
 ViewHydraulicAlgebric::ViewHydraulicAlgebric(std::string id)
-    : ViewNode(), hesiod::cnode::HydraulicAlgebric(id)
+    : hesiod::cnode::ControlNode(id), ViewNode(id),
+      hesiod::cnode::HydraulicAlgebric(id)
 {
-  this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
   this->set_view3d_elevation_port_id("output");
 }
@@ -38,24 +38,6 @@ bool ViewHydraulicAlgebric::render_settings()
 
   has_changed |= this->render_settings_footer();
   return has_changed;
-}
-
-void ViewHydraulicAlgebric::serialize_save(cereal::JSONOutputArchive &ar)
-{
-  ar(cereal::make_nvp("talus_global", this->talus_global));
-  ar(cereal::make_nvp("ir", this->ir));
-  ar(cereal::make_nvp("c_erosion", this->c_erosion));
-  ar(cereal::make_nvp("c_deposition", this->c_deposition));
-  ar(cereal::make_nvp("iterations", this->iterations));
-}
-
-void ViewHydraulicAlgebric::serialize_load(cereal::JSONInputArchive &ar)
-{
-  ar(cereal::make_nvp("talus_global", this->talus_global));
-  ar(cereal::make_nvp("ir", this->ir));
-  ar(cereal::make_nvp("c_erosion", this->c_erosion));
-  ar(cereal::make_nvp("c_deposition", this->c_deposition));
-  ar(cereal::make_nvp("iterations", this->iterations));
 }
 
 } // namespace hesiod::vnode

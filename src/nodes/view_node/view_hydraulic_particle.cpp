@@ -9,9 +9,9 @@ namespace hesiod::vnode
 {
 
 ViewHydraulicParticle::ViewHydraulicParticle(std::string id)
-    : ViewNode(), hesiod::cnode::HydraulicParticle(id)
+    : hesiod::cnode::ControlNode(id), ViewNode(id),
+      hesiod::cnode::HydraulicParticle(id)
 {
-  this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
   this->set_view3d_elevation_port_id("output");
 }
@@ -55,30 +55,6 @@ bool ViewHydraulicParticle::render_settings()
 
   has_changed |= this->render_settings_footer();
   return has_changed;
-}
-
-void ViewHydraulicParticle::serialize_save(cereal::JSONOutputArchive &ar)
-{
-  ar(cereal::make_nvp("seed", this->seed));
-  ar(cereal::make_nvp("nparticles", this->nparticles));
-  ar(cereal::make_nvp("c_radius", this->c_radius));
-  ar(cereal::make_nvp("c_capacity", this->c_capacity));
-  ar(cereal::make_nvp("c_erosion", this->c_erosion));
-  ar(cereal::make_nvp("c_deposition", this->c_deposition));
-  ar(cereal::make_nvp("drag_rate", this->drag_rate));
-  ar(cereal::make_nvp("evap_rate", this->evap_rate));
-}
-
-void ViewHydraulicParticle::serialize_load(cereal::JSONInputArchive &ar)
-{
-  ar(cereal::make_nvp("seed", this->seed));
-  ar(cereal::make_nvp("nparticles", this->nparticles));
-  ar(cereal::make_nvp("c_radius", this->c_radius));
-  ar(cereal::make_nvp("c_capacity", this->c_capacity));
-  ar(cereal::make_nvp("c_erosion", this->c_erosion));
-  ar(cereal::make_nvp("c_deposition", this->c_deposition));
-  ar(cereal::make_nvp("drag_rate", this->drag_rate));
-  ar(cereal::make_nvp("evap_rate", this->evap_rate));
 }
 
 } // namespace hesiod::vnode

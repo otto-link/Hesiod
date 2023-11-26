@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-ErosionMaps::ErosionMaps(std::string id) : gnode::Node(id)
+ErosionMaps::ErosionMaps(std::string id) : ControlNode(id)
 {
   this->node_type = "ErosionMaps";
   this->category = category_mapping.at(this->node_type);

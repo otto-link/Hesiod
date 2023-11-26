@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-Export::Export(std::string id) : gnode::Node(id)
+Export::Export(std::string id) : ControlNode(id)
 {
   LOG_DEBUG("Export::Export()");
   this->node_type = "Export";

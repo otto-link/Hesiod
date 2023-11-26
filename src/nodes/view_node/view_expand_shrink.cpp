@@ -10,9 +10,9 @@ namespace hesiod::vnode
 {
 
 ViewExpandShrink::ViewExpandShrink(std::string id)
-    : ViewNode(), hesiod::cnode::ExpandShrink(id)
+    : hesiod::cnode::ControlNode(id), ViewNode(id),
+      hesiod::cnode::ExpandShrink(id)
 {
-  this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
   this->set_view3d_elevation_port_id("output");
 }
@@ -36,20 +36,6 @@ bool ViewExpandShrink::render_settings()
 
   has_changed |= this->render_settings_footer();
   return has_changed;
-}
-
-void ViewExpandShrink::serialize_save(cereal::JSONOutputArchive &ar)
-{
-  ar(cereal::make_nvp("ir", this->ir));
-  ar(cereal::make_nvp("shrink", this->shrink));
-  ar(cereal::make_nvp("kernel", this->kernel));
-}
-
-void ViewExpandShrink::serialize_load(cereal::JSONInputArchive &ar)
-{
-  ar(cereal::make_nvp("ir", this->ir));
-  ar(cereal::make_nvp("shrink", this->shrink));
-  ar(cereal::make_nvp("kernel", this->kernel));
 }
 
 } // namespace hesiod::vnode

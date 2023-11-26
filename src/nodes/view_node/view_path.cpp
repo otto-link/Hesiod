@@ -9,9 +9,9 @@
 namespace hesiod::vnode
 {
 
-ViewPath::ViewPath(std::string id) : ViewNode(), hesiod::cnode::Path(id)
+ViewPath::ViewPath(std::string id)
+    : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Path(id)
 {
-  this->set_p_control_node((gnode::Node *)this);
 }
 
 void ViewPath::render_node_specific_content()

@@ -9,19 +9,11 @@ namespace hesiod::vnode
 {
 
 ViewGradientAngle::ViewGradientAngle(std::string id)
-    : ViewNode(), hesiod::cnode::GradientAngle(id)
+    : hesiod::cnode::ControlNode(id), ViewNode(id),
+      hesiod::cnode::GradientAngle(id)
 {
-  this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
   this->set_view3d_elevation_port_id("output");
-}
-
-void ViewGradientAngle::serialize_save(cereal::JSONOutputArchive &)
-{
-}
-
-void ViewGradientAngle::serialize_load(cereal::JSONInputArchive &)
-{
 }
 
 } // namespace hesiod::vnode

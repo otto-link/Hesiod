@@ -17,8 +17,7 @@ Checkerboard::Checkerboard(std::string     id,
   LOG_DEBUG("Checkerboard::Checkerboard()");
   this->node_type = "Checkerboard";
   this->category = category_mapping.at(this->node_type);
-  this->value_out.set_sto(shape, tiling, overlap);
-  this->update_inner_bindings();
+  this->attr["kw"] = NEW_ATTR_WAVENB();
 }
 
 void Checkerboard::compute()
@@ -35,15 +34,14 @@ void Checkerboard::compute()
                     hmap::Array      *p_noise_y)
              {
                return hmap::checkerboard(shape,
-                                         this->kw,
+                                         GET_ATTR_WAVENB("kw"),
                                          p_noise_x,
                                          p_noise_y,
                                          shift,
                                          scale);
              });
 
-  // remap the output
-  this->value_out.remap(this->vmin, this->vmax);
+  this->post_process_heightmap(this->value_out);
 }
 
 } // namespace hesiod::cnode

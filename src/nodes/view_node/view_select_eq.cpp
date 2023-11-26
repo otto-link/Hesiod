@@ -12,9 +12,8 @@ namespace hesiod::vnode
 {
 
 ViewSelectEq::ViewSelectEq(std::string id)
-    : ViewNode(), hesiod::cnode::SelectEq(id)
+    : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::SelectEq(id)
 {
-  this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
   this->set_view3d_elevation_port_id("input");
   this->set_view3d_color_port_id("output");
@@ -73,31 +72,11 @@ bool ViewSelectEq::render_settings()
   }
 
   ImGui::Separator();
-
-  has_changed |= render_settings_mask(
-      (hesiod::cnode::Mask *)this->get_p_control_node());
+  has_changed |= render_settings_mask(this->get_ref<hesiod::cnode::Mask>());
 
   has_changed |= this->render_settings_footer();
 
   return has_changed;
-}
-
-void ViewSelectEq::serialize_save(cereal::JSONOutputArchive &ar)
-{
-  ar(cereal::make_nvp("value", this->value));
-
-  serialize_save_settings_mask(
-      (hesiod::cnode::Mask *)this->get_p_control_node(),
-      ar);
-}
-
-void ViewSelectEq::serialize_load(cereal::JSONInputArchive &ar)
-{
-  ar(cereal::make_nvp("value", this->value));
-
-  serialize_load_settings_mask(
-      (hesiod::cnode::Mask *)this->get_p_control_node(),
-      ar);
 }
 
 } // namespace hesiod::vnode

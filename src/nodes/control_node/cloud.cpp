@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-Cloud::Cloud(std::string id) : gnode::Node(id)
+Cloud::Cloud(std::string id) : ControlNode(id)
 {
   LOG_DEBUG("Cloud::Cloud()");
   this->node_type = "Cloud";

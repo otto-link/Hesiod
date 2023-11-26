@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-Thermal::Thermal(std::string id) : gnode::Node(id)
+Thermal::Thermal(std::string id) : ControlNode(id)
 {
   this->node_type = "Thermal";
   this->category = category_mapping.at(this->node_type);

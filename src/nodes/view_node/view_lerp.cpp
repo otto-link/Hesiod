@@ -8,9 +8,9 @@
 namespace hesiod::vnode
 {
 
-ViewLerp::ViewLerp(std::string id) : ViewNode(), hesiod::cnode::Lerp(id)
+ViewLerp::ViewLerp(std::string id)
+    : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Lerp(id)
 {
-  this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
   this->set_view3d_elevation_port_id("output");
 }
@@ -28,16 +28,6 @@ bool ViewLerp::render_settings()
 
   has_changed |= this->render_settings_footer();
   return has_changed;
-}
-
-void ViewLerp::serialize_save(cereal::JSONOutputArchive &ar)
-{
-  ar(cereal::make_nvp("t", this->t));
-}
-
-void ViewLerp::serialize_load(cereal::JSONInputArchive &ar)
-{
-  ar(cereal::make_nvp("t", this->t));
 }
 
 } // namespace hesiod::vnode

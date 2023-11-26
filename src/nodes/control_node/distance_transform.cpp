@@ -8,9 +8,12 @@
 namespace hesiod::cnode
 {
 
-DistanceTransform::DistanceTransform(std::string id) : gnode::Node(id)
+DistanceTransform::DistanceTransform(std::string id) : ControlNode(id)
 {
-  LOG_DEBUG("DistanceTransform::DistanceTransform()");
+  LOG_DEBUG("DistanceTransform::DistanceTransform, id: %s", id.c_str());
+  LOG_DEBUG("DistanceTransform::DistanceTransform, this->id: [%s]",
+            this->id.c_str());
+
   this->node_type = "DistanceTransform";
   this->category = category_mapping.at(this->node_type);
   this->add_port(gnode::Port("input", gnode::direction::in, dtype::dHeightMap));

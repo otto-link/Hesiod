@@ -10,9 +10,9 @@ namespace hesiod::vnode
 {
 
 ViewExpandShrinkDirectional::ViewExpandShrinkDirectional(std::string id)
-    : ViewNode(), hesiod::cnode::ExpandShrinkDirectional(id)
+    : hesiod::cnode::ControlNode(id), ViewNode(id),
+      hesiod::cnode::ExpandShrinkDirectional(id)
 {
-  this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
   this->set_view3d_elevation_port_id("output");
 }
@@ -41,24 +41,6 @@ bool ViewExpandShrinkDirectional::render_settings()
 
   has_changed |= this->render_settings_footer();
   return has_changed;
-}
-
-void ViewExpandShrinkDirectional::serialize_save(cereal::JSONOutputArchive &ar)
-{
-  ar(cereal::make_nvp("ir", this->ir));
-  ar(cereal::make_nvp("angle", this->angle));
-  ar(cereal::make_nvp("aspect_ratio", this->aspect_ratio));
-  ar(cereal::make_nvp("anisotropy", this->anisotropy));
-  ar(cereal::make_nvp("shrink", this->shrink));
-}
-
-void ViewExpandShrinkDirectional::serialize_load(cereal::JSONInputArchive &ar)
-{
-  ar(cereal::make_nvp("ir", this->ir));
-  ar(cereal::make_nvp("angle", this->angle));
-  ar(cereal::make_nvp("aspect_ratio", this->aspect_ratio));
-  ar(cereal::make_nvp("anisotropy", this->anisotropy));
-  ar(cereal::make_nvp("shrink", this->shrink));
 }
 
 } // namespace hesiod::vnode

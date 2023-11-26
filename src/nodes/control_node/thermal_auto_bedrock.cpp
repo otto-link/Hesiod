@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-ThermalAutoBedrock::ThermalAutoBedrock(std::string id) : gnode::Node(id)
+ThermalAutoBedrock::ThermalAutoBedrock(std::string id) : ControlNode(id)
 {
   this->node_type = "ThermalAutoBedrock";
   this->category = category_mapping.at(this->node_type);

@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-Path::Path(std::string id) : gnode::Node(id)
+Path::Path(std::string id) : ControlNode(id)
 {
   LOG_DEBUG("Path::Path()");
   this->node_type = "Path";

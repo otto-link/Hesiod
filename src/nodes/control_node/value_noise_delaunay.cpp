@@ -17,8 +17,9 @@ ValueNoiseDelaunay::ValueNoiseDelaunay(std::string     id,
   LOG_DEBUG("ValueNoiseDelaunay::ValueNoiseDelaunay()");
   this->node_type = "ValueNoiseDelaunay";
   this->category = category_mapping.at(this->node_type);
-  this->value_out.set_sto(shape, tiling, overlap);
-  this->update_inner_bindings();
+
+  this->attr["kw"] = NEW_ATTR_FLOAT(2.f, 0.01f, 64.f);
+  this->attr["seed"] = NEW_ATTR_SEED();
 }
 
 void ValueNoiseDelaunay::compute()
@@ -35,16 +36,15 @@ void ValueNoiseDelaunay::compute()
                     hmap::Array      *p_noise_y)
              {
                return hmap::value_noise_delaunay(shape,
-                                                 this->kw,
-                                                 (uint)this->seed,
+                                                 GET_ATTR_FLOAT("kw"),
+                                                 GET_ATTR_SEED("seed"),
                                                  p_noise_x,
                                                  p_noise_y,
                                                  shift,
                                                  scale);
              });
 
-  // remap the output
-  this->value_out.remap(this->vmin, this->vmax);
+  this->post_process_heightmap(this->value_out);
 }
 
 } // namespace hesiod::cnode

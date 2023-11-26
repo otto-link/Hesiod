@@ -8,10 +8,11 @@
 namespace hesiod::cnode
 {
 
-ConvolveSVD::ConvolveSVD(std::string id) : gnode::Node(id)
+ConvolveSVD::ConvolveSVD(std::string id) : ControlNode(id)
 {
   this->node_type = "ConvolveSVD";
   this->category = category_mapping.at(this->node_type);
+  this->attr["rank"] = NEW_ATTR_INT(4, 1, 8);
 
   this->add_port(gnode::Port("input", gnode::direction::in, dtype::dHeightMap));
   this->add_port(gnode::Port("kernel", gnode::direction::in, dtype::dArray));
@@ -37,10 +38,10 @@ void ConvolveSVD::compute()
 
   this->value_out = *p_input_hmap;
 
-  hmap::transform(this->value_out,
-                  [this, p_input_kernel](hmap::Array &z) {
-                    z = hmap::convolve2d_svd(z, *p_input_kernel, this->rank);
-                  });
+  hmap::transform(
+      this->value_out,
+      [this, p_input_kernel](hmap::Array &z)
+      { z = hmap::convolve2d_svd(z, *p_input_kernel, GET_ATTR_INT("rank")); });
 
   this->value_out.smooth_overlap_buffers();
 }

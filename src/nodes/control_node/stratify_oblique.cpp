@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-StratifyOblique::StratifyOblique(std::string id) : gnode::Node(id)
+StratifyOblique::StratifyOblique(std::string id) : ControlNode(id)
 {
   this->node_type = "StratifyOblique";
   this->category = category_mapping.at(this->node_type);

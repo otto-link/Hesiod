@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-PathFinding::PathFinding(std::string id) : gnode::Node(id)
+PathFinding::PathFinding(std::string id) : ControlNode(id)
 {
   LOG_DEBUG("PathFinding::PathFinding()");
   this->node_type = "PathFinding";

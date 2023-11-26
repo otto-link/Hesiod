@@ -17,8 +17,16 @@ WaveDune::WaveDune(std::string     id,
   LOG_DEBUG("WaveDune::WaveDune()");
   this->node_type = "WaveDune";
   this->category = category_mapping.at(this->node_type);
+
+  this->attr["kw"] = NEW_ATTR_FLOAT(2.f, 0.01f, 128.f);
+  this->attr["angle"] = NEW_ATTR_FLOAT(0.f, -180.f, 180.f);
+  this->attr["xtop"] = NEW_ATTR_FLOAT(0.7f, 0.f, 1.f);
+  this->attr["xbottom"] = NEW_ATTR_FLOAT(0.f, 0.f, 1.f);
+  this->attr["phase_shift"] = NEW_ATTR_FLOAT(0.f, -180.f, 180.f);
+
+  this->attr_ordered_key = {"kw", "angle", "xtop", "xbottom", "phase_shift"};
+
   this->remove_port("dy");
-  this->value_out.set_sto(shape, tiling, overlap);
   this->update_inner_bindings();
 }
 
@@ -34,18 +42,17 @@ void WaveDune::compute()
                     hmap::Array      *p_noise_x)
              {
                return hmap::wave_dune(shape,
-                                      this->kw,
-                                      this->angle,
-                                      this->xtop,
-                                      this->xbottom,
-                                      this->phase_shift,
+                                      GET_ATTR_FLOAT("kw"),
+                                      GET_ATTR_FLOAT("angle"),
+                                      GET_ATTR_FLOAT("xtop"),
+                                      GET_ATTR_FLOAT("xbottom"),
+                                      GET_ATTR_FLOAT("phase_shift"),
                                       p_noise_x,
                                       shift,
                                       scale);
              });
 
-  // remap the output
-  this->value_out.remap(this->vmin, this->vmax);
+  this->post_process_heightmap(this->value_out);
 }
 
 } // namespace hesiod::cnode

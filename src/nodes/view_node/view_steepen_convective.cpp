@@ -9,9 +9,9 @@ namespace hesiod::vnode
 {
 
 ViewSteepenConvective::ViewSteepenConvective(std::string id)
-    : ViewNode(), hesiod::cnode::SteepenConvective(id)
+    : hesiod::cnode::ControlNode(id), ViewNode(id),
+      hesiod::cnode::SteepenConvective(id)
 {
-  this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
   this->set_view3d_elevation_port_id("output");
 }
@@ -37,22 +37,6 @@ bool ViewSteepenConvective::render_settings()
 
   has_changed |= this->render_settings_footer();
   return has_changed;
-}
-
-void ViewSteepenConvective::serialize_save(cereal::JSONOutputArchive &ar)
-{
-  ar(cereal::make_nvp("angle", this->angle));
-  ar(cereal::make_nvp("iterations", this->iterations));
-  ar(cereal::make_nvp("ir", this->ir));
-  ar(cereal::make_nvp("dt", this->dt));
-}
-
-void ViewSteepenConvective::serialize_load(cereal::JSONInputArchive &ar)
-{
-  ar(cereal::make_nvp("angle", this->angle));
-  ar(cereal::make_nvp("iterations", this->iterations));
-  ar(cereal::make_nvp("ir", this->ir));
-  ar(cereal::make_nvp("dt", this->dt));
 }
 
 } // namespace hesiod::vnode

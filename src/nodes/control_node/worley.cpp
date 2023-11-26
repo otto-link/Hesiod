@@ -17,8 +17,11 @@ Worley::Worley(std::string     id,
   LOG_DEBUG("Worley::Worley()");
   this->node_type = "Worley";
   this->category = category_mapping.at(this->node_type);
-  this->value_out.set_sto(shape, tiling, overlap);
-  this->update_inner_bindings();
+
+  this->attr["kw"] = NEW_ATTR_WAVENB();
+  this->attr["seed"] = NEW_ATTR_SEED();
+
+  this->attr_ordered_key = {"kw", "seed"};
 }
 
 void Worley::compute()
@@ -35,16 +38,15 @@ void Worley::compute()
                     hmap::Array      *p_noise_y)
              {
                return hmap::worley(shape,
-                                   this->kw,
-                                   (uint)this->seed,
+                                   GET_ATTR_WAVENB("kw"),
+                                   GET_ATTR_SEED("seed"),
                                    p_noise_x,
                                    p_noise_y,
                                    shift,
                                    scale);
              });
 
-  // remap the output
-  this->value_out.remap(this->vmin, this->vmax);
+  this->post_process_heightmap(this->value_out);
 }
 
 } // namespace hesiod::cnode

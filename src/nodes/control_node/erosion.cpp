@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-Erosion::Erosion(std::string id) : gnode::Node(id)
+Erosion::Erosion(std::string id) : ControlNode(id)
 {
   LOG_DEBUG("Erosion::Erosion()");
   this->add_port(gnode::Port("input", gnode::direction::in, dtype::dHeightMap));

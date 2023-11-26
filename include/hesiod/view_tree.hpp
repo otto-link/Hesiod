@@ -66,9 +66,6 @@ public:
 
   ax::NodeEditor::EditorContext *get_p_node_editor_context() const;
 
-  hesiod::vnode::ViewControlNode *get_view_control_node_ref_by_id(
-      std::string node_id) const;
-
   void set_sto(hmap::Vec2<int> new_shape,
                hmap::Vec2<int> new_tiling,
                float           new_overlap);

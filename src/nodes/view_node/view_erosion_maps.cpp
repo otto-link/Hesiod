@@ -9,9 +9,9 @@ namespace hesiod::vnode
 {
 
 ViewErosionMaps::ViewErosionMaps(std::string id)
-    : ViewNode(), hesiod::cnode::ErosionMaps(id)
+    : hesiod::cnode::ControlNode(id), ViewNode(id),
+      hesiod::cnode::ErosionMaps(id)
 {
-  this->set_p_control_node((gnode::Node *)this);
 }
 
 bool ViewErosionMaps::render_settings()
@@ -24,16 +24,6 @@ bool ViewErosionMaps::render_settings()
 
   has_changed |= this->render_settings_footer();
   return has_changed;
-}
-
-void ViewErosionMaps::serialize_save(cereal::JSONOutputArchive &ar)
-{
-  ar(cereal::make_nvp("tolerance", this->tolerance));
-}
-
-void ViewErosionMaps::serialize_load(cereal::JSONInputArchive &ar)
-{
-  ar(cereal::make_nvp("tolerance", this->tolerance));
 }
 
 } // namespace hesiod::vnode

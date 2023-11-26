@@ -9,9 +9,9 @@ namespace hesiod::vnode
 {
 
 ViewHydraulicBenes::ViewHydraulicBenes(std::string id)
-    : ViewNode(), hesiod::cnode::HydraulicBenes(id)
+    : hesiod::cnode::ControlNode(id), ViewNode(id),
+      hesiod::cnode::HydraulicBenes(id)
 {
-  this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
   this->set_view3d_elevation_port_id("output");
 }
@@ -44,15 +44,6 @@ bool ViewHydraulicBenes::render_settings()
 
   has_changed |= this->render_settings_footer();
   return has_changed;
-}
-
-void ViewHydraulicBenes::serialize_save(cereal::JSONOutputArchive &ar)
-{
-  // ar(cereal::make_nvp("", this->));
-}
-
-void ViewHydraulicBenes::serialize_load(cereal::JSONInputArchive &ar)
-{
 }
 
 } // namespace hesiod::vnode

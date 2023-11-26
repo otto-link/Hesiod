@@ -5,7 +5,14 @@
 #include <string>
 
 #include "gnode.hpp"
-#include "highmap.hpp"
+
+#include <cereal/archives/json.hpp>
+#include <cereal/types/list.hpp>
+#include <cereal/types/map.hpp>
+#include <cereal/types/memory.hpp>
+#include <cereal/types/vector.hpp>
+
+#include "hesiod/attribute.hpp"
 
 // clang-format off
 #define DEFAULT_KERNEL_SHAPE {17, 17}
@@ -81,7 +88,6 @@ static const std::map<std::string, std::string> category_mapping = {
     {"CombineMask", "Mask"},
     {"PreviewColorize", "Texture"},
     {"ConvolveSVD", "Math/Convolution"},
-    // {"CubicPulseTruncated", "Primitive/Kernel"}, // useless
     {"Debug", "Debug"},
     {"DepressionFilling", "Erosion"}, // not distributed
     {"DigPath", "Roads"},             // partially distributed
@@ -180,10 +186,38 @@ static const std::map<std::string, std::string> category_mapping = {
     {"ZeroedEdges", "Math/Boundaries"}};
 
 //----------------------------------------
+// Base node class
+//----------------------------------------
+
+class ControlNode : public gnode::Node
+{
+public:
+  std::map<std::string, std::unique_ptr<hesiod::Attribute>> attr = {};
+  std::vector<std::string> attr_ordered_key = {};
+
+  ControlNode() : gnode::Node()
+  {
+  }
+
+  ControlNode(std::string id) : gnode::Node(id)
+  {
+  }
+
+#ifdef USE_CEREAL
+  template <class Archive> void serialize(Archive &ar)
+  {
+    ar(cereal::make_nvp("id", this->id), cereal::make_nvp("attr", this->attr));
+  }
+#endif
+
+  void post_process_heightmap(hmap::HeightMap &h);
+};
+
+//----------------------------------------
 // Generic nodes
 //----------------------------------------
 
-class Unary : public gnode::Node // most basic, 1 in / 1 out
+class Unary : virtual public ControlNode // most basic, 1 in / 1 out
 {
 public:
   Unary(std::string id);
@@ -202,7 +236,7 @@ protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
 
-class Binary : public gnode::Node // basic, 2 in / 1 out
+class Binary : virtual public ControlNode // basic, 2 in / 1 out
 {
 public:
   Binary(std::string id);
@@ -223,7 +257,7 @@ protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
 
-class Debug : public gnode::Node
+class Debug : virtual public ControlNode
 {
 public:
   Debug(std::string id);
@@ -231,7 +265,7 @@ public:
   void compute();
 };
 
-class Erosion : public gnode::Node
+class Erosion : virtual public ControlNode
 {
 public:
   Erosion(std::string id);
@@ -257,7 +291,7 @@ protected:
   hmap::HeightMap deposition_map = hmap::HeightMap();
 };
 
-class Filter : public gnode::Node
+class Filter : virtual public ControlNode
 {
 public:
   Filter(std::string id);
@@ -276,20 +310,10 @@ protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
 
-class Mask : public gnode::Node
+// OK
+class Mask : virtual public ControlNode
 {
 public:
-  bool  inverse = false;
-  bool  smoothing = false;
-  int   ir_smoothing = 16;
-  bool  saturate = false;
-  float smin = 0.f;
-  float smax = 1.f;
-  float k = 0.05f;
-  bool  remap = true;
-  float vmin = 0.f;
-  float vmax = 1.f;
-
   Mask(std::string id);
 
   void update_inner_bindings();
@@ -306,7 +330,8 @@ protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
 
-class Primitive : public gnode::Node
+// OK
+class Primitive : virtual public ControlNode
 {
 public:
   Primitive(std::string     id,
@@ -316,11 +341,10 @@ public:
 
   void update_inner_bindings();
 
+  void post_compute();
+
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
-  float           vmin = 0.f;
-  float           vmax = 1.f;
-  bool            inverse = false;
 
 private:
   hmap::Vec2<int> shape;
@@ -332,7 +356,7 @@ private:
 // Data routing nodes
 //----------------------------------------
 
-class Clone : public gnode::Node
+class Clone : virtual public ControlNode
 {
 public:
   Clone(std::string id);
@@ -353,7 +377,7 @@ protected:
 // End-user nodes
 //----------------------------------------
 
-class AlterElevation : public gnode::Node
+class AlterElevation : virtual public ControlNode
 {
 public:
   AlterElevation(std::string id);
@@ -370,6 +394,7 @@ protected:
   float           vmax = 1.f;
 };
 
+// OK
 class BaseElevation : public Primitive
 {
 public:
@@ -379,16 +404,10 @@ public:
                 float           overlap);
 
   void compute();
-
-protected:
-  std::vector<std::vector<float>> values = {{0.f, 0.f, 0.f},
-                                            {0.f, 0.f, 0.f},
-                                            {0.f, 0.f, 0.f}};
-  float                           width_factor = 1.f;
-  bool                            remap = false;
 };
 
-class BezierPath : public gnode::Node
+// OK
+class BezierPath : virtual public ControlNode
 {
 public:
   BezierPath(std::string id);
@@ -399,10 +418,9 @@ public:
 
 protected:
   hmap::Path value_out = hmap::Path();
-  float      curvature_ratio = 0.3f;
-  int        edge_divisions = 10;
 };
 
+// OK
 class BiquadPulse : public Primitive
 {
 public:
@@ -412,11 +430,9 @@ public:
               float           overlap);
 
   void compute();
-
-protected:
-  float gain = 1.f;
 };
 
+// OK
 class Blend : public Binary
 {
 public:
@@ -426,7 +442,7 @@ public:
                       hmap::HeightMap *p_h_in1,
                       hmap::HeightMap *p_h_in2);
 
-protected:
+private:
   std::map<std::string, int> blending_method_map = {
       {"add", blending_method::add},
       {"exclusion", blending_method::exclusion},
@@ -441,11 +457,9 @@ protected:
       {"overlay", blending_method::overlay},
       {"soft", blending_method::soft},
       {"substract", blending_method::substract}};
-  int   method = 0;
-  float k = 0.1f; // smooth intensity for smooth min and max
-  int   ir = 4;   // for gradients
 };
 
+// OK
 class Bump : public Primitive
 {
 public:
@@ -455,12 +469,10 @@ public:
        float           overlap);
 
   void compute();
-
-protected:
-  float gain = 1.f;
 };
 
-class Brush : public gnode::Node
+// TO DO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+class Brush : virtual public ControlNode
 {
 public:
   Brush(std::string     id,
@@ -485,20 +497,7 @@ private:
   float           overlap;
 };
 
-class Checkerboard : public Primitive
-{
-public:
-  Checkerboard(std::string     id,
-               hmap::Vec2<int> shape,
-               hmap::Vec2<int> tiling,
-               float           overlap);
-
-  void compute();
-
-protected:
-  hmap::Vec2<float> kw = {DEFAULT_KW, DEFAULT_KW};
-};
-
+// OK
 class Caldera : public Primitive
 {
 public:
@@ -508,37 +507,31 @@ public:
           float           overlap);
 
   void compute();
-
-protected:
-  float             radius = 128.f;
-  float             sigma_inner = 16.f;
-  float             sigma_outer = 32.f;
-  float             noise_r_amp = 32.f;
-  float             z_bottom = 0.5f;
-  float             noise_ratio_z = 0.1f;
-  hmap::Vec2<float> center = {0.5f, 0.5f};
 };
 
+// OK
+class Checkerboard : public Primitive
+{
+public:
+  Checkerboard(std::string     id,
+               hmap::Vec2<int> shape,
+               hmap::Vec2<int> tiling,
+               float           overlap);
+
+  void compute();
+};
+
+// OK
 class Clamp : public Unary
 {
 public:
   Clamp(std::string id);
 
   void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
-
-protected:
-  float cmin = 0.f;
-  float cmax = 1.f;
-  bool  smooth_min = false;
-  bool  smooth_max = false;
-  float k_min = 0.05f;
-  float k_max = 0.05f;
-  bool  remap = false;
-  float vmin = 0.f;
-  float vmax = 1.f;
 };
 
-class Cloud : public gnode::Node
+// TO DO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+class Cloud : virtual public ControlNode
 {
 public:
   Cloud(std::string id);
@@ -551,6 +544,7 @@ protected:
   hmap::Cloud value_out = hmap::Cloud();
 };
 
+// OK
 class CloudToArrayInterp : public Primitive
 {
 public:
@@ -560,12 +554,10 @@ public:
                      float           overlap);
 
   void compute();
-
-protected:
-  int interpolation_method = 0;
 };
 
-class Colorize : public gnode::Node
+// OK
+class Colorize : virtual public ControlNode
 {
 public:
   Colorize(std::string id);
@@ -575,16 +567,11 @@ public:
   void update_inner_bindings();
 
 protected:
-  hmap::HeightMapRGB         value_out = hmap::HeightMapRGB();
-  std::map<std::string, int> cmap_map = {};
-  int                        cmap_choice = 0;
-  bool                       reverse = false;
-  bool                       clamp = false;
-  float                      vmin = 0.f;
-  float                      vmax = 1.f;
+  hmap::HeightMapRGB value_out = hmap::HeightMapRGB();
 };
 
-class CombineMask : public gnode::Node
+// OK
+class CombineMask : virtual public ControlNode
 {
 public:
   CombineMask(std::string id);
@@ -594,11 +581,14 @@ public:
   void update_inner_bindings();
 
 protected:
-  hmap::HeightMap value_out = hmap::HeightMap();
-  int             method = 0;
+  hmap::HeightMap            value_out = hmap::HeightMap();
+  std::map<std::string, int> method_map = {{"union", 0},
+                                           {"intersection", 1},
+                                           {"exclusion", 2}};
 };
 
-class ConvolveSVD : public gnode::Node
+// OK
+class ConvolveSVD : virtual public ControlNode
 {
 public:
   ConvolveSVD(std::string id);
@@ -609,41 +599,19 @@ public:
 
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
-  int             rank = 3;
 };
 
-class CubicPulseTruncated : public gnode::Node
-{
-public:
-  CubicPulseTruncated(std::string id);
-
-  void update_inner_bindings();
-
-  void compute();
-
-protected:
-  hmap::Array     value_out = hmap::Array();
-  bool            normalized = true;
-  float           slant_ratio = 0.1f;
-  float           angle = 30.f;
-  float           vmin = 0.f;
-  float           vmax = 1.f;
-  hmap::Vec2<int> shape = DEFAULT_KERNEL_SHAPE;
-};
-
+// OK
 class DepressionFilling : public Unary
 {
 public:
   DepressionFilling(std::string id);
 
   void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
-
-protected:
-  int   iterations = 1000;
-  float epsilon = 1e-4f;
 };
 
-class DigPath : public gnode::Node
+// OK
+class DigPath : virtual public ControlNode
 {
 public:
   DigPath(std::string id);
@@ -654,14 +622,9 @@ public:
 
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
-  int             width = 1;
-  int             decay = 2;
-  int             flattening_radius = 16;
-  bool            force_downhill = false;
-  float           depth = 0.f;
 };
 
-class DistanceTransform : public gnode::Node
+class DistanceTransform : virtual public ControlNode
 {
 public:
   DistanceTransform(std::string id);
@@ -686,7 +649,7 @@ public:
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
 };
 
-class ErosionMaps : public gnode::Node
+class ErosionMaps : virtual public ControlNode
 {
 public:
   ErosionMaps(std::string id);
@@ -734,7 +697,7 @@ protected:
   bool  shrink = false;
 };
 
-class Export : public gnode::Node
+class Export : virtual public ControlNode
 {
 public:
   Export(std::string id);
@@ -749,7 +712,7 @@ protected:
   std::string fname = "export.png";
 };
 
-class ExportRGB : public gnode::Node
+class ExportRGB : virtual public ControlNode
 {
 public:
   ExportRGB(std::string id);
@@ -763,6 +726,7 @@ protected:
   std::string fname = "export_rgb.png";
 };
 
+// OK
 class FbmPerlin : public Primitive
 {
 public:
@@ -772,16 +736,9 @@ public:
             float           overlap);
 
   void compute();
-
-protected:
-  hmap::Vec2<float> kw = {DEFAULT_KW, DEFAULT_KW};
-  int               seed = DEFAULT_SEED;
-  int               octaves = 8;
-  float             weight = 0.7f;
-  float             persistence = 0.5f;
-  float             lacunarity = 2.f;
 };
 
+// OK
 class FbmSimplex : public Primitive
 {
 public:
@@ -791,16 +748,9 @@ public:
              float           overlap);
 
   void compute();
-
-protected:
-  hmap::Vec2<float> kw = {DEFAULT_KW, DEFAULT_KW};
-  int               seed = DEFAULT_SEED;
-  int               octaves = 8;
-  float             weight = 0.7f;
-  float             persistence = 0.5f;
-  float             lacunarity = 2.f;
 };
 
+// OK
 class FbmWorley : public Primitive
 {
 public:
@@ -810,17 +760,9 @@ public:
             float           overlap);
 
   void compute();
-
-protected:
-  hmap::Vec2<float> kw = {DEFAULT_KW, DEFAULT_KW};
-  int               seed = DEFAULT_SEED;
-  int               octaves = 8;
-  float             weight = 0.7f;
-  float             persistence = 0.5f;
-  float             lacunarity = 2.f;
 };
 
-class FractalizePath : public gnode::Node
+class FractalizePath : virtual public ControlNode
 {
 public:
   FractalizePath(std::string id);
@@ -838,7 +780,7 @@ protected:
   float      persistence = 1.f;
 };
 
-class GaborNoise : public gnode::Node
+class GaborNoise : virtual public ControlNode
 {
 public:
   GaborNoise(std::string     id,
@@ -866,6 +808,7 @@ private:
   float           overlap;
 };
 
+// OK
 class Gain : public Filter
 {
 public:
@@ -901,6 +844,7 @@ protected:
   float k = 0.1f;
 };
 
+// OK
 class GaussianPulse : public Primitive
 {
 public:
@@ -910,14 +854,10 @@ public:
                 float           overlap);
 
   void compute();
-
-protected:
-  float             sigma = 32;
-  bool              inverse = false;
-  hmap::Vec2<float> center = {0.5f, 0.5f};
 };
 
-class Gradient : public gnode::Node
+// OK
+class Gradient : virtual public ControlNode
 {
 public:
   Gradient(std::string id);
@@ -929,11 +869,6 @@ public:
 protected:
   hmap::HeightMap value_out_dx = hmap::HeightMap();
   hmap::HeightMap value_out_dy = hmap::HeightMap();
-  bool            normalize = true;
-  float           vmin_x = 0.f;
-  float           vmax_x = 1.f;
-  float           vmin_y = 0.f;
-  float           vmax_y = 1.f;
 };
 
 class GradientAngle : public Unary
@@ -944,17 +879,13 @@ public:
   void compute_in_out(hmap::HeightMap &h, hmap::HeightMap *p_talus);
 };
 
+// OK
 class GradientNorm : public Unary
 {
 public:
   GradientNorm(std::string id);
 
   void compute_in_out(hmap::HeightMap &h, hmap::HeightMap *p_talus);
-
-protected:
-  bool  remap = true;
-  float vmin = 0.f;
-  float vmax = 1.f;
 };
 
 class GradientTalus : public Unary
@@ -1107,7 +1038,7 @@ protected:
   float evap_rate = 0.01f;
 };
 
-class Import : public gnode::Node
+class Import : virtual public ControlNode
 {
 public:
   Import(std::string     id,
@@ -1131,7 +1062,7 @@ private:
   float           overlap;
 };
 
-class Kernel : public gnode::Node
+class Kernel : virtual public ControlNode
 {
 public:
   Kernel(std::string id);
@@ -1172,7 +1103,7 @@ protected:
   bool              normalize_inputs = true;
 };
 
-class KmeansClustering3 : public gnode::Node
+class KmeansClustering3 : virtual public ControlNode
 {
 public:
   KmeansClustering3(std::string id);
@@ -1215,7 +1146,7 @@ protected:
   float talus_global = 10.f;
 };
 
-class Lerp : public gnode::Node
+class Lerp : virtual public ControlNode
 {
 public:
   Lerp(std::string id);
@@ -1240,7 +1171,7 @@ protected:
   float threshold = 0.f;
 };
 
-class MeanderizePath : public gnode::Node
+class MeanderizePath : virtual public ControlNode
 {
 public:
   MeanderizePath(std::string id);
@@ -1287,7 +1218,7 @@ protected:
   int ir = 4;
 };
 
-class MixRGB : public gnode::Node
+class MixRGB : virtual public ControlNode
 {
 public:
   MixRGB(std::string id);
@@ -1327,7 +1258,7 @@ protected:
   float vmax = 1.f;
 };
 
-class Path : public gnode::Node
+class Path : virtual public ControlNode
 {
 public:
   Path(std::string id);
@@ -1341,7 +1272,7 @@ protected:
   bool       closed = false;
 };
 
-class PathFinding : public gnode::Node
+class PathFinding : virtual public ControlNode
 {
 public:
   PathFinding(std::string id);
@@ -1357,7 +1288,7 @@ protected:
   float           distance_exponent = 1.f;
 };
 
-class PathToHeightmap : public gnode::Node
+class PathToHeightmap : virtual public ControlNode
 {
 public:
   PathToHeightmap(std::string     id,
@@ -1381,6 +1312,7 @@ private:
   float           overlap;
 };
 
+// OK
 class Perlin : public Primitive
 {
 public:
@@ -1390,12 +1322,9 @@ public:
          float           overlap);
 
   void compute();
-
-protected:
-  hmap::Vec2<float> kw = {DEFAULT_KW, DEFAULT_KW};
-  int               seed = DEFAULT_SEED;
 };
 
+// OK
 class PerlinBillow : public Primitive
 {
 public:
@@ -1405,10 +1334,6 @@ public:
                float           overlap);
 
   void compute();
-
-protected:
-  hmap::Vec2<float> kw = {DEFAULT_KW, DEFAULT_KW};
-  int               seed = DEFAULT_SEED;
 };
 
 class Plateau : public Filter
@@ -1423,7 +1348,7 @@ protected:
   float factor = 4.f;
 };
 
-class Preview : public gnode::Node
+class Preview : virtual public ControlNode
 {
 public:
   Preview(std::string id);
@@ -1433,7 +1358,7 @@ public:
   void update_inner_bindings();
 };
 
-class PreviewColorize : public gnode::Node
+class PreviewColorize : virtual public ControlNode
 {
 public:
   PreviewColorize(std::string id);
@@ -1443,7 +1368,7 @@ public:
   void update_inner_bindings();
 };
 
-class RecastCanyon : public gnode::Node
+class RecastCanyon : virtual public ControlNode
 {
 public:
   RecastCanyon(std::string id);
@@ -1469,18 +1394,16 @@ protected:
   std::vector<float> curve = {0.f, 0.25f, 0.5f, 0.75f, 1.f};
 };
 
+// OK
 class RecurveKura : public Filter
 {
 public:
   RecurveKura(std::string id);
 
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
-
-protected:
-  float a = 2.f;
-  float b = 2.f;
 };
 
+// OK
 class RecurveS : public Filter
 {
 public:
@@ -1489,29 +1412,26 @@ public:
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
 };
 
+// OK
 class RelativeElevation : public Unary
 {
 public:
   RelativeElevation(std::string id);
 
   void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
-
-protected:
-  int ir = 64;
+  int  ir = 64;
 };
 
+// OK
 class Remap : public Unary
 {
 public:
   Remap(std::string id);
 
   void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
-
-protected:
-  float vmin = 0.f;
-  float vmax = 1.f;
 };
 
+// OK
 class RidgedPerlin : public Primitive
 {
 public:
@@ -1521,30 +1441,18 @@ public:
                float           overlap);
 
   void compute();
-
-protected:
-  hmap::Vec2<float> kw = {DEFAULT_KW, DEFAULT_KW};
-  int               seed = DEFAULT_SEED;
-  int               octaves = 8;
-  float             weight = 0.7f;
-  float             persistence = 0.5f;
-  float             lacunarity = 2.f;
 };
 
+// OK
 class Rugosity : public Mask
 {
 public:
   Rugosity(std::string id);
 
   void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
-
-protected:
-  int   ir = 8;
-  bool  clamp_max = false;
-  float vc_max = 1.f;
 };
 
-class SedimentDeposition : public gnode::Node
+class SedimentDeposition : virtual public ControlNode
 {
 public:
   SedimentDeposition(std::string id);
@@ -1562,18 +1470,16 @@ protected:
   int             thermal_subiterations = 10;
 };
 
+// OK
 class SelectCavities : public Mask
 {
 public:
   SelectCavities(std::string id);
 
   void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
-
-protected:
-  int  ir = 32;
-  bool concave = true;
 };
 
+// TO DO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 class SelectEq : public Mask
 {
 public:
@@ -1585,6 +1491,7 @@ protected:
   float value = 0.f;
 };
 
+// OK
 class SelectGradientNorm : public Mask
 {
 public:
@@ -1593,31 +1500,26 @@ public:
   void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
 };
 
+// OK
 class SelectInterval : public Mask
 {
 public:
   SelectInterval(std::string id);
 
   void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
-
-protected:
-  float value1 = 0.f;
-  float value2 = 1.f;
 };
 
+// OK
 class SelectRivers : public Mask
 {
 public:
   SelectRivers(std::string id);
 
   void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
-
-protected:
-  float talus_ref = 0.1f;
-  float clipping_ratio = 50.f;
 };
 
-class SelectTransitions : public gnode::Node
+// OK
+class SelectTransitions : virtual public ControlNode
 {
 public:
   SelectTransitions(std::string id);
@@ -1628,12 +1530,9 @@ public:
 
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
-  bool            normalize = true;
-  bool            inverse = false;
-  bool            smoothing = false;
-  int             ir_smoothing = 16;
 };
 
+// OK
 class Simplex : public Primitive
 {
 public:
@@ -1643,13 +1542,9 @@ public:
           float           overlap);
 
   void compute();
-
-protected:
-  hmap::Vec2<float> kw = {DEFAULT_KW, DEFAULT_KW};
-  int               seed = DEFAULT_SEED;
 };
 
-class Slope : public gnode::Node
+class Slope : virtual public ControlNode
 {
 public:
   Slope(std::string     id,
@@ -1684,7 +1579,7 @@ protected:
   int ir = 8;
 };
 
-class SmoothFill : public gnode::Node
+class SmoothFill : virtual public ControlNode
 {
 public:
   SmoothFill(std::string id);
@@ -1736,6 +1631,7 @@ protected:
   float dt = 0.1f;
 };
 
+// OK
 class Step : public Primitive
 {
 public:
@@ -1745,14 +1641,9 @@ public:
        float           overlap);
 
   void compute();
-
-protected:
-  float             angle = 0.f;
-  float             talus_global = 4.f;
-  hmap::Vec2<float> center = {0.5f, 0.5f};
 };
 
-class StratifyMultiscale : public gnode::Node
+class StratifyMultiscale : virtual public ControlNode
 {
 public:
   StratifyMultiscale(std::string id);
@@ -1770,7 +1661,7 @@ protected:
   int                seed = DEFAULT_SEED;
 };
 
-class StratifyOblique : public gnode::Node
+class StratifyOblique : virtual public ControlNode
 {
 public:
   StratifyOblique(std::string id);
@@ -1790,7 +1681,7 @@ protected:
   int             seed = DEFAULT_SEED;
 };
 
-class Thermal : public gnode::Node
+class Thermal : virtual public ControlNode
 {
 public:
   Thermal(std::string id);
@@ -1806,7 +1697,7 @@ protected:
   int             iterations = 10;
 };
 
-class ThermalAutoBedrock : public gnode::Node
+class ThermalAutoBedrock : virtual public ControlNode
 {
 public:
   ThermalAutoBedrock(std::string id);
@@ -1822,7 +1713,7 @@ protected:
   int             iterations = 10;
 };
 
-class ThermalScree : public gnode::Node
+class ThermalScree : virtual public ControlNode
 {
 public:
   ThermalScree(std::string id);
@@ -1844,6 +1735,7 @@ protected:
   bool            talus_constraint = true;
 };
 
+// OK
 class ToMask : public Mask
 {
 public:
@@ -1852,17 +1744,16 @@ public:
   void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
 };
 
+// OK
 class ValleyWidth : public Mask
 {
 public:
   ValleyWidth(std::string id);
 
   void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
-
-protected:
-  int ir = 4;
 };
 
+// OK
 class ValueNoiseDelaunay : public Primitive
 {
 public:
@@ -1872,12 +1763,9 @@ public:
                      float           overlap);
 
   void compute();
-
-protected:
-  float kw = DEFAULT_KW;
-  int   seed = DEFAULT_SEED;
 };
 
+// OK
 class ValueNoiseLinear : public Primitive
 {
 public:
@@ -1887,12 +1775,9 @@ public:
                    float           overlap);
 
   void compute();
-
-protected:
-  hmap::Vec2<float> kw = {DEFAULT_KW, DEFAULT_KW};
-  int               seed = DEFAULT_SEED;
 };
 
+// OK
 class ValueNoiseThinplate : public Primitive
 {
 public:
@@ -1902,13 +1787,9 @@ public:
                       float           overlap);
 
   void compute();
-
-protected:
-  float kw = DEFAULT_KW;
-  int   seed = DEFAULT_SEED;
 };
 
-class Warp : public gnode::Node
+class Warp : virtual public ControlNode
 {
 public:
   Warp(std::string id);
@@ -1935,6 +1816,7 @@ protected:
   bool  reverse = false;
 };
 
+// OK
 class WaveDune : public Primitive
 {
 public:
@@ -1944,15 +1826,9 @@ public:
            float           overlap);
 
   void compute();
-
-protected:
-  float kw = DEFAULT_KW;
-  float angle = 0.f;
-  float xtop = 0.7f;
-  float xbottom = 1.f;
-  float phase_shift = 0.f;
 };
 
+// OK
 class WaveSine : public Primitive
 {
 public:
@@ -1962,14 +1838,10 @@ public:
            float           overlap);
 
   void compute();
-
-protected:
-  float kw = DEFAULT_KW;
-  float angle = 0.f;
-  float phase_shift = 0.f;
 };
 
-class White : public gnode::Node
+// OK
+class White : virtual public ControlNode
 {
 public:
   White(std::string     id,
@@ -1993,7 +1865,8 @@ private:
   float           overlap;
 };
 
-class WhiteDensityMap : public gnode::Node
+// OK
+class WhiteDensityMap : virtual public ControlNode
 {
 public:
   WhiteDensityMap(std::string id);
@@ -2004,10 +1877,10 @@ public:
 
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
-  int             seed = DEFAULT_SEED;
 };
 
-class WhiteSparse : public gnode::Node
+// OK
+class WhiteSparse : virtual public ControlNode
 {
 public:
   WhiteSparse(std::string     id,
@@ -2021,10 +1894,6 @@ public:
 
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
-  int             seed = DEFAULT_SEED;
-  float           density = 0.1f;
-  float           vmin = 0.f;
-  float           vmax = 1.f;
 
 private:
   hmap::Vec2<int> shape;
@@ -2032,6 +1901,7 @@ private:
   float           overlap;
 };
 
+// OK
 class Worley : public Primitive
 {
 public:
@@ -2041,12 +1911,9 @@ public:
          float           overlap);
 
   void compute();
-
-protected:
-  hmap::Vec2<float> kw = {DEFAULT_KW, DEFAULT_KW};
-  int               seed = DEFAULT_SEED;
 };
 
+// OK
 class WorleyDouble : public Primitive
 {
 public:
@@ -2056,14 +1923,9 @@ public:
                float           overlap);
 
   void compute();
-
-protected:
-  hmap::Vec2<float> kw = {DEFAULT_KW, DEFAULT_KW};
-  int               seed = DEFAULT_SEED;
-  float             ratio = 0.5f;
-  float             k = 0.05f;
 };
 
+// OK
 class WorleyValue : public Primitive
 {
 public:
@@ -2073,13 +1935,10 @@ public:
               float           overlap);
 
   void compute();
-
-protected:
-  hmap::Vec2<float> kw = {DEFAULT_KW, DEFAULT_KW};
-  int               seed = DEFAULT_SEED;
 };
 
-class ZeroedEdges : public gnode::Node
+// OK
+class ZeroedEdges : virtual public ControlNode
 {
 public:
   ZeroedEdges(std::string id);
@@ -2090,10 +1949,6 @@ public:
 
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
-  float           sigma = 0.25f;
-  bool            remap = false;
-  float           vmin = 0.f;
-  float           vmax = 1.f;
 };
 
 } // namespace hesiod::cnode

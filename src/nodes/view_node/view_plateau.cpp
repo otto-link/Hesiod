@@ -9,9 +9,8 @@ namespace hesiod::vnode
 {
 
 ViewPlateau::ViewPlateau(std::string id)
-    : ViewNode(), hesiod::cnode::Plateau(id)
+    : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Plateau(id)
 {
-  this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
   this->set_view3d_elevation_port_id("output");
 }
@@ -29,18 +28,6 @@ bool ViewPlateau::render_settings()
 
   has_changed |= this->render_settings_footer();
   return has_changed;
-}
-
-void ViewPlateau::serialize_save(cereal::JSONOutputArchive &ar)
-{
-  ar(cereal::make_nvp("ir", this->ir));
-  ar(cereal::make_nvp("factor", this->factor));
-}
-
-void ViewPlateau::serialize_load(cereal::JSONInputArchive &ar)
-{
-  ar(cereal::make_nvp("ir", this->ir));
-  ar(cereal::make_nvp("factor", this->factor));
 }
 
 } // namespace hesiod::vnode

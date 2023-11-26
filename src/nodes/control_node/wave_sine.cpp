@@ -17,8 +17,14 @@ WaveSine::WaveSine(std::string     id,
   LOG_DEBUG("WaveSine::WaveSine()");
   this->node_type = "WaveSine";
   this->category = category_mapping.at(this->node_type);
+
+  this->attr["kw"] = NEW_ATTR_FLOAT(2.f, 0.01f, 128.f);
+  this->attr["angle"] = NEW_ATTR_FLOAT(0.f, -180.f, 180.f);
+  this->attr["phase_shift"] = NEW_ATTR_FLOAT(0.f, -180.f, 180.f);
+
+  this->attr_ordered_key = {"kw", "angle", "phase_shift"};
+
   this->remove_port("dy");
-  this->value_out.set_sto(shape, tiling, overlap);
   this->update_inner_bindings();
 }
 
@@ -34,16 +40,15 @@ void WaveSine::compute()
                     hmap::Array      *p_noise_x)
              {
                return hmap::wave_sine(shape,
-                                      this->kw,
-                                      this->angle,
-                                      this->phase_shift,
+                                      GET_ATTR_FLOAT("kw"),
+                                      GET_ATTR_FLOAT("angle"),
+                                      GET_ATTR_FLOAT("phase_shift"),
                                       p_noise_x,
                                       shift,
                                       scale);
              });
 
-  // remap the output
-  this->value_out.remap(this->vmin, this->vmax);
+  this->post_process_heightmap(this->value_out);
 }
 
 } // namespace hesiod::cnode

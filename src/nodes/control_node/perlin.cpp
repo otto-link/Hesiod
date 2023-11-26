@@ -18,13 +18,10 @@ Perlin::Perlin(std::string     id,
   this->node_type = "Perlin";
   this->category = category_mapping.at(this->node_type);
 
-  this->add_port(gnode::Port("stretching",
-                             gnode::direction::in,
-                             dtype::dHeightMap,
-                             gnode::optional::yes));
+  this->attr["kw"] = NEW_ATTR_WAVENB();
+  this->attr["seed"] = NEW_ATTR_SEED();
 
-  this->value_out.set_sto(shape, tiling, overlap);
-  this->update_inner_bindings();
+  this->attr_ordered_key = {"kw", "seed"};
 }
 
 void Perlin::compute()
@@ -34,26 +31,23 @@ void Perlin::compute()
   hmap::fill(this->value_out,
              (hmap::HeightMap *)this->get_p_data("dx"),
              (hmap::HeightMap *)this->get_p_data("dy"),
-             (hmap::HeightMap *)this->get_p_data("stretching"),
              [this](hmap::Vec2<int>   shape,
                     hmap::Vec2<float> shift,
                     hmap::Vec2<float> scale,
                     hmap::Array      *p_noise_x,
-                    hmap::Array      *p_noise_y,
-                    hmap::Array      *p_stretching)
+                    hmap::Array      *p_noise_y)
              {
                return hmap::perlin(shape,
-                                   this->kw,
-                                   (uint)this->seed,
+                                   GET_ATTR_WAVENB("kw"),
+                                   GET_ATTR_SEED("seed"),
                                    p_noise_x,
                                    p_noise_y,
-                                   p_stretching,
+                                   nullptr,
                                    shift,
                                    scale);
              });
 
-  // remap the output
-  this->value_out.remap(this->vmin, this->vmax);
+  this->post_process_heightmap(this->value_out);
 }
 
 } // namespace hesiod::cnode

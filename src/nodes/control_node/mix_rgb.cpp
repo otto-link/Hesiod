@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-MixRGB::MixRGB(std::string id) : gnode::Node(id)
+MixRGB::MixRGB(std::string id) : ControlNode(id)
 {
   LOG_DEBUG("MixRGB::MixRGB()");
   this->node_type = "MixRGB";

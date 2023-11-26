@@ -9,9 +9,9 @@
 namespace hesiod::vnode
 {
 
-ViewKernel::ViewKernel(std::string id) : ViewNode(), hesiod::cnode::Kernel(id)
+ViewKernel::ViewKernel(std::string id)
+    : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Kernel(id)
 {
-  this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
 }
 
@@ -46,26 +46,6 @@ bool ViewKernel::render_settings()
 
   has_changed |= this->render_settings_footer();
   return has_changed;
-}
-
-void ViewKernel::serialize_save(cereal::JSONOutputArchive &ar)
-{
-  ar(cereal::make_nvp("shape.x", this->shape.x));
-  ar(cereal::make_nvp("shape.y", this->shape.y));
-  ar(cereal::make_nvp("normalized", this->normalized));
-  ar(cereal::make_nvp("vmin", this->vmin));
-  ar(cereal::make_nvp("vmax", this->vmax));
-  ar(cereal::make_nvp("kernel", this->kernel));
-}
-
-void ViewKernel::serialize_load(cereal::JSONInputArchive &ar)
-{
-  ar(cereal::make_nvp("shape.x", this->shape.x));
-  ar(cereal::make_nvp("shape.y", this->shape.y));
-  ar(cereal::make_nvp("normalized", this->normalized));
-  ar(cereal::make_nvp("vmin", this->vmin));
-  ar(cereal::make_nvp("vmax", this->vmax));
-  ar(cereal::make_nvp("kernel", this->kernel));
 }
 
 } // namespace hesiod::vnode

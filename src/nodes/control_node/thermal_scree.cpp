@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-ThermalScree::ThermalScree(std::string id) : gnode::Node(id)
+ThermalScree::ThermalScree(std::string id) : ControlNode(id)
 {
   this->node_type = "ThermalScree";
   this->category = category_mapping.at(this->node_type);

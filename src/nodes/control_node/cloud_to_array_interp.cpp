@@ -17,10 +17,7 @@ CloudToArrayInterp::CloudToArrayInterp(std::string     id,
   LOG_DEBUG("CloudToArrayInterp::CloudToArrayInterp()");
   this->node_type = "CloudToArrayInterp";
   this->category = category_mapping.at(this->node_type);
-  this->value_out.set_sto(shape, tiling, overlap);
-
   this->add_port(gnode::Port("cloud", gnode::direction::in, dtype::dCloud));
-
   this->update_inner_bindings();
 }
 
@@ -44,7 +41,7 @@ void CloudToArrayInterp::compute()
                  hmap::Array array(shape);
                  p_input_cloud->to_array_interp(array,
                                                 {0.f, 1.f, 0.f, 1.f},
-                                                this->interpolation_method,
+                                                0, // linear interpolation
                                                 p_noise_x,
                                                 p_noise_y,
                                                 shift,
@@ -55,8 +52,7 @@ void CloudToArrayInterp::compute()
     // fill with zeroes
     hmap::transform(this->value_out, [](hmap::Array array) { array = 0.f; });
 
-  // remap the output
-  this->value_out.remap(this->vmin, this->vmax);
+  this->post_process_heightmap(this->value_out);
 }
 
 } // namespace hesiod::cnode

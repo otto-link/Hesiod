@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-StratifyMultiscale::StratifyMultiscale(std::string id) : gnode::Node(id)
+StratifyMultiscale::StratifyMultiscale(std::string id) : ControlNode(id)
 {
   this->node_type = "StratifyMultiscale";
   this->category = category_mapping.at(this->node_type);

@@ -9,9 +9,9 @@ namespace hesiod::vnode
 {
 
 ViewNormalDisplacement::ViewNormalDisplacement(std::string id)
-    : ViewNode(), hesiod::cnode::NormalDisplacement(id)
+    : hesiod::cnode::ControlNode(id), ViewNode(id),
+      hesiod::cnode::NormalDisplacement(id)
 {
-  this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
   this->set_view3d_elevation_port_id("output");
 }
@@ -32,20 +32,6 @@ bool ViewNormalDisplacement::render_settings()
 
   has_changed |= this->render_settings_footer();
   return has_changed;
-}
-
-void ViewNormalDisplacement::serialize_save(cereal::JSONOutputArchive &ar)
-{
-  ar(cereal::make_nvp("amount", this->amount));
-  ar(cereal::make_nvp("ir", this->ir));
-  ar(cereal::make_nvp("reverse", this->reverse));
-}
-
-void ViewNormalDisplacement::serialize_load(cereal::JSONInputArchive &ar)
-{
-  ar(cereal::make_nvp("amount", this->amount));
-  ar(cereal::make_nvp("ir", this->ir));
-  ar(cereal::make_nvp("reverse", this->reverse));
 }
 
 } // namespace hesiod::vnode

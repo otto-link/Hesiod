@@ -12,9 +12,9 @@ namespace hesiod::vnode
 {
 
 ViewStratifyMultiscale::ViewStratifyMultiscale(std::string id)
-    : ViewNode(), hesiod::cnode::StratifyMultiscale(id)
+    : hesiod::cnode::ControlNode(id), ViewNode(id),
+      hesiod::cnode::StratifyMultiscale(id)
 {
-  this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
   this->set_view3d_elevation_port_id("output");
 }
@@ -96,14 +96,6 @@ bool ViewStratifyMultiscale::render_settings()
   has_changed |= this->render_settings_footer();
 
   return has_changed;
-}
-
-void ViewStratifyMultiscale::serialize_save(cereal::JSONOutputArchive &ar)
-{
-}
-
-void ViewStratifyMultiscale::serialize_load(cereal::JSONInputArchive &ar)
-{
 }
 
 } // namespace hesiod::vnode

@@ -16,9 +16,9 @@ ViewSlope::ViewSlope(std::string     id,
                      hmap::Vec2<int> shape,
                      hmap::Vec2<int> tiling,
                      float           overlap)
-    : ViewNode(), hesiod::cnode::Slope(id, shape, tiling, overlap)
+    : hesiod::cnode::ControlNode(id), ViewNode(id),
+      hesiod::cnode::Slope(id, shape, tiling, overlap)
 {
-  this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
   this->set_view3d_elevation_port_id("output");
 }
@@ -45,22 +45,6 @@ bool ViewSlope::render_settings()
 
   has_changed |= this->render_settings_footer();
   return has_changed;
-}
-
-void ViewSlope::serialize_save(cereal::JSONOutputArchive &ar)
-{
-  ar(cereal::make_nvp("angle", this->angle));
-  ar(cereal::make_nvp("talus_global", this->talus_global));
-  ar(cereal::make_nvp("center.x", this->center.x));
-  ar(cereal::make_nvp("center.y", this->center.y));
-}
-
-void ViewSlope::serialize_load(cereal::JSONInputArchive &ar)
-{
-  ar(cereal::make_nvp("angle", this->angle));
-  ar(cereal::make_nvp("talus_global", this->talus_global));
-  ar(cereal::make_nvp("center.x", this->center.x));
-  ar(cereal::make_nvp("center.y", this->center.y));
 }
 
 } // namespace hesiod::vnode

@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-Unary::Unary(std::string id) : gnode::Node(id)
+Unary::Unary(std::string id) : ControlNode(id)
 {
   LOG_DEBUG("Unary::Unary()");
   this->add_port(gnode::Port("input", gnode::direction::in, dtype::dHeightMap));

@@ -9,9 +9,9 @@ namespace hesiod::vnode
 {
 
 ViewSmoothCpulse::ViewSmoothCpulse(std::string id)
-    : ViewNode(), hesiod::cnode::SmoothCpulse(id)
+    : hesiod::cnode::ControlNode(id), ViewNode(id),
+      hesiod::cnode::SmoothCpulse(id)
 {
-  this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
   this->set_view3d_elevation_port_id("output");
 }
@@ -26,16 +26,6 @@ bool ViewSmoothCpulse::render_settings()
 
   has_changed |= this->render_settings_footer();
   return has_changed;
-}
-
-void ViewSmoothCpulse::serialize_save(cereal::JSONOutputArchive &ar)
-{
-  ar(cereal::make_nvp("ir", this->ir));
-}
-
-void ViewSmoothCpulse::serialize_load(cereal::JSONInputArchive &ar)
-{
-  ar(cereal::make_nvp("ir", this->ir));
 }
 
 } // namespace hesiod::vnode

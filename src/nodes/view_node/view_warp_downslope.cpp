@@ -9,9 +9,9 @@ namespace hesiod::vnode
 {
 
 ViewWarpDownslope::ViewWarpDownslope(std::string id)
-    : ViewNode(), hesiod::cnode::WarpDownslope(id)
+    : hesiod::cnode::ControlNode(id), ViewNode(id),
+      hesiod::cnode::WarpDownslope(id)
 {
-  this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
   this->set_view3d_elevation_port_id("output");
 }
@@ -32,20 +32,6 @@ bool ViewWarpDownslope::render_settings()
 
   has_changed |= this->render_settings_footer();
   return has_changed;
-}
-
-void ViewWarpDownslope::serialize_save(cereal::JSONOutputArchive &ar)
-{
-  ar(cereal::make_nvp("amount", this->amount));
-  ar(cereal::make_nvp("ir", this->ir));
-  ar(cereal::make_nvp("reverse", this->reverse));
-}
-
-void ViewWarpDownslope::serialize_load(cereal::JSONInputArchive &ar)
-{
-  ar(cereal::make_nvp("amount", this->amount));
-  ar(cereal::make_nvp("ir", this->ir));
-  ar(cereal::make_nvp("reverse", this->reverse));
 }
 
 } // namespace hesiod::vnode

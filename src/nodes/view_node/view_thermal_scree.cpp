@@ -12,9 +12,9 @@ namespace hesiod::vnode
 {
 
 ViewThermalScree::ViewThermalScree(std::string id)
-    : ViewNode(), hesiod::cnode::ThermalScree(id)
+    : hesiod::cnode::ControlNode(id), ViewNode(id),
+      hesiod::cnode::ThermalScree(id)
 {
-  this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
   this->set_view3d_elevation_port_id("output");
 }
@@ -67,30 +67,6 @@ bool ViewThermalScree::render_settings()
   has_changed |= this->render_settings_footer();
 
   return has_changed;
-}
-
-void ViewThermalScree::serialize_save(cereal::JSONOutputArchive &ar)
-{
-  ar(cereal::make_nvp("talus_global", this->talus_global));
-  ar(cereal::make_nvp("seed", this->seed));
-  ar(cereal::make_nvp("zmax", this->zmax));
-  ar(cereal::make_nvp("zmin", this->zmin));
-  ar(cereal::make_nvp("noise_ratio", this->noise_ratio));
-  ar(cereal::make_nvp("landing_talus_ratio", this->landing_talus_ratio));
-  ar(cereal::make_nvp("landing_width_ratio", this->landing_width_ratio));
-  ar(cereal::make_nvp("talus_constraint", this->talus_constraint));
-}
-
-void ViewThermalScree::serialize_load(cereal::JSONInputArchive &ar)
-{
-  ar(cereal::make_nvp("talus_global", this->talus_global));
-  ar(cereal::make_nvp("seed", this->seed));
-  ar(cereal::make_nvp("zmax", this->zmax));
-  ar(cereal::make_nvp("zmin", this->zmin));
-  ar(cereal::make_nvp("noise_ratio", this->noise_ratio));
-  ar(cereal::make_nvp("landing_talus_ratio", this->landing_talus_ratio));
-  ar(cereal::make_nvp("landing_width_ratio", this->landing_width_ratio));
-  ar(cereal::make_nvp("talus_constraint", this->talus_constraint));
 }
 
 } // namespace hesiod::vnode

@@ -15,9 +15,9 @@ bool slider_vmin_vmax(float &vmin, float &vmax)
   ImGui::PushID((void *)&vmin);
   ImGui::BeginGroup();
 
-  ImGui::TextUnformatted("Range selection");
+  // ImGui::TextUnformatted("Range selection");
 
-  ImGui::DragFloatRange2("Range",
+  ImGui::DragFloatRange2("range",
                          &vmin,
                          &vmax,
                          0.01f,
@@ -36,7 +36,7 @@ bool slider_vmin_vmax(float &vmin, float &vmax)
     ret = true;
   }
 
-  if (ImGui::Button("Reset"))
+  if (ImGui::Button("reset"))
   {
     vmin = 0.f;
     vmax = 1.f;
@@ -44,7 +44,7 @@ bool slider_vmin_vmax(float &vmin, float &vmax)
   }
 
   ImGui::SameLine();
-  if (ImGui::Button("Center"))
+  if (ImGui::Button("center"))
   {
     float span = vmax - vmin;
     vmin = -0.5f * span;

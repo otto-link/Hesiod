@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-Warp::Warp(std::string id) : gnode::Node(id)
+Warp::Warp(std::string id) : ControlNode(id)
 {
   this->node_type = "Warp";
   this->category = category_mapping.at(this->node_type);

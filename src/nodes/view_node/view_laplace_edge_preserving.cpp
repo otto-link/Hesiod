@@ -9,9 +9,9 @@ namespace hesiod::vnode
 {
 
 ViewLaplaceEdgePreserving::ViewLaplaceEdgePreserving(std::string id)
-    : ViewNode(), hesiod::cnode::LaplaceEdgePreserving(id)
+    : hesiod::cnode::ControlNode(id), ViewNode(id),
+      hesiod::cnode::LaplaceEdgePreserving(id)
 {
-  this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
   this->set_view3d_elevation_port_id("output");
 }
@@ -32,20 +32,6 @@ bool ViewLaplaceEdgePreserving::render_settings()
 
   has_changed |= this->render_settings_footer();
   return has_changed;
-}
-
-void ViewLaplaceEdgePreserving::serialize_save(cereal::JSONOutputArchive &ar)
-{
-  ar(cereal::make_nvp("sigma", this->sigma));
-  ar(cereal::make_nvp("iterations", this->iterations));
-  ar(cereal::make_nvp("talus_global", this->talus_global));
-}
-
-void ViewLaplaceEdgePreserving::serialize_load(cereal::JSONInputArchive &ar)
-{
-  ar(cereal::make_nvp("sigma", this->sigma));
-  ar(cereal::make_nvp("iterations", this->iterations));
-  ar(cereal::make_nvp("talus_global", this->talus_global));
 }
 
 } // namespace hesiod::vnode

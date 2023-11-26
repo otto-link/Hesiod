@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-Kernel::Kernel(std::string id) : gnode::Node(id)
+Kernel::Kernel(std::string id) : ControlNode(id)
 {
   this->node_type = "Kernel";
   this->category = category_mapping.at(this->node_type);

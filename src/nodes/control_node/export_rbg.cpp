@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-ExportRGB::ExportRGB(std::string id) : gnode::Node(id)
+ExportRGB::ExportRGB(std::string id) : ControlNode(id)
 {
   LOG_DEBUG("ExportRGB::ExportRGB()");
   this->node_type = "ExportRGB";

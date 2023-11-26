@@ -12,9 +12,16 @@ Primitive::Primitive(std::string     id,
                      hmap::Vec2<int> shape,
                      hmap::Vec2<int> tiling,
                      float           overlap)
-    : gnode::Node(id), shape(shape), tiling(tiling), overlap(overlap)
+    : ControlNode(id), shape(shape), tiling(tiling), overlap(overlap)
 {
   LOG_DEBUG("Primitive::Primitive()");
+  this->value_out.set_sto(shape, tiling, overlap);
+
+  // parameters
+  this->attr["remap"] = NEW_ATTR_RANGE();
+  this->attr["inverse"] = NEW_ATTR_BOOL(false);
+
+  // ports
   this->add_port(gnode::Port("dx",
                              gnode::direction::in,
                              dtype::dHeightMap,

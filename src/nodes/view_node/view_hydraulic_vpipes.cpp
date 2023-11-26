@@ -9,9 +9,9 @@ namespace hesiod::vnode
 {
 
 ViewHydraulicVpipes::ViewHydraulicVpipes(std::string id)
-    : ViewNode(), hesiod::cnode::HydraulicVpipes(id)
+    : hesiod::cnode::ControlNode(id), ViewNode(id),
+      hesiod::cnode::HydraulicVpipes(id)
 {
-  this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
   this->set_view3d_elevation_port_id("output");
 }
@@ -44,28 +44,6 @@ bool ViewHydraulicVpipes::render_settings()
 
   has_changed |= this->render_settings_footer();
   return has_changed;
-}
-
-void ViewHydraulicVpipes::serialize_save(cereal::JSONOutputArchive &ar)
-{
-  ar(cereal::make_nvp("iterations", this->iterations));
-  ar(cereal::make_nvp("water_height", this->water_height));
-  ar(cereal::make_nvp("c_capacity", this->c_capacity));
-  ar(cereal::make_nvp("c_erosion", this->c_erosion));
-  ar(cereal::make_nvp("c_deposition", this->c_deposition));
-  ar(cereal::make_nvp("rain_rate", this->rain_rate));
-  ar(cereal::make_nvp("evap_rate", this->evap_rate));
-}
-
-void ViewHydraulicVpipes::serialize_load(cereal::JSONInputArchive &ar)
-{
-  ar(cereal::make_nvp("iterations", this->iterations));
-  ar(cereal::make_nvp("water_height", this->water_height));
-  ar(cereal::make_nvp("c_capacity", this->c_capacity));
-  ar(cereal::make_nvp("c_erosion", this->c_erosion));
-  ar(cereal::make_nvp("c_deposition", this->c_deposition));
-  ar(cereal::make_nvp("rain_rate", this->rain_rate));
-  ar(cereal::make_nvp("evap_rate", this->evap_rate));
 }
 
 } // namespace hesiod::vnode

@@ -10,9 +10,9 @@
 namespace hesiod::vnode
 {
 
-ViewExport::ViewExport(std::string id) : ViewNode(), hesiod::cnode::Export(id)
+ViewExport::ViewExport(std::string id)
+    : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Export(id)
 {
-  this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("input");
   this->set_view3d_elevation_port_id("input");
 }
@@ -54,20 +54,6 @@ bool ViewExport::render_settings()
 
   has_changed |= this->render_settings_footer();
   return has_changed;
-}
-
-void ViewExport::serialize_save(cereal::JSONOutputArchive &ar)
-{
-  ar(cereal::make_nvp("auto_export", this->auto_export));
-  ar(cereal::make_nvp("export_format", this->export_format));
-  ar(cereal::make_nvp("fname", this->fname));
-}
-
-void ViewExport::serialize_load(cereal::JSONInputArchive &ar)
-{
-  ar(cereal::make_nvp("auto_export", this->auto_export));
-  ar(cereal::make_nvp("export_format", this->export_format));
-  ar(cereal::make_nvp("fname", this->fname));
 }
 
 } // namespace hesiod::vnode

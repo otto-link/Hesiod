@@ -10,9 +10,9 @@ namespace hesiod::vnode
 {
 
 ViewRecastCanyon::ViewRecastCanyon(std::string id)
-    : ViewNode(), hesiod::cnode::RecastCanyon(id)
+    : hesiod::cnode::ControlNode(id), ViewNode(id),
+      hesiod::cnode::RecastCanyon(id)
 {
-  this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
   this->set_view3d_elevation_port_id("output");
 }
@@ -30,18 +30,6 @@ bool ViewRecastCanyon::render_settings()
 
   has_changed |= this->render_settings_footer();
   return has_changed;
-}
-
-void ViewRecastCanyon::serialize_save(cereal::JSONOutputArchive &ar)
-{
-  ar(cereal::make_nvp("vcut", this->vcut));
-  ar(cereal::make_nvp("gamma", this->gamma));
-}
-
-void ViewRecastCanyon::serialize_load(cereal::JSONInputArchive &ar)
-{
-  ar(cereal::make_nvp("vcut", this->vcut));
-  ar(cereal::make_nvp("gamma", this->gamma));
 }
 
 } // namespace hesiod::vnode

@@ -9,9 +9,8 @@ namespace hesiod::vnode
 {
 
 ViewEqualize::ViewEqualize(std::string id)
-    : ViewNode(), hesiod::cnode::Equalize(id)
+    : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Equalize(id)
 {
-  this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
   this->set_view3d_elevation_port_id("output");
 }
@@ -23,16 +22,6 @@ bool ViewEqualize::render_settings()
 
   has_changed |= this->render_settings_footer();
   return has_changed;
-}
-
-void ViewEqualize::serialize_save(cereal::JSONOutputArchive &)
-{
-  // nothing to do here
-}
-
-void ViewEqualize::serialize_load(cereal::JSONInputArchive &)
-{
-  // nothing to do here
 }
 
 } // namespace hesiod::vnode

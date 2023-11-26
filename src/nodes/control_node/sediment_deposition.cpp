@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-SedimentDeposition::SedimentDeposition(std::string id) : gnode::Node(id)
+SedimentDeposition::SedimentDeposition(std::string id) : ControlNode(id)
 {
   this->node_type = "SedimentDeposition";
   this->category = category_mapping.at(this->node_type);

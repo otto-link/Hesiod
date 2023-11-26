@@ -11,9 +11,8 @@ namespace hesiod::vnode
 {
 
 ViewExportRGB::ViewExportRGB(std::string id)
-    : ViewNode(), hesiod::cnode::ExportRGB(id)
+    : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::ExportRGB(id)
 {
-  this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("RGB");
 }
 
@@ -51,18 +50,6 @@ bool ViewExportRGB::render_settings()
 
   has_changed |= this->render_settings_footer();
   return has_changed;
-}
-
-void ViewExportRGB::serialize_save(cereal::JSONOutputArchive &ar)
-{
-  ar(cereal::make_nvp("auto_export", this->auto_export));
-  ar(cereal::make_nvp("fname", this->fname));
-}
-
-void ViewExportRGB::serialize_load(cereal::JSONInputArchive &ar)
-{
-  ar(cereal::make_nvp("auto_export", this->auto_export));
-  ar(cereal::make_nvp("fname", this->fname));
 }
 
 } // namespace hesiod::vnode

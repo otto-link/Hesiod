@@ -9,9 +9,8 @@ namespace hesiod::vnode
 {
 
 ViewMedian3x3::ViewMedian3x3(std::string id)
-    : ViewNode(), hesiod::cnode::Median3x3(id)
+    : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Median3x3(id)
 {
-  this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
   this->set_view3d_elevation_port_id("output");
 }
@@ -23,14 +22,6 @@ bool ViewMedian3x3::render_settings()
 
   has_changed |= this->render_settings_footer();
   return has_changed;
-}
-
-void ViewMedian3x3::serialize_save(cereal::JSONOutputArchive &)
-{
-}
-
-void ViewMedian3x3::serialize_load(cereal::JSONInputArchive &)
-{
 }
 
 } // namespace hesiod::vnode

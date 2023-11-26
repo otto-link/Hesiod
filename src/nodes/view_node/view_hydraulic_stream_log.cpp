@@ -9,9 +9,9 @@ namespace hesiod::vnode
 {
 
 ViewHydraulicStreamLog::ViewHydraulicStreamLog(std::string id)
-    : ViewNode(), hesiod::cnode::HydraulicStreamLog(id)
+    : hesiod::cnode::ControlNode(id), ViewNode(id),
+      hesiod::cnode::HydraulicStreamLog(id)
 {
-  this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
   this->set_view3d_elevation_port_id("output");
 }
@@ -35,22 +35,6 @@ bool ViewHydraulicStreamLog::render_settings()
 
   has_changed |= this->render_settings_footer();
   return has_changed;
-}
-
-void ViewHydraulicStreamLog::serialize_save(cereal::JSONOutputArchive &ar)
-{
-  ar(cereal::make_nvp("c_erosion", this->c_erosion));
-  ar(cereal::make_nvp("talus_ref", this->talus_ref));
-  ar(cereal::make_nvp("gamma", this->gamma));
-  ar(cereal::make_nvp("ir", this->ir));
-}
-
-void ViewHydraulicStreamLog::serialize_load(cereal::JSONInputArchive &ar)
-{
-  ar(cereal::make_nvp("c_erosion", this->c_erosion));
-  ar(cereal::make_nvp("talus_ref", this->talus_ref));
-  ar(cereal::make_nvp("gamma", this->gamma));
-  ar(cereal::make_nvp("ir", this->ir));
 }
 
 } // namespace hesiod::vnode

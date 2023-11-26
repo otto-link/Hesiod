@@ -10,9 +10,9 @@ namespace hesiod::vnode
 {
 
 ViewDistanceTransform::ViewDistanceTransform(std::string id)
-    : ViewNode(), hesiod::cnode::DistanceTransform(id)
+    : hesiod::cnode::ControlNode(id), ViewNode(id),
+      hesiod::cnode::DistanceTransform(id)
 {
-  this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
   this->set_view3d_elevation_port_id("output");
 
@@ -47,24 +47,6 @@ bool ViewDistanceTransform::render_settings()
   has_changed |= this->render_settings_footer();
 
   return has_changed;
-}
-
-void ViewDistanceTransform::serialize_save(cereal::JSONOutputArchive &ar)
-{
-  ar(cereal::make_nvp("shape_working.x", this->shape_working.x));
-  ar(cereal::make_nvp("shape_working.y", this->shape_working.y));
-  ar(cereal::make_nvp("reverse", this->reverse));
-  ar(cereal::make_nvp("vmin", this->vmin));
-  ar(cereal::make_nvp("vmax", this->vmax));
-}
-
-void ViewDistanceTransform::serialize_load(cereal::JSONInputArchive &ar)
-{
-  ar(cereal::make_nvp("shape_working.x", this->shape_working.x));
-  ar(cereal::make_nvp("shape_working.y", this->shape_working.y));
-  ar(cereal::make_nvp("reverse", this->reverse));
-  ar(cereal::make_nvp("vmin", this->vmin));
-  ar(cereal::make_nvp("vmax", this->vmax));
 }
 
 } // namespace hesiod::vnode

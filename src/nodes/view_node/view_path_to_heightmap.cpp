@@ -13,9 +13,9 @@ ViewPathToHeightmap::ViewPathToHeightmap(std::string     id,
                                          hmap::Vec2<int> shape,
                                          hmap::Vec2<int> tiling,
                                          float           overlap)
-    : ViewNode(), hesiod::cnode::PathToHeightmap(id, shape, tiling, overlap)
+    : hesiod::cnode::ControlNode(id), ViewNode(id),
+      hesiod::cnode::PathToHeightmap(id, shape, tiling, overlap)
 {
-  this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
   this->set_view3d_elevation_port_id("output");
   this->set_view3d_color_port_id("path");
@@ -37,20 +37,6 @@ bool ViewPathToHeightmap::render_settings()
 
   has_changed |= this->render_settings_footer();
   return has_changed;
-}
-
-void ViewPathToHeightmap::serialize_save(cereal::JSONOutputArchive &ar)
-{
-  ar(cereal::make_nvp("filled", this->filled));
-  ar(cereal::make_nvp("vmin", this->vmin));
-  ar(cereal::make_nvp("vmax", this->vmax));
-}
-
-void ViewPathToHeightmap::serialize_load(cereal::JSONInputArchive &ar)
-{
-  ar(cereal::make_nvp("filled", this->filled));
-  ar(cereal::make_nvp("vmin", this->vmin));
-  ar(cereal::make_nvp("vmax", this->vmax));
 }
 
 } // namespace hesiod::vnode

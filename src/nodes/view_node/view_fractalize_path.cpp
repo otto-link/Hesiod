@@ -10,9 +10,9 @@ namespace hesiod::vnode
 {
 
 ViewFractalizePath::ViewFractalizePath(std::string id)
-    : ViewNode(), hesiod::cnode::FractalizePath(id)
+    : hesiod::cnode::ControlNode(id), ViewNode(id),
+      hesiod::cnode::FractalizePath(id)
 {
-  this->set_p_control_node((gnode::Node *)this);
 }
 
 void ViewFractalizePath::render_node_specific_content()
@@ -49,24 +49,6 @@ bool ViewFractalizePath::render_settings()
 
   has_changed |= this->render_settings_footer();
   return has_changed;
-}
-
-void ViewFractalizePath::serialize_save(cereal::JSONOutputArchive &ar)
-{
-  ar(cereal::make_nvp("iterations", this->iterations));
-  ar(cereal::make_nvp("seed", this->seed));
-  ar(cereal::make_nvp("sigma", this->sigma));
-  ar(cereal::make_nvp("orientation", this->orientation));
-  ar(cereal::make_nvp("persistence", this->persistence));
-}
-
-void ViewFractalizePath::serialize_load(cereal::JSONInputArchive &ar)
-{
-  ar(cereal::make_nvp("iterations", this->iterations));
-  ar(cereal::make_nvp("seed", this->seed));
-  ar(cereal::make_nvp("sigma", this->sigma));
-  ar(cereal::make_nvp("orientation", this->orientation));
-  ar(cereal::make_nvp("persistence", this->persistence));
 }
 
 } // namespace hesiod::vnode

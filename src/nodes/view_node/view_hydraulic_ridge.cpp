@@ -9,9 +9,9 @@ namespace hesiod::vnode
 {
 
 ViewHydraulicRidge::ViewHydraulicRidge(std::string id)
-    : ViewNode(), hesiod::cnode::HydraulicRidge(id)
+    : hesiod::cnode::ControlNode(id), ViewNode(id),
+      hesiod::cnode::HydraulicRidge(id)
 {
-  this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
   this->set_view3d_elevation_port_id("output");
 }
@@ -51,28 +51,6 @@ bool ViewHydraulicRidge::render_settings()
 
   has_changed |= this->render_settings_footer();
   return has_changed;
-}
-
-void ViewHydraulicRidge::serialize_save(cereal::JSONOutputArchive &ar)
-{
-  ar(cereal::make_nvp("talus_global", this->talus_global));
-  ar(cereal::make_nvp("intensity", this->intensity));
-  ar(cereal::make_nvp("erosion_factor", this->erosion_factor));
-  ar(cereal::make_nvp("smoothing_factor", this->smoothing_factor));
-  ar(cereal::make_nvp("noise_ratio", this->noise_ratio));
-  ar(cereal::make_nvp("ir", this->ir));
-  ar(cereal::make_nvp("seed", this->seed));
-}
-
-void ViewHydraulicRidge::serialize_load(cereal::JSONInputArchive &ar)
-{
-  ar(cereal::make_nvp("talus_global", this->talus_global));
-  ar(cereal::make_nvp("intensity", this->intensity));
-  ar(cereal::make_nvp("erosion_factor", this->erosion_factor));
-  ar(cereal::make_nvp("smoothing_factor", this->smoothing_factor));
-  ar(cereal::make_nvp("noise_ratio", this->noise_ratio));
-  ar(cereal::make_nvp("ir", this->ir));
-  ar(cereal::make_nvp("seed", this->seed));
 }
 
 } // namespace hesiod::vnode

@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-SmoothFill::SmoothFill(std::string id) : gnode::Node(id)
+SmoothFill::SmoothFill(std::string id) : ControlNode(id)
 {
   this->node_type = "SmoothFill";
   this->category = category_mapping.at(this->node_type);

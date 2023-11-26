@@ -9,9 +9,9 @@ namespace hesiod::vnode
 {
 
 ViewSmoothFill::ViewSmoothFill(std::string id)
-    : ViewNode(), hesiod::cnode::SmoothFill(id)
+    : hesiod::cnode::ControlNode(id), ViewNode(id),
+      hesiod::cnode::SmoothFill(id)
 {
-  this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
   this->set_view3d_elevation_port_id("output");
 }
@@ -29,18 +29,6 @@ bool ViewSmoothFill::render_settings()
 
   has_changed |= this->render_settings_footer();
   return has_changed;
-}
-
-void ViewSmoothFill::serialize_save(cereal::JSONOutputArchive &ar)
-{
-  ar(cereal::make_nvp("ir", this->ir));
-  ar(cereal::make_nvp("k", this->k));
-}
-
-void ViewSmoothFill::serialize_load(cereal::JSONInputArchive &ar)
-{
-  ar(cereal::make_nvp("ir", this->ir));
-  ar(cereal::make_nvp("k", this->k));
 }
 
 } // namespace hesiod::vnode

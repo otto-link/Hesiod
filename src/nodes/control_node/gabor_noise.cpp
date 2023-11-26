@@ -12,7 +12,7 @@ GaborNoise::GaborNoise(std::string     id,
                        hmap::Vec2<int> shape,
                        hmap::Vec2<int> tiling,
                        float           overlap)
-    : gnode::Node(id), shape(shape), tiling(tiling), overlap(overlap)
+    : ControlNode(id), shape(shape), tiling(tiling), overlap(overlap)
 {
   LOG_DEBUG("GaborNoise::GaborNoise()");
   this->node_type = "GaborNoise";

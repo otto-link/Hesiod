@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-KmeansClustering3::KmeansClustering3(std::string id) : gnode::Node(id)
+KmeansClustering3::KmeansClustering3(std::string id) : ControlNode(id)
 {
   LOG_DEBUG("KmeansClustering3::KmeansClustering3()");
   this->add_port(

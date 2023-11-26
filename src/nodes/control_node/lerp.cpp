@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-Lerp::Lerp(std::string id) : gnode::Node(id)
+Lerp::Lerp(std::string id) : ControlNode(id)
 {
   LOG_DEBUG("Lerp::Lerp()");
   this->node_type = "Lerp";

@@ -10,9 +10,9 @@ namespace hesiod::vnode
 {
 
 ViewPathFinding::ViewPathFinding(std::string id)
-    : ViewNode(), hesiod::cnode::PathFinding(id)
+    : hesiod::cnode::ControlNode(id), ViewNode(id),
+      hesiod::cnode::PathFinding(id)
 {
-  this->set_p_control_node((gnode::Node *)this);
   this->set_view3d_elevation_port_id("heightmap");
   this->set_view3d_color_port_id("output");
 
@@ -62,22 +62,6 @@ bool ViewPathFinding::render_settings()
 
   has_changed |= this->render_settings_footer();
   return has_changed;
-}
-
-void ViewPathFinding::serialize_save(cereal::JSONOutputArchive &ar)
-{
-  ar(cereal::make_nvp("wshape.x", this->wshape.x));
-  ar(cereal::make_nvp("wshape.y", this->wshape.y));
-  ar(cereal::make_nvp("elevation_ratio", this->elevation_ratio));
-  ar(cereal::make_nvp("distance_exponent", this->distance_exponent));
-}
-
-void ViewPathFinding::serialize_load(cereal::JSONInputArchive &ar)
-{
-  ar(cereal::make_nvp("wshape.x", this->wshape.x));
-  ar(cereal::make_nvp("wshape.y", this->wshape.y));
-  ar(cereal::make_nvp("elevation_ratio", this->elevation_ratio));
-  ar(cereal::make_nvp("distance_exponent", this->distance_exponent));
 }
 
 } // namespace hesiod::vnode

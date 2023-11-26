@@ -15,9 +15,9 @@ ViewGaborNoise::ViewGaborNoise(std::string     id,
                                hmap::Vec2<int> shape,
                                hmap::Vec2<int> tiling,
                                float           overlap)
-    : ViewNode(), hesiod::cnode::GaborNoise(id, shape, tiling, overlap)
+    : hesiod::cnode::ControlNode(id), ViewNode(id),
+      hesiod::cnode::GaborNoise(id, shape, tiling, overlap)
 {
-  this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
   this->set_view3d_elevation_port_id("output");
 }
@@ -69,28 +69,6 @@ bool ViewGaborNoise::render_settings()
   has_changed |= this->render_settings_footer();
 
   return has_changed;
-}
-
-void ViewGaborNoise::serialize_save(cereal::JSONOutputArchive &ar)
-{
-  ar(cereal::make_nvp("kw", this->kw));
-  ar(cereal::make_nvp("angle", this->angle));
-  ar(cereal::make_nvp("width", this->width));
-  ar(cereal::make_nvp("density", this->density));
-  ar(cereal::make_nvp("seed", this->seed));
-  ar(cereal::make_nvp("vmin", this->vmin));
-  ar(cereal::make_nvp("vmax", this->vmax));
-}
-
-void ViewGaborNoise::serialize_load(cereal::JSONInputArchive &ar)
-{
-  ar(cereal::make_nvp("kw", this->kw));
-  ar(cereal::make_nvp("angle", this->angle));
-  ar(cereal::make_nvp("width", this->width));
-  ar(cereal::make_nvp("density", this->density));
-  ar(cereal::make_nvp("seed", this->seed));
-  ar(cereal::make_nvp("vmin", this->vmin));
-  ar(cereal::make_nvp("vmax", this->vmax));
 }
 
 } // namespace hesiod::vnode

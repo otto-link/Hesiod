@@ -9,9 +9,9 @@ namespace hesiod::vnode
 {
 
 ViewAlterElevation::ViewAlterElevation(std::string id)
-    : ViewNode(), hesiod::cnode::AlterElevation(id)
+    : hesiod::cnode::ControlNode(id), ViewNode(id),
+      hesiod::cnode::AlterElevation(id)
 {
-  this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
   this->set_view3d_elevation_port_id("output");
 }
@@ -33,22 +33,6 @@ bool ViewAlterElevation::render_settings()
 
   has_changed |= this->render_settings_footer();
   return has_changed;
-}
-
-void ViewAlterElevation::serialize_save(cereal::JSONOutputArchive &ar)
-{
-  ar(cereal::make_nvp("ir", this->ir));
-  ar(cereal::make_nvp("footprint_ratio", this->footprint_ratio));
-  ar(cereal::make_nvp("vmin", this->vmin));
-  ar(cereal::make_nvp("vmax", this->vmax));
-}
-
-void ViewAlterElevation::serialize_load(cereal::JSONInputArchive &ar)
-{
-  ar(cereal::make_nvp("ir", this->ir));
-  ar(cereal::make_nvp("footprint_ratio", this->footprint_ratio));
-  ar(cereal::make_nvp("vmin", this->vmin));
-  ar(cereal::make_nvp("vmax", this->vmax));
 }
 
 } // namespace hesiod::vnode

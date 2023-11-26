@@ -10,9 +10,9 @@ namespace hesiod::vnode
 {
 
 ViewMinimumLocal::ViewMinimumLocal(std::string id)
-    : ViewNode(), hesiod::cnode::MinimumLocal(id)
+    : hesiod::cnode::ControlNode(id), ViewNode(id),
+      hesiod::cnode::MinimumLocal(id)
 {
-  this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
   this->set_view3d_elevation_port_id("output");
 }
@@ -27,16 +27,6 @@ bool ViewMinimumLocal::render_settings()
 
   has_changed |= this->render_settings_footer();
   return has_changed;
-}
-
-void ViewMinimumLocal::serialize_save(cereal::JSONOutputArchive &ar)
-{
-  ar(cereal::make_nvp("ir", this->ir));
-}
-
-void ViewMinimumLocal::serialize_load(cereal::JSONInputArchive &ar)
-{
-  ar(cereal::make_nvp("ir", this->ir));
 }
 
 } // namespace hesiod::vnode

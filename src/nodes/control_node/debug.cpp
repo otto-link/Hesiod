@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-Debug::Debug(std::string id) : gnode::Node(id)
+Debug::Debug(std::string id) : ControlNode(id)
 {
   LOG_DEBUG("Debug::Debug()");
   this->node_type = "Debug";

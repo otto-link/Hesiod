@@ -9,9 +9,9 @@ namespace hesiod::vnode
 {
 
 ViewGammaCorrectionLocal::ViewGammaCorrectionLocal(std::string id)
-    : ViewNode(), hesiod::cnode::GammaCorrectionLocal(id)
+    : hesiod::cnode::ControlNode(id), ViewNode(id),
+      hesiod::cnode::GammaCorrectionLocal(id)
 {
-  this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
   this->set_view3d_elevation_port_id("output");
 }
@@ -32,20 +32,6 @@ bool ViewGammaCorrectionLocal::render_settings()
 
   has_changed |= this->render_settings_footer();
   return has_changed;
-}
-
-void ViewGammaCorrectionLocal::serialize_save(cereal::JSONOutputArchive &ar)
-{
-  ar(cereal::make_nvp("gamma", this->gamma));
-  ar(cereal::make_nvp("ir", this->ir));
-  ar(cereal::make_nvp("k", this->k));
-}
-
-void ViewGammaCorrectionLocal::serialize_load(cereal::JSONInputArchive &ar)
-{
-  ar(cereal::make_nvp("gamma", this->gamma));
-  ar(cereal::make_nvp("ir", this->ir));
-  ar(cereal::make_nvp("k", this->k));
 }
 
 } // namespace hesiod::vnode

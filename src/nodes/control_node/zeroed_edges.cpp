@@ -8,10 +8,15 @@
 namespace hesiod::cnode
 {
 
-ZeroedEdges::ZeroedEdges(std::string id) : gnode::Node(id)
+ZeroedEdges::ZeroedEdges(std::string id) : ControlNode(id)
 {
   this->node_type = "ZeroedEdges";
   this->category = category_mapping.at(this->node_type);
+
+  this->attr["sigma"] = NEW_ATTR_FLOAT(0.25f, 0.f, 0.5f);
+  this->attr["remap"] = NEW_ATTR_RANGE(false);
+
+  this->attr_ordered_key = {"sigma", "remap"};
 
   this->add_port(gnode::Port("input", gnode::direction::in, dtype::dHeightMap));
   this->add_port(gnode::Port("dr",
@@ -41,23 +46,30 @@ void ZeroedEdges::compute()
 
   this->value_out = *p_input_hmap;
 
+  float sigma = GET_ATTR_FLOAT("sigma");
+
   if (!p_input_dr)
-    hmap::transform(
-        this->value_out,
-        [this](hmap::Array &z, hmap::Vec2<float> shift, hmap::Vec2<float> scale)
-        { hmap::zeroed_edges(z, this->sigma, nullptr, shift, scale); });
+    hmap::transform(this->value_out,
+                    [this, &sigma](hmap::Array      &z,
+                                   hmap::Vec2<float> shift,
+                                   hmap::Vec2<float> scale)
+                    { hmap::zeroed_edges(z, sigma, nullptr, shift, scale); });
 
   else
     hmap::transform(this->value_out,
                     *p_input_dr,
-                    [this](hmap::Array      &z,
-                           hmap::Array      &dr,
-                           hmap::Vec2<float> shift,
-                           hmap::Vec2<float> scale)
-                    { hmap::zeroed_edges(z, this->sigma, &dr, shift, scale); });
+                    [this, &sigma](hmap::Array      &z,
+                                   hmap::Array      &dr,
+                                   hmap::Vec2<float> shift,
+                                   hmap::Vec2<float> scale)
+                    { hmap::zeroed_edges(z, sigma, &dr, shift, scale); });
 
-  if (remap)
-    this->value_out.remap(this->vmin, this->vmax);
+  // remap
+  if (this->attr.at("remap")->get_ref<RangeAttribute>()->is_activated())
+  {
+    hmap::Vec2<float> vrange = GET_ATTR_RANGE("remap");
+    this->value_out.remap(vrange.x, vrange.y);
+  }
 }
 
 } // namespace hesiod::cnode

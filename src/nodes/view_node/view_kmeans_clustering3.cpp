@@ -10,9 +10,9 @@ namespace hesiod::vnode
 {
 
 ViewKmeansClustering3::ViewKmeansClustering3(std::string id)
-    : ViewNode(), hesiod::cnode::KmeansClustering3(id)
+    : hesiod::cnode::ControlNode(id), ViewNode(id),
+      hesiod::cnode::KmeansClustering3(id)
 {
-  this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
 }
 
@@ -55,30 +55,6 @@ bool ViewKmeansClustering3::render_settings()
   has_changed |= this->render_settings_footer();
 
   return has_changed;
-}
-
-void ViewKmeansClustering3::serialize_save(cereal::JSONOutputArchive &ar)
-{
-  ar(cereal::make_nvp("nclusters", this->nclusters));
-  ar(cereal::make_nvp("weights.x", this->weights.x));
-  ar(cereal::make_nvp("weights.y", this->weights.y));
-  ar(cereal::make_nvp("weights.z", this->weights.z));
-  ar(cereal::make_nvp("seed", this->seed));
-  ar(cereal::make_nvp("shape_clustering.x", this->shape_clustering.x));
-  ar(cereal::make_nvp("shape_clustering.y", this->shape_clustering.y));
-  ar(cereal::make_nvp("normalize_inputs", this->normalize_inputs));
-}
-
-void ViewKmeansClustering3::serialize_load(cereal::JSONInputArchive &ar)
-{
-  ar(cereal::make_nvp("nclusters", this->nclusters));
-  ar(cereal::make_nvp("weights.x", this->weights.x));
-  ar(cereal::make_nvp("weights.y", this->weights.y));
-  ar(cereal::make_nvp("weights.z", this->weights.z));
-  ar(cereal::make_nvp("seed", this->seed));
-  ar(cereal::make_nvp("shape_clustering.x", this->shape_clustering.x));
-  ar(cereal::make_nvp("shape_clustering.y", this->shape_clustering.y));
-  ar(cereal::make_nvp("normalize_inputs", this->normalize_inputs));
 }
 
 } // namespace hesiod::vnode

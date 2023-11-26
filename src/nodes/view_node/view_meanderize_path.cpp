@@ -10,9 +10,9 @@ namespace hesiod::vnode
 {
 
 ViewMeanderizePath::ViewMeanderizePath(std::string id)
-    : ViewNode(), hesiod::cnode::MeanderizePath(id)
+    : hesiod::cnode::ControlNode(id), ViewNode(id),
+      hesiod::cnode::MeanderizePath(id)
 {
-  this->set_p_control_node((gnode::Node *)this);
 }
 
 void ViewMeanderizePath::render_node_specific_content()
@@ -50,24 +50,6 @@ bool ViewMeanderizePath::render_settings()
 
   has_changed |= this->render_settings_footer();
   return has_changed;
-}
-
-void ViewMeanderizePath::serialize_save(cereal::JSONOutputArchive &ar)
-{
-  ar(cereal::make_nvp("radius", this->radius));
-  ar(cereal::make_nvp("tangent_contribution", this->tangent_contribution));
-  ar(cereal::make_nvp("iterations", this->iterations));
-  ar(cereal::make_nvp("transition_length_ratio",
-                      this->transition_length_ratio));
-}
-
-void ViewMeanderizePath::serialize_load(cereal::JSONInputArchive &ar)
-{
-  ar(cereal::make_nvp("radius", this->radius));
-  ar(cereal::make_nvp("tangent_contribution", this->tangent_contribution));
-  ar(cereal::make_nvp("iterations", this->iterations));
-  ar(cereal::make_nvp("transition_length_ratio",
-                      this->transition_length_ratio));
 }
 
 } // namespace hesiod::vnode

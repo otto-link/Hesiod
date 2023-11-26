@@ -9,9 +9,8 @@ namespace hesiod::vnode
 {
 
 ViewLaplace::ViewLaplace(std::string id)
-    : ViewNode(), hesiod::cnode::Laplace(id)
+    : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Laplace(id)
 {
-  this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
   this->set_view3d_elevation_port_id("output");
 }
@@ -29,18 +28,6 @@ bool ViewLaplace::render_settings()
 
   has_changed |= this->render_settings_footer();
   return has_changed;
-}
-
-void ViewLaplace::serialize_save(cereal::JSONOutputArchive &ar)
-{
-  ar(cereal::make_nvp("sigma", this->sigma));
-  ar(cereal::make_nvp("iterations", this->iterations));
-}
-
-void ViewLaplace::serialize_load(cereal::JSONInputArchive &ar)
-{
-  ar(cereal::make_nvp("sigma", this->sigma));
-  ar(cereal::make_nvp("iterations", this->iterations));
 }
 
 } // namespace hesiod::vnode

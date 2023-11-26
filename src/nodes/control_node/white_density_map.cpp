@@ -8,12 +8,18 @@
 namespace hesiod::cnode
 {
 
-WhiteDensityMap::WhiteDensityMap(std::string id) : gnode::Node(id)
+WhiteDensityMap::WhiteDensityMap(std::string id) : ControlNode(id)
 {
   LOG_DEBUG("WhiteDensityMap::WhiteDensityMapFilter()");
 
   this->node_type = "WhiteDensityMap";
   this->category = category_mapping.at(this->node_type);
+
+  this->attr["seed"] = NEW_ATTR_SEED();
+  this->attr["remap"] = NEW_ATTR_RANGE(false);
+
+  this->attr_ordered_key = {"seed", "remap"};
+
   this->add_port(
       gnode::Port("density map", gnode::direction::in, dtype::dHeightMap));
   this->add_port(
@@ -37,11 +43,15 @@ void WhiteDensityMap::compute()
                           p_input_hmap->tiling,
                           p_input_hmap->overlap);
 
-  hmap::transform(
-      this->value_out,
-      *p_input_hmap,
-      [this](hmap::Array &h_out, hmap::Array &density_map)
-      { h_out = hmap::white_density_map(density_map, (uint)this->seed); });
+  int seed = GET_ATTR_SEED("seed");
+
+  hmap::transform(this->value_out,
+                  *p_input_hmap,
+                  [this, &seed](hmap::Array &h_out, hmap::Array &density_map) {
+                    h_out = hmap::white_density_map(density_map, (uint)seed++);
+                  });
+
+  this->post_process_heightmap(this->value_out);
 }
 
 } // namespace hesiod::cnode

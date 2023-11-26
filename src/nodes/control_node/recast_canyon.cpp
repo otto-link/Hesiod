@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-RecastCanyon::RecastCanyon(std::string id) : gnode::Node(id)
+RecastCanyon::RecastCanyon(std::string id) : ControlNode(id)
 {
   LOG_DEBUG("RecastCanyon::RecastCanyon()");
   this->node_type = "RecastCanyon";

@@ -27,8 +27,8 @@ void ViewTree::render_view2d()
 
   ImGui::Text("%s", this->viewer_node_id.c_str());
 
-  hesiod::vnode::ViewControlNode *p_vnode =
-      this->get_view_control_node_ref_by_id(this->viewer_node_id);
+  hesiod::vnode::ViewNode *p_vnode = this->get_node_ref_by_id<ViewNode>(
+      this->viewer_node_id);
 
   if (p_vnode->get_preview_port_id() != "")
   {
@@ -111,8 +111,8 @@ void ViewTree::render_view3d()
 
   ImGui::Text("%s", this->viewer_node_id.c_str());
 
-  hesiod::vnode::ViewControlNode *p_vnode =
-      this->get_view_control_node_ref_by_id(this->viewer_node_id);
+  hesiod::vnode::ViewNode *p_vnode = this->get_node_ref_by_id<ViewNode>(
+      this->viewer_node_id);
 
   if (p_vnode->get_view3d_elevation_port_id() != "")
   {
@@ -222,15 +222,15 @@ void ViewTree::render_view3d()
 
 void ViewTree::render_settings(std::string node_id)
 {
-  this->get_view_control_node_ref_by_id(node_id)->render_settings();
+  this->get_node_ref_by_id<ViewNode>(node_id)->render_settings();
 }
 
 void ViewTree::update_image_texture_view2d()
 {
   if (this->is_node_id_in_keys(this->viewer_node_id))
   {
-    hesiod::vnode::ViewControlNode *p_vnode =
-        this->get_view_control_node_ref_by_id(this->viewer_node_id);
+    hesiod::vnode::ViewNode *p_vnode = this->get_node_ref_by_id<ViewNode>(
+        this->viewer_node_id);
 
     std::string data_pid = p_vnode->get_preview_port_id();
 
@@ -290,8 +290,8 @@ void ViewTree::update_image_texture_view3d(bool vertex_array_update)
 {
   if (this->is_node_id_in_keys(this->viewer_node_id))
   {
-    hesiod::vnode::ViewControlNode *p_vnode =
-        this->get_view_control_node_ref_by_id(this->viewer_node_id);
+    hesiod::vnode::ViewNode *p_vnode = this->get_node_ref_by_id<ViewNode>(
+        this->viewer_node_id);
 
     std::string elevation_pid = p_vnode->get_view3d_elevation_port_id();
     std::string color_pid = p_vnode->get_view3d_color_port_id();

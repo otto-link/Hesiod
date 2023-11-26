@@ -8,11 +8,24 @@
 namespace hesiod::cnode
 {
 
-DigPath::DigPath(std::string id) : gnode::Node(id)
+DigPath::DigPath(std::string id) : ControlNode(id)
 {
   LOG_DEBUG("DigPath::DigPath()");
   this->node_type = "DigPath";
   this->category = category_mapping.at(this->node_type);
+
+  this->attr["width"] = NEW_ATTR_INT(1, 1, 32);
+  this->attr["decay"] = NEW_ATTR_INT(2, 1, 32);
+  this->attr["flattening_radius"] = NEW_ATTR_INT(16, 1, 32);
+  this->attr["force_downhill"] = NEW_ATTR_BOOL(false);
+  this->attr["depth"] = NEW_ATTR_FLOAT(0.f, -0.2f, 0.2f);
+
+  this->attr_ordered_key = {"width",
+                            "decay",
+                            "flattening_radius",
+                            "depth",
+                            "force_downhill"};
+
   this->add_port(gnode::Port("path", gnode::direction::in, dtype::dPath));
   this->add_port(gnode::Port("input", gnode::direction::in, dtype::dHeightMap));
   this->add_port(
@@ -34,7 +47,7 @@ void DigPath::compute()
     // work on a copy of the input
     this->value_out = *p_input_hmap;
 
-    if (!this->force_downhill)
+    if (!GET_ATTR_BOOL("force_downhill"))
     {
       hmap::transform(
           this->value_out,
@@ -42,12 +55,12 @@ void DigPath::compute()
           {
             hmap::dig_path(z,
                            *p_input_path,
-                           this->width,
-                           this->decay,
-                           this->flattening_radius,
-                           this->force_downhill,
+                           GET_ATTR_INT("width"),
+                           GET_ATTR_INT("decay"),
+                           GET_ATTR_INT("flattening_radius"),
+                           GET_ATTR_BOOL("force_downhill"),
                            bbox,
-                           this->depth);
+                           GET_ATTR_FLOAT("depth"));
           });
     }
     else
@@ -57,12 +70,12 @@ void DigPath::compute()
 
       hmap::dig_path(z_array,
                      *p_input_path,
-                     this->width,
-                     this->decay,
-                     this->flattening_radius,
-                     this->force_downhill,
+                     GET_ATTR_INT("width"),
+                     GET_ATTR_INT("decay"),
+                     GET_ATTR_INT("flattening_radius"),
+                     GET_ATTR_BOOL("force_downhill"),
                      hmap::Vec4<float>(0.f, 1.f, 0.f, 1.f), // bbox
-                     this->depth);
+                     GET_ATTR_FLOAT("depth"));
 
       this->value_out.from_array_interp(z_array);
     }

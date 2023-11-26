@@ -11,9 +11,8 @@ namespace hesiod::vnode
 {
 
 ViewPreview::ViewPreview(std::string id)
-    : ViewNode(), hesiod::cnode::Preview(id)
+    : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Preview(id)
 {
-  this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("input");
   this->set_view3d_elevation_port_id("input");
   this->set_view3d_color_port_id("color mask");
@@ -28,16 +27,6 @@ bool ViewPreview::render_settings()
 
   has_changed |= this->render_settings_footer();
   return has_changed;
-}
-
-void ViewPreview::serialize_save(cereal::JSONOutputArchive &)
-{
-  // nothing here
-}
-
-void ViewPreview::serialize_load(cereal::JSONInputArchive &)
-{
-  // nothing here
 }
 
 } // namespace hesiod::vnode

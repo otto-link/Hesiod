@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-FractalizePath::FractalizePath(std::string id) : gnode::Node(id)
+FractalizePath::FractalizePath(std::string id) : ControlNode(id)
 {
   LOG_DEBUG("FractalizePath::FractalizePath()");
   this->node_type = "FractalizePath";

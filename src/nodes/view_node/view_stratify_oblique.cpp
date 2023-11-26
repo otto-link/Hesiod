@@ -12,9 +12,9 @@ namespace hesiod::vnode
 {
 
 ViewStratifyOblique::ViewStratifyOblique(std::string id)
-    : ViewNode(), hesiod::cnode::StratifyOblique(id)
+    : hesiod::cnode::ControlNode(id), ViewNode(id),
+      hesiod::cnode::StratifyOblique(id)
 {
-  this->set_p_control_node((gnode::Node *)this);
   this->set_preview_port_id("output");
   this->set_view3d_elevation_port_id("output");
 }
@@ -59,28 +59,6 @@ bool ViewStratifyOblique::render_settings()
   has_changed |= this->render_settings_footer();
 
   return has_changed;
-}
-
-void ViewStratifyOblique::serialize_save(cereal::JSONOutputArchive &ar)
-{
-  ar(cereal::make_nvp("n_strata", this->n_strata));
-  ar(cereal::make_nvp("strata_noise", this->strata_noise));
-  ar(cereal::make_nvp("gamma", this->gamma));
-  ar(cereal::make_nvp("gamma_noise", this->gamma_noise));
-  ar(cereal::make_nvp("talus_global", this->talus_global));
-  ar(cereal::make_nvp("angle", this->angle));
-  ar(cereal::make_nvp("seed", this->seed));
-}
-
-void ViewStratifyOblique::serialize_load(cereal::JSONInputArchive &ar)
-{
-  ar(cereal::make_nvp("n_strata", this->n_strata));
-  ar(cereal::make_nvp("strata_noise", this->strata_noise));
-  ar(cereal::make_nvp("gamma", this->gamma));
-  ar(cereal::make_nvp("gamma_noise", this->gamma_noise));
-  ar(cereal::make_nvp("talus_global", this->talus_global));
-  ar(cereal::make_nvp("angle", this->angle));
-  ar(cereal::make_nvp("seed", this->seed));
 }
 
 } // namespace hesiod::vnode

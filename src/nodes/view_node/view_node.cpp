@@ -8,27 +8,41 @@
 #include "hesiod/gui.hpp"
 #include "hesiod/view_node.hpp"
 
-// HELPER
+// --- HELPERS
 static inline ImRect ImGui_GetItemRect()
 {
   return ImRect(ImGui::GetItemRectMin(), ImGui::GetItemRectMax());
 }
 
+int count_leading_character(const std::string &str, char target)
+{
+  int count = 0;
+
+  for (char ch : str)
+  {
+    if (ch == target)
+      count++;
+    else
+      break;
+  }
+  return count;
+}
+
+// --- Hesiod
+
 namespace hesiod::vnode
 {
 
-ViewNode::ViewNode() : p_control_node(nullptr)
+ViewNode::ViewNode(std::string id) : hesiod::cnode::ControlNode(id)
 {
-}
+  LOG_DEBUG("ViewNode::ViewNode, id: %s", id.c_str());
+  LOG_DEBUG("ViewNode::ViewNode, this->id: [%s]", this->id.c_str());
 
-ViewNode::ViewNode(gnode::Node *p_control_node) : p_control_node(p_control_node)
-{
-  this->init_from_control_node();
-}
-
-gnode::Node *ViewNode::get_p_control_node()
-{
-  return this->p_control_node;
+  // setup callbacks
+  this->set_pre_update_callback([this](gnode::Node *)
+                                { this->pre_control_node_update(); });
+  this->set_post_update_callback([this](gnode::Node *)
+                                 { this->post_control_node_update(); });
 }
 
 std::string ViewNode::get_preview_port_id()
@@ -46,20 +60,12 @@ std::string ViewNode::get_view3d_color_port_id()
   return this->view3d_color_port_id;
 }
 
-void ViewNode::set_p_control_node(gnode::Node *new_p_control_node)
-{
-  this->p_control_node = new_p_control_node;
-  this->init_from_control_node();
-  this->p_control_node->update();
-  LOG_DEBUG("hash_id: %d", this->p_control_node->hash_id);
-}
-
 void ViewNode::set_preview_port_id(std::string new_port_id)
 {
-  if (this->p_control_node->is_port_id_in_keys(new_port_id))
+  if (this->is_port_id_in_keys(new_port_id))
   {
     this->preview_port_id = new_port_id;
-    this->p_control_node->update();
+    this->update();
     this->update_preview();
   }
   else
@@ -77,7 +83,7 @@ void ViewNode::set_preview_type(int new_preview_type)
 
 void ViewNode::set_view3d_elevation_port_id(std::string new_port_id)
 {
-  if (this->p_control_node->is_port_id_in_keys(new_port_id))
+  if (this->is_port_id_in_keys(new_port_id))
     // NB - viewer update is carried out by the ViewTree object (above)
     this->view3d_elevation_port_id = new_port_id;
   else
@@ -89,7 +95,7 @@ void ViewNode::set_view3d_elevation_port_id(std::string new_port_id)
 
 void ViewNode::set_view3d_color_port_id(std::string new_port_id)
 {
-  if (this->p_control_node->is_port_id_in_keys(new_port_id))
+  if (this->is_port_id_in_keys(new_port_id))
     this->view3d_color_port_id = new_port_id;
   else
   {
@@ -98,31 +104,16 @@ void ViewNode::set_view3d_color_port_id(std::string new_port_id)
   }
 }
 
-void ViewNode::init_from_control_node()
-{
-  // uplink connection between control and view node: when the control
-  // node is updated/computed this wrapper is triggered (with the view
-  // node as reference parameter) and it then triggers the
-  // 'post_control_node_update' method of the node (and same for the
-  // pre_update)
-
-  this->p_control_node->set_pre_update_callback(
-      [this](gnode::Node *) { this->pre_control_node_update(); });
-
-  this->p_control_node->set_post_update_callback(
-      [this](gnode::Node *) { this->post_control_node_update(); });
-}
-
 void ViewNode::pre_control_node_update()
 {
-  LOG_DEBUG("pre-update, node [%s]", this->p_control_node->id.c_str());
+  LOG_DEBUG("pre-update, node [%s]", this->id.c_str());
 
   this->timer.reset();
 }
 
 void ViewNode::post_control_node_update()
 {
-  LOG_DEBUG("post-update, node [%s]", this->p_control_node->id.c_str());
+  LOG_DEBUG("post-update, node [%s]", this->id.c_str());
 
   this->update_time = this->timer.stop();
 
@@ -134,10 +125,9 @@ void ViewNode::render_node()
 {
   ImGui::PushID((void *)this);
 
-  std::string node_type = this->p_control_node->get_node_type();
-  int         pos = this->p_control_node->get_category().find("/");
-  std::string main_category = this->p_control_node->get_category().substr(0,
-                                                                          pos);
+  std::string node_type = this->get_node_type();
+  int         pos = this->get_category().find("/");
+  std::string main_category = this->get_category().substr(0, pos);
 
   std::string node_label = node_type;
   {
@@ -151,10 +141,9 @@ void ViewNode::render_node()
     }
   }
 
-  ax::NodeEditor::BeginNode(
-      ax::NodeEditor::NodeId(this->p_control_node->hash_id));
+  ax::NodeEditor::BeginNode(ax::NodeEditor::NodeId(this->hash_id));
 
-  if (this->p_control_node->frozen_outputs)
+  if (this->frozen_outputs)
     ImGui::TextColored(ImColor(IM_COL32(150, 50, 50, 255)),
                        "%s",
                        node_label.c_str());
@@ -166,7 +155,7 @@ void ViewNode::render_node()
   ImGui::Spacing();
 
   // inputs
-  for (auto &[port_id, port] : this->p_control_node->get_ports())
+  for (auto &[port_id, port] : this->get_ports())
     if (port.direction == gnode::direction::in)
     {
       ax::NodeEditor::BeginPin(ax::NodeEditor::PinId(port.hash_id),
@@ -193,7 +182,7 @@ void ViewNode::render_node()
     }
 
   // outputs
-  for (auto &[port_id, port] : this->p_control_node->get_ports())
+  for (auto &[port_id, port] : this->get_ports())
     if (port.direction == gnode::direction::out)
     {
       const char *txt = port.label.c_str();
@@ -242,7 +231,7 @@ void ViewNode::render_node()
   float  height = text_content_rect.GetBR().y - text_content_rect.GetTL().y;
 
   ImDrawList *draw_list = ax::NodeEditor::GetNodeBackgroundDrawList(
-      this->p_control_node->hash_id);
+      this->hash_id);
 
   draw_list->AddRectFilled(ImVec2(node_content_rect.GetTL().x + 1.f,
                                   node_content_rect.GetTL().y + 1.f),
@@ -260,6 +249,40 @@ bool ViewNode::render_settings()
   // just the header and the footer
   bool has_changed = false;
   has_changed |= this->render_settings_header();
+
+  // automatic layout
+  ImGui::SeparatorText("Settings");
+  {
+    std::list<std::string> attr_key_queue = {};
+    for (auto &[k, v] : this->attr)
+      attr_key_queue.push_back(k);
+
+    // start rendering the parameters using the ordered list
+    for (auto &k : this->attr_ordered_key)
+    {
+      // indentation
+      int         indent = count_leading_character(k, '_');
+      std::string key = k.substr(indent, k.size() - indent);
+
+      for (int i = 0; i < indent; i++)
+        ImGui::Indent();
+
+      has_changed |= this->attr.at(key)->render_settings(key.c_str());
+
+      for (int i = 0; i < indent; i++)
+        ImGui::Unindent();
+
+      attr_key_queue.remove(key);
+    }
+
+    // render the remaining parameters not present in the ordered list
+    for (auto &k : attr_key_queue)
+      has_changed |= this->attr.at(k)->render_settings(k.c_str());
+  }
+
+  if (has_changed)
+    this->force_update();
+
   has_changed |= this->render_settings_footer();
   return has_changed;
 }
@@ -274,17 +297,17 @@ bool ViewNode::render_settings_header()
   ImGui::PushID((void *)this);
 
   // --- buttons
-  if (ImGui::Checkbox("Auto-update", &this->p_control_node->auto_update))
+  if (ImGui::Checkbox("Auto-update", &this->auto_update))
     has_changed = true;
 
   // frozen outputs button
   ImGui::SameLine();
-  if (ImGui::Checkbox("Frozen outputs", &this->p_control_node->frozen_outputs))
+  if (ImGui::Checkbox("Frozen outputs", &this->frozen_outputs))
   {
     // ignite force update when the node is unfrozzen to update
     // downstream nodes
-    if (!this->p_control_node->frozen_outputs)
-      this->p_control_node->force_update();
+    if (!this->frozen_outputs)
+      this->force_update();
     has_changed = true;
   }
 
@@ -293,14 +316,13 @@ bool ViewNode::render_settings_header()
   ImGui::Checkbox("Show help", &this->show_help);
 
   // auto-update button
-  bool disabled_update_button = this->p_control_node->auto_update &
-                                this->p_control_node->is_up_to_date;
+  bool disabled_update_button = this->auto_update & this->is_up_to_date;
   if (disabled_update_button)
     ImGui::BeginDisabled();
 
   if (ImGui::Button("Update"))
   {
-    this->p_control_node->update();
+    this->update();
     has_changed = true;
   }
   if (disabled_update_button)
@@ -308,14 +330,12 @@ bool ViewNode::render_settings_header()
 
   // state text
   ImGui::SameLine();
-  if (this->p_control_node->is_up_to_date)
+  if (this->is_up_to_date)
     ImGui::TextColored(ImVec4(0.5, 0.5, 0.5, 1), "Up to date");
   else
     ImGui::TextColored(ImVec4(1, 1, 0, 1), "To be updated");
   ImGui::SameLine();
   ImGui::TextColored(ImVec4(0.5, 0.5, 0.5, 1), "(%.2f ms)", this->update_time);
-
-  ImGui::Separator();
 
   return has_changed;
 }
@@ -327,7 +347,7 @@ bool ViewNode::render_settings_footer()
   // preview type
   if (this->preview_port_id != "" && this->show_preview)
   {
-    ImGui::Separator();
+    ImGui::SeparatorText("Preview");
     float height = ImGui::GetStyle().ItemSpacing.y +
                    2.f * ImGui::GetTextLineHeightWithSpacing();
     if (ImGui::BeginListBox("Preview type", ImVec2(0.f, height)))
@@ -343,8 +363,7 @@ bool ViewNode::render_settings_footer()
   // help text
   if (this->show_help)
   {
-    ImGui::Separator();
-    ImGui::TextUnformatted("Help");
+    ImGui::SeparatorText("Help");
     ImGui::PushTextWrapPos(0.0f);
     ImGui::TextUnformatted((char *)this->help_text.c_str());
     ImGui::PopTextWrapPos();
@@ -354,25 +373,11 @@ bool ViewNode::render_settings_footer()
   return has_changed;
 }
 
-void ViewNode::serialize_load(cereal::JSONInputArchive &)
-{
-  LOG_ERROR("serialize (input) not defined for node [%s]",
-            this->p_control_node->id.c_str());
-  // throw std::runtime_error("undefined serialization");
-}
-
-void ViewNode::serialize_save(cereal::JSONOutputArchive &)
-{
-  LOG_ERROR("serialize (output) not defined for node [%s]",
-            this->p_control_node->id.c_str());
-  // throw std::runtime_error("undefined serialization");
-}
-
 bool ViewNode::trigger_update_after_edit()
 {
   if (ImGui::IsItemDeactivatedAfterEdit())
   {
-    this->p_control_node->force_update();
+    this->force_update();
     return true;
   }
   else
@@ -383,11 +388,10 @@ void ViewNode::update_preview()
 {
   if (this->preview_port_id != "" && this->show_preview)
   {
-    void *p_data = this->p_control_node->get_p_data(this->preview_port_id);
+    void *p_data = this->get_p_data(this->preview_port_id);
     if (p_data)
     {
-      int port_dtype =
-          this->p_control_node->get_port_ref_by_id(preview_port_id)->dtype;
+      int port_dtype = this->get_port_ref_by_id(preview_port_id)->dtype;
 
       if (port_dtype == hesiod::cnode::dHeightMap)
       {

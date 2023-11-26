@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-MeanderizePath::MeanderizePath(std::string id) : gnode::Node(id)
+MeanderizePath::MeanderizePath(std::string id) : ControlNode(id)
 {
   LOG_DEBUG("MeanderizePath::MeanderizePath()");
   this->node_type = "MeanderizePath";
