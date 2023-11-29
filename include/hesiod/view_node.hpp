@@ -23,6 +23,7 @@ namespace hesiod::vnode
 enum preview_type : int
 {
   grayscale, ///< grayscale
+  jet,       ///< jet
   histogram  ///< histogram
 };
 
@@ -308,12 +309,16 @@ private:
 /**
  * @brief ViewAlterElevation class.
  */
+
+// OK
 class ViewAlterElevation : public ViewNode, public hesiod::cnode::AlterElevation
 {
 public:
-  ViewAlterElevation(std::string id);
-
-  bool render_settings();
+  ViewAlterElevation(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::AlterElevation(id)
+  {
+  }
 };
 
 // OK
@@ -1583,13 +1588,18 @@ public:
   bool render_settings();
 };
 
+// OK
 class ViewStratifyOblique : public ViewNode,
                             public hesiod::cnode::StratifyOblique
 {
 public:
-  ViewStratifyOblique(std::string id);
-
-  bool render_settings();
+  ViewStratifyOblique(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::StratifyOblique(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 // OK

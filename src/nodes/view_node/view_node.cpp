@@ -346,12 +346,14 @@ bool ViewNode::render_settings_footer()
   {
     ImGui::SeparatorText("Preview");
     float height = ImGui::GetStyle().ItemSpacing.y +
-                   2.f * ImGui::GetTextLineHeightWithSpacing();
+                   3.f * ImGui::GetTextLineHeightWithSpacing();
     if (ImGui::BeginListBox("Preview type", ImVec2(0.f, height)))
     {
       if (ImGui::Selectable("grayscale"))
         this->set_preview_type(preview_type::grayscale);
-      if (ImGui::Selectable("histogram"))
+      else if (ImGui::Selectable("jet"))
+        this->set_preview_type(preview_type::jet);
+      else if (ImGui::Selectable("histogram"))
         this->set_preview_type(preview_type::histogram);
       ImGui::EndListBox();
     }
@@ -395,12 +397,29 @@ void ViewNode::update_preview()
         hmap::HeightMap     *p_h = (hmap::HeightMap *)p_data;
         std::vector<uint8_t> img = {};
 
-        if (this->preview_type == preview_type::grayscale)
-          img = hmap::colorize_grayscale(p_h->to_array(this->shape_preview));
-        else if (this->preview_type == preview_type::histogram)
-          img = hmap::colorize_histogram(p_h->to_array(this->shape_preview));
+        hmap::Array array = p_h->to_array(this->shape_preview);
 
-        img_to_texture(img, this->shape_preview, this->image_texture_preview);
+        if (this->preview_type == preview_type::grayscale)
+        {
+          img = hmap::colorize_grayscale(array);
+          img_to_texture(img, this->shape_preview, this->image_texture_preview);
+        }
+        else if (this->preview_type == preview_type::jet)
+        {
+          img = hmap::colorize(array,
+                               array.min(),
+                               array.max(),
+                               hmap::cmap::jet,
+                               false);
+          img_to_texture_rgb(img,
+                             this->shape_preview,
+                             this->image_texture_preview);
+        }
+        else if (this->preview_type == preview_type::histogram)
+        {
+          img = hmap::colorize_histogram(array);
+          img_to_texture(img, this->shape_preview, this->image_texture_preview);
+        }
       }
       else if (port_dtype == hesiod::cnode::dHeightMapRGB)
       {
@@ -419,14 +438,29 @@ void ViewNode::update_preview()
         hmap::Array         *p_a = (hmap::Array *)p_data;
         std::vector<uint8_t> img = {};
 
-        if (this->preview_type == preview_type::grayscale)
-          img = hmap::colorize_grayscale(
-              p_a->resample_to_shape(this->shape_preview));
-        else if (this->preview_type == preview_type::histogram)
-          img = hmap::colorize_histogram(
-              p_a->resample_to_shape(this->shape_preview));
+        hmap::Array array = p_a->resample_to_shape(this->shape_preview);
 
-        img_to_texture(img, this->shape_preview, this->image_texture_preview);
+        if (this->preview_type == preview_type::grayscale)
+        {
+          img = hmap::colorize_grayscale(array);
+          img_to_texture(img, this->shape_preview, this->image_texture_preview);
+        }
+        else if (this->preview_type == preview_type::jet)
+        {
+          img = hmap::colorize(array,
+                               array.min(),
+                               array.max(),
+                               hmap::cmap::jet,
+                               false);
+          img_to_texture_rgb(img,
+                             this->shape_preview,
+                             this->image_texture_preview);
+        }
+        else if (this->preview_type == preview_type::histogram)
+        {
+          img = hmap::colorize_histogram(array);
+          img_to_texture(img, this->shape_preview, this->image_texture_preview);
+        }
       }
     }
   }

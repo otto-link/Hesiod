@@ -383,6 +383,7 @@ protected:
 // End-user nodes
 //----------------------------------------
 
+// OK
 class AlterElevation : virtual public ControlNode
 {
 public:
@@ -394,10 +395,6 @@ public:
 
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
-  int             ir = 64;
-  float           footprint_ratio = 1.f;
-  float           vmin = 0.f;
-  float           vmax = 1.f;
 };
 
 // OK
@@ -1502,6 +1499,7 @@ protected:
   int                seed = DEFAULT_SEED;
 };
 
+// OK
 class StratifyOblique : virtual public ControlNode
 {
 public:
@@ -1513,13 +1511,6 @@ public:
 
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
-  int             n_strata = 3;
-  float           strata_noise = 0.f;
-  float           gamma = 0.7f;
-  float           gamma_noise = 0.f;
-  float           talus_global = 2.f;
-  float           angle = 30.f;
-  int             seed = DEFAULT_SEED;
 };
 
 // OK

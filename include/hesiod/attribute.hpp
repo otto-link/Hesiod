@@ -30,6 +30,7 @@
 #define NEW_ATTR_SEED(a) std::make_unique<hesiod::SeedAttribute>(a)
 #define NEW_ATTR_SHAPE() std::make_unique<hesiod::ShapeAttribute>()
 #define NEW_ATTR_VECFLOAT(a) std::make_unique<hesiod::VecFloatAttribute>(a)
+#define NEW_ATTR_VECINT(a) std::make_unique<hesiod::VecIntAttribute>(a)
 #define NEW_ATTR_WAVENB(a) std::make_unique<hesiod::WaveNbAttribute>(a)
 
 #define GET_ATTR_BOOL(s) this->attr.at(s)->get_ref<BoolAttribute>()->get()
@@ -41,6 +42,7 @@
 #define GET_ATTR_SEED(s) this->attr.at(s)->get_ref<SeedAttribute>()->get()
 #define GET_ATTR_SHAPE(s) this->attr.at(s)->get_ref<ShapeAttribute>()->get()
 #define GET_ATTR_VECFLOAT(s) this->attr.at(s)->get_ref<VecFloatAttribute>()->get()
+#define GET_ATTR_VECINT(s) this->attr.at(s)->get_ref<VecIntAttribute>()->get()
 #define GET_ATTR_WAVENB(s) this->attr.at(s)->get_ref<WaveNbAttribute>()->get()
 
 #define GET_ATTR_REF_RANGE(s) this->attr.at(s)->get_ref<RangeAttribute>()
@@ -284,6 +286,26 @@ private:
   std::vector<float> value = {};
 };
 
+class VecIntAttribute : public Attribute
+{
+public:
+  VecIntAttribute();
+  VecIntAttribute(std::vector<int> value);
+  std::vector<int> get();
+  virtual bool     render_settings(std::string label);
+
+#ifdef USE_CEREAL
+  template <class Archive> void serialize(Archive &ar)
+  {
+    Attribute::serialize<Archive>(ar);
+    ar(cereal::make_nvp("value", this->value));
+  }
+#endif
+
+private:
+  std::vector<int> value = {};
+};
+
 class WaveNbAttribute : public Attribute
 {
 public:
@@ -310,6 +332,7 @@ private:
 } // namespace hesiod
 
 // clang-format off
+#ifdef USE_CEREAL
 CEREAL_REGISTER_TYPE(hesiod::BoolAttribute);
 CEREAL_REGISTER_TYPE(hesiod::FloatAttribute);
 CEREAL_REGISTER_TYPE(hesiod::IntAttribute);
@@ -318,6 +341,8 @@ CEREAL_REGISTER_TYPE(hesiod::MatrixAttribute);
 CEREAL_REGISTER_TYPE(hesiod::RangeAttribute);
 CEREAL_REGISTER_TYPE(hesiod::SeedAttribute);
 CEREAL_REGISTER_TYPE(hesiod::ShapeAttribute);
+CEREAL_REGISTER_TYPE(hesiod::VecFloatAttribute);
+CEREAL_REGISTER_TYPE(hesiod::VecIntAttribute);
 CEREAL_REGISTER_TYPE(hesiod::WaveNbAttribute);
 
 CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute, hesiod::BoolAttribute);
@@ -328,5 +353,8 @@ CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute, hesiod::MapEnumAttribute
 CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute, hesiod::RangeAttribute);
 CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute, hesiod::SeedAttribute);
 CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute, hesiod::ShapeAttribute);
+CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute, hesiod::VecFloatAttribute);
+CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute, hesiod::VecIntAttribute);
 CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute, hesiod::WaveNbAttribute);
+#endif
 // clang-format on

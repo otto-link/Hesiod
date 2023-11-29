@@ -13,6 +13,17 @@ StratifyOblique::StratifyOblique(std::string id) : ControlNode(id)
   this->node_type = "StratifyOblique";
   this->category = category_mapping.at(this->node_type);
 
+  this->attr["seed"] = NEW_ATTR_SEED();
+  this->attr["n_strata"] = NEW_ATTR_INT(3, 1, 16);
+  this->attr["strata_noise"] = NEW_ATTR_FLOAT(0.f, 0.f, 1.f);
+  this->attr["gamma"] = NEW_ATTR_FLOAT(0.7f, 0.01f, 10.f);
+  this->attr["gamma_noise"] = NEW_ATTR_FLOAT(0.f, 0.f, 1.f);
+  this->attr["talus_global"] = NEW_ATTR_FLOAT(2.f, 0.f, 32.f);
+  this->attr["angle"] = NEW_ATTR_FLOAT(30.f, -180.f, 180.f);
+
+  this->attr_ordered_key =
+      {"seed", "n_strata", "strata_noise", "gamma", "talus_global", "angle"};
+
   this->add_port(gnode::Port("input", gnode::direction::in, dtype::dHeightMap));
 
   this->add_port(gnode::Port("mask",
@@ -39,7 +50,7 @@ void StratifyOblique::update_inner_bindings()
 void StratifyOblique::compute()
 {
   LOG_DEBUG("computing node [%s]", this->id.c_str());
-  hmap::HeightMap *p_hmap = CAST_PORT_REF(hmap::HeightMap, "mask");
+  hmap::HeightMap *p_hmap = CAST_PORT_REF(hmap::HeightMap, "input");
   hmap::HeightMap *p_noise = CAST_PORT_REF(hmap::HeightMap, "noise");
   hmap::HeightMap *p_mask = CAST_PORT_REF(hmap::HeightMap, "mask");
 
@@ -51,16 +62,21 @@ void StratifyOblique::compute()
 
   auto hs = hmap::linspace_jitted(zmin,
                                   zmax,
-                                  n_strata,
-                                  this->strata_noise,
-                                  (uint)this->seed);
-  auto gs = hmap::random_vector(
-      std::max(0.01f, this->gamma * (1.f - this->gamma_noise)),
-      this->gamma * (1.f - this->gamma_noise),
-      this->n_strata - 1,
-      (uint)this->seed);
+                                  GET_ATTR_INT("n_strata"),
+                                  GET_ATTR_FLOAT("strata_noise"),
+                                  GET_ATTR_SEED("seed"));
 
-  float talus = this->talus_global / (float)this->value_out.shape.x;
+  float gmin = std::max(0.01f,
+                        GET_ATTR_FLOAT("gamma") *
+                            (1.f - GET_ATTR_FLOAT("gamma_noise")));
+  float gmax = GET_ATTR_FLOAT("gamma") * (1.f + GET_ATTR_FLOAT("gamma_noise"));
+
+  auto gs = hmap::random_vector(gmin,
+                                gmax,
+                                GET_ATTR_INT("n_strata") - 1,
+                                GET_ATTR_SEED("seed"));
+
+  float talus = GET_ATTR_FLOAT("talus_global") / (float)this->value_out.shape.x;
 
   hmap::transform(this->value_out,
                   p_mask,
@@ -74,7 +90,7 @@ void StratifyOblique::compute()
                                            hs,
                                            gs,
                                            talus,
-                                           this->angle,
+                                           GET_ATTR_FLOAT("angle"),
                                            p_noise_array);
                   });
 
