@@ -13,6 +13,10 @@ RecastCanyon::RecastCanyon(std::string id) : ControlNode(id)
   LOG_DEBUG("RecastCanyon::RecastCanyon()");
   this->node_type = "RecastCanyon";
   this->category = category_mapping.at(this->node_type);
+
+  this->attr["vcut"] = NEW_ATTR_FLOAT(0.7f, -1.f, 2.f);
+  this->attr["gamma"] = NEW_ATTR_FLOAT(4.f, 0.01f, 10.f);
+
   this->add_port(gnode::Port("input", gnode::direction::in, dtype::dHeightMap));
   this->add_port(gnode::Port("dz",
                              gnode::direction::in,
@@ -50,7 +54,13 @@ void RecastCanyon::compute()
       p_input_dz,
       p_input_mask,
       [this](hmap::Array &z, hmap::Array *p_noise, hmap::Array *p_mask)
-      { hmap::recast_canyon(z, this->vcut, p_mask, this->gamma, p_noise); });
+      {
+        hmap::recast_canyon(z,
+                            GET_ATTR_FLOAT("vcut"),
+                            p_mask,
+                            GET_ATTR_FLOAT("gamma"),
+                            p_noise);
+      });
 
   this->value_out.smooth_overlap_buffers();
 }

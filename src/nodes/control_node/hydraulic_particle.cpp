@@ -12,6 +12,24 @@ HydraulicParticle::HydraulicParticle(std::string id) : Erosion(id)
 {
   this->node_type = "HydraulicParticle";
   this->category = category_mapping.at(this->node_type);
+
+  this->attr["seed"] = NEW_ATTR_SEED();
+  this->attr["nparticles"] = NEW_ATTR_INT(40000, 1, 1000000);
+  this->attr["c_capacity"] = NEW_ATTR_FLOAT(40.f, 0.1f, 100.f);
+  this->attr["c_erosion"] = NEW_ATTR_FLOAT(0.05f, 0.01f, 0.1f);
+  this->attr["c_deposition"] = NEW_ATTR_FLOAT(0.1f, 0.01f, 0.1f);
+  this->attr["drag_rate"] = NEW_ATTR_FLOAT(0.01f, 0.f, 1.f);
+  this->attr["evap_rate"] = NEW_ATTR_FLOAT(0.001f, 0.f, 1.f);
+  this->attr["c_radius"] = NEW_ATTR_INT(0, 0, 16);
+
+  this->attr_ordered_key = {"seed",
+                            "nparticles",
+                            "c_capacity",
+                            "c_erosion",
+                            "c_deposition",
+                            "drag_rate",
+                            "evap_rate",
+                            "c_radius"};
 }
 
 void HydraulicParticle::compute_erosion(hmap::HeightMap &h,
@@ -23,7 +41,8 @@ void HydraulicParticle::compute_erosion(hmap::HeightMap &h,
 {
   LOG_DEBUG("computing erosion node [%s]", this->id.c_str());
 
-  int nparticles_tile = (int)(this->nparticles / (float)h.get_ntiles());
+  int nparticles_tile = (int)(GET_ATTR_INT("nparticles") /
+                              (float)h.get_ntiles());
 
   hmap::transform(h,
                   p_bedrock,
@@ -41,17 +60,17 @@ void HydraulicParticle::compute_erosion(hmap::HeightMap &h,
                     hmap::hydraulic_particle(h_out,
                                              p_mask_array,
                                              nparticles_tile,
-                                             (uint)this->seed,
+                                             GET_ATTR_SEED("seed"),
                                              p_bedrock_array,
                                              p_moisture_map_array,
                                              p_erosion_map_array,
                                              p_deposition_map_array,
-                                             this->c_radius,
-                                             this->c_capacity,
-                                             this->c_erosion,
-                                             this->c_deposition,
-                                             this->drag_rate,
-                                             this->evap_rate);
+                                             GET_ATTR_INT("c_radius"),
+                                             GET_ATTR_FLOAT("c_capacity"),
+                                             GET_ATTR_FLOAT("c_erosion"),
+                                             GET_ATTR_FLOAT("c_deposition"),
+                                             GET_ATTR_FLOAT("drag_rate"),
+                                             GET_ATTR_FLOAT("evap_rate"));
                   });
 }
 

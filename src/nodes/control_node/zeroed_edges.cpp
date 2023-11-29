@@ -65,7 +65,7 @@ void ZeroedEdges::compute()
                     { hmap::zeroed_edges(z, sigma, &dr, shift, scale); });
 
   // remap
-  if (this->attr.at("remap")->get_ref<RangeAttribute>()->is_activated())
+  if (GET_ATTR_REF_RANGE("remap")->is_activated())
   {
     hmap::Vec2<float> vrange = GET_ATTR_RANGE("remap");
     this->value_out.remap(vrange.x, vrange.y);

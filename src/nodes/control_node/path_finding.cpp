@@ -13,6 +13,13 @@ PathFinding::PathFinding(std::string id) : ControlNode(id)
   LOG_DEBUG("PathFinding::PathFinding()");
   this->node_type = "PathFinding";
   this->category = category_mapping.at(this->node_type);
+
+  this->attr["shape"] = NEW_ATTR_SHAPE();
+  this->attr["elevation_ratio"] = NEW_ATTR_FLOAT(0.5f, 0.f, 0.9f);
+  this->attr["distance_exponent"] = NEW_ATTR_FLOAT(1.f, 0.5f, 1.f);
+
+  this->attr_ordered_key = {};
+
   this->add_port(gnode::Port("path", gnode::direction::in, dtype::dPath));
   this->add_port(
       gnode::Port("heightmap", gnode::direction::in, dtype::dHeightMap));
@@ -28,24 +35,23 @@ void PathFinding::compute()
 {
   LOG_DEBUG("computing PathFinding node [%s]", this->id.c_str());
 
-  hmap::HeightMap *p_input_hmap = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("heightmap"));
-  hmap::HeightMap *p_mask = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("mask nogo"));
-  hmap::Path *p_input_path = static_cast<hmap::Path *>(
-      (void *)this->get_p_data("path"));
+  hmap::HeightMap *p_hmap = CAST_PORT_REF(hmap::HeightMap, "heightmap");
+  hmap::HeightMap *p_mask = CAST_PORT_REF(hmap::HeightMap, "mask nogo");
+  hmap::Path      *p_path = CAST_PORT_REF(hmap::Path, "path");
 
   // work on a copy of the input
-  this->value_out = *p_input_path;
+  this->value_out = *p_path;
 
-  if (p_input_path->get_npoints() > 1)
+  GET_ATTR_REF_SHAPE("shape")->set_value_max(p_hmap->shape);
+  hmap::Vec2<int> wshape = GET_ATTR_SHAPE("shape");
+
+  if (p_path->get_npoints() > 1)
   // work on a subset of the data
   {
-    if (this->wshape.x > (*p_input_hmap).shape.x ||
-        this->wshape.y > (*p_input_hmap).shape.y)
-      this->wshape = (*p_input_hmap).shape;
+    if (wshape.x > (*p_hmap).shape.x || wshape.y > (*p_hmap).shape.y)
+      wshape = (*p_hmap).shape;
 
-    hmap::Array z = (*p_input_hmap).to_array(this->wshape);
+    hmap::Array z = (*p_hmap).to_array(wshape);
     hmap::remap(z);
 
     hmap::Array *p_mask_array = nullptr;
@@ -53,15 +59,15 @@ void PathFinding::compute()
 
     if (p_mask)
     {
-      mask_array = p_mask->to_array(this->wshape);
+      mask_array = p_mask->to_array(wshape);
       p_mask_array = &mask_array;
     }
 
     this->value_out.dijkstra(z,
                              {0.f, 1.f, 0.f, 1.f},
                              0,
-                             this->elevation_ratio,
-                             this->distance_exponent,
+                             GET_ATTR_FLOAT("elevation_ratio"),
+                             GET_ATTR_FLOAT("distance_exponent"),
                              p_mask_array);
   }
 }

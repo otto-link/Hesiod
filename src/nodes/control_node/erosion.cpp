@@ -48,58 +48,52 @@ void Erosion::update_inner_bindings()
 void Erosion::compute()
 {
   LOG_DEBUG("computing node [%s]", this->id.c_str());
-  hmap::HeightMap *p_input_hmap = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("input"));
-  hmap::HeightMap *p_input_bedrock = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("bedrock"));
-  hmap::HeightMap *p_input_moisture_map = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("moisture map"));
-  hmap::HeightMap *p_input_mask = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("mask"));
 
-  hmap::HeightMap *p_output_erosion_map = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("erosion map"));
-  hmap::HeightMap *p_output_deposition_map = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("deposition map"));
+  hmap::HeightMap *p_hmap = CAST_PORT_REF(hmap::HeightMap, "input");
+  hmap::HeightMap *p_bedrock = CAST_PORT_REF(hmap::HeightMap, "bedrock");
+  hmap::HeightMap *p_moisture = CAST_PORT_REF(hmap::HeightMap, "moisture map");
+  hmap::HeightMap *p_mask = CAST_PORT_REF(hmap::HeightMap, "mask");
+
+  hmap::HeightMap *p_erosion = CAST_PORT_REF(hmap::HeightMap, "erosion map");
+  hmap::HeightMap *p_deposition = CAST_PORT_REF(hmap::HeightMap,
+                                                "deposition map");
 
   // work on a copy of the input
-  this->value_out = *p_input_hmap;
+  this->value_out = *p_hmap;
 
-  if (p_output_erosion_map)
-    this->erosion_map.set_sto(p_input_hmap->shape,
-                              p_input_hmap->tiling,
-                              p_input_hmap->overlap);
+  if (p_erosion)
+    this->erosion_map.set_sto(p_hmap->shape, p_hmap->tiling, p_hmap->overlap);
 
-  if (p_output_deposition_map)
-    this->deposition_map.set_sto(p_input_hmap->shape,
-                                 p_input_hmap->tiling,
-                                 p_input_hmap->overlap);
+  if (p_deposition)
+    this->deposition_map.set_sto(p_hmap->shape,
+                                 p_hmap->tiling,
+                                 p_hmap->overlap);
 
   // if there is a moisture map, work on a copy to be able to
   // normalize it
-  hmap::HeightMap *p_moisture_map_copy = nullptr;
+  hmap::HeightMap *p_moisture_copy = nullptr;
   hmap::HeightMap  moisture_map_copy;
-  if (p_input_moisture_map)
+  if (p_moisture)
   {
-    moisture_map_copy = (*p_input_moisture_map);
+    moisture_map_copy = (*p_moisture);
     moisture_map_copy.remap();
-    p_moisture_map_copy = &moisture_map_copy;
+    p_moisture_copy = &moisture_map_copy;
   }
 
   this->compute_erosion(this->value_out,
-                        p_input_bedrock,
-                        p_moisture_map_copy,
-                        p_input_mask,
-                        p_output_erosion_map,
-                        p_output_deposition_map);
+                        p_bedrock,
+                        p_moisture_copy,
+                        p_mask,
+                        p_erosion,
+                        p_deposition);
 
   this->value_out.smooth_overlap_buffers();
 
-  if (p_output_erosion_map)
-    (*p_output_erosion_map).smooth_overlap_buffers();
+  if (p_erosion)
+    (*p_erosion).smooth_overlap_buffers();
 
-  if (p_output_deposition_map)
-    (*p_output_deposition_map).smooth_overlap_buffers();
+  if (p_deposition)
+    (*p_deposition).smooth_overlap_buffers();
 }
 
 } // namespace hesiod::cnode

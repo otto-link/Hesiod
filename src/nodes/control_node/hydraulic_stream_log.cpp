@@ -12,6 +12,13 @@ HydraulicStreamLog::HydraulicStreamLog(std::string id) : Erosion(id)
 {
   this->node_type = "HydraulicStreamLog";
   this->category = category_mapping.at(this->node_type);
+
+  this->attr["c_erosion"] = NEW_ATTR_FLOAT(0.05f, 0.01f, 0.1f);
+  this->attr["talus_ref"] = NEW_ATTR_FLOAT(0.1f, 0.01f, 10.f);
+  this->attr["ir"] = NEW_ATTR_INT(0, 1, 16);
+  this->attr["gamma"] = NEW_ATTR_FLOAT(1.f, 0.01f, 4.f);
+
+  this->attr_ordered_key = {"c_erosion", "talus_ref", "ir", "gamma"};
 }
 
 void HydraulicStreamLog::compute_erosion(hmap::HeightMap &h,
@@ -38,13 +45,13 @@ void HydraulicStreamLog::compute_erosion(hmap::HeightMap &h,
                   {
                     hmap::hydraulic_stream_log(h_out,
                                                p_mask_array,
-                                               this->c_erosion,
-                                               this->talus_ref,
-                                               this->gamma,
+                                               GET_ATTR_FLOAT("c_erosion"),
+                                               GET_ATTR_FLOAT("talus_ref"),
+                                               GET_ATTR_FLOAT("gamma"),
                                                p_bedrock_array,
                                                p_moisture_map_array,
                                                p_erosion_map_array,
-                                               this->ir);
+                                               GET_ATTR_INT("ir"));
                   });
 
   h.smooth_overlap_buffers();

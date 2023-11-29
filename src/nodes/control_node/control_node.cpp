@@ -26,7 +26,7 @@ void ControlNode::post_process_heightmap(hmap::HeightMap &h)
     }
 
   if (this->attr.contains("saturate"))
-    if (this->attr.at("saturate")->get_ref<RangeAttribute>()->is_activated())
+    if (GET_ATTR_REF_RANGE("saturate")->is_activated())
     {
       hmap::Vec2<float> srange = GET_ATTR_RANGE("saturate");
       float             k = GET_ATTR_FLOAT("k_saturate");
@@ -49,7 +49,7 @@ void ControlNode::post_process_heightmap(hmap::HeightMap &h)
     }
 
   if (this->attr.contains("remap"))
-    if (this->attr.at("remap")->get_ref<RangeAttribute>()->is_activated())
+    if (GET_ATTR_REF_RANGE("remap")->is_activated())
     {
       hmap::Vec2<float> vrange = GET_ATTR_RANGE("remap");
       h.remap(vrange.x, vrange.y);

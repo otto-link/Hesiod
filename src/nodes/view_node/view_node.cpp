@@ -35,9 +35,6 @@ namespace hesiod::vnode
 
 ViewNode::ViewNode(std::string id) : hesiod::cnode::ControlNode(id)
 {
-  LOG_DEBUG("ViewNode::ViewNode, id: %s", id.c_str());
-  LOG_DEBUG("ViewNode::ViewNode, this->id: [%s]", this->id.c_str());
-
   // setup callbacks
   this->set_pre_update_callback([this](gnode::Node *)
                                 { this->pre_control_node_update(); });

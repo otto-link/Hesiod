@@ -13,6 +13,7 @@ SmoothFillSmearPeaks::SmoothFillSmearPeaks(std::string id) : Filter(id)
   LOG_DEBUG("SmoothFillSmearPeaks::SmoothFillSmearPeaks()");
   this->node_type = "SmoothFillSmearPeaks";
   this->category = category_mapping.at(this->node_type);
+  this->attr["ir"] = NEW_ATTR_INT(8, 1, 128);
 }
 
 void SmoothFillSmearPeaks::compute_filter(hmap::HeightMap &h,
@@ -20,10 +21,11 @@ void SmoothFillSmearPeaks::compute_filter(hmap::HeightMap &h,
 {
   LOG_DEBUG("computing filter node [%s]", this->id.c_str());
 
-  hmap::transform(h,
-                  p_mask,
-                  [this](hmap::Array &x, hmap::Array *p_mask)
-                  { hmap::smooth_fill_smear_peaks(x, this->ir, p_mask); });
+  hmap::transform(
+      h,
+      p_mask,
+      [this](hmap::Array &x, hmap::Array *p_mask)
+      { hmap::smooth_fill_smear_peaks(x, GET_ATTR_INT("ir"), p_mask); });
 
   h.smooth_overlap_buffers();
 }

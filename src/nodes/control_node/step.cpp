@@ -17,7 +17,6 @@ Step::Step(std::string     id,
   LOG_DEBUG("Step::Step()");
   this->node_type = "Step";
   this->category = category_mapping.at(this->node_type);
-  this->remove_port("dy");
 
   this->attr["angle"] = NEW_ATTR_FLOAT(0.f, -180.f, 180.f);
   this->attr["talus_global"] = NEW_ATTR_FLOAT(2.f, 0.01f, 32.f);
@@ -26,6 +25,7 @@ Step::Step(std::string     id,
 
   this->attr_ordered_key = {"angle", "talus_global", "center.x", "center.y"};
 
+  this->remove_port("dy");
   this->update_inner_bindings();
 }
 

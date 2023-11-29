@@ -13,6 +13,7 @@ SmoothFillHoles::SmoothFillHoles(std::string id) : Filter(id)
   LOG_DEBUG("SmoothFillHoles::SmoothFillHoles()");
   this->node_type = "SmoothFillHoles";
   this->category = category_mapping.at(this->node_type);
+  this->attr["ir"] = NEW_ATTR_INT(8, 1, 128);
 }
 
 void SmoothFillHoles::compute_filter(hmap::HeightMap &h,
@@ -23,7 +24,7 @@ void SmoothFillHoles::compute_filter(hmap::HeightMap &h,
   hmap::transform(h,
                   p_mask,
                   [this](hmap::Array &x, hmap::Array *p_mask)
-                  { hmap::smooth_fill_holes(x, this->ir, p_mask); });
+                  { hmap::smooth_fill_holes(x, GET_ATTR_INT("ir"), p_mask); });
 
   h.smooth_overlap_buffers();
 }

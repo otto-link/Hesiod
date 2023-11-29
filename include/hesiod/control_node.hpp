@@ -18,6 +18,8 @@
 #define DEFAULT_KERNEL_SHAPE {17, 17}
 #define DEFAULT_KW 2.f
 #define DEFAULT_SEED 1
+
+#define CAST_PORT_REF(type, port_id)  static_cast<type *>(this->get_p_data(port_id))
 // clang-format on
 
 namespace hesiod::cnode
@@ -112,7 +114,6 @@ static const std::map<std::string, std::string> category_mapping = {
     {"GradientNorm", "Math/Gradient"},
     {"GradientTalus", "Math/Gradient"},
     {"HydraulicAlgebric", "Erosion/Hydraulic"},
-    // {"HydraulicBenes", "Erosion/Hydraulic"}, // BROKEN
     {"HydraulicParticle", "Erosion/Hydraulic"},
     {"HydraulicRidge", "Erosion/Hydraulic"}, // not distributed
     {"HydraulicStream", "Erosion/Hydraulic"},
@@ -217,6 +218,7 @@ public:
 // Generic nodes
 //----------------------------------------
 
+// OK
 class Unary : virtual public ControlNode // most basic, 1 in / 1 out
 {
 public:
@@ -236,6 +238,7 @@ protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
 
+// OK
 class Binary : virtual public ControlNode // basic, 2 in / 1 out
 {
 public:
@@ -257,6 +260,7 @@ protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
 
+// OK
 class Debug : virtual public ControlNode
 {
 public:
@@ -265,6 +269,7 @@ public:
   void compute();
 };
 
+// OK
 class Erosion : virtual public ControlNode
 {
 public:
@@ -291,6 +296,7 @@ protected:
   hmap::HeightMap deposition_map = hmap::HeightMap();
 };
 
+// OK
 class Filter : virtual public ControlNode
 {
 public:
@@ -624,6 +630,7 @@ protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
 
+// OK
 class DistanceTransform : virtual public ControlNode
 {
 public:
@@ -635,12 +642,9 @@ public:
 
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
-  hmap::Vec2<int> shape_working = {512, 512};
-  bool            reverse = true;
-  float           vmin = 0.f;
-  float           vmax = 1.f;
 };
 
+// OK
 class Equalize : public Filter
 {
 public:
@@ -649,6 +653,7 @@ public:
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
 };
 
+// OK
 class ErosionMaps : virtual public ControlNode
 {
 public:
@@ -661,9 +666,9 @@ public:
 protected:
   hmap::HeightMap erosion_map = hmap::HeightMap();
   hmap::HeightMap deposition_map = hmap::HeightMap();
-  float           tolerance = 0.f;
 };
 
+// OK
 class ExpandShrink : public Filter
 {
 public:
@@ -672,29 +677,20 @@ public:
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
 
 protected:
-  int                        ir = 4;
-  bool                       shrink = false;
   std::map<std::string, int> kernel_map = {
       {"cone", kernel::cone},
       {"cubic_pulse", kernel::cubic_pulse},
       {"lorentzian", kernel::lorentzian},
       {"smooth_cosine", kernel::smooth_cosine}};
-  int kernel = kernel::cubic_pulse;
 };
 
+// OK
 class ExpandShrinkDirectional : public Filter
 {
 public:
   ExpandShrinkDirectional(std::string id);
 
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
-
-protected:
-  int   ir = 4;
-  float angle = 30.f;
-  float aspect_ratio = 0.2f;
-  float anisotropy = 1.f;
-  bool  shrink = false;
 };
 
 class Export : virtual public ControlNode
@@ -762,6 +758,7 @@ public:
   void compute();
 };
 
+// OK
 class FractalizePath : virtual public ControlNode
 {
 public:
@@ -773,14 +770,10 @@ public:
 
 protected:
   hmap::Path value_out = hmap::Path();
-  int        iterations = 1;
-  int        seed = DEFAULT_SEED;
-  float      sigma = 0.3f;
-  int        orientation = 0;
-  float      persistence = 1.f;
 };
 
-class GaborNoise : virtual public ControlNode
+// OK
+class GaborNoise : public Primitive
 {
 public:
   GaborNoise(std::string     id,
@@ -791,21 +784,6 @@ public:
   void update_inner_bindings();
 
   void compute();
-
-protected:
-  hmap::HeightMap value_out = hmap::HeightMap();
-  float           kw = 1.f;
-  float           angle = 30.f;
-  int             width = 128;
-  float           density = 0.05f;
-  int             seed = DEFAULT_SEED;
-  float           vmin = 0.f;
-  float           vmax = 1.f;
-
-private:
-  hmap::Vec2<int> shape;
-  hmap::Vec2<int> tiling;
-  float           overlap;
 };
 
 // OK
@@ -820,28 +798,22 @@ protected:
   float gain = 1.f;
 };
 
+// OK
 class GammaCorrection : public Filter
 {
 public:
   GammaCorrection(std::string id);
 
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
-
-protected:
-  float gamma = 1.f;
 };
 
+// OK
 class GammaCorrectionLocal : public Filter
 {
 public:
   GammaCorrectionLocal(std::string id);
 
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
-
-protected:
-  float gamma = 1.f;
-  int   ir = 4;
-  float k = 0.1f;
 };
 
 // OK
@@ -871,6 +843,7 @@ protected:
   hmap::HeightMap value_out_dy = hmap::HeightMap();
 };
 
+// OK
 class GradientAngle : public Unary
 {
 public:
@@ -888,6 +861,7 @@ public:
   void compute_in_out(hmap::HeightMap &h, hmap::HeightMap *p_talus);
 };
 
+// OK
 class GradientTalus : public Unary
 {
 public:
@@ -896,6 +870,7 @@ public:
   void compute_in_out(hmap::HeightMap &h, hmap::HeightMap *p_talus);
 };
 
+// OK
 class HydraulicAlgebric : public Erosion
 {
 public:
@@ -907,37 +882,9 @@ public:
                        hmap::HeightMap *p_mask,
                        hmap::HeightMap *p_erosion_map,
                        hmap::HeightMap *p_deposition_map);
-
-protected:
-  float talus_global = 2.f;
-  int   ir = 16;
-  float c_erosion = 0.07f;
-  float c_deposition = 0.01f;
-  int   iterations = 1;
 };
 
-class HydraulicBenes : public Erosion
-{
-public:
-  HydraulicBenes(std::string id);
-
-  void compute_erosion(hmap::HeightMap &h,
-                       hmap::HeightMap *p_bedrock,
-                       hmap::HeightMap *p_moisture_map,
-                       hmap::HeightMap *p_mask,
-                       hmap::HeightMap *p_erosion_map,
-                       hmap::HeightMap *p_deposition_map);
-
-protected:
-  int   iterations = 50;
-  float c_capacity = 40.f;
-  float c_erosion = 0.2f;
-  float c_deposition = 0.8f;
-  float water_level = 0.005f;
-  float evap_rate = 0.01f;
-  float rain_rate = 0.5f;
-};
-
+// OK
 class HydraulicParticle : public Erosion
 {
 public:
@@ -949,35 +896,18 @@ public:
                        hmap::HeightMap *p_mask,
                        hmap::HeightMap *p_erosion_map,
                        hmap::HeightMap *p_deposition_map);
-
-protected:
-  int   seed = 1;
-  int   nparticles = 40000;
-  int   c_radius = 0;
-  float c_capacity = 40.f;
-  float c_erosion = 0.05f;
-  float c_deposition = 0.1f;
-  float drag_rate = 0.01f;
-  float evap_rate = 0.001f;
 };
 
+// OK
 class HydraulicRidge : public Filter
 {
 public:
   HydraulicRidge(std::string id);
 
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
-
-protected:
-  float talus_global = 16.f;
-  float intensity = 0.5f;
-  float erosion_factor = 1.5f;
-  float smoothing_factor = 0.5f;
-  float noise_ratio = 0.1f;
-  int   ir = 16;
-  int   seed = DEFAULT_SEED;
 };
 
+// OK
 class HydraulicStream : public Erosion
 {
 public:
@@ -989,14 +919,9 @@ public:
                        hmap::HeightMap *p_mask,
                        hmap::HeightMap *p_erosion_map,
                        hmap::HeightMap *p_deposition_map);
-
-protected:
-  float c_erosion = 0.05f;
-  float talus_ref = 0.1f;
-  int   ir = 1;
-  float clipping_ratio = 10.f;
 };
 
+// OK
 class HydraulicStreamLog : public Erosion
 {
 public:
@@ -1008,14 +933,9 @@ public:
                        hmap::HeightMap *p_mask,
                        hmap::HeightMap *p_erosion_map,
                        hmap::HeightMap *p_deposition_map);
-
-protected:
-  float c_erosion = 0.05f;
-  float talus_ref = 0.1f;
-  float gamma = 1.f;
-  int   ir = 1;
 };
 
+// OK
 class HydraulicVpipes : public Erosion
 {
 public:
@@ -1027,15 +947,6 @@ public:
                        hmap::HeightMap *p_mask,
                        hmap::HeightMap *p_erosion_map,
                        hmap::HeightMap *p_deposition_map);
-
-protected:
-  int   iterations = 50;
-  float water_height = 0.01f;
-  float c_capacity = 0.1f;
-  float c_erosion = 0.01f;
-  float c_deposition = 0.01f;
-  float rain_rate = 0.f;
-  float evap_rate = 0.01f;
 };
 
 class Import : virtual public ControlNode
@@ -1062,6 +973,7 @@ private:
   float           overlap;
 };
 
+// OK
 class Kernel : virtual public ControlNode
 {
 public:
@@ -1072,12 +984,7 @@ public:
   void compute();
 
 protected:
-  hmap::Array     value_out = hmap::Array();
-  bool            normalized = true;
-  float           vmin = 0.f;
-  float           vmax = 1.f;
-  hmap::Vec2<int> shape = DEFAULT_KERNEL_SHAPE;
-  int             kernel = kernel::cubic_pulse;
+  hmap::Array value_out = hmap::Array();
 
   std::map<std::string, int> kernel_map = {
       {"cone", kernel::cone},
@@ -1086,6 +993,7 @@ protected:
       {"smooth_cosine", kernel::smooth_cosine}};
 };
 
+// OK
 class KmeansClustering2 : public Binary
 {
 public:
@@ -1094,15 +1002,9 @@ public:
   void compute_in_out(hmap::HeightMap &h_out,
                       hmap::HeightMap *p_h_in1,
                       hmap::HeightMap *p_h_in2);
-
-protected:
-  int               nclusters = 4;
-  hmap::Vec2<float> weights = {1.f, 1.f};
-  int               seed = DEFAULT_SEED;
-  hmap::Vec2<int>   shape_clustering = {256, 256};
-  bool              normalize_inputs = true;
 };
 
+// OK
 class KmeansClustering3 : virtual public ControlNode
 {
 public:
@@ -1113,39 +1015,28 @@ public:
   void compute();
 
 protected:
-  hmap::HeightMap   value_out = hmap::HeightMap();
-  int               nclusters = 4;
-  hmap::Vec3<float> weights = {1.f, 1.f, 1.f};
-  int               seed = DEFAULT_SEED;
-  hmap::Vec2<int>   shape_clustering = {256, 256};
-  bool              normalize_inputs = true;
+  hmap::HeightMap value_out = hmap::HeightMap();
 };
 
+// OK
 class Laplace : public Filter
 {
 public:
   Laplace(std::string id);
 
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
-
-protected:
-  float sigma = 0.2f;
-  int   iterations = 3;
 };
 
+// OK
 class LaplaceEdgePreserving : public Filter
 {
 public:
   LaplaceEdgePreserving(std::string id);
 
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
-
-protected:
-  float sigma = 0.2f;
-  int   iterations = 3;
-  float talus_global = 10.f;
 };
 
+// OK
 class Lerp : virtual public ControlNode
 {
 public:
@@ -1157,20 +1048,18 @@ public:
 
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
-  float           t = 0.5f;
 };
 
+// OK
 class MakeBinary : public Unary
 {
 public:
   MakeBinary(std::string id);
 
   void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
-
-protected:
-  float threshold = 0.f;
 };
 
+// OK
 class MeanderizePath : virtual public ControlNode
 {
 public:
@@ -1182,23 +1071,18 @@ public:
 
 protected:
   hmap::Path value_out = hmap::Path();
-  float      radius = 0.05f;
-  float      tangent_contribution = 0.1f;
-  int        iterations = 1;
-  float      transition_length_ratio = 0.2f;
 };
 
+// OK
 class MeanLocal : public Filter
 {
 public:
   MeanLocal(std::string id);
 
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
-
-protected:
-  int ir = 8;
 };
 
+// OK
 class Median3x3 : public Filter
 {
 public:
@@ -1207,17 +1091,16 @@ public:
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
 };
 
+// OK
 class MinimumLocal : public Unary
 {
 public:
   MinimumLocal(std::string id);
 
   void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
-
-protected:
-  int ir = 4;
 };
 
+// OK
 class MixRGB : virtual public ControlNode
 {
 public:
@@ -1229,33 +1112,24 @@ public:
 
 protected:
   hmap::HeightMapRGB value_out = hmap::HeightMapRGB();
-  float              t = 0.5f;
-  bool               sqrt_mix = true;
 };
 
+// OK
 class NormalDisplacement : public Filter
 {
 public:
   NormalDisplacement(std::string id);
 
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
-
-protected:
-  float amount = 5.f;
-  int   ir = 0;
-  bool  reverse = false;
 };
 
+// OK
 class OneMinus : public Unary
 {
 public:
   OneMinus(std::string id);
 
   void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
-
-protected:
-  float vmin = 0.f;
-  float vmax = 1.f;
 };
 
 class Path : virtual public ControlNode
@@ -1272,6 +1146,7 @@ protected:
   bool       closed = false;
 };
 
+// OK
 class PathFinding : virtual public ControlNode
 {
 public:
@@ -1282,12 +1157,10 @@ public:
   void update_inner_bindings();
 
 protected:
-  hmap::Path      value_out = hmap::Path();
-  hmap::Vec2<int> wshape = {256, 256};
-  float           elevation_ratio = 0.5f;
-  float           distance_exponent = 1.f;
+  hmap::Path value_out = hmap::Path();
 };
 
+// OK
 class PathToHeightmap : virtual public ControlNode
 {
 public:
@@ -1302,9 +1175,6 @@ public:
 
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
-  bool            filled = false;
-  float           vmin = 0.f;
-  float           vmax = 1.f;
 
 private:
   hmap::Vec2<int> shape;
@@ -1336,18 +1206,16 @@ public:
   void compute();
 };
 
+// OK
 class Plateau : public Filter
 {
 public:
   Plateau(std::string id);
 
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
-
-protected:
-  int   ir = 32;
-  float factor = 4.f;
 };
 
+// OK
 class Preview : virtual public ControlNode
 {
 public:
@@ -1358,6 +1226,7 @@ public:
   void update_inner_bindings();
 };
 
+// OK
 class PreviewColorize : virtual public ControlNode
 {
 public:
@@ -1368,6 +1237,7 @@ public:
   void update_inner_bindings();
 };
 
+// OK
 class RecastCanyon : virtual public ControlNode
 {
 public:
@@ -1379,19 +1249,15 @@ public:
 
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
-  float           vcut = 0.7f;
-  float           gamma = 4.f;
 };
 
+// OK
 class Recurve : public Filter
 {
 public:
   Recurve(std::string id);
 
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
-
-protected:
-  std::vector<float> curve = {0.f, 0.25f, 0.5f, 0.75f, 1.f};
 };
 
 // OK
@@ -1452,6 +1318,7 @@ public:
   void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
 };
 
+// OK
 class SedimentDeposition : virtual public ControlNode
 {
 public:
@@ -1464,10 +1331,6 @@ public:
 protected:
   hmap::HeightMap value_out = hmap::HeightMap(); // eroded heightmap
   hmap::HeightMap deposition_map = hmap::HeightMap();
-  float           talus_global = 0.1f;
-  float           max_deposition = 0.01;
-  int             iterations = 5;
-  int             thermal_subiterations = 10;
 };
 
 // OK
@@ -1544,7 +1407,8 @@ public:
   void compute();
 };
 
-class Slope : virtual public ControlNode
+// OK
+class Slope : public Primitive
 {
 public:
   Slope(std::string     id,
@@ -1555,30 +1419,18 @@ public:
   void compute();
 
   void update_inner_bindings();
-
-protected:
-  hmap::HeightMap   value_out = hmap::HeightMap();
-  float             angle = 0.f;
-  float             talus_global = 4.f;
-  hmap::Vec2<float> center = {0.5f, 0.5f};
-
-private:
-  hmap::Vec2<int> shape;
-  hmap::Vec2<int> tiling;
-  float           overlap;
 };
 
+// OK
 class SmoothCpulse : public Filter
 {
 public:
   SmoothCpulse(std::string id);
 
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
-
-protected:
-  int ir = 8;
 };
 
+// OK
 class SmoothFill : virtual public ControlNode
 {
 public:
@@ -1591,44 +1443,33 @@ public:
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
   hmap::HeightMap deposition_map = hmap::HeightMap();
-  int             ir = 32;
-  float           k = 0.01f;
 };
 
+// OK
 class SmoothFillHoles : public Filter
 {
 public:
   SmoothFillHoles(std::string id);
 
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
-
-protected:
-  int ir = 8;
 };
 
+// OK
 class SmoothFillSmearPeaks : public Filter
 {
 public:
   SmoothFillSmearPeaks(std::string id);
 
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
-
-protected:
-  int ir = 8;
 };
 
+// OK
 class SteepenConvective : public Filter
 {
 public:
   SteepenConvective(std::string id);
 
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
-
-protected:
-  float angle = 0.f;
-  int   iterations = 1;
-  int   ir = 0;
-  float dt = 0.1f;
 };
 
 // OK
@@ -1681,6 +1522,7 @@ protected:
   int             seed = DEFAULT_SEED;
 };
 
+// OK
 class Thermal : virtual public ControlNode
 {
 public:
@@ -1693,10 +1535,9 @@ public:
 protected:
   hmap::HeightMap value_out = hmap::HeightMap(); // eroded heightmap
   hmap::HeightMap deposition_map = hmap::HeightMap();
-  float           talus_global = 0.1f;
-  int             iterations = 10;
 };
 
+// OK
 class ThermalAutoBedrock : virtual public ControlNode
 {
 public:
@@ -1709,10 +1550,9 @@ public:
 protected:
   hmap::HeightMap value_out = hmap::HeightMap(); // eroded heightmap
   hmap::HeightMap deposition_map = hmap::HeightMap();
-  float           talus_global = 0.1f;
-  int             iterations = 10;
 };
 
+// OK
 class ThermalScree : virtual public ControlNode
 {
 public:
@@ -1725,14 +1565,6 @@ public:
 protected:
   hmap::HeightMap value_out = hmap::HeightMap(); // eroded heightmap
   hmap::HeightMap deposition_map = hmap::HeightMap();
-  float           talus_global = 3.f;
-  int             seed = DEFAULT_SEED;
-  float           zmax = 0.3f;
-  float           zmin = -1.f;
-  float           noise_ratio = 0.3f;
-  float           landing_talus_ratio = 1.f;
-  float           landing_width_ratio = 0.25f;
-  bool            talus_constraint = true;
 };
 
 // OK
@@ -1789,6 +1621,7 @@ public:
   void compute();
 };
 
+// OK
 class Warp : virtual public ControlNode
 {
 public:
@@ -1800,20 +1633,15 @@ public:
 
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
-  float           scale = 1.f;
 };
 
+// OK
 class WarpDownslope : public Filter
 {
 public:
   WarpDownslope(std::string id);
 
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
-
-protected:
-  float amount = 5.f;
-  int   ir = 0;
-  bool  reverse = false;
 };
 
 // OK

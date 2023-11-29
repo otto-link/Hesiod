@@ -14,8 +14,8 @@ Gradient::Gradient(std::string id) : ControlNode(id)
   this->node_type = "Gradient";
   this->category = category_mapping.at(this->node_type);
 
-  this->attr["remap (x)"] = NEW_ATTR_RANGE();
-  this->attr["remap (y)"] = NEW_ATTR_RANGE();
+  this->attr["remap.x"] = NEW_ATTR_RANGE();
+  this->attr["remap.y"] = NEW_ATTR_RANGE();
 
   this->add_port(gnode::Port("input", gnode::direction::in, dtype::dHeightMap));
   this->add_port(gnode::Port("dx", gnode::direction::out, dtype::dHeightMap));
@@ -56,15 +56,15 @@ void Gradient::compute()
                   { hmap::gradient_y(in, out); });
 
   // remap
-  if (this->attr.at("remap (x)")->get_ref<RangeAttribute>()->is_activated())
+  if (GET_ATTR_REF_RANGE("remap.x")->is_activated())
   {
-    hmap::Vec2<float> vrange = GET_ATTR_RANGE("remap (x)");
+    hmap::Vec2<float> vrange = GET_ATTR_RANGE("remap.x");
     this->value_out_dx.remap(vrange.x, vrange.y);
   }
 
-  if (this->attr.at("remap (y)")->get_ref<RangeAttribute>()->is_activated())
+  if (GET_ATTR_REF_RANGE("remap.y")->is_activated())
   {
-    hmap::Vec2<float> vrange = GET_ATTR_RANGE("remap (y)");
+    hmap::Vec2<float> vrange = GET_ATTR_RANGE("remap.y");
     this->value_out_dy.remap(vrange.x, vrange.y);
   }
 }

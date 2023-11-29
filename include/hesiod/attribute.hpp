@@ -28,6 +28,8 @@
 #define NEW_ATTR_MATRIX() std::make_unique<hesiod::MatrixAttribute>()
 #define NEW_ATTR_RANGE(a) std::make_unique<hesiod::RangeAttribute>(a)
 #define NEW_ATTR_SEED(a) std::make_unique<hesiod::SeedAttribute>(a)
+#define NEW_ATTR_SHAPE() std::make_unique<hesiod::ShapeAttribute>()
+#define NEW_ATTR_VECFLOAT(a) std::make_unique<hesiod::VecFloatAttribute>(a)
 #define NEW_ATTR_WAVENB(a) std::make_unique<hesiod::WaveNbAttribute>(a)
 
 #define GET_ATTR_BOOL(s) this->attr.at(s)->get_ref<BoolAttribute>()->get()
@@ -37,7 +39,12 @@
 #define GET_ATTR_MATRIX(s) this->attr.at(s)->get_ref<MatrixAttribute>()->get()
 #define GET_ATTR_RANGE(s) this->attr.at(s)->get_ref<RangeAttribute>()->get()
 #define GET_ATTR_SEED(s) this->attr.at(s)->get_ref<SeedAttribute>()->get()
+#define GET_ATTR_SHAPE(s) this->attr.at(s)->get_ref<ShapeAttribute>()->get()
+#define GET_ATTR_VECFLOAT(s) this->attr.at(s)->get_ref<VecFloatAttribute>()->get()
 #define GET_ATTR_WAVENB(s) this->attr.at(s)->get_ref<WaveNbAttribute>()->get()
+
+#define GET_ATTR_REF_RANGE(s) this->attr.at(s)->get_ref<RangeAttribute>()
+#define GET_ATTR_REF_SHAPE(s) this->attr.at(s)->get_ref<ShapeAttribute>()
 // clang-format on
 
 namespace hesiod
@@ -71,7 +78,7 @@ public:
 #endif
 };
 
-// base
+// --- Derived
 
 class BoolAttribute : public Attribute
 {
@@ -141,28 +148,6 @@ private:
   int vmin = 0.f;
   int vmax = 1.f;
 };
-
-// class StringAttribute : public Attribute
-// {
-// public:
-//   StringAttribute() = default;
-//   StringAttribute(std::string value);
-//   std::string          get();
-//   virtual bool render_settings(std::string label);
-
-// #ifdef USE_CEREAL
-//   template <class Archive> void serialize(Archive &ar)
-//   {
-//     Attribute::serialize<Archive>(ar);
-//     ar(cereal::make_nvp("value", this->value));
-//   }
-// #endif
-
-// private:
-//   std::string value = "";
-// };
-
-// specific
 
 class MapEnumAttribute : public Attribute
 {
@@ -257,6 +242,48 @@ private:
   int value = 1;
 };
 
+class ShapeAttribute : public Attribute
+{
+public:
+  ShapeAttribute();
+  hmap::Vec2<int> get();
+  void            set_value_max(hmap::Vec2<int> new_value_max);
+  virtual bool    render_settings(std::string label);
+
+#ifdef USE_CEREAL
+  template <class Archive> void serialize(Archive &ar)
+  {
+    Attribute::serialize<Archive>(ar);
+    ar(cereal::make_nvp("value.x", this->value.x),
+       cereal::make_nvp("value.y", this->value.y));
+  }
+#endif
+
+private:
+  hmap::Vec2<int> value = {128, 128};
+  hmap::Vec2<int> value_max = {0, 0};
+};
+
+class VecFloatAttribute : public Attribute
+{
+public:
+  VecFloatAttribute();
+  VecFloatAttribute(std::vector<float> value);
+  std::vector<float> get();
+  virtual bool       render_settings(std::string label);
+
+#ifdef USE_CEREAL
+  template <class Archive> void serialize(Archive &ar)
+  {
+    Attribute::serialize<Archive>(ar);
+    ar(cereal::make_nvp("value", this->value));
+  }
+#endif
+
+private:
+  std::vector<float> value = {};
+};
+
 class WaveNbAttribute : public Attribute
 {
 public:
@@ -282,6 +309,7 @@ private:
 
 } // namespace hesiod
 
+// clang-format off
 CEREAL_REGISTER_TYPE(hesiod::BoolAttribute);
 CEREAL_REGISTER_TYPE(hesiod::FloatAttribute);
 CEREAL_REGISTER_TYPE(hesiod::IntAttribute);
@@ -289,19 +317,16 @@ CEREAL_REGISTER_TYPE(hesiod::MapEnumAttribute);
 CEREAL_REGISTER_TYPE(hesiod::MatrixAttribute);
 CEREAL_REGISTER_TYPE(hesiod::RangeAttribute);
 CEREAL_REGISTER_TYPE(hesiod::SeedAttribute);
-// CEREAL_REGISTER_TYPE(hesiod::StringAttribute);
+CEREAL_REGISTER_TYPE(hesiod::ShapeAttribute);
 CEREAL_REGISTER_TYPE(hesiod::WaveNbAttribute);
 
 CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute, hesiod::BoolAttribute);
 CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute, hesiod::FloatAttribute);
 CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute, hesiod::IntAttribute);
-CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute,
-                                     hesiod::MatrixAttribute);
-CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute,
-                                     hesiod::MapEnumAttribute);
+CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute, hesiod::MatrixAttribute);
+CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute, hesiod::MapEnumAttribute);
 CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute, hesiod::RangeAttribute);
 CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute, hesiod::SeedAttribute);
-// CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute,
-// hesiod::StringAttribute);
-CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute,
-                                     hesiod::WaveNbAttribute);
+CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute, hesiod::ShapeAttribute);
+CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute, hesiod::WaveNbAttribute);
+// clang-format on

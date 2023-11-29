@@ -30,10 +30,8 @@ void Filter::update_inner_bindings()
 void Filter::compute()
 {
   LOG_DEBUG("computing node [%s]", this->id.c_str());
-  hmap::HeightMap *p_input_hmap = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("input"));
-  hmap::HeightMap *p_input_mask = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("mask"));
+  hmap::HeightMap *p_input_hmap = CAST_PORT_REF(hmap::HeightMap, "input");
+  hmap::HeightMap *p_input_mask = CAST_PORT_REF(hmap::HeightMap, "mask");
 
   // work on a copy of the input
   this->value_out = *p_input_hmap;

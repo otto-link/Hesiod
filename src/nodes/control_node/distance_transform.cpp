@@ -11,11 +11,15 @@ namespace hesiod::cnode
 DistanceTransform::DistanceTransform(std::string id) : ControlNode(id)
 {
   LOG_DEBUG("DistanceTransform::DistanceTransform, id: %s", id.c_str());
-  LOG_DEBUG("DistanceTransform::DistanceTransform, this->id: [%s]",
-            this->id.c_str());
-
   this->node_type = "DistanceTransform";
   this->category = category_mapping.at(this->node_type);
+
+  this->attr["shape"] = NEW_ATTR_SHAPE();
+  this->attr["reverse"] = NEW_ATTR_BOOL(false);
+  this->attr["remap"] = NEW_ATTR_RANGE(true);
+
+  this->attr_ordered_key = {"shape", "reverse", "remap"};
+
   this->add_port(gnode::Port("input", gnode::direction::in, dtype::dHeightMap));
   this->add_port(
       gnode::Port("output", gnode::direction::out, dtype::dHeightMap));
@@ -26,20 +30,22 @@ void DistanceTransform::compute()
 {
   LOG_DEBUG("computing DistanceTransform node [%s]", this->id.c_str());
 
-  hmap::HeightMap *p_input_hmap = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("input"));
+  hmap::HeightMap *p_hmap = CAST_PORT_REF(hmap::HeightMap, "input");
 
   // work on a copy of the input
-  this->value_out = *p_input_hmap;
+  this->value_out = *p_hmap;
+
+  GET_ATTR_REF_SHAPE("shape")->set_value_max(this->value_out.shape);
+  hmap::Vec2<int> shape_working = GET_ATTR_SHAPE("shape");
 
   // work on a subset of the data, make sure the shapes are compatible
-  if (this->shape_working.x > this->value_out.shape.x ||
-      this->shape_working.y > this->value_out.shape.y)
-    this->shape_working = this->value_out.shape;
+  if (shape_working.x > this->value_out.shape.x ||
+      shape_working.y > this->value_out.shape.y)
+    shape_working = this->value_out.shape;
 
-  hmap::Array z = this->value_out.to_array(this->shape_working);
+  hmap::Array z = this->value_out.to_array(shape_working);
 
-  if (this->reverse)
+  if (GET_ATTR_BOOL("reverse"))
   {
     make_binary(z);
     z = 1.f - z;
@@ -48,7 +54,7 @@ void DistanceTransform::compute()
   z = hmap::distance_transform(z);
 
   this->value_out.from_array_interp(z);
-  this->value_out.remap(this->vmin, this->vmax);
+  this->post_process_heightmap(this->value_out);
 }
 
 void DistanceTransform::update_inner_bindings()

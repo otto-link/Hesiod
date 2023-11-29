@@ -48,7 +48,7 @@ void Colorize::compute()
   float cmin = 0.f;
   float cmax = 1.f;
 
-  if (this->attr.at("clamp")->get_ref<RangeAttribute>()->is_activated())
+  if (GET_ATTR_REF_RANGE("clamp")->is_activated())
   {
     float hmin = p_input_hmap->min();
     float hmax = p_input_hmap->max();

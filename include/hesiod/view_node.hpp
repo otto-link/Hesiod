@@ -526,7 +526,7 @@ public:
   }
 };
 
-// TO DO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// OK
 class ViewDebug : public ViewNode, public hesiod::cnode::Debug
 {
 public:
@@ -570,47 +570,73 @@ public:
   }
 };
 
+// OK
 class ViewDistanceTransform : public ViewNode,
                               public hesiod::cnode::DistanceTransform
 {
 public:
-  ViewDistanceTransform(std::string id);
-
-  bool render_settings();
+  ViewDistanceTransform(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::DistanceTransform(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+    this->help_text = "Apply the distance transform (Euclidean distance) to "
+                      "the input heightmap. Cells with null or negative values "
+                      "are assumed to belong to the background.";
+  }
 };
 
+// OK
 class ViewEqualize : public ViewNode, public hesiod::cnode::Equalize
 {
 public:
-  ViewEqualize(std::string id);
-
-  bool render_settings();
+  ViewEqualize(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::Equalize(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
+// OK
 class ViewErosionMaps : public ViewNode, public hesiod::cnode::ErosionMaps
 {
 public:
-  ViewErosionMaps(std::string id);
-
-  bool render_settings();
+  ViewErosionMaps(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::ErosionMaps(id)
+  {
+  }
 };
 
+// OK
 class ViewExpandShrink : public ViewNode, public hesiod::cnode::ExpandShrink
 {
 public:
-  ViewExpandShrink(std::string id);
-
-  bool render_settings();
+  ViewExpandShrink(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::ExpandShrink(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
+// OK
 class ViewExpandShrinkDirectional
     : public ViewNode,
       public hesiod::cnode::ExpandShrinkDirectional
 {
 public:
-  ViewExpandShrinkDirectional(std::string id);
-
-  bool render_settings();
+  ViewExpandShrinkDirectional(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::ExpandShrinkDirectional(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewExport : public ViewNode, public hesiod::cnode::Export
@@ -688,25 +714,33 @@ public:
   }
 };
 
+// OK
 class ViewFractalizePath : public ViewNode, public hesiod::cnode::FractalizePath
 {
 public:
-  ViewFractalizePath(std::string id);
+  ViewFractalizePath(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::FractalizePath(id)
+  {
+  }
 
   void render_node_specific_content();
-
-  bool render_settings();
 };
 
+// OK
 class ViewGaborNoise : public ViewNode, public hesiod::cnode::GaborNoise
 {
 public:
   ViewGaborNoise(std::string     id,
                  hmap::Vec2<int> shape,
                  hmap::Vec2<int> tiling,
-                 float           overlap);
-
-  bool render_settings();
+                 float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::GaborNoise(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 // OK
@@ -716,25 +750,37 @@ public:
   ViewGain(std::string id)
       : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Gain(id)
   {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
   }
 };
 
+// OK
 class ViewGammaCorrection : public ViewNode,
                             public hesiod::cnode::GammaCorrection
 {
 public:
-  ViewGammaCorrection(std::string id);
-
-  bool render_settings();
+  ViewGammaCorrection(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::GammaCorrection(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
+// OK
 class ViewGammaCorrectionLocal : public ViewNode,
                                  public hesiod::cnode::GammaCorrectionLocal
 {
 public:
-  ViewGammaCorrectionLocal(std::string id);
-
-  bool render_settings();
+  ViewGammaCorrectionLocal(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::GammaCorrectionLocal(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 // OK
@@ -748,13 +794,17 @@ public:
   }
 };
 
+// OK
 class ViewGradientAngle : public ViewNode, public hesiod::cnode::GradientAngle
 {
 public:
-  ViewGradientAngle(std::string id);
-
-  void serialize_save(cereal::JSONOutputArchive &);
-  void serialize_load(cereal::JSONInputArchive &);
+  ViewGradientAngle(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::GradientAngle(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 // OK
@@ -770,13 +820,17 @@ public:
   }
 };
 
+// OK
 class ViewGradientTalus : public ViewNode, public hesiod::cnode::GradientTalus
 {
 public:
-  ViewGradientTalus(std::string id);
-
-  void serialize_save(cereal::JSONOutputArchive &);
-  void serialize_load(cereal::JSONInputArchive &);
+  ViewGradientTalus(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::GradientTalus(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 // OK
@@ -795,65 +849,87 @@ public:
   }
 };
 
+// OK
 class ViewHydraulicAlgebric : public ViewNode,
                               public hesiod::cnode::HydraulicAlgebric
 {
 public:
-  ViewHydraulicAlgebric(std::string id);
-
-  bool render_settings();
+  ViewHydraulicAlgebric(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::HydraulicAlgebric(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
-class ViewHydraulicBenes : public ViewNode, public hesiod::cnode::HydraulicBenes
-{
-public:
-  ViewHydraulicBenes(std::string id);
-
-  bool render_settings();
-};
-
+// OK
 class ViewHydraulicParticle : public ViewNode,
                               public hesiod::cnode::HydraulicParticle
 {
 public:
-  ViewHydraulicParticle(std::string id);
-
-  bool render_settings();
+  ViewHydraulicParticle(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::HydraulicParticle(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
+// OK
 class ViewHydraulicRidge : public ViewNode, public hesiod::cnode::HydraulicRidge
 {
 public:
-  ViewHydraulicRidge(std::string id);
-
-  bool render_settings();
+  ViewHydraulicRidge(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::HydraulicRidge(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
+// OK
 class ViewHydraulicStream : public ViewNode,
                             public hesiod::cnode::HydraulicStream
 {
 public:
-  ViewHydraulicStream(std::string id);
-
-  bool render_settings();
+  ViewHydraulicStream(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::HydraulicStream(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
+// OK
 class ViewHydraulicStreamLog : public ViewNode,
                                public hesiod::cnode::HydraulicStreamLog
 {
 public:
-  ViewHydraulicStreamLog(std::string id);
-
-  bool render_settings();
+  ViewHydraulicStreamLog(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::HydraulicStreamLog(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
+// OK
 class ViewHydraulicVpipes : public ViewNode,
                             public hesiod::cnode::HydraulicVpipes
 {
 public:
-  ViewHydraulicVpipes(std::string id);
-
-  bool render_settings();
+  ViewHydraulicVpipes(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::HydraulicVpipes(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewImport : public ViewNode, public hesiod::cnode::Import
@@ -869,123 +945,183 @@ public:
   void render_node_specific_content();
 };
 
+// OK
 class ViewKernel : public ViewNode, public hesiod::cnode::Kernel
 {
 public:
-  ViewKernel(std::string id);
-
-  bool render_settings();
+  ViewKernel(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Kernel(id)
+  {
+    this->set_preview_port_id("output");
+  }
 };
 
+// OK
 class ViewKmeansClustering2 : public ViewNode,
                               public hesiod::cnode::KmeansClustering2
 {
 public:
-  ViewKmeansClustering2(std::string id);
-
-  bool render_settings();
+  ViewKmeansClustering2(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::KmeansClustering2(id)
+  {
+    this->set_preview_port_id("output");
+  }
 };
 
+// OK
 class ViewKmeansClustering3 : public ViewNode,
                               public hesiod::cnode::KmeansClustering3
 {
 public:
-  ViewKmeansClustering3(std::string id);
-
-  bool render_settings();
+  ViewKmeansClustering3(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::KmeansClustering3(id)
+  {
+    this->set_preview_port_id("output");
+  }
 };
 
+// OK
 class ViewLaplace : public ViewNode, public hesiod::cnode::Laplace
 {
 public:
-  ViewLaplace(std::string id);
-
-  bool render_settings();
+  ViewLaplace(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Laplace(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
+// OK
 class ViewLaplaceEdgePreserving : public ViewNode,
                                   public hesiod::cnode::LaplaceEdgePreserving
 {
 public:
-  ViewLaplaceEdgePreserving(std::string id);
-
-  bool render_settings();
+  ViewLaplaceEdgePreserving(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::LaplaceEdgePreserving(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
+// OK
 class ViewLerp : public ViewNode, public hesiod::cnode::Lerp
 {
 public:
-  ViewLerp(std::string id);
-
-  bool render_settings();
+  ViewLerp(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Lerp(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
+// OK
 class ViewMakeBinary : public ViewNode, public hesiod::cnode::MakeBinary
 
 {
 public:
-  ViewMakeBinary(std::string id);
-
-  bool render_settings();
+  ViewMakeBinary(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::MakeBinary(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
+// OK
 class ViewMeanderizePath : public ViewNode, public hesiod::cnode::MeanderizePath
 {
 public:
-  ViewMeanderizePath(std::string id);
+  ViewMeanderizePath(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::MeanderizePath(id)
+  {
+  }
 
   void render_node_specific_content();
-
-  bool render_settings();
 };
 
+// OK
 class ViewMeanLocal : public ViewNode, public hesiod::cnode::MeanLocal
 {
 public:
-  ViewMeanLocal(std::string id);
-
-  bool render_settings();
+  ViewMeanLocal(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::MeanLocal(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
+// OK
 class ViewMedian3x3 : public ViewNode, public hesiod::cnode::Median3x3
 {
 public:
-  ViewMedian3x3(std::string id);
-
-  bool render_settings();
+  ViewMedian3x3(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::Median3x3(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
+// OK
 class ViewMinimumLocal : public ViewNode, public hesiod::cnode::MinimumLocal
 {
 public:
-  ViewMinimumLocal(std::string id);
-
-  bool render_settings();
+  ViewMinimumLocal(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::MinimumLocal(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
+// OK
 class ViewMixRGB : public ViewNode, public hesiod::cnode::MixRGB
 {
 public:
-  ViewMixRGB(std::string id);
-
-  bool render_settings();
+  ViewMixRGB(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::MixRGB(id)
+  {
+    this->set_preview_port_id("RGB");
+  }
 };
 
+// OK
 class ViewNormalDisplacement : public ViewNode,
                                public hesiod::cnode::NormalDisplacement
 {
 public:
-  ViewNormalDisplacement(std::string id);
-
-  bool render_settings();
+  ViewNormalDisplacement(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::NormalDisplacement(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
+// OK
 class ViewOneMinus : public ViewNode, public hesiod::cnode::OneMinus
 {
 public:
-  ViewOneMinus(std::string id);
-
-  bool render_settings();
+  ViewOneMinus(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::OneMinus(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewPath : public ViewNode, public hesiod::cnode::Path
@@ -998,16 +1134,31 @@ public:
   bool render_settings();
 };
 
+// OK
 class ViewPathFinding : public ViewNode, public hesiod::cnode::PathFinding
 {
 public:
-  ViewPathFinding(std::string id);
+  ViewPathFinding(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::PathFinding(id)
+  {
+    this->set_view3d_elevation_port_id("heightmap");
+    this->set_view3d_color_port_id("output");
+    this->help_text =
+        "Find the lowest elevation and elevation difference path for each edge "
+        "of the input path, assuming this path lies on the input "
+        "heightmap.\n'elevation_ratio': Balance between absolute elevation and "
+        "elevation difference in the cost function.\n'distance_exponent': "
+        "Exponent of the distance calculation between two points. Increasing "
+        "the distance exponent of the cost function increases the cost of "
+        "elevation gaps: path then tends to stay at the same elevation if "
+        "possible (i.e. reduce the overall cumulative elevation gain).";
+  }
 
   void render_node_specific_content();
-
-  bool render_settings();
 };
 
+// OK
 class ViewPathToHeightmap : public ViewNode,
                             public hesiod::cnode::PathToHeightmap
 {
@@ -1015,9 +1166,14 @@ public:
   ViewPathToHeightmap(std::string     id,
                       hmap::Vec2<int> shape,
                       hmap::Vec2<int> tiling,
-                      float           overlap);
-
-  bool render_settings();
+                      float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::PathToHeightmap(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+    this->set_view3d_color_port_id("path");
+  }
 };
 
 // OK
@@ -1037,6 +1193,7 @@ public:
   }
 };
 
+// OK
 class ViewPerlinBillow : public ViewNode, public hesiod::cnode::PerlinBillow
 {
 public:
@@ -1052,54 +1209,69 @@ public:
   }
 };
 
+// OK
 class ViewPlateau : public ViewNode, public hesiod::cnode::Plateau
 {
 public:
-  ViewPlateau(std::string id);
-
-  bool render_settings();
+  ViewPlateau(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Plateau(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
+// OK
 class ViewPreview : public ViewNode, public hesiod::cnode::Preview
 {
 public:
-  ViewPreview(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &);
-  void serialize_load(cereal::JSONInputArchive &);
+  ViewPreview(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Preview(id)
+  {
+    this->set_preview_port_id("input");
+    this->set_view3d_elevation_port_id("input");
+    this->set_view3d_color_port_id("color mask");
+  }
 };
 
+// OK
 class ViewPreviewColorize : public ViewNode,
                             public hesiod::cnode::PreviewColorize
 {
 public:
-  ViewPreviewColorize(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &);
-  void serialize_load(cereal::JSONInputArchive &);
+  ViewPreviewColorize(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::PreviewColorize(id)
+  {
+    this->set_preview_port_id("RGB");
+    this->set_view3d_elevation_port_id("input");
+    this->set_view3d_color_port_id("RGB");
+  }
 };
 
+// OK
 class ViewRecastCanyon : public ViewNode, public hesiod::cnode::RecastCanyon
 {
 public:
-  ViewRecastCanyon(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &);
-  void serialize_load(cereal::JSONInputArchive &);
+  ViewRecastCanyon(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::RecastCanyon(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
+// OK
 class ViewRecurve : public ViewNode, public hesiod::cnode::Recurve
 {
 public:
-  ViewRecurve(std::string id);
-
-  bool render_settings();
+  ViewRecurve(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Recurve(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 // OK
@@ -1186,13 +1358,18 @@ public:
   }
 };
 
+// OK
 class ViewSedimentDeposition : public ViewNode,
                                public hesiod::cnode::SedimentDeposition
 {
 public:
-  ViewSedimentDeposition(std::string id);
-
-  bool render_settings();
+  ViewSedimentDeposition(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::SedimentDeposition(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 // OK
@@ -1297,58 +1474,88 @@ public:
   }
 };
 
+// OK
 class ViewSlope : public ViewNode, public hesiod::cnode::Slope
 {
 public:
   ViewSlope(std::string     id,
             hmap::Vec2<int> shape,
             hmap::Vec2<int> tiling,
-            float           overlap);
-
-  bool render_settings();
+            float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::Slope(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
+// OK
 class ViewSmoothCpulse : public ViewNode, public hesiod::cnode::SmoothCpulse
 {
 public:
-  ViewSmoothCpulse(std::string id);
-
-  bool render_settings();
+  ViewSmoothCpulse(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::SmoothCpulse(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
+// OK
 class ViewSmoothFill : public ViewNode, public hesiod::cnode::SmoothFill
 {
 public:
-  ViewSmoothFill(std::string id);
-
-  bool render_settings();
+  ViewSmoothFill(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::SmoothFill(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
+// OK
 class ViewSmoothFillHoles : public ViewNode,
                             public hesiod::cnode::SmoothFillHoles
 {
 public:
-  ViewSmoothFillHoles(std::string id);
-
-  bool render_settings();
+  ViewSmoothFillHoles(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::SmoothFillHoles(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
+// OK
 class ViewSmoothFillSmearPeaks : public ViewNode,
                                  public hesiod::cnode::SmoothFillSmearPeaks
 {
 public:
-  ViewSmoothFillSmearPeaks(std::string id);
-
-  bool render_settings();
+  ViewSmoothFillSmearPeaks(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::SmoothFillSmearPeaks(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
+// OK
 class ViewSteepenConvective : public ViewNode,
                               public hesiod::cnode::SteepenConvective
 {
 public:
-  ViewSteepenConvective(std::string id);
-
-  bool render_settings();
+  ViewSteepenConvective(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::SteepenConvective(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 // OK
@@ -1385,29 +1592,43 @@ public:
   bool render_settings();
 };
 
+// OK
 class ViewThermal : public ViewNode, public hesiod::cnode::Thermal
 {
 public:
-  ViewThermal(std::string id);
-
-  bool render_settings();
+  ViewThermal(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Thermal(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
+// OK
 class ViewThermalAutoBedrock : public ViewNode,
                                public hesiod::cnode::ThermalAutoBedrock
 {
 public:
-  ViewThermalAutoBedrock(std::string id);
-
-  bool render_settings();
+  ViewThermalAutoBedrock(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::ThermalAutoBedrock(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
+// OK
 class ViewThermalScree : public ViewNode, public hesiod::cnode::ThermalScree
 {
 public:
-  ViewThermalScree(std::string id);
-
-  bool render_settings();
+  ViewThermalScree(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::ThermalScree(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 // OK
@@ -1488,20 +1709,29 @@ public:
   }
 };
 
+// OK
 class ViewWarp : public ViewNode, public hesiod::cnode::Warp
 {
 public:
-  ViewWarp(std::string id);
-
-  bool render_settings();
+  ViewWarp(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Warp(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
+// OK
 class ViewWarpDownslope : public ViewNode, public hesiod::cnode::WarpDownslope
 {
 public:
-  ViewWarpDownslope(std::string id);
-
-  bool render_settings();
+  ViewWarpDownslope(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::WarpDownslope(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 // OK

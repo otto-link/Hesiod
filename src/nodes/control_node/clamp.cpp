@@ -41,7 +41,7 @@ void Clamp::compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in)
   float             k_max = GET_ATTR_FLOAT("k_max");
 
   // compute
-  if (this->attr.at("clamp")->get_ref<RangeAttribute>()->is_activated())
+  if (GET_ATTR_REF_RANGE("clamp")->is_activated())
   {
     if (!smooth_min && !smooth_max)
     {

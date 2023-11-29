@@ -27,9 +27,9 @@ void Blend::compute_in_out(hmap::HeightMap &h_out,
 
   std::function<void(hmap::Array &, hmap::Array &, hmap::Array &)> lambda;
 
-  int   method = GET_ATTR_MAPENUM("blending_method");
   float k = GET_ATTR_FLOAT("k");
   int   ir = GET_ATTR_INT("ir");
+  int   method = GET_ATTR_MAPENUM("blending_method");
 
   switch (method)
   {

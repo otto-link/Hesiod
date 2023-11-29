@@ -104,8 +104,6 @@ std::string ViewTree::add_view_node(std::string control_node_type,
     this->add_node(std::make_shared<hesiod::vnode::ViewGradientTalus>(id));
   else if (control_node_type == "HydraulicAlgebric")
     this->add_node(std::make_shared<hesiod::vnode::ViewHydraulicAlgebric>(id));
-  else if (control_node_type == "HydraulicBenes")
-    this->add_node(std::make_shared<hesiod::vnode::ViewHydraulicBenes>(id));
   else if (control_node_type == "HydraulicParticle")
     this->add_node(std::make_shared<hesiod::vnode::ViewHydraulicParticle>(id));
   else if (control_node_type == "HydraulicRidge")

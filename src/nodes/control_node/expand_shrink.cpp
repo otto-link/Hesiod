@@ -13,6 +13,12 @@ ExpandShrink::ExpandShrink(std::string id) : Filter(id)
   LOG_DEBUG("ExpandShrink::ExpandShrink()");
   this->node_type = "ExpandShrink";
   this->category = category_mapping.at(this->node_type);
+
+  this->attr["kernel"] = NEW_ATTR_MAPENUM(this->kernel_map);
+  this->attr["ir"] = NEW_ATTR_INT(4, 1, 128);
+  this->attr["shrink"] = NEW_ATTR_BOOL(false);
+
+  this->attr_ordered_key = {"kernel", "ir", "shrink"};
 }
 
 void ExpandShrink::compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask)
@@ -21,9 +27,10 @@ void ExpandShrink::compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask)
 
   // kernel definition
   hmap::Array     kernel_array;
-  hmap::Vec2<int> kernel_shape = {2 * this->ir + 1, 2 * this->ir + 1};
+  hmap::Vec2<int> kernel_shape = {2 * GET_ATTR_INT("ir") + 1,
+                                  2 * GET_ATTR_INT("ir") + 1};
 
-  switch (this->kernel)
+  switch (GET_ATTR_MAPENUM("kernel"))
   {
   case kernel::cone:
     kernel_array = hmap::cone(kernel_shape);
@@ -45,7 +52,7 @@ void ExpandShrink::compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask)
   // core operator
   std::function<void(hmap::Array &, hmap::Array *)> lambda;
 
-  if (this->shrink)
+  if (GET_ATTR_BOOL("shrink"))
     lambda = [&kernel_array](hmap::Array &x, hmap::Array *p_mask)
     { hmap::shrink(x, kernel_array, p_mask); };
   else

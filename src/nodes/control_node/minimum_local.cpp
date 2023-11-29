@@ -13,6 +13,7 @@ MinimumLocal::MinimumLocal(std::string id) : Unary(id)
   LOG_DEBUG("MinimumLocal::MinimumLocal()");
   this->node_type = "MinimumLocal";
   this->category = category_mapping.at(this->node_type);
+  this->attr["ir"] = NEW_ATTR_INT(8, 1, 128);
 }
 
 void MinimumLocal::compute_in_out(hmap::HeightMap &h_out,
@@ -24,7 +25,7 @@ void MinimumLocal::compute_in_out(hmap::HeightMap &h_out,
   hmap::transform(h_out,
                   *p_h_in,
                   [this](hmap::Array &x, hmap::Array &y)
-                  { x = hmap::minimum_local(y, this->ir); });
+                  { x = hmap::minimum_local(y, GET_ATTR_INT("ir")); });
   h_out.smooth_overlap_buffers();
 }
 
