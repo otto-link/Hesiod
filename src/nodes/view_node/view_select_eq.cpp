@@ -11,21 +11,15 @@
 namespace hesiod::vnode
 {
 
-ViewSelectEq::ViewSelectEq(std::string id)
-    : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::SelectEq(id)
-{
-  this->set_preview_port_id("output");
-  this->set_view3d_elevation_port_id("input");
-  this->set_view3d_color_port_id("output");
-}
-
 bool ViewSelectEq::render_settings()
 {
   bool has_changed = false;
 
   has_changed |= this->render_settings_header();
 
-  ImGui::DragFloat("value", &this->value, 0.001f, -FLT_MAX, +FLT_MAX);
+  float value = GET_ATTR_FLOAT("value");
+
+  ImGui::DragFloat("value", &value, 0.001f, -FLT_MAX, +FLT_MAX);
   has_changed |= this->trigger_update_after_edit();
 
   // unique values
@@ -56,7 +50,7 @@ bool ViewSelectEq::render_settings()
                   is_selected))
           {
             this->selected_idx = k;
-            this->value = this->input_unique_values[k];
+            value = this->input_unique_values[k];
             has_changed = true;
             this->force_update();
           }
@@ -71,8 +65,7 @@ bool ViewSelectEq::render_settings()
     }
   }
 
-  ImGui::Separator();
-  has_changed |= render_settings_mask(this->get_ref<hesiod::cnode::Mask>());
+  GET_ATTR_REF_FLOAT("value")->set(value);
 
   has_changed |= this->render_settings_footer();
 

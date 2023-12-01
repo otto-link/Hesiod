@@ -78,8 +78,16 @@ template <class Archive> void ViewTree::load(Archive &archive)
 
   // nodes parameters
   for (auto &[id, node] : this->get_nodes_map())
-    this->get_node_ref_by_id<hesiod::cnode::ControlNode>(id)->serialize(
-        archive);
+  {
+    // this could be done with a virtual method but it is much more
+    // compact to do it this way (since there is only one exception so
+    // far)
+    if (this->get_node_type(id) != "Clone")
+      this->get_node_ref_by_id<hesiod::cnode::ControlNode>(id)->serialize(
+          archive);
+    else
+      this->get_node_ref_by_id<hesiod::cnode::Clone>(id)->serialize(archive);
+  }
 
   // links
   archive(cereal::make_nvp("links", this->links));
@@ -131,8 +139,13 @@ template <class Archive> void ViewTree::save(Archive &archive) const
 
   // nodes parameters
   for (auto &[id, node] : this->get_nodes_map())
-    this->get_node_ref_by_id<hesiod::cnode::ControlNode>(id)->serialize(
-        archive);
+  {
+    if (this->get_node_type(id) != "Clone")
+      this->get_node_ref_by_id<hesiod::cnode::ControlNode>(id)->serialize(
+          archive);
+    else
+      this->get_node_ref_by_id<hesiod::cnode::Clone>(id)->serialize(archive);
+  }
 
   // links
   archive(cereal::make_nvp("links", this->links));

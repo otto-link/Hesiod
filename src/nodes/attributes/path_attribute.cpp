@@ -11,30 +11,28 @@
 namespace hesiod
 {
 
-FloatAttribute::FloatAttribute(float value, float vmin, float vmax)
-    : value(value), vmin(vmin), vmax(vmax)
-{
-}
-
-float FloatAttribute::get()
+hmap::Path PathAttribute::get()
 {
   return value;
 }
 
-void FloatAttribute::set(float new_value)
-{
-  this->value = new_value;
-}
-
-bool FloatAttribute::render_settings(std::string label)
+bool PathAttribute::render_settings(std::string label)
 {
   bool has_changed = false;
-  ImGui::SliderFloat(label.c_str(),
-                     &this->value,
-                     this->vmin,
-                     this->vmax,
-                     "%.2f");
+  ImGui::TextUnformatted(label.c_str());
+
+  ImGui::Checkbox("closed", &this->value.closed);
   has_changed |= ImGui::IsItemDeactivatedAfterEdit();
+
+  ImGui::SameLine();
+
+  if (ImGui::Button("reverse"))
+  {
+    this->value.reverse();
+    has_changed = true;
+  }
+
+  has_changed |= hesiod::gui::canvas_path_editor(this->value);
   return has_changed;
 }
 

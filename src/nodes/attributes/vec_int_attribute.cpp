@@ -11,20 +11,27 @@
 namespace hesiod
 {
 
-MatrixAttribute::MatrixAttribute()
+VecIntAttribute::VecIntAttribute()
 {
 }
 
-std::vector<std::vector<float>> MatrixAttribute::get()
+VecIntAttribute::VecIntAttribute(std::vector<int> value) : value(value)
+{
+}
+
+std::vector<int> VecIntAttribute::get()
 {
   return value;
 }
 
-bool MatrixAttribute::render_settings(std::string label)
+bool VecIntAttribute::render_settings(std::string label)
 {
   bool has_changed = false;
   ImGui::TextUnformatted(label.c_str());
-  has_changed |= hesiod::gui::drag_float_matrix(this->value);
+  ImGui::Indent();
+  // has_changed |=
+  //     hesiod::gui::drag_int_vector(this->value, true, true, 0.f, 1.f);
+  ImGui::Unindent();
   return has_changed;
 }
 

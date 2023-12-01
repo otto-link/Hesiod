@@ -11,20 +11,16 @@
 namespace hesiod
 {
 
-MatrixAttribute::MatrixAttribute()
-{
-}
-
-std::vector<std::vector<float>> MatrixAttribute::get()
+hmap::Cloud CloudAttribute::get()
 {
   return value;
 }
 
-bool MatrixAttribute::render_settings(std::string label)
+bool CloudAttribute::render_settings(std::string label)
 {
   bool has_changed = false;
   ImGui::TextUnformatted(label.c_str());
-  has_changed |= hesiod::gui::drag_float_matrix(this->value);
+  has_changed |= hesiod::gui::canvas_cloud_editor(this->value);
   return has_changed;
 }
 

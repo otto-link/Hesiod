@@ -93,7 +93,7 @@ ImU32 ViewTree::get_node_color(std::string node_id)
   return ImColor(category_colors.at(main_category).hovered);
 }
 
-std::string ViewTree::get_node_type(std::string node_id)
+std::string ViewTree::get_node_type(std::string node_id) const
 {
   return this->get_node_ref_by_id(node_id)->get_node_type();
 }

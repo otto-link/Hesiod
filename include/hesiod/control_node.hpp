@@ -218,7 +218,6 @@ public:
 // Generic nodes
 //----------------------------------------
 
-// OK
 class Unary : virtual public ControlNode // most basic, 1 in / 1 out
 {
 public:
@@ -238,7 +237,6 @@ protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
 
-// OK
 class Binary : virtual public ControlNode // basic, 2 in / 1 out
 {
 public:
@@ -260,7 +258,6 @@ protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
 
-// OK
 class Debug : virtual public ControlNode
 {
 public:
@@ -269,7 +266,6 @@ public:
   void compute();
 };
 
-// OK
 class Erosion : virtual public ControlNode
 {
 public:
@@ -296,7 +292,6 @@ protected:
   hmap::HeightMap deposition_map = hmap::HeightMap();
 };
 
-// OK
 class Filter : virtual public ControlNode
 {
 public:
@@ -316,7 +311,6 @@ protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
 
-// OK
 class Mask : virtual public ControlNode
 {
 public:
@@ -336,7 +330,6 @@ protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
 
-// OK
 class Primitive : virtual public ControlNode
 {
 public:
@@ -373,6 +366,33 @@ public:
 
   void compute();
 
+#ifdef USE_CEREAL
+  template <class Archive> void serialize(Archive &ar)
+  {
+    ControlNode::serialize(ar);
+
+    ar(cereal::make_nvp("id", this->id), cereal::make_nvp("attr", this->attr));
+
+    std::vector<std::string> output_ids = {};
+
+    this->update_inner_bindings();
+
+    for (auto &[port_id, port] : this->get_ports())
+      if (port.direction == gnode::direction::out)
+        output_ids.push_back(port_id.c_str());
+
+    ar(cereal::make_nvp("output_ids", output_ids));
+    ar(cereal::make_nvp("id_count", id_count));
+
+    for (auto &port_id : output_ids)
+      if (!this->is_port_id_in_keys(port_id))
+        this->add_port(gnode::Port(port_id,
+                                   gnode::direction::out,
+                                   hesiod::cnode::dtype::dHeightMap));
+    this->update_inner_bindings();
+  }
+#endif
+
 protected:
   int             id_count = 0;
   int             n_outputs = 1;
@@ -383,7 +403,6 @@ protected:
 // End-user nodes
 //----------------------------------------
 
-// OK
 class AlterElevation : virtual public ControlNode
 {
 public:
@@ -397,7 +416,6 @@ protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
 
-// OK
 class BaseElevation : public Primitive
 {
 public:
@@ -409,7 +427,6 @@ public:
   void compute();
 };
 
-// OK
 class BezierPath : virtual public ControlNode
 {
 public:
@@ -423,7 +440,6 @@ protected:
   hmap::Path value_out = hmap::Path();
 };
 
-// OK
 class BiquadPulse : public Primitive
 {
 public:
@@ -435,7 +451,6 @@ public:
   void compute();
 };
 
-// OK
 class Blend : public Binary
 {
 public:
@@ -462,7 +477,6 @@ private:
       {"substract", blending_method::substract}};
 };
 
-// OK
 class Bump : public Primitive
 {
 public:
@@ -500,7 +514,6 @@ private:
   float           overlap;
 };
 
-// OK
 class Caldera : public Primitive
 {
 public:
@@ -512,7 +525,6 @@ public:
   void compute();
 };
 
-// OK
 class Checkerboard : public Primitive
 {
 public:
@@ -524,7 +536,6 @@ public:
   void compute();
 };
 
-// OK
 class Clamp : public Unary
 {
 public:
@@ -533,7 +544,6 @@ public:
   void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
 };
 
-// TO DO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 class Cloud : virtual public ControlNode
 {
 public:
@@ -547,7 +557,6 @@ protected:
   hmap::Cloud value_out = hmap::Cloud();
 };
 
-// OK
 class CloudToArrayInterp : public Primitive
 {
 public:
@@ -559,7 +568,6 @@ public:
   void compute();
 };
 
-// OK
 class Colorize : virtual public ControlNode
 {
 public:
@@ -573,7 +581,6 @@ protected:
   hmap::HeightMapRGB value_out = hmap::HeightMapRGB();
 };
 
-// OK
 class CombineMask : virtual public ControlNode
 {
 public:
@@ -590,7 +597,6 @@ protected:
                                            {"exclusion", 2}};
 };
 
-// OK
 class ConvolveSVD : virtual public ControlNode
 {
 public:
@@ -604,7 +610,6 @@ protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
 
-// OK
 class DepressionFilling : public Unary
 {
 public:
@@ -613,7 +618,6 @@ public:
   void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
 };
 
-// OK
 class DigPath : virtual public ControlNode
 {
 public:
@@ -627,7 +631,6 @@ protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
 
-// OK
 class DistanceTransform : virtual public ControlNode
 {
 public:
@@ -641,7 +644,6 @@ protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
 
-// OK
 class Equalize : public Filter
 {
 public:
@@ -650,7 +652,6 @@ public:
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
 };
 
-// OK
 class ErosionMaps : virtual public ControlNode
 {
 public:
@@ -665,7 +666,6 @@ protected:
   hmap::HeightMap deposition_map = hmap::HeightMap();
 };
 
-// OK
 class ExpandShrink : public Filter
 {
 public:
@@ -681,7 +681,6 @@ protected:
       {"smooth_cosine", kernel::smooth_cosine}};
 };
 
-// OK
 class ExpandShrinkDirectional : public Filter
 {
 public:
@@ -700,9 +699,11 @@ public:
   void write_file();
 
 protected:
-  bool        auto_export = false;
-  int         export_format = export_type::png8bit;
-  std::string fname = "export.png";
+  std::map<std::string, int> format_map = {
+      // {"binary", hesiod::cnode::export_type::binary},
+      {"png (8 bit)", hesiod::cnode::export_type::png8bit},
+      {"png (16 bit)", hesiod::cnode::export_type::png16bit},
+      {"raw (16 bit, Unity)", hesiod::cnode::export_type::raw16bit}};
 };
 
 class ExportRGB : virtual public ControlNode
@@ -713,13 +714,8 @@ public:
   void compute();
 
   void write_file();
-
-protected:
-  bool        auto_export = false;
-  std::string fname = "export_rgb.png";
 };
 
-// OK
 class FbmPerlin : public Primitive
 {
 public:
@@ -731,7 +727,6 @@ public:
   void compute();
 };
 
-// OK
 class FbmSimplex : public Primitive
 {
 public:
@@ -743,7 +738,6 @@ public:
   void compute();
 };
 
-// OK
 class FbmWorley : public Primitive
 {
 public:
@@ -755,7 +749,6 @@ public:
   void compute();
 };
 
-// OK
 class FractalizePath : virtual public ControlNode
 {
 public:
@@ -769,7 +762,6 @@ protected:
   hmap::Path value_out = hmap::Path();
 };
 
-// OK
 class GaborNoise : public Primitive
 {
 public:
@@ -783,7 +775,6 @@ public:
   void compute();
 };
 
-// OK
 class Gain : public Filter
 {
 public:
@@ -795,7 +786,6 @@ protected:
   float gain = 1.f;
 };
 
-// OK
 class GammaCorrection : public Filter
 {
 public:
@@ -804,7 +794,6 @@ public:
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
 };
 
-// OK
 class GammaCorrectionLocal : public Filter
 {
 public:
@@ -813,7 +802,6 @@ public:
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
 };
 
-// OK
 class GaussianPulse : public Primitive
 {
 public:
@@ -825,7 +813,6 @@ public:
   void compute();
 };
 
-// OK
 class Gradient : virtual public ControlNode
 {
 public:
@@ -840,7 +827,6 @@ protected:
   hmap::HeightMap value_out_dy = hmap::HeightMap();
 };
 
-// OK
 class GradientAngle : public Unary
 {
 public:
@@ -849,7 +835,6 @@ public:
   void compute_in_out(hmap::HeightMap &h, hmap::HeightMap *p_talus);
 };
 
-// OK
 class GradientNorm : public Unary
 {
 public:
@@ -858,7 +843,6 @@ public:
   void compute_in_out(hmap::HeightMap &h, hmap::HeightMap *p_talus);
 };
 
-// OK
 class GradientTalus : public Unary
 {
 public:
@@ -867,7 +851,6 @@ public:
   void compute_in_out(hmap::HeightMap &h, hmap::HeightMap *p_talus);
 };
 
-// OK
 class HydraulicAlgebric : public Erosion
 {
 public:
@@ -881,7 +864,6 @@ public:
                        hmap::HeightMap *p_deposition_map);
 };
 
-// OK
 class HydraulicParticle : public Erosion
 {
 public:
@@ -895,7 +877,6 @@ public:
                        hmap::HeightMap *p_deposition_map);
 };
 
-// OK
 class HydraulicRidge : public Filter
 {
 public:
@@ -904,7 +885,6 @@ public:
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
 };
 
-// OK
 class HydraulicStream : public Erosion
 {
 public:
@@ -918,7 +898,6 @@ public:
                        hmap::HeightMap *p_deposition_map);
 };
 
-// OK
 class HydraulicStreamLog : public Erosion
 {
 public:
@@ -932,7 +911,6 @@ public:
                        hmap::HeightMap *p_deposition_map);
 };
 
-// OK
 class HydraulicVpipes : public Erosion
 {
 public:
@@ -960,9 +938,6 @@ public:
 
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
-  float           vmin = 0.f;
-  float           vmax = 1.f;
-  std::string     fname = "";
 
 private:
   hmap::Vec2<int> shape;
@@ -970,7 +945,6 @@ private:
   float           overlap;
 };
 
-// OK
 class Kernel : virtual public ControlNode
 {
 public:
@@ -990,7 +964,6 @@ protected:
       {"smooth_cosine", kernel::smooth_cosine}};
 };
 
-// OK
 class KmeansClustering2 : public Binary
 {
 public:
@@ -1001,7 +974,6 @@ public:
                       hmap::HeightMap *p_h_in2);
 };
 
-// OK
 class KmeansClustering3 : virtual public ControlNode
 {
 public:
@@ -1015,7 +987,6 @@ protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
 
-// OK
 class Laplace : public Filter
 {
 public:
@@ -1024,7 +995,6 @@ public:
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
 };
 
-// OK
 class LaplaceEdgePreserving : public Filter
 {
 public:
@@ -1033,7 +1003,6 @@ public:
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
 };
 
-// OK
 class Lerp : virtual public ControlNode
 {
 public:
@@ -1047,7 +1016,6 @@ protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
 
-// OK
 class MakeBinary : public Unary
 {
 public:
@@ -1056,7 +1024,6 @@ public:
   void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
 };
 
-// OK
 class MeanderizePath : virtual public ControlNode
 {
 public:
@@ -1070,7 +1037,6 @@ protected:
   hmap::Path value_out = hmap::Path();
 };
 
-// OK
 class MeanLocal : public Filter
 {
 public:
@@ -1079,7 +1045,6 @@ public:
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
 };
 
-// OK
 class Median3x3 : public Filter
 {
 public:
@@ -1088,7 +1053,6 @@ public:
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
 };
 
-// OK
 class MinimumLocal : public Unary
 {
 public:
@@ -1097,7 +1061,6 @@ public:
   void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
 };
 
-// OK
 class MixRGB : virtual public ControlNode
 {
 public:
@@ -1111,7 +1074,6 @@ protected:
   hmap::HeightMapRGB value_out = hmap::HeightMapRGB();
 };
 
-// OK
 class NormalDisplacement : public Filter
 {
 public:
@@ -1120,7 +1082,6 @@ public:
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
 };
 
-// OK
 class OneMinus : public Unary
 {
 public:
@@ -1140,10 +1101,8 @@ public:
 
 protected:
   hmap::Path value_out = hmap::Path();
-  bool       closed = false;
 };
 
-// OK
 class PathFinding : virtual public ControlNode
 {
 public:
@@ -1157,7 +1116,6 @@ protected:
   hmap::Path value_out = hmap::Path();
 };
 
-// OK
 class PathToHeightmap : virtual public ControlNode
 {
 public:
@@ -1179,7 +1137,6 @@ private:
   float           overlap;
 };
 
-// OK
 class Perlin : public Primitive
 {
 public:
@@ -1191,7 +1148,6 @@ public:
   void compute();
 };
 
-// OK
 class PerlinBillow : public Primitive
 {
 public:
@@ -1203,7 +1159,6 @@ public:
   void compute();
 };
 
-// OK
 class Plateau : public Filter
 {
 public:
@@ -1212,7 +1167,6 @@ public:
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
 };
 
-// OK
 class Preview : virtual public ControlNode
 {
 public:
@@ -1223,7 +1177,6 @@ public:
   void update_inner_bindings();
 };
 
-// OK
 class PreviewColorize : virtual public ControlNode
 {
 public:
@@ -1234,7 +1187,6 @@ public:
   void update_inner_bindings();
 };
 
-// OK
 class RecastCanyon : virtual public ControlNode
 {
 public:
@@ -1248,7 +1200,6 @@ protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
 
-// OK
 class Recurve : public Filter
 {
 public:
@@ -1257,7 +1208,6 @@ public:
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
 };
 
-// OK
 class RecurveKura : public Filter
 {
 public:
@@ -1266,7 +1216,6 @@ public:
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
 };
 
-// OK
 class RecurveS : public Filter
 {
 public:
@@ -1275,7 +1224,6 @@ public:
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
 };
 
-// OK
 class RelativeElevation : public Unary
 {
 public:
@@ -1285,7 +1233,6 @@ public:
   int  ir = 64;
 };
 
-// OK
 class Remap : public Unary
 {
 public:
@@ -1294,7 +1241,6 @@ public:
   void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
 };
 
-// OK
 class RidgedPerlin : public Primitive
 {
 public:
@@ -1306,7 +1252,6 @@ public:
   void compute();
 };
 
-// OK
 class Rugosity : public Mask
 {
 public:
@@ -1315,7 +1260,6 @@ public:
   void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
 };
 
-// OK
 class SedimentDeposition : virtual public ControlNode
 {
 public:
@@ -1330,7 +1274,6 @@ protected:
   hmap::HeightMap deposition_map = hmap::HeightMap();
 };
 
-// OK
 class SelectCavities : public Mask
 {
 public:
@@ -1339,19 +1282,14 @@ public:
   void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
 };
 
-// TO DO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 class SelectEq : public Mask
 {
 public:
   SelectEq(std::string id);
 
   void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
-
-protected:
-  float value = 0.f;
 };
 
-// OK
 class SelectGradientNorm : public Mask
 {
 public:
@@ -1360,7 +1298,6 @@ public:
   void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
 };
 
-// OK
 class SelectInterval : public Mask
 {
 public:
@@ -1369,7 +1306,6 @@ public:
   void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
 };
 
-// OK
 class SelectRivers : public Mask
 {
 public:
@@ -1378,7 +1314,6 @@ public:
   void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
 };
 
-// OK
 class SelectTransitions : virtual public ControlNode
 {
 public:
@@ -1392,7 +1327,6 @@ protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
 
-// OK
 class Simplex : public Primitive
 {
 public:
@@ -1404,7 +1338,6 @@ public:
   void compute();
 };
 
-// OK
 class Slope : public Primitive
 {
 public:
@@ -1418,7 +1351,6 @@ public:
   void update_inner_bindings();
 };
 
-// OK
 class SmoothCpulse : public Filter
 {
 public:
@@ -1427,7 +1359,6 @@ public:
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
 };
 
-// OK
 class SmoothFill : virtual public ControlNode
 {
 public:
@@ -1442,7 +1373,6 @@ protected:
   hmap::HeightMap deposition_map = hmap::HeightMap();
 };
 
-// OK
 class SmoothFillHoles : public Filter
 {
 public:
@@ -1451,7 +1381,6 @@ public:
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
 };
 
-// OK
 class SmoothFillSmearPeaks : public Filter
 {
 public:
@@ -1460,7 +1389,6 @@ public:
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
 };
 
-// OK
 class SteepenConvective : public Filter
 {
 public:
@@ -1469,7 +1397,6 @@ public:
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
 };
 
-// OK
 class Step : public Primitive
 {
 public:
@@ -1491,15 +1418,9 @@ public:
   void update_inner_bindings();
 
 protected:
-  hmap::HeightMap    value_out = hmap::HeightMap(); // eroded heightmap
-  std::vector<int>   n_strata = {2, 3, 4};
-  std::vector<float> strata_noise = {0.f, 0.f, 0.f};
-  std::vector<float> gamma_list = {1.5f, 0.5f, 1.f};
-  std::vector<float> gamma_noise = {0.f, 0.f, 0.f};
-  int                seed = DEFAULT_SEED;
+  hmap::HeightMap value_out = hmap::HeightMap(); // eroded heightmap
 };
 
-// OK
 class StratifyOblique : virtual public ControlNode
 {
 public:
@@ -1513,7 +1434,6 @@ protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
 
-// OK
 class Thermal : virtual public ControlNode
 {
 public:
@@ -1528,7 +1448,6 @@ protected:
   hmap::HeightMap deposition_map = hmap::HeightMap();
 };
 
-// OK
 class ThermalAutoBedrock : virtual public ControlNode
 {
 public:
@@ -1543,7 +1462,6 @@ protected:
   hmap::HeightMap deposition_map = hmap::HeightMap();
 };
 
-// OK
 class ThermalScree : virtual public ControlNode
 {
 public:
@@ -1558,7 +1476,6 @@ protected:
   hmap::HeightMap deposition_map = hmap::HeightMap();
 };
 
-// OK
 class ToMask : public Mask
 {
 public:
@@ -1567,7 +1484,6 @@ public:
   void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
 };
 
-// OK
 class ValleyWidth : public Mask
 {
 public:
@@ -1576,7 +1492,6 @@ public:
   void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
 };
 
-// OK
 class ValueNoiseDelaunay : public Primitive
 {
 public:
@@ -1588,7 +1503,6 @@ public:
   void compute();
 };
 
-// OK
 class ValueNoiseLinear : public Primitive
 {
 public:
@@ -1600,7 +1514,6 @@ public:
   void compute();
 };
 
-// OK
 class ValueNoiseThinplate : public Primitive
 {
 public:
@@ -1612,7 +1525,6 @@ public:
   void compute();
 };
 
-// OK
 class Warp : virtual public ControlNode
 {
 public:
@@ -1626,7 +1538,6 @@ protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
 
-// OK
 class WarpDownslope : public Filter
 {
 public:
@@ -1635,7 +1546,6 @@ public:
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
 };
 
-// OK
 class WaveDune : public Primitive
 {
 public:
@@ -1647,7 +1557,6 @@ public:
   void compute();
 };
 
-// OK
 class WaveSine : public Primitive
 {
 public:
@@ -1659,7 +1568,6 @@ public:
   void compute();
 };
 
-// OK
 class White : virtual public ControlNode
 {
 public:
@@ -1684,7 +1592,6 @@ private:
   float           overlap;
 };
 
-// OK
 class WhiteDensityMap : virtual public ControlNode
 {
 public:
@@ -1698,7 +1605,6 @@ protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
 
-// OK
 class WhiteSparse : virtual public ControlNode
 {
 public:
@@ -1720,7 +1626,6 @@ private:
   float           overlap;
 };
 
-// OK
 class Worley : public Primitive
 {
 public:
@@ -1732,7 +1637,6 @@ public:
   void compute();
 };
 
-// OK
 class WorleyDouble : public Primitive
 {
 public:
@@ -1744,7 +1648,6 @@ public:
   void compute();
 };
 
-// OK
 class WorleyValue : public Primitive
 {
 public:
@@ -1756,7 +1659,6 @@ public:
   void compute();
 };
 
-// OK
 class ZeroedEdges : virtual public ControlNode
 {
 public:

@@ -12,11 +12,6 @@
 namespace hesiod::vnode
 {
 
-ViewClone::ViewClone(std::string id)
-    : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Clone(id)
-{
-}
-
 bool ViewClone::render_settings()
 {
   bool has_changed = false;

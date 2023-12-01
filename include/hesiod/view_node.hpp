@@ -310,7 +310,6 @@ private:
  * @brief ViewAlterElevation class.
  */
 
-// OK
 class ViewAlterElevation : public ViewNode, public hesiod::cnode::AlterElevation
 {
 public:
@@ -321,7 +320,6 @@ public:
   }
 };
 
-// OK
 class ViewBaseElevation : public ViewNode, public hesiod::cnode::BaseElevation
 {
 public:
@@ -337,7 +335,6 @@ public:
   }
 };
 
-// OK
 class ViewBezierPath : public ViewNode, public hesiod::cnode::BezierPath
 {
 public:
@@ -350,7 +347,6 @@ public:
   void render_node_specific_content();
 };
 
-// OK
 class ViewBiquadPulse : public ViewNode, public hesiod::cnode::BiquadPulse
 {
 public:
@@ -366,7 +362,6 @@ public:
   }
 };
 
-// OK
 class ViewBlend : public ViewNode, public hesiod::cnode::Blend
 {
 public:
@@ -390,7 +385,6 @@ public:
   bool render_settings();
 };
 
-// OK
 class ViewBump : public ViewNode, public hesiod::cnode::Bump
 {
 public:
@@ -406,7 +400,6 @@ public:
   }
 };
 
-// OK
 class ViewCaldera : public ViewNode, public hesiod::cnode::Caldera
 {
 public:
@@ -422,7 +415,6 @@ public:
   }
 };
 
-// OK
 class ViewCheckerboard : public ViewNode, public hesiod::cnode::Checkerboard
 {
 public:
@@ -438,7 +430,6 @@ public:
   }
 };
 
-// OK
 class ViewClamp : public ViewNode, public hesiod::cnode::Clamp
 {
 public:
@@ -450,29 +441,28 @@ public:
   }
 };
 
-// TO DO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 class ViewClone : public ViewNode, public hesiod::cnode::Clone
 {
 public:
-  ViewClone(std::string id);
+  ViewClone(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Clone(id)
+  {
+  }
 
   bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &);
-  void serialize_load(cereal::JSONInputArchive &);
 };
 
 class ViewCloud : public ViewNode, public hesiod::cnode::Cloud
 {
 public:
-  ViewCloud(std::string id);
+  ViewCloud(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Cloud(id)
+  {
+  }
 
   void render_node_specific_content();
-
-  bool render_settings();
 };
 
-// OK
 class ViewCloudToArrayInterp : public ViewNode,
                                public hesiod::cnode::CloudToArrayInterp
 {
@@ -489,7 +479,6 @@ public:
   }
 };
 
-// OK
 class ViewColorize : public ViewNode, public hesiod::cnode::Colorize
 {
 public:
@@ -505,7 +494,6 @@ public:
   bool render_settings();
 };
 
-// OK
 class ViewCombineMask : public ViewNode, public hesiod::cnode::CombineMask
 {
 public:
@@ -518,7 +506,6 @@ public:
   }
 };
 
-// OK
 class ViewConvolveSVD : public ViewNode, public hesiod::cnode::ConvolveSVD
 {
 public:
@@ -531,7 +518,6 @@ public:
   }
 };
 
-// OK
 class ViewDebug : public ViewNode, public hesiod::cnode::Debug
 {
 public:
@@ -549,7 +535,6 @@ public:
   void render_node_specific_content();
 };
 
-// OK
 class ViewDepressionFilling : public ViewNode,
                               public hesiod::cnode::DepressionFilling
 {
@@ -563,7 +548,6 @@ public:
   }
 };
 
-// OK
 class ViewDigPath : public ViewNode, public hesiod::cnode::DigPath
 {
 public:
@@ -575,7 +559,6 @@ public:
   }
 };
 
-// OK
 class ViewDistanceTransform : public ViewNode,
                               public hesiod::cnode::DistanceTransform
 {
@@ -592,7 +575,6 @@ public:
   }
 };
 
-// OK
 class ViewEqualize : public ViewNode, public hesiod::cnode::Equalize
 {
 public:
@@ -605,7 +587,6 @@ public:
   }
 };
 
-// OK
 class ViewErosionMaps : public ViewNode, public hesiod::cnode::ErosionMaps
 {
 public:
@@ -616,7 +597,6 @@ public:
   }
 };
 
-// OK
 class ViewExpandShrink : public ViewNode, public hesiod::cnode::ExpandShrink
 {
 public:
@@ -629,7 +609,6 @@ public:
   }
 };
 
-// OK
 class ViewExpandShrinkDirectional
     : public ViewNode,
       public hesiod::cnode::ExpandShrinkDirectional
@@ -647,31 +626,29 @@ public:
 class ViewExport : public ViewNode, public hesiod::cnode::Export
 {
 public:
-  ViewExport(std::string id);
-
-  bool render_settings();
+  ViewExport(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Export(id)
+  {
+    this->set_preview_port_id("input");
+    this->set_view3d_elevation_port_id("input");
+  }
 
   void render_node_specific_content();
-
-protected:
-  std::map<std::string, int> format_map = {
-      {"binary", hesiod::cnode::export_type::binary},
-      {"png (8 bit)", hesiod::cnode::export_type::png8bit},
-      {"png (16 bit)", hesiod::cnode::export_type::png16bit},
-      {"raw (16 bit, Unity)", hesiod::cnode::export_type::raw16bit}};
 };
 
 class ViewExportRGB : public ViewNode, public hesiod::cnode::ExportRGB
 {
 public:
-  ViewExportRGB(std::string id);
-
-  bool render_settings();
+  ViewExportRGB(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::ExportRGB(id)
+  {
+    this->set_preview_port_id("RGB");
+  }
 
   void render_node_specific_content();
 };
 
-// OK
 class ViewFbmPerlin : public ViewNode, public hesiod::cnode::FbmPerlin
 {
 public:
@@ -687,7 +664,6 @@ public:
   }
 };
 
-// OK
 class ViewFbmSimplex : public ViewNode, public hesiod::cnode::FbmSimplex
 {
 public:
@@ -703,7 +679,6 @@ public:
   }
 };
 
-// OK
 class ViewFbmWorley : public ViewNode, public hesiod::cnode::FbmWorley
 {
 public:
@@ -719,7 +694,6 @@ public:
   }
 };
 
-// OK
 class ViewFractalizePath : public ViewNode, public hesiod::cnode::FractalizePath
 {
 public:
@@ -732,7 +706,6 @@ public:
   void render_node_specific_content();
 };
 
-// OK
 class ViewGaborNoise : public ViewNode, public hesiod::cnode::GaborNoise
 {
 public:
@@ -748,7 +721,6 @@ public:
   }
 };
 
-// OK
 class ViewGain : public ViewNode, public hesiod::cnode::Gain
 {
 public:
@@ -760,7 +732,6 @@ public:
   }
 };
 
-// OK
 class ViewGammaCorrection : public ViewNode,
                             public hesiod::cnode::GammaCorrection
 {
@@ -774,7 +745,6 @@ public:
   }
 };
 
-// OK
 class ViewGammaCorrectionLocal : public ViewNode,
                                  public hesiod::cnode::GammaCorrectionLocal
 {
@@ -788,7 +758,6 @@ public:
   }
 };
 
-// OK
 class ViewGradient : public ViewNode, public hesiod::cnode::Gradient
 {
 public:
@@ -799,7 +768,6 @@ public:
   }
 };
 
-// OK
 class ViewGradientAngle : public ViewNode, public hesiod::cnode::GradientAngle
 {
 public:
@@ -812,7 +780,6 @@ public:
   }
 };
 
-// OK
 class ViewGradientNorm : public ViewNode, public hesiod::cnode::GradientNorm
 {
 public:
@@ -825,7 +792,6 @@ public:
   }
 };
 
-// OK
 class ViewGradientTalus : public ViewNode, public hesiod::cnode::GradientTalus
 {
 public:
@@ -838,7 +804,6 @@ public:
   }
 };
 
-// OK
 class ViewGaussianPulse : public ViewNode, public hesiod::cnode::GaussianPulse
 {
 public:
@@ -854,7 +819,6 @@ public:
   }
 };
 
-// OK
 class ViewHydraulicAlgebric : public ViewNode,
                               public hesiod::cnode::HydraulicAlgebric
 {
@@ -868,7 +832,6 @@ public:
   }
 };
 
-// OK
 class ViewHydraulicParticle : public ViewNode,
                               public hesiod::cnode::HydraulicParticle
 {
@@ -882,7 +845,6 @@ public:
   }
 };
 
-// OK
 class ViewHydraulicRidge : public ViewNode, public hesiod::cnode::HydraulicRidge
 {
 public:
@@ -895,7 +857,6 @@ public:
   }
 };
 
-// OK
 class ViewHydraulicStream : public ViewNode,
                             public hesiod::cnode::HydraulicStream
 {
@@ -909,7 +870,6 @@ public:
   }
 };
 
-// OK
 class ViewHydraulicStreamLog : public ViewNode,
                                public hesiod::cnode::HydraulicStreamLog
 {
@@ -923,7 +883,6 @@ public:
   }
 };
 
-// OK
 class ViewHydraulicVpipes : public ViewNode,
                             public hesiod::cnode::HydraulicVpipes
 {
@@ -943,14 +902,17 @@ public:
   ViewImport(std::string     id,
              hmap::Vec2<int> shape,
              hmap::Vec2<int> tiling,
-             float           overlap);
-
-  bool render_settings();
+             float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::Import(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 
   void render_node_specific_content();
 };
 
-// OK
 class ViewKernel : public ViewNode, public hesiod::cnode::Kernel
 {
 public:
@@ -961,7 +923,6 @@ public:
   }
 };
 
-// OK
 class ViewKmeansClustering2 : public ViewNode,
                               public hesiod::cnode::KmeansClustering2
 {
@@ -974,7 +935,6 @@ public:
   }
 };
 
-// OK
 class ViewKmeansClustering3 : public ViewNode,
                               public hesiod::cnode::KmeansClustering3
 {
@@ -987,7 +947,6 @@ public:
   }
 };
 
-// OK
 class ViewLaplace : public ViewNode, public hesiod::cnode::Laplace
 {
 public:
@@ -999,7 +958,6 @@ public:
   }
 };
 
-// OK
 class ViewLaplaceEdgePreserving : public ViewNode,
                                   public hesiod::cnode::LaplaceEdgePreserving
 {
@@ -1013,7 +971,6 @@ public:
   }
 };
 
-// OK
 class ViewLerp : public ViewNode, public hesiod::cnode::Lerp
 {
 public:
@@ -1025,7 +982,6 @@ public:
   }
 };
 
-// OK
 class ViewMakeBinary : public ViewNode, public hesiod::cnode::MakeBinary
 
 {
@@ -1039,7 +995,6 @@ public:
   }
 };
 
-// OK
 class ViewMeanderizePath : public ViewNode, public hesiod::cnode::MeanderizePath
 {
 public:
@@ -1052,7 +1007,6 @@ public:
   void render_node_specific_content();
 };
 
-// OK
 class ViewMeanLocal : public ViewNode, public hesiod::cnode::MeanLocal
 {
 public:
@@ -1065,7 +1019,6 @@ public:
   }
 };
 
-// OK
 class ViewMedian3x3 : public ViewNode, public hesiod::cnode::Median3x3
 {
 public:
@@ -1078,7 +1031,6 @@ public:
   }
 };
 
-// OK
 class ViewMinimumLocal : public ViewNode, public hesiod::cnode::MinimumLocal
 {
 public:
@@ -1091,7 +1043,6 @@ public:
   }
 };
 
-// OK
 class ViewMixRGB : public ViewNode, public hesiod::cnode::MixRGB
 {
 public:
@@ -1102,7 +1053,6 @@ public:
   }
 };
 
-// OK
 class ViewNormalDisplacement : public ViewNode,
                                public hesiod::cnode::NormalDisplacement
 {
@@ -1116,7 +1066,6 @@ public:
   }
 };
 
-// OK
 class ViewOneMinus : public ViewNode, public hesiod::cnode::OneMinus
 {
 public:
@@ -1132,14 +1081,14 @@ public:
 class ViewPath : public ViewNode, public hesiod::cnode::Path
 {
 public:
-  ViewPath(std::string id);
+  ViewPath(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Path(id)
+  {
+  }
 
   void render_node_specific_content();
-
-  bool render_settings();
 };
 
-// OK
 class ViewPathFinding : public ViewNode, public hesiod::cnode::PathFinding
 {
 public:
@@ -1163,7 +1112,6 @@ public:
   void render_node_specific_content();
 };
 
-// OK
 class ViewPathToHeightmap : public ViewNode,
                             public hesiod::cnode::PathToHeightmap
 {
@@ -1181,7 +1129,6 @@ public:
   }
 };
 
-// OK
 class ViewPerlin : public ViewNode, public hesiod::cnode::Perlin
 {
 public:
@@ -1198,7 +1145,6 @@ public:
   }
 };
 
-// OK
 class ViewPerlinBillow : public ViewNode, public hesiod::cnode::PerlinBillow
 {
 public:
@@ -1214,7 +1160,6 @@ public:
   }
 };
 
-// OK
 class ViewPlateau : public ViewNode, public hesiod::cnode::Plateau
 {
 public:
@@ -1226,7 +1171,6 @@ public:
   }
 };
 
-// OK
 class ViewPreview : public ViewNode, public hesiod::cnode::Preview
 {
 public:
@@ -1239,7 +1183,6 @@ public:
   }
 };
 
-// OK
 class ViewPreviewColorize : public ViewNode,
                             public hesiod::cnode::PreviewColorize
 {
@@ -1254,7 +1197,6 @@ public:
   }
 };
 
-// OK
 class ViewRecastCanyon : public ViewNode, public hesiod::cnode::RecastCanyon
 {
 public:
@@ -1267,7 +1209,6 @@ public:
   }
 };
 
-// OK
 class ViewRecurve : public ViewNode, public hesiod::cnode::Recurve
 {
 public:
@@ -1279,7 +1220,6 @@ public:
   }
 };
 
-// OK
 class ViewRecurveKura : public ViewNode, public hesiod::cnode::RecurveKura
 {
 public:
@@ -1292,7 +1232,6 @@ public:
   }
 };
 
-// OK
 class ViewRecurveS : public ViewNode, public hesiod::cnode::RecurveS
 {
 public:
@@ -1305,7 +1244,6 @@ public:
   }
 };
 
-// OK
 class ViewRelativeElevation : public ViewNode,
                               public hesiod::cnode::RelativeElevation
 {
@@ -1319,7 +1257,6 @@ public:
   }
 };
 
-// OK
 class ViewRemap : public ViewNode, public hesiod::cnode::Remap
 {
 public:
@@ -1331,7 +1268,6 @@ public:
   }
 };
 
-// OK
 class ViewRidgedPerlin : public ViewNode, public hesiod::cnode::RidgedPerlin
 {
 public:
@@ -1347,7 +1283,6 @@ public:
   }
 };
 
-// OK
 class ViewRugosity : public ViewNode, public hesiod::cnode::Rugosity
 {
 public:
@@ -1363,7 +1298,6 @@ public:
   }
 };
 
-// OK
 class ViewSedimentDeposition : public ViewNode,
                                public hesiod::cnode::SedimentDeposition
 {
@@ -1377,7 +1311,6 @@ public:
   }
 };
 
-// OK
 class ViewSelectCavities : public ViewNode, public hesiod::cnode::SelectCavities
 {
 public:
@@ -1391,11 +1324,17 @@ public:
   }
 };
 
-// TO DO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 class ViewSelectEq : public ViewNode, public hesiod::cnode::SelectEq
 {
 public:
-  ViewSelectEq(std::string id);
+  ViewSelectEq(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::SelectEq(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("input");
+    this->set_view3d_color_port_id("output");
+  }
 
   bool render_settings();
 
@@ -1405,7 +1344,6 @@ private:
   int                selected_idx = 0;
 };
 
-// OK
 class ViewSelectGradientNorm : public ViewNode,
                                public hesiod::cnode::SelectGradientNorm
 {
@@ -1419,7 +1357,6 @@ public:
   }
 };
 
-// OK
 class ViewSelectInterval : public ViewNode, public hesiod::cnode::SelectInterval
 {
 public:
@@ -1433,7 +1370,6 @@ public:
   }
 };
 
-// OK
 class ViewSelectRivers : public ViewNode, public hesiod::cnode::SelectRivers
 {
 public:
@@ -1447,7 +1383,6 @@ public:
   }
 };
 
-// OK
 class ViewSelectTransitions : public ViewNode,
                               public hesiod::cnode::SelectTransitions
 {
@@ -1462,7 +1397,6 @@ public:
   }
 };
 
-// OK
 class ViewSimplex : public ViewNode, public hesiod::cnode::Simplex
 {
 public:
@@ -1479,7 +1413,6 @@ public:
   }
 };
 
-// OK
 class ViewSlope : public ViewNode, public hesiod::cnode::Slope
 {
 public:
@@ -1495,7 +1428,6 @@ public:
   }
 };
 
-// OK
 class ViewSmoothCpulse : public ViewNode, public hesiod::cnode::SmoothCpulse
 {
 public:
@@ -1508,7 +1440,6 @@ public:
   }
 };
 
-// OK
 class ViewSmoothFill : public ViewNode, public hesiod::cnode::SmoothFill
 {
 public:
@@ -1521,7 +1452,6 @@ public:
   }
 };
 
-// OK
 class ViewSmoothFillHoles : public ViewNode,
                             public hesiod::cnode::SmoothFillHoles
 {
@@ -1535,7 +1465,6 @@ public:
   }
 };
 
-// OK
 class ViewSmoothFillSmearPeaks : public ViewNode,
                                  public hesiod::cnode::SmoothFillSmearPeaks
 {
@@ -1549,7 +1478,6 @@ public:
   }
 };
 
-// OK
 class ViewSteepenConvective : public ViewNode,
                               public hesiod::cnode::SteepenConvective
 {
@@ -1563,7 +1491,6 @@ public:
   }
 };
 
-// OK
 class ViewStep : public ViewNode, public hesiod::cnode::Step
 {
 public:
@@ -1583,12 +1510,17 @@ class ViewStratifyMultiscale : public ViewNode,
                                public hesiod::cnode::StratifyMultiscale
 {
 public:
-  ViewStratifyMultiscale(std::string id);
+  ViewStratifyMultiscale(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::StratifyMultiscale(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 
   bool render_settings();
 };
 
-// OK
 class ViewStratifyOblique : public ViewNode,
                             public hesiod::cnode::StratifyOblique
 {
@@ -1602,7 +1534,6 @@ public:
   }
 };
 
-// OK
 class ViewThermal : public ViewNode, public hesiod::cnode::Thermal
 {
 public:
@@ -1614,7 +1545,6 @@ public:
   }
 };
 
-// OK
 class ViewThermalAutoBedrock : public ViewNode,
                                public hesiod::cnode::ThermalAutoBedrock
 {
@@ -1628,7 +1558,6 @@ public:
   }
 };
 
-// OK
 class ViewThermalScree : public ViewNode, public hesiod::cnode::ThermalScree
 {
 public:
@@ -1641,7 +1570,6 @@ public:
   }
 };
 
-// OK
 class ViewToMask : public ViewNode, public hesiod::cnode::ToMask
 {
 public:
@@ -1654,7 +1582,6 @@ public:
   }
 };
 
-// OK
 class ViewValleyWidth : public ViewNode, public hesiod::cnode::ValleyWidth
 {
 public:
@@ -1668,7 +1595,6 @@ public:
   }
 };
 
-// OK
 class ViewValueNoiseDelaunay : public ViewNode,
                                public hesiod::cnode::ValueNoiseDelaunay
 {
@@ -1685,7 +1611,6 @@ public:
   }
 };
 
-// OK
 class ViewValueNoiseLinear : public ViewNode,
                              public hesiod::cnode::ValueNoiseLinear
 {
@@ -1702,7 +1627,6 @@ public:
   }
 };
 
-// OK
 class ViewValueNoiseThinplate : public ViewNode,
                                 public hesiod::cnode::ValueNoiseThinplate
 {
@@ -1719,7 +1643,6 @@ public:
   }
 };
 
-// OK
 class ViewWarp : public ViewNode, public hesiod::cnode::Warp
 {
 public:
@@ -1731,7 +1654,6 @@ public:
   }
 };
 
-// OK
 class ViewWarpDownslope : public ViewNode, public hesiod::cnode::WarpDownslope
 {
 public:
@@ -1744,7 +1666,6 @@ public:
   }
 };
 
-// OK
 class ViewWaveDune : public ViewNode, public hesiod::cnode::WaveDune
 {
 public:
@@ -1760,7 +1681,6 @@ public:
   }
 };
 
-// OK
 class ViewWaveSine : public ViewNode, public hesiod::cnode::WaveSine
 {
 public:
@@ -1776,7 +1696,6 @@ public:
   }
 };
 
-// OK
 class ViewWhite : public ViewNode, public hesiod::cnode::White
 {
 public:
@@ -1792,7 +1711,6 @@ public:
   }
 };
 
-// OK
 class ViewWhiteDensityMap : public ViewNode,
                             public hesiod::cnode::WhiteDensityMap
 {
@@ -1806,7 +1724,6 @@ public:
   }
 };
 
-// OK
 class ViewWhiteSparse : public ViewNode, public hesiod::cnode::WhiteSparse
 {
 public:
@@ -1822,7 +1739,6 @@ public:
   }
 };
 
-// OK
 class ViewWorley : public ViewNode, public hesiod::cnode::Worley
 {
 public:
@@ -1838,7 +1754,6 @@ public:
   }
 };
 
-// OK
 class ViewWorleyDouble : public ViewNode, public hesiod::cnode::WorleyDouble
 {
 public:
@@ -1854,7 +1769,6 @@ public:
   }
 };
 
-// OK
 class ViewWorleyValue : public ViewNode, public hesiod::cnode::WorleyValue
 {
 public:
@@ -1870,7 +1784,6 @@ public:
   }
 };
 
-// OK
 class ViewZeroedEdges : public ViewNode, public hesiod::cnode::ZeroedEdges
 {
 public:
@@ -1882,9 +1795,6 @@ public:
     this->set_view3d_elevation_port_id("output");
   }
 };
-
-// Some generic settings
-bool render_settings_mask(hesiod::cnode::Mask *p_node);
 
 // // HELPERS
 

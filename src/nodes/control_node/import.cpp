@@ -18,9 +18,16 @@ Import::Import(std::string     id,
 {
   LOG_DEBUG("Import::Import()");
   this->node_type = "Import";
+  this->category = category_mapping.at(this->node_type);
+
+  this->attr["fname"] = NEW_ATTR_FILENAME("");
+  this->attr["remap"] = NEW_ATTR_RANGE(true);
+
+  this->attr_ordered_key = {"fname", "remap"};
+
   this->add_port(
       gnode::Port("output", gnode::direction::out, dtype::dHeightMap));
-  this->category = category_mapping.at(this->node_type);
+
   this->value_out.set_sto(shape, tiling, overlap);
   this->update_inner_bindings();
 }
@@ -33,12 +40,12 @@ void Import::update_inner_bindings()
 void Import::compute()
 {
   // check if the file exist before loading
-  std::ifstream f(this->fname.c_str());
+  std::ifstream f(GET_ATTR_FILENAME("fname").c_str());
   if (f.good())
   {
-    hmap::Array z = hmap::Array(this->fname);
+    hmap::Array z = hmap::Array(GET_ATTR_FILENAME("fname"));
     this->value_out.from_array_interp(z);
-    this->value_out.remap(this->vmin, this->vmax);
+    this->post_process_heightmap(this->value_out);
   }
 }
 
