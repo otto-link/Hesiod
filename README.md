@@ -22,7 +22,7 @@ This project is licensed under the GNU General Public License v3.0.
 
 #### Standalone executable
 
-Available here: https://sourceforge.net/projects/hesiod/
+Available here: https://sourceforge.net/projects/hesiod
 
 #### Getting the sources
 
