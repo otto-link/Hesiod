@@ -6,7 +6,9 @@ https://github.com/otto-link/Hesiod/assets/121820229/da3b246e-18af-47d5-bfd2-197
 
 Color is coming!
 
-![Screenshot_2023-11-12_23-01-20](https://github.com/otto-link/Hesiod/assets/121820229/1fb9311a-5b50-40a5-b8ad-7755b9e3571a)
+![Screenshot_2023-11-12_23-01-20](https://github.com/otto-link/Hesiod/assets/121820229/e8117ebf-e61f-49b3-8fd0-159669e8caee)
+
+https://github.com/otto-link/Hesiod/assets/121820229/860ea0cd-40f7-49d0-abdf-a88b45956bcc
 
 ## Warning 
 
