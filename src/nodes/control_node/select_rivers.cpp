@@ -12,6 +12,19 @@ SelectRivers::SelectRivers(std::string id) : Mask(id)
 {
   this->node_type = "SelectRivers";
   this->category = category_mapping.at(this->node_type);
+
+  this->attr["talus_ref"] = NEW_ATTR_FLOAT(0.1f, 0.01f, 10.f);
+  this->attr["clipping_ratio"] = NEW_ATTR_FLOAT(50.f, 0.1f, 1000.f);
+
+  this->attr_ordered_key = {"talus_ref",
+                            "clipping_ratio",
+                            "inverse",
+                            "smoothing",
+                            "_ir_smoothing",
+                            "saturate",
+                            "_k_saturate",
+                            "remap"};
+
   this->update_inner_bindings();
 }
 
@@ -32,7 +45,9 @@ void SelectRivers::compute_mask(hmap::HeightMap &h_out,
 
   // --- work on a single array as a temporary solution
   hmap::Array z_array = p_input->to_array();
-  z_array = hmap::select_rivers(z_array, this->talus_ref, this->clipping_ratio);
+  z_array = hmap::select_rivers(z_array,
+                                GET_ATTR_FLOAT("talus_ref"),
+                                GET_ATTR_FLOAT("clipping_ratio"));
   h_out.from_array_interp(z_array);
 }
 

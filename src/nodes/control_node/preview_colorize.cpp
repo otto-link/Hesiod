@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-PreviewColorize::PreviewColorize(std::string id) : gnode::Node(id)
+PreviewColorize::PreviewColorize(std::string id) : ControlNode(id)
 {
   this->node_type = "PreviewColorize";
   this->add_port(gnode::Port("input", gnode::direction::in, dtype::dHeightMap));

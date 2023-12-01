@@ -17,8 +17,14 @@ GaussianPulse::GaussianPulse(std::string     id,
   LOG_DEBUG("GaussianPulse::GaussianPulse()");
   this->node_type = "GaussianPulse";
   this->category = category_mapping.at(this->node_type);
+
+  this->attr["sigma"] = NEW_ATTR_FLOAT(32.f, 0.01f, 256.f);
+  this->attr["center.x"] = NEW_ATTR_FLOAT(0.5f, -0.5f, 1.5f);
+  this->attr["center.y"] = NEW_ATTR_FLOAT(0.5f, -0.5f, 1.5f);
+
+  this->attr_ordered_key = {"sigma", "center.x", "center.y"};
+
   this->remove_port("dy");
-  this->value_out.set_sto(shape, tiling, overlap);
   this->update_inner_bindings();
 }
 
@@ -26,45 +32,26 @@ void GaussianPulse::compute()
 {
   LOG_DEBUG("computing GaussianPulse node [%s]", this->id.c_str());
 
-  std::function<hmap::Array(hmap::Vec2<int>,
-                            hmap::Vec2<float>,
-                            hmap::Vec2<float>,
-                            hmap::Array *)>
-      lambda;
-
-  if (this->inverse)
-    lambda = [this](hmap::Vec2<int>   shape,
-                    hmap::Vec2<float> shift,
-                    hmap::Vec2<float> scale,
-                    hmap::Array      *p_noise_x)
-    {
-      return 1.f - hmap::gaussian_pulse(shape,
-                                        this->sigma,
-                                        p_noise_x,
-                                        this->center,
-                                        shift,
-                                        scale);
-    };
-  else
-    lambda = [this](hmap::Vec2<int>   shape,
-                    hmap::Vec2<float> shift,
-                    hmap::Vec2<float> scale,
-                    hmap::Array      *p_noise_x)
-    {
-      return hmap::gaussian_pulse(shape,
-                                  this->sigma,
-                                  p_noise_x,
-                                  this->center,
-                                  shift,
-                                  scale);
-    };
+  hmap::Vec2<float> center;
+  center.x = GET_ATTR_FLOAT("center.x");
+  center.y = GET_ATTR_FLOAT("center.y");
 
   hmap::fill(this->value_out,
              (hmap::HeightMap *)this->get_p_data("dx"),
-             lambda);
+             [this, &center](hmap::Vec2<int>   shape,
+                             hmap::Vec2<float> shift,
+                             hmap::Vec2<float> scale,
+                             hmap::Array      *p_noise_x)
+             {
+               return hmap::gaussian_pulse(shape,
+                                           GET_ATTR_FLOAT("sigma"),
+                                           p_noise_x,
+                                           center,
+                                           shift,
+                                           scale);
+             });
 
-  // remap the output
-  this->value_out.remap(this->vmin, this->vmax);
+  this->post_process_heightmap(this->value_out);
 }
 
 } // namespace hesiod::cnode

@@ -13,6 +13,7 @@ DepressionFilling::DepressionFilling(std::string id) : Unary(id)
   LOG_DEBUG("DepressionFilling::DepressionFilling()");
   this->node_type = "DepressionFilling";
   this->category = category_mapping.at(this->node_type);
+  this->attr["iterations"] = NEW_ATTR_INT(1000, 1, 5000);
 }
 
 void DepressionFilling::compute_in_out(hmap::HeightMap &h_out,
@@ -33,7 +34,7 @@ void DepressionFilling::compute_in_out(hmap::HeightMap &h_out,
 
   // --- work on a single array as a temporary solution
   hmap::Array z_array = h_out.to_array();
-  hmap::depression_filling(z_array, this->iterations, this->epsilon);
+  hmap::depression_filling(z_array, GET_ATTR_INT("iterations"), 1e-4);
   h_out.from_array_interp(z_array);
 }
 

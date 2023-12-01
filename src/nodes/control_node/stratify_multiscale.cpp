@@ -8,10 +8,25 @@
 namespace hesiod::cnode
 {
 
-StratifyMultiscale::StratifyMultiscale(std::string id) : gnode::Node(id)
+StratifyMultiscale::StratifyMultiscale(std::string id) : ControlNode(id)
 {
   this->node_type = "StratifyMultiscale";
   this->category = category_mapping.at(this->node_type);
+
+  this->attr["n_strata"] = NEW_ATTR_VECINT(std::vector<int>({2, 3, 4}));
+  this->attr["strata_noise"] = NEW_ATTR_VECFLOAT(
+      std::vector<float>({0.f, 0.f, 0.f}));
+  this->attr["gamma_list"] = NEW_ATTR_VECFLOAT(
+      std::vector<float>({1.5f, 0.5f, 1.f}));
+  this->attr["gamma_noise"] = NEW_ATTR_VECFLOAT(
+      std::vector<float>({0.f, 0.f, 0.f}));
+  this->attr["seed"] = NEW_ATTR_SEED();
+
+  this->attr_ordered_key = {"n_strata",
+                            "strata_noise",
+                            "gamma_list",
+                            "gamma_noise",
+                            "seed"};
 
   this->add_port(gnode::Port("input", gnode::direction::in, dtype::dHeightMap));
 
@@ -39,22 +54,19 @@ void StratifyMultiscale::update_inner_bindings()
 void StratifyMultiscale::compute()
 {
   LOG_DEBUG("computing node [%s]", this->id.c_str());
-  hmap::HeightMap *p_input_hmap = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("input"));
-  hmap::HeightMap *p_input_mask = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("mask"));
-  hmap::HeightMap *p_input_noise = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("noise"));
+  hmap::HeightMap *p_hmap = CAST_PORT_REF(hmap::HeightMap, "input");
+  hmap::HeightMap *p_mask = CAST_PORT_REF(hmap::HeightMap, "mask");
+  hmap::HeightMap *p_noise = CAST_PORT_REF(hmap::HeightMap, "noise");
 
   // work on a copy of the input
-  this->value_out = *p_input_hmap;
+  this->value_out = *p_hmap;
 
   float zmin = this->value_out.min();
   float zmax = this->value_out.max();
 
   hmap::transform(this->value_out,
-                  p_input_mask,
-                  p_input_noise,
+                  p_mask,
+                  p_noise,
                   [this, &zmin, &zmax](hmap::Array &h_out,
                                        hmap::Array *p_mask_array,
                                        hmap::Array *p_noise_array)
@@ -62,11 +74,11 @@ void StratifyMultiscale::compute()
                     hmap::stratify_multiscale(h_out,
                                               zmin,
                                               zmax,
-                                              this->n_strata,
-                                              this->strata_noise,
-                                              this->gamma_list,
-                                              this->gamma_noise,
-                                              (uint)this->seed,
+                                              GET_ATTR_VECINT("n_strata"),
+                                              GET_ATTR_VECFLOAT("strata_noise"),
+                                              GET_ATTR_VECFLOAT("gamma_list"),
+                                              GET_ATTR_VECFLOAT("gamma_noise"),
+                                              GET_ATTR_SEED("seed"),
                                               p_mask_array,
                                               p_noise_array);
                   });

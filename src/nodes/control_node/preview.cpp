@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-Preview::Preview(std::string id) : gnode::Node(id)
+Preview::Preview(std::string id) : ControlNode(id)
 {
   this->node_type = "Preview";
   this->add_port(gnode::Port("input", gnode::direction::in, dtype::dHeightMap));

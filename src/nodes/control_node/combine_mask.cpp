@@ -8,11 +8,13 @@
 namespace hesiod::cnode
 {
 
-CombineMask::CombineMask(std::string id) : gnode::Node(id)
+CombineMask::CombineMask(std::string id) : ControlNode(id)
 {
   LOG_DEBUG("CombineMask::CombineMask()");
   this->node_type = "CombineMask";
   this->category = category_mapping.at(this->node_type);
+  this->attr["method"] = NEW_ATTR_MAPENUM(this->method_map);
+
   this->add_port(
       gnode::Port("input 1", gnode::direction::in, dtype::dHeightMap));
   this->add_port(
@@ -20,6 +22,11 @@ CombineMask::CombineMask(std::string id) : gnode::Node(id)
   this->add_port(
       gnode::Port("output", gnode::direction::out, dtype::dHeightMap));
   this->update_inner_bindings();
+}
+
+void CombineMask::update_inner_bindings()
+{
+  this->set_p_data("output", (void *)&this->value_out);
 }
 
 void CombineMask::compute()
@@ -35,7 +42,9 @@ void CombineMask::compute()
 
   std::function<void(hmap::Array &, hmap::Array &, hmap::Array &)> lambda;
 
-  switch (this->method)
+  int method = GET_ATTR_MAPENUM("method");
+
+  switch (method)
   {
   case 0: // union
     lambda = [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
@@ -57,11 +66,6 @@ void CombineMask::compute()
   }
 
   hmap::transform(this->value_out, *p_in1, *p_in2, lambda);
-}
-
-void CombineMask::update_inner_bindings()
-{
-  this->set_p_data("output", (void *)&this->value_out);
 }
 
 } // namespace hesiod::cnode

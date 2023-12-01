@@ -8,11 +8,15 @@
 namespace hesiod::cnode
 {
 
-BezierPath::BezierPath(std::string id) : gnode::Node(id)
+BezierPath::BezierPath(std::string id) : ControlNode(id)
 {
   LOG_DEBUG("BezierPath::BezierPath()");
   this->node_type = "BezierPath";
   this->category = category_mapping.at(this->node_type);
+
+  this->attr["curvature_ratio"] = NEW_ATTR_FLOAT(0.3f, 0.f, 1.f);
+  this->attr["edge_divisions"] = NEW_ATTR_INT(10, 1, 32);
+
   this->add_port(gnode::Port("path", gnode::direction::in, dtype::dPath));
   this->add_port(gnode::Port("output", gnode::direction::out, dtype::dPath));
   this->update_inner_bindings();
@@ -29,7 +33,8 @@ void BezierPath::compute()
   this->value_out = *p_input_path;
 
   if (p_input_path->get_npoints() > 1)
-    this->value_out.bezier(this->curvature_ratio, this->edge_divisions);
+    this->value_out.bezier(GET_ATTR_FLOAT("curvature_ratio"),
+                           GET_ATTR_INT("edge_divisions"));
 }
 
 void BezierPath::update_inner_bindings()

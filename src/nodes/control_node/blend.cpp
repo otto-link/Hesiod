@@ -12,6 +12,11 @@ Blend::Blend(std::string id) : Binary(id)
 {
   this->node_type = "Blend";
   this->category = category_mapping.at(this->node_type);
+
+  this->attr["blending_method"] = NEW_ATTR_MAPENUM(this->blending_method_map);
+  this->attr["k"] = NEW_ATTR_FLOAT(0.1f, 0.01f, 1.f);
+  this->attr["ir"] = NEW_ATTR_INT(4, 1, 128);
+  this->attr_ordered_key = {"blending_method", "k", "ir"};
 }
 
 void Blend::compute_in_out(hmap::HeightMap &h_out,
@@ -22,7 +27,11 @@ void Blend::compute_in_out(hmap::HeightMap &h_out,
 
   std::function<void(hmap::Array &, hmap::Array &, hmap::Array &)> lambda;
 
-  switch (this->method)
+  float k = GET_ATTR_FLOAT("k");
+  int   ir = GET_ATTR_INT("ir");
+  int   method = GET_ATTR_MAPENUM("blending_method");
+
+  switch (method)
   {
   case blending_method::add:
     lambda = [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
@@ -35,8 +44,8 @@ void Blend::compute_in_out(hmap::HeightMap &h_out,
     break;
 
   case blending_method::gradients:
-    lambda = [this](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
-    { m = hmap::blend_gradients(a1, a2, this->ir); };
+    lambda = [&ir](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
+    { m = hmap::blend_gradients(a1, a2, ir); };
     break;
 
   case blending_method::maximum:
@@ -45,8 +54,8 @@ void Blend::compute_in_out(hmap::HeightMap &h_out,
     break;
 
   case blending_method::maximum_smooth:
-    lambda = [this](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
-    { m = hmap::maximum_smooth(a1, a2, this->k); };
+    lambda = [&k](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
+    { m = hmap::maximum_smooth(a1, a2, k); };
     break;
 
   case blending_method::minimum:
@@ -55,8 +64,8 @@ void Blend::compute_in_out(hmap::HeightMap &h_out,
     break;
 
   case blending_method::minimum_smooth:
-    lambda = [this](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
-    { m = hmap::minimum_smooth(a1, a2, this->k); };
+    lambda = [&k](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
+    { m = hmap::minimum_smooth(a1, a2, k); };
     break;
 
   case blending_method::multiply:
@@ -92,7 +101,7 @@ void Blend::compute_in_out(hmap::HeightMap &h_out,
 
   hmap::transform(h_out, *p_h_in1, *p_h_in2, lambda);
 
-  if (this->method == blending_method::gradients)
+  if (method == blending_method::gradients)
     h_out.smooth_overlap_buffers();
 }
 

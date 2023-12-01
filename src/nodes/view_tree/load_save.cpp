@@ -7,6 +7,7 @@
 #include "macrologger.h"
 #include <cereal/archives/json.hpp>
 #include <cereal/types/map.hpp>
+#include <cereal/types/polymorphic.hpp>
 #include <cereal/types/string.hpp>
 #include <cereal/types/vector.hpp>
 
@@ -18,6 +19,7 @@ namespace hesiod::vnode
 
 void ViewTree::load_state(std::string fname)
 {
+#ifdef USE_CEREAL
   LOG_DEBUG("loading state...");
 
   // clear the tree first
@@ -27,10 +29,24 @@ void ViewTree::load_state(std::string fname)
   std::ifstream            is(fname);
   cereal::JSONInputArchive iarchive(is);
   iarchive(*this);
+#endif
+}
+
+void ViewTree::save_state(std::string fname)
+{
+#ifdef USE_CEREAL
+  LOG_DEBUG("saving state...");
+
+  std::ofstream             os(fname);
+  cereal::JSONOutputArchive oarchive(os);
+  oarchive(cereal::make_nvp("tree", *this));
+  LOG_DEBUG("ok");
+#endif
 }
 
 template <class Archive> void ViewTree::load(Archive &archive)
 {
+#ifdef USE_CEREAL
   archive(cereal::make_nvp("id", this->id),
           cereal::make_nvp("overlap ", this->overlap),
           cereal::make_nvp("shape.x", this->shape.x),
@@ -39,6 +55,8 @@ template <class Archive> void ViewTree::load(Archive &archive)
           cereal::make_nvp("tiling.y", this->tiling.y),
           cereal::make_nvp("id_counter", this->id_counter));
 
+  // retrive node ids and positions and re-generate all the nodes and
+  // position them on the node editor canvas
   {
     std::vector<std::string> node_ids = {};
     std::vector<float>       pos_x = {};
@@ -60,7 +78,16 @@ template <class Archive> void ViewTree::load(Archive &archive)
 
   // nodes parameters
   for (auto &[id, node] : this->get_nodes_map())
-    this->get_view_control_node_ref_by_id(id)->serialize_load(archive);
+  {
+    // this could be done with a virtual method but it is much more
+    // compact to do it this way (since there is only one exception so
+    // far)
+    if (this->get_node_type(id) != "Clone")
+      this->get_node_ref_by_id<hesiod::cnode::ControlNode>(id)->serialize(
+          archive);
+    else
+      this->get_node_ref_by_id<hesiod::cnode::Clone>(id)->serialize(archive);
+  }
 
   // links
   archive(cereal::make_nvp("links", this->links));
@@ -74,10 +101,12 @@ template <class Archive> void ViewTree::load(Archive &archive)
                link.port_id_to);
 
   this->update();
+#endif
 }
 
 template <class Archive> void ViewTree::save(Archive &archive) const
 {
+#ifdef USE_CEREAL
   archive(cereal::make_nvp("id", this->id),
           cereal::make_nvp("overlap ", this->overlap),
           cereal::make_nvp("shape.x", this->shape.x),
@@ -110,20 +139,17 @@ template <class Archive> void ViewTree::save(Archive &archive) const
 
   // nodes parameters
   for (auto &[id, node] : this->get_nodes_map())
-    this->get_view_control_node_ref_by_id(id)->serialize_save(archive);
+  {
+    if (this->get_node_type(id) != "Clone")
+      this->get_node_ref_by_id<hesiod::cnode::ControlNode>(id)->serialize(
+          archive);
+    else
+      this->get_node_ref_by_id<hesiod::cnode::Clone>(id)->serialize(archive);
+  }
 
   // links
   archive(cereal::make_nvp("links", this->links));
-}
-
-void ViewTree::save_state(std::string fname)
-{
-  LOG_DEBUG("saving state...");
-
-  std::ofstream             os(fname);
-  cereal::JSONOutputArchive oarchive(os);
-  oarchive(cereal::make_nvp("tree", *this));
-  LOG_DEBUG("ok");
+#endif
 }
 
 } // namespace hesiod::vnode

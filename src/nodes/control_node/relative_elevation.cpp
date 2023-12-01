@@ -12,6 +12,7 @@ RelativeElevation::RelativeElevation(std::string id) : Unary(id)
 {
   LOG_DEBUG("RelativeElevation::RelativeElevation()");
   this->node_type = "RelativeElevation";
+  this->attr["ir"] = NEW_ATTR_INT(64, 1, 256);
   this->category = category_mapping.at(this->node_type);
 }
 
@@ -24,7 +25,7 @@ void RelativeElevation::compute_in_out(hmap::HeightMap &h_out,
 
   hmap::transform(h_out,
                   [this](hmap::Array &x)
-                  { x = hmap::relative_elevation(x, this->ir); });
+                  { x = hmap::relative_elevation(x, GET_ATTR_INT("ir")); });
 
   h_out.smooth_overlap_buffers();
 }

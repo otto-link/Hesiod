@@ -12,20 +12,20 @@ Slope::Slope(std::string     id,
              hmap::Vec2<int> shape,
              hmap::Vec2<int> tiling,
              float           overlap)
-    : gnode::Node(id), shape(shape), tiling(tiling), overlap(overlap)
+    : Primitive(id, shape, tiling, overlap)
 {
   LOG_DEBUG("Slope::Slope()");
   this->node_type = "Slope";
   this->category = category_mapping.at(this->node_type);
 
-  this->add_port(gnode::Port("dx",
-                             gnode::direction::in,
-                             dtype::dHeightMap,
-                             gnode::optional::yes));
-  this->add_port(
-      gnode::Port("output", gnode::direction::out, dtype::dHeightMap));
+  this->attr["angle"] = NEW_ATTR_FLOAT(0.f, -180.f, 180.f);
+  this->attr["talus_global"] = NEW_ATTR_FLOAT(4.f, 0.f, 8.f);
+  this->attr["center.x"] = NEW_ATTR_FLOAT(0.5f, -0.5f, 1.5f);
+  this->attr["center.y"] = NEW_ATTR_FLOAT(0.5f, -0.5f, 1.5f);
 
-  this->value_out.set_sto(shape, tiling, overlap);
+  this->attr_ordered_key = {"angle", "talus_global", "center.x", "center.y"};
+
+  this->remove_port("dy");
   this->update_inner_bindings();
 }
 
@@ -38,20 +38,24 @@ void Slope::compute()
 {
   LOG_DEBUG("computing Slope node [%s]", this->id.c_str());
 
-  float talus = this->talus_global / (float)this->value_out.shape.x;
+  hmap::Vec2<float> center;
+  center.x = GET_ATTR_FLOAT("center.x");
+  center.y = GET_ATTR_FLOAT("center.y");
+
+  float talus = GET_ATTR_FLOAT("talus_global") / (float)this->value_out.shape.x;
 
   hmap::fill(this->value_out,
              (hmap::HeightMap *)this->get_p_data("dx"),
-             [this, &talus](hmap::Vec2<int>   shape,
-                            hmap::Vec2<float> shift,
-                            hmap::Vec2<float> scale,
-                            hmap::Array      *p_noise_x)
+             [this, &talus, &center](hmap::Vec2<int>   shape,
+                                     hmap::Vec2<float> shift,
+                                     hmap::Vec2<float> scale,
+                                     hmap::Array      *p_noise_x)
              {
                return hmap::slope(shape,
-                                  this->angle,
+                                  GET_ATTR_FLOAT("angle"),
                                   talus,
                                   p_noise_x,
-                                  this->center,
+                                  center,
                                   shift,
                                   scale);
              });

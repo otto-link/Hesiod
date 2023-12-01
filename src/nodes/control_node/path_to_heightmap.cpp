@@ -12,11 +12,15 @@ PathToHeightmap::PathToHeightmap(std::string     id,
                                  hmap::Vec2<int> shape,
                                  hmap::Vec2<int> tiling,
                                  float           overlap)
-    : gnode::Node(id), shape(shape), tiling(tiling), overlap(overlap)
+    : ControlNode(id), shape(shape), tiling(tiling), overlap(overlap)
 {
   LOG_DEBUG("PathToHeightmap::PathToHeightmap()");
   this->node_type = "PathToHeightmap";
   this->category = category_mapping.at(this->node_type);
+
+  this->attr["filled"] = NEW_ATTR_BOOL(false);
+  this->attr["remap"] = NEW_ATTR_RANGE(true);
+
   this->add_port(gnode::Port("path", gnode::direction::in, dtype::dPath));
   this->add_port(
       gnode::Port("output", gnode::direction::out, dtype::dHeightMap));
@@ -33,7 +37,7 @@ void PathToHeightmap::compute()
 
   if (p_input_path->get_npoints() > 1)
   {
-    if (!this->filled)
+    if (!GET_ATTR_BOOL("filled"))
     {
       hmap::fill(this->value_out,
                  [p_input_path](hmap::Vec2<int>   shape,
@@ -57,9 +61,8 @@ void PathToHeightmap::compute()
       hmap::Vec4<float> bbox = hmap::Vec4<float>(0.f, 1.f, 0.f, 1.f);
 
       p_input_path->to_array(z_array, bbox, true);
-      this->value_out.from_array_interp(z_array);
     }
-    this->value_out.remap(this->vmin, this->vmax);
+    this->post_process_heightmap(this->value_out);
   }
   else
     // fill with zeros

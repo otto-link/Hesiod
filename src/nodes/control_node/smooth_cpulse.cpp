@@ -12,6 +12,7 @@ SmoothCpulse::SmoothCpulse(std::string id) : Filter(id)
 {
   this->node_type = "SmoothCpulse";
   this->category = category_mapping.at(this->node_type);
+  this->attr["ir"] = NEW_ATTR_INT(8, 1, 128);
 }
 
 void SmoothCpulse::compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask)
@@ -20,7 +21,7 @@ void SmoothCpulse::compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask)
   hmap::transform(h,
                   p_mask,
                   [this](hmap::Array &x, hmap::Array *p_mask)
-                  { hmap::smooth_cpulse(x, this->ir, p_mask); });
+                  { hmap::smooth_cpulse(x, GET_ATTR_INT("ir"), p_mask); });
   h.smooth_overlap_buffers();
 }
 

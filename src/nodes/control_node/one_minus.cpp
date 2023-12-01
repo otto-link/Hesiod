@@ -13,6 +13,7 @@ OneMinus::OneMinus(std::string id) : Unary(id)
   LOG_DEBUG("OneMinus::OneMinus()");
   this->node_type = "OneMinus";
   this->category = category_mapping.at(this->node_type);
+  this->attr["remap"] = NEW_ATTR_RANGE(false);
 }
 
 void OneMinus::compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in)
@@ -25,7 +26,7 @@ void OneMinus::compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in)
 
   hmap::transform(h_out, [this, &hmax](hmap::Array &x) { x = hmax - x; });
 
-  this->value_out.remap(this->vmin, this->vmax);
+  this->post_process_heightmap(this->value_out);
 }
 
 } // namespace hesiod::cnode

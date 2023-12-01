@@ -8,11 +8,14 @@
 namespace hesiod::cnode
 {
 
-Lerp::Lerp(std::string id) : gnode::Node(id)
+Lerp::Lerp(std::string id) : ControlNode(id)
 {
   LOG_DEBUG("Lerp::Lerp()");
   this->node_type = "Lerp";
   this->category = category_mapping.at(this->node_type);
+
+  this->attr["t"] = NEW_ATTR_FLOAT(0.5f, 0.f, 1.f);
+
   this->add_port(gnode::Port("a", gnode::direction::in, dtype::dHeightMap));
   this->add_port(gnode::Port("b", gnode::direction::in, dtype::dHeightMap));
   this->add_port(gnode::Port("t",
@@ -57,7 +60,7 @@ void Lerp::compute()
                     *p_input_hmap_a, // input
                     *p_input_hmap_b, // input
                     [this](hmap::Array &out, hmap::Array &a, hmap::Array &b)
-                    { out = hmap::lerp(a, b, this->t); });
+                    { out = hmap::lerp(a, b, GET_ATTR_FLOAT("t")); });
 }
 
 } // namespace hesiod::cnode

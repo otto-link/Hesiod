@@ -12,6 +12,8 @@ Remap::Remap(std::string id) : Unary(id)
 {
   this->node_type = "Remap";
   this->category = category_mapping.at(this->node_type);
+
+  this->attr["remap"] = NEW_ATTR_RANGE(true);
 }
 
 void Remap::compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in)
@@ -20,7 +22,7 @@ void Remap::compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in)
 
   // make a copy of the input and applied range remapping
   h_out = *p_h_in;
-  h_out.remap(this->vmin, this->vmax);
+  h_out.remap(GET_ATTR_RANGE("remap").x, GET_ATTR_RANGE("remap").y);
 }
 
 } // namespace hesiod::cnode

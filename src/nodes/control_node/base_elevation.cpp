@@ -17,8 +17,9 @@ BaseElevation::BaseElevation(std::string     id,
   LOG_DEBUG("BaseElevation::BaseElevation()");
   this->node_type = "BaseElevation";
   this->category = category_mapping.at(this->node_type);
-  this->value_out.set_sto(shape, tiling, overlap);
-  this->update_inner_bindings();
+
+  this->attr["values"] = NEW_ATTR_MATRIX();
+  this->attr["width_factor"] = NEW_ATTR_FLOAT(1.f, 0.01f, 2.f);
 }
 
 void BaseElevation::compute()
@@ -35,17 +36,15 @@ void BaseElevation::compute()
                     hmap::Array      *p_noise_y)
              {
                return hmap::base_elevation(shape,
-                                           this->values,
-                                           this->width_factor,
+                                           GET_ATTR_MATRIX("values"),
+                                           GET_ATTR_FLOAT("width_factor"),
                                            p_noise_x,
                                            p_noise_y,
                                            shift,
                                            scale);
              });
 
-  // remap the output
-  if (this->remap)
-    this->value_out.remap(this->vmin, this->vmax);
+  this->post_process_heightmap(this->value_out);
 }
 
 } // namespace hesiod::cnode

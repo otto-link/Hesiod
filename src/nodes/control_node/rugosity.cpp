@@ -12,6 +12,20 @@ Rugosity::Rugosity(std::string id) : Mask(id)
 {
   this->node_type = "Rugosity";
   this->category = category_mapping.at(this->node_type);
+
+  this->attr["ir"] = NEW_ATTR_INT(32, 1, 256);
+  this->attr["clamp_max"] = NEW_ATTR_BOOL(false);
+  this->attr["vc_max"] = NEW_ATTR_FLOAT(1.f, 0.f, 10.f);
+
+  this->attr_ordered_key = {"ir",
+                            "clamp_max",
+                            "_vc_max",
+                            "inverse",
+                            "smoothing",
+                            "_ir_smoothing",
+                            "saturate",
+                            "_k_saturate",
+                            "remap"};
 }
 
 void Rugosity::compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in)
@@ -22,12 +36,12 @@ void Rugosity::compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in)
   hmap::transform(h_out,
                   *p_h_in,
                   [this](hmap::Array &out, hmap::Array &in)
-                  { out = hmap::rugosity(in, this->ir); });
+                  { out = hmap::rugosity(in, GET_ATTR_INT("ir")); });
 
-  if (this->clamp_max)
+  if (GET_ATTR_BOOL("clamp_max"))
     hmap::transform(h_out,
                     [this](hmap::Array &x)
-                    { hmap::clamp_max(x, this->vc_max); });
+                    { hmap::clamp_max(x, GET_ATTR_FLOAT("vc_max")); });
 }
 
 } // namespace hesiod::cnode

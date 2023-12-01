@@ -8,11 +8,17 @@
 namespace hesiod::cnode
 {
 
-MixRGB::MixRGB(std::string id) : gnode::Node(id)
+MixRGB::MixRGB(std::string id) : ControlNode(id)
 {
   LOG_DEBUG("MixRGB::MixRGB()");
   this->node_type = "MixRGB";
   this->category = category_mapping.at(this->node_type);
+
+  this->attr["t"] = NEW_ATTR_FLOAT(0.5f, 0.f, 1.f);
+  this->attr["sqrt_mix"] = NEW_ATTR_BOOL(true);
+
+  this->attr_ordered_key = {"t", "sqrt_mix"};
+
   this->add_port(
       gnode::Port("RGB1", gnode::direction::in, dtype::dHeightMapRGB));
   this->add_port(
@@ -35,7 +41,7 @@ void MixRGB::compute()
   hmap::HeightMapRGB *p_input_rgb2 = static_cast<hmap::HeightMapRGB *>(
       (void *)this->get_p_data("RGB2"));
 
-  if (this->sqrt_mix)
+  if (GET_ATTR_BOOL("sqrt_mix"))
   {
     if (this->get_p_data("t"))
     {
@@ -48,7 +54,7 @@ void MixRGB::compute()
     else
       this->value_out = mix_heightmap_rgb_sqrt(*p_input_rgb1,
                                                *p_input_rgb2,
-                                               this->t);
+                                               GET_ATTR_FLOAT("t"));
   }
   else
   {
@@ -64,7 +70,7 @@ void MixRGB::compute()
     else
       this->value_out = mix_heightmap_rgb(*p_input_rgb1,
                                           *p_input_rgb2,
-                                          this->t);
+                                          GET_ATTR_FLOAT("t"));
   }
 }
 

@@ -8,7 +8,8 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4 /Od")
 else()
     # GNU compiler options
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -O3 -pthread -DLOG_LEVEL=3")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wno-dangling-reference -O3 -pthread -DLOG_LEVEL=3")
+    # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DUSE_CEREAL")
 endif()
 
 set(CMAKE_CXX_STANDARD 20)

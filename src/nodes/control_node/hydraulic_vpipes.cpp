@@ -12,6 +12,22 @@ HydraulicVpipes::HydraulicVpipes(std::string id) : Erosion(id)
 {
   this->node_type = "HydraulicVpipes";
   this->category = category_mapping.at(this->node_type);
+
+  this->attr["iterations"] = NEW_ATTR_INT(50, 1, 500);
+  this->attr["water_height"] = NEW_ATTR_FLOAT(0.01f, 0.01f, 0.5f);
+  this->attr["c_capacity"] = NEW_ATTR_FLOAT(0.1f, 0.01f, 0.5f);
+  this->attr["c_erosion"] = NEW_ATTR_FLOAT(0.01f, 0.f, 0.5f);
+  this->attr["c_deposition"] = NEW_ATTR_FLOAT(0.01f, 0.f, 0.5f);
+  this->attr["rain_rate"] = NEW_ATTR_FLOAT(0.f, 0.f, 0.1f);
+  this->attr["evap_rate"] = NEW_ATTR_FLOAT(0.01f, 0.01f, 0.1f);
+
+  this->attr_ordered_key = {"iterations",
+                            "water_height",
+                            "c_capacity",
+                            "c_erosion",
+                            "c_deposition",
+                            "rain_rate",
+                            "evap_rate"};
 }
 
 void HydraulicVpipes::compute_erosion(hmap::HeightMap &h,
@@ -38,17 +54,17 @@ void HydraulicVpipes::compute_erosion(hmap::HeightMap &h,
                   {
                     hydraulic_vpipes(h_out,
                                      p_mask_array,
-                                     this->iterations,
+                                     GET_ATTR_INT("iterations"),
                                      p_bedrock_array,
                                      p_moisture_map_array,
                                      p_erosion_map_array,
                                      p_deposition_map_array,
-                                     this->water_height,
-                                     this->c_capacity,
-                                     this->c_erosion,
-                                     this->c_deposition,
-                                     this->rain_rate,
-                                     this->evap_rate);
+                                     GET_ATTR_FLOAT("water_height"),
+                                     GET_ATTR_FLOAT("c_capacity"),
+                                     GET_ATTR_FLOAT("c_erosion"),
+                                     GET_ATTR_FLOAT("c_deposition"),
+                                     GET_ATTR_FLOAT("rain_rate"),
+                                     GET_ATTR_FLOAT("evap_rate"));
                   });
 
   h.smooth_overlap_buffers();

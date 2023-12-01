@@ -8,9 +8,17 @@
 namespace hesiod::cnode
 {
 
-Mask::Mask(std::string id) : gnode::Node(id)
+Mask::Mask(std::string id) : ControlNode(id)
 {
   LOG_DEBUG("Mask::Mask()");
+
+  this->attr["inverse"] = NEW_ATTR_BOOL(false);
+  this->attr["smoothing"] = NEW_ATTR_BOOL(false);
+  this->attr["ir_smoothing"] = NEW_ATTR_INT(4, 1, 128);
+  this->attr["saturate"] = NEW_ATTR_RANGE(false);
+  this->attr["k_saturate"] = NEW_ATTR_FLOAT(0.05f, 0.f, 1.f);
+  this->attr["remap"] = NEW_ATTR_RANGE(true);
+
   this->add_port(gnode::Port("input", gnode::direction::in, dtype::dHeightMap));
   this->add_port(
       gnode::Port("output", gnode::direction::out, dtype::dHeightMap));
@@ -33,39 +41,7 @@ void Mask::compute()
 
   this->compute_mask(this->value_out, p_input);
   this->value_out.smooth_overlap_buffers();
-
-  if (this->inverse)
-    this->value_out.inverse();
-
-  if (this->smoothing)
-  {
-    hmap::transform(this->value_out,
-                    [this](hmap::Array &array)
-                    { return hmap::smooth_cpulse(array, this->ir_smoothing); });
-    this->value_out.smooth_overlap_buffers();
-  }
-
-  if (this->saturate)
-  {
-    float hmin = this->value_out.min();
-    float hmax = this->value_out.max();
-
-    // node parameters are assumed normalized and thus in [0, 1],
-    // they need to be rescaled
-    float smin_n = hmin + this->smin * (hmax - hmin);
-    float smax_n = hmax - (1.f - this->smax) * (hmax - hmin);
-    float k_n = this->k * (hmax - hmin);
-
-    hmap::transform(this->value_out,
-                    [&smin_n, &smax_n, &k_n](hmap::Array &array)
-                    { hmap::clamp_smooth(array, smin_n, smax_n, k_n); });
-
-    // keep original amplitude
-    this->value_out.remap(hmin, hmax);
-  }
-
-  if (this->remap)
-    this->value_out.remap(this->vmin, this->vmax);
+  this->post_process_heightmap(this->value_out);
 }
 
 } // namespace hesiod::cnode

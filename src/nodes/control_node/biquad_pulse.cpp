@@ -17,8 +17,8 @@ BiquadPulse::BiquadPulse(std::string     id,
   LOG_DEBUG("BiquadPulse::BiquadPulse()");
   this->node_type = "BiquadPulse";
   this->category = category_mapping.at(this->node_type);
-  this->value_out.set_sto(shape, tiling, overlap);
-  this->update_inner_bindings();
+
+  this->attr["gain"] = NEW_ATTR_FLOAT(1.f, 0.01f, 10.f);
 }
 
 void BiquadPulse::compute()
@@ -35,17 +35,14 @@ void BiquadPulse::compute()
                     hmap::Array      *p_noise_y)
              {
                return hmap::biquad_pulse(shape,
-                                         this->gain,
+                                         GET_ATTR_FLOAT("gain"),
                                          p_noise_x,
                                          p_noise_y,
                                          shift,
                                          scale);
              });
 
-  if (this->inverse)
-    hmap::transform(this->value_out, [](hmap::Array &x) { x = 1.f - x; });
-
-  this->value_out.remap(this->vmin, this->vmax);
+  this->post_process_heightmap(this->value_out);
 }
 
 } // namespace hesiod::cnode

@@ -54,13 +54,13 @@ void ViewTree::render_links()
 
 void ViewTree::render_view_node(std::string node_id)
 {
-  this->get_view_control_node_ref_by_id(node_id)->render_node();
+  this->get_node_ref_by_id<ViewNode>(node_id)->render_node();
 }
 
 void ViewTree::render_view_nodes()
 {
   for (auto &[id, node] : this->get_nodes_map())
-    this->render_view_node(id);
+    this->get_node_ref_by_id<ViewNode>(id)->render_node();
 }
 
 } // namespace hesiod::vnode

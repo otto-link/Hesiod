@@ -12,6 +12,22 @@ HydraulicRidge::HydraulicRidge(std::string id) : Filter(id)
 {
   this->node_type = "HydraulicRidge";
   this->category = category_mapping.at(this->node_type);
+
+  this->attr["talus_global"] = NEW_ATTR_FLOAT(16.f, 0.01f, 32.f);
+  this->attr["intensity"] = NEW_ATTR_FLOAT(0.5f, 0.f, 2.f);
+  this->attr["erosion_factor"] = NEW_ATTR_FLOAT(1.5f, 0.f, 4.f);
+  this->attr["smoothing_factor"] = NEW_ATTR_FLOAT(0.5f, 0.01f, 2.f);
+  this->attr["noise_ratio"] = NEW_ATTR_FLOAT(0.1f, 0.f, 1.f);
+  this->attr["ir"] = NEW_ATTR_INT(16, 1, 128);
+  this->attr["seed"] = NEW_ATTR_SEED();
+
+  this->attr_ordered_key = {"talus_global",
+                            "intensity",
+                            "erosion_factor",
+                            "smoothing_factor",
+                            "noise_ratio",
+                            "ir",
+                            "seed"};
 }
 
 void HydraulicRidge::compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask)
@@ -56,17 +72,17 @@ void HydraulicRidge::compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask)
   float zmin = z_array.min();
   float zmax = z_array.max();
 
-  float talus = this->talus_global / (float)this->value_out.shape.x;
+  float talus = GET_ATTR_FLOAT("talus_global") / (float)this->value_out.shape.x;
 
   hmap::hydraulic_ridge(z_array,
                         talus,
                         p_mask_array,
-                        this->intensity,
-                        this->erosion_factor,
-                        this->smoothing_factor,
-                        this->noise_ratio,
-                        this->ir,
-                        (uint)this->seed);
+                        GET_ATTR_FLOAT("intensity"),
+                        GET_ATTR_FLOAT("erosion_factor"),
+                        GET_ATTR_FLOAT("smoothing_factor"),
+                        GET_ATTR_FLOAT("noise_ratio"),
+                        GET_ATTR_INT("ir"),
+                        GET_ATTR_SEED("seed"));
 
   hmap::remap(z_array, zmin, zmax);
 

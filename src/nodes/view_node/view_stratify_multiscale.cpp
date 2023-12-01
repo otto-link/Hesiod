@@ -11,99 +11,64 @@
 namespace hesiod::vnode
 {
 
-ViewStratifyMultiscale::ViewStratifyMultiscale(std::string id)
-    : ViewNode(), hesiod::cnode::StratifyMultiscale(id)
-{
-  this->set_p_control_node((gnode::Node *)this);
-  this->set_preview_port_id("output");
-  this->set_view3d_elevation_port_id("output");
-}
-
 bool ViewStratifyMultiscale::render_settings()
 {
   bool has_changed = false;
 
   has_changed |= this->render_settings_header();
 
-  if (ImGui::Button("Re-seed"))
-  {
-    this->seed = (int)time(NULL);
-    this->force_update();
-    has_changed = true;
-  }
-
-  ImGui::DragInt("seed", &this->seed);
-  has_changed |= this->trigger_update_after_edit();
-
-  // TODO add / remove layer of strata
+  has_changed |=
+      this->attr.at("seed")->get_ref<SeedAttribute>()->render_settings("seed");
 
   if (ImGui::Button("Size +1"))
   {
-    this->n_strata.push_back(1);
-    this->strata_noise.push_back(0.f);
-    this->gamma_list.push_back(1.f);
-    this->gamma_noise.push_back(0.f);
-    this->force_update();
+    this->attr.at("n_strata")->get_ref<VecIntAttribute>()->value.push_back(1);
+    this->attr.at("strata_noise")
+        ->get_ref<VecFloatAttribute>()
+        ->value.push_back(0.f);
+    this->attr.at("gamma_list")
+        ->get_ref<VecFloatAttribute>()
+        ->value.push_back(1.f);
+    this->attr.at("gamma_noise")
+        ->get_ref<VecFloatAttribute>()
+        ->value.push_back(0.f);
+    has_changed = true;
   }
   ImGui::SameLine();
 
-  if (ImGui::Button("Size -1") && this->n_strata.size() > 1)
+  if (ImGui::Button("Size -1") &&
+      this->attr.at("n_strata")->get_ref<VecIntAttribute>()->value.size() > 1)
   {
-    this->n_strata.pop_back();
-    this->strata_noise.pop_back();
-    this->gamma_list.pop_back();
-    this->gamma_noise.pop_back();
-    this->force_update();
+    this->attr.at("n_strata")->get_ref<VecIntAttribute>()->value.pop_back();
+    this->attr.at("strata_noise")
+        ->get_ref<VecFloatAttribute>()
+        ->value.pop_back();
+    this->attr.at("gamma_list")->get_ref<VecFloatAttribute>()->value.pop_back();
+    this->attr.at("gamma_noise")
+        ->get_ref<VecFloatAttribute>()
+        ->value.pop_back();
+    has_changed = true;
   }
 
-  ImGui::TextUnformatted("n_strata");
-  for (size_t k = 0; k < this->n_strata.size(); k++)
-  {
-    ImGui::SliderInt(("##n_strata" + std::to_string(k)).c_str(),
-                     &(this->n_strata[k]),
-                     1,
-                     8);
-    has_changed |= this->trigger_update_after_edit();
-  }
-
-  ImGui::TextUnformatted("strata_noise");
-  if (hesiod::gui::drag_float_vector(this->strata_noise,
-                                     false,
-                                     false,
-                                     0.f,
-                                     1.f,
-                                     true))
-    this->force_update();
-
-  ImGui::TextUnformatted("gamma_list");
-  if (hesiod::gui::drag_float_vector(this->gamma_list,
-                                     false,
-                                     false,
-                                     0.05f,
-                                     4.f,
-                                     true))
-    this->force_update();
-
-  ImGui::TextUnformatted("gamma_noise");
-  if (hesiod::gui::drag_float_vector(this->gamma_noise,
-                                     false,
-                                     false,
-                                     0.f,
-                                     1.f,
-                                     true))
-    this->force_update();
+  has_changed |= this->attr.at("n_strata")
+                     ->get_ref<VecIntAttribute>()
+                     ->render_settings("n_strata");
+  has_changed |= this->attr.at("strata_noise")
+                     ->get_ref<VecFloatAttribute>()
+                     ->render_settings("strata_noise");
+  has_changed |= this->attr.at("gamma_list")
+                     ->get_ref<VecFloatAttribute>()
+                     ->render_settings("gamma_list");
+  has_changed |= this->attr.at("gamma_noise")
+                     ->get_ref<VecFloatAttribute>()
+                     ->render_settings("gamma_noise");
 
   has_changed |= this->render_settings_footer();
 
+  if (has_changed)
+    this->force_update();
+
   return has_changed;
-}
-
-void ViewStratifyMultiscale::serialize_save(cereal::JSONOutputArchive &ar)
-{
-}
-
-void ViewStratifyMultiscale::serialize_load(cereal::JSONInputArchive &ar)
-{
 }
 
 } // namespace hesiod::vnode

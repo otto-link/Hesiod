@@ -8,10 +8,15 @@
 namespace hesiod::cnode
 {
 
-Thermal::Thermal(std::string id) : gnode::Node(id)
+Thermal::Thermal(std::string id) : ControlNode(id)
 {
   this->node_type = "Thermal";
   this->category = category_mapping.at(this->node_type);
+
+  this->attr["talus_global"] = NEW_ATTR_FLOAT(0.1f, 0.f, 10.f);
+  this->attr["iterations"] = NEW_ATTR_INT(5, 1, 200);
+
+  this->attr_ordered_key = {"talus_global", "iterations"};
 
   this->add_port(gnode::Port("input", gnode::direction::in, dtype::dHeightMap));
   this->add_port(gnode::Port("bedrock",
@@ -35,6 +40,7 @@ Thermal::Thermal(std::string id) : gnode::Node(id)
 void Thermal::update_inner_bindings()
 {
   LOG_DEBUG("inner bindings [%s]", this->id.c_str());
+
   this->set_p_data("output", (void *)&(this->value_out));
   this->set_p_data("deposition map", (void *)&(this->deposition_map));
 }
@@ -42,47 +48,44 @@ void Thermal::update_inner_bindings()
 void Thermal::compute()
 {
   LOG_DEBUG("computing node [%s]", this->id.c_str());
-  hmap::HeightMap *p_input_hmap = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("input"));
-  hmap::HeightMap *p_input_bedrock = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("bedrock"));
-  hmap::HeightMap *p_input_mask = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("mask"));
+  hmap::HeightMap *p_hmap = CAST_PORT_REF(hmap::HeightMap, "input");
+  hmap::HeightMap *p_bedrock = CAST_PORT_REF(hmap::HeightMap, "bedrock");
+  hmap::HeightMap *p_mask = CAST_PORT_REF(hmap::HeightMap, "mask");
 
-  hmap::HeightMap *p_output_deposition_map = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("deposition map"));
+  hmap::HeightMap *p_deposition = CAST_PORT_REF(hmap::HeightMap,
+                                                "deposition map");
 
   // work on a copy of the input
-  this->value_out = *p_input_hmap;
+  this->value_out = *p_hmap;
 
-  if (p_output_deposition_map)
-    this->deposition_map.set_sto(p_input_hmap->shape,
-                                 p_input_hmap->tiling,
-                                 p_input_hmap->overlap);
+  if (p_deposition)
+    this->deposition_map.set_sto(p_hmap->shape,
+                                 p_hmap->tiling,
+                                 p_hmap->overlap);
 
-  float talus = this->talus_global / (float)this->value_out.shape.x;
+  float talus = GET_ATTR_FLOAT("talus_global") / (float)this->value_out.shape.x;
 
   hmap::transform(this->value_out,
-                  p_input_bedrock,
-                  p_input_mask,
-                  p_output_deposition_map,
+                  p_bedrock,
+                  p_mask,
+                  p_deposition,
                   [this, &talus](hmap::Array &h_out,
                                  hmap::Array *p_bedrock_array,
                                  hmap::Array *p_mask_array,
-                                 hmap::Array *p_deposition_map_array)
+                                 hmap::Array *p_deposition_array)
                   {
                     hmap::thermal(h_out,
                                   p_mask_array,
                                   hmap::constant(h_out.shape, talus),
-                                  this->iterations,
+                                  GET_ATTR_INT("iterations"),
                                   p_bedrock_array,
-                                  p_deposition_map_array);
+                                  p_deposition_array);
                   });
 
   this->value_out.smooth_overlap_buffers();
 
-  if (p_output_deposition_map)
-    p_output_deposition_map->smooth_overlap_buffers();
+  if (p_deposition)
+    p_deposition->smooth_overlap_buffers();
 }
 
 } // namespace hesiod::cnode

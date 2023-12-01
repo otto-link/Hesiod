@@ -12,6 +12,12 @@ NormalDisplacement::NormalDisplacement(std::string id) : Filter(id)
 {
   this->node_type = "NormalDisplacement";
   this->category = category_mapping.at(this->node_type);
+
+  this->attr["ir"] = NEW_ATTR_INT(0, 0, 64);
+  this->attr["amount"] = NEW_ATTR_FLOAT(5.f, 0.f, 10.f);
+  this->attr["reverse"] = NEW_ATTR_BOOL(false);
+
+  this->attr_ordered_key = {"ir", "amount", "reverse"};
 }
 
 void NormalDisplacement::compute_filter(hmap::HeightMap &h,
@@ -24,9 +30,9 @@ void NormalDisplacement::compute_filter(hmap::HeightMap &h,
                   {
                     hmap::normal_displacement(x,
                                               p_mask,
-                                              this->amount,
-                                              this->ir,
-                                              this->reverse);
+                                              GET_ATTR_FLOAT("amount"),
+                                              GET_ATTR_INT("ir"),
+                                              GET_ATTR_BOOL("reverse"));
                   });
   h.smooth_overlap_buffers();
 }

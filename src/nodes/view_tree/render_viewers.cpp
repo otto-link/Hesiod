@@ -27,8 +27,8 @@ void ViewTree::render_view2d()
 
   ImGui::Text("%s", this->viewer_node_id.c_str());
 
-  hesiod::vnode::ViewControlNode *p_vnode =
-      this->get_view_control_node_ref_by_id(this->viewer_node_id);
+  hesiod::vnode::ViewNode *p_vnode = this->get_node_ref_by_id<ViewNode>(
+      this->viewer_node_id);
 
   if (p_vnode->get_preview_port_id() != "")
   {
@@ -111,8 +111,8 @@ void ViewTree::render_view3d()
 
   ImGui::Text("%s", this->viewer_node_id.c_str());
 
-  hesiod::vnode::ViewControlNode *p_vnode =
-      this->get_view_control_node_ref_by_id(this->viewer_node_id);
+  hesiod::vnode::ViewNode *p_vnode = this->get_node_ref_by_id<ViewNode>(
+      this->viewer_node_id);
 
   if (p_vnode->get_view3d_elevation_port_id() != "")
   {
@@ -136,6 +136,9 @@ void ViewTree::render_view3d()
       if (this->auto_rotate)
         this->update_image_texture_view3d(false);
 
+      ImGui::SameLine();
+      ImGui::Checkbox("Show on background", &this->show_view3d_on_background);
+
       if (ImGui::SliderFloat("h_scale", &this->h_scale, 0.f, 2.f, "%.2f"))
         this->update_image_texture_view3d(false);
 
@@ -149,6 +152,8 @@ void ViewTree::render_view3d()
     }
 
     // --- 3D rendering viewport
+    ImGuiIO &io = ImGui::GetIO();
+
     float window_width = ImGui::GetContentRegionAvail().x;
     {
       ImVec2 pos = ImGui::GetCursorScreenPos();
@@ -165,9 +170,20 @@ void ViewTree::render_view3d()
                           ImVec2(1, 0));
       draw_list->AddRect(p0, p1, IM_COL32(255, 255, 255, 255));
       ImGui::InvisibleButton("##image3d", ImVec2(window_width, window_width));
+
+      if (this->show_view3d_on_background)
+      {
+        float display_width = std::min(io.DisplaySize.x, io.DisplaySize.y);
+
+        ImGui::GetBackgroundDrawList()->AddImage(
+            (void *)(intptr_t)this->image_texture_view3d,
+            ImVec2(0, 0),
+            ImVec2(display_width, display_width),
+            ImVec2(0, 1),
+            ImVec2(1, 0));
+      }
     }
 
-    ImGuiIO &io = ImGui::GetIO();
     {
       ImGui::SetItemKeyOwner(ImGuiKey_MouseLeft);
       ImGui::SetItemKeyOwner(ImGuiKey_MouseWheelY);
@@ -206,15 +222,15 @@ void ViewTree::render_view3d()
 
 void ViewTree::render_settings(std::string node_id)
 {
-  this->get_view_control_node_ref_by_id(node_id)->render_settings();
+  this->get_node_ref_by_id<ViewNode>(node_id)->render_settings();
 }
 
 void ViewTree::update_image_texture_view2d()
 {
   if (this->is_node_id_in_keys(this->viewer_node_id))
   {
-    hesiod::vnode::ViewControlNode *p_vnode =
-        this->get_view_control_node_ref_by_id(this->viewer_node_id);
+    hesiod::vnode::ViewNode *p_vnode = this->get_node_ref_by_id<ViewNode>(
+        this->viewer_node_id);
 
     std::string data_pid = p_vnode->get_preview_port_id();
 
@@ -274,8 +290,8 @@ void ViewTree::update_image_texture_view3d(bool vertex_array_update)
 {
   if (this->is_node_id_in_keys(this->viewer_node_id))
   {
-    hesiod::vnode::ViewControlNode *p_vnode =
-        this->get_view_control_node_ref_by_id(this->viewer_node_id);
+    hesiod::vnode::ViewNode *p_vnode = this->get_node_ref_by_id<ViewNode>(
+        this->viewer_node_id);
 
     std::string elevation_pid = p_vnode->get_view3d_elevation_port_id();
     std::string color_pid = p_vnode->get_view3d_color_port_id();

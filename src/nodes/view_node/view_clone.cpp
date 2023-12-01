@@ -12,11 +12,6 @@
 namespace hesiod::vnode
 {
 
-ViewClone::ViewClone(std::string id) : ViewNode(), hesiod::cnode::Clone(id)
-{
-  this->set_p_control_node((gnode::Node *)this);
-}
-
 bool ViewClone::render_settings()
 {
   bool has_changed = false;
@@ -37,35 +32,6 @@ bool ViewClone::render_settings()
   has_changed |= this->render_settings_footer();
 
   return has_changed;
-}
-
-void ViewClone::serialize_save(cereal::JSONOutputArchive &ar)
-{
-  // save output port state
-  std::vector<std::string> output_ids = {};
-
-  for (auto &[port_id, port] : this->get_ports())
-    if (port.direction == gnode::direction::out)
-      output_ids.push_back(port_id.c_str());
-
-  ar(cereal::make_nvp("output_ids", output_ids));
-  ar(cereal::make_nvp("id_count", id_count));
-}
-
-void ViewClone::serialize_load(cereal::JSONInputArchive &ar)
-{
-  std::vector<std::string> output_ids = {};
-
-  ar(cereal::make_nvp("output_ids", output_ids));
-
-  for (auto &port_id : output_ids)
-    if (!this->is_port_id_in_keys(port_id))
-      this->add_port(gnode::Port(port_id,
-                                 gnode::direction::out,
-                                 hesiod::cnode::dtype::dHeightMap));
-  this->update_inner_bindings();
-
-  ar(cereal::make_nvp("id_count", id_count));
 }
 
 } // namespace hesiod::vnode

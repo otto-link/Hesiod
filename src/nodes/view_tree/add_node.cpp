@@ -23,774 +23,233 @@ std::string ViewTree::add_view_node(std::string control_node_type,
 
   LOG_DEBUG("adding node type: %s", control_node_type.c_str());
 
+  // clang-format off
   if (control_node_type == "AlterElevation")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewAlterElevation>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewAlterElevation>(id));
   else if (control_node_type == "BaseElevation")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewBaseElevation>(id,
-                                                           this->shape,
-                                                           this->tiling,
-                                                           this->overlap);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewBaseElevation>(id, this->shape, this->tiling, this->overlap));
   else if (control_node_type == "BezierPath")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewBezierPath>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewBezierPath>(id));
   else if (control_node_type == "BiquadPulse")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewBiquadPulse>(id,
-                                                         this->shape,
-                                                         this->tiling,
-                                                         this->overlap);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewBiquadPulse>(id, this->shape, this->tiling, this->overlap));
   else if (control_node_type == "Blend")
-  {
-    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewBlend>(
-        id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewBlend>(id));
   else if (control_node_type == "Brush")
-  {
-    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewBrush>(
-        id,
-        this->shape,
-        this->tiling,
-        this->overlap);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewBrush>(id, this->shape, this->tiling, this->overlap));
   else if (control_node_type == "Bump")
-  {
-    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewBump>(
-        id,
-        this->shape,
-        this->tiling,
-        this->overlap);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewBump>(id, this->shape, this->tiling, this->overlap));
   else if (control_node_type == "Caldera")
-  {
-    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewCaldera>(
-        id,
-        this->shape,
-        this->tiling,
-        this->overlap);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewCaldera>(id, this->shape, this->tiling, this->overlap));
   else if (control_node_type == "Checkerboard")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewCheckerboard>(id,
-                                                          this->shape,
-                                                          this->tiling,
-                                                          this->overlap);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewCheckerboard>(id, this->shape, this->tiling, this->overlap));
   else if (control_node_type == "Clamp")
-  {
-    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewClamp>(
-        id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewClamp>(id));
   else if (control_node_type == "Clone")
-  {
-    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewClone>(
-        id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewClone>(id));
   else if (control_node_type == "Cloud")
-  {
-    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewCloud>(
-        id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewCloud>(id));
   else if (control_node_type == "CloudToArrayInterp")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewCloudToArrayInterp>(id,
-                                                                this->shape,
-                                                                this->tiling,
-                                                                this->overlap);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewCloudToArrayInterp>(id, this->shape, this->tiling, this->overlap));
   else if (control_node_type == "Colorize")
-  {
-    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewColorize>(
-        id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewColorize>(id));
   else if (control_node_type == "CombineMask")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewCombineMask>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewCombineMask>(id));
   else if (control_node_type == "ConvolveSVD")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewConvolveSVD>(id);
-    this->add_node(p_view_node);
-  }
-  else if (control_node_type == "CubicPulseTruncated")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewCubicPulseTruncated>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewConvolveSVD>(id));
   else if (control_node_type == "Debug")
-  {
-    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewDebug>(
-        id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewDebug>(id));
   else if (control_node_type == "DepressionFilling")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewDepressionFilling>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewDepressionFilling>(id));
   else if (control_node_type == "DigPath")
-  {
-    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewDigPath>(
-        id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewDigPath>(id));
   else if (control_node_type == "DistanceTransform")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewDistanceTransform>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewDistanceTransform>(id));
   else if (control_node_type == "Equalize")
-  {
-    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewEqualize>(
-        id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewEqualize>(id));
   else if (control_node_type == "ErosionMaps")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewErosionMaps>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewErosionMaps>(id));
   else if (control_node_type == "ExpandShrinkDirectional")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewExpandShrinkDirectional>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewExpandShrinkDirectional>(id));
   else if (control_node_type == "ExpandShrink")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewExpandShrink>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewExpandShrink>(id));
   else if (control_node_type == "Export")
-  {
-    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewExport>(
-        id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewExport>(id));
   else if (control_node_type == "ExportRGB")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewExportRGB>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewExportRGB>(id));
   else if (control_node_type == "FbmPerlin")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewFbmPerlin>(id,
-                                                       this->shape,
-                                                       this->tiling,
-                                                       this->overlap);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewFbmPerlin>(id, this->shape, this->tiling, this->overlap));
   else if (control_node_type == "FbmSimplex")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewFbmSimplex>(id,
-                                                        this->shape,
-                                                        this->tiling,
-                                                        this->overlap);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewFbmSimplex>(id, this->shape, this->tiling, this->overlap));
   else if (control_node_type == "FbmWorley")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewFbmWorley>(id,
-                                                       this->shape,
-                                                       this->tiling,
-                                                       this->overlap);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewFbmWorley>(id, this->shape, this->tiling, this->overlap));
   else if (control_node_type == "FractalizePath")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewFractalizePath>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewFractalizePath>(id));
   else if (control_node_type == "GaborNoise")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewGaborNoise>(id,
-                                                        this->shape,
-                                                        this->tiling,
-                                                        this->overlap);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewGaborNoise>(id, this->shape, this->tiling, this->overlap));
   else if (control_node_type == "Gain")
-  {
-    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewGain>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewGain>(id));
   else if (control_node_type == "GammaCorrection")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewGammaCorrection>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewGammaCorrection>(id));
   else if (control_node_type == "GammaCorrectionLocal")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewGammaCorrectionLocal>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewGammaCorrectionLocal>(id));
   else if (control_node_type == "GaussianPulse")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewGaussianPulse>(id,
-                                                           this->shape,
-                                                           this->tiling,
-                                                           this->overlap);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewGaussianPulse>(id, this->shape, this->tiling, this->overlap));
   else if (control_node_type == "Gradient")
-  {
-    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewGradient>(
-        id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewGradient>(id));
   else if (control_node_type == "GradientAngle")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewGradientAngle>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewGradientAngle>(id));
   else if (control_node_type == "GradientNorm")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewGradientNorm>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewGradientNorm>(id));
   else if (control_node_type == "GradientTalus")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewGradientTalus>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewGradientTalus>(id));
   else if (control_node_type == "HydraulicAlgebric")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewHydraulicAlgebric>(id);
-    this->add_node(p_view_node);
-  }
-  else if (control_node_type == "HydraulicBenes")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewHydraulicBenes>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewHydraulicAlgebric>(id));
   else if (control_node_type == "HydraulicParticle")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewHydraulicParticle>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewHydraulicParticle>(id));
   else if (control_node_type == "HydraulicRidge")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewHydraulicRidge>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewHydraulicRidge>(id));
   else if (control_node_type == "HydraulicStream")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewHydraulicStream>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewHydraulicStream>(id));
   else if (control_node_type == "HydraulicStreamLog")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewHydraulicStreamLog>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewHydraulicStreamLog>(id));
   else if (control_node_type == "HydraulicVpipes")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewHydraulicVpipes>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewHydraulicVpipes>(id));
   else if (control_node_type == "Import")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewImport>(id, shape, tiling, overlap);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewImport>(id, shape, tiling, overlap));
   else if (control_node_type == "Kernel")
-  {
-    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewKernel>(
-        id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewKernel>(id));
   else if (control_node_type == "KmeansClustering2")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewKmeansClustering2>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewKmeansClustering2>(id));
   else if (control_node_type == "KmeansClustering3")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewKmeansClustering3>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewKmeansClustering3>(id));
   else if (control_node_type == "Laplace")
-  {
-    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewLaplace>(
-        id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewLaplace>(id));
   else if (control_node_type == "LaplaceEdgePreserving")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewLaplaceEdgePreserving>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewLaplaceEdgePreserving>(id));
   else if (control_node_type == "Lerp")
-  {
-    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewLerp>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewLerp>(id));
   else if (control_node_type == "MakeBinary")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewMakeBinary>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewMakeBinary>(id));
   else if (control_node_type == "MeanderizePath")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewMeanderizePath>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewMeanderizePath>(id));
   else if (control_node_type == "MeanLocal")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewMeanLocal>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewMeanLocal>(id));
   else if (control_node_type == "Median3x3")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewMedian3x3>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewMedian3x3>(id));
   else if (control_node_type == "MinimumLocal")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewMinimumLocal>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewMinimumLocal>(id));
   else if (control_node_type == "MixRGB")
-  {
-    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewMixRGB>(
-        id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewMixRGB>(id));
   else if (control_node_type == "NormalDisplacement")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewNormalDisplacement>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewNormalDisplacement>(id));
   else if (control_node_type == "OneMinus")
-  {
-    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewOneMinus>(
-        id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewOneMinus>(id));
   else if (control_node_type == "Path")
-  {
-    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewPath>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewPath>(id));
   else if (control_node_type == "PathFinding")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewPathFinding>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewPathFinding>(id));
   else if (control_node_type == "PathToHeightmap")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewPathToHeightmap>(id,
-                                                             this->shape,
-                                                             this->tiling,
-                                                             this->overlap);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewPathToHeightmap>(id, this->shape, this->tiling, this->overlap));
   else if (control_node_type == "Perlin")
-  {
-    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewPerlin>(
-        id,
-        this->shape,
-        this->tiling,
-        this->overlap);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewPerlin>(id, this->shape, this->tiling, this->overlap));
   else if (control_node_type == "PerlinBillow")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewPerlinBillow>(id,
-                                                          this->shape,
-                                                          this->tiling,
-                                                          this->overlap);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewPerlinBillow>(id, this->shape, this->tiling, this->overlap));
   else if (control_node_type == "Plateau")
-  {
-    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewPlateau>(
-        id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewPlateau>(id));
   else if (control_node_type == "Preview")
-  {
-    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewPreview>(
-        id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewPreview>(id));
   else if (control_node_type == "PreviewColorize")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewPreviewColorize>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewPreviewColorize>(id));
   else if (control_node_type == "RecastCanyon")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewRecastCanyon>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewRecastCanyon>(id));
   else if (control_node_type == "Recurve")
-  {
-    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewRecurve>(
-        id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewRecurve>(id));
   else if (control_node_type == "RecurveKura")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewRecurveKura>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewRecurveKura>(id));
   else if (control_node_type == "RecurveS")
-  {
-    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewRecurveS>(
-        id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewRecurveS>(id));
   else if (control_node_type == "RelativeElevation")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewRelativeElevation>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewRelativeElevation>(id));
   else if (control_node_type == "Remap")
-  {
-    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewRemap>(
-        id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewRemap>(id));
   else if (control_node_type == "RidgedPerlin")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewRidgedPerlin>(id,
-                                                          this->shape,
-                                                          this->tiling,
-                                                          this->overlap);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewRidgedPerlin>(id, this->shape, this->tiling, this->overlap));
   else if (control_node_type == "Rugosity")
-  {
-    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewRugosity>(
-        id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewRugosity>(id));
   else if (control_node_type == "SedimentDeposition")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewSedimentDeposition>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewSedimentDeposition>(id));
   else if (control_node_type == "SelectCavities")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewSelectCavities>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewSelectCavities>(id));
   else if (control_node_type == "SelectGradientNorm")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewSelectGradientNorm>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewSelectGradientNorm>(id));
   else if (control_node_type == "SelectEq")
-  {
-    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewSelectEq>(
-        id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewSelectEq>(id));
   else if (control_node_type == "SelectInterval")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewSelectInterval>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewSelectInterval>(id));
   else if (control_node_type == "SelectRivers")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewSelectRivers>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewSelectRivers>(id));
   else if (control_node_type == "SelectTransitions")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewSelectTransitions>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewSelectTransitions>(id));
   else if (control_node_type == "Simplex")
-  {
-    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewSimplex>(
-        id,
-        this->shape,
-        this->tiling,
-        this->overlap);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewSimplex>(id, this->shape, this->tiling, this->overlap));
   else if (control_node_type == "Slope")
-  {
-    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewSlope>(
-        id,
-        this->shape,
-        this->tiling,
-        this->overlap);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewSlope>(id, this->shape, this->tiling, this->overlap));
   else if (control_node_type == "SmoothCpulse")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewSmoothCpulse>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewSmoothCpulse>(id));
   else if (control_node_type == "SmoothFill")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewSmoothFill>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewSmoothFill>(id));
   else if (control_node_type == "SmoothFillHoles")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewSmoothFillHoles>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewSmoothFillHoles>(id));
   else if (control_node_type == "SmoothFillSmearPeaks")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewSmoothFillSmearPeaks>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewSmoothFillSmearPeaks>(id));
   else if (control_node_type == "SteepenConvective")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewSteepenConvective>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewSteepenConvective>(id));
   else if (control_node_type == "Step")
-  {
-    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewStep>(
-        id,
-        this->shape,
-        this->tiling,
-        this->overlap);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewStep>(id, this->shape, this->tiling, this->overlap));
   else if (control_node_type == "StratifyMultiscale")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewStratifyMultiscale>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewStratifyMultiscale>(id));
   else if (control_node_type == "StratifyOblique")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewStratifyOblique>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewStratifyOblique>(id));
   else if (control_node_type == "Thermal")
-  {
-    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewThermal>(
-        id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewThermal>(id));
   else if (control_node_type == "ThermalAutoBedrock")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewThermalAutoBedrock>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewThermalAutoBedrock>(id));
   else if (control_node_type == "ThermalScree")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewThermalScree>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewThermalScree>(id));
   else if (control_node_type == "ToMask")
-  {
-    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewToMask>(
-        id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewToMask>(id));
   else if (control_node_type == "ValleyWidth")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewValleyWidth>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewValleyWidth>(id));
   else if (control_node_type == "ValueNoiseDelaunay")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewValueNoiseDelaunay>(id,
-                                                                this->shape,
-                                                                this->tiling,
-                                                                this->overlap);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewValueNoiseDelaunay>(id, this->shape, this->tiling, this->overlap));
   else if (control_node_type == "ValueNoiseLinear")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewValueNoiseLinear>(id,
-                                                              this->shape,
-                                                              this->tiling,
-                                                              this->overlap);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewValueNoiseLinear>(id, this->shape, this->tiling, this->overlap));
   else if (control_node_type == "ValueNoiseThinplate")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewValueNoiseThinplate>(id,
-                                                                 this->shape,
-                                                                 this->tiling,
-                                                                 this->overlap);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewValueNoiseThinplate>(id, this->shape, this->tiling, this->overlap));
   else if (control_node_type == "WaveDune")
-  {
-    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewWaveDune>(
-        id,
-        this->shape,
-        this->tiling,
-        this->overlap);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewWaveDune>(id, this->shape, this->tiling, this->overlap));
   else if (control_node_type == "WaveSine")
-  {
-    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewWaveSine>(
-        id,
-        this->shape,
-        this->tiling,
-        this->overlap);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewWaveSine>(id, this->shape, this->tiling, this->overlap));
   else if (control_node_type == "Warp")
-  {
-    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewWarp>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewWarp>(id));
   else if (control_node_type == "WarpDownslope")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewWarpDownslope>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewWarpDownslope>(id));
   else if (control_node_type == "White")
-  {
-    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewWhite>(
-        id,
-        this->shape,
-        this->tiling,
-        this->overlap);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewWhite>(id, this->shape, this->tiling, this->overlap));
   else if (control_node_type == "WhiteDensityMap")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewWhiteDensityMap>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewWhiteDensityMap>(id));
   else if (control_node_type == "WhiteSparse")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewWhiteSparse>(id,
-                                                         this->shape,
-                                                         this->tiling,
-                                                         this->overlap);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewWhiteSparse>(id, this->shape, this->tiling, this->overlap));
   else if (control_node_type == "Worley")
-  {
-    std::shared_ptr p_view_node = std::make_shared<hesiod::vnode::ViewWorley>(
-        id,
-        this->shape,
-        this->tiling,
-        this->overlap);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewWorley>(id, this->shape, this->tiling, this->overlap));
   else if (control_node_type == "WorleyDouble")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewWorleyDouble>(id,
-                                                          this->shape,
-                                                          this->tiling,
-                                                          this->overlap);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewWorleyDouble>(id, this->shape, this->tiling, this->overlap));
   else if (control_node_type == "WorleyValue")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewWorleyValue>(id,
-                                                         this->shape,
-                                                         this->tiling,
-                                                         this->overlap);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewWorleyValue>(id, this->shape, this->tiling, this->overlap));
   else if (control_node_type == "ZeroedEdges")
-  {
-    std::shared_ptr p_view_node =
-        std::make_shared<hesiod::vnode::ViewZeroedEdges>(id);
-    this->add_node(p_view_node);
-  }
+    this->add_node(std::make_shared<hesiod::vnode::ViewZeroedEdges>(id));
   else
+  // clang-format on
   {
     LOG_ERROR("unknown node type: [%s]", control_node_type.c_str());
     throw std::runtime_error("adding an unknown node type");

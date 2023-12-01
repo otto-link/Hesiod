@@ -62,12 +62,9 @@ public:
 
   ImU32 get_node_color(std::string node_id);
 
-  std::string get_node_type(std::string node_id);
+  std::string get_node_type(std::string node_id) const;
 
   ax::NodeEditor::EditorContext *get_p_node_editor_context() const;
-
-  hesiod::vnode::ViewControlNode *get_view_control_node_ref_by_id(
-      std::string node_id) const;
 
   void set_sto(hmap::Vec2<int> new_shape,
                hmap::Vec2<int> new_tiling,
@@ -166,6 +163,7 @@ private:
 
   // 3D viewer
   bool                 open_view3d_window = false;
+  bool                 show_view3d_on_background = false;
   GLuint               image_texture_view3d;
   GLuint               shader_id;
   GLuint               vertex_array_id;

@@ -8,10 +8,28 @@
 namespace hesiod::cnode
 {
 
-ThermalScree::ThermalScree(std::string id) : gnode::Node(id)
+ThermalScree::ThermalScree(std::string id) : ControlNode(id)
 {
   this->node_type = "ThermalScree";
   this->category = category_mapping.at(this->node_type);
+
+  this->attr["talus_constraint"] = NEW_ATTR_BOOL(true);
+  this->attr["talus_global"] = NEW_ATTR_FLOAT(3.f, 1.f, 8.f);
+  this->attr["zmin"] = NEW_ATTR_FLOAT(-1.f, -1.f, 2.f);
+  this->attr["zmax"] = NEW_ATTR_FLOAT(0.3f, -1.f, 2.f);
+  this->attr["noise_ratio"] = NEW_ATTR_FLOAT(0.3f, 0.f, 1.f);
+  this->attr["landing_talus_ratio"] = NEW_ATTR_FLOAT(1.f, 0.f, 1.f);
+  this->attr["landing_width_ratio"] = NEW_ATTR_FLOAT(0.25f, 0.01f, 1.f);
+  this->attr["seed"] = NEW_ATTR_SEED();
+
+  this->attr_ordered_key = {"talus_constraint",
+                            "talus_global",
+                            "zmin",
+                            "zmax",
+                            "noise_ratio",
+                            "landing_talus_ratio",
+                            "landing_width_ratio",
+                            "seed"};
 
   this->add_port(gnode::Port("input", gnode::direction::in, dtype::dHeightMap));
   this->add_port(gnode::Port("mask",
@@ -38,27 +56,25 @@ void ThermalScree::update_inner_bindings()
 void ThermalScree::compute()
 {
   LOG_DEBUG("computing node [%s]", this->id.c_str());
-  hmap::HeightMap *p_input_hmap = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("input"));
-  hmap::HeightMap *p_input_mask = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("mask"));
+  hmap::HeightMap *p_hmap = CAST_PORT_REF(hmap::HeightMap, "input");
+  hmap::HeightMap *p_mask = CAST_PORT_REF(hmap::HeightMap, "mask");
 
-  hmap::HeightMap *p_output_deposition_map = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("deposition map"));
+  hmap::HeightMap *p_deposition_map = CAST_PORT_REF(hmap::HeightMap,
+                                                    "deposition map");
 
   // work on a copy of the input
-  this->value_out = *p_input_hmap;
+  this->value_out = *p_hmap;
 
-  if (p_output_deposition_map)
-    this->deposition_map.set_sto(p_input_hmap->shape,
-                                 p_input_hmap->tiling,
-                                 p_input_hmap->overlap);
+  if (p_deposition_map)
+    this->deposition_map.set_sto(p_hmap->shape,
+                                 p_hmap->tiling,
+                                 p_hmap->overlap);
 
-  float talus = this->talus_global / (float)this->value_out.shape.x;
+  float talus = GET_ATTR_FLOAT("talus_global") / (float)this->value_out.shape.x;
 
   hmap::transform(this->value_out,
-                  p_input_mask,
-                  p_output_deposition_map,
+                  p_mask,
+                  p_deposition_map,
                   [this, &talus](hmap::Array &h_out,
                                  hmap::Array *p_mask_array,
                                  hmap::Array *p_deposition_map_array)
@@ -66,20 +82,20 @@ void ThermalScree::compute()
                     hmap::thermal_scree(h_out,
                                         p_mask_array,
                                         talus,
-                                        (uint)this->seed,
-                                        this->zmax,
-                                        this->zmin,
-                                        this->noise_ratio,
+                                        GET_ATTR_SEED("seed"),
+                                        GET_ATTR_FLOAT("zmax"),
+                                        GET_ATTR_FLOAT("zmin"),
+                                        GET_ATTR_FLOAT("noise_ratio"),
                                         p_deposition_map_array,
-                                        this->landing_talus_ratio,
-                                        this->landing_width_ratio,
-                                        this->talus_constraint);
+                                        GET_ATTR_FLOAT("landing_talus_ratio"),
+                                        GET_ATTR_FLOAT("landing_width_ratio"),
+                                        GET_ATTR_BOOL("talus_constraint"));
                   });
 
   this->value_out.smooth_overlap_buffers();
 
-  if (p_output_deposition_map)
-    p_output_deposition_map->smooth_overlap_buffers();
+  if (p_deposition_map)
+    p_deposition_map->smooth_overlap_buffers();
 }
 
 } // namespace hesiod::cnode

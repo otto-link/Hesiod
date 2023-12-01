@@ -9,18 +9,22 @@
 namespace hesiod::cnode
 {
 
-Colorize::Colorize(std::string id) : gnode::Node(id)
+Colorize::Colorize(std::string id) : ControlNode(id)
 {
   LOG_DEBUG("Colorize::Colorize()");
   this->node_type = "Colorize";
   this->category = category_mapping.at(this->node_type);
+
+  this->attr["colormap"] = NEW_ATTR_MAPENUM(hesiod::get_colormap_mapping());
+  this->attr["reverse"] = NEW_ATTR_BOOL(false);
+  this->attr["clamp"] = NEW_ATTR_RANGE(false);
+  // NB - GUI for this node is produce "manually", see specific render_settings
+
   this->add_port(gnode::Port("input", gnode::direction::in, dtype::dHeightMap));
   this->add_port(
       gnode::Port("RGB", gnode::direction::out, dtype::dHeightMapRGB));
   this->add_port(gnode::Port("thru", gnode::direction::out, dtype::dHeightMap));
   this->update_inner_bindings();
-
-  this->cmap_map = hesiod::get_colormap_mapping();
 }
 
 void Colorize::compute()
@@ -32,7 +36,7 @@ void Colorize::compute()
   this->update_links();
 
   std::vector<std::vector<float>> colormap_colors = hesiod::get_colormap_data(
-      this->cmap_choice);
+      GET_ATTR_MAPENUM("colormap"));
 
   hmap::HeightMap *p_input_hmap = static_cast<hmap::HeightMap *>(
       (void *)this->get_p_data("input"));
@@ -44,20 +48,20 @@ void Colorize::compute()
   float cmin = 0.f;
   float cmax = 1.f;
 
-  if (this->clamp)
+  if (GET_ATTR_REF_RANGE("clamp")->is_activated())
   {
     float hmin = p_input_hmap->min();
     float hmax = p_input_hmap->max();
 
-    cmin = (1.f - this->vmin) * hmin + this->vmin * hmax;
-    cmax = (1.f - this->vmax) * hmin + this->vmax * hmax;
+    hmap::Vec2<float> crange = GET_ATTR_RANGE("clamp");
+
+    cmin = (1.f - crange.x) * hmin + crange.x * hmax;
+    cmax = (1.f - crange.y) * hmin + crange.y * hmax;
   }
 
-  this->value_out.colorize(*p_input_hmap,
-                           cmin,
-                           cmax,
-                           colormap_colors,
-                           this->reverse);
+  bool inverse = GET_ATTR_BOOL("reverse");
+
+  this->value_out.colorize(*p_input_hmap, cmin, cmax, colormap_colors, inverse);
 }
 
 void Colorize::update_inner_bindings()

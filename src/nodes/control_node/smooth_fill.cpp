@@ -8,10 +8,13 @@
 namespace hesiod::cnode
 {
 
-SmoothFill::SmoothFill(std::string id) : gnode::Node(id)
+SmoothFill::SmoothFill(std::string id) : ControlNode(id)
 {
   this->node_type = "SmoothFill";
   this->category = category_mapping.at(this->node_type);
+
+  this->attr["ir"] = NEW_ATTR_INT(8, 1, 128);
+  this->attr["k"] = NEW_ATTR_FLOAT(0.01f, 0.f, 1.f);
 
   this->add_port(gnode::Port("input", gnode::direction::in, dtype::dHeightMap));
   this->add_port(gnode::Port("mask",
@@ -57,7 +60,13 @@ void SmoothFill::compute()
       p_input_mask,
       p_output_deposition_map,
       [this](hmap::Array &x, hmap::Array *p_mask, hmap::Array *p_deposition)
-      { hmap::smooth_fill(x, this->ir, p_mask, this->k, p_deposition); });
+      {
+        hmap::smooth_fill(x,
+                          GET_ATTR_INT("ir"),
+                          p_mask,
+                          GET_ATTR_FLOAT("k"),
+                          p_deposition);
+      });
 
   this->value_out.smooth_overlap_buffers();
 

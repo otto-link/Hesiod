@@ -12,12 +12,16 @@ White::White(std::string     id,
              hmap::Vec2<int> shape,
              hmap::Vec2<int> tiling,
              float           overlap)
-    : gnode::Node(id), shape(shape), tiling(tiling), overlap(overlap)
+    : ControlNode(id), shape(shape), tiling(tiling), overlap(overlap)
 {
   LOG_DEBUG("White::WhiteFilter()");
-
   this->node_type = "White";
   this->category = category_mapping.at(this->node_type);
+
+  this->attr["seed"] = NEW_ATTR_SEED();
+  this->attr["remap"] = NEW_ATTR_RANGE(false);
+  this->attr_ordered_key = {"seed", "remap"};
+
   this->add_port(
       gnode::Port("output", gnode::direction::out, dtype::dHeightMap));
   this->value_out.set_sto(shape, tiling, overlap);
@@ -34,14 +38,13 @@ void White::compute()
 {
   LOG_DEBUG("computing node [%s]", this->id.c_str());
 
-  int seed0 = this->seed;
+  int seed = (int)GET_ATTR_SEED("seed");
 
   hmap::fill(this->value_out,
-             [&seed0](hmap::Vec2<int> shape)
-             { return hmap::white(shape, 0.f, 1.f, (uint)seed0++); });
+             [&seed](hmap::Vec2<int> shape)
+             { return hmap::white(shape, 0.f, 1.f, (uint)seed++); });
 
-  // remap the output
-  this->value_out.remap(this->vmin, this->vmax);
+  this->post_process_heightmap(this->value_out);
 }
 
 } // namespace hesiod::cnode

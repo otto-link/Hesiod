@@ -12,6 +12,7 @@ MakeBinary::MakeBinary(std::string id) : Unary(id)
 {
   this->node_type = "MakeBinary";
   this->category = category_mapping.at(this->node_type);
+  this->attr["threshold"] = NEW_ATTR_FLOAT(0.f, -1.f, 1.f);
 }
 
 void MakeBinary::compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in)
@@ -22,7 +23,7 @@ void MakeBinary::compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in)
   h_out = *p_h_in;
   hmap::transform(h_out,
                   [this](hmap::Array &x)
-                  { hmap::make_binary(x, this->threshold); });
+                  { hmap::make_binary(x, GET_ATTR_FLOAT("threshold")); });
 }
 
 } // namespace hesiod::cnode

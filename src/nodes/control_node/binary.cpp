@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-Binary::Binary(std::string id) : gnode::Node(id)
+Binary::Binary(std::string id) : ControlNode(id)
 {
   LOG_DEBUG("Binary::Binary()");
   this->add_port(

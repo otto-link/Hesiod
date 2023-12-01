@@ -8,11 +8,17 @@
 namespace hesiod::cnode
 {
 
-AlterElevation::AlterElevation(std::string id) : gnode::Node(id)
+AlterElevation::AlterElevation(std::string id) : ControlNode(id)
 {
   LOG_DEBUG("AlterElevation::AlterElevation()");
   this->node_type = "AlterElevation";
   this->category = category_mapping.at(this->node_type);
+
+  this->attr["ir"] = NEW_ATTR_INT(64, 1, 256);
+  this->attr["footprint_ratio"] = NEW_ATTR_FLOAT(1.f, 0.01f, 4.f);
+  this->attr["remap"] = NEW_ATTR_RANGE();
+
+  this->attr_ordered_key = {"ir", "footprint_ratio", "remap"};
 
   this->add_port(gnode::Port("cloud", gnode::direction::in, dtype::dCloud));
   this->add_port(gnode::Port("input", gnode::direction::in, dtype::dHeightMap));
@@ -32,10 +38,8 @@ void AlterElevation::compute()
 {
   LOG_DEBUG("computing AlterElevation node [%s]", this->id.c_str());
 
-  hmap::Cloud *p_input_cloud = static_cast<hmap::Cloud *>(
-      this->get_p_data("cloud"));
-  hmap::HeightMap *p_input_hmap = static_cast<hmap::HeightMap *>(
-      this->get_p_data("input"));
+  hmap::Cloud     *p_input_cloud = CAST_PORT_REF(hmap::Cloud, "cloud");
+  hmap::HeightMap *p_input_hmap = CAST_PORT_REF(hmap::HeightMap, "input");
 
   this->value_out = *p_input_hmap;
   hmap::transform(this->value_out,
@@ -45,14 +49,13 @@ void AlterElevation::compute()
                   {
                     hmap::alter_elevation(array,
                                           *p_input_cloud,
-                                          this->ir,
-                                          this->footprint_ratio,
+                                          GET_ATTR_INT("ir"),
+                                          GET_ATTR_FLOAT("footprint_ratio"),
                                           shift,
                                           scale);
                   });
 
-  // remap the output
-  this->value_out.remap(this->vmin, this->vmax);
+  this->post_process_heightmap(this->value_out);
 }
 
 } // namespace hesiod::cnode

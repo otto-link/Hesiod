@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-Clone::Clone(std::string id) : gnode::Node(id)
+Clone::Clone(std::string id) : ControlNode(id)
 {
   LOG_DEBUG("Unary::Unary()");
   this->node_type = "Clone";

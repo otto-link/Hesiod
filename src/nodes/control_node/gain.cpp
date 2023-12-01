@@ -13,6 +13,7 @@ Gain::Gain(std::string id) : Filter(id)
   LOG_DEBUG("Gain::Gain()");
   this->node_type = "Gain";
   this->category = category_mapping.at(this->node_type);
+  this->attr["gain"] = NEW_ATTR_FLOAT(1.f, 0.01f, 10.f);
 }
 
 void Gain::compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask)
@@ -25,7 +26,7 @@ void Gain::compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask)
   hmap::transform(h,
                   p_mask,
                   [this](hmap::Array &x, hmap::Array *p_mask)
-                  { hmap::gain(x, this->gain, p_mask); });
+                  { hmap::gain(x, GET_ATTR_FLOAT("gain"), p_mask); });
   h.remap(hmin, hmax, 0.f, 1.f);
 }
 

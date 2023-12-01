@@ -8,10 +8,25 @@
 namespace hesiod::cnode
 {
 
-SelectTransitions::SelectTransitions(std::string id) : gnode::Node(id)
+SelectTransitions::SelectTransitions(std::string id) : ControlNode(id)
 {
   this->node_type = "SelectTransitions";
   this->category = category_mapping.at(this->node_type);
+
+  this->attr["inverse"] = NEW_ATTR_BOOL(false);
+  this->attr["smoothing"] = NEW_ATTR_BOOL(false);
+  this->attr["ir_smoothing"] = NEW_ATTR_INT(4, 1, 128);
+  this->attr["saturate"] = NEW_ATTR_RANGE(false);
+  this->attr["k_saturate"] = NEW_ATTR_FLOAT(0.05f, 0.f, 1.f);
+  this->attr["remap"] = NEW_ATTR_RANGE(true);
+
+  this->attr_ordered_key = {"inverse",
+                            "smoothing",
+                            "_ir_smoothing",
+                            "saturate",
+                            "_k_saturate",
+                            "remap"};
+
   this->add_port(
       gnode::Port("input##1", gnode::direction::in, dtype::dHeightMap));
   this->add_port(
@@ -49,20 +64,6 @@ void SelectTransitions::compute()
       *p_input_blend,
       [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2, hmap::Array &a3)
       { m = hmap::select_transitions(a1, a2, a3); });
-
-  if (this->normalize)
-    this->value_out.remap();
-
-  if (this->inverse)
-    this->value_out.inverse();
-
-  if (this->smoothing)
-  {
-    hmap::transform(this->value_out,
-                    [this](hmap::Array &array)
-                    { return hmap::smooth_cpulse(array, this->ir_smoothing); });
-    this->value_out.smooth_overlap_buffers();
-  }
 }
 
 } // namespace hesiod::cnode

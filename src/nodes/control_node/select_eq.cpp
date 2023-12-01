@@ -12,6 +12,9 @@ SelectEq::SelectEq(std::string id) : Mask(id)
 {
   this->node_type = "SelectEq";
   this->category = category_mapping.at(this->node_type);
+
+  this->attr["value"] = NEW_ATTR_FLOAT(0.f, -1.f, 1.f);
+
   this->update_inner_bindings();
 }
 
@@ -22,7 +25,7 @@ void SelectEq::compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_input)
   hmap::transform(h_out,    // output
                   *p_input, // input
                   [this](hmap::Array &array)
-                  { return hmap::select_eq(array, this->value); });
+                  { return hmap::select_eq(array, GET_ATTR_FLOAT("value")); });
 }
 
 } // namespace hesiod::cnode

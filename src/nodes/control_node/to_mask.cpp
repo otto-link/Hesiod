@@ -12,6 +12,12 @@ ToMask::ToMask(std::string id) : Mask(id)
 {
   this->node_type = "ToMask";
   this->category = category_mapping.at(this->node_type);
+  this->attr_ordered_key = {"inverse",
+                            "smoothing",
+                            "_ir_smoothing",
+                            "saturate",
+                            "_k_saturate",
+                            "remap"};
   this->update_inner_bindings();
 }
 

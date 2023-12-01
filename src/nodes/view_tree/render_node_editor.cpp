@@ -100,7 +100,7 @@ void ViewTree::render_node_editor()
 
   if (this->show_settings)
   {
-    ImGui::BeginChild("settings", ImVec2(256, 0), true);
+    ImGui::BeginChild("settings", ImVec2(320, 0), true);
 
     ImGui::TextUnformatted("Settings");
     for (auto &node_hid : selected_node_hid)

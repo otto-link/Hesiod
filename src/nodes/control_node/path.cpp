@@ -8,18 +8,21 @@
 namespace hesiod::cnode
 {
 
-Path::Path(std::string id) : gnode::Node(id)
+Path::Path(std::string id) : ControlNode(id)
 {
   LOG_DEBUG("Path::Path()");
   this->node_type = "Path";
   this->category = category_mapping.at(this->node_type);
+
+  this->attr["path"] = NEW_ATTR_PATH();
+
   this->add_port(gnode::Port("output", gnode::direction::out, dtype::dPath));
   this->update_inner_bindings();
 }
 
 void Path::compute()
 {
-  this->value_out.closed = this->closed;
+  this->value_out = GET_ATTR_PATH("path");
 }
 
 void Path::update_inner_bindings()

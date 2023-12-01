@@ -8,10 +8,13 @@
 namespace hesiod::cnode
 {
 
-Warp::Warp(std::string id) : gnode::Node(id)
+Warp::Warp(std::string id) : ControlNode(id)
 {
   this->node_type = "Warp";
   this->category = category_mapping.at(this->node_type);
+
+  this->attr["scale"] = NEW_ATTR_FLOAT(1.f, 0.f, 128.f);
+
   this->add_port(gnode::Port("input", gnode::direction::in, dtype::dHeightMap));
   this->add_port(gnode::Port("dx",
                              gnode::direction::in,
@@ -21,11 +24,6 @@ Warp::Warp(std::string id) : gnode::Node(id)
                              gnode::direction::in,
                              dtype::dHeightMap,
                              gnode::optional::yes));
-
-  // this->add_port(gnode::Port("mask",
-  //                            gnode::direction::in,
-  //                            dtype::dHeightMap,
-  //                            gnode::optional::yes));
   this->add_port(
       gnode::Port("output", gnode::direction::out, dtype::dHeightMap));
   this->update_inner_bindings();
@@ -42,13 +40,14 @@ void Warp::compute()
   LOG_DEBUG("computing node [%s]", this->id.c_str());
 
   // work on a copy of the input
-  this->value_out = *(hmap::HeightMap *)this->get_p_data("input");
+  this->value_out = *CAST_PORT_REF(hmap::HeightMap, "input");
 
   hmap::transform(this->value_out,
-                  (hmap::HeightMap *)this->get_p_data("dx"),
-                  (hmap::HeightMap *)this->get_p_data("dy"),
+                  CAST_PORT_REF(hmap::HeightMap, "dx"),
+                  CAST_PORT_REF(hmap::HeightMap, "dy"),
                   [this](hmap::Array &z, hmap::Array *p_dx, hmap::Array *p_dy)
-                  { hmap::warp(z, p_dx, p_dy, this->scale); });
+                  { hmap::warp(z, p_dx, p_dy, GET_ATTR_FLOAT("scale")); });
+
   this->value_out.smooth_overlap_buffers();
 }
 

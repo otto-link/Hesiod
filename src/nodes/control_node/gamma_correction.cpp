@@ -13,6 +13,7 @@ GammaCorrection::GammaCorrection(std::string id) : Filter(id)
   LOG_DEBUG("GammaCorrection::GammaCorrection()");
   this->node_type = "GammaCorrection";
   this->category = category_mapping.at(this->node_type);
+  this->attr["gamma"] = NEW_ATTR_FLOAT(1.f, 0.01f, 10.f);
 }
 
 void GammaCorrection::compute_filter(hmap::HeightMap &h,
@@ -25,8 +26,9 @@ void GammaCorrection::compute_filter(hmap::HeightMap &h,
   h.remap(0.f, 1.f, hmin, hmax);
   hmap::transform(h,
                   p_mask,
-                  [this](hmap::Array &x, hmap::Array *p_mask)
-                  { hmap::gamma_correction(x, this->gamma, p_mask); });
+                  [this](hmap::Array &x, hmap::Array *p_mask) {
+                    hmap::gamma_correction(x, GET_ATTR_FLOAT("gamma"), p_mask);
+                  });
   h.remap(hmin, hmax, 0.f, 1.f);
 }
 

@@ -23,6 +23,7 @@ namespace hesiod::vnode
 enum preview_type : int
 {
   grayscale, ///< grayscale
+  jet,       ///< jet
   histogram  ///< histogram
 };
 
@@ -101,29 +102,15 @@ static const std::map<int, viewnode_color_set> dtype_colors = {
 /**
  * @brief Base class for all 'View Node' (nodes with a GUI).
  */
-class ViewNode
+class ViewNode : virtual public hesiod::cnode::ControlNode
 {
 public:
   /**
-   * @brief Default constructor, exists only to permit declaration of lists of
-   * nodes.
-   */
-  ViewNode();
-
-  /**
    * @brief Construct a new View Node object.
    *
-   * @param p_control_node Reference to associated 'control node', i.e. the node
-   * carrying out all the computations.
+   * @param id Node id.
    */
-  ViewNode(gnode::Node *p_control_node);
-
-  /**
-   * @brief Get the reference to the associated control node.
-   *
-   * @return gnode::Node* Associated control node.
-   */
-  gnode::Node *get_p_control_node();
+  ViewNode(std::string id);
 
   /**
    * @brief Get the view3d port id.
@@ -145,13 +132,6 @@ public:
    * @return std::string
    */
   std::string get_view3d_color_port_id();
-
-  /**
-   * @brief Set the reference to the associated control node.
-   *
-   * @param new_p_control_node Reference to the new associated control node.
-   */
-  void set_p_control_node(gnode::Node *new_p_control_node);
 
   /**
    * @brief Set the preview port id.
@@ -231,13 +211,20 @@ public:
   /**
    * @brief Serialization of the node parameters (load).
    */
-  virtual void serialize_load(cereal::JSONInputArchive &);
+  // virtual void serialize_load(cereal::JSONInputArchive &);
 
   /**
    * @brief Serialization of the node parameters (save).
    */
-  virtual void serialize_save(cereal::JSONOutputArchive &);
+  // virtual void serialize_save(cereal::JSONOutputArchive &);
 
+  /**
+   * @brief To be placed after an ImGui widget, triggers the node update after
+   * the widget has been edited (and true when this is the case).
+   *
+   * @return true Widget has been edited.
+   * @return false Has not.
+   */
   bool trigger_update_after_edit();
 
   /**
@@ -284,11 +271,6 @@ protected:
 
 private:
   /**
-   * @brief Reference to the associated control node.
-   */
-  gnode::Node *p_control_node;
-
-  /**
    * @brief Shape preview.
    */
   hmap::Vec2<int> shape_preview = {128, 128};
@@ -320,26 +302,6 @@ private:
   float update_time = 0.f;
 };
 
-/**
- * @brief Composite class based on ViewNode (view node) and gnode::Node (control
- * node). Base class used to build all the view nodes.
- */
-class ViewControlNode : public ViewNode,
-                        public gnode::Node // used to recast derived ViewNode
-{
-public:
-  /**
-   * @brief Constructor, instantiate both the view node and the control node,
-   * and associate them.
-   *
-   * @param id Node id.
-   */
-  ViewControlNode(std::string id) : ViewNode(), gnode::Node(id)
-  {
-    this->set_p_control_node((gnode::Node *)this);
-  }
-};
-
 //----------------------------------------
 // End-user nodes
 //----------------------------------------
@@ -347,15 +309,15 @@ public:
 /**
  * @brief ViewAlterElevation class.
  */
+
 class ViewAlterElevation : public ViewNode, public hesiod::cnode::AlterElevation
 {
 public:
-  ViewAlterElevation(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewAlterElevation(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::AlterElevation(id)
+  {
+  }
 };
 
 class ViewBaseElevation : public ViewNode, public hesiod::cnode::BaseElevation
@@ -364,25 +326,25 @@ public:
   ViewBaseElevation(std::string     id,
                     hmap::Vec2<int> shape,
                     hmap::Vec2<int> tiling,
-                    float           overlap);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+                    float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::BaseElevation(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewBezierPath : public ViewNode, public hesiod::cnode::BezierPath
 {
 public:
-  ViewBezierPath(std::string id);
+  ViewBezierPath(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::BezierPath(id)
+  {
+  }
 
   void render_node_specific_content();
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewBiquadPulse : public ViewNode, public hesiod::cnode::BiquadPulse
@@ -391,25 +353,27 @@ public:
   ViewBiquadPulse(std::string     id,
                   hmap::Vec2<int> shape,
                   hmap::Vec2<int> tiling,
-                  float           overlap);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+                  float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::BiquadPulse(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewBlend : public ViewNode, public hesiod::cnode::Blend
 {
 public:
-  ViewBlend(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewBlend(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Blend(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
+// TO DO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 class ViewBrush : public ViewNode, public hesiod::cnode::Brush
 {
 public:
@@ -419,9 +383,6 @@ public:
             float           overlap);
 
   bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewBump : public ViewNode, public hesiod::cnode::Bump
@@ -430,12 +391,13 @@ public:
   ViewBump(std::string     id,
            hmap::Vec2<int> shape,
            hmap::Vec2<int> tiling,
-           float           overlap);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+           float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::Bump(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewCaldera : public ViewNode, public hesiod::cnode::Caldera
@@ -444,12 +406,13 @@ public:
   ViewCaldera(std::string     id,
               hmap::Vec2<int> shape,
               hmap::Vec2<int> tiling,
-              float           overlap);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+              float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::Caldera(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewCheckerboard : public ViewNode, public hesiod::cnode::Checkerboard
@@ -458,47 +421,46 @@ public:
   ViewCheckerboard(std::string     id,
                    hmap::Vec2<int> shape,
                    hmap::Vec2<int> tiling,
-                   float           overlap);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
-
-private:
-  bool link_kxy = true;
+                   float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::Checkerboard(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewClamp : public ViewNode, public hesiod::cnode::Clamp
 {
 public:
-  ViewClamp(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewClamp(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Clamp(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewClone : public ViewNode, public hesiod::cnode::Clone
 {
 public:
-  ViewClone(std::string id);
+  ViewClone(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Clone(id)
+  {
+  }
 
   bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &);
-  void serialize_load(cereal::JSONInputArchive &);
 };
 
 class ViewCloud : public ViewNode, public hesiod::cnode::Cloud
 {
 public:
-  ViewCloud(std::string id);
+  ViewCloud(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Cloud(id)
+  {
+  }
 
   void render_node_specific_content();
-
-  bool render_settings();
 };
 
 class ViewCloudToArrayInterp : public ViewNode,
@@ -508,59 +470,52 @@ public:
   ViewCloudToArrayInterp(std::string     id,
                          hmap::Vec2<int> shape,
                          hmap::Vec2<int> tiling,
-                         float           overlap);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+                         float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::CloudToArrayInterp(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewColorize : public ViewNode, public hesiod::cnode::Colorize
 {
 public:
-  ViewColorize(std::string id);
-
-  // void render_node_specific_content();
+  ViewColorize(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::Colorize(id)
+  {
+    this->set_preview_port_id("RGB");
+    this->set_view3d_elevation_port_id("input");
+    this->set_view3d_color_port_id("RGB");
+  }
 
   bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewCombineMask : public ViewNode, public hesiod::cnode::CombineMask
 {
 public:
-  ViewCombineMask(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewCombineMask(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::CombineMask(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_color_port_id("output");
+  }
 };
 
 class ViewConvolveSVD : public ViewNode, public hesiod::cnode::ConvolveSVD
 {
 public:
-  ViewConvolveSVD(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
-};
-
-class ViewCubicPulseTruncated : public ViewNode,
-                                public hesiod::cnode::CubicPulseTruncated
-{
-public:
-  ViewCubicPulseTruncated(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewConvolveSVD(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::ConvolveSVD(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewDebug : public ViewNode, public hesiod::cnode::Debug
@@ -578,77 +533,80 @@ public:
   bool render_settings();
 
   void render_node_specific_content();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewDepressionFilling : public ViewNode,
                               public hesiod::cnode::DepressionFilling
 {
 public:
-  ViewDepressionFilling(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewDepressionFilling(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::DepressionFilling(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewDigPath : public ViewNode, public hesiod::cnode::DigPath
 {
 public:
-  ViewDigPath(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewDigPath(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::DigPath(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewDistanceTransform : public ViewNode,
                               public hesiod::cnode::DistanceTransform
 {
 public:
-  ViewDistanceTransform(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewDistanceTransform(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::DistanceTransform(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+    this->help_text = "Apply the distance transform (Euclidean distance) to "
+                      "the input heightmap. Cells with null or negative values "
+                      "are assumed to belong to the background.";
+  }
 };
 
 class ViewEqualize : public ViewNode, public hesiod::cnode::Equalize
 {
 public:
-  ViewEqualize(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewEqualize(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::Equalize(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewErosionMaps : public ViewNode, public hesiod::cnode::ErosionMaps
 {
 public:
-  ViewErosionMaps(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewErosionMaps(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::ErosionMaps(id)
+  {
+  }
 };
 
 class ViewExpandShrink : public ViewNode, public hesiod::cnode::ExpandShrink
 {
 public:
-  ViewExpandShrink(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewExpandShrink(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::ExpandShrink(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewExpandShrinkDirectional
@@ -656,45 +614,39 @@ class ViewExpandShrinkDirectional
       public hesiod::cnode::ExpandShrinkDirectional
 {
 public:
-  ViewExpandShrinkDirectional(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewExpandShrinkDirectional(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::ExpandShrinkDirectional(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewExport : public ViewNode, public hesiod::cnode::Export
 {
 public:
-  ViewExport(std::string id);
-
-  bool render_settings();
+  ViewExport(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Export(id)
+  {
+    this->set_preview_port_id("input");
+    this->set_view3d_elevation_port_id("input");
+  }
 
   void render_node_specific_content();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
-
-protected:
-  std::map<std::string, int> format_map = {
-      {"binary", hesiod::cnode::export_type::binary},
-      {"png (8 bit)", hesiod::cnode::export_type::png8bit},
-      {"png (16 bit)", hesiod::cnode::export_type::png16bit},
-      {"raw (16 bit, Unity)", hesiod::cnode::export_type::raw16bit}};
 };
 
 class ViewExportRGB : public ViewNode, public hesiod::cnode::ExportRGB
 {
 public:
-  ViewExportRGB(std::string id);
-
-  bool render_settings();
+  ViewExportRGB(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::ExportRGB(id)
+  {
+    this->set_preview_port_id("RGB");
+  }
 
   void render_node_specific_content();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewFbmPerlin : public ViewNode, public hesiod::cnode::FbmPerlin
@@ -703,15 +655,13 @@ public:
   ViewFbmPerlin(std::string     id,
                 hmap::Vec2<int> shape,
                 hmap::Vec2<int> tiling,
-                float           overlap);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
-
-private:
-  bool link_kxy = true;
+                float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::FbmPerlin(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewFbmSimplex : public ViewNode, public hesiod::cnode::FbmSimplex
@@ -720,15 +670,13 @@ public:
   ViewFbmSimplex(std::string     id,
                  hmap::Vec2<int> shape,
                  hmap::Vec2<int> tiling,
-                 float           overlap);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
-
-private:
-  bool link_kxy = true;
+                 float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::FbmSimplex(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewFbmWorley : public ViewNode, public hesiod::cnode::FbmWorley
@@ -737,28 +685,25 @@ public:
   ViewFbmWorley(std::string     id,
                 hmap::Vec2<int> shape,
                 hmap::Vec2<int> tiling,
-                float           overlap);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
-
-private:
-  bool link_kxy = true;
+                float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::FbmWorley(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewFractalizePath : public ViewNode, public hesiod::cnode::FractalizePath
 {
 public:
-  ViewFractalizePath(std::string id);
+  ViewFractalizePath(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::FractalizePath(id)
+  {
+  }
 
   void render_node_specific_content();
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewGaborNoise : public ViewNode, public hesiod::cnode::GaborNoise
@@ -767,87 +712,96 @@ public:
   ViewGaborNoise(std::string     id,
                  hmap::Vec2<int> shape,
                  hmap::Vec2<int> tiling,
-                 float           overlap);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+                 float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::GaborNoise(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewGain : public ViewNode, public hesiod::cnode::Gain
 {
 public:
-  ViewGain(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewGain(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Gain(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewGammaCorrection : public ViewNode,
                             public hesiod::cnode::GammaCorrection
 {
 public:
-  ViewGammaCorrection(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewGammaCorrection(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::GammaCorrection(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewGammaCorrectionLocal : public ViewNode,
                                  public hesiod::cnode::GammaCorrectionLocal
 {
 public:
-  ViewGammaCorrectionLocal(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewGammaCorrectionLocal(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::GammaCorrectionLocal(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewGradient : public ViewNode, public hesiod::cnode::Gradient
 {
 public:
-  ViewGradient(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewGradient(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::Gradient(id)
+  {
+  }
 };
 
 class ViewGradientAngle : public ViewNode, public hesiod::cnode::GradientAngle
 {
 public:
-  ViewGradientAngle(std::string id);
-
-  void serialize_save(cereal::JSONOutputArchive &);
-  void serialize_load(cereal::JSONInputArchive &);
+  ViewGradientAngle(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::GradientAngle(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewGradientNorm : public ViewNode, public hesiod::cnode::GradientNorm
 {
 public:
-  ViewGradientNorm(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewGradientNorm(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::GradientNorm(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewGradientTalus : public ViewNode, public hesiod::cnode::GradientTalus
 {
 public:
-  ViewGradientTalus(std::string id);
-
-  void serialize_save(cereal::JSONOutputArchive &);
-  void serialize_load(cereal::JSONInputArchive &);
+  ViewGradientTalus(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::GradientTalus(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewGaussianPulse : public ViewNode, public hesiod::cnode::GaussianPulse
@@ -856,94 +810,90 @@ public:
   ViewGaussianPulse(std::string     id,
                     hmap::Vec2<int> shape,
                     hmap::Vec2<int> tiling,
-                    float           overlap);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+                    float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::GaussianPulse(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewHydraulicAlgebric : public ViewNode,
                               public hesiod::cnode::HydraulicAlgebric
 {
 public:
-  ViewHydraulicAlgebric(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
-};
-
-class ViewHydraulicBenes : public ViewNode, public hesiod::cnode::HydraulicBenes
-{
-public:
-  ViewHydraulicBenes(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewHydraulicAlgebric(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::HydraulicAlgebric(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewHydraulicParticle : public ViewNode,
                               public hesiod::cnode::HydraulicParticle
 {
 public:
-  ViewHydraulicParticle(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewHydraulicParticle(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::HydraulicParticle(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewHydraulicRidge : public ViewNode, public hesiod::cnode::HydraulicRidge
 {
 public:
-  ViewHydraulicRidge(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewHydraulicRidge(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::HydraulicRidge(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewHydraulicStream : public ViewNode,
                             public hesiod::cnode::HydraulicStream
 {
 public:
-  ViewHydraulicStream(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewHydraulicStream(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::HydraulicStream(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewHydraulicStreamLog : public ViewNode,
                                public hesiod::cnode::HydraulicStreamLog
 {
 public:
-  ViewHydraulicStreamLog(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewHydraulicStreamLog(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::HydraulicStreamLog(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewHydraulicVpipes : public ViewNode,
                             public hesiod::cnode::HydraulicVpipes
 {
 public:
-  ViewHydraulicVpipes(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewHydraulicVpipes(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::HydraulicVpipes(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewImport : public ViewNode, public hesiod::cnode::Import
@@ -952,198 +902,214 @@ public:
   ViewImport(std::string     id,
              hmap::Vec2<int> shape,
              hmap::Vec2<int> tiling,
-             float           overlap);
-
-  bool render_settings();
+             float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::Import(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 
   void render_node_specific_content();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewKernel : public ViewNode, public hesiod::cnode::Kernel
 {
 public:
-  ViewKernel(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewKernel(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Kernel(id)
+  {
+    this->set_preview_port_id("output");
+  }
 };
 
 class ViewKmeansClustering2 : public ViewNode,
                               public hesiod::cnode::KmeansClustering2
 {
 public:
-  ViewKmeansClustering2(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewKmeansClustering2(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::KmeansClustering2(id)
+  {
+    this->set_preview_port_id("output");
+  }
 };
 
 class ViewKmeansClustering3 : public ViewNode,
                               public hesiod::cnode::KmeansClustering3
 {
 public:
-  ViewKmeansClustering3(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewKmeansClustering3(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::KmeansClustering3(id)
+  {
+    this->set_preview_port_id("output");
+  }
 };
 
 class ViewLaplace : public ViewNode, public hesiod::cnode::Laplace
 {
 public:
-  ViewLaplace(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewLaplace(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Laplace(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewLaplaceEdgePreserving : public ViewNode,
                                   public hesiod::cnode::LaplaceEdgePreserving
 {
 public:
-  ViewLaplaceEdgePreserving(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewLaplaceEdgePreserving(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::LaplaceEdgePreserving(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewLerp : public ViewNode, public hesiod::cnode::Lerp
 {
 public:
-  ViewLerp(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewLerp(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Lerp(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewMakeBinary : public ViewNode, public hesiod::cnode::MakeBinary
 
 {
 public:
-  ViewMakeBinary(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewMakeBinary(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::MakeBinary(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewMeanderizePath : public ViewNode, public hesiod::cnode::MeanderizePath
 {
 public:
-  ViewMeanderizePath(std::string id);
+  ViewMeanderizePath(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::MeanderizePath(id)
+  {
+  }
 
   void render_node_specific_content();
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewMeanLocal : public ViewNode, public hesiod::cnode::MeanLocal
 {
 public:
-  ViewMeanLocal(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewMeanLocal(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::MeanLocal(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewMedian3x3 : public ViewNode, public hesiod::cnode::Median3x3
 {
 public:
-  ViewMedian3x3(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewMedian3x3(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::Median3x3(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewMinimumLocal : public ViewNode, public hesiod::cnode::MinimumLocal
 {
 public:
-  ViewMinimumLocal(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewMinimumLocal(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::MinimumLocal(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewMixRGB : public ViewNode, public hesiod::cnode::MixRGB
 {
 public:
-  ViewMixRGB(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewMixRGB(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::MixRGB(id)
+  {
+    this->set_preview_port_id("RGB");
+  }
 };
 
 class ViewNormalDisplacement : public ViewNode,
                                public hesiod::cnode::NormalDisplacement
 {
 public:
-  ViewNormalDisplacement(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewNormalDisplacement(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::NormalDisplacement(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewOneMinus : public ViewNode, public hesiod::cnode::OneMinus
 {
 public:
-  ViewOneMinus(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewOneMinus(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::OneMinus(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewPath : public ViewNode, public hesiod::cnode::Path
 {
 public:
-  ViewPath(std::string id);
+  ViewPath(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Path(id)
+  {
+  }
 
   void render_node_specific_content();
-
-  bool render_settings();
 };
 
 class ViewPathFinding : public ViewNode, public hesiod::cnode::PathFinding
 {
 public:
-  ViewPathFinding(std::string id);
+  ViewPathFinding(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::PathFinding(id)
+  {
+    this->set_view3d_elevation_port_id("heightmap");
+    this->set_view3d_color_port_id("output");
+    this->help_text =
+        "Find the lowest elevation and elevation difference path for each edge "
+        "of the input path, assuming this path lies on the input "
+        "heightmap.\n'elevation_ratio': Balance between absolute elevation and "
+        "elevation difference in the cost function.\n'distance_exponent': "
+        "Exponent of the distance calculation between two points. Increasing "
+        "the distance exponent of the cost function increases the cost of "
+        "elevation gaps: path then tends to stay at the same elevation if "
+        "possible (i.e. reduce the overall cumulative elevation gain).";
+  }
 
   void render_node_specific_content();
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewPathToHeightmap : public ViewNode,
@@ -1153,12 +1119,14 @@ public:
   ViewPathToHeightmap(std::string     id,
                       hmap::Vec2<int> shape,
                       hmap::Vec2<int> tiling,
-                      float           overlap);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+                      float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::PathToHeightmap(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+    this->set_view3d_color_port_id("path");
+  }
 };
 
 class ViewPerlin : public ViewNode, public hesiod::cnode::Perlin
@@ -1167,15 +1135,14 @@ public:
   ViewPerlin(std::string     id,
              hmap::Vec2<int> shape,
              hmap::Vec2<int> tiling,
-             float           overlap);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
-
-private:
-  bool link_kxy = true;
+             float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::Perlin(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+    this->help_text = "Generate a Perlin noise.";
+  }
 };
 
 class ViewPerlinBillow : public ViewNode, public hesiod::cnode::PerlinBillow
@@ -1184,114 +1151,121 @@ public:
   ViewPerlinBillow(std::string     id,
                    hmap::Vec2<int> shape,
                    hmap::Vec2<int> tiling,
-                   float           overlap);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
-
-private:
-  bool link_kxy = true;
+                   float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::PerlinBillow(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewPlateau : public ViewNode, public hesiod::cnode::Plateau
 {
 public:
-  ViewPlateau(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewPlateau(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Plateau(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewPreview : public ViewNode, public hesiod::cnode::Preview
 {
 public:
-  ViewPreview(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &);
-  void serialize_load(cereal::JSONInputArchive &);
+  ViewPreview(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Preview(id)
+  {
+    this->set_preview_port_id("input");
+    this->set_view3d_elevation_port_id("input");
+    this->set_view3d_color_port_id("color mask");
+  }
 };
 
 class ViewPreviewColorize : public ViewNode,
                             public hesiod::cnode::PreviewColorize
 {
 public:
-  ViewPreviewColorize(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &);
-  void serialize_load(cereal::JSONInputArchive &);
+  ViewPreviewColorize(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::PreviewColorize(id)
+  {
+    this->set_preview_port_id("RGB");
+    this->set_view3d_elevation_port_id("input");
+    this->set_view3d_color_port_id("RGB");
+  }
 };
 
 class ViewRecastCanyon : public ViewNode, public hesiod::cnode::RecastCanyon
 {
 public:
-  ViewRecastCanyon(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &);
-  void serialize_load(cereal::JSONInputArchive &);
+  ViewRecastCanyon(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::RecastCanyon(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewRecurve : public ViewNode, public hesiod::cnode::Recurve
 {
 public:
-  ViewRecurve(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewRecurve(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Recurve(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewRecurveKura : public ViewNode, public hesiod::cnode::RecurveKura
 {
 public:
-  ViewRecurveKura(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewRecurveKura(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::RecurveKura(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewRecurveS : public ViewNode, public hesiod::cnode::RecurveS
 {
 public:
-  ViewRecurveS(std::string id);
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewRecurveS(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::RecurveS(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewRelativeElevation : public ViewNode,
                               public hesiod::cnode::RelativeElevation
 {
 public:
-  ViewRelativeElevation(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewRelativeElevation(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::RelativeElevation(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewRemap : public ViewNode, public hesiod::cnode::Remap
 {
 public:
-  ViewRemap(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewRemap(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Remap(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewRidgedPerlin : public ViewNode, public hesiod::cnode::RidgedPerlin
@@ -1300,60 +1274,69 @@ public:
   ViewRidgedPerlin(std::string     id,
                    hmap::Vec2<int> shape,
                    hmap::Vec2<int> tiling,
-                   float           overlap);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
-
-private:
-  bool link_kxy = true;
+                   float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::RidgedPerlin(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewRugosity : public ViewNode, public hesiod::cnode::Rugosity
 {
 public:
-  ViewRugosity(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewRugosity(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::Rugosity(id)
+  {
+    LOG_DEBUG("ViewRugosity::ViewRugosity");
+    LOG_DEBUG("node [%s]", this->id.c_str());
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("input");
+    this->set_view3d_color_port_id("output");
+  }
 };
 
 class ViewSedimentDeposition : public ViewNode,
                                public hesiod::cnode::SedimentDeposition
 {
 public:
-  ViewSedimentDeposition(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewSedimentDeposition(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::SedimentDeposition(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewSelectCavities : public ViewNode, public hesiod::cnode::SelectCavities
 {
 public:
-  ViewSelectCavities(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewSelectCavities(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::SelectCavities(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("input");
+    this->set_view3d_color_port_id("output");
+  }
 };
 
 class ViewSelectEq : public ViewNode, public hesiod::cnode::SelectEq
 {
 public:
-  ViewSelectEq(std::string id);
+  ViewSelectEq(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::SelectEq(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("input");
+    this->set_view3d_color_port_id("output");
+  }
 
   bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
 
 private:
   bool               use_input_unique_values = false;
@@ -1365,46 +1348,53 @@ class ViewSelectGradientNorm : public ViewNode,
                                public hesiod::cnode::SelectGradientNorm
 {
 public:
-  ViewSelectGradientNorm(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewSelectGradientNorm(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::SelectGradientNorm(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewSelectInterval : public ViewNode, public hesiod::cnode::SelectInterval
 {
 public:
-  ViewSelectInterval(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewSelectInterval(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::SelectInterval(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("input");
+    this->set_view3d_color_port_id("output");
+  }
 };
 
 class ViewSelectRivers : public ViewNode, public hesiod::cnode::SelectRivers
 {
 public:
-  ViewSelectRivers(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewSelectRivers(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::SelectRivers(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("input");
+    this->set_view3d_color_port_id("output");
+  }
 };
 
 class ViewSelectTransitions : public ViewNode,
                               public hesiod::cnode::SelectTransitions
 {
 public:
-  ViewSelectTransitions(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewSelectTransitions(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::SelectTransitions(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("blend");
+    this->set_view3d_color_port_id("output");
+  }
 };
 
 class ViewSimplex : public ViewNode, public hesiod::cnode::Simplex
@@ -1413,15 +1403,14 @@ public:
   ViewSimplex(std::string     id,
               hmap::Vec2<int> shape,
               hmap::Vec2<int> tiling,
-              float           overlap);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
-
-private:
-  bool link_kxy = true;
+              float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::Simplex(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+    this->help_text = "Generate a Simplex noise.";
+  }
 };
 
 class ViewSlope : public ViewNode, public hesiod::cnode::Slope
@@ -1430,70 +1419,76 @@ public:
   ViewSlope(std::string     id,
             hmap::Vec2<int> shape,
             hmap::Vec2<int> tiling,
-            float           overlap);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+            float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::Slope(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewSmoothCpulse : public ViewNode, public hesiod::cnode::SmoothCpulse
 {
 public:
-  ViewSmoothCpulse(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewSmoothCpulse(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::SmoothCpulse(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewSmoothFill : public ViewNode, public hesiod::cnode::SmoothFill
 {
 public:
-  ViewSmoothFill(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewSmoothFill(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::SmoothFill(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewSmoothFillHoles : public ViewNode,
                             public hesiod::cnode::SmoothFillHoles
 {
 public:
-  ViewSmoothFillHoles(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewSmoothFillHoles(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::SmoothFillHoles(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewSmoothFillSmearPeaks : public ViewNode,
                                  public hesiod::cnode::SmoothFillSmearPeaks
 {
 public:
-  ViewSmoothFillSmearPeaks(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewSmoothFillSmearPeaks(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::SmoothFillSmearPeaks(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewSteepenConvective : public ViewNode,
                               public hesiod::cnode::SteepenConvective
 {
 public:
-  ViewSteepenConvective(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewSteepenConvective(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::SteepenConvective(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewStep : public ViewNode, public hesiod::cnode::Step
@@ -1502,92 +1497,102 @@ public:
   ViewStep(std::string     id,
            hmap::Vec2<int> shape,
            hmap::Vec2<int> tiling,
-           float           overlap);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+           float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::Step(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewStratifyMultiscale : public ViewNode,
                                public hesiod::cnode::StratifyMultiscale
 {
 public:
-  ViewStratifyMultiscale(std::string id);
+  ViewStratifyMultiscale(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::StratifyMultiscale(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 
   bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
 };
 
 class ViewStratifyOblique : public ViewNode,
                             public hesiod::cnode::StratifyOblique
 {
 public:
-  ViewStratifyOblique(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewStratifyOblique(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::StratifyOblique(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewThermal : public ViewNode, public hesiod::cnode::Thermal
 {
 public:
-  ViewThermal(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewThermal(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Thermal(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewThermalAutoBedrock : public ViewNode,
                                public hesiod::cnode::ThermalAutoBedrock
 {
 public:
-  ViewThermalAutoBedrock(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewThermalAutoBedrock(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::ThermalAutoBedrock(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewThermalScree : public ViewNode, public hesiod::cnode::ThermalScree
 {
 public:
-  ViewThermalScree(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewThermalScree(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::ThermalScree(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewToMask : public ViewNode, public hesiod::cnode::ToMask
 {
 public:
-  ViewToMask(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewToMask(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::ToMask(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("input");
+    this->set_view3d_color_port_id("output");
+  }
 };
 
 class ViewValleyWidth : public ViewNode, public hesiod::cnode::ValleyWidth
 {
 public:
-  ViewValleyWidth(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewValleyWidth(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::ValleyWidth(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("input");
+    this->set_view3d_color_port_id("output");
+  }
 };
 
 class ViewValueNoiseDelaunay : public ViewNode,
@@ -1597,12 +1602,13 @@ public:
   ViewValueNoiseDelaunay(std::string     id,
                          hmap::Vec2<int> shape,
                          hmap::Vec2<int> tiling,
-                         float           overlap);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+                         float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::ValueNoiseDelaunay(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewValueNoiseLinear : public ViewNode,
@@ -1612,15 +1618,13 @@ public:
   ViewValueNoiseLinear(std::string     id,
                        hmap::Vec2<int> shape,
                        hmap::Vec2<int> tiling,
-                       float           overlap);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
-
-private:
-  bool link_kxy = true;
+                       float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::ValueNoiseLinear(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewValueNoiseThinplate : public ViewNode,
@@ -1630,51 +1634,36 @@ public:
   ViewValueNoiseThinplate(std::string     id,
                           hmap::Vec2<int> shape,
                           hmap::Vec2<int> tiling,
-                          float           overlap);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
-
-private:
-  bool link_kxy = true;
+                          float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::ValueNoiseThinplate(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewWarp : public ViewNode, public hesiod::cnode::Warp
 {
 public:
-  ViewWarp(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewWarp(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Warp(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewWarpDownslope : public ViewNode, public hesiod::cnode::WarpDownslope
 {
 public:
-  ViewWarpDownslope(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
-};
-
-class ViewWaveSine : public ViewNode, public hesiod::cnode::WaveSine
-{
-public:
-  ViewWaveSine(std::string     id,
-               hmap::Vec2<int> shape,
-               hmap::Vec2<int> tiling,
-               float           overlap);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewWarpDownslope(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::WarpDownslope(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewWaveDune : public ViewNode, public hesiod::cnode::WaveDune
@@ -1683,12 +1672,28 @@ public:
   ViewWaveDune(std::string     id,
                hmap::Vec2<int> shape,
                hmap::Vec2<int> tiling,
-               float           overlap);
+               float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::WaveDune(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
+};
 
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+class ViewWaveSine : public ViewNode, public hesiod::cnode::WaveSine
+{
+public:
+  ViewWaveSine(std::string     id,
+               hmap::Vec2<int> shape,
+               hmap::Vec2<int> tiling,
+               float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::WaveSine(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewWhite : public ViewNode, public hesiod::cnode::White
@@ -1697,24 +1702,26 @@ public:
   ViewWhite(std::string     id,
             hmap::Vec2<int> shape,
             hmap::Vec2<int> tiling,
-            float           overlap);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+            float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::White(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewWhiteDensityMap : public ViewNode,
                             public hesiod::cnode::WhiteDensityMap
 {
 public:
-  ViewWhiteDensityMap(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewWhiteDensityMap(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::WhiteDensityMap(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewWhiteSparse : public ViewNode, public hesiod::cnode::WhiteSparse
@@ -1723,12 +1730,13 @@ public:
   ViewWhiteSparse(std::string     id,
                   hmap::Vec2<int> shape,
                   hmap::Vec2<int> tiling,
-                  float           overlap);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+                  float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::WhiteSparse(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewWorley : public ViewNode, public hesiod::cnode::Worley
@@ -1737,15 +1745,13 @@ public:
   ViewWorley(std::string     id,
              hmap::Vec2<int> shape,
              hmap::Vec2<int> tiling,
-             float           overlap);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
-
-private:
-  bool link_kxy = true;
+             float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::Worley(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewWorleyDouble : public ViewNode, public hesiod::cnode::WorleyDouble
@@ -1754,15 +1760,13 @@ public:
   ViewWorleyDouble(std::string     id,
                    hmap::Vec2<int> shape,
                    hmap::Vec2<int> tiling,
-                   float           overlap);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
-
-private:
-  bool link_kxy = true;
+                   float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::WorleyDouble(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewWorleyValue : public ViewNode, public hesiod::cnode::WorleyValue
@@ -1771,36 +1775,26 @@ public:
   ViewWorleyValue(std::string     id,
                   hmap::Vec2<int> shape,
                   hmap::Vec2<int> tiling,
-                  float           overlap);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
-
-private:
-  bool link_kxy = true;
+                  float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::WorleyValue(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
 
 class ViewZeroedEdges : public ViewNode, public hesiod::cnode::ZeroedEdges
 {
 public:
-  ViewZeroedEdges(std::string id);
-
-  bool render_settings();
-
-  void serialize_save(cereal::JSONOutputArchive &ar);
-  void serialize_load(cereal::JSONInputArchive &ar);
+  ViewZeroedEdges(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::ZeroedEdges(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
 };
-
-// Some generic settings
-bool render_settings_mask(hesiod::cnode::Mask *p_node);
-
-void serialize_load_settings_mask(hesiod::cnode::Mask      *p_node,
-                                  cereal::JSONInputArchive &ar);
-
-void serialize_save_settings_mask(hesiod::cnode::Mask       *p_node,
-                                  cereal::JSONOutputArchive &ar);
 
 // // HELPERS
 

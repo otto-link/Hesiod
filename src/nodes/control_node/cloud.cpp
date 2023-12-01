@@ -8,10 +8,13 @@
 namespace hesiod::cnode
 {
 
-Cloud::Cloud(std::string id) : gnode::Node(id)
+Cloud::Cloud(std::string id) : ControlNode(id)
 {
   LOG_DEBUG("Cloud::Cloud()");
   this->node_type = "Cloud";
+
+  this->attr["cloud"] = NEW_ATTR_CLOUD();
+
   this->category = category_mapping.at(this->node_type);
   this->add_port(gnode::Port("output", gnode::direction::out, dtype::dCloud));
   this->update_inner_bindings();
@@ -20,7 +23,7 @@ Cloud::Cloud(std::string id) : gnode::Node(id)
 void Cloud::compute()
 {
   LOG_DEBUG("computing Cloud node [%s]", this->id.c_str());
-  // nothing here
+  this->value_out = GET_ATTR_CLOUD("cloud");
 }
 
 void Cloud::update_inner_bindings()

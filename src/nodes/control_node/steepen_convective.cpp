@@ -16,6 +16,13 @@ SteepenConvective::SteepenConvective(std::string id) : Filter(id)
   LOG_DEBUG("SteepenConvective::SteepenConvective()");
   this->node_type = "SteepenConvective";
   this->category = category_mapping.at(this->node_type);
+
+  this->attr["angle"] = NEW_ATTR_FLOAT(0.f, -180.f, 180.f);
+  this->attr["iterations"] = NEW_ATTR_INT(1, 1, 100);
+  this->attr["ir"] = NEW_ATTR_INT(0, 0, 128);
+  this->attr["dt"] = NEW_ATTR_FLOAT(0.1f, 0.01f, 2.f);
+
+  this->attr_ordered_key = {"angle", "iterations", "ir", "dt"};
 }
 
 void SteepenConvective::compute_filter(hmap::HeightMap &h,
@@ -31,11 +38,11 @@ void SteepenConvective::compute_filter(hmap::HeightMap &h,
                   [this](hmap::Array &x, hmap::Array *p_mask)
                   {
                     hmap::steepen_convective(x,
-                                             this->angle / M_PI * 180.f,
+                                             GET_ATTR_FLOAT("angle"),
                                              p_mask,
-                                             this->iterations,
-                                             this->ir,
-                                             this->dt);
+                                             GET_ATTR_INT("iterations"),
+                                             GET_ATTR_INT("ir"),
+                                             GET_ATTR_FLOAT("dt"));
                   });
   h.smooth_overlap_buffers();
   h.remap(hmin, hmax, 0.f, 1.f);
