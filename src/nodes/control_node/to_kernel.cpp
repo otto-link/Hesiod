@@ -8,52 +8,44 @@
 namespace hesiod::cnode
 {
 
-Kernel::Kernel(std::string id) : ControlNode(id)
+ToKernel::ToKernel(std::string id) : ControlNode(id)
 {
-  this->node_type = "Kernel";
+  this->node_type = "ToKernel";
   this->category = category_mapping.at(this->node_type);
 
-  this->attr["kernel"] = NEW_ATTR_MAPENUM(this->kernel_map);
   this->attr["ir"] = NEW_ATTR_INT(8, 1, 128);
   this->attr["remap"] = NEW_ATTR_RANGE(true);
 
-  this->attr_ordered_key = {"kernel", "ir", "remap"};
+  this->attr_ordered_key = {"ir", "remap"};
 
-  this->add_port(gnode::Port("output", gnode::direction::out, dtype::dArray));
+  this->add_port(
+      gnode::Port("heightmap", gnode::direction::in, dtype::dHeightMap));
+  this->add_port(gnode::Port("kernel", gnode::direction::out, dtype::dArray));
+
+  hmap::Vec2<int> shape = hmap::Vec2<int>(2 * GET_ATTR_INT("ir"),
+                                          2 * GET_ATTR_INT("ir"));
+  this->value_out = hmap::Array(shape);
+
   this->update_inner_bindings();
 }
 
-void Kernel::update_inner_bindings()
+void ToKernel::update_inner_bindings()
 {
   LOG_DEBUG("inner bindings [%s]", this->id.c_str());
-  this->set_p_data("output", (void *)&(this->value_out));
+  this->set_p_data("kernel", (void *)&(this->value_out));
 }
 
-void Kernel::compute()
+void ToKernel::compute()
 {
   LOG_DEBUG("computing node [%s]", this->id.c_str());
+
+  hmap::HeightMap *p_hmap = CAST_PORT_REF(hmap::HeightMap, "heightmap");
 
   hmap::Vec2<int> shape = hmap::Vec2<int>(2 * GET_ATTR_INT("ir"),
                                           2 * GET_ATTR_INT("ir"));
 
-  switch (GET_ATTR_MAPENUM("kernel"))
-  {
-  case kernel::cone:
-    this->value_out = hmap::cone(shape);
-    break;
-
-  case kernel::cubic_pulse:
-    this->value_out = hmap::cubic_pulse(shape);
-    break;
-
-  case kernel::lorentzian:
-    this->value_out = hmap::lorentzian(shape);
-    break;
-
-  case kernel::smooth_cosine:
-    this->value_out = hmap::smooth_cosine(shape);
-    break;
-  }
+  // TODO use a distributed procedure instead of this
+  this->value_out = p_hmap->to_array().resample_to_shape(shape);
 
   if (GET_ATTR_REF_RANGE("remap")->is_activated())
     this->value_out.normalize();

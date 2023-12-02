@@ -1570,6 +1570,17 @@ public:
   }
 };
 
+class ViewToKernel : public ViewNode, public hesiod::cnode::ToKernel
+{
+public:
+  ViewToKernel(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::ToKernel(id)
+  {
+    this->set_preview_port_id("kernel");
+  }
+};
+
 class ViewToMask : public ViewNode, public hesiod::cnode::ToMask
 {
 public:

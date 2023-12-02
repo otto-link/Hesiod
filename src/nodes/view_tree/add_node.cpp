@@ -216,6 +216,8 @@ std::string ViewTree::add_view_node(std::string control_node_type,
     this->add_node(std::make_shared<hesiod::vnode::ViewThermalAutoBedrock>(id));
   else if (control_node_type == "ThermalScree")
     this->add_node(std::make_shared<hesiod::vnode::ViewThermalScree>(id));
+  else if (control_node_type == "ToKernel")
+    this->add_node(std::make_shared<hesiod::vnode::ViewToKernel>(id));
   else if (control_node_type == "ToMask")
     this->add_node(std::make_shared<hesiod::vnode::ViewToMask>(id));
   else if (control_node_type == "ValleyWidth")

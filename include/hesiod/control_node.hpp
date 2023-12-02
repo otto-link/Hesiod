@@ -113,6 +113,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"GradientAngle", "Math/Gradient"},
     {"GradientNorm", "Math/Gradient"},
     {"GradientTalus", "Math/Gradient"},
+    {"ToKernel", "Primitive/Kernel"},
     {"HydraulicAlgebric", "Erosion/Hydraulic"},
     {"HydraulicParticle", "Erosion/Hydraulic"},
     {"HydraulicRidge", "Erosion/Hydraulic"}, // not distributed
@@ -1474,6 +1475,19 @@ public:
 protected:
   hmap::HeightMap value_out = hmap::HeightMap(); // eroded heightmap
   hmap::HeightMap deposition_map = hmap::HeightMap();
+};
+
+class ToKernel : virtual public ControlNode
+{
+public:
+  ToKernel(std::string id);
+
+  void update_inner_bindings();
+
+  void compute();
+
+protected:
+  hmap::Array value_out = hmap::Array();
 };
 
 class ToMask : public Mask
