@@ -21,7 +21,7 @@ WaveDune::WaveDune(std::string     id,
   this->attr["kw"] = NEW_ATTR_FLOAT(2.f, 0.01f, 128.f);
   this->attr["angle"] = NEW_ATTR_FLOAT(0.f, -180.f, 180.f);
   this->attr["xtop"] = NEW_ATTR_FLOAT(0.7f, 0.f, 1.f);
-  this->attr["xbottom"] = NEW_ATTR_FLOAT(0.f, 0.f, 1.f);
+  this->attr["xbottom"] = NEW_ATTR_FLOAT(0.9f, 0.f, 1.f);
   this->attr["phase_shift"] = NEW_ATTR_FLOAT(0.f, -180.f, 180.f);
 
   this->attr_ordered_key = {"kw", "angle", "xtop", "xbottom", "phase_shift"};
