@@ -20,11 +20,11 @@ This project is licensed under the GNU General Public License v3.0.
 
 ## Getting started
 
-### Windows
-
-#### Standalone executable
+### Standalone executables for Windows and Linux
 
 Available here: https://sourceforge.net/projects/hesiod
+
+### Windows
 
 #### Getting the sources
 
