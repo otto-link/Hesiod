@@ -1311,6 +1311,19 @@ public:
   }
 };
 
+class ViewSelectBlobLog : public ViewNode, public hesiod::cnode::SelectBlobLog
+{
+public:
+  ViewSelectBlobLog(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::SelectBlobLog(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("input");
+    this->set_view3d_color_port_id("output");
+  }
+};
+
 class ViewSelectCavities : public ViewNode, public hesiod::cnode::SelectCavities
 {
 public:

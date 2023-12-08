@@ -8,16 +8,14 @@
 namespace hesiod::cnode
 {
 
-SelectCavities::SelectCavities(std::string id) : Mask(id)
+SelectBlobLog::SelectBlobLog(std::string id) : Mask(id)
 {
-  this->node_type = "SelectCavities";
+  this->node_type = "SelectBlobLog";
   this->category = category_mapping.at(this->node_type);
 
   this->attr["ir"] = NEW_ATTR_INT(32, 1, 256);
-  this->attr["concave"] = NEW_ATTR_BOOL(true);
 
   this->attr_ordered_key = {"ir",
-                            "concave",
                             "inverse",
                             "smoothing",
                             "_ir_smoothing",
@@ -28,19 +26,15 @@ SelectCavities::SelectCavities(std::string id) : Mask(id)
   this->update_inner_bindings();
 }
 
-void SelectCavities::compute_mask(hmap::HeightMap &h_out,
-                                  hmap::HeightMap *p_input)
+void SelectBlobLog::compute_mask(hmap::HeightMap &h_out,
+                                 hmap::HeightMap *p_input)
 {
   LOG_DEBUG("computing node [%s]", this->id.c_str());
 
   hmap::transform(h_out,    // output
                   *p_input, // input
                   [this](hmap::Array &array)
-                  {
-                    return hmap::select_cavities(array,
-                                                 GET_ATTR_INT("ir"),
-                                                 GET_ATTR_BOOL("concave"));
-                  });
+                  { return hmap::select_blob_log(array, GET_ATTR_INT("ir")); });
 }
 
 } // namespace hesiod::cnode

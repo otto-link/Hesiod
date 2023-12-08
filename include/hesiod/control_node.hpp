@@ -151,6 +151,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"RidgedPerlin", "Primitive/Coherent Noise"},
     {"Rugosity", "Features"},
     {"SedimentDeposition", "Erosion/Thermal"},
+    {"SelectBlobLog", "Mask"},
     {"SelectCavities", "Mask"},
     {"SelectEq", "Mask"},
     {"SelectGradientNorm", "Mask"},
@@ -1273,6 +1274,14 @@ public:
 protected:
   hmap::HeightMap value_out = hmap::HeightMap(); // eroded heightmap
   hmap::HeightMap deposition_map = hmap::HeightMap();
+};
+
+class SelectBlobLog : public Mask
+{
+public:
+  SelectBlobLog(std::string id);
+
+  void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
 };
 
 class SelectCavities : public Mask
