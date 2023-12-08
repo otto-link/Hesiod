@@ -156,6 +156,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"SelectEq", "Mask"},
     {"SelectGradientNorm", "Mask"},
     {"SelectInterval", "Mask"},
+    {"SelectPulse", "Mask"},
     {"SelectRivers", "Mask"}, // not distributed
     {"SelectTransitions", "Mask"},
     {"Simplex", "Primitive/Coherent Noise"},
@@ -1312,6 +1313,14 @@ class SelectInterval : public Mask
 {
 public:
   SelectInterval(std::string id);
+
+  void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
+};
+
+class SelectPulse : public Mask
+{
+public:
+  SelectPulse(std::string id);
 
   void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
 };

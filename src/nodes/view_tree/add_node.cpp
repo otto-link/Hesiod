@@ -188,6 +188,8 @@ std::string ViewTree::add_view_node(std::string control_node_type,
     this->add_node(std::make_shared<hesiod::vnode::ViewSelectEq>(id));
   else if (control_node_type == "SelectInterval")
     this->add_node(std::make_shared<hesiod::vnode::ViewSelectInterval>(id));
+  else if (control_node_type == "SelectPulse")
+    this->add_node(std::make_shared<hesiod::vnode::ViewSelectPulse>(id));
   else if (control_node_type == "SelectRivers")
     this->add_node(std::make_shared<hesiod::vnode::ViewSelectRivers>(id));
   else if (control_node_type == "SelectTransitions")
