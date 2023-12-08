@@ -133,6 +133,7 @@ void update_vertex_colors(hmap::Array &z, std::vector<GLfloat> &colors)
 {
   hmap::Array hs = hillshade(z, 180.f, 45.f, 10.f * z.ptp() / (float)z.shape.y);
   hs = hmap::pow(hs, 1.5f);
+
   int k = 0;
 
   for (int i = 0; i < z.shape.x - 1; i++)
@@ -210,6 +211,7 @@ void update_vertex_colors(hmap::Array          &z,
 {
   hmap::Array hs = hillshade(z, 180.f, 45.f, 10.f * z.ptp() / (float)z.shape.y);
   hs = hmap::pow(hs, 1.5f);
+  hmap::remap(hs, 0.2f, 1.5f);
 
   int k = 0;
 
