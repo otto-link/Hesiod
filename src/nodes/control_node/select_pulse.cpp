@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-SelectPulse::SelectPulse(std::string id) : Mask(id)
+SelectPulse::SelectPulse(std::string id) : ControlNode(id), Mask(id)
 {
   this->node_type = "SelectPulse";
   this->category = category_mapping.at(this->node_type);

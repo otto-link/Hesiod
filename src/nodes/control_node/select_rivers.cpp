@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-SelectRivers::SelectRivers(std::string id) : Mask(id)
+SelectRivers::SelectRivers(std::string id) : ControlNode(id), Mask(id)
 {
   this->node_type = "SelectRivers";
   this->category = category_mapping.at(this->node_type);

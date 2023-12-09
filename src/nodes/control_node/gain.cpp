@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-Gain::Gain(std::string id) : Filter(id)
+Gain::Gain(std::string id) : ControlNode(id), Filter(id)
 {
   LOG_DEBUG("Gain::Gain()");
   this->node_type = "Gain";

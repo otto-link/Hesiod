@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-Equalize::Equalize(std::string id) : Filter(id)
+Equalize::Equalize(std::string id) : ControlNode(id), Filter(id)
 {
   this->node_type = "Equalize";
   this->category = category_mapping.at(this->node_type);

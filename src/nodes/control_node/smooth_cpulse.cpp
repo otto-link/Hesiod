@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-SmoothCpulse::SmoothCpulse(std::string id) : Filter(id)
+SmoothCpulse::SmoothCpulse(std::string id) : ControlNode(id), Filter(id)
 {
   this->node_type = "SmoothCpulse";
   this->category = category_mapping.at(this->node_type);

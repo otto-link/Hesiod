@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-Abs::Abs(std::string id) : Unary(id)
+Abs::Abs(std::string id) : ControlNode(id), Unary(id)
 {
   LOG_DEBUG("Abs::Abs()");
   this->node_type = "Abs";

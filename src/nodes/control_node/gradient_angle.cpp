@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-GradientAngle::GradientAngle(std::string id) : Unary(id)
+GradientAngle::GradientAngle(std::string id) : ControlNode(id), Unary(id)
 {
   this->node_type = "GradientAngle";
   this->category = category_mapping.at(this->node_type);

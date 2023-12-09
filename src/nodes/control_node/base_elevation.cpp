@@ -12,7 +12,7 @@ BaseElevation::BaseElevation(std::string     id,
                              hmap::Vec2<int> shape,
                              hmap::Vec2<int> tiling,
                              float           overlap)
-    : Primitive(id, shape, tiling, overlap)
+    : ControlNode(id), Primitive(id, shape, tiling, overlap)
 {
   LOG_DEBUG("BaseElevation::BaseElevation()");
   this->node_type = "BaseElevation";

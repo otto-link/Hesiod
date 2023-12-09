@@ -8,7 +8,8 @@
 namespace hesiod::cnode
 {
 
-GammaCorrectionLocal::GammaCorrectionLocal(std::string id) : Filter(id)
+GammaCorrectionLocal::GammaCorrectionLocal(std::string id)
+    : ControlNode(id), Filter(id)
 {
   LOG_DEBUG("GammaCorrectionLocal::GammaCorrectionLocal()");
   this->node_type = "GammaCorrectionLocal";

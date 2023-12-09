@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-SelectBlobLog::SelectBlobLog(std::string id) : Mask(id)
+SelectBlobLog::SelectBlobLog(std::string id) : ControlNode(id), Mask(id)
 {
   this->node_type = "SelectBlobLog";
   this->category = category_mapping.at(this->node_type);

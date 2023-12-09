@@ -8,7 +8,8 @@
 namespace hesiod::cnode
 {
 
-SmoothFillSmearPeaks::SmoothFillSmearPeaks(std::string id) : Filter(id)
+SmoothFillSmearPeaks::SmoothFillSmearPeaks(std::string id)
+    : ControlNode(id), Filter(id)
 {
   LOG_DEBUG("SmoothFillSmearPeaks::SmoothFillSmearPeaks()");
   this->node_type = "SmoothFillSmearPeaks";

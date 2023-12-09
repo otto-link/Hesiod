@@ -8,7 +8,8 @@
 namespace hesiod::cnode
 {
 
-ExpandShrinkDirectional::ExpandShrinkDirectional(std::string id) : Filter(id)
+ExpandShrinkDirectional::ExpandShrinkDirectional(std::string id)
+    : ControlNode(id), Filter(id)
 {
   LOG_DEBUG("ExpandShrinkDirectional::ExpandShrinkDirectional()");
   this->node_type = "ExpandShrinkDirectional";

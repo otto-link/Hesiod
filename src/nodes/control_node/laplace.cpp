@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-Laplace::Laplace(std::string id) : Filter(id)
+Laplace::Laplace(std::string id) : ControlNode(id), Filter(id)
 {
   this->node_type = "Laplace";
   this->category = category_mapping.at(this->node_type);

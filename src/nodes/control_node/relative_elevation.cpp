@@ -8,7 +8,8 @@
 namespace hesiod::cnode
 {
 
-RelativeElevation::RelativeElevation(std::string id) : Unary(id)
+RelativeElevation::RelativeElevation(std::string id)
+    : ControlNode(id), Unary(id)
 {
   LOG_DEBUG("RelativeElevation::RelativeElevation()");
   this->node_type = "RelativeElevation";

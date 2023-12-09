@@ -71,6 +71,10 @@ int main()
 
   // hmap::HeightMap h = hmap::HeightMap(shape, tiling, overlap);
 
+  // auto node = hesiod::cnode::Path("test");
+  // auto node = hesiod::cnode::Cloud("test");
+  // node.infos();
+
   while (!glfwWindowShouldClose(window))
   {
     glfwPollEvents();

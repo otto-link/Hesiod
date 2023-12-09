@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-ToMask::ToMask(std::string id) : Mask(id)
+ToMask::ToMask(std::string id) : ControlNode(id), Mask(id)
 {
   this->node_type = "ToMask";
   this->category = category_mapping.at(this->node_type);

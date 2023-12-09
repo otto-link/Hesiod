@@ -12,7 +12,7 @@ RidgedPerlin::RidgedPerlin(std::string     id,
                            hmap::Vec2<int> shape,
                            hmap::Vec2<int> tiling,
                            float           overlap)
-    : Primitive(id, shape, tiling, overlap)
+    : ControlNode(id), Primitive(id, shape, tiling, overlap)
 {
   LOG_DEBUG("RidgedPerlin::RidgedPerlin()");
   this->node_type = "RidgedPerlin";

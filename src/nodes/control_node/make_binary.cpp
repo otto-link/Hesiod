@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-MakeBinary::MakeBinary(std::string id) : Unary(id)
+MakeBinary::MakeBinary(std::string id) : ControlNode(id), Unary(id)
 {
   this->node_type = "MakeBinary";
   this->category = category_mapping.at(this->node_type);

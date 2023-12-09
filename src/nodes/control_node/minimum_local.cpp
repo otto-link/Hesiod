@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-MinimumLocal::MinimumLocal(std::string id) : Unary(id)
+MinimumLocal::MinimumLocal(std::string id) : ControlNode(id), Unary(id)
 {
   LOG_DEBUG("MinimumLocal::MinimumLocal()");
   this->node_type = "MinimumLocal";

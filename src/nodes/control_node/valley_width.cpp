@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-ValleyWidth::ValleyWidth(std::string id) : Mask(id)
+ValleyWidth::ValleyWidth(std::string id) : ControlNode(id), Mask(id)
 {
   this->node_type = "ValleyWidth";
   this->category = category_mapping.at(this->node_type);

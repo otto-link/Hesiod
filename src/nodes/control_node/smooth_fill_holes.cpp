@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-SmoothFillHoles::SmoothFillHoles(std::string id) : Filter(id)
+SmoothFillHoles::SmoothFillHoles(std::string id) : ControlNode(id), Filter(id)
 {
   LOG_DEBUG("SmoothFillHoles::SmoothFillHoles()");
   this->node_type = "SmoothFillHoles";

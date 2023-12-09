@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-Plateau::Plateau(std::string id) : Filter(id)
+Plateau::Plateau(std::string id) : ControlNode(id), Filter(id)
 {
   this->node_type = "Plateau";
   this->category = category_mapping.at(this->node_type);

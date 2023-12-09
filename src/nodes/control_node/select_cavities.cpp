@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-SelectCavities::SelectCavities(std::string id) : Mask(id)
+SelectCavities::SelectCavities(std::string id) : ControlNode(id), Mask(id)
 {
   this->node_type = "SelectCavities";
   this->category = category_mapping.at(this->node_type);

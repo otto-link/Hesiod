@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-WarpDownslope::WarpDownslope(std::string id) : Filter(id)
+WarpDownslope::WarpDownslope(std::string id) : ControlNode(id), Filter(id)
 {
   this->node_type = "WarpDownslope";
   this->category = category_mapping.at(this->node_type);

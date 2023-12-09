@@ -8,7 +8,8 @@
 namespace hesiod::cnode
 {
 
-LaplaceEdgePreserving::LaplaceEdgePreserving(std::string id) : Filter(id)
+LaplaceEdgePreserving::LaplaceEdgePreserving(std::string id)
+    : ControlNode(id), Filter(id)
 {
   this->node_type = "LaplaceEdgePreserving";
   this->category = category_mapping.at(this->node_type);

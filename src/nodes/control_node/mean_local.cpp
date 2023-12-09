@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-MeanLocal::MeanLocal(std::string id) : Filter(id)
+MeanLocal::MeanLocal(std::string id) : ControlNode(id), Filter(id)
 {
   LOG_DEBUG("MeanLocal::MeanLocal()");
   this->node_type = "MeanLocal";

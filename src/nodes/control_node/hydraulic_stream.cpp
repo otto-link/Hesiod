@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-HydraulicStream::HydraulicStream(std::string id) : Erosion(id)
+HydraulicStream::HydraulicStream(std::string id) : ControlNode(id), Erosion(id)
 {
   this->node_type = "HydraulicStream";
   this->category = category_mapping.at(this->node_type);

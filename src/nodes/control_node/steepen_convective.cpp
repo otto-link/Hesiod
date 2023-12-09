@@ -11,7 +11,8 @@
 namespace hesiod::cnode
 {
 
-SteepenConvective::SteepenConvective(std::string id) : Filter(id)
+SteepenConvective::SteepenConvective(std::string id)
+    : ControlNode(id), Filter(id)
 {
   LOG_DEBUG("SteepenConvective::SteepenConvective()");
   this->node_type = "SteepenConvective";

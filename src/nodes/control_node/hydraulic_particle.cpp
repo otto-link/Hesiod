@@ -8,7 +8,8 @@
 namespace hesiod::cnode
 {
 
-HydraulicParticle::HydraulicParticle(std::string id) : Erosion(id)
+HydraulicParticle::HydraulicParticle(std::string id)
+    : ControlNode(id), Erosion(id)
 {
   this->node_type = "HydraulicParticle";
   this->category = category_mapping.at(this->node_type);

@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-ExpandShrink::ExpandShrink(std::string id) : Filter(id)
+ExpandShrink::ExpandShrink(std::string id) : ControlNode(id), Filter(id)
 {
   LOG_DEBUG("ExpandShrink::ExpandShrink()");
   this->node_type = "ExpandShrink";

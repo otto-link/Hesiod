@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-Clamp::Clamp(std::string id) : Unary(id)
+Clamp::Clamp(std::string id) : ControlNode(id), Unary(id)
 {
   LOG_DEBUG("Clamp::Clamp()");
   this->node_type = "Clamp";

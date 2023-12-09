@@ -9,7 +9,7 @@
 namespace hesiod::cnode
 {
 
-Recurve::Recurve(std::string id) : Filter(id)
+Recurve::Recurve(std::string id) : ControlNode(id), Filter(id)
 {
   LOG_DEBUG("Recurve::Recurve()");
   this->node_type = "Recurve";

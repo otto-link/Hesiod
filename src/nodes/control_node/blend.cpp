@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-Blend::Blend(std::string id) : Binary(id)
+Blend::Blend(std::string id) : ControlNode(id), Binary(id)
 {
   this->node_type = "Blend";
   this->category = category_mapping.at(this->node_type);

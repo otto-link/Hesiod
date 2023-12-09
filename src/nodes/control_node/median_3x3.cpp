@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-Median3x3::Median3x3(std::string id) : Filter(id)
+Median3x3::Median3x3(std::string id) : ControlNode(id), Filter(id)
 {
   LOG_DEBUG("Median3x3::Median3x3()");
   this->node_type = "Median3x3";

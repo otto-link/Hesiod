@@ -8,7 +8,8 @@
 namespace hesiod::cnode
 {
 
-NormalDisplacement::NormalDisplacement(std::string id) : Filter(id)
+NormalDisplacement::NormalDisplacement(std::string id)
+    : ControlNode(id), Filter(id)
 {
   this->node_type = "NormalDisplacement";
   this->category = category_mapping.at(this->node_type);

@@ -12,7 +12,7 @@ CloudToArrayInterp::CloudToArrayInterp(std::string     id,
                                        hmap::Vec2<int> shape,
                                        hmap::Vec2<int> tiling,
                                        float           overlap)
-    : Primitive(id, shape, tiling, overlap)
+    : ControlNode(id), Primitive(id, shape, tiling, overlap)
 {
   LOG_DEBUG("CloudToArrayInterp::CloudToArrayInterp()");
   this->node_type = "CloudToArrayInterp";

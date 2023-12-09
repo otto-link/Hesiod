@@ -8,7 +8,8 @@
 namespace hesiod::cnode
 {
 
-HydraulicAlgebric::HydraulicAlgebric(std::string id) : Erosion(id)
+HydraulicAlgebric::HydraulicAlgebric(std::string id)
+    : ControlNode(id), Erosion(id)
 {
   this->node_type = "HydraulicAlgebric";
   this->category = category_mapping.at(this->node_type);

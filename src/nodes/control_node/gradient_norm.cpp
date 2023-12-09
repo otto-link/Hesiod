@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-GradientNorm::GradientNorm(std::string id) : Unary(id)
+GradientNorm::GradientNorm(std::string id) : ControlNode(id), Unary(id)
 {
   this->node_type = "GradientNorm";
   this->category = category_mapping.at(this->node_type);

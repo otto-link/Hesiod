@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-Rugosity::Rugosity(std::string id) : Mask(id)
+Rugosity::Rugosity(std::string id) : ControlNode(id), Mask(id)
 {
   this->node_type = "Rugosity";
   this->category = category_mapping.at(this->node_type);

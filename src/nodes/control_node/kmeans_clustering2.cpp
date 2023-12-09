@@ -8,7 +8,8 @@
 namespace hesiod::cnode
 {
 
-KmeansClustering2::KmeansClustering2(std::string id) : Binary(id)
+KmeansClustering2::KmeansClustering2(std::string id)
+    : ControlNode(id), Binary(id)
 {
   this->node_type = "KmeansClustering2";
   this->category = category_mapping.at(this->node_type);

@@ -8,7 +8,8 @@
 namespace hesiod::cnode
 {
 
-SelectGradientNorm::SelectGradientNorm(std::string id) : Mask(id)
+SelectGradientNorm::SelectGradientNorm(std::string id)
+    : ControlNode(id), Mask(id)
 {
   this->node_type = "SelectGradientNorm";
   this->category = category_mapping.at(this->node_type);

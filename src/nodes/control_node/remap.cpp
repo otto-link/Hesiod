@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-Remap::Remap(std::string id) : Unary(id)
+Remap::Remap(std::string id) : ControlNode(id), Unary(id)
 {
   this->node_type = "Remap";
   this->category = category_mapping.at(this->node_type);

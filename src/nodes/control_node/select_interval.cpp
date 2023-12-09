@@ -8,7 +8,7 @@
 namespace hesiod::cnode
 {
 
-SelectInterval::SelectInterval(std::string id) : Mask(id)
+SelectInterval::SelectInterval(std::string id) : ControlNode(id), Mask(id)
 {
   this->node_type = "SelectInterval";
   this->category = category_mapping.at(this->node_type);

@@ -8,7 +8,8 @@
 namespace hesiod::cnode
 {
 
-DepressionFilling::DepressionFilling(std::string id) : Unary(id)
+DepressionFilling::DepressionFilling(std::string id)
+    : ControlNode(id), Unary(id)
 {
   LOG_DEBUG("DepressionFilling::DepressionFilling()");
   this->node_type = "DepressionFilling";
