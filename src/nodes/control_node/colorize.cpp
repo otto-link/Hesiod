@@ -38,20 +38,17 @@ void Colorize::compute()
   std::vector<std::vector<float>> colormap_colors = hesiod::get_colormap_data(
       GET_ATTR_MAPENUM("colormap"));
 
-  hmap::HeightMap *p_input_hmap = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("input"));
+  hmap::HeightMap *p_hmap = CAST_PORT_REF(hmap::HeightMap, "input");
 
-  this->value_out.set_sto(p_input_hmap->shape,
-                          p_input_hmap->tiling,
-                          p_input_hmap->overlap);
+  this->value_out.set_sto(p_hmap->shape, p_hmap->tiling, p_hmap->overlap);
 
   float cmin = 0.f;
   float cmax = 1.f;
 
   if (GET_ATTR_REF_RANGE("clamp")->is_activated())
   {
-    float hmin = p_input_hmap->min();
-    float hmax = p_input_hmap->max();
+    float hmin = p_hmap->min();
+    float hmax = p_hmap->max();
 
     hmap::Vec2<float> crange = GET_ATTR_RANGE("clamp");
 
@@ -61,7 +58,7 @@ void Colorize::compute()
 
   bool inverse = GET_ATTR_BOOL("reverse");
 
-  this->value_out.colorize(*p_input_hmap, cmin, cmax, colormap_colors, inverse);
+  this->value_out.colorize(*p_hmap, cmin, cmax, colormap_colors, inverse);
 }
 
 void Colorize::update_inner_bindings()

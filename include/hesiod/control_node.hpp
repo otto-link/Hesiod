@@ -89,6 +89,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Cloud", "Geometry/Cloud"},
     {"CloudToArrayInterp", "Primitive/Manual"},
     {"Colorize", "Texture"},
+    {"ColorizeSolid", "Texture"},
     {"CombineMask", "Mask"},
     {"PreviewColorize", "Texture"},
     {"ConvolveSVD", "Math/Convolution"},
@@ -598,6 +599,19 @@ class Colorize : virtual public ControlNode
 {
 public:
   Colorize(std::string id);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::HeightMapRGB value_out = hmap::HeightMapRGB();
+};
+
+class ColorizeSolid : virtual public ControlNode
+{
+public:
+  ColorizeSolid(std::string id);
 
   void compute();
 

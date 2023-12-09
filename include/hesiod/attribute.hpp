@@ -23,6 +23,7 @@
 // clang-format off
 #define NEW_ATTR_BOOL(a) std::make_unique<hesiod::BoolAttribute>(a)
 #define NEW_ATTR_CLOUD() std::make_unique<hesiod::CloudAttribute>()
+#define NEW_ATTR_COLOR() std::make_unique<hesiod::ColorAttribute>()
 #define NEW_ATTR_FILENAME(a) std::make_unique<hesiod::FilenameAttribute>(a)
 #define NEW_ATTR_FLOAT(a, b, c) std::make_unique<hesiod::FloatAttribute>(a, b, c)
 #define NEW_ATTR_INT(a, b, c) std::make_unique<hesiod::IntAttribute>(a, b, c)
@@ -38,6 +39,7 @@
 
 #define GET_ATTR_BOOL(s) this->attr.at(s)->get_ref<BoolAttribute>()->get()
 #define GET_ATTR_CLOUD(s) this->attr.at(s)->get_ref<CloudAttribute>()->get()
+#define GET_ATTR_COLOR(s) this->attr.at(s)->get_ref<ColorAttribute>()->get()
 #define GET_ATTR_FILENAME(s) this->attr.at(s)->get_ref<FilenameAttribute>()->get()
 #define GET_ATTR_FLOAT(s) this->attr.at(s)->get_ref<FloatAttribute>()->get()
 #define GET_ATTR_INT(s) this->attr.at(s)->get_ref<IntAttribute>()->get()
@@ -132,6 +134,24 @@ public:
 #endif
 
   hmap::Cloud value;
+};
+
+class ColorAttribute : public Attribute
+{
+public:
+  ColorAttribute() = default;
+  std::vector<float> get();
+  virtual bool       render_settings(std::string label);
+
+#ifdef USE_CEREAL
+  template <class Archive> void serialize(Archive &ar)
+  {
+    Attribute::serialize<Archive>(ar);
+    ar(cereal::make_nvp("value", value));
+  }
+#endif
+
+  std::vector<float> value = {1.f, 1.f, 1.f};
 };
 
 class FilenameAttribute : public Attribute
@@ -406,6 +426,7 @@ public:
 #ifdef USE_CEREAL
 CEREAL_REGISTER_TYPE(hesiod::BoolAttribute);
 CEREAL_REGISTER_TYPE(hesiod::CloudAttribute);
+CEREAL_REGISTER_TYPE(hesiod::ColorAttribute);
 CEREAL_REGISTER_TYPE(hesiod::FilenameAttribute);
 CEREAL_REGISTER_TYPE(hesiod::FloatAttribute);
 CEREAL_REGISTER_TYPE(hesiod::IntAttribute);
@@ -421,6 +442,7 @@ CEREAL_REGISTER_TYPE(hesiod::WaveNbAttribute);
 
 CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute, hesiod::BoolAttribute);
 CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute, hesiod::CloudAttribute);
+CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute, hesiod::ColorAttribute);
 CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute, hesiod::FilenameAttribute);
 CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute, hesiod::FloatAttribute);
 CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute, hesiod::IntAttribute);

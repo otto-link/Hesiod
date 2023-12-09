@@ -36,12 +36,9 @@ void Lerp::update_inner_bindings()
 void Lerp::compute()
 {
   LOG_DEBUG("computing node [%s]", this->id.c_str());
-  hmap::HeightMap *p_input_hmap_a = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("a"));
-  hmap::HeightMap *p_input_hmap_b = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("b"));
-  hmap::HeightMap *p_input_hmap_t = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("t"));
+  hmap::HeightMap *p_input_hmap_a = CAST_PORT_REF(hmap::HeightMap, "a");
+  hmap::HeightMap *p_input_hmap_b = CAST_PORT_REF(hmap::HeightMap, "b");
+  hmap::HeightMap *p_input_hmap_t = CAST_PORT_REF(hmap::HeightMap, "t");
 
   this->value_out.set_sto(p_input_hmap_a->shape,
                           p_input_hmap_a->tiling,

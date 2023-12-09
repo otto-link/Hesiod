@@ -513,6 +513,19 @@ public:
   bool render_settings();
 };
 
+class ViewColorizeSolid : public ViewNode, public hesiod::cnode::ColorizeSolid
+{
+public:
+  ViewColorizeSolid(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::ColorizeSolid(id)
+  {
+    this->set_preview_port_id("RGB");
+    this->set_view3d_elevation_port_id("input");
+    this->set_view3d_color_port_id("RGB");
+  }
+};
+
 class ViewCombineMask : public ViewNode, public hesiod::cnode::CombineMask
 {
 public:

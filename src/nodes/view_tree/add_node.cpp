@@ -56,6 +56,8 @@ std::string ViewTree::add_view_node(std::string control_node_type,
     this->add_node(std::make_shared<hesiod::vnode::ViewCloudToArrayInterp>(id, this->shape, this->tiling, this->overlap));
   else if (control_node_type == "Colorize")
     this->add_node(std::make_shared<hesiod::vnode::ViewColorize>(id));
+  else if (control_node_type == "ColorizeSolid")
+    this->add_node(std::make_shared<hesiod::vnode::ViewColorizeSolid>(id));
   else if (control_node_type == "CombineMask")
     this->add_node(std::make_shared<hesiod::vnode::ViewCombineMask>(id));
   else if (control_node_type == "ConvolveSVD")
