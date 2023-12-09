@@ -26,8 +26,7 @@ void Unary::update_inner_bindings()
 void Unary::compute()
 {
   LOG_DEBUG("computing node [%s]", this->id.c_str());
-  hmap::HeightMap *p_input_hmap = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("input"));
+  hmap::HeightMap *p_input_hmap = CAST_PORT_REF(hmap::HeightMap, "input");
 
   this->value_out.set_sto(p_input_hmap->shape,
                           p_input_hmap->tiling,

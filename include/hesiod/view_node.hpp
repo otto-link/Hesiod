@@ -306,9 +306,28 @@ private:
 // End-user nodes
 //----------------------------------------
 
-/**
- * @brief ViewAlterElevation class.
- */
+class ViewAbs : public ViewNode, public hesiod::cnode::Abs
+{
+public:
+  ViewAbs(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Abs(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
+};
+
+class ViewAbsSmooth : public ViewNode, public hesiod::cnode::AbsSmooth
+{
+public:
+  ViewAbsSmooth(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::AbsSmooth(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
+};
 
 class ViewAlterElevation : public ViewNode, public hesiod::cnode::AlterElevation
 {

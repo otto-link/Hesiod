@@ -73,6 +73,8 @@ enum kernel : int
 //----------------------------------------
 
 static const std::map<std::string, std::string> category_mapping = {
+    {"Abs", "Math/Base"},
+    {"AbsSmooth", "Math/Base"},
     // {"AlterElevation", "Operator/Transform"}, // BROKEN
     {"BaseElevation", "Primitive/Manual"},
     {"BezierPath", "Geometry/Path"},
@@ -405,6 +407,27 @@ protected:
 //----------------------------------------
 // End-user nodes
 //----------------------------------------
+
+class Abs : public Unary
+{
+public:
+  Abs(std::string id);
+
+  void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
+};
+
+class AbsSmooth : virtual public ControlNode
+{
+public:
+  AbsSmooth(std::string id);
+
+  void update_inner_bindings();
+
+  void compute();
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap();
+};
 
 class AlterElevation : virtual public ControlNode
 {

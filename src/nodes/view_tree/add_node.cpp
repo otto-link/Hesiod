@@ -24,7 +24,11 @@ std::string ViewTree::add_view_node(std::string control_node_type,
   LOG_DEBUG("adding node type: %s", control_node_type.c_str());
 
   // clang-format off
-  if (control_node_type == "AlterElevation")
+  if (control_node_type == "Abs")
+    this->add_node(std::make_shared<hesiod::vnode::ViewAbs>(id));
+  else if (control_node_type == "AbsSmooth")
+    this->add_node(std::make_shared<hesiod::vnode::ViewAbsSmooth>(id));
+  else if (control_node_type == "AlterElevation")
     this->add_node(std::make_shared<hesiod::vnode::ViewAlterElevation>(id));
   else if (control_node_type == "BaseElevation")
     this->add_node(std::make_shared<hesiod::vnode::ViewBaseElevation>(id, this->shape, this->tiling, this->overlap));
