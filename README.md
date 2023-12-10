@@ -24,8 +24,6 @@ This project is licensed under the GNU General Public License v3.0.
 
 Available here: https://sourceforge.net/projects/hesiod
 
-**AppImage seems to be broken, working on it...**
-
 ### Windows
 
 #### Getting the sources
