@@ -188,6 +188,8 @@ std::string ViewTree::add_view_node(std::string control_node_type,
     this->add_node(std::make_shared<hesiod::vnode::ViewSelectBlobLog>(id));
   else if (control_node_type == "SelectCavities")
     this->add_node(std::make_shared<hesiod::vnode::ViewSelectCavities>(id));
+  else if (control_node_type == "SelectElevationSlope")
+    this->add_node(std::make_shared<hesiod::vnode::ViewSelectElevationSlope>(id));
   else if (control_node_type == "SelectGradientNorm")
     this->add_node(std::make_shared<hesiod::vnode::ViewSelectGradientNorm>(id));
   else if (control_node_type == "SelectEq")

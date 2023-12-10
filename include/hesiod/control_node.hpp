@@ -156,6 +156,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"SedimentDeposition", "Erosion/Thermal"},
     {"SelectBlobLog", "Mask"},
     {"SelectCavities", "Mask"},
+    {"SelectElevationSlope", "Mask"},
     {"SelectEq", "Mask"},
     {"SelectGradientNorm", "Mask"},
     {"SelectInterval", "Mask"},
@@ -1334,6 +1335,14 @@ class SelectEq : public Mask
 {
 public:
   SelectEq(std::string id);
+
+  void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
+};
+
+class SelectElevationSlope : public Mask
+{
+public:
+  SelectElevationSlope(std::string id);
 
   void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
 };
