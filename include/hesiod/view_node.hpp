@@ -733,9 +733,8 @@ public:
       : hesiod::cnode::ControlNode(id), ViewNode(id),
         hesiod::cnode::FractalizePath(id)
   {
+    this->set_preview_port_id("output");
   }
-
-  void render_node_specific_content();
 };
 
 class ViewGaborNoise : public ViewNode, public hesiod::cnode::GaborNoise
@@ -1034,9 +1033,8 @@ public:
       : hesiod::cnode::ControlNode(id), ViewNode(id),
         hesiod::cnode::MeanderizePath(id)
   {
+    this->set_preview_port_id("output");
   }
-
-  void render_node_specific_content();
 };
 
 class ViewMeanLocal : public ViewNode, public hesiod::cnode::MeanLocal
@@ -1116,9 +1114,8 @@ public:
   ViewPath(std::string id)
       : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Path(id)
   {
+    this->set_preview_port_id("output");
   }
-
-  void render_node_specific_content();
 };
 
 class ViewPathFinding : public ViewNode, public hesiod::cnode::PathFinding
@@ -1128,6 +1125,7 @@ public:
       : hesiod::cnode::ControlNode(id), ViewNode(id),
         hesiod::cnode::PathFinding(id)
   {
+    this->set_preview_port_id("output");
     this->set_view3d_elevation_port_id("heightmap");
     this->set_view3d_color_port_id("output");
     this->help_text =
@@ -1140,8 +1138,6 @@ public:
         "elevation gaps: path then tends to stay at the same elevation if "
         "possible (i.e. reduce the overall cumulative elevation gain).";
   }
-
-  void render_node_specific_content();
 };
 
 class ViewPathToHeightmap : public ViewNode,
@@ -1155,7 +1151,7 @@ public:
       : hesiod::cnode::ControlNode(id), ViewNode(id),
         hesiod::cnode::PathToHeightmap(id, shape, tiling, overlap)
   {
-    this->set_preview_port_id("output");
+    this->set_preview_port_id("path");
     this->set_view3d_elevation_port_id("output");
     this->set_view3d_color_port_id("path");
   }

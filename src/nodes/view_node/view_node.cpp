@@ -392,7 +392,10 @@ void ViewNode::update_preview()
     {
       int port_dtype = this->get_port_ref_by_id(preview_port_id)->dtype;
 
-      if (port_dtype == hesiod::cnode::dHeightMap)
+      switch (port_dtype)
+      {
+
+      case hesiod::cnode::dHeightMap:
       {
         hmap::HeightMap     *p_h = (hmap::HeightMap *)p_data;
         std::vector<uint8_t> img = {};
@@ -421,7 +424,9 @@ void ViewNode::update_preview()
           img_to_texture(img, this->shape_preview, this->image_texture_preview);
         }
       }
-      else if (port_dtype == hesiod::cnode::dHeightMapRGB)
+      break;
+
+      case hesiod::cnode::dHeightMapRGB:
       {
         hmap::HeightMapRGB  *p_c = (hmap::HeightMapRGB *)p_data;
         std::vector<uint8_t> img = {};
@@ -433,7 +438,9 @@ void ViewNode::update_preview()
                            this->shape_preview,
                            this->image_texture_preview);
       }
-      else if (port_dtype == hesiod::cnode::dArray)
+      break;
+
+      case hesiod::cnode::dArray:
       {
         hmap::Array         *p_a = (hmap::Array *)p_data;
         std::vector<uint8_t> img = {};
@@ -461,6 +468,27 @@ void ViewNode::update_preview()
           img = hmap::colorize_histogram(array);
           img_to_texture(img, this->shape_preview, this->image_texture_preview);
         }
+      }
+      break;
+
+      case hesiod::cnode::dPath:
+      {
+        hmap::Path           path = *(hmap::Path *)p_data;
+        std::vector<uint8_t> img = {};
+
+        hmap::Array       array = hmap::Array(this->shape_preview);
+        hmap::Vec4<float> bbox = hmap::Vec4<float>(0.f, 1.f, 0.f, 1.f);
+
+        if (path.get_npoints() > 1)
+        {
+          path.set_values(1.f);
+          path.to_array(array, bbox);
+        }
+
+        img = hmap::colorize_grayscale(array);
+        img_to_texture(img, this->shape_preview, this->image_texture_preview);
+      }
+      break;
       }
     }
   }
