@@ -361,9 +361,8 @@ public:
       : hesiod::cnode::ControlNode(id), ViewNode(id),
         hesiod::cnode::BezierPath(id)
   {
+    this->set_preview_port_id("output");
   }
-
-  void render_node_specific_content();
 };
 
 class ViewBiquadPulse : public ViewNode, public hesiod::cnode::BiquadPulse
@@ -477,9 +476,8 @@ public:
   ViewCloud(std::string id)
       : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Cloud(id)
   {
+    this->set_preview_port_id("output");
   }
-
-  void render_node_specific_content();
 };
 
 class ViewCloudToArrayInterp : public ViewNode,

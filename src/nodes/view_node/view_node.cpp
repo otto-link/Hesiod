@@ -395,6 +395,56 @@ void ViewNode::update_preview()
       switch (port_dtype)
       {
 
+      case hesiod::cnode::dArray:
+      {
+        hmap::Array         *p_a = (hmap::Array *)p_data;
+        std::vector<uint8_t> img = {};
+
+        hmap::Array array = p_a->resample_to_shape(this->shape_preview);
+
+        if (this->preview_type == preview_type::grayscale)
+        {
+          img = hmap::colorize_grayscale(array);
+          img_to_texture(img, this->shape_preview, this->image_texture_preview);
+        }
+        else if (this->preview_type == preview_type::jet)
+        {
+          img = hmap::colorize(array,
+                               array.min(),
+                               array.max(),
+                               hmap::cmap::jet,
+                               false);
+          img_to_texture_rgb(img,
+                             this->shape_preview,
+                             this->image_texture_preview);
+        }
+        else if (this->preview_type == preview_type::histogram)
+        {
+          img = hmap::colorize_histogram(array);
+          img_to_texture(img, this->shape_preview, this->image_texture_preview);
+        }
+      }
+      break;	
+
+      case hesiod::cnode::dCloud:
+      {
+        hmap::Cloud           cloud = *(hmap::Cloud *)p_data;
+        std::vector<uint8_t> img = {};
+
+        hmap::Array       array = hmap::Array(this->shape_preview);
+        hmap::Vec4<float> bbox = hmap::Vec4<float>(0.f, 1.f, 0.f, 1.f);
+
+        if (cloud.get_npoints() > 0)
+        {
+          cloud.set_values(1.f);
+          cloud.to_array(array, bbox);
+        }
+
+        img = hmap::colorize_grayscale(array);
+        img_to_texture(img, this->shape_preview, this->image_texture_preview);
+      }
+      break;
+      
       case hesiod::cnode::dHeightMap:
       {
         hmap::HeightMap     *p_h = (hmap::HeightMap *)p_data;
@@ -440,37 +490,6 @@ void ViewNode::update_preview()
       }
       break;
 
-      case hesiod::cnode::dArray:
-      {
-        hmap::Array         *p_a = (hmap::Array *)p_data;
-        std::vector<uint8_t> img = {};
-
-        hmap::Array array = p_a->resample_to_shape(this->shape_preview);
-
-        if (this->preview_type == preview_type::grayscale)
-        {
-          img = hmap::colorize_grayscale(array);
-          img_to_texture(img, this->shape_preview, this->image_texture_preview);
-        }
-        else if (this->preview_type == preview_type::jet)
-        {
-          img = hmap::colorize(array,
-                               array.min(),
-                               array.max(),
-                               hmap::cmap::jet,
-                               false);
-          img_to_texture_rgb(img,
-                             this->shape_preview,
-                             this->image_texture_preview);
-        }
-        else if (this->preview_type == preview_type::histogram)
-        {
-          img = hmap::colorize_histogram(array);
-          img_to_texture(img, this->shape_preview, this->image_texture_preview);
-        }
-      }
-      break;
-
       case hesiod::cnode::dPath:
       {
         hmap::Path           path = *(hmap::Path *)p_data;
@@ -489,6 +508,7 @@ void ViewNode::update_preview()
         img_to_texture(img, this->shape_preview, this->image_texture_preview);
       }
       break;
+      
       }
     }
   }
