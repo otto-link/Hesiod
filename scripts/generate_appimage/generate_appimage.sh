@@ -1,0 +1,8 @@
+rm -rf AppDir
+
+wget -nc https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage -P ${2}
+chmod 0744 ${2}/linuxdeploy-x86_64.AppImage
+
+./linuxdeploy-x86_64.AppImage --appdir AppDir --executable ${3}/bin/hesiod --output appimage -d ${1}/hesiod.desktop -i ${1}/icon_hesiod.png
+
+cp hesiod-x86_64.AppImage ${3}/bin/.

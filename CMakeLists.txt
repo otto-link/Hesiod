@@ -82,7 +82,8 @@ target_link_libraries(${PROJECT_NAME}
   GLEW::GLEW
 	GLUT::GLUT)
 
-# documentatio
+# documentation
 add_subdirectory(${PROJECT_SOURCE_DIR}/external/HighMap)
 add_subdirectory(${PROJECT_SOURCE_DIR}/external/GNode)
 add_subdirectory(${PROJECT_SOURCE_DIR}/doc)
+add_subdirectory(${PROJECT_SOURCE_DIR}/scripts/generate_appimage)

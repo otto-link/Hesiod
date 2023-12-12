@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Terminal=true
+Exec=hesiod
+Name=hesiod
+Icon=icon_hesiod
+StartupNotify=false
+Categories=Development

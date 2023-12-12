@@ -1,0 +1,6 @@
+add_custom_target(appimage
+    COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/./generate_appimage.sh ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_BINARY_DIR}
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    COMMENT "Generating AppImage"
+    DEPENDS hesiod
+)
