@@ -12,4 +12,4 @@ HASH=${HASH:0:7}
 
 DATE=$(date '+%Y-%m-%d')
 
-cp hesiod-x86_64.AppImage ${3}/bin/hesiod-x86_64_${DATE}_${HASH}.AppImage
+cp hesiod-x86_64.AppImage ${3}/bin/hesiod-linux_x86_64_${DATE}_${HASH}.AppImage
