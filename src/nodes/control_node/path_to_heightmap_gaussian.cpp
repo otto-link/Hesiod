@@ -22,7 +22,7 @@ PathToHeightmapGaussian::PathToHeightmapGaussian(std::string     id,
   this->attr["remap"] = NEW_ATTR_RANGE();
   this->attr["inverse"] = NEW_ATTR_BOOL(false);
 
-  this->attr_ordered_key = {"width", "inverse", "remap"};
+  this->attr_ordered_key = {"width", "inverse", "remap", "a"};
 
   this->add_port(gnode::Port("path", gnode::direction::in, dtype::dPath));
   this->add_port(gnode::Port("dx",

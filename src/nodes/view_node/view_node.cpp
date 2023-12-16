@@ -264,6 +264,16 @@ bool ViewNode::render_settings()
       for (int i = 0; i < indent; i++)
         ImGui::Indent();
 
+      // verity the key indeed exist before using it
+      if (!this->attr.contains(key))
+      {
+        LOG_ERROR("unknown attribute id [%s], check the attr_ordered_key "
+                  "definition for node [%s]",
+                  key.c_str(),
+                  this->id.c_str());
+        throw std::runtime_error("unknown attribute id");
+      }
+
       has_changed |= this->attr.at(key)->render_settings(key.c_str());
 
       for (int i = 0; i < indent; i++)
