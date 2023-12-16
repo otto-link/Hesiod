@@ -156,6 +156,8 @@ std::string ViewTree::add_view_node(std::string control_node_type,
     this->add_node(std::make_shared<hesiod::vnode::ViewPathFinding>(id));
   else if (control_node_type == "PathToHeightmap")
     this->add_node(std::make_shared<hesiod::vnode::ViewPathToHeightmap>(id, this->shape, this->tiling, this->overlap));
+  else if (control_node_type == "PathToHeightmapGaussian")
+    this->add_node(std::make_shared<hesiod::vnode::ViewPathToHeightmapGaussian>(id, this->shape, this->tiling, this->overlap));
   else if (control_node_type == "Perlin")
     this->add_node(std::make_shared<hesiod::vnode::ViewPerlin>(id, this->shape, this->tiling, this->overlap));
   else if (control_node_type == "PerlinBillow")

@@ -424,11 +424,11 @@ void ViewNode::update_preview()
           img_to_texture(img, this->shape_preview, this->image_texture_preview);
         }
       }
-      break;	
+      break;
 
       case hesiod::cnode::dCloud:
       {
-        hmap::Cloud           cloud = *(hmap::Cloud *)p_data;
+        hmap::Cloud          cloud = *(hmap::Cloud *)p_data;
         std::vector<uint8_t> img = {};
 
         hmap::Array       array = hmap::Array(this->shape_preview);
@@ -444,7 +444,7 @@ void ViewNode::update_preview()
         img_to_texture(img, this->shape_preview, this->image_texture_preview);
       }
       break;
-      
+
       case hesiod::cnode::dHeightMap:
       {
         hmap::HeightMap     *p_h = (hmap::HeightMap *)p_data;
@@ -508,7 +508,6 @@ void ViewNode::update_preview()
         img_to_texture(img, this->shape_preview, this->image_texture_preview);
       }
       break;
-      
       }
     }
   }
