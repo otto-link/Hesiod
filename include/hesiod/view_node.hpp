@@ -1167,7 +1167,24 @@ public:
       : hesiod::cnode::ControlNode(id), ViewNode(id),
         hesiod::cnode::PathToHeightmapGaussian(id, shape, tiling, overlap)
   {
-    this->set_preview_port_id("path");
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+    this->set_view3d_color_port_id("path");
+  }
+};
+
+class ViewPathToHeightmapPolygon : public ViewNode,
+                                   public hesiod::cnode::PathToHeightmapPolygon
+{
+public:
+  ViewPathToHeightmapPolygon(std::string     id,
+                             hmap::Vec2<int> shape,
+                             hmap::Vec2<int> tiling,
+                             float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::PathToHeightmapPolygon(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
     this->set_view3d_elevation_port_id("output");
     this->set_view3d_color_port_id("path");
   }

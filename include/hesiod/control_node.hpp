@@ -142,6 +142,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"PathFinding", "Roads"},
     {"PathToHeightmap", "Geometry/Path"},
     {"PathToHeightmapGaussian", "Geometry/Path"},
+    {"PathToHeightmapPolygon", "Geometry/Path"},
     {"Perlin", "Primitive/Coherent Noise"},
     {"PerlinBillow", "Primitive/Coherent Noise"},
     {"Plateau", "Filter/Recurve"},
@@ -1186,6 +1187,27 @@ public:
                           hmap::Vec2<int> shape,
                           hmap::Vec2<int> tiling,
                           float           overlap);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap();
+
+private:
+  hmap::Vec2<int> shape;
+  hmap::Vec2<int> tiling;
+  float           overlap;
+};
+
+class PathToHeightmapPolygon : virtual public ControlNode
+{
+public:
+  PathToHeightmapPolygon(std::string     id,
+                         hmap::Vec2<int> shape,
+                         hmap::Vec2<int> tiling,
+                         float           overlap);
 
   void compute();
 

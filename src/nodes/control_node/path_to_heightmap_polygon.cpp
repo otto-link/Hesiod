@@ -8,21 +8,22 @@
 namespace hesiod::cnode
 {
 
-PathToHeightmapGaussian::PathToHeightmapGaussian(std::string     id,
-                                                 hmap::Vec2<int> shape,
-                                                 hmap::Vec2<int> tiling,
-                                                 float           overlap)
+PathToHeightmapPolygon::PathToHeightmapPolygon(std::string     id,
+                                               hmap::Vec2<int> shape,
+                                               hmap::Vec2<int> tiling,
+                                               float           overlap)
     : ControlNode(id), shape(shape), tiling(tiling), overlap(overlap)
 {
-  LOG_DEBUG("PathToHeightmapGaussian::PathToHeightmapGaussian()");
-  this->node_type = "PathToHeightmapGaussian";
+  LOG_DEBUG("PathToHeightmapPolygon::PathToHeightmapPolygon()");
+  this->node_type = "PathToHeightmapPolygon";
   this->category = category_mapping.at(this->node_type);
 
-  this->attr["width"] = NEW_ATTR_FLOAT(0.25f, 0.01f, 1.f);
   this->attr["remap"] = NEW_ATTR_RANGE();
   this->attr["inverse"] = NEW_ATTR_BOOL(false);
+  this->attr["saturate"] = NEW_ATTR_RANGE(false);
+  this->attr["k_saturate"] = NEW_ATTR_FLOAT(0.05f, 0.f, 1.f);
 
-  this->attr_ordered_key = {"width", "inverse", "remap"};
+  this->attr_ordered_key = {"inverse", "remap", "saturate", "k_saturate"};
 
   this->add_port(gnode::Port("path", gnode::direction::in, dtype::dPath));
   this->add_port(gnode::Port("dx",
@@ -40,9 +41,9 @@ PathToHeightmapGaussian::PathToHeightmapGaussian(std::string     id,
   this->update_inner_bindings();
 }
 
-void PathToHeightmapGaussian::compute()
+void PathToHeightmapPolygon::compute()
 {
-  LOG_DEBUG("computing PathToHeightmapGaussian node [%s]", this->id.c_str());
+  LOG_DEBUG("computing PathToHeightmapPolygon node [%s]", this->id.c_str());
 
   hmap::Path      *p_input_path = CAST_PORT_REF(hmap::Path, "path");
   hmap::HeightMap *p_dx = CAST_PORT_REF(hmap::HeightMap, "dx");
@@ -58,12 +59,10 @@ void PathToHeightmapGaussian::compute()
                                          hmap::Array      *p_noise_x,
                                          hmap::Array      *p_noise_y)
                     {
-                      out = p_input_path->to_array_gaussian(
-                          out.shape,
-                          bbox,
-                          GET_ATTR_FLOAT("width"),
-                          p_noise_x,
-                          p_noise_y);
+                      out = p_input_path->to_array_polygon(out.shape,
+                                                           bbox,
+                                                           p_noise_x,
+                                                           p_noise_y);
                     });
   }
   else
@@ -73,7 +72,7 @@ void PathToHeightmapGaussian::compute()
   this->post_process_heightmap(this->value_out);
 }
 
-void PathToHeightmapGaussian::update_inner_bindings()
+void PathToHeightmapPolygon::update_inner_bindings()
 {
   this->set_p_data("output", (void *)&this->value_out);
 }
