@@ -942,6 +942,17 @@ public:
   void render_node_specific_content();
 };
 
+class ViewInverse : public ViewNode, public hesiod::cnode::Inverse
+{
+public:
+  ViewInverse(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Inverse(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
+};
+
 class ViewKernel : public ViewNode, public hesiod::cnode::Kernel
 {
 public:
@@ -1891,6 +1902,17 @@ public:
                   float           overlap)
       : hesiod::cnode::ControlNode(id), ViewNode(id),
         hesiod::cnode::WorleyValue(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
+};
+
+class ViewWrinkle : public ViewNode, public hesiod::cnode::Wrinkle
+{
+public:
+  ViewWrinkle(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Wrinkle(id)
   {
     this->set_preview_port_id("output");
     this->set_view3d_elevation_port_id("output");

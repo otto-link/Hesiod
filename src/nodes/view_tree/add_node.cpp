@@ -122,6 +122,8 @@ std::string ViewTree::add_view_node(std::string control_node_type,
     this->add_node(std::make_shared<hesiod::vnode::ViewHydraulicVpipes>(id));
   else if (control_node_type == "Import")
     this->add_node(std::make_shared<hesiod::vnode::ViewImport>(id, shape, tiling, overlap));
+  else if (control_node_type == "Inverse")
+    this->add_node(std::make_shared<hesiod::vnode::ViewInverse>(id));
   else if (control_node_type == "Kernel")
     this->add_node(std::make_shared<hesiod::vnode::ViewKernel>(id));
   else if (control_node_type == "KmeansClustering2")
@@ -264,6 +266,8 @@ std::string ViewTree::add_view_node(std::string control_node_type,
     this->add_node(std::make_shared<hesiod::vnode::ViewWorleyDouble>(id, this->shape, this->tiling, this->overlap));
   else if (control_node_type == "WorleyValue")
     this->add_node(std::make_shared<hesiod::vnode::ViewWorleyValue>(id, this->shape, this->tiling, this->overlap));
+  else if (control_node_type == "Wrinkle")
+    this->add_node(std::make_shared<hesiod::vnode::ViewWrinkle>(id));
   else if (control_node_type == "ZeroedEdges")
     this->add_node(std::make_shared<hesiod::vnode::ViewZeroedEdges>(id));
   else

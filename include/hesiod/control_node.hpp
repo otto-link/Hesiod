@@ -124,6 +124,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"HydraulicStreamLog", "Erosion/Hydraulic"},
     {"HydraulicVpipes", "Erosion/Hydraulic"},
     {"Import", "IO/Files"},
+    {"Inverse", "Math/Base"},
     {"Kernel", "Primitive/Kernel"},
     {"KmeansClustering2", "Features"}, // not distributed
     {"KmeansClustering3", "Features"}, // not distributed
@@ -193,6 +194,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Worley", "Primitive/Coherent Noise"},
     {"WorleyDouble", "Primitive/Coherent Noise"},
     {"WorleyValue", "Primitive/Coherent Noise"},
+    {"Wrinkle", "Filter/Recast"},
     {"ZeroedEdges", "Math/Boundaries"}};
 
 //----------------------------------------
@@ -988,6 +990,14 @@ private:
   float           overlap;
 };
 
+class Inverse : public Unary
+{
+public:
+  Inverse(std::string id);
+
+  void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
+};
+
 class Kernel : virtual public ControlNode
 {
 public:
@@ -1779,6 +1789,14 @@ public:
               float           overlap);
 
   void compute();
+};
+
+class Wrinkle : public Filter
+{
+public:
+  Wrinkle(std::string id);
+
+  void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
 };
 
 class ZeroedEdges : virtual public ControlNode
