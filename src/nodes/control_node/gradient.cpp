@@ -67,6 +67,9 @@ void Gradient::compute()
     hmap::Vec2<float> vrange = GET_ATTR_RANGE("remap.y");
     this->value_out_dy.remap(vrange.x, vrange.y);
   }
+
+  this->value_out_dx.smooth_overlap_buffers();
+  this->value_out_dy.smooth_overlap_buffers();
 }
 
 } // namespace hesiod::cnode

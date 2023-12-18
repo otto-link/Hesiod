@@ -23,6 +23,7 @@ void GradientTalus::compute_in_out(hmap::HeightMap &talus,
   hmap::transform(talus,    // output
                   *p_input, // input
                   [](hmap::Array &z) { return hmap::gradient_talus(z); });
+  talus.smooth_overlap_buffers();
 }
 
 } // namespace hesiod::cnode

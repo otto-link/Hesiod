@@ -27,7 +27,8 @@ void GradientNorm::compute_in_out(hmap::HeightMap &gradient_norm,
                   *p_input,      // input
                   [](hmap::Array &z) { return hmap::gradient_norm(z); });
 
-  this->post_process_heightmap(this->value_out);
+  gradient_norm.smooth_overlap_buffers();
+  this->post_process_heightmap(gradient_norm);
 }
 
 } // namespace hesiod::cnode
