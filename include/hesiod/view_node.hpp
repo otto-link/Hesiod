@@ -186,6 +186,8 @@ public:
    */
   void render_node();
 
+  void render_node_minimalist();
+
   /**
    * @brief Render any specific content after rendering the node base boyd
    * (@link render_node).
