@@ -39,16 +39,14 @@ void ZeroedEdges::compute()
 {
   LOG_DEBUG("computing node [%s]", this->id.c_str());
 
-  hmap::HeightMap *p_input_hmap = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("input"));
-  hmap::HeightMap *p_input_dr = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("dr"));
+  hmap::HeightMap *p_hmap = CAST_PORT_REF(hmap::HeightMap, "input");
+  hmap::HeightMap *p_dr = CAST_PORT_REF(hmap::HeightMap, "dr");
 
-  this->value_out = *p_input_hmap;
+  this->value_out = *p_hmap;
 
   float sigma = GET_ATTR_FLOAT("sigma");
 
-  if (!p_input_dr)
+  if (!p_dr)
     hmap::transform(this->value_out,
                     [this, &sigma](hmap::Array      &z,
                                    hmap::Vec2<float> shift,
@@ -57,7 +55,7 @@ void ZeroedEdges::compute()
 
   else
     hmap::transform(this->value_out,
-                    *p_input_dr,
+                    *p_dr,
                     [this, &sigma](hmap::Array      &z,
                                    hmap::Array      &dr,
                                    hmap::Vec2<float> shift,

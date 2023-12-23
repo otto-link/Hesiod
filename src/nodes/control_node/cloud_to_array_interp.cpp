@@ -25,27 +25,26 @@ void CloudToArrayInterp::compute()
 {
   LOG_DEBUG("computing CloudToArrayInterp node [%s]", this->id.c_str());
 
-  hmap::Cloud *p_input_cloud = static_cast<hmap::Cloud *>(
-      (void *)this->get_p_data("cloud"));
+  hmap::Cloud *p_cloud = CAST_PORT_REF(hmap::Cloud, "cloud");
 
-  if (p_input_cloud->get_npoints() > 0)
+  if (p_cloud->get_npoints() > 0)
     hmap::fill(this->value_out,
                (hmap::HeightMap *)this->get_p_data("dx"),
                (hmap::HeightMap *)this->get_p_data("dy"),
-               [this, p_input_cloud](hmap::Vec2<int>   shape,
-                                     hmap::Vec2<float> shift,
-                                     hmap::Vec2<float> scale,
-                                     hmap::Array      *p_noise_x,
-                                     hmap::Array      *p_noise_y)
+               [this, p_cloud](hmap::Vec2<int>   shape,
+                               hmap::Vec2<float> shift,
+                               hmap::Vec2<float> scale,
+                               hmap::Array      *p_noise_x,
+                               hmap::Array      *p_noise_y)
                {
                  hmap::Array array(shape);
-                 p_input_cloud->to_array_interp(array,
-                                                {0.f, 1.f, 0.f, 1.f},
-                                                0, // linear interpolation
-                                                p_noise_x,
-                                                p_noise_y,
-                                                shift,
-                                                scale);
+                 p_cloud->to_array_interp(array,
+                                          {0.f, 1.f, 0.f, 1.f},
+                                          0, // linear interpolation
+                                          p_noise_x,
+                                          p_noise_y,
+                                          shift,
+                                          scale);
                  return array;
                });
   else

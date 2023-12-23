@@ -33,10 +33,8 @@ void CombineMask::compute()
 {
   LOG_DEBUG("computing CombineMask node [%s]", this->id.c_str());
 
-  hmap::HeightMap *p_in1 = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("input 1"));
-  hmap::HeightMap *p_in2 = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("input 2"));
+  hmap::HeightMap *p_in1 = CAST_PORT_REF(hmap::HeightMap, "input 1");
+  hmap::HeightMap *p_in2 = CAST_PORT_REF(hmap::HeightMap, "input 2");
 
   this->value_out.set_sto(p_in1->shape, p_in1->tiling, p_in1->overlap);
 

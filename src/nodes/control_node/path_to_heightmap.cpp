@@ -32,17 +32,16 @@ void PathToHeightmap::compute()
 {
   LOG_DEBUG("computing PathToHeightmap node [%s]", this->id.c_str());
 
-  hmap::Path *p_input_path = static_cast<hmap::Path *>(
-      (void *)this->get_p_data("path"));
+  hmap::Path *p_path = CAST_PORT_REF(hmap::Path, "path");
 
-  if (p_input_path->get_npoints() > 1)
+  if (p_path->get_npoints() > 1)
   {
     if (!GET_ATTR_BOOL("filled"))
     {
       hmap::fill(this->value_out,
-                 [p_input_path](hmap::Vec2<int>   shape,
-                                hmap::Vec2<float> shift,
-                                hmap::Vec2<float> scale)
+                 [p_path](hmap::Vec2<int>   shape,
+                          hmap::Vec2<float> shift,
+                          hmap::Vec2<float> scale)
                  {
                    hmap::Array       z = hmap::Array(shape);
                    hmap::Vec4<float> bbox = hmap::Vec4<float>(shift.x,
@@ -50,7 +49,7 @@ void PathToHeightmap::compute()
                                                               shift.y,
                                                               shift.y +
                                                                   scale.y);
-                   p_input_path->to_array(z, bbox);
+                   p_path->to_array(z, bbox);
                    return z;
                  });
     }
@@ -60,7 +59,7 @@ void PathToHeightmap::compute()
       hmap::Array       z_array = hmap::Array(this->value_out.shape);
       hmap::Vec4<float> bbox = hmap::Vec4<float>(0.f, 1.f, 0.f, 1.f);
 
-      p_input_path->to_array(z_array, bbox, true);
+      p_path->to_array(z_array, bbox, true);
     }
     this->post_process_heightmap(this->value_out);
   }

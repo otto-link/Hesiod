@@ -46,22 +46,17 @@ void SelectTransitions::update_inner_bindings()
 void SelectTransitions::compute()
 {
   LOG_DEBUG("computing node [%s]", this->id.c_str());
-  hmap::HeightMap *p_input_hmap1 = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("input##1"));
-  hmap::HeightMap *p_input_hmap2 = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("input##2"));
-  hmap::HeightMap *p_input_blend = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("blend"));
+  hmap::HeightMap *p_hmap1 = CAST_PORT_REF(hmap::HeightMap, "input##1");
+  hmap::HeightMap *p_hmap2 = CAST_PORT_REF(hmap::HeightMap, "input##2");
+  hmap::HeightMap *p_blend = CAST_PORT_REF(hmap::HeightMap, "blend");
 
-  this->value_out.set_sto(p_input_hmap1->shape,
-                          p_input_hmap1->tiling,
-                          p_input_hmap1->overlap);
+  this->value_out.set_sto(p_hmap1->shape, p_hmap1->tiling, p_hmap1->overlap);
 
   hmap::transform(
       this->value_out,
-      *p_input_hmap1,
-      *p_input_hmap2,
-      *p_input_blend,
+      *p_hmap1,
+      *p_hmap2,
+      *p_blend,
       [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2, hmap::Array &a3)
       { m = hmap::select_transitions(a1, a2, a3); });
 }

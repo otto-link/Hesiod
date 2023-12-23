@@ -33,13 +33,12 @@ void MeanderizePath::compute()
 {
   LOG_DEBUG("computing MeanderizePath node [%s]", this->id.c_str());
 
-  hmap::Path *p_input_path = static_cast<hmap::Path *>(
-      (void *)this->get_p_data("path"));
+  hmap::Path *p_path = CAST_PORT_REF(hmap::Path, "path");
 
   // work on a copy of the input
-  this->value_out = *p_input_path;
+  this->value_out = *p_path;
 
-  if (p_input_path->get_npoints() > 1)
+  if (p_path->get_npoints() > 1)
     this->value_out.meanderize(GET_ATTR_FLOAT("radius"),
                                GET_ATTR_FLOAT("tangent_contribution"),
                                GET_ATTR_INT("iterations"),

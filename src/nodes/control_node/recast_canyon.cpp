@@ -40,19 +40,16 @@ void RecastCanyon::update_inner_bindings()
 void RecastCanyon::compute()
 {
   LOG_DEBUG("computing node [%s]", this->id.c_str());
-  hmap::HeightMap *p_input_hmap = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("input"));
-  hmap::HeightMap *p_input_dz = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("dz"));
-  hmap::HeightMap *p_input_mask = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("mask"));
+  hmap::HeightMap *p_hmap = CAST_PORT_REF(hmap::HeightMap, "input");
+  hmap::HeightMap *p_dz = CAST_PORT_REF(hmap::HeightMap, "dz");
+  hmap::HeightMap *p_mask = CAST_PORT_REF(hmap::HeightMap, "mask");
 
-  this->value_out = *p_input_hmap;
+  this->value_out = *p_hmap;
 
   hmap::transform(
       this->value_out,
-      p_input_dz,
-      p_input_mask,
+      p_dz,
+      p_mask,
       [this](hmap::Array &z, hmap::Array *p_noise, hmap::Array *p_mask)
       {
         hmap::recast_canyon(z,
