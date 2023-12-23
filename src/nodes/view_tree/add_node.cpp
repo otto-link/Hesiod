@@ -174,6 +174,8 @@ std::string ViewTree::add_view_node(std::string control_node_type,
     this->add_node(std::make_shared<hesiod::vnode::ViewPreviewColorize>(id));
   else if (control_node_type == "RecastCanyon")
     this->add_node(std::make_shared<hesiod::vnode::ViewRecastCanyon>(id));
+  else if (control_node_type == "RecastPeak")
+    this->add_node(std::make_shared<hesiod::vnode::ViewRecastPeak>(id));
   else if (control_node_type == "RecastRockySlopes")
     this->add_node(std::make_shared<hesiod::vnode::ViewRecastRockySlopes>(id));
   else if (control_node_type == "Recurve")

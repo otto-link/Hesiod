@@ -1283,6 +1283,18 @@ public:
   }
 };
 
+class ViewRecastPeak : public ViewNode, public hesiod::cnode::RecastPeak
+{
+public:
+  ViewRecastPeak(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::RecastPeak(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
+};
+
 class ViewRecastRockySlopes : public ViewNode,
                               public hesiod::cnode::RecastRockySlopes
 {
