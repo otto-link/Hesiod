@@ -247,6 +247,26 @@ int main()
     export_png(window, tree, "ex_KmeansClustering2.png");
   }
 
+  // --- MakeBinary
+  {
+    hesiod::vnode::ViewTree tree =
+        hesiod::vnode::ViewTree("tree", shape, tiling, overlap);
+    auto nf = tree.add_view_node("FbmSimplex");
+    auto nc = tree.add_view_node("MakeBinary");
+    tree.new_link(nf, "output", nc, "input");
+
+    tree.get_node_ref_by_id<hesiod::cnode::MakeBinary>(nc)
+        ->attr.at("threshold")
+        ->get_ref<hesiod::FloatAttribute>()
+        ->value = 0.5f;
+
+    tree.update();
+    export_png(window, tree, "ex_MakeBinary.png");
+
+    tree.set_viewer_node_id(nc);
+    tree.export_view3d("ex_MakeBinary_render.png");
+  }
+
   //
   {
     // hesiod::vnode::ViewTree tree =
