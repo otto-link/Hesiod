@@ -365,8 +365,6 @@ void ViewTree::update_image_texture_view3d(bool vertex_array_update)
             }
             break;
 
-              // TODO : case for incoming RGB texture
-
             default:
               // render a black surface
               for (auto &v : this->colors)

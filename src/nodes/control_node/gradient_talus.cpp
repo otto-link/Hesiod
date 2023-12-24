@@ -12,6 +12,9 @@ GradientTalus::GradientTalus(std::string id) : ControlNode(id), Unary(id)
 {
   this->node_type = "GradientTalus";
   this->category = category_mapping.at(this->node_type);
+
+  this->attr["remap"] = NEW_ATTR_RANGE();
+
   this->update_inner_bindings();
 }
 
@@ -24,6 +27,7 @@ void GradientTalus::compute_in_out(hmap::HeightMap &talus,
                   *p_input, // input
                   [](hmap::Array &z) { return hmap::gradient_talus(z); });
   talus.smooth_overlap_buffers();
+  this->post_process_heightmap(talus);
 }
 
 } // namespace hesiod::cnode

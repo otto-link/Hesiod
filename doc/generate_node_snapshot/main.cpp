@@ -104,6 +104,65 @@ int main()
 
     tree.update();
     export_png(window, tree, "ex_Clamp.png");
+
+    tree.set_viewer_node_id(nc);
+    tree.export_view3d("ex_Clamp_render.png");
+  }
+
+  // --- Cloud / CloudToArrayInterp
+  {
+    hesiod::vnode::ViewTree tree =
+        hesiod::vnode::ViewTree("tree", shape, tiling, overlap);
+
+    auto nc = tree.add_view_node("Cloud");
+    auto nf = tree.add_view_node("FbmSimplex");
+    auto na = tree.add_view_node("CloudToArrayInterp");
+    tree.new_link(nf, "output", na, "dx");
+    tree.new_link(nc, "output", na, "cloud");
+
+    hmap::Cloud value = hmap::Cloud({0.1f, 0.7f, 0.5f, 0.8f},
+                                    {0.2f, 0.5f, 0.8f, 0.1f},
+                                    {0.1f, 0.2f, 1.f, 0.5f});
+
+    tree.get_node_ref_by_id<hesiod::cnode::Cloud>(nc)
+        ->attr.at("cloud")
+        ->get_ref<hesiod::CloudAttribute>()
+        ->value = value;
+
+    tree.update();
+    export_png(window, tree, "ex_Cloud.png");
+    export_png(window, tree, "ex_CloudToArrayInterp.png");
+
+    tree.set_viewer_node_id(na);
+    tree.export_view3d("ex_CloudToArrayInterp_render.png");
+  }
+
+  // --- FbmPerlin
+  {
+    hesiod::vnode::ViewTree tree =
+        hesiod::vnode::ViewTree("tree", shape, tiling, overlap);
+
+    auto nf = tree.add_view_node("FbmPerlin");
+
+    tree.update();
+    export_png(window, tree, "ex_FbmPerlin.png");
+
+    tree.set_viewer_node_id(nf);
+    tree.export_view3d("ex_FbmPerlin_render.png");
+  }
+
+  // --- FbmSimplex
+  {
+    hesiod::vnode::ViewTree tree =
+        hesiod::vnode::ViewTree("tree", shape, tiling, overlap);
+
+    auto nf = tree.add_view_node("FbmSimplex");
+
+    tree.update();
+    export_png(window, tree, "ex_FbmSimplex.png");
+
+    tree.set_viewer_node_id(nf);
+    tree.export_view3d("ex_FbmSimplex_render.png");
   }
 
   // --- Gradient
@@ -132,6 +191,9 @@ int main()
 
     tree.update();
     export_png(window, tree, "ex_GradientAngle.png");
+
+    tree.set_viewer_node_id(ng);
+    tree.export_view3d("ex_GradientAngle_render.png");
   }
 
   // --- GradientNorm
@@ -144,6 +206,9 @@ int main()
 
     tree.update();
     export_png(window, tree, "ex_GradientNorm.png");
+
+    tree.set_viewer_node_id(ng);
+    tree.export_view3d("ex_GradientNorm_render.png");
   }
 
   // --- GradientTalus
@@ -156,6 +221,9 @@ int main()
 
     tree.update();
     export_png(window, tree, "ex_GradientTalus.png");
+
+    tree.set_viewer_node_id(ng);
+    tree.export_view3d("ex_GradientTalus_render.png");
   }
 
   // --- KmeansClustering2

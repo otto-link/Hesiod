@@ -807,7 +807,8 @@ public:
         hesiod::cnode::GradientAngle(id)
   {
     this->set_preview_port_id("output");
-    this->set_view3d_elevation_port_id("output");
+    this->set_view3d_elevation_port_id("input");
+    this->set_view3d_color_port_id("output");
   }
 };
 
@@ -819,7 +820,8 @@ public:
         hesiod::cnode::GradientNorm(id)
   {
     this->set_preview_port_id("output");
-    this->set_view3d_elevation_port_id("output");
+    this->set_view3d_elevation_port_id("input");
+    this->set_view3d_color_port_id("output");
   }
 };
 
@@ -831,7 +833,8 @@ public:
         hesiod::cnode::GradientTalus(id)
   {
     this->set_preview_port_id("output");
-    this->set_view3d_elevation_port_id("output");
+    this->set_view3d_elevation_port_id("input");
+    this->set_view3d_color_port_id("output");
   }
 };
 
@@ -846,7 +849,8 @@ public:
         hesiod::cnode::GaussianPulse(id, shape, tiling, overlap)
   {
     this->set_preview_port_id("output");
-    this->set_view3d_elevation_port_id("output");
+    this->set_view3d_elevation_port_id("input");
+    this->set_view3d_color_port_id("output");
   }
 };
 

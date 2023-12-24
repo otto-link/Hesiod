@@ -59,6 +59,8 @@ bool drag_float_vector(std::vector<float> &vector,
 
 void draw_icon(int icon_type, ImVec2 size, ImU32 color, bool filled);
 
+void flip_vertically(int width, int height, uint8_t *data);
+
 void help_marker(std::string text);
 
 bool hmap_brush_editor(hmap::HeightMap &h, float width = 0.f);
