@@ -8,6 +8,7 @@
 
 #include "hesiod/viewer.hpp"
 
+#include "hesiod/gui.hpp"
 #include "hesiod/view_node.hpp"
 #include "hesiod/view_tree.hpp"
 
@@ -126,6 +127,31 @@ void ViewTree::set_sto(hmap::Vec2<int> new_shape,
 void ViewTree::clear_links()
 {
   this->links.clear();
+}
+
+void ViewTree::export_view3d(std::string fname)
+{
+  this->update_view3d_basemesh();
+  this->update_image_texture_view3d();
+
+  std::vector<uint8_t> img(this->shape_view3d.x * this->shape_view3d.y * 3);
+
+  hesiod::viewer::bind_framebuffer(this->FBO);
+  glReadPixels(0,
+               0,
+               this->shape_view3d.x,
+               this->shape_view3d.y,
+               GL_RGB,
+               GL_UNSIGNED_BYTE,
+               img.data());
+  hesiod::viewer::unbind_framebuffer();
+
+  gui::flip_vertically(this->shape_view3d.x, this->shape_view3d.y, img.data());
+
+  hmap::write_png_rgb_8bit(
+      fname,
+      img,
+      hmap::Vec2<int>(this->shape_view3d.x, this->shape_view3d.y));
 }
 
 void ViewTree::insert_clone_node(std::string node_id)

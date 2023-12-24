@@ -64,6 +64,8 @@ int main()
       SNAPSHOT_SIZE,
       "Hesiod v0.0.x (c) 2023 Otto Link");
 
+  ImCandy::Theme_Blender();
+
   ImGuiIO     &io = ImGui::GetIO();
   ImFontConfig config;
   config.OversampleH = 2;
@@ -91,10 +93,137 @@ int main()
   {
     hesiod::vnode::ViewTree tree =
         hesiod::vnode::ViewTree("tree", shape, tiling, overlap);
-    tree.add_view_node("FbmPerlin");
-    tree.add_view_node("Clamp");
-    tree.new_link("FbmPerlin##0", "output", "Clamp##1", "input");
+    auto nf = tree.add_view_node("FbmSimplex");
+    auto nc = tree.add_view_node("Clamp");
+    tree.new_link(nf, "output", nc, "input");
+
+    tree.get_node_ref_by_id<hesiod::cnode::Clamp>(nc)
+        ->attr.at("clamp")
+        ->get_ref<hesiod::RangeAttribute>()
+        ->value.x = 0.5f;
+
+    tree.update();
     export_png(window, tree, "ex_Clamp.png");
+
+    tree.set_viewer_node_id(nc);
+    tree.export_view3d("ex_Clamp_render.png");
+  }
+
+  // --- Cloud / CloudToArrayInterp
+  {
+    hesiod::vnode::ViewTree tree =
+        hesiod::vnode::ViewTree("tree", shape, tiling, overlap);
+
+    auto nc = tree.add_view_node("Cloud");
+    auto nf = tree.add_view_node("FbmSimplex");
+    auto na = tree.add_view_node("CloudToArrayInterp");
+    tree.new_link(nf, "output", na, "dx");
+    tree.new_link(nc, "output", na, "cloud");
+
+    hmap::Cloud value = hmap::Cloud({0.1f, 0.7f, 0.5f, 0.8f},
+                                    {0.2f, 0.5f, 0.8f, 0.1f},
+                                    {0.1f, 0.2f, 1.f, 0.5f});
+
+    tree.get_node_ref_by_id<hesiod::cnode::Cloud>(nc)
+        ->attr.at("cloud")
+        ->get_ref<hesiod::CloudAttribute>()
+        ->value = value;
+
+    tree.update();
+    export_png(window, tree, "ex_Cloud.png");
+    export_png(window, tree, "ex_CloudToArrayInterp.png");
+
+    tree.set_viewer_node_id(na);
+    tree.export_view3d("ex_CloudToArrayInterp_render.png");
+  }
+
+  // --- FbmPerlin
+  {
+    hesiod::vnode::ViewTree tree =
+        hesiod::vnode::ViewTree("tree", shape, tiling, overlap);
+
+    auto nf = tree.add_view_node("FbmPerlin");
+
+    tree.update();
+    export_png(window, tree, "ex_FbmPerlin.png");
+
+    tree.set_viewer_node_id(nf);
+    tree.export_view3d("ex_FbmPerlin_render.png");
+  }
+
+  // --- FbmSimplex
+  {
+    hesiod::vnode::ViewTree tree =
+        hesiod::vnode::ViewTree("tree", shape, tiling, overlap);
+
+    auto nf = tree.add_view_node("FbmSimplex");
+
+    tree.update();
+    export_png(window, tree, "ex_FbmSimplex.png");
+
+    tree.set_viewer_node_id(nf);
+    tree.export_view3d("ex_FbmSimplex_render.png");
+  }
+
+  // --- Gradient
+  {
+    hesiod::vnode::ViewTree tree =
+        hesiod::vnode::ViewTree("tree", shape, tiling, overlap);
+    auto nf = tree.add_view_node("FbmSimplex");
+    auto ng = tree.add_view_node("Gradient");
+    auto n1 = tree.add_view_node("Preview");
+    auto n2 = tree.add_view_node("Preview");
+    tree.new_link(nf, "output", ng, "input");
+    tree.new_link(ng, "dx", n1, "input");
+    tree.new_link(ng, "dy", n2, "input");
+
+    tree.update();
+    export_png(window, tree, "ex_Gradient.png");
+  }
+
+  // --- GradientAngle
+  {
+    hesiod::vnode::ViewTree tree =
+        hesiod::vnode::ViewTree("tree", shape, tiling, overlap);
+    auto nf = tree.add_view_node("FbmSimplex");
+    auto ng = tree.add_view_node("GradientAngle");
+    tree.new_link(nf, "output", ng, "input");
+
+    tree.update();
+    export_png(window, tree, "ex_GradientAngle.png");
+
+    tree.set_viewer_node_id(ng);
+    tree.export_view3d("ex_GradientAngle_render.png");
+  }
+
+  // --- GradientNorm
+  {
+    hesiod::vnode::ViewTree tree =
+        hesiod::vnode::ViewTree("tree", shape, tiling, overlap);
+    auto nf = tree.add_view_node("FbmSimplex");
+    auto ng = tree.add_view_node("GradientNorm");
+    tree.new_link(nf, "output", ng, "input");
+
+    tree.update();
+    export_png(window, tree, "ex_GradientNorm.png");
+
+    tree.set_viewer_node_id(ng);
+    tree.export_view3d("ex_GradientNorm_render.png");
+  }
+
+  // --- GradientTalus
+  {
+    hesiod::vnode::ViewTree tree =
+        hesiod::vnode::ViewTree("tree", shape, tiling, overlap);
+    auto nf = tree.add_view_node("FbmSimplex");
+    auto ng = tree.add_view_node("GradientTalus");
+    tree.new_link(nf, "output", ng, "input");
+
+    tree.update();
+    export_png(window, tree, "ex_GradientTalus.png");
+
+    tree.set_viewer_node_id(ng);
+    tree.export_view3d("ex_GradientTalus_render.png");
   }
 
   // --- KmeansClustering2
@@ -105,27 +234,46 @@ int main()
     tree.add_view_node("Clone");
     tree.add_view_node("GradientNorm");
     tree.add_view_node("KmeansClustering2");
-    tree.add_view_node("FbmPerlin");
-    tree.print_node_list();
-    tree.new_link("FbmPerlin##3", "output", "Clone##0", "input");
+    tree.add_view_node("FbmSimplex");
+
+    tree.new_link("FbmSimplex##3", "output", "Clone##0", "input");
     tree.new_link("Clone##0", "thru##0", "GradientNorm##1", "input");
     tree.new_link("Clone##0", "thru##1", "KmeansClustering2##2", "input##2");
     tree.new_link("GradientNorm##1",
                   "output",
                   "KmeansClustering2##2",
                   "input##1");
-    export_png(window, tree, "ex_KmeansClustering2.png");
 
-    tree.save_state("state.json");
+    export_png(window, tree, "ex_KmeansClustering2.png");
+  }
+
+  // --- MakeBinary
+  {
+    hesiod::vnode::ViewTree tree =
+        hesiod::vnode::ViewTree("tree", shape, tiling, overlap);
+    auto nf = tree.add_view_node("FbmSimplex");
+    auto nc = tree.add_view_node("MakeBinary");
+    tree.new_link(nf, "output", nc, "input");
+
+    tree.get_node_ref_by_id<hesiod::cnode::MakeBinary>(nc)
+        ->attr.at("threshold")
+        ->get_ref<hesiod::FloatAttribute>()
+        ->value = 0.5f;
+
+    tree.update();
+    export_png(window, tree, "ex_MakeBinary.png");
+
+    tree.set_viewer_node_id(nc);
+    tree.export_view3d("ex_MakeBinary_render.png");
   }
 
   //
   {
-    hesiod::vnode::ViewTree tree =
-        hesiod::vnode::ViewTree("tree", shape, tiling, overlap);
+    // hesiod::vnode::ViewTree tree =
+    //     hesiod::vnode::ViewTree("tree", shape, tiling, overlap);
 
-    tree.load_state("state.json");
-    export_png(window, tree, "out.png");
+    // tree.load_state("state.json");
+    // export_png(window, tree, "out.png");
   }
 
   // --- Cleanup

@@ -160,6 +160,10 @@ void main_dock(hesiod::vnode::ViewTree &view_tree)
 
       if (ImGui::Button("2048 x 2048"))
         gui_shape = {2048, 2048};
+      ImGui::SameLine();
+
+      if (ImGui::Button("4096 x 4096"))
+        gui_shape = {4096, 4096};
 
       ImGui::InputInt("tiling.x", &gui_tiling.x);
       ImGui::InputInt("tiling.y", &gui_tiling.y);

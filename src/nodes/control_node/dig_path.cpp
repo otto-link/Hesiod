@@ -37,31 +37,28 @@ void DigPath::compute()
 {
   LOG_DEBUG("computing DigPath node [%s]", this->id.c_str());
 
-  hmap::HeightMap *p_input_hmap = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("input"));
-  hmap::Path *p_input_path = static_cast<hmap::Path *>(
-      (void *)this->get_p_data("path"));
+  hmap::HeightMap *p_hmap = CAST_PORT_REF(hmap::HeightMap, "input");
+  hmap::Path      *p_path = CAST_PORT_REF(hmap::Path, "path");
 
-  if (p_input_path->get_npoints() > 1)
+  if (p_path->get_npoints() > 1)
   {
     // work on a copy of the input
-    this->value_out = *p_input_hmap;
+    this->value_out = *p_hmap;
 
     if (!GET_ATTR_BOOL("force_downhill"))
     {
-      hmap::transform(
-          this->value_out,
-          [this, p_input_path](hmap::Array &z, hmap::Vec4<float> bbox)
-          {
-            hmap::dig_path(z,
-                           *p_input_path,
-                           GET_ATTR_INT("width"),
-                           GET_ATTR_INT("decay"),
-                           GET_ATTR_INT("flattening_radius"),
-                           GET_ATTR_BOOL("force_downhill"),
-                           bbox,
-                           GET_ATTR_FLOAT("depth"));
-          });
+      hmap::transform(this->value_out,
+                      [this, p_path](hmap::Array &z, hmap::Vec4<float> bbox)
+                      {
+                        hmap::dig_path(z,
+                                       *p_path,
+                                       GET_ATTR_INT("width"),
+                                       GET_ATTR_INT("decay"),
+                                       GET_ATTR_INT("flattening_radius"),
+                                       GET_ATTR_BOOL("force_downhill"),
+                                       bbox,
+                                       GET_ATTR_FLOAT("depth"));
+                      });
     }
     else
     {
@@ -69,7 +66,7 @@ void DigPath::compute()
       hmap::Array z_array = this->value_out.to_array();
 
       hmap::dig_path(z_array,
-                     *p_input_path,
+                     *p_path,
                      GET_ATTR_INT("width"),
                      GET_ATTR_INT("decay"),
                      GET_ATTR_INT("flattening_radius"),

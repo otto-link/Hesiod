@@ -186,6 +186,8 @@ public:
    */
   void render_node();
 
+  void render_node_minimalist();
+
   /**
    * @brief Render any specific content after rendering the node base boyd
    * (@link render_node).
@@ -805,7 +807,8 @@ public:
         hesiod::cnode::GradientAngle(id)
   {
     this->set_preview_port_id("output");
-    this->set_view3d_elevation_port_id("output");
+    this->set_view3d_elevation_port_id("input");
+    this->set_view3d_color_port_id("output");
   }
 };
 
@@ -817,7 +820,8 @@ public:
         hesiod::cnode::GradientNorm(id)
   {
     this->set_preview_port_id("output");
-    this->set_view3d_elevation_port_id("output");
+    this->set_view3d_elevation_port_id("input");
+    this->set_view3d_color_port_id("output");
   }
 };
 
@@ -829,7 +833,8 @@ public:
         hesiod::cnode::GradientTalus(id)
   {
     this->set_preview_port_id("output");
-    this->set_view3d_elevation_port_id("output");
+    this->set_view3d_elevation_port_id("input");
+    this->set_view3d_color_port_id("output");
   }
 };
 
@@ -844,7 +849,8 @@ public:
         hesiod::cnode::GaussianPulse(id, shape, tiling, overlap)
   {
     this->set_preview_port_id("output");
-    this->set_view3d_elevation_port_id("output");
+    this->set_view3d_elevation_port_id("input");
+    this->set_view3d_color_port_id("output");
   }
 };
 
@@ -1031,7 +1037,8 @@ public:
         hesiod::cnode::MakeBinary(id)
   {
     this->set_preview_port_id("output");
-    this->set_view3d_elevation_port_id("output");
+    this->set_view3d_elevation_port_id("input");
+    this->set_view3d_color_port_id("output");
   }
 };
 
@@ -1275,6 +1282,31 @@ public:
   ViewRecastCanyon(std::string id)
       : hesiod::cnode::ControlNode(id), ViewNode(id),
         hesiod::cnode::RecastCanyon(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
+};
+
+class ViewRecastPeak : public ViewNode, public hesiod::cnode::RecastPeak
+{
+public:
+  ViewRecastPeak(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::RecastPeak(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
+};
+
+class ViewRecastRockySlopes : public ViewNode,
+                              public hesiod::cnode::RecastRockySlopes
+{
+public:
+  ViewRecastRockySlopes(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::RecastRockySlopes(id)
   {
     this->set_preview_port_id("output");
     this->set_view3d_elevation_port_id("output");

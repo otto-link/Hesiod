@@ -39,26 +39,23 @@ void SmoothFill::update_inner_bindings()
 void SmoothFill::compute()
 {
   LOG_DEBUG("computing node [%s]", this->id.c_str());
-  hmap::HeightMap *p_input_hmap = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("input"));
-  hmap::HeightMap *p_input_mask = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("mask"));
-
-  hmap::HeightMap *p_output_deposition_map = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("deposition map"));
+  hmap::HeightMap *p_hmap = CAST_PORT_REF(hmap::HeightMap, "input");
+  hmap::HeightMap *p_mask = CAST_PORT_REF(hmap::HeightMap, "mask");
+  hmap::HeightMap *p_deposition_map = CAST_PORT_REF(hmap::HeightMap,
+                                                    "deposition map");
 
   // work on a copy of the input
-  this->value_out = *p_input_hmap;
+  this->value_out = *p_hmap;
 
-  if (p_output_deposition_map)
-    this->deposition_map.set_sto(p_input_hmap->shape,
-                                 p_input_hmap->tiling,
-                                 p_input_hmap->overlap);
+  if (p_deposition_map)
+    this->deposition_map.set_sto(p_hmap->shape,
+                                 p_hmap->tiling,
+                                 p_hmap->overlap);
 
   hmap::transform(
       this->value_out,
-      p_input_mask,
-      p_output_deposition_map,
+      p_mask,
+      p_deposition_map,
       [this](hmap::Array &x, hmap::Array *p_mask, hmap::Array *p_deposition)
       {
         hmap::smooth_fill(x,
@@ -70,8 +67,8 @@ void SmoothFill::compute()
 
   this->value_out.smooth_overlap_buffers();
 
-  if (p_output_deposition_map)
-    (*p_output_deposition_map).smooth_overlap_buffers();
+  if (p_deposition_map)
+    (*p_deposition_map).smooth_overlap_buffers();
 }
 
 } // namespace hesiod::cnode

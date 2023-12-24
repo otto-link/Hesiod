@@ -32,26 +32,21 @@ void Gradient::update_inner_bindings()
 void Gradient::compute()
 {
   LOG_DEBUG("computing node [%s]", this->id.c_str());
-  hmap::HeightMap *p_input_hmap = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("input"));
+  hmap::HeightMap *p_hmap = CAST_PORT_REF(hmap::HeightMap, "input");
 
   // reshaping
-  this->value_out_dx.set_sto(p_input_hmap->shape,
-                             p_input_hmap->tiling,
-                             p_input_hmap->overlap);
+  this->value_out_dx.set_sto(p_hmap->shape, p_hmap->tiling, p_hmap->overlap);
 
-  this->value_out_dy.set_sto(p_input_hmap->shape,
-                             p_input_hmap->tiling,
-                             p_input_hmap->overlap);
+  this->value_out_dy.set_sto(p_hmap->shape, p_hmap->tiling, p_hmap->overlap);
 
   // compute gradients
   hmap::transform(this->value_out_dx, // output
-                  *p_input_hmap,      // input
+                  *p_hmap,            // input
                   [](hmap::Array &out, hmap::Array &in)
                   { hmap::gradient_x(in, out); });
 
   hmap::transform(this->value_out_dy, // output
-                  *p_input_hmap,      // input
+                  *p_hmap,            // input
                   [](hmap::Array &out, hmap::Array &in)
                   { hmap::gradient_y(in, out); });
 
@@ -67,6 +62,9 @@ void Gradient::compute()
     hmap::Vec2<float> vrange = GET_ATTR_RANGE("remap.y");
     this->value_out_dy.remap(vrange.x, vrange.y);
   }
+
+  this->value_out_dx.smooth_overlap_buffers();
+  this->value_out_dy.smooth_overlap_buffers();
 }
 
 } // namespace hesiod::cnode

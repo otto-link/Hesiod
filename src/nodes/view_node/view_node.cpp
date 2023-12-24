@@ -241,6 +241,93 @@ void ViewNode::render_node()
   ImGui::PopID();
 }
 
+void ViewNode::render_node_minimalist()
+{
+  ImGui::PushID((void *)this);
+
+  std::string node_type = this->get_node_type();
+  int         pos = this->get_category().find("/");
+  std::string main_category = this->get_category().substr(0, pos);
+
+  std::string node_label = node_type;
+  {
+    // truncate node label to make it fit within the node width
+    float char_width = ImGui::CalcTextSize("a").x;
+    int   nchar = (int)(this->node_width / char_width);
+    if (nchar < (int)node_label.size())
+    {
+      nchar -= 3;
+      node_label = node_label.substr(0, nchar) + "...";
+    }
+  }
+
+  ax::NodeEditor::BeginNode(ax::NodeEditor::NodeId(this->hash_id));
+
+  if (this->frozen_outputs)
+    ImGui::TextColored(ImColor(IM_COL32(150, 50, 50, 255)),
+                       "%s",
+                       node_label.c_str());
+  else
+    ImGui::TextColored(ImColor(category_colors.at(main_category).hovered),
+                       "%s",
+                       node_label.c_str());
+
+  ImGui::Spacing();
+
+  // inputs
+  for (auto &[port_id, port] : this->get_ports())
+    if (port.direction == gnode::direction::in)
+    {
+      ax::NodeEditor::BeginPin(ax::NodeEditor::PinId(port.hash_id),
+                               ax::NodeEditor::PinKind::Input);
+
+      ImU32 color = dtype_colors.at(port.dtype).hovered;
+      if (port.is_optional)
+        color = dtype_colors.at(port.dtype).base;
+
+      hesiod::gui::draw_icon(hesiod::gui::square,
+                             {10.f, 10.f},
+                             color,
+                             port.is_connected);
+
+      ax::NodeEditor::EndPin();
+      ImGui::SameLine();
+
+      if (port.is_optional)
+        ImGui::TextColored(ImVec4(0.5f, 0.5f, 0.5f, 1.f),
+                           "%s",
+                           port.label.c_str());
+      else
+        ImGui::TextUnformatted(port.label.c_str());
+    }
+
+  // outputs
+  for (auto &[port_id, port] : this->get_ports())
+    if (port.direction == gnode::direction::out)
+    {
+      const char *txt = port.label.c_str();
+      const float text_width = ImGui::CalcTextSize(txt).x;
+      ImGui::Dummy(
+          ImVec2(this->node_width - text_width - 8.f - 18.f, 0)); // TODO
+      ImGui::SameLine();
+
+      ImGui::TextUnformatted(txt);
+      ImGui::SameLine();
+
+      ax::NodeEditor::BeginPin(ax::NodeEditor::PinId(port.hash_id),
+                               ax::NodeEditor::PinKind::Output);
+      hesiod::gui::draw_icon(hesiod::gui::square,
+                             {10.f, 10.f},
+                             dtype_colors.at(port.dtype).hovered,
+                             port.is_connected);
+      ax::NodeEditor::EndPin();
+    }
+
+  ax::NodeEditor::EndNode();
+
+  ImGui::PopID();
+}
+
 bool ViewNode::render_settings()
 {
   // just the header and the footer

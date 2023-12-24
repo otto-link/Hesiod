@@ -36,17 +36,14 @@ void WhiteDensityMap::update_inner_bindings()
 void WhiteDensityMap::compute()
 {
   LOG_DEBUG("computing node [%s]", this->id.c_str());
-  hmap::HeightMap *p_input_hmap = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("density map"));
+  hmap::HeightMap *p_hmap = CAST_PORT_REF(hmap::HeightMap, "density map");
 
-  this->value_out.set_sto(p_input_hmap->shape,
-                          p_input_hmap->tiling,
-                          p_input_hmap->overlap);
+  this->value_out.set_sto(p_hmap->shape, p_hmap->tiling, p_hmap->overlap);
 
   int seed = GET_ATTR_SEED("seed");
 
   hmap::transform(this->value_out,
-                  *p_input_hmap,
+                  *p_hmap,
                   [this, &seed](hmap::Array &h_out, hmap::Array &density_map) {
                     h_out = hmap::white_density_map(density_map, (uint)seed++);
                   });

@@ -31,17 +31,15 @@ void ConvolveSVD::compute()
 {
   LOG_DEBUG("computing node [%s]", this->id.c_str());
 
-  hmap::HeightMap *p_input_hmap = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("input"));
-  hmap::Array *p_input_kernel = static_cast<hmap::Array *>(
-      (void *)this->get_p_data("kernel"));
+  hmap::HeightMap *p_hmap = CAST_PORT_REF(hmap::HeightMap, "input");
+  hmap::Array     *p_kernel = CAST_PORT_REF(hmap::Array, "kernel");
 
-  this->value_out = *p_input_hmap;
+  this->value_out = *p_hmap;
 
   hmap::transform(
       this->value_out,
-      [this, p_input_kernel](hmap::Array &z)
-      { z = hmap::convolve2d_svd(z, *p_input_kernel, GET_ATTR_INT("rank")); });
+      [this, p_kernel](hmap::Array &z)
+      { z = hmap::convolve2d_svd(z, *p_kernel, GET_ATTR_INT("rank")); });
 
   this->value_out.smooth_overlap_buffers();
 }

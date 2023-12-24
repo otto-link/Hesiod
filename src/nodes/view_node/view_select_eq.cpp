@@ -29,8 +29,7 @@ bool ViewSelectEq::render_settings()
   {
     if (ImGui::Button("Update unique values") && this->get_p_data("input"))
     {
-      hmap::HeightMap *p_input_hmap = static_cast<hmap::HeightMap *>(
-          (void *)this->get_p_data("input"));
+      hmap::HeightMap *p_input_hmap = CAST_PORT_REF(hmap::HeightMap, "input");
       this->input_unique_values = p_input_hmap->unique_values();
     }
 

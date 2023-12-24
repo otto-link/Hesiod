@@ -36,24 +36,19 @@ void MixRGB::compute()
 {
   LOG_DEBUG("computing MixRGB node [%s]", this->id.c_str());
 
-  hmap::HeightMapRGB *p_input_rgb1 = static_cast<hmap::HeightMapRGB *>(
-      (void *)this->get_p_data("RGB1"));
-  hmap::HeightMapRGB *p_input_rgb2 = static_cast<hmap::HeightMapRGB *>(
-      (void *)this->get_p_data("RGB2"));
+  hmap::HeightMapRGB *p_rgb1 = CAST_PORT_REF(hmap::HeightMapRGB, "RGB1");
+  hmap::HeightMapRGB *p_rgb2 = CAST_PORT_REF(hmap::HeightMapRGB, "RGB2");
 
   if (GET_ATTR_BOOL("sqrt_mix"))
   {
     if (this->get_p_data("t"))
     {
-      hmap::HeightMap *p_input_t = static_cast<hmap::HeightMap *>(
-          (void *)this->get_p_data("t"));
-      this->value_out = mix_heightmap_rgb_sqrt(*p_input_rgb1,
-                                               *p_input_rgb2,
-                                               *p_input_t);
+      hmap::HeightMap *p_t = CAST_PORT_REF(hmap::HeightMap, "t");
+      this->value_out = mix_heightmap_rgb_sqrt(*p_rgb1, *p_rgb2, *p_t);
     }
     else
-      this->value_out = mix_heightmap_rgb_sqrt(*p_input_rgb1,
-                                               *p_input_rgb2,
+      this->value_out = mix_heightmap_rgb_sqrt(*p_rgb1,
+                                               *p_rgb2,
                                                GET_ATTR_FLOAT("t"));
   }
   else
@@ -61,15 +56,12 @@ void MixRGB::compute()
     // linear salpha mix
     if (this->get_p_data("t"))
     {
-      hmap::HeightMap *p_input_t = static_cast<hmap::HeightMap *>(
-          (void *)this->get_p_data("t"));
-      this->value_out = mix_heightmap_rgb(*p_input_rgb1,
-                                          *p_input_rgb2,
-                                          *p_input_t);
+      hmap::HeightMap *p_t = CAST_PORT_REF(hmap::HeightMap, "t");
+      this->value_out = mix_heightmap_rgb(*p_rgb1, *p_rgb2, *p_t);
     }
     else
-      this->value_out = mix_heightmap_rgb(*p_input_rgb1,
-                                          *p_input_rgb2,
+      this->value_out = mix_heightmap_rgb(*p_rgb1,
+                                          *p_rgb2,
                                           GET_ATTR_FLOAT("t"));
   }
 }

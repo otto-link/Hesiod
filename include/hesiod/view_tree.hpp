@@ -79,6 +79,8 @@ public:
 
   void clear_links();
 
+  void export_view3d(std::string fname);
+
   void insert_clone_node(std::string node_id);
 
   void new_link(int port_hash_id_from, int port_hash_id_to);
@@ -177,8 +179,8 @@ private:
 
   float scale = 0.7f;
   float h_scale = 0.4f;
-  float alpha_x = 0.f;
-  float alpha_y = 0.f;
+  float alpha_x = 35.f;
+  float alpha_y = -25.f;
   float delta_x = 0.f;
   float delta_y = 0.f;
   bool  wireframe = false;

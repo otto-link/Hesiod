@@ -15,14 +15,15 @@ GradientAngle::GradientAngle(std::string id) : ControlNode(id), Unary(id)
   this->update_inner_bindings();
 }
 
-void GradientAngle::compute_in_out(hmap::HeightMap &talus,
+void GradientAngle::compute_in_out(hmap::HeightMap &angle,
                                    hmap::HeightMap *p_input)
 {
   LOG_DEBUG("computing node [%s]", this->id.c_str());
 
-  hmap::transform(talus,    // output
+  hmap::transform(angle,    // output
                   *p_input, // input
                   [](hmap::Array &z) { return hmap::gradient_angle(z); });
+  angle.smooth_overlap_buffers();
 }
 
 } // namespace hesiod::cnode

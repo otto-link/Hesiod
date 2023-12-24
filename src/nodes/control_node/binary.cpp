@@ -29,16 +29,12 @@ void Binary::update_inner_bindings()
 void Binary::compute()
 {
   LOG_DEBUG("computing node [%s]", this->id.c_str());
-  hmap::HeightMap *p_input_hmap1 = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("input##1"));
-  hmap::HeightMap *p_input_hmap2 = static_cast<hmap::HeightMap *>(
-      (void *)this->get_p_data("input##2"));
+  hmap::HeightMap *p_hmap1 = CAST_PORT_REF(hmap::HeightMap, "input##1");
+  hmap::HeightMap *p_hmap2 = CAST_PORT_REF(hmap::HeightMap, "input##2");
 
-  this->value_out.set_sto(p_input_hmap1->shape,
-                          p_input_hmap1->tiling,
-                          p_input_hmap1->overlap);
+  this->value_out.set_sto(p_hmap1->shape, p_hmap1->tiling, p_hmap1->overlap);
 
-  this->compute_in_out(this->value_out, p_input_hmap1, p_input_hmap2);
+  this->compute_in_out(this->value_out, p_hmap1, p_hmap2);
 }
 
 } // namespace hesiod::cnode
