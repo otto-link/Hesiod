@@ -267,6 +267,48 @@ int main()
     tree.export_view3d("ex_MakeBinary_render.png");
   }
 
+  // --- WaveSine
+  {
+    hesiod::vnode::ViewTree tree =
+        hesiod::vnode::ViewTree("tree", shape, tiling, overlap);
+
+    auto nf = tree.add_view_node("WaveSine");
+    auto nd = tree.add_view_node("FbmSimplex");
+    tree.new_link(nd, "output", nf, "dx");
+
+    tree.get_node_ref_by_id<hesiod::cnode::FbmSimplex>(nd)
+        ->attr.at("remap")
+        ->get_ref<hesiod::RangeAttribute>()
+        ->value.y = 0.2f;
+
+    tree.update();
+    export_png(window, tree, "ex_WaveSine.png");
+
+    tree.set_viewer_node_id(nf);
+    tree.export_view3d("ex_WaveSine_render.png");
+  }
+
+  // --- WaveTriangular
+  {
+    hesiod::vnode::ViewTree tree =
+        hesiod::vnode::ViewTree("tree", shape, tiling, overlap);
+
+    auto nf = tree.add_view_node("WaveTriangular");
+    auto nd = tree.add_view_node("FbmSimplex");
+    tree.new_link(nd, "output", nf, "dx");
+
+    tree.get_node_ref_by_id<hesiod::cnode::FbmSimplex>(nd)
+        ->attr.at("remap")
+        ->get_ref<hesiod::RangeAttribute>()
+        ->value.y = 0.2f;
+
+    tree.update();
+    export_png(window, tree, "ex_WaveTriangular.png");
+
+    tree.set_viewer_node_id(nf);
+    tree.export_view3d("ex_WaveTriangular_render.png");
+  }
+
   //
   {
     // hesiod::vnode::ViewTree tree =

@@ -190,6 +190,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"WarpDownslope", "Operator/Transform"},
     {"WaveDune", "Primitive/Function"},
     {"WaveSine", "Primitive/Function"},
+    {"WaveTriangular", "Primitive/Function"},
     {"White", "Primitive/Random"},
     {"WhiteDensityMap", "Primitive/Random"},
     {"WhiteSparse", "Primitive/Random"},
@@ -1724,6 +1725,17 @@ public:
            hmap::Vec2<int> shape,
            hmap::Vec2<int> tiling,
            float           overlap);
+
+  void compute();
+};
+
+class WaveTriangular : public Primitive
+{
+public:
+  WaveTriangular(std::string     id,
+                 hmap::Vec2<int> shape,
+                 hmap::Vec2<int> tiling,
+                 float           overlap);
 
   void compute();
 };
