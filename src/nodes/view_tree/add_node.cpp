@@ -378,6 +378,9 @@ std::string ViewTree::add_view_node(std::string control_node_type,
   case str2int("WaveSine"):
     this->add_node(std::make_shared<hesiod::vnode::ViewWaveSine>(id, this->shape, this->tiling, this->overlap));
     break;
+  case str2int("WaveSquare"):
+    this->add_node(std::make_shared<hesiod::vnode::ViewWaveSquare>(id, this->shape, this->tiling, this->overlap));
+    break;
   case str2int("WaveTriangular"):
     this->add_node(std::make_shared<hesiod::vnode::ViewWaveTriangular>(id, this->shape, this->tiling, this->overlap));
     break;

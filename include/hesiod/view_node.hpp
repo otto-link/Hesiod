@@ -1852,6 +1852,21 @@ public:
   }
 };
 
+class ViewWaveSquare : public ViewNode, public hesiod::cnode::WaveSquare
+{
+public:
+  ViewWaveSquare(std::string     id,
+                 hmap::Vec2<int> shape,
+                 hmap::Vec2<int> tiling,
+                 float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::WaveSquare(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
+};
+
 class ViewWaveTriangular : public ViewNode, public hesiod::cnode::WaveTriangular
 {
 public:
