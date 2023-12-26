@@ -50,21 +50,25 @@ void PathToHeightmapGaussian::compute()
 
   if (p_input_path->get_npoints() > 1)
   {
-    hmap::transform(this->value_out,
-                    p_dx,
-                    p_dy,
-                    [p_input_path, this](hmap::Array      &out,
-                                         hmap::Vec4<float> bbox,
-                                         hmap::Array      *p_noise_x,
-                                         hmap::Array      *p_noise_y)
-                    {
-                      out = p_input_path->to_array_gaussian(
-                          out.shape,
-                          bbox,
-                          GET_ATTR_FLOAT("width"),
-                          p_noise_x,
-                          p_noise_y);
-                    });
+    hmap::fill(this->value_out,
+               p_dx,
+               p_dy,
+               [p_input_path, this](hmap::Vec2<int>   shape,
+                                    hmap::Vec2<float> shift,
+                                    hmap::Vec2<float> scale,
+                                    hmap::Array      *p_noise_x,
+                                    hmap::Array      *p_noise_y)
+               {
+                 hmap::Vec4<float> bbox = {0.f, 1.f, 0.f, 1.f};
+
+                 return p_input_path->to_array_gaussian(shape,
+                                                        bbox,
+                                                        GET_ATTR_FLOAT("width"),
+                                                        p_noise_x,
+                                                        p_noise_y,
+                                                        shift,
+                                                        scale);
+               });
   }
   else
     // fill with zeros
