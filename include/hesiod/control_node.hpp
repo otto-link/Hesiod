@@ -375,6 +375,8 @@ class Clone : virtual public ControlNode
 public:
   Clone(std::string id);
 
+  std::string add_thru_port();
+
   void remove_unused_outputs();
 
   void update_inner_bindings();

@@ -20,6 +20,15 @@ Clone::Clone(std::string id) : ControlNode(id)
   this->update_inner_bindings();
 }
 
+std::string Clone::add_thru_port()
+{
+  std::string port_id = "thru##" + std::to_string(this->id_count++);
+
+  this->add_port(
+      gnode::Port(port_id, gnode::direction::out, dtype::dHeightMap));
+  return port_id;
+}
+
 void Clone::remove_unused_outputs()
 {
   // --- make sure there is always only one available output ready for
@@ -66,9 +75,7 @@ void Clone::update_inner_bindings()
       true); // skip unconnected
 
   if (this->n_outputs == n_connected_outputs)
-    this->add_port(gnode::Port("thru##" + std::to_string(this->id_count++),
-                               gnode::direction::out,
-                               dtype::dHeightMap));
+    std::string dummy = this->add_thru_port();
 
   // input is passed as a reference to the output(s)
   for (auto &[port_id, port] : this->get_ports())
