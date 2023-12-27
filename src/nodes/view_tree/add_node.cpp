@@ -240,6 +240,9 @@ std::string ViewTree::add_view_node(std::string control_node_type,
   case str2int("PathToHeightmapPolygon"):
     this->add_node(std::make_shared<hesiod::vnode::ViewPathToHeightmapPolygon>(id, this->shape, this->tiling, this->overlap));
     break;
+  case str2int("Peak"):
+    this->add_node(std::make_shared<hesiod::vnode::ViewPeak>(id, this->shape, this->tiling, this->overlap));
+    break;
   case str2int("Perlin"):
     this->add_node(std::make_shared<hesiod::vnode::ViewPerlin>(id, this->shape, this->tiling, this->overlap));
     break;
