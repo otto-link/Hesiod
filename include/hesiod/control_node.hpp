@@ -146,6 +146,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"PathToHeightmapPolygon", "Geometry/Path"},
     {"Perlin", "Primitive/Coherent Noise"},
     {"PerlinBillow", "Primitive/Coherent Noise"},
+    {"PingpongPerlin", "Primitive/Coherent Noise"},
     {"Plateau", "Filter/Recurve"},
     {"Preview", "Debug"},
     {"RecastCanyon", "Filter/Recast"},
@@ -1256,6 +1257,17 @@ public:
                hmap::Vec2<int> shape,
                hmap::Vec2<int> tiling,
                float           overlap);
+
+  void compute();
+};
+
+class PingpongPerlin : public Primitive
+{
+public:
+  PingpongPerlin(std::string     id,
+                 hmap::Vec2<int> shape,
+                 hmap::Vec2<int> tiling,
+                 float           overlap);
 
   void compute();
 };

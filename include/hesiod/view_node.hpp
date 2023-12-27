@@ -1239,6 +1239,21 @@ public:
   }
 };
 
+class ViewPingpongPerlin : public ViewNode, public hesiod::cnode::PingpongPerlin
+{
+public:
+  ViewPingpongPerlin(std::string     id,
+                     hmap::Vec2<int> shape,
+                     hmap::Vec2<int> tiling,
+                     float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::PingpongPerlin(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
+};
+
 class ViewPlateau : public ViewNode, public hesiod::cnode::Plateau
 {
 public:

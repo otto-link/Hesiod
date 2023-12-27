@@ -246,6 +246,9 @@ std::string ViewTree::add_view_node(std::string control_node_type,
   case str2int("PerlinBillow"):
     this->add_node(std::make_shared<hesiod::vnode::ViewPerlinBillow>(id, this->shape, this->tiling, this->overlap));
     break;
+  case str2int("PingpongPerlin"):
+    this->add_node(std::make_shared<hesiod::vnode::ViewPingpongPerlin>(id, this->shape, this->tiling, this->overlap));
+    break;
   case str2int("Plateau"):
     this->add_node(std::make_shared<hesiod::vnode::ViewPlateau>(id));
     break;
