@@ -1208,6 +1208,21 @@ public:
   }
 };
 
+class ViewPeak : public ViewNode, public hesiod::cnode::Peak
+{
+public:
+  ViewPeak(std::string     id,
+           hmap::Vec2<int> shape,
+           hmap::Vec2<int> tiling,
+           float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::Peak(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
+};
+
 class ViewPerlin : public ViewNode, public hesiod::cnode::Perlin
 {
 public:
@@ -1233,6 +1248,21 @@ public:
                    float           overlap)
       : hesiod::cnode::ControlNode(id), ViewNode(id),
         hesiod::cnode::PerlinBillow(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
+};
+
+class ViewPingpongPerlin : public ViewNode, public hesiod::cnode::PingpongPerlin
+{
+public:
+  ViewPingpongPerlin(std::string     id,
+                     hmap::Vec2<int> shape,
+                     hmap::Vec2<int> tiling,
+                     float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::PingpongPerlin(id, shape, tiling, overlap)
   {
     this->set_preview_port_id("output");
     this->set_view3d_elevation_port_id("output");
@@ -1846,6 +1876,36 @@ public:
                float           overlap)
       : hesiod::cnode::ControlNode(id), ViewNode(id),
         hesiod::cnode::WaveSine(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
+};
+
+class ViewWaveSquare : public ViewNode, public hesiod::cnode::WaveSquare
+{
+public:
+  ViewWaveSquare(std::string     id,
+                 hmap::Vec2<int> shape,
+                 hmap::Vec2<int> tiling,
+                 float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::WaveSquare(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
+};
+
+class ViewWaveTriangular : public ViewNode, public hesiod::cnode::WaveTriangular
+{
+public:
+  ViewWaveTriangular(std::string     id,
+                     hmap::Vec2<int> shape,
+                     hmap::Vec2<int> tiling,
+                     float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::WaveTriangular(id, shape, tiling, overlap)
   {
     this->set_preview_port_id("output");
     this->set_view3d_elevation_port_id("output");

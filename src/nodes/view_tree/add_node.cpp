@@ -12,6 +12,7 @@
 namespace hesiod::vnode
 {
 
+// HELPER
 constexpr unsigned int str2int(const char *str, int h = 0)
 {
   // https://stackoverflow.com/questions/16388510
@@ -239,11 +240,17 @@ std::string ViewTree::add_view_node(std::string control_node_type,
   case str2int("PathToHeightmapPolygon"):
     this->add_node(std::make_shared<hesiod::vnode::ViewPathToHeightmapPolygon>(id, this->shape, this->tiling, this->overlap));
     break;
+  case str2int("Peak"):
+    this->add_node(std::make_shared<hesiod::vnode::ViewPeak>(id, this->shape, this->tiling, this->overlap));
+    break;
   case str2int("Perlin"):
     this->add_node(std::make_shared<hesiod::vnode::ViewPerlin>(id, this->shape, this->tiling, this->overlap));
     break;
   case str2int("PerlinBillow"):
     this->add_node(std::make_shared<hesiod::vnode::ViewPerlinBillow>(id, this->shape, this->tiling, this->overlap));
+    break;
+  case str2int("PingpongPerlin"):
+    this->add_node(std::make_shared<hesiod::vnode::ViewPingpongPerlin>(id, this->shape, this->tiling, this->overlap));
     break;
   case str2int("Plateau"):
     this->add_node(std::make_shared<hesiod::vnode::ViewPlateau>(id));
@@ -376,6 +383,12 @@ std::string ViewTree::add_view_node(std::string control_node_type,
     break;
   case str2int("WaveSine"):
     this->add_node(std::make_shared<hesiod::vnode::ViewWaveSine>(id, this->shape, this->tiling, this->overlap));
+    break;
+  case str2int("WaveSquare"):
+    this->add_node(std::make_shared<hesiod::vnode::ViewWaveSquare>(id, this->shape, this->tiling, this->overlap));
+    break;
+  case str2int("WaveTriangular"):
+    this->add_node(std::make_shared<hesiod::vnode::ViewWaveTriangular>(id, this->shape, this->tiling, this->overlap));
     break;
   case str2int("Warp"):
     this->add_node(std::make_shared<hesiod::vnode::ViewWarp>(id));

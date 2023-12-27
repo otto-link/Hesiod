@@ -144,8 +144,10 @@ static const std::map<std::string, std::string> category_mapping = {
     {"PathToHeightmap", "Geometry/Path"},
     {"PathToHeightmapGaussian", "Geometry/Path"},
     {"PathToHeightmapPolygon", "Geometry/Path"},
+    {"Peak", "Primitive/Geological"},
     {"Perlin", "Primitive/Coherent Noise"},
     {"PerlinBillow", "Primitive/Coherent Noise"},
+    {"PingpongPerlin", "Primitive/Coherent Noise"},
     {"Plateau", "Filter/Recurve"},
     {"Preview", "Debug"},
     {"RecastCanyon", "Filter/Recast"},
@@ -190,6 +192,8 @@ static const std::map<std::string, std::string> category_mapping = {
     {"WarpDownslope", "Operator/Transform"},
     {"WaveDune", "Primitive/Function"},
     {"WaveSine", "Primitive/Function"},
+    {"WaveSquare", "Primitive/Function"},
+    {"WaveTriangular", "Primitive/Function"},
     {"White", "Primitive/Random"},
     {"WhiteDensityMap", "Primitive/Random"},
     {"WhiteSparse", "Primitive/Random"},
@@ -372,6 +376,8 @@ class Clone : virtual public ControlNode
 {
 public:
   Clone(std::string id);
+
+  std::string add_thru_port();
 
   void remove_unused_outputs();
 
@@ -1234,6 +1240,17 @@ private:
   float           overlap;
 };
 
+class Peak : public Primitive
+{
+public:
+  Peak(std::string     id,
+       hmap::Vec2<int> shape,
+       hmap::Vec2<int> tiling,
+       float           overlap);
+
+  void compute();
+};
+
 class Perlin : public Primitive
 {
 public:
@@ -1252,6 +1269,17 @@ public:
                hmap::Vec2<int> shape,
                hmap::Vec2<int> tiling,
                float           overlap);
+
+  void compute();
+};
+
+class PingpongPerlin : public Primitive
+{
+public:
+  PingpongPerlin(std::string     id,
+                 hmap::Vec2<int> shape,
+                 hmap::Vec2<int> tiling,
+                 float           overlap);
 
   void compute();
 };
@@ -1724,6 +1752,28 @@ public:
            hmap::Vec2<int> shape,
            hmap::Vec2<int> tiling,
            float           overlap);
+
+  void compute();
+};
+
+class WaveSquare : public Primitive
+{
+public:
+  WaveSquare(std::string     id,
+             hmap::Vec2<int> shape,
+             hmap::Vec2<int> tiling,
+             float           overlap);
+
+  void compute();
+};
+
+class WaveTriangular : public Primitive
+{
+public:
+  WaveTriangular(std::string     id,
+                 hmap::Vec2<int> shape,
+                 hmap::Vec2<int> tiling,
+                 float           overlap);
 
   void compute();
 };

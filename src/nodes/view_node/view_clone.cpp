@@ -20,9 +20,7 @@ bool ViewClone::render_settings()
 
   if (ImGui::Button("Add output"))
   {
-    this->add_port(gnode::Port("thru##" + std::to_string(this->id_count++),
-                               gnode::direction::out,
-                               hesiod::cnode::dtype::dHeightMap));
+    std::string dummy = this->add_thru_port();
     this->update_inner_bindings();
   }
 
