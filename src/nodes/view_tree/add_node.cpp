@@ -240,6 +240,9 @@ std::string ViewTree::add_view_node(std::string control_node_type,
   case str2int("PathToHeightmapPolygon"):
     this->add_node(std::make_shared<hesiod::vnode::ViewPathToHeightmapPolygon>(id, this->shape, this->tiling, this->overlap));
     break;
+  case str2int("PathToHeightmapRange"):
+    this->add_node(std::make_shared<hesiod::vnode::ViewPathToHeightmapRange>(id, this->shape, this->tiling, this->overlap));
+    break;
   case str2int("Peak"):
     this->add_node(std::make_shared<hesiod::vnode::ViewPeak>(id, this->shape, this->tiling, this->overlap));
     break;
@@ -356,6 +359,9 @@ std::string ViewTree::add_view_node(std::string control_node_type,
     break;
   case str2int("ThermalAutoBedrock"):
     this->add_node(std::make_shared<hesiod::vnode::ViewThermalAutoBedrock>(id));
+    break;
+  case str2int("ThermalFlatten"):
+    this->add_node(std::make_shared<hesiod::vnode::ViewThermalFlatten>(id));
     break;
   case str2int("ThermalScree"):
     this->add_node(std::make_shared<hesiod::vnode::ViewThermalScree>(id));

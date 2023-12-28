@@ -144,6 +144,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"PathToHeightmap", "Geometry/Path"},
     {"PathToHeightmapGaussian", "Geometry/Path"},
     {"PathToHeightmapPolygon", "Geometry/Path"},
+    {"PathToHeightmapRange", "Geometry/Path"},
     {"Peak", "Primitive/Geological"},
     {"Perlin", "Primitive/Coherent Noise"},
     {"PerlinBillow", "Primitive/Coherent Noise"},
@@ -182,6 +183,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"StratifyOblique", "Erosion/Stratify"},
     {"Thermal", "Erosion/Thermal"},
     {"ThermalAutoBedrock", "Erosion/Thermal"},
+    {"ThermalFlatten", "Erosion/Thermal"},
     {"ThermalScree", "Erosion/Thermal"},
     {"ToMask", "Mask"},
     {"ValleyWidth", "Features"},
@@ -1240,6 +1242,27 @@ private:
   float           overlap;
 };
 
+class PathToHeightmapRange : virtual public ControlNode
+{
+public:
+  PathToHeightmapRange(std::string     id,
+                       hmap::Vec2<int> shape,
+                       hmap::Vec2<int> tiling,
+                       float           overlap);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap();
+
+private:
+  hmap::Vec2<int> shape;
+  hmap::Vec2<int> tiling;
+  float           overlap;
+};
+
 class Peak : public Primitive
 {
 public:
@@ -1627,6 +1650,20 @@ class ThermalAutoBedrock : virtual public ControlNode
 {
 public:
   ThermalAutoBedrock(std::string id);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap(); // eroded heightmap
+  hmap::HeightMap deposition_map = hmap::HeightMap();
+};
+
+class ThermalFlatten : virtual public ControlNode
+{
+public:
+  ThermalFlatten(std::string id);
 
   void compute();
 

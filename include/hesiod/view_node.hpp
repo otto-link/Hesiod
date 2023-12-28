@@ -1208,6 +1208,23 @@ public:
   }
 };
 
+class ViewPathToHeightmapRange : public ViewNode,
+                                 public hesiod::cnode::PathToHeightmapRange
+{
+public:
+  ViewPathToHeightmapRange(std::string     id,
+                           hmap::Vec2<int> shape,
+                           hmap::Vec2<int> tiling,
+                           float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::PathToHeightmapRange(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+    this->set_view3d_color_port_id("path");
+  }
+};
+
 class ViewPeak : public ViewNode, public hesiod::cnode::Peak
 {
 public:
@@ -1727,6 +1744,18 @@ public:
   ViewThermalAutoBedrock(std::string id)
       : hesiod::cnode::ControlNode(id), ViewNode(id),
         hesiod::cnode::ThermalAutoBedrock(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
+};
+
+class ViewThermalFlatten : public ViewNode, public hesiod::cnode::ThermalFlatten
+{
+public:
+  ViewThermalFlatten(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::ThermalFlatten(id)
   {
     this->set_preview_port_id("output");
     this->set_view3d_elevation_port_id("output");
