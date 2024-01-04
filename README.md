@@ -84,4 +84,4 @@ See https://github.com/otto-link/HighMap.
 - https://github.com/Raais/ImguiCandy / Color utils, Themes and other cool stuff for Dear ImGui
 - https://github.com/dmcrodrigues/macro-logger / A simplified logging system using macros
 - https://github.com/USCiLab/cereal / A C++11 library for serialization
-
+- https://github.com/mgaillard/Noise / Dendry: A Procedural Model for Dendritic Patterns
