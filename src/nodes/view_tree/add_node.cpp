@@ -291,6 +291,9 @@ std::string ViewTree::add_view_node(std::string control_node_type,
   case str2int("Remap"):
     this->add_node(std::make_shared<hesiod::vnode::ViewRemap>(id));
     break;
+  case str2int("Rescale"):
+    this->add_node(std::make_shared<hesiod::vnode::ViewRescale>(id));
+    break;
   case str2int("RidgedPerlin"):
     this->add_node(std::make_shared<hesiod::vnode::ViewRidgedPerlin>(id, this->shape, this->tiling, this->overlap));
     break;

@@ -1434,6 +1434,17 @@ public:
   }
 };
 
+class ViewRescale : public ViewNode, public hesiod::cnode::Rescale
+{
+public:
+  ViewRescale(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Rescale(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
+};
+
 class ViewRidgedPerlin : public ViewNode, public hesiod::cnode::RidgedPerlin
 {
 public:

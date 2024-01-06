@@ -160,6 +160,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"RecurveS", "Filter/Recurve"},
     {"RelativeElevation", "Features"},
     {"Remap", "Filter/Range"},
+    {"Rescale", "Filter/Range"},
     {"RidgedPerlin", "Primitive/Coherent Noise"},
     {"Rugosity", "Features"},
     {"SedimentDeposition", "Erosion/Thermal"},
@@ -1433,6 +1434,14 @@ class Remap : public Unary
 {
 public:
   Remap(std::string id);
+
+  void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
+};
+
+class Rescale : public Unary
+{
+public:
+  Rescale(std::string id);
 
   void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
 };
