@@ -93,6 +93,9 @@ std::string ViewTree::add_view_node(std::string control_node_type,
   case str2int("Debug"):
     this->add_node(std::make_shared<hesiod::vnode::ViewDebug>(id));
     break;
+  case str2int("Dendry"):
+    this->add_node(std::make_shared<hesiod::vnode::ViewDendry>(id, this->shape, this->tiling, this->overlap));
+    break;
   case str2int("DepressionFilling"):
     this->add_node(std::make_shared<hesiod::vnode::ViewDepressionFilling>(id));
     break;

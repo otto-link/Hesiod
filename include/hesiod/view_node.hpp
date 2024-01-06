@@ -567,6 +567,21 @@ public:
   void render_node_specific_content();
 };
 
+class ViewDendry : public ViewNode, public hesiod::cnode::Dendry
+{
+public:
+  ViewDendry(std::string     id,
+             hmap::Vec2<int> shape,
+             hmap::Vec2<int> tiling,
+             float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::Dendry(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
+};
+
 class ViewDepressionFilling : public ViewNode,
                               public hesiod::cnode::DepressionFilling
 {

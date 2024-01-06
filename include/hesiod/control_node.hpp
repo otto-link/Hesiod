@@ -94,6 +94,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"PreviewColorize", "Texture"},
     {"ConvolveSVD", "Math/Convolution"},
     {"Debug", "Debug"},
+    {"Dendry", "Primitive/Coherent"},
     {"DepressionFilling", "Erosion"}, // not distributed
     {"DigPath", "Roads"},             // partially distributed
     {"DistanceTransform", "Math"},
@@ -663,6 +664,27 @@ public:
 
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
+};
+
+class Dendry : virtual public ControlNode
+{
+public:
+  Dendry(std::string     id,
+         hmap::Vec2<int> shape,
+         hmap::Vec2<int> tiling,
+         float           overlap);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap();
+
+private:
+  hmap::Vec2<int> shape;
+  hmap::Vec2<int> tiling;
+  float           overlap;
 };
 
 class DepressionFilling : public Unary
