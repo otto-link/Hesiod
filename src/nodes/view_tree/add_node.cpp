@@ -123,6 +123,9 @@ std::string ViewTree::add_view_node(std::string control_node_type,
   case str2int("ExportRGB"):
     this->add_node(std::make_shared<hesiod::vnode::ViewExportRGB>(id));
     break;
+  case str2int("Faceted"):
+    this->add_node(std::make_shared<hesiod::vnode::ViewFaceted>(id));
+    break;
   case str2int("FbmPerlin"):
     this->add_node(std::make_shared<hesiod::vnode::ViewFbmPerlin>(id, this->shape, this->tiling, this->overlap));
     break;

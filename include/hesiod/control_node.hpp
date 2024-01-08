@@ -104,6 +104,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"ExpandShrinkDirectional", "Filter/Recast"},
     {"Export", "IO/Files"},
     {"ExportRGB", "IO/Files"},
+    {"Faceted", "Filter/Recast"}, // not distributed
     {"FbmPerlin", "Primitive/Coherent Noise"},
     {"FbmSimplex", "Primitive/Coherent Noise"},
     {"FbmWorley", "Primitive/Coherent Noise"},
@@ -792,6 +793,25 @@ public:
   void compute();
 
   void write_file();
+};
+
+class Faceted : virtual public ControlNode
+{
+public:
+  Faceted(std::string id);
+
+  void update_inner_bindings();
+
+  void compute();
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap();
+
+private:
+  std::map<std::string, int> neighborhood_map = {
+      {"Moore", hmap::neighborhood::moore},
+      {"Von Neumann", hmap::neighborhood::von_neumann},
+      {"cross", hmap::neighborhood::cross}};
 };
 
 class FbmPerlin : public Primitive

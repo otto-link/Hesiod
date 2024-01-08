@@ -696,6 +696,17 @@ public:
   void render_node_specific_content();
 };
 
+class ViewFaceted : public ViewNode, public hesiod::cnode::Faceted
+{
+public:
+  ViewFaceted(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Faceted(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
+};
+
 class ViewFbmPerlin : public ViewNode, public hesiod::cnode::FbmPerlin
 {
 public:
