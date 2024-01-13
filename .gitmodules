@@ -13,7 +13,8 @@
 	url = git@github.com:ocornut/imgui.git
 [submodule "external/imgui-node-editor"]
 	path = external/imgui-node-editor
-	url = git@github.com:otto-link/imgui-node-editor.git
+	url = git@github.com:thedmd/imgui-node-editor.git
+	# git@github.com:otto-link/imgui-node-editor.git
 [submodule "external/cereal"]
 	path = external/cereal
 	url = git@github.com:USCiLab/cereal.git

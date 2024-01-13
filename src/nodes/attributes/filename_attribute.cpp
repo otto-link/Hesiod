@@ -28,10 +28,15 @@ bool FilenameAttribute::render_settings(std::string label)
   ImGui::TextUnformatted(label.c_str());
   {
     if (ImGui::Button(("File: " + this->value).c_str()))
+    {
+      IGFD::FileDialogConfig config;
+      config.path = ".";
+
       ImGuiFileDialog::Instance()->OpenDialog("DialogId",
                                               "Choose File",
                                               ".png,.raw,.bin",
-                                              ".");
+                                              config);
+    }
 
     if (ImGuiFileDialog::Instance()->Display("DialogId"))
     {
