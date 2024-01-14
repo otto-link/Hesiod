@@ -85,3 +85,4 @@ See https://github.com/otto-link/HighMap.
 - https://github.com/dmcrodrigues/macro-logger / A simplified logging system using macros
 - https://github.com/USCiLab/cereal / A C++11 library for serialization
 - https://github.com/mgaillard/Noise / Dendry: A Procedural Model for Dendritic Patterns
+- https://github.com/yknishidate/WavefrontObjWriter : A header-only library for C ++ that can efficiently create 3D objects by code
