@@ -105,6 +105,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Export", "IO/Files"},
     {"ExportRGB", "IO/Files"},
     {"Faceted", "Filter/Recast"}, // not distributed
+    {"FbmIqPerlin", "Primitive/Coherent Noise"},
     {"FbmPerlin", "Primitive/Coherent Noise"},
     {"FbmSimplex", "Primitive/Coherent Noise"},
     {"FbmWorley", "Primitive/Coherent Noise"},
@@ -812,6 +813,17 @@ private:
       {"Moore", hmap::neighborhood::moore},
       {"Von Neumann", hmap::neighborhood::von_neumann},
       {"cross", hmap::neighborhood::cross}};
+};
+
+class FbmIqPerlin : public Primitive
+{
+public:
+  FbmIqPerlin(std::string     id,
+              hmap::Vec2<int> shape,
+              hmap::Vec2<int> tiling,
+              float           overlap);
+
+  void compute();
 };
 
 class FbmPerlin : public Primitive
