@@ -2,7 +2,7 @@ option(BUILD_DOC "Build documentation" ON)
 
 find_package(Doxygen)
 
-if (DOXYGEN_FOUND)
+if(DOXYGEN_FOUND)
 
   # set input and output files
   set(DOXYGEN_IN ${CMAKE_CURRENT_SOURCE_DIR}/doxygen/Doxyfile.in)
@@ -12,8 +12,8 @@ if (DOXYGEN_FOUND)
   configure_file(${DOXYGEN_IN} ${DOXYGEN_OUT} @ONLY)
   message("Doxygen build started")
 
-  # note the option ALL which allows to build the docs together with
-  # the application
+  # note the option ALL which allows to build the docs together with the
+  # application
   add_custom_target(
     doc_hesiod
     # ALL
@@ -21,11 +21,11 @@ if (DOXYGEN_FOUND)
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     COMMENT "Generating API documentation with Doxygen"
     VERBATIM)
-  
-else (DOXYGEN_FOUND)
-  
+
+else(DOXYGEN_FOUND)
+
   message("Doxygen need to be installed to generate the doxygen documentation")
 
-endif (DOXYGEN_FOUND)
+endif(DOXYGEN_FOUND)
 
 add_subdirectory(generate_node_snapshot)
