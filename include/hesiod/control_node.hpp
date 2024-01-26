@@ -205,6 +205,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"WhiteSparse", "Primitive/Random"},
     {"Worley", "Primitive/Coherent Noise"},
     {"WorleyDouble", "Primitive/Coherent Noise"},
+    {"WorleyPolyline", "Primitive/Coherent Noise"},
     {"WorleyValue", "Primitive/Coherent Noise"},
     {"Wrinkle", "Filter/Recast"},
     {"ZeroedEdges", "Math/Boundaries"}};
@@ -1954,6 +1955,17 @@ public:
                hmap::Vec2<int> shape,
                hmap::Vec2<int> tiling,
                float           overlap);
+
+  void compute();
+};
+
+class WorleyPolyline : public Primitive
+{
+public:
+  WorleyPolyline(std::string     id,
+                 hmap::Vec2<int> shape,
+                 hmap::Vec2<int> tiling,
+                 float           overlap);
 
   void compute();
 };

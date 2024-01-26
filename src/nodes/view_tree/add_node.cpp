@@ -429,6 +429,9 @@ std::string ViewTree::add_view_node(std::string control_node_type,
   case str2int("WorleyDouble"):
     this->add_node(std::make_shared<hesiod::vnode::ViewWorleyDouble>(id, this->shape, this->tiling, this->overlap));
     break;
+  case str2int("WorleyPolyline"):
+    this->add_node(std::make_shared<hesiod::vnode::ViewWorleyPolyline>(id, this->shape, this->tiling, this->overlap));
+    break;
   case str2int("WorleyValue"):
     this->add_node(std::make_shared<hesiod::vnode::ViewWorleyValue>(id, this->shape, this->tiling, this->overlap));
     break;
