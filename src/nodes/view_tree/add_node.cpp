@@ -138,6 +138,12 @@ std::string ViewTree::add_view_node(std::string control_node_type,
   case str2int("FbmWorley"):
     this->add_node(std::make_shared<hesiod::vnode::ViewFbmWorley>(id, this->shape, this->tiling, this->overlap));
     break;
+  case str2int("FbmWorleyDouble"):
+    this->add_node(std::make_shared<hesiod::vnode::ViewFbmWorleyDouble>(id, this->shape, this->tiling, this->overlap));
+    break;
+  case str2int("FbmWorleyPolyline"):
+    this->add_node(std::make_shared<hesiod::vnode::ViewFbmWorleyPolyline>(id, this->shape, this->tiling, this->overlap));
+    break;
   case str2int("FractalizePath"):
     this->add_node(std::make_shared<hesiod::vnode::ViewFractalizePath>(id));
     break;

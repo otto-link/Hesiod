@@ -109,6 +109,8 @@ static const std::map<std::string, std::string> category_mapping = {
     {"FbmPerlin", "Primitive/Coherent Noise"},
     {"FbmSimplex", "Primitive/Coherent Noise"},
     {"FbmWorley", "Primitive/Coherent Noise"},
+    {"FbmWorleyDouble", "Primitive/Coherent Noise"},
+    {"FbmWorleyPolyline", "Primitive/Coherent Noise"},
     {"FractalizePath", "Geometry/Path"},
     {"GaborNoise", "Primitive/Coherent Noise"},
     {"Gain", "Filter/Recurve"},
@@ -858,6 +860,27 @@ public:
             hmap::Vec2<int> shape,
             hmap::Vec2<int> tiling,
             float           overlap);
+
+  void compute();
+};
+
+class FbmWorleyDouble : public Primitive
+{
+public:
+  FbmWorleyDouble(std::string     id,
+                  hmap::Vec2<int> shape,
+                  hmap::Vec2<int> tiling,
+                  float           overlap);
+
+  void compute();
+};
+class FbmWorleyPolyline : public Primitive
+{
+public:
+  FbmWorleyPolyline(std::string     id,
+                    hmap::Vec2<int> shape,
+                    hmap::Vec2<int> tiling,
+                    float           overlap);
 
   void compute();
 };
