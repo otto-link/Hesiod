@@ -276,6 +276,12 @@ std::string ViewTree::add_view_node(std::string control_node_type,
   case str2int("RecastCanyon"):
     this->add_node(std::make_shared<hesiod::vnode::ViewRecastCanyon>(id));
     break;
+  case str2int("RecastCliff"):
+    this->add_node(std::make_shared<hesiod::vnode::ViewRecastCliff>(id));
+    break;
+  case str2int("RecastCliffDirectional"):
+    this->add_node(std::make_shared<hesiod::vnode::ViewRecastCliffDirectional>(id));
+    break;
   case str2int("RecastPeak"):
     this->add_node(std::make_shared<hesiod::vnode::ViewRecastPeak>(id));
     break;

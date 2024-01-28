@@ -155,6 +155,8 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Plateau", "Filter/Recurve"},
     {"Preview", "Debug"},
     {"RecastCanyon", "Filter/Recast"},
+    {"RecastCliff", "Filter/Recast"},
+    {"RecastCliffDirectional", "Filter/Recast"},
     {"RecastPeak", "Filter/Recast"},
     {"RecastRockySlopes", "Filter/Recast"},
     {"Recurve", "Filter/Recurve"},
@@ -1395,6 +1397,32 @@ class RecastCanyon : virtual public ControlNode
 {
 public:
   RecastCanyon(std::string id);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap();
+};
+
+class RecastCliff : virtual public ControlNode
+{
+public:
+  RecastCliff(std::string id);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap();
+};
+
+class RecastCliffDirectional : virtual public ControlNode
+{
+public:
+  RecastCliffDirectional(std::string id);
 
   void compute();
 

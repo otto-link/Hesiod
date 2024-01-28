@@ -1376,6 +1376,31 @@ public:
   }
 };
 
+class ViewRecastCliff : public ViewNode, public hesiod::cnode::RecastCliff
+{
+public:
+  ViewRecastCliff(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::RecastCliff(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
+};
+
+class ViewRecastCliffDirectional : public ViewNode,
+                                   public hesiod::cnode::RecastCliffDirectional
+{
+public:
+  ViewRecastCliffDirectional(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::RecastCliffDirectional(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
+};
+
 class ViewRecastPeak : public ViewNode, public hesiod::cnode::RecastPeak
 {
 public:
