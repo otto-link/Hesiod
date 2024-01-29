@@ -33,6 +33,7 @@ void Unary::compute()
                           p_input_hmap->overlap);
 
   this->compute_in_out(this->value_out, p_input_hmap);
+  this->post_process_heightmap(this->value_out);
 }
 
 } // namespace hesiod::cnode

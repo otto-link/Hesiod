@@ -162,6 +162,9 @@ std::string ViewTree::add_view_node(std::string control_node_type,
   case str2int("GaussianPulse"):
     this->add_node(std::make_shared<hesiod::vnode::ViewGaussianPulse>(id, this->shape, this->tiling, this->overlap));
     break;
+  case str2int("Geomorphons"):
+    this->add_node(std::make_shared<hesiod::vnode::ViewGeomorphons>(id));
+    break;
   case str2int("Gradient"):
     this->add_node(std::make_shared<hesiod::vnode::ViewGradient>(id));
     break;

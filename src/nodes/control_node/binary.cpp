@@ -35,6 +35,7 @@ void Binary::compute()
   this->value_out.set_sto(p_hmap1->shape, p_hmap1->tiling, p_hmap1->overlap);
 
   this->compute_in_out(this->value_out, p_hmap1, p_hmap2);
+  this->post_process_heightmap(this->value_out);
 }
 
 } // namespace hesiod::cnode

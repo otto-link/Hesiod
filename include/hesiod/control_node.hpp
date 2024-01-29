@@ -117,6 +117,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"GammaCorrection", "Filter/Recurve"},
     {"GammaCorrectionLocal", "Filter/Recurve"},
     {"GaussianPulse", "Primitive/Function"},
+    {"Geomorphons", "Features"},
     {"Gradient", "Math/Gradient"},
     {"GradientAngle", "Math/Gradient"},
     {"GradientNorm", "Math/Gradient"},
@@ -947,6 +948,14 @@ public:
                 float           overlap);
 
   void compute();
+};
+
+class Geomorphons : public Unary
+{
+public:
+  Geomorphons(std::string id);
+
+  void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
 };
 
 class Gradient : virtual public ControlNode

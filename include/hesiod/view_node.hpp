@@ -862,6 +862,18 @@ public:
   }
 };
 
+class ViewGeomorphons : public ViewNode, public hesiod::cnode::Geomorphons
+{
+public:
+  ViewGeomorphons(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::Geomorphons(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
+};
+
 class ViewGradient : public ViewNode, public hesiod::cnode::Gradient
 {
 public:
