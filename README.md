@@ -37,7 +37,7 @@ git submodule update --init --recursive
 
 Install the missing OpenSource dependencies using `vcpkg`:
 ```
-vcpkg install glfw3 opengl gsl glew freeglut eigen3 glm libpng boost-range boost-type-erasure boost-geometry glm
+vcpkg install glfw3 opengl gsl glew freeglut eigen3 glm libpng boost-range boost-type-erasure boost-geometry glm opencl
 ```
 
 You should then be able to build the sources using Visual Studio.
