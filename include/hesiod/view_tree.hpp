@@ -49,10 +49,11 @@ struct Link
 class ViewTree : public gnode::Tree
 {
 public:
-  ViewTree(std::string     id,
-           hmap::Vec2<int> shape,
-           hmap::Vec2<int> tiling,
-           float           overlap);
+  ViewTree(std::string              id,
+           hmap::Vec2<int>          shape,
+           hmap::Vec2<int>          tiling,
+           float                    overlap,
+           hmap::gpu::OpenCLConfig *p_opencl_config = nullptr);
 
   ~ViewTree();
 
@@ -65,6 +66,8 @@ public:
   std::string get_node_type(std::string node_id) const;
 
   ax::NodeEditor::EditorContext *get_p_node_editor_context() const;
+
+  hmap::gpu::OpenCLConfig *get_p_opencl_config() const;
 
   void set_sto(hmap::Vec2<int> new_shape,
                hmap::Vec2<int> new_tiling,
@@ -147,6 +150,9 @@ private:
   bool open_node_list_window = false;
 
   std::string viewer_node_id = "";
+
+  // OpenCL
+  hmap::gpu::OpenCLConfig *p_opencl_config = nullptr;
 
   // 2D viewer
   bool            open_view2d_window = false;

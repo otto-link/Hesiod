@@ -29,6 +29,9 @@ int main()
   // tiling = {1, 1};
   // overlap = 0.f;
 
+  // initialize OpenCL context
+  hmap::gpu::OpenCLConfig opencl_config = hmap::gpu::OpenCLConfig();
+
   // ----------------------------------- Main GUI
 
   GLFWwindow *window =
@@ -47,7 +50,7 @@ int main()
                                  &config);
 
   hesiod::vnode::ViewTree tree =
-      hesiod::vnode::ViewTree("tree_1", shape, tiling, overlap);
+      hesiod::vnode::ViewTree("tree_1", shape, tiling, overlap, &opencl_config);
 
   hesiod::vnode::ViewTree tree2 =
       hesiod::vnode::ViewTree("tree_2", shape, tiling, overlap);

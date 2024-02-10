@@ -28,6 +28,8 @@ void glfw_error_callback(int error, const char *description);
 
 GLFWwindow *init_gui(int width, int height, std::string window_title);
 
+std::unique_ptr<hmap::gpu::OpenCLConfig> init_opencl_config();
+
 void save_screenshot(std::string fname);
 
 // main GUI
