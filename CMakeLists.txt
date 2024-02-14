@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
 project(hesiod-root)
 
+option(HESIOD_ENABLE_GENERATE_APP_IMAGE "" OFF)
+
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
@@ -24,6 +26,10 @@ find_package(GLUT REQUIRED)
 add_subdirectory(external)
 
 add_subdirectory(Hesiod)
+
+if(HESIOD_ENABLE_GENERATE_APP_IMAGE)
+    add_subdirectory(scripts/generate_appimage)
+endif(HESIOD_ENABLE_GENERATE_APP_IMAGE)
 
 # documentation
 # add_subdirectory(${PROJECT_SOURCE_DIR}/doc)
