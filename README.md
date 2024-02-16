@@ -44,6 +44,11 @@ You should then be able to build the sources using Visual Studio.
 
 ### Linux
 
+There are also required external dependencies for ubuntu you can execute:
+```
+sudo apt-get -y install libglfw3 libglfw3-dev libglew-dev libopengl-dev freeglut3-dev libboost-all-dev libeigen3-dev libglm-dev fuse libfuse2
+```
+
 #### Getting the sources
 
 Use `git` to retrieve the sources: 
@@ -54,13 +59,6 @@ git submodule update --init --recursive
 ```
 
 #### Building
-
-There are also required external dependencies for ubuntu you can execute:
-```
-sudo apt-get -y install libglfw3 libglfw3-dev libglew-dev libopengl-dev freeglut3-dev libboost-all-dev libeigen3-dev libglm-dev fuse libfuse2
-```
-This also applies for Windows and other Operating-Systems.
-
 
 Build by making a build directory (i.e. `build/`), run `cmake` in that dir, and then use `make` to build the desired target.
 
