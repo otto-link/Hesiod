@@ -1,4 +1,5 @@
-#include "ImCandy/candy.h"
+#include "generate_node_snapshot.hpp"
+
 #include "gnode.hpp"
 
 #include "hesiod/viewer.hpp"
@@ -9,11 +10,12 @@
 #include "hesiod/view_node.hpp"
 #include "hesiod/view_tree.hpp"
 
+#if ENABLE_GENERATE_NODE_SNAPSHOT
 #define SNAPSHOT_SIZE 512
 
-void export_png(GLFWwindow              *window,
-                hesiod::vnode::ViewTree &tree,
-                std::string              fname)
+static void export_png(GLFWwindow              *window,
+                       hesiod::vnode::ViewTree &tree,
+                       std::string              fname)
 {
   ImVec4 clear_color = ImVec4(0.15f, 0.25f, 0.30f, 1.00f);
 
@@ -53,7 +55,7 @@ void export_png(GLFWwindow              *window,
   hesiod::gui::save_screenshot(fname);
 }
 
-int main()
+void generate_node_snapshot()
 {
   hmap::Vec2<int> shape = {512, 512};
   hmap::Vec2<int> tiling = {1, 1};
@@ -63,13 +65,15 @@ int main()
       2 * SNAPSHOT_SIZE,
       SNAPSHOT_SIZE,
       "Hesiod v0.0.x (c) 2023 Otto Link");
-
-  ImCandy::Theme_Blender();
+  
+  // What the hell is going on in ImCandy?
+  // ImCandy::Theme_Blender();
 
   ImGuiIO     &io = ImGui::GetIO();
   ImFontConfig config;
   config.OversampleH = 2;
   config.OversampleV = 2;
+  config.FontDataOwnedByAtlas = false;
   io.Fonts->AddFontFromMemoryTTF(Roboto_Regular_ttf,
                                  Roboto_Regular_ttf_len,
                                  16.f,
@@ -346,5 +350,7 @@ int main()
   glfwDestroyWindow(window);
   glfwTerminate();
 
-  return 0;
+  return;
 }
+
+#endif

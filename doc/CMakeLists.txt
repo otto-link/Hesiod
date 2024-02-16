@@ -27,5 +27,3 @@ else (DOXYGEN_FOUND)
   message("Doxygen need to be installed to generate the doxygen documentation")
 
 endif (DOXYGEN_FOUND)
-
-add_subdirectory(generate_node_snapshot)

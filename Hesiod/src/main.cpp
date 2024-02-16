@@ -18,8 +18,18 @@ typedef unsigned int uint;
 #include "hesiod/view_node.hpp"
 #include "hesiod/view_tree.hpp"
 
-int main()
+#if ENABLE_GENERATE_NODE_SNAPSHOT
+#include "generate_node_snapshot.hpp"
+#endif
+
+int main(int argc, char* argv[])
 {
+  if(argc >= 2 && strcmp(argv[1], "--generate-node-snapshot") == 0)
+  {
+    generate_node_snapshot();
+    return 0;
+  }
+
   hmap::Vec2<int> shape = {512, 512};
   shape = {1024, 1024};
 
@@ -41,6 +51,7 @@ int main()
   ImFontConfig config;
   config.OversampleH = 2;
   config.OversampleV = 2;
+  config.FontDataOwnedByAtlas = false;
   io.Fonts->AddFontFromMemoryTTF(Roboto_Regular_ttf,
                                  Roboto_Regular_ttf_len,
                                  16.f,

@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.10)
 project(hesiod-root)
 
 option(HESIOD_ENABLE_GENERATE_APP_IMAGE "" OFF)
+option(HESIOD_ENABLE_GENERATE_NODE_SNAPSHOT "" OFF)
+option(HESIOD_ENABLE_CEREAL "" ON)
 
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
@@ -11,7 +13,6 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 else()
     # GNU compiler options
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wno-dangling-reference -O3 -pthread -DLOG_LEVEL=3")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DUSE_CEREAL")
 endif()
 
 set(CMAKE_CXX_STANDARD 20)
