@@ -24,11 +24,14 @@ typedef unsigned int uint;
 
 int main(int argc, char* argv[])
 {
+
+  #if ENABLE_GENERATE_NODE_SNAPSHOT
   if(argc >= 2 && strcmp(argv[1], "--generate-node-snapshot") == 0)
   {
     generate_node_snapshot();
     return 0;
   }
+  #endif
 
   hmap::Vec2<int> shape = {512, 512};
   shape = {1024, 1024};
