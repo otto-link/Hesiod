@@ -4,6 +4,7 @@ project(hesiod-root)
 option(HESIOD_ENABLE_GENERATE_APP_IMAGE "" OFF)
 option(HESIOD_ENABLE_GENERATE_NODE_SNAPSHOT "" OFF)
 option(HESIOD_ENABLE_CEREAL "" ON)
+option(HESIOD_ENABLE_DOXYGEN "" ON)
 
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
@@ -33,5 +34,6 @@ if(HESIOD_ENABLE_GENERATE_APP_IMAGE)
 endif(HESIOD_ENABLE_GENERATE_APP_IMAGE)
 
 # documentation
-# add_subdirectory(${PROJECT_SOURCE_DIR}/doc)
-# add_subdirectory(${PROJECT_SOURCE_DIR}/scripts/generate_appimage)
+if(HESIOD_ENABLE_DOXYGEN)
+    add_subdirectory(${PROJECT_SOURCE_DIR}/doc)
+endif(HESIOD_ENABLE_DOXYGEN)
