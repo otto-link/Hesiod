@@ -78,6 +78,10 @@ bin/./hesiod
 
 See https://github.com/otto-link/HighMap.
 
+## Error: Failed to initialize OpenGL loader!
+
+Try to install the package `glfw` or `glfw-devel`!
+
 ## Dependencies
 
 - https://github.com/otto-link/HighMap / A C++ library to generate two-dimensional terrain heightmaps for software rendering or video games.
