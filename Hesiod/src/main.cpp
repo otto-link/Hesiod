@@ -22,25 +22,20 @@ typedef unsigned int uint;
 #include "generate_node_snapshot.hpp"
 #endif
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
 
-  #if ENABLE_GENERATE_NODE_SNAPSHOT
-  if(argc >= 2 && strcmp(argv[1], "--generate-node-snapshot") == 0)
+#if ENABLE_GENERATE_NODE_SNAPSHOT
+  if (argc >= 2 && strcmp(argv[1], "--generate-node-snapshot") == 0)
   {
     generate_node_snapshot();
     return 0;
   }
-  #endif
+#endif
 
-  hmap::Vec2<int> shape = {512, 512};
-  shape = {1024, 1024};
-
+  hmap::Vec2<int> shape = {1024, 1024};
   hmap::Vec2<int> tiling = {4, 4};
   float           overlap = 0.25f;
-
-  // tiling = {1, 1};
-  // overlap = 0.f;
 
   // ----------------------------------- Main GUI
 
@@ -63,31 +58,8 @@ int main(int argc, char* argv[])
   hesiod::vnode::ViewTree tree =
       hesiod::vnode::ViewTree("tree_1", shape, tiling, overlap);
 
-  hesiod::vnode::ViewTree tree2 =
-      hesiod::vnode::ViewTree("tree_2", shape, tiling, overlap);
-
-  tree2.add_view_node("FbmPerlin");
-
-  // tree.add_view_node("DistanceTransform");
   tree.add_view_node("FbmSimplex");
   tree.add_view_node("Perlin");
-  // tree.add_view_node("ZeroedEdges");
-  // tree.add_view_node("Plateau");
-  // tree.add_view_node("Path");
-  // tree.add_view_node("PathToHeightmap");
-  // tree.new_link("FbmPerlin##0", "output", "Plateau##1", "input");
-  // tree.new_link("Path##1", "output", "PathToHeightmap##2", "path");
-
-  // hmap::Cloud cloud = hmap::Cloud(5, 2);
-  // hmap::Cloud cloud2 = hmap::Cloud(15, 3);
-  // hmap::Path path = hmap::Path(15, 3);
-  // path.reorder_nns();
-
-  // hmap::HeightMap h = hmap::HeightMap(shape, tiling, overlap);
-
-  // auto node = hesiod::cnode::Path("test");
-  // auto node = hesiod::cnode::Cloud("test");
-  // node.infos();
 
   while (!glfwWindowShouldClose(window))
   {
@@ -99,13 +71,7 @@ int main(int argc, char* argv[])
     // --- GUI content
 
     hesiod::gui::main_dock(tree);
-
     tree.render_node_editor();
-    // tree2.render_node_editor();
-
-    // ImGui::Begin("TEST");
-    // hesiod::gui::hmap_brush_editor(h);
-    // ImGui::End();
 
     // --- Rendering
     ImGui::Render();

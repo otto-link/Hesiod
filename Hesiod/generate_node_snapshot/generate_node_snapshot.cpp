@@ -65,7 +65,7 @@ void generate_node_snapshot()
       2 * SNAPSHOT_SIZE,
       SNAPSHOT_SIZE,
       "Hesiod v0.0.x (c) 2023 Otto Link");
-  
+
   // What the hell is going on in ImCandy?
   // ImCandy::Theme_Blender();
 

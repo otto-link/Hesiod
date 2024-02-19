@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 project(hesiod-root)
 
+# dont forget to remove the CMakeCache.txt in the build dir if options are changed 
 option(HESIOD_ENABLE_GENERATE_APP_IMAGE "" OFF)
 option(HESIOD_ENABLE_GENERATE_NODE_SNAPSHOT "" OFF)
 option(HESIOD_ENABLE_CEREAL "" ON)

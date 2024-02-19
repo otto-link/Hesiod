@@ -29,11 +29,14 @@ if(HESIOD_ENABLE_GENERATE_NODE_SNAPSHOT)
 endif(HESIOD_ENABLE_GENERATE_NODE_SNAPSHOT)
 
 if(HESIOD_ENABLE_CEREAL)
+  message("cereal activated")
   target_compile_definitions(${PROJECT_NAME} PRIVATE USE_CEREAL=1)
+else()
+  message("cereal deactivated")
 endif(HESIOD_ENABLE_CEREAL)
 
 if(HESIOD_ENABLE_GENERATE_NODE_SNAPSHOT)
-target_compile_definitions(${PROJECT_NAME} PRIVATE ENABLE_GENERATE_NODE_SNAPSHOT=1)
+  target_compile_definitions(${PROJECT_NAME} PRIVATE ENABLE_GENERATE_NODE_SNAPSHOT=1)
 endif(HESIOD_ENABLE_GENERATE_NODE_SNAPSHOT)
 
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
