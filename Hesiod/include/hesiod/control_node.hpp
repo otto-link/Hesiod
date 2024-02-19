@@ -94,6 +94,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"PreviewColorize", "Texture"},
     {"ConvolveSVD", "Math/Convolution"},
     {"Debug", "Debug"},
+    {"Dendry", "Primitive/Coherent"},
     {"DepressionFilling", "Erosion"}, // not distributed
     {"DigPath", "Roads"},             // partially distributed
     {"DistanceTransform", "Math"},
@@ -103,15 +104,20 @@ static const std::map<std::string, std::string> category_mapping = {
     {"ExpandShrinkDirectional", "Filter/Recast"},
     {"Export", "IO/Files"},
     {"ExportRGB", "IO/Files"},
+    {"Faceted", "Filter/Recast"}, // not distributed
+    {"FbmIqPerlin", "Primitive/Coherent Noise"},
     {"FbmPerlin", "Primitive/Coherent Noise"},
     {"FbmSimplex", "Primitive/Coherent Noise"},
     {"FbmWorley", "Primitive/Coherent Noise"},
+    {"FbmWorleyDouble", "Primitive/Coherent Noise"},
+    {"FbmWorleyPolyline", "Primitive/Coherent Noise"},
     {"FractalizePath", "Geometry/Path"},
     {"GaborNoise", "Primitive/Coherent Noise"},
     {"Gain", "Filter/Recurve"},
     {"GammaCorrection", "Filter/Recurve"},
     {"GammaCorrectionLocal", "Filter/Recurve"},
     {"GaussianPulse", "Primitive/Function"},
+    {"Geomorphons", "Features"},
     {"Gradient", "Math/Gradient"},
     {"GradientAngle", "Math/Gradient"},
     {"GradientNorm", "Math/Gradient"},
@@ -144,6 +150,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"PathToHeightmap", "Geometry/Path"},
     {"PathToHeightmapGaussian", "Geometry/Path"},
     {"PathToHeightmapPolygon", "Geometry/Path"},
+    {"PathToHeightmapRange", "Geometry/Path"},
     {"Peak", "Primitive/Geological"},
     {"Perlin", "Primitive/Coherent Noise"},
     {"PerlinBillow", "Primitive/Coherent Noise"},
@@ -151,6 +158,8 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Plateau", "Filter/Recurve"},
     {"Preview", "Debug"},
     {"RecastCanyon", "Filter/Recast"},
+    {"RecastCliff", "Filter/Recast"},
+    {"RecastCliffDirectional", "Filter/Recast"},
     {"RecastPeak", "Filter/Recast"},
     {"RecastRockySlopes", "Filter/Recast"},
     {"Recurve", "Filter/Recurve"},
@@ -158,6 +167,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"RecurveS", "Filter/Recurve"},
     {"RelativeElevation", "Features"},
     {"Remap", "Filter/Range"},
+    {"Rescale", "Filter/Range"},
     {"RidgedPerlin", "Primitive/Coherent Noise"},
     {"Rugosity", "Features"},
     {"SedimentDeposition", "Erosion/Thermal"},
@@ -182,6 +192,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"StratifyOblique", "Erosion/Stratify"},
     {"Thermal", "Erosion/Thermal"},
     {"ThermalAutoBedrock", "Erosion/Thermal"},
+    {"ThermalFlatten", "Erosion/Thermal"},
     {"ThermalScree", "Erosion/Thermal"},
     {"ToMask", "Mask"},
     {"ValleyWidth", "Features"},
@@ -199,6 +210,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"WhiteSparse", "Primitive/Random"},
     {"Worley", "Primitive/Coherent Noise"},
     {"WorleyDouble", "Primitive/Coherent Noise"},
+    {"WorleyPolyline", "Primitive/Coherent Noise"},
     {"WorleyValue", "Primitive/Coherent Noise"},
     {"Wrinkle", "Filter/Recast"},
     {"ZeroedEdges", "Math/Boundaries"}};
@@ -663,6 +675,27 @@ protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
 
+class Dendry : virtual public ControlNode
+{
+public:
+  Dendry(std::string     id,
+         hmap::Vec2<int> shape,
+         hmap::Vec2<int> tiling,
+         float           overlap);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap();
+
+private:
+  hmap::Vec2<int> shape;
+  hmap::Vec2<int> tiling;
+  float           overlap;
+};
+
 class DepressionFilling : public Unary
 {
 public:
@@ -769,6 +802,36 @@ public:
   void write_file();
 };
 
+class Faceted : virtual public ControlNode
+{
+public:
+  Faceted(std::string id);
+
+  void update_inner_bindings();
+
+  void compute();
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap();
+
+private:
+  std::map<std::string, int> neighborhood_map = {
+      {"Moore", hmap::neighborhood::moore},
+      {"Von Neumann", hmap::neighborhood::von_neumann},
+      {"cross", hmap::neighborhood::cross}};
+};
+
+class FbmIqPerlin : public Primitive
+{
+public:
+  FbmIqPerlin(std::string     id,
+              hmap::Vec2<int> shape,
+              hmap::Vec2<int> tiling,
+              float           overlap);
+
+  void compute();
+};
+
 class FbmPerlin : public Primitive
 {
 public:
@@ -798,6 +861,27 @@ public:
             hmap::Vec2<int> shape,
             hmap::Vec2<int> tiling,
             float           overlap);
+
+  void compute();
+};
+
+class FbmWorleyDouble : public Primitive
+{
+public:
+  FbmWorleyDouble(std::string     id,
+                  hmap::Vec2<int> shape,
+                  hmap::Vec2<int> tiling,
+                  float           overlap);
+
+  void compute();
+};
+class FbmWorleyPolyline : public Primitive
+{
+public:
+  FbmWorleyPolyline(std::string     id,
+                    hmap::Vec2<int> shape,
+                    hmap::Vec2<int> tiling,
+                    float           overlap);
 
   void compute();
 };
@@ -864,6 +948,14 @@ public:
                 float           overlap);
 
   void compute();
+};
+
+class Geomorphons : public Unary
+{
+public:
+  Geomorphons(std::string id);
+
+  void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
 };
 
 class Gradient : virtual public ControlNode
@@ -1240,6 +1332,27 @@ private:
   float           overlap;
 };
 
+class PathToHeightmapRange : virtual public ControlNode
+{
+public:
+  PathToHeightmapRange(std::string     id,
+                       hmap::Vec2<int> shape,
+                       hmap::Vec2<int> tiling,
+                       float           overlap);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap();
+
+private:
+  hmap::Vec2<int> shape;
+  hmap::Vec2<int> tiling;
+  float           overlap;
+};
+
 class Peak : public Primitive
 {
 public:
@@ -1325,6 +1438,32 @@ protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
 
+class RecastCliff : virtual public ControlNode
+{
+public:
+  RecastCliff(std::string id);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap();
+};
+
+class RecastCliffDirectional : virtual public ControlNode
+{
+public:
+  RecastCliffDirectional(std::string id);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap();
+};
+
 class RecastPeak : virtual public ControlNode
 {
 public:
@@ -1388,6 +1527,14 @@ class Remap : public Unary
 {
 public:
   Remap(std::string id);
+
+  void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
+};
+
+class Rescale : public Unary
+{
+public:
+  Rescale(std::string id);
 
   void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
 };
@@ -1637,6 +1784,20 @@ protected:
   hmap::HeightMap deposition_map = hmap::HeightMap();
 };
 
+class ThermalFlatten : virtual public ControlNode
+{
+public:
+  ThermalFlatten(std::string id);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::HeightMap value_out = hmap::HeightMap(); // eroded heightmap
+  hmap::HeightMap deposition_map = hmap::HeightMap();
+};
+
 class ThermalScree : virtual public ControlNode
 {
 public:
@@ -1854,6 +2015,17 @@ public:
                hmap::Vec2<int> shape,
                hmap::Vec2<int> tiling,
                float           overlap);
+
+  void compute();
+};
+
+class WorleyPolyline : public Primitive
+{
+public:
+  WorleyPolyline(std::string     id,
+                 hmap::Vec2<int> shape,
+                 hmap::Vec2<int> tiling,
+                 float           overlap);
 
   void compute();
 };

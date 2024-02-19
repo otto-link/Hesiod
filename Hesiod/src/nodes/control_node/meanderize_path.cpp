@@ -14,15 +14,17 @@ MeanderizePath::MeanderizePath(std::string id) : ControlNode(id)
   this->node_type = "MeanderizePath";
   this->category = category_mapping.at(this->node_type);
 
-  this->attr["radius"] = NEW_ATTR_FLOAT(0.05f, 0.f, 1.f);
-  this->attr["tangent_contribution"] = NEW_ATTR_FLOAT(0.1f, 0.f, 1.f);
-  this->attr["iterations"] = NEW_ATTR_INT(1, 1, 10);
-  this->attr["transition_length_ratio"] = NEW_ATTR_FLOAT(0.2f, 0.f, 1.f);
+  this->attr["ratio"] = NEW_ATTR_FLOAT(0.2f, 0.f, 1.f);
+  this->attr["noise_ratio"] = NEW_ATTR_FLOAT(0.1f, 0.f, 1.f);
+  this->attr["seed"] = NEW_ATTR_SEED();
+  this->attr["iterations"] = NEW_ATTR_INT(1, 1, 8);
+  this->attr["edge_divisions"] = NEW_ATTR_INT(10, 1, 32);
 
-  this->attr_ordered_key = {"radius",
-                            "tangent_contribution",
+  this->attr_ordered_key = {"ratio",
+                            "noise_ratio",
+                            "seed",
                             "iterations",
-                            "transition_length_ratio"};
+                            "edge_divisions"};
 
   this->add_port(gnode::Port("path", gnode::direction::in, dtype::dPath));
   this->add_port(gnode::Port("output", gnode::direction::out, dtype::dPath));
@@ -39,10 +41,11 @@ void MeanderizePath::compute()
   this->value_out = *p_path;
 
   if (p_path->get_npoints() > 1)
-    this->value_out.meanderize(GET_ATTR_FLOAT("radius"),
-                               GET_ATTR_FLOAT("tangent_contribution"),
+    this->value_out.meanderize(GET_ATTR_FLOAT("ratio"),
+                               GET_ATTR_FLOAT("noise_ratio"),
+                               GET_ATTR_SEED("seed"),
                                GET_ATTR_INT("iterations"),
-                               GET_ATTR_FLOAT("transition_length_ratio"));
+                               GET_ATTR_INT("edge_divisions"));
 }
 
 void MeanderizePath::update_inner_bindings()

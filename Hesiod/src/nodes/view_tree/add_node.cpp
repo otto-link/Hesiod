@@ -93,6 +93,9 @@ std::string ViewTree::add_view_node(std::string control_node_type,
   case str2int("Debug"):
     this->add_node(std::make_shared<hesiod::vnode::ViewDebug>(id));
     break;
+  case str2int("Dendry"):
+    this->add_node(std::make_shared<hesiod::vnode::ViewDendry>(id, this->shape, this->tiling, this->overlap));
+    break;
   case str2int("DepressionFilling"):
     this->add_node(std::make_shared<hesiod::vnode::ViewDepressionFilling>(id));
     break;
@@ -120,6 +123,12 @@ std::string ViewTree::add_view_node(std::string control_node_type,
   case str2int("ExportRGB"):
     this->add_node(std::make_shared<hesiod::vnode::ViewExportRGB>(id));
     break;
+  case str2int("Faceted"):
+    this->add_node(std::make_shared<hesiod::vnode::ViewFaceted>(id));
+    break;
+  case str2int("FbmIqPerlin"):
+    this->add_node(std::make_shared<hesiod::vnode::ViewFbmIqPerlin>(id, this->shape, this->tiling, this->overlap));
+    break;
   case str2int("FbmPerlin"):
     this->add_node(std::make_shared<hesiod::vnode::ViewFbmPerlin>(id, this->shape, this->tiling, this->overlap));
     break;
@@ -128,6 +137,12 @@ std::string ViewTree::add_view_node(std::string control_node_type,
     break;
   case str2int("FbmWorley"):
     this->add_node(std::make_shared<hesiod::vnode::ViewFbmWorley>(id, this->shape, this->tiling, this->overlap));
+    break;
+  case str2int("FbmWorleyDouble"):
+    this->add_node(std::make_shared<hesiod::vnode::ViewFbmWorleyDouble>(id, this->shape, this->tiling, this->overlap));
+    break;
+  case str2int("FbmWorleyPolyline"):
+    this->add_node(std::make_shared<hesiod::vnode::ViewFbmWorleyPolyline>(id, this->shape, this->tiling, this->overlap));
     break;
   case str2int("FractalizePath"):
     this->add_node(std::make_shared<hesiod::vnode::ViewFractalizePath>(id));
@@ -146,6 +161,9 @@ std::string ViewTree::add_view_node(std::string control_node_type,
     break;
   case str2int("GaussianPulse"):
     this->add_node(std::make_shared<hesiod::vnode::ViewGaussianPulse>(id, this->shape, this->tiling, this->overlap));
+    break;
+  case str2int("Geomorphons"):
+    this->add_node(std::make_shared<hesiod::vnode::ViewGeomorphons>(id));
     break;
   case str2int("Gradient"):
     this->add_node(std::make_shared<hesiod::vnode::ViewGradient>(id));
@@ -240,6 +258,9 @@ std::string ViewTree::add_view_node(std::string control_node_type,
   case str2int("PathToHeightmapPolygon"):
     this->add_node(std::make_shared<hesiod::vnode::ViewPathToHeightmapPolygon>(id, this->shape, this->tiling, this->overlap));
     break;
+  case str2int("PathToHeightmapRange"):
+    this->add_node(std::make_shared<hesiod::vnode::ViewPathToHeightmapRange>(id, this->shape, this->tiling, this->overlap));
+    break;
   case str2int("Peak"):
     this->add_node(std::make_shared<hesiod::vnode::ViewPeak>(id, this->shape, this->tiling, this->overlap));
     break;
@@ -264,6 +285,12 @@ std::string ViewTree::add_view_node(std::string control_node_type,
   case str2int("RecastCanyon"):
     this->add_node(std::make_shared<hesiod::vnode::ViewRecastCanyon>(id));
     break;
+  case str2int("RecastCliff"):
+    this->add_node(std::make_shared<hesiod::vnode::ViewRecastCliff>(id));
+    break;
+  case str2int("RecastCliffDirectional"):
+    this->add_node(std::make_shared<hesiod::vnode::ViewRecastCliffDirectional>(id));
+    break;
   case str2int("RecastPeak"):
     this->add_node(std::make_shared<hesiod::vnode::ViewRecastPeak>(id));
     break;
@@ -284,6 +311,9 @@ std::string ViewTree::add_view_node(std::string control_node_type,
     break;
   case str2int("Remap"):
     this->add_node(std::make_shared<hesiod::vnode::ViewRemap>(id));
+    break;
+  case str2int("Rescale"):
+    this->add_node(std::make_shared<hesiod::vnode::ViewRescale>(id));
     break;
   case str2int("RidgedPerlin"):
     this->add_node(std::make_shared<hesiod::vnode::ViewRidgedPerlin>(id, this->shape, this->tiling, this->overlap));
@@ -357,6 +387,9 @@ std::string ViewTree::add_view_node(std::string control_node_type,
   case str2int("ThermalAutoBedrock"):
     this->add_node(std::make_shared<hesiod::vnode::ViewThermalAutoBedrock>(id));
     break;
+  case str2int("ThermalFlatten"):
+    this->add_node(std::make_shared<hesiod::vnode::ViewThermalFlatten>(id));
+    break;
   case str2int("ThermalScree"):
     this->add_node(std::make_shared<hesiod::vnode::ViewThermalScree>(id));
     break;
@@ -410,6 +443,9 @@ std::string ViewTree::add_view_node(std::string control_node_type,
     break;
   case str2int("WorleyDouble"):
     this->add_node(std::make_shared<hesiod::vnode::ViewWorleyDouble>(id, this->shape, this->tiling, this->overlap));
+    break;
+  case str2int("WorleyPolyline"):
+    this->add_node(std::make_shared<hesiod::vnode::ViewWorleyPolyline>(id, this->shape, this->tiling, this->overlap));
     break;
   case str2int("WorleyValue"):
     this->add_node(std::make_shared<hesiod::vnode::ViewWorleyValue>(id, this->shape, this->tiling, this->overlap));

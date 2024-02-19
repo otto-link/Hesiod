@@ -36,6 +36,7 @@ void Filter::compute()
   // work on a copy of the input
   this->value_out = *p_input_hmap;
   this->compute_filter(this->value_out, p_input_mask);
+  this->post_process_heightmap(this->value_out);
 }
 
 } // namespace hesiod::cnode

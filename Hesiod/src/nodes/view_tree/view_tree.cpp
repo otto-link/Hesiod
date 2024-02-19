@@ -34,11 +34,13 @@ Link::Link(std::string node_id_from,
             port_id_to.c_str());
 }
 
-ViewTree::ViewTree(std::string     id,
-                   hmap::Vec2<int> shape,
-                   hmap::Vec2<int> tiling,
-                   float           overlap)
-    : gnode::Tree(id), shape(shape), tiling(tiling), overlap(overlap)
+ViewTree::ViewTree(std::string              id,
+                   hmap::Vec2<int>          shape,
+                   hmap::Vec2<int>          tiling,
+                   float                    overlap,
+                   hmap::gpu::OpenCLConfig *p_opencl_config)
+    : gnode::Tree(id), shape(shape), tiling(tiling), overlap(overlap),
+      p_opencl_config(p_opencl_config)
 {
   // initialize node editor
   ax::NodeEditor::Config config;
@@ -102,6 +104,11 @@ std::string ViewTree::get_node_type(std::string node_id) const
 ax::NodeEditor::EditorContext *ViewTree::get_p_node_editor_context() const
 {
   return this->p_node_editor_context;
+}
+
+hmap::gpu::OpenCLConfig *ViewTree::get_p_opencl_config() const
+{
+  return this->p_opencl_config;
 }
 
 void ViewTree::set_sto(hmap::Vec2<int> new_shape,

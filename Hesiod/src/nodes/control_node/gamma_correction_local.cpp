@@ -14,6 +14,7 @@ GammaCorrectionLocal::GammaCorrectionLocal(std::string id)
   LOG_DEBUG("GammaCorrectionLocal::GammaCorrectionLocal()");
   this->node_type = "GammaCorrectionLocal";
   this->category = category_mapping.at(this->node_type);
+
   this->attr["ir"] = NEW_ATTR_INT(8, 1, 128);
   this->attr["gamma"] = NEW_ATTR_FLOAT(1.f, 0.01f, 10.f);
   this->attr["k"] = NEW_ATTR_FLOAT(0.1f, 0.f, 1.f);

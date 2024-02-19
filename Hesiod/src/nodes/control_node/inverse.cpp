@@ -25,8 +25,6 @@ void Inverse::compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in)
   float hmax = h_out.max();
 
   hmap::transform(h_out, [this, &hmax](hmap::Array &x) { x *= -1.f; });
-
-  this->post_process_heightmap(this->value_out);
 }
 
 } // namespace hesiod::cnode

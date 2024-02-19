@@ -567,6 +567,21 @@ public:
   void render_node_specific_content();
 };
 
+class ViewDendry : public ViewNode, public hesiod::cnode::Dendry
+{
+public:
+  ViewDendry(std::string     id,
+             hmap::Vec2<int> shape,
+             hmap::Vec2<int> tiling,
+             float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::Dendry(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
+};
+
 class ViewDepressionFilling : public ViewNode,
                               public hesiod::cnode::DepressionFilling
 {
@@ -681,6 +696,32 @@ public:
   void render_node_specific_content();
 };
 
+class ViewFaceted : public ViewNode, public hesiod::cnode::Faceted
+{
+public:
+  ViewFaceted(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Faceted(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
+};
+
+class ViewFbmIqPerlin : public ViewNode, public hesiod::cnode::FbmIqPerlin
+{
+public:
+  ViewFbmIqPerlin(std::string     id,
+                  hmap::Vec2<int> shape,
+                  hmap::Vec2<int> tiling,
+                  float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::FbmIqPerlin(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
+};
+
 class ViewFbmPerlin : public ViewNode, public hesiod::cnode::FbmPerlin
 {
 public:
@@ -720,6 +761,38 @@ public:
                 float           overlap)
       : hesiod::cnode::ControlNode(id), ViewNode(id),
         hesiod::cnode::FbmWorley(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
+};
+
+class ViewFbmWorleyDouble : public ViewNode,
+                            public hesiod::cnode::FbmWorleyDouble
+{
+public:
+  ViewFbmWorleyDouble(std::string     id,
+                      hmap::Vec2<int> shape,
+                      hmap::Vec2<int> tiling,
+                      float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::FbmWorleyDouble(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
+};
+
+class ViewFbmWorleyPolyline : public ViewNode,
+                              public hesiod::cnode::FbmWorleyPolyline
+{
+public:
+  ViewFbmWorleyPolyline(std::string     id,
+                        hmap::Vec2<int> shape,
+                        hmap::Vec2<int> tiling,
+                        float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::FbmWorleyPolyline(id, shape, tiling, overlap)
   {
     this->set_preview_port_id("output");
     this->set_view3d_elevation_port_id("output");
@@ -783,6 +856,18 @@ public:
   ViewGammaCorrectionLocal(std::string id)
       : hesiod::cnode::ControlNode(id), ViewNode(id),
         hesiod::cnode::GammaCorrectionLocal(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
+};
+
+class ViewGeomorphons : public ViewNode, public hesiod::cnode::Geomorphons
+{
+public:
+  ViewGeomorphons(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::Geomorphons(id)
   {
     this->set_preview_port_id("output");
     this->set_view3d_elevation_port_id("output");
@@ -1208,6 +1293,23 @@ public:
   }
 };
 
+class ViewPathToHeightmapRange : public ViewNode,
+                                 public hesiod::cnode::PathToHeightmapRange
+{
+public:
+  ViewPathToHeightmapRange(std::string     id,
+                           hmap::Vec2<int> shape,
+                           hmap::Vec2<int> tiling,
+                           float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::PathToHeightmapRange(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+    this->set_view3d_color_port_id("path");
+  }
+};
+
 class ViewPeak : public ViewNode, public hesiod::cnode::Peak
 {
 public:
@@ -1318,6 +1420,31 @@ public:
   }
 };
 
+class ViewRecastCliff : public ViewNode, public hesiod::cnode::RecastCliff
+{
+public:
+  ViewRecastCliff(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::RecastCliff(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
+};
+
+class ViewRecastCliffDirectional : public ViewNode,
+                                   public hesiod::cnode::RecastCliffDirectional
+{
+public:
+  ViewRecastCliffDirectional(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::RecastCliffDirectional(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
+};
+
 class ViewRecastPeak : public ViewNode, public hesiod::cnode::RecastPeak
 {
 public:
@@ -1396,6 +1523,17 @@ class ViewRemap : public ViewNode, public hesiod::cnode::Remap
 public:
   ViewRemap(std::string id)
       : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Remap(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
+};
+
+class ViewRescale : public ViewNode, public hesiod::cnode::Rescale
+{
+public:
+  ViewRescale(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::Rescale(id)
   {
     this->set_preview_port_id("output");
     this->set_view3d_elevation_port_id("output");
@@ -1733,6 +1871,18 @@ public:
   }
 };
 
+class ViewThermalFlatten : public ViewNode, public hesiod::cnode::ThermalFlatten
+{
+public:
+  ViewThermalFlatten(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::ThermalFlatten(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
+};
+
 class ViewThermalScree : public ViewNode, public hesiod::cnode::ThermalScree
 {
 public:
@@ -1979,6 +2129,21 @@ public:
                    float           overlap)
       : hesiod::cnode::ControlNode(id), ViewNode(id),
         hesiod::cnode::WorleyDouble(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
+};
+
+class ViewWorleyPolyline : public ViewNode, public hesiod::cnode::WorleyPolyline
+{
+public:
+  ViewWorleyPolyline(std::string     id,
+                     hmap::Vec2<int> shape,
+                     hmap::Vec2<int> tiling,
+                     float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::WorleyPolyline(id, shape, tiling, overlap)
   {
     this->set_preview_port_id("output");
     this->set_view3d_elevation_port_id("output");
