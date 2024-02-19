@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # directories to be formatted (recursive search)
-DIRS="include src doc/generate_node_snapshot"
+DIRS="Hesiod/include Hesiod/src Hesiod/generate_node_snapshot"
 # FORMAT_CMD="clang-format --style=LLVM -i {}"
 FORMAT_CMD="clang-format -style=file:scripts/clang_style -i {}"
 
@@ -11,4 +11,3 @@ done
 
 cmake-format -i CMakeLists.txt
 cmake-format -i doc/CMakeLists.txt
-cmake-format -i doc/generate_node_snapshot/CMakeLists.txt

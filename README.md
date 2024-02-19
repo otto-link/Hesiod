@@ -37,12 +37,17 @@ git submodule update --init --recursive
 
 Install the missing OpenSource dependencies using `vcpkg`:
 ```
-vcpkg install glfw3 opengl gsl glew freeglut eigen3 glm libpng boost-range boost-type-erasure boost-geometry glm
+vcpkg install glfw3 opengl gsl glew freeglut eigen3 glm libpng boost-range boost-type-erasure boost-geometry glm opencl
 ```
 
 You should then be able to build the sources using Visual Studio.
 
 ### Linux
+
+There are also required external dependencies for ubuntu you can execute:
+```
+sudo apt-get -y install libglfw3 libglfw3-dev libglew-dev libopengl-dev freeglut3-dev libboost-all-dev libeigen3-dev libglm-dev fuse libfuse2
+```
 
 #### Getting the sources
 
@@ -73,6 +78,10 @@ bin/./hesiod
 
 See https://github.com/otto-link/HighMap.
 
+## Error: Failed to initialize OpenGL loader!
+
+Try to install the package `glfw` or `glfw-devel`!
+
 ## Dependencies
 
 - https://github.com/otto-link/HighMap / A C++ library to generate two-dimensional terrain heightmaps for software rendering or video games.
@@ -84,4 +93,6 @@ See https://github.com/otto-link/HighMap.
 - https://github.com/Raais/ImguiCandy / Color utils, Themes and other cool stuff for Dear ImGui
 - https://github.com/dmcrodrigues/macro-logger / A simplified logging system using macros
 - https://github.com/USCiLab/cereal / A C++11 library for serialization
-
+- https://github.com/mgaillard/Noise / Dendry: A Procedural Model for Dendritic Patterns
+- https://github.com/yknishidate/WavefrontObjWriter / WavefrontObjWriter: A header-only library for C ++ that can efficiently create 3D objects by code
+- https://github.com/chen0040/cpp-spline / cpp-spline: Package provides C++ implementation of spline interpolation
