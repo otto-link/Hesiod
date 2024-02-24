@@ -56,4 +56,5 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     ImGuiNodeEditor::ImGuiNodeEditor
     ImGuiFileDialog::ImGuiFileDialog
     cereal::cereal
+    nlohmann_json::nlohmann_json
 )

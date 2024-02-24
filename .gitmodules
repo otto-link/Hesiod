@@ -27,3 +27,6 @@
 [submodule "external/ImGuiFileDialog"]
 	path = external/ImGuiFileDialog
 	url = git@github.com:aiekick/ImGuiFileDialog.git
+[submodule "external/json"]
+	path = external/json
+	url = https://github.com/nlohmann/json.git
