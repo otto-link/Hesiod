@@ -139,5 +139,16 @@ namespace hesiod::serialization
         return true;
     }
 
+    // SerializationBatchBase
+
+    bool SerializationBatchBase::serialize_json_v2(std::string fieldName, nlohmann::json& outputData)
+    {
+        return this->BuildBatchHelperData().serialize_json_v2(fieldName, outputData);
+    }
+
+    bool SerializationBatchBase::deserialize_json_v2(std::string fieldName, nlohmann::json& inputData)
+    {
+        return this->BuildBatchHelperData().deserialize_json_v2(fieldName, inputData);
+    }
 
 }

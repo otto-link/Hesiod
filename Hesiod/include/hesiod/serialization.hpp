@@ -3,6 +3,8 @@
 #include <nlohmann/json.hpp>
 #include <string>
 
+#define SERIALIZATION_V2_IMPLEMENT_BATCH_BASE() SerializationBatchHelper BuildBatchHelperData();
+
 namespace hesiod::serialization
 {
 
@@ -222,8 +224,15 @@ namespace hesiod::serialization
     class SerializationBatchBase : public SerializationBase
     {
     public:
-    private:
+        SerializationBatchBase() = default;
+        ~SerializationBatchBase() = default;
         
+        virtual SerializationBatchHelper BuildBatchHelperData() {
+            return SerializationBatchHelper();
+        }
+
+        bool serialize_json_v2(std::string fieldName, nlohmann::json& outputData);
+        bool deserialize_json_v2(std::string fieldName, nlohmann::json& inputData);
     };
 
 }
