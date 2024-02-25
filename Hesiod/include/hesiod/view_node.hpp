@@ -783,22 +783,6 @@ public:
   }
 };
 
-class ViewFbmWorleyPolyline : public ViewNode,
-                              public hesiod::cnode::FbmWorleyPolyline
-{
-public:
-  ViewFbmWorleyPolyline(std::string     id,
-                        hmap::Vec2<int> shape,
-                        hmap::Vec2<int> tiling,
-                        float           overlap)
-      : hesiod::cnode::ControlNode(id), ViewNode(id),
-        hesiod::cnode::FbmWorleyPolyline(id, shape, tiling, overlap)
-  {
-    this->set_preview_port_id("output");
-    this->set_view3d_elevation_port_id("output");
-  }
-};
-
 class ViewFractalizePath : public ViewNode, public hesiod::cnode::FractalizePath
 {
 public:
@@ -1253,58 +1237,6 @@ public:
         hesiod::cnode::PathToHeightmap(id, shape, tiling, overlap)
   {
     this->set_preview_port_id("path");
-    this->set_view3d_elevation_port_id("output");
-    this->set_view3d_color_port_id("path");
-  }
-};
-
-class ViewPathToHeightmapGaussian
-    : public ViewNode,
-      public hesiod::cnode::PathToHeightmapGaussian
-{
-public:
-  ViewPathToHeightmapGaussian(std::string     id,
-                              hmap::Vec2<int> shape,
-                              hmap::Vec2<int> tiling,
-                              float           overlap)
-      : hesiod::cnode::ControlNode(id), ViewNode(id),
-        hesiod::cnode::PathToHeightmapGaussian(id, shape, tiling, overlap)
-  {
-    this->set_preview_port_id("output");
-    this->set_view3d_elevation_port_id("output");
-    this->set_view3d_color_port_id("path");
-  }
-};
-
-class ViewPathToHeightmapPolygon : public ViewNode,
-                                   public hesiod::cnode::PathToHeightmapPolygon
-{
-public:
-  ViewPathToHeightmapPolygon(std::string     id,
-                             hmap::Vec2<int> shape,
-                             hmap::Vec2<int> tiling,
-                             float           overlap)
-      : hesiod::cnode::ControlNode(id), ViewNode(id),
-        hesiod::cnode::PathToHeightmapPolygon(id, shape, tiling, overlap)
-  {
-    this->set_preview_port_id("output");
-    this->set_view3d_elevation_port_id("output");
-    this->set_view3d_color_port_id("path");
-  }
-};
-
-class ViewPathToHeightmapRange : public ViewNode,
-                                 public hesiod::cnode::PathToHeightmapRange
-{
-public:
-  ViewPathToHeightmapRange(std::string     id,
-                           hmap::Vec2<int> shape,
-                           hmap::Vec2<int> tiling,
-                           float           overlap)
-      : hesiod::cnode::ControlNode(id), ViewNode(id),
-        hesiod::cnode::PathToHeightmapRange(id, shape, tiling, overlap)
-  {
-    this->set_preview_port_id("output");
     this->set_view3d_elevation_port_id("output");
     this->set_view3d_color_port_id("path");
   }
@@ -2129,21 +2061,6 @@ public:
                    float           overlap)
       : hesiod::cnode::ControlNode(id), ViewNode(id),
         hesiod::cnode::WorleyDouble(id, shape, tiling, overlap)
-  {
-    this->set_preview_port_id("output");
-    this->set_view3d_elevation_port_id("output");
-  }
-};
-
-class ViewWorleyPolyline : public ViewNode, public hesiod::cnode::WorleyPolyline
-{
-public:
-  ViewWorleyPolyline(std::string     id,
-                     hmap::Vec2<int> shape,
-                     hmap::Vec2<int> tiling,
-                     float           overlap)
-      : hesiod::cnode::ControlNode(id), ViewNode(id),
-        hesiod::cnode::WorleyPolyline(id, shape, tiling, overlap)
   {
     this->set_preview_port_id("output");
     this->set_view3d_elevation_port_id("output");

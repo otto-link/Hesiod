@@ -141,9 +141,6 @@ std::string ViewTree::add_view_node(std::string control_node_type,
   case str2int("FbmWorleyDouble"):
     this->add_node(std::make_shared<hesiod::vnode::ViewFbmWorleyDouble>(id, this->shape, this->tiling, this->overlap));
     break;
-  case str2int("FbmWorleyPolyline"):
-    this->add_node(std::make_shared<hesiod::vnode::ViewFbmWorleyPolyline>(id, this->shape, this->tiling, this->overlap));
-    break;
   case str2int("FractalizePath"):
     this->add_node(std::make_shared<hesiod::vnode::ViewFractalizePath>(id));
     break;
@@ -251,15 +248,6 @@ std::string ViewTree::add_view_node(std::string control_node_type,
     break;
   case str2int("PathToHeightmap"):
     this->add_node(std::make_shared<hesiod::vnode::ViewPathToHeightmap>(id, this->shape, this->tiling, this->overlap));
-    break;
-  case str2int("PathToHeightmapGaussian"):
-    this->add_node(std::make_shared<hesiod::vnode::ViewPathToHeightmapGaussian>(id, this->shape, this->tiling, this->overlap));
-    break;
-  case str2int("PathToHeightmapPolygon"):
-    this->add_node(std::make_shared<hesiod::vnode::ViewPathToHeightmapPolygon>(id, this->shape, this->tiling, this->overlap));
-    break;
-  case str2int("PathToHeightmapRange"):
-    this->add_node(std::make_shared<hesiod::vnode::ViewPathToHeightmapRange>(id, this->shape, this->tiling, this->overlap));
     break;
   case str2int("Peak"):
     this->add_node(std::make_shared<hesiod::vnode::ViewPeak>(id, this->shape, this->tiling, this->overlap));
@@ -443,9 +431,6 @@ std::string ViewTree::add_view_node(std::string control_node_type,
     break;
   case str2int("WorleyDouble"):
     this->add_node(std::make_shared<hesiod::vnode::ViewWorleyDouble>(id, this->shape, this->tiling, this->overlap));
-    break;
-  case str2int("WorleyPolyline"):
-    this->add_node(std::make_shared<hesiod::vnode::ViewWorleyPolyline>(id, this->shape, this->tiling, this->overlap));
     break;
   case str2int("WorleyValue"):
     this->add_node(std::make_shared<hesiod::vnode::ViewWorleyValue>(id, this->shape, this->tiling, this->overlap));

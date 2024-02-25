@@ -110,7 +110,6 @@ static const std::map<std::string, std::string> category_mapping = {
     {"FbmSimplex", "Primitive/Coherent Noise"},
     {"FbmWorley", "Primitive/Coherent Noise"},
     {"FbmWorleyDouble", "Primitive/Coherent Noise"},
-    {"FbmWorleyPolyline", "Primitive/Coherent Noise"},
     {"FractalizePath", "Geometry/Path"},
     {"GaborNoise", "Primitive/Coherent Noise"},
     {"Gain", "Filter/Recurve"},
@@ -148,9 +147,6 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Path", "Geometry/Path"},
     {"PathFinding", "Roads"},
     {"PathToHeightmap", "Geometry/Path"},
-    {"PathToHeightmapGaussian", "Geometry/Path"},
-    {"PathToHeightmapPolygon", "Geometry/Path"},
-    {"PathToHeightmapRange", "Geometry/Path"},
     {"Peak", "Primitive/Geological"},
     {"Perlin", "Primitive/Coherent Noise"},
     {"PerlinBillow", "Primitive/Coherent Noise"},
@@ -210,7 +206,6 @@ static const std::map<std::string, std::string> category_mapping = {
     {"WhiteSparse", "Primitive/Random"},
     {"Worley", "Primitive/Coherent Noise"},
     {"WorleyDouble", "Primitive/Coherent Noise"},
-    {"WorleyPolyline", "Primitive/Coherent Noise"},
     {"WorleyValue", "Primitive/Coherent Noise"},
     {"Wrinkle", "Filter/Recast"},
     {"ZeroedEdges", "Math/Boundaries"}};
@@ -875,16 +870,6 @@ public:
 
   void compute();
 };
-class FbmWorleyPolyline : public Primitive
-{
-public:
-  FbmWorleyPolyline(std::string     id,
-                    hmap::Vec2<int> shape,
-                    hmap::Vec2<int> tiling,
-                    float           overlap);
-
-  void compute();
-};
 
 class FractalizePath : virtual public ControlNode
 {
@@ -1276,69 +1261,6 @@ public:
                   hmap::Vec2<int> shape,
                   hmap::Vec2<int> tiling,
                   float           overlap);
-
-  void compute();
-
-  void update_inner_bindings();
-
-protected:
-  hmap::HeightMap value_out = hmap::HeightMap();
-
-private:
-  hmap::Vec2<int> shape;
-  hmap::Vec2<int> tiling;
-  float           overlap;
-};
-
-class PathToHeightmapGaussian : virtual public ControlNode
-{
-public:
-  PathToHeightmapGaussian(std::string     id,
-                          hmap::Vec2<int> shape,
-                          hmap::Vec2<int> tiling,
-                          float           overlap);
-
-  void compute();
-
-  void update_inner_bindings();
-
-protected:
-  hmap::HeightMap value_out = hmap::HeightMap();
-
-private:
-  hmap::Vec2<int> shape;
-  hmap::Vec2<int> tiling;
-  float           overlap;
-};
-
-class PathToHeightmapPolygon : virtual public ControlNode
-{
-public:
-  PathToHeightmapPolygon(std::string     id,
-                         hmap::Vec2<int> shape,
-                         hmap::Vec2<int> tiling,
-                         float           overlap);
-
-  void compute();
-
-  void update_inner_bindings();
-
-protected:
-  hmap::HeightMap value_out = hmap::HeightMap();
-
-private:
-  hmap::Vec2<int> shape;
-  hmap::Vec2<int> tiling;
-  float           overlap;
-};
-
-class PathToHeightmapRange : virtual public ControlNode
-{
-public:
-  PathToHeightmapRange(std::string     id,
-                       hmap::Vec2<int> shape,
-                       hmap::Vec2<int> tiling,
-                       float           overlap);
 
   void compute();
 
@@ -2015,17 +1937,6 @@ public:
                hmap::Vec2<int> shape,
                hmap::Vec2<int> tiling,
                float           overlap);
-
-  void compute();
-};
-
-class WorleyPolyline : public Primitive
-{
-public:
-  WorleyPolyline(std::string     id,
-                 hmap::Vec2<int> shape,
-                 hmap::Vec2<int> tiling,
-                 float           overlap);
 
   void compute();
 };
