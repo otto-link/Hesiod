@@ -3,6 +3,9 @@
 #include <nlohmann/json.hpp>
 #include <string>
 
+#define SERIALIZATION_V2_IMPLEMENT_BASE()   bool serialize_json_v2(std::string fieldName, nlohmann::json& outputData); \
+                                            bool deserialize_json_v2(std::string fieldName, nlohmann::json& inputData);
+
 #define SERIALIZATION_V2_IMPLEMENT_BATCH_BASE() SerializationBatchHelper BuildBatchHelperData();
 
 namespace hesiod::serialization

@@ -17,6 +17,8 @@
 #include <stdexcept>
 
 #include "highmap.hpp"
+#include "serialization.hpp"
+
 #include <cereal/archives/json.hpp>
 #include <cereal/types/map.hpp>
 #include <cereal/types/polymorphic.hpp>
@@ -64,7 +66,7 @@
 namespace hesiod
 {
 
-class Attribute
+class Attribute : public serialization::SerializationBase
 {
 public:
   Attribute() = default;
@@ -110,6 +112,8 @@ public:
   }
 #endif
 
+  SERIALIZATION_V2_IMPLEMENT_BASE();
+
   bool value = true;
 };
 
@@ -135,6 +139,8 @@ public:
     this->value = hmap::Cloud(x, y, v);
   }
 #endif
+
+  SERIALIZATION_V2_IMPLEMENT_BASE();
 
   hmap::Cloud value;
 };
