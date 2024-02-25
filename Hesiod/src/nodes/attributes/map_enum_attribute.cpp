@@ -7,6 +7,7 @@
 
 #include "hesiod/attribute.hpp"
 #include "hesiod/gui.hpp"
+#include "nlohmann/json_fwd.hpp"
 
 namespace hesiod
 {
@@ -52,6 +53,41 @@ bool MapEnumAttribute::render_settings(std::string label)
     }
 
   return has_changed;
+}
+
+bool MapEnumAttribute::serialize_json_v2(std::string fieldName, nlohmann::json& outputData) 
+{ 
+  for(std::map<std::string, int>::iterator currentIterator = this->value.begin(); currentIterator != this->value.end(); currentIterator++)
+  {
+    outputData[fieldName]["value"][currentIterator->first] = currentIterator->second;
+  }
+
+  outputData[fieldName]["choice"] = this->choice;
+
+  return true;
+}
+
+bool MapEnumAttribute::deserialize_json_v2(std::string fieldName, nlohmann::json& inputData) 
+{
+  if(
+    inputData[fieldName].is_object() == false || 
+    inputData[fieldName]["value"].is_object() == false ||
+    inputData[fieldName]["choice"].is_string() == false
+  )
+  {
+    return false;
+  }
+
+  this->value.clear();
+
+  for(auto& [currentKey, currentValue] : inputData[fieldName]["value"].items())
+  {
+    this->value[currentKey] = currentValue.get<int>();
+  }
+
+  this->choice = inputData[fieldName]["choice"].get<std::string>();
+
+  return true; 
 }
 
 } // namespace hesiod

@@ -231,6 +231,8 @@ public:
   }
 #endif
 
+  SERIALIZATION_V2_IMPLEMENT_BASE();
+
   int value = 1;
   int vmin = 0;
   int vmax = 1;
@@ -254,6 +256,8 @@ public:
        cereal::make_nvp("choice", this->choice));
   }
 #endif
+
+  SERIALIZATION_V2_IMPLEMENT_BASE();
 
   std::map<std::string, int> value = {};
   std::string                choice = "";
