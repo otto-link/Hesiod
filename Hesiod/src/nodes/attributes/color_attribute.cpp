@@ -23,4 +23,22 @@ bool ColorAttribute::render_settings(std::string label)
   return has_changed;
 }
 
+bool ColorAttribute::serialize_json_v2(std::string fieldName, nlohmann::json& outputData) 
+{ 
+  outputData[fieldName] = this->value;
+  return true; 
+}
+
+bool ColorAttribute::deserialize_json_v2(std::string fieldName, nlohmann::json& inputData) 
+{ 
+  if(inputData[fieldName].is_array() == false)
+  {
+    LOG_DEBUG("[%s] Attribute %s is not an array.", __FUNCTION__, fieldName.data());
+    return false;
+  }
+
+  this->value = inputData[fieldName].get<std::vector<float>>();
+  return true; 
+}
+
 } // namespace hesiod

@@ -160,6 +160,8 @@ public:
   }
 #endif
 
+  SERIALIZATION_V2_IMPLEMENT_BASE();
+
   std::vector<float> value = {1.f, 1.f, 1.f};
 };
 
@@ -178,6 +180,8 @@ public:
     ar(cereal::make_nvp("value", this->value));
   }
 #endif
+
+  SERIALIZATION_V2_IMPLEMENT_BASE();
 
   std::string value = "";
 };
@@ -200,6 +204,8 @@ public:
        cereal::make_nvp("vmax", this->vmax));
   }
 #endif
+
+  SERIALIZATION_V2_IMPLEMENT_BASE();
 
   float value = 1.f;
   float vmin = 0.f;
