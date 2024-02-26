@@ -35,4 +35,22 @@ bool VecIntAttribute::render_settings(std::string label)
   return has_changed;
 }
 
+bool VecIntAttribute::serialize_json_v2(std::string fieldName, nlohmann::json& outputData) 
+{ 
+  outputData[fieldName] = this->value;
+  return true; 
+}
+
+bool VecIntAttribute::deserialize_json_v2(std::string fieldName, nlohmann::json& inputData) 
+{ 
+  if(inputData[fieldName].is_array() == false)
+  {
+    LOG_DEBUG("Attribute %s is not a an array.", fieldName.data());
+    return false;
+  }
+
+  this->value = inputData[fieldName].get<std::vector<int>>();
+  return true; 
+}
+
 } // namespace hesiod

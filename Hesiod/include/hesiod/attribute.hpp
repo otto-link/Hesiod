@@ -383,6 +383,8 @@ public:
   }
 #endif
 
+  SERIALIZATION_V2_IMPLEMENT_BASE();
+
   hmap::Vec2<int> value = {128, 128};
   hmap::Vec2<int> value_max = {0, 0};
 };
@@ -403,6 +405,8 @@ public:
   }
 #endif
 
+  SERIALIZATION_V2_IMPLEMENT_BASE();
+
   std::vector<float> value = {};
 };
 
@@ -421,6 +425,8 @@ public:
     ar(cereal::make_nvp("value", this->value));
   }
 #endif
+
+  SERIALIZATION_V2_IMPLEMENT_BASE();
 
   std::vector<int> value = {};
 };
@@ -442,6 +448,8 @@ public:
        cereal::make_nvp("link_xy", this->link_xy));
   }
 #endif
+
+  SERIALIZATION_V2_IMPLEMENT_BASE();
 
   hmap::Vec2<float> value = {2.f, 2.f};
   bool              link_xy = true; // GUI
