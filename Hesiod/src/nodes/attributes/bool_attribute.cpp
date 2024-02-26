@@ -37,7 +37,7 @@ bool BoolAttribute::deserialize_json_v2(std::string fieldName, nlohmann::json& i
 { 
   if(inputData[fieldName].is_boolean() == false)
   {
-    LOG_DEBUG("[%s] Attribute %s is not a boolean.", __FUNCTION__, fieldName.data());
+    LOG_DEBUG("Attribute %s is not a boolean.", fieldName.data());
     return false;
   }
 

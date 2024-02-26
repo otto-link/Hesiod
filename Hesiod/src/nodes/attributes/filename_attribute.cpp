@@ -59,7 +59,7 @@ bool FilenameAttribute::deserialize_json_v2(std::string fieldName, nlohmann::jso
 { 
   if(inputData[fieldName].is_string() == false)
   {
-    LOG_DEBUG("[%s] Attribute %s is not a string.", __FUNCTION__, fieldName.data());
+    LOG_DEBUG("Attribute %s is not a string.", fieldName.data());
     return false;
   }
 

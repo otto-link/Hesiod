@@ -42,7 +42,7 @@ bool CloudAttribute::deserialize_json_v2(std::string fieldName, nlohmann::json& 
      inputData[fieldName]["v"].is_array() == false
   )
   {
-    LOG_DEBUG("[%s] Attribute %s is not filled with arrays.", __FUNCTION__, fieldName.data());
+    LOG_DEBUG("Attribute %s is not filled with arrays.", fieldName.data());
     return false;
   }
 

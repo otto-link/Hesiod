@@ -33,7 +33,7 @@ bool ColorAttribute::deserialize_json_v2(std::string fieldName, nlohmann::json& 
 { 
   if(inputData[fieldName].is_array() == false)
   {
-    LOG_DEBUG("[%s] Attribute %s is not an array.", __FUNCTION__, fieldName.data());
+    LOG_DEBUG("Attribute %s is not an array.", fieldName.data());
     return false;
   }
 

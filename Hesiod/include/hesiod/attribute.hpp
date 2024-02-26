@@ -278,6 +278,8 @@ public:
   }
 #endif
 
+  SERIALIZATION_V2_IMPLEMENT_BASE();
+
   std::vector<std::vector<float>> value = {{0.f, 0.f, 0.f},
                                            {0.f, 0.f, 0.f},
                                            {0.f, 0.f, 0.f}};
@@ -308,6 +310,8 @@ public:
     this->value.closed = closed;
   }
 #endif
+
+  SERIALIZATION_V2_IMPLEMENT_BASE();
 
   hmap::Path value;
 };

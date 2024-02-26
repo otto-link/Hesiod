@@ -55,7 +55,7 @@ bool FloatAttribute::deserialize_json_v2(std::string fieldName, nlohmann::json& 
     inputData[fieldName]["vmax"].is_number() == false
   )
   {
-    LOG_DEBUG("[%s] Attribute %s is not valid.", __FUNCTION__, fieldName.data());
+    LOG_DEBUG("Attribute %s is not valid.", fieldName.data());
     return false;
   }
 
