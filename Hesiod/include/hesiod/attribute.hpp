@@ -339,6 +339,8 @@ public:
   }
 #endif
 
+  SERIALIZATION_V2_IMPLEMENT_BASE();
+
   hmap::Vec2<float> value = {0.f, 1.f};
   bool              activate = true;
 };
@@ -358,6 +360,8 @@ public:
     ar(cereal::make_nvp("value", this->value));
   }
 #endif
+
+  SERIALIZATION_V2_IMPLEMENT_BASE();
 
   int value = 1;
 };
