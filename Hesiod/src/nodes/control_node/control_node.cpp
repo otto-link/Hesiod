@@ -1,12 +1,73 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include "hesiod/attribute.hpp"
 #include "macrologger.h"
+#include "nlohmann/json_fwd.hpp"
+#include <map>
+#include <memory>
+#include <vector>
 
 #include "hesiod/control_node.hpp"
 
 namespace hesiod::cnode
 {
+
+bool ControlNode::serialize_json_v2(std::string fieldName, nlohmann::json& outputData) 
+{
+  std::vector<nlohmann::json> attributesListJsonData = {};
+
+  for(std::map<std::string, std::unique_ptr<hesiod::Attribute>>::iterator currentAttributeIterator = attr.begin(); currentAttributeIterator != attr.end(); currentAttributeIterator++)
+  {
+    nlohmann::json currentAttributeIteratorJsonData = nlohmann::json();
+
+    currentAttributeIteratorJsonData["type"] = AttributeInstancing::get_name_from_type(currentAttributeIterator->second->get_type());
+    currentAttributeIteratorJsonData["key"] = currentAttributeIterator->first;
+    currentAttributeIterator->second->serialize_json_v2("value", currentAttributeIteratorJsonData);
+  
+    attributesListJsonData.push_back(currentAttributeIteratorJsonData);
+  }
+  
+  outputData[fieldName]["id"] = this->id;
+  outputData[fieldName]["attributes"] = attributesListJsonData;
+  return true;
+}
+
+bool ControlNode::deserialize_json_v2(std::string fieldName, nlohmann::json& inputData)
+{
+  if(
+    inputData[fieldName]["id"].is_string() == false ||
+    inputData[fieldName]["attributes"].is_array() == false
+  )
+  {
+    LOG_ERROR("Encountered invalid control node!");
+    return false;
+  }
+
+  attr.clear();
+
+  this->id = inputData[fieldName]["id"].get<std::string>();
+
+  for(nlohmann::json currentAttributeIteratorJsonData : inputData[fieldName]["attributes"])
+  {
+    AttributeType currentAttributeIteratorType = AttributeInstancing::get_type_from_name(currentAttributeIteratorJsonData["type"].get<std::string>());
+
+    if(currentAttributeIteratorType == AttributeType::INVALID)
+    {
+      LOG_ERROR("Encountered invalid control node attribute type!");
+      continue;
+    }
+
+    std::unique_ptr<Attribute> currentAttribute = AttributeInstancing::create_attribute_from_type(currentAttributeIteratorType);
+    std::string currentAttributeKey = currentAttributeIteratorJsonData["key"].get<std::string>();
+
+    currentAttribute->deserialize_json_v2("value", currentAttributeIteratorJsonData);
+
+    attr.emplace(currentAttributeKey, std::move(currentAttribute));
+  }
+
+  return true;
+}
 
 void ControlNode::post_process_heightmap(hmap::HeightMap &h)
 {

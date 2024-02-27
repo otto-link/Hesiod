@@ -13,6 +13,7 @@
 #include <cereal/types/vector.hpp>
 
 #include "hesiod/attribute.hpp"
+#include "hesiod/serialization.hpp"
 
 // clang-format off
 #define DEFAULT_KERNEL_SHAPE {17, 17}
@@ -214,7 +215,7 @@ static const std::map<std::string, std::string> category_mapping = {
 // Base node class
 //----------------------------------------
 
-class ControlNode : public gnode::Node
+class ControlNode : public gnode::Node, serialization::SerializationBase
 {
 public:
   std::map<std::string, std::unique_ptr<hesiod::Attribute>> attr = {};
@@ -234,6 +235,8 @@ public:
     ar(cereal::make_nvp("id", this->id), cereal::make_nvp("attr", this->attr));
   }
 #endif
+
+  SERIALIZATION_V2_IMPLEMENT_BASE();
 
   void post_process_heightmap(hmap::HeightMap &h);
 };

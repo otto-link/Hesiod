@@ -490,8 +490,15 @@ public:
   bool              link_xy = true; // GUI
 };
 
-} // namespace hesiod
+class AttributeInstancing
+{
+public:
+  static std::string get_name_from_type(AttributeType type);
+  static AttributeType get_type_from_name(std::string name);
+  static std::unique_ptr<Attribute> create_attribute_from_type(AttributeType type);
+};
 
+} // namespace hesiod
 // clang-format off
 #ifdef USE_CEREAL
 CEREAL_REGISTER_TYPE(hesiod::BoolAttribute);
