@@ -66,10 +66,31 @@
 namespace hesiod
 {
 
+enum class AttributeType
+{
+  INVALID = 0,
+  BOOL_ATTRIBUTE = 1,
+  CLOUD_ATTRIBUTE = 2,
+  COLOR_ATTRIBUTE = 3,
+  FILENAME_ATTRIBUTE = 4,
+  FLOAT_ATTRIBUTE = 5,
+  INT_ATTRIBUTE = 6,
+  MAP_ENUM_ATTRIBUTE = 7,
+  MATRIX_ATTRIBUTE = 8,
+  PATH_ATTRIBUTE = 9,
+  RANGE_ATTRIBUTE = 10,
+  SEED_ATTRIBUTE = 11,
+  SHAPE_ATTRIBUTE = 12,
+  VEC_FLOAT_ATTRIBUTE = 13,
+  VEC_INT_ATTRIBUTE = 14,
+  WAVE_NB_ATTRIBUTE = 15
+};
+
 class Attribute : public serialization::SerializationBase
 {
 public:
   Attribute() = default;
+  virtual AttributeType get_type() { return AttributeType::INVALID; }
   virtual bool render_settings(std::string) = 0;
 
   template <class T = void> T *get_ref()
@@ -102,6 +123,7 @@ public:
   BoolAttribute() = default;
   BoolAttribute(bool value);
   bool         get();
+  AttributeType get_type() { return AttributeType::BOOL_ATTRIBUTE; }
   virtual bool render_settings(std::string label);
 
 #ifdef USE_CEREAL
@@ -122,6 +144,7 @@ class CloudAttribute : public Attribute
 public:
   CloudAttribute() = default;
   hmap::Cloud  get();
+  AttributeType get_type() { return AttributeType::CLOUD_ATTRIBUTE; }
   virtual bool render_settings(std::string label);
 
 #ifdef USE_CEREAL
@@ -150,6 +173,7 @@ class ColorAttribute : public Attribute
 public:
   ColorAttribute() = default;
   std::vector<float> get();
+  AttributeType get_type() { return AttributeType::COLOR_ATTRIBUTE; }
   virtual bool       render_settings(std::string label);
 
 #ifdef USE_CEREAL
@@ -171,6 +195,7 @@ public:
   FilenameAttribute() = default;
   FilenameAttribute(std::string value);
   std::string  get();
+  AttributeType get_type() { return AttributeType::FILENAME_ATTRIBUTE; }
   virtual bool render_settings(std::string label);
 
 #ifdef USE_CEREAL
@@ -193,6 +218,7 @@ public:
   FloatAttribute(float value, float vmin, float vmax);
   float        get();
   void         set(float new_value);
+  AttributeType get_type() { return AttributeType::FLOAT_ATTRIBUTE; }
   virtual bool render_settings(std::string label);
 
 #ifdef USE_CEREAL
@@ -219,6 +245,7 @@ public:
   IntAttribute() = default;
   IntAttribute(int value, int vmin, int vmax);
   int          get();
+  AttributeType get_type() { return AttributeType::INT_ATTRIBUTE; }
   virtual bool render_settings(std::string label);
 
 #ifdef USE_CEREAL
@@ -246,6 +273,7 @@ public:
   int                        get();
   std::map<std::string, int> get_map();
   void                       set(std::string new_choice);
+  AttributeType get_type() { return AttributeType::MAP_ENUM_ATTRIBUTE; }
   virtual bool               render_settings(std::string label);
 
 #ifdef USE_CEREAL
@@ -268,6 +296,7 @@ class MatrixAttribute : public Attribute
 public:
   MatrixAttribute();
   std::vector<std::vector<float>> get();
+  AttributeType get_type() { return AttributeType::MATRIX_ATTRIBUTE; }
   virtual bool                    render_settings(std::string label);
 
 #ifdef USE_CEREAL
@@ -290,6 +319,7 @@ class PathAttribute : public Attribute
 public:
   PathAttribute() = default;
   hmap::Path   get();
+  AttributeType get_type() { return AttributeType::PATH_ATTRIBUTE; }
   virtual bool render_settings(std::string label);
 
 #ifdef USE_CEREAL
@@ -327,6 +357,7 @@ public:
   {
     return this->activate;
   };
+  AttributeType get_type() { return AttributeType::RANGE_ATTRIBUTE; }
   virtual bool render_settings(std::string label);
 
 #ifdef USE_CEREAL
@@ -351,6 +382,7 @@ public:
   SeedAttribute() = default;
   SeedAttribute(int value);
   int          get();
+  AttributeType get_type() { return AttributeType:: SEED_ATTRIBUTE; }
   virtual bool render_settings(std::string label);
 
 #ifdef USE_CEREAL
@@ -372,6 +404,7 @@ public:
   ShapeAttribute();
   hmap::Vec2<int> get();
   void            set_value_max(hmap::Vec2<int> new_value_max);
+  AttributeType get_type() { return AttributeType::SHAPE_ATTRIBUTE; }
   virtual bool    render_settings(std::string label);
 
 #ifdef USE_CEREAL
@@ -416,6 +449,7 @@ public:
   VecIntAttribute();
   VecIntAttribute(std::vector<int> value);
   std::vector<int> get();
+  AttributeType get_type() { return AttributeType::VEC_INT_ATTRIBUTE; }
   virtual bool     render_settings(std::string label);
 
 #ifdef USE_CEREAL
@@ -437,6 +471,7 @@ public:
   WaveNbAttribute() = default;
   WaveNbAttribute(hmap::Vec2<float> value);
   hmap::Vec2<float> get();
+  AttributeType get_type() { return AttributeType::WAVE_NB_ATTRIBUTE; }
   virtual bool      render_settings(std::string label);
 
 #ifdef USE_CEREAL
