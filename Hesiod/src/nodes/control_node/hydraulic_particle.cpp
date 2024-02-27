@@ -15,7 +15,6 @@ HydraulicParticle::HydraulicParticle(std::string id)
   this->node_type = "HydraulicParticle";
   this->category = category_mapping.at(this->node_type);
 
-  this->attr["GPU-based"] = NEW_ATTR_BOOL(false);
   this->attr["seed"] = NEW_ATTR_SEED();
   this->attr["nparticles"] = NEW_ATTR_INT(40000, 1, 1000000);
   this->attr["c_capacity"] = NEW_ATTR_FLOAT(40.f, 0.1f, 100.f);
@@ -25,8 +24,7 @@ HydraulicParticle::HydraulicParticle(std::string id)
   this->attr["evap_rate"] = NEW_ATTR_FLOAT(0.001f, 0.f, 1.f);
   this->attr["c_radius"] = NEW_ATTR_INT(0, 0, 16);
 
-  this->attr_ordered_key = {"GPU-based",
-                            "seed",
+  this->attr_ordered_key = {"seed",
                             "nparticles",
                             "c_capacity",
                             "c_erosion",
@@ -48,78 +46,34 @@ void HydraulicParticle::compute_erosion(hmap::HeightMap &h,
   int nparticles_tile = (int)(GET_ATTR_INT("nparticles") /
                               (float)h.get_ntiles());
 
-  if (GET_ATTR_BOOL("GPU-based"))
-  {
-    // retrieve OpenCL context from ViewTree object
-    hesiod::vnode::ViewTree *p_vtree = static_cast<hesiod::vnode::ViewTree *>(
-        this->p_tree);
-    hmap::gpu::OpenCLConfig *p_opencl_config = p_vtree->get_p_opencl_config();
-
-    if (p_opencl_config)
-      hmap::transform(h,
-                      p_bedrock,
-                      p_moisture_map,
-                      p_mask,
-                      p_erosion_map,
-                      p_deposition_map,
-                      [this, p_opencl_config, &nparticles_tile](
-                          hmap::Array &h_out,
-                          hmap::Array *p_bedrock_array,
-                          hmap::Array *p_moisture_map_array,
-                          hmap::Array *p_mask_array,
-                          hmap::Array *p_erosion_map_array,
-                          hmap::Array *p_deposition_map_array)
-                      {
-                        hmap::gpu::hydraulic_particle(
-                            *p_opencl_config,
-                            h_out,
-                            // p_mask_array,
-                            nparticles_tile,
-                            GET_ATTR_SEED("seed"),
-                            // p_bedrock_array,
-                            // p_moisture_map_array,
-                            // p_erosion_map_array,
-                            // p_deposition_map_array,
-                            // GET_ATTR_INT("c_radius"), // ! NO RADIUS
-                            GET_ATTR_FLOAT("c_capacity"),
-                            GET_ATTR_FLOAT("c_erosion"),
-                            GET_ATTR_FLOAT("c_deposition"),
-                            GET_ATTR_FLOAT("drag_rate"),
-                            GET_ATTR_FLOAT("evap_rate"));
-                      });
-    else
-      LOG_ERROR("OpenCL configuration not available");
-  }
-  else
-    hmap::transform(
-        h,
-        p_bedrock,
-        p_moisture_map,
-        p_mask,
-        p_erosion_map,
-        p_deposition_map,
-        [this, &nparticles_tile](hmap::Array &h_out,
-                                 hmap::Array *p_bedrock_array,
-                                 hmap::Array *p_moisture_map_array,
-                                 hmap::Array *p_mask_array,
-                                 hmap::Array *p_erosion_map_array,
-                                 hmap::Array *p_deposition_map_array)
-        {
-          hmap::hydraulic_particle(h_out,
-                                   p_mask_array,
-                                   nparticles_tile,
-                                   GET_ATTR_SEED("seed"),
-                                   p_bedrock_array,
-                                   p_moisture_map_array,
-                                   p_erosion_map_array,
-                                   p_deposition_map_array,
-                                   GET_ATTR_INT("c_radius"),
-                                   GET_ATTR_FLOAT("c_capacity"),
-                                   GET_ATTR_FLOAT("c_erosion"),
-                                   GET_ATTR_FLOAT("c_deposition"),
-                                   GET_ATTR_FLOAT("drag_rate"),
-                                   GET_ATTR_FLOAT("evap_rate"));
-        });
+  hmap::transform(h,
+                  p_bedrock,
+                  p_moisture_map,
+                  p_mask,
+                  p_erosion_map,
+                  p_deposition_map,
+                  [this, &nparticles_tile](hmap::Array &h_out,
+                                           hmap::Array *p_bedrock_array,
+                                           hmap::Array *p_moisture_map_array,
+                                           hmap::Array *p_mask_array,
+                                           hmap::Array *p_erosion_map_array,
+                                           hmap::Array *p_deposition_map_array)
+                  {
+                    hmap::hydraulic_particle(h_out,
+                                             p_mask_array,
+                                             nparticles_tile,
+                                             GET_ATTR_SEED("seed"),
+                                             p_bedrock_array,
+                                             p_moisture_map_array,
+                                             p_erosion_map_array,
+                                             p_deposition_map_array,
+                                             GET_ATTR_INT("c_radius"),
+                                             GET_ATTR_FLOAT("c_capacity"),
+                                             GET_ATTR_FLOAT("c_erosion"),
+                                             GET_ATTR_FLOAT("c_deposition"),
+                                             GET_ATTR_FLOAT("drag_rate"),
+                                             GET_ATTR_FLOAT("evap_rate"));
+                  });
 }
 
 } // namespace hesiod::cnode

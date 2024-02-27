@@ -37,9 +37,6 @@ int main(int argc, char *argv[])
   hmap::Vec2<int> tiling = {4, 4};
   float           overlap = 0.25f;
 
-  // initialize OpenCL context
-  hmap::gpu::OpenCLConfig opencl_config = hmap::gpu::OpenCLConfig();
-
   // ----------------------------------- Main GUI
 
   GLFWwindow *window =
@@ -59,7 +56,7 @@ int main(int argc, char *argv[])
                                  &config);
 
   hesiod::vnode::ViewTree tree =
-      hesiod::vnode::ViewTree("tree_1", shape, tiling, overlap, &opencl_config);
+      hesiod::vnode::ViewTree("tree_1", shape, tiling, overlap);
 
   tree.add_view_node("FbmSimplex");
   tree.add_view_node("Perlin");

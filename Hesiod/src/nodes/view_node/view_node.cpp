@@ -391,8 +391,7 @@ bool ViewNode::render_settings_header()
   ImGui::PushID((void *)this);
 
   // --- buttons
-  if (ImGui::Checkbox("Auto-update", &this->auto_update))
-    has_changed = true;
+  ImGui::Checkbox("Auto-update", &this->auto_update);
 
   // frozen outputs button
   ImGui::SameLine();
@@ -416,8 +415,11 @@ bool ViewNode::render_settings_header()
 
   if (ImGui::Button("Update"))
   {
-    this->update();
-    has_changed = true;
+    // switch auto_update state to true to allow node update, if not
+    // update will be blocked in GNode update procedure
+    this->auto_update = true;
+    this->force_update();
+    this->auto_update = false;
   }
   if (disabled_update_button)
     ImGui::EndDisabled();
