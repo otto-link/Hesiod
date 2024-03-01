@@ -163,8 +163,8 @@ void ViewTree::render_node_editor()
           ImGui::OpenPopup("add node");
           p_port_hid_new = &port_hid_1;
         }
+      ax::NodeEditor::EndCreate();
     }
-    ax::NodeEditor::EndCreate();
 
     // --- pop-up contextual menus
     {
