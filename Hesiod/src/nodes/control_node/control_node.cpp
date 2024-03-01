@@ -10,6 +10,9 @@
 
 #include "hesiod/control_node.hpp"
 
+#define CONTROL_NODE_IMPLEMENT_FORWARD_FUNCTION_BASE(ClassName) bool ClassName ::serialize_json_v2(std::string fieldName, nlohmann::json& outputData) { return ControlNode::serialize_json_v2(fieldName, outputData); } \
+                                                                bool ClassName ::deserialize_json_v2(std::string fieldName, nlohmann::json& inputData) { return ControlNode::deserialize_json_v2(fieldName, inputData); }
+
 namespace hesiod::cnode
 {
 
@@ -116,5 +119,13 @@ void ControlNode::post_process_heightmap(hmap::HeightMap &h)
       h.remap(vrange.x, vrange.y);
     }
 }
+
+CONTROL_NODE_IMPLEMENT_FORWARD_FUNCTION_BASE(Unary);
+CONTROL_NODE_IMPLEMENT_FORWARD_FUNCTION_BASE(Binary);
+CONTROL_NODE_IMPLEMENT_FORWARD_FUNCTION_BASE(Debug);
+CONTROL_NODE_IMPLEMENT_FORWARD_FUNCTION_BASE(Erosion);
+CONTROL_NODE_IMPLEMENT_FORWARD_FUNCTION_BASE(Filter);
+CONTROL_NODE_IMPLEMENT_FORWARD_FUNCTION_BASE(Mask);
+CONTROL_NODE_IMPLEMENT_FORWARD_FUNCTION_BASE(Primitive);
 
 } // namespace hesiod::cnode

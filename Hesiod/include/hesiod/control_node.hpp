@@ -21,6 +21,9 @@
 #define DEFAULT_SEED 1
 
 #define CAST_PORT_REF(type, port_id)  static_cast<type *>(this->get_p_data(port_id))
+#define CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(enum_value) ControlNodeType get_type() { return ControlNodeType:: enum_value ; } \
+                                                            bool serialize_json_v2(std::string fieldName, nlohmann::json& outputData); \
+                                                            bool deserialize_json_v2(std::string fieldName, nlohmann::json& inputData);
 // clang-format on
 
 namespace hesiod::cnode
@@ -409,6 +412,8 @@ public:
     throw std::runtime_error("undefined 'compute_in_out' method");
   }
 
+  CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(UNARY);
+
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
@@ -430,6 +435,8 @@ public:
     throw std::runtime_error("undefined 'compute_in_out' method");
   }
 
+  CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(BINARY);
+
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
@@ -440,6 +447,8 @@ public:
   Debug(std::string id);
 
   void compute();
+
+  CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(DEBUG);
 };
 
 class Erosion : virtual public ControlNode
@@ -462,6 +471,8 @@ public:
     throw std::runtime_error("undefined 'compute_erosion' method");
   }
 
+  CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(EROSION);
+
 protected:
   hmap::HeightMap value_out = hmap::HeightMap(); // eroded heightmap
   hmap::HeightMap erosion_map = hmap::HeightMap();
@@ -483,6 +494,8 @@ public:
     throw std::runtime_error("undefined 'compute_filter' method");
   }
 
+  CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(FILTER);
+
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
@@ -502,6 +515,8 @@ public:
     throw std::runtime_error("undefined 'compute_mask' method");
   }
 
+  CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(MASK);
+
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
@@ -520,6 +535,8 @@ public:
 
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
+
+  CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(PRIMITIVE);
 
 private:
   hmap::Vec2<int> shape;
