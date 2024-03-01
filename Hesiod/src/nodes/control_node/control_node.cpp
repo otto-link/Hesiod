@@ -120,6 +120,8 @@ void ControlNode::post_process_heightmap(hmap::HeightMap &h)
     }
 }
 
+// Generic nodes
+
 CONTROL_NODE_IMPLEMENT_FORWARD_FUNCTION_BASE(Unary);
 CONTROL_NODE_IMPLEMENT_FORWARD_FUNCTION_BASE(Binary);
 CONTROL_NODE_IMPLEMENT_FORWARD_FUNCTION_BASE(Debug);
@@ -127,5 +129,66 @@ CONTROL_NODE_IMPLEMENT_FORWARD_FUNCTION_BASE(Erosion);
 CONTROL_NODE_IMPLEMENT_FORWARD_FUNCTION_BASE(Filter);
 CONTROL_NODE_IMPLEMENT_FORWARD_FUNCTION_BASE(Mask);
 CONTROL_NODE_IMPLEMENT_FORWARD_FUNCTION_BASE(Primitive);
+
+// Data routing nodes
+
+bool Clone::serialize_json_v2(std ::string fieldName, nlohmann ::json &outputData) 
+{
+  if(ControlNode::serialize_json_v2("base", outputData[fieldName]) == false)
+  {
+    return false;
+  }
+
+  std::vector<std::string> output_ids = {};
+
+  this->update_inner_bindings();
+
+  for (auto& [port_id, port] : this->get_ports())
+  {
+    if (port.direction == gnode::direction::out)
+    {
+      output_ids.push_back(port_id.c_str());
+    }
+  }
+
+  outputData[fieldName]["output_ids"] = output_ids;
+  outputData[fieldName]["id_count"] = id_count;
+
+  return true;
+}
+
+bool Clone::deserialize_json_v2(std ::string fieldName, nlohmann ::json &inputData) 
+{
+  if(
+    inputData[fieldName]["base"].is_object() == false ||
+    inputData[fieldName]["output_ids"].is_array() == false ||
+    inputData[fieldName]["id_count"].is_number() == false
+  )
+  {
+    LOG_ERROR("Encountered invalid Clone ControlNode!");
+    return false;
+  }
+
+  if(ControlNode::deserialize_json_v2("base", inputData[fieldName]) == false)
+  {
+    return false;
+  }
+
+  this->update_inner_bindings();
+
+  std::vector<std::string> output_ids = inputData[fieldName]["output_ids"].get<std::vector<std::string>>();
+
+  for (auto &port_id : output_ids)
+  {
+    if (!this->is_port_id_in_keys(port_id))
+    {
+      this->add_port(gnode::Port(port_id, gnode::direction::out, hesiod::cnode::dtype::dHeightMap));
+    }
+  }
+
+  id_count = inputData[fieldName]["id_count"].get<int>();
+
+  return true;
+}
 
 } // namespace hesiod::cnode

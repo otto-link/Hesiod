@@ -588,6 +588,8 @@ public:
   }
 #endif
 
+  CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(CLONE);
+
 protected:
   int             id_count = 0;
   int             n_outputs = 1;
