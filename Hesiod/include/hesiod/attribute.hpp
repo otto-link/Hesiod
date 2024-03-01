@@ -18,6 +18,7 @@
 
 #include "highmap.hpp"
 #include "serialization.hpp"
+#include "macrologger.h"
 
 #include <cereal/archives/json.hpp>
 #include <cereal/types/map.hpp>
