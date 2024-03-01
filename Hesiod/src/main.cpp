@@ -1,3 +1,4 @@
+#include "highmap/geometry.hpp"
 #define _USE_MATH_DEFINES
 typedef unsigned int uint;
 
@@ -18,6 +19,9 @@ typedef unsigned int uint;
 #include "hesiod/view_node.hpp"
 #include "hesiod/view_tree.hpp"
 
+#include "hesiod/serialization.hpp"
+#include "hesiod/attribute.hpp"
+
 #if ENABLE_GENERATE_NODE_SNAPSHOT
 #include "generate_node_snapshot.hpp"
 #endif
@@ -32,6 +36,13 @@ int main(int argc, char *argv[])
     return 0;
   }
 #endif
+
+  if(argc >= 2 && strcmp(argv[1], "--test") == 0)
+  {
+    nlohmann::json data = nlohmann::json();
+    
+    return 0;
+  }
 
   hmap::Vec2<int> shape = {1024, 1024};
   hmap::Vec2<int> tiling = {4, 4};
