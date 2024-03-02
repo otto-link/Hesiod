@@ -3,7 +3,6 @@
  * this software. */
 #include "imgui.h"
 #include "macrologger.h"
-#include <cereal/archives/json.hpp>
 
 #include "hesiod/control_node.hpp"
 #include "hesiod/gui.hpp"

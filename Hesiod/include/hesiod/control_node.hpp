@@ -6,12 +6,6 @@
 
 #include "gnode.hpp"
 
-#include <cereal/archives/json.hpp>
-#include <cereal/types/list.hpp>
-#include <cereal/types/map.hpp>
-#include <cereal/types/memory.hpp>
-#include <cereal/types/vector.hpp>
-
 #include "hesiod/attribute.hpp"
 #include "hesiod/serialization.hpp"
 
@@ -384,13 +378,6 @@ public:
     return ControlNodeType::INVALID;
   }
 
-#ifdef USE_CEREAL
-  template <class Archive> void serialize(Archive &ar)
-  {
-    ar(cereal::make_nvp("id", this->id), cereal::make_nvp("attr", this->attr));
-  }
-#endif
-
   SERIALIZATION_V2_IMPLEMENT_BASE();
 
   void post_process_heightmap(hmap::HeightMap &h);
@@ -574,33 +561,6 @@ public:
   void update_inner_bindings();
 
   void compute();
-
-#ifdef USE_CEREAL
-  template <class Archive> void serialize(Archive &ar)
-  {
-    ControlNode::serialize(ar);
-
-    ar(cereal::make_nvp("id", this->id), cereal::make_nvp("attr", this->attr));
-
-    std::vector<std::string> output_ids = {};
-
-    this->update_inner_bindings();
-
-    for (auto &[port_id, port] : this->get_ports())
-      if (port.direction == gnode::direction::out)
-        output_ids.push_back(port_id.c_str());
-
-    ar(cereal::make_nvp("output_ids", output_ids));
-    ar(cereal::make_nvp("id_count", id_count));
-
-    for (auto &port_id : output_ids)
-      if (!this->is_port_id_in_keys(port_id))
-        this->add_port(gnode::Port(port_id,
-                                   gnode::direction::out,
-                                   hesiod::cnode::dtype::dHeightMap));
-    this->update_inner_bindings();
-  }
-#endif
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(CLONE);
 

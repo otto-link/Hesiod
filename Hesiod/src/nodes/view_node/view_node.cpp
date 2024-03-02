@@ -1,6 +1,8 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include <list>
+
 #include "gnode.hpp"
 #include <imgui_internal.h>
 #include <imgui_node_editor.h>

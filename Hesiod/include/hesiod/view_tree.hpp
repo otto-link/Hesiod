@@ -8,7 +8,6 @@
 
 #include "hesiod/serialization.hpp"
 #include "highmap.hpp"
-#include <cereal/archives/json.hpp>
 #include <imgui_node_editor.h>
 
 #include "hesiod/control_node.hpp"
@@ -35,16 +34,6 @@ struct Link
        std::string node_id_to,
        std::string port_id_to,
        int         port_hash_id_to);
-
-  template <class Archive> void serialize(Archive &ar)
-  {
-    ar(cereal::make_nvp("node_id_from", node_id_from),
-       cereal::make_nvp("port_id_from", port_id_from),
-       cereal::make_nvp("port_hash_id_from", port_hash_id_from),
-       cereal::make_nvp("node_id_to", node_id_to),
-       cereal::make_nvp("port_id_to", port_id_to),
-       cereal::make_nvp("port_hash_id_to", port_hash_id_to));
-  }
 
   SERIALIZATION_V2_IMPLEMENT_BASE();
 };

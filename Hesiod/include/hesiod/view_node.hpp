@@ -6,7 +6,6 @@
 
 #include "gnode.hpp"
 #include <GLFW/glfw3.h>
-#include <cereal/archives/json.hpp>
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
@@ -209,16 +208,6 @@ public:
    * @return false Settings have not been changed.
    */
   bool render_settings_footer();
-
-  /**
-   * @brief Serialization of the node parameters (load).
-   */
-  // virtual void serialize_load(cereal::JSONInputArchive &);
-
-  /**
-   * @brief Serialization of the node parameters (save).
-   */
-  // virtual void serialize_save(cereal::JSONOutputArchive &);
 
   /**
    * @brief To be placed after an ImGui widget, triggers the node update after

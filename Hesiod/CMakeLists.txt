@@ -18,7 +18,6 @@ set(HESIOD_INCLUDE
   PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}/include
   PRIVATE
-    ${PROJECT_SOURCE_DIR}/external/cereal/include
     ${PROJECT_SOURCE_DIR}/external/macro-logger
 )
 
@@ -27,13 +26,6 @@ if(HESIOD_ENABLE_GENERATE_NODE_SNAPSHOT)
     ${CMAKE_CURRENT_SOURCE_DIR}/generate_node_snapshot
   )
 endif(HESIOD_ENABLE_GENERATE_NODE_SNAPSHOT)
-
-if(HESIOD_ENABLE_CEREAL)
-  message("cereal activated")
-  target_compile_definitions(${PROJECT_NAME} PRIVATE USE_CEREAL=1)
-else()
-  message("cereal deactivated")
-endif(HESIOD_ENABLE_CEREAL)
 
 if(HESIOD_ENABLE_GENERATE_NODE_SNAPSHOT)
   target_compile_definitions(${PROJECT_NAME} PRIVATE ENABLE_GENERATE_NODE_SNAPSHOT=1)
@@ -55,6 +47,5 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     ImCandy::ImCandy
     ImGuiNodeEditor::ImGuiNodeEditor
     ImGuiFileDialog::ImGuiFileDialog
-    cereal::cereal
     nlohmann_json::nlohmann_json
 )

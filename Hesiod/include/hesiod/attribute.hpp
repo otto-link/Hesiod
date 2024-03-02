@@ -20,12 +20,6 @@
 #include "macrologger.h"
 #include "serialization.hpp"
 
-#include <cereal/archives/json.hpp>
-#include <cereal/types/map.hpp>
-#include <cereal/types/polymorphic.hpp>
-#include <cereal/types/string.hpp>
-#include <cereal/types/vector.hpp>
-
 // clang-format off
 #define NEW_ATTR_BOOL(a) std::make_unique<hesiod::BoolAttribute>(a)
 #define NEW_ATTR_CLOUD() std::make_unique<hesiod::CloudAttribute>()
@@ -110,13 +104,6 @@ public:
       throw std::runtime_error("wrong type");
     }
   }
-
-#ifdef USE_CEREAL
-  template <class Archive> void serialize(Archive &)
-  {
-    // empty
-  }
-#endif
 };
 
 // --- Derived
@@ -132,14 +119,6 @@ public:
     return AttributeType::BOOL_ATTRIBUTE;
   }
   virtual bool render_settings(std::string label);
-
-#ifdef USE_CEREAL
-  template <class Archive> void serialize(Archive &ar)
-  {
-    Attribute::serialize<Archive>(ar);
-    ar(cereal::make_nvp("value", this->value));
-  }
-#endif
 
   SERIALIZATION_V2_IMPLEMENT_BASE();
 
@@ -157,22 +136,6 @@ public:
   }
   virtual bool render_settings(std::string label);
 
-#ifdef USE_CEREAL
-  template <class Archive> void serialize(Archive &ar)
-  {
-    Attribute::serialize<Archive>(ar);
-    std::vector<float> x = this->value.get_x();
-    std::vector<float> y = this->value.get_y();
-    std::vector<float> v = this->value.get_values();
-
-    ar(cereal::make_nvp("x", x),
-       cereal::make_nvp("y", y),
-       cereal::make_nvp("v", v));
-
-    this->value = hmap::Cloud(x, y, v);
-  }
-#endif
-
   SERIALIZATION_V2_IMPLEMENT_BASE();
 
   hmap::Cloud value;
@@ -188,14 +151,6 @@ public:
     return AttributeType::COLOR_ATTRIBUTE;
   }
   virtual bool render_settings(std::string label);
-
-#ifdef USE_CEREAL
-  template <class Archive> void serialize(Archive &ar)
-  {
-    Attribute::serialize<Archive>(ar);
-    ar(cereal::make_nvp("value", value));
-  }
-#endif
 
   SERIALIZATION_V2_IMPLEMENT_BASE();
 
@@ -214,14 +169,6 @@ public:
   }
   virtual bool render_settings(std::string label);
 
-#ifdef USE_CEREAL
-  template <class Archive> void serialize(Archive &ar)
-  {
-    Attribute::serialize<Archive>(ar);
-    ar(cereal::make_nvp("value", this->value));
-  }
-#endif
-
   SERIALIZATION_V2_IMPLEMENT_BASE();
 
   std::string value = "";
@@ -239,16 +186,6 @@ public:
     return AttributeType::FLOAT_ATTRIBUTE;
   }
   virtual bool render_settings(std::string label);
-
-#ifdef USE_CEREAL
-  template <class Archive> void serialize(Archive &ar)
-  {
-    Attribute::serialize<Archive>(ar);
-    ar(cereal::make_nvp("value", this->value),
-       cereal::make_nvp("vmin", this->vmin),
-       cereal::make_nvp("vmax", this->vmax));
-  }
-#endif
 
   SERIALIZATION_V2_IMPLEMENT_BASE();
 
@@ -269,16 +206,6 @@ public:
     return AttributeType::INT_ATTRIBUTE;
   }
   virtual bool render_settings(std::string label);
-
-#ifdef USE_CEREAL
-  template <class Archive> void serialize(Archive &ar)
-  {
-    Attribute::serialize<Archive>(ar);
-    ar(cereal::make_nvp("value", this->value),
-       cereal::make_nvp("vmin", this->vmin),
-       cereal::make_nvp("vmax", this->vmax));
-  }
-#endif
 
   SERIALIZATION_V2_IMPLEMENT_BASE();
 
@@ -301,15 +228,6 @@ public:
   }
   virtual bool render_settings(std::string label);
 
-#ifdef USE_CEREAL
-  template <class Archive> void serialize(Archive &ar)
-  {
-    Attribute::serialize<Archive>(ar);
-    ar(cereal::make_nvp("value", this->value),
-       cereal::make_nvp("choice", this->choice));
-  }
-#endif
-
   SERIALIZATION_V2_IMPLEMENT_BASE();
 
   std::map<std::string, int> value = {};
@@ -326,14 +244,6 @@ public:
     return AttributeType::MATRIX_ATTRIBUTE;
   }
   virtual bool render_settings(std::string label);
-
-#ifdef USE_CEREAL
-  template <class Archive> void serialize(Archive &ar)
-  {
-    Attribute::serialize<Archive>(ar);
-    ar(cereal::make_nvp("value", this->value));
-  }
-#endif
 
   SERIALIZATION_V2_IMPLEMENT_BASE();
 
@@ -352,25 +262,6 @@ public:
     return AttributeType::PATH_ATTRIBUTE;
   }
   virtual bool render_settings(std::string label);
-
-#ifdef USE_CEREAL
-  template <class Archive> void serialize(Archive &ar)
-  {
-    Attribute::serialize<Archive>(ar);
-    std::vector<float> x = this->value.get_x();
-    std::vector<float> y = this->value.get_y();
-    std::vector<float> v = this->value.get_values();
-    bool               closed = this->value.closed;
-
-    ar(cereal::make_nvp("x", x),
-       cereal::make_nvp("y", y),
-       cereal::make_nvp("v", v),
-       cereal::make_nvp("closed", closed));
-
-    this->value = hmap::Path(x, y, v);
-    this->value.closed = closed;
-  }
-#endif
 
   SERIALIZATION_V2_IMPLEMENT_BASE();
 
@@ -394,16 +285,6 @@ public:
   }
   virtual bool render_settings(std::string label);
 
-#ifdef USE_CEREAL
-  template <class Archive> void serialize(Archive &ar)
-  {
-    Attribute::serialize<Archive>(ar);
-    ar(cereal::make_nvp("value.x", this->value.x),
-       cereal::make_nvp("value.y", this->value.y),
-       cereal::make_nvp("activate", this->activate));
-  }
-#endif
-
   SERIALIZATION_V2_IMPLEMENT_BASE();
 
   hmap::Vec2<float> value = {0.f, 1.f};
@@ -422,14 +303,6 @@ public:
   }
   virtual bool render_settings(std::string label);
 
-#ifdef USE_CEREAL
-  template <class Archive> void serialize(Archive &ar)
-  {
-    Attribute::serialize<Archive>(ar);
-    ar(cereal::make_nvp("value", this->value));
-  }
-#endif
-
   SERIALIZATION_V2_IMPLEMENT_BASE();
 
   int value = 1;
@@ -446,15 +319,6 @@ public:
     return AttributeType::SHAPE_ATTRIBUTE;
   }
   virtual bool render_settings(std::string label);
-
-#ifdef USE_CEREAL
-  template <class Archive> void serialize(Archive &ar)
-  {
-    Attribute::serialize<Archive>(ar);
-    ar(cereal::make_nvp("value.x", this->value.x),
-       cereal::make_nvp("value.y", this->value.y));
-  }
-#endif
 
   SERIALIZATION_V2_IMPLEMENT_BASE();
 
@@ -474,14 +338,6 @@ public:
   }
   virtual bool render_settings(std::string label);
 
-#ifdef USE_CEREAL
-  template <class Archive> void serialize(Archive &ar)
-  {
-    Attribute::serialize<Archive>(ar);
-    ar(cereal::make_nvp("value", this->value));
-  }
-#endif
-
   SERIALIZATION_V2_IMPLEMENT_BASE();
 
   std::vector<float> value = {};
@@ -498,14 +354,6 @@ public:
     return AttributeType::VEC_INT_ATTRIBUTE;
   }
   virtual bool render_settings(std::string label);
-
-#ifdef USE_CEREAL
-  template <class Archive> void serialize(Archive &ar)
-  {
-    Attribute::serialize<Archive>(ar);
-    ar(cereal::make_nvp("value", this->value));
-  }
-#endif
 
   SERIALIZATION_V2_IMPLEMENT_BASE();
 
@@ -524,16 +372,6 @@ public:
   }
   virtual bool render_settings(std::string label);
 
-#ifdef USE_CEREAL
-  template <class Archive> void serialize(Archive &ar)
-  {
-    Attribute::serialize<Archive>(ar);
-    ar(cereal::make_nvp("value.x", this->value.x),
-       cereal::make_nvp("value.y", this->value.y),
-       cereal::make_nvp("link_xy", this->link_xy));
-  }
-#endif
-
   SERIALIZATION_V2_IMPLEMENT_BASE();
 
   hmap::Vec2<float> value = {2.f, 2.f};
@@ -550,38 +388,3 @@ public:
 };
 
 } // namespace hesiod
-  // clang-format off
-#ifdef USE_CEREAL
-CEREAL_REGISTER_TYPE(hesiod::BoolAttribute);
-CEREAL_REGISTER_TYPE(hesiod::CloudAttribute);
-CEREAL_REGISTER_TYPE(hesiod::ColorAttribute);
-CEREAL_REGISTER_TYPE(hesiod::FilenameAttribute);
-CEREAL_REGISTER_TYPE(hesiod::FloatAttribute);
-CEREAL_REGISTER_TYPE(hesiod::IntAttribute);
-CEREAL_REGISTER_TYPE(hesiod::MapEnumAttribute);
-CEREAL_REGISTER_TYPE(hesiod::MatrixAttribute);
-CEREAL_REGISTER_TYPE(hesiod::PathAttribute);
-CEREAL_REGISTER_TYPE(hesiod::RangeAttribute);
-CEREAL_REGISTER_TYPE(hesiod::SeedAttribute);
-CEREAL_REGISTER_TYPE(hesiod::ShapeAttribute);
-CEREAL_REGISTER_TYPE(hesiod::VecFloatAttribute);
-CEREAL_REGISTER_TYPE(hesiod::VecIntAttribute);
-CEREAL_REGISTER_TYPE(hesiod::WaveNbAttribute);
-
-CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute, hesiod::BoolAttribute);
-CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute, hesiod::CloudAttribute);
-CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute, hesiod::ColorAttribute);
-CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute, hesiod::FilenameAttribute);
-CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute, hesiod::FloatAttribute);
-CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute, hesiod::IntAttribute);
-CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute, hesiod::MatrixAttribute);
-CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute, hesiod::MapEnumAttribute);
-CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute, hesiod::PathAttribute);
-CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute, hesiod::RangeAttribute);
-CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute, hesiod::SeedAttribute);
-CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute, hesiod::ShapeAttribute);
-CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute, hesiod::VecFloatAttribute);
-CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute, hesiod::VecIntAttribute);
-CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute, hesiod::WaveNbAttribute);
-#endif
-  // clang-format on

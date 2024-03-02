@@ -2,8 +2,6 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include "macrologger.h"
-#include <cereal/types/string.hpp>
-#include <cereal/types/vector.hpp>
 
 #include "hesiod/control_node.hpp"
 #include "hesiod/gui.hpp"

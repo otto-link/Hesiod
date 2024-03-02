@@ -5,9 +5,7 @@ include(ImCandy.cmake)
 
 set(BUILD_DOC OFF)
 set(BUILD_SANDBOX OFF)
-set(SKIP_PERFORMANCE_COMPARISON ON)
 
-add_subdirectory(cereal)
 add_subdirectory(HighMap)
 add_subdirectory(GNode)
 add_subdirectory(json)
