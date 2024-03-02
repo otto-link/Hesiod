@@ -65,6 +65,18 @@ void ViewTree::load_state(std::string fname)
   std::ifstream            is(fname);
   cereal::JSONInputArchive iarchive(is);
   iarchive(*this);
+#else
+  this->remove_all_nodes();
+  this->links.clear();
+
+  std::ifstream inputFileStream = std::ifstream(fname);
+  nlohmann::json inputSerializedData = nlohmann::json();
+
+  inputFileStream >> inputSerializedData;
+
+  this->deserialize_json_v2("data", inputSerializedData);
+
+  inputFileStream.close();
 #endif
 }
 
@@ -270,6 +282,10 @@ bool ViewTree::serialize_json_v2(std::string fieldName, nlohmann::json& outputDa
 
 bool ViewTree::deserialize_json_v2(std::string fieldName, nlohmann::json& inputData)
 {
+  if(inputData[fieldName].is_object() == false)
+  {
+    return false;
+  }
 
   id = inputData[fieldName]["id"].get<std::string>();
   overlap = inputData[fieldName]["overlap"].get<float>();
@@ -278,6 +294,57 @@ bool ViewTree::deserialize_json_v2(std::string fieldName, nlohmann::json& inputD
   tiling.x = inputData[fieldName]["tiling.x"].get<int>();
   tiling.y = inputData[fieldName]["tiling.y"].get<int>();
   id_counter = inputData[fieldName]["id_counter"].get<int>();
+
+  {
+    std::vector<std::string> node_ids = inputData[fieldName]["node_ids"].get<std::vector<std::string>>();
+    std::vector<float>       pos_x = inputData[fieldName]["pos_x"].get<std::vector<float>>();
+    std::vector<float>       pos_y = inputData[fieldName]["pos_y"].get<std::vector<float>>();
+
+    ax::NodeEditor::SetCurrentEditor(this->get_p_node_editor_context());
+    for (size_t k = 0; k < node_ids.size(); k++)
+    {
+      this->add_view_node(node_type_from_id(node_ids[k]), node_ids[k]);
+      ax::NodeEditor::SetNodePosition(
+          this->get_node_ref_by_id(node_ids[k])->hash_id,
+          ImVec2(pos_x[k], pos_y[k]));
+    }
+    ax::NodeEditor::SetCurrentEditor(nullptr);
+  }
+
+  // nodes parameters
+
+  for(nlohmann::json currentNodeSerializedData : inputData[fieldName]["nodes"])
+  {
+    std::string id = currentNodeSerializedData["data"]["id"].get<std::string>();
+
+    if (this->get_node_type(id) != "Clone")
+    {
+      this->get_node_ref_by_id<hesiod::cnode::ControlNode>(id)->deserialize_json_v2("data", currentNodeSerializedData);
+    }
+    else
+    {
+      this->get_node_ref_by_id<hesiod::cnode::Clone>(id)->serialize_json_v2("data", currentNodeSerializedData);
+    }
+  }
+
+  // links
+  for(nlohmann::json currentLinkObject : inputData[fieldName]["links"])
+  {
+    Link currentLink = Link();
+    int id = currentLinkObject["key"].get<int>();
+    currentLink.deserialize_json_v2("value", currentLinkObject);
+    links.emplace(id, currentLink);
+  }
+
+  // links from the ViewTree (GUI links) still needs to be replicated
+  // within the GNode framework (data links)
+  for (auto &[id, link] : this->links)
+    this->link(link.node_id_from,
+               link.port_id_from,
+               link.node_id_to,
+               link.port_id_to);
+
+  this->update();
 
   return true;
 }
