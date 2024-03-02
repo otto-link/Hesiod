@@ -119,15 +119,17 @@ public:
 
   inline hmap::Vec2<int> get_shape()
   {
-    return shape;
+    return this->shape;
   }
+
   inline hmap::Vec2<int> get_tiling()
   {
-    return tiling;
+    return this->tiling;
   }
+
   inline float get_overlap()
   {
-    return overlap;
+    return this->overlap;
   }
 
   // serialization
@@ -135,10 +137,6 @@ public:
   void load_state(std::string fname);
 
   void save_state(std::string fname);
-
-  template <class Archive> void load(Archive &archive);
-
-  template <class Archive> void save(Archive &archive) const;
 
   SERIALIZATION_V2_IMPLEMENT_BASE();
 

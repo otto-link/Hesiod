@@ -773,6 +773,7 @@ bool Clone::serialize_json_v2(std ::string     fieldName,
 
   outputData[fieldName]["output_ids"] = output_ids;
   outputData[fieldName]["id_count"] = id_count;
+  outputData[fieldName]["id"] = this->id;
 
   return true;
 }

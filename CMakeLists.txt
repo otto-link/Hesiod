@@ -4,7 +4,6 @@ project(hesiod-root)
 # dont forget to remove the CMakeCache.txt in the build dir if options are changed 
 option(HESIOD_ENABLE_GENERATE_APP_IMAGE "" OFF)
 option(HESIOD_ENABLE_GENERATE_NODE_SNAPSHOT "" OFF)
-option(HESIOD_ENABLE_CEREAL "" ON)
 option(HESIOD_ENABLE_DOXYGEN "" ON)
 
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/bin)

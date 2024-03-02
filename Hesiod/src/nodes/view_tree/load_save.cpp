@@ -74,14 +74,6 @@ void ViewTree::save_state(std::string fname)
   outputFileStream.close();
 }
 
-template <class Archive> void ViewTree::load(Archive &archive)
-{
-}
-
-template <class Archive> void ViewTree::save(Archive &archive) const
-{
-}
-
 bool ViewTree::serialize_json_v2(std::string     fieldName,
                                  nlohmann::json &outputData)
 {
@@ -209,7 +201,7 @@ bool ViewTree::deserialize_json_v2(std::string     fieldName,
     }
     else
     {
-      this->get_node_ref_by_id<hesiod::cnode::Clone>(id)->serialize_json_v2(
+      this->get_node_ref_by_id<hesiod::cnode::Clone>(id)->deserialize_json_v2(
           "data",
           currentNodeSerializedData);
     }
