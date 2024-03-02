@@ -27,24 +27,24 @@ bool WaveNbAttribute::render_settings(std::string label)
   return has_changed;
 }
 
-bool WaveNbAttribute::serialize_json_v2(std::string fieldName, nlohmann::json& outputData) 
-{ 
+bool WaveNbAttribute::serialize_json_v2(std::string     fieldName,
+                                        nlohmann::json &outputData)
+{
   outputData[fieldName]["value"]["x"] = this->value.x;
   outputData[fieldName]["value"]["y"] = this->value.y;
   outputData[fieldName]["link_xy"] = this->link_xy;
 
-  return true; 
+  return true;
 }
 
-bool WaveNbAttribute::deserialize_json_v2(std::string fieldName, nlohmann::json& inputData) 
-{ 
-  if(
-    inputData[fieldName].is_object() == false ||
-    inputData[fieldName]["value"].is_object() == false ||
-    inputData[fieldName]["link_xy"].is_boolean() == false ||
-    inputData[fieldName]["value"]["x"].is_number() == false ||
-    inputData[fieldName]["value"]["y"].is_number() == false
-  )
+bool WaveNbAttribute::deserialize_json_v2(std::string     fieldName,
+                                          nlohmann::json &inputData)
+{
+  if (inputData[fieldName].is_object() == false ||
+      inputData[fieldName]["value"].is_object() == false ||
+      inputData[fieldName]["link_xy"].is_boolean() == false ||
+      inputData[fieldName]["value"]["x"].is_number() == false ||
+      inputData[fieldName]["value"]["y"].is_number() == false)
   {
     LOG_DEBUG("Attribute %s is not a an array.", fieldName.data());
     return false;
@@ -53,7 +53,7 @@ bool WaveNbAttribute::deserialize_json_v2(std::string fieldName, nlohmann::json&
   this->value.x = inputData[fieldName]["value"]["x"].get<float>();
   this->value.y = inputData[fieldName]["value"]["y"].get<float>();
   this->link_xy = inputData[fieldName]["link_xy"].get<bool>();
-  return true; 
+  return true;
 }
 
 } // namespace hesiod

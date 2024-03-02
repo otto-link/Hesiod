@@ -27,22 +27,24 @@ bool BoolAttribute::render_settings(std::string label)
   return has_changed;
 }
 
-bool BoolAttribute::serialize_json_v2(std::string fieldName, nlohmann::json& outputData) 
-{ 
+bool BoolAttribute::serialize_json_v2(std::string     fieldName,
+                                      nlohmann::json &outputData)
+{
   outputData[fieldName] = this->value;
-  return true; 
+  return true;
 }
 
-bool BoolAttribute::deserialize_json_v2(std::string fieldName, nlohmann::json& inputData) 
-{ 
-  if(inputData[fieldName].is_boolean() == false)
+bool BoolAttribute::deserialize_json_v2(std::string     fieldName,
+                                        nlohmann::json &inputData)
+{
+  if (inputData[fieldName].is_boolean() == false)
   {
     LOG_DEBUG("Attribute %s is not a boolean.", fieldName.data());
     return false;
   }
 
   this->value = inputData[fieldName].get<bool>();
-  return true; 
+  return true;
 }
 
 } // namespace hesiod

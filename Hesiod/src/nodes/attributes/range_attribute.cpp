@@ -43,34 +43,32 @@ bool RangeAttribute::render_settings(std::string label)
   return has_changed;
 }
 
-bool RangeAttribute::serialize_json_v2(std::string fieldName, nlohmann::json& outputData) 
-{ 
+bool RangeAttribute::serialize_json_v2(std::string     fieldName,
+                                       nlohmann::json &outputData)
+{
   outputData[fieldName]["x"] = this->value.x;
   outputData[fieldName]["y"] = this->value.y;
   outputData[fieldName]["activate"] = this->activate;
-  return true; 
+  return true;
 }
 
-bool RangeAttribute::deserialize_json_v2(std::string fieldName, nlohmann::json& inputData) 
-{ 
-  if(
-    inputData[fieldName].is_object() == false ||
-    inputData[fieldName]["x"].is_number() == false ||
-    inputData[fieldName]["y"].is_number() == false ||
-    inputData[fieldName]["activate"].is_boolean() == false
-  )
+bool RangeAttribute::deserialize_json_v2(std::string     fieldName,
+                                         nlohmann::json &inputData)
+{
+  if (inputData[fieldName].is_object() == false ||
+      inputData[fieldName]["x"].is_number() == false ||
+      inputData[fieldName]["y"].is_number() == false ||
+      inputData[fieldName]["activate"].is_boolean() == false)
   {
     LOG_DEBUG("Attribute %s is invalid.", fieldName.data());
     return false;
   }
 
-  this->value = hmap::Vec2<float>(
-    inputData[fieldName]["x"].get<float>(),
-    inputData[fieldName]["y"].get<float>()
-  );
-  
+  this->value = hmap::Vec2<float>(inputData[fieldName]["x"].get<float>(),
+                                  inputData[fieldName]["y"].get<float>());
+
   this->activate = inputData[fieldName]["activate"].get<bool>();
-  return true; 
+  return true;
 }
 
 } // namespace hesiod

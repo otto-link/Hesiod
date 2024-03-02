@@ -26,33 +26,33 @@ bool CloudAttribute::render_settings(std::string label)
   return has_changed;
 }
 
-bool CloudAttribute::serialize_json_v2(std::string fieldName, nlohmann::json& outputData) 
-{ 
+bool CloudAttribute::serialize_json_v2(std::string     fieldName,
+                                       nlohmann::json &outputData)
+{
   outputData[fieldName]["x"] = this->value.get_x();
   outputData[fieldName]["y"] = this->value.get_y();
   outputData[fieldName]["v"] = this->value.get_values();
-  
-  return true; 
+
+  return true;
 }
 
-bool CloudAttribute::deserialize_json_v2(std::string fieldName, nlohmann::json& inputData) 
-{ 
-  if(inputData[fieldName]["x"].is_array() == false || 
-     inputData[fieldName]["y"].is_array() == false ||
-     inputData[fieldName]["v"].is_array() == false
-  )
+bool CloudAttribute::deserialize_json_v2(std::string     fieldName,
+                                         nlohmann::json &inputData)
+{
+  if (inputData[fieldName]["x"].is_array() == false ||
+      inputData[fieldName]["y"].is_array() == false ||
+      inputData[fieldName]["v"].is_array() == false)
   {
     LOG_DEBUG("Attribute %s is not filled with arrays.", fieldName.data());
     return false;
   }
 
   this->value = hmap::Cloud(
-    inputData[fieldName]["x"].get<std::vector<float>>(),
-    inputData[fieldName]["y"].get<std::vector<float>>(),
-    inputData[fieldName]["v"].get<std::vector<float>>()
-  );
+      inputData[fieldName]["x"].get<std::vector<float>>(),
+      inputData[fieldName]["y"].get<std::vector<float>>(),
+      inputData[fieldName]["v"].get<std::vector<float>>());
 
-  return true; 
+  return true;
 }
 
 } // namespace hesiod

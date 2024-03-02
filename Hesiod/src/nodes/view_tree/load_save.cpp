@@ -22,7 +22,7 @@ namespace hesiod::vnode
 
 // Link
 
-bool Link::serialize_json_v2(std::string fieldName, nlohmann::json& outputData)
+bool Link::serialize_json_v2(std::string fieldName, nlohmann::json &outputData)
 {
   outputData[fieldName]["node_id_from"] = node_id_from;
   outputData[fieldName]["port_id_from"] = port_id_from;
@@ -33,9 +33,9 @@ bool Link::serialize_json_v2(std::string fieldName, nlohmann::json& outputData)
   return true;
 }
 
-bool Link::deserialize_json_v2(std::string fieldName, nlohmann::json& inputData)
+bool Link::deserialize_json_v2(std::string fieldName, nlohmann::json &inputData)
 {
-  if(inputData[fieldName].is_object() == false)
+  if (inputData[fieldName].is_object() == false)
   {
     LOG_ERROR("Encountered invalid link data.");
     return false;
@@ -49,7 +49,6 @@ bool Link::deserialize_json_v2(std::string fieldName, nlohmann::json& inputData)
   port_hash_id_to = inputData[fieldName]["port_hash_id_to"].get<int>();
   return true;
 }
-
 
 // ViewTree
 
@@ -69,7 +68,7 @@ void ViewTree::load_state(std::string fname)
   this->remove_all_nodes();
   this->links.clear();
 
-  std::ifstream inputFileStream = std::ifstream(fname);
+  std::ifstream  inputFileStream = std::ifstream(fname);
   nlohmann::json inputSerializedData = nlohmann::json();
 
   inputFileStream >> inputSerializedData;
@@ -89,13 +88,13 @@ void ViewTree::save_state(std::string fname)
   oarchive(cereal::make_nvp("tree", *this));
   LOG_DEBUG("ok");
 #else
-  std::ofstream outputFileStream = std::ofstream(fname, std::ios::trunc);
+  std::ofstream  outputFileStream = std::ofstream(fname, std::ios::trunc);
   nlohmann::json outputSerializedData = nlohmann::json();
 
   this->serialize_json_v2("data", outputSerializedData);
 
   outputFileStream << outputSerializedData.dump(1) << std::endl;
-  
+
   outputFileStream.close();
 #endif
 }
@@ -208,7 +207,8 @@ template <class Archive> void ViewTree::save(Archive &archive) const
 #endif
 }
 
-bool ViewTree::serialize_json_v2(std::string fieldName, nlohmann::json& outputData)
+bool ViewTree::serialize_json_v2(std::string     fieldName,
+                                 nlohmann::json &outputData)
 {
   outputData[fieldName]["id"] = id;
   outputData[fieldName]["overlap"] = overlap;
@@ -248,15 +248,21 @@ bool ViewTree::serialize_json_v2(std::string fieldName, nlohmann::json& outputDa
     nlohmann::json currentNodeSerialized = nlohmann::json();
 
     currentNodeSerialized["id"] = id;
-    currentNodeSerialized["type"] = cnode::ControlNodeInstancing::get_name_from_type(this->get_node_ref_by_id<hesiod::cnode::ControlNode>(id)->get_type());
+    currentNodeSerialized["type"] =
+        cnode::ControlNodeInstancing::get_name_from_type(
+            this->get_node_ref_by_id<hesiod::cnode::ControlNode>(id)
+                ->get_type());
 
     if (this->get_node_type(id) != "Clone")
     {
-      this->get_node_ref_by_id<hesiod::cnode::ControlNode>(id)->serialize_json_v2("data", currentNodeSerialized);
+      this->get_node_ref_by_id<hesiod::cnode::ControlNode>(id)
+          ->serialize_json_v2("data", currentNodeSerialized);
     }
     else
     {
-      this->get_node_ref_by_id<hesiod::cnode::Clone>(id)->serialize_json_v2("data", currentNodeSerialized);
+      this->get_node_ref_by_id<hesiod::cnode::Clone>(id)->serialize_json_v2(
+          "data",
+          currentNodeSerialized);
     }
 
     nodesArraySerialized.push_back(currentNodeSerialized);
@@ -264,7 +270,7 @@ bool ViewTree::serialize_json_v2(std::string fieldName, nlohmann::json& outputDa
 
   std::vector<nlohmann::json> linksArraySerialized = {};
 
-  for(auto& [id, link] : links)
+  for (auto &[id, link] : links)
   {
     nlohmann::json currentLinkSerialized = nlohmann::json();
 
@@ -278,11 +284,12 @@ bool ViewTree::serialize_json_v2(std::string fieldName, nlohmann::json& outputDa
   outputData[fieldName]["links"] = linksArraySerialized;
 
   return true;
-} 
+}
 
-bool ViewTree::deserialize_json_v2(std::string fieldName, nlohmann::json& inputData)
+bool ViewTree::deserialize_json_v2(std::string     fieldName,
+                                   nlohmann::json &inputData)
 {
-  if(inputData[fieldName].is_object() == false)
+  if (inputData[fieldName].is_object() == false)
   {
     return false;
   }
@@ -296,9 +303,12 @@ bool ViewTree::deserialize_json_v2(std::string fieldName, nlohmann::json& inputD
   id_counter = inputData[fieldName]["id_counter"].get<int>();
 
   {
-    std::vector<std::string> node_ids = inputData[fieldName]["node_ids"].get<std::vector<std::string>>();
-    std::vector<float>       pos_x = inputData[fieldName]["pos_x"].get<std::vector<float>>();
-    std::vector<float>       pos_y = inputData[fieldName]["pos_y"].get<std::vector<float>>();
+    std::vector<std::string> node_ids =
+        inputData[fieldName]["node_ids"].get<std::vector<std::string>>();
+    std::vector<float> pos_x =
+        inputData[fieldName]["pos_x"].get<std::vector<float>>();
+    std::vector<float> pos_y =
+        inputData[fieldName]["pos_y"].get<std::vector<float>>();
 
     ax::NodeEditor::SetCurrentEditor(this->get_p_node_editor_context());
     for (size_t k = 0; k < node_ids.size(); k++)
@@ -313,25 +323,28 @@ bool ViewTree::deserialize_json_v2(std::string fieldName, nlohmann::json& inputD
 
   // nodes parameters
 
-  for(nlohmann::json currentNodeSerializedData : inputData[fieldName]["nodes"])
+  for (nlohmann::json currentNodeSerializedData : inputData[fieldName]["nodes"])
   {
     std::string id = currentNodeSerializedData["data"]["id"].get<std::string>();
 
     if (this->get_node_type(id) != "Clone")
     {
-      this->get_node_ref_by_id<hesiod::cnode::ControlNode>(id)->deserialize_json_v2("data", currentNodeSerializedData);
+      this->get_node_ref_by_id<hesiod::cnode::ControlNode>(id)
+          ->deserialize_json_v2("data", currentNodeSerializedData);
     }
     else
     {
-      this->get_node_ref_by_id<hesiod::cnode::Clone>(id)->serialize_json_v2("data", currentNodeSerializedData);
+      this->get_node_ref_by_id<hesiod::cnode::Clone>(id)->serialize_json_v2(
+          "data",
+          currentNodeSerializedData);
     }
   }
 
   // links
-  for(nlohmann::json currentLinkObject : inputData[fieldName]["links"])
+  for (nlohmann::json currentLinkObject : inputData[fieldName]["links"])
   {
     Link currentLink = Link();
-    int id = currentLinkObject["key"].get<int>();
+    int  id = currentLinkObject["key"].get<int>();
     currentLink.deserialize_json_v2("value", currentLinkObject);
     links.emplace(id, currentLink);
   }

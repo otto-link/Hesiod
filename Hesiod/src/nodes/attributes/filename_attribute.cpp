@@ -49,22 +49,24 @@ bool FilenameAttribute::render_settings(std::string label)
   return has_changed;
 }
 
-bool FilenameAttribute::serialize_json_v2(std::string fieldName, nlohmann::json& outputData) 
-{ 
+bool FilenameAttribute::serialize_json_v2(std::string     fieldName,
+                                          nlohmann::json &outputData)
+{
   outputData[fieldName] = this->value;
-  return true; 
+  return true;
 }
 
-bool FilenameAttribute::deserialize_json_v2(std::string fieldName, nlohmann::json& inputData) 
-{ 
-  if(inputData[fieldName].is_string() == false)
+bool FilenameAttribute::deserialize_json_v2(std::string     fieldName,
+                                            nlohmann::json &inputData)
+{
+  if (inputData[fieldName].is_string() == false)
   {
     LOG_DEBUG("Attribute %s is not a string.", fieldName.data());
     return false;
   }
 
   this->value = inputData[fieldName].get<std::string>();
-  return true; 
+  return true;
 }
 
 } // namespace hesiod

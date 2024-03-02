@@ -29,22 +29,24 @@ bool MatrixAttribute::render_settings(std::string label)
   return has_changed;
 }
 
-bool MatrixAttribute::serialize_json_v2(std::string fieldName, nlohmann::json& outputData) 
-{ 
+bool MatrixAttribute::serialize_json_v2(std::string     fieldName,
+                                        nlohmann::json &outputData)
+{
   outputData[fieldName] = this->value;
-  return true; 
+  return true;
 }
 
-bool MatrixAttribute::deserialize_json_v2(std::string fieldName, nlohmann::json& inputData) 
-{ 
-  if(inputData[fieldName].is_array() == false)
+bool MatrixAttribute::deserialize_json_v2(std::string     fieldName,
+                                          nlohmann::json &inputData)
+{
+  if (inputData[fieldName].is_array() == false)
   {
     LOG_DEBUG("Attribute %s is not a an array.", fieldName.data());
     return false;
   }
 
   this->value = inputData[fieldName].get<std::vector<std::vector<float>>>();
-  return true; 
+  return true;
 }
 
 } // namespace hesiod

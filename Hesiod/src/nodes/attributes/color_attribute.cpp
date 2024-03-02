@@ -23,22 +23,24 @@ bool ColorAttribute::render_settings(std::string label)
   return has_changed;
 }
 
-bool ColorAttribute::serialize_json_v2(std::string fieldName, nlohmann::json& outputData) 
-{ 
+bool ColorAttribute::serialize_json_v2(std::string     fieldName,
+                                       nlohmann::json &outputData)
+{
   outputData[fieldName] = this->value;
-  return true; 
+  return true;
 }
 
-bool ColorAttribute::deserialize_json_v2(std::string fieldName, nlohmann::json& inputData) 
-{ 
-  if(inputData[fieldName].is_array() == false)
+bool ColorAttribute::deserialize_json_v2(std::string     fieldName,
+                                         nlohmann::json &inputData)
+{
+  if (inputData[fieldName].is_array() == false)
   {
     LOG_DEBUG("Attribute %s is not an array.", fieldName.data());
     return false;
   }
 
   this->value = inputData[fieldName].get<std::vector<float>>();
-  return true; 
+  return true;
 }
 
 } // namespace hesiod

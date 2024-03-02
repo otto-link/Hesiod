@@ -38,38 +38,36 @@ bool PathAttribute::render_settings(std::string label)
   return has_changed;
 }
 
-bool PathAttribute::serialize_json_v2(std::string fieldName, nlohmann::json& outputData) 
-{ 
+bool PathAttribute::serialize_json_v2(std::string     fieldName,
+                                      nlohmann::json &outputData)
+{
   outputData[fieldName]["x"] = this->value.get_x();
   outputData[fieldName]["y"] = this->value.get_y();
   outputData[fieldName]["v"] = this->value.get_values();
   outputData[fieldName]["closed"] = this->value.closed;
 
-  return true; 
+  return true;
 }
 
-bool PathAttribute::deserialize_json_v2(std::string fieldName, nlohmann::json& inputData) 
-{ 
-  if(
-    inputData[fieldName].is_object() == false ||
-    inputData[fieldName]["x"].is_array() == false ||
-    inputData[fieldName]["y"].is_array() == false ||
-    inputData[fieldName]["v"].is_array() == false ||
-    inputData[fieldName]["closed"].is_boolean() == false
-  )
+bool PathAttribute::deserialize_json_v2(std::string     fieldName,
+                                        nlohmann::json &inputData)
+{
+  if (inputData[fieldName].is_object() == false ||
+      inputData[fieldName]["x"].is_array() == false ||
+      inputData[fieldName]["y"].is_array() == false ||
+      inputData[fieldName]["v"].is_array() == false ||
+      inputData[fieldName]["closed"].is_boolean() == false)
   {
     LOG_DEBUG("Attribute %s is invalid.", fieldName.data());
     return false;
   }
 
-  this->value = hmap::Path(
-    inputData[fieldName]["x"].get<std::vector<float>>(),
-    inputData[fieldName]["y"].get<std::vector<float>>(),
-    inputData[fieldName]["v"].get<std::vector<float>>()
-  );
+  this->value = hmap::Path(inputData[fieldName]["x"].get<std::vector<float>>(),
+                           inputData[fieldName]["y"].get<std::vector<float>>(),
+                           inputData[fieldName]["v"].get<std::vector<float>>());
   this->value.closed = inputData[fieldName]["closed"].get<bool>();
 
-  return true; 
+  return true;
 }
 
 } // namespace hesiod

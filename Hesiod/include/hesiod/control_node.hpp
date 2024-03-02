@@ -216,149 +216,149 @@ static const std::map<std::string, std::string> category_mapping = {
 
 enum class ControlNodeType
 {
- INVALID = 0,
- UNARY = 1,
- BINARY = 2,
- DEBUG = 3,
- EROSION = 4,
- FILTER = 5,
- MASK = 6,
- PRIMITIVE = 7,
- CLONE = 8,
- ABS = 9,
- ABS_SMOOTH = 10,
- ALTER_ELEVATION = 11,
- BASE_ELEVATION = 12,
- BEZIER_PATH = 13,
- BIQUAD_PULSE = 14,
- BLEND = 15,
- BUMP = 16,
- BRUSH = 17,
- CALDERA = 18,
- CHECKERBOARD = 19,
- CLAMP = 20,
- CLOUD = 21,
- CLOUD_TO_ARRAY_INTERP = 22,
- COLORIZE = 23,
- COLORIZE_SOLID = 24,
- COMBINE_MASK = 25,
- CONVOLVE_SVD = 26,
- DENDRY = 27,
- DEPRESSION_FILLING = 28,
- DIG_PATH = 29,
- DISTANCE_TRANSFORM = 30,
- EQUALIZE = 31,
- EROSION_MAPS = 32,
- EXPAND_SHRINK = 33,
- EXPAND_SHRINK_DIRECTIONAL = 34,
- EXPORT = 35,
- EXPORT_RGB = 36,
- FACETED = 37,
- FBM_IQ_PERLIN = 38,
- FBM_PERLIN = 39,
- FBM_SIMPLEX = 40,
- FBM_WORLEY = 41,
- FBM_WORLEY_DOUBLE = 42,
- FRACTALIZE_PATH = 43,
- GABOR_NOISE = 44,
- GAIN = 45,
- GAMMA_CORRECTION = 46,
- GAMMA_CORRECTION_LOCAL = 47,
- GAUSSIAN_PULSE = 48,
- GEOMORPHONS = 49,
- GRADIENT = 50,
- GRADIENT_ANGLE = 51,
- GRADIENT_NORM = 52,
- GRADIENT_TALUS = 53,
- HYDRAULIC_ALGEBRIC = 54,
- HYDRAULIC_PARTICLE = 55,
- HYDRAULIC_RIDGE = 56,
- HYDRAULIC_STREAM = 57,
- HYDRAULIC_STREAM_LOG = 58,
- HYDRAULIC_VPIPES = 59,
- IMPORT = 60,
- INVERSE = 61,
- KERNEL = 62,
- KMEANS_CLUSTERING2 = 63,
- KMEANS_CLUSTERING3 = 64,
- LAPLACE = 65,
- LAPLACE_EDGE_PRESERVING = 66,
- LERP = 67,
- MAKE_BINARY = 68,
- MEANDERIZE_PATH = 69,
- MEAN_LOCAL = 70,
- MEDIAN3X3 = 71,
- MINIMUM_LOCAL = 72,
- MIX_RGB = 73,
- NORMAL_DISPLACEMENT = 74,
- ONE_MINUS = 75,
- PATH = 76,
- PATH_FINDING = 77,
- PATH_TO_HEIGHTMAP = 78,
- PEAK = 79,
- PERLIN = 80,
- PERLIN_BILLOW = 81,
- PINGPONG_PERLIN = 82,
- PLATEAU = 83,
- PREVIEW = 84,
- PREVIEW_COLORIZE = 85,
- RECAST_CANYON = 86,
- RECAST_CLIFF = 87,
- RECAST_CLIFF_DIRECTIONAL = 88,
- RECAST_PEAK = 89,
- RECAST_ROCKY_SLOPES = 90,
- RECURVE = 91,
- RECURVE_KURA = 92,
- RECURVE_S = 93,
- RELATIVE_ELEVATION = 94,
- REMAP = 95,
- RESCALE = 96,
- RIDGED_PERLIN = 97,
- RUGOSITY = 98,
- SEDIMENT_DEPOSITION = 99,
- SELECT_BLOB_LOG = 100,
- SELECT_CAVITIES = 101,
- SELECT_EQ = 102,
- SELECT_ELEVATION_SLOPE = 103,
- SELECT_GRADIENT_NORM = 104,
- SELECT_INTERVAL = 105,
- SELECT_PULSE = 106,
- SELECT_RIVERS = 107,
- SELECT_TRANSITIONS = 108,
- SIMPLEX = 109,
- SLOPE = 110,
- SMOOTH_CPULSE = 111,
- SMOOTH_FILL = 112,
- SMOOTH_FILL_HOLES = 113,
- SMOOTH_FILL_SMEAR_PEAKS = 114,
- STEEPEN_CONVECTIVE = 115,
- STEP = 116,
- STRATIFY_MULTISCALE = 117,
- STRATIFY_OBLIQUE = 118,
- THERMAL = 119,
- THERMAL_AUTO_BEDROCK = 120,
- THERMAL_FLATTEN = 121,
- THERMAL_SCREE = 122,
- TO_KERNEL = 123,
- TO_MASK = 124,
- VALLEY_WIDTH = 125,
- VALUE_NOISE_DELAUNAY = 126,
- VALUE_NOISE_LINEAR = 127,
- VALUE_NOISE_THINPLATE = 128,
- WARP = 129,
- WARP_DOWNSLOPE = 130,
- WAVE_DUNE = 131,
- WAVE_SINE = 132,
- WAVE_SQUARE = 133,
- WAVE_TRIANGULAR = 134,
- WHITE = 135,
- WHITE_DENSITY_MAP = 136,
- WHITE_SPARSE = 137,
- WORLEY = 138,
- WORLEY_DOUBLE = 139,
- WORLEY_VALUE = 140,
- WRINKLE = 141,
- ZEROED_EDGES = 142,
+  INVALID = 0,
+  UNARY = 1,
+  BINARY = 2,
+  DEBUG = 3,
+  EROSION = 4,
+  FILTER = 5,
+  MASK = 6,
+  PRIMITIVE = 7,
+  CLONE = 8,
+  ABS = 9,
+  ABS_SMOOTH = 10,
+  ALTER_ELEVATION = 11,
+  BASE_ELEVATION = 12,
+  BEZIER_PATH = 13,
+  BIQUAD_PULSE = 14,
+  BLEND = 15,
+  BUMP = 16,
+  BRUSH = 17,
+  CALDERA = 18,
+  CHECKERBOARD = 19,
+  CLAMP = 20,
+  CLOUD = 21,
+  CLOUD_TO_ARRAY_INTERP = 22,
+  COLORIZE = 23,
+  COLORIZE_SOLID = 24,
+  COMBINE_MASK = 25,
+  CONVOLVE_SVD = 26,
+  DENDRY = 27,
+  DEPRESSION_FILLING = 28,
+  DIG_PATH = 29,
+  DISTANCE_TRANSFORM = 30,
+  EQUALIZE = 31,
+  EROSION_MAPS = 32,
+  EXPAND_SHRINK = 33,
+  EXPAND_SHRINK_DIRECTIONAL = 34,
+  EXPORT = 35,
+  EXPORT_RGB = 36,
+  FACETED = 37,
+  FBM_IQ_PERLIN = 38,
+  FBM_PERLIN = 39,
+  FBM_SIMPLEX = 40,
+  FBM_WORLEY = 41,
+  FBM_WORLEY_DOUBLE = 42,
+  FRACTALIZE_PATH = 43,
+  GABOR_NOISE = 44,
+  GAIN = 45,
+  GAMMA_CORRECTION = 46,
+  GAMMA_CORRECTION_LOCAL = 47,
+  GAUSSIAN_PULSE = 48,
+  GEOMORPHONS = 49,
+  GRADIENT = 50,
+  GRADIENT_ANGLE = 51,
+  GRADIENT_NORM = 52,
+  GRADIENT_TALUS = 53,
+  HYDRAULIC_ALGEBRIC = 54,
+  HYDRAULIC_PARTICLE = 55,
+  HYDRAULIC_RIDGE = 56,
+  HYDRAULIC_STREAM = 57,
+  HYDRAULIC_STREAM_LOG = 58,
+  HYDRAULIC_VPIPES = 59,
+  IMPORT = 60,
+  INVERSE = 61,
+  KERNEL = 62,
+  KMEANS_CLUSTERING2 = 63,
+  KMEANS_CLUSTERING3 = 64,
+  LAPLACE = 65,
+  LAPLACE_EDGE_PRESERVING = 66,
+  LERP = 67,
+  MAKE_BINARY = 68,
+  MEANDERIZE_PATH = 69,
+  MEAN_LOCAL = 70,
+  MEDIAN3X3 = 71,
+  MINIMUM_LOCAL = 72,
+  MIX_RGB = 73,
+  NORMAL_DISPLACEMENT = 74,
+  ONE_MINUS = 75,
+  PATH = 76,
+  PATH_FINDING = 77,
+  PATH_TO_HEIGHTMAP = 78,
+  PEAK = 79,
+  PERLIN = 80,
+  PERLIN_BILLOW = 81,
+  PINGPONG_PERLIN = 82,
+  PLATEAU = 83,
+  PREVIEW = 84,
+  PREVIEW_COLORIZE = 85,
+  RECAST_CANYON = 86,
+  RECAST_CLIFF = 87,
+  RECAST_CLIFF_DIRECTIONAL = 88,
+  RECAST_PEAK = 89,
+  RECAST_ROCKY_SLOPES = 90,
+  RECURVE = 91,
+  RECURVE_KURA = 92,
+  RECURVE_S = 93,
+  RELATIVE_ELEVATION = 94,
+  REMAP = 95,
+  RESCALE = 96,
+  RIDGED_PERLIN = 97,
+  RUGOSITY = 98,
+  SEDIMENT_DEPOSITION = 99,
+  SELECT_BLOB_LOG = 100,
+  SELECT_CAVITIES = 101,
+  SELECT_EQ = 102,
+  SELECT_ELEVATION_SLOPE = 103,
+  SELECT_GRADIENT_NORM = 104,
+  SELECT_INTERVAL = 105,
+  SELECT_PULSE = 106,
+  SELECT_RIVERS = 107,
+  SELECT_TRANSITIONS = 108,
+  SIMPLEX = 109,
+  SLOPE = 110,
+  SMOOTH_CPULSE = 111,
+  SMOOTH_FILL = 112,
+  SMOOTH_FILL_HOLES = 113,
+  SMOOTH_FILL_SMEAR_PEAKS = 114,
+  STEEPEN_CONVECTIVE = 115,
+  STEP = 116,
+  STRATIFY_MULTISCALE = 117,
+  STRATIFY_OBLIQUE = 118,
+  THERMAL = 119,
+  THERMAL_AUTO_BEDROCK = 120,
+  THERMAL_FLATTEN = 121,
+  THERMAL_SCREE = 122,
+  TO_KERNEL = 123,
+  TO_MASK = 124,
+  VALLEY_WIDTH = 125,
+  VALUE_NOISE_DELAUNAY = 126,
+  VALUE_NOISE_LINEAR = 127,
+  VALUE_NOISE_THINPLATE = 128,
+  WARP = 129,
+  WARP_DOWNSLOPE = 130,
+  WAVE_DUNE = 131,
+  WAVE_SINE = 132,
+  WAVE_SQUARE = 133,
+  WAVE_TRIANGULAR = 134,
+  WHITE = 135,
+  WHITE_DENSITY_MAP = 136,
+  WHITE_SPARSE = 137,
+  WORLEY = 138,
+  WORLEY_DOUBLE = 139,
+  WORLEY_VALUE = 140,
+  WRINKLE = 141,
+  ZEROED_EDGES = 142,
 };
 
 //----------------------------------------
@@ -379,7 +379,10 @@ public:
   {
   }
 
-  virtual ControlNodeType get_type() { return ControlNodeType::INVALID; }
+  virtual ControlNodeType get_type()
+  {
+    return ControlNodeType::INVALID;
+  }
 
 #ifdef USE_CEREAL
   template <class Archive> void serialize(Archive &ar)
@@ -396,9 +399,12 @@ public:
 class ControlNodeInstancing
 {
 public:
-  static std::string get_name_from_type(ControlNodeType type);
-  static ControlNodeType get_type_from_name(std::string name);
-  static std::unique_ptr<ControlNode> create_attribute_from_type(ControlNodeType type, std::string id, void* tree);
+  static std::string                  get_name_from_type(ControlNodeType type);
+  static ControlNodeType              get_type_from_name(std::string name);
+  static std::unique_ptr<ControlNode> create_attribute_from_type(
+      ControlNodeType type,
+      std::string     id,
+      void           *tree);
 };
 
 //----------------------------------------
@@ -628,6 +634,7 @@ public:
   void compute();
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(ABS_SMOOTH);
+
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
@@ -743,6 +750,7 @@ public:
   void update_inner_bindings();
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(BRUSH);
+
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
   float           vmin = 0.f;
@@ -802,6 +810,7 @@ public:
   void update_inner_bindings();
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(CLOUD);
+
 protected:
   hmap::Cloud value_out = hmap::Cloud();
 };
@@ -829,6 +838,7 @@ public:
   void update_inner_bindings();
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(COLORIZE);
+
 protected:
   hmap::HeightMapRGB value_out = hmap::HeightMapRGB();
 };
@@ -843,6 +853,7 @@ public:
   void update_inner_bindings();
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(COLORIZE_SOLID);
+
 protected:
   hmap::HeightMapRGB value_out = hmap::HeightMapRGB();
 };
@@ -857,6 +868,7 @@ public:
   void update_inner_bindings();
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(COMBINE_MASK);
+
 protected:
   hmap::HeightMap            value_out = hmap::HeightMap();
   std::map<std::string, int> method_map = {{"union", 0},
@@ -874,6 +886,7 @@ public:
   void update_inner_bindings();
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(CONVOLVE_SVD);
+
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
@@ -891,6 +904,7 @@ public:
   void update_inner_bindings();
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(DENDRY);
+
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 
@@ -920,6 +934,7 @@ public:
   void update_inner_bindings();
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(DIG_PATH);
+
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
@@ -934,6 +949,7 @@ public:
   void update_inner_bindings();
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(DISTANCE_TRANSFORM);
+
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
@@ -958,6 +974,7 @@ public:
   void update_inner_bindings();
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(EROSION_MAPS);
+
 protected:
   hmap::HeightMap erosion_map = hmap::HeightMap();
   hmap::HeightMap deposition_map = hmap::HeightMap();
@@ -971,6 +988,7 @@ public:
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(EXPAND_SHRINK);
+
 protected:
   std::map<std::string, int> kernel_map = {
       {"cone", kernel::cone},
@@ -999,6 +1017,7 @@ public:
   void write_file();
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(EXPORT);
+
 protected:
   std::map<std::string, int> format_map = {
       // {"binary", hesiod::cnode::export_type::binary},
@@ -1029,6 +1048,7 @@ public:
   void compute();
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(FACETED);
+
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 
@@ -1114,6 +1134,7 @@ public:
   void update_inner_bindings();
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(FRACTALIZE_PATH);
+
 protected:
   hmap::Path value_out = hmap::Path();
 };
@@ -1141,6 +1162,7 @@ public:
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(GAIN);
+
 protected:
   float gain = 1.f;
 };
@@ -1198,6 +1220,7 @@ public:
   void compute();
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(GRADIENT);
+
 protected:
   hmap::HeightMap value_out_dx = hmap::HeightMap();
   hmap::HeightMap value_out_dy = hmap::HeightMap();
@@ -1331,6 +1354,7 @@ public:
   void compute();
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(IMPORT);
+
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 
@@ -1360,6 +1384,7 @@ public:
   void compute();
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(KERNEL);
+
 protected:
   hmap::Array value_out = hmap::Array();
 
@@ -1392,6 +1417,7 @@ public:
   void compute();
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(KMEANS_CLUSTERING3);
+
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
@@ -1426,6 +1452,7 @@ public:
   void compute();
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(LERP);
+
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
@@ -1450,6 +1477,7 @@ public:
   void update_inner_bindings();
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(MEANDERIZE_PATH);
+
 protected:
   hmap::Path value_out = hmap::Path();
 };
@@ -1494,6 +1522,7 @@ public:
   void update_inner_bindings();
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(MIX_RGB);
+
 protected:
   hmap::HeightMapRGB value_out = hmap::HeightMapRGB();
 };
@@ -1528,6 +1557,7 @@ public:
   void update_inner_bindings();
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(PATH);
+
 protected:
   hmap::Path value_out = hmap::Path();
 };
@@ -1542,6 +1572,7 @@ public:
   void update_inner_bindings();
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(PATH_FINDING);
+
 protected:
   hmap::Path value_out = hmap::Path();
 };
@@ -1559,6 +1590,7 @@ public:
   void update_inner_bindings();
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(PATH_TO_HEIGHTMAP);
+
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 
@@ -1664,6 +1696,7 @@ public:
   void update_inner_bindings();
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(RECAST_CANYON);
+
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
@@ -1678,6 +1711,7 @@ public:
   void update_inner_bindings();
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(RECAST_CLIFF);
+
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
@@ -1692,6 +1726,7 @@ public:
   void update_inner_bindings();
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(RECAST_CLIFF_DIRECTIONAL);
+
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
@@ -1706,6 +1741,7 @@ public:
   void update_inner_bindings();
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(RECAST_PEAK);
+
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
@@ -1720,6 +1756,7 @@ public:
   void update_inner_bindings();
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(RECAST_ROCKY_SLOPES);
+
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
@@ -1730,7 +1767,7 @@ public:
   Recurve(std::string id);
 
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
-  
+
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(RECURVE);
 };
 
@@ -1763,7 +1800,7 @@ public:
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(RELATIVE_ELEVATION);
 
-  int  ir = 64;
+  int ir = 64;
 };
 
 class Remap : public Unary
@@ -1819,6 +1856,7 @@ public:
   void update_inner_bindings();
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(SEDIMENT_DEPOSITION);
+
 protected:
   hmap::HeightMap value_out = hmap::HeightMap(); // eroded heightmap
   hmap::HeightMap deposition_map = hmap::HeightMap();
@@ -1914,6 +1952,7 @@ public:
   void update_inner_bindings();
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(SELECT_TRANSITIONS);
+
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
@@ -1966,6 +2005,7 @@ public:
   void update_inner_bindings();
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(SMOOTH_FILL);
+
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
   hmap::HeightMap deposition_map = hmap::HeightMap();
@@ -2024,6 +2064,7 @@ public:
   void update_inner_bindings();
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(STRATIFY_MULTISCALE);
+
 protected:
   hmap::HeightMap value_out = hmap::HeightMap(); // eroded heightmap
 };
@@ -2038,6 +2079,7 @@ public:
   void update_inner_bindings();
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(STRATIFY_OBLIQUE);
+
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
@@ -2052,6 +2094,7 @@ public:
   void update_inner_bindings();
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(THERMAL);
+
 protected:
   hmap::HeightMap value_out = hmap::HeightMap(); // eroded heightmap
   hmap::HeightMap deposition_map = hmap::HeightMap();
@@ -2067,6 +2110,7 @@ public:
   void update_inner_bindings();
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(THERMAL_AUTO_BEDROCK);
+
 protected:
   hmap::HeightMap value_out = hmap::HeightMap(); // eroded heightmap
   hmap::HeightMap deposition_map = hmap::HeightMap();
@@ -2082,6 +2126,7 @@ public:
   void update_inner_bindings();
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(THERMAL_FLATTEN);
+
 protected:
   hmap::HeightMap value_out = hmap::HeightMap(); // eroded heightmap
   hmap::HeightMap deposition_map = hmap::HeightMap();
@@ -2097,6 +2142,7 @@ public:
   void update_inner_bindings();
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(THERMAL_SCREE);
+
 protected:
   hmap::HeightMap value_out = hmap::HeightMap(); // eroded heightmap
   hmap::HeightMap deposition_map = hmap::HeightMap();
@@ -2112,6 +2158,7 @@ public:
   void compute();
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(TO_KERNEL);
+
 protected:
   hmap::Array value_out = hmap::Array();
 };
@@ -2185,6 +2232,7 @@ public:
   void compute();
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(WARP);
+
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
@@ -2264,6 +2312,7 @@ public:
   void compute();
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(WHITE);
+
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
   int             seed = DEFAULT_SEED;
@@ -2286,6 +2335,7 @@ public:
   void compute();
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(WHITE_DENSITY_MAP);
+
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
@@ -2303,6 +2353,7 @@ public:
   void compute();
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(WHITE_SPARSE);
+
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 
@@ -2347,7 +2398,7 @@ public:
               float           overlap);
 
   void compute();
-  
+
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(WORLEY_VALUE);
 };
 
@@ -2371,6 +2422,7 @@ public:
   void compute();
 
   CONTROL_NODE_IMPLEMENT_SERIALIZATION_V2(ZEROED_EDGES);
+
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };

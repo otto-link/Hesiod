@@ -128,9 +128,18 @@ public:
   // used for serialization now
   // see class ControlNodeInstancing
 
-  inline hmap::Vec2<int> get_shape() { return shape; } 
-  inline hmap::Vec2<int> get_tiling() { return tiling; }
-  inline float get_overlap() { return overlap; }
+  inline hmap::Vec2<int> get_shape()
+  {
+    return shape;
+  }
+  inline hmap::Vec2<int> get_tiling()
+  {
+    return tiling;
+  }
+  inline float get_overlap()
+  {
+    return overlap;
+  }
 
   // serialization
 
@@ -141,8 +150,9 @@ public:
   template <class Archive> void load(Archive &archive);
 
   template <class Archive> void save(Archive &archive) const;
-  
+
   SERIALIZATION_V2_IMPLEMENT_BASE();
+
 private:
   hmap::Vec2<int> shape;
   hmap::Vec2<int> tiling;

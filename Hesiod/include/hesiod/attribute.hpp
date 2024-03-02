@@ -17,8 +17,8 @@
 #include <stdexcept>
 
 #include "highmap.hpp"
-#include "serialization.hpp"
 #include "macrologger.h"
+#include "serialization.hpp"
 
 #include <cereal/archives/json.hpp>
 #include <cereal/types/map.hpp>
@@ -91,7 +91,10 @@ class Attribute : public serialization::SerializationBase
 {
 public:
   Attribute() = default;
-  virtual AttributeType get_type() { return AttributeType::INVALID; }
+  virtual AttributeType get_type()
+  {
+    return AttributeType::INVALID;
+  }
   virtual bool render_settings(std::string) = 0;
 
   template <class T = void> T *get_ref()
@@ -123,8 +126,11 @@ class BoolAttribute : public Attribute
 public:
   BoolAttribute() = default;
   BoolAttribute(bool value);
-  bool         get();
-  AttributeType get_type() { return AttributeType::BOOL_ATTRIBUTE; }
+  bool          get();
+  AttributeType get_type()
+  {
+    return AttributeType::BOOL_ATTRIBUTE;
+  }
   virtual bool render_settings(std::string label);
 
 #ifdef USE_CEREAL
@@ -144,8 +150,11 @@ class CloudAttribute : public Attribute
 {
 public:
   CloudAttribute() = default;
-  hmap::Cloud  get();
-  AttributeType get_type() { return AttributeType::CLOUD_ATTRIBUTE; }
+  hmap::Cloud   get();
+  AttributeType get_type()
+  {
+    return AttributeType::CLOUD_ATTRIBUTE;
+  }
   virtual bool render_settings(std::string label);
 
 #ifdef USE_CEREAL
@@ -174,8 +183,11 @@ class ColorAttribute : public Attribute
 public:
   ColorAttribute() = default;
   std::vector<float> get();
-  AttributeType get_type() { return AttributeType::COLOR_ATTRIBUTE; }
-  virtual bool       render_settings(std::string label);
+  AttributeType      get_type()
+  {
+    return AttributeType::COLOR_ATTRIBUTE;
+  }
+  virtual bool render_settings(std::string label);
 
 #ifdef USE_CEREAL
   template <class Archive> void serialize(Archive &ar)
@@ -195,8 +207,11 @@ class FilenameAttribute : public Attribute
 public:
   FilenameAttribute() = default;
   FilenameAttribute(std::string value);
-  std::string  get();
-  AttributeType get_type() { return AttributeType::FILENAME_ATTRIBUTE; }
+  std::string   get();
+  AttributeType get_type()
+  {
+    return AttributeType::FILENAME_ATTRIBUTE;
+  }
   virtual bool render_settings(std::string label);
 
 #ifdef USE_CEREAL
@@ -217,9 +232,12 @@ class FloatAttribute : public Attribute
 public:
   FloatAttribute() = default;
   FloatAttribute(float value, float vmin, float vmax);
-  float        get();
-  void         set(float new_value);
-  AttributeType get_type() { return AttributeType::FLOAT_ATTRIBUTE; }
+  float         get();
+  void          set(float new_value);
+  AttributeType get_type()
+  {
+    return AttributeType::FLOAT_ATTRIBUTE;
+  }
   virtual bool render_settings(std::string label);
 
 #ifdef USE_CEREAL
@@ -245,8 +263,11 @@ class IntAttribute : public Attribute
 public:
   IntAttribute() = default;
   IntAttribute(int value, int vmin, int vmax);
-  int          get();
-  AttributeType get_type() { return AttributeType::INT_ATTRIBUTE; }
+  int           get();
+  AttributeType get_type()
+  {
+    return AttributeType::INT_ATTRIBUTE;
+  }
   virtual bool render_settings(std::string label);
 
 #ifdef USE_CEREAL
@@ -274,8 +295,11 @@ public:
   int                        get();
   std::map<std::string, int> get_map();
   void                       set(std::string new_choice);
-  AttributeType get_type() { return AttributeType::MAP_ENUM_ATTRIBUTE; }
-  virtual bool               render_settings(std::string label);
+  AttributeType              get_type()
+  {
+    return AttributeType::MAP_ENUM_ATTRIBUTE;
+  }
+  virtual bool render_settings(std::string label);
 
 #ifdef USE_CEREAL
   template <class Archive> void serialize(Archive &ar)
@@ -297,8 +321,11 @@ class MatrixAttribute : public Attribute
 public:
   MatrixAttribute();
   std::vector<std::vector<float>> get();
-  AttributeType get_type() { return AttributeType::MATRIX_ATTRIBUTE; }
-  virtual bool                    render_settings(std::string label);
+  AttributeType                   get_type()
+  {
+    return AttributeType::MATRIX_ATTRIBUTE;
+  }
+  virtual bool render_settings(std::string label);
 
 #ifdef USE_CEREAL
   template <class Archive> void serialize(Archive &ar)
@@ -319,8 +346,11 @@ class PathAttribute : public Attribute
 {
 public:
   PathAttribute() = default;
-  hmap::Path   get();
-  AttributeType get_type() { return AttributeType::PATH_ATTRIBUTE; }
+  hmap::Path    get();
+  AttributeType get_type()
+  {
+    return AttributeType::PATH_ATTRIBUTE;
+  }
   virtual bool render_settings(std::string label);
 
 #ifdef USE_CEREAL
@@ -358,7 +388,10 @@ public:
   {
     return this->activate;
   };
-  AttributeType get_type() { return AttributeType::RANGE_ATTRIBUTE; }
+  AttributeType get_type()
+  {
+    return AttributeType::RANGE_ATTRIBUTE;
+  }
   virtual bool render_settings(std::string label);
 
 #ifdef USE_CEREAL
@@ -382,8 +415,11 @@ class SeedAttribute : public Attribute
 public:
   SeedAttribute() = default;
   SeedAttribute(int value);
-  int          get();
-  AttributeType get_type() { return AttributeType:: SEED_ATTRIBUTE; }
+  int           get();
+  AttributeType get_type()
+  {
+    return AttributeType::SEED_ATTRIBUTE;
+  }
   virtual bool render_settings(std::string label);
 
 #ifdef USE_CEREAL
@@ -405,8 +441,11 @@ public:
   ShapeAttribute();
   hmap::Vec2<int> get();
   void            set_value_max(hmap::Vec2<int> new_value_max);
-  AttributeType get_type() { return AttributeType::SHAPE_ATTRIBUTE; }
-  virtual bool    render_settings(std::string label);
+  AttributeType   get_type()
+  {
+    return AttributeType::SHAPE_ATTRIBUTE;
+  }
+  virtual bool render_settings(std::string label);
 
 #ifdef USE_CEREAL
   template <class Archive> void serialize(Archive &ar)
@@ -429,8 +468,11 @@ public:
   VecFloatAttribute();
   VecFloatAttribute(std::vector<float> value);
   std::vector<float> get();
-  AttributeType get_type() { return AttributeType::VEC_FLOAT_ATTRIBUTE; }
-  virtual bool       render_settings(std::string label);
+  AttributeType      get_type()
+  {
+    return AttributeType::VEC_FLOAT_ATTRIBUTE;
+  }
+  virtual bool render_settings(std::string label);
 
 #ifdef USE_CEREAL
   template <class Archive> void serialize(Archive &ar)
@@ -451,8 +493,11 @@ public:
   VecIntAttribute();
   VecIntAttribute(std::vector<int> value);
   std::vector<int> get();
-  AttributeType get_type() { return AttributeType::VEC_INT_ATTRIBUTE; }
-  virtual bool     render_settings(std::string label);
+  AttributeType    get_type()
+  {
+    return AttributeType::VEC_INT_ATTRIBUTE;
+  }
+  virtual bool render_settings(std::string label);
 
 #ifdef USE_CEREAL
   template <class Archive> void serialize(Archive &ar)
@@ -473,8 +518,11 @@ public:
   WaveNbAttribute() = default;
   WaveNbAttribute(hmap::Vec2<float> value);
   hmap::Vec2<float> get();
-  AttributeType get_type() { return AttributeType::WAVE_NB_ATTRIBUTE; }
-  virtual bool      render_settings(std::string label);
+  AttributeType     get_type()
+  {
+    return AttributeType::WAVE_NB_ATTRIBUTE;
+  }
+  virtual bool render_settings(std::string label);
 
 #ifdef USE_CEREAL
   template <class Archive> void serialize(Archive &ar)
@@ -495,13 +543,14 @@ public:
 class AttributeInstancing
 {
 public:
-  static std::string get_name_from_type(AttributeType type);
-  static AttributeType get_type_from_name(std::string name);
-  static std::unique_ptr<Attribute> create_attribute_from_type(AttributeType type);
+  static std::string                get_name_from_type(AttributeType type);
+  static AttributeType              get_type_from_name(std::string name);
+  static std::unique_ptr<Attribute> create_attribute_from_type(
+      AttributeType type);
 };
 
 } // namespace hesiod
-// clang-format off
+  // clang-format off
 #ifdef USE_CEREAL
 CEREAL_REGISTER_TYPE(hesiod::BoolAttribute);
 CEREAL_REGISTER_TYPE(hesiod::CloudAttribute);
@@ -535,4 +584,4 @@ CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute, hesiod::VecFloatAttribut
 CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute, hesiod::VecIntAttribute);
 CEREAL_REGISTER_POLYMORPHIC_RELATION(hesiod::Attribute, hesiod::WaveNbAttribute);
 #endif
-// clang-format on
+  // clang-format on

@@ -34,25 +34,25 @@ bool ShapeAttribute::render_settings(std::string label)
   return has_changed;
 }
 
-bool ShapeAttribute::serialize_json_v2(std::string fieldName, nlohmann::json& outputData) 
-{ 
+bool ShapeAttribute::serialize_json_v2(std::string     fieldName,
+                                       nlohmann::json &outputData)
+{
   outputData[fieldName]["value"]["x"] = this->value.x;
   outputData[fieldName]["value"]["y"] = this->value.y;
   outputData[fieldName]["value_max"]["x"] = this->value_max.x;
   outputData[fieldName]["value_max"]["y"] = this->value_max.y;
-  return true; 
+  return true;
 }
 
-bool ShapeAttribute::deserialize_json_v2(std::string fieldName, nlohmann::json& inputData) 
-{ 
-  if(
-    inputData[fieldName]["value"].is_object() == false ||
-    inputData[fieldName]["value_max"].is_object() == false ||
-    inputData[fieldName]["value"]["x"].is_number() == false ||
-    inputData[fieldName]["value"]["y"].is_number() == false ||
-    inputData[fieldName]["value_max"]["x"].is_number() == false ||
-    inputData[fieldName]["value_max"]["y"].is_number() == false
-  )
+bool ShapeAttribute::deserialize_json_v2(std::string     fieldName,
+                                         nlohmann::json &inputData)
+{
+  if (inputData[fieldName]["value"].is_object() == false ||
+      inputData[fieldName]["value_max"].is_object() == false ||
+      inputData[fieldName]["value"]["x"].is_number() == false ||
+      inputData[fieldName]["value"]["y"].is_number() == false ||
+      inputData[fieldName]["value_max"]["x"].is_number() == false ||
+      inputData[fieldName]["value_max"]["y"].is_number() == false)
   {
     LOG_DEBUG("Attribute %s is not a an array.", fieldName.data());
     return false;
@@ -62,7 +62,7 @@ bool ShapeAttribute::deserialize_json_v2(std::string fieldName, nlohmann::json& 
   this->value.y = inputData[fieldName]["value"]["y"].get<float>();
   this->value_max.x = inputData[fieldName]["value_max"]["x"].get<float>();
   this->value_max.y = inputData[fieldName]["value_max"]["y"].get<float>();
-  return true; 
+  return true;
 }
 
 } // namespace hesiod

@@ -29,22 +29,22 @@ bool IntAttribute::render_settings(std::string label)
   return has_changed;
 }
 
-bool IntAttribute::serialize_json_v2(std::string fieldName, nlohmann::json& outputData) 
-{ 
+bool IntAttribute::serialize_json_v2(std::string     fieldName,
+                                     nlohmann::json &outputData)
+{
   outputData[fieldName]["value"] = this->value;
   outputData[fieldName]["vmin"] = this->vmin;
   outputData[fieldName]["vmax"] = this->vmax;
-  return true; 
+  return true;
 }
 
-bool IntAttribute::deserialize_json_v2(std::string fieldName, nlohmann::json& inputData) 
-{ 
-  if(
-    inputData[fieldName].is_null() == true ||
-    inputData[fieldName]["value"].is_number() == false ||
-    inputData[fieldName]["vmin"].is_number() == false ||
-    inputData[fieldName]["vmax"].is_number() == false
-  )
+bool IntAttribute::deserialize_json_v2(std::string     fieldName,
+                                       nlohmann::json &inputData)
+{
+  if (inputData[fieldName].is_null() == true ||
+      inputData[fieldName]["value"].is_number() == false ||
+      inputData[fieldName]["vmin"].is_number() == false ||
+      inputData[fieldName]["vmax"].is_number() == false)
   {
     LOG_DEBUG("Attribute %s is not valid.", fieldName.data());
     return false;
@@ -53,7 +53,7 @@ bool IntAttribute::deserialize_json_v2(std::string fieldName, nlohmann::json& in
   this->value = inputData[fieldName]["value"].get<int>();
   this->vmin = inputData[fieldName]["vmin"].get<int>();
   this->vmax = inputData[fieldName]["vmax"].get<int>();
-  return true; 
+  return true;
 }
 
 } // namespace hesiod
