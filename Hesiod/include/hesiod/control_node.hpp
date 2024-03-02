@@ -393,6 +393,14 @@ public:
   void post_process_heightmap(hmap::HeightMap &h);
 };
 
+class ControlNodeInstancing
+{
+public:
+  static std::string get_name_from_type(ControlNodeType type);
+  static ControlNodeType get_type_from_name(std::string name);
+  static std::unique_ptr<ControlNode> create_attribute_from_type(ControlNodeType type, std::string id, void* tree);
+};
+
 //----------------------------------------
 // Generic nodes
 //----------------------------------------

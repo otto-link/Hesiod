@@ -4,6 +4,7 @@
 #include <fstream>
 
 #include "gnode.hpp"
+#include "hesiod/control_node.hpp"
 #include "macrologger.h"
 #include <cereal/archives/json.hpp>
 #include <cereal/types/map.hpp>
@@ -13,6 +14,7 @@
 
 #include "hesiod/view_node.hpp"
 #include "hesiod/view_tree.hpp"
+#include "nlohmann/json_fwd.hpp"
 
 namespace hesiod::vnode
 {
@@ -34,14 +36,23 @@ void ViewTree::load_state(std::string fname)
 
 void ViewTree::save_state(std::string fname)
 {
-#ifdef USE_CEREAL
-  LOG_DEBUG("saving state...");
+// #ifdef USE_CEREAL
+//   LOG_DEBUG("saving state...");
+// 
+//   std::ofstream             os(fname);
+//   cereal::JSONOutputArchive oarchive(os);
+//   oarchive(cereal::make_nvp("tree", *this));
+//   LOG_DEBUG("ok");
+// #endif
 
-  std::ofstream             os(fname);
-  cereal::JSONOutputArchive oarchive(os);
-  oarchive(cereal::make_nvp("tree", *this));
-  LOG_DEBUG("ok");
-#endif
+  std::ofstream outputFileStream = std::ofstream(fname, std::ios::trunc);
+  nlohmann::json outputSerializedData = nlohmann::json();
+
+  this->serialize_json_v2("data", outputSerializedData);
+
+  outputFileStream << outputSerializedData.dump(1) << std::endl;
+  
+  outputFileStream.close();
 }
 
 template <class Archive> void ViewTree::load(Archive &archive)
@@ -150,6 +161,79 @@ template <class Archive> void ViewTree::save(Archive &archive) const
   // links
   archive(cereal::make_nvp("links", this->links));
 #endif
+}
+
+bool ViewTree::serialize_json_v2(std::string fieldName, nlohmann::json& outputData)
+{
+  outputData[fieldName]["id"] = id;
+  outputData[fieldName]["overlap"] = overlap;
+  outputData[fieldName]["shape.x"] = shape.x;
+  outputData[fieldName]["shape.y"] = shape.y;
+  outputData[fieldName]["tiling.x"] = tiling.x;
+  outputData[fieldName]["tiling.y"] = tiling.y;
+  outputData[fieldName]["id_counter"] = id_counter;
+
+  // node ids and positions
+  {
+    ax::NodeEditor::SetCurrentEditor(this->get_p_node_editor_context());
+
+    std::vector<std::string> node_ids = {};
+    std::vector<float>       pos_x = {};
+    std::vector<float>       pos_y = {};
+    for (auto &[id, vnode] : this->get_nodes_map())
+    {
+      ImVec2 pos = ax::NodeEditor::GetNodePosition(vnode.get()->hash_id);
+      node_ids.push_back(id);
+      pos_x.push_back(pos.x);
+      pos_y.push_back(pos.y);
+    }
+
+    ax::NodeEditor::SetCurrentEditor(nullptr);
+
+    outputData[fieldName]["node_ids"] = node_ids;
+    outputData[fieldName]["pos_x"] = pos_x;
+    outputData[fieldName]["pos_y"] = pos_y;
+  }
+
+  std::vector<nlohmann::json> nodesArraySerialized = {};
+
+  // nodes parameters
+  for (auto &[id, node] : this->get_nodes_map())
+  {
+    nlohmann::json currentNodeSerialized = nlohmann::json();
+
+    currentNodeSerialized["id"] = id;
+    currentNodeSerialized["type"] = cnode::ControlNodeInstancing::get_name_from_type(this->get_node_ref_by_id<hesiod::cnode::ControlNode>(id)->get_type());
+
+    if (this->get_node_type(id) != "Clone")
+    {
+      this->get_node_ref_by_id<hesiod::cnode::ControlNode>(id)->serialize_json_v2("data", currentNodeSerialized);
+    }
+    else
+    {
+      this->get_node_ref_by_id<hesiod::cnode::Clone>(id)->serialize_json_v2("data", currentNodeSerialized);
+    }
+
+    nodesArraySerialized.push_back(currentNodeSerialized);
+  }
+
+  outputData[fieldName]["nodes"] = nodesArraySerialized;
+
+  return true;
+} 
+
+bool ViewTree::deserialize_json_v2(std::string fieldName, nlohmann::json& inputData)
+{
+
+  id = inputData[fieldName]["id"].get<std::string>();
+  overlap = inputData[fieldName]["overlap"].get<float>();
+  shape.x = inputData[fieldName]["shape.x"].get<int>();
+  shape.y = inputData[fieldName]["shape.y"].get<int>();
+  tiling.x = inputData[fieldName]["tiling.x"].get<int>();
+  tiling.y = inputData[fieldName]["tiling.y"].get<int>();
+  id_counter = inputData[fieldName]["id_counter"].get<int>();
+
+  return true;
 }
 
 } // namespace hesiod::vnode

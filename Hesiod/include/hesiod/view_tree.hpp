@@ -6,6 +6,7 @@
 
 #include <GL/glut.h>
 
+#include "hesiod/serialization.hpp"
 #include "highmap.hpp"
 #include <cereal/archives/json.hpp>
 #include <imgui_node_editor.h>
@@ -46,7 +47,7 @@ struct Link
   }
 };
 
-class ViewTree : public gnode::Tree
+class ViewTree : public gnode::Tree, public serialization::SerializationBase
 {
 public:
   ViewTree(std::string     id,
@@ -122,6 +123,13 @@ public:
 
   void update_view3d_basemesh();
 
+  // used for serialization now
+  // see class ControlNodeInstancing
+
+  inline hmap::Vec2<int> get_shape() { return shape; } 
+  inline hmap::Vec2<int> get_tiling() { return tiling; }
+  inline float get_overlap() { return overlap; }
+
   // serialization
 
   void load_state(std::string fname);
@@ -131,7 +139,8 @@ public:
   template <class Archive> void load(Archive &archive);
 
   template <class Archive> void save(Archive &archive) const;
-
+  
+  SERIALIZATION_V2_IMPLEMENT_BASE();
 private:
   hmap::Vec2<int> shape;
   hmap::Vec2<int> tiling;
