@@ -429,6 +429,7 @@ public:
   VecFloatAttribute();
   VecFloatAttribute(std::vector<float> value);
   std::vector<float> get();
+  AttributeType get_type() { return AttributeType::VEC_FLOAT_ATTRIBUTE; }
   virtual bool       render_settings(std::string label);
 
 #ifdef USE_CEREAL

@@ -45,6 +45,8 @@ struct Link
        cereal::make_nvp("port_id_to", port_id_to),
        cereal::make_nvp("port_hash_id_to", port_hash_id_to));
   }
+
+  SERIALIZATION_V2_IMPLEMENT_BASE();
 };
 
 class ViewTree : public gnode::Tree, public serialization::SerializationBase

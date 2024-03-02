@@ -11,6 +11,7 @@
 #include <cereal/types/polymorphic.hpp>
 #include <cereal/types/string.hpp>
 #include <cereal/types/vector.hpp>
+#include <vector>
 
 #include "hesiod/view_node.hpp"
 #include "hesiod/view_tree.hpp"
@@ -18,6 +19,39 @@
 
 namespace hesiod::vnode
 {
+
+// Link
+
+bool Link::serialize_json_v2(std::string fieldName, nlohmann::json& outputData)
+{
+  outputData[fieldName]["node_id_from"] = node_id_from;
+  outputData[fieldName]["port_id_from"] = port_id_from;
+  outputData[fieldName]["port_hash_id_from"] = port_hash_id_from;
+  outputData[fieldName]["node_id_to"] = node_id_to;
+  outputData[fieldName]["port_id_to"] = port_id_to;
+  outputData[fieldName]["port_hash_id_to"] = port_hash_id_to;
+  return true;
+}
+
+bool Link::deserialize_json_v2(std::string fieldName, nlohmann::json& inputData)
+{
+  if(inputData[fieldName].is_object() == false)
+  {
+    LOG_ERROR("Encountered invalid link data.");
+    return false;
+  }
+
+  node_id_from = inputData[fieldName]["node_id_from"].get<std::string>();
+  port_id_from = inputData[fieldName]["port_id_from"].get<std::string>();
+  port_hash_id_from = inputData[fieldName]["port_hash_id_from"].get<int>();
+  node_id_to = inputData[fieldName]["node_id_to"].get<std::string>();
+  port_id_to = inputData[fieldName]["port_id_to"].get<std::string>();
+  port_hash_id_to = inputData[fieldName]["port_hash_id_to"].get<int>();
+  return true;
+}
+
+
+// ViewTree
 
 void ViewTree::load_state(std::string fname)
 {
@@ -36,15 +70,13 @@ void ViewTree::load_state(std::string fname)
 
 void ViewTree::save_state(std::string fname)
 {
-// #ifdef USE_CEREAL
-//   LOG_DEBUG("saving state...");
-// 
-//   std::ofstream             os(fname);
-//   cereal::JSONOutputArchive oarchive(os);
-//   oarchive(cereal::make_nvp("tree", *this));
-//   LOG_DEBUG("ok");
-// #endif
-
+#ifdef USE_CEREAL
+  LOG_DEBUG("saving state...");
+  std::ofstream             os(fname);
+  cereal::JSONOutputArchive oarchive(os);
+  oarchive(cereal::make_nvp("tree", *this));
+  LOG_DEBUG("ok");
+#else
   std::ofstream outputFileStream = std::ofstream(fname, std::ios::trunc);
   nlohmann::json outputSerializedData = nlohmann::json();
 
@@ -53,6 +85,7 @@ void ViewTree::save_state(std::string fname)
   outputFileStream << outputSerializedData.dump(1) << std::endl;
   
   outputFileStream.close();
+#endif
 }
 
 template <class Archive> void ViewTree::load(Archive &archive)
@@ -217,7 +250,20 @@ bool ViewTree::serialize_json_v2(std::string fieldName, nlohmann::json& outputDa
     nodesArraySerialized.push_back(currentNodeSerialized);
   }
 
+  std::vector<nlohmann::json> linksArraySerialized = {};
+
+  for(auto& [id, link] : links)
+  {
+    nlohmann::json currentLinkSerialized = nlohmann::json();
+
+    currentLinkSerialized["key"] = id;
+    link.serialize_json_v2("value", currentLinkSerialized);
+
+    linksArraySerialized.push_back(currentLinkSerialized);
+  }
+
   outputData[fieldName]["nodes"] = nodesArraySerialized;
+  outputData[fieldName]["links"] = linksArraySerialized;
 
   return true;
 } 
