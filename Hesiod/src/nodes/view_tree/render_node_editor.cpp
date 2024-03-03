@@ -3,6 +3,7 @@
  * this software. */
 #include <functional>
 
+#include "ImGuiFileDialog.h"
 #include "gnode.hpp"
 #include "macrologger.h"
 #include <imgui_node_editor.h>
@@ -84,11 +85,21 @@ void ViewTree::render_node_editor()
   ImGui::SameLine();
 
   if (ImGui::Button("Load"))
-    this->load_state("tree_state.json");
+  {
+    IGFD::FileDialogConfig config;
+    config.path = ".";
+    ImGuiFileDialog::Instance()->OpenDialog("LoadTreeStateDlg", "Load Tree", ".json");
+  }
+
   ImGui::SameLine();
 
   if (ImGui::Button("Save"))
-    this->save_state("tree_state.json");
+  {
+    IGFD::FileDialogConfig config;
+    config.path = ".";
+    ImGuiFileDialog::Instance()->OpenDialog("SaveTreeStateDlg", "Save Tree", ".json");
+  }
+
   ImGui::SameLine();
 
   if (ImGui::Button("2D viewer"))
@@ -289,6 +300,32 @@ void ViewTree::render_node_editor()
                  &this->open_node_list_window);
     this->render_node_list();
     ImGui::End();
+  }
+
+  if(ImGuiFileDialog::Instance()->Display("SaveTreeStateDlg"))
+  {
+    if (ImGuiFileDialog::Instance()->IsOk()) 
+    {
+      std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+      std::string filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
+
+      this->save_state(filePathName);
+    }
+
+    ImGuiFileDialog::Instance()->Close();
+  }
+
+  if(ImGuiFileDialog::Instance()->Display("LoadTreeStateDlg"))
+  {
+    if (ImGuiFileDialog::Instance()->IsOk()) 
+    {
+      std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
+      std::string filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
+
+      this->load_state(filePathName);
+    }
+
+    ImGuiFileDialog::Instance()->Close();
   }
 }
 
