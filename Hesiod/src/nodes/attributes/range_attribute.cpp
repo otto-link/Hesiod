@@ -43,31 +43,31 @@ bool RangeAttribute::render_settings(std::string label)
   return has_changed;
 }
 
-bool RangeAttribute::serialize_json_v2(std::string     fieldName,
-                                       nlohmann::json &outputData)
+bool RangeAttribute::serialize_json_v2(std::string     field_name,
+                                       nlohmann::json &output_data)
 {
-  outputData[fieldName]["x"] = this->value.x;
-  outputData[fieldName]["y"] = this->value.y;
-  outputData[fieldName]["activate"] = this->activate;
+  output_data[field_name]["x"] = this->value.x;
+  output_data[field_name]["y"] = this->value.y;
+  output_data[field_name]["activate"] = this->activate;
   return true;
 }
 
-bool RangeAttribute::deserialize_json_v2(std::string     fieldName,
-                                         nlohmann::json &inputData)
+bool RangeAttribute::deserialize_json_v2(std::string     field_name,
+                                         nlohmann::json &input_data)
 {
-  if (inputData[fieldName].is_object() == false ||
-      inputData[fieldName]["x"].is_number() == false ||
-      inputData[fieldName]["y"].is_number() == false ||
-      inputData[fieldName]["activate"].is_boolean() == false)
+  if (input_data[field_name].is_object() == false ||
+      input_data[field_name]["x"].is_number() == false ||
+      input_data[field_name]["y"].is_number() == false ||
+      input_data[field_name]["activate"].is_boolean() == false)
   {
-    LOG_DEBUG("Attribute %s is invalid.", fieldName.data());
+    LOG_DEBUG("Attribute %s is invalid.", field_name.data());
     return false;
   }
 
-  this->value = hmap::Vec2<float>(inputData[fieldName]["x"].get<float>(),
-                                  inputData[fieldName]["y"].get<float>());
+  this->value = hmap::Vec2<float>(input_data[field_name]["x"].get<float>(),
+                                  input_data[field_name]["y"].get<float>());
 
-  this->activate = inputData[fieldName]["activate"].get<bool>();
+  this->activate = input_data[field_name]["activate"].get<bool>();
   return true;
 }
 

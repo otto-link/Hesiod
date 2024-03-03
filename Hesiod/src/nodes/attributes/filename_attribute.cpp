@@ -49,23 +49,23 @@ bool FilenameAttribute::render_settings(std::string label)
   return has_changed;
 }
 
-bool FilenameAttribute::serialize_json_v2(std::string     fieldName,
-                                          nlohmann::json &outputData)
+bool FilenameAttribute::serialize_json_v2(std::string     field_name,
+                                          nlohmann::json &output_data)
 {
-  outputData[fieldName] = this->value;
+  output_data[field_name] = this->value;
   return true;
 }
 
-bool FilenameAttribute::deserialize_json_v2(std::string     fieldName,
-                                            nlohmann::json &inputData)
+bool FilenameAttribute::deserialize_json_v2(std::string     field_name,
+                                            nlohmann::json &input_data)
 {
-  if (inputData[fieldName].is_string() == false)
+  if (input_data[field_name].is_string() == false)
   {
-    LOG_DEBUG("Attribute %s is not a string.", fieldName.data());
+    LOG_DEBUG("Attribute %s is not a string.", field_name.data());
     return false;
   }
 
-  this->value = inputData[fieldName].get<std::string>();
+  this->value = input_data[field_name].get<std::string>();
   return true;
 }
 

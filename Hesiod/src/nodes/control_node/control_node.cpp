@@ -15,8 +15,8 @@
 namespace hesiod::cnode
 {
 
-bool ControlNode::serialize_json_v2(std::string     fieldName,
-                                    nlohmann::json &outputData)
+bool ControlNode::serialize_json_v2(std::string     field_name,
+                                    nlohmann::json &output_data)
 {
   std::vector<nlohmann::json> attributesListJsonData = {};
 
@@ -38,16 +38,16 @@ bool ControlNode::serialize_json_v2(std::string     fieldName,
     attributesListJsonData.push_back(currentAttributeIteratorJsonData);
   }
 
-  outputData[fieldName]["id"] = this->id;
-  outputData[fieldName]["attributes"] = attributesListJsonData;
+  output_data[field_name]["id"] = this->id;
+  output_data[field_name]["attributes"] = attributesListJsonData;
   return true;
 }
 
-bool ControlNode::deserialize_json_v2(std::string     fieldName,
-                                      nlohmann::json &inputData)
+bool ControlNode::deserialize_json_v2(std::string     field_name,
+                                      nlohmann::json &input_data)
 {
-  if (inputData[fieldName]["id"].is_string() == false ||
-      inputData[fieldName]["attributes"].is_array() == false)
+  if (input_data[field_name]["id"].is_string() == false ||
+      input_data[field_name]["attributes"].is_array() == false)
   {
     LOG_ERROR("Encountered invalid control node!");
     return false;
@@ -55,10 +55,10 @@ bool ControlNode::deserialize_json_v2(std::string     fieldName,
 
   attr.clear();
 
-  this->id = inputData[fieldName]["id"].get<std::string>();
+  this->id = input_data[field_name]["id"].get<std::string>();
 
   for (nlohmann::json currentAttributeIteratorJsonData :
-       inputData[fieldName]["attributes"])
+       input_data[field_name]["attributes"])
   {
     AttributeType currentAttributeIteratorType =
         AttributeInstancing::get_type_from_name(

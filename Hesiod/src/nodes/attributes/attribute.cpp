@@ -39,14 +39,14 @@ std::string AttributeInstancing::get_name_from_type(AttributeType type)
 
 AttributeType AttributeInstancing::get_type_from_name(std::string name)
 {
-  for (std::map<AttributeType, std::string>::iterator currentIterator =
+  for (std::map<AttributeType, std::string>::iterator current_iterator =
            attribute_type_to_name.begin();
-       currentIterator != attribute_type_to_name.end();
-       currentIterator++)
+       current_iterator != attribute_type_to_name.end();
+       current_iterator++)
   {
-    if (currentIterator->second == name)
+    if (current_iterator->second == name)
     {
-      return currentIterator->first;
+      return current_iterator->first;
     }
   }
 

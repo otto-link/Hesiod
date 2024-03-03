@@ -55,41 +55,42 @@ bool MapEnumAttribute::render_settings(std::string label)
   return has_changed;
 }
 
-bool MapEnumAttribute::serialize_json_v2(std::string     fieldName,
-                                         nlohmann::json &outputData)
+bool MapEnumAttribute::serialize_json_v2(std::string     field_name,
+                                         nlohmann::json &output_data)
 {
-  for (std::map<std::string, int>::iterator currentIterator =
+  for (std::map<std::string, int>::iterator current_iterator =
            this->value.begin();
-       currentIterator != this->value.end();
-       currentIterator++)
+       current_iterator != this->value.end();
+       current_iterator++)
   {
-    outputData[fieldName]["value"][currentIterator->first] =
-        currentIterator->second;
+    output_data[field_name]["value"][current_iterator->first] =
+        current_iterator->second;
   }
 
-  outputData[fieldName]["choice"] = this->choice;
+  output_data[field_name]["choice"] = this->choice;
 
   return true;
 }
 
-bool MapEnumAttribute::deserialize_json_v2(std::string     fieldName,
-                                           nlohmann::json &inputData)
+bool MapEnumAttribute::deserialize_json_v2(std::string     field_name,
+                                           nlohmann::json &input_data)
 {
-  if (inputData[fieldName].is_object() == false ||
-      inputData[fieldName]["value"].is_object() == false ||
-      inputData[fieldName]["choice"].is_string() == false)
+  if (input_data[field_name].is_object() == false ||
+      input_data[field_name]["value"].is_object() == false ||
+      input_data[field_name]["choice"].is_string() == false)
   {
     return false;
   }
 
   this->value.clear();
 
-  for (auto &[currentKey, currentValue] : inputData[fieldName]["value"].items())
+  for (auto &[currentKey, currentValue] :
+       input_data[field_name]["value"].items())
   {
     this->value[currentKey] = currentValue.get<int>();
   }
 
-  this->choice = inputData[fieldName]["choice"].get<std::string>();
+  this->choice = input_data[field_name]["choice"].get<std::string>();
 
   return true;
 }

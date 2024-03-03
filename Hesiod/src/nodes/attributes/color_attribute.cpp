@@ -23,23 +23,23 @@ bool ColorAttribute::render_settings(std::string label)
   return has_changed;
 }
 
-bool ColorAttribute::serialize_json_v2(std::string     fieldName,
-                                       nlohmann::json &outputData)
+bool ColorAttribute::serialize_json_v2(std::string     field_name,
+                                       nlohmann::json &output_data)
 {
-  outputData[fieldName] = this->value;
+  output_data[field_name] = this->value;
   return true;
 }
 
-bool ColorAttribute::deserialize_json_v2(std::string     fieldName,
-                                         nlohmann::json &inputData)
+bool ColorAttribute::deserialize_json_v2(std::string     field_name,
+                                         nlohmann::json &input_data)
 {
-  if (inputData[fieldName].is_array() == false)
+  if (input_data[field_name].is_array() == false)
   {
-    LOG_DEBUG("Attribute %s is not an array.", fieldName.data());
+    LOG_DEBUG("Attribute %s is not an array.", field_name.data());
     return false;
   }
 
-  this->value = inputData[fieldName].get<std::vector<float>>();
+  this->value = input_data[field_name].get<std::vector<float>>();
   return true;
 }
 

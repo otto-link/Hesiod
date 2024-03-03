@@ -2,15 +2,14 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #pragma once
+#include <GL/glut.h>
 #include <string>
 
-#include <GL/glut.h>
-
-#include "hesiod/serialization.hpp"
 #include "highmap.hpp"
 #include <imgui_node_editor.h>
 
 #include "hesiod/control_node.hpp"
+#include "hesiod/serialization.hpp"
 #include "hesiod/view_node.hpp"
 
 namespace hesiod::vnode

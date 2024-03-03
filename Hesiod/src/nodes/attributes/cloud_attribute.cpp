@@ -26,31 +26,31 @@ bool CloudAttribute::render_settings(std::string label)
   return has_changed;
 }
 
-bool CloudAttribute::serialize_json_v2(std::string     fieldName,
-                                       nlohmann::json &outputData)
+bool CloudAttribute::serialize_json_v2(std::string     field_name,
+                                       nlohmann::json &output_data)
 {
-  outputData[fieldName]["x"] = this->value.get_x();
-  outputData[fieldName]["y"] = this->value.get_y();
-  outputData[fieldName]["v"] = this->value.get_values();
+  output_data[field_name]["x"] = this->value.get_x();
+  output_data[field_name]["y"] = this->value.get_y();
+  output_data[field_name]["v"] = this->value.get_values();
 
   return true;
 }
 
-bool CloudAttribute::deserialize_json_v2(std::string     fieldName,
-                                         nlohmann::json &inputData)
+bool CloudAttribute::deserialize_json_v2(std::string     field_name,
+                                         nlohmann::json &input_data)
 {
-  if (inputData[fieldName]["x"].is_array() == false ||
-      inputData[fieldName]["y"].is_array() == false ||
-      inputData[fieldName]["v"].is_array() == false)
+  if (input_data[field_name]["x"].is_array() == false ||
+      input_data[field_name]["y"].is_array() == false ||
+      input_data[field_name]["v"].is_array() == false)
   {
-    LOG_DEBUG("Attribute %s is not filled with arrays.", fieldName.data());
+    LOG_DEBUG("Attribute %s is not filled with arrays.", field_name.data());
     return false;
   }
 
   this->value = hmap::Cloud(
-      inputData[fieldName]["x"].get<std::vector<float>>(),
-      inputData[fieldName]["y"].get<std::vector<float>>(),
-      inputData[fieldName]["v"].get<std::vector<float>>());
+      input_data[field_name]["x"].get<std::vector<float>>(),
+      input_data[field_name]["y"].get<std::vector<float>>(),
+      input_data[field_name]["v"].get<std::vector<float>>());
 
   return true;
 }

@@ -38,34 +38,35 @@ bool PathAttribute::render_settings(std::string label)
   return has_changed;
 }
 
-bool PathAttribute::serialize_json_v2(std::string     fieldName,
-                                      nlohmann::json &outputData)
+bool PathAttribute::serialize_json_v2(std::string     field_name,
+                                      nlohmann::json &output_data)
 {
-  outputData[fieldName]["x"] = this->value.get_x();
-  outputData[fieldName]["y"] = this->value.get_y();
-  outputData[fieldName]["v"] = this->value.get_values();
-  outputData[fieldName]["closed"] = this->value.closed;
+  output_data[field_name]["x"] = this->value.get_x();
+  output_data[field_name]["y"] = this->value.get_y();
+  output_data[field_name]["v"] = this->value.get_values();
+  output_data[field_name]["closed"] = this->value.closed;
 
   return true;
 }
 
-bool PathAttribute::deserialize_json_v2(std::string     fieldName,
-                                        nlohmann::json &inputData)
+bool PathAttribute::deserialize_json_v2(std::string     field_name,
+                                        nlohmann::json &input_data)
 {
-  if (inputData[fieldName].is_object() == false ||
-      inputData[fieldName]["x"].is_array() == false ||
-      inputData[fieldName]["y"].is_array() == false ||
-      inputData[fieldName]["v"].is_array() == false ||
-      inputData[fieldName]["closed"].is_boolean() == false)
+  if (input_data[field_name].is_object() == false ||
+      input_data[field_name]["x"].is_array() == false ||
+      input_data[field_name]["y"].is_array() == false ||
+      input_data[field_name]["v"].is_array() == false ||
+      input_data[field_name]["closed"].is_boolean() == false)
   {
-    LOG_DEBUG("Attribute %s is invalid.", fieldName.data());
+    LOG_DEBUG("Attribute %s is invalid.", field_name.data());
     return false;
   }
 
-  this->value = hmap::Path(inputData[fieldName]["x"].get<std::vector<float>>(),
-                           inputData[fieldName]["y"].get<std::vector<float>>(),
-                           inputData[fieldName]["v"].get<std::vector<float>>());
-  this->value.closed = inputData[fieldName]["closed"].get<bool>();
+  this->value = hmap::Path(
+      input_data[field_name]["x"].get<std::vector<float>>(),
+      input_data[field_name]["y"].get<std::vector<float>>(),
+      input_data[field_name]["v"].get<std::vector<float>>());
+  this->value.closed = input_data[field_name]["closed"].get<bool>();
 
   return true;
 }

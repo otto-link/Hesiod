@@ -29,23 +29,23 @@ bool MatrixAttribute::render_settings(std::string label)
   return has_changed;
 }
 
-bool MatrixAttribute::serialize_json_v2(std::string     fieldName,
-                                        nlohmann::json &outputData)
+bool MatrixAttribute::serialize_json_v2(std::string     field_name,
+                                        nlohmann::json &output_data)
 {
-  outputData[fieldName] = this->value;
+  output_data[field_name] = this->value;
   return true;
 }
 
-bool MatrixAttribute::deserialize_json_v2(std::string     fieldName,
-                                          nlohmann::json &inputData)
+bool MatrixAttribute::deserialize_json_v2(std::string     field_name,
+                                          nlohmann::json &input_data)
 {
-  if (inputData[fieldName].is_array() == false)
+  if (input_data[field_name].is_array() == false)
   {
-    LOG_DEBUG("Attribute %s is not a an array.", fieldName.data());
+    LOG_DEBUG("Attribute %s is not a an array.", field_name.data());
     return false;
   }
 
-  this->value = inputData[fieldName].get<std::vector<std::vector<float>>>();
+  this->value = input_data[field_name].get<std::vector<std::vector<float>>>();
   return true;
 }
 

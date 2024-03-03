@@ -34,34 +34,34 @@ bool ShapeAttribute::render_settings(std::string label)
   return has_changed;
 }
 
-bool ShapeAttribute::serialize_json_v2(std::string     fieldName,
-                                       nlohmann::json &outputData)
+bool ShapeAttribute::serialize_json_v2(std::string     field_name,
+                                       nlohmann::json &output_data)
 {
-  outputData[fieldName]["value"]["x"] = this->value.x;
-  outputData[fieldName]["value"]["y"] = this->value.y;
-  outputData[fieldName]["value_max"]["x"] = this->value_max.x;
-  outputData[fieldName]["value_max"]["y"] = this->value_max.y;
+  output_data[field_name]["value"]["x"] = this->value.x;
+  output_data[field_name]["value"]["y"] = this->value.y;
+  output_data[field_name]["value_max"]["x"] = this->value_max.x;
+  output_data[field_name]["value_max"]["y"] = this->value_max.y;
   return true;
 }
 
-bool ShapeAttribute::deserialize_json_v2(std::string     fieldName,
-                                         nlohmann::json &inputData)
+bool ShapeAttribute::deserialize_json_v2(std::string     field_name,
+                                         nlohmann::json &input_data)
 {
-  if (inputData[fieldName]["value"].is_object() == false ||
-      inputData[fieldName]["value_max"].is_object() == false ||
-      inputData[fieldName]["value"]["x"].is_number() == false ||
-      inputData[fieldName]["value"]["y"].is_number() == false ||
-      inputData[fieldName]["value_max"]["x"].is_number() == false ||
-      inputData[fieldName]["value_max"]["y"].is_number() == false)
+  if (input_data[field_name]["value"].is_object() == false ||
+      input_data[field_name]["value_max"].is_object() == false ||
+      input_data[field_name]["value"]["x"].is_number() == false ||
+      input_data[field_name]["value"]["y"].is_number() == false ||
+      input_data[field_name]["value_max"]["x"].is_number() == false ||
+      input_data[field_name]["value_max"]["y"].is_number() == false)
   {
-    LOG_DEBUG("Attribute %s is not a an array.", fieldName.data());
+    LOG_DEBUG("Attribute %s is not a an array.", field_name.data());
     return false;
   }
 
-  this->value.x = inputData[fieldName]["value"]["x"].get<float>();
-  this->value.y = inputData[fieldName]["value"]["y"].get<float>();
-  this->value_max.x = inputData[fieldName]["value_max"]["x"].get<float>();
-  this->value_max.y = inputData[fieldName]["value_max"]["y"].get<float>();
+  this->value.x = input_data[field_name]["value"]["x"].get<float>();
+  this->value.y = input_data[field_name]["value"]["y"].get<float>();
+  this->value_max.x = input_data[field_name]["value_max"]["x"].get<float>();
+  this->value_max.y = input_data[field_name]["value_max"]["y"].get<float>();
   return true;
 }
 

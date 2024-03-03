@@ -7,14 +7,14 @@ namespace hesiod::serialization
 #define SERIALIZATION_BATCH_IMPLEMENT_SERIALIZE_CASE(Enum, Cast)               \
   case SerializationBatchHelperElementType::Enum:                              \
   {                                                                            \
-    batchData[e->name] = *reinterpret_cast<Cast *>(e->data);                   \
+    batch_data[e->name] = *reinterpret_cast<Cast *>(e->data);                  \
     break;                                                                     \
   }
 
 #define SERIALIZATION_BATCH_IMPLEMENT_DESERIALIZE_CASE(Enum, Cast)             \
   case SerializationBatchHelperElementType::Enum:                              \
   {                                                                            \
-    *reinterpret_cast<Cast *>(e->data) = batchData[e->name].get<Cast>();       \
+    *reinterpret_cast<Cast *>(e->data) = batch_data[e->name].get<Cast>();      \
     break;                                                                     \
   }
 
@@ -26,10 +26,10 @@ SerializationBatchHelper::~SerializationBatchHelper()
 {
 }
 
-bool SerializationBatchHelper::serialize_json_v2(std::string     fieldName,
-                                                 nlohmann::json &outputData)
+bool SerializationBatchHelper::serialize_json_v2(std::string     field_name,
+                                                 nlohmann::json &output_data)
 {
-  nlohmann::json batchData = nlohmann::json();
+  nlohmann::json batch_data = nlohmann::json();
 
   for (SerializationBatchHelperElement *e : this->elements)
   {
@@ -52,32 +52,32 @@ bool SerializationBatchHelper::serialize_json_v2(std::string     fieldName,
       SERIALIZATION_BATCH_IMPLEMENT_SERIALIZE_CASE(DOUBLE, double);
     case SerializationBatchHelperElementType::STL_STRING:
     {
-      batchData[e->name] = reinterpret_cast<std::string *>(e->data)->data();
+      batch_data[e->name] = reinterpret_cast<std::string *>(e->data)->data();
       break;
     }
     case SerializationBatchHelperElementType::OBJECT:
     {
-      nlohmann::json tempData = nlohmann::json();
+      nlohmann::json temp_data = nlohmann::json();
 
       SerializationBase *base = reinterpret_cast<SerializationBase *>(e->data);
 
       if (base)
-        base->serialize_json_v2("sub", tempData);
+        base->serialize_json_v2("sub", temp_data);
 
-      batchData[e->name] = tempData;
+      batch_data[e->name] = temp_data;
       break;
     }
     case SerializationBatchHelperElementType::OBJECT_PTR:
     {
-      nlohmann::json tempData = nlohmann::json();
+      nlohmann::json temp_data = nlohmann::json();
 
       SerializationBase *base = (*reinterpret_cast<SerializationBase **>(
           e->data));
 
       if (base)
-        base->serialize_json_v2("sub", tempData);
+        base->serialize_json_v2("sub", temp_data);
 
-      batchData[e->name] = tempData;
+      batch_data[e->name] = temp_data;
       break;
     }
     default:
@@ -86,28 +86,28 @@ bool SerializationBatchHelper::serialize_json_v2(std::string     fieldName,
     }
   }
 
-  outputData[fieldName] = batchData;
+  output_data[field_name] = batch_data;
 
   return true;
 }
 
-bool SerializationBatchHelper::deserialize_json_v2(std::string     fieldName,
-                                                   nlohmann::json &inputData)
+bool SerializationBatchHelper::deserialize_json_v2(std::string     field_name,
+                                                   nlohmann::json &input_data)
 {
-  if (inputData[fieldName].is_null() ||
-      inputData[fieldName].is_object() == false)
+  if (input_data[field_name].is_null() ||
+      input_data[field_name].is_object() == false)
   {
     LOG_ERROR("[%s] Encountered error while parsing object.", __FUNCTION__);
     return false;
   }
 
-  nlohmann::json batchData = inputData[fieldName];
+  nlohmann::json batch_data = input_data[field_name];
 
   for (SerializationBatchHelperElement *e : this->elements)
   {
     if (e->data == nullptr)
       continue;
-    if (batchData[e->name].is_null())
+    if (batch_data[e->name].is_null())
       continue;
 
     switch (e->type)
@@ -127,28 +127,28 @@ bool SerializationBatchHelper::deserialize_json_v2(std::string     fieldName,
       SERIALIZATION_BATCH_IMPLEMENT_DESERIALIZE_CASE(DOUBLE, double);
     case SerializationBatchHelperElementType::STL_STRING:
     {
-      std::string deserializedString = batchData[e->name].get<std::string>();
+      std::string deserializedString = batch_data[e->name].get<std::string>();
       reinterpret_cast<std::string *>(e->data)->swap(deserializedString);
       break;
     }
     case SerializationBatchHelperElementType::OBJECT:
     {
-      nlohmann::json     tempData = batchData[e->name];
+      nlohmann::json     temp_data = batch_data[e->name];
       SerializationBase *base = reinterpret_cast<SerializationBase *>(e->data);
 
       if (base)
-        base->deserialize_json_v2("sub", tempData);
+        base->deserialize_json_v2("sub", temp_data);
 
       break;
     }
     case SerializationBatchHelperElementType::OBJECT_PTR:
     {
-      nlohmann::json     tempData = batchData[e->name];
+      nlohmann::json     temp_data = batch_data[e->name];
       SerializationBase *base = (*reinterpret_cast<SerializationBase **>(
           e->data));
 
       if (base)
-        base->deserialize_json_v2("sub", tempData);
+        base->deserialize_json_v2("sub", temp_data);
 
       break;
     }
@@ -163,16 +163,18 @@ bool SerializationBatchHelper::deserialize_json_v2(std::string     fieldName,
 
 // SerializationBatchBase
 
-bool SerializationBatchBase::serialize_json_v2(std::string     fieldName,
-                                               nlohmann::json &outputData)
+bool SerializationBatchBase::serialize_json_v2(std::string     field_name,
+                                               nlohmann::json &output_data)
 {
-  return this->BuildBatchHelperData().serialize_json_v2(fieldName, outputData);
+  return this->BuildBatchHelperData().serialize_json_v2(field_name,
+                                                        output_data);
 }
 
-bool SerializationBatchBase::deserialize_json_v2(std::string     fieldName,
-                                                 nlohmann::json &inputData)
+bool SerializationBatchBase::deserialize_json_v2(std::string     field_name,
+                                                 nlohmann::json &input_data)
 {
-  return this->BuildBatchHelperData().deserialize_json_v2(fieldName, inputData);
+  return this->BuildBatchHelperData().deserialize_json_v2(field_name,
+                                                          input_data);
 }
 
 } // namespace hesiod::serialization

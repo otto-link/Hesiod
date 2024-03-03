@@ -1,11 +1,12 @@
 #pragma once
 #include <cstring>
-#include <nlohmann/json.hpp>
 #include <string>
 
+#include <nlohmann/json.hpp>
+
 #define SERIALIZATION_V2_IMPLEMENT_BASE()                                      \
-  bool serialize_json_v2(std::string fieldName, nlohmann::json &outputData);   \
-  bool deserialize_json_v2(std::string fieldName, nlohmann::json &inputData);
+  bool serialize_json_v2(std::string field_name, nlohmann::json &output_data); \
+  bool deserialize_json_v2(std::string field_name, nlohmann::json &input_data);
 
 #define SERIALIZATION_V2_IMPLEMENT_BATCH_BASE()                                \
   SerializationBatchHelper BuildBatchHelperData();
@@ -81,8 +82,8 @@ public:
   SerializationBatchHelper();
   ~SerializationBatchHelper();
 
-  bool serialize_json_v2(std::string fieldName, nlohmann::json &outputData);
-  bool deserialize_json_v2(std::string fieldName, nlohmann::json &inputData);
+  bool serialize_json_v2(std::string field_name, nlohmann::json &output_data);
+  bool deserialize_json_v2(std::string field_name, nlohmann::json &input_data);
 
   // Wrappers for the ease of use
 
@@ -247,8 +248,8 @@ public:
     return SerializationBatchHelper();
   }
 
-  bool serialize_json_v2(std::string fieldName, nlohmann::json &outputData);
-  bool deserialize_json_v2(std::string fieldName, nlohmann::json &inputData);
+  bool serialize_json_v2(std::string field_name, nlohmann::json &output_data);
+  bool deserialize_json_v2(std::string field_name, nlohmann::json &input_data);
 };
 
 } // namespace hesiod::serialization

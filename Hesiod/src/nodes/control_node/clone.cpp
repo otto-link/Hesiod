@@ -98,10 +98,10 @@ void Clone::compute()
   this->value_out = *p_input_hmap;
 }
 
-bool Clone::serialize_json_v2(std ::string     fieldName,
-                              nlohmann ::json &outputData)
+bool Clone::serialize_json_v2(std ::string     field_name,
+                              nlohmann ::json &output_data)
 {
-  if (ControlNode::serialize_json_v2("base", outputData[fieldName]) == false)
+  if (ControlNode::serialize_json_v2("base", output_data[field_name]) == false)
   {
     return false;
   }
@@ -118,25 +118,25 @@ bool Clone::serialize_json_v2(std ::string     fieldName,
     }
   }
 
-  outputData[fieldName]["output_ids"] = output_ids;
-  outputData[fieldName]["id_count"] = id_count;
-  outputData[fieldName]["id"] = this->id;
+  output_data[field_name]["output_ids"] = output_ids;
+  output_data[field_name]["id_count"] = id_count;
+  output_data[field_name]["id"] = this->id;
 
   return true;
 }
 
-bool Clone::deserialize_json_v2(std ::string     fieldName,
-                                nlohmann ::json &inputData)
+bool Clone::deserialize_json_v2(std ::string     field_name,
+                                nlohmann ::json &input_data)
 {
-  if (inputData[fieldName]["base"].is_object() == false ||
-      inputData[fieldName]["output_ids"].is_array() == false ||
-      inputData[fieldName]["id_count"].is_number() == false)
+  if (input_data[field_name]["base"].is_object() == false ||
+      input_data[field_name]["output_ids"].is_array() == false ||
+      input_data[field_name]["id_count"].is_number() == false)
   {
     LOG_ERROR("Encountered invalid Clone ControlNode!");
     return false;
   }
 
-  if (ControlNode::deserialize_json_v2("base", inputData[fieldName]) == false)
+  if (ControlNode::deserialize_json_v2("base", input_data[field_name]) == false)
   {
     return false;
   }
@@ -144,7 +144,7 @@ bool Clone::deserialize_json_v2(std ::string     fieldName,
   this->update_inner_bindings();
 
   std::vector<std::string> output_ids =
-      inputData[fieldName]["output_ids"].get<std::vector<std::string>>();
+      input_data[field_name]["output_ids"].get<std::vector<std::string>>();
 
   for (auto &port_id : output_ids)
   {
@@ -156,7 +156,7 @@ bool Clone::deserialize_json_v2(std ::string     fieldName,
     }
   }
 
-  id_count = inputData[fieldName]["id_count"].get<int>();
+  id_count = input_data[field_name]["id_count"].get<int>();
 
   this->update_inner_bindings();
 

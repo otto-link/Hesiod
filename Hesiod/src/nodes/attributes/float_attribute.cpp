@@ -38,30 +38,30 @@ bool FloatAttribute::render_settings(std::string label)
   return has_changed;
 }
 
-bool FloatAttribute::serialize_json_v2(std::string     fieldName,
-                                       nlohmann::json &outputData)
+bool FloatAttribute::serialize_json_v2(std::string     field_name,
+                                       nlohmann::json &output_data)
 {
-  outputData[fieldName]["value"] = this->value;
-  outputData[fieldName]["vmin"] = this->vmin;
-  outputData[fieldName]["vmax"] = this->vmax;
+  output_data[field_name]["value"] = this->value;
+  output_data[field_name]["vmin"] = this->vmin;
+  output_data[field_name]["vmax"] = this->vmax;
   return true;
 }
 
-bool FloatAttribute::deserialize_json_v2(std::string     fieldName,
-                                         nlohmann::json &inputData)
+bool FloatAttribute::deserialize_json_v2(std::string     field_name,
+                                         nlohmann::json &input_data)
 {
-  if (inputData[fieldName].is_null() == true ||
-      inputData[fieldName]["value"].is_number() == false ||
-      inputData[fieldName]["vmin"].is_number() == false ||
-      inputData[fieldName]["vmax"].is_number() == false)
+  if (input_data[field_name].is_null() == true ||
+      input_data[field_name]["value"].is_number() == false ||
+      input_data[field_name]["vmin"].is_number() == false ||
+      input_data[field_name]["vmax"].is_number() == false)
   {
-    LOG_DEBUG("Attribute %s is not valid.", fieldName.data());
+    LOG_DEBUG("Attribute %s is not valid.", field_name.data());
     return false;
   }
 
-  this->value = inputData[fieldName]["value"].get<float>();
-  this->vmin = inputData[fieldName]["vmin"].get<float>();
-  this->vmax = inputData[fieldName]["vmax"].get<float>();
+  this->value = input_data[field_name]["value"].get<float>();
+  this->vmin = input_data[field_name]["vmin"].get<float>();
+  this->vmax = input_data[field_name]["vmax"].get<float>();
   return true;
 }
 

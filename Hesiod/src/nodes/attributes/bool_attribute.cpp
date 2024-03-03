@@ -27,23 +27,23 @@ bool BoolAttribute::render_settings(std::string label)
   return has_changed;
 }
 
-bool BoolAttribute::serialize_json_v2(std::string     fieldName,
-                                      nlohmann::json &outputData)
+bool BoolAttribute::serialize_json_v2(std::string     field_name,
+                                      nlohmann::json &output_data)
 {
-  outputData[fieldName] = this->value;
+  output_data[field_name] = this->value;
   return true;
 }
 
-bool BoolAttribute::deserialize_json_v2(std::string     fieldName,
-                                        nlohmann::json &inputData)
+bool BoolAttribute::deserialize_json_v2(std::string     field_name,
+                                        nlohmann::json &input_data)
 {
-  if (inputData[fieldName].is_boolean() == false)
+  if (input_data[field_name].is_boolean() == false)
   {
-    LOG_DEBUG("Attribute %s is not a boolean.", fieldName.data());
+    LOG_DEBUG("Attribute %s is not a boolean.", field_name.data());
     return false;
   }
 
-  this->value = inputData[fieldName].get<bool>();
+  this->value = input_data[field_name].get<bool>();
   return true;
 }
 
