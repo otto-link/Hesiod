@@ -22,6 +22,7 @@ bool listbox_map_enum(std::map<std::string, int> &map,
                  (float)n_items * ImGui::GetTextLineHeightWithSpacing();
 
   if (ImGui::BeginListBox("##method", ImVec2(width, height)))
+  {
     for (auto &[cname, k] : map)
     {
       bool is_selected = false;
@@ -34,7 +35,8 @@ bool listbox_map_enum(std::map<std::string, int> &map,
         has_changed = true;
       }
     }
-  ImGui::EndListBox();
+    ImGui::EndListBox();
+  }
 
   ImGui::PopID();
 
