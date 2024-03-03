@@ -1,7 +1,9 @@
-#include "hesiod/attribute.hpp"
-#include "macrologger.h"
 #include <map>
 #include <memory>
+
+#include "macrologger.h"
+
+#include "hesiod/attribute.hpp"
 
 namespace hesiod
 {

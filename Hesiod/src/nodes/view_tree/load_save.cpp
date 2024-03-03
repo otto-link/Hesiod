@@ -115,10 +115,7 @@ bool ViewTree::serialize_json_v2(std::string     fieldName,
     nlohmann::json currentNodeSerialized = nlohmann::json();
 
     currentNodeSerialized["id"] = id;
-    currentNodeSerialized["type"] =
-        cnode::ControlNodeInstancing::get_name_from_type(
-            this->get_node_ref_by_id<hesiod::cnode::ControlNode>(id)
-                ->get_type());
+    currentNodeSerialized["type"] = this->get_node_type(id);
 
     if (this->get_node_type(id) != "Clone")
     {
