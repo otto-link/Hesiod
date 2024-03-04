@@ -172,12 +172,8 @@ void main_dock(hesiod::vnode::ViewTree &view_tree)
 
       if (ImGui::Button("Ok"))
       {
-        view_tree.set_viewer_node_id("");
-        view_tree.remove_all_nodes();
-        view_tree.clear_links();
-
+        view_tree.clear();
         view_tree.set_sto(gui_shape, gui_tiling, gui_overlap);
-
         ImGui::CloseCurrentPopup();
       }
       ImGui::SameLine();

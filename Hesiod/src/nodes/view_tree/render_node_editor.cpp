@@ -17,8 +17,9 @@ namespace hesiod::vnode
 
 void ViewTree::render_node_editor()
 {
+  std::string title_bar = "Node editor " + this->id;
 
-  ImGui::Begin(("Node editor / " + this->id).c_str(),
+  ImGui::Begin(title_bar.c_str(),
                nullptr,
                ImGuiWindowFlags_MenuBar |
                    ImGuiWindowFlags_NoBringToFrontOnFocus);
@@ -69,9 +70,6 @@ void ViewTree::render_node_editor()
   bool fit_to_selection = false;
   bool automatic_layout = false;
 
-  ImGui::Text("Size: {%d, %d}", this->shape.x, this->shape.y);
-  ImGui::SameLine();
-
   if (ImGui::Button("Fit to content"))
     fit_to_content = true;
   ImGui::SameLine();
@@ -84,23 +82,70 @@ void ViewTree::render_node_editor()
     automatic_layout = true;
   ImGui::SameLine();
 
-  if (ImGui::Button("Load"))
+  // --- load / save / save as
   {
-    IGFD::FileDialogConfig config;
-    config.path = ".";
-    ImGuiFileDialog::Instance()->OpenDialog("LoadTreeStateDlg", "Load Tree", ".json");
+    if (ImGui::Button("Load"))
+    {
+      IGFD::FileDialogConfig config;
+      config.path = ".";
+      config.fileName = this->json_filename;
+      ImGuiFileDialog::Instance()->OpenDialog("LoadTreeStateDlg",
+                                              "Load Tree",
+                                              ".json",
+                                              config);
+    }
+
+    if (ImGuiFileDialog::Instance()->Display("LoadTreeStateDlg"))
+    {
+      if (ImGuiFileDialog::Instance()->IsOk())
+      {
+        std::string filePathName =
+            ImGuiFileDialog::Instance()->GetFilePathName();
+        std::string filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
+
+        this->load_state(filePathName);
+        this->json_filename = filePathName;
+      }
+
+      ImGuiFileDialog::Instance()->Close();
+    }
+
+    ImGui::SameLine();
+
+    bool save_button = ImGui::Button("Save");
+    ImGui::SameLine();
+    bool save_as_button = ImGui::Button("Save as");
+    ImGui::SameLine();
+
+    if ((save_button && this->json_filename == "") || save_as_button)
+    {
+      IGFD::FileDialogConfig config;
+      config.path = ".";
+      config.fileName = this->json_filename;
+      ImGuiFileDialog::Instance()->OpenDialog("SaveTreeStateDlg",
+                                              "Save Tree",
+                                              ".json",
+                                              config);
+    }
+    else
+      this->save_state(this->json_filename);
+
+    if (ImGuiFileDialog::Instance()->Display("SaveTreeStateDlg"))
+    {
+      if (ImGuiFileDialog::Instance()->IsOk())
+      {
+        std::string filePathName =
+            ImGuiFileDialog::Instance()->GetFilePathName();
+        std::string filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
+
+        this->save_state(filePathName);
+        this->json_filename = filePathName;
+        LOG_DEBUG("SAVE: %s", filePathName.c_str());
+      }
+
+      ImGuiFileDialog::Instance()->Close();
+    }
   }
-
-  ImGui::SameLine();
-
-  if (ImGui::Button("Save"))
-  {
-    IGFD::FileDialogConfig config;
-    config.path = ".";
-    ImGuiFileDialog::Instance()->OpenDialog("SaveTreeStateDlg", "Save Tree", ".json");
-  }
-
-  ImGui::SameLine();
 
   if (ImGui::Button("2D viewer"))
     this->open_view2d_window = !this->open_view2d_window;
@@ -133,6 +178,10 @@ void ViewTree::render_node_editor()
     ImGui::EndChild();
     ImGui::SameLine();
   }
+
+  ImGui::Text("Size: {%d, %d}", this->shape.x, this->shape.y);
+  ImGui::SameLine();
+  ImGui::Text("File: %s", this->json_filename.c_str());
 
   // --- editor canvas
 
@@ -300,32 +349,6 @@ void ViewTree::render_node_editor()
                  &this->open_node_list_window);
     this->render_node_list();
     ImGui::End();
-  }
-
-  if(ImGuiFileDialog::Instance()->Display("SaveTreeStateDlg"))
-  {
-    if (ImGuiFileDialog::Instance()->IsOk()) 
-    {
-      std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
-      std::string filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
-
-      this->save_state(filePathName);
-    }
-
-    ImGuiFileDialog::Instance()->Close();
-  }
-
-  if(ImGuiFileDialog::Instance()->Display("LoadTreeStateDlg"))
-  {
-    if (ImGuiFileDialog::Instance()->IsOk()) 
-    {
-      std::string filePathName = ImGuiFileDialog::Instance()->GetFilePathName();
-      std::string filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
-
-      this->load_state(filePathName);
-    }
-
-    ImGuiFileDialog::Instance()->Close();
   }
 }
 
