@@ -99,12 +99,12 @@ void ViewTree::render_node_editor()
     {
       if (ImGuiFileDialog::Instance()->IsOk())
       {
-        std::string filePathName =
+        std::string file_path_name =
             ImGuiFileDialog::Instance()->GetFilePathName();
-        std::string filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
+        std::string file_path = ImGuiFileDialog::Instance()->GetCurrentPath();
 
-        this->load_state(filePathName);
-        this->json_filename = filePathName;
+        this->load_state(file_path_name);
+        this->json_filename = file_path_name;
       }
 
       ImGuiFileDialog::Instance()->Close();
@@ -134,13 +134,12 @@ void ViewTree::render_node_editor()
     {
       if (ImGuiFileDialog::Instance()->IsOk())
       {
-        std::string filePathName =
+        std::string file_path_name =
             ImGuiFileDialog::Instance()->GetFilePathName();
-        std::string filePath = ImGuiFileDialog::Instance()->GetCurrentPath();
+        std::string file_path = ImGuiFileDialog::Instance()->GetCurrentPath();
 
-        this->save_state(filePathName);
-        this->json_filename = filePathName;
-        LOG_DEBUG("SAVE: %s", filePathName.c_str());
+        this->save_state(file_path_name);
+        this->json_filename = file_path_name;
       }
 
       ImGuiFileDialog::Instance()->Close();
