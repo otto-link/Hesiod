@@ -84,16 +84,15 @@ void ViewTree::render_node_editor()
 
   // --- load / save / save as
   {
+    IGFD::FileDialogConfig config;
+    config.path = ".";
+    config.fileName = this->json_filename;
+
     if (ImGui::Button("Load"))
-    {
-      IGFD::FileDialogConfig config;
-      config.path = ".";
-      config.fileName = this->json_filename;
       ImGuiFileDialog::Instance()->OpenDialog("LoadTreeStateDlg",
                                               "Load Tree",
                                               ".json",
                                               config);
-    }
 
     if (ImGuiFileDialog::Instance()->Display("LoadTreeStateDlg"))
     {
@@ -119,9 +118,7 @@ void ViewTree::render_node_editor()
 
     if ((save_button && this->json_filename == "") || save_as_button)
     {
-      IGFD::FileDialogConfig config;
-      config.path = ".";
-      config.fileName = this->json_filename;
+      config.flags = ImGuiFileDialogFlags_ConfirmOverwrite;
       ImGuiFileDialog::Instance()->OpenDialog("SaveTreeStateDlg",
                                               "Save Tree",
                                               ".json",
