@@ -1,7 +1,9 @@
 #include <map>
 #include <memory>
+#include <utility>
 
 #include "macrologger.h"
+#include "nlohmann/json_fwd.hpp"
 
 #include "hesiod/attribute.hpp"
 
@@ -93,6 +95,47 @@ std::unique_ptr<Attribute> AttributeInstancing::create_attribute_from_type(
   case AttributeType::WAVE_NB_ATTRIBUTE:
     return std::unique_ptr<Attribute>(new WaveNbAttribute());
   }
+}
+
+std::pair<bool, nlohmann::json> AttributeInstancing::quick_and_dirty_serialize_node_attribute(std::string key, Attribute* value)
+{
+  nlohmann::json data = nlohmann::json();
+
+  data["key"] = key;
+  data["type"] = AttributeInstancing::get_name_from_type(value->get_type());
+  if(value->serialize_json_v2("value", data) == false)
+  {
+    return std::make_pair(false, data);
+  }
+
+  return std::make_pair(true, data);
+}
+
+std::pair<std::string, std::unique_ptr<Attribute>> AttributeInstancing::quick_and_dirty_deserialize_node_attribute(nlohmann::json data)
+{
+  if(
+    data["key"].is_string() == false ||
+    data["type"].is_string() == false
+  )
+  {
+    return std::make_pair(std::string(), std::unique_ptr<Attribute>(nullptr));
+  }
+
+  AttributeType type = AttributeInstancing::get_type_from_name(data["type"].get<std::string>());
+
+  if(type == AttributeType::INVALID)
+  {
+    return std::make_pair(std::string(), std::unique_ptr<Attribute>(nullptr));
+  }
+
+  std::unique_ptr<Attribute> attributeCreated = AttributeInstancing::create_attribute_from_type(type);
+
+  if(attributeCreated->deserialize_json_v2("value", data) == false)
+  {
+    return std::make_pair(std::string(), std::unique_ptr<Attribute>(nullptr));
+  }
+
+  return std::make_pair(data["key"].get<std::string>(), std::move(attributeCreated));
 }
 
 } // namespace hesiod

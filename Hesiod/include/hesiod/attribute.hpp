@@ -18,6 +18,7 @@
 
 #include "highmap.hpp"
 #include "macrologger.h"
+#include "nlohmann/json.hpp"
 #include "serialization.hpp"
 
 // clang-format off
@@ -385,6 +386,9 @@ public:
   static AttributeType              get_type_from_name(std::string name);
   static std::unique_ptr<Attribute> create_attribute_from_type(
       AttributeType type);
+  //     std::pair<succeeded, data>
+  static std::pair<bool, nlohmann::json> quick_and_dirty_serialize_node_attribute(std::string key, Attribute* value);
+  static std::pair<std::string, std::unique_ptr<Attribute>> quick_and_dirty_deserialize_node_attribute(nlohmann::json data); 
 };
 
 } // namespace hesiod

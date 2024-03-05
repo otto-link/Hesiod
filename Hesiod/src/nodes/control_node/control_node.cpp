@@ -27,13 +27,14 @@ bool ControlNode::serialize_json_v2(std::string     field_name,
   {
     nlohmann::json currentAttributeIteratorJsonData = nlohmann::json();
 
-    currentAttributeIteratorJsonData["type"] =
-        AttributeInstancing::get_name_from_type(
-            currentAttributeIterator->second->get_type());
-    currentAttributeIteratorJsonData["key"] = currentAttributeIterator->first;
-    currentAttributeIterator->second->serialize_json_v2(
-        "value",
-        currentAttributeIteratorJsonData);
+    if(auto res = AttributeInstancing::quick_and_dirty_serialize_node_attribute(currentAttributeIterator->first, currentAttributeIterator->second.get()); res.first)
+    {
+      currentAttributeIteratorJsonData = res.second;
+    }
+    else 
+    {
+      LOG_ERROR("Warning failed serialization of the attribute %s!", currentAttributeIterator->first.data());
+    }
 
     attributesListJsonData.push_back(currentAttributeIteratorJsonData);
   }
@@ -60,26 +61,10 @@ bool ControlNode::deserialize_json_v2(std::string     field_name,
   for (nlohmann::json currentAttributeIteratorJsonData :
        input_data[field_name]["attributes"])
   {
-    AttributeType currentAttributeIteratorType =
-        AttributeInstancing::get_type_from_name(
-            currentAttributeIteratorJsonData["type"].get<std::string>());
-
-    if (currentAttributeIteratorType == AttributeType::INVALID)
+    if(auto res = AttributeInstancing::quick_and_dirty_deserialize_node_attribute(currentAttributeIteratorJsonData); res.first.length() > 0)
     {
-      LOG_ERROR("Encountered invalid control node attribute type!");
-      continue;
+      attr.emplace(res.first, std::move(res.second));
     }
-
-    std::unique_ptr<Attribute> currentAttribute =
-        AttributeInstancing::create_attribute_from_type(
-            currentAttributeIteratorType);
-    std::string currentAttributeKey =
-        currentAttributeIteratorJsonData["key"].get<std::string>();
-
-    currentAttribute->deserialize_json_v2("value",
-                                          currentAttributeIteratorJsonData);
-
-    attr.emplace(currentAttributeKey, std::move(currentAttribute));
   }
 
   return true;
