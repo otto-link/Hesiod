@@ -21,20 +21,21 @@ bool listbox_map_enum(std::map<std::string, int> &map,
   float height = ImGui::GetStyle().ItemSpacing.y +
                  (float)n_items * ImGui::GetTextLineHeightWithSpacing();
 
-  if (ImGui::BeginListBox("##method", ImVec2(width, height)))
-    for (auto &[cname, k] : map)
+  if (ImGui::BeginListBox("##method", ImVec2(width, height))) {
+    for (auto& [cname, k] : map)
     {
-      bool is_selected = false;
-      if (selected == k)
-        is_selected = true;
+        bool is_selected = false;
+        if (selected == k)
+            is_selected = true;
 
-      if (ImGui::Selectable(cname.c_str(), is_selected))
-      {
-        selected = k;
-        has_changed = true;
-      }
+        if (ImGui::Selectable(cname.c_str(), is_selected))
+        {
+            selected = k;
+            has_changed = true;
+        }
     }
-  ImGui::EndListBox();
+    ImGui::EndListBox();
+  }
 
   ImGui::PopID();
 
