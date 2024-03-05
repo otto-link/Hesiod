@@ -261,6 +261,11 @@ protected:
    */
   std::string help_text = "No help available.";
 
+  /**
+  * @brief OpenGL texture used to store the image preview.
+  */
+  GLuint image_texture_preview = 0;
+
 private:
   /**
    * @brief Shape preview.
@@ -271,11 +276,6 @@ private:
    * @brief Preview type.
    */
   int preview_type = preview_type::grayscale;
-
-  /**
-   * @brief OpenGL texture used to store the image preview.
-   */
-  GLuint image_texture_preview = 0;
 
   /**
    * @brief Set the control node post-update callback to the view node
