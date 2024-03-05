@@ -68,7 +68,7 @@ public:
 
   void automatic_node_layout();
 
-  void clear_links();
+  void clear();
 
   void export_view3d(std::string fname);
 
@@ -146,6 +146,8 @@ private:
 
   std::map<int, Link> links = {};
   int                 id_counter = 0;
+
+  std::string json_filename = "";
 
   std::vector<ax::NodeEditor::NodeId> selected_node_hid = {};
 

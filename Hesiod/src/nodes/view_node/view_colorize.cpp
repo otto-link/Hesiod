@@ -27,6 +27,7 @@ bool ViewColorize::render_settings()
                    (float)n_items * ImGui::GetTextLineHeightWithSpacing();
 
     if (ImGui::BeginListBox("##method", ImVec2(width, height)))
+    {
       for (auto &[cname, k] : cmap_map)
       {
         bool is_selected = false;
@@ -47,7 +48,8 @@ bool ViewColorize::render_settings()
         hesiod::gui::render_colorbar(hesiod::get_colormap_data(k),
                                      ImVec2(0.5f * width, 16));
       }
-    ImGui::EndListBox();
+      ImGui::EndListBox();
+    }
   }
 
   has_changed |= this->attr.at("reverse")->render_settings("reverse");

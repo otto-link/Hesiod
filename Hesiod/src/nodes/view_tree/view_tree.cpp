@@ -124,8 +124,11 @@ void ViewTree::set_sto(hmap::Vec2<int> new_shape,
   this->update_view3d_basemesh();
 }
 
-void ViewTree::clear_links()
+void ViewTree::clear()
 {
+  this->set_viewer_node_id("");
+  this->json_filename = "";
+  this->remove_all_nodes();
   this->links.clear();
 }
 
