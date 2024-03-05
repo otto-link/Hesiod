@@ -67,11 +67,13 @@ bool ViewBrush::render_settings()
   ImGui::SameLine();
   if (ImGui::Button("Smooth"))
   {
-    hmap::transform(this->edit_state.pending_hm, [](hmap::Array& m) { hmap::smooth_gaussian(m, 8); });
+    hmap::transform(this->edit_state.pending_hm, [this](hmap::Array& m) { hmap::smooth_gaussian(m, this->edit_state.blur_strength); });
     this->edit_state.pending_hm.smooth_overlap_buffers();
     sync_drawing_texture();
     sync_value();
   }
+  ImGui::SameLine();
+  ImGui::SliderInt("ir", &this->edit_state.blur_strength, 2, 32);
 
   if (this->remap)
   {

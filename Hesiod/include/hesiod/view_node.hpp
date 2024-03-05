@@ -412,6 +412,7 @@ public:
     float max_height;
     float brush_radius;
     float brush_strength;
+    int blur_strength;
     hmap::Vec2<float> last_mouse_pos;
     ImVec2 canvas_size;
 
@@ -419,7 +420,8 @@ public:
     std::vector<std::pair<hmap::Vec2<float>, float>> pending_changes; // (pos, weight)
 
     HmBrushEditorState() :
-      is_drawing(false), is_initted(false), max_height(1), brush_radius(50), brush_strength(1),
+      is_drawing(false), is_initted(false), max_height(1), brush_radius(50),
+      brush_strength(1), blur_strength(8),
       last_mouse_pos(std::numeric_limits<float>::max(), std::numeric_limits<float>::max())
     { }
 
