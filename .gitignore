@@ -1,4 +1,5 @@
 .cache/
+.vs/
 bin/
 build/
 launch.json
