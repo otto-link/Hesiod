@@ -15,29 +15,10 @@
 namespace hesiod::gui
 {
 
-// HELPER
 
-void add_brush(hmap::HeightMap &h, hmap::Array &kernel, float x, float y)
+void hmap_brush_editor(hesiod::vnode::ViewBrush::HmBrushEditorState& edit_state, ImTextureID canvas_texture, float width)
 {
-  hmap::transform(h,
-                  [&kernel, &x, &y](hmap::Array      &z,
-                                    hmap::Vec2<float> shift,
-                                    hmap::Vec2<float> scale)
-                  {
-                    int ic = (int)((x - shift.x) / scale.x * (z.shape.x - 1));
-                    int jc = (int)((y - shift.y) / scale.y * (z.shape.y - 1));
-                    add_kernel(z, kernel, ic, jc);
-                  });
-}
-
-bool hmap_brush_editor(hmap::HeightMap &h, float width)
-{
-  ImGuiStorage *imgui_storage = ImGui::GetStateStorage();
-  float brush_radius = imgui_storage->GetFloat(IMGUI_ID_BRUSH_RADIUS, 16.f);
-
-  bool ret = false;
-
-  ImGui::PushID((void *)&h);
+  ImGui::PushID((void *)&edit_state);
   ImGui::BeginGroup();
 
   // --- canvas
@@ -47,20 +28,22 @@ bool hmap_brush_editor(hmap::HeightMap &h, float width)
   if (width == 0.f)
   {
     canvas_size = ImGui::GetContentRegionAvail();
-    if (canvas_size.x < 50.0f)
-      canvas_size.x = 50.0f;
+    if (canvas_size.x < 75.0f)
+      canvas_size.x = 75.0f;
     canvas_size.y = canvas_size.x; // square canvas
   }
   else
-    canvas_size = {width, width};
+  {
+    canvas_size = { width, width };
+  }
+  edit_state.canvas_size = canvas_size;
 
   ImVec2 canvas_p1 = ImVec2(canvas_p0.x + canvas_size.x,
                             canvas_p0.y + canvas_size.y);
 
   // draw canvas and points
   ImDrawList *draw_list = ImGui::GetWindowDrawList();
-  draw_list->AddRectFilled(canvas_p0, canvas_p1, IM_COL32(50, 50, 50, 255));
-  draw_list->AddRect(canvas_p0, canvas_p1, IM_COL32(255, 255, 255, 255));
+  draw_list->AddImage(canvas_texture, canvas_p0, canvas_p1);
 
   // mouse interactions
   ImGui::InvisibleButton("canvas",
@@ -71,60 +54,68 @@ bool hmap_brush_editor(hmap::HeightMap &h, float width)
   ImGui::SetItemKeyOwner(ImGuiKey_MouseWheelY);
   bool is_canvas_hovered = ImGui::IsItemHovered();
 
+  // brush radius in pixels
+  int ir = (int)(edit_state.brush_radius / canvas_size.x * edit_state.pending_hm.shape.x);
+
   ImGuiIO     &io = ImGui::GetIO();
-  const ImVec2 mouse_pos_in_canvas(io.MousePos.x - canvas_p0.x,
+  const hmap::Vec2<float> mouse_pos_in_canvas(io.MousePos.x - canvas_p0.x,
                                    io.MousePos.y - canvas_p0.y);
+  bool mouse_moved_enough = false;
+  auto mouse_delta = mouse_pos_in_canvas - edit_state.last_mouse_pos;
+  if (ImGui::IsAnyMouseDown() && std::sqrt(mouse_delta.x * mouse_delta.x + mouse_delta.y * mouse_delta.y) >= std::sqrt(edit_state.brush_radius))
+  {
+    edit_state.last_mouse_pos = mouse_pos_in_canvas;
+    mouse_moved_enough = true;
+  }
 
   if (is_canvas_hovered)
   {
     // draw brush size
     draw_list->AddCircle(io.MousePos,
-                         brush_radius,
+                         edit_state.brush_radius,
                          IM_COL32(255, 255, 255, 255));
 
     // remap mouse coordinates to [0, 1] and reverse y-axis
     float x = (io.MousePos.x - canvas_p0.x) / canvas_size.x;
     float y = 1.f - (io.MousePos.y - canvas_p0.y) / canvas_size.y;
 
-    // brush radius in pixels
-    int ir = (int)(brush_radius / canvas_size.x * h.shape.x);
-
-    if (ImGui::IsMouseDown(ImGuiMouseButton_Left)) // move
+    auto strength = edit_state.brush_strength;
+    if (ImGui::IsMouseDown(ImGuiMouseButton_Left))
     {
+      edit_state.is_drawing = true;
+      if (mouse_moved_enough)
+      {
+        edit_state.add_change({ x, y }, strength);
+      }
     }
-    else if (ImGui::IsMouseReleased(ImGuiMouseButton_Left))
+    else if (ImGui::IsMouseDown(ImGuiMouseButton_Right))
     {
-      hmap::Array kernel = hmap::cubic_pulse(
-          hmap::Vec2<int>(2 * ir + 1, 2 * ir + 1));
-      add_brush(h, kernel, x, y);
-      ret = true;
+      edit_state.is_drawing = true;
+      if (mouse_moved_enough)
+      {
+        edit_state.add_change({ x, y }, -strength);
+      }
     }
-    else if (ImGui::IsMouseReleased(ImGuiMouseButton_Right))
+    else
     {
-      hmap::Array kernel = -hmap::cubic_pulse(
-          hmap::Vec2<int>(2 * ir + 1, 2 * ir + 1));
-      add_brush(h, kernel, x, y);
-      ret = true;
+      edit_state.is_drawing = false;
     }
 
     // brush size
     if (io.MouseWheel)
     {
-      float step = brush_radius * 0.1f;
+      float step = edit_state.brush_radius * 0.1f;
       if (ImGui::IsKeyPressed(ImGuiKey_LeftShift))
         step *= 0.1f;
-      brush_radius = std::max(1.f, brush_radius + io.MouseWheel * step);
-      ret = true;
+      edit_state.brush_radius = std::max(1.f, edit_state.brush_radius + io.MouseWheel * step);
     }
   }
 
   ImGui::Text("Brush radius: %d pixels",
-              (int)(brush_radius / canvas_size.x * h.shape.x));
+              (int)(edit_state.brush_radius / canvas_size.x * edit_state.pending_hm.shape.x));
 
   ImGui::EndGroup();
-  imgui_storage->SetFloat(IMGUI_ID_BRUSH_RADIUS, brush_radius);
-
-  return ret;
+  ImGui::PopID();
 }
 
 } // namespace hesiod::gui
