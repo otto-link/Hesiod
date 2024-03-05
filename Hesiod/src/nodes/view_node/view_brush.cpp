@@ -47,10 +47,12 @@ bool ViewBrush::render_settings()
     this->edit_state.pending_hm.set_sto(this->value_out.shape, this->value_out.tiling, this->value_out.overlap);
     this->edit_state.is_initted = true;
   }
-
+  
   if (ImGui::SliderFloat("max height", &this->edit_state.max_height, 0.1f, 2.0f, "%.1f"))
   {
-    hmap::transform(this->edit_state.pending_hm, [this](hmap::Array& m) { hmap::clamp(m, 0.0f, this->edit_state.max_height); });
+    hmap::transform(this->edit_state.pending_hm, [this](hmap::Array& m) { 
+      hmap::clamp_max_smooth(m, this->edit_state.max_height);
+    });
     this->edit_state.brush_strength = std::min(this->edit_state.brush_strength, this->edit_state.max_height);
     sync_drawing_texture();
   }
