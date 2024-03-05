@@ -5,10 +5,9 @@
 #include <iostream>
 
 #include "highmap.hpp"
+#include "hesiod/hmap_brush_editor.hpp"
 #include "imgui_internal.h"
 #include "macrologger.h"
-
-#include "hesiod/gui.hpp"
 
 #define IMGUI_ID_BRUSH_RADIUS 0
 
@@ -16,7 +15,7 @@ namespace hesiod::gui
 {
 
 
-void hmap_brush_editor(hesiod::vnode::ViewBrush::HmBrushEditorState& edit_state, ImTextureID canvas_texture, float width)
+void hmap_brush_editor(HmBrushEditorState& edit_state, ImTextureID canvas_texture, float width)
 {
   ImGui::PushID((void *)&edit_state);
   ImGui::BeginGroup();
@@ -116,6 +115,52 @@ void hmap_brush_editor(hesiod::vnode::ViewBrush::HmBrushEditorState& edit_state,
 
   ImGui::EndGroup();
   ImGui::PopID();
+}
+
+void HmBrushEditorState::add_change(hmap::Vec2<float> pos, float weight)
+{
+  if (pending_changes.size() > 128)
+    return;
+  pending_changes.push_back({ pos, weight });
+}
+
+void HmBrushEditorState::apply_pending_changes()
+{
+  int ir = (int)(brush_radius / canvas_size.x * pending_hm.shape.x);
+
+  std::vector<hmap::Array> kernels;
+  std::vector<hmap::Vec2<float>> positions;
+  for (auto& [pos, weight] : pending_changes) {
+    hmap::Array kernel = weight * hmap::cubic_pulse(
+      hmap::Vec2<int>(2 * ir + 1, 2 * ir + 1));
+    kernels.push_back(kernel);
+    positions.push_back(pos);
+  }
+  apply_brushes(pending_hm, kernels, positions);
+  hmap::transform(pending_hm, [this](hmap::Array& m) {
+    hmap::clamp(m, 0, max_height);
+    });
+  pending_hm.smooth_overlap_buffers();
+  pending_changes.clear();
+}
+
+void HmBrushEditorState::apply_brushes(hmap::HeightMap& h, std::span<hmap::Array> kernels, std::span<hmap::Vec2<float>> positions)
+{
+  hmap::transform(h,
+    [&kernels, &positions](hmap::Array& z,
+      hmap::Vec2<float> shift,
+      hmap::Vec2<float> scale)
+    {
+      for (int i = 0; i < kernels.size(); ++i)
+      {
+        hmap::Vec2<float> pos = positions[i];
+        float x = pos.x;
+        float y = pos.y;
+        int ic = (int)((x - shift.x) / scale.x * (z.shape.x - 1));
+        int jc = (int)((y - shift.y) / scale.y * (z.shape.y - 1));
+        add_kernel(z, kernels[i], ic, jc);
+      }
+    });
 }
 
 } // namespace hesiod::gui

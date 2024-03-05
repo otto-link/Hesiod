@@ -14,6 +14,7 @@
 
 #include "hesiod/control_node.hpp"
 #include "hesiod/timer.hpp"
+#include "hesiod/hmap_brush_editor.hpp"
 
 namespace hesiod::vnode
 {
@@ -406,75 +407,9 @@ public:
   void sync_drawing_texture();
   void sync_value();
 
-
-  struct HmBrushEditorState {
-    bool is_drawing;
-    bool is_initted;
-    float max_height;
-    float brush_radius;
-    float brush_strength;
-    int blur_strength;
-    hmap::Vec2<float> last_mouse_pos;
-    ImVec2 canvas_size;
-
-    hmap::HeightMap pending_hm;
-    std::vector<std::pair<hmap::Vec2<float>, float>> pending_changes; // (pos, weight)
-
-    HmBrushEditorState() :
-      is_drawing(false), is_initted(false), max_height(1), brush_radius(50),
-      brush_strength(1), blur_strength(8),
-      last_mouse_pos(std::numeric_limits<float>::max(), std::numeric_limits<float>::max())
-    { }
-
-    void add_change(hmap::Vec2<float> pos, float weight)
-    {
-      if (pending_changes.size() > 128)
-        return;
-      pending_changes.push_back({ pos, weight });
-    }
-
-    void apply_pending_changes() {
-      int ir = (int)(brush_radius / canvas_size.x * pending_hm.shape.x);
-
-      std::vector<hmap::Array> kernels;
-      std::vector<hmap::Vec2<float>> positions;
-      for (auto& [pos, weight] : pending_changes) {
-        hmap::Array kernel = weight * hmap::cubic_pulse(
-          hmap::Vec2<int>(2 * ir + 1, 2 * ir + 1));
-        kernels.push_back(kernel);
-        positions.push_back(pos);
-      }
-      apply_brushes(pending_hm, kernels, positions);
-      hmap::transform(pending_hm, [this](hmap::Array& m) {
-        hmap::clamp(m, 0, max_height);
-      });
-      pending_hm.smooth_overlap_buffers();
-      pending_changes.clear();
-    }
-
-    void apply_brushes(hmap::HeightMap& h, std::span<hmap::Array> kernels, std::span<hmap::Vec2<float>> positions)
-    {
-      hmap::transform(h,
-        [&kernels, &positions](hmap::Array& z,
-          hmap::Vec2<float> shift,
-          hmap::Vec2<float> scale)
-        {
-          for (int i = 0; i < kernels.size(); ++i) 
-          {
-            hmap::Vec2<float> pos = positions[i];
-            float x = pos.x;
-            float y = pos.y;
-            int ic = (int)((x - shift.x) / scale.x * (z.shape.x - 1));
-            int jc = (int)((y - shift.y) / scale.y * (z.shape.y - 1));
-            add_kernel(z, kernels[i], ic, jc);
-          }
-        });
-    }
-  };
-
 private:
   GLuint draw_texture = 0;
-  HmBrushEditorState edit_state;
+  hesiod::gui::HmBrushEditorState edit_state;
 };
 
 class ViewBump : public ViewNode, public hesiod::cnode::Bump
