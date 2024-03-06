@@ -37,8 +37,7 @@ void WaveDune::compute()
   hmap::fill(this->value_out,
              (hmap::HeightMap *)this->get_p_data("dx"),
              [this](hmap::Vec2<int>   shape,
-                    hmap::Vec2<float> shift,
-                    hmap::Vec2<float> scale,
+                    hmap::Vec4<float> bbox,
                     hmap::Array      *p_noise_x)
              {
                return hmap::wave_dune(shape,
@@ -48,8 +47,9 @@ void WaveDune::compute()
                                       GET_ATTR_FLOAT("xbottom"),
                                       GET_ATTR_FLOAT("phase_shift"),
                                       p_noise_x,
-                                      shift,
-                                      scale);
+                                      nullptr,
+                                      nullptr,
+                                      bbox);
              });
 
   this->post_process_heightmap(this->value_out);

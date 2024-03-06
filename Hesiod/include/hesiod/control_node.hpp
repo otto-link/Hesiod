@@ -69,7 +69,6 @@ enum kernel : int
 static const std::map<std::string, std::string> category_mapping = {
     {"Abs", "Math/Base"},
     {"AbsSmooth", "Math/Base"},
-    // {"AlterElevation", "Operator/Transform"}, // BROKEN
     {"BaseElevation", "Primitive/Manual"},
     {"BezierPath", "Geometry/Path"},
     {"BiquadPulse", "Primitive/Function"},
@@ -101,6 +100,8 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Faceted", "Filter/Recast"}, // not distributed
     {"FbmIqPerlin", "Primitive/Coherent Noise"},
     {"FbmPerlin", "Primitive/Coherent Noise"},
+    {"FbmPingpongPerlin", "Primitive/Coherent Noise"},
+    {"FbmRidgedPerlin", "Primitive/Coherent Noise"},
     {"FbmSimplex", "Primitive/Coherent Noise"},
     {"FbmWorley", "Primitive/Coherent Noise"},
     {"FbmWorleyDouble", "Primitive/Coherent Noise"},
@@ -144,7 +145,6 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Peak", "Primitive/Geological"},
     {"Perlin", "Primitive/Coherent Noise"},
     {"PerlinBillow", "Primitive/Coherent Noise"},
-    {"PingpongPerlin", "Primitive/Coherent Noise"},
     {"Plateau", "Filter/Recurve"},
     {"Preview", "Debug"},
     {"RecastCanyon", "Filter/Recast"},
@@ -158,7 +158,6 @@ static const std::map<std::string, std::string> category_mapping = {
     {"RelativeElevation", "Features"},
     {"Remap", "Filter/Range"},
     {"Rescale", "Filter/Range"},
-    {"RidgedPerlin", "Primitive/Coherent Noise"},
     {"Rugosity", "Features"},
     {"SedimentDeposition", "Erosion/Thermal"},
     {"SelectBlobLog", "Mask"},
@@ -421,19 +420,6 @@ public:
   void update_inner_bindings();
 
   void compute();
-
-protected:
-  hmap::HeightMap value_out = hmap::HeightMap();
-};
-
-class AlterElevation : virtual public ControlNode
-{
-public:
-  AlterElevation(std::string id);
-
-  void compute();
-
-  void update_inner_bindings();
 
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
@@ -824,6 +810,30 @@ public:
             hmap::Vec2<int> shape,
             hmap::Vec2<int> tiling,
             float           overlap);
+
+  void compute();
+
+};
+
+class FbmPingpongPerlin : public Primitive
+{
+public:
+  FbmPingpongPerlin(std::string     id,
+                 hmap::Vec2<int> shape,
+                 hmap::Vec2<int> tiling,
+                 float           overlap);
+
+  void compute();
+
+};
+
+class FbmRidgedPerlin : public Primitive
+{
+public:
+  FbmRidgedPerlin(std::string     id,
+               hmap::Vec2<int> shape,
+               hmap::Vec2<int> tiling,
+               float           overlap);
 
   void compute();
 
@@ -1329,18 +1339,6 @@ public:
 
 };
 
-class PingpongPerlin : public Primitive
-{
-public:
-  PingpongPerlin(std::string     id,
-                 hmap::Vec2<int> shape,
-                 hmap::Vec2<int> tiling,
-                 float           overlap);
-
-  void compute();
-
-};
-
 class Plateau : public Filter
 {
 public:
@@ -1494,17 +1492,6 @@ public:
 
 };
 
-class RidgedPerlin : public Primitive
-{
-public:
-  RidgedPerlin(std::string     id,
-               hmap::Vec2<int> shape,
-               hmap::Vec2<int> tiling,
-               float           overlap);
-
-  void compute();
-
-};
 
 class Rugosity : public Mask
 {

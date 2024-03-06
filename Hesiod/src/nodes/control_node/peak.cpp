@@ -42,8 +42,7 @@ void Peak::compute()
   hmap::fill(this->value_out,
              (hmap::HeightMap *)this->get_p_data("dx"),
              [this](hmap::Vec2<int>   shape,
-                    hmap::Vec2<float> shift,
-                    hmap::Vec2<float> scale,
+                    hmap::Vec4<float> bbox,
                     hmap::Array      *p_noise_x)
              {
                // hmap::Vec2<float> center;
@@ -56,8 +55,7 @@ void Peak::compute()
                                  GET_ATTR_FLOAT("noise_r_amp"),
                                  GET_ATTR_FLOAT("noise_ratio_z"),
                                  // center,
-                                 shift,
-                                 scale);
+                                 bbox);
              });
 
   this->value_out.smooth_overlap_buffers();

@@ -32,19 +32,19 @@ void CloudToArrayInterp::compute()
                (hmap::HeightMap *)this->get_p_data("dx"),
                (hmap::HeightMap *)this->get_p_data("dy"),
                [this, p_cloud](hmap::Vec2<int>   shape,
-                               hmap::Vec2<float> shift,
-                               hmap::Vec2<float> scale,
+                               hmap::Vec4<float> bbox,
                                hmap::Array      *p_noise_x,
                                hmap::Array      *p_noise_y)
                {
-                 hmap::Array array(shape);
+                 hmap::Array       array(shape);
+                 hmap::Vec4<float> bbox_points = {0.f, 1.f, 0.f, 1.f};
+
                  p_cloud->to_array_interp(array,
-                                          {0.f, 1.f, 0.f, 1.f},
+                                          bbox_points,
                                           0, // linear interpolation
                                           p_noise_x,
                                           p_noise_y,
-                                          shift,
-                                          scale);
+                                          bbox);
                  return array;
                });
   else

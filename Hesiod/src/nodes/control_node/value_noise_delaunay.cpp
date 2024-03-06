@@ -18,7 +18,7 @@ ValueNoiseDelaunay::ValueNoiseDelaunay(std::string     id,
   this->node_type = "ValueNoiseDelaunay";
   this->category = category_mapping.at(this->node_type);
 
-  this->attr["kw"] = NEW_ATTR_FLOAT(2.f, 0.01f, 64.f);
+  this->attr["kw"] = NEW_ATTR_WAVENB();
   this->attr["seed"] = NEW_ATTR_SEED();
 }
 
@@ -30,18 +30,17 @@ void ValueNoiseDelaunay::compute()
              (hmap::HeightMap *)this->get_p_data("dx"),
              (hmap::HeightMap *)this->get_p_data("dy"),
              [this](hmap::Vec2<int>   shape,
-                    hmap::Vec2<float> shift,
-                    hmap::Vec2<float> scale,
+                    hmap::Vec4<float> bbox,
                     hmap::Array      *p_noise_x,
                     hmap::Array      *p_noise_y)
              {
                return hmap::value_noise_delaunay(shape,
-                                                 GET_ATTR_FLOAT("kw"),
+                                                 GET_ATTR_WAVENB("kw"),
                                                  GET_ATTR_SEED("seed"),
                                                  p_noise_x,
                                                  p_noise_y,
-                                                 shift,
-                                                 scale);
+                                                 nullptr,
+                                                 bbox);
              });
 
   this->post_process_heightmap(this->value_out);

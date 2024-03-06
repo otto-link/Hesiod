@@ -50,8 +50,7 @@ void FbmWorley::compute()
              (hmap::HeightMap *)this->get_p_data("dy"),
              (hmap::HeightMap *)this->get_p_data("stretching"),
              [this](hmap::Vec2<int>   shape,
-                    hmap::Vec2<float> shift,
-                    hmap::Vec2<float> scale,
+                    hmap::Vec4<float> bbox,
                     hmap::Array      *p_noise_x,
                     hmap::Array      *p_noise_y,
                     hmap::Array      *p_stretching)
@@ -66,8 +65,7 @@ void FbmWorley::compute()
                                        p_noise_x,
                                        p_noise_y,
                                        p_stretching,
-                                       shift,
-                                       scale);
+                                       bbox);
              });
 
   this->post_process_heightmap(this->value_out);

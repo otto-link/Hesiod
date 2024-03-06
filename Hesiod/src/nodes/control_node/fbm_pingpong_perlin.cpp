@@ -8,14 +8,14 @@
 namespace hesiod::cnode
 {
 
-PingpongPerlin::PingpongPerlin(std::string     id,
-                               hmap::Vec2<int> shape,
-                               hmap::Vec2<int> tiling,
-                               float           overlap)
+FbmPingpongPerlin::FbmPingpongPerlin(std::string     id,
+                                     hmap::Vec2<int> shape,
+                                     hmap::Vec2<int> tiling,
+                                     float           overlap)
     : ControlNode(id), Primitive(id, shape, tiling, overlap)
 {
-  LOG_DEBUG("PingpongPerlin::PingpongPerlin()");
-  this->node_type = "PingpongPerlin";
+  LOG_DEBUG("FbmPingpongPerlin::FbmPingpongPerlin()");
+  this->node_type = "FbmPingpongPerlin";
   this->category = category_mapping.at(this->node_type);
 
   this->attr["kw"] = NEW_ATTR_WAVENB();
@@ -41,33 +41,31 @@ PingpongPerlin::PingpongPerlin(std::string     id,
   this->update_inner_bindings();
 }
 
-void PingpongPerlin::compute()
+void FbmPingpongPerlin::compute()
 {
-  LOG_DEBUG("computing PingpongPerlin node [%s]", this->id.c_str());
+  LOG_DEBUG("computing FbmPingpongPerlin node [%s]", this->id.c_str());
 
   hmap::fill(this->value_out,
              (hmap::HeightMap *)this->get_p_data("dx"),
              (hmap::HeightMap *)this->get_p_data("dy"),
              (hmap::HeightMap *)this->get_p_data("stretching"),
              [this](hmap::Vec2<int>   shape,
-                    hmap::Vec2<float> shift,
-                    hmap::Vec2<float> scale,
+                    hmap::Vec4<float> bbox,
                     hmap::Array      *p_noise_x,
                     hmap::Array      *p_noise_y,
                     hmap::Array      *p_stretching)
              {
-               return hmap::pingpong_perlin(shape,
-                                            GET_ATTR_WAVENB("kw"),
-                                            GET_ATTR_SEED("seed"),
-                                            GET_ATTR_INT("octaves"),
-                                            GET_ATTR_FLOAT("weight"),
-                                            GET_ATTR_FLOAT("persistence"),
-                                            GET_ATTR_FLOAT("lacunarity"),
-                                            p_noise_x,
-                                            p_noise_y,
-                                            p_stretching,
-                                            shift,
-                                            scale);
+               return hmap::fbm_pingpong_perlin(shape,
+                                                GET_ATTR_WAVENB("kw"),
+                                                GET_ATTR_SEED("seed"),
+                                                GET_ATTR_INT("octaves"),
+                                                GET_ATTR_FLOAT("weight"),
+                                                GET_ATTR_FLOAT("persistence"),
+                                                GET_ATTR_FLOAT("lacunarity"),
+                                                p_noise_x,
+                                                p_noise_y,
+                                                p_stretching,
+                                                bbox);
              });
 
   this->post_process_heightmap(this->value_out);

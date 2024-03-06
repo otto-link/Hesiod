@@ -36,8 +36,7 @@ void WaveTriangular::compute()
   hmap::fill(this->value_out,
              (hmap::HeightMap *)this->get_p_data("dx"),
              [this](hmap::Vec2<int>   shape,
-                    hmap::Vec2<float> shift,
-                    hmap::Vec2<float> scale,
+                    hmap::Vec4<float> bbox,
                     hmap::Array      *p_noise_x)
              {
                return hmap::wave_triangular(shape,
@@ -46,8 +45,9 @@ void WaveTriangular::compute()
                                             GET_ATTR_FLOAT("slant_ratio"),
                                             GET_ATTR_FLOAT("phase_shift"),
                                             p_noise_x,
-                                            shift,
-                                            scale);
+                                            nullptr,
+                                            nullptr,
+                                            bbox);
              });
 
   this->post_process_heightmap(this->value_out);

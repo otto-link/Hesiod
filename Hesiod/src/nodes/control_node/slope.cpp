@@ -47,17 +47,17 @@ void Slope::compute()
   hmap::fill(this->value_out,
              (hmap::HeightMap *)this->get_p_data("dx"),
              [this, &talus, &center](hmap::Vec2<int>   shape,
-                                     hmap::Vec2<float> shift,
-                                     hmap::Vec2<float> scale,
+                                     hmap::Vec4<float> bbox,
                                      hmap::Array      *p_noise_x)
              {
                return hmap::slope(shape,
                                   GET_ATTR_FLOAT("angle"),
                                   talus,
                                   p_noise_x,
+                                  nullptr,
+                                  nullptr,
                                   center,
-                                  shift,
-                                  scale);
+                                  bbox);
              });
 }
 

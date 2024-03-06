@@ -8,14 +8,14 @@
 namespace hesiod::cnode
 {
 
-RidgedPerlin::RidgedPerlin(std::string     id,
-                           hmap::Vec2<int> shape,
-                           hmap::Vec2<int> tiling,
-                           float           overlap)
+FbmRidgedPerlin::FbmRidgedPerlin(std::string     id,
+                                 hmap::Vec2<int> shape,
+                                 hmap::Vec2<int> tiling,
+                                 float           overlap)
     : ControlNode(id), Primitive(id, shape, tiling, overlap)
 {
-  LOG_DEBUG("RidgedPerlin::RidgedPerlin()");
-  this->node_type = "RidgedPerlin";
+  LOG_DEBUG("FbmRidgedPerlin::FbmRidgedPerlin()");
+  this->node_type = "FbmRidgedPerlin";
   this->category = category_mapping.at(this->node_type);
 
   this->attr["kw"] = NEW_ATTR_WAVENB();
@@ -23,7 +23,8 @@ RidgedPerlin::RidgedPerlin(std::string     id,
   this->attr["octaves"] = NEW_ATTR_INT(8, 0, 32);
   this->attr["weight"] = NEW_ATTR_FLOAT(0.7f, 0.f, 1.f);
   this->attr["persistence"] = NEW_ATTR_FLOAT(0.5f, 0.f, 1.f);
-  this->attr["lacunarity"] = NEW_ATTR_FLOAT(0.5f, 0.01f, 4.f);
+  this->attr["lacunarity"] = NEW_ATTR_FLOAT(2.f, 0.01f, 4.f);
+  this->attr["k_smoothing"] = NEW_ATTR_FLOAT(0.2f, 0.f, 1.f);
 
   this->attr_ordered_key = {"kw",
                             "seed",
@@ -31,6 +32,7 @@ RidgedPerlin::RidgedPerlin(std::string     id,
                             "weight",
                             "persistence",
                             "lacunarity",
+                            "k_smoothing",
                             "inverse",
                             "remap"};
 
@@ -41,33 +43,32 @@ RidgedPerlin::RidgedPerlin(std::string     id,
   this->update_inner_bindings();
 }
 
-void RidgedPerlin::compute()
+void FbmRidgedPerlin::compute()
 {
-  LOG_DEBUG("computing RidgedPerlin node [%s]", this->id.c_str());
+  LOG_DEBUG("computing FbmRidgedPerlin node [%s]", this->id.c_str());
 
   hmap::fill(this->value_out,
              (hmap::HeightMap *)this->get_p_data("dx"),
              (hmap::HeightMap *)this->get_p_data("dy"),
              (hmap::HeightMap *)this->get_p_data("stretching"),
              [this](hmap::Vec2<int>   shape,
-                    hmap::Vec2<float> shift,
-                    hmap::Vec2<float> scale,
+                    hmap::Vec4<float> bbox,
                     hmap::Array      *p_noise_x,
                     hmap::Array      *p_noise_y,
                     hmap::Array      *p_stretching)
              {
-               return hmap::ridged_perlin(shape,
-                                          GET_ATTR_WAVENB("kw"),
-                                          GET_ATTR_SEED("seed"),
-                                          GET_ATTR_INT("octaves"),
-                                          GET_ATTR_FLOAT("weight"),
-                                          GET_ATTR_FLOAT("persistence"),
-                                          GET_ATTR_FLOAT("lacunarity"),
-                                          p_noise_x,
-                                          p_noise_y,
-                                          p_stretching,
-                                          shift,
-                                          scale);
+               return hmap::fbm_ridged_perlin(shape,
+                                              GET_ATTR_WAVENB("kw"),
+                                              GET_ATTR_SEED("seed"),
+                                              GET_ATTR_INT("octaves"),
+                                              GET_ATTR_FLOAT("weight"),
+                                              GET_ATTR_FLOAT("persistence"),
+                                              GET_ATTR_FLOAT("lacunarity"),
+                                              GET_ATTR_FLOAT("k_smoothing"),
+                                              p_noise_x,
+                                              p_noise_y,
+                                              p_stretching,
+                                              bbox);
              });
 
   this->post_process_heightmap(this->value_out);

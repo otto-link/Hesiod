@@ -72,8 +72,7 @@ void Dendry::compute()
              p_dx,
              p_dy,
              [this, &ctrl_array](hmap::Vec2<int>   shape,
-                                 hmap::Vec2<float> shift,
-                                 hmap::Vec2<float> scale,
+                                 hmap::Vec4<float> bbox,
                                  hmap::Array      *p_noise_x,
                                  hmap::Array      *p_noise_y)
              {
@@ -91,8 +90,8 @@ void Dendry::compute()
                                    0.5f, // overlap
                                    p_noise_x,
                                    p_noise_y,
-                                   shift,
-                                   scale);
+                                   nullptr,
+                                   bbox);
              });
 
   // hmap::fill(this->value_out,

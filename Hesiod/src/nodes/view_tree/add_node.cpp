@@ -39,9 +39,6 @@ std::string ViewTree::add_view_node(std::string control_node_type,
   case str2int("AbsSmooth"):
     this->add_node(std::make_shared<hesiod::vnode::ViewAbsSmooth>(id));
     break;
-  case str2int("AlterElevation"):
-    this->add_node(std::make_shared<hesiod::vnode::ViewAlterElevation>(id));
-    break;
   case str2int("BaseElevation"):
     this->add_node(std::make_shared<hesiod::vnode::ViewBaseElevation>(id, this->shape, this->tiling, this->overlap));
     break;
@@ -131,6 +128,12 @@ std::string ViewTree::add_view_node(std::string control_node_type,
     break;
   case str2int("FbmPerlin"):
     this->add_node(std::make_shared<hesiod::vnode::ViewFbmPerlin>(id, this->shape, this->tiling, this->overlap));
+    break;
+  case str2int("FbmPingpongPerlin"):
+    this->add_node(std::make_shared<hesiod::vnode::ViewFbmPingpongPerlin>(id, this->shape, this->tiling, this->overlap));
+    break;
+  case str2int("FbmRidgedPerlin"):
+    this->add_node(std::make_shared<hesiod::vnode::ViewFbmRidgedPerlin>(id, this->shape, this->tiling, this->overlap));
     break;
   case str2int("FbmSimplex"):
     this->add_node(std::make_shared<hesiod::vnode::ViewFbmSimplex>(id, this->shape, this->tiling, this->overlap));
@@ -258,9 +261,6 @@ std::string ViewTree::add_view_node(std::string control_node_type,
   case str2int("PerlinBillow"):
     this->add_node(std::make_shared<hesiod::vnode::ViewPerlinBillow>(id, this->shape, this->tiling, this->overlap));
     break;
-  case str2int("PingpongPerlin"):
-    this->add_node(std::make_shared<hesiod::vnode::ViewPingpongPerlin>(id, this->shape, this->tiling, this->overlap));
-    break;
   case str2int("Plateau"):
     this->add_node(std::make_shared<hesiod::vnode::ViewPlateau>(id));
     break;
@@ -302,9 +302,6 @@ std::string ViewTree::add_view_node(std::string control_node_type,
     break;
   case str2int("Rescale"):
     this->add_node(std::make_shared<hesiod::vnode::ViewRescale>(id));
-    break;
-  case str2int("RidgedPerlin"):
-    this->add_node(std::make_shared<hesiod::vnode::ViewRidgedPerlin>(id, this->shape, this->tiling, this->overlap));
     break;
   case str2int("Rugosity"):
     this->add_node(std::make_shared<hesiod::vnode::ViewRugosity>(id));

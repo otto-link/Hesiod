@@ -31,8 +31,7 @@ void Simplex::compute()
              (hmap::HeightMap *)this->get_p_data("dx"),
              (hmap::HeightMap *)this->get_p_data("dy"),
              [this](hmap::Vec2<int>   shape,
-                    hmap::Vec2<float> shift,
-                    hmap::Vec2<float> scale,
+                    hmap::Vec4<float> bbox,
                     hmap::Array      *p_noise_x,
                     hmap::Array      *p_noise_y)
              {
@@ -42,8 +41,7 @@ void Simplex::compute()
                                     p_noise_x,
                                     p_noise_y,
                                     nullptr,
-                                    shift,
-                                    scale);
+                                    bbox);
              });
 
   this->post_process_heightmap(this->value_out);

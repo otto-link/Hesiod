@@ -48,19 +48,15 @@ void ZeroedEdges::compute()
 
   if (!p_dr)
     hmap::transform(this->value_out,
-                    [this, &sigma](hmap::Array      &z,
-                                   hmap::Vec2<float> shift,
-                                   hmap::Vec2<float> scale)
-                    { hmap::zeroed_edges(z, sigma, nullptr, shift, scale); });
+                    [this, &sigma](hmap::Array &z, hmap::Vec4<float> bbox)
+                    { hmap::zeroed_edges(z, sigma, nullptr, bbox); });
 
   else
-    hmap::transform(this->value_out,
-                    *p_dr,
-                    [this, &sigma](hmap::Array      &z,
-                                   hmap::Array      &dr,
-                                   hmap::Vec2<float> shift,
-                                   hmap::Vec2<float> scale)
-                    { hmap::zeroed_edges(z, sigma, &dr, shift, scale); });
+    hmap::transform(
+        this->value_out,
+        *p_dr,
+        [this, &sigma](hmap::Array &z, hmap::Array &dr, hmap::Vec4<float> bbox)
+        { hmap::zeroed_edges(z, sigma, &dr, bbox); });
 
   // remap
   if (GET_ATTR_REF_RANGE("remap")->is_activated())

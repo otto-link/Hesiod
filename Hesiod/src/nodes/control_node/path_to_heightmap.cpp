@@ -39,16 +39,9 @@ void PathToHeightmap::compute()
     if (!GET_ATTR_BOOL("filled"))
     {
       hmap::fill(this->value_out,
-                 [p_path](hmap::Vec2<int>   shape,
-                          hmap::Vec2<float> shift,
-                          hmap::Vec2<float> scale)
+                 [p_path](hmap::Vec2<int> shape, hmap::Vec4<float> bbox)
                  {
-                   hmap::Array       z = hmap::Array(shape);
-                   hmap::Vec4<float> bbox = hmap::Vec4<float>(shift.x,
-                                                              shift.x + scale.x,
-                                                              shift.y,
-                                                              shift.y +
-                                                                  scale.y);
+                   hmap::Array z = hmap::Array(shape);
                    p_path->to_array(z, bbox);
                    return z;
                  });

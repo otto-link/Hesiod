@@ -39,8 +39,7 @@ void Step::compute()
   hmap::fill(this->value_out,
              (hmap::HeightMap *)this->get_p_data("dx"),
              [this, &talus](hmap::Vec2<int>   shape,
-                            hmap::Vec2<float> shift,
-                            hmap::Vec2<float> scale,
+                            hmap::Vec4<float> bbox,
                             hmap::Array      *p_noise_x)
              {
                hmap::Vec2<float> center;
@@ -51,9 +50,10 @@ void Step::compute()
                                  GET_ATTR_FLOAT("angle"),
                                  talus,
                                  p_noise_x,
+                                 nullptr,
+                                 nullptr,
                                  center,
-                                 shift,
-                                 scale);
+                                 bbox);
              });
 
   this->post_process_heightmap(this->value_out);

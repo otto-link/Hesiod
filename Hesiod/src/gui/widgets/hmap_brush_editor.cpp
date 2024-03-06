@@ -19,15 +19,17 @@ namespace hesiod::gui
 
 void add_brush(hmap::HeightMap &h, hmap::Array &kernel, float x, float y)
 {
-  hmap::transform(h,
-                  [&kernel, &x, &y](hmap::Array      &z,
-                                    hmap::Vec2<float> shift,
-                                    hmap::Vec2<float> scale)
-                  {
-                    int ic = (int)((x - shift.x) / scale.x * (z.shape.x - 1));
-                    int jc = (int)((y - shift.y) / scale.y * (z.shape.y - 1));
-                    add_kernel(z, kernel, ic, jc);
-                  });
+  hmap::transform(
+      h,
+      [&kernel, &x, &y](hmap::Array &z, hmap::Vec4<float> bbox)
+      {
+        hmap::Vec2<float> shift = {bbox.a, bbox.c};
+        hmap::Vec2<float> scale = {bbox.b - bbox.a, bbox.d - bbox.c};
+
+        int ic = (int)((x - shift.x) / scale.x * (z.shape.x - 1));
+        int jc = (int)((y - shift.y) / scale.y * (z.shape.y - 1));
+        add_kernel(z, kernel, ic, jc);
+      });
 }
 
 bool hmap_brush_editor(hmap::HeightMap &h, float width)
