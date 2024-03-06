@@ -3,10 +3,8 @@
  * this software. */
 #include "highmap.hpp"
 #include "macrologger.h"
-#include <imgui.h>
 
 #include "hesiod/attribute.hpp"
-#include "hesiod/gui.hpp"
 
 namespace hesiod
 {
@@ -19,14 +17,6 @@ IntAttribute::IntAttribute(int value, int vmin, int vmax)
 int IntAttribute::get()
 {
   return value;
-}
-
-bool IntAttribute::render_settings(std::string label)
-{
-  bool has_changed = false;
-  ImGui::SliderInt(label.c_str(), &this->value, this->vmin, this->vmax);
-  has_changed |= ImGui::IsItemDeactivatedAfterEdit();
-  return has_changed;
 }
 
 bool IntAttribute::serialize_json_v2(std::string     field_name,

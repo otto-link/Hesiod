@@ -13,6 +13,7 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
+#include "hesiod/attribute.hpp"
 #include "hesiod/view_tree.hpp"
 
 namespace hesiod::gui
@@ -32,6 +33,12 @@ void save_screenshot(std::string fname);
 
 // main GUI
 void main_dock(hesiod::vnode::ViewTree &view_tree);
+
+// attribute settings
+bool render_attribute_widget(std::unique_ptr<Attribute> &p_attr);
+
+bool render_attribute_widget(std::unique_ptr<Attribute> &p_attr,
+                             std::string                 label);
 
 // custom ImGui widgets
 void canvas_cloud(hmap::Cloud &cloud, float width = 0.f, float radius = 4.f);

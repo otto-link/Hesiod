@@ -3,10 +3,8 @@
  * this software. */
 #include "highmap.hpp"
 #include "macrologger.h"
-#include <imgui.h>
 
 #include "hesiod/attribute.hpp"
-#include "hesiod/gui.hpp"
 
 namespace hesiod
 {
@@ -18,13 +16,6 @@ BoolAttribute::BoolAttribute(bool value) : value(value)
 bool BoolAttribute::get()
 {
   return value;
-}
-
-bool BoolAttribute::render_settings(std::string label)
-{
-  bool has_changed = false;
-  has_changed |= ImGui::Checkbox(label.c_str(), &this->value);
-  return has_changed;
 }
 
 bool BoolAttribute::serialize_json_v2(std::string     field_name,

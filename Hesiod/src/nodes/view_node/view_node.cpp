@@ -148,7 +148,7 @@ bool ViewNode::render_attribute_settings()
       throw std::runtime_error("unknown attribute id");
     }
 
-    has_changed |= this->attr.at(key)->render_settings(key.c_str());
+    has_changed |= hesiod::gui::render_attribute_widget(this->attr.at(key));
 
     for (int i = 0; i < indent; i++)
       ImGui::Unindent();
@@ -158,7 +158,7 @@ bool ViewNode::render_attribute_settings()
 
   // render the remaining parameters not present in the ordered list
   for (auto &k : attr_key_queue)
-    has_changed |= this->attr.at(k)->render_settings(k.c_str());
+    has_changed |= hesiod::gui::render_attribute_widget(this->attr.at(k));
 
   return has_changed;
 }

@@ -128,7 +128,7 @@ void ViewBrush::sync_drawing_texture()
       this->edit_state.draw_shape);
 
   std::vector<uint8_t> img = hmap::colorize(array,
-					    0.f,
+                                            0.f,
                                             this->edit_state.max_height,
                                             hmap::cmap::inferno,
                                             false);

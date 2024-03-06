@@ -4,11 +4,9 @@
 #include "highmap.hpp"
 #include "highmap/geometry.hpp"
 #include "macrologger.h"
-#include <imgui.h>
 #include <vector>
 
 #include "hesiod/attribute.hpp"
-#include "hesiod/gui.hpp"
 
 namespace hesiod
 {
@@ -16,14 +14,6 @@ namespace hesiod
 hmap::Cloud CloudAttribute::get()
 {
   return value;
-}
-
-bool CloudAttribute::render_settings(std::string label)
-{
-  bool has_changed = false;
-  ImGui::TextUnformatted(label.c_str());
-  has_changed |= hesiod::gui::canvas_cloud_editor(this->value);
-  return has_changed;
 }
 
 bool CloudAttribute::serialize_json_v2(std::string     field_name,

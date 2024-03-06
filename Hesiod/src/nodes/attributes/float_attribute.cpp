@@ -3,10 +3,8 @@
  * this software. */
 #include "highmap.hpp"
 #include "macrologger.h"
-#include <imgui.h>
 
 #include "hesiod/attribute.hpp"
-#include "hesiod/gui.hpp"
 
 namespace hesiod
 {
@@ -24,18 +22,6 @@ float FloatAttribute::get()
 void FloatAttribute::set(float new_value)
 {
   this->value = new_value;
-}
-
-bool FloatAttribute::render_settings(std::string label)
-{
-  bool has_changed = false;
-  ImGui::SliderFloat(label.c_str(),
-                     &this->value,
-                     this->vmin,
-                     this->vmax,
-                     "%.2f");
-  has_changed |= ImGui::IsItemDeactivatedAfterEdit();
-  return has_changed;
 }
 
 bool FloatAttribute::serialize_json_v2(std::string     field_name,

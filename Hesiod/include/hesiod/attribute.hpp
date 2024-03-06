@@ -85,11 +85,11 @@ class Attribute : public serialization::SerializationBase
 {
 public:
   Attribute() = default;
+
   virtual AttributeType get_type()
   {
     return AttributeType::INVALID;
   }
-  virtual bool render_settings(std::string) = 0;
 
   template <class T = void> T *get_ref()
   {
@@ -118,7 +118,6 @@ public:
   {
     return AttributeType::BOOL_ATTRIBUTE;
   }
-  virtual bool render_settings(std::string label);
 
   SERIALIZATION_V2_IMPLEMENT_BASE();
 
@@ -129,12 +128,13 @@ class CloudAttribute : public Attribute
 {
 public:
   CloudAttribute() = default;
-  hmap::Cloud   get();
+
+  hmap::Cloud get();
+
   AttributeType get_type()
   {
     return AttributeType::CLOUD_ATTRIBUTE;
   }
-  virtual bool render_settings(std::string label);
 
   SERIALIZATION_V2_IMPLEMENT_BASE();
 
@@ -145,12 +145,13 @@ class ColorAttribute : public Attribute
 {
 public:
   ColorAttribute() = default;
+
   std::vector<float> get();
-  AttributeType      get_type()
+
+  AttributeType get_type()
   {
     return AttributeType::COLOR_ATTRIBUTE;
   }
-  virtual bool render_settings(std::string label);
 
   SERIALIZATION_V2_IMPLEMENT_BASE();
 
@@ -167,7 +168,6 @@ public:
   {
     return AttributeType::FILENAME_ATTRIBUTE;
   }
-  virtual bool render_settings(std::string label);
 
   SERIALIZATION_V2_IMPLEMENT_BASE();
 
@@ -185,7 +185,6 @@ public:
   {
     return AttributeType::FLOAT_ATTRIBUTE;
   }
-  virtual bool render_settings(std::string label);
 
   SERIALIZATION_V2_IMPLEMENT_BASE();
 
@@ -205,7 +204,6 @@ public:
   {
     return AttributeType::INT_ATTRIBUTE;
   }
-  virtual bool render_settings(std::string label);
 
   SERIALIZATION_V2_IMPLEMENT_BASE();
 
@@ -226,7 +224,6 @@ public:
   {
     return AttributeType::MAP_ENUM_ATTRIBUTE;
   }
-  virtual bool render_settings(std::string label);
 
   SERIALIZATION_V2_IMPLEMENT_BASE();
 
@@ -243,7 +240,6 @@ public:
   {
     return AttributeType::MATRIX_ATTRIBUTE;
   }
-  virtual bool render_settings(std::string label);
 
   SERIALIZATION_V2_IMPLEMENT_BASE();
 
@@ -261,7 +257,6 @@ public:
   {
     return AttributeType::PATH_ATTRIBUTE;
   }
-  virtual bool render_settings(std::string label);
 
   SERIALIZATION_V2_IMPLEMENT_BASE();
 
@@ -283,7 +278,6 @@ public:
   {
     return AttributeType::RANGE_ATTRIBUTE;
   }
-  virtual bool render_settings(std::string label);
 
   SERIALIZATION_V2_IMPLEMENT_BASE();
 
@@ -301,7 +295,6 @@ public:
   {
     return AttributeType::SEED_ATTRIBUTE;
   }
-  virtual bool render_settings(std::string label);
 
   SERIALIZATION_V2_IMPLEMENT_BASE();
 
@@ -318,7 +311,6 @@ public:
   {
     return AttributeType::SHAPE_ATTRIBUTE;
   }
-  virtual bool render_settings(std::string label);
 
   SERIALIZATION_V2_IMPLEMENT_BASE();
 
@@ -336,7 +328,6 @@ public:
   {
     return AttributeType::VEC_FLOAT_ATTRIBUTE;
   }
-  virtual bool render_settings(std::string label);
 
   SERIALIZATION_V2_IMPLEMENT_BASE();
 
@@ -353,7 +344,6 @@ public:
   {
     return AttributeType::VEC_INT_ATTRIBUTE;
   }
-  virtual bool render_settings(std::string label);
 
   SERIALIZATION_V2_IMPLEMENT_BASE();
 
@@ -370,7 +360,6 @@ public:
   {
     return AttributeType::WAVE_NB_ATTRIBUTE;
   }
-  virtual bool render_settings(std::string label);
 
   SERIALIZATION_V2_IMPLEMENT_BASE();
 

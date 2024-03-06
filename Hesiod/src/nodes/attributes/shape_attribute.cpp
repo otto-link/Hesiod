@@ -3,10 +3,8 @@
  * this software. */
 #include "highmap.hpp"
 #include "macrologger.h"
-#include <imgui.h>
 
 #include "hesiod/attribute.hpp"
-#include "hesiod/gui.hpp"
 
 namespace hesiod
 {
@@ -23,15 +21,6 @@ hmap::Vec2<int> ShapeAttribute::get()
 void ShapeAttribute::set_value_max(hmap::Vec2<int> new_value_max)
 {
   this->value_max = new_value_max;
-}
-
-bool ShapeAttribute::render_settings(std::string label)
-{
-  bool has_changed = false;
-  has_changed |= hesiod::gui::select_shape(label.c_str(),
-                                           this->value,
-                                           this->value_max);
-  return has_changed;
 }
 
 bool ShapeAttribute::serialize_json_v2(std::string     field_name,
