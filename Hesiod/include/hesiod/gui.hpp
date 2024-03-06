@@ -63,8 +63,6 @@ void flip_vertically(int width, int height, uint8_t *data);
 
 void help_marker(std::string text);
 
-bool hmap_brush_editor(hmap::HeightMap &h, float width = 0.f);
-
 bool listbox_map_enum(std::map<std::string, int> &map,
                       int                        &selected,
                       float                       width);

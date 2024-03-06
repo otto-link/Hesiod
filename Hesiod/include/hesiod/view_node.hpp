@@ -2,6 +2,7 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #pragma once
+#include <span>
 #include <string>
 
 #include <GLFW/glfw3.h>
@@ -12,6 +13,7 @@
 #include "gnode.hpp"
 
 #include "hesiod/control_node.hpp"
+#include "hesiod/hmap_brush_editor.hpp"
 #include "hesiod/timer.hpp"
 
 namespace hesiod::vnode
@@ -174,6 +176,14 @@ public:
   virtual void post_control_node_update();
 
   /**
+   * @brief Render the attribute settings GUI widgets.
+   *
+   * @return true Settings have changed.
+   * @return false Settings have not been changed.
+   */
+  virtual bool render_attribute_settings();
+
+  /**
    * @brief Render the settings GUI widgets.
    *
    * @return true Settings have changed.
@@ -261,6 +271,11 @@ protected:
    */
   std::string help_text = "No help available.";
 
+  /**
+   * @brief OpenGL texture used to store the image preview.
+   */
+  GLuint image_texture_preview = 0;
+
 private:
   /**
    * @brief Shape preview.
@@ -271,11 +286,6 @@ private:
    * @brief Preview type.
    */
   int preview_type = preview_type::grayscale;
-
-  /**
-   * @brief OpenGL texture used to store the image preview.
-   */
-  GLuint image_texture_preview = 0;
 
   /**
    * @brief Set the control node post-update callback to the view node
@@ -373,7 +383,6 @@ public:
   }
 };
 
-// TO DO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 class ViewBrush : public ViewNode, public hesiod::cnode::Brush
 {
 public:
@@ -383,6 +392,12 @@ public:
             float           overlap);
 
   bool render_settings();
+
+  void sync_drawing_texture();
+  void sync_value();
+
+private:
+  hesiod::gui::HmBrushEditorState edit_state;
 };
 
 class ViewBump : public ViewNode, public hesiod::cnode::Bump

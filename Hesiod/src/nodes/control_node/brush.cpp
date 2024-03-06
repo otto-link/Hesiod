@@ -17,6 +17,9 @@ Brush::Brush(std::string     id,
   LOG_DEBUG("Brush::Brush()");
   this->node_type = "Brush";
   this->category = category_mapping.at(this->node_type);
+
+  this->attr["remap"] = NEW_ATTR_RANGE(true);
+
   this->add_port(
       gnode::Port("output", gnode::direction::out, dtype::dHeightMap));
   this->value_out.set_sto(shape, tiling, overlap);
@@ -30,16 +33,9 @@ void Brush::update_inner_bindings()
 
 void Brush::compute()
 {
-  LOG_DEBUG("computing Perlin node [%s]", this->id.c_str());
+  LOG_DEBUG("computing Brush node [%s]", this->id.c_str());
 
-  // remap the output
-  if (this->remap)
-  {
-    if (this->inverse)
-      this->value_out.remap(this->vmax, this->vmin);
-    else
-      this->value_out.remap(this->vmin, this->vmax);
-  }
+  this->post_process_heightmap(this->value_out);
 }
 
 } // namespace hesiod::cnode

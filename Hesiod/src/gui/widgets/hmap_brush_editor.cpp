@@ -8,38 +8,16 @@
 #include "imgui_internal.h"
 #include "macrologger.h"
 
-#include "hesiod/gui.hpp"
-
-#define IMGUI_ID_BRUSH_RADIUS 0
+#include "hesiod/hmap_brush_editor.hpp"
 
 namespace hesiod::gui
 {
 
-// HELPER
-
-void add_brush(hmap::HeightMap &h, hmap::Array &kernel, float x, float y)
+void hmap_brush_editor(HmBrushEditorState &edit_state,
+                       ImTextureID         canvas_texture,
+                       float               width)
 {
-  hmap::transform(
-      h,
-      [&kernel, &x, &y](hmap::Array &z, hmap::Vec4<float> bbox)
-      {
-        hmap::Vec2<float> shift = {bbox.a, bbox.c};
-        hmap::Vec2<float> scale = {bbox.b - bbox.a, bbox.d - bbox.c};
-
-        int ic = (int)((x - shift.x) / scale.x * (z.shape.x - 1));
-        int jc = (int)((y - shift.y) / scale.y * (z.shape.y - 1));
-        add_kernel(z, kernel, ic, jc);
-      });
-}
-
-bool hmap_brush_editor(hmap::HeightMap &h, float width)
-{
-  ImGuiStorage *imgui_storage = ImGui::GetStateStorage();
-  float brush_radius = imgui_storage->GetFloat(IMGUI_ID_BRUSH_RADIUS, 16.f);
-
-  bool ret = false;
-
-  ImGui::PushID((void *)&h);
+  ImGui::PushID((void *)&edit_state);
   ImGui::BeginGroup();
 
   // --- canvas
@@ -49,20 +27,22 @@ bool hmap_brush_editor(hmap::HeightMap &h, float width)
   if (width == 0.f)
   {
     canvas_size = ImGui::GetContentRegionAvail();
-    if (canvas_size.x < 50.0f)
-      canvas_size.x = 50.0f;
+    if (canvas_size.x < 75.0f)
+      canvas_size.x = 75.0f;
     canvas_size.y = canvas_size.x; // square canvas
   }
   else
+  {
     canvas_size = {width, width};
+  }
+  edit_state.canvas_size = canvas_size;
 
   ImVec2 canvas_p1 = ImVec2(canvas_p0.x + canvas_size.x,
                             canvas_p0.y + canvas_size.y);
 
   // draw canvas and points
   ImDrawList *draw_list = ImGui::GetWindowDrawList();
-  draw_list->AddRectFilled(canvas_p0, canvas_p1, IM_COL32(50, 50, 50, 255));
-  draw_list->AddRect(canvas_p0, canvas_p1, IM_COL32(255, 255, 255, 255));
+  draw_list->AddImage(canvas_texture, canvas_p0, canvas_p1);
 
   // mouse interactions
   ImGui::InvisibleButton("canvas",
@@ -73,60 +53,115 @@ bool hmap_brush_editor(hmap::HeightMap &h, float width)
   ImGui::SetItemKeyOwner(ImGuiKey_MouseWheelY);
   bool is_canvas_hovered = ImGui::IsItemHovered();
 
-  ImGuiIO     &io = ImGui::GetIO();
-  const ImVec2 mouse_pos_in_canvas(io.MousePos.x - canvas_p0.x,
-                                   io.MousePos.y - canvas_p0.y);
+  ImGuiIO                &io = ImGui::GetIO();
+  const hmap::Vec2<float> mouse_pos_in_canvas(io.MousePos.x - canvas_p0.x,
+                                              io.MousePos.y - canvas_p0.y);
+  bool                    mouse_moved_enough = false;
+  auto mouse_delta = mouse_pos_in_canvas - edit_state.last_mouse_pos;
+  if (ImGui::IsAnyMouseDown() && std::sqrt(mouse_delta.x * mouse_delta.x +
+                                           mouse_delta.y * mouse_delta.y) >=
+                                     std::sqrt(edit_state.brush_radius))
+  {
+    edit_state.last_mouse_pos = mouse_pos_in_canvas;
+    mouse_moved_enough = true;
+  }
 
   if (is_canvas_hovered)
   {
     // draw brush size
     draw_list->AddCircle(io.MousePos,
-                         brush_radius,
+                         edit_state.brush_radius,
                          IM_COL32(255, 255, 255, 255));
 
     // remap mouse coordinates to [0, 1] and reverse y-axis
     float x = (io.MousePos.x - canvas_p0.x) / canvas_size.x;
     float y = 1.f - (io.MousePos.y - canvas_p0.y) / canvas_size.y;
 
-    // brush radius in pixels
-    int ir = (int)(brush_radius / canvas_size.x * h.shape.x);
-
-    if (ImGui::IsMouseDown(ImGuiMouseButton_Left)) // move
+    auto strength = edit_state.brush_strength;
+    if (ImGui::IsMouseDown(ImGuiMouseButton_Left))
     {
+      edit_state.is_drawing = true;
+      if (mouse_moved_enough)
+      {
+        edit_state.add_change({x, y}, strength);
+      }
     }
-    else if (ImGui::IsMouseReleased(ImGuiMouseButton_Left))
+    else if (ImGui::IsMouseDown(ImGuiMouseButton_Right))
     {
-      hmap::Array kernel = hmap::cubic_pulse(
-          hmap::Vec2<int>(2 * ir + 1, 2 * ir + 1));
-      add_brush(h, kernel, x, y);
-      ret = true;
+      edit_state.is_drawing = true;
+      if (mouse_moved_enough)
+      {
+        edit_state.add_change({x, y}, -strength);
+      }
     }
-    else if (ImGui::IsMouseReleased(ImGuiMouseButton_Right))
+    else
     {
-      hmap::Array kernel = -hmap::cubic_pulse(
-          hmap::Vec2<int>(2 * ir + 1, 2 * ir + 1));
-      add_brush(h, kernel, x, y);
-      ret = true;
+      edit_state.is_drawing = false;
     }
 
     // brush size
     if (io.MouseWheel)
     {
-      float step = brush_radius * 0.1f;
+      float step = edit_state.brush_radius * 0.1f;
       if (ImGui::IsKeyPressed(ImGuiKey_LeftShift))
         step *= 0.1f;
-      brush_radius = std::max(1.f, brush_radius + io.MouseWheel * step);
-      ret = true;
+      edit_state.brush_radius = std::max(1.f,
+                                         edit_state.brush_radius +
+                                             io.MouseWheel * step);
     }
   }
 
-  ImGui::Text("Brush radius: %d pixels",
-              (int)(brush_radius / canvas_size.x * h.shape.x));
+  // display relative radius (grid size independent)
+  ImGui::Text("Brush radius: %.2f", edit_state.brush_radius / canvas_size.x);
 
   ImGui::EndGroup();
-  imgui_storage->SetFloat(IMGUI_ID_BRUSH_RADIUS, brush_radius);
+  ImGui::PopID();
+}
 
-  return ret;
+void HmBrushEditorState::add_change(hmap::Vec2<float> pos, float weight)
+{
+  if (pending_changes.size() > 128)
+    return;
+  pending_changes.push_back({pos, weight});
+}
+
+void HmBrushEditorState::apply_pending_changes()
+{
+  int ir = (int)(brush_radius / canvas_size.x * pending_hm.shape.x);
+
+  std::vector<hmap::Array>       kernels;
+  std::vector<hmap::Vec2<float>> positions;
+  for (auto &[pos, weight] : pending_changes)
+  {
+    hmap::Array kernel = weight * hmap::cubic_pulse(
+                                      hmap::Vec2<int>(2 * ir + 1, 2 * ir + 1));
+    kernels.push_back(kernel);
+    positions.push_back(pos);
+  }
+  apply_brushes(pending_hm, kernels, positions);
+  hmap::transform(pending_hm,
+                  [this](hmap::Array &m) { hmap::clamp(m, 0, max_height); });
+  pending_hm.smooth_overlap_buffers();
+  pending_changes.clear();
+}
+
+void HmBrushEditorState::apply_brushes(hmap::HeightMap             &h,
+                                       std::span<hmap::Array>       kernels,
+                                       std::span<hmap::Vec2<float>> positions)
+{
+  hmap::transform(h,
+                  [&kernels, &positions](hmap::Array &z, hmap::Vec4<float> bbox)
+                  {
+                    for (size_t i = 0; i < kernels.size(); ++i)
+                    {
+                      hmap::Vec2<float> pos = positions[i];
+                      int ic = (int)((pos.x - bbox.a) / (bbox.b - bbox.a) *
+                                     (z.shape.x - 1));
+                      int jc = (int)((pos.y - bbox.c) / (bbox.d - bbox.c) *
+                                     (z.shape.y - 1));
+                      add_kernel(z, kernels[i], ic, jc);
+                    }
+                  });
 }
 
 } // namespace hesiod::gui

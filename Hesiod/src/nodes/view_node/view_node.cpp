@@ -120,6 +120,49 @@ void ViewNode::post_control_node_update()
     this->update_preview();
 }
 
+bool ViewNode::render_attribute_settings()
+{
+  bool has_changed = false;
+
+  std::list<std::string> attr_key_queue = {};
+  for (auto &[k, v] : this->attr)
+    attr_key_queue.push_back(k);
+
+  // start rendering the parameters using the ordered list
+  for (auto &k : this->attr_ordered_key)
+  {
+    // indentation
+    int         indent = count_leading_character(k, '_');
+    std::string key = k.substr(indent, k.size() - indent);
+
+    for (int i = 0; i < indent; i++)
+      ImGui::Indent();
+
+    // verity the key indeed exist before using it
+    if (!this->attr.contains(key))
+    {
+      LOG_ERROR("unknown attribute id [%s], check the attr_ordered_key "
+                "definition for node [%s]",
+                key.c_str(),
+                this->id.c_str());
+      throw std::runtime_error("unknown attribute id");
+    }
+
+    has_changed |= this->attr.at(key)->render_settings(key.c_str());
+
+    for (int i = 0; i < indent; i++)
+      ImGui::Unindent();
+
+    attr_key_queue.remove(key);
+  }
+
+  // render the remaining parameters not present in the ordered list
+  for (auto &k : attr_key_queue)
+    has_changed |= this->attr.at(k)->render_settings(k.c_str());
+
+  return has_changed;
+}
+
 void ViewNode::render_node()
 {
   ImGui::PushID((void *)this);
@@ -338,43 +381,7 @@ bool ViewNode::render_settings()
 
   // automatic layout
   ImGui::SeparatorText("Settings");
-  {
-    std::list<std::string> attr_key_queue = {};
-    for (auto &[k, v] : this->attr)
-      attr_key_queue.push_back(k);
-
-    // start rendering the parameters using the ordered list
-    for (auto &k : this->attr_ordered_key)
-    {
-      // indentation
-      int         indent = count_leading_character(k, '_');
-      std::string key = k.substr(indent, k.size() - indent);
-
-      for (int i = 0; i < indent; i++)
-        ImGui::Indent();
-
-      // verity the key indeed exist before using it
-      if (!this->attr.contains(key))
-      {
-        LOG_ERROR("unknown attribute id [%s], check the attr_ordered_key "
-                  "definition for node [%s]",
-                  key.c_str(),
-                  this->id.c_str());
-        throw std::runtime_error("unknown attribute id");
-      }
-
-      has_changed |= this->attr.at(key)->render_settings(key.c_str());
-
-      for (int i = 0; i < indent; i++)
-        ImGui::Unindent();
-
-      attr_key_queue.remove(key);
-    }
-
-    // render the remaining parameters not present in the ordered list
-    for (auto &k : attr_key_queue)
-      has_changed |= this->attr.at(k)->render_settings(k.c_str());
-  }
+  has_changed |= this->render_attribute_settings();
 
   if (has_changed)
     this->force_update();
