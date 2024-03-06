@@ -13,7 +13,7 @@ namespace hesiod::gui
 
 bool render_attribute_widget(std::unique_ptr<Attribute> &attr)
 {
-  return render_attribute_widget(attr, "");
+  return render_attribute_widget(attr, );
 }
 
 bool render_attribute_widget(std::unique_ptr<Attribute> &attr,

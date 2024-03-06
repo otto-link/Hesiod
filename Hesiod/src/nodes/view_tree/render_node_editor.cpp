@@ -124,7 +124,7 @@ void ViewTree::render_node_editor()
                                               ".json",
                                               config);
     }
-    else
+    else if (save_button)
       this->save_state(this->json_filename);
 
     if (ImGuiFileDialog::Instance()->Display("SaveTreeStateDlg"))
