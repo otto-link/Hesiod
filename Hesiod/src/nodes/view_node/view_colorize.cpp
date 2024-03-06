@@ -52,8 +52,10 @@ bool ViewColorize::render_settings()
     }
   }
 
-  has_changed |= hesiod::gui::render_attribute_widget(this->attr.at("reverse"));
-  has_changed |= hesiod::gui::render_attribute_widget(this->attr.at("clamp"));
+  has_changed |= hesiod::gui::render_attribute_widget(this->attr.at("reverse"),
+                                                      "reverse");
+  has_changed |= hesiod::gui::render_attribute_widget(this->attr.at("clamp"),
+                                                      "clamp");
 
   if (has_changed)
     this->force_update();

@@ -17,7 +17,8 @@ bool ViewStratifyMultiscale::render_settings()
 
   has_changed |= this->render_settings_header();
 
-  has_changed |= hesiod::gui::render_attribute_widget(this->attr.at("seed"));
+  has_changed |= hesiod::gui::render_attribute_widget(this->attr.at("seed"),
+                                                      "seed");
 
   if (ImGui::Button("Size +1"))
   {
@@ -49,14 +50,17 @@ bool ViewStratifyMultiscale::render_settings()
     has_changed = true;
   }
 
+  has_changed |= hesiod::gui::render_attribute_widget(this->attr.at("n_strata"),
+                                                      "n_strata");
   has_changed |= hesiod::gui::render_attribute_widget(
-      this->attr.at("n_strata"));
+      this->attr.at("strata_noise"),
+      "strata_noise");
   has_changed |= hesiod::gui::render_attribute_widget(
-      this->attr.at("strata_noise"));
+      this->attr.at("gamma_list"),
+      "gamma_list");
   has_changed |= hesiod::gui::render_attribute_widget(
-      this->attr.at("gamma_list"));
-  has_changed |= hesiod::gui::render_attribute_widget(
-      this->attr.at("gamma_noise"));
+      this->attr.at("gamma_noise"),
+      "gamma_noise");
 
   has_changed |= this->render_settings_footer();
 
