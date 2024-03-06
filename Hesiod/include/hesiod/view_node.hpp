@@ -394,9 +394,6 @@ public:
             hmap::Vec2<int> tiling,
             float           overlap);
 
-  ViewBrush(const ViewBrush& other) = delete;
-  ViewBrush(ViewBrush&& other) noexcept = default;
-  ViewBrush& operator=(ViewBrush&& other) noexcept = default;
 
   ~ViewBrush() {
       glDeleteTextures(1, &draw_texture);
