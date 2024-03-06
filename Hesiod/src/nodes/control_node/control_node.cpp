@@ -27,9 +27,9 @@ bool ControlNode::serialize_json_v2(std::string     field_name,
   {
     nlohmann::json currentAttributeIteratorJsonData = nlohmann::json();
 
-    currentAttributeIteratorJsonData["type"] =
-        AttributeInstancing::get_name_from_type(
-            currentAttributeIterator->second->get_type());
+    currentAttributeIteratorJsonData["type"] = get_attribute_name_from_type(
+        currentAttributeIterator->second->get_type());
+
     currentAttributeIteratorJsonData["key"] = currentAttributeIterator->first;
     currentAttributeIterator->second->serialize_json_v2(
         "value",
@@ -60,9 +60,8 @@ bool ControlNode::deserialize_json_v2(std::string     field_name,
   for (nlohmann::json currentAttributeIteratorJsonData :
        input_data[field_name]["attributes"])
   {
-    AttributeType currentAttributeIteratorType =
-        AttributeInstancing::get_type_from_name(
-            currentAttributeIteratorJsonData["type"].get<std::string>());
+    AttributeType currentAttributeIteratorType = get_attribute_type_from_name(
+        currentAttributeIteratorJsonData["type"].get<std::string>());
 
     if (currentAttributeIteratorType == AttributeType::INVALID)
     {
@@ -70,9 +69,8 @@ bool ControlNode::deserialize_json_v2(std::string     field_name,
       continue;
     }
 
-    std::unique_ptr<Attribute> currentAttribute =
-        AttributeInstancing::create_attribute_from_type(
-            currentAttributeIteratorType);
+    std::unique_ptr<Attribute> currentAttribute = create_attribute_from_type(
+        currentAttributeIteratorType);
     std::string currentAttributeKey =
         currentAttributeIteratorJsonData["key"].get<std::string>();
 

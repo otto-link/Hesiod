@@ -63,22 +63,22 @@ namespace hesiod
 
 enum class AttributeType
 {
-  INVALID = 0,
-  BOOL_ATTRIBUTE = 1,
-  CLOUD_ATTRIBUTE = 2,
-  COLOR_ATTRIBUTE = 3,
-  FILENAME_ATTRIBUTE = 4,
-  FLOAT_ATTRIBUTE = 5,
-  INT_ATTRIBUTE = 6,
-  MAP_ENUM_ATTRIBUTE = 7,
-  MATRIX_ATTRIBUTE = 8,
-  PATH_ATTRIBUTE = 9,
-  RANGE_ATTRIBUTE = 10,
-  SEED_ATTRIBUTE = 11,
-  SHAPE_ATTRIBUTE = 12,
-  VEC_FLOAT_ATTRIBUTE = 13,
-  VEC_INT_ATTRIBUTE = 14,
-  WAVE_NB_ATTRIBUTE = 15
+  INVALID,
+  BOOL_ATTRIBUTE,
+  CLOUD_ATTRIBUTE,
+  COLOR_ATTRIBUTE,
+  FILENAME_ATTRIBUTE,
+  FLOAT_ATTRIBUTE,
+  INT_ATTRIBUTE,
+  MAP_ENUM_ATTRIBUTE,
+  MATRIX_ATTRIBUTE,
+  PATH_ATTRIBUTE,
+  RANGE_ATTRIBUTE,
+  SEED_ATTRIBUTE,
+  SHAPE_ATTRIBUTE,
+  VEC_FLOAT_ATTRIBUTE,
+  VEC_INT_ATTRIBUTE,
+  WAVE_NB_ATTRIBUTE
 };
 
 class Attribute : public serialization::SerializationBase
@@ -367,13 +367,10 @@ public:
   bool              link_xy = true; // GUI
 };
 
-class AttributeInstancing
-{
-public:
-  static std::string                get_name_from_type(AttributeType type);
-  static AttributeType              get_type_from_name(std::string name);
-  static std::unique_ptr<Attribute> create_attribute_from_type(
-      AttributeType type);
-};
+std::string get_attribute_name_from_type(AttributeType type);
+
+AttributeType get_attribute_type_from_name(std::string name);
+
+std::unique_ptr<Attribute> create_attribute_from_type(AttributeType type);
 
 } // namespace hesiod

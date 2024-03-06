@@ -26,7 +26,7 @@ static std::map<AttributeType, std::string> attribute_type_to_name = {
     {AttributeType::WAVE_NB_ATTRIBUTE, "WAVE_NB_ATTRIBUTE"},
 };
 
-std::string AttributeInstancing::get_name_from_type(AttributeType type)
+std::string get_attribute_name_from_type(AttributeType type)
 {
   if (attribute_type_to_name.contains(type) == false)
   {
@@ -37,24 +37,16 @@ std::string AttributeInstancing::get_name_from_type(AttributeType type)
   return attribute_type_to_name.at(type);
 }
 
-AttributeType AttributeInstancing::get_type_from_name(std::string name)
+AttributeType get_attribute_type_from_name(std::string name)
 {
-  for (std::map<AttributeType, std::string>::iterator current_iterator =
-           attribute_type_to_name.begin();
-       current_iterator != attribute_type_to_name.end();
-       current_iterator++)
-  {
-    if (current_iterator->second == name)
-    {
-      return current_iterator->first;
-    }
-  }
+  for (auto [type, search_name] : attribute_type_to_name)
+    if (name == search_name)
+      return type;
 
   return AttributeType::INVALID;
 }
 
-std::unique_ptr<Attribute> AttributeInstancing::create_attribute_from_type(
-    AttributeType type)
+std::unique_ptr<Attribute> create_attribute_from_type(AttributeType type)
 {
   switch (type)
   {
