@@ -13,7 +13,7 @@ WarpDownslope::WarpDownslope(std::string id) : ControlNode(id), Filter(id)
   this->node_type = "WarpDownslope";
   this->category = category_mapping.at(this->node_type);
 
-  this->attr["amount"] = NEW_ATTR_FLOAT(5.f, 0.f, 20.f);
+  this->attr["amount"] = NEW_ATTR_FLOAT(0.01f, 0.f, 0.2f);
   this->attr["ir"] = NEW_ATTR_INT(0, 0, 64);
   this->attr["inverse"] = NEW_ATTR_BOOL(false);
 
@@ -31,7 +31,7 @@ void WarpDownslope::compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask)
                                          p_mask,
                                          GET_ATTR_FLOAT("amount"),
                                          GET_ATTR_INT("ir"),
-                                         GET_ATTR_BOOL("reverse"));
+                                         GET_ATTR_BOOL("inverse"));
                   });
   h.smooth_overlap_buffers();
 }
