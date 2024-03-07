@@ -94,35 +94,6 @@ void Dendry::compute()
                                    bbox);
              });
 
-  // hmap::fill(this->value_out,
-  //            *p_ctrl,
-  //            p_dx,
-  //            p_dy,
-  //            [this](hmap::Array       ctrl_array,
-  //                   hmap::Vec2<int>   shape,
-  //                   hmap::Vec2<float> shift,
-  //                   hmap::Vec2<float> scale,
-  //                   hmap::Array      *p_noise_x,
-  //                   hmap::Array      *p_noise_y)
-  //            {
-  //              return hmap::dendry(shape,
-  //                                  GET_ATTR_WAVENB("kw"),
-  //                                  GET_ATTR_SEED("seed"),
-  //                                  ctrl_array,
-  //                                  GET_ATTR_FLOAT("eps"),
-  //                                  GET_ATTR_INT("resolution"),
-  //                                  GET_ATTR_FLOAT("displacement"),
-  //                                  GET_ATTR_INT("primitives_resolution_steps"),
-  //                                  GET_ATTR_FLOAT("slope_power"),
-  //                                  GET_ATTR_FLOAT("noise_amplitude_proportion"),
-  //                                  true, // add noise
-  //                                  0.5f, // overlap
-  //                                  p_noise_x,
-  //                                  p_noise_y,
-  //                                  shift,
-  //                                  scale);
-  //            });
-
   this->value_out.smooth_overlap_buffers();
   this->post_process_heightmap(this->value_out);
 }
