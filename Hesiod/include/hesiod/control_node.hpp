@@ -9,12 +9,14 @@
 #include "hesiod/attribute.hpp"
 #include "hesiod/serialization.hpp"
 
+#include "highmap.hpp"
+
 // clang-format off
 #define DEFAULT_KERNEL_SHAPE {17, 17}
 #define DEFAULT_KW 2.f
 #define DEFAULT_SEED 1
-
 #define CAST_PORT_REF(type, port_id)  static_cast<type *>(this->get_p_data(port_id))
+// clang-format on
 
 namespace hesiod::cnode
 {
@@ -138,6 +140,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"MinimumLocal", "Filter/Smoothing"},
     {"MixRGB", "Texture"},
     {"NormalDisplacement", "Filter/Recast"},
+    {"Noise", "Primitive/Coherent Noise"},
     {"OneMinus", "Math/Base"},
     {"Path", "Geometry/Path"},
     {"PathFinding", "Roads"},
@@ -221,9 +224,9 @@ public:
   {
   }
 
-  bool serialize_json_v2(std::string field_name, nlohmann::json& output_data);
+  bool serialize_json_v2(std::string field_name, nlohmann::json &output_data);
 
-  bool deserialize_json_v2(std::string field_name, nlohmann::json& input_data);
+  bool deserialize_json_v2(std::string field_name, nlohmann::json &input_data);
 
   void post_process_heightmap(hmap::HeightMap &h);
 };
@@ -278,7 +281,6 @@ public:
   Debug(std::string id);
 
   void compute();
-
 };
 
 class Erosion : virtual public ControlNode
@@ -357,11 +359,8 @@ public:
 
   void post_compute();
 
-
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
-
- 
 
 private:
   hmap::Vec2<int> shape;
@@ -386,12 +385,10 @@ public:
 
   void compute();
 
-
-  bool serialize_json_v2(std::string field_name, nlohmann::json& output_data) override;
-  bool deserialize_json_v2(std::string field_name, nlohmann::json& input_data) override;
-
-
-
+  bool serialize_json_v2(std::string     field_name,
+                         nlohmann::json &output_data) override;
+  bool deserialize_json_v2(std::string     field_name,
+                           nlohmann::json &input_data) override;
 
 protected:
   int             id_count = 0;
@@ -409,7 +406,6 @@ public:
   Abs(std::string id);
 
   void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
-
 };
 
 class AbsSmooth : virtual public ControlNode
@@ -434,7 +430,6 @@ public:
                 float           overlap);
 
   void compute();
-
 };
 
 class BezierPath : virtual public ControlNode
@@ -459,7 +454,6 @@ public:
               float           overlap);
 
   void compute();
-
 };
 
 class Blend : public Binary
@@ -470,8 +464,6 @@ public:
   void compute_in_out(hmap::HeightMap &h_out,
                       hmap::HeightMap *p_h_in1,
                       hmap::HeightMap *p_h_in2);
-
- 
 
 private:
   std::map<std::string, int> blending_method_map = {
@@ -499,7 +491,6 @@ public:
        float           overlap);
 
   void compute();
-
 };
 
 // TO DO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -537,7 +528,6 @@ public:
           float           overlap);
 
   void compute();
-
 };
 
 class Checkerboard : public Primitive
@@ -549,7 +539,6 @@ public:
                float           overlap);
 
   void compute();
-
 };
 
 class Clamp : public Unary
@@ -558,7 +547,6 @@ public:
   Clamp(std::string id);
 
   void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
-
 };
 
 class Cloud : virtual public ControlNode
@@ -583,7 +571,6 @@ public:
                      float           overlap);
 
   void compute();
-
 };
 
 class Colorize : virtual public ControlNode
@@ -668,7 +655,6 @@ public:
   DepressionFilling(std::string id);
 
   void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
-
 };
 
 class DigPath : virtual public ControlNode
@@ -703,7 +689,6 @@ public:
   Equalize(std::string id);
 
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
-
 };
 
 class ErosionMaps : virtual public ControlNode
@@ -741,7 +726,6 @@ public:
   ExpandShrinkDirectional(std::string id);
 
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
-
 };
 
 class Export : virtual public ControlNode
@@ -769,7 +753,6 @@ public:
   void compute();
 
   void write_file();
-
 };
 
 class Faceted : virtual public ControlNode
@@ -800,7 +783,6 @@ public:
               float           overlap);
 
   void compute();
-
 };
 
 class FbmPerlin : public Primitive
@@ -812,31 +794,28 @@ public:
             float           overlap);
 
   void compute();
-
 };
 
 class FbmPingpongPerlin : public Primitive
 {
 public:
   FbmPingpongPerlin(std::string     id,
-                 hmap::Vec2<int> shape,
-                 hmap::Vec2<int> tiling,
-                 float           overlap);
+                    hmap::Vec2<int> shape,
+                    hmap::Vec2<int> tiling,
+                    float           overlap);
 
   void compute();
-
 };
 
 class FbmRidgedPerlin : public Primitive
 {
 public:
   FbmRidgedPerlin(std::string     id,
-               hmap::Vec2<int> shape,
-               hmap::Vec2<int> tiling,
-               float           overlap);
+                  hmap::Vec2<int> shape,
+                  hmap::Vec2<int> tiling,
+                  float           overlap);
 
   void compute();
-
 };
 
 class FbmSimplex : public Primitive
@@ -848,7 +827,6 @@ public:
              float           overlap);
 
   void compute();
-
 };
 
 class FbmWorley : public Primitive
@@ -860,7 +838,6 @@ public:
             float           overlap);
 
   void compute();
-
 };
 
 class FbmWorleyDouble : public Primitive
@@ -872,7 +849,6 @@ public:
                   float           overlap);
 
   void compute();
-
 };
 
 class FractalizePath : virtual public ControlNode
@@ -899,7 +875,6 @@ public:
   void update_inner_bindings();
 
   void compute();
-
 };
 
 class Gain : public Filter
@@ -919,7 +894,6 @@ public:
   GammaCorrection(std::string id);
 
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
-
 };
 
 class GammaCorrectionLocal : public Filter
@@ -928,7 +902,6 @@ public:
   GammaCorrectionLocal(std::string id);
 
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
-
 };
 
 class GaussianPulse : public Primitive
@@ -940,7 +913,6 @@ public:
                 float           overlap);
 
   void compute();
-
 };
 
 class Geomorphons : public Unary
@@ -949,7 +921,6 @@ public:
   Geomorphons(std::string id);
 
   void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
-
 };
 
 class Gradient : virtual public ControlNode
@@ -972,7 +943,6 @@ public:
   GradientAngle(std::string id);
 
   void compute_in_out(hmap::HeightMap &h, hmap::HeightMap *p_talus);
-
 };
 
 class GradientNorm : public Unary
@@ -981,7 +951,6 @@ public:
   GradientNorm(std::string id);
 
   void compute_in_out(hmap::HeightMap &h, hmap::HeightMap *p_talus);
-
 };
 
 class GradientTalus : public Unary
@@ -990,7 +959,6 @@ public:
   GradientTalus(std::string id);
 
   void compute_in_out(hmap::HeightMap &h, hmap::HeightMap *p_talus);
-
 };
 
 class HydraulicAlgebric : public Erosion
@@ -1004,7 +972,6 @@ public:
                        hmap::HeightMap *p_mask,
                        hmap::HeightMap *p_erosion_map,
                        hmap::HeightMap *p_deposition_map);
-
 };
 
 class HydraulicParticle : public Erosion
@@ -1018,7 +985,6 @@ public:
                        hmap::HeightMap *p_mask,
                        hmap::HeightMap *p_erosion_map,
                        hmap::HeightMap *p_deposition_map);
-
 };
 
 class HydraulicRidge : public Filter
@@ -1027,7 +993,6 @@ public:
   HydraulicRidge(std::string id);
 
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
-
 };
 
 class HydraulicStream : public Erosion
@@ -1041,7 +1006,6 @@ public:
                        hmap::HeightMap *p_mask,
                        hmap::HeightMap *p_erosion_map,
                        hmap::HeightMap *p_deposition_map);
-
 };
 
 class HydraulicStreamLog : public Erosion
@@ -1055,7 +1019,6 @@ public:
                        hmap::HeightMap *p_mask,
                        hmap::HeightMap *p_erosion_map,
                        hmap::HeightMap *p_deposition_map);
-
 };
 
 class HydraulicVpipes : public Erosion
@@ -1069,7 +1032,6 @@ public:
                        hmap::HeightMap *p_mask,
                        hmap::HeightMap *p_erosion_map,
                        hmap::HeightMap *p_deposition_map);
-
 };
 
 class Import : virtual public ControlNode
@@ -1099,7 +1061,6 @@ public:
   Inverse(std::string id);
 
   void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
-
 };
 
 class Kernel : virtual public ControlNode
@@ -1129,7 +1090,6 @@ public:
   void compute_in_out(hmap::HeightMap &h_out,
                       hmap::HeightMap *p_h_in1,
                       hmap::HeightMap *p_h_in2);
-
 };
 
 class KmeansClustering3 : virtual public ControlNode
@@ -1151,7 +1111,6 @@ public:
   Laplace(std::string id);
 
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
-
 };
 
 class LaplaceEdgePreserving : public Filter
@@ -1160,7 +1119,6 @@ public:
   LaplaceEdgePreserving(std::string id);
 
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
-
 };
 
 class Lerp : virtual public ControlNode
@@ -1182,7 +1140,6 @@ public:
   MakeBinary(std::string id);
 
   void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
-
 };
 
 class MeanderizePath : virtual public ControlNode
@@ -1204,7 +1161,6 @@ public:
   MeanLocal(std::string id);
 
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
-
 };
 
 class Median3x3 : public Filter
@@ -1213,7 +1169,6 @@ public:
   Median3x3(std::string id);
 
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
-
 };
 
 class MinimumLocal : public Unary
@@ -1222,7 +1177,6 @@ public:
   MinimumLocal(std::string id);
 
   void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
-
 };
 
 class MixRGB : virtual public ControlNode
@@ -1238,13 +1192,39 @@ protected:
   hmap::HeightMapRGB value_out = hmap::HeightMapRGB();
 };
 
+class Noise : public Primitive
+{
+public:
+  Noise(std::string     id,
+        hmap::Vec2<int> shape,
+        hmap::Vec2<int> tiling,
+        float           overlap);
+
+  void compute();
+
+private:
+  std::map<std::string, int> noise_type_map = {
+      {"Perlin", hmap::NoiseType::n_perlin},
+      {"Perlin (billow)", hmap::NoiseType::n_perlin_billow},
+      {"Perlin (half)", hmap::NoiseType::n_perlin_half},
+      {"OpenSimplex2", hmap::NoiseType::n_simplex2},
+      {"OpenSimplex2S", hmap::NoiseType::n_simplex2s},
+      {"Value", hmap::NoiseType::n_value},
+      {"Value (cubic)", hmap::NoiseType::n_value_cubic},
+      {"Value (delaunay)", hmap::NoiseType::n_value_delaunay},
+      {"Value (linear)", hmap::NoiseType::n_value_linear},
+      {"Value (thinplate)", hmap::NoiseType::n_value_thinplate},
+      {"Worley", hmap::NoiseType::n_worley},
+      {"Worley (doube)", hmap::NoiseType::n_worley_double},
+      {"Worley (value)", hmap::NoiseType::n_worley_value}};
+};
+
 class NormalDisplacement : public Filter
 {
 public:
   NormalDisplacement(std::string id);
 
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
-
 };
 
 class OneMinus : public Unary
@@ -1253,7 +1233,6 @@ public:
   OneMinus(std::string id);
 
   void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
-
 };
 
 class Path : virtual public ControlNode
@@ -1312,7 +1291,6 @@ public:
        float           overlap);
 
   void compute();
-
 };
 
 class Perlin : public Primitive
@@ -1324,7 +1302,6 @@ public:
          float           overlap);
 
   void compute();
-
 };
 
 class PerlinBillow : public Primitive
@@ -1336,7 +1313,6 @@ public:
                float           overlap);
 
   void compute();
-
 };
 
 class Plateau : public Filter
@@ -1345,7 +1321,6 @@ public:
   Plateau(std::string id);
 
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
-
 };
 
 class Preview : virtual public ControlNode
@@ -1356,7 +1331,6 @@ public:
   void compute();
 
   void update_inner_bindings();
-
 };
 
 class PreviewColorize : virtual public ControlNode
@@ -1367,7 +1341,6 @@ public:
   void compute();
 
   void update_inner_bindings();
-
 };
 
 class RecastCanyon : virtual public ControlNode
@@ -1441,7 +1414,6 @@ public:
   Recurve(std::string id);
 
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
-
 };
 
 class RecurveKura : public Filter
@@ -1450,7 +1422,6 @@ public:
   RecurveKura(std::string id);
 
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
-
 };
 
 class RecurveS : public Filter
@@ -1459,7 +1430,6 @@ public:
   RecurveS(std::string id);
 
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
-
 };
 
 class RelativeElevation : public Unary
@@ -1468,8 +1438,6 @@ public:
   RelativeElevation(std::string id);
 
   void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
-
- 
 
   int ir = 64;
 };
@@ -1480,7 +1448,6 @@ public:
   Remap(std::string id);
 
   void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
-
 };
 
 class Rescale : public Unary
@@ -1489,9 +1456,7 @@ public:
   Rescale(std::string id);
 
   void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
-
 };
-
 
 class Rugosity : public Mask
 {
@@ -1499,7 +1464,6 @@ public:
   Rugosity(std::string id);
 
   void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
-
 };
 
 class SedimentDeposition : virtual public ControlNode
@@ -1522,7 +1486,6 @@ public:
   SelectBlobLog(std::string id);
 
   void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
-
 };
 
 class SelectCavities : public Mask
@@ -1531,7 +1494,6 @@ public:
   SelectCavities(std::string id);
 
   void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
-
 };
 
 class SelectEq : public Mask
@@ -1540,7 +1502,6 @@ public:
   SelectEq(std::string id);
 
   void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
-
 };
 
 class SelectElevationSlope : public Mask
@@ -1549,7 +1510,6 @@ public:
   SelectElevationSlope(std::string id);
 
   void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
-
 };
 
 class SelectGradientNorm : public Mask
@@ -1558,7 +1518,6 @@ public:
   SelectGradientNorm(std::string id);
 
   void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
-
 };
 
 class SelectInterval : public Mask
@@ -1567,7 +1526,6 @@ public:
   SelectInterval(std::string id);
 
   void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
-
 };
 
 class SelectPulse : public Mask
@@ -1576,7 +1534,6 @@ public:
   SelectPulse(std::string id);
 
   void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
-
 };
 
 class SelectRivers : public Mask
@@ -1585,7 +1542,6 @@ public:
   SelectRivers(std::string id);
 
   void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
-
 };
 
 class SelectTransitions : virtual public ControlNode
@@ -1610,7 +1566,6 @@ public:
           float           overlap);
 
   void compute();
-
 };
 
 class Slope : public Primitive
@@ -1624,7 +1579,6 @@ public:
   void compute();
 
   void update_inner_bindings();
-
 };
 
 class SmoothCpulse : public Filter
@@ -1633,7 +1587,6 @@ public:
   SmoothCpulse(std::string id);
 
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
-
 };
 
 class SmoothFill : virtual public ControlNode
@@ -1656,7 +1609,6 @@ public:
   SmoothFillHoles(std::string id);
 
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
-
 };
 
 class SmoothFillSmearPeaks : public Filter
@@ -1665,7 +1617,6 @@ public:
   SmoothFillSmearPeaks(std::string id);
 
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
-
 };
 
 class SteepenConvective : public Filter
@@ -1674,7 +1625,6 @@ public:
   SteepenConvective(std::string id);
 
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
-
 };
 
 class Step : public Primitive
@@ -1686,7 +1636,6 @@ public:
        float           overlap);
 
   void compute();
-
 };
 
 class StratifyMultiscale : virtual public ControlNode
@@ -1790,7 +1739,6 @@ public:
   ToMask(std::string id);
 
   void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
-
 };
 
 class ValleyWidth : public Mask
@@ -1799,7 +1747,6 @@ public:
   ValleyWidth(std::string id);
 
   void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
-
 };
 
 class ValueNoiseDelaunay : public Primitive
@@ -1811,7 +1758,6 @@ public:
                      float           overlap);
 
   void compute();
-
 };
 
 class ValueNoiseLinear : public Primitive
@@ -1823,7 +1769,6 @@ public:
                    float           overlap);
 
   void compute();
-
 };
 
 class ValueNoiseThinplate : public Primitive
@@ -1835,7 +1780,6 @@ public:
                       float           overlap);
 
   void compute();
-
 };
 
 class Warp : virtual public ControlNode
@@ -1857,7 +1801,6 @@ public:
   WarpDownslope(std::string id);
 
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
-
 };
 
 class WaveDune : public Primitive
@@ -1869,7 +1812,6 @@ public:
            float           overlap);
 
   void compute();
-
 };
 
 class WaveSine : public Primitive
@@ -1881,7 +1823,6 @@ public:
            float           overlap);
 
   void compute();
-
 };
 
 class WaveSquare : public Primitive
@@ -1893,7 +1834,6 @@ public:
              float           overlap);
 
   void compute();
-
 };
 
 class WaveTriangular : public Primitive
@@ -1905,7 +1845,6 @@ public:
                  float           overlap);
 
   void compute();
-
 };
 
 class White : virtual public ControlNode
@@ -1975,7 +1914,6 @@ public:
          float           overlap);
 
   void compute();
-
 };
 
 class WorleyDouble : public Primitive
@@ -1987,7 +1925,6 @@ public:
                float           overlap);
 
   void compute();
-
 };
 
 class WorleyValue : public Primitive
@@ -1999,7 +1936,6 @@ public:
               float           overlap);
 
   void compute();
-
 };
 
 class Wrinkle : public Filter
@@ -2008,7 +1944,6 @@ public:
   Wrinkle(std::string id);
 
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
-
 };
 
 class ZeroedEdges : virtual public ControlNode

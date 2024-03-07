@@ -1195,6 +1195,22 @@ public:
   }
 };
 
+class ViewNoise : public ViewNode, public hesiod::cnode::Noise
+{
+public:
+  ViewNoise(std::string     id,
+            hmap::Vec2<int> shape,
+            hmap::Vec2<int> tiling,
+            float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::Noise(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+    this->help_text = "Generate a coherent noise (Perlin, Worley...).";
+  }
+};
+
 class ViewNormalDisplacement : public ViewNode,
                                public hesiod::cnode::NormalDisplacement
 {
