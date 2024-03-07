@@ -16,6 +16,9 @@ else()
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wno-dangling-reference -O3 -pthread -DLOG_LEVEL=3")
 endif()
 
+add_definitions("-DBOOST_ALLOW_DEPRECATED_HEADERS")
+add_definitions("-DBOOST_BIND_GLOBAL_PLACEHOLDERS")
+
 set(CMAKE_CXX_STANDARD 20)
 
 # --- Dear ImGui
