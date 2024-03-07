@@ -240,6 +240,24 @@ std::string ViewTree::add_view_node(std::string control_node_type,
   case str2int("Noise"):
     this->add_node(std::make_shared<hesiod::vnode::ViewNoise>(id, this->shape, this->tiling, this->overlap));
     break;
+  case str2int("NoiseFbm"):
+    this->add_node(std::make_shared<hesiod::vnode::ViewNoiseFbm>(id, this->shape, this->tiling, this->overlap));
+    break;
+  case str2int("NoiseIq"):
+    this->add_node(std::make_shared<hesiod::vnode::ViewNoiseIq>(id, this->shape, this->tiling, this->overlap));
+    break;
+  case str2int("NoiseJordan"):
+    this->add_node(std::make_shared<hesiod::vnode::ViewNoiseJordan>(id, this->shape, this->tiling, this->overlap));
+    break;
+  case str2int("NoisePingpong"):
+    this->add_node(std::make_shared<hesiod::vnode::ViewNoisePingpong>(id, this->shape, this->tiling, this->overlap));
+    break;
+  case str2int("NoiseRidged"):
+    this->add_node(std::make_shared<hesiod::vnode::ViewNoiseRidged>(id, this->shape, this->tiling, this->overlap));
+    break;
+  case str2int("NoiseSwiss"):
+    this->add_node(std::make_shared<hesiod::vnode::ViewNoiseSwiss>(id, this->shape, this->tiling, this->overlap));
+    break;
   case str2int("NormalDisplacement"):
     this->add_node(std::make_shared<hesiod::vnode::ViewNormalDisplacement>(id));
     break;

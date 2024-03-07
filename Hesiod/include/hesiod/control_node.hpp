@@ -16,6 +16,37 @@
 #define DEFAULT_KW 2.f
 #define DEFAULT_SEED 1
 #define CAST_PORT_REF(type, port_id)  static_cast<type *>(this->get_p_data(port_id))
+
+#define NOISE_TYPE_MAP \
+  std::map<std::string, int> noise_type_map = { \
+      {"Perlin", hmap::NoiseType::n_perlin}, \
+      {"Perlin (billow)", hmap::NoiseType::n_perlin_billow}, \
+      {"Perlin (half)", hmap::NoiseType::n_perlin_half}, \
+      {"OpenSimplex2", hmap::NoiseType::n_simplex2}, \
+      {"OpenSimplex2S", hmap::NoiseType::n_simplex2s}, \
+      {"Value", hmap::NoiseType::n_value}, \
+      {"Value (cubic)", hmap::NoiseType::n_value_cubic}, \
+      {"Value (delaunay)", hmap::NoiseType::n_value_delaunay}, \
+      {"Value (linear)", hmap::NoiseType::n_value_linear}, \
+      {"Value (thinplate)", hmap::NoiseType::n_value_thinplate}, \
+      {"Worley", hmap::NoiseType::n_worley}, \
+      {"Worley (doube)", hmap::NoiseType::n_worley_double}, \
+      {"Worley (value)", hmap::NoiseType::n_worley_value}}
+
+// removed some value noises (delaunay, linear and thinplate) that can
+// be very slow at high wavenumbers
+#define NOISE_TYPE_MAP_FRACTAL \
+  std::map<std::string, int> noise_type_map = { \
+      {"Perlin", hmap::NoiseType::n_perlin}, \
+      {"Perlin (billow)", hmap::NoiseType::n_perlin_billow}, \
+      {"Perlin (half)", hmap::NoiseType::n_perlin_half}, \
+      {"OpenSimplex2", hmap::NoiseType::n_simplex2}, \
+      {"OpenSimplex2S", hmap::NoiseType::n_simplex2s}, \
+      {"Value", hmap::NoiseType::n_value}, \
+      {"Value (cubic)", hmap::NoiseType::n_value_cubic}, \
+      {"Worley", hmap::NoiseType::n_worley}, \
+      {"Worley (doube)", hmap::NoiseType::n_worley_double}, \
+      {"Worley (value)", hmap::NoiseType::n_worley_value}}
 // clang-format on
 
 namespace hesiod::cnode
@@ -141,6 +172,12 @@ static const std::map<std::string, std::string> category_mapping = {
     {"MixRGB", "Texture"},
     {"NormalDisplacement", "Filter/Recast"},
     {"Noise", "Primitive/Coherent Noise"},
+    {"NoiseFbm", "Primitive/Coherent Noise"},
+    {"NoiseIq", "Primitive/Coherent Noise"},
+    {"NoiseJordan", "Primitive/Coherent Noise"},
+    {"NoisePingpong", "Primitive/Coherent Noise"},
+    {"NoiseRidged", "Primitive/Coherent Noise"},
+    {"NoiseSwiss", "Primitive/Coherent Noise"},
     {"OneMinus", "Math/Base"},
     {"Path", "Geometry/Path"},
     {"PathFinding", "Roads"},
@@ -1203,20 +1240,91 @@ public:
   void compute();
 
 private:
-  std::map<std::string, int> noise_type_map = {
-      {"Perlin", hmap::NoiseType::n_perlin},
-      {"Perlin (billow)", hmap::NoiseType::n_perlin_billow},
-      {"Perlin (half)", hmap::NoiseType::n_perlin_half},
-      {"OpenSimplex2", hmap::NoiseType::n_simplex2},
-      {"OpenSimplex2S", hmap::NoiseType::n_simplex2s},
-      {"Value", hmap::NoiseType::n_value},
-      {"Value (cubic)", hmap::NoiseType::n_value_cubic},
-      {"Value (delaunay)", hmap::NoiseType::n_value_delaunay},
-      {"Value (linear)", hmap::NoiseType::n_value_linear},
-      {"Value (thinplate)", hmap::NoiseType::n_value_thinplate},
-      {"Worley", hmap::NoiseType::n_worley},
-      {"Worley (doube)", hmap::NoiseType::n_worley_double},
-      {"Worley (value)", hmap::NoiseType::n_worley_value}};
+  NOISE_TYPE_MAP;
+};
+
+class NoiseFbm : public Primitive
+{
+public:
+  NoiseFbm(std::string     id,
+           hmap::Vec2<int> shape,
+           hmap::Vec2<int> tiling,
+           float           overlap);
+
+  void compute();
+
+private:
+  NOISE_TYPE_MAP_FRACTAL;
+};
+
+class NoiseIq : public Primitive
+{
+public:
+  NoiseIq(std::string     id,
+          hmap::Vec2<int> shape,
+          hmap::Vec2<int> tiling,
+          float           overlap);
+
+  void compute();
+
+private:
+  NOISE_TYPE_MAP_FRACTAL;
+};
+
+class NoiseJordan : public Primitive
+{
+public:
+  NoiseJordan(std::string     id,
+              hmap::Vec2<int> shape,
+              hmap::Vec2<int> tiling,
+              float           overlap);
+
+  void compute();
+
+private:
+  NOISE_TYPE_MAP_FRACTAL;
+};
+
+class NoisePingpong : public Primitive
+{
+public:
+  NoisePingpong(std::string     id,
+                hmap::Vec2<int> shape,
+                hmap::Vec2<int> tiling,
+                float           overlap);
+
+  void compute();
+
+private:
+  NOISE_TYPE_MAP_FRACTAL;
+};
+
+class NoiseRidged : public Primitive
+{
+public:
+  NoiseRidged(std::string     id,
+              hmap::Vec2<int> shape,
+              hmap::Vec2<int> tiling,
+              float           overlap);
+
+  void compute();
+
+private:
+  NOISE_TYPE_MAP_FRACTAL;
+};
+
+class NoiseSwiss : public Primitive
+{
+public:
+  NoiseSwiss(std::string     id,
+             hmap::Vec2<int> shape,
+             hmap::Vec2<int> tiling,
+             float           overlap);
+
+  void compute();
+
+private:
+  NOISE_TYPE_MAP_FRACTAL;
 };
 
 class NormalDisplacement : public Filter
