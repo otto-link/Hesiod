@@ -237,6 +237,9 @@ std::string ViewTree::add_view_node(std::string control_node_type,
   case str2int("MixRGB"):
     this->add_node(std::make_shared<hesiod::vnode::ViewMixRGB>(id));
     break;
+  case str2int("Noise"):
+    this->add_node(std::make_shared<hesiod::vnode::ViewNoise>(id, this->shape, this->tiling, this->overlap));
+    break;
   case str2int("NormalDisplacement"):
     this->add_node(std::make_shared<hesiod::vnode::ViewNormalDisplacement>(id));
     break;
