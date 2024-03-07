@@ -1211,6 +1211,102 @@ public:
   }
 };
 
+class ViewNoiseFbm : public ViewNode, public hesiod::cnode::NoiseFbm
+{
+public:
+  ViewNoiseFbm(std::string     id,
+               hmap::Vec2<int> shape,
+               hmap::Vec2<int> tiling,
+               float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::NoiseFbm(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+    this->help_text = "Generate a coherent fractal noise (Perlin, Worley...).";
+  }
+};
+
+class ViewNoiseIq : public ViewNode, public hesiod::cnode::NoiseIq
+{
+public:
+  ViewNoiseIq(std::string     id,
+              hmap::Vec2<int> shape,
+              hmap::Vec2<int> tiling,
+              float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::NoiseIq(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+    this->help_text = "Generate a coherent fractal noise (Perlin, Worley...).";
+  }
+};
+
+class ViewNoiseJordan : public ViewNode, public hesiod::cnode::NoiseJordan
+{
+public:
+  ViewNoiseJordan(std::string     id,
+                  hmap::Vec2<int> shape,
+                  hmap::Vec2<int> tiling,
+                  float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::NoiseJordan(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+    this->help_text = "Generate a coherent fractal noise (Perlin, Worley...).";
+  }
+};
+
+class ViewNoisePingpong : public ViewNode, public hesiod::cnode::NoisePingpong
+{
+public:
+  ViewNoisePingpong(std::string     id,
+                    hmap::Vec2<int> shape,
+                    hmap::Vec2<int> tiling,
+                    float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::NoisePingpong(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+    this->help_text = "Generate a coherent fractal noise (Perlin, Worley...).";
+  }
+};
+
+class ViewNoiseRidged : public ViewNode, public hesiod::cnode::NoiseRidged
+{
+public:
+  ViewNoiseRidged(std::string     id,
+                  hmap::Vec2<int> shape,
+                  hmap::Vec2<int> tiling,
+                  float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::NoiseRidged(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+    this->help_text = "Generate a coherent fractal noise (Perlin, Worley...).";
+  }
+};
+
+class ViewNoiseSwiss : public ViewNode, public hesiod::cnode::NoiseSwiss
+{
+public:
+  ViewNoiseSwiss(std::string     id,
+                 hmap::Vec2<int> shape,
+                 hmap::Vec2<int> tiling,
+                 float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::NoiseSwiss(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+    this->help_text = "Generate a coherent fractal noise (Perlin, Worley...).";
+  }
+};
+
 class ViewNormalDisplacement : public ViewNode,
                                public hesiod::cnode::NormalDisplacement
 {
