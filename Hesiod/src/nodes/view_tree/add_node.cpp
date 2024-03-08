@@ -123,27 +123,6 @@ std::string ViewTree::add_view_node(std::string control_node_type,
   case str2int("Faceted"):
     this->add_node(std::make_shared<hesiod::vnode::ViewFaceted>(id));
     break;
-  case str2int("FbmIqPerlin"):
-    this->add_node(std::make_shared<hesiod::vnode::ViewFbmIqPerlin>(id, this->shape, this->tiling, this->overlap));
-    break;
-  case str2int("FbmPerlin"):
-    this->add_node(std::make_shared<hesiod::vnode::ViewFbmPerlin>(id, this->shape, this->tiling, this->overlap));
-    break;
-  case str2int("FbmPingpongPerlin"):
-    this->add_node(std::make_shared<hesiod::vnode::ViewFbmPingpongPerlin>(id, this->shape, this->tiling, this->overlap));
-    break;
-  case str2int("FbmRidgedPerlin"):
-    this->add_node(std::make_shared<hesiod::vnode::ViewFbmRidgedPerlin>(id, this->shape, this->tiling, this->overlap));
-    break;
-  case str2int("FbmSimplex"):
-    this->add_node(std::make_shared<hesiod::vnode::ViewFbmSimplex>(id, this->shape, this->tiling, this->overlap));
-    break;
-  case str2int("FbmWorley"):
-    this->add_node(std::make_shared<hesiod::vnode::ViewFbmWorley>(id, this->shape, this->tiling, this->overlap));
-    break;
-  case str2int("FbmWorleyDouble"):
-    this->add_node(std::make_shared<hesiod::vnode::ViewFbmWorleyDouble>(id, this->shape, this->tiling, this->overlap));
-    break;
   case str2int("FractalizePath"):
     this->add_node(std::make_shared<hesiod::vnode::ViewFractalizePath>(id));
     break;
@@ -276,12 +255,6 @@ std::string ViewTree::add_view_node(std::string control_node_type,
   case str2int("Peak"):
     this->add_node(std::make_shared<hesiod::vnode::ViewPeak>(id, this->shape, this->tiling, this->overlap));
     break;
-  case str2int("Perlin"):
-    this->add_node(std::make_shared<hesiod::vnode::ViewPerlin>(id, this->shape, this->tiling, this->overlap));
-    break;
-  case str2int("PerlinBillow"):
-    this->add_node(std::make_shared<hesiod::vnode::ViewPerlinBillow>(id, this->shape, this->tiling, this->overlap));
-    break;
   case str2int("Plateau"):
     this->add_node(std::make_shared<hesiod::vnode::ViewPlateau>(id));
     break;
@@ -357,9 +330,6 @@ std::string ViewTree::add_view_node(std::string control_node_type,
   case str2int("SelectTransitions"):
     this->add_node(std::make_shared<hesiod::vnode::ViewSelectTransitions>(id));
     break;
-  case str2int("Simplex"):
-    this->add_node(std::make_shared<hesiod::vnode::ViewSimplex>(id, this->shape, this->tiling, this->overlap));
-    break;
   case str2int("Slope"):
     this->add_node(std::make_shared<hesiod::vnode::ViewSlope>(id, this->shape, this->tiling, this->overlap));
     break;
@@ -408,15 +378,6 @@ std::string ViewTree::add_view_node(std::string control_node_type,
   case str2int("ValleyWidth"):
     this->add_node(std::make_shared<hesiod::vnode::ViewValleyWidth>(id));
     break;
-  case str2int("ValueNoiseDelaunay"):
-    this->add_node(std::make_shared<hesiod::vnode::ViewValueNoiseDelaunay>(id, this->shape, this->tiling, this->overlap));
-    break;
-  case str2int("ValueNoiseLinear"):
-    this->add_node(std::make_shared<hesiod::vnode::ViewValueNoiseLinear>(id, this->shape, this->tiling, this->overlap));
-    break;
-  case str2int("ValueNoiseThinplate"):
-    this->add_node(std::make_shared<hesiod::vnode::ViewValueNoiseThinplate>(id, this->shape, this->tiling, this->overlap));
-    break;
   case str2int("WaveDune"):
     this->add_node(std::make_shared<hesiod::vnode::ViewWaveDune>(id, this->shape, this->tiling, this->overlap));
     break;
@@ -443,15 +404,6 @@ std::string ViewTree::add_view_node(std::string control_node_type,
     break;
   case str2int("WhiteSparse"):
     this->add_node(std::make_shared<hesiod::vnode::ViewWhiteSparse>(id, this->shape, this->tiling, this->overlap));
-    break;
-  case str2int("Worley"):
-    this->add_node(std::make_shared<hesiod::vnode::ViewWorley>(id, this->shape, this->tiling, this->overlap));
-    break;
-  case str2int("WorleyDouble"):
-    this->add_node(std::make_shared<hesiod::vnode::ViewWorleyDouble>(id, this->shape, this->tiling, this->overlap));
-    break;
-  case str2int("WorleyValue"):
-    this->add_node(std::make_shared<hesiod::vnode::ViewWorleyValue>(id, this->shape, this->tiling, this->overlap));
     break;
   case str2int("Wrinkle"):
     this->add_node(std::make_shared<hesiod::vnode::ViewWrinkle>(id));
