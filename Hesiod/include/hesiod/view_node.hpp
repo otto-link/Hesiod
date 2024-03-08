@@ -15,6 +15,7 @@
 #include "hesiod/control_node.hpp"
 #include "hesiod/hmap_brush_editor.hpp"
 #include "hesiod/timer.hpp"
+#include "highmap/heightmap.hpp"
 
 namespace hesiod::vnode
 {
@@ -396,6 +397,7 @@ public:
   void sync_drawing_texture();
   void sync_value();
 
+  bool deserialize_json_v2(std::string field_name, nlohmann::json& input_data) override;
 private:
   hesiod::gui::HmBrushEditorState edit_state;
 };
