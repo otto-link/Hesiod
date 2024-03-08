@@ -1,8 +1,10 @@
-#include "hesiod/serialization.hpp"
-#include "highmap/array.hpp"
-#include "macro-logger/macrologger.h"
 #include <string>
 #include <vector>
+
+#include "highmap/array.hpp"
+#include "macro-logger/macrologger.h"
+
+#include "hesiod/serialization.hpp"
 
 namespace hesiod::serialization
 {
