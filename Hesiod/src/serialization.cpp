@@ -191,7 +191,7 @@ nlohmann::json adapter_hmap_array_serialize(hmap::Array a)
   return data;
 }
 
-hmap::Array adapter_hmap_array_deserialize(nlohmann::json& data)
+hmap::Array adapter_hmap_array_deserialize(nlohmann::json &data)
 {
   hmap::Array array = hmap::Array();
 

@@ -397,7 +397,9 @@ public:
   void sync_drawing_texture();
   void sync_value();
 
-  bool deserialize_json_v2(std::string field_name, nlohmann::json& input_data) override;
+  bool deserialize_json_v2(std::string     field_name,
+                           nlohmann::json &input_data) override;
+
 private:
   hesiod::gui::HmBrushEditorState edit_state;
 };

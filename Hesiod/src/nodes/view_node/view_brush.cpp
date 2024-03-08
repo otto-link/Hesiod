@@ -142,18 +142,24 @@ void ViewBrush::sync_value()
   this->force_update();
 }
 
-bool ViewBrush::deserialize_json_v2(std::string field_name, nlohmann::json& input_data)
+bool ViewBrush::deserialize_json_v2(std::string     field_name,
+                                    nlohmann::json &input_data)
 {
   hmap::HeightMap original_map = this->value_out;
 
-  if(this->deserialize_json_v2_ext(field_name, input_data, &original_map, &original_map.shape, &original_map.tiling, &original_map.overlap) == false)
+  if (this->deserialize_json_v2_ext(field_name,
+                                    input_data,
+                                    &original_map,
+                                    &original_map.shape,
+                                    &original_map.tiling,
+                                    &original_map.overlap) == false)
   {
     return false;
   }
 
   original_map.set_sto(original_map.shape,
-                                      original_map.tiling,
-                                      original_map.overlap);
+                       original_map.tiling,
+                       original_map.overlap);
   this->edit_state.is_initted = true;
   this->edit_state.pending_hm = original_map;
 

@@ -257,7 +257,7 @@ public:
 
 // Adapter hmap::Vec2
 
-template<typename T>
+template <typename T>
 inline nlohmann::json adapter_hmap_serialize_vec2(hmap::Vec2<T> v)
 {
   nlohmann::json data = nlohmann::json();
@@ -268,17 +268,18 @@ inline nlohmann::json adapter_hmap_serialize_vec2(hmap::Vec2<T> v)
   return data;
 }
 
-template<typename T>
-inline hmap::Vec2<T> adapter_hmap_deserialize_vec2(nlohmann::json& data)
+template <typename T>
+inline hmap::Vec2<T> adapter_hmap_deserialize_vec2(nlohmann::json &data)
 {
-  if(data.is_object() == false) return hmap::Vec2<T>();
+  if (data.is_object() == false)
+    return hmap::Vec2<T>();
 
   return hmap::Vec2<T>(data["x"].get<T>(), data["y"].get<T>());
 }
 
 // Adapter hmap::Vec4
 
-template<typename T>
+template <typename T>
 inline nlohmann::json adapter_hmap_serialize_vec4(hmap::Vec4<T> v)
 {
   nlohmann::json data = nlohmann::json();
@@ -287,21 +288,25 @@ inline nlohmann::json adapter_hmap_serialize_vec4(hmap::Vec4<T> v)
   data["b"] = v.b;
   data["c"] = v.c;
   data["d"] = v.d;
- 
+
   return data;
 }
 
-template<typename T>
-inline hmap::Vec4<T> adapter_hmap_deserialize_vec4(nlohmann::json& data)
+template <typename T>
+inline hmap::Vec4<T> adapter_hmap_deserialize_vec4(nlohmann::json &data)
 {
-  if(data.is_object() == false) return hmap::Vec4<T>();
+  if (data.is_object() == false)
+    return hmap::Vec4<T>();
 
-  return hmap::Vec4<T>(data["a"].get<T>(), data["b"].get<T>(), data["c"].get<T>(), data["d"].get<T>());
+  return hmap::Vec4<T>(data["a"].get<T>(),
+                       data["b"].get<T>(),
+                       data["c"].get<T>(),
+                       data["d"].get<T>());
 }
 
 // Adapter hmap::Array
 
 nlohmann::json adapter_hmap_array_serialize(hmap::Array a);
-hmap::Array adapter_hmap_array_deserialize(nlohmann::json& data);
+hmap::Array    adapter_hmap_array_deserialize(nlohmann::json &data);
 
 } // namespace hesiod::serialization
