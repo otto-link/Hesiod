@@ -69,8 +69,8 @@ int main(int argc, char *argv[])
   hesiod::vnode::ViewTree tree =
       hesiod::vnode::ViewTree("tree_1", shape, tiling, overlap);
 
-  tree.add_view_node("FbmSimplex");
-  tree.add_view_node("Perlin");
+  tree.add_view_node("NoiseFbm");
+  tree.add_view_node("Noise");
 
   while (!glfwWindowShouldClose(window))
   {

@@ -702,114 +702,6 @@ public:
   }
 };
 
-class ViewFbmIqPerlin : public ViewNode, public hesiod::cnode::FbmIqPerlin
-{
-public:
-  ViewFbmIqPerlin(std::string     id,
-                  hmap::Vec2<int> shape,
-                  hmap::Vec2<int> tiling,
-                  float           overlap)
-      : hesiod::cnode::ControlNode(id), ViewNode(id),
-        hesiod::cnode::FbmIqPerlin(id, shape, tiling, overlap)
-  {
-    this->set_preview_port_id("output");
-    this->set_view3d_elevation_port_id("output");
-  }
-};
-
-class ViewFbmPerlin : public ViewNode, public hesiod::cnode::FbmPerlin
-{
-public:
-  ViewFbmPerlin(std::string     id,
-                hmap::Vec2<int> shape,
-                hmap::Vec2<int> tiling,
-                float           overlap)
-      : hesiod::cnode::ControlNode(id), ViewNode(id),
-        hesiod::cnode::FbmPerlin(id, shape, tiling, overlap)
-  {
-    this->set_preview_port_id("output");
-    this->set_view3d_elevation_port_id("output");
-  }
-};
-
-class ViewFbmPingpongPerlin : public ViewNode,
-                              public hesiod::cnode::FbmPingpongPerlin
-{
-public:
-  ViewFbmPingpongPerlin(std::string     id,
-                        hmap::Vec2<int> shape,
-                        hmap::Vec2<int> tiling,
-                        float           overlap)
-      : hesiod::cnode::ControlNode(id), ViewNode(id),
-        hesiod::cnode::FbmPingpongPerlin(id, shape, tiling, overlap)
-  {
-    this->set_preview_port_id("output");
-    this->set_view3d_elevation_port_id("output");
-  }
-};
-
-class ViewFbmRidgedPerlin : public ViewNode,
-                            public hesiod::cnode::FbmRidgedPerlin
-{
-public:
-  ViewFbmRidgedPerlin(std::string     id,
-                      hmap::Vec2<int> shape,
-                      hmap::Vec2<int> tiling,
-                      float           overlap)
-      : hesiod::cnode::ControlNode(id), ViewNode(id),
-        hesiod::cnode::FbmRidgedPerlin(id, shape, tiling, overlap)
-  {
-    this->set_preview_port_id("output");
-    this->set_view3d_elevation_port_id("output");
-  }
-};
-
-class ViewFbmSimplex : public ViewNode, public hesiod::cnode::FbmSimplex
-{
-public:
-  ViewFbmSimplex(std::string     id,
-                 hmap::Vec2<int> shape,
-                 hmap::Vec2<int> tiling,
-                 float           overlap)
-      : hesiod::cnode::ControlNode(id), ViewNode(id),
-        hesiod::cnode::FbmSimplex(id, shape, tiling, overlap)
-  {
-    this->set_preview_port_id("output");
-    this->set_view3d_elevation_port_id("output");
-  }
-};
-
-class ViewFbmWorley : public ViewNode, public hesiod::cnode::FbmWorley
-{
-public:
-  ViewFbmWorley(std::string     id,
-                hmap::Vec2<int> shape,
-                hmap::Vec2<int> tiling,
-                float           overlap)
-      : hesiod::cnode::ControlNode(id), ViewNode(id),
-        hesiod::cnode::FbmWorley(id, shape, tiling, overlap)
-  {
-    this->set_preview_port_id("output");
-    this->set_view3d_elevation_port_id("output");
-  }
-};
-
-class ViewFbmWorleyDouble : public ViewNode,
-                            public hesiod::cnode::FbmWorleyDouble
-{
-public:
-  ViewFbmWorleyDouble(std::string     id,
-                      hmap::Vec2<int> shape,
-                      hmap::Vec2<int> tiling,
-                      float           overlap)
-      : hesiod::cnode::ControlNode(id), ViewNode(id),
-        hesiod::cnode::FbmWorleyDouble(id, shape, tiling, overlap)
-  {
-    this->set_preview_port_id("output");
-    this->set_view3d_elevation_port_id("output");
-  }
-};
-
 class ViewFractalizePath : public ViewNode, public hesiod::cnode::FractalizePath
 {
 public:
@@ -1396,37 +1288,6 @@ public:
   }
 };
 
-class ViewPerlin : public ViewNode, public hesiod::cnode::Perlin
-{
-public:
-  ViewPerlin(std::string     id,
-             hmap::Vec2<int> shape,
-             hmap::Vec2<int> tiling,
-             float           overlap)
-      : hesiod::cnode::ControlNode(id), ViewNode(id),
-        hesiod::cnode::Perlin(id, shape, tiling, overlap)
-  {
-    this->set_preview_port_id("output");
-    this->set_view3d_elevation_port_id("output");
-    this->help_text = "Generate a Perlin noise.";
-  }
-};
-
-class ViewPerlinBillow : public ViewNode, public hesiod::cnode::PerlinBillow
-{
-public:
-  ViewPerlinBillow(std::string     id,
-                   hmap::Vec2<int> shape,
-                   hmap::Vec2<int> tiling,
-                   float           overlap)
-      : hesiod::cnode::ControlNode(id), ViewNode(id),
-        hesiod::cnode::PerlinBillow(id, shape, tiling, overlap)
-  {
-    this->set_preview_port_id("output");
-    this->set_view3d_elevation_port_id("output");
-  }
-};
-
 class ViewPlateau : public ViewNode, public hesiod::cnode::Plateau
 {
 public:
@@ -1751,22 +1612,6 @@ public:
   }
 };
 
-class ViewSimplex : public ViewNode, public hesiod::cnode::Simplex
-{
-public:
-  ViewSimplex(std::string     id,
-              hmap::Vec2<int> shape,
-              hmap::Vec2<int> tiling,
-              float           overlap)
-      : hesiod::cnode::ControlNode(id), ViewNode(id),
-        hesiod::cnode::Simplex(id, shape, tiling, overlap)
-  {
-    this->set_preview_port_id("output");
-    this->set_view3d_elevation_port_id("output");
-    this->help_text = "Generate a Simplex noise.";
-  }
-};
-
 class ViewSlope : public ViewNode, public hesiod::cnode::Slope
 {
 public:
@@ -1972,54 +1817,6 @@ public:
   }
 };
 
-class ViewValueNoiseDelaunay : public ViewNode,
-                               public hesiod::cnode::ValueNoiseDelaunay
-{
-public:
-  ViewValueNoiseDelaunay(std::string     id,
-                         hmap::Vec2<int> shape,
-                         hmap::Vec2<int> tiling,
-                         float           overlap)
-      : hesiod::cnode::ControlNode(id), ViewNode(id),
-        hesiod::cnode::ValueNoiseDelaunay(id, shape, tiling, overlap)
-  {
-    this->set_preview_port_id("output");
-    this->set_view3d_elevation_port_id("output");
-  }
-};
-
-class ViewValueNoiseLinear : public ViewNode,
-                             public hesiod::cnode::ValueNoiseLinear
-{
-public:
-  ViewValueNoiseLinear(std::string     id,
-                       hmap::Vec2<int> shape,
-                       hmap::Vec2<int> tiling,
-                       float           overlap)
-      : hesiod::cnode::ControlNode(id), ViewNode(id),
-        hesiod::cnode::ValueNoiseLinear(id, shape, tiling, overlap)
-  {
-    this->set_preview_port_id("output");
-    this->set_view3d_elevation_port_id("output");
-  }
-};
-
-class ViewValueNoiseThinplate : public ViewNode,
-                                public hesiod::cnode::ValueNoiseThinplate
-{
-public:
-  ViewValueNoiseThinplate(std::string     id,
-                          hmap::Vec2<int> shape,
-                          hmap::Vec2<int> tiling,
-                          float           overlap)
-      : hesiod::cnode::ControlNode(id), ViewNode(id),
-        hesiod::cnode::ValueNoiseThinplate(id, shape, tiling, overlap)
-  {
-    this->set_preview_port_id("output");
-    this->set_view3d_elevation_port_id("output");
-  }
-};
-
 class ViewWarp : public ViewNode, public hesiod::cnode::Warp
 {
 public:
@@ -2140,51 +1937,6 @@ public:
                   float           overlap)
       : hesiod::cnode::ControlNode(id), ViewNode(id),
         hesiod::cnode::WhiteSparse(id, shape, tiling, overlap)
-  {
-    this->set_preview_port_id("output");
-    this->set_view3d_elevation_port_id("output");
-  }
-};
-
-class ViewWorley : public ViewNode, public hesiod::cnode::Worley
-{
-public:
-  ViewWorley(std::string     id,
-             hmap::Vec2<int> shape,
-             hmap::Vec2<int> tiling,
-             float           overlap)
-      : hesiod::cnode::ControlNode(id), ViewNode(id),
-        hesiod::cnode::Worley(id, shape, tiling, overlap)
-  {
-    this->set_preview_port_id("output");
-    this->set_view3d_elevation_port_id("output");
-  }
-};
-
-class ViewWorleyDouble : public ViewNode, public hesiod::cnode::WorleyDouble
-{
-public:
-  ViewWorleyDouble(std::string     id,
-                   hmap::Vec2<int> shape,
-                   hmap::Vec2<int> tiling,
-                   float           overlap)
-      : hesiod::cnode::ControlNode(id), ViewNode(id),
-        hesiod::cnode::WorleyDouble(id, shape, tiling, overlap)
-  {
-    this->set_preview_port_id("output");
-    this->set_view3d_elevation_port_id("output");
-  }
-};
-
-class ViewWorleyValue : public ViewNode, public hesiod::cnode::WorleyValue
-{
-public:
-  ViewWorleyValue(std::string     id,
-                  hmap::Vec2<int> shape,
-                  hmap::Vec2<int> tiling,
-                  float           overlap)
-      : hesiod::cnode::ControlNode(id), ViewNode(id),
-        hesiod::cnode::WorleyValue(id, shape, tiling, overlap)
   {
     this->set_preview_port_id("output");
     this->set_view3d_elevation_port_id("output");

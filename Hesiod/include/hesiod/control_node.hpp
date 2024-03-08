@@ -131,13 +131,6 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Export", "IO/Files"},
     {"ExportRGB", "IO/Files"},
     {"Faceted", "Filter/Recast"}, // not distributed
-    {"FbmIqPerlin", "Primitive/Coherent Noise"},
-    {"FbmPerlin", "Primitive/Coherent Noise"},
-    {"FbmPingpongPerlin", "Primitive/Coherent Noise"},
-    {"FbmRidgedPerlin", "Primitive/Coherent Noise"},
-    {"FbmSimplex", "Primitive/Coherent Noise"},
-    {"FbmWorley", "Primitive/Coherent Noise"},
-    {"FbmWorleyDouble", "Primitive/Coherent Noise"},
     {"FractalizePath", "Geometry/Path"},
     {"GaborNoise", "Primitive/Coherent Noise"},
     {"Gain", "Filter/Recurve"},
@@ -183,8 +176,6 @@ static const std::map<std::string, std::string> category_mapping = {
     {"PathFinding", "Roads"},
     {"PathToHeightmap", "Geometry/Path"},
     {"Peak", "Primitive/Geological"},
-    {"Perlin", "Primitive/Coherent Noise"},
-    {"PerlinBillow", "Primitive/Coherent Noise"},
     {"Plateau", "Filter/Recurve"},
     {"Preview", "Debug"},
     {"RecastCanyon", "Filter/Recast"},
@@ -209,7 +200,6 @@ static const std::map<std::string, std::string> category_mapping = {
     {"SelectPulse", "Mask"},
     {"SelectRivers", "Mask"}, // not distributed
     {"SelectTransitions", "Mask"},
-    {"Simplex", "Primitive/Coherent Noise"},
     {"Slope", "Primitive/Function"},
     {"SmoothCpulse", "Filter/Smoothing"},
     {"SmoothFill", "Filter/Smoothing"},
@@ -225,9 +215,6 @@ static const std::map<std::string, std::string> category_mapping = {
     {"ThermalScree", "Erosion/Thermal"},
     {"ToMask", "Mask"},
     {"ValleyWidth", "Features"},
-    {"ValueNoiseDelaunay", "Primitive/Coherent Noise"},
-    {"ValueNoiseLinear", "Primitive/Coherent Noise"},
-    {"ValueNoiseThinplate", "Primitive/Coherent Noise"},
     {"Warp", "Operator/Transform"},
     {"WarpDownslope", "Operator/Transform"},
     {"WaveDune", "Primitive/Function"},
@@ -237,9 +224,6 @@ static const std::map<std::string, std::string> category_mapping = {
     {"White", "Primitive/Random"},
     {"WhiteDensityMap", "Primitive/Random"},
     {"WhiteSparse", "Primitive/Random"},
-    {"Worley", "Primitive/Coherent Noise"},
-    {"WorleyDouble", "Primitive/Coherent Noise"},
-    {"WorleyValue", "Primitive/Coherent Noise"},
     {"Wrinkle", "Filter/Recast"},
     {"ZeroedEdges", "Math/Boundaries"}};
 
@@ -811,83 +795,6 @@ private:
       {"cross", hmap::neighborhood::cross}};
 };
 
-class FbmIqPerlin : public Primitive
-{
-public:
-  FbmIqPerlin(std::string     id,
-              hmap::Vec2<int> shape,
-              hmap::Vec2<int> tiling,
-              float           overlap);
-
-  void compute();
-};
-
-class FbmPerlin : public Primitive
-{
-public:
-  FbmPerlin(std::string     id,
-            hmap::Vec2<int> shape,
-            hmap::Vec2<int> tiling,
-            float           overlap);
-
-  void compute();
-};
-
-class FbmPingpongPerlin : public Primitive
-{
-public:
-  FbmPingpongPerlin(std::string     id,
-                    hmap::Vec2<int> shape,
-                    hmap::Vec2<int> tiling,
-                    float           overlap);
-
-  void compute();
-};
-
-class FbmRidgedPerlin : public Primitive
-{
-public:
-  FbmRidgedPerlin(std::string     id,
-                  hmap::Vec2<int> shape,
-                  hmap::Vec2<int> tiling,
-                  float           overlap);
-
-  void compute();
-};
-
-class FbmSimplex : public Primitive
-{
-public:
-  FbmSimplex(std::string     id,
-             hmap::Vec2<int> shape,
-             hmap::Vec2<int> tiling,
-             float           overlap);
-
-  void compute();
-};
-
-class FbmWorley : public Primitive
-{
-public:
-  FbmWorley(std::string     id,
-            hmap::Vec2<int> shape,
-            hmap::Vec2<int> tiling,
-            float           overlap);
-
-  void compute();
-};
-
-class FbmWorleyDouble : public Primitive
-{
-public:
-  FbmWorleyDouble(std::string     id,
-                  hmap::Vec2<int> shape,
-                  hmap::Vec2<int> tiling,
-                  float           overlap);
-
-  void compute();
-};
-
 class FractalizePath : virtual public ControlNode
 {
 public:
@@ -1401,28 +1308,6 @@ public:
   void compute();
 };
 
-class Perlin : public Primitive
-{
-public:
-  Perlin(std::string     id,
-         hmap::Vec2<int> shape,
-         hmap::Vec2<int> tiling,
-         float           overlap);
-
-  void compute();
-};
-
-class PerlinBillow : public Primitive
-{
-public:
-  PerlinBillow(std::string     id,
-               hmap::Vec2<int> shape,
-               hmap::Vec2<int> tiling,
-               float           overlap);
-
-  void compute();
-};
-
 class Plateau : public Filter
 {
 public:
@@ -1663,17 +1548,6 @@ public:
 
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
-};
-
-class Simplex : public Primitive
-{
-public:
-  Simplex(std::string     id,
-          hmap::Vec2<int> shape,
-          hmap::Vec2<int> tiling,
-          float           overlap);
-
-  void compute();
 };
 
 class Slope : public Primitive
