@@ -45,11 +45,11 @@ bool ViewBrush::render_settings()
   }
   else
   {
-    this->edit_state.pending_hm = hmap::HeightMap();
-    this->edit_state.pending_hm.set_sto(this->value_out.shape,
-                                        this->value_out.tiling,
-                                        this->value_out.overlap);
+    // useful when deserializing the node, so that the current edit
+    // state fit with the stored data
+    this->edit_state.pending_hm = this->value_out;
     this->edit_state.is_initted = true;
+    sync_drawing_texture();
   }
 
   if (ImGui::SliderFloat("max height",
@@ -140,33 +140,6 @@ void ViewBrush::sync_value()
 {
   this->value_out = this->edit_state.pending_hm;
   this->force_update();
-}
-
-bool ViewBrush::deserialize_json_v2(std::string     field_name,
-                                    nlohmann::json &input_data)
-{
-  hmap::HeightMap original_map = this->value_out;
-
-  if (this->deserialize_json_v2_ext(field_name,
-                                    input_data,
-                                    &original_map,
-                                    &original_map.shape,
-                                    &original_map.tiling,
-                                    &original_map.overlap) == false)
-  {
-    return false;
-  }
-
-  original_map.set_sto(original_map.shape,
-                       original_map.tiling,
-                       original_map.overlap);
-  this->edit_state.is_initted = true;
-  this->edit_state.pending_hm = original_map;
-
-  sync_drawing_texture();
-  sync_value();
-
-  return true;
 }
 
 } // namespace hesiod::vnode

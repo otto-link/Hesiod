@@ -1,12 +1,12 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-#include "hesiod/serialization.hpp"
 #include "highmap/array.hpp"
 #include "highmap/heightmap.hpp"
 #include "macrologger.h"
 
 #include "hesiod/control_node.hpp"
+#include "hesiod/serialization.hpp"
 
 namespace hesiod::cnode
 {
@@ -53,18 +53,11 @@ bool Brush::serialize_json_v2(std::string     field_name,
       serialization::adapter_hmap_array_serialize(this->value_out.to_array());
   output_data[field_name]["heightmap"]["shape"] =
       serialization::adapter_hmap_serialize_vec2<int>(this->value_out.shape);
-  output_data[field_name]["heightmap"]["tiling"] =
-      serialization::adapter_hmap_serialize_vec2<int>(this->value_out.tiling);
-  output_data[field_name]["heightmap"]["overlap"] = this->value_out.overlap;
   return true;
 }
 
-bool Brush::deserialize_json_v2_ext(std::string      field_name,
-                                    nlohmann::json  &input_data,
-                                    hmap::HeightMap *output,
-                                    hmap::Vec2<int> *shape,
-                                    hmap::Vec2<int> *tiling,
-                                    float           *overlap)
+bool Brush::deserialize_json_v2(std::string     field_name,
+                                nlohmann::json &input_data)
 {
   if (input_data[field_name].is_object() == false ||
       input_data[field_name]["heightmap"].is_object() == false)
@@ -77,15 +70,10 @@ bool Brush::deserialize_json_v2_ext(std::string      field_name,
     return false;
   }
 
-  hmap::Array arr = serialization::adapter_hmap_array_deserialize(
+  hmap::Array array = serialization::adapter_hmap_array_deserialize(
       input_data[field_name]["heightmap"]["array"]);
 
-  output->from_array_interp(arr);
-  *shape = serialization::adapter_hmap_deserialize_vec2<int>(
-      input_data[field_name]["heightmap"]["shape"]);
-  *tiling = serialization::adapter_hmap_deserialize_vec2<int>(
-      input_data[field_name]["heightmap"]["tiling"]);
-  *overlap = input_data[field_name]["heightmap"]["overlap"].get<float>();
+  this->value_out.from_array_interp(array);
 
   return true;
 }
