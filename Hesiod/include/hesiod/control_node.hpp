@@ -8,6 +8,7 @@
 
 #include "hesiod/attribute.hpp"
 #include "hesiod/serialization.hpp"
+#include "highmap/heightmap.hpp"
 
 // clang-format off
 #define DEFAULT_KERNEL_SHAPE {17, 17}
@@ -514,6 +515,9 @@ public:
   void compute();
 
   void update_inner_bindings();
+
+  bool serialize_json_v2(std::string field_name, nlohmann::json& output_data) override;
+  bool deserialize_json_v2_ext(std::string field_name, nlohmann::json& input_data, hmap::HeightMap* output, hmap::Vec2<int>* shape, hmap::Vec2<int>* tiling, float* overlap);
 
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
