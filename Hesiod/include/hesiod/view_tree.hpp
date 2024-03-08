@@ -37,6 +37,16 @@ struct Link
   SERIALIZATION_V2_IMPLEMENT_BASE();
 };
 
+enum class ViewTreesSerializationType
+{
+  PLAIN,
+  BJDATA,
+  BSON,
+  CBOR,
+  MESSAGEPACK,
+  UBJSON
+};
+
 class ViewTree : public gnode::Tree, public serialization::SerializationBase
 {
 public:
@@ -133,9 +143,9 @@ public:
 
   // serialization
 
-  void load_state(std::string fname);
+  void load_state(std::string fname, ViewTreesSerializationType stype);
 
-  void save_state(std::string fname);
+  void save_state(std::string fname, ViewTreesSerializationType stype);
 
   SERIALIZATION_V2_IMPLEMENT_BASE();
 
@@ -198,6 +208,7 @@ private:
   bool                     show_settings = false;
   ax::NodeEditor::NodeId   context_menu_node_hid;
   std::vector<std::string> key_sort;
+  ViewTreesSerializationType serialization_type;
 };
 
 // HELPERS

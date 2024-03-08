@@ -38,7 +38,7 @@ ViewTree::ViewTree(std::string     id,
                    hmap::Vec2<int> shape,
                    hmap::Vec2<int> tiling,
                    float           overlap)
-    : gnode::Tree(id), shape(shape), tiling(tiling), overlap(overlap)
+    : gnode::Tree(id), shape(shape), tiling(tiling), overlap(overlap), serialization_type(ViewTreesSerializationType::MESSAGEPACK)
 {
   // initialize node editor
   ax::NodeEditor::Config config;
