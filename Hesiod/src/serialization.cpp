@@ -1,6 +1,8 @@
 #include "hesiod/serialization.hpp"
+#include "highmap/array.hpp"
 #include "macro-logger/macrologger.h"
 #include <string>
+#include <vector>
 
 namespace hesiod::serialization
 {
@@ -175,6 +177,28 @@ bool SerializationBatchBase::deserialize_json_v2(std::string     field_name,
 {
   return this->BuildBatchHelperData().deserialize_json_v2(field_name,
                                                           input_data);
+}
+
+// Adapter hmap::Array
+
+nlohmann::json adapter_hmap_array_serialize(hmap::Array a)
+{
+  nlohmann::json data = nlohmann::json();
+
+  data["shape"] = adapter_hmap_serialize_vec2<int>(a.shape);
+  data["vector"] = a.vector;
+
+  return data;
+}
+
+hmap::Array adapter_hmap_array_deserialize(nlohmann::json &data)
+{
+  hmap::Array array = hmap::Array();
+
+  array.set_shape(adapter_hmap_deserialize_vec2<int>(data["shape"]));
+  array.vector = data["vector"].get<std::vector<float>>();
+
+  return array;
 }
 
 } // namespace hesiod::serialization

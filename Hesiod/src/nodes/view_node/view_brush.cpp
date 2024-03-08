@@ -1,6 +1,7 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include "highmap/heightmap.hpp"
 #include "imgui.h"
 #include "macrologger.h"
 
@@ -139,6 +140,33 @@ void ViewBrush::sync_value()
 {
   this->value_out = this->edit_state.pending_hm;
   this->force_update();
+}
+
+bool ViewBrush::deserialize_json_v2(std::string     field_name,
+                                    nlohmann::json &input_data)
+{
+  hmap::HeightMap original_map = this->value_out;
+
+  if (this->deserialize_json_v2_ext(field_name,
+                                    input_data,
+                                    &original_map,
+                                    &original_map.shape,
+                                    &original_map.tiling,
+                                    &original_map.overlap) == false)
+  {
+    return false;
+  }
+
+  original_map.set_sto(original_map.shape,
+                       original_map.tiling,
+                       original_map.overlap);
+  this->edit_state.is_initted = true;
+  this->edit_state.pending_hm = original_map;
+
+  sync_drawing_texture();
+  sync_value();
+
+  return true;
 }
 
 } // namespace hesiod::vnode
