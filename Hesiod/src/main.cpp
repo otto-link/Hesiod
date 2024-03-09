@@ -22,20 +22,8 @@ typedef unsigned int uint;
 #include "hesiod/attribute.hpp"
 #include "hesiod/serialization.hpp"
 
-#if ENABLE_GENERATE_NODE_SNAPSHOT
-#include "generate_node_snapshot.hpp"
-#endif
-
 int main(int argc, char *argv[])
 {
-
-#if ENABLE_GENERATE_NODE_SNAPSHOT
-  if (argc >= 2 && strcmp(argv[1], "--generate-node-snapshot") == 0)
-  {
-    generate_node_snapshot();
-    return 0;
-  }
-#endif
 
   if (argc >= 2 && strcmp(argv[1], "--test") == 0)
   {
