@@ -125,6 +125,26 @@ void ViewTree::set_sto(hmap::Vec2<int> new_shape,
   this->update_view3d_basemesh();
 }
 
+std::string ViewTree::add_view_node(std::string control_node_type,
+                                    std::string node_id)
+{
+  std::string id;
+  if (node_id == "")
+    id = control_node_type + "##" + this->get_new_id();
+  else
+    id = node_id;
+
+  LOG_DEBUG("adding node type: %s", control_node_type.c_str());
+
+  this->add_node(create_view_node_from_type(control_node_type,
+                                            id,
+                                            this->shape,
+                                            this->tiling,
+                                            this->overlap));
+
+  return id;
+}
+
 void ViewTree::clear()
 {
   this->set_viewer_node_id("");
