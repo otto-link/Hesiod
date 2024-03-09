@@ -131,4 +131,10 @@ void ControlNode::post_process_heightmap(hmap::HeightMap &h)
     }
 }
 
+// HELPERS
+std::string node_type_from_id(std::string node_id)
+{
+  return node_id.substr(0, node_id.find("#"));
+}
+
 } // namespace hesiod::cnode

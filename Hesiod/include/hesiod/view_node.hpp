@@ -1967,7 +1967,12 @@ public:
   }
 };
 
-// // HELPERS
+// --- HELPERS
+std::shared_ptr<gnode::Node> create_view_node_from_type(std::string node_type,
+                                                        std::string node_id,
+                                                        hmap::Vec2<int> shape,
+                                                        hmap::Vec2<int> tiling,
+                                                        float overlap);
 
 void img_to_texture(std::vector<uint8_t> img,
                     hmap::Vec2<int>      shape,

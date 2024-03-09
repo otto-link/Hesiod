@@ -16,19 +16,14 @@
 
 namespace hesiod::serialization
 {
-
-class SerializationBase
+enum class SerializationType
 {
-public:
-  virtual ~SerializationBase() = default;
-  virtual bool serialize_json_v2(std::string, nlohmann::json &)
-  {
-    return false;
-  }
-  virtual bool deserialize_json_v2(std::string, nlohmann::json &)
-  {
-    return false;
-  }
+  PLAIN,
+  BJDATA,
+  BSON,
+  CBOR,
+  MESSAGEPACK,
+  UBJSON
 };
 
 enum class SerializationBatchHelperElementType : char
@@ -47,6 +42,20 @@ enum class SerializationBatchHelperElementType : char
   OBJECT = 11,
   OBJECT_PTR = 12,
   INVALID = 13
+};
+
+class SerializationBase
+{
+public:
+  virtual ~SerializationBase() = default;
+  virtual bool serialize_json_v2(std::string, nlohmann::json &)
+  {
+    return false;
+  }
+  virtual bool deserialize_json_v2(std::string, nlohmann::json &)
+  {
+    return false;
+  }
 };
 
 class SerializationBatchHelperElement

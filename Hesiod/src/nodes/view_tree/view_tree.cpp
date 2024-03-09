@@ -8,6 +8,7 @@
 
 #include "hesiod/viewer.hpp"
 
+#include "hesiod/control_tree.hpp"
 #include "hesiod/gui.hpp"
 #include "hesiod/view_node.hpp"
 #include "hesiod/view_tree.hpp"
@@ -38,8 +39,7 @@ ViewTree::ViewTree(std::string     id,
                    hmap::Vec2<int> shape,
                    hmap::Vec2<int> tiling,
                    float           overlap)
-    : gnode::Tree(id), shape(shape), tiling(tiling), overlap(overlap),
-      serialization_type(ViewTreesSerializationType::MESSAGEPACK)
+    : hesiod::cnode::ControlTree(id, shape, tiling, overlap)
 {
   // initialize node editor
   ax::NodeEditor::Config config;
@@ -82,22 +82,12 @@ Link *ViewTree::get_link_ref_by_id(int link_id)
   }
 }
 
-std::string ViewTree::get_new_id()
-{
-  return std::to_string(this->id_counter++);
-}
-
 ImU32 ViewTree::get_node_color(std::string node_id)
 {
   std::string node_type = this->get_node_type(node_id);
   std::string node_category = hesiod::cnode::category_mapping.at(node_type);
   std::string main_category = node_category.substr(0, node_category.find("/"));
   return ImColor(category_colors.at(main_category).hovered);
-}
-
-std::string ViewTree::get_node_type(std::string node_id) const
-{
-  return this->get_node_ref_by_id(node_id)->get_node_type();
 }
 
 ax::NodeEditor::EditorContext *ViewTree::get_p_node_editor_context() const
@@ -141,7 +131,6 @@ std::string ViewTree::add_view_node(std::string control_node_type,
                                             this->shape,
                                             this->tiling,
                                             this->overlap));
-
   return id;
 }
 
@@ -410,12 +399,6 @@ void ViewTree::remove_view_node(std::string node_id)
   // for the control node handled by GNode, everything is taken care
   // of by this method
   this->remove_node(node_id);
-}
-
-// HELPERS
-std::string node_type_from_id(std::string node_id)
-{
-  return node_id.substr(0, node_id.find("#"));
 }
 
 } // namespace hesiod::vnode

@@ -1943,4 +1943,14 @@ protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
 
+// --- HELPERS
+std::shared_ptr<gnode::Node> create_control_node_from_type(
+    std::string     node_type,
+    std::string     node_id,
+    hmap::Vec2<int> shape,
+    hmap::Vec2<int> tiling,
+    float           overlap);
+
+std::string node_type_from_id(std::string node_id);
+
 } // namespace hesiod::cnode

@@ -8,7 +8,7 @@
 #include "highmap.hpp"
 #include <imgui_node_editor.h>
 
-#include "hesiod/control_node.hpp"
+#include "hesiod/control_tree.hpp"
 #include "hesiod/serialization.hpp"
 #include "hesiod/view_node.hpp"
 
@@ -37,17 +37,7 @@ struct Link
   SERIALIZATION_V2_IMPLEMENT_BASE();
 };
 
-enum class ViewTreesSerializationType
-{
-  PLAIN,
-  BJDATA,
-  BSON,
-  CBOR,
-  MESSAGEPACK,
-  UBJSON
-};
-
-class ViewTree : public gnode::Tree, public serialization::SerializationBase
+class ViewTree : public hesiod::cnode::ControlTree
 {
 public:
   ViewTree(std::string     id,
@@ -59,22 +49,13 @@ public:
 
   Link *get_link_ref_by_id(int link_id);
 
-  std::string get_new_id();
-
   ImU32 get_node_color(std::string node_id);
-
-  std::string get_node_type(std::string node_id) const;
 
   ax::NodeEditor::EditorContext *get_p_node_editor_context() const;
 
-  void set_serialization_type(ViewTreesSerializationType new_serialization_type)
-  {
-    this->serialization_type = new_serialization_type;
-  }
-
-  void set_sto(hmap::Vec2<int> new_shape,
-               hmap::Vec2<int> new_tiling,
-               float           new_overlap);
+  virtual void set_sto(hmap::Vec2<int> new_shape,
+                       hmap::Vec2<int> new_tiling,
+                       float           new_overlap) override;
 
   void set_viewer_node_id(std::string node_id);
 
@@ -83,7 +64,7 @@ public:
 
   void automatic_node_layout();
 
-  void clear();
+  virtual void clear() override;
 
   void export_view3d(std::string fname);
 
@@ -128,42 +109,16 @@ public:
 
   void update_view3d_basemesh();
 
-  // used for serialization now
-  // see class ControlNodeInstancing
-
-  inline hmap::Vec2<int> get_shape()
-  {
-    return this->shape;
-  }
-
-  inline hmap::Vec2<int> get_tiling()
-  {
-    return this->tiling;
-  }
-
-  inline float get_overlap()
-  {
-    return this->overlap;
-  }
-
   // serialization
 
-  void load_state(std::string fname);
+  virtual void load_state(std::string fname) override;
 
-  void save_state(std::string fname);
+  virtual void save_state(std::string fname) override;
 
   SERIALIZATION_V2_IMPLEMENT_BASE();
 
 private:
-  hmap::Vec2<int> shape;
-  hmap::Vec2<int> tiling;
-  float           overlap;
-
-  std::map<int, Link> links = {};
-  int                 id_counter = 0;
-
-  std::string json_filename = "";
-
+  std::map<int, Link>                 links = {};
   std::vector<ax::NodeEditor::NodeId> selected_node_hid = {};
 
   ax::NodeEditor::EditorContext *p_node_editor_context = nullptr;
@@ -210,19 +165,9 @@ private:
   bool  wireframe = false;
   bool  auto_rotate = false;
 
-  bool                       show_settings = false;
-  ax::NodeEditor::NodeId     context_menu_node_hid;
-  std::vector<std::string>   key_sort;
-  ViewTreesSerializationType serialization_type;
+  bool                     show_settings = false;
+  ax::NodeEditor::NodeId   context_menu_node_hid;
+  std::vector<std::string> key_sort;
 };
-
-// HELPERS
-std::shared_ptr<gnode::Node> create_view_node_from_type(std::string node_type,
-                                                        std::string node_id,
-                                                        hmap::Vec2<int> shape,
-                                                        hmap::Vec2<int> tiling,
-                                                        float overlap);
-
-std::string node_type_from_id(std::string node_id);
 
 } // namespace hesiod::vnode
