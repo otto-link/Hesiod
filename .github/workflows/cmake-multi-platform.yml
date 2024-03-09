@@ -73,7 +73,6 @@ jobs:
         -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
         -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
         -DHESIOD_ENABLE_GENERATE_APP_IMAGE=ON
-        -DHESIOD_ENABLE_GENERATE_NODE_SNAPSHOT=ON
         -DHESIOD_ENABLE_CEREAL=ON
         -S ${{ github.workspace }}
 
