@@ -67,6 +67,11 @@ public:
 
   ax::NodeEditor::EditorContext *get_p_node_editor_context() const;
 
+  void set_serialization_type(ViewTreesSerializationType new_serialization_type)
+  {
+    this->serialization_type = new_serialization_type;
+  }
+
   void set_sto(hmap::Vec2<int> new_shape,
                hmap::Vec2<int> new_tiling,
                float           new_overlap);
@@ -143,9 +148,9 @@ public:
 
   // serialization
 
-  void load_state(std::string fname, ViewTreesSerializationType stype);
+  void load_state(std::string fname);
 
-  void save_state(std::string fname, ViewTreesSerializationType stype);
+  void save_state(std::string fname);
 
   SERIALIZATION_V2_IMPLEMENT_BASE();
 
@@ -205,9 +210,9 @@ private:
   bool  wireframe = false;
   bool  auto_rotate = false;
 
-  bool                     show_settings = false;
-  ax::NodeEditor::NodeId   context_menu_node_hid;
-  std::vector<std::string> key_sort;
+  bool                       show_settings = false;
+  ax::NodeEditor::NodeId     context_menu_node_hid;
+  std::vector<std::string>   key_sort;
   ViewTreesSerializationType serialization_type;
 };
 

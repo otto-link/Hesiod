@@ -103,7 +103,7 @@ void ViewTree::render_node_editor()
             ImGuiFileDialog::Instance()->GetFilePathName();
         std::string file_path = ImGuiFileDialog::Instance()->GetCurrentPath();
 
-        this->load_state(file_path_name, serialization_type);
+        this->load_state(file_path_name);
         this->json_filename = file_path_name;
       }
 
@@ -126,7 +126,7 @@ void ViewTree::render_node_editor()
                                               config);
     }
     else if (save_button)
-      this->save_state(this->json_filename, serialization_type);
+      this->save_state(this->json_filename);
 
     if (ImGuiFileDialog::Instance()->Display("SaveTreeStateDlg"))
     {
@@ -136,7 +136,7 @@ void ViewTree::render_node_editor()
             ImGuiFileDialog::Instance()->GetFilePathName();
         std::string file_path = ImGuiFileDialog::Instance()->GetCurrentPath();
 
-        this->save_state(file_path_name, serialization_type);
+        this->save_state(file_path_name);
         this->json_filename = file_path_name;
       }
 

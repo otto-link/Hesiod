@@ -51,88 +51,91 @@ bool Link::deserialize_json_v2(std::string     field_name,
 
 // ViewTree
 
-void ViewTree::load_state(std::string fname, ViewTreesSerializationType stype)
+void ViewTree::load_state(std::string fname)
 {
   this->remove_all_nodes();
   this->links.clear();
 
-  std::ifstream  inputFileStream = std::ifstream(fname);
-  nlohmann::json inputSerializedData = nlohmann::json();
+  std::ifstream  input_file_stream = std::ifstream(fname);
+  nlohmann::json input_serialized_data = nlohmann::json();
 
-  if(stype == ViewTreesSerializationType::PLAIN)
+  if (this->serialization_type == ViewTreesSerializationType::PLAIN)
   {
-    inputFileStream >> inputSerializedData;
+    input_file_stream >> input_serialized_data;
   }
-  else 
+  else
   {
-    std::vector<char> buffer = std::vector<char>(std::istreambuf_iterator<char>(inputFileStream), std::istreambuf_iterator<char>());
+    std::vector<char> buffer = std::vector<char>(
+        std::istreambuf_iterator<char>(input_file_stream),
+        std::istreambuf_iterator<char>());
 
-    switch (stype) 
+    switch (this->serialization_type)
     {
-      case ViewTreesSerializationType::BJDATA:
-        inputSerializedData = nlohmann::json::from_bjdata(buffer);
-        break;
-      case ViewTreesSerializationType::BSON:
-        inputSerializedData = nlohmann::json::from_bson(buffer);
-        break;
-      case ViewTreesSerializationType::CBOR:
-        inputSerializedData = nlohmann::json::from_cbor(buffer);
-        break;
-      case ViewTreesSerializationType::MESSAGEPACK:
-        inputSerializedData = nlohmann::json::from_msgpack(buffer);
-        break;
-      case ViewTreesSerializationType::UBJSON:
-        inputSerializedData = nlohmann::json::from_ubjson(buffer);
-        break;
-      default:
-        LOG_ERROR("Unknown load type");
-        break;
+    case ViewTreesSerializationType::BJDATA:
+      input_serialized_data = nlohmann::json::from_bjdata(buffer);
+      break;
+    case ViewTreesSerializationType::BSON:
+      input_serialized_data = nlohmann::json::from_bson(buffer);
+      break;
+    case ViewTreesSerializationType::CBOR:
+      input_serialized_data = nlohmann::json::from_cbor(buffer);
+      break;
+    case ViewTreesSerializationType::MESSAGEPACK:
+      input_serialized_data = nlohmann::json::from_msgpack(buffer);
+      break;
+    case ViewTreesSerializationType::UBJSON:
+      input_serialized_data = nlohmann::json::from_ubjson(buffer);
+      break;
+    default:
+      LOG_ERROR("Unknown load type");
+      break;
     }
   }
 
-  this->deserialize_json_v2("data", inputSerializedData);
+  this->deserialize_json_v2("data", input_serialized_data);
 
-  inputFileStream.close();
+  input_file_stream.close();
 }
 
-void ViewTree::save_state(std::string fname, ViewTreesSerializationType stype)
+void ViewTree::save_state(std::string fname)
 {
   std::ofstream  outputFileStream = std::ofstream(fname, std::ios::trunc);
   nlohmann::json outputSerializedData = nlohmann::json();
 
   this->serialize_json_v2("data", outputSerializedData);
 
-  if(stype == ViewTreesSerializationType::PLAIN)
+  if (this->serialization_type == ViewTreesSerializationType::PLAIN)
   {
     outputFileStream << outputSerializedData.dump(1) << std::endl;
   }
-  else 
+  else
   {
     std::vector<uint8_t> bytes = {};
 
-    switch (stype) 
+    switch (this->serialization_type)
     {
-      case ViewTreesSerializationType::BJDATA: 
-        bytes = nlohmann::json::to_bjdata(outputSerializedData);
-        break;
-      case ViewTreesSerializationType::BSON:
-        bytes = nlohmann::json::to_bson(outputSerializedData);
-        break;
-      case ViewTreesSerializationType::CBOR:
-        bytes = nlohmann::json::to_cbor(outputSerializedData);
-        break;
-      case ViewTreesSerializationType::MESSAGEPACK:
-        bytes = nlohmann::json::to_msgpack(outputSerializedData);
-        break;
-      case ViewTreesSerializationType::UBJSON:
-        bytes = nlohmann::json::to_ubjson(outputSerializedData);
-        break;
-      default:
-        LOG_ERROR("Unknown load type");
-        break;
+    case ViewTreesSerializationType::BJDATA:
+      bytes = nlohmann::json::to_bjdata(outputSerializedData);
+      break;
+    case ViewTreesSerializationType::BSON:
+      bytes = nlohmann::json::to_bson(outputSerializedData);
+      break;
+    case ViewTreesSerializationType::CBOR:
+      bytes = nlohmann::json::to_cbor(outputSerializedData);
+      break;
+    case ViewTreesSerializationType::MESSAGEPACK:
+      bytes = nlohmann::json::to_msgpack(outputSerializedData);
+      break;
+    case ViewTreesSerializationType::UBJSON:
+      bytes = nlohmann::json::to_ubjson(outputSerializedData);
+      break;
+    default:
+      LOG_ERROR("Unknown load type");
+      break;
     }
 
-    outputFileStream.write(reinterpret_cast<char*>(bytes.data()), bytes.size());
+    outputFileStream.write(reinterpret_cast<char *>(bytes.data()),
+                           bytes.size());
     outputFileStream.flush();
   }
 
