@@ -73,6 +73,9 @@ jobs:
         -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
         -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
         -DHESIOD_ENABLE_GENERATE_APP_IMAGE=ON
+	-DHIGHMAP_ENABLE_DOCS=OFF
+	-DHIGHMAP_ENABLE_EXAMPLES=OFF
+	-DHIGHMAP_ENABLE_TESTS=OFF
         -S ${{ github.workspace }}
 
     - name: Build
