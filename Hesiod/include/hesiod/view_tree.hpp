@@ -37,6 +37,16 @@ struct Link
   SERIALIZATION_V2_IMPLEMENT_BASE();
 };
 
+enum class ViewTreesSerializationType
+{
+  PLAIN,
+  BJDATA,
+  BSON,
+  CBOR,
+  MESSAGEPACK,
+  UBJSON
+};
+
 class ViewTree : public gnode::Tree, public serialization::SerializationBase
 {
 public:
@@ -56,6 +66,11 @@ public:
   std::string get_node_type(std::string node_id) const;
 
   ax::NodeEditor::EditorContext *get_p_node_editor_context() const;
+
+  void set_serialization_type(ViewTreesSerializationType new_serialization_type)
+  {
+    this->serialization_type = new_serialization_type;
+  }
 
   void set_sto(hmap::Vec2<int> new_shape,
                hmap::Vec2<int> new_tiling,
@@ -195,9 +210,10 @@ private:
   bool  wireframe = false;
   bool  auto_rotate = false;
 
-  bool                     show_settings = false;
-  ax::NodeEditor::NodeId   context_menu_node_hid;
-  std::vector<std::string> key_sort;
+  bool                       show_settings = false;
+  ax::NodeEditor::NodeId     context_menu_node_hid;
+  std::vector<std::string>   key_sort;
+  ViewTreesSerializationType serialization_type;
 };
 
 // HELPERS

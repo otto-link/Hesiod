@@ -7,6 +7,7 @@
 #include "gnode.hpp"
 #include "macrologger.h"
 #include <imgui_node_editor.h>
+#include <vector>
 
 #include "hesiod/gui.hpp"
 #include "hesiod/view_node.hpp"
@@ -91,7 +92,7 @@ void ViewTree::render_node_editor()
     if (ImGui::Button("Load"))
       ImGuiFileDialog::Instance()->OpenDialog("LoadTreeStateDlg",
                                               "Load Tree",
-                                              ".json",
+                                              ".hsd",
                                               config);
 
     if (ImGuiFileDialog::Instance()->Display("LoadTreeStateDlg"))
@@ -121,7 +122,7 @@ void ViewTree::render_node_editor()
       config.flags = ImGuiFileDialogFlags_ConfirmOverwrite;
       ImGuiFileDialog::Instance()->OpenDialog("SaveTreeStateDlg",
                                               "Save Tree",
-                                              ".json",
+                                              ".hsd",
                                               config);
     }
     else if (save_button)

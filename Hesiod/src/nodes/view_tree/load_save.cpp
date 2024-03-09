@@ -1,11 +1,13 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include <cstdint>
 #include <fstream>
 
 #include "gnode.hpp"
 #include "hesiod/control_node.hpp"
 #include "macrologger.h"
+#include <iterator>
 #include <vector>
 
 #include "hesiod/view_node.hpp"
@@ -54,14 +56,45 @@ void ViewTree::load_state(std::string fname)
   this->remove_all_nodes();
   this->links.clear();
 
-  std::ifstream  inputFileStream = std::ifstream(fname);
-  nlohmann::json inputSerializedData = nlohmann::json();
+  std::ifstream  input_file_stream = std::ifstream(fname);
+  nlohmann::json input_serialized_data = nlohmann::json();
 
-  inputFileStream >> inputSerializedData;
+  if (this->serialization_type == ViewTreesSerializationType::PLAIN)
+  {
+    input_file_stream >> input_serialized_data;
+  }
+  else
+  {
+    std::vector<char> buffer = std::vector<char>(
+        std::istreambuf_iterator<char>(input_file_stream),
+        std::istreambuf_iterator<char>());
 
-  this->deserialize_json_v2("data", inputSerializedData);
+    switch (this->serialization_type)
+    {
+    case ViewTreesSerializationType::BJDATA:
+      input_serialized_data = nlohmann::json::from_bjdata(buffer);
+      break;
+    case ViewTreesSerializationType::BSON:
+      input_serialized_data = nlohmann::json::from_bson(buffer);
+      break;
+    case ViewTreesSerializationType::CBOR:
+      input_serialized_data = nlohmann::json::from_cbor(buffer);
+      break;
+    case ViewTreesSerializationType::MESSAGEPACK:
+      input_serialized_data = nlohmann::json::from_msgpack(buffer);
+      break;
+    case ViewTreesSerializationType::UBJSON:
+      input_serialized_data = nlohmann::json::from_ubjson(buffer);
+      break;
+    default:
+      LOG_ERROR("Unknown load type");
+      break;
+    }
+  }
 
-  inputFileStream.close();
+  this->deserialize_json_v2("data", input_serialized_data);
+
+  input_file_stream.close();
 }
 
 void ViewTree::save_state(std::string fname)
@@ -71,7 +104,40 @@ void ViewTree::save_state(std::string fname)
 
   this->serialize_json_v2("data", outputSerializedData);
 
-  outputFileStream << outputSerializedData.dump(1) << std::endl;
+  if (this->serialization_type == ViewTreesSerializationType::PLAIN)
+  {
+    outputFileStream << outputSerializedData.dump(1) << std::endl;
+  }
+  else
+  {
+    std::vector<uint8_t> bytes = {};
+
+    switch (this->serialization_type)
+    {
+    case ViewTreesSerializationType::BJDATA:
+      bytes = nlohmann::json::to_bjdata(outputSerializedData);
+      break;
+    case ViewTreesSerializationType::BSON:
+      bytes = nlohmann::json::to_bson(outputSerializedData);
+      break;
+    case ViewTreesSerializationType::CBOR:
+      bytes = nlohmann::json::to_cbor(outputSerializedData);
+      break;
+    case ViewTreesSerializationType::MESSAGEPACK:
+      bytes = nlohmann::json::to_msgpack(outputSerializedData);
+      break;
+    case ViewTreesSerializationType::UBJSON:
+      bytes = nlohmann::json::to_ubjson(outputSerializedData);
+      break;
+    default:
+      LOG_ERROR("Unknown load type");
+      break;
+    }
+
+    outputFileStream.write(reinterpret_cast<char *>(bytes.data()),
+                           bytes.size());
+    outputFileStream.flush();
+  }
 
   outputFileStream.close();
 }
