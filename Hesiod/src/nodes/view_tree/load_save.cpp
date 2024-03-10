@@ -257,32 +257,30 @@ bool ViewTree::deserialize_json_v2(std::string     field_name,
   }
 
   // nodes parameters
-
-  for (nlohmann::json currentNodeSerializedData :
-       input_data[field_name]["nodes"])
+  for (nlohmann::json node_data : input_data[field_name]["nodes"])
   {
-    std::string id = currentNodeSerializedData["data"]["id"].get<std::string>();
+    std::string id = node_data["data"]["id"].get<std::string>();
 
     if (this->get_node_type(id) != "Clone")
     {
       this->get_node_ref_by_id<hesiod::cnode::ControlNode>(id)
-          ->deserialize_json_v2("data", currentNodeSerializedData);
+          ->deserialize_json_v2("data", node_data);
     }
     else
     {
       this->get_node_ref_by_id<hesiod::cnode::Clone>(id)->deserialize_json_v2(
           "data",
-          currentNodeSerializedData);
+          node_data);
     }
   }
 
   // links
-  for (nlohmann::json currentLinkObject : input_data[field_name]["links"])
+  for (nlohmann::json link_data : input_data[field_name]["links"])
   {
-    Link currentLink = Link();
-    int  id = currentLinkObject["key"].get<int>();
-    currentLink.deserialize_json_v2("value", currentLinkObject);
-    links.emplace(id, currentLink);
+    Link current_link = Link();
+    int  id = link_data["key"].get<int>();
+    current_link.deserialize_json_v2("value", link_data);
+    links.emplace(id, current_link);
   }
 
   // links from the ViewTree (GUI links) still needs to be replicated

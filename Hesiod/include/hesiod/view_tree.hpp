@@ -113,7 +113,7 @@ public:
 
   virtual void load_state(std::string fname) override;
 
-  virtual void save_state(std::string fname) override;
+  void save_state(std::string fname);
 
   SERIALIZATION_V2_IMPLEMENT_BASE();
 

@@ -7,6 +7,15 @@
 namespace hesiod::cnode
 {
 
+ControlTree::ControlTree(std::string id)
+    : gnode::Tree(id),
+      serialization_type(hesiod::serialization::SerializationType::MESSAGEPACK)
+{
+  this->shape = hmap::Vec2<int>(0, 0);
+  this->tiling = hmap::Vec2<int>(0, 0);
+  this->overlap = 0.f;
+}
+
 ControlTree::ControlTree(std::string     id,
                          hmap::Vec2<int> shape,
                          hmap::Vec2<int> tiling,

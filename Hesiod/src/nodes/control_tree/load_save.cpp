@@ -13,6 +13,7 @@
 #include "hesiod/control_node.hpp"
 #include "hesiod/control_tree.hpp"
 #include "hesiod/serialization.hpp"
+#include "hesiod/view_tree.hpp" // for the Link object
 
 namespace hesiod::cnode
 {
@@ -65,63 +66,65 @@ void ControlTree::load_state(std::string fname)
   input_file_stream.close();
 }
 
-void ControlTree::save_state(std::string fname)
-{
-  std::ofstream  outputFileStream = std::ofstream(fname, std::ios::trunc);
-  nlohmann::json outputSerializedData = nlohmann::json();
-
-  this->serialize_json_v2("data", outputSerializedData);
-
-  if (this->serialization_type ==
-      hesiod::serialization::SerializationType::PLAIN)
-  {
-    outputFileStream << outputSerializedData.dump(1) << std::endl;
-  }
-  else
-  {
-    std::vector<uint8_t> bytes = {};
-
-    switch (this->serialization_type)
-    {
-    case hesiod::serialization::SerializationType::BJDATA:
-      bytes = nlohmann::json::to_bjdata(outputSerializedData);
-      break;
-    case hesiod::serialization::SerializationType::BSON:
-      bytes = nlohmann::json::to_bson(outputSerializedData);
-      break;
-    case hesiod::serialization::SerializationType::CBOR:
-      bytes = nlohmann::json::to_cbor(outputSerializedData);
-      break;
-    case hesiod::serialization::SerializationType::MESSAGEPACK:
-      bytes = nlohmann::json::to_msgpack(outputSerializedData);
-      break;
-    case hesiod::serialization::SerializationType::UBJSON:
-      bytes = nlohmann::json::to_ubjson(outputSerializedData);
-      break;
-    default:
-      LOG_ERROR("Unknown load type");
-      break;
-    }
-
-    outputFileStream.write(reinterpret_cast<char *>(bytes.data()),
-                           bytes.size());
-    outputFileStream.flush();
-  }
-
-  outputFileStream.close();
-}
-
-bool ControlTree::serialize_json_v2(std::string     field_name,
-                                    nlohmann::json &output_data)
-{
-  // TODO
-  return true;
-}
-
 bool ControlTree::deserialize_json_v2(std::string     field_name,
                                       nlohmann::json &input_data)
 {
-  // TODO
+  if (input_data[field_name].is_object() == false)
+  {
+    return false;
+  }
+
+  // global parameters
+  id = input_data[field_name]["id"].get<std::string>();
+  overlap = input_data[field_name]["overlap"].get<float>();
+  shape.x = input_data[field_name]["shape.x"].get<int>();
+  shape.y = input_data[field_name]["shape.y"].get<int>();
+  tiling.x = input_data[field_name]["tiling.x"].get<int>();
+  tiling.y = input_data[field_name]["tiling.y"].get<int>();
+  id_counter = input_data[field_name]["id_counter"].get<int>();
+
+  // create node
+  std::vector<std::string> node_ids =
+      input_data[field_name]["node_ids"].get<std::vector<std::string>>();
+
+  for (size_t k = 0; k < node_ids.size(); k++)
+    this->add_control_node(hesiod::cnode::node_type_from_id(node_ids[k]),
+                           node_ids[k]);
+
+  // nodes parameters
+  for (nlohmann::json node_data : input_data[field_name]["nodes"])
+  {
+    std::string id = node_data["data"]["id"].get<std::string>();
+
+    if (this->get_node_type(id) != "Clone")
+    {
+      this->get_node_ref_by_id<hesiod::cnode::ControlNode>(id)
+          ->deserialize_json_v2("data", node_data);
+    }
+    else
+    {
+      this->get_node_ref_by_id<hesiod::cnode::Clone>(id)->deserialize_json_v2(
+          "data",
+          node_data);
+    }
+  }
+
+  // links
+  for (nlohmann::json link_data : input_data[field_name]["links"])
+  {
+    // links from the ViewTree (GUI links) are replicated within the
+    // GNode framework (data links)
+    hesiod::vnode::Link current_link = hesiod::vnode::Link();
+    current_link.deserialize_json_v2("value", link_data);
+
+    this->link(current_link.node_id_from,
+               current_link.port_id_from,
+               current_link.node_id_to,
+               current_link.port_id_to);
+  }
+
+  this->update();
+
   return true;
 }
 

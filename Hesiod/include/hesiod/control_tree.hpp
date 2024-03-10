@@ -16,6 +16,8 @@ namespace hesiod::cnode
 class ControlTree : public gnode::Tree, public serialization::SerializationBase
 {
 public:
+  ControlTree(std::string id);
+
   ControlTree(std::string     id,
               hmap::Vec2<int> shape,
               hmap::Vec2<int> tiling,
@@ -55,13 +57,11 @@ public:
 
   virtual void clear();
 
-  // serialization
+  // serialization (only "load" for this object, used for the batch mode)
 
   virtual void load_state(std::string fname);
 
-  virtual void save_state(std::string fname);
-
-  SERIALIZATION_V2_IMPLEMENT_BASE();
+  bool deserialize_json_v2(std::string field_name, nlohmann::json &input_data);
 
 protected:
   hmap::Vec2<int> shape;

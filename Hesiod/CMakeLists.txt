@@ -21,6 +21,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE ${HESIOD_INCLUDE})
 			     
 # Link libraries
 target_link_libraries(${PROJECT_NAME} PRIVATE
+    args
     highmap
     gnode
     glfw

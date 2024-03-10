@@ -1,3 +1,4 @@
+include(args.cmake)
 include(ImGui.cmake)
 include(ImGuiNodeEditor.cmake)
 include(ImGuiFileDialog.cmake)
