@@ -56,7 +56,7 @@ void Noise::compute()
   if (this->get_p_data("envelope"))
   {
     float hmin = this->value_out.min();
-    LOG_DEBUG("hmin: %f", hmin);
+
     hmap::transform(this->value_out,
                     *(hmap::HeightMap *)this->get_p_data("envelope"),
                     [&hmin](hmap::Array &a, hmap::Array &b)
