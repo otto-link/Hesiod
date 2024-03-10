@@ -40,6 +40,11 @@ NoiseFbm::NoiseFbm(std::string     id,
                              gnode::direction::in,
                              dtype::dHeightMap,
                              gnode::optional::yes));
+
+  this->add_port(gnode::Port("envelope",
+                             gnode::direction::in,
+                             dtype::dHeightMap,
+                             gnode::optional::yes));
 }
 
 void NoiseFbm::compute()
@@ -71,6 +76,19 @@ void NoiseFbm::compute()
                    nullptr,
                    bbox);
              });
+
+  if (this->get_p_data("envelope"))
+  {
+    float hmin = this->value_out.min();
+    LOG_DEBUG("hmin: %f", hmin);
+    hmap::transform(this->value_out,
+                    *(hmap::HeightMap *)this->get_p_data("envelope"),
+                    [&hmin](hmap::Array &a, hmap::Array &b)
+                    {
+                      a -= hmin;
+                      a *= b;
+                    });
+  }
 
   this->post_process_heightmap(this->value_out);
 }

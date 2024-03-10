@@ -23,6 +23,11 @@ Noise::Noise(std::string     id,
   this->attr["seed"] = NEW_ATTR_SEED();
 
   this->attr_ordered_key = {"noise_type", "kw", "seed"};
+
+  this->add_port(gnode::Port("envelope",
+                             gnode::direction::in,
+                             dtype::dHeightMap,
+                             gnode::optional::yes));
 }
 
 void Noise::compute()
@@ -47,6 +52,19 @@ void Noise::compute()
                    nullptr,
                    bbox);
              });
+
+  if (this->get_p_data("envelope"))
+  {
+    float hmin = this->value_out.min();
+    LOG_DEBUG("hmin: %f", hmin);
+    hmap::transform(this->value_out,
+                    *(hmap::HeightMap *)this->get_p_data("envelope"),
+                    [&hmin](hmap::Array &a, hmap::Array &b)
+                    {
+                      a -= hmin;
+                      a *= b;
+                    });
+  }
 
   this->post_process_heightmap(this->value_out);
 }

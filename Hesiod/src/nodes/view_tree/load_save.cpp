@@ -3,16 +3,16 @@
  * this software. */
 #include <cstdint>
 #include <fstream>
-
-#include "gnode.hpp"
-#include "hesiod/control_node.hpp"
-#include "macrologger.h"
 #include <iterator>
 #include <vector>
 
-#include "hesiod/view_node.hpp"
-#include "hesiod/view_tree.hpp"
+#include "gnode.hpp"
+#include "macrologger.h"
 #include "nlohmann/json_fwd.hpp"
+
+#include "hesiod/control_node.hpp"
+#include "hesiod/serialization.hpp"
+#include "hesiod/view_tree.hpp"
 
 namespace hesiod::vnode
 {
@@ -59,7 +59,8 @@ void ViewTree::load_state(std::string fname)
   std::ifstream  input_file_stream = std::ifstream(fname);
   nlohmann::json input_serialized_data = nlohmann::json();
 
-  if (this->serialization_type == ViewTreesSerializationType::PLAIN)
+  if (this->serialization_type ==
+      hesiod::serialization::SerializationType::PLAIN)
   {
     input_file_stream >> input_serialized_data;
   }
@@ -71,19 +72,19 @@ void ViewTree::load_state(std::string fname)
 
     switch (this->serialization_type)
     {
-    case ViewTreesSerializationType::BJDATA:
+    case hesiod::serialization::SerializationType::BJDATA:
       input_serialized_data = nlohmann::json::from_bjdata(buffer);
       break;
-    case ViewTreesSerializationType::BSON:
+    case hesiod::serialization::SerializationType::BSON:
       input_serialized_data = nlohmann::json::from_bson(buffer);
       break;
-    case ViewTreesSerializationType::CBOR:
+    case hesiod::serialization::SerializationType::CBOR:
       input_serialized_data = nlohmann::json::from_cbor(buffer);
       break;
-    case ViewTreesSerializationType::MESSAGEPACK:
+    case hesiod::serialization::SerializationType::MESSAGEPACK:
       input_serialized_data = nlohmann::json::from_msgpack(buffer);
       break;
-    case ViewTreesSerializationType::UBJSON:
+    case hesiod::serialization::SerializationType::UBJSON:
       input_serialized_data = nlohmann::json::from_ubjson(buffer);
       break;
     default:
@@ -93,20 +94,22 @@ void ViewTree::load_state(std::string fname)
   }
 
   this->deserialize_json_v2("data", input_serialized_data);
-
   input_file_stream.close();
+
+  this->update();
 }
 
 void ViewTree::save_state(std::string fname)
 {
-  std::ofstream  outputFileStream = std::ofstream(fname, std::ios::trunc);
-  nlohmann::json outputSerializedData = nlohmann::json();
+  std::ofstream  output_file_stream = std::ofstream(fname, std::ios::trunc);
+  nlohmann::json output_serialized_data = nlohmann::json();
 
-  this->serialize_json_v2("data", outputSerializedData);
+  this->serialize_json_v2("data", output_serialized_data);
 
-  if (this->serialization_type == ViewTreesSerializationType::PLAIN)
+  if (this->serialization_type ==
+      hesiod::serialization::SerializationType::PLAIN)
   {
-    outputFileStream << outputSerializedData.dump(1) << std::endl;
+    output_file_stream << output_serialized_data.dump(1) << std::endl;
   }
   else
   {
@@ -114,32 +117,32 @@ void ViewTree::save_state(std::string fname)
 
     switch (this->serialization_type)
     {
-    case ViewTreesSerializationType::BJDATA:
-      bytes = nlohmann::json::to_bjdata(outputSerializedData);
+    case hesiod::serialization::SerializationType::BJDATA:
+      bytes = nlohmann::json::to_bjdata(output_serialized_data);
       break;
-    case ViewTreesSerializationType::BSON:
-      bytes = nlohmann::json::to_bson(outputSerializedData);
+    case hesiod::serialization::SerializationType::BSON:
+      bytes = nlohmann::json::to_bson(output_serialized_data);
       break;
-    case ViewTreesSerializationType::CBOR:
-      bytes = nlohmann::json::to_cbor(outputSerializedData);
+    case hesiod::serialization::SerializationType::CBOR:
+      bytes = nlohmann::json::to_cbor(output_serialized_data);
       break;
-    case ViewTreesSerializationType::MESSAGEPACK:
-      bytes = nlohmann::json::to_msgpack(outputSerializedData);
+    case hesiod::serialization::SerializationType::MESSAGEPACK:
+      bytes = nlohmann::json::to_msgpack(output_serialized_data);
       break;
-    case ViewTreesSerializationType::UBJSON:
-      bytes = nlohmann::json::to_ubjson(outputSerializedData);
+    case hesiod::serialization::SerializationType::UBJSON:
+      bytes = nlohmann::json::to_ubjson(output_serialized_data);
       break;
     default:
       LOG_ERROR("Unknown load type");
       break;
     }
 
-    outputFileStream.write(reinterpret_cast<char *>(bytes.data()),
-                           bytes.size());
-    outputFileStream.flush();
+    output_file_stream.write(reinterpret_cast<char *>(bytes.data()),
+                             bytes.size());
+    output_file_stream.flush();
   }
 
-  outputFileStream.close();
+  output_file_stream.close();
 }
 
 bool ViewTree::serialize_json_v2(std::string     field_name,
@@ -245,7 +248,8 @@ bool ViewTree::deserialize_json_v2(std::string     field_name,
     ax::NodeEditor::SetCurrentEditor(this->get_p_node_editor_context());
     for (size_t k = 0; k < node_ids.size(); k++)
     {
-      this->add_view_node(node_type_from_id(node_ids[k]), node_ids[k]);
+      this->add_view_node(hesiod::cnode::node_type_from_id(node_ids[k]),
+                          node_ids[k]);
       ax::NodeEditor::SetNodePosition(
           this->get_node_ref_by_id(node_ids[k])->hash_id,
           ImVec2(pos_x[k], pos_y[k]));
@@ -254,32 +258,30 @@ bool ViewTree::deserialize_json_v2(std::string     field_name,
   }
 
   // nodes parameters
-
-  for (nlohmann::json currentNodeSerializedData :
-       input_data[field_name]["nodes"])
+  for (nlohmann::json node_data : input_data[field_name]["nodes"])
   {
-    std::string id = currentNodeSerializedData["data"]["id"].get<std::string>();
+    std::string id = node_data["data"]["id"].get<std::string>();
 
     if (this->get_node_type(id) != "Clone")
     {
       this->get_node_ref_by_id<hesiod::cnode::ControlNode>(id)
-          ->deserialize_json_v2("data", currentNodeSerializedData);
+          ->deserialize_json_v2("data", node_data);
     }
     else
     {
       this->get_node_ref_by_id<hesiod::cnode::Clone>(id)->deserialize_json_v2(
           "data",
-          currentNodeSerializedData);
+          node_data);
     }
   }
 
   // links
-  for (nlohmann::json currentLinkObject : input_data[field_name]["links"])
+  for (nlohmann::json link_data : input_data[field_name]["links"])
   {
-    Link currentLink = Link();
-    int  id = currentLinkObject["key"].get<int>();
-    currentLink.deserialize_json_v2("value", currentLinkObject);
-    links.emplace(id, currentLink);
+    Link current_link = Link();
+    int  id = link_data["key"].get<int>();
+    current_link.deserialize_json_v2("value", link_data);
+    links.emplace(id, current_link);
   }
 
   // links from the ViewTree (GUI links) still needs to be replicated
@@ -289,8 +291,6 @@ bool ViewTree::deserialize_json_v2(std::string     field_name,
                link.port_id_from,
                link.node_id_to,
                link.port_id_to);
-
-  this->update();
 
   return true;
 }
