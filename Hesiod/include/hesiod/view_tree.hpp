@@ -3,6 +3,7 @@
  * this software. */
 #pragma once
 #include <GL/glut.h>
+#include <filesystem>
 #include <string>
 
 #include "highmap.hpp"
@@ -11,6 +12,7 @@
 #include "hesiod/control_node.hpp"
 #include "hesiod/serialization.hpp"
 #include "hesiod/view_node.hpp"
+#include "imgui.h"
 
 namespace hesiod::vnode
 {
@@ -162,7 +164,7 @@ private:
   std::map<int, Link> links = {};
   int                 id_counter = 0;
 
-  std::string json_filename = "";
+  std::filesystem::path json_filename = "";
 
   std::vector<ax::NodeEditor::NodeId> selected_node_hid = {};
 
@@ -200,6 +202,7 @@ private:
   hmap::Vec2<int>      shape_view3d = {512, 512};
   std::vector<GLfloat> vertices = {};
   std::vector<GLfloat> colors = {};
+  ImColor              view3d_clear_color;
 
   float scale = 0.7f;
   float h_scale = 0.4f;

@@ -5,6 +5,7 @@
 
 #include "ImGuiFileDialog.h"
 #include "gnode.hpp"
+#include "imgui.h"
 #include "macrologger.h"
 #include <imgui_node_editor.h>
 #include <vector>
@@ -18,7 +19,11 @@ namespace hesiod::vnode
 
 void ViewTree::render_node_editor()
 {
-  std::string title_bar = "Node editor " + this->id;
+  std::string title_bar = "Node editor ##" + this->id;
+
+  bool fit_to_content = false;
+  bool fit_to_selection = false;
+  bool automatic_layout = false;
 
   ImGui::Begin(title_bar.c_str(),
                nullptr,
@@ -30,20 +35,58 @@ void ViewTree::render_node_editor()
     ImGui::PushItemWidth(ImGui::GetFontSize() * -12);
     if (ImGui::BeginMenuBar())
     {
+      if(ImGui::BeginMenu("File"))
+      {
+        IGFD::FileDialogConfig config;
+        config.path = ".";
+        config.fileName = this->json_filename;
+
+        if (ImGui::MenuItem("Load"))
+          ImGuiFileDialog::Instance()->OpenDialog("LoadTreeStateDlg",
+                                                  "Load Tree",
+                                                  ".hsd",
+                                                  config);
+
+        bool save_button = ImGui::MenuItem("Save", nullptr, false, this->json_filename.empty() == false);
+        bool save_as_button = ImGui::MenuItem("Save as");
+        
+        if ((save_button && this->json_filename == "") || save_as_button)
+        {
+          config.flags = ImGuiFileDialogFlags_ConfirmOverwrite;
+          ImGuiFileDialog::Instance()->OpenDialog("SaveTreeStateDlg",
+                                                  "Save Tree",
+                                                  ".hsd",
+                                                  config);
+        }
+        else if (save_button)
+          this->save_state(this->json_filename);
+      
+        ImGui::EndMenu();
+      }
+      if(ImGui::BeginMenu("Actions"))
+      {
+        if (ImGui::MenuItem("Fit to content"))
+          fit_to_content = true;
+        if (ImGui::MenuItem("Fit to selection"))
+          fit_to_selection = true;
+        if (ImGui::MenuItem("Automatic layout"))
+          automatic_layout = true;
+        ImGui::EndMenu();
+      }
       if (ImGui::BeginMenu("View"))
       {
-        if (ImGui::MenuItem("Node list [N]",
-                            nullptr,
+        if (ImGui::MenuItem("Node list",
+                            "N",
                             this->open_node_list_window))
           this->open_node_list_window = !this->open_node_list_window;
 
-        if (ImGui::MenuItem("Settings [S]", nullptr, this->show_settings))
+        if (ImGui::MenuItem("Settings", "S", this->show_settings))
           this->show_settings = !this->show_settings;
 
-        if (ImGui::MenuItem("View 2D [2]", nullptr, this->open_view2d_window))
+        if (ImGui::MenuItem("View 2D", "2", this->open_view2d_window))
           this->open_view2d_window = !this->open_view2d_window;
 
-        if (ImGui::MenuItem("View 3D [3]", nullptr, this->open_view3d_window))
+        if (ImGui::MenuItem("View 3D", "3", this->open_view3d_window))
           this->open_view3d_window = !this->open_view3d_window;
 
         ImGui::EndMenu();
@@ -65,91 +108,6 @@ void ViewTree::render_node_editor()
         this->open_view3d_window = !this->open_view3d_window;
     }
   }
-
-  // --- settings
-  bool fit_to_content = false;
-  bool fit_to_selection = false;
-  bool automatic_layout = false;
-
-  if (ImGui::Button("Fit to content"))
-    fit_to_content = true;
-  ImGui::SameLine();
-
-  if (ImGui::Button("Fit to selection"))
-    fit_to_selection = true;
-  ImGui::SameLine();
-
-  if (ImGui::Button("Automatic layout"))
-    automatic_layout = true;
-  ImGui::SameLine();
-
-  // --- load / save / save as
-  {
-    IGFD::FileDialogConfig config;
-    config.path = ".";
-    config.fileName = this->json_filename;
-
-    if (ImGui::Button("Load"))
-      ImGuiFileDialog::Instance()->OpenDialog("LoadTreeStateDlg",
-                                              "Load Tree",
-                                              ".hsd",
-                                              config);
-
-    if (ImGuiFileDialog::Instance()->Display("LoadTreeStateDlg"))
-    {
-      if (ImGuiFileDialog::Instance()->IsOk())
-      {
-        std::string file_path_name =
-            ImGuiFileDialog::Instance()->GetFilePathName();
-        std::string file_path = ImGuiFileDialog::Instance()->GetCurrentPath();
-
-        this->load_state(file_path_name);
-        this->json_filename = file_path_name;
-      }
-
-      ImGuiFileDialog::Instance()->Close();
-    }
-
-    ImGui::SameLine();
-
-    bool save_button = ImGui::Button("Save");
-    ImGui::SameLine();
-    bool save_as_button = ImGui::Button("Save as");
-    ImGui::SameLine();
-
-    if ((save_button && this->json_filename == "") || save_as_button)
-    {
-      config.flags = ImGuiFileDialogFlags_ConfirmOverwrite;
-      ImGuiFileDialog::Instance()->OpenDialog("SaveTreeStateDlg",
-                                              "Save Tree",
-                                              ".hsd",
-                                              config);
-    }
-    else if (save_button)
-      this->save_state(this->json_filename);
-
-    if (ImGuiFileDialog::Instance()->Display("SaveTreeStateDlg"))
-    {
-      if (ImGuiFileDialog::Instance()->IsOk())
-      {
-        std::string file_path_name =
-            ImGuiFileDialog::Instance()->GetFilePathName();
-        std::string file_path = ImGuiFileDialog::Instance()->GetCurrentPath();
-
-        this->save_state(file_path_name);
-        this->json_filename = file_path_name;
-      }
-
-      ImGuiFileDialog::Instance()->Close();
-    }
-  }
-
-  if (ImGui::Button("2D viewer"))
-    this->open_view2d_window = !this->open_view2d_window;
-  ImGui::SameLine();
-
-  if (ImGui::Button("3D viewer"))
-    this->open_view3d_window = !this->open_view3d_window;
 
   if (this->show_settings)
   {
@@ -175,10 +133,6 @@ void ViewTree::render_node_editor()
     ImGui::EndChild();
     ImGui::SameLine();
   }
-
-  ImGui::Text("Size: {%d, %d}", this->shape.x, this->shape.y);
-  ImGui::SameLine();
-  ImGui::Text("File: %s", this->json_filename.c_str());
 
   // --- editor canvas
 
@@ -314,13 +268,15 @@ void ViewTree::render_node_editor()
   // --- 2D viewer
   if (this->open_view2d_window)
   {
-    ImGui::Begin(("View 2D / " + this->id).c_str(), &this->open_view2d_window);
-    if (this->selected_node_hid.size() > 0)
+    if(ImGui::Begin(("View 2D ##" + this->id).c_str(), &this->open_view2d_window, ImGuiWindowFlags_MenuBar))
     {
-      std::string node_id = this->get_node_id_by_hash_id(
-          this->selected_node_hid.back().Get());
-      this->set_viewer_node_id(node_id);
-      this->render_view2d();
+      if (this->selected_node_hid.size() > 0)
+      {
+        std::string node_id = this->get_node_id_by_hash_id(
+            this->selected_node_hid.back().Get());
+        this->set_viewer_node_id(node_id);
+        this->render_view2d();
+      }
     }
     ImGui::End();
   }
@@ -328,24 +284,61 @@ void ViewTree::render_node_editor()
   // --- 3D viewer
   if (this->open_view3d_window)
   {
-    ImGui::Begin(("View 3D / " + this->id).c_str(), &this->open_view3d_window);
-    if (this->selected_node_hid.size() > 0)
+    ImGui::PushStyleColor(ImGuiCol_WindowBg, view3d_clear_color.Value);
+    if(ImGui::Begin(("View 3D ##" + this->id).c_str(), &this->open_view3d_window, ImGuiWindowFlags_MenuBar))
     {
-      std::string node_id = this->get_node_id_by_hash_id(
-          this->selected_node_hid.back().Get());
-      this->set_viewer_node_id(node_id);
-      this->render_view3d();
+      if (this->selected_node_hid.size() > 0)
+      {
+        std::string node_id = this->get_node_id_by_hash_id(
+            this->selected_node_hid.back().Get());
+        this->set_viewer_node_id(node_id);
+        this->render_view3d();
+      }
     }
     ImGui::End();
+    ImGui::PopStyleColor();
   }
 
   // --- node list window
   if (this->open_node_list_window)
   {
-    ImGui::Begin(("Node list / " + this->id).c_str(),
-                 &this->open_node_list_window);
-    this->render_node_list();
+    if(ImGui::Begin(("Node list ##" + this->id).c_str(),
+                 &this->open_node_list_window))
+    {
+      this->render_node_list();
+    }
     ImGui::End();
+  }
+
+  // -- dialogs
+
+  if (ImGuiFileDialog::Instance()->Display("LoadTreeStateDlg"))
+  {
+    if (ImGuiFileDialog::Instance()->IsOk())
+    {
+      std::string file_path_name =
+          ImGuiFileDialog::Instance()->GetFilePathName();
+      std::string file_path = ImGuiFileDialog::Instance()->GetCurrentPath();
+
+      this->load_state(file_path_name);
+      this->json_filename = file_path_name;
+    }
+
+    ImGuiFileDialog::Instance()->Close();
+  }
+  if (ImGuiFileDialog::Instance()->Display("SaveTreeStateDlg"))
+  {
+    if (ImGuiFileDialog::Instance()->IsOk())
+    {
+      std::string file_path_name =
+          ImGuiFileDialog::Instance()->GetFilePathName();
+      std::string file_path = ImGuiFileDialog::Instance()->GetCurrentPath();
+
+      this->save_state(file_path_name);
+      this->json_filename = file_path_name;
+    }
+
+    ImGuiFileDialog::Instance()->Close();
   }
 }
 

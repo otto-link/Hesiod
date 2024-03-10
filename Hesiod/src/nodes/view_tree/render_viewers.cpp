@@ -4,6 +4,7 @@
 #include <functional>
 
 #include "gnode.hpp"
+#include "imgui.h"
 #include "imgui_internal.h"
 #include "macrologger.h"
 #include <imgui_node_editor.h>
@@ -25,36 +26,51 @@ void ViewTree::render_view2d()
 {
   ImGui::PushID((void *)this);
 
-  ImGui::Text("%s", this->viewer_node_id.c_str());
-
   hesiod::vnode::ViewNode *p_vnode = this->get_node_ref_by_id<ViewNode>(
       this->viewer_node_id);
+  bool is_node_selected = p_vnode->get_preview_port_id() != "";
 
-  if (p_vnode->get_preview_port_id() != "")
+  if(ImGui::BeginMenuBar())
   {
-    if (ImGui::Button("Reset view"))
+    if(ImGui::BeginMenu("Preview"))
     {
-      this->view2d_zoom = 100.f;
-      this->view2d_uv0 = {0.f, 0.f};
+      if (ImGui::MenuItem("Reset view", nullptr, false, is_node_selected))
+      {
+        this->view2d_zoom = 100.f;
+        this->view2d_uv0 = {0.f, 0.f};
+      }
+
+      if(ImGui::BeginMenu("Color Map"))
+      {
+        if (hesiod::gui::listbox_map_enum(this->cmap_map, this->cmap_view2d, 128.f))
+        {
+          this->update_image_texture_view2d();
+        }
+
+        ImGui::EndMenu();
+      }
+
+      if(ImGui::BeginMenu("Render Settings"))
+      {
+        if (ImGui::Checkbox("Hillshading", &this->hillshade_view2d))
+          this->update_image_texture_view2d();
+        
+        if (hesiod::gui::select_shape("Resolution", this->shape_view2d, this->shape))
+        {
+          this->update_view3d_basemesh();
+          this->update_image_texture_view2d();
+        }
+        ImGui::EndMenu();
+      }
+
+      ImGui::EndMenu();
     }
-    ImGui::SameLine();
+    ImGui::EndMenuBar();
+  }
 
-    if (hesiod::gui::listbox_map_enum(this->cmap_map, this->cmap_view2d, 128.f))
-      this->update_image_texture_view2d();
-
-    ImGui::SameLine();
-    if (ImGui::Checkbox("Hillshading", &this->hillshade_view2d))
-      this->update_image_texture_view2d();
-
-    if (hesiod::gui::select_shape("shape (render)",
-                                  this->shape_view2d,
-                                  this->shape))
-    {
-      this->update_view3d_basemesh();
-      this->update_image_texture_view2d();
-    }
-
-    float  window_width = ImGui::GetContentRegionAvail().x;
+  if (is_node_selected)
+  {
+    float  window_width = std::min(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y);
     ImVec2 pos = ImGui::GetCursorScreenPos();
 
     ImVec2 uv1 = {this->view2d_uv0[0] + 100.f / this->view2d_zoom,
@@ -73,7 +89,7 @@ void ViewTree::render_view2d()
                         uv1);
     draw_list->AddRect(p0, p1, IM_COL32(255, 255, 255, 255));
 
-    ImGui::InvisibleButton("##image2d", ImVec2(window_width, window_width));
+    ImGui::InvisibleButton("##image2d", ImVec2(-1, -1));
 
     // zooming and panning
     ImGuiIO &io = ImGui::GetIO();
@@ -109,15 +125,15 @@ void ViewTree::render_view3d()
 {
   ImGui::PushID((void *)this);
 
-  ImGui::Text("%s", this->viewer_node_id.c_str());
-
   hesiod::vnode::ViewNode *p_vnode = this->get_node_ref_by_id<ViewNode>(
       this->viewer_node_id);
+  bool is_node_selected = p_vnode->get_view3d_elevation_port_id() != "";
 
-  if (p_vnode->get_view3d_elevation_port_id() != "")
+  if(ImGui::BeginMenuBar())
   {
+    if(ImGui::BeginMenu("Preview"))
     {
-      if (ImGui::Button("Top"))
+      if(ImGui::MenuItem("Top", nullptr, false, is_node_selected))
       {
         alpha_x = 90.f;
         alpha_y = 0.f;
@@ -126,37 +142,48 @@ void ViewTree::render_view3d()
         scale = 1.f;
         this->update_image_texture_view3d(false);
       }
-      ImGui::SameLine();
-
-      if (ImGui::Checkbox("Wireframe", &this->wireframe))
-        this->update_image_texture_view3d(false);
-      ImGui::SameLine();
-
-      ImGui::Checkbox("Auto rotate", &this->auto_rotate);
-      if (this->auto_rotate)
-        this->update_image_texture_view3d(false);
-
-      ImGui::SameLine();
-      ImGui::Checkbox("Show on background", &this->show_view3d_on_background);
-
-      if (ImGui::SliderFloat("h_scale", &this->h_scale, 0.f, 2.f, "%.2f"))
-        this->update_image_texture_view3d(false);
-
-      if (hesiod::gui::select_shape("shape (render)",
-                                    this->shape_view3d,
-                                    this->shape))
+      if(ImGui::MenuItem("Wireframe", nullptr, &this->wireframe, is_node_selected))
       {
-        this->update_view3d_basemesh();
-        this->update_image_texture_view3d();
+        this->update_image_texture_view3d(false);
       }
+      ImGui::MenuItem("Auto rotate", nullptr, &this->auto_rotate, is_node_selected);
+      ImGui::MenuItem("Show on background", nullptr, &this->show_view3d_on_background, is_node_selected);
+      if(ImGui::BeginMenu("Render Settings"))
+      {
+        if (ImGui::SliderFloat("Scale", &this->h_scale, 0.f, 2.f, "%.2f"))
+          this->update_image_texture_view3d(false);
+        
+        if(hesiod::gui::select_shape("Resolution", this->shape_view3d, this->shape))
+        {
+          this->update_view3d_basemesh();
+          this->update_image_texture_view3d();
+        }
+
+        ImGui::EndMenu();
+      }
+      ImGui::EndMenu();
     }
 
+    ImGui::EndMenuBar();
+  }
+
+  if (is_node_selected)
+  {
+    if (this->auto_rotate)
+    {
+      this->update_image_texture_view3d(false);
+    }
     // --- 3D rendering viewport
     ImGuiIO &io = ImGui::GetIO();
 
-    float window_width = ImGui::GetContentRegionAvail().x;
+    float window_width = std::min(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y);
     {
-      ImVec2 pos = ImGui::GetCursorScreenPos();
+      ImVec2 windowSize = ImGui::GetWindowSize();
+      ImVec2 windowPos = ImGui::GetWindowPos();
+      ImVec2 pos = ImVec2(
+        windowPos.x + (windowSize.x / 2) - (window_width / 2),
+        windowPos.y + (windowSize.y / 2) - (window_width / 2)
+      );
 
       ImVec2 p0 = ImVec2(pos.x, pos.y);
       ImVec2 p1 = ImVec2(pos.x + window_width, pos.y + window_width);
@@ -168,8 +195,8 @@ void ViewTree::render_view3d()
                           p1,
                           ImVec2(0, 1),
                           ImVec2(1, 0));
-      draw_list->AddRect(p0, p1, IM_COL32(255, 255, 255, 255));
-      ImGui::InvisibleButton("##image3d", ImVec2(window_width, window_width));
+//    draw_list->AddRect(p0, p1, IM_COL32(255, 255, 255, 255));
+      ImGui::InvisibleButton("##image3d", ImVec2(-1, -1));
 
       if (this->show_view3d_on_background)
       {
@@ -388,7 +415,7 @@ void ViewTree::update_image_texture_view3d(bool vertex_array_update)
         hesiod::viewer::bind_framebuffer(this->FBO);
 
         glUseProgram(this->shader_id);
-        glClearColor(0.1f, 0.1f, 0.1f, 0);
+        glClearColor(view3d_clear_color.Value.x, view3d_clear_color.Value.y, view3d_clear_color.Value.z, 0.f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glEnable(GL_DEPTH_TEST);
         glDisable(GL_CULL_FACE);

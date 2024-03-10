@@ -39,6 +39,7 @@ ViewTree::ViewTree(std::string     id,
                    hmap::Vec2<int> tiling,
                    float           overlap)
     : gnode::Tree(id), shape(shape), tiling(tiling), overlap(overlap),
+      view3d_clear_color(25, 25, 25, 255),
       serialization_type(ViewTreesSerializationType::MESSAGEPACK)
 {
   // initialize node editor
