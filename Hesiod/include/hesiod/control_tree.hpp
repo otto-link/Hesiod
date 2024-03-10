@@ -74,7 +74,7 @@ protected:
 
   int id_counter = 0;
 
-  std::string                              json_filename = "";
+  std::filesystem::path                    json_filename = "";
   hesiod::serialization::SerializationType serialization_type;
 };
 

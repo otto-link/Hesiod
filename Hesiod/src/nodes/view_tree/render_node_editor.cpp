@@ -41,14 +41,14 @@ void ViewTree::render_node_editor()
         config.path = ".";
         config.fileName = this->json_filename;
 
-        if (ImGui::MenuItem("Load"))
+        if (ImGui::MenuItem("Load", "STRG O"))
           ImGuiFileDialog::Instance()->OpenDialog("LoadTreeStateDlg",
                                                   "Load Tree",
                                                   ".hsd",
                                                   config);
 
-        bool save_button = ImGui::MenuItem("Save", nullptr, false, this->json_filename.empty() == false);
-        bool save_as_button = ImGui::MenuItem("Save as");
+        bool save_button = ImGui::MenuItem("Save", "", false, this->json_filename.empty() == false);
+        bool save_as_button = ImGui::MenuItem("Save as", "");
         
         if ((save_button && this->json_filename == "") || save_as_button)
         {
@@ -268,6 +268,8 @@ void ViewTree::render_node_editor()
   // --- 2D viewer
   if (this->open_view2d_window)
   {
+    ImGui::PushStyleColor(ImGuiCol_WindowBg, view3d_clear_color.Value);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.f, 0.f));
     if(ImGui::Begin(("View 2D ##" + this->id).c_str(), &this->open_view2d_window, ImGuiWindowFlags_MenuBar))
     {
       if (this->selected_node_hid.size() > 0)
@@ -279,12 +281,15 @@ void ViewTree::render_node_editor()
       }
     }
     ImGui::End();
+    ImGui::PopStyleVar();
+    ImGui::PopStyleColor();
   }
 
   // --- 3D viewer
   if (this->open_view3d_window)
   {
     ImGui::PushStyleColor(ImGuiCol_WindowBg, view3d_clear_color.Value);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.f, 0.f));
     if(ImGui::Begin(("View 3D ##" + this->id).c_str(), &this->open_view3d_window, ImGuiWindowFlags_MenuBar))
     {
       if (this->selected_node_hid.size() > 0)
@@ -296,6 +301,7 @@ void ViewTree::render_node_editor()
       }
     }
     ImGui::End();
+    ImGui::PopStyleVar();
     ImGui::PopStyleColor();
   }
 

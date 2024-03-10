@@ -70,24 +70,29 @@ void ViewTree::render_view2d()
 
   if (is_node_selected)
   {
-    float  window_width = std::min(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y);
-    ImVec2 pos = ImGui::GetCursorScreenPos();
-
-    ImVec2 uv1 = {this->view2d_uv0[0] + 100.f / this->view2d_zoom,
-                  this->view2d_uv0[1] + 100.f / this->view2d_zoom};
+    float window_width = std::min(ImGui::GetWindowSize().x, ImGui::GetWindowSize().y);
+    ImVec2 windowSize = ImGui::GetWindowSize();
+    ImVec2 windowPos = ImGui::GetWindowPos();
+    ImVec2 pos = ImVec2(
+      windowPos.x + (windowSize.x / 2) - (window_width / 2),
+      windowPos.y + (windowSize.y / 2) - (window_width / 2)
+    );
 
     ImVec2 p0 = ImVec2(pos.x, pos.y);
     ImVec2 p1 = ImVec2(pos.x + window_width, pos.y + window_width);
 
+
+    ImVec2 uv1 = {this->view2d_uv0[0] + 100.f / this->view2d_zoom,
+                  this->view2d_uv0[1] + 100.f / this->view2d_zoom};
+
     ImDrawList *draw_list = ImGui::GetWindowDrawList();
 
-    draw_list->AddRectFilled(p0, p1, IM_COL32(50, 50, 50, 255));
+    //draw_list->AddRectFilled(p0, p1, IM_COL32(50, 50, 50, 255));
     draw_list->AddImage((void *)(intptr_t)this->image_texture_view2d,
                         p0,
                         p1,
                         this->view2d_uv0,
                         uv1);
-    draw_list->AddRect(p0, p1, IM_COL32(255, 255, 255, 255));
 
     ImGui::InvisibleButton("##image2d", ImVec2(-1, -1));
 
@@ -176,7 +181,7 @@ void ViewTree::render_view3d()
     // --- 3D rendering viewport
     ImGuiIO &io = ImGui::GetIO();
 
-    float window_width = std::min(ImGui::GetContentRegionAvail().x, ImGui::GetContentRegionAvail().y);
+    float window_width = std::min(ImGui::GetWindowSize().x, ImGui::GetWindowSize().y);
     {
       ImVec2 windowSize = ImGui::GetWindowSize();
       ImVec2 windowPos = ImGui::GetWindowPos();
@@ -195,7 +200,6 @@ void ViewTree::render_view3d()
                           p1,
                           ImVec2(0, 1),
                           ImVec2(1, 0));
-//    draw_list->AddRect(p0, p1, IM_COL32(255, 255, 255, 255));
       ImGui::InvisibleButton("##image3d", ImVec2(-1, -1));
 
       if (this->show_view3d_on_background)
