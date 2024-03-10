@@ -94,8 +94,9 @@ void ViewTree::load_state(std::string fname)
   }
 
   this->deserialize_json_v2("data", input_serialized_data);
-
   input_file_stream.close();
+
+  this->update();
 }
 
 void ViewTree::save_state(std::string fname)
@@ -290,8 +291,6 @@ bool ViewTree::deserialize_json_v2(std::string     field_name,
                link.port_id_from,
                link.node_id_to,
                link.port_id_to);
-
-  this->update();
 
   return true;
 }

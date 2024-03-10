@@ -48,10 +48,6 @@ public:
     this->serialization_type = new_serialization_type;
   }
 
-  virtual void set_sto(hmap::Vec2<int> new_shape,
-                       hmap::Vec2<int> new_tiling,
-                       float           new_overlap);
-
   std::string add_control_node(std::string control_node_type,
                                std::string node_id);
 
@@ -59,9 +55,17 @@ public:
 
   // serialization (only "load" for this object, used for the batch mode)
 
-  virtual void load_state(std::string fname);
+  void load_state(std::string     fname,
+                  hmap::Vec2<int> new_shape,
+                  hmap::Vec2<int> new_tiling,
+                  float           new_overlap);
 
-  bool deserialize_json_v2(std::string field_name, nlohmann::json &input_data);
+  // specific version with shape, tiling, overlap as inputs
+  bool deserialize_json_v2_sto(std::string     field_name,
+                               nlohmann::json &input_data,
+                               hmap::Vec2<int> new_shape,
+                               hmap::Vec2<int> new_tiling,
+                               float           new_overlap);
 
 protected:
   hmap::Vec2<int> shape;

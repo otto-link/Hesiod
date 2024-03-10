@@ -7,6 +7,7 @@
 #include <vector>
 
 #include "gnode.hpp"
+#include "highmap.hpp"
 #include "macrologger.h"
 #include "nlohmann/json_fwd.hpp"
 
@@ -20,7 +21,10 @@ namespace hesiod::cnode
 
 // ControlTree
 
-void ControlTree::load_state(std::string fname)
+void ControlTree::load_state(std::string     fname,
+                             hmap::Vec2<int> new_shape,
+                             hmap::Vec2<int> new_tiling,
+                             float           new_overlap)
 {
   this->remove_all_nodes();
 
@@ -61,13 +65,21 @@ void ControlTree::load_state(std::string fname)
     }
   }
 
-  this->deserialize_json_v2("data", input_serialized_data);
-
+  this->deserialize_json_v2_sto("data",
+                                input_serialized_data,
+                                new_shape,
+                                new_tiling,
+                                new_overlap);
   input_file_stream.close();
+
+  this->update();
 }
 
-bool ControlTree::deserialize_json_v2(std::string     field_name,
-                                      nlohmann::json &input_data)
+bool ControlTree::deserialize_json_v2_sto(std::string     field_name,
+                                          nlohmann::json &input_data,
+                                          hmap::Vec2<int> new_shape,
+                                          hmap::Vec2<int> new_tiling,
+                                          float           new_overlap)
 {
   if (input_data[field_name].is_object() == false)
   {
@@ -82,6 +94,32 @@ bool ControlTree::deserialize_json_v2(std::string     field_name,
   tiling.x = input_data[field_name]["tiling.x"].get<int>();
   tiling.y = input_data[field_name]["tiling.y"].get<int>();
   id_counter = input_data[field_name]["id_counter"].get<int>();
+
+  // override some parameters if requested (much simpler to do it
+  // before instanciating the nodes than afterwards)
+  if (new_shape.x > 0)
+  {
+    LOG_INFO("shape modified: {%d, %d} -> {%d, %d}",
+             shape.x,
+             shape.y,
+             new_shape.x,
+             new_shape.y);
+    shape = new_shape;
+  }
+  if (new_tiling.x > 0)
+  {
+    LOG_INFO("tiling modified: {%d, %d} -> {%d, %d}",
+             tiling.x,
+             tiling.y,
+             new_tiling.x,
+             new_tiling.y);
+    tiling = new_tiling;
+  }
+  if (new_overlap > 0)
+  {
+    LOG_INFO("overlap modified: %f -> %f", overlap, new_overlap);
+    overlap = new_overlap;
+  }
 
   // create node
   std::vector<std::string> node_ids =
@@ -122,8 +160,6 @@ bool ControlTree::deserialize_json_v2(std::string     field_name,
                current_link.node_id_to,
                current_link.port_id_to);
   }
-
-  this->update();
 
   return true;
 }

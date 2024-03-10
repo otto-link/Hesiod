@@ -53,9 +53,9 @@ public:
 
   ax::NodeEditor::EditorContext *get_p_node_editor_context() const;
 
-  virtual void set_sto(hmap::Vec2<int> new_shape,
-                       hmap::Vec2<int> new_tiling,
-                       float           new_overlap) override;
+  void set_sto(hmap::Vec2<int> new_shape,
+               hmap::Vec2<int> new_tiling,
+               float           new_overlap);
 
   void set_viewer_node_id(std::string node_id);
 
@@ -111,7 +111,7 @@ public:
 
   // serialization
 
-  virtual void load_state(std::string fname) override;
+  void load_state(std::string fname);
 
   void save_state(std::string fname);
 

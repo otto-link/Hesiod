@@ -35,15 +35,6 @@ std::string ControlTree::get_node_type(std::string node_id) const
   return this->get_node_ref_by_id(node_id)->get_node_type();
 }
 
-void ControlTree::set_sto(hmap::Vec2<int> new_shape,
-                          hmap::Vec2<int> new_tiling,
-                          float           new_overlap)
-{
-  this->shape = new_shape;
-  this->tiling = new_tiling;
-  this->overlap = new_overlap;
-}
-
 std::string ControlTree::add_control_node(std::string control_node_type,
                                           std::string node_id)
 {
