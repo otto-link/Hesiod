@@ -44,7 +44,12 @@ void MixRGB::compute()
     if (this->get_p_data("t"))
     {
       hmap::HeightMap *p_t = CAST_PORT_REF(hmap::HeightMap, "t");
-      this->value_out = mix_heightmap_rgb_sqrt(*p_rgb1, *p_rgb2, *p_t);
+
+      // clamp the mixing parameter to avoid artifacts
+      hmap::HeightMap tc = *p_t;
+      hmap::transform(tc, [](hmap::Array &x) { hmap::clamp(x, 0.f, 1.f); });
+
+      this->value_out = mix_heightmap_rgb_sqrt(*p_rgb1, *p_rgb2, tc);
     }
     else
       this->value_out = mix_heightmap_rgb_sqrt(*p_rgb1,
@@ -57,7 +62,11 @@ void MixRGB::compute()
     if (this->get_p_data("t"))
     {
       hmap::HeightMap *p_t = CAST_PORT_REF(hmap::HeightMap, "t");
-      this->value_out = mix_heightmap_rgb(*p_rgb1, *p_rgb2, *p_t);
+
+      hmap::HeightMap tc = *p_t;
+      hmap::transform(tc, [](hmap::Array &x) { hmap::clamp(x, 0.f, 1.f); });
+
+      this->value_out = mix_heightmap_rgb(*p_rgb1, *p_rgb2, tc);
     }
     else
       this->value_out = mix_heightmap_rgb(*p_rgb1,
