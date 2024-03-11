@@ -20,10 +20,10 @@ SteepenConvective::SteepenConvective(std::string id)
 
   this->attr["angle"] = NEW_ATTR_FLOAT(0.f, -180.f, 180.f);
   this->attr["iterations"] = NEW_ATTR_INT(1, 1, 100);
-  this->attr["ir"] = NEW_ATTR_INT(0, 0, 128);
+  this->attr["radius"] = NEW_ATTR_FLOAT(0.f, 0.f, 0.5f);
   this->attr["dt"] = NEW_ATTR_FLOAT(0.1f, 0.01f, 2.f);
 
-  this->attr_ordered_key = {"angle", "iterations", "ir", "dt"};
+  this->attr_ordered_key = {"angle", "iterations", "radius", "dt"};
 }
 
 void SteepenConvective::compute_filter(hmap::HeightMap &h,
@@ -31,18 +31,20 @@ void SteepenConvective::compute_filter(hmap::HeightMap &h,
 {
   LOG_DEBUG("computing filter node [%s]", this->id.c_str());
 
+  int ir = std::max(1, (int)(GET_ATTR_FLOAT("radius") * h.shape.x));
+
   float hmin = h.min();
   float hmax = h.max();
   h.remap(0.f, 1.f, hmin, hmax);
   hmap::transform(h,
                   p_mask,
-                  [this](hmap::Array &x, hmap::Array *p_mask)
+                  [this, &ir](hmap::Array &x, hmap::Array *p_mask)
                   {
                     hmap::steepen_convective(x,
                                              GET_ATTR_FLOAT("angle"),
                                              p_mask,
                                              GET_ATTR_INT("iterations"),
-                                             GET_ATTR_INT("ir"),
+                                             ir,
                                              GET_ATTR_FLOAT("dt"));
                   });
   h.smooth_overlap_buffers();

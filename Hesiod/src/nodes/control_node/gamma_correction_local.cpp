@@ -15,7 +15,7 @@ GammaCorrectionLocal::GammaCorrectionLocal(std::string id)
   this->node_type = "GammaCorrectionLocal";
   this->category = category_mapping.at(this->node_type);
 
-  this->attr["ir"] = NEW_ATTR_INT(8, 1, 128);
+  this->attr["radius"] = NEW_ATTR_FLOAT(0.05f, 0.01f, 1.f);
   this->attr["gamma"] = NEW_ATTR_FLOAT(1.f, 0.01f, 10.f);
   this->attr["k"] = NEW_ATTR_FLOAT(0.1f, 0.f, 1.f);
 }
@@ -25,16 +25,18 @@ void GammaCorrectionLocal::compute_filter(hmap::HeightMap &h,
 {
   LOG_DEBUG("computing filter node [%s]", this->id.c_str());
 
+  int ir = std::max(1, (int)(GET_ATTR_FLOAT("radius") * h.shape.x));
+
   float hmin = h.min();
   float hmax = h.max();
   h.remap(0.f, 1.f, hmin, hmax);
   hmap::transform(h,
                   p_mask,
-                  [this](hmap::Array &x, hmap::Array *p_mask)
+                  [this, &ir](hmap::Array &x, hmap::Array *p_mask)
                   {
                     hmap::gamma_correction_local(x,
                                                  GET_ATTR_FLOAT("gamma"),
-                                                 GET_ATTR_INT("ir"),
+                                                 ir,
                                                  p_mask,
                                                  GET_ATTR_FLOAT("k"));
                   });

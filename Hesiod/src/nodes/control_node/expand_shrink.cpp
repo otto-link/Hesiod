@@ -15,20 +15,21 @@ ExpandShrink::ExpandShrink(std::string id) : ControlNode(id), Filter(id)
   this->category = category_mapping.at(this->node_type);
 
   this->attr["kernel"] = NEW_ATTR_MAPENUM(this->kernel_map);
-  this->attr["ir"] = NEW_ATTR_INT(4, 1, 128);
+  this->attr["radius"] = NEW_ATTR_FLOAT(0.05f, 0.01f, 0.2f);
   this->attr["shrink"] = NEW_ATTR_BOOL(false);
 
-  this->attr_ordered_key = {"kernel", "ir", "shrink"};
+  this->attr_ordered_key = {"kernel", "radius", "shrink"};
 }
 
 void ExpandShrink::compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask)
 {
   LOG_DEBUG("computing filter node [%s]", this->id.c_str());
 
+  int ir = std::max(1, (int)(GET_ATTR_FLOAT("radius") * h.shape.x));
+
   // kernel definition
   hmap::Array     kernel_array;
-  hmap::Vec2<int> kernel_shape = {2 * GET_ATTR_INT("ir") + 1,
-                                  2 * GET_ATTR_INT("ir") + 1};
+  hmap::Vec2<int> kernel_shape = {2 * ir + 1, 2 * ir + 1};
 
   switch (GET_ATTR_MAPENUM("kernel"))
   {

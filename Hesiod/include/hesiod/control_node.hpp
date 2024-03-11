@@ -88,8 +88,8 @@ enum export_type : int
 
 enum kernel : int
 {
-  cone,
   cubic_pulse,
+  cone,
   lorentzian,
   smooth_cosine
 };

@@ -13,8 +13,8 @@ SmoothFill::SmoothFill(std::string id) : ControlNode(id)
   this->node_type = "SmoothFill";
   this->category = category_mapping.at(this->node_type);
 
-  this->attr["ir"] = NEW_ATTR_INT(8, 1, 128);
-  this->attr["k"] = NEW_ATTR_FLOAT(0.01f, 0.f, 1.f);
+  this->attr["radius"] = NEW_ATTR_FLOAT(0.05f, 0.01f, 1.f);
+  this->attr["k"] = NEW_ATTR_FLOAT(0.01f, 0.01f, 1.f);
 
   this->add_port(gnode::Port("input", gnode::direction::in, dtype::dHeightMap));
   this->add_port(gnode::Port("mask",
@@ -52,18 +52,16 @@ void SmoothFill::compute()
                                  p_hmap->tiling,
                                  p_hmap->overlap);
 
+  int ir = std::max(1,
+                    (int)(GET_ATTR_FLOAT("radius") * this->value_out.shape.x));
+
   hmap::transform(
       this->value_out,
       p_mask,
       p_deposition_map,
-      [this](hmap::Array &x, hmap::Array *p_mask, hmap::Array *p_deposition)
-      {
-        hmap::smooth_fill(x,
-                          GET_ATTR_INT("ir"),
-                          p_mask,
-                          GET_ATTR_FLOAT("k"),
-                          p_deposition);
-      });
+      [this,
+       &ir](hmap::Array &x, hmap::Array *p_mask, hmap::Array *p_deposition)
+      { hmap::smooth_fill(x, ir, p_mask, GET_ATTR_FLOAT("k"), p_deposition); });
 
   this->value_out.smooth_overlap_buffers();
 

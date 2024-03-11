@@ -12,16 +12,19 @@ SmoothCpulse::SmoothCpulse(std::string id) : ControlNode(id), Filter(id)
 {
   this->node_type = "SmoothCpulse";
   this->category = category_mapping.at(this->node_type);
-  this->attr["ir"] = NEW_ATTR_INT(8, 1, 128);
+  this->attr["radius"] = NEW_ATTR_FLOAT(0.1f, 0.f, 0.5f);
 }
 
 void SmoothCpulse::compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask)
 {
   LOG_DEBUG("computing filter node [%s]", this->id.c_str());
+
+  int ir = std::max(1, (int)(GET_ATTR_FLOAT("radius") * h.shape.x));
+
   hmap::transform(h,
                   p_mask,
-                  [this](hmap::Array &x, hmap::Array *p_mask)
-                  { hmap::smooth_cpulse(x, GET_ATTR_INT("ir"), p_mask); });
+                  [&ir](hmap::Array &x, hmap::Array *p_mask)
+                  { hmap::smooth_cpulse(x, ir, p_mask); });
   h.smooth_overlap_buffers();
 }
 

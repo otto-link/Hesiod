@@ -13,21 +13,22 @@ Plateau::Plateau(std::string id) : ControlNode(id), Filter(id)
   this->node_type = "Plateau";
   this->category = category_mapping.at(this->node_type);
 
-  this->attr["ir"] = NEW_ATTR_INT(32, 1, 256);
+  this->attr["radius"] = NEW_ATTR_FLOAT(0.05f, 0.01f, 0.2f);
   this->attr["factor"] = NEW_ATTR_FLOAT(4.f, 0.01f, 10.f);
 
-  this->attr_ordered_key = {"ir", "factor"};
+  this->attr_ordered_key = {"radius", "factor"};
 }
 
 void Plateau::compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask)
 {
   LOG_DEBUG("computing filter node [%s]", this->id.c_str());
-  hmap::transform(
-      h,
-      p_mask,
-      [this](hmap::Array &x, hmap::Array *p_mask) {
-        hmap::plateau(x, p_mask, GET_ATTR_INT("ir"), GET_ATTR_FLOAT("factor"));
-      });
+
+  int ir = std::max(1, (int)(GET_ATTR_FLOAT("radius") * h.shape.x));
+
+  hmap::transform(h,
+                  p_mask,
+                  [this, &ir](hmap::Array &x, hmap::Array *p_mask)
+                  { hmap::plateau(x, p_mask, ir, GET_ATTR_FLOAT("factor")); });
   h.smooth_overlap_buffers();
 }
 

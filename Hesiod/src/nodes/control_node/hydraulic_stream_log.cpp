@@ -16,10 +16,10 @@ HydraulicStreamLog::HydraulicStreamLog(std::string id)
 
   this->attr["c_erosion"] = NEW_ATTR_FLOAT(0.05f, 0.01f, 0.1f);
   this->attr["talus_ref"] = NEW_ATTR_FLOAT(0.1f, 0.01f, 10.f);
-  this->attr["ir"] = NEW_ATTR_INT(0, 1, 16);
+  this->attr["radius"] = NEW_ATTR_FLOAT(0.f, 0.f, 0.1f);
   this->attr["gamma"] = NEW_ATTR_FLOAT(1.f, 0.01f, 4.f);
 
-  this->attr_ordered_key = {"c_erosion", "talus_ref", "ir", "gamma"};
+  this->attr_ordered_key = {"c_erosion", "talus_ref", "radius", "gamma"};
 }
 
 void HydraulicStreamLog::compute_erosion(hmap::HeightMap &h,
@@ -31,18 +31,20 @@ void HydraulicStreamLog::compute_erosion(hmap::HeightMap &h,
 {
   LOG_DEBUG("computing erosion node [%s]", this->id.c_str());
 
+  int ir = (int)(GET_ATTR_FLOAT("radius") * h.shape.x);
+
   hmap::transform(h,
                   p_bedrock,
                   p_moisture_map,
                   p_mask,
                   p_erosion_map,
                   p_deposition_map,
-                  [this](hmap::Array &h_out,
-                         hmap::Array *p_bedrock_array,
-                         hmap::Array *p_moisture_map_array,
-                         hmap::Array *p_mask_array,
-                         hmap::Array *p_erosion_map_array,
-                         hmap::Array *p_deposition_map_array)
+                  [this, &ir](hmap::Array &h_out,
+                              hmap::Array *p_bedrock_array,
+                              hmap::Array *p_moisture_map_array,
+                              hmap::Array *p_mask_array,
+                              hmap::Array *p_erosion_map_array,
+                              hmap::Array *p_deposition_map_array)
                   {
                     hmap::hydraulic_stream_log(h_out,
                                                p_mask_array,
@@ -52,7 +54,7 @@ void HydraulicStreamLog::compute_erosion(hmap::HeightMap &h,
                                                p_bedrock_array,
                                                p_moisture_map_array,
                                                p_erosion_map_array,
-                                               GET_ATTR_INT("ir"));
+                                               ir);
                   });
 
   h.smooth_overlap_buffers();

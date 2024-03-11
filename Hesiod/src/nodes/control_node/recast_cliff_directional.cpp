@@ -15,12 +15,16 @@ RecastCliffDirectional::RecastCliffDirectional(std::string id) : ControlNode(id)
   this->category = category_mapping.at(this->node_type);
 
   this->attr["talus_global"] = NEW_ATTR_FLOAT(1.f, 0.f, 10.f);
-  this->attr["ir"] = NEW_ATTR_INT(64, 1, 128);
+  this->attr["radius"] = NEW_ATTR_FLOAT(0.1f, 0.f, 0.5f);
   this->attr["amplitude"] = NEW_ATTR_FLOAT(0.1f, 0.f, 1.f);
   this->attr["angle"] = NEW_ATTR_FLOAT(0.f, -180.f, 180.f);
   this->attr["gain"] = NEW_ATTR_FLOAT(2.f, 0.01f, 10.f);
 
-  this->attr_ordered_key = {"talus_global", "ir", "amplitude", "angle", "gain"};
+  this->attr_ordered_key = {"talus_global",
+                            "radius",
+                            "amplitude",
+                            "angle",
+                            "gain"};
 
   this->add_port(gnode::Port("input", gnode::direction::in, dtype::dHeightMap));
   this->add_port(gnode::Port("mask",
@@ -48,13 +52,16 @@ void RecastCliffDirectional::compute()
 
   float talus = GET_ATTR_FLOAT("talus_global") / (float)this->value_out.shape.x;
 
+  int ir = std::max(1,
+                    (int)(GET_ATTR_FLOAT("radius") * this->value_out.shape.x));
+
   hmap::transform(this->value_out,
                   p_mask,
-                  [this, &talus](hmap::Array &z, hmap::Array *p_mask)
+                  [this, &talus, &ir](hmap::Array &z, hmap::Array *p_mask)
                   {
                     hmap::recast_cliff_directional(z,
                                                    talus,
-                                                   GET_ATTR_INT("ir"),
+                                                   ir,
                                                    GET_ATTR_FLOAT("amplitude"),
                                                    GET_ATTR_FLOAT("angle"),
                                                    p_mask,
