@@ -54,6 +54,7 @@ bool SerializationBatchHelper::serialize_json_v2(std::string     field_name,
                                                    unsigned long long);
       SERIALIZATION_BATCH_IMPLEMENT_SERIALIZE_CASE(FLOAT, float);
       SERIALIZATION_BATCH_IMPLEMENT_SERIALIZE_CASE(DOUBLE, double);
+      SERIALIZATION_BATCH_IMPLEMENT_SERIALIZE_CASE(BOOL, bool);
     case SerializationBatchHelperElementType::STL_STRING:
     {
       batch_data[e->name] = reinterpret_cast<std::string *>(e->data)->data();
@@ -129,6 +130,7 @@ bool SerializationBatchHelper::deserialize_json_v2(std::string     field_name,
                                                      unsigned long long);
       SERIALIZATION_BATCH_IMPLEMENT_DESERIALIZE_CASE(FLOAT, float);
       SERIALIZATION_BATCH_IMPLEMENT_DESERIALIZE_CASE(DOUBLE, double);
+      SERIALIZATION_BATCH_IMPLEMENT_DESERIALIZE_CASE(BOOL, bool);
     case SerializationBatchHelperElementType::STL_STRING:
     {
       std::string deserializedString = batch_data[e->name].get<std::string>();

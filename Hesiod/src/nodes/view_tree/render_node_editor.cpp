@@ -269,9 +269,11 @@ void ViewTree::render_node_editor()
   if (this->open_view2d_window)
   {
     ImGui::PushStyleColor(ImGuiCol_WindowBg, view3d_clear_color.Value);
+    ImVec2 originalWindowPadding = ImGui::GetStyle().WindowPadding;
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.f, 0.f));
     if(ImGui::Begin(("View 2D ##" + this->id).c_str(), &this->open_view2d_window, ImGuiWindowFlags_MenuBar))
     {
+      ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, originalWindowPadding);
       if (this->selected_node_hid.size() > 0)
       {
         std::string node_id = this->get_node_id_by_hash_id(
@@ -279,6 +281,7 @@ void ViewTree::render_node_editor()
         this->set_viewer_node_id(node_id);
         this->render_view2d();
       }
+      ImGui::PopStyleVar();
     }
     ImGui::End();
     ImGui::PopStyleVar();
@@ -289,9 +292,11 @@ void ViewTree::render_node_editor()
   if (this->open_view3d_window)
   {
     ImGui::PushStyleColor(ImGuiCol_WindowBg, view3d_clear_color.Value);
+    ImVec2 originalWindowPadding = ImGui::GetStyle().WindowPadding;
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.f, 0.f));
     if(ImGui::Begin(("View 3D ##" + this->id).c_str(), &this->open_view3d_window, ImGuiWindowFlags_MenuBar))
     {
+      ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, originalWindowPadding);
       if (this->selected_node_hid.size() > 0)
       {
         std::string node_id = this->get_node_id_by_hash_id(
@@ -299,6 +304,7 @@ void ViewTree::render_node_editor()
         this->set_viewer_node_id(node_id);
         this->render_view3d();
       }
+      ImGui::PopStyleVar();
     }
     ImGui::End();
     ImGui::PopStyleVar();

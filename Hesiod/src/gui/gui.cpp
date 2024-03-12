@@ -5,9 +5,11 @@
 
 #include <GL/glew.h>
 #include <GL/glut.h>
+#include <GLFW/glfw3.h>
 
 #include "hesiod/gui.hpp"
 #include "hesiod/view_tree.hpp"
+#include "macrologger.h"
 
 namespace hesiod::gui
 {
@@ -69,6 +71,10 @@ GLFWwindow *init_gui(int width, int height, std::string window_title)
   io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
   ImGui::StyleColorsDark();
+  
+  glfwSetKeyCallback(window, [] (GLFWwindow* window, int key, int scancode, int action, int mods) {
+      // LOG_INFO("glfw clalbakc triggered");
+  });
 
   // Setup Platform/Renderer backends
   ImGui_ImplGlfw_InitForOpenGL(window, true);

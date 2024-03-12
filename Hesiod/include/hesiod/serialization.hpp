@@ -12,7 +12,7 @@
   bool deserialize_json_v2(std::string field_name, nlohmann::json &input_data);
 
 #define SERIALIZATION_V2_IMPLEMENT_BATCH_BASE()                                \
-  SerializationBatchHelper BuildBatchHelperData();
+  hesiod::serialization::SerializationBatchHelper BuildBatchHelperData();
 
 namespace hesiod::serialization
 {
@@ -41,6 +41,7 @@ enum class SerializationBatchHelperElementType : char
   STL_STRING = 10,
   OBJECT = 11,
   OBJECT_PTR = 12,
+  BOOL = 13,
   INVALID = 13
 };
 
@@ -244,7 +245,17 @@ public:
 
     return *this;
   }
+  
+  SerializationBatchHelper &AddBool(std::string key, bool *value)
+  {
+    SerializationBatchHelperElement *e = new SerializationBatchHelperElement();
+    e->name = key;
+    e->data = value;
+    e->type = SerializationBatchHelperElementType::BOOL;
+    this->elements.push_back(e);
 
+    return *this;
+  }
 private:
   std::vector<SerializationBatchHelperElement *> elements;
 };
