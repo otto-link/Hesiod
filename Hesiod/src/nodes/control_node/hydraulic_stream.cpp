@@ -15,7 +15,7 @@ HydraulicStream::HydraulicStream(std::string id) : ControlNode(id), Erosion(id)
 
   this->attr["c_erosion"] = NEW_ATTR_FLOAT(0.05f, 0.01f, 0.1f);
   this->attr["talus_ref"] = NEW_ATTR_FLOAT(0.1f, 0.01f, 10.f);
-  this->attr["radius"] = NEW_ATTR_FLOAT(0.f, 0.f, 0.1f);
+  this->attr["radius"] = NEW_ATTR_FLOAT(0.f, 0.f, 0.05f, "%.3f");
   this->attr["clipping_ratio"] = NEW_ATTR_FLOAT(10.f, 0.1f, 100.f);
 
   this->attr_ordered_key = {"c_erosion",

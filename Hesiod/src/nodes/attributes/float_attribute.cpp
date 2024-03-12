@@ -9,8 +9,11 @@
 namespace hesiod
 {
 
-FloatAttribute::FloatAttribute(float value, float vmin, float vmax)
-    : value(value), vmin(vmin), vmax(vmax)
+FloatAttribute::FloatAttribute(float       value,
+                               float       vmin,
+                               float       vmax,
+                               std::string fmt)
+    : value(value), vmin(vmin), vmax(vmax), fmt(fmt)
 {
 }
 

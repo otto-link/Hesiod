@@ -77,7 +77,7 @@ bool render_attribute_widget(std::unique_ptr<Attribute> &attr,
                        &p_attr->value,
                        p_attr->vmin,
                        p_attr->vmax,
-                       "%.2f");
+                       p_attr->fmt.c_str());
     has_changed |= ImGui::IsItemDeactivatedAfterEdit();
   }
   break;
