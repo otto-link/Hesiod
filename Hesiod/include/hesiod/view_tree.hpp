@@ -2,16 +2,19 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #pragma once
-#include <GL/glut.h>
 #include <filesystem>
 #include <string>
 
+#include <GL/glew.h>
+#include <GL/glut.h>
+#include <GLFW/glfw3.h>
+
+#include "hesiod/gui.hpp"
 #include "highmap.hpp"
 #include <imgui_node_editor.h>
 
 #include "hesiod/control_tree.hpp"
 #include "hesiod/serialization.hpp"
-#include "hesiod/view_node.hpp"
 #include "imgui.h"
 
 namespace hesiod::vnode
@@ -39,7 +42,8 @@ struct Link
   SERIALIZATION_V2_IMPLEMENT_BASE();
 };
 
-class ViewTree : public hesiod::cnode::ControlTree
+class ViewTree : public hesiod::cnode::ControlTree,
+                 public hesiod::gui::GuiRenderableWindowBase
 {
 public:
   ViewTree(std::string     id,
@@ -90,6 +94,8 @@ public:
   std::string render_new_node_popup();
 
   std::string render_new_node_treeview(const ImVec2 node_position = {0.f, 0.f});
+
+  bool render_element_content() override;
 
   void render_node_editor();
 

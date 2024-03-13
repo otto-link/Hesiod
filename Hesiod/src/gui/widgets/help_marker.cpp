@@ -3,7 +3,7 @@
  * this software. */
 #include <iostream>
 
-#include "hesiod/gui.hpp"
+#include "hesiod/widgets.hpp"
 
 #define DEFAULT_SHAPE 256
 

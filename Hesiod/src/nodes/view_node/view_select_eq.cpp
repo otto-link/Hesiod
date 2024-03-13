@@ -7,6 +7,7 @@
 #include "hesiod/control_node.hpp"
 #include "hesiod/gui.hpp"
 #include "hesiod/view_node.hpp"
+#include "hesiod/widgets.hpp"
 
 namespace hesiod::vnode
 {

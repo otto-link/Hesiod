@@ -13,9 +13,16 @@
 #include "hesiod/gui.hpp"
 #include "hesiod/view_node.hpp"
 #include "hesiod/view_tree.hpp"
+#include "hesiod/widgets.hpp"
 
 namespace hesiod::vnode
 {
+
+bool ViewTree::render_element_content()
+{
+  this->render_node_editor();
+  return true;
+}
 
 void ViewTree::render_node_editor()
 {
@@ -25,17 +32,12 @@ void ViewTree::render_node_editor()
   bool fit_to_selection = false;
   bool automatic_layout = false;
 
-  ImGui::Begin(title_bar.c_str(),
-               nullptr,
-               ImGuiWindowFlags_MenuBar |
-                   ImGuiWindowFlags_NoBringToFrontOnFocus);
-
   // --- menu bar
   {
     ImGui::PushItemWidth(ImGui::GetFontSize() * -12);
     if (ImGui::BeginMenuBar())
     {
-      if(ImGui::BeginMenu("File"))
+      if (ImGui::BeginMenu("File"))
       {
         IGFD::FileDialogConfig config;
         config.path = ".";
@@ -47,9 +49,13 @@ void ViewTree::render_node_editor()
                                                   ".hsd",
                                                   config);
 
-        bool save_button = ImGui::MenuItem("Save", "", false, this->json_filename.empty() == false);
+        bool save_button = ImGui::MenuItem("Save",
+                                           "",
+                                           false,
+                                           this->json_filename.empty() ==
+                                               false);
         bool save_as_button = ImGui::MenuItem("Save as", "");
-        
+
         if ((save_button && this->json_filename == "") || save_as_button)
         {
           config.flags = ImGuiFileDialogFlags_ConfirmOverwrite;
@@ -60,10 +66,10 @@ void ViewTree::render_node_editor()
         }
         else if (save_button)
           this->save_state(this->json_filename);
-      
+
         ImGui::EndMenu();
       }
-      if(ImGui::BeginMenu("Actions"))
+      if (ImGui::BeginMenu("Actions"))
       {
         if (ImGui::MenuItem("Fit to content"))
           fit_to_content = true;
@@ -75,9 +81,7 @@ void ViewTree::render_node_editor()
       }
       if (ImGui::BeginMenu("View"))
       {
-        if (ImGui::MenuItem("Node list",
-                            "N",
-                            this->open_node_list_window))
+        if (ImGui::MenuItem("Node list", "N", this->open_node_list_window))
           this->open_node_list_window = !this->open_node_list_window;
 
         if (ImGui::MenuItem("Settings", "S", this->show_settings))
@@ -263,15 +267,15 @@ void ViewTree::render_node_editor()
   ax::NodeEditor::End();
   ax::NodeEditor::SetCurrentEditor(nullptr);
 
-  ImGui::End();
-
   // --- 2D viewer
   if (this->open_view2d_window)
   {
     ImGui::PushStyleColor(ImGuiCol_WindowBg, view3d_clear_color.Value);
     ImVec2 originalWindowPadding = ImGui::GetStyle().WindowPadding;
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.f, 0.f));
-    if(ImGui::Begin(("View 2D ##" + this->id).c_str(), &this->open_view2d_window, ImGuiWindowFlags_MenuBar))
+    if (ImGui::Begin(("View 2D ##" + this->id).c_str(),
+                     &this->open_view2d_window,
+                     ImGuiWindowFlags_MenuBar))
     {
       ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, originalWindowPadding);
       if (this->selected_node_hid.size() > 0)
@@ -294,7 +298,9 @@ void ViewTree::render_node_editor()
     ImGui::PushStyleColor(ImGuiCol_WindowBg, view3d_clear_color.Value);
     ImVec2 originalWindowPadding = ImGui::GetStyle().WindowPadding;
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.f, 0.f));
-    if(ImGui::Begin(("View 3D ##" + this->id).c_str(), &this->open_view3d_window, ImGuiWindowFlags_MenuBar))
+    if (ImGui::Begin(("View 3D ##" + this->id).c_str(),
+                     &this->open_view3d_window,
+                     ImGuiWindowFlags_MenuBar))
     {
       ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, originalWindowPadding);
       if (this->selected_node_hid.size() > 0)
@@ -314,8 +320,8 @@ void ViewTree::render_node_editor()
   // --- node list window
   if (this->open_node_list_window)
   {
-    if(ImGui::Begin(("Node list ##" + this->id).c_str(),
-                 &this->open_node_list_window))
+    if (ImGui::Begin(("Node list ##" + this->id).c_str(),
+                     &this->open_node_list_window))
     {
       this->render_node_list();
     }

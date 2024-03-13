@@ -8,7 +8,7 @@
 #include "imgui_internal.h"
 #include "macrologger.h"
 
-#include "hesiod/gui.hpp"
+#include "hesiod/widgets.hpp"
 
 #define IMGUI_ID_HOVERED_POINT_INDEX 0
 #define IMGUI_ID_VMAX 1

@@ -6,7 +6,7 @@
 #include <imgui.h>
 
 #include "hesiod/attribute.hpp"
-#include "hesiod/gui.hpp"
+#include "hesiod/widgets.hpp"
 
 namespace hesiod::gui
 {

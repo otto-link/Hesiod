@@ -6,7 +6,7 @@
 #include "highmap.hpp"
 #include "macrologger.h"
 
-#include "hesiod/gui.hpp"
+#include "hesiod/widgets.hpp"
 
 namespace hesiod::gui
 {

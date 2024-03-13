@@ -245,7 +245,7 @@ public:
 
     return *this;
   }
-  
+
   SerializationBatchHelper &AddBool(std::string key, bool *value)
   {
     SerializationBatchHelperElement *e = new SerializationBatchHelperElement();
@@ -256,6 +256,7 @@ public:
 
     return *this;
   }
+
 private:
   std::vector<SerializationBatchHelperElement *> elements;
 };

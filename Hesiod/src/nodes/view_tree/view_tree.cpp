@@ -4,6 +4,7 @@
 #include <functional>
 
 #include "gnode.hpp"
+#include "imgui.h"
 #include "macrologger.h"
 
 #include "hesiod/viewer.hpp"
@@ -12,6 +13,7 @@
 #include "hesiod/gui.hpp"
 #include "hesiod/view_node.hpp"
 #include "hesiod/view_tree.hpp"
+#include "hesiod/widgets.hpp"
 
 namespace hesiod::vnode
 {
@@ -40,6 +42,7 @@ ViewTree::ViewTree(std::string     id,
                    hmap::Vec2<int> tiling,
                    float           overlap)
     : hesiod::cnode::ControlTree(id, shape, tiling, overlap),
+      hesiod::gui::GuiRenderableWindowBase(),
       view3d_clear_color(25, 25, 25, 255)
 {
   // initialize node editor
@@ -55,6 +58,9 @@ ViewTree::ViewTree(std::string     id,
   this->shader_id = hesiod::viewer::load_shaders(
       "SimpleVertexShader.vertexshader",
       "SimpleFragmentShader.fragmentshader");
+
+  this->renderable_window_title = "ViewTree " + id;
+  this->renderable_window_flags = ImGuiWindowFlags_MenuBar;
 
   glGenVertexArrays(1, &this->vertex_array_id);
   glGenBuffers(1, &this->vertex_buffer);

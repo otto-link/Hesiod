@@ -5,7 +5,7 @@
 
 #include "highmap.hpp"
 
-#include "hesiod/gui.hpp"
+#include "hesiod/widgets.hpp"
 
 namespace hesiod::gui
 {
