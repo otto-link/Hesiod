@@ -236,6 +236,7 @@ class ControlNode : public gnode::Node, serialization::SerializationBase
 public:
   std::map<std::string, std::unique_ptr<hesiod::Attribute>> attr = {};
   std::vector<std::string> attr_ordered_key = {};
+  std::string              comment_text = "";
 
   ControlNode() : gnode::Node()
   {

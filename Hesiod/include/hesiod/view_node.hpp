@@ -123,6 +123,14 @@ public:
   std::string get_preview_port_id();
 
   /**
+   * @brief Get whether the comment is to be rendered or not (value retrieved
+   * from the ViewTree).
+   *
+   * @return bool Show or not.
+   */
+  bool get_show_comment();
+
+  /**
    * @brief Get the view3d elevation port id.
    *
    * @return std::string

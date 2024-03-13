@@ -6,6 +6,7 @@
 #include "gnode.hpp"
 #include <imgui_internal.h>
 #include <imgui_node_editor.h>
+#include <misc/cpp/imgui_stdlib.h>
 
 #include "hesiod/gui.hpp"
 #include "hesiod/view_node.hpp"
@@ -47,6 +48,11 @@ ViewNode::ViewNode(std::string id) : hesiod::cnode::ControlNode(id)
 std::string ViewNode::get_preview_port_id()
 {
   return this->preview_port_id;
+}
+
+bool ViewNode::get_show_comment()
+{
+  return ((ViewTree *)this->p_tree)->show_comments;
 }
 
 std::string ViewNode::get_view3d_elevation_port_id()
@@ -284,6 +290,21 @@ void ViewNode::render_node()
                            ax::NodeEditor::GetStyle().NodeRounding,
                            ImDrawFlags_RoundCornersTop);
 
+  if (this->get_show_comment())
+    if (this->comment_text != "")
+    {
+      ImFont *font_current = ImGui::GetFont();
+
+      draw_list->AddText(font_current,
+                         ImGui::GetFontSize() * 0.8,
+                         ImVec2(node_content_rect.GetTL().x + 4.f,
+                                node_content_rect.GetBR().y + 4.f),
+                         IM_COL32(255, 255, 255, 124),
+                         this->comment_text.c_str(),
+                         NULL,
+                         this->node_width);
+    }
+
   ImGui::PopID();
 }
 
@@ -475,6 +496,27 @@ bool ViewNode::render_settings_footer()
     ImGui::PushTextWrapPos(0.0f);
     ImGui::TextUnformatted((char *)this->help_text.c_str());
     ImGui::PopTextWrapPos();
+  }
+
+  // comment text
+  if (this->get_show_comment())
+  {
+    ImGui::SeparatorText("Comment");
+
+    // callback to copy the edited text back to the storage string
+    auto callback = [](ImGuiInputTextCallbackData *data)
+    {
+      std::string *p_text = (std::string *)data->UserData;
+      p_text->assign(data->Buf);
+      return 0;
+    };
+
+    ImGui::InputTextMultiline("Comment",
+                              &this->comment_text,
+                              ImVec2(256.f, ImGui::GetTextLineHeight() * 6),
+                              ImGuiInputTextFlags_CallbackEdit,
+                              callback,
+                              (void *)&this->comment_text);
   }
 
   ImGui::PopID();

@@ -150,6 +150,9 @@ void ViewTree::render_node_editor()
 
   if (ImGui::Button("3D viewer"))
     this->open_view3d_window = !this->open_view3d_window;
+  ImGui::SameLine();
+
+  ImGui::Checkbox("Show comments", &this->show_comments);
 
   if (this->show_settings)
   {
