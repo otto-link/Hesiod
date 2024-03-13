@@ -1613,6 +1613,18 @@ public:
   }
 };
 
+class ViewSharpenCone : public ViewNode, public hesiod::cnode::SharpenCone
+{
+public:
+  ViewSharpenCone(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::SharpenCone(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
+};
+
 class ViewSlope : public ViewNode, public hesiod::cnode::Slope
 {
 public:

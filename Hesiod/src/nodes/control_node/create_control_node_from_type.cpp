@@ -216,6 +216,8 @@ std::shared_ptr<gnode::Node> create_control_node_from_type(
     return std::make_shared<hesiod::cnode::SelectRivers>(node_id);
   case str2int("SelectTransitions"):
     return std::make_shared<hesiod::cnode::SelectTransitions>(node_id);
+  case str2int("SharpenCone"):
+    return std::make_shared<hesiod::cnode::SharpenCone>(node_id);
   case str2int("Slope"):
     return std::make_shared<hesiod::cnode::Slope>(node_id, shape, tiling, overlap);
   case str2int("SmoothCpulse"):

@@ -116,7 +116,6 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Colorize", "Texture"},
     {"ColorizeSolid", "Texture"},
     {"CombineMask", "Mask"},
-    {"PreviewColorize", "Texture"},
     {"ConvolveSVD", "Math/Convolution"},
     {"Debug", "Debug"},
     {"Dendry", "Primitive/Coherent"},
@@ -141,7 +140,6 @@ static const std::map<std::string, std::string> category_mapping = {
     {"GradientAngle", "Math/Gradient"},
     {"GradientNorm", "Math/Gradient"},
     {"GradientTalus", "Math/Gradient"},
-    {"ToKernel", "Primitive/Kernel"},
     {"HydraulicAlgebric", "Erosion/Hydraulic"},
     {"HydraulicParticle", "Erosion/Hydraulic"},
     {"HydraulicRidge", "Erosion/Hydraulic"}, // not distributed
@@ -177,6 +175,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Peak", "Primitive/Geological"},
     {"Plateau", "Filter/Recurve"},
     {"Preview", "Debug"},
+    {"PreviewColorize", "Texture"},
     {"RecastCanyon", "Filter/Recast"},
     {"RecastCliff", "Filter/Recast"},
     {"RecastCliffDirectional", "Filter/Recast"},
@@ -199,6 +198,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"SelectPulse", "Mask"},
     {"SelectRivers", "Mask"}, // not distributed
     {"SelectTransitions", "Mask"},
+    {"SharpenCone", "Filter/Smoothing"},
     {"Slope", "Primitive/Function"},
     {"SmoothCpulse", "Filter/Smoothing"},
     {"SmoothFill", "Filter/Smoothing"},
@@ -212,6 +212,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"ThermalAutoBedrock", "Erosion/Thermal"},
     {"ThermalFlatten", "Erosion/Thermal"},
     {"ThermalScree", "Erosion/Thermal"},
+    {"ToKernel", "Primitive/Kernel"},
     {"ToMask", "Mask"},
     {"ValleyWidth", "Features"},
     {"Warp", "Operator/Transform"},
@@ -1550,6 +1551,14 @@ public:
 
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
+};
+
+class SharpenCone : public Filter
+{
+public:
+  SharpenCone(std::string id);
+
+  void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
 };
 
 class Slope : public Primitive
