@@ -155,6 +155,7 @@ bool ViewTree::serialize_json_v2(std::string     field_name,
   output_data[field_name]["tiling.x"] = tiling.x;
   output_data[field_name]["tiling.y"] = tiling.y;
   output_data[field_name]["id_counter"] = id_counter;
+  output_data[field_name]["show_comments"] = show_comments;
 
   // node ids and positions
   {
@@ -236,6 +237,7 @@ bool ViewTree::deserialize_json_v2(std::string     field_name,
   tiling.x = input_data[field_name]["tiling.x"].get<int>();
   tiling.y = input_data[field_name]["tiling.y"].get<int>();
   id_counter = input_data[field_name]["id_counter"].get<int>();
+  show_comments = input_data[field_name]["show_comments"].get<bool>();
 
   {
     std::vector<std::string> node_ids =
