@@ -687,6 +687,21 @@ public:
   void render_node_specific_content();
 };
 
+class ViewExportOBJ : public ViewNode, public hesiod::cnode::ExportOBJ
+{
+public:
+  ViewExportOBJ(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::ExportOBJ(id)
+  {
+    this->set_preview_port_id("RGB");
+    this->set_view3d_elevation_port_id("elevation");
+    this->set_view3d_color_port_id("RGB");
+  }
+
+  void render_node_specific_content();
+};
+
 class ViewExportRGB : public ViewNode, public hesiod::cnode::ExportRGB
 {
 public:

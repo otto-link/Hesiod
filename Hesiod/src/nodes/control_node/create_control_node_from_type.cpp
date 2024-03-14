@@ -74,6 +74,8 @@ std::shared_ptr<gnode::Node> create_control_node_from_type(
     return std::make_shared<hesiod::cnode::ExpandShrink>(node_id);
   case str2int("Export"):
     return std::make_shared<hesiod::cnode::Export>(node_id);
+  case str2int("ExportOBJ"):
+    return std::make_shared<hesiod::cnode::ExportOBJ>(node_id);
   case str2int("ExportRGB"):
     return std::make_shared<hesiod::cnode::ExportRGB>(node_id);
   case str2int("Faceted"):

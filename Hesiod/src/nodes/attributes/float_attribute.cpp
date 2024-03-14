@@ -33,6 +33,7 @@ bool FloatAttribute::serialize_json_v2(std::string     field_name,
   output_data[field_name]["value"] = this->value;
   output_data[field_name]["vmin"] = this->vmin;
   output_data[field_name]["vmax"] = this->vmax;
+  output_data[field_name]["fmt"] = this->fmt;
   return true;
 }
 
@@ -42,7 +43,8 @@ bool FloatAttribute::deserialize_json_v2(std::string     field_name,
   if (input_data[field_name].is_null() == true ||
       input_data[field_name]["value"].is_number() == false ||
       input_data[field_name]["vmin"].is_number() == false ||
-      input_data[field_name]["vmax"].is_number() == false)
+      input_data[field_name]["vmax"].is_number() == false ||
+      input_data[field_name]["fmt"].is_string() == false)
   {
     LOG_DEBUG("Attribute %s is not valid.", field_name.data());
     return false;
@@ -51,6 +53,7 @@ bool FloatAttribute::deserialize_json_v2(std::string     field_name,
   this->value = input_data[field_name]["value"].get<float>();
   this->vmin = input_data[field_name]["vmin"].get<float>();
   this->vmax = input_data[field_name]["vmax"].get<float>();
+  this->fmt = input_data[field_name]["fmt"].get<std::string>();
   return true;
 }
 

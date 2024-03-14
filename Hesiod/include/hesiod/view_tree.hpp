@@ -40,7 +40,7 @@ struct Link
 class ViewTree : public hesiod::cnode::ControlTree
 {
 public:
-  bool show_comments = true;
+  bool show_comments = false;
 
   ViewTree(std::string     id,
            hmap::Vec2<int> shape,

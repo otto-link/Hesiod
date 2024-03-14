@@ -127,6 +127,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"ExpandShrink", "Filter/Recast"},
     {"ExpandShrinkDirectional", "Filter/Recast"},
     {"Export", "IO/Files"},
+    {"ExportOBJ", "IO/Files"},
     {"ExportRGB", "IO/Files"},
     {"Faceted", "Filter/Recast"}, // not distributed
     {"FractalizePath", "Geometry/Path"},
@@ -768,6 +769,16 @@ protected:
       {"png (8 bit)", hesiod::cnode::export_type::png8bit},
       {"png (16 bit)", hesiod::cnode::export_type::png16bit},
       {"raw (16 bit, Unity)", hesiod::cnode::export_type::raw16bit}};
+};
+
+class ExportOBJ : virtual public ControlNode
+{
+public:
+  ExportOBJ(std::string id);
+
+  void compute();
+
+  void write_file();
 };
 
 class ExportRGB : virtual public ControlNode
