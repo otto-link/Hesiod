@@ -115,6 +115,7 @@ GuiWindowManager::Tag GuiWindowManager::add_window_with_tag(
     return GuiWindowManager::kInvalidTag;
   }
 
+  window->renderable_window_manager_parent = this;
   windows.emplace(tag, window);
   return tag;
 }
@@ -123,6 +124,7 @@ GuiWindowManager::Tag GuiWindowManager::add_window(
     GuiRenderableWindowBase *window)
 {
   Tag tag = find_free_tag();
+  window->renderable_window_manager_parent = this;
   windows.emplace(tag, window);
   return tag;
 }

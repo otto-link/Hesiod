@@ -22,6 +22,9 @@
 namespace hesiod::gui
 {
 
+// Forward declaration for the parent of the GuiRenderableWindowBase
+class GuiWindowManager;
+
 class GuiRenderableElement
 {
 public:
@@ -39,10 +42,12 @@ public:
   virtual ~GuiRenderableWindowBase() = default;
   virtual bool render_window();
   bool         render_element_content() override;
-
 protected:
+  friend class GuiWindowManager;
+
   std::string      renderable_window_title;
   ImGuiWindowFlags renderable_window_flags;
+  GuiWindowManager* renderable_window_manager_parent;
 };
 
 class GuiWindowManager
