@@ -8,24 +8,28 @@ namespace hesiod::shortcuts
 
 // GuiShortcut
 
-GuiShortcut::GuiShortcut(std::string shortcut_label,
-                           int         shortcut_key,
-                           int         shortcut_modifier,
-                           Delegate    shortcut_delegate,
-                           GuiShortcutGroupId shortcut_group_id,
-                           bool        shortcut_enabled)
+GuiShortcut::GuiShortcut(std::string        shortcut_label,
+                         int                shortcut_key,
+                         int                shortcut_modifier,
+                         Delegate           shortcut_delegate,
+                         GuiShortcutGroupId shortcut_group_id,
+                         bool               shortcut_enabled)
     : label(shortcut_label), key(shortcut_key), modifier(shortcut_modifier),
-      delegate(shortcut_delegate), group_id(shortcut_group_id), enabled(shortcut_enabled)
+      delegate(shortcut_delegate), group_id(shortcut_group_id),
+      enabled(shortcut_enabled)
 {
 }
 
-void GuiShortcut::pass_and_check(int shortcut_key, int shortcut_modifier, GuiShortcutGroupId focused_group_id, void *pass_data)
+void GuiShortcut::pass_and_check(int                shortcut_key,
+                                 int                shortcut_modifier,
+                                 GuiShortcutGroupId focused_group_id,
+                                 void              *pass_data)
 {
-  if (key != shortcut_key || modifier != shortcut_modifier || group_id != focused_group_id || enabled != true)
+  if (key != shortcut_key || modifier != shortcut_modifier ||
+      group_id != focused_group_id || enabled != true)
   {
     return;
   }
-
 
   delegate(pass_data);
 }
@@ -94,10 +98,11 @@ bool GuiShortcutsManager::remove_all_shortcuts()
 }
 
 void GuiShortcutsManager::pass_and_check(int   shortcut_key,
-                                        int   shortcut_modifier,
-                                        void *pass_data)
+                                         int   shortcut_modifier,
+                                         void *pass_data)
 {
-  if(input_blocked == true) return;
+  if (input_blocked == true)
+    return;
 
   for (std::map<std::string, GuiShortcut *>::iterator currentIterator =
            shortcuts.begin();
@@ -105,13 +110,14 @@ void GuiShortcutsManager::pass_and_check(int   shortcut_key,
        currentIterator++)
   {
     currentIterator->second->pass_and_check(shortcut_key,
-                                          shortcut_modifier,
-                                          focused_group_id,
-                                          pass_data);
+                                            shortcut_modifier,
+                                            focused_group_id,
+                                            pass_data);
   }
 }
 
-void GuiShortcutsManager::set_focused_group_id(GuiShortcutGroupId shortcut_group_id)
+void GuiShortcutsManager::set_focused_group_id(
+    GuiShortcutGroupId shortcut_group_id)
 {
   this->focused_group_id = shortcut_group_id;
 }
@@ -121,7 +127,8 @@ void GuiShortcutsManager::set_input_blocked(bool toggle)
   this->input_blocked = toggle;
 }
 
-bool GuiShortcutsManager::serialize_json_v2(std::string field_name, nlohmann::json &output_data)
+bool GuiShortcutsManager::serialize_json_v2(std::string     field_name,
+                                            nlohmann::json &output_data)
 {
   for (std::map<std::string, GuiShortcut *>::iterator currentIterator =
            shortcuts.begin();
@@ -134,36 +141,37 @@ bool GuiShortcutsManager::serialize_json_v2(std::string field_name, nlohmann::js
   }
 
   return true;
-} 
+}
 
-bool GuiShortcutsManager::deserialize_json_v2(std::string field_name, nlohmann::json &input_data)
+bool GuiShortcutsManager::deserialize_json_v2(std::string     field_name,
+                                              nlohmann::json &input_data)
 {
-  if(input_data[field_name].is_object() == false)
+  if (input_data[field_name].is_object() == false)
   {
     return false;
   }
 
-  for(auto currentIterator : input_data[field_name].items())
+  for (auto currentIterator : input_data[field_name].items())
   {
     std::string label = currentIterator.key();
 
-    if(currentIterator.value().is_object() == false)
+    if (currentIterator.value().is_object() == false)
     {
       LOG_ERROR("Current shortcut data is not an object!");
       continue;
     }
 
-    if(this->shortcuts.count(label) <= 0)
+    if (this->shortcuts.count(label) <= 0)
     {
       LOG_ERROR("Short with the label of %s could not be found!", label.data());
       continue;
     }
 
-    this->shortcuts.at(label)->deserialize_json_v2("data", currentIterator.value());
+    this->shortcuts.at(label)->deserialize_json_v2("data",
+                                                   currentIterator.value());
   }
 
   return true;
 }
-
 
 } // namespace hesiod::shortcuts

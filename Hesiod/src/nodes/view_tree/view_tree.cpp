@@ -64,7 +64,7 @@ ViewTree::ViewTree(std::string     id,
 
   this->renderable_window_title = "ViewTree " + id;
   this->renderable_window_flags = ImGuiWindowFlags_MenuBar;
-  
+
   // OpenGL
 
   glGenVertexArrays(1, &this->vertex_array_id);

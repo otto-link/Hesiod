@@ -107,9 +107,12 @@ bool WindowImplemented::initialize()
       {
         WindowImplemented *instance = static_cast<WindowImplemented *>(
             glfwGetWindowUserPointer(window));
-        if(action == GLFW_PRESS)
+        if (action == GLFW_PRESS)
         {
-          instance->get_window_manager()->handle_input(key, scancode, action, modifiers);
+          instance->get_window_manager()->handle_input(key,
+                                                       scancode,
+                                                       action,
+                                                       modifiers);
         }
       });
 
@@ -143,7 +146,8 @@ bool WindowImplemented::run()
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
-    get_window_manager()->get_shortcuts_manager()->set_input_blocked(ImGui::GetIO().WantTextInput);
+    get_window_manager()->get_shortcuts_manager()->set_input_blocked(
+        ImGui::GetIO().WantTextInput);
 
     // --- GUI content
     window_manager->render_windows();

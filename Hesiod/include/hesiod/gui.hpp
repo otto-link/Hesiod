@@ -36,23 +36,28 @@ public:
   }
 };
 
-class GuiRenderableWindowBase : public GuiRenderableElement, public shortcuts::GuiShortcutGroupElement
+class GuiRenderableWindowBase : public GuiRenderableElement,
+                                public shortcuts::GuiShortcutGroupElement
 {
 public:
   GuiRenderableWindowBase();
   virtual ~GuiRenderableWindowBase() = default;
-  virtual bool initialize_window() { return true; }
+  virtual bool initialize_window()
+  {
+    return true;
+  }
   virtual bool render_window();
   bool         render_element_content() override;
   virtual bool add_window_shortcuts();
   virtual bool remove_window_shortcuts();
+
 protected:
   friend class GuiWindowManager;
 
-  std::string      renderable_window_title;
-  ImGuiWindowFlags renderable_window_flags;
-  GuiWindowManager* renderable_window_manager_parent;
-  std::vector<shortcuts::GuiShortcut*> renderable_window_shortcuts;
+  std::string                           renderable_window_title;
+  ImGuiWindowFlags                      renderable_window_flags;
+  GuiWindowManager                     *renderable_window_manager_parent;
+  std::vector<shortcuts::GuiShortcut *> renderable_window_shortcuts;
 };
 
 class GuiWindowManager
@@ -77,13 +82,14 @@ public:
 
   virtual void handle_input(int key, int scancode, int action, int modifiers);
 
-  virtual shortcuts::GuiShortcutsManager* get_shortcuts_manager();
+  virtual shortcuts::GuiShortcutsManager *get_shortcuts_manager();
+
 private:
   std::map<Tag, GuiRenderableWindowBase *> windows;
   std::queue<Tag>                          windows_delete_queue;
   Tag                                      tag_count;
 
-  shortcuts::GuiShortcutsManager* shortcuts_manager;
+  shortcuts::GuiShortcutsManager *shortcuts_manager;
 };
 
 } // namespace hesiod::gui

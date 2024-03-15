@@ -21,22 +21,25 @@ namespace hesiod::vnode
 bool ViewTree::initialize_window()
 {
   renderable_window_shortcuts.push_back(new shortcuts::GuiShortcut(
-    "Preview 2d ##" + id, GLFW_KEY_2, 0, [this] (void*) {
-      this->open_view2d_window = !this->open_view2d_window;
-    }, this->get_element_shortcut_group_id()
-  ));
+      "Preview 2d ##" + id,
+      GLFW_KEY_2,
+      0,
+      [this](void *) { this->open_view2d_window = !this->open_view2d_window; },
+      this->get_element_shortcut_group_id()));
 
   renderable_window_shortcuts.push_back(new shortcuts::GuiShortcut(
-    "Preview 3d ##" + id, GLFW_KEY_3, 0, [this] (void*) {
-      this->open_view3d_window = !this->open_view3d_window;
-    }, this->get_element_shortcut_group_id()
-  ));
+      "Preview 3d ##" + id,
+      GLFW_KEY_3,
+      0,
+      [this](void *) { this->open_view3d_window = !this->open_view3d_window; },
+      this->get_element_shortcut_group_id()));
 
   renderable_window_shortcuts.push_back(new shortcuts::GuiShortcut(
-    "Settings ##" + id, GLFW_KEY_S, 0, [this] (void*) {
-      this->show_settings = !this->show_settings;
-    }, this->get_element_shortcut_group_id()
-  ));
+      "Settings ##" + id,
+      GLFW_KEY_S,
+      0,
+      [this](void *) { this->show_settings = !this->show_settings; },
+      this->get_element_shortcut_group_id()));
 
   return true;
 }
@@ -49,7 +52,7 @@ bool ViewTree::render_element_content()
 
 shortcuts::GuiShortcutGroupId ViewTree::get_element_shortcut_group_id()
 {
-  return "GroupViewTree" + this->id; 
+  return "GroupViewTree" + this->id;
 }
 
 void ViewTree::render_node_editor()
