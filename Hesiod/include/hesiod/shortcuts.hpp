@@ -5,22 +5,22 @@
 namespace hesiod::shortcuts
 {
 
-using ViewShortcutGroupId = std::string;
+using GuiShortcutGroupId = std::string;
 
-class ViewShortcut : public hesiod::serialization::SerializationBatchBase
+class GuiShortcut : public hesiod::serialization::SerializationBatchBase
 {
 public:
   using Delegate = void (*)(void *pass_data);
 
-  ViewShortcut(std::string shortcut_label,
+  GuiShortcut(std::string shortcut_label,
                int         shortcut_key,
                int         shortcut_modifier,
                Delegate    shortcut_delegate,
-               ViewShortcutGroupId shortcut_group_id,
+               GuiShortcutGroupId shortcut_group_id,
                bool        shortcut_enabled = true);
-  ~ViewShortcut() = default;
+  ~GuiShortcut() = default;
 
-  void pass_and_check(int shortcut_key, int shortcut_modifier, ViewShortcutGroupId focused_group_id, void *pass_data);
+  void pass_and_check(int shortcut_key, int shortcut_modifier, GuiShortcutGroupId focused_group_id, void *pass_data);
   SERIALIZATION_V2_IMPLEMENT_BATCH_BASE();
 
   std::string get_label()
@@ -44,26 +44,26 @@ private:
   int                 key;
   int                 modifier;
   Delegate            delegate;
-  ViewShortcutGroupId group_id;
+  GuiShortcutGroupId group_id;
   bool                enabled;
 };
 
-class ViewShortcutsManager : public hesiod::serialization::SerializationBase
+class GuiShortcutsManager : public hesiod::serialization::SerializationBase
 {
 public:
-  ViewShortcutsManager();
-  ~ViewShortcutsManager();
+  GuiShortcutsManager();
+  ~GuiShortcutsManager();
 
-  bool add_shortcut(ViewShortcut *shortcut);
+  bool add_shortcut(GuiShortcut *shortcut);
   bool remove_shortcut(std::string Label);
   bool remove_all_shortcuts();
   void pass_and_check(int shortcut_key, int shortcut_modifier, void *pass_data);
-  void set_focused_group_id(ViewShortcutGroupId shortcut_group_id);
+  void set_focused_group_id(GuiShortcutGroupId shortcut_group_id);
 
   SERIALIZATION_V2_IMPLEMENT_BASE();
 private:
-  std::map<std::string, ViewShortcut *> shortcuts;
-  ViewShortcutGroupId focused_group_id;
+  std::map<std::string, GuiShortcut *> shortcuts;
+  GuiShortcutGroupId focused_group_id;
 };
 
 } // namespace hesiod::shortcuts

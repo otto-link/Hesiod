@@ -6,20 +6,20 @@
 namespace hesiod::shortcuts
 {
 
-// ViewShortcut
+// GuiShortcut
 
-ViewShortcut::ViewShortcut(std::string shortcut_label,
+GuiShortcut::GuiShortcut(std::string shortcut_label,
                            int         shortcut_key,
                            int         shortcut_modifier,
                            Delegate    shortcut_delegate,
-                           ViewShortcutGroupId shortcut_group_id,
+                           GuiShortcutGroupId shortcut_group_id,
                            bool        shortcut_enabled)
     : label(shortcut_label), key(shortcut_key), modifier(shortcut_modifier),
       delegate(shortcut_delegate), group_id(shortcut_group_id), enabled(shortcut_enabled)
 {
 }
 
-void ViewShortcut::pass_and_check(int shortcut_key, int shortcut_modifier, ViewShortcutGroupId focused_group_id, void *pass_data)
+void GuiShortcut::pass_and_check(int shortcut_key, int shortcut_modifier, GuiShortcutGroupId focused_group_id, void *pass_data)
 {
   if (key != shortcut_key || modifier != shortcut_modifier || group_id != focused_group_id || enabled != true)
   {
@@ -29,7 +29,7 @@ void ViewShortcut::pass_and_check(int shortcut_key, int shortcut_modifier, ViewS
   delegate(pass_data);
 }
 
-serialization::SerializationBatchHelper ViewShortcut::BuildBatchHelperData()
+serialization::SerializationBatchHelper GuiShortcut::BuildBatchHelperData()
 {
   serialization::SerializationBatchHelper batch =
       serialization::SerializationBatchHelper();
@@ -41,18 +41,18 @@ serialization::SerializationBatchHelper ViewShortcut::BuildBatchHelperData()
   return batch;
 }
 
-// ViewShortcutsManager
+// GuiShortcutsManager
 
-ViewShortcutsManager::ViewShortcutsManager() : shortcuts(), focused_group_id()
+GuiShortcutsManager::GuiShortcutsManager() : shortcuts(), focused_group_id()
 {
 }
 
-ViewShortcutsManager::~ViewShortcutsManager()
+GuiShortcutsManager::~GuiShortcutsManager()
 {
   this->remove_all_shortcuts();
 }
 
-bool ViewShortcutsManager::add_shortcut(ViewShortcut *shortcut)
+bool GuiShortcutsManager::add_shortcut(GuiShortcut *shortcut)
 {
   if (shortcuts.count(shortcut->get_label()) > 0)
   {
@@ -63,25 +63,25 @@ bool ViewShortcutsManager::add_shortcut(ViewShortcut *shortcut)
   return true;
 }
 
-bool ViewShortcutsManager::remove_shortcut(std::string Label)
+bool GuiShortcutsManager::remove_shortcut(std::string Label)
 {
   if (shortcuts.count(Label) <= 0)
   {
     return false;
   }
 
-  ViewShortcut *s = shortcuts.at(Label);
+  GuiShortcut *s = shortcuts.at(Label);
   shortcuts.erase(Label);
 
   delete s;
   return true;
 }
 
-bool ViewShortcutsManager::remove_all_shortcuts()
+bool GuiShortcutsManager::remove_all_shortcuts()
 {
   bool res = true;
 
-  for (std::map<std::string, ViewShortcut *>::iterator currentIterator =
+  for (std::map<std::string, GuiShortcut *>::iterator currentIterator =
            shortcuts.begin();
        currentIterator != shortcuts.end();
        currentIterator++)
@@ -92,11 +92,11 @@ bool ViewShortcutsManager::remove_all_shortcuts()
   return res;
 }
 
-void ViewShortcutsManager::pass_and_check(int   shortcut_key,
+void GuiShortcutsManager::pass_and_check(int   shortcut_key,
                                         int   shortcut_modifier,
                                         void *pass_data)
 {
-  for (std::map<std::string, ViewShortcut *>::iterator currentIterator =
+  for (std::map<std::string, GuiShortcut *>::iterator currentIterator =
            shortcuts.begin();
        currentIterator != shortcuts.end();
        currentIterator++)
@@ -108,9 +108,14 @@ void ViewShortcutsManager::pass_and_check(int   shortcut_key,
   }
 }
 
-bool ViewShortcutsManager::serialize_json_v2(std::string field_name, nlohmann::json &output_data)
+void GuiShortcutsManager::set_focused_group_id(GuiShortcutGroupId shortcut_group_id)
 {
-  for (std::map<std::string, ViewShortcut *>::iterator currentIterator =
+  this->focused_group_id = shortcut_group_id;
+}
+
+bool GuiShortcutsManager::serialize_json_v2(std::string field_name, nlohmann::json &output_data)
+{
+  for (std::map<std::string, GuiShortcut *>::iterator currentIterator =
            shortcuts.begin();
        currentIterator != shortcuts.end();
        currentIterator++)
@@ -123,7 +128,7 @@ bool ViewShortcutsManager::serialize_json_v2(std::string field_name, nlohmann::j
   return true;
 } 
 
-bool ViewShortcutsManager::deserialize_json_v2(std::string field_name, nlohmann::json &input_data)
+bool GuiShortcutsManager::deserialize_json_v2(std::string field_name, nlohmann::json &input_data)
 {
   if(input_data[field_name].is_object() == false)
   {
