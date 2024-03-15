@@ -14,8 +14,8 @@ namespace hesiod::gui
 {
 
 void hmap_brush_editor(HmapBrushEditorState &edit_state,
-                       ImTextureID         canvas_texture,
-                       float               width)
+                       ImTextureID           canvas_texture,
+                       float                 width)
 {
   ImGui::PushID((void *)&edit_state);
   ImGui::BeginGroup();

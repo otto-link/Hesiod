@@ -54,7 +54,7 @@ struct HmapBrushEditorState
 };
 
 void hmap_brush_editor(HmapBrushEditorState &state,
-                       ImTextureID         canvas_texture,
-                       float               width = 0.0f);
+                       ImTextureID           canvas_texture,
+                       float                 width = 0.0f);
 
 } // namespace hesiod::gui

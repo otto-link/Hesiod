@@ -37,6 +37,14 @@ void main_dock(hesiod::vnode::ViewTree &view_tree);
 // attribute settings
 bool render_attribute_widget(std::unique_ptr<Attribute> &p_attr);
 
+/**
+ * @brief Render the settings of an attribute (widget type is based on the
+ * attribute type).
+ * @param p_attr Reference to the attribute.
+ * @param label Settings label.
+ * @param p_node Reference to the parent node.
+ * @return True if the settings have changed.
+ */
 bool render_attribute_widget(std::unique_ptr<Attribute> &p_attr,
                              std::string                 label);
 
