@@ -8,6 +8,7 @@
 #include <GLFW/glfw3.h>
 
 #include "hesiod/gui.hpp"
+#include "hesiod/shortcuts.hpp"
 #include "hesiod/view_tree.hpp"
 #include "imgui.h"
 #include "imgui_impl_opengl3.h"
@@ -30,6 +31,11 @@ bool GuiRenderableWindowBase::render_window()
                    nullptr,
                    renderable_window_flags))
   {
+    if(ImGui::IsWindowFocused())
+    {
+      this->renderable_window_manager_parent->get_shortcuts_manager()->set_focused_group_id(this->get_element_shortcut_group_id());
+    }
+
     res &= render_element_content();
   }
   ImGui::End();
@@ -42,16 +48,40 @@ bool GuiRenderableWindowBase::render_element_content()
   return true;
 }
 
+bool GuiRenderableWindowBase::add_window_shortcuts()
+{
+  for(auto s : renderable_window_shortcuts)
+  {
+    renderable_window_manager_parent->get_shortcuts_manager()->add_shortcut(s);
+  }
+  return true;
+}
+bool GuiRenderableWindowBase::remove_window_shortcuts()
+{
+  for(auto s : renderable_window_shortcuts)
+  {
+    renderable_window_manager_parent->get_shortcuts_manager()->remove_shortcut(s->get_label());
+  }
+  renderable_window_shortcuts.clear();
+  return true;
+}
+
 // GuiWindowManager
 
 GuiWindowManager::GuiWindowManager()
-    : windows(), windows_delete_queue(), tag_count()
+    : windows(), windows_delete_queue(), tag_count(), shortcuts_manager(new shortcuts::GuiShortcutsManager())
 {
 }
 
 GuiWindowManager::~GuiWindowManager()
 {
   this->remove_all_windows();
+
+  if(shortcuts_manager)
+  {
+    delete shortcuts_manager;
+    shortcuts_manager = nullptr;
+  }
 }
 
 GuiWindowManager::Tag GuiWindowManager::find_free_tag()
@@ -116,6 +146,8 @@ GuiWindowManager::Tag GuiWindowManager::add_window_with_tag(
   }
 
   window->renderable_window_manager_parent = this;
+  window->initialize_window();
+  window->add_window_shortcuts();
   windows.emplace(tag, window);
   return tag;
 }
@@ -124,9 +156,7 @@ GuiWindowManager::Tag GuiWindowManager::add_window(
     GuiRenderableWindowBase *window)
 {
   Tag tag = find_free_tag();
-  window->renderable_window_manager_parent = this;
-  windows.emplace(tag, window);
-  return tag;
+  return add_window_with_tag(tag, window);
 }
 
 bool GuiWindowManager::do_delete_queue()
@@ -138,7 +168,9 @@ bool GuiWindowManager::do_delete_queue()
 
     if (has_window(tag))
     {
-      delete windows.at(tag);
+      GuiRenderableWindowBase* w = windows.at(tag);
+      w->remove_window_shortcuts();
+      delete w;
       windows.erase(tag);
     }
   }
@@ -159,6 +191,16 @@ bool GuiWindowManager::render_windows()
   }
 
   return true;
+}
+
+void GuiWindowManager::handle_input(int key, int /* scancode */, int /* action */, int modifiers)
+{
+  shortcuts_manager->pass_and_check(key, modifiers, this);
+}
+
+shortcuts::GuiShortcutsManager* GuiWindowManager::get_shortcuts_manager()
+{
+  return shortcuts_manager;
 }
 
 } // namespace hesiod::gui

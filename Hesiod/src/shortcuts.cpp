@@ -26,6 +26,7 @@ void GuiShortcut::pass_and_check(int shortcut_key, int shortcut_modifier, GuiSho
     return;
   }
 
+
   delegate(pass_data);
 }
 
@@ -96,6 +97,8 @@ void GuiShortcutsManager::pass_and_check(int   shortcut_key,
                                         int   shortcut_modifier,
                                         void *pass_data)
 {
+  if(input_blocked == true) return;
+
   for (std::map<std::string, GuiShortcut *>::iterator currentIterator =
            shortcuts.begin();
        currentIterator != shortcuts.end();
@@ -111,6 +114,11 @@ void GuiShortcutsManager::pass_and_check(int   shortcut_key,
 void GuiShortcutsManager::set_focused_group_id(GuiShortcutGroupId shortcut_group_id)
 {
   this->focused_group_id = shortcut_group_id;
+}
+
+void GuiShortcutsManager::set_input_blocked(bool toggle)
+{
+  this->input_blocked = toggle;
 }
 
 bool GuiShortcutsManager::serialize_json_v2(std::string field_name, nlohmann::json &output_data)

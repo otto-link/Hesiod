@@ -9,6 +9,7 @@
 #include <string>
 #include <vector>
 
+#include "hesiod/shortcuts.hpp"
 #include "highmap.hpp"
 
 #include <GL/glew.h>
@@ -35,19 +36,23 @@ public:
   }
 };
 
-class GuiRenderableWindowBase : public GuiRenderableElement
+class GuiRenderableWindowBase : public GuiRenderableElement, public shortcuts::GuiShortcutGroupElement
 {
 public:
   GuiRenderableWindowBase();
   virtual ~GuiRenderableWindowBase() = default;
+  virtual bool initialize_window() { return true; }
   virtual bool render_window();
   bool         render_element_content() override;
+  virtual bool add_window_shortcuts();
+  virtual bool remove_window_shortcuts();
 protected:
   friend class GuiWindowManager;
 
   std::string      renderable_window_title;
   ImGuiWindowFlags renderable_window_flags;
   GuiWindowManager* renderable_window_manager_parent;
+  std::vector<shortcuts::GuiShortcut*> renderable_window_shortcuts;
 };
 
 class GuiWindowManager
@@ -70,10 +75,15 @@ public:
   virtual bool do_delete_queue();
   virtual bool render_windows();
 
+  virtual void handle_input(int key, int scancode, int action, int modifiers);
+
+  virtual shortcuts::GuiShortcutsManager* get_shortcuts_manager();
 private:
   std::map<Tag, GuiRenderableWindowBase *> windows;
   std::queue<Tag>                          windows_delete_queue;
   Tag                                      tag_count;
+
+  shortcuts::GuiShortcutsManager* shortcuts_manager;
 };
 
 } // namespace hesiod::gui

@@ -1,16 +1,24 @@
 #pragma once
 #include "hesiod/serialization.hpp"
 #include <map>
+#include <functional>
 
 namespace hesiod::shortcuts
 {
 
 using GuiShortcutGroupId = std::string;
 
+class GuiShortcutGroupElement
+{
+public:
+  virtual ~GuiShortcutGroupElement() = default;
+  virtual GuiShortcutGroupId get_element_shortcut_group_id() { return "Default Group"; }
+};
+
 class GuiShortcut : public hesiod::serialization::SerializationBatchBase
 {
 public:
-  using Delegate = void (*)(void *pass_data);
+  using Delegate = std::function<void(void *pass_data)>;
 
   GuiShortcut(std::string shortcut_label,
                int         shortcut_key,
@@ -59,11 +67,13 @@ public:
   bool remove_all_shortcuts();
   void pass_and_check(int shortcut_key, int shortcut_modifier, void *pass_data);
   void set_focused_group_id(GuiShortcutGroupId shortcut_group_id);
+  void set_input_blocked(bool toggle); // Will be reset after each frame!
 
   SERIALIZATION_V2_IMPLEMENT_BASE();
 private:
   std::map<std::string, GuiShortcut *> shortcuts;
   GuiShortcutGroupId focused_group_id;
+  bool input_blocked;
 };
 
 } // namespace hesiod::shortcuts

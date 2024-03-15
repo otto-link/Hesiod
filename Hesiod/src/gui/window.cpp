@@ -103,10 +103,14 @@ bool WindowImplemented::initialize()
   glfwSetWindowUserPointer(window, this);
   glfwSetKeyCallback(
       window,
-      [](GLFWwindow *window, int key, int scancode, int action, int mods)
+      [](GLFWwindow *window, int key, int scancode, int action, int modifiers)
       {
         WindowImplemented *instance = static_cast<WindowImplemented *>(
             glfwGetWindowUserPointer(window));
+        if(action == GLFW_PRESS)
+        {
+          instance->get_window_manager()->handle_input(key, scancode, action, modifiers);
+        }
       });
 
   // Setup Platform/Renderer backends
@@ -138,6 +142,8 @@ bool WindowImplemented::run()
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
+
+    get_window_manager()->get_shortcuts_manager()->set_input_blocked(ImGui::GetIO().WantTextInput);
 
     // --- GUI content
     window_manager->render_windows();

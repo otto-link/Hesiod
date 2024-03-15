@@ -95,8 +95,6 @@ public:
 
   std::string render_new_node_treeview(const ImVec2 node_position = {0.f, 0.f});
 
-  bool render_element_content() override;
-
   void render_node_editor();
 
   void render_node_list();
@@ -116,6 +114,14 @@ public:
   void update_image_texture_view3d(bool vertex_array_update = true);
 
   void update_view3d_basemesh();
+
+  // window
+
+  bool initialize_window() override;
+
+  bool render_element_content() override;
+
+  shortcuts::GuiShortcutGroupId get_element_shortcut_group_id() override;
 
   // serialization
 

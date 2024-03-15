@@ -4,6 +4,7 @@
 #include <functional>
 
 #include "gnode.hpp"
+#include "hesiod/shortcuts.hpp"
 #include "imgui.h"
 #include "macrologger.h"
 
@@ -45,7 +46,7 @@ ViewTree::ViewTree(std::string     id,
       hesiod::gui::GuiRenderableWindowBase(),
       view3d_clear_color(25, 25, 25, 255)
 {
-  // initialize node editor
+  // Initialize node editor
   ax::NodeEditor::Config config;
   config.NavigateButtonIndex = 2;
   config.ContextMenuButtonIndex = 1;
@@ -59,8 +60,12 @@ ViewTree::ViewTree(std::string     id,
       "SimpleVertexShader.vertexshader",
       "SimpleFragmentShader.fragmentshader");
 
+  // Window
+
   this->renderable_window_title = "ViewTree " + id;
   this->renderable_window_flags = ImGuiWindowFlags_MenuBar;
+  
+  // OpenGL
 
   glGenVertexArrays(1, &this->vertex_array_id);
   glGenBuffers(1, &this->vertex_buffer);
