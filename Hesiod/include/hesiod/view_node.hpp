@@ -789,6 +789,34 @@ public:
   }
 };
 
+class ViewGaussianDecay : public ViewNode, public hesiod::cnode::GaussianDecay
+{
+public:
+  ViewGaussianDecay(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::GaussianDecay(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
+};
+
+class ViewGaussianPulse : public ViewNode, public hesiod::cnode::GaussianPulse
+{
+public:
+  ViewGaussianPulse(std::string     id,
+                    hmap::Vec2<int> shape,
+                    hmap::Vec2<int> tiling,
+                    float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::GaussianPulse(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("input");
+    this->set_view3d_color_port_id("output");
+  }
+};
+
 class ViewGeomorphons : public ViewNode, public hesiod::cnode::Geomorphons
 {
 public:
@@ -843,22 +871,6 @@ public:
   ViewGradientTalus(std::string id)
       : hesiod::cnode::ControlNode(id), ViewNode(id),
         hesiod::cnode::GradientTalus(id)
-  {
-    this->set_preview_port_id("output");
-    this->set_view3d_elevation_port_id("input");
-    this->set_view3d_color_port_id("output");
-  }
-};
-
-class ViewGaussianPulse : public ViewNode, public hesiod::cnode::GaussianPulse
-{
-public:
-  ViewGaussianPulse(std::string     id,
-                    hmap::Vec2<int> shape,
-                    hmap::Vec2<int> tiling,
-                    float           overlap)
-      : hesiod::cnode::ControlNode(id), ViewNode(id),
-        hesiod::cnode::GaussianPulse(id, shape, tiling, overlap)
   {
     this->set_preview_port_id("output");
     this->set_view3d_elevation_port_id("input");

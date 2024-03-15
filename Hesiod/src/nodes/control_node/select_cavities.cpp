@@ -13,7 +13,7 @@ SelectCavities::SelectCavities(std::string id) : ControlNode(id), Mask(id)
   this->node_type = "SelectCavities";
   this->category = category_mapping.at(this->node_type);
 
-  this->attr["radius"] = NEW_ATTR_FLOAT(0.1f, 0.01f, 1.f);
+  this->attr["radius"] = NEW_ATTR_FLOAT(0.05f, 0.001f, 0.2f, "%.3f");
   this->attr["concave"] = NEW_ATTR_BOOL(true);
 
   this->attr_ordered_key = {"radius",

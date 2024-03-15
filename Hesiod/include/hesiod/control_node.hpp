@@ -135,6 +135,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Gain", "Filter/Recurve"},
     {"GammaCorrection", "Filter/Recurve"},
     {"GammaCorrectionLocal", "Filter/Recurve"},
+    {"GaussianDecay", "Math/Base"},
     {"GaussianPulse", "Primitive/Function"},
     {"Geomorphons", "Features"},
     {"Gradient", "Math/Gradient"},
@@ -861,6 +862,14 @@ public:
   GammaCorrectionLocal(std::string id);
 
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
+};
+
+class GaussianDecay : public Unary
+{
+public:
+  GaussianDecay(std::string id);
+
+  void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
 };
 
 class GaussianPulse : public Primitive

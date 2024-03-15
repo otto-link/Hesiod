@@ -90,6 +90,8 @@ std::shared_ptr<gnode::Node> create_control_node_from_type(
     return std::make_shared<hesiod::cnode::GammaCorrection>(node_id);
   case str2int("GammaCorrectionLocal"):
     return std::make_shared<hesiod::cnode::GammaCorrectionLocal>(node_id);
+  case str2int("GaussianDecay"):
+    return std::make_shared<hesiod::cnode::GaussianDecay>(node_id);
   case str2int("GaussianPulse"):
     return std::make_shared<hesiod::cnode::GaussianPulse>(node_id, shape, tiling, overlap);
   case str2int("Geomorphons"):

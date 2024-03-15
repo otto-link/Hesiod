@@ -13,7 +13,7 @@ SmoothFill::SmoothFill(std::string id) : ControlNode(id)
   this->node_type = "SmoothFill";
   this->category = category_mapping.at(this->node_type);
 
-  this->attr["radius"] = NEW_ATTR_FLOAT(0.05f, 0.01f, 1.f);
+  this->attr["radius"] = NEW_ATTR_FLOAT(0.05f, 0.001f, 0.2f, "%.3f");
   this->attr["k"] = NEW_ATTR_FLOAT(0.01f, 0.01f, 1.f);
 
   this->add_port(gnode::Port("input", gnode::direction::in, dtype::dHeightMap));
