@@ -13,7 +13,7 @@
 namespace hesiod::gui
 {
 
-void hmap_brush_editor(HmBrushEditorState &edit_state,
+void hmap_brush_editor(HmapBrushEditorState &edit_state,
                        ImTextureID         canvas_texture,
                        float               width)
 {
@@ -118,14 +118,14 @@ void hmap_brush_editor(HmBrushEditorState &edit_state,
   ImGui::PopID();
 }
 
-void HmBrushEditorState::add_change(hmap::Vec2<float> pos, float weight)
+void HmapBrushEditorState::add_change(hmap::Vec2<float> pos, float weight)
 {
   if (pending_changes.size() > 128)
     return;
   pending_changes.push_back({pos, weight});
 }
 
-void HmBrushEditorState::apply_pending_changes()
+void HmapBrushEditorState::apply_pending_changes()
 {
   int ir = (int)(brush_radius / canvas_size.x * pending_hm.shape.x);
 
@@ -145,9 +145,9 @@ void HmBrushEditorState::apply_pending_changes()
   pending_changes.clear();
 }
 
-void HmBrushEditorState::apply_brushes(hmap::HeightMap             &h,
-                                       std::span<hmap::Array>       kernels,
-                                       std::span<hmap::Vec2<float>> positions)
+void HmapBrushEditorState::apply_brushes(hmap::HeightMap             &h,
+                                         std::span<hmap::Array>       kernels,
+                                         std::span<hmap::Vec2<float>> positions)
 {
   hmap::transform(h,
                   [&kernels, &positions](hmap::Array &z, hmap::Vec4<float> bbox)

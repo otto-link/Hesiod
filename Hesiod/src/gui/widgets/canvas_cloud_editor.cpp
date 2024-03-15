@@ -11,9 +11,8 @@
 #include "hesiod/gui.hpp"
 
 #define IMGUI_ID_HOVERED_POINT_INDEX 0
-#define IMGUI_ID_VMAX 1
-#define IMGUI_ID_RADIUS 2
-#define IMGUI_ID_SEED 3
+#define IMGUI_ID_RADIUS 1
+#define IMGUI_ID_SEED 2
 
 namespace hesiod::gui
 {

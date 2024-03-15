@@ -406,7 +406,7 @@ public:
   void sync_value();
 
 private:
-  hesiod::gui::HmBrushEditorState edit_state;
+  hesiod::gui::HmapBrushEditorState edit_state;
 };
 
 class ViewBump : public ViewNode, public hesiod::cnode::Bump
