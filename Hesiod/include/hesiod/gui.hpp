@@ -55,7 +55,6 @@ public:
   static constexpr Tag kInvalidTag = (Tag)-1;
 
   WindowManager();
-  virtual ~WindowManager();
 
   Tag     find_free_tag();
   bool    has_window(Tag tag);
@@ -77,7 +76,7 @@ private:
   std::queue<Tag>                        windows_delete_queue;
   Tag                                    tag_count;
 
-  ShortcutsManager *p_shortcuts_manager;
+  ShortcutsManager shortcuts_manager;
 };
 
 } // namespace hesiod::gui
