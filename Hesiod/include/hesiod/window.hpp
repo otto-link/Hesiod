@@ -41,7 +41,7 @@ public:
 
   bool get_size(int &width, int &height);
 
-  gui::WindowManager *get_window_manager_ref();
+  WindowManager *get_window_manager_ref();
 
 protected:
   void cleanup_internally();
@@ -56,7 +56,7 @@ private:
 
   ImColor clear_color;
 
-  gui::WindowManager window_manager;
+  WindowManager window_manager;
 };
 
 } // namespace hesiod::gui

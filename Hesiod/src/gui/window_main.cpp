@@ -125,8 +125,6 @@ bool MainWindow::initialize()
   ImGui_ImplGlfw_InitForOpenGL(this->p_glfw_window, true);
   ImGui_ImplOpenGL3_Init(glsl_version);
 
-  // this->window_manager = new gui::WindowManager();
-
   this->running = true;
   return this->running;
 }
@@ -221,7 +219,7 @@ bool MainWindow::get_size(int &query_width, int &query_height)
   return true;
 }
 
-gui::WindowManager *MainWindow::get_window_manager_ref()
+WindowManager *MainWindow::get_window_manager_ref()
 {
   return &(this->window_manager);
 }

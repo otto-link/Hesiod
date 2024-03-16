@@ -170,7 +170,9 @@ void ViewTree::export_view3d(std::string fname)
                img.data());
   hesiod::viewer::unbind_framebuffer();
 
-  gui::flip_vertically(this->shape_view3d.x, this->shape_view3d.y, img.data());
+  hesiod::gui::flip_vertically(this->shape_view3d.x,
+                               this->shape_view3d.y,
+                               img.data());
 
   hmap::write_png_rgb_8bit(
       fname,
