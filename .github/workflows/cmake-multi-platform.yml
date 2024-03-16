@@ -85,9 +85,9 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: Hesiod-Binary
-        path: ${{ github.workspace }}/bin/hesiod
+        path: ${{ github.workspace }}/build/bin/hesiod
     - name: Archive output binary (appimage)
       uses: actions/upload-artifact@v4
       with:
         name: Hesiod-AppImage
-        path: ${{ github.workspace }}/bin/hesiod.AppImage
+        path: ${{ github.workspace }}/build/bin/hesiod.AppImage
