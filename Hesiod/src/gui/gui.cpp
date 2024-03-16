@@ -201,7 +201,7 @@ void GuiWindowManager::handle_input(int key,
                                     int /* action */,
                                     int modifiers)
 {
-  shortcuts_manager->pass_and_check(key, modifiers, this);
+  shortcuts_manager->pass_and_check(key, modifiers);
 }
 
 gui::ShortcutsManager *GuiWindowManager::get_shortcuts_manager()

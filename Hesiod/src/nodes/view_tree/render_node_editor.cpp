@@ -24,21 +24,21 @@ bool ViewTree::initialize_window()
       "Preview 2d ##" + id,
       GLFW_KEY_2,
       0,
-      [this](void *) { this->open_view2d_window = !this->open_view2d_window; },
+      [this]() { this->open_view2d_window = !this->open_view2d_window; },
       this->get_element_shortcut_group_id()));
 
   renderable_window_shortcuts.push_back(new gui::Shortcut(
       "Preview 3d ##" + id,
       GLFW_KEY_4,
       0,
-      [this](void *) { this->open_view3d_window = !this->open_view3d_window; },
+      [this]() { this->open_view3d_window = !this->open_view3d_window; },
       this->get_element_shortcut_group_id()));
 
   renderable_window_shortcuts.push_back(new gui::Shortcut(
       "Settings ##" + id,
       GLFW_KEY_S,
       0,
-      [this](void *) { this->show_settings = !this->show_settings; },
+      [this]() { this->show_settings = !this->show_settings; },
       this->get_element_shortcut_group_id()));
 
   return true;

@@ -11,7 +11,7 @@ namespace hesiod::gui
 Shortcut::Shortcut(std::string     shortcut_label,
                    int             shortcut_key,
                    int             shortcut_modifier,
-                   Delegate        shortcut_delegate,
+                   ShortcutDelegate        shortcut_delegate,
                    ShortcutGroupId shortcut_group_id,
                    bool            shortcut_enabled)
     : label(shortcut_label), key(shortcut_key), modifier(shortcut_modifier),
@@ -22,16 +22,15 @@ Shortcut::Shortcut(std::string     shortcut_label,
 
 void Shortcut::pass_and_check(int             shortcut_key,
                               int             shortcut_modifier,
-                              ShortcutGroupId focused_group_id,
-                              void           *pass_data)
+                              ShortcutGroupId focused_group_id)
 {
-  if (key != shortcut_key || modifier != shortcut_modifier ||
-      group_id != focused_group_id || enabled != true)
+  if (this->key != shortcut_key || this->modifier != shortcut_modifier ||
+      this->group_id != focused_group_id || this->enabled != true)
   {
     return;
   }
 
-  delegate(pass_data);
+  this->delegate();
 }
 
 serialization::SerializationBatchHelper Shortcut::BuildBatchHelperData()
@@ -39,9 +38,9 @@ serialization::SerializationBatchHelper Shortcut::BuildBatchHelperData()
   serialization::SerializationBatchHelper batch =
       serialization::SerializationBatchHelper();
 
-  batch.AddInt("key", &key);
-  batch.AddInt("modifier", &modifier);
-  batch.AddBool("enabled", &enabled);
+  batch.AddInt("key", &this->key);
+  batch.AddInt("modifier", &this->modifier);
+  batch.AddBool("enabled", &this->enabled);
 
   return batch;
 }
@@ -59,24 +58,24 @@ ShortcutsManager::~ShortcutsManager()
 
 bool ShortcutsManager::add_shortcut(Shortcut *shortcut)
 {
-  if (shortcuts.count(shortcut->get_label()) > 0)
+  if (this->shortcuts.count(shortcut->get_label()) > 0)
   {
     return false;
   }
 
-  shortcuts.emplace(shortcut->get_label(), shortcut);
+  this->shortcuts.emplace(shortcut->get_label(), shortcut);
   return true;
 }
 
-bool ShortcutsManager::remove_shortcut(std::string Label)
+bool ShortcutsManager::remove_shortcut(std::string label)
 {
-  if (shortcuts.count(Label) <= 0)
+  if (this->shortcuts.count(label) <= 0)
   {
     return false;
   }
 
-  Shortcut *s = shortcuts.at(Label);
-  shortcuts.erase(Label);
+  Shortcut *s = this->shortcuts.at(label);
+  this->shortcuts.erase(label);
 
   delete s;
   return true;
@@ -91,15 +90,13 @@ bool ShortcutsManager::remove_all_shortcuts()
        currentIterator != shortcuts.end();
        currentIterator++)
   {
-    res &= remove_shortcut(currentIterator->first);
+    res &= this->remove_shortcut(currentIterator->first);
   }
 
   return res;
 }
 
-void ShortcutsManager::pass_and_check(int   shortcut_key,
-                                      int   shortcut_modifier,
-                                      void *pass_data)
+void ShortcutsManager::pass_and_check(int shortcut_key, int shortcut_modifier)
 {
   if (input_blocked == true)
     return;
@@ -111,8 +108,7 @@ void ShortcutsManager::pass_and_check(int   shortcut_key,
   {
     currentIterator->second->pass_and_check(shortcut_key,
                                             shortcut_modifier,
-                                            focused_group_id,
-                                            pass_data);
+                                            focused_group_id);
   }
 }
 
