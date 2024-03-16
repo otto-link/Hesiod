@@ -51,15 +51,17 @@ bool GuiRenderableWindowBase::render_element_content()
 
 bool GuiRenderableWindowBase::add_window_shortcuts()
 {
-  for (auto s : renderable_window_shortcuts)
+  for (auto &s : renderable_window_shortcuts)
   {
-    renderable_window_manager_parent->get_shortcuts_manager()->add_shortcut(s);
+    renderable_window_manager_parent->get_shortcuts_manager()->add_shortcut(
+        std::move(s));
   }
   return true;
 }
+
 bool GuiRenderableWindowBase::remove_window_shortcuts()
 {
-  for (auto s : renderable_window_shortcuts)
+  for (auto &s : renderable_window_shortcuts)
   {
     renderable_window_manager_parent->get_shortcuts_manager()->remove_shortcut(
         s->get_label());

@@ -1,19 +1,24 @@
-#include "hesiod/shortcuts.hpp"
+/* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
+ * Public License. The full license is in the file LICENSE, distributed with
+ * this software. */
+#include <map>
+
 #include "macrologger.h"
 #include "nlohmann/json_fwd.hpp"
-#include <map>
+
+#include "hesiod/shortcuts.hpp"
 
 namespace hesiod::gui
 {
 
 // Shortcut
 
-Shortcut::Shortcut(std::string     shortcut_label,
-                   int             shortcut_key,
-                   int             shortcut_modifier,
-                   ShortcutDelegate        shortcut_delegate,
-                   ShortcutGroupId shortcut_group_id,
-                   bool            shortcut_enabled)
+Shortcut::Shortcut(std::string      shortcut_label,
+                   int              shortcut_key,
+                   int              shortcut_modifier,
+                   ShortcutDelegate shortcut_delegate,
+                   ShortcutGroupId  shortcut_group_id,
+                   bool             shortcut_enabled)
     : label(shortcut_label), key(shortcut_key), modifier(shortcut_modifier),
       delegate(shortcut_delegate), group_id(shortcut_group_id),
       enabled(shortcut_enabled)
@@ -56,44 +61,39 @@ ShortcutsManager::~ShortcutsManager()
   this->remove_all_shortcuts();
 }
 
-bool ShortcutsManager::add_shortcut(Shortcut *shortcut)
+bool ShortcutsManager::add_shortcut(std::unique_ptr<Shortcut> p_shortcut)
 {
-  if (this->shortcuts.count(shortcut->get_label()) > 0)
+  if (this->shortcuts.contains(p_shortcut->get_label()))
   {
+    LOG_ERROR("shortcut label [%s] already used",
+              p_shortcut->get_label().c_str());
     return false;
   }
-
-  this->shortcuts.emplace(shortcut->get_label(), shortcut);
-  return true;
+  else
+  {
+    this->shortcuts.emplace(p_shortcut->get_label(), std::move(p_shortcut));
+    return true;
+  }
 }
 
 bool ShortcutsManager::remove_shortcut(std::string label)
 {
-  if (this->shortcuts.count(label) <= 0)
+  if (this->shortcuts.contains(label))
   {
+    this->shortcuts.erase(label);
+    return true;
+  }
+  else
+  {
+    LOG_ERROR("shortcut label [%s] unknown", label.c_str());
     return false;
   }
-
-  Shortcut *s = this->shortcuts.at(label);
-  this->shortcuts.erase(label);
-
-  delete s;
-  return true;
 }
 
 bool ShortcutsManager::remove_all_shortcuts()
 {
-  bool res = true;
-
-  for (std::map<std::string, Shortcut *>::iterator currentIterator =
-           shortcuts.begin();
-       currentIterator != shortcuts.end();
-       currentIterator++)
-  {
-    res &= this->remove_shortcut(currentIterator->first);
-  }
-
-  return res;
+  this->shortcuts.clear();
+  return true;
 }
 
 void ShortcutsManager::pass_and_check(int shortcut_key, int shortcut_modifier)
@@ -101,15 +101,10 @@ void ShortcutsManager::pass_and_check(int shortcut_key, int shortcut_modifier)
   if (input_blocked == true)
     return;
 
-  for (std::map<std::string, Shortcut *>::iterator currentIterator =
-           shortcuts.begin();
-       currentIterator != shortcuts.end();
-       currentIterator++)
-  {
-    currentIterator->second->pass_and_check(shortcut_key,
-                                            shortcut_modifier,
-                                            focused_group_id);
-  }
+  for (auto &[label, p_shortcut] : this->shortcuts)
+    p_shortcut->pass_and_check(shortcut_key,
+                               shortcut_modifier,
+                               focused_group_id);
 }
 
 void ShortcutsManager::set_focused_group_id(ShortcutGroupId shortcut_group_id)
@@ -125,14 +120,11 @@ void ShortcutsManager::set_input_blocked(bool toggle)
 bool ShortcutsManager::serialize_json_v2(std::string     field_name,
                                          nlohmann::json &output_data)
 {
-  for (std::map<std::string, Shortcut *>::iterator currentIterator =
-           shortcuts.begin();
-       currentIterator != shortcuts.end();
-       currentIterator++)
+  for (auto &[label, p_shortcut] : this->shortcuts)
   {
-    nlohmann::json currentData = nlohmann::json();
-    currentIterator->second->serialize_json_v2("data", currentData);
-    output_data[field_name][currentIterator->first] = currentData;
+    nlohmann::json data = nlohmann::json();
+    p_shortcut->serialize_json_v2("data", data);
+    output_data[field_name][label] = data;
   }
 
   return true;
@@ -146,11 +138,11 @@ bool ShortcutsManager::deserialize_json_v2(std::string     field_name,
     return false;
   }
 
-  for (auto currentIterator : input_data[field_name].items())
+  for (auto data : input_data[field_name].items())
   {
-    std::string label = currentIterator.key();
+    std::string label = data.key();
 
-    if (currentIterator.value().is_object() == false)
+    if (data.value().is_object() == false)
     {
       LOG_ERROR("Current shortcut data is not an object!");
       continue;
@@ -162,8 +154,7 @@ bool ShortcutsManager::deserialize_json_v2(std::string     field_name,
       continue;
     }
 
-    this->shortcuts.at(label)->deserialize_json_v2("data",
-                                                   currentIterator.value());
+    this->shortcuts.at(label)->deserialize_json_v2("data", data.value());
   }
 
   return true;

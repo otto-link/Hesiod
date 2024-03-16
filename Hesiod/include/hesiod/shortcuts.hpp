@@ -1,7 +1,12 @@
+/* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
+ * Public License. The full license is in the file LICENSE, distributed with
+ * this software. */
 #pragma once
-#include "hesiod/serialization.hpp"
 #include <functional>
 #include <map>
+#include <memory>
+
+#include "hesiod/serialization.hpp"
 
 namespace hesiod::gui
 {
@@ -74,7 +79,7 @@ public:
   ShortcutsManager();
   ~ShortcutsManager();
 
-  bool add_shortcut(Shortcut *shortcut);
+  bool add_shortcut(std::unique_ptr<Shortcut> p_shortcut);
   bool remove_shortcut(std::string Label);
   bool remove_all_shortcuts();
   void pass_and_check(int shortcut_key, int shortcut_modifier);
@@ -84,9 +89,9 @@ public:
   SERIALIZATION_V2_IMPLEMENT_BASE();
 
 private:
-  std::map<std::string, Shortcut *> shortcuts;
-  ShortcutGroupId                   focused_group_id;
-  bool                              input_blocked;
+  std::map<std::string, std::unique_ptr<Shortcut>> shortcuts;
+  ShortcutGroupId                                  focused_group_id;
+  bool                                             input_blocked;
 };
 
 } // namespace hesiod::gui

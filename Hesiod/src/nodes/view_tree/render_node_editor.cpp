@@ -2,13 +2,13 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include <functional>
+#include <vector>
 
 #include "ImGuiFileDialog.h"
 #include "gnode.hpp"
 #include "imgui.h"
 #include "macrologger.h"
 #include <imgui_node_editor.h>
-#include <vector>
 
 #include "hesiod/gui.hpp"
 #include "hesiod/view_node.hpp"
@@ -20,21 +20,21 @@ namespace hesiod::vnode
 
 bool ViewTree::initialize_window()
 {
-  renderable_window_shortcuts.push_back(new gui::Shortcut(
+  renderable_window_shortcuts.push_back(std::make_unique<gui::Shortcut>(
       "Preview 2d ##" + id,
       GLFW_KEY_2,
       0,
       [this]() { this->open_view2d_window = !this->open_view2d_window; },
       this->get_element_shortcut_group_id()));
 
-  renderable_window_shortcuts.push_back(new gui::Shortcut(
+  renderable_window_shortcuts.push_back(std::make_unique<gui::Shortcut>(
       "Preview 3d ##" + id,
-      GLFW_KEY_4,
+      GLFW_KEY_3,
       0,
       [this]() { this->open_view3d_window = !this->open_view3d_window; },
       this->get_element_shortcut_group_id()));
 
-  renderable_window_shortcuts.push_back(new gui::Shortcut(
+  renderable_window_shortcuts.push_back(std::make_unique<gui::Shortcut>(
       "Settings ##" + id,
       GLFW_KEY_S,
       0,

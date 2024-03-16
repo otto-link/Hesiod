@@ -54,10 +54,10 @@ public:
 protected:
   friend class GuiWindowManager;
 
-  std::string                  renderable_window_title;
-  ImGuiWindowFlags             renderable_window_flags;
-  GuiWindowManager            *renderable_window_manager_parent;
-  std::vector<gui::Shortcut *> renderable_window_shortcuts;
+  std::string                            renderable_window_title;
+  ImGuiWindowFlags                       renderable_window_flags;
+  GuiWindowManager                      *renderable_window_manager_parent;
+  std::vector<std::unique_ptr<Shortcut>> renderable_window_shortcuts;
 };
 
 class GuiWindowManager
