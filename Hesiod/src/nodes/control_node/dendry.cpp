@@ -19,6 +19,8 @@ Dendry::Dendry(std::string     id,
   this->node_type = "Dendry";
   this->category = category_mapping.at(this->node_type);
 
+  this->attr["subsampling"] = NEW_ATTR_INT(1, 1, 8);
+  
   this->attr["kw"] = NEW_ATTR_WAVENB(); // TODO default to {8.f, 8.f}
   this->attr["seed"] = NEW_ATTR_SEED();
   this->attr["eps"] = NEW_ATTR_FLOAT(0.2f, 0.f, 1.f);
@@ -30,7 +32,8 @@ Dendry::Dendry(std::string     id,
   this->attr["remap"] = NEW_ATTR_RANGE();
   this->attr["inverse"] = NEW_ATTR_BOOL(false);
 
-  this->attr_ordered_key = {"kw",
+  this->attr_ordered_key = {"subsampling",
+			    "kw",
                             "seed",
                             "eps",
                             "slope_power",
@@ -91,7 +94,8 @@ void Dendry::compute()
                                    p_noise_x,
                                    p_noise_y,
                                    nullptr,
-                                   bbox);
+                                   bbox,
+				   GET_ATTR_INT("subsampling"));
              });
 
   this->value_out.smooth_overlap_buffers();
