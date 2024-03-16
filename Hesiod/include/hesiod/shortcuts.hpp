@@ -29,7 +29,7 @@ class Shortcut : public hesiod::serialization::SerializationBatchBase
 public:
   using ShortcutDelegate = std::function<void()>;
 
-  Shortcut(std::string      shortcut_label,
+  Shortcut(std::string      shortcut_id,
            int              shortcut_key,
            int              shortcut_modifier,
            ShortcutDelegate shortcut_delegate,
@@ -44,9 +44,9 @@ public:
 
   SERIALIZATION_V2_IMPLEMENT_BATCH_BASE();
 
-  std::string get_label()
+  std::string get_id()
   {
-    return label;
+    return id;
   }
 
   int get_key()
@@ -65,7 +65,7 @@ public:
   }
 
 private:
-  std::string      label;
+  std::string      id;
   int              key;
   int              modifier;
   ShortcutDelegate delegate;
@@ -80,7 +80,7 @@ public:
   ~ShortcutsManager();
 
   bool add_shortcut(std::unique_ptr<Shortcut> p_shortcut);
-  bool remove_shortcut(std::string Label);
+  bool remove_shortcut(std::string id);
   bool remove_all_shortcuts();
   void pass_and_check(int shortcut_key, int shortcut_modifier);
   void set_focused_group_id(ShortcutGroupId shortcut_group_id);

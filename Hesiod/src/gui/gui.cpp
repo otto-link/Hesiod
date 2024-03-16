@@ -64,7 +64,7 @@ bool Window::remove_window_shortcuts()
   for (auto &s : renderable_window_shortcuts)
   {
     renderable_window_manager_parent->get_shortcuts_manager()->remove_shortcut(
-        s->get_label());
+        s->get_id());
   }
   renderable_window_shortcuts.clear();
   return true;

@@ -47,6 +47,7 @@ public:
   {
     return false;
   }
+
   virtual bool is_running()
   {
     return false;
@@ -56,6 +57,7 @@ public:
   {
     return "Not implemented";
   }
+
   virtual bool get_size(int * /*width*/, int * /*height*/)
   {
     return false;

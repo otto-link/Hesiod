@@ -13,13 +13,13 @@ namespace hesiod::gui
 
 // Shortcut
 
-Shortcut::Shortcut(std::string      shortcut_label,
+Shortcut::Shortcut(std::string      shortcut_id,
                    int              shortcut_key,
                    int              shortcut_modifier,
                    ShortcutDelegate shortcut_delegate,
                    ShortcutGroupId  shortcut_group_id,
                    bool             shortcut_enabled)
-    : label(shortcut_label), key(shortcut_key), modifier(shortcut_modifier),
+    : id(shortcut_id), key(shortcut_key), modifier(shortcut_modifier),
       delegate(shortcut_delegate), group_id(shortcut_group_id),
       enabled(shortcut_enabled)
 {
@@ -63,29 +63,28 @@ ShortcutsManager::~ShortcutsManager()
 
 bool ShortcutsManager::add_shortcut(std::unique_ptr<Shortcut> p_shortcut)
 {
-  if (this->shortcuts.contains(p_shortcut->get_label()))
+  if (this->shortcuts.contains(p_shortcut->get_id()))
   {
-    LOG_ERROR("shortcut label [%s] already used",
-              p_shortcut->get_label().c_str());
+    LOG_ERROR("shortcut id [%s] already used", p_shortcut->get_id().c_str());
     return false;
   }
   else
   {
-    this->shortcuts.emplace(p_shortcut->get_label(), std::move(p_shortcut));
+    this->shortcuts.emplace(p_shortcut->get_id(), std::move(p_shortcut));
     return true;
   }
 }
 
-bool ShortcutsManager::remove_shortcut(std::string label)
+bool ShortcutsManager::remove_shortcut(std::string id)
 {
-  if (this->shortcuts.contains(label))
+  if (this->shortcuts.contains(id))
   {
-    this->shortcuts.erase(label);
+    this->shortcuts.erase(id);
     return true;
   }
   else
   {
-    LOG_ERROR("shortcut label [%s] unknown", label.c_str());
+    LOG_ERROR("shortcut id [%s] unknown", id.c_str());
     return false;
   }
 }
@@ -101,7 +100,7 @@ void ShortcutsManager::pass_and_check(int shortcut_key, int shortcut_modifier)
   if (input_blocked == true)
     return;
 
-  for (auto &[label, p_shortcut] : this->shortcuts)
+  for (auto &[id, p_shortcut] : this->shortcuts)
     p_shortcut->pass_and_check(shortcut_key,
                                shortcut_modifier,
                                focused_group_id);
@@ -120,11 +119,11 @@ void ShortcutsManager::set_input_blocked(bool toggle)
 bool ShortcutsManager::serialize_json_v2(std::string     field_name,
                                          nlohmann::json &output_data)
 {
-  for (auto &[label, p_shortcut] : this->shortcuts)
+  for (auto &[id, p_shortcut] : this->shortcuts)
   {
     nlohmann::json data = nlohmann::json();
     p_shortcut->serialize_json_v2("data", data);
-    output_data[field_name][label] = data;
+    output_data[field_name][id] = data;
   }
 
   return true;
@@ -140,7 +139,7 @@ bool ShortcutsManager::deserialize_json_v2(std::string     field_name,
 
   for (auto data : input_data[field_name].items())
   {
-    std::string label = data.key();
+    std::string id = data.key();
 
     if (data.value().is_object() == false)
     {
@@ -148,13 +147,13 @@ bool ShortcutsManager::deserialize_json_v2(std::string     field_name,
       continue;
     }
 
-    if (this->shortcuts.count(label) <= 0)
+    if (this->shortcuts.count(id) <= 0)
     {
-      LOG_ERROR("Short with the label of %s could not be found!", label.data());
+      LOG_ERROR("Short with the id of %s could not be found!", id.data());
       continue;
     }
 
-    this->shortcuts.at(label)->deserialize_json_v2("data", data.value());
+    this->shortcuts.at(id)->deserialize_json_v2("data", data.value());
   }
 
   return true;
