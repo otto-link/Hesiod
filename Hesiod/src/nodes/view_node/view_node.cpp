@@ -7,7 +7,6 @@
 #include <imgui_internal.h>
 #include <imgui_node_editor.h>
 
-#include "hesiod/gui.hpp"
 #include "hesiod/view_node.hpp"
 #include "hesiod/widgets.hpp"
 

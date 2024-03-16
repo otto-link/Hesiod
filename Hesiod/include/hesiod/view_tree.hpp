@@ -5,17 +5,17 @@
 #include <filesystem>
 #include <string>
 
+#include "highmap.hpp"
+#include "imgui.h"
 #include <GL/glew.h>
 #include <GL/glut.h>
 #include <GLFW/glfw3.h>
-
-#include "hesiod/gui.hpp"
-#include "highmap.hpp"
 #include <imgui_node_editor.h>
 
 #include "hesiod/control_tree.hpp"
 #include "hesiod/serialization.hpp"
-#include "imgui.h"
+#include "hesiod/shortcuts.hpp"
+#include "hesiod/windows.hpp"
 
 namespace hesiod::vnode
 {
@@ -120,7 +120,7 @@ public:
 
   bool render_window_content() override;
 
-  ShortcutGroupId get_element_shortcut_group_id() override;
+  hesiod::gui::ShortcutGroupId get_element_shortcut_group_id() override;
 
   // serialization
 

@@ -11,8 +11,8 @@
 #include "imgui_impl_opengl3.h"
 #include "macrologger.h"
 
-#include "hesiod/gui.hpp"
 #include "hesiod/shortcuts.hpp"
+#include "hesiod/windows.hpp"
 
 namespace hesiod::gui
 {

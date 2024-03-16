@@ -1,15 +1,6 @@
-/* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
- * Public License. The full license is in the file LICENSE, distributed with
- * this software. */
 #pragma once
-#include <filesystem>
-#include <map>
 #include <queue>
 #include <string>
-#include <vector>
-
-#include "hesiod/shortcuts.hpp"
-#include "highmap.hpp"
 
 #include <GL/glew.h>
 #include <GL/glut.h>
@@ -19,10 +10,13 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
+#include "hesiod/shortcuts.hpp"
+
 namespace hesiod::gui
+
 {
 
-// Forward declaration for the parent of the Window
+// forward declarations
 class WindowManager;
 
 class Window : public ShortcutGroupElement
@@ -77,6 +71,50 @@ private:
   Tag                                    tag_count;
 
   ShortcutsManager shortcuts_manager;
+};
+
+class MainWindow
+{
+public:
+  MainWindow(std::string window_title, int window_width, int window_height);
+
+  ~MainWindow();
+
+  bool initialize();
+
+  bool shutdown();
+
+  bool run();
+
+  bool set_title(std::string title);
+
+  bool set_size(int width, int height);
+
+  bool is_running()
+  {
+    return this->running;
+  }
+
+  std::string get_title();
+
+  bool get_size(int &width, int &height);
+
+  WindowManager *get_window_manager_ref();
+
+protected:
+  void cleanup_internally();
+
+private:
+  std::string title;
+  int         width;
+  int         height;
+
+  GLFWwindow *p_glfw_window;
+  bool        running;
+
+  ImColor clear_color;
+
+  WindowManager window_manager;
 };
 
 } // namespace hesiod::gui

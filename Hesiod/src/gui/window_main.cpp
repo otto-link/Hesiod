@@ -1,10 +1,13 @@
-#include "hesiod/window.hpp"
+/* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
+ * Public License. The full license is in the file LICENSE, distributed with
+ * this software. */
+#include <vector>
 
 #include "ImCandy/candy.h"
-#include "hesiod/fonts.hpp"
-#include "hesiod/gui.hpp"
 #include "macrologger.h"
-#include <vector>
+
+#include "hesiod/fonts.hpp"
+#include "hesiod/windows.hpp"
 
 namespace hesiod::gui
 {

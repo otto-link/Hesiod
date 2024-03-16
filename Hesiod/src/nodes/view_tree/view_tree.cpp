@@ -11,10 +11,10 @@
 #include "hesiod/viewer.hpp"
 
 #include "hesiod/control_tree.hpp"
-#include "hesiod/gui.hpp"
 #include "hesiod/view_node.hpp"
 #include "hesiod/view_tree.hpp"
 #include "hesiod/widgets.hpp"
+#include "hesiod/windows.hpp"
 
 namespace hesiod::vnode
 {

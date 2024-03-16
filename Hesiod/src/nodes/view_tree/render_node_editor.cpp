@@ -10,10 +10,10 @@
 #include "macrologger.h"
 #include <imgui_node_editor.h>
 
-#include "hesiod/gui.hpp"
 #include "hesiod/view_node.hpp"
 #include "hesiod/view_tree.hpp"
 #include "hesiod/widgets.hpp"
+#include "hesiod/windows.hpp"
 
 namespace hesiod::vnode
 {
