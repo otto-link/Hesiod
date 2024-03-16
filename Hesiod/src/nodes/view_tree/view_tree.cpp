@@ -19,14 +19,14 @@
 namespace hesiod::vnode
 {
 
-Link::Link(){};
+LinkInfos::LinkInfos(){};
 
-Link::Link(std::string node_id_from,
-           std::string port_id_from,
-           int         port_hash_id_from,
-           std::string node_id_to,
-           std::string port_id_to,
-           int         port_hash_id_to)
+LinkInfos::LinkInfos(std::string node_id_from,
+                     std::string port_id_from,
+                     int         port_hash_id_from,
+                     std::string node_id_to,
+                     std::string port_id_to,
+                     int         port_hash_id_to)
     : node_id_from(node_id_from), port_id_from(port_id_from),
       port_hash_id_from(port_hash_id_from), node_id_to(node_id_to),
       port_id_to(port_id_to), port_hash_id_to(port_hash_id_to)
@@ -82,10 +82,10 @@ ViewTree::~ViewTree()
   glDeleteFramebuffers(1, &this->RBO);
 }
 
-Link *ViewTree::get_link_ref_by_id(int link_id)
+LinkInfos *ViewTree::get_link_ref_by_id(int link_id)
 {
-  if (this->links.contains(link_id))
-    return &(this->links[link_id]);
+  if (this->links_infos.contains(link_id))
+    return &(this->links_infos[link_id]);
   else
   {
     LOG_ERROR("link id [%d] is not known", link_id);
@@ -150,7 +150,7 @@ void ViewTree::clear()
   this->set_viewer_node_id("");
   this->json_filename = "";
   this->remove_all_nodes();
-  this->links.clear();
+  this->links_infos.clear();
 }
 
 void ViewTree::export_view3d(std::string fname)
@@ -261,7 +261,7 @@ void ViewTree::new_link(std::string node_id_from,
   {
 
     // swap from and to if the link has been drawn from an input to and
-    // output (in GNode the links are created always from the output to
+    // output (in GNode the links_infos are created always from the output to
     // the input)
     if (this->get_node_ref_by_id(node_id_from)
             ->get_port_ref_by_id(port_id_from)
@@ -279,7 +279,7 @@ void ViewTree::new_link(std::string node_id_from,
                               ->get_port_ref_by_id(port_id_to)
                               ->hash_id;
 
-    // --- check if links already exist for the ports that are to be
+    // --- check if links_infos already exist for the ports that are to be
     // --- connected
     if (this->get_node_ref_by_id(node_id_from)
             ->get_port_ref_by_id(port_id_from)
@@ -319,19 +319,19 @@ void ViewTree::new_link(std::string node_id_from,
 
     // --- generate link
 
-    // in GNode
+    // in GNode (data link)
     this->link(node_id_from, port_id_from, node_id_to, port_id_to);
 
     // use input hash id for the link id
-    Link link = Link(node_id_from,
-                     port_id_from,
-                     port_hash_id_from,
-                     node_id_to,
-                     port_id_to,
-                     port_hash_id_to);
+    LinkInfos link = LinkInfos(node_id_from,
+                               port_id_from,
+                               port_hash_id_from,
+                               node_id_to,
+                               port_id_to,
+                               port_hash_id_to);
 
     int link_id = port_hash_id_to;
-    this->links[link_id] = link;
+    this->links_infos[link_id] = link;
 
     if (this->is_cyclic())
     {
@@ -370,7 +370,8 @@ void ViewTree::post_update()
 
 void ViewTree::remove_link(int link_id)
 {
-  Link *p_link = this->get_link_ref_by_id(link_id);
+  // in GNode (data link)
+  LinkInfos *p_link = this->get_link_ref_by_id(link_id);
   this->unlink(p_link->node_id_from,
                p_link->port_id_from,
                p_link->node_id_to,
@@ -380,17 +381,17 @@ void ViewTree::remove_link(int link_id)
   this->update_node(p_link->node_id_to);
 
   // eventually remove link from the link directory
-  this->links.erase(link_id);
+  this->links_infos.erase(link_id);
 }
 
 void ViewTree::remove_view_node(std::string node_id)
 {
 
   // for the TreeView, we need to do everything by hand: first remove
-  // all the links from and to the node
+  // all the links_infos from and to the node
   std::vector<int> link_id_to_remove = {};
 
-  for (auto &[link_id, link] : this->links)
+  for (auto &[link_id, link] : this->links_infos)
     if ((link.node_id_from == node_id) | (link.node_id_to == node_id))
       link_id_to_remove.push_back(link_id);
 

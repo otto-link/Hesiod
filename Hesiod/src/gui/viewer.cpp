@@ -411,7 +411,7 @@ GLuint load_shaders(const char *vertex_file_path,
     LOG_DEBUG("%s", &fragment_shader_error_message[0]);
   }
 
-  // Link the program
+  // LinkInfos the program
   LOG_DEBUG("Linking program");
   GLuint program_id = glCreateProgram();
   glAttachShader(program_id, vertex_shader_id);

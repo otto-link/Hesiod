@@ -24,7 +24,7 @@ void ViewTree::render_node_list()
     ImGui::TableSetupColumn("Node Id");
     ImGui::TableSetupColumn("Port Id");
     ImGui::TableSetupColumn("Port Direction");
-    ImGui::TableSetupColumn("Link");
+    ImGui::TableSetupColumn("LinkInfos");
     ImGui::TableSetupColumn("Node Id");
     ImGui::TableSetupColumn("Port Id");
     ImGui::TableSetupScrollFreeze(0, 1);

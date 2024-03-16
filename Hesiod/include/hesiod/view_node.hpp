@@ -93,7 +93,7 @@ static const std::map<std::string, viewnode_color_set> category_colors = {
     {"Biomes", viewnode_color_set({133, 153, 0, 255})},
     {"Texture", viewnode_color_set({0, 0, 0, 255})}};
 
-// Dracula theme for links
+// Dracula theme for links_infos
 static const std::map<int, viewnode_color_set> dtype_colors = {
     {hesiod::cnode::dArray, viewnode_color_set({255, 121, 198, 255})},
     {hesiod::cnode::dCloud, viewnode_color_set({139, 233, 253, 255})},

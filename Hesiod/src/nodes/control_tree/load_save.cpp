@@ -14,7 +14,7 @@
 #include "hesiod/control_node.hpp"
 #include "hesiod/control_tree.hpp"
 #include "hesiod/serialization.hpp"
-#include "hesiod/view_tree.hpp" // for the Link object
+#include "hesiod/view_tree.hpp" // for the LinkInfos object
 
 namespace hesiod::cnode
 {
@@ -147,12 +147,12 @@ bool ControlTree::deserialize_json_v2_sto(std::string     field_name,
     }
   }
 
-  // links
-  for (nlohmann::json link_data : input_data[field_name]["links"])
+  // links_infos
+  for (nlohmann::json link_data : input_data[field_name]["links_infos"])
   {
-    // links from the ViewTree (GUI links) are replicated within the
-    // GNode framework (data links)
-    hesiod::vnode::Link current_link = hesiod::vnode::Link();
+    // links_infos from the ViewTree (GUI links_infos) are replicated within the
+    // GNode framework (data links_infos)
+    hesiod::vnode::LinkInfos current_link = hesiod::vnode::LinkInfos();
     current_link.deserialize_json_v2("value", link_data);
 
     this->link(current_link.node_id_from,

@@ -17,10 +17,10 @@
 namespace hesiod::vnode
 {
 
-// Link
+// LinkInfos
 
-bool Link::serialize_json_v2(std::string     field_name,
-                             nlohmann::json &output_data)
+bool LinkInfos::serialize_json_v2(std::string     field_name,
+                                  nlohmann::json &output_data)
 {
   output_data[field_name]["node_id_from"] = node_id_from;
   output_data[field_name]["port_id_from"] = port_id_from;
@@ -31,8 +31,8 @@ bool Link::serialize_json_v2(std::string     field_name,
   return true;
 }
 
-bool Link::deserialize_json_v2(std::string     field_name,
-                               nlohmann::json &input_data)
+bool LinkInfos::deserialize_json_v2(std::string     field_name,
+                                    nlohmann::json &input_data)
 {
   if (input_data[field_name].is_object() == false)
   {
@@ -54,7 +54,7 @@ bool Link::deserialize_json_v2(std::string     field_name,
 void ViewTree::load_state(std::string fname)
 {
   this->remove_all_nodes();
-  this->links.clear();
+  this->links_infos.clear();
 
   std::ifstream  input_file_stream = std::ifstream(fname);
   nlohmann::json input_serialized_data = nlohmann::json();
@@ -205,7 +205,7 @@ bool ViewTree::serialize_json_v2(std::string     field_name,
 
   std::vector<nlohmann::json> linksArraySerialized = {};
 
-  for (auto &[id, link] : links)
+  for (auto &[id, link] : links_infos)
   {
     nlohmann::json currentLinkSerialized = nlohmann::json();
 
@@ -216,7 +216,7 @@ bool ViewTree::serialize_json_v2(std::string     field_name,
   }
 
   output_data[field_name]["nodes"] = nodesArraySerialized;
-  output_data[field_name]["links"] = linksArraySerialized;
+  output_data[field_name]["links_infos"] = linksArraySerialized;
 
   return true;
 }
@@ -275,18 +275,18 @@ bool ViewTree::deserialize_json_v2(std::string     field_name,
     }
   }
 
-  // links
-  for (nlohmann::json link_data : input_data[field_name]["links"])
+  // links_infos
+  for (nlohmann::json link_data : input_data[field_name]["links_infos"])
   {
-    Link current_link = Link();
-    int  id = link_data["key"].get<int>();
+    LinkInfos current_link = LinkInfos();
+    int       id = link_data["key"].get<int>();
     current_link.deserialize_json_v2("value", link_data);
-    links.emplace(id, current_link);
+    links_infos.emplace(id, current_link);
   }
 
-  // links from the ViewTree (GUI links) still needs to be replicated
-  // within the GNode framework (data links)
-  for (auto &[id, link] : this->links)
+  // links_infos from the ViewTree (GUI links_infos) still needs to be
+  // replicated within the GNode framework (data links_infos)
+  for (auto &[id, link] : this->links_infos)
     this->link(link.node_id_from,
                link.port_id_from,
                link.node_id_to,

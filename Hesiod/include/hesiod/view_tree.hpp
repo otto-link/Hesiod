@@ -20,24 +20,66 @@
 namespace hesiod::vnode
 {
 
-struct Link
+/**
+ * @brief LinkInfos class, use to store informations about the data link between
+ * the nodes.
+ *
+ * The base framework GNode does not provide an inventory of the
+ * links since the data connection informations between the nodes are carried
+ * out by the nodes themselve. In order to render the links, it nonetheless
+ * necessary to have an 'overview' of the links (to avoid parsing the whole to
+ * rebuild the links invetory).
+ *
+ * 'from' and 'to' depends on how the link is created and is not related to a
+ * specific link direction (different from 'output' or 'input').
+ */
+struct LinkInfos
 {
-  // related to GNode and Hesiod
+  // --- GNode (and thus Hesiod) Id system
+
+  /**
+   * @brief Starting node id (GNode id system).
+   */
   std::string node_id_from;
+
+  /**
+   * @brief Starting port id (GNode id system).
+   */
   std::string port_id_from;
-  int         port_hash_id_from;
+
+  /**
+   * @brief Ending node id (GNode id system).
+   */
   std::string node_id_to;
+
+  /**
+   * @brief Ending port id (GNode id system).
+   */
   std::string port_id_to;
-  int         port_hash_id_to;
 
-  Link();
+  // --- Id system compliant with the node editor
 
-  Link(std::string node_id_from,
-       std::string port_id_from,
-       int         port_hash_id_from,
-       std::string node_id_to,
-       std::string port_id_to,
-       int         port_hash_id_to);
+  /**
+   * @brief  Starting port id (node editor id system).
+   */
+  int port_hash_id_from;
+
+  /**
+   * @brief  Ending port id (node editor id system).
+   */
+  int port_hash_id_to;
+
+  /**
+   * @brief Constructor
+   */
+  LinkInfos();
+
+  LinkInfos(std::string node_id_from,
+            std::string port_id_from,
+            int         port_hash_id_from,
+            std::string node_id_to,
+            std::string port_id_to,
+            int         port_hash_id_to); ///< @overload
 
   SERIALIZATION_V2_IMPLEMENT_BASE();
 };
@@ -52,7 +94,7 @@ public:
 
   ~ViewTree();
 
-  Link *get_link_ref_by_id(int link_id);
+  LinkInfos *get_link_ref_by_id(int link_id);
 
   ImU32 get_node_color(std::string node_id);
 
@@ -131,7 +173,7 @@ public:
   SERIALIZATION_V2_IMPLEMENT_BASE();
 
 private:
-  std::map<int, Link>                 links = {};
+  std::map<int, LinkInfos>            links_infos = {};
   std::vector<ax::NodeEditor::NodeId> selected_node_hid = {};
 
   ax::NodeEditor::EditorContext *p_node_editor_context = nullptr;

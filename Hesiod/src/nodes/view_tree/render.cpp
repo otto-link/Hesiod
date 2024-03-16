@@ -30,9 +30,9 @@ void ViewTree::automatic_node_layout()
 
 void ViewTree::render_links()
 {
-  for (auto &[link_id, link] : this->links)
+  for (auto &[link_id, link] : this->links_infos)
   {
-    // change color of "dead" links when a node upstream is frozen
+    // change color of "dead" links_infos when a node upstream is frozen
     bool is_link_frozen =
         this->get_node_ref_by_id(link.node_id_from)->frozen_outputs;
 
