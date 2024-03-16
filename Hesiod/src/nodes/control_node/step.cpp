@@ -33,14 +33,11 @@ void Step::compute()
 {
   LOG_DEBUG("computing Step node [%s]", this->id.c_str());
 
-  float talus_global = GET_ATTR_FLOAT("talus_global");
-  float talus = talus_global / (float)this->value_out.shape.x;
-
   hmap::fill(this->value_out,
              (hmap::HeightMap *)this->get_p_data("dx"),
-             [this, &talus](hmap::Vec2<int>   shape,
-                            hmap::Vec4<float> bbox,
-                            hmap::Array      *p_noise_x)
+             [this](hmap::Vec2<int>   shape,
+                    hmap::Vec4<float> bbox,
+                    hmap::Array      *p_noise_x)
              {
                hmap::Vec2<float> center;
                center.x = GET_ATTR_FLOAT("center.x");
@@ -48,7 +45,7 @@ void Step::compute()
 
                return hmap::step(shape,
                                  GET_ATTR_FLOAT("angle"),
-                                 talus,
+                                 GET_ATTR_FLOAT("talus_global"),
                                  p_noise_x,
                                  nullptr,
                                  nullptr,

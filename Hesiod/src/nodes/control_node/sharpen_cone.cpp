@@ -8,17 +8,18 @@
 namespace hesiod::cnode
 {
 
-SmoothFillSmearPeaks::SmoothFillSmearPeaks(std::string id)
-    : ControlNode(id), Filter(id)
+SharpenCone::SharpenCone(std::string id) : ControlNode(id), Filter(id)
 {
-  LOG_DEBUG("SmoothFillSmearPeaks::SmoothFillSmearPeaks()");
-  this->node_type = "SmoothFillSmearPeaks";
+  this->node_type = "SharpenCone";
   this->category = category_mapping.at(this->node_type);
-  this->attr["radius"] = NEW_ATTR_FLOAT(0.05f, 0.01f, 0.5f);
+  this->attr["radius"] = NEW_ATTR_FLOAT(0.1f, 0.f, 0.5f);
+  this->attr["scale"] = NEW_ATTR_FLOAT(0.1f, 0.f, 2.f);
+  this->attr["remap"] = NEW_ATTR_RANGE();
+
+  this->attr_ordered_key = {"radius", "scale", "remap"};
 }
 
-void SmoothFillSmearPeaks::compute_filter(hmap::HeightMap &h,
-                                          hmap::HeightMap *p_mask)
+void SharpenCone::compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask)
 {
   LOG_DEBUG("computing filter node [%s]", this->id.c_str());
 
@@ -26,9 +27,9 @@ void SmoothFillSmearPeaks::compute_filter(hmap::HeightMap &h,
 
   hmap::transform(h,
                   p_mask,
-                  [&ir](hmap::Array &x, hmap::Array *p_mask)
-                  { hmap::smooth_fill_smear_peaks(x, ir, p_mask); });
-
+                  [this, &ir](hmap::Array &x, hmap::Array *p_mask) {
+                    hmap::sharpen_cone(x, p_mask, ir, GET_ATTR_FLOAT("scale"));
+                  });
   h.smooth_overlap_buffers();
 }
 

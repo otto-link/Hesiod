@@ -30,7 +30,7 @@ bool render_attribute_widget(std::unique_ptr<Attribute> &attr,
   {
     CloudAttribute *p_attr = attr.get()->get_ref<CloudAttribute>();
     ImGui::TextUnformatted(label.c_str());
-    has_changed |= hesiod::gui::canvas_cloud_editor(p_attr->value);
+    has_changed |= hesiod::gui::hmap_cloud_editor(p_attr->value);
   }
   break;
 
@@ -77,7 +77,7 @@ bool render_attribute_widget(std::unique_ptr<Attribute> &attr,
                        &p_attr->value,
                        p_attr->vmin,
                        p_attr->vmax,
-                       "%.2f");
+                       p_attr->fmt.c_str());
     has_changed |= ImGui::IsItemDeactivatedAfterEdit();
   }
   break;
@@ -134,7 +134,7 @@ bool render_attribute_widget(std::unique_ptr<Attribute> &attr,
       has_changed = true;
     }
 
-    has_changed |= hesiod::gui::canvas_path_editor(p_attr->value);
+    has_changed |= hesiod::gui::hmap_path_editor(p_attr->value);
   }
   break;
 

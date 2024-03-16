@@ -88,8 +88,8 @@ enum export_type : int
 
 enum kernel : int
 {
-  cone,
   cubic_pulse,
+  cone,
   lorentzian,
   smooth_cosine
 };
@@ -116,7 +116,6 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Colorize", "Texture"},
     {"ColorizeSolid", "Texture"},
     {"CombineMask", "Mask"},
-    {"PreviewColorize", "Texture"},
     {"ConvolveSVD", "Math/Convolution"},
     {"Debug", "Debug"},
     {"Dendry", "Primitive/Coherent"},
@@ -128,6 +127,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"ExpandShrink", "Filter/Recast"},
     {"ExpandShrinkDirectional", "Filter/Recast"},
     {"Export", "IO/Files"},
+    {"ExportOBJ", "IO/Files"},
     {"ExportRGB", "IO/Files"},
     {"Faceted", "Filter/Recast"}, // not distributed
     {"FractalizePath", "Geometry/Path"},
@@ -135,13 +135,13 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Gain", "Filter/Recurve"},
     {"GammaCorrection", "Filter/Recurve"},
     {"GammaCorrectionLocal", "Filter/Recurve"},
+    {"GaussianDecay", "Math/Base"},
     {"GaussianPulse", "Primitive/Function"},
     {"Geomorphons", "Features"},
     {"Gradient", "Math/Gradient"},
     {"GradientAngle", "Math/Gradient"},
     {"GradientNorm", "Math/Gradient"},
     {"GradientTalus", "Math/Gradient"},
-    {"ToKernel", "Primitive/Kernel"},
     {"HydraulicAlgebric", "Erosion/Hydraulic"},
     {"HydraulicParticle", "Erosion/Hydraulic"},
     {"HydraulicRidge", "Erosion/Hydraulic"}, // not distributed
@@ -177,6 +177,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Peak", "Primitive/Geological"},
     {"Plateau", "Filter/Recurve"},
     {"Preview", "Debug"},
+    {"PreviewColorize", "Texture"},
     {"RecastCanyon", "Filter/Recast"},
     {"RecastCliff", "Filter/Recast"},
     {"RecastCliffDirectional", "Filter/Recast"},
@@ -199,6 +200,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"SelectPulse", "Mask"},
     {"SelectRivers", "Mask"}, // not distributed
     {"SelectTransitions", "Mask"},
+    {"SharpenCone", "Filter/Smoothing"},
     {"Slope", "Primitive/Function"},
     {"SmoothCpulse", "Filter/Smoothing"},
     {"SmoothFill", "Filter/Smoothing"},
@@ -212,6 +214,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"ThermalAutoBedrock", "Erosion/Thermal"},
     {"ThermalFlatten", "Erosion/Thermal"},
     {"ThermalScree", "Erosion/Thermal"},
+    {"ToKernel", "Primitive/Kernel"},
     {"ToMask", "Mask"},
     {"ValleyWidth", "Features"},
     {"Warp", "Operator/Transform"},
@@ -235,6 +238,7 @@ class ControlNode : public gnode::Node, serialization::SerializationBase
 public:
   std::map<std::string, std::unique_ptr<hesiod::Attribute>> attr = {};
   std::vector<std::string> attr_ordered_key = {};
+  std::string              comment_text = "";
 
   ControlNode() : gnode::Node()
   {
@@ -768,6 +772,16 @@ protected:
       {"raw (16 bit, Unity)", hesiod::cnode::export_type::raw16bit}};
 };
 
+class ExportOBJ : virtual public ControlNode
+{
+public:
+  ExportOBJ(std::string id);
+
+  void compute();
+
+  void write_file();
+};
+
 class ExportRGB : virtual public ControlNode
 {
 public:
@@ -848,6 +862,14 @@ public:
   GammaCorrectionLocal(std::string id);
 
   void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
+};
+
+class GaussianDecay : public Unary
+{
+public:
+  GaussianDecay(std::string id);
+
+  void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
 };
 
 class GaussianPulse : public Primitive
@@ -1550,6 +1572,14 @@ public:
 
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
+};
+
+class SharpenCone : public Filter
+{
+public:
+  SharpenCone(std::string id);
+
+  void compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask);
 };
 
 class Slope : public Primitive

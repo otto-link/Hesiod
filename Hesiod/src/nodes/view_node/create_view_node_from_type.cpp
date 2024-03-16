@@ -73,6 +73,8 @@ std::shared_ptr<gnode::Node> create_view_node_from_type(std::string node_type,
     return std::make_shared<hesiod::vnode::ViewExpandShrink>(node_id);
   case str2int("Export"):
     return std::make_shared<hesiod::vnode::ViewExport>(node_id);
+  case str2int("ExportOBJ"):
+    return std::make_shared<hesiod::vnode::ViewExportOBJ>(node_id);
   case str2int("ExportRGB"):
     return std::make_shared<hesiod::vnode::ViewExportRGB>(node_id);
   case str2int("Faceted"):
@@ -87,6 +89,8 @@ std::shared_ptr<gnode::Node> create_view_node_from_type(std::string node_type,
     return std::make_shared<hesiod::vnode::ViewGammaCorrection>(node_id);
   case str2int("GammaCorrectionLocal"):
     return std::make_shared<hesiod::vnode::ViewGammaCorrectionLocal>(node_id);
+  case str2int("GaussianDecay"):
+    return std::make_shared<hesiod::vnode::ViewGaussianDecay>(node_id);
   case str2int("GaussianPulse"):
     return std::make_shared<hesiod::vnode::ViewGaussianPulse>(node_id, shape, tiling, overlap);
   case str2int("Geomorphons"):
@@ -215,6 +219,8 @@ std::shared_ptr<gnode::Node> create_view_node_from_type(std::string node_type,
     return std::make_shared<hesiod::vnode::ViewSelectRivers>(node_id);
   case str2int("SelectTransitions"):
     return std::make_shared<hesiod::vnode::ViewSelectTransitions>(node_id);
+  case str2int("SharpenCone"):
+    return std::make_shared<hesiod::vnode::ViewSharpenCone>(node_id);
   case str2int("Slope"):
     return std::make_shared<hesiod::vnode::ViewSlope>(node_id, shape, tiling, overlap);
   case str2int("SmoothCpulse"):

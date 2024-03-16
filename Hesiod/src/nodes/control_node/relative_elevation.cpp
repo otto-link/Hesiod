@@ -13,7 +13,7 @@ RelativeElevation::RelativeElevation(std::string id)
 {
   LOG_DEBUG("RelativeElevation::RelativeElevation()");
   this->node_type = "RelativeElevation";
-  this->attr["ir"] = NEW_ATTR_INT(64, 1, 256);
+  this->attr["radius"] = NEW_ATTR_FLOAT(0.1f, 0.f, 1.f);
   this->category = category_mapping.at(this->node_type);
 }
 
@@ -24,9 +24,11 @@ void RelativeElevation::compute_in_out(hmap::HeightMap &h_out,
 
   h_out = *p_h_in; // copy the input
 
+  int ir = std::max(1, (int)(GET_ATTR_FLOAT("radius") * h_out.shape.x));
+
   hmap::transform(h_out,
-                  [this](hmap::Array &x)
-                  { x = hmap::relative_elevation(x, GET_ATTR_INT("ir")); });
+                  [&ir](hmap::Array &x)
+                  { x = hmap::relative_elevation(x, ir); });
 
   h_out.smooth_overlap_buffers();
 }

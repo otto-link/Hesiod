@@ -122,6 +122,14 @@ public:
   std::string get_preview_port_id();
 
   /**
+   * @brief Get whether the comment is to be rendered or not (value retrieved
+   * from the ViewTree).
+   *
+   * @return bool Show or not.
+   */
+  bool get_show_comment();
+
+  /**
    * @brief Get the view3d elevation port id.
    *
    * @return std::string
@@ -397,7 +405,7 @@ public:
   void sync_value();
 
 private:
-  hesiod::gui::HmBrushEditorState edit_state;
+  hesiod::gui::HmapBrushEditorState edit_state;
 };
 
 class ViewBump : public ViewNode, public hesiod::cnode::Bump
@@ -678,6 +686,21 @@ public:
   void render_node_specific_content();
 };
 
+class ViewExportOBJ : public ViewNode, public hesiod::cnode::ExportOBJ
+{
+public:
+  ViewExportOBJ(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::ExportOBJ(id)
+  {
+    this->set_preview_port_id("RGB");
+    this->set_view3d_elevation_port_id("elevation");
+    this->set_view3d_color_port_id("RGB");
+  }
+
+  void render_node_specific_content();
+};
+
 class ViewExportRGB : public ViewNode, public hesiod::cnode::ExportRGB
 {
 public:
@@ -765,6 +788,34 @@ public:
   }
 };
 
+class ViewGaussianDecay : public ViewNode, public hesiod::cnode::GaussianDecay
+{
+public:
+  ViewGaussianDecay(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::GaussianDecay(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
+};
+
+class ViewGaussianPulse : public ViewNode, public hesiod::cnode::GaussianPulse
+{
+public:
+  ViewGaussianPulse(std::string     id,
+                    hmap::Vec2<int> shape,
+                    hmap::Vec2<int> tiling,
+                    float           overlap)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::GaussianPulse(id, shape, tiling, overlap)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("input");
+    this->set_view3d_color_port_id("output");
+  }
+};
+
 class ViewGeomorphons : public ViewNode, public hesiod::cnode::Geomorphons
 {
 public:
@@ -819,22 +870,6 @@ public:
   ViewGradientTalus(std::string id)
       : hesiod::cnode::ControlNode(id), ViewNode(id),
         hesiod::cnode::GradientTalus(id)
-  {
-    this->set_preview_port_id("output");
-    this->set_view3d_elevation_port_id("input");
-    this->set_view3d_color_port_id("output");
-  }
-};
-
-class ViewGaussianPulse : public ViewNode, public hesiod::cnode::GaussianPulse
-{
-public:
-  ViewGaussianPulse(std::string     id,
-                    hmap::Vec2<int> shape,
-                    hmap::Vec2<int> tiling,
-                    float           overlap)
-      : hesiod::cnode::ControlNode(id), ViewNode(id),
-        hesiod::cnode::GaussianPulse(id, shape, tiling, overlap)
   {
     this->set_preview_port_id("output");
     this->set_view3d_elevation_port_id("input");
@@ -1609,6 +1644,18 @@ public:
     this->set_preview_port_id("output");
     this->set_view3d_elevation_port_id("blend");
     this->set_view3d_color_port_id("output");
+  }
+};
+
+class ViewSharpenCone : public ViewNode, public hesiod::cnode::SharpenCone
+{
+public:
+  ViewSharpenCone(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::SharpenCone(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
   }
 };
 

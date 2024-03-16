@@ -13,7 +13,7 @@ MinimumLocal::MinimumLocal(std::string id) : ControlNode(id), Unary(id)
   LOG_DEBUG("MinimumLocal::MinimumLocal()");
   this->node_type = "MinimumLocal";
   this->category = category_mapping.at(this->node_type);
-  this->attr["ir"] = NEW_ATTR_INT(8, 1, 128);
+  this->attr["radius"] = NEW_ATTR_FLOAT(0.02f, 0.f, 0.5f);
 }
 
 void MinimumLocal::compute_in_out(hmap::HeightMap &h_out,
@@ -21,11 +21,13 @@ void MinimumLocal::compute_in_out(hmap::HeightMap &h_out,
 {
   LOG_DEBUG("computing node [%s]", this->id.c_str());
 
+  int ir = std::max(1, (int)(GET_ATTR_FLOAT("radius") * h_out.shape.x));
+
   // make a copy of the input and applied range remapping
   hmap::transform(h_out,
                   *p_h_in,
-                  [this](hmap::Array &x, hmap::Array &y)
-                  { x = hmap::minimum_local(y, GET_ATTR_INT("ir")); });
+                  [this, &ir](hmap::Array &x, hmap::Array &y)
+                  { x = hmap::minimum_local(y, ir); });
   h_out.smooth_overlap_buffers();
 }
 

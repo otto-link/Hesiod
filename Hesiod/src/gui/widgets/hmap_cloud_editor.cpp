@@ -11,9 +11,8 @@
 #include "hesiod/widgets.hpp"
 
 #define IMGUI_ID_HOVERED_POINT_INDEX 0
-#define IMGUI_ID_VMAX 1
-#define IMGUI_ID_RADIUS 2
-#define IMGUI_ID_SEED 3
+#define IMGUI_ID_RADIUS 1
+#define IMGUI_ID_SEED 2
 
 namespace hesiod::gui
 {
@@ -80,7 +79,7 @@ void draw_points(hmap::Cloud &cloud,
 
 // --- WIDGETS
 
-void canvas_cloud(hmap::Cloud &cloud, float width, float radius)
+void hmap_cloud(hmap::Cloud &cloud, float width, float radius)
 {
   ImGui::PushID((void *)&cloud);
   ImGui::BeginGroup();
@@ -113,10 +112,10 @@ void canvas_cloud(hmap::Cloud &cloud, float width, float radius)
   ImGui::PopID();
 }
 
-bool canvas_cloud_editor(hmap::Cloud &cloud,
-                         float        width,
-                         ImVec2      *p_canvas_p0,
-                         ImVec2      *p_canvas_size)
+bool hmap_cloud_editor(hmap::Cloud &cloud,
+                       float        width,
+                       ImVec2      *p_canvas_p0,
+                       ImVec2      *p_canvas_size)
 {
   ImGuiStorage *imgui_storage = ImGui::GetStateStorage();
 
@@ -275,7 +274,7 @@ bool canvas_cloud_editor(hmap::Cloud &cloud,
   return ret;
 }
 
-void canvas_path(hmap::Path &path, float width)
+void hmap_path(hmap::Path &path, float width)
 {
   ImGui::PushID((void *)&path);
   ImGui::BeginGroup();
@@ -308,7 +307,7 @@ void canvas_path(hmap::Path &path, float width)
   ImGui::PopID();
 }
 
-bool canvas_path_editor(hmap::Path &path, float width)
+bool hmap_path_editor(hmap::Path &path, float width)
 {
   bool ret = false;
 
@@ -316,7 +315,7 @@ bool canvas_path_editor(hmap::Path &path, float width)
   ImVec2 canvas_size;
 
   ret |=
-      canvas_cloud_editor((hmap::Cloud &)path, width, &canvas_p0, &canvas_size);
+      hmap_cloud_editor((hmap::Cloud &)path, width, &canvas_p0, &canvas_size);
 
   draw_polyline(path.points, canvas_p0, canvas_size, path.closed);
 

@@ -178,7 +178,7 @@ class FloatAttribute : public Attribute
 {
 public:
   FloatAttribute() = default;
-  FloatAttribute(float value, float vmin, float vmax);
+  FloatAttribute(float value, float vmin, float vmax, std::string fmt = "%.2f");
   float         get();
   void          set(float new_value);
   AttributeType get_type()
@@ -188,10 +188,11 @@ public:
 
   SERIALIZATION_V2_IMPLEMENT_BASE();
 
-  float value = 1.f;
-  float vmin = 0.f;
-  float vmax = 1.f;
-  bool  activate = true;
+  float       value = 1.f;
+  float       vmin = 0.f;
+  float       vmax = 1.f;
+  std::string fmt = "";
+  bool        activate = true;
 };
 
 class IntAttribute : public Attribute

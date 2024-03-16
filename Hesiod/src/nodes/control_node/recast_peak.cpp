@@ -14,11 +14,11 @@ RecastPeak::RecastPeak(std::string id) : ControlNode(id)
   this->node_type = "RecastPeak";
   this->category = category_mapping.at(this->node_type);
 
-  this->attr["ir"] = NEW_ATTR_INT(32, 1, 128);
+  this->attr["radius"] = NEW_ATTR_FLOAT(0.1f, 0.01f, 1.f);
   this->attr["gamma"] = NEW_ATTR_FLOAT(2.f, 0.01f, 10.f);
   this->attr["k"] = NEW_ATTR_FLOAT(0.1f, 0.01f, 1.f);
 
-  this->attr_ordered_key = {"ir", "gamma", "k"};
+  this->attr_ordered_key = {"radius", "gamma", "k"};
 
   this->add_port(gnode::Port("input", gnode::direction::in, dtype::dHeightMap));
   this->add_port(gnode::Port("mask",
@@ -44,12 +44,15 @@ void RecastPeak::compute()
 
   this->value_out = *p_hmap;
 
+  int ir = std::max(1,
+                    (int)(GET_ATTR_FLOAT("radius") * this->value_out.shape.x));
+
   hmap::transform(this->value_out,
                   p_mask,
-                  [this](hmap::Array &z, hmap::Array *p_mask)
+                  [this, &ir](hmap::Array &z, hmap::Array *p_mask)
                   {
                     hmap::recast_peak(z,
-                                      GET_ATTR_INT("ir"),
+                                      ir,
                                       p_mask,
                                       GET_ATTR_FLOAT("gamma"),
                                       GET_ATTR_FLOAT("k"));

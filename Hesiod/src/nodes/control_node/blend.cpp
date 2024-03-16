@@ -15,8 +15,8 @@ Blend::Blend(std::string id) : ControlNode(id), Binary(id)
 
   this->attr["blending_method"] = NEW_ATTR_MAPENUM(this->blending_method_map);
   this->attr["k"] = NEW_ATTR_FLOAT(0.1f, 0.01f, 1.f);
-  this->attr["ir"] = NEW_ATTR_INT(4, 1, 128);
-  this->attr_ordered_key = {"blending_method", "k", "ir"};
+  this->attr["radius"] = NEW_ATTR_FLOAT(0.05f, 0.f, 0.2f);
+  this->attr_ordered_key = {"blending_method", "k", "radius"};
 }
 
 void Blend::compute_in_out(hmap::HeightMap &h_out,
@@ -28,7 +28,7 @@ void Blend::compute_in_out(hmap::HeightMap &h_out,
   std::function<void(hmap::Array &, hmap::Array &, hmap::Array &)> lambda;
 
   float k = GET_ATTR_FLOAT("k");
-  int   ir = GET_ATTR_INT("ir");
+  int   ir = std::max(1, (int)(GET_ATTR_FLOAT("radius") * h_out.shape.x));
   int   method = GET_ATTR_MAPENUM("blending_method");
 
   switch (method)

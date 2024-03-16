@@ -13,10 +13,10 @@ SelectCavities::SelectCavities(std::string id) : ControlNode(id), Mask(id)
   this->node_type = "SelectCavities";
   this->category = category_mapping.at(this->node_type);
 
-  this->attr["ir"] = NEW_ATTR_INT(32, 1, 256);
+  this->attr["radius"] = NEW_ATTR_FLOAT(0.05f, 0.001f, 0.2f, "%.3f");
   this->attr["concave"] = NEW_ATTR_BOOL(true);
 
-  this->attr_ordered_key = {"ir",
+  this->attr_ordered_key = {"radius",
                             "concave",
                             "inverse",
                             "smoothing",
@@ -33,14 +33,13 @@ void SelectCavities::compute_mask(hmap::HeightMap &h_out,
 {
   LOG_DEBUG("computing node [%s]", this->id.c_str());
 
-  hmap::transform(h_out,    // output
-                  *p_input, // input
-                  [this](hmap::Array &array)
-                  {
-                    return hmap::select_cavities(array,
-                                                 GET_ATTR_INT("ir"),
-                                                 GET_ATTR_BOOL("concave"));
-                  });
+  int ir = std::max(1, (int)(GET_ATTR_FLOAT("radius") * h_out.shape.x));
+
+  hmap::transform(
+      h_out,    // output
+      *p_input, // input
+      [this, &ir](hmap::Array &array)
+      { return hmap::select_cavities(array, ir, GET_ATTR_BOOL("concave")); });
 }
 
 } // namespace hesiod::cnode

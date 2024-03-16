@@ -35,7 +35,8 @@ namespace hesiod::vnode
  */
 struct LinkInfos
 {
-  // --- GNode (and thus Hesiod) Id system
+  // --- GNode (and thus Hesiod) id system, and 'hash_id' for an id system
+  // compliant with the node editor
 
   /**
    * @brief Starting node id (GNode id system).
@@ -48,6 +49,11 @@ struct LinkInfos
   std::string port_id_from;
 
   /**
+   * @brief  Starting port id (node editor id system).
+   */
+  int port_hash_id_from;
+
+  /**
    * @brief Ending node id (GNode id system).
    */
   std::string node_id_to;
@@ -56,13 +62,6 @@ struct LinkInfos
    * @brief Ending port id (GNode id system).
    */
   std::string port_id_to;
-
-  // --- Id system compliant with the node editor
-
-  /**
-   * @brief  Starting port id (node editor id system).
-   */
-  int port_hash_id_from;
 
   /**
    * @brief  Ending port id (node editor id system).
@@ -87,6 +86,8 @@ struct LinkInfos
 class ViewTree : public hesiod::cnode::ControlTree, public hesiod::gui::Window
 {
 public:
+  bool show_comments = false;
+
   ViewTree(std::string     id,
            hmap::Vec2<int> shape,
            hmap::Vec2<int> tiling,

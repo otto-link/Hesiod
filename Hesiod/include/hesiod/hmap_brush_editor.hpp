@@ -12,7 +12,7 @@
 namespace hesiod::gui
 {
 
-struct HmBrushEditorState
+struct HmapBrushEditorState
 {
   bool              is_drawing;
   bool              is_initted;
@@ -30,7 +30,7 @@ struct HmBrushEditorState
          pending_changes; // (pos, weight)
   GLuint draw_texture = 0;
 
-  HmBrushEditorState()
+  HmapBrushEditorState()
       : is_drawing(false), is_initted(false), max_height(1.f),
         brush_radius(50.f), brush_strength(0.2f), blur_strength(8),
         k_clamp_smoothing(0.5f),
@@ -41,7 +41,7 @@ struct HmBrushEditorState
     glGenTextures(1, &this->draw_texture);
   }
 
-  ~HmBrushEditorState()
+  ~HmapBrushEditorState()
   {
     glDeleteTextures(1, &this->draw_texture);
   }
@@ -55,8 +55,8 @@ struct HmBrushEditorState
                      std::span<hmap::Vec2<float>> positions);
 };
 
-void hmap_brush_editor(HmBrushEditorState &state,
-                       ImTextureID         canvas_texture,
-                       float               width = 0.0f);
+void hmap_brush_editor(HmapBrushEditorState &state,
+                       ImTextureID           canvas_texture,
+                       float                 width = 0.0f);
 
 } // namespace hesiod::gui

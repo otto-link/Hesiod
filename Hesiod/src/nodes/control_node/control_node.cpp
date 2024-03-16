@@ -40,6 +40,7 @@ bool ControlNode::serialize_json_v2(std::string     field_name,
 
   output_data[field_name]["id"] = this->id;
   output_data[field_name]["attributes"] = attributesListJsonData;
+  output_data[field_name]["comment_text"] = this->comment_text;
   return true;
 }
 
@@ -47,7 +48,8 @@ bool ControlNode::deserialize_json_v2(std::string     field_name,
                                       nlohmann::json &input_data)
 {
   if (input_data[field_name]["id"].is_string() == false ||
-      input_data[field_name]["attributes"].is_array() == false)
+      input_data[field_name]["attributes"].is_array() == false ||
+      input_data[field_name]["comment_text"].is_string() == false)
   {
     LOG_ERROR("Encountered invalid control node!");
     return false;
@@ -56,6 +58,8 @@ bool ControlNode::deserialize_json_v2(std::string     field_name,
   attr.clear();
 
   this->id = input_data[field_name]["id"].get<std::string>();
+  this->comment_text =
+      input_data[field_name]["comment_text"].get<std::string>();
 
   for (nlohmann::json currentAttributeIteratorJsonData :
        input_data[field_name]["attributes"])
