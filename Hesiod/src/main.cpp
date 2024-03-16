@@ -99,10 +99,11 @@ int main(int argc, char *argv[])
   hmap::Vec2<int> tiling = {4, 4};
   float           overlap = 0.25f;
 
-  hesiod::window::WindowImplemented window =
-      hesiod::window::WindowImplemented("Hesiod", 1600, 900);
+  hesiod::gui::MainWindow window_main = hesiod::gui::MainWindow("Hesiod",
+                                                                1600,
+                                                                900);
 
-  if (window.initialize() == false)
+  if (window_main.initialize() == false)
   {
     LOG_ERROR("initialize_window failed.");
     return -1;
@@ -125,12 +126,12 @@ int main(int argc, char *argv[])
 
   p_tree2->add_view_node("NoiseFbm");
 
-  window.get_window_manager()->add_window(std::move(p_tree));
-  window.get_window_manager()->add_window(std::move(p_tree2));
+  window_main.get_window_manager_ref()->add_window(std::move(p_tree));
+  window_main.get_window_manager_ref()->add_window(std::move(p_tree2));
 
-  window.run();
+  window_main.run();
 
-  if (window.shutdown() == false)
+  if (window_main.shutdown() == false)
   {
     LOG_ERROR("shutdown failed.");
     return -1;

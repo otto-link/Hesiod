@@ -6,7 +6,7 @@
 #include "macrologger.h"
 #include <vector>
 
-namespace hesiod::window
+namespace hesiod::gui
 {
 void sGlfwErrorCallback(int error, const char *description)
 {
@@ -16,23 +16,24 @@ void sGlfwErrorCallback(int error, const char *description)
 // Fix this
 static bool sGLFWInitialized = false;
 
-WindowImplemented::WindowImplemented(std::string window_title,
-                                     int         window_width,
-                                     int         window_height)
+MainWindow::MainWindow(std::string window_title,
+                       int         window_width,
+                       int         window_height)
     : title(window_title), width(window_width), height(window_height),
-      window(nullptr), running(false), clear_color(0.15f, 0.25f, 0.30f, 1.00f)
+      p_glfw_window(nullptr), running(false),
+      clear_color(0.15f, 0.25f, 0.30f, 1.00f)
 {
 }
 
-WindowImplemented::~WindowImplemented()
+MainWindow::~MainWindow()
 {
-  if (is_running())
+  if (this->is_running())
   {
-    shutdown();
+    this->shutdown();
   }
 }
 
-bool WindowImplemented::initialize()
+bool MainWindow::initialize()
 {
   if (sGLFWInitialized == false)
   {
@@ -69,8 +70,12 @@ bool WindowImplemented::initialize()
   // only glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // 3.0+ only
 #endif
 
-  window = glfwCreateWindow(width, height, title.data(), nullptr, nullptr);
-  glfwMakeContextCurrent(window);
+  this->p_glfw_window = glfwCreateWindow(this->width,
+                                         this->height,
+                                         this->title.c_str(),
+                                         nullptr,
+                                         nullptr);
+  glfwMakeContextCurrent(this->p_glfw_window);
   glfwSwapInterval(1);
 
   glewExperimental = true; // Needed for core profile
@@ -88,73 +93,75 @@ bool WindowImplemented::initialize()
   // io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
   ImFontConfig                config;
-  std::vector<unsigned char> &fontDataVec = get_robot_reguar_ttf();
+  std::vector<unsigned char> &font_data_vec = get_robot_reguar_ttf();
   config.OversampleH = 2;
   config.OversampleV = 2;
   config.FontDataOwnedByAtlas = false;
-  io.Fonts->AddFontFromMemoryTTF(fontDataVec.data(),
-                                 fontDataVec.size(),
+  io.Fonts->AddFontFromMemoryTTF(font_data_vec.data(),
+                                 font_data_vec.size(),
                                  16.f,
                                  &config);
 
   ImGui::StyleColorsDark();
   ImCandy::Theme_Blender();
 
-  glfwSetWindowUserPointer(window, this);
+  glfwSetWindowUserPointer(this->p_glfw_window, this);
   glfwSetKeyCallback(
-      window,
-      [](GLFWwindow *window, int key, int scancode, int action, int modifiers)
+      this->p_glfw_window,
+      [](GLFWwindow *p_window, int key, int scancode, int action, int modifiers)
       {
-        WindowImplemented *instance = static_cast<WindowImplemented *>(
-            glfwGetWindowUserPointer(window));
+        MainWindow *instance = static_cast<MainWindow *>(
+            glfwGetWindowUserPointer(p_window));
         if (action == GLFW_PRESS)
         {
-          instance->get_window_manager()->handle_input(key,
-                                                       scancode,
-                                                       action,
-                                                       modifiers);
+          instance->get_window_manager_ref()->handle_input(key,
+                                                           scancode,
+                                                           action,
+                                                           modifiers);
         }
       });
 
   // Setup Platform/Renderer backends
-  ImGui_ImplGlfw_InitForOpenGL(window, true);
+  ImGui_ImplGlfw_InitForOpenGL(this->p_glfw_window, true);
   ImGui_ImplOpenGL3_Init(glsl_version);
 
-  window_manager = new gui::WindowManager();
+  // this->window_manager = new gui::WindowManager();
 
-  running = true;
-  return running;
+  this->running = true;
+  return this->running;
 }
 
-bool WindowImplemented::shutdown()
+bool MainWindow::shutdown()
 {
-  if (running == false)
+  if (this->running == false)
   {
     return true;
   }
 
-  cleanup_internally();
+  this->cleanup_internally();
   return true;
 }
 
-bool WindowImplemented::run()
+bool MainWindow::run()
 {
-  while (!glfwWindowShouldClose(window) && running)
+  while (!glfwWindowShouldClose(this->p_glfw_window) && this->running)
   {
     glfwPollEvents();
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
-    get_window_manager()->get_shortcuts_manager_ref()->set_input_blocked(
-        ImGui::GetIO().WantTextInput);
+    this->get_window_manager_ref()
+        ->get_shortcuts_manager_ref()
+        ->set_input_blocked(ImGui::GetIO().WantTextInput);
 
     // --- GUI content
-    window_manager->render_windows();
+    window_manager.render_windows();
+
     // --- Rendering
     ImGui::Render();
     int display_w, display_h;
-    glfwGetFramebufferSize(window, &display_w, &display_h);
+    glfwGetFramebufferSize(this->p_glfw_window, &display_w, &display_h);
     glViewport(0, 0, display_w, display_h);
     glClearColor(clear_color.Value.x * clear_color.Value.w,
                  clear_color.Value.y * clear_color.Value.w,
@@ -163,76 +170,75 @@ bool WindowImplemented::run()
     glClear(GL_COLOR_BUFFER_BIT);
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-    glfwSwapBuffers(window);
+    glfwSwapBuffers(this->p_glfw_window);
   }
 
-  cleanup_internally();
+  this->cleanup_internally();
   return true;
 }
 
-bool WindowImplemented::set_title(std::string window_title)
+bool MainWindow::set_title(std::string window_title)
 {
-  if (window == nullptr)
+  if (this->p_glfw_window == nullptr)
     return false;
 
-  title = window_title;
-  glfwSetWindowTitle(window, window_title.data());
+  this->title = window_title;
+  glfwSetWindowTitle(this->p_glfw_window, this->title.c_str());
 
   return true;
 }
 
-bool WindowImplemented::set_size(int window_width, int window_height)
+bool MainWindow::set_size(int window_width, int window_height)
 {
-  if (window == nullptr)
+  if (this->p_glfw_window == nullptr)
     return false;
 
-  glfwGetWindowSize(window, &width, &height);
+  glfwGetWindowSize(this->p_glfw_window, &this->width, &this->height);
 
-  width = window_width ? window_width : width;
-  height = window_height ? window_height : height;
+  this->width = window_width ? window_width : this->width;
+  this->height = window_height ? window_height : this->height;
 
-  glfwSetWindowSize(window, width, height);
+  glfwSetWindowSize(this->p_glfw_window, this->width, this->height);
 
   return true;
 }
 
-std::string WindowImplemented::get_title()
+std::string MainWindow::get_title()
 {
-  return title;
+  return this->title;
 }
 
-bool WindowImplemented::get_size(int *width, int *height)
+bool MainWindow::get_size(int &query_width, int &query_height)
 {
-  if (window == nullptr)
+  if (this->p_glfw_window == nullptr)
     return false;
 
-  glfwGetWindowSize(window, width, height);
+  glfwGetWindowSize(this->p_glfw_window, &query_width, &query_height);
+
+  // this->width = query_width;
+  // this->height = query_height;
+
   return true;
 }
 
-gui::WindowManager *WindowImplemented::get_window_manager()
+gui::WindowManager *MainWindow::get_window_manager_ref()
 {
-  return window_manager;
+  return &(this->window_manager);
 }
 
-void WindowImplemented::cleanup_internally()
+void MainWindow::cleanup_internally()
 {
   if (running == false)
     return;
 
-  if (window_manager)
-  {
-    delete window_manager;
-    window_manager = nullptr;
-  }
-
   ImGui_ImplOpenGL3_Shutdown();
   ImGui_ImplGlfw_Shutdown();
   ImGui::DestroyContext();
-  glfwDestroyWindow(window);
+  glfwDestroyWindow(this->p_glfw_window);
   glfwTerminate();
 
-  window = nullptr;
-  running = false;
+  this->p_glfw_window = nullptr;
+  this->running = false;
 }
-} // namespace hesiod::window
+
+} // namespace hesiod::gui
