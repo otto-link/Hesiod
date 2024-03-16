@@ -85,7 +85,7 @@ bool WindowImplemented::initialize()
   ImGuiIO &io = ImGui::GetIO();
   (void)io;
   io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-  io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+  // io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 
   ImFontConfig                config;
   std::vector<unsigned char> &fontDataVec = get_robot_reguar_ttf();
@@ -120,7 +120,7 @@ bool WindowImplemented::initialize()
   ImGui_ImplGlfw_InitForOpenGL(window, true);
   ImGui_ImplOpenGL3_Init(glsl_version);
 
-  window_manager = new gui::GuiWindowManager();
+  window_manager = new gui::WindowManager();
 
   running = true;
   return running;
@@ -210,7 +210,7 @@ bool WindowImplemented::get_size(int *width, int *height)
   return true;
 }
 
-gui::GuiWindowManager *WindowImplemented::get_window_manager()
+gui::WindowManager *WindowImplemented::get_window_manager()
 {
   return window_manager;
 }

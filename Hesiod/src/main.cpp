@@ -14,6 +14,7 @@ typedef unsigned int uint;
 #include "hesiod/gui.hpp"
 #include "hesiod/window.hpp"
 #include "macrologger.h"
+
 // in this order, required by args.hxx
 std::istream &operator>>(std::istream &is, hmap::Vec2<int> &vec2)
 {
@@ -98,26 +99,38 @@ int main(int argc, char *argv[])
   hmap::Vec2<int> tiling = {4, 4};
   float           overlap = 0.25f;
 
-  hesiod::window::WindowImplemented *window =
-      new hesiod::window::WindowImplemented("Hesiod", 1600, 900);
+  hesiod::window::WindowImplemented window =
+      hesiod::window::WindowImplemented("Hesiod", 1600, 900);
 
-  if (window->initialize() == false)
+  if (window.initialize() == false)
   {
     LOG_ERROR("initialize failed.");
     return -1;
   }
 
-  hesiod::vnode::ViewTree *tree =
-      new hesiod::vnode::ViewTree("tree_1", shape, tiling, overlap);
+  std::unique_ptr<hesiod::vnode::ViewTree> p_tree =
+      std::make_unique<hesiod::vnode::ViewTree>("tree_1",
+                                                shape,
+                                                tiling,
+                                                overlap);
 
-  tree->add_view_node("NoiseFbm");
-  tree->add_view_node("Noise");
+  p_tree->add_view_node("NoiseFbm");
+  p_tree->add_view_node("Noise");
 
-  window->get_window_manager()->add_window(tree);
+  std::unique_ptr<hesiod::vnode::ViewTree> p_tree2 =
+      std::make_unique<hesiod::vnode::ViewTree>("tree_2",
+                                                shape,
+                                                tiling,
+                                                overlap);
 
-  window->run();
+  p_tree2->add_view_node("NoiseFbm");
 
-  if (window->shutdown() == false)
+  window.get_window_manager()->add_window(std::move(p_tree));
+  window.get_window_manager()->add_window(std::move(p_tree2));
+
+  window.run();
+
+  if (window.shutdown() == false)
   {
     LOG_ERROR("shutdown failed.");
     return -1;

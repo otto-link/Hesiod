@@ -7,24 +7,24 @@
 #include <GL/glut.h>
 #include <GLFW/glfw3.h>
 
-#include "hesiod/gui.hpp"
-#include "hesiod/shortcuts.hpp"
-#include "hesiod/view_tree.hpp"
 #include "imgui.h"
 #include "imgui_impl_opengl3.h"
 #include "macrologger.h"
 
+#include "hesiod/gui.hpp"
+#include "hesiod/shortcuts.hpp"
+#include "hesiod/view_tree.hpp"
+
 namespace hesiod::gui
 {
 
-// GuiRenderableWindowBase
+// Window
 
-GuiRenderableWindowBase::GuiRenderableWindowBase()
-    : renderable_window_title(), renderable_window_flags()
+Window::Window() : renderable_window_title(), renderable_window_flags()
 {
 }
 
-bool GuiRenderableWindowBase::render_window()
+bool Window::render_window()
 {
   bool res = true;
   if (ImGui::Begin(renderable_window_title.data(),
@@ -43,13 +43,13 @@ bool GuiRenderableWindowBase::render_window()
   return res;
 }
 
-bool GuiRenderableWindowBase::render_element_content()
+bool Window::render_element_content()
 {
   ImGui::Text("render_element_content not implemented.");
   return true;
 }
 
-bool GuiRenderableWindowBase::add_window_shortcuts()
+bool Window::add_window_shortcuts()
 {
   for (auto &s : renderable_window_shortcuts)
   {
@@ -59,7 +59,7 @@ bool GuiRenderableWindowBase::add_window_shortcuts()
   return true;
 }
 
-bool GuiRenderableWindowBase::remove_window_shortcuts()
+bool Window::remove_window_shortcuts()
 {
   for (auto &s : renderable_window_shortcuts)
   {
@@ -70,15 +70,15 @@ bool GuiRenderableWindowBase::remove_window_shortcuts()
   return true;
 }
 
-// GuiWindowManager
+// WindowManager
 
-GuiWindowManager::GuiWindowManager()
+WindowManager::WindowManager()
     : windows(), windows_delete_queue(), tag_count(),
       shortcuts_manager(new gui::ShortcutsManager())
 {
 }
 
-GuiWindowManager::~GuiWindowManager()
+WindowManager::~WindowManager()
 {
   this->remove_all_windows();
 
@@ -89,7 +89,7 @@ GuiWindowManager::~GuiWindowManager()
   }
 }
 
-GuiWindowManager::Tag GuiWindowManager::find_free_tag()
+WindowManager::Tag WindowManager::find_free_tag()
 {
   Tag currentTag = tag_count;
 
@@ -102,20 +102,20 @@ GuiWindowManager::Tag GuiWindowManager::find_free_tag()
   return currentTag;
 }
 
-bool GuiWindowManager::has_window(Tag tag)
+bool WindowManager::has_window(Tag tag)
 {
   return windows.count(tag) > 0;
 }
 
-GuiRenderableWindowBase *GuiWindowManager::get_window(Tag tag)
+Window *WindowManager::get_window_ref_by_tag(Tag tag)
 {
   if (has_window(tag) == false)
     return nullptr;
 
-  return windows.at(tag);
+  return this->windows.at(tag).get();
 }
 
-bool GuiWindowManager::remove_window(Tag tag)
+bool WindowManager::remove_window(Tag tag)
 {
   if (has_window(tag) == false)
     return false;
@@ -125,88 +125,72 @@ bool GuiWindowManager::remove_window(Tag tag)
   return true;
 }
 
-bool GuiWindowManager::remove_all_windows()
+bool WindowManager::remove_all_windows()
 {
-  std::map<Tag, GuiRenderableWindowBase *> copiedWindows = windows;
-  windows.clear();
-
-  for (std::map<Tag, GuiRenderableWindowBase *>::iterator currentIterator =
-           copiedWindows.begin();
-       currentIterator != copiedWindows.end();
-       currentIterator++)
-  {
-    delete currentIterator->second;
-  }
-
+  this->windows.clear();
   return true;
 }
 
-GuiWindowManager::Tag GuiWindowManager::add_window_with_tag(
-    Tag                      tag,
-    GuiRenderableWindowBase *window)
+WindowManager::Tag WindowManager::add_window_with_tag(
+    Tag                     tag,
+    std::unique_ptr<Window> p_window)
 {
-  if (has_window(tag))
+  if (this->has_window(tag))
   {
-    return GuiWindowManager::kInvalidTag;
+    return WindowManager::kInvalidTag;
   }
 
-  window->renderable_window_manager_parent = this;
-  window->initialize_window();
-  window->add_window_shortcuts();
-  windows.emplace(tag, window);
+  p_window->renderable_window_manager_parent = this;
+  p_window->initialize_window();
+  p_window->add_window_shortcuts();
+  this->windows.emplace(tag, std::move(p_window));
   return tag;
 }
 
-GuiWindowManager::Tag GuiWindowManager::add_window(
-    GuiRenderableWindowBase *window)
+WindowManager::Tag WindowManager::add_window(std::unique_ptr<Window> p_window)
 {
-  Tag tag = find_free_tag();
-  return add_window_with_tag(tag, window);
+  Tag tag = this->find_free_tag();
+  return this->add_window_with_tag(tag, std::move(p_window));
 }
 
-bool GuiWindowManager::do_delete_queue()
+bool WindowManager::do_delete_queue()
 {
-  while (windows_delete_queue.empty())
-  {
-    Tag tag = windows_delete_queue.front();
-    windows_delete_queue.pop();
+  // while (windows_delete_queue.empty())
+  // {
+  //   Tag tag = windows_delete_queue.front();
+  //   windows_delete_queue.pop();
 
-    if (has_window(tag))
-    {
-      GuiRenderableWindowBase *w = windows.at(tag);
-      w->remove_window_shortcuts();
-      delete w;
-      windows.erase(tag);
-    }
-  }
+  //   if (has_window(tag))
+  //   {
+  //     Window *w = windows.at(tag);
+  //     w->remove_window_shortcuts();
+  //     delete w;
+  //     windows.erase(tag);
+  //   }
+  // }
 
   return true;
 }
 
-bool GuiWindowManager::render_windows()
+bool WindowManager::render_windows()
 {
   do_delete_queue();
 
-  for (std::map<Tag, GuiRenderableWindowBase *>::iterator currentIterator =
-           windows.begin();
-       currentIterator != windows.end();
-       currentIterator++)
-  {
-    currentIterator->second->render_window();
-  }
+  for (auto &[tag, p_window] : this->windows)
+    p_window->render_window();
 
   return true;
 }
 
-void GuiWindowManager::handle_input(int key,
-                                    int /* scancode */,
-                                    int /* action */,
-                                    int modifiers)
+void WindowManager::handle_input(int key,
+                                 int /* scancode */,
+                                 int /* action */,
+                                 int modifiers)
 {
   shortcuts_manager->pass_and_check(key, modifiers);
 }
 
-gui::ShortcutsManager *GuiWindowManager::get_shortcuts_manager()
+gui::ShortcutsManager *WindowManager::get_shortcuts_manager()
 {
   return shortcuts_manager;
 }

@@ -43,8 +43,7 @@ ViewTree::ViewTree(std::string     id,
                    hmap::Vec2<int> tiling,
                    float           overlap)
     : hesiod::cnode::ControlTree(id, shape, tiling, overlap),
-      hesiod::gui::GuiRenderableWindowBase(),
-      view3d_clear_color(25, 25, 25, 255)
+      hesiod::gui::Window(), view3d_clear_color(25, 25, 25, 255)
 {
   // Initialize node editor
   ax::NodeEditor::Config config;

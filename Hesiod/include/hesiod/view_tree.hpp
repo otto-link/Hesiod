@@ -42,8 +42,7 @@ struct Link
   SERIALIZATION_V2_IMPLEMENT_BASE();
 };
 
-class ViewTree : public hesiod::cnode::ControlTree,
-                 public hesiod::gui::GuiRenderableWindowBase
+class ViewTree : public hesiod::cnode::ControlTree, public hesiod::gui::Window
 {
 public:
   ViewTree(std::string     id,

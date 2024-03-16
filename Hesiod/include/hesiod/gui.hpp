@@ -23,25 +23,24 @@
 namespace hesiod::gui
 {
 
-// Forward declaration for the parent of the GuiRenderableWindowBase
-class GuiWindowManager;
+// Forward declaration for the parent of the Window
+class WindowManager;
 
-class GuiRenderableElement
+class RenderableElement
 {
 public:
-  virtual ~GuiRenderableElement() = default;
+  virtual ~RenderableElement() = default;
   virtual bool render_element_content()
   {
     return false;
   }
 };
 
-class GuiRenderableWindowBase : public GuiRenderableElement,
-                                public gui::ShortcutGroupElement
+class Window : public RenderableElement, public ShortcutGroupElement
 {
 public:
-  GuiRenderableWindowBase();
-  virtual ~GuiRenderableWindowBase() = default;
+  Window();
+  virtual ~Window() = default;
   virtual bool initialize_window()
   {
     return true;
@@ -52,31 +51,31 @@ public:
   virtual bool remove_window_shortcuts();
 
 protected:
-  friend class GuiWindowManager;
+  friend class WindowManager;
 
   std::string                            renderable_window_title;
   ImGuiWindowFlags                       renderable_window_flags;
-  GuiWindowManager                      *renderable_window_manager_parent;
+  WindowManager                         *renderable_window_manager_parent;
   std::vector<std::unique_ptr<Shortcut>> renderable_window_shortcuts;
 };
 
-class GuiWindowManager
+class WindowManager
 {
 public:
   using Tag = unsigned int;
   static constexpr Tag kInvalidTag = (Tag)-1;
 
-  GuiWindowManager();
-  virtual ~GuiWindowManager();
+  WindowManager();
+  virtual ~WindowManager();
 
-  virtual Tag                      find_free_tag();
-  virtual bool                     has_window(Tag tag);
-  virtual GuiRenderableWindowBase *get_window(Tag tag);
-  virtual bool                     remove_window(Tag tag);
-  virtual bool                     remove_all_windows();
+  virtual Tag     find_free_tag();
+  virtual bool    has_window(Tag tag);
+  virtual Window *get_window_ref_by_tag(Tag tag);
+  virtual bool    remove_window(Tag tag);
+  virtual bool    remove_all_windows();
 
-  virtual Tag  add_window_with_tag(Tag tag, GuiRenderableWindowBase *window);
-  virtual Tag  add_window(GuiRenderableWindowBase *window);
+  virtual Tag  add_window_with_tag(Tag tag, std::unique_ptr<Window> p_window);
+  virtual Tag  add_window(std::unique_ptr<Window> p_window);
   virtual bool do_delete_queue();
   virtual bool render_windows();
 
@@ -85,9 +84,9 @@ public:
   virtual gui::ShortcutsManager *get_shortcuts_manager();
 
 private:
-  std::map<Tag, GuiRenderableWindowBase *> windows;
-  std::queue<Tag>                          windows_delete_queue;
-  Tag                                      tag_count;
+  std::map<Tag, std::unique_ptr<Window>> windows;
+  std::queue<Tag>                        windows_delete_queue;
+  Tag                                    tag_count;
 
   gui::ShortcutsManager *shortcuts_manager;
 };

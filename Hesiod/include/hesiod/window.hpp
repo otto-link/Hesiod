@@ -1,5 +1,4 @@
 #pragma once
-#include "hesiod/gui.hpp"
 #include <string>
 
 #include <GL/glew.h>
@@ -9,6 +8,8 @@
 #include <imgui.h>
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
+
+#include "hesiod/gui.hpp"
 
 namespace hesiod::window
 {
@@ -60,7 +61,7 @@ public:
     return false;
   }
 
-  virtual gui::GuiWindowManager *get_window_manager()
+  virtual gui::WindowManager *get_window_manager()
   {
     return nullptr;
   }
@@ -89,7 +90,7 @@ public:
   std::string get_title() override;
   bool        get_size(int *width, int *height) override;
 
-  gui::GuiWindowManager *get_window_manager() override;
+  gui::WindowManager *get_window_manager() override;
 
 protected:
   void cleanup_internally();
@@ -104,7 +105,7 @@ private:
 
   ImColor clear_color;
 
-  gui::GuiWindowManager *window_manager;
+  gui::WindowManager *window_manager;
 };
 
 } // namespace hesiod::window
