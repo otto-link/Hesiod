@@ -21,21 +21,21 @@ namespace hesiod::vnode
 bool ViewTree::initialize_window()
 {
   renderable_window_shortcuts.push_back(std::make_unique<gui::Shortcut>(
-      "Preview 2d ##" + id,
+      "Preview 2d ##" + this->id,
       GLFW_KEY_2,
       0,
       [this]() { this->open_view2d_window = !this->open_view2d_window; },
       this->get_element_shortcut_group_id()));
 
   renderable_window_shortcuts.push_back(std::make_unique<gui::Shortcut>(
-      "Preview 3d ##" + id,
+      "Preview 3d ##" + this->id,
       GLFW_KEY_3,
       0,
       [this]() { this->open_view3d_window = !this->open_view3d_window; },
       this->get_element_shortcut_group_id()));
 
   renderable_window_shortcuts.push_back(std::make_unique<gui::Shortcut>(
-      "Settings ##" + id,
+      "Settings ##" + this->id,
       GLFW_KEY_S,
       0,
       [this]() { this->show_settings = !this->show_settings; },
@@ -74,7 +74,7 @@ void ViewTree::render_node_editor()
         config.path = ".";
         config.fileName = this->json_filename;
 
-        if (ImGui::MenuItem("Load", "STRG O"))
+        if (ImGui::MenuItem("Load", ""))
           ImGuiFileDialog::Instance()->OpenDialog("LoadTreeStateDlg",
                                                   "Load Tree",
                                                   ".hsd",
@@ -129,19 +129,6 @@ void ViewTree::render_node_editor()
       ImGui::EndMenuBar();
     }
     ImGui::PopItemWidth();
-
-    // key bindings
-    // if (ImGui::IsWindowFocused())
-    // {
-    //   if (ImGui::IsKeyReleased(ImGuiKey_N))
-    //     this->open_node_list_window = !this->open_node_list_window;
-    //   if (ImGui::IsKeyReleased(ImGuiKey_S))
-    //     this->show_settings = !this->show_settings;
-    //   if (ImGui::IsKeyReleased(ImGuiKey_2))
-    //     this->open_view2d_window = !this->open_view2d_window;
-    //   if (ImGui::IsKeyReleased(ImGuiKey_3))
-    //     this->open_view3d_window = !this->open_view3d_window;
-    // }
   }
 
   if (this->show_settings)
