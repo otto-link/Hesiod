@@ -61,8 +61,8 @@ ViewTree::ViewTree(std::string     id,
 
   // Window
 
-  this->renderable_window_title = "ViewTree " + id;
-  this->renderable_window_flags = ImGuiWindowFlags_MenuBar;
+  this->title = "ViewTree " + id;
+  this->flags = ImGuiWindowFlags_MenuBar;
 
   // OpenGL
 

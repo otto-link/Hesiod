@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
 
   if (window.initialize() == false)
   {
-    LOG_ERROR("initialize failed.");
+    LOG_ERROR("initialize_window failed.");
     return -1;
   }
 

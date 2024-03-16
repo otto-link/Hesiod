@@ -20,53 +20,51 @@ namespace hesiod::gui
 
 // Window
 
-Window::Window() : renderable_window_title(), renderable_window_flags()
+Window::Window() : title(), flags()
 {
 }
 
-bool Window::render_window()
+bool Window::render()
 {
   bool res = true;
-  if (ImGui::Begin(renderable_window_title.data(),
-                   nullptr,
-                   renderable_window_flags))
+  if (ImGui::Begin(title.data(), nullptr, flags))
   {
     if (ImGui::IsWindowFocused())
     {
-      this->renderable_window_manager_parent->get_shortcuts_manager_ref()
+      this->p_parent_window_manager->get_shortcuts_manager_ref()
           ->set_focused_group_id(this->get_element_shortcut_group_id());
     }
 
-    res &= render_element_content();
+    res &= render_window_content();
   }
   ImGui::End();
   return res;
 }
 
-bool Window::render_element_content()
+bool Window::render_window_content()
 {
-  ImGui::Text("render_element_content not implemented.");
+  ImGui::Text("render_window_content not implemented.");
   return true;
 }
 
-bool Window::add_window_shortcuts()
+bool Window::add_shortcuts()
 {
-  for (auto &s : renderable_window_shortcuts)
+  for (auto &s : shortcuts)
   {
-    renderable_window_manager_parent->get_shortcuts_manager_ref()->add_shortcut(
+    p_parent_window_manager->get_shortcuts_manager_ref()->add_shortcut(
         std::move(s));
   }
   return true;
 }
 
-bool Window::remove_window_shortcuts()
+bool Window::remove_shortcuts()
 {
-  for (auto &s : renderable_window_shortcuts)
+  for (auto &s : shortcuts)
   {
-    renderable_window_manager_parent->get_shortcuts_manager_ref()
-        ->remove_shortcut(s->get_id());
+    p_parent_window_manager->get_shortcuts_manager_ref()->remove_shortcut(
+        s->get_id());
   }
-  renderable_window_shortcuts.clear();
+  shortcuts.clear();
   return true;
 }
 
@@ -140,9 +138,9 @@ WindowManager::Tag WindowManager::add_window_with_tag(
     return WindowManager::kInvalidTag;
   }
 
-  p_window->renderable_window_manager_parent = this;
+  p_window->p_parent_window_manager = this;
   p_window->initialize_window();
-  p_window->add_window_shortcuts();
+  p_window->add_shortcuts();
   this->windows.emplace(tag, std::move(p_window));
   return tag;
 }
@@ -163,7 +161,7 @@ bool WindowManager::do_delete_queue()
   //   if (has_window(tag))
   //   {
   //     Window *w = windows.at(tag);
-  //     w->remove_window_shortcuts();
+  //     w->remove_shortcuts();
   //     delete w;
   //     windows.erase(tag);
   //   }
@@ -174,10 +172,10 @@ bool WindowManager::do_delete_queue()
 
 bool WindowManager::render_windows()
 {
-  do_delete_queue();
+  // do_delete_queue();
 
   for (auto &[tag, p_window] : this->windows)
-    p_window->render_window();
+    p_window->render();
 
   return true;
 }

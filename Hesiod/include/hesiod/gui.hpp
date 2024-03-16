@@ -4,7 +4,6 @@
 #pragma once
 #include <filesystem>
 #include <map>
-#include <mutex>
 #include <queue>
 #include <string>
 #include <vector>
@@ -35,18 +34,18 @@ public:
   {
     return true;
   }
-  bool         render_window();
-  virtual bool render_element_content();
-  bool         add_window_shortcuts();
-  bool         remove_window_shortcuts();
+  bool         render();
+  virtual bool render_window_content();
+  bool         add_shortcuts();
+  bool         remove_shortcuts();
 
 protected:
   friend class WindowManager;
 
-  std::string                            renderable_window_title;
-  ImGuiWindowFlags                       renderable_window_flags;
-  WindowManager                         *renderable_window_manager_parent;
-  std::vector<std::unique_ptr<Shortcut>> renderable_window_shortcuts;
+  std::string                            title;
+  ImGuiWindowFlags                       flags;
+  WindowManager                         *p_parent_window_manager;
+  std::vector<std::unique_ptr<Shortcut>> shortcuts;
 };
 
 class WindowManager

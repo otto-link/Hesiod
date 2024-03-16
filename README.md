@@ -78,7 +78,7 @@ bin/./hesiod
 
 See https://github.com/otto-link/HighMap.
 
-## Error: Failed to initialize OpenGL loader!
+## Error: Failed to initialize_window OpenGL loader!
 
 Try to install the package `glfw` or `glfw-devel`!
 

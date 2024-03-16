@@ -20,21 +20,21 @@ namespace hesiod::vnode
 
 bool ViewTree::initialize_window()
 {
-  renderable_window_shortcuts.push_back(std::make_unique<gui::Shortcut>(
+  this->shortcuts.push_back(std::make_unique<gui::Shortcut>(
       "Preview 2d ##" + this->id,
       GLFW_KEY_2,
       0,
       [this]() { this->open_view2d_window = !this->open_view2d_window; },
       this->get_element_shortcut_group_id()));
 
-  renderable_window_shortcuts.push_back(std::make_unique<gui::Shortcut>(
+  this->shortcuts.push_back(std::make_unique<gui::Shortcut>(
       "Preview 3d ##" + this->id,
       GLFW_KEY_3,
       0,
       [this]() { this->open_view3d_window = !this->open_view3d_window; },
       this->get_element_shortcut_group_id()));
 
-  renderable_window_shortcuts.push_back(std::make_unique<gui::Shortcut>(
+  this->shortcuts.push_back(std::make_unique<gui::Shortcut>(
       "Settings ##" + this->id,
       GLFW_KEY_S,
       0,
@@ -44,7 +44,7 @@ bool ViewTree::initialize_window()
   return true;
 }
 
-bool ViewTree::render_element_content()
+bool ViewTree::render_window_content()
 {
   this->render_node_editor();
   return true;

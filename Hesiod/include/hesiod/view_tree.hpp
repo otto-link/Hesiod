@@ -118,7 +118,7 @@ public:
 
   bool initialize_window() override;
 
-  bool render_element_content() override;
+  bool render_window_content() override;
 
   gui::ShortcutGroupId get_element_shortcut_group_id() override;
 
