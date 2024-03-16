@@ -37,7 +37,7 @@ public:
 };
 
 class GuiRenderableWindowBase : public GuiRenderableElement,
-                                public shortcuts::GuiShortcutGroupElement
+                                public gui::GuiShortcutGroupElement
 {
 public:
   GuiRenderableWindowBase();
@@ -57,7 +57,7 @@ protected:
   std::string                           renderable_window_title;
   ImGuiWindowFlags                      renderable_window_flags;
   GuiWindowManager                     *renderable_window_manager_parent;
-  std::vector<shortcuts::GuiShortcut *> renderable_window_shortcuts;
+  std::vector<gui::GuiShortcut *> renderable_window_shortcuts;
 };
 
 class GuiWindowManager
@@ -82,14 +82,14 @@ public:
 
   virtual void handle_input(int key, int scancode, int action, int modifiers);
 
-  virtual shortcuts::GuiShortcutsManager *get_shortcuts_manager();
+  virtual gui::GuiShortcutsManager *get_shortcuts_manager();
 
 private:
   std::map<Tag, GuiRenderableWindowBase *> windows;
   std::queue<Tag>                          windows_delete_queue;
   Tag                                      tag_count;
 
-  shortcuts::GuiShortcutsManager *shortcuts_manager;
+  gui::GuiShortcutsManager *shortcuts_manager;
 };
 
 } // namespace hesiod::gui

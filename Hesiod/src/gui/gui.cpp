@@ -72,7 +72,7 @@ bool GuiRenderableWindowBase::remove_window_shortcuts()
 
 GuiWindowManager::GuiWindowManager()
     : windows(), windows_delete_queue(), tag_count(),
-      shortcuts_manager(new shortcuts::GuiShortcutsManager())
+      shortcuts_manager(new gui::GuiShortcutsManager())
 {
 }
 
@@ -204,7 +204,7 @@ void GuiWindowManager::handle_input(int key,
   shortcuts_manager->pass_and_check(key, modifiers, this);
 }
 
-shortcuts::GuiShortcutsManager *GuiWindowManager::get_shortcuts_manager()
+gui::GuiShortcutsManager *GuiWindowManager::get_shortcuts_manager()
 {
   return shortcuts_manager;
 }

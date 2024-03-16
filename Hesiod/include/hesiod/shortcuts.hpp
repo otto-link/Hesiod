@@ -3,7 +3,7 @@
 #include <functional>
 #include <map>
 
-namespace hesiod::shortcuts
+namespace hesiod::gui
 {
 
 using GuiShortcutGroupId = std::string;
@@ -84,4 +84,4 @@ private:
   bool                                 input_blocked;
 };
 
-} // namespace hesiod::shortcuts
+} // namespace hesiod::gui

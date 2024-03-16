@@ -20,21 +20,21 @@ namespace hesiod::vnode
 
 bool ViewTree::initialize_window()
 {
-  renderable_window_shortcuts.push_back(new shortcuts::GuiShortcut(
+  renderable_window_shortcuts.push_back(new gui::GuiShortcut(
       "Preview 2d ##" + id,
       GLFW_KEY_2,
       0,
       [this](void *) { this->open_view2d_window = !this->open_view2d_window; },
       this->get_element_shortcut_group_id()));
 
-  renderable_window_shortcuts.push_back(new shortcuts::GuiShortcut(
+  renderable_window_shortcuts.push_back(new gui::GuiShortcut(
       "Preview 3d ##" + id,
       GLFW_KEY_3,
       0,
       [this](void *) { this->open_view3d_window = !this->open_view3d_window; },
       this->get_element_shortcut_group_id()));
 
-  renderable_window_shortcuts.push_back(new shortcuts::GuiShortcut(
+  renderable_window_shortcuts.push_back(new gui::GuiShortcut(
       "Settings ##" + id,
       GLFW_KEY_S,
       0,
@@ -50,7 +50,7 @@ bool ViewTree::render_element_content()
   return true;
 }
 
-shortcuts::GuiShortcutGroupId ViewTree::get_element_shortcut_group_id()
+gui::GuiShortcutGroupId ViewTree::get_element_shortcut_group_id()
 {
   return "GroupViewTree" + this->id;
 }

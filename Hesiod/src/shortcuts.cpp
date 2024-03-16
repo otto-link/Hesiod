@@ -3,7 +3,7 @@
 #include "nlohmann/json_fwd.hpp"
 #include <map>
 
-namespace hesiod::shortcuts
+namespace hesiod::gui
 {
 
 // GuiShortcut
@@ -174,4 +174,4 @@ bool GuiShortcutsManager::deserialize_json_v2(std::string     field_name,
   return true;
 }
 
-} // namespace hesiod::shortcuts
+} // namespace hesiod::gui

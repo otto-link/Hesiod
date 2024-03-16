@@ -121,7 +121,7 @@ public:
 
   bool render_element_content() override;
 
-  shortcuts::GuiShortcutGroupId get_element_shortcut_group_id() override;
+  gui::GuiShortcutGroupId get_element_shortcut_group_id() override;
 
   // serialization
 
