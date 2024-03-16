@@ -146,7 +146,7 @@ bool WindowImplemented::run()
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 
-    get_window_manager()->get_shortcuts_manager()->set_input_blocked(
+    get_window_manager()->get_shortcuts_manager_ref()->set_input_blocked(
         ImGui::GetIO().WantTextInput);
 
     // --- GUI content

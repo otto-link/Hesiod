@@ -26,17 +26,7 @@ namespace hesiod::gui
 // Forward declaration for the parent of the Window
 class WindowManager;
 
-class RenderableElement
-{
-public:
-  virtual ~RenderableElement() = default;
-  virtual bool render_element_content()
-  {
-    return false;
-  }
-};
-
-class Window : public RenderableElement, public ShortcutGroupElement
+class Window : public ShortcutGroupElement
 {
 public:
   Window();
@@ -45,10 +35,10 @@ public:
   {
     return true;
   }
-  virtual bool render_window();
-  bool         render_element_content() override;
-  virtual bool add_window_shortcuts();
-  virtual bool remove_window_shortcuts();
+  bool         render_window();
+  virtual bool render_element_content();
+  bool         add_window_shortcuts();
+  bool         remove_window_shortcuts();
 
 protected:
   friend class WindowManager;
@@ -68,27 +58,27 @@ public:
   WindowManager();
   virtual ~WindowManager();
 
-  virtual Tag     find_free_tag();
-  virtual bool    has_window(Tag tag);
-  virtual Window *get_window_ref_by_tag(Tag tag);
-  virtual bool    remove_window(Tag tag);
-  virtual bool    remove_all_windows();
+  Tag     find_free_tag();
+  bool    has_window(Tag tag);
+  Window *get_window_ref_by_tag(Tag tag);
+  bool    remove_window(Tag tag);
+  bool    remove_all_windows();
 
-  virtual Tag  add_window_with_tag(Tag tag, std::unique_ptr<Window> p_window);
-  virtual Tag  add_window(std::unique_ptr<Window> p_window);
-  virtual bool do_delete_queue();
-  virtual bool render_windows();
+  Tag  add_window_with_tag(Tag tag, std::unique_ptr<Window> p_window);
+  Tag  add_window(std::unique_ptr<Window> p_window);
+  bool do_delete_queue();
+  bool render_windows();
 
-  virtual void handle_input(int key, int scancode, int action, int modifiers);
+  void handle_input(int key, int scancode, int action, int modifiers);
 
-  virtual gui::ShortcutsManager *get_shortcuts_manager();
+  ShortcutsManager *get_shortcuts_manager_ref();
 
 private:
   std::map<Tag, std::unique_ptr<Window>> windows;
   std::queue<Tag>                        windows_delete_queue;
   Tag                                    tag_count;
 
-  gui::ShortcutsManager *shortcuts_manager;
+  ShortcutsManager *p_shortcuts_manager;
 };
 
 } // namespace hesiod::gui

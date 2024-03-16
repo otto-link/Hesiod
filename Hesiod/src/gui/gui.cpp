@@ -33,7 +33,7 @@ bool Window::render_window()
   {
     if (ImGui::IsWindowFocused())
     {
-      this->renderable_window_manager_parent->get_shortcuts_manager()
+      this->renderable_window_manager_parent->get_shortcuts_manager_ref()
           ->set_focused_group_id(this->get_element_shortcut_group_id());
     }
 
@@ -53,7 +53,7 @@ bool Window::add_window_shortcuts()
 {
   for (auto &s : renderable_window_shortcuts)
   {
-    renderable_window_manager_parent->get_shortcuts_manager()->add_shortcut(
+    renderable_window_manager_parent->get_shortcuts_manager_ref()->add_shortcut(
         std::move(s));
   }
   return true;
@@ -63,8 +63,8 @@ bool Window::remove_window_shortcuts()
 {
   for (auto &s : renderable_window_shortcuts)
   {
-    renderable_window_manager_parent->get_shortcuts_manager()->remove_shortcut(
-        s->get_id());
+    renderable_window_manager_parent->get_shortcuts_manager_ref()
+        ->remove_shortcut(s->get_id());
   }
   renderable_window_shortcuts.clear();
   return true;
@@ -74,7 +74,7 @@ bool Window::remove_window_shortcuts()
 
 WindowManager::WindowManager()
     : windows(), windows_delete_queue(), tag_count(),
-      shortcuts_manager(new gui::ShortcutsManager())
+      p_shortcuts_manager(new gui::ShortcutsManager())
 {
 }
 
@@ -82,10 +82,10 @@ WindowManager::~WindowManager()
 {
   this->remove_all_windows();
 
-  if (shortcuts_manager)
+  if (p_shortcuts_manager)
   {
-    delete shortcuts_manager;
-    shortcuts_manager = nullptr;
+    delete p_shortcuts_manager;
+    p_shortcuts_manager = nullptr;
   }
 }
 
@@ -187,12 +187,12 @@ void WindowManager::handle_input(int key,
                                  int /* action */,
                                  int modifiers)
 {
-  shortcuts_manager->pass_and_check(key, modifiers);
+  p_shortcuts_manager->pass_and_check(key, modifiers);
 }
 
-gui::ShortcutsManager *WindowManager::get_shortcuts_manager()
+gui::ShortcutsManager *WindowManager::get_shortcuts_manager_ref()
 {
-  return shortcuts_manager;
+  return p_shortcuts_manager;
 }
 
 } // namespace hesiod::gui
