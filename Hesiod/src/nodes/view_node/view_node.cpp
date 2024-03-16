@@ -249,11 +249,6 @@ void ViewNode::render_node()
   // preview
   if (this->preview_port_id != "")
   {
-    if (ImGui::Checkbox("Preview", &this->show_preview))
-      if (this->show_preview)
-        // update only when toggle to true
-        this->update_preview();
-
     if (this->show_preview)
     {
       ImVec2 img_size = {(float)this->shape_preview.x,
@@ -451,9 +446,16 @@ bool ViewNode::render_settings_footer()
   bool has_changed = false;
 
   // preview type
+
+  ImGui::SeparatorText("Preview");
+
+  if (ImGui::Checkbox("Preview", &this->show_preview))
+    if (this->show_preview)
+      // update only when toggle to true
+      this->update_preview();
+
   if (this->preview_port_id != "" && this->show_preview)
   {
-    ImGui::SeparatorText("Preview");
     float height = ImGui::GetStyle().ItemSpacing.y +
                    3.f * ImGui::GetTextLineHeightWithSpacing();
     if (ImGui::BeginListBox("Preview type", ImVec2(0.f, height)))
