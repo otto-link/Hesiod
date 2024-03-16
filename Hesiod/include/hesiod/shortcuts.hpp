@@ -6,35 +6,35 @@
 namespace hesiod::gui
 {
 
-using GuiShortcutGroupId = std::string;
+using ShortcutGroupId = std::string;
 
-class GuiShortcutGroupElement
+class ShortcutGroupElement
 {
 public:
-  virtual ~GuiShortcutGroupElement() = default;
-  virtual GuiShortcutGroupId get_element_shortcut_group_id()
+  virtual ~ShortcutGroupElement() = default;
+  virtual ShortcutGroupId get_element_shortcut_group_id()
   {
     return "Default Group";
   }
 };
 
-class GuiShortcut : public hesiod::serialization::SerializationBatchBase
+class Shortcut : public hesiod::serialization::SerializationBatchBase
 {
 public:
   using Delegate = std::function<void(void *pass_data)>;
 
-  GuiShortcut(std::string        shortcut_label,
-              int                shortcut_key,
-              int                shortcut_modifier,
-              Delegate           shortcut_delegate,
-              GuiShortcutGroupId shortcut_group_id,
-              bool               shortcut_enabled = true);
-  ~GuiShortcut() = default;
+  Shortcut(std::string     shortcut_label,
+           int             shortcut_key,
+           int             shortcut_modifier,
+           Delegate        shortcut_delegate,
+           ShortcutGroupId shortcut_group_id,
+           bool            shortcut_enabled = true);
+  ~Shortcut() = default;
 
-  void pass_and_check(int                shortcut_key,
-                      int                shortcut_modifier,
-                      GuiShortcutGroupId focused_group_id,
-                      void              *pass_data);
+  void pass_and_check(int             shortcut_key,
+                      int             shortcut_modifier,
+                      ShortcutGroupId focused_group_id,
+                      void           *pass_data);
   SERIALIZATION_V2_IMPLEMENT_BATCH_BASE();
 
   std::string get_label()
@@ -55,33 +55,33 @@ public:
   }
 
 private:
-  std::string        label;
-  int                key;
-  int                modifier;
-  Delegate           delegate;
-  GuiShortcutGroupId group_id;
-  bool               enabled;
+  std::string     label;
+  int             key;
+  int             modifier;
+  Delegate        delegate;
+  ShortcutGroupId group_id;
+  bool            enabled;
 };
 
-class GuiShortcutsManager : public hesiod::serialization::SerializationBase
+class ShortcutsManager : public hesiod::serialization::SerializationBase
 {
 public:
-  GuiShortcutsManager();
-  ~GuiShortcutsManager();
+  ShortcutsManager();
+  ~ShortcutsManager();
 
-  bool add_shortcut(GuiShortcut *shortcut);
+  bool add_shortcut(Shortcut *shortcut);
   bool remove_shortcut(std::string Label);
   bool remove_all_shortcuts();
   void pass_and_check(int shortcut_key, int shortcut_modifier, void *pass_data);
-  void set_focused_group_id(GuiShortcutGroupId shortcut_group_id);
+  void set_focused_group_id(ShortcutGroupId shortcut_group_id);
   void set_input_blocked(bool toggle); // Will be reset after each frame!
 
   SERIALIZATION_V2_IMPLEMENT_BASE();
 
 private:
-  std::map<std::string, GuiShortcut *> shortcuts;
-  GuiShortcutGroupId                   focused_group_id;
-  bool                                 input_blocked;
+  std::map<std::string, Shortcut *> shortcuts;
+  ShortcutGroupId                   focused_group_id;
+  bool                              input_blocked;
 };
 
 } // namespace hesiod::gui

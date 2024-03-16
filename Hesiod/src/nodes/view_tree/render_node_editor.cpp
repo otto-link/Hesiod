@@ -20,21 +20,21 @@ namespace hesiod::vnode
 
 bool ViewTree::initialize_window()
 {
-  renderable_window_shortcuts.push_back(new gui::GuiShortcut(
+  renderable_window_shortcuts.push_back(new gui::Shortcut(
       "Preview 2d ##" + id,
       GLFW_KEY_2,
       0,
       [this](void *) { this->open_view2d_window = !this->open_view2d_window; },
       this->get_element_shortcut_group_id()));
 
-  renderable_window_shortcuts.push_back(new gui::GuiShortcut(
+  renderable_window_shortcuts.push_back(new gui::Shortcut(
       "Preview 3d ##" + id,
-      GLFW_KEY_3,
+      GLFW_KEY_4,
       0,
       [this](void *) { this->open_view3d_window = !this->open_view3d_window; },
       this->get_element_shortcut_group_id()));
 
-  renderable_window_shortcuts.push_back(new gui::GuiShortcut(
+  renderable_window_shortcuts.push_back(new gui::Shortcut(
       "Settings ##" + id,
       GLFW_KEY_S,
       0,
@@ -50,7 +50,7 @@ bool ViewTree::render_element_content()
   return true;
 }
 
-gui::GuiShortcutGroupId ViewTree::get_element_shortcut_group_id()
+gui::ShortcutGroupId ViewTree::get_element_shortcut_group_id()
 {
   return "GroupViewTree" + this->id;
 }
@@ -115,7 +115,7 @@ void ViewTree::render_node_editor()
         if (ImGui::MenuItem("Node list", "N", this->open_node_list_window))
           this->open_node_list_window = !this->open_node_list_window;
 
-        if (ImGui::MenuItem("Settings", "S", this->show_settings))
+        if (ImGui::MenuItem("Node settings", "S", this->show_settings))
           this->show_settings = !this->show_settings;
 
         if (ImGui::MenuItem("View 2D", "2", this->open_view2d_window))

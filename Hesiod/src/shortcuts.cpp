@@ -6,24 +6,24 @@
 namespace hesiod::gui
 {
 
-// GuiShortcut
+// Shortcut
 
-GuiShortcut::GuiShortcut(std::string        shortcut_label,
-                         int                shortcut_key,
-                         int                shortcut_modifier,
-                         Delegate           shortcut_delegate,
-                         GuiShortcutGroupId shortcut_group_id,
-                         bool               shortcut_enabled)
+Shortcut::Shortcut(std::string     shortcut_label,
+                   int             shortcut_key,
+                   int             shortcut_modifier,
+                   Delegate        shortcut_delegate,
+                   ShortcutGroupId shortcut_group_id,
+                   bool            shortcut_enabled)
     : label(shortcut_label), key(shortcut_key), modifier(shortcut_modifier),
       delegate(shortcut_delegate), group_id(shortcut_group_id),
       enabled(shortcut_enabled)
 {
 }
 
-void GuiShortcut::pass_and_check(int                shortcut_key,
-                                 int                shortcut_modifier,
-                                 GuiShortcutGroupId focused_group_id,
-                                 void              *pass_data)
+void Shortcut::pass_and_check(int             shortcut_key,
+                              int             shortcut_modifier,
+                              ShortcutGroupId focused_group_id,
+                              void           *pass_data)
 {
   if (key != shortcut_key || modifier != shortcut_modifier ||
       group_id != focused_group_id || enabled != true)
@@ -34,7 +34,7 @@ void GuiShortcut::pass_and_check(int                shortcut_key,
   delegate(pass_data);
 }
 
-serialization::SerializationBatchHelper GuiShortcut::BuildBatchHelperData()
+serialization::SerializationBatchHelper Shortcut::BuildBatchHelperData()
 {
   serialization::SerializationBatchHelper batch =
       serialization::SerializationBatchHelper();
@@ -46,18 +46,18 @@ serialization::SerializationBatchHelper GuiShortcut::BuildBatchHelperData()
   return batch;
 }
 
-// GuiShortcutsManager
+// ShortcutsManager
 
-GuiShortcutsManager::GuiShortcutsManager() : shortcuts(), focused_group_id()
+ShortcutsManager::ShortcutsManager() : shortcuts(), focused_group_id()
 {
 }
 
-GuiShortcutsManager::~GuiShortcutsManager()
+ShortcutsManager::~ShortcutsManager()
 {
   this->remove_all_shortcuts();
 }
 
-bool GuiShortcutsManager::add_shortcut(GuiShortcut *shortcut)
+bool ShortcutsManager::add_shortcut(Shortcut *shortcut)
 {
   if (shortcuts.count(shortcut->get_label()) > 0)
   {
@@ -68,25 +68,25 @@ bool GuiShortcutsManager::add_shortcut(GuiShortcut *shortcut)
   return true;
 }
 
-bool GuiShortcutsManager::remove_shortcut(std::string Label)
+bool ShortcutsManager::remove_shortcut(std::string Label)
 {
   if (shortcuts.count(Label) <= 0)
   {
     return false;
   }
 
-  GuiShortcut *s = shortcuts.at(Label);
+  Shortcut *s = shortcuts.at(Label);
   shortcuts.erase(Label);
 
   delete s;
   return true;
 }
 
-bool GuiShortcutsManager::remove_all_shortcuts()
+bool ShortcutsManager::remove_all_shortcuts()
 {
   bool res = true;
 
-  for (std::map<std::string, GuiShortcut *>::iterator currentIterator =
+  for (std::map<std::string, Shortcut *>::iterator currentIterator =
            shortcuts.begin();
        currentIterator != shortcuts.end();
        currentIterator++)
@@ -97,14 +97,14 @@ bool GuiShortcutsManager::remove_all_shortcuts()
   return res;
 }
 
-void GuiShortcutsManager::pass_and_check(int   shortcut_key,
-                                         int   shortcut_modifier,
-                                         void *pass_data)
+void ShortcutsManager::pass_and_check(int   shortcut_key,
+                                      int   shortcut_modifier,
+                                      void *pass_data)
 {
   if (input_blocked == true)
     return;
 
-  for (std::map<std::string, GuiShortcut *>::iterator currentIterator =
+  for (std::map<std::string, Shortcut *>::iterator currentIterator =
            shortcuts.begin();
        currentIterator != shortcuts.end();
        currentIterator++)
@@ -116,21 +116,20 @@ void GuiShortcutsManager::pass_and_check(int   shortcut_key,
   }
 }
 
-void GuiShortcutsManager::set_focused_group_id(
-    GuiShortcutGroupId shortcut_group_id)
+void ShortcutsManager::set_focused_group_id(ShortcutGroupId shortcut_group_id)
 {
   this->focused_group_id = shortcut_group_id;
 }
 
-void GuiShortcutsManager::set_input_blocked(bool toggle)
+void ShortcutsManager::set_input_blocked(bool toggle)
 {
   this->input_blocked = toggle;
 }
 
-bool GuiShortcutsManager::serialize_json_v2(std::string     field_name,
-                                            nlohmann::json &output_data)
+bool ShortcutsManager::serialize_json_v2(std::string     field_name,
+                                         nlohmann::json &output_data)
 {
-  for (std::map<std::string, GuiShortcut *>::iterator currentIterator =
+  for (std::map<std::string, Shortcut *>::iterator currentIterator =
            shortcuts.begin();
        currentIterator != shortcuts.end();
        currentIterator++)
@@ -143,8 +142,8 @@ bool GuiShortcutsManager::serialize_json_v2(std::string     field_name,
   return true;
 }
 
-bool GuiShortcutsManager::deserialize_json_v2(std::string     field_name,
-                                              nlohmann::json &input_data)
+bool ShortcutsManager::deserialize_json_v2(std::string     field_name,
+                                           nlohmann::json &input_data)
 {
   if (input_data[field_name].is_object() == false)
   {
