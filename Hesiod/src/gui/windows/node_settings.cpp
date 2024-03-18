@@ -34,14 +34,13 @@ bool NodeSettings::render_content()
     std::string node_id =
         this->p_vtree->get_node_ref_by_hash_id(node_hid.Get())->id;
 
-    ImGui::Separator();
     hesiod::gui::draw_icon(hesiod::gui::square,
-                           {24.f, 24.f},
+                           {12.f, 12.f},
                            this->p_vtree->get_node_color(node_id),
                            true);
     ImGui::SameLine();
-    ImGui::Text("%s", this->p_vtree->get_node_type(node_id).c_str());
-
+    ImGui::TextUnformatted(this->p_vtree->get_node_type(node_id).c_str());
+    
     this->p_vtree->render_settings(node_id);
     ImGui::Dummy(ImVec2(0.f, 16.f));
   }

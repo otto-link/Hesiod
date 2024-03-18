@@ -214,32 +214,6 @@ bool NodeEditor::render_content()
     ImGui::PopItemWidth();
   }
 
-  if (this->show_nodes_settings)
-  {
-    ImGui::BeginChild("settings", ImVec2(320, 0), true);
-
-    ImGui::TextUnformatted("Settings");
-    for (auto &node_hid : selected_node_hid)
-    {
-      std::string node_id =
-          this->p_vtree->get_node_ref_by_hash_id(node_hid.Get())->id;
-
-      ImGui::Separator();
-      hesiod::gui::draw_icon(hesiod::gui::square,
-                             {12.f, 12.f},
-                             this->p_vtree->get_node_color(node_id),
-                             true);
-      ImGui::SameLine();
-      ImGui::Text("%s", this->p_vtree->get_node_type(node_id).c_str());
-
-      this->p_vtree->render_settings(node_id);
-      ImGui::Dummy(ImVec2(0.f, 16.f));
-    }
-
-    ImGui::EndChild();
-    ImGui::SameLine();
-  }
-
   // --- editor canvas
 
   ax::NodeEditor::SetCurrentEditor(this->p_node_editor_context);

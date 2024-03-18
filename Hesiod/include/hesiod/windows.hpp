@@ -192,8 +192,6 @@ private:
   std::vector<ax::NodeEditor::NodeId> selected_node_hid = {};
 
   ax::NodeEditor::EditorContext *p_node_editor_context = nullptr;
-
-  bool show_nodes_settings = false;
 };
 
 /**
