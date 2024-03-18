@@ -40,7 +40,7 @@ bool NodeSettings::render_content()
                            true);
     ImGui::SameLine();
     ImGui::TextUnformatted(this->p_vtree->get_node_type(node_id).c_str());
-    
+
     this->p_vtree->render_settings(node_id);
     ImGui::Dummy(ImVec2(0.f, 16.f));
   }

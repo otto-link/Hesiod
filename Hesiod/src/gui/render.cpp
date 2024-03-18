@@ -6,7 +6,7 @@
 #include "highmap.hpp"
 #include "macrologger.h"
 
-namespace hesiod::viewer
+namespace hesiod::render
 {
 
 //----------------------------------------
@@ -440,4 +440,4 @@ GLuint load_shaders(const char *vertex_file_path,
   return program_id;
 }
 
-} // namespace hesiod::viewer
+} // namespace hesiod::render

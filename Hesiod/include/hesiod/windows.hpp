@@ -267,7 +267,7 @@ public:
    */
   bool render_content() override;
 
-  // --- specific to the 2D viewer
+  // --- specific to the 2D rendering
 
   /**
    * @brief Method called after the node tree has been updated.
@@ -285,7 +285,7 @@ private:
    */
   hesiod::vnode::ViewTree *p_vtree;
 
-  // --- viewer parameters
+  // --- rendering parameters
 
   /**
    * @brief
@@ -293,7 +293,7 @@ private:
   std::string viewer_node_id = "";
 
   /**
-   * @brief Whether or not the viewer adjust the content rendered to the
+   * @brief Whether or not the rendering adjust the content rendered to the
    * currently selected node (or always keep the same node displayed).
    */
   bool pin_current_node = false;
@@ -370,7 +370,7 @@ public:
    */
   bool render_content() override;
 
-  // --- specific to the 3D viewer
+  // --- specific to the 3D rendering
 
   /**
    * @brief Method called after the node tree has been updated.
@@ -395,7 +395,7 @@ private:
    */
   hesiod::vnode::ViewTree *p_vtree;
 
-  // --- viewer parameters
+  // --- rendering parameters
 
   /**
    * @brief
@@ -403,7 +403,7 @@ private:
   std::string viewer_node_id = "";
 
   /**
-   * @brief Whether or not the viewer adjust the content rendered to the
+   * @brief Whether or not the rendering adjust the content rendered to the
    * currently selected node (or always keep the same node displayed).
    */
   bool pin_current_node = false;

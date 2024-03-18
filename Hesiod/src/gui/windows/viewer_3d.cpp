@@ -9,8 +9,8 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "hesiod/control_node.hpp"
+#include "hesiod/render.hpp"
 #include "hesiod/view_node.hpp"
-#include "hesiod/viewer.hpp"
 #include "hesiod/widgets.hpp"
 #include "hesiod/windows.hpp"
 
@@ -20,7 +20,7 @@ namespace hesiod::gui
 Viewer3D::Viewer3D(hesiod::vnode::ViewTree *p_vtree) : p_vtree(p_vtree)
 {
   // shader setup
-  this->shader_id = hesiod::viewer::load_shaders(
+  this->shader_id = hesiod::render::load_shaders(
       "SimpleVertexShader.vertexshader",
       "SimpleFragmentShader.fragmentshader");
 
@@ -219,11 +219,11 @@ void Viewer3D::update_basemesh()
 {
   glBindVertexArray(this->vertex_array_id);
 
-  hesiod::viewer::generate_basemesh(this->display_shape,
+  hesiod::render::generate_basemesh(this->display_shape,
                                     this->vertices,
                                     this->colors);
 
-  hesiod::viewer::create_framebuffer(this->FBO,
+  hesiod::render::create_framebuffer(this->FBO,
                                      this->RBO,
                                      this->image_texture,
                                      (float)this->display_shape.x,
@@ -256,12 +256,12 @@ void Viewer3D::update_image_texture(bool vertex_array_update)
           hmap::HeightMap *p_h = (hmap::HeightMap *)p_elev;
           hmap::Array      z = p_h->to_array(this->display_shape);
 
-          hesiod::viewer::update_vertex_elevations(z, this->vertices);
+          hesiod::render::update_vertex_elevations(z, this->vertices);
 
           if (!p_color)
             // color is undefined (on purpose or data not available),
             // only solid white and hillshading
-            hesiod::viewer::update_vertex_colors(z, this->colors);
+            hesiod::render::update_vertex_colors(z, this->colors);
           else
           {
             switch (p_vnode->get_port_ref_by_id(color_pid)->dtype)
@@ -273,7 +273,7 @@ void Viewer3D::update_image_texture(bool vertex_array_update)
               // set to zero
               hmap::HeightMap *p_c = (hmap::HeightMap *)p_color;
               hmap::Array      c = 1.f - p_c->to_array(this->display_shape);
-              hesiod::viewer::update_vertex_colors(z, c, this->colors);
+              hesiod::render::update_vertex_colors(z, c, this->colors);
             }
             break;
 
@@ -287,7 +287,7 @@ void Viewer3D::update_image_texture(bool vertex_array_update)
               hmap::Array         g = p_c->rgb[1].to_array(this->display_shape);
               hmap::Array         b = p_c->rgb[2].to_array(this->display_shape);
 
-              hesiod::viewer::update_vertex_colors(z, r, g, b, this->colors);
+              hesiod::render::update_vertex_colors(z, r, g, b, this->colors);
             }
             break;
 
@@ -304,10 +304,10 @@ void Viewer3D::update_image_texture(bool vertex_array_update)
                 hmap::Vec4<float> bbox = hmap::Vec4<float>(0.f, 1.f, 0.f, 1.f);
                 path_copy.to_array(c, bbox);
                 c = 1.f - c;
-                hesiod::viewer::update_vertex_colors(z, c, this->colors);
+                hesiod::render::update_vertex_colors(z, c, this->colors);
               }
               else
-                hesiod::viewer::update_vertex_colors(z, this->colors);
+                hesiod::render::update_vertex_colors(z, this->colors);
             }
             break;
 
@@ -331,7 +331,7 @@ void Viewer3D::update_image_texture(bool vertex_array_update)
                        GL_STATIC_DRAW);
         }
 
-        hesiod::viewer::bind_framebuffer(this->FBO);
+        hesiod::render::bind_framebuffer(this->FBO);
 
         glUseProgram(this->shader_id);
         glClearColor(clear_color.Value.x,
@@ -413,7 +413,7 @@ void Viewer3D::update_image_texture(bool vertex_array_update)
         glDisableVertexAttribArray(0);
         glDisableVertexAttribArray(1);
 
-        hesiod::viewer::unbind_framebuffer();
+        hesiod::render::unbind_framebuffer();
       }
     }
   }

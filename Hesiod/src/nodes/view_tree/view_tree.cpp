@@ -7,7 +7,7 @@
 #include "hesiod/shortcuts.hpp"
 #include "macrologger.h"
 
-#include "hesiod/viewer.hpp"
+#include "hesiod/render.hpp"
 
 #include "hesiod/control_tree.hpp"
 #include "hesiod/view_node.hpp"

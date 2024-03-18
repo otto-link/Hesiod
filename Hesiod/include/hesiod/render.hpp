@@ -7,7 +7,7 @@
 
 #include "highmap.hpp"
 
-namespace hesiod::viewer
+namespace hesiod::render
 {
 
 //----------------------------------------
@@ -58,4 +58,4 @@ void rescale_framebuffer(GLuint &RBO,
 GLuint load_shaders(const char *vertex_file_path,
                     const char *fragment_file_path);
 
-} // namespace hesiod::viewer
+} // namespace hesiod::render

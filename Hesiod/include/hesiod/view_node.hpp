@@ -250,12 +250,12 @@ protected:
   std::string preview_port_id = "";
 
   /**
-   * @brief Port id of the elevation data displayed in the 3D viewer.
+   * @brief Port id of the elevation data displayed in the 3D rendering.
    */
   std::string view3d_elevation_port_id = "";
 
   /**
-   * @brief Port id of the color data displayed in the 3D viewer.
+   * @brief Port id of the color data displayed in the 3D rendering.
    */
   std::string view3d_color_port_id = "";
 
