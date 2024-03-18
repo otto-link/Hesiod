@@ -1,3 +1,6 @@
+/* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
+ * Public License. The full license is in the file LICENSE, distributed with
+ * this software. */
 #pragma once
 #include <list>
 #include <string>
@@ -20,38 +23,82 @@ using WindowTag = unsigned int;
 // forward declarations
 class WindowManager;
 
+/**
+ * @brief Window class, base GUI window class.
+ */
 class Window : public ShortcutGroupElement
 {
 public:
+  /**
+   * @brief Constructor.
+   */
   Window()
   {
   }
 
+  /**
+   * @brief Returns a unique Id for this window instance.
+   * @return The Id.
+   */
   std::string get_unique_id();
 
+  /**
+   * @brief Returns a reference to the window manager this window belongs to.
+   * @return Window manager reference.
+   */
   WindowManager *get_window_manager_ref()
   {
     return this->p_parent_window_manager;
   }
 
+  /**
+   * @brief Set the window tag.
+   * @param new_tag New tag.
+   */
   void set_tag(WindowTag new_tag)
   {
     this->tag = new_tag;
   }
 
+  /**
+   * @brief Get the window title.
+   * @return Title.
+   */
   std::string get_title() const
   {
     return this->title;
   }
 
+  /**
+   * @brief Initialize the window (pure virtual for the base class).
+   * @return Success.
+   */
   virtual bool initialize() = 0;
 
+  /**
+   * @brief Render the window frame.
+   * @return Success.
+   */
   bool render();
 
+  /**
+   * @brief Render the window content (pure virtual for the base class).
+   * @return Success.
+   */
   virtual bool render_content() = 0;
 
+  /**
+   * @brief Add shortcuts for this window to the shortcut manager (carried by
+   * the parent window manager).
+   * @return Success.
+   */
   bool add_shortcuts();
 
+  /**
+   * @brief Remove shortcuts for this window to the shortcut manager (carried by
+   * the parent window manager).
+   * @return Success.
+   */
   bool remove_shortcuts();
 
   /**
@@ -65,12 +112,36 @@ public:
 protected:
   friend class WindowManager;
 
-  WindowTag                              tag = -1;
-  std::string                            title;
-  ImGuiWindowFlags                       flags;
-  WindowManager                         *p_parent_window_manager;
+  /**
+   * @brief Window tag.
+   */
+  WindowTag tag = -1;
+
+  /**
+   * @brief Window title.
+   */
+  std::string title;
+
+  /**
+   * @brief Window flags (ImGui).
+   */
+  ImGuiWindowFlags flags;
+
+  /**
+   * @brief Reference to the parent window manager this window belongs to.
+   */
+  WindowManager *p_parent_window_manager;
+
+  /**
+   * @brief Shortcuts of this window.
+   */
   std::vector<std::unique_ptr<Shortcut>> shortcuts;
-  bool                                   is_open = true;
+
+  /**
+   * @brief Is the window open. If `is_open` is equal to false, the window
+   * instance is destroyed.
+   */
+  bool is_open = true;
 };
 
 class WindowManager
