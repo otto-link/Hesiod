@@ -5,7 +5,6 @@
 
 #include "gnode.hpp"
 #include "hesiod/shortcuts.hpp"
-#include "imgui.h"
 #include "macrologger.h"
 
 #include "hesiod/viewer.hpp"
@@ -13,74 +12,10 @@
 #include "hesiod/control_tree.hpp"
 #include "hesiod/view_node.hpp"
 #include "hesiod/view_tree.hpp"
-#include "hesiod/widgets.hpp"
 #include "hesiod/windows.hpp"
 
 namespace hesiod::vnode
 {
-
-LinkInfos::LinkInfos(){};
-
-LinkInfos::LinkInfos(std::string node_id_from,
-                     std::string port_id_from,
-                     int         port_hash_id_from,
-                     std::string node_id_to,
-                     std::string port_id_to,
-                     int         port_hash_id_to)
-    : node_id_from(node_id_from), port_id_from(port_id_from),
-      port_hash_id_from(port_hash_id_from), node_id_to(node_id_to),
-      port_id_to(port_id_to), port_hash_id_to(port_hash_id_to)
-{
-  LOG_DEBUG("new link [%s]/[%s] to [%s]/[%s]",
-            node_id_from.c_str(),
-            port_id_from.c_str(),
-            node_id_to.c_str(),
-            port_id_to.c_str());
-}
-
-ViewTree::ViewTree(std::string     id,
-                   hmap::Vec2<int> shape,
-                   hmap::Vec2<int> tiling,
-                   float           overlap)
-    : hesiod::cnode::ControlTree(id, shape, tiling, overlap),
-      hesiod::gui::Window(), view3d_clear_color(25, 25, 25, 255)
-{
-  // Initialize node editor
-  ax::NodeEditor::Config config;
-  config.NavigateButtonIndex = 2;
-  config.ContextMenuButtonIndex = 1;
-  this->p_node_editor_context = ax::NodeEditor::CreateEditor(&config);
-
-  this->shape_view2d = this->shape;
-  this->shape_view3d = this->shape;
-
-  this->update_view3d_basemesh();
-  this->shader_id = hesiod::viewer::load_shaders(
-      "SimpleVertexShader.vertexshader",
-      "SimpleFragmentShader.fragmentshader");
-
-  // Window
-
-  this->title = "ViewTree " + id;
-  this->flags = ImGuiWindowFlags_MenuBar;
-
-  // OpenGL
-
-  glGenVertexArrays(1, &this->vertex_array_id);
-  glGenBuffers(1, &this->vertex_buffer);
-  glGenBuffers(1, &this->color_buffer);
-}
-
-ViewTree::~ViewTree()
-{
-  // shutdown node editor
-  ax::NodeEditor::DestroyEditor(this->p_node_editor_context);
-  glDeleteBuffers(1, &this->vertex_buffer);
-  glDeleteBuffers(1, &this->color_buffer);
-  glDeleteVertexArrays(1, &this->vertex_array_id);
-  glDeleteFramebuffers(1, &this->FBO);
-  glDeleteFramebuffers(1, &this->RBO);
-}
 
 LinkInfos *ViewTree::get_link_ref_by_id(int link_id)
 {
@@ -93,17 +28,12 @@ LinkInfos *ViewTree::get_link_ref_by_id(int link_id)
   }
 }
 
-ImU32 ViewTree::get_node_color(std::string node_id)
+ImU32 ViewTree::get_node_color(std::string node_id) const
 {
   std::string node_type = this->get_node_type(node_id);
   std::string node_category = hesiod::cnode::category_mapping.at(node_type);
   std::string main_category = node_category.substr(0, node_category.find("/"));
   return ImColor(category_colors.at(main_category).hovered);
-}
-
-ax::NodeEditor::EditorContext *ViewTree::get_p_node_editor_context() const
-{
-  return this->p_node_editor_context;
 }
 
 void ViewTree::set_sto(hmap::Vec2<int> new_shape,
@@ -112,18 +42,9 @@ void ViewTree::set_sto(hmap::Vec2<int> new_shape,
 {
   // TODO quick and dirty, did this only to allow modifications in the
   // main GUI for demo purpose
-  this->viewer_node_id = "";
-  this->open_view2d_window = false;
-  this->open_view3d_window = false;
-
   this->shape = new_shape;
   this->tiling = new_tiling;
   this->overlap = new_overlap;
-
-  this->shape_view2d = this->shape;
-  this->shape_view3d = this->shape;
-
-  this->update_view3d_basemesh();
 }
 
 std::string ViewTree::add_view_node(std::string control_node_type,
@@ -147,88 +68,30 @@ std::string ViewTree::add_view_node(std::string control_node_type,
 
 void ViewTree::clear()
 {
-  this->set_viewer_node_id("");
   this->json_filename = "";
   this->remove_all_nodes();
   this->links_infos.clear();
 }
 
-void ViewTree::export_view3d(std::string fname)
+void ViewTree::set_selected_node_hid(
+    std::vector<ax::NodeEditor::NodeId> new_selected_node_hid)
 {
-  this->update_view3d_basemesh();
-  this->update_image_texture_view3d();
+  // if the selection has changed, trigger the post-update callbacks
+  // to propagate the info to other windows
+  bool do_post_update = false;
 
-  std::vector<uint8_t> img(this->shape_view3d.x * this->shape_view3d.y * 3);
+  if (this->selected_node_hid.size() != new_selected_node_hid.size())
+    do_post_update = true;
 
-  hesiod::viewer::bind_framebuffer(this->FBO);
-  glReadPixels(0,
-               0,
-               this->shape_view3d.x,
-               this->shape_view3d.y,
-               GL_RGB,
-               GL_UNSIGNED_BYTE,
-               img.data());
-  hesiod::viewer::unbind_framebuffer();
+  if (this->selected_node_hid.size() > 0 && new_selected_node_hid.size() > 0)
+    if (this->selected_node_hid.back() != new_selected_node_hid.back())
+      do_post_update = true;
 
-  hesiod::gui::flip_vertically(this->shape_view3d.x,
-                               this->shape_view3d.y,
-                               img.data());
+  // backup node selection
+  this->selected_node_hid = new_selected_node_hid;
 
-  hmap::write_png_rgb_8bit(
-      fname,
-      img,
-      hmap::Vec2<int>(this->shape_view3d.x, this->shape_view3d.y));
-}
-
-void ViewTree::insert_clone_node(std::string node_id)
-{
-  std::string new_node_id = this->add_view_node("Clone");
-  this->render_view_node(new_node_id);
-
-  ImVec2 pos = ax::NodeEditor::GetNodePosition(
-      this->get_node_ref_by_id(node_id)->hash_id);
-  ax::NodeEditor::SetNodePosition(
-      this->get_node_ref_by_id(new_node_id)->hash_id,
-      ImVec2(pos.x + 200.f, pos.y));
-
-  // automatic reconnection (only if there is an output named
-  // "output")
-  gnode::Node *p_node = this->get_node_ref_by_id(node_id);
-  gnode::Node *p_clone = this->get_node_ref_by_id(new_node_id);
-
-  if (p_node->is_port_id_in_keys("output"))
-  {
-    // hash id of the port on the other end of the link (if
-    // connected)
-    int port_hash_id_to = 0;
-
-    bool previously_connected = false;
-    if (p_node->get_port_ref_by_id("output")->is_connected)
-    {
-      port_hash_id_to =
-          p_node->get_port_ref_by_id("output")->p_linked_port->hash_id;
-      previously_connected = true;
-    }
-
-    // selected node -> new Clone node
-    this->new_link(p_node->get_port_ref_by_id("output")->hash_id,
-                   p_clone->get_port_ref_by_id("input")->hash_id);
-
-    // new Clone node -> previously connected input (if any)
-    if (previously_connected)
-      this->new_link(p_clone->get_port_ref_by_id("thru##0")->hash_id,
-                     port_hash_id_to);
-  }
-}
-
-void ViewTree::set_viewer_node_id(std::string node_id)
-{
-  if (node_id != this->viewer_node_id)
-  {
-    this->viewer_node_id = node_id;
-    this->update_image_texture_view2d();
-    this->update_image_texture_view3d();
-  }
+  if (do_post_update)
+    this->post_update();
 }
 
 void ViewTree::new_link(std::string node_id_from,
@@ -364,8 +227,11 @@ void ViewTree::new_link(int port_hash_id_from, int port_hash_id_to)
 
 void ViewTree::post_update()
 {
-  this->update_image_texture_view2d();
-  this->update_image_texture_view3d();
+  for (auto &[key, callback] : this->post_update_callbacks)
+  {
+    LOG_DEBUG("%s", key.c_str());
+    callback();
+  }
 }
 
 void ViewTree::remove_link(int link_id)
@@ -413,6 +279,26 @@ void ViewTree::remove_view_node(std::string node_id)
   // for the control node handled by GNode, everything is taken care
   // of by this method
   this->remove_node(node_id);
+}
+
+void ViewTree::render_settings(std::string node_id)
+{
+  this->get_node_ref_by_id<ViewNode>(node_id)->render_settings();
+}
+
+void ViewTree::store_node_positions(
+    ax::NodeEditor::EditorContext *p_node_editor_context)
+{
+  ax::NodeEditor::SetCurrentEditor(p_node_editor_context);
+
+  this->node_positions.clear();
+  for (auto &[id, vnode] : this->get_nodes_map())
+  {
+    ImVec2 pos = ax::NodeEditor::GetNodePosition(vnode.get()->hash_id);
+    this->node_positions[id] = pos;
+  }
+
+  ax::NodeEditor::SetCurrentEditor(nullptr);
 }
 
 } // namespace hesiod::vnode

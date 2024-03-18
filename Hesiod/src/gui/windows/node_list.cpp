@@ -1,24 +1,37 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-#include <functional>
-
-#include "gnode.hpp"
 #include "macrologger.h"
 
 #include "hesiod/view_node.hpp"
-#include "hesiod/view_tree.hpp"
+#include "hesiod/windows.hpp"
 
-namespace hesiod::vnode
+namespace hesiod::gui
 {
 
-void ViewTree::render_node_list()
+ShortcutGroupId NodeList::get_element_shortcut_group_id()
+{
+  return "GroupNodeList" + this->get_unique_id();
+}
+
+bool NodeList::initialize()
+{
+  LOG_DEBUG("initializing NodeList window for ViewTree [%s]",
+            p_vtree->id.c_str());
+
+  this->title = "Node listing " + p_vtree->id;
+  this->flags = ImGuiWindowFlags_MenuBar;
+
+  return true;
+}
+
+bool NodeList::render_content()
 {
   ImGuiTableFlags flags = ImGuiTableFlags_BordersOuter |
                           ImGuiTableFlags_BordersV;
   const int ncol = 7;
 
-  if (ImGui::BeginTable(("table##" + this->id).c_str(), ncol, flags))
+  if (ImGui::BeginTable(("table##" + this->p_vtree->id).c_str(), ncol, flags))
   {
     ImGui::TableSetupColumn("Hash Id");
     ImGui::TableSetupColumn("Node Id");
@@ -39,7 +52,7 @@ void ViewTree::render_node_list()
                              IM_COL32(120, 120, 120, 255));
     }
 
-    for (auto &[id, vnode] : this->get_nodes_map())
+    for (auto &[id, vnode] : this->p_vtree->get_nodes_map())
     {
       ImGui::TableNextRow();
 
@@ -48,13 +61,6 @@ void ViewTree::render_node_list()
                          "%d",
                          vnode.get()->hash_id);
       ImGui::TableNextColumn();
-      if (ImGui::Button(("Go##" + id).c_str()))
-      {
-        ax::NodeEditor::SetCurrentEditor(this->get_p_node_editor_context());
-        ax::NodeEditor::SelectNode(vnode.get()->hash_id);
-        ax::NodeEditor::NavigateToSelection(false, 1);
-        ax::NodeEditor::SetCurrentEditor(nullptr);
-      }
       ImGui::SameLine();
       ImGui::TextUnformatted(id.c_str());
 
@@ -90,13 +96,6 @@ void ViewTree::render_node_list()
           else
             ImGui::TextUnformatted("-->");
           ImGui::TableNextColumn();
-          if (ImGui::Button((port.p_linked_node->id + "##link").c_str()))
-          {
-            ax::NodeEditor::SetCurrentEditor(this->get_p_node_editor_context());
-            ax::NodeEditor::SelectNode(port.p_linked_node->hash_id);
-            ax::NodeEditor::NavigateToSelection(false, 1);
-            ax::NodeEditor::SetCurrentEditor(nullptr);
-          }
           ImGui::TableNextColumn();
           ImGui::Text("%s", port.p_linked_port->id.c_str());
         }
@@ -120,6 +119,8 @@ void ViewTree::render_node_list()
 
     ImGui::EndTable();
   }
+
+  return true;
 }
 
-} // namespace hesiod::vnode
+} // namespace hesiod::gui

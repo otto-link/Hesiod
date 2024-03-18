@@ -159,20 +159,15 @@ bool ViewTree::serialize_json_v2(std::string     field_name,
 
   // node ids and positions
   {
-    ax::NodeEditor::SetCurrentEditor(this->get_p_node_editor_context());
-
     std::vector<std::string> node_ids = {};
     std::vector<float>       pos_x = {};
     std::vector<float>       pos_y = {};
-    for (auto &[id, vnode] : this->get_nodes_map())
+    for (auto &[id, pos] : this->get_node_positions())
     {
-      ImVec2 pos = ax::NodeEditor::GetNodePosition(vnode.get()->hash_id);
       node_ids.push_back(id);
       pos_x.push_back(pos.x);
       pos_y.push_back(pos.y);
     }
-
-    ax::NodeEditor::SetCurrentEditor(nullptr);
 
     output_data[field_name]["node_ids"] = node_ids;
     output_data[field_name]["pos_x"] = pos_x;
@@ -239,24 +234,19 @@ bool ViewTree::deserialize_json_v2(std::string     field_name,
   id_counter = input_data[field_name]["id_counter"].get<int>();
   show_comments = input_data[field_name]["show_comments"].get<bool>();
 
-  {
-    std::vector<std::string> node_ids =
-        input_data[field_name]["node_ids"].get<std::vector<std::string>>();
-    std::vector<float> pos_x =
-        input_data[field_name]["pos_x"].get<std::vector<float>>();
-    std::vector<float> pos_y =
-        input_data[field_name]["pos_y"].get<std::vector<float>>();
+  // node positions
+  std::vector<std::string> node_ids =
+      input_data[field_name]["node_ids"].get<std::vector<std::string>>();
+  std::vector<float> pos_x =
+      input_data[field_name]["pos_x"].get<std::vector<float>>();
+  std::vector<float> pos_y =
+      input_data[field_name]["pos_y"].get<std::vector<float>>();
 
-    ax::NodeEditor::SetCurrentEditor(this->get_p_node_editor_context());
-    for (size_t k = 0; k < node_ids.size(); k++)
-    {
-      this->add_view_node(hesiod::cnode::node_type_from_id(node_ids[k]),
-                          node_ids[k]);
-      ax::NodeEditor::SetNodePosition(
-          this->get_node_ref_by_id(node_ids[k])->hash_id,
-          ImVec2(pos_x[k], pos_y[k]));
-    }
-    ax::NodeEditor::SetCurrentEditor(nullptr);
+  for (size_t k = 0; k < node_ids.size(); k++)
+  {
+    this->add_view_node(hesiod::cnode::node_type_from_id(node_ids[k]),
+                        node_ids[k]);
+    this->node_positions[node_ids[k]] = ImVec2(pos_x[k], pos_y[k]);
   }
 
   // nodes parameters

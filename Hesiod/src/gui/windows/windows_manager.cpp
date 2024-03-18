@@ -21,25 +21,18 @@ WindowManager::WindowManager()
 {
 }
 
-WindowManager::Tag WindowManager::find_free_tag()
+WindowTag WindowManager::get_new_tag()
 {
-  Tag currentTag = this->tag_count;
-
-  // Yes this is bad, and I know it.
-  while (this->has_window(currentTag))
-  {
-    currentTag = (++this->tag_count);
-  }
-
-  return currentTag;
+  this->tag_count++;
+  return (WindowTag)(this->tag_count);
 }
 
-bool WindowManager::has_window(Tag tag)
+bool WindowManager::has_window(WindowTag tag)
 {
   return this->windows.contains(tag);
 }
 
-Window *WindowManager::get_window_ref_by_tag(Tag tag)
+Window *WindowManager::get_window_ref_by_tag(WindowTag tag)
 {
   if (this->has_window(tag) == false)
     return nullptr;
@@ -47,12 +40,12 @@ Window *WindowManager::get_window_ref_by_tag(Tag tag)
   return this->windows.at(tag).get();
 }
 
-bool WindowManager::remove_window(Tag tag)
+bool WindowManager::remove_window(WindowTag tag)
 {
   if (has_window(tag) == false)
     return false;
 
-  windows_delete_queue.push(tag);
+  this->windows_delete_queue.push_back(tag);
 
   return true;
 }
@@ -63,9 +56,8 @@ bool WindowManager::remove_all_windows()
   return true;
 }
 
-WindowManager::Tag WindowManager::add_window_with_tag(
-    Tag                     tag,
-    std::unique_ptr<Window> p_window)
+WindowTag WindowManager::add_window_with_tag(WindowTag               tag,
+                                             std::unique_ptr<Window> p_window)
 {
   if (this->has_window(tag))
   {
@@ -73,40 +65,35 @@ WindowManager::Tag WindowManager::add_window_with_tag(
   }
 
   p_window->p_parent_window_manager = this;
-  p_window->initialize_window();
+  p_window->set_tag(tag);
+  p_window->initialize();
   p_window->add_shortcuts();
+
   this->windows.emplace(tag, std::move(p_window));
+
   return tag;
 }
 
-WindowManager::Tag WindowManager::add_window(std::unique_ptr<Window> p_window)
+WindowTag WindowManager::add_window(std::unique_ptr<Window> p_window)
 {
-  Tag tag = this->find_free_tag();
+  WindowTag tag = this->get_new_tag();
+
   return this->add_window_with_tag(tag, std::move(p_window));
 }
 
 bool WindowManager::do_delete_queue()
 {
-  // while (windows_delete_queue.empty())
-  // {
-  //   Tag tag = windows_delete_queue.front();
-  //   windows_delete_queue.pop();
+  for (auto &tag : this->windows_delete_queue)
+    this->windows.erase(tag);
 
-  //   if (has_window(tag))
-  //   {
-  //     Window *w = windows.at(tag);
-  //     w->remove_shortcuts();
-  //     delete w;
-  //     windows.erase(tag);
-  //   }
-  // }
+  this->windows_delete_queue.clear();
 
   return true;
 }
 
 bool WindowManager::render_windows()
 {
-  // do_delete_queue();
+  this->do_delete_queue();
 
   for (auto &[tag, p_window] : this->windows)
     p_window->render();

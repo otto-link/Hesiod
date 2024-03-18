@@ -21,27 +21,31 @@ Window::Window() : title(), flags()
 {
 }
 
+std::string Window::get_unique_id()
+{
+  return std::to_string((int)this->tag);
+}
+
 bool Window::render()
 {
   bool res = true;
-  if (ImGui::Begin(this->title.c_str(), nullptr, this->flags))
+
+  std::string unique_title = this->title + "_" + this->get_unique_id();
+
+  if (this->is_open &&
+      ImGui::Begin(unique_title.c_str(), &this->is_open, this->flags))
   {
     if (ImGui::IsWindowFocused())
-    {
       this->p_parent_window_manager->get_shortcuts_manager_ref()
           ->set_focused_group_id(this->get_element_shortcut_group_id());
-    }
 
-    res &= this->render_window_content();
+    res &= this->render_content();
   }
-  ImGui::End();
-  return res;
-}
+  else
+    // the window destroys itself...
+    this->get_window_manager_ref()->remove_window(this->tag);
 
-bool Window::render_window_content()
-{
-  ImGui::Text("render_window_content not implemented.");
-  return true;
+  return res;
 }
 
 bool Window::add_shortcuts()

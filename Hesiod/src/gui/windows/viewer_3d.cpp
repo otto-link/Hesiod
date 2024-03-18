@@ -1,122 +1,119 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-#include <functional>
-
-#include "gnode.hpp"
 #include "imgui_internal.h"
 #include "macrologger.h"
-#include <imgui_node_editor.h>
-
-#include "hesiod/viewer.hpp"
 
 #include "glm/gtc/matrix_transform.hpp"
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "hesiod/control_node.hpp"
 #include "hesiod/view_node.hpp"
-#include "hesiod/view_tree.hpp"
+#include "hesiod/viewer.hpp"
 #include "hesiod/widgets.hpp"
+#include "hesiod/windows.hpp"
 
-namespace hesiod::vnode
+namespace hesiod::gui
 {
 
-void ViewTree::render_view2d()
+Viewer3D::Viewer3D(hesiod::vnode::ViewTree *p_vtree) : p_vtree(p_vtree)
 {
-  ImGui::PushID((void *)this);
+  // shader setup
+  this->shader_id = hesiod::viewer::load_shaders(
+      "SimpleVertexShader.vertexshader",
+      "SimpleFragmentShader.fragmentshader");
 
-  ImGui::Text("%s", this->viewer_node_id.c_str());
+  glGenVertexArrays(1, &this->vertex_array_id);
+  glGenBuffers(1, &this->vertex_buffer);
+  glGenBuffers(1, &this->color_buffer);
 
-  hesiod::vnode::ViewNode *p_vnode = this->get_node_ref_by_id<ViewNode>(
-      this->viewer_node_id);
-
-  if (p_vnode->get_preview_port_id() != "")
-  {
-    if (ImGui::Button("Reset view"))
-    {
-      this->view2d_zoom = 100.f;
-      this->view2d_uv0 = {0.f, 0.f};
-    }
-    ImGui::SameLine();
-
-    if (hesiod::gui::listbox_map_enum(this->cmap_map, this->cmap_view2d, 128.f))
-      this->update_image_texture_view2d();
-
-    ImGui::SameLine();
-    if (ImGui::Checkbox("Hillshading", &this->hillshade_view2d))
-      this->update_image_texture_view2d();
-
-    if (hesiod::gui::select_shape("shape (render)",
-                                  this->shape_view2d,
-                                  this->shape))
-    {
-      this->update_view3d_basemesh();
-      this->update_image_texture_view2d();
-    }
-
-    float  window_width = ImGui::GetContentRegionAvail().x;
-    ImVec2 pos = ImGui::GetCursorScreenPos();
-
-    ImVec2 uv1 = {this->view2d_uv0[0] + 100.f / this->view2d_zoom,
-                  this->view2d_uv0[1] + 100.f / this->view2d_zoom};
-
-    ImVec2 p0 = ImVec2(pos.x, pos.y);
-    ImVec2 p1 = ImVec2(pos.x + window_width, pos.y + window_width);
-
-    ImDrawList *draw_list = ImGui::GetWindowDrawList();
-
-    draw_list->AddRectFilled(p0, p1, IM_COL32(50, 50, 50, 255));
-    draw_list->AddImage((void *)(intptr_t)this->image_texture_view2d,
-                        p0,
-                        p1,
-                        this->view2d_uv0,
-                        uv1);
-    draw_list->AddRect(p0, p1, IM_COL32(255, 255, 255, 255));
-
-    ImGui::InvisibleButton("##image2d", ImVec2(-1, -1));
-
-    // zooming and panning
-    ImGuiIO &io = ImGui::GetIO();
-    {
-
-      ImGui::SetItemKeyOwner(ImGuiKey_MouseLeft);
-      ImGui::SetItemKeyOwner(ImGuiKey_MouseWheelY);
-      if (ImGui::IsItemHovered())
-      {
-        // zoom
-        if (io.MouseWheel)
-          this->view2d_zoom = std::max(1.f,
-                                       this->view2d_zoom *
-                                           (1.f + 0.05f * io.MouseWheel));
-
-        // position
-        if (ImGui::IsMouseDown(2))
-        {
-          ImVec2 window_size = ImGui::GetWindowSize();
-          float  du = -io.MouseDelta.x / window_size[0];
-          float  dv = -io.MouseDelta.y / window_size[1];
-          this->view2d_uv0 = {this->view2d_uv0[0] + du,
-                              this->view2d_uv0[1] + dv};
-        }
-      }
-    }
-  }
-
-  ImGui::PopID();
+  this->update_basemesh();
 }
 
-void ViewTree::render_view3d()
+Viewer3D::~Viewer3D()
+{
+  LOG_DEBUG("Viewer3D::~Viewer3D");
+
+  // clean-up the post-update callbacks
+  this->p_vtree->post_update_callbacks.erase(this->get_unique_id());
+
+  // clean-up OpenGL buffers
+  glDeleteBuffers(1, &this->vertex_buffer);
+  glDeleteBuffers(1, &this->color_buffer);
+  glDeleteVertexArrays(1, &this->vertex_array_id);
+  glDeleteFramebuffers(1, &this->FBO);
+  glDeleteFramebuffers(1, &this->RBO);
+}
+
+ShortcutGroupId Viewer3D::get_element_shortcut_group_id()
+{
+  return "GroupViewer3D" + this->get_unique_id();
+}
+
+bool Viewer3D::initialize()
+{
+  LOG_DEBUG("initializing Viewer3D window [%s] for ViewTree [%s]",
+            this->get_unique_id().c_str(),
+            p_vtree->id.c_str());
+
+  this->title = "Viewer (3D) " + p_vtree->id;
+  this->flags = ImGuiWindowFlags_MenuBar;
+
+  // setup the post-update callback
+  this->p_vtree->post_update_callbacks[this->title + this->get_unique_id()] =
+      std::bind(&Viewer3D::post_update, this);
+
+  // force update to generate before-hand any rendering if node data are
+  // available
+  this->post_update();
+
+  return true;
+}
+
+void Viewer3D::post_update()
+{
+  // retrieve current selection (if any or unless the current node is
+  // pinned for this viewer)
+  if (!this->pin_current_node)
+  {
+    this->viewer_node_id = "";
+
+    if (this->p_vtree->get_selected_node_hid().size() > 0)
+    {
+      uint hash_id = this->p_vtree->get_selected_node_hid().back().Get();
+      this->viewer_node_id = this->p_vtree->get_node_id_by_hash_id(hash_id);
+    }
+  }
+  else
+  {
+    // if the view is pinned but the node has been destroyed
+    // in-between, un-pin the view...
+    if (!this->p_vtree->is_node_id_in_keys(this->viewer_node_id))
+      this->pin_current_node = false;
+  }
+
+  this->update_image_texture();
+}
+
+bool Viewer3D::render_content()
 {
   ImGui::PushID((void *)this);
 
   ImGui::Text("%s", this->viewer_node_id.c_str());
 
-  hesiod::vnode::ViewNode *p_vnode = this->get_node_ref_by_id<ViewNode>(
-      this->viewer_node_id);
-
-  if (p_vnode->get_view3d_elevation_port_id() != "")
+  if (this->p_vtree->is_node_id_in_keys(this->viewer_node_id))
   {
+
+    hesiod::vnode::ViewNode *p_vnode =
+        this->p_vtree->get_node_ref_by_id<hesiod::vnode::ViewNode>(
+            this->viewer_node_id);
+
+    if (p_vnode->get_view3d_elevation_port_id() != "")
     {
+      ImGui::SameLine();
+      ImGui::Checkbox("Pin this node", &this->pin_current_node);
+
       if (ImGui::Button("Top"))
       {
         alpha_x = 90.f;
@@ -124,30 +121,27 @@ void ViewTree::render_view3d()
         delta_x = 0.f;
         delta_y = 0.f;
         scale = 1.f;
-        this->update_image_texture_view3d(false);
+        this->update_image_texture(false);
       }
       ImGui::SameLine();
 
       if (ImGui::Checkbox("Wireframe", &this->wireframe))
-        this->update_image_texture_view3d(false);
+        this->update_image_texture(false);
       ImGui::SameLine();
 
       ImGui::Checkbox("Auto rotate", &this->auto_rotate);
       if (this->auto_rotate)
-        this->update_image_texture_view3d(false);
-
-      ImGui::SameLine();
-      ImGui::Checkbox("Show on background", &this->show_view3d_on_background);
+        this->update_image_texture(false);
 
       if (ImGui::SliderFloat("h_scale", &this->h_scale, 0.f, 2.f, "%.2f"))
-        this->update_image_texture_view3d(false);
+        this->update_image_texture(false);
 
-      if (hesiod::gui::select_shape("shape (render)",
-                                    this->shape_view3d,
-                                    this->shape))
+      if (hesiod::gui::select_shape("Display shape",
+                                    this->display_shape,
+                                    this->p_vtree->get_shape()))
       {
-        this->update_view3d_basemesh();
-        this->update_image_texture_view3d();
+        this->update_basemesh();
+        this->update_image_texture();
       }
     }
 
@@ -163,7 +157,7 @@ void ViewTree::render_view3d()
 
       ImDrawList *draw_list = ImGui::GetWindowDrawList();
 
-      draw_list->AddImage((void *)(intptr_t)this->image_texture_view3d,
+      draw_list->AddImage((void *)(intptr_t)this->image_texture,
                           p0,
                           p1,
                           ImVec2(0, 1),
@@ -171,17 +165,17 @@ void ViewTree::render_view3d()
       draw_list->AddRect(p0, p1, IM_COL32(255, 255, 255, 255));
       ImGui::InvisibleButton("##image3d", ImVec2(-1, -1));
 
-      if (this->show_view3d_on_background)
-      {
-        float display_width = std::min(io.DisplaySize.x, io.DisplaySize.y);
+      // if (this->show_view3d_on_background)
+      // {
+      //   float display_width = std::min(io.DisplaySize.x, io.DisplaySize.y);
 
-        ImGui::GetBackgroundDrawList()->AddImage(
-            (void *)(intptr_t)this->image_texture_view3d,
-            ImVec2(0, 0),
-            ImVec2(display_width, display_width),
-            ImVec2(0, 1),
-            ImVec2(1, 0));
-      }
+      //   ImGui::GetBackgroundDrawList()->AddImage(
+      //       (void *)(intptr_t)this->image_texture,
+      //       ImVec2(0, 0),
+      //       ImVec2(display_width, display_width),
+      //       ImVec2(0, 1),
+      //       ImVec2(1, 0));
+      // }
     }
 
     {
@@ -198,106 +192,58 @@ void ViewTree::render_view3d()
         {
           float dscale = factor * this->scale * io.MouseWheel * 0.1f;
           this->scale = std::max(0.05f, this->scale + dscale);
-          this->update_image_texture_view3d(false);
+          this->update_image_texture(false);
         }
 
         if (ImGui::IsMouseDown(0))
         {
           this->alpha_y += 100.f * factor * io.MouseDelta.x / window_width;
           this->alpha_x += 100.f * factor * io.MouseDelta.y / window_width;
-          this->update_image_texture_view3d(false);
+          this->update_image_texture(false);
         }
         if (ImGui::IsMouseDown(2))
         {
           this->delta_x += 4.f * factor * io.MouseDelta.x / window_width;
           this->delta_y -= 4.f * factor * io.MouseDelta.y / window_width;
-          this->update_image_texture_view3d(false);
+          this->update_image_texture(false);
         }
       }
     }
   }
-
   ImGui::PopID();
+
+  return true;
 }
 
-void ViewTree::render_settings(std::string node_id)
+void Viewer3D::update_basemesh()
 {
-  this->get_node_ref_by_id<ViewNode>(node_id)->render_settings();
+  glBindVertexArray(this->vertex_array_id);
+
+  hesiod::viewer::generate_basemesh(this->display_shape,
+                                    this->vertices,
+                                    this->colors);
+
+  hesiod::viewer::create_framebuffer(this->FBO,
+                                     this->RBO,
+                                     this->image_texture,
+                                     (float)this->display_shape.x,
+                                     (float)this->display_shape.y);
 }
 
-void ViewTree::update_image_texture_view2d()
+void Viewer3D::update_image_texture(bool vertex_array_update)
 {
-  if (this->is_node_id_in_keys(this->viewer_node_id))
+  if (this->p_vtree->is_node_id_in_keys(this->viewer_node_id))
   {
-    hesiod::vnode::ViewNode *p_vnode = this->get_node_ref_by_id<ViewNode>(
-        this->viewer_node_id);
-
-    std::string data_pid = p_vnode->get_preview_port_id();
-
-    if (data_pid != "")
-    {
-      void *p_data = p_vnode->get_p_data(data_pid);
-
-      if (p_data)
-      {
-        std::vector<uint8_t> img = {};
-
-        switch (p_vnode->get_port_ref_by_id(data_pid)->dtype)
-        {
-        case hesiod::cnode::dtype::dHeightMap:
-        {
-          hmap::HeightMap *p_h = (hmap::HeightMap *)p_data;
-          hmap::Array      array = p_h->to_array(this->shape_view2d);
-          img = hmap::colorize(array,
-                               array.min(),
-                               array.max(),
-                               this->cmap_view2d,
-                               this->hillshade_view2d);
-        }
-        break;
-
-        case hesiod::cnode::dtype::dHeightMapRGB:
-        {
-          hmap::HeightMapRGB *p_c = (hmap::HeightMapRGB *)p_data;
-          if (p_c->shape.x > 0)
-            img = p_c->to_img_8bit(this->shape_view2d);
-        }
-        break;
-
-        case hesiod::cnode::dtype::dArray:
-        {
-          hmap::Array array =
-              ((hmap::Array *)p_data)->resample_to_shape(this->shape_view2d);
-          img = hmap::colorize(array,
-                               array.min(),
-                               array.max(),
-                               this->cmap_view2d,
-                               this->hillshade_view2d);
-        }
-        break;
-
-        default:
-          LOG_ERROR("data type not suitable for 2d viewer");
-        }
-
-        img_to_texture_rgb(img, this->shape_view2d, this->image_texture_view2d);
-      }
-    }
-  }
-}
-
-void ViewTree::update_image_texture_view3d(bool vertex_array_update)
-{
-  if (this->is_node_id_in_keys(this->viewer_node_id))
-  {
-    hesiod::vnode::ViewNode *p_vnode = this->get_node_ref_by_id<ViewNode>(
-        this->viewer_node_id);
+    hesiod::vnode::ViewNode *p_vnode =
+        this->p_vtree->get_node_ref_by_id<hesiod::vnode::ViewNode>(
+            this->viewer_node_id);
 
     std::string elevation_pid = p_vnode->get_view3d_elevation_port_id();
     std::string color_pid = p_vnode->get_view3d_color_port_id();
 
     if (elevation_pid != "")
     {
+
       void *p_elev = p_vnode->get_p_data(elevation_pid);
       void *p_color = color_pid == "" ? nullptr
                                       : p_vnode->get_p_data(color_pid);
@@ -308,7 +254,7 @@ void ViewTree::update_image_texture_view3d(bool vertex_array_update)
         {
           // TODO extend to arrays
           hmap::HeightMap *p_h = (hmap::HeightMap *)p_elev;
-          hmap::Array      z = p_h->to_array(this->shape_view3d);
+          hmap::Array      z = p_h->to_array(this->display_shape);
 
           hesiod::viewer::update_vertex_elevations(z, this->vertices);
 
@@ -326,7 +272,7 @@ void ViewTree::update_image_texture_view3d(bool vertex_array_update)
               // is assigned to the Red channel, other channels are
               // set to zero
               hmap::HeightMap *p_c = (hmap::HeightMap *)p_color;
-              hmap::Array      c = 1.f - p_c->to_array(this->shape_view3d);
+              hmap::Array      c = 1.f - p_c->to_array(this->display_shape);
               hesiod::viewer::update_vertex_colors(z, c, this->colors);
             }
             break;
@@ -337,9 +283,9 @@ void ViewTree::update_image_texture_view3d(bool vertex_array_update)
               // is assigned to the Red channel, other channels are
               // set to zero
               hmap::HeightMapRGB *p_c = (hmap::HeightMapRGB *)p_color;
-              hmap::Array         r = p_c->rgb[0].to_array(this->shape_view3d);
-              hmap::Array         g = p_c->rgb[1].to_array(this->shape_view3d);
-              hmap::Array         b = p_c->rgb[2].to_array(this->shape_view3d);
+              hmap::Array         r = p_c->rgb[0].to_array(this->display_shape);
+              hmap::Array         g = p_c->rgb[1].to_array(this->display_shape);
+              hmap::Array         b = p_c->rgb[2].to_array(this->display_shape);
 
               hesiod::viewer::update_vertex_colors(z, r, g, b, this->colors);
             }
@@ -352,7 +298,7 @@ void ViewTree::update_image_texture_view3d(bool vertex_array_update)
               hmap::Path *p_path = (hmap::Path *)p_color;
               if (p_path->get_npoints() > 1)
               {
-                hmap::Array c = hmap::Array(this->shape_view3d);
+                hmap::Array c = hmap::Array(this->display_shape);
                 hmap::Path  path_copy = *p_path;
                 path_copy.set_values(1.f);
                 hmap::Vec4<float> bbox = hmap::Vec4<float>(0.f, 1.f, 0.f, 1.f);
@@ -388,16 +334,16 @@ void ViewTree::update_image_texture_view3d(bool vertex_array_update)
         hesiod::viewer::bind_framebuffer(this->FBO);
 
         glUseProgram(this->shader_id);
-        glClearColor(view3d_clear_color.Value.x,
-                     view3d_clear_color.Value.y,
-                     view3d_clear_color.Value.z,
-                     0.f);
+        glClearColor(clear_color.Value.x,
+                     clear_color.Value.y,
+                     clear_color.Value.z,
+                     clear_color.Value.w);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glEnable(GL_DEPTH_TEST);
         glDisable(GL_CULL_FACE);
 
         // reset glViewport and scale framebuffer
-        glViewport(0, 0, this->shape_view3d.x, this->shape_view3d.y);
+        glViewport(0, 0, this->display_shape.x, this->display_shape.y);
 
         if (this->wireframe)
           glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -443,14 +389,11 @@ void ViewTree::update_image_texture_view3d(bool vertex_array_update)
                                                  glm::vec3(0.f, 0.f, -2.f));
 
           // define perspective projection parameters
-          float     fov = 60.0f;
-          float     aspect_ratio = 1.f;
-          float     near_plane = 0.1f;
-          float     far_plane = 100.0f;
-          glm::mat4 projection_matrix = glm::perspective(glm::radians(fov),
-                                                         aspect_ratio,
-                                                         near_plane,
-                                                         far_plane);
+          glm::mat4 projection_matrix = glm::perspective(
+              glm::radians(this->fov),
+              this->aspect_ratio,
+              this->near_plane,
+              this->far_plane);
 
           combined_matrix = projection_matrix * view_matrix *
                             transalation_matrix * rotation_matrix *
@@ -476,19 +419,4 @@ void ViewTree::update_image_texture_view3d(bool vertex_array_update)
   }
 }
 
-void ViewTree::update_view3d_basemesh()
-{
-  glBindVertexArray(this->vertex_array_id);
-
-  hesiod::viewer::generate_basemesh(this->shape_view3d,
-                                    this->vertices,
-                                    this->colors);
-
-  hesiod::viewer::create_framebuffer(this->FBO,
-                                     this->RBO,
-                                     this->image_texture_view3d,
-                                     (float)this->shape_view3d.x,
-                                     (float)this->shape_view3d.y);
-}
-
-} // namespace hesiod::vnode
+} // namespace hesiod::gui

@@ -10,8 +10,9 @@
 #include "hesiod/view_node.hpp"
 #include "hesiod/view_tree.hpp"
 #include "hesiod/widgets.hpp"
+#include "hesiod/windows.hpp"
 
-namespace hesiod::vnode
+namespace hesiod::gui
 {
 
 // HELPER Comparator function to sort pairs according to second value
@@ -49,7 +50,7 @@ std::vector<std::string> sort(const std::map<std::string, std::string> &amap,
   return keys_sorted;
 }
 
-std::string ViewTree::render_new_node_popup()
+std::string NodeEditor::render_new_node_popup()
 {
   std::string new_node_id = "";
 
@@ -68,7 +69,7 @@ std::string ViewTree::render_new_node_popup()
   return new_node_id;
 }
 
-std::string ViewTree::render_new_node_treeview(const ImVec2 node_position)
+std::string NodeEditor::render_new_node_treeview(const ImVec2 node_position)
 {
   std::string new_node_id = "";
   const float TEXT_BASE_HEIGHT = ImGui::GetTextLineHeightWithSpacing();
@@ -142,12 +143,12 @@ std::string ViewTree::render_new_node_treeview(const ImVec2 node_position)
                               ImGuiSelectableFlags_SpanAllColumns))
         {
           LOG_DEBUG("selected node type: %s", node_type.c_str());
-          new_node_id = this->add_view_node(node_type);
+          new_node_id = this->p_vtree->add_view_node(node_type);
 
           // set node position: the node needs to be rendered first
           this->render_view_node(new_node_id);
           ax::NodeEditor::SetNodePosition(
-              this->get_node_ref_by_id(new_node_id)->hash_id,
+              this->p_vtree->get_node_ref_by_id(new_node_id)->hash_id,
               ax::NodeEditor::ScreenToCanvas(node_position));
         }
 
@@ -159,7 +160,7 @@ std::string ViewTree::render_new_node_treeview(const ImVec2 node_position)
         hesiod::gui::draw_icon(
             hesiod::gui::square,
             {12.f, 12.f},
-            ImColor(category_colors.at(main_category).hovered),
+            ImColor(hesiod::vnode::category_colors.at(main_category).hovered),
             true);
         ImGui::SameLine();
         ImGui::Text("%s", node_category.c_str());
@@ -173,4 +174,4 @@ std::string ViewTree::render_new_node_treeview(const ImVec2 node_position)
   return new_node_id;
 }
 
-} // namespace hesiod::vnode
+} // namespace hesiod::gui

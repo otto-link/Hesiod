@@ -143,6 +143,31 @@ bool MainWindow::shutdown()
   return true;
 }
 
+void MainWindow::render_main_menu()
+{
+  if (ImGui::BeginMainMenuBar())
+  {
+    if (ImGui::BeginMenu("File"))
+    {
+      ImGui::MenuItem("TODO nothing here...");
+      ImGui::Separator();
+      ImGui::MenuItem("TODO Preferences");
+      ImGui::EndMenu();
+    }
+    if (ImGui::BeginMenu("Windows"))
+    {
+      ImGui::MenuItem("TODO nothing here... (new view)");
+      ImGui::Separator();
+
+      for (auto &[tag, p_window] : this->window_manager.windows)
+        ImGui::MenuItem(p_window->get_title().c_str(), "", false, false);
+
+      ImGui::EndMenu();
+    }
+    ImGui::EndMainMenuBar();
+  }
+}
+
 bool MainWindow::run()
 {
   while (!glfwWindowShouldClose(this->p_glfw_window) && this->running)
@@ -157,7 +182,8 @@ bool MainWindow::run()
         ->set_input_blocked(ImGui::GetIO().WantTextInput);
 
     // --- GUI content
-    window_manager.render_windows();
+    this->render_main_menu();
+    this->window_manager.render_windows();
 
     // --- Rendering
     ImGui::Render();

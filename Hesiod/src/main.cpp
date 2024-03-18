@@ -128,8 +128,26 @@ int main(int argc, char *argv[])
 
   p_tree2->add_view_node("NoiseFbm");
 
-  window_main.get_window_manager_ref()->add_window(std::move(p_tree));
-  window_main.get_window_manager_ref()->add_window(std::move(p_tree2));
+  window_main.get_window_manager_ref()->add_window(
+      std::make_unique<hesiod::gui::NodeEditor>(p_tree.get()));
+
+  // window_main.get_window_manager_ref()->add_window(
+  //     std::make_unique<hesiod::gui::NodeList>(p_tree.get()));
+
+  // window_main.get_window_manager_ref()->add_window(
+  //     std::make_unique<hesiod::gui::Viewer2D>(p_tree.get()));
+
+  // window_main.get_window_manager_ref()->add_window(
+  //     std::make_unique<hesiod::gui::Viewer3D>(p_tree.get()));
+
+  // window_main.get_window_manager_ref()->add_window(
+  //     std::make_unique<hesiod::gui::Viewer3D>(p_tree.get()));
+
+  // window_main.get_window_manager_ref()->add_window(
+  //     std::make_unique<hesiod::gui::Viewer2D>(p_tree.get()));
+
+  // window_main.get_window_manager_ref()->add_window(
+  //     std::make_unique<hesiod::gui::NodeEditor>(p_tree.get()));
 
   window_main.run();
 

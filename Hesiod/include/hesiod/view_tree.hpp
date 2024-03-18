@@ -15,7 +15,6 @@
 #include "hesiod/control_tree.hpp"
 #include "hesiod/serialization.hpp"
 #include "hesiod/shortcuts.hpp"
-#include "hesiod/windows.hpp"
 
 namespace hesiod::vnode
 {
@@ -83,7 +82,7 @@ struct LinkInfos
   SERIALIZATION_V2_IMPLEMENT_BASE();
 };
 
-class ViewTree : public hesiod::cnode::ControlTree, public hesiod::gui::Window
+class ViewTree : public hesiod::cnode::ControlTree
 {
 public:
   bool show_comments = false;
@@ -91,32 +90,36 @@ public:
   ViewTree(std::string     id,
            hmap::Vec2<int> shape,
            hmap::Vec2<int> tiling,
-           float           overlap);
+           float           overlap)
+      : hesiod::cnode::ControlTree(id, shape, tiling, overlap)
+  {
+  }
 
-  ~ViewTree();
+  std::map<int, LinkInfos> get_links_infos()
+  {
+    return this->links_infos;
+  }
 
   LinkInfos *get_link_ref_by_id(int link_id);
 
-  ImU32 get_node_color(std::string node_id);
+  ImU32 get_node_color(std::string node_id) const;
 
-  ax::NodeEditor::EditorContext *get_p_node_editor_context() const;
+  std::vector<ax::NodeEditor::NodeId> get_selected_node_hid() const
+  {
+    return this->selected_node_hid;
+  }
 
   void set_sto(hmap::Vec2<int> new_shape,
                hmap::Vec2<int> new_tiling,
                float           new_overlap);
 
-  void set_viewer_node_id(std::string node_id);
+  void set_selected_node_hid(
+      std::vector<ax::NodeEditor::NodeId> new_selected_node_hid);
 
   std::string add_view_node(std::string control_node_type,
                             std::string node_id = "");
 
-  void automatic_node_layout();
-
   virtual void clear() override;
-
-  void export_view3d(std::string fname);
-
-  void insert_clone_node(std::string node_id);
 
   void new_link(int port_hash_id_from, int port_hash_id_to);
 
@@ -131,41 +134,17 @@ public:
 
   void remove_view_node(std::string node_id);
 
-  void render_links();
+  void render_settings(std::string node_id); // stays here
 
-  std::string render_new_node_popup();
+  std::map<std::string, ImVec2> get_node_positions() const
+  {
+    return this->node_positions;
+  }
 
-  std::string render_new_node_treeview(const ImVec2 node_position = {0.f, 0.f});
+  void store_node_positions(
+      ax::NodeEditor::EditorContext *p_node_editor_context);
 
-  void render_node_editor();
-
-  void render_node_list();
-
-  void render_settings(std::string node_id);
-
-  void render_view_node(std::string node_id);
-
-  void render_view_nodes();
-
-  void render_view2d();
-
-  void render_view3d();
-
-  void update_image_texture_view2d();
-
-  void update_image_texture_view3d(bool vertex_array_update = true);
-
-  void update_view3d_basemesh();
-
-  // window
-
-  bool initialize_window() override;
-
-  bool render_window_content() override;
-
-  hesiod::gui::ShortcutGroupId get_element_shortcut_group_id() override;
-
-  // serialization
+  // --- serialization
 
   void load_state(std::string fname);
 
@@ -173,58 +152,32 @@ public:
 
   SERIALIZATION_V2_IMPLEMENT_BASE();
 
+public:
+  /**
+   * @brief List of callbacks function to be called after the tree has been
+   * updated. Can be useful to update the content of a window for instance.
+   */
+  std::map<std::string, std::function<void()>> post_update_callbacks = {};
+
 private:
-  std::map<int, LinkInfos>            links_infos = {};
+  /**
+   * @brief Storage of the link informations.
+   */
+  std::map<int, LinkInfos> links_infos = {};
+
+  //  keep a copy of some data from the node editor(s) for conveniency and
+  //  overall coherency between the node editors
+
+  /**
+   * @brief Copy the last known node selection from the node editor.
+   */
   std::vector<ax::NodeEditor::NodeId> selected_node_hid = {};
 
-  ax::NodeEditor::EditorContext *p_node_editor_context = nullptr;
-
-  bool open_node_list_window = false;
-
-  std::string viewer_node_id = "";
-
-  // 2D viewer
-  bool            open_view2d_window = false;
-  GLuint          image_texture_view2d;
-  hmap::Vec2<int> shape_view2d = {512, 512};
-  int             cmap_view2d = hmap::cmap::inferno;
-  bool            hillshade_view2d = false;
-  float           view2d_zoom = 100.f;
-  ImVec2          view2d_uv0 = {0.f, 0.f};
-
-  std::map<std::string, int> cmap_map = {
-      {"gray", hmap::cmap::gray},
-      {"inferno", hmap::cmap::inferno},
-      {"nipy_spectral", hmap::cmap::nipy_spectral},
-      {"terrain", hmap::cmap::terrain}};
-
-  // 3D viewer
-  bool                 open_view3d_window = false;
-  bool                 show_view3d_on_background = false;
-  GLuint               image_texture_view3d;
-  GLuint               shader_id;
-  GLuint               vertex_array_id;
-  GLuint               vertex_buffer;
-  GLuint               color_buffer;
-  GLuint               FBO;
-  GLuint               RBO;
-  hmap::Vec2<int>      shape_view3d = {512, 512};
-  std::vector<GLfloat> vertices = {};
-  std::vector<GLfloat> colors = {};
-  ImColor              view3d_clear_color;
-
-  float scale = 0.7f;
-  float h_scale = 0.4f;
-  float alpha_x = 35.f;
-  float alpha_y = -25.f;
-  float delta_x = 0.f;
-  float delta_y = 0.f;
-  bool  wireframe = false;
-  bool  auto_rotate = false;
-
-  bool                     show_settings = false;
-  ax::NodeEditor::NodeId   context_menu_node_hid;
-  std::vector<std::string> key_sort;
+  /**
+   * @brief Node positions, stored in order to diffuse them to all the node
+   * editors, and also used for serialization.
+   */
+  std::map<std::string, ImVec2> node_positions = {};
 };
 
 } // namespace hesiod::vnode
