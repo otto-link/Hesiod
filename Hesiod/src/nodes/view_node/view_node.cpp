@@ -89,7 +89,6 @@ void ViewNode::set_preview_type(int new_preview_type)
 void ViewNode::set_view3d_elevation_port_id(std::string new_port_id)
 {
   if (this->is_port_id_in_keys(new_port_id))
-    // NB - rendering update is carried out by the ViewTree object (above)
     this->view3d_elevation_port_id = new_port_id;
   else
   {

@@ -86,6 +86,11 @@ public:
   void set_focused_group_id(ShortcutGroupId shortcut_group_id);
   void set_input_blocked(bool toggle); // Will be reset after each frame!
 
+  Shortcut *get_shortcut_ref_by_id(std::string id)
+  {
+      return this->shortcuts.at(id).get();
+  }
+
   SERIALIZATION_V2_IMPLEMENT_BASE();
 
 private:

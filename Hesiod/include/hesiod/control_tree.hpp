@@ -67,6 +67,9 @@ public:
                                hmap::Vec2<int> new_tiling,
                                float           new_overlap);
 
+public:
+  std::filesystem::path json_filename = "";
+
 protected:
   hmap::Vec2<int> shape;
   hmap::Vec2<int> tiling;
@@ -74,7 +77,6 @@ protected:
 
   int id_counter = 0;
 
-  std::filesystem::path                    json_filename = "";
   hesiod::serialization::SerializationType serialization_type;
 };
 

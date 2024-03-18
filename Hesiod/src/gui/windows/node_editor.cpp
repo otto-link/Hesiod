@@ -1,6 +1,7 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include "ImGuiFileDialog.h"
 #include "macrologger.h"
 
 #include "hesiod/view_node.hpp"
@@ -142,40 +143,39 @@ bool NodeEditor::render_content()
     ImGui::PushItemWidth(ImGui::GetFontSize() * -12);
     if (ImGui::BeginMenuBar())
     {
-      // if (ImGui::BeginMenu("File"))
-      // {
-      //   IGFD::FileDialogConfig config;
-      //   config.path = ".";
-      //   config.fileName = this->p_vtree->json_filename;
+      if (ImGui::BeginMenu("File"))
+      {
+        IGFD::FileDialogConfig config;
+        config.path = ".";
+        config.fileName = this->p_vtree->json_filename;
 
-      //   if (ImGui::MenuItem("Load", ""))
-      //     ImGuiFileDialog::Instance()->OpenDialog("LoadTreeStateDlg",
-      //                                             "Load Tree",
-      //                                             ".hsd",
-      //                                             config);
+        if (ImGui::MenuItem("Load", ""))
+          ImGuiFileDialog::Instance()->OpenDialog("LoadTreeStateDlg",
+                                                  "Load Tree",
+                                                  ".hsd",
+                                                  config);
 
-      //   bool save_button = ImGui::MenuItem("Save",
-      //                                      "",
-      //                                      false,
-      //                                      this->p_vtree->json_filename.empty()
-      //                                      ==
-      //                                          false);
-      //   bool save_as_button = ImGui::MenuItem("Save as", "");
+        bool save_button = ImGui::MenuItem(
+            "Save",
+            "",
+            false,
+            this->p_vtree->json_filename.empty() == false);
+        bool save_as_button = ImGui::MenuItem("Save as", "");
 
-      //   if ((save_button && this->p_vtree->json_filename == "") ||
-      //   save_as_button)
-      //   {
-      //     config.flags = ImGuiFileDialogFlags_ConfirmOverwrite;
-      //     ImGuiFileDialog::Instance()->OpenDialog("SaveTreeStateDlg",
-      //                                             "Save Tree",
-      //                                             ".hsd",
-      //                                             config);
-      //   }
-      //   else if (save_button)
-      //     this->p_vtree->save_state(this->p_vtree->json_filename);
+        if ((save_button && this->p_vtree->json_filename == "") ||
+            save_as_button)
+        {
+          config.flags = ImGuiFileDialogFlags_ConfirmOverwrite;
+          ImGuiFileDialog::Instance()->OpenDialog("SaveTreeStateDlg",
+                                                  "Save Tree",
+                                                  ".hsd",
+                                                  config);
+        }
+        else if (save_button)
+          this->p_vtree->save_state(this->p_vtree->json_filename);
 
-      //   ImGui::EndMenu();
-      // }
+        ImGui::EndMenu();
+      }
 
       if (ImGui::BeginMenu("Actions"))
       {
@@ -189,6 +189,10 @@ bool NodeEditor::render_content()
       }
       if (ImGui::BeginMenu("View"))
       {
+	if (ImGui::MenuItem("Show node comments", NULL, &this->p_vtree->show_comments))
+	  this->p_vtree->show_comments &= this->p_vtree->show_comments;
+	ImGui::Separator();
+	
         // if (ImGui::MenuItem("Node list", "N",
         // this->p_vtree->open_node_list_window))
         //   this->p_vtree->open_node_list_window =
@@ -357,84 +361,36 @@ bool NodeEditor::render_content()
   this->p_vtree->set_selected_node_hid(this->selected_node_hid);
   this->p_vtree->store_node_positions(this->get_p_node_editor_context());
 
-  // --- 2D viewer
+  // -- file dialogs
 
-  // if (this->p_vtree->open_view2d_window)
-  // {
-  //   if (ImGui::Begin(("View 2D ##" + this->p_vtree->id).c_str(),
-  //                    &this->p_vtree->open_view2d_window))
-  //   {
-  //     if (this->selected_node_hid.size() > 0)
-  //     {
-  //       std::string node_id = this->p_vtree->get_node_id_by_hash_id(
-  //           this->selected_node_hid.back().Get());
-  //       this->p_vtree->set_viewer_node_id(node_id);
-  //       this->p_vtree->render_view2d();
-  //     }
-  //   }
-  //   ImGui::End();
-  // }
+  if (ImGuiFileDialog::Instance()->Display("LoadTreeStateDlg"))
+  {
+    if (ImGuiFileDialog::Instance()->IsOk())
+    {
+      std::string file_path_name =
+          ImGuiFileDialog::Instance()->GetFilePathName();
+      std::string file_path = ImGuiFileDialog::Instance()->GetCurrentPath();
 
-  // --- 3D viewer
+      this->p_vtree->load_state(file_path_name);
+      this->p_vtree->json_filename = file_path_name;
+    }
 
-  // if (this->p_vtree->open_view3d_window)
-  // {
-  //   if (ImGui::Begin(("View 3D ##" + this->p_vtree->id).c_str(),
-  //                    &this->p_vtree->open_view3d_window))
-  //   {
-  //     if (this->selected_node_hid.size() > 0)
-  //     {
-  //       std::string node_id = this->p_vtree->get_node_id_by_hash_id(
-  //           this->selected_node_hid.back().Get());
-  //       this->p_vtree->set_viewer_node_id(node_id);
-  //       this->p_vtree->render_view3d();
-  //     }
-  //   }
-  //   ImGui::End();
-  // }
+    ImGuiFileDialog::Instance()->Close();
+  }
+  if (ImGuiFileDialog::Instance()->Display("SaveTreeStateDlg"))
+  {
+    if (ImGuiFileDialog::Instance()->IsOk())
+    {
+      std::string file_path_name =
+          ImGuiFileDialog::Instance()->GetFilePathName();
+      std::string file_path = ImGuiFileDialog::Instance()->GetCurrentPath();
 
-  // --- node list window
+      this->p_vtree->save_state(file_path_name);
+      this->p_vtree->json_filename = file_path_name;
+    }
 
-  // if (this->p_vtree->open_node_list_window)
-  // {
-  //   if (ImGui::Begin(("Node list ##" + this->p_vtree->id).c_str(),
-  //                    &this->p_vtree->open_node_list_window))
-  //   {
-  //     this->p_vtree->render_node_list();
-  //   }
-  //   ImGui::End();
-  // }
-
-  // -- dialogs
-
-  // if (ImGuiFileDialog::Instance()->Display("LoadTreeStateDlg"))
-  // {
-  //   if (ImGuiFileDialog::Instance()->IsOk())
-  //   {
-  //     std::string file_path_name =
-  //         ImGuiFileDialog::Instance()->GetFilePathName();
-  //     std::string file_path = ImGuiFileDialog::Instance()->GetCurrentPath();
-
-  //     this->p_vtree->load_state(file_path_name);
-  //     this->p_vtree->json_filename = file_path_name;
-  //   }
-
-  //   ImGuiFileDialog::Instance()->Close();
-  // }
-  // if (ImGuiFileDialog::Instance()->Display("SaveTreeStateDlg"))
-  // {
-  //   if (ImGuiFileDialog::Instance()->IsOk())
-  //   {
-  //     std::string file_path_name =
-  //         ImGuiFileDialog::Instance()->GetFilePathName();
-  //     std::string file_path = ImGuiFileDialog::Instance()->GetCurrentPath();
-
-  //     this->p_vtree->save_state(file_path_name);
-  //     this->p_vtree->json_filename = file_path_name;
-  //   }
-
-  //   ImGuiFileDialog::Instance()->Close();
-  // }
+    ImGuiFileDialog::Instance()->Close();
+  }
 
   return true;
 }
