@@ -18,11 +18,11 @@ GaussianPulse::GaussianPulse(std::string     id,
   this->node_type = "GaussianPulse";
   this->category = category_mapping.at(this->node_type);
 
-  this->attr["sigma"] = NEW_ATTR_FLOAT(32.f, 0.01f, 256.f);
+  this->attr["radius"] = NEW_ATTR_FLOAT(0.1f, 0.f, 1.f);
   this->attr["center.x"] = NEW_ATTR_FLOAT(0.5f, -0.5f, 1.5f);
   this->attr["center.y"] = NEW_ATTR_FLOAT(0.5f, -0.5f, 1.5f);
 
-  this->attr_ordered_key = {"sigma", "center.x", "center.y"};
+  this->attr_ordered_key = {"radius", "center.x", "center.y"};
 
   this->remove_port("dy");
   this->update_inner_bindings();
@@ -36,18 +36,16 @@ void GaussianPulse::compute()
   center.x = GET_ATTR_FLOAT("center.x");
   center.y = GET_ATTR_FLOAT("center.y");
 
-  hmap::fill(this->value_out,
-             (hmap::HeightMap *)this->get_p_data("dx"),
-             [this, &center](hmap::Vec2<int>   shape,
-                             hmap::Vec4<float> bbox,
-                             hmap::Array      *p_noise_x)
-             {
-               return hmap::gaussian_pulse(shape,
-                                           GET_ATTR_FLOAT("sigma"),
-                                           p_noise_x,
-                                           center,
-                                           bbox);
-             });
+  float sigma = std::max(1.f,
+                         (GET_ATTR_FLOAT("radius") * this->value_out.shape.x));
+
+  hmap::fill(
+      this->value_out,
+      (hmap::HeightMap *)this->get_p_data("dx"),
+      [this, &center, &sigma](hmap::Vec2<int>   shape,
+                              hmap::Vec4<float> bbox,
+                              hmap::Array      *p_noise_x)
+      { return hmap::gaussian_pulse(shape, sigma, p_noise_x, center, bbox); });
 
   this->post_process_heightmap(this->value_out);
 }
