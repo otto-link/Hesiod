@@ -23,7 +23,9 @@ class WindowManager;
 class Window : public ShortcutGroupElement
 {
 public:
-  Window();
+  Window()
+  {
+  }
 
   std::string get_unique_id();
 
@@ -51,6 +53,14 @@ public:
   bool add_shortcuts();
 
   bool remove_shortcuts();
+
+  /**
+   * @brief Add a menu item entry based on a shortcut.
+   * @param item_label Item label.
+   * @param shortcut_id Shortcut Id.
+   */
+  void add_menuitem_from_shortcut(std::string item_label,
+                                  std::string shortcut_id);
 
 protected:
   friend class WindowManager;

@@ -17,8 +17,18 @@
 namespace hesiod::gui
 {
 
-Window::Window() : title(), flags()
+void Window::add_menuitem_from_shortcut(std::string item_label,
+                                        std::string shortcut_id)
 {
+  Shortcut *p_shortcut = this->get_window_manager_ref()
+                             ->get_shortcuts_manager_ref()
+                             ->get_shortcut_ref_by_id(shortcut_id);
+
+  if (ImGui::MenuItem(item_label.c_str(),
+                      glfwGetKeyName(p_shortcut->get_key(), 0)))
+  {
+    p_shortcut->get_delegate()();
+  }
 }
 
 std::string Window::get_unique_id()

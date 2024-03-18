@@ -87,6 +87,17 @@ bool NodeEditor::initialize()
       },
       this->get_element_shortcut_group_id()));
 
+  this->shortcuts.push_back(std::make_unique<gui::Shortcut>(
+      "Node List ##" + this->get_unique_id(),
+      GLFW_KEY_N,
+      0,
+      [this]()
+      {
+        this->get_window_manager_ref()->add_window(
+            std::make_unique<hesiod::gui::NodeList>(this->p_vtree));
+      },
+      this->get_element_shortcut_group_id()));
+
   return true;
 }
 
@@ -195,23 +206,20 @@ bool NodeEditor::render_content()
           this->p_vtree->show_comments &= this->p_vtree->show_comments;
         ImGui::Separator();
 
-        // if (ImGui::MenuItem("Node list", "N",
-        // this->p_vtree->open_node_list_window))
-        //   this->p_vtree->open_node_list_window =
-        //   !this->p_vtree->open_node_list_window;
+        this->add_menuitem_from_shortcut("View 2D",
+                                         "Preview 2d ##" +
+                                             this->get_unique_id());
 
-        // if (ImGui::MenuItem("Node settings", "S", this->show_nodes_settings))
-        //   this->show_nodes_settings = !this->show_nodes_settings;
+        this->add_menuitem_from_shortcut("View 3D",
+                                         "Preview 3d ##" +
+                                             this->get_unique_id());
 
-        // if (ImGui::MenuItem("View 2D", "2",
-        // this->p_vtree->open_view2d_window))
-        //   this->p_vtree->open_view2d_window =
-        //   !this->p_vtree->open_view2d_window;
+        this->add_menuitem_from_shortcut("Node settings",
+                                         "Settings ##" + this->get_unique_id());
 
-        // if (ImGui::MenuItem("View 3D", "3",
-        // this->p_vtree->open_view3d_window))
-        //   this->p_vtree->open_view3d_window =
-        //   !this->p_vtree->open_view3d_window;
+        this->add_menuitem_from_shortcut("Node list",
+                                         "Node List ##" +
+                                             this->get_unique_id());
 
         ImGui::EndMenu();
       }
