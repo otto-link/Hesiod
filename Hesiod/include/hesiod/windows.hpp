@@ -218,6 +218,27 @@ private:
 };
 
 /**
+ * @brief NodeSettings class, GUI window to display settings widgets of the
+ * currently selected nodes.
+ */
+class NodeSettings : public Window
+{
+public:
+  NodeSettings(hesiod::vnode::ViewTree *p_vtree) : p_vtree(p_vtree)
+  {
+  }
+
+  ShortcutGroupId get_element_shortcut_group_id() override;
+
+  bool initialize() override;
+
+  bool render_content() override;
+
+private:
+  hesiod::vnode::ViewTree *p_vtree;
+};
+
+/**
  * @brief Viewer2D class, GUI window to display heightmap as 2D heatmap plots.
  */
 class Viewer2D : public Window

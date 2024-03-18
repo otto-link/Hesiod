@@ -79,7 +79,11 @@ bool NodeEditor::initialize()
       "Settings ##" + this->get_unique_id(),
       GLFW_KEY_S,
       0,
-      [this]() { this->show_nodes_settings = !this->show_nodes_settings; },
+      [this]()
+      {
+        this->get_window_manager_ref()->add_window(
+            std::make_unique<hesiod::gui::NodeSettings>(this->p_vtree));
+      },
       this->get_element_shortcut_group_id()));
 
   return true;
@@ -190,8 +194,8 @@ bool NodeEditor::render_content()
         //   this->p_vtree->open_node_list_window =
         //   !this->p_vtree->open_node_list_window;
 
-        if (ImGui::MenuItem("Node settings", "S", this->show_nodes_settings))
-          this->show_nodes_settings = !this->show_nodes_settings;
+        // if (ImGui::MenuItem("Node settings", "S", this->show_nodes_settings))
+        //   this->show_nodes_settings = !this->show_nodes_settings;
 
         // if (ImGui::MenuItem("View 2D", "2",
         // this->p_vtree->open_view2d_window))
