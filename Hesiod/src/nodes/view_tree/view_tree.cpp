@@ -228,10 +228,7 @@ void ViewTree::new_link(int port_hash_id_from, int port_hash_id_to)
 void ViewTree::post_update()
 {
   for (auto &[key, callback] : this->post_update_callbacks)
-  {
-    LOG_DEBUG("%s", key.c_str());
     callback();
-  }
 }
 
 void ViewTree::remove_link(int link_id)

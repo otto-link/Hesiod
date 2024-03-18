@@ -144,69 +144,69 @@ bool Viewer3D::render_content()
         this->update_basemesh();
         this->update_image_texture();
       }
-    }
 
-    // --- 3D rendering viewport
-    ImGuiIO &io = ImGui::GetIO();
+      // --- 3D rendering viewport
+      ImGuiIO &io = ImGui::GetIO();
 
-    float window_width = ImGui::GetContentRegionAvail().x;
-    {
-      ImVec2 pos = ImGui::GetCursorScreenPos();
-
-      ImVec2 p0 = ImVec2(pos.x, pos.y);
-      ImVec2 p1 = ImVec2(pos.x + window_width, pos.y + window_width);
-
-      ImDrawList *draw_list = ImGui::GetWindowDrawList();
-
-      draw_list->AddImage((void *)(intptr_t)this->image_texture,
-                          p0,
-                          p1,
-                          ImVec2(0, 1),
-                          ImVec2(1, 0));
-      draw_list->AddRect(p0, p1, IM_COL32(255, 255, 255, 255));
-      ImGui::InvisibleButton("##image3d", ImVec2(-1, -1));
-
-      // if (this->show_view3d_on_background)
-      // {
-      //   float display_width = std::min(io.DisplaySize.x, io.DisplaySize.y);
-
-      //   ImGui::GetBackgroundDrawList()->AddImage(
-      //       (void *)(intptr_t)this->image_texture,
-      //       ImVec2(0, 0),
-      //       ImVec2(display_width, display_width),
-      //       ImVec2(0, 1),
-      //       ImVec2(1, 0));
-      // }
-    }
-
-    {
-      ImGui::SetItemKeyOwner(ImGuiKey_MouseLeft);
-      ImGui::SetItemKeyOwner(ImGuiKey_MouseWheelY);
-      if (ImGui::IsItemHovered())
+      float window_width = ImGui::GetContentRegionAvail().x;
       {
-        float factor = 1.f;
-        if (io.KeyMods == ImGuiMod_Shift)
-          factor = 0.1f;
+        ImVec2 pos = ImGui::GetCursorScreenPos();
 
-        ImGuiIO &io = ImGui::GetIO();
-        if (io.MouseWheel != 0.f)
-        {
-          float dscale = factor * this->scale * io.MouseWheel * 0.1f;
-          this->scale = std::max(0.05f, this->scale + dscale);
-          this->update_image_texture(false);
-        }
+        ImVec2 p0 = ImVec2(pos.x, pos.y);
+        ImVec2 p1 = ImVec2(pos.x + window_width, pos.y + window_width);
 
-        if (ImGui::IsMouseDown(0))
+        ImDrawList *draw_list = ImGui::GetWindowDrawList();
+
+        draw_list->AddImage((void *)(intptr_t)this->image_texture,
+                            p0,
+                            p1,
+                            ImVec2(0, 1),
+                            ImVec2(1, 0));
+        draw_list->AddRect(p0, p1, IM_COL32(255, 255, 255, 255));
+        ImGui::InvisibleButton("##image3d", ImVec2(-1, -1));
+
+        // if (this->show_view3d_on_background)
+        // {
+        //   float display_width = std::min(io.DisplaySize.x, io.DisplaySize.y);
+
+        //   ImGui::GetBackgroundDrawList()->AddImage(
+        //       (void *)(intptr_t)this->image_texture,
+        //       ImVec2(0, 0),
+        //       ImVec2(display_width, display_width),
+        //       ImVec2(0, 1),
+        //       ImVec2(1, 0));
+        // }
+      }
+
+      {
+        ImGui::SetItemKeyOwner(ImGuiKey_MouseLeft);
+        ImGui::SetItemKeyOwner(ImGuiKey_MouseWheelY);
+        if (ImGui::IsItemHovered())
         {
-          this->alpha_y += 100.f * factor * io.MouseDelta.x / window_width;
-          this->alpha_x += 100.f * factor * io.MouseDelta.y / window_width;
-          this->update_image_texture(false);
-        }
-        if (ImGui::IsMouseDown(2))
-        {
-          this->delta_x += 4.f * factor * io.MouseDelta.x / window_width;
-          this->delta_y -= 4.f * factor * io.MouseDelta.y / window_width;
-          this->update_image_texture(false);
+          float factor = 1.f;
+          if (io.KeyMods == ImGuiMod_Shift)
+            factor = 0.1f;
+
+          ImGuiIO &io = ImGui::GetIO();
+          if (io.MouseWheel != 0.f)
+          {
+            float dscale = factor * this->scale * io.MouseWheel * 0.1f;
+            this->scale = std::max(0.05f, this->scale + dscale);
+            this->update_image_texture(false);
+          }
+
+          if (ImGui::IsMouseDown(0))
+          {
+            this->alpha_y += 100.f * factor * io.MouseDelta.x / window_width;
+            this->alpha_x += 100.f * factor * io.MouseDelta.y / window_width;
+            this->update_image_texture(false);
+          }
+          if (ImGui::IsMouseDown(2))
+          {
+            this->delta_x += 4.f * factor * io.MouseDelta.x / window_width;
+            this->delta_y -= 4.f * factor * io.MouseDelta.y / window_width;
+            this->update_image_texture(false);
+          }
         }
       }
     }

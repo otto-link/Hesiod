@@ -14,7 +14,7 @@ SmoothFillSmearPeaks::SmoothFillSmearPeaks(std::string id)
   LOG_DEBUG("SmoothFillSmearPeaks::SmoothFillSmearPeaks()");
   this->node_type = "SmoothFillSmearPeaks";
   this->category = category_mapping.at(this->node_type);
-  this->attr["radius"] = NEW_ATTR_FLOAT(0.05f, 0.01f, 0.5f);
+  this->attr["radius"] = NEW_ATTR_FLOAT(0.05f, 0.001f, 0.2f, "%.3f");
 }
 
 void SmoothFillSmearPeaks::compute_filter(hmap::HeightMap &h,

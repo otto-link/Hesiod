@@ -13,7 +13,7 @@ SmoothFillHoles::SmoothFillHoles(std::string id) : ControlNode(id), Filter(id)
   LOG_DEBUG("SmoothFillHoles::SmoothFillHoles()");
   this->node_type = "SmoothFillHoles";
   this->category = category_mapping.at(this->node_type);
-  this->attr["radius"] = NEW_ATTR_FLOAT(0.05f, 0.01f, 0.5f);
+  this->attr["radius"] = NEW_ATTR_FLOAT(0.05f, 0.001f, 0.2f, "%.3f");
 }
 
 void SmoothFillHoles::compute_filter(hmap::HeightMap &h,
