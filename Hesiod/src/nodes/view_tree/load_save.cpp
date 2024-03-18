@@ -55,6 +55,8 @@ void ViewTree::load_state(std::string fname)
 {
   this->remove_all_nodes();
   this->links_infos.clear();
+  this->selected_node_hid.clear();
+  this->node_positions.clear();
 
   std::ifstream  input_file_stream = std::ifstream(fname);
   nlohmann::json input_serialized_data = nlohmann::json();
