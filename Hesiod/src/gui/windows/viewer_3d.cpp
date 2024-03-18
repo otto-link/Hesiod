@@ -61,8 +61,9 @@ bool Viewer3D::initialize()
   this->flags = ImGuiWindowFlags_MenuBar;
 
   // setup the post-update callback
-  this->p_vtree->post_update_callbacks[this->title + this->get_unique_id()] =
-      std::bind(&Viewer3D::post_update, this);
+  this->p_vtree->post_update_callbacks[this->get_unique_id()] = std::bind(
+      &Viewer3D::post_update,
+      this);
 
   // force update to generate before-hand any rendering if node data are
   // available

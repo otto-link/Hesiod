@@ -23,7 +23,7 @@ Window::Window() : title(), flags()
 
 std::string Window::get_unique_id()
 {
-  return std::to_string((int)this->tag);
+  return this->title + "_" + std::to_string((int)this->tag);
 }
 
 bool Window::render()

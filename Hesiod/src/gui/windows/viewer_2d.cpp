@@ -19,8 +19,7 @@ Viewer2D::Viewer2D(hesiod::vnode::ViewTree *p_vtree) : p_vtree(p_vtree)
 Viewer2D::~Viewer2D()
 {
   // clean-up the post-update callbacks
-  this->p_vtree->post_update_callbacks.erase(this->title +
-                                             this->get_unique_id());
+  this->p_vtree->post_update_callbacks.erase(this->get_unique_id());
 }
 
 ShortcutGroupId Viewer2D::get_element_shortcut_group_id()
@@ -38,8 +37,9 @@ bool Viewer2D::initialize()
   this->flags = ImGuiWindowFlags_MenuBar;
 
   // setup the post-update callback
-  this->p_vtree->post_update_callbacks[this->title + this->get_unique_id()] =
-      std::bind(&Viewer2D::post_update, this);
+  this->p_vtree->post_update_callbacks[this->get_unique_id()] = std::bind(
+      &Viewer2D::post_update,
+      this);
 
   // force update to generate before-hand any rendering if node data are
   // available

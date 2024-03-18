@@ -88,7 +88,7 @@ public:
 
   Shortcut *get_shortcut_ref_by_id(std::string id)
   {
-      return this->shortcuts.at(id).get();
+    return this->shortcuts.at(id).get();
   }
 
   SERIALIZATION_V2_IMPLEMENT_BASE();

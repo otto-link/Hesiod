@@ -189,10 +189,12 @@ bool NodeEditor::render_content()
       }
       if (ImGui::BeginMenu("View"))
       {
-	if (ImGui::MenuItem("Show node comments", NULL, &this->p_vtree->show_comments))
-	  this->p_vtree->show_comments &= this->p_vtree->show_comments;
-	ImGui::Separator();
-	
+        if (ImGui::MenuItem("Show node comments",
+                            NULL,
+                            &this->p_vtree->show_comments))
+          this->p_vtree->show_comments &= this->p_vtree->show_comments;
+        ImGui::Separator();
+
         // if (ImGui::MenuItem("Node list", "N",
         // this->p_vtree->open_node_list_window))
         //   this->p_vtree->open_node_list_window =
