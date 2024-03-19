@@ -98,7 +98,7 @@ bool render_attribute_widget(std::unique_ptr<Attribute> &attr,
 
     has_changed |= hesiod::gui::listbox_map_enum(p_attr->value,
                                                  choice_index,
-                                                 128.f);
+                                                 256.f);
 
     // reverse map to get the key (string) based on the value chosen (int)
     for (auto &[k, v] : p_attr->value)

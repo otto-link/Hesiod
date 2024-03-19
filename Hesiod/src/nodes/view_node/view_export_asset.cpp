@@ -8,7 +8,7 @@
 namespace hesiod::vnode
 {
 
-void ViewExportOBJ::render_node_specific_content()
+void ViewExportAsset::render_node_specific_content()
 {
   if (ImGui::Button("export!"))
     this->write_file();

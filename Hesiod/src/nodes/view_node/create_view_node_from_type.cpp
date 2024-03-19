@@ -73,8 +73,8 @@ std::shared_ptr<gnode::Node> create_view_node_from_type(std::string node_type,
     return std::make_shared<hesiod::vnode::ViewExpandShrink>(node_id);
   case str2int("Export"):
     return std::make_shared<hesiod::vnode::ViewExport>(node_id);
-  case str2int("ExportOBJ"):
-    return std::make_shared<hesiod::vnode::ViewExportOBJ>(node_id);
+  case str2int("ExportAsset"):
+    return std::make_shared<hesiod::vnode::ViewExportAsset>(node_id);
   case str2int("ExportRGB"):
     return std::make_shared<hesiod::vnode::ViewExportRGB>(node_id);
   case str2int("Faceted"):
