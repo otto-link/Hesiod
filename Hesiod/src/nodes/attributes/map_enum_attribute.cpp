@@ -17,6 +17,12 @@ MapEnumAttribute::MapEnumAttribute(std::map<std::string, int> value)
   this->choice = this->value.begin()->first;
 }
 
+MapEnumAttribute::MapEnumAttribute(std::map<std::string, int> value,
+                                   std::string                choice)
+    : value(value), choice(choice)
+{
+}
+
 int MapEnumAttribute::get()
 {
   return this->value.at(this->choice);

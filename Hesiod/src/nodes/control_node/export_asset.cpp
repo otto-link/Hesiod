@@ -14,18 +14,25 @@ ExportAsset::ExportAsset(std::string id) : ControlNode(id)
   this->node_type = "ExportAsset";
   this->category = category_mapping.at(this->node_type);
 
-  // generate export format map
+  // generate enumerate mappings
   for (auto &[export_id, export_infos] : hmap::asset_export_format_as_string)
     this->export_format_map[export_infos[0]] = (int)export_id;
 
   for (auto &[mesh_id, mesh_infos] : hmap::mesh_type_as_string)
     this->export_mesh_map[mesh_infos] = (int)mesh_id;
 
+  std::string default_export_format =
+      "GL Transmission Format v. 2 (binary) - *.glb";
+  std::string default_mesh_type = "triangles";
+
+  // attributes
   this->attr["auto_export"] = NEW_ATTR_BOOL(false);
   this->attr["fname"] = NEW_ATTR_FILENAME("export");
 
-  this->attr["export_format"] = NEW_ATTR_MAPENUM(this->export_format_map);
-  this->attr["mesh_type"] = NEW_ATTR_MAPENUM(this->export_mesh_map);
+  this->attr["export_format"] = NEW_ATTR_MAPENUM(this->export_format_map,
+                                                 default_export_format);
+  this->attr["mesh_type"] = NEW_ATTR_MAPENUM(this->export_mesh_map,
+                                             default_mesh_type);
 
   this->attr["max_error"] = NEW_ATTR_FLOAT(5e-4f, 0.f, 0.01f, "%.4f");
   this->attr["elevation_scaling"] = NEW_ATTR_FLOAT(0.2f, 0.f, 1.f);
