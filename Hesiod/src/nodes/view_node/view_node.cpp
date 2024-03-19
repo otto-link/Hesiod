@@ -399,6 +399,8 @@ bool ViewNode::render_settings()
   ImGui::SeparatorText("Settings");
   has_changed |= this->render_attribute_settings();
 
+  has_changed |= this->render_settings_specific_content();
+
   if (has_changed)
     this->force_update();
 

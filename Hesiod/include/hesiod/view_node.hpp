@@ -200,6 +200,14 @@ public:
   virtual bool render_settings();
 
   /**
+   * @brief Render any specific content after rendering the attribute settings
+   */
+  virtual bool render_settings_specific_content()
+  {
+    return false;
+  };
+
+  /**
    * @brief Render the node within the current node editor context.
    */
   void render_node();
@@ -684,6 +692,8 @@ public:
   }
 
   void render_node_specific_content();
+
+  bool render_settings_specific_content();
 };
 
 class ViewExportAsset : public ViewNode, public hesiod::cnode::ExportAsset
@@ -699,6 +709,8 @@ public:
   }
 
   void render_node_specific_content();
+
+  bool render_settings_specific_content();
 };
 
 class ViewExportRGB : public ViewNode, public hesiod::cnode::ExportRGB
@@ -712,6 +724,8 @@ public:
   }
 
   void render_node_specific_content();
+
+  bool render_settings_specific_content();
 };
 
 class ViewFaceted : public ViewNode, public hesiod::cnode::Faceted

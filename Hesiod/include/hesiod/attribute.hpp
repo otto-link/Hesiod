@@ -162,16 +162,22 @@ class FilenameAttribute : public Attribute
 {
 public:
   FilenameAttribute() = default;
-  FilenameAttribute(std::string value);
+  FilenameAttribute(std::string value, std::string extension_filter = ".*");
   std::string   get();
   AttributeType get_type()
   {
     return AttributeType::FILENAME_ATTRIBUTE;
   }
 
+  void set_extension_filter(std::string new_extension_filter)
+  {
+    this->extension_filter = new_extension_filter;
+  }
+
   SERIALIZATION_V2_IMPLEMENT_BASE();
 
   std::string value = "";
+  std::string extension_filter;
 };
 
 class FloatAttribute : public Attribute

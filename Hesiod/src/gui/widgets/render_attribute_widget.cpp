@@ -53,10 +53,11 @@ bool render_attribute_widget(std::unique_ptr<Attribute> &attr,
         IGFD::FileDialogConfig config;
         config.path = ".";
 
-        ImGuiFileDialog::Instance()->OpenDialog("DialogId",
-                                                "Choose File",
-                                                ".png,.raw,.bin",
-                                                config);
+        ImGuiFileDialog::Instance()->OpenDialog(
+            "DialogId",
+            "Choose File",
+            p_attr->extension_filter.c_str(),
+            config);
       }
 
       if (ImGuiFileDialog::Instance()->Display("DialogId"))

@@ -15,4 +15,11 @@ void ViewExportRGB::render_node_specific_content()
     this->write_file();
 }
 
+bool ViewExportRGB::render_settings_specific_content()
+{
+  if (ImGui::Button("export!"))
+    this->write_file();
+  return false;
+}
+
 } // namespace hesiod::vnode

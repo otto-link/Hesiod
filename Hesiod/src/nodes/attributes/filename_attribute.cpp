@@ -9,7 +9,9 @@
 namespace hesiod
 {
 
-FilenameAttribute::FilenameAttribute(std::string value) : value(value)
+FilenameAttribute::FilenameAttribute(std::string value,
+                                     std::string extension_filter)
+    : value(value), extension_filter(extension_filter)
 {
 }
 
