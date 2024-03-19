@@ -387,7 +387,7 @@ private:
   /**
    * @brief Texture default shape.
    */
-  hmap::Vec2<int> display_shape = {512, 512};
+  hmap::Vec2<int> display_shape = {1024, 1024};
 
   /**
    * @brief Colormap.
@@ -497,7 +497,7 @@ private:
   /**
    * @brief Texture default shape.
    */
-  hmap::Vec2<int> display_shape = {512, 512};
+  hmap::Vec2<int> display_shape = {1024, 1024};
 
   // --- rendering stuffs...
 
