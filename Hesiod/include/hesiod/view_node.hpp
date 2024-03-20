@@ -1150,6 +1150,16 @@ public:
   }
 };
 
+class ViewMixRGBA : public ViewNode, public hesiod::cnode::MixRGBA
+{
+public:
+  ViewMixRGBA(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::MixRGBA(id)
+  {
+    this->set_preview_port_id("RGBA");
+  }
+};
+
 class ViewNoise : public ViewNode, public hesiod::cnode::Noise
 {
 public:

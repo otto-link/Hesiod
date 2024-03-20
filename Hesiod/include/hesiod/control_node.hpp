@@ -165,6 +165,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Median3x3", "Filter/Smoothing"},
     {"MinimumLocal", "Filter/Smoothing"},
     {"MixRGB", "Texture"},
+    {"MixRGBA", "Texture"},
     {"NormalDisplacement", "Filter/Recast"},
     {"Noise", "Primitive/Coherent Noise"},
     {"NoiseFbm", "Primitive/Coherent Noise"},
@@ -1181,6 +1182,19 @@ public:
 
 protected:
   hmap::HeightMapRGB value_out = hmap::HeightMapRGB();
+};
+
+class MixRGBA : virtual public ControlNode
+{
+public:
+  MixRGBA(std::string id);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::HeightMapRGBA value_out = hmap::HeightMapRGBA();
 };
 
 class Noise : public Primitive

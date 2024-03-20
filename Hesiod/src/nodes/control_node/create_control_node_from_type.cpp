@@ -146,6 +146,8 @@ std::shared_ptr<gnode::Node> create_control_node_from_type(
     return std::make_shared<hesiod::cnode::MinimumLocal>(node_id);
   case str2int("MixRGB"):
     return std::make_shared<hesiod::cnode::MixRGB>(node_id);
+  case str2int("MixRGBA"):
+    return std::make_shared<hesiod::cnode::MixRGBA>(node_id);
   case str2int("Noise"):
     return std::make_shared<hesiod::cnode::Noise>(node_id, shape, tiling, overlap);
   case str2int("NoiseFbm"):
