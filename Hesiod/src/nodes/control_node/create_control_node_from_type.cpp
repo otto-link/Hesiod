@@ -48,6 +48,8 @@ std::shared_ptr<gnode::Node> create_control_node_from_type(
     return std::make_shared<hesiod::cnode::CloudToArrayInterp>(node_id, shape, tiling, overlap);
   case str2int("Colorize"):
     return std::make_shared<hesiod::cnode::Colorize>(node_id);
+  case str2int("ColorizeRGBA"):
+    return std::make_shared<hesiod::cnode::ColorizeRGBA>(node_id);
   case str2int("ColorizeSolid"):
     return std::make_shared<hesiod::cnode::ColorizeSolid>(node_id);
   case str2int("CombineMask"):

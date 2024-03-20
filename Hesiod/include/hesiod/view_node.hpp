@@ -10,7 +10,6 @@
 #include <imgui_impl_opengl3.h>
 
 #include "gnode.hpp"
-// #include "highmap/heightmap.hpp"
 
 #include "hesiod/control_node.hpp"
 #include "hesiod/hmap_brush_editor.hpp"
@@ -99,6 +98,7 @@ static const std::map<int, viewnode_color_set> dtype_colors = {
     {hesiod::cnode::dCloud, viewnode_color_set({139, 233, 253, 255})},
     {hesiod::cnode::dHeightMap, viewnode_color_set({255, 255, 255, 255})},
     {hesiod::cnode::dHeightMapRGB, viewnode_color_set({255, 184, 108, 255})},
+    {hesiod::cnode::dHeightMapRGBA, viewnode_color_set({255, 184, 108, 255})},
     {hesiod::cnode::dPath, viewnode_color_set({80, 250, 123, 255})}};
 
 /**
@@ -519,6 +519,21 @@ public:
     this->set_preview_port_id("RGB");
     this->set_view3d_elevation_port_id("input");
     this->set_view3d_color_port_id("RGB");
+  }
+
+  bool render_settings();
+};
+
+class ViewColorizeRGBA : public ViewNode, public hesiod::cnode::ColorizeRGBA
+{
+public:
+  ViewColorizeRGBA(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::ColorizeRGBA(id)
+  {
+    this->set_preview_port_id("RGBA");
+    this->set_view3d_elevation_port_id("color_level");
+    this->set_view3d_color_port_id("RGBA");
   }
 
   bool render_settings();
@@ -2040,5 +2055,9 @@ void img_to_texture(std::vector<uint8_t> img,
 void img_to_texture_rgb(std::vector<uint8_t> img,
                         hmap::Vec2<int>      shape,
                         GLuint              &image_texture);
+
+void img_to_texture_rgba(std::vector<uint8_t> img,
+                         hmap::Vec2<int>      shape,
+                         GLuint              &image_texture);
 
 } // namespace hesiod::vnode

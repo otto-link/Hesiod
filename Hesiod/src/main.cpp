@@ -137,8 +137,8 @@ int main(int argc, char *argv[])
   // window_main.get_window_manager_ref()->add_window(
   //     std::make_unique<hesiod::gui::Viewer2D>(p_tree.get()));
 
-  // window_main.get_window_manager_ref()->add_window(
-  //     std::make_unique<hesiod::gui::Viewer3D>(p_tree.get()));
+  window_main.get_window_manager_ref()->add_window(
+      std::make_unique<hesiod::gui::Viewer3D>(p_tree.get()));
 
   // window_main.get_window_manager_ref()->add_window(
   //     std::make_unique<hesiod::gui::Viewer3D>(p_tree.get()));

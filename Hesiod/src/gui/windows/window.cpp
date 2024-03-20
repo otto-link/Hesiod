@@ -42,6 +42,8 @@ bool Window::render()
 
   std::string unique_title = this->title + "_" + this->get_unique_id();
 
+  ImGui::SetNextWindowSize(ImVec2(500, 600), ImGuiCond_FirstUseEver);
+
   if (this->is_open &&
       ImGui::Begin(unique_title.c_str(), &this->is_open, this->flags))
   {

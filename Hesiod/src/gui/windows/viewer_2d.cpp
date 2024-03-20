@@ -204,6 +204,14 @@ void Viewer2D::update_image_texture()
         }
         break;
 
+        case hesiod::cnode::dtype::dHeightMapRGBA:
+        {
+          hmap::HeightMapRGBA *p_c = (hmap::HeightMapRGBA *)p_data;
+          if (p_c->shape.x > 0)
+            img = p_c->to_img_8bit(this->display_shape);
+        }
+        break;
+
         case hesiod::cnode::dtype::dArray:
         {
           hmap::Array array =
@@ -220,9 +228,15 @@ void Viewer2D::update_image_texture()
           LOG_ERROR("data type not suitable for 2d viewer");
         }
 
-        hesiod::vnode::img_to_texture_rgb(img,
-                                          this->display_shape,
-                                          this->image_texture);
+        if (p_vnode->get_port_ref_by_id(data_pid)->dtype !=
+            hesiod::cnode::dtype::dHeightMapRGBA)
+          hesiod::vnode::img_to_texture_rgb(img,
+                                            this->display_shape,
+                                            this->image_texture);
+        else
+          hesiod::vnode::img_to_texture_rgba(img,
+                                             this->display_shape,
+                                             this->image_texture);
       }
     }
   }

@@ -51,13 +51,15 @@
 namespace hesiod::cnode
 {
 
-// define hesiod's own data types
+// define hesiod's own data types (do not forget to add the color in
+// view_node.hpp...)
 enum dtype : int
 {
   dArray,
   dCloud,
   dHeightMap,
   dHeightMapRGB,
+  dHeightMapRGBA,
   dPath
 };
 
@@ -114,6 +116,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Cloud", "Geometry/Cloud"},
     {"CloudToArrayInterp", "Primitive/Manual"},
     {"Colorize", "Texture"},
+    {"ColorizeRGBA", "Texture"},
     {"ColorizeSolid", "Texture"},
     {"CombineMask", "Mask"},
     {"ConvolveSVD", "Math/Convolution"},
@@ -611,6 +614,19 @@ public:
 
 protected:
   hmap::HeightMapRGB value_out = hmap::HeightMapRGB();
+};
+
+class ColorizeRGBA : virtual public ControlNode
+{
+public:
+  ColorizeRGBA(std::string id);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::HeightMapRGBA value_out = hmap::HeightMapRGBA();
 };
 
 class ColorizeSolid : virtual public ControlNode

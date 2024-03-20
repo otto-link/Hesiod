@@ -21,7 +21,9 @@ void generate_basemesh(hmap::Vec2<int>       shape,
   if (vertices.size() != n_vertices)
   {
     vertices.resize(n_vertices);
-    colors.resize(n_vertices);
+
+    size_t n_colors = (shape.x - 1) * (shape.y - 1) * 3 * 4 * 2;
+    colors.resize(n_colors);
   }
 
   std::vector<float> x = hmap::linspace(-1.f, 1.f, shape.x);
@@ -129,85 +131,171 @@ void update_vertex_elevations(hmap::Array &z, std::vector<GLfloat> &vertices)
     }
 }
 
-void update_vertex_colors(hmap::Array &z, std::vector<GLfloat> &colors)
+void update_vertex_colors(hmap::Array          &z,
+                          std::vector<GLfloat> &colors,
+                          hmap::Array          *p_alpha)
 {
   hmap::Array hs = hillshade(z, 180.f, 45.f, 10.f * z.ptp() / (float)z.shape.y);
   hs = hmap::pow(hs, 1.5f);
 
   int k = 0;
 
-  for (int i = 0; i < z.shape.x - 1; i++)
-    for (int j = 0; j < z.shape.y - 1; j++)
-    {
-      colors[k++] = hs(i, j);
-      colors[k++] = hs(i, j);
-      colors[k++] = hs(i, j);
+  if (p_alpha)
+    for (int i = 0; i < z.shape.x - 1; i++)
+      for (int j = 0; j < z.shape.y - 1; j++)
+      {
+        colors[k++] = hs(i, j);
+        colors[k++] = hs(i, j);
+        colors[k++] = hs(i, j);
+        colors[k++] = (*p_alpha)(i, j);
 
-      colors[k++] = hs(i, j + 1);
-      colors[k++] = hs(i, j + 1);
-      colors[k++] = hs(i, j + 1);
+        colors[k++] = hs(i, j + 1);
+        colors[k++] = hs(i, j + 1);
+        colors[k++] = hs(i, j + 1);
+        colors[k++] = (*p_alpha)(i, j + 1);
 
-      colors[k++] = hs(i + 1, j + 1);
-      colors[k++] = hs(i + 1, j + 1);
-      colors[k++] = hs(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1);
+        colors[k++] = (*p_alpha)(i + 1, j + 1);
 
-      colors[k++] = hs(i, j);
-      colors[k++] = hs(i, j);
-      colors[k++] = hs(i, j);
+        colors[k++] = hs(i, j);
+        colors[k++] = hs(i, j);
+        colors[k++] = hs(i, j);
+        colors[k++] = (*p_alpha)(i, j);
 
-      colors[k++] = hs(i + 1, j + 1);
-      colors[k++] = hs(i + 1, j + 1);
-      colors[k++] = hs(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1);
+        colors[k++] = (*p_alpha)(i + 1, j + 1);
 
-      colors[k++] = hs(i + 1, j);
-      colors[k++] = hs(i + 1, j);
-      colors[k++] = hs(i + 1, j);
-    }
+        colors[k++] = hs(i + 1, j);
+        colors[k++] = hs(i + 1, j);
+        colors[k++] = hs(i + 1, j);
+        colors[k++] = (*p_alpha)(i + 1, j);
+      }
+  else
+    for (int i = 0; i < z.shape.x - 1; i++)
+      for (int j = 0; j < z.shape.y - 1; j++)
+      {
+        colors[k++] = hs(i, j);
+        colors[k++] = hs(i, j);
+        colors[k++] = hs(i, j);
+        colors[k++] = 1.f;
+
+        colors[k++] = hs(i, j + 1);
+        colors[k++] = hs(i, j + 1);
+        colors[k++] = hs(i, j + 1);
+        colors[k++] = 1.f;
+
+        colors[k++] = hs(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1);
+        colors[k++] = 1.f;
+
+        colors[k++] = hs(i, j);
+        colors[k++] = hs(i, j);
+        colors[k++] = hs(i, j);
+        colors[k++] = 1.f;
+
+        colors[k++] = hs(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1);
+        colors[k++] = 1.f;
+
+        colors[k++] = hs(i + 1, j);
+        colors[k++] = hs(i + 1, j);
+        colors[k++] = hs(i + 1, j);
+        colors[k++] = 1.f;
+      }
 }
 
 void update_vertex_colors(hmap::Array          &z,
                           hmap::Array          &c,
-                          std::vector<GLfloat> &colors)
+                          std::vector<GLfloat> &colors,
+                          hmap::Array          *p_alpha)
 {
   hmap::Array hs = hillshade(z, 180.f, 45.f, 10.f * z.ptp() / (float)z.shape.y);
   hs = hmap::pow(hs, 1.5f);
 
   int k = 0;
 
-  for (int i = 0; i < z.shape.x - 1; i++)
-    for (int j = 0; j < z.shape.y - 1; j++)
-    {
-      colors[k++] = hs(i, j);
-      colors[k++] = hs(i, j) * c(i, j);
-      colors[k++] = hs(i, j);
+  if (p_alpha)
+    for (int i = 0; i < z.shape.x - 1; i++)
+      for (int j = 0; j < z.shape.y - 1; j++)
+      {
+        colors[k++] = hs(i, j);
+        colors[k++] = hs(i, j) * c(i, j);
+        colors[k++] = hs(i, j);
+        colors[k++] = (*p_alpha)(i, j);
 
-      colors[k++] = hs(i, j + 1);
-      colors[k++] = hs(i, j + 1) * c(i, j + 1);
-      colors[k++] = hs(i, j + 1);
+        colors[k++] = hs(i, j + 1);
+        colors[k++] = hs(i, j + 1) * c(i, j + 1);
+        colors[k++] = hs(i, j + 1);
+        colors[k++] = (*p_alpha)(i, j + 1);
 
-      colors[k++] = hs(i + 1, j + 1);
-      colors[k++] = hs(i + 1, j + 1) * c(i + 1, j + 1);
-      colors[k++] = hs(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1) * c(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1);
+        colors[k++] = (*p_alpha)(i + 1, j + 1);
 
-      colors[k++] = hs(i, j);
-      colors[k++] = hs(i, j) * c(i, j);
-      colors[k++] = hs(i, j);
+        colors[k++] = hs(i, j);
+        colors[k++] = hs(i, j) * c(i, j);
+        colors[k++] = hs(i, j);
+        colors[k++] = (*p_alpha)(i, j);
 
-      colors[k++] = hs(i + 1, j + 1);
-      colors[k++] = hs(i + 1, j + 1) * c(i + 1, j + 1);
-      colors[k++] = hs(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1) * c(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1);
+        colors[k++] = (*p_alpha)(i + 1, j + 1);
 
-      colors[k++] = hs(i + 1, j);
-      colors[k++] = hs(i + 1, j) * c(i + 1, j);
-      colors[k++] = hs(i + 1, j);
-    }
+        colors[k++] = hs(i + 1, j);
+        colors[k++] = hs(i + 1, j) * c(i + 1, j);
+        colors[k++] = hs(i + 1, j);
+        colors[k++] = (*p_alpha)(i + 1, j);
+      }
+  else
+    for (int i = 0; i < z.shape.x - 1; i++)
+      for (int j = 0; j < z.shape.y - 1; j++)
+      {
+        colors[k++] = hs(i, j);
+        colors[k++] = hs(i, j) * c(i, j);
+        colors[k++] = hs(i, j);
+        colors[k++] = 1.f;
+
+        colors[k++] = hs(i, j + 1);
+        colors[k++] = hs(i, j + 1) * c(i, j + 1);
+        colors[k++] = hs(i, j + 1);
+        colors[k++] = 1.f;
+
+        colors[k++] = hs(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1) * c(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1);
+        colors[k++] = 1.f;
+
+        colors[k++] = hs(i, j);
+        colors[k++] = hs(i, j) * c(i, j);
+        colors[k++] = hs(i, j);
+        colors[k++] = 1.f;
+
+        colors[k++] = hs(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1) * c(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1);
+        colors[k++] = 1.f;
+
+        colors[k++] = hs(i + 1, j);
+        colors[k++] = hs(i + 1, j) * c(i + 1, j);
+        colors[k++] = hs(i + 1, j);
+        colors[k++] = 1.f;
+      }
 }
 
 void update_vertex_colors(hmap::Array          &z,
                           hmap::Array          &r,
                           hmap::Array          &g,
                           hmap::Array          &b,
-                          std::vector<GLfloat> &colors)
+                          std::vector<GLfloat> &colors,
+                          hmap::Array          *p_alpha)
 {
   hmap::Array hs = hillshade(z, 180.f, 45.f, 10.f * z.ptp() / (float)z.shape.y);
   hs = hmap::pow(hs, 0.9f);
@@ -215,33 +303,74 @@ void update_vertex_colors(hmap::Array          &z,
 
   int k = 0;
 
-  for (int i = 0; i < z.shape.x - 1; i++)
-    for (int j = 0; j < z.shape.y - 1; j++)
-    {
-      colors[k++] = hs(i, j) * r(i, j);
-      colors[k++] = hs(i, j) * g(i, j);
-      colors[k++] = hs(i, j) * b(i, j);
+  if (p_alpha)
+    for (int i = 0; i < z.shape.x - 1; i++)
+      for (int j = 0; j < z.shape.y - 1; j++)
+      {
+        colors[k++] = hs(i, j) * r(i, j);
+        colors[k++] = hs(i, j) * g(i, j);
+        colors[k++] = hs(i, j) * b(i, j);
+        colors[k++] = (*p_alpha)(i, j);
 
-      colors[k++] = hs(i, j + 1) * r(i, j + 1);
-      colors[k++] = hs(i, j + 1) * g(i, j + 1);
-      colors[k++] = hs(i, j + 1) * b(i, j + 1);
+        colors[k++] = hs(i, j + 1) * r(i, j + 1);
+        colors[k++] = hs(i, j + 1) * g(i, j + 1);
+        colors[k++] = hs(i, j + 1) * b(i, j + 1);
+        colors[k++] = (*p_alpha)(i, j + 1);
 
-      colors[k++] = hs(i + 1, j + 1) * r(i + 1, j + 1);
-      colors[k++] = hs(i + 1, j + 1) * g(i + 1, j + 1);
-      colors[k++] = hs(i + 1, j + 1) * b(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1) * r(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1) * g(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1) * b(i + 1, j + 1);
+        colors[k++] = (*p_alpha)(i + 1, j + 1);
 
-      colors[k++] = hs(i, j) * r(i, j);
-      colors[k++] = hs(i, j) * g(i, j);
-      colors[k++] = hs(i, j) * b(i, j);
+        colors[k++] = hs(i, j) * r(i, j);
+        colors[k++] = hs(i, j) * g(i, j);
+        colors[k++] = hs(i, j) * b(i, j);
+        colors[k++] = (*p_alpha)(i, j);
 
-      colors[k++] = hs(i + 1, j + 1) * r(i + 1, j + 1);
-      colors[k++] = hs(i + 1, j + 1) * g(i + 1, j + 1);
-      colors[k++] = hs(i + 1, j + 1) * b(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1) * r(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1) * g(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1) * b(i + 1, j + 1);
+        colors[k++] = (*p_alpha)(i + 1, j + 1);
 
-      colors[k++] = hs(i + 1, j) * r(i + 1, j);
-      colors[k++] = hs(i + 1, j) * g(i + 1, j);
-      colors[k++] = hs(i + 1, j) * b(i + 1, j);
-    }
+        colors[k++] = hs(i + 1, j) * r(i + 1, j);
+        colors[k++] = hs(i + 1, j) * g(i + 1, j);
+        colors[k++] = hs(i + 1, j) * b(i + 1, j);
+        colors[k++] = (*p_alpha)(i + 1, j);
+      }
+  else
+    for (int i = 0; i < z.shape.x - 1; i++)
+      for (int j = 0; j < z.shape.y - 1; j++)
+      {
+        colors[k++] = hs(i, j) * r(i, j);
+        colors[k++] = hs(i, j) * g(i, j);
+        colors[k++] = hs(i, j) * b(i, j);
+        colors[k++] = 1.f;
+
+        colors[k++] = hs(i, j + 1) * r(i, j + 1);
+        colors[k++] = hs(i, j + 1) * g(i, j + 1);
+        colors[k++] = hs(i, j + 1) * b(i, j + 1);
+        colors[k++] = 1.f;
+
+        colors[k++] = hs(i + 1, j + 1) * r(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1) * g(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1) * b(i + 1, j + 1);
+        colors[k++] = 1.f;
+
+        colors[k++] = hs(i, j) * r(i, j);
+        colors[k++] = hs(i, j) * g(i, j);
+        colors[k++] = hs(i, j) * b(i, j);
+        colors[k++] = 1.f;
+
+        colors[k++] = hs(i + 1, j + 1) * r(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1) * g(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1) * b(i + 1, j + 1);
+        colors[k++] = 1.f;
+
+        colors[k++] = hs(i + 1, j) * r(i + 1, j);
+        colors[k++] = hs(i + 1, j) * g(i + 1, j);
+        colors[k++] = hs(i + 1, j) * b(i + 1, j);
+        colors[k++] = 1.f;
+      }
 }
 
 //----------------------------------------
@@ -270,11 +399,11 @@ void create_framebuffer(GLuint &FBO,
   glBindTexture(GL_TEXTURE_2D, texture_id);
   glTexImage2D(GL_TEXTURE_2D,
                0,
-               GL_RGB,
+               GL_RGBA,
                width,
                height,
                0,
-               GL_RGB,
+               GL_RGBA,
                GL_UNSIGNED_BYTE,
                NULL);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -322,11 +451,11 @@ void rescale_framebuffer(GLuint &RBO,
   glBindTexture(GL_TEXTURE_2D, texture_id);
   glTexImage2D(GL_TEXTURE_2D,
                0,
-               GL_RGB,
+               GL_RGBA,
                width,
                height,
                0,
-               GL_RGB,
+               GL_RGBA,
                GL_UNSIGNED_BYTE,
                NULL);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);

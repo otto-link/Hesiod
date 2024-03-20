@@ -22,17 +22,21 @@ void array_to_vertices(hmap::Array &array, std::vector<GLfloat> &vertices);
 
 void update_vertex_elevations(hmap::Array &z, std::vector<GLfloat> &vertices);
 
-void update_vertex_colors(hmap::Array &z, std::vector<GLfloat> &colors);
+void update_vertex_colors(hmap::Array          &z,
+                          std::vector<GLfloat> &colors,
+                          hmap::Array          *p_alpha = nullptr);
 
 void update_vertex_colors(hmap::Array          &z,
                           hmap::Array          &color,
-                          std::vector<GLfloat> &colors);
+                          std::vector<GLfloat> &colors,
+                          hmap::Array          *p_alpha = nullptr);
 
 void update_vertex_colors(hmap::Array          &z,
                           hmap::Array          &r,
                           hmap::Array          &g,
                           hmap::Array          &b,
-                          std::vector<GLfloat> &colors);
+                          std::vector<GLfloat> &colors,
+                          hmap::Array          *p_alpha = nullptr);
 
 //----------------------------------------
 // frame buffers

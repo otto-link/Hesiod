@@ -280,9 +280,6 @@ void Viewer3D::update_image_texture(bool vertex_array_update)
 
             case hesiod::cnode::dtype::dHeightMapRGB:
             {
-              // the color data are provided as an heightmap => it
-              // is assigned to the Red channel, other channels are
-              // set to zero
               hmap::HeightMapRGB *p_c = (hmap::HeightMapRGB *)p_color;
               hmap::Array         r = p_c->rgb[0].to_array(this->display_shape);
               hmap::Array         g = p_c->rgb[1].to_array(this->display_shape);
@@ -292,9 +289,25 @@ void Viewer3D::update_image_texture(bool vertex_array_update)
             }
             break;
 
+            case hesiod::cnode::dtype::dHeightMapRGBA:
+            {
+              hmap::HeightMapRGBA *p_c = (hmap::HeightMapRGBA *)p_color;
+              hmap::Array r = p_c->rgba[0].to_array(this->display_shape);
+              hmap::Array g = p_c->rgba[1].to_array(this->display_shape);
+              hmap::Array b = p_c->rgba[2].to_array(this->display_shape);
+              hmap::Array a = p_c->rgba[3].to_array(this->display_shape);
+
+              hesiod::render::update_vertex_colors(z,
+                                                   r,
+                                                   g,
+                                                   b,
+                                                   this->colors,
+                                                   &a);
+            }
+            break;
+
             case hesiod::cnode::dtype::dPath:
             {
-              LOG_DEBUG("path");
               // project path to an array (with 0 and 1 only)
               hmap::Path *p_path = (hmap::Path *)p_color;
               if (p_path->get_npoints() > 1)
@@ -340,6 +353,8 @@ void Viewer3D::update_image_texture(bool vertex_array_update)
                      clear_color.Value.z,
                      clear_color.Value.w);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glEnable(GL_BLEND);
         glEnable(GL_DEPTH_TEST);
         glDisable(GL_CULL_FACE);
 
@@ -359,7 +374,7 @@ void Viewer3D::update_image_texture(bool vertex_array_update)
         // colors
         glEnableVertexAttribArray(1);
         glBindBuffer(GL_ARRAY_BUFFER, this->color_buffer);
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void *)0);
+        glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, (void *)0);
 
         glm::mat4 combined_matrix;
         {
