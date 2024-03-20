@@ -61,18 +61,18 @@ void ColorizeRGBA::compute()
   bool inverse = GET_ATTR_BOOL("reverse");
 
   // reverse alpha
-  hmap::HeightMap alpha_copy;
-  hmap::HeightMap* p_alpha_copy = nullptr;
+  hmap::HeightMap  alpha_copy;
+  hmap::HeightMap *p_alpha_copy = nullptr;
 
   if (GET_ATTR_BOOL("reverse_alpha") && p_alpha)
-    {
-      alpha_copy = *p_alpha;
-      alpha_copy.inverse();
-      p_alpha_copy = &alpha_copy;
-    }
+  {
+    alpha_copy = *p_alpha;
+    alpha_copy.inverse();
+    p_alpha_copy = &alpha_copy;
+  }
   else
     p_alpha_copy = p_alpha;
-  
+
   // colorize
   this->value_out
       .colorize(*p_hmap, cmin, cmax, colormap_colors, p_alpha_copy, inverse);

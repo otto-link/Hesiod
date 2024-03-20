@@ -178,6 +178,8 @@ std::shared_ptr<gnode::Node> create_control_node_from_type(
     return std::make_shared<hesiod::cnode::Preview>(node_id);
   case str2int("PreviewColorize"):
     return std::make_shared<hesiod::cnode::PreviewColorize>(node_id);
+  case str2int("PreviewColorizeRGBA"):
+    return std::make_shared<hesiod::cnode::PreviewColorizeRGBA>(node_id);
   case str2int("RecastCanyon"):
     return std::make_shared<hesiod::cnode::RecastCanyon>(node_id);
   case str2int("RecastCliff"):

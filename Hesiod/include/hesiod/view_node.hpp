@@ -97,7 +97,7 @@ static const std::map<int, viewnode_color_set> dtype_colors = {
     {hesiod::cnode::dArray, viewnode_color_set({255, 121, 198, 255})},
     {hesiod::cnode::dCloud, viewnode_color_set({139, 233, 253, 255})},
     {hesiod::cnode::dHeightMap, viewnode_color_set({255, 255, 255, 255})},
-    {hesiod::cnode::dHeightMapRGB, viewnode_color_set({255, 184, 108, 255})},
+    {hesiod::cnode::dHeightMapRGB, viewnode_color_set({255, 0, 0, 255})},
     {hesiod::cnode::dHeightMapRGBA, viewnode_color_set({255, 184, 108, 255})},
     {hesiod::cnode::dPath, viewnode_color_set({80, 250, 123, 255})}};
 
@@ -1385,6 +1385,20 @@ public:
     this->set_preview_port_id("RGB");
     this->set_view3d_elevation_port_id("input");
     this->set_view3d_color_port_id("RGB");
+  }
+};
+
+class ViewPreviewColorizeRGBA : public ViewNode,
+                                public hesiod::cnode::PreviewColorizeRGBA
+{
+public:
+  ViewPreviewColorizeRGBA(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::PreviewColorizeRGBA(id)
+  {
+    this->set_preview_port_id("RGBA");
+    this->set_view3d_elevation_port_id("input");
+    this->set_view3d_color_port_id("RGBA");
   }
 };
 
