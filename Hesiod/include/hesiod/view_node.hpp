@@ -1689,6 +1689,17 @@ public:
   }
 };
 
+class ViewSetAlpha : public ViewNode, public hesiod::cnode::SetAlpha
+{
+public:
+  ViewSetAlpha(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::SetAlpha(id)
+  {
+    this->set_preview_port_id("RGBA out");
+  }
+};
+
 class ViewSharpenCone : public ViewNode, public hesiod::cnode::SharpenCone
 {
 public:

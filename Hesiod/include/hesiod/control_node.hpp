@@ -204,6 +204,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"SelectPulse", "Mask"},
     {"SelectRivers", "Mask"}, // not distributed
     {"SelectTransitions", "Mask"},
+    {"SetAlpha", "Texture"},
     {"SharpenCone", "Filter/Smoothing"},
     {"Slope", "Primitive/Function"},
     {"SmoothCpulse", "Filter/Smoothing"},
@@ -1604,6 +1605,19 @@ public:
 
 protected:
   hmap::HeightMap value_out = hmap::HeightMap();
+};
+
+class SetAlpha : virtual public ControlNode
+{
+public:
+  SetAlpha(std::string id);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::HeightMapRGBA value_out = hmap::HeightMapRGBA();
 };
 
 class SharpenCone : public Filter
