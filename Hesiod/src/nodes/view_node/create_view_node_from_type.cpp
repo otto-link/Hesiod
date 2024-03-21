@@ -259,6 +259,8 @@ std::shared_ptr<gnode::Node> create_view_node_from_type(std::string node_type,
     return std::make_shared<hesiod::vnode::ViewToKernel>(node_id);
   case str2int("ToMask"):
     return std::make_shared<hesiod::vnode::ViewToMask>(node_id);
+  case str2int("ToRGBA"):
+    return std::make_shared<hesiod::vnode::ViewToRGBA>(node_id);
   case str2int("ValleyWidth"):
     return std::make_shared<hesiod::vnode::ViewValleyWidth>(node_id);
   case str2int("WaveDune"):

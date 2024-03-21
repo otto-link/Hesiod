@@ -1914,6 +1914,16 @@ public:
   }
 };
 
+class ViewToRGBA : public ViewNode, public hesiod::cnode::ToRGBA
+{
+public:
+  ViewToRGBA(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::ToRGBA(id)
+  {
+    this->set_preview_port_id("RGBA");
+  }
+};
+
 class ViewValleyWidth : public ViewNode, public hesiod::cnode::ValleyWidth
 {
 public:

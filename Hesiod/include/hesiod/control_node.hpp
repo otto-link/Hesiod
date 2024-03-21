@@ -222,6 +222,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"ThermalScree", "Erosion/Thermal"},
     {"ToKernel", "Primitive/Kernel"},
     {"ToMask", "Mask"},
+    {"ToRGBA", "Texture"},
     {"ValleyWidth", "Features"},
     {"Warp", "Operator/Transform"},
     {"WarpDownslope", "Operator/Transform"},
@@ -1813,6 +1814,19 @@ public:
   ToMask(std::string id);
 
   void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
+};
+
+class ToRGBA : virtual public ControlNode
+{
+public:
+  ToRGBA(std::string id);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::HeightMapRGBA value_out = hmap::HeightMapRGBA();
 };
 
 class ValleyWidth : public Mask

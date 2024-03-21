@@ -260,6 +260,8 @@ std::shared_ptr<gnode::Node> create_control_node_from_type(
     return std::make_shared<hesiod::cnode::ToKernel>(node_id);
   case str2int("ToMask"):
     return std::make_shared<hesiod::cnode::ToMask>(node_id);
+  case str2int("ToRGBA"):
+    return std::make_shared<hesiod::cnode::ToRGBA>(node_id);
   case str2int("ValleyWidth"):
     return std::make_shared<hesiod::cnode::ValleyWidth>(node_id);
   case str2int("WaveDune"):
