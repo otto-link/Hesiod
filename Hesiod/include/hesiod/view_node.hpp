@@ -743,6 +743,21 @@ public:
   bool render_settings_specific_content();
 };
 
+class ViewExportRGBA : public ViewNode, public hesiod::cnode::ExportRGBA
+{
+public:
+  ViewExportRGBA(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::ExportRGBA(id)
+  {
+    this->set_preview_port_id("RGBA");
+  }
+
+  void render_node_specific_content();
+
+  bool render_settings_specific_content();
+};
+
 class ViewFaceted : public ViewNode, public hesiod::cnode::Faceted
 {
 public:

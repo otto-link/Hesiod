@@ -132,6 +132,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Export", "IO/Files"},
     {"ExportAsset", "IO/Files"},
     {"ExportRGB", "IO/Files"},
+    {"ExportRGBA", "IO/Files"},
     {"Faceted", "Filter/Recast"}, // not distributed
     {"FractalizePath", "Geometry/Path"},
     {"GaborNoise", "Primitive/Coherent Noise"},
@@ -811,6 +812,16 @@ class ExportRGB : virtual public ControlNode
 {
 public:
   ExportRGB(std::string id);
+
+  void compute();
+
+  void write_file();
+};
+
+class ExportRGBA : virtual public ControlNode
+{
+public:
+  ExportRGBA(std::string id);
 
   void compute();
 

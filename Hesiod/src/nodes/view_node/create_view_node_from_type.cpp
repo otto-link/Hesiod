@@ -79,6 +79,8 @@ std::shared_ptr<gnode::Node> create_view_node_from_type(std::string node_type,
     return std::make_shared<hesiod::vnode::ViewExportAsset>(node_id);
   case str2int("ExportRGB"):
     return std::make_shared<hesiod::vnode::ViewExportRGB>(node_id);
+  case str2int("ExportRGBA"):
+    return std::make_shared<hesiod::vnode::ViewExportRGBA>(node_id);
   case str2int("Faceted"):
     return std::make_shared<hesiod::vnode::ViewFaceted>(node_id);
   case str2int("FractalizePath"):

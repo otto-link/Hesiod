@@ -80,6 +80,8 @@ std::shared_ptr<gnode::Node> create_control_node_from_type(
     return std::make_shared<hesiod::cnode::ExportAsset>(node_id);
   case str2int("ExportRGB"):
     return std::make_shared<hesiod::cnode::ExportRGB>(node_id);
+  case str2int("ExportRGBA"):
+    return std::make_shared<hesiod::cnode::ExportRGBA>(node_id);
   case str2int("Faceted"):
     return std::make_shared<hesiod::cnode::Faceted>(node_id);
   case str2int("FractalizePath"):
