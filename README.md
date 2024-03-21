@@ -70,7 +70,7 @@ Example:
 ``` bash
 mkdir build && cd build
 cmake ..
-make
+make hesiod
 ```
 
 Start the main executable:
