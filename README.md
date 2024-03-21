@@ -37,7 +37,7 @@ git submodule update --init --recursive
 
 Install the missing OpenSource dependencies using `vcpkg`:
 ```
-vcpkg install glfw3 opengl gsl glew freeglut eigen3 glm libpng boost-range boost-type-erasure boost-geometry glm opencl
+vcpkg install glfw3 opengl gsl glew freeglut eigen3 glm libpng boost-range boost-type-erasure boost-geometry glm opencl libassimp-dev
 ```
 
 You should then be able to build the sources using Visual Studio.
@@ -46,7 +46,7 @@ You should then be able to build the sources using Visual Studio.
 
 There are also required external dependencies for ubuntu you can execute:
 ```
-sudo apt-get -y install libglfw3 libglfw3-dev libglew-dev libopengl-dev freeglut3-dev libboost-all-dev libeigen3-dev libglm-dev fuse libfuse2 ocl-icd-opencl-dev
+sudo apt-get -y install libglfw3 libglfw3-dev libglew-dev libopengl-dev freeglut3-dev libboost-all-dev libeigen3-dev libglm-dev fuse libfuse2 ocl-icd-opencl-dev libassimp-dev
 ```
 
 #### Getting the sources
