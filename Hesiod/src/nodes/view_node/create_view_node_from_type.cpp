@@ -45,8 +45,6 @@ std::shared_ptr<gnode::Node> create_view_node_from_type(std::string node_type,
     return std::make_shared<hesiod::vnode::ViewCloud>(node_id);
   case str2int("CloudToArrayInterp"):
     return std::make_shared<hesiod::vnode::ViewCloudToArrayInterp>(node_id, shape, tiling, overlap);
-  case str2int("Colorize"):
-    return std::make_shared<hesiod::vnode::ViewColorize>(node_id);
   case str2int("ColorizeRGBA"):
     return std::make_shared<hesiod::vnode::ViewColorizeRGBA>(node_id);
   case str2int("ColorizeSolid"):
@@ -77,8 +75,6 @@ std::shared_ptr<gnode::Node> create_view_node_from_type(std::string node_type,
     return std::make_shared<hesiod::vnode::ViewExport>(node_id);
   case str2int("ExportAsset"):
     return std::make_shared<hesiod::vnode::ViewExportAsset>(node_id);
-  case str2int("ExportRGB"):
-    return std::make_shared<hesiod::vnode::ViewExportRGB>(node_id);
   case str2int("ExportRGBA"):
     return std::make_shared<hesiod::vnode::ViewExportRGBA>(node_id);
   case str2int("Faceted"):
@@ -145,8 +141,6 @@ std::shared_ptr<gnode::Node> create_view_node_from_type(std::string node_type,
     return std::make_shared<hesiod::vnode::ViewMedian3x3>(node_id);
   case str2int("MinimumLocal"):
     return std::make_shared<hesiod::vnode::ViewMinimumLocal>(node_id);
-  case str2int("MixRGB"):
-    return std::make_shared<hesiod::vnode::ViewMixRGB>(node_id);
   case str2int("MixRGBA"):
     return std::make_shared<hesiod::vnode::ViewMixRGBA>(node_id);
   case str2int("Noise"):
@@ -179,8 +173,6 @@ std::shared_ptr<gnode::Node> create_view_node_from_type(std::string node_type,
     return std::make_shared<hesiod::vnode::ViewPlateau>(node_id);
   case str2int("Preview"):
     return std::make_shared<hesiod::vnode::ViewPreview>(node_id);
-  case str2int("PreviewColorize"):
-    return std::make_shared<hesiod::vnode::ViewPreviewColorize>(node_id);
   case str2int("PreviewRGBA"):
     return std::make_shared<hesiod::vnode::ViewPreviewRGBA>(node_id);
   case str2int("RecastCanyon"):

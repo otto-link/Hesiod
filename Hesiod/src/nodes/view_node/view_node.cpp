@@ -630,20 +630,6 @@ void ViewNode::update_preview()
       }
       break;
 
-      case hesiod::cnode::dHeightMapRGB:
-      {
-        hmap::HeightMapRGB  *p_c = (hmap::HeightMapRGB *)p_data;
-        std::vector<uint8_t> img = {};
-
-        if (p_c->shape.x > 0)
-          img = p_c->to_img_8bit(this->shape_preview);
-
-        img_to_texture_rgb(img,
-                           this->shape_preview,
-                           this->image_texture_preview);
-      }
-      break;
-
       case hesiod::cnode::dHeightMapRGBA:
       {
         hmap::HeightMapRGBA *p_c = (hmap::HeightMapRGBA *)p_data;

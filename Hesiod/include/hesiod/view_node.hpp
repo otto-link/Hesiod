@@ -97,7 +97,6 @@ static const std::map<int, viewnode_color_set> dtype_colors = {
     {hesiod::cnode::dArray, viewnode_color_set({255, 121, 198, 255})},
     {hesiod::cnode::dCloud, viewnode_color_set({139, 233, 253, 255})},
     {hesiod::cnode::dHeightMap, viewnode_color_set({255, 255, 255, 255})},
-    {hesiod::cnode::dHeightMapRGB, viewnode_color_set({255, 0, 0, 255})},
     {hesiod::cnode::dHeightMapRGBA, viewnode_color_set({255, 184, 108, 255})},
     {hesiod::cnode::dPath, viewnode_color_set({80, 250, 123, 255})}};
 
@@ -509,21 +508,6 @@ public:
   }
 };
 
-class ViewColorize : public ViewNode, public hesiod::cnode::Colorize
-{
-public:
-  ViewColorize(std::string id)
-      : hesiod::cnode::ControlNode(id), ViewNode(id),
-        hesiod::cnode::Colorize(id)
-  {
-    this->set_preview_port_id("RGB");
-    this->set_view3d_elevation_port_id("input");
-    this->set_view3d_color_port_id("RGB");
-  }
-
-  bool render_settings();
-};
-
 class ViewColorizeRGBA : public ViewNode, public hesiod::cnode::ColorizeRGBA
 {
 public:
@@ -718,24 +702,9 @@ public:
       : hesiod::cnode::ControlNode(id), ViewNode(id),
         hesiod::cnode::ExportAsset(id)
   {
-    this->set_preview_port_id("RGB");
+    this->set_preview_port_id("RGBA");
     this->set_view3d_elevation_port_id("elevation");
-    this->set_view3d_color_port_id("RGB");
-  }
-
-  void render_node_specific_content();
-
-  bool render_settings_specific_content();
-};
-
-class ViewExportRGB : public ViewNode, public hesiod::cnode::ExportRGB
-{
-public:
-  ViewExportRGB(std::string id)
-      : hesiod::cnode::ControlNode(id), ViewNode(id),
-        hesiod::cnode::ExportRGB(id)
-  {
-    this->set_preview_port_id("RGB");
+    this->set_view3d_color_port_id("RGBA");
   }
 
   void render_node_specific_content();
@@ -1155,16 +1124,6 @@ public:
   }
 };
 
-class ViewMixRGB : public ViewNode, public hesiod::cnode::MixRGB
-{
-public:
-  ViewMixRGB(std::string id)
-      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::MixRGB(id)
-  {
-    this->set_preview_port_id("RGB");
-  }
-};
-
 class ViewMixRGBA : public ViewNode, public hesiod::cnode::MixRGBA
 {
 public:
@@ -1396,20 +1355,6 @@ public:
     this->set_preview_port_id("input");
     this->set_view3d_elevation_port_id("input");
     this->set_view3d_color_port_id("color mask");
-  }
-};
-
-class ViewPreviewColorize : public ViewNode,
-                            public hesiod::cnode::PreviewColorize
-{
-public:
-  ViewPreviewColorize(std::string id)
-      : hesiod::cnode::ControlNode(id), ViewNode(id),
-        hesiod::cnode::PreviewColorize(id)
-  {
-    this->set_preview_port_id("RGB");
-    this->set_view3d_elevation_port_id("input");
-    this->set_view3d_color_port_id("RGB");
   }
 };
 

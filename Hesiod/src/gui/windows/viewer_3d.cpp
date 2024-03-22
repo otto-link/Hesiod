@@ -278,17 +278,6 @@ void Viewer3D::update_image_texture(bool vertex_array_update)
             }
             break;
 
-            case hesiod::cnode::dtype::dHeightMapRGB:
-            {
-              hmap::HeightMapRGB *p_c = (hmap::HeightMapRGB *)p_color;
-              hmap::Array         r = p_c->rgb[0].to_array(this->display_shape);
-              hmap::Array         g = p_c->rgb[1].to_array(this->display_shape);
-              hmap::Array         b = p_c->rgb[2].to_array(this->display_shape);
-
-              hesiod::render::update_vertex_colors(z, r, g, b, this->colors);
-            }
-            break;
-
             case hesiod::cnode::dtype::dHeightMapRGBA:
             {
               hmap::HeightMapRGBA *p_c = (hmap::HeightMapRGBA *)p_color;

@@ -196,14 +196,6 @@ void Viewer2D::update_image_texture()
         }
         break;
 
-        case hesiod::cnode::dtype::dHeightMapRGB:
-        {
-          hmap::HeightMapRGB *p_c = (hmap::HeightMapRGB *)p_data;
-          if (p_c->shape.x > 0)
-            img = p_c->to_img_8bit(this->display_shape);
-        }
-        break;
-
         case hesiod::cnode::dtype::dHeightMapRGBA:
         {
           hmap::HeightMapRGBA *p_c = (hmap::HeightMapRGBA *)p_data;
