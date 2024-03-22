@@ -546,9 +546,9 @@ public:
       : hesiod::cnode::ControlNode(id), ViewNode(id),
         hesiod::cnode::ColorizeSolid(id)
   {
-    this->set_preview_port_id("RGB");
+    this->set_preview_port_id("RGBA");
     this->set_view3d_elevation_port_id("input");
-    this->set_view3d_color_port_id("RGB");
+    this->set_view3d_color_port_id("RGBA");
   }
 };
 

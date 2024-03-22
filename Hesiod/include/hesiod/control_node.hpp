@@ -644,7 +644,7 @@ public:
   void update_inner_bindings();
 
 protected:
-  hmap::HeightMapRGB value_out = hmap::HeightMapRGB();
+  hmap::HeightMapRGBA value_out = hmap::HeightMapRGBA();
 };
 
 class CombineMask : virtual public ControlNode
