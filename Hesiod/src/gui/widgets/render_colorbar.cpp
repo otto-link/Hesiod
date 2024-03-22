@@ -3,7 +3,6 @@
  * this software. */
 #include <vector>
 
-
 #include "macrologger.h"
 
 #include "hesiod/widgets.hpp"

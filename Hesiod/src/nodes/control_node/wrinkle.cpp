@@ -40,7 +40,9 @@ void Wrinkle::compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask)
 
   hmap::transform(h,
                   p_mask,
-                  [this, &amp, &ir](hmap::Array &x, hmap::Array *p_mask)
+                  [this, &amp, &ir](hmap::Array      &x,
+                                    hmap::Vec4<float> bbox,
+                                    hmap::Array      *p_mask)
                   {
                     hmap::wrinkle(x,
                                   amp,
@@ -50,7 +52,8 @@ void Wrinkle::compute_filter(hmap::HeightMap &h, hmap::HeightMap *p_mask)
                                   GET_ATTR_FLOAT("kw"),
                                   GET_ATTR_SEED("seed"),
                                   GET_ATTR_INT("octaves"),
-                                  GET_ATTR_FLOAT("weight"));
+                                  GET_ATTR_FLOAT("weight"),
+                                  bbox);
                   });
 
   h.smooth_overlap_buffers();

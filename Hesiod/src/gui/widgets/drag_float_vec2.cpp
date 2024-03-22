@@ -3,8 +3,6 @@
  * this software. */
 #include <iostream>
 
-
-
 #include "hesiod/widgets.hpp"
 
 namespace hesiod::gui

@@ -2,7 +2,6 @@
 #include <span>
 #include <vector>
 
-
 #include "imgui.h"
 
 #include <GL/glew.h>

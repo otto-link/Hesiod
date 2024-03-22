@@ -6,7 +6,6 @@
 
 #include "gnode.hpp"
 
-
 #include "hesiod/control_node.hpp"
 #include "hesiod/serialization.hpp"
 

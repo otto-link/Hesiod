@@ -60,9 +60,10 @@ void RecastRockySlopes::compute()
   hmap::transform(this->value_out,
                   p_noise,
                   p_mask,
-                  [this, &talus, &ir](hmap::Array &z,
-                                      hmap::Array *p_noise,
-                                      hmap::Array *p_mask)
+                  [this, &talus, &ir](hmap::Array      &z,
+                                      hmap::Vec4<float> bbox,
+                                      hmap::Array      *p_noise,
+                                      hmap::Array      *p_mask)
                   {
                     hmap::recast_rocky_slopes(z,
                                               talus,
@@ -72,7 +73,8 @@ void RecastRockySlopes::compute()
                                               GET_ATTR_FLOAT("kw"),
                                               p_mask,
                                               GET_ATTR_FLOAT("gamma"),
-                                              p_noise);
+                                              p_noise,
+                                              bbox);
                   });
 
   this->value_out.smooth_overlap_buffers();
