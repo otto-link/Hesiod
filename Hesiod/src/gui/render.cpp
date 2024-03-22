@@ -2,8 +2,11 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include <GL/glew.h>
+#include <vector>
 
-#include "highmap.hpp"
+#include "highmap/array.hpp"
+#include "highmap/op.hpp"
+#include "highmap/vector.hpp"
 #include "macrologger.h"
 
 namespace hesiod::render

@@ -7,7 +7,7 @@
 #include <vector>
 
 #include "gnode.hpp"
-#include "highmap.hpp"
+
 #include "macrologger.h"
 #include "nlohmann/json_fwd.hpp"
 

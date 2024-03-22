@@ -3,7 +3,7 @@
  * this software. */
 #include <vector>
 
-#include "highmap.hpp"
+
 #include "macrologger.h"
 
 #include "hesiod/widgets.hpp"
