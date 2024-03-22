@@ -16,14 +16,18 @@ PreviewColorizeRGBA::PreviewColorizeRGBA(std::string id) : ControlNode(id)
                              gnode::direction::in,
                              dtype::dHeightMapRGBA,
                              gnode::optional::yes));
-  this->add_port(gnode::Port("thru", gnode::direction::out, dtype::dHeightMap));
+  this->add_port(
+      gnode::Port("thru input", gnode::direction::out, dtype::dHeightMap));
+  this->add_port(
+      gnode::Port("thru RGBA", gnode::direction::out, dtype::dHeightMapRGBA));
   this->category = category_mapping.at(this->node_type);
   this->update_inner_bindings();
 }
 
 void PreviewColorizeRGBA::update_inner_bindings()
 {
-  this->set_p_data("thru", this->get_p_data("input"));
+  this->set_p_data("thru input", this->get_p_data("input"));
+  this->set_p_data("thru RGBA", this->get_p_data("RGBA"));
 }
 
 void PreviewColorizeRGBA::compute()
