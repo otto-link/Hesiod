@@ -10,7 +10,7 @@
 namespace hesiod::vnode
 {
 
-bool ViewColorize::render_settings()
+bool ViewColorizeRGBA::render_settings()
 {
   bool has_changed = false;
   has_changed |= this->render_settings_header();
@@ -54,6 +54,11 @@ bool ViewColorize::render_settings()
 
   has_changed |= hesiod::gui::render_attribute_widget(this->attr.at("reverse"),
                                                       "reverse");
+
+  has_changed |= hesiod::gui::render_attribute_widget(
+      this->attr.at("reverse_alpha"),
+      "reverse_alpha");
+
   has_changed |= hesiod::gui::render_attribute_widget(this->attr.at("clamp"),
                                                       "clamp");
 

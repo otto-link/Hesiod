@@ -51,13 +51,14 @@
 namespace hesiod::cnode
 {
 
-// define hesiod's own data types
+// define hesiod's own data types (do not forget to add the color in
+// view_node.hpp...)
 enum dtype : int
 {
   dArray,
   dCloud,
   dHeightMap,
-  dHeightMapRGB,
+  dHeightMapRGBA,
   dPath
 };
 
@@ -113,7 +114,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Clone", "Routing"},
     {"Cloud", "Geometry/Cloud"},
     {"CloudToArrayInterp", "Primitive/Manual"},
-    {"Colorize", "Texture"},
+    {"ColorizeRGBA", "Texture"},
     {"ColorizeSolid", "Texture"},
     {"CombineMask", "Mask"},
     {"ConvolveSVD", "Math/Convolution"},
@@ -128,7 +129,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"ExpandShrinkDirectional", "Filter/Recast"},
     {"Export", "IO/Files"},
     {"ExportAsset", "IO/Files"},
-    {"ExportRGB", "IO/Files"},
+    {"ExportRGBA", "IO/Files"},
     {"Faceted", "Filter/Recast"}, // not distributed
     {"FractalizePath", "Geometry/Path"},
     {"GaborNoise", "Primitive/Coherent Noise"},
@@ -161,7 +162,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"MeanLocal", "Filter/Smoothing"},
     {"Median3x3", "Filter/Smoothing"},
     {"MinimumLocal", "Filter/Smoothing"},
-    {"MixRGB", "Texture"},
+    {"MixRGBA", "Texture"},
     {"NormalDisplacement", "Filter/Recast"},
     {"Noise", "Primitive/Coherent Noise"},
     {"NoiseFbm", "Primitive/Coherent Noise"},
@@ -177,7 +178,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Peak", "Primitive/Geological"},
     {"Plateau", "Filter/Recurve"},
     {"Preview", "Debug"},
-    {"PreviewColorize", "Texture"},
+    {"PreviewRGBA", "Texture"},
     {"RecastCanyon", "Filter/Recast"},
     {"RecastCliff", "Filter/Recast"},
     {"RecastCliffDirectional", "Filter/Recast"},
@@ -200,6 +201,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"SelectPulse", "Mask"},
     {"SelectRivers", "Mask"}, // not distributed
     {"SelectTransitions", "Mask"},
+    {"SetAlpha", "Texture"},
     {"SharpenCone", "Filter/Smoothing"},
     {"Slope", "Primitive/Function"},
     {"SmoothCpulse", "Filter/Smoothing"},
@@ -216,6 +218,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"ThermalScree", "Erosion/Thermal"},
     {"ToKernel", "Primitive/Kernel"},
     {"ToMask", "Mask"},
+    {"ToRGBA", "Texture"},
     {"ValleyWidth", "Features"},
     {"Warp", "Operator/Transform"},
     {"WarpDownslope", "Operator/Transform"},
@@ -600,17 +603,17 @@ public:
   void compute();
 };
 
-class Colorize : virtual public ControlNode
+class ColorizeRGBA : virtual public ControlNode
 {
 public:
-  Colorize(std::string id);
+  ColorizeRGBA(std::string id);
 
   void compute();
 
   void update_inner_bindings();
 
 protected:
-  hmap::HeightMapRGB value_out = hmap::HeightMapRGB();
+  hmap::HeightMapRGBA value_out = hmap::HeightMapRGBA();
 };
 
 class ColorizeSolid : virtual public ControlNode
@@ -623,7 +626,7 @@ public:
   void update_inner_bindings();
 
 protected:
-  hmap::HeightMapRGB value_out = hmap::HeightMapRGB();
+  hmap::HeightMapRGBA value_out = hmap::HeightMapRGBA();
 };
 
 class CombineMask : virtual public ControlNode
@@ -787,10 +790,10 @@ protected:
   std::map<std::string, int> export_mesh_map = {};
 };
 
-class ExportRGB : virtual public ControlNode
+class ExportRGBA : virtual public ControlNode
 {
 public:
-  ExportRGB(std::string id);
+  ExportRGBA(std::string id);
 
   void compute();
 
@@ -1152,17 +1155,17 @@ public:
   void compute_in_out(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
 };
 
-class MixRGB : virtual public ControlNode
+class MixRGBA : virtual public ControlNode
 {
 public:
-  MixRGB(std::string id);
+  MixRGBA(std::string id);
 
   void compute();
 
   void update_inner_bindings();
 
 protected:
-  hmap::HeightMapRGB value_out = hmap::HeightMapRGB();
+  hmap::HeightMapRGBA value_out = hmap::HeightMapRGBA();
 };
 
 class Noise : public Primitive
@@ -1355,10 +1358,10 @@ public:
   void update_inner_bindings();
 };
 
-class PreviewColorize : virtual public ControlNode
+class PreviewRGBA : virtual public ControlNode
 {
 public:
-  PreviewColorize(std::string id);
+  PreviewRGBA(std::string id);
 
   void compute();
 
@@ -1579,6 +1582,19 @@ protected:
   hmap::HeightMap value_out = hmap::HeightMap();
 };
 
+class SetAlpha : virtual public ControlNode
+{
+public:
+  SetAlpha(std::string id);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::HeightMapRGBA value_out = hmap::HeightMapRGBA();
+};
+
 class SharpenCone : public Filter
 {
 public:
@@ -1758,6 +1774,19 @@ public:
   ToMask(std::string id);
 
   void compute_mask(hmap::HeightMap &h_out, hmap::HeightMap *p_h_in);
+};
+
+class ToRGBA : virtual public ControlNode
+{
+public:
+  ToRGBA(std::string id);
+
+  void compute();
+
+  void update_inner_bindings();
+
+protected:
+  hmap::HeightMapRGBA value_out = hmap::HeightMapRGBA();
 };
 
 class ValleyWidth : public Mask

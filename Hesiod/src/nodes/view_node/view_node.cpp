@@ -630,17 +630,17 @@ void ViewNode::update_preview()
       }
       break;
 
-      case hesiod::cnode::dHeightMapRGB:
+      case hesiod::cnode::dHeightMapRGBA:
       {
-        hmap::HeightMapRGB  *p_c = (hmap::HeightMapRGB *)p_data;
+        hmap::HeightMapRGBA *p_c = (hmap::HeightMapRGBA *)p_data;
         std::vector<uint8_t> img = {};
 
         if (p_c->shape.x > 0)
           img = p_c->to_img_8bit(this->shape_preview);
 
-        img_to_texture_rgb(img,
-                           this->shape_preview,
-                           this->image_texture_preview);
+        img_to_texture_rgba(img,
+                            this->shape_preview,
+                            this->image_texture_preview);
       }
       break;
 
@@ -719,6 +719,33 @@ void img_to_texture_rgb(std::vector<uint8_t> img,
                shape.y,
                0,
                GL_RGB,
+               GL_UNSIGNED_BYTE,
+               img.data());
+}
+
+void img_to_texture_rgba(std::vector<uint8_t> img,
+                         hmap::Vec2<int>      shape,
+                         GLuint              &image_texture)
+{
+  glGenTextures(1, &image_texture);
+  glBindTexture(GL_TEXTURE_2D, image_texture);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+
+  // Upload pixels into texture
+#if defined(GL_UNPACK_ROW_LENGTH) && !defined(__EMSCRIPTEN__)
+  glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+#endif
+
+  glTexImage2D(GL_TEXTURE_2D,
+               0,
+               GL_RGBA,
+               shape.x,
+               shape.y,
+               0,
+               GL_RGBA,
                GL_UNSIGNED_BYTE,
                img.data());
 }

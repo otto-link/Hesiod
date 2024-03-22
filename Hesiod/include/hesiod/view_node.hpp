@@ -10,7 +10,6 @@
 #include <imgui_impl_opengl3.h>
 
 #include "gnode.hpp"
-// #include "highmap/heightmap.hpp"
 
 #include "hesiod/control_node.hpp"
 #include "hesiod/hmap_brush_editor.hpp"
@@ -98,7 +97,7 @@ static const std::map<int, viewnode_color_set> dtype_colors = {
     {hesiod::cnode::dArray, viewnode_color_set({255, 121, 198, 255})},
     {hesiod::cnode::dCloud, viewnode_color_set({139, 233, 253, 255})},
     {hesiod::cnode::dHeightMap, viewnode_color_set({255, 255, 255, 255})},
-    {hesiod::cnode::dHeightMapRGB, viewnode_color_set({255, 184, 108, 255})},
+    {hesiod::cnode::dHeightMapRGBA, viewnode_color_set({255, 184, 108, 255})},
     {hesiod::cnode::dPath, viewnode_color_set({80, 250, 123, 255})}};
 
 /**
@@ -509,16 +508,16 @@ public:
   }
 };
 
-class ViewColorize : public ViewNode, public hesiod::cnode::Colorize
+class ViewColorizeRGBA : public ViewNode, public hesiod::cnode::ColorizeRGBA
 {
 public:
-  ViewColorize(std::string id)
+  ViewColorizeRGBA(std::string id)
       : hesiod::cnode::ControlNode(id), ViewNode(id),
-        hesiod::cnode::Colorize(id)
+        hesiod::cnode::ColorizeRGBA(id)
   {
-    this->set_preview_port_id("RGB");
-    this->set_view3d_elevation_port_id("input");
-    this->set_view3d_color_port_id("RGB");
+    this->set_preview_port_id("RGBA");
+    this->set_view3d_elevation_port_id("color_level");
+    this->set_view3d_color_port_id("RGBA");
   }
 
   bool render_settings();
@@ -531,9 +530,9 @@ public:
       : hesiod::cnode::ControlNode(id), ViewNode(id),
         hesiod::cnode::ColorizeSolid(id)
   {
-    this->set_preview_port_id("RGB");
+    this->set_preview_port_id("RGBA");
     this->set_view3d_elevation_port_id("input");
-    this->set_view3d_color_port_id("RGB");
+    this->set_view3d_color_port_id("RGBA");
   }
 };
 
@@ -703,9 +702,9 @@ public:
       : hesiod::cnode::ControlNode(id), ViewNode(id),
         hesiod::cnode::ExportAsset(id)
   {
-    this->set_preview_port_id("RGB");
+    this->set_preview_port_id("RGBA");
     this->set_view3d_elevation_port_id("elevation");
-    this->set_view3d_color_port_id("RGB");
+    this->set_view3d_color_port_id("RGBA");
   }
 
   void render_node_specific_content();
@@ -713,14 +712,14 @@ public:
   bool render_settings_specific_content();
 };
 
-class ViewExportRGB : public ViewNode, public hesiod::cnode::ExportRGB
+class ViewExportRGBA : public ViewNode, public hesiod::cnode::ExportRGBA
 {
 public:
-  ViewExportRGB(std::string id)
+  ViewExportRGBA(std::string id)
       : hesiod::cnode::ControlNode(id), ViewNode(id),
-        hesiod::cnode::ExportRGB(id)
+        hesiod::cnode::ExportRGBA(id)
   {
-    this->set_preview_port_id("RGB");
+    this->set_preview_port_id("RGBA");
   }
 
   void render_node_specific_content();
@@ -1125,13 +1124,13 @@ public:
   }
 };
 
-class ViewMixRGB : public ViewNode, public hesiod::cnode::MixRGB
+class ViewMixRGBA : public ViewNode, public hesiod::cnode::MixRGBA
 {
 public:
-  ViewMixRGB(std::string id)
-      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::MixRGB(id)
+  ViewMixRGBA(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::MixRGBA(id)
   {
-    this->set_preview_port_id("RGB");
+    this->set_preview_port_id("RGBA");
   }
 };
 
@@ -1359,17 +1358,16 @@ public:
   }
 };
 
-class ViewPreviewColorize : public ViewNode,
-                            public hesiod::cnode::PreviewColorize
+class ViewPreviewRGBA : public ViewNode, public hesiod::cnode::PreviewRGBA
 {
 public:
-  ViewPreviewColorize(std::string id)
+  ViewPreviewRGBA(std::string id)
       : hesiod::cnode::ControlNode(id), ViewNode(id),
-        hesiod::cnode::PreviewColorize(id)
+        hesiod::cnode::PreviewRGBA(id)
   {
-    this->set_preview_port_id("RGB");
+    this->set_preview_port_id("RGBA");
     this->set_view3d_elevation_port_id("input");
-    this->set_view3d_color_port_id("RGB");
+    this->set_view3d_color_port_id("RGBA");
   }
 };
 
@@ -1660,6 +1658,17 @@ public:
   }
 };
 
+class ViewSetAlpha : public ViewNode, public hesiod::cnode::SetAlpha
+{
+public:
+  ViewSetAlpha(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::SetAlpha(id)
+  {
+    this->set_preview_port_id("RGBA out");
+  }
+};
+
 class ViewSharpenCone : public ViewNode, public hesiod::cnode::SharpenCone
 {
 public:
@@ -1864,6 +1873,16 @@ public:
   }
 };
 
+class ViewToRGBA : public ViewNode, public hesiod::cnode::ToRGBA
+{
+public:
+  ViewToRGBA(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id), hesiod::cnode::ToRGBA(id)
+  {
+    this->set_preview_port_id("RGBA");
+  }
+};
+
 class ViewValleyWidth : public ViewNode, public hesiod::cnode::ValleyWidth
 {
 public:
@@ -2040,5 +2059,9 @@ void img_to_texture(std::vector<uint8_t> img,
 void img_to_texture_rgb(std::vector<uint8_t> img,
                         hmap::Vec2<int>      shape,
                         GLuint              &image_texture);
+
+void img_to_texture_rgba(std::vector<uint8_t> img,
+                         hmap::Vec2<int>      shape,
+                         GLuint              &image_texture);
 
 } // namespace hesiod::vnode

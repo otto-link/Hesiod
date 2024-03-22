@@ -8,10 +8,10 @@
 namespace hesiod::cnode
 {
 
-ExportRGB::ExportRGB(std::string id) : ControlNode(id)
+ExportRGBA::ExportRGBA(std::string id) : ControlNode(id)
 {
-  LOG_DEBUG("ExportRGB::ExportRGB()");
-  this->node_type = "ExportRGB";
+  LOG_DEBUG("ExportRGBA::ExportRGBA()");
+  this->node_type = "ExportRGBA";
   this->category = category_mapping.at(this->node_type);
 
   this->attr["auto_export"] = NEW_ATTR_BOOL(false);
@@ -20,20 +20,20 @@ ExportRGB::ExportRGB(std::string id) : ControlNode(id)
   this->attr_ordered_key = {"auto_export", "fname"};
 
   this->add_port(
-      gnode::Port("RGB", gnode::direction::in, dtype::dHeightMapRGB));
+      gnode::Port("RGBA", gnode::direction::in, dtype::dHeightMapRGBA));
 }
 
-void ExportRGB::compute()
+void ExportRGBA::compute()
 {
   if (GET_ATTR_BOOL("auto_export"))
     this->write_file();
 }
 
-void ExportRGB::write_file()
+void ExportRGBA::write_file()
 {
-  if (this->get_p_data("RGB"))
+  if (this->get_p_data("RGBA"))
   {
-    hmap::HeightMapRGB *p_h = (hmap::HeightMapRGB *)this->get_p_data("RGB");
+    hmap::HeightMapRGBA *p_h = (hmap::HeightMapRGBA *)this->get_p_data("RGBA");
     p_h->to_png_16bit(GET_ATTR_FILENAME("fname"));
   }
 }

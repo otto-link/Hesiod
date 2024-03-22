@@ -46,8 +46,8 @@ std::shared_ptr<gnode::Node> create_control_node_from_type(
     return std::make_shared<hesiod::cnode::Cloud>(node_id);
   case str2int("CloudToArrayInterp"):
     return std::make_shared<hesiod::cnode::CloudToArrayInterp>(node_id, shape, tiling, overlap);
-  case str2int("Colorize"):
-    return std::make_shared<hesiod::cnode::Colorize>(node_id);
+  case str2int("ColorizeRGBA"):
+    return std::make_shared<hesiod::cnode::ColorizeRGBA>(node_id);
   case str2int("ColorizeSolid"):
     return std::make_shared<hesiod::cnode::ColorizeSolid>(node_id);
   case str2int("CombineMask"):
@@ -76,8 +76,8 @@ std::shared_ptr<gnode::Node> create_control_node_from_type(
     return std::make_shared<hesiod::cnode::Export>(node_id);
   case str2int("ExportAsset"):
     return std::make_shared<hesiod::cnode::ExportAsset>(node_id);
-  case str2int("ExportRGB"):
-    return std::make_shared<hesiod::cnode::ExportRGB>(node_id);
+  case str2int("ExportRGBA"):
+    return std::make_shared<hesiod::cnode::ExportRGBA>(node_id);
   case str2int("Faceted"):
     return std::make_shared<hesiod::cnode::Faceted>(node_id);
   case str2int("FractalizePath"):
@@ -142,8 +142,8 @@ std::shared_ptr<gnode::Node> create_control_node_from_type(
     return std::make_shared<hesiod::cnode::Median3x3>(node_id);
   case str2int("MinimumLocal"):
     return std::make_shared<hesiod::cnode::MinimumLocal>(node_id);
-  case str2int("MixRGB"):
-    return std::make_shared<hesiod::cnode::MixRGB>(node_id);
+  case str2int("MixRGBA"):
+    return std::make_shared<hesiod::cnode::MixRGBA>(node_id);
   case str2int("Noise"):
     return std::make_shared<hesiod::cnode::Noise>(node_id, shape, tiling, overlap);
   case str2int("NoiseFbm"):
@@ -174,8 +174,8 @@ std::shared_ptr<gnode::Node> create_control_node_from_type(
     return std::make_shared<hesiod::cnode::Plateau>(node_id);
   case str2int("Preview"):
     return std::make_shared<hesiod::cnode::Preview>(node_id);
-  case str2int("PreviewColorize"):
-    return std::make_shared<hesiod::cnode::PreviewColorize>(node_id);
+  case str2int("PreviewRGBA"):
+    return std::make_shared<hesiod::cnode::PreviewRGBA>(node_id);
   case str2int("RecastCanyon"):
     return std::make_shared<hesiod::cnode::RecastCanyon>(node_id);
   case str2int("RecastCliff"):
@@ -220,6 +220,8 @@ std::shared_ptr<gnode::Node> create_control_node_from_type(
     return std::make_shared<hesiod::cnode::SelectRivers>(node_id);
   case str2int("SelectTransitions"):
     return std::make_shared<hesiod::cnode::SelectTransitions>(node_id);
+  case str2int("SetAlpha"):
+    return std::make_shared<hesiod::cnode::SetAlpha>(node_id);
   case str2int("SharpenCone"):
     return std::make_shared<hesiod::cnode::SharpenCone>(node_id);
   case str2int("Slope"):
@@ -252,6 +254,8 @@ std::shared_ptr<gnode::Node> create_control_node_from_type(
     return std::make_shared<hesiod::cnode::ToKernel>(node_id);
   case str2int("ToMask"):
     return std::make_shared<hesiod::cnode::ToMask>(node_id);
+  case str2int("ToRGBA"):
+    return std::make_shared<hesiod::cnode::ToRGBA>(node_id);
   case str2int("ValleyWidth"):
     return std::make_shared<hesiod::cnode::ValleyWidth>(node_id);
   case str2int("WaveDune"):

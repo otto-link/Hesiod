@@ -46,9 +46,9 @@ ExportAsset::ExportAsset(std::string id) : ControlNode(id)
 
   this->add_port(
       gnode::Port("elevation", gnode::direction::in, dtype::dHeightMap));
-  this->add_port(gnode::Port("RGB",
+  this->add_port(gnode::Port("RGBA",
                              gnode::direction::in,
-                             dtype::dHeightMapRGB,
+                             dtype::dHeightMapRGBA,
                              gnode::optional::yes));
 }
 
@@ -67,12 +67,12 @@ void ExportAsset::write_file()
 
     std::string fname = GET_ATTR_FILENAME("fname");
 
-    // if available export RGB to an image file
+    // if available export RGBA to an image file
     std::string texture_fname = "";
-    if (this->get_p_data("RGB"))
+    if (this->get_p_data("RGBA"))
     {
       texture_fname = fname + ".png";
-      ((hmap::HeightMapRGB *)this->get_p_data("RGB"))
+      ((hmap::HeightMapRGBA *)this->get_p_data("RGBA"))
           ->to_png_16bit(texture_fname);
     }
 

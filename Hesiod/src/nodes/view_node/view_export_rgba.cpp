@@ -9,13 +9,13 @@
 namespace hesiod::vnode
 {
 
-void ViewExportRGB::render_node_specific_content()
+void ViewExportRGBA::render_node_specific_content()
 {
   if (ImGui::Button("export!"))
     this->write_file();
 }
 
-bool ViewExportRGB::render_settings_specific_content()
+bool ViewExportRGBA::render_settings_specific_content()
 {
   if (ImGui::Button("export!"))
     this->write_file();

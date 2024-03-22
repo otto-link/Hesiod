@@ -19,7 +19,7 @@ ColorizeSolid::ColorizeSolid(std::string id) : ControlNode(id)
 
   this->add_port(gnode::Port("input", gnode::direction::in, dtype::dHeightMap));
   this->add_port(
-      gnode::Port("RGB", gnode::direction::out, dtype::dHeightMapRGB));
+      gnode::Port("RGBA", gnode::direction::out, dtype::dHeightMapRGBA));
   this->add_port(gnode::Port("thru", gnode::direction::out, dtype::dHeightMap));
   this->update_inner_bindings();
 }
@@ -32,21 +32,23 @@ void ColorizeSolid::compute()
   this->update_inner_bindings();
   this->update_links();
 
-  hmap::HeightMap *p_hmap = CAST_PORT_REF(hmap::HeightMap, "input");
+  hmap::HeightMap   *p_hmap = CAST_PORT_REF(hmap::HeightMap, "input");
+  std::vector<float> col3 = GET_ATTR_COLOR("color");
 
   this->value_out.set_sto(p_hmap->shape, p_hmap->tiling, p_hmap->overlap);
 
-  // actually use a "one color colormap"
-  // TODO optimize memeory usage
-  std::vector<float>              col3 = GET_ATTR_COLOR("color");
-  std::vector<std::vector<float>> colormap_colors = {col3};
-
-  this->value_out.colorize(*p_hmap, 0.f, 1.f, colormap_colors, false);
+  for (int k = 0; k < 4; k++)
+  {
+    float color = k < 3 ? col3[k] : 1.f;
+    LOG_DEBUG("%f", color);
+    this->value_out.rgba[k] =
+        hmap::HeightMap(p_hmap->shape, p_hmap->tiling, p_hmap->overlap, color);
+  }
 }
 
 void ColorizeSolid::update_inner_bindings()
 {
-  this->set_p_data("RGB", (void *)&this->value_out);
+  this->set_p_data("RGBA", (void *)&this->value_out);
   this->set_p_data("thru", this->get_p_data("input"));
 }
 
