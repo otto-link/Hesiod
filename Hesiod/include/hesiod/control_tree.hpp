@@ -5,7 +5,7 @@
 #include <string>
 
 #include "gnode.hpp"
-#include "highmap.hpp"
+
 
 #include "hesiod/control_node.hpp"
 #include "hesiod/serialization.hpp"

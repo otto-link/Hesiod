@@ -5,7 +5,8 @@
 #include <string>
 
 #include "gnode.hpp"
-#include "highmap.hpp"
+#include "highmap/heightmap.hpp"
+#include "highmap/noise_function.hpp"
 
 #include "hesiod/attribute.hpp"
 #include "hesiod/serialization.hpp"

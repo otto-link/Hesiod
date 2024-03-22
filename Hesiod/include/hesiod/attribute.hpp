@@ -16,7 +16,8 @@
 #include <memory>
 #include <stdexcept>
 
-#include "highmap.hpp"
+#include "highmap/geometry.hpp"
+#include "highmap/vector.hpp"
 #include "macrologger.h"
 #include "serialization.hpp"
 

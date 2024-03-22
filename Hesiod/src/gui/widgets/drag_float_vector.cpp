@@ -3,7 +3,7 @@
  * this software. */
 #include <iostream>
 
-#include "highmap.hpp"
+
 
 #include "hesiod/widgets.hpp"
 

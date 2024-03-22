@@ -4,7 +4,7 @@
 #include <cstdio>
 #include <iostream>
 
-#include "highmap.hpp"
+
 #include "imgui_internal.h"
 #include "macrologger.h"
 

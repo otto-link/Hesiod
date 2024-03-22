@@ -5,7 +5,7 @@
 
 #include <GL/glew.h>
 
-#include "highmap.hpp"
+#include "highmap/vector.hpp"
 
 namespace hesiod::render
 {

@@ -4,7 +4,10 @@
 #include <cstdio>
 #include <iostream>
 
-#include "highmap.hpp"
+#include "highmap/array.hpp"
+#include "highmap/heightmap.hpp"
+#include "highmap/kernels.hpp"
+#include "highmap/op.hpp"
 #include "imgui_internal.h"
 #include "macrologger.h"
 

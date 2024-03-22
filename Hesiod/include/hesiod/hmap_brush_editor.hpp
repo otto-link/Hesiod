@@ -2,7 +2,7 @@
 #include <span>
 #include <vector>
 
-#include "highmap.hpp"
+
 #include "imgui.h"
 
 #include <GL/glew.h>

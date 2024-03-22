@@ -9,8 +9,6 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
-#include "gnode.hpp"
-
 #include "hesiod/control_node.hpp"
 #include "hesiod/hmap_brush_editor.hpp"
 #include "hesiod/timer.hpp"
