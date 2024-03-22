@@ -181,8 +181,8 @@ std::shared_ptr<gnode::Node> create_view_node_from_type(std::string node_type,
     return std::make_shared<hesiod::vnode::ViewPreview>(node_id);
   case str2int("PreviewColorize"):
     return std::make_shared<hesiod::vnode::ViewPreviewColorize>(node_id);
-  case str2int("PreviewColorizeRGBA"):
-    return std::make_shared<hesiod::vnode::ViewPreviewColorizeRGBA>(node_id);
+  case str2int("PreviewRGBA"):
+    return std::make_shared<hesiod::vnode::ViewPreviewRGBA>(node_id);
   case str2int("RecastCanyon"):
     return std::make_shared<hesiod::vnode::ViewRecastCanyon>(node_id);
   case str2int("RecastCliff"):

@@ -183,7 +183,7 @@ static const std::map<std::string, std::string> category_mapping = {
     {"Plateau", "Filter/Recurve"},
     {"Preview", "Debug"},
     {"PreviewColorize", "Texture"},
-    {"PreviewColorizeRGBA", "Texture"},
+    {"PreviewRGBA", "Texture"},
     {"RecastCanyon", "Filter/Recast"},
     {"RecastCliff", "Filter/Recast"},
     {"RecastCliffDirectional", "Filter/Recast"},
@@ -1409,10 +1409,10 @@ public:
   void update_inner_bindings();
 };
 
-class PreviewColorizeRGBA : virtual public ControlNode
+class PreviewRGBA : virtual public ControlNode
 {
 public:
-  PreviewColorizeRGBA(std::string id);
+  PreviewRGBA(std::string id);
 
   void compute();
 

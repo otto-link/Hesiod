@@ -1413,13 +1413,12 @@ public:
   }
 };
 
-class ViewPreviewColorizeRGBA : public ViewNode,
-                                public hesiod::cnode::PreviewColorizeRGBA
+class ViewPreviewRGBA : public ViewNode, public hesiod::cnode::PreviewRGBA
 {
 public:
-  ViewPreviewColorizeRGBA(std::string id)
+  ViewPreviewRGBA(std::string id)
       : hesiod::cnode::ControlNode(id), ViewNode(id),
-        hesiod::cnode::PreviewColorizeRGBA(id)
+        hesiod::cnode::PreviewRGBA(id)
   {
     this->set_preview_port_id("RGBA");
     this->set_view3d_elevation_port_id("input");

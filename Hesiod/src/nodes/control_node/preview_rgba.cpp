@@ -8,9 +8,9 @@
 namespace hesiod::cnode
 {
 
-PreviewColorizeRGBA::PreviewColorizeRGBA(std::string id) : ControlNode(id)
+PreviewRGBA::PreviewRGBA(std::string id) : ControlNode(id)
 {
-  this->node_type = "PreviewColorizeRGBA";
+  this->node_type = "PreviewRGBA";
   this->add_port(gnode::Port("input", gnode::direction::in, dtype::dHeightMap));
   this->add_port(gnode::Port("RGBA",
                              gnode::direction::in,
@@ -24,13 +24,13 @@ PreviewColorizeRGBA::PreviewColorizeRGBA(std::string id) : ControlNode(id)
   this->update_inner_bindings();
 }
 
-void PreviewColorizeRGBA::update_inner_bindings()
+void PreviewRGBA::update_inner_bindings()
 {
   this->set_p_data("thru input", this->get_p_data("input"));
   this->set_p_data("thru RGBA", this->get_p_data("RGBA"));
 }
 
-void PreviewColorizeRGBA::compute()
+void PreviewRGBA::compute()
 {
   // for thru port
   this->update_inner_bindings();
