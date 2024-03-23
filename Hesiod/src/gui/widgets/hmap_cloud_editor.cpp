@@ -4,7 +4,6 @@
 #include <cstdio>
 #include <iostream>
 
-
 #include "imgui_internal.h"
 #include "macrologger.h"
 

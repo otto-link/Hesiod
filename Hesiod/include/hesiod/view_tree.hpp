@@ -5,7 +5,6 @@
 #include <filesystem>
 #include <string>
 
-
 #include "imgui.h"
 #include <GL/glew.h>
 #include <GL/glut.h>
