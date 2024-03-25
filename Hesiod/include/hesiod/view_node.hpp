@@ -1431,6 +1431,18 @@ public:
   }
 };
 
+class ViewRecastSag : public ViewNode, public hesiod::cnode::RecastSag
+{
+public:
+  ViewRecastSag(std::string id)
+      : hesiod::cnode::ControlNode(id), ViewNode(id),
+        hesiod::cnode::RecastSag(id)
+  {
+    this->set_preview_port_id("output");
+    this->set_view3d_elevation_port_id("output");
+  }
+};
+
 class ViewRecurve : public ViewNode, public hesiod::cnode::Recurve
 {
 public:
