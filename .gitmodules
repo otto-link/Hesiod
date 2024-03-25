@@ -1,32 +1,9 @@
 [submodule "external/HighMap"]
 	path = external/HighMap
 	url = git@github.com:otto-link/HighMap.git
-[submodule "external/gnode"]
-	path = external/GNode
-	url = git@github.com:otto-link/GNode.git
-	ignore = untracked
 [submodule "external/macro-logger"]
 	path = external/macro-logger
         url = git@github.com:otto-link/macro-logger.git
-[submodule "external/imgui"]
-	path = external/imgui
-	url = git@github.com:ocornut/imgui.git
-[submodule "external/imgui-node-editor"]
-	path = external/imgui-node-editor
-	url = git@github.com:thedmd/imgui-node-editor.git
-	# git@github.com:otto-link/imgui-node-editor.git
-[submodule "external/ImguiCandy"]
-	path = external/ImguiCandy
-	url = git@github.com:Raais/ImguiCandy.git
-[submodule "external/imgui-filebrowser"]
-	path = external/imgui-filebrowser
-	url = git@github.com:AirGuanZ/imgui-filebrowser.git
-[submodule "external/ImGuiFileDialog"]
-	path = external/ImGuiFileDialog
-	url = git@github.com:aiekick/ImGuiFileDialog.git
-[submodule "external/json"]
-	path = external/json
-	url = https://github.com/nlohmann/json.git
 [submodule "external/args"]
 	path = external/args
 	url = git@github.com:Taywee/args.git

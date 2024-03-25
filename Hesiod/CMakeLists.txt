@@ -15,25 +15,16 @@ target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${HESIOD_INCLUDE})
 
-target_precompile_headers(
-  ${PROJECT_NAME}
-  PRIVATE
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/hesiod/attribute.hpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/hesiod/control_node.hpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/include/hesiod/view_node.hpp)
+# target_precompile_headers(
+#   ${PROJECT_NAME}
+#   PRIVATE)
 
 # Link libraries
 target_link_libraries(
   ${PROJECT_NAME}
   PRIVATE args
           highmap
-          gnode
           glfw
           OpenGL::GL
           GLEW::GLEW
-          GLUT::GLUT
-          ImGui::ImGui
-          ImCandy::ImCandy
-          ImGuiNodeEditor::ImGuiNodeEditor
-          ImGuiFileDialog::ImGuiFileDialog
-          nlohmann_json::nlohmann_json)
+          GLUT::GLUT)
