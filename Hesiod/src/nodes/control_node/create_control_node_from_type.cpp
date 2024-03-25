@@ -186,6 +186,8 @@ std::shared_ptr<gnode::Node> create_control_node_from_type(
     return std::make_shared<hesiod::cnode::RecastPeak>(node_id);
   case str2int("RecastRockySlopes"):
     return std::make_shared<hesiod::cnode::RecastRockySlopes>(node_id);
+  case str2int("RecastSag"):
+    return std::make_shared<hesiod::cnode::RecastSag>(node_id);
   case str2int("Recurve"):
     return std::make_shared<hesiod::cnode::Recurve>(node_id);
   case str2int("RecurveKura"):
