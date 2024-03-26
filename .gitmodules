@@ -7,3 +7,9 @@
 [submodule "external/args"]
 	path = external/args
 	url = git@github.com:Taywee/args.git
+[submodule "Hesiod/external/nodeeditor"]
+	path = Hesiod/external/nodeeditor
+	url = git@github.com:paceholder/nodeeditor.git
+[submodule "external/nodeeditor"]
+	path = external/nodeeditor
+	url = git@github.com:paceholder/nodeeditor.git

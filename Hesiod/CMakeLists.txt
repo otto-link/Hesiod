@@ -3,13 +3,21 @@ project(hesiod)
 include_directories(${OPENGL_INCLUDE_DIRS} ${GLEW_INCLUDE_DIRS}
                     ${GLUT_INCLUDE_DIRS})
 
+# Qt5
+set(CMAKE_AUTOMOC ON)
+
 # --- sources
+# GUI headers need to be added in add_executable, otherwise the moc won't parse
+# them
+file(GLOB_RECURSE HESIOD_GUI_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp)
+
 file(GLOB_RECURSE HESIOD_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
 
-add_executable(${PROJECT_NAME} ${HESIOD_SOURCES})
+add_executable(${PROJECT_NAME} ${HESIOD_SOURCES} ${HESIOD_GUI_INCLUDES})
 
 set(HESIOD_INCLUDE PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include PRIVATE
                    ${PROJECT_SOURCE_DIR}/external/macro-logger)
+
 
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
 
@@ -27,4 +35,6 @@ target_link_libraries(
           glfw
           OpenGL::GL
           GLEW::GLEW
-          GLUT::GLUT)
+          GLUT::GLUT
+        Qt5::Core Qt5::Widgets
+                      macro-logger::macro-logger QtNodes::QtNodes)
