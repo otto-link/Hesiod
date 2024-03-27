@@ -4,11 +4,13 @@
 #pragma once
 
 #include <QCheckBox>
+#include <QComboBox>
 #include <QDialog>
 #include <QLabel>
 #include <QPushButton>
 #include <QSlider>
 #include <QSpinBox>
+#include <QStringList>
 #include <QWidget>
 
 #include <QtNodes/DataFlowGraphModel>
@@ -55,6 +57,29 @@ public:
 
         switch (attr->get_type())
         {
+
+        case AttributeType::MAP_ENUM:
+        {
+          MapEnumAttribute *p_attr = attr->get_ref<MapEnumAttribute>();
+
+          QComboBox  *combo_box = new QComboBox();
+          QStringList items;
+          for (auto &[key, dummy] : p_attr->value)
+            combo_box->addItem(key.c_str());
+
+          combo_box->setCurrentText(p_attr->choice.c_str());
+
+          QObject::connect(combo_box,
+                           qOverload<int>(&QComboBox::activated),
+                           [p_node, p_attr, combo_box](int index)
+                           {
+                             p_attr->choice = combo_box->itemText(index).toStdString();
+                             p_node->compute();
+                           });
+
+          layout->addWidget(combo_box, row, col++);
+        }
+        break;
 
         case AttributeType::SEED:
         {
