@@ -23,13 +23,6 @@ public:
     this->value.set_sto(config.shape, config.tiling, config.overlap);
   }
 
-  // HeightMapData(const hmap::HeightMap value) : value(value), name("HeightMapData") {}
-
-  //  HeightMapData(const hmap::HeightMap value, const QString name)
-  //      : value(value), name(name)
-  //  {
-  //  }
-
   hmap::HeightMap get_value() const { return this->value; }
 
   hmap::HeightMap *get_ref() { return &this->value; }
