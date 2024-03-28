@@ -10,7 +10,7 @@ GammaCorrection::GammaCorrection(const ModelConfig &config) : BaseNode(config)
 {
   LOG_DEBUG("GammaCorrection::GammaCorrection");
   config.log_debug();
-  
+
   // model
   this->node_caption = "GammaCorrection";
   this->input_types = {HeightMapData().type(), MaskData().type()};
@@ -23,7 +23,8 @@ GammaCorrection::GammaCorrection(const ModelConfig &config) : BaseNode(config)
   this->out = std::make_shared<HeightMapData>(config);
 
   // GUI
-  this->p_preview_data = (QtNodes::NodeData*)this->out.get();
+  this->p_preview_data = (QtNodes::NodeData *)this->out.get();
+  this->p_viewer2d_data = this->p_preview_data;
 
   // update
   this->compute();

@@ -29,8 +29,6 @@ private:
   const ModelConfig *p_config;
   QtNodes::NodeData *p_data;
   QLabel            *label;
-
-  void update();
 };
 
 } // namespace hesiod

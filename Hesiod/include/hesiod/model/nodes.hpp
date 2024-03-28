@@ -9,10 +9,10 @@
 #include "highmap/primitives.hpp"
 #include "macrologger.h"
 
-#include "hesiod/model/base_node.hpp"
-#include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/data/heightmap_data.hpp"
 #include "hesiod/data/mask_data.hpp"
+#include "hesiod/model/base_node.hpp"
+#include "hesiod/model/enum_mapping.hpp"
 
 namespace hesiod
 {

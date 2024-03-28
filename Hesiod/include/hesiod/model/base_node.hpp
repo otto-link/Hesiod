@@ -147,6 +147,7 @@ protected:
 
 public:
   QtNodes::NodeData *p_preview_data = nullptr;
+  QtNodes::NodeData *p_viewer2d_data = nullptr;
 
   virtual void context_menu(const QPointF /* pos */) { LOG_DEBUG("context menu"); }
 

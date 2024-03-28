@@ -9,9 +9,9 @@
 #include "highmap/io.hpp"
 #include "macrologger.h"
 
-#include "hesiod/gui/h_preview.hpp"
 #include "hesiod/data/heightmap_data.hpp"
 #include "hesiod/data/mask_data.hpp"
+#include "hesiod/gui/h_preview.hpp"
 
 namespace hesiod
 {

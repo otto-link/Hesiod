@@ -23,8 +23,9 @@ HeightMapToMask::HeightMapToMask(const ModelConfig &config) : BaseNode(config)
   this->mask = std::make_shared<MaskData>(config);
 
   // GUI
-  this->p_preview_data = (QtNodes::NodeData*)this->mask.get();
-  
+  this->p_preview_data = (QtNodes::NodeData *)this->mask.get();
+  this->p_viewer2d_data = this->p_preview_data;
+
   // update
   this->compute();
 }

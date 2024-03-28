@@ -19,7 +19,7 @@ typedef unsigned int uint;
 #include "highmap/vector.hpp"
 #include "macrologger.h"
 
-#include "hesiod/data/heightmap_data.hpp"
+#include "hesiod/gui/h_viewer2d.hpp"
 #include "hesiod/model/model_config.hpp"
 #include "hesiod/model/nodes.hpp"
 
@@ -153,7 +153,17 @@ QSlider::handle:horizontal {
 
   hesiod::SettingsDialog settings_dialog = hesiod::SettingsDialog();
   settings_dialog.setGeometry(200, 200, 600, 400);
-  settings_dialog.show();
+  // settings_dialog.show();
+
+  QWidget            window;
+  QVBoxLayout       *layout = new QVBoxLayout(&window);
+  hesiod::HViewer2d *viewer2d = new hesiod::HViewer2d(&model_config, &model);
+  layout->addWidget((QWidget *)viewer2d);
+  QObject::connect(scene,
+                   &QtNodes::DataFlowGraphicsScene::nodeSelected,
+                   viewer2d,
+                   &hesiod::HViewer2d::update_viewport);
+  window.show();
 
   // TODO find a way to empty the editor when there are no more nodes
   // selected
