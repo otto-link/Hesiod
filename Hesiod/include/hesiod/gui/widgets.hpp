@@ -11,24 +11,6 @@
 namespace hesiod
 {
 
-class ImagePreview
-{
-public:
-  QLabel *label = nullptr;
-
-  ImagePreview() = default;
-
-  ImagePreview(const ModelConfig &config);
-
-  void update(QtNodes::NodeData *p_data);
-
-private:
-  /**
-   * @brief Reference to the model configuration.
-   */
-  const ModelConfig *p_config = nullptr;
-};
-
 void add_attribute_widget(QGridLayout                *layout,
                           std::unique_ptr<Attribute> &attr,
                           std::string                 label);

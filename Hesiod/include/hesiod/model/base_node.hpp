@@ -9,8 +9,8 @@
 #include "highmap/primitives.hpp"
 #include "macrologger.h"
 
+#include "hesiod/gui/h_preview.hpp"
 #include "hesiod/model/attributes.hpp"
-#include "hesiod/model/heightmap_data.hpp"
 #include "hesiod/model/model_config.hpp"
 
 #define HSD_GET_POINTER(X) X.lock() ? X.lock()->get_ref() : nullptr
@@ -105,20 +105,6 @@ public:
    */
   void load(QJsonObject const &p) override;
 
-  // --- GUI
-
-  // define "empty shells" to allow (1) usage of the model nodes even if there is
-  // no GUI widgets associated and (2) usage of BaseNode as a base class for both model
-  // and view nodes (for sake of simplicity)
-
-  virtual void context_menu(const QPointF /* pos */) { LOG_DEBUG("context menu"); }
-
-  /**
-   * @brief Reference the reference to the widget embedded within the grpahic node.
-   * @return Widget reference.
-   */
-  QWidget *embeddedWidget() override { return nullptr; }
-
   // --- debugging
 
   /**
@@ -156,6 +142,34 @@ protected:
    */
   std::vector<QString> input_captions = {};
   std::vector<QString> output_captions = {};
+
+  // --- GUI
+
+public:
+  QtNodes::NodeData *p_preview_data = nullptr;
+
+  virtual void context_menu(const QPointF /* pos */) { LOG_DEBUG("context menu"); }
+
+  /**
+   * @brief Reference the reference to the widget embedded within the grpahic node.
+   * @return Widget reference.
+   */
+  QWidget *embeddedWidget() override
+  {
+    if (this->p_preview_data && !this->preview)
+    {
+      this->preview = new HPreview(this->p_config, this->p_preview_data);
+      connect(this,
+              &NodeDelegateModel::dataUpdated,
+              this->preview,
+              &HPreview::update_image,
+              Qt::UniqueConnection);
+    }
+    return (QWidget *)this->preview;
+  }
+
+private:
+  HPreview *preview = nullptr;
 };
 
 } // namespace hesiod

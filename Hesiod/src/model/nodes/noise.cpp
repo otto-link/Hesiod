@@ -1,16 +1,17 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-#include "hesiod/model/noise.hpp"
+#include "hesiod/model/nodes.hpp"
 
 namespace hesiod
 {
 
-Noise::Noise(const ModelConfig &config, const bool update_after_ctor) : BaseNode(config)
+Noise::Noise(const ModelConfig &config) : BaseNode(config)
 {
-  LOG_DEBUG("NoiseNode::NoiseNode");
+  LOG_DEBUG("Noise::Noise");
   config.log_debug();
 
+  // model
   this->node_caption = "Noise";
   this->input_types = {HeightMapData().type(),
                        HeightMapData().type(),
@@ -25,8 +26,11 @@ Noise::Noise(const ModelConfig &config, const bool update_after_ctor) : BaseNode
 
   this->out = std::make_shared<HeightMapData>(config);
 
-  if (update_after_ctor)
-    this->compute();
+  // GUI
+  this->p_preview_data = (QtNodes::NodeData*)this->out.get();
+
+  // update
+  this->compute();
 }
 
 std::shared_ptr<QtNodes::NodeData> Noise::outData(QtNodes::PortIndex /* port_index */)
@@ -38,7 +42,10 @@ void Noise::setInData(std::shared_ptr<QtNodes::NodeData> data,
                       QtNodes::PortIndex                 port_index)
 {
   if (!data)
-    Q_EMIT this->dataInvalidated(0);
+  {
+    QtNodes::PortIndex const out_port_index = 0;
+    Q_EMIT this->dataInvalidated(out_port_index);
+  }
 
   switch (port_index)
   {
@@ -101,6 +108,9 @@ void Noise::compute()
 
   // propagate
   QtNodes::PortIndex const out_port_index = 0;
+
+  LOG_DEBUG("here");
+
   Q_EMIT this->dataUpdated(out_port_index);
 }
 

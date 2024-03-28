@@ -19,21 +19,42 @@ typedef unsigned int uint;
 #include "highmap/vector.hpp"
 #include "macrologger.h"
 
-#include "hesiod/model/heightmap_data.hpp"
+#include "hesiod/data/heightmap_data.hpp"
 #include "hesiod/model/model_config.hpp"
-#include "hesiod/model/noise.hpp"
+#include "hesiod/model/nodes.hpp"
 
 #include "hesiod/gui/settings_dialog.hpp"
-#include "hesiod/gui/view_nodes.hpp"
 
 static std::shared_ptr<QtNodes::NodeDelegateModelRegistry> registerDataModels(
     hesiod::ModelConfig &config)
 {
   auto ret = std::make_shared<QtNodes::NodeDelegateModelRegistry>();
-  ret->registerModel<hesiod::ViewNoise>(
-      [&config]() { return std::make_unique<hesiod::ViewNoise>(config); },
-      "Primitives");
+
+  ret->registerModel<hesiod::GammaCorrection>(
+      [&config]() { return std::make_unique<hesiod::GammaCorrection>(config); },
+      "Filters");
+
+  ret->registerModel<hesiod::HeightMapToMask>(
+      [&config]() { return std::make_unique<hesiod::HeightMapToMask>(config); },
+      "Converters");
+
+  ret->registerModel<hesiod::Noise>([&config]()
+                                    { return std::make_unique<hesiod::Noise>(config); },
+                                    "Primitives");
+
   return ret;
+}
+
+static void set_style()
+{
+  QtNodes::ConnectionStyle::setConnectionStyle(
+      R"(
+  {
+    "ConnectionStyle": {
+      "UseDataDefinedColors": true
+    }
+  }
+  )");
 }
 
 int main(int argc, char *argv[])
@@ -54,6 +75,8 @@ QSlider::handle:horizontal {
 	border-radius: 8px;
 }
 )");
+
+  set_style();
 
   hesiod::ModelConfig model_config;
 
@@ -129,7 +152,7 @@ QSlider::handle:horizontal {
   main_widget.showNormal();
 
   hesiod::SettingsDialog settings_dialog = hesiod::SettingsDialog();
-  settings_dialog.setGeometry(200, 200, 800, 600);
+  settings_dialog.setGeometry(200, 200, 600, 400);
   settings_dialog.show();
 
   // TODO find a way to empty the editor when there are no more nodes

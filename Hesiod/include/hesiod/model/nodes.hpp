@@ -11,9 +11,54 @@
 
 #include "hesiod/model/base_node.hpp"
 #include "hesiod/model/enum_mapping.hpp"
+#include "hesiod/data/heightmap_data.hpp"
+#include "hesiod/data/mask_data.hpp"
 
 namespace hesiod
 {
+
+/**
+ * @brief GammaCorrection class.
+ */
+class GammaCorrection : public BaseNode
+{
+public:
+  GammaCorrection(const ModelConfig &config);
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(
+      QtNodes::PortIndex /* port_index */) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data,
+                 QtNodes::PortIndex                 port_index) override;
+
+protected:
+  std::weak_ptr<HeightMapData>   in;
+  std::weak_ptr<MaskData>        mask;
+  std::shared_ptr<HeightMapData> out;
+};
+
+/**
+ * @brief HeightMapToMask class, to convert a heightmap to a class.
+ */
+class HeightMapToMask : public BaseNode
+{
+public:
+  HeightMapToMask(const ModelConfig &config);
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(
+      QtNodes::PortIndex /* port_index */) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data,
+                 QtNodes::PortIndex                 port_index) override;
+
+protected:
+  std::weak_ptr<HeightMapData> in;
+  std::shared_ptr<MaskData>    mask;
+};
 
 /**
  * @brief Noise class, noise primitive generation.
@@ -25,11 +70,8 @@ public:
   /**
    * @brief Constructor.
    * @param config Noise graph configuration (shape, tiling...).
-   * @param update_after_ctor Whether should be updated or not at the end of the
-   * constructor. It used and set to false when a node (like a view node) is derived from
-   * this class, to avoid updating two times the same kind of node.
    */
-  Noise(const ModelConfig &config, const bool update_after_ctor = false);
+  Noise(const ModelConfig &config);
 
   /**
    * @brief Node computation.

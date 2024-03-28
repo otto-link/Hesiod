@@ -9,6 +9,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QSlider>
+#include <QSpacerItem>
 #include <QSpinBox>
 #include <QStringList>
 #include <QWidget>
@@ -229,6 +230,10 @@ public:
         row++;
       }
     }
+
+    QSpacerItem *spacer =
+        new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    layout->addItem(spacer, row, 0);
 
     this->setLayout(layout);
   }
