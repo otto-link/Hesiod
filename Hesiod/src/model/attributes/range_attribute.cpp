@@ -8,9 +8,20 @@
 namespace hesiod
 {
 
-RangeAttribute::RangeAttribute(hmap::Vec2<float> value) : value(value) {}
+RangeAttribute::RangeAttribute(hmap::Vec2<float> value, bool activate, std::string fmt)
+    : value(value), activate(activate), fmt(fmt)
+{
+}
 
-RangeAttribute::RangeAttribute(bool activate) : activate(activate) {}
+RangeAttribute::RangeAttribute(hmap::Vec2<float> value, std::string fmt)
+    : value(value), fmt(fmt)
+{
+}
+
+RangeAttribute::RangeAttribute(bool activate, std::string fmt)
+    : activate(activate), fmt(fmt)
+{
+}
 
 hmap::Vec2<float> RangeAttribute::get() { return value; }
 

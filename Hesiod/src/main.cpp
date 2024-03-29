@@ -20,9 +20,12 @@ typedef unsigned int uint;
 #include "macrologger.h"
 
 #include "hesiod/gui/viewer2d.hpp"
+#include "hesiod/gui/widgets.hpp"
 #include "hesiod/model/attributes.hpp"
 #include "hesiod/model/model_config.hpp"
 #include "hesiod/model/nodes.hpp"
+
+#include "hesiod/model/enum_mapping.hpp"
 
 static std::shared_ptr<QtNodes::NodeDelegateModelRegistry> registerDataModels(
     hesiod::ModelConfig &config)
@@ -59,6 +62,11 @@ static void set_style()
 int main(int argc, char *argv[])
 {
   QApplication app(argc, argv);
+
+  QFont font("Roboto");
+  // font.setStyleHint(QFont::Monospace);
+  font.setPointSize(10);
+  QApplication::setFont(font);
 
   app.setStyleSheet(R"(
 QSlider::groove:horizontal { 
@@ -151,7 +159,47 @@ QSlider::handle:horizontal {
   hesiod::Viewer2d *viewer2d = new hesiod::Viewer2d(&model_config, scene);
   viewer2d->show();
 
-  std::unique_ptr<hesiod::Attribute> attr = NEW_ATTR_SEED();
+  // ---
+
+  // std::unique_ptr<hesiod::SeedAttribute> attr = NEW_ATTR_SEED();
+  // hesiod::SeedWidget *sw = new hesiod::SeedWidget(attr.get());
+  // sw->show();
+  // QObject::connect(sw,
+  //                  &hesiod::SeedWidget::value_changed,
+  //                  [&attr]() { LOG_DEBUG("seed: %d", attr->value); });
+
+  // std::unique_ptr<hesiod::FloatAttribute> attr = NEW_ATTR_FLOAT(1.f, 0.1f, 5.f,
+  // "%.3f"); hesiod::FloatWidget                    *sw = new
+  // hesiod::FloatWidget(attr.get()); sw->show(); QObject::connect(sw,
+  //                  &hesiod::FloatWidget::value_changed,
+  //                  [&attr]() { LOG_DEBUG("float: %f", attr->value); });
+
+  // std::unique_ptr<hesiod::IntAttribute> attr = NEW_ATTR_INT(32, 1, 64);
+  // hesiod::IntWidget                    *sw = new hesiod::IntWidget(attr.get());
+  // sw->show();
+  // QObject::connect(sw,
+  //                  &hesiod::IntWidget::value_changed,
+  //                  [&attr]() { LOG_DEBUG("int: %d", attr->value); });
+
+  // std::unique_ptr<hesiod::MapEnumAttribute> attr = NEW_ATTR_MAPENUM(hesiod::cmap_map);
+  // hesiod::MapEnumWidget                    *sw = new hesiod::MapEnumWidget(attr.get());
+  // sw->show();
+  // QObject::connect(sw,
+  //                  &hesiod::MapEnumWidget::value_changed,
+  //                  [&attr]() { LOG_DEBUG("choice: %s", attr->choice.c_str()); });
+
+  std::unique_ptr<hesiod::RangeAttribute> attr = NEW_ATTR_RANGE(
+      hmap::Vec2<float>(0.5f, 2.f),
+      false,
+      "%.3f");
+  hesiod::RangeWidget *sw = new hesiod::RangeWidget(attr.get());
+  sw->show();
+  QObject::connect(sw,
+                   &hesiod::RangeWidget::value_changed,
+                   [&attr]()
+                   { LOG_DEBUG("range: %f %f", attr->value.x, attr->value.y); });
+
+  // ---
 
   // QWidget window;
   // window.setWindowTitle("Viewer 2D");

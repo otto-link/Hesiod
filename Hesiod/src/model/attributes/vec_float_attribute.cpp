@@ -10,7 +10,13 @@ namespace hesiod
 
 VecFloatAttribute::VecFloatAttribute() {}
 
-VecFloatAttribute::VecFloatAttribute(std::vector<float> value) : value(value) {}
+VecFloatAttribute::VecFloatAttribute(std::vector<float> value,
+                                     float              vmin,
+                                     float              vmax,
+                                     std::string        fmt)
+    : value(value), vmin(vmin), vmax(vmax), fmt(fmt)
+{
+}
 
 std::vector<float> VecFloatAttribute::get() { return value; }
 

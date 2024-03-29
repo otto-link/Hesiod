@@ -129,7 +129,7 @@ public:
 
 // --- Derived
 
-class BoolAttribute : public Attribute
+class BoolAttribute : public Attribute // OK JSON GUI
 {
 public:
   BoolAttribute() = default;
@@ -137,16 +137,26 @@ public:
   bool          get();
   AttributeType get_type() { return AttributeType::BOOL; }
 
-  void log_debug() override
+  QJsonObject save() const override
   {
-    Attribute::log_debug();
-    LOG_DEBUG("bool / value: %s", (this->value ? "true" : "false"));
+    QJsonObject model_json;
+    model_json["value"] = QString(this->value ? "true" : "false");
+    return model_json;
+  }
+
+  void load(QJsonObject const &p) override
+  {
+    bool ret = true;
+    ret &= convert_qjsonvalue_to_bool(p["value"], this->value);
+
+    if (!ret)
+      LOG_ERROR("serialization in with BoolAttribute");
   }
 
   bool value = true;
 };
 
-class CloudAttribute : public Attribute
+class CloudAttribute : public Attribute // --------- TODO
 {
 public:
   CloudAttribute() = default;
@@ -158,7 +168,7 @@ public:
   hmap::Cloud value;
 };
 
-class ColorAttribute : public Attribute
+class ColorAttribute : public Attribute // --------- TODO
 {
 public:
   ColorAttribute() = default;
@@ -170,7 +180,7 @@ public:
   std::vector<float> value = {1.f, 1.f, 1.f};
 };
 
-class FilenameAttribute : public Attribute
+class FilenameAttribute : public Attribute // --------- TODO
 {
 public:
   FilenameAttribute() = default;
@@ -181,7 +191,7 @@ public:
   std::string value = "";
 };
 
-class FloatAttribute : public Attribute
+class FloatAttribute : public Attribute // OK JSON GUI
 {
 public:
   FloatAttribute() = default;
@@ -190,6 +200,28 @@ public:
   void          set(float new_value);
   AttributeType get_type() { return AttributeType::FLOAT; }
 
+  QJsonObject save() const override
+  {
+    QJsonObject model_json;
+    model_json["value"] = QString::number(this->value);
+    model_json["vmin"] = QString::number(this->vmin);
+    model_json["vmax"] = QString::number(this->vmax);
+    model_json["fmt"] = QString::fromStdString(fmt);
+    return model_json;
+  }
+
+  void load(QJsonObject const &p) override
+  {
+    bool ret = true;
+    ret &= convert_qjsonvalue_to_float(p["value"], this->value);
+    ret &= convert_qjsonvalue_to_float(p["vmin"], this->vmin);
+    ret &= convert_qjsonvalue_to_float(p["vmax"], this->vmax);
+    ret &= convert_qjsonvalue_to_string(p["fmt"], this->fmt);
+
+    if (!ret)
+      LOG_ERROR("serialization in with WaveNbAttribute");
+  }
+
   float       value = 1.f;
   float       vmin = 0.f;
   float       vmax = 1.f;
@@ -197,7 +229,7 @@ public:
   bool        activate = true;
 };
 
-class IntAttribute : public Attribute
+class IntAttribute : public Attribute // OK JSON GUI
 {
 public:
   IntAttribute() = default;
@@ -205,12 +237,31 @@ public:
   int           get();
   AttributeType get_type() { return AttributeType::INT; }
 
+  QJsonObject save() const override
+  {
+    QJsonObject model_json;
+    model_json["value"] = QString::number(this->value);
+    model_json["vmin"] = QString::number(this->vmin);
+    model_json["vmax"] = QString::number(this->vmax);
+    return model_json;
+  }
+
+  void load(QJsonObject const &p) override
+  {
+    bool ret = true;
+    ret &= convert_qjsonvalue_to_int(p["value"], this->value);
+    ret &= convert_qjsonvalue_to_int(p["vmin"], this->vmin);
+    ret &= convert_qjsonvalue_to_int(p["vmax"], this->vmax);
+
+    if (!ret)
+      LOG_ERROR("serialization in with WaveNbAttribute");
+  }
   int value = 1;
   int vmin = 0;
   int vmax = 1;
 };
 
-class MapEnumAttribute : public Attribute
+class MapEnumAttribute : public Attribute // OK JSON GUI
 {
 public:
   MapEnumAttribute() = default;
@@ -240,7 +291,7 @@ public:
   std::string                choice = "";
 };
 
-class MatrixAttribute : public Attribute
+class MatrixAttribute : public Attribute // --------- TODO
 {
 public:
   MatrixAttribute();
@@ -252,7 +303,7 @@ public:
                                            {0.f, 0.f, 0.f}};
 };
 
-class PathAttribute : public Attribute
+class PathAttribute : public Attribute // --------- TODO
 {
 public:
   PathAttribute() = default;
@@ -262,21 +313,45 @@ public:
   hmap::Path value;
 };
 
-class RangeAttribute : public Attribute
+class RangeAttribute : public Attribute // OK JSON
 {
 public:
   RangeAttribute() = default;
-  RangeAttribute(hmap::Vec2<float> value);
-  RangeAttribute(bool activate);
+  RangeAttribute(hmap::Vec2<float> value, bool activate, std::string fmt = "%.1f");
+  RangeAttribute(hmap::Vec2<float> value, std::string fmt = "%.1f");
+  RangeAttribute(bool activate, std::string fmt = "%.1f");
   hmap::Vec2<float> get();
   bool              is_activated() { return this->activate; };
   AttributeType     get_type() { return AttributeType::RANGE; }
 
+  QJsonObject save() const override
+  {
+    QJsonObject model_json;
+    model_json["value.x"] = QString::number(this->value.x);
+    model_json["value.y"] = QString::number(this->value.y);
+    model_json["activate"] = QString(this->activate ? "true" : "false");
+    model_json["fmt"] = QString::fromStdString(fmt);
+    return model_json;
+  }
+
+  void load(QJsonObject const &p) override
+  {
+    bool ret = true;
+    ret &= convert_qjsonvalue_to_float(p["value.x"], this->value.x);
+    ret &= convert_qjsonvalue_to_float(p["value.y"], this->value.y);
+    ret &= convert_qjsonvalue_to_bool(p["activate"], this->activate);
+    ret &= convert_qjsonvalue_to_string(p["fmt"], this->fmt);
+
+    if (!ret)
+      LOG_ERROR("serialization in with WaveNbAttribute");
+  }
+
   hmap::Vec2<float> value = {0.f, 1.f};
   bool              activate = true;
+  std::string       fmt = "%.1f";
 };
 
-class SeedAttribute : public Attribute
+class SeedAttribute : public Attribute // OK JSON GUI
 {
 public:
   SeedAttribute() = default;
@@ -327,11 +402,17 @@ class VecFloatAttribute : public Attribute
 {
 public:
   VecFloatAttribute();
-  VecFloatAttribute(std::vector<float> value);
+  VecFloatAttribute(std::vector<float> value,
+                    float              vmin,
+                    float              vmax,
+                    std::string        fmt = "%.2f");
   std::vector<float> get();
   AttributeType      get_type() { return AttributeType::VEC_FLOAT; }
 
   std::vector<float> value = {};
+  float              vmin = 0.1f;
+  float              vmax = 64.f;
+  std::string        fmt = "%.2f";
 };
 
 class VecIntAttribute : public Attribute
@@ -381,14 +462,6 @@ public:
 
     if (!ret)
       LOG_ERROR("serialization in with WaveNbAttribute");
-  }
-
-  void log_debug() override
-  {
-    Attribute::log_debug();
-    LOG_DEBUG("wave_nb / value.x: %f", this->value.x);
-    LOG_DEBUG("wave_nb / value.y: %f", this->value.y);
-    LOG_DEBUG("wave_nb / link_xy: %s", (this->link_xy ? "true" : "false"));
   }
 
   hmap::Vec2<float> value = {HSD_DEFAULT_KW, HSD_DEFAULT_KW};
