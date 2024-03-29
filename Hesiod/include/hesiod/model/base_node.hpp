@@ -9,7 +9,7 @@
 #include "highmap/primitives.hpp"
 #include "macrologger.h"
 
-#include "hesiod/gui/h_preview.hpp"
+#include "hesiod/gui/preview.hpp"
 #include "hesiod/model/attributes.hpp"
 #include "hesiod/model/model_config.hpp"
 
@@ -159,18 +159,18 @@ public:
   {
     if (this->p_preview_data && !this->preview)
     {
-      this->preview = new HPreview(this->p_config, this->p_preview_data);
+      this->preview = new Preview(this->p_config, this->p_preview_data);
       connect(this,
               &NodeDelegateModel::dataUpdated,
               this->preview,
-              &HPreview::update_image,
+              &Preview::update_image,
               Qt::UniqueConnection);
     }
     return (QWidget *)this->preview;
   }
 
 private:
-  HPreview *preview = nullptr;
+  Preview *preview = nullptr;
 };
 
 } // namespace hesiod

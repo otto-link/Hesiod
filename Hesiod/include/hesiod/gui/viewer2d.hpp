@@ -20,16 +20,16 @@
 namespace hesiod
 {
 
-class HViewer2d : public QWidget
+class Viewer2d : public QWidget
 {
   Q_OBJECT
 
 public:
-  HViewer2d() = default;
+  Viewer2d() = default;
 
-  HViewer2d(ModelConfig                    *p_config,
-            QtNodes::DataFlowGraphicsScene *p_scene,
-            QWidget                        *parent = nullptr);
+  Viewer2d(ModelConfig                    *p_config,
+           QtNodes::DataFlowGraphicsScene *p_scene,
+           QWidget                        *parent = nullptr);
 
 Q_SIGNALS:
   void resized(int width, int height);

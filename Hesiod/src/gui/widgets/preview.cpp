@@ -11,12 +11,12 @@
 
 #include "hesiod/data/heightmap_data.hpp"
 #include "hesiod/data/mask_data.hpp"
-#include "hesiod/gui/h_preview.hpp"
+#include "hesiod/gui/preview.hpp"
 
 namespace hesiod
 {
 
-HPreview::HPreview(const ModelConfig *p_config, QtNodes::NodeData *p_data)
+Preview::Preview(const ModelConfig *p_config, QtNodes::NodeData *p_data)
     : p_config(p_config), p_data(p_data)
 {
   this->resize(HSD_PREVIEW_SHAPE, HSD_PREVIEW_SHAPE);
@@ -24,7 +24,7 @@ HPreview::HPreview(const ModelConfig *p_config, QtNodes::NodeData *p_data)
   this->update_image();
 }
 
-void HPreview::update_image()
+void Preview::update_image()
 {
   if (this->p_data->type().id.compare("HeightMapData") == 0)
   {

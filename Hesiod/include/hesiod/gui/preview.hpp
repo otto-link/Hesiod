@@ -13,14 +13,14 @@
 namespace hesiod
 {
 
-class HPreview : public QWidget
+class Preview : public QWidget
 {
   Q_OBJECT
 
 public:
-  HPreview() = default;
+  Preview() = default;
 
-  HPreview(const ModelConfig *p_config, QtNodes::NodeData *p_data);
+  Preview(const ModelConfig *p_config, QtNodes::NodeData *p_data);
 
 public Q_SLOTS:
   void update_image();
