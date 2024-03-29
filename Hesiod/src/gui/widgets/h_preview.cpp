@@ -39,8 +39,11 @@ void HPreview::update_image()
     //                               this->p_config->shape_preview.y,
     //                               QImage::Format_Grayscale8);
 
-    std::vector<uint8_t> img =
-        hmap::colorize(array, array.min(), array.max(), hmap::cmap::magma, false);
+    std::vector<uint8_t> img = hmap::colorize(array,
+                                              array.min(),
+                                              array.max(),
+                                              hmap::cmap::magma,
+                                              false);
 
     QImage preview_image = QImage(img.data(),
                                   this->p_config->shape_preview.x,

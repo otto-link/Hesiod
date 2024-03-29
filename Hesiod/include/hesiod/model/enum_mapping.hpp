@@ -26,4 +26,16 @@ static std::map<std::string, int> noise_type_map = {
     {"Worley (doube)", hmap::NoiseType::n_worley_double},
     {"Worley (value)", hmap::NoiseType::n_worley_value}};
 
+/**
+ * @brief Plain text / enumerate mapping for the HighMap colormaps.
+ */
+static std::map<std::string, int> cmap_map = {
+    {"bone", hmap::cmap::bone},
+    {"gray", hmap::cmap::gray},
+    {"jet", hmap::cmap::jet},
+    {"magma", hmap::cmap::magma},
+    {"nipy_spectral", hmap::cmap::nipy_spectral},
+    {"terrain", hmap::cmap::terrain},
+    {"viridis", hmap::cmap::viridis}};
+
 } // namespace hesiod

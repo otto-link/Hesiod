@@ -15,5 +15,5 @@ BraceWrapping:
 
 ColumnLimit: 90
 
-PenaltyBreakAssignment: 100
+PenaltyBreakAssignment: 1000
 PenaltyReturnTypeOnItsOwnLine: 1000

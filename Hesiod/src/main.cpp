@@ -23,8 +23,6 @@ typedef unsigned int uint;
 #include "hesiod/model/model_config.hpp"
 #include "hesiod/model/nodes.hpp"
 
-#include "hesiod/gui/settings_dialog.hpp"
-
 static std::shared_ptr<QtNodes::NodeDelegateModelRegistry> registerDataModels(
     hesiod::ModelConfig &config)
 {
@@ -138,8 +136,6 @@ QSlider::handle:horizontal {
                      p_node->context_menu(pos);
                    });
 
-  // void nodeContextMenu(NodeId const nodeId, QPointF const pos);
-
   QObject::connect(quit_action,
                    &QAction::triggered,
                    []()
@@ -151,26 +147,26 @@ QSlider::handle:horizontal {
   main_widget.setWindowTitle("Hesiod");
   main_widget.showNormal();
 
-  hesiod::SettingsDialog settings_dialog = hesiod::SettingsDialog();
-  settings_dialog.setGeometry(200, 200, 600, 400);
-  // settings_dialog.show();
+  hesiod::HViewer2d *viewer2d = new hesiod::HViewer2d(&model_config, scene);
+  viewer2d->show();
 
-  QWidget            window;
-  QVBoxLayout       *layout = new QVBoxLayout(&window);
-  hesiod::HViewer2d *viewer2d = new hesiod::HViewer2d(&model_config, &model);
-  layout->addWidget((QWidget *)viewer2d);
-  QObject::connect(scene,
-                   &QtNodes::DataFlowGraphicsScene::nodeSelected,
-                   viewer2d,
-                   &hesiod::HViewer2d::update_viewport);
-  window.show();
+  // QWidget window;
+  // window.setWindowTitle("Viewer 2D");
+  // QVBoxLayout       *layout = new QVBoxLayout(&window);
+  // hesiod::HViewer2d *viewer2d = new hesiod::HViewer2d(&model_config, scene);
+  // layout->addWidget((QWidget *)viewer2d);
+  // // QObject::connect(scene,
+  // //                  &QtNodes::DataFlowGraphicsScene::nodeSelected,
+  // //                  viewer2d,
+  // //                  &hesiod::HViewer2d::update_viewport);
+  // window.show();
 
-  // TODO find a way to empty the editor when there are no more nodes
-  // selected
-  QObject::connect(scene,
-                   &QtNodes::DataFlowGraphicsScene::nodeSelected,
-                   [&model, &scene, &settings_dialog]()
-                   { settings_dialog.update_layout(model, scene->selectedNodes()); });
+  // // TODO find a way to empty the editor when there are no more nodes
+  // // selected
+  // QObject::connect(scene,
+  //                  &QtNodes::DataFlowGraphicsScene::nodeSelected,
+  //                  [&model, &scene, &settings_dialog]()
+  //                  { settings_dialog.update_layout(model, scene->selectedNodes()); });
 
   return app.exec();
 }

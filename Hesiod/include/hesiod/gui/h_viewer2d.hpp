@@ -3,13 +3,18 @@
  * this software. */
 #pragma once
 
-#include <QGridLayout>
+#include <QCheckBox>
+#include <QComboBox>
 #include <QLabel>
+#include <QResizeEvent>
+#include <QVBoxLayout>
 #include <QWidget>
 
 #include <QtNodes/DataFlowGraphModel>
+#include <QtNodes/DataFlowGraphicsScene>
 #include <QtNodes/NodeDelegateModel>
 
+#include "hesiod/model/base_node.hpp"
 #include "hesiod/model/model_config.hpp"
 
 namespace hesiod
@@ -22,17 +27,35 @@ class HViewer2d : public QWidget
 public:
   HViewer2d() = default;
 
-  HViewer2d(ModelConfig *p_config, QtNodes::DataFlowGraphModel *p_model);
+  HViewer2d(ModelConfig                    *p_config,
+            QtNodes::DataFlowGraphicsScene *p_scene,
+            QWidget                        *parent = nullptr);
+
+Q_SIGNALS:
+  void resized(int width, int height);
 
 public Q_SLOTS:
+  void update_label_image();
+
   void update_viewport(QtNodes::NodeId const nodeId);
 
-private:
-  ModelConfig                 *p_config;
-  QtNodes::DataFlowGraphModel *p_model;
+protected:
+  void resizeEvent(QResizeEvent *event) override;
 
-  QLabel      *label;
-  QGridLayout *layout;
+private:
+  ModelConfig                    *p_config;
+  QtNodes::DataFlowGraphicsScene *p_scene;
+  QtNodes::DataFlowGraphModel    *p_model;
+  QWidget                        *parent;
+
+  QtNodes::NodeId    current_node_id = -1;
+  QtNodes::NodeData *p_data = nullptr;
+
+  QVBoxLayout *layout;
+  QComboBox   *combobox_cmap;
+  QCheckBox   *checkbox_hillshade;
+  QCheckBox   *checkbox_pin_node;
+  QLabel      *label_image;
 };
 
 } // namespace hesiod
