@@ -188,16 +188,37 @@ QSlider::handle:horizontal {
   //                  &hesiod::MapEnumWidget::value_changed,
   //                  [&attr]() { LOG_DEBUG("choice: %s", attr->choice.c_str()); });
 
-  std::unique_ptr<hesiod::RangeAttribute> attr = NEW_ATTR_RANGE(
-      hmap::Vec2<float>(0.5f, 2.f),
-      false,
-      "%.3f");
-  hesiod::RangeWidget *sw = new hesiod::RangeWidget(attr.get());
+  // std::unique_ptr<hesiod::RangeAttribute> attr = NEW_ATTR_RANGE(
+  //     hmap::Vec2<float>(0.5f, 2.f),
+  //     false,
+  //     "%.3f");
+  // hesiod::RangeWidget *sw = new hesiod::RangeWidget(attr.get());
+  // sw->show();
+  // QObject::connect(sw,
+  //                  &hesiod::RangeWidget::value_changed,
+  //                  [&attr]()
+  //                  { LOG_DEBUG("range: %f %f", attr->value.x, attr->value.y); });
+
+  // std::unique_ptr<hesiod::WaveNbAttribute> attr = NEW_ATTR_WAVENB(
+  //     hmap::Vec2<float>(16.f, 2.f),
+  //     0.1f,
+  //     64.f,
+  //     "%.3f");
+  // hesiod::WaveNbWidget *sw = new hesiod::WaveNbWidget(attr.get());
+  // sw->show();
+  // QObject::connect(sw,
+  //                  &hesiod::WaveNbWidget::value_changed,
+  //                  [&attr]()
+  //                  { LOG_DEBUG("range: %f %f", attr->value.x, attr->value.y); });
+
+  std::unique_ptr<hesiod::FilenameAttribute> attr = NEW_ATTR_FILENAME("export.png",
+                                                                      "PNG Files (*.png)",
+                                                                      "Open toto");
+  hesiod::FilenameWidget                    *sw = new hesiod::FilenameWidget(attr.get());
   sw->show();
   QObject::connect(sw,
-                   &hesiod::RangeWidget::value_changed,
-                   [&attr]()
-                   { LOG_DEBUG("range: %f %f", attr->value.x, attr->value.y); });
+                   &hesiod::FilenameWidget::value_changed,
+                   [&attr]() { LOG_DEBUG("file: %s", attr->value.c_str()); });
 
   // ---
 

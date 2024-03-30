@@ -24,7 +24,7 @@ FloatWidget::FloatWidget(FloatAttribute *p_attr) : p_attr(p_attr)
   this->slider->setValue(pos);
   layout->addWidget(this->slider);
 
-  // display value but not signals
+  // only display value but no signal
   connect(this->slider,
           &QSlider::valueChanged,
           [this]()

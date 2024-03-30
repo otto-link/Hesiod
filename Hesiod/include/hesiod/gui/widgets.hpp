@@ -2,8 +2,11 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #pragma once
+#include <QCheckBox>
 #include <QComboBox>
+#include <QFileDialog>
 #include <QLabel>
+#include <QPushButton>
 #include <QSlider>
 #include <QSpinBox>
 #include <QWidget>
@@ -17,6 +20,26 @@
 
 namespace hesiod
 {
+
+class FilenameWidget : public QWidget
+{
+  Q_OBJECT
+
+public:
+  FilenameWidget() = default;
+
+  FilenameWidget(FilenameAttribute *p_attr);
+
+Q_SIGNALS:
+  void value_changed();
+
+private:
+  FilenameAttribute *p_attr;
+  QPushButton       *button;
+  QFileDialog       *file_dialog;
+
+  void update_attribute();
+};
 
 class FloatWidget : public QWidget
 {
@@ -113,6 +136,27 @@ Q_SIGNALS:
 private:
   SeedAttribute *p_attr;
   QSpinBox      *spinbox;
+
+  void update_attribute();
+};
+
+class WaveNbWidget : public QWidget
+{
+  Q_OBJECT
+
+public:
+  WaveNbWidget() = default;
+
+  WaveNbWidget(WaveNbAttribute *p_attr);
+
+Q_SIGNALS:
+  void value_changed();
+
+private:
+  WaveNbAttribute *p_attr;
+  QSlider         *slider_x, *slider_y;
+  QLabel          *label_x, *label_y;
+  QCheckBox       *checkbox;
 
   void update_attribute();
 };

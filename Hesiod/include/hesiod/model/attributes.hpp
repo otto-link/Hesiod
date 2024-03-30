@@ -64,6 +64,7 @@
 
 #define HSD_DEFAULT_KW 2.f
 #define HSD_DEFAULT_SEED 1
+#define HSD_FILENAME_DISPLAY_MAX_SIZE 32
 
 namespace hesiod
 {
@@ -180,15 +181,38 @@ public:
   std::vector<float> value = {1.f, 1.f, 1.f};
 };
 
-class FilenameAttribute : public Attribute // --------- TODO
+class FilenameAttribute : public Attribute // OK JSON GUI
 {
 public:
   FilenameAttribute() = default;
-  FilenameAttribute(std::string value);
+  FilenameAttribute(std::string value, std::string filter = "", std::string label = "");
   std::string   get();
   AttributeType get_type() { return AttributeType::FILENAME; }
 
+  QJsonObject save() const override
+  {
+    QJsonObject model_json;
+    model_json["value"] = QString::fromStdString(this->value);
+    model_json["filter"] = QString::fromStdString(this->filter);
+    model_json["label"] = QString::fromStdString(this->label);
+    return model_json;
+  }
+
+  void load(QJsonObject const &p) override
+  {
+    bool ret = true;
+    ret &= convert_qjsonvalue_to_string(p["value"], this->value);
+    ret &= convert_qjsonvalue_to_string(p["filter"], this->filter);
+    ret &= convert_qjsonvalue_to_string(p["label"], this->label);
+
+    if (!ret)
+      LOG_ERROR("serialization in with FilenameAttribute");
+  }
+
   std::string value = "";
+  // filter eg: "Images (*.png *.xpm *.jpg);;Text files (*.txt);;XML files (*.xml)"
+  std::string filter = "";
+  std::string label = "";
 };
 
 class FloatAttribute : public Attribute // OK JSON GUI
@@ -206,7 +230,7 @@ public:
     model_json["value"] = QString::number(this->value);
     model_json["vmin"] = QString::number(this->vmin);
     model_json["vmax"] = QString::number(this->vmax);
-    model_json["fmt"] = QString::fromStdString(fmt);
+    model_json["fmt"] = QString::fromStdString(this->fmt);
     return model_json;
   }
 
@@ -426,7 +450,7 @@ public:
   std::vector<int> value = {};
 };
 
-class WaveNbAttribute : public Attribute
+class WaveNbAttribute : public Attribute // OK JSON GUI
 {
 public:
   WaveNbAttribute() = default;
@@ -446,7 +470,7 @@ public:
     model_json["link_xy"] = QString(this->link_xy ? "true" : "false");
     model_json["vmin"] = QString::number(this->vmin);
     model_json["vmax"] = QString::number(this->vmax);
-    model_json["fmt"] = QString::fromStdString(fmt);
+    model_json["fmt"] = QString::fromStdString(this->fmt);
     return model_json;
   }
 

@@ -31,7 +31,7 @@ RangeWidget::RangeWidget(RangeAttribute *p_attr) : p_attr(p_attr)
   this->slider_min->setValue(pos);
   layout->addWidget(this->slider_min, 0, 0);
 
-  // display value but not signals
+  // only display value but no signal
   connect(this->slider_min,
           &QSlider::valueChanged,
           [this]()
@@ -65,7 +65,7 @@ RangeWidget::RangeWidget(RangeAttribute *p_attr) : p_attr(p_attr)
   this->slider_max->setValue(pos);
   layout->addWidget(this->slider_max, 1, 0);
 
-  // display value but not signals
+  // only display value but no signal
   connect(this->slider_max,
           &QSlider::valueChanged,
           [this]()

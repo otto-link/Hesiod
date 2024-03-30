@@ -8,7 +8,12 @@
 namespace hesiod
 {
 
-FilenameAttribute::FilenameAttribute(std::string value) : value(value) {}
+FilenameAttribute::FilenameAttribute(std::string value,
+                                     std::string filter,
+                                     std::string label)
+    : value(value), filter(filter), label(label)
+{
+}
 
 std::string FilenameAttribute::get() { return value; }
 

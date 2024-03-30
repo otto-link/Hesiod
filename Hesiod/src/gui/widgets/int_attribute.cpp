@@ -22,7 +22,7 @@ IntWidget::IntWidget(IntAttribute *p_attr) : p_attr(p_attr)
   this->slider->setValue(this->p_attr->value);
   layout->addWidget(this->slider);
 
-  // display value but not signals
+  // only display value but no signal
   connect(this->slider,
           &QSlider::valueChanged,
           [this]() { this->label->setText(QString::number(this->slider->value())); });
