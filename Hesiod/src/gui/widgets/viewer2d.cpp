@@ -14,6 +14,7 @@
 #include "hesiod/data/mask_data.hpp"
 #include "hesiod/gui/viewer2d.hpp"
 #include "hesiod/model/enum_mapping.hpp"
+#include "hesiod/model/graph_model_addon.hpp"
 
 namespace hesiod
 {
@@ -23,13 +24,18 @@ Viewer2d::Viewer2d(ModelConfig                    *p_config,
                    QWidget                        *parent)
     : p_config(p_config), p_scene(p_scene), parent(parent)
 {
-  this->p_model = (QtNodes::DataFlowGraphModel *)&this->p_scene->graphModel();
+  this->p_model = (HsdDataFlowGraphModel *)&this->p_scene->graphModel();
 
   // update connection
-  QObject::connect(p_scene,
+  QObject::connect(this->p_scene,
                    &QtNodes::DataFlowGraphicsScene::nodeSelected,
                    this,
                    &hesiod::Viewer2d::update_viewport);
+
+  QObject::connect(this->p_model,
+                   &HsdDataFlowGraphModel::computingFinished,
+                   this,
+                   &hesiod::Viewer2d::update_after_computing);
 
   QObject::connect(this,
                    &hesiod::Viewer2d::resized,
@@ -92,6 +98,12 @@ void Viewer2d::resizeEvent(QResizeEvent *event)
 {
   QWidget::resizeEvent(event);
   Q_EMIT this->resized(event->size().width(), event->size().height());
+}
+
+void Viewer2d::update_after_computing(QtNodes::NodeId const node_id)
+{
+  if (node_id == this->current_node_id)
+    this->update_label_image();
 }
 
 void Viewer2d::update_label_image()

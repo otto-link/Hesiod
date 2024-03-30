@@ -58,6 +58,8 @@ void GammaCorrection::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void GammaCorrection::compute()
 {
+  Q_EMIT this->computingStarted();
+
   LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
 
   hmap::HeightMap *p_in = HSD_GET_POINTER(this->in);
@@ -81,6 +83,8 @@ void GammaCorrection::compute()
 
   // propagate
   QtNodes::PortIndex const out_port_index = 0;
+
+  Q_EMIT this->computingFinished();
   Q_EMIT this->dataUpdated(out_port_index);
 }
 

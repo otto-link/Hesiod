@@ -10,7 +10,7 @@ typedef unsigned int uint;
 #include <QVBoxLayout>
 #include <QWidget>
 
-#include <QtNodes/DataFlowGraphModel>
+// #include <QtNodes/DataFlowGraphModel>
 #include <QtNodes/DataFlowGraphicsScene>
 #include <QtNodes/GraphicsView>
 #include <QtNodes/NodeData>
@@ -22,6 +22,7 @@ typedef unsigned int uint;
 #include "hesiod/gui/viewer2d.hpp"
 #include "hesiod/gui/widgets.hpp"
 #include "hesiod/model/attributes.hpp"
+#include "hesiod/model/graph_model_addon.hpp"
 #include "hesiod/model/model_config.hpp"
 #include "hesiod/model/nodes.hpp"
 
@@ -89,7 +90,7 @@ QSlider::handle:horizontal {
 
   std::shared_ptr<QtNodes::NodeDelegateModelRegistry> registry = registerDataModels(
       model_config);
-  QtNodes::DataFlowGraphModel model(registry);
+  hesiod::HsdDataFlowGraphModel model(registry);
 
   model_config.set_shape({1024, 1024});
 
@@ -127,13 +128,13 @@ QSlider::handle:horizontal {
                    view,
                    &QtNodes::GraphicsView::centerScene);
 
-  QObject::connect(scene,
-                   &QtNodes::DataFlowGraphicsScene::nodeClicked,
-                   [&scene]()
-                   {
-                     for (auto &nid : scene->selectedNodes())
-                       std::cout << nid << "\n";
-                   });
+  // QObject::connect(scene,
+  //                  &QtNodes::DataFlowGraphicsScene::nodeClicked,
+  //                  [&scene]()
+  //                  {
+  //                    for (auto &nid : scene->selectedNodes())
+  //                      std::cout << nid << "\n";
+  //                  });
 
   QObject::connect(scene,
                    &QtNodes::DataFlowGraphicsScene::nodeContextMenu,
@@ -172,7 +173,7 @@ QSlider::handle:horizontal {
   attr["file"] = NEW_ATTR_FILENAME("export.png", "PNG Files(*.png)", "Open toto");
 
   hesiod::AttributesWidget *sw = new hesiod::AttributesWidget(&attr);
-  sw->show();
+  // sw->show();
 
   // std::unique_ptr<hesiod::FilenameAttribute> attr = NEW_ATTR_FILENAME("export.png",
   //                                                                     "PNG Files

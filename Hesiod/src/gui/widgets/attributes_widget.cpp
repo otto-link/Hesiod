@@ -31,56 +31,80 @@ AttributesWidget::AttributesWidget(
 
     case (AttributeType::BOOL):
     {
-      QWidget *widget = new BoolWidget((BoolAttribute *)p_attr);
+      BoolWidget *widget = new BoolWidget((BoolAttribute *)p_attr);
+      connect(widget,
+              &BoolWidget::value_changed,
+              [this]() { Q_EMIT this->value_changed(); });
       layout->addWidget(widget, row, 1);
     }
     break;
 
     case (AttributeType::FILENAME):
     {
-      QWidget *widget = new FilenameWidget((FilenameAttribute *)p_attr);
+      FilenameWidget *widget = new FilenameWidget((FilenameAttribute *)p_attr);
+      connect(widget,
+              &FilenameWidget::value_changed,
+              [this]() { Q_EMIT this->value_changed(); });
       layout->addWidget(widget, row, 1);
     }
     break;
 
     case (AttributeType::FLOAT):
     {
-      QWidget *widget = new FloatWidget((FloatAttribute *)p_attr);
+      FloatWidget *widget = new FloatWidget((FloatAttribute *)p_attr);
+      connect(widget,
+              &FloatWidget::value_changed,
+              [this]() { Q_EMIT this->value_changed(); });
       layout->addWidget(widget, row, 1);
     }
     break;
 
     case (AttributeType::INT):
     {
-      QWidget *widget = new IntWidget((IntAttribute *)p_attr);
+      IntWidget *widget = new IntWidget((IntAttribute *)p_attr);
+      connect(widget,
+              &IntWidget::value_changed,
+              [this]() { Q_EMIT this->value_changed(); });
       layout->addWidget(widget, row, 1);
     }
     break;
 
     case (AttributeType::MAP_ENUM):
     {
-      QWidget *widget = new MapEnumWidget((MapEnumAttribute *)p_attr);
+      MapEnumWidget *widget = new MapEnumWidget((MapEnumAttribute *)p_attr);
+      connect(widget,
+              &MapEnumWidget::value_changed,
+              [this]() { Q_EMIT this->value_changed(); });
       layout->addWidget(widget, row, 1);
     }
     break;
 
     case (AttributeType::RANGE):
     {
-      QWidget *widget = new RangeWidget((RangeAttribute *)p_attr);
+      RangeWidget *widget = new RangeWidget((RangeAttribute *)p_attr);
+      connect(widget,
+              &RangeWidget::value_changed,
+              [this]() { Q_EMIT this->value_changed(); });
       layout->addWidget(widget, row, 1);
     }
     break;
 
     case (AttributeType::SEED):
     {
-      QWidget *widget = new SeedWidget((SeedAttribute *)p_attr);
+      SeedWidget *widget = new SeedWidget((SeedAttribute *)p_attr);
+      connect(widget,
+              &SeedWidget::value_changed,
+              [this]() { Q_EMIT this->value_changed(); });
       layout->addWidget(widget, row, 1);
     }
     break;
 
     case (AttributeType::WAVE_NB):
     {
-      QWidget *widget = new WaveNbWidget((WaveNbAttribute *)p_attr);
+      WaveNbWidget *widget = new WaveNbWidget((WaveNbAttribute *)p_attr);
+      connect(widget,
+              &WaveNbWidget::value_changed,
+              [this]() { Q_EMIT this->value_changed(); });
       layout->addWidget(widget, row, 1);
     }
     break;

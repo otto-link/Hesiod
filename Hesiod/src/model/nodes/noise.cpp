@@ -67,6 +67,8 @@ void Noise::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void Noise::compute()
 {
+  Q_EMIT this->computingStarted();
+
   LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
   // this->log_debug();
 
@@ -112,6 +114,7 @@ void Noise::compute()
 
   LOG_DEBUG("here");
 
+  Q_EMIT this->computingFinished();
   Q_EMIT this->dataUpdated(out_port_index);
 }
 

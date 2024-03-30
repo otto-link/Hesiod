@@ -2,6 +2,7 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include "hesiod/model/base_node.hpp"
+#include "hesiod/gui/widgets.hpp"
 
 namespace hesiod
 {
