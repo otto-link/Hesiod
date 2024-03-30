@@ -18,7 +18,19 @@ HeightMapToMask::HeightMapToMask(const ModelConfig &config) : BaseNode(config)
   this->input_captions = {"input"};
   this->output_captions = {"mask"};
 
-  // TODO add controls
+  this->attr["inverse"] = NEW_ATTR_BOOL(false);
+  this->attr["smoothing"] = NEW_ATTR_BOOL(false);
+  this->attr["smoothing_radius"] = NEW_ATTR_FLOAT(0.05f, 0.f, 1.f, "%.2f");
+  this->attr["saturate"] = NEW_ATTR_BOOL(false);
+  this->attr["saturate_range"] = NEW_ATTR_RANGE();
+  this->attr["saturate_k"] = NEW_ATTR_FLOAT(0.01f, 0.01f, 1.f, "%.2f");
+
+  this->attr_ordered_key = {"inverse",
+                            "smoothing",
+                            "smoothing_radius",
+                            "saturate",
+                            "saturate_range",
+                            "saturate_k"};
 
   this->mask = std::make_shared<MaskData>(config);
 
@@ -66,6 +78,21 @@ void HeightMapToMask::compute()
     // clamp to [0, 1]
     hmap::transform(*p_mask, [](hmap::Array &x) { hmap::clamp(x, 0.f, 1.f); });
   }
+
+  // post-process
+  int ir = std::max(
+      1,
+      (int)(GET_ATTR_FLOAT("smoothing_radius") * this->mask->get_ref()->shape.x));
+
+  post_process_heightmap(*this->mask->get_ref(),
+                         GET_ATTR_BOOL("inverse"),
+                         GET_ATTR_BOOL("smoothing"),
+                         ir,
+                         GET_ATTR_BOOL("saturate"),
+                         GET_ATTR_RANGE("saturate_range"),
+                         GET_ATTR_FLOAT("saturate_k"),
+                         false, // remap
+                         {0.f, 0.f});
 
   // propagate
   QtNodes::PortIndex const out_port_index = 0;

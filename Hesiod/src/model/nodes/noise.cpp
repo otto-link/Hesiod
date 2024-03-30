@@ -123,7 +123,7 @@ void Noise::compute()
                          false, // saturate
                          {0.f, 0.f},
                          0.f,
-                         GET_ATTR_BOOL("inverse"),
+                         GET_ATTR_BOOL("remap"),
                          GET_ATTR_RANGE("remap_range"));
 
   // propagate

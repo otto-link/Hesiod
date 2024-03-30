@@ -94,6 +94,7 @@ QSlider::handle:horizontal {
   hesiod::HsdDataFlowGraphModel model(registry);
 
   model_config.set_shape({1024, 1024});
+  model_config.tiling = {4, 4};
 
   QWidget main_widget;
 

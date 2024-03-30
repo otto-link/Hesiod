@@ -163,7 +163,6 @@ public:
    */
   virtual void context_menu(const QPointF /* pos */)
   {
-    LOG_DEBUG("context menu");
     if (!this->qmenu)
     {
       // menu populated here to ensure this is done by the derived class, not by the
@@ -171,9 +170,25 @@ public:
       AttributesWidget *attributes_widget = new AttributesWidget(&this->attr,
                                                                  &this->attr_ordered_key);
       this->qmenu = new QMenu();
-      QWidgetAction *widget_action = new QWidgetAction(qmenu);
-      widget_action->setDefaultWidget(attributes_widget);
-      this->qmenu->addAction(widget_action);
+      // this->qmenu.setStyleSheet("QMenu::item { padding: 5px; }");
+
+      {
+        QLabel *label = new QLabel(this->caption());
+        QFont   f = label->font();
+        f.setBold(true);
+        label->setFont(f);
+        QWidgetAction *widget_action = new QWidgetAction(qmenu);
+        widget_action->setDefaultWidget(label);
+        this->qmenu->addAction(widget_action);
+      }
+
+      this->qmenu->addSeparator();
+
+      {
+        QWidgetAction *widget_action = new QWidgetAction(qmenu);
+        widget_action->setDefaultWidget(attributes_widget);
+        this->qmenu->addAction(widget_action);
+      }
 
       connect(attributes_widget,
               &AttributesWidget::value_changed,

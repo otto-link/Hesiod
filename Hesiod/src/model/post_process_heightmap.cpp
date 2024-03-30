@@ -38,7 +38,7 @@ void post_process_heightmap(hmap::HeightMap  &h,
     // they need to be rescaled
     float smin_n = hmin + saturate_range.x * (hmax - hmin);
     float smax_n = hmax - (1.f - saturate_range.y) * (hmax - hmin);
-    float k_n = saturate_k * (hmax - hmin);
+    float k_n = std::max(1e-6f, saturate_k * (hmax - hmin));
 
     hmap::transform(h,
                     [&smin_n, &smax_n, &k_n](hmap::Array &array)
