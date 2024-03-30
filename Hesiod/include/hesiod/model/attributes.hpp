@@ -134,7 +134,7 @@ class BoolAttribute : public Attribute // OK JSON GUI
 {
 public:
   BoolAttribute() = default;
-  BoolAttribute(bool value);
+  BoolAttribute(bool value, std::string label);
   bool          get();
   AttributeType get_type() { return AttributeType::BOOL; }
 
@@ -154,7 +154,8 @@ public:
       LOG_ERROR("serialization in with BoolAttribute");
   }
 
-  bool value = true;
+  bool        value = true;
+  std::string label = "";
 };
 
 class CloudAttribute : public Attribute // --------- TODO

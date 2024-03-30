@@ -8,7 +8,9 @@
 namespace hesiod
 {
 
-BoolAttribute::BoolAttribute(bool value) : value(value) {}
+BoolAttribute::BoolAttribute(bool value, std::string label) : value(value), label(label)
+{
+}
 
 bool BoolAttribute::get() { return value; }
 

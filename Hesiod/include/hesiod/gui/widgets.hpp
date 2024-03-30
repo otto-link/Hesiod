@@ -21,6 +21,50 @@
 namespace hesiod
 {
 
+// --- Main attributes widget
+
+/**
+ * @brief AttributesWidget clas, main attributes widget, automatically laid the widgets
+ required for the setting of the attribute list
+
+ */
+class AttributesWidget : public QWidget
+{
+  Q_OBJECT
+
+public:
+  AttributesWidget() = default;
+
+  AttributesWidget(std::map<std::string, std::unique_ptr<Attribute>> *p_attr_map);
+
+Q_SIGNALS:
+  void value_changed();
+
+private:
+  std::map<std::string, std::unique_ptr<Attribute>> *p_attr_map;
+};
+
+// --- Attribute-specific widgets
+
+class BoolWidget : public QWidget
+{
+  Q_OBJECT
+
+public:
+  BoolWidget() = default;
+
+  BoolWidget(BoolAttribute *p_attr);
+
+Q_SIGNALS:
+  void value_changed();
+
+private:
+  BoolAttribute *p_attr;
+  QCheckBox     *checkbox;
+
+  void update_attribute();
+};
+
 class FilenameWidget : public QWidget
 {
   Q_OBJECT

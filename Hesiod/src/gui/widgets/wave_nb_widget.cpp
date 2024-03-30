@@ -85,6 +85,9 @@ WaveNbWidget::WaveNbWidget(WaveNbAttribute *p_attr) : p_attr(p_attr)
       QString().asprintf(this->p_attr->fmt.c_str(), this->p_attr->value.y));
   layout->addWidget(this->label_y, 1, 1);
 
+  this->slider_y->setVisible(!this->p_attr->link_xy);
+  this->label_y->setVisible(!this->p_attr->link_xy);
+
   // --- x/y link
   this->checkbox = new QCheckBox("link x and y");
   this->checkbox->setChecked(p_attr->link_xy);
@@ -95,11 +98,10 @@ WaveNbWidget::WaveNbWidget(WaveNbAttribute *p_attr) : p_attr(p_attr)
           [this]()
           {
             this->p_attr->link_xy = this->checkbox->checkState();
+            this->slider_y->setVisible(!this->p_attr->link_xy);
+            this->label_y->setVisible(!this->p_attr->link_xy);
             this->update_attribute();
           });
-
-  connect(checkbox, &QCheckBox::clicked, this->slider_y, &QSlider::setVisible);
-  connect(checkbox, &QCheckBox::clicked, this->label_y, &QSlider::setVisible);
 
   this->setLayout(layout);
 }

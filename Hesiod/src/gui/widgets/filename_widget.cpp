@@ -15,8 +15,7 @@ FilenameWidget::FilenameWidget(FilenameAttribute *p_attr) : p_attr(p_attr)
 
   QHBoxLayout *layout = new QHBoxLayout(this);
 
-  std::string text = "File: " + this->p_attr->value;
-  this->button = new QPushButton(QString::fromStdString(text));
+  this->button = new QPushButton(QString::fromStdString(this->p_attr->value));
   layout->addWidget(this->button);
 
   connect(button,
@@ -36,13 +35,13 @@ FilenameWidget::FilenameWidget(FilenameAttribute *p_attr) : p_attr(p_attr)
 
 void FilenameWidget::update_attribute()
 {
-  std::string text = "File: ";
+  std::string text = "";
   size_t      max_size = HSD_FILENAME_DISPLAY_MAX_SIZE;
   if (this->p_attr->value.size() > max_size)
-    text += "..." +
-            this->p_attr->value.substr(this->p_attr->value.size() - max_size, max_size);
+    text = "..." +
+           this->p_attr->value.substr(this->p_attr->value.size() - max_size, max_size);
   else
-    text += this->p_attr->value;
+    text = this->p_attr->value;
 
   this->button->setText(QString::fromStdString(text));
   Q_EMIT this->value_changed();
