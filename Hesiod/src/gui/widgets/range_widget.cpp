@@ -95,6 +95,8 @@ RangeWidget::RangeWidget(RangeAttribute *p_attr) : p_attr(p_attr)
           &QPushButton::released,
           [this]()
           {
+            this->vmax = std::max(std::abs(this->vmin), std::abs(this->vmax));
+            this->vmin = -this->vmax;
             float vptp = this->p_attr->value.y - this->p_attr->value.x;
             float v0 = float_to_slider_pos(-0.5f * vptp,
                                            this->vmin,

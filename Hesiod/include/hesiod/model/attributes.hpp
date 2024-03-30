@@ -313,7 +313,7 @@ public:
   hmap::Path value;
 };
 
-class RangeAttribute : public Attribute // OK JSON
+class RangeAttribute : public Attribute // OK JSON GUI
 {
 public:
   RangeAttribute() = default;
