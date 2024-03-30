@@ -3,6 +3,7 @@
  * this software. */
 #pragma once
 #include <QMenu>
+#include <QSizePolicy>
 #include <QWidgetAction>
 
 #include <QtCore/QObject>
@@ -152,6 +153,14 @@ public:
   QtNodes::NodeData *p_preview_data = nullptr;
   QtNodes::NodeData *p_viewer2d_data = nullptr;
 
+  /**
+   * @brief Defines the display order of the attributes in the settings widget.
+   */
+  std::vector<std::string> attr_ordered_key = {};
+
+  /**
+   * @brief Node context menu.
+   */
   virtual void context_menu(const QPointF /* pos */)
   {
     LOG_DEBUG("context menu");
@@ -159,7 +168,8 @@ public:
     {
       // menu populated here to ensure this is done by the derived class, not by the
       // current base class BaseNode (or the attribute mapping will be empty)
-      AttributesWidget *attributes_widget = new AttributesWidget(&this->attr);
+      AttributesWidget *attributes_widget = new AttributesWidget(&this->attr,
+                                                                 &this->attr_ordered_key);
       this->qmenu = new QMenu();
       QWidgetAction *widget_action = new QWidgetAction(qmenu);
       widget_action->setDefaultWidget(attributes_widget);
@@ -174,7 +184,7 @@ public:
   }
 
   /**
-   * @brief Reference the reference to the widget embedded within the grpahic node.
+   * @brief Return the reference to the widget embedded within the grpahic node.
    * @return Widget reference.
    */
   QWidget *embeddedWidget() override

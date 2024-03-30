@@ -62,12 +62,13 @@ static void set_style()
 
 int main(int argc, char *argv[])
 {
-  QApplication app(argc, argv);
-
   QFont font("Roboto");
-  // font.setStyleHint(QFont::Monospace);
   font.setPointSize(10);
   QApplication::setFont(font);
+
+  QApplication app(argc, argv);
+
+  // QFont font("Roboto");
 
   app.setStyleSheet(R"(
 QSlider::groove:horizontal { 

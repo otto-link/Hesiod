@@ -134,7 +134,7 @@ class BoolAttribute : public Attribute // OK JSON GUI
 {
 public:
   BoolAttribute() = default;
-  BoolAttribute(bool value, std::string label);
+  BoolAttribute(bool value, std::string label = "");
   bool          get();
   AttributeType get_type() { return AttributeType::BOOL; }
 
@@ -342,9 +342,9 @@ class RangeAttribute : public Attribute // OK JSON GUI
 {
 public:
   RangeAttribute() = default;
-  RangeAttribute(hmap::Vec2<float> value, bool activate, std::string fmt = "%.1f");
-  RangeAttribute(hmap::Vec2<float> value, std::string fmt = "%.1f");
-  RangeAttribute(bool activate, std::string fmt = "%.1f");
+  RangeAttribute(hmap::Vec2<float> value, bool activate, std::string fmt = "%.2f");
+  RangeAttribute(hmap::Vec2<float> value, std::string fmt = "%.2");
+  RangeAttribute(bool activate, std::string fmt = "%.2f");
   hmap::Vec2<float> get();
   bool              is_activated() { return this->activate; };
   AttributeType     get_type() { return AttributeType::RANGE; }
@@ -373,7 +373,7 @@ public:
 
   hmap::Vec2<float> value = {0.f, 1.f};
   bool              activate = true;
-  std::string       fmt = "%.1f";
+  std::string       fmt = "%.2f";
 };
 
 class SeedAttribute : public Attribute // OK JSON GUI

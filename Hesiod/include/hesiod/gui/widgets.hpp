@@ -35,13 +35,15 @@ class AttributesWidget : public QWidget
 public:
   AttributesWidget() = default;
 
-  AttributesWidget(std::map<std::string, std::unique_ptr<Attribute>> *p_attr_map);
+  AttributesWidget(std::map<std::string, std::unique_ptr<Attribute>> *p_attr_map,
+                   std::vector<std::string> *p_attr_ordered_key = nullptr);
 
 Q_SIGNALS:
   void value_changed();
 
 private:
   std::map<std::string, std::unique_ptr<Attribute>> *p_attr_map;
+  std::vector<std::string>                          *p_attr_ordered_key;
 };
 
 // --- Attribute-specific widgets

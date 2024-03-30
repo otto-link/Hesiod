@@ -24,6 +24,13 @@ Noise::Noise(const ModelConfig &config) : BaseNode(config)
   this->attr["kw"] = NEW_ATTR_WAVENB();
   this->attr["seed"] = NEW_ATTR_SEED();
 
+  this->attr["inverse"] = NEW_ATTR_BOOL(false);
+  this->attr["remap"] = NEW_ATTR_BOOL(true);
+  this->attr["remap_range"] = NEW_ATTR_RANGE();
+
+  this->attr_ordered_key =
+      {"noise_type", "kw", "seed", "_SEPARATOR_", "inverse", "remap", "remap_range"};
+
   this->out = std::make_shared<HeightMapData>(config);
 
   // GUI
@@ -70,7 +77,6 @@ void Noise::compute()
   Q_EMIT this->computingStarted();
 
   LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
-  // this->log_debug();
 
   // base noise function
   hmap::HeightMap *p_dx = HSD_GET_POINTER(this->dx);
@@ -109,10 +115,19 @@ void Noise::compute()
                     });
   }
 
+  // post-process
+  post_process_heightmap(*this->out->get_ref(),
+                         GET_ATTR_BOOL("inverse"),
+                         false, // smooth
+                         0,
+                         false, // saturate
+                         {0.f, 0.f},
+                         0.f,
+                         GET_ATTR_BOOL("inverse"),
+                         GET_ATTR_RANGE("remap_range"));
+
   // propagate
   QtNodes::PortIndex const out_port_index = 0;
-
-  LOG_DEBUG("here");
 
   Q_EMIT this->computingFinished();
   Q_EMIT this->dataUpdated(out_port_index);
