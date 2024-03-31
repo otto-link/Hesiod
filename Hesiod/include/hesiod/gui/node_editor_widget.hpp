@@ -3,11 +3,13 @@
  * this software. */
 #pragma once
 
+#include <QAction>
 #include <QWidget>
 
 #include <QtNodes/DataFlowGraphicsScene>
 #include <QtNodes/GraphicsView>
 
+#include "hesiod/gui/viewer2d_widget.hpp"
 #include "hesiod/model/graph_model_addon.hpp"
 #include "hesiod/model/model_config.hpp"
 
@@ -37,6 +39,8 @@ Q_SIGNALS:
 private:
   std::unique_ptr<hesiod::HsdDataFlowGraphModel>  model;
   std::unique_ptr<QtNodes::DataFlowGraphicsScene> scene;
+
+  std::unique_ptr<hesiod::Viewer2dWidget> viewer2d;
 };
 
 } // namespace hesiod

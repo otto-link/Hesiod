@@ -32,23 +32,23 @@ void Preview::update_image()
     hmap::HeightMap *p_h = static_cast<hmap::HeightMap *>(p_hdata->get_ref());
     hmap::Array      array = p_h->to_array(this->p_config->shape_preview);
 
-    // std::vector<uint8_t> img = hmap::colorize_grayscale(array);
-
-    // QImage preview_image = QImage(img.data(),
-    //                               this->p_config->shape_preview.x,
-    //                               this->p_config->shape_preview.y,
-    //                               QImage::Format_Grayscale8);
-
-    std::vector<uint8_t> img = hmap::colorize(array,
-                                              array.min(),
-                                              array.max(),
-                                              hmap::cmap::magma,
-                                              false);
+    std::vector<uint8_t> img = hmap::colorize_grayscale(array);
 
     QImage preview_image = QImage(img.data(),
                                   this->p_config->shape_preview.x,
                                   this->p_config->shape_preview.y,
-                                  QImage::Format_RGB888);
+                                  QImage::Format_Grayscale8);
+
+    // std::vector<uint8_t> img = hmap::colorize(array,
+    //                                           array.min(),
+    //                                           array.max(),
+    //                                           hmap::cmap::magma,
+    //                                           false);
+
+    // QImage preview_image = QImage(img.data(),
+    //                               this->p_config->shape_preview.x,
+    //                               this->p_config->shape_preview.y,
+    //                               QImage::Format_RGB888);
 
     this->label->setPixmap(QPixmap::fromImage(preview_image));
   }

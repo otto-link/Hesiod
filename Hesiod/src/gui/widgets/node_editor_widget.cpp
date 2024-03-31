@@ -41,6 +41,7 @@ NodeEditorWidget::NodeEditorWidget(hesiod::ModelConfig model_config,
 
   QMenu   *view_menu = menu_bar->addMenu("View");
   QAction *view2d_action = view_menu->addAction("Add 2D view");
+  view2d_action->setCheckable(true);
 
   layout->addWidget(menu_bar);
 
@@ -52,7 +53,36 @@ NodeEditorWidget::NodeEditorWidget(hesiod::ModelConfig model_config,
   layout->addWidget(view);
   this->setLayout(layout);
 
+  // viewer(s)
+  this->viewer2d = std::make_unique<hesiod::Viewer2dWidget>(&this->model_config,
+                                                            this->get_scene_ref());
+
   // --- connections
+
+  QObject::connect(load_action,
+                   &QAction::triggered,
+                   this->get_scene_ref(),
+                   &QtNodes::DataFlowGraphicsScene::load);
+
+  QObject::connect(this->get_scene_ref(),
+                   &QtNodes::DataFlowGraphicsScene::sceneLoaded,
+                   view,
+                   &QtNodes::GraphicsView::centerScene);
+
+  QObject::connect(save_action,
+                   &QAction::triggered,
+                   this->get_scene_ref(),
+                   &QtNodes::DataFlowGraphicsScene::save);
+
+  QObject::connect(view2d_action,
+                   &QAction::toggled,
+                   [this, view2d_action]()
+                   {
+                     if (view2d_action->isChecked())
+                       this->viewer2d.get()->show();
+                     else
+                       this->viewer2d.get()->hide();
+                   });
 
   QObject::connect(
       this->get_scene_ref(),
@@ -63,21 +93,6 @@ NodeEditorWidget::NodeEditorWidget(hesiod::ModelConfig model_config,
             node_id);
         p_node->context_menu(pos);
       });
-
-  QObject::connect(load_action,
-                   &QAction::triggered,
-                   this->get_scene_ref(),
-                   &QtNodes::DataFlowGraphicsScene::load);
-
-  QObject::connect(save_action,
-                   &QAction::triggered,
-                   this->get_scene_ref(),
-                   &QtNodes::DataFlowGraphicsScene::save);
-
-  QObject::connect(this->get_scene_ref(),
-                   &QtNodes::DataFlowGraphicsScene::sceneLoaded,
-                   view,
-                   &QtNodes::GraphicsView::centerScene);
 
   // pass-through for the node updates
   QObject::connect(this->get_model_ref(),
