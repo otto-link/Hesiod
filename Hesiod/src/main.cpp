@@ -19,7 +19,7 @@ typedef unsigned int uint;
 #include "highmap/vector.hpp"
 #include "macrologger.h"
 
-#include "hesiod/gui/viewer2d.hpp"
+#include "hesiod/gui/viewer2d_widget.hpp"
 #include "hesiod/gui/widgets.hpp"
 #include "hesiod/model/attributes.hpp"
 #include "hesiod/model/graph_model_addon.hpp"
@@ -163,7 +163,7 @@ QSlider::handle:horizontal {
   main_widget.setWindowTitle("Hesiod");
   main_widget.showNormal();
 
-  hesiod::Viewer2d *viewer2d = new hesiod::Viewer2d(&model_config, scene);
+  hesiod::Viewer2dWidget *viewer2d = new hesiod::Viewer2dWidget(&model_config, scene);
   viewer2d->show();
 
   // ---
@@ -195,12 +195,12 @@ QSlider::handle:horizontal {
   // QWidget window;
   // window.setWindowTitle("Viewer 2D");
   // QVBoxLayout       *layout = new QVBoxLayout(&window);
-  // hesiod::Viewer2d *viewer2d = new hesiod::Viewer2d(&model_config, scene);
+  // hesiod::Viewer2dWidget *viewer2d = new hesiod::Viewer2dWidget(&model_config, scene);
   // layout->addWidget((QWidget *)viewer2d);
   // // QObject::connect(scene,
   // //                  &QtNodes::DataFlowGraphicsScene::nodeSelected,
   // //                  viewer2d,
-  // //                  &hesiod::Viewer2d::update_viewport);
+  // //                  &hesiod::Viewer2dWidget::update_viewport);
   // window.show();
 
   // // TODO find a way to empty the editor when there are no more nodes

@@ -12,16 +12,16 @@
 
 #include "hesiod/data/heightmap_data.hpp"
 #include "hesiod/data/mask_data.hpp"
-#include "hesiod/gui/viewer2d.hpp"
+#include "hesiod/gui/viewer2d_widget.hpp"
 #include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/graph_model_addon.hpp"
 
 namespace hesiod
 {
 
-Viewer2d::Viewer2d(ModelConfig                    *p_config,
-                   QtNodes::DataFlowGraphicsScene *p_scene,
-                   QWidget                        *parent)
+Viewer2dWidget::Viewer2dWidget(ModelConfig                    *p_config,
+                               QtNodes::DataFlowGraphicsScene *p_scene,
+                               QWidget                        *parent)
     : p_config(p_config), p_scene(p_scene), parent(parent)
 {
   this->p_model = (HsdDataFlowGraphModel *)&this->p_scene->graphModel();
@@ -30,15 +30,15 @@ Viewer2d::Viewer2d(ModelConfig                    *p_config,
   QObject::connect(this->p_scene,
                    &QtNodes::DataFlowGraphicsScene::nodeSelected,
                    this,
-                   &hesiod::Viewer2d::update_viewport);
+                   &hesiod::Viewer2dWidget::update_viewport);
 
   QObject::connect(this->p_model,
                    &HsdDataFlowGraphModel::computingFinished,
                    this,
-                   &hesiod::Viewer2d::update_after_computing);
+                   &hesiod::Viewer2dWidget::update_after_computing);
 
   QObject::connect(this,
-                   &hesiod::Viewer2d::resized,
+                   &hesiod::Viewer2dWidget::resized,
                    this,
                    [this](int /*width*/, int /*height*/) { this->update_label_image(); });
 
@@ -61,7 +61,7 @@ Viewer2d::Viewer2d(ModelConfig                    *p_config,
     connect(this->combobox_cmap,
             QOverload<int>::of(&QComboBox::currentIndexChanged),
             this,
-            &Viewer2d::update_label_image);
+            &Viewer2dWidget::update_label_image);
   }
 
   // hillshading
@@ -73,7 +73,7 @@ Viewer2d::Viewer2d(ModelConfig                    *p_config,
     connect(this->checkbox_hillshade,
             &QCheckBox::stateChanged,
             this,
-            &Viewer2d::update_label_image);
+            &Viewer2dWidget::update_label_image);
   }
 
   // pin this node
@@ -94,19 +94,19 @@ Viewer2d::Viewer2d(ModelConfig                    *p_config,
   this->setLayout(layout);
 }
 
-void Viewer2d::resizeEvent(QResizeEvent *event)
+void Viewer2dWidget::resizeEvent(QResizeEvent *event)
 {
   QWidget::resizeEvent(event);
   Q_EMIT this->resized(event->size().width(), event->size().height());
 }
 
-void Viewer2d::update_after_computing(QtNodes::NodeId const node_id)
+void Viewer2dWidget::update_after_computing(QtNodes::NodeId const node_id)
 {
   if (node_id == this->current_node_id)
     this->update_label_image();
 }
 
-void Viewer2d::update_label_image()
+void Viewer2dWidget::update_label_image()
 {
   // check that the current node has not been deleted since, and that
   // data are indeed available
@@ -170,7 +170,7 @@ void Viewer2d::update_label_image()
     this->label_image->setText("No preview");
 }
 
-void Viewer2d::update_viewport(QtNodes::NodeId const node_id)
+void Viewer2dWidget::update_viewport(QtNodes::NodeId const node_id)
 {
   LOG_DEBUG("viewer2d, node [%d]", (int)node_id);
 
