@@ -22,7 +22,7 @@ QColor ConnectionStyle::normalColor(QString typeId) const
     return QColor::fromRgb(255, 184, 108);
   else if (QString::compare(typeId, "MaskData") == 0)
     return QColor::fromRgb(189, 147, 249);
-  else if (QString::compare(typeId, "PathRGBA") == 0)
+  else if (QString::compare(typeId, "PathData") == 0)
     return QColor::fromRgb(80, 250, 123);
 
   return QColor::fromRgb(255, 0, 0);
