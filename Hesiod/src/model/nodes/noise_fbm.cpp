@@ -6,13 +6,13 @@
 namespace hesiod
 {
 
-Noise::Noise(const ModelConfig &config) : BaseNode(config)
+NoiseFbm::NoiseFbm(const ModelConfig &config) : BaseNode(config)
 {
-  LOG_DEBUG("Noise::Noise");
+  LOG_DEBUG("NoiseFbm::NoiseFbm");
   config.log_debug();
 
   // model
-  this->node_caption = "Noise";
+  this->node_caption = "NoiseFbm";
   this->input_types = {HeightMapData().type(),
                        HeightMapData().type(),
                        HeightMapData().type()};
@@ -20,9 +20,13 @@ Noise::Noise(const ModelConfig &config) : BaseNode(config)
   this->input_captions = {"dx", "dy", "envelope"};
   this->output_captions = {"output"};
 
-  this->attr["noise_type"] = NEW_ATTR_MAPENUM(noise_type_map);
+  this->attr["noise_type"] = NEW_ATTR_MAPENUM(noise_type_map_fbm);
   this->attr["kw"] = NEW_ATTR_WAVENB();
   this->attr["seed"] = NEW_ATTR_SEED();
+  this->attr["octaves"] = NEW_ATTR_INT(8, 0, 32);
+  this->attr["weight"] = NEW_ATTR_FLOAT(0.7f, 0.f, 1.f);
+  this->attr["persistence"] = NEW_ATTR_FLOAT(0.5f, 0.f, 1.f);
+  this->attr["lacunarity"] = NEW_ATTR_FLOAT(2.f, 0.01f, 4.f);
 
   this->attr["inverse"] = NEW_ATTR_BOOL(false);
   this->attr["remap"] = NEW_ATTR_BOOL(true);
@@ -32,6 +36,10 @@ Noise::Noise(const ModelConfig &config) : BaseNode(config)
                             "_SEPARATOR_",
                             "kw",
                             "seed",
+                            "octaves",
+                            "weight",
+                            "persistence",
+                            "lacunarity",
                             "_SEPARATOR_",
                             "inverse",
                             "remap",
@@ -47,13 +55,13 @@ Noise::Noise(const ModelConfig &config) : BaseNode(config)
   this->compute();
 }
 
-std::shared_ptr<QtNodes::NodeData> Noise::outData(QtNodes::PortIndex /* port_index */)
+std::shared_ptr<QtNodes::NodeData> NoiseFbm::outData(QtNodes::PortIndex /* port_index */)
 {
   return std::static_pointer_cast<QtNodes::NodeData>(this->out);
 }
 
-void Noise::setInData(std::shared_ptr<QtNodes::NodeData> data,
-                      QtNodes::PortIndex                 port_index)
+void NoiseFbm::setInData(std::shared_ptr<QtNodes::NodeData> data,
+                         QtNodes::PortIndex                 port_index)
 {
   if (!data)
   {
@@ -78,7 +86,7 @@ void Noise::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 // --- computing
 
-void Noise::compute()
+void NoiseFbm::compute()
 {
   Q_EMIT this->computingStarted();
 
@@ -96,14 +104,19 @@ void Noise::compute()
                     hmap::Array      *p_noise_x,
                     hmap::Array      *p_noise_y)
              {
-               return hmap::noise((hmap::NoiseType)GET_ATTR_MAPENUM("noise_type"),
-                                  shape,
-                                  GET_ATTR_WAVENB("kw"),
-                                  GET_ATTR_SEED("seed"),
-                                  p_noise_x,
-                                  p_noise_y,
-                                  nullptr,
-                                  bbox);
+               return hmap::noise_fbm((hmap::NoiseType)GET_ATTR_MAPENUM("noise_type"),
+                                      shape,
+                                      GET_ATTR_WAVENB("kw"),
+                                      GET_ATTR_SEED("seed"),
+                                      GET_ATTR_INT("octaves"),
+                                      GET_ATTR_FLOAT("weight"),
+                                      GET_ATTR_FLOAT("persistence"),
+                                      GET_ATTR_FLOAT("lacunarity"),
+                                      nullptr,
+                                      p_noise_x,
+                                      p_noise_y,
+                                      nullptr,
+                                      bbox);
              });
 
   // add envelope

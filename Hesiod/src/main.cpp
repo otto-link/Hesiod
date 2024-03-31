@@ -45,6 +45,10 @@ static std::shared_ptr<QtNodes::NodeDelegateModelRegistry> registerDataModels(
                                     { return std::make_unique<hesiod::Noise>(config); },
                                     "Primitives");
 
+  ret->registerModel<hesiod::NoiseFbm>(
+      [&config]() { return std::make_unique<hesiod::NoiseFbm>(config); },
+      "Primitives");
+
   return ret;
 }
 

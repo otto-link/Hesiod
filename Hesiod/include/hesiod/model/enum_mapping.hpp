@@ -27,6 +27,23 @@ static std::map<std::string, int> noise_type_map = {
     {"Worley (value)", hmap::NoiseType::n_worley_value}};
 
 /**
+ * @brief Plain text / enumerate mapping for the HighMap noise types, with some value
+ * noises removed (delaunay, linear and thinplate) that can be very slow at high
+ * wavenumbers
+ */
+static std::map<std::string, int> noise_type_map_fbm = {
+    {"Perlin", hmap::NoiseType::n_perlin},
+    {"Perlin (billow)", hmap::NoiseType::n_perlin_billow},
+    {"Perlin (half)", hmap::NoiseType::n_perlin_half},
+    {"OpenSimplex2", hmap::NoiseType::n_simplex2},
+    {"OpenSimplex2S", hmap::NoiseType::n_simplex2s},
+    {"Value", hmap::NoiseType::n_value},
+    {"Value (cubic)", hmap::NoiseType::n_value_cubic},
+    {"Worley", hmap::NoiseType::n_worley},
+    {"Worley (doube)", hmap::NoiseType::n_worley_double},
+    {"Worley (value)", hmap::NoiseType::n_worley_value}};
+
+/**
  * @brief Plain text / enumerate mapping for the HighMap colormaps.
  */
 static std::map<std::string, int> cmap_map = {

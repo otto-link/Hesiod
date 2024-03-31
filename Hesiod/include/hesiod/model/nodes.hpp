@@ -105,4 +105,25 @@ protected:
   std::shared_ptr<HeightMapData> out;
 };
 
+/**
+ * @brief NoiseFbm class, noise primitive generation.
+ */
+class NoiseFbm : public BaseNode
+{
+public:
+  NoiseFbm(const ModelConfig &config);
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(
+      QtNodes::PortIndex /* port_index */) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data,
+                 QtNodes::PortIndex                 port_index) override;
+
+protected:
+  std::weak_ptr<HeightMapData>   dx, dy, envelope;
+  std::shared_ptr<HeightMapData> out;
+};
+
 } // namespace hesiod
