@@ -50,6 +50,7 @@ NodeEditorWidget::NodeEditorWidget(hesiod::ModelConfig model_config,
   auto view = new QtNodes::GraphicsView(scene.get());
 
   layout->addWidget(view);
+  this->setLayout(layout);
 
   // --- connections
 
@@ -78,7 +79,16 @@ NodeEditorWidget::NodeEditorWidget(hesiod::ModelConfig model_config,
                    view,
                    &QtNodes::GraphicsView::centerScene);
 
-  this->setLayout(layout);
+  // pass-through for the node updates
+  QObject::connect(this->get_model_ref(),
+                   &HsdDataFlowGraphModel::computingStarted,
+                   this,
+                   &NodeEditorWidget::computingStarted);
+
+  QObject::connect(this->get_model_ref(),
+                   &HsdDataFlowGraphModel::computingFinished,
+                   this,
+                   &NodeEditorWidget::computingFinished);
 }
 
 } // namespace hesiod

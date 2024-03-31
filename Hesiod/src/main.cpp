@@ -59,6 +59,11 @@ QSlider::handle:horizontal {
   auto editor = new hesiod::NodeEditorWidget(model_config);
   editor->show();
 
+  QObject::connect(editor,
+                   &hesiod::NodeEditorWidget::computingFinished,
+                   [](QtNodes::NodeId const node_id)
+                   { LOG_DEBUG("node updated: %d", (int)node_id); });
+
   hesiod::Viewer2dWidget *viewer2d = new hesiod::Viewer2dWidget(&model_config,
                                                                 editor->get_scene_ref());
   viewer2d->show();

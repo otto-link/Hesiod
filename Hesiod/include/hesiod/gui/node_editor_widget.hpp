@@ -29,6 +29,11 @@ public:
 
   QtNodes::DataFlowGraphicsScene *get_scene_ref() { return this->scene.get(); }
 
+Q_SIGNALS:
+  void computingStarted(QtNodes::NodeId const node_id);
+
+  void computingFinished(QtNodes::NodeId const node_id);
+
 private:
   std::unique_ptr<hesiod::HsdDataFlowGraphModel>  model;
   std::unique_ptr<QtNodes::DataFlowGraphicsScene> scene;
