@@ -67,6 +67,25 @@ private:
   void update_attribute();
 };
 
+class ColorWidget : public QWidget
+{
+  Q_OBJECT
+
+public:
+  ColorWidget() = default;
+
+  ColorWidget(ColorAttribute *p_attr);
+
+Q_SIGNALS:
+  void value_changed();
+
+private:
+  ColorAttribute *p_attr;
+  QLabel         *label;
+
+  void update_attribute(QColor color);
+};
+
 class FilenameWidget : public QWidget
 {
   Q_OBJECT

@@ -68,6 +68,16 @@ AttributesWidget::AttributesWidget(
       }
       break;
 
+      case (AttributeType::COLOR):
+      {
+        ColorWidget *widget = new ColorWidget((ColorAttribute *)p_attr);
+        connect(widget,
+                &ColorWidget::value_changed,
+                [this]() { Q_EMIT this->value_changed(); });
+        layout->addWidget(widget, row, 1);
+      }
+      break;
+
       case (AttributeType::FILENAME):
       {
         FilenameWidget *widget = new FilenameWidget((FilenameAttribute *)p_attr);
@@ -151,7 +161,8 @@ AttributesWidget::AttributesWidget(
   LOG_DEBUG("%d %d", count, (int)this->p_attr_map->size());
 
   if (check_count && count != (int)this->p_attr_map->size())
-    throw std::runtime_error("missing attributes in AttributesWidget");
+    throw std::runtime_error(
+        "missing attributes in AttributesWidget (check attr_ordered_key)");
 
   // as a last resort, for empty "settings"
   if (p_attr_map->size() == 0)

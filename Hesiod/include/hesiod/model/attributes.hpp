@@ -16,6 +16,7 @@
 #include <memory>
 #include <stdexcept>
 
+#include <QJsonArray>
 #include <QJsonObject>
 
 #include "highmap/geometry.hpp"
@@ -170,7 +171,7 @@ public:
   hmap::Cloud value;
 };
 
-class ColorAttribute : public Attribute // --------- TODO
+class ColorAttribute : public Attribute // OK JSON GUI
 {
 public:
   ColorAttribute() = default;
@@ -179,7 +180,34 @@ public:
 
   AttributeType get_type() { return AttributeType::COLOR; }
 
-  std::vector<float> value = {1.f, 1.f, 1.f};
+  QJsonObject save() const override
+  {
+    QJsonObject model_json;
+
+    QJsonArray json_array;
+    for (const float &v : this->value)
+      json_array.append(v);
+
+    model_json["value"] = json_array;
+    return model_json;
+  }
+
+  void load(QJsonObject const &p) override
+  {
+    bool ret = true;
+
+    this->value.clear();
+    QJsonArray json_array = p["value"].toArray();
+    for (const QJsonValue &v : json_array)
+    {
+      this->value.push_back((float)v.toDouble());
+    }
+
+    if (!ret)
+      LOG_ERROR("serialization in with ColorAttribute");
+  }
+
+  std::vector<float> value = {1.f, 1.f, 1.f, 1.f};
 };
 
 class FilenameAttribute : public Attribute // OK JSON GUI

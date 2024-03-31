@@ -58,15 +58,6 @@ int main(int argc, char *argv[])
   app.setStyleSheet(R"(
 * {
     font-family: Roboto, sans-serif;
-    color: #ECEFF4;
-}
-
-QMainWindow {
-    background-color: #2E2E2E;
-}
-
-QWidget {
-    background-color: #2E2E2E;
 }
 
 QSlider::groove:horizontal { 
@@ -81,8 +72,6 @@ QSlider::handle:horizontal {
 	height: 16px; 
 	border-radius: 8px;
 }
-
-
 
 )");
 
@@ -125,6 +114,7 @@ QSlider::handle:horizontal {
   attr["range"] = NEW_ATTR_RANGE(hmap::Vec2<float>(0.5f, 2.f), false, "%.3f");
   attr["kw"] = NEW_ATTR_WAVENB(hmap::Vec2<float>(16.f, 2.f), 0.1f, 64.f, "%.3f");
   attr["file"] = NEW_ATTR_FILENAME("export.png", "PNG Files(*.png)", "Open toto");
+  attr["color"] = NEW_ATTR_COLOR();
 
   hesiod::AttributesWidget *sw = new hesiod::AttributesWidget(&attr);
   // sw->show();
