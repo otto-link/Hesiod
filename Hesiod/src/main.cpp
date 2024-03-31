@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 {
   QApplication app(argc, argv);
 
-  QFont font("Monospace");
+  QFont font("Roboto");
   font.setPointSize(10);
   app.setFont(font);
 
