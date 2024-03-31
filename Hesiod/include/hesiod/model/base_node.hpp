@@ -3,7 +3,6 @@
  * this software. */
 #pragma once
 #include <QMenu>
-#include <QSizePolicy>
 #include <QWidgetAction>
 
 #include <QtCore/QObject>
@@ -161,60 +160,13 @@ public:
   /**
    * @brief Node context menu.
    */
-  virtual void context_menu(const QPointF /* pos */)
-  {
-    if (!this->qmenu)
-    {
-      // menu populated here to ensure this is done by the derived class, not by the
-      // current base class BaseNode (or the attribute mapping will be empty)
-      AttributesWidget *attributes_widget = new AttributesWidget(&this->attr,
-                                                                 &this->attr_ordered_key);
-      this->qmenu = new QMenu();
-      // this->qmenu.setStyleSheet("QMenu::item { padding: 5px; }");
-
-      {
-        QLabel *label = new QLabel(this->caption());
-        QFont   f = label->font();
-        f.setBold(true);
-        label->setFont(f);
-        QWidgetAction *widget_action = new QWidgetAction(qmenu);
-        widget_action->setDefaultWidget(label);
-        this->qmenu->addAction(widget_action);
-      }
-
-      this->qmenu->addSeparator();
-
-      {
-        QWidgetAction *widget_action = new QWidgetAction(qmenu);
-        widget_action->setDefaultWidget(attributes_widget);
-        this->qmenu->addAction(widget_action);
-      }
-
-      connect(attributes_widget,
-              &AttributesWidget::value_changed,
-              [this]() { this->compute(); });
-    }
-
-    this->qmenu->popup(QCursor::pos());
-  }
+  virtual void context_menu(const QPointF /* pos */);
 
   /**
    * @brief Return the reference to the widget embedded within the grpahic node.
    * @return Widget reference.
    */
-  QWidget *embeddedWidget() override
-  {
-    if (this->p_preview_data && !this->preview)
-    {
-      this->preview = new Preview(this->p_config, this->p_preview_data);
-      connect(this,
-              &NodeDelegateModel::dataUpdated,
-              this->preview,
-              &Preview::update_image,
-              Qt::UniqueConnection);
-    }
-    return (QWidget *)this->preview;
-  }
+  virtual QWidget *embeddedWidget() override;
 
 private:
   Preview *preview = nullptr;

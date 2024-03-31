@@ -31,9 +31,9 @@ int main(int argc, char *argv[])
 {
   QApplication app(argc, argv);
 
-  QFont font("Roboto");
+  QFont font("Monospace");
   font.setPointSize(10);
-  QApplication::setFont(font);
+  app.setFont(font);
 
   app.setStyleSheet(R"(
 QSlider::groove:horizontal { 
