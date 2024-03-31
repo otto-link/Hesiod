@@ -2,55 +2,18 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 typedef unsigned int uint;
-#include <iostream>
-
 #include <QApplication>
-#include <QMenuBar>
-#include <QShortcut>
-#include <QVBoxLayout>
-#include <QWidget>
-
-// #include <QtNodes/DataFlowGraphModel>
-#include <QtNodes/DataFlowGraphicsScene>
-#include <QtNodes/GraphicsView>
-#include <QtNodes/NodeData>
-#include <QtNodes/NodeDelegateModelRegistry>
 
 #include "highmap/vector.hpp"
 #include "macrologger.h"
 
+#include "hesiod/gui/node_editor_widget.hpp"
 #include "hesiod/gui/viewer2d_widget.hpp"
+
+// for testing - TO REMOVE
 #include "hesiod/gui/widgets.hpp"
 #include "hesiod/model/attributes.hpp"
-#include "hesiod/model/graph_model_addon.hpp"
-#include "hesiod/model/model_config.hpp"
-#include "hesiod/model/nodes.hpp"
-
 #include "hesiod/model/enum_mapping.hpp"
-
-static std::shared_ptr<QtNodes::NodeDelegateModelRegistry> registerDataModels(
-    hesiod::ModelConfig &config)
-{
-  auto ret = std::make_shared<QtNodes::NodeDelegateModelRegistry>();
-
-  ret->registerModel<hesiod::GammaCorrection>(
-      [&config]() { return std::make_unique<hesiod::GammaCorrection>(config); },
-      "Filters");
-
-  ret->registerModel<hesiod::HeightMapToMask>(
-      [&config]() { return std::make_unique<hesiod::HeightMapToMask>(config); },
-      "Converters");
-
-  ret->registerModel<hesiod::Noise>([&config]()
-                                    { return std::make_unique<hesiod::Noise>(config); },
-                                    "Primitives");
-
-  ret->registerModel<hesiod::NoiseFbm>(
-      [&config]() { return std::make_unique<hesiod::NoiseFbm>(config); },
-      "Primitives");
-
-  return ret;
-}
 
 static void set_style()
 {
@@ -66,13 +29,11 @@ static void set_style()
 
 int main(int argc, char *argv[])
 {
+  QApplication app(argc, argv);
+
   QFont font("Roboto");
   font.setPointSize(10);
   QApplication::setFont(font);
-
-  QApplication app(argc, argv);
-
-  // QFont font("Roboto");
 
   app.setStyleSheet(R"(
 QSlider::groove:horizontal { 
@@ -88,85 +49,30 @@ QSlider::handle:horizontal {
 	border-radius: 8px;
 }
 )");
-
   set_style();
 
   hesiod::ModelConfig model_config;
-
-  std::shared_ptr<QtNodes::NodeDelegateModelRegistry> registry = registerDataModels(
-      model_config);
-  hesiod::HsdDataFlowGraphModel model(registry);
-
   model_config.set_shape({1024, 1024});
   model_config.tiling = {4, 4};
 
-  QWidget main_widget;
+  //
+  auto editor = new hesiod::NodeEditorWidget(model_config);
+  editor->show();
 
-  auto   menu_bar = new QMenuBar();
-  QMenu *file = menu_bar->addMenu("File");
-  auto   load_action = file->addAction("Load Scene");
-  auto   save_action = file->addAction("Save Scene");
-  file->addSeparator();
-  auto quit_action = file->addAction("Quit");
-
-  QVBoxLayout *l = new QVBoxLayout(&main_widget);
-
-  l->addWidget(menu_bar);
-  auto scene = new QtNodes::DataFlowGraphicsScene(model, &main_widget);
-
-  auto view = new QtNodes::GraphicsView(scene);
-  l->addWidget(view);
-  l->setContentsMargins(0, 0, 0, 0);
-  l->setSpacing(0);
-
-  QObject::connect(save_action,
-                   &QAction::triggered,
-                   scene,
-                   &QtNodes::DataFlowGraphicsScene::save);
-
-  QObject::connect(load_action,
-                   &QAction::triggered,
-                   scene,
-                   &QtNodes::DataFlowGraphicsScene::load);
-
-  QObject::connect(scene,
-                   &QtNodes::DataFlowGraphicsScene::sceneLoaded,
-                   view,
-                   &QtNodes::GraphicsView::centerScene);
-
-  // QObject::connect(scene,
-  //                  &QtNodes::DataFlowGraphicsScene::nodeClicked,
-  //                  [&scene]()
-  //                  {
-  //                    for (auto &nid : scene->selectedNodes())
-  //                      std::cout << nid << "\n";
-  //                  });
-
-  QObject::connect(scene,
-                   &QtNodes::DataFlowGraphicsScene::nodeContextMenu,
-                   [&model](QtNodes::NodeId const node_id, QPointF const pos)
-                   {
-                     hesiod::BaseNode *p_node = model.delegateModel<hesiod::BaseNode>(
-                         node_id);
-
-                     p_node->context_menu(pos);
-                   });
-
-  QObject::connect(quit_action,
-                   &QAction::triggered,
-                   []()
-                   {
-                     LOG_DEBUG("quitting...");
-                     QApplication::quit();
-                   });
-
-  main_widget.setWindowTitle("Hesiod");
-  main_widget.showNormal();
-
-  hesiod::Viewer2dWidget *viewer2d = new hesiod::Viewer2dWidget(&model_config, scene);
+  hesiod::Viewer2dWidget *viewer2d = new hesiod::Viewer2dWidget(&model_config,
+                                                                editor->get_scene_ref());
   viewer2d->show();
 
-  // ---
+  // //
+  // auto editor2 = new hesiod::NodeEditorWidget(model_config);
+  // editor2->show();
+
+  // hesiod::Viewer2dWidget *viewer2d2 = new hesiod::Viewer2dWidget(
+  //     &model_config,
+  //     editor2->get_scene_ref());
+  // viewer2d2->show();
+
+  // --- WIDGET TESTING
   std::map<std::string, std::unique_ptr<hesiod::Attribute>> attr = {};
 
   attr["somme choice"] = NEW_ATTR_BOOL(false, "toto");
@@ -181,34 +87,7 @@ QSlider::handle:horizontal {
   hesiod::AttributesWidget *sw = new hesiod::AttributesWidget(&attr);
   // sw->show();
 
-  // std::unique_ptr<hesiod::FilenameAttribute> attr = NEW_ATTR_FILENAME("export.png",
-  //                                                                     "PNG Files
-  //                                                                     (*.png)", "Open
-  //                                                                     toto");
-  // hesiod::FilenameWidget                    *sw = new
-  // hesiod::FilenameWidget(attr.get()); sw->show(); QObject::connect(sw,
-  //                  &hesiod::FilenameWidget::value_changed,
-  //                  [&attr]() { LOG_DEBUG("file: %s", attr->value.c_str()); });
-
   // ---
-
-  // QWidget window;
-  // window.setWindowTitle("Viewer 2D");
-  // QVBoxLayout       *layout = new QVBoxLayout(&window);
-  // hesiod::Viewer2dWidget *viewer2d = new hesiod::Viewer2dWidget(&model_config, scene);
-  // layout->addWidget((QWidget *)viewer2d);
-  // // QObject::connect(scene,
-  // //                  &QtNodes::DataFlowGraphicsScene::nodeSelected,
-  // //                  viewer2d,
-  // //                  &hesiod::Viewer2dWidget::update_viewport);
-  // window.show();
-
-  // // TODO find a way to empty the editor when there are no more nodes
-  // // selected
-  // QObject::connect(scene,
-  //                  &QtNodes::DataFlowGraphicsScene::nodeSelected,
-  //                  [&model, &scene, &settings_dialog]()
-  //                  { settings_dialog.update_layout(model, scene->selectedNodes()); });
 
   return app.exec();
 }
