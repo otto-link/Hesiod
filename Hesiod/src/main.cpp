@@ -3,6 +3,7 @@
  * this software. */
 typedef unsigned int uint;
 #include <QApplication>
+#include <QDebug>
 
 #include "highmap/vector.hpp"
 #include "macrologger.h"
@@ -20,10 +21,26 @@ static void set_style()
   QtNodes::ConnectionStyle::setConnectionStyle(
       R"(
   {
-    "ConnectionStyle": {
-      "UseDataDefinedColors": true
-    }
+  "GraphicsViewStyle": {
+    "BackgroundColor": [255, 0, 0],
+    "FineGridColor": [68, 71, 90],
+    "CoarseGridColor": [88, 91, 45]
+    },
+  "ConnectionStyle": {
+    "ConstructionColor": "gray",
+    "NormalColor": "darkcyan",
+    "SelectedColor": [100, 100, 100],
+    "SelectedHaloColor": "orange",
+    "HoveredColor": "lightcyan",
+
+    "LineWidth": 1.0,
+    "ConstructionLineWidth": 3.0,
+    "PointDiameter": 10.0,
+
+    "UseDataDefinedColors": true
   }
+
+}
   )");
 }
 
@@ -31,24 +48,44 @@ int main(int argc, char *argv[])
 {
   QApplication app(argc, argv);
 
+  // QString appStyleSheet = qApp->styleSheet();
+  // qDebug() << "Application StyleSheet:" << appStyleSheet;
+
   QFont font("Roboto");
   font.setPointSize(10);
   app.setFont(font);
 
   app.setStyleSheet(R"(
+* {
+    font-family: Roboto, sans-serif;
+    color: #ECEFF4;
+}
+
+QMainWindow {
+    background-color: #2E2E2E;
+}
+
+QWidget {
+    background-color: #2E2E2E;
+}
+
 QSlider::groove:horizontal { 
-	background: #C9CDD0;
+	background: #D8DEE9;
 	height: 16px; 
 	border-radius: 4px;
 }
 
 QSlider::handle:horizontal { 
-	background-color: #51A0D5; 
+	background-color: #81A1C1; 
 	width: 16px; 
 	height: 16px; 
 	border-radius: 8px;
 }
+
+
+
 )");
+
   set_style();
 
   hesiod::ModelConfig model_config;
