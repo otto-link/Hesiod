@@ -45,9 +45,8 @@ Viewer2dWidget::Viewer2dWidget(ModelConfig                    *p_config,
   // --- build up layout
   this->setWindowTitle("Viewer 2D");
 
-  this->layout = new QVBoxLayout(this);
-  this->layout->setSpacing(0);
-  this->layout->setContentsMargins(0, 0, 0, 0);
+  QGridLayout *layout = new QGridLayout(this);
+  // layout->setSpacing(0);
 
   // colormap choice
   {
@@ -56,7 +55,7 @@ Viewer2dWidget::Viewer2dWidget(ModelConfig                    *p_config,
     for (auto &[key, dummy] : cmap_map)
       this->combobox_cmap->addItem(key.c_str());
     this->combobox_cmap->setCurrentText("magma");
-    layout->addWidget(this->combobox_cmap);
+    layout->addWidget(this->combobox_cmap, 0, 0);
 
     connect(this->combobox_cmap,
             QOverload<int>::of(&QComboBox::currentIndexChanged),
@@ -68,7 +67,7 @@ Viewer2dWidget::Viewer2dWidget(ModelConfig                    *p_config,
   {
     this->checkbox_hillshade = new QCheckBox("Hillshading");
     this->checkbox_hillshade->setChecked(false);
-    layout->addWidget(this->checkbox_hillshade);
+    layout->addWidget(this->checkbox_hillshade, 0, 1);
 
     connect(this->checkbox_hillshade,
             &QCheckBox::stateChanged,
@@ -80,7 +79,7 @@ Viewer2dWidget::Viewer2dWidget(ModelConfig                    *p_config,
   {
     this->checkbox_pin_node = new QCheckBox("Pin current node");
     this->checkbox_pin_node->setChecked(false);
-    layout->addWidget(this->checkbox_pin_node);
+    layout->addWidget(this->checkbox_pin_node, 0, 2);
   }
 
   // image itself
@@ -88,7 +87,7 @@ Viewer2dWidget::Viewer2dWidget(ModelConfig                    *p_config,
     this->setMinimumSize(512, 512); // TODO
     this->label_image = new QLabel();
     this->label_image->resize(512, 512);
-    layout->addWidget(this->label_image);
+    layout->addWidget(this->label_image, 2, 0, 1, 3);
   }
 
   this->setLayout(layout);

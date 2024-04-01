@@ -39,7 +39,6 @@ AttributesWidget::AttributesWidget(
 
   for (auto &key : attr_key_queue)
   {
-    LOG_DEBUG("key: %s", key.c_str());
     if (key == "_SEPARATOR_")
     {
       QFrame *line = new QFrame;
@@ -177,8 +176,6 @@ AttributesWidget::AttributesWidget(
 
     row++;
   }
-
-  LOG_DEBUG("%d %d", count, (int)this->p_attr_map->size());
 
   if (check_count && count != (int)this->p_attr_map->size())
   {

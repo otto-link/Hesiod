@@ -59,27 +59,27 @@ int main(int argc, char *argv[])
 
 QSlider::groove:horizontal { 
 	background: #D8DEE9;
-	height: 16px; 
+	height: 24px; 
 	border-radius: 4px;
 }
 
 QSlider::handle:horizontal { 
 	background-color: #81A1C1; 
-	width: 16px; 
-	height: 16px; 
+	width: 24px; 
+	height: 24px; 
 	border-radius: 8px;
 }
 
 QSlider::groove:vertical { 
 	background: #D8DEE9;
-	width: 16px; 
+	width: 24px; 
 	border-radius: 4px;
 }
 
 QSlider::handle:vertical { 
 	background-color: #81A1C1; 
-	width: 16px; 
-	height: 16px; 
+	width: 24px; 
+	height: 24px; 
 	border-radius: 8px;
 }
 

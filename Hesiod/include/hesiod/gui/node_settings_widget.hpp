@@ -21,43 +21,29 @@
 namespace hesiod
 {
 
-class Viewer2dWidget : public QWidget
+class NodeSettingsWidget : public QWidget
 {
   Q_OBJECT
 
 public:
-  Viewer2dWidget() = default;
+  NodeSettingsWidget() = default;
 
-  Viewer2dWidget(ModelConfig                    *p_config,
-                 QtNodes::DataFlowGraphicsScene *p_scene,
-                 QWidget                        *parent = nullptr);
-
-Q_SIGNALS:
-  void resized(int width, int height);
+  NodeSettingsWidget(QtNodes::DataFlowGraphicsScene *p_scene, QWidget *parent = nullptr);
 
 public Q_SLOTS:
-  void update_after_computing(QtNodes::NodeId const node_id);
+  // void update_after_computing(QtNodes::NodeId const node_id);
 
-  void update_label_image();
-
-  void update_viewport(QtNodes::NodeId const nodeId);
-
-protected:
-  void resizeEvent(QResizeEvent *event) override;
+  void update_layout(QtNodes::NodeId const nodeId);
 
 private:
-  ModelConfig                    *p_config;
   QtNodes::DataFlowGraphicsScene *p_scene;
   HsdDataFlowGraphModel          *p_model;
   QWidget                        *parent;
 
-  QtNodes::NodeId    current_node_id = -1;
-  QtNodes::NodeData *p_data = nullptr;
+  QtNodes::NodeId current_node_id = -1;
 
-  QComboBox *combobox_cmap;
-  QCheckBox *checkbox_hillshade;
-  QCheckBox *checkbox_pin_node;
-  QLabel    *label_image;
+  QVBoxLayout *layout;
+  QCheckBox   *checkbox_pin_node;
 };
 
 } // namespace hesiod

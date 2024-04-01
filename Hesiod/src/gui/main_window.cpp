@@ -17,6 +17,7 @@
 
 #include "hesiod/gui/main_window.hpp"
 #include "hesiod/gui/node_editor_widget.hpp"
+#include "hesiod/gui/node_settings_widget.hpp"
 #include "hesiod/model/model_config.hpp"
 
 namespace hesiod
@@ -40,28 +41,25 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
 
   QHBoxLayout *layout = new QHBoxLayout(central_widget);
 
-  {
-    QTabWidget *tab = new QTabWidget();
+  QTabWidget *tab = new QTabWidget();
 
-    auto editor = new NodeEditorWidget(model_config);
-    tab->addTab(editor, "Node editor");
-
-    layout->addWidget(tab);
-  }
+  auto editor = new NodeEditorWidget(model_config);
+  tab->addTab(editor, "Node editor");
+  layout->addWidget(tab);
 
   this->setCentralWidget(central_widget);
 
-  //
-
   // Create a dock widget
-  QDockWidget *dock_settings = new QDockWidget("floating window title", this);
+  QDockWidget *dock_settings = new QDockWidget("Node settings", this);
   dock_settings->setAllowedAreas(Qt::AllDockWidgetAreas);
   dock_settings->setFeatures(QDockWidget::DockWidgetMovable |
                              QDockWidget::DockWidgetFloatable);
 
   // Add some content to the dock widget
-  QLabel *dockLabel = new QLabel("Dock Widget Content", dock_settings);
-  dock_settings->setWidget(dockLabel);
+  NodeSettingsWidget *node_settings_widget = new NodeSettingsWidget(
+      editor->get_scene_ref());
+
+  dock_settings->setWidget(node_settings_widget);
   dock_settings->setObjectName("dock_settings");
   dock_settings->setMinimumWidth(300);
 
