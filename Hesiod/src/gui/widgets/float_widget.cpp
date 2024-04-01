@@ -19,8 +19,10 @@ FloatWidget::FloatWidget(FloatAttribute *p_attr) : p_attr(p_attr)
   this->slider->setRange(0, HSD_SLIDER_STEPS);
   this->slider->setSingleStep(0);
   this->slider->setPageStep(0);
-  int pos = (int)(HSD_SLIDER_STEPS * (this->p_attr->value - this->p_attr->vmin) /
-                  (this->p_attr->vmax - this->p_attr->vmin));
+  int pos = float_to_slider_pos(this->p_attr->value,
+                                this->p_attr->vmin,
+                                this->p_attr->vmax,
+                                HSD_SLIDER_STEPS);
   this->slider->setValue(pos);
   layout->addWidget(this->slider);
 
@@ -48,9 +50,10 @@ FloatWidget::FloatWidget(FloatAttribute *p_attr) : p_attr(p_attr)
 
 void FloatWidget::update_attribute()
 {
-  this->p_attr->value = this->p_attr->vmin +
-                        (float)this->slider->value() / HSD_SLIDER_STEPS *
-                            (this->p_attr->vmax - this->p_attr->vmin);
+  this->p_attr->value = slider_pos_to_float(this->slider->value(),
+                                            this->p_attr->vmin,
+                                            this->p_attr->vmax,
+                                            HSD_SLIDER_STEPS);
   this->label->setText(
       QString().asprintf(this->p_attr->fmt.c_str(), this->p_attr->value));
   Q_EMIT this->value_changed();

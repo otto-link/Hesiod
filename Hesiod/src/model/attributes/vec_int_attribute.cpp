@@ -12,6 +12,11 @@ VecIntAttribute::VecIntAttribute() {}
 
 VecIntAttribute::VecIntAttribute(std::vector<int> value) : value(value) {}
 
+VecIntAttribute::VecIntAttribute(std::vector<int> value, int vmin, int vmax)
+    : value(value), vmin(vmin), vmax(vmax)
+{
+}
+
 std::vector<int> VecIntAttribute::get() { return value; }
 
 } // namespace hesiod

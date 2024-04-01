@@ -16,7 +16,7 @@
 #include <memory>
 #include <stdexcept>
 
-#include <QJsonArray>
+// #include <QJsonArray>
 #include <QJsonObject>
 
 #include "highmap/geometry.hpp"
@@ -183,25 +183,16 @@ public:
   QJsonObject save() const override
   {
     QJsonObject model_json;
+    model_json["value"] = model_json["value"] = std_vector_float_to_qjsonarray(
+        this->value);
 
-    QJsonArray json_array;
-    for (const float &v : this->value)
-      json_array.append(v);
-
-    model_json["value"] = json_array;
     return model_json;
   }
 
   void load(QJsonObject const &p) override
   {
     bool ret = true;
-
-    this->value.clear();
-    QJsonArray json_array = p["value"].toArray();
-    for (const QJsonValue &v : json_array)
-    {
-      this->value.push_back((float)v.toDouble());
-    }
+    ret &= convert_qjsonvalue_to_vector_float(p["value"], this->value);
 
     if (!ret)
       LOG_ERROR("serialization in with ColorAttribute");
@@ -451,7 +442,7 @@ public:
   hmap::Vec2<int> value_max = {0, 0};
 };
 
-class VecFloatAttribute : public Attribute
+class VecFloatAttribute : public Attribute // OK JSON GUI
 {
 public:
   VecFloatAttribute();
@@ -462,21 +453,66 @@ public:
   std::vector<float> get();
   AttributeType      get_type() { return AttributeType::VEC_FLOAT; }
 
+  QJsonObject save() const override
+  {
+    QJsonObject model_json;
+    model_json["value"] = std_vector_float_to_qjsonarray(this->value);
+    model_json["vmin"] = QString::number(this->vmin);
+    model_json["vmax"] = QString::number(this->vmax);
+    model_json["fmt"] = QString::fromStdString(this->fmt);
+    return model_json;
+  }
+
+  void load(QJsonObject const &p) override
+  {
+    bool ret = true;
+    ret &= convert_qjsonvalue_to_vector_float(p["value"], this->value);
+    ret &= convert_qjsonvalue_to_float(p["vmin"], this->vmin);
+    ret &= convert_qjsonvalue_to_float(p["vmax"], this->vmax);
+    ret &= convert_qjsonvalue_to_string(p["fmt"], this->fmt);
+
+    if (!ret)
+      LOG_ERROR("serialization in with WaveNbAttribute");
+  }
+
   std::vector<float> value = {};
   float              vmin = 0.1f;
   float              vmax = 64.f;
   std::string        fmt = "%.2f";
 };
 
-class VecIntAttribute : public Attribute
+class VecIntAttribute : public Attribute // OK JSON GUI
 {
 public:
   VecIntAttribute();
   VecIntAttribute(std::vector<int> value);
+  VecIntAttribute(std::vector<int> value, int vmin, int vmax);
   std::vector<int> get();
   AttributeType    get_type() { return AttributeType::VEC_INT; }
 
+  QJsonObject save() const override
+  {
+    QJsonObject model_json;
+    model_json["value"] = std_vector_int_to_qjsonarray(this->value);
+    model_json["vmin"] = QString::number(this->vmin);
+    model_json["vmax"] = QString::number(this->vmax);
+    return model_json;
+  }
+
+  void load(QJsonObject const &p) override
+  {
+    bool ret = true;
+    ret &= convert_qjsonvalue_to_vector_int(p["value"], this->value);
+    ret &= convert_qjsonvalue_to_int(p["vmin"], this->vmin);
+    ret &= convert_qjsonvalue_to_int(p["vmax"], this->vmax);
+
+    if (!ret)
+      LOG_ERROR("serialization in with WaveNbAttribute");
+  }
+
   std::vector<int> value = {};
+  int              vmin = 0;
+  int              vmax = 64;
 };
 
 class WaveNbAttribute : public Attribute // OK JSON GUI

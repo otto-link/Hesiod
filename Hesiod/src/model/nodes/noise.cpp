@@ -20,6 +20,12 @@ Noise::Noise(const ModelConfig &config) : BaseNode(config)
   this->input_captions = {"dx", "dy", "envelope"};
   this->output_captions = {"output"};
 
+  std::vector<float> v = {1.f, 2.f, 3.f, 4.f};
+  this->attr["vector"] = NEW_ATTR_VECFLOAT(v, -1.f, 10.f, "%.2f");
+
+  std::vector<int> vi = {4, 5, 6, 7};
+  this->attr["vint"] = NEW_ATTR_VECINT(vi, 0, 64);
+
   this->attr["noise_type"] = NEW_ATTR_MAPENUM(noise_type_map);
   this->attr["kw"] = NEW_ATTR_WAVENB();
   this->attr["seed"] = NEW_ATTR_SEED();
@@ -28,7 +34,9 @@ Noise::Noise(const ModelConfig &config) : BaseNode(config)
   this->attr["remap"] = NEW_ATTR_BOOL(true);
   this->attr["remap_range"] = NEW_ATTR_RANGE();
 
-  this->attr_ordered_key = {"noise_type",
+  this->attr_ordered_key = {"vector",
+                            "vint",
+                            "noise_type",
                             "_SEPARATOR_",
                             "kw",
                             "seed",

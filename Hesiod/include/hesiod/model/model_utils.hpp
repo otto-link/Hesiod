@@ -13,6 +13,7 @@
  *
  */
 #pragma once
+#include <QJsonArray>
 
 #include "highmap/heightmap.hpp"
 
@@ -28,6 +29,14 @@ bool convert_qjsonvalue_to_int(QJsonValue v, int &out);
 bool convert_qjsonvalue_to_uint(QJsonValue v, uint &out);
 
 bool convert_qjsonvalue_to_string(QJsonValue v, std::string &out);
+
+bool convert_qjsonvalue_to_vector_float(QJsonValue v, std::vector<float> &out);
+
+bool convert_qjsonvalue_to_vector_int(QJsonValue v, std::vector<int> &out);
+
+QJsonArray std_vector_float_to_qjsonarray(const std::vector<float> &vector);
+
+QJsonArray std_vector_int_to_qjsonarray(const std::vector<int> &vector);
 
 /**
  * @brief

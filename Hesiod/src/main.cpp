@@ -73,6 +73,19 @@ QSlider::handle:horizontal {
 	border-radius: 8px;
 }
 
+QSlider::groove:vertical { 
+	background: #D8DEE9;
+	width: 16px; 
+	border-radius: 4px;
+}
+
+QSlider::handle:vertical { 
+	background-color: #81A1C1; 
+	width: 16px; 
+	height: 16px; 
+	border-radius: 8px;
+}
+
 )");
 
   set_style();
@@ -116,8 +129,11 @@ QSlider::handle:horizontal {
   attr["file"] = NEW_ATTR_FILENAME("export.png", "PNG Files(*.png)", "Open toto");
   attr["color"] = NEW_ATTR_COLOR();
 
+  std::vector<int> vi = {4, 5, 6, 7};
+  attr["vint"] = NEW_ATTR_VECINT(vi, 0, 64);
+
   hesiod::AttributesWidget *sw = new hesiod::AttributesWidget(&attr);
-  // sw->show();
+  sw->show();
 
   // ---
 

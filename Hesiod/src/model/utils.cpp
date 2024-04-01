@@ -89,4 +89,46 @@ bool convert_qjsonvalue_to_string(QJsonValue v, std::string &out)
   return false;
 }
 
+bool convert_qjsonvalue_to_vector_float(QJsonValue v, std::vector<float> &out)
+{
+  if (!v.isUndefined())
+  {
+    out.clear();
+    QJsonArray json_array = v.toArray();
+    for (const QJsonValue &x : json_array)
+      out.push_back((float)x.toDouble());
+    return true;
+  }
+  return false;
+}
+
+bool convert_qjsonvalue_to_vector_int(QJsonValue v, std::vector<int> &out)
+{
+  if (!v.isUndefined())
+  {
+    out.clear();
+    QJsonArray json_array = v.toArray();
+    for (const QJsonValue &x : json_array)
+      out.push_back((int)x.toDouble());
+    return true;
+  }
+  return false;
+}
+
+QJsonArray std_vector_float_to_qjsonarray(const std::vector<float> &vector)
+{
+  QJsonArray json_array;
+  for (const float &v : vector)
+    json_array.append(v);
+  return json_array;
+}
+
+QJsonArray std_vector_int_to_qjsonarray(const std::vector<int> &vector)
+{
+  QJsonArray json_array;
+  for (const int &v : vector)
+    json_array.append(v);
+  return json_array;
+}
+
 } // namespace hesiod

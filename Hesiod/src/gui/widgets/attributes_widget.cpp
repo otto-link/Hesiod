@@ -138,6 +138,26 @@ AttributesWidget::AttributesWidget(
       }
       break;
 
+      case (AttributeType::VEC_FLOAT):
+      {
+        VecFloatWidget *widget = new VecFloatWidget((VecFloatAttribute *)p_attr);
+        connect(widget,
+                &VecFloatWidget::value_changed,
+                [this]() { Q_EMIT this->value_changed(); });
+        layout->addWidget(widget, row, 1);
+      }
+      break;
+
+      case (AttributeType::VEC_INT):
+      {
+        VecIntWidget *widget = new VecIntWidget((VecIntAttribute *)p_attr);
+        connect(widget,
+                &VecIntWidget::value_changed,
+                [this]() { Q_EMIT this->value_changed(); });
+        layout->addWidget(widget, row, 1);
+      }
+      break;
+
       case (AttributeType::WAVE_NB):
       {
         WaveNbWidget *widget = new WaveNbWidget((WaveNbAttribute *)p_attr);
@@ -161,8 +181,11 @@ AttributesWidget::AttributesWidget(
   LOG_DEBUG("%d %d", count, (int)this->p_attr_map->size());
 
   if (check_count && count != (int)this->p_attr_map->size())
+  {
+    LOG_ERROR("missing attributes in AttributesWidget (check attr_ordered_key)");
     throw std::runtime_error(
         "missing attributes in AttributesWidget (check attr_ordered_key)");
+  }
 
   // as a last resort, for empty "settings"
   if (p_attr_map->size() == 0)

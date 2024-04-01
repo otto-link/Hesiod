@@ -205,6 +205,46 @@ private:
   void update_attribute();
 };
 
+class VecFloatWidget : public QWidget
+{
+  Q_OBJECT
+
+public:
+  VecFloatWidget() = default;
+
+  VecFloatWidget(VecFloatAttribute *p_attr);
+
+Q_SIGNALS:
+  void value_changed();
+
+private:
+  VecFloatAttribute     *p_attr;
+  std::vector<QLabel *>  labels = {};
+  std::vector<QSlider *> sliders = {};
+
+  void update_attribute();
+};
+
+class VecIntWidget : public QWidget
+{
+  Q_OBJECT
+
+public:
+  VecIntWidget() = default;
+
+  VecIntWidget(VecIntAttribute *p_attr);
+
+Q_SIGNALS:
+  void value_changed();
+
+private:
+  VecIntAttribute       *p_attr;
+  std::vector<QLabel *>  labels = {};
+  std::vector<QSlider *> sliders = {};
+
+  void update_attribute();
+};
+
 class WaveNbWidget : public QWidget
 {
   Q_OBJECT
