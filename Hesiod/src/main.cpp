@@ -5,11 +5,11 @@ typedef unsigned int uint;
 #include <QApplication>
 #include <QDebug>
 
-#include "highmap/vector.hpp"
+#include <QtNodes/ConnectionStyle>
+
 #include "macrologger.h"
 
-#include "hesiod/gui/node_editor_widget.hpp"
-#include "hesiod/gui/viewer2d_widget.hpp"
+#include "hesiod/gui/main_window.hpp"
 
 // for testing - TO REMOVE
 #include "hesiod/gui/widgets.hpp"
@@ -47,9 +47,6 @@ static void set_style()
 int main(int argc, char *argv[])
 {
   QApplication app(argc, argv);
-
-  // QString appStyleSheet = qApp->styleSheet();
-  // qDebug() << "Application StyleSheet:" << appStyleSheet;
 
   QFont font("Roboto");
   font.setPointSize(10);
@@ -90,13 +87,18 @@ QSlider::handle:vertical {
 
   set_style();
 
-  hesiod::ModelConfig model_config;
-  model_config.set_shape({1024, 1024});
-  model_config.tiling = {4, 4};
+  // hesiod::ModelConfig model_config;
+  // model_config.set_shape({1024, 1024});
+  // model_config.tiling = {4, 4};
 
-  //
-  auto editor = new hesiod::NodeEditorWidget(model_config);
-  editor->show();
+  // //
+  // auto editor = new hesiod::NodeEditorWidget(model_config);
+  // editor->show();
+
+  // --- main window
+
+  hesiod::MainWindow main_window(&app);
+  main_window.show();
 
   // QObject::connect(editor,
   //                  &hesiod::NodeEditorWidget::computingFinished,
