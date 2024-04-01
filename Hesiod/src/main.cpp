@@ -133,7 +133,7 @@ QSlider::handle:vertical {
   attr["vint"] = NEW_ATTR_VECINT(vi, 0, 64);
 
   hesiod::AttributesWidget *sw = new hesiod::AttributesWidget(&attr);
-  sw->show();
+  // sw->show();
 
   // ---
 

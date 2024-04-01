@@ -12,10 +12,10 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
 {
   auto ret = std::make_shared<QtNodes::NodeDelegateModelRegistry>();
 
-  HSD_REGISTER_NODE(hesiod::GammaCorrection, "Filters");
-  HSD_REGISTER_NODE(hesiod::HeightMapToMask, "Converters");
-  HSD_REGISTER_NODE(hesiod::Noise, "Primitives");
-  HSD_REGISTER_NODE(hesiod::NoiseFbm, "Primitives");
+  HSD_REGISTER_NODE(hesiod::GammaCorrection, "Filter");
+  HSD_REGISTER_NODE(hesiod::HeightMapToMask, "Converter");
+  HSD_REGISTER_NODE(hesiod::Noise, "Primitive");
+  HSD_REGISTER_NODE(hesiod::NoiseFbm, "Primitive");
 
   return ret;
 }
