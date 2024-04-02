@@ -29,6 +29,7 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
   hesiod::ModelConfig model_config;
   model_config.set_shape({1024, 1024});
   model_config.tiling = {4, 4};
+  model_config.overlap = 0.25f;
 
   this->setWindowTitle(tr("Hesiod"));
   this->restore_state();

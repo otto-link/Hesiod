@@ -126,4 +126,26 @@ protected:
   std::shared_ptr<HeightMapData> out;
 };
 
+/**
+ * @brief SmoothCpulse class.
+ */
+class SmoothCpulse : public BaseNode
+{
+public:
+  SmoothCpulse(const ModelConfig &config);
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(
+      QtNodes::PortIndex /* port_index */) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data,
+                 QtNodes::PortIndex                 port_index) override;
+
+protected:
+  std::weak_ptr<HeightMapData>   in;
+  std::weak_ptr<MaskData>        mask;
+  std::shared_ptr<HeightMapData> out;
+};
+
 } // namespace hesiod
