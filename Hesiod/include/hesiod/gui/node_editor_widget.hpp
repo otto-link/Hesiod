@@ -31,10 +31,17 @@ public:
 
   QtNodes::DataFlowGraphicsScene *get_scene_ref() { return this->scene.get(); }
 
+  Viewer2dWidget *get_viewer2d_ref() { return this->viewer2d.get(); }
+
 Q_SIGNALS:
   void computingStarted(QtNodes::NodeId const node_id);
 
   void computingFinished(QtNodes::NodeId const node_id);
+
+public Q_SLOTS:
+  void load() { this->get_scene_ref()->load(); }
+
+  void save() { this->get_scene_ref()->save(); }
 
 private:
   std::unique_ptr<hesiod::HsdDataFlowGraphModel>  model;

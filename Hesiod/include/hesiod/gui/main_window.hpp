@@ -4,6 +4,8 @@
 #pragma once
 #include <QMainWindow>
 
+#include "hesiod/gui/node_editor_widget.hpp"
+
 namespace hesiod
 {
 
@@ -17,20 +19,18 @@ public:
   ~MainWindow() override;
 
 protected:
-  void create_menu_bar();
-
-  void create_status_bar();
-
   void restore_state();
+
+  void save_state();
 
   void set_status_bar_message(std::string msg);
 
   void show_about();
 
-  void save_state();
-
 private:
   void closeEvent(QCloseEvent *event) override;
+
+  NodeEditorWidget *node_editor_widget;
 };
 
 } // namespace hesiod

@@ -31,21 +31,42 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
   model_config.tiling = {4, 4};
 
   this->setWindowTitle(tr("Hesiod"));
-  this->create_status_bar();
   this->restore_state();
 
-  // layout
-  this->create_menu_bar();
+  // --- menu bar
+  auto *load_action = new QAction("&Load", this);
+  load_action->setShortcut(tr("CTRL+O"));
+
+  auto *save_action = new QAction("&Save", this);
+  save_action->setShortcut(tr("CTRL+S"));
+
+  auto *quit = new QAction("&Quit", this);
+  quit->setShortcut(tr("CTRL+Q"));
+
+  auto *about = new QAction("&About", this);
+
+  QMenu *file = menuBar()->addMenu("&File");
+  file->addAction(load_action);
+  file->addAction(save_action);
+  file->addSeparator();
+  file->addAction(quit);
+
+  QMenu   *view_menu = menuBar()->addMenu("View");
+  QAction *view2d_action = view_menu->addAction("Add 2D view");
+  view2d_action->setCheckable(true);
+  view_menu->addAction(view2d_action);
+
+  QMenu *help = menuBar()->addMenu("&Help");
+  help->addAction(about);
+
+  // --- widgets
 
   QWidget *central_widget = new QWidget(this);
 
   QHBoxLayout *layout = new QHBoxLayout(central_widget);
 
-  QTabWidget *tab = new QTabWidget();
-
-  auto editor = new NodeEditorWidget(model_config);
-  tab->addTab(editor, "Node editor");
-  layout->addWidget(tab);
+  this->node_editor_widget = new NodeEditorWidget(model_config);
+  layout->addWidget(this->node_editor_widget);
 
   this->setCentralWidget(central_widget);
 
@@ -57,21 +78,46 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
 
   // Add some content to the dock widget
   NodeSettingsWidget *node_settings_widget = new NodeSettingsWidget(
-      editor->get_scene_ref());
+      this->node_editor_widget->get_scene_ref());
 
   dock_settings->setWidget(node_settings_widget);
   dock_settings->setObjectName("dock_settings");
   dock_settings->setMinimumWidth(300);
 
-  // dock_settings->setWindowFlags(Qt::Window);
-
-  // QLabel *title_label = new QLabel("Some title", dock_settings);
-  // dock_settings->setTitleBarWidget(title_label);
-
   // Add the dock widget to the main window
   this->addDockWidget(Qt::RightDockWidgetArea, dock_settings);
 
   // --- connections
+
+  QObject::connect(load_action,
+                   &QAction::triggered,
+                   this->node_editor_widget,
+                   &NodeEditorWidget::load);
+
+  QObject::connect(save_action,
+                   &QAction::triggered,
+                   this->node_editor_widget,
+                   &NodeEditorWidget::save);
+
+  QObject::connect(view2d_action,
+                   &QAction::toggled,
+                   [this, view2d_action]()
+                   {
+                     if (view2d_action->isChecked())
+                       this->node_editor_widget->get_viewer2d_ref()->show();
+                     else
+                       this->node_editor_widget->get_viewer2d_ref()->hide();
+                   });
+
+  connect(quit,
+          &QAction::triggered,
+          []()
+          {
+            LOG_DEBUG("quitting...");
+            QApplication::quit();
+          });
+
+  connect(about, &QAction::triggered, this, &MainWindow::show_about);
 
   QObject::connect(p_app, &QApplication::aboutToQuit, [&]() { this->save_state(); });
 }
@@ -88,35 +134,6 @@ void MainWindow::closeEvent(QCloseEvent *event)
   else
     event->ignore();
 }
-
-void MainWindow::create_menu_bar()
-{
-  // auto *preferences = new QAction("&Preferences", this);
-  auto *quit = new QAction("&Quit", this);
-  quit->setShortcut(tr("CTRL+Q"));
-
-  auto *about = new QAction("&About", this);
-
-  QMenu *file = menuBar()->addMenu("&File");
-  // file->addAction(preferences);
-  // file->addSeparator();
-  file->addAction(quit);
-
-  QMenu *help = menuBar()->addMenu("&Help");
-  help->addAction(about);
-
-  connect(quit,
-          &QAction::triggered,
-          []()
-          {
-            LOG_DEBUG("quitting...");
-            QApplication::quit();
-          });
-
-  connect(about, &QAction::triggered, this, &MainWindow::show_about);
-}
-
-void MainWindow::create_status_bar() { this->statusBar()->showMessage(tr("Ready")); }
 
 void MainWindow::restore_state()
 {

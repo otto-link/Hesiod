@@ -34,16 +34,16 @@ NodeEditorWidget::NodeEditorWidget(hesiod::ModelConfig model_config,
 
   // --- menu bar
 
-  QMenuBar *menu_bar = new QMenuBar();
-  QMenu    *file = menu_bar->addMenu("File");
-  QAction  *load_action = file->addAction("Load Scene");
-  QAction  *save_action = file->addAction("Save Scene");
+  // QMenuBar *menu_bar = new QMenuBar();
+  // QMenu    *file = menu_bar->addMenu("File");
+  // QAction  *load_action = file->addAction("Load Scene");
+  // QAction  *save_action = file->addAction("Save Scene");
 
-  QMenu   *view_menu = menu_bar->addMenu("View");
-  QAction *view2d_action = view_menu->addAction("Add 2D view");
-  view2d_action->setCheckable(true);
+  // QMenu   *view_menu = menu_bar->addMenu("View");
+  // QAction *view2d_action = view_menu->addAction("Add 2D view");
+  // view2d_action->setCheckable(true);
 
-  layout->addWidget(menu_bar);
+  // layout->addWidget(menu_bar);
 
   // --- QtNode editor widget
 
@@ -59,30 +59,30 @@ NodeEditorWidget::NodeEditorWidget(hesiod::ModelConfig model_config,
 
   // --- connections
 
-  QObject::connect(load_action,
-                   &QAction::triggered,
-                   this->get_scene_ref(),
-                   &QtNodes::DataFlowGraphicsScene::load);
+  // QObject::connect(load_action,
+  //                  &QAction::triggered,
+  //                  this,
+  //                  &NodeEditorWidget::load);
+
+  // QObject::connect(save_action,
+  //                  &QAction::triggered,
+  //                  this,
+  //                  &NodeEditorWidget::save);
+
+  // QObject::connect(view2d_action,
+  //                  &QAction::toggled,
+  //                  [this, view2d_action]()
+  //                  {
+  //                    if (view2d_action->isChecked())
+  //                      this->viewer2d.get()->show();
+  //                    else
+  //                      this->viewer2d.get()->hide();
+  //                  });
 
   QObject::connect(this->get_scene_ref(),
                    &QtNodes::DataFlowGraphicsScene::sceneLoaded,
                    view,
                    &QtNodes::GraphicsView::centerScene);
-
-  QObject::connect(save_action,
-                   &QAction::triggered,
-                   this->get_scene_ref(),
-                   &QtNodes::DataFlowGraphicsScene::save);
-
-  QObject::connect(view2d_action,
-                   &QAction::toggled,
-                   [this, view2d_action]()
-                   {
-                     if (view2d_action->isChecked())
-                       this->viewer2d.get()->show();
-                     else
-                       this->viewer2d.get()->hide();
-                   });
 
   QObject::connect(
       this->get_scene_ref(),
