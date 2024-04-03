@@ -9,6 +9,7 @@
 #include "highmap/io.hpp"
 #include "macrologger.h"
 
+#include "hesiod/data/cloud_data.hpp"
 #include "hesiod/data/heightmap_data.hpp"
 #include "hesiod/data/mask_data.hpp"
 #include "hesiod/gui/preview.hpp"
@@ -26,7 +27,29 @@ Preview::Preview(const ModelConfig *p_config, QtNodes::NodeData *p_data)
 
 void Preview::update_image()
 {
-  if (this->p_data->type().id.compare("HeightMapData") == 0)
+  if (this->p_data->type().id.compare("CloudData") == 0)
+  {
+    CloudData  *p_cdata = static_cast<CloudData *>(this->p_data);
+    hmap::Cloud cloud = *static_cast<hmap::Cloud *>(p_cdata->get_ref());
+    hmap::Array array = hmap::Array(this->p_config->shape_preview);
+
+    if (cloud.get_npoints() > 0)
+    {
+      hmap::Vec4<float> bbox = hmap::Vec4<float>(0.f, 1.f, 0.f, 1.f);
+      cloud.set_values(1.f);
+      cloud.to_array(array, bbox);
+    }
+
+    std::vector<uint8_t> img = hmap::colorize_grayscale(array);
+    QImage               preview_image = QImage(img.data(),
+                                  this->p_config->shape_preview.x,
+                                  this->p_config->shape_preview.y,
+                                  QImage::Format_Grayscale8);
+
+    this->label->setPixmap(QPixmap::fromImage(preview_image));
+  }
+  //
+  else if (this->p_data->type().id.compare("HeightMapData") == 0)
   {
     HeightMapData   *p_hdata = static_cast<HeightMapData *>(this->p_data);
     hmap::HeightMap *p_h = static_cast<hmap::HeightMap *>(p_hdata->get_ref());
@@ -52,6 +75,7 @@ void Preview::update_image()
 
     this->label->setPixmap(QPixmap::fromImage(preview_image));
   }
+  //
   else if (this->p_data->type().id.compare("MaskData") == 0)
   {
     MaskData        *p_hdata = static_cast<MaskData *>(this->p_data);

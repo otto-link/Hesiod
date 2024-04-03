@@ -87,14 +87,6 @@ QSlider::handle:vertical {
 
   set_style();
 
-  // hesiod::ModelConfig model_config;
-  // model_config.set_shape({1024, 1024});
-  // model_config.tiling = {4, 4};
-
-  // //
-  // auto editor = new hesiod::NodeEditorWidget(model_config);
-  // editor->show();
-
   // --- main window
 
   hesiod::MainWindow main_window(&app);
@@ -133,6 +125,8 @@ QSlider::handle:vertical {
 
   std::vector<int> vi = {4, 5, 6, 7};
   attr["vint"] = NEW_ATTR_VECINT(vi, 0, 64);
+
+  attr["cloud"] = NEW_ATTR_CLOUD();
 
   hesiod::AttributesWidget *sw = new hesiod::AttributesWidget(&attr);
   // sw->show();

@@ -9,6 +9,7 @@
 #include "highmap/primitives.hpp"
 #include "macrologger.h"
 
+#include "hesiod/data/cloud_data.hpp"
 #include "hesiod/data/heightmap_data.hpp"
 #include "hesiod/data/mask_data.hpp"
 #include "hesiod/model/base_node.hpp"
@@ -16,6 +17,25 @@
 
 namespace hesiod
 {
+
+/**
+ * @brief SmoothCpulse class.
+ */
+class Cloud : public BaseNode
+{
+public:
+  Cloud(const ModelConfig &config);
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(
+      QtNodes::PortIndex /* port_index */) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data, QtNodes::PortIndex port_index);
+
+protected:
+  std::shared_ptr<CloudData> out;
+};
 
 /**
  * @brief GammaCorrection class.

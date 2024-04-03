@@ -37,7 +37,7 @@ std::shared_ptr<QtNodes::NodeData> SmoothCpulse::outData(
 }
 
 void SmoothCpulse::setInData(std::shared_ptr<QtNodes::NodeData> data,
-                                QtNodes::PortIndex                 port_index)
+                             QtNodes::PortIndex                 port_index)
 {
   if (!data)
     Q_EMIT this->dataInvalidated(0);
@@ -74,9 +74,9 @@ void SmoothCpulse::compute()
     int ir = std::max(1, (int)(GET_ATTR_FLOAT("radius") * p_out->shape.x));
 
     hmap::transform(*p_out,
-		    p_mask,
-		    [&ir](hmap::Array &x, hmap::Array *p_mask)
-		    { hmap::smooth_cpulse(x, ir, p_mask); });
+                    p_mask,
+                    [&ir](hmap::Array &x, hmap::Array *p_mask)
+                    { hmap::smooth_cpulse(x, ir, p_mask); });
     p_out->smooth_overlap_buffers();
   }
 

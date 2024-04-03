@@ -159,7 +159,7 @@ public:
   std::string label = "";
 };
 
-class CloudAttribute : public Attribute // --------- TODO
+class CloudAttribute : public Attribute // OK JSON
 {
 public:
   CloudAttribute() = default;
@@ -167,6 +167,31 @@ public:
   hmap::Cloud get();
 
   AttributeType get_type() { return AttributeType::CLOUD; }
+
+  QJsonObject save() const override
+  {
+    QJsonObject model_json;
+    model_json["x"] = std_vector_float_to_qjsonarray(this->value.get_x());
+    model_json["y"] = std_vector_float_to_qjsonarray(this->value.get_y());
+    model_json["v"] = std_vector_float_to_qjsonarray(this->value.get_values());
+
+    return model_json;
+  }
+
+  void load(QJsonObject const &p) override
+  {
+    bool ret = true;
+
+    std::vector<float> x, y, v;
+
+    ret &= convert_qjsonvalue_to_vector_float(p["x"], x);
+    ret &= convert_qjsonvalue_to_vector_float(p["y"], y);
+    ret &= convert_qjsonvalue_to_vector_float(p["v"], v);
+    if (!ret)
+      LOG_ERROR("serialization in with ColorAttribute");
+
+    this->value = hmap::Cloud(x, y, v);
+  }
 
   hmap::Cloud value;
 };
@@ -183,8 +208,7 @@ public:
   QJsonObject save() const override
   {
     QJsonObject model_json;
-    model_json["value"] = model_json["value"] = std_vector_float_to_qjsonarray(
-        this->value);
+    model_json["value"] = std_vector_float_to_qjsonarray(this->value);
 
     return model_json;
   }

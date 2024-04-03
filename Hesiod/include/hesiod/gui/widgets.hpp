@@ -5,6 +5,7 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QFileDialog>
+#include <QGraphicsView>
 #include <QLabel>
 #include <QPushButton>
 #include <QSlider>
@@ -63,6 +64,24 @@ Q_SIGNALS:
 private:
   BoolAttribute *p_attr;
   QCheckBox     *checkbox;
+
+  void update_attribute();
+};
+
+class CloudWidget : public QWidget
+{
+  Q_OBJECT
+
+public:
+  CloudWidget() = default;
+
+  CloudWidget(CloudAttribute *p_attr);
+
+Q_SIGNALS:
+  void value_changed();
+
+private:
+  CloudAttribute *p_attr;
 
   void update_attribute();
 };
@@ -266,9 +285,53 @@ private:
   void update_attribute();
 };
 
+// --- Other widgets
+
+class PointEditorWidget : public QGraphicsView
+{
+  Q_OBJECT
+
+public:
+  PointEditorWidget() = default;
+
+  PointEditorWidget(std::vector<hmap::Point> *p_points, QWidget *parent = nullptr);
+
+Q_SIGNALS:
+  void changed();
+
+protected:
+  void mouseDoubleClickEvent(QMouseEvent *event) override;
+  void mouseMoveEvent(QMouseEvent *event) override;
+  void mousePressEvent(QMouseEvent *event) override;
+  void mouseReleaseEvent(QMouseEvent *event) override;
+  void wheelEvent(QWheelEvent *event) override;
+
+private:
+  std::vector<hmap::Point> *p_points;
+  int                       width, height;
+  int                       data_key = 0;
+
+  QGraphicsScene       *scene;
+  QGraphicsView        *view;
+  QPushButton          *add_button;
+  QGraphicsEllipseItem *moving_point;
+  QPointF               offset;
+
+  void add_point(QPointF event_pos);
+
+  void update_points();
+
+private Q_SLOTS:
+  void clear_scene();
+};
+
 // --- helpers
 
 int float_to_slider_pos(float v, float min, float max, int slider_steps);
+
+QPointF qgraphicsitem_relative_coordinates(QGraphicsItem *graphics_item,
+                                           QGraphicsView *view,
+                                           QPointF       *p_global_pos = nullptr);
 
 float slider_pos_to_float(int pos, float min, float max, int slider_steps);
 

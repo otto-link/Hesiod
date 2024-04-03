@@ -67,6 +67,16 @@ AttributesWidget::AttributesWidget(
       }
       break;
 
+      case (AttributeType::CLOUD):
+      {
+        CloudWidget *widget = new CloudWidget((CloudAttribute *)p_attr);
+        connect(widget,
+                &CloudWidget::value_changed,
+                [this]() { Q_EMIT this->value_changed(); });
+        layout->addWidget(widget, row, 1);
+      }
+      break;
+
       case (AttributeType::COLOR):
       {
         ColorWidget *widget = new ColorWidget((ColorAttribute *)p_attr);
