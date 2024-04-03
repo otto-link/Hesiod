@@ -24,6 +24,11 @@ NodeSettingsWidget::NodeSettingsWidget(QtNodes::DataFlowGraphicsScene *p_scene,
                    this,
                    &hesiod::NodeSettingsWidget::update_layout);
 
+  QObject::connect(this->p_model,
+                   &hesiod::HsdDataFlowGraphModel::nodeDeleted,
+                   this,
+                   &hesiod::NodeSettingsWidget::on_node_deleted);
+
   // build up layout (actually empty at this point)
   this->setWindowTitle("Node settings");
 
@@ -38,6 +43,15 @@ NodeSettingsWidget::NodeSettingsWidget(QtNodes::DataFlowGraphicsScene *p_scene,
   }
 
   this->setLayout(this->layout);
+}
+
+void NodeSettingsWidget::on_node_deleted(QtNodes::NodeId const node_id)
+{
+  if (this->current_node_id == node_id)
+  {
+    clear_layout(this->layout);
+    this->current_node_id = -1;
+  }
 }
 
 void NodeSettingsWidget::update_layout(QtNodes::NodeId const node_id)

@@ -33,7 +33,9 @@ public:
 public Q_SLOTS:
   // void update_after_computing(QtNodes::NodeId const node_id);
 
-  void update_layout(QtNodes::NodeId const nodeId);
+  void on_node_deleted(QtNodes::NodeId const node_id);
+
+  void update_layout(QtNodes::NodeId const node_id);
 
 private:
   QtNodes::DataFlowGraphicsScene *p_scene;
