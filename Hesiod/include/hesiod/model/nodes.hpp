@@ -38,6 +38,27 @@ protected:
 };
 
 /**
+ * @brief SmoothCpulse class.
+ */
+class CloudToArrayInterp : public BaseNode
+{
+public:
+  CloudToArrayInterp(const ModelConfig &config);
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(
+      QtNodes::PortIndex /* port_index */) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data, QtNodes::PortIndex port_index);
+
+protected:
+  std::weak_ptr<CloudData>       in;
+  std::weak_ptr<HeightMapData>   dx, dy;
+  std::shared_ptr<HeightMapData> out;
+};
+
+/**
  * @brief GammaCorrection class.
  */
 class GammaCorrection : public BaseNode

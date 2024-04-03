@@ -27,14 +27,12 @@ PointEditorWidget::PointEditorWidget(std::vector<hmap::Point> *p_points, QWidget
                        QPen(Qt::black),
                        QBrush(Qt::gray));
 
-  //   this->view = new QGraphicsView(this->scene, this);
   // set view
   this->setScene(this->scene);
   this->setMinimumSize(width, height);
-  // this->setDragMode(QGraphicsView::ScrollHandDrag);
   this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-  // connect(this->scene, &QGraphicsScene::changed, [](){LOG_DEBUG("changed");});
+  // TODO add points already in the Cloud object
 }
 
 void PointEditorWidget::add_point(QPointF event_pos)
