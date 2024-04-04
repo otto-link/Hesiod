@@ -35,6 +35,13 @@ QPointF qgraphicsitem_relative_coordinates(QGraphicsItem *item,
   return view_pos;
 }
 
+QPointF qgraphicsitem_relative_to_global_pos(QGraphicsItem *graphics_item,
+                                             QGraphicsView *view,
+                                             QPointF        relative_pos)
+{
+  return QPointF(0.f, 0.f);
+}
+
 float slider_pos_to_float(int pos, float min, float max, int slider_steps)
 {
   return min + (float)pos / (float)slider_steps * (max - min);

@@ -27,6 +27,9 @@ PointEditorWidget::PointEditorWidget(std::vector<hmap::Point> *p_points, QWidget
                        QPen(Qt::black),
                        QBrush(Qt::gray));
 
+  // set points
+  this->update_scene();
+
   // set view
   this->setScene(this->scene);
   this->setMinimumSize(width, height);
@@ -35,26 +38,33 @@ PointEditorWidget::PointEditorWidget(std::vector<hmap::Point> *p_points, QWidget
   // TODO add points already in the Cloud object
 }
 
-void PointEditorWidget::add_point(QPointF event_pos)
+void PointEditorWidget::add_point(QPointF event_pos, float point_value)
 {
-  QPoint  pos = event_pos.toPoint() - QPoint(12, 12);
+  int     radius = 24;
+  QPoint  pos = event_pos.toPoint() - QPoint(radius / 2, radius / 2);
   QPointF new_point = this->mapFromGlobal(pos);
 
   QGraphicsEllipseItem *ellipse_item = this->scene->addEllipse(
-      QRectF(new_point.x(), new_point.y(), 24, 24),
+      QRectF(new_point.x(), new_point.y(), radius, radius),
       QPen(Qt::black),
       QBrush(Qt::black));
-  ellipse_item->setData(this->data_key, 1.f);
+  ellipse_item->setData(this->data_key, point_value);
   ellipse_item->setFlag(QGraphicsItem::ItemIsMovable);
 }
 
 void PointEditorWidget::clear_scene()
 {
+  // only remove the ellipse objects
   QList<QGraphicsItem *> all_items = this->scene->items();
+
   for (QGraphicsItem *item : all_items)
   {
-    this->scene->removeItem(item);
-    delete item;
+    QGraphicsItem *ellipse_item = dynamic_cast<QGraphicsEllipseItem *>(item);
+    if (ellipse_item && ellipse_item->type() == QGraphicsEllipseItem::Type)
+    {
+      this->scene->removeItem(item);
+      delete item;
+    }
   }
 }
 
@@ -155,6 +165,20 @@ void PointEditorWidget::update_points()
   std::reverse(this->p_points->begin(), this->p_points->end());
 
   Q_EMIT this->changed();
+}
+
+void PointEditorWidget::update_scene()
+{
+  this->clear_scene();
+  QPointF global_view_pos = this->mapToGlobal(QPoint(0, 0));
+
+  for (auto &p : *this->p_points)
+  {
+    QPointF pos = QPointF(p.x * this->width + global_view_pos.x(),
+                          (1.f - p.y) * this->height + global_view_pos.y());
+
+    this->add_point(pos, p.v);
+  }
 }
 
 void PointEditorWidget::wheelEvent(QWheelEvent *event)

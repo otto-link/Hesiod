@@ -27,7 +27,6 @@ namespace hesiod
 /**
  * @brief AttributesWidget clas, main attributes widget, automatically laid the widgets
  required for the setting of the attribute list
-
  */
 class AttributesWidget : public QWidget
 {
@@ -299,6 +298,13 @@ public:
 Q_SIGNALS:
   void changed();
 
+public Q_SLOTS:
+  void clear_scene();
+
+  void update_points();
+
+  void update_scene();
+
 protected:
   void mouseDoubleClickEvent(QMouseEvent *event) override;
   void mouseMoveEvent(QMouseEvent *event) override;
@@ -317,12 +323,7 @@ private:
   QGraphicsEllipseItem *moving_point;
   QPointF               offset;
 
-  void add_point(QPointF event_pos);
-
-  void update_points();
-
-private Q_SLOTS:
-  void clear_scene();
+  void add_point(QPointF event_pos, float point_value = 1.f);
 };
 
 // --- helpers
@@ -332,6 +333,10 @@ int float_to_slider_pos(float v, float min, float max, int slider_steps);
 QPointF qgraphicsitem_relative_coordinates(QGraphicsItem *graphics_item,
                                            QGraphicsView *view,
                                            QPointF       *p_global_pos = nullptr);
+
+QPointF qgraphicsitem_relative_to_global_pos(QGraphicsItem *graphics_item,
+                                             QGraphicsView *view,
+                                             QPointF        relative_pos);
 
 float slider_pos_to_float(int pos, float min, float max, int slider_steps);
 

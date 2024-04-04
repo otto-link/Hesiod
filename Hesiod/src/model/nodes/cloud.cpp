@@ -17,7 +17,13 @@ Cloud::Cloud(const ModelConfig &config) : BaseNode(config)
   this->input_captions = {};
   this->output_captions = {"cloud"};
 
-  attr["cloud"] = NEW_ATTR_CLOUD();
+  this->attr["cloud"] = NEW_ATTR_CLOUD();
+
+  this->attr["cloud"]->get_ref<CloudAttribute>()->value.add_point(
+      hmap::Point(0.f, 0.f, 1.f));
+  this->attr["cloud"]->get_ref<CloudAttribute>()->value.add_point(
+      hmap::Point(1.f, 0.5f, 0.5f));
+  this->attr["cloud"]->get_ref<CloudAttribute>()->value.print();
 
   this->attr_ordered_key = {"cloud"};
 
