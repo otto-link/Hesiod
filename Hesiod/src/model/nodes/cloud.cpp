@@ -9,7 +9,6 @@ namespace hesiod
 Cloud::Cloud(const ModelConfig &config) : BaseNode(config)
 {
   LOG_DEBUG("Cloud::Cloud");
-  config.log_debug();
 
   // model
   this->node_caption = "Cloud";

@@ -9,7 +9,6 @@ namespace hesiod
 HeightMapToMask::HeightMapToMask(const ModelConfig &config) : BaseNode(config)
 {
   LOG_DEBUG("HeightMapToMask::HeightMapToMask");
-  config.log_debug();
 
   // model
   this->node_caption = "HeightMapToMask";

@@ -9,7 +9,6 @@ namespace hesiod
 GammaCorrection::GammaCorrection(const ModelConfig &config) : BaseNode(config)
 {
   LOG_DEBUG("GammaCorrection::GammaCorrection");
-  config.log_debug();
 
   // model
   this->node_caption = "GammaCorrection";

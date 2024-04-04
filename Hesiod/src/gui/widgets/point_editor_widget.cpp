@@ -17,7 +17,7 @@ PointEditorWidget::PointEditorWidget(std::vector<hmap::Point> *p_points, QWidget
   this->width = 256;
   this->height = 256;
 
-  this->setMinimumSize(width + 2, height + 2);
+  this->setFixedSize(width + 2, height + 2);
 
   this->setWindowTitle("2D Point Editor");
   this->scene = new QGraphicsScene(parent);
@@ -37,7 +37,7 @@ PointEditorWidget::PointEditorWidget(std::vector<hmap::Point> *p_points, QWidget
 
 void PointEditorWidget::add_point(QPointF event_pos)
 {
-  QPoint  pos = event_pos.toPoint() - QPoint(8, 8);
+  QPoint  pos = event_pos.toPoint() - QPoint(12, 12);
   QPointF new_point = this->mapFromGlobal(pos);
 
   QGraphicsEllipseItem *ellipse_item = this->scene->addEllipse(

@@ -9,7 +9,6 @@ namespace hesiod
 CloudToArrayInterp::CloudToArrayInterp(const ModelConfig &config) : BaseNode(config)
 {
   LOG_DEBUG("CloudToArrayInterp::CloudToArrayInterp");
-  config.log_debug();
 
   // model
   this->node_caption = "CloudToArrayInterp";
@@ -25,7 +24,7 @@ CloudToArrayInterp::CloudToArrayInterp(const ModelConfig &config) : BaseNode(con
   // GUI
   this->p_preview_data = (QtNodes::NodeData *)this->out.get();
   this->p_viewer2d_data = this->p_preview_data;
- 
+
   // update
   this->compute();
 }
@@ -75,8 +74,8 @@ void CloudToArrayInterp::compute()
   if (p_cloud)
   {
     if (p_cloud->get_npoints() > 0)
-      {
-	LOG_DEBUG("HERE");
+    {
+      LOG_DEBUG("HERE");
       hmap::fill(*this->out->get_ref(),
                  p_dx,
                  p_dy,
@@ -96,7 +95,7 @@ void CloudToArrayInterp::compute()
                                             bbox);
                    return array;
                  });
-      }
+    }
   }
   else
     // fill with zeroes

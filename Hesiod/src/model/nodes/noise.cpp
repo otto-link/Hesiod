@@ -9,7 +9,6 @@ namespace hesiod
 Noise::Noise(const ModelConfig &config) : BaseNode(config)
 {
   LOG_DEBUG("Noise::Noise");
-  config.log_debug();
 
   // model
   this->node_caption = "Noise";
