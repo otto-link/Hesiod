@@ -4,7 +4,7 @@ name: CMake on multiple platforms
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "qt_mockup" ]
   pull_request:
     branches: [ "main" ]
 
