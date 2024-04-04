@@ -13,6 +13,7 @@
 #include "highmap/op.hpp"
 
 #include "hesiod/data/heightmap_data.hpp"
+#include "hesiod/data/mask_data.hpp"
 #include "hesiod/gui/widgets.hpp"
 
 namespace hesiod
@@ -175,6 +176,86 @@ void update_vertex_colors(hmap::Array          &z,
       }
 }
 
+void update_vertex_colors(hmap::Array          &z,
+                          hmap::Array          &c,
+                          std::vector<GLfloat> &colors,
+                          hmap::Array          *p_alpha)
+{
+  hmap::Array hs = hillshade(z, 180.f, 45.f, 10.f * z.ptp() / (float)z.shape.y);
+  hs = hmap::pow(hs, 1.5f);
+
+  int k = 0;
+
+  if (p_alpha)
+    for (int i = 0; i < z.shape.x - 1; i++)
+      for (int j = 0; j < z.shape.y - 1; j++)
+      {
+        colors[k++] = hs(i, j);
+        colors[k++] = hs(i, j) * c(i, j);
+        colors[k++] = hs(i, j);
+        colors[k++] = (*p_alpha)(i, j);
+
+        colors[k++] = hs(i, j + 1);
+        colors[k++] = hs(i, j + 1) * c(i, j + 1);
+        colors[k++] = hs(i, j + 1);
+        colors[k++] = (*p_alpha)(i, j + 1);
+
+        colors[k++] = hs(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1) * c(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1);
+        colors[k++] = (*p_alpha)(i + 1, j + 1);
+
+        colors[k++] = hs(i, j);
+        colors[k++] = hs(i, j) * c(i, j);
+        colors[k++] = hs(i, j);
+        colors[k++] = (*p_alpha)(i, j);
+
+        colors[k++] = hs(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1) * c(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1);
+        colors[k++] = (*p_alpha)(i + 1, j + 1);
+
+        colors[k++] = hs(i + 1, j);
+        colors[k++] = hs(i + 1, j) * c(i + 1, j);
+        colors[k++] = hs(i + 1, j);
+        colors[k++] = (*p_alpha)(i + 1, j);
+      }
+  else
+    for (int i = 0; i < z.shape.x - 1; i++)
+      for (int j = 0; j < z.shape.y - 1; j++)
+      {
+        colors[k++] = hs(i, j);
+        colors[k++] = hs(i, j) * c(i, j);
+        colors[k++] = hs(i, j);
+        colors[k++] = 1.f;
+
+        colors[k++] = hs(i, j + 1);
+        colors[k++] = hs(i, j + 1) * c(i, j + 1);
+        colors[k++] = hs(i, j + 1);
+        colors[k++] = 1.f;
+
+        colors[k++] = hs(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1) * c(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1);
+        colors[k++] = 1.f;
+
+        colors[k++] = hs(i, j);
+        colors[k++] = hs(i, j) * c(i, j);
+        colors[k++] = hs(i, j);
+        colors[k++] = 1.f;
+
+        colors[k++] = hs(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1) * c(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1);
+        colors[k++] = 1.f;
+
+        colors[k++] = hs(i + 1, j);
+        colors[k++] = hs(i + 1, j) * c(i + 1, j);
+        colors[k++] = hs(i + 1, j);
+        colors[k++] = 1.f;
+      }
+}
+
 // --- class definitions
 
 HmapGLViewer::HmapGLViewer(ModelConfig       *p_config,
@@ -192,14 +273,59 @@ void HmapGLViewer::set_data(QtNodes::NodeData *new_p_data, QtNodes::NodeData *ne
   this->p_color = new_p_color;
 
   if (p_data)
-    if (this->p_data->type().id.compare("HeightMapData") == 0)
+  {
+
+    // --- prepare data
+
+    QString data_type = this->p_data->type().id;
+
+    if (data_type.compare("HeightMapData") == 0 || data_type.compare("MaskData") == 0)
     {
-      HeightMapData   *p_hdata = static_cast<HeightMapData *>(this->p_data);
-      hmap::HeightMap *p_h = static_cast<hmap::HeightMap *>(p_hdata->get_ref());
-      hmap::Array      array = p_h->to_array();
+      // elevation array
+      hmap::HeightMap *p_h;
+      hmap::Array      array;
+
+      if (data_type.compare("HeightMapData") == 0)
+      {
+        HeightMapData *p_hdata = static_cast<HeightMapData *>(this->p_data);
+        p_h = static_cast<hmap::HeightMap *>(p_hdata->get_ref());
+        array = p_h->to_array();
+      }
+      else if (data_type.compare("MaskData") == 0)
+      {
+        MaskData *p_hdata = static_cast<MaskData *>(this->p_data);
+        p_h = static_cast<hmap::HeightMap *>(p_hdata->get_ref());
+        array = p_h->to_array();
+      }
 
       update_vertex_elevations(array, this->vertices);
-      update_vertex_colors(array, this->colors, nullptr);
+
+      // color array
+      if (p_color)
+      {
+        QString color_type = this->p_color->type().id;
+
+        if (color_type.compare("HeightMapData") == 0)
+        {
+          HeightMapData   *p_hcolor = static_cast<HeightMapData *>(this->p_color);
+          hmap::HeightMap *p_c = static_cast<hmap::HeightMap *>(p_hcolor->get_ref());
+          hmap::Array      c = 1.f - p_c->to_array();
+
+          update_vertex_colors(array, c, this->colors, nullptr);
+        }
+        else if (color_type.compare("MaskData") == 0)
+        {
+          MaskData        *p_hcolor = static_cast<MaskData *>(this->p_color);
+          hmap::HeightMap *p_c = static_cast<hmap::HeightMap *>(p_hcolor->get_ref());
+          hmap::Array      c = 1.f - p_c->to_array();
+
+          update_vertex_colors(array, c, this->colors, nullptr);
+        }
+      }
+      else
+        update_vertex_colors(array, this->colors, nullptr);
+
+      // -- send to OpenGL buffers and update
 
       // make sure OpenGL context is set
       this->makeCurrent(); // QOpenGLWidget
@@ -218,6 +344,7 @@ void HmapGLViewer::set_data(QtNodes::NodeData *new_p_data, QtNodes::NodeData *ne
 
       this->repaint();
     }
+  }
 }
 
 void HmapGLViewer::initializeGL()
@@ -334,8 +461,6 @@ void HmapGLViewer::wheelEvent(QWheelEvent *event)
 
 void HmapGLViewer::paintGL()
 {
-  LOG_DEBUG("PAINT GL");
-
   glUseProgram(this->shader_program);
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

@@ -19,7 +19,7 @@ HeightMapToMask::HeightMapToMask(const ModelConfig &config) : BaseNode(config)
 
   this->attr["inverse"] = NEW_ATTR_BOOL(false);
   this->attr["smoothing"] = NEW_ATTR_BOOL(false);
-  this->attr["smoothing_radius"] = NEW_ATTR_FLOAT(0.05f, 0.f, 1.f, "%.2f");
+  this->attr["smoothing_radius"] = NEW_ATTR_FLOAT(0.05f, 0.f, 0.2f, "%.2f");
   this->attr["saturate"] = NEW_ATTR_BOOL(false);
   this->attr["saturate_range"] = NEW_ATTR_RANGE();
   this->attr["saturate_k"] = NEW_ATTR_FLOAT(0.01f, 0.01f, 1.f, "%.2f");
@@ -36,6 +36,9 @@ HeightMapToMask::HeightMapToMask(const ModelConfig &config) : BaseNode(config)
   // GUI
   this->p_preview_data = (QtNodes::NodeData *)this->mask.get();
   this->p_viewer2d_data = this->p_preview_data;
+
+  this->p_viewer3d_data = this->p_preview_data;
+  this->p_viewer3d_color = this->p_preview_data;
 
   // update
   this->compute();
