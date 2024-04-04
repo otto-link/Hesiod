@@ -30,7 +30,7 @@ Viewer2dWidget::Viewer2dWidget(ModelConfig                    *p_config,
   QObject::connect(this->p_scene,
                    &QtNodes::DataFlowGraphicsScene::nodeSelected,
                    this,
-                   &hesiod::Viewer2dWidget::update_viewport);
+                   &hesiod::Viewer2dWidget::on_node_selected);
 
   QObject::connect(this->p_model,
                    &HsdDataFlowGraphModel::computingFinished,
@@ -44,6 +44,7 @@ Viewer2dWidget::Viewer2dWidget(ModelConfig                    *p_config,
 
   // --- build up layout
   this->setWindowTitle("Viewer 2D");
+  this->setMinimumSize(512, 512); // TODO
 
   QGridLayout *layout = new QGridLayout(this);
   // layout->setSpacing(0);
@@ -84,13 +85,18 @@ Viewer2dWidget::Viewer2dWidget(ModelConfig                    *p_config,
 
   // image itself
   {
-    this->setMinimumSize(512, 512); // TODO
     this->label_image = new QLabel();
     this->label_image->resize(512, 512);
     layout->addWidget(this->label_image, 2, 0, 1, 3);
   }
 
   this->setLayout(layout);
+}
+
+void Viewer2dWidget::on_node_selected(QtNodes::NodeId const node_id)
+{
+  if (node_id != this->current_node_id)
+    this->update_viewport(node_id);
 }
 
 void Viewer2dWidget::resizeEvent(QResizeEvent *event)

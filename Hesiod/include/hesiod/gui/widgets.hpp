@@ -7,6 +7,8 @@
 #include <QFileDialog>
 #include <QGraphicsView>
 #include <QLabel>
+#include <QOpenGLFunctions>
+#include <QOpenGLWidget>
 #include <QPushButton>
 #include <QSlider>
 #include <QSpinBox>
@@ -326,6 +328,56 @@ private:
   void add_point(QPointF event_pos, float point_value = 1.f);
 };
 
+class HmapGLViewer : public QOpenGLWidget, protected QOpenGLFunctions
+{
+public:
+  HmapGLViewer(ModelConfig       *p_config,
+               QtNodes::NodeData *p_data,
+               QtNodes::NodeData *p_color = nullptr,
+               QWidget           *parent = nullptr);
+
+  void set_data(QtNodes::NodeData *new_p_data, QtNodes::NodeData *new_p_color);
+
+protected:
+  void initializeGL() override;
+
+  void resizeGL(int w, int h);
+
+  void paintGL() override;
+
+  void mousePressEvent(QMouseEvent *event) override;
+  void mouseMoveEvent(QMouseEvent *event) override;
+  // void mouseReleaseEvent(QMouseEvent *event) override;
+  void wheelEvent(QWheelEvent *event) override;
+
+private:
+  ModelConfig       *p_config;
+  QtNodes::NodeData *p_data;
+  QtNodes::NodeData *p_color;
+
+  std::vector<GLfloat> vertices = {};
+  std::vector<GLfloat> colors = {};
+  GLuint               shader_program;
+  GLuint               vbo_vertices;
+  GLuint               vbo_colors;
+
+  // view parameters
+  float scale = 0.7f;
+  float h_scale = 0.4f;
+  float alpha_x = 35.f;
+  float alpha_y = -25.f;
+  float delta_x = 0.f;
+  float delta_y = 0.f;
+
+  float fov = 60.0f;
+  float aspect_ratio = 1.f;
+  float near_plane = 0.1f;
+  float far_plane = 100.0f;
+
+  QPointF mouse_pos_bckp;
+  float   alpha_x_bckp, alpha_y_bckp, delta_x_bckp, delta_y_bckp;
+};
+
 // --- helpers
 
 int float_to_slider_pos(float v, float min, float max, int slider_steps);
@@ -333,10 +385,6 @@ int float_to_slider_pos(float v, float min, float max, int slider_steps);
 QPointF qgraphicsitem_relative_coordinates(QGraphicsItem *graphics_item,
                                            QGraphicsView *view,
                                            QPointF       *p_global_pos = nullptr);
-
-QPointF qgraphicsitem_relative_to_global_pos(QGraphicsItem *graphics_item,
-                                             QGraphicsView *view,
-                                             QPointF        relative_pos);
 
 float slider_pos_to_float(int pos, float min, float max, int slider_steps);
 

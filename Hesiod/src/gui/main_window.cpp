@@ -57,6 +57,10 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
   view2d_action->setCheckable(true);
   view_menu->addAction(view2d_action);
 
+  QAction *view3d_action = view_menu->addAction("Add 3D view");
+  view3d_action->setCheckable(true);
+  view_menu->addAction(view3d_action);
+
   QMenu *help = menuBar()->addMenu("&Help");
   help->addAction(about);
 
@@ -108,6 +112,16 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
                        this->node_editor_widget->get_viewer2d_ref()->show();
                      else
                        this->node_editor_widget->get_viewer2d_ref()->hide();
+                   });
+
+  QObject::connect(view3d_action,
+                   &QAction::toggled,
+                   [this, view3d_action]()
+                   {
+                     if (view3d_action->isChecked())
+                       this->node_editor_widget->get_viewer3d_ref()->show();
+                     else
+                       this->node_editor_widget->get_viewer3d_ref()->hide();
                    });
 
   connect(quit,

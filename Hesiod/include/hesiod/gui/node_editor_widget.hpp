@@ -10,6 +10,7 @@
 #include <QtNodes/GraphicsView>
 
 #include "hesiod/gui/viewer2d_widget.hpp"
+#include "hesiod/gui/viewer3d_widget.hpp"
 #include "hesiod/model/graph_model_addon.hpp"
 #include "hesiod/model/model_config.hpp"
 
@@ -33,6 +34,8 @@ public:
 
   Viewer2dWidget *get_viewer2d_ref() { return this->viewer2d.get(); }
 
+  Viewer3dWidget *get_viewer3d_ref() { return this->viewer3d.get(); }
+
 Q_SIGNALS:
   void computingStarted(QtNodes::NodeId const node_id);
 
@@ -48,6 +51,7 @@ private:
   std::unique_ptr<QtNodes::DataFlowGraphicsScene> scene;
 
   std::unique_ptr<hesiod::Viewer2dWidget> viewer2d;
+  std::unique_ptr<hesiod::Viewer3dWidget> viewer3d;
 };
 
 } // namespace hesiod

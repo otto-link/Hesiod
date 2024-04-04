@@ -21,14 +21,14 @@
 namespace hesiod
 {
 
-class Viewer2dWidget : public QWidget
+class Viewer3dWidget : public QWidget
 {
   Q_OBJECT
 
 public:
-  Viewer2dWidget() = default;
+  Viewer3dWidget() = default;
 
-  Viewer2dWidget(ModelConfig                    *p_config,
+  Viewer3dWidget(ModelConfig                    *p_config,
                  QtNodes::DataFlowGraphicsScene *p_scene,
                  QWidget                        *parent = nullptr);
 
@@ -40,7 +40,7 @@ public Q_SLOTS:
 
   void update_after_computing(QtNodes::NodeId const node_id);
 
-  void update_label_image();
+  // void update_label_image();
 
   void update_viewport(QtNodes::NodeId const nodeId);
 
@@ -56,10 +56,8 @@ private:
   QtNodes::NodeId    current_node_id = -1;
   QtNodes::NodeData *p_data = nullptr;
 
-  QComboBox *combobox_cmap;
-  QCheckBox *checkbox_hillshade;
-  QCheckBox *checkbox_pin_node;
-  QLabel    *label_image;
+  QCheckBox    *checkbox_pin_node;
+  HmapGLViewer *gl_viewer;
 };
 
 } // namespace hesiod

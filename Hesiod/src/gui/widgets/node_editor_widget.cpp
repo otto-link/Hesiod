@@ -57,6 +57,11 @@ NodeEditorWidget::NodeEditorWidget(hesiod::ModelConfig model_config,
   this->viewer2d = std::make_unique<hesiod::Viewer2dWidget>(&this->model_config,
                                                             this->get_scene_ref());
 
+  this->viewer3d = std::make_unique<hesiod::Viewer3dWidget>(&this->model_config,
+                                                            this->get_scene_ref());
+
+  this->viewer3d->show(); // fix me DBG
+
   // --- connections
 
   // QObject::connect(load_action,

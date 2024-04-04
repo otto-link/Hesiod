@@ -42,6 +42,9 @@ Noise::Noise(const ModelConfig &config) : BaseNode(config)
   this->p_preview_data = (QtNodes::NodeData *)this->out.get();
   this->p_viewer2d_data = this->p_preview_data;
 
+  this->p_viewer3d_data = this->p_preview_data;
+  this->p_viewer3d_color = nullptr;
+
   // update
   this->compute();
 }

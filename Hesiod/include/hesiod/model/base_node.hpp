@@ -152,6 +152,9 @@ public:
   QtNodes::NodeData *p_preview_data = nullptr;
   QtNodes::NodeData *p_viewer2d_data = nullptr;
 
+  QtNodes::NodeData *p_viewer3d_data = nullptr;
+  QtNodes::NodeData *p_viewer3d_color = nullptr;
+
   /**
    * @brief Defines the display order of the attributes in the settings widget.
    */
