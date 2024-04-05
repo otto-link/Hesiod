@@ -177,8 +177,6 @@ void Viewer2dWidget::update_label_image()
 
 void Viewer2dWidget::update_viewport(QtNodes::NodeId const node_id)
 {
-  LOG_DEBUG("viewer2d, node [%d]", (int)node_id);
-
   if (!this->checkbox_pin_node->isChecked())
   {
     this->current_node_id = node_id;

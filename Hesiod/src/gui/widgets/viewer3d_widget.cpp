@@ -37,12 +37,6 @@ Viewer3dWidget::Viewer3dWidget(ModelConfig                    *p_config,
                    this,
                    &hesiod::Viewer3dWidget::update_after_computing);
 
-  // QObject::connect(this,
-  //                  &hesiod::Viewer3dWidget::resized,
-  //                  this,
-  //                  [this](int /*width*/, int /*height*/) { this->update_label_image();
-  //                  });
-
   // --- build up layout
   this->setWindowTitle("Viewer 3D");
   this->setMinimumSize(512, 512); // TODO
@@ -86,8 +80,6 @@ void Viewer3dWidget::update_after_computing(QtNodes::NodeId const node_id)
 
 void Viewer3dWidget::update_viewport(QtNodes::NodeId const node_id)
 {
-  LOG_DEBUG("viewer3d, node [%d]", (int)node_id);
-
   if (!this->checkbox_pin_node->isChecked())
   {
     this->current_node_id = node_id;
