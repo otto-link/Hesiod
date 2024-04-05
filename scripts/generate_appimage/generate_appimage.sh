@@ -5,7 +5,7 @@ rm -rf AppDir
 wget -nc https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage -P ${2}
 chmod 0744 ${2}/linuxdeploy-x86_64.AppImage
 
-./linuxdeploy-x86_64.AppImage --appdir AppDir --executable ${3}/build/bin/hesiod --output appimage -d ${1}/hesiod.desktop -i ${1}/icon_hesiod.png
+./linuxdeploy-x86_64.AppImage --appdir AppDir --executable ${3}/build/bin/hesiod --plugin qt --output appimage -d ${1}/hesiod.desktop -i ${1}/icon_hesiod.png
 
 HASH=`git rev-parse HEAD`
 HASH=${HASH:0:7}

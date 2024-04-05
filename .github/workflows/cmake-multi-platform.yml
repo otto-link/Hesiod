@@ -40,7 +40,7 @@ jobs:
       run: |
         sudo apt update
         sudo apt-get update
-        sudo apt-get -y install libglfw3 libglfw3-dev libglew-dev libopengl-dev freeglut3-dev libboost-all-dev libeigen3-dev libglm-dev fuse libfuse2 ocl-icd-opencl-dev libassimp-dev libxkbcommon-dev libxcb*
+        sudo apt-get -y install libglfw3 libglfw3-dev libglew-dev libopengl-dev freeglut3-dev libboost-all-dev libeigen3-dev libglm-dev fuse libfuse2 ocl-icd-opencl-dev libassimp-dev libxkbcommon-dev
 
     - name: Install system dependencies (windows)
       if: startsWith (matrix.os, 'windows')
