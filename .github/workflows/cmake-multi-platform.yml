@@ -69,7 +69,7 @@ jobs:
     - name: Build
       run: |
         export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${{ github.workspace }}/Qt/5.15.2/gcc_64/lib/
-	cmake --build ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }}
+        cmake --build ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }}
 
     - name: Archive output binary (linux / non appimage)
       if: startsWith (matrix.os, 'ubuntu')
