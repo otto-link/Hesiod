@@ -33,20 +33,20 @@ jobs:
     - name: Install Qt
       uses: jurplel/install-qt-action@v3
       with:
-        version: "5.15.10"
+        version: "5.15.2"
 
     - name: Install system dependencies (ubuntu)
       if: startsWith (matrix.os, 'ubuntu')
       run: |
         sudo apt update
         sudo apt-get update
-        sudo apt-get -y install libglfw3 libglfw3-dev libglew-dev libopengl-dev freeglut3-dev libboost-all-dev libeigen3-dev libglm-dev fuse libfuse2 ocl-icd-opencl-dev libassimp-dev
+        sudo apt-get -y install libglfw3 libglfw3-dev libglew-dev libopengl-dev freeglut3-dev libboost-all-dev libeigen3-dev libglm-dev fuse libfuse2 ocl-icd-opencl-dev libassimp-dev libxkbcommon-dev
 
     - name: Install system dependencies (windows)
       if: startsWith (matrix.os, 'windows')
       run: |
         vcpkg integrate install
-        vcpkg install libglfw3 libglfw3-dev libglew-dev libopengl-dev freeglut3-dev libboost-all-dev libeigen3-dev libglm-dev fuse libfuse2 ocl-icd-opencl-dev libassimp-dev
+        vcpkg install libglfw3 libglfw3-dev libglew-dev libopengl-dev freeglut3-dev libboost-all-dev libeigen3-dev libglm-dev fuse libfuse2 ocl-icd-opencl-dev libassimp-dev libxkbcommon-dev
 
     - name: Set reusable strings
       id: strings
