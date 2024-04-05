@@ -149,11 +149,25 @@ protected:
   // --- GUI
 
 public:
-  QtNodes::NodeData *p_preview_data = nullptr;
-  QtNodes::NodeData *p_viewer2d_data = nullptr;
+  /**
+   *@brief Return the reference to the NodeData for the node preview.
+   */
+  virtual QtNodes::NodeData *get_preview_data() { return nullptr; }
 
-  QtNodes::NodeData *p_viewer3d_data = nullptr;
-  QtNodes::NodeData *p_viewer3d_color = nullptr;
+  /**
+   *@brief Return the reference to the NodeData for the 2D viewer.
+   */
+  virtual QtNodes::NodeData *get_viewer2d_data() { return nullptr; }
+
+  /**
+   *@brief Return the reference to the elevation NodeData for the 3D viewer.
+   */
+  virtual QtNodes::NodeData *get_viewer3d_data() { return nullptr; }
+
+  /**
+   *@brief Return the reference to the color NodeData for the 3D viewer.
+   */
+  virtual QtNodes::NodeData *get_viewer3d_color() { return nullptr; }
 
   /**
    * @brief Defines the display order of the attributes in the settings widget.

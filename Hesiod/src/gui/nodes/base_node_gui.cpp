@@ -46,9 +46,9 @@ void BaseNode::context_menu(const QPointF /* pos */)
 
 QWidget *BaseNode::embeddedWidget()
 {
-  if (this->p_preview_data && !this->preview)
+  if (this->get_preview_data() && !this->preview)
   {
-    this->preview = new Preview(this->p_config, this->p_preview_data);
+    this->preview = new Preview(this->p_config, this->get_preview_data());
     connect(this,
             &NodeDelegateModel::dataUpdated,
             this->preview,

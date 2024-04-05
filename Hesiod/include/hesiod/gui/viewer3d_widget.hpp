@@ -40,8 +40,6 @@ public Q_SLOTS:
 
   void update_after_computing(QtNodes::NodeId const node_id);
 
-  // void update_label_image();
-
   void update_viewport(QtNodes::NodeId const nodeId);
 
 protected:

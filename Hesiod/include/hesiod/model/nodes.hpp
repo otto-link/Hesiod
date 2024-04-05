@@ -26,6 +26,11 @@ class Cloud : public BaseNode
 public:
   Cloud(const ModelConfig &config);
 
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return nullptr; }
+  QtNodes::NodeData *get_viewer3d_data() { return nullptr; }
+  QtNodes::NodeData *get_viewer3d_color() { return nullptr; }
+
   void compute() override;
 
   std::shared_ptr<QtNodes::NodeData> outData(
@@ -44,6 +49,11 @@ class CloudToArrayInterp : public BaseNode
 {
 public:
   CloudToArrayInterp(const ModelConfig &config);
+
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_color() { return this->in.lock().get(); }
 
   void compute() override;
 
@@ -66,6 +76,11 @@ class GammaCorrection : public BaseNode
 public:
   GammaCorrection(const ModelConfig &config);
 
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_color() { return this->mask.lock().get(); }
+
   void compute() override;
 
   std::shared_ptr<QtNodes::NodeData> outData(
@@ -87,6 +102,11 @@ class HeightMapToMask : public BaseNode
 {
 public:
   HeightMapToMask(const ModelConfig &config);
+
+  QtNodes::NodeData *get_preview_data() { return this->mask.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return this->mask.get(); }
+  QtNodes::NodeData *get_viewer3d_data() { return this->in.lock().get(); }
+  QtNodes::NodeData *get_viewer3d_color() { return this->mask.get(); }
 
   void compute() override;
 
@@ -113,6 +133,15 @@ public:
    * @param config Noise graph configuration (shape, tiling...).
    */
   Noise(const ModelConfig &config);
+
+  /**
+   * @brief Return reference to the data for each viewers.
+   * @return Reference to the data.
+   */
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_color() { return nullptr; }
 
   /**
    * @brief Node computation.
@@ -154,6 +183,11 @@ class NoiseFbm : public BaseNode
 public:
   NoiseFbm(const ModelConfig &config);
 
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_color() { return nullptr; }
+
   void compute() override;
 
   std::shared_ptr<QtNodes::NodeData> outData(
@@ -174,6 +208,11 @@ class SmoothCpulse : public BaseNode
 {
 public:
   SmoothCpulse(const ModelConfig &config);
+
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_color() { return this->mask.lock().get(); }
 
   void compute() override;
 

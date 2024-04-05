@@ -93,7 +93,7 @@ void Viewer3dWidget::update_viewport(QtNodes::NodeId const node_id)
     this->current_node_id = node_id;
 
     hesiod::BaseNode *p_node = this->p_model->delegateModel<hesiod::BaseNode>(node_id);
-    this->gl_viewer->set_data(p_node->p_viewer3d_data, p_node->p_viewer3d_color);
+    this->gl_viewer->set_data(p_node->get_viewer3d_data(), p_node->get_viewer3d_color());
   }
 }
 

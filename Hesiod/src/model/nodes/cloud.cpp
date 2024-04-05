@@ -23,9 +23,6 @@ Cloud::Cloud(const ModelConfig &config) : BaseNode(config)
 
   this->out = std::make_shared<CloudData>();
 
-  // GUI
-  this->p_preview_data = (QtNodes::NodeData *)this->out.get();
-
   // update
   this->compute();
 }
