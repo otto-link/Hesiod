@@ -14,7 +14,8 @@ jobs:
       fail-fast: false
 
       matrix:
-        os: [ubuntu-latest]
+        # os: [ubuntu-latest]
+        os: [windows-msvc]
         build_type: [Release]
         include:
           - os: windows-msvc
