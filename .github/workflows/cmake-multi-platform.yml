@@ -14,13 +14,13 @@ jobs:
       fail-fast: false
 
       matrix:
-        # os: [ubuntu-latest]
-        os: [windows-msvc]
+        os: [ubuntu-latest]
+        # os: [windows-msvc]
         build_type: [Release]
         include:
-          - os: windows-msvc
-            c_compiler: msvc
-            cpp_compiler: msvc
+          #- os: windows-msvc
+          #  c_compiler: msvc
+          #  cpp_compiler: msvc
           - os: ubuntu-latest
             c_compiler: gcc
             cpp_compiler: g++
@@ -33,7 +33,7 @@ jobs:
     - name: Install Qt
       uses: jurplel/install-qt-action@v3
       with:
-        version: "5.15.2"
+        version: "5.15.10"
 
     - name: Install system dependencies (ubuntu)
       if: startsWith (matrix.os, 'ubuntu')
