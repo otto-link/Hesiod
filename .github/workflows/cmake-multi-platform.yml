@@ -17,9 +17,9 @@ jobs:
         os: [ubuntu-latest]
         build_type: [Release]
         include:
-          #- os: windows-latest
-          #  c_compiler: cl
-          #  cpp_compiler: cl
+          - os: windows-msvc
+            c_compiler: msvc
+            cpp_compiler: msvc
           - os: ubuntu-latest
             c_compiler: gcc
             cpp_compiler: g++
@@ -40,6 +40,12 @@ jobs:
         sudo apt update
         sudo apt-get update
         sudo apt-get -y install libglfw3 libglfw3-dev libglew-dev libopengl-dev freeglut3-dev libboost-all-dev libeigen3-dev libglm-dev fuse libfuse2 ocl-icd-opencl-dev libassimp-dev
+
+    - name: Install system dependencies (windows)
+      if: startsWith (matrix.os, 'windows')
+      run: |
+        vcpkg integrate install
+        vcpkg install libglfw3 libglfw3-dev libglew-dev libopengl-dev freeglut3-dev libboost-all-dev libeigen3-dev libglm-dev fuse libfuse2 ocl-icd-opencl-dev libassimp-dev
 
     - name: Set reusable strings
       id: strings
@@ -62,14 +68,14 @@ jobs:
     - name: Build
       run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }}
 
-    - name: Archive output binary (non appimage)
+    - name: Archive output binary (linux / non appimage)
       if: startsWith (matrix.os, 'ubuntu')
       uses: actions/upload-artifact@v4
       with:
         name: Hesiod-Binary
         path: ${{ github.workspace }}/build/bin/hesiod
     
-    - name: Archive output binary (appimage)
+    - name: Archive output binary (linux / appimage)
       if: startsWith (matrix.os, 'ubuntu')
       uses: actions/upload-artifact@v4
       with:
