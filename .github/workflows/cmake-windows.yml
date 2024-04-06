@@ -27,10 +27,10 @@ jobs:
 
     - name: Install Vcpkg Dependencies
       run: |
-        $VCPKG_ROOT\vcpkg install libglfw3 libglfw3-dev libglew-dev libopengl-dev freeglut3-dev libboost-all-dev libeigen3-dev libglm-dev fuse libfuse2 ocl-icd-opencl-dev libassimp-dev
+        D:\a\Hesiod\Hesiod\vcpkg\vcpkg install libglfw3 libglfw3-dev libglew-dev libopengl-dev freeglut3-dev libboost-all-dev libeigen3-dev libglm-dev fuse libfuse2 ocl-icd-opencl-dev libassimp-dev
 
     - name: Generate Visual Studio Solution
-      run: cmake -G "Visual Studio 16 2019" -DCMAKE_TOOLCHAIN_FILE=$VCPKG_ROOT\scripts\buildsystems\vcpkg.cmake .
+      run: cmake -G "Visual Studio 16 2019" -DCMAKE_TOOLCHAIN_FILE=D:\a\Hesiod\Hesiod\vcpkg\scripts\buildsystems\vcpkg.cmake .
 
     - name: Build
       run: cmake --build . --config Release
