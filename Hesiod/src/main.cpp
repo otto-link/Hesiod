@@ -158,7 +158,7 @@ int main(int argc, char *argv[])
   attr["cloud"] = NEW_ATTR_CLOUD();
 
   hesiod::AttributesWidget *sw = new hesiod::AttributesWidget(&attr);
-  // sw->show();
+  sw->show();
 
   // ---
 

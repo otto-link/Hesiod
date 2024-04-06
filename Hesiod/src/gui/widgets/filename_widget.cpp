@@ -26,8 +26,11 @@ FilenameWidget::FilenameWidget(FilenameAttribute *p_attr) : p_attr(p_attr)
                                                          this->p_attr->label.c_str(),
                                                          ".",
                                                          this->p_attr->filter.c_str());
-            this->p_attr->value = fname.toStdString();
-            this->update_attribute();
+            if (!fname.isNull() && !fname.isEmpty())
+            {
+              this->p_attr->value = fname.toStdString();
+              this->update_attribute();
+            }
           });
 
   this->setLayout(layout);
