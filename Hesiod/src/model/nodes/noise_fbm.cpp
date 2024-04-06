@@ -9,7 +9,6 @@ namespace hesiod
 NoiseFbm::NoiseFbm(const ModelConfig &config) : BaseNode(config)
 {
   LOG_DEBUG("NoiseFbm::NoiseFbm");
-  config.log_debug();
 
   // model
   this->node_caption = "NoiseFbm";

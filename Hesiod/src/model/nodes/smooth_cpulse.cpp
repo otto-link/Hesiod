@@ -9,7 +9,6 @@ namespace hesiod
 SmoothCpulse::SmoothCpulse(const ModelConfig &config) : BaseNode(config)
 {
   LOG_DEBUG("SmoothCpulse::SmoothCpulse");
-  config.log_debug();
 
   // model
   this->node_caption = "SmoothCpulse";

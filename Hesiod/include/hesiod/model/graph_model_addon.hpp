@@ -50,6 +50,14 @@ public Q_SLOTS:
     DataFlowGraphModel::load(jsonDocument);
   }
 
+  void load(QJsonObject const &jsonDocument, hesiod::ModelConfig &model_config_override)
+  {
+    // a configuration can be provided as an input to override the configuration provided
+    // by the json document (used for batch mode for instance)
+    *this->p_model_config = model_config_override;
+    DataFlowGraphModel::load(jsonDocument);
+  }
+
   QJsonObject save() const override // DataFlowGraphModel
   {
     QJsonObject sceneJson;

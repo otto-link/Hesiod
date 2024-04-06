@@ -5,110 +5,139 @@ typedef unsigned int uint;
 #include <QApplication>
 #include <QDebug>
 
-#include <QtNodes/ConnectionStyle>
-
 #include "macrologger.h"
 
 #include "hesiod/gui/main_window.hpp"
+#include "hesiod/gui/style.hpp"
+
+#include "hesiod/model/model_registry.hpp" // batch
 
 // for testing - TO REMOVE
 #include "hesiod/gui/widgets.hpp"
 #include "hesiod/model/attributes.hpp"
 #include "hesiod/model/enum_mapping.hpp"
 
-static void set_style()
+// in this order, required by args.hxx
+std::istream &operator>>(std::istream &is, hmap::Vec2<int> &vec2)
 {
-  QtNodes::ConnectionStyle::setConnectionStyle(
-      R"(
-  {
-  "GraphicsViewStyle": {
-    "BackgroundColor": [255, 0, 0],
-    "FineGridColor": [68, 71, 90],
-    "CoarseGridColor": [88, 91, 45]
-    },
-  "ConnectionStyle": {
-    "ConstructionColor": "gray",
-    "NormalColor": "darkcyan",
-    "SelectedColor": [100, 100, 100],
-    "SelectedHaloColor": "orange",
-    "HoveredColor": "lightcyan",
-
-    "LineWidth": 1.0,
-    "ConstructionLineWidth": 3.0,
-    "PointDiameter": 10.0,
-
-    "UseDataDefinedColors": true
-  }
-
+  is >> vec2.x;
+  is.get();
+  is >> vec2.y;
+  return is;
 }
-  )");
-}
+#include <args.hxx>
 
 int main(int argc, char *argv[])
 {
+  // --- parse command line arguments
+
+  args::ArgumentParser parser("Hesiod.");
+  args::HelpFlag       help(parser, "help", "Display this help menu", {'h', "help"});
+
+  args::ValueFlag<std::string> batch(parser, "batch mode", "Execute ...", {'b', "batch"});
+
+  args::ValueFlag<hmap::Vec2<int>> shape_arg(
+      parser,
+      "shape",
+      "Heightmap shape (in pixels), ex. --shape=512,512",
+      {"shape"});
+
+  args::ValueFlag<hmap::Vec2<int>> tiling_arg(parser,
+                                              "tiling",
+                                              "Heightmap tiling, ex. --tiling=4,4",
+                                              {"tiling"});
+
+  args::ValueFlag<float> overlap_arg(
+      parser,
+      "overlap",
+      "Tile overlapping ratio (in [0, 1[), ex. --overlap=0.25",
+      {"overlap"});
+
+  try
+  {
+    parser.ParseCLI(argc, argv);
+
+    // batch mode
+    if (batch)
+    {
+      std::string filename = args::get(batch);
+
+      LOG_INFO("executing Hesiod in batch mode...");
+      LOG_DEBUG("file: %s", filename.c_str());
+
+      hmap::Vec2<int> shape = shape_arg == true ? args::get(shape_arg)
+                                                : hmap::Vec2<int>(0, 0);
+      hmap::Vec2<int> tiling = tiling_arg == true ? args::get(tiling_arg)
+                                                  : hmap::Vec2<int>(0, 0);
+      float           overlap = overlap_arg == true ? args::get(overlap_arg) : -1.f;
+
+      LOG_DEBUG("cli shape: {%d, %d}", shape.x, shape.y);
+      LOG_DEBUG("cli tiling: {%d, %d}", tiling.x, tiling.y);
+      LOG_DEBUG("cli overlap: %f", overlap);
+
+      QFile file(QString::fromStdString(filename));
+      if (!file.open(QIODevice::ReadOnly))
+      {
+        LOG_ERROR("error while opening graph file");
+        return 1;
+      }
+
+      QByteArray const whole_file = file.readAll();
+      QJsonObject      json_doc = QJsonDocument::fromJson(whole_file).object();
+
+      // initialize the registry with a small data shape to avoid
+      // using excessive memory at this stage
+      hesiod::ModelConfig model_config;
+      model_config.shape = {4, 4};
+
+      std::shared_ptr<QtNodes::NodeDelegateModelRegistry> registry = register_data_models(
+          model_config);
+
+      // load (only) the model configuration and adjust it
+      model_config.load(json_doc["model_config"].toObject());
+      model_config.log_debug();
+
+      // adjust model config
+      if (shape.x > 0)
+        model_config.shape = shape;
+      if (tiling.x > 0)
+        model_config.tiling = tiling;
+      if (overlap >= 0.f)
+        model_config.overlap = overlap;
+
+      // load the graph and compute
+      auto model = std::make_unique<hesiod::HsdDataFlowGraphModel>(registry,
+                                                                   &model_config);
+
+      LOG_INFO("computing node graph...");
+      model->load(json_doc, model_config);
+
+      return 0;
+    }
+  }
+  catch (args::Help)
+  {
+    std::cout << parser;
+    return 0;
+  }
+
+  catch (args::Error &e)
+  {
+    std::cerr << e.what() << std::endl << parser;
+    return 1;
+  }
+
+  // ----------------------------------- Main GUI
+
   QApplication app(argc, argv);
 
-  QFont font("Roboto");
-  font.setPointSize(10);
-  app.setFont(font);
+  hesiod::set_style_qtapp(app);
+  hesiod::set_style_qtnodes();
 
-  app.setStyleSheet(R"(
-* {
-    font-family: Roboto, sans-serif;
-}
-
-QSlider::groove:horizontal { 
-	background: #D8DEE9;
-	height: 24px; 
-	border-radius: 4px;
-}
-
-QSlider::handle:horizontal { 
-	background-color: #81A1C1; 
-	width: 24px; 
-	height: 24px; 
-	border-radius: 8px;
-}
-
-QSlider::groove:vertical { 
-	background: #D8DEE9;
-	width: 24px; 
-	border-radius: 4px;
-}
-
-QSlider::handle:vertical { 
-	background-color: #81A1C1; 
-	width: 24px; 
-	height: 24px; 
-	border-radius: 8px;
-}
-
-)");
-
-  set_style();
-
-  // --- main window
+  // main window
 
   hesiod::MainWindow main_window(&app);
   main_window.show();
-
-  // QObject::connect(editor,
-  //                  &hesiod::NodeEditorWidget::computingFinished,
-  //                  [](QtNodes::NodeId const node_id)
-  //                  { LOG_DEBUG("node updated: %d", (int)node_id); });
-
-  // hesiod::Viewer2dWidget viewer2d = hesiod::Viewer2dWidget(&model_config,
-  //                                                          editor->get_scene_ref());
-  // viewer2d.show();
-
-  // //
-  // auto editor2 = new hesiod::NodeEditorWidget(model_config);
-  // editor2->show();
-
-  // hesiod::Viewer2dWidget *viewer2d2 = new hesiod::Viewer2dWidget(
-  //     &model_config,
-  //     editor2->get_scene_ref());
-  // viewer2d2->show();
 
   // --- WIDGET TESTING
   std::map<std::string, std::unique_ptr<hesiod::Attribute>> attr = {};
