@@ -187,10 +187,15 @@ void Viewer2dWidget::update_viewport(QtNodes::NodeId const node_id)
   {
     this->current_node_id = node_id;
 
-    hesiod::BaseNode *p_node = this->p_model->delegateModel<hesiod::BaseNode>(node_id);
-    this->p_data = p_node->get_viewer2d_data();
-    this->update_label_image();
+    if (this->isVisible())
+    {
+      hesiod::BaseNode *p_node = this->p_model->delegateModel<hesiod::BaseNode>(node_id);
+      this->p_data = p_node->get_viewer2d_data();
+      this->update_label_image();
+    }
   }
 }
+
+void Viewer2dWidget::update_viewport() { this->update_viewport(this->current_node_id); }
 
 } // namespace hesiod

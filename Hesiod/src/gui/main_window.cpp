@@ -119,7 +119,10 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
                    [this, view3d_action]()
                    {
                      if (view3d_action->isChecked())
+                     {
                        this->node_editor_widget->get_viewer3d_ref()->show();
+                       this->node_editor_widget->get_viewer3d_ref()->update_viewport();
+                     }
                      else
                        this->node_editor_widget->get_viewer3d_ref()->hide();
                    });

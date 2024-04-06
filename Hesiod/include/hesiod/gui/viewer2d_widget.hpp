@@ -46,6 +46,8 @@ public Q_SLOTS:
 
   void update_viewport(QtNodes::NodeId const nodeId);
 
+  void update_viewport();
+
 protected:
   void resizeEvent(QResizeEvent *event) override;
 

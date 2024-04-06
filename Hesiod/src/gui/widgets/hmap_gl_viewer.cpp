@@ -341,7 +341,7 @@ void HmapGLViewer::set_data(QtNodes::NodeData *new_p_data, QtNodes::NodeData *ne
       glBufferData(GL_ARRAY_BUFFER,
                    sizeof(this->vertices[0]) * this->vertices.size(),
                    (GLvoid *)&this->vertices[0],
-                   GL_DYNAMIC_DRAW);
+                   GL_STATIC_DRAW);
 
       glBindBuffer(GL_ARRAY_BUFFER, this->vbo_colors);
       glBufferData(GL_ARRAY_BUFFER,
