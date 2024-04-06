@@ -4,6 +4,8 @@
 #pragma once
 #include <QtNodes/DataFlowGraphModel>
 
+#include "hesiod/model/model_config.hpp"
+
 namespace hesiod
 {
 
@@ -12,8 +14,9 @@ class HsdDataFlowGraphModel : public QtNodes::DataFlowGraphModel
   Q_OBJECT
 
 public:
-  HsdDataFlowGraphModel(std::shared_ptr<QtNodes::NodeDelegateModelRegistry> registry)
-      : DataFlowGraphModel(registry)
+  HsdDataFlowGraphModel(std::shared_ptr<QtNodes::NodeDelegateModelRegistry> registry,
+                        hesiod::ModelConfig *p_model_config)
+      : DataFlowGraphModel(registry), p_model_config(p_model_config)
   {
     QObject::connect(this,
                      &hesiod::HsdDataFlowGraphModel::nodeCreated,
@@ -40,5 +43,22 @@ public Q_SLOTS:
             &QtNodes::NodeDelegateModel::computingStarted,
             [this, node_id]() { Q_EMIT this->computingStarted(node_id); });
   }
+
+  void load(QJsonObject const &jsonDocument) override // DataFlowGraphModel
+  {
+    this->p_model_config->load(jsonDocument["model_config"].toObject());
+    DataFlowGraphModel::load(jsonDocument);
+  }
+
+  QJsonObject save() const override // DataFlowGraphModel
+  {
+    QJsonObject sceneJson;
+    sceneJson = DataFlowGraphModel::save();
+    sceneJson["model_config"] = this->p_model_config->save();
+    return sceneJson;
+  }
+
+private:
+  hesiod::ModelConfig *p_model_config;
 };
 } // namespace hesiod

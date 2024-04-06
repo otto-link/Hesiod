@@ -2,10 +2,12 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #pragma once
-
-#include "macrologger.h"
+#include <QJsonObject>
 
 #include "highmap/vector.hpp"
+#include "macrologger.h"
+
+#include "hesiod/model/model_utils.hpp"
 
 #define HSD_PREVIEW_SHAPE 128
 
@@ -37,6 +39,34 @@ struct ModelConfig
   // --- GUI
   hmap::Vec2<int> shape_preview = {std::min(HSD_PREVIEW_SHAPE, shape.x),
                                    std::min(HSD_PREVIEW_SHAPE, shape.y)};
+
+  // --- methods
+  void load(QJsonObject const &p)
+  {
+    bool ret = true;
+
+    hmap::Vec2<int> shape_load;
+    ret &= convert_qjsonvalue_to_int(p["shape.x"], shape_load.x);
+    ret &= convert_qjsonvalue_to_int(p["shape.y"], shape_load.y);
+    this->set_shape(shape_load);
+
+    ret &= convert_qjsonvalue_to_int(p["tiling.x"], this->tiling.x);
+    ret &= convert_qjsonvalue_to_int(p["tiling.y"], this->tiling.y);
+    ret &= convert_qjsonvalue_to_float(p["overlap"], this->overlap);
+    if (!ret)
+      LOG_ERROR("serialization in with WaveNbAttribute");
+  }
+
+  QJsonObject save() const
+  {
+    QJsonObject model_json;
+    model_json["shape.x"] = QString::number(this->shape.x);
+    model_json["shape.y"] = QString::number(this->shape.y);
+    model_json["tiling.x"] = QString::number(this->tiling.x);
+    model_json["tiling.y"] = QString::number(this->tiling.y);
+    model_json["overlap"] = QString::number(this->overlap);
+    return model_json;
+  }
 };
 
 } // namespace hesiod

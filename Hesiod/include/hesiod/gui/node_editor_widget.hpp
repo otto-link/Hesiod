@@ -42,9 +42,9 @@ Q_SIGNALS:
   void computingFinished(QtNodes::NodeId const node_id);
 
 public Q_SLOTS:
-  void load() { this->get_scene_ref()->load(); }
+  void load();
 
-  void save() { this->get_scene_ref()->save(); }
+  void save();
 
 private:
   std::unique_ptr<hesiod::HsdDataFlowGraphModel>  model;

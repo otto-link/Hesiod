@@ -338,6 +338,8 @@ public:
 
   void set_data(QtNodes::NodeData *new_p_data, QtNodes::NodeData *new_p_color);
 
+  void reset();
+
 protected:
   void initializeGL() override;
 

@@ -25,7 +25,8 @@ NodeEditorWidget::NodeEditorWidget(hesiod::ModelConfig model_config,
 
   this->model_config.set_shape(shape_bckp);
   this->model_config.tiling = {4, 4};
-  this->model = std::make_unique<hesiod::HsdDataFlowGraphModel>(registry);
+  this->model = std::make_unique<hesiod::HsdDataFlowGraphModel>(registry,
+                                                                &this->model_config);
 
   // build layout
   QVBoxLayout *layout = new QVBoxLayout(this);
@@ -110,5 +111,20 @@ NodeEditorWidget::NodeEditorWidget(hesiod::ModelConfig model_config,
                    this,
                    &NodeEditorWidget::computingFinished);
 }
+
+void NodeEditorWidget::load()
+{
+  // reset current views
+  this->get_viewer2d_ref()->reset();
+  this->get_viewer3d_ref()->reset();
+
+  this->get_scene_ref()->load();
+
+  // re-set various buffers based on the the model configuration (e.g. array shape)
+  this->get_viewer2d_ref()->reset();
+  this->get_viewer3d_ref()->reset();
+}
+
+void NodeEditorWidget::save() { this->get_scene_ref()->save(); }
 
 } // namespace hesiod

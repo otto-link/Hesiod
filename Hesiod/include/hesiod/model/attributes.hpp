@@ -16,7 +16,6 @@
 #include <memory>
 #include <stdexcept>
 
-// #include <QJsonArray>
 #include <QJsonObject>
 
 #include "highmap/geometry.hpp"

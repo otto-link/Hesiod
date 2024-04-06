@@ -267,6 +267,13 @@ HmapGLViewer::HmapGLViewer(ModelConfig       *p_config,
   generate_basemesh(p_config->shape, this->vertices, this->colors);
 }
 
+void HmapGLViewer::reset()
+{
+  this->set_data(nullptr, nullptr);
+  generate_basemesh(p_config->shape, this->vertices, this->colors);
+  this->repaint();
+}
+
 void HmapGLViewer::set_data(QtNodes::NodeData *new_p_data, QtNodes::NodeData *new_p_color)
 {
   this->p_data = new_p_data;

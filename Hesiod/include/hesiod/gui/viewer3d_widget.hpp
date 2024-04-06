@@ -38,6 +38,8 @@ Q_SIGNALS:
 public Q_SLOTS:
   void on_node_selected(QtNodes::NodeId const node_id);
 
+  void reset();
+
   void update_after_computing(QtNodes::NodeId const node_id);
 
   void update_viewport(QtNodes::NodeId const nodeId);

@@ -99,6 +99,12 @@ void Viewer2dWidget::on_node_selected(QtNodes::NodeId const node_id)
     this->update_viewport(node_id);
 }
 
+void Viewer2dWidget::reset()
+{
+  this->current_node_id = -1;
+  this->p_data = nullptr;
+};
+
 void Viewer2dWidget::resizeEvent(QResizeEvent *event)
 {
   QWidget::resizeEvent(event);

@@ -66,6 +66,13 @@ void Viewer3dWidget::on_node_selected(QtNodes::NodeId const node_id)
     this->update_viewport(node_id);
 }
 
+void Viewer3dWidget::reset()
+{
+  this->current_node_id = -1;
+  this->p_data = nullptr;
+  this->gl_viewer->reset();
+};
+
 void Viewer3dWidget::resizeEvent(QResizeEvent *event)
 {
   QWidget::resizeEvent(event);
