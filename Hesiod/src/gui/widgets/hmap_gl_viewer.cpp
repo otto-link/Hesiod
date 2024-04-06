@@ -12,6 +12,7 @@
 #include "highmap/heightmap.hpp"
 #include "highmap/op.hpp"
 
+#include "hesiod/data/cloud_data.hpp"
 #include "hesiod/data/heightmap_data.hpp"
 #include "hesiod/data/mask_data.hpp"
 #include "hesiod/gui/widgets.hpp"
@@ -325,6 +326,17 @@ void HmapGLViewer::set_data(QtNodes::NodeData *new_p_data, QtNodes::NodeData *ne
           MaskData        *p_hcolor = static_cast<MaskData *>(this->p_color);
           hmap::HeightMap *p_c = static_cast<hmap::HeightMap *>(p_hcolor->get_ref());
           hmap::Array      c = 1.f - p_c->to_array();
+
+          update_vertex_colors(array, c, this->colors, nullptr);
+        }
+        else if (color_type.compare("CloudData") == 0)
+        {
+          CloudData   *p_hcolor = static_cast<CloudData *>(this->p_color);
+          hmap::Cloud *p_cloud = static_cast<hmap::Cloud *>(p_hcolor->get_ref());
+          hmap::Array  c = hmap::Array(array.shape);
+          p_cloud->to_array(c);
+          c *= -1.f;
+          c += 1.f;
 
           update_vertex_colors(array, c, this->colors, nullptr);
         }
