@@ -33,19 +33,6 @@ NodeEditorWidget::NodeEditorWidget(hesiod::ModelConfig model_config,
   layout->setContentsMargins(0, 0, 0, 0);
   layout->setSpacing(0);
 
-  // --- menu bar
-
-  // QMenuBar *menu_bar = new QMenuBar();
-  // QMenu    *file = menu_bar->addMenu("File");
-  // QAction  *load_action = file->addAction("Load Scene");
-  // QAction  *save_action = file->addAction("Save Scene");
-
-  // QMenu   *view_menu = menu_bar->addMenu("View");
-  // QAction *view2d_action = view_menu->addAction("Add 2D view");
-  // view2d_action->setCheckable(true);
-
-  // layout->addWidget(menu_bar);
-
   // --- QtNode editor widget
 
   this->scene = std::make_unique<QtNodes::DataFlowGraphicsScene>(*this->model.get());
@@ -54,43 +41,14 @@ NodeEditorWidget::NodeEditorWidget(hesiod::ModelConfig model_config,
   layout->addWidget(view);
   this->setLayout(layout);
 
-  // viewer(s)
-  this->viewer2d = std::make_unique<hesiod::Viewer2dWidget>(&this->model_config,
-                                                            this->get_scene_ref());
-
-  this->viewer3d = std::make_unique<hesiod::Viewer3dWidget>(&this->model_config,
-                                                            this->get_scene_ref());
-
-  // this->viewer3d->show(); // fix me DBG
-
   // --- connections
 
-  // QObject::connect(load_action,
-  //                  &QAction::triggered,
-  //                  this,
-  //                  &NodeEditorWidget::load);
+  connect(this->get_scene_ref(),
+          &QtNodes::DataFlowGraphicsScene::sceneLoaded,
+          view,
+          &QtNodes::GraphicsView::centerScene);
 
-  // QObject::connect(save_action,
-  //                  &QAction::triggered,
-  //                  this,
-  //                  &NodeEditorWidget::save);
-
-  // QObject::connect(view2d_action,
-  //                  &QAction::toggled,
-  //                  [this, view2d_action]()
-  //                  {
-  //                    if (view2d_action->isChecked())
-  //                      this->viewer2d.get()->show();
-  //                    else
-  //                      this->viewer2d.get()->hide();
-  //                  });
-
-  QObject::connect(this->get_scene_ref(),
-                   &QtNodes::DataFlowGraphicsScene::sceneLoaded,
-                   view,
-                   &QtNodes::GraphicsView::centerScene);
-
-  QObject::connect(
+  connect(
       this->get_scene_ref(),
       &QtNodes::DataFlowGraphicsScene::nodeContextMenu,
       [this](QtNodes::NodeId const node_id, QPointF const pos)
@@ -101,29 +59,18 @@ NodeEditorWidget::NodeEditorWidget(hesiod::ModelConfig model_config,
       });
 
   // pass-through for the node updates
-  QObject::connect(this->get_model_ref(),
-                   &HsdDataFlowGraphModel::computingStarted,
-                   this,
-                   &NodeEditorWidget::computingStarted);
+  connect(this->get_model_ref(),
+          &HsdDataFlowGraphModel::computingStarted,
+          this,
+          &NodeEditorWidget::computingStarted);
 
-  QObject::connect(this->get_model_ref(),
-                   &HsdDataFlowGraphModel::computingFinished,
-                   this,
-                   &NodeEditorWidget::computingFinished);
+  connect(this->get_model_ref(),
+          &HsdDataFlowGraphModel::computingFinished,
+          this,
+          &NodeEditorWidget::computingFinished);
 }
 
-void NodeEditorWidget::load()
-{
-  // reset current views
-  this->get_viewer2d_ref()->reset();
-  this->get_viewer3d_ref()->reset();
-
-  this->get_scene_ref()->load();
-
-  // re-set various buffers based on the the model configuration (e.g. array shape)
-  this->get_viewer2d_ref()->reset();
-  this->get_viewer3d_ref()->reset();
-}
+void NodeEditorWidget::load() { this->get_scene_ref()->load(); }
 
 void NodeEditorWidget::save() { this->get_scene_ref()->save(); }
 

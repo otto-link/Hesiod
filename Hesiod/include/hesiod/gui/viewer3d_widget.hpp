@@ -59,7 +59,7 @@ private:
   QtNodes::NodeData *p_data = nullptr;
 
   QCheckBox    *checkbox_pin_node;
-  HmapGLViewer *gl_viewer;
+  HmapGLViewer *gl_viewer = nullptr;
 };
 
 } // namespace hesiod

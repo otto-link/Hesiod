@@ -39,10 +39,9 @@ Viewer3dWidget::Viewer3dWidget(ModelConfig                    *p_config,
 
   // --- build up layout
   this->setWindowTitle("Viewer 3D");
-  this->setMinimumSize(512, 512); // TODO
+  this->setMinimumSize(512, 512);
 
   QGridLayout *layout = new QGridLayout(this);
-  // layout->setSpacing(0);
 
   // pin this node
   {
@@ -100,6 +99,10 @@ void Viewer3dWidget::update_viewport(QtNodes::NodeId const node_id)
   }
 }
 
-void Viewer3dWidget::update_viewport() { this->update_viewport(this->current_node_id); }
+void Viewer3dWidget::update_viewport()
+{
+  if (this->p_model->allNodeIds().contains(this->current_node_id))
+    this->update_viewport(this->current_node_id);
+}
 
 } // namespace hesiod

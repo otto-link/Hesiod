@@ -5,6 +5,8 @@
 #include <QMainWindow>
 
 #include "hesiod/gui/node_editor_widget.hpp"
+#include "hesiod/gui/viewer2d_widget.hpp"
+#include "hesiod/gui/viewer3d_widget.hpp"
 
 namespace hesiod
 {
@@ -17,6 +19,10 @@ public:
   MainWindow(QApplication *p_app = nullptr, QWidget *p_parent = nullptr);
 
   ~MainWindow() override;
+
+  hesiod::Viewer2dWidget *viewer2d;
+
+  hesiod::Viewer3dWidget *viewer3d;
 
 protected:
   void restore_state();
