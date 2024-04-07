@@ -61,7 +61,7 @@ NodeEditorWidget::NodeEditorWidget(hesiod::ModelConfig model_config,
   this->viewer3d = std::make_unique<hesiod::Viewer3dWidget>(&this->model_config,
                                                             this->get_scene_ref());
 
-  this->viewer3d->show(); // fix me DBG
+  // this->viewer3d->show(); // fix me DBG
 
   // --- connections
 

@@ -76,10 +76,11 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
   this->setCentralWidget(central_widget);
 
   // Create a dock widget
-  QDockWidget *dock_settings = new QDockWidget("Node settings", this);
+  QDockWidget *dock_settings = new QDockWidget("Node settings", this, Qt::Window);
   dock_settings->setAllowedAreas(Qt::AllDockWidgetAreas);
   dock_settings->setFeatures(QDockWidget::DockWidgetMovable |
                              QDockWidget::DockWidgetFloatable);
+  dock_settings->show();
 
   // Add some content to the dock widget
   NodeSettingsWidget *node_settings_widget = new NodeSettingsWidget(
@@ -93,6 +94,17 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
   this->addDockWidget(Qt::RightDockWidgetArea, dock_settings);
 
   // --- connections
+
+  connect(dock_settings,
+          &QDockWidget::topLevelChanged,
+          [dock_settings]()
+          {
+            if (dock_settings->isVisible() && dock_settings->isFloating())
+            {
+              dock_settings->setWindowFlags(Qt::Window);
+              dock_settings->show();
+            }
+          });
 
   QObject::connect(load_action,
                    &QAction::triggered,
