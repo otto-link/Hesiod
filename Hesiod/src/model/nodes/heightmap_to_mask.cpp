@@ -12,11 +12,17 @@ HeightMapToMask::HeightMapToMask(const ModelConfig &config) : BaseNode(config)
 
   // model
   this->node_caption = "HeightMapToMask";
-  this->input_types = {HeightMapData().type()};
-  this->output_types = {MaskData().type()};
-  this->input_captions = {"input"};
-  this->output_captions = {"mask"};
 
+  // inputs
+  this->input_captions = {"input"};
+  this->input_types = {HeightMapData().type()};
+
+  // outputs
+  this->output_captions = {"mask"};
+  this->output_types = {MaskData().type()};
+  this->mask = std::make_shared<MaskData>(config);
+
+  // attributes
   this->attr["inverse"] = NEW_ATTR_BOOL(false);
   this->attr["smoothing"] = NEW_ATTR_BOOL(false);
   this->attr["smoothing_radius"] = NEW_ATTR_FLOAT(0.05f, 0.f, 0.2f, "%.2f");
@@ -30,8 +36,6 @@ HeightMapToMask::HeightMapToMask(const ModelConfig &config) : BaseNode(config)
                             "saturate",
                             "saturate_range",
                             "saturate_k"};
-
-  this->mask = std::make_shared<MaskData>(config);
 
   // update
   this->compute();

@@ -12,14 +12,18 @@ SmoothCpulse::SmoothCpulse(const ModelConfig &config) : BaseNode(config)
 
   // model
   this->node_caption = "SmoothCpulse";
-  this->input_types = {HeightMapData().type(), MaskData().type()};
-  this->output_types = {HeightMapData().type()};
+
+  // inputs
   this->input_captions = {"input", "mask"};
+  this->input_types = {HeightMapData().type(), MaskData().type()};
+
+  // outputs
   this->output_captions = {"output"};
-
-  this->attr["radius"] = NEW_ATTR_FLOAT(0.05f, 0.f, 0.2f, "%.3f");
-
+  this->output_types = {HeightMapData().type()};
   this->out = std::make_shared<HeightMapData>(config);
+
+  // attributes
+  this->attr["radius"] = NEW_ATTR_FLOAT(0.05f, 0.f, 0.2f, "%.3f");
 
   // update
   this->compute();

@@ -11,6 +11,7 @@
 
 #include "hesiod/data/cloud_data.hpp"
 #include "hesiod/data/heightmap_data.hpp"
+#include "hesiod/data/heightmap_rgba_data.hpp"
 #include "hesiod/data/mask_data.hpp"
 #include "hesiod/gui/preview.hpp"
 
@@ -72,6 +73,21 @@ void Preview::update_image()
     //                               this->p_config->shape_preview.x,
     //                               this->p_config->shape_preview.y,
     //                               QImage::Format_RGB888);
+
+    this->label->setPixmap(QPixmap::fromImage(preview_image));
+  }
+  //
+  else if (this->p_data->type().id.compare("HeightMapRGBAData") == 0)
+  {
+    HeightMapRGBAData   *p_hdata = static_cast<HeightMapRGBAData *>(this->p_data);
+    hmap::HeightMapRGBA *p_h = static_cast<hmap::HeightMapRGBA *>(p_hdata->get_ref());
+
+    std::vector<uint8_t> img = p_h->to_img_8bit(this->p_config->shape_preview);
+
+    QImage preview_image = QImage(img.data(),
+                                  this->p_config->shape_preview.x,
+                                  this->p_config->shape_preview.y,
+                                  QImage::Format_RGBA8888);
 
     this->label->setPixmap(QPixmap::fromImage(preview_image));
   }

@@ -76,11 +76,10 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
   this->setCentralWidget(central_widget);
 
   // Create a dock widget
-  QDockWidget *dock_settings = new QDockWidget("Node settings", this, Qt::Window);
+  QDockWidget *dock_settings = new QDockWidget("Node settings", this);
   dock_settings->setAllowedAreas(Qt::AllDockWidgetAreas);
   dock_settings->setFeatures(QDockWidget::DockWidgetMovable |
                              QDockWidget::DockWidgetFloatable);
-  dock_settings->show();
 
   // Add some content to the dock widget
   NodeSettingsWidget *node_settings_widget = new NodeSettingsWidget(

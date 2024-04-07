@@ -12,13 +12,19 @@ Noise::Noise(const ModelConfig &config) : BaseNode(config)
 
   // model
   this->node_caption = "Noise";
+
+  // inputs
+  this->input_captions = {"dx", "dy", "envelope"};
   this->input_types = {HeightMapData().type(),
                        HeightMapData().type(),
                        HeightMapData().type()};
-  this->output_types = {HeightMapData().type()};
-  this->input_captions = {"dx", "dy", "envelope"};
-  this->output_captions = {"output"};
 
+  // outputs
+  this->output_captions = {"output"};
+  this->output_types = {HeightMapData().type()};
+  this->out = std::make_shared<HeightMapData>(config);
+
+  // attributes
   this->attr["noise_type"] = NEW_ATTR_MAPENUM(noise_type_map);
   this->attr["kw"] = NEW_ATTR_WAVENB();
   this->attr["seed"] = NEW_ATTR_SEED();
@@ -35,8 +41,6 @@ Noise::Noise(const ModelConfig &config) : BaseNode(config)
                             "inverse",
                             "remap",
                             "remap_range"};
-
-  this->out = std::make_shared<HeightMapData>(config);
 
   // update
   this->compute();

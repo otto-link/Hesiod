@@ -50,7 +50,7 @@ void DefaultNodePainter::drawNodeCaption(QPainter *painter, NodeGraphicsObject &
     painter->setBrush(fill_color);
     painter->setPen(Qt::NoPen);
 
-    QRect rect(0, 0, size.width(), 32);
+    QRect rect(1, 0, size.width() - 1, 32);
 
     QPainterPath path;
     path.moveTo(rect.left(), rect.bottom());

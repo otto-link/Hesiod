@@ -12,14 +12,18 @@ GammaCorrection::GammaCorrection(const ModelConfig &config) : BaseNode(config)
 
   // model
   this->node_caption = "GammaCorrection";
-  this->input_types = {HeightMapData().type(), MaskData().type()};
-  this->output_types = {HeightMapData().type()};
+
+  // inputs
   this->input_captions = {"input", "mask"};
+  this->input_types = {HeightMapData().type(), MaskData().type()};
+
+  // outputs
   this->output_captions = {"output"};
-
-  this->attr["gamma"] = NEW_ATTR_FLOAT(2.f, 0.01f, 10.f);
-
+  this->output_types = {HeightMapData().type()};
   this->out = std::make_shared<HeightMapData>(config);
+
+  // attributes
+  this->attr["gamma"] = NEW_ATTR_FLOAT(2.f, 0.01f, 10.f);
 
   // update
   this->compute();

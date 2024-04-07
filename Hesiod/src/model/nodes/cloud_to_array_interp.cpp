@@ -12,13 +12,16 @@ CloudToArrayInterp::CloudToArrayInterp(const ModelConfig &config) : BaseNode(con
 
   // model
   this->node_caption = "CloudToArrayInterp";
+
+  // inputs
+  this->input_captions = {"cloud", "dx", "dy"};
   this->input_types = {CloudData().type(),
                        HeightMapData().type(),
                        HeightMapData().type()};
-  this->output_types = {HeightMapData().type()};
-  this->input_captions = {"cloud", "dx", "dy"};
-  this->output_captions = {"heightmap"};
 
+  // outputs
+  this->output_captions = {"heightmap"};
+  this->output_types = {HeightMapData().type()};
   this->out = std::make_shared<HeightMapData>(config);
 
   // update

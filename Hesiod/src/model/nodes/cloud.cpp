@@ -12,16 +12,19 @@ Cloud::Cloud(const ModelConfig &config) : BaseNode(config)
 
   // model
   this->node_caption = "Cloud";
+
+  // inputs
   this->input_types = {};
-  this->output_types = {CloudData().type()};
   this->input_captions = {};
+
+  // outputs
   this->output_captions = {"cloud"};
-
-  this->attr["cloud"] = NEW_ATTR_CLOUD();
-
-  this->attr_ordered_key = {"cloud"};
-
+  this->output_types = {CloudData().type()};
   this->out = std::make_shared<CloudData>();
+
+  // attributes
+  this->attr["cloud"] = NEW_ATTR_CLOUD();
+  this->attr_ordered_key = {"cloud"};
 
   // update
   this->compute();

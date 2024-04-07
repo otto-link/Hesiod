@@ -11,6 +11,7 @@
 
 #include "hesiod/data/cloud_data.hpp"
 #include "hesiod/data/heightmap_data.hpp"
+#include "hesiod/data/heightmap_rgba_data.hpp"
 #include "hesiod/data/mask_data.hpp"
 #include "hesiod/model/base_node.hpp"
 #include "hesiod/model/enum_mapping.hpp"
@@ -33,8 +34,7 @@ public:
 
   void compute() override;
 
-  std::shared_ptr<QtNodes::NodeData> outData(
-      QtNodes::PortIndex /* port_index */) override;
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
 
   void setInData(std::shared_ptr<QtNodes::NodeData> data, QtNodes::PortIndex port_index);
 
@@ -57,8 +57,7 @@ public:
 
   void compute() override;
 
-  std::shared_ptr<QtNodes::NodeData> outData(
-      QtNodes::PortIndex /* port_index */) override;
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
 
   void setInData(std::shared_ptr<QtNodes::NodeData> data, QtNodes::PortIndex port_index);
 
@@ -66,6 +65,30 @@ protected:
   std::weak_ptr<CloudData>       in;
   std::weak_ptr<HeightMapData>   dx, dy;
   std::shared_ptr<HeightMapData> out;
+};
+
+/**
+ * @brief ColorizeSolid class, colorize texture using a uniform solid color.
+ */
+class ColorizeSolid : public BaseNode
+{
+public:
+  ColorizeSolid(const ModelConfig &config);
+
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_data() { return nullptr; }
+  QtNodes::NodeData *get_viewer3d_color() { return nullptr; }
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data,
+                 QtNodes::PortIndex                 port_index) override;
+
+protected:
+  std::shared_ptr<HeightMapRGBAData> out;
 };
 
 /**
@@ -83,8 +106,7 @@ public:
 
   void compute() override;
 
-  std::shared_ptr<QtNodes::NodeData> outData(
-      QtNodes::PortIndex /* port_index */) override;
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
 
   void setInData(std::shared_ptr<QtNodes::NodeData> data,
                  QtNodes::PortIndex                 port_index) override;
@@ -110,8 +132,7 @@ public:
 
   void compute() override;
 
-  std::shared_ptr<QtNodes::NodeData> outData(
-      QtNodes::PortIndex /* port_index */) override;
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
 
   void setInData(std::shared_ptr<QtNodes::NodeData> data,
                  QtNodes::PortIndex                 port_index) override;
@@ -152,8 +173,7 @@ public:
    * @brief Return a reference to the output data for a given output port.
    * @return Shared pointer referencing the output data (as a generic NodeData).
    */
-  std::shared_ptr<QtNodes::NodeData> outData(
-      QtNodes::PortIndex /* port_index */) override;
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
 
   /**
    * @brief Method triggered when there are incoming data at a given input port.
@@ -190,8 +210,7 @@ public:
 
   void compute() override;
 
-  std::shared_ptr<QtNodes::NodeData> outData(
-      QtNodes::PortIndex /* port_index */) override;
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
 
   void setInData(std::shared_ptr<QtNodes::NodeData> data,
                  QtNodes::PortIndex                 port_index) override;
@@ -216,8 +235,7 @@ public:
 
   void compute() override;
 
-  std::shared_ptr<QtNodes::NodeData> outData(
-      QtNodes::PortIndex /* port_index */) override;
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
 
   void setInData(std::shared_ptr<QtNodes::NodeData> data,
                  QtNodes::PortIndex                 port_index) override;
