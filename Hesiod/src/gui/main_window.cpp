@@ -109,6 +109,8 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
   dock_viewer2d->setWidget(this->viewer2d);
   dock_viewer2d->setObjectName("dock_viewer2d");
 
+  // TODO solve OpenGL issues when docking QOpenGLWidget...
+  
   // // viewer 3D dock
   // QDockWidget *dock_viewer3d = new QDockWidget("Node settings", this, Qt::Window);
   // dock_viewer3d->setAllowedAreas(Qt::AllDockWidgetAreas);
