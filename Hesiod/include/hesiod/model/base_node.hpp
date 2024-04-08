@@ -186,8 +186,15 @@ public:
   virtual QWidget *embeddedWidget() override;
 
 private:
+  /**
+   * @brief Reference to the preview widget.
+   */
   Preview *preview = nullptr;
-  QMenu   *qmenu = nullptr;
+
+  /**
+   * @brief Reference to the Qt context menu widget.
+   */
+  QMenu *qmenu = nullptr;
 };
 
 } // namespace hesiod

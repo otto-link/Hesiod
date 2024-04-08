@@ -14,13 +14,32 @@
 namespace hesiod
 {
 
+/**
+ * @brief Model configuration class, holds the base parameters of the node graph model
+ * (including the GUI parameters)
+ */
 struct ModelConfig
 {
   // --- model
-  hmap::Vec2<int> shape = {4, 4};
-  hmap::Vec2<int> tiling = {1, 1};
-  float           overlap = 0.f;
 
+  /**
+   * @brief Heightmap shape (e.g. width and height)
+   */
+  hmap::Vec2<int> shape = {4, 4};
+
+  /**
+   * @brief Heightmap tiling (for distributed computation)
+   */
+  hmap::Vec2<int> tiling = {1, 1};
+
+  /**
+   * @brief Tile overlap (in [0, 1]).
+   */
+  float overlap = 0.f;
+
+  /**
+   * @brief Display some infos about the configuration.
+   */
   void log_debug() const
   {
     LOG_DEBUG("shape: {%d, %d}", shape.x, shape.y);
@@ -29,6 +48,10 @@ struct ModelConfig
     LOG_DEBUG("shape_preview: {%d, %d}", shape_preview.x, shape_preview.y);
   }
 
+  /**
+   * @brief Set the heightmap shape, and adjust display shapes.
+   * @param new_shape New shape.
+   */
   void set_shape(hmap::Vec2<int> new_shape)
   {
     this->shape = new_shape;
@@ -36,11 +59,10 @@ struct ModelConfig
                            std::min(HSD_PREVIEW_SHAPE, this->shape.y)};
   }
 
-  // --- GUI
-  hmap::Vec2<int> shape_preview = {std::min(HSD_PREVIEW_SHAPE, shape.x),
-                                   std::min(HSD_PREVIEW_SHAPE, shape.y)};
-
-  // --- methods
+  /**
+   * @brief Load the model configuration parameters from a json object.
+   * @param p Json object.
+   */
   void load(QJsonObject const &p)
   {
     bool ret = true;
@@ -57,6 +79,10 @@ struct ModelConfig
       LOG_ERROR("serialization in with WaveNbAttribute");
   }
 
+  /**
+   * @brief Save the model configuration parameters to a json object.
+   * @return Json object.
+   */
   QJsonObject save() const
   {
     QJsonObject model_json;
@@ -67,6 +93,14 @@ struct ModelConfig
     model_json["overlap"] = QString::number(this->overlap);
     return model_json;
   }
+
+  // --- GUI
+
+  /**
+   * @brief Preview widget shape.
+   */
+  hmap::Vec2<int> shape_preview = {std::min(HSD_PREVIEW_SHAPE, shape.x),
+                                   std::min(HSD_PREVIEW_SHAPE, shape.y)};
 };
 
 } // namespace hesiod
