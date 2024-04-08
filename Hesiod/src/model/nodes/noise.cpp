@@ -6,7 +6,7 @@
 namespace hesiod
 {
 
-Noise::Noise(const ModelConfig &config) : BaseNode(config)
+Noise::Noise(const ModelConfig *p_config) : BaseNode(p_config)
 {
   LOG_DEBUG("Noise::Noise");
 
@@ -22,7 +22,7 @@ Noise::Noise(const ModelConfig &config) : BaseNode(config)
   // outputs
   this->output_captions = {"output"};
   this->output_types = {HeightMapData().type()};
-  this->out = std::make_shared<HeightMapData>(config);
+  this->out = std::make_shared<HeightMapData>(p_config);
 
   // attributes
   this->attr["noise_type"] = NEW_ATTR_MAPENUM(noise_type_map);

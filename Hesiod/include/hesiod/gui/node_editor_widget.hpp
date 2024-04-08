@@ -20,13 +20,11 @@ class NodeEditorWidget : public QWidget
   Q_OBJECT
 
 public:
-  hesiod::ModelConfig model_config;
-
   NodeEditorWidget() = default;
 
-  NodeEditorWidget(hesiod::ModelConfig model_config, QWidget *parent = nullptr);
+  NodeEditorWidget(hesiod::ModelConfig *p_model_config, QWidget *parent = nullptr);
 
-  hesiod::ModelConfig *get_model_config_ref() { return &this->model_config; }
+  hesiod::ModelConfig *get_model_config_ref() { return this->p_model_config; }
 
   hesiod::HsdDataFlowGraphModel *get_model_ref() { return this->model.get(); }
 
@@ -43,7 +41,10 @@ public Q_SLOTS:
   void save();
 
 private:
-  std::unique_ptr<hesiod::HsdDataFlowGraphModel>  model;
+  hesiod::ModelConfig *p_model_config;
+
+  std::unique_ptr<hesiod::HsdDataFlowGraphModel> model;
+
   std::unique_ptr<QtNodes::DataFlowGraphicsScene> scene;
 };
 

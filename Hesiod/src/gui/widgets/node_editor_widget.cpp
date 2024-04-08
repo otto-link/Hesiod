@@ -11,22 +11,22 @@
 namespace hesiod
 {
 
-NodeEditorWidget::NodeEditorWidget(hesiod::ModelConfig model_config,
+NodeEditorWidget::NodeEditorWidget(hesiod::ModelConfig *p_model_config,
                                    QWidget * /* parent */)
-    : model_config(model_config)
+    : p_model_config(p_model_config)
 {
   // initialize the registry with a small data shape to avoid using excessive memory at
   // this stage
-  hmap::Vec2<int> shape_bckp = this->model_config.shape;
-  this->model_config.set_shape(hmap::Vec2<int>(8, 8));
+  hmap::Vec2<int> shape_bckp = this->p_model_config->shape;
+  this->p_model_config->set_shape(hmap::Vec2<int>(8, 8));
 
   std::shared_ptr<QtNodes::NodeDelegateModelRegistry> registry = register_data_models(
-      this->model_config);
+      this->p_model_config);
 
-  this->model_config.set_shape(shape_bckp);
-  this->model_config.tiling = {4, 4};
+  this->p_model_config->set_shape(shape_bckp);
+  this->p_model_config->tiling = {4, 4};
   this->model = std::make_unique<hesiod::HsdDataFlowGraphModel>(registry,
-                                                                &this->model_config);
+                                                                this->p_model_config);
 
   // build layout
   QVBoxLayout *layout = new QVBoxLayout(this);

@@ -18,9 +18,9 @@ class HeightMapData : public QtNodes::NodeData
 public:
   HeightMapData() : name("HeightMapData") {}
 
-  HeightMapData(const ModelConfig &config)
+  HeightMapData(const ModelConfig *p_config)
   {
-    this->value.set_sto(config.shape, config.tiling, config.overlap);
+    this->value.set_sto(p_config->shape, p_config->tiling, p_config->overlap);
   }
 
   hmap::HeightMap get_value() const { return this->value; }

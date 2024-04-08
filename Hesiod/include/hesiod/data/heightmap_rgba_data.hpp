@@ -18,9 +18,9 @@ class HeightMapRGBAData : public QtNodes::NodeData
 public:
   HeightMapRGBAData() : name("HeightMapRGBAData") {}
 
-  HeightMapRGBAData(const ModelConfig &config)
+  HeightMapRGBAData(const ModelConfig *p_config)
   {
-    this->value.set_sto(config.shape, config.tiling, config.overlap);
+    this->value.set_sto(p_config->shape, p_config->tiling, p_config->overlap);
   }
 
   hmap::HeightMapRGBA get_value() const { return this->value; }

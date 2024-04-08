@@ -7,7 +7,7 @@
 namespace hesiod
 {
 
-BaseNode::BaseNode(const ModelConfig &config) : p_config(&config) {}
+BaseNode::BaseNode(const ModelConfig *p_config) : p_config(p_config) {}
 
 QtNodes::NodeDataType BaseNode::dataType(QtNodes::PortType  port_type,
                                          QtNodes::PortIndex port_index) const

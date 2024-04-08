@@ -26,10 +26,9 @@ namespace hesiod
 MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(parent)
 {
   // (config instance saved by the node editor)
-  hesiod::ModelConfig model_config;
-  model_config.set_shape({1024, 1024});
-  model_config.tiling = {4, 4};
-  model_config.overlap = 0.25f;
+  this->model_config.set_shape({1024, 1024});
+  this->model_config.tiling = {4, 4};
+  this->model_config.overlap = 0.25f;
 
   this->setWindowTitle(tr("Hesiod"));
   this->restore_state();
@@ -78,7 +77,7 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
 
   QHBoxLayout *layout = new QHBoxLayout(central_widget);
 
-  this->node_editor_widget = new NodeEditorWidget(model_config);
+  this->node_editor_widget = new NodeEditorWidget(&this->model_config);
   layout->addWidget(this->node_editor_widget);
 
   this->setCentralWidget(central_widget);
@@ -102,9 +101,8 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
   dock_viewer2d->setFeatures(QDockWidget::DockWidgetMovable |
                              QDockWidget::DockWidgetFloatable);
 
-  this->viewer2d = new hesiod::Viewer2dWidget(
-      this->node_editor_widget->get_model_config_ref(),
-      this->node_editor_widget->get_scene_ref());
+  this->viewer2d = new hesiod::Viewer2dWidget(&this->model_config,
+                                              this->node_editor_widget->get_scene_ref());
 
   dock_viewer2d->setWidget(this->viewer2d);
   dock_viewer2d->setObjectName("dock_viewer2d");
@@ -118,7 +116,7 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
   //                            QDockWidget::DockWidgetFloatable);
 
   // this->viewer3d = new
-  // hesiod::Viewer3dWidget(this->node_editor_widget->get_model_config_ref(),
+  // hesiod::Viewer3dWidget(&this->model_config,
   //                                             this->node_editor_widget->get_scene_ref());
 
   // dock_viewer3d->setWidget(this->viewer3d);
@@ -130,9 +128,8 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
 
   // this->addDockWidget(Qt::TopDockWidgetArea, dock_viewer3d);
 
-  this->viewer3d = new hesiod::Viewer3dWidget(
-      this->node_editor_widget->get_model_config_ref(),
-      this->node_editor_widget->get_scene_ref());
+  this->viewer3d = new hesiod::Viewer3dWidget(&this->model_config,
+                                              this->node_editor_widget->get_scene_ref());
   // this->viewer3d->show();
 
   // --- connections

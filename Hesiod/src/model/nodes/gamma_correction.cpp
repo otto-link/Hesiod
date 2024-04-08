@@ -6,7 +6,7 @@
 namespace hesiod
 {
 
-GammaCorrection::GammaCorrection(const ModelConfig &config) : BaseNode(config)
+GammaCorrection::GammaCorrection(const ModelConfig *p_config) : BaseNode(p_config)
 {
   LOG_DEBUG("GammaCorrection::GammaCorrection");
 
@@ -20,7 +20,7 @@ GammaCorrection::GammaCorrection(const ModelConfig &config) : BaseNode(config)
   // outputs
   this->output_captions = {"output"};
   this->output_types = {HeightMapData().type()};
-  this->out = std::make_shared<HeightMapData>(config);
+  this->out = std::make_shared<HeightMapData>(p_config);
 
   // attributes
   this->attr["gamma"] = NEW_ATTR_FLOAT(2.f, 0.01f, 10.f);

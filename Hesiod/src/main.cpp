@@ -91,7 +91,7 @@ int main(int argc, char *argv[])
       model_config.shape = {4, 4};
 
       std::shared_ptr<QtNodes::NodeDelegateModelRegistry> registry = register_data_models(
-          model_config);
+          &model_config);
 
       // load (only) the model configuration and adjust it
       model_config.load(json_doc["model_config"].toObject());

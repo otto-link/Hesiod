@@ -8,7 +8,7 @@ namespace hesiod
 {
 
 std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
-    hesiod::ModelConfig &config)
+    hesiod::ModelConfig *p_config)
 {
   auto ret = std::make_shared<QtNodes::NodeDelegateModelRegistry>();
 

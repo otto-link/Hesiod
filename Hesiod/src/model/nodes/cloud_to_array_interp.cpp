@@ -6,7 +6,7 @@
 namespace hesiod
 {
 
-CloudToArrayInterp::CloudToArrayInterp(const ModelConfig &config) : BaseNode(config)
+CloudToArrayInterp::CloudToArrayInterp(const ModelConfig *p_config) : BaseNode(p_config)
 {
   LOG_DEBUG("CloudToArrayInterp::CloudToArrayInterp");
 
@@ -22,7 +22,7 @@ CloudToArrayInterp::CloudToArrayInterp(const ModelConfig &config) : BaseNode(con
   // outputs
   this->output_captions = {"heightmap"};
   this->output_types = {HeightMapData().type()};
-  this->out = std::make_shared<HeightMapData>(config);
+  this->out = std::make_shared<HeightMapData>(p_config);
 
   // update
   this->compute();

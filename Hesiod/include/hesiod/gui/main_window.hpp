@@ -7,6 +7,7 @@
 #include "hesiod/gui/node_editor_widget.hpp"
 #include "hesiod/gui/viewer2d_widget.hpp"
 #include "hesiod/gui/viewer3d_widget.hpp"
+#include "hesiod/model/model_config.hpp"
 
 namespace hesiod
 {
@@ -35,6 +36,8 @@ protected:
 
 private:
   void closeEvent(QCloseEvent *event) override;
+
+  hesiod::ModelConfig model_config;
 
   NodeEditorWidget *node_editor_widget;
 };

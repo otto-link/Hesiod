@@ -6,7 +6,7 @@
 namespace hesiod
 {
 
-HeightMapToMask::HeightMapToMask(const ModelConfig &config) : BaseNode(config)
+HeightMapToMask::HeightMapToMask(const ModelConfig *p_config) : BaseNode(p_config)
 {
   LOG_DEBUG("HeightMapToMask::HeightMapToMask");
 
@@ -20,7 +20,7 @@ HeightMapToMask::HeightMapToMask(const ModelConfig &config) : BaseNode(config)
   // outputs
   this->output_captions = {"mask"};
   this->output_types = {MaskData().type()};
-  this->mask = std::make_shared<MaskData>(config);
+  this->mask = std::make_shared<MaskData>(p_config);
 
   // attributes
   this->attr["inverse"] = NEW_ATTR_BOOL(false);

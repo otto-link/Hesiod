@@ -25,7 +25,7 @@ namespace hesiod
 class Cloud : public BaseNode
 {
 public:
-  Cloud(const ModelConfig &config);
+  Cloud(const ModelConfig *p_config);
 
   QtNodes::NodeData *get_preview_data() { return this->out.get(); }
   QtNodes::NodeData *get_viewer2d_data() { return nullptr; }
@@ -48,7 +48,7 @@ protected:
 class CloudToArrayInterp : public BaseNode
 {
 public:
-  CloudToArrayInterp(const ModelConfig &config);
+  CloudToArrayInterp(const ModelConfig *p_config);
 
   QtNodes::NodeData *get_preview_data() { return this->out.get(); }
   QtNodes::NodeData *get_viewer2d_data() { return this->out.get(); }
@@ -73,7 +73,7 @@ protected:
 class ColorizeSolid : public BaseNode
 {
 public:
-  ColorizeSolid(const ModelConfig &config);
+  ColorizeSolid(const ModelConfig *p_config);
 
   QtNodes::NodeData *get_preview_data() { return this->out.get(); }
   QtNodes::NodeData *get_viewer2d_data() { return this->out.get(); }
@@ -97,7 +97,7 @@ protected:
 class GammaCorrection : public BaseNode
 {
 public:
-  GammaCorrection(const ModelConfig &config);
+  GammaCorrection(const ModelConfig *p_config);
 
   QtNodes::NodeData *get_preview_data() { return this->out.get(); }
   QtNodes::NodeData *get_viewer2d_data() { return this->out.get(); }
@@ -123,7 +123,7 @@ protected:
 class HeightMapToMask : public BaseNode
 {
 public:
-  HeightMapToMask(const ModelConfig &config);
+  HeightMapToMask(const ModelConfig *p_config);
 
   QtNodes::NodeData *get_preview_data() { return this->mask.get(); }
   QtNodes::NodeData *get_viewer2d_data() { return this->mask.get(); }
@@ -153,7 +153,7 @@ public:
    * @brief Constructor.
    * @param config Noise graph configuration (shape, tiling...).
    */
-  Noise(const ModelConfig &config);
+  Noise(const ModelConfig *p_config);
 
   /**
    * @brief Return reference to the data for each viewers.
@@ -201,7 +201,7 @@ protected:
 class NoiseFbm : public BaseNode
 {
 public:
-  NoiseFbm(const ModelConfig &config);
+  NoiseFbm(const ModelConfig *p_config);
 
   QtNodes::NodeData *get_preview_data() { return this->out.get(); }
   QtNodes::NodeData *get_viewer2d_data() { return this->out.get(); }
@@ -226,7 +226,7 @@ protected:
 class SmoothCpulse : public BaseNode
 {
 public:
-  SmoothCpulse(const ModelConfig &config);
+  SmoothCpulse(const ModelConfig *p_config);
 
   QtNodes::NodeData *get_preview_data() { return this->out.get(); }
   QtNodes::NodeData *get_viewer2d_data() { return this->out.get(); }

@@ -6,7 +6,7 @@
 namespace hesiod
 {
 
-Cloud::Cloud(const ModelConfig &config) : BaseNode(config)
+Cloud::Cloud(const ModelConfig *p_config) : BaseNode(p_config)
 {
   LOG_DEBUG("Cloud::Cloud");
 

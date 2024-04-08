@@ -8,13 +8,13 @@
 
 // see model_registry.cpp
 #define HSD_REGISTER_NODE(TYPE, CATEGORY)                                                \
-  ret->registerModel<TYPE>([&config]() { return std::make_unique<TYPE>(config); },       \
+  ret->registerModel<TYPE>([p_config]() { return std::make_unique<TYPE>(p_config); },    \
                            CATEGORY);
 
 namespace hesiod
 {
 
 std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
-    hesiod::ModelConfig &config);
+    hesiod::ModelConfig *p_config);
 
 }

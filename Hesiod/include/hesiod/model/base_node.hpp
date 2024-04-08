@@ -33,7 +33,7 @@ public:
   /**
    * @brief Constructor.
    */
-  BaseNode(const ModelConfig &config);
+  BaseNode(const ModelConfig *p_config);
 
   /**
    * @brief Return the node caption.

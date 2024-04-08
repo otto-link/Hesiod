@@ -6,7 +6,7 @@
 namespace hesiod
 {
 
-SmoothCpulse::SmoothCpulse(const ModelConfig &config) : BaseNode(config)
+SmoothCpulse::SmoothCpulse(const ModelConfig *p_config) : BaseNode(p_config)
 {
   LOG_DEBUG("SmoothCpulse::SmoothCpulse");
 
@@ -20,7 +20,7 @@ SmoothCpulse::SmoothCpulse(const ModelConfig &config) : BaseNode(config)
   // outputs
   this->output_captions = {"output"};
   this->output_types = {HeightMapData().type()};
-  this->out = std::make_shared<HeightMapData>(config);
+  this->out = std::make_shared<HeightMapData>(p_config);
 
   // attributes
   this->attr["radius"] = NEW_ATTR_FLOAT(0.05f, 0.f, 0.2f, "%.3f");

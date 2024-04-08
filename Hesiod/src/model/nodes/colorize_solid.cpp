@@ -6,7 +6,7 @@
 namespace hesiod
 {
 
-ColorizeSolid::ColorizeSolid(const ModelConfig &config) : BaseNode(config)
+ColorizeSolid::ColorizeSolid(const ModelConfig *p_config) : BaseNode(p_config)
 {
   LOG_DEBUG("ColorizeSolid::ColorizeSolid");
 
@@ -20,7 +20,7 @@ ColorizeSolid::ColorizeSolid(const ModelConfig &config) : BaseNode(config)
   // outputs
   this->output_captions = {"texture"};
   this->output_types = {HeightMapRGBAData().type()};
-  this->out = std::make_shared<HeightMapRGBAData>(config);
+  this->out = std::make_shared<HeightMapRGBAData>(p_config);
 
   // attributes
   this->attr["color"] = NEW_ATTR_COLOR();

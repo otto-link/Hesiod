@@ -18,9 +18,9 @@ class MaskData : public QtNodes::NodeData
 public:
   MaskData() : name("MaskData") {}
 
-  MaskData(const ModelConfig &config)
+  MaskData(const ModelConfig *p_config)
   {
-    this->value.set_sto(config.shape, config.tiling, config.overlap);
+    this->value.set_sto(p_config->shape, p_config->tiling, p_config->overlap);
   }
 
   hmap::HeightMap get_value() const { return this->value; }
