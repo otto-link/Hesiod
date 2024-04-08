@@ -21,8 +21,6 @@ target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${HESIOD_INCLUDE})
 
-# target_precompile_headers( ${PROJECT_NAME} PRIVATE)
-
 # Link libraries
 target_link_libraries(
   ${PROJECT_NAME}
