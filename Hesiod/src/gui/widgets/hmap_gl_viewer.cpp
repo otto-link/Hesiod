@@ -14,6 +14,7 @@
 
 #include "hesiod/data/cloud_data.hpp"
 #include "hesiod/data/heightmap_data.hpp"
+#include "hesiod/data/heightmap_rgba_data.hpp"
 #include "hesiod/data/mask_data.hpp"
 #include "hesiod/gui/widgets.hpp"
 
@@ -257,6 +258,89 @@ void update_vertex_colors(hmap::Array          &z,
       }
 }
 
+void update_vertex_colors(hmap::Array          &z,
+                          hmap::Array          &r,
+                          hmap::Array          &g,
+                          hmap::Array          &b,
+                          std::vector<GLfloat> &colors,
+                          hmap::Array          *p_alpha)
+{
+  hmap::Array hs = hillshade(z, 180.f, 45.f, 10.f * z.ptp() / (float)z.shape.y);
+  hs = hmap::pow(hs, 0.9f);
+  hmap::remap(hs, 0.f, 1.5f);
+
+  int k = 0;
+
+  if (p_alpha)
+    for (int i = 0; i < z.shape.x - 1; i++)
+      for (int j = 0; j < z.shape.y - 1; j++)
+      {
+        colors[k++] = hs(i, j) * r(i, j);
+        colors[k++] = hs(i, j) * g(i, j);
+        colors[k++] = hs(i, j) * b(i, j);
+        colors[k++] = (*p_alpha)(i, j);
+
+        colors[k++] = hs(i, j + 1) * r(i, j + 1);
+        colors[k++] = hs(i, j + 1) * g(i, j + 1);
+        colors[k++] = hs(i, j + 1) * b(i, j + 1);
+        colors[k++] = (*p_alpha)(i, j + 1);
+
+        colors[k++] = hs(i + 1, j + 1) * r(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1) * g(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1) * b(i + 1, j + 1);
+        colors[k++] = (*p_alpha)(i + 1, j + 1);
+
+        colors[k++] = hs(i, j) * r(i, j);
+        colors[k++] = hs(i, j) * g(i, j);
+        colors[k++] = hs(i, j) * b(i, j);
+        colors[k++] = (*p_alpha)(i, j);
+
+        colors[k++] = hs(i + 1, j + 1) * r(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1) * g(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1) * b(i + 1, j + 1);
+        colors[k++] = (*p_alpha)(i + 1, j + 1);
+
+        colors[k++] = hs(i + 1, j) * r(i + 1, j);
+        colors[k++] = hs(i + 1, j) * g(i + 1, j);
+        colors[k++] = hs(i + 1, j) * b(i + 1, j);
+        colors[k++] = (*p_alpha)(i + 1, j);
+      }
+  else
+    for (int i = 0; i < z.shape.x - 1; i++)
+      for (int j = 0; j < z.shape.y - 1; j++)
+      {
+        colors[k++] = hs(i, j) * r(i, j);
+        colors[k++] = hs(i, j) * g(i, j);
+        colors[k++] = hs(i, j) * b(i, j);
+        colors[k++] = 1.f;
+
+        colors[k++] = hs(i, j + 1) * r(i, j + 1);
+        colors[k++] = hs(i, j + 1) * g(i, j + 1);
+        colors[k++] = hs(i, j + 1) * b(i, j + 1);
+        colors[k++] = 1.f;
+
+        colors[k++] = hs(i + 1, j + 1) * r(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1) * g(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1) * b(i + 1, j + 1);
+        colors[k++] = 1.f;
+
+        colors[k++] = hs(i, j) * r(i, j);
+        colors[k++] = hs(i, j) * g(i, j);
+        colors[k++] = hs(i, j) * b(i, j);
+        colors[k++] = 1.f;
+
+        colors[k++] = hs(i + 1, j + 1) * r(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1) * g(i + 1, j + 1);
+        colors[k++] = hs(i + 1, j + 1) * b(i + 1, j + 1);
+        colors[k++] = 1.f;
+
+        colors[k++] = hs(i + 1, j) * r(i + 1, j);
+        colors[k++] = hs(i + 1, j) * g(i + 1, j);
+        colors[k++] = hs(i + 1, j) * b(i + 1, j);
+        colors[k++] = 1.f;
+      }
+}
+
 // --- class definitions
 
 HmapGLViewer::HmapGLViewer(ModelConfig       *p_config,
@@ -320,6 +404,19 @@ void HmapGLViewer::set_data(QtNodes::NodeData *new_p_data, QtNodes::NodeData *ne
           hmap::Array      c = 1.f - p_c->to_array();
 
           update_vertex_colors(array, c, this->colors, nullptr);
+        }
+        else if (color_type.compare("HeightMapRGBAData") == 0)
+        {
+          HeightMapRGBAData   *p_hcolor = static_cast<HeightMapRGBAData *>(this->p_color);
+          hmap::HeightMapRGBA *p_c = static_cast<hmap::HeightMapRGBA *>(
+              p_hcolor->get_ref());
+
+          hmap::Array r = p_c->rgba[0].to_array();
+          hmap::Array g = p_c->rgba[1].to_array();
+          hmap::Array b = p_c->rgba[2].to_array();
+          hmap::Array a = p_c->rgba[3].to_array();
+
+          update_vertex_colors(array, r, g, b, this->colors, &a);
         }
         else if (color_type.compare("MaskData") == 0)
         {

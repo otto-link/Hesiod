@@ -21,6 +21,8 @@
 namespace hesiod
 {
 
+class Preview; // forward decl.
+
 /**
  * @brief BaseNode class, derived from the QtNodes delegate model to provide basic
  * features for the specialize model nodes.
@@ -30,6 +32,11 @@ class BaseNode : public QtNodes::NodeDelegateModel
   Q_OBJECT
 
 public:
+  /**
+   * @brief Reference to the model configuration.
+   */
+  const ModelConfig *p_config = nullptr;
+
   /**
    * @brief Constructor.
    */
@@ -122,11 +129,6 @@ public:
   std::map<std::string, std::unique_ptr<Attribute>> attr = {};
 
 protected:
-  /**
-   * @brief Reference to the model configuration.
-   */
-  const ModelConfig *p_config = nullptr;
-
   /**
    * @brief Node caption
    */

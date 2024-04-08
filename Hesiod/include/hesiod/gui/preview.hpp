@@ -6,12 +6,12 @@
 #include <QLabel>
 #include <QWidget>
 
-#include <QtNodes/NodeData>
-
-#include "hesiod/model/model_config.hpp"
+#include "hesiod/model/base_node.hpp"
 
 namespace hesiod
 {
+
+class BaseNode; // forward decl.
 
 class Preview : public QWidget
 {
@@ -20,15 +20,14 @@ class Preview : public QWidget
 public:
   Preview() = default;
 
-  Preview(const ModelConfig *p_config, QtNodes::NodeData *p_data);
+  Preview(BaseNode *p_node);
 
 public Q_SLOTS:
   void update_image();
 
 private:
-  const ModelConfig *p_config;
-  QtNodes::NodeData *p_data;
-  QLabel            *label;
+  BaseNode *p_node;
+  QLabel   *label;
 };
 
 } // namespace hesiod

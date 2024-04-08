@@ -15,6 +15,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::Cloud, "Geometry");
   HSD_REGISTER_NODE(hesiod::CloudToArrayInterp, "Geometry");
   HSD_REGISTER_NODE(hesiod::ColorizeSolid, "Texture");
+  HSD_REGISTER_NODE(hesiod::DataPreview, "Debug");
   HSD_REGISTER_NODE(hesiod::GammaCorrection, "Filter");
   HSD_REGISTER_NODE(hesiod::HeightMapToMask, "Converter");
   HSD_REGISTER_NODE(hesiod::Noise, "Primitive");

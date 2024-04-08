@@ -78,7 +78,7 @@ Viewer2dWidget::Viewer2dWidget(ModelConfig                    *p_config,
   // pin this node
   {
     this->checkbox_pin_node = new QCheckBox("Pin current node");
-    this->checkbox_pin_node->setChecked(false);
+    this->checkbox_pin_node->setChecked(Qt::Unchecked);
     layout->addWidget(this->checkbox_pin_node, 0, 2);
   }
 
@@ -101,6 +101,7 @@ void Viewer2dWidget::on_node_selected(QtNodes::NodeId const node_id)
 void Viewer2dWidget::reset()
 {
   this->current_node_id = -1;
+  this->checkbox_pin_node->setChecked(false);
   this->p_data = nullptr;
 };
 
@@ -183,22 +184,17 @@ void Viewer2dWidget::update_label_image()
 void Viewer2dWidget::update_viewport(QtNodes::NodeId const node_id)
 {
   if (!this->checkbox_pin_node->isChecked())
-  {
     this->current_node_id = node_id;
 
-    if (this->isVisible())
-    {
-      hesiod::BaseNode *p_node = this->p_model->delegateModel<hesiod::BaseNode>(node_id);
-      this->p_data = p_node->get_viewer2d_data();
-      this->update_label_image();
-    }
+  if (this->isVisible() && this->p_model->allNodeIds().contains(this->current_node_id))
+  {
+    hesiod::BaseNode *p_node = this->p_model->delegateModel<hesiod::BaseNode>(
+        this->current_node_id);
+    this->p_data = p_node->get_viewer2d_data();
+    this->update_label_image();
   }
 }
 
-void Viewer2dWidget::update_viewport()
-{
-  if (this->p_model->allNodeIds().contains(this->current_node_id))
-    this->update_viewport(this->current_node_id);
-}
+void Viewer2dWidget::update_viewport() { this->update_viewport(this->current_node_id); }
 
 } // namespace hesiod

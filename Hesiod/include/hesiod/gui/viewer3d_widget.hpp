@@ -55,8 +55,7 @@ private:
   HsdDataFlowGraphModel          *p_model;
   QWidget                        *parent;
 
-  QtNodes::NodeId    current_node_id = -1;
-  QtNodes::NodeData *p_data = nullptr;
+  QtNodes::NodeId current_node_id = -1;
 
   QCheckBox    *checkbox_pin_node;
   HmapGLViewer *gl_viewer = nullptr;

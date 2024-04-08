@@ -68,7 +68,7 @@ void Viewer3dWidget::on_node_selected(QtNodes::NodeId const node_id)
 void Viewer3dWidget::reset()
 {
   this->current_node_id = -1;
-  this->p_data = nullptr;
+  this->checkbox_pin_node->setChecked(false);
   this->gl_viewer->reset();
 };
 
@@ -81,28 +81,23 @@ void Viewer3dWidget::resizeEvent(QResizeEvent *event)
 void Viewer3dWidget::update_after_computing(QtNodes::NodeId const node_id)
 {
   if (node_id == this->current_node_id)
+
     this->update_viewport(node_id);
 }
 
 void Viewer3dWidget::update_viewport(QtNodes::NodeId const node_id)
 {
   if (!this->checkbox_pin_node->isChecked())
-  {
     this->current_node_id = node_id;
 
-    if (this->isVisible())
-    {
-      hesiod::BaseNode *p_node = this->p_model->delegateModel<hesiod::BaseNode>(node_id);
-      this->gl_viewer->set_data(p_node->get_viewer3d_data(),
-                                p_node->get_viewer3d_color());
-    }
+  if (this->isVisible() && this->p_model->allNodeIds().contains(this->current_node_id))
+  {
+    hesiod::BaseNode *p_node = this->p_model->delegateModel<hesiod::BaseNode>(
+        this->current_node_id);
+    this->gl_viewer->set_data(p_node->get_viewer3d_data(), p_node->get_viewer3d_color());
   }
 }
 
-void Viewer3dWidget::update_viewport()
-{
-  if (this->p_model->allNodeIds().contains(this->current_node_id))
-    this->update_viewport(this->current_node_id);
-}
+void Viewer3dWidget::update_viewport() { this->update_viewport(this->current_node_id); }
 
 } // namespace hesiod

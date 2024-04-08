@@ -92,6 +92,31 @@ protected:
 };
 
 /**
+ * @brief DataPreview class.
+ */
+class DataPreview : public BaseNode
+{
+public:
+  DataPreview(const ModelConfig *p_config);
+
+  QtNodes::NodeData *get_preview_data() { return this->elevation.lock().get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return this->elevation.lock().get(); }
+  QtNodes::NodeData *get_viewer3d_data() { return this->elevation.lock().get(); }
+  QtNodes::NodeData *get_viewer3d_color() { return this->color.lock().get(); }
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data,
+                 QtNodes::PortIndex                 port_index) override;
+
+protected:
+  std::weak_ptr<HeightMapData>     elevation;
+  std::weak_ptr<HeightMapRGBAData> color;
+};
+
+/**
  * @brief GammaCorrection class.
  */
 class GammaCorrection : public BaseNode

@@ -19,7 +19,12 @@ MapEnumWidget::MapEnumWidget(MapEnumAttribute *p_attr) : p_attr(p_attr)
   QStringList items;
   for (auto &[key, dummy] : this->p_attr->get_map())
     this->combobox->addItem(key.c_str());
-  this->combobox->setCurrentText(this->p_attr->get_map().begin()->first.c_str());
+
+  if (this->p_attr->get_map().contains(this->p_attr->choice))
+    this->combobox->setCurrentText(QString::fromStdString(this->p_attr->choice));
+  else
+    this->combobox->setCurrentText(this->p_attr->get_map().begin()->first.c_str());
+
   layout->addWidget(this->combobox);
 
   connect(this->combobox,
