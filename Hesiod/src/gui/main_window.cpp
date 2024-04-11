@@ -60,7 +60,7 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
 
   QAction *view2d_action = view_menu->addAction("Add 2D view");
   view2d_action->setCheckable(true);
-  view2d_action->setChecked(true);
+  view2d_action->setChecked(false);
   view_menu->addAction(view2d_action);
 
   QAction *view3d_action = view_menu->addAction("Add 3D view");
@@ -106,6 +106,7 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
 
   dock_viewer2d->setWidget(this->viewer2d);
   dock_viewer2d->setObjectName("dock_viewer2d");
+  dock_viewer2d->setVisible(false);
 
   // TODO solve OpenGL issues when docking QOpenGLWidget...
 

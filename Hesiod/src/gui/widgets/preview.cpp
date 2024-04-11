@@ -22,6 +22,7 @@ Preview::Preview(BaseNode *p_node) : p_node(p_node)
 {
   this->resize(HSD_PREVIEW_SHAPE, HSD_PREVIEW_SHAPE);
   this->label = new QLabel(this);
+  this->setStyleSheet("QLabel { background-color : black;}");
   this->update_image();
 }
 
