@@ -185,6 +185,8 @@ std::shared_ptr<gnode::Node> create_view_node_from_type(std::string node_type,
     return std::make_shared<hesiod::vnode::ViewRecastPeak>(node_id);
   case str2int("RecastRockySlopes"):
     return std::make_shared<hesiod::vnode::ViewRecastRockySlopes>(node_id);
+  case str2int("RecastSag"):
+    return std::make_shared<hesiod::vnode::ViewRecastSag>(node_id);
   case str2int("Recurve"):
     return std::make_shared<hesiod::vnode::ViewRecurve>(node_id);
   case str2int("RecurveKura"):
