@@ -147,7 +147,7 @@ int main(int argc, char *argv[])
   attr["float"] = NEW_ATTR_FLOAT(1.f, 0.1f, 5.f, "%.3f");
   attr["int"] = NEW_ATTR_INT(32, 1, 64);
   attr["map"] = NEW_ATTR_MAPENUM(hesiod::cmap_map);
-  attr["range"] = NEW_ATTR_RANGE(hmap::Vec2<float>(0.5f, 2.f), false, "%.3f");
+  attr["range"] = NEW_ATTR_RANGE(hmap::Vec2<float>(0.5f, 2.f), "%.3f");
   attr["kw"] = NEW_ATTR_WAVENB(hmap::Vec2<float>(16.f, 2.f), 0.1f, 64.f, "%.3f");
   attr["file"] = NEW_ATTR_FILENAME("export.png", "PNG Files(*.png)", "Open toto");
   attr["color"] = NEW_ATTR_COLOR();
