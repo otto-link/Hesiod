@@ -11,6 +11,7 @@
 #include "macrologger.h"
 
 #include "hesiod/data/heightmap_data.hpp"
+#include "hesiod/data/heightmap_rgba_data.hpp"
 #include "hesiod/data/mask_data.hpp"
 #include "hesiod/gui/viewer2d_widget.hpp"
 #include "hesiod/model/enum_mapping.hpp"
@@ -153,6 +154,22 @@ void Viewer2dWidget::update_label_image()
                                     array.shape.x,
                                     array.shape.y,
                                     QImage::Format_RGB888);
+      QPixmap pixmap = QPixmap::fromImage(preview_image)
+                           .QPixmap::scaled(shape.x, shape.y);
+      this->label_image->setPixmap(pixmap);
+    }
+    //
+    else if (this->p_data->type().id.compare("HeightMapRGBAData") == 0)
+    {
+      HeightMapRGBAData   *p_hdata = static_cast<HeightMapRGBAData *>(this->p_data);
+      hmap::HeightMapRGBA *p_h = static_cast<hmap::HeightMapRGBA *>(p_hdata->get_ref());
+
+      std::vector<uint8_t> img = p_h->to_img_8bit(p_h->shape);
+
+      QImage  preview_image = QImage(img.data(),
+                                    p_h->shape.x,
+                                    p_h->shape.y,
+                                    QImage::Format_RGBA8888);
       QPixmap pixmap = QPixmap::fromImage(preview_image)
                            .QPixmap::scaled(shape.x, shape.y);
       this->label_image->setPixmap(pixmap);

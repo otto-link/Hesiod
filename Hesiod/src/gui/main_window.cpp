@@ -65,7 +65,7 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
 
   QAction *view3d_action = view_menu->addAction("Add 3D view");
   view3d_action->setCheckable(true);
-  view3d_action->setChecked(false);
+  view3d_action->setChecked(true);
   view_menu->addAction(view3d_action);
 
   QMenu *help = menuBar()->addMenu("&Help");
@@ -131,7 +131,7 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
 
   this->viewer3d = new hesiod::Viewer3dWidget(&this->model_config,
                                               this->node_editor_widget->get_scene_ref());
-  // this->viewer3d->show();
+  this->viewer3d->show();
 
   // --- connections
 
