@@ -22,6 +22,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::Noise, "Primitive");
   HSD_REGISTER_NODE(hesiod::NoiseFbm, "Primitive");
   HSD_REGISTER_NODE(hesiod::Remap, "Filter");
+  HSD_REGISTER_NODE(hesiod::Rescale, "Filter");
   HSD_REGISTER_NODE(hesiod::SetAlpha, "Texture");
   HSD_REGISTER_NODE(hesiod::SmoothCpulse, "Filter");
 
