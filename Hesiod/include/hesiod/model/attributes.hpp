@@ -64,7 +64,7 @@
 
 #define HSD_DEFAULT_KW 2.f
 #define HSD_DEFAULT_SEED 1
-#define HSD_FILENAME_DISPLAY_MAX_SIZE 32
+#define HSD_FILENAME_DISPLAY_MAX_SIZE 16
 
 namespace hesiod
 {

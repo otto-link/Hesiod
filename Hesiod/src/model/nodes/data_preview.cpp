@@ -63,9 +63,8 @@ void DataPreview::compute()
 
   // empty on purpose
 
-  QtNodes::PortIndex const out_port_index = 0;
+  // not output, do not propagate
   Q_EMIT this->computingFinished();
-  Q_EMIT this->dataUpdated(out_port_index);
 }
 
 } // namespace hesiod

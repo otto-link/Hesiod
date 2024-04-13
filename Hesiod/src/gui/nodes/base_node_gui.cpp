@@ -49,7 +49,10 @@ QWidget *BaseNode::embeddedWidget()
   if (!this->preview)
   {
     this->preview = new Preview(this);
-    connect(this, &NodeDelegateModel::dataUpdated, this->preview, &Preview::update_image);
+    connect(this,
+            &NodeDelegateModel::computingFinished,
+            this->preview,
+            &Preview::update_image);
   }
   return (QWidget *)this->preview;
 }

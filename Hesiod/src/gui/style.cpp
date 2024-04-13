@@ -67,7 +67,7 @@ void set_style_qtnodes()
     "SelectedHaloColor": "orange",
     "HoveredColor": "lightcyan",
 
-    "LineWidth": 1.0,
+    "LineWidth": 1.5,
     "ConstructionLineWidth": 3.0,
     "PointDiameter": 10.0,
 

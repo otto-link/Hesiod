@@ -118,6 +118,19 @@ void Preview::update_image()
       LOG_ERROR("no preview available for the requested data type: [%s]",
                 p_data->type().id.toStdString().c_str());
   }
+  else
+  {
+    // black image if no data available
+    std::vector<uint8_t> img(this->p_node->p_config->shape_preview.x *
+                             this->p_node->p_config->shape_preview.y);
+
+    QImage preview_image = QImage(img.data(),
+                                  this->p_node->p_config->shape_preview.x,
+                                  this->p_node->p_config->shape_preview.y,
+                                  QImage::Format_Grayscale8);
+
+    this->label->setPixmap(QPixmap::fromImage(preview_image));
+  }
 }
 
 } // namespace hesiod
