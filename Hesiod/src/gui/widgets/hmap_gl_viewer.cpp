@@ -367,6 +367,7 @@ void HmapGLViewer::reset()
   glBufferData(GL_ARRAY_BUFFER, 0, NULL, GL_DYNAMIC_DRAW);
 
   this->repaint();
+
   generate_basemesh(p_config->shape, this->vertices, this->colors);
 }
 
@@ -572,19 +573,6 @@ void HmapGLViewer::wheelEvent(QWheelEvent *event)
 
   this->repaint();
 }
-
-// void HmapGLViewer::mouseReleaseEvent(QMouseEvent *event)
-// {
-//   if (event->buttons() == Qt::LeftButton)
-//   {
-//     LOG_DEBUG("left released");
-//   }
-
-//   if (event->buttons() == Qt::RightButton)
-//   {
-//     LOG_DEBUG("right released");
-//   }
-// }
 
 void HmapGLViewer::paintGL()
 {
