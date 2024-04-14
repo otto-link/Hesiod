@@ -22,10 +22,11 @@ ExportTexture::ExportTexture(const ModelConfig *p_config) : BaseNode(p_config)
   this->output_types = {};
 
   // attributes
-  this->attr["auto_export"] = NEW_ATTR_BOOL(false);
   this->attr["fname"] = NEW_ATTR_FILENAME("texture.png");
+  this->attr["auto_export"] = NEW_ATTR_BOOL(false);
+  this->attr["16 bit"] = NEW_ATTR_BOOL(false);
 
-  this->attr_ordered_key = {"auto_export", "fname"};
+  this->attr_ordered_key = {"fname", "16 bit", "auto_export"};
 
   // update
   this->compute();
@@ -61,7 +62,10 @@ void ExportTexture::compute()
 
   if (p_in && GET_ATTR_BOOL("auto_export"))
   {
-    p_in->to_png_16bit(GET_ATTR_FILENAME("fname"));
+    if (GET_ATTR_BOOL("16 bit"))
+      p_in->to_png_16bit(GET_ATTR_FILENAME("fname"));
+    else
+      p_in->to_png_8bit(GET_ATTR_FILENAME("fname"));
   }
 
   // not output, do not propagate
