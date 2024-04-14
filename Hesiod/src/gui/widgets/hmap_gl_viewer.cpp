@@ -354,9 +354,6 @@ HmapGLViewer::HmapGLViewer(ModelConfig       *p_config,
 
 void HmapGLViewer::reset()
 {
-  LOG_DEBUG("HERE");
-  p_config->log_debug();
-
   this->set_data(nullptr, nullptr);
 
   this->vertices.clear();
