@@ -14,6 +14,16 @@ MapEnumAttribute::MapEnumAttribute(std::map<std::string, int> value) : value(val
   this->choice = this->value.begin()->first;
 }
 
+MapEnumAttribute::MapEnumAttribute(std::map<std::string, int> value, std::string choice)
+    : value(value), choice(choice)
+{
+  if (!this->value.contains(this->choice))
+  {
+    LOG_ERROR("initial choice not in the available keys");
+    throw std::runtime_error("initial choice not in the available keys");
+  }
+}
+
 int MapEnumAttribute::get() { return this->value.at(this->choice); }
 
 std::map<std::string, int> MapEnumAttribute::get_map() { return this->value; }

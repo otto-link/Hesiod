@@ -3,10 +3,39 @@
  * this software. */
 #pragma once
 
+#include "highmap/colormaps.hpp"
 #include "highmap/primitives.hpp"
 
 namespace hesiod
 {
+
+enum export_format : int
+{
+  png8bit,
+  png16bit,
+  raw16bit,
+};
+
+/**
+ * @brief Plain text / enumerate mapping for the HighMap colormaps.
+ */
+static std::map<std::string, int> cmap_map = {
+    {"bone", hmap::cmap::bone},
+    {"gray", hmap::cmap::gray},
+    {"jet", hmap::cmap::jet},
+    {"magma", hmap::cmap::magma},
+    {"nipy_spectral", hmap::cmap::nipy_spectral},
+    {"terrain", hmap::cmap::terrain},
+    {"viridis", hmap::cmap::viridis}};
+
+/**
+ * @brief Plain text / enumerate mapping for the heightmap export formats (see
+ * ExportHeightmap node).
+ */
+static std::map<std::string, int> heightmap_export_format_map = {
+    {"png (8 bit)", export_format::png8bit},
+    {"png (16 bit)", export_format::png16bit},
+    {"raw (16 bit, Unity)", export_format::raw16bit}};
 
 /**
  * @brief Plain text / enumerate mapping for the HighMap noise types.
@@ -42,17 +71,5 @@ static std::map<std::string, int> noise_type_map_fbm = {
     {"Worley", hmap::NoiseType::n_worley},
     {"Worley (doube)", hmap::NoiseType::n_worley_double},
     {"Worley (value)", hmap::NoiseType::n_worley_value}};
-
-/**
- * @brief Plain text / enumerate mapping for the HighMap colormaps.
- */
-static std::map<std::string, int> cmap_map = {
-    {"bone", hmap::cmap::bone},
-    {"gray", hmap::cmap::gray},
-    {"jet", hmap::cmap::jet},
-    {"magma", hmap::cmap::magma},
-    {"nipy_spectral", hmap::cmap::nipy_spectral},
-    {"terrain", hmap::cmap::terrain},
-    {"viridis", hmap::cmap::viridis}};
 
 } // namespace hesiod

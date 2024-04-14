@@ -333,6 +333,7 @@ class MapEnumAttribute : public Attribute // OK JSON GUI
 public:
   MapEnumAttribute() = default;
   MapEnumAttribute(std::map<std::string, int> value);
+  MapEnumAttribute(std::map<std::string, int> value, std::string choice);
   int                        get();
   std::map<std::string, int> get_map();
   void                       set(std::string new_choice);
