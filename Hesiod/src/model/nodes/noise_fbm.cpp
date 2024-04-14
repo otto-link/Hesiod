@@ -10,6 +10,8 @@ NoiseFbm::NoiseFbm(const ModelConfig *p_config) : BaseNode(p_config)
 {
   LOG_DEBUG("NoiseFbm::NoiseFbm");
 
+  this->p_config->log_debug();
+
   // model
   this->node_caption = "NoiseFbm";
 

@@ -354,9 +354,23 @@ HmapGLViewer::HmapGLViewer(ModelConfig       *p_config,
 
 void HmapGLViewer::reset()
 {
+  LOG_DEBUG("HERE");
+  p_config->log_debug();
+
   this->set_data(nullptr, nullptr);
-  generate_basemesh(p_config->shape, this->vertices, this->colors);
+
+  this->vertices.clear();
+  this->colors.clear();
+
+  this->makeCurrent(); // QOpenGLWidget
+  glBindBuffer(GL_ARRAY_BUFFER, this->vbo_vertices);
+  glBufferData(GL_ARRAY_BUFFER, 0, NULL, GL_DYNAMIC_DRAW);
+
+  glBindBuffer(GL_ARRAY_BUFFER, this->vbo_colors);
+  glBufferData(GL_ARRAY_BUFFER, 0, NULL, GL_DYNAMIC_DRAW);
+
   this->repaint();
+  generate_basemesh(p_config->shape, this->vertices, this->colors);
 }
 
 void HmapGLViewer::set_data(QtNodes::NodeData *new_p_data, QtNodes::NodeData *new_p_color)
@@ -450,13 +464,13 @@ void HmapGLViewer::set_data(QtNodes::NodeData *new_p_data, QtNodes::NodeData *ne
       glBufferData(GL_ARRAY_BUFFER,
                    sizeof(this->vertices[0]) * this->vertices.size(),
                    (GLvoid *)&this->vertices[0],
-                   GL_STATIC_DRAW);
+                   GL_DYNAMIC_DRAW);
 
       glBindBuffer(GL_ARRAY_BUFFER, this->vbo_colors);
       glBufferData(GL_ARRAY_BUFFER,
                    sizeof(this->colors[0]) * this->colors.size(),
                    (GLvoid *)&this->colors[0],
-                   GL_STATIC_DRAW);
+                   GL_DYNAMIC_DRAW);
 
       this->repaint();
     }

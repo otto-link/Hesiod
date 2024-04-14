@@ -4,6 +4,7 @@
 #pragma once
 #include <QCheckBox>
 #include <QComboBox>
+#include <QDialog>
 #include <QFileDialog>
 #include <QGraphicsView>
 #include <QLabel>
@@ -378,6 +379,31 @@ private:
 
   QPointF mouse_pos_bckp;
   float   alpha_x_bckp, alpha_y_bckp, delta_x_bckp, delta_y_bckp;
+};
+
+class ModelConfigWidget : public QDialog
+{
+  Q_OBJECT
+
+public:
+  ModelConfigWidget() = default;
+
+  ModelConfigWidget(ModelConfig *p_model_config, QWidget *parent = nullptr);
+
+private:
+  ModelConfig *p_model_config;
+
+  QSlider *slider_shape;
+  QLabel  *label_shape;
+
+  QSlider *slider_tiling;
+  QLabel  *label_tiling;
+
+  QSlider *slider_overlap;
+  QLabel  *label_overlap;
+  float    vmin = 0.f;
+  float    vmax = 0.75f;
+  int      steps = 3;
 };
 
 // --- helpers
