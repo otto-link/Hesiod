@@ -34,6 +34,9 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
   this->restore_state();
 
   // --- menu bar
+  auto *new_action = new QAction("&New", this);
+  new_action->setShortcut(tr("CTRL+N"));
+
   auto *load_action = new QAction("&Load", this);
   load_action->setShortcut(tr("CTRL+O"));
 
@@ -46,6 +49,8 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
   auto *about = new QAction("&About", this);
 
   QMenu *file = menuBar()->addMenu("&File");
+  file->addAction(new_action);
+  file->addSeparator();
   file->addAction(load_action);
   file->addAction(save_action);
   file->addSeparator();
@@ -167,6 +172,19 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
   //             dock_viewer3d->show();
   //           }
   //         });
+
+  connect(new_action,
+          &QAction::triggered,
+          [this]()
+          {
+            QMessageBox::StandardButton reply;
+            reply = QMessageBox::question(this,
+                                          "New graph",
+                                          "Erase everything and start a new graph?",
+                                          QMessageBox::Yes | QMessageBox::No);
+            if (reply == QMessageBox::Yes)
+              this->node_editor_widget->get_scene_ref()->clearScene();
+          });
 
   connect(load_action,
           &QAction::triggered,
