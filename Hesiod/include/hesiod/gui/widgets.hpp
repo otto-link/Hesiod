@@ -379,6 +379,8 @@ private:
 
   QPointF mouse_pos_bckp;
   float   alpha_x_bckp, alpha_y_bckp, delta_x_bckp, delta_y_bckp;
+
+  void bind_gl_buffers();
 };
 
 class ModelConfigWidget : public QDialog

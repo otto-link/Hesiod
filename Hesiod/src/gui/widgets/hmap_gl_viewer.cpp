@@ -352,6 +352,24 @@ HmapGLViewer::HmapGLViewer(ModelConfig       *p_config,
   generate_basemesh(p_config->shape, this->vertices, this->colors);
 }
 
+void HmapGLViewer::bind_gl_buffers()
+{
+  // make sure OpenGL context is set
+  this->makeCurrent(); // QOpenGLWidget
+
+  glBindBuffer(GL_ARRAY_BUFFER, this->vbo_vertices);
+  glBufferData(GL_ARRAY_BUFFER,
+               sizeof(this->vertices[0]) * this->vertices.size(),
+               (GLvoid *)&this->vertices[0],
+               GL_STATIC_DRAW);
+
+  glBindBuffer(GL_ARRAY_BUFFER, this->vbo_colors);
+  glBufferData(GL_ARRAY_BUFFER,
+               sizeof(this->colors[0]) * this->colors.size(),
+               (GLvoid *)&this->colors[0],
+               GL_STATIC_DRAW);
+}
+
 void HmapGLViewer::reset()
 {
   this->set_data(nullptr, nullptr);
@@ -359,16 +377,9 @@ void HmapGLViewer::reset()
   this->vertices.clear();
   this->colors.clear();
 
-  this->makeCurrent(); // QOpenGLWidget
-  glBindBuffer(GL_ARRAY_BUFFER, this->vbo_vertices);
-  glBufferData(GL_ARRAY_BUFFER, 0, NULL, GL_DYNAMIC_DRAW);
-
-  glBindBuffer(GL_ARRAY_BUFFER, this->vbo_colors);
-  glBufferData(GL_ARRAY_BUFFER, 0, NULL, GL_DYNAMIC_DRAW);
-
+  generate_basemesh(this->p_config->shape, this->vertices, this->colors);
+  this->bind_gl_buffers();
   this->repaint();
-
-  generate_basemesh(p_config->shape, this->vertices, this->colors);
 }
 
 void HmapGLViewer::set_data(QtNodes::NodeData *new_p_data, QtNodes::NodeData *new_p_color)
@@ -454,22 +465,7 @@ void HmapGLViewer::set_data(QtNodes::NodeData *new_p_data, QtNodes::NodeData *ne
         update_vertex_colors(array, this->colors, nullptr);
 
       // -- send to OpenGL buffers and update
-
-      // make sure OpenGL context is set
-      this->makeCurrent(); // QOpenGLWidget
-
-      glBindBuffer(GL_ARRAY_BUFFER, this->vbo_vertices);
-      glBufferData(GL_ARRAY_BUFFER,
-                   sizeof(this->vertices[0]) * this->vertices.size(),
-                   (GLvoid *)&this->vertices[0],
-                   GL_DYNAMIC_DRAW);
-
-      glBindBuffer(GL_ARRAY_BUFFER, this->vbo_colors);
-      glBufferData(GL_ARRAY_BUFFER,
-                   sizeof(this->colors[0]) * this->colors.size(),
-                   (GLvoid *)&this->colors[0],
-                   GL_DYNAMIC_DRAW);
-
+      this->bind_gl_buffers();
       this->repaint();
     }
   }
