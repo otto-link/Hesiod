@@ -18,13 +18,19 @@ class HsdDataFlowGraphModel : public QtNodes::DataFlowGraphModel
 
 public:
   /**
+   * @brief Graph Id.
+   */
+  std::string graph_id;
+
+  /**
    * @brief Constructor.
    * @param registry
    * @param p_model_config
    */
   HsdDataFlowGraphModel(std::shared_ptr<QtNodes::NodeDelegateModelRegistry> registry,
-                        hesiod::ModelConfig *p_model_config)
-      : DataFlowGraphModel(registry), p_model_config(p_model_config)
+                        hesiod::ModelConfig *p_model_config,
+                        std::string          graph_id = "default_id")
+      : DataFlowGraphModel(registry), graph_id(graph_id), p_model_config(p_model_config)
   {
     QObject::connect(this,
                      &hesiod::HsdDataFlowGraphModel::nodeCreated,
@@ -71,8 +77,10 @@ public Q_SLOTS:
    */
   void load(QJsonObject const &jsonDocument) override // DataFlowGraphModel
   {
-    this->p_model_config->load(jsonDocument["model_config"].toObject());
-    DataFlowGraphModel::load(jsonDocument);
+    QJsonObject current_graph_json = jsonDocument[this->graph_id.c_str()].toObject();
+
+    this->p_model_config->load(current_graph_json["model_config"].toObject());
+    DataFlowGraphModel::load(current_graph_json);
   }
 
   /**
@@ -86,7 +94,7 @@ public Q_SLOTS:
     // a configuration can be provided as an input to override the configuration provided
     // by the json document (used for batch mode for instance)
     *this->p_model_config = model_config_override;
-    DataFlowGraphModel::load(jsonDocument);
+    DataFlowGraphModel::load(jsonDocument[this->graph_id.c_str()].toObject());
   }
 
   /**
@@ -95,10 +103,14 @@ public Q_SLOTS:
    */
   QJsonObject save() const override // DataFlowGraphModel
   {
-    QJsonObject sceneJson;
-    sceneJson = DataFlowGraphModel::save();
-    sceneJson["model_config"] = this->p_model_config->save();
-    return sceneJson;
+    QJsonObject graph_json;
+    graph_json = DataFlowGraphModel::save();
+    graph_json["model_config"] = this->p_model_config->save();
+
+    QJsonObject full_json;
+    full_json[this->graph_id.c_str()] = graph_json;
+
+    return full_json;
   }
 
 private:
