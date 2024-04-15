@@ -33,8 +33,7 @@ SmoothFill::SmoothFill(const ModelConfig *p_config) : BaseNode(p_config)
   this->compute();
 }
 
-std::shared_ptr<QtNodes::NodeData> SmoothFill::outData(
-    QtNodes::PortIndex port_index)
+std::shared_ptr<QtNodes::NodeData> SmoothFill::outData(QtNodes::PortIndex port_index)
 {
   switch (port_index)
   {
@@ -43,7 +42,6 @@ std::shared_ptr<QtNodes::NodeData> SmoothFill::outData(
   case 1:
     return std::static_pointer_cast<QtNodes::NodeData>(this->deposition_map);
   }
-  
 }
 
 void SmoothFill::setInData(std::shared_ptr<QtNodes::NodeData> data,

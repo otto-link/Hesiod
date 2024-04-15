@@ -66,7 +66,6 @@ void Rescale::compute()
     float vref = 0.f;
 
     if (GET_ATTR_BOOL("centered"))
-      // vref = 0.5f * (h_out.min() + h_out.max());
       vref = p_out->mean();
 
     hmap::transform(*p_out,

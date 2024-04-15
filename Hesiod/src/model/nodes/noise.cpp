@@ -86,8 +86,10 @@ void Noise::compute()
   // base noise function
   hmap::HeightMap *p_dx = HSD_GET_POINTER(this->dx);
   hmap::HeightMap *p_dy = HSD_GET_POINTER(this->dy);
+  hmap::HeightMap *p_env = HSD_GET_POINTER(this->envelope);
+  hmap::HeightMap *p_out = this->out->get_ref();
 
-  hmap::fill(*this->out->get_ref(),
+  hmap::fill(*p_out,
              p_dx,
              p_dy,
              [this](hmap::Vec2<int>   shape,
@@ -106,12 +108,10 @@ void Noise::compute()
              });
 
   // add envelope
-  hmap::HeightMap *p_env = HSD_GET_POINTER(this->envelope);
-
   if (p_env)
   {
-    float hmin = this->out->get_ref()->min();
-    hmap::transform(*this->out->get_ref(),
+    float hmin = p_out->min();
+    hmap::transform(*p_out,
                     *p_env,
                     [&hmin](hmap::Array &a, hmap::Array &b)
                     {
@@ -121,7 +121,7 @@ void Noise::compute()
   }
 
   // post-process
-  post_process_heightmap(*this->out->get_ref(),
+  post_process_heightmap(*p_out,
                          GET_ATTR_BOOL("inverse"),
                          false, // smooth
                          0,
