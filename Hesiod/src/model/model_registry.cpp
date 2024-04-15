@@ -22,9 +22,10 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::Gain, "Filter");
   HSD_REGISTER_NODE(hesiod::GammaCorrection, "Filter");
   HSD_REGISTER_NODE(hesiod::HeightMapToMask, "Converter");
-  HSD_REGISTER_NODE(hesiod::Plateau, "Filter");
+  HSD_REGISTER_NODE(hesiod::Median3x3, "Filter");
   HSD_REGISTER_NODE(hesiod::Noise, "Primitive");
   HSD_REGISTER_NODE(hesiod::NoiseFbm, "Primitive");
+  HSD_REGISTER_NODE(hesiod::Plateau, "Filter");
   HSD_REGISTER_NODE(hesiod::Remap, "Filter");
   HSD_REGISTER_NODE(hesiod::Rescale, "Filter");
   HSD_REGISTER_NODE(hesiod::SetAlpha, "Texture");
