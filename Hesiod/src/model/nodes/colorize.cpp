@@ -30,13 +30,17 @@ Colorize::Colorize(const ModelConfig *p_config) : BaseNode(p_config)
   this->attr["colormap"] = NEW_ATTR_MAPENUM(get_colormap_mapping());
   this->attr["reverse_colormap"] = NEW_ATTR_BOOL(false);
   this->attr["reverse_alpha"] = NEW_ATTR_BOOL(false);
-  this->attr["clamp_input"] = NEW_ATTR_BOOL(false);
-  this->attr["clamp_input_range"] = NEW_ATTR_RANGE();
+  this->attr["saturate_input"] = NEW_ATTR_BOOL(false);
+  this->attr["saturate_input_range"] = NEW_ATTR_RANGE();
+  this->attr["saturate_alpha"] = NEW_ATTR_BOOL(false);
+  this->attr["saturate_alpha_range"] = NEW_ATTR_RANGE();
   this->attr_ordered_key = {"colormap",
                             "reverse_colormap",
                             "reverse_alpha",
-                            "clamp_input",
-                            "clamp_input_range"};
+                            "saturate_input",
+                            "saturate_input_range",
+                            "saturate_alpha",
+                            "saturate_alpha_range"};
 
   // update
   if (this->p_config->compute_nodes_at_instanciation)
@@ -90,16 +94,16 @@ void Colorize::compute()
     std::vector<std::vector<float>> colormap_colors = hesiod::get_colormap_data(
         GET_ATTR_MAPENUM("colormap"));
 
-    // input clamping
+    // input saturation (clamping and then remapping to [0, 1])
     float cmin = 0.f;
     float cmax = 1.f;
 
-    if (GET_ATTR_BOOL("clamp_input"))
+    if (GET_ATTR_BOOL("saturate_input"))
     {
       float hmin = p_level->min();
       float hmax = p_level->max();
 
-      hmap::Vec2<float> crange = GET_ATTR_RANGE("clamp_input_range");
+      hmap::Vec2<float> crange = GET_ATTR_RANGE("saturate_input_range");
 
       cmin = (1.f - crange.x) * hmin + crange.x * hmax;
       cmax = (1.f - crange.y) * hmin + crange.y * hmax;
@@ -109,14 +113,25 @@ void Colorize::compute()
     hmap::HeightMap  alpha_copy;
     hmap::HeightMap *p_alpha_copy = nullptr;
 
-    if (GET_ATTR_BOOL("reverse_alpha") && p_alpha)
+    if (!p_alpha)
+      p_alpha_copy = p_alpha;
+    else
     {
       alpha_copy = *p_alpha;
-      alpha_copy.inverse();
       p_alpha_copy = &alpha_copy;
+
+      if (GET_ATTR_BOOL("reverse_alpha"))
+        alpha_copy.inverse();
+
+      if (GET_ATTR_BOOL("saturate_alpha"))
+      {
+        hmap::Vec2<float> arange = GET_ATTR_RANGE("saturate_alpha_range");
+        hmap::transform(alpha_copy,
+                        [&arange](hmap::Array &x)
+                        { hmap::clamp(x, arange.x, arange.y); });
+        alpha_copy.remap();
+      }
     }
-    else
-      p_alpha_copy = p_alpha;
 
     // colorize
     p_out->colorize(*p_level,
