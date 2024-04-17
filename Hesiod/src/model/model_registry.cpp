@@ -21,6 +21,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::DataPreview, "Debug");
   HSD_REGISTER_NODE(hesiod::ExportHeightmap, "IO");
   HSD_REGISTER_NODE(hesiod::ExportTexture, "IO");
+  HSD_REGISTER_NODE(hesiod::Fold, "Filter");
   HSD_REGISTER_NODE(hesiod::Gain, "Filter");
   HSD_REGISTER_NODE(hesiod::GammaCorrection, "Filter");
   HSD_REGISTER_NODE(hesiod::HeightMapToMask, "Converter");
