@@ -29,6 +29,7 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
   this->restore_state();
 
   // --- menu bar
+
   auto *new_action = new QAction("&New", this);
   new_action->setShortcut(tr("Ctrl+N"));
 
@@ -51,30 +52,6 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
   file_menu->addSeparator();
   file_menu->addAction(quit);
 
-  // QMenu *edit_menu = menuBar()->addMenu("Edit");
-
-  // auto *edit_model_config_action = new QAction("Edit graph configuration", this);
-  // // TODO add copy / paste / duplicate...
-  // edit_menu->addSeparator();
-  // edit_menu->addAction(edit_model_config_action);
-
-  // QMenu *view_menu = menuBar()->addMenu("View");
-
-  // QAction *node_settings_action = view_menu->addAction("Node settings");
-  // node_settings_action->setCheckable(true);
-  // node_settings_action->setChecked(false);
-  // view_menu->addAction(node_settings_action);
-
-  // QAction *view2d_action = view_menu->addAction("Add 2D view");
-  // view2d_action->setCheckable(true);
-  // view2d_action->setChecked(false);
-  // view_menu->addAction(view2d_action);
-
-  // QAction *view3d_action = view_menu->addAction("Add 3D view");
-  // view3d_action->setCheckable(true);
-  // view3d_action->setChecked(true);
-  // view_menu->addAction(view3d_action);
-
   QMenu *help = menuBar()->addMenu("&Help");
   help->addAction(about);
 
@@ -87,12 +64,9 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
   this->node_editor_widgets.push_back(new NodeEditorWidget("graph_1"));
   layout->addWidget(this->node_editor_widgets.back());
 
-  // this->node_editor_widgets.push_back(new NodeEditorWidget("graph_2"));
-  // layout->addWidget(this->node_editor_widgets.back());
-
   this->setCentralWidget(central_widget);
 
-  // connections
+  // --- connections
 
   connect(about, &QAction::triggered, this, &MainWindow::show_about);
   connect(load_action, &QAction::triggered, this, &MainWindow::on_load);
@@ -101,167 +75,6 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
   connect(save_action, &QAction::triggered, this, &MainWindow::on_save);
 
   connect(p_app, &QApplication::aboutToQuit, [&]() { this->save_state(); });
-
-  // // node settings dock
-  // QDockWidget *dock_settings = new QDockWidget("Node settings", this);
-  // dock_settings->setAllowedAreas(Qt::AllDockWidgetAreas);
-  // dock_settings->setFeatures(QDockWidget::DockWidgetMovable |
-  //                            QDockWidget::DockWidgetFloatable);
-
-  // NodeSettingsWidget *node_settings_widget = new NodeSettingsWidget(
-  //     this->node_editor_widget->get_scene_ref());
-
-  // dock_settings->setWidget(node_settings_widget);
-  // dock_settings->setObjectName("dock_settings");
-  // dock_settings->setMinimumWidth(300);
-  // dock_settings->setVisible(false);
-
-  // // viewer 2D dock
-  // QDockWidget *dock_viewer2d = new QDockWidget("Viewer 2D", this);
-  // dock_viewer2d->setAllowedAreas(Qt::AllDockWidgetAreas);
-  // dock_viewer2d->setFeatures(QDockWidget::DockWidgetMovable |
-  //                            QDockWidget::DockWidgetFloatable);
-
-  // this->viewer2d = new hesiod::Viewer2dWidget(&this->model_config,
-  //                                             this->node_editor_widget->get_scene_ref());
-
-  // dock_viewer2d->setWidget(this->viewer2d);
-  // dock_viewer2d->setObjectName("dock_viewer2d");
-  // dock_viewer2d->setVisible(false);
-
-  // TODO solve OpenGL issues when docking QOpenGLWidget...
-
-  // // viewer 3D dock
-  // QDockWidget *dock_viewer3d = new QDockWidget("Node settings", this, Qt::Window);
-  // dock_viewer3d->setAllowedAreas(Qt::AllDockWidgetAreas);
-  // dock_viewer3d->setFeatures(QDockWidget::DockWidgetMovable |
-  //                            QDockWidget::DockWidgetFloatable);
-
-  // this->viewer3d = new
-  // hesiod::Viewer3dWidget(&this->model_config,
-  //                                             this->node_editor_widget->get_scene_ref());
-
-  // dock_viewer3d->setWidget(this->viewer3d);
-  // dock_viewer3d->setObjectName("dock_viewer3d");
-
-  // Add the dock widget to the main window
-  // this->addDockWidget(Qt::RightDockWidgetArea, dock_viewer2d);
-  // this->addDockWidget(Qt::RightDockWidgetArea, dock_settings);
-
-  // this->addDockWidget(Qt::TopDockWidgetArea, dock_viewer3d);
-
-  // this->viewer3d = new hesiod::Viewer3dWidget(&this->model_config,
-  //                                             this->node_editor_widget->get_scene_ref());
-  // this->viewer3d->show();
-
-  // --- connections
-
-  // connect(dock_settings,
-  //         &QDockWidget::topLevelChanged,
-  //         [dock_settings]()
-  //         {
-  //           if (dock_settings->isVisible() && dock_settings->isFloating())
-  //           {
-  //             dock_settings->setWindowFlags(Qt::Window);
-  //             dock_settings->show();
-  //           }
-  //         });
-
-  // connect(dock_viewer2d,
-  //         &QDockWidget::topLevelChanged,
-  //         [dock_viewer2d]()
-  //         {
-  //           if (dock_viewer2d->isVisible() && dock_viewer2d->isFloating())
-  //           {
-  //             dock_viewer2d->setWindowFlags(Qt::Window);
-  //             dock_viewer2d->show();
-  //           }
-  //         });
-
-  // connect(dock_viewer3d,
-  //         &QDockWidget::topLevelChanged,
-  //         [dock_viewer3d]()
-  //         {
-  //           if (dock_viewer3d->isVisible() && dock_viewer3d->isFloating())
-  //           {
-  //             dock_viewer3d->setWindowFlags(Qt::Window);
-  //             dock_viewer3d->show();
-  //           }
-  //         });
-
-  // connect(edit_model_config_action,
-  //         &QAction::triggered,
-  //         [this]()
-  //         {
-  //           // TODO move this to node_editor_widget along with viewers...
-
-  //           // work on a copy of the model configuration before
-  //           // apllying modifications
-  //           ModelConfig       new_model_config = model_config;
-  //           ModelConfigWidget model_config_editor(&new_model_config, this);
-  //           int               ret = model_config_editor.exec();
-
-  //           new_model_config.log_debug();
-
-  //           if (ret)
-  //           {
-  //             LOG_DEBUG("updating model configuration");
-
-  //             // reset current views
-  //             this->viewer2d->reset();
-  //             this->viewer3d->reset();
-
-  //             // serialize the scene
-  //             QJsonObject scene_json =
-  //             this->node_editor_widget->get_model_ref()->save();
-
-  //             // modify the model config
-  //             this->model_config = new_model_config;
-
-  //             // clear out and reload the scene
-  //             this->node_editor_widget->get_scene_ref()->clearScene();
-  //             this->node_editor_widget->get_model_ref()->load(scene_json,
-  //                                                             this->model_config);
-
-  //             // re-set various buffers based on the the model
-  //             // configuration (e.g.  array shape)
-  //             this->viewer2d->reset();
-  //             this->viewer3d->reset();
-  //           }
-  //         });
-
-  // connect(node_settings_action,
-  //         &QAction::toggled,
-  //         [this, dock_settings, node_settings_action]()
-  //         {
-  //           if (node_settings_action->isChecked())
-  //             dock_settings->setVisible(true);
-  //           else
-  //             dock_settings->setVisible(false);
-  //         });
-
-  // connect(view2d_action,
-  //         &QAction::toggled,
-  //         [this, dock_viewer2d, view2d_action]()
-  //         {
-  //           if (view2d_action->isChecked())
-  //             dock_viewer2d->setVisible(true);
-  //           else
-  //             dock_viewer2d->setVisible(false);
-  //         });
-
-  // connect(view3d_action,
-  //         &QAction::toggled,
-  //         [this, view3d_action]()
-  //         {
-  //           if (view3d_action->isChecked())
-  //           {
-  //             this->viewer3d->show();
-  //             this->viewer3d->update_viewport();
-  //           }
-  //           else
-  //             this->viewer3d->hide();
-  //         });
 }
 
 MainWindow::~MainWindow() { this->save_state(); }
