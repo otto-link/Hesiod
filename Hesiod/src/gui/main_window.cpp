@@ -62,7 +62,9 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
   QHBoxLayout *layout = new QHBoxLayout(central_widget);
 
   this->node_editor_widgets.push_back(new NodeEditorWidget("graph_1"));
-  layout->addWidget(this->node_editor_widgets.back());
+
+  for (auto &e : this->node_editor_widgets)
+    layout->addWidget(e);
 
   this->setCentralWidget(central_widget);
 
