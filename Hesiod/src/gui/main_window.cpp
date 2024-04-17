@@ -25,26 +25,21 @@ namespace hesiod
 
 MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(parent)
 {
-  // (config instance saved by the node editor)
-  this->model_config.set_shape({1024, 1024});
-  this->model_config.tiling = {4, 4};
-  this->model_config.overlap = 0.25f;
-
   this->setWindowTitle(tr("Hesiod"));
   this->restore_state();
 
   // --- menu bar
   auto *new_action = new QAction("&New", this);
-  new_action->setShortcut(tr("CTRL+N"));
+  new_action->setShortcut(tr("Ctrl+N"));
 
   auto *load_action = new QAction("&Load", this);
-  load_action->setShortcut(tr("CTRL+O"));
+  load_action->setShortcut(tr("Ctrl+O"));
 
   auto *save_action = new QAction("&Save", this);
-  save_action->setShortcut(tr("CTRL+S"));
+  save_action->setShortcut(tr("Ctrl+S"));
 
   auto *quit = new QAction("&Quit", this);
-  quit->setShortcut(tr("CTRL+Q"));
+  quit->setShortcut(tr("Ctrl+Q"));
 
   auto *about = new QAction("&About", this);
 
@@ -56,29 +51,29 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
   file_menu->addSeparator();
   file_menu->addAction(quit);
 
-  QMenu *edit_menu = menuBar()->addMenu("Edit");
+  // QMenu *edit_menu = menuBar()->addMenu("Edit");
 
-  auto *edit_model_config_action = new QAction("Edit graph configuration", this);
-  // TODO add copy / paste / duplicate...
-  edit_menu->addSeparator();
-  edit_menu->addAction(edit_model_config_action);
+  // auto *edit_model_config_action = new QAction("Edit graph configuration", this);
+  // // TODO add copy / paste / duplicate...
+  // edit_menu->addSeparator();
+  // edit_menu->addAction(edit_model_config_action);
 
-  QMenu *view_menu = menuBar()->addMenu("View");
+  // QMenu *view_menu = menuBar()->addMenu("View");
 
-  QAction *node_settings_action = view_menu->addAction("Node settings");
-  node_settings_action->setCheckable(true);
-  node_settings_action->setChecked(false);
-  view_menu->addAction(node_settings_action);
+  // QAction *node_settings_action = view_menu->addAction("Node settings");
+  // node_settings_action->setCheckable(true);
+  // node_settings_action->setChecked(false);
+  // view_menu->addAction(node_settings_action);
 
-  QAction *view2d_action = view_menu->addAction("Add 2D view");
-  view2d_action->setCheckable(true);
-  view2d_action->setChecked(false);
-  view_menu->addAction(view2d_action);
+  // QAction *view2d_action = view_menu->addAction("Add 2D view");
+  // view2d_action->setCheckable(true);
+  // view2d_action->setChecked(false);
+  // view_menu->addAction(view2d_action);
 
-  QAction *view3d_action = view_menu->addAction("Add 3D view");
-  view3d_action->setCheckable(true);
-  view3d_action->setChecked(true);
-  view_menu->addAction(view3d_action);
+  // QAction *view3d_action = view_menu->addAction("Add 3D view");
+  // view3d_action->setCheckable(true);
+  // view3d_action->setChecked(true);
+  // view_menu->addAction(view3d_action);
 
   QMenu *help = menuBar()->addMenu("&Help");
   help->addAction(about);
@@ -89,37 +84,50 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
 
   QHBoxLayout *layout = new QHBoxLayout(central_widget);
 
-  this->node_editor_widget = new NodeEditorWidget(&this->model_config);
-  layout->addWidget(this->node_editor_widget);
+  this->node_editor_widgets.push_back(new NodeEditorWidget("graph_1"));
+  layout->addWidget(this->node_editor_widgets.back());
+
+  // this->node_editor_widgets.push_back(new NodeEditorWidget("graph_2"));
+  // layout->addWidget(this->node_editor_widgets.back());
 
   this->setCentralWidget(central_widget);
 
-  // node settings dock
-  QDockWidget *dock_settings = new QDockWidget("Node settings", this);
-  dock_settings->setAllowedAreas(Qt::AllDockWidgetAreas);
-  dock_settings->setFeatures(QDockWidget::DockWidgetMovable |
-                             QDockWidget::DockWidgetFloatable);
+  // connections
 
-  NodeSettingsWidget *node_settings_widget = new NodeSettingsWidget(
-      this->node_editor_widget->get_scene_ref());
+  connect(about, &QAction::triggered, this, &MainWindow::show_about);
+  connect(load_action, &QAction::triggered, this, &MainWindow::on_load);
+  connect(new_action, &QAction::triggered, this, &MainWindow::on_new);
+  connect(quit, &QAction::triggered, this, &MainWindow::on_quit);
+  connect(save_action, &QAction::triggered, this, &MainWindow::on_save);
 
-  dock_settings->setWidget(node_settings_widget);
-  dock_settings->setObjectName("dock_settings");
-  dock_settings->setMinimumWidth(300);
-  dock_settings->setVisible(false);
+  connect(p_app, &QApplication::aboutToQuit, [&]() { this->save_state(); });
 
-  // viewer 2D dock
-  QDockWidget *dock_viewer2d = new QDockWidget("Viewer 2D", this);
-  dock_viewer2d->setAllowedAreas(Qt::AllDockWidgetAreas);
-  dock_viewer2d->setFeatures(QDockWidget::DockWidgetMovable |
-                             QDockWidget::DockWidgetFloatable);
+  // // node settings dock
+  // QDockWidget *dock_settings = new QDockWidget("Node settings", this);
+  // dock_settings->setAllowedAreas(Qt::AllDockWidgetAreas);
+  // dock_settings->setFeatures(QDockWidget::DockWidgetMovable |
+  //                            QDockWidget::DockWidgetFloatable);
 
-  this->viewer2d = new hesiod::Viewer2dWidget(&this->model_config,
-                                              this->node_editor_widget->get_scene_ref());
+  // NodeSettingsWidget *node_settings_widget = new NodeSettingsWidget(
+  //     this->node_editor_widget->get_scene_ref());
 
-  dock_viewer2d->setWidget(this->viewer2d);
-  dock_viewer2d->setObjectName("dock_viewer2d");
-  dock_viewer2d->setVisible(false);
+  // dock_settings->setWidget(node_settings_widget);
+  // dock_settings->setObjectName("dock_settings");
+  // dock_settings->setMinimumWidth(300);
+  // dock_settings->setVisible(false);
+
+  // // viewer 2D dock
+  // QDockWidget *dock_viewer2d = new QDockWidget("Viewer 2D", this);
+  // dock_viewer2d->setAllowedAreas(Qt::AllDockWidgetAreas);
+  // dock_viewer2d->setFeatures(QDockWidget::DockWidgetMovable |
+  //                            QDockWidget::DockWidgetFloatable);
+
+  // this->viewer2d = new hesiod::Viewer2dWidget(&this->model_config,
+  //                                             this->node_editor_widget->get_scene_ref());
+
+  // dock_viewer2d->setWidget(this->viewer2d);
+  // dock_viewer2d->setObjectName("dock_viewer2d");
+  // dock_viewer2d->setVisible(false);
 
   // TODO solve OpenGL issues when docking QOpenGLWidget...
 
@@ -137,38 +145,38 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
   // dock_viewer3d->setObjectName("dock_viewer3d");
 
   // Add the dock widget to the main window
-  this->addDockWidget(Qt::RightDockWidgetArea, dock_viewer2d);
-  this->addDockWidget(Qt::RightDockWidgetArea, dock_settings);
+  // this->addDockWidget(Qt::RightDockWidgetArea, dock_viewer2d);
+  // this->addDockWidget(Qt::RightDockWidgetArea, dock_settings);
 
   // this->addDockWidget(Qt::TopDockWidgetArea, dock_viewer3d);
 
-  this->viewer3d = new hesiod::Viewer3dWidget(&this->model_config,
-                                              this->node_editor_widget->get_scene_ref());
-  this->viewer3d->show();
+  // this->viewer3d = new hesiod::Viewer3dWidget(&this->model_config,
+  //                                             this->node_editor_widget->get_scene_ref());
+  // this->viewer3d->show();
 
   // --- connections
 
-  connect(dock_settings,
-          &QDockWidget::topLevelChanged,
-          [dock_settings]()
-          {
-            if (dock_settings->isVisible() && dock_settings->isFloating())
-            {
-              dock_settings->setWindowFlags(Qt::Window);
-              dock_settings->show();
-            }
-          });
+  // connect(dock_settings,
+  //         &QDockWidget::topLevelChanged,
+  //         [dock_settings]()
+  //         {
+  //           if (dock_settings->isVisible() && dock_settings->isFloating())
+  //           {
+  //             dock_settings->setWindowFlags(Qt::Window);
+  //             dock_settings->show();
+  //           }
+  //         });
 
-  connect(dock_viewer2d,
-          &QDockWidget::topLevelChanged,
-          [dock_viewer2d]()
-          {
-            if (dock_viewer2d->isVisible() && dock_viewer2d->isFloating())
-            {
-              dock_viewer2d->setWindowFlags(Qt::Window);
-              dock_viewer2d->show();
-            }
-          });
+  // connect(dock_viewer2d,
+  //         &QDockWidget::topLevelChanged,
+  //         [dock_viewer2d]()
+  //         {
+  //           if (dock_viewer2d->isVisible() && dock_viewer2d->isFloating())
+  //           {
+  //             dock_viewer2d->setWindowFlags(Qt::Window);
+  //             dock_viewer2d->show();
+  //           }
+  //         });
 
   // connect(dock_viewer3d,
   //         &QDockWidget::topLevelChanged,
@@ -181,125 +189,79 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
   //           }
   //         });
 
-  connect(new_action,
-          &QAction::triggered,
-          [this]()
-          {
-            QMessageBox::StandardButton reply;
-            reply = QMessageBox::question(this,
-                                          "New graph",
-                                          "Erase everything and start a new graph?",
-                                          QMessageBox::Yes | QMessageBox::No);
-            if (reply == QMessageBox::Yes)
-              this->node_editor_widget->get_scene_ref()->clearScene();
-          });
+  // connect(edit_model_config_action,
+  //         &QAction::triggered,
+  //         [this]()
+  //         {
+  //           // TODO move this to node_editor_widget along with viewers...
 
-  connect(load_action,
-          &QAction::triggered,
-          [this]()
-          {
-            // reset current views
-            this->viewer2d->reset();
-            this->viewer3d->reset();
+  //           // work on a copy of the model configuration before
+  //           // apllying modifications
+  //           ModelConfig       new_model_config = model_config;
+  //           ModelConfigWidget model_config_editor(&new_model_config, this);
+  //           int               ret = model_config_editor.exec();
 
-            // load graph
-            this->node_editor_widget->load();
+  //           new_model_config.log_debug();
 
-            // re-set various buffers based on the the model
-            // configuration (e.g.  array shape)
-            this->viewer2d->reset();
-            this->viewer3d->reset();
-          });
+  //           if (ret)
+  //           {
+  //             LOG_DEBUG("updating model configuration");
 
-  connect(save_action,
-          &QAction::triggered,
-          this->node_editor_widget,
-          &NodeEditorWidget::save);
+  //             // reset current views
+  //             this->viewer2d->reset();
+  //             this->viewer3d->reset();
 
-  connect(edit_model_config_action,
-          &QAction::triggered,
-          [this]()
-          {
-            // TODO move this to node_editor_widget along with viewers...
+  //             // serialize the scene
+  //             QJsonObject scene_json =
+  //             this->node_editor_widget->get_model_ref()->save();
 
-            // work on a copy of the model configuration before
-            // apllying modifications
-            ModelConfig       new_model_config = model_config;
-            ModelConfigWidget model_config_editor(&new_model_config, this);
-            int               ret = model_config_editor.exec();
+  //             // modify the model config
+  //             this->model_config = new_model_config;
 
-            new_model_config.log_debug();
+  //             // clear out and reload the scene
+  //             this->node_editor_widget->get_scene_ref()->clearScene();
+  //             this->node_editor_widget->get_model_ref()->load(scene_json,
+  //                                                             this->model_config);
 
-            if (ret)
-            {
-              LOG_DEBUG("updating model configuration");
+  //             // re-set various buffers based on the the model
+  //             // configuration (e.g.  array shape)
+  //             this->viewer2d->reset();
+  //             this->viewer3d->reset();
+  //           }
+  //         });
 
-              // reset current views
-              this->viewer2d->reset();
-              this->viewer3d->reset();
+  // connect(node_settings_action,
+  //         &QAction::toggled,
+  //         [this, dock_settings, node_settings_action]()
+  //         {
+  //           if (node_settings_action->isChecked())
+  //             dock_settings->setVisible(true);
+  //           else
+  //             dock_settings->setVisible(false);
+  //         });
 
-              // serialize the scene
-              QJsonObject scene_json = this->node_editor_widget->get_model_ref()->save();
+  // connect(view2d_action,
+  //         &QAction::toggled,
+  //         [this, dock_viewer2d, view2d_action]()
+  //         {
+  //           if (view2d_action->isChecked())
+  //             dock_viewer2d->setVisible(true);
+  //           else
+  //             dock_viewer2d->setVisible(false);
+  //         });
 
-              // modify the model config
-              this->model_config = new_model_config;
-
-              // clear out and reload the scene
-              this->node_editor_widget->get_scene_ref()->clearScene();
-              this->node_editor_widget->get_model_ref()->load(scene_json,
-                                                              this->model_config);
-
-              // re-set various buffers based on the the model
-              // configuration (e.g.  array shape)
-              this->viewer2d->reset();
-              this->viewer3d->reset();
-            }
-          });
-
-  connect(node_settings_action,
-          &QAction::toggled,
-          [this, dock_settings, node_settings_action]()
-          {
-            if (node_settings_action->isChecked())
-              dock_settings->setVisible(true);
-            else
-              dock_settings->setVisible(false);
-          });
-
-  connect(view2d_action,
-          &QAction::toggled,
-          [this, dock_viewer2d, view2d_action]()
-          {
-            if (view2d_action->isChecked())
-              dock_viewer2d->setVisible(true);
-            else
-              dock_viewer2d->setVisible(false);
-          });
-
-  connect(view3d_action,
-          &QAction::toggled,
-          [this, view3d_action]()
-          {
-            if (view3d_action->isChecked())
-            {
-              this->viewer3d->show();
-              this->viewer3d->update_viewport();
-            }
-            else
-              this->viewer3d->hide();
-          });
-
-  connect(quit,
-          &QAction::triggered,
-          []()
-          {
-            LOG_DEBUG("quitting...");
-            QApplication::quit();
-          });
-
-  connect(about, &QAction::triggered, this, &MainWindow::show_about);
-
-  connect(p_app, &QApplication::aboutToQuit, [&]() { this->save_state(); });
+  // connect(view3d_action,
+  //         &QAction::toggled,
+  //         [this, view3d_action]()
+  //         {
+  //           if (view3d_action->isChecked())
+  //           {
+  //             this->viewer3d->show();
+  //             this->viewer3d->update_viewport();
+  //           }
+  //           else
+  //             this->viewer3d->hide();
+  //         });
 }
 
 MainWindow::~MainWindow() { this->save_state(); }
@@ -315,16 +277,56 @@ void MainWindow::closeEvent(QCloseEvent *event)
     event->ignore();
 }
 
+void MainWindow::on_load()
+{
+  QString filename = QFileDialog::getOpenFileName(nullptr,
+                                                  tr("Hesiod"),
+                                                  QDir::homePath(),
+                                                  tr("Hesiod Files (*.hsd)"));
+
+  if (!QFileInfo::exists(filename))
+    return;
+
+  for (auto &e : this->node_editor_widgets)
+    e->load(filename.toStdString());
+}
+
+void MainWindow::on_new()
+{
+  QMessageBox::StandardButton reply;
+  reply = QMessageBox::question(this,
+                                "New graph",
+                                "Erase everything and start a new graph?",
+                                QMessageBox::Yes | QMessageBox::No);
+  if (reply == QMessageBox::Yes)
+    for (auto &e : this->node_editor_widgets)
+      e->clear();
+}
+
+void MainWindow::on_quit() { QApplication::quit(); }
+
+void MainWindow::on_save()
+{
+  QString filename = QFileDialog::getSaveFileName(nullptr,
+                                                  tr("Hesiod"),
+                                                  QDir::homePath(),
+                                                  tr("Hesiod Files (*.hsd)"));
+
+  if (!filename.isEmpty())
+  {
+    if (!filename.endsWith("hsd", Qt::CaseInsensitive))
+      filename += ".hsd";
+  }
+
+  for (auto &e : this->node_editor_widgets)
+    e->save(filename.toStdString());
+}
+
 void MainWindow::restore_state()
 {
   QSettings settings("olink", "hesiod");
   this->restoreState(settings.value("MainWindow/state").toByteArray());
   this->restoreGeometry(settings.value("MainWindow/geometry").toByteArray());
-}
-
-void MainWindow::set_status_bar_message(std::string msg)
-{
-  this->statusBar()->showMessage(QString::fromStdString(msg));
 }
 
 void MainWindow::show_about()

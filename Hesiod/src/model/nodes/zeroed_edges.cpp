@@ -20,7 +20,6 @@ ZeroedEdges::ZeroedEdges(const ModelConfig *p_config) : BaseNode(p_config)
   // outputs
   this->output_captions = {"output"};
   this->output_types = {HeightMapData().type()};
-  this->out = std::make_shared<HeightMapData>(p_config);
 
   // attributes
   this->attr["sigma"] = NEW_ATTR_FLOAT(0.25f, 0.f, 0.5f, "%.2f");
@@ -30,7 +29,11 @@ ZeroedEdges::ZeroedEdges(const ModelConfig *p_config) : BaseNode(p_config)
   this->attr_ordered_key = {"sigma", "remap", "remap_range"};
 
   // update
-  this->compute();
+  if (this->p_config->compute_nodes_at_instanciation)
+  {
+    this->out = std::make_shared<HeightMapData>(p_config);
+    this->compute();
+  }
 }
 
 std::shared_ptr<QtNodes::NodeData> ZeroedEdges::outData(

@@ -22,7 +22,10 @@ DataPreview::DataPreview(const ModelConfig *p_config) : BaseNode(p_config)
   this->output_types = {};
 
   // update
-  this->compute();
+  if (this->p_config->compute_nodes_at_instanciation)
+  {
+    this->compute();
+  }
 }
 
 std::shared_ptr<QtNodes::NodeData> DataPreview::outData(

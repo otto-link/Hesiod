@@ -49,13 +49,15 @@ public Q_SLOTS:
 protected:
   void resizeEvent(QResizeEvent *event) override;
 
+  void showEvent(QShowEvent *event) override;
+
 private:
   ModelConfig                    *p_config;
   QtNodes::DataFlowGraphicsScene *p_scene;
   HsdDataFlowGraphModel          *p_model;
   QWidget                        *parent;
 
-  QtNodes::NodeId current_node_id = -1;
+  QtNodes::NodeId current_node_id = std::numeric_limits<uint>::max();
 
   QCheckBox    *checkbox_pin_node;
   HmapGLViewer *gl_viewer = nullptr;

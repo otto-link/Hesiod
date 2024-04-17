@@ -20,8 +20,6 @@ SmoothFill::SmoothFill(const ModelConfig *p_config) : BaseNode(p_config)
   // outputs
   this->output_captions = {"output", "depo. map"};
   this->output_types = {HeightMapData().type(), HeightMapData().type()};
-  this->out = std::make_shared<HeightMapData>(p_config);
-  this->deposition_map = std::make_shared<HeightMapData>(p_config);
 
   // attributes
   this->attr["radius"] = NEW_ATTR_FLOAT(0.05f, 0.001f, 0.2f, "%.3f");
@@ -30,7 +28,12 @@ SmoothFill::SmoothFill(const ModelConfig *p_config) : BaseNode(p_config)
   this->attr_ordered_key = {"radius", "k", "normalized_map"};
 
   // update
-  this->compute();
+  if (this->p_config->compute_nodes_at_instanciation)
+  {
+    this->out = std::make_shared<HeightMapData>(p_config);
+    this->deposition_map = std::make_shared<HeightMapData>(p_config);
+    this->compute();
+  }
 }
 
 std::shared_ptr<QtNodes::NodeData> SmoothFill::outData(QtNodes::PortIndex port_index)

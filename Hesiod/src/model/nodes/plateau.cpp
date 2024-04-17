@@ -20,7 +20,6 @@ Plateau::Plateau(const ModelConfig *p_config) : BaseNode(p_config)
   // outputs
   this->output_captions = {"output"};
   this->output_types = {HeightMapData().type()};
-  this->out = std::make_shared<HeightMapData>(p_config);
 
   // attributes
   this->attr["radius"] = NEW_ATTR_FLOAT(0.05f, 0.01f, 0.5f);
@@ -28,7 +27,11 @@ Plateau::Plateau(const ModelConfig *p_config) : BaseNode(p_config)
   this->attr_ordered_key = {"radius", "factor"};
 
   // update
-  this->compute();
+  if (this->p_config->compute_nodes_at_instanciation)
+  {
+    this->out = std::make_shared<HeightMapData>(p_config);
+    this->compute();
+  }
 }
 
 std::shared_ptr<QtNodes::NodeData> Plateau::outData(QtNodes::PortIndex /* port_index */)

@@ -20,13 +20,16 @@ SmoothCpulse::SmoothCpulse(const ModelConfig *p_config) : BaseNode(p_config)
   // outputs
   this->output_captions = {"output"};
   this->output_types = {HeightMapData().type()};
-  this->out = std::make_shared<HeightMapData>(p_config);
 
   // attributes
   this->attr["radius"] = NEW_ATTR_FLOAT(0.05f, 0.f, 0.2f, "%.3f");
 
   // update
-  this->compute();
+  if (this->p_config->compute_nodes_at_instanciation)
+  {
+    this->out = std::make_shared<HeightMapData>(p_config);
+    this->compute();
+  }
 }
 
 std::shared_ptr<QtNodes::NodeData> SmoothCpulse::outData(

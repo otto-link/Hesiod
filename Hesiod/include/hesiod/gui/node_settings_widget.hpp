@@ -42,7 +42,7 @@ private:
   HsdDataFlowGraphModel          *p_model;
   QWidget                        *parent;
 
-  QtNodes::NodeId current_node_id = -1;
+  QtNodes::NodeId current_node_id = std::numeric_limits<uint>::max();
 
   QVBoxLayout *layout;
   QCheckBox   *checkbox_pin_node;

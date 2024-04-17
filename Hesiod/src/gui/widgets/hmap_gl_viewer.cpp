@@ -349,7 +349,7 @@ HmapGLViewer::HmapGLViewer(ModelConfig       *p_config,
                            QWidget           *parent)
     : QOpenGLWidget(parent), p_config(p_config), p_data(p_data), p_color(p_color)
 {
-  generate_basemesh(p_config->shape, this->vertices, this->colors);
+  // generate_basemesh(p_config->shape, this->vertices, this->colors);
 }
 
 void HmapGLViewer::bind_gl_buffers()
@@ -370,17 +370,7 @@ void HmapGLViewer::bind_gl_buffers()
                GL_STATIC_DRAW);
 }
 
-void HmapGLViewer::reset()
-{
-  this->set_data(nullptr, nullptr);
-
-  this->vertices.clear();
-  this->colors.clear();
-
-  generate_basemesh(this->p_config->shape, this->vertices, this->colors);
-  this->bind_gl_buffers();
-  this->repaint();
-}
+void HmapGLViewer::reset() { this->set_data(nullptr, nullptr); }
 
 void HmapGLViewer::set_data(QtNodes::NodeData *new_p_data, QtNodes::NodeData *new_p_color)
 {
@@ -412,6 +402,12 @@ void HmapGLViewer::set_data(QtNodes::NodeData *new_p_data, QtNodes::NodeData *ne
         p_h = static_cast<hmap::HeightMap *>(p_hdata->get_ref());
         array = p_h->to_array();
       }
+
+      // generate the basemesh (NB - shape can be modified while
+      // editing the graph when the model configuration is changed by
+      // the user)
+      if (array.size() != this->vertices.size())
+        generate_basemesh(array.shape, this->vertices, this->colors);
 
       update_vertex_elevations(array, this->vertices);
 
@@ -464,11 +460,12 @@ void HmapGLViewer::set_data(QtNodes::NodeData *new_p_data, QtNodes::NodeData *ne
       else
         update_vertex_colors(array, this->colors, nullptr);
 
-      // -- send to OpenGL buffers and update
+      // send to OpenGL buffers
       this->bind_gl_buffers();
-      this->repaint();
     }
   }
+
+  this->repaint();
 }
 
 void HmapGLViewer::initializeGL()
@@ -572,65 +569,72 @@ void HmapGLViewer::wheelEvent(QWheelEvent *event)
 
 void HmapGLViewer::paintGL()
 {
-  glUseProgram(this->shader_program);
-
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  glEnable(GL_BLEND);
-  glEnable(GL_DEPTH_TEST);
-  glDisable(GL_CULL_FACE);
 
-  glEnableVertexAttribArray(0);
-  glBindBuffer(GL_ARRAY_BUFFER, this->vbo_vertices);
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void *)0);
-
-  glEnableVertexAttribArray(1);
-  glBindBuffer(GL_ARRAY_BUFFER, this->vbo_colors);
-  glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, (void *)0);
-
-  // transformations
-  glm::mat4 combined_matrix;
+  if (this->p_data)
   {
-    // compensate for viewport aspect ratio
-    this->aspect_ratio = (float)this->width() / (float)this->height();
+    glUseProgram(this->shader_program);
 
-    glm::mat4 scale_matrix = glm::scale(
-        glm::mat4(1.0f),
-        glm::vec3(this->scale, this->scale * this->h_scale, this->scale));
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
+    glEnable(GL_DEPTH_TEST);
+    glDisable(GL_CULL_FACE);
 
-    glm::mat4 rotation_matrix_y = glm::rotate(glm::mat4(1.0f),
-                                              glm::radians(this->alpha_y),
-                                              glm::vec3(0.0f, 1.0f, 0.0f));
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, this->vbo_vertices);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void *)0);
 
-    glm::mat4 rotation_matrix_x = glm::rotate(glm::mat4(1.0f),
-                                              glm::radians(this->alpha_x),
-                                              glm::vec3(1.0f, 0.0f, 0.0f));
+    glEnableVertexAttribArray(1);
+    glBindBuffer(GL_ARRAY_BUFFER, this->vbo_colors);
+    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, (void *)0);
 
-    glm::mat4 rotation_matrix = rotation_matrix_x * rotation_matrix_y;
+    // transformations
+    glm::mat4 combined_matrix;
+    {
+      // compensate for viewport aspect ratio
+      this->aspect_ratio = (float)this->width() / (float)this->height();
 
-    glm::mat4 transalation_matrix = glm::translate(
-        glm::mat4(1.f),
-        glm::vec3(this->delta_x, this->delta_y, 0.f));
+      glm::mat4 scale_matrix = glm::scale(
+          glm::mat4(1.0f),
+          glm::vec3(this->scale, this->scale * this->h_scale, this->scale));
 
-    glm::mat4 view_matrix = glm::translate(glm::mat4(1.f), glm::vec3(0.f, 0.f, -2.f));
+      glm::mat4 rotation_matrix_y = glm::rotate(glm::mat4(1.0f),
+                                                glm::radians(this->alpha_y),
+                                                glm::vec3(0.0f, 1.0f, 0.0f));
 
-    // define perspective projection parameters
-    glm::mat4 projection_matrix = glm::perspective(glm::radians(this->fov),
-                                                   this->aspect_ratio,
-                                                   this->near_plane,
-                                                   this->far_plane);
+      glm::mat4 rotation_matrix_x = glm::rotate(glm::mat4(1.0f),
+                                                glm::radians(this->alpha_x),
+                                                glm::vec3(1.0f, 0.0f, 0.0f));
 
-    combined_matrix = projection_matrix * view_matrix * transalation_matrix *
-                      rotation_matrix * scale_matrix;
+      glm::mat4 rotation_matrix = rotation_matrix_x * rotation_matrix_y;
+
+      glm::mat4 transalation_matrix = glm::translate(
+          glm::mat4(1.f),
+          glm::vec3(this->delta_x, this->delta_y, 0.f));
+
+      glm::mat4 view_matrix = glm::translate(glm::mat4(1.f), glm::vec3(0.f, 0.f, -2.f));
+
+      // define perspective projection parameters
+      glm::mat4 projection_matrix = glm::perspective(glm::radians(this->fov),
+                                                     this->aspect_ratio,
+                                                     this->near_plane,
+                                                     this->far_plane);
+
+      combined_matrix = projection_matrix * view_matrix * transalation_matrix *
+                        rotation_matrix * scale_matrix;
+    }
+    GLuint model_matrix_location = glGetUniformLocation(shader_program, "modelMatrix");
+    glUniformMatrix4fv(model_matrix_location,
+                       1,
+                       GL_FALSE,
+                       glm::value_ptr(combined_matrix));
+
+    // eventually render
+    glDrawArrays(GL_TRIANGLES, 0, this->vertices.size());
+
+    glDisableVertexAttribArray(0);
+    glDisableVertexAttribArray(1);
   }
-  GLuint model_matrix_location = glGetUniformLocation(shader_program, "modelMatrix");
-  glUniformMatrix4fv(model_matrix_location, 1, GL_FALSE, glm::value_ptr(combined_matrix));
-
-  // eventually render
-  glDrawArrays(GL_TRIANGLES, 0, this->vertices.size());
-
-  glDisableVertexAttribArray(0);
-  glDisableVertexAttribArray(1);
 }
 
 void HmapGLViewer::resizeGL(int w, int h) { glViewport(0, 0, w, h); }

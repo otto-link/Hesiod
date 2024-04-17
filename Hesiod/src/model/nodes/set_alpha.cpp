@@ -25,14 +25,17 @@ SetAlpha::SetAlpha(const ModelConfig *p_config) : BaseNode(p_config)
   // outputs
   this->output_captions = {"out"};
   this->output_types = {HeightMapRGBAData().type()};
-  this->out = std::make_shared<HeightMapRGBAData>(p_config);
 
   // attributes
   this->attr["alpha"] = NEW_ATTR_FLOAT(1.f, 0.f, 1.f, "%.2f");
   this->attr_ordered_key = {"alpha"};
 
   // update
-  this->compute();
+  if (this->p_config->compute_nodes_at_instanciation)
+  {
+    this->out = std::make_shared<HeightMapRGBAData>(p_config);
+    this->compute();
+  }
 }
 
 std::shared_ptr<QtNodes::NodeData> SetAlpha::outData(QtNodes::PortIndex /* port_index */)

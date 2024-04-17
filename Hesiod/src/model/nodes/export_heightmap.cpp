@@ -30,7 +30,10 @@ ExportHeightmap::ExportHeightmap(const ModelConfig *p_config) : BaseNode(p_confi
   this->attr_ordered_key = {"fname", "format", "auto_export"};
 
   // update
-  this->compute();
+  if (this->p_config->compute_nodes_at_instanciation)
+  {
+    this->compute();
+  }
 }
 
 std::shared_ptr<QtNodes::NodeData> ExportHeightmap::outData(

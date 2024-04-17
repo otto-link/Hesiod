@@ -29,7 +29,10 @@ ExportTexture::ExportTexture(const ModelConfig *p_config) : BaseNode(p_config)
   this->attr_ordered_key = {"fname", "16 bit", "auto_export"};
 
   // update
-  this->compute();
+  if (this->p_config->compute_nodes_at_instanciation)
+  {
+    this->compute();
+  }
 }
 
 std::shared_ptr<QtNodes::NodeData> ExportTexture::outData(

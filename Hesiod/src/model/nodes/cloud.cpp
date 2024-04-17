@@ -20,14 +20,17 @@ Cloud::Cloud(const ModelConfig *p_config) : BaseNode(p_config)
   // outputs
   this->output_captions = {"cloud"};
   this->output_types = {CloudData().type()};
-  this->out = std::make_shared<CloudData>();
 
   // attributes
   this->attr["cloud"] = NEW_ATTR_CLOUD();
   this->attr_ordered_key = {"cloud"};
 
   // update
-  this->compute();
+  if (this->p_config->compute_nodes_at_instanciation)
+  {
+    this->out = std::make_shared<CloudData>();
+    this->compute();
+  }
 }
 
 std::shared_ptr<QtNodes::NodeData> Cloud::outData(QtNodes::PortIndex /* port_index */)

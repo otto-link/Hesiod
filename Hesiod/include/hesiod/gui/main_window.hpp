@@ -5,9 +5,6 @@
 #include <QMainWindow>
 
 #include "hesiod/gui/node_editor_widget.hpp"
-#include "hesiod/gui/viewer2d_widget.hpp"
-#include "hesiod/gui/viewer3d_widget.hpp"
-#include "hesiod/model/model_config.hpp"
 
 namespace hesiod
 {
@@ -21,25 +18,26 @@ public:
 
   ~MainWindow() override;
 
-  hesiod::Viewer2dWidget *viewer2d;
-
-  hesiod::Viewer3dWidget *viewer3d;
-
 protected:
   void restore_state();
 
   void save_state();
 
-  void set_status_bar_message(std::string msg);
-
   void show_about();
+
+private Q_SLOTS:
+  void on_load();
+
+  void on_new();
+
+  void on_quit();
+
+  void on_save();
 
 private:
   void closeEvent(QCloseEvent *event) override;
 
-  hesiod::ModelConfig model_config;
-
-  NodeEditorWidget *node_editor_widget;
+  std::vector<NodeEditorWidget *> node_editor_widgets;
 };
 
 } // namespace hesiod

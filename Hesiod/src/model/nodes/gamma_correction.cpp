@@ -20,13 +20,16 @@ GammaCorrection::GammaCorrection(const ModelConfig *p_config) : BaseNode(p_confi
   // outputs
   this->output_captions = {"output"};
   this->output_types = {HeightMapData().type()};
-  this->out = std::make_shared<HeightMapData>(p_config);
 
   // attributes
   this->attr["gamma"] = NEW_ATTR_FLOAT(2.f, 0.01f, 10.f);
 
   // update
-  this->compute();
+  if (this->p_config->compute_nodes_at_instanciation)
+  {
+    this->out = std::make_shared<HeightMapData>(p_config);
+    this->compute();
+  }
 }
 
 std::shared_ptr<QtNodes::NodeData> GammaCorrection::outData(

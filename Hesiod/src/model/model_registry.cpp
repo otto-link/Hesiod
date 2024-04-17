@@ -10,6 +10,8 @@ namespace hesiod
 std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
     hesiod::ModelConfig *p_config)
 {
+  LOG_DEBUG("initializing node registry...");
+
   auto ret = std::make_shared<QtNodes::NodeDelegateModelRegistry>();
 
   HSD_REGISTER_NODE(hesiod::Cloud, "Geometry");

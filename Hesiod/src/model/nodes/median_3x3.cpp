@@ -20,12 +20,15 @@ Median3x3::Median3x3(const ModelConfig *p_config) : BaseNode(p_config)
   // outputs
   this->output_captions = {"output"};
   this->output_types = {HeightMapData().type()};
-  this->out = std::make_shared<HeightMapData>(p_config);
 
   // no attributes
 
   // update
-  this->compute();
+  if (this->p_config->compute_nodes_at_instanciation)
+  {
+    this->out = std::make_shared<HeightMapData>(p_config);
+    this->compute();
+  }
 }
 
 std::shared_ptr<QtNodes::NodeData> Median3x3::outData(QtNodes::PortIndex /* port_index */)

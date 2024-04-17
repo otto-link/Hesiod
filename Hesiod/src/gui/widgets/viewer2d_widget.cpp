@@ -86,7 +86,6 @@ Viewer2dWidget::Viewer2dWidget(ModelConfig                    *p_config,
   // image itself
   {
     this->label_image = new QLabel();
-    this->label_image->resize(512, 512);
     layout->addWidget(this->label_image, 2, 0, 1, 3);
   }
 
@@ -101,15 +100,22 @@ void Viewer2dWidget::on_node_selected(QtNodes::NodeId const node_id)
 
 void Viewer2dWidget::reset()
 {
-  this->current_node_id = -1;
+  this->current_node_id = std::numeric_limits<uint>::max();
   this->checkbox_pin_node->setChecked(false);
   this->p_data = nullptr;
+  this->update_label_image();
 };
 
 void Viewer2dWidget::resizeEvent(QResizeEvent *event)
 {
   QWidget::resizeEvent(event);
   Q_EMIT this->resized(event->size().width(), event->size().height());
+}
+
+void Viewer2dWidget::showEvent(QShowEvent *event)
+{
+  QWidget::showEvent(event);
+  this->update_viewport();
 }
 
 void Viewer2dWidget::update_after_computing(QtNodes::NodeId const node_id)
@@ -120,13 +126,19 @@ void Viewer2dWidget::update_after_computing(QtNodes::NodeId const node_id)
 
 void Viewer2dWidget::update_label_image()
 {
+  if (!this->p_data)
+  {
+    this->label_image->setText("No preview");
+    return;
+  }
+
   // check that the current node has not been deleted since, and that
   // data are indeed available
 
-  if (this->p_model->allNodeIds().contains(this->current_node_id) && this->p_data)
+  if (this->p_model->allNodeIds().contains(this->current_node_id))
   {
     QSize           size = this->size();
-    int             dmin = std::min(size.rheight(), size.rwidth());
+    int             dmin = (int)std::min(0.8f * size.rheight(), 0.8f * size.rwidth());
     hmap::Vec2<int> shape = {dmin, dmin};
 
     // retrieve colormap choice from combo box
@@ -141,7 +153,6 @@ void Viewer2dWidget::update_label_image()
       HeightMapData   *p_hdata = static_cast<HeightMapData *>(this->p_data);
       hmap::HeightMap *p_h = static_cast<hmap::HeightMap *>(p_hdata->get_ref());
 
-      // TODO use interpolation to avoid issues with array shape vs widget size
       hmap::Array array = p_h->to_array();
 
       std::vector<uint8_t> img = hmap::colorize(array,
@@ -150,12 +161,14 @@ void Viewer2dWidget::update_label_image()
                                                 cmap,
                                                 hs);
 
-      QImage  preview_image = QImage(img.data(),
+      QImage preview_image = QImage(img.data(),
                                     array.shape.x,
                                     array.shape.y,
                                     QImage::Format_RGB888);
+
       QPixmap pixmap = QPixmap::fromImage(preview_image)
                            .QPixmap::scaled(shape.x, shape.y);
+
       this->label_image->setPixmap(pixmap);
     }
     //
@@ -166,12 +179,14 @@ void Viewer2dWidget::update_label_image()
 
       std::vector<uint8_t> img = p_h->to_img_8bit(p_h->shape);
 
-      QImage  preview_image = QImage(img.data(),
+      QImage preview_image = QImage(img.data(),
                                     p_h->shape.x,
                                     p_h->shape.y,
                                     QImage::Format_RGBA8888);
+
       QPixmap pixmap = QPixmap::fromImage(preview_image)
                            .QPixmap::scaled(shape.x, shape.y);
+
       this->label_image->setPixmap(pixmap);
     }
     //
@@ -183,19 +198,19 @@ void Viewer2dWidget::update_label_image()
 
       std::vector<uint8_t> img = hmap::colorize_grayscale(array);
 
-      QImage  preview_image = QImage(img.data(),
+      QImage preview_image = QImage(img.data(),
                                     array.shape.x,
                                     array.shape.y,
                                     QImage::Format_Grayscale8);
+
       QPixmap pixmap = QPixmap::fromImage(preview_image)
                            .QPixmap::scaled(shape.x, shape.y);
+
       this->label_image->setPixmap(pixmap);
     }
     else
       this->label_image->setText("No preview");
   }
-  else
-    this->label_image->setText("No preview");
 }
 
 void Viewer2dWidget::update_viewport(QtNodes::NodeId const node_id)
@@ -203,13 +218,17 @@ void Viewer2dWidget::update_viewport(QtNodes::NodeId const node_id)
   if (!this->checkbox_pin_node->isChecked())
     this->current_node_id = node_id;
 
-  if (this->isVisible() && this->p_model->allNodeIds().contains(this->current_node_id))
+  if (this->p_model->allNodeIds().contains(this->current_node_id))
   {
     hesiod::BaseNode *p_node = this->p_model->delegateModel<hesiod::BaseNode>(
         this->current_node_id);
     this->p_data = p_node->get_viewer2d_data();
-    this->update_label_image();
   }
+  else
+    this->p_data = nullptr;
+
+  if (this->isVisible())
+    this->update_label_image();
 }
 
 void Viewer2dWidget::update_viewport() { this->update_viewport(this->current_node_id); }

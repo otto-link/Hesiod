@@ -22,10 +22,13 @@ CloudToArrayInterp::CloudToArrayInterp(const ModelConfig *p_config) : BaseNode(p
   // outputs
   this->output_captions = {"heightmap"};
   this->output_types = {HeightMapData().type()};
-  this->out = std::make_shared<HeightMapData>(p_config);
 
   // update
-  this->compute();
+  if (this->p_config->compute_nodes_at_instanciation)
+  {
+    this->out = std::make_shared<HeightMapData>(p_config);
+    this->compute();
+  }
 }
 
 std::shared_ptr<QtNodes::NodeData> CloudToArrayInterp::outData(

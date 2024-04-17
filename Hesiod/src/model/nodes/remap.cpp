@@ -20,13 +20,16 @@ Remap::Remap(const ModelConfig *p_config) : BaseNode(p_config)
   // outputs
   this->output_captions = {"output"};
   this->output_types = {HeightMapData().type()};
-  this->out = std::make_shared<HeightMapData>(p_config);
 
   // attributes
   this->attr["remap"] = NEW_ATTR_RANGE();
 
   // update
-  this->compute();
+  if (this->p_config->compute_nodes_at_instanciation)
+  {
+    this->out = std::make_shared<HeightMapData>(p_config);
+    this->compute();
+  }
 }
 
 std::shared_ptr<QtNodes::NodeData> Remap::outData(QtNodes::PortIndex /* port_index */)

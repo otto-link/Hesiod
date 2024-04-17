@@ -20,7 +20,6 @@ HeightMapToMask::HeightMapToMask(const ModelConfig *p_config) : BaseNode(p_confi
   // outputs
   this->output_captions = {"mask"};
   this->output_types = {MaskData().type()};
-  this->mask = std::make_shared<MaskData>(p_config);
 
   // attributes
   this->attr["inverse"] = NEW_ATTR_BOOL(false);
@@ -38,7 +37,11 @@ HeightMapToMask::HeightMapToMask(const ModelConfig *p_config) : BaseNode(p_confi
                             "saturate_k"};
 
   // update
-  this->compute();
+  if (this->p_config->compute_nodes_at_instanciation)
+  {
+    this->mask = std::make_shared<MaskData>(p_config);
+    this->compute();
+  }
 }
 
 std::shared_ptr<QtNodes::NodeData> HeightMapToMask::outData(

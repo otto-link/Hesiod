@@ -25,7 +25,6 @@ Colorize::Colorize(const ModelConfig *p_config) : BaseNode(p_config)
   // outputs
   this->output_captions = {"texture"};
   this->output_types = {HeightMapRGBAData().type()};
-  this->out = std::make_shared<HeightMapRGBAData>(p_config);
 
   // attributes
   this->attr["colormap"] = NEW_ATTR_MAPENUM(get_colormap_mapping());
@@ -40,7 +39,11 @@ Colorize::Colorize(const ModelConfig *p_config) : BaseNode(p_config)
                             "clamp_input_range"};
 
   // update
-  this->compute();
+  if (this->p_config->compute_nodes_at_instanciation)
+  {
+    this->out = std::make_shared<HeightMapRGBAData>(p_config);
+    this->compute();
+  }
 }
 
 std::shared_ptr<QtNodes::NodeData> Colorize::outData(QtNodes::PortIndex /* port_index */)

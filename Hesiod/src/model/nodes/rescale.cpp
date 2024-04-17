@@ -20,7 +20,6 @@ Rescale::Rescale(const ModelConfig *p_config) : BaseNode(p_config)
   // outputs
   this->output_captions = {"output"};
   this->output_types = {HeightMapData().type()};
-  this->out = std::make_shared<HeightMapData>(p_config);
 
   // attributes
   this->attr["scaling"] = NEW_ATTR_FLOAT(1.f, 0.f, 4.f, "%.2f");
@@ -28,7 +27,11 @@ Rescale::Rescale(const ModelConfig *p_config) : BaseNode(p_config)
   this->attr_ordered_key = {"scaling", "centered"};
 
   // update
-  this->compute();
+  if (this->p_config->compute_nodes_at_instanciation)
+  {
+    this->out = std::make_shared<HeightMapData>(p_config);
+    this->compute();
+  }
 }
 
 std::shared_ptr<QtNodes::NodeData> Rescale::outData(QtNodes::PortIndex /* port_index */)

@@ -25,17 +25,24 @@ struct ModelConfig
   /**
    * @brief Heightmap shape (e.g. width and height)
    */
-  hmap::Vec2<int> shape = {4, 4};
+  hmap::Vec2<int> shape = {1024, 1024};
 
   /**
    * @brief Heightmap tiling (for distributed computation)
    */
-  hmap::Vec2<int> tiling = {1, 1};
+  hmap::Vec2<int> tiling = {4, 4};
 
   /**
    * @brief Tile overlap (in [0, 1]).
    */
-  float overlap = 0.f;
+  float overlap = 0.25f;
+
+  /**
+   * @brief Define whether the node data are allocated in memory and whether the node is
+   * computed at instanciation (set to false when generating the model registry to avoid
+   * using excessive memory at this stage)
+   */
+  bool compute_nodes_at_instanciation = true;
 
   /**
    * @brief Display some infos about the configuration.

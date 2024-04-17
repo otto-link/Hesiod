@@ -22,7 +22,6 @@ Noise::Noise(const ModelConfig *p_config) : BaseNode(p_config)
   // outputs
   this->output_captions = {"output"};
   this->output_types = {HeightMapData().type()};
-  this->out = std::make_shared<HeightMapData>(p_config);
 
   // attributes
   this->attr["noise_type"] = NEW_ATTR_MAPENUM(noise_type_map);
@@ -43,7 +42,11 @@ Noise::Noise(const ModelConfig *p_config) : BaseNode(p_config)
                             "remap_range"};
 
   // update
-  this->compute();
+  if (this->p_config->compute_nodes_at_instanciation)
+  {
+    this->out = std::make_shared<HeightMapData>(p_config);
+    this->compute();
+  }
 }
 
 std::shared_ptr<QtNodes::NodeData> Noise::outData(QtNodes::PortIndex /* port_index */)
