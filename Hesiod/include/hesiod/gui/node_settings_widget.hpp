@@ -28,7 +28,9 @@ class NodeSettingsWidget : public QWidget
 public:
   NodeSettingsWidget() = default;
 
-  NodeSettingsWidget(QtNodes::DataFlowGraphicsScene *p_scene, QWidget *parent = nullptr);
+  NodeSettingsWidget(QtNodes::DataFlowGraphicsScene *p_scene,
+                     QWidget                        *parent = nullptr,
+                     std::string                     label = "");
 
 public Q_SLOTS:
   // void update_after_computing(QtNodes::NodeId const node_id);
@@ -41,11 +43,15 @@ private:
   QtNodes::DataFlowGraphicsScene *p_scene;
   HsdDataFlowGraphModel          *p_model;
   QWidget                        *parent;
+  std::string                     label;
 
   QtNodes::NodeId current_node_id = std::numeric_limits<uint>::max();
 
   QVBoxLayout *layout;
-  QCheckBox   *checkbox_pin_node;
+  QCheckBox   *checkbox_pin_node = nullptr;
+  bool         do_pin_node;
+
+  void build_layout(QtNodes::NodeId const node_id);
 };
 
 } // namespace hesiod

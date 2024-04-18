@@ -22,7 +22,8 @@ namespace hesiod
 
 Viewer2dWidget::Viewer2dWidget(ModelConfig                    *p_config,
                                QtNodes::DataFlowGraphicsScene *p_scene,
-                               QWidget                        *parent)
+                               QWidget                        *parent,
+                               std::string                     label)
     : p_config(p_config), p_scene(p_scene), parent(parent)
 {
   this->p_model = (HsdDataFlowGraphModel *)&this->p_scene->graphModel();
@@ -32,6 +33,11 @@ Viewer2dWidget::Viewer2dWidget(ModelConfig                    *p_config,
                    &QtNodes::DataFlowGraphicsScene::nodeSelected,
                    this,
                    &hesiod::Viewer2dWidget::on_node_selected);
+
+  QObject::connect(this->p_model,
+                   &hesiod::HsdDataFlowGraphModel::nodeDeleted,
+                   this,
+                   &hesiod::Viewer2dWidget::on_node_deleted);
 
   QObject::connect(this->p_model,
                    &HsdDataFlowGraphModel::computingFinished,
@@ -45,9 +51,28 @@ Viewer2dWidget::Viewer2dWidget(ModelConfig                    *p_config,
 
   // --- build up layout
   this->setWindowTitle("Viewer 2D");
-  this->setMinimumSize(128, 128);
 
   QGridLayout *layout = new QGridLayout(this);
+  int          row = 0;
+
+  // title
+  if (label != "")
+  {
+    QLabel *widget = new QLabel(label.c_str());
+    QFont   f = widget->font();
+    f.setBold(true);
+    widget->setFont(f);
+    layout->addWidget(widget, row, 0);
+    row++;
+  }
+
+  // pin this node
+  {
+    this->checkbox_pin_node = new QCheckBox("Pin current node");
+    this->checkbox_pin_node->setChecked(Qt::Unchecked);
+    layout->addWidget(this->checkbox_pin_node, row, 0, 1, 2);
+    row++;
+  }
 
   // colormap choice
   {
@@ -56,7 +81,7 @@ Viewer2dWidget::Viewer2dWidget(ModelConfig                    *p_config,
     for (auto &[key, dummy] : cmap_map)
       this->combobox_cmap->addItem(key.c_str());
     this->combobox_cmap->setCurrentText("magma");
-    layout->addWidget(this->combobox_cmap, 0, 0);
+    layout->addWidget(this->combobox_cmap, row, 0);
 
     connect(this->combobox_cmap,
             QOverload<int>::of(&QComboBox::currentIndexChanged),
@@ -68,28 +93,30 @@ Viewer2dWidget::Viewer2dWidget(ModelConfig                    *p_config,
   {
     this->checkbox_hillshade = new QCheckBox("Hillshading");
     this->checkbox_hillshade->setChecked(false);
-    layout->addWidget(this->checkbox_hillshade, 0, 1);
+    layout->addWidget(this->checkbox_hillshade, row, 1);
 
     connect(this->checkbox_hillshade,
             &QCheckBox::stateChanged,
             this,
             &Viewer2dWidget::update_label_image);
-  }
-
-  // pin this node
-  {
-    this->checkbox_pin_node = new QCheckBox("Pin current node");
-    this->checkbox_pin_node->setChecked(Qt::Unchecked);
-    layout->addWidget(this->checkbox_pin_node, 0, 2);
+    row++;
   }
 
   // image itself
   {
     this->label_image = new QLabel();
-    layout->addWidget(this->label_image, 2, 0, 1, 3);
+    this->label_image->setMaximumSize(256, 256);
+    layout->addWidget(this->label_image, row, 0, 1, 2);
+    row++;
   }
 
   this->setLayout(layout);
+}
+
+void Viewer2dWidget::on_node_deleted(QtNodes::NodeId const node_id)
+{
+  if (this->current_node_id == node_id)
+    this->reset();
 }
 
 void Viewer2dWidget::on_node_selected(QtNodes::NodeId const node_id)
@@ -138,7 +165,7 @@ void Viewer2dWidget::update_label_image()
   if (this->p_model->allNodeIds().contains(this->current_node_id))
   {
     QSize           size = this->size();
-    int             dmin = (int)std::min(0.8f * size.rheight(), 0.8f * size.rwidth());
+    int             dmin = (int)std::min(1.f * size.rheight(), 1.f * size.rwidth());
     hmap::Vec2<int> shape = {dmin, dmin};
 
     // retrieve colormap choice from combo box

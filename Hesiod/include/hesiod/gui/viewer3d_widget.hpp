@@ -30,12 +30,15 @@ public:
 
   Viewer3dWidget(ModelConfig                    *p_config,
                  QtNodes::DataFlowGraphicsScene *p_scene,
-                 QWidget                        *parent = nullptr);
+                 QWidget                        *parent = nullptr,
+                 std::string                     label = "");
 
 Q_SIGNALS:
   void resized(int width, int height);
 
 public Q_SLOTS:
+  void on_node_deleted(QtNodes::NodeId const node_id);
+
   void on_node_selected(QtNodes::NodeId const node_id);
 
   void reset();

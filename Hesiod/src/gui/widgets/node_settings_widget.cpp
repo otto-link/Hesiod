@@ -13,8 +13,9 @@ namespace hesiod
 {
 
 NodeSettingsWidget::NodeSettingsWidget(QtNodes::DataFlowGraphicsScene *p_scene,
-                                       QWidget                        *parent)
-    : p_scene(p_scene), parent(parent)
+                                       QWidget                        *parent,
+                                       std::string                     label)
+    : p_scene(p_scene), parent(parent), label(label)
 {
   this->p_model = (HsdDataFlowGraphModel *)&this->p_scene->graphModel();
 
@@ -29,39 +30,37 @@ NodeSettingsWidget::NodeSettingsWidget(QtNodes::DataFlowGraphicsScene *p_scene,
                    this,
                    &hesiod::NodeSettingsWidget::on_node_deleted);
 
-  // build up layout (actually empty at this point)
   this->setWindowTitle("Node settings");
 
+  // build up layout
   this->layout = new QVBoxLayout(this);
-  this->layout->setSpacing(0);
-
-  // pin this node
-  {
-    this->checkbox_pin_node = new QCheckBox("Pin current node");
-    this->checkbox_pin_node->setChecked(false);
-    this->layout->addWidget(this->checkbox_pin_node);
-  }
-
   this->setLayout(this->layout);
+
+  this->build_layout(this->current_node_id);
 }
 
-void NodeSettingsWidget::on_node_deleted(QtNodes::NodeId const node_id)
+void NodeSettingsWidget::build_layout(QtNodes::NodeId const node_id)
 {
-  if (this->current_node_id == node_id)
+  if (this->label != "")
   {
-    clear_layout(this->layout);
-    this->current_node_id = -1;
+    QLabel *widget = new QLabel(this->label.c_str());
+    QFont   f = widget->font();
+    f.setBold(true);
+    widget->setFont(f);
+    this->layout->addWidget(widget);
   }
-}
 
-void NodeSettingsWidget::update_layout(QtNodes::NodeId const node_id)
-{
-  if (!this->checkbox_pin_node->isChecked())
-  {
+  this->checkbox_pin_node = new QCheckBox("Pin current node");
+  this->checkbox_pin_node->setChecked(this->do_pin_node);
+  this->layout->addWidget(this->checkbox_pin_node);
+
+  if (!this->do_pin_node)
     this->current_node_id = node_id;
-    hesiod::BaseNode *p_node = this->p_model->delegateModel<hesiod::BaseNode>(node_id);
 
-    clear_layout(this->layout);
+  if (this->p_model->allNodeIds().contains(this->current_node_id))
+  {
+    hesiod::BaseNode *p_node = this->p_model->delegateModel<hesiod::BaseNode>(
+        this->current_node_id);
 
     AttributesWidget *attributes_widget = new AttributesWidget(&p_node->attr,
                                                                &p_node->attr_ordered_key);
@@ -70,19 +69,35 @@ void NodeSettingsWidget::update_layout(QtNodes::NodeId const node_id)
             &AttributesWidget::value_changed,
             [p_node]() { p_node->compute(); });
 
-    // this->layout->addWidget(this->checkbox_pin_node);
-
-    this->checkbox_pin_node = new QCheckBox("Pin current node");
-    this->checkbox_pin_node->setChecked(false);
-    this->layout->addWidget(this->checkbox_pin_node);
-
-    QFrame *line = new QFrame;
-    line->setFrameShape(QFrame::HLine);
-    line->setFrameShadow(QFrame::Sunken);
-    this->layout->addWidget(line);
-
     this->layout->addWidget(attributes_widget);
-    this->layout->addStretch();
+  }
+  else
+  {
+    QLabel *widget = new QLabel("nothing to show");
+    this->layout->addWidget(widget);
+  }
+}
+
+void NodeSettingsWidget::on_node_deleted(QtNodes::NodeId const node_id)
+{
+  if (this->current_node_id == node_id)
+  {
+    this->current_node_id = -1;
+    this->do_pin_node = false;
+    clear_layout(this->layout);
+    this->build_layout(this->current_node_id);
+  }
+}
+
+void NodeSettingsWidget::update_layout(QtNodes::NodeId const node_id)
+{
+  this->do_pin_node = this->checkbox_pin_node == nullptr
+                          ? false
+                          : this->checkbox_pin_node->isChecked();
+  if (!this->do_pin_node)
+  {
+    clear_layout(this->layout);
+    this->build_layout(node_id);
   }
 }
 

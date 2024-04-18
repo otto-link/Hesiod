@@ -21,7 +21,8 @@ namespace hesiod
 
 Viewer3dWidget::Viewer3dWidget(ModelConfig                    *p_config,
                                QtNodes::DataFlowGraphicsScene *p_scene,
-                               QWidget                        *parent)
+                               QWidget                        *parent,
+                               std::string                     label)
     : p_config(p_config), p_scene(p_scene), parent(parent)
 {
   this->p_model = (HsdDataFlowGraphModel *)&this->p_scene->graphModel();
@@ -31,6 +32,11 @@ Viewer3dWidget::Viewer3dWidget(ModelConfig                    *p_config,
                    &QtNodes::DataFlowGraphicsScene::nodeSelected,
                    this,
                    &hesiod::Viewer3dWidget::on_node_selected);
+
+  QObject::connect(this->p_model,
+                   &hesiod::HsdDataFlowGraphModel::nodeDeleted,
+                   this,
+                   &hesiod::Viewer3dWidget::on_node_deleted);
 
   QObject::connect(this->p_model,
                    &HsdDataFlowGraphModel::computingFinished,
@@ -43,20 +49,36 @@ Viewer3dWidget::Viewer3dWidget(ModelConfig                    *p_config,
 
   QGridLayout *layout = new QGridLayout(this);
 
+  // title
+  if (label != "")
+  {
+    QLabel *widget = new QLabel(label.c_str());
+    QFont   f = widget->font();
+    f.setBold(true);
+    widget->setFont(f);
+    layout->addWidget(widget, 0, 0);
+  }
+
   // pin this node
   {
     this->checkbox_pin_node = new QCheckBox("Pin current node");
     this->checkbox_pin_node->setChecked(false);
-    layout->addWidget(this->checkbox_pin_node, 0, 0);
+    layout->addWidget(this->checkbox_pin_node, 0, 1);
   }
 
   // openGL widget
   {
     this->gl_viewer = new HmapGLViewer(this->p_config, nullptr);
-    layout->addWidget(this->gl_viewer, 1, 0);
+    layout->addWidget(this->gl_viewer, 1, 0, 1, 2);
   }
 
   this->setLayout(layout);
+}
+
+void Viewer3dWidget::on_node_deleted(QtNodes::NodeId const node_id)
+{
+  if (this->current_node_id == node_id)
+    this->reset();
 }
 
 void Viewer3dWidget::on_node_selected(QtNodes::NodeId const node_id)

@@ -35,30 +35,37 @@ NodeEditorWidget::NodeEditorWidget(std::string graph_id, QWidget *parent)
 
   this->scene = std::make_unique<QtNodes::DataFlowGraphicsScene>(*this->model.get());
 
-  // viewers 2d and 3d
+  // viewer 3d
+  this->viewer3d = new hesiod::Viewer3dWidget(&this->model_config,
+                                              this->get_scene_ref(),
+                                              parent,
+                                              "Viewer 3D");
+  this->viewer3d->hide();
+  layout->addWidget(this->viewer3d, 0, 0);
+
+  // viewer2d and settings
   {
     QWidget     *viewers = new QWidget(this);
-    QVBoxLayout *layout_viewers = new QVBoxLayout(viewers);
+    QVBoxLayout *layout_vert = new QVBoxLayout(viewers);
+
+    this->node_settings_widget = new NodeSettingsWidget(this->get_scene_ref(),
+                                                        parent,
+                                                        "Node settings");
+    this->node_settings_widget->hide();
 
     this->viewer2d = new hesiod::Viewer2dWidget(&this->model_config,
-                                                this->get_scene_ref());
-    this->viewer3d = new hesiod::Viewer3dWidget(&this->model_config,
-                                                this->get_scene_ref());
-
+                                                this->get_scene_ref(),
+                                                parent,
+                                                "Viewer 2D");
     this->viewer2d->hide();
-    this->viewer3d->hide();
 
-    layout_viewers->addWidget(this->viewer2d);
-    layout_viewers->addWidget(this->viewer3d);
+    layout_vert->addWidget(this->viewer2d);
+    layout_vert->addWidget(this->node_settings_widget);
+    layout_vert->addStretch();
 
-    viewers->setLayout(layout_viewers);
-    layout->addWidget(viewers, 0, 0);
+    viewers->setLayout(layout_vert);
+    layout->addWidget(viewers, 0, 2);
   }
-
-  // settings
-  this->node_settings_widget = new NodeSettingsWidget(this->get_scene_ref());
-  layout->addWidget(this->node_settings_widget, 0, 2);
-  this->node_settings_widget->hide();
 
   // node editor
   auto view = new QtNodes::GraphicsView(scene.get());
