@@ -46,6 +46,7 @@ Viewer3dWidget::Viewer3dWidget(ModelConfig                    *p_config,
   // --- build up layout
   this->setWindowTitle("Viewer 3D");
   this->setMinimumSize(256, 256);
+  this->setStyleSheet("border: 1px");
 
   QGridLayout *layout = new QGridLayout(this);
 

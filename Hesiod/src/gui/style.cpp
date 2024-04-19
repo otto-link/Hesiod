@@ -16,38 +16,48 @@ void set_style_qtapp(QApplication &app)
   font.setPointSize(10);
   app.setFont(font);
 
-  app.setStyleSheet(R"(
-* {
-    font-family: Roboto, sans-serif;
-}
+  // QFont defaultFont = app.font();
+  // defaultFont.setPointSize(defaultFont.pointSize() - 2);
+  // app.setFont(defaultFont);
 
-QSlider::groove:horizontal { 
-	background: #D8DEE9;
-	height: 24px; 
-	border-radius: 4px;
-}
+  const std::string style_sheet =
+#include "darkstyle.css"
+      ;
 
-QSlider::handle:horizontal { 
-	background-color: #81A1C1; 
-	width: 24px; 
-	height: 24px; 
-	border-radius: 8px;
-}
+  //   app.setStyleSheet(R"(
+  // * {
+  //     font-family: Roboto, sans-serif;
+  // }
 
-QSlider::groove:vertical { 
-	background: #D8DEE9;
-	width: 24px; 
-	border-radius: 4px;
-}
+  // QSlider::groove:horizontal {
+  // 	background: #D8DEE9;
+  // 	height: 24px;
+  // 	border-radius: 4px;
+  // }
 
-QSlider::handle:vertical { 
-	background-color: #81A1C1; 
-	width: 24px; 
-	height: 24px; 
-	border-radius: 8px;
-}
+  // QSlider::handle:horizontal {
+  // 	background-color: #81A1C1;
+  // 	width: 24px;
+  // 	height: 24px;
+  // 	border-radius: 8px;
+  // }
 
-)");
+  // QSlider::groove:vertical {
+  // 	background: #D8DEE9;
+  // 	width: 24px;
+  // 	border-radius: 4px;
+  // }
+
+  // QSlider::handle:vertical {
+  // 	background-color: #81A1C1;
+  // 	width: 24px;
+  // 	height: 24px;
+  // 	border-radius: 8px;
+  // }
+
+  // )");
+
+  app.setStyleSheet(style_sheet.c_str());
 }
 
 void set_style_qtnodes()
