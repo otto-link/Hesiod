@@ -24,39 +24,6 @@ void set_style_qtapp(QApplication &app)
 #include "darkstyle.css"
       ;
 
-  //   app.setStyleSheet(R"(
-  // * {
-  //     font-family: Roboto, sans-serif;
-  // }
-
-  // QSlider::groove:horizontal {
-  // 	background: #D8DEE9;
-  // 	height: 24px;
-  // 	border-radius: 4px;
-  // }
-
-  // QSlider::handle:horizontal {
-  // 	background-color: #81A1C1;
-  // 	width: 24px;
-  // 	height: 24px;
-  // 	border-radius: 8px;
-  // }
-
-  // QSlider::groove:vertical {
-  // 	background: #D8DEE9;
-  // 	width: 24px;
-  // 	border-radius: 4px;
-  // }
-
-  // QSlider::handle:vertical {
-  // 	background-color: #81A1C1;
-  // 	width: 24px;
-  // 	height: 24px;
-  // 	border-radius: 8px;
-  // }
-
-  // )");
-
   app.setStyleSheet(style_sheet.c_str());
 }
 
