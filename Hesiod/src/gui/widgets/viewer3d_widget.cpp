@@ -45,7 +45,7 @@ Viewer3dWidget::Viewer3dWidget(ModelConfig                    *p_config,
 
   // --- build up layout
   this->setWindowTitle("Viewer 3D");
-  this->setMinimumSize(512, 512);
+  this->setMinimumSize(256, 256);
 
   QGridLayout *layout = new QGridLayout(this);
 
