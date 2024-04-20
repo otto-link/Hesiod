@@ -103,6 +103,7 @@ R""(
 	border: 0px solid #5B5B5B;
 	color: #DFE1E2;
 	margin: 2px;
+	border-radius: 4px;
 	background-color: #2B2B2B;
 	selection-background-color: #ABABAB;
     }
@@ -188,6 +189,11 @@ R""(
     QColumnView::item:selected:active
     {
 	background-color: #ABABAB;
+    }
+
+    QHeaderView {
+	color: #DFE1E2;
+	background-color: #2B2B2B;
     }
     
     /* QSlider */

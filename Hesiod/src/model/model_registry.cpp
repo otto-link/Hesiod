@@ -14,29 +14,29 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
 
   auto ret = std::make_shared<QtNodes::NodeDelegateModelRegistry>();
 
-  HSD_REGISTER_NODE(hesiod::Cloud, "Geometry");
-  HSD_REGISTER_NODE(hesiod::CloudToArrayInterp, "Geometry");
+  HSD_REGISTER_NODE(hesiod::Cloud, "Geometry/Cloud");
+  HSD_REGISTER_NODE(hesiod::CloudToArrayInterp, "Primitive/Authoring");
   HSD_REGISTER_NODE(hesiod::Colorize, "Texture");
   HSD_REGISTER_NODE(hesiod::ColorizeSolid, "Texture");
   HSD_REGISTER_NODE(hesiod::Comment, "Comment");
   HSD_REGISTER_NODE(hesiod::DataPreview, "Debug");
-  HSD_REGISTER_NODE(hesiod::ExportHeightmap, "IO");
-  HSD_REGISTER_NODE(hesiod::ExportTexture, "IO");
-  HSD_REGISTER_NODE(hesiod::Fold, "Filter");
-  HSD_REGISTER_NODE(hesiod::Gain, "Filter");
-  HSD_REGISTER_NODE(hesiod::GammaCorrection, "Filter");
+  HSD_REGISTER_NODE(hesiod::ExportHeightmap, "IO/Files");
+  HSD_REGISTER_NODE(hesiod::ExportTexture, "IO/Files");
+  HSD_REGISTER_NODE(hesiod::Fold, "Filter/Recast");
+  HSD_REGISTER_NODE(hesiod::Gain, "Filter/Recurve");
+  HSD_REGISTER_NODE(hesiod::GammaCorrection, "Filter/Recurve");
   HSD_REGISTER_NODE(hesiod::HeightMapToMask, "Converter");
-  HSD_REGISTER_NODE(hesiod::Median3x3, "Filter");
+  HSD_REGISTER_NODE(hesiod::Median3x3, "Filter/Smoothing");
   HSD_REGISTER_NODE(hesiod::MixTexture, "Texture");
-  HSD_REGISTER_NODE(hesiod::Noise, "Primitive");
-  HSD_REGISTER_NODE(hesiod::NoiseFbm, "Primitive");
-  HSD_REGISTER_NODE(hesiod::Plateau, "Filter");
-  HSD_REGISTER_NODE(hesiod::Remap, "Filter");
-  HSD_REGISTER_NODE(hesiod::Rescale, "Filter");
+  HSD_REGISTER_NODE(hesiod::Noise, "Primitive/Coherent Noise");
+  HSD_REGISTER_NODE(hesiod::NoiseFbm, "Primitive/Coherent Noise");
+  HSD_REGISTER_NODE(hesiod::Plateau, "Filter/Recurve");
+  HSD_REGISTER_NODE(hesiod::Remap, "Filter/Range");
+  HSD_REGISTER_NODE(hesiod::Rescale, "Filter/Range");
   HSD_REGISTER_NODE(hesiod::SetAlpha, "Texture");
-  HSD_REGISTER_NODE(hesiod::SmoothCpulse, "Filter");
-  HSD_REGISTER_NODE(hesiod::SmoothFill, "Filter");
-  HSD_REGISTER_NODE(hesiod::ZeroedEdges, "Math");
+  HSD_REGISTER_NODE(hesiod::SmoothCpulse, "Filter/Smoothing");
+  HSD_REGISTER_NODE(hesiod::SmoothFill, "Filter/Smoothing");
+  HSD_REGISTER_NODE(hesiod::ZeroedEdges, "Math/Boundaries");
 
   return ret;
 }

@@ -41,11 +41,13 @@ void DefaultNodePainter::drawNodeCaption(QPainter *painter, NodeGraphicsObject &
         node_type_map = registry->registeredModelsCategoryAssociation();
 
     std::string node_category = node_type_map.at(name).toStdString();
+    int         pos = node_category.find("/");
+    std::string main_category = node_category.substr(0, pos);
 
     QColor fill_color = QColor(255, 0, 0);
 
-    if (hesiod::node_category_color.contains(node_category))
-      fill_color = hesiod::node_category_color.at(node_category);
+    if (hesiod::node_category_color.contains(main_category))
+      fill_color = hesiod::node_category_color.at(main_category);
 
     painter->setBrush(fill_color);
     painter->setPen(Qt::NoPen);

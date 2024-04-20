@@ -160,7 +160,7 @@ int main(int argc, char *argv[])
   attr["text"] = NEW_ATTR_STRING("test");
 
   hesiod::AttributesWidget *sw = new hesiod::AttributesWidget(&attr);
-  sw->show();
+  // sw->show();
 
   // ---
 
