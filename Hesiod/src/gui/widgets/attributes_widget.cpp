@@ -31,6 +31,8 @@ AttributesWidget::AttributesWidget(
     }
 
   QGridLayout *layout = new QGridLayout(this);
+  layout->setContentsMargins(0, 0, 0, 0);
+  layout->setSpacing(0);
 
   int row = 0;
   // to check the number of widgets corresponds to the number of keys
@@ -142,6 +144,16 @@ AttributesWidget::AttributesWidget(
         SeedWidget *widget = new SeedWidget((SeedAttribute *)p_attr);
         connect(widget,
                 &SeedWidget::value_changed,
+                [this]() { Q_EMIT this->value_changed(); });
+        layout->addWidget(widget, row, 1);
+      }
+      break;
+
+      case (AttributeType::STRING):
+      {
+        StringWidget *widget = new StringWidget((StringAttribute *)p_attr);
+        connect(widget,
+                &StringWidget::value_changed,
                 [this]() { Q_EMIT this->value_changed(); });
         layout->addWidget(widget, row, 1);
       }

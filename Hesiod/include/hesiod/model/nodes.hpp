@@ -2,6 +2,7 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #pragma once
+#include <QPlainTextEdit>
 
 #include <QtCore/QObject>
 #include <QtNodes/NodeDelegateModel>
@@ -114,6 +115,27 @@ public:
 
 protected:
   std::shared_ptr<HeightMapRGBAData> out;
+};
+
+/**
+ * @brief Comment class.
+ */
+class Comment : public BaseNode
+{
+public:
+  Comment(const ModelConfig *p_config);
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data,
+                 QtNodes::PortIndex                 port_index) override;
+
+  virtual QWidget *embeddedWidget() override;
+
+private:
+  QLabel *label_comment = nullptr;
 };
 
 /**

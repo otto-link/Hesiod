@@ -155,10 +155,12 @@ int main(int argc, char *argv[])
   std::vector<int> vi = {4, 5, 6, 7};
   attr["vint"] = NEW_ATTR_VECINT(vi, 0, 64);
 
-  attr["cloud"] = NEW_ATTR_CLOUD();
+  // attr["cloud"] = NEW_ATTR_CLOUD();
+
+  attr["text"] = NEW_ATTR_STRING("test");
 
   hesiod::AttributesWidget *sw = new hesiod::AttributesWidget(&attr);
-  // sw->show();
+  sw->show();
 
   // ---
 

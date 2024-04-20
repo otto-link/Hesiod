@@ -148,6 +148,19 @@ protected:
   std::vector<QString> input_captions = {};
   std::vector<QString> output_captions = {};
 
+  // --- SIGNALS (model and GUI)
+Q_SIGNALS:
+
+  /**
+   * @brief Signal emitted when the node has been loaded.
+   */
+  void node_loaded(); // model
+
+  /**
+   * @brief Signal emitted when any attribute has been modified with the GUI.
+   */
+  void settings_changed(); // GUI
+
   // --- GUI
 
 public:

@@ -38,7 +38,11 @@ void BaseNode::context_menu(const QPointF /* pos */)
 
     connect(attributes_widget,
             &AttributesWidget::value_changed,
-            [this]() { this->compute(); });
+            [this]()
+            {
+              this->compute();
+              Q_EMIT this->settings_changed();
+            });
   }
 
   this->qmenu->popup(QCursor::pos());

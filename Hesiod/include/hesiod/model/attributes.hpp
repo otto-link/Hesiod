@@ -37,6 +37,7 @@
 #define NEW_ATTR_RANGE(...) std::make_unique<hesiod::RangeAttribute>(__VA_ARGS__)
 #define NEW_ATTR_SEED(...) std::make_unique<hesiod::SeedAttribute>(__VA_ARGS__)
 #define NEW_ATTR_SHAPE(...) std::make_unique<hesiod::ShapeAttribute>(__VA_ARGS__)
+#define NEW_ATTR_STRING(...) std::make_unique<hesiod::StringAttribute>(__VA_ARGS__)
 #define NEW_ATTR_VECFLOAT(...) std::make_unique<hesiod::VecFloatAttribute>(__VA_ARGS__)
 #define NEW_ATTR_VECINT(...) std::make_unique<hesiod::VecIntAttribute>(__VA_ARGS__)
 #define NEW_ATTR_WAVENB(...) std::make_unique<hesiod::WaveNbAttribute>(__VA_ARGS__)
@@ -53,6 +54,7 @@
 #define GET_ATTR_RANGE(s) this->attr.at(s)->get_ref<RangeAttribute>()->get()
 #define GET_ATTR_SEED(s) this->attr.at(s)->get_ref<SeedAttribute>()->get()
 #define GET_ATTR_SHAPE(s) this->attr.at(s)->get_ref<ShapeAttribute>()->get()
+#define GET_ATTR_STRING(s) this->attr.at(s)->get_ref<StringAttribute>()->get()
 #define GET_ATTR_VECFLOAT(s) this->attr.at(s)->get_ref<VecFloatAttribute>()->get()
 #define GET_ATTR_VECINT(s) this->attr.at(s)->get_ref<VecIntAttribute>()->get()
 #define GET_ATTR_WAVENB(s) this->attr.at(s)->get_ref<WaveNbAttribute>()->get()
@@ -84,6 +86,7 @@ enum class AttributeType
   RANGE,
   SEED,
   SHAPE,
+  STRING,
   VEC_FLOAT,
   VEC_INT,
   WAVE_NB
@@ -459,6 +462,33 @@ public:
 
   hmap::Vec2<int> value = {128, 128};
   hmap::Vec2<int> value_max = {0, 0};
+};
+
+class StringAttribute : public Attribute // OK JSON GUI
+{
+public:
+  StringAttribute() = default;
+  StringAttribute(std::string value);
+  std::string   get();
+  AttributeType get_type() { return AttributeType::STRING; }
+
+  QJsonObject save() const override
+  {
+    QJsonObject model_json;
+    model_json["value"] = QString::fromStdString(this->value);
+    return model_json;
+  }
+
+  void load(QJsonObject const &p) override
+  {
+    bool ret = true;
+    ret &= convert_qjsonvalue_to_string(p["value"], this->value);
+
+    if (!ret)
+      LOG_ERROR("serialization in with WaveNbAttribute");
+  }
+
+  std::string value = "";
 };
 
 class VecFloatAttribute : public Attribute // OK JSON GUI

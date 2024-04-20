@@ -84,6 +84,8 @@ void BaseNode::load(QJsonObject const &p)
   // themselves so that they need to be recomputed after reloading the node internal
   // state (besides the heightmaps)
   this->compute();
+
+  Q_EMIT this->node_loaded();
 }
 
 // --- debugging

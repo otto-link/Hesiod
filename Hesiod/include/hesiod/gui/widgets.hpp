@@ -10,6 +10,7 @@
 #include <QLabel>
 #include <QOpenGLFunctions>
 #include <QOpenGLWidget>
+#include <QPlainTextEdit>
 #include <QPushButton>
 #include <QSlider>
 #include <QSpinBox>
@@ -222,6 +223,25 @@ Q_SIGNALS:
 private:
   SeedAttribute *p_attr;
   QSpinBox      *spinbox;
+
+  void update_attribute();
+};
+
+class StringWidget : public QWidget
+{
+  Q_OBJECT
+
+public:
+  StringWidget() = default;
+
+  StringWidget(StringAttribute *p_attr);
+
+Q_SIGNALS:
+  void value_changed();
+
+private:
+  StringAttribute *p_attr;
+  QPlainTextEdit  *text_edit;
 
   void update_attribute();
 };
