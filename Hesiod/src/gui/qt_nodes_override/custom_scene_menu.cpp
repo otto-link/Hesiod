@@ -67,39 +67,7 @@ QMenu *DataFlowGraphicsScene::createSceneMenu(QPointF const scenePos)
       cat_color = hesiod::node_category_color.at(main_category);
 
     item->setForeground(1, cat_color);
-
-    // cat_color.setAlpha(127);
-    // item->setBackground(1, cat_color);
   }
-
-  // for (auto const &cat : registry->categories()) {
-  //     auto item = new QTreeWidgetItem(treeView);
-  //     item->setText(0, cat);
-  //     item->setFlags(item->flags() & ~Qt::ItemIsSelectable);
-
-  // 	// background color
-  // 	QColor fill_color = QColor(255, 0, 0);
-
-  // 	if (hesiod::node_category_color.contains(cat.toStdString()))
-  // 	  fill_color = hesiod::node_category_color.at(cat.toStdString());
-
-  // 	fill_color.setAlpha(127);
-  // 	QBrush brush = QBrush(fill_color);
-
-  // 	item->setText(1, " ");
-  // 	item->setBackground(1, brush);
-  // }
-
-  // for (auto const &assoc : registry->registeredModelsCategoryAssociation()) {
-  //     QTree<QTreeWidgetItem *> parent = treeView->findItems(assoc.second,
-  //     Qt::MatchExactly);
-
-  //     if (parent.count() <= 0)
-  //         continue;
-
-  //     auto item = new QTreeWidgetItem(parent.first());
-  //     item->setText(0, assoc.first);
-  // }
 
   treeView->expandAll();
 
