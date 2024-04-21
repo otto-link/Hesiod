@@ -11,6 +11,7 @@
 #include "DataFlowGraphicsScene.hpp"
 #include "UndoCommands.hpp"
 
+#include "hesiod/gui/gui_utils.hpp"
 #include "hesiod/gui/node_category_color.hpp"
 
 namespace QtNodes
@@ -24,6 +25,7 @@ QMenu *DataFlowGraphicsScene::createSceneMenu(QPointF const scenePos)
   auto *txtBox = new QLineEdit(modelMenu);
   txtBox->setPlaceholderText(QStringLiteral("Filter"));
   txtBox->setClearButtonEnabled(true);
+  hesiod::resize_font(txtBox, -2);
 
   auto *txtBoxAction = new QWidgetAction(modelMenu);
   txtBoxAction->setDefaultWidget(txtBox);
@@ -38,6 +40,7 @@ QMenu *DataFlowGraphicsScene::createSceneMenu(QPointF const scenePos)
   treeView->setHeaderLabels({"Node", "Category"});
   treeView->setSortingEnabled(true);
   treeView->sortByColumn(0, Qt::AscendingOrder);
+  hesiod::resize_font(treeView, -2);
 
   auto *treeViewAction = new QWidgetAction(modelMenu);
   treeViewAction->setDefaultWidget(treeView);
@@ -46,10 +49,6 @@ QMenu *DataFlowGraphicsScene::createSceneMenu(QPointF const scenePos)
   modelMenu->addAction(treeViewAction);
 
   auto registry = _graphModel.dataModelRegistry();
-
-  QFont font = treeView->font();
-  font.setPointSize(font.pointSize() - 2);
-  treeView->setFont(font);
 
   for (auto const &assoc : registry->registeredModelsCategoryAssociation())
   {

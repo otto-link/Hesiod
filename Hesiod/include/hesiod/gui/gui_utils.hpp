@@ -13,4 +13,12 @@ namespace hesiod
  */
 void clear_layout(QLayout *layout);
 
+/**
+ * @brief Resize the widget font
+ * @param widget Reference to the widget.
+ * @param relative_size_modification Relative size modification (+/- with respect to the
+ * current font size).
+ */
+void resize_font(QWidget *widget, int relative_size_modification);
+
 } // namespace hesiod

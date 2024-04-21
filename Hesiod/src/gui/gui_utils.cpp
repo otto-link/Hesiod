@@ -31,4 +31,11 @@ void clear_layout(QLayout *layout)
   }
 }
 
+void resize_font(QWidget *widget, int relative_size_modification)
+{
+  QFont font = widget->font();
+  font.setPointSize(font.pointSize() + relative_size_modification);
+  widget->setFont(font);
+}
+
 } // namespace hesiod
