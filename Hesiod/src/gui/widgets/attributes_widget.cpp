@@ -50,6 +50,9 @@ AttributesWidget::AttributesWidget(
     }
     else
     {
+      if (!this->p_attr_map->contains(key))
+        LOG_ERROR("attribute key not found: [%s]", key.c_str());
+
       Attribute *p_attr = this->p_attr_map->at(key).get();
 
       QLabel *label = new QLabel(QString::fromStdString(key));

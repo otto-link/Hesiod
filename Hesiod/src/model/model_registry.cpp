@@ -14,6 +14,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
 
   auto ret = std::make_shared<QtNodes::NodeDelegateModelRegistry>();
 
+  HSD_REGISTER_NODE(hesiod::Bump, "Primitive/Function");
   HSD_REGISTER_NODE(hesiod::Cloud, "Geometry/Cloud");
   HSD_REGISTER_NODE(hesiod::CloudToArrayInterp, "Primitive/Authoring");
   HSD_REGISTER_NODE(hesiod::Colorize, "Texture");
