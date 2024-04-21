@@ -53,6 +53,7 @@ struct ModelConfig
     LOG_DEBUG("tiling: {%d, %d}", tiling.x, tiling.y);
     LOG_DEBUG("overlap: %f", overlap);
     LOG_DEBUG("shape_preview: {%d, %d}", shape_preview.x, shape_preview.y);
+    LOG_DEBUG("compute_nodes_at_instanciation: %d", (int)compute_nodes_at_instanciation);
   }
 
   /**

@@ -60,6 +60,8 @@ int main(int argc, char *argv[])
     // batch mode
     if (batch)
     {
+      std::string graph_id = "graph_1"; // only one for now
+
       std::string filename = args::get(batch);
 
       LOG_INFO("executing Hesiod in batch mode...");
@@ -85,17 +87,15 @@ int main(int argc, char *argv[])
       QByteArray const whole_file = file.readAll();
       QJsonObject      json_doc = QJsonDocument::fromJson(whole_file).object();
 
-      // initialize the registry with a small data shape to avoid
-      // using excessive memory at this stage
       hesiod::ModelConfig model_config;
-      model_config.shape = {4, 4};
+      model_config.compute_nodes_at_instanciation = false;
 
       std::shared_ptr<QtNodes::NodeDelegateModelRegistry> registry = register_data_models(
           &model_config);
 
       // load (only) the model configuration and adjust it
-      model_config.load(json_doc["model_config"].toObject());
-      model_config.log_debug();
+      model_config.load(json_doc[graph_id.c_str()].toObject()["model_config"].toObject());
+      model_config.compute_nodes_at_instanciation = true;
 
       // adjust model config
       if (shape.x > 0)
@@ -105,9 +105,12 @@ int main(int argc, char *argv[])
       if (overlap >= 0.f)
         model_config.overlap = overlap;
 
+      model_config.log_debug();
+
       // load the graph and compute
       auto model = std::make_unique<hesiod::HsdDataFlowGraphModel>(registry,
-                                                                   &model_config);
+                                                                   &model_config,
+                                                                   graph_id);
 
       LOG_INFO("computing node graph...");
       model->load(json_doc, model_config);
