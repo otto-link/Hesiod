@@ -30,8 +30,11 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::MixTexture, "Texture");
   HSD_REGISTER_NODE(hesiod::Noise, "Primitive/Coherent Noise");
   HSD_REGISTER_NODE(hesiod::NoiseFbm, "Primitive/Coherent Noise");
+  HSD_REGISTER_NODE(hesiod::NoiseIq, "Primitive/Coherent Noise");
+  HSD_REGISTER_NODE(hesiod::NoiseJordan, "Primitive/Coherent Noise");
   HSD_REGISTER_NODE(hesiod::NoisePingpong, "Primitive/Coherent Noise");
   HSD_REGISTER_NODE(hesiod::NoiseRidged, "Primitive/Coherent Noise");
+  HSD_REGISTER_NODE(hesiod::NoiseSwiss, "Primitive/Coherent Noise");
   HSD_REGISTER_NODE(hesiod::Plateau, "Filter/Recurve");
   HSD_REGISTER_NODE(hesiod::Remap, "Filter/Range");
   HSD_REGISTER_NODE(hesiod::Rescale, "Filter/Range");

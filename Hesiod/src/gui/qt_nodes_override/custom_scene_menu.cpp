@@ -40,7 +40,7 @@ QMenu *DataFlowGraphicsScene::createSceneMenu(QPointF const scenePos)
   treeView->setHeaderLabels({"Node", "Category"});
   treeView->setSortingEnabled(true);
   treeView->sortByColumn(0, Qt::AscendingOrder);
-  hesiod::resize_font(treeView, -2);
+  hesiod::resize_font(treeView, -1);
 
   auto *treeViewAction = new QWidgetAction(modelMenu);
   treeViewAction->setDefaultWidget(treeView);
