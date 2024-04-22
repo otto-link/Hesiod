@@ -389,6 +389,10 @@ class RangeAttribute : public Attribute // OK JSON GUI
 public:
   RangeAttribute() = default;
   RangeAttribute(hmap::Vec2<float> value, std::string fmt = "%.2f");
+  RangeAttribute(hmap::Vec2<float> value,
+                 float             vmin,
+                 float             vmax,
+                 std::string       fmt = "%.2f");
   RangeAttribute(std::string fmt);
   hmap::Vec2<float> get();
   AttributeType     get_type() { return AttributeType::RANGE; }
@@ -398,6 +402,8 @@ public:
     QJsonObject model_json;
     model_json["value.x"] = QString::number(this->value.x);
     model_json["value.y"] = QString::number(this->value.y);
+    model_json["vmin"] = QString::number(this->vmin);
+    model_json["vmax"] = QString::number(this->vmax);
     model_json["fmt"] = QString::fromStdString(fmt);
     return model_json;
   }
@@ -407,6 +413,8 @@ public:
     bool ret = true;
     ret &= convert_qjsonvalue_to_float(p["value.x"], this->value.x);
     ret &= convert_qjsonvalue_to_float(p["value.y"], this->value.y);
+    ret &= convert_qjsonvalue_to_float(p["vmin"], this->vmin);
+    ret &= convert_qjsonvalue_to_float(p["vmax"], this->vmax);
     ret &= convert_qjsonvalue_to_string(p["fmt"], this->fmt);
 
     if (!ret)
@@ -414,6 +422,8 @@ public:
   }
 
   hmap::Vec2<float> value = {0.f, 1.f};
+  float             vmin = -0.5f;
+  float             vmax = 1.5f;
   std::string       fmt = "%.2f";
 };
 

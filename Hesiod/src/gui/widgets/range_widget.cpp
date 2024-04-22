@@ -13,10 +13,6 @@ RangeWidget::RangeWidget(RangeAttribute *p_attr) : p_attr(p_attr)
 {
   this->setWindowTitle("Range attribute");
 
-  // sliders extent
-  this->vmin = 2.f * this->p_attr->value.x - this->p_attr->value.y;
-  this->vmax = 2.f * this->p_attr->value.y - this->p_attr->value.x;
-
   QGridLayout *layout = new QGridLayout(this);
 
   // min
@@ -25,8 +21,8 @@ RangeWidget::RangeWidget(RangeAttribute *p_attr) : p_attr(p_attr)
   this->slider_min->setSingleStep(0);
   this->slider_min->setPageStep(0);
   int pos = float_to_slider_pos(this->p_attr->value.x,
-                                this->vmin,
-                                this->vmax,
+                                this->p_attr->vmin,
+                                this->p_attr->vmax,
                                 HSD_SLIDER_STEPS);
   this->slider_min->setValue(pos);
   layout->addWidget(this->slider_min, 0, 0);
@@ -37,8 +33,8 @@ RangeWidget::RangeWidget(RangeAttribute *p_attr) : p_attr(p_attr)
           [this]()
           {
             float v = slider_pos_to_float(this->slider_min->value(),
-                                          this->vmin,
-                                          this->vmax,
+                                          this->p_attr->vmin,
+                                          this->p_attr->vmax,
                                           HSD_SLIDER_STEPS);
             this->label_min->setText(QString().asprintf(this->p_attr->fmt.c_str(), v));
           });
@@ -59,8 +55,8 @@ RangeWidget::RangeWidget(RangeAttribute *p_attr) : p_attr(p_attr)
   this->slider_max->setSingleStep(0);
   this->slider_max->setPageStep(0);
   pos = float_to_slider_pos(this->p_attr->value.y,
-                            this->vmin,
-                            this->vmax,
+                            this->p_attr->vmin,
+                            this->p_attr->vmax,
                             HSD_SLIDER_STEPS);
   this->slider_max->setValue(pos);
   layout->addWidget(this->slider_max, 1, 0);
@@ -71,8 +67,8 @@ RangeWidget::RangeWidget(RangeAttribute *p_attr) : p_attr(p_attr)
           [this]()
           {
             float v = slider_pos_to_float(this->slider_max->value(),
-                                          this->vmin,
-                                          this->vmax,
+                                          this->p_attr->vmin,
+                                          this->p_attr->vmax,
                                           HSD_SLIDER_STEPS);
             this->label_max->setText(QString().asprintf(this->p_attr->fmt.c_str(), v));
           });
@@ -95,16 +91,17 @@ RangeWidget::RangeWidget(RangeAttribute *p_attr) : p_attr(p_attr)
           &QPushButton::released,
           [this]()
           {
-            this->vmax = std::max(std::abs(this->vmin), std::abs(this->vmax));
-            this->vmin = -this->vmax;
+            this->p_attr->vmax = std::max(std::abs(this->p_attr->vmin),
+                                          std::abs(this->p_attr->vmax));
+            this->p_attr->vmin = -this->p_attr->vmax;
             float vptp = this->p_attr->value.y - this->p_attr->value.x;
             float v0 = float_to_slider_pos(-0.5f * vptp,
-                                           this->vmin,
-                                           this->vmax,
+                                           this->p_attr->vmin,
+                                           this->p_attr->vmax,
                                            HSD_SLIDER_STEPS);
             float v1 = float_to_slider_pos(0.5f * vptp,
-                                           this->vmin,
-                                           this->vmax,
+                                           this->p_attr->vmin,
+                                           this->p_attr->vmax,
                                            HSD_SLIDER_STEPS);
 
             this->slider_min->setValue(v0);
@@ -119,8 +116,14 @@ RangeWidget::RangeWidget(RangeAttribute *p_attr) : p_attr(p_attr)
           &QPushButton::released,
           [this]()
           {
-            float v0 = float_to_slider_pos(0.f, this->vmin, this->vmax, HSD_SLIDER_STEPS);
-            float v1 = float_to_slider_pos(1.f, this->vmin, this->vmax, HSD_SLIDER_STEPS);
+            float v0 = float_to_slider_pos(0.f,
+                                           this->p_attr->vmin,
+                                           this->p_attr->vmax,
+                                           HSD_SLIDER_STEPS);
+            float v1 = float_to_slider_pos(1.f,
+                                           this->p_attr->vmin,
+                                           this->p_attr->vmax,
+                                           HSD_SLIDER_STEPS);
 
             this->slider_min->setValue(v0);
             this->slider_max->setValue(v1);
@@ -133,12 +136,12 @@ RangeWidget::RangeWidget(RangeAttribute *p_attr) : p_attr(p_attr)
 void RangeWidget::update_attribute()
 {
   this->p_attr->value.x = slider_pos_to_float(this->slider_min->value(),
-                                              this->vmin,
-                                              this->vmax,
+                                              this->p_attr->vmin,
+                                              this->p_attr->vmax,
                                               HSD_SLIDER_STEPS);
   this->p_attr->value.y = slider_pos_to_float(this->slider_max->value(),
-                                              this->vmin,
-                                              this->vmax,
+                                              this->p_attr->vmin,
+                                              this->p_attr->vmax,
                                               HSD_SLIDER_STEPS);
 
   // prevent a "reverse" range
@@ -146,8 +149,8 @@ void RangeWidget::update_attribute()
   {
     this->p_attr->value.y = this->p_attr->value.x;
     int pos = float_to_slider_pos(this->p_attr->value.y,
-                                  this->vmin,
-                                  this->vmax,
+                                  this->p_attr->vmin,
+                                  this->p_attr->vmax,
                                   HSD_SLIDER_STEPS);
     this->slider_max->setValue(pos);
   }

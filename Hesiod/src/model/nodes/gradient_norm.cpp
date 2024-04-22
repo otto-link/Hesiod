@@ -23,7 +23,7 @@ GradientNorm::GradientNorm(const ModelConfig *p_config) : BaseNode(p_config)
 
   // attributes
   this->attr["remap"] = NEW_ATTR_BOOL(true);
-  this->attr["remap_range"] = NEW_ATTR_RANGE();
+  this->attr["remap_range"] = NEW_ATTR_RANGE(hmap::Vec2<float>(0.f, 1.f), 0.f, 1.f);
 
   this->attr_ordered_key = {"remap", "remap_range"};
 

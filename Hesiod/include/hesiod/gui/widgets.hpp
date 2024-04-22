@@ -203,7 +203,6 @@ private:
   RangeAttribute *p_attr;
   QSlider        *slider_min, *slider_max;
   QLabel         *label_min, *label_max;
-  float           vmin, vmax;
 
   void update_attribute();
 };

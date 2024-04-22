@@ -31,9 +31,13 @@ Colorize::Colorize(const ModelConfig *p_config) : BaseNode(p_config)
   this->attr["reverse_colormap"] = NEW_ATTR_BOOL(false);
   this->attr["reverse_alpha"] = NEW_ATTR_BOOL(false);
   this->attr["saturate_input"] = NEW_ATTR_BOOL(false);
-  this->attr["saturate_input_range"] = NEW_ATTR_RANGE();
+  this->attr["saturate_input_range"] = NEW_ATTR_RANGE(hmap::Vec2<float>(0.f, 1.f),
+                                                      0.f,
+                                                      1.f);
   this->attr["saturate_alpha"] = NEW_ATTR_BOOL(false);
-  this->attr["saturate_alpha_range"] = NEW_ATTR_RANGE();
+  this->attr["saturate_alpha_range"] = NEW_ATTR_RANGE(hmap::Vec2<float>(0.f, 1.f),
+                                                      0.f,
+                                                      1.f);
   this->attr_ordered_key = {"colormap",
                             "reverse_colormap",
                             "reverse_alpha",
