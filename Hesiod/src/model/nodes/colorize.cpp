@@ -30,6 +30,8 @@ Colorize::Colorize(const ModelConfig *p_config) : BaseNode(p_config)
   this->attr["colormap"] = NEW_ATTR_MAPENUM(get_colormap_mapping());
   this->attr["reverse_colormap"] = NEW_ATTR_BOOL(false);
   this->attr["reverse_alpha"] = NEW_ATTR_BOOL(false);
+  this->attr["clamp_alpha"] = NEW_ATTR_BOOL(true);
+
   this->attr["saturate_input"] = NEW_ATTR_BOOL(false);
   this->attr["saturate_input_range"] = NEW_ATTR_RANGE(hmap::Vec2<float>(0.f, 1.f),
                                                       0.f,
@@ -41,6 +43,8 @@ Colorize::Colorize(const ModelConfig *p_config) : BaseNode(p_config)
   this->attr_ordered_key = {"colormap",
                             "reverse_colormap",
                             "reverse_alpha",
+                            "clamp_alpha",
+                            "_SEPARATOR_",
                             "saturate_input",
                             "saturate_input_range",
                             "saturate_alpha",
@@ -123,6 +127,9 @@ void Colorize::compute()
     {
       alpha_copy = *p_alpha;
       p_alpha_copy = &alpha_copy;
+
+      if (GET_ATTR_BOOL("clamp_alpha"))
+        hmap::transform(alpha_copy, [](hmap::Array &x) { hmap::clamp(x, 0.f, 1.f); });
 
       if (GET_ATTR_BOOL("reverse_alpha"))
         alpha_copy.inverse();
