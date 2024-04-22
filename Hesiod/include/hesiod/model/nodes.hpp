@@ -339,6 +339,28 @@ protected:
 };
 
 /**
+ * @brief Gradient class.
+ */
+class Gradient : public BaseNode
+{
+public:
+  Gradient(const ModelConfig *p_config);
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data,
+                 QtNodes::PortIndex                 port_index) override;
+
+  virtual QWidget *embeddedWidget() override { return nullptr; }
+
+protected:
+  std::weak_ptr<HeightMapData>   in;
+  std::shared_ptr<HeightMapData> dx, dy;
+};
+
+/**
  * @brief GradientNorm class.
  */
 class GradientNorm : public BaseNode

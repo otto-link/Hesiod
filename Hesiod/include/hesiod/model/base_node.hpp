@@ -101,6 +101,11 @@ public:
   bool portCaptionVisible(QtNodes::PortType /* port_type */,
                           QtNodes::PortIndex /* port_index */) const override;
 
+  /**
+   * @brief Triggers the signals 'dataUpdated' for each output, if any.
+   */
+  void trigger_outputs_updated();
+
   // --- serialization
 
   /**

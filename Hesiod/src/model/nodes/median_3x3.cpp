@@ -79,10 +79,8 @@ void Median3x3::compute()
   }
 
   // propagate
-  QtNodes::PortIndex const out_port_index = 0;
-
   Q_EMIT this->computingFinished();
-  Q_EMIT this->dataUpdated(out_port_index);
+  this->trigger_outputs_updated();
 }
 
 } // namespace hesiod

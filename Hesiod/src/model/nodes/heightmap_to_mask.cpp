@@ -97,10 +97,8 @@ void HeightMapToMask::compute()
                          {0.f, 0.f});
 
   // propagate
-  QtNodes::PortIndex const out_port_index = 0;
-
   Q_EMIT this->computingFinished();
-  Q_EMIT this->dataUpdated(out_port_index);
+  this->trigger_outputs_updated();
 }
 
 } // namespace hesiod

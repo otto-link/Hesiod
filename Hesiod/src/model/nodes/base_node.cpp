@@ -58,6 +58,15 @@ bool BaseNode::portCaptionVisible(QtNodes::PortType /* port_type */,
   return true;
 }
 
+void BaseNode::trigger_outputs_updated()
+{
+  for (uint k = 0; k < this->output_types.size(); k++)
+  {
+    QtNodes::PortIndex out_port_index = (QtNodes::PortIndex)k;
+    Q_EMIT this->dataUpdated(out_port_index);
+  }
+}
+
 // --- serialization
 
 QJsonObject BaseNode::save() const
