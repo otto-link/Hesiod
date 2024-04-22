@@ -13,7 +13,7 @@ static std::map<std::string, QColor> node_category_color = {
     {"Converter", QColor(188, 182, 163, 255)},
     {"Comment", QColor(170, 170, 170, 255)},
     {"Debug", QColor(200, 0, 0, 255)},
-    {"Math", QColor(0, 43, 54, 255)},
+    {"Math", QColor(0, 70, 87, 255)},
     {"Geometry", QColor(101, 123, 131, 255)},
     {"Roads", QColor(147, 161, 161, 255)},
     // {"Routing", QColor(188, 182, 163, 255)},
