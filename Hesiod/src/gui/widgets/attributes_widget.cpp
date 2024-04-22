@@ -45,7 +45,8 @@ AttributesWidget::AttributesWidget(
     {
       QFrame *line = new QFrame;
       line->setFrameShape(QFrame::HLine);
-      line->setFrameShadow(QFrame::Sunken);
+      line->setFrameShadow(QFrame::Plain);
+      line->setFixedHeight(1);
       layout->addWidget(line, row, 0, 1, 2);
     }
     else
