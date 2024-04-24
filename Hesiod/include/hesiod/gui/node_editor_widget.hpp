@@ -33,6 +33,8 @@ public:
 
   QtNodes::DataFlowGraphicsScene *get_scene_ref() { return this->scene.get(); }
 
+  QtNodes::GraphicsView *get_view_ref() { return this->view; }
+
 Q_SIGNALS:
   void computingStarted(QtNodes::NodeId const node_id);
 

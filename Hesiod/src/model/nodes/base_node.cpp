@@ -1,8 +1,10 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-#include "hesiod/model/base_node.hpp"
+#include <fstream>
+
 #include "hesiod/gui/widgets.hpp"
+#include "hesiod/model/base_node.hpp"
 
 namespace hesiod
 {
@@ -21,6 +23,16 @@ QtNodes::NodeDataType BaseNode::dataType(QtNodes::PortType  port_type,
   default:
     throw std::runtime_error("wrong port type");
   }
+}
+
+void BaseNode::full_description_to_file(std::string filename)
+{
+  std::string desc = this->get_full_description();
+
+  std::fstream f;
+  f.open(filename, std::ios::out);
+  f << desc;
+  f.close();
 }
 
 std::string BaseNode::get_full_description()

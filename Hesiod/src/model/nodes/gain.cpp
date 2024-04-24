@@ -22,7 +22,7 @@ Gain::Gain(const ModelConfig *p_config) : BaseNode(p_config)
   this->output_types = {HeightMapData().type()};
 
   // attributes
-  this->attr["gain"] = NEW_ATTR_FLOAT(1.f, 0.01f, 10.f);
+  this->attr["gain"] = NEW_ATTR_FLOAT(2.f, 0.01f, 10.f);
 
   // update
   if (this->p_config->compute_nodes_at_instanciation)

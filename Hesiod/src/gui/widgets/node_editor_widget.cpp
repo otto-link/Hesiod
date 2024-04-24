@@ -214,7 +214,11 @@ NodeEditorWidget::NodeEditorWidget(std::string graph_id, QWidget *parent)
           &NodeEditorWidget::computingFinished);
 }
 
-void NodeEditorWidget::clear() { this->get_scene_ref()->clearScene(); }
+void NodeEditorWidget::clear()
+{
+  this->get_scene_ref()->clearScene();
+  this->get_scene_ref()->onModelReset();
+}
 
 void NodeEditorWidget::load(std::string filename)
 {

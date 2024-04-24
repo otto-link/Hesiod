@@ -33,6 +33,15 @@ Gradient::Gradient(const ModelConfig *p_config) : BaseNode(p_config)
     this->dy = std::make_shared<HeightMapData>(p_config);
     this->compute();
   }
+
+  // documentation
+  this->description = "Gradient provides insight into the spatial distribution of a "
+                      "function's gradient, conveying both direction and intensity of "
+                      "change across the xy-plane";
+
+  this->input_descriptions = {"Input heightmap."};
+  this->output_descriptions = {"Gradient with respect to the x-direction.",
+                               "Gradient with respect to the y-direction."};
 }
 
 std::shared_ptr<QtNodes::NodeData> Gradient::outData(QtNodes::PortIndex port_index)

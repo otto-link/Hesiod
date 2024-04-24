@@ -34,21 +34,34 @@ int main(int argc, char *argv[])
   args::ArgumentParser parser("Hesiod.");
   args::HelpFlag       help(parser, "help", "Display this help menu", {'h', "help"});
 
-  args::ValueFlag<std::string> batch(parser, "batch mode", "Execute ...", {'b', "batch"});
+  args::Group group(parser,
+                    "This group is all exclusive:",
+                    args::Group::Validators::DontCare);
+
+  args::Flag snapshot_generation(group, "", "Node snapshot generation", {"snapshot"});
+
+  args::ValueFlag<std::string> batch(group,
+                                     "hsd file",
+                                     "Execute Hesiod in batch mode",
+                                     {'b', "batch"});
+
+  args::Group batch_args(group,
+                         "batch mode arguments",
+                         args::Group::Validators::DontCare);
 
   args::ValueFlag<hmap::Vec2<int>> shape_arg(
-      parser,
+      batch_args,
       "shape",
       "Heightmap shape (in pixels), ex. --shape=512,512",
       {"shape"});
 
-  args::ValueFlag<hmap::Vec2<int>> tiling_arg(parser,
+  args::ValueFlag<hmap::Vec2<int>> tiling_arg(batch_args,
                                               "tiling",
                                               "Heightmap tiling, ex. --tiling=4,4",
                                               {"tiling"});
 
   args::ValueFlag<float> overlap_arg(
-      parser,
+      batch_args,
       "overlap",
       "Tile overlapping ratio (in [0, 1[), ex. --overlap=0.25",
       {"overlap"});
@@ -57,7 +70,8 @@ int main(int argc, char *argv[])
   {
     parser.ParseCLI(argc, argv);
 
-    // batch mode
+    // --- batch mode
+
     if (batch)
     {
       std::string graph_id = "graph_1"; // only one for now
@@ -114,6 +128,52 @@ int main(int argc, char *argv[])
 
       LOG_INFO("computing node graph...");
       model->load(json_doc, model_config);
+
+      return 0;
+    }
+
+    // --- snapshot mode
+
+    if (snapshot_generation)
+    {
+      LOG_INFO("executing Hesiod in snapshot generation mode...");
+
+      // ignite Qt application
+      QApplication app(argc, argv);
+      hesiod::set_style_qtapp(app);
+      hesiod::set_style_qtnodes();
+
+      //
+      hesiod::ModelConfig model_config = hesiod::ModelConfig();
+      std::shared_ptr<QtNodes::NodeDelegateModelRegistry> registry = register_data_models(
+          &model_config);
+      auto node_type_category_map = registry->registeredModelsCategoryAssociation();
+
+      for (auto &[node_type_qstring, category] : node_type_category_map)
+      {
+        std::string node_type = node_type_qstring.toStdString();
+
+        LOG_DEBUG("Generating snapshot for node type: %s", node_type.c_str());
+
+        hesiod::NodeEditorWidget      *p_ed = new hesiod::NodeEditorWidget("");
+        hesiod::HsdDataFlowGraphModel *p_model = p_ed->get_model_ref();
+
+        p_ed->get_model_config_ref()->shape = hmap::Vec2<int>(128, 128);
+        p_ed->get_model_config_ref()->tiling = hmap::Vec2<int>(1, 1);
+        p_ed->get_model_config_ref()->overlap = 0.f;
+
+        p_ed->show();
+
+        QtNodes::NodeId node_id = hesiod::add_graph_example(p_model,
+                                                            node_type,
+                                                            category.toStdString());
+        p_ed->save_screenshot(node_type + ".png");
+
+        hesiod::BaseNode *p_node = p_model->delegateModel<hesiod::BaseNode>(node_id);
+        p_node->full_description_to_file(node_type + ".txt");
+
+        delete p_ed;
+      }
 
       return 0;
     }

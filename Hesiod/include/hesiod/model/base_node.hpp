@@ -69,6 +69,12 @@ public:
                                  QtNodes::PortIndex port_index) const override;
 
   /**
+   * @brief Dump the full description (node and inputs/outputs) of the node to an ASCII
+   * file.
+   */
+  void full_description_to_file(std::string filename);
+
+  /**
    * @brief Return the full description (node and inputs/outputs) of the node.
    * @return Full description.
    */
@@ -81,8 +87,8 @@ public:
   QString name() const override;
 
   /**
-   * @brief Return the number of ports for each port type (input or output), based on the
-   * input_types nd output_types storage.
+   * @brief Return the number of ports for each port type (input or output), based on
+   * the input_types nd output_types storage.
    * @param port_type Input or output.
    * @return Number of ports.
    */
@@ -99,9 +105,9 @@ public:
                       QtNodes::PortIndex port_index) const override;
 
   /**
-   * @brief Return whether port captions should be visible or not (all the ports trated
-   * the same way here and the method always returns true to allow different caption for
-   * each port -> see portCaption).
+   * @brief Return whether port captions should be visible or not (all the ports
+   * trated the same way here and the method always returns true to allow different
+   * caption for each port -> see portCaption).
    * @return True for visible.
    */
   bool portCaptionVisible(QtNodes::PortType /* port_type */,
@@ -134,8 +140,8 @@ public:
   void log_debug();
 
   /**
-   * @brief Node generic attributes, use to define/store the algorithm parameters and also
-   * use to automatically generate the settings GUI.
+   * @brief Node generic attributes, use to define/store the algorithm parameters and
+   * also use to automatically generate the settings GUI.
    */
   std::map<std::string, std::unique_ptr<Attribute>> attr = {};
 
@@ -166,8 +172,8 @@ protected:
   std::map<std::string, std::string> attribute_descriptions = {};
 
   /**
-   * @brief Input and output type storage, to facilitate and automatize some ports feature
-   * definition (see @link nPorts and @link dataType).
+   * @brief Input and output type storage, to facilitate and automatize some ports
+   * feature definition (see @link nPorts and @link dataType).
    */
   std::vector<QtNodes::NodeDataType> input_types = {};
   std::vector<QtNodes::NodeDataType> output_types = {};

@@ -36,6 +36,22 @@ SetAlpha::SetAlpha(const ModelConfig *p_config) : BaseNode(p_config)
     this->out = std::make_shared<HeightMapRGBAData>(p_config);
     this->compute();
   }
+
+  // documentation
+  this->description = "SetAlpha adjusts the transparency of a texture based on an input "
+                      "alpha value, which can either be a single scalar or an array. "
+                      "When provided with a scalar alpha value, the function uniformly "
+                      "adjusts the transparency of the entire texture. Alternatively, "
+                      "when given an array of alpha values, it enables fine-grained "
+                      "control over the transparency of different parts of the texture, "
+                      "allowing for varied opacity across the texture's surface.";
+
+  this->input_descriptions = {"Input texture.",
+                              "Transparency (expected to be in [0, 1])."};
+  this->output_descriptions = {"Texture with new transparency."};
+
+  this->attribute_descriptions["alpha"] = "Transparency as a scalar value (overriden if "
+                                          "this alpha input is set).";
 }
 
 std::shared_ptr<QtNodes::NodeData> SetAlpha::outData(QtNodes::PortIndex /* port_index */)

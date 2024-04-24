@@ -57,9 +57,9 @@ NoiseFbm::NoiseFbm(const ModelConfig *p_config) : BaseNode(p_config)
   }
 
   // documentation
-  this->description = "Fractal noise is a versatile mathematical algorithm used to "
-                      "generate complex and detailed patterns characterized by "
-                      "self-similarity across different scales.";
+  this->description = "Fractal noise is a mathematical algorithm used to generate "
+                      "complex and detailed patterns characterized by self-similarity "
+                      "across different scales.";
 
   this->input_descriptions = {
       "Displacement with respect to the domain size (x-direction).",
@@ -74,8 +74,6 @@ NoiseFbm::NoiseFbm(const ModelConfig *p_config) : BaseNode(p_config)
   this->attribute_descriptions["weight"] = "Octave weighting.";
   this->attribute_descriptions["persistence"] = "Octave persistence.";
   this->attribute_descriptions["lacunarity"] = "Wavenumber ratio between each octaves.";
-
-  LOG_DEBUG("\n%s", this->get_full_description().c_str());
 }
 
 std::shared_ptr<QtNodes::NodeData> NoiseFbm::outData(QtNodes::PortIndex /* port_index */)
