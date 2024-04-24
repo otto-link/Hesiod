@@ -47,6 +47,8 @@ public Q_SLOTS:
 
   void save(std::string filename);
 
+  void save_screenshot(std::string filename);
+
   void update_model_configuration();
 
 private:
@@ -58,6 +60,7 @@ private:
 
   std::unique_ptr<QtNodes::DataFlowGraphicsScene> scene;
 
+  QtNodes::GraphicsView  *view;
   hesiod::Viewer2dWidget *viewer2d;
   hesiod::Viewer3dWidget *viewer3d;
   NodeSettingsWidget     *node_settings_widget;

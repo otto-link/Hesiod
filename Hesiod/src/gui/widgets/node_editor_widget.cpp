@@ -68,8 +68,8 @@ NodeEditorWidget::NodeEditorWidget(std::string graph_id, QWidget *parent)
   }
 
   // node editor
-  auto view = new QtNodes::GraphicsView(scene.get());
-  layout->addWidget(view, 0, 1);
+  this->view = new QtNodes::GraphicsView(scene.get());
+  layout->addWidget(this->view, 0, 1);
 
   // quick access
   QWidget     *quick_access = new QWidget(this);
@@ -92,6 +92,15 @@ NodeEditorWidget::NodeEditorWidget(std::string graph_id, QWidget *parent)
 
   QPushButton *model_config_button = new QPushButton("graph config.");
   layout_quick_access->addWidget(model_config_button);
+
+  QPushButton *screenshot_button = new QPushButton("screenshot");
+  layout_quick_access->addWidget(screenshot_button);
+
+  QPushButton *center_view_button = new QPushButton("center view");
+  layout_quick_access->addWidget(center_view_button);
+
+  QPushButton *zoom_content_button = new QPushButton("zoom content");
+  layout_quick_access->addWidget(zoom_content_button);
 
   layout_quick_access->addStretch();
   quick_access->setLayout(layout_quick_access);
@@ -162,9 +171,25 @@ NodeEditorWidget::NodeEditorWidget(std::string graph_id, QWidget *parent)
               layout->setColumnStretch(0, 0);
           });
 
+  connect(screenshot_button,
+          &QPushButton::released,
+          [this]() { this->save_screenshot("screenshot.png"); });
+
+  connect(center_view_button,
+          &QPushButton::released,
+          this->view,
+          &QtNodes::GraphicsView::centerScene);
+
+  connect(zoom_content_button,
+          &QPushButton::released,
+          [this]() {
+            this->view->fitInView(this->get_scene_ref()->sceneRect(),
+                                  Qt::KeepAspectRatio);
+          });
+
   connect(this->get_scene_ref(),
           &QtNodes::DataFlowGraphicsScene::sceneLoaded,
-          view,
+          this->view,
           &QtNodes::GraphicsView::centerScene);
 
   connect(
@@ -233,6 +258,13 @@ void NodeEditorWidget::save(std::string filename)
 
     file.write(QJsonDocument(QJsonObject::fromVariantMap(map)).toJson());
   }
+}
+
+void NodeEditorWidget::save_screenshot(std::string filename)
+{
+  this->view->fitInView(this->get_scene_ref()->sceneRect(), Qt::KeepAspectRatio);
+  QPixmap pixMap = this->view->grab();
+  pixMap.save(filename.c_str());
 }
 
 void NodeEditorWidget::toggle_widget_visibility(QWidget *widget, QPushButton *button)

@@ -55,6 +55,27 @@ NoiseFbm::NoiseFbm(const ModelConfig *p_config) : BaseNode(p_config)
     this->out = std::make_shared<HeightMapData>(this->p_config);
     this->compute();
   }
+
+  // documentation
+  this->description = "Fractal noise is a versatile mathematical algorithm used to "
+                      "generate complex and detailed patterns characterized by "
+                      "self-similarity across different scales.";
+
+  this->input_descriptions = {
+      "Displacement with respect to the domain size (x-direction).",
+      "Displacement with respect to the domain size (y-direction).",
+      "Output noise amplitude envelope."};
+  this->output_descriptions = {"Generated noise."};
+
+  this->attribute_descriptions["noise_type"] = "Base primitive noise.";
+  this->attribute_descriptions["kw"] = "Noise wavenumbers (kx, ky) for each directions.";
+  this->attribute_descriptions["seed"] = "Random seed number.";
+  this->attribute_descriptions["octaves"] = "Number of octaves.";
+  this->attribute_descriptions["weight"] = "Octave weighting.";
+  this->attribute_descriptions["persistence"] = "Octave persistence.";
+  this->attribute_descriptions["lacunarity"] = "Wavenumber ratio between each octaves.";
+
+  LOG_DEBUG("\n%s", this->get_full_description().c_str());
 }
 
 std::shared_ptr<QtNodes::NodeData> NoiseFbm::outData(QtNodes::PortIndex /* port_index */)

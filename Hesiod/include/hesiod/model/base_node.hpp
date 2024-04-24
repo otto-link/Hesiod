@@ -69,6 +69,12 @@ public:
                                  QtNodes::PortIndex port_index) const override;
 
   /**
+   * @brief Return the full description (node and inputs/outputs) of the node.
+   * @return Full description.
+   */
+  std::string get_full_description();
+
+  /**
    * @brief Return the node name (same as the caption here).
    * @return Node name.
    */
@@ -138,6 +144,26 @@ protected:
    * @brief Node caption
    */
   QString node_caption = "??? undefined ???";
+
+  /**
+   * brief What the node does and what for.
+   */
+  std::string description = "no description";
+
+  /**
+   * brief Input plain text descriptions.
+   */
+  std::vector<std::string> input_descriptions = {};
+
+  /**
+   * brief Output plain text descriptions.
+   */
+  std::vector<std::string> output_descriptions = {};
+
+  /**
+   * brief Attributes plain text descriptions.
+   */
+  std::map<std::string, std::string> attribute_descriptions = {};
 
   /**
    * @brief Input and output type storage, to facilitate and automatize some ports feature

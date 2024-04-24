@@ -23,6 +23,69 @@ QtNodes::NodeDataType BaseNode::dataType(QtNodes::PortType  port_type,
   }
 }
 
+std::string BaseNode::get_full_description()
+{
+  std::string desc = this->description;
+  desc += "\n\n";
+
+  desc += "Inputs\n";
+
+  for (size_t k = 0; k < this->input_descriptions.size(); k++)
+  {
+    desc += " - '" + this->input_captions[k].toStdString() + "'";
+    desc += " (" + this->input_types[k].name.toStdString() + "): ";
+    desc += this->input_descriptions[k];
+    desc += "\n";
+  }
+
+  desc += "\n";
+  desc += "Outputs\n";
+
+  for (size_t k = 0; k < this->output_descriptions.size(); k++)
+  {
+    desc += " - '" + this->output_captions[k].toStdString() + "'";
+    desc += " (" + this->output_types[k].name.toStdString() + "): ";
+    desc += this->output_descriptions[k];
+    desc += "\n";
+  }
+
+  desc += "\n";
+  desc += "Parameters\n";
+
+  LOG_DEBUG("%ld", this->attribute_descriptions.size());
+
+  for (auto &[key, str] : this->attribute_descriptions)
+  {
+    desc += " - '" + key + "'";
+    desc += " (" + attribute_type_map.at(this->attr.at(key)->get_type()) + "): ";
+    desc += str;
+
+    // add available values if the attribute is an enumerate
+    if (this->attr.at(key)->get_type() == hesiod::AttributeType::MAP_ENUM)
+    {
+      MapEnumAttribute *p_attr = this->attr.at(key)->get_ref<MapEnumAttribute>();
+
+      if (!p_attr->value.empty())
+      {
+        desc += " Available values: ";
+
+        std::string last_choice = std::prev(p_attr->value.end())->first;
+        LOG_DEBUG("%s", last_choice.c_str());
+
+        for (auto &[choice, dummy] : p_attr->value)
+          if (choice != last_choice)
+            desc += choice + ", ";
+          else
+            desc += choice + '.';
+      }
+    }
+
+    desc += "\n";
+  }
+
+  return desc;
+}
+
 QString BaseNode::name() const { return this->node_caption; }
 
 unsigned int BaseNode::nPorts(QtNodes::PortType port_type) const

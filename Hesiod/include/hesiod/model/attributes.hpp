@@ -92,6 +92,24 @@ enum class AttributeType
   WAVE_NB
 };
 
+static std::map<hesiod::AttributeType, std::string> attribute_type_map = {
+    {hesiod::AttributeType::BOOL, "Bool"},
+    {hesiod::AttributeType::CLOUD, "HighMap Cloud Object"},
+    {hesiod::AttributeType::COLOR, "Color"},
+    {hesiod::AttributeType::FILENAME, "Filename"},
+    {hesiod::AttributeType::FLOAT, "Float"},
+    {hesiod::AttributeType::INT, "Integer"},
+    {hesiod::AttributeType::MAP_ENUM, "Enumeration"},
+    {hesiod::AttributeType::MATRIX, "Matrix"},
+    {hesiod::AttributeType::PATH, "HighMap Path object"},
+    {hesiod::AttributeType::RANGE, "Value range"},
+    {hesiod::AttributeType::SEED, "Random seed"},
+    {hesiod::AttributeType::SHAPE, "Shape"},
+    {hesiod::AttributeType::STRING, "String"},
+    {hesiod::AttributeType::VEC_FLOAT, "Float vector"},
+    {hesiod::AttributeType::VEC_INT, "Integer vector"},
+    {hesiod::AttributeType::WAVE_NB, "Wavenumber"}};
+
 class Attribute
 {
 public:

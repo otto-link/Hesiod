@@ -30,6 +30,21 @@ Dilation::Dilation(const ModelConfig *p_config) : BaseNode(p_config)
     this->out = std::make_shared<HeightMapData>(p_config);
     this->compute();
   }
+
+  // documentation
+  this->description =
+      "Dilation expands the boundaries of objects in an image and fills in small gaps or "
+      "holes in those objects. Use Cases: (+) Filling gaps: Dilation can be used to fill "
+      "small gaps or holes in objects, making them more solid. (+) Merging objects: "
+      "Dilation can help merge nearby objects or connect broken segments in an image.";
+
+  this->input_descriptions = {"Input heightmap."};
+  this->output_descriptions = {"Dilated Heightmap."};
+
+  this->attribute_descriptions
+      ["radius"] = "Filter radius with respect to the domain size.";
+
+  LOG_DEBUG("\n%s", this->get_full_description().c_str());
 }
 
 std::shared_ptr<QtNodes::NodeData> Dilation::outData(QtNodes::PortIndex /* port_index */)

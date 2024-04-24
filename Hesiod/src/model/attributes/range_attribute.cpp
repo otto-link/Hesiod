@@ -13,9 +13,6 @@ RangeAttribute::RangeAttribute(hmap::Vec2<float> value, std::string fmt)
 {
   this->vmin = 2.f * this->value.x - this->value.y;
   this->vmax = 2.f * this->value.y - this->value.x;
-
-  LOG_DEBUG("%f %f", this->value.x, this->value.y);
-  LOG_DEBUG("%f %f", this->vmin, this->vmax);
 }
 
 RangeAttribute::RangeAttribute(hmap::Vec2<float> value,
