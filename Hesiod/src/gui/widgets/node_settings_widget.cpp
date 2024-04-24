@@ -31,6 +31,7 @@ NodeSettingsWidget::NodeSettingsWidget(QtNodes::DataFlowGraphicsScene *p_scene,
                    &hesiod::NodeSettingsWidget::on_node_deleted);
 
   this->setWindowTitle("Node settings");
+  this->setMinimumWidth(300);
 
   // build up layout
   this->layout = new QVBoxLayout(this);

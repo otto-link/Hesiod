@@ -378,11 +378,15 @@ public:
   void setInData(std::shared_ptr<QtNodes::NodeData> data,
                  QtNodes::PortIndex                 port_index) override;
 
-  virtual QWidget *embeddedWidget() override { return nullptr; }
+  // specific preview GUI widget for this node
+  virtual QWidget *embeddedWidget() override; // GUI
 
 protected:
   std::weak_ptr<HeightMapData>   in;
   std::shared_ptr<HeightMapData> dx, dy;
+
+private:
+  PreviewVec2 *preview_vec2 = nullptr; // GUI
 };
 
 /**
