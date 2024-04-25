@@ -42,6 +42,12 @@ HeightMapToMask::HeightMapToMask(const ModelConfig *p_config) : BaseNode(p_confi
     this->mask = std::make_shared<MaskData>(p_config);
     this->compute();
   }
+
+  // documentation
+  this->description = "Convert an heightmap to a mask.";
+
+  this->input_descriptions = {"Heightmap."};
+  this->output_descriptions = {"Mask."};
 }
 
 std::shared_ptr<QtNodes::NodeData> HeightMapToMask::outData(
@@ -79,22 +85,21 @@ void HeightMapToMask::compute()
 
     // clamp to [0, 1]
     hmap::transform(*p_mask, [](hmap::Array &x) { hmap::clamp(x, 0.f, 1.f); });
+    // post-process
+    int ir = std::max(
+        1,
+        (int)(GET_ATTR_FLOAT("smoothing_radius") * this->mask->get_ref()->shape.x));
+
+    post_process_heightmap(*this->mask->get_ref(),
+                           GET_ATTR_BOOL("inverse"),
+                           GET_ATTR_BOOL("smoothing"),
+                           ir,
+                           GET_ATTR_BOOL("saturate"),
+                           GET_ATTR_RANGE("saturate_range"),
+                           GET_ATTR_FLOAT("saturate_k"),
+                           false, // remap
+                           {0.f, 0.f});
   }
-
-  // post-process
-  int ir = std::max(
-      1,
-      (int)(GET_ATTR_FLOAT("smoothing_radius") * this->mask->get_ref()->shape.x));
-
-  post_process_heightmap(*this->mask->get_ref(),
-                         GET_ATTR_BOOL("inverse"),
-                         GET_ATTR_BOOL("smoothing"),
-                         ir,
-                         GET_ATTR_BOOL("saturate"),
-                         GET_ATTR_RANGE("saturate_range"),
-                         GET_ATTR_FLOAT("saturate_k"),
-                         false, // remap
-                         {0.f, 0.f});
 
   // propagate
   Q_EMIT this->computingFinished();
