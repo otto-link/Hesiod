@@ -16,6 +16,14 @@ enum export_format : int
   raw16bit,
 };
 
+enum kernel : int
+{
+  cubic_pulse,
+  cone,
+  lorentzian,
+  smooth_cosine
+};
+
 /**
  * @brief Plain text / enumerate mapping for the HighMap colormaps.
  */
@@ -36,6 +44,14 @@ static std::map<std::string, int> heightmap_export_format_map = {
     {"png (8 bit)", export_format::png8bit},
     {"png (16 bit)", export_format::png16bit},
     {"raw (16 bit, Unity)", export_format::raw16bit}};
+
+/**
+ * @brief Plain text / enumerate mapping for the kernels.
+ */
+static std::map<std::string, int> kernel_map = {{"cone", kernel::cone},
+                                                {"cubic_pulse", kernel::cubic_pulse},
+                                                {"lorentzian", kernel::lorentzian},
+                                                {"smooth_cosine", kernel::smooth_cosine}};
 
 /**
  * @brief Plain text / enumerate mapping for the HighMap noise types.
