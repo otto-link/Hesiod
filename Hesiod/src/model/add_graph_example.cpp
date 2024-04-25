@@ -14,7 +14,39 @@ QtNodes::NodeId add_graph_example(HsdDataFlowGraphModel *p_model,
                                   std::string            node_type,
                                   std::string            category)
 {
-  if (node_type == "Gradient")
+  if (node_type == "ExpandShrink")
+  {
+    QtNodes::NodeId node_id1 = p_model->addNode("NoiseFbm");
+    QtNodes::NodeId node_id2 = p_model->addNode(QString::fromStdString(node_type));
+    QtNodes::NodeId node_id3 = p_model->addNode(QString::fromStdString(node_type));
+
+    p_model->addConnection(QtNodes::ConnectionId(node_id1, 0, node_id2, 0));
+    p_model->addConnection(QtNodes::ConnectionId(node_id1, 0, node_id3, 0));
+
+    p_model->setNodeData(node_id1, QtNodes::NodeRole::Position, QPointF(0.f, 0.f));
+    p_model->setNodeData(node_id2,
+                         QtNodes::NodeRole::Position,
+                         QPointF(HSD_NODE_SPACING, 0.f));
+    p_model->setNodeData(node_id3,
+                         QtNodes::NodeRole::Position,
+                         QPointF(HSD_NODE_SPACING, HSD_NODE_SPACING));
+
+    {
+      ExpandShrink *p_node = p_model->delegateModel<ExpandShrink>(node_id2);
+      p_node->attr.at("radius")->get_ref<FloatAttribute>()->value = 0.25f;
+      p_node->compute();
+    }
+
+    {
+      ExpandShrink *p_node = p_model->delegateModel<ExpandShrink>(node_id3);
+      p_node->attr.at("radius")->get_ref<FloatAttribute>()->value = 0.25f;
+      p_node->attr.at("shrink")->get_ref<BoolAttribute>()->value = true;
+      p_node->compute();
+    }
+
+    return node_id2;
+  }
+  else if (node_type == "Gradient")
   {
     float pos_x = 0.f;
     float pos_y = 0.f;
