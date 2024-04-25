@@ -29,6 +29,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::Fold, "Filter/Recast");
   HSD_REGISTER_NODE(hesiod::Gain, "Filter/Recurve");
   HSD_REGISTER_NODE(hesiod::GammaCorrection, "Filter/Recurve");
+  HSD_REGISTER_NODE(hesiod::GammaCorrectionLocal, "Filter/Recurve");
   HSD_REGISTER_NODE(hesiod::Gradient, "Math/Gradient");
   HSD_REGISTER_NODE(hesiod::GradientAngle, "Math/Gradient");
   HSD_REGISTER_NODE(hesiod::GradientNorm, "Math/Gradient");

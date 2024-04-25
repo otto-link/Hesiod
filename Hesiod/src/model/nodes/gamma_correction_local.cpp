@@ -6,12 +6,13 @@
 namespace hesiod
 {
 
-GammaCorrection::GammaCorrection(const ModelConfig *p_config) : BaseNode(p_config)
+GammaCorrectionLocal::GammaCorrectionLocal(const ModelConfig *p_config)
+    : BaseNode(p_config)
 {
-  LOG_DEBUG("GammaCorrection::GammaCorrection");
+  LOG_DEBUG("GammaCorrectionLocal::GammaCorrectionLocal");
 
   // model
-  this->node_caption = "GammaCorrection";
+  this->node_caption = "GammaCorrectionLocal";
 
   // inputs
   this->input_captions = {"input", "mask"};
@@ -22,7 +23,11 @@ GammaCorrection::GammaCorrection(const ModelConfig *p_config) : BaseNode(p_confi
   this->output_types = {HeightMapData().type()};
 
   // attributes
+  this->attr["radius"] = NEW_ATTR_FLOAT(0.05f, 0.01f, 0.2f);
   this->attr["gamma"] = NEW_ATTR_FLOAT(2.f, 0.01f, 10.f);
+  this->attr["k"] = NEW_ATTR_FLOAT(0.1f, 0.f, 0.5f);
+
+  this->attr_ordered_key = {"radius", "gamma", "k"};
 
   // update
   if (this->p_config->compute_nodes_at_instanciation)
@@ -33,27 +38,29 @@ GammaCorrection::GammaCorrection(const ModelConfig *p_config) : BaseNode(p_confi
 
   // documentation
   this->description = "Gamma correction involves applying a nonlinear transformation to "
-                      "the pixel values of the heightmap. This transformation is based "
-                      "on a power-law function, where each pixel value is raised to the "
-                      "power of the gamma value. The gamma value is a parameter that "
-                      "determines the degree and direction of the correction.";
+                      "the pixel values of the heightmap. For GammaCorrectionLocal, the "
+                      "transformation parameters are locally defined within a perimeter "
+                      "'radius'.";
 
   this->input_descriptions = {
       "Input heightmap.",
       "Mask defining the filtering intensity (expected in [0, 1])."};
   this->output_descriptions = {"Filtered heightmap."};
 
+  this->attribute_descriptions
+      ["radius"] = "Filter radius with respect to the domain size.";
   this->attribute_descriptions["gamma"] = "Gamma exponent.";
+  this->attribute_descriptions["k"] = "Smoothing factor (typically in [0, 1]).";
 }
 
-std::shared_ptr<QtNodes::NodeData> GammaCorrection::outData(
+std::shared_ptr<QtNodes::NodeData> GammaCorrectionLocal::outData(
     QtNodes::PortIndex /* port_index */)
 {
   return std::static_pointer_cast<QtNodes::NodeData>(this->out);
 }
 
-void GammaCorrection::setInData(std::shared_ptr<QtNodes::NodeData> data,
-                                QtNodes::PortIndex                 port_index)
+void GammaCorrectionLocal::setInData(std::shared_ptr<QtNodes::NodeData> data,
+                                     QtNodes::PortIndex                 port_index)
 {
   if (!data)
     Q_EMIT this->dataInvalidated(0);
@@ -72,7 +79,7 @@ void GammaCorrection::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 // --- computing
 
-void GammaCorrection::compute()
+void GammaCorrectionLocal::compute()
 {
   Q_EMIT this->computingStarted();
 
@@ -87,14 +94,23 @@ void GammaCorrection::compute()
     // copy the input heightmap
     *p_out = *p_in;
 
+    int ir = std::max(1, (int)(GET_ATTR_FLOAT("radius") * p_out->shape.x));
+
     float hmin = p_out->min();
     float hmax = p_out->max();
     p_out->remap(0.f, 1.f, hmin, hmax);
     hmap::transform(*p_out,
                     p_mask,
-                    [this](hmap::Array &x, hmap::Array *p_mask)
-                    { hmap::gamma_correction(x, GET_ATTR_FLOAT("gamma"), p_mask); });
+                    [this, &ir](hmap::Array &x, hmap::Array *p_mask)
+                    {
+                      hmap::gamma_correction_local(x,
+                                                   GET_ATTR_FLOAT("gamma"),
+                                                   ir,
+                                                   p_mask,
+                                                   GET_ATTR_FLOAT("k"));
+                    });
     p_out->remap(hmin, hmax, 0.f, 1.f);
+    p_out->smooth_overlap_buffers();
   }
 
   // propagate
