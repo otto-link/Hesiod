@@ -47,6 +47,19 @@ Noise::Noise(const ModelConfig *p_config) : BaseNode(p_config)
     this->out = std::make_shared<HeightMapData>(p_config);
     this->compute();
   }
+
+  // documentation
+  this->description = "Noise node generates coherent and random-looking patterns.";
+
+  this->input_descriptions = {
+      "Displacement with respect to the domain size (x-direction).",
+      "Displacement with respect to the domain size (y-direction).",
+      "Output noise amplitude envelope."};
+  this->output_descriptions = {"Generated noise."};
+
+  this->attribute_descriptions["noise_type"] = "Base primitive noise.";
+  this->attribute_descriptions["kw"] = "Noise wavenumbers (kx, ky) for each directions.";
+  this->attribute_descriptions["seed"] = "Random seed number.";
 }
 
 std::shared_ptr<QtNodes::NodeData> Noise::outData(QtNodes::PortIndex /* port_index */)

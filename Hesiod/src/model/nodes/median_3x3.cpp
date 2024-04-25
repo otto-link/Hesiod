@@ -29,6 +29,17 @@ Median3x3::Median3x3(const ModelConfig *p_config) : BaseNode(p_config)
     this->out = std::make_shared<HeightMapData>(p_config);
     this->compute();
   }
+
+  // documentation
+  this->description = "Median3x3 filter is a median filter with a 3x3 kernel used to "
+                      "reduce noise while preserving edges in an image. This process "
+                      "removes outliers and smooths the image without noise reduction "
+                      "and feature preservation in digital images";
+
+  this->input_descriptions = {
+      "Input heightmap.",
+      "Mask defining the filtering intensity (expected in [0, 1])."};
+  this->output_descriptions = {"Filtered heightmap."};
 }
 
 std::shared_ptr<QtNodes::NodeData> Median3x3::outData(QtNodes::PortIndex /* port_index */)

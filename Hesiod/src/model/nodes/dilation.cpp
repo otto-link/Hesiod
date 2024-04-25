@@ -39,7 +39,7 @@ Dilation::Dilation(const ModelConfig *p_config) : BaseNode(p_config)
       "Dilation can help merge nearby objects or connect broken segments in an image.";
 
   this->input_descriptions = {"Input heightmap."};
-  this->output_descriptions = {"Dilated Heightmap."};
+  this->output_descriptions = {"Dilated heightmap."};
 
   this->attribute_descriptions
       ["radius"] = "Filter radius with respect to the domain size.";

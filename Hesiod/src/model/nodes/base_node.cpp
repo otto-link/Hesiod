@@ -64,8 +64,6 @@ std::string BaseNode::get_full_description()
   desc += "\n";
   desc += "Parameters\n";
 
-  LOG_DEBUG("%ld", this->attribute_descriptions.size());
-
   for (auto &[key, str] : this->attribute_descriptions)
   {
     desc += " - '" + key + "'";
