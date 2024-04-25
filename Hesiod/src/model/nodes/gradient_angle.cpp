@@ -33,6 +33,15 @@ GradientAngle::GradientAngle(const ModelConfig *p_config) : BaseNode(p_config)
     this->out = std::make_shared<HeightMapData>(p_config);
     this->compute();
   }
+
+  // documentation
+  this->description = "The gradient angle of a heightmap refers to the direction in "
+                      "which the elevation changes most rapidly at each point on the "
+                      "map. It represents the slope or inclination of the terrain "
+                      "surface relative to a horizontal plane";
+
+  this->input_descriptions = {"Input heightmap."};
+  this->output_descriptions = {"Gradient angle."};
 }
 
 std::shared_ptr<QtNodes::NodeData> GradientAngle::outData(

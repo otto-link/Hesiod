@@ -33,6 +33,15 @@ GradientNorm::GradientNorm(const ModelConfig *p_config) : BaseNode(p_config)
     this->out = std::make_shared<HeightMapData>(p_config);
     this->compute();
   }
+
+  // documentation
+  this->description = "The gradient norm of a heightmap refers to the magnitude or "
+                      "intensity of the rate of change of elevation at each point on the "
+                      "map. It represents the steepness or slope of the terrain surface, "
+                      "irrespective of its direction.";
+
+  this->input_descriptions = {"Input heightmap."};
+  this->output_descriptions = {"Gradient norm."};
 }
 
 std::shared_ptr<QtNodes::NodeData> GradientNorm::outData(

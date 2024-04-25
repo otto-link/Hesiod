@@ -33,6 +33,14 @@ GradientTalus::GradientTalus(const ModelConfig *p_config) : BaseNode(p_config)
     this->out = std::make_shared<HeightMapData>(p_config);
     this->compute();
   }
+
+  // documentation
+  this->description = "Gradient talus refers to the local steepest downslope, or the "
+                      "direction in which the terrain descends most rapidly, at each "
+                      "point on the heightmap.";
+
+  this->input_descriptions = {"Input heightmap."};
+  this->output_descriptions = {"Gradient talus."};
 }
 
 std::shared_ptr<QtNodes::NodeData> GradientTalus::outData(

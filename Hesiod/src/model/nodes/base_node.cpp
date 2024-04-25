@@ -42,56 +42,72 @@ std::string BaseNode::get_full_description()
 
   desc += "Inputs\n";
 
-  for (size_t k = 0; k < this->input_descriptions.size(); k++)
+  if (this->input_descriptions.size())
   {
-    desc += " - '" + this->input_captions[k].toStdString() + "'";
-    desc += " (" + this->input_types[k].name.toStdString() + "): ";
-    desc += this->input_descriptions[k];
-    desc += "\n";
+    for (size_t k = 0; k < this->input_descriptions.size(); k++)
+    {
+      desc += " - '" + this->input_captions[k].toStdString() + "'";
+      desc += " (" + this->input_types[k].name.toStdString() + "): ";
+      desc += this->input_descriptions[k];
+      desc += "\n";
+    }
   }
+  else
+    desc += "None.";
 
   desc += "\n";
   desc += "Outputs\n";
 
-  for (size_t k = 0; k < this->output_descriptions.size(); k++)
+  if (this->output_descriptions.size())
   {
-    desc += " - '" + this->output_captions[k].toStdString() + "'";
-    desc += " (" + this->output_types[k].name.toStdString() + "): ";
-    desc += this->output_descriptions[k];
-    desc += "\n";
+    for (size_t k = 0; k < this->output_descriptions.size(); k++)
+    {
+      desc += " - '" + this->output_captions[k].toStdString() + "'";
+      desc += " (" + this->output_types[k].name.toStdString() + "): ";
+      desc += this->output_descriptions[k];
+      desc += "\n";
+    }
   }
+  else
+    desc += "None.";
 
   desc += "\n";
   desc += "Parameters\n";
 
-  for (auto &[key, str] : this->attribute_descriptions)
+  if (!this->attribute_descriptions.empty())
   {
-    desc += " - '" + key + "'";
-    desc += " (" + attribute_type_map.at(this->attr.at(key)->get_type()) + "): ";
-    desc += str;
-
-    // add available values if the attribute is an enumerate
-    if (this->attr.at(key)->get_type() == hesiod::AttributeType::MAP_ENUM)
+    for (auto &[key, str] : this->attribute_descriptions)
     {
-      MapEnumAttribute *p_attr = this->attr.at(key)->get_ref<MapEnumAttribute>();
+      desc += " - '" + key + "'";
+      desc += " (" + attribute_type_map.at(this->attr.at(key)->get_type()) + "): ";
+      desc += str;
 
-      if (!p_attr->value.empty())
+      // add available values if the attribute is an enumerate
+      if (this->attr.at(key)->get_type() == hesiod::AttributeType::MAP_ENUM)
       {
-        desc += " Available values: ";
+        MapEnumAttribute *p_attr = this->attr.at(key)->get_ref<MapEnumAttribute>();
 
-        std::string last_choice = std::prev(p_attr->value.end())->first;
-        LOG_DEBUG("%s", last_choice.c_str());
+        if (!p_attr->value.empty())
+        {
+          desc += " Available values: ";
 
-        for (auto &[choice, dummy] : p_attr->value)
-          if (choice != last_choice)
-            desc += choice + ", ";
-          else
-            desc += choice + '.';
+          std::string last_choice = std::prev(p_attr->value.end())->first;
+
+          for (auto &[choice, dummy] : p_attr->value)
+            if (choice != last_choice)
+              desc += choice + ", ";
+            else
+              desc += choice + '.';
+        }
       }
-    }
 
-    desc += "\n";
+      desc += "\n";
+    }
   }
+  else
+    desc += "None.";
+
+  desc += "\n";
 
   return desc;
 }
