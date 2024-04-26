@@ -130,14 +130,14 @@ QtNodes::NodeId add_graph_example(HsdDataFlowGraphModel *p_model,
     return node_id;
   }
   //
-  else if (node_type == "SetAlpha")
+  else if (node_type == "ColorizeCmap" || node_type == "SetAlpha")
   {
     float pos_x = 0.f;
     float pos_y = 0.f;
 
     QtNodes::NodeId node_id1 = p_model->addNode("NoiseFbm");
     QtNodes::NodeId node_id2 = p_model->addNode("Noise");
-    QtNodes::NodeId node_id3 = p_model->addNode("Colorize");
+    QtNodes::NodeId node_id3 = p_model->addNode("ColorizeCmap");
     QtNodes::NodeId node_id4 = p_model->addNode("SetAlpha");
 
     p_model->addConnection(QtNodes::ConnectionId(node_id1, 0, node_id3, 0));
@@ -156,7 +156,10 @@ QtNodes::NodeId add_graph_example(HsdDataFlowGraphModel *p_model,
 
     p_model->setNodeData(node_id4, QtNodes::NodeRole::Position, QPointF(pos_x, pos_y));
 
-    return node_id4;
+    if (node_type == "SetAlpha")
+      return node_id4;
+    else
+      return node_id3;
   }
   //
   else

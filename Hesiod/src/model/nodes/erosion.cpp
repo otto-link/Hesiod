@@ -44,8 +44,6 @@ Erosion::Erosion(const ModelConfig *p_config) : BaseNode(p_config)
 
   this->attribute_descriptions
       ["radius"] = "Filter radius with respect to the domain size.";
-
-  LOG_DEBUG("\n%s", this->get_full_description().c_str());
 }
 
 std::shared_ptr<QtNodes::NodeData> Erosion::outData(QtNodes::PortIndex /* port_index */)

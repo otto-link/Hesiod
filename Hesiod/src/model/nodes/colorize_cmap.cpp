@@ -11,12 +11,12 @@
 namespace hesiod
 {
 
-Colorize::Colorize(const ModelConfig *p_config) : BaseNode(p_config)
+ColorizeCmap::ColorizeCmap(const ModelConfig *p_config) : BaseNode(p_config)
 {
-  LOG_DEBUG("Colorize::Colorize");
+  LOG_DEBUG("ColorizeCmap::ColorizeCmap");
 
   // model
-  this->node_caption = "Colorize";
+  this->node_caption = "ColorizeCmap";
 
   // inputs
   this->input_captions = {"level", "alpha"};
@@ -56,15 +56,28 @@ Colorize::Colorize(const ModelConfig *p_config) : BaseNode(p_config)
     this->out = std::make_shared<HeightMapRGBAData>(p_config);
     this->compute();
   }
+
+  // documentation
+  this->description = "ColorizeCmap generates a texture based on colormaps to assign "
+                      "colors to data values.";
+
+  this->input_descriptions = {"Data values for color selection.", "Texture alpha map."};
+  this->output_descriptions = {"Texture (RGBA)."};
+
+  this->attribute_descriptions["colormap"] = "Color mapping selection.";
+  this->attribute_descriptions["reverse_colormap"] = "Reverse the colormap range.";
+  this->attribute_descriptions["reverse_alpha"] = "Reverse the input alpha map.";
+  this->attribute_descriptions["clamp_alpha"] = "Clamp to [0, 1] to input alpha map.";
 }
 
-std::shared_ptr<QtNodes::NodeData> Colorize::outData(QtNodes::PortIndex /* port_index */)
+std::shared_ptr<QtNodes::NodeData> ColorizeCmap::outData(
+    QtNodes::PortIndex /* port_index */)
 {
   return std::static_pointer_cast<QtNodes::NodeData>(this->out);
 }
 
-void Colorize::setInData(std::shared_ptr<QtNodes::NodeData> data,
-                         QtNodes::PortIndex                 port_index)
+void ColorizeCmap::setInData(std::shared_ptr<QtNodes::NodeData> data,
+                             QtNodes::PortIndex                 port_index)
 {
   if (!data)
   {
@@ -86,7 +99,7 @@ void Colorize::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 // --- computing
 
-void Colorize::compute()
+void ColorizeCmap::compute()
 {
   Q_EMIT this->computingStarted();
 

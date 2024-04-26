@@ -119,12 +119,12 @@ protected:
 };
 
 /**
- * @brief Colorize class, colorize texture using an input field and a colormap.
+ * @brief ColorizeCmap class.
  */
-class Colorize : public BaseNode
+class ColorizeCmap : public BaseNode
 {
 public:
-  Colorize(const ModelConfig *p_config);
+  ColorizeCmap(const ModelConfig *p_config);
 
   QtNodes::NodeData *get_preview_data() { return this->out.get(); }
   QtNodes::NodeData *get_viewer2d_data() { return this->out.get(); }
