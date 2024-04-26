@@ -28,7 +28,8 @@ SetAlpha::SetAlpha(const ModelConfig *p_config) : BaseNode(p_config)
 
   // attributes
   this->attr["alpha"] = NEW_ATTR_FLOAT(1.f, 0.f, 1.f, "%.2f");
-  this->attr_ordered_key = {"alpha"};
+  this->attr["clamp_alpha"] = NEW_ATTR_BOOL(true);
+  this->attr_ordered_key = {"alpha", "clamp_alpha"};
 
   // update
   if (this->p_config->compute_nodes_at_instanciation)
@@ -52,6 +53,7 @@ SetAlpha::SetAlpha(const ModelConfig *p_config) : BaseNode(p_config)
 
   this->attribute_descriptions["alpha"] = "Transparency as a scalar value (overriden if "
                                           "this alpha input is set).";
+  this->attribute_descriptions["clamp_alpha"] = "Clamp to [0, 1] to input alpha map.";
 }
 
 std::shared_ptr<QtNodes::NodeData> SetAlpha::outData(QtNodes::PortIndex /* port_index */)
@@ -97,7 +99,12 @@ void SetAlpha::compute()
     *p_out = *p_in;
 
     if (p_alpha)
+    {
+      if (GET_ATTR_BOOL("clamp_alpha"))
+        hmap::transform(*p_alpha, [](hmap::Array &x) { hmap::clamp(x, 0.f, 1.f); });
+
       p_out->set_alpha(*p_alpha);
+    }
     else
       p_out->set_alpha(GET_ATTR_FLOAT("alpha"));
   }
