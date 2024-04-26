@@ -38,6 +38,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::HeightMapToMask, "Converter");
   HSD_REGISTER_NODE(hesiod::Laplace, "Filter/Smoothing");
   HSD_REGISTER_NODE(hesiod::Lerp, "Operator/Blend");
+  HSD_REGISTER_NODE(hesiod::MakeBinary, "Operator/Morphology");
   HSD_REGISTER_NODE(hesiod::Median3x3, "Filter/Smoothing");
   HSD_REGISTER_NODE(hesiod::MixTexture, "Texture");
   HSD_REGISTER_NODE(hesiod::Noise, "Primitive/Coherent Noise");
