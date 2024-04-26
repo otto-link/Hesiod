@@ -13,7 +13,6 @@
 #include "hesiod/data/cloud_data.hpp"
 #include "hesiod/data/heightmap_data.hpp"
 #include "hesiod/data/heightmap_rgba_data.hpp"
-#include "hesiod/data/mask_data.hpp"
 #include "hesiod/model/base_node.hpp"
 #include "hesiod/model/enum_mapping.hpp"
 
@@ -284,8 +283,7 @@ public:
                  QtNodes::PortIndex                 port_index) override;
 
 protected:
-  std::weak_ptr<HeightMapData>   in;
-  std::weak_ptr<MaskData>        mask;
+  std::weak_ptr<HeightMapData>   in, mask;
   std::shared_ptr<HeightMapData> out;
 };
 
@@ -383,8 +381,7 @@ public:
                  QtNodes::PortIndex                 port_index) override;
 
 protected:
-  std::weak_ptr<HeightMapData>   in;
-  std::weak_ptr<MaskData>        mask;
+  std::weak_ptr<HeightMapData>   in, mask;
   std::shared_ptr<HeightMapData> out;
 };
 
@@ -409,8 +406,7 @@ public:
                  QtNodes::PortIndex                 port_index) override;
 
 protected:
-  std::weak_ptr<HeightMapData>   in;
-  std::weak_ptr<MaskData>        mask;
+  std::weak_ptr<HeightMapData>   in, mask;
   std::shared_ptr<HeightMapData> out;
 };
 
@@ -435,8 +431,7 @@ public:
                  QtNodes::PortIndex                 port_index) override;
 
 protected:
-  std::weak_ptr<HeightMapData>   in;
-  std::weak_ptr<MaskData>        mask;
+  std::weak_ptr<HeightMapData>   in, mask;
   std::shared_ptr<HeightMapData> out;
 };
 
@@ -562,8 +557,8 @@ public:
                  QtNodes::PortIndex                 port_index) override;
 
 protected:
-  std::weak_ptr<HeightMapData> in;
-  std::shared_ptr<MaskData>    mask;
+  std::weak_ptr<HeightMapData>   in;
+  std::shared_ptr<HeightMapData> mask;
 };
 
 /**
@@ -587,8 +582,7 @@ public:
                  QtNodes::PortIndex                 port_index) override;
 
 protected:
-  std::weak_ptr<HeightMapData>   in;
-  std::weak_ptr<MaskData>        mask;
+  std::weak_ptr<HeightMapData>   in, mask;
   std::shared_ptr<HeightMapData> out;
 };
 
@@ -618,31 +612,6 @@ protected:
 };
 
 /**
- * @brief MaskToHeightMap class.
- */
-class MaskToHeightMap : public BaseNode
-{
-public:
-  MaskToHeightMap(const ModelConfig *p_config);
-
-  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
-  QtNodes::NodeData *get_viewer2d_data() { return this->out.get(); }
-  QtNodes::NodeData *get_viewer3d_data() { return this->out.get(); }
-  QtNodes::NodeData *get_viewer3d_color() { return this->mask.lock().get(); }
-
-  void compute() override;
-
-  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
-
-  void setInData(std::shared_ptr<QtNodes::NodeData> data,
-                 QtNodes::PortIndex                 port_index) override;
-
-protected:
-  std::weak_ptr<MaskData>        mask;
-  std::shared_ptr<HeightMapData> out;
-};
-
-/**
  * @brief Median3x3 class.
  */
 class Median3x3 : public BaseNode
@@ -663,8 +632,7 @@ public:
                  QtNodes::PortIndex                 port_index) override;
 
 protected:
-  std::weak_ptr<HeightMapData>   in;
-  std::weak_ptr<MaskData>        mask;
+  std::weak_ptr<HeightMapData>   in, mask;
   std::shared_ptr<HeightMapData> out;
 };
 
@@ -917,8 +885,7 @@ public:
                  QtNodes::PortIndex                 port_index) override;
 
 protected:
-  std::weak_ptr<HeightMapData>   in;
-  std::weak_ptr<MaskData>        mask;
+  std::weak_ptr<HeightMapData>   in, mask;
   std::shared_ptr<HeightMapData> out;
 };
 
@@ -1019,8 +986,7 @@ public:
                  QtNodes::PortIndex                 port_index) override;
 
 protected:
-  std::weak_ptr<HeightMapData>   in;
-  std::weak_ptr<MaskData>        mask;
+  std::weak_ptr<HeightMapData>   in, mask;
   std::shared_ptr<HeightMapData> out, deposition_map;
 };
 
@@ -1045,8 +1011,7 @@ public:
                  QtNodes::PortIndex                 port_index) override;
 
 protected:
-  std::weak_ptr<HeightMapData>   in;
-  std::weak_ptr<MaskData>        mask;
+  std::weak_ptr<HeightMapData>   in, mask;
   std::shared_ptr<HeightMapData> out;
 };
 

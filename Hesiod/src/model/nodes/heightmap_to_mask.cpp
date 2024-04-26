@@ -19,7 +19,7 @@ HeightMapToMask::HeightMapToMask(const ModelConfig *p_config) : BaseNode(p_confi
 
   // outputs
   this->output_captions = {"mask"};
-  this->output_types = {MaskData().type()};
+  this->output_types = {HeightMapData().type()};
 
   // attributes
   this->attr["inverse"] = NEW_ATTR_BOOL(false);
@@ -39,12 +39,12 @@ HeightMapToMask::HeightMapToMask(const ModelConfig *p_config) : BaseNode(p_confi
   // update
   if (this->p_config->compute_nodes_at_instanciation)
   {
-    this->mask = std::make_shared<MaskData>(p_config);
+    this->mask = std::make_shared<HeightMapData>(p_config);
     this->compute();
   }
 
   // documentation
-  this->description = "Convert an heightmap to a mask.";
+  this->description = "Convert an heightmap to a mask (remap values).";
 
   this->input_descriptions = {"Heightmap."};
   this->output_descriptions = {"Mask."};

@@ -15,7 +15,6 @@
 #include "hesiod/data/cloud_data.hpp"
 #include "hesiod/data/heightmap_data.hpp"
 #include "hesiod/data/heightmap_rgba_data.hpp"
-#include "hesiod/data/mask_data.hpp"
 #include "hesiod/gui/widgets.hpp"
 
 namespace hesiod
@@ -384,24 +383,15 @@ void HmapGLViewer::set_data(QtNodes::NodeData *new_p_data, QtNodes::NodeData *ne
 
     QString data_type = this->p_data->type().id;
 
-    if (data_type.compare("HeightMapData") == 0 || data_type.compare("MaskData") == 0)
+    if (data_type.compare("HeightMapData") == 0)
     {
       // elevation array
       hmap::HeightMap *p_h;
       hmap::Array      array;
 
-      if (data_type.compare("HeightMapData") == 0)
-      {
-        HeightMapData *p_hdata = static_cast<HeightMapData *>(this->p_data);
-        p_h = static_cast<hmap::HeightMap *>(p_hdata->get_ref());
-        array = p_h->to_array();
-      }
-      else if (data_type.compare("MaskData") == 0)
-      {
-        MaskData *p_hdata = static_cast<MaskData *>(this->p_data);
-        p_h = static_cast<hmap::HeightMap *>(p_hdata->get_ref());
-        array = p_h->to_array();
-      }
+      HeightMapData *p_hdata = static_cast<HeightMapData *>(this->p_data);
+      p_h = static_cast<hmap::HeightMap *>(p_hdata->get_ref());
+      array = p_h->to_array();
 
       // generate the basemesh (NB - shape can be modified while
       // editing the graph when the model configuration is changed by
@@ -436,14 +426,6 @@ void HmapGLViewer::set_data(QtNodes::NodeData *new_p_data, QtNodes::NodeData *ne
           hmap::Array a = p_c->rgba[3].to_array();
 
           update_vertex_colors(array, r, g, b, this->colors, &a);
-        }
-        else if (color_type.compare("MaskData") == 0)
-        {
-          MaskData        *p_hcolor = static_cast<MaskData *>(this->p_color);
-          hmap::HeightMap *p_c = static_cast<hmap::HeightMap *>(p_hcolor->get_ref());
-          hmap::Array      c = 1.f - p_c->to_array();
-
-          update_vertex_colors(array, c, this->colors, nullptr);
         }
         else if (color_type.compare("CloudData") == 0)
         {

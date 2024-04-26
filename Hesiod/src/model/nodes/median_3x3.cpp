@@ -15,7 +15,7 @@ Median3x3::Median3x3(const ModelConfig *p_config) : BaseNode(p_config)
 
   // inputs
   this->input_captions = {"input", "mask"};
-  this->input_types = {HeightMapData().type(), MaskData().type()};
+  this->input_types = {HeightMapData().type(), HeightMapData().type()};
 
   // outputs
   this->output_captions = {"output"};
@@ -59,7 +59,7 @@ void Median3x3::setInData(std::shared_ptr<QtNodes::NodeData> data,
     this->in = std::dynamic_pointer_cast<HeightMapData>(data);
     break;
   case 1:
-    this->mask = std::dynamic_pointer_cast<MaskData>(data);
+    this->mask = std::dynamic_pointer_cast<HeightMapData>(data);
   }
 
   this->compute();

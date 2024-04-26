@@ -11,7 +11,6 @@
 #include "macrologger.h"
 
 #include "hesiod/data/heightmap_data.hpp"
-#include "hesiod/data/mask_data.hpp"
 #include "hesiod/gui/viewer3d_widget.hpp"
 #include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/graph_model_addon.hpp"

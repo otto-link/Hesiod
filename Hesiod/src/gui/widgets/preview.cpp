@@ -12,7 +12,6 @@
 #include "hesiod/data/cloud_data.hpp"
 #include "hesiod/data/heightmap_data.hpp"
 #include "hesiod/data/heightmap_rgba_data.hpp"
-#include "hesiod/data/mask_data.hpp"
 #include "hesiod/gui/preview.hpp"
 
 namespace hesiod
@@ -95,22 +94,6 @@ void Preview::update_image()
                                     this->p_node->p_config->shape_preview.x,
                                     this->p_node->p_config->shape_preview.y,
                                     QImage::Format_RGBA8888);
-
-      this->label->setPixmap(QPixmap::fromImage(preview_image));
-    }
-    //
-    else if (p_data->type().id.compare("MaskData") == 0)
-    {
-      MaskData        *p_hdata = static_cast<MaskData *>(p_data);
-      hmap::HeightMap *p_h = static_cast<hmap::HeightMap *>(p_hdata->get_ref());
-      hmap::Array      array = p_h->to_array(this->p_node->p_config->shape_preview);
-
-      std::vector<uint8_t> img = hmap::colorize_grayscale(array);
-
-      QImage preview_image = QImage(img.data(),
-                                    this->p_node->p_config->shape_preview.x,
-                                    this->p_node->p_config->shape_preview.y,
-                                    QImage::Format_Grayscale8);
 
       this->label->setPixmap(QPixmap::fromImage(preview_image));
     }

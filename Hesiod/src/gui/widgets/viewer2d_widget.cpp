@@ -12,7 +12,6 @@
 
 #include "hesiod/data/heightmap_data.hpp"
 #include "hesiod/data/heightmap_rgba_data.hpp"
-#include "hesiod/data/mask_data.hpp"
 #include "hesiod/gui/viewer2d_widget.hpp"
 #include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/graph_model_addon.hpp"
@@ -217,24 +216,6 @@ void Viewer2dWidget::update_label_image()
       this->label_image->setPixmap(pixmap);
     }
     //
-    else if (this->p_data->type().id.compare("MaskData") == 0)
-    {
-      MaskData        *p_hdata = static_cast<MaskData *>(this->p_data);
-      hmap::HeightMap *p_h = static_cast<hmap::HeightMap *>(p_hdata->get_ref());
-      hmap::Array      array = p_h->to_array();
-
-      std::vector<uint8_t> img = hmap::colorize_grayscale(array);
-
-      QImage preview_image = QImage(img.data(),
-                                    array.shape.x,
-                                    array.shape.y,
-                                    QImage::Format_Grayscale8);
-
-      QPixmap pixmap = QPixmap::fromImage(preview_image)
-                           .QPixmap::scaled(shape.x, shape.y);
-
-      this->label_image->setPixmap(pixmap);
-    }
     else
       this->label_image->setText("No preview");
   }

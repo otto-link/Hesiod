@@ -12,7 +12,6 @@
 #include "hesiod/data/cloud_data.hpp"
 #include "hesiod/data/heightmap_data.hpp"
 #include "hesiod/data/heightmap_rgba_data.hpp"
-#include "hesiod/data/mask_data.hpp"
 #include "hesiod/gui/preview.hpp"
 
 namespace hesiod
