@@ -37,6 +37,7 @@ ColorWidget::ColorWidget(ColorAttribute *p_attr) : p_attr(p_attr)
             QColorDialog color_dialog;
             color_dialog.setOption(QColorDialog::ShowAlphaChannel);
             QColor color = color_dialog.getColor();
+            // TODO detect "Cancel" button
             this->update_attribute(color);
           });
 

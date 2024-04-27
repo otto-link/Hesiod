@@ -8,8 +8,10 @@
 #include <QFileDialog>
 #include <QGraphicsView>
 #include <QLabel>
+#include <QListWidget>
 #include <QOpenGLFunctions>
 #include <QOpenGLWidget>
+#include <QPainter>
 #include <QPlainTextEdit>
 #include <QPushButton>
 #include <QSlider>
@@ -25,6 +27,8 @@
 
 namespace hesiod
 {
+
+class ColorbarWidget; // forward decl.
 
 // --- Main attributes widget
 
@@ -106,6 +110,39 @@ private:
   QLabel         *label;
 
   void update_attribute(QColor color);
+};
+
+class ColorGradientWidget : public QWidget
+{
+  Q_OBJECT
+
+public:
+  ColorGradientWidget() = default;
+
+  ColorGradientWidget(ColorGradientAttribute *p_attr);
+
+public Q_SLOTS:
+  void add_color();
+
+  void on_item_double_click(QListWidgetItem *item);
+
+  void remove_color();
+
+Q_SIGNALS:
+  void value_changed();
+
+private:
+  ColorGradientAttribute *p_attr;
+  ColorbarWidget         *colorbar;
+  QListWidget            *color_list;
+
+  void update();
+
+  void update_attribute();
+
+  void update_color_list();
+
+  void update_label_gradient();
 };
 
 class FilenameWidget : public QWidget
@@ -307,6 +344,24 @@ private:
 };
 
 // --- Other widgets
+
+class ColorbarWidget : public QLabel
+{
+public:
+  ColorbarWidget(QWidget *parent = nullptr);
+
+  ColorbarWidget(std::vector<std::vector<float>> colors, QWidget *parent = nullptr);
+
+  std::vector<std::vector<float>> get_colors() { return this->colors; };
+
+  void update_colors(std::vector<std::vector<float>> new_colors);
+
+protected:
+  void paintEvent(QPaintEvent *event) override;
+
+private:
+  std::vector<std::vector<float>> colors;
+};
 
 class PointEditorWidget : public QGraphicsView
 {

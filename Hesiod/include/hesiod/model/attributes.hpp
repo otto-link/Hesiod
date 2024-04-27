@@ -28,6 +28,7 @@
 #define NEW_ATTR_BOOL(...) std::make_unique<hesiod::BoolAttribute>(__VA_ARGS__)
 #define NEW_ATTR_CLOUD(...) std::make_unique<hesiod::CloudAttribute>(__VA_ARGS__)
 #define NEW_ATTR_COLOR(...) std::make_unique<hesiod::ColorAttribute>(__VA_ARGS__)
+#define NEW_ATTR_COLORGRADIENT(...) std::make_unique<hesiod::ColorGradientAttribute>(__VA_ARGS__)
 #define NEW_ATTR_FILENAME(...) std::make_unique<hesiod::FilenameAttribute>(__VA_ARGS__)
 #define NEW_ATTR_FLOAT(...) std::make_unique<hesiod::FloatAttribute>(__VA_ARGS__)
 #define NEW_ATTR_INT(...) std::make_unique<hesiod::IntAttribute>(__VA_ARGS__)
@@ -45,6 +46,7 @@
 #define GET_ATTR_BOOL(s) this->attr.at(s)->get_ref<BoolAttribute>()->get()
 #define GET_ATTR_CLOUD(s) this->attr.at(s)->get_ref<CloudAttribute>()->get()
 #define GET_ATTR_COLOR(s) this->attr.at(s)->get_ref<ColorAttribute>()->get()
+#define GET_ATTR_COLORGRADIENT(s) this->attr.at(s)->get_ref<ColorGradientAttribute>()->get()
 #define GET_ATTR_FILENAME(s) this->attr.at(s)->get_ref<FilenameAttribute>()->get()
 #define GET_ATTR_FLOAT(s) this->attr.at(s)->get_ref<FloatAttribute>()->get()
 #define GET_ATTR_INT(s) this->attr.at(s)->get_ref<IntAttribute>()->get()
@@ -58,10 +60,6 @@
 #define GET_ATTR_VECFLOAT(s) this->attr.at(s)->get_ref<VecFloatAttribute>()->get()
 #define GET_ATTR_VECINT(s) this->attr.at(s)->get_ref<VecIntAttribute>()->get()
 #define GET_ATTR_WAVENB(s) this->attr.at(s)->get_ref<WaveNbAttribute>()->get()
-
-#define GET_ATTR_REF_FLOAT(s) this->attr.at(s)->get_ref<FloatAttribute>()
-#define GET_ATTR_REF_RANGE(s) this->attr.at(s)->get_ref<RangeAttribute>()
-#define GET_ATTR_REF_SHAPE(s) this->attr.at(s)->get_ref<ShapeAttribute>()
 // clang-format on
 
 #define HSD_DEFAULT_KW 2.f
@@ -77,6 +75,7 @@ enum class AttributeType
   BOOL,
   CLOUD,
   COLOR,
+  COLOR_GRADIENT,
   FILENAME,
   FLOAT,
   INT,
@@ -96,6 +95,7 @@ static std::map<hesiod::AttributeType, std::string> attribute_type_map = {
     {hesiod::AttributeType::BOOL, "Bool"},
     {hesiod::AttributeType::CLOUD, "HighMap Cloud Object"},
     {hesiod::AttributeType::COLOR, "Color"},
+    {hesiod::AttributeType::COLOR_GRADIENT, "Color gradient"},
     {hesiod::AttributeType::FILENAME, "Filename"},
     {hesiod::AttributeType::FLOAT, "Float"},
     {hesiod::AttributeType::INT, "Integer"},
@@ -208,7 +208,7 @@ public:
     ret &= convert_qjsonvalue_to_vector_float(p["y"], y);
     ret &= convert_qjsonvalue_to_vector_float(p["v"], v);
     if (!ret)
-      LOG_ERROR("serialization in with ColorAttribute");
+      LOG_ERROR("serialization in with CloudAttribute");
 
     this->value = hmap::Cloud(x, y, v);
   }
@@ -243,6 +243,41 @@ public:
   }
 
   std::vector<float> value = {1.f, 1.f, 1.f, 1.f};
+};
+
+class ColorGradientAttribute : public Attribute //
+{
+public:
+  ColorGradientAttribute();
+  ColorGradientAttribute(std::vector<std::vector<float>> value);
+  std::vector<std::vector<float>> get();
+  AttributeType                   get_type() { return AttributeType::COLOR_GRADIENT; }
+
+  QJsonObject save() const override
+  {
+    QJsonObject model_json;
+
+    int stride = 0;
+    if (this->value.size() > 0)
+      stride = (int)this->value[0].size();
+
+    model_json["stride"] = QString::number(stride);
+    model_json["value"] = std_vector_vector_float_to_qjsonarray(this->value);
+    return model_json;
+  }
+
+  void load(QJsonObject const &p) override
+  {
+    bool ret = true;
+    int  stride;
+    ret &= convert_qjsonvalue_to_int(p["stride"], stride);
+    ret &= convert_qjsonvalue_to_vector_vector_float(p["value"], this->value, stride);
+
+    if (!ret)
+      LOG_ERROR("serialization in with ColorGradientAttribute");
+  }
+
+  std::vector<std::vector<float>> value = {};
 };
 
 class FilenameAttribute : public Attribute // OK JSON GUI
@@ -307,7 +342,7 @@ public:
     ret &= convert_qjsonvalue_to_string(p["fmt"], this->fmt);
 
     if (!ret)
-      LOG_ERROR("serialization in with WaveNbAttribute");
+      LOG_ERROR("serialization in with FloatAttribute");
   }
 
   float       value = 1.f;
@@ -342,7 +377,7 @@ public:
     ret &= convert_qjsonvalue_to_int(p["vmax"], this->vmax);
 
     if (!ret)
-      LOG_ERROR("serialization in with WaveNbAttribute");
+      LOG_ERROR("serialization in with IntAttribute");
   }
   int value = 1;
   int vmin = 0;
@@ -436,7 +471,7 @@ public:
     ret &= convert_qjsonvalue_to_string(p["fmt"], this->fmt);
 
     if (!ret)
-      LOG_ERROR("serialization in with WaveNbAttribute");
+      LOG_ERROR("serialization in with RangeAttribute");
   }
 
   hmap::Vec2<float> value = {0.f, 1.f};
@@ -513,7 +548,7 @@ public:
     ret &= convert_qjsonvalue_to_string(p["value"], this->value);
 
     if (!ret)
-      LOG_ERROR("serialization in with WaveNbAttribute");
+      LOG_ERROR("serialization in with StringAttribute");
   }
 
   std::string value = "";
@@ -549,7 +584,7 @@ public:
     ret &= convert_qjsonvalue_to_string(p["fmt"], this->fmt);
 
     if (!ret)
-      LOG_ERROR("serialization in with WaveNbAttribute");
+      LOG_ERROR("serialization in with VecFloatAttribute");
   }
 
   std::vector<float> value = {};
@@ -584,7 +619,7 @@ public:
     ret &= convert_qjsonvalue_to_int(p["vmax"], this->vmax);
 
     if (!ret)
-      LOG_ERROR("serialization in with WaveNbAttribute");
+      LOG_ERROR("serialization in with VecIntAttribute");
   }
 
   std::vector<int> value = {};

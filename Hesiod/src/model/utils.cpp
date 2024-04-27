@@ -115,6 +115,36 @@ bool convert_qjsonvalue_to_vector_int(QJsonValue v, std::vector<int> &out)
   return false;
 }
 
+bool convert_qjsonvalue_to_vector_vector_float(QJsonValue                       v,
+                                               std::vector<std::vector<float>> &out,
+                                               int                              stride)
+{
+  if (!v.isUndefined())
+  {
+    out.clear();
+    if (stride > 0)
+    {
+      QJsonArray         json_array = v.toArray();
+      std::vector<float> vec_work = {};
+      int                k = 0;
+
+      for (const QJsonValue &x : json_array)
+      {
+        float v = (float)x.toDouble();
+
+        vec_work.push_back(v);
+        k++;
+
+        if (k % stride == 0)
+        {
+          out.push_back(vec_work);
+          vec_work.clear();
+        }
+      }
+    }
+  }
+}
+
 QJsonArray std_vector_float_to_qjsonarray(const std::vector<float> &vector)
 {
   QJsonArray json_array;
@@ -128,6 +158,16 @@ QJsonArray std_vector_int_to_qjsonarray(const std::vector<int> &vector)
   QJsonArray json_array;
   for (const int &v : vector)
     json_array.append(v);
+  return json_array;
+}
+
+QJsonArray std_vector_vector_float_to_qjsonarray(
+    const std::vector<std::vector<float>> &vector)
+{
+  QJsonArray json_array;
+  for (const std::vector<float> &sub_vector : vector)
+    for (const float &v : sub_vector)
+      json_array.append(v);
   return json_array;
 }
 

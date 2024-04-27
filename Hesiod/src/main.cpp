@@ -222,6 +222,12 @@ int main(int argc, char *argv[])
 
   attr["text"] = NEW_ATTR_STRING("test");
 
+  std::vector<std::vector<float>> gradient = {{0.f, 1.f, 0.f, 0.f, 1.f},
+                                              {0.25f, 0.f, 1.f, 0.f, 1.f},
+                                              {1.f, 0.f, 0.f, 1.f, 1.f}};
+
+  attr["color_vec"] = NEW_ATTR_COLORGRADIENT(gradient);
+
   hesiod::AttributesWidget *sw = new hesiod::AttributesWidget(&attr);
   // sw->show();
 

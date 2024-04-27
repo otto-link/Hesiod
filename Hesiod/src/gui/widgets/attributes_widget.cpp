@@ -93,6 +93,17 @@ AttributesWidget::AttributesWidget(
       }
       break;
 
+      case (AttributeType::COLOR_GRADIENT):
+      {
+        ColorGradientWidget *widget = new ColorGradientWidget(
+            (ColorGradientAttribute *)p_attr);
+        connect(widget,
+                &ColorGradientWidget::value_changed,
+                [this]() { Q_EMIT this->value_changed(); });
+        layout->addWidget(widget, row, 1);
+      }
+      break;
+
       case (AttributeType::FILENAME):
       {
         FilenameWidget *widget = new FilenameWidget((FilenameAttribute *)p_attr);

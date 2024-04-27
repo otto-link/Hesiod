@@ -34,9 +34,16 @@ bool convert_qjsonvalue_to_vector_float(QJsonValue v, std::vector<float> &out);
 
 bool convert_qjsonvalue_to_vector_int(QJsonValue v, std::vector<int> &out);
 
+bool convert_qjsonvalue_to_vector_vector_float(QJsonValue                       v,
+                                               std::vector<std::vector<float>> &out,
+                                               int                              stride);
+
 QJsonArray std_vector_float_to_qjsonarray(const std::vector<float> &vector);
 
 QJsonArray std_vector_int_to_qjsonarray(const std::vector<int> &vector);
+
+QJsonArray std_vector_vector_float_to_qjsonarray(
+    const std::vector<std::vector<float>> &vector);
 
 /**
  * @brief
