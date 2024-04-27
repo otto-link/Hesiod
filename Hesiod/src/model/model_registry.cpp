@@ -52,6 +52,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::Plateau, "Filter/Recurve");
   HSD_REGISTER_NODE(hesiod::Remap, "Filter/Range");
   HSD_REGISTER_NODE(hesiod::Rescale, "Filter/Range");
+  HSD_REGISTER_NODE(hesiod::SelectGt, "Mask/Selector");
   HSD_REGISTER_NODE(hesiod::SetAlpha, "Texture");
   HSD_REGISTER_NODE(hesiod::SmoothCpulse, "Filter/Smoothing");
   HSD_REGISTER_NODE(hesiod::SmoothFill, "Filter/Smoothing");

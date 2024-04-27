@@ -85,6 +85,7 @@ void HeightMapToMask::compute()
 
     // clamp to [0, 1]
     hmap::transform(*p_mask, [](hmap::Array &x) { hmap::clamp(x, 0.f, 1.f); });
+
     // post-process
     int ir = std::max(
         1,
