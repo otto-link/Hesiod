@@ -142,7 +142,9 @@ bool convert_qjsonvalue_to_vector_vector_float(QJsonValue                       
         }
       }
     }
+    return true;
   }
+  return false;
 }
 
 QJsonArray std_vector_float_to_qjsonarray(const std::vector<float> &vector)
