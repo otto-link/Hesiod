@@ -6,12 +6,12 @@
 namespace hesiod
 {
 
-Median3x3::Median3x3(const ModelConfig *p_config) : BaseNode(p_config)
+RecurveKura::RecurveKura(const ModelConfig *p_config) : BaseNode(p_config)
 {
-  LOG_DEBUG("Median3x3::Median3x3");
+  LOG_DEBUG("RecurveKura::RecurveKura");
 
   // model
-  this->node_caption = "Median3x3";
+  this->node_caption = "RecurveKura";
 
   // inputs
   this->input_captions = {"input", "mask"};
@@ -21,7 +21,10 @@ Median3x3::Median3x3(const ModelConfig *p_config) : BaseNode(p_config)
   this->output_captions = {"output"};
   this->output_types = {HeightMapData().type()};
 
-  // no attributes
+  // attributes
+
+  this->attr["a"] = NEW_ATTR_FLOAT(2.f, 0.01f, 4.f);
+  this->attr["b"] = NEW_ATTR_FLOAT(2.f, 0.01f, 4.f);
 
   // update
   if (this->p_config->compute_nodes_at_instanciation)
@@ -31,24 +34,28 @@ Median3x3::Median3x3(const ModelConfig *p_config) : BaseNode(p_config)
   }
 
   // documentation
-  this->description = "Median3x3 filter is a median filter with a 3x3 kernel used to "
-                      "reduce noise while preserving edges in an image. This process "
-                      "removes outliers and smooths the image without noise reduction "
-                      "and feature preservation in digital images.";
+  this->description = "RecurveKura is an operator based on the Kumaraswamy distribution "
+                      "that can be used to adjust the amplitude levels of a dataset.";
 
   this->input_descriptions = {
       "Input heightmap.",
       "Mask defining the filtering intensity (expected in [0, 1])."};
   this->output_descriptions = {"Filtered heightmap."};
+
+  this->attribute_descriptions["a"] = "Primarily controls the rightward skewness and "
+                                      "tail behavior of the distribution.";
+  this->attribute_descriptions
+      ["b"] = "Primarily controls the leftward skewness and tail behavior.";
 }
 
-std::shared_ptr<QtNodes::NodeData> Median3x3::outData(QtNodes::PortIndex /* port_index */)
+std::shared_ptr<QtNodes::NodeData> RecurveKura::outData(
+    QtNodes::PortIndex /* port_index */)
 {
   return std::static_pointer_cast<QtNodes::NodeData>(this->out);
 }
 
-void Median3x3::setInData(std::shared_ptr<QtNodes::NodeData> data,
-                          QtNodes::PortIndex                 port_index)
+void RecurveKura::setInData(std::shared_ptr<QtNodes::NodeData> data,
+                            QtNodes::PortIndex                 port_index)
 {
   if (!data)
     Q_EMIT this->dataInvalidated(0);
@@ -67,7 +74,7 @@ void Median3x3::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 // --- computing
 
-void Median3x3::compute()
+void RecurveKura::compute()
 {
   Q_EMIT this->computingStarted();
 
@@ -82,12 +89,18 @@ void Median3x3::compute()
     // copy the input heightmap
     *p_out = *p_in;
 
-    hmap::transform(*p_out,
-                    p_mask,
-                    [](hmap::Array &x, hmap::Array *p_mask)
-                    { hmap::median_3x3(x, p_mask); });
+    float hmin = p_out->min();
+    float hmax = p_out->max();
 
-    p_out->smooth_overlap_buffers();
+    p_out->remap(0.f, 1.f, hmin, hmax);
+
+    hmap::transform(
+        *p_out,
+        p_mask,
+        [this](hmap::Array &x, hmap::Array *p_mask)
+        { hmap::recurve_kura(x, GET_ATTR_FLOAT("a"), GET_ATTR_FLOAT("b"), p_mask); });
+
+    p_out->remap(hmin, hmax, 0.f, 1.f);
   }
 
   // propagate
