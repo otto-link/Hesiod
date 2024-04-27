@@ -99,6 +99,8 @@ void ColorGradientWidget::add_color()
 
   this->colorbar->update_colors(this->p_attr->value);
   this->update_color_list();
+
+  Q_EMIT this->value_changed();
 }
 
 void ColorGradientWidget::on_item_double_click(QListWidgetItem *item)
@@ -137,6 +139,8 @@ void ColorGradientWidget::update()
   this->update_attribute();
   this->colorbar->update_colors(this->p_attr->value);
   this->update_color_list();
+
+  Q_EMIT this->value_changed();
 }
 
 void ColorGradientWidget::update_attribute()
@@ -157,8 +161,6 @@ void ColorGradientWidget::update_attribute()
       this->p_attr->value.push_back(color);
     }
   }
-
-  Q_EMIT this->value_changed();
 }
 
 void ColorGradientWidget::update_color_list()
