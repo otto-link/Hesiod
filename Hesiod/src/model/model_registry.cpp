@@ -37,6 +37,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::GradientNorm, "Math/Gradient");
   HSD_REGISTER_NODE(hesiod::GradientTalus, "Math/Gradient");
   HSD_REGISTER_NODE(hesiod::HeightMapToMask, "Converter");
+  HSD_REGISTER_NODE(hesiod::HeightMapToRGBA, "Converter");
   HSD_REGISTER_NODE(hesiod::Laplace, "Filter/Smoothing");
   HSD_REGISTER_NODE(hesiod::Lerp, "Operator/Blend");
   HSD_REGISTER_NODE(hesiod::MakeBinary, "Operator/Morphology");
