@@ -18,7 +18,6 @@ ColorGradientWidget::ColorGradientWidget(ColorGradientAttribute *p_attr) : p_att
   QGridLayout *layout = new QGridLayout(this);
 
   int row = 0;
-  int col = 0;
 
   this->colorbar = new ColorbarWidget(this);
   this->colorbar->update_colors(p_attr->value);
