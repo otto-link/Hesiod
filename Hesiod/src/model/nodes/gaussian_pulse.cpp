@@ -62,7 +62,7 @@ std::shared_ptr<QtNodes::NodeData> GaussianPulse::outData(
 }
 
 void GaussianPulse::setInData(std::shared_ptr<QtNodes::NodeData> data,
-                              QtNodes::PortIndex                 port_index)
+                              QtNodes::PortIndex /* port_index */)
 {
   if (!data)
   {
