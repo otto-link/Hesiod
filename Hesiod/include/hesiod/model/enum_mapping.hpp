@@ -9,26 +9,26 @@
 namespace hesiod
 {
 
-enum mask_combine_method : int
+enum MaskCombineMethod : int
 {
   UNION,
   INTERSECTION,
   EXCLUSION,
 };
 
-enum export_format : int
+enum ExportFormat : int
 {
-  png8bit,
-  png16bit,
-  raw16bit,
+  PNG8BIT,
+  PNG16BIT,
+  RAW16BIT,
 };
 
-enum kernel : int
+enum Kernel : int
 {
-  cubic_pulse,
-  cone,
-  lorentzian,
-  smooth_cosine
+  CUBIC_PULSE,
+  CONE,
+  LORENTZIAN,
+  SMOOTH_COSINE
 };
 
 enum PreviewType : int
@@ -54,25 +54,25 @@ static std::map<std::string, int> cmap_map = {
  * ExportHeightmap node).
  */
 static std::map<std::string, int> heightmap_export_format_map = {
-    {"png (8 bit)", export_format::png8bit},
-    {"png (16 bit)", export_format::png16bit},
-    {"raw (16 bit, Unity)", export_format::raw16bit}};
+    {"png (8 bit)", ExportFormat::PNG8BIT},
+    {"png (16 bit)", ExportFormat::PNG16BIT},
+    {"raw (16 bit, Unity)", ExportFormat::RAW16BIT}};
 
 /**
  * @brief Plain text / enumerate mapping for the kernels.
  */
-static std::map<std::string, int> kernel_map = {{"cone", kernel::cone},
-                                                {"cubic_pulse", kernel::cubic_pulse},
-                                                {"lorentzian", kernel::lorentzian},
-                                                {"smooth_cosine", kernel::smooth_cosine}};
+static std::map<std::string, int> kernel_map = {{"cone", Kernel::CONE},
+                                                {"CUBIC_PULSE", Kernel::CUBIC_PULSE},
+                                                {"lorentzian", Kernel::LORENTZIAN},
+                                                {"smooth_cosine", Kernel::SMOOTH_COSINE}};
 
 /**
  * @brief Plain text / enumerate mapping for the mask combine method.
  */
 static std::map<std::string, int> mask_combine_method_map = {
-    {"union", mask_combine_method::UNION},
-    {"intersection", mask_combine_method::INTERSECTION},
-    {"exclusion", mask_combine_method::EXCLUSION}};
+    {"union", MaskCombineMethod::UNION},
+    {"intersection", MaskCombineMethod::INTERSECTION},
+    {"exclusion", MaskCombineMethod::EXCLUSION}};
 
 /**
  * @brief Plain text / enumerate mapping for the HighMap noise types.

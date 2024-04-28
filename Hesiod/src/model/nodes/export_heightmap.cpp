@@ -70,15 +70,15 @@ void ExportHeightmap::compute()
 
     switch (GET_ATTR_MAPENUM("format"))
     {
-    case export_format::png8bit:
+    case ExportFormat::PNG8BIT:
       p_in->to_array().to_png_grayscale_8bit(fname);
       break;
 
-    case export_format::png16bit:
+    case ExportFormat::PNG16BIT:
       p_in->to_array().to_png_grayscale_16bit(fname);
       break;
 
-    case export_format::raw16bit:
+    case ExportFormat::RAW16BIT:
       p_in->to_array().to_raw_16bit(fname);
       break;
     }

@@ -86,17 +86,17 @@ void CombineMask::compute()
 
     switch (method)
     {
-    case mask_combine_method::UNION:
+    case MaskCombineMethod::UNION:
       lambda = [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
       { m = hmap::maximum(a1, a2); };
       break;
 
-    case mask_combine_method::INTERSECTION:
+    case MaskCombineMethod::INTERSECTION:
       lambda = [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
       { m = hmap::minimum(a1, a2); };
       break;
 
-    case mask_combine_method::EXCLUSION:
+    case MaskCombineMethod::EXCLUSION:
       lambda = [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
       {
         m = a1 - a2;
