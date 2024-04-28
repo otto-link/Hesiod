@@ -14,8 +14,28 @@ QtNodes::NodeId add_graph_example(HsdDataFlowGraphModel *p_model,
                                   std::string            node_type,
                                   std::string            category)
 {
+  if (node_type == "Clamp")
+  {
+    QtNodes::NodeId node_id1 = p_model->addNode("NoiseFbm");
+    QtNodes::NodeId node_id2 = p_model->addNode(QString::fromStdString(node_type));
+
+    {
+      Clamp *p_node = p_model->delegateModel<Clamp>(node_id2);
+      p_node->attr.at("clamp")->get_ref<RangeAttribute>()->value = {0.3f, 0.7f};
+      p_node->compute();
+    }
+
+    p_model->addConnection(QtNodes::ConnectionId(node_id1, 0, node_id2, 0));
+
+    p_model->setNodeData(node_id1, QtNodes::NodeRole::Position, QPointF(0.f, 0.f));
+    p_model->setNodeData(node_id2,
+                         QtNodes::NodeRole::Position,
+                         QPointF(HSD_NODE_SPACING, 0.f));
+
+    return node_id2;
+  }
   //
-  if (node_type == "CombineMask")
+  else if (node_type == "CombineMask")
   {
     QtNodes::NodeId node_id1 = p_model->addNode("NoiseFbm");
     QtNodes::NodeId node_id2 = p_model->addNode("NoiseFbm");
