@@ -9,6 +9,13 @@
 namespace hesiod
 {
 
+enum mask_combine_method : int
+{
+  UNION,
+  INTERSECTION,
+  EXCLUSION,
+};
+
 enum export_format : int
 {
   png8bit,
@@ -52,6 +59,14 @@ static std::map<std::string, int> kernel_map = {{"cone", kernel::cone},
                                                 {"cubic_pulse", kernel::cubic_pulse},
                                                 {"lorentzian", kernel::lorentzian},
                                                 {"smooth_cosine", kernel::smooth_cosine}};
+
+/**
+ * @brief Plain text / enumerate mapping for the mask combine method.
+ */
+static std::map<std::string, int> mask_combine_method_map = {
+    {"union", mask_combine_method::UNION},
+    {"intersection", mask_combine_method::INTERSECTION},
+    {"exclusion", mask_combine_method::EXCLUSION}};
 
 /**
  * @brief Plain text / enumerate mapping for the HighMap noise types.

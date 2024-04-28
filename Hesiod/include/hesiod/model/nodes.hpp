@@ -192,6 +192,31 @@ protected:
 };
 
 /**
+ * @brief CombineMask class.
+ */
+class CombineMask : public BaseNode
+{
+public:
+  CombineMask(const ModelConfig *p_config);
+
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_data() { return nullptr; }
+  QtNodes::NodeData *get_viewer3d_color() { return nullptr; }
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data,
+                 QtNodes::PortIndex                 port_index) override;
+
+protected:
+  std::weak_ptr<HeightMapData>   in1, in2;
+  std::shared_ptr<HeightMapData> out;
+};
+
+/**
  * @brief Comment class.
  */
 class Comment : public BaseNode

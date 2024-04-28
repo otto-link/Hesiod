@@ -24,9 +24,9 @@ Clamp::Clamp(const ModelConfig *p_config) : BaseNode(p_config)
   // attributes
   this->attr["clamp"] = NEW_ATTR_RANGE();
   this->attr["smooth_min"] = NEW_ATTR_BOOL(false);
-  this->attr["k_min"] = NEW_ATTR_FLOAT(0.05f, 0.f, 1.f);
+  this->attr["k_min"] = NEW_ATTR_FLOAT(0.05f, 0.01f, 1.f);
   this->attr["smooth_max"] = NEW_ATTR_BOOL(false);
-  this->attr["k_max"] = NEW_ATTR_FLOAT(0.05f, 0.f, 1.f);
+  this->attr["k_max"] = NEW_ATTR_FLOAT(0.05f, 0.01f, 1.f);
 
   this->attr_ordered_key = {"clamp", "smooth_min", "k_min", "smooth_max", "k_max"};
 
@@ -42,10 +42,8 @@ Clamp::Clamp(const ModelConfig *p_config) : BaseNode(p_config)
                       "ensures that a value does not exceed a defined upper limit or "
                       "fall below a defined lower limit.";
 
-  this->input_descriptions = {
-      "Input heightmap.",
-      "Mask defining the filtering intensity (expected in [0, 1])."};
-  this->output_descriptions = {"Filtered heightmap."};
+  this->input_descriptions = {"Input heightmap."};
+  this->output_descriptions = {"Clamped heightmap."};
 
   this->attribute_descriptions["clamp"] = "Clamping range.";
   this->attribute_descriptions

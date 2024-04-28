@@ -14,7 +14,34 @@ QtNodes::NodeId add_graph_example(HsdDataFlowGraphModel *p_model,
                                   std::string            node_type,
                                   std::string            category)
 {
-  if (node_type == "ExpandShrink")
+  //
+  if (node_type == "CombineMask")
+  {
+    QtNodes::NodeId node_id1 = p_model->addNode("NoiseFbm");
+    QtNodes::NodeId node_id2 = p_model->addNode("NoiseFbm");
+    QtNodes::NodeId node_id4 = p_model->addNode(QString::fromStdString(node_type));
+
+    {
+      NoiseFbm *p_node = p_model->delegateModel<NoiseFbm>(node_id2);
+      p_node->attr.at("seed")->get_ref<SeedAttribute>()->value = 2;
+      p_node->compute();
+    }
+
+    p_model->addConnection(QtNodes::ConnectionId(node_id1, 0, node_id4, 0));
+    p_model->addConnection(QtNodes::ConnectionId(node_id2, 0, node_id4, 1));
+
+    p_model->setNodeData(node_id1, QtNodes::NodeRole::Position, QPointF(0.f, 0.f));
+    p_model->setNodeData(node_id2,
+                         QtNodes::NodeRole::Position,
+                         QPointF(0.f, HSD_NODE_SPACING));
+    p_model->setNodeData(node_id4,
+                         QtNodes::NodeRole::Position,
+                         QPointF(HSD_NODE_SPACING, 0.f));
+
+    return node_id4;
+  }
+  //
+  else if (node_type == "ExpandShrink")
   {
     QtNodes::NodeId node_id1 = p_model->addNode("NoiseFbm");
     QtNodes::NodeId node_id2 = p_model->addNode(QString::fromStdString(node_type));
