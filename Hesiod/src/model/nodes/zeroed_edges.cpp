@@ -34,6 +34,17 @@ ZeroedEdges::ZeroedEdges(const ModelConfig *p_config) : BaseNode(p_config)
     this->out = std::make_shared<HeightMapData>(p_config);
     this->compute();
   }
+
+  // documentation
+  this->description = "ZeroedEdges is an operator that enforces values close to zero at "
+                      "the domain edges.";
+
+  this->input_descriptions = {
+      "Input heightmap.",
+      "Mask defining the filtering intensity (expected in [0, 1])."};
+  this->output_descriptions = {"Filtered heightmap."};
+
+  this->attribute_descriptions["sigma"] = "Shape half-width.";
 }
 
 std::shared_ptr<QtNodes::NodeData> ZeroedEdges::outData(
