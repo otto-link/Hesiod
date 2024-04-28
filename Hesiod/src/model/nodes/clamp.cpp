@@ -36,6 +36,24 @@ Clamp::Clamp(const ModelConfig *p_config) : BaseNode(p_config)
     this->out = std::make_shared<HeightMapData>(p_config);
     this->compute();
   }
+
+  // documentation
+  this->description = "Clamp restrict a value within a specified range. Essentially, it "
+                      "ensures that a value does not exceed a defined upper limit or "
+                      "fall below a defined lower limit.";
+
+  this->input_descriptions = {
+      "Input heightmap.",
+      "Mask defining the filtering intensity (expected in [0, 1])."};
+  this->output_descriptions = {"Filtered heightmap."};
+
+  this->attribute_descriptions["clamp"] = "Clamping range.";
+  this->attribute_descriptions
+      ["smooth_min"] = "Activate smooth clamping for the lower bound.";
+  this->attribute_descriptions["k_min"] = "Lower bound smoothing intensity.";
+  this->attribute_descriptions
+      ["smooth_max"] = "Activate smooth clamping for the upper bound.";
+  this->attribute_descriptions["k_max"] = "Upper bound smoothing intensity.";
 }
 
 std::shared_ptr<QtNodes::NodeData> Clamp::outData(QtNodes::PortIndex /* port_index */)
