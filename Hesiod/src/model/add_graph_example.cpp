@@ -233,6 +233,27 @@ QtNodes::NodeId add_graph_example(HsdDataFlowGraphModel *p_model,
     return node_id;
   }
   //
+  else if (node_type == "QuiltingExpand" || node_type == "QuiltingShuffle")
+  {
+    QtNodes::NodeId node_id1 = p_model->addNode("NoiseFbm");
+    QtNodes::NodeId node_id2 = p_model->addNode(QString::fromStdString(node_type));
+
+    {
+      NoiseFbm *p_node = p_model->delegateModel<NoiseFbm>(node_id1);
+      p_node->attr.at("kw")->get_ref<WaveNbAttribute>()->value = {4.f, 4.f};
+      p_node->compute();
+    }
+
+    p_model->addConnection(QtNodes::ConnectionId(node_id1, 0, node_id2, 0));
+
+    p_model->setNodeData(node_id1, QtNodes::NodeRole::Position, QPointF(0.f, 0.f));
+    p_model->setNodeData(node_id2,
+                         QtNodes::NodeRole::Position,
+                         QPointF(HSD_NODE_SPACING, 0.f));
+
+    return node_id2;
+  }
+  //
   else if (node_type == "ColorizeCmap" || node_type == "SetAlpha")
   {
     float pos_x = 0.f;

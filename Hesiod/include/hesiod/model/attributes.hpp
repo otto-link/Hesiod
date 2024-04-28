@@ -506,8 +506,6 @@ public:
     bool ret = true;
     ret &= convert_qjsonvalue_to_uint(p["value"], this->value);
 
-    LOG_DEBUG("seed in object: %d", this->value);
-
     if (!ret)
       LOG_ERROR("serialization error with SeedAttribute");
   }
