@@ -36,6 +36,17 @@ Bump::Bump(const ModelConfig *p_config) : BaseNode(p_config)
     this->out = std::make_shared<HeightMapData>(this->p_config);
     this->compute();
   }
+
+  // documentation
+  this->description = "Bump generates a smooth transitions between zero-valued "
+                      "boundaries and the center of the domain.";
+
+  this->input_descriptions = {
+      "Displacement with respect to the domain size (x-direction).",
+      "Displacement with respect to the domain size (y-direction)."};
+  this->output_descriptions = {"Bump heightmap."};
+
+  this->attribute_descriptions["gain"] = "Shape control parameter.";
 }
 
 std::shared_ptr<QtNodes::NodeData> Bump::outData(QtNodes::PortIndex /* port_index */)
