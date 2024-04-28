@@ -7,6 +7,7 @@
 #include "highmap/vector.hpp"
 #include "macrologger.h"
 
+#include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/model_utils.hpp"
 
 #define HSD_PREVIEW_SHAPE 128
@@ -43,6 +44,11 @@ struct ModelConfig
    * using excessive memory at this stage)
    */
   bool compute_nodes_at_instanciation = true;
+
+  /**
+   * @brief Define the node preview rendering method.
+   */
+  PreviewType preview_type = PreviewType::GRAYSCALE;
 
   /**
    * @brief Display some infos about the configuration.

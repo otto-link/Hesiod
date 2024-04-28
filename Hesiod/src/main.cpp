@@ -161,6 +161,7 @@ int main(int argc, char *argv[])
         p_ed->get_model_config_ref()->shape = hmap::Vec2<int>(128, 128);
         p_ed->get_model_config_ref()->tiling = hmap::Vec2<int>(1, 1);
         p_ed->get_model_config_ref()->overlap = 0.f;
+        p_ed->get_model_config_ref()->preview_type = hesiod::PreviewType::MAGMA;
 
         p_ed->show();
 

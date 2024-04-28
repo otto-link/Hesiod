@@ -31,6 +31,12 @@ enum kernel : int
   smooth_cosine
 };
 
+enum PreviewType : int
+{
+  GRAYSCALE,
+  MAGMA,
+};
+
 /**
  * @brief Plain text / enumerate mapping for the HighMap colormaps.
  */
