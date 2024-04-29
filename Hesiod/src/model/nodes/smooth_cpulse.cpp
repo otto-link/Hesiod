@@ -30,6 +30,22 @@ SmoothCpulse::SmoothCpulse(const ModelConfig *p_config) : BaseNode(p_config)
     this->out = std::make_shared<HeightMapData>(p_config);
     this->compute();
   }
+
+  // documentation
+  this->description = "Smoothing using a cubic pulse kernel can be considered somewhat "
+                      "similar to Gaussian smoothing. This technique is used to reduce "
+                      "noise and smooth data. The cubic pulse kernel has a cubic "
+                      "decrease in influence with distance within a finite interval. It "
+                      "is zero beyond a certain radius, providing a compact support that "
+                      "affects only nearby points.";
+
+  this->input_descriptions = {
+      "Input heightmap.",
+      "Mask defining the filtering intensity (expected in [0, 1])."};
+  this->output_descriptions = {"Filtered heightmap."};
+
+  this->attribute_descriptions
+      ["radius"] = "Filter radius with respect to the domain size.";
 }
 
 std::shared_ptr<QtNodes::NodeData> SmoothCpulse::outData(

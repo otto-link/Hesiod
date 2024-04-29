@@ -32,6 +32,18 @@ Rescale::Rescale(const ModelConfig *p_config) : BaseNode(p_config)
     this->out = std::make_shared<HeightMapData>(p_config);
     this->compute();
   }
+
+  // documentation
+  this->description = "The Rescale operatorinvolves adjusting each data point by "
+                      "multiplying it with a predetermined constant.";
+
+  this->input_descriptions = {"Input heightmap."};
+  this->output_descriptions = {"Rescaled heightmap."};
+
+  this->attribute_descriptions
+      ["scaling"] = "Constant by which each elevation values will be multiplied.";
+  this->attribute_descriptions["centered"] = "Determine whether a mean offset is applied "
+                                             "to the values to center the scaling.";
 }
 
 std::shared_ptr<QtNodes::NodeData> Rescale::outData(QtNodes::PortIndex /* port_index */)

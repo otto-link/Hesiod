@@ -30,6 +30,18 @@ Remap::Remap(const ModelConfig *p_config) : BaseNode(p_config)
     this->out = std::make_shared<HeightMapData>(p_config);
     this->compute();
   }
+
+  // documentation
+  this->description = "The Remap operator is used to adjust the elevation values across "
+                      "the entire dataset, effectively changing the range of elevation "
+                      "data to match a desired output scale or to normalize the data.";
+
+  this->input_descriptions = {"Input heightmap."};
+  this->output_descriptions = {"Remapped heightmap."};
+
+  this->attribute_descriptions
+      ["remap"] = "Traget range: define the new minimum and maximum values to remap the "
+                  "elevation values to.";
 }
 
 std::shared_ptr<QtNodes::NodeData> Remap::outData(QtNodes::PortIndex /* port_index */)

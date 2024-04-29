@@ -25,7 +25,7 @@ ExpandShrink::ExpandShrink(const ModelConfig *p_config) : BaseNode(p_config)
   this->output_types = {HeightMapData().type()};
 
   // attributes
-  this->attr["kernel"] = NEW_ATTR_MAPENUM(kernel_map, "CUBIC_PULSE");
+  this->attr["kernel"] = NEW_ATTR_MAPENUM(kernel_map, "cubic_pulse");
   this->attr["radius"] = NEW_ATTR_FLOAT(0.05f, 0.01f, 0.2f, "%.3f");
   this->attr["shrink"] = NEW_ATTR_BOOL(false);
 

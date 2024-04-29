@@ -31,6 +31,16 @@ Cloud::Cloud(const ModelConfig *p_config) : BaseNode(p_config)
     this->out = std::make_shared<CloudData>();
     this->compute();
   }
+
+  // documentation
+  this->description = "Gain is a power law transformation altering the distribution of "
+                      "signal values, compressing or expanding certain regions of the "
+                      "signal depending on the exponent of the power law.";
+
+  this->input_descriptions = {};
+  this->output_descriptions = {"Set of points (x, y) and elevations z."};
+
+  this->attribute_descriptions["cloud"] = "Cloud data.";
 }
 
 std::shared_ptr<QtNodes::NodeData> Cloud::outData(QtNodes::PortIndex /* port_index */)

@@ -30,6 +30,18 @@ Gain::Gain(const ModelConfig *p_config) : BaseNode(p_config)
     this->out = std::make_shared<HeightMapData>(p_config);
     this->compute();
   }
+
+  // documentation
+  this->description = "Gain is a power law transformation altering the distribution of "
+                      "signal values, compressing or expanding certain regions of the "
+                      "signal depending on the exponent of the power law.";
+
+  this->input_descriptions = {
+      "Input heightmap.",
+      "Mask defining the filtering intensity (expected in [0, 1])."};
+  this->output_descriptions = {"Filtered heightmap."};
+
+  this->attribute_descriptions["gain"] = "Power law exponent.";
 }
 
 std::shared_ptr<QtNodes::NodeData> Gain::outData(QtNodes::PortIndex /* port_index */)

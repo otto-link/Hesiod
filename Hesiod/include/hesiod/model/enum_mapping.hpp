@@ -62,7 +62,7 @@ static std::map<std::string, int> heightmap_export_format_map = {
  * @brief Plain text / enumerate mapping for the kernels.
  */
 static std::map<std::string, int> kernel_map = {{"cone", Kernel::CONE},
-                                                {"CUBIC_PULSE", Kernel::CUBIC_PULSE},
+                                                {"cubic_pulse", Kernel::CUBIC_PULSE},
                                                 {"lorentzian", Kernel::LORENTZIAN},
                                                 {"smooth_cosine", Kernel::SMOOTH_COSINE}};
 

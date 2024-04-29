@@ -34,6 +34,22 @@ SmoothFill::SmoothFill(const ModelConfig *p_config) : BaseNode(p_config)
     this->deposition_map = std::make_shared<HeightMapData>(p_config);
     this->compute();
   }
+
+  // documentation
+  this->description = "SmoothFill is a smoothing technique that takes the maximum "
+                      "between the input and the filtered field to simulate a sediment "
+                      "deposition effect.";
+
+  this->input_descriptions = {
+      "Input heightmap.",
+      "Mask defining the filtering intensity (expected in [0, 1])."};
+  this->output_descriptions = {"Filtered heightmap.", "Deposition map."};
+
+  this->attribute_descriptions
+      ["radius"] = "Filter radius with respect to the domain size.";
+  this->attribute_descriptions["k"] = "Smoothing intensity of the maximum operator.";
+  this->attribute_descriptions
+      ["normalized_map"] = "Decides if the deposition map is normalized.";
 }
 
 std::shared_ptr<QtNodes::NodeData> SmoothFill::outData(QtNodes::PortIndex port_index)

@@ -23,12 +23,25 @@ CloudToArrayInterp::CloudToArrayInterp(const ModelConfig *p_config) : BaseNode(p
   this->output_captions = {"heightmap"};
   this->output_types = {HeightMapData().type()};
 
+  // no attributes
+
   // update
   if (this->p_config->compute_nodes_at_instanciation)
   {
     this->out = std::make_shared<HeightMapData>(p_config);
     this->compute();
   }
+
+  // documentation
+  this->description = "CloudToArrayInterp generates a smooth and continuous 2D elevation "
+                      "map from a set of scattered points using Delaunay linear "
+                      "interpolation.";
+
+  this->input_descriptions = {
+      "Set of points (x, y) and elevations z.",
+      "Displacement with respect to the domain size (x-direction).",
+      "Displacement with respect to the domain size (y-direction)."};
+  this->output_descriptions = {"Interpolated heightmap."};
 }
 
 std::shared_ptr<QtNodes::NodeData> CloudToArrayInterp::outData(

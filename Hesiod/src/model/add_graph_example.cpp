@@ -1,6 +1,8 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include "highmap/geometry.hpp"
+
 #include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/graph_model_addon.hpp"
 #include "hesiod/model/nodes.hpp"
@@ -26,6 +28,46 @@ QtNodes::NodeId add_graph_example(HsdDataFlowGraphModel *p_model,
     }
 
     p_model->addConnection(QtNodes::ConnectionId(node_id1, 0, node_id2, 0));
+
+    p_model->setNodeData(node_id1, QtNodes::NodeRole::Position, QPointF(0.f, 0.f));
+    p_model->setNodeData(node_id2,
+                         QtNodes::NodeRole::Position,
+                         QPointF(HSD_NODE_SPACING, 0.f));
+
+    return node_id2;
+  }
+  //
+  else if (node_type == "Cloud")
+  {
+    QtNodes::NodeId node_id1 = p_model->addNode(QString::fromStdString(node_type));
+
+    {
+      hmap::Cloud cloud = hmap::Cloud(10, 0);
+
+      Cloud *p_node = p_model->delegateModel<Cloud>(node_id1);
+      p_node->attr.at("cloud")->get_ref<CloudAttribute>()->value = cloud;
+      p_node->compute();
+    }
+
+    p_model->setNodeData(node_id1, QtNodes::NodeRole::Position, QPointF(0.f, 0.f));
+
+    return node_id1;
+  }
+  //
+  else if (node_type == "CloudToArrayInterp")
+  {
+    QtNodes::NodeId node_id1 = p_model->addNode("Cloud");
+    QtNodes::NodeId node_id2 = p_model->addNode("CloudToArrayInterp");
+
+    p_model->addConnection(QtNodes::ConnectionId(node_id1, 0, node_id2, 0));
+
+    {
+      hmap::Cloud cloud = hmap::Cloud(10, 0);
+
+      Cloud *p_node = p_model->delegateModel<Cloud>(node_id1);
+      p_node->attr.at("cloud")->get_ref<CloudAttribute>()->value = cloud;
+      p_node->compute();
+    }
 
     p_model->setNodeData(node_id1, QtNodes::NodeRole::Position, QPointF(0.f, 0.f));
     p_model->setNodeData(node_id2,
