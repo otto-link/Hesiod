@@ -13,9 +13,12 @@ set(USE_QT6
     OFF
     CACHE BOOL "")
 
-# a bit hacky, but an access to these directories is required to tweak the
-# rendering of the nodes
-target_include_directories(
-        ${PROJECT_NAME} INTERFACE nodeeditor/src nodeeditor/include/QtNodes/internal)
+if(UNIX AND NOT APPLE)
+  # a bit hacky, but an access to these directories is required to tweak the
+  # rendering of the nodes
+  target_include_directories(
+    ${PROJECT_NAME} INTERFACE nodeeditor/src
+                              nodeeditor/include/QtNodes/internal)
+endif()
 
 add_subdirectory(nodeeditor)

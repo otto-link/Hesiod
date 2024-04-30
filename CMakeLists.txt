@@ -8,6 +8,15 @@ option(HESIOD_ENABLE_DOXYGEN "" ON)
 
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 
+if(UNIX AND NOT APPLE)
+  # see issue #152, for now the custom node face and node menu are only
+  # available on linux
+  message(STATUS "Configuring for LINUX system...")
+  add_definitions("-DHSD_OS_LINUX")
+else()
+  message(STATUS "NOT configuring for LINUX system...")
+endif()
+
 if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
   # MSVC compiler options
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4 /Od")

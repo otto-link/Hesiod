@@ -1,6 +1,8 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#ifdef HSD_OS_LINUX
+
 #include <QWidget>
 
 #include <QtNodes/AbstractGraphModel>
@@ -61,3 +63,5 @@ QPointF DefaultHorizontalNodeGeometry::widgetPosition(NodeId const nodeId) const
 }
 
 } // namespace QtNodes
+
+#endif

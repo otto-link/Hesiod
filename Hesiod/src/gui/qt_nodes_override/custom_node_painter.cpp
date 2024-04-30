@@ -1,6 +1,8 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#ifdef HSD_OS_LINUX
+
 #include <QtNodes/AbstractGraphModel>
 #include <QtNodes/AbstractNodePainter>
 #include <QtNodes/BasicGraphicsScene>
@@ -88,3 +90,5 @@ void DefaultNodePainter::drawNodeCaption(QPainter *painter, NodeGraphicsObject &
 }
 
 } // namespace QtNodes
+
+#endif
