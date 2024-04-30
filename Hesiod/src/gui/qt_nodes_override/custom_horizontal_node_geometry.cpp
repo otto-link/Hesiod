@@ -4,6 +4,7 @@
 #include <QWidget>
 
 #include <QtNodes/AbstractGraphModel>
+#include <QtNodes/DefaultNodePainter>
 
 #include "DefaultHorizontalNodeGeometry.hpp"
 

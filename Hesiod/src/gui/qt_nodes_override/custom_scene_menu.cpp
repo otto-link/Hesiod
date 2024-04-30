@@ -8,8 +8,8 @@
 #include <QUndoStack>
 #include <QWidgetAction>
 
-#include "DataFlowGraphicsScene.hpp"
 #include "UndoCommands.hpp"
+#include <QtNodes/DataFlowGraphicsScene>
 
 #include "hesiod/gui/gui_utils.hpp"
 #include "hesiod/gui/node_category_color.hpp"
