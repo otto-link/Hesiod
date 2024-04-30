@@ -48,10 +48,12 @@ Step::Step(const ModelConfig *p_config) : BaseNode(p_config)
   }
 
   // documentation
-  this->description = "Step .";
+  this->description = "Step is function used to represent a conceptualized escarpment, "
+                      "it serves as a tool for creating sharp, distinct changes in "
+                      "elevation.";
 
   this->input_descriptions = {
-      "Displacement with respect to the domain size (radial direction)."};
+      "Displacement with respect to the domain size (normal direction)."};
   this->output_descriptions = {"Step heightmap."};
 
   this->attribute_descriptions["angle"] = "Angle.";
