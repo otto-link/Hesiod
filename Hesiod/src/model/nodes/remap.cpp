@@ -40,7 +40,7 @@ Remap::Remap(const ModelConfig *p_config) : BaseNode(p_config)
   this->output_descriptions = {"Remapped heightmap."};
 
   this->attribute_descriptions
-      ["remap"] = "Traget range: define the new minimum and maximum values to remap the "
+      ["remap"] = "Target range: define the new minimum and maximum values to remap the "
                   "elevation values to.";
 }
 
