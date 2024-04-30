@@ -6,12 +6,12 @@
 namespace hesiod
 {
 
-GaussianPulse::GaussianPulse(const ModelConfig *p_config) : BaseNode(p_config)
+Step::Step(const ModelConfig *p_config) : BaseNode(p_config)
 {
-  LOG_DEBUG("GaussianPulse::GaussianPulse");
+  LOG_DEBUG("Step::Step");
 
   // model
-  this->node_caption = "GaussianPulse";
+  this->node_caption = "Step";
 
   // inputs
   this->input_captions = {"dr"};
@@ -22,7 +22,8 @@ GaussianPulse::GaussianPulse(const ModelConfig *p_config) : BaseNode(p_config)
   this->output_types = {HeightMapData().type()};
 
   // attributes
-  this->attr["radius"] = NEW_ATTR_FLOAT(0.1f, 0.f, 1.f);
+  this->attr["angle"] = NEW_ATTR_FLOAT(0.f, -180.f, 180.f);
+  this->attr["talus_global"] = NEW_ATTR_FLOAT(2.f, 0.01f, 32.f);
   this->attr["center.x"] = NEW_ATTR_FLOAT(0.5f, -0.5f, 1.5f);
   this->attr["center.y"] = NEW_ATTR_FLOAT(0.5f, -0.5f, 1.5f);
 
@@ -30,7 +31,8 @@ GaussianPulse::GaussianPulse(const ModelConfig *p_config) : BaseNode(p_config)
   this->attr["remap"] = NEW_ATTR_BOOL(true);
   this->attr["remap_range"] = NEW_ATTR_RANGE();
 
-  this->attr_ordered_key = {"radius",
+  this->attr_ordered_key = {"angle",
+                            "talus_global",
                             "center.x",
                             "center.y",
                             "_SEPARATOR_",
@@ -46,25 +48,25 @@ GaussianPulse::GaussianPulse(const ModelConfig *p_config) : BaseNode(p_config)
   }
 
   // documentation
-  this->description = "GaussianPulse generates a Gaussian pulse.";
+  this->description = "Step .";
 
   this->input_descriptions = {
       "Displacement with respect to the domain size (radial direction)."};
-  this->output_descriptions = {"Gaussian heightmap."};
+  this->output_descriptions = {"Step heightmap."};
 
-  this->attribute_descriptions["radius"] = "Pulse half-width.";
+  this->attribute_descriptions["angle"] = "Angle.";
+  this->attribute_descriptions["talus_global"] = "Step slope.";
   this->attribute_descriptions["center.x"] = "Pulse center x coordinate.";
   this->attribute_descriptions["center.y"] = "Pulse center y coordinate.";
 }
 
-std::shared_ptr<QtNodes::NodeData> GaussianPulse::outData(
-    QtNodes::PortIndex /* port_index */)
+std::shared_ptr<QtNodes::NodeData> Step::outData(QtNodes::PortIndex /* port_index */)
 {
   return std::static_pointer_cast<QtNodes::NodeData>(this->out);
 }
 
-void GaussianPulse::setInData(std::shared_ptr<QtNodes::NodeData> data,
-                              QtNodes::PortIndex /* port_index */)
+void Step::setInData(std::shared_ptr<QtNodes::NodeData> data,
+                     QtNodes::PortIndex /* port_index */)
 {
   if (!data)
   {
@@ -79,7 +81,7 @@ void GaussianPulse::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 // --- computing
 
-void GaussianPulse::compute()
+void Step::compute()
 {
   Q_EMIT this->computingStarted();
 
@@ -93,14 +95,20 @@ void GaussianPulse::compute()
   center.x = GET_ATTR_FLOAT("center.x");
   center.y = GET_ATTR_FLOAT("center.y");
 
-  float sigma = std::max(1.f, (GET_ATTR_FLOAT("radius") * p_out->shape.x));
-
-  hmap::fill(*p_out,
-             p_dr,
-             [this, &center, &sigma](hmap::Vec2<int>   shape,
-                                     hmap::Vec4<float> bbox,
-                                     hmap::Array      *p_noise)
-             { return hmap::gaussian_pulse(shape, sigma, p_noise, center, bbox); });
+  hmap::fill(
+      *p_out,
+      p_dr,
+      [this, &center](hmap::Vec2<int> shape, hmap::Vec4<float> bbox, hmap::Array *p_noise)
+      {
+        return hmap::step(shape,
+                          GET_ATTR_FLOAT("angle"),
+                          GET_ATTR_FLOAT("talus_global"),
+                          p_noise,
+                          nullptr,
+                          nullptr,
+                          center,
+                          bbox);
+      });
 
   // post-process
   post_process_heightmap(*p_out,
