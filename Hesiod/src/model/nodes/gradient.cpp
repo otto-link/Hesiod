@@ -51,6 +51,7 @@ std::shared_ptr<QtNodes::NodeData> Gradient::outData(QtNodes::PortIndex port_ind
   case 0:
     return std::static_pointer_cast<QtNodes::NodeData>(this->dx);
   case 1:
+  default:
     return std::static_pointer_cast<QtNodes::NodeData>(this->dy);
   }
 }
