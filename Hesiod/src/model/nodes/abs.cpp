@@ -21,7 +21,8 @@ Abs::Abs(const ModelConfig *p_config) : BaseNode(p_config)
   this->output_captions = {"output"};
   this->output_types = {HeightMapData().type()};
 
-  // no attributes
+  // attributes
+  this->attr["vshift"] = NEW_ATTR_FLOAT(0.5f, 0.f, 1.f);
 
   // update
   if (this->p_config->compute_nodes_at_instanciation)
@@ -35,6 +36,9 @@ Abs::Abs(const ModelConfig *p_config) : BaseNode(p_config)
 
   this->input_descriptions = {"Input heightmap."};
   this->output_descriptions = {"Output heightmap."};
+
+  this->attribute_descriptions
+      ["vshift"] = "Reference value for the zero-equivalent value of the absolute value.";
 }
 
 std::shared_ptr<QtNodes::NodeData> Abs::outData(QtNodes::PortIndex /* port_index */)
@@ -68,7 +72,8 @@ void Abs::compute()
   {
     hmap::transform(*p_out,
                     *p_in,
-                    [this](hmap::Array &out, hmap::Array &in) { out = hmap::abs(in); });
+                    [this](hmap::Array &out, hmap::Array &in)
+                    { out = hmap::abs(in - GET_ATTR_FLOAT("vshift")); });
   }
 
   // propagate
