@@ -53,8 +53,8 @@ GaussianPulse::GaussianPulse(const ModelConfig *p_config) : BaseNode(p_config)
   this->output_descriptions = {"Gaussian heightmap."};
 
   this->attribute_descriptions["radius"] = "Pulse half-width.";
-  this->attribute_descriptions["center.x"] = "Pulse center x coordinate.";
-  this->attribute_descriptions["center.y"] = "Pulse center y coordinate.";
+  this->attribute_descriptions["center.x"] = "Center x coordinate.";
+  this->attribute_descriptions["center.y"] = "Center y coordinate.";
 }
 
 std::shared_ptr<QtNodes::NodeData> GaussianPulse::outData(

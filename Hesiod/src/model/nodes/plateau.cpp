@@ -32,6 +32,19 @@ Plateau::Plateau(const ModelConfig *p_config) : BaseNode(p_config)
     this->out = std::make_shared<HeightMapData>(p_config);
     this->compute();
   }
+
+  // documentation
+  this->description = "Plateau node manipulates the elevation values to create flats, "
+                      "elevated regions surrounded by steep slopes.";
+
+  this->input_descriptions = {
+      "Input heightmap.",
+      "Mask defining the filtering intensity (expected in [0, 1])."};
+  this->output_descriptions = {"Filtered heightmap."};
+
+  this->attribute_descriptions
+      ["radius"] = "Filter radius with respect to the domain size.";
+  this->attribute_descriptions["factor"] = "Influence the cliff elevation profile.";
 }
 
 std::shared_ptr<QtNodes::NodeData> Plateau::outData(QtNodes::PortIndex /* port_index */)

@@ -76,6 +76,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::SmoothFillSmearPeaks, "Filter/Smoothing");
   HSD_REGISTER_NODE(hesiod::Smoothstep3, "Math/Base");
   HSD_REGISTER_NODE(hesiod::Smoothstep5, "Math/Base");
+  HSD_REGISTER_NODE(hesiod::Slope, "Primitive/Function");
   HSD_REGISTER_NODE(hesiod::Step, "Primitive/Function");
   HSD_REGISTER_NODE(hesiod::White, "Primitive/Random");
   HSD_REGISTER_NODE(hesiod::ZeroedEdges, "Math/Boundaries");

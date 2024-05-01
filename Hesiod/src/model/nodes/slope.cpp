@@ -6,12 +6,12 @@
 namespace hesiod
 {
 
-Step::Step(const ModelConfig *p_config) : BaseNode(p_config)
+Slope::Slope(const ModelConfig *p_config) : BaseNode(p_config)
 {
-  LOG_DEBUG("Step::Step");
+  LOG_DEBUG("Slope::Slope");
 
   // model
-  this->node_caption = "Step";
+  this->node_caption = "Slope";
 
   // inputs
   this->input_captions = {"dr"};
@@ -48,27 +48,25 @@ Step::Step(const ModelConfig *p_config) : BaseNode(p_config)
   }
 
   // documentation
-  this->description = "Step is function used to represent a conceptualized escarpment, "
-                      "it serves as a tool for creating sharp, distinct changes in "
-                      "elevation.";
+  this->description = "Slope is function used to represent continuous terrain slope.";
 
   this->input_descriptions = {
       "Displacement with respect to the domain size (normal direction)."};
-  this->output_descriptions = {"Step heightmap."};
+  this->output_descriptions = {"Slope heightmap."};
 
   this->attribute_descriptions["angle"] = "Angle.";
-  this->attribute_descriptions["talus_global"] = "Step slope.";
+  this->attribute_descriptions["talus_global"] = "Slope slope...";
   this->attribute_descriptions["center.x"] = "Center x coordinate.";
   this->attribute_descriptions["center.y"] = "Center y coordinate.";
 }
 
-std::shared_ptr<QtNodes::NodeData> Step::outData(QtNodes::PortIndex /* port_index */)
+std::shared_ptr<QtNodes::NodeData> Slope::outData(QtNodes::PortIndex /* port_index */)
 {
   return std::static_pointer_cast<QtNodes::NodeData>(this->out);
 }
 
-void Step::setInData(std::shared_ptr<QtNodes::NodeData> data,
-                     QtNodes::PortIndex /* port_index */)
+void Slope::setInData(std::shared_ptr<QtNodes::NodeData> data,
+                      QtNodes::PortIndex /* port_index */)
 {
   if (!data)
   {
@@ -83,7 +81,7 @@ void Step::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 // --- computing
 
-void Step::compute()
+void Slope::compute()
 {
   Q_EMIT this->computingStarted();
 
@@ -102,14 +100,14 @@ void Step::compute()
       p_dr,
       [this, &center](hmap::Vec2<int> shape, hmap::Vec4<float> bbox, hmap::Array *p_noise)
       {
-        return hmap::step(shape,
-                          GET_ATTR_FLOAT("angle"),
-                          GET_ATTR_FLOAT("talus_global"),
-                          p_noise,
-                          nullptr,
-                          nullptr,
-                          center,
-                          bbox);
+        return hmap::slope(shape,
+                           GET_ATTR_FLOAT("angle"),
+                           GET_ATTR_FLOAT("talus_global"),
+                           p_noise,
+                           nullptr,
+                           nullptr,
+                           center,
+                           bbox);
       });
 
   // post-process
