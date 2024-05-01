@@ -1441,6 +1441,31 @@ protected:
 };
 
 /**
+ * @brief SmoothCpulse class.
+ */
+class SmoothCpulse : public BaseNode
+{
+public:
+  SmoothCpulse(const ModelConfig *p_config);
+
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_color() { return this->mask.lock().get(); }
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data,
+                 QtNodes::PortIndex                 port_index) override;
+
+protected:
+  std::weak_ptr<HeightMapData>   in, mask;
+  std::shared_ptr<HeightMapData> out;
+};
+
+/**
  * @brief SmoothFill class.
  */
 class SmoothFill : public BaseNode
@@ -1491,12 +1516,12 @@ protected:
 };
 
 /**
- * @brief SmoothCpulse class.
+ * @brief SmoothFillSmearPeaks class.
  */
-class SmoothCpulse : public BaseNode
+class SmoothFillSmearPeaks : public BaseNode
 {
 public:
-  SmoothCpulse(const ModelConfig *p_config);
+  SmoothFillSmearPeaks(const ModelConfig *p_config);
 
   QtNodes::NodeData *get_preview_data() { return this->out.get(); }
   QtNodes::NodeData *get_viewer2d_data() { return this->out.get(); }
