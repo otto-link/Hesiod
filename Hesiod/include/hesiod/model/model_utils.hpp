@@ -50,7 +50,7 @@ QJsonArray std_vector_vector_float_to_qjsonarray(
  * @param h
  * @param inverse
  * @param smoothing
- * @param ir_smoothing
+ * @param smoothing_radius
  * @param saturate
  * @param saturate_range
  * @param saturate_k
@@ -60,7 +60,7 @@ QJsonArray std_vector_vector_float_to_qjsonarray(
 void post_process_heightmap(hmap::HeightMap  &h,
                             bool              inverse,
                             bool              smoothing,
-                            int               ir_smoothing,
+                            float             smoothing_radius,
                             bool              saturate,
                             hmap::Vec2<float> saturate_range,
                             float             saturate_k,

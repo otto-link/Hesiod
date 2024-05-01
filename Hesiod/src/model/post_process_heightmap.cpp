@@ -11,7 +11,7 @@ namespace hesiod
 void post_process_heightmap(hmap::HeightMap  &h,
                             bool              inverse,
                             bool              smoothing,
-                            int               ir_smoothing,
+                            float             smoothing_radius,
                             bool              saturate,
                             hmap::Vec2<float> saturate_range,
                             float             saturate_k,
@@ -23,9 +23,10 @@ void post_process_heightmap(hmap::HeightMap  &h,
 
   if (smoothing)
   {
+    int ir = std::max(1, (int)(smoothing_radius * h.shape.x));
+
     hmap::transform(h,
-                    [&ir_smoothing](hmap::Array &array)
-                    { return hmap::smooth_cpulse(array, ir_smoothing); });
+                    [&ir](hmap::Array &array) { return hmap::smooth_cpulse(array, ir); });
     h.smooth_overlap_buffers();
   }
 

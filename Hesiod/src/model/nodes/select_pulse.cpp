@@ -93,12 +93,10 @@ void SelectPulse::compute()
         });
 
     // post-process
-    int ir = std::max(1, (int)(GET_ATTR_FLOAT("smoothing_radius") * p_out->shape.x));
-
     post_process_heightmap(*p_out,
                            GET_ATTR_BOOL("inverse"),
                            GET_ATTR_BOOL("smoothing"),
-                           ir,
+                           GET_ATTR_FLOAT("smoothing_radius"),
                            false, // saturate
                            {0.f, 0.f},
                            0.f,
