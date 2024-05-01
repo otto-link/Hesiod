@@ -16,6 +16,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
 
   HSD_REGISTER_NODE(hesiod::Abs, "Math/Base");
   HSD_REGISTER_NODE(hesiod::AbsSmooth, "Math/Base");
+  HSD_REGISTER_NODE(hesiod::Blend, "Operator/Blend");
   HSD_REGISTER_NODE(hesiod::Bump, "Primitive/Function");
   HSD_REGISTER_NODE(hesiod::Clamp, "Filter/Range");
   HSD_REGISTER_NODE(hesiod::Cloud, "Geometry/Cloud");

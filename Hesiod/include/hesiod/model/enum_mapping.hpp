@@ -9,11 +9,21 @@
 namespace hesiod
 {
 
-enum MaskCombineMethod : int
+enum BlendingMethod : int
 {
-  UNION,
-  INTERSECTION,
-  EXCLUSION,
+  ADD,
+  EXCLUSION_BLEND,
+  GRADIENTS,
+  MAXIMUM,
+  MAXIMUM_SMOOTH,
+  MINIMUM,
+  MINIMUM_SMOOTH,
+  MULTIPLY,
+  MULTIPLY_ADD,
+  NEGATE,
+  OVERLAY,
+  SOFT,
+  SUBSTRACT,
 };
 
 enum ExportFormat : int
@@ -31,11 +41,36 @@ enum Kernel : int
   SMOOTH_COSINE
 };
 
+enum MaskCombineMethod : int
+{
+  UNION,
+  INTERSECTION,
+  EXCLUSION,
+};
+
 enum PreviewType : int
 {
   GRAYSCALE,
   MAGMA,
 };
+
+/**
+ * @brief Plain text / enumerate mapping for the blending methods.
+ */
+static std::map<std::string, int> blending_method_map = {
+    {"add", BlendingMethod::ADD},
+    {"exclusion", BlendingMethod::EXCLUSION_BLEND},
+    {"gradients", BlendingMethod::GRADIENTS},
+    {"maximum", BlendingMethod::MAXIMUM},
+    {"maximum_smooth", BlendingMethod::MAXIMUM_SMOOTH},
+    {"minimum", BlendingMethod::MINIMUM},
+    {"minimum_smooth", BlendingMethod::MINIMUM_SMOOTH},
+    {"multiply", BlendingMethod::MULTIPLY},
+    {"multiply_add", BlendingMethod::MULTIPLY_ADD},
+    {"negate", BlendingMethod::NEGATE},
+    {"overlay", BlendingMethod::OVERLAY},
+    {"soft", BlendingMethod::SOFT},
+    {"substract", BlendingMethod::SUBSTRACT}};
 
 /**
  * @brief Plain text / enumerate mapping for the HighMap colormaps.
