@@ -34,7 +34,7 @@ Smoothstep5::Smoothstep5(const ModelConfig *p_config) : BaseNode(p_config)
   this->description = "Apply a 5th-order smoothstep function to every values.";
 
   this->input_descriptions = {"Input heightmap."};
-  this->output_descriptions = {"Binary heightmap."};
+  this->output_descriptions = {"Output heightmap."};
 }
 
 std::shared_ptr<QtNodes::NodeData> Smoothstep5::outData(
