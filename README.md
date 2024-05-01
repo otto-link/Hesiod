@@ -37,9 +37,9 @@ git submodule update --init --recursive
 
 To get the submodules, you will need a GitHub account with its SSH key configured.
 
-Install the missing OpenSource dependencies using `vcpkg`:
+Install [Qt5 SDK](https://wiki.qt.io/Install_Qt_5_Dev_Suite_Windows) and install the missing OpenSource dependencies using `vcpkg`:
 ```
-vcpkg install glfw3 opengl gsl glew freeglut eigen3 glm libpng boost-range boost-type-erasure boost-geometry glm opencl libassimp-dev
+vcpkg install glfw3 opengl gsl glew freeglut eigen3 glm libpng boost-range boost-type-erasure boost-geometry glm opencl assimp
 ```
 
 You should then be able to build the sources using Visual Studio.
