@@ -52,6 +52,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::MakePeriodicStitching, "Operator/Tiling");
   HSD_REGISTER_NODE(hesiod::Median3x3, "Filter/Smoothing");
   HSD_REGISTER_NODE(hesiod::MixTexture, "Texture");
+  HSD_REGISTER_NODE(hesiod::MorphologicalGradient, "Operator/Morphology");
   HSD_REGISTER_NODE(hesiod::Noise, "Primitive/Coherent Noise");
   HSD_REGISTER_NODE(hesiod::NoiseFbm, "Primitive/Coherent Noise");
   HSD_REGISTER_NODE(hesiod::NoiseIq, "Primitive/Coherent Noise");

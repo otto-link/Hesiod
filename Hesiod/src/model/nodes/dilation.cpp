@@ -74,12 +74,12 @@ void Dilation::compute()
 
   if (p_in)
   {
-    // copy the input heightmap
-    *p_out = *p_in;
-
     int ir = std::max(1, (int)(GET_ATTR_FLOAT("radius") * p_out->shape.x));
 
-    hmap::transform(*p_out, [&ir](hmap::Array &x) { x = hmap::dilation(x, ir); });
+    hmap::transform(*p_out,
+                    *p_in,
+                    [&ir](hmap::Array &out, hmap::Array &in)
+                    { out = hmap::dilation(in, ir); });
     p_out->smooth_overlap_buffers();
   }
 

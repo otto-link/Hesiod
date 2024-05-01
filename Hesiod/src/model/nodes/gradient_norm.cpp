@@ -74,10 +74,10 @@ void GradientNorm::compute()
 
   if (p_in)
   {
-    // copy the input heightmap
-    *p_out = *p_in;
-
-    hmap::transform(*p_out, *p_in, [](hmap::Array &z) { return hmap::gradient_norm(z); });
+    hmap::transform(*p_out,
+                    *p_in,
+                    [](hmap::Array &out, hmap::Array &in)
+                    { out = hmap::gradient_norm(in); });
 
     p_out->smooth_overlap_buffers();
 

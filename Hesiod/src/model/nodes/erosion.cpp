@@ -75,12 +75,12 @@ void Erosion::compute()
 
   if (p_in)
   {
-    // copy the input heightmap
-    *p_out = *p_in;
-
     int ir = std::max(1, (int)(GET_ATTR_FLOAT("radius") * p_out->shape.x));
 
-    hmap::transform(*p_out, [&ir](hmap::Array &x) { x = hmap::erosion(x, ir); });
+    hmap::transform(*p_out,
+                    *p_in,
+                    [&ir](hmap::Array &out, hmap::Array &in)
+                    { out = hmap::erosion(in, ir); });
     p_out->smooth_overlap_buffers();
   }
 

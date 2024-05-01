@@ -73,12 +73,10 @@ void GradientTalus::compute()
 
   if (p_in)
   {
-    // copy the input heightmap
-    *p_out = *p_in;
-
     hmap::transform(*p_out,
                     *p_in,
-                    [](hmap::Array &z) { return hmap::gradient_talus(z); });
+                    [](hmap::Array &out, hmap::Array &in)
+                    { out = hmap::gradient_talus(in); });
 
     p_out->smooth_overlap_buffers();
 

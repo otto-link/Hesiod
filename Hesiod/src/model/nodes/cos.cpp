@@ -31,6 +31,7 @@ Cos::Cos(const ModelConfig *p_config) : BaseNode(p_config)
 
   this->attr_ordered_key =
       {"frequency", "phase_shift", "_SEPARATOR_", "inverse", "remap", "remap_range"};
+
   // update
   if (this->p_config->compute_nodes_at_instanciation)
   {
