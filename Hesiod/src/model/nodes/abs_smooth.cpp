@@ -39,7 +39,10 @@ AbsSmooth::AbsSmooth(const ModelConfig *p_config) : BaseNode(p_config)
   }
 
   // documentation
-  this->description = "Apply a smooth absolute value function to every values.";
+  this->description = "Apply a smooth absolute value function to every values. The "
+                      "smooth absolute operator computes the absolute value of an input "
+                      "while providing a smooth transition around zero, ensuring "
+                      "continuity and smoothness in the output.";
 
   this->input_descriptions = {"Input heightmap."};
   this->output_descriptions = {"Output heightmap."};
