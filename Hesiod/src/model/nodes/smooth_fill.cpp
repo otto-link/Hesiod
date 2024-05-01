@@ -59,6 +59,7 @@ std::shared_ptr<QtNodes::NodeData> SmoothFill::outData(QtNodes::PortIndex port_i
   case 0:
     return std::static_pointer_cast<QtNodes::NodeData>(this->out);
   case 1:
+  default:
     return std::static_pointer_cast<QtNodes::NodeData>(this->deposition_map);
   }
 }
