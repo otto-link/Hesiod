@@ -75,6 +75,12 @@ public:
   void full_description_to_file(std::string filename);
 
   /**
+   * @brief Dump the full description (node and inputs/outputs) of the node to a json
+   * object.
+   */
+  QJsonObject full_description_to_json();
+
+  /**
    * @brief Return the full description (node and inputs/outputs) of the node.
    * @return Full description.
    */

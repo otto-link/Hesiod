@@ -3,6 +3,8 @@
  * this software. */
 #include <fstream>
 
+#include <QJsonObject>
+
 #include "hesiod/gui/widgets.hpp"
 #include "hesiod/model/base_node.hpp"
 
@@ -33,6 +35,73 @@ void BaseNode::full_description_to_file(std::string filename)
   f.open(filename, std::ios::out);
   f << desc;
   f.close();
+}
+
+QJsonObject BaseNode::full_description_to_json()
+{
+  QJsonObject json;
+
+  json["description"] = QString::fromStdString(this->description);
+
+  // inputs
+  QJsonArray json_inputs;
+  for (size_t k = 0; k < this->input_descriptions.size(); k++)
+  {
+    QJsonObject json;
+    json["caption"] = this->input_captions[k];
+    json["type"] = this->input_types[k].name;
+    json["description"] = this->input_descriptions[k].c_str();
+    json_inputs.push_back(json);
+  }
+  json["inputs"] = json_inputs;
+
+  // outpus
+  QJsonArray json_outputs;
+  for (size_t k = 0; k < this->output_descriptions.size(); k++)
+  {
+    QJsonObject json;
+    json["caption"] = this->output_captions[k];
+    json["type"] = this->output_types[k].name;
+    json["description"] = this->output_descriptions[k].c_str();
+    json_outputs.push_back(json);
+  }
+  json["outputs"] = json_outputs;
+
+  // attributes
+  QJsonArray json_attr;
+
+  for (auto &[key, str] : this->attribute_descriptions)
+  {
+    QJsonObject json;
+    json["key"] = key.c_str();
+    json["type"] = attribute_type_map.at(this->attr.at(key)->get_type()).c_str();
+
+    // add available values if the attribute is an enumerate
+    if (this->attr.at(key)->get_type() == hesiod::AttributeType::MAP_ENUM)
+    {
+      MapEnumAttribute *p_attr = this->attr.at(key)->get_ref<MapEnumAttribute>();
+
+      if (!p_attr->value.empty())
+      {
+        str += " Available values: ";
+
+        std::string last_choice = std::prev(p_attr->value.end())->first;
+
+        for (auto &[choice, dummy] : p_attr->value)
+          if (choice != last_choice)
+            str += choice + ", ";
+          else
+            str += choice + '.';
+      }
+    }
+
+    json["description"] = str.c_str();
+    json_attr.push_back(json);
+  }
+
+  json["parameters"] = json_attr;
+
+  return json;
 }
 
 std::string BaseNode::get_full_description()

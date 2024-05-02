@@ -149,6 +149,8 @@ int main(int argc, char *argv[])
           &model_config);
       auto node_type_category_map = registry->registeredModelsCategoryAssociation();
 
+      QJsonObject json;
+
       for (auto &[node_type_qstring, category] : node_type_category_map)
       {
         std::string node_type = node_type_qstring.toStdString();
@@ -168,13 +170,21 @@ int main(int argc, char *argv[])
         QtNodes::NodeId node_id = hesiod::add_graph_example(p_model,
                                                             node_type,
                                                             category.toStdString());
-        p_ed->save_screenshot(node_type + ".png");
+        std::string     snapshot_fname = node_type + ".png";
+        p_ed->save_screenshot(snapshot_fname);
 
         hesiod::BaseNode *p_node = p_model->delegateModel<hesiod::BaseNode>(node_id);
-        p_node->full_description_to_file(node_type + ".txt");
+        QJsonObject       json_node = p_node->full_description_to_json();
+        json_node["category"] = category;
+        json_node["snapshot"] = snapshot_fname.c_str();
+        json[node_type_qstring] = json_node;
 
         delete p_ed;
       }
+
+      QFile file("nodes_description.json");
+      if (file.open(QIODevice::WriteOnly))
+        file.write(QJsonDocument(json).toJson());
 
       return 0;
     }
