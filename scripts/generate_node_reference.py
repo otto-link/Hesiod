@@ -89,7 +89,7 @@ if __name__ == "__main__":
 
         # md_file.new_paragraph(Html.image(path='../images/' + data[node_type]["snapshot"], size=img_size))
         md_file.new_paragraph(Image.Image.new_inline_image(text="img",
-                                                     path='../images/' + data[node_type]["snapshot"]))
+                                                     path='../images/nodes/' + data[node_type]["snapshot"]))
 
         # inputs
         
