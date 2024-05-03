@@ -1816,6 +1816,31 @@ protected:
 };
 
 /**
+ * @brief StratifyOblique class.
+ */
+class StratifyOblique : public BaseNode
+{
+public:
+  StratifyOblique(const ModelConfig *p_config);
+
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_color() { return this->mask.lock().get(); }
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data,
+                 QtNodes::PortIndex                 port_index) override;
+
+protected:
+  std::weak_ptr<HeightMapData>   in, noise, mask;
+  std::shared_ptr<HeightMapData> out;
+};
+
+/**
  * @brief ValleyWidth class.
  */
 class ValleyWidth : public BaseNode
