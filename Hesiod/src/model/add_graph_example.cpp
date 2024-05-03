@@ -356,7 +356,8 @@ QtNodes::NodeId add_graph_example(HsdDataFlowGraphModel *p_model,
     std::string main_category = category.substr(0, pos);
 
     if (main_category == "Filter" || main_category == "Mask" || main_category == "Math" ||
-        main_category == "Operator" || main_category == "Morphology")
+        main_category == "Operator" || main_category == "Morphology" ||
+        main_category == "Features")
     {
       QtNodes::NodeId node_id1 = p_model->addNode("NoiseFbm");
       QtNodes::NodeId node_id2 = p_model->addNode(QString::fromStdString(node_type));

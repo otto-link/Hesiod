@@ -19,6 +19,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::Blend, "Operator/Blend");
   HSD_REGISTER_NODE(hesiod::Bump, "Primitive/Function");
   HSD_REGISTER_NODE(hesiod::Clamp, "Filter/Range");
+  HSD_REGISTER_NODE(hesiod::Closing, "Operator/Morphology");
   HSD_REGISTER_NODE(hesiod::Cloud, "Geometry/Cloud");
   HSD_REGISTER_NODE(hesiod::CloudToArrayInterp, "Primitive/Authoring");
   HSD_REGISTER_NODE(hesiod::ColorizeCmap, "Texture");
@@ -60,6 +61,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::NoisePingpong, "Primitive/Coherent Noise");
   HSD_REGISTER_NODE(hesiod::NoiseRidged, "Primitive/Coherent Noise");
   HSD_REGISTER_NODE(hesiod::NoiseSwiss, "Primitive/Coherent Noise");
+  HSD_REGISTER_NODE(hesiod::Opening, "Operator/Morphology");
   HSD_REGISTER_NODE(hesiod::Plateau, "Filter/Recurve");
   HSD_REGISTER_NODE(hesiod::QuiltingExpand, "Operator/Expand");
   HSD_REGISTER_NODE(hesiod::QuiltingShuffle, "Operator/Resynthesis");
