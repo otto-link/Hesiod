@@ -52,7 +52,7 @@ QuiltingExpand::QuiltingExpand(const ModelConfig *p_config) : BaseNode(p_config)
                       "feature wavenumber of a heightmap by modifying the frequency or "
                       "scale of features present in the heightmap using a quilting-like "
                       "technique. This operator allows for the synthesis of heightmaps "
-                      "with different levels of detail or spatial frequency content";
+                      "with different levels of detail or spatial frequency content.";
 
   this->input_descriptions = {"Input heightmap."};
   this->output_descriptions = {"Synthetized heightmap."};

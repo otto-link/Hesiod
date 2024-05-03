@@ -34,7 +34,7 @@ Rescale::Rescale(const ModelConfig *p_config) : BaseNode(p_config)
   }
 
   // documentation
-  this->description = "The Rescale operatorinvolves adjusting each data point by "
+  this->description = "The Rescale operator involves adjusting each data point by "
                       "multiplying it with a predetermined constant.";
 
   this->input_descriptions = {"Input heightmap."};
