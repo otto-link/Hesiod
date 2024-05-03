@@ -33,6 +33,18 @@ ExportTexture::ExportTexture(const ModelConfig *p_config) : BaseNode(p_config)
   {
     this->compute();
   }
+
+  // documentation
+  this->description = "ExportTexture is a texture to a PNG image file.";
+
+  this->input_descriptions = {"Input texture."};
+  this->output_descriptions = {};
+
+  this->attribute_descriptions["fname"] = "Export file name.";
+  this->attribute_descriptions
+      ["16 bit"] = "Decides whether the output is an 8 bit or a 16 bit PNG file.";
+  this->attribute_descriptions["auto_export"] =
+      "Decides whether the export is automatically performed when the node is updated.";
 }
 
 std::shared_ptr<QtNodes::NodeData> ExportTexture::outData(

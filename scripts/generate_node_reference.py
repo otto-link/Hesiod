@@ -5,8 +5,6 @@ from mdutils.tools import Image
 import os
 import sys
 
-img_size = "512"
-
 if __name__ == "__main__":
     workdir = sys.argv[-1]
     
@@ -84,13 +82,16 @@ if __name__ == "__main__":
         # print(node_type)
 
         md_file.new_header(level=2, title=node_type)
-
+                
         md_file.new_paragraph(data[node_type]["description"])
 
-        # md_file.new_paragraph(Html.image(path='../images/' + data[node_type]["snapshot"], size=img_size))
         md_file.new_paragraph(Image.Image.new_inline_image(text="img",
                                                      path='../images/nodes/' + data[node_type]["snapshot"]))
 
+        md_file.new_line()
+        md_file.new_header(level=3, title="Category")
+        md_file.new_paragraph(data[node_type]["category"])
+        
         # inputs
         
         inputs_table = ["Name", "Type", "Description"]

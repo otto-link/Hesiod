@@ -17,6 +17,14 @@ Comment::Comment(const ModelConfig *p_config) : BaseNode(p_config)
 
   // attributes
   this->attr["comment"] = NEW_ATTR_STRING("new comment...");
+
+  // documentation
+  this->description = "Comment node is a passive node holding a comment text.";
+
+  this->input_descriptions = {};
+  this->output_descriptions = {};
+
+  this->attribute_descriptions["comment"] = "Text comment.";
 }
 
 std::shared_ptr<QtNodes::NodeData> Comment::outData(QtNodes::PortIndex /* port_index */)

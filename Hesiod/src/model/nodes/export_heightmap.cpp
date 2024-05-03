@@ -15,7 +15,7 @@ ExportHeightmap::ExportHeightmap(const ModelConfig *p_config) : BaseNode(p_confi
   this->node_caption = "ExportHeightmap";
 
   // inputs
-  this->input_captions = {"texture"};
+  this->input_captions = {"input"};
   this->input_types = {HeightMapData().type()};
 
   // outputs
@@ -34,6 +34,18 @@ ExportHeightmap::ExportHeightmap(const ModelConfig *p_config) : BaseNode(p_confi
   {
     this->compute();
   }
+
+  // documentation
+  this->description = "ExportHeightmap is an operator for exporting a heightmap in "
+                      "various file formats.";
+
+  this->input_descriptions = {"Input heightmap."};
+  this->output_descriptions = {};
+
+  this->attribute_descriptions["fname"] = "Export file name.";
+  this->attribute_descriptions["format"] = "Export format.";
+  this->attribute_descriptions["auto_export"] =
+      "Decides whether the export is automatically performed when the node is updated.";
 }
 
 std::shared_ptr<QtNodes::NodeData> ExportHeightmap::outData(

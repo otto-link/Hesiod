@@ -55,6 +55,23 @@ NoisePingpong::NoisePingpong(const ModelConfig *p_config) : BaseNode(p_config)
     this->out = std::make_shared<HeightMapData>(this->p_config);
     this->compute();
   }
+
+  // documentation
+  this->description = "NoisePingPong, variant of NoiseFbm.";
+
+  this->input_descriptions = {
+      "Displacement with respect to the domain size (x-direction).",
+      "Displacement with respect to the domain size (y-direction).",
+      "Output noise amplitude envelope."};
+  this->output_descriptions = {"Generated noise."};
+
+  this->attribute_descriptions["noise_type"] = "Base primitive noise.";
+  this->attribute_descriptions["kw"] = "Noise wavenumbers (kx, ky) for each directions.";
+  this->attribute_descriptions["seed"] = "Random seed number.";
+  this->attribute_descriptions["octaves"] = "Number of octaves.";
+  this->attribute_descriptions["weight"] = "Octave weighting.";
+  this->attribute_descriptions["persistence"] = "Octave persistence.";
+  this->attribute_descriptions["lacunarity"] = "Wavenumber ratio between each octaves.";
 }
 
 std::shared_ptr<QtNodes::NodeData> NoisePingpong::outData(

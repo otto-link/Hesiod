@@ -41,6 +41,22 @@ MixTexture::MixTexture(const ModelConfig *p_config) : BaseNode(p_config)
     this->out = std::make_shared<HeightMapRGBAData>(p_config);
     this->compute();
   }
+
+  // documentation
+  this->description = "MixTexture enables the seamless integration of multiple textures "
+                      "by utilizing the alpha channel information to control the "
+                      "blending.";
+
+  this->input_descriptions = {"Input texture.",
+                              "Input texture.",
+                              "Input texture.",
+                              "Input texture."};
+  this->output_descriptions = {"Output texture."};
+
+  this->attribute_descriptions["use_sqrt_avg"] =
+      "Use square averaging for alpha-compositing (instead of linear averaging).";
+  this->attribute_descriptions
+      ["reset_output_alpha"] = "Reset the output alpha channel to 1 (opaque).";
 }
 
 std::shared_ptr<QtNodes::NodeData> MixTexture::outData(

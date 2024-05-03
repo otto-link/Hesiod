@@ -32,6 +32,16 @@ ColorizeSolid::ColorizeSolid(const ModelConfig *p_config) : BaseNode(p_config)
     this->out = std::make_shared<HeightMapRGBAData>(p_config);
     this->compute();
   }
+
+  // documentation
+  this->description = "ColorizeSolid generates an uniform texture based on an input "
+                      "color.";
+
+  this->input_descriptions = {};
+  this->output_descriptions = {"Texture (RGBA)."};
+
+  this->attribute_descriptions["color"] = "Solid color.";
+  this->attribute_descriptions["alpha"] = "Transparency as a scalar value";
 }
 
 std::shared_ptr<QtNodes::NodeData> ColorizeSolid::outData(

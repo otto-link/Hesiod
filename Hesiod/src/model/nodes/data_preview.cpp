@@ -21,11 +21,20 @@ DataPreview::DataPreview(const ModelConfig *p_config) : BaseNode(p_config)
   this->output_captions = {};
   this->output_types = {};
 
+  // no attributes
+
   // update
   if (this->p_config->compute_nodes_at_instanciation)
   {
     this->compute();
   }
+
+  // documentation
+  this->description = "DataPreview.";
+
+  this->input_descriptions = {"Data values for elevation preview.",
+                              "Data values for color preview."};
+  this->output_descriptions = {};
 }
 
 std::shared_ptr<QtNodes::NodeData> DataPreview::outData(

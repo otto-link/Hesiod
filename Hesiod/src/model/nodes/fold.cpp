@@ -31,6 +31,17 @@ Fold::Fold(const ModelConfig *p_config) : BaseNode(p_config)
     this->out = std::make_shared<HeightMapData>(p_config);
     this->compute();
   }
+
+  // documentation
+  this->description = "Fold iteratively applies the absolute value function to the input "
+                      "field, effectively folding negative values to their positive "
+                      "counterparts.";
+
+  this->input_descriptions = {"Input heightmap."};
+  this->output_descriptions = {"Folded heightmap."};
+
+  this->attribute_descriptions["k"] = "Smoothing parameter of the smooth absolute value.";
+  this->attribute_descriptions["iterations"] = "Number of successive foldings.";
 }
 
 std::shared_ptr<QtNodes::NodeData> Fold::outData(QtNodes::PortIndex /* port_index */)
