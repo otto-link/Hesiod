@@ -388,6 +388,31 @@ protected:
 };
 
 /**
+ * @brief Dendry class, noise primitive generation.
+ */
+class Dendry : public BaseNode
+{
+public:
+  Dendry(const ModelConfig *p_config);
+
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_color() { return nullptr; }
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data,
+                 QtNodes::PortIndex                 port_index) override;
+
+protected:
+  std::weak_ptr<HeightMapData>   control_function, dx, dy, envelope;
+  std::shared_ptr<HeightMapData> out;
+};
+
+/**
  * @brief Dilation class.
  */
 class Dilation : public BaseNode
@@ -784,6 +809,31 @@ public:
 protected:
   std::weak_ptr<HeightMapData>       r, g, b, a;
   std::shared_ptr<HeightMapRGBAData> out;
+};
+
+/**
+ * @brief HydraulicStream class.
+ */
+class HydraulicStream : public BaseNode
+{
+public:
+  HydraulicStream(const ModelConfig *p_config);
+
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_color() { return this->mask.lock().get(); }
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data,
+                 QtNodes::PortIndex                 port_index) override;
+
+protected:
+  std::weak_ptr<HeightMapData>   in, bedrock, moisture_map, mask;
+  std::shared_ptr<HeightMapData> out, erosion_map;
 };
 
 /**
