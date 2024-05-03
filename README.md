@@ -1,18 +1,14 @@
 # Hesiod
 
 A desktop application for node-based procedural terrain generation.
+- documentation: https://hesioddocumentation.readthedocs.io
+- binaries: https://sourceforge.net/projects/hesiod
 
-https://github.com/otto-link/Hesiod/assets/121820229/da3b246e-18af-47d5-bfd2-197c44c670df
+>[!WARNING] 
+> Work in progress, use at your own risk!
 
-Color is coming!
+![demo_screenshot](https://github.com/otto-link/Hesiod/assets/121820229/10197187-e983-4b50-a50e-04e27ef30e2b)
 
-![Screenshot_2023-11-12_23-01-20](https://github.com/otto-link/Hesiod/assets/121820229/e8117ebf-e61f-49b3-8fd0-159669e8caee)
-
-https://github.com/otto-link/Hesiod/assets/121820229/860ea0cd-40f7-49d0-abdf-a88b45956bcc
-
-## Warning 
-
-Work in progress, use at your own risk!
 
 ## License
 
