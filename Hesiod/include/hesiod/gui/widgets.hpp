@@ -350,7 +350,9 @@ class ColorbarWidget : public QLabel
 public:
   ColorbarWidget(QWidget *parent = nullptr);
 
-  ColorbarWidget(std::vector<std::vector<float>> colors, QWidget *parent = nullptr);
+  ColorbarWidget(std::vector<std::vector<float>> colors,
+                 QString                         caption = "",
+                 QWidget                        *parent = nullptr);
 
   std::vector<std::vector<float>> get_colors() { return this->colors; };
 
@@ -361,6 +363,7 @@ protected:
 
 private:
   std::vector<std::vector<float>> colors;
+  QString                         caption = "";
 };
 
 class PointEditorWidget : public QGraphicsView
