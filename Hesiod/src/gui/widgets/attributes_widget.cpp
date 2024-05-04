@@ -136,11 +136,24 @@ AttributesWidget::AttributesWidget(
 
       case (AttributeType::MAP_ENUM):
       {
-        MapEnumWidget *widget = new MapEnumWidget((MapEnumAttribute *)p_attr);
-        connect(widget,
-                &MapEnumWidget::value_changed,
-                [this]() { Q_EMIT this->value_changed(); });
-        layout->addWidget(widget, row, 1);
+        MapEnumAttribute *p_map_attr = (MapEnumAttribute *)p_attr;
+
+        if (p_map_attr->is_colormap_enum)
+        {
+          ColormapEnumWidget *widget = new ColormapEnumWidget(p_map_attr);
+          connect(widget,
+                  &ColormapEnumWidget::value_changed,
+                  [this]() { Q_EMIT this->value_changed(); });
+          layout->addWidget(widget, row, 1);
+        }
+        else
+        {
+          MapEnumWidget *widget = new MapEnumWidget(p_map_attr);
+          connect(widget,
+                  &MapEnumWidget::value_changed,
+                  [this]() { Q_EMIT this->value_changed(); });
+          layout->addWidget(widget, row, 1);
+        }
       }
       break;
 

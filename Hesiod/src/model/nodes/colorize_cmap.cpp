@@ -26,6 +26,8 @@ ColorizeCmap::ColorizeCmap(const ModelConfig *p_config) : BaseNode(p_config)
 
   // attributes
   this->attr["colormap"] = NEW_ATTR_MAPENUM(get_colormap_mapping());
+  this->attr["colormap"]->get_ref<MapEnumAttribute>()->is_colormap_enum = true;
+
   this->attr["reverse_colormap"] = NEW_ATTR_BOOL(false);
   this->attr["reverse_alpha"] = NEW_ATTR_BOOL(false);
   this->attr["clamp_alpha"] = NEW_ATTR_BOOL(true);

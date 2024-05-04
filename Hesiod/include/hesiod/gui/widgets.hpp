@@ -145,6 +145,27 @@ private:
   void update_label_gradient();
 };
 
+class ColormapEnumWidget : public QWidget
+{
+  Q_OBJECT
+
+public:
+  ColormapEnumWidget() = default;
+
+  ColormapEnumWidget(MapEnumAttribute *p_attr);
+
+  void on_item_click(QListWidgetItem *item);
+
+Q_SIGNALS:
+  void value_changed();
+
+private:
+  MapEnumAttribute        *p_attr;
+  QListWidget             *cmap_list;
+  int                      current_choice_item_idx = 0;
+  std::vector<std::string> item_choice = {};
+};
+
 class FilenameWidget : public QWidget
 {
   Q_OBJECT
@@ -354,7 +375,13 @@ public:
                  QString                         caption = "",
                  QWidget                        *parent = nullptr);
 
+  QString get_caption() { return this->caption; };
+
   std::vector<std::vector<float>> get_colors() { return this->colors; };
+
+  void set_border(int width, QColor color);
+
+  void set_caption(QString new_caption);
 
   void update_colors(std::vector<std::vector<float>> new_colors);
 
@@ -364,6 +391,8 @@ protected:
 private:
   std::vector<std::vector<float>> colors;
   QString                         caption = "";
+  int                             border_width = 0;
+  QColor                          border_color = Qt::white;
 };
 
 class PointEditorWidget : public QGraphicsView

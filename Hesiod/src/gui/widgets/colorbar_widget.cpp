@@ -15,7 +15,7 @@ ColorbarWidget::ColorbarWidget(QWidget *parent) : QLabel(parent)
 ColorbarWidget::ColorbarWidget(std::vector<std::vector<float>> colors,
                                QString                         caption,
                                QWidget                        *parent)
-    : QLabel(parent), caption(caption), colors(colors)
+    : QLabel(parent), colors(colors), caption(caption)
 {
 }
 
@@ -35,11 +35,30 @@ void ColorbarWidget::paintEvent(QPaintEvent *event)
   painter.setPen(Qt::transparent); // no border
   painter.fillRect(this->rect(), brush);
 
+  if (this->border_width > 0)
+  {
+    painter.setPen(QPen(this->border_color, this->border_width));
+    painter.drawRect(this->rect());
+  }
+
   painter.setPen(QPen(Qt::white, 1));
   painter.drawText(this->rect().bottomLeft(), this->caption);
 
   // base paint event
   QWidget::paintEvent(event);
+}
+
+void ColorbarWidget::set_border(int width, QColor color)
+{
+  this->border_width = width;
+  this->border_color = color;
+  this->repaint();
+}
+
+void ColorbarWidget::set_caption(QString new_caption)
+{
+  this->caption = new_caption;
+  this->repaint();
 }
 
 void ColorbarWidget::update_colors(std::vector<std::vector<float>> new_colors)

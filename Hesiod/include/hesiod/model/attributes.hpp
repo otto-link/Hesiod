@@ -413,6 +413,7 @@ public:
 
   std::map<std::string, int> value = {};
   std::string                choice = "";
+  bool                       is_colormap_enum = false;
 };
 
 class MatrixAttribute : public Attribute // --------- TODO
