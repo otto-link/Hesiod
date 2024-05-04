@@ -25,8 +25,9 @@ NormalDisplacement::NormalDisplacement(const ModelConfig *p_config) : BaseNode(p
   this->attr["radius"] = NEW_ATTR_FLOAT(0.f, 0.f, 0.2f);
   this->attr["amount"] = NEW_ATTR_FLOAT(5.f, 0.f, 20.f);
   this->attr["reverse"] = NEW_ATTR_BOOL(false);
+  this->attr["iterations"] = NEW_ATTR_INT(1, 1, 10);
 
-  this->attr_ordered_key = {"radius", "amount", "reverse"};
+  this->attr_ordered_key = {"radius", "amount", "reverse", "iterations"};
 
   // update
   if (this->p_config->compute_nodes_at_instanciation)
@@ -48,6 +49,7 @@ NormalDisplacement::NormalDisplacement(const ModelConfig *p_config) : BaseNode(p
       ["radius"] = "Filter radius with respect to the domain size.";
   this->attribute_descriptions["amount"] = "Displacement scaling.";
   this->attribute_descriptions["reverse"] = "Reverse displacement direction.";
+  this->attribute_descriptions["iterations"] = "Number of successive use of the operator.";
 }
 
 std::shared_ptr<QtNodes::NodeData> NormalDisplacement::outData(
@@ -93,18 +95,20 @@ void NormalDisplacement::compute()
 
     int ir = std::max(0, (int)(GET_ATTR_FLOAT("radius") * p_in->shape.x));
 
-    hmap::transform(*p_out,
-                    p_mask,
-                    [this, &ir](hmap::Array &x, hmap::Array *p_mask)
-                    {
-                      hmap::normal_displacement(x,
-                                                p_mask,
-                                                GET_ATTR_FLOAT("amount"),
-                                                ir,
-                                                GET_ATTR_BOOL("reverse"));
-                    });
-
-    p_out->smooth_overlap_buffers();
+    for (int it = 0; it < GET_ATTR_INT("iterations"); it++)
+    {
+      hmap::transform(*p_out,
+                      p_mask,
+                      [this, &ir](hmap::Array &x, hmap::Array *p_mask)
+                      {
+                        hmap::normal_displacement(x,
+                                                  p_mask,
+                                                  GET_ATTR_FLOAT("amount"),
+                                                  ir,
+                                                  GET_ATTR_BOOL("reverse"));
+                      });
+      p_out->smooth_overlap_buffers();
+    }
   }
 
   // propagate
