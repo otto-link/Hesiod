@@ -8,15 +8,15 @@ namespace hesiod
 
 ColorbarWidget::ColorbarWidget(QWidget *parent) : QLabel(parent)
 {
-  // this->setMinimumHeight(24);
   // position / r / g / b / a
   this->colors = {{0.f, 0.f, 0.f, 0.f, 1.f}};
 }
 
-ColorbarWidget::ColorbarWidget(std::vector<std::vector<float>> colors, QWidget *parent)
-    : QLabel(parent), colors(colors)
+ColorbarWidget::ColorbarWidget(std::vector<std::vector<float>> colors,
+                               QString                         caption,
+                               QWidget                        *parent)
+    : QLabel(parent), caption(caption), colors(colors)
 {
-  // this->setMinimumHeight(24);
 }
 
 void ColorbarWidget::paintEvent(QPaintEvent *event)
@@ -34,6 +34,9 @@ void ColorbarWidget::paintEvent(QPaintEvent *event)
   painter.setBrush(brush);
   painter.setPen(Qt::transparent); // no border
   painter.fillRect(this->rect(), brush);
+
+  painter.setPen(QPen(Qt::white, 1));
+  painter.drawText(this->rect().bottomLeft(), this->caption);
 
   // base paint event
   QWidget::paintEvent(event);
