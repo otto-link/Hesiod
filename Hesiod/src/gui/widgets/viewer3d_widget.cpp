@@ -66,13 +66,24 @@ Viewer3dWidget::Viewer3dWidget(ModelConfig                    *p_config,
     layout->addWidget(this->checkbox_pin_node, 0, 1);
   }
 
+  // show color
+  {
+    this->checkbox_texture = new QCheckBox("Render texture");
+    this->checkbox_texture->setChecked(true);
+    layout->addWidget(this->checkbox_texture, 0, 2);
+  }
+
   // openGL widget
   {
     this->gl_viewer = new HmapGLViewer(this->p_config, nullptr);
-    layout->addWidget(this->gl_viewer, 1, 0, 1, 2);
+    layout->addWidget(this->gl_viewer, 1, 0, 1, 3);
   }
 
   this->setLayout(layout);
+
+  connect(this->checkbox_texture,
+          &QCheckBox::stateChanged,
+          [this]() { this->update_viewport(); });
 }
 
 void Viewer3dWidget::on_node_deleted(QtNodes::NodeId const node_id)
@@ -91,6 +102,7 @@ void Viewer3dWidget::reset()
 {
   this->current_node_id = std::numeric_limits<uint>::max();
   this->checkbox_pin_node->setChecked(false);
+  this->checkbox_texture->setChecked(true);
   this->gl_viewer->reset();
 };
 
@@ -126,7 +138,11 @@ void Viewer3dWidget::update_viewport(QtNodes::NodeId const node_id)
     hesiod::BaseNode *p_node = this->p_model->delegateModel<hesiod::BaseNode>(
         this->current_node_id);
     p_data = p_node->get_viewer3d_data();
-    p_color = p_node->get_viewer3d_color();
+
+    if (this->checkbox_texture->isChecked())
+      p_color = p_node->get_viewer3d_color();
+    else
+      p_color = nullptr;
   }
 
   if (this->isVisible())

@@ -63,6 +63,7 @@ private:
   QtNodes::NodeId current_node_id = std::numeric_limits<uint>::max();
 
   QCheckBox    *checkbox_pin_node;
+  QCheckBox    *checkbox_texture;
   HmapGLViewer *gl_viewer = nullptr;
 };
 
