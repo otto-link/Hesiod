@@ -70,6 +70,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::Remap, "Filter/Range");
   HSD_REGISTER_NODE(hesiod::RecastCliff, "Filter/Recast");
   HSD_REGISTER_NODE(hesiod::RecurveKura, "Filter/Recurve");
+  HSD_REGISTER_NODE(hesiod::RecurveS, "Filter/Recurve");
   HSD_REGISTER_NODE(hesiod::Rescale, "Filter/Range");
   HSD_REGISTER_NODE(hesiod::Saturate, "Filter/Recurve");
   HSD_REGISTER_NODE(hesiod::ScanMask, "Mask/Adjust");
@@ -89,6 +90,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::Step, "Primitive/Function");
   HSD_REGISTER_NODE(hesiod::StratifyOblique, "Erosion/Stratify");
   HSD_REGISTER_NODE(hesiod::ValleyWidth, "Features");
+  HSD_REGISTER_NODE(hesiod::WaveDune, "Primitive/Function");
   HSD_REGISTER_NODE(hesiod::White, "Primitive/Random");
   HSD_REGISTER_NODE(hesiod::ZeroedEdges, "Math/Boundaries");
 
