@@ -7,7 +7,6 @@
 #include <QWidget>
 
 #include "hesiod/data/heightmap_data.hpp"
-#include "hesiod/model/base_node.hpp"
 
 namespace hesiod
 {

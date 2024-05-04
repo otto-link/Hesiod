@@ -3,7 +3,8 @@
  * this software. */
 #include "highmap/erosion.hpp"
 
-#include "hesiod/model/nodes.hpp"
+#include "hesiod/model/nodes/stratify_oblique.hpp"
+
 
 namespace hesiod
 {

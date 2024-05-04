@@ -9,7 +9,7 @@
 namespace hesiod
 {
 
-static std::map<std::string, QColor> node_category_color = {
+inline std::map<std::string, QColor> node_category_color = {
     {"Converter", QColor(188, 182, 163, 255)},
     {"Comment", QColor(170, 170, 170, 255)},
     {"Debug", QColor(200, 0, 0, 255)},

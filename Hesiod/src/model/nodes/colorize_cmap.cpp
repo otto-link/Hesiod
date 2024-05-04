@@ -4,7 +4,8 @@
 #include "highmap/heightmap.hpp"
 
 #include "hesiod/model/cmap.hpp"
-#include "hesiod/model/nodes.hpp"
+#include "hesiod/model/nodes/colorize_cmap.hpp"
+
 
 namespace hesiod
 {

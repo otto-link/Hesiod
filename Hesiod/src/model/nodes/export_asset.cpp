@@ -3,7 +3,8 @@
  * this software. */
 #include "highmap/io.hpp"
 
-#include "hesiod/model/nodes.hpp"
+#include "hesiod/model/nodes/export_asset.hpp"
+
 
 namespace hesiod
 {

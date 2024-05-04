@@ -57,7 +57,7 @@ enum PreviewType : int
 /**
  * @brief Plain text / enumerate mapping for the blending methods.
  */
-static std::map<std::string, int> blending_method_map = {
+inline std::map<std::string, int> blending_method_map = {
     {"add", BlendingMethod::ADD},
     {"exclusion", BlendingMethod::EXCLUSION_BLEND},
     {"gradients", BlendingMethod::GRADIENTS},
@@ -75,7 +75,7 @@ static std::map<std::string, int> blending_method_map = {
 /**
  * @brief Plain text / enumerate mapping for the HighMap colormaps.
  */
-static std::map<std::string, int> cmap_map = {
+inline std::map<std::string, int> cmap_map = {
     {"bone", hmap::cmap::bone},
     {"gray", hmap::cmap::gray},
     {"jet", hmap::cmap::jet},
@@ -88,7 +88,7 @@ static std::map<std::string, int> cmap_map = {
  * @brief Plain text / enumerate mapping for the heightmap export formats (see
  * ExportHeightmap node).
  */
-static std::map<std::string, int> heightmap_export_format_map = {
+inline std::map<std::string, int> heightmap_export_format_map = {
     {"png (8 bit)", ExportFormat::PNG8BIT},
     {"png (16 bit)", ExportFormat::PNG16BIT},
     {"raw (16 bit, Unity)", ExportFormat::RAW16BIT}};
@@ -96,7 +96,7 @@ static std::map<std::string, int> heightmap_export_format_map = {
 /**
  * @brief Plain text / enumerate mapping for the kernels.
  */
-static std::map<std::string, int> kernel_map = {{"cone", Kernel::CONE},
+inline std::map<std::string, int> kernel_map = {{"cone", Kernel::CONE},
                                                 {"cubic_pulse", Kernel::CUBIC_PULSE},
                                                 {"lorentzian", Kernel::LORENTZIAN},
                                                 {"smooth_cosine", Kernel::SMOOTH_COSINE}};
@@ -104,7 +104,7 @@ static std::map<std::string, int> kernel_map = {{"cone", Kernel::CONE},
 /**
  * @brief Plain text / enumerate mapping for the mask combine method.
  */
-static std::map<std::string, int> mask_combine_method_map = {
+inline std::map<std::string, int> mask_combine_method_map = {
     {"union", MaskCombineMethod::UNION},
     {"intersection", MaskCombineMethod::INTERSECTION},
     {"exclusion", MaskCombineMethod::EXCLUSION}};
@@ -112,7 +112,7 @@ static std::map<std::string, int> mask_combine_method_map = {
 /**
  * @brief Plain text / enumerate mapping for the HighMap noise types.
  */
-static std::map<std::string, int> noise_type_map = {
+inline std::map<std::string, int> noise_type_map = {
     {"Perlin", hmap::NoiseType::n_perlin},
     {"Perlin (billow)", hmap::NoiseType::n_perlin_billow},
     {"Perlin (half)", hmap::NoiseType::n_perlin_half},
@@ -132,7 +132,7 @@ static std::map<std::string, int> noise_type_map = {
  * noises removed (delaunay, linear and thinplate) that can be very slow at high
  * wavenumbers
  */
-static std::map<std::string, int> noise_type_map_fbm = {
+inline std::map<std::string, int> noise_type_map_fbm = {
     {"Perlin", hmap::NoiseType::n_perlin},
     {"Perlin (billow)", hmap::NoiseType::n_perlin_billow},
     {"Perlin (half)", hmap::NoiseType::n_perlin_half},

@@ -6,6 +6,13 @@
 #include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/graph_model_addon.hpp"
 #include "hesiod/model/nodes.hpp"
+#include "hesiod/model/nodes/clamp.hpp"
+#include "hesiod/model/nodes/cloud.hpp"
+#include "hesiod/model/nodes/expand_shrink.hpp"
+#include "hesiod/model/nodes/noise.hpp"
+#include "hesiod/model/nodes/noise_fbm.hpp"
+#include "hesiod/model/nodes/make_binary.hpp"
+#include "hesiod/model/nodes/saturate.hpp"
 
 #define HSD_NODE_SPACING 300.f
 

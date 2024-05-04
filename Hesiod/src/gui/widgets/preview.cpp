@@ -13,6 +13,7 @@
 #include "hesiod/data/heightmap_data.hpp"
 #include "hesiod/data/heightmap_rgba_data.hpp"
 #include "hesiod/gui/preview.hpp"
+#include "hesiod/model/base_node.hpp"
 
 namespace hesiod
 {

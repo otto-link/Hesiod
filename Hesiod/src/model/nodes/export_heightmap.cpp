@@ -2,7 +2,8 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include "hesiod/model/enum_mapping.hpp"
-#include "hesiod/model/nodes.hpp"
+#include "hesiod/model/nodes/export_heightmap.hpp"
+
 
 namespace hesiod
 {

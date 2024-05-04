@@ -4,7 +4,8 @@
 #include "highmap/kernels.hpp"
 
 #include "hesiod/model/enum_mapping.hpp"
-#include "hesiod/model/nodes.hpp"
+#include "hesiod/model/nodes/expand_shrink.hpp"
+
 
 namespace hesiod
 {
