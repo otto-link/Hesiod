@@ -78,19 +78,19 @@ void CloudToArrayInterp::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void CloudToArrayInterp::compute()
 {
-  Q_EMIT this->computingStarted();
-
   LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
 
-  hmap::Cloud     *p_cloud = HSD_GET_POINTER(this->in);
-  hmap::HeightMap *p_dx = HSD_GET_POINTER(this->dx);
-  hmap::HeightMap *p_dy = HSD_GET_POINTER(this->dy);
+  hmap::Cloud *p_cloud = HSD_GET_POINTER(this->in);
 
   if (p_cloud)
   {
+    Q_EMIT this->computingStarted();
+
     if (p_cloud->get_npoints() > 0)
     {
-      LOG_DEBUG("HERE");
+      hmap::HeightMap *p_dx = HSD_GET_POINTER(this->dx);
+      hmap::HeightMap *p_dy = HSD_GET_POINTER(this->dy);
+
       hmap::fill(*this->out->get_ref(),
                  p_dx,
                  p_dy,
@@ -111,15 +111,14 @@ void CloudToArrayInterp::compute()
                    return array;
                  });
     }
-  }
-  else
-    // fill with zeroes
-    hmap::transform(*this->out->get_ref(), [](hmap::Array array) { array = 0.f; });
+    else
+      // fill with zeroes
+      hmap::transform(*this->out->get_ref(), [](hmap::Array array) { array = 0.f; });
 
-  // propagate
-  QtNodes::PortIndex const out_port_index = 0;
-  Q_EMIT this->computingFinished();
-  Q_EMIT this->dataUpdated(out_port_index);
+    // propagate
+    Q_EMIT this->computingFinished();
+    this->trigger_outputs_updated();
+  }
 }
 
 } // namespace hesiod

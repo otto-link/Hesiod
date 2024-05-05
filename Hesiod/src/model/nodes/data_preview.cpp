@@ -69,10 +69,9 @@ void DataPreview::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void DataPreview::compute()
 {
-  Q_EMIT this->computingStarted();
-
   LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
 
+  Q_EMIT this->computingStarted();
   // empty on purpose
 
   // not output, do not propagate

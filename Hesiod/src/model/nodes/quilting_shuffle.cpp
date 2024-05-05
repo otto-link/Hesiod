@@ -87,15 +87,16 @@ void QuiltingShuffle::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void QuiltingShuffle::compute()
 {
-  Q_EMIT this->computingStarted();
-
   LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
 
   hmap::HeightMap *p_in = HSD_GET_POINTER(this->in);
-  hmap::HeightMap *p_out = this->out->get_ref();
 
   if (p_in)
   {
+    Q_EMIT this->computingStarted();
+
+    hmap::HeightMap *p_out = this->out->get_ref();
+
     int ir = std::max(1, (int)(GET_ATTR_FLOAT("patch_width") * p_out->shape.x));
     hmap::Vec2<int> patch_base_shape = hmap::Vec2<int>(ir, ir);
 
@@ -114,11 +115,11 @@ void QuiltingShuffle::compute()
                                        GET_ATTR_FLOAT("filter_width_ratio"));
 
     p_out->from_array_interp_nearest(out_array);
-  }
 
-  // propagate
-  Q_EMIT this->computingFinished();
-  this->trigger_outputs_updated();
+    // propagate
+    Q_EMIT this->computingFinished();
+    this->trigger_outputs_updated();
+  }
 }
 
 } // namespace hesiod

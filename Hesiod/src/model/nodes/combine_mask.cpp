@@ -70,16 +70,17 @@ void CombineMask::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void CombineMask::compute()
 {
-  Q_EMIT this->computingStarted();
-
   LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
 
   hmap::HeightMap *p_in1 = HSD_GET_POINTER(this->in1);
   hmap::HeightMap *p_in2 = HSD_GET_POINTER(this->in2);
-  hmap::HeightMap *p_out = this->out->get_ref();
 
   if (p_in1 && p_in2)
   {
+    Q_EMIT this->computingStarted();
+
+    hmap::HeightMap *p_out = this->out->get_ref();
+
     std::function<void(hmap::Array &, hmap::Array &, hmap::Array &)> lambda;
 
     int method = GET_ATTR_MAPENUM("method");
@@ -106,11 +107,11 @@ void CombineMask::compute()
     }
 
     hmap::transform(*p_out, *p_in1, *p_in2, lambda);
-  }
 
-  // propagate
-  Q_EMIT this->computingFinished();
-  this->trigger_outputs_updated();
+    // propagate
+    Q_EMIT this->computingFinished();
+    this->trigger_outputs_updated();
+  }
 }
 
 } // namespace hesiod

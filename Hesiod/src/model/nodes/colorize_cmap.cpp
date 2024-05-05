@@ -101,17 +101,18 @@ void ColorizeCmap::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void ColorizeCmap::compute()
 {
-  Q_EMIT this->computingStarted();
-
   LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
 
-  hmap::HeightMap     *p_level = HSD_GET_POINTER(this->level);
-  hmap::HeightMap     *p_alpha = HSD_GET_POINTER(this->alpha);
-  hmap::HeightMapRGBA *p_out = this->out->get_ref();
+  hmap::HeightMap *p_level = HSD_GET_POINTER(this->level);
 
   // colorize
   if (p_level)
   {
+    Q_EMIT this->computingStarted();
+
+    hmap::HeightMap     *p_alpha = HSD_GET_POINTER(this->alpha);
+    hmap::HeightMapRGBA *p_out = this->out->get_ref();
+
     std::vector<std::vector<float>> colormap_colors = hesiod::get_colormap_data(
         GET_ATTR_MAPENUM("colormap"));
 
@@ -164,11 +165,11 @@ void ColorizeCmap::compute()
                     colormap_colors,
                     p_alpha_copy,
                     GET_ATTR_BOOL("reverse_colormap"));
-  }
 
-  // propagate
-  Q_EMIT this->computingFinished();
-  this->trigger_outputs_updated();
+    // propagate
+    Q_EMIT this->computingFinished();
+    this->trigger_outputs_updated();
+  }
 }
 
 } // namespace hesiod

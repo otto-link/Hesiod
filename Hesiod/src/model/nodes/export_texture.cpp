@@ -69,22 +69,22 @@ void ExportTexture::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void ExportTexture::compute()
 {
-  Q_EMIT this->computingStarted();
-
   LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
 
   hmap::HeightMapRGBA *p_in = HSD_GET_POINTER(this->in);
 
   if (p_in && GET_ATTR_BOOL("auto_export"))
   {
+    Q_EMIT this->computingStarted();
+
     if (GET_ATTR_BOOL("16 bit"))
       p_in->to_png_16bit(GET_ATTR_FILENAME("fname"));
     else
       p_in->to_png_8bit(GET_ATTR_FILENAME("fname"));
-  }
 
-  // not output, do not propagate
-  Q_EMIT this->computingFinished();
+    // not output, do not propagate
+    Q_EMIT this->computingFinished();
+  }
 }
 
 } // namespace hesiod

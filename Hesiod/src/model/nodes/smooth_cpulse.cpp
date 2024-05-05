@@ -76,16 +76,17 @@ void SmoothCpulse::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void SmoothCpulse::compute()
 {
-  Q_EMIT this->computingStarted();
-
   LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
 
   hmap::HeightMap *p_in = HSD_GET_POINTER(this->in);
-  hmap::HeightMap *p_mask = HSD_GET_POINTER(this->mask);
-  hmap::HeightMap *p_out = this->out->get_ref();
 
   if (p_in)
   {
+    Q_EMIT this->computingStarted();
+
+    hmap::HeightMap *p_mask = HSD_GET_POINTER(this->mask);
+    hmap::HeightMap *p_out = this->out->get_ref();
+
     // copy the input heightmap
     *p_out = *p_in;
 
@@ -96,11 +97,11 @@ void SmoothCpulse::compute()
                     [&ir](hmap::Array &x, hmap::Array *p_mask)
                     { hmap::smooth_cpulse(x, ir, p_mask); });
     p_out->smooth_overlap_buffers();
-  }
 
-  // propagate
-  Q_EMIT this->computingFinished();
-  this->trigger_outputs_updated();
+    // propagate
+    Q_EMIT this->computingFinished();
+    this->trigger_outputs_updated();
+  }
 }
 
 } // namespace hesiod

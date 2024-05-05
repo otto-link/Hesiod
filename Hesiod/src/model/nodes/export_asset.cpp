@@ -108,15 +108,16 @@ void ExportAsset::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void ExportAsset::compute()
 {
-  Q_EMIT this->computingStarted();
-
   LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
 
-  hmap::HeightMap     *p_elev = HSD_GET_POINTER(this->elevation);
-  hmap::HeightMapRGBA *p_color = HSD_GET_POINTER(this->color);
+  hmap::HeightMap *p_elev = HSD_GET_POINTER(this->elevation);
 
   if (p_elev)
   {
+    Q_EMIT this->computingStarted();
+
+    hmap::HeightMapRGBA *p_color = HSD_GET_POINTER(this->color);
+
     hmap::Array array = p_elev->to_array();
 
     std::string fname = GET_ATTR_FILENAME("fname");
@@ -138,10 +139,10 @@ void ExportAsset::compute()
                        texture_fname,
                        "", // TODO normal map
                        GET_ATTR_FLOAT("max_error"));
-  }
 
-  // not output, do not propagate
-  Q_EMIT this->computingFinished();
+    // not output, do not propagate
+    Q_EMIT this->computingFinished();
+  }
 }
 
 } // namespace hesiod

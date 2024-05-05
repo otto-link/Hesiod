@@ -79,18 +79,19 @@ void HeightMapToRGBA::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void HeightMapToRGBA::compute()
 {
-  Q_EMIT this->computingStarted();
-
   LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
 
-  hmap::HeightMap     *p_r = HSD_GET_POINTER(this->r);
-  hmap::HeightMap     *p_g = HSD_GET_POINTER(this->g);
-  hmap::HeightMap     *p_b = HSD_GET_POINTER(this->b);
-  hmap::HeightMap     *p_a = HSD_GET_POINTER(this->a);
-  hmap::HeightMapRGBA *p_out = this->out->get_ref();
+  hmap::HeightMap *p_r = HSD_GET_POINTER(this->r);
+  hmap::HeightMap *p_g = HSD_GET_POINTER(this->g);
+  hmap::HeightMap *p_b = HSD_GET_POINTER(this->b);
+  hmap::HeightMap *p_a = HSD_GET_POINTER(this->a);
 
   if (p_r || p_g || p_b || p_a)
   {
+    Q_EMIT this->computingStarted();
+
+    hmap::HeightMapRGBA *p_out = this->out->get_ref();
+
     hmap::Vec2<int> shape;
     hmap::Vec2<int> tiling;
     float           overlap = 0.f;
@@ -114,11 +115,11 @@ void HeightMapToRGBA::compute()
                                         : *p_a;
 
     *p_out = hmap::HeightMapRGBA(hr, hg, hb, ha);
-  }
 
-  // propagate
-  Q_EMIT this->computingFinished();
-  this->trigger_outputs_updated();
+    // propagate
+    Q_EMIT this->computingFinished();
+    this->trigger_outputs_updated();
+  }
 }
 
 } // namespace hesiod

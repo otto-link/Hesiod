@@ -67,16 +67,17 @@ void RecurveS::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void RecurveS::compute()
 {
-  Q_EMIT this->computingStarted();
-
   LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
 
   hmap::HeightMap *p_in = HSD_GET_POINTER(this->in);
-  hmap::HeightMap *p_mask = HSD_GET_POINTER(this->mask);
-  hmap::HeightMap *p_out = this->out->get_ref();
 
   if (p_in)
   {
+    Q_EMIT this->computingStarted();
+
+    hmap::HeightMap *p_mask = HSD_GET_POINTER(this->mask);
+    hmap::HeightMap *p_out = this->out->get_ref();
+
     // copy the input heightmap
     *p_out = *p_in;
 
@@ -91,11 +92,11 @@ void RecurveS::compute()
                     { hmap::recurve_s(x, p_mask); });
 
     p_out->remap(hmin, hmax, 0.f, 1.f);
-  }
 
-  // propagate
-  Q_EMIT this->computingFinished();
-  this->trigger_outputs_updated();
+    // propagate
+    Q_EMIT this->computingFinished();
+    this->trigger_outputs_updated();
+  }
 }
 
 } // namespace hesiod

@@ -106,20 +106,21 @@ void HydraulicStream::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void HydraulicStream::compute()
 {
-  Q_EMIT this->computingStarted();
-
   LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
 
   hmap::HeightMap *p_in = HSD_GET_POINTER(this->in);
-  hmap::HeightMap *p_bedrock = HSD_GET_POINTER(this->bedrock);
-  hmap::HeightMap *p_moisture_map = HSD_GET_POINTER(this->moisture_map);
-  hmap::HeightMap *p_mask = HSD_GET_POINTER(this->mask);
-
-  hmap::HeightMap *p_out = this->out->get_ref();
-  hmap::HeightMap *p_erosion_map = this->erosion_map->get_ref();
 
   if (p_in)
   {
+    Q_EMIT this->computingStarted();
+
+    hmap::HeightMap *p_bedrock = HSD_GET_POINTER(this->bedrock);
+    hmap::HeightMap *p_moisture_map = HSD_GET_POINTER(this->moisture_map);
+    hmap::HeightMap *p_mask = HSD_GET_POINTER(this->mask);
+
+    hmap::HeightMap *p_out = this->out->get_ref();
+    hmap::HeightMap *p_erosion_map = this->erosion_map->get_ref();
+
     // copy the input heightmap
     *p_out = *p_in;
 
@@ -153,11 +154,11 @@ void HydraulicStream::compute()
 
     if (p_erosion_map)
       p_erosion_map->smooth_overlap_buffers();
-  }
 
-  // propagate
-  Q_EMIT this->computingFinished();
-  this->trigger_outputs_updated();
+    // propagate
+    Q_EMIT this->computingFinished();
+    this->trigger_outputs_updated();
+  }
 }
 
 } // namespace hesiod

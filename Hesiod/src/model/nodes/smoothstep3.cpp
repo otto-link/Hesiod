@@ -58,15 +58,17 @@ void Smoothstep3::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void Smoothstep3::compute()
 {
-  Q_EMIT this->computingStarted();
 
   LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
 
   hmap::HeightMap *p_in = HSD_GET_POINTER(this->in);
-  hmap::HeightMap *p_out = this->out->get_ref();
 
   if (p_in)
   {
+    Q_EMIT this->computingStarted();
+
+    hmap::HeightMap *p_out = this->out->get_ref();
+
     // copy the input heightmap
     *p_out = *p_in;
 
@@ -75,11 +77,11 @@ void Smoothstep3::compute()
     p_out->remap(0.f, 1.f, hmin, hmax);
     hmap::transform(*p_out, [this](hmap::Array &x) { x = hmap::smoothstep3(x); });
     p_out->remap(hmin, hmax, 0.f, 1.f);
-  }
 
-  // propagate
-  Q_EMIT this->computingFinished();
-  this->trigger_outputs_updated();
+    // propagate
+    Q_EMIT this->computingFinished();
+    this->trigger_outputs_updated();
+  }
 }
 
 } // namespace hesiod

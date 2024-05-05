@@ -96,8 +96,6 @@ void MixTexture::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void MixTexture::compute()
 {
-  Q_EMIT this->computingStarted();
-
   LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
 
   hmap::HeightMapRGBA *p_in1 = HSD_GET_POINTER(this->in1);
@@ -111,17 +109,19 @@ void MixTexture::compute()
     if (ptr)
       ptr_list.push_back(ptr);
 
-  if (ptr_list.size())
+  if ((int)ptr_list.size())
   {
+    Q_EMIT this->computingStarted();
+
     *p_out = mix_heightmap_rgba(ptr_list, GET_ATTR_BOOL("use_sqrt_avg"));
 
     if (GET_ATTR_BOOL("reset_output_alpha"))
       p_out->set_alpha(1.f);
-  }
 
-  // propagate
-  Q_EMIT this->computingFinished();
-  this->trigger_outputs_updated();
+    // propagate
+    Q_EMIT this->computingFinished();
+    this->trigger_outputs_updated();
+  }
 }
 
 } // namespace hesiod

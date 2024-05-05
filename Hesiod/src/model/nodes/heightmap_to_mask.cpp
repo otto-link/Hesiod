@@ -71,15 +71,16 @@ void HeightMapToMask::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void HeightMapToMask::compute()
 {
-  Q_EMIT this->computingStarted();
-
   LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
 
   hmap::HeightMap *p_in = HSD_GET_POINTER(this->in);
-  hmap::HeightMap *p_mask = this->mask->get_ref();
 
   if (p_in)
   {
+    Q_EMIT this->computingStarted();
+
+    hmap::HeightMap *p_mask = this->mask->get_ref();
+
     // copy the input heightmap
     *p_mask = *p_in;
 
@@ -100,11 +101,11 @@ void HeightMapToMask::compute()
                            GET_ATTR_FLOAT("saturate_k"),
                            false, // remap
                            {0.f, 0.f});
-  }
 
-  // propagate
-  Q_EMIT this->computingFinished();
-  this->trigger_outputs_updated();
+    // propagate
+    Q_EMIT this->computingFinished();
+    this->trigger_outputs_updated();
+  }
 }
 
 } // namespace hesiod

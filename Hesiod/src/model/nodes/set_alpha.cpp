@@ -86,16 +86,17 @@ void SetAlpha::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void SetAlpha::compute()
 {
-  Q_EMIT this->computingStarted();
-
   LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
 
   hmap::HeightMapRGBA *p_in = HSD_GET_POINTER(this->in);
-  hmap::HeightMap     *p_alpha = HSD_GET_POINTER(this->alpha);
-  hmap::HeightMapRGBA *p_out = this->out->get_ref();
 
   if (p_in)
   {
+    Q_EMIT this->computingStarted();
+
+    hmap::HeightMap     *p_alpha = HSD_GET_POINTER(this->alpha);
+    hmap::HeightMapRGBA *p_out = this->out->get_ref();
+
     *p_out = *p_in;
 
     if (p_alpha)
@@ -107,11 +108,11 @@ void SetAlpha::compute()
     }
     else
       p_out->set_alpha(GET_ATTR_FLOAT("alpha"));
-  }
 
-  // propagate
-  Q_EMIT this->computingFinished();
-  this->trigger_outputs_updated();
+    // propagate
+    Q_EMIT this->computingFinished();
+    this->trigger_outputs_updated();
+  }
 }
 
 } // namespace hesiod

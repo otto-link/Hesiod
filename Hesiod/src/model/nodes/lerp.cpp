@@ -82,17 +82,17 @@ void Lerp::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void Lerp::compute()
 {
-  Q_EMIT this->computingStarted();
-
   LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
 
   hmap::HeightMap *p_a = HSD_GET_POINTER(this->a);
   hmap::HeightMap *p_b = HSD_GET_POINTER(this->b);
-  hmap::HeightMap *p_t = HSD_GET_POINTER(this->t);
-  hmap::HeightMap *p_out = this->out->get_ref();
 
   if (p_a && p_b)
   {
+    Q_EMIT this->computingStarted();
+    hmap::HeightMap *p_t = HSD_GET_POINTER(this->t);
+    hmap::HeightMap *p_out = this->out->get_ref();
+
     if (p_t)
       hmap::transform(*p_out,
                       *p_a,
@@ -106,11 +106,11 @@ void Lerp::compute()
                       *p_b,
                       [this](hmap::Array &out, hmap::Array &a, hmap::Array &b)
                       { out = hmap::lerp(a, b, GET_ATTR_FLOAT("t")); });
-  }
 
-  // propagate
-  Q_EMIT this->computingFinished();
-  this->trigger_outputs_updated();
+    // propagate
+    Q_EMIT this->computingFinished();
+    this->trigger_outputs_updated();
+  }
 }
 
 } // namespace hesiod

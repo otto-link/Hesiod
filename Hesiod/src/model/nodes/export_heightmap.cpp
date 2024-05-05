@@ -70,14 +70,14 @@ void ExportHeightmap::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void ExportHeightmap::compute()
 {
-  Q_EMIT this->computingStarted();
-
   LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
 
   hmap::HeightMap *p_in = HSD_GET_POINTER(this->in);
 
   if (p_in && GET_ATTR_BOOL("auto_export"))
   {
+    Q_EMIT this->computingStarted();
+
     std::string fname = GET_ATTR_FILENAME("fname");
 
     switch (GET_ATTR_MAPENUM("format"))
@@ -94,10 +94,10 @@ void ExportHeightmap::compute()
       p_in->to_array().to_raw_16bit(fname);
       break;
     }
-  }
 
-  // not output, do not propagate
-  Q_EMIT this->computingFinished();
+    // not output, do not propagate
+    Q_EMIT this->computingFinished();
+  }
 }
 
 } // namespace hesiod

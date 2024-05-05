@@ -74,15 +74,16 @@ void Clamp::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void Clamp::compute()
 {
-  Q_EMIT this->computingStarted();
-
   LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
 
   hmap::HeightMap *p_in = HSD_GET_POINTER(this->in);
-  hmap::HeightMap *p_out = this->out->get_ref();
 
   if (p_in)
   {
+    Q_EMIT this->computingStarted();
+
+    hmap::HeightMap *p_out = this->out->get_ref();
+
     // copy the input heightmap
     *p_out = *p_in;
 
@@ -117,11 +118,11 @@ void Clamp::compute()
         hmap::transform(*p_out,
                         [&crange](hmap::Array &x) { hmap::clamp_max(x, crange.y); });
     }
-  }
 
-  // propagate
-  Q_EMIT this->computingFinished();
-  this->trigger_outputs_updated();
+    // propagate
+    Q_EMIT this->computingFinished();
+    this->trigger_outputs_updated();
+  }
 }
 
 } // namespace hesiod

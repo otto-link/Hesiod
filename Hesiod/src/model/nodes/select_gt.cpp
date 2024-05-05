@@ -72,15 +72,16 @@ void SelectGt::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void SelectGt::compute()
 {
-  Q_EMIT this->computingStarted();
-
   LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
 
   hmap::HeightMap *p_in = HSD_GET_POINTER(this->in);
-  hmap::HeightMap *p_out = this->out->get_ref();
 
   if (p_in)
   {
+    Q_EMIT this->computingStarted();
+
+    hmap::HeightMap *p_out = this->out->get_ref();
+
     hmap::transform(*p_out,
                     *p_in,
                     [this](hmap::Array &out, hmap::Array &in)
@@ -96,11 +97,11 @@ void SelectGt::compute()
                            0.f,
                            true, // force remap
                            {0.f, 1.f});
-  }
 
-  // propagate
-  Q_EMIT this->computingFinished();
-  this->trigger_outputs_updated();
+    // propagate
+    Q_EMIT this->computingFinished();
+    this->trigger_outputs_updated();
+  }
 }
 
 } // namespace hesiod

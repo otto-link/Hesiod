@@ -63,26 +63,27 @@ void MakePeriodicStitching::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void MakePeriodicStitching::compute()
 {
-  Q_EMIT this->computingStarted();
-
   LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
 
   hmap::HeightMap *p_in = HSD_GET_POINTER(this->in);
-  hmap::HeightMap *p_out = this->out->get_ref();
 
   if (p_in)
   {
+    Q_EMIT this->computingStarted();
+
+    hmap::HeightMap *p_out = this->out->get_ref();
+
     hmap::Array in_array = p_in->to_array();
     hmap::Array out_array = hmap::Array(p_out->shape);
 
     out_array = hmap::make_periodic_stitching(in_array, GET_ATTR_FLOAT("overlap"));
 
     p_out->from_array_interp_nearest(out_array);
-  }
 
-  // propagate
-  Q_EMIT this->computingFinished();
-  this->trigger_outputs_updated();
+    // propagate
+    Q_EMIT this->computingFinished();
+    this->trigger_outputs_updated();
+  }
 }
 
 } // namespace hesiod
