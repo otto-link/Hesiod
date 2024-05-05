@@ -49,6 +49,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::GradientTalus, "Math/Gradient");
   HSD_REGISTER_NODE(hesiod::HeightMapToMask, "Converter");
   HSD_REGISTER_NODE(hesiod::HeightMapToRGBA, "Converter");
+  HSD_REGISTER_NODE(hesiod::HydraulicParticle, "Erosion/Hydraulic");
   HSD_REGISTER_NODE(hesiod::HydraulicStream, "Erosion/Hydraulic");
   HSD_REGISTER_NODE(hesiod::Inverse, "Math/Base");
   HSD_REGISTER_NODE(hesiod::Laplace, "Filter/Smoothing");
