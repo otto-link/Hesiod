@@ -1,0 +1,13 @@
+site_name: Hesiod Documentation
+
+theme:
+    name: null
+    custom_dir: 'docs/custom-theme/'
+
+nav:
+  - 'Start Here':
+    - 'index.md'
+  - 'Node Reference':
+    - 'node_reference/nodes.md'
+    - 'node_reference/categories.md'
+    - 'node_reference/nodes_registry.md'
