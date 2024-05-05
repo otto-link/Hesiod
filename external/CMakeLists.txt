@@ -2,8 +2,16 @@ project(external)
 
 include(args.cmake)
 
-set(BUILD_DOC OFF)
-set(BUILD_SANDBOX OFF)
+set(HIGHMAP_ENABLE_DOCS
+    OFF
+    CACHE BOOL "")
+set(HIGHMAP_ENABLE_EXAMPLES
+    OFF
+    CACHE BOOL "")
+set(HIGHMAP_ENABLE_TESTS
+    OFF
+    CACHE BOOL "")
+
 add_subdirectory(HighMap)
 
 set(BUILD_EXAMPLES
