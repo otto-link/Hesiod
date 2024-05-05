@@ -85,14 +85,8 @@ Try to install the package `glfw` or `glfw-devel`!
 ## Dependencies
 
 - https://github.com/otto-link/HighMap / A C++ library to generate two-dimensional terrain heightmaps for software rendering or video games.
-- https://github.com/otto-link/GNode / A generic node-based data structure for node graph programming in C++
 
-- https://github.com/ocornut/imgui / Dear ImGui: Bloat-free Graphical User interface for C++ with minimal dependencies
-- https://github.com/aiekick/ImGuiFileDialog / File Dialog for Dear ImGui
-- https://github.com/thedmd/imgui-node-editor / Node Editor built using Dear ImGui
-- https://github.com/Raais/ImguiCandy / Color utils, Themes and other cool stuff for Dear ImGui
+- https://github.com/paceholder/nodeeditor/tree/master / Qt Node Editor. Dataflow programming framework
 - https://github.com/dmcrodrigues/macro-logger / A simplified logging system using macros
-- https://github.com/USCiLab/cereal / A C++11 library for serialization
 - https://github.com/mgaillard/Noise / Dendry: A Procedural Model for Dendritic Patterns
-- https://github.com/yknishidate/WavefrontObjWriter / WavefrontObjWriter: A header-only library for C ++ that can efficiently create 3D objects by code
-- https://github.com/chen0040/cpp-spline / cpp-spline: Package provides C++ implementation of spline interpolation
+- https://github.com/Taywee/args / A simple header-only C++ argument parser library
