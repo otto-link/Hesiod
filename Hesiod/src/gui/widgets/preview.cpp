@@ -19,7 +19,7 @@ namespace hesiod
 
 Preview::Preview(BaseNode *p_node) : p_node(p_node)
 {
-  this->resize(HSD_PREVIEW_SHAPE, HSD_PREVIEW_SHAPE);
+  // this->resize(HSD_PREVIEW_SHAPE, HSD_PREVIEW_SHAPE);
   this->label = new QLabel(this);
   this->setStyleSheet("QLabel { background-color : black;}");
   this->update_image();
@@ -28,6 +28,8 @@ Preview::Preview(BaseNode *p_node) : p_node(p_node)
 void Preview::update_image()
 {
   QtNodes::NodeData *p_data = this->p_node->get_preview_data();
+
+  QImage preview_image;
 
   if (p_data)
   {
@@ -48,10 +50,10 @@ void Preview::update_image()
       }
 
       std::vector<uint8_t> img = hmap::colorize_grayscale(array);
-      QImage               preview_image = QImage(img.data(),
-                                    this->p_node->p_config->shape_preview.x,
-                                    this->p_node->p_config->shape_preview.y,
-                                    QImage::Format_Grayscale8);
+      preview_image = QImage(img.data(),
+                             this->p_node->p_config->shape_preview.x,
+                             this->p_node->p_config->shape_preview.y,
+                             QImage::Format_Grayscale8);
 
       this->label->setPixmap(QPixmap::fromImage(preview_image));
     }
@@ -68,10 +70,10 @@ void Preview::update_image()
       {
         std::vector<uint8_t> img = hmap::colorize_grayscale(array);
 
-        QImage preview_image = QImage(img.data(),
-                                      this->p_node->p_config->shape_preview.x,
-                                      this->p_node->p_config->shape_preview.y,
-                                      QImage::Format_Grayscale8);
+        preview_image = QImage(img.data(),
+                               this->p_node->p_config->shape_preview.x,
+                               this->p_node->p_config->shape_preview.y,
+                               QImage::Format_Grayscale8);
         this->label->setPixmap(QPixmap::fromImage(preview_image));
       }
       break;
@@ -84,10 +86,10 @@ void Preview::update_image()
                                                   hmap::cmap::magma,
                                                   false);
 
-        QImage preview_image = QImage(img.data(),
-                                      this->p_node->p_config->shape_preview.x,
-                                      this->p_node->p_config->shape_preview.y,
-                                      QImage::Format_RGB888);
+        preview_image = QImage(img.data(),
+                               this->p_node->p_config->shape_preview.x,
+                               this->p_node->p_config->shape_preview.y,
+                               QImage::Format_RGB888);
         this->label->setPixmap(QPixmap::fromImage(preview_image));
       }
       }
@@ -100,10 +102,10 @@ void Preview::update_image()
 
       std::vector<uint8_t> img = p_h->to_img_8bit(this->p_node->p_config->shape_preview);
 
-      QImage preview_image = QImage(img.data(),
-                                    this->p_node->p_config->shape_preview.x,
-                                    this->p_node->p_config->shape_preview.y,
-                                    QImage::Format_RGBA8888);
+      preview_image = QImage(img.data(),
+                             this->p_node->p_config->shape_preview.x,
+                             this->p_node->p_config->shape_preview.y,
+                             QImage::Format_RGBA8888);
 
       this->label->setPixmap(QPixmap::fromImage(preview_image));
     }
@@ -117,10 +119,10 @@ void Preview::update_image()
     std::vector<uint8_t> img(this->p_node->p_config->shape_preview.x *
                              this->p_node->p_config->shape_preview.y);
 
-    QImage preview_image = QImage(img.data(),
-                                  this->p_node->p_config->shape_preview.x,
-                                  this->p_node->p_config->shape_preview.y,
-                                  QImage::Format_Grayscale8);
+    preview_image = QImage(img.data(),
+                           this->p_node->p_config->shape_preview.x,
+                           this->p_node->p_config->shape_preview.y,
+                           QImage::Format_Grayscale8);
 
     this->label->setPixmap(QPixmap::fromImage(preview_image));
   }
