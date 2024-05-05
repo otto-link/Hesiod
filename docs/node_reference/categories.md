@@ -10,8 +10,8 @@ Node Categories
 |Comment||Comment|
 |Converter||HeightMapToMask, HeightMapToRGBA|
 |Debug||DataPreview|
-|Erosion|Hydraulic|HydraulicParticle, HydraulicRidge, HydraulicStream|
-|Erosion|Stratify|StratifyOblique|
+|Erosion|Hydraulic|HydraulicParticle, HydraulicRidge, HydraulicStream, HydraulicVpipes|
+|Erosion|Stratify|Stratify, StratifyOblique|
 |Features||Rugosity, ValleyWidth|
 |Filter|Range|Clamp, Remap, Rescale|
 |Filter|Recast|ExpandShrink, Fold, NormalDisplacement, RecastCliff|

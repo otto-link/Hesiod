@@ -5,26 +5,32 @@ from mdutils.tools import Image
 import os
 import sys
 
+BUILD_PATH = "build"
+NODE_SNAPSHOT_PATH = "docs/images/nodes/"
+NODE_MARKDOWN_PATH = "docs/node_reference/"
+
 if __name__ == "__main__":
-    workdir = sys.argv[-1]
+
+    img_relative_path = os.path.relpath(NODE_SNAPSHOT_PATH, NODE_MARKDOWN_PATH)
+
+    print(img_relative_path)
     
-    if not(os.path.isdir(workdir)):
-        print("something's wrong with the input arguments...")
-        print("python3 {} [workdir]".format(os.path.basename(__file__)))
-        exit(1)
+    # --- generate snapshots and data
 
-    print("workdir is: {}".format(workdir))
+    print("generating snapshots...")
 
+    os.system("cd {} ; bin/./hesiod --snapshot".format(BUILD_PATH))
+    
     # --- retrieve data from json file
 
-    fname = os.path.join(workdir, "nodes_description.json")
+    fname = os.path.join(BUILD_PATH, "nodes_description.json")
 
     with open(fname, "r") as f:
         data = json.load(f)
     
     # --- categories
 
-    md_file = MdUtils(file_name=os.path.join(workdir, "categories"),
+    md_file = MdUtils(file_name=os.path.join(NODE_MARKDOWN_PATH, "categories"),
                       title="Node Categories")
 
     md_file.new_header(level=1, title="Categories")
@@ -71,7 +77,7 @@ if __name__ == "__main__":
     
     # --- all nodes
     
-    md_file = MdUtils(file_name=os.path.join(workdir, "nodes"),
+    md_file = MdUtils(file_name=os.path.join(NODE_MARKDOWN_PATH, "nodes"),
                       title="Node Reference")
 
     md_file.new_header(level=1, title="Some kind of introduction")
@@ -85,8 +91,10 @@ if __name__ == "__main__":
                 
         md_file.new_paragraph(data[node_type]["description"])
 
+        img_fname = os.path.join(img_relative_path, data[node_type]["snapshot"])
+        
         md_file.new_paragraph(Image.Image.new_inline_image(text="img",
-                                                     path='../images/nodes/' + data[node_type]["snapshot"]))
+                                                           path=img_fname))
 
         md_file.new_line()
         md_file.new_header(level=3, title="Category")

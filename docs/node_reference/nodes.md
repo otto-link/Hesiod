@@ -1295,6 +1295,49 @@ Erosion/Hydraulic
 |radius|Float|Carving kernel radius.|
 |talus_ref|Float|Reference talus, with small values of talus_ref  leading to thinner flow streams.|
 
+## HydraulicVpipes
+
+
+HydraulicVpipes performs hydraulic erosion using a virtual pipe algorithm, which is a method that simulates erosion and sediment transport processes by mimicking the behavior of water flowing through a network of virtual pipes. This approach models erosion based on the principles of fluid dynamics and sediment transport, while also considering the local topography of the terrain represented by the input heightmap.
+
+![img](../images/nodes/HydraulicVpipes.png)  
+
+### Category
+
+
+Erosion/Hydraulic  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Input heightmap.|
+|bedrock|HeightMapData|Bedrock elevation, erosion process cannot carve the heightmap further down this point.|
+|moisture|HeightMapData|Moisture map, influences the amount of water locally deposited.|
+|mask|HeightMapData|Mask defining the filtering intensity (expected in [0, 1]).|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Eroded heightmap.|
+|erosion map|HeightMapData|Erosion map|
+|depo. map|HeightMapData|Deposition map|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|c_capacity|Float|Particle capacity.|
+|c_deposition|Float|Particle deposition coefficient.|
+|c_erosion|Float|Particle erosion cofficient.|
+|evap_rate|Float|Particle water evaporation rate.|
+|iterations|Integer|Number of simulation iterations.|
+|rain_rate|Float|Water evaporation rate.|
+|water_height|Float|Total water height..|
+
 ## Inverse
 
 
@@ -2784,6 +2827,44 @@ Primitive/Function
 |center.x|Float|Center x coordinate.|
 |center.y|Float|Center y coordinate.|
 |talus_global|Float|Step slope.|
+
+## Stratify
+
+
+Stratify adds horizontal stratifications to the input heightmap.
+
+![img](../images/nodes/Stratify.png)  
+
+### Category
+
+
+Erosion/Stratify  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Input heightmap.|
+|noise|HeightMapData|Local elevation noise, value range expected to be scaled with the one of the input heightmap.|
+|mask|HeightMapData|Mask defining the filtering intensity (expected in [0, 1]).|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Eroded heightmap.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|gamma|Float|Reference value for the gamma correction applied to each strata, influence the cliff elevation profile.|
+|gamma_noise|Float|Noise range for the gamma value.|
+|n_strata|Integer|Numbner of strata.|
+|seed|Random seed|Random seed number.|
+|strata_noise|Float|Noise range for the strata elevations.|
 
 ## StratifyOblique
 
