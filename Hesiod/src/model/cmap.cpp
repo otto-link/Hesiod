@@ -21,6 +21,9 @@ bool load_colormap_data_from_file(std::filesystem::path cmap_path)
 {
   if(std::filesystem::exists(cmap_path) == false) return false;
 
+  available_loaded_colormaps_mapping.clear();
+  available_loaded_colormaps.clear();
+
   std::ifstream cmapStream = std::ifstream(cmap_path);
 
   if(cmapStream.bad()) return false;
