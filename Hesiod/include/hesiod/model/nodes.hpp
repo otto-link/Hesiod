@@ -961,6 +961,31 @@ protected:
 };
 
 /**
+ * @brief HydraulicVpipes class.
+ */
+class HydraulicVpipes : public BaseNode
+{
+public:
+  HydraulicVpipes(const ModelConfig *p_config);
+
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_color() { return this->mask.lock().get(); }
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data,
+                 QtNodes::PortIndex                 port_index) override;
+
+protected:
+  std::weak_ptr<HeightMapData>   in, bedrock, moisture_map, mask;
+  std::shared_ptr<HeightMapData> out, erosion_map, deposition_map;
+};
+
+/**
  * @brief Inverse class.
  */
 class Inverse : public BaseNode
