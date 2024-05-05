@@ -4,6 +4,8 @@ include(args.cmake)
 
 set(BUILD_DOC OFF)
 set(BUILD_SANDBOX OFF)
+set(HIGHMAP_ENABLE_EXAMPLES OFF)
+
 add_subdirectory(HighMap)
 
 set(BUILD_EXAMPLES
@@ -22,3 +24,4 @@ if(UNIX AND NOT APPLE)
 endif()
 
 add_subdirectory(nodeeditor)
+add_subdirectory(json)

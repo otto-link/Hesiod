@@ -1,6 +1,8 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include "hesiod/model/cmap.hpp"
+#include <filesystem>
 typedef unsigned int uint;
 #include <QApplication>
 #include <QDebug>
@@ -65,6 +67,12 @@ int main(int argc, char *argv[])
       "overlap",
       "Tile overlapping ratio (in [0, 1[), ex. --overlap=0.25",
       {"overlap"});
+
+  if(hesiod::load_colormap_data_from_file(std::filesystem::current_path() / "resources/colormap.json") == false)
+  {
+    LOG_ERROR("Failed to colormap data from file!");
+    return -1;
+  }
 
   try
   {

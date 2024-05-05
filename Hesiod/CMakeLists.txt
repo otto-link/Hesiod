@@ -38,4 +38,12 @@ target_link_libraries(
           Qt5::Core
           Qt5::Widgets
           macro-logger::macro-logger
-          QtNodes::QtNodes)
+          QtNodes::QtNodes
+          nlohmann_json::nlohmann_json)
+
+add_custom_command(
+  TARGET ${PROJECT_NAME} POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy_directory
+      "${CMAKE_CURRENT_SOURCE_DIR}/resources"
+      "${EXECUTABLE_OUTPUT_PATH}/resources"
+)

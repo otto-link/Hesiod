@@ -13,3 +13,6 @@
 [submodule "external/nodeeditor"]
 	path = external/nodeeditor
 	url = git@github.com:paceholder/nodeeditor.git
+[submodule "external/json"]
+	path = external/json
+	url = https://github.com/nlohmann/json.git
