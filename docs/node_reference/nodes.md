@@ -2197,6 +2197,38 @@ Filter/Recurve
 |Name|Type|Description|
 | :--- | :--- | :--- |
 
+## RelativeElevation
+
+
+RelativeElevation identifies heightmap relative elevation based on the surrounding heightmap values.
+
+![img](../images/nodes/RelativeElevation.png)  
+
+### Category
+
+
+Features  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Input heightmap.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Relative elevation.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|radius|Float|Filter radius with respect to the domain size.|
+
 ## Remap
 
 
@@ -2285,7 +2317,7 @@ Features
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Valley width heightmap.|
+|output|HeightMapData|Rugosity.|
   
 
 ### Parameters
