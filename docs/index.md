@@ -14,6 +14,12 @@ Standalone executables for Windows and Linux are available on [sourceforge.net/p
 - For Windows user: unzip the archive and execute `hesiod.exe`.
 - For Linux user: make the AppImage executable with the command line `chmod a+x hesiod.AppImage` or enable something like `Allow executing file as program` in your file explorer.
 
+Batch mode execution allows headless computation of the graph nodes and modification of the main parameters:
+
+```
+bin/./hesiod --batch graph_made_with_the_gui.hsd --shape=1024,1024 --tiling=1,1 --overlap=0
+```
+
 ## For developpers 
 
 As an open-source tool, hosted on [github.com/otto-link/Hesiod](https://github.com/otto-link/Hesiod), Hesiod greatly encourages contributions. Developers and enthusiasts are welcome to improve existing features, add new capabilities, or fix bugs, enhancing the tool's functionality and broadening its application scope.
