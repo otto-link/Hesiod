@@ -73,6 +73,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::NormalDisplacement, "Filter/Recast");
   HSD_REGISTER_NODE(hesiod::Opening, "Operator/Morphology");
   HSD_REGISTER_NODE(hesiod::Path, "Geometry/Cloud");
+  HSD_REGISTER_NODE(hesiod::PathFractalize, "Geometry/Cloud");
   HSD_REGISTER_NODE(hesiod::Plateau, "Filter/Recurve");
   HSD_REGISTER_NODE(hesiod::QuiltingExpand, "Operator/Expand");
   HSD_REGISTER_NODE(hesiod::QuiltingShuffle, "Operator/Resynthesis");

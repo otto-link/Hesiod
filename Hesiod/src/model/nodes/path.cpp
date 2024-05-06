@@ -23,7 +23,8 @@ Path::Path(const ModelConfig *p_config) : BaseNode(p_config)
 
   // attributes
   this->attr["path"] = NEW_ATTR_PATH();
-  this->attr_ordered_key = {"path"};
+  this->attr["closed"] = NEW_ATTR_BOOL(false);
+  this->attr_ordered_key = {"path", "closed"};
 
   // update
   if (this->p_config->compute_nodes_at_instanciation)
@@ -39,6 +40,8 @@ Path::Path(const ModelConfig *p_config) : BaseNode(p_config)
   this->output_descriptions = {"Set of directed points (x, y) and elevations z."};
 
   this->attribute_descriptions["path"] = "Path data.";
+  this->attribute_descriptions
+      ["closed"] = "Decides whether the path is open and closed on itself.";
 }
 
 std::shared_ptr<QtNodes::NodeData> Path::outData(QtNodes::PortIndex /* port_index */)
@@ -59,7 +62,10 @@ void Path::compute()
 
   LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
 
-  *this->out->get_ref() = GET_ATTR_PATH("path");
+  hmap::Path *p_out = this->out->get_ref();
+
+  *p_out = GET_ATTR_PATH("path");
+  p_out->closed = GET_ATTR_BOOL("closed");
 
   // propagate
   Q_EMIT this->computingFinished();
