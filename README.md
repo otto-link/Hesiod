@@ -7,7 +7,7 @@ A desktop application for node-based procedural terrain generation.
 >[!WARNING] 
 > Work in progress, use at your own risk!
 
-![demo_screenshot](https://github.com/otto-link/Hesiod/assets/121820229/10197187-e983-4b50-a50e-04e27ef30e2b)
+![demo_screenshot](docs/images/demo_screenshot.png)
 
 
 ## License
