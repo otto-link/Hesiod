@@ -72,10 +72,10 @@ void RelativeElevation::compute()
     Q_EMIT this->computingStarted();
 
     hmap::HeightMap *p_out = this->out->get_ref();
-    
+
     // copy the input heightmap
     *p_out = *p_in;
-    
+
     int ir = std::max(1, (int)(GET_ATTR_FLOAT("radius") * p_out->shape.x));
 
     hmap::transform(*p_out,
@@ -83,7 +83,7 @@ void RelativeElevation::compute()
 
     p_out->smooth_overlap_buffers();
     p_out->remap();
-    
+
     // propagate
     Q_EMIT this->computingFinished();
     this->trigger_outputs_updated();
