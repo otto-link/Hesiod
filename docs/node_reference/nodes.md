@@ -1338,6 +1338,38 @@ Erosion/Hydraulic
 |rain_rate|Float|Water evaporation rate.|
 |water_height|Float|Total water height..|
 
+## ImportHeightmap
+
+
+ImportHeightmap .
+
+![img](../images/nodes/ImportHeightmap.png)  
+
+### Category
+
+
+IO/Files  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|texture|HeightMapData|Texture (RGBA).|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|fname|Filename|Import file name.|
+|remap|Bool|Remap imported heightmap elevation to [0, 1].|
+
 ## Inverse
 
 
