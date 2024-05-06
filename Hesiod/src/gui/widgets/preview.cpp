@@ -120,15 +120,31 @@ void Preview::update_image()
       if (path.get_npoints() > 0)
       {
         hmap::Vec4<float> bbox = hmap::Vec4<float>(0.f, 1.f, 0.f, 1.f);
-        path.set_values(1.f);
+
+        float vmin = path.get_values_min();
+        float eps = 1e-1f;
+        for (auto &p : path.points)
+          p.v += -vmin + eps;
+
         path.to_array(array, bbox);
       }
 
-      std::vector<uint8_t> img = hmap::colorize_grayscale(array);
+      // std::vector<uint8_t> img = hmap::colorize_grayscale(array);
+      // preview_image = QImage(img.data(),
+      //                        this->p_node->p_config->shape_preview.x,
+      //                        this->p_node->p_config->shape_preview.y,
+      //                        QImage::Format_Grayscale8);
+
+      std::vector<uint8_t> img = hmap::colorize(array,
+                                                array.min(),
+                                                array.max(),
+                                                hmap::cmap::magma,
+                                                false);
+
       preview_image = QImage(img.data(),
                              this->p_node->p_config->shape_preview.x,
                              this->p_node->p_config->shape_preview.y,
-                             QImage::Format_Grayscale8);
+                             QImage::Format_RGB888);
 
       this->label->setPixmap(QPixmap::fromImage(preview_image));
     }

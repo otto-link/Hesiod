@@ -242,7 +242,7 @@ int main(int argc, char *argv[])
   attr["path"] = NEW_ATTR_PATH();
 
   hesiod::AttributesWidget *sw = new hesiod::AttributesWidget(&attr);
-  sw->show();
+  // sw->show();
 
   // ---
 

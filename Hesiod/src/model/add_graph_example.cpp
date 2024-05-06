@@ -77,6 +77,24 @@ QtNodes::NodeId add_graph_example(HsdDataFlowGraphModel *p_model,
     return node_id2;
   }
   //
+  else if (node_type == "Path")
+  {
+    QtNodes::NodeId node_id1 = p_model->addNode(QString::fromStdString(node_type));
+
+    {
+      hmap::Path path = hmap::Path(5, 0);
+      path.reorder_nns();
+
+      Path *p_node = p_model->delegateModel<Path>(node_id1);
+      p_node->attr.at("path")->get_ref<PathAttribute>()->value = path;
+      p_node->compute();
+    }
+
+    p_model->setNodeData(node_id1, QtNodes::NodeRole::Position, QPointF(0.f, 0.f));
+
+    return node_id1;
+  }
+  //
   else if (node_type == "Blend" || node_type == "CombineMask")
   {
     QtNodes::NodeId node_id1 = p_model->addNode("NoiseFbm");
