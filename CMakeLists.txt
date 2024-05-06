@@ -3,7 +3,7 @@ project(hesiod-root)
 
 # dont forget to remove the CMakeCache.txt in the build dir if options are
 # changed
-option(HESIOD_ENABLE_GENERATE_APP_IMAGE "" OFF)
+option(HESIOD_ENABLE_GENERATE_APP_IMAGE "" ON)
 
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 
