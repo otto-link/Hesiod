@@ -10,6 +10,8 @@
 #include <QLabel>
 #include <QListWidget>
 #include <QOpenGLFunctions>
+#include <QOpenGLShaderProgram>
+#include <QOpenGLVertexArrayObject>
 #include <QOpenGLWidget>
 #include <QPainter>
 #include <QPlainTextEdit>
@@ -438,14 +440,19 @@ private:
 class HmapGLViewer : public QOpenGLWidget, protected QOpenGLFunctions
 {
 public:
+  bool render_texture = true;
+  bool render_mask = true;
+
   HmapGLViewer(ModelConfig       *p_config,
                QtNodes::NodeData *p_data,
                QtNodes::NodeData *p_color = nullptr,
                QWidget           *parent = nullptr);
 
-  void set_data(QtNodes::NodeData *new_p_data, QtNodes::NodeData *new_p_color);
-
   void reset();
+
+  void set_data_forced();
+
+  void set_data(QtNodes::NodeData *new_p_data, QtNodes::NodeData *new_p_color);
 
 protected:
   void initializeGL() override;
@@ -465,10 +472,15 @@ private:
   QtNodes::NodeData *p_color;
 
   std::vector<GLfloat> vertices = {};
-  std::vector<GLfloat> colors = {};
-  GLuint               shader_program;
-  GLuint               vbo_vertices;
-  GLuint               vbo_colors;
+  std::vector<uint>    indices = {};
+  std::vector<uint8_t> texture_img = {};
+  hmap::Vec2<int>      texture_shape = hmap::Vec2<int>(0, 0);
+
+  QOpenGLVertexArrayObject qvao;
+  QOpenGLShaderProgram     shader;
+  GLuint                   vbo;
+  GLuint                   ebo;
+  GLuint                   texture_id;
 
   // view parameters
   float scale = 0.7f;

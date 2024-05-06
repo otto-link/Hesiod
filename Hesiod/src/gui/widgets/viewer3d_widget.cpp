@@ -5,6 +5,7 @@
 
 #include <QCheckBox>
 #include <QComboBox>
+#include <QTimer>
 
 #include "highmap/heightmap.hpp"
 #include "highmap/io.hpp"
@@ -73,17 +74,35 @@ Viewer3dWidget::Viewer3dWidget(ModelConfig                    *p_config,
     layout->addWidget(this->checkbox_texture, 0, 2);
   }
 
+  {
+    this->checkbox_mask = new QCheckBox("Render mask");
+    this->checkbox_mask->setChecked(true);
+    layout->addWidget(this->checkbox_mask, 0, 3);
+  }
+
   // openGL widget
   {
     this->gl_viewer = new HmapGLViewer(this->p_config, nullptr);
-    layout->addWidget(this->gl_viewer, 1, 0, 1, 3);
+    layout->addWidget(this->gl_viewer, 1, 0, 1, 4);
   }
 
   this->setLayout(layout);
 
   connect(this->checkbox_texture,
           &QCheckBox::stateChanged,
-          [this]() { this->update_viewport(); });
+          [this]()
+          {
+            this->gl_viewer->render_texture = this->checkbox_texture->checkState();
+            this->update_viewport();
+          });
+
+  connect(this->checkbox_mask,
+          &QCheckBox::stateChanged,
+          [this]()
+          {
+            this->gl_viewer->render_mask = this->checkbox_mask->checkState();
+            this->update_viewport();
+          });
 }
 
 void Viewer3dWidget::on_node_deleted(QtNodes::NodeId const node_id)
@@ -103,6 +122,7 @@ void Viewer3dWidget::reset()
   this->current_node_id = std::numeric_limits<uint>::max();
   this->checkbox_pin_node->setChecked(false);
   this->checkbox_texture->setChecked(true);
+  this->checkbox_mask->setChecked(true);
   this->gl_viewer->reset();
 };
 
@@ -115,14 +135,17 @@ void Viewer3dWidget::resizeEvent(QResizeEvent *event)
 void Viewer3dWidget::update_after_computing(QtNodes::NodeId const node_id)
 {
   if (node_id == this->current_node_id)
-
     this->update_viewport(node_id);
 }
 
 void Viewer3dWidget::showEvent(QShowEvent *event)
 {
   QWidget::showEvent(event);
-  this->update_viewport();
+
+  // fix me - seems to be some kind of conflicts between the update of
+  // the OpenGL content and the "showing" decoration effect of the
+  // widget, OpenGL needs to wait a bit to make sure it is rendered
+  QTimer::singleShot(50, [this]() { this->update_viewport(); });
 }
 
 void Viewer3dWidget::update_viewport(QtNodes::NodeId const node_id)
@@ -138,11 +161,7 @@ void Viewer3dWidget::update_viewport(QtNodes::NodeId const node_id)
     hesiod::BaseNode *p_node = this->p_model->delegateModel<hesiod::BaseNode>(
         this->current_node_id);
     p_data = p_node->get_viewer3d_data();
-
-    if (this->checkbox_texture->isChecked())
-      p_color = p_node->get_viewer3d_color();
-    else
-      p_color = nullptr;
+    p_color = p_node->get_viewer3d_color();
   }
 
   if (this->isVisible())
