@@ -239,8 +239,10 @@ int main(int argc, char *argv[])
 
   attr["color_vec"] = NEW_ATTR_COLORGRADIENT(gradient);
 
+  attr["path"] = NEW_ATTR_PATH();
+
   hesiod::AttributesWidget *sw = new hesiod::AttributesWidget(&attr);
-  // sw->show();
+  sw->show();
 
   // ---
 

@@ -13,6 +13,7 @@
 #include "hesiod/data/cloud_data.hpp"
 #include "hesiod/data/heightmap_data.hpp"
 #include "hesiod/data/heightmap_rgba_data.hpp"
+#include "hesiod/data/path_data.hpp"
 #include "hesiod/model/base_node.hpp"
 #include "hesiod/model/enum_mapping.hpp"
 
@@ -1485,6 +1486,29 @@ public:
 protected:
   std::weak_ptr<HeightMapData>   in;
   std::shared_ptr<HeightMapData> out;
+};
+
+/**
+ * @brief Path class.
+ */
+class Path : public BaseNode
+{
+public:
+  Path(const ModelConfig *p_config);
+
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return nullptr; }
+  QtNodes::NodeData *get_viewer3d_data() { return nullptr; }
+  QtNodes::NodeData *get_viewer3d_color() { return nullptr; }
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data, QtNodes::PortIndex port_index);
+
+protected:
+  std::shared_ptr<PathData> out;
 };
 
 /**

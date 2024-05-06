@@ -12,6 +12,7 @@
 #include "hesiod/data/cloud_data.hpp"
 #include "hesiod/data/heightmap_data.hpp"
 #include "hesiod/data/heightmap_rgba_data.hpp"
+#include "hesiod/data/path_data.hpp"
 #include "hesiod/gui/preview.hpp"
 
 namespace hesiod
@@ -109,10 +110,33 @@ void Preview::update_image()
 
       this->label->setPixmap(QPixmap::fromImage(preview_image));
     }
+    //
+    else if (p_data->type().id.compare("PathData") == 0)
+    {
+      PathData   *p_cdata = static_cast<PathData *>(p_data);
+      hmap::Path  path = *static_cast<hmap::Path *>(p_cdata->get_ref());
+      hmap::Array array = hmap::Array(this->p_node->p_config->shape_preview);
+
+      if (path.get_npoints() > 0)
+      {
+        hmap::Vec4<float> bbox = hmap::Vec4<float>(0.f, 1.f, 0.f, 1.f);
+        path.set_values(1.f);
+        path.to_array(array, bbox);
+      }
+
+      std::vector<uint8_t> img = hmap::colorize_grayscale(array);
+      preview_image = QImage(img.data(),
+                             this->p_node->p_config->shape_preview.x,
+                             this->p_node->p_config->shape_preview.y,
+                             QImage::Format_Grayscale8);
+
+      this->label->setPixmap(QPixmap::fromImage(preview_image));
+    }
     else
       LOG_ERROR("no preview available for the requested data type: [%s]",
                 p_data->type().id.toStdString().c_str());
   }
+  //
   else
   {
     // black image if no data available

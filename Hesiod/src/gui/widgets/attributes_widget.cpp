@@ -157,6 +157,16 @@ AttributesWidget::AttributesWidget(
       }
       break;
 
+      case (AttributeType::PATH):
+      {
+        PathWidget *widget = new PathWidget((PathAttribute *)p_attr);
+        connect(widget,
+                &PathWidget::value_changed,
+                [this]() { Q_EMIT this->value_changed(); });
+        layout->addWidget(widget, row, 1);
+      }
+      break;
+
       case (AttributeType::RANGE):
       {
         RangeWidget *widget = new RangeWidget((RangeAttribute *)p_attr);

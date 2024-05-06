@@ -210,7 +210,7 @@ Operator/Morphology
 ## Cloud
 
 
-Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.
+Set of points.
 
 ![img](../images/nodes/Cloud.png)  
 
@@ -1341,7 +1341,7 @@ Erosion/Hydraulic
 ## ImportHeightmap
 
 
-ImportHeightmap .
+ImportHeightmap imports an heighmap from a grayscale PNG 8bit file.
 
 ![img](../images/nodes/ImportHeightmap.png)  
 
@@ -1360,7 +1360,7 @@ IO/Files
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|texture|HeightMapData|Texture (RGBA).|
+|texture|HeightMapData|Heightmap.|
   
 
 ### Parameters
@@ -2015,6 +2015,37 @@ Operator/Morphology
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |radius|Float|Filter radius with respect to the domain size.|
+
+## Path
+
+
+Polyline definition.
+
+![img](../images/nodes/Path.png)  
+
+### Category
+
+
+Geometry/Cloud  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|path|PathData|Set of directed points (x, y) and elevations z.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|path|HighMap Path object|Path data.|
 
 ## Plateau
 
