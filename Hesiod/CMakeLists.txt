@@ -22,8 +22,7 @@ target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
 target_include_directories(${PROJECT_NAME} PRIVATE ${HESIOD_INCLUDE})
 
 target_precompile_headers(
-  ${PROJECT_NAME}
-  PRIVATE
+  ${PROJECT_NAME} PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}/include/hesiod/model/attributes.hpp)
 
 # Link libraries
@@ -31,11 +30,8 @@ target_link_libraries(
   ${PROJECT_NAME}
   PRIVATE args
           highmap
-          glfw
-          OpenGL::GL
-          GLEW::GLEW
-          GLUT::GLUT
           Qt5::Core
+          Qt5::OpenGL
           Qt5::Widgets
           macro-logger::macro-logger
           QtNodes::QtNodes)

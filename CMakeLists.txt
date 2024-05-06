@@ -32,12 +32,7 @@ add_definitions("-DBOOST_BIND_GLOBAL_PLACEHOLDERS")
 set(CMAKE_CXX_STANDARD 20)
 
 # --- Dear ImGui
-find_package(glfw3 REQUIRED)
-set(OpenGL_GL_PREFERENCE LEGACY)
-find_package(OpenGL REQUIRED)
-find_package(GLEW REQUIRED)
-find_package(GLUT REQUIRED)
-find_package(Qt5 REQUIRED COMPONENTS Core Widgets)
+find_package(Qt5 REQUIRED COMPONENTS Core Widgets OpenGL)
 
 add_subdirectory(external)
 
