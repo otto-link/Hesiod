@@ -53,6 +53,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::HydraulicRidge, "Erosion/Hydraulic");
   HSD_REGISTER_NODE(hesiod::HydraulicStream, "Erosion/Hydraulic");
   HSD_REGISTER_NODE(hesiod::HydraulicVpipes, "Erosion/Hydraulic");
+  HSD_REGISTER_NODE(hesiod::ImportHeightmap, "IO/Files");
   HSD_REGISTER_NODE(hesiod::Inverse, "Math/Base");
   HSD_REGISTER_NODE(hesiod::Laplace, "Filter/Smoothing");
   HSD_REGISTER_NODE(hesiod::Lerp, "Operator/Blend");
@@ -78,6 +79,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::RecastCliff, "Filter/Recast");
   HSD_REGISTER_NODE(hesiod::RecurveKura, "Filter/Recurve");
   HSD_REGISTER_NODE(hesiod::RecurveS, "Filter/Recurve");
+  HSD_REGISTER_NODE(hesiod::RelativeElevation, "Features");
   HSD_REGISTER_NODE(hesiod::Rescale, "Filter/Range");
   HSD_REGISTER_NODE(hesiod::Rugosity, "Features");
   HSD_REGISTER_NODE(hesiod::Saturate, "Filter/Recurve");

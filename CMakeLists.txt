@@ -4,7 +4,6 @@ project(hesiod-root)
 # dont forget to remove the CMakeCache.txt in the build dir if options are
 # changed
 option(HESIOD_ENABLE_GENERATE_APP_IMAGE "" OFF)
-option(HESIOD_ENABLE_DOXYGEN "" ON)
 
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 
@@ -47,8 +46,3 @@ add_subdirectory(Hesiod)
 if(HESIOD_ENABLE_GENERATE_APP_IMAGE)
   add_subdirectory(scripts/generate_appimage)
 endif(HESIOD_ENABLE_GENERATE_APP_IMAGE)
-
-# documentation
-if(HESIOD_ENABLE_DOXYGEN)
-  add_subdirectory(${PROJECT_SOURCE_DIR}/doc)
-endif(HESIOD_ENABLE_DOXYGEN)

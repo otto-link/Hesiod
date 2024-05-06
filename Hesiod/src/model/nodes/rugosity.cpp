@@ -50,7 +50,7 @@ Rugosity::Rugosity(const ModelConfig *p_config) : BaseNode(p_config)
                       "irregularity of the surface.";
 
   this->input_descriptions = {"Input heightmap."};
-  this->output_descriptions = {"Valley width heightmap."};
+  this->output_descriptions = {"Rugosity."};
 
   this->attribute_descriptions
       ["radius"] = "Filter radius with respect to the domain size.";

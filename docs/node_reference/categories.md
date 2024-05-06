@@ -10,15 +10,15 @@ Node Categories
 |Comment||Comment|
 |Converter||HeightMapToMask, HeightMapToRGBA|
 |Debug||DataPreview|
-|Erosion|Hydraulic|HydraulicParticle, HydraulicRidge, HydraulicStream|
-|Erosion|Stratify|StratifyOblique|
-|Features||Rugosity, ValleyWidth|
+|Erosion|Hydraulic|HydraulicParticle, HydraulicRidge, HydraulicStream, HydraulicVpipes|
+|Erosion|Stratify|Stratify, StratifyOblique|
+|Features||RelativeElevation, Rugosity, ValleyWidth|
 |Filter|Range|Clamp, Remap, Rescale|
 |Filter|Recast|ExpandShrink, Fold, NormalDisplacement, RecastCliff|
 |Filter|Recurve|Gain, GammaCorrection, GammaCorrectionLocal, Plateau, RecurveKura, RecurveS, Saturate|
 |Filter|Smoothing|Laplace, Median3x3, SharpenCone, SmoothCpulse, SmoothFill, SmoothFillHoles, SmoothFillSmearPeaks|
 |Geometry|Cloud|Cloud|
-|IO|Files|ExportAsset, ExportHeightmap, ExportNormalMap, ExportTexture|
+|IO|Files|ExportAsset, ExportHeightmap, ExportNormalMap, ExportTexture, ImportHeightmap|
 |Mask|Adjust|ScanMask|
 |Mask|Selector|SelectCavities, SelectGt, SelectInterval, SelectPulse|
 |Math|Base|Abs, AbsSmooth, Cos, Inverse, Smoothstep3, Smoothstep5|
