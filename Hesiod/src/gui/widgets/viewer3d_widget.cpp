@@ -130,6 +130,7 @@ void Viewer3dWidget::resizeEvent(QResizeEvent *event)
 {
   QWidget::resizeEvent(event);
   Q_EMIT this->resized(event->size().width(), event->size().height());
+  this->update_viewport();
 }
 
 void Viewer3dWidget::update_after_computing(QtNodes::NodeId const node_id)
@@ -141,11 +142,7 @@ void Viewer3dWidget::update_after_computing(QtNodes::NodeId const node_id)
 void Viewer3dWidget::showEvent(QShowEvent *event)
 {
   QWidget::showEvent(event);
-
-  // fix me - seems to be some kind of conflicts between the update of
-  // the OpenGL content and the "showing" decoration effect of the
-  // widget, OpenGL needs to wait a bit to make sure it is rendered
-  QTimer::singleShot(50, [this]() { this->update_viewport(); });
+  this->update_viewport();
 }
 
 void Viewer3dWidget::update_viewport(QtNodes::NodeId const node_id)
