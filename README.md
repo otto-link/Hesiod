@@ -1,7 +1,7 @@
 # Hesiod
 
 A desktop application for node-based procedural terrain generation.
-- documentation: [https://hesioddocumentation.readthedocs.io](https://hesioddoc.readthedocs.io/)
+- documentation: https://hesioddoc.readthedocs.io
 - binaries: https://sourceforge.net/projects/hesiod
 
 >[!WARNING] 
