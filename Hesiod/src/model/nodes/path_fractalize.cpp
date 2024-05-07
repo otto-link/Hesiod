@@ -44,7 +44,7 @@ PathFractalize::PathFractalize(const ModelConfig *p_config) : BaseNode(p_config)
                       "mimicking fractal characteristics.";
 
   this->input_descriptions = {"Input path."};
-  this->output_descriptions = {"Binary path."};
+  this->output_descriptions = {"Output path."};
 
   this->attribute_descriptions
       ["iterations"] = "Number of mid-point displacement iterations.";

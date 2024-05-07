@@ -2048,6 +2048,72 @@ Geometry/Cloud
 |closed|Bool|Decides whether the path is open and closed on itself.|
 |path|HighMap Path object|Path data.|
 
+## PathBezier
+
+
+PathBezier uses Bezier interpolation to replace sharp angles and straight segments with smooth, flowing curves.
+
+![img](../images/nodes/PathBezier.png)  
+
+### Category
+
+
+Geometry/Cloud  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|PathData|Input path.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|PathData|Output path.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|curvature_ratio|Float|Amount of curvature (usually in [-1, 1] and commonly > 0).|
+|edge_divisions|Integer|Edge sub-divisions of each edge. After the operation, the path is remeshed based on this new sub-division.|
+
+## PathBezierRound
+
+
+PathBezierRound uses Bezier interpolation to replace sharp angles and straight segments with smooth, round and flowing curves. PathBezierRound is an alternative to PathBezier.
+
+![img](../images/nodes/PathBezierRound.png)  
+
+### Category
+
+
+Geometry/Cloud  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|PathData|Input path.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|PathData|Output path.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|curvature_ratio|Float|Amount of curvature (usually in [-1, 1] and commonly > 0).|
+|edge_divisions|Integer|Edge sub-divisions of each edge. After the operation, the path is remeshed based on this new sub-division.|
+
 ## PathFractalize
 
 
@@ -2071,7 +2137,7 @@ Geometry/Cloud
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|PathData|Binary path.|
+|output|PathData|Output path.|
   
 
 ### Parameters

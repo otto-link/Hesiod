@@ -1512,6 +1512,54 @@ protected:
 };
 
 /**
+ * @brief PathBezier class.
+ */
+class PathBezier : public BaseNode
+{
+public:
+  PathBezier(const ModelConfig *p_config);
+
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return nullptr; }
+  QtNodes::NodeData *get_viewer3d_data() { return nullptr; }
+  QtNodes::NodeData *get_viewer3d_color() { return nullptr; }
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data, QtNodes::PortIndex port_index);
+
+protected:
+  std::weak_ptr<PathData>   in;
+  std::shared_ptr<PathData> out;
+};
+
+/**
+ * @brief PathBezierRound class.
+ */
+class PathBezierRound : public BaseNode
+{
+public:
+  PathBezierRound(const ModelConfig *p_config);
+
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return nullptr; }
+  QtNodes::NodeData *get_viewer3d_data() { return nullptr; }
+  QtNodes::NodeData *get_viewer3d_color() { return nullptr; }
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data, QtNodes::PortIndex port_index);
+
+protected:
+  std::weak_ptr<PathData>   in;
+  std::shared_ptr<PathData> out;
+};
+
+/**
  * @brief PathFractalize class.
  */
 class PathFractalize : public BaseNode
