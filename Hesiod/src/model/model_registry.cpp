@@ -75,6 +75,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::Path, "Geometry/Cloud");
   HSD_REGISTER_NODE(hesiod::PathBezier, "Geometry/Cloud");
   HSD_REGISTER_NODE(hesiod::PathBezierRound, "Geometry/Cloud");
+  HSD_REGISTER_NODE(hesiod::PathBspline, "Geometry/Cloud");
   HSD_REGISTER_NODE(hesiod::PathFractalize, "Geometry/Cloud");
   HSD_REGISTER_NODE(hesiod::Plateau, "Filter/Recurve");
   HSD_REGISTER_NODE(hesiod::QuiltingExpand, "Operator/Expand");

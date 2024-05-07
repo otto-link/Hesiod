@@ -2114,6 +2114,38 @@ Geometry/Cloud
 |curvature_ratio|Float|Amount of curvature (usually in [-1, 1] and commonly > 0).|
 |edge_divisions|Integer|Edge sub-divisions of each edge. After the operation, the path is remeshed based on this new sub-division.|
 
+## PathBspline
+
+
+PathBspline uses Bspline interpolation to replace sharp angles and straight segments with smooth, flowing curves.
+
+![img](../images/nodes/PathBspline.png)  
+
+### Category
+
+
+Geometry/Cloud  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|PathData|Input path.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|PathData|Output path.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|edge_divisions|Integer|Edge sub-divisions of each edge. After the operation, the path is remeshed based on this new sub-division.|
+
 ## PathFractalize
 
 
