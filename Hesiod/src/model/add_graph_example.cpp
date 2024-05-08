@@ -95,8 +95,9 @@ QtNodes::NodeId add_graph_example(HsdDataFlowGraphModel *p_model,
     return node_id1;
   }
   //
-  else if (node_type == "PathBezier" || node_type == "PathBezierRound" ||
-           node_type == "PathFractalize")
+  else if (node_type == "PathBezier" || node_type == "PathBspline" ||
+           node_type == "PathBezierRound" || node_type == "PathFractalize" ||
+           node_type == "PathToHeightmap")
   {
     QtNodes::NodeId node_id1 = p_model->addNode("Path");
     QtNodes::NodeId node_id2 = p_model->addNode(QString::fromStdString(node_type));

@@ -2026,7 +2026,7 @@ Polyline definition.
 ### Category
 
 
-Geometry/Cloud  
+Geometry/Path  
 
 ### Inputs
 
@@ -2058,7 +2058,7 @@ PathBezier uses Bezier interpolation to replace sharp angles and straight segmen
 ### Category
 
 
-Geometry/Cloud  
+Geometry/Path  
 
 ### Inputs
 
@@ -2091,7 +2091,7 @@ PathBezierRound uses Bezier interpolation to replace sharp angles and straight s
 ### Category
 
 
-Geometry/Cloud  
+Geometry/Path  
 
 ### Inputs
 
@@ -2124,7 +2124,7 @@ PathBspline uses Bspline interpolation to replace sharp angles and straight segm
 ### Category
 
 
-Geometry/Cloud  
+Geometry/Path  
 
 ### Inputs
 
@@ -2156,7 +2156,7 @@ PathFractalize fractalizes a polyline using a mid-point displacement algorithm. 
 ### Category
 
 
-Geometry/Cloud  
+Geometry/Path  
 
 ### Inputs
 
@@ -2181,6 +2181,38 @@ Geometry/Cloud
 |persistence|Float|Noise persistence (with iteration number).|
 |seed|Random seed|Random seed number.|
 |sigma|Float|Half-width of the random Gaussian displacement, normalized by the distance between points.|
+
+## PathToHeightmap
+
+
+PathToHeightmap Project path points to an heightmap.
+
+![img](../images/nodes/PathToHeightmap.png)  
+
+### Category
+
+
+Geometry/Path  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|path|PathData|Input path.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|heightmap|HeightMapData|Output heightmap.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|filled|Bool|Whether the resulting path contour is filled (input Path needs to be closed).|
 
 ## Plateau
 
