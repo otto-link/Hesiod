@@ -6,16 +6,18 @@
 namespace hesiod
 {
 
-PathSDF::PathSDF(const ModelConfig *p_config) : BaseNode(p_config)
+CloudSDF::CloudSDF(const ModelConfig *p_config) : BaseNode(p_config)
 {
-  LOG_DEBUG("PathSDF::PathSDF");
+  LOG_DEBUG("CloudSDF::CloudSDF");
 
   // model
-  this->node_caption = "PathSDF";
+  this->node_caption = "CloudSDF";
 
   // inputs
-  this->input_captions = {"path", "dx", "dy"};
-  this->input_types = {PathData().type(), HeightMapData().type(), HeightMapData().type()};
+  this->input_captions = {"cloud", "dx", "dy"};
+  this->input_types = {CloudData().type(),
+                       HeightMapData().type(),
+                       HeightMapData().type()};
 
   // outputs
   this->output_captions = {"sdf"};
@@ -35,24 +37,21 @@ PathSDF::PathSDF(const ModelConfig *p_config) : BaseNode(p_config)
   }
 
   // documentation
-  this->description = "PathSDF evaluates the signed distance function of a polyline. It "
-                      "assigns a signed distance value to every point in space. For "
-                      "points outside the polyline, the distance is positive, while for "
-                      "points inside, it's negative. The zero level set of this function "
-                      "precisely defines the polyline's path Project path points to an "
-                      "heightmap.";
+  this->description = "CloudSDF evaluates the signed distance function of a set of "
+                      "points. It assigns a signed distance value to every point in "
+                      "space.";
 
-  this->input_descriptions = {"Input path."};
+  this->input_descriptions = {"Input cloud."};
   this->output_descriptions = {"Signed distance as an heightmap."};
 }
 
-std::shared_ptr<QtNodes::NodeData> PathSDF::outData(QtNodes::PortIndex /* port_index */)
+std::shared_ptr<QtNodes::NodeData> CloudSDF::outData(QtNodes::PortIndex /* port_index */)
 {
   return std::static_pointer_cast<QtNodes::NodeData>(this->out);
 }
 
-void PathSDF::setInData(std::shared_ptr<QtNodes::NodeData> data,
-                        QtNodes::PortIndex                 port_index)
+void CloudSDF::setInData(std::shared_ptr<QtNodes::NodeData> data,
+                         QtNodes::PortIndex                 port_index)
 {
   if (!data)
     Q_EMIT this->dataInvalidated(0);
@@ -60,7 +59,7 @@ void PathSDF::setInData(std::shared_ptr<QtNodes::NodeData> data,
   switch (port_index)
   {
   case 0:
-    this->in = std::dynamic_pointer_cast<PathData>(data);
+    this->in = std::dynamic_pointer_cast<CloudData>(data);
     break;
   case 1:
     this->dx = std::dynamic_pointer_cast<HeightMapData>(data);
@@ -74,33 +73,33 @@ void PathSDF::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 // --- computing
 
-void PathSDF::compute()
+void CloudSDF::compute()
 {
   LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
 
-  hmap::Path      *p_path = HSD_GET_POINTER(this->in);
+  hmap::Cloud     *p_cloud = HSD_GET_POINTER(this->in);
   hmap::HeightMap *p_dx = HSD_GET_POINTER(this->dx);
   hmap::HeightMap *p_dy = HSD_GET_POINTER(this->dy);
 
-  if (p_path)
+  if (p_cloud)
   {
     Q_EMIT this->computingStarted();
 
     hmap::HeightMap *p_out = this->out->get_ref();
 
-    if (p_path->get_npoints() > 1)
+    if (p_cloud->get_npoints() > 1)
     {
       hmap::fill(
           *p_out,
           p_dx,
           p_dy,
-          [this, p_path](hmap::Vec2<int>   shape,
-                         hmap::Vec4<float> bbox,
-                         hmap::Array      *p_noise_x,
-                         hmap::Array      *p_noise_y)
+          [this, p_cloud](hmap::Vec2<int>   shape,
+                          hmap::Vec4<float> bbox,
+                          hmap::Array      *p_noise_x,
+                          hmap::Array      *p_noise_y)
           {
             hmap::Vec4<float> bbox_full = hmap::Vec4<float>(0.f, 1.f, 0.f, 1.f);
-            return p_path->to_array_sdf(shape, bbox_full, p_noise_x, p_noise_y, bbox);
+            return p_cloud->to_array_sdf(shape, bbox_full, p_noise_x, p_noise_y, bbox);
           });
 
       // post-process

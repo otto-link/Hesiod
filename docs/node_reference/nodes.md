@@ -238,6 +238,37 @@ Geometry/Cloud
 | :--- | :--- | :--- |
 |cloud|HighMap Cloud Object|Cloud data.|
 
+## CloudSDF
+
+
+CloudSDF evaluates the signed distance function of a set of points. It assigns a signed distance value to every point in space.
+
+![img](../images/nodes/CloudSDF.png)  
+
+### Category
+
+
+Geometry/Cloud  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|cloud|CloudData|Input cloud.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|sdf|HeightMapData|Signed distance as an heightmap.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+
 ## CloudToArrayInterp
 
 
