@@ -2182,6 +2182,37 @@ Geometry/Path
 |seed|Random seed|Random seed number.|
 |sigma|Float|Half-width of the random Gaussian displacement, normalized by the distance between points.|
 
+## PathSDF
+
+
+PathSDF evaluates the signed distance function of a polyline. It assigns a signed distance value to every point in space. For points outside the polyline, the distance is positive, while for points inside, it's negative. The zero level set of this function precisely defines the polyline's path Project path points to an heightmap.
+
+![img](../images/nodes/PathSDF.png)  
+
+### Category
+
+
+Geometry/Path  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|path|PathData|Input path.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|sdf|HeightMapData|Signed distance as an heightmap.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+
 ## PathToHeightmap
 
 

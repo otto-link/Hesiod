@@ -77,6 +77,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::PathBezierRound, "Geometry/Path");
   HSD_REGISTER_NODE(hesiod::PathBspline, "Geometry/Path");
   HSD_REGISTER_NODE(hesiod::PathFractalize, "Geometry/Path");
+  HSD_REGISTER_NODE(hesiod::PathSDF, "Geometry/Path");
   HSD_REGISTER_NODE(hesiod::PathToHeightmap, "Geometry/Path");
   HSD_REGISTER_NODE(hesiod::Plateau, "Filter/Recurve");
   HSD_REGISTER_NODE(hesiod::QuiltingExpand, "Operator/Expand");
