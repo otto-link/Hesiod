@@ -980,6 +980,38 @@ Filter/Recurve
 |k|Float|Smoothing factor (typically in [0, 1]).|
 |radius|Float|Filter radius with respect to the domain size.|
 
+## GaussianDecay
+
+
+Apply a Gaussian function to every values.
+
+![img](../images/nodes/GaussianDecay.png)  
+
+### Category
+
+
+Math/Base  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Input heightmap.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Output heightmap.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|sigma|Float|Gaussian half-width, represents the distance from the peak of the Gaussian curve to the points where the amplitude drops to half of its maximum value.|
+
 ## GaussianPulse
 
 

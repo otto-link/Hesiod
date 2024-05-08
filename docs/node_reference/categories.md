@@ -22,7 +22,7 @@ Node Categories
 |IO|Files|ExportAsset, ExportHeightmap, ExportNormalMap, ExportTexture, ImportHeightmap|
 |Mask|Adjust|ScanMask|
 |Mask|Selector|SelectCavities, SelectGt, SelectInterval, SelectPulse|
-|Math|Base|Abs, AbsSmooth, Cos, Inverse, Smoothstep3, Smoothstep5|
+|Math|Base|Abs, AbsSmooth, Cos, GaussianDecay, Inverse, Smoothstep3, Smoothstep5|
 |Math|Boundaries|ZeroedEdges|
 |Math|Gradient|Gradient, GradientAngle, GradientNorm, GradientTalus|
 |Operator|Blend|Blend, Lerp|

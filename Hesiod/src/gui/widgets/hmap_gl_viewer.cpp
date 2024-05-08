@@ -236,25 +236,25 @@ void HmapGLViewer::set_data(QtNodes::NodeData *new_p_data, QtNodes::NodeData *ne
           color_done = true;
         }
         //
-        else if (color_type.compare("PathData") == 0)
-        {
-          PathData   *p_hcolor = static_cast<PathData *>(this->p_color);
-          hmap::Path *p_path = static_cast<hmap::Path *>(p_hcolor->get_ref());
-          hmap::Array c = hmap::Array(array.shape);
+        // else if (color_type.compare("PathData") == 0)
+        // {
+        //   PathData   *p_hcolor = static_cast<PathData *>(this->p_color);
+        //   hmap::Path *p_path = static_cast<hmap::Path *>(p_hcolor->get_ref());
+        //   hmap::Array c = hmap::Array(array.shape);
 
-          hmap::Path path_copy = *p_path;
-          path_copy.set_values(1.f);
-          hmap::Vec4<float> bbox = hmap::Vec4<float>(0.f, 1.f, 0.f, 1.f);
-          path_copy.to_array(c, bbox);
-          // c = 1.f - c;
+        //   hmap::Path path_copy = *p_path;
+        //   path_copy.set_values(1.f);
+        //   hmap::Vec4<float> bbox = hmap::Vec4<float>(0.f, 1.f, 0.f, 1.f);
+        //   path_copy.to_array(c, bbox);
+        //   // c = 1.f - c;
 
-          this->texture_img = generate_selector_image(c);
-          this->texture_shape = array.shape;
+        //   this->texture_img = generate_selector_image(c);
+        //   this->texture_shape = array.shape;
 
-          hmap::apply_hillshade(this->texture_img, array, 0.f, 1.f, 1.5f, true);
+        //   hmap::apply_hillshade(this->texture_img, array, 0.f, 1.f, 1.5f, true);
 
-          color_done = true;
-        }
+        //   color_done = true;
+        // }
       }
 
       // default rendering
