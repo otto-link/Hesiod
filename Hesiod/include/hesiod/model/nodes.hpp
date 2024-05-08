@@ -837,12 +837,12 @@ protected:
 };
 
 /**
- * @brief HeightMapToMask class, to convert a heightmap to a class.
+ * @brief HeightmapToMask class, to convert a heightmap to a class.
  */
-class HeightMapToMask : public BaseNode
+class HeightmapToMask : public BaseNode
 {
 public:
-  HeightMapToMask(const ModelConfig *p_config);
+  HeightmapToMask(const ModelConfig *p_config);
 
   QtNodes::NodeData *get_preview_data() { return this->mask.get(); }
   QtNodes::NodeData *get_viewer2d_data() { return this->mask.get(); }
@@ -862,12 +862,12 @@ protected:
 };
 
 /**
- * @brief HeightMapToRGBA class.
+ * @brief HeightmapToRGBA class.
  */
-class HeightMapToRGBA : public BaseNode
+class HeightmapToRGBA : public BaseNode
 {
 public:
-  HeightMapToRGBA(const ModelConfig *p_config);
+  HeightmapToRGBA(const ModelConfig *p_config);
 
   QtNodes::NodeData *get_preview_data() { return this->out.get(); }
   QtNodes::NodeData *get_viewer2d_data() { return this->out.get(); }

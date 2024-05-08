@@ -6,12 +6,12 @@
 namespace hesiod
 {
 
-HeightMapToMask::HeightMapToMask(const ModelConfig *p_config) : BaseNode(p_config)
+HeightmapToMask::HeightmapToMask(const ModelConfig *p_config) : BaseNode(p_config)
 {
-  LOG_DEBUG("HeightMapToMask::HeightMapToMask");
+  LOG_DEBUG("HeightmapToMask::HeightmapToMask");
 
   // model
-  this->node_caption = "HeightMapToMask";
+  this->node_caption = "HeightmapToMask";
 
   // inputs
   this->input_captions = {"input"};
@@ -50,13 +50,13 @@ HeightMapToMask::HeightMapToMask(const ModelConfig *p_config) : BaseNode(p_confi
   this->output_descriptions = {"Mask."};
 }
 
-std::shared_ptr<QtNodes::NodeData> HeightMapToMask::outData(
+std::shared_ptr<QtNodes::NodeData> HeightmapToMask::outData(
     QtNodes::PortIndex /* port_index */)
 {
   return std::static_pointer_cast<QtNodes::NodeData>(this->mask);
 }
 
-void HeightMapToMask::setInData(std::shared_ptr<QtNodes::NodeData> data,
+void HeightmapToMask::setInData(std::shared_ptr<QtNodes::NodeData> data,
                                 QtNodes::PortIndex /* port_index */)
 {
   if (!data)
@@ -69,7 +69,7 @@ void HeightMapToMask::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 // --- computing
 
-void HeightMapToMask::compute()
+void HeightmapToMask::compute()
 {
   LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
 

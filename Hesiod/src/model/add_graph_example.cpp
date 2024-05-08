@@ -222,7 +222,7 @@ QtNodes::NodeId add_graph_example(HsdDataFlowGraphModel *p_model,
     return node_id2;
   }
   //
-  else if (node_type == "HeightMapToRGBA")
+  else if (node_type == "HeightmapToRGBA")
   {
     QtNodes::NodeId node_id1 = p_model->addNode("NoiseFbm");
     QtNodes::NodeId node_id2 = p_model->addNode("NoiseFbm");

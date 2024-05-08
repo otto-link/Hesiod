@@ -1108,12 +1108,12 @@ Math/Gradient
 |Name|Type|Description|
 | :--- | :--- | :--- |
 
-## HeightMapToMask
+## HeightmapToMask
 
 
 Convert an heightmap to a mask (remap values).
 
-![img](../images/nodes/HeightMapToMask.png)  
+![img](../images/nodes/HeightmapToMask.png)  
 
 ### Category
 
@@ -1139,12 +1139,12 @@ Converter
 |Name|Type|Description|
 | :--- | :--- | :--- |
 
-## HeightMapToRGBA
+## HeightmapToRGBA
 
 
-HeightMapToRGBA converts a series of heightmaps into an RGBA splatmap.
+HeightmapToRGBA converts a series of heightmaps into an RGBA splatmap.
 
-![img](../images/nodes/HeightMapToRGBA.png)  
+![img](../images/nodes/HeightmapToRGBA.png)  
 
 ### Category
 
