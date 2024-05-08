@@ -115,6 +115,8 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::WaveSquare, "Primitive/Function");
   HSD_REGISTER_NODE(hesiod::WaveTriangular, "Primitive/Function");
   HSD_REGISTER_NODE(hesiod::White, "Primitive/Random");
+  HSD_REGISTER_NODE(hesiod::WhiteDensityMap, "Primitive/Random");
+  HSD_REGISTER_NODE(hesiod::WhiteSparse, "Primitive/Random");
   HSD_REGISTER_NODE(hesiod::ZeroedEdges, "Math/Boundaries");
 
   return ret;

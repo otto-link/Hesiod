@@ -33,5 +33,5 @@ Node Categories
 |Primitive|Authoring|CloudToArrayInterp|
 |Primitive|Coherent Noise|Dendry, Noise, NoiseFbm, NoiseIq, NoiseJordan, NoisePingpong, NoiseRidged, NoiseSwiss|
 |Primitive|Function|Bump, GaussianPulse, Slope, Step, WaveDune, WaveSine, WaveSquare, WaveTriangular|
-|Primitive|Random|White|
+|Primitive|Random|White, WhiteDensityMap, WhiteSparse|
 |Texture||ColorizeCmap, ColorizeGradient, ColorizeSolid, MixTexture, SetAlpha|

@@ -3465,6 +3465,71 @@ Primitive/Random
 | :--- | :--- | :--- |
 |seed|Random seed|Random seed number.|
 
+## WhiteDensityMap
+
+
+WhiteDensityMap noise operator generates a random signal with a flat power and a spatial density defined by an input heightmap.
+
+![img](../images/nodes/WhiteDensityMap.png)  
+
+### Category
+
+
+Primitive/Random  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|density|HeightMapData|Output noise amplitude envelope.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Generated noise.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|seed|Random seed|Random seed number.|
+
+## WhiteSparse
+
+
+WhiteSparse noise operator generates a random signal with a flat power spectral density, but with a sparse spatial density.
+
+![img](../images/nodes/WhiteSparse.png)  
+
+### Category
+
+
+Primitive/Random  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|envelope|HeightMapData|Output noise amplitude envelope.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Generated noise.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|density|Float|Noise density.|
+|seed|Random seed|Random seed number.|
+
 ## ZeroedEdges
 
 
