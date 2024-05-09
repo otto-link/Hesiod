@@ -9,7 +9,7 @@ Node Categories
 | :--- | :--- | :--- |
 |Comment||Comment|
 |Converter||HeightmapToMask, HeightmapToRGBA|
-|Debug||DataPreview|
+|Debug||DataAnalysis, DataPreview|
 |Erosion|Hydraulic|HydraulicParticle, HydraulicRidge, HydraulicStream, HydraulicVpipes|
 |Erosion|Stratify|Stratify, StratifyOblique|
 |Features||RelativeElevation, Rugosity, ValleyWidth|

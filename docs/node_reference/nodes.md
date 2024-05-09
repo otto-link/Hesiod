@@ -502,6 +502,36 @@ Math/Base
 |frequency|Float|Frequency.|
 |phase_shift|Float|Phase shift.|
 
+## DataAnalysis
+
+
+DataAnalysis.
+
+![img](../images/nodes/DataAnalysis.png)  
+
+### Category
+
+
+Debug  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Input heightmap.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+
 ## DataPreview
 
 

@@ -389,6 +389,32 @@ protected:
 };
 
 /**
+ * @brief DataAnalysis class.
+ */
+class DataAnalysis : public BaseNode
+{
+public:
+  DataAnalysis(const ModelConfig *p_config);
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data,
+                 QtNodes::PortIndex                 port_index) override;
+
+  virtual QWidget *embeddedWidget() override;
+
+protected:
+  std::weak_ptr<HeightMapData> in;
+
+private:
+  QLabel *label = nullptr;
+
+  void update_widget_content();
+};
+
+/**
  * @brief DataPreview class.
  */
 class DataPreview : public BaseNode

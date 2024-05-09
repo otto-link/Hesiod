@@ -29,6 +29,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::CombineMask, "Mask");
   HSD_REGISTER_NODE(hesiod::Comment, "Comment");
   HSD_REGISTER_NODE(hesiod::Cos, "Math/Base");
+  HSD_REGISTER_NODE(hesiod::DataAnalysis, "Debug");
   HSD_REGISTER_NODE(hesiod::DataPreview, "Debug");
   HSD_REGISTER_NODE(hesiod::Dendry, "Primitive/Coherent Noise");
   HSD_REGISTER_NODE(hesiod::DepressionFilling, "Erosion");
