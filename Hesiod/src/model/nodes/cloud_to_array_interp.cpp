@@ -86,12 +86,14 @@ void CloudToArrayInterp::compute()
   {
     Q_EMIT this->computingStarted();
 
+    hmap::HeightMap *p_out = this->out->get_ref();
+
     if (p_cloud->get_npoints() > 0)
     {
       hmap::HeightMap *p_dx = HSD_GET_POINTER(this->dx);
       hmap::HeightMap *p_dy = HSD_GET_POINTER(this->dy);
 
-      hmap::fill(*this->out->get_ref(),
+      hmap::fill(*p_out,
                  p_dx,
                  p_dy,
                  [this, p_cloud](hmap::Vec2<int>   shape,
@@ -113,7 +115,7 @@ void CloudToArrayInterp::compute()
     }
     else
       // fill with zeroes
-      hmap::transform(*this->out->get_ref(), [](hmap::Array array) { array = 0.f; });
+      hmap::transform(*p_out, [](hmap::Array array) { array = 0.f; });
 
     // propagate
     Q_EMIT this->computingFinished();

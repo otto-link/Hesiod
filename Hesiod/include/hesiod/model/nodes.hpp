@@ -1932,6 +1932,31 @@ protected:
 };
 
 /**
+ * @brief Ridgelines class.
+ */
+class Ridgelines : public BaseNode
+{
+public:
+  Ridgelines(const ModelConfig *p_config);
+
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_color() { return this->in.lock().get(); }
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data, QtNodes::PortIndex port_index);
+
+protected:
+  std::weak_ptr<PathData>        in;
+  std::weak_ptr<HeightMapData>   dx, dy;
+  std::shared_ptr<HeightMapData> out;
+};
+
+/**
  * @brief Rugosity class.
  */
 class Rugosity : public BaseNode

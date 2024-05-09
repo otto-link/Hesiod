@@ -2618,6 +2618,43 @@ Filter/Range
 |centered|Bool|Determine whether a mean offset is applied to the values to center the scaling.|
 |scaling|Float|Constant by which each elevation values will be multiplied.|
 
+## Ridgelines
+
+
+Ridgelines generates an heightmap assuming the input path defines a ridgeline.
+
+![img](../images/nodes/Ridgelines.png)  
+
+### Category
+
+
+Primitive/Authoring  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|path|PathData|Set of points (x, y) and elevations z.|
+|dx|HeightMapData|Displacement with respect to the domain size (x-direction).|
+|dy|HeightMapData|Displacement with respect to the domain size (y-direction).|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|heightmap|HeightMapData|Interpolated heightmap.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|k_smoothing|Float|Smoothing intensity.|
+|talus_global|Float|Ridge slope.|
+|vmin|Float|Minimum value (lower values are clamped).|
+|width|Float|Ridge edge width.|
+
 ## Rugosity
 
 
