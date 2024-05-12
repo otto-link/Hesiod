@@ -24,7 +24,8 @@ Path::Path(const ModelConfig *p_config) : BaseNode(p_config)
   // attributes
   this->attr["path"] = NEW_ATTR_PATH();
   this->attr["closed"] = NEW_ATTR_BOOL(false);
-  this->attr_ordered_key = {"path", "closed"};
+  this->attr["reorder_nns"] = NEW_ATTR_BOOL(false);
+  this->attr_ordered_key = {"path", "closed", "reorder_nns"};
 
   // update
   if (this->p_config->compute_nodes_at_instanciation)
@@ -42,6 +43,8 @@ Path::Path(const ModelConfig *p_config) : BaseNode(p_config)
   this->attribute_descriptions["path"] = "Path data.";
   this->attribute_descriptions
       ["closed"] = "Decides whether the path is open and closed on itself.";
+  this->attribute_descriptions["reorder_nns"] =
+      "Decides whether the path points are reordered using a nearest neighbor search.";
 }
 
 std::shared_ptr<QtNodes::NodeData> Path::outData(QtNodes::PortIndex /* port_index */)
@@ -66,6 +69,9 @@ void Path::compute()
 
   *p_out = GET_ATTR_PATH("path");
   p_out->closed = GET_ATTR_BOOL("closed");
+
+  if (GET_ATTR_BOOL("reorder_nns"))
+    p_out->reorder_nns();
 
   // propagate
   Q_EMIT this->computingFinished();

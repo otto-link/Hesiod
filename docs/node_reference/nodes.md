@@ -2140,6 +2140,7 @@ Geometry/Path
 | :--- | :--- | :--- |
 |closed|Bool|Decides whether the path is open and closed on itself.|
 |path|HighMap Path object|Path data.|
+|reorder_nns|Bool|Decides whether the path points are reordered using a nearest neighbor search.|
 
 ## PathBezier
 
