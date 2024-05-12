@@ -35,6 +35,16 @@ AttributesWidget::AttributesWidget(
   layout->setSpacing(0);
 
   int row = 0;
+
+  QPushButton *update_button = new QPushButton("Force update");
+  layout->addWidget(update_button, row, 0);
+
+  connect(update_button,
+          &QPushButton::released,
+          [this]() { Q_EMIT this->update_button_released(); });
+
+  row++;
+
   // to check the number of widgets corresponds to the number of keys
   // in "p_attr_ordered_key"
   int count = 0;
