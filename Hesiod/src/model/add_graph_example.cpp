@@ -54,10 +54,10 @@ QtNodes::NodeId add_graph_example(HsdDataFlowGraphModel *p_model,
     return node_id1;
   }
   //
-  else if (node_type == "CloudToArrayInterp")
+  else if (node_type == "CloudSDF" || node_type == "CloudToArrayInterp")
   {
     QtNodes::NodeId node_id1 = p_model->addNode("Cloud");
-    QtNodes::NodeId node_id2 = p_model->addNode("CloudToArrayInterp");
+    QtNodes::NodeId node_id2 = p_model->addNode(QString::fromStdString(node_type));
 
     p_model->addConnection(QtNodes::ConnectionId(node_id1, 0, node_id2, 0));
 
@@ -73,6 +73,51 @@ QtNodes::NodeId add_graph_example(HsdDataFlowGraphModel *p_model,
     p_model->setNodeData(node_id2,
                          QtNodes::NodeRole::Position,
                          QPointF(HSD_NODE_SPACING, 0.f));
+
+    return node_id2;
+  }
+  //
+  else if (node_type == "Path")
+  {
+    QtNodes::NodeId node_id1 = p_model->addNode(QString::fromStdString(node_type));
+
+    {
+      hmap::Path path = hmap::Path(5, 0);
+      path.reorder_nns();
+
+      Path *p_node = p_model->delegateModel<Path>(node_id1);
+      p_node->attr.at("path")->get_ref<PathAttribute>()->value = path;
+      p_node->compute();
+    }
+
+    p_model->setNodeData(node_id1, QtNodes::NodeRole::Position, QPointF(0.f, 0.f));
+
+    return node_id1;
+  }
+  //
+  else if (node_type == "PathBezier" || node_type == "PathBspline" ||
+           node_type == "PathBezierRound" || node_type == "PathFractalize" ||
+           node_type == "PathToHeightmap" || node_type == "PathSDF" ||
+           node_type == "Ridgelines" || node_type == "ReverseMidpoint")
+  {
+    QtNodes::NodeId node_id1 = p_model->addNode("Path");
+    QtNodes::NodeId node_id2 = p_model->addNode(QString::fromStdString(node_type));
+
+    {
+      hmap::Path path = hmap::Path(5, 2);
+      path.reorder_nns();
+
+      Path *p_node = p_model->delegateModel<Path>(node_id1);
+      p_node->attr.at("path")->get_ref<PathAttribute>()->value = path;
+      p_node->compute();
+    }
+
+    p_model->setNodeData(node_id1, QtNodes::NodeRole::Position, QPointF(0.f, 0.f));
+    p_model->setNodeData(node_id2,
+                         QtNodes::NodeRole::Position,
+                         QPointF(HSD_NODE_SPACING, 0.f));
+
+    p_model->addConnection(QtNodes::ConnectionId(node_id1, 0, node_id2, 0));
 
     return node_id2;
   }
@@ -116,6 +161,35 @@ QtNodes::NodeId add_graph_example(HsdDataFlowGraphModel *p_model,
                          QPointF(HSD_NODE_SPACING, 0.f));
 
     return node_id2;
+  }
+  //
+  else if (node_type == "GaussianDecay")
+  {
+    QtNodes::NodeId node_id1 = p_model->addNode("Path");
+    QtNodes::NodeId node_id2 = p_model->addNode("PathSDF");
+    QtNodes::NodeId node_id3 = p_model->addNode("GaussianDecay");
+
+    {
+      hmap::Path path = hmap::Path(5, 2);
+      path.reorder_nns();
+
+      Path *p_node = p_model->delegateModel<Path>(node_id1);
+      p_node->attr.at("path")->get_ref<PathAttribute>()->value = path;
+      p_node->compute();
+    }
+
+    p_model->setNodeData(node_id1, QtNodes::NodeRole::Position, QPointF(0.f, 0.f));
+    p_model->setNodeData(node_id2,
+                         QtNodes::NodeRole::Position,
+                         QPointF(HSD_NODE_SPACING, 0.f));
+    p_model->setNodeData(node_id3,
+                         QtNodes::NodeRole::Position,
+                         QPointF(2 * HSD_NODE_SPACING, 0.f));
+
+    p_model->addConnection(QtNodes::ConnectionId(node_id1, 0, node_id2, 0));
+    p_model->addConnection(QtNodes::ConnectionId(node_id2, 0, node_id3, 0));
+
+    return node_id3;
   }
   //
   else if (node_type == "ExpandShrink")
@@ -178,7 +252,7 @@ QtNodes::NodeId add_graph_example(HsdDataFlowGraphModel *p_model,
     return node_id2;
   }
   //
-  else if (node_type == "HeightMapToRGBA")
+  else if (node_type == "HeightmapToRGBA")
   {
     QtNodes::NodeId node_id1 = p_model->addNode("NoiseFbm");
     QtNodes::NodeId node_id2 = p_model->addNode("NoiseFbm");
@@ -372,7 +446,8 @@ QtNodes::NodeId add_graph_example(HsdDataFlowGraphModel *p_model,
 
     if (main_category == "Filter" || main_category == "Mask" || main_category == "Math" ||
         main_category == "Operator" || main_category == "Morphology" ||
-        main_category == "Features" || main_category == "Erosion")
+        main_category == "Features" || main_category == "Erosion" ||
+        node_type == "WhiteDensityMap" || node_type == "DataAnalysis")
     {
       QtNodes::NodeId node_id1 = p_model->addNode("NoiseFbm");
       QtNodes::NodeId node_id2 = p_model->addNode(QString::fromStdString(node_type));

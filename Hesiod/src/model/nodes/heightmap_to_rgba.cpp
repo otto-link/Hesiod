@@ -6,12 +6,12 @@
 namespace hesiod
 {
 
-HeightMapToRGBA::HeightMapToRGBA(const ModelConfig *p_config) : BaseNode(p_config)
+HeightmapToRGBA::HeightmapToRGBA(const ModelConfig *p_config) : BaseNode(p_config)
 {
-  LOG_DEBUG("HeightMapToRGBA::HeightMapToRGBA");
+  LOG_DEBUG("HeightmapToRGBA::HeightmapToRGBA");
 
   // model
-  this->node_caption = "HeightMapToRGBA";
+  this->node_caption = "HeightmapToRGBA";
 
   // inputs
   this->input_captions = {"R", "G", "B", "A"};
@@ -35,7 +35,7 @@ HeightMapToRGBA::HeightMapToRGBA(const ModelConfig *p_config) : BaseNode(p_confi
   }
 
   // documentation
-  this->description = "HeightMapToRGBA converts a series of heightmaps into an RGBA "
+  this->description = "HeightmapToRGBA converts a series of heightmaps into an RGBA "
                       "splatmap.";
 
   this->input_descriptions = {"Red channel.",
@@ -45,13 +45,13 @@ HeightMapToRGBA::HeightMapToRGBA(const ModelConfig *p_config) : BaseNode(p_confi
   this->output_descriptions = {"RGBA heightmap."};
 }
 
-std::shared_ptr<QtNodes::NodeData> HeightMapToRGBA::outData(
+std::shared_ptr<QtNodes::NodeData> HeightmapToRGBA::outData(
     QtNodes::PortIndex /* port_index */)
 {
   return std::static_pointer_cast<QtNodes::NodeData>(this->out);
 }
 
-void HeightMapToRGBA::setInData(std::shared_ptr<QtNodes::NodeData> data,
+void HeightmapToRGBA::setInData(std::shared_ptr<QtNodes::NodeData> data,
                                 QtNodes::PortIndex                 port_index)
 {
   if (!data)
@@ -77,7 +77,7 @@ void HeightMapToRGBA::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 // --- computing
 
-void HeightMapToRGBA::compute()
+void HeightmapToRGBA::compute()
 {
   LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
 

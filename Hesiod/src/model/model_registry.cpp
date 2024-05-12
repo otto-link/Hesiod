@@ -21,6 +21,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::Clamp, "Filter/Range");
   HSD_REGISTER_NODE(hesiod::Closing, "Operator/Morphology");
   HSD_REGISTER_NODE(hesiod::Cloud, "Geometry/Cloud");
+  HSD_REGISTER_NODE(hesiod::CloudSDF, "Geometry/Cloud");
   HSD_REGISTER_NODE(hesiod::CloudToArrayInterp, "Primitive/Authoring");
   HSD_REGISTER_NODE(hesiod::ColorizeCmap, "Texture");
   HSD_REGISTER_NODE(hesiod::ColorizeGradient, "Texture");
@@ -28,6 +29,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::CombineMask, "Mask");
   HSD_REGISTER_NODE(hesiod::Comment, "Comment");
   HSD_REGISTER_NODE(hesiod::Cos, "Math/Base");
+  HSD_REGISTER_NODE(hesiod::DataAnalysis, "Debug");
   HSD_REGISTER_NODE(hesiod::DataPreview, "Debug");
   HSD_REGISTER_NODE(hesiod::Dendry, "Primitive/Coherent Noise");
   HSD_REGISTER_NODE(hesiod::DepressionFilling, "Erosion");
@@ -42,13 +44,14 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::Gain, "Filter/Recurve");
   HSD_REGISTER_NODE(hesiod::GammaCorrection, "Filter/Recurve");
   HSD_REGISTER_NODE(hesiod::GammaCorrectionLocal, "Filter/Recurve");
+  HSD_REGISTER_NODE(hesiod::GaussianDecay, "Math/Base");
   HSD_REGISTER_NODE(hesiod::GaussianPulse, "Primitive/Function");
   HSD_REGISTER_NODE(hesiod::Gradient, "Math/Gradient");
   HSD_REGISTER_NODE(hesiod::GradientAngle, "Math/Gradient");
   HSD_REGISTER_NODE(hesiod::GradientNorm, "Math/Gradient");
   HSD_REGISTER_NODE(hesiod::GradientTalus, "Math/Gradient");
-  HSD_REGISTER_NODE(hesiod::HeightMapToMask, "Converter");
-  HSD_REGISTER_NODE(hesiod::HeightMapToRGBA, "Converter");
+  HSD_REGISTER_NODE(hesiod::HeightmapToMask, "Converter");
+  HSD_REGISTER_NODE(hesiod::HeightmapToRGBA, "Converter");
   HSD_REGISTER_NODE(hesiod::HydraulicParticle, "Erosion/Hydraulic");
   HSD_REGISTER_NODE(hesiod::HydraulicRidge, "Erosion/Hydraulic");
   HSD_REGISTER_NODE(hesiod::HydraulicStream, "Erosion/Hydraulic");
@@ -72,6 +75,13 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::NoiseSwiss, "Primitive/Coherent Noise");
   HSD_REGISTER_NODE(hesiod::NormalDisplacement, "Filter/Recast");
   HSD_REGISTER_NODE(hesiod::Opening, "Operator/Morphology");
+  HSD_REGISTER_NODE(hesiod::Path, "Geometry/Path");
+  HSD_REGISTER_NODE(hesiod::PathBezier, "Geometry/Path");
+  HSD_REGISTER_NODE(hesiod::PathBezierRound, "Geometry/Path");
+  HSD_REGISTER_NODE(hesiod::PathBspline, "Geometry/Path");
+  HSD_REGISTER_NODE(hesiod::PathFractalize, "Geometry/Path");
+  HSD_REGISTER_NODE(hesiod::PathSDF, "Geometry/Path");
+  HSD_REGISTER_NODE(hesiod::PathToHeightmap, "Geometry/Path");
   HSD_REGISTER_NODE(hesiod::Plateau, "Filter/Recurve");
   HSD_REGISTER_NODE(hesiod::QuiltingExpand, "Operator/Expand");
   HSD_REGISTER_NODE(hesiod::QuiltingShuffle, "Operator/Resynthesis");
@@ -81,6 +91,8 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::RecurveS, "Filter/Recurve");
   HSD_REGISTER_NODE(hesiod::RelativeElevation, "Features");
   HSD_REGISTER_NODE(hesiod::Rescale, "Filter/Range");
+  HSD_REGISTER_NODE(hesiod::ReverseMidpoint, "Primitive/Authoring");
+  HSD_REGISTER_NODE(hesiod::Ridgelines, "Primitive/Authoring");
   HSD_REGISTER_NODE(hesiod::Rugosity, "Features");
   HSD_REGISTER_NODE(hesiod::Saturate, "Filter/Recurve");
   HSD_REGISTER_NODE(hesiod::ScanMask, "Mask/Adjust");
@@ -106,6 +118,8 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::WaveSquare, "Primitive/Function");
   HSD_REGISTER_NODE(hesiod::WaveTriangular, "Primitive/Function");
   HSD_REGISTER_NODE(hesiod::White, "Primitive/Random");
+  HSD_REGISTER_NODE(hesiod::WhiteDensityMap, "Primitive/Random");
+  HSD_REGISTER_NODE(hesiod::WhiteSparse, "Primitive/Random");
   HSD_REGISTER_NODE(hesiod::ZeroedEdges, "Math/Boundaries");
 
   return ret;

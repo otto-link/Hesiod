@@ -33,9 +33,7 @@ Cloud::Cloud(const ModelConfig *p_config) : BaseNode(p_config)
   }
 
   // documentation
-  this->description = "Gain is a power law transformation altering the distribution of "
-                      "signal values, compressing or expanding certain regions of the "
-                      "signal depending on the exponent of the power law.";
+  this->description = "Set of points.";
 
   this->input_descriptions = {};
   this->output_descriptions = {"Set of points (x, y) and elevations z."};

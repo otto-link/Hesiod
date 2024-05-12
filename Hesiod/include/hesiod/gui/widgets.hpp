@@ -247,6 +247,24 @@ private:
   void update_attribute();
 };
 
+class PathWidget : public QWidget
+{
+  Q_OBJECT
+
+public:
+  PathWidget() = default;
+
+  PathWidget(PathAttribute *p_attr);
+
+Q_SIGNALS:
+  void value_changed();
+
+private:
+  PathAttribute *p_attr;
+
+  void update_attribute();
+};
+
 class RangeWidget : public QWidget
 {
   Q_OBJECT

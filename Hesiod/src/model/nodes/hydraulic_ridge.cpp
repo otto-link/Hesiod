@@ -139,7 +139,7 @@ void HydraulicRidge::compute()
 
     hmap::remap(z_array, zmin, zmax);
 
-    p_out->from_array_interp(z_array);
+    p_out->from_array_interp_nearest(z_array);
 
     // propagate
     Q_EMIT this->computingFinished();

@@ -210,7 +210,7 @@ Operator/Morphology
 ## Cloud
 
 
-Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.
+Set of points.
 
 ![img](../images/nodes/Cloud.png)  
 
@@ -237,6 +237,37 @@ Geometry/Cloud
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |cloud|HighMap Cloud Object|Cloud data.|
+
+## CloudSDF
+
+
+CloudSDF evaluates the signed distance function of a set of points. It assigns a signed distance value to every point in space.
+
+![img](../images/nodes/CloudSDF.png)  
+
+### Category
+
+
+Geometry/Cloud  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|cloud|CloudData|Input cloud.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|sdf|HeightMapData|Signed distance as an heightmap.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
 
 ## CloudToArrayInterp
 
@@ -470,6 +501,36 @@ Math/Base
 | :--- | :--- | :--- |
 |frequency|Float|Frequency.|
 |phase_shift|Float|Phase shift.|
+
+## DataAnalysis
+
+
+DataAnalysis.
+
+![img](../images/nodes/DataAnalysis.png)  
+
+### Category
+
+
+Debug  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Input heightmap.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
 
 ## DataPreview
 
@@ -949,6 +1010,38 @@ Filter/Recurve
 |k|Float|Smoothing factor (typically in [0, 1]).|
 |radius|Float|Filter radius with respect to the domain size.|
 
+## GaussianDecay
+
+
+Apply a Gaussian function to every values.
+
+![img](../images/nodes/GaussianDecay.png)  
+
+### Category
+
+
+Math/Base  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Input heightmap.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Output heightmap.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|sigma|Float|Gaussian half-width, represents the distance from the peak of the Gaussian curve to the points where the amplitude drops to half of its maximum value.|
+
 ## GaussianPulse
 
 
@@ -1108,12 +1201,12 @@ Math/Gradient
 |Name|Type|Description|
 | :--- | :--- | :--- |
 
-## HeightMapToMask
+## HeightmapToMask
 
 
 Convert an heightmap to a mask (remap values).
 
-![img](../images/nodes/HeightMapToMask.png)  
+![img](../images/nodes/HeightmapToMask.png)  
 
 ### Category
 
@@ -1139,12 +1232,12 @@ Converter
 |Name|Type|Description|
 | :--- | :--- | :--- |
 
-## HeightMapToRGBA
+## HeightmapToRGBA
 
 
-HeightMapToRGBA converts a series of heightmaps into an RGBA splatmap.
+HeightmapToRGBA converts a series of heightmaps into an RGBA splatmap.
 
-![img](../images/nodes/HeightMapToRGBA.png)  
+![img](../images/nodes/HeightmapToRGBA.png)  
 
 ### Category
 
@@ -1341,7 +1434,7 @@ Erosion/Hydraulic
 ## ImportHeightmap
 
 
-ImportHeightmap .
+ImportHeightmap imports an heighmap from a grayscale PNG 8bit file.
 
 ![img](../images/nodes/ImportHeightmap.png)  
 
@@ -1360,7 +1453,7 @@ IO/Files
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|texture|HeightMapData|Texture (RGBA).|
+|texture|HeightMapData|Heightmap.|
   
 
 ### Parameters
@@ -2016,6 +2109,236 @@ Operator/Morphology
 | :--- | :--- | :--- |
 |radius|Float|Filter radius with respect to the domain size.|
 
+## Path
+
+
+Polyline definition.
+
+![img](../images/nodes/Path.png)  
+
+### Category
+
+
+Geometry/Path  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|path|PathData|Set of directed points (x, y) and elevations z.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|closed|Bool|Decides whether the path is open and closed on itself.|
+|path|HighMap Path object|Path data.|
+|reorder_nns|Bool|Decides whether the path points are reordered using a nearest neighbor search.|
+
+## PathBezier
+
+
+PathBezier uses Bezier interpolation to replace sharp angles and straight segments with smooth, flowing curves.
+
+![img](../images/nodes/PathBezier.png)  
+
+### Category
+
+
+Geometry/Path  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|PathData|Input path.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|PathData|Output path.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|curvature_ratio|Float|Amount of curvature (usually in [-1, 1] and commonly > 0).|
+|edge_divisions|Integer|Edge sub-divisions of each edge. After the operation, the path is remeshed based on this new sub-division.|
+
+## PathBezierRound
+
+
+PathBezierRound uses Bezier interpolation to replace sharp angles and straight segments with smooth, round and flowing curves. PathBezierRound is an alternative to PathBezier.
+
+![img](../images/nodes/PathBezierRound.png)  
+
+### Category
+
+
+Geometry/Path  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|PathData|Input path.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|PathData|Output path.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|curvature_ratio|Float|Amount of curvature (usually in [-1, 1] and commonly > 0).|
+|edge_divisions|Integer|Edge sub-divisions of each edge. After the operation, the path is remeshed based on this new sub-division.|
+
+## PathBspline
+
+
+PathBspline uses Bspline interpolation to replace sharp angles and straight segments with smooth, flowing curves.
+
+![img](../images/nodes/PathBspline.png)  
+
+### Category
+
+
+Geometry/Path  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|PathData|Input path.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|PathData|Output path.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|edge_divisions|Integer|Edge sub-divisions of each edge. After the operation, the path is remeshed based on this new sub-division.|
+
+## PathFractalize
+
+
+PathFractalize fractalizes a polyline using a mid-point displacement algorithm. The procedure involves iteratively modifying the polyline's geometry to increase its complexity, mimicking fractal characteristics.
+
+![img](../images/nodes/PathFractalize.png)  
+
+### Category
+
+
+Geometry/Path  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|PathData|Input path.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|PathData|Output path.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|iterations|Integer|Number of mid-point displacement iterations.|
+|orientation|Integer|Displacement orientation (0 for random inward/outward displacement, 1 to inflate the path and -1 to deflate the path).|
+|persistence|Float|Noise persistence (with iteration number).|
+|seed|Random seed|Random seed number.|
+|sigma|Float|Half-width of the random Gaussian displacement, normalized by the distance between points.|
+
+## PathSDF
+
+
+PathSDF evaluates the signed distance function of a polyline. It assigns a signed distance value to every point in space. For points outside the polyline, the distance is positive, while for points inside, it's negative. The zero level set of this function precisely defines the polyline's path Project path points to an heightmap.
+
+![img](../images/nodes/PathSDF.png)  
+
+### Category
+
+
+Geometry/Path  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|path|PathData|Input path.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|sdf|HeightMapData|Signed distance as an heightmap.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+
+## PathToHeightmap
+
+
+PathToHeightmap Project path points to an heightmap.
+
+![img](../images/nodes/PathToHeightmap.png)  
+
+### Category
+
+
+Geometry/Path  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|path|PathData|Input path.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|heightmap|HeightMapData|Output heightmap.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|filled|Bool|Whether the resulting path contour is filled (input Path needs to be closed).|
+
 ## Plateau
 
 
@@ -2325,6 +2648,76 @@ Filter/Range
 | :--- | :--- | :--- |
 |centered|Bool|Determine whether a mean offset is applied to the values to center the scaling.|
 |scaling|Float|Constant by which each elevation values will be multiplied.|
+
+## ReverseMidpoint
+
+
+ReverseMidpoint generates an heightmap. It uses a polyline as a base, then recursively interpolate and displace midpoints to generate a terrain.
+
+![img](../images/nodes/ReverseMidpoint.png)  
+
+### Category
+
+
+Primitive/Authoring  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|path|PathData|Set of points (x, y) and elevations z.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|heightmap|HeightMapData|Interpolated heightmap.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|noise_scale|Float|Added noise scaling.|
+|seed|Random seed|Random seed number.|
+
+## Ridgelines
+
+
+Ridgelines generates an heightmap assuming the input path defines a ridgeline.
+
+![img](../images/nodes/Ridgelines.png)  
+
+### Category
+
+
+Primitive/Authoring  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|path|PathData|Set of points (x, y) and elevations z.|
+|dx|HeightMapData|Displacement with respect to the domain size (x-direction).|
+|dy|HeightMapData|Displacement with respect to the domain size (y-direction).|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|heightmap|HeightMapData|Interpolated heightmap.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|k_smoothing|Float|Smoothing intensity.|
+|talus_global|Float|Ridge slope.|
+|vmin|Float|Minimum value (lower values are clamped).|
+|width|Float|Ridge edge width.|
 
 ## Rugosity
 
@@ -3171,6 +3564,71 @@ Primitive/Random
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|seed|Random seed|Random seed number.|
+
+## WhiteDensityMap
+
+
+WhiteDensityMap noise operator generates a random signal with a flat power and a spatial density defined by an input heightmap.
+
+![img](../images/nodes/WhiteDensityMap.png)  
+
+### Category
+
+
+Primitive/Random  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|density|HeightMapData|Output noise amplitude envelope.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Generated noise.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|seed|Random seed|Random seed number.|
+
+## WhiteSparse
+
+
+WhiteSparse noise operator generates a random signal with a flat power spectral density, but with a sparse spatial density.
+
+![img](../images/nodes/WhiteSparse.png)  
+
+### Category
+
+
+Primitive/Random  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|envelope|HeightMapData|Output noise amplitude envelope.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Generated noise.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|density|Float|Noise density.|
 |seed|Random seed|Random seed number.|
 
 ## ZeroedEdges

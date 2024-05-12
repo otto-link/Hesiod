@@ -428,12 +428,37 @@ public:
                                            {0.f, 0.f, 0.f}};
 };
 
-class PathAttribute : public Attribute // --------- TODO
+class PathAttribute : public Attribute // OK JSON GUI
 {
 public:
   PathAttribute() = default;
   hmap::Path    get();
   AttributeType get_type() { return AttributeType::PATH; }
+
+  QJsonObject save() const override
+  {
+    QJsonObject model_json;
+    model_json["x"] = std_vector_float_to_qjsonarray(this->value.get_x());
+    model_json["y"] = std_vector_float_to_qjsonarray(this->value.get_y());
+    model_json["v"] = std_vector_float_to_qjsonarray(this->value.get_values());
+
+    return model_json;
+  }
+
+  void load(QJsonObject const &p) override
+  {
+    bool ret = true;
+
+    std::vector<float> x, y, v;
+
+    ret &= convert_qjsonvalue_to_vector_float(p["x"], x);
+    ret &= convert_qjsonvalue_to_vector_float(p["y"], y);
+    ret &= convert_qjsonvalue_to_vector_float(p["v"], v);
+    if (!ret)
+      LOG_ERROR("serialization in with PathAttribute");
+
+    this->value = hmap::Path(x, y, v);
+  }
 
   hmap::Path value;
 };
