@@ -30,7 +30,7 @@ Node Categories
 |Operator|Morphology|Closing, Dilation, Erosion, MakeBinary, MorphologicalGradient, Opening|
 |Operator|Resynthesis|QuiltingShuffle|
 |Operator|Tiling|MakePeriodic, MakePeriodicStitching|
-|Primitive|Authoring|CloudToArrayInterp, Ridgelines|
+|Primitive|Authoring|CloudToArrayInterp, ReverseMidpoint, Ridgelines|
 |Primitive|Coherent Noise|Dendry, Noise, NoiseFbm, NoiseIq, NoiseJordan, NoisePingpong, NoiseRidged, NoiseSwiss|
 |Primitive|Function|Bump, GaussianPulse, Slope, Step, WaveDune, WaveSine, WaveSquare, WaveTriangular|
 |Primitive|Random|White, WhiteDensityMap, WhiteSparse|

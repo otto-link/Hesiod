@@ -2648,6 +2648,39 @@ Filter/Range
 |centered|Bool|Determine whether a mean offset is applied to the values to center the scaling.|
 |scaling|Float|Constant by which each elevation values will be multiplied.|
 
+## ReverseMidpoint
+
+
+ReverseMidpoint generates an heightmap. It uses a polyline as a base, then recursively interpolate and displace midpoints to generate a terrain.
+
+![img](../images/nodes/ReverseMidpoint.png)  
+
+### Category
+
+
+Primitive/Authoring  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|path|PathData|Set of points (x, y) and elevations z.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|heightmap|HeightMapData|Interpolated heightmap.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|noise_scale|Float|Added noise scaling.|
+|seed|Random seed|Random seed number.|
+
 ## Ridgelines
 
 
