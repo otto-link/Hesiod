@@ -113,19 +113,19 @@ static std::map<std::string, int> mask_combine_method_map = {
  * @brief Plain text / enumerate mapping for the HighMap noise types.
  */
 static std::map<std::string, int> noise_type_map = {
-    {"Perlin", hmap::NoiseType::n_perlin},
-    {"Perlin (billow)", hmap::NoiseType::n_perlin_billow},
-    {"Perlin (half)", hmap::NoiseType::n_perlin_half},
-    {"OpenSimplex2", hmap::NoiseType::n_simplex2},
-    {"OpenSimplex2S", hmap::NoiseType::n_simplex2s},
-    {"Value", hmap::NoiseType::n_value},
-    {"Value (cubic)", hmap::NoiseType::n_value_cubic},
-    {"Value (delaunay)", hmap::NoiseType::n_value_delaunay},
-    {"Value (linear)", hmap::NoiseType::n_value_linear},
-    {"Value (thinplate)", hmap::NoiseType::n_value_thinplate},
-    {"Worley", hmap::NoiseType::n_worley},
-    {"Worley (doube)", hmap::NoiseType::n_worley_double},
-    {"Worley (value)", hmap::NoiseType::n_worley_value}};
+    {"Perlin", hmap::NoiseType::PERLIN},
+    {"Perlin (billow)", hmap::NoiseType::PERLIN_BILLOW},
+    {"Perlin (half)", hmap::NoiseType::PERLIN_HALF},
+    {"OpenSimplex2", hmap::NoiseType::SIMPLEX2},
+    {"OpenSimplex2S", hmap::NoiseType::SIMPLEX2S},
+    {"Value", hmap::NoiseType::VALUE},
+    {"Value (cubic)", hmap::NoiseType::VALUE_CUBIC},
+    {"Value (delaunay)", hmap::NoiseType::VALUE_DELAUNAY},
+    {"Value (linear)", hmap::NoiseType::VALUE_LINEAR},
+    {"Value (thinplate)", hmap::NoiseType::VALUE_THINPLATE},
+    {"Worley", hmap::NoiseType::WORLEY},
+    {"Worley (doube)", hmap::NoiseType::WORLEY_DOUBLE},
+    {"Worley (value)", hmap::NoiseType::WORLEY_VALUE}};
 
 /**
  * @brief Plain text / enumerate mapping for the HighMap noise types, with some value
@@ -133,15 +133,15 @@ static std::map<std::string, int> noise_type_map = {
  * wavenumbers
  */
 static std::map<std::string, int> noise_type_map_fbm = {
-    {"Perlin", hmap::NoiseType::n_perlin},
-    {"Perlin (billow)", hmap::NoiseType::n_perlin_billow},
-    {"Perlin (half)", hmap::NoiseType::n_perlin_half},
-    {"OpenSimplex2", hmap::NoiseType::n_simplex2},
-    {"OpenSimplex2S", hmap::NoiseType::n_simplex2s},
-    {"Value", hmap::NoiseType::n_value},
-    {"Value (cubic)", hmap::NoiseType::n_value_cubic},
-    {"Worley", hmap::NoiseType::n_worley},
-    {"Worley (doube)", hmap::NoiseType::n_worley_double},
-    {"Worley (value)", hmap::NoiseType::n_worley_value}};
+    {"Perlin", hmap::NoiseType::PERLIN},
+    {"Perlin (billow)", hmap::NoiseType::PERLIN_BILLOW},
+    {"Perlin (half)", hmap::NoiseType::PERLIN_HALF},
+    {"OpenSimplex2", hmap::NoiseType::SIMPLEX2},
+    {"OpenSimplex2S", hmap::NoiseType::SIMPLEX2S},
+    {"Value", hmap::NoiseType::VALUE},
+    {"Value (cubic)", hmap::NoiseType::VALUE_CUBIC},
+    {"Worley", hmap::NoiseType::WORLEY},
+    {"Worley (doube)", hmap::NoiseType::WORLEY_DOUBLE},
+    {"Worley (value)", hmap::NoiseType::WORLEY_VALUE}};
 
 } // namespace hesiod
