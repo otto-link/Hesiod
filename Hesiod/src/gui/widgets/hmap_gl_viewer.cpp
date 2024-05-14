@@ -216,7 +216,7 @@ void HmapGLViewer::set_data(QtNodes::NodeData *new_p_data, QtNodes::NodeData *ne
           hmap::HeightMap *p_c = static_cast<hmap::HeightMap *>(p_hcolor->get_ref());
           hmap::Array      c = 1.f - p_c->to_array();
 
-          this->texture_img = generate_selector_image(array);
+          this->texture_img = generate_selector_image(c);
           this->texture_shape = array.shape;
           color_done = true;
         }

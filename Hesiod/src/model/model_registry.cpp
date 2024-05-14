@@ -89,7 +89,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::RecastCliff, "Filter/Recast");
   HSD_REGISTER_NODE(hesiod::RecurveKura, "Filter/Recurve");
   HSD_REGISTER_NODE(hesiod::RecurveS, "Filter/Recurve");
-  HSD_REGISTER_NODE(hesiod::RelativeElevation, "Features");
+  HSD_REGISTER_NODE(hesiod::RelativeElevation, "Features/Landform");
   HSD_REGISTER_NODE(hesiod::Rescale, "Filter/Range");
   HSD_REGISTER_NODE(hesiod::ReverseMidpoint, "Primitive/Authoring");
   HSD_REGISTER_NODE(hesiod::Ridgelines, "Primitive/Authoring");
@@ -101,6 +101,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::SelectInterval, "Mask/Selector");
   HSD_REGISTER_NODE(hesiod::SelectPulse, "Mask/Selector");
   HSD_REGISTER_NODE(hesiod::SetAlpha, "Texture");
+  HSD_REGISTER_NODE(hesiod::ShapeIndex, "Features/Landform");
   HSD_REGISTER_NODE(hesiod::SharpenCone, "Filter/Smoothing");
   HSD_REGISTER_NODE(hesiod::SmoothCpulse, "Filter/Smoothing");
   HSD_REGISTER_NODE(hesiod::SmoothFill, "Filter/Smoothing");
@@ -112,7 +113,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::Step, "Primitive/Function");
   HSD_REGISTER_NODE(hesiod::Stratify, "Erosion/Stratify");
   HSD_REGISTER_NODE(hesiod::StratifyOblique, "Erosion/Stratify");
-  HSD_REGISTER_NODE(hesiod::ValleyWidth, "Features");
+  HSD_REGISTER_NODE(hesiod::ValleyWidth, "Features/Landform");
   HSD_REGISTER_NODE(hesiod::WaveDune, "Primitive/Function");
   HSD_REGISTER_NODE(hesiod::WaveSine, "Primitive/Function");
   HSD_REGISTER_NODE(hesiod::WaveSquare, "Primitive/Function");

@@ -772,7 +772,7 @@ IO/Files
 | :--- | :--- | :--- |
 |auto_export|Bool|Decides whether the export is automatically performed when the node is updated.|
 |elevation_scaling|Float|Elevation scaling.|
-|export_format|Enumeration|Export format. Available values: Assimp Binary - *.assbin, Assxml Document - *.assxml, Autodesk 3DS (legacy) - *.3ds, Autodesk FBX (ascii) - *.fbx, Autodesk FBX (binary) - *.fbx, COLLADA - Digital Asset Exchange Schema - *.dae, Extensible 3D - *.x3d, GL Transmission Format (binary) - *.glb, GL Transmission Format - *.gltf, GL Transmission Format v. 2 (binary) - *.glb, GL Transmission Format v. 2 - *.gltf, Stanford Polygon Library (binary) - *.ply, Stanford Polygon Library - *.ply, Step Files - *.stp, Stereolithography (binary) - *.stl, Stereolithography - *.stl, The 3MF-File-Format - *.3mf, Wavefront OBJ format - *.obj, Wavefront OBJ format without material file - *.obj, X Files - *.x.|
+|export_format|Enumeration|Export format. Available values: Assimp Binary - *.assbin, Assxml Document - *.assxml, Autodesk 3DS (legacy) - *.3ds, Autodesk FBX (ascii) - *.fbx, Autodesk FBX (binary) - *.fbx, COLLADA - Digital Asset Exchange Schema - *.dae, Extensible 3D - *.x3d, GL Transmission Format (binary) - *.glb, GL Transmission Format - *.gltf, GL Transmission Format v. 2 (binary) - *.glb, GL Transmission Format v. 2 - *.gltf, Stanford Polygon Library (binary) - *.ply, Stanford Polygon Library - *.ply, Step Files - *.stp, Stereolithography (binary) - *.stl, Stereolithography - *.stl, The 3MF-File-Format - *.3mf, Wavefront OBJ format - *.obj, Wavefront OBJ format without material file - *.obj.|
 |fname|Filename|Export file name.|
 |max_error|Float|Maximum error (for optimized triangulated mesh).|
 |mesh_type|Enumeration|Mesh type for the geometry. Available values: triangles, triangles (optimized).|
@@ -2562,7 +2562,7 @@ RelativeElevation identifies heightmap relative elevation based on the surroundi
 ### Category
 
 
-Features  
+Features/Landform  
 
 ### Inputs
 
@@ -2984,6 +2984,38 @@ Texture
 |alpha|Float|Transparency as a scalar value (overriden if this alpha input is set).|
 |clamp_alpha|Bool|Clamp to [0, 1] to input alpha map.|
 
+## ShapeIndex
+
+
+ShapeIndex is a measure used to quantify the shape complexity of landforms in an heightmap. It is calculated based on the second derivatives of the elevation surface. The surface index is greater than 0.5 for convex surface and lower than 0.5 for concave surface.
+
+![img](../images/nodes/ShapeIndex.png)  
+
+### Category
+
+
+Features/Landform  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Input heightmap.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Shape index.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|radius|Float|Filter radius with respect to the domain size.|
+
 ## SharpenCone
 
 
@@ -3373,7 +3405,7 @@ ValleyWidth identifies valley lines and measure the width of the valley at each 
 ### Category
 
 
-Features  
+Features/Landform  
 
 ### Inputs
 
