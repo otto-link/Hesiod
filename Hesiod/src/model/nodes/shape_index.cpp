@@ -24,7 +24,7 @@ ShapeIndex::ShapeIndex(const ModelConfig *p_config) : BaseNode(p_config)
   this->output_types = {HeightMapData().type()};
 
   // attributes
-  this->attr["radius"] = NEW_ATTR_FLOAT(0.2f, 0.f, 0.4f);
+  this->attr["radius"] = NEW_ATTR_FLOAT(0.01f, 0.f, 0.2f);
 
   this->attr["inverse"] = NEW_ATTR_BOOL(false);
   this->attr["smoothing"] = NEW_ATTR_BOOL(false);
