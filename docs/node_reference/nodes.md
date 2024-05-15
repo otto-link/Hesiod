@@ -3395,6 +3395,38 @@ Erosion/Stratify
 |strata_noise|Float|Noise range for the strata elevations.|
 |talus_global|Float|Step slope.|
 
+## Unsphericity
+
+
+Unsphericity is a measure used to quantify the deviation of the heightmap shape from a perfect sphere. In other words, it indicates how much the terrain differs from being perfectly round or spherical.
+
+![img](../images/nodes/Unsphericity.png)  
+
+### Category
+
+
+Features/Landform  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Input heightmap.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Shape index.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|radius|Float|Filter radius with respect to the domain size.|
+
 ## ValleyWidth
 
 
