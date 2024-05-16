@@ -88,7 +88,8 @@ void ShapeIndex::compute()
 
     hmap::HeightMap *p_out = this->out->get_ref();
 
-    int ir = std::max(1, (int)(GET_ATTR_FLOAT("radius") * p_out->shape.x));
+    // zero radius accepted
+    int ir = std::max(0, (int)(GET_ATTR_FLOAT("radius") * p_out->shape.x));
 
     hmap::transform(*p_out,
                     *p_in,
