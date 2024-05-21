@@ -25,7 +25,7 @@ Node Categories
 |Math|Base|Abs, AbsSmooth, Cos, GaussianDecay, Inverse, Smoothstep3, Smoothstep5|
 |Math|Boundaries|ZeroedEdges|
 |Math|Gradient|Gradient, GradientAngle, GradientNorm, GradientTalus|
-|Operator|Blend|Blend, Lerp|
+|Operator|Blend|Blend, Lerp, Mixer|
 |Operator|Expand|QuiltingExpand|
 |Operator|Morphology|Closing, Dilation, Erosion, MakeBinary, MorphologicalGradient, Opening|
 |Operator|Resynthesis|QuiltingShuffle|

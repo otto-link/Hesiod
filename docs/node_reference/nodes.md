@@ -1726,6 +1726,41 @@ Texture
 |reset_output_alpha|Bool|Reset the output alpha channel to 1 (opaque).|
 |use_sqrt_avg|Bool|Use square averaging for alpha-compositing (instead of linear averaging).|
 
+## Mixer
+
+
+The Mixer operator takes several input heightmaps and blend them according to a mixing parameter expected in [0, 1].
+
+![img](../images/nodes/Mixer.png)  
+
+### Category
+
+
+Operator/Blend  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input 1|HeightMapData|Input heightmap.|
+|input 2|HeightMapData|Input heightmap.|
+|input 3|HeightMapData|Input heightmap.|
+|input 4|HeightMapData|Input heightmap.|
+|t|HeightMapData|Mixing parameter, expected in [0, 1].|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Output heightmap.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+
 ## MorphologicalGradient
 
 
