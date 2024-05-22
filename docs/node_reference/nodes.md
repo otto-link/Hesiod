@@ -334,6 +334,39 @@ Primitive/Authoring
 |Name|Type|Description|
 | :--- | :--- | :--- |
 
+## CloudToPath
+
+
+CloudToPath convert a Cloud to a Path.
+
+![img](../images/nodes/CloudToPath.png)  
+
+### Category
+
+
+Converter  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|cloud|CloudData|Input cloud.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|path|PathData|Output path.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|closed|Bool|Decides whether the path is open and closed on itself.|
+|reorder_nns|Bool|Decides whether the path points are reordered using a nearest neighbor search.|
+
 ## ColorizeCmap
 
 

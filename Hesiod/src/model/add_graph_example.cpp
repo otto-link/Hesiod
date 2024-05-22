@@ -54,7 +54,8 @@ QtNodes::NodeId add_graph_example(HsdDataFlowGraphModel *p_model,
     return node_id1;
   }
   //
-  else if (node_type == "CloudSDF" || node_type == "CloudToArrayInterp")
+  else if (node_type == "CloudSDF" || node_type == "CloudToArrayInterp" ||
+           node_type == "CloudToPath")
   {
     QtNodes::NodeId node_id1 = p_model->addNode("Cloud");
     QtNodes::NodeId node_id2 = p_model->addNode(QString::fromStdString(node_type));
