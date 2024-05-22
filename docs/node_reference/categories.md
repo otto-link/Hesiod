@@ -18,7 +18,7 @@ Node Categories
 |Filter|Recurve|Gain, GammaCorrection, GammaCorrectionLocal, Plateau, RecurveKura, RecurveS, Saturate|
 |Filter|Smoothing|Laplace, Median3x3, SharpenCone, SmoothCpulse, SmoothFill, SmoothFillHoles, SmoothFillSmearPeaks|
 |Geometry|Cloud|Cloud, CloudSDF|
-|Geometry|Path|Path, PathBezier, PathBezierRound, PathBspline, PathFractalize, PathSDF, PathToHeightmap|
+|Geometry|Path|Path, PathBezier, PathBezierRound, PathBspline, PathFractalize, PathMeanderize, PathSDF, PathToHeightmap|
 |IO|Files|ExportAsset, ExportHeightmap, ExportNormalMap, ExportTexture, ImportHeightmap|
 |Mask|Adjust|ScanMask|
 |Mask|Selector|SelectCavities, SelectGt, SelectInterval, SelectPulse|

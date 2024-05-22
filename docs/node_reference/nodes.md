@@ -2343,6 +2343,42 @@ Geometry/Path
 |seed|Random seed|Random seed number.|
 |sigma|Float|Half-width of the random Gaussian displacement, normalized by the distance between points.|
 
+## PathMeanderize
+
+
+PathMeanderize uses Bezier interpolation to add menaders to the input path.
+
+![img](../images/nodes/PathMeanderize.png)  
+
+### Category
+
+
+Geometry/Path  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|PathData|Input path.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|PathData|Output path.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|edge_divisions|Integer|Edge sub-divisions of each edge. After the operation, the path is remeshed based on this new sub-division.|
+|iterations|Integer|Number of meandering iterations.|
+|noise_ratio|Float|Randomness ratio.|
+|ratio|Float|Meander amplitude ratio.|
+|seed|Random seed|Random seed number|
+
 ## PathSDF
 
 
