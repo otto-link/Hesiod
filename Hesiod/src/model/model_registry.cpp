@@ -105,6 +105,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::SelectCavities, "Mask/Selector");
   HSD_REGISTER_NODE(hesiod::SelectGt, "Mask/Selector");
   HSD_REGISTER_NODE(hesiod::SelectInterval, "Mask/Selector");
+  HSD_REGISTER_NODE(hesiod::SelectInwardOutward, "Mask/Selector");
   HSD_REGISTER_NODE(hesiod::SelectPulse, "Mask/Selector");
   HSD_REGISTER_NODE(hesiod::SetAlpha, "Texture");
   HSD_REGISTER_NODE(hesiod::ShapeIndex, "Features/Landform");

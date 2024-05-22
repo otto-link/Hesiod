@@ -3116,6 +3116,39 @@ Mask/Selector
 |value1|Float|Selection value, lower bound.|
 |value2|Float|Selection value, upper bound.|
 
+## SelectInwardOutward
+
+
+SelectInwardOutward .
+
+![img](../images/nodes/SelectInwardOutward.png)  
+
+### Category
+
+
+Mask/Selector  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Input heightmap.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Mask heightmap (in [0, 1]).|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|center.x|Float|Reference center x coordinate.|
+|center.y|Float|Reference center y coordinate.|
+
 ## SelectPulse
 
 

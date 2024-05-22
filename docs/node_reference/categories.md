@@ -21,7 +21,7 @@ Node Categories
 |Geometry|Path|Path, PathBezier, PathBezierRound, PathBspline, PathFractalize, PathMeanderize, PathSDF, PathToHeightmap|
 |IO|Files|ExportAsset, ExportHeightmap, ExportNormalMap, ExportTexture, ImportHeightmap|
 |Mask|Adjust|ScanMask|
-|Mask|Selector|SelectBlobLog, SelectCavities, SelectGt, SelectInterval, SelectPulse|
+|Mask|Selector|SelectBlobLog, SelectCavities, SelectGt, SelectInterval, SelectInwardOutward, SelectPulse|
 |Math|Base|Abs, AbsSmooth, Cos, GaussianDecay, Inverse, Smoothstep3, Smoothstep5|
 |Math|Boundaries|ZeroedEdges|
 |Math|Gradient|Gradient, GradientAngle, GradientNorm, GradientTalus|
