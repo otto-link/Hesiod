@@ -71,6 +71,38 @@ Math/Base
 |mu|Float|Smoothing intensity.|
 |vshift|Float|Reference value for the zero-equivalent value of the absolute value.|
 
+## AccumulationCurvature
+
+
+AccumulationCurvature is a specific type of curvature reflects how the shape of the heightmap influences the accumulation of water. Positive accumulation curvature indicates converging flow, where water tends to accumulate and concentrate, often leading to the formation of channels or gullies. Negative accumulation curvature suggests diverging flow, where water is dispersed over a broader area, which is typical of ridges or hilltops.
+
+![img](../images/nodes/AccumulationCurvature.png)  
+
+### Category
+
+
+Features/Landform  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Input heightmap.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Accumulation curvature.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|radius|Float|Filter radius with respect to the domain size.|
+
 ## Blend
 
 

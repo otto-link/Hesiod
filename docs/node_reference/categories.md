@@ -12,7 +12,7 @@ Node Categories
 |Debug||DataAnalysis, DataPreview|
 |Erosion|Hydraulic|HydraulicParticle, HydraulicRidge, HydraulicStream, HydraulicVpipes|
 |Erosion|Stratify|Stratify, StratifyOblique|
-|Features|Landform|RelativeElevation, ShapeIndex, Unsphericity, ValleyWidth|
+|Features|Landform|AccumulationCurvature, RelativeElevation, ShapeIndex, Unsphericity, ValleyWidth|
 |Filter|Range|Clamp, Remap, Rescale|
 |Filter|Recast|ExpandShrink, Fold, NormalDisplacement, RecastCliff|
 |Filter|Recurve|Gain, GammaCorrection, GammaCorrectionLocal, Plateau, RecurveKura, RecurveS, Saturate|
