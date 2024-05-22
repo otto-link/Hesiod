@@ -2953,6 +2953,38 @@ Mask/Adjust
 |brightness|Float|Brightness adjustment.|
 |contrast|Float|Contrast adjustment.|
 
+## SelectBlobLog
+
+
+SelectBlobLog performs 'blob' detection using oa Laplacian of Gaussian (log) method. Blobs are areas in an image that are either brighter or darker than the surrounding areas.
+
+![img](../images/nodes/SelectBlobLog.png)  
+
+### Category
+
+
+Mask/Selector  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Input heightmap.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Mask heightmap (in [0, 1]).|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|radius|Float|Detection radius with respect to the domain size.|
+
 ## SelectCavities
 
 
