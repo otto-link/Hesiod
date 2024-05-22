@@ -19,7 +19,7 @@ Node Categories
 |Filter|Smoothing|Laplace, Median3x3, SharpenCone, SmoothCpulse, SmoothFill, SmoothFillHoles, SmoothFillSmearPeaks|
 |Geometry|Cloud|Cloud, CloudSDF|
 |Geometry|Path|Path, PathBezier, PathBezierRound, PathBspline, PathFractalize, PathMeanderize, PathSDF, PathToHeightmap|
-|IO|Files|ExportAsset, ExportHeightmap, ExportNormalMap, ExportTexture, ImportHeightmap|
+|IO|Files|ExportAsset, ExportCloud, ExportHeightmap, ExportNormalMap, ExportPath, ExportTexture, ImportHeightmap|
 |Mask|Adjust|ScanMask|
 |Mask|Selector|SelectBlobLog, SelectCavities, SelectGt, SelectInterval, SelectInwardOutward, SelectPulse|
 |Math|Base|Abs, AbsSmooth, Cos, GaussianDecay, Inverse, Smoothstep3, Smoothstep5|

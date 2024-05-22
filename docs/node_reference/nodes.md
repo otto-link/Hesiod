@@ -842,6 +842,38 @@ IO/Files
 |max_error|Float|Maximum error (for optimized triangulated mesh).|
 |mesh_type|Enumeration|Mesh type for the geometry. Available values: triangles, triangles (optimized).|
 
+## ExportCloud
+
+
+ExportCloud is an operator for exporting cloud data to a csv file.
+
+![img](../images/nodes/ExportCloud.png)  
+
+### Category
+
+
+IO/Files  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|CloudData|Input heightmap.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|auto_export|Bool|Decides whether the export is automatically performed when the node is updated.|
+|fname|Filename|Export file name.|
+
 ## ExportHeightmap
 
 
@@ -905,6 +937,38 @@ IO/Files
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |16bit|Bool|Whether the output file is a 16bit PNG file (instead of 8bit).|
+|auto_export|Bool|Decides whether the export is automatically performed when the node is updated.|
+|fname|Filename|Export file name.|
+
+## ExportPath
+
+
+ExportPath is an operator for exporting path data to a csv file.
+
+![img](../images/nodes/ExportPath.png)  
+
+### Category
+
+
+IO/Files  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|PathData|Input heightmap.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
 |auto_export|Bool|Decides whether the export is automatically performed when the node is updated.|
 |fname|Filename|Export file name.|
 
@@ -3119,7 +3183,7 @@ Mask/Selector
 ## SelectInwardOutward
 
 
-SelectInwardOutward .
+SelectInwardOutward returns values > 0.5 if the slope is pointing to the center (slope is inward), and values < 0.5 otherwise (slope is outward).
 
 ![img](../images/nodes/SelectInwardOutward.png)  
 

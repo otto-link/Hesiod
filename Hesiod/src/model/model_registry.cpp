@@ -39,8 +39,10 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::Erosion, "Operator/Morphology");
   HSD_REGISTER_NODE(hesiod::ExpandShrink, "Filter/Recast");
   HSD_REGISTER_NODE(hesiod::ExportAsset, "IO/Files");
+  HSD_REGISTER_NODE(hesiod::ExportCloud, "IO/Files");
   HSD_REGISTER_NODE(hesiod::ExportHeightmap, "IO/Files");
   HSD_REGISTER_NODE(hesiod::ExportNormalMap, "IO/Files");
+  HSD_REGISTER_NODE(hesiod::ExportPath, "IO/Files");
   HSD_REGISTER_NODE(hesiod::ExportTexture, "IO/Files");
   HSD_REGISTER_NODE(hesiod::Fold, "Filter/Recast");
   HSD_REGISTER_NODE(hesiod::Gain, "Filter/Recurve");
