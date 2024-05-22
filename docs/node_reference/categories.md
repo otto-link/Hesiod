@@ -8,7 +8,7 @@ Node Categories
 |Primary|Secondary|Nodes|
 | :--- | :--- | :--- |
 |Comment||Comment|
-|Converter||HeightmapToMask, HeightmapToRGBA|
+|Converter||HeightmapToMask, HeightmapToRGBA, PathToCloud|
 |Debug||DataAnalysis, DataPreview|
 |Erosion|Hydraulic|HydraulicParticle, HydraulicRidge, HydraulicStream, HydraulicVpipes|
 |Erosion|Stratify|Stratify, StratifyOblique|

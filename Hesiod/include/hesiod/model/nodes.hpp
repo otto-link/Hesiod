@@ -1759,6 +1759,30 @@ protected:
 };
 
 /**
+ * @brief PathToCloud class.
+ */
+class PathToCloud : public BaseNode
+{
+public:
+  PathToCloud(const ModelConfig *p_config);
+
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return nullptr; }
+  QtNodes::NodeData *get_viewer3d_data() { return nullptr; }
+  QtNodes::NodeData *get_viewer3d_color() { return nullptr; }
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data, QtNodes::PortIndex port_index);
+
+protected:
+  std::weak_ptr<PathData>    in;
+  std::shared_ptr<CloudData> out;
+};
+
+/**
  * @brief PathToHeightmap class.
  */
 class PathToHeightmap : public BaseNode

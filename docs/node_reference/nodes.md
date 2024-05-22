@@ -74,7 +74,7 @@ Math/Base
 ## AccumulationCurvature
 
 
-AccumulationCurvature is a specific type of curvature reflects how the shape of the heightmap influences the accumulation of water. Positive accumulation curvature indicates converging flow, where water tends to accumulate and concentrate, often leading to the formation of channels or gullies. Negative accumulation curvature suggests diverging flow, where water is dispersed over a broader area, which is typical of ridges or hilltops.
+AccumulationCurvature is a specific type of curvature reflecting how the shape of the heightmap influences the accumulation of water. Positive accumulation curvature indicates converging flow, where water tends to accumulate and concentrate, often leading to the formation of channels or gullies. Negative accumulation curvature suggests diverging flow, where water is dispersed over a broader area, which is typical of ridges or hilltops.
 
 ![img](../images/nodes/AccumulationCurvature.png)  
 
@@ -2367,6 +2367,37 @@ Geometry/Path
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |sdf|HeightMapData|Signed distance as an heightmap.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+
+## PathToCloud
+
+
+PathToCloud convert a Path to a set of points (Cloud).
+
+![img](../images/nodes/PathToCloud.png)  
+
+### Category
+
+
+Converter  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|path|PathData|Input path.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|cloud|CloudData|Output cloud.|
   
 
 ### Parameters
