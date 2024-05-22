@@ -71,6 +71,31 @@ protected:
 };
 
 /**
+ * @brief AccumulationCurvature class.
+ */
+class AccumulationCurvature : public BaseNode
+{
+public:
+  AccumulationCurvature(const ModelConfig *p_config);
+
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_data() { return this->in.lock().get(); }
+  QtNodes::NodeData *get_viewer3d_color() { return this->out.get(); }
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data,
+                 QtNodes::PortIndex                 port_index) override;
+
+protected:
+  std::weak_ptr<HeightMapData>   in;
+  std::shared_ptr<HeightMapData> out;
+};
+
+/**
  * @brief Blend class.
  */
 class Blend : public BaseNode
@@ -1262,6 +1287,31 @@ protected:
 };
 
 /**
+ * @brief Mixer class.
+ */
+class Mixer : public BaseNode
+{
+public:
+  Mixer(const ModelConfig *p_config);
+
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_color() { return nullptr; }
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data,
+                 QtNodes::PortIndex                 port_index) override;
+
+protected:
+  std::weak_ptr<HeightMapData>   in1, in2, in3, in4, t;
+  std::shared_ptr<HeightMapData> out;
+};
+
+/**
  * @brief MixTexture class.
  */
 class MixTexture : public BaseNode
@@ -1684,6 +1734,30 @@ protected:
 };
 
 /**
+ * @brief PathMeanderize class.
+ */
+class PathMeanderize : public BaseNode
+{
+public:
+  PathMeanderize(const ModelConfig *p_config);
+
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return nullptr; }
+  QtNodes::NodeData *get_viewer3d_data() { return nullptr; }
+  QtNodes::NodeData *get_viewer3d_color() { return nullptr; }
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data, QtNodes::PortIndex port_index);
+
+protected:
+  std::weak_ptr<PathData>   in;
+  std::shared_ptr<PathData> out;
+};
+
+/**
  * @brief PathSDF class.
  */
 class PathSDF : public BaseNode
@@ -1706,6 +1780,30 @@ protected:
   std::weak_ptr<PathData>        in;
   std::weak_ptr<HeightMapData>   dx, dy;
   std::shared_ptr<HeightMapData> out;
+};
+
+/**
+ * @brief PathToCloud class.
+ */
+class PathToCloud : public BaseNode
+{
+public:
+  PathToCloud(const ModelConfig *p_config);
+
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return nullptr; }
+  QtNodes::NodeData *get_viewer3d_data() { return nullptr; }
+  QtNodes::NodeData *get_viewer3d_color() { return nullptr; }
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data, QtNodes::PortIndex port_index);
+
+protected:
+  std::weak_ptr<PathData>    in;
+  std::shared_ptr<CloudData> out;
 };
 
 /**
@@ -2082,6 +2180,31 @@ protected:
 };
 
 /**
+ * @brief SelectBlobLog class.
+ */
+class SelectBlobLog : public BaseNode
+{
+public:
+  SelectBlobLog(const ModelConfig *p_config);
+
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_data() { return this->in.lock().get(); }
+  QtNodes::NodeData *get_viewer3d_color() { return this->out.get(); }
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data,
+                 QtNodes::PortIndex                 port_index) override;
+
+protected:
+  std::weak_ptr<HeightMapData>   in;
+  std::shared_ptr<HeightMapData> out;
+};
+
+/**
  * @brief SelectCavities class.
  */
 class SelectCavities : public BaseNode
@@ -2205,6 +2328,31 @@ protected:
   std::weak_ptr<HeightMapRGBAData>   in;
   std::weak_ptr<HeightMapData>       alpha;
   std::shared_ptr<HeightMapRGBAData> out;
+};
+
+/**
+ * @brief ShapeIndex class.
+ */
+class ShapeIndex : public BaseNode
+{
+public:
+  ShapeIndex(const ModelConfig *p_config);
+
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_data() { return this->in.lock().get(); }
+  QtNodes::NodeData *get_viewer3d_color() { return this->out.get(); }
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data,
+                 QtNodes::PortIndex                 port_index) override;
+
+protected:
+  std::weak_ptr<HeightMapData>   in;
+  std::shared_ptr<HeightMapData> out;
 };
 
 /**
@@ -2479,6 +2627,31 @@ public:
 
 protected:
   std::weak_ptr<HeightMapData>   in, noise, mask;
+  std::shared_ptr<HeightMapData> out;
+};
+
+/**
+ * @brief Unsphericity class.
+ */
+class Unsphericity : public BaseNode
+{
+public:
+  Unsphericity(const ModelConfig *p_config);
+
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_data() { return this->in.lock().get(); }
+  QtNodes::NodeData *get_viewer3d_color() { return this->out.get(); }
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data,
+                 QtNodes::PortIndex                 port_index) override;
+
+protected:
+  std::weak_ptr<HeightMapData>   in;
   std::shared_ptr<HeightMapData> out;
 };
 

@@ -43,6 +43,10 @@ void BaseNode::context_menu(const QPointF /* pos */)
               this->compute();
               Q_EMIT this->settings_changed();
             });
+
+    connect(attributes_widget,
+            &AttributesWidget::update_button_released,
+            [this]() { this->compute(); });
   }
 
   this->qmenu->popup(QCursor::pos());

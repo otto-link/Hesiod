@@ -24,7 +24,7 @@ ExportTexture::ExportTexture(const ModelConfig *p_config) : BaseNode(p_config)
   // attributes
   this->attr["fname"] = NEW_ATTR_FILENAME("texture.png");
   this->attr["16 bit"] = NEW_ATTR_BOOL(false);
-  this->attr["auto_export"] = NEW_ATTR_BOOL(false);
+  this->attr["auto_export"] = NEW_ATTR_BOOL(true);
 
   this->attr_ordered_key = {"fname", "16 bit", "auto_export"};
 

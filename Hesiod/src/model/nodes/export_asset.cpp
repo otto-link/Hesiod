@@ -24,7 +24,7 @@ ExportAsset::ExportAsset(const ModelConfig *p_config) : BaseNode(p_config)
   this->output_types = {};
 
   // attributes
-  this->attr["auto_export"] = NEW_ATTR_BOOL(false);
+  this->attr["auto_export"] = NEW_ATTR_BOOL(true);
   this->attr["fname"] = NEW_ATTR_FILENAME("export");
 
   {

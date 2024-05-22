@@ -71,6 +71,38 @@ Math/Base
 |mu|Float|Smoothing intensity.|
 |vshift|Float|Reference value for the zero-equivalent value of the absolute value.|
 
+## AccumulationCurvature
+
+
+AccumulationCurvature is a specific type of curvature reflecting how the shape of the heightmap influences the accumulation of water. Positive accumulation curvature indicates converging flow, where water tends to accumulate and concentrate, often leading to the formation of channels or gullies. Negative accumulation curvature suggests diverging flow, where water is dispersed over a broader area, which is typical of ridges or hilltops.
+
+![img](../images/nodes/AccumulationCurvature.png)  
+
+### Category
+
+
+Features/Landform  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Input heightmap.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Accumulation curvature.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|radius|Float|Filter radius with respect to the domain size.|
+
 ## Blend
 
 
@@ -772,7 +804,7 @@ IO/Files
 | :--- | :--- | :--- |
 |auto_export|Bool|Decides whether the export is automatically performed when the node is updated.|
 |elevation_scaling|Float|Elevation scaling.|
-|export_format|Enumeration|Export format. Available values: Assimp Binary - *.assbin, Assxml Document - *.assxml, Autodesk 3DS (legacy) - *.3ds, Autodesk FBX (ascii) - *.fbx, Autodesk FBX (binary) - *.fbx, COLLADA - Digital Asset Exchange Schema - *.dae, Extensible 3D - *.x3d, GL Transmission Format (binary) - *.glb, GL Transmission Format - *.gltf, GL Transmission Format v. 2 (binary) - *.glb, GL Transmission Format v. 2 - *.gltf, Stanford Polygon Library (binary) - *.ply, Stanford Polygon Library - *.ply, Step Files - *.stp, Stereolithography (binary) - *.stl, Stereolithography - *.stl, The 3MF-File-Format - *.3mf, Wavefront OBJ format - *.obj, Wavefront OBJ format without material file - *.obj, X Files - *.x.|
+|export_format|Enumeration|Export format. Available values: Assimp Binary - *.assbin, Assxml Document - *.assxml, Autodesk 3DS (legacy) - *.3ds, Autodesk FBX (ascii) - *.fbx, Autodesk FBX (binary) - *.fbx, COLLADA - Digital Asset Exchange Schema - *.dae, Extensible 3D - *.x3d, GL Transmission Format (binary) - *.glb, GL Transmission Format - *.gltf, GL Transmission Format v. 2 (binary) - *.glb, GL Transmission Format v. 2 - *.gltf, Stanford Polygon Library (binary) - *.ply, Stanford Polygon Library - *.ply, Step Files - *.stp, Stereolithography (binary) - *.stl, Stereolithography - *.stl, The 3MF-File-Format - *.3mf, Wavefront OBJ format - *.obj, Wavefront OBJ format without material file - *.obj.|
 |fname|Filename|Export file name.|
 |max_error|Float|Maximum error (for optimized triangulated mesh).|
 |mesh_type|Enumeration|Mesh type for the geometry. Available values: triangles, triangles (optimized).|
@@ -1726,6 +1758,41 @@ Texture
 |reset_output_alpha|Bool|Reset the output alpha channel to 1 (opaque).|
 |use_sqrt_avg|Bool|Use square averaging for alpha-compositing (instead of linear averaging).|
 
+## Mixer
+
+
+The Mixer operator takes several input heightmaps and blend them according to a mixing parameter expected in [0, 1].
+
+![img](../images/nodes/Mixer.png)  
+
+### Category
+
+
+Operator/Blend  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input 1|HeightMapData|Input heightmap.|
+|input 2|HeightMapData|Input heightmap.|
+|input 3|HeightMapData|Input heightmap.|
+|input 4|HeightMapData|Input heightmap.|
+|t|HeightMapData|Mixing parameter, expected in [0, 1].|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Output heightmap.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+
 ## MorphologicalGradient
 
 
@@ -2276,6 +2343,42 @@ Geometry/Path
 |seed|Random seed|Random seed number.|
 |sigma|Float|Half-width of the random Gaussian displacement, normalized by the distance between points.|
 
+## PathMeanderize
+
+
+PathMeanderize uses Bezier interpolation to add menaders to the input path.
+
+![img](../images/nodes/PathMeanderize.png)  
+
+### Category
+
+
+Geometry/Path  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|PathData|Input path.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|PathData|Output path.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|edge_divisions|Integer|Edge sub-divisions of each edge. After the operation, the path is remeshed based on this new sub-division.|
+|iterations|Integer|Number of meandering iterations.|
+|noise_ratio|Float|Randomness ratio.|
+|ratio|Float|Meander amplitude ratio.|
+|seed|Random seed|Random seed number|
+
 ## PathSDF
 
 
@@ -2300,6 +2403,37 @@ Geometry/Path
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |sdf|HeightMapData|Signed distance as an heightmap.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+
+## PathToCloud
+
+
+PathToCloud convert a Path to a set of points (Cloud).
+
+![img](../images/nodes/PathToCloud.png)  
+
+### Category
+
+
+Converter  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|path|PathData|Input path.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|cloud|CloudData|Output cloud.|
   
 
 ### Parameters
@@ -2562,7 +2696,7 @@ RelativeElevation identifies heightmap relative elevation based on the surroundi
 ### Category
 
 
-Features  
+Features/Landform  
 
 ### Inputs
 
@@ -2819,6 +2953,38 @@ Mask/Adjust
 |brightness|Float|Brightness adjustment.|
 |contrast|Float|Contrast adjustment.|
 
+## SelectBlobLog
+
+
+SelectBlobLog performs 'blob' detection using oa Laplacian of Gaussian (log) method. Blobs are areas in an image that are either brighter or darker than the surrounding areas.
+
+![img](../images/nodes/SelectBlobLog.png)  
+
+### Category
+
+
+Mask/Selector  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Input heightmap.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Mask heightmap (in [0, 1]).|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|radius|Float|Detection radius with respect to the domain size.|
+
 ## SelectCavities
 
 
@@ -2983,6 +3149,38 @@ Texture
 | :--- | :--- | :--- |
 |alpha|Float|Transparency as a scalar value (overriden if this alpha input is set).|
 |clamp_alpha|Bool|Clamp to [0, 1] to input alpha map.|
+
+## ShapeIndex
+
+
+ShapeIndex is a measure used to quantify the shape complexity of landforms in an heightmap. It is calculated based on the second derivatives of the elevation surface. The surface index is greater than 0.5 for convex surface and lower than 0.5 for concave surface.
+
+![img](../images/nodes/ShapeIndex.png)  
+
+### Category
+
+
+Features/Landform  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Input heightmap.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Shape index.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|radius|Float|Filter radius with respect to the domain size.|
 
 ## SharpenCone
 
@@ -3363,6 +3561,38 @@ Erosion/Stratify
 |strata_noise|Float|Noise range for the strata elevations.|
 |talus_global|Float|Step slope.|
 
+## Unsphericity
+
+
+Unsphericity is a measure used to quantify the deviation of the heightmap shape from a perfect sphere. In other words, it indicates how much the terrain differs from being perfectly round or spherical.
+
+![img](../images/nodes/Unsphericity.png)  
+
+### Category
+
+
+Features/Landform  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Input heightmap.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Shape index.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|radius|Float|Filter radius with respect to the domain size.|
+
 ## ValleyWidth
 
 
@@ -3373,7 +3603,7 @@ ValleyWidth identifies valley lines and measure the width of the valley at each 
 ### Category
 
 
-Features  
+Features/Landform  
 
 ### Inputs
 

@@ -16,7 +16,7 @@
 
 #include "highmap/heightmap.hpp"
 #include "highmap/io.hpp"
-#include "highmap/op.hpp"
+#include "highmap/math.hpp"
 
 #include "hesiod/data/cloud_data.hpp"
 #include "hesiod/data/heightmap_data.hpp"
@@ -87,20 +87,13 @@ std::vector<uint8_t> generate_selector_image(hmap::Array &array)
 {
   std::vector<uint8_t> img(4 * array.shape.x * array.shape.y);
 
-  hmap::Array hs = hillshade(array,
-                             180.f,
-                             45.f,
-                             10.f * array.ptp() / (float)array.shape.x);
-  hmap::remap(hs);
-  hs = hmap::pow(hs, 1.5f);
-
   int k = 0;
   for (int j = array.shape.y - 1; j > -1; j--)
     for (int i = 0; i < array.shape.x; i++)
     {
-      img[k++] = (uint8_t)(255.f * hs(i, j));
-      img[k++] = (uint8_t)(255.f * (1.f - array(i, j)) * hs(i, j));
-      img[k++] = (uint8_t)(255.f * hs(i, j));
+      img[k++] = (uint8_t)(255.f);
+      img[k++] = (uint8_t)(255.f * (1.f - array(i, j)));
+      img[k++] = (uint8_t)(255.f);
       img[k++] = (uint8_t)(255.f);
     }
 
@@ -214,10 +207,13 @@ void HmapGLViewer::set_data(QtNodes::NodeData *new_p_data, QtNodes::NodeData *ne
         {
           HeightMapData   *p_hcolor = static_cast<HeightMapData *>(this->p_color);
           hmap::HeightMap *p_c = static_cast<hmap::HeightMap *>(p_hcolor->get_ref());
-          hmap::Array      c = 1.f - p_c->to_array();
+          hmap::Array      c = p_c->to_array();
 
-          this->texture_img = generate_selector_image(array);
-          this->texture_shape = array.shape;
+          this->texture_img = generate_selector_image(c);
+          this->texture_shape = p_c->shape;
+
+          hmap::apply_hillshade(this->texture_img, array, 0.f, 1.f, 1.5f, true);
+
           color_done = true;
         }
         //

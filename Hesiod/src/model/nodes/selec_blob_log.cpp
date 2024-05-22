@@ -1,19 +1,17 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-#include "highmap/features.hpp"
-
 #include "hesiod/model/nodes.hpp"
 
 namespace hesiod
 {
 
-ValleyWidth::ValleyWidth(const ModelConfig *p_config) : BaseNode(p_config)
+SelectBlobLog::SelectBlobLog(const ModelConfig *p_config) : BaseNode(p_config)
 {
-  LOG_DEBUG("ValleyWidth::ValleyWidth");
+  LOG_DEBUG("SelectBlobLog::SelectBlobLog");
 
   // model
-  this->node_caption = "ValleyWidth";
+  this->node_caption = "SelectBlobLog";
 
   // inputs
   this->input_captions = {"input"};
@@ -24,12 +22,16 @@ ValleyWidth::ValleyWidth(const ModelConfig *p_config) : BaseNode(p_config)
   this->output_types = {HeightMapData().type()};
 
   // attributes
-  this->attr["radius"] = NEW_ATTR_FLOAT(0.1f, 0.f, 0.2f, "%.3f");
+  this->attr["radius"] = NEW_ATTR_FLOAT(0.05f, 0.001f, 0.2f, "%.3f");
+  this->attr["inverse"] = NEW_ATTR_BOOL(false);
+  this->attr["smoothing"] = NEW_ATTR_BOOL(false);
+  this->attr["smoothing_radius"] = NEW_ATTR_FLOAT(0.05f, 0.f, 0.2f, "%.2f");
 
-  this->attr["remap"] = NEW_ATTR_BOOL(true);
-  this->attr["remap_range"] = NEW_ATTR_RANGE(hmap::Vec2<float>(0.f, 1.f), 0.f, 1.f);
-
-  this->attr_ordered_key = {"radius", "_SEPARATOR_", "remap", "remap_range"};
+  this->attr_ordered_key = {"radius",
+                            "_SEPARATOR_",
+                            "inverse",
+                            "smoothing",
+                            "smoothing_radius"};
 
   // update
   if (this->p_config->compute_nodes_at_instanciation)
@@ -39,24 +41,25 @@ ValleyWidth::ValleyWidth(const ModelConfig *p_config) : BaseNode(p_config)
   }
 
   // documentation
-  this->description = "ValleyWidth identifies valley lines and measure the width of the "
-                      "valley at each cross-section.";
+  this->description = "SelectBlobLog performs 'blob' detection using oa Laplacian of "
+                      "Gaussian (log) method. Blobs are areas in an image that are "
+                      "either brighter or darker than the surrounding areas.";
 
   this->input_descriptions = {"Input heightmap."};
-  this->output_descriptions = {"Valley width heightmap."};
+  this->output_descriptions = {"Mask heightmap (in [0, 1])."};
 
   this->attribute_descriptions
-      ["radius"] = "Filter radius with respect to the domain size.";
+      ["radius"] = "Detection radius with respect to the domain size.";
 }
 
-std::shared_ptr<QtNodes::NodeData> ValleyWidth::outData(
+std::shared_ptr<QtNodes::NodeData> SelectBlobLog::outData(
     QtNodes::PortIndex /* port_index */)
 {
   return std::static_pointer_cast<QtNodes::NodeData>(this->out);
 }
 
-void ValleyWidth::setInData(std::shared_ptr<QtNodes::NodeData> data,
-                            QtNodes::PortIndex /* port_index */)
+void SelectBlobLog::setInData(std::shared_ptr<QtNodes::NodeData> data,
+                              QtNodes::PortIndex /* port_index */)
 {
   if (!data)
     Q_EMIT this->dataInvalidated(0);
@@ -68,7 +71,7 @@ void ValleyWidth::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 // --- computing
 
-void ValleyWidth::compute()
+void SelectBlobLog::compute()
 {
   LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
 
@@ -84,21 +87,23 @@ void ValleyWidth::compute()
 
     hmap::transform(*p_out,
                     *p_in,
-                    [&ir](hmap::Array &out, hmap::Array &in)
-                    { out = hmap::valley_width(in, ir); });
+                    [this, &ir](hmap::Array &array)
+                    { return hmap::select_blob_log(array, ir); });
 
     p_out->smooth_overlap_buffers();
 
     // post-process
+    ir = std::max(1, (int)(GET_ATTR_FLOAT("smoothing_radius") * p_out->shape.x));
+
     post_process_heightmap(*p_out,
-                           false, // inverse
-                           false, // smooth
-                           0,
+                           GET_ATTR_BOOL("inverse"),
+                           GET_ATTR_BOOL("smoothing"),
+                           ir,
                            false, // saturate
                            {0.f, 0.f},
                            0.f,
-                           GET_ATTR_BOOL("remap"),
-                           GET_ATTR_RANGE("remap_range"));
+                           true, // force remap
+                           {0.f, 1.f});
 
     // propagate
     Q_EMIT this->computingFinished();

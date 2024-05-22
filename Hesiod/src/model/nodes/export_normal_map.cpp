@@ -25,7 +25,7 @@ ExportNormalMap::ExportNormalMap(const ModelConfig *p_config) : BaseNode(p_confi
   // attributes
   this->attr["fname"] = NEW_ATTR_FILENAME("nmap.png");
   this->attr["16bit"] = NEW_ATTR_BOOL(false);
-  this->attr["auto_export"] = NEW_ATTR_BOOL(false);
+  this->attr["auto_export"] = NEW_ATTR_BOOL(true);
 
   this->attr_ordered_key = {"fname", "16bit", "auto_export"};
 

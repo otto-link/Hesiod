@@ -73,8 +73,21 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
   connect(about, &QAction::triggered, this, &MainWindow::show_about);
   connect(load_action, &QAction::triggered, this, &MainWindow::on_load);
   connect(new_action, &QAction::triggered, this, &MainWindow::on_new);
-  connect(quit, &QAction::triggered, this, &MainWindow::on_quit);
   connect(save_action, &QAction::triggered, this, &MainWindow::on_save);
+
+  connect(quit,
+          &QAction::triggered,
+          [this]()
+          {
+            QMessageBox::StandardButton reply;
+            reply = QMessageBox::question(nullptr,
+                                          "Quit",
+                                          "Quitting the application, are you sure?",
+                                          QMessageBox::Yes | QMessageBox::No);
+
+            if (reply == QMessageBox::Yes)
+              this->on_quit();
+          });
 
   connect(p_app, &QApplication::aboutToQuit, [&]() { this->save_state(); });
 }
