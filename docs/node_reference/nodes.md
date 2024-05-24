@@ -171,6 +171,37 @@ Primitive/Function
 | :--- | :--- | :--- |
 |gain|Float|Shape control parameter.|
 
+## Caldera
+
+
+Caldera generates a volcanic caldera landscape.
+
+![img](../images/nodes/Caldera.png)  
+
+### Category
+
+
+Primitive/Geological  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|dr|HeightMapData|Displacement with respect to the domain size (normal direction).|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Caldera heightmap.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+
 ## Clamp
 
 
@@ -3114,6 +3145,38 @@ Mask/Selector
 | :--- | :--- | :--- |
 |concave|Bool|Decides whether concave or convex features are detected.|
 |radius|Float|Detection radius with respect to the domain size.|
+
+## SelectElevationSlope
+
+
+SelectElevationSlope select regions based a combinaison of elevation and slope values.
+
+![img](../images/nodes/SelectElevationSlope.png)  
+
+### Category
+
+
+Mask/Selector  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Input heightmap.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Mask heightmap (in [0, 1]).|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|gradient_scale|Float|Gradient scaling, with respect to elevation.|
 
 ## SelectGt
 

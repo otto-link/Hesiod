@@ -19,6 +19,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::AccumulationCurvature, "Features/Landform");
   HSD_REGISTER_NODE(hesiod::Blend, "Operator/Blend");
   HSD_REGISTER_NODE(hesiod::Bump, "Primitive/Function");
+  HSD_REGISTER_NODE(hesiod::Caldera, "Primitive/Geological");
   HSD_REGISTER_NODE(hesiod::Clamp, "Filter/Range");
   HSD_REGISTER_NODE(hesiod::Closing, "Operator/Morphology");
   HSD_REGISTER_NODE(hesiod::Cloud, "Geometry/Cloud");
@@ -105,6 +106,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::ScanMask, "Mask/Adjust");
   HSD_REGISTER_NODE(hesiod::SelectBlobLog, "Mask/Selector");
   HSD_REGISTER_NODE(hesiod::SelectCavities, "Mask/Selector");
+  HSD_REGISTER_NODE(hesiod::SelectElevationSlope, "Mask/Selector");
   HSD_REGISTER_NODE(hesiod::SelectGt, "Mask/Selector");
   HSD_REGISTER_NODE(hesiod::SelectInterval, "Mask/Selector");
   HSD_REGISTER_NODE(hesiod::SelectInwardOutward, "Mask/Selector");

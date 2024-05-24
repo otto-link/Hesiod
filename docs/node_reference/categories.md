@@ -21,7 +21,7 @@ Node Categories
 |Geometry|Path|Path, PathBezier, PathBezierRound, PathBspline, PathFractalize, PathMeanderize, PathSDF, PathToHeightmap|
 |IO|Files|ExportAsset, ExportCloud, ExportHeightmap, ExportNormalMap, ExportPath, ExportTexture, ImportHeightmap|
 |Mask|Adjust|ScanMask|
-|Mask|Selector|SelectBlobLog, SelectCavities, SelectGt, SelectInterval, SelectInwardOutward, SelectPulse|
+|Mask|Selector|SelectBlobLog, SelectCavities, SelectElevationSlope, SelectGt, SelectInterval, SelectInwardOutward, SelectPulse|
 |Math|Base|Abs, AbsSmooth, Cos, GaussianDecay, Inverse, Smoothstep3, Smoothstep5|
 |Math|Boundaries|ZeroedEdges|
 |Math|Gradient|Gradient, GradientAngle, GradientNorm, GradientTalus|
@@ -33,5 +33,6 @@ Node Categories
 |Primitive|Authoring|CloudToArrayInterp, ReverseMidpoint, Ridgelines|
 |Primitive|Coherent Noise|Dendry, Noise, NoiseFbm, NoiseIq, NoiseJordan, NoisePingpong, NoiseRidged, NoiseSwiss|
 |Primitive|Function|Bump, GaussianPulse, Slope, Step, WaveDune, WaveSine, WaveSquare, WaveTriangular|
+|Primitive|Geological|Caldera|
 |Primitive|Random|White, WhiteDensityMap, WhiteSparse|
 |Texture||ColorizeCmap, ColorizeGradient, ColorizeSolid, MixTexture, SetAlpha|
