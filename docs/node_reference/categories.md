@@ -8,7 +8,7 @@ Node Categories
 |Primary|Secondary|Nodes|
 | :--- | :--- | :--- |
 |Comment||Comment|
-|Converter||HeightmapToMask, HeightmapToRGBA, PathToCloud|
+|Converter||CloudToPath, HeightmapToMask, HeightmapToRGBA, PathToCloud|
 |Debug||DataAnalysis, DataPreview|
 |Erosion|Hydraulic|HydraulicParticle, HydraulicRidge, HydraulicStream, HydraulicVpipes|
 |Erosion|Stratify|Stratify, StratifyOblique|
@@ -19,9 +19,9 @@ Node Categories
 |Filter|Smoothing|Laplace, Median3x3, SharpenCone, SmoothCpulse, SmoothFill, SmoothFillHoles, SmoothFillSmearPeaks|
 |Geometry|Cloud|Cloud, CloudSDF|
 |Geometry|Path|Path, PathBezier, PathBezierRound, PathBspline, PathFractalize, PathMeanderize, PathSDF, PathToHeightmap|
-|IO|Files|ExportAsset, ExportHeightmap, ExportNormalMap, ExportTexture, ImportHeightmap|
+|IO|Files|ExportAsset, ExportCloud, ExportHeightmap, ExportNormalMap, ExportPath, ExportTexture, ImportHeightmap|
 |Mask|Adjust|ScanMask|
-|Mask|Selector|SelectBlobLog, SelectCavities, SelectGt, SelectInterval, SelectPulse|
+|Mask|Selector|SelectBlobLog, SelectCavities, SelectElevationSlope, SelectGt, SelectInterval, SelectInwardOutward, SelectPulse|
 |Math|Base|Abs, AbsSmooth, Cos, GaussianDecay, Inverse, Smoothstep3, Smoothstep5|
 |Math|Boundaries|ZeroedEdges|
 |Math|Gradient|Gradient, GradientAngle, GradientNorm, GradientTalus|
@@ -33,5 +33,6 @@ Node Categories
 |Primitive|Authoring|CloudToArrayInterp, ReverseMidpoint, Ridgelines|
 |Primitive|Coherent Noise|Dendry, Noise, NoiseFbm, NoiseIq, NoiseJordan, NoisePingpong, NoiseRidged, NoiseSwiss|
 |Primitive|Function|Bump, GaussianPulse, Slope, Step, WaveDune, WaveSine, WaveSquare, WaveTriangular|
+|Primitive|Geological|Caldera|
 |Primitive|Random|White, WhiteDensityMap, WhiteSparse|
 |Texture||ColorizeCmap, ColorizeGradient, ColorizeSolid, MixTexture, SetAlpha|

@@ -146,6 +146,31 @@ protected:
 };
 
 /**
+ * @brief Caldera class.
+ */
+class Caldera : public BaseNode
+{
+public:
+  Caldera(const ModelConfig *p_config);
+
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_color() { return nullptr; }
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data,
+                 QtNodes::PortIndex                 port_index) override;
+
+protected:
+  std::weak_ptr<HeightMapData>   dr;
+  std::shared_ptr<HeightMapData> out;
+};
+
+/**
  * @brief Clamp class.
  */
 class Clamp : public BaseNode
@@ -266,6 +291,30 @@ protected:
   std::weak_ptr<CloudData>       in;
   std::weak_ptr<HeightMapData>   dx, dy;
   std::shared_ptr<HeightMapData> out;
+};
+
+/**
+ * @brief CloudToPath class.
+ */
+class CloudToPath : public BaseNode
+{
+public:
+  CloudToPath(const ModelConfig *p_config);
+
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return nullptr; }
+  QtNodes::NodeData *get_viewer3d_data() { return nullptr; }
+  QtNodes::NodeData *get_viewer3d_color() { return nullptr; }
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data, QtNodes::PortIndex port_index);
+
+protected:
+  std::weak_ptr<CloudData>  in;
+  std::shared_ptr<PathData> out;
 };
 
 /**
@@ -615,6 +664,30 @@ protected:
 };
 
 /**
+ * @brief ExportCloud class.
+ */
+class ExportCloud : public BaseNode
+{
+public:
+  ExportCloud(const ModelConfig *p_config);
+
+  QtNodes::NodeData *get_preview_data() { return this->in.lock().get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return this->in.lock().get(); }
+  QtNodes::NodeData *get_viewer3d_data() { return nullptr; }
+  QtNodes::NodeData *get_viewer3d_color() { return nullptr; }
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data,
+                 QtNodes::PortIndex                 port_index) override;
+
+protected:
+  std::weak_ptr<CloudData> in;
+};
+
+/**
  * @brief ExportHeightmap class.
  */
 class ExportHeightmap : public BaseNode
@@ -660,6 +733,30 @@ public:
 
 protected:
   std::weak_ptr<HeightMapData> in;
+};
+
+/**
+ * @brief ExportPath class.
+ */
+class ExportPath : public BaseNode
+{
+public:
+  ExportPath(const ModelConfig *p_config);
+
+  QtNodes::NodeData *get_preview_data() { return this->in.lock().get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return this->in.lock().get(); }
+  QtNodes::NodeData *get_viewer3d_data() { return nullptr; }
+  QtNodes::NodeData *get_viewer3d_color() { return nullptr; }
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data,
+                 QtNodes::PortIndex                 port_index) override;
+
+protected:
+  std::weak_ptr<PathData> in;
 };
 
 /**
@@ -2230,6 +2327,31 @@ protected:
 };
 
 /**
+ * @brief SelectElevationSlope class.
+ */
+class SelectElevationSlope : public BaseNode
+{
+public:
+  SelectElevationSlope(const ModelConfig *p_config);
+
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_data() { return this->in.lock().get(); }
+  QtNodes::NodeData *get_viewer3d_color() { return this->out.get(); }
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data,
+                 QtNodes::PortIndex                 port_index) override;
+
+protected:
+  std::weak_ptr<HeightMapData>   in;
+  std::shared_ptr<HeightMapData> out;
+};
+
+/**
  * @brief SelectGt class.
  */
 class SelectGt : public BaseNode
@@ -2261,6 +2383,31 @@ class SelectInterval : public BaseNode
 {
 public:
   SelectInterval(const ModelConfig *p_config);
+
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_data() { return this->in.lock().get(); }
+  QtNodes::NodeData *get_viewer3d_color() { return this->out.get(); }
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data,
+                 QtNodes::PortIndex                 port_index) override;
+
+protected:
+  std::weak_ptr<HeightMapData>   in;
+  std::shared_ptr<HeightMapData> out;
+};
+
+/**
+ * @brief SelectInwardOutward class.
+ */
+class SelectInwardOutward : public BaseNode
+{
+public:
+  SelectInwardOutward(const ModelConfig *p_config);
 
   QtNodes::NodeData *get_preview_data() { return this->out.get(); }
   QtNodes::NodeData *get_viewer2d_data() { return this->out.get(); }

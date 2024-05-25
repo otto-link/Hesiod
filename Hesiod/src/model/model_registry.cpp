@@ -19,11 +19,13 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::AccumulationCurvature, "Features/Landform");
   HSD_REGISTER_NODE(hesiod::Blend, "Operator/Blend");
   HSD_REGISTER_NODE(hesiod::Bump, "Primitive/Function");
+  HSD_REGISTER_NODE(hesiod::Caldera, "Primitive/Geological");
   HSD_REGISTER_NODE(hesiod::Clamp, "Filter/Range");
   HSD_REGISTER_NODE(hesiod::Closing, "Operator/Morphology");
   HSD_REGISTER_NODE(hesiod::Cloud, "Geometry/Cloud");
   HSD_REGISTER_NODE(hesiod::CloudSDF, "Geometry/Cloud");
   HSD_REGISTER_NODE(hesiod::CloudToArrayInterp, "Primitive/Authoring");
+  HSD_REGISTER_NODE(hesiod::CloudToPath, "Converter");
   HSD_REGISTER_NODE(hesiod::ColorizeCmap, "Texture");
   HSD_REGISTER_NODE(hesiod::ColorizeGradient, "Texture");
   HSD_REGISTER_NODE(hesiod::ColorizeSolid, "Texture");
@@ -38,8 +40,10 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::Erosion, "Operator/Morphology");
   HSD_REGISTER_NODE(hesiod::ExpandShrink, "Filter/Recast");
   HSD_REGISTER_NODE(hesiod::ExportAsset, "IO/Files");
+  HSD_REGISTER_NODE(hesiod::ExportCloud, "IO/Files");
   HSD_REGISTER_NODE(hesiod::ExportHeightmap, "IO/Files");
   HSD_REGISTER_NODE(hesiod::ExportNormalMap, "IO/Files");
+  HSD_REGISTER_NODE(hesiod::ExportPath, "IO/Files");
   HSD_REGISTER_NODE(hesiod::ExportTexture, "IO/Files");
   HSD_REGISTER_NODE(hesiod::Fold, "Filter/Recast");
   HSD_REGISTER_NODE(hesiod::Gain, "Filter/Recurve");
@@ -102,8 +106,10 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::ScanMask, "Mask/Adjust");
   HSD_REGISTER_NODE(hesiod::SelectBlobLog, "Mask/Selector");
   HSD_REGISTER_NODE(hesiod::SelectCavities, "Mask/Selector");
+  HSD_REGISTER_NODE(hesiod::SelectElevationSlope, "Mask/Selector");
   HSD_REGISTER_NODE(hesiod::SelectGt, "Mask/Selector");
   HSD_REGISTER_NODE(hesiod::SelectInterval, "Mask/Selector");
+  HSD_REGISTER_NODE(hesiod::SelectInwardOutward, "Mask/Selector");
   HSD_REGISTER_NODE(hesiod::SelectPulse, "Mask/Selector");
   HSD_REGISTER_NODE(hesiod::SetAlpha, "Texture");
   HSD_REGISTER_NODE(hesiod::ShapeIndex, "Features/Landform");

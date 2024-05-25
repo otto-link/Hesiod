@@ -171,6 +171,37 @@ Primitive/Function
 | :--- | :--- | :--- |
 |gain|Float|Shape control parameter.|
 
+## Caldera
+
+
+Caldera generates a volcanic caldera landscape.
+
+![img](../images/nodes/Caldera.png)  
+
+### Category
+
+
+Primitive/Geological  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|dr|HeightMapData|Displacement with respect to the domain size (normal direction).|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Caldera heightmap.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+
 ## Clamp
 
 
@@ -333,6 +364,39 @@ Primitive/Authoring
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+
+## CloudToPath
+
+
+CloudToPath convert a Cloud to a Path.
+
+![img](../images/nodes/CloudToPath.png)  
+
+### Category
+
+
+Converter  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|cloud|CloudData|Input cloud.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|path|PathData|Output path.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|closed|Bool|Decides whether the path is open and closed on itself.|
+|reorder_nns|Bool|Decides whether the path points are reordered using a nearest neighbor search.|
 
 ## ColorizeCmap
 
@@ -809,6 +873,38 @@ IO/Files
 |max_error|Float|Maximum error (for optimized triangulated mesh).|
 |mesh_type|Enumeration|Mesh type for the geometry. Available values: triangles, triangles (optimized).|
 
+## ExportCloud
+
+
+ExportCloud is an operator for exporting cloud data to a csv file.
+
+![img](../images/nodes/ExportCloud.png)  
+
+### Category
+
+
+IO/Files  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|CloudData|Input heightmap.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|auto_export|Bool|Decides whether the export is automatically performed when the node is updated.|
+|fname|Filename|Export file name.|
+
 ## ExportHeightmap
 
 
@@ -872,6 +968,38 @@ IO/Files
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |16bit|Bool|Whether the output file is a 16bit PNG file (instead of 8bit).|
+|auto_export|Bool|Decides whether the export is automatically performed when the node is updated.|
+|fname|Filename|Export file name.|
+
+## ExportPath
+
+
+ExportPath is an operator for exporting path data to a csv file.
+
+![img](../images/nodes/ExportPath.png)  
+
+### Category
+
+
+IO/Files  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|PathData|Input heightmap.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
 |auto_export|Bool|Decides whether the export is automatically performed when the node is updated.|
 |fname|Filename|Export file name.|
 
@@ -3018,6 +3146,38 @@ Mask/Selector
 |concave|Bool|Decides whether concave or convex features are detected.|
 |radius|Float|Detection radius with respect to the domain size.|
 
+## SelectElevationSlope
+
+
+SelectElevationSlope select regions based a combinaison of elevation and slope values.
+
+![img](../images/nodes/SelectElevationSlope.png)  
+
+### Category
+
+
+Mask/Selector  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Input heightmap.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Mask heightmap (in [0, 1]).|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|gradient_scale|Float|Gradient scaling, with respect to elevation.|
+
 ## SelectGt
 
 
@@ -3082,6 +3242,39 @@ Mask/Selector
 | :--- | :--- | :--- |
 |value1|Float|Selection value, lower bound.|
 |value2|Float|Selection value, upper bound.|
+
+## SelectInwardOutward
+
+
+SelectInwardOutward returns values > 0.5 if the slope is pointing to the center (slope is inward), and values < 0.5 otherwise (slope is outward).
+
+![img](../images/nodes/SelectInwardOutward.png)  
+
+### Category
+
+
+Mask/Selector  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Input heightmap.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Mask heightmap (in [0, 1]).|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|center.x|Float|Reference center x coordinate.|
+|center.y|Float|Reference center y coordinate.|
 
 ## SelectPulse
 
