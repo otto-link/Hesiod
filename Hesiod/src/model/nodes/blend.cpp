@@ -27,7 +27,7 @@ Blend::Blend(const ModelConfig *p_config) : BaseNode(p_config)
   this->attr["radius"] = NEW_ATTR_FLOAT(0.05f, 0.f, 0.2f);
 
   this->attr["inverse"] = NEW_ATTR_BOOL(false);
-  this->attr["remap"] = NEW_ATTR_BOOL(true);
+  this->attr["remap"] = NEW_ATTR_BOOL(false);
   this->attr["remap_range"] = NEW_ATTR_RANGE();
 
   this->attr_ordered_key = {"blending_method",

@@ -3309,6 +3309,39 @@ Mask/Selector
 |sigma|Float|Selection half-width.|
 |value|Float|Selection center value.|
 
+## SelectTransitions
+
+
+SelectTransitions returns a mask filled with 1 at the blending transition between two heightmaps, and 0 elsewhere.
+
+![img](../images/nodes/SelectTransitions.png)  
+
+### Category
+
+
+Mask/Selector  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input 1|HeightMapData|Input heightmap 1.|
+|input 2|HeightMapData|Input heightmap 2.|
+|blend|HeightMapData|Blended heightmap.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Mask heightmap (in [0, 1]).|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+
 ## SetAlpha
 
 
