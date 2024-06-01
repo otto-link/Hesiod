@@ -2114,6 +2114,46 @@ Primitive/Coherent Noise
 |warp_scale|Float|Warping influence scaling.|
 |weight|Float|Octave weighting.|
 
+## NoiseParberry
+
+
+NoiseParberry, variant of NoiseFbm, is a Perlin noise based terrain generator from Ian Parberry, Tobler's First Law of Geography, Self Similarity, and Perlin Noise: A Large Scale Analysis of Gradient Distribution in Southern Utah with Application to Procedural Terrain Generation.
+
+![img](../images/nodes/NoiseParberry.png)  
+
+### Category
+
+
+Primitive/Coherent Noise  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|dx|HeightMapData|Displacement with respect to the domain size (x-direction).|
+|dy|HeightMapData|Displacement with respect to the domain size (y-direction).|
+|envelope|HeightMapData|Output noise amplitude envelope.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Generated noise.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|kw|Wavenumber|Noise wavenumbers (kx, ky) for each directions.|
+|lacunarity|Float|Wavenumber ratio between each octaves.|
+|mu|Float|Gradient magnitude exponent.|
+|octaves|Integer|Number of octaves.|
+|persistence|Float|Octave persistence.|
+|seed|Random seed|Random seed number.|
+|weight|Float|Octave weighting.|
+
 ## NoisePingpong
 
 

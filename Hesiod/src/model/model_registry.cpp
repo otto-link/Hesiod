@@ -77,6 +77,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::NoiseIq, "Primitive/Coherent Noise");
   HSD_REGISTER_NODE(hesiod::NoiseJordan, "Primitive/Coherent Noise");
   HSD_REGISTER_NODE(hesiod::NoisePingpong, "Primitive/Coherent Noise");
+  HSD_REGISTER_NODE(hesiod::NoiseParberry, "Primitive/Coherent Noise");
   HSD_REGISTER_NODE(hesiod::NoiseRidged, "Primitive/Coherent Noise");
   HSD_REGISTER_NODE(hesiod::NoiseSwiss, "Primitive/Coherent Noise");
   HSD_REGISTER_NODE(hesiod::NormalDisplacement, "Filter/Recast");
