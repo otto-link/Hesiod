@@ -107,6 +107,10 @@ public Q_SLOTS:
     graph_json = DataFlowGraphModel::save();
     graph_json["model_config"] = this->p_model_config->save();
 
+    graph_json["hesiod_version_major"] = QString::number(HESIOD_VERSION_MAJOR);
+    graph_json["hesiod_version_minor"] = QString::number(HESIOD_VERSION_MINOR);
+    graph_json["hesiod_version_patch"] = QString::number(HESIOD_VERSION_PATCH);
+
     QJsonObject full_json;
     full_json[this->graph_id.c_str()] = graph_json;
 

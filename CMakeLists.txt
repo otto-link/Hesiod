@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(hesiod-root)
+project(hesiod-root VERSION 0.0.0)
 
 # dont forget to remove the CMakeCache.txt in the build dir if options are
 # changed
@@ -28,6 +28,11 @@ endif()
 
 add_definitions("-DBOOST_ALLOW_DEPRECATED_HEADERS")
 add_definitions("-DBOOST_BIND_GLOBAL_PLACEHOLDERS")
+
+add_compile_definitions(
+  HESIOD_VERSION_MAJOR=${hesiod-root_VERSION_MAJOR}
+  HESIOD_VERSION_MINOR=${hesiod-root_VERSION_MINOR}
+  HESIOD_VERSION_PATCH=${hesiod-root_VERSION_PATCH})
 
 set(CMAKE_CXX_STANDARD 20)
 
