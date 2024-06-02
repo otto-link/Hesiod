@@ -159,10 +159,18 @@ void MainWindow::restore_state()
 
 void MainWindow::show_about()
 {
+  LOG_DEBUG("%d", HESIOD_VERSION_MAJOR);
+
+  std::string msg = "Hesiov v";
+  msg += std::to_string(HESIOD_VERSION_MAJOR) + ".";
+  msg += std::to_string(HESIOD_VERSION_MINOR) + ".";
+  msg += std::to_string(HESIOD_VERSION_PATCH) + "\n";
+  msg += "A desktop application for node-based "
+         "procedural terrain "
+         "generation.\nhttps://github.com/otto-link/Hesiod";
+
   QMessageBox msg_box;
-  msg_box.setText("Hesiov vx.x.x.\nA desktop application for node-based "
-                  "procedural terrain "
-                  "generation.\nhttps://github.com/otto-link/Hesiod");
+  msg_box.setText(msg.c_str());
   msg_box.exec();
 }
 

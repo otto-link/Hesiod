@@ -77,6 +77,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::NoiseIq, "Primitive/Coherent Noise");
   HSD_REGISTER_NODE(hesiod::NoiseJordan, "Primitive/Coherent Noise");
   HSD_REGISTER_NODE(hesiod::NoisePingpong, "Primitive/Coherent Noise");
+  HSD_REGISTER_NODE(hesiod::NoiseParberry, "Primitive/Coherent Noise");
   HSD_REGISTER_NODE(hesiod::NoiseRidged, "Primitive/Coherent Noise");
   HSD_REGISTER_NODE(hesiod::NoiseSwiss, "Primitive/Coherent Noise");
   HSD_REGISTER_NODE(hesiod::NormalDisplacement, "Filter/Recast");
@@ -87,6 +88,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::PathBspline, "Geometry/Path");
   HSD_REGISTER_NODE(hesiod::PathFractalize, "Geometry/Path");
   HSD_REGISTER_NODE(hesiod::PathMeanderize, "Geometry/Path");
+  HSD_REGISTER_NODE(hesiod::PathResample, "Geometry/Path");
   HSD_REGISTER_NODE(hesiod::PathSDF, "Geometry/Path");
   HSD_REGISTER_NODE(hesiod::PathToCloud, "Converter");
   HSD_REGISTER_NODE(hesiod::PathToHeightmap, "Geometry/Path");
@@ -111,6 +113,8 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::SelectInterval, "Mask/Selector");
   HSD_REGISTER_NODE(hesiod::SelectInwardOutward, "Mask/Selector");
   HSD_REGISTER_NODE(hesiod::SelectPulse, "Mask/Selector");
+  HSD_REGISTER_NODE(hesiod::SelectRivers, "Mask/Selector");
+  HSD_REGISTER_NODE(hesiod::SelectTransitions, "Mask/Selector");
   HSD_REGISTER_NODE(hesiod::SetAlpha, "Texture");
   HSD_REGISTER_NODE(hesiod::ShapeIndex, "Features/Landform");
   HSD_REGISTER_NODE(hesiod::SharpenCone, "Filter/Smoothing");

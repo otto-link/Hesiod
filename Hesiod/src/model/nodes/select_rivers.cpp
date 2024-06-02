@@ -1,17 +1,19 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include "highmap/selector.hpp"
+
 #include "hesiod/model/nodes.hpp"
 
 namespace hesiod
 {
 
-SelectBlobLog::SelectBlobLog(const ModelConfig *p_config) : BaseNode(p_config)
+SelectRivers::SelectRivers(const ModelConfig *p_config) : BaseNode(p_config)
 {
-  LOG_DEBUG("SelectBlobLog::SelectBlobLog");
+  LOG_DEBUG("SelectRivers::SelectRivers");
 
   // model
-  this->node_caption = "SelectBlobLog";
+  this->node_caption = "SelectRivers";
 
   // inputs
   this->input_captions = {"input"};
@@ -22,16 +24,20 @@ SelectBlobLog::SelectBlobLog(const ModelConfig *p_config) : BaseNode(p_config)
   this->output_types = {HeightMapData().type()};
 
   // attributes
-  this->attr["radius"] = NEW_ATTR_FLOAT(0.05f, 0.001f, 0.2f, "%.3f");
+  this->attr["talus_ref"] = NEW_ATTR_FLOAT(0.1f, 0.01f, 10.f);
+  this->attr["clipping_ratio"] = NEW_ATTR_FLOAT(50.f, 0.1f, 100.f);
   this->attr["inverse"] = NEW_ATTR_BOOL(false);
   this->attr["smoothing"] = NEW_ATTR_BOOL(false);
   this->attr["smoothing_radius"] = NEW_ATTR_FLOAT(0.05f, 0.f, 0.2f, "%.2f");
+  this->attr["remap"] = NEW_ATTR_BOOL(false);
 
-  this->attr_ordered_key = {"radius",
+  this->attr_ordered_key = {"talus_ref",
+                            "clipping_ratio",
                             "_SEPARATOR_",
                             "inverse",
                             "smoothing",
-                            "smoothing_radius"};
+                            "smoothing_radius",
+                            "remap"};
 
   // update
   if (this->p_config->compute_nodes_at_instanciation)
@@ -41,25 +47,23 @@ SelectBlobLog::SelectBlobLog(const ModelConfig *p_config) : BaseNode(p_config)
   }
 
   // documentation
-  this->description = "SelectBlobLog performs 'blob' detection using oa Laplacian of "
-                      "Gaussian (log) method. Blobs are areas in an image that are "
-                      "either brighter or darker than the surrounding areas.";
+  this->description = "SelectRivers is a thresholding operator. It creates a mask for "
+                      "river systems based on a flow accumulation threshold.";
 
   this->input_descriptions = {"Input heightmap."};
   this->output_descriptions = {"Mask heightmap (in [0, 1])."};
 
-  this->attribute_descriptions
-      ["radius"] = "Detection radius with respect to the domain size.";
+  // this->attribute_descriptions[""] = ".";
 }
 
-std::shared_ptr<QtNodes::NodeData> SelectBlobLog::outData(
+std::shared_ptr<QtNodes::NodeData> SelectRivers::outData(
     QtNodes::PortIndex /* port_index */)
 {
   return std::static_pointer_cast<QtNodes::NodeData>(this->out);
 }
 
-void SelectBlobLog::setInData(std::shared_ptr<QtNodes::NodeData> data,
-                              QtNodes::PortIndex /* port_index */)
+void SelectRivers::setInData(std::shared_ptr<QtNodes::NodeData> data,
+                             QtNodes::PortIndex /* port_index */)
 {
   if (!data)
     Q_EMIT this->dataInvalidated(0);
@@ -71,7 +75,7 @@ void SelectBlobLog::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 // --- computing
 
-void SelectBlobLog::compute()
+void SelectRivers::compute()
 {
   LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
 
@@ -83,28 +87,23 @@ void SelectBlobLog::compute()
 
     hmap::HeightMap *p_out = this->out->get_ref();
 
-    int ir = std::max(1, (int)(GET_ATTR_FLOAT("radius") * p_out->shape.x));
-
-    hmap::transform(*p_out,
-                    *p_in,
-                    [this, &ir](hmap::Array &array)
-                    { return hmap::select_blob_log(array, ir); });
-
-    p_out->smooth_overlap_buffers();
+    // work on a single array as a temporary solution
+    hmap::Array z_array = p_in->to_array();
+    z_array = hmap::select_rivers(z_array,
+                                  GET_ATTR_FLOAT("talus_ref"),
+                                  GET_ATTR_FLOAT("clipping_ratio"));
+    p_out->from_array_interp(z_array);
 
     // post-process
-    ir = std::max(1, (int)(GET_ATTR_FLOAT("smoothing_radius") * p_out->shape.x));
-
     post_process_heightmap(*p_out,
                            GET_ATTR_BOOL("inverse"),
                            GET_ATTR_BOOL("smoothing"),
-                           ir,
+                           GET_ATTR_FLOAT("smoothing_radius"),
                            false, // saturate
                            {0.f, 0.f},
                            0.f,
-                           true, // force remap
+                           GET_ATTR_BOOL("remap"),
                            {0.f, 1.f});
-
     // propagate
     Q_EMIT this->computingFinished();
     this->trigger_outputs_updated();
