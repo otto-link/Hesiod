@@ -3357,6 +3357,37 @@ Mask/Selector
 |sigma|Float|Selection half-width.|
 |value|Float|Selection center value.|
 
+## SelectRivers
+
+
+SelectRivers is a thresholding operator. It creates a mask for river systems based on a flow accumulation threshold.
+
+![img](../images/nodes/SelectRivers.png)  
+
+### Category
+
+
+Mask/Selector  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Input heightmap.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Mask heightmap (in [0, 1]).|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+
 ## SelectTransitions
 
 
