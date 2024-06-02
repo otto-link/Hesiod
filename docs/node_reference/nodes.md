@@ -2555,6 +2555,38 @@ Geometry/Path
 |ratio|Float|Meander amplitude ratio.|
 |seed|Random seed|Random seed number|
 
+## PathResample
+
+
+PathResample resamples the path based to get (approximately) a given distance between points.
+
+![img](../images/nodes/PathResample.png)  
+
+### Category
+
+
+Geometry/Path  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|PathData|Input path.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|PathData|Output path.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|delta|Float|Target distance between the points.|
+
 ## PathSDF
 
 
