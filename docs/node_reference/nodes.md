@@ -201,6 +201,14 @@ Primitive/Geological
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|center.x|Float|Center x coordinate.|
+|center.y|Float|Center y coordinate.|
+|noise_r_amp|Float|Noise amplitude for the radial displacement.|
+|noise_ratio_z|Float|Noise amplitude for the vertical displacement.|
+|radius|Float|Crater radius.|
+|sigma_inner|Float|Crater inner lip half-width.|
+|sigma_outer|Float|Crater outer lip half-width.|
+|z_bottom|Float|Crater bottom elevation.|
 
 ## Clamp
 

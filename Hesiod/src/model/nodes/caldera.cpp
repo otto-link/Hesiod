@@ -61,6 +61,17 @@ Caldera::Caldera(const ModelConfig *p_config) : BaseNode(p_config)
   this->input_descriptions = {
       "Displacement with respect to the domain size (normal direction)."};
   this->output_descriptions = {"Caldera heightmap."};
+
+  this->attribute_descriptions["radius"] = "Crater radius.";
+  this->attribute_descriptions["sigma_inner"] = "Crater inner lip half-width.";
+  this->attribute_descriptions["sigma_outer"] = "Crater outer lip half-width.";
+  this->attribute_descriptions
+      ["noise_r_amp"] = "Noise amplitude for the radial displacement.";
+  this->attribute_descriptions["z_bottom"] = "Crater bottom elevation.";
+  this->attribute_descriptions
+      ["noise_ratio_z"] = "Noise amplitude for the vertical displacement.";
+  this->attribute_descriptions["center.x"] = "Center x coordinate.";
+  this->attribute_descriptions["center.y"] = "Center y coordinate.";
 }
 
 std::shared_ptr<QtNodes::NodeData> Caldera::outData(QtNodes::PortIndex /* port_index */)
