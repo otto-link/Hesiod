@@ -7,13 +7,13 @@
 
 #include "highmap/heightmap.hpp"
 #include "highmap/io.hpp"
-#include "macrologger.h"
 
 #include "hesiod/data/cloud_data.hpp"
 #include "hesiod/data/heightmap_data.hpp"
 #include "hesiod/data/heightmap_rgba_data.hpp"
 #include "hesiod/data/path_data.hpp"
 #include "hesiod/gui/preview.hpp"
+#include "hesiod/logger.hpp"
 
 namespace hesiod
 {
@@ -149,8 +149,8 @@ void Preview::update_image()
       this->label->setPixmap(QPixmap::fromImage(preview_image));
     }
     else
-      LOG_ERROR("no preview available for the requested data type: [%s]",
-                p_data->type().id.toStdString().c_str());
+      LOG->error("no preview available for the requested data type: {}",
+                 p_data->type().id.toStdString());
   }
   //
   else

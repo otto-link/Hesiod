@@ -1,6 +1,7 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include "hesiod/logger.hpp"
 #include "hesiod/model/nodes.hpp"
 
 namespace hesiod
@@ -8,7 +9,7 @@ namespace hesiod
 
 PathToHeightmap::PathToHeightmap(const ModelConfig *p_config) : BaseNode(p_config)
 {
-  LOG_DEBUG("PathToHeightmap::PathToHeightmap");
+  LOG->trace("PathToHeightmap::PathToHeightmap");
 
   // model
   this->node_caption = "PathToHeightmap";
@@ -70,7 +71,7 @@ void PathToHeightmap::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void PathToHeightmap::compute()
 {
-  LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
+  LOG->trace("computing node {}", this->name().toStdString());
 
   hmap::Path *p_path = HSD_GET_POINTER(this->in);
 

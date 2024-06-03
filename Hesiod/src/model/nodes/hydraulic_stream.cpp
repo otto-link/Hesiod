@@ -3,6 +3,7 @@
  * this software. */
 #include "highmap/erosion.hpp"
 
+#include "hesiod/logger.hpp"
 #include "hesiod/model/nodes.hpp"
 
 namespace hesiod
@@ -10,7 +11,7 @@ namespace hesiod
 
 HydraulicStream::HydraulicStream(const ModelConfig *p_config) : BaseNode(p_config)
 {
-  LOG_DEBUG("HydraulicStream::HydraulicStream");
+  LOG->trace("HydraulicStream::HydraulicStream");
 
   // model
   this->node_caption = "HydraulicStream";
@@ -106,7 +107,7 @@ void HydraulicStream::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void HydraulicStream::compute()
 {
-  LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
+  LOG->trace("computing node {}", this->name().toStdString());
 
   hmap::HeightMap *p_in = HSD_GET_POINTER(this->in);
 

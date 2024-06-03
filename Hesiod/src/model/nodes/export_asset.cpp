@@ -3,6 +3,7 @@
  * this software. */
 #include "highmap/io.hpp"
 
+#include "hesiod/logger.hpp"
 #include "hesiod/model/nodes.hpp"
 
 namespace hesiod
@@ -10,7 +11,7 @@ namespace hesiod
 
 ExportAsset::ExportAsset(const ModelConfig *p_config) : BaseNode(p_config)
 {
-  LOG_DEBUG("ExportAsset::ExportAsset");
+  LOG->trace("ExportAsset::ExportAsset");
 
   // model
   this->node_caption = "ExportAsset";
@@ -108,7 +109,7 @@ void ExportAsset::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void ExportAsset::compute()
 {
-  LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
+  LOG->trace("computing node {}", this->name().toStdString());
 
   hmap::HeightMap *p_elev = HSD_GET_POINTER(this->elevation);
 

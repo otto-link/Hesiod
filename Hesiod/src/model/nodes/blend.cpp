@@ -1,6 +1,7 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include "hesiod/logger.hpp"
 #include "hesiod/model/nodes.hpp"
 
 namespace hesiod
@@ -8,7 +9,7 @@ namespace hesiod
 
 Blend::Blend(const ModelConfig *p_config) : BaseNode(p_config)
 {
-  LOG_DEBUG("Blend::Blend");
+  LOG->trace("Blend::Blend");
 
   // model
   this->node_caption = "Blend";
@@ -84,7 +85,7 @@ void Blend::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void Blend::compute()
 {
-  LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
+  LOG->trace("computing node {}", this->name().toStdString());
 
   hmap::HeightMap *p_in1 = HSD_GET_POINTER(this->in1);
   hmap::HeightMap *p_in2 = HSD_GET_POINTER(this->in2);

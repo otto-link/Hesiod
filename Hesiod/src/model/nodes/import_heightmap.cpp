@@ -3,6 +3,7 @@
  * this software. */
 #include <fstream>
 
+#include "hesiod/logger.hpp"
 #include "hesiod/model/nodes.hpp"
 
 namespace hesiod
@@ -10,7 +11,7 @@ namespace hesiod
 
 ImportHeightmap::ImportHeightmap(const ModelConfig *p_config) : BaseNode(p_config)
 {
-  LOG_DEBUG("ImportHeightmap::ImportHeightmap");
+  LOG->trace("ImportHeightmap::ImportHeightmap");
 
   // model
   this->node_caption = "ImportHeightmap";
@@ -64,7 +65,7 @@ void ImportHeightmap::compute()
 {
   Q_EMIT this->computingStarted();
 
-  LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
+  LOG->trace("computing node {}", this->name().toStdString());
 
   hmap::HeightMap *p_out = this->out->get_ref();
 

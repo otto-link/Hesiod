@@ -1,8 +1,8 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-#include "macrologger.h"
 
+#include "hesiod/logger.hpp"
 #include "hesiod/model/attributes.hpp"
 
 namespace hesiod
@@ -19,7 +19,7 @@ MapEnumAttribute::MapEnumAttribute(std::map<std::string, int> value, std::string
 {
   if (!this->value.contains(this->choice))
   {
-    LOG_ERROR("initial choice not in the available keys");
+    LOG->critical("initial choice not in the available keys ({})", this->choice);
     throw std::runtime_error("initial choice not in the available keys");
   }
 }

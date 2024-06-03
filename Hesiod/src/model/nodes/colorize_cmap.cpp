@@ -3,6 +3,7 @@
  * this software. */
 #include "highmap/heightmap.hpp"
 
+#include "hesiod/logger.hpp"
 #include "hesiod/model/cmap.hpp"
 #include "hesiod/model/nodes.hpp"
 
@@ -11,7 +12,7 @@ namespace hesiod
 
 ColorizeCmap::ColorizeCmap(const ModelConfig *p_config) : BaseNode(p_config)
 {
-  LOG_DEBUG("ColorizeCmap::ColorizeCmap");
+  LOG->trace("ColorizeCmap::ColorizeCmap");
 
   // model
   this->node_caption = "ColorizeCmap";
@@ -101,7 +102,7 @@ void ColorizeCmap::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void ColorizeCmap::compute()
 {
-  LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
+  LOG->trace("computing node {}", this->name().toStdString());
 
   hmap::HeightMap *p_level = HSD_GET_POINTER(this->level);
 

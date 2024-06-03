@@ -3,6 +3,7 @@
  * this software. */
 #include "highmap/gradient.hpp"
 
+#include "hesiod/logger.hpp"
 #include "hesiod/model/nodes.hpp"
 
 namespace hesiod
@@ -10,7 +11,7 @@ namespace hesiod
 
 GradientTalus::GradientTalus(const ModelConfig *p_config) : BaseNode(p_config)
 {
-  LOG_DEBUG("GradientTalus::GradientTalus");
+  LOG->trace("GradientTalus::GradientTalus");
 
   // model
   this->node_caption = "GradientTalus";
@@ -66,7 +67,7 @@ void GradientTalus::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void GradientTalus::compute()
 {
-  LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
+  LOG->trace("computing node {}", this->name().toStdString());
 
   hmap::HeightMap *p_in = HSD_GET_POINTER(this->in);
 

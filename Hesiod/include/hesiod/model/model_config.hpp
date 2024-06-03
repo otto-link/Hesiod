@@ -5,7 +5,6 @@
 #include <QJsonObject>
 
 #include "highmap/vector.hpp"
-#include "macrologger.h"
 
 #include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/model_utils.hpp"
@@ -55,11 +54,11 @@ struct ModelConfig
    */
   void log_debug() const
   {
-    LOG_DEBUG("shape: {%d, %d}", shape.x, shape.y);
-    LOG_DEBUG("tiling: {%d, %d}", tiling.x, tiling.y);
-    LOG_DEBUG("overlap: %f", overlap);
-    LOG_DEBUG("shape_preview: {%d, %d}", shape_preview.x, shape_preview.y);
-    LOG_DEBUG("compute_nodes_at_instanciation: %d", (int)compute_nodes_at_instanciation);
+    LOG->info("shape: {{{}, {}}}", shape.x, shape.y);
+    LOG->info("tiling: {{{}, {}}}", tiling.x, tiling.y);
+    LOG->info("overlap: {}", overlap);
+    LOG->info("shape_preview: {{{}, {}}}", shape_preview.x, shape_preview.y);
+    LOG->info("compute_nodes_at_instanciation: {}", (int)compute_nodes_at_instanciation);
   }
 
   /**
@@ -90,7 +89,7 @@ struct ModelConfig
     ret &= convert_qjsonvalue_to_int(p["tiling.y"], this->tiling.y);
     ret &= convert_qjsonvalue_to_float(p["overlap"], this->overlap);
     if (!ret)
-      LOG_ERROR("serialization in with WaveNbAttribute");
+      LOG->error("serialization error in with ModelConfig");
   }
 
   /**

@@ -1,10 +1,9 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-// #include <vector>
-
 #include "highmap/heightmap.hpp"
 
+#include "hesiod/logger.hpp"
 #include "hesiod/model/cmap.hpp"
 #include "hesiod/model/nodes.hpp"
 
@@ -13,7 +12,7 @@ namespace hesiod
 
 ColorizeGradient::ColorizeGradient(const ModelConfig *p_config) : BaseNode(p_config)
 {
-  LOG_DEBUG("ColorizeGradient::ColorizeGradient");
+  LOG->trace("ColorizeGradient::ColorizeGradient");
 
   // model
   this->node_caption = "ColorizeGradient";
@@ -92,7 +91,7 @@ void ColorizeGradient::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void ColorizeGradient::compute()
 {
-  LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
+  LOG->trace("computing node {}", this->name().toStdString());
 
   hmap::HeightMap *p_level = HSD_GET_POINTER(this->level);
 
@@ -113,7 +112,7 @@ void ColorizeGradient::compute()
       // TODO add position interpolation
 
       colormap_colors.push_back({data[1], data[2], data[3]});
-      // LOG_DEBUG("%f %f %f",
+      // LOG->trace("%f %f %f",
       //           colormap_colors.back()[0],
       //           colormap_colors.back()[1],
       //           colormap_colors.back()[2]);

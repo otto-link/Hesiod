@@ -1,6 +1,7 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include "hesiod/logger.hpp"
 #include "hesiod/model/nodes.hpp"
 
 namespace hesiod
@@ -8,7 +9,7 @@ namespace hesiod
 
 NoiseJordan::NoiseJordan(const ModelConfig *p_config) : BaseNode(p_config)
 {
-  LOG_DEBUG("NoiseJordan::NoiseJordan");
+  LOG->trace("NoiseJordan::NoiseJordan");
 
   // model
   this->node_caption = "NoiseJordan";
@@ -123,7 +124,7 @@ void NoiseJordan::compute()
 {
   Q_EMIT this->computingStarted();
 
-  LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
+  LOG->trace("computing node {}", this->name().toStdString());
 
   // base noise function
   hmap::HeightMap *p_dx = HSD_GET_POINTER(this->dx);

@@ -6,6 +6,7 @@
 #include <QJsonObject>
 
 #include "hesiod/gui/widgets.hpp"
+#include "hesiod/logger.hpp"
 #include "hesiod/model/base_node.hpp"
 
 namespace hesiod
@@ -259,9 +260,9 @@ void BaseNode::load(QJsonObject const &p)
 
 void BaseNode::log_debug()
 {
-  LOG_DEBUG("caption: %s", this->caption().toStdString().c_str());
-  LOG_DEBUG("name: %s", this->name().toStdString().c_str());
-  LOG_DEBUG("address: %s", std::to_string((unsigned long long)(void **)this).c_str());
+  LOG->trace("caption: %s", this->caption().toStdString().c_str());
+  LOG->trace("name: %s", this->name().toStdString().c_str());
+  LOG->trace("address: %s", std::to_string((unsigned long long)(void **)this).c_str());
 
   for (QtNodes::PortType port_type :
        {QtNodes::PortType::In, QtNodes::PortType::Out, QtNodes::PortType::None})
@@ -269,14 +270,14 @@ void BaseNode::log_debug()
     {
       std::string c = this->portCaption(port_type, port_index).toStdString();
       std::string t = this->dataType(port_type, port_index).name.toStdString();
-      LOG_DEBUG("port: {%d, %d, %s, %s}",
-                (int)port_type,
-                port_index,
-                t.c_str(),
-                c.c_str());
+      LOG->trace("port: {{{}, {}, {}, {}}}",
+                 (int)port_type,
+                 port_index,
+                 t.c_str(),
+                 c.c_str());
     }
 
-  LOG_DEBUG("attributes");
+  LOG->trace("attributes");
   for (auto &[key, attr] : this->attr)
     attr->log_debug();
 }

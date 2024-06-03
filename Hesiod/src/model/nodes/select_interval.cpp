@@ -3,6 +3,7 @@
  * this software. */
 #include "highmap/selector.hpp"
 
+#include "hesiod/logger.hpp"
 #include "hesiod/model/nodes.hpp"
 
 namespace hesiod
@@ -10,7 +11,7 @@ namespace hesiod
 
 SelectInterval::SelectInterval(const ModelConfig *p_config) : BaseNode(p_config)
 {
-  LOG_DEBUG("SelectInterval::SelectInterval");
+  LOG->trace("SelectInterval::SelectInterval");
 
   // model
   this->node_caption = "SelectInterval";
@@ -74,7 +75,7 @@ void SelectInterval::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void SelectInterval::compute()
 {
-  LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
+  LOG->trace("computing node {}", this->name().toStdString());
 
   hmap::HeightMap *p_in = HSD_GET_POINTER(this->in);
 

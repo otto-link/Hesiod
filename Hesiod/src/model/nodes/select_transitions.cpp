@@ -3,6 +3,7 @@
  * this software. */
 #include "highmap/selector.hpp"
 
+#include "hesiod/logger.hpp"
 #include "hesiod/model/nodes.hpp"
 
 namespace hesiod
@@ -10,7 +11,7 @@ namespace hesiod
 
 SelectTransitions::SelectTransitions(const ModelConfig *p_config) : BaseNode(p_config)
 {
-  LOG_DEBUG("SelectTransitions::SelectTransitions");
+  LOG->trace("SelectTransitions::SelectTransitions");
 
   // model
   this->node_caption = "SelectTransitions";
@@ -80,7 +81,7 @@ void SelectTransitions::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void SelectTransitions::compute()
 {
-  LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
+  LOG->trace("computing node {}", this->name().toStdString());
 
   hmap::HeightMap *p_in1 = HSD_GET_POINTER(this->in1);
   hmap::HeightMap *p_in2 = HSD_GET_POINTER(this->in2);

@@ -20,8 +20,8 @@
 
 #include "highmap/geometry.hpp"
 #include "highmap/vector.hpp"
-#include "macrologger.h"
 
+#include "hesiod/logger.hpp"
 #include "hesiod/model/model_utils.hpp"
 
 // clang-format off
@@ -124,28 +124,28 @@ public:
       return ptr;
     else
     {
-      LOG_ERROR("in Attribute, trying to get an attribute type which is not "
-                "compatible with the current instance. Get type is: [%s]",
-                typeid(T).name());
+      LOG->critical("in Attribute, trying to get an attribute type which is not "
+                    "compatible with the current instance. Get type is: [{}]",
+                    typeid(T).name());
       throw std::runtime_error("wrong type");
     }
   }
 
   virtual void log_debug()
   {
-    // LOG_DEBUG("address: %s", std::to_string((unsigned long long)(void
+    // ("address: %s", std::to_string((unsigned long long)(void
     // **)this).c_str());
   }
 
   virtual QJsonObject save() const
   {
-    LOG_ERROR("TODO TODO TODO TODO TODO");
+    LOG->error("TODO TODO TODO TODO TODO");
     return QJsonObject();
   }
 
   virtual void load(QJsonObject const & /* p */)
   {
-    LOG_ERROR("TODO TODO TODO TODO TODO");
+    LOG->error("TODO TODO TODO TODO TODO");
   }
 };
 
@@ -172,7 +172,7 @@ public:
     ret &= convert_qjsonvalue_to_bool(p["value"], this->value);
 
     if (!ret)
-      LOG_ERROR("serialization in with BoolAttribute");
+      LOG->error("serialization error in with BoolAttribute");
   }
 
   bool        value = true;
@@ -208,7 +208,7 @@ public:
     ret &= convert_qjsonvalue_to_vector_float(p["y"], y);
     ret &= convert_qjsonvalue_to_vector_float(p["v"], v);
     if (!ret)
-      LOG_ERROR("serialization in with CloudAttribute");
+      LOG->error("serialization error in with CloudAttribute");
 
     this->value = hmap::Cloud(x, y, v);
   }
@@ -239,7 +239,7 @@ public:
     ret &= convert_qjsonvalue_to_vector_float(p["value"], this->value);
 
     if (!ret)
-      LOG_ERROR("serialization in with ColorAttribute");
+      LOG->error("serialization error in with ColorAttribute");
   }
 
   std::vector<float> value = {1.f, 1.f, 1.f, 1.f};
@@ -274,7 +274,7 @@ public:
     ret &= convert_qjsonvalue_to_vector_vector_float(p["value"], this->value, stride);
 
     if (!ret)
-      LOG_ERROR("serialization in with ColorGradientAttribute");
+      LOG->error("serialization error in with ColorGradientAttribute");
   }
 
   std::vector<std::vector<float>> value = {};
@@ -305,7 +305,7 @@ public:
     ret &= convert_qjsonvalue_to_string(p["label"], this->label);
 
     if (!ret)
-      LOG_ERROR("serialization in with FilenameAttribute");
+      LOG->error("serialization error in with FilenameAttribute");
   }
 
   std::string value = "";
@@ -342,7 +342,7 @@ public:
     ret &= convert_qjsonvalue_to_string(p["fmt"], this->fmt);
 
     if (!ret)
-      LOG_ERROR("serialization in with FloatAttribute");
+      LOG->error("serialization error in with FloatAttribute");
   }
 
   float       value = 1.f;
@@ -377,7 +377,7 @@ public:
     ret &= convert_qjsonvalue_to_int(p["vmax"], this->vmax);
 
     if (!ret)
-      LOG_ERROR("serialization in with IntAttribute");
+      LOG->error("serialization error in with IntAttribute");
   }
   int value = 1;
   int vmin = 0;
@@ -408,7 +408,7 @@ public:
     ret &= convert_qjsonvalue_to_string(p["choice"], this->choice);
 
     if (!ret)
-      LOG_ERROR("serialization error with MapEnumAttribute");
+      LOG->error("serialization error with MapEnumAttribute");
   }
 
   std::map<std::string, int> value = {};
@@ -455,7 +455,7 @@ public:
     ret &= convert_qjsonvalue_to_vector_float(p["y"], y);
     ret &= convert_qjsonvalue_to_vector_float(p["v"], v);
     if (!ret)
-      LOG_ERROR("serialization in with PathAttribute");
+      LOG->error("serialization error in with PathAttribute");
 
     this->value = hmap::Path(x, y, v);
   }
@@ -497,7 +497,7 @@ public:
     ret &= convert_qjsonvalue_to_string(p["fmt"], this->fmt);
 
     if (!ret)
-      LOG_ERROR("serialization in with RangeAttribute");
+      LOG->error("serialization error in with RangeAttribute");
   }
 
   hmap::Vec2<float> value = {0.f, 1.f};
@@ -517,7 +517,7 @@ public:
   void log_debug() override
   {
     Attribute::log_debug();
-    LOG_DEBUG("seed / value: %d", this->value);
+    LOG->info("seed / value: {}", this->value);
   }
 
   QJsonObject save() const override
@@ -533,7 +533,7 @@ public:
     ret &= convert_qjsonvalue_to_uint(p["value"], this->value);
 
     if (!ret)
-      LOG_ERROR("serialization error with SeedAttribute");
+      LOG->error("serialization error with SeedAttribute");
   }
 
   uint value = HSD_DEFAULT_SEED;
@@ -572,7 +572,7 @@ public:
     ret &= convert_qjsonvalue_to_string(p["value"], this->value);
 
     if (!ret)
-      LOG_ERROR("serialization in with StringAttribute");
+      LOG->error("serialization error in with StringAttribute");
   }
 
   std::string value = "";
@@ -608,7 +608,7 @@ public:
     ret &= convert_qjsonvalue_to_string(p["fmt"], this->fmt);
 
     if (!ret)
-      LOG_ERROR("serialization in with VecFloatAttribute");
+      LOG->error("serialization error in with VecFloatAttribute");
   }
 
   std::vector<float> value = {};
@@ -643,7 +643,7 @@ public:
     ret &= convert_qjsonvalue_to_int(p["vmax"], this->vmax);
 
     if (!ret)
-      LOG_ERROR("serialization in with VecIntAttribute");
+      LOG->error("serialization error in with VecIntAttribute");
   }
 
   std::vector<int> value = {};
@@ -686,7 +686,7 @@ public:
     ret &= convert_qjsonvalue_to_string(p["fmt"], this->fmt);
 
     if (!ret)
-      LOG_ERROR("serialization in with WaveNbAttribute");
+      LOG->error("serialization error in with WaveNbAttribute");
   }
 
   hmap::Vec2<float> value = {HSD_DEFAULT_KW, HSD_DEFAULT_KW};

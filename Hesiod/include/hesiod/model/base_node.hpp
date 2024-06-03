@@ -9,7 +9,6 @@
 #include <QtNodes/NodeDelegateModel>
 
 #include "highmap/primitives.hpp"
-#include "macrologger.h"
 
 #include "hesiod/gui/preview.hpp"
 #include "hesiod/gui/widgets.hpp"

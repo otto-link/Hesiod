@@ -3,6 +3,7 @@
  * this software. */
 #include "highmap/authoring.hpp"
 
+#include "hesiod/logger.hpp"
 #include "hesiod/model/nodes.hpp"
 
 namespace hesiod
@@ -10,7 +11,7 @@ namespace hesiod
 
 Ridgelines::Ridgelines(const ModelConfig *p_config) : BaseNode(p_config)
 {
-  LOG_DEBUG("Ridgelines::Ridgelines");
+  LOG->trace("Ridgelines::Ridgelines");
 
   // model
   this->node_caption = "Ridgelines";
@@ -86,7 +87,7 @@ void Ridgelines::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void Ridgelines::compute()
 {
-  LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
+  LOG->trace("computing node {}", this->name().toStdString());
 
   hmap::Path *p_path = HSD_GET_POINTER(this->in);
 
@@ -105,7 +106,7 @@ void Ridgelines::compute()
 
       for (size_t k = 0; k < p_path->get_npoints() - 1; k++)
       {
-        LOG_DEBUG("%ld", k);
+        LOG->trace("%ld", k);
         xs.push_back(p_path->points[k].x);
         ys.push_back(p_path->points[k].y);
         zs.push_back(p_path->points[k].v);

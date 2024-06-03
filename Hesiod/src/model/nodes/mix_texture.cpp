@@ -1,10 +1,10 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-// #include <vector>
-
 #include "highmap/heightmap.hpp"
+#include "highmap/kernels.hpp"
 
+#include "hesiod/logger.hpp"
 #include "hesiod/model/cmap.hpp"
 #include "hesiod/model/nodes.hpp"
 
@@ -13,7 +13,7 @@ namespace hesiod
 
 MixTexture::MixTexture(const ModelConfig *p_config) : BaseNode(p_config)
 {
-  LOG_DEBUG("MixTexture::MixTexture");
+  LOG->trace("MixTexture::MixTexture");
 
   // model
   this->node_caption = "MixTexture";
@@ -96,7 +96,7 @@ void MixTexture::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void MixTexture::compute()
 {
-  LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
+  LOG->trace("computing node {}", this->name().toStdString());
 
   hmap::HeightMapRGBA *p_in1 = HSD_GET_POINTER(this->in1);
   hmap::HeightMapRGBA *p_in2 = HSD_GET_POINTER(this->in2);

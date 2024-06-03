@@ -1,6 +1,7 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include "hesiod/logger.hpp"
 #include "hesiod/model/nodes.hpp"
 
 namespace hesiod
@@ -8,7 +9,7 @@ namespace hesiod
 
 ColorizeSolid::ColorizeSolid(const ModelConfig *p_config) : BaseNode(p_config)
 {
-  LOG_DEBUG("ColorizeSolid::ColorizeSolid");
+  LOG->trace("ColorizeSolid::ColorizeSolid");
 
   // model
   this->node_caption = "ColorizeSolid";
@@ -61,7 +62,7 @@ void ColorizeSolid::compute()
 {
   Q_EMIT this->computingStarted();
 
-  LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
+  LOG->trace("computing node {}", this->name().toStdString());
 
   std::vector<float> col3 = GET_ATTR_COLOR("color");
 

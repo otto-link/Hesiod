@@ -2,6 +2,7 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include "hesiod/model/model_registry.hpp"
+#include "hesiod/logger.hpp"
 #include "hesiod/model/nodes.hpp"
 
 namespace hesiod
@@ -10,7 +11,9 @@ namespace hesiod
 std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
     hesiod::ModelConfig *p_config)
 {
-  LOG_DEBUG("initializing node registry...");
+  auto log = hesiod::Logger::get_logger();
+
+  log->debug("initializing node registry");
 
   auto ret = std::make_shared<QtNodes::NodeDelegateModelRegistry>();
 
@@ -138,6 +141,8 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::WhiteDensityMap, "Primitive/Random");
   HSD_REGISTER_NODE(hesiod::WhiteSparse, "Primitive/Random");
   HSD_REGISTER_NODE(hesiod::ZeroedEdges, "Math/Boundaries");
+
+  log->debug("node registry initialized");
 
   return ret;
 }

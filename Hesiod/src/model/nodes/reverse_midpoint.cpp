@@ -3,6 +3,7 @@
  * this software. */
 #include "highmap/authoring.hpp"
 
+#include "hesiod/logger.hpp"
 #include "hesiod/model/nodes.hpp"
 
 namespace hesiod
@@ -10,7 +11,7 @@ namespace hesiod
 
 ReverseMidpoint::ReverseMidpoint(const ModelConfig *p_config) : BaseNode(p_config)
 {
-  LOG_DEBUG("ReverseMidpoint::ReverseMidpoint");
+  LOG->trace("ReverseMidpoint::ReverseMidpoint");
 
   // model
   this->node_caption = "ReverseMidpoint";
@@ -75,7 +76,7 @@ void ReverseMidpoint::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void ReverseMidpoint::compute()
 {
-  LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
+  LOG->trace("computing node {}", this->name().toStdString());
 
   hmap::Path *p_path = HSD_GET_POINTER(this->in);
 

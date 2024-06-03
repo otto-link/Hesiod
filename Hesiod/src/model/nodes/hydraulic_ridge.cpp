@@ -3,6 +3,7 @@
  * this software. */
 #include "highmap/erosion.hpp"
 
+#include "hesiod/logger.hpp"
 #include "hesiod/model/nodes.hpp"
 
 namespace hesiod
@@ -10,7 +11,7 @@ namespace hesiod
 
 HydraulicRidge::HydraulicRidge(const ModelConfig *p_config) : BaseNode(p_config)
 {
-  LOG_DEBUG("HydraulicRidge::HydraulicRidge");
+  LOG->trace("HydraulicRidge::HydraulicRidge");
 
   // model
   this->node_caption = "HydraulicRidge";
@@ -96,7 +97,7 @@ void HydraulicRidge::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void HydraulicRidge::compute()
 {
-  LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
+  LOG->trace("computing node {}", this->name().toStdString());
 
   hmap::HeightMap *p_in = HSD_GET_POINTER(this->in);
 

@@ -1,6 +1,7 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include "hesiod/logger.hpp"
 #include "hesiod/model/nodes.hpp"
 
 namespace hesiod
@@ -8,7 +9,7 @@ namespace hesiod
 
 Mixer::Mixer(const ModelConfig *p_config) : BaseNode(p_config)
 {
-  LOG_DEBUG("Mixer::Mixer");
+  LOG->trace("Mixer::Mixer");
 
   // model
   this->node_caption = "Mixer";
@@ -80,7 +81,7 @@ void Mixer::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void Mixer::compute()
 {
-  LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
+  LOG->trace("computing node {}", this->name().toStdString());
 
   hmap::HeightMap *p_in1 = HSD_GET_POINTER(this->in1);
   hmap::HeightMap *p_in2 = HSD_GET_POINTER(this->in2);

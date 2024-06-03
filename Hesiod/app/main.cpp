@@ -2,11 +2,14 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 typedef unsigned int uint;
+
+#include <spdlog/spdlog.h>
+#include <spdlog/sinks/basic_file_sink.h>
+
 #include <QApplication>
 #include <QDebug>
 
-#include "macrologger.h"
-
+#include "hesiod/logger.hpp"
 #include "hesiod/gui/main_window.hpp"
 #include "hesiod/gui/style.hpp"
 
@@ -27,8 +30,20 @@ std::istream &operator>>(std::istream &is, hmap::Vec2<int> &vec2)
 }
 #include <args.hxx>
 
+
+  
 int main(int argc, char *argv[])
 {
+  auto log = hesiod::Logger::get_logger();
+
+  log->info("Welcome to Hesiod v{}.{}.{}!", HESIOD_VERSION_MAJOR, HESIOD_VERSION_MINOR, HESIOD_VERSION_PATCH);
+
+  // log->warn("Welcome to Hesiod!");
+  // log->error("Welcome to Hesiod!");
+  // log->critical("Welcome to Hesiod!");
+  // log->debug("Welcome to Hesiod!");
+  // log->trace("Welcome to Hesiod!");
+
   // --- parse command line arguments
 
   args::ArgumentParser parser("Hesiod.");
@@ -78,23 +93,23 @@ int main(int argc, char *argv[])
 
       std::string filename = args::get(batch);
 
-      LOG_INFO("executing Hesiod in batch mode...");
-      LOG_DEBUG("file: %s", filename.c_str());
-
+      log->info("executing Hesiod in batch mode");
+      
       hmap::Vec2<int> shape = shape_arg == true ? args::get(shape_arg)
                                                 : hmap::Vec2<int>(0, 0);
       hmap::Vec2<int> tiling = tiling_arg == true ? args::get(tiling_arg)
                                                   : hmap::Vec2<int>(0, 0);
       float           overlap = overlap_arg == true ? args::get(overlap_arg) : -1.f;
 
-      LOG_DEBUG("cli shape: {%d, %d}", shape.x, shape.y);
-      LOG_DEBUG("cli tiling: {%d, %d}", tiling.x, tiling.y);
-      LOG_DEBUG("cli overlap: %f", overlap);
+      log->info("file: {}", filename);
+      log->info("cli shape: {{{}, {}}}", shape.x, shape.y);
+      log->info("cli tiling: {{{}, {}}}", tiling.x, tiling.y);
+      log->info("cli overlap: {}", overlap);
 
       QFile file(QString::fromStdString(filename));
       if (!file.open(QIODevice::ReadOnly))
       {
-        LOG_ERROR("error while opening graph file");
+        log->critical("not able to open the input graph file: {}", filename);
         return 1;
       }
 
@@ -126,7 +141,7 @@ int main(int argc, char *argv[])
                                                                    &model_config,
                                                                    graph_id);
 
-      LOG_INFO("computing node graph...");
+      log->info("computing node graph...");
       model->load(json_doc, model_config);
 
       return 0;
@@ -136,7 +151,7 @@ int main(int argc, char *argv[])
 
     if (snapshot_generation)
     {
-      LOG_INFO("executing Hesiod in snapshot generation mode...");
+      log->info("executing Hesiod in snapshot generation mode");
 
       // ignite Qt application
       QApplication app(argc, argv);
@@ -155,7 +170,7 @@ int main(int argc, char *argv[])
       {
         std::string node_type = node_type_qstring.toStdString();
 
-        LOG_DEBUG("Generating snapshot for node type: %s", node_type.c_str());
+        log->info("Generating snapshot for node type: {}", node_type);
 
         hesiod::NodeEditorWidget      *p_ed = new hesiod::NodeEditorWidget("");
         hesiod::HsdDataFlowGraphModel *p_model = p_ed->get_model_ref();
@@ -214,35 +229,35 @@ int main(int argc, char *argv[])
   main_window.show();
 
   // --- WIDGET TESTING
-  std::map<std::string, std::unique_ptr<hesiod::Attribute>> attr = {};
+  // std::map<std::string, std::unique_ptr<hesiod::Attribute>> attr = {};
 
-  attr["somme choice"] = NEW_ATTR_BOOL(false, "toto");
-  attr["seed"] = NEW_ATTR_SEED();
-  attr["float"] = NEW_ATTR_FLOAT(1.f, 0.1f, 5.f, "%.3f");
-  attr["int"] = NEW_ATTR_INT(32, 1, 64);
-  attr["map"] = NEW_ATTR_MAPENUM(hesiod::cmap_map);
-  attr["range"] = NEW_ATTR_RANGE(hmap::Vec2<float>(0.5f, 2.f), "%.3f");
-  attr["kw"] = NEW_ATTR_WAVENB(hmap::Vec2<float>(16.f, 2.f), 0.1f, 64.f, "%.3f");
-  attr["file"] = NEW_ATTR_FILENAME("export.png", "PNG Files(*.png)", "Open toto");
-  attr["color"] = NEW_ATTR_COLOR();
+  // attr["somme choice"] = NEW_ATTR_BOOL(false, "toto");
+  // attr["seed"] = NEW_ATTR_SEED();
+  // attr["float"] = NEW_ATTR_FLOAT(1.f, 0.1f, 5.f, "%.3f");
+  // attr["int"] = NEW_ATTR_INT(32, 1, 64);
+  // attr["map"] = NEW_ATTR_MAPENUM(hesiod::cmap_map);
+  // attr["range"] = NEW_ATTR_RANGE(hmap::Vec2<float>(0.5f, 2.f), "%.3f");
+  // attr["kw"] = NEW_ATTR_WAVENB(hmap::Vec2<float>(16.f, 2.f), 0.1f, 64.f, "%.3f");
+  // attr["file"] = NEW_ATTR_FILENAME("export.png", "PNG Files(*.png)", "Open toto");
+  // attr["color"] = NEW_ATTR_COLOR();
 
-  std::vector<int> vi = {4, 5, 6, 7};
-  attr["vint"] = NEW_ATTR_VECINT(vi, 0, 64);
+  // std::vector<int> vi = {4, 5, 6, 7};
+  // attr["vint"] = NEW_ATTR_VECINT(vi, 0, 64);
 
-  // attr["cloud"] = NEW_ATTR_CLOUD();
+  // // attr["cloud"] = NEW_ATTR_CLOUD();
 
-  attr["text"] = NEW_ATTR_STRING("test");
+  // attr["text"] = NEW_ATTR_STRING("test");
 
-  std::vector<std::vector<float>> gradient = {{0.f, 1.f, 0.f, 0.f, 1.f},
-                                              {0.25f, 0.f, 1.f, 0.f, 1.f},
-                                              {1.f, 0.f, 0.f, 1.f, 1.f}};
+  // std::vector<std::vector<float>> gradient = {{0.f, 1.f, 0.f, 0.f, 1.f},
+  //                                             {0.25f, 0.f, 1.f, 0.f, 1.f},
+  //                                             {1.f, 0.f, 0.f, 1.f, 1.f}};
 
-  attr["color_vec"] = NEW_ATTR_COLORGRADIENT(gradient);
+  // attr["color_vec"] = NEW_ATTR_COLORGRADIENT(gradient);
 
-  attr["path"] = NEW_ATTR_PATH();
+  // attr["path"] = NEW_ATTR_PATH();
 
-  hesiod::AttributesWidget *sw = new hesiod::AttributesWidget(&attr);
-  // sw->show();
+  // hesiod::AttributesWidget *sw = new hesiod::AttributesWidget(&attr);
+  // // sw->show();
 
   // ---
 

@@ -1,10 +1,9 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-// #include <vector>
-
 #include "highmap/heightmap.hpp"
 
+#include "hesiod/logger.hpp"
 #include "hesiod/model/cmap.hpp"
 #include "hesiod/model/nodes.hpp"
 
@@ -13,7 +12,7 @@ namespace hesiod
 
 SetAlpha::SetAlpha(const ModelConfig *p_config) : BaseNode(p_config)
 {
-  LOG_DEBUG("SetAlpha::SetAlpha");
+  LOG->trace("SetAlpha::SetAlpha");
 
   // model
   this->node_caption = "SetAlpha";
@@ -86,7 +85,7 @@ void SetAlpha::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void SetAlpha::compute()
 {
-  LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
+  LOG->trace("computing node {}", this->name().toStdString());
 
   hmap::HeightMapRGBA *p_in = HSD_GET_POINTER(this->in);
 
