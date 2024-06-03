@@ -7,7 +7,6 @@
 
 #include "highmap/heightmap.hpp"
 #include "highmap/io.hpp"
-#include "macrologger.h"
 
 #include "hesiod/data/cloud_data.hpp"
 #include "hesiod/data/heightmap_data.hpp"

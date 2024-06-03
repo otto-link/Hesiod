@@ -3,6 +3,7 @@
  * this software. */
 #include "highmap/selector.hpp"
 
+#include "hesiod/logger.hpp"
 #include "hesiod/model/nodes.hpp"
 
 namespace hesiod
@@ -10,7 +11,7 @@ namespace hesiod
 
 SelectInwardOutward::SelectInwardOutward(const ModelConfig *p_config) : BaseNode(p_config)
 {
-  LOG_DEBUG("SelectInwardOutward::SelectInwardOutward");
+  LOG->trace("SelectInwardOutward::SelectInwardOutward");
 
   // model
   this->node_caption = "SelectInwardOutward";
@@ -74,7 +75,7 @@ void SelectInwardOutward::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void SelectInwardOutward::compute()
 {
-  LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
+  LOG->trace("computing node {}", this->name().toStdString());
 
   hmap::HeightMap *p_in = HSD_GET_POINTER(this->in);
 

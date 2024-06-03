@@ -8,7 +8,6 @@
 #include <QtNodes/NodeDelegateModel>
 
 #include "highmap/primitives.hpp"
-#include "macrologger.h"
 
 #include "hesiod/data/cloud_data.hpp"
 #include "hesiod/data/heightmap_data.hpp"

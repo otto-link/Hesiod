@@ -37,6 +37,7 @@ add_compile_definitions(
 set(CMAKE_CXX_STANDARD 20)
 
 # --- Dear ImGui
+find_package(spdlog REQUIRED)
 find_package(Qt5 REQUIRED COMPONENTS Core Widgets OpenGL)
 
 add_subdirectory(external)

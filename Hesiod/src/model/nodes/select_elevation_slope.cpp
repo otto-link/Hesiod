@@ -3,6 +3,7 @@
  * this software. */
 #include "highmap/selector.hpp"
 
+#include "hesiod/logger.hpp"
 #include "hesiod/model/nodes.hpp"
 
 namespace hesiod
@@ -11,7 +12,7 @@ namespace hesiod
 SelectElevationSlope::SelectElevationSlope(const ModelConfig *p_config)
     : BaseNode(p_config)
 {
-  LOG_DEBUG("SelectElevationSlope::SelectElevationSlope");
+  LOG->trace("SelectElevationSlope::SelectElevationSlope");
 
   // model
   this->node_caption = "SelectElevationSlope";
@@ -76,7 +77,7 @@ void SelectElevationSlope::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void SelectElevationSlope::compute()
 {
-  LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
+  LOG->trace("computing node {}", this->name().toStdString());
 
   hmap::HeightMap *p_in = HSD_GET_POINTER(this->in);
 

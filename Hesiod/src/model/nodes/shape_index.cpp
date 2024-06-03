@@ -3,6 +3,7 @@
  * this software. */
 #include "highmap/features.hpp"
 
+#include "hesiod/logger.hpp"
 #include "hesiod/model/nodes.hpp"
 
 namespace hesiod
@@ -10,7 +11,7 @@ namespace hesiod
 
 ShapeIndex::ShapeIndex(const ModelConfig *p_config) : BaseNode(p_config)
 {
-  LOG_DEBUG("ShapeIndex::ShapeIndex");
+  LOG->trace("ShapeIndex::ShapeIndex");
 
   // model
   this->node_caption = "ShapeIndex";
@@ -78,7 +79,7 @@ void ShapeIndex::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void ShapeIndex::compute()
 {
-  LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
+  LOG->trace("computing node {}", this->name().toStdString());
 
   hmap::HeightMap *p_in = HSD_GET_POINTER(this->in);
 

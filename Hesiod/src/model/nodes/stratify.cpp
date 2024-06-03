@@ -3,6 +3,7 @@
  * this software. */
 #include "highmap/erosion.hpp"
 
+#include "hesiod/logger.hpp"
 #include "hesiod/model/nodes.hpp"
 
 namespace hesiod
@@ -10,7 +11,7 @@ namespace hesiod
 
 Stratify::Stratify(const ModelConfig *p_config) : BaseNode(p_config)
 {
-  LOG_DEBUG("Stratify::Stratify");
+  LOG->trace("Stratify::Stratify");
 
   // model
   this->node_caption = "Stratify";
@@ -90,7 +91,7 @@ void Stratify::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void Stratify::compute()
 {
-  LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
+  LOG->trace("computing node {}", this->name().toStdString());
 
   hmap::HeightMap *p_in = HSD_GET_POINTER(this->in);
 

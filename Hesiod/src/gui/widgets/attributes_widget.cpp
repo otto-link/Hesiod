@@ -4,6 +4,7 @@
 #include <QGridLayout>
 
 #include "hesiod/gui/widgets.hpp"
+#include "hesiod/logger.hpp"
 
 namespace hesiod
 {
@@ -62,7 +63,7 @@ AttributesWidget::AttributesWidget(
     else
     {
       if (!this->p_attr_map->contains(key))
-        LOG_ERROR("attribute key not found: [%s]", key.c_str());
+        LOG->error("attribute key not found: {}", key);
 
       Attribute *p_attr = this->p_attr_map->at(key).get();
 
@@ -238,8 +239,8 @@ AttributesWidget::AttributesWidget(
       break;
 
       default:
-        LOG_ERROR("attribute settings could not be created, for type [%d]",
-                  (int)p_attr->get_type());
+        LOG->error("attribute settings could not be created, for type {}",
+                   (int)p_attr->get_type());
       }
       count++;
     }
@@ -249,7 +250,7 @@ AttributesWidget::AttributesWidget(
 
   if (check_count && count != (int)this->p_attr_map->size())
   {
-    LOG_ERROR("missing attributes in AttributesWidget (check attr_ordered_key)");
+    LOG->critical("missing attributes in AttributesWidget (check attr_ordered_key)");
     throw std::runtime_error(
         "missing attributes in AttributesWidget (check attr_ordered_key)");
   }

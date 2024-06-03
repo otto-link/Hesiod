@@ -1,6 +1,7 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include "hesiod/logger.hpp"
 #include "hesiod/model/nodes.hpp"
 
 namespace hesiod
@@ -9,7 +10,7 @@ namespace hesiod
 GammaCorrectionLocal::GammaCorrectionLocal(const ModelConfig *p_config)
     : BaseNode(p_config)
 {
-  LOG_DEBUG("GammaCorrectionLocal::GammaCorrectionLocal");
+  LOG->trace("GammaCorrectionLocal::GammaCorrectionLocal");
 
   // model
   this->node_caption = "GammaCorrectionLocal";
@@ -81,7 +82,7 @@ void GammaCorrectionLocal::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void GammaCorrectionLocal::compute()
 {
-  LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
+  LOG->trace("computing node {}", this->name().toStdString());
 
   hmap::HeightMap *p_in = HSD_GET_POINTER(this->in);
 

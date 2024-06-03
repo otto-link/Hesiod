@@ -3,6 +3,7 @@
  * this software. */
 #include "highmap/math.hpp"
 
+#include "hesiod/logger.hpp"
 #include "hesiod/model/nodes.hpp"
 
 namespace hesiod
@@ -10,7 +11,7 @@ namespace hesiod
 
 Smoothstep5::Smoothstep5(const ModelConfig *p_config) : BaseNode(p_config)
 {
-  LOG_DEBUG("Smoothstep5::Smoothstep5");
+  LOG->trace("Smoothstep5::Smoothstep5");
 
   // model
   this->node_caption = "Smoothstep5";
@@ -60,7 +61,7 @@ void Smoothstep5::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void Smoothstep5::compute()
 {
-  LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
+  LOG->trace("computing node {}", this->name().toStdString());
 
   hmap::HeightMap *p_in = HSD_GET_POINTER(this->in);
 

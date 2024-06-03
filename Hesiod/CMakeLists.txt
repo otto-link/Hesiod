@@ -15,8 +15,7 @@ file(GLOB_RECURSE HESIOD_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
 
 add_executable(${PROJECT_NAME} ${HESIOD_SOURCES} ${HESIOD_GUI_INCLUDES})
 
-set(HESIOD_INCLUDE PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include PRIVATE
-                   ${PROJECT_SOURCE_DIR}/external/macro-logger)
+set(HESIOD_INCLUDE PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include PRIVATE)
 
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
 
@@ -30,9 +29,9 @@ target_precompile_headers(
 target_link_libraries(
   ${PROJECT_NAME}
   PRIVATE args
+          spdlog::spdlog
           highmap
           Qt5::Core
           Qt5::OpenGL
           Qt5::Widgets
-          macro-logger::macro-logger
           QtNodes::QtNodes)

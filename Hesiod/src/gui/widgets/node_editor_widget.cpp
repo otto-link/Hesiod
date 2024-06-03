@@ -5,6 +5,7 @@
 #include <QShortcut>
 
 #include "hesiod/gui/node_editor_widget.hpp"
+#include "hesiod/logger.hpp"
 #include "hesiod/model/model_registry.hpp"
 #include "hesiod/model/nodes.hpp"
 
@@ -222,7 +223,7 @@ void NodeEditorWidget::clear()
 
 void NodeEditorWidget::load(std::string filename)
 {
-  LOG_DEBUG("loading graph [%s], file [%s]", this->graph_id.c_str(), filename.c_str());
+  LOG->info("loading graph {}, file {}", this->graph_id, filename);
 
   QFile file(filename.c_str());
 
@@ -238,7 +239,7 @@ void NodeEditorWidget::load(std::string filename)
 
 void NodeEditorWidget::save(std::string filename)
 {
-  LOG_DEBUG("saving graph [%s], file [%s]", this->graph_id.c_str(), filename.c_str());
+  LOG->info("saving graph {}, file {}", this->graph_id, filename);
 
   QFile file(filename.c_str());
 
@@ -294,7 +295,7 @@ void NodeEditorWidget::update_model_configuration()
 
   if (ret)
   {
-    LOG_DEBUG("updating model configuration");
+    LOG->trace("updating model configuration");
 
     Q_EMIT this->before_updating_model_configuration(this->graph_id);
 

@@ -1,7 +1,8 @@
+/* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
+ * Public License. The full license is in the file LICENSE, distributed with
+ * this software. */
 #include <map>
 #include <memory>
-
-#include "macrologger.h"
 
 #include "hesiod/model/attributes.hpp"
 
@@ -30,8 +31,8 @@ std::string get_attribute_name_from_type(AttributeType type)
 {
   if (attribute_type_to_name.contains(type) == false)
   {
-    LOG_ERROR("Encountered unknown type! (%i)", static_cast<int>(type));
-    return "INVALID";
+    LOG->critical("encountered unknown type for attribute ({})", static_cast<int>(type));
+    throw std::runtime_error("attribute encountered unknown type");
   }
 
   return attribute_type_to_name.at(type);

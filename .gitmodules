@@ -1,9 +1,6 @@
 [submodule "external/HighMap"]
 	path = external/HighMap
 	url = git@github.com:otto-link/HighMap.git
-[submodule "external/macro-logger"]
-	path = external/macro-logger
-        url = git@github.com:otto-link/macro-logger.git
 [submodule "external/args"]
 	path = external/args
 	url = git@github.com:Taywee/args.git

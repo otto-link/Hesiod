@@ -3,6 +3,7 @@
  * this software. */
 #include "highmap/kernels.hpp"
 
+#include "hesiod/logger.hpp"
 #include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/nodes.hpp"
 
@@ -11,7 +12,7 @@ namespace hesiod
 
 ExpandShrink::ExpandShrink(const ModelConfig *p_config) : BaseNode(p_config)
 {
-  LOG_DEBUG("ExpandShrink::ExpandShrink");
+  LOG->trace("ExpandShrink::ExpandShrink");
 
   // model
   this->node_caption = "ExpandShrink";
@@ -82,7 +83,7 @@ void ExpandShrink::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void ExpandShrink::compute()
 {
-  LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
+  LOG->trace("computing node {}", this->name().toStdString());
 
   hmap::HeightMap *p_in = HSD_GET_POINTER(this->in);
 

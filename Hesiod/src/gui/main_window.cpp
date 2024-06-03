@@ -1,7 +1,6 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-
 #include <QApplication>
 #include <QCloseEvent>
 #include <QDockWidget>
@@ -13,11 +12,10 @@
 #include <QStatusBar>
 #include <QTabWidget>
 
-#include "macrologger.h"
-
 #include "hesiod/gui/main_window.hpp"
 #include "hesiod/gui/node_editor_widget.hpp"
 #include "hesiod/gui/node_settings_widget.hpp"
+#include "hesiod/logger.hpp"
 #include "hesiod/model/model_config.hpp"
 
 namespace hesiod
@@ -159,8 +157,6 @@ void MainWindow::restore_state()
 
 void MainWindow::show_about()
 {
-  LOG_DEBUG("%d", HESIOD_VERSION_MAJOR);
-
   std::string msg = "Hesiov v";
   msg += std::to_string(HESIOD_VERSION_MAJOR) + ".";
   msg += std::to_string(HESIOD_VERSION_MINOR) + ".";

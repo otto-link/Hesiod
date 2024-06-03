@@ -11,8 +11,6 @@
 #include <QtNodes/internal/AbstractNodeGeometry.hpp>
 #include <QtNodes/internal/NodeGraphicsObject.hpp>
 
-#include "macrologger.h"
-
 #include "hesiod/gui/node_category_color.hpp"
 
 namespace QtNodes

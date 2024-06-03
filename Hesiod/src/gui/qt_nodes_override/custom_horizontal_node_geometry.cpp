@@ -10,8 +10,6 @@
 
 #include "DefaultHorizontalNodeGeometry.hpp"
 
-#include "macrologger.h"
-
 namespace QtNodes
 {
 

@@ -3,8 +3,6 @@
  * this software. */
 #include <QSpacerItem>
 
-#include "macrologger.h"
-
 #include "hesiod/gui/gui_utils.hpp"
 #include "hesiod/gui/node_settings_widget.hpp"
 #include "hesiod/model/graph_model_addon.hpp"

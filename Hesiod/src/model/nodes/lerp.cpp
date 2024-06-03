@@ -1,9 +1,9 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-#include "highmap/kernels.hpp"
 #include "highmap/math.hpp"
 
+#include "hesiod/logger.hpp"
 #include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/nodes.hpp"
 
@@ -12,7 +12,7 @@ namespace hesiod
 
 Lerp::Lerp(const ModelConfig *p_config) : BaseNode(p_config)
 {
-  LOG_DEBUG("Lerp::Lerp");
+  LOG->trace("Lerp::Lerp");
 
   // model
   this->node_caption = "Lerp";
@@ -83,7 +83,7 @@ void Lerp::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 void Lerp::compute()
 {
-  LOG_DEBUG("computing node [%s]", this->name().toStdString().c_str());
+  LOG->trace("computing node {}", this->name().toStdString());
 
   hmap::HeightMap *p_a = HSD_GET_POINTER(this->a);
   hmap::HeightMap *p_b = HSD_GET_POINTER(this->b);
