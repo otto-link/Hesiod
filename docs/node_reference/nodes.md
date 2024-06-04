@@ -777,6 +777,37 @@ Operator/Morphology
 | :--- | :--- | :--- |
 |radius|Float|Filter radius with respect to the domain size.|
 
+## DistanceTransform
+
+
+DistanceTransform is a distance map or distance image where each pixel's value represents the shortest distance to the nearest non-zero value in the input heightmap.
+
+![img](../images/nodes/DistanceTransform.png)  
+
+### Category
+
+
+Operator/Morphology  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Input heightmap.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Output heightmap.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+
 ## Erosion
 
 

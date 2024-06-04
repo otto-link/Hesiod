@@ -27,7 +27,7 @@ Node Categories
 |Math|Gradient|Gradient, GradientAngle, GradientNorm, GradientTalus|
 |Operator|Blend|Blend, Lerp, Mixer|
 |Operator|Expand|QuiltingExpand|
-|Operator|Morphology|Closing, Dilation, Erosion, MakeBinary, MorphologicalGradient, Opening|
+|Operator|Morphology|Closing, Dilation, DistanceTransform, Erosion, MakeBinary, MorphologicalGradient, Opening|
 |Operator|Resynthesis|QuiltingShuffle|
 |Operator|Tiling|MakePeriodic, MakePeriodicStitching|
 |Primitive|Authoring|CloudToArrayInterp, ReverseMidpoint, Ridgelines|
