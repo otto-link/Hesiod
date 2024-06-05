@@ -30,7 +30,7 @@ SelectRivers::SelectRivers(const ModelConfig *p_config) : BaseNode(p_config)
   this->attr["inverse"] = NEW_ATTR_BOOL(false);
   this->attr["smoothing"] = NEW_ATTR_BOOL(false);
   this->attr["smoothing_radius"] = NEW_ATTR_FLOAT(0.05f, 0.f, 0.2f, "%.2f");
-  this->attr["remap"] = NEW_ATTR_BOOL(false);
+  this->attr["remap"] = NEW_ATTR_BOOL(true);
 
   this->attr_ordered_key = {"talus_ref",
                             "clipping_ratio",

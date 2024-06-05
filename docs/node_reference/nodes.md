@@ -3929,6 +3929,42 @@ Erosion/Stratify
 |strata_noise|Float|Noise range for the strata elevations.|
 |talus_global|Float|Step slope.|
 
+## Thermal
+
+
+Thermal is an erosion operator used to simulate the process of thermal erosion, which is a type of erosion that occurs due to temperature fluctuations causing the breakdown and movement of soil and rock materials.
+
+![img](../images/nodes/Thermal.png)  
+
+### Category
+
+
+Erosion/Thermal  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Input heightmap.|
+|bedrock|HeightMapData|Bedrock elevation, erosion process cannot carve the heightmap further down this point.|
+|mask|HeightMapData|Mask defining the filtering intensity (expected in [0, 1]).|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Eroded heightmap.|
+|depo. map|HeightMapData|Deposition map|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|iterations|Integer|Number of iterations.|
+|talus_global|Float|Repose slope.|
+
 ## Unsphericity
 
 
