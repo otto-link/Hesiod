@@ -3965,6 +3965,39 @@ Erosion/Thermal
 |iterations|Integer|Number of iterations.|
 |talus_global|Float|Repose slope.|
 
+## ThermalRib
+
+
+ThermalRib performs thermal erosion using a 'rib' algorithm (taken from Geomorph)
+
+![img](../images/nodes/ThermalRib.png)  
+
+### Category
+
+
+Erosion/Thermal  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Input heightmap.|
+|bedrock|HeightMapData|Bedrock elevation, erosion process cannot carve the heightmap further down this point.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Eroded heightmap.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|iterations|Integer|Number of iterations.|
+
 ## Unsphericity
 
 

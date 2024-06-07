@@ -133,6 +133,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::Stratify, "Erosion/Stratify");
   HSD_REGISTER_NODE(hesiod::StratifyOblique, "Erosion/Stratify");
   HSD_REGISTER_NODE(hesiod::Thermal, "Erosion/Thermal");
+  HSD_REGISTER_NODE(hesiod::ThermalRib, "Erosion/Thermal");
   HSD_REGISTER_NODE(hesiod::Unsphericity, "Features/Landform");
   HSD_REGISTER_NODE(hesiod::ValleyWidth, "Features/Landform");
   HSD_REGISTER_NODE(hesiod::WaveDune, "Primitive/Function");

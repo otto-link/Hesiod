@@ -12,7 +12,7 @@ Node Categories
 |Debug||DataAnalysis, DataPreview|
 |Erosion|Hydraulic|HydraulicParticle, HydraulicRidge, HydraulicStream, HydraulicVpipes|
 |Erosion|Stratify|Stratify, StratifyOblique|
-|Erosion|Thermal|Thermal|
+|Erosion|Thermal|Thermal, ThermalRib|
 |Features|Landform|AccumulationCurvature, RelativeElevation, ShapeIndex, Unsphericity, ValleyWidth|
 |Filter|Range|Clamp, Remap, Rescale|
 |Filter|Recast|ExpandShrink, Fold, NormalDisplacement, RecastCliff|
