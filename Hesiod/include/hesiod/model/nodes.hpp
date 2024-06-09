@@ -721,7 +721,7 @@ public:
 
   QtNodes::NodeData *get_preview_data() { return this->in.lock().get(); }
   QtNodes::NodeData *get_viewer2d_data() { return this->in.lock().get(); }
-  QtNodes::NodeData *get_viewer3d_data() { return nullptr; }
+  QtNodes::NodeData *get_viewer3d_data() { return this->in.lock().get(); }
   QtNodes::NodeData *get_viewer3d_color() { return nullptr; }
 
   void compute() override;
