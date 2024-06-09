@@ -3192,6 +3192,40 @@ Mask/Adjust
 |brightness|Float|Brightness adjustment.|
 |contrast|Float|Contrast adjustment.|
 
+## SelectAngle
+
+
+SelectAngle is a thresholding operator. It selects angle values within a specified range defined by the shape of a Gaussian pulse.
+
+![img](../images/nodes/SelectAngle.png)  
+
+### Category
+
+
+Mask/Selector  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Input heightmap.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Mask heightmap (in [0, 1]).|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|angle|Float|Selection center value.|
+|radius|Float|Pre-filter radius.|
+|sigma|Float|Selection half-width.|
+
 ## SelectBlobLog
 
 
