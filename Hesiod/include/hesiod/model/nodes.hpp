@@ -588,6 +588,31 @@ protected:
 };
 
 /**
+ * @brief DistanceTransform class.
+ */
+class DistanceTransform : public BaseNode
+{
+public:
+  DistanceTransform(const ModelConfig *p_config);
+
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_data() { return this->in.lock().get(); }
+  QtNodes::NodeData *get_viewer3d_color() { return this->out.get(); }
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data,
+                 QtNodes::PortIndex                 port_index) override;
+
+protected:
+  std::weak_ptr<HeightMapData>   in;
+  std::shared_ptr<HeightMapData> out;
+};
+
+/**
  * @brief Erosion class.
  */
 class Erosion : public BaseNode
@@ -2325,6 +2350,31 @@ protected:
 };
 
 /**
+ * @brief SelectAngle class.
+ */
+class SelectAngle : public BaseNode
+{
+public:
+  SelectAngle(const ModelConfig *p_config);
+
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_data() { return this->in.lock().get(); }
+  QtNodes::NodeData *get_viewer3d_color() { return this->out.get(); }
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data,
+                 QtNodes::PortIndex                 port_index) override;
+
+protected:
+  std::weak_ptr<HeightMapData>   in;
+  std::shared_ptr<HeightMapData> out;
+};
+
+/**
  * @brief SelectBlobLog class.
  */
 class SelectBlobLog : public BaseNode
@@ -2872,6 +2922,56 @@ public:
 
 protected:
   std::weak_ptr<HeightMapData>   in, noise, mask;
+  std::shared_ptr<HeightMapData> out;
+};
+
+/**
+ * @brief Thermal class.
+ */
+class Thermal : public BaseNode
+{
+public:
+  Thermal(const ModelConfig *p_config);
+
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_color() { return this->mask.lock().get(); }
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data,
+                 QtNodes::PortIndex                 port_index) override;
+
+protected:
+  std::weak_ptr<HeightMapData>   in, bedrock, mask;
+  std::shared_ptr<HeightMapData> out, deposition_map;
+};
+
+/**
+ * @brief ThermalRib class.
+ */
+class ThermalRib : public BaseNode
+{
+public:
+  ThermalRib(const ModelConfig *p_config);
+
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_color() { return nullptr; }
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data,
+                 QtNodes::PortIndex                 port_index) override;
+
+protected:
+  std::weak_ptr<HeightMapData>   in, bedrock;
   std::shared_ptr<HeightMapData> out;
 };
 

@@ -130,4 +130,7 @@ QtNodes::NodeId add_graph_example(hesiod::HsdDataFlowGraphModel *p_model,
                                   std::string                    node_type,
                                   std::string                    category = "");
 
+void add_graph_startup(hesiod::HsdDataFlowGraphModel *p_model,
+                       std::string                    model = "default");
+
 } // namespace hesiod

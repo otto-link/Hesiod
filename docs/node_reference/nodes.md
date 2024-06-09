@@ -777,6 +777,37 @@ Operator/Morphology
 | :--- | :--- | :--- |
 |radius|Float|Filter radius with respect to the domain size.|
 
+## DistanceTransform
+
+
+DistanceTransform is a distance map or distance image where each pixel's value represents the shortest distance to the nearest non-zero value in the input heightmap.
+
+![img](../images/nodes/DistanceTransform.png)  
+
+### Category
+
+
+Operator/Morphology  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Input heightmap.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Output heightmap.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+
 ## Erosion
 
 
@@ -3161,6 +3192,40 @@ Mask/Adjust
 |brightness|Float|Brightness adjustment.|
 |contrast|Float|Contrast adjustment.|
 
+## SelectAngle
+
+
+SelectAngle is a thresholding operator. It selects angle values within a specified range defined by the shape of a Gaussian pulse.
+
+![img](../images/nodes/SelectAngle.png)  
+
+### Category
+
+
+Mask/Selector  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Input heightmap.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Mask heightmap (in [0, 1]).|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|angle|Float|Selection center value.|
+|radius|Float|Pre-filter radius.|
+|sigma|Float|Selection half-width.|
+
 ## SelectBlobLog
 
 
@@ -3897,6 +3962,75 @@ Erosion/Stratify
 |seed|Random seed|Random seed number.|
 |strata_noise|Float|Noise range for the strata elevations.|
 |talus_global|Float|Step slope.|
+
+## Thermal
+
+
+Thermal is an erosion operator used to simulate the process of thermal erosion, which is a type of erosion that occurs due to temperature fluctuations causing the breakdown and movement of soil and rock materials.
+
+![img](../images/nodes/Thermal.png)  
+
+### Category
+
+
+Erosion/Thermal  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Input heightmap.|
+|bedrock|HeightMapData|Bedrock elevation, erosion process cannot carve the heightmap further down this point.|
+|mask|HeightMapData|Mask defining the filtering intensity (expected in [0, 1]).|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Eroded heightmap.|
+|depo. map|HeightMapData|Deposition map|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|iterations|Integer|Number of iterations.|
+|talus_global|Float|Repose slope.|
+
+## ThermalRib
+
+
+ThermalRib performs thermal erosion using a 'rib' algorithm (taken from Geomorph)
+
+![img](../images/nodes/ThermalRib.png)  
+
+### Category
+
+
+Erosion/Thermal  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Input heightmap.|
+|bedrock|HeightMapData|Bedrock elevation, erosion process cannot carve the heightmap further down this point.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Eroded heightmap.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|iterations|Integer|Number of iterations.|
 
 ## Unsphericity
 

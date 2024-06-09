@@ -40,6 +40,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::Dendry, "Primitive/Coherent Noise");
   HSD_REGISTER_NODE(hesiod::DepressionFilling, "Erosion");
   HSD_REGISTER_NODE(hesiod::Dilation, "Operator/Morphology");
+  HSD_REGISTER_NODE(hesiod::DistanceTransform, "Operator/Morphology");
   HSD_REGISTER_NODE(hesiod::Erosion, "Operator/Morphology");
   HSD_REGISTER_NODE(hesiod::ExpandShrink, "Filter/Recast");
   HSD_REGISTER_NODE(hesiod::ExportAsset, "IO/Files");
@@ -109,6 +110,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::Rugosity, "Features");
   HSD_REGISTER_NODE(hesiod::Saturate, "Filter/Recurve");
   HSD_REGISTER_NODE(hesiod::ScanMask, "Mask/Adjust");
+  HSD_REGISTER_NODE(hesiod::SelectAngle, "Mask/Selector");
   HSD_REGISTER_NODE(hesiod::SelectBlobLog, "Mask/Selector");
   HSD_REGISTER_NODE(hesiod::SelectCavities, "Mask/Selector");
   HSD_REGISTER_NODE(hesiod::SelectElevationSlope, "Mask/Selector");
@@ -131,6 +133,8 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::Step, "Primitive/Function");
   HSD_REGISTER_NODE(hesiod::Stratify, "Erosion/Stratify");
   HSD_REGISTER_NODE(hesiod::StratifyOblique, "Erosion/Stratify");
+  HSD_REGISTER_NODE(hesiod::Thermal, "Erosion/Thermal");
+  HSD_REGISTER_NODE(hesiod::ThermalRib, "Erosion/Thermal");
   HSD_REGISTER_NODE(hesiod::Unsphericity, "Features/Landform");
   HSD_REGISTER_NODE(hesiod::ValleyWidth, "Features/Landform");
   HSD_REGISTER_NODE(hesiod::WaveDune, "Primitive/Function");

@@ -12,6 +12,7 @@ Node Categories
 |Debug||DataAnalysis, DataPreview|
 |Erosion|Hydraulic|HydraulicParticle, HydraulicRidge, HydraulicStream, HydraulicVpipes|
 |Erosion|Stratify|Stratify, StratifyOblique|
+|Erosion|Thermal|Thermal, ThermalRib|
 |Features|Landform|AccumulationCurvature, RelativeElevation, ShapeIndex, Unsphericity, ValleyWidth|
 |Filter|Range|Clamp, Remap, Rescale|
 |Filter|Recast|ExpandShrink, Fold, NormalDisplacement, RecastCliff|
@@ -21,13 +22,13 @@ Node Categories
 |Geometry|Path|Path, PathBezier, PathBezierRound, PathBspline, PathFractalize, PathMeanderize, PathResample, PathSDF, PathToHeightmap|
 |IO|Files|ExportAsset, ExportCloud, ExportHeightmap, ExportNormalMap, ExportPath, ExportTexture, ImportHeightmap|
 |Mask|Adjust|ScanMask|
-|Mask|Selector|SelectBlobLog, SelectCavities, SelectElevationSlope, SelectGt, SelectInterval, SelectInwardOutward, SelectPulse, SelectRivers, SelectTransitions|
+|Mask|Selector|SelectAngle, SelectBlobLog, SelectCavities, SelectElevationSlope, SelectGt, SelectInterval, SelectInwardOutward, SelectPulse, SelectRivers, SelectTransitions|
 |Math|Base|Abs, AbsSmooth, Cos, GaussianDecay, Inverse, Smoothstep3, Smoothstep5|
 |Math|Boundaries|ZeroedEdges|
 |Math|Gradient|Gradient, GradientAngle, GradientNorm, GradientTalus|
 |Operator|Blend|Blend, Lerp, Mixer|
 |Operator|Expand|QuiltingExpand|
-|Operator|Morphology|Closing, Dilation, Erosion, MakeBinary, MorphologicalGradient, Opening|
+|Operator|Morphology|Closing, Dilation, DistanceTransform, Erosion, MakeBinary, MorphologicalGradient, Opening|
 |Operator|Resynthesis|QuiltingShuffle|
 |Operator|Tiling|MakePeriodic, MakePeriodicStitching|
 |Primitive|Authoring|CloudToArrayInterp, ReverseMidpoint, Ridgelines|

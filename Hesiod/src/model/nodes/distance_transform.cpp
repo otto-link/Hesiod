@@ -1,7 +1,7 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-#include "highmap/selector.hpp"
+#include "highmap/math.hpp"
 
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes.hpp"
@@ -9,12 +9,12 @@
 namespace hesiod
 {
 
-SelectRivers::SelectRivers(const ModelConfig *p_config) : BaseNode(p_config)
+DistanceTransform::DistanceTransform(const ModelConfig *p_config) : BaseNode(p_config)
 {
-  LOG->trace("SelectRivers::SelectRivers");
+  LOG->trace("DistanceTransform::DistanceTransform");
 
   // model
-  this->node_caption = "SelectRivers";
+  this->node_caption = "DistanceTransform";
 
   // inputs
   this->input_captions = {"input"};
@@ -25,20 +25,12 @@ SelectRivers::SelectRivers(const ModelConfig *p_config) : BaseNode(p_config)
   this->output_types = {HeightMapData().type()};
 
   // attributes
-  this->attr["talus_ref"] = NEW_ATTR_FLOAT(0.1f, 0.01f, 10.f);
-  this->attr["clipping_ratio"] = NEW_ATTR_FLOAT(50.f, 0.1f, 100.f);
+  this->attr["reverse"] = NEW_ATTR_BOOL(false);
+
   this->attr["inverse"] = NEW_ATTR_BOOL(false);
-  this->attr["smoothing"] = NEW_ATTR_BOOL(false);
-  this->attr["smoothing_radius"] = NEW_ATTR_FLOAT(0.05f, 0.f, 0.2f, "%.2f");
   this->attr["remap"] = NEW_ATTR_BOOL(true);
 
-  this->attr_ordered_key = {"talus_ref",
-                            "clipping_ratio",
-                            "_SEPARATOR_",
-                            "inverse",
-                            "smoothing",
-                            "smoothing_radius",
-                            "remap"};
+  this->attr_ordered_key = {"reverse", "_SEPARATOR_", "inverse", "remap"};
 
   // update
   if (this->p_config->compute_nodes_at_instanciation)
@@ -48,23 +40,22 @@ SelectRivers::SelectRivers(const ModelConfig *p_config) : BaseNode(p_config)
   }
 
   // documentation
-  this->description = "SelectRivers is a thresholding operator. It creates a mask for "
-                      "river systems based on a flow accumulation threshold.";
+  this->description = "DistanceTransform is a distance map or distance image where each "
+                      "pixel's value represents the shortest distance to the nearest "
+                      "non-zero value in the input heightmap.";
 
   this->input_descriptions = {"Input heightmap."};
-  this->output_descriptions = {"Mask heightmap (in [0, 1])."};
-
-  // this->attribute_descriptions[""] = ".";
+  this->output_descriptions = {"Output heightmap."};
 }
 
-std::shared_ptr<QtNodes::NodeData> SelectRivers::outData(
+std::shared_ptr<QtNodes::NodeData> DistanceTransform::outData(
     QtNodes::PortIndex /* port_index */)
 {
   return std::static_pointer_cast<QtNodes::NodeData>(this->out);
 }
 
-void SelectRivers::setInData(std::shared_ptr<QtNodes::NodeData> data,
-                             QtNodes::PortIndex /* port_index */)
+void DistanceTransform::setInData(std::shared_ptr<QtNodes::NodeData> data,
+                                  QtNodes::PortIndex /* port_index */)
 {
   if (!data)
     Q_EMIT this->dataInvalidated(0);
@@ -76,7 +67,7 @@ void SelectRivers::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 // --- computing
 
-void SelectRivers::compute()
+void DistanceTransform::compute()
 {
   LOG->trace("computing node {}", this->name().toStdString());
 
@@ -88,23 +79,30 @@ void SelectRivers::compute()
 
     hmap::HeightMap *p_out = this->out->get_ref();
 
-    // work on a single array as a temporary solution
+    // not distributed, work on a single array
     hmap::Array z_array = p_in->to_array();
-    z_array = hmap::select_rivers(z_array,
-                                  GET_ATTR_FLOAT("talus_ref"),
-                                  GET_ATTR_FLOAT("clipping_ratio"));
+
+    if (GET_ATTR_BOOL("reverse"))
+    {
+      make_binary(z_array);
+      z_array = 1.f - z_array;
+    }
+
+    z_array = hmap::distance_transform(z_array);
+
     p_out->from_array_interp(z_array);
 
     // post-process
     post_process_heightmap(*p_out,
                            GET_ATTR_BOOL("inverse"),
-                           GET_ATTR_BOOL("smoothing"),
-                           GET_ATTR_FLOAT("smoothing_radius"),
+                           false, // smooth
+                           0,
                            false, // saturate
                            {0.f, 0.f},
                            0.f,
                            GET_ATTR_BOOL("remap"),
                            {0.f, 1.f});
+
     // propagate
     Q_EMIT this->computingFinished();
     this->trigger_outputs_updated();

@@ -326,6 +326,29 @@ QtNodes::NodeId add_graph_example(HsdDataFlowGraphModel *p_model,
     return node_id4;
   }
   //
+  else if (node_type == "DistanceTransform")
+  {
+    QtNodes::NodeId node_id1 = p_model->addNode("NoiseFbm");
+    QtNodes::NodeId node_id2 = p_model->addNode("MakeBinary");
+    QtNodes::NodeId node_id3 = p_model->addNode(QString::fromStdString(node_type));
+
+    p_model->addConnection(QtNodes::ConnectionId(node_id1, 0, node_id2, 0));
+    p_model->addConnection(QtNodes::ConnectionId(node_id2, 0, node_id3, 0));
+
+    p_model->setNodeData(node_id1, QtNodes::NodeRole::Position, QPointF(0.f, 0.f));
+    p_model->setNodeData(node_id2,
+                         QtNodes::NodeRole::Position,
+                         QPointF(HSD_NODE_SPACING, 0.f));
+    p_model->setNodeData(node_id3,
+                         QtNodes::NodeRole::Position,
+                         QPointF(2.f * HSD_NODE_SPACING, 0.f));
+
+    MakeBinary *p_node = p_model->delegateModel<MakeBinary>(node_id2);
+    p_node->attr.at("threshold")->get_ref<FloatAttribute>()->value = 0.5f;
+    p_node->compute();
+
+    return node_id3;
+  } //
   else if (node_type == "MakeBinary")
   {
     QtNodes::NodeId node_id1 = p_model->addNode("NoiseFbm");
@@ -501,6 +524,34 @@ QtNodes::NodeId add_graph_example(HsdDataFlowGraphModel *p_model,
 
     else
       return p_model->addNode(QString::fromStdString(node_type));
+  }
+}
+
+void add_graph_startup(hesiod::HsdDataFlowGraphModel *p_model, std::string model)
+{
+  if (model == "default")
+  {
+    std::vector<QtNodes::NodeId> node_ids = {};
+
+    node_ids.push_back(p_model->addNode("NoiseFbm"));
+    node_ids.push_back(p_model->addNode("ZeroedEdges"));
+    node_ids.push_back(p_model->addNode("HydraulicStream"));
+    node_ids.push_back(p_model->addNode("SmoothFill"));
+    node_ids.push_back(p_model->addNode("ExportHeightmap"));
+
+    p_model->addConnection(QtNodes::ConnectionId(node_ids[0], 0, node_ids[1], 0));
+    p_model->addConnection(QtNodes::ConnectionId(node_ids[1], 0, node_ids[2], 0));
+    p_model->addConnection(QtNodes::ConnectionId(node_ids[1], 0, node_ids[2], 3));
+    p_model->addConnection(QtNodes::ConnectionId(node_ids[2], 0, node_ids[3], 0));
+    p_model->addConnection(QtNodes::ConnectionId(node_ids[3], 0, node_ids[4], 0));
+
+    float pos = 0.f;
+
+    for (QtNodes::NodeId node_id : node_ids)
+    {
+      p_model->setNodeData(node_id, QtNodes::NodeRole::Position, QPointF(pos, 0.f));
+      pos += HSD_NODE_SPACING;
+    }
   }
 }
 
