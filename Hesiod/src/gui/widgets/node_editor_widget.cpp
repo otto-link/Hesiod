@@ -27,6 +27,8 @@ NodeEditorWidget::NodeEditorWidget(std::string graph_id, QWidget *parent)
                                                                 &this->model_config,
                                                                 this->graph_id);
 
+  add_graph_startup(this->model.get());
+
   // build layout
   QGridLayout *layout = new QGridLayout(this);
   layout->setContentsMargins(0, 0, 0, 0);
