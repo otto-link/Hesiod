@@ -46,7 +46,7 @@ void Preview::update_image()
       if (cloud.get_npoints() > 0)
       {
         hmap::Vec4<float> bbox = hmap::Vec4<float>(0.f, 1.f, 0.f, 1.f);
-        cloud.set_values(1.f);
+        cloud.remap_values(0.1f, 1.f);
         cloud.to_array(array, bbox);
       }
 

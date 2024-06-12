@@ -161,7 +161,7 @@ int main(int argc, char *argv[])
 
         log->info("Generating snapshot for node type: {}", node_type);
 
-        hesiod::NodeEditorWidget      *p_ed = new hesiod::NodeEditorWidget("");
+        hesiod::NodeEditorWidget      *p_ed = new hesiod::NodeEditorWidget("", nullptr, false);
         hesiod::HsdDataFlowGraphModel *p_model = p_ed->get_model_ref();
 
         p_ed->get_model_config_ref()->shape = hmap::Vec2<int>(128, 128);
