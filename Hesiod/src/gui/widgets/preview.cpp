@@ -11,6 +11,7 @@
 #include "hesiod/data/cloud_data.hpp"
 #include "hesiod/data/heightmap_data.hpp"
 #include "hesiod/data/heightmap_rgba_data.hpp"
+#include "hesiod/data/kernel_data.hpp"
 #include "hesiod/data/path_data.hpp"
 #include "hesiod/gui/preview.hpp"
 #include "hesiod/logger.hpp"
@@ -107,6 +108,21 @@ void Preview::update_image()
                              this->p_node->p_config->shape_preview.x,
                              this->p_node->p_config->shape_preview.y,
                              QImage::Format_RGBA8888);
+
+      this->label->setPixmap(QPixmap::fromImage(preview_image));
+    }
+    //
+    else if (p_data->type().id.compare("KernelData") == 0)
+    {
+      KernelData *p_kdata = static_cast<KernelData *>(p_data);
+      hmap::Array array = *static_cast<hmap::Array *>(p_kdata->get_ref());
+      array = array.resample_to_shape(this->p_node->p_config->shape_preview);
+
+      std::vector<uint8_t> img = hmap::colorize_grayscale(array);
+      preview_image = QImage(img.data(),
+                             this->p_node->p_config->shape_preview.x,
+                             this->p_node->p_config->shape_preview.y,
+                             QImage::Format_Grayscale8);
 
       this->label->setPixmap(QPixmap::fromImage(preview_image));
     }

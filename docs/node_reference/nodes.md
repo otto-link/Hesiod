@@ -1790,6 +1790,39 @@ Math/Base
 |Name|Type|Description|
 | :--- | :--- | :--- |
 
+## KernelPrim
+
+
+.
+
+![img](../images/nodes/KernelPrim.png)  
+
+### Category
+
+
+Primitive/Kernel  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|kernel|KernelData|KernelPrim generates a 'kernel', refering to a small matrix used to apply specific effects based on convolution for instance.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|kernel|Enumeration|Kernel type. Available values: cone, cubic_pulse, lorentzian, smooth_cosine.|
+|normalize|Bool|Normalize kernel so that the sum of the elements equals 1, preserving the overall intensity of an heightmap after convolution for instance.|
+|radius|Float|Filter radius with respect to the domain size.|
+
 ## Laplace
 
 
