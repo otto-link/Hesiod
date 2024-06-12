@@ -61,7 +61,12 @@ CloudLattice::CloudLattice(const ModelConfig *p_config) : BaseNode(p_config)
   this->input_descriptions = {};
   this->output_descriptions = {"Set of points (x, y) and elevations z."};
 
-  // this->attribute_descriptions[""] = "";
+  this->attribute_descriptions["delta"] = "Point spacing in x and y directions.";
+  this->attribute_descriptions["stagger_ratio"] = "Point offset in x and y directions "
+                                                  "for every two lines or columns.";
+  this->attribute_descriptions
+      ["jitter_ratio"] = "Point jittering (noise) in x and y directions.";
+  this->attribute_descriptions["seed"] = "Random seed number";
 }
 
 std::shared_ptr<QtNodes::NodeData> CloudLattice::outData(

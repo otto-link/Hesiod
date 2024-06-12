@@ -338,6 +338,10 @@ Geometry/Cloud
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|delta|Wavenumber|Point spacing in x and y directions.|
+|jitter_ratio|Wavenumber|Point jittering (noise) in x and y directions.|
+|seed|Random seed|Random seed number|
+|stagger_ratio|Wavenumber|Point offset in x and y directions for every two lines or columns.|
 
 ## CloudRandom
 
