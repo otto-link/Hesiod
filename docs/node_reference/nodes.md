@@ -309,6 +309,36 @@ Geometry/Cloud
 | :--- | :--- | :--- |
 |cloud|HighMap Cloud Object|Cloud data.|
 
+## CloudLattice
+
+
+Generate a grid lattice set of points.
+
+![img](../images/nodes/CloudLattice.png)  
+
+### Category
+
+
+Geometry/Cloud  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|cloud|CloudData|Set of points (x, y) and elevations z.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+
 ## CloudRandom
 
 
@@ -344,7 +374,7 @@ Geometry/Cloud
 ## CloudRemapValues
 
 
-CloudRemapValues convert a Cloud to a Path.
+CloudRemapValues remap the range of the cloud point values.
 
 ![img](../images/nodes/CloudRemapValues.png)  
 

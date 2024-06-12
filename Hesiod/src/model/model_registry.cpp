@@ -26,6 +26,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::Clamp, "Filter/Range");
   HSD_REGISTER_NODE(hesiod::Closing, "Operator/Morphology");
   HSD_REGISTER_NODE(hesiod::Cloud, "Geometry/Cloud");
+  HSD_REGISTER_NODE(hesiod::CloudLattice, "Geometry/Cloud");
   HSD_REGISTER_NODE(hesiod::CloudRandom, "Geometry/Cloud");
   HSD_REGISTER_NODE(hesiod::CloudRemapValues, "Geometry/Cloud");
   HSD_REGISTER_NODE(hesiod::CloudSDF, "Geometry/Cloud");
