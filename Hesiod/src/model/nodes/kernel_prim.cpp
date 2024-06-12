@@ -26,7 +26,7 @@ KernelPrim::KernelPrim(const ModelConfig *p_config) : BaseNode(p_config)
 
   // attributes
   this->attr["kernel"] = NEW_ATTR_MAPENUM(kernel_map, "cubic_pulse");
-  this->attr["radius"] = NEW_ATTR_FLOAT(0.1f, 0.01f, 0.2f, "%.3f");
+  this->attr["radius"] = NEW_ATTR_FLOAT(0.1f, 0.001f, 0.2f, "%.3f");
   this->attr["normalize"] = NEW_ATTR_BOOL(false);
 
   this->attr_ordered_key = {"kernel", "radius", "normalize"};
@@ -48,7 +48,7 @@ KernelPrim::KernelPrim(const ModelConfig *p_config) : BaseNode(p_config)
 
   this->attribute_descriptions["kernel"] = "Kernel type.";
   this->attribute_descriptions
-      ["radius"] = "Filter radius with respect to the domain size.";
+      ["radius"] = "Kernel radius with respect to the domain size.";
   this->attribute_descriptions["normalize"] =
       "Normalize kernel so that the sum of the elements equals 1, preserving the overall "
       "intensity of an heightmap after convolution for instance.";

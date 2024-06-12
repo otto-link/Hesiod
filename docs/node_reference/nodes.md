@@ -1497,6 +1497,39 @@ Math/Gradient
 |Name|Type|Description|
 | :--- | :--- | :--- |
 
+## HeightmapToKernel
+
+
+Convert an heightmap to a kernel.
+
+![img](../images/nodes/HeightmapToKernel.png)  
+
+### Category
+
+
+Converter  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Heightmap.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|kernel|KernelData|Kernel.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|normalize|Bool|Normalize kernel so that the sum of the elements equals 1, preserving the overall intensity of an heightmap after convolution for instance.|
+|radius|Float|Kernel radius with respect to the domain size.|
+
 ## HeightmapToMask
 
 
@@ -1821,7 +1854,7 @@ Primitive/Kernel
 | :--- | :--- | :--- |
 |kernel|Enumeration|Kernel type. Available values: cone, cubic_pulse, lorentzian, smooth_cosine.|
 |normalize|Bool|Normalize kernel so that the sum of the elements equals 1, preserving the overall intensity of an heightmap after convolution for instance.|
-|radius|Float|Filter radius with respect to the domain size.|
+|radius|Float|Kernel radius with respect to the domain size.|
 
 ## Laplace
 
