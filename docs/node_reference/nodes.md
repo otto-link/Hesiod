@@ -341,6 +341,37 @@ Geometry/Cloud
 |npoints|Integer|Number of points.|
 |seed|Random seed|Random seed number.|
 
+## CloudRemapValues
+
+
+CloudRemapValues convert a Cloud to a Path.
+
+![img](../images/nodes/CloudRemapValues.png)  
+
+### Category
+
+
+Geometry/Cloud  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|cloud|CloudData|Input cloud.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|cloud|CloudData|Output cloud.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+
 ## CloudSDF
 
 
