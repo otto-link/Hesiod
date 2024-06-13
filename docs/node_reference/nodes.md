@@ -343,6 +343,38 @@ Geometry/Cloud
 |seed|Random seed|Random seed number|
 |stagger_ratio|Wavenumber|Point offset in x and y directions for every two lines or columns.|
 
+## CloudMerge
+
+
+Random set of points.
+
+![img](../images/nodes/CloudMerge.png)  
+
+### Category
+
+
+Geometry/Cloud  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|cloud|CloudData|Set of points (x, y) and elevations z.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|npoints|Integer|Number of points.|
+|seed|Random seed|Random seed number.|
+
 ## CloudRandom
 
 
