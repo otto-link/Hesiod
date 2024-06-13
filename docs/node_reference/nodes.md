@@ -4045,6 +4045,38 @@ Math/Base
 |Name|Type|Description|
 | :--- | :--- | :--- |
 
+## Stamping
+
+
+Random set of points.
+
+![img](../images/nodes/Stamping.png)  
+
+### Category
+
+
+Primitive/Authoring  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|cloud|CloudData|Set of points (x, y) and elevations z.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|npoints|Integer|Number of points.|
+|seed|Random seed|Random seed number.|
+
 ## Step
 
 
