@@ -1,6 +1,8 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include "highmap/kernels.hpp"
+
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes.hpp"
 
@@ -26,7 +28,14 @@ HeightmapToKernel::HeightmapToKernel(const ModelConfig *p_config) : BaseNode(p_c
   this->attr["radius"] = NEW_ATTR_FLOAT(0.1f, 0.001f, 0.2f, "%.3f");
   this->attr["normalize"] = NEW_ATTR_BOOL(false);
 
-  this->attr_ordered_key = {"radius", "normalize"};
+  this->attr["envelope"] = NEW_ATTR_BOOL(false);
+  this->attr["envelope_kernel"] = NEW_ATTR_MAPENUM(kernel_map, "cubic_pulse");
+
+  this->attr_ordered_key = {"radius",
+                            "normalize",
+                            "_SEPARATOR_",
+                            "envelope",
+                            "envelope_kernel"};
 
   // update
   if (this->p_config->compute_nodes_at_instanciation)
@@ -49,6 +58,9 @@ HeightmapToKernel::HeightmapToKernel(const ModelConfig *p_config) : BaseNode(p_c
   this->attribute_descriptions["normalize"] =
       "Normalize kernel so that the sum of the elements equals 1, preserving the overall "
       "intensity of an heightmap after convolution for instance.";
+  this->attribute_descriptions
+      ["envelope"] = "Determine if an enveloppe is applied to the kernel.";
+  this->attribute_descriptions["envelope_kernel"] = "Envelope kernel.";
 }
 
 std::shared_ptr<QtNodes::NodeData> HeightmapToKernel::outData(
@@ -87,6 +99,32 @@ void HeightmapToKernel::compute()
 
     hmap::Array array = p_in->to_array();
     *p_out = array.resample_to_shape(kernel_shape);
+
+    if (GET_ATTR_BOOL("envelope"))
+    {
+      hmap::Array env;
+
+      switch (GET_ATTR_MAPENUM("envelope_kernel"))
+      {
+      case Kernel::CONE:
+        env = hmap::cone(kernel_shape);
+        break;
+
+      case Kernel::CUBIC_PULSE:
+        env = hmap::cubic_pulse(kernel_shape);
+        break;
+
+      case Kernel::LORENTZIAN:
+        env = hmap::lorentzian(kernel_shape);
+        break;
+
+      case Kernel::SMOOTH_COSINE:
+        env = hmap::smooth_cosine(kernel_shape);
+        break;
+      }
+
+      *p_out *= env;
+    }
 
     if (GET_ATTR_BOOL("normalize"))
       *p_out /= p_out->sum();

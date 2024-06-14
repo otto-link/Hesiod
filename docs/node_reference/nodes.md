@@ -1559,6 +1559,8 @@ Converter
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|envelope|Bool|Determine if an enveloppe is applied to the kernel.|
+|envelope_kernel|Enumeration|Envelope kernel. Available values: cone, cubic_pulse, lorentzian, smooth_cosine.|
 |normalize|Bool|Normalize kernel so that the sum of the elements equals 1, preserving the overall intensity of an heightmap after convolution for instance.|
 |radius|Float|Kernel radius with respect to the domain size.|
 
