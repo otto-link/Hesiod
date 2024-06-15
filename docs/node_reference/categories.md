@@ -8,7 +8,7 @@ Node Categories
 |Primary|Secondary|Nodes|
 | :--- | :--- | :--- |
 |Comment||Comment|
-|Converter||CloudToPath, HeightmapToMask, HeightmapToRGBA, PathToCloud|
+|Converter||CloudToPath, HeightmapToKernel, HeightmapToMask, HeightmapToRGBA, PathToCloud|
 |Debug||DataAnalysis, DataPreview|
 |Erosion|Hydraulic|HydraulicParticle, HydraulicRidge, HydraulicStream, HydraulicVpipes|
 |Erosion|Stratify|Stratify, StratifyOblique|
@@ -18,7 +18,7 @@ Node Categories
 |Filter|Recast|ExpandShrink, Fold, NormalDisplacement, RecastCliff|
 |Filter|Recurve|Gain, GammaCorrection, GammaCorrectionLocal, Plateau, RecurveKura, RecurveS, Saturate|
 |Filter|Smoothing|Laplace, Median3x3, SharpenCone, SmoothCpulse, SmoothFill, SmoothFillHoles, SmoothFillSmearPeaks|
-|Geometry|Cloud|Cloud, CloudSDF|
+|Geometry|Cloud|Cloud, CloudLattice, CloudMerge, CloudRandom, CloudRemapValues, CloudSDF|
 |Geometry|Path|Path, PathBezier, PathBezierRound, PathBspline, PathFractalize, PathMeanderize, PathResample, PathSDF, PathToHeightmap|
 |IO|Files|ExportAsset, ExportCloud, ExportHeightmap, ExportNormalMap, ExportPath, ExportTexture, ImportHeightmap|
 |Mask|Adjust|ScanMask|
@@ -31,9 +31,10 @@ Node Categories
 |Operator|Morphology|Closing, Dilation, DistanceTransform, Erosion, MakeBinary, MorphologicalGradient, Opening|
 |Operator|Resynthesis|QuiltingShuffle|
 |Operator|Tiling|MakePeriodic, MakePeriodicStitching|
-|Primitive|Authoring|CloudToArrayInterp, ReverseMidpoint, Ridgelines|
+|Primitive|Authoring|CloudToArrayInterp, ReverseMidpoint, Ridgelines, Stamping|
 |Primitive|Coherent Noise|Dendry, Noise, NoiseFbm, NoiseIq, NoiseJordan, NoiseParberry, NoisePingpong, NoiseRidged, NoiseSwiss|
 |Primitive|Function|Bump, GaussianPulse, Slope, Step, WaveDune, WaveSine, WaveSquare, WaveTriangular|
 |Primitive|Geological|Caldera|
+|Primitive|Kernel|KernelPrim|
 |Primitive|Random|White, WhiteDensityMap, WhiteSparse|
 |Texture||ColorizeCmap, ColorizeGradient, ColorizeSolid, MixTexture, SetAlpha|

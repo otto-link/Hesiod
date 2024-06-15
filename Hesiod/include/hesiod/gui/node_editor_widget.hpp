@@ -25,7 +25,9 @@ class NodeEditorWidget : public QWidget
 public:
   NodeEditorWidget() = default;
 
-  NodeEditorWidget(std::string graph_id = "default_id", QWidget *parent = nullptr);
+  NodeEditorWidget(std::string graph_id = "default_id",
+                   QWidget    *parent = nullptr,
+                   bool        add_startup_graph = true);
 
   hesiod::ModelConfig *get_model_config_ref() { return &this->model_config; }
 

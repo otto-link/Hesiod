@@ -12,6 +12,7 @@
 #include "hesiod/data/cloud_data.hpp"
 #include "hesiod/data/heightmap_data.hpp"
 #include "hesiod/data/heightmap_rgba_data.hpp"
+#include "hesiod/data/kernel_data.hpp"
 #include "hesiod/data/path_data.hpp"
 #include "hesiod/model/base_node.hpp"
 #include "hesiod/model/enum_mapping.hpp"
@@ -239,6 +240,100 @@ public:
   void setInData(std::shared_ptr<QtNodes::NodeData> data, QtNodes::PortIndex port_index);
 
 protected:
+  std::shared_ptr<CloudData> out;
+};
+
+/**
+ * @brief CloudMerge class.
+ */
+class CloudMerge : public BaseNode
+{
+public:
+  CloudMerge(const ModelConfig *p_config);
+
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return nullptr; }
+  QtNodes::NodeData *get_viewer3d_data() { return nullptr; }
+  QtNodes::NodeData *get_viewer3d_color() { return nullptr; }
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data, QtNodes::PortIndex port_index);
+
+protected:
+  std::weak_ptr<CloudData>   in1, in2;
+  std::shared_ptr<CloudData> out;
+};
+
+/**
+ * @brief CloudLattice class.
+ */
+class CloudLattice : public BaseNode
+{
+public:
+  CloudLattice(const ModelConfig *p_config);
+
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return nullptr; }
+  QtNodes::NodeData *get_viewer3d_data() { return nullptr; }
+  QtNodes::NodeData *get_viewer3d_color() { return nullptr; }
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data, QtNodes::PortIndex port_index);
+
+protected:
+  std::shared_ptr<CloudData> out;
+};
+
+/**
+ * @brief CloudRandom class.
+ */
+class CloudRandom : public BaseNode
+{
+public:
+  CloudRandom(const ModelConfig *p_config);
+
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return nullptr; }
+  QtNodes::NodeData *get_viewer3d_data() { return nullptr; }
+  QtNodes::NodeData *get_viewer3d_color() { return nullptr; }
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data, QtNodes::PortIndex port_index);
+
+protected:
+  std::shared_ptr<CloudData> out;
+};
+
+/**
+ * @brief CloudRemapValues class.
+ */
+class CloudRemapValues : public BaseNode
+{
+public:
+  CloudRemapValues(const ModelConfig *p_config);
+
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return nullptr; }
+  QtNodes::NodeData *get_viewer3d_data() { return nullptr; }
+  QtNodes::NodeData *get_viewer3d_color() { return nullptr; }
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data, QtNodes::PortIndex port_index);
+
+protected:
+  std::weak_ptr<CloudData>   in;
   std::shared_ptr<CloudData> out;
 };
 
@@ -1059,6 +1154,31 @@ protected:
 };
 
 /**
+ * @brief HeightmapToKernel class.
+ */
+class HeightmapToKernel : public BaseNode
+{
+public:
+  HeightmapToKernel(const ModelConfig *p_config);
+
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return nullptr; }
+  QtNodes::NodeData *get_viewer3d_data() { return nullptr; }
+  QtNodes::NodeData *get_viewer3d_color() { return nullptr; }
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data,
+                 QtNodes::PortIndex                 port_index) override;
+
+protected:
+  std::weak_ptr<HeightMapData> in;
+  std::shared_ptr<KernelData>  out;
+};
+
+/**
  * @brief HeightmapToMask class, to convert a heightmap to a class.
  */
 class HeightmapToMask : public BaseNode
@@ -1230,6 +1350,29 @@ public:
 
 protected:
   std::shared_ptr<HeightMapData> out;
+};
+
+/**
+ * @brief KernelPrim class.
+ */
+class KernelPrim : public BaseNode
+{
+public:
+  KernelPrim(const ModelConfig *p_config);
+
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return nullptr; }
+  QtNodes::NodeData *get_viewer3d_data() { return nullptr; }
+  QtNodes::NodeData *get_viewer3d_color() { return nullptr; }
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data, QtNodes::PortIndex port_index);
+
+protected:
+  std::shared_ptr<KernelData> out;
 };
 
 /**
@@ -2847,6 +2990,32 @@ public:
 
 protected:
   std::weak_ptr<HeightMapData>   dr;
+  std::shared_ptr<HeightMapData> out;
+};
+
+/**
+ * @brief Stamping class.
+ */
+class Stamping : public BaseNode
+{
+public:
+  Stamping(const ModelConfig *p_config);
+
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_color() { return nullptr; }
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data,
+                 QtNodes::PortIndex                 port_index) override;
+
+protected:
+  std::weak_ptr<CloudData>       cloud;
+  std::weak_ptr<KernelData>      kernel;
   std::shared_ptr<HeightMapData> out;
 };
 

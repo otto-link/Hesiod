@@ -3,6 +3,7 @@
  * this software. */
 #pragma once
 
+#include "highmap/authoring.hpp"
 #include "highmap/colormaps.hpp"
 #include "highmap/primitives.hpp"
 
@@ -83,6 +84,18 @@ static std::map<std::string, int> cmap_map = {
     {"nipy_spectral", hmap::cmap::nipy_spectral},
     {"terrain", hmap::cmap::terrain},
     {"viridis", hmap::cmap::viridis}};
+
+/**
+ * @brief Plain text / enumerate mapping for the stamping blend method.
+ */
+static std::map<std::string, int> stamping_blend_method_map = {
+    {"add", hmap::StampingBlendMethod::ADD},
+    {"maximum", hmap::StampingBlendMethod::MAXIMUM},
+    // {"maximum_smooth", hmap::StampingBlendMethod::MAXIMUM_SMOOTH},
+    {"minimum", hmap::StampingBlendMethod::MINIMUM},
+    // {"minimum_smooth", hmap::StampingBlendMethod::MINIMUM_SMOOTH},
+    {"multiply", hmap::StampingBlendMethod::MULTIPLY},
+    {"substract", hmap::StampingBlendMethod::SUBSTRACT}};
 
 /**
  * @brief Plain text / enumerate mapping for the heightmap export formats (see

@@ -309,6 +309,135 @@ Geometry/Cloud
 | :--- | :--- | :--- |
 |cloud|HighMap Cloud Object|Cloud data.|
 
+## CloudLattice
+
+
+Generate a grid lattice set of points.
+
+![img](../images/nodes/CloudLattice.png)  
+
+### Category
+
+
+Geometry/Cloud  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|cloud|CloudData|Set of points (x, y) and elevations z.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|delta|Wavenumber|Point spacing in x and y directions.|
+|jitter_ratio|Wavenumber|Point jittering (noise) in x and y directions.|
+|seed|Random seed|Random seed number|
+|stagger_ratio|Wavenumber|Point offset in x and y directions for every two lines or columns.|
+
+## CloudMerge
+
+
+Random set of points.
+
+![img](../images/nodes/CloudMerge.png)  
+
+### Category
+
+
+Geometry/Cloud  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|cloud|CloudData|Set of points (x, y) and elevations z.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|npoints|Integer|Number of points.|
+|seed|Random seed|Random seed number.|
+
+## CloudRandom
+
+
+Random set of points.
+
+![img](../images/nodes/CloudRandom.png)  
+
+### Category
+
+
+Geometry/Cloud  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|cloud|CloudData|Set of points (x, y) and elevations z.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|npoints|Integer|Number of points.|
+|seed|Random seed|Random seed number.|
+
+## CloudRemapValues
+
+
+CloudRemapValues remap the range of the cloud point values.
+
+![img](../images/nodes/CloudRemapValues.png)  
+
+### Category
+
+
+Geometry/Cloud  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|cloud|CloudData|Input cloud.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|cloud|CloudData|Output cloud.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+
 ## CloudSDF
 
 
@@ -1400,6 +1529,41 @@ Math/Gradient
 |Name|Type|Description|
 | :--- | :--- | :--- |
 
+## HeightmapToKernel
+
+
+Convert an heightmap to a kernel.
+
+![img](../images/nodes/HeightmapToKernel.png)  
+
+### Category
+
+
+Converter  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Heightmap.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|kernel|KernelData|Kernel.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|envelope|Bool|Determine if an enveloppe is applied to the kernel.|
+|envelope_kernel|Enumeration|Envelope kernel. Available values: cone, cubic_pulse, lorentzian, smooth_cosine.|
+|normalize|Bool|Normalize kernel so that the sum of the elements equals 1, preserving the overall intensity of an heightmap after convolution for instance.|
+|radius|Float|Kernel radius with respect to the domain size.|
+
 ## HeightmapToMask
 
 
@@ -1692,6 +1856,39 @@ Math/Base
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+
+## KernelPrim
+
+
+.
+
+![img](../images/nodes/KernelPrim.png)  
+
+### Category
+
+
+Primitive/Kernel  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|kernel|KernelData|KernelPrim generates a 'kernel', refering to a small matrix used to apply specific effects based on convolution for instance.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|kernel|Enumeration|Kernel type. Available values: cone, cubic_pulse, lorentzian, smooth_cosine.|
+|normalize|Bool|Normalize kernel so that the sum of the elements equals 1, preserving the overall intensity of an heightmap after convolution for instance.|
+|radius|Float|Kernel radius with respect to the domain size.|
 
 ## Laplace
 
@@ -3849,6 +4046,38 @@ Math/Base
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+
+## Stamping
+
+
+Random set of points.
+
+![img](../images/nodes/Stamping.png)  
+
+### Category
+
+
+Primitive/Authoring  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|cloud|CloudData|Set of points (x, y) and elevations z.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|npoints|Integer|Number of points.|
+|seed|Random seed|Random seed number.|
 
 ## Step
 

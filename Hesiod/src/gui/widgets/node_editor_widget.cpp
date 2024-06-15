@@ -12,7 +12,9 @@
 namespace hesiod
 {
 
-NodeEditorWidget::NodeEditorWidget(std::string graph_id, QWidget *parent)
+NodeEditorWidget::NodeEditorWidget(std::string graph_id,
+                                   QWidget    *parent,
+                                   bool        add_startup_graph)
     : QWidget(parent), graph_id(graph_id)
 {
   this->model_config = hesiod::ModelConfig();
@@ -27,7 +29,8 @@ NodeEditorWidget::NodeEditorWidget(std::string graph_id, QWidget *parent)
                                                                 &this->model_config,
                                                                 this->graph_id);
 
-  add_graph_startup(this->model.get());
+  if (add_startup_graph)
+    add_graph_startup(this->model.get());
 
   // build layout
   QGridLayout *layout = new QGridLayout(this);

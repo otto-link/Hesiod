@@ -26,6 +26,10 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::Clamp, "Filter/Range");
   HSD_REGISTER_NODE(hesiod::Closing, "Operator/Morphology");
   HSD_REGISTER_NODE(hesiod::Cloud, "Geometry/Cloud");
+  HSD_REGISTER_NODE(hesiod::CloudLattice, "Geometry/Cloud");
+  HSD_REGISTER_NODE(hesiod::CloudMerge, "Geometry/Cloud");
+  HSD_REGISTER_NODE(hesiod::CloudRandom, "Geometry/Cloud");
+  HSD_REGISTER_NODE(hesiod::CloudRemapValues, "Geometry/Cloud");
   HSD_REGISTER_NODE(hesiod::CloudSDF, "Geometry/Cloud");
   HSD_REGISTER_NODE(hesiod::CloudToArrayInterp, "Primitive/Authoring");
   HSD_REGISTER_NODE(hesiod::CloudToPath, "Converter");
@@ -59,6 +63,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::GradientAngle, "Math/Gradient");
   HSD_REGISTER_NODE(hesiod::GradientNorm, "Math/Gradient");
   HSD_REGISTER_NODE(hesiod::GradientTalus, "Math/Gradient");
+  HSD_REGISTER_NODE(hesiod::HeightmapToKernel, "Converter");
   HSD_REGISTER_NODE(hesiod::HeightmapToMask, "Converter");
   HSD_REGISTER_NODE(hesiod::HeightmapToRGBA, "Converter");
   HSD_REGISTER_NODE(hesiod::HydraulicParticle, "Erosion/Hydraulic");
@@ -67,6 +72,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::HydraulicVpipes, "Erosion/Hydraulic");
   HSD_REGISTER_NODE(hesiod::ImportHeightmap, "IO/Files");
   HSD_REGISTER_NODE(hesiod::Inverse, "Math/Base");
+  HSD_REGISTER_NODE(hesiod::KernelPrim, "Primitive/Kernel");
   HSD_REGISTER_NODE(hesiod::Laplace, "Filter/Smoothing");
   HSD_REGISTER_NODE(hesiod::Lerp, "Operator/Blend");
   HSD_REGISTER_NODE(hesiod::MakeBinary, "Operator/Morphology");
@@ -130,6 +136,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::Smoothstep3, "Math/Base");
   HSD_REGISTER_NODE(hesiod::Smoothstep5, "Math/Base");
   HSD_REGISTER_NODE(hesiod::Slope, "Primitive/Function");
+  HSD_REGISTER_NODE(hesiod::Stamping, "Primitive/Authoring");
   HSD_REGISTER_NODE(hesiod::Step, "Primitive/Function");
   HSD_REGISTER_NODE(hesiod::Stratify, "Erosion/Stratify");
   HSD_REGISTER_NODE(hesiod::StratifyOblique, "Erosion/Stratify");
