@@ -346,7 +346,7 @@ Geometry/Cloud
 ## CloudMerge
 
 
-Random set of points.
+CloudMerge merges two clouds into a single one.
 
 ![img](../images/nodes/CloudMerge.png)  
 
@@ -359,21 +359,21 @@ Geometry/Cloud
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|cloud1|CloudData|Input cloud.|
+|cloud2|CloudData|Input cloud.|
   
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|cloud|CloudData|Set of points (x, y) and elevations z.|
+|cloud|CloudData|Merged cloud.|
   
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|npoints|Integer|Number of points.|
-|seed|Random seed|Random seed number.|
 
 ## CloudRandom
 
@@ -701,6 +701,38 @@ Comment
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |comment|String|Text comment.|
+
+## ConvolveSVD
+
+
+ConvolveSVD .
+
+![img](../images/nodes/ConvolveSVD.png)  
+
+### Category
+
+
+Math/Convolution  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Input heightmap.|
+|kernel|KernelData|Convolution kernel.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Output heightmap.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
 
 ## Cos
 
@@ -4050,7 +4082,7 @@ Math/Base
 ## Stamping
 
 
-Random set of points.
+Stamping .
 
 ![img](../images/nodes/Stamping.png)  
 
@@ -4063,20 +4095,28 @@ Primitive/Authoring
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|cloud|CloudData|Stamping locations and intensities (as a Cloud).|
+|kernel|KernelData|Kernel to be stamped.|
   
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|cloud|CloudData|Set of points (x, y) and elevations z.|
+|output|HeightMapData|Output heightmap.|
   
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|npoints|Integer|Number of points.|
+|blend_method|Enumeration|Blending method. Available values: add, maximum, minimum, multiply, substract.|
+|k_smoothing|Float|Smoothing parameter (if any).|
+|kernel_flip|Bool|Randomly flip, or not, the kernel before stamping (includes tranposing).|
+|kernel_radius|Float|Kernel base radius, with respect a unit square domain.|
+|kernel_rotate|Bool|Randomly rotate, or not, the kernel before stamping (can be any rotation angle, can also be ressource consuming).|
+|kernel_scale_amplitude|Bool|Determine whether the kernel amplitude is scaled with the point values.|
+|kernel_scale_radius|Bool|Determine whether the kernel radius is scaled with the point values.|
 |seed|Random seed|Random seed number.|
 
 ## Step

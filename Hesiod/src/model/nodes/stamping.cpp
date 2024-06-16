@@ -115,8 +115,6 @@ void Stamping::compute()
   {
     Q_EMIT this->computingStarted();
 
-    LOG->debug("here");
-
     hmap::HeightMap *p_out = this->out->get_ref();
 
     std::vector<float> xp = p_cloud->get_x();
