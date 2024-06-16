@@ -705,7 +705,7 @@ Comment
 ## ConvolveSVD
 
 
-ConvolveSVD .
+ConvolveSVD performs convolution using a Singular Value Decomposition (SVD) of the kernel to accelerate the process.
 
 ![img](../images/nodes/ConvolveSVD.png)  
 
@@ -733,6 +733,7 @@ Math/Convolution
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|rank|Integer|Rank of the singular value decomposition.|
 
 ## Cos
 
