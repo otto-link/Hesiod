@@ -3089,6 +3089,40 @@ Filter/Recast
 |radius|Float|Filter influence radius.|
 |talus_global|Float|Reference talus at which the cliff are added.|
 
+## RecastSag
+
+
+RecastSag add cliffs in a heightmap by introducing sinks, droops, or bends downward changes in elevation.
+
+![img](../images/nodes/RecastSag.png)  
+
+### Category
+
+
+Filter/Recast  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Input heightmap.|
+|mask|HeightMapData|Mask defining the filtering intensity (expected in [0, 1]).|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Filtered heightmap.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|k|Float|Smoothing parameter.|
+|vref|Float|Reference elevation for the folding.|
+
 ## RecurveKura
 
 

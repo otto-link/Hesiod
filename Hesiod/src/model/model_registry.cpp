@@ -108,6 +108,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::QuiltingShuffle, "Operator/Resynthesis");
   HSD_REGISTER_NODE(hesiod::Remap, "Filter/Range");
   HSD_REGISTER_NODE(hesiod::RecastCliff, "Filter/Recast");
+  HSD_REGISTER_NODE(hesiod::RecastSag, "Filter/Recast");
   HSD_REGISTER_NODE(hesiod::RecurveKura, "Filter/Recurve");
   HSD_REGISTER_NODE(hesiod::RecurveS, "Filter/Recurve");
   HSD_REGISTER_NODE(hesiod::RelativeElevation, "Features/Landform");
