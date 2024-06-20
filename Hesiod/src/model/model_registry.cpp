@@ -38,11 +38,13 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::ColorizeSolid, "Texture");
   HSD_REGISTER_NODE(hesiod::CombineMask, "Mask");
   HSD_REGISTER_NODE(hesiod::Comment, "Comment");
+  HSD_REGISTER_NODE(hesiod::ConvolveSVD, "Math/Convolution");
   HSD_REGISTER_NODE(hesiod::Cos, "Math/Base");
   HSD_REGISTER_NODE(hesiod::DataAnalysis, "Debug");
   HSD_REGISTER_NODE(hesiod::DataPreview, "Debug");
   HSD_REGISTER_NODE(hesiod::Dendry, "Primitive/Coherent Noise");
   HSD_REGISTER_NODE(hesiod::DepressionFilling, "Erosion");
+  HSD_REGISTER_NODE(hesiod::Detrend, "Filter/Recurve");
   HSD_REGISTER_NODE(hesiod::Dilation, "Operator/Morphology");
   HSD_REGISTER_NODE(hesiod::DistanceTransform, "Operator/Morphology");
   HSD_REGISTER_NODE(hesiod::Erosion, "Operator/Morphology");
@@ -107,6 +109,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::QuiltingShuffle, "Operator/Resynthesis");
   HSD_REGISTER_NODE(hesiod::Remap, "Filter/Range");
   HSD_REGISTER_NODE(hesiod::RecastCliff, "Filter/Recast");
+  HSD_REGISTER_NODE(hesiod::RecastSag, "Filter/Recast");
   HSD_REGISTER_NODE(hesiod::RecurveKura, "Filter/Recurve");
   HSD_REGISTER_NODE(hesiod::RecurveS, "Filter/Recurve");
   HSD_REGISTER_NODE(hesiod::RelativeElevation, "Features/Landform");

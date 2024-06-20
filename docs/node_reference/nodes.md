@@ -346,7 +346,7 @@ Geometry/Cloud
 ## CloudMerge
 
 
-Random set of points.
+CloudMerge merges two clouds into a single one.
 
 ![img](../images/nodes/CloudMerge.png)  
 
@@ -359,21 +359,21 @@ Geometry/Cloud
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|cloud1|CloudData|Input cloud.|
+|cloud2|CloudData|Input cloud.|
   
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|cloud|CloudData|Set of points (x, y) and elevations z.|
+|cloud|CloudData|Merged cloud.|
   
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|npoints|Integer|Number of points.|
-|seed|Random seed|Random seed number.|
 
 ## CloudRandom
 
@@ -702,6 +702,39 @@ Comment
 | :--- | :--- | :--- |
 |comment|String|Text comment.|
 
+## ConvolveSVD
+
+
+ConvolveSVD performs convolution using a Singular Value Decomposition (SVD) of the kernel to accelerate the process.
+
+![img](../images/nodes/ConvolveSVD.png)  
+
+### Category
+
+
+Math/Convolution  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Input heightmap.|
+|kernel|KernelData|Convolution kernel.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Output heightmap.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|rank|Integer|Rank of the singular value decomposition.|
+
 ## Cos
 
 
@@ -873,6 +906,37 @@ Erosion
 |epsilon|Float|Minimum slope tolerance.|
 |iterations|Integer|Maximum number of iterations.|
 |remap fill map|Bool|Remap to [0, 1] the filling map.|
+
+## Detrend
+
+
+The Detrend operator is used to adjust the elevation using a very basic (uncorrect) detrending operator.
+
+![img](../images/nodes/Detrend.png)  
+
+### Category
+
+
+Filter/Recurve  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Input heightmap.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Detrended heightmap.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
 
 ## Dilation
 
@@ -3056,6 +3120,40 @@ Filter/Recast
 |radius|Float|Filter influence radius.|
 |talus_global|Float|Reference talus at which the cliff are added.|
 
+## RecastSag
+
+
+RecastSag add cliffs in a heightmap by introducing sinks, droops, or bends downward changes in elevation.
+
+![img](../images/nodes/RecastSag.png)  
+
+### Category
+
+
+Filter/Recast  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Input heightmap.|
+|mask|HeightMapData|Mask defining the filtering intensity (expected in [0, 1]).|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Filtered heightmap.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|k|Float|Smoothing parameter.|
+|vref|Float|Reference elevation for the folding.|
+
 ## RecurveKura
 
 
@@ -4050,7 +4148,7 @@ Math/Base
 ## Stamping
 
 
-Random set of points.
+Stamping .
 
 ![img](../images/nodes/Stamping.png)  
 
@@ -4063,20 +4161,28 @@ Primitive/Authoring
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|cloud|CloudData|Stamping locations and intensities (as a Cloud).|
+|kernel|KernelData|Kernel to be stamped.|
   
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|cloud|CloudData|Set of points (x, y) and elevations z.|
+|output|HeightMapData|Output heightmap.|
   
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|npoints|Integer|Number of points.|
+|blend_method|Enumeration|Blending method. Available values: add, maximum, minimum, multiply, substract.|
+|k_smoothing|Float|Smoothing parameter (if any).|
+|kernel_flip|Bool|Randomly flip, or not, the kernel before stamping (includes tranposing).|
+|kernel_radius|Float|Kernel base radius, with respect a unit square domain.|
+|kernel_rotate|Bool|Randomly rotate, or not, the kernel before stamping (can be any rotation angle, can also be ressource consuming).|
+|kernel_scale_amplitude|Bool|Determine whether the kernel amplitude is scaled with the point values.|
+|kernel_scale_radius|Bool|Determine whether the kernel radius is scaled with the point values.|
 |seed|Random seed|Random seed number.|
 
 ## Step

@@ -15,8 +15,8 @@ Node Categories
 |Erosion|Thermal|Thermal, ThermalRib|
 |Features|Landform|AccumulationCurvature, RelativeElevation, ShapeIndex, Unsphericity, ValleyWidth|
 |Filter|Range|Clamp, Remap, Rescale|
-|Filter|Recast|ExpandShrink, Fold, NormalDisplacement, RecastCliff|
-|Filter|Recurve|Gain, GammaCorrection, GammaCorrectionLocal, Plateau, RecurveKura, RecurveS, Saturate|
+|Filter|Recast|ExpandShrink, Fold, NormalDisplacement, RecastCliff, RecastSag|
+|Filter|Recurve|Detrend, Gain, GammaCorrection, GammaCorrectionLocal, Plateau, RecurveKura, RecurveS, Saturate|
 |Filter|Smoothing|Laplace, Median3x3, SharpenCone, SmoothCpulse, SmoothFill, SmoothFillHoles, SmoothFillSmearPeaks|
 |Geometry|Cloud|Cloud, CloudLattice, CloudMerge, CloudRandom, CloudRemapValues, CloudSDF|
 |Geometry|Path|Path, PathBezier, PathBezierRound, PathBspline, PathFractalize, PathMeanderize, PathResample, PathSDF, PathToHeightmap|
@@ -25,6 +25,7 @@ Node Categories
 |Mask|Selector|SelectAngle, SelectBlobLog, SelectCavities, SelectElevationSlope, SelectGt, SelectInterval, SelectInwardOutward, SelectPulse, SelectRivers, SelectTransitions|
 |Math|Base|Abs, AbsSmooth, Cos, GaussianDecay, Inverse, Smoothstep3, Smoothstep5|
 |Math|Boundaries|ZeroedEdges|
+|Math|Convolution|ConvolveSVD|
 |Math|Gradient|Gradient, GradientAngle, GradientNorm, GradientTalus|
 |Operator|Blend|Blend, Lerp, Mixer|
 |Operator|Expand|QuiltingExpand|
