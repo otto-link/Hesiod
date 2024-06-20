@@ -907,6 +907,37 @@ Erosion
 |iterations|Integer|Maximum number of iterations.|
 |remap fill map|Bool|Remap to [0, 1] the filling map.|
 
+## Detrend
+
+
+The Detrend operator is used to adjust the elevation using a very basic (uncorrect) detrending operator.
+
+![img](../images/nodes/Detrend.png)  
+
+### Category
+
+
+Filter/Recurve  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Input heightmap.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Detrended heightmap.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+
 ## Dilation
 
 
