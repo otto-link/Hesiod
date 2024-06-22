@@ -5,6 +5,7 @@
 
 #include "highmap/authoring.hpp"
 #include "highmap/colormaps.hpp"
+#include "highmap/kernels.hpp"
 #include "highmap/primitives.hpp"
 
 namespace hesiod
@@ -32,14 +33,6 @@ enum ExportFormat : int
   PNG8BIT,
   PNG16BIT,
   RAW16BIT,
-};
-
-enum Kernel : int
-{
-  CUBIC_PULSE,
-  CONE,
-  LORENTZIAN,
-  SMOOTH_COSINE
 };
 
 enum MaskCombineMethod : int
@@ -109,10 +102,16 @@ static std::map<std::string, int> heightmap_export_format_map = {
 /**
  * @brief Plain text / enumerate mapping for the kernels.
  */
-static std::map<std::string, int> kernel_map = {{"cone", Kernel::CONE},
-                                                {"cubic_pulse", Kernel::CUBIC_PULSE},
-                                                {"lorentzian", Kernel::LORENTZIAN},
-                                                {"smooth_cosine", Kernel::SMOOTH_COSINE}};
+static std::map<std::string, int> kernel_type_map = {
+    {"biweight", hmap::KernelType::BIWEIGHT},
+    {"cone", hmap::KernelType::CONE},
+    {"cone_smooth", hmap::KernelType::CONE_SMOOTH},
+    {"cubic_pulse", hmap::KernelType::CUBIC_PULSE},
+    {"disk", hmap::KernelType::DISK},
+    {"lorentzian", hmap::KernelType::LORENTZIAN},
+    {"smooth_cosine", hmap::KernelType::SMOOTH_COSINE},
+    {"square", hmap::KernelType::SQUARE},
+    {"tricube", hmap::KernelType::TRICUBE}};
 
 /**
  * @brief Plain text / enumerate mapping for the mask combine method.

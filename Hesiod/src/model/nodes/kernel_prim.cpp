@@ -25,7 +25,7 @@ KernelPrim::KernelPrim(const ModelConfig *p_config) : BaseNode(p_config)
   this->output_types = {KernelData().type()};
 
   // attributes
-  this->attr["kernel"] = NEW_ATTR_MAPENUM(kernel_map, "cubic_pulse");
+  this->attr["kernel"] = NEW_ATTR_MAPENUM(kernel_type_map, "cubic_pulse");
   this->attr["radius"] = NEW_ATTR_FLOAT(0.1f, 0.001f, 0.2f, "%.3f");
   this->attr["normalize"] = NEW_ATTR_BOOL(false);
 
@@ -80,24 +80,7 @@ void KernelPrim::compute()
   // kernel definition
   hmap::Vec2<int> kernel_shape = {2 * ir + 1, 2 * ir + 1};
 
-  switch (GET_ATTR_MAPENUM("kernel"))
-  {
-  case Kernel::CONE:
-    *p_out = hmap::cone(kernel_shape);
-    break;
-
-  case Kernel::CUBIC_PULSE:
-    *p_out = hmap::cubic_pulse(kernel_shape);
-    break;
-
-  case Kernel::LORENTZIAN:
-    *p_out = hmap::lorentzian(kernel_shape);
-    break;
-
-  case Kernel::SMOOTH_COSINE:
-    *p_out = hmap::smooth_cosine(kernel_shape);
-    break;
-  }
+  *p_out = hmap::get_kernel(kernel_shape, (hmap::KernelType)GET_ATTR_MAPENUM("kernel"));
 
   if (GET_ATTR_BOOL("normalize"))
     *p_out /= p_out->sum();

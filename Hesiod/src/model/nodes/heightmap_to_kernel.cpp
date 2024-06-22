@@ -29,7 +29,7 @@ HeightmapToKernel::HeightmapToKernel(const ModelConfig *p_config) : BaseNode(p_c
   this->attr["normalize"] = NEW_ATTR_BOOL(false);
 
   this->attr["envelope"] = NEW_ATTR_BOOL(false);
-  this->attr["envelope_kernel"] = NEW_ATTR_MAPENUM(kernel_map, "cubic_pulse");
+  this->attr["envelope_kernel"] = NEW_ATTR_MAPENUM(kernel_type_map, "cubic_pulse");
 
   this->attr_ordered_key = {"radius",
                             "normalize",
@@ -102,27 +102,9 @@ void HeightmapToKernel::compute()
 
     if (GET_ATTR_BOOL("envelope"))
     {
-      hmap::Array env;
-
-      switch (GET_ATTR_MAPENUM("envelope_kernel"))
-      {
-      case Kernel::CONE:
-        env = hmap::cone(kernel_shape);
-        break;
-
-      case Kernel::CUBIC_PULSE:
-        env = hmap::cubic_pulse(kernel_shape);
-        break;
-
-      case Kernel::LORENTZIAN:
-        env = hmap::lorentzian(kernel_shape);
-        break;
-
-      case Kernel::SMOOTH_COSINE:
-        env = hmap::smooth_cosine(kernel_shape);
-        break;
-      }
-
+      hmap::Array env = hmap::get_kernel(
+          kernel_shape,
+          (hmap::KernelType)GET_ATTR_MAPENUM("envelope_kernel"));
       *p_out *= env;
     }
 
