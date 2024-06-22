@@ -9,12 +9,12 @@
 namespace hesiod
 {
 
-KernelPrim::KernelPrim(const ModelConfig *p_config) : BaseNode(p_config)
+KernelGabor::KernelGabor(const ModelConfig *p_config) : BaseNode(p_config)
 {
-  LOG->trace("KernelPrim::KernelPrim");
+  LOG->trace("KernelGabor::KernelGabor");
 
   // model
-  this->node_caption = "KernelPrim";
+  this->node_caption = "KernelGabor";
 
   // inputs
   this->input_types = {};
@@ -25,11 +25,13 @@ KernelPrim::KernelPrim(const ModelConfig *p_config) : BaseNode(p_config)
   this->output_types = {KernelData().type()};
 
   // attributes
-  this->attr["kernel"] = NEW_ATTR_MAPENUM(kernel_type_map, "cubic_pulse");
   this->attr["radius"] = NEW_ATTR_FLOAT(0.1f, 0.001f, 0.2f, "%.3f");
   this->attr["normalize"] = NEW_ATTR_BOOL(false);
 
-  this->attr_ordered_key = {"kernel", "radius", "normalize"};
+  this->attr["kw"] = NEW_ATTR_FLOAT(2.f, 0.01f, 32.f);
+  this->attr["angle"] = NEW_ATTR_FLOAT(0.f, -180.f, 180.f);
+
+  this->attr_ordered_key = {"radius", "normalize", "_SEPARATOR_", "kw", "angle"};
 
   // update
   if (this->p_config->compute_nodes_at_instanciation)
@@ -42,32 +44,32 @@ KernelPrim::KernelPrim(const ModelConfig *p_config) : BaseNode(p_config)
   this->description = ".";
 
   this->input_descriptions = {};
-  this->output_descriptions = {
-      "KernelPrim generates a 'kernel', refering to a small matrix used to apply "
-      "specific effects based on convolution for instance."};
+  this->output_descriptions = {"KernelGabor generates a Gabor kernel."};
 
-  this->attribute_descriptions["kernel"] = "Kernel type.";
   this->attribute_descriptions
       ["radius"] = "Kernel radius with respect to the domain size.";
   this->attribute_descriptions["normalize"] =
       "Normalize kernel so that the sum of the elements equals 1, preserving the overall "
       "intensity of an heightmap after convolution for instance.";
+
+  this->attribute_descriptions["kw"] = "Kernel wavenumber (spatial frequency).";
+  this->attribute_descriptions["angle"] = "Kernel angle.";
 }
 
-std::shared_ptr<QtNodes::NodeData> KernelPrim::outData(
+std::shared_ptr<QtNodes::NodeData> KernelGabor::outData(
     QtNodes::PortIndex /* port_index */)
 {
   return std::static_pointer_cast<QtNodes::NodeData>(this->out);
 }
 
-void KernelPrim::setInData(std::shared_ptr<QtNodes::NodeData> /* data */,
-                           QtNodes::PortIndex /* port_index */)
+void KernelGabor::setInData(std::shared_ptr<QtNodes::NodeData> /* data */,
+                            QtNodes::PortIndex /* port_index */)
 {
 }
 
 // --- computing
 
-void KernelPrim::compute()
+void KernelGabor::compute()
 {
   Q_EMIT this->computingStarted();
 
@@ -80,7 +82,7 @@ void KernelPrim::compute()
   // kernel definition
   hmap::Vec2<int> kernel_shape = {2 * ir + 1, 2 * ir + 1};
 
-  *p_out = hmap::get_kernel(kernel_shape, (hmap::KernelType)GET_ATTR_MAPENUM("kernel"));
+  *p_out = hmap::gabor(kernel_shape, GET_ATTR_FLOAT("kw"), GET_ATTR_FLOAT("angle"));
 
   if (GET_ATTR_BOOL("normalize"))
     *p_out /= p_out->sum();

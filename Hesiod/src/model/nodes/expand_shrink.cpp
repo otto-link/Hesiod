@@ -26,7 +26,7 @@ ExpandShrink::ExpandShrink(const ModelConfig *p_config) : BaseNode(p_config)
   this->output_types = {HeightMapData().type()};
 
   // attributes
-  this->attr["kernel"] = NEW_ATTR_MAPENUM(kernel_map, "cubic_pulse");
+  this->attr["kernel"] = NEW_ATTR_MAPENUM(kernel_type_map, "cubic_pulse");
   this->attr["radius"] = NEW_ATTR_FLOAT(0.05f, 0.01f, 0.2f, "%.3f");
   this->attr["shrink"] = NEW_ATTR_BOOL(false);
 
@@ -103,24 +103,8 @@ void ExpandShrink::compute()
     hmap::Array     kernel_array;
     hmap::Vec2<int> kernel_shape = {2 * ir + 1, 2 * ir + 1};
 
-    switch (GET_ATTR_MAPENUM("kernel"))
-    {
-    case Kernel::CONE:
-      kernel_array = hmap::cone(kernel_shape);
-      break;
-
-    case Kernel::CUBIC_PULSE:
-      kernel_array = hmap::cubic_pulse(kernel_shape);
-      break;
-
-    case Kernel::LORENTZIAN:
-      kernel_array = hmap::lorentzian(kernel_shape);
-      break;
-
-    case Kernel::SMOOTH_COSINE:
-      kernel_array = hmap::smooth_cosine(kernel_shape);
-      break;
-    }
+    kernel_array = hmap::get_kernel(kernel_shape,
+                                    (hmap::KernelType)GET_ATTR_MAPENUM("kernel"));
 
     // core operator
     std::function<void(hmap::Array &, hmap::Array *)> lambda;
