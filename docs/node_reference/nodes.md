@@ -1064,7 +1064,7 @@ Filter/Recast
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|kernel|Enumeration|Weighting kernel. Available values: cone, cubic_pulse, lorentzian, smooth_cosine.|
+|kernel|Enumeration|Weighting kernel. Available values: biweight, cone, cone_smooth, cubic_pulse, disk, lorentzian, smooth_cosine, square, tricube.|
 |radius|Float|Filter radius with respect to the domain size.|
 |shrink|Bool|Shrink (if true) or expand (if false).|
 
@@ -1624,7 +1624,7 @@ Converter
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |envelope|Bool|Determine if an enveloppe is applied to the kernel.|
-|envelope_kernel|Enumeration|Envelope kernel. Available values: cone, cubic_pulse, lorentzian, smooth_cosine.|
+|envelope_kernel|Enumeration|Envelope kernel. Available values: biweight, cone, cone_smooth, cubic_pulse, disk, lorentzian, smooth_cosine, square, tricube.|
 |normalize|Bool|Normalize kernel so that the sum of the elements equals 1, preserving the overall intensity of an heightmap after convolution for instance.|
 |radius|Float|Kernel radius with respect to the domain size.|
 
@@ -1921,6 +1921,40 @@ Math/Base
 |Name|Type|Description|
 | :--- | :--- | :--- |
 
+## KernelGabor
+
+
+.
+
+![img](../images/nodes/KernelGabor.png)  
+
+### Category
+
+
+Primitive/Kernel  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|kernel|KernelData|KernelGabor generates a Gabor kernel.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|angle|Float|Kernel angle.|
+|kw|Float|Kernel wavenumber (spatial frequency).|
+|normalize|Bool|Normalize kernel so that the sum of the elements equals 1, preserving the overall intensity of an heightmap after convolution for instance.|
+|radius|Float|Kernel radius with respect to the domain size.|
+
 ## KernelPrim
 
 
@@ -1950,7 +1984,7 @@ Primitive/Kernel
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|kernel|Enumeration|Kernel type. Available values: cone, cubic_pulse, lorentzian, smooth_cosine.|
+|kernel|Enumeration|Kernel type. Available values: biweight, cone, cone_smooth, cubic_pulse, disk, lorentzian, smooth_cosine, square, tricube.|
 |normalize|Bool|Normalize kernel so that the sum of the elements equals 1, preserving the overall intensity of an heightmap after convolution for instance.|
 |radius|Float|Kernel radius with respect to the domain size.|
 
