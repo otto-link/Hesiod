@@ -2678,6 +2678,47 @@ Operator/Morphology
 | :--- | :--- | :--- |
 |radius|Float|Filter radius with respect to the domain size.|
 
+## Paraboloid
+
+
+.
+
+![img](../images/nodes/Paraboloid.png)  
+
+### Category
+
+
+Primitive/Function  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|dx|HeightMapData|Displacement with respect to the domain size (x-direction).|
+|dy|HeightMapData|Displacement with respect to the domain size (y-direction).|
+|envelope|HeightMapData|Output noise amplitude envelope.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Paraboloid.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|a|Float|Curvature parameter, first principal axis.|
+|angle|Float|Angle.|
+|b|Float|Curvature parameter, second principal axis.|
+|center.x|Float|Center x coordinate.|
+|center.y|Float|Center y coordinate.|
+|reverse_x|Bool|Reverse coefficient of first principal axis.|
+|reverse_y|Bool|Reverse coefficient of second principal axis.|
+|v0|Float|Value at the paraboloid center.|
+
 ## Path
 
 
