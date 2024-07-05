@@ -4773,4 +4773,5 @@ Math/Boundaries
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|sigma|Float|Shape half-width.|
+|distance_function|Enumeration|Measure used for the distance calculation. Available values: Chebyshev, Euclidian, Euclidian/Chebyshev, Manhattan.|
+|sigma|Float|Shape power law.|

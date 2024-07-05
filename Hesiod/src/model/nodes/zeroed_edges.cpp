@@ -23,11 +23,13 @@ ZeroedEdges::ZeroedEdges(const ModelConfig *p_config) : BaseNode(p_config)
   this->output_types = {HeightMapData().type()};
 
   // attributes
-  this->attr["sigma"] = NEW_ATTR_FLOAT(0.25f, 0.f, 0.5f, "%.2f");
+  this->attr["sigma"] = NEW_ATTR_FLOAT(2.f, 1.f, 4.f, "%.2f");
+  this->attr["distance_function"] = NEW_ATTR_MAPENUM(distance_function_map, "Euclidian");
+
   this->attr["remap"] = NEW_ATTR_BOOL(true);
   this->attr["remap_range"] = NEW_ATTR_RANGE();
 
-  this->attr_ordered_key = {"sigma", "remap", "remap_range"};
+  this->attr_ordered_key = {"sigma", "distance_function", "remap", "remap_range"};
 
   // update
   if (this->p_config->compute_nodes_at_instanciation)
@@ -45,7 +47,9 @@ ZeroedEdges::ZeroedEdges(const ModelConfig *p_config) : BaseNode(p_config)
       "Mask defining the filtering intensity (expected in [0, 1])."};
   this->output_descriptions = {"Filtered heightmap."};
 
-  this->attribute_descriptions["sigma"] = "Shape half-width.";
+  this->attribute_descriptions["sigma"] = "Shape power law.";
+  this->attribute_descriptions
+      ["distance_function"] = "Measure used for the distance calculation.";
 }
 
 std::shared_ptr<QtNodes::NodeData> ZeroedEdges::outData(
@@ -95,14 +99,28 @@ void ZeroedEdges::compute()
     if (!p_dr)
       hmap::transform(*p_out,
                       [this, &sigma](hmap::Array &z, hmap::Vec4<float> bbox)
-                      { hmap::zeroed_edges(z, sigma, nullptr, bbox); });
+                      {
+                        hmap::zeroed_edges(
+                            z,
+                            sigma,
+                            (hmap::DistanceFunction)GET_ATTR_MAPENUM("distance_function"),
+                            nullptr,
+                            bbox);
+                      });
 
     else
       hmap::transform(
           *p_out,
           *p_dr,
           [this, &sigma](hmap::Array &z, hmap::Array &dr, hmap::Vec4<float> bbox)
-          { hmap::zeroed_edges(z, sigma, &dr, bbox); });
+          {
+            hmap::zeroed_edges(
+                z,
+                sigma,
+                (hmap::DistanceFunction)GET_ATTR_MAPENUM("distance_function"),
+                &dr,
+                bbox);
+          });
 
     if (GET_ATTR_BOOL("remap"))
       p_out->remap(GET_ATTR_RANGE("remap_range").x, GET_ATTR_RANGE("remap_range").y);
