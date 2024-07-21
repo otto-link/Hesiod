@@ -14,7 +14,7 @@ Node Categories
 |Erosion|Stratify|Stratify, StratifyOblique|
 |Erosion|Thermal|Thermal, ThermalRib|
 |Features|Landform|AccumulationCurvature, RelativeElevation, ShapeIndex, Unsphericity, ValleyWidth|
-|Filter|Range|Clamp, Remap, Rescale|
+|Filter|Range|Clamp, Remap, Rescale, ShiftElevation|
 |Filter|Recast|ExpandShrink, Fold, NormalDisplacement, RecastCliff, RecastSag|
 |Filter|Recurve|Detrend, Gain, GammaCorrection, GammaCorrectionLocal, Plateau, RecurveKura, RecurveS, Saturate|
 |Filter|Smoothing|Laplace, Median3x3, SharpenCone, SmoothCpulse, SmoothFill, SmoothFillHoles, SmoothFillSmearPeaks|

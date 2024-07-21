@@ -135,6 +135,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::SetAlpha, "Texture");
   HSD_REGISTER_NODE(hesiod::ShapeIndex, "Features/Landform");
   HSD_REGISTER_NODE(hesiod::SharpenCone, "Filter/Smoothing");
+  HSD_REGISTER_NODE(hesiod::ShiftElevation, "Filter/Range");
   HSD_REGISTER_NODE(hesiod::SmoothCpulse, "Filter/Smoothing");
   HSD_REGISTER_NODE(hesiod::SmoothFill, "Filter/Smoothing");
   HSD_REGISTER_NODE(hesiod::SmoothFillHoles, "Filter/Smoothing");

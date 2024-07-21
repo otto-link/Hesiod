@@ -3159,6 +3159,40 @@ Operator/Resynthesis
 |patch_width|Float|Decide on the size (with respect to the domain size) of the patches that will be used to create the new heightmap. This determines the level of detail and texture in the final result.|
 |seed|Random seed|Random seed number.|
 
+## RadialDisplacementToXy
+
+
+RadialDisplacementToXy interprets the input array dr as a radial displacement and convert it to a pair of displacements dx and dy in cartesian coordinates.
+
+![img](../images/nodes/RadialDisplacementToXy.png)  
+
+### Category
+
+
+Math  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|dr|HeightMapData|Radial displacement.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|dx|HeightMapData|Displacement for  the x-direction.|
+|dy|HeightMapData|Displacement for  the y-direction.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|center.x|Float|Center x coordinate.|
+|center.y|Float|Center y coordinate.|
+
 ## RecastCliff
 
 
@@ -3987,6 +4021,38 @@ Filter/Smoothing
 | :--- | :--- | :--- |
 |radius|Float|Filter radius with respect to the domain size.|
 |scale|Float|Sharpening intensity.|
+
+## ShiftElevation
+
+
+The ShiftElevation operator involves adjusting each data point by adding it with a predetermined constant.
+
+![img](../images/nodes/ShiftElevation.png)  
+
+### Category
+
+
+Filter/Range  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Input heightmap.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Output heightmap.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|shift|Float|Constant by which each elevation values will be added.|
 
 ## Slope
 
