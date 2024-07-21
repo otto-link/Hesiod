@@ -2318,6 +2318,32 @@ protected:
 };
 
 /**
+ * @brief RadialDisplacementToXy class.
+ */
+class RadialDisplacementToXy : public BaseNode
+{
+public:
+  RadialDisplacementToXy(const ModelConfig *p_config);
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data,
+                 QtNodes::PortIndex                 port_index) override;
+
+  // specific preview GUI widget for this node
+  virtual QWidget *embeddedWidget() override; // GUI
+
+protected:
+  std::weak_ptr<HeightMapData>   dr;
+  std::shared_ptr<HeightMapData> dx, dy;
+
+private:
+  PreviewVec2 *preview_vec2 = nullptr; // GUI
+};
+
+/**
  * @brief Remap class.
  */
 class Remap : public BaseNode
