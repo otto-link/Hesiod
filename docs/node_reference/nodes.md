@@ -169,6 +169,8 @@ Primitive/Function
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|center.x|Float|Center x coordinate.|
+|center.y|Float|Center y coordinate.|
 |gain|Float|Shape control parameter.|
 
 ## Caldera
