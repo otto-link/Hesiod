@@ -26,10 +26,11 @@ RadialDisplacementToXy::RadialDisplacementToXy(const ModelConfig *p_config)
   this->output_types = {HeightMapData().type(), HeightMapData().type()};
 
   // attributes
-  this->attr["center.x"] = NEW_ATTR_FLOAT(0.5f, -0.5f, 1.5f);
+  this->attr["smoothing"] = NEW_ATTR_FLOAT(1.f, 0.f, 10.f);
   this->attr["center.y"] = NEW_ATTR_FLOAT(0.5f, -0.5f, 1.5f);
+  this->attr["center.x"] = NEW_ATTR_FLOAT(0.5f, -0.5f, 1.5f);
 
-  this->attr_ordered_key = {"center.x", "center.y"};
+  this->attr_ordered_key = {"smoothing", "center.x", "center.y"};
 
   // update
   if (this->p_config->compute_nodes_at_instanciation)
@@ -48,6 +49,8 @@ RadialDisplacementToXy::RadialDisplacementToXy(const ModelConfig *p_config)
   this->output_descriptions = {"Displacement for  the x-direction.",
                                "Displacement for  the y-direction."};
 
+  this->attribute_descriptions
+      ["smoothing"] = "Smoothing parameter to avoid discontinuity at the origin.";
   this->attribute_descriptions["center.x"] = "Center x coordinate.";
   this->attribute_descriptions["center.y"] = "Center y coordinate.";
 }
@@ -98,11 +101,18 @@ void RadialDisplacementToXy::compute()
     hmap::transform(*p_dr,
                     *p_dx,
                     *p_dy,
-                    [&center](hmap::Array      &dr,
-                              hmap::Array      &dx,
-                              hmap::Array      &dy,
-                              hmap::Vec4<float> bbox)
-                    { hmap::radial_displacement_to_xy(dr, dx, dy, center, bbox); });
+                    [this, &center](hmap::Array      &dr,
+                                    hmap::Array      &dx,
+                                    hmap::Array      &dy,
+                                    hmap::Vec4<float> bbox)
+                    {
+                      hmap::radial_displacement_to_xy(dr,
+                                                      dx,
+                                                      dy,
+                                                      GET_ATTR_FLOAT("smoothing"),
+                                                      center,
+                                                      bbox);
+                    });
 
     // propagate
     Q_EMIT this->computingFinished();

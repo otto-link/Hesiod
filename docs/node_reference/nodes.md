@@ -3226,6 +3226,7 @@ Math
 | :--- | :--- | :--- |
 |center.x|Float|Center x coordinate.|
 |center.y|Float|Center y coordinate.|
+|smoothing|Float|Smoothing parameter to avoid discontinuity at the origin.|
 
 ## RecastCliff
 
