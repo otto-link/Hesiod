@@ -24,12 +24,15 @@ Bump::Bump(const ModelConfig *p_config) : BaseNode(p_config)
 
   // attributes
   this->attr["gain"] = NEW_ATTR_FLOAT(1.f, 0.01f, 10.f);
+  this->attr["center.x"] = NEW_ATTR_FLOAT(0.5f, -0.5f, 1.5f);
+  this->attr["center.y"] = NEW_ATTR_FLOAT(0.5f, -0.5f, 1.5f);
 
   this->attr["inverse"] = NEW_ATTR_BOOL(false);
   this->attr["remap"] = NEW_ATTR_BOOL(true);
   this->attr["remap_range"] = NEW_ATTR_RANGE();
 
-  this->attr_ordered_key = {"gain", "_SEPARATOR_", "inverse", "remap", "remap_range"};
+  this->attr_ordered_key =
+      {"gain", "center.x", "center.y", "_SEPARATOR_", "inverse", "remap", "remap_range"};
 
   // update
   if (this->p_config->compute_nodes_at_instanciation)
@@ -48,6 +51,8 @@ Bump::Bump(const ModelConfig *p_config) : BaseNode(p_config)
   this->output_descriptions = {"Bump heightmap."};
 
   this->attribute_descriptions["gain"] = "Shape control parameter.";
+  this->attribute_descriptions["center.x"] = "Center x coordinate.";
+  this->attribute_descriptions["center.y"] = "Center y coordinate.";
 }
 
 std::shared_ptr<QtNodes::NodeData> Bump::outData(QtNodes::PortIndex /* port_index */)
@@ -89,19 +94,24 @@ void Bump::compute()
   hmap::HeightMap *p_dy = HSD_GET_POINTER(this->dy);
   hmap::HeightMap *p_out = this->out->get_ref();
 
+  hmap::Vec2<float> center;
+  center.x = GET_ATTR_FLOAT("center.x");
+  center.y = GET_ATTR_FLOAT("center.y");
+
   hmap::fill(*p_out,
              p_dx,
              p_dy,
-             [this](hmap::Vec2<int>   shape,
-                    hmap::Vec4<float> bbox,
-                    hmap::Array      *p_noise_x,
-                    hmap::Array      *p_noise_y)
+             [this, &center](hmap::Vec2<int>   shape,
+                             hmap::Vec4<float> bbox,
+                             hmap::Array      *p_noise_x,
+                             hmap::Array      *p_noise_y)
              {
                return hmap::bump(shape,
                                  GET_ATTR_FLOAT("gain"),
                                  p_noise_x,
                                  p_noise_y,
                                  nullptr,
+                                 center,
                                  bbox);
              });
 
