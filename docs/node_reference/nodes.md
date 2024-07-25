@@ -1268,6 +1268,40 @@ IO/Files
 |auto_export|Bool|Decides whether the export is automatically performed when the node is updated.|
 |fname|Filename|Export file name.|
 
+## Falloff
+
+
+Falloff is an operator that enforces values close to zero at the domain edges.
+
+![img](../images/nodes/Falloff.png)  
+
+### Category
+
+
+Math/Boundaries  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Input heightmap.|
+|dr|HeightMapData|Displacement with respect to the domain size (radial direction).|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Filtered heightmap.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|distance_function|Enumeration|Measure used for the distance calculation. Available values: Chebyshev, Euclidian, Euclidian/Chebyshev, Manhattan.|
+|strength|Float|Falloff strength.|
+
 ## Fold
 
 
@@ -2678,6 +2712,47 @@ Operator/Morphology
 | :--- | :--- | :--- |
 |radius|Float|Filter radius with respect to the domain size.|
 
+## Paraboloid
+
+
+.
+
+![img](../images/nodes/Paraboloid.png)  
+
+### Category
+
+
+Primitive/Function  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|dx|HeightMapData|Displacement with respect to the domain size (x-direction).|
+|dy|HeightMapData|Displacement with respect to the domain size (y-direction).|
+|envelope|HeightMapData|Output noise amplitude envelope.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Paraboloid.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|a|Float|Curvature parameter, first principal axis.|
+|angle|Float|Angle.|
+|b|Float|Curvature parameter, second principal axis.|
+|center.x|Float|Center x coordinate.|
+|center.y|Float|Center y coordinate.|
+|reverse_x|Bool|Reverse coefficient of first principal axis.|
+|reverse_y|Bool|Reverse coefficient of second principal axis.|
+|v0|Float|Value at the paraboloid center.|
+
 ## Path
 
 
@@ -3117,6 +3192,41 @@ Operator/Resynthesis
 |patch_transpose|Bool|Allow patch tranposition.|
 |patch_width|Float|Decide on the size (with respect to the domain size) of the patches that will be used to create the new heightmap. This determines the level of detail and texture in the final result.|
 |seed|Random seed|Random seed number.|
+
+## RadialDisplacementToXy
+
+
+RadialDisplacementToXy interprets the input array dr as a radial displacement and convert it to a pair of displacements dx and dy in cartesian coordinates.
+
+![img](../images/nodes/RadialDisplacementToXy.png)  
+
+### Category
+
+
+Math  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|dr|HeightMapData|Radial displacement.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|dx|HeightMapData|Displacement for  the x-direction.|
+|dy|HeightMapData|Displacement for  the y-direction.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|center.x|Float|Center x coordinate.|
+|center.y|Float|Center y coordinate.|
+|smoothing|Float|Smoothing parameter to avoid discontinuity at the origin.|
 
 ## RecastCliff
 
@@ -3947,6 +4057,38 @@ Filter/Smoothing
 |radius|Float|Filter radius with respect to the domain size.|
 |scale|Float|Sharpening intensity.|
 
+## ShiftElevation
+
+
+The ShiftElevation operator involves adjusting each data point by adding it with a predetermined constant.
+
+![img](../images/nodes/ShiftElevation.png)  
+
+### Category
+
+
+Filter/Range  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Input heightmap.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Output heightmap.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|shift|Float|Constant by which each elevation values will be added.|
+
 ## Slope
 
 
@@ -4718,7 +4860,7 @@ Math/Boundaries
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |input|HeightMapData|Input heightmap.|
-|dr|HeightMapData|Mask defining the filtering intensity (expected in [0, 1]).|
+|dr|HeightMapData|Displacement with respect to the domain size (radial direction).|
   
 
 ### Outputs
@@ -4732,4 +4874,5 @@ Math/Boundaries
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|sigma|Float|Shape half-width.|
+|distance_function|Enumeration|Measure used for the distance calculation. Available values: Chebyshev, Euclidian, Euclidian/Chebyshev, Manhattan.|
+|sigma|Float|Shape power law.|

@@ -954,6 +954,31 @@ protected:
 };
 
 /**
+ * @brief Falloff class.
+ */
+class Falloff : public BaseNode
+{
+public:
+  Falloff(const ModelConfig *p_config);
+
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_color() { return nullptr; }
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data,
+                 QtNodes::PortIndex                 port_index) override;
+
+protected:
+  std::weak_ptr<HeightMapData>   in, dr;
+  std::shared_ptr<HeightMapData> out;
+};
+
+/**
  * @brief Fold class.
  */
 class Fold : public BaseNode
@@ -1978,6 +2003,31 @@ protected:
 };
 
 /**
+ * @brief Paraboloid class.
+ */
+class Paraboloid : public BaseNode
+{
+public:
+  Paraboloid(const ModelConfig *p_config);
+
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_color() { return nullptr; }
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data,
+                 QtNodes::PortIndex                 port_index) override;
+
+protected:
+  std::weak_ptr<HeightMapData>   dx, dy, envelope;
+  std::shared_ptr<HeightMapData> out;
+};
+
+/**
  * @brief Path class.
  */
 class Path : public BaseNode
@@ -2290,6 +2340,32 @@ public:
 protected:
   std::weak_ptr<HeightMapData>   in;
   std::shared_ptr<HeightMapData> out;
+};
+
+/**
+ * @brief RadialDisplacementToXy class.
+ */
+class RadialDisplacementToXy : public BaseNode
+{
+public:
+  RadialDisplacementToXy(const ModelConfig *p_config);
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data,
+                 QtNodes::PortIndex                 port_index) override;
+
+  // specific preview GUI widget for this node
+  virtual QWidget *embeddedWidget() override; // GUI
+
+protected:
+  std::weak_ptr<HeightMapData>   dr;
+  std::shared_ptr<HeightMapData> dx, dy;
+
+private:
+  PreviewVec2 *preview_vec2 = nullptr; // GUI
 };
 
 /**
@@ -2914,6 +2990,31 @@ public:
 
 protected:
   std::weak_ptr<HeightMapData>   in, mask;
+  std::shared_ptr<HeightMapData> out;
+};
+
+/**
+ * @brief ShiftElevation class.
+ */
+class ShiftElevation : public BaseNode
+{
+public:
+  ShiftElevation(const ModelConfig *p_config);
+
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_color() { return nullptr; }
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data,
+                 QtNodes::PortIndex                 port_index) override;
+
+protected:
+  std::weak_ptr<HeightMapData>   in;
   std::shared_ptr<HeightMapData> out;
 };
 

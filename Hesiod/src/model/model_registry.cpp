@@ -55,6 +55,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::ExportNormalMap, "IO/Files");
   HSD_REGISTER_NODE(hesiod::ExportPath, "IO/Files");
   HSD_REGISTER_NODE(hesiod::ExportTexture, "IO/Files");
+  HSD_REGISTER_NODE(hesiod::Falloff, "Math/Boundaries");
   HSD_REGISTER_NODE(hesiod::Fold, "Filter/Recast");
   HSD_REGISTER_NODE(hesiod::Gain, "Filter/Recurve");
   HSD_REGISTER_NODE(hesiod::GammaCorrection, "Filter/Recurve");
@@ -95,6 +96,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::NoiseSwiss, "Primitive/Coherent Noise");
   HSD_REGISTER_NODE(hesiod::NormalDisplacement, "Filter/Recast");
   HSD_REGISTER_NODE(hesiod::Opening, "Operator/Morphology");
+  HSD_REGISTER_NODE(hesiod::Paraboloid, "Primitive/Function");
   HSD_REGISTER_NODE(hesiod::Path, "Geometry/Path");
   HSD_REGISTER_NODE(hesiod::PathBezier, "Geometry/Path");
   HSD_REGISTER_NODE(hesiod::PathBezierRound, "Geometry/Path");
@@ -108,6 +110,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::Plateau, "Filter/Recurve");
   HSD_REGISTER_NODE(hesiod::QuiltingExpand, "Operator/Expand");
   HSD_REGISTER_NODE(hesiod::QuiltingShuffle, "Operator/Resynthesis");
+  HSD_REGISTER_NODE(hesiod::RadialDisplacementToXy, "Math");
   HSD_REGISTER_NODE(hesiod::Remap, "Filter/Range");
   HSD_REGISTER_NODE(hesiod::RecastCliff, "Filter/Recast");
   HSD_REGISTER_NODE(hesiod::RecastSag, "Filter/Recast");
@@ -133,6 +136,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::SetAlpha, "Texture");
   HSD_REGISTER_NODE(hesiod::ShapeIndex, "Features/Landform");
   HSD_REGISTER_NODE(hesiod::SharpenCone, "Filter/Smoothing");
+  HSD_REGISTER_NODE(hesiod::ShiftElevation, "Filter/Range");
   HSD_REGISTER_NODE(hesiod::SmoothCpulse, "Filter/Smoothing");
   HSD_REGISTER_NODE(hesiod::SmoothFill, "Filter/Smoothing");
   HSD_REGISTER_NODE(hesiod::SmoothFillHoles, "Filter/Smoothing");

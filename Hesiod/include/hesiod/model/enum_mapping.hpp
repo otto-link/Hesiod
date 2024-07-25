@@ -79,6 +79,16 @@ static std::map<std::string, int> cmap_map = {
     {"viridis", hmap::cmap::viridis}};
 
 /**
+ * @brief Plain text / enumerate mapping for the HighMap distance functions.
+ */
+static std::map<std::string, int> distance_function_map = {
+    {"Chebyshev", hmap::DistanceFunction::CHEBYSHEV},
+    {"Euclidian", hmap::DistanceFunction::EUCLIDIAN},
+    {"Euclidian/Chebyshev", hmap::DistanceFunction::EUCLISHEV},
+    {"Manhattan", hmap::DistanceFunction::MANHATTAN},
+};
+
+/**
  * @brief Plain text / enumerate mapping for the stamping blend method.
  */
 static std::map<std::string, int> stamping_blend_method_map = {
