@@ -7,12 +7,12 @@
 namespace hesiod
 {
 
-ZeroedEdges::ZeroedEdges(const ModelConfig *p_config) : BaseNode(p_config)
+Falloff::Falloff(const ModelConfig *p_config) : BaseNode(p_config)
 {
-  LOG->trace("ZeroedEdges::ZeroedEdges");
+  LOG->trace("Falloff::Falloff");
 
   // model
-  this->node_caption = "ZeroedEdges";
+  this->node_caption = "Falloff";
 
   // inputs
   this->input_captions = {"input", "dr"};
@@ -23,13 +23,13 @@ ZeroedEdges::ZeroedEdges(const ModelConfig *p_config) : BaseNode(p_config)
   this->output_types = {HeightMapData().type()};
 
   // attributes
-  this->attr["sigma"] = NEW_ATTR_FLOAT(2.f, 1.f, 4.f, "%.2f");
+  this->attr["strength"] = NEW_ATTR_FLOAT(1.f, 0.f, 4.f, "%.2f");
   this->attr["distance_function"] = NEW_ATTR_MAPENUM(distance_function_map, "Euclidian");
 
   this->attr["remap"] = NEW_ATTR_BOOL(true);
   this->attr["remap_range"] = NEW_ATTR_RANGE();
 
-  this->attr_ordered_key = {"sigma", "distance_function", "remap", "remap_range"};
+  this->attr_ordered_key = {"strength", "distance_function", "remap", "remap_range"};
 
   // update
   if (this->p_config->compute_nodes_at_instanciation)
@@ -39,7 +39,7 @@ ZeroedEdges::ZeroedEdges(const ModelConfig *p_config) : BaseNode(p_config)
   }
 
   // documentation
-  this->description = "ZeroedEdges is an operator that enforces values close to zero at "
+  this->description = "Falloff is an operator that enforces values close to zero at "
                       "the domain edges.";
 
   this->input_descriptions = {
@@ -47,19 +47,18 @@ ZeroedEdges::ZeroedEdges(const ModelConfig *p_config) : BaseNode(p_config)
       "Displacement with respect to the domain size (radial direction)."};
   this->output_descriptions = {"Filtered heightmap."};
 
-  this->attribute_descriptions["sigma"] = "Shape power law.";
+  this->attribute_descriptions["strength"] = "Falloff strength.";
   this->attribute_descriptions
       ["distance_function"] = "Measure used for the distance calculation.";
 }
 
-std::shared_ptr<QtNodes::NodeData> ZeroedEdges::outData(
-    QtNodes::PortIndex /* port_index */)
+std::shared_ptr<QtNodes::NodeData> Falloff::outData(QtNodes::PortIndex /* port_index */)
 {
   return std::static_pointer_cast<QtNodes::NodeData>(this->out);
 }
 
-void ZeroedEdges::setInData(std::shared_ptr<QtNodes::NodeData> data,
-                            QtNodes::PortIndex                 port_index)
+void Falloff::setInData(std::shared_ptr<QtNodes::NodeData> data,
+                        QtNodes::PortIndex                 port_index)
 {
   if (!data)
     Q_EMIT this->dataInvalidated(0);
@@ -78,7 +77,7 @@ void ZeroedEdges::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 // --- computing
 
-void ZeroedEdges::compute()
+void Falloff::compute()
 {
   LOG->trace("computing node {}", this->name().toStdString());
 
@@ -94,15 +93,15 @@ void ZeroedEdges::compute()
     // copy the input heightmap
     *p_out = *p_in;
 
-    float sigma = GET_ATTR_FLOAT("sigma");
+    float strength = GET_ATTR_FLOAT("strength");
 
     if (!p_dr)
       hmap::transform(*p_out,
-                      [this, &sigma](hmap::Array &z, hmap::Vec4<float> bbox)
+                      [this, &strength](hmap::Array &z, hmap::Vec4<float> bbox)
                       {
-                        hmap::zeroed_edges(
+                        hmap::falloff(
                             z,
-                            sigma,
+                            strength,
                             (hmap::DistanceFunction)GET_ATTR_MAPENUM("distance_function"),
                             nullptr,
                             bbox);
@@ -112,14 +111,13 @@ void ZeroedEdges::compute()
       hmap::transform(
           *p_out,
           *p_dr,
-          [this, &sigma](hmap::Array &z, hmap::Array &dr, hmap::Vec4<float> bbox)
+          [this, &strength](hmap::Array &z, hmap::Array &dr, hmap::Vec4<float> bbox)
           {
-            hmap::zeroed_edges(
-                z,
-                sigma,
-                (hmap::DistanceFunction)GET_ATTR_MAPENUM("distance_function"),
-                &dr,
-                bbox);
+            hmap::falloff(z,
+                          strength,
+                          (hmap::DistanceFunction)GET_ATTR_MAPENUM("distance_function"),
+                          &dr,
+                          bbox);
           });
 
     if (GET_ATTR_BOOL("remap"))

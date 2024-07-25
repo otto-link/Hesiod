@@ -1268,6 +1268,40 @@ IO/Files
 |auto_export|Bool|Decides whether the export is automatically performed when the node is updated.|
 |fname|Filename|Export file name.|
 
+## Falloff
+
+
+Falloff is an operator that enforces values close to zero at the domain edges.
+
+![img](../images/nodes/Falloff.png)  
+
+### Category
+
+
+Math/Boundaries  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Input heightmap.|
+|dr|HeightMapData|Displacement with respect to the domain size (radial direction).|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Filtered heightmap.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|distance_function|Enumeration|Measure used for the distance calculation. Available values: Chebyshev, Euclidian, Euclidian/Chebyshev, Manhattan.|
+|strength|Float|Falloff strength.|
+
 ## Fold
 
 
@@ -4825,7 +4859,7 @@ Math/Boundaries
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |input|HeightMapData|Input heightmap.|
-|dr|HeightMapData|Mask defining the filtering intensity (expected in [0, 1]).|
+|dr|HeightMapData|Displacement with respect to the domain size (radial direction).|
   
 
 ### Outputs

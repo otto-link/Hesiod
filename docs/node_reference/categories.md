@@ -24,7 +24,7 @@ Node Categories
 |Mask|Adjust|ScanMask|
 |Mask|Selector|SelectAngle, SelectBlobLog, SelectCavities, SelectElevationSlope, SelectGt, SelectInterval, SelectInwardOutward, SelectPulse, SelectRivers, SelectTransitions|
 |Math|Base|Abs, AbsSmooth, Cos, GaussianDecay, Inverse, Smoothstep3, Smoothstep5|
-|Math|Boundaries|ZeroedEdges|
+|Math|Boundaries|Falloff, ZeroedEdges|
 |Math|Convolution|ConvolveSVD|
 |Math|Gradient|Gradient, GradientAngle, GradientNorm, GradientTalus|
 |Operator|Blend|Blend, Lerp, Mixer|

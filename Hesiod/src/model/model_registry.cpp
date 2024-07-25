@@ -55,6 +55,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::ExportNormalMap, "IO/Files");
   HSD_REGISTER_NODE(hesiod::ExportPath, "IO/Files");
   HSD_REGISTER_NODE(hesiod::ExportTexture, "IO/Files");
+  HSD_REGISTER_NODE(hesiod::Falloff, "Math/Boundaries");
   HSD_REGISTER_NODE(hesiod::Fold, "Filter/Recast");
   HSD_REGISTER_NODE(hesiod::Gain, "Filter/Recurve");
   HSD_REGISTER_NODE(hesiod::GammaCorrection, "Filter/Recurve");
