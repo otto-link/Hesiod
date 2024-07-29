@@ -2377,6 +2377,7 @@ Primitive/Coherent Noise
 | :--- | :--- | :--- |
 |dx|HeightMapData|Displacement with respect to the domain size (x-direction).|
 |dy|HeightMapData|Displacement with respect to the domain size (y-direction).|
+|control|HeightMapData|Control parameter, acts as a multiplier for the weight parameter.|
 |envelope|HeightMapData|Output noise amplitude envelope.|
   
 
@@ -2417,6 +2418,7 @@ Primitive/Coherent Noise
 | :--- | :--- | :--- |
 |dx|HeightMapData|Displacement with respect to the domain size (x-direction).|
 |dy|HeightMapData|Displacement with respect to the domain size (y-direction).|
+|control|HeightMapData|Control parameter, acts as a multiplier for the weight parameter.|
 |envelope|HeightMapData|Output noise amplitude envelope.|
   
 
@@ -2458,6 +2460,7 @@ Primitive/Coherent Noise
 | :--- | :--- | :--- |
 |dx|HeightMapData|Displacement with respect to the domain size (x-direction).|
 |dy|HeightMapData|Displacement with respect to the domain size (y-direction).|
+|control|HeightMapData|Control parameter, acts as a multiplier for the weight parameter.|
 |envelope|HeightMapData|Output noise amplitude envelope.|
   
 
@@ -2502,6 +2505,7 @@ Primitive/Coherent Noise
 | :--- | :--- | :--- |
 |dx|HeightMapData|Displacement with respect to the domain size (x-direction).|
 |dy|HeightMapData|Displacement with respect to the domain size (y-direction).|
+|control|HeightMapData|Control parameter, acts as a multiplier for the weight parameter.|
 |envelope|HeightMapData|Output noise amplitude envelope.|
   
 
@@ -2542,6 +2546,7 @@ Primitive/Coherent Noise
 | :--- | :--- | :--- |
 |dx|HeightMapData|Displacement with respect to the domain size (x-direction).|
 |dy|HeightMapData|Displacement with respect to the domain size (y-direction).|
+|control|HeightMapData|Control parameter, acts as a multiplier for the weight parameter.|
 |envelope|HeightMapData|Output noise amplitude envelope.|
   
 
@@ -2582,6 +2587,7 @@ Primitive/Coherent Noise
 | :--- | :--- | :--- |
 |dx|HeightMapData|Displacement with respect to the domain size (x-direction).|
 |dy|HeightMapData|Displacement with respect to the domain size (y-direction).|
+|control|HeightMapData|Control parameter, acts as a multiplier for the weight parameter.|
 |envelope|HeightMapData|Output noise amplitude envelope.|
   
 
@@ -2623,6 +2629,7 @@ Primitive/Coherent Noise
 | :--- | :--- | :--- |
 |dx|HeightMapData|Displacement with respect to the domain size (x-direction).|
 |dy|HeightMapData|Displacement with respect to the domain size (y-direction).|
+|control|HeightMapData|Control parameter, acts as a multiplier for the weight parameter.|
 |envelope|HeightMapData|Output noise amplitude envelope.|
   
 

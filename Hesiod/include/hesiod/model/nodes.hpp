@@ -1798,7 +1798,7 @@ public:
                  QtNodes::PortIndex                 port_index) override;
 
 protected:
-  std::weak_ptr<HeightMapData>   dx, dy, envelope;
+  std::weak_ptr<HeightMapData>   dx, dy, ctrl, envelope;
   std::shared_ptr<HeightMapData> out;
 };
 
@@ -1823,7 +1823,7 @@ public:
                  QtNodes::PortIndex                 port_index) override;
 
 protected:
-  std::weak_ptr<HeightMapData>   dx, dy, envelope;
+  std::weak_ptr<HeightMapData>   dx, dy, ctrl, envelope;
   std::shared_ptr<HeightMapData> out;
 };
 
@@ -1848,7 +1848,7 @@ public:
                  QtNodes::PortIndex                 port_index) override;
 
 protected:
-  std::weak_ptr<HeightMapData>   dx, dy, envelope;
+  std::weak_ptr<HeightMapData>   dx, dy, ctrl, envelope;
   std::shared_ptr<HeightMapData> out;
 };
 
@@ -1873,7 +1873,7 @@ public:
                  QtNodes::PortIndex                 port_index) override;
 
 protected:
-  std::weak_ptr<HeightMapData>   dx, dy, envelope;
+  std::weak_ptr<HeightMapData>   dx, dy, ctrl, envelope;
   std::shared_ptr<HeightMapData> out;
 };
 
@@ -1898,7 +1898,7 @@ public:
                  QtNodes::PortIndex                 port_index) override;
 
 protected:
-  std::weak_ptr<HeightMapData>   dx, dy, envelope;
+  std::weak_ptr<HeightMapData>   dx, dy, ctrl, envelope;
   std::shared_ptr<HeightMapData> out;
 };
 
@@ -1923,7 +1923,7 @@ public:
                  QtNodes::PortIndex                 port_index) override;
 
 protected:
-  std::weak_ptr<HeightMapData>   dx, dy, envelope;
+  std::weak_ptr<HeightMapData>   dx, dy, ctrl, envelope;
   std::shared_ptr<HeightMapData> out;
 };
 
@@ -1948,7 +1948,7 @@ public:
                  QtNodes::PortIndex                 port_index) override;
 
 protected:
-  std::weak_ptr<HeightMapData>   dx, dy, envelope;
+  std::weak_ptr<HeightMapData>   dx, dy, ctrl, envelope;
   std::shared_ptr<HeightMapData> out;
 };
 

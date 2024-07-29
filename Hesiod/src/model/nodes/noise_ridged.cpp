@@ -15,8 +15,9 @@ NoiseRidged::NoiseRidged(const ModelConfig *p_config) : BaseNode(p_config)
   this->node_caption = "NoiseRidged";
 
   // inputs
-  this->input_captions = {"dx", "dy", "envelope"};
+  this->input_captions = {"dx", "dy", "control", "envelope"};
   this->input_types = {HeightMapData().type(),
+                       HeightMapData().type(),
                        HeightMapData().type(),
                        HeightMapData().type()};
 
@@ -66,6 +67,7 @@ NoiseRidged::NoiseRidged(const ModelConfig *p_config) : BaseNode(p_config)
   this->input_descriptions = {
       "Displacement with respect to the domain size (x-direction).",
       "Displacement with respect to the domain size (y-direction).",
+      "Control parameter, acts as a multiplier for the weight parameter.",
       "Output noise amplitude envelope."};
   this->output_descriptions = {"Generated noise."};
 
@@ -104,6 +106,9 @@ void NoiseRidged::setInData(std::shared_ptr<QtNodes::NodeData> data,
     this->dy = std::dynamic_pointer_cast<HeightMapData>(data);
     break;
   case 2:
+    this->ctrl = std::dynamic_pointer_cast<HeightMapData>(data);
+    break;
+  case 3:
     this->envelope = std::dynamic_pointer_cast<HeightMapData>(data);
   }
 
@@ -121,16 +126,19 @@ void NoiseRidged::compute()
   // base noise function
   hmap::HeightMap *p_dx = HSD_GET_POINTER(this->dx);
   hmap::HeightMap *p_dy = HSD_GET_POINTER(this->dy);
+  hmap::HeightMap *p_ctrl = HSD_GET_POINTER(this->ctrl);
   hmap::HeightMap *p_env = HSD_GET_POINTER(this->envelope);
   hmap::HeightMap *p_out = this->out->get_ref();
 
   hmap::fill(*p_out,
              p_dx,
              p_dy,
+             p_ctrl,
              [this](hmap::Vec2<int>   shape,
                     hmap::Vec4<float> bbox,
                     hmap::Array      *p_noise_x,
-                    hmap::Array      *p_noise_y)
+                    hmap::Array      *p_noise_y,
+                    hmap::Array      *p_ctrl)
              {
                return hmap::noise_ridged((hmap::NoiseType)GET_ATTR_MAPENUM("noise_type"),
                                          shape,
@@ -141,7 +149,7 @@ void NoiseRidged::compute()
                                          GET_ATTR_FLOAT("persistence"),
                                          GET_ATTR_FLOAT("lacunarity"),
                                          GET_ATTR_FLOAT("k_smoothing"),
-                                         nullptr,
+                                         p_ctrl,
                                          p_noise_x,
                                          p_noise_y,
                                          nullptr,
