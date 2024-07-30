@@ -15,8 +15,10 @@ Bump::Bump(const ModelConfig *p_config) : BaseNode(p_config)
   this->node_caption = "Bump";
 
   // inputs
-  this->input_captions = {"dx", "dy"};
-  this->input_types = {HeightMapData().type(), HeightMapData().type()};
+  this->input_captions = {"dx", "dy", "control"};
+  this->input_types = {HeightMapData().type(),
+                       HeightMapData().type(),
+                       HeightMapData().type()};
 
   // outputs
   this->output_captions = {"output"};
@@ -47,7 +49,8 @@ Bump::Bump(const ModelConfig *p_config) : BaseNode(p_config)
 
   this->input_descriptions = {
       "Displacement with respect to the domain size (x-direction).",
-      "Displacement with respect to the domain size (y-direction)."};
+      "Displacement with respect to the domain size (y-direction).",
+      "Control parameter, acts as a multiplier for the weight parameter."};
   this->output_descriptions = {"Bump heightmap."};
 
   this->attribute_descriptions["gain"] = "Shape control parameter.";
@@ -76,6 +79,9 @@ void Bump::setInData(std::shared_ptr<QtNodes::NodeData> data,
     break;
   case 1:
     this->dy = std::dynamic_pointer_cast<HeightMapData>(data);
+    break;
+  case 2:
+    this->ctrl = std::dynamic_pointer_cast<HeightMapData>(data);
   }
 
   this->compute();
@@ -92,6 +98,7 @@ void Bump::compute()
   // base noise function
   hmap::HeightMap *p_dx = HSD_GET_POINTER(this->dx);
   hmap::HeightMap *p_dy = HSD_GET_POINTER(this->dy);
+  hmap::HeightMap *p_ctrl = HSD_GET_POINTER(this->ctrl);
   hmap::HeightMap *p_out = this->out->get_ref();
 
   hmap::Vec2<float> center;
@@ -101,13 +108,16 @@ void Bump::compute()
   hmap::fill(*p_out,
              p_dx,
              p_dy,
+             p_ctrl,
              [this, &center](hmap::Vec2<int>   shape,
                              hmap::Vec4<float> bbox,
                              hmap::Array      *p_noise_x,
-                             hmap::Array      *p_noise_y)
+                             hmap::Array      *p_noise_y,
+                             hmap::Array      *p_ctrl)
              {
                return hmap::bump(shape,
                                  GET_ATTR_FLOAT("gain"),
+                                 p_ctrl,
                                  p_noise_x,
                                  p_noise_y,
                                  nullptr,

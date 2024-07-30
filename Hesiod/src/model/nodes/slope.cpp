@@ -15,8 +15,10 @@ Slope::Slope(const ModelConfig *p_config) : BaseNode(p_config)
   this->node_caption = "Slope";
 
   // inputs
-  this->input_captions = {"dr"};
-  this->input_types = {HeightMapData().type()};
+  this->input_captions = {"dx", "dy", "control"};
+  this->input_types = {HeightMapData().type(),
+                       HeightMapData().type(),
+                       HeightMapData().type()};
 
   // outputs
   this->output_captions = {"output"};
@@ -52,7 +54,9 @@ Slope::Slope(const ModelConfig *p_config) : BaseNode(p_config)
   this->description = "Slope is function used to represent continuous terrain slope.";
 
   this->input_descriptions = {
-      "Displacement with respect to the domain size (normal direction)."};
+      "Displacement with respect to the domain size (x-direction).",
+      "Displacement with respect to the domain size (y-direction).",
+      "Control parameter, acts as a multiplier for the weight parameter."};
   this->output_descriptions = {"Slope heightmap."};
 
   this->attribute_descriptions["angle"] = "Angle.";
@@ -67,7 +71,7 @@ std::shared_ptr<QtNodes::NodeData> Slope::outData(QtNodes::PortIndex /* port_ind
 }
 
 void Slope::setInData(std::shared_ptr<QtNodes::NodeData> data,
-                      QtNodes::PortIndex /* port_index */)
+                      QtNodes::PortIndex                 port_index)
 {
   if (!data)
   {
@@ -75,7 +79,17 @@ void Slope::setInData(std::shared_ptr<QtNodes::NodeData> data,
     Q_EMIT this->dataInvalidated(out_port_index);
   }
 
-  this->dr = std::dynamic_pointer_cast<HeightMapData>(data);
+  switch (port_index)
+  {
+  case 0:
+    this->dx = std::dynamic_pointer_cast<HeightMapData>(data);
+    break;
+  case 1:
+    this->dy = std::dynamic_pointer_cast<HeightMapData>(data);
+    break;
+  case 2:
+    this->ctrl = std::dynamic_pointer_cast<HeightMapData>(data);
+  }
 
   this->compute();
 }
@@ -89,27 +103,35 @@ void Slope::compute()
   LOG->trace("computing node {}", this->name().toStdString());
 
   // base noise function
-  hmap::HeightMap *p_dr = HSD_GET_POINTER(this->dr);
+  hmap::HeightMap *p_dx = HSD_GET_POINTER(this->dx);
+  hmap::HeightMap *p_dy = HSD_GET_POINTER(this->dy);
+  hmap::HeightMap *p_ctrl = HSD_GET_POINTER(this->ctrl);
   hmap::HeightMap *p_out = this->out->get_ref();
 
   hmap::Vec2<float> center;
   center.x = GET_ATTR_FLOAT("center.x");
   center.y = GET_ATTR_FLOAT("center.y");
 
-  hmap::fill(
-      *p_out,
-      p_dr,
-      [this, &center](hmap::Vec2<int> shape, hmap::Vec4<float> bbox, hmap::Array *p_noise)
-      {
-        return hmap::slope(shape,
-                           GET_ATTR_FLOAT("angle"),
-                           GET_ATTR_FLOAT("talus_global"),
-                           p_noise,
-                           nullptr,
-                           nullptr,
-                           center,
-                           bbox);
-      });
+  hmap::fill(*p_out,
+             p_dx,
+             p_dy,
+             p_ctrl,
+             [this, &center](hmap::Vec2<int>   shape,
+                             hmap::Vec4<float> bbox,
+                             hmap::Array      *p_noise_x,
+                             hmap::Array      *p_noise_y,
+                             hmap::Array      *p_ctrl)
+             {
+               return hmap::slope(shape,
+                                  GET_ATTR_FLOAT("angle"),
+                                  GET_ATTR_FLOAT("talus_global"),
+                                  p_ctrl,
+                                  p_noise_x,
+                                  p_noise_y,
+                                  nullptr,
+                                  center,
+                                  bbox);
+             });
 
   // post-process
   post_process_heightmap(*p_out,
