@@ -207,6 +207,12 @@ Q_SIGNALS:
 
 public:
   /**
+   * @brief Whether the node widget size needs to be recomputed after every node update
+   * (can be useful for nodes with dynamic number of ports).
+   */
+  bool recompute_size_after_compute = false;
+
+  /**
    *@brief Return the reference to the NodeData for the node preview.
    */
   virtual QtNodes::NodeData *get_preview_data() { return nullptr; }

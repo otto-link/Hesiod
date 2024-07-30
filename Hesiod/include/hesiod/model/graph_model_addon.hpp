@@ -53,7 +53,7 @@ Q_SIGNALS:
 
 public Q_SLOTS:
   /**
-   * @brief Called when a node is added (performs some connections before the model and
+   * @brief Called when a node is added (performs some connections between the model and
    * the node signals).
    * @param node_id Node id.
    */

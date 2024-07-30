@@ -218,6 +218,20 @@ NodeEditorWidget::NodeEditorWidget(std::string graph_id,
           &HsdDataFlowGraphModel::computingFinished,
           this,
           &NodeEditorWidget::computingFinished);
+
+  // another pass-through to force node widget size recompute after
+  // node computation (for nodes with dynamic number of ports)
+  connect(
+      this->get_model_ref(),
+      &HsdDataFlowGraphModel::computingFinished,
+      [this](QtNodes::NodeId const node_id)
+      {
+        hesiod::BaseNode *p_node = this->get_model_ref()->delegateModel<hesiod::BaseNode>(
+            node_id);
+
+        if (p_node->recompute_size_after_compute)
+          Q_EMIT this->get_scene_ref()->onNodeUpdated(node_id);
+      });
 }
 
 void NodeEditorWidget::clear()
