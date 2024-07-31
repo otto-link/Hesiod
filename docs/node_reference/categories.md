@@ -13,6 +13,7 @@ Node Categories
 |Erosion|Hydraulic|HydraulicParticle, HydraulicRidge, HydraulicStream, HydraulicVpipes|
 |Erosion|Stratify|Stratify, StratifyOblique|
 |Erosion|Thermal|Thermal, ThermalRib|
+|Features|Clustering|KmeansClustering2, KmeansClustering3|
 |Features|Landform|AccumulationCurvature, RelativeElevation, ShapeIndex, Unsphericity, ValleyWidth|
 |Filter|Range|Clamp, Remap, Rescale, ShiftElevation|
 |Filter|Recast|ExpandShrink, Fold, NormalDisplacement, RecastCliff, RecastSag|

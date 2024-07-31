@@ -1475,6 +1475,56 @@ protected:
 };
 
 /**
+ * @brief KmeansClustering2 class.
+ */
+class KmeansClustering2 : public BaseNode
+{
+public:
+  KmeansClustering2(const ModelConfig *p_config);
+
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_color() { return nullptr; }
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data,
+                 QtNodes::PortIndex                 port_index) override;
+
+protected:
+  std::weak_ptr<HeightMapData>   in1, in2;
+  std::shared_ptr<HeightMapData> out;
+};
+
+/**
+ * @brief KmeansClustering3 class.
+ */
+class KmeansClustering3 : public BaseNode
+{
+public:
+  KmeansClustering3(const ModelConfig *p_config);
+
+  QtNodes::NodeData *get_preview_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer2d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_data() { return this->out.get(); }
+  QtNodes::NodeData *get_viewer3d_color() { return nullptr; }
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data,
+                 QtNodes::PortIndex                 port_index) override;
+
+protected:
+  std::weak_ptr<HeightMapData>   in1, in2, in3;
+  std::shared_ptr<HeightMapData> out;
+};
+
+/**
  * @brief Inverse class.
  */
 class Inverse : public BaseNode

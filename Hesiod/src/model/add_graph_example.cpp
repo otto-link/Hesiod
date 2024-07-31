@@ -408,7 +408,8 @@ QtNodes::NodeId add_graph_example(HsdDataFlowGraphModel *p_model,
     p_node->compute();
 
     return node_id3;
-  } //
+  }
+  //
   else if (node_type == "MakeBinary")
   {
     QtNodes::NodeId node_id1 = p_model->addNode("NoiseFbm");
@@ -557,6 +558,49 @@ QtNodes::NodeId add_graph_example(HsdDataFlowGraphModel *p_model,
       return node_id4;
     else
       return node_id3;
+  }
+  //
+  else if (node_type == "KmeansClustering2")
+  {
+    QtNodes::NodeId node_id1 = p_model->addNode("NoiseFbm");
+    QtNodes::NodeId node_id2 = p_model->addNode("GradientNorm");
+    QtNodes::NodeId node_id3 = p_model->addNode(QString::fromStdString(node_type));
+
+    p_model->addConnection(QtNodes::ConnectionId(node_id1, 0, node_id2, 0));
+    p_model->addConnection(QtNodes::ConnectionId(node_id1, 0, node_id3, 0));
+    p_model->addConnection(QtNodes::ConnectionId(node_id2, 0, node_id3, 1));
+
+    p_model->setNodeData(node_id1, QtNodes::NodeRole::Position, QPointF(0.f, 0.f));
+    p_model->setNodeData(node_id2,
+                         QtNodes::NodeRole::Position,
+                         QPointF(HSD_NODE_SPACING, HSD_NODE_SPACING));
+    p_model->setNodeData(node_id3,
+                         QtNodes::NodeRole::Position,
+                         QPointF(2.f * HSD_NODE_SPACING, 0.f));
+
+    return node_id3;
+  }
+  //
+  else if (node_type == "KmeansClustering3")
+  {
+    QtNodes::NodeId node_id1 = p_model->addNode("NoiseFbm");
+    QtNodes::NodeId node_id2 = p_model->addNode("Gradient");
+    QtNodes::NodeId node_id3 = p_model->addNode(QString::fromStdString(node_type));
+
+    p_model->addConnection(QtNodes::ConnectionId(node_id1, 0, node_id2, 0));
+    p_model->addConnection(QtNodes::ConnectionId(node_id1, 0, node_id3, 0));
+    p_model->addConnection(QtNodes::ConnectionId(node_id2, 0, node_id3, 1));
+    p_model->addConnection(QtNodes::ConnectionId(node_id2, 1, node_id3, 2));
+
+    p_model->setNodeData(node_id1, QtNodes::NodeRole::Position, QPointF(0.f, 0.f));
+    p_model->setNodeData(node_id2,
+                         QtNodes::NodeRole::Position,
+                         QPointF(HSD_NODE_SPACING, HSD_NODE_SPACING));
+    p_model->setNodeData(node_id3,
+                         QtNodes::NodeRole::Position,
+                         QPointF(2.f * HSD_NODE_SPACING, 0.f));
+
+    return node_id3;
   }
   //
   else

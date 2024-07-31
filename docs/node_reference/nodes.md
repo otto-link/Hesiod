@@ -2025,6 +2025,81 @@ Primitive/Kernel
 |normalize|Bool|Normalize kernel so that the sum of the elements equals 1, preserving the overall intensity of an heightmap after convolution for instance.|
 |radius|Float|Kernel radius with respect to the domain size.|
 
+## KmeansClustering2
+
+
+KmeansClustering2 node groups the data into clusters based on the values of the two input features.
+
+![img](../images/nodes/KmeansClustering2.png)  
+
+### Category
+
+
+Features/Clustering  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|feature 1|HeightMapData|First measurable property or characteristic of the data points being analyzed (e.g elevation, gradient norm, etc...|
+|feature 2|HeightMapData|Second measurable property or characteristic of the data points being analyzed (e.g elevation, gradient norm, etc...|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Cluster labelling.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|nclusters|Integer|Number of clusters.|
+|normalize_inputs|Bool|Determine whether the feature amplitudes are normalized before the clustering.|
+|seed|Random seed|Random seed number.|
+|weights.x|Float|Weight of the first feature.|
+|weights.y|Float|Weight of the second feature.|
+
+## KmeansClustering3
+
+
+KmeansClustering2 node groups the data into clusters based on the values of the three input features.
+
+![img](../images/nodes/KmeansClustering3.png)  
+
+### Category
+
+
+Features/Clustering  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|feature 1|HeightMapData|First measurable property or characteristic of the data points being analyzed (e.g elevation, gradient norm, etc...|
+|feature 2|HeightMapData|First measurable property or characteristic of the data points being analyzed (e.g elevation, gradient norm, etc...|
+|feature 3|HeightMapData|Third measurable property or characteristic of the data points being analyzed (e.g elevation, gradient norm, etc...|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Cluster labelling.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|nclusters|Integer|Number of clusters.|
+|normalize_inputs|Bool|Determine whether the feature amplitudes are normalized before the clustering.|
+|seed|Random seed|Random seed number.|
+|weights.x|Float|Weight of the first feature.|
+|weights.y|Float|Weight of the third feature.|
+
 ## Laplace
 
 

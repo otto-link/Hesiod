@@ -75,6 +75,8 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::HydraulicVpipes, "Erosion/Hydraulic");
   HSD_REGISTER_NODE(hesiod::ImportHeightmap, "IO/Files");
   HSD_REGISTER_NODE(hesiod::Inverse, "Math/Base");
+  HSD_REGISTER_NODE(hesiod::KmeansClustering2, "Features/Clustering");
+  HSD_REGISTER_NODE(hesiod::KmeansClustering3, "Features/Clustering");
   HSD_REGISTER_NODE(hesiod::KernelGabor, "Primitive/Kernel");
   HSD_REGISTER_NODE(hesiod::KernelPrim, "Primitive/Kernel");
   HSD_REGISTER_NODE(hesiod::Laplace, "Filter/Smoothing");
