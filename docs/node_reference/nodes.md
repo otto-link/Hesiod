@@ -1487,7 +1487,9 @@ Primitive/Function
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|dr|HeightMapData|Displacement with respect to the domain size (radial direction).|
+|dx|HeightMapData|Displacement with respect to the domain size (x-direction).|
+|dy|HeightMapData|Displacement with respect to the domain size (y-direction).|
+|control|HeightMapData|Control parameter, acts as a multiplier for the weight parameter.|
   
 
 ### Outputs

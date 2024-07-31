@@ -12,6 +12,7 @@
 #include "hesiod/data/cloud_data.hpp"
 #include "hesiod/data/heightmap_data.hpp"
 #include "hesiod/data/heightmap_rgba_data.hpp"
+#include "hesiod/data/heightmap_vector_data.hpp"
 #include "hesiod/data/kernel_data.hpp"
 #include "hesiod/data/path_data.hpp"
 #include "hesiod/model/base_node.hpp"
@@ -141,7 +142,7 @@ public:
                  QtNodes::PortIndex                 port_index) override;
 
 protected:
-  std::weak_ptr<HeightMapData>   dx, ctrl, dy;
+  std::weak_ptr<HeightMapData>   dx, dy, ctrl;
   std::shared_ptr<HeightMapData> out;
 };
 
@@ -1074,7 +1075,7 @@ public:
                  QtNodes::PortIndex                 port_index) override;
 
 protected:
-  std::weak_ptr<HeightMapData>   dr;
+  std::weak_ptr<HeightMapData>   dx, dy, ctrl;
   std::shared_ptr<HeightMapData> out;
 };
 
@@ -1495,8 +1496,9 @@ public:
                  QtNodes::PortIndex                 port_index) override;
 
 protected:
-  std::weak_ptr<HeightMapData>   in1, in2;
-  std::shared_ptr<HeightMapData> out;
+  std::weak_ptr<HeightMapData>         in1, in2;
+  std::shared_ptr<HeightMapData>       out;
+  std::shared_ptr<HeightMapVectorData> scoring;
 };
 
 /**
@@ -1520,8 +1522,9 @@ public:
                  QtNodes::PortIndex                 port_index) override;
 
 protected:
-  std::weak_ptr<HeightMapData>   in1, in2, in3;
-  std::shared_ptr<HeightMapData> out;
+  std::weak_ptr<HeightMapData>         in1, in2, in3;
+  std::shared_ptr<HeightMapData>       out;
+  std::shared_ptr<HeightMapVectorData> scoring;
 };
 
 /**

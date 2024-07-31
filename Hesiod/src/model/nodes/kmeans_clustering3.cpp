@@ -23,8 +23,8 @@ KmeansClustering3::KmeansClustering3(const ModelConfig *p_config) : BaseNode(p_c
                        HeightMapData().type()};
 
   // outputs
-  this->output_captions = {"output"};
-  this->output_types = {HeightMapData().type()};
+  this->output_captions = {"output", "scoring"};
+  this->output_types = {HeightMapData().type(), HeightMapVectorData().type()};
 
   // attributes
   this->attr["seed"] = NEW_ATTR_SEED();
@@ -41,6 +41,7 @@ KmeansClustering3::KmeansClustering3(const ModelConfig *p_config) : BaseNode(p_c
   if (this->p_config->compute_nodes_at_instanciation)
   {
     this->out = std::make_shared<HeightMapData>(this->p_config);
+    this->scoring = std::make_shared<HeightMapVectorData>();
     this->compute();
   }
 
@@ -105,16 +106,19 @@ void KmeansClustering3::compute()
   LOG->trace("computing node {}", this->name().toStdString());
 
   // base noise function
-  hmap::HeightMap *p_in1 = HSD_GET_POINTER(this->in1);
-  hmap::HeightMap *p_in2 = HSD_GET_POINTER(this->in2);
-  hmap::HeightMap *p_in3 = HSD_GET_POINTER(this->in3);
-  hmap::HeightMap *p_out = this->out->get_ref();
+  hmap::HeightMap              *p_in1 = HSD_GET_POINTER(this->in1);
+  hmap::HeightMap              *p_in2 = HSD_GET_POINTER(this->in2);
+  hmap::HeightMap              *p_in3 = HSD_GET_POINTER(this->in3);
+  hmap::HeightMap              *p_out = this->out->get_ref();
+  std::vector<hmap::HeightMap> *p_scoring = this->scoring->get_ref();
 
   if (p_in1 && p_in2 && p_in3)
   {
 
     // work on arrays (not tileable so far)
-    hmap::Array labels;
+    hmap::Array              labels;
+    std::vector<hmap::Array> scoring_arrays;
+
     {
       hmap::Array z = p_out->to_array(p_out->shape);
       hmap::Array a1 = p_in1->to_array(p_out->shape);
@@ -136,12 +140,24 @@ void KmeansClustering3::compute()
                                         a2,
                                         a3,
                                         GET_ATTR_INT("nclusters"),
-                                        nullptr,
+                                        nullptr, // &scoring_arrays,
                                         weights,
                                         GET_ATTR_SEED("seed"));
     }
 
     p_out->from_array_interp_nearest(labels);
+
+    // // retrieve scoring data
+    // p_scoring->clear();
+    // p_scoring->reserve(GET_ATTR_INT("nclusters"));
+
+    // for (size_t k = 0; k < scoring_arrays.size(); k++)
+    // {
+    //   hmap::HeightMap h;
+    //   h.set_sto(p_config->shape, p_config->tiling, p_config->overlap);
+    //   h.from_array_interp_nearest(scoring_arrays[k]);
+    //   p_scoring->push_back(h);
+    // }
   }
 
   // propagate

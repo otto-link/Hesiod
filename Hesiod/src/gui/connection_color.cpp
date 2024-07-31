@@ -19,6 +19,8 @@ QColor ConnectionStyle::normalColor(QString typeId) const
     return QColor::fromRgb(248, 248, 242);
   else if (QString::compare(typeId, "HeightMapRGBAData") == 0)
     return QColor::fromRgb(255, 184, 108);
+  else if (QString::compare(typeId, "HeightMapVectorData") == 0)
+    return QColor::fromRgb(248, 123, 80);
   else if (QString::compare(typeId, "KernelData") == 0)
     return QColor::fromRgb(255, 121, 198);
   else if (QString::compare(typeId, "PathData") == 0)
