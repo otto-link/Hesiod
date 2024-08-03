@@ -2052,12 +2052,14 @@ Features/Clustering
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |output|HeightMapData|Cluster labelling.|
+|scoring|HeightMapVectorData|Score in [0, 1] of the cell to belong to a given cluster|
   
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|compute_scoring|Bool|Determine whether scoring is computed.|
 |nclusters|Integer|Number of clusters.|
 |normalize_inputs|Bool|Determine whether the feature amplitudes are normalized before the clustering.|
 |seed|Random seed|Random seed number.|
@@ -2090,12 +2092,14 @@ Features/Clustering
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |output|HeightMapData|Cluster labelling.|
+|scoring|HeightMapVectorData|Score in [0, 1] of the cell to belong to a given cluster|
   
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|compute_scoring|Bool|Determine whether scoring is computed.|
 |nclusters|Integer|Number of clusters.|
 |normalize_inputs|Bool|Determine whether the feature amplitudes are normalized before the clustering.|
 |seed|Random seed|Random seed number.|
@@ -4633,6 +4637,45 @@ Erosion/Thermal
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |iterations|Integer|Number of iterations.|
+
+## Unpack
+
+
+KmeansClustering2 node groups the data into clusters based on the values of the two input features.
+
+![img](../images/nodes/Unpack.png)  
+
+### Category
+
+
+Routing  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|feature 1|HeightMapData|First measurable property or characteristic of the data points being analyzed (e.g elevation, gradient norm, etc...|
+|feature 2|HeightMapData|Second measurable property or characteristic of the data points being analyzed (e.g elevation, gradient norm, etc...|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Cluster labelling.|
+|scoring|HeightMapVectorData|Score in [0, 1] of the cell to belong to a given cluster|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|compute_scoring|Bool|Determine whether scoring is computed.|
+|nclusters|Integer|Number of clusters.|
+|normalize_inputs|Bool|Determine whether the feature amplitudes are normalized before the clustering.|
+|seed|Random seed|Random seed number.|
+|weights.x|Float|Weight of the first feature.|
+|weights.y|Float|Weight of the second feature.|
 
 ## Unsphericity
 

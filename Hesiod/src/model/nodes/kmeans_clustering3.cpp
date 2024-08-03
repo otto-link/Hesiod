@@ -33,9 +33,16 @@ KmeansClustering3::KmeansClustering3(const ModelConfig *p_config) : BaseNode(p_c
   this->attr["weights.y"] = NEW_ATTR_FLOAT(1.f, 0.01f, 2.f);
   this->attr["weights.z"] = NEW_ATTR_FLOAT(1.f, 0.01f, 2.f);
   this->attr["normalize_inputs"] = NEW_ATTR_BOOL(true);
+  this->attr["compute_scoring"] = NEW_ATTR_BOOL(true);
 
-  this->attr_ordered_key =
-      {"seed", "nclusters", "weights.x", "weights.y", "weights.z", "normalize_inputs"};
+  this->attr_ordered_key = {"seed",
+                            "nclusters",
+                            "weights.x",
+                            "weights.y",
+                            "weights.z",
+                            "normalize_inputs",
+                            "_SEPARATOR_",
+                            "compute_scoring"};
 
   // update
   if (this->p_config->compute_nodes_at_instanciation)
@@ -56,7 +63,9 @@ KmeansClustering3::KmeansClustering3(const ModelConfig *p_config) : BaseNode(p_c
       "(e.g elevation, gradient norm, etc...",
       "Third measurable property or characteristic of the data points being analyzed "
       "(e.g elevation, gradient norm, etc..."};
-  this->output_descriptions = {"Cluster labelling."};
+  this->output_descriptions = {
+      "Cluster labelling.",
+      "Score in [0, 1] of the cell to belong to a given cluster"};
 
   this->attribute_descriptions["seed"] = "Random seed number.";
   this->attribute_descriptions["nclusters"] = "Number of clusters.";
@@ -65,12 +74,21 @@ KmeansClustering3::KmeansClustering3(const ModelConfig *p_config) : BaseNode(p_c
   this->attribute_descriptions["weights.y"] = "Weight of the third feature.";
   this->attribute_descriptions["normalize_inputs"] =
       "Determine whether the feature amplitudes are normalized before the clustering.";
+  this->attribute_descriptions
+      ["compute_scoring"] = "Determine whether scoring is computed.";
 }
 
 std::shared_ptr<QtNodes::NodeData> KmeansClustering3::outData(
-    QtNodes::PortIndex /* port_index */)
+    QtNodes::PortIndex port_index)
 {
-  return std::static_pointer_cast<QtNodes::NodeData>(this->out);
+  switch (port_index)
+  {
+  case 0:
+    return std::static_pointer_cast<QtNodes::NodeData>(this->out);
+  case 1:
+  default:
+    return std::static_pointer_cast<QtNodes::NodeData>(this->scoring);
+  }
 }
 
 void KmeansClustering3::setInData(std::shared_ptr<QtNodes::NodeData> data,
@@ -136,28 +154,37 @@ void KmeansClustering3::compute()
                                    GET_ATTR_FLOAT("weights.y"),
                                    GET_ATTR_FLOAT("weights.z")};
 
-      labels = hmap::kmeans_clustering3(a1,
-                                        a2,
-                                        a3,
-                                        GET_ATTR_INT("nclusters"),
-                                        nullptr, // &scoring_arrays,
-                                        weights,
-                                        GET_ATTR_SEED("seed"));
+      if (GET_ATTR_BOOL("normalize_inputs"))
+        labels = hmap::kmeans_clustering3(a1,
+                                          a2,
+                                          a3,
+                                          GET_ATTR_INT("nclusters"),
+                                          &scoring_arrays,
+                                          weights,
+                                          GET_ATTR_SEED("seed"));
+      else
+        labels = hmap::kmeans_clustering3(a1,
+                                          a2,
+                                          a3,
+                                          GET_ATTR_INT("nclusters"),
+                                          nullptr,
+                                          weights,
+                                          GET_ATTR_SEED("seed"));
     }
 
     p_out->from_array_interp_nearest(labels);
 
-    // // retrieve scoring data
-    // p_scoring->clear();
-    // p_scoring->reserve(GET_ATTR_INT("nclusters"));
+    // retrieve scoring data
+    p_scoring->clear();
+    p_scoring->reserve(GET_ATTR_INT("nclusters"));
 
-    // for (size_t k = 0; k < scoring_arrays.size(); k++)
-    // {
-    //   hmap::HeightMap h;
-    //   h.set_sto(p_config->shape, p_config->tiling, p_config->overlap);
-    //   h.from_array_interp_nearest(scoring_arrays[k]);
-    //   p_scoring->push_back(h);
-    // }
+    for (size_t k = 0; k < scoring_arrays.size(); k++)
+    {
+      hmap::HeightMap h;
+      h.set_sto(p_config->shape, p_config->tiling, p_config->overlap);
+      h.from_array_interp_nearest(scoring_arrays[k]);
+      p_scoring->push_back(h);
+    }
   }
 
   // propagate

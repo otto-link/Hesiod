@@ -3398,6 +3398,28 @@ protected:
 };
 
 /**
+ * @brief Unpack class.
+ */
+class Unpack : public BaseNode
+{
+public:
+  Unpack(const ModelConfig *p_config);
+
+  virtual QWidget *embeddedWidget() override { return nullptr; }
+
+  void compute() override;
+
+  std::shared_ptr<QtNodes::NodeData> outData(QtNodes::PortIndex port_index) override;
+
+  void setInData(std::shared_ptr<QtNodes::NodeData> data,
+                 QtNodes::PortIndex                 port_index) override;
+
+protected:
+  std::weak_ptr<HeightMapVectorData>          in;
+  std::vector<std::shared_ptr<HeightMapData>> vector_out;
+};
+
+/**
  * @brief Unsphericity class.
  */
 class Unsphericity : public BaseNode

@@ -39,4 +39,5 @@ Node Categories
 |Primitive|Geological|Caldera|
 |Primitive|Kernel|KernelGabor, KernelPrim|
 |Primitive|Random|White, WhiteDensityMap, WhiteSparse|
+|Routing||Unpack|
 |Texture||ColorizeCmap, ColorizeGradient, ColorizeSolid, MixTexture, SetAlpha|

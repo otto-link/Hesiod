@@ -603,6 +603,42 @@ QtNodes::NodeId add_graph_example(HsdDataFlowGraphModel *p_model,
     return node_id3;
   }
   //
+  else if (node_type == "Unpack")
+  {
+    QtNodes::NodeId node_id1 = p_model->addNode("NoiseFbm");
+    QtNodes::NodeId node_id2 = p_model->addNode("GradientNorm");
+    QtNodes::NodeId node_id3 = p_model->addNode("KmeansClustering2");
+    QtNodes::NodeId node_id4 = p_model->addNode(QString::fromStdString(node_type));
+    QtNodes::NodeId node_id5 = p_model->addNode("DataPreview");
+    QtNodes::NodeId node_id6 = p_model->addNode("DataPreview");
+
+    p_model->addConnection(QtNodes::ConnectionId(node_id1, 0, node_id2, 0));
+    p_model->addConnection(QtNodes::ConnectionId(node_id1, 0, node_id3, 0));
+    p_model->addConnection(QtNodes::ConnectionId(node_id2, 0, node_id3, 1));
+    p_model->addConnection(QtNodes::ConnectionId(node_id3, 1, node_id4, 0));
+    p_model->addConnection(QtNodes::ConnectionId(node_id4, 0, node_id5, 0));
+    p_model->addConnection(QtNodes::ConnectionId(node_id4, 1, node_id6, 0));
+
+    p_model->setNodeData(node_id1, QtNodes::NodeRole::Position, QPointF(0.f, 0.f));
+    p_model->setNodeData(node_id2,
+                         QtNodes::NodeRole::Position,
+                         QPointF(HSD_NODE_SPACING, HSD_NODE_SPACING));
+    p_model->setNodeData(node_id3,
+                         QtNodes::NodeRole::Position,
+                         QPointF(2.f * HSD_NODE_SPACING, 0.f));
+    p_model->setNodeData(node_id4,
+                         QtNodes::NodeRole::Position,
+                         QPointF(3.f * HSD_NODE_SPACING, 0.f));
+    p_model->setNodeData(node_id5,
+                         QtNodes::NodeRole::Position,
+                         QPointF(4.f * HSD_NODE_SPACING, 0.f));
+    p_model->setNodeData(node_id6,
+                         QtNodes::NodeRole::Position,
+                         QPointF(4.f * HSD_NODE_SPACING, HSD_NODE_SPACING));
+
+    return node_id3;
+  }
+  //
   else
   {
     int         pos = category.find("/");
