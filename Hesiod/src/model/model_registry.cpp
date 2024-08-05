@@ -122,6 +122,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::Rescale, "Filter/Range");
   HSD_REGISTER_NODE(hesiod::ReverseMidpoint, "Primitive/Authoring");
   HSD_REGISTER_NODE(hesiod::Ridgelines, "Primitive/Authoring");
+  HSD_REGISTER_NODE(hesiod::Rift, "Primitive/Function");
   HSD_REGISTER_NODE(hesiod::Rugosity, "Features");
   HSD_REGISTER_NODE(hesiod::Saturate, "Filter/Recurve");
   HSD_REGISTER_NODE(hesiod::ScanMask, "Mask/Adjust");

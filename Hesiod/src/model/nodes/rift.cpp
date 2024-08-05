@@ -7,12 +7,12 @@
 namespace hesiod
 {
 
-Step::Step(const ModelConfig *p_config) : BaseNode(p_config)
+Rift::Rift(const ModelConfig *p_config) : BaseNode(p_config)
 {
-  LOG->trace("Step::Step");
+  LOG->trace("Rift::Rift");
 
   // model
-  this->node_caption = "Step";
+  this->node_caption = "Rift";
 
   // inputs
   this->input_captions = {"dx", "dy", "control"};
@@ -26,7 +26,9 @@ Step::Step(const ModelConfig *p_config) : BaseNode(p_config)
 
   // attributes
   this->attr["angle"] = NEW_ATTR_FLOAT(0.f, -180.f, 180.f);
-  this->attr["slope"] = NEW_ATTR_FLOAT(2.f, 0.01f, 32.f);
+  this->attr["slope"] = NEW_ATTR_FLOAT(8.f, 0.01f, 32.f);
+  this->attr["width"] = NEW_ATTR_FLOAT(0.1f, 0.f, 1.f);
+  this->attr["sharp_bottom"] = NEW_ATTR_BOOL(false);
   this->attr["center.x"] = NEW_ATTR_FLOAT(0.5f, -0.5f, 1.5f);
   this->attr["center.y"] = NEW_ATTR_FLOAT(0.5f, -0.5f, 1.5f);
 
@@ -36,6 +38,8 @@ Step::Step(const ModelConfig *p_config) : BaseNode(p_config)
 
   this->attr_ordered_key = {"angle",
                             "slope",
+                            "width",
+                            "sharp_bottom",
                             "center.x",
                             "center.y",
                             "_SEPARATOR_",
@@ -51,28 +55,29 @@ Step::Step(const ModelConfig *p_config) : BaseNode(p_config)
   }
 
   // documentation
-  this->description = "Step is function used to represent a conceptualized escarpment, "
-                      "it serves as a tool for creating sharp, distinct changes in "
-                      "elevation.";
+  this->description = "Rift is function used to represent a conceptualized rift.";
 
   this->input_descriptions = {
       "Displacement with respect to the domain size (x-direction).",
       "Displacement with respect to the domain size (y-direction).",
-      "Control parameter, acts as a multiplier for the weight parameter."};
-  this->output_descriptions = {"Step heightmap."};
+      "Control parameter, acts as a multiplier for the width parameter."};
+  this->output_descriptions = {"Rift heightmap."};
 
   this->attribute_descriptions["angle"] = "Angle.";
-  this->attribute_descriptions["slope"] = "Step slope.";
+  this->attribute_descriptions["slope"] = "Rift slope.";
+  this->attribute_descriptions["width"] = "Rift width.";
+  this->attribute_descriptions
+      ["sharp_bottom"] = "Decide whether the rift bottom is sharp or not.";
   this->attribute_descriptions["center.x"] = "Center x coordinate.";
   this->attribute_descriptions["center.y"] = "Center y coordinate.";
 }
 
-std::shared_ptr<QtNodes::NodeData> Step::outData(QtNodes::PortIndex /* port_index */)
+std::shared_ptr<QtNodes::NodeData> Rift::outData(QtNodes::PortIndex /* port_index */)
 {
   return std::static_pointer_cast<QtNodes::NodeData>(this->out);
 }
 
-void Step::setInData(std::shared_ptr<QtNodes::NodeData> data,
+void Rift::setInData(std::shared_ptr<QtNodes::NodeData> data,
                      QtNodes::PortIndex                 port_index)
 {
   if (!data)
@@ -98,7 +103,7 @@ void Step::setInData(std::shared_ptr<QtNodes::NodeData> data,
 
 // --- computing
 
-void Step::compute()
+void Rift::compute()
 {
   Q_EMIT this->computingStarted();
 
@@ -124,9 +129,11 @@ void Step::compute()
                              hmap::Array      *p_noise_y,
                              hmap::Array      *p_ctrl)
              {
-               return hmap::step(shape,
+               return hmap::rift(shape,
                                  GET_ATTR_FLOAT("angle"),
                                  GET_ATTR_FLOAT("slope"),
+                                 GET_ATTR_FLOAT("width"),
+                                 GET_ATTR_BOOL("sharp_bottom"),
                                  p_ctrl,
                                  p_noise_x,
                                  p_noise_y,

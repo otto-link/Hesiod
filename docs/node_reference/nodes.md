@@ -3622,6 +3622,45 @@ Primitive/Authoring
 |vmin|Float|Minimum value (lower values are clamped).|
 |width|Float|Ridge edge width.|
 
+## Rift
+
+
+Rift is function used to represent a conceptualized rift.
+
+![img](../images/nodes/Rift.png)  
+
+### Category
+
+
+Primitive/Function  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|dx|HeightMapData|Displacement with respect to the domain size (x-direction).|
+|dy|HeightMapData|Displacement with respect to the domain size (y-direction).|
+|control|HeightMapData|Control parameter, acts as a multiplier for the width parameter.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Rift heightmap.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|angle|Float|Angle.|
+|center.x|Float|Center x coordinate.|
+|center.y|Float|Center y coordinate.|
+|sharp_bottom|Bool|Decide whether the rift bottom is sharp or not.|
+|slope|Float|Rift slope.|
+|width|Float|Rift width.|
+
 ## Rugosity
 
 
@@ -4489,7 +4528,7 @@ Primitive/Function
 |angle|Float|Angle.|
 |center.x|Float|Center x coordinate.|
 |center.y|Float|Center y coordinate.|
-|talus_global|Float|Step slope.|
+|slope|Float|Step slope.|
 
 ## Stratify
 
