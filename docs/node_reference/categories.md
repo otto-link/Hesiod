@@ -10,7 +10,7 @@ Node Categories
 |Comment||Comment|
 |Converter||CloudToPath, HeightmapToKernel, HeightmapToMask, HeightmapToRGBA, PathToCloud|
 |Debug||DataAnalysis, DataPreview|
-|Erosion|Hydraulic|HydraulicParticle, HydraulicRidge, HydraulicStream, HydraulicVpipes|
+|Erosion|Hydraulic|HydraulicBlur, HydraulicParticle, HydraulicRidge, HydraulicStream, HydraulicVpipes|
 |Erosion|Stratify|Stratify, StratifyOblique|
 |Erosion|Thermal|Thermal, ThermalRib|
 |Features|Clustering|KmeansClustering2, KmeansClustering3|

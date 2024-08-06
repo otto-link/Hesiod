@@ -69,6 +69,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::HeightmapToKernel, "Converter");
   HSD_REGISTER_NODE(hesiod::HeightmapToMask, "Converter");
   HSD_REGISTER_NODE(hesiod::HeightmapToRGBA, "Converter");
+  HSD_REGISTER_NODE(hesiod::HydraulicBlur, "Erosion/Hydraulic");
   HSD_REGISTER_NODE(hesiod::HydraulicParticle, "Erosion/Hydraulic");
   HSD_REGISTER_NODE(hesiod::HydraulicRidge, "Erosion/Hydraulic");
   HSD_REGISTER_NODE(hesiod::HydraulicStream, "Erosion/Hydraulic");

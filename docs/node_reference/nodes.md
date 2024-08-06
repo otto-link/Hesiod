@@ -1732,6 +1732,40 @@ Converter
 |Name|Type|Description|
 | :--- | :--- | :--- |
 
+## HydraulicBlur
+
+
+Hydraulic Blur applied a cell-based hydraulic erosion using a nonlinear diffusion model.
+
+![img](../images/nodes/HydraulicBlur.png)  
+
+### Category
+
+
+Erosion/Hydraulic  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Input heightmap.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Eroded heightmap.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|k_smoothing|Float|Smoothing factor, if any.|
+|radius|Float|Gaussian filter radius (with respect to a unit domain).|
+|vmax|Float|Maximum elevation for the details.|
+
 ## HydraulicParticle
 
 
