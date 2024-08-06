@@ -4814,6 +4814,39 @@ Features/Landform
 | :--- | :--- | :--- |
 |radius|Float|Filter radius with respect to the domain size.|
 
+## Warp
+
+
+The Warp node transforms a base heightmap by warping/pushing pixels as defined by the input displacements.
+
+![img](../images/nodes/Warp.png)  
+
+### Category
+
+
+Operator/Transform  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Input heightmap.|
+|dx|HeightMapData|Displacement with respect to the domain size (x-direction).|
+|dy|HeightMapData|Displacement with respect to the domain size (y-direction).|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Warped heightmap.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+
 ## WaveDune
 
 

@@ -157,6 +157,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::Unpack, "Routing");
   HSD_REGISTER_NODE(hesiod::Unsphericity, "Features/Landform");
   HSD_REGISTER_NODE(hesiod::ValleyWidth, "Features/Landform");
+  HSD_REGISTER_NODE(hesiod::Warp, "Operator/Transform");
   HSD_REGISTER_NODE(hesiod::WaveDune, "Primitive/Function");
   HSD_REGISTER_NODE(hesiod::WaveSine, "Primitive/Function");
   HSD_REGISTER_NODE(hesiod::WaveSquare, "Primitive/Function");
