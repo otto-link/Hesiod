@@ -110,8 +110,6 @@ void GaussianPulse::compute()
   center.x = GET_ATTR_FLOAT("center.x");
   center.y = GET_ATTR_FLOAT("center.y");
 
-  float sigma = std::max(1.f, (GET_ATTR_FLOAT("radius") * p_out->shape.x));
-
   hmap::fill(*p_out,
              p_dx,
              p_dy,

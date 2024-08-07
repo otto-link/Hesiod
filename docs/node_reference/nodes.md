@@ -1305,6 +1305,40 @@ Math/Boundaries
 |distance_function|Enumeration|Measure used for the distance calculation. Available values: Chebyshev, Euclidian, Euclidian/Chebyshev, Manhattan.|
 |strength|Float|Falloff strength.|
 
+## FillTalus
+
+
+.
+
+![img](../images/nodes/FillTalus.png)  
+
+### Category
+
+
+Operator/Transform  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Input heightmap.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Output heightmap.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|noise_ratio|Float|Noise ratio, added to the downslope.|
+|seed|Random seed|Random seed number.|
+|slope|Float|Downslope used for filling.|
+
 ## Fold
 
 
