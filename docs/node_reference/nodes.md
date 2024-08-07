@@ -4847,6 +4847,38 @@ Operator/Transform
 |Name|Type|Description|
 | :--- | :--- | :--- |
 
+## WarpDownslope
+
+
+.
+
+![img](../images/nodes/WarpDownslope.png)  
+
+### Category
+
+
+Operator/Transform  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Input heightmap.|
+|mask|HeightMapData|Mask defining the filtering intensity (expected in [0, 1]).|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Filtered heightmap.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+
 ## WaveDune
 
 
