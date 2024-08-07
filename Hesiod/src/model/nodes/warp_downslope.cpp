@@ -35,14 +35,18 @@ WarpDownslope::WarpDownslope(const ModelConfig *p_config) : BaseNode(p_config)
   }
 
   // documentation
-  this->description = ".";
+  this->description = "Warp the heightmap with a direction and amount based on the local "
+                      "downslope.";
 
-  this->input_descriptions = {
-      "Input heightmap.",
-      "Mask defining the filtering intensity (expected in [0, 1])."};
+  // clang-format off
+  this->input_descriptions = {"Input heightmap.",
+			      "Mask defining the filtering intensity (expected in [0, 1])."};
   this->output_descriptions = {"Filtered heightmap."};
 
-  // this->attribute_descriptions[""] = ".";
+  this->attribute_descriptions["amount"] = "Warp scaling with respect to the gradient.";
+  this->attribute_descriptions["radius"] = "Prefiltering radius for gradient computation.";
+  this->attribute_descriptions["reverse"] = "Reverse warping direction (upslope if true and downslope otherwise).";
+  // clang-format on
 }
 
 std::shared_ptr<QtNodes::NodeData> WarpDownslope::outData(

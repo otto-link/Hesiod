@@ -4850,7 +4850,7 @@ Operator/Transform
 ## WarpDownslope
 
 
-.
+Warp the heightmap with a direction and amount based on the local downslope.
 
 ![img](../images/nodes/WarpDownslope.png)  
 
@@ -4878,6 +4878,9 @@ Operator/Transform
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|amount|Float|Warp scaling with respect to the gradient.|
+|radius|Float|Prefiltering radius for gradient computation.|
+|reverse|Bool|Reverse warping direction (upslope if true and downslope otherwise).|
 
 ## WaveDune
 
