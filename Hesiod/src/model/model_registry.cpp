@@ -40,6 +40,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::Comment, "Comment");
   HSD_REGISTER_NODE(hesiod::ConvolveSVD, "Math/Convolution");
   HSD_REGISTER_NODE(hesiod::Cos, "Math/Base");
+  HSD_REGISTER_NODE(hesiod::Crater, "Primitive/Geological");
   HSD_REGISTER_NODE(hesiod::DataAnalysis, "Debug");
   HSD_REGISTER_NODE(hesiod::DataPreview, "Debug");
   HSD_REGISTER_NODE(hesiod::Dendry, "Primitive/Coherent Noise");

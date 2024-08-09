@@ -28,7 +28,7 @@ FillTalus::FillTalus(const ModelConfig *p_config) : BaseNode(p_config)
   this->attr["seed"] = NEW_ATTR_SEED();
 
   this->attr_ordered_key = {"slope", "noise_ratio", "seed"};
-  
+
   // update
   if (this->p_config->compute_nodes_at_instanciation)
   {
@@ -37,7 +37,8 @@ FillTalus::FillTalus(const ModelConfig *p_config) : BaseNode(p_config)
   }
 
   // documentation
-  this->description = "Fill the heightmap starting from the highest elevations using a regular downslope.";
+  this->description = "Fill the heightmap starting from the highest elevations using a "
+                      "regular downslope.";
 
   // clang-format off
   this->input_descriptions = {"Input heightmap."};

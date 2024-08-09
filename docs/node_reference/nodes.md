@@ -771,6 +771,43 @@ Math/Base
 |frequency|Float|Frequency.|
 |phase_shift|Float|Phase shift.|
 
+## Crater
+
+
+Crater generates a crater landscape..
+
+![img](../images/nodes/Crater.png)  
+
+### Category
+
+
+Primitive/Geological  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|dx|HeightMapData|Displacement with respect to the domain size (x-direction).|
+|dy|HeightMapData|Displacement with respect to the domain size (y-direction).|
+|control|HeightMapData|Control parameter, acts as a multiplier for the weight parameter.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Crater heightmap.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|depth|Float|Crater depth.|
+|lip_decay|Float|Ejecta lip decay.|
+|lip_height_ratio|Float|Controls the ejecta lip relative height.|
+|radius|Float|Crater radius.|
+
 ## DataAnalysis
 
 
@@ -1308,7 +1345,7 @@ Math/Boundaries
 ## FillTalus
 
 
-.
+Fill the heightmap starting from the highest elevations using a regular downslope.
 
 ![img](../images/nodes/FillTalus.png)  
 
