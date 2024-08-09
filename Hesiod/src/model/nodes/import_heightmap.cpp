@@ -25,10 +25,10 @@ ImportHeightmap::ImportHeightmap(const ModelConfig *p_config) : BaseNode(p_confi
   this->output_types = {HeightMapData().type()};
 
   // attributes
-  this->attr["fname"] = NEW_ATTR_FILENAME("", "TIFF (*.png)");
+  this->attr["fname (8bit grayscale)"] = NEW_ATTR_FILENAME("", "PNG (*.png)");
   this->attr["remap"] = NEW_ATTR_BOOL(true);
 
-  this->attr_ordered_key = {"fname", "remap"};
+  this->attr_ordered_key = {"fname (8bit grayscale)", "remap"};
 
   // update
   if (this->p_config->compute_nodes_at_instanciation)
@@ -44,7 +44,7 @@ ImportHeightmap::ImportHeightmap(const ModelConfig *p_config) : BaseNode(p_confi
   this->input_descriptions = {};
   this->output_descriptions = {"Heightmap."};
 
-  this->attribute_descriptions["fname"] = "Import file name.";
+  this->attribute_descriptions["fname (8bit grayscale)"] = "Import file name.";
   this->attribute_descriptions["remap"] = "Remap imported heightmap elevation to [0, 1].";
 }
 
@@ -69,10 +69,10 @@ void ImportHeightmap::compute()
 
   hmap::HeightMap *p_out = this->out->get_ref();
 
-  std::ifstream f(GET_ATTR_FILENAME("fname").c_str());
+  std::ifstream f(GET_ATTR_FILENAME("fname (8bit grayscale)").c_str());
   if (f.good())
   {
-    hmap::Array z = hmap::Array(GET_ATTR_FILENAME("fname"));
+    hmap::Array z = hmap::Array(GET_ATTR_FILENAME("fname (8bit grayscale)"));
     p_out->from_array_interp(z);
 
     if (GET_ATTR_BOOL("remap"))
