@@ -2031,7 +2031,7 @@ IO/Files
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|fname|Filename|Import file name.|
+|fname (8bit grayscale)|Filename|Import file name.|
 |remap|Bool|Remap imported heightmap elevation to [0, 1].|
 
 ## Inverse
@@ -4782,6 +4782,42 @@ Erosion/Thermal
 | :--- | :--- | :--- |
 |iterations|Integer|Number of iterations.|
 
+## Translate
+
+
+Translates an heightmap by a specified amount along the x and y axes. This function shifts the contents of the input array by `dx` and `dy` units along the x and y axes, respectively. It supports both periodic boundary conditions, where the array wraps around, and non-periodic conditions.
+
+![img](../images/nodes/Translate.png)  
+
+### Category
+
+
+Operator/Transform  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Displacement with respect to the domain size (x-direction).|
+|dx|HeightMapData|Displacement with respect to the domain size (y-direction).|
+|dy|HeightMapData|Control parameter, acts as a multiplier for the weight parameter.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Translate heightmap.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|dx|Float|The translation distance along the x-axis. Positive values shift the array to the right.|
+|dy|Float|The translation distance along the y-axis. Positive values shift the array downward.|
+|periodic|Bool|If set to `true`, the translation is periodic, meaning that elements that move out of one side of the array reappear on the opposite side.|
+
 ## Unpack
 
 
@@ -5222,3 +5258,40 @@ Math/Boundaries
 | :--- | :--- | :--- |
 |distance_function|Enumeration|Measure used for the distance calculation. Available values: Chebyshev, Euclidian, Euclidian/Chebyshev, Manhattan.|
 |sigma|Float|Shape power law.|
+
+## Zoom
+
+
+Applies a zoom effect to an heightmap with an adjustable center. This function scales the input 2D array by a specified zoom factor, effectively resizing the array's contents. The zoom operation is centered around a specified point within the array, allowing for flexible zooming behavior.
+
+![img](../images/nodes/Zoom.png)  
+
+### Category
+
+
+Operator/Transform  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|HeightMapData|Displacement with respect to the domain size (x-direction).|
+|dx|HeightMapData|Displacement with respect to the domain size (y-direction).|
+|dy|HeightMapData|Control parameter, acts as a multiplier for the weight parameter.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|Zoom heightmap.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|center.x|Float|Center of the zoom operation.|
+|center.y|Float|Center of the zoom operation.|
+|periodic|Bool|If set to `true`, the zoom is periodic.|
+|zoom_factor|Float|The factor by which to zoom the heightmap.|

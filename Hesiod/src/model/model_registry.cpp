@@ -156,6 +156,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::StratifyOblique, "Erosion/Stratify");
   HSD_REGISTER_NODE(hesiod::Thermal, "Erosion/Thermal");
   HSD_REGISTER_NODE(hesiod::ThermalRib, "Erosion/Thermal");
+  HSD_REGISTER_NODE(hesiod::Translate, "Operator/Transform");
   HSD_REGISTER_NODE(hesiod::Unpack, "Routing");
   HSD_REGISTER_NODE(hesiod::Unsphericity, "Features/Landform");
   HSD_REGISTER_NODE(hesiod::ValleyWidth, "Features/Landform");
@@ -169,6 +170,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::WhiteDensityMap, "Primitive/Random");
   HSD_REGISTER_NODE(hesiod::WhiteSparse, "Primitive/Random");
   HSD_REGISTER_NODE(hesiod::ZeroedEdges, "Math/Boundaries");
+  HSD_REGISTER_NODE(hesiod::Zoom, "Operator/Transform");
 
   log->debug("node registry initialized");
 
