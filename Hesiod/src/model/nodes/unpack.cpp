@@ -30,6 +30,16 @@ Unpack::Unpack(const ModelConfig *p_config) : BaseNode(p_config)
   // update
   if (this->p_config->compute_nodes_at_instanciation)
   {
+    // failsafe - generate an arbitrary fixed-size vector of outputs
+    // to prevent issues at graph deserialization (since node update
+    // order is not controlled with qt-node-editor)
+    int default_size = 16;
+    this->vector_out.clear();
+    this->vector_out.reserve(default_size);
+
+    for (int k = 0; k < default_size; k++)
+      this->vector_out.push_back(std::make_shared<HeightMapData>(p_config));
+
     this->compute();
   }
 
