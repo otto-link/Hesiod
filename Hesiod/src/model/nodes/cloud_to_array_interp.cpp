@@ -1,6 +1,8 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include "highmap/interpolate.hpp"
+
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes.hpp"
 
@@ -107,7 +109,7 @@ void CloudToArrayInterp::compute()
 
                    p_cloud->to_array_interp(array,
                                             bbox_points,
-                                            0, // linear interpolation
+                                            hmap::InterpolationMethod2D::DELAUNAY,
                                             p_noise_x,
                                             p_noise_y,
                                             bbox);

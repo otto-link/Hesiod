@@ -26,9 +26,6 @@ else()
   )
 endif()
 
-add_definitions("-DBOOST_ALLOW_DEPRECATED_HEADERS")
-add_definitions("-DBOOST_BIND_GLOBAL_PLACEHOLDERS")
-
 add_compile_definitions(
   HESIOD_VERSION_MAJOR=${hesiod-root_VERSION_MAJOR}
   HESIOD_VERSION_MINOR=${hesiod-root_VERSION_MINOR}

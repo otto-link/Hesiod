@@ -12,9 +12,13 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "highmap/colorize.hpp"
+#include "highmap/export.hpp"
 #include "highmap/heightmap.hpp"
-#include "highmap/io.hpp"
 #include "highmap/math.hpp"
+#include "highmap/operator.hpp"
+#include "highmap/range.hpp"
+#include "highmap/shadows.hpp"
 
 #include "hesiod/data/cloud_data.hpp"
 #include "hesiod/data/heightmap_data.hpp"

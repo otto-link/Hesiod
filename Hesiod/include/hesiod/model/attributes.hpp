@@ -18,8 +18,8 @@
 
 #include <QJsonObject>
 
+#include "highmap/algebra.hpp"
 #include "highmap/geometry.hpp"
-#include "highmap/vector.hpp"
 
 #include "hesiod/logger.hpp"
 #include "hesiod/model/model_utils.hpp"

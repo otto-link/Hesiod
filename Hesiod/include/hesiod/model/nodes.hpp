@@ -7,7 +7,7 @@
 #include <QtCore/QObject>
 #include <QtNodes/NodeDelegateModel>
 
-#include "highmap/primitives.hpp"
+// #include "highmap/primitives.hpp"
 
 #include "hesiod/data/cloud_data.hpp"
 #include "hesiod/data/heightmap_data.hpp"

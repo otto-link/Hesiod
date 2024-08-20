@@ -6,8 +6,8 @@
 #include <QCheckBox>
 #include <QComboBox>
 
+#include "highmap/colorize.hpp"
 #include "highmap/heightmap.hpp"
-#include "highmap/io.hpp"
 
 #include "hesiod/data/heightmap_data.hpp"
 #include "hesiod/data/heightmap_rgba_data.hpp"
@@ -167,7 +167,7 @@ void Viewer2dWidget::update_label_image()
     hmap::Vec2<int> shape = {dmin, dmin};
 
     // retrieve colormap choice from combo box
-    hmap::cmap cmap = (hmap::cmap)cmap_map.at(
+    hmap::Cmap cmap = (hmap::Cmap)cmap_map.at(
         this->combobox_cmap->currentText().toStdString());
 
     bool hs = this->checkbox_hillshade->isChecked();
@@ -180,11 +180,8 @@ void Viewer2dWidget::update_label_image()
 
       hmap::Array array = p_h->to_array();
 
-      std::vector<uint8_t> img = hmap::colorize(array,
-                                                array.min(),
-                                                array.max(),
-                                                cmap,
-                                                hs);
+      std::vector<uint8_t> img = hmap::colorize(array, array.min(), array.max(), cmap, hs)
+                                     .to_img_8bit();
 
       QImage preview_image = QImage(img.data(),
                                     array.shape.x,

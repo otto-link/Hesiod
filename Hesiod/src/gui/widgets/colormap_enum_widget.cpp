@@ -4,7 +4,7 @@
 #include <QColorDialog>
 #include <QGridLayout>
 
-#include "highmap/op.hpp"
+#include "highmap/operator.hpp"
 
 #include "hesiod/gui/widgets.hpp"
 #include "hesiod/model/cmap.hpp"

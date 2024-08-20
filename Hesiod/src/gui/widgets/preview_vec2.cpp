@@ -5,8 +5,8 @@
 
 #include <QtNodes/NodeData>
 
+#include "highmap/colorize.hpp"
 #include "highmap/heightmap.hpp"
-#include "highmap/io.hpp"
 
 #include "hesiod/data/cloud_data.hpp"
 #include "hesiod/data/heightmap_data.hpp"
@@ -37,7 +37,7 @@ void PreviewVec2::update_image()
   hmap::Array u = p_hmap_u->to_array(this->p_config->shape_preview);
   hmap::Array v = p_hmap_v->to_array(this->p_config->shape_preview);
 
-  std::vector<uint8_t> img = hmap::colorize_vec2(u, v);
+  std::vector<uint8_t> img = hmap::colorize_vec2(u, v).to_img_8bit();
 
   QImage preview_image = QImage(img.data(),
                                 this->p_config->shape_preview.x,

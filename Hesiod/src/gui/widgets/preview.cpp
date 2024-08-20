@@ -5,8 +5,9 @@
 
 #include <QtNodes/NodeData>
 
+#include "highmap/array3.hpp"
+#include "highmap/colorize.hpp"
 #include "highmap/heightmap.hpp"
-#include "highmap/io.hpp"
 
 #include "hesiod/data/cloud_data.hpp"
 #include "hesiod/data/heightmap_data.hpp"
@@ -85,8 +86,9 @@ void Preview::update_image()
         std::vector<uint8_t> img = hmap::colorize(array,
                                                   array.min(),
                                                   array.max(),
-                                                  hmap::cmap::magma,
-                                                  false);
+                                                  hmap::Cmap::MAGMA,
+                                                  false)
+                                       .to_img_8bit();
 
         preview_image = QImage(img.data(),
                                this->p_node->p_config->shape_preview.x,
@@ -154,8 +156,9 @@ void Preview::update_image()
       std::vector<uint8_t> img = hmap::colorize(array,
                                                 array.min(),
                                                 array.max(),
-                                                hmap::cmap::magma,
-                                                false);
+                                                hmap::Cmap::MAGMA,
+                                                false)
+                                     .to_img_8bit();
 
       preview_image = QImage(img.data(),
                              this->p_node->p_config->shape_preview.x,

@@ -4,7 +4,7 @@
 #pragma once
 #include <QJsonObject>
 
-#include "highmap/vector.hpp"
+#include "highmap/algebra.hpp"
 
 #include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/model_utils.hpp"

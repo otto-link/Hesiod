@@ -6,6 +6,7 @@
 #include "highmap/authoring.hpp"
 #include "highmap/colormaps.hpp"
 #include "highmap/kernels.hpp"
+#include "highmap/math.hpp"
 #include "highmap/primitives.hpp"
 
 namespace hesiod
@@ -70,13 +71,13 @@ static std::map<std::string, int> blending_method_map = {
  * @brief Plain text / enumerate mapping for the HighMap colormaps.
  */
 static std::map<std::string, int> cmap_map = {
-    {"bone", hmap::cmap::bone},
-    {"gray", hmap::cmap::gray},
-    {"jet", hmap::cmap::jet},
-    {"magma", hmap::cmap::magma},
-    {"nipy_spectral", hmap::cmap::nipy_spectral},
-    {"terrain", hmap::cmap::terrain},
-    {"viridis", hmap::cmap::viridis}};
+    {"bone", hmap::Cmap::BONE},
+    {"gray", hmap::Cmap::GRAY},
+    {"jet", hmap::Cmap::JET},
+    {"magma", hmap::Cmap::MAGMA},
+    {"nipy_spectral", hmap::Cmap::NIPY_SPECTRAL},
+    {"terrain", hmap::Cmap::TERRAIN},
+    {"viridis", hmap::Cmap::VIRIDIS}};
 
 /**
  * @brief Plain text / enumerate mapping for the HighMap distance functions.
@@ -144,7 +145,6 @@ static std::map<std::string, int> noise_type_map = {
     {"Value (cubic)", hmap::NoiseType::VALUE_CUBIC},
     {"Value (delaunay)", hmap::NoiseType::VALUE_DELAUNAY},
     {"Value (linear)", hmap::NoiseType::VALUE_LINEAR},
-    {"Value (thinplate)", hmap::NoiseType::VALUE_THINPLATE},
     {"Worley", hmap::NoiseType::WORLEY},
     {"Worley (doube)", hmap::NoiseType::WORLEY_DOUBLE},
     {"Worley (value)", hmap::NoiseType::WORLEY_VALUE}};

@@ -1,7 +1,8 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-#include "highmap/math.hpp"
+#include "highmap/filters.hpp"
+#include "highmap/morphology.hpp"
 
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes.hpp"

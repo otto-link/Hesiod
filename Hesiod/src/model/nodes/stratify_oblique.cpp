@@ -2,6 +2,7 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include "highmap/erosion.hpp"
+#include "highmap/operator.hpp"
 
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes.hpp"

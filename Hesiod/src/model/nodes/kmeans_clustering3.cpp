@@ -2,6 +2,7 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include "highmap/features.hpp"
+#include "highmap/range.hpp"
 
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes.hpp"
@@ -160,6 +161,7 @@ void KmeansClustering3::compute()
                                           a3,
                                           GET_ATTR_INT("nclusters"),
                                           &scoring_arrays,
+                                          nullptr,
                                           weights,
                                           GET_ATTR_SEED("seed"));
       else
@@ -167,6 +169,7 @@ void KmeansClustering3::compute()
                                           a2,
                                           a3,
                                           GET_ATTR_INT("nclusters"),
+                                          nullptr,
                                           nullptr,
                                           weights,
                                           GET_ATTR_SEED("seed"));

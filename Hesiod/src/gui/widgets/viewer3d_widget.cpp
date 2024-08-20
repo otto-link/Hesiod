@@ -8,7 +8,6 @@
 #include <QTimer>
 
 #include "highmap/heightmap.hpp"
-#include "highmap/io.hpp"
 
 #include "hesiod/data/heightmap_data.hpp"
 #include "hesiod/gui/viewer3d_widget.hpp"
