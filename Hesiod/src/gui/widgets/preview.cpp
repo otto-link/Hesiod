@@ -5,9 +5,9 @@
 
 #include <QtNodes/NodeData>
 
-#include "highmap/array3.hpp"
 #include "highmap/colorize.hpp"
 #include "highmap/heightmap.hpp"
+#include "highmap/tensor.hpp"
 
 #include "hesiod/data/cloud_data.hpp"
 #include "hesiod/data/heightmap_data.hpp"
@@ -52,11 +52,23 @@ void Preview::update_image()
         cloud.to_array(array, bbox);
       }
 
-      std::vector<uint8_t> img = hmap::colorize_grayscale(array);
+      // std::vector<uint8_t> img = hmap::colorize_grayscale(array).to_img_8bit();
+      // preview_image = QImage(img.data(),
+      //                        this->p_node->p_config->shape_preview.x,
+      //                        this->p_node->p_config->shape_preview.y,
+      //                        QImage::Format_Grayscale8);
+
+      std::vector<uint8_t> img = hmap::colorize(array,
+                                                array.min(),
+                                                array.max(),
+                                                hmap::Cmap::MAGMA,
+                                                false)
+                                     .to_img_8bit();
+
       preview_image = QImage(img.data(),
                              this->p_node->p_config->shape_preview.x,
                              this->p_node->p_config->shape_preview.y,
-                             QImage::Format_Grayscale8);
+                             QImage::Format_RGB888);
 
       this->label->setPixmap(QPixmap::fromImage(preview_image));
     }
@@ -71,7 +83,7 @@ void Preview::update_image()
       {
       case (PreviewType::GRAYSCALE):
       {
-        std::vector<uint8_t> img = hmap::colorize_grayscale(array);
+        std::vector<uint8_t> img = hmap::colorize_grayscale(array).to_img_8bit();
 
         preview_image = QImage(img.data(),
                                this->p_node->p_config->shape_preview.x,
@@ -120,7 +132,7 @@ void Preview::update_image()
       hmap::Array array = *static_cast<hmap::Array *>(p_kdata->get_ref());
       array = array.resample_to_shape(this->p_node->p_config->shape_preview);
 
-      std::vector<uint8_t> img = hmap::colorize_grayscale(array);
+      std::vector<uint8_t> img = hmap::colorize_grayscale(array).to_img_8bit();
       preview_image = QImage(img.data(),
                              this->p_node->p_config->shape_preview.x,
                              this->p_node->p_config->shape_preview.y,
@@ -147,7 +159,7 @@ void Preview::update_image()
         path.to_array(array, bbox);
       }
 
-      // std::vector<uint8_t> img = hmap::colorize_grayscale(array);
+      // std::vector<uint8_t> img = hmap::colorize_grayscale(array).to_img_8bit();
       // preview_image = QImage(img.data(),
       //                        this->p_node->p_config->shape_preview.x,
       //                        this->p_node->p_config->shape_preview.y,
