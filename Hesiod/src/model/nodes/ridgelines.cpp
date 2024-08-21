@@ -106,7 +106,6 @@ void Ridgelines::compute()
 
       for (size_t k = 0; k < p_path->get_npoints() - 1; k++)
       {
-        LOG->trace("%ld", k);
         xs.push_back(p_path->points[k].x);
         ys.push_back(p_path->points[k].y);
         zs.push_back(p_path->points[k].v);
