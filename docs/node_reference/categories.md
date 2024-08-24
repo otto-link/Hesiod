@@ -20,7 +20,7 @@ Node Categories
 |Filter|Recurve|Detrend, Gain, GammaCorrection, GammaCorrectionLocal, Plateau, RecurveKura, RecurveS, Saturate|
 |Filter|Smoothing|Laplace, Median3x3, SharpenCone, SmoothCpulse, SmoothFill, SmoothFillHoles, SmoothFillSmearPeaks|
 |Geometry|Cloud|Cloud, CloudLattice, CloudMerge, CloudRandom, CloudRemapValues, CloudSDF|
-|Geometry|Path|Path, PathBezier, PathBezierRound, PathBspline, PathFractalize, PathMeanderize, PathResample, PathSDF, PathToHeightmap|
+|Geometry|Path|Path, PathBezier, PathBezierRound, PathBspline, PathDecasteljau, PathFractalize, PathMeanderize, PathResample, PathSDF, PathToHeightmap|
 |IO|Files|ExportAsset, ExportCloud, ExportHeightmap, ExportNormalMap, ExportPath, ExportTexture, ImportHeightmap|
 |Mask|Adjust|ScanMask|
 |Mask|Selector|SelectAngle, SelectBlobLog, SelectCavities, SelectElevationSlope, SelectGt, SelectInterval, SelectInwardOutward, SelectPulse, SelectRivers, SelectTransitions|
@@ -35,7 +35,7 @@ Node Categories
 |Operator|Tiling|MakePeriodic, MakePeriodicStitching|
 |Operator|Transform|FillTalus, Translate, Warp, WarpDownslope, Zoom|
 |Primitive|Authoring|CloudToArrayInterp, ReverseMidpoint, Ridgelines, Stamping|
-|Primitive|Coherent Noise|Dendry, Noise, NoiseFbm, NoiseIq, NoiseJordan, NoiseParberry, NoisePingpong, NoiseRidged, NoiseSwiss|
+|Primitive|Coherent Noise|Dendry, DiffusionLimitedAggregation, Noise, NoiseFbm, NoiseIq, NoiseJordan, NoiseParberry, NoisePingpong, NoiseRidged, NoiseSwiss|
 |Primitive|Function|Bump, GaussianPulse, Paraboloid, Rift, Slope, Step, WaveDune, WaveSine, WaveSquare, WaveTriangular|
 |Primitive|Geological|Caldera, Crater|
 |Primitive|Kernel|KernelGabor, KernelPrim|

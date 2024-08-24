@@ -978,6 +978,42 @@ Filter/Recurve
 |Name|Type|Description|
 | :--- | :--- | :--- |
 
+## DiffusionLimitedAggregation
+
+
+DiffusionLimitedAggregation creates branching, fractal-like structures that resemble the rugged, irregular contours of mountain ranges.
+
+![img](../images/nodes/DiffusionLimitedAggregation.png)  
+
+### Category
+
+
+Primitive/Coherent Noise  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|HeightMapData|DiffusionLimitedAggregation heightmap.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|noise_ratio|Float| A parameter that controls the amount of randomness or noise introduced in the talus formation process.|
+|scale|Float|A scaling factor that influences the density of the particles in the DLA pattern.|
+|seed|Random seed|The seed for the random number generator.|
+|seeding_outer_radius_ratio|Float|The ratio between the outer seeding radius and the initial seeding radius. It determines the outer boundary for particle seeding.|
+|seeding_radius|Float|The radius within which initial seeding of particles occurs. This radius defines the area where the first particles are placed.|
+|slope|Float|Slope of the talus added to the DLA pattern.|
+
 ## Dilation
 
 
@@ -2543,7 +2579,7 @@ Primitive/Coherent Noise
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |kw|Wavenumber|Noise wavenumbers (kx, ky) for each directions.|
-|noise_type|Enumeration|Base primitive noise. Available values: OpenSimplex2, OpenSimplex2S, Perlin, Perlin (billow), Perlin (half), Value, Value (cubic), Value (delaunay), Value (linear), Value (thinplate), Worley, Worley (doube), Worley (value).|
+|noise_type|Enumeration|Base primitive noise. Available values: OpenSimplex2, OpenSimplex2S, Perlin, Perlin (billow), Perlin (half), Value, Value (cubic), Value (delaunay), Value (linear), Worley, Worley (doube), Worley (value).|
 |seed|Random seed|Random seed number.|
 
 ## NoiseFbm
@@ -3054,6 +3090,38 @@ Geometry/Path
 PathBspline uses Bspline interpolation to replace sharp angles and straight segments with smooth, flowing curves.
 
 ![img](../images/nodes/PathBspline.png)  
+
+### Category
+
+
+Geometry/Path  
+
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|PathData|Input path.|
+  
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|PathData|Output path.|
+  
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|edge_divisions|Integer|Edge sub-divisions of each edge. After the operation, the path is remeshed based on this new sub-division.|
+
+## PathDecasteljau
+
+
+PathDecasteljau uses Decasteljau interpolation to replace sharp angles and straight segments with smooth, flowing curves.
+
+![img](../images/nodes/PathDecasteljau.png)  
 
 ### Category
 

@@ -46,6 +46,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::Dendry, "Primitive/Coherent Noise");
   HSD_REGISTER_NODE(hesiod::DepressionFilling, "Erosion");
   HSD_REGISTER_NODE(hesiod::Detrend, "Filter/Recurve");
+  HSD_REGISTER_NODE(hesiod::DiffusionLimitedAggregation, "Primitive/Coherent Noise");
   HSD_REGISTER_NODE(hesiod::Dilation, "Operator/Morphology");
   HSD_REGISTER_NODE(hesiod::DistanceTransform, "Operator/Morphology");
   HSD_REGISTER_NODE(hesiod::Erosion, "Operator/Morphology");
