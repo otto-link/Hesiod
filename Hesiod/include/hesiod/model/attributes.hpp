@@ -19,7 +19,8 @@
 #include <QJsonObject>
 
 #include "highmap/algebra.hpp"
-#include "highmap/geometry.hpp"
+#include "highmap/geometry/cloud.hpp"
+#include "highmap/geometry/path.hpp"
 
 #include "hesiod/logger.hpp"
 #include "hesiod/model/model_utils.hpp"

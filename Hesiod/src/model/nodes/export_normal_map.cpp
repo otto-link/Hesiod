@@ -83,9 +83,9 @@ void ExportNormalMap::compute()
     std::string fname = GET_ATTR_FILENAME("fname");
 
     if (GET_ATTR_BOOL("16bit"))
-      hmap::export_normal_map_png_16bit(fname, p_in->to_array());
+      hmap::export_normal_map_png(fname, p_in->to_array(), CV_16U);
     else
-      hmap::export_normal_map_png_8bit(fname, p_in->to_array());
+      hmap::export_normal_map_png(fname, p_in->to_array(), CV_8U);
 
     // not output, do not propagate
     Q_EMIT this->computingFinished();

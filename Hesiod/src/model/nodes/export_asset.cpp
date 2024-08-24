@@ -129,7 +129,7 @@ void ExportAsset::compute()
     if (p_color)
     {
       texture_fname = fname + ".png";
-      p_color->to_png_16bit(texture_fname);
+      p_color->to_png(texture_fname, CV_16U);
     }
 
     hmap::export_asset(fname,

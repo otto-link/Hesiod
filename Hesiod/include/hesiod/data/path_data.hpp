@@ -6,7 +6,7 @@
 #include <QtCore/QString>
 #include <QtNodes/NodeData>
 
-#include "highmap/geometry.hpp"
+#include "highmap/geometry/path.hpp"
 
 namespace hesiod
 {

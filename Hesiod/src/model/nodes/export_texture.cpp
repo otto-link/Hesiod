@@ -79,9 +79,9 @@ void ExportTexture::compute()
     Q_EMIT this->computingStarted();
 
     if (GET_ATTR_BOOL("16 bit"))
-      p_in->to_png_16bit(GET_ATTR_FILENAME("fname"));
+      p_in->to_png(GET_ATTR_FILENAME("fname"), CV_16U);
     else
-      p_in->to_png_8bit(GET_ATTR_FILENAME("fname"));
+      p_in->to_png(GET_ATTR_FILENAME("fname"), CV_8U);
 
     // not output, do not propagate
     Q_EMIT this->computingFinished();

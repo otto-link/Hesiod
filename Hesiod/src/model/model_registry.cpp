@@ -106,6 +106,7 @@ std::shared_ptr<QtNodes::NodeDelegateModelRegistry> register_data_models(
   HSD_REGISTER_NODE(hesiod::PathBezier, "Geometry/Path");
   HSD_REGISTER_NODE(hesiod::PathBezierRound, "Geometry/Path");
   HSD_REGISTER_NODE(hesiod::PathBspline, "Geometry/Path");
+  HSD_REGISTER_NODE(hesiod::PathDecasteljau, "Geometry/Path");
   HSD_REGISTER_NODE(hesiod::PathFractalize, "Geometry/Path");
   HSD_REGISTER_NODE(hesiod::PathMeanderize, "Geometry/Path");
   HSD_REGISTER_NODE(hesiod::PathResample, "Geometry/Path");
