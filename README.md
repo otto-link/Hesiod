@@ -26,9 +26,7 @@ Available here: https://sourceforge.net/projects/hesiod
 
 Use `PowerShell` to clone the repository (because Visual Studio won't clone the submodules) using `git` command lines:
 ``` bash
-git clone git@github.com:otto-link/Hesiod.git
-cd Hesiod
-git submodule update --init --recursive
+git clone --recurse-submodules git@github.com:otto-link/Hesiod.git
 ```
 
 To get the submodules, you will need a GitHub account with its SSH key configured.
