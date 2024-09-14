@@ -16,46 +16,10 @@
 #pragma once
 #include <memory>
 
+#include "highmap/algebra.hpp"
 #include "nlohmann/json.hpp"
 
-#include "highmap/geometry/cloud.hpp"
-#include "highmap/geometry/path.hpp"
-
 #include "hesiod/logger.hpp"
-
-// clang-format off
-#define NEW_ATTR_BOOL(...) std::make_unique<hesiod::BoolAttribute>(__VA_ARGS__)
-#define NEW_ATTR_COLOR(...) std::make_unique<hesiod::ColorAttribute>(__VA_ARGS__)
-#define NEW_ATTR_COLORGRADIENT(...) std::make_unique<hesiod::ColorGradientAttribute>(__VA_ARGS__)
-#define NEW_ATTR_FILENAME(...) std::make_unique<hesiod::FilenameAttribute>(__VA_ARGS__)
-#define NEW_ATTR_FLOAT(...) std::make_unique<hesiod::FloatAttribute>(__VA_ARGS__)
-#define NEW_ATTR_INT(...) std::make_unique<hesiod::IntAttribute>(__VA_ARGS__)
-#define NEW_ATTR_MAPENUM(...) std::make_unique<hesiod::MapEnumAttribute>(__VA_ARGS__)
-#define NEW_ATTR_MATRIX(...) std::make_unique<hesiod::MatrixAttribute>(__VA_ARGS__)
-#define NEW_ATTR_RANGE(...) std::make_unique<hesiod::RangeAttribute>(__VA_ARGS__)
-#define NEW_ATTR_SEED(...) std::make_unique<hesiod::SeedAttribute>(__VA_ARGS__)
-#define NEW_ATTR_SHAPE(...) std::make_unique<hesiod::ShapeAttribute>(__VA_ARGS__)
-#define NEW_ATTR_STRING(...) std::make_unique<hesiod::StringAttribute>(__VA_ARGS__)
-#define NEW_ATTR_VECFLOAT(...) std::make_unique<hesiod::VecFloatAttribute>(__VA_ARGS__)
-#define NEW_ATTR_VECINT(...) std::make_unique<hesiod::VecIntAttribute>(__VA_ARGS__)
-#define NEW_ATTR_WAVENB(...) std::make_unique<hesiod::WaveNbAttribute>(__VA_ARGS__)
-
-#define GET_ATTR_BOOL(s) this->attr.at(s)->get_ref<BoolAttribute>()->get()
-#define GET_ATTR_COLOR(s) this->attr.at(s)->get_ref<ColorAttribute>()->get()
-#define GET_ATTR_COLORGRADIENT(s) this->attr.at(s)->get_ref<ColorGradientAttribute>()->get()
-#define GET_ATTR_FILENAME(s) this->attr.at(s)->get_ref<FilenameAttribute>()->get()
-#define GET_ATTR_FLOAT(s) this->attr.at(s)->get_ref<FloatAttribute>()->get()
-#define GET_ATTR_INT(s) this->attr.at(s)->get_ref<IntAttribute>()->get()
-#define GET_ATTR_MAPENUM(s) this->attr.at(s)->get_ref<MapEnumAttribute>()->get()
-#define GET_ATTR_MATRIX(s) this->attr.at(s)->get_ref<MatrixAttribute>()->get()
-#define GET_ATTR_RANGE(s) this->attr.at(s)->get_ref<RangeAttribute>()->get()
-#define GET_ATTR_SEED(s) this->attr.at(s)->get_ref<SeedAttribute>()->get()
-#define GET_ATTR_SHAPE(s) this->attr.at(s)->get_ref<ShapeAttribute>()->get()
-#define GET_ATTR_STRING(s) this->attr.at(s)->get_ref<StringAttribute>()->get()
-#define GET_ATTR_VECFLOAT(s) this->attr.at(s)->get_ref<VecFloatAttribute>()->get()
-#define GET_ATTR_VECINT(s) this->attr.at(s)->get_ref<VecIntAttribute>()->get()
-#define GET_ATTR_WAVENB(s) this->attr.at(s)->get_ref<WaveNbAttribute>()->get()
-// clang-format on
 
 #define HSD_DEFAULT_KW 2.f
 #define HSD_DEFAULT_SEED 1
@@ -105,6 +69,26 @@ static std::map<hesiod::AttributeType, std::string> attribute_type_map = {
     {hesiod::AttributeType::VEC_INT, "Integer vector"},
     {hesiod::AttributeType::WAVE_NB, "Wavenumber"}};
 
+/**
+ * @brief Creates a unique pointer to an attribute of the specified type.
+ *
+ * This function is a template that can create any type of attribute by forwarding
+ * the provided arguments to the constructor of the attribute.
+ *
+ * @tparam AttributeType The type of the attribute to create. Must be a class that
+ * inherits from an attribute base class.
+ * @tparam Args Variadic template parameter that allows passing any number of arguments
+ * to the constructor of the attribute.
+ *
+ * @param args The arguments to forward to the constructor of the attribute.
+ * @return std::unique_ptr<AttributeType> A unique pointer to the newly created attribute.
+ */
+template <typename AttributeType, typename... Args>
+std::unique_ptr<AttributeType> create_attr(Args &&...args)
+{
+  return std::make_unique<AttributeType>(std::forward<Args>(args)...);
+}
+
 class Attribute
 {
 public:
@@ -119,16 +103,16 @@ public:
       return ptr;
     else
     {
-      SPDLOG->critical("in Attribute, trying to get an attribute type which is not "
-                       "compatible with the current instance. Get type is: [{}]",
-                       typeid(T).name());
+      HLOG->critical("in Attribute, trying to get an attribute type which is not "
+                     "compatible with the current instance. Get type is: [{}]",
+                     typeid(T).name());
       throw std::runtime_error("wrong type");
     }
   }
 
-  virtual nlohmann::json json_to() const = 0;
-
   virtual void json_from(nlohmann::json const &) = 0;
+
+  virtual nlohmann::json json_to() const = 0;
 };
 
 // --- Derived
@@ -141,9 +125,8 @@ public:
   bool          get();
   AttributeType get_type() { return AttributeType::BOOL; }
 
+  void           json_from(nlohmann::json const &json) override;
   nlohmann::json json_to() const override;
-
-  void json_from(nlohmann::json const &json) override;
 
   bool        value = true;
   std::string label = "";
@@ -158,9 +141,9 @@ public:
 
   AttributeType get_type() { return AttributeType::COLOR; }
 
-  nlohmann::json json_to() const override;
-
   void json_from(nlohmann::json const &json) override;
+
+  nlohmann::json json_to() const override;
 
   std::vector<float> value = {1.f, 1.f, 1.f, 1.f};
 };
@@ -172,10 +155,9 @@ public:
   ColorGradientAttribute(std::vector<std::vector<float>> value);
   std::vector<std::vector<float>> get();
   AttributeType                   get_type() { return AttributeType::COLOR_GRADIENT; }
+  void                            json_from(nlohmann::json const &json) override;
 
   nlohmann::json json_to() const override;
-
-  void json_from(nlohmann::json const &json) override;
 
   std::vector<std::vector<float>> value = {};
 };
@@ -185,12 +167,10 @@ class FilenameAttribute : public Attribute
 public:
   FilenameAttribute() = default;
   FilenameAttribute(std::string value, std::string filter = "", std::string label = "");
-  std::string   get();
-  AttributeType get_type() { return AttributeType::FILENAME; }
-
+  std::string    get();
+  AttributeType  get_type() { return AttributeType::FILENAME; }
+  void           json_from(nlohmann::json const &json) override;
   nlohmann::json json_to() const override;
-
-  void json_from(nlohmann::json const &json) override;
 
   std::string value = "";
   // filter eg: "Images (*.png *.xpm *.jpg);;Text files (*.txt);;XML files (*.xml)"
@@ -203,13 +183,11 @@ class FloatAttribute : public Attribute
 public:
   FloatAttribute() = default;
   FloatAttribute(float value, float vmin, float vmax, std::string fmt = "%.2f");
-  float         get();
-  void          set(float new_value);
-  AttributeType get_type() { return AttributeType::FLOAT; }
-
+  float          get();
+  void           set(float new_value);
+  AttributeType  get_type() { return AttributeType::FLOAT; }
+  void           json_from(nlohmann::json const &json) override;
   nlohmann::json json_to() const override;
-
-  void json_from(nlohmann::json const &json) override;
 
   float       value = 1.f;
   float       vmin = 0.f;
@@ -265,13 +243,6 @@ public:
   AttributeType get_type() { return AttributeType::INT; }
 
   /**
-   * @brief Serializes the attribute to a JSON object.
-   *
-   * @return A JSON object representing the attribute.
-   */
-  nlohmann::json json_to() const override;
-
-  /**
    * @brief Deserializes the attribute from a JSON object.
    *
    * Updates the value, vmin, and vmax of the attribute based on the JSON input.
@@ -279,6 +250,13 @@ public:
    * @param json The JSON object containing the attribute data.
    */
   void json_from(nlohmann::json const &json) override;
+
+  /**
+   * @brief Serializes the attribute to a JSON object.
+   *
+   * @return A JSON object representing the attribute.
+   */
+  nlohmann::json json_to() const override;
 
   /// The current integer value of the attribute.
   int value = 1;
@@ -301,9 +279,9 @@ public:
   void                       set(std::string new_choice);
   AttributeType              get_type() { return AttributeType::MAP_ENUM; }
 
-  nlohmann::json json_to() const override;
-
   void json_from(nlohmann::json const &json) override;
+
+  nlohmann::json json_to() const override;
 
   std::map<std::string, int> value = {};
   std::string                choice = "";
@@ -322,10 +300,8 @@ public:
   RangeAttribute(std::string fmt);
   hmap::Vec2<float> get();
   AttributeType     get_type() { return AttributeType::RANGE; }
-
-  nlohmann::json json_to() const override;
-
-  void json_from(nlohmann::json const &json) override;
+  void              json_from(nlohmann::json const &json) override;
+  nlohmann::json    json_to() const override;
 
   hmap::Vec2<float> value = {0.f, 1.f};
   float             vmin = -0.5f;
@@ -338,12 +314,10 @@ class SeedAttribute : public Attribute
 public:
   SeedAttribute() = default;
   SeedAttribute(uint value);
-  uint          get();
-  AttributeType get_type() { return AttributeType::SEED; }
-
+  uint           get();
+  AttributeType  get_type() { return AttributeType::SEED; }
+  void           json_from(nlohmann::json const &json) override;
   nlohmann::json json_to() const override;
-
-  void json_from(nlohmann::json const &json) override;
 
   uint value = HSD_DEFAULT_SEED;
 };
@@ -353,12 +327,10 @@ class StringAttribute : public Attribute
 public:
   StringAttribute() = default;
   StringAttribute(std::string value);
-  std::string   get();
-  AttributeType get_type() { return AttributeType::STRING; }
-
+  std::string    get();
+  AttributeType  get_type() { return AttributeType::STRING; }
+  void           json_from(nlohmann::json const &json) override;
   nlohmann::json json_to() const override;
-
-  void json_from(nlohmann::json const &json) override;
 
   std::string value = "";
 };
@@ -373,10 +345,8 @@ public:
                     std::string        fmt = "%.2f");
   std::vector<float> get();
   AttributeType      get_type() { return AttributeType::VEC_FLOAT; }
-
-  nlohmann::json json_to() const override;
-
-  void json_from(nlohmann::json const &json) override;
+  void               json_from(nlohmann::json const &json) override;
+  nlohmann::json     json_to() const override;
 
   std::vector<float> value = {};
   float              vmin = 0.1f;
@@ -392,10 +362,8 @@ public:
   VecIntAttribute(std::vector<int> value, int vmin, int vmax);
   std::vector<int> get();
   AttributeType    get_type() { return AttributeType::VEC_INT; }
-
-  nlohmann::json json_to() const override;
-
-  void json_from(nlohmann::json const &json) override;
+  void             json_from(nlohmann::json const &json) override;
+  nlohmann::json   json_to() const override;
 
   std::vector<int> value = {};
   int              vmin = 0;
@@ -413,10 +381,8 @@ public:
                   std::string       fmt = "%.1f");
   hmap::Vec2<float> get();
   AttributeType     get_type() { return AttributeType::WAVE_NB; }
-
-  nlohmann::json json_to() const override;
-
-  void json_from(nlohmann::json const &json) override;
+  void              json_from(nlohmann::json const &json) override;
+  nlohmann::json    json_to() const override;
 
   hmap::Vec2<float> value = {HSD_DEFAULT_KW, HSD_DEFAULT_KW};
 
@@ -426,9 +392,5 @@ public:
   float       vmax = 64.f;
   std::string fmt = "%.1f";
 };
-
-// std::string get_name_from_type(AttributeType type);
-//
-// AttributeType get_type_from_name(std::string name);
 
 } // namespace hesiod

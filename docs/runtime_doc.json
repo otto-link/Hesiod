@@ -1,0 +1,14 @@
+{
+  "Remap": {
+    "description": "The Remap operator is used to adjust the elevation values across the entire dataset, effectively changing the range of elevation data to match a desired output scale or to normalize the data.",
+    "inputs": {
+      "input": "Input heightmap."
+    },
+    "outputs": {
+      "output": "Remapped heightmap."
+    },
+    "attributes": {
+      "remap": "Target range: define the new minimum and maximum values to remap the elevation values to."
+    }
+  }
+}

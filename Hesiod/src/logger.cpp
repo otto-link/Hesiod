@@ -13,8 +13,8 @@ std::shared_ptr<spdlog::logger> &Logger::get_logger()
 {
   if (!instance)
   {
-    instance = spdlog::stdout_color_mt("console");
-    instance->set_pattern("[hsd--] [%H:%M:%S] [%^---%L---%$] %v");
+    instance = spdlog::stdout_color_mt("console_hesiod");
+    instance->set_pattern("[hesiod] [%H:%M:%S] [%^---%L---%$] %v");
     instance->set_level(spdlog::level::trace);
   }
   return instance;

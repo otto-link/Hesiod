@@ -3,7 +3,7 @@
  * this software. */
 #include <vector>
 
-#include "hesiod/model/attributes_highmap.hpp"
+#include "hesiod/model/attributes/attributes_highmap.hpp"
 
 namespace hesiod
 {

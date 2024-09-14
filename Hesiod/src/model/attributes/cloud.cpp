@@ -2,7 +2,7 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 
-#include "hesiod/model/attributes_highmap.hpp"
+#include "hesiod/model/attributes/attributes_highmap.hpp"
 
 namespace hesiod
 {

@@ -3,7 +3,7 @@
  * this software. */
 
 #include "hesiod/logger.hpp"
-#include "hesiod/model/attributes.hpp"
+#include "hesiod/model/attributes/attributes.hpp"
 
 namespace hesiod
 {
@@ -19,7 +19,7 @@ MapEnumAttribute::MapEnumAttribute(std::map<std::string, int> value, std::string
 {
   if (!this->value.contains(this->choice))
   {
-    SPDLOG->critical("initial choice not in the available keys ({})", this->choice);
+    HLOG->critical("initial choice not in the available keys ({})", this->choice);
     throw std::runtime_error("initial choice not in the available keys");
   }
 }
