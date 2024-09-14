@@ -3,15 +3,6 @@
  * this software. */
 #include "hesiod/logger.hpp"
 
-// #define __FILE_BASENAME__  strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 :
-// __FILE__
-
-// // #define HSD_LOG "[hsd--] [" + std::string(__FILE_BASENAME__) + " " +
-// std::string(__FUNCTION__) + ":" + std::to_string(__LINE__) + "] " #define HSD_LOG
-// std::string("[hsd--] ")
-
-// // __FUNCTION__, __LINE__
-
 namespace hesiod
 {
 

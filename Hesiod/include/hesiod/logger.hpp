@@ -7,7 +7,7 @@
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/spdlog.h>
 
-#define LOG hesiod::Logger::get_logger()
+#define SPDLOG hesiod::Logger::get_logger()
 
 namespace hesiod
 {

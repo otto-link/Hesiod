@@ -31,7 +31,8 @@ std::string get_attribute_name_from_type(AttributeType type)
 {
   if (attribute_type_to_name.contains(type) == false)
   {
-    LOG->critical("encountered unknown type for attribute ({})", static_cast<int>(type));
+    SPDLOG->critical("encountered unknown type for attribute ({})",
+                     static_cast<int>(type));
     throw std::runtime_error("attribute encountered unknown type");
   }
 

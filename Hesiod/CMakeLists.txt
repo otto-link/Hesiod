@@ -30,8 +30,8 @@ target_link_libraries(
   ${PROJECT_NAME}
   PRIVATE args
           spdlog::spdlog
+          nlohmann_json::nlohmann_json
           highmap
-          Qt5::Core
-          Qt5::OpenGL
-          Qt5::Widgets
-          QtNodes::QtNodes)
+          Qt6::Core
+          Qt6::OpenGL
+          Qt6::Widgets)

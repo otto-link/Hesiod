@@ -12,22 +12,19 @@
  * @copyright Copyright (c) 2023
  *
  */
+
 #pragma once
 #include <memory>
-#include <stdexcept>
 
-#include <QJsonObject>
+#include "nlohmann/json.hpp"
 
-#include "highmap/algebra.hpp"
 #include "highmap/geometry/cloud.hpp"
 #include "highmap/geometry/path.hpp"
 
 #include "hesiod/logger.hpp"
-#include "hesiod/model/model_utils.hpp"
 
 // clang-format off
 #define NEW_ATTR_BOOL(...) std::make_unique<hesiod::BoolAttribute>(__VA_ARGS__)
-#define NEW_ATTR_CLOUD(...) std::make_unique<hesiod::CloudAttribute>(__VA_ARGS__)
 #define NEW_ATTR_COLOR(...) std::make_unique<hesiod::ColorAttribute>(__VA_ARGS__)
 #define NEW_ATTR_COLORGRADIENT(...) std::make_unique<hesiod::ColorGradientAttribute>(__VA_ARGS__)
 #define NEW_ATTR_FILENAME(...) std::make_unique<hesiod::FilenameAttribute>(__VA_ARGS__)
@@ -35,7 +32,6 @@
 #define NEW_ATTR_INT(...) std::make_unique<hesiod::IntAttribute>(__VA_ARGS__)
 #define NEW_ATTR_MAPENUM(...) std::make_unique<hesiod::MapEnumAttribute>(__VA_ARGS__)
 #define NEW_ATTR_MATRIX(...) std::make_unique<hesiod::MatrixAttribute>(__VA_ARGS__)
-#define NEW_ATTR_PATH(...) std::make_unique<hesiod::PathAttribute>(__VA_ARGS__)
 #define NEW_ATTR_RANGE(...) std::make_unique<hesiod::RangeAttribute>(__VA_ARGS__)
 #define NEW_ATTR_SEED(...) std::make_unique<hesiod::SeedAttribute>(__VA_ARGS__)
 #define NEW_ATTR_SHAPE(...) std::make_unique<hesiod::ShapeAttribute>(__VA_ARGS__)
@@ -45,7 +41,6 @@
 #define NEW_ATTR_WAVENB(...) std::make_unique<hesiod::WaveNbAttribute>(__VA_ARGS__)
 
 #define GET_ATTR_BOOL(s) this->attr.at(s)->get_ref<BoolAttribute>()->get()
-#define GET_ATTR_CLOUD(s) this->attr.at(s)->get_ref<CloudAttribute>()->get()
 #define GET_ATTR_COLOR(s) this->attr.at(s)->get_ref<ColorAttribute>()->get()
 #define GET_ATTR_COLORGRADIENT(s) this->attr.at(s)->get_ref<ColorGradientAttribute>()->get()
 #define GET_ATTR_FILENAME(s) this->attr.at(s)->get_ref<FilenameAttribute>()->get()
@@ -53,7 +48,6 @@
 #define GET_ATTR_INT(s) this->attr.at(s)->get_ref<IntAttribute>()->get()
 #define GET_ATTR_MAPENUM(s) this->attr.at(s)->get_ref<MapEnumAttribute>()->get()
 #define GET_ATTR_MATRIX(s) this->attr.at(s)->get_ref<MatrixAttribute>()->get()
-#define GET_ATTR_PATH(s) this->attr.at(s)->get_ref<PathAttribute>()->get()
 #define GET_ATTR_RANGE(s) this->attr.at(s)->get_ref<RangeAttribute>()->get()
 #define GET_ATTR_SEED(s) this->attr.at(s)->get_ref<SeedAttribute>()->get()
 #define GET_ATTR_SHAPE(s) this->attr.at(s)->get_ref<ShapeAttribute>()->get()
@@ -125,34 +119,21 @@ public:
       return ptr;
     else
     {
-      LOG->critical("in Attribute, trying to get an attribute type which is not "
-                    "compatible with the current instance. Get type is: [{}]",
-                    typeid(T).name());
+      SPDLOG->critical("in Attribute, trying to get an attribute type which is not "
+                       "compatible with the current instance. Get type is: [{}]",
+                       typeid(T).name());
       throw std::runtime_error("wrong type");
     }
   }
 
-  virtual void log_debug()
-  {
-    // ("address: %s", std::to_string((unsigned long long)(void
-    // **)this).c_str());
-  }
+  virtual nlohmann::json json_to() const = 0;
 
-  virtual QJsonObject save() const
-  {
-    LOG->error("TODO TODO TODO TODO TODO");
-    return QJsonObject();
-  }
-
-  virtual void load(QJsonObject const & /* p */)
-  {
-    LOG->error("TODO TODO TODO TODO TODO");
-  }
+  virtual void json_from(nlohmann::json const &) = 0;
 };
 
 // --- Derived
 
-class BoolAttribute : public Attribute // OK JSON GUI
+class BoolAttribute : public Attribute
 {
 public:
   BoolAttribute() = default;
@@ -160,64 +141,15 @@ public:
   bool          get();
   AttributeType get_type() { return AttributeType::BOOL; }
 
-  QJsonObject save() const override
-  {
-    QJsonObject model_json;
-    model_json["value"] = QString(this->value ? "true" : "false");
-    return model_json;
-  }
+  nlohmann::json json_to() const override;
 
-  void load(QJsonObject const &p) override
-  {
-    bool ret = true;
-    ret &= convert_qjsonvalue_to_bool(p["value"], this->value);
-
-    if (!ret)
-      LOG->error("serialization error in with BoolAttribute");
-  }
+  void json_from(nlohmann::json const &json) override;
 
   bool        value = true;
   std::string label = "";
 };
 
-class CloudAttribute : public Attribute // OK JSON
-{
-public:
-  CloudAttribute() = default;
-
-  hmap::Cloud get();
-
-  AttributeType get_type() { return AttributeType::CLOUD; }
-
-  QJsonObject save() const override
-  {
-    QJsonObject model_json;
-    model_json["x"] = std_vector_float_to_qjsonarray(this->value.get_x());
-    model_json["y"] = std_vector_float_to_qjsonarray(this->value.get_y());
-    model_json["v"] = std_vector_float_to_qjsonarray(this->value.get_values());
-
-    return model_json;
-  }
-
-  void load(QJsonObject const &p) override
-  {
-    bool ret = true;
-
-    std::vector<float> x, y, v;
-
-    ret &= convert_qjsonvalue_to_vector_float(p["x"], x);
-    ret &= convert_qjsonvalue_to_vector_float(p["y"], y);
-    ret &= convert_qjsonvalue_to_vector_float(p["v"], v);
-    if (!ret)
-      LOG->error("serialization error in with CloudAttribute");
-
-    this->value = hmap::Cloud(x, y, v);
-  }
-
-  hmap::Cloud value;
-};
-
-class ColorAttribute : public Attribute // OK JSON GUI
+class ColorAttribute : public Attribute
 {
 public:
   ColorAttribute() = default;
@@ -226,27 +158,14 @@ public:
 
   AttributeType get_type() { return AttributeType::COLOR; }
 
-  QJsonObject save() const override
-  {
-    QJsonObject model_json;
-    model_json["value"] = std_vector_float_to_qjsonarray(this->value);
+  nlohmann::json json_to() const override;
 
-    return model_json;
-  }
-
-  void load(QJsonObject const &p) override
-  {
-    bool ret = true;
-    ret &= convert_qjsonvalue_to_vector_float(p["value"], this->value);
-
-    if (!ret)
-      LOG->error("serialization error in with ColorAttribute");
-  }
+  void json_from(nlohmann::json const &json) override;
 
   std::vector<float> value = {1.f, 1.f, 1.f, 1.f};
 };
 
-class ColorGradientAttribute : public Attribute //
+class ColorGradientAttribute : public Attribute
 {
 public:
   ColorGradientAttribute();
@@ -254,34 +173,14 @@ public:
   std::vector<std::vector<float>> get();
   AttributeType                   get_type() { return AttributeType::COLOR_GRADIENT; }
 
-  QJsonObject save() const override
-  {
-    QJsonObject model_json;
+  nlohmann::json json_to() const override;
 
-    int stride = 0;
-    if (this->value.size() > 0)
-      stride = (int)this->value[0].size();
-
-    model_json["stride"] = QString::number(stride);
-    model_json["value"] = std_vector_vector_float_to_qjsonarray(this->value);
-    return model_json;
-  }
-
-  void load(QJsonObject const &p) override
-  {
-    bool ret = true;
-    int  stride;
-    ret &= convert_qjsonvalue_to_int(p["stride"], stride);
-    ret &= convert_qjsonvalue_to_vector_vector_float(p["value"], this->value, stride);
-
-    if (!ret)
-      LOG->error("serialization error in with ColorGradientAttribute");
-  }
+  void json_from(nlohmann::json const &json) override;
 
   std::vector<std::vector<float>> value = {};
 };
 
-class FilenameAttribute : public Attribute // OK JSON GUI
+class FilenameAttribute : public Attribute
 {
 public:
   FilenameAttribute() = default;
@@ -289,25 +188,9 @@ public:
   std::string   get();
   AttributeType get_type() { return AttributeType::FILENAME; }
 
-  QJsonObject save() const override
-  {
-    QJsonObject model_json;
-    model_json["value"] = QString::fromStdString(this->value);
-    model_json["filter"] = QString::fromStdString(this->filter);
-    model_json["label"] = QString::fromStdString(this->label);
-    return model_json;
-  }
+  nlohmann::json json_to() const override;
 
-  void load(QJsonObject const &p) override
-  {
-    bool ret = true;
-    ret &= convert_qjsonvalue_to_string(p["value"], this->value);
-    ret &= convert_qjsonvalue_to_string(p["filter"], this->filter);
-    ret &= convert_qjsonvalue_to_string(p["label"], this->label);
-
-    if (!ret)
-      LOG->error("serialization error in with FilenameAttribute");
-  }
+  void json_from(nlohmann::json const &json) override;
 
   std::string value = "";
   // filter eg: "Images (*.png *.xpm *.jpg);;Text files (*.txt);;XML files (*.xml)"
@@ -315,7 +198,7 @@ public:
   std::string label = "";
 };
 
-class FloatAttribute : public Attribute // OK JSON GUI
+class FloatAttribute : public Attribute
 {
 public:
   FloatAttribute() = default;
@@ -324,27 +207,9 @@ public:
   void          set(float new_value);
   AttributeType get_type() { return AttributeType::FLOAT; }
 
-  QJsonObject save() const override
-  {
-    QJsonObject model_json;
-    model_json["value"] = QString::number(this->value);
-    model_json["vmin"] = QString::number(this->vmin);
-    model_json["vmax"] = QString::number(this->vmax);
-    model_json["fmt"] = QString::fromStdString(this->fmt);
-    return model_json;
-  }
+  nlohmann::json json_to() const override;
 
-  void load(QJsonObject const &p) override
-  {
-    bool ret = true;
-    ret &= convert_qjsonvalue_to_float(p["value"], this->value);
-    ret &= convert_qjsonvalue_to_float(p["vmin"], this->vmin);
-    ret &= convert_qjsonvalue_to_float(p["vmax"], this->vmax);
-    ret &= convert_qjsonvalue_to_string(p["fmt"], this->fmt);
-
-    if (!ret)
-      LOG->error("serialization error in with FloatAttribute");
-  }
+  void json_from(nlohmann::json const &json) override;
 
   float       value = 1.f;
   float       vmin = 0.f;
@@ -353,39 +218,79 @@ public:
   bool        activate = true;
 };
 
-class IntAttribute : public Attribute // OK JSON GUI
+/**
+ * @class IntAttribute
+ * @brief A class that represents an integer attribute with minimum and maximum bounds.
+ *
+ * IntAttribute is derived from the Attribute class and represents an integer attribute
+ * that can be serialized to and from JSON. It contains a value and enforces minimum
+ * (vmin) and maximum (vmax) constraints.
+ */
+class IntAttribute : public Attribute
 {
 public:
+  /**
+   * @brief Default constructor for IntAttribute.
+   *
+   * Initializes the attribute with default values (value = 1, vmin = 0, vmax = 1).
+   */
   IntAttribute() = default;
+
+  /**
+   * @brief Parameterized constructor for IntAttribute.
+   *
+   * Initializes the attribute with a specific value and its minimum and maximum bounds.
+   *
+   * @param value The initial value of the attribute.
+   * @param vmin The minimum allowable value.
+   * @param vmax The maximum allowable value.
+   */
   IntAttribute(int value, int vmin, int vmax);
-  int           get();
+
+  /**
+   * @brief Gets the current value of the attribute.
+   *
+   * @return The current integer value of the attribute.
+   */
+  int get();
+
+  /**
+   * @brief Returns the type of the attribute.
+   *
+   * Overrides the base class method to return AttributeType::INT,
+   * indicating that this is an integer attribute.
+   *
+   * @return The attribute type (AttributeType::INT).
+   */
   AttributeType get_type() { return AttributeType::INT; }
 
-  QJsonObject save() const override
-  {
-    QJsonObject model_json;
-    model_json["value"] = QString::number(this->value);
-    model_json["vmin"] = QString::number(this->vmin);
-    model_json["vmax"] = QString::number(this->vmax);
-    return model_json;
-  }
+  /**
+   * @brief Serializes the attribute to a JSON object.
+   *
+   * @return A JSON object representing the attribute.
+   */
+  nlohmann::json json_to() const override;
 
-  void load(QJsonObject const &p) override
-  {
-    bool ret = true;
-    ret &= convert_qjsonvalue_to_int(p["value"], this->value);
-    ret &= convert_qjsonvalue_to_int(p["vmin"], this->vmin);
-    ret &= convert_qjsonvalue_to_int(p["vmax"], this->vmax);
+  /**
+   * @brief Deserializes the attribute from a JSON object.
+   *
+   * Updates the value, vmin, and vmax of the attribute based on the JSON input.
+   *
+   * @param json The JSON object containing the attribute data.
+   */
+  void json_from(nlohmann::json const &json) override;
 
-    if (!ret)
-      LOG->error("serialization error in with IntAttribute");
-  }
+  /// The current integer value of the attribute.
   int value = 1;
+
+  /// The minimum allowable value for the attribute.
   int vmin = 0;
+
+  /// The maximum allowable value for the attribute.
   int vmax = 1;
 };
 
-class MapEnumAttribute : public Attribute // OK JSON GUI
+class MapEnumAttribute : public Attribute
 {
 public:
   MapEnumAttribute() = default;
@@ -396,75 +301,16 @@ public:
   void                       set(std::string new_choice);
   AttributeType              get_type() { return AttributeType::MAP_ENUM; }
 
-  QJsonObject save() const override
-  {
-    QJsonObject model_json;
-    model_json["choice"] = QString::fromStdString(this->choice);
-    return model_json;
-  }
+  nlohmann::json json_to() const override;
 
-  void load(QJsonObject const &p) override
-  {
-    bool ret = true;
-    ret &= convert_qjsonvalue_to_string(p["choice"], this->choice);
-
-    if (!ret)
-      LOG->error("serialization error with MapEnumAttribute");
-  }
+  void json_from(nlohmann::json const &json) override;
 
   std::map<std::string, int> value = {};
   std::string                choice = "";
   bool                       is_colormap_enum = false;
 };
 
-class MatrixAttribute : public Attribute // --------- TODO
-{
-public:
-  MatrixAttribute();
-  std::vector<std::vector<float>> get();
-  AttributeType                   get_type() { return AttributeType::MATRIX; }
-
-  std::vector<std::vector<float>> value = {{0.f, 0.f, 0.f},
-                                           {0.f, 0.f, 0.f},
-                                           {0.f, 0.f, 0.f}};
-};
-
-class PathAttribute : public Attribute // OK JSON GUI
-{
-public:
-  PathAttribute() = default;
-  hmap::Path    get();
-  AttributeType get_type() { return AttributeType::PATH; }
-
-  QJsonObject save() const override
-  {
-    QJsonObject model_json;
-    model_json["x"] = std_vector_float_to_qjsonarray(this->value.get_x());
-    model_json["y"] = std_vector_float_to_qjsonarray(this->value.get_y());
-    model_json["v"] = std_vector_float_to_qjsonarray(this->value.get_values());
-
-    return model_json;
-  }
-
-  void load(QJsonObject const &p) override
-  {
-    bool ret = true;
-
-    std::vector<float> x, y, v;
-
-    ret &= convert_qjsonvalue_to_vector_float(p["x"], x);
-    ret &= convert_qjsonvalue_to_vector_float(p["y"], y);
-    ret &= convert_qjsonvalue_to_vector_float(p["v"], v);
-    if (!ret)
-      LOG->error("serialization error in with PathAttribute");
-
-    this->value = hmap::Path(x, y, v);
-  }
-
-  hmap::Path value;
-};
-
-class RangeAttribute : public Attribute // OK JSON GUI
+class RangeAttribute : public Attribute
 {
 public:
   RangeAttribute() = default;
@@ -477,29 +323,9 @@ public:
   hmap::Vec2<float> get();
   AttributeType     get_type() { return AttributeType::RANGE; }
 
-  QJsonObject save() const override
-  {
-    QJsonObject model_json;
-    model_json["value.x"] = QString::number(this->value.x);
-    model_json["value.y"] = QString::number(this->value.y);
-    model_json["vmin"] = QString::number(this->vmin);
-    model_json["vmax"] = QString::number(this->vmax);
-    model_json["fmt"] = QString::fromStdString(fmt);
-    return model_json;
-  }
+  nlohmann::json json_to() const override;
 
-  void load(QJsonObject const &p) override
-  {
-    bool ret = true;
-    ret &= convert_qjsonvalue_to_float(p["value.x"], this->value.x);
-    ret &= convert_qjsonvalue_to_float(p["value.y"], this->value.y);
-    ret &= convert_qjsonvalue_to_float(p["vmin"], this->vmin);
-    ret &= convert_qjsonvalue_to_float(p["vmax"], this->vmax);
-    ret &= convert_qjsonvalue_to_string(p["fmt"], this->fmt);
-
-    if (!ret)
-      LOG->error("serialization error in with RangeAttribute");
-  }
+  void json_from(nlohmann::json const &json) override;
 
   hmap::Vec2<float> value = {0.f, 1.f};
   float             vmin = -0.5f;
@@ -507,7 +333,7 @@ public:
   std::string       fmt = "%.2f";
 };
 
-class SeedAttribute : public Attribute // OK JSON GUI
+class SeedAttribute : public Attribute
 {
 public:
   SeedAttribute() = default;
@@ -515,44 +341,14 @@ public:
   uint          get();
   AttributeType get_type() { return AttributeType::SEED; }
 
-  void log_debug() override
-  {
-    Attribute::log_debug();
-    LOG->info("seed / value: {}", this->value);
-  }
+  nlohmann::json json_to() const override;
 
-  QJsonObject save() const override
-  {
-    QJsonObject model_json;
-    model_json["value"] = QString::number(this->value);
-    return model_json;
-  }
-
-  void load(QJsonObject const &p) override
-  {
-    bool ret = true;
-    ret &= convert_qjsonvalue_to_uint(p["value"], this->value);
-
-    if (!ret)
-      LOG->error("serialization error with SeedAttribute");
-  }
+  void json_from(nlohmann::json const &json) override;
 
   uint value = HSD_DEFAULT_SEED;
 };
 
-class ShapeAttribute : public Attribute
-{
-public:
-  ShapeAttribute();
-  hmap::Vec2<int> get();
-  void            set_value_max(hmap::Vec2<int> new_value_max);
-  AttributeType   get_type() { return AttributeType::SHAPE; }
-
-  hmap::Vec2<int> value = {128, 128};
-  hmap::Vec2<int> value_max = {0, 0};
-};
-
-class StringAttribute : public Attribute // OK JSON GUI
+class StringAttribute : public Attribute
 {
 public:
   StringAttribute() = default;
@@ -560,26 +356,14 @@ public:
   std::string   get();
   AttributeType get_type() { return AttributeType::STRING; }
 
-  QJsonObject save() const override
-  {
-    QJsonObject model_json;
-    model_json["value"] = QString::fromStdString(this->value);
-    return model_json;
-  }
+  nlohmann::json json_to() const override;
 
-  void load(QJsonObject const &p) override
-  {
-    bool ret = true;
-    ret &= convert_qjsonvalue_to_string(p["value"], this->value);
-
-    if (!ret)
-      LOG->error("serialization error in with StringAttribute");
-  }
+  void json_from(nlohmann::json const &json) override;
 
   std::string value = "";
 };
 
-class VecFloatAttribute : public Attribute // OK JSON GUI
+class VecFloatAttribute : public Attribute
 {
 public:
   VecFloatAttribute();
@@ -590,27 +374,9 @@ public:
   std::vector<float> get();
   AttributeType      get_type() { return AttributeType::VEC_FLOAT; }
 
-  QJsonObject save() const override
-  {
-    QJsonObject model_json;
-    model_json["value"] = std_vector_float_to_qjsonarray(this->value);
-    model_json["vmin"] = QString::number(this->vmin);
-    model_json["vmax"] = QString::number(this->vmax);
-    model_json["fmt"] = QString::fromStdString(this->fmt);
-    return model_json;
-  }
+  nlohmann::json json_to() const override;
 
-  void load(QJsonObject const &p) override
-  {
-    bool ret = true;
-    ret &= convert_qjsonvalue_to_vector_float(p["value"], this->value);
-    ret &= convert_qjsonvalue_to_float(p["vmin"], this->vmin);
-    ret &= convert_qjsonvalue_to_float(p["vmax"], this->vmax);
-    ret &= convert_qjsonvalue_to_string(p["fmt"], this->fmt);
-
-    if (!ret)
-      LOG->error("serialization error in with VecFloatAttribute");
-  }
+  void json_from(nlohmann::json const &json) override;
 
   std::vector<float> value = {};
   float              vmin = 0.1f;
@@ -618,7 +384,7 @@ public:
   std::string        fmt = "%.2f";
 };
 
-class VecIntAttribute : public Attribute // OK JSON GUI
+class VecIntAttribute : public Attribute
 {
 public:
   VecIntAttribute();
@@ -627,32 +393,16 @@ public:
   std::vector<int> get();
   AttributeType    get_type() { return AttributeType::VEC_INT; }
 
-  QJsonObject save() const override
-  {
-    QJsonObject model_json;
-    model_json["value"] = std_vector_int_to_qjsonarray(this->value);
-    model_json["vmin"] = QString::number(this->vmin);
-    model_json["vmax"] = QString::number(this->vmax);
-    return model_json;
-  }
+  nlohmann::json json_to() const override;
 
-  void load(QJsonObject const &p) override
-  {
-    bool ret = true;
-    ret &= convert_qjsonvalue_to_vector_int(p["value"], this->value);
-    ret &= convert_qjsonvalue_to_int(p["vmin"], this->vmin);
-    ret &= convert_qjsonvalue_to_int(p["vmax"], this->vmax);
-
-    if (!ret)
-      LOG->error("serialization error in with VecIntAttribute");
-  }
+  void json_from(nlohmann::json const &json) override;
 
   std::vector<int> value = {};
   int              vmin = 0;
   int              vmax = 64;
 };
 
-class WaveNbAttribute : public Attribute // OK JSON GUI
+class WaveNbAttribute : public Attribute
 {
 public:
   WaveNbAttribute() = default;
@@ -664,31 +414,9 @@ public:
   hmap::Vec2<float> get();
   AttributeType     get_type() { return AttributeType::WAVE_NB; }
 
-  QJsonObject save() const override
-  {
-    QJsonObject model_json;
-    model_json["value.x"] = QString::number(this->value.x);
-    model_json["value.y"] = QString::number(this->value.y);
-    model_json["link_xy"] = QString(this->link_xy ? "true" : "false");
-    model_json["vmin"] = QString::number(this->vmin);
-    model_json["vmax"] = QString::number(this->vmax);
-    model_json["fmt"] = QString::fromStdString(this->fmt);
-    return model_json;
-  }
+  nlohmann::json json_to() const override;
 
-  void load(QJsonObject const &p) override
-  {
-    bool ret = true;
-    ret &= convert_qjsonvalue_to_float(p["value.x"], this->value.x);
-    ret &= convert_qjsonvalue_to_float(p["value.y"], this->value.y);
-    ret &= convert_qjsonvalue_to_bool(p["link_xy"], this->link_xy);
-    ret &= convert_qjsonvalue_to_float(p["vmin"], this->vmin);
-    ret &= convert_qjsonvalue_to_float(p["vmax"], this->vmax);
-    ret &= convert_qjsonvalue_to_string(p["fmt"], this->fmt);
-
-    if (!ret)
-      LOG->error("serialization error in with WaveNbAttribute");
-  }
+  void json_from(nlohmann::json const &json) override;
 
   hmap::Vec2<float> value = {HSD_DEFAULT_KW, HSD_DEFAULT_KW};
 
