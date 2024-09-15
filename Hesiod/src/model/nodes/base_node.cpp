@@ -48,6 +48,16 @@ BaseNode::BaseNode(const std::string &label, std::shared_ptr<ModelConfig> config
                 });
 }
 
+gngui::PortType BaseNode::get_port_type(int port_index) const
+{
+  gnode::PortType ptype = gnode::Node::get_port_type(this->get_port_label(port_index));
+
+  if (ptype == gnode::PortType::IN)
+    return gngui::PortType::IN;
+  else
+    return gngui::PortType::OUT;
+}
+
 void BaseNode::json_from(nlohmann::json const &json)
 {
   this->set_id(json["id"]);

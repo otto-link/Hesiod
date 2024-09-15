@@ -15,5 +15,5 @@ for D in ${DIRS}; do
     done
 done
 
-# cmake-format -i CMakeLists.txt
-# cmake-format -i doc/CMakeLists.txt
+cmake-format -i CMakeLists.txt
+cmake-format -i Hesiod/CMakeLists.txt

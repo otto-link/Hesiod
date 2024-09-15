@@ -11,7 +11,9 @@ string(REPLACE "\(" "\[" JSON_CONTENT "${JSON_CONTENT}")
 string(REPLACE "\)" "\]" JSON_CONTENT "${JSON_CONTENT}")
 
 # Generate the header file with the embedded JSON content
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/hesiod/model/nodes/runtime_doc.hpp.in ${CMAKE_BINARY_DIR}/include/hesiod/model/nodes/runtime_doc.hpp @ONLY)
+configure_file(
+  ${CMAKE_CURRENT_SOURCE_DIR}/include/hesiod/model/nodes/runtime_doc.hpp.in
+  ${CMAKE_BINARY_DIR}/include/hesiod/model/nodes/runtime_doc.hpp @ONLY)
 
 # Qt6
 set(CMAKE_AUTOMOC ON)
@@ -29,11 +31,11 @@ set(HESIOD_INCLUDE PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include PRIVATE)
 
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
 
-target_include_directories(${PROJECT_NAME} PRIVATE ${HESIOD_INCLUDE} ${CMAKE_BINARY_DIR}/include)
+target_include_directories(${PROJECT_NAME} PRIVATE ${HESIOD_INCLUDE}
+                                                   ${CMAKE_BINARY_DIR}/include)
 
-#target_precompile_headers(
-#  ${PROJECT_NAME} PRIVATE
-#  ${CMAKE_CURRENT_SOURCE_DIR}/include/hesiod/model/attributes.hpp)
+# target_precompile_headers( ${PROJECT_NAME} PRIVATE
+# ${CMAKE_CURRENT_SOURCE_DIR}/include/hesiod/model/attributes.hpp)
 
 # Link libraries
 target_link_libraries(
@@ -43,6 +45,7 @@ target_link_libraries(
           nlohmann_json::nlohmann_json
           highmap
           gnode
+          gnodegui
           Qt6::Core
           Qt6::OpenGL
           Qt6::Widgets)

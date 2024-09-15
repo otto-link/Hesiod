@@ -35,6 +35,8 @@ int main() // (int argc, char *argv[])
 
   graph.update(id1);
 
+  graph.get_node_ref_by_id<hesiod::Noise>(id1)->get_proxy_ref()->log_debug();
+
   // nlohmann::json json = graph.json_to();
   // graph.clear();
   // graph.print();

@@ -19,6 +19,7 @@
 #include "nlohmann/json.hpp"
 
 #include "gnode/node.hpp"
+#include "gnodegui/node_proxy.hpp"
 
 #include "hesiod/model/attributes/attributes.hpp"
 #include "hesiod/model/model_config.hpp"
@@ -26,7 +27,7 @@
 namespace hesiod
 {
 
-class BaseNode : public QObject, public gnode::Node
+class BaseNode : public QObject, public gnode::Node, public gngui::NodeProxy
 {
   Q_OBJECT
 
@@ -41,13 +42,37 @@ public:
     return this->attr.at(key)->get_ref<AttributeType>()->get();
   }
 
-  std::string get_category() const { return this->category; }
+  std::string get_category() const override { return this->category; }
 
   nlohmann::json get_documentation() const { return this->documentation; }
+
+  std::string get_id() const override { return gnode::Node::get_id(); }
 
   void json_from(nlohmann::json const &json);
 
   nlohmann::json json_to() const;
+
+  void set_id(const std::string &new_id) override { gnode::Node::set_id(new_id); }
+
+  //--------------------
+  // NodeProxy wrapper - fetches the infos necessary to build up the node GUI
+  //--------------------
+
+  std::string get_caption() const override { return this->get_label(); }
+
+  std::string get_data_type(int port_index) const override
+  {
+    return gnode::Node::get_data_type(port_index);
+  }
+
+  int get_nports() const override { return gnode::Node::get_nports(); }
+
+  std::string get_port_caption(int port_index) const override
+  {
+    return gnode::Node::get_port_label(port_index);
+  };
+
+  gngui::PortType get_port_type(int port_index) const override;
 
 Q_SIGNALS:
   void compute_started(std::string id);
