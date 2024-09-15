@@ -21,7 +21,7 @@ std::vector<float> VecFloatAttribute::get() { return value; }
 
 nlohmann::json VecFloatAttribute::json_to() const
 {
-  nlohmann::json json;
+  nlohmann::json json = Attribute::json_to();
   json["value"] = this->value;
   json["vmin"] = this->vmin;
   json["vmax"] = this->vmax;
@@ -31,6 +31,7 @@ nlohmann::json VecFloatAttribute::json_to() const
 
 void VecFloatAttribute::json_from(nlohmann::json const &json)
 {
+  Attribute::json_from(json);
   this->value = json["value"].get<std::vector<float>>();
   this->vmin = json["vmin"];
   this->vmax = json["vmax"];

@@ -35,7 +35,7 @@ int main() // (int argc, char *argv[])
 
   graph.update(id1);
 
-  // nlohmann::json json = graph.json_to();
+  nlohmann::json json = graph.json_to();
   // graph.clear();
   // graph.print();
   // graph.json_from(json);

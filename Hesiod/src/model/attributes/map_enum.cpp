@@ -32,13 +32,14 @@ void MapEnumAttribute::set(std::string new_choice) { this->choice = new_choice; 
 
 nlohmann::json MapEnumAttribute::json_to() const
 {
-  nlohmann::json json;
+  nlohmann::json json = Attribute::json_to();
   json["choice"] = this->choice;
   return json;
 }
 
 void MapEnumAttribute::json_from(nlohmann::json const &json)
 {
+  Attribute::json_from(json);
   this->choice = json["choice"];
 }
 

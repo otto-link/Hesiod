@@ -10,7 +10,7 @@ namespace hesiod
 FilenameAttribute::FilenameAttribute(std::string value,
                                      std::string filter,
                                      std::string label)
-    : value(value), filter(filter), label(label)
+    : Attribute(label), value(value), filter(filter)
 {
 }
 
@@ -18,7 +18,7 @@ std::string FilenameAttribute::get() { return value; }
 
 nlohmann::json FilenameAttribute::json_to() const
 {
-  nlohmann::json json;
+  nlohmann::json json = Attribute::json_to();
   json["value"] = this->value;
   json["filter"] = this->filter;
   json["label"] = this->label;
@@ -27,6 +27,7 @@ nlohmann::json FilenameAttribute::json_to() const
 
 void FilenameAttribute::json_from(nlohmann::json const &json)
 {
+  Attribute::json_from(json);
   this->value = json["value"];
   this->filter = json["filter"];
   this->label = json["label"];

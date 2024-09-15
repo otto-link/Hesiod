@@ -16,7 +16,7 @@ int IntAttribute::get() { return value; }
 
 nlohmann::json IntAttribute::json_to() const
 {
-  nlohmann::json json;
+  nlohmann::json json = Attribute::json_to();
   json["value"] = this->value;
   json["vmin"] = this->vmin;
   json["vmax"] = this->vmax;
@@ -25,6 +25,7 @@ nlohmann::json IntAttribute::json_to() const
 
 void IntAttribute::json_from(nlohmann::json const &json)
 {
+  Attribute::json_from(json);
   this->value = json["value"];
   this->vmin = json["vmin"];
   this->vmax = json["vmax"];

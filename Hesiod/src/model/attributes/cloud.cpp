@@ -11,7 +11,7 @@ hmap::Cloud CloudAttribute::get() { return value; }
 
 nlohmann::json CloudAttribute::json_to() const
 {
-  nlohmann::json json;
+  nlohmann::json json = Attribute::json_to();
   json["x"] = this->value.get_x();
   json["y"] = this->value.get_y();
   json["v"] = this->value.get_values();
@@ -20,6 +20,8 @@ nlohmann::json CloudAttribute::json_to() const
 
 void CloudAttribute::json_from(nlohmann::json const &json)
 {
+  Attribute::json_from(json);
+
   std::vector<float> x, y, v;
   x = json["x"].get<std::vector<float>>();
   y = json["y"].get<std::vector<float>>();

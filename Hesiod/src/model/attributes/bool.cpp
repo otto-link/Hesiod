@@ -7,7 +7,8 @@
 namespace hesiod
 {
 
-BoolAttribute::BoolAttribute(bool value, std::string label) : value(value), label(label)
+BoolAttribute::BoolAttribute(bool value, std::string label)
+    : Attribute(label), value(value)
 {
 }
 
@@ -15,11 +16,15 @@ bool BoolAttribute::get() { return value; }
 
 nlohmann::json BoolAttribute::json_to() const
 {
-  nlohmann::json json;
+  nlohmann::json json = Attribute::json_to();
   json["value"] = this->value;
   return json;
 }
 
-void BoolAttribute::json_from(nlohmann::json const &json) { this->value = json["value"]; }
+void BoolAttribute::json_from(nlohmann::json const &json)
+{
+  Attribute::json_from(json);
+  this->value = json["value"];
+}
 
 } // namespace hesiod

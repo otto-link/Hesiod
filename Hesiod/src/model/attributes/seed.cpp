@@ -13,11 +13,15 @@ uint SeedAttribute::get() { return value; }
 
 nlohmann::json SeedAttribute::json_to() const
 {
-  nlohmann::json json;
+  nlohmann::json json = Attribute::json_to();
   json["value"] = this->value;
   return json;
 }
 
-void SeedAttribute::json_from(nlohmann::json const &json) { this->value = json["value"]; }
+void SeedAttribute::json_from(nlohmann::json const &json)
+{
+  Attribute::json_from(json);
+  this->value = json["value"];
+}
 
 } // namespace hesiod

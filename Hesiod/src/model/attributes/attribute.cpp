@@ -47,4 +47,19 @@ AttributeType get_attribute_type_from_name(std::string name)
   return AttributeType::INVALID;
 }
 
+void Attribute::json_from(nlohmann::json const &json)
+{
+  // NB - thr attribute type is set when the attribute is created, no
+  // need to deserialize it
+  this->label = json["label"];
+}
+
+nlohmann::json Attribute::json_to() const
+{
+  nlohmann::json json;
+  json["label"] = this->label;
+  json["type"] = attribute_type_map.at(this->get_type()); // for info
+  return json;
+}
+
 } // namespace hesiod

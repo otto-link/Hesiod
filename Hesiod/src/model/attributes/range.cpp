@@ -32,7 +32,7 @@ hmap::Vec2<float> RangeAttribute::get() { return value; }
 
 nlohmann::json RangeAttribute::json_to() const
 {
-  nlohmann::json json;
+  nlohmann::json json = Attribute::json_to();
   json["value.x"] = this->value.x;
   json["value.y"] = this->value.y;
   json["vmin"] = this->vmin;
@@ -43,6 +43,7 @@ nlohmann::json RangeAttribute::json_to() const
 
 void RangeAttribute::json_from(nlohmann::json const &json)
 {
+  Attribute::json_from(json);
   this->value.x = json["value.x"];
   this->value.y = json["value.y"];
   this->vmin = json["vmin"];

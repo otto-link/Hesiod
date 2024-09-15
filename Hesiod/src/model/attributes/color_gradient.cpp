@@ -18,13 +18,14 @@ std::vector<std::vector<float>> ColorGradientAttribute::get() { return value; }
 
 nlohmann::json ColorGradientAttribute::json_to() const
 {
-  nlohmann::json json;
+  nlohmann::json json = Attribute::json_to();
   json["value"] = this->value;
   return json;
 }
 
 void ColorGradientAttribute::json_from(nlohmann::json const &json)
 {
+  Attribute::json_from(json);
   this->value = json["value"].get<std::vector<std::vector<float>>>();
 }
 

@@ -24,7 +24,7 @@ hmap::Vec2<float> WaveNbAttribute::get() { return value; }
 
 nlohmann::json WaveNbAttribute::json_to() const
 {
-  nlohmann::json json;
+  nlohmann::json json = Attribute::json_to();
   json["value.x"] = this->value.x;
   json["value.y"] = this->value.y;
   json["link_xy"] = this->link_xy;
@@ -36,6 +36,7 @@ nlohmann::json WaveNbAttribute::json_to() const
 
 void WaveNbAttribute::json_from(nlohmann::json const &json)
 {
+  Attribute::json_from(json);
   this->value.x = json["value.x"];
   this->value.y = json["value.y"];
   this->link_xy = json["link_xy"];

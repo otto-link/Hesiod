@@ -28,7 +28,7 @@
 namespace hesiod
 {
 
-enum class AttributeType
+enum class AttributeType : int
 {
   INVALID,
   BOOL,
@@ -94,7 +94,11 @@ class Attribute
 public:
   Attribute() = default;
 
-  virtual AttributeType get_type() { return AttributeType::INVALID; }
+  Attribute(const std::string &label) : label(label) {}
+
+  std::string get_label() const { return this->label; }
+
+  virtual AttributeType get_type() const { return AttributeType::INVALID; }
 
   template <class T = void> T *get_ref()
   {
@@ -110,9 +114,14 @@ public:
     }
   }
 
-  virtual void json_from(nlohmann::json const &) = 0;
+  virtual void json_from(nlohmann::json const &);
 
-  virtual nlohmann::json json_to() const = 0;
+  virtual nlohmann::json json_to() const;
+
+  void set_label(const std::string &new_label) { this->label = new_label; }
+
+protected:
+  std::string label;
 };
 
 // --- Derived
@@ -123,13 +132,12 @@ public:
   BoolAttribute() = default;
   BoolAttribute(bool value, std::string label = "");
   bool          get();
-  AttributeType get_type() { return AttributeType::BOOL; }
+  AttributeType get_type() const { return AttributeType::BOOL; }
 
   void           json_from(nlohmann::json const &json) override;
   nlohmann::json json_to() const override;
 
-  bool        value = true;
-  std::string label = "";
+  bool value = true;
 };
 
 class ColorAttribute : public Attribute
@@ -139,7 +147,7 @@ public:
 
   std::vector<float> get();
 
-  AttributeType get_type() { return AttributeType::COLOR; }
+  AttributeType get_type() const { return AttributeType::COLOR; }
 
   void json_from(nlohmann::json const &json) override;
 
@@ -154,8 +162,8 @@ public:
   ColorGradientAttribute();
   ColorGradientAttribute(std::vector<std::vector<float>> value);
   std::vector<std::vector<float>> get();
-  AttributeType                   get_type() { return AttributeType::COLOR_GRADIENT; }
-  void                            json_from(nlohmann::json const &json) override;
+  AttributeType get_type() const { return AttributeType::COLOR_GRADIENT; }
+  void          json_from(nlohmann::json const &json) override;
 
   nlohmann::json json_to() const override;
 
@@ -168,14 +176,13 @@ public:
   FilenameAttribute() = default;
   FilenameAttribute(std::string value, std::string filter = "", std::string label = "");
   std::string    get();
-  AttributeType  get_type() { return AttributeType::FILENAME; }
+  AttributeType  get_type() const { return AttributeType::FILENAME; }
   void           json_from(nlohmann::json const &json) override;
   nlohmann::json json_to() const override;
 
   std::string value = "";
   // filter eg: "Images (*.png *.xpm *.jpg);;Text files (*.txt);;XML files (*.xml)"
   std::string filter = "";
-  std::string label = "";
 };
 
 class FloatAttribute : public Attribute
@@ -185,7 +192,7 @@ public:
   FloatAttribute(float value, float vmin, float vmax, std::string fmt = "%.2f");
   float          get();
   void           set(float new_value);
-  AttributeType  get_type() { return AttributeType::FLOAT; }
+  AttributeType  get_type() const { return AttributeType::FLOAT; }
   void           json_from(nlohmann::json const &json) override;
   nlohmann::json json_to() const override;
 
@@ -240,7 +247,7 @@ public:
    *
    * @return The attribute type (AttributeType::INT).
    */
-  AttributeType get_type() { return AttributeType::INT; }
+  AttributeType get_type() const { return AttributeType::INT; }
 
   /**
    * @brief Deserializes the attribute from a JSON object.
@@ -277,7 +284,7 @@ public:
   int                        get();
   std::map<std::string, int> get_map();
   void                       set(std::string new_choice);
-  AttributeType              get_type() { return AttributeType::MAP_ENUM; }
+  AttributeType              get_type() const { return AttributeType::MAP_ENUM; }
 
   void json_from(nlohmann::json const &json) override;
 
@@ -299,7 +306,7 @@ public:
                  std::string       fmt = "%.2f");
   RangeAttribute(std::string fmt);
   hmap::Vec2<float> get();
-  AttributeType     get_type() { return AttributeType::RANGE; }
+  AttributeType     get_type() const { return AttributeType::RANGE; }
   void              json_from(nlohmann::json const &json) override;
   nlohmann::json    json_to() const override;
 
@@ -315,7 +322,7 @@ public:
   SeedAttribute() = default;
   SeedAttribute(uint value);
   uint           get();
-  AttributeType  get_type() { return AttributeType::SEED; }
+  AttributeType  get_type() const { return AttributeType::SEED; }
   void           json_from(nlohmann::json const &json) override;
   nlohmann::json json_to() const override;
 
@@ -328,7 +335,7 @@ public:
   StringAttribute() = default;
   StringAttribute(std::string value);
   std::string    get();
-  AttributeType  get_type() { return AttributeType::STRING; }
+  AttributeType  get_type() const { return AttributeType::STRING; }
   void           json_from(nlohmann::json const &json) override;
   nlohmann::json json_to() const override;
 
@@ -344,7 +351,7 @@ public:
                     float              vmax,
                     std::string        fmt = "%.2f");
   std::vector<float> get();
-  AttributeType      get_type() { return AttributeType::VEC_FLOAT; }
+  AttributeType      get_type() const { return AttributeType::VEC_FLOAT; }
   void               json_from(nlohmann::json const &json) override;
   nlohmann::json     json_to() const override;
 
@@ -361,7 +368,7 @@ public:
   VecIntAttribute(std::vector<int> value);
   VecIntAttribute(std::vector<int> value, int vmin, int vmax);
   std::vector<int> get();
-  AttributeType    get_type() { return AttributeType::VEC_INT; }
+  AttributeType    get_type() const { return AttributeType::VEC_INT; }
   void             json_from(nlohmann::json const &json) override;
   nlohmann::json   json_to() const override;
 
@@ -380,7 +387,7 @@ public:
                   float             vmax,
                   std::string       fmt = "%.1f");
   hmap::Vec2<float> get();
-  AttributeType     get_type() { return AttributeType::WAVE_NB; }
+  AttributeType     get_type() const { return AttributeType::WAVE_NB; }
   void              json_from(nlohmann::json const &json) override;
   nlohmann::json    json_to() const override;
 

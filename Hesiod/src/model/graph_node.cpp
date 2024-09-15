@@ -81,7 +81,7 @@ nlohmann::json GraphNode::json_to() const
     json["links"].push_back(json_link);
   }
 
-  // std::cout << json.dump(4) << std::endl;
+  std::cout << json.dump(4) << std::endl;
 
   return json;
 }
