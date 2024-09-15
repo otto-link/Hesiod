@@ -21,13 +21,6 @@ BaseNode::BaseNode(const std::string &label, std::shared_ptr<ModelConfig> config
 
   // --- DEBUG ---
 
-  // nlohmann::json doc = this->get_documentation();
-  // if (!doc.is_null())
-  // {
-  //   HLOG->trace(label);
-  //   std::cout << doc.dump(4) << std::endl;
-  // }
-
   this->connect(this,
                 &BaseNode::compute_started,
                 [this]() {
@@ -41,6 +34,15 @@ BaseNode::BaseNode(const std::string &label, std::shared_ptr<ModelConfig> config
                 [this]()
                 {
                   HLOG->trace("{}({}), SIGNALS: computed_finished",
+                              this->get_label(),
+                              this->get_id());
+                });
+
+  this->connect(this,
+                &BaseNode::node_deserialized,
+                [this]()
+                {
+                  HLOG->trace("{}({}), SIGNALS: node_deserialized",
                               this->get_label(),
                               this->get_id());
                 });
