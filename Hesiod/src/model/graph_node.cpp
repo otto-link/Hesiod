@@ -43,10 +43,10 @@ void GraphNode::json_from(nlohmann::json const &json)
 
   // links
   for (auto &json_link : json["links"])
-    this->connect(json_link["node_id_from"].get<std::string>(),
-                  json_link["port_id_from"].get<std::string>(),
-                  json_link["node_id_to"].get<std::string>(),
-                  json_link["port_id_to"].get<std::string>());
+    this->new_link(json_link["node_id_from"].get<std::string>(),
+                   json_link["port_id_from"].get<std::string>(),
+                   json_link["node_id_to"].get<std::string>(),
+                   json_link["port_id_to"].get<std::string>());
 }
 
 nlohmann::json GraphNode::json_to() const
@@ -85,5 +85,71 @@ nlohmann::json GraphNode::json_to() const
 
   return json;
 }
+
+std::string GraphNode::new_node(const std::string &node_type)
+{
+  std::shared_ptr<gnode::Node> node = node_factory(node_type, this->config);
+  std::string                  node_id = this->add_node(node);
+  return node_id;
+}
+
+void GraphNode::on_connection_deleted_request(const std::string &id_out,
+                                              const std::string &port_id_out,
+                                              const std::string &to_in,
+                                              const std::string &port_id_in)
+{
+  HLOG->trace("GraphNode::on_connection_deleted_request, {}:{} -> {}:{}",
+              id_out,
+              port_id_out,
+              to_in,
+              port_id_in);
+
+  this->remove_link(id_out, port_id_out, to_in, port_id_in);
+}
+
+void GraphNode::on_connection_finished_request(const std::string &id_out,
+                                               const std::string &port_id_out,
+                                               const std::string &to_in,
+                                               const std::string &port_id_in)
+{
+  HLOG->trace("GraphNode::on_connection_finished_request, {}:{} -> {}:{}",
+              id_out,
+              port_id_out,
+              to_in,
+              port_id_in);
+
+  this->new_link(id_out, port_id_out, to_in, port_id_in);
+}
+
+void GraphNode::on_graph_clear_request()
+{
+  HLOG->trace("GraphNode::on_graph_clear_request, graph {}", this->get_id());
+  this->clear();
+}
+
+void GraphNode::on_graph_update_request()
+{
+  HLOG->trace("GraphNode::on_graph_update_request, graph {}", this->get_id());
+  this->update();
+}
+
+void GraphNode::on_new_node_request(const std::string &node_type)
+{
+  HLOG->trace("GraphNode::on_new_node_request, node_type {}", node_type);
+  this->new_node(node_type);
+  // TODO propagate back to viewer?
+}
+
+void GraphNode::on_node_deleted_request(const std::string &node_id)
+{
+  HLOG->trace("GraphNode::on_node_deleted_request, node {}", node_id);
+  this->remove_node(node_id);
+}
+
+void GraphNode::on_node_update_request(const std::string &node_id)
+{
+  HLOG->trace("GraphNode::on_node_update_request, node {}", node_id);
+  this->update(id);
+};
 
 } // namespace hesiod

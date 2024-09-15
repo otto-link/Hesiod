@@ -30,8 +30,8 @@ int main() // (int argc, char *argv[])
   auto id2 = graph.add_node<hesiod::Remap>(config);
   auto id3 = graph.add_node<hesiod::Remap>(config);
 
-  graph.connect(id1, "out", id2, "input");
-  graph.connect(id1, "out", id3, "input");
+  graph.new_link(id1, "out", id2, "input");
+  graph.new_link(id1, "out", id3, "input");
 
   graph.update(id1);
 
