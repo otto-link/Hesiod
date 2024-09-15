@@ -54,9 +54,11 @@ void BaseNode::json_from(nlohmann::json const &json)
     if (!json[key].is_null())
       a->json_from(json[key]);
     else
-      HLOG->error("BaseNode::json_from, could not deserialize attribute: {}", key);
+      HLOG->error(
+          "BaseNode::json_from, could not deserialize attribute: {}, using default value",
+          key);
 
-  Q_EMIT this->node_loaded(this->get_id());
+  Q_EMIT this->node_deserialized(this->get_id());
 }
 
 nlohmann::json BaseNode::json_to() const

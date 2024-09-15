@@ -54,7 +54,7 @@ Q_SIGNALS:
 
   void compute_finished(std::string id);
 
-  void node_loaded(std::string id);
+  void node_deserialized(std::string id);
 
 protected:
   std::map<std::string, std::unique_ptr<Attribute>> attr = {};
