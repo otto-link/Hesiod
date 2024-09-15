@@ -16,6 +16,9 @@ namespace hesiod
 
 Noise::Noise(std::shared_ptr<ModelConfig> config) : BaseNode("Noise", config)
 {
+  HLOG->trace("Noise::Noise");
+
+  // categories
   this->category = "Primitive/Coherent";
 
   // input port(s)
@@ -51,8 +54,6 @@ Noise::Noise(std::shared_ptr<ModelConfig> config) : BaseNode("Noise", config)
 
 void Noise::compute()
 {
-  Q_EMIT this->compute_started(this->get_id());
-
   HLOG->trace("computing node {}", this->get_label());
 
   // base noise function
@@ -103,8 +104,6 @@ void Noise::compute()
                          0.f,
                          this->get_attr<BoolAttribute>("remap"),
                          this->get_attr<RangeAttribute>("remap_range"));
-
-  Q_EMIT this->compute_finished(this->get_id());
 }
 
 } // namespace hesiod

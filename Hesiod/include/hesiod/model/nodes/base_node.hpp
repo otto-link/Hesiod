@@ -14,8 +14,6 @@
  */
 
 #pragma once
-#include <QObject>
-
 #include "nlohmann/json.hpp"
 
 #include "gnode/node.hpp"
@@ -27,10 +25,8 @@
 namespace hesiod
 {
 
-class BaseNode : public QObject, public gnode::Node, public gngui::NodeProxy
+class BaseNode : public gnode::Node, public gngui::NodeProxy
 {
-  Q_OBJECT
-
 public:
   BaseNode() = default;
 
@@ -73,13 +69,6 @@ public:
   };
 
   gngui::PortType get_port_type(int port_index) const override;
-
-Q_SIGNALS:
-  void compute_started(std::string id);
-
-  void compute_finished(std::string id);
-
-  void node_deserialized(std::string id);
 
 protected:
   std::map<std::string, std::unique_ptr<Attribute>> attr = {};

@@ -18,34 +18,6 @@ BaseNode::BaseNode(const std::string &label, std::shared_ptr<ModelConfig> config
 
   // initialize documentation
   this->documentation = nlohmann::json::parse(runtime_doc)[label];
-
-  // --- DEBUG ---
-
-  this->connect(this,
-                &BaseNode::compute_started,
-                [this]() {
-                  HLOG->trace("{}({}), SIGNALS: computed_started",
-                              this->get_label(),
-                              this->get_id());
-                });
-
-  this->connect(this,
-                &BaseNode::compute_finished,
-                [this]()
-                {
-                  HLOG->trace("{}({}), SIGNALS: computed_finished",
-                              this->get_label(),
-                              this->get_id());
-                });
-
-  this->connect(this,
-                &BaseNode::node_deserialized,
-                [this]()
-                {
-                  HLOG->trace("{}({}), SIGNALS: node_deserialized",
-                              this->get_label(),
-                              this->get_id());
-                });
 }
 
 gngui::PortType BaseNode::get_port_type(int port_index) const
@@ -69,8 +41,6 @@ void BaseNode::json_from(nlohmann::json const &json)
       HLOG->error(
           "BaseNode::json_from, could not deserialize attribute: {}, using default value",
           key);
-
-  Q_EMIT this->node_deserialized(this->get_id());
 }
 
 nlohmann::json BaseNode::json_to() const

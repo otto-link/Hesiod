@@ -13,6 +13,9 @@ namespace hesiod
 
 Remap::Remap(std::shared_ptr<ModelConfig> config) : BaseNode("Remap", config)
 {
+  HLOG->trace("Remap::Remap");
+
+  // categories
   this->category = "Filter/Range";
 
   // input port(s)
@@ -31,8 +34,6 @@ Remap::Remap(std::shared_ptr<ModelConfig> config) : BaseNode("Remap", config)
 
 void Remap::compute()
 {
-  Q_EMIT this->compute_started(this->get_id());
-
   HLOG->trace("computing node {}", this->get_label());
 
   // base noise function
@@ -45,8 +46,6 @@ void Remap::compute()
     p_out->remap(this->get_attr<RangeAttribute>("remap").x,
                  this->get_attr<RangeAttribute>("remap").y);
   }
-
-  Q_EMIT this->compute_finished(this->get_id());
 }
 
 } // namespace hesiod
