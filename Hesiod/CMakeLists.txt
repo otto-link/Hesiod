@@ -7,6 +7,9 @@ include_directories(${OPENGL_INCLUDE_DIRS} ${GLEW_INCLUDE_DIRS}
 set(JSON_FILE_PATH ${CMAKE_SOURCE_DIR}/docs/runtime_doc.json)
 file(READ ${JSON_FILE_PATH} JSON_CONTENT)
 
+string(REPLACE "\(" "\[" JSON_CONTENT "${JSON_CONTENT}")
+string(REPLACE "\)" "\]" JSON_CONTENT "${JSON_CONTENT}")
+
 # Generate the header file with the embedded JSON content
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/include/hesiod/model/nodes/runtime_doc.hpp.in ${CMAKE_BINARY_DIR}/include/hesiod/model/nodes/runtime_doc.hpp @ONLY)
 

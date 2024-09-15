@@ -11,9 +11,10 @@
 namespace hesiod
 {
 
-Remap::Remap(const std::string &id, std::shared_ptr<ModelConfig> config)
-    : BaseNode("Remap", id, config)
+Remap::Remap(std::shared_ptr<ModelConfig> config) : BaseNode("Remap", config)
 {
+  this->category = "Filter/Range";
+
   // input port(s)
   this->add_port<hmap::HeightMap>(gnode::PortType::IN, "input");
 

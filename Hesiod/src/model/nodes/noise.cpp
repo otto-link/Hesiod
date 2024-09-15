@@ -14,9 +14,10 @@
 namespace hesiod
 {
 
-Noise::Noise(const std::string &id, std::shared_ptr<ModelConfig> config)
-    : BaseNode("Noise", id, config)
+Noise::Noise(std::shared_ptr<ModelConfig> config) : BaseNode("Noise", config)
 {
+  this->category = "Primitive/Coherent";
+
   // input port(s)
   this->add_port<hmap::HeightMap>(gnode::PortType::IN, "dx");
   this->add_port<hmap::HeightMap>(gnode::PortType::IN, "dy");

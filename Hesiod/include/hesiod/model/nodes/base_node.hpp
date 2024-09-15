@@ -33,15 +33,15 @@ class BaseNode : public QObject, public gnode::Node
 public:
   BaseNode() = default;
 
-  BaseNode(const std::string           &label,
-           const std::string           &id,
-           std::shared_ptr<ModelConfig> config);
+  BaseNode(const std::string &label, std::shared_ptr<ModelConfig> config);
 
   template <typename AttributeType>
   auto get_attr(const std::string &key) -> decltype(auto)
   {
     return this->attr.at(key)->get_ref<AttributeType>()->get();
   }
+
+  std::string get_category() const { return this->category; }
 
   nlohmann::json get_documentation() const { return this->documentation; }
 
@@ -63,6 +63,8 @@ protected:
    * @brief Defines a preferred display order of the attributes.
    */
   std::vector<std::string> attr_ordered_key = {};
+
+  std::string category;
 
 private:
   std::shared_ptr<ModelConfig> config;

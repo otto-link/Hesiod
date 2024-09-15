@@ -22,7 +22,7 @@ namespace hesiod
 
 struct Remap : public BaseNode
 {
-  Remap(const std::string &id, std::shared_ptr<ModelConfig> config);
+  Remap(std::shared_ptr<ModelConfig> config);
 
   void compute() override;
 };

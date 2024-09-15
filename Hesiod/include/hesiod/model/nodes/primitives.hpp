@@ -22,7 +22,7 @@ namespace hesiod
 
 struct Noise : public BaseNode
 {
-  Noise(const std::string &id, std::shared_ptr<ModelConfig> config);
+  Noise(std::shared_ptr<ModelConfig> config);
 
   void compute() override;
 };

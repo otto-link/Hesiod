@@ -15,6 +15,8 @@
 
 #pragma once
 
+#include "nlohmann/json.hpp"
+
 #include "gnode/graph.hpp"
 
 #include "hesiod/model/model_config.hpp"
@@ -30,6 +32,12 @@ public:
   GraphNode(const std::string &id, std::shared_ptr<ModelConfig> config);
 
   std::string get_id() const { return this->id; }
+
+  void json_from(nlohmann::json const &json);
+
+  nlohmann::json json_to() const;
+
+  void set_id(const std::string &new_id) { this->id = new_id; }
 
 private:
   std::string                  id;

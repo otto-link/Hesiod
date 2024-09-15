@@ -11,10 +11,8 @@
 namespace hesiod
 {
 
-BaseNode::BaseNode(const std::string           &label,
-                   const std::string           &id,
-                   std::shared_ptr<ModelConfig> config)
-    : gnode::Node(label, id), config(config)
+BaseNode::BaseNode(const std::string &label, std::shared_ptr<ModelConfig> config)
+    : gnode::Node(label), config(config)
 {
   HLOG->trace("BaseNode::BaseNode, label: {}", label);
 
@@ -50,6 +48,8 @@ BaseNode::BaseNode(const std::string           &label,
 
 void BaseNode::json_from(nlohmann::json const &json)
 {
+  this->set_id(json["id"]);
+
   for (auto &[key, a] : this->attr)
     if (!json[key].is_null())
       a->json_from(json[key]);
@@ -66,7 +66,6 @@ nlohmann::json BaseNode::json_to() const
   for (auto &[key, a] : this->attr)
     json[key] = a->json_to();
 
-  // added for infos, not deserialized
   json["id"] = this->get_id();
   json["label"] = this->get_label();
 

@@ -24,15 +24,23 @@ int main() // (int argc, char *argv[])
   auto config = std::make_shared<hesiod::ModelConfig>();
   config->log_debug();
 
-  hesiod::Noise node = hesiod::Noise("n1", config);
-  hesiod::Remap node2 = hesiod::Remap("n2", config);
-  node.compute();
-  node2.compute();
-
-  node.json_to();
-  node2.json_to();
-
   hesiod::GraphNode graph = hesiod::GraphNode("graph1", config);
+
+  auto id1 = graph.add_node<hesiod::Noise>(config);
+  auto id2 = graph.add_node<hesiod::Remap>(config);
+  auto id3 = graph.add_node<hesiod::Remap>(config);
+
+  graph.connect(id1, "out", id2, "input");
+  graph.connect(id1, "out", id3, "input");
+
+  graph.update(id1);
+
+  // nlohmann::json json = graph.json_to();
+  // graph.clear();
+  // graph.print();
+  // graph.json_from(json);
+  // graph.print();
+  // graph.update(id1);
 
   return 0;
 }
