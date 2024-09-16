@@ -2,6 +2,8 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 
+#include "gnodegui/style.hpp"
+
 #include "hesiod/graph_editor.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
@@ -45,15 +47,15 @@ GraphEditor::GraphEditor(const std::string           &id,
                   this,
                   &GraphEditor::on_connection_finished);
 
-    // this->connect(this->viewer.get(),
-    //               &gngui::GraphViewer::graph_clear_request,
-    //               this,
-    //               &GraphEditor::on_graph_clear_request);
+    this->connect(this->viewer.get(),
+                  &gngui::GraphViewer::graph_clear_request,
+                  this,
+                  &GraphEditor::on_graph_clear_request);
 
-    // this->connect(this->viewer.get(),
-    //               &gngui::GraphViewer::graph_reload_request,
-    //               this,
-    //               &GraphEditor::on_graph_reload_request);
+    this->connect(this->viewer.get(),
+                  &gngui::GraphViewer::graph_reload_request,
+                  this,
+                  &GraphEditor::on_graph_reload_request);
 
     this->connect(this->viewer.get(),
                   &gngui::GraphViewer::new_node_request,
@@ -70,6 +72,28 @@ GraphEditor::GraphEditor(const std::string           &id,
                   this,
                   &GraphEditor::on_node_reload_request);
   }
+
+  // --- syles
+
+  // TODO move somewhere else
+  // GN_STYLE->node.color_port_data[] = QColor(189, 147, 249, 255);
+
+  GN_STYLE->node.color_category = {{"Converter", QColor(188, 182, 163, 255)},
+                                   {"Comment", QColor(170, 170, 170, 255)},
+                                   {"Debug", QColor(200, 0, 0, 255)},
+                                   {"Math", QColor(0, 43, 54, 255)},
+                                   {"Geometry", QColor(101, 123, 131, 255)},
+                                   {"Roads", QColor(147, 161, 161, 255)},
+                                   {"Routing", QColor(188, 182, 163, 255)},
+                                   {"IO", QColor(203, 196, 177, 255)},
+                                   {"Features", QColor(181, 137, 0, 255)},
+                                   {"Erosion", QColor(203, 75, 22, 255)},
+                                   {"Mask", QColor(211, 54, 130, 255)},
+                                   {"Filter", QColor(108, 113, 196, 255)},
+                                   {"Operator", QColor(108, 113, 196, 255)},
+                                   {"Hydrology", QColor(38, 139, 210, 255)},
+                                   {"Primitive", QColor(42, 161, 152, 255)},
+                                   {"Biomes", QColor(133, 153, 0, 255)}};
 }
 
 void GraphEditor::on_connection_deleted(const std::string &id_out,
