@@ -56,6 +56,11 @@ public:
 
   std::string get_caption() const override { return this->get_label(); }
 
+  void *get_data_ref(int port_index) override
+  {
+    return (void *)this->get_base_data(port_index).get();
+  }
+
   std::string get_data_type(int port_index) const override
   {
     return gnode::Node::get_data_type(port_index);
