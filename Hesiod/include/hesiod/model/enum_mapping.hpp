@@ -43,12 +43,6 @@ enum MaskCombineMethod : int
   EXCLUSION,
 };
 
-enum PreviewType : int
-{
-  GRAYSCALE,
-  MAGMA,
-};
-
 /**
  * @brief Plain text / enumerate mapping for the blending methods.
  */
@@ -165,5 +159,10 @@ static std::map<std::string, int> noise_type_map_fbm = {
     {"Worley", hmap::NoiseType::WORLEY},
     {"Worley (doube)", hmap::NoiseType::WORLEY_DOUBLE},
     {"Worley (value)", hmap::NoiseType::WORLEY_VALUE}};
+
+static std::map<std::string, std::string> node_inventory = {
+    {"Noise", "Primitive/Coherent"},
+    {"GammaCorrection", "Filter/Recurve"},
+    {"Remap", "Filter/Range"}};
 
 } // namespace hesiod

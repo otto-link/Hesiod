@@ -6,6 +6,7 @@
 
 #include "hesiod/graph_editor.hpp"
 #include "hesiod/logger.hpp"
+#include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 
 namespace hesiod
@@ -31,9 +32,7 @@ GraphEditor::GraphEditor(const std::string           &id,
 
     this->viewer = std::make_unique<gngui::GraphViewer>(this->get_id());
 
-    std::map<std::string, std::string> ni = {{"Noise", "Primitive/Coherent"},
-                                             {"Remap", "Filter/Range"}};
-    this->viewer->set_node_inventory(ni);
+    this->viewer->set_node_inventory(node_inventory);
 
     // --- connect with core node graph (GraphNode)
 

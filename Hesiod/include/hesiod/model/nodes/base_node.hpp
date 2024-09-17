@@ -14,6 +14,8 @@
  */
 
 #pragma once
+#include <QObject>
+
 #include "nlohmann/json.hpp"
 
 #include "gnode/node.hpp"
@@ -22,11 +24,14 @@
 #include "hesiod/model/attributes/attributes.hpp"
 #include "hesiod/model/model_config.hpp"
 
+#include "hesiod/gui/widgets/data_preview.hpp"
+
 namespace hesiod
 {
 
-class BaseNode : public gnode::Node, public gngui::NodeProxy
+class BaseNode : public QWidget, public gnode::Node, public gngui::NodeProxy
 {
+  Q_OBJECT
 public:
   BaseNode() = default;
 
@@ -58,7 +63,7 @@ public:
 
   void *get_data_ref(int port_index) override
   {
-    return (void *)this->get_base_data(port_index).get();
+    return this->get_value_ref_void(port_index);
   }
 
   std::string get_data_type(int port_index) const override
@@ -75,6 +80,13 @@ public:
 
   gngui::PortType get_port_type(int port_index) const override;
 
+  virtual QWidget *get_qwidget_ref() override;
+
+Q_SIGNALS:
+  void compute_finished(const std::string &id);
+
+  void compute_started(const std::string &id);
+
 protected:
   std::map<std::string, std::unique_ptr<Attribute>> attr = {};
 
@@ -89,6 +101,9 @@ private:
   std::shared_ptr<ModelConfig> config;
 
   nlohmann::json documentation;
+
+  // ownership of this pointer will be taken by the gngui::GraphicsNode instance
+  DataPreview *data_preview = nullptr;
 };
 
 } // namespace hesiod

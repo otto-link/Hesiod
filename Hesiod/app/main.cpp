@@ -11,8 +11,8 @@ typedef unsigned int uint;
 #include "hesiod/logger.hpp"
 #include "hesiod/model/model_config.hpp"
 
-// #include "hesiod/model/nodes/primitives.hpp"
-// #include "hesiod/model/nodes/range.hpp"
+#include "hesiod/model/nodes/primitives.hpp"
+#include "hesiod/model/nodes/range.hpp"
 
 int main(int argc, char *argv[])
 {
@@ -31,22 +31,17 @@ int main(int argc, char *argv[])
 
   hesiod::GraphEditor graph = hesiod::GraphEditor("graph1", config);
 
+  graph.on_new_node_request("Noise", QPointF(200, 200));
+  graph.on_new_node_request("Remap", QPointF(400, 200));
+  graph.on_new_node_request("GammaCorrection", QPointF(600, 200));
+  graph.get_p_viewer()->zoom_to_content();
+
   graph.get_p_viewer()->resize(1000, 800);
   graph.get_p_viewer()->show();
 
   return app.exec();
 
   // hesiod::GraphNode graph = hesiod::GraphNode("graph1", config);
-
-  // auto id1 = graph.add_node<hesiod::Noise>(config);
-  // auto id2 = graph.add_node<hesiod::Remap>(config);
-  // auto id3 = graph.add_node<hesiod::Remap>(config);
-
-  // graph.new_link(id1, "out", id2, "input");
-  // graph.new_link(id1, "out", id3, "input");
-
-  // graph.update(id1);
-
   // graph.get_node_ref_by_id<hesiod::Noise>(id1)->get_proxy_ref()->log_debug();
 
   // // nlohmann::json json = graph.json_to();

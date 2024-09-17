@@ -1,0 +1,163 @@
+/* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
+ * Public License. The full license is in the file LICENSE, distributed with
+ * this software. */
+#include <typeinfo>
+
+#include <QMenu>
+#include <QPainter>
+
+#include "gnodegui/style.hpp"
+
+#include "highmap/colorize.hpp"
+#include "highmap/heightmap.hpp"
+#include "highmap/tensor.hpp"
+
+#include "hesiod/gui/widgets/data_preview.hpp"
+#include "hesiod/logger.hpp"
+
+namespace hesiod
+{
+
+DataPreview::DataPreview(gngui::NodeProxy *p_proxy_node)
+    : QLabel(), p_proxy_node(p_proxy_node)
+{
+  HLOG->trace("DataPreview::DataPreview, node {}({})",
+              p_proxy_node->get_caption(),
+              p_proxy_node->get_id());
+
+  int width = (int)(GN_STYLE->node.width + 2.f * GN_STYLE->node.padding -
+                    2.f * GN_STYLE->node.padding_widget_width);
+
+  this->resize(width, width);
+
+  this->setStyleSheet("QLabel { background-color : gray;}");
+  this->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+
+  // By default use first output or first input if there are no output
+  this->preview_port_index = 0;
+  for (int k = 0; k < this->p_proxy_node->get_nports(); k++)
+    if (this->p_proxy_node->get_port_type(k) == gngui::PortType::OUT)
+    {
+      this->preview_port_index = k;
+      break;
+    }
+
+  this->update_image();
+}
+
+void DataPreview::contextMenuEvent(QContextMenuEvent *event)
+{
+  QMenu context_menu(this);
+
+  context_menu.addSection("Preview type");
+
+  for (auto &[key, value] : preview_type_map)
+  {
+    QAction *action = context_menu.addAction(key.c_str());
+
+    if (value == this->preview_type)
+    {
+      action->setCheckable(true);
+      action->setChecked(true);
+    }
+  }
+
+  context_menu.addSection("Data");
+
+  for (int k = 0; k < this->p_proxy_node->get_nports(); k++)
+  {
+    std::string port_type = this->p_proxy_node->get_port_type(k) == gngui::PortType::IN
+                                ? " (IN)"
+                                : " (OUT)";
+    std::string action_label = this->p_proxy_node->get_port_caption(k);
+
+    QAction *action = context_menu.addAction(action_label.c_str());
+
+    if (k == this->preview_port_index)
+    {
+      action->setCheckable(true);
+      action->setChecked(true);
+    }
+  }
+
+  QAction *selected_action = context_menu.exec(event->globalPos());
+
+  if (selected_action)
+  {
+    std::string action_label = selected_action->text().toStdString();
+
+    // check preview type first
+    for (auto &[key, _] : preview_type_map)
+      if (key == action_label)
+      {
+        this->preview_type = preview_type_map.at(key);
+        this->update_image();
+        return;
+      }
+
+    // check next inputs and outputs
+    for (int k = 0; k < this->p_proxy_node->get_nports(); k++)
+      if (this->p_proxy_node->get_port_caption(k) == action_label)
+      {
+        this->preview_port_index = k;
+        this->update_image();
+        return;
+      }
+  }
+}
+
+void DataPreview::update_image()
+{
+  // Retrieve port informations
+  void       *blind_data_ptr = this->p_proxy_node->get_data_ref(this->preview_port_index);
+  std::string data_type = this->p_proxy_node->get_data_type(this->preview_port_index);
+
+  int             img_width = (int)GN_STYLE->node.width;
+  hmap::Vec2<int> shape_preview = hmap::Vec2<int>(img_width, img_width);
+  this->resize(shape_preview.x, shape_preview.y);
+
+  QImage preview_image;
+
+  HLOG->trace("data_type: {}", data_type);
+
+  // Preview image (transparent by default if no data or no rendering
+  // for the requested data type)
+  preview_image.fill(Qt::transparent);
+
+  // Update preview
+  if (blind_data_ptr)
+  {
+    QImage::Format       img_format = QImage::Format_Grayscale8;
+    std::vector<uint8_t> img;
+
+    if (data_type == typeid(hmap::HeightMap).name())
+    {
+      hmap::HeightMap *p_h = static_cast<hmap::HeightMap *>(blind_data_ptr);
+      hmap::Array      array = p_h->to_array(shape_preview);
+
+      if (this->preview_type == PreviewType::GRAYSCALE)
+      {
+        img = hmap::colorize_grayscale(array).to_img_8bit();
+        img_format = QImage::Format_Grayscale8;
+      }
+      else if (this->preview_type == PreviewType::MAGMA)
+      {
+        img = hmap::colorize(array, array.min(), array.max(), hmap::Cmap::MAGMA, false)
+                  .to_img_8bit();
+        img_format = QImage::Format_RGB888;
+      }
+      else if (this->preview_type == PreviewType::HISTOGRAM)
+      {
+        img = hmap::colorize_histogram(array).to_img_8bit();
+        img_format = QImage::Format_Grayscale8;
+      }
+    }
+
+    preview_image = QImage(img.data(), shape_preview.x, shape_preview.y, img_format);
+  }
+
+  this->setPixmap(QPixmap::fromImage(preview_image));
+  this->update();
+}
+
+} // namespace hesiod

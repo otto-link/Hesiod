@@ -4,6 +4,7 @@
 
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/logger.hpp"
+#include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/nodes/runtime_doc.hpp"
 
 #include <iostream>
@@ -16,8 +17,19 @@ BaseNode::BaseNode(const std::string &label, std::shared_ptr<ModelConfig> config
 {
   HLOG->trace("BaseNode::BaseNode, label: {}", label);
 
+  this->category = node_inventory.at(label);
+
   // initialize documentation
   this->documentation = nlohmann::json::parse(runtime_doc)[label];
+
+  // connections
+  this->connect(this,
+                &BaseNode::compute_finished,
+                [this]()
+                {
+                  if (this->data_preview)
+                    this->data_preview->update_image();
+                });
 }
 
 gngui::PortType BaseNode::get_port_type(int port_index) const
@@ -28,6 +40,14 @@ gngui::PortType BaseNode::get_port_type(int port_index) const
     return gngui::PortType::IN;
   else
     return gngui::PortType::OUT;
+}
+#include <QPushButton>
+QWidget *BaseNode::get_qwidget_ref()
+{
+  if (!this->data_preview)
+    this->data_preview = new DataPreview(this);
+
+  return (QWidget *)this->data_preview;
 }
 
 void BaseNode::json_from(nlohmann::json const &json)
