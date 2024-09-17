@@ -27,11 +27,13 @@ DataPreview::DataPreview(gngui::NodeProxy *p_proxy_node)
 
   int width = (int)(GN_STYLE->node.width + 2.f * GN_STYLE->node.padding -
                     2.f * GN_STYLE->node.padding_widget_width);
-
   this->resize(width, width);
 
-  this->setStyleSheet("QLabel { background-color : gray;}");
   this->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+
+  this->setFrameStyle(QFrame::Box | QFrame::Plain);
+  this->setStyleSheet("QLabel { background-color : red; }");
+  this->setStyleSheet("QLabel { border: 1px solid black; margin: 0px;}");
 
   // By default use first output or first input if there are no output
   this->preview_port_index = 0;
@@ -112,13 +114,12 @@ void DataPreview::update_image()
   void       *blind_data_ptr = this->p_proxy_node->get_data_ref(this->preview_port_index);
   std::string data_type = this->p_proxy_node->get_data_type(this->preview_port_index);
 
-  int             img_width = (int)GN_STYLE->node.width;
-  hmap::Vec2<int> shape_preview = hmap::Vec2<int>(img_width, img_width);
+  hmap::Vec2<int> shape_preview = hmap::Vec2<int>(128, 128);
   this->resize(shape_preview.x, shape_preview.y);
 
   QImage preview_image;
 
-  HLOG->trace("data_type: {}", data_type);
+  HLOG->trace("DataPreview::update_image, data_type: {}", data_type);
 
   // Preview image (transparent by default if no data or no rendering
   // for the requested data type)
@@ -143,6 +144,12 @@ void DataPreview::update_image()
       else if (this->preview_type == PreviewType::MAGMA)
       {
         img = hmap::colorize(array, array.min(), array.max(), hmap::Cmap::MAGMA, false)
+                  .to_img_8bit();
+        img_format = QImage::Format_RGB888;
+      }
+      else if (this->preview_type == PreviewType::TERRAIN)
+      {
+        img = hmap::colorize(array, array.min(), array.max(), hmap::Cmap::TERRAIN, true)
                   .to_img_8bit();
         img_format = QImage::Format_RGB888;
       }

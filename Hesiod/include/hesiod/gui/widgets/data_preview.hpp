@@ -18,11 +18,13 @@ enum PreviewType : int
   GRAYSCALE,
   MAGMA,
   HISTOGRAM,
+  TERRAIN,
 };
 
 static std::map<std::string, PreviewType> preview_type_map = {
     {"Grayscale", PreviewType::GRAYSCALE},
     {"Magma", PreviewType::MAGMA},
+    {"Terrain (hillshade)", PreviewType::TERRAIN},
     {"Histogram view", PreviewType::HISTOGRAM},
 };
 

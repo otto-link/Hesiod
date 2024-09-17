@@ -58,6 +58,8 @@ public Q_SLOTS:
 
   void on_node_reload_request(const std::string &node_id);
 
+  void on_node_right_clicked(const std::string &node_id, QPointF scene_pos);
+
 private:
   std::unique_ptr<gngui::GraphViewer> viewer = std::unique_ptr<gngui::GraphViewer>(
       nullptr);

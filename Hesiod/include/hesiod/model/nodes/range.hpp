@@ -25,6 +25,8 @@ struct Remap : public BaseNode
   Remap(std::shared_ptr<ModelConfig> config);
 
   void compute() override;
+
+  QWidget *get_qwidget_ref() override { return nullptr; }
 };
 
 } // namespace hesiod

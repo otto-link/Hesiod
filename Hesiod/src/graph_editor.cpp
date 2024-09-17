@@ -1,6 +1,9 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include <QMenu>
+#include <QPushButton>
+#include <QWidgetAction>
 
 #include "gnodegui/style.hpp"
 
@@ -70,6 +73,11 @@ GraphEditor::GraphEditor(const std::string           &id,
                   &gngui::GraphViewer::node_reload_request,
                   this,
                   &GraphEditor::on_node_reload_request);
+
+    this->connect(this->viewer.get(),
+                  &gngui::GraphViewer::node_right_clicked,
+                  this,
+                  &GraphEditor::on_node_right_clicked);
   }
 
   // --- syles
@@ -168,6 +176,47 @@ void GraphEditor::on_node_reload_request(const std::string &node_id)
   HLOG->trace("GraphNode::on_node_reload_request, node {}", node_id);
   this->update(node_id);
   // TODO signals back to GUI before / after
+}
+
+void GraphEditor::on_node_right_clicked(const std::string &node_id, QPointF scene_pos)
+{
+  HLOG->trace("GraphNode::on_node_right_clicked, node {}", node_id);
+
+  if (this->viewer)
+  {
+    BaseNode            *p_node = this->get_node_ref_by_id<BaseNode>(node_id);
+    gngui::GraphicsNode *p_gx_node = this->viewer->get_graphics_node_by_id(node_id);
+
+    QPointF item_pos = scene_pos - p_gx_node->scenePos();
+
+    // if the click is above the widget, let the widget context menu
+    // take the event
+    if (item_pos.y() < p_gx_node->get_geometry_ref()->widget_pos.y())
+    {
+
+      QMenu *menu = new QMenu();
+
+      // --- add label
+
+      {
+        QLabel        *label = new QLabel(p_node->get_caption().c_str());
+        QWidgetAction *widget_action = new QWidgetAction(menu);
+        widget_action->setDefaultWidget(label);
+        menu->addAction(widget_action);
+      }
+
+      menu->addSeparator();
+
+      {
+        QPushButton   *push_button = new QPushButton("button");
+        QWidgetAction *widget_action = new QWidgetAction(menu);
+        widget_action->setDefaultWidget(push_button);
+        menu->addAction(widget_action);
+      }
+
+      menu->popup(QCursor::pos());
+    }
+  }
 }
 
 } // namespace hesiod
