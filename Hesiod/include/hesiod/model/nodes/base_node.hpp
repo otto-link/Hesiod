@@ -43,6 +43,16 @@ public:
     return this->attr.at(key)->get_ref<AttributeType>()->get();
   }
 
+  std::map<std::string, std::unique_ptr<Attribute>> *get_attr_ref()
+  {
+    return &this->attr;
+  };
+
+  std::vector<std::string> *get_attr_ordered_key_ref()
+  {
+    return &this->attr_ordered_key;
+  };
+
   std::string get_category() const override { return this->category; }
 
   nlohmann::json get_documentation() const { return this->documentation; }

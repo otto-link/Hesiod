@@ -16,7 +16,7 @@ namespace hesiod
 
 Noise::Noise(std::shared_ptr<ModelConfig> config) : BaseNode("Noise", config)
 {
-  HLOG->trace("Noise::Noise");
+  HSDLOG->trace("Noise::Noise");
 
   // input port(s)
   this->add_port<hmap::HeightMap>(gnode::PortType::IN, "dx");
@@ -53,7 +53,7 @@ void Noise::compute()
 {
   Q_EMIT this->compute_started(this->get_id());
 
-  HLOG->trace("computing node {}", this->get_label());
+  HSDLOG->trace("computing node {}", this->get_label());
 
   // base noise function
   hmap::HeightMap *p_dx = this->get_value_ref<hmap::HeightMap>("dx");

@@ -21,19 +21,17 @@ namespace hesiod
 DataPreview::DataPreview(gngui::NodeProxy *p_proxy_node)
     : QLabel(), p_proxy_node(p_proxy_node)
 {
-  HLOG->trace("DataPreview::DataPreview, node {}({})",
-              p_proxy_node->get_caption(),
-              p_proxy_node->get_id());
+  HSDLOG->trace("DataPreview::DataPreview, node {}({})",
+                p_proxy_node->get_caption(),
+                p_proxy_node->get_id());
 
   int width = (int)(GN_STYLE->node.width + 2.f * GN_STYLE->node.padding -
                     2.f * GN_STYLE->node.padding_widget_width);
   this->resize(width, width);
 
   this->setAlignment(Qt::AlignLeft | Qt::AlignTop);
-
-  this->setFrameStyle(QFrame::Box | QFrame::Plain);
-  this->setStyleSheet("QLabel { background-color : red; }");
-  this->setStyleSheet("QLabel { border: 1px solid black; margin: 0px;}");
+  this->setFrameStyle(QFrame::NoFrame);
+  this->setStyleSheet("QLabel { background-color : gray; }");
 
   // By default use first output or first input if there are no output
   this->preview_port_index = 0;
@@ -119,7 +117,7 @@ void DataPreview::update_image()
 
   QImage preview_image;
 
-  HLOG->trace("DataPreview::update_image, data_type: {}", data_type);
+  HSDLOG->trace("DataPreview::update_image, data_type: {}", data_type);
 
   // Preview image (transparent by default if no data or no rendering
   // for the requested data type)

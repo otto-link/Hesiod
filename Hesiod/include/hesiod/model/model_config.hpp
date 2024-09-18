@@ -72,6 +72,16 @@ struct ModelConfig
    * @return nlohmann::json A JSON object representing the model configuration.
    */
   nlohmann::json json_to() const;
+
+  /**
+   * @brief Sets a new shape for the object.
+   *
+   * This function updates the internal shape of the object to the specified value.
+   *
+   * @param new_shape A 2D vector representing the new shape dimensions (e.g., width and
+   * height).
+   */
+  void set_shape(const hmap::Vec2<int> &new_shape) { this->shape = new_shape; }
 };
 
 } // namespace hesiod

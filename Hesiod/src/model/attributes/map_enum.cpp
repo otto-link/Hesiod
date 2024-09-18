@@ -19,7 +19,7 @@ MapEnumAttribute::MapEnumAttribute(std::map<std::string, int> value, std::string
 {
   if (!this->value.contains(this->choice))
   {
-    HLOG->critical("initial choice not in the available keys ({})", this->choice);
+    HSDLOG->critical("initial choice not in the available keys ({})", this->choice);
     throw std::runtime_error("initial choice not in the available keys");
   }
 }

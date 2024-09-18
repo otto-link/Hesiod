@@ -66,7 +66,7 @@ public:
    *
    * @return AttributeType The attribute type (AttributeType::CLOUD).
    */
-  AttributeType get_type() { return AttributeType::CLOUD; }
+  AttributeType get_type() const override { return AttributeType::CLOUD; }
 
   /**
    * @brief Serializes the attribute to a JSON object.
@@ -119,7 +119,7 @@ public:
    *
    * @return AttributeType The attribute type (AttributeType::PATH).
    */
-  AttributeType get_type() { return AttributeType::PATH; }
+  AttributeType get_type() const override { return AttributeType::PATH; }
 
   /**
    * @brief Serializes the attribute to a JSON object.

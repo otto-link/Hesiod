@@ -48,4 +48,5 @@ target_link_libraries(
           gnodegui
           Qt6::Core
           Qt6::OpenGL
-          Qt6::Widgets)
+          Qt6::Widgets
+          Qt6::OpenGLWidgets)

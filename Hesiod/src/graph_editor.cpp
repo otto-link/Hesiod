@@ -8,6 +8,8 @@
 #include "gnodegui/style.hpp"
 
 #include "hesiod/graph_editor.hpp"
+#include "hesiod/gui/gui_utils.hpp"
+#include "hesiod/gui/widgets/widgets.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
@@ -20,16 +22,16 @@ GraphEditor::GraphEditor(const std::string           &id,
                          bool                         headless)
     : GraphNode(id, config)
 {
-  HLOG->trace("GraphEditor::GraphEditor, graph id {}", this->get_id());
+  HSDLOG->trace("GraphEditor::GraphEditor, graph id {}", this->get_id());
 
   if (headless)
   {
-    HLOG->trace(
+    HSDLOG->trace(
         "GraphEditor::GraphEditor, running in headless mode for the graph editor");
   }
   else
   {
-    HLOG->trace("GraphEditor::GraphEditor, initializing graph GUI");
+    HSDLOG->trace("GraphEditor::GraphEditor, initializing graph GUI");
 
     // --- instantiate
 
@@ -108,11 +110,11 @@ void GraphEditor::on_connection_deleted(const std::string &id_out,
                                         const std::string &id_in,
                                         const std::string &port_id_in)
 {
-  HLOG->trace("GraphEditor::on_connection_deleted, {}:{} -> {}:{}",
-              id_out,
-              port_id_out,
-              id_in,
-              port_id_in);
+  HSDLOG->trace("GraphEditor::on_connection_deleted, {}:{} -> {}:{}",
+                id_out,
+                port_id_out,
+                id_in,
+                port_id_in);
 
   this->remove_link(id_out, port_id_out, id_in, port_id_in);
   this->update(id_in);
@@ -123,11 +125,11 @@ void GraphEditor::on_connection_finished(const std::string &id_out,
                                          const std::string &id_in,
                                          const std::string &port_id_in)
 {
-  HLOG->trace("GraphEditor::on_connection_finished, {}:{} -> {}:{}",
-              id_out,
-              port_id_out,
-              id_in,
-              port_id_in);
+  HSDLOG->trace("GraphEditor::on_connection_finished, {}:{} -> {}:{}",
+                id_out,
+                port_id_out,
+                id_in,
+                port_id_in);
 
   this->new_link(id_out, port_id_out, id_in, port_id_in);
   this->update(id_out);
@@ -135,7 +137,7 @@ void GraphEditor::on_connection_finished(const std::string &id_out,
 
 void GraphEditor::on_graph_clear_request()
 {
-  HLOG->trace("GraphEditor::on_graph_clear_request");
+  HSDLOG->trace("GraphEditor::on_graph_clear_request");
   this->clear();
   if (this->viewer)
     this->viewer->clear();
@@ -143,7 +145,7 @@ void GraphEditor::on_graph_clear_request()
 
 void GraphEditor::on_graph_reload_request()
 {
-  HLOG->trace("GraphEditor::on_graph_reload_request");
+  HSDLOG->trace("GraphEditor::on_graph_reload_request");
   this->update();
   // TODO signals back to GUI before / after
 }
@@ -164,7 +166,7 @@ void GraphEditor::on_new_node_request(const std::string &node_type, QPointF scen
 
 void GraphEditor::on_node_deleted_request(const std::string &node_id)
 {
-  HLOG->trace("GraphNode::on_node_deleted_request, node {}", node_id);
+  HSDLOG->trace("GraphNode::on_node_deleted_request, node {}", node_id);
 
   this->remove_node(node_id);
   if (this->viewer)
@@ -173,14 +175,14 @@ void GraphEditor::on_node_deleted_request(const std::string &node_id)
 
 void GraphEditor::on_node_reload_request(const std::string &node_id)
 {
-  HLOG->trace("GraphNode::on_node_reload_request, node {}", node_id);
+  HSDLOG->trace("GraphNode::on_node_reload_request, node {}", node_id);
   this->update(node_id);
   // TODO signals back to GUI before / after
 }
 
 void GraphEditor::on_node_right_clicked(const std::string &node_id, QPointF scene_pos)
 {
-  HLOG->trace("GraphNode::on_node_right_clicked, node {}", node_id);
+  HSDLOG->trace("GraphNode::on_node_right_clicked, node {}", node_id);
 
   if (this->viewer)
   {
@@ -199,7 +201,8 @@ void GraphEditor::on_node_right_clicked(const std::string &node_id, QPointF scen
       // --- add label
 
       {
-        QLabel        *label = new QLabel(p_node->get_caption().c_str());
+        QLabel *label = new QLabel(p_node->get_caption().c_str());
+        resize_font(label, 1);
         QWidgetAction *widget_action = new QWidgetAction(menu);
         widget_action->setDefaultWidget(label);
         menu->addAction(widget_action);
@@ -207,12 +210,29 @@ void GraphEditor::on_node_right_clicked(const std::string &node_id, QPointF scen
 
       menu->addSeparator();
 
+      // --- add attributes
+
+      AttributesWidget *attributes_widget = new AttributesWidget(
+          p_node->get_attr_ref(),
+          p_node->get_attr_ordered_key_ref());
+
       {
-        QPushButton   *push_button = new QPushButton("button");
         QWidgetAction *widget_action = new QWidgetAction(menu);
-        widget_action->setDefaultWidget(push_button);
+        widget_action->setDefaultWidget(attributes_widget);
         menu->addAction(widget_action);
       }
+
+      connect(attributes_widget,
+              &AttributesWidget::value_changed,
+              [this, p_node]()
+              {
+                std::string node_id = p_node->get_id();
+                this->update(node_id);
+              });
+
+      connect(attributes_widget,
+              &AttributesWidget::update_button_released,
+              [this, p_node]() { this->update(p_node->get_id()); });
 
       menu->popup(QCursor::pos());
     }

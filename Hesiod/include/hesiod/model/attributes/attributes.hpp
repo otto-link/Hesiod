@@ -98,7 +98,7 @@ public:
 
   std::string get_label() const { return this->label; }
 
-  virtual AttributeType get_type() const { return AttributeType::INVALID; }
+  virtual AttributeType get_type() const = 0;
 
   template <class T = void> T *get_ref()
   {
@@ -107,9 +107,9 @@ public:
       return ptr;
     else
     {
-      HLOG->critical("in Attribute, trying to get an attribute type which is not "
-                     "compatible with the current instance. Get type is: [{}]",
-                     typeid(T).name());
+      HSDLOG->critical("in Attribute, trying to get an attribute type which is not "
+                       "compatible with the current instance. Get type is: [{}]",
+                       typeid(T).name());
       throw std::runtime_error("wrong type");
     }
   }

@@ -14,7 +14,7 @@ namespace hesiod
 
 Remap::Remap(std::shared_ptr<ModelConfig> config) : BaseNode("Remap", config)
 {
-  HLOG->trace("Remap::Remap");
+  HSDLOG->trace("Remap::Remap");
 
   // input port(s)
   this->add_port<hmap::HeightMap>(gnode::PortType::IN, "input");
@@ -34,7 +34,7 @@ void Remap::compute()
 {
   Q_EMIT this->compute_started(this->get_id());
 
-  HLOG->trace("computing node {}", this->get_label());
+  HSDLOG->trace("computing node {}", this->get_label());
 
   // base noise function
   hmap::HeightMap *p_in = this->get_value_ref<hmap::HeightMap>("input");
