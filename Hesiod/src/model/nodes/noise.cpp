@@ -61,25 +61,28 @@ void Noise::compute()
   hmap::HeightMap *p_env = this->get_value_ref<hmap::HeightMap>("envelope");
   hmap::HeightMap *p_out = this->get_value_ref<hmap::HeightMap>("out");
 
-  hmap::fill(*p_out,
-             p_dx,
-             p_dy,
-             [this](hmap::Vec2<int>   shape,
-                    hmap::Vec4<float> bbox,
-                    hmap::Array      *p_noise_x,
-                    hmap::Array      *p_noise_y)
-             {
-               return hmap::noise(
-                   (hmap::NoiseType)this->get_attr<MapEnumAttribute>("noise_type"),
-                   shape,
-                   this->get_attr<WaveNbAttribute>("kw"),
-                   this->get_attr<SeedAttribute>("seed"),
-                   p_noise_x,
-                   p_noise_y,
-                   nullptr,
-                   bbox);
-             });
+  for (int k = 0; k < 100; k++)
+  {
 
+    hmap::fill(*p_out,
+               p_dx,
+               p_dy,
+               [this](hmap::Vec2<int>   shape,
+                      hmap::Vec4<float> bbox,
+                      hmap::Array      *p_noise_x,
+                      hmap::Array      *p_noise_y)
+               {
+                 return hmap::noise(
+                     (hmap::NoiseType)this->get_attr<MapEnumAttribute>("noise_type"),
+                     shape,
+                     this->get_attr<WaveNbAttribute>("kw"),
+                     this->get_attr<SeedAttribute>("seed"),
+                     p_noise_x,
+                     p_noise_y,
+                     nullptr,
+                     bbox);
+               });
+  }
   // add envelope
   if (p_env)
   {
