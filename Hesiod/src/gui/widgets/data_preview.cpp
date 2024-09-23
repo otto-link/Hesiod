@@ -156,6 +156,11 @@ void DataPreview::update_image()
         img = hmap::colorize_histogram(array).to_img_8bit();
         img_format = QImage::Format_Grayscale8;
       }
+      else if (this->preview_type == PreviewType::SLOPE_ELEVATION_HEATMAP)
+      {
+        img = hmap::colorize_slope_height_heatmap(array, hmap::Cmap::HOT).to_img_8bit();
+        img_format = QImage::Format_RGB888;
+      }
     }
 
     preview_image = QImage(img.data(), shape_preview.x, shape_preview.y, img_format);

@@ -17,15 +17,17 @@ enum PreviewType : int
 {
   GRAYSCALE,
   MAGMA,
-  HISTOGRAM,
   TERRAIN,
+  SLOPE_ELEVATION_HEATMAP,
+  HISTOGRAM,
 };
 
 static std::map<std::string, PreviewType> preview_type_map = {
-    {"Grayscale", PreviewType::GRAYSCALE},
-    {"Magma", PreviewType::MAGMA},
-    {"Terrain (hillshade)", PreviewType::TERRAIN},
+    {"cmap Grayscale", PreviewType::GRAYSCALE},
+    {"cmap Magma", PreviewType::MAGMA},
+    {"cmap Terrain (hillshade)", PreviewType::TERRAIN},
     {"Histogram view", PreviewType::HISTOGRAM},
+    // {"Slope/elev. heatmap", PreviewType::SLOPE_ELEVATION_HEATMAP},
 };
 
 /**
