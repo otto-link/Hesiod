@@ -17,7 +17,7 @@ namespace hesiod
 GammaCorrection::GammaCorrection(std::shared_ptr<ModelConfig> config)
     : BaseNode("GammaCorrection", config)
 {
-  HSDLOG->trace("GammaCorrection::GammaCorrection");
+  LOG->trace("GammaCorrection::GammaCorrection");
 
   // input port(s)
   this->add_port<hmap::HeightMap>(gnode::PortType::IN, "input");
@@ -31,17 +31,14 @@ GammaCorrection::GammaCorrection(std::shared_ptr<ModelConfig> config)
                                   config->overlap);
 
   // attribute(s)
-  this->attr["gamma"] = attr::create_attr<attr::FloatAttribute>(2.f,
-                                                                0.01f,
-                                                                10.f,
-                                                                "gamma");
+  this->attr["gamma"] = NEW(FloatAttribute, 2.f, 0.01f, 10.f, "Gamma");
 }
 
 void GammaCorrection::compute()
 {
   Q_EMIT this->compute_started(this->get_id());
 
-  HSDLOG->trace("computing node {}", this->get_label());
+  LOG->trace("computing node {}", this->get_label());
 
   // base noise function
   hmap::HeightMap *p_in = this->get_value_ref<hmap::HeightMap>("input");
@@ -59,12 +56,8 @@ void GammaCorrection::compute()
 
     hmap::transform(*p_out,
                     p_mask,
-                    [this](hmap::Array &x, hmap::Array *p_mask) {
-                      hmap::gamma_correction(
-                          x,
-                          this->get_attr<attr::FloatAttribute>("gamma"),
-                          p_mask);
-                    });
+                    [this](hmap::Array &x, hmap::Array *p_mask)
+                    { hmap::gamma_correction(x, GET("gamma", FloatAttribute), p_mask); });
 
     p_out->remap(hmin, hmax, 0.f, 1.f);
   }

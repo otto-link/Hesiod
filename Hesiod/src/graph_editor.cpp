@@ -24,16 +24,15 @@ GraphEditor::GraphEditor(const std::string           &id,
                          bool                         headless)
     : GraphNode(id, config)
 {
-  HSDLOG->trace("GraphEditor::GraphEditor, graph id {}", this->get_id());
+  LOG->trace("GraphEditor::GraphEditor, graph id {}", this->get_id());
 
   if (headless)
   {
-    HSDLOG->trace(
-        "GraphEditor::GraphEditor, running in headless mode for the graph editor");
+    LOG->trace("GraphEditor::GraphEditor, running in headless mode for the graph editor");
   }
   else
   {
-    HSDLOG->trace("GraphEditor::GraphEditor, initializing graph GUI");
+    LOG->trace("GraphEditor::GraphEditor, initializing graph GUI");
 
     // --- instantiate
 
@@ -112,11 +111,11 @@ void GraphEditor::on_connection_deleted(const std::string &id_out,
                                         const std::string &id_in,
                                         const std::string &port_id_in)
 {
-  HSDLOG->trace("GraphEditor::on_connection_deleted, {}:{} -> {}:{}",
-                id_out,
-                port_id_out,
-                id_in,
-                port_id_in);
+  LOG->trace("GraphEditor::on_connection_deleted, {}:{} -> {}:{}",
+             id_out,
+             port_id_out,
+             id_in,
+             port_id_in);
 
   this->remove_link(id_out, port_id_out, id_in, port_id_in);
   this->update(id_in);
@@ -127,11 +126,11 @@ void GraphEditor::on_connection_finished(const std::string &id_out,
                                          const std::string &id_in,
                                          const std::string &port_id_in)
 {
-  HSDLOG->trace("GraphEditor::on_connection_finished, {}:{} -> {}:{}",
-                id_out,
-                port_id_out,
-                id_in,
-                port_id_in);
+  LOG->trace("GraphEditor::on_connection_finished, {}:{} -> {}:{}",
+             id_out,
+             port_id_out,
+             id_in,
+             port_id_in);
 
   this->new_link(id_out, port_id_out, id_in, port_id_in);
   this->update(id_out);
@@ -139,7 +138,7 @@ void GraphEditor::on_connection_finished(const std::string &id_out,
 
 void GraphEditor::on_graph_clear_request()
 {
-  HSDLOG->trace("GraphEditor::on_graph_clear_request");
+  LOG->trace("GraphEditor::on_graph_clear_request");
   this->clear();
   if (this->viewer)
     this->viewer->clear();
@@ -147,7 +146,7 @@ void GraphEditor::on_graph_clear_request()
 
 void GraphEditor::on_graph_reload_request()
 {
-  HSDLOG->trace("GraphEditor::on_graph_reload_request");
+  LOG->trace("GraphEditor::on_graph_reload_request");
   this->update();
   // TODO signals back to GUI before / after
 }
@@ -189,7 +188,7 @@ void GraphEditor::on_new_node_request(const std::string &node_type, QPointF scen
 
 void GraphEditor::on_node_deleted_request(const std::string &node_id)
 {
-  HSDLOG->trace("GraphNode::on_node_deleted_request, node {}", node_id);
+  LOG->trace("GraphNode::on_node_deleted_request, node {}", node_id);
 
   this->remove_node(node_id);
   if (this->viewer)
@@ -198,14 +197,14 @@ void GraphEditor::on_node_deleted_request(const std::string &node_id)
 
 void GraphEditor::on_node_reload_request(const std::string &node_id)
 {
-  HSDLOG->trace("GraphNode::on_node_reload_request, node {}", node_id);
+  LOG->trace("GraphNode::on_node_reload_request, node {}", node_id);
   this->update(node_id);
   // TODO signals back to GUI before / after
 }
 
 void GraphEditor::on_node_right_clicked(const std::string &node_id, QPointF scene_pos)
 {
-  HSDLOG->trace("GraphNode::on_node_right_clicked, node {}", node_id);
+  LOG->trace("GraphNode::on_node_right_clicked, node {}", node_id);
 
   if (this->viewer)
   {

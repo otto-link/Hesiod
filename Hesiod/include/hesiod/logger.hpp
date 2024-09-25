@@ -7,7 +7,7 @@
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/spdlog.h>
 
-#define HSDLOG hesiod::Logger::get_logger()
+#define LOG hesiod::Logger::log()
 
 namespace hesiod
 {
@@ -16,7 +16,7 @@ class Logger
 {
 public:
   // Get the singleton instance of the logger
-  static std::shared_ptr<spdlog::logger> &get_logger();
+  static std::shared_ptr<spdlog::logger> &log();
 
 private:
   // Private constructor to prevent instantiation

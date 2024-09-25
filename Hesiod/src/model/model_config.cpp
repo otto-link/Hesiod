@@ -10,9 +10,9 @@ namespace hesiod
 
 void ModelConfig::log_debug() const
 {
-  HSDLOG->info("shape: {{{}, {}}}", shape.x, shape.y);
-  HSDLOG->info("tiling: {{{}, {}}}", tiling.x, tiling.y);
-  HSDLOG->info("overlap: {}", overlap);
+  LOG->info("shape: {{{}, {}}}", shape.x, shape.y);
+  LOG->info("tiling: {{{}, {}}}", tiling.x, tiling.y);
+  LOG->info("overlap: {}", overlap);
 }
 
 void ModelConfig::json_from(nlohmann::json const &json)

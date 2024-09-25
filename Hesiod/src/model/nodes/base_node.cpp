@@ -15,7 +15,7 @@ namespace hesiod
 BaseNode::BaseNode(const std::string &label, std::shared_ptr<ModelConfig> config)
     : gnode::Node(label), config(config)
 {
-  HSDLOG->trace("BaseNode::BaseNode, label: {}", label);
+  LOG->trace("BaseNode::BaseNode, label: {}", label);
 
   this->category = node_inventory.at(label);
 
@@ -58,7 +58,7 @@ void BaseNode::json_from(nlohmann::json const &json)
     if (!json[key].is_null())
       a->json_from(json[key]);
     else
-      HSDLOG->error(
+      LOG->error(
           "BaseNode::json_from, could not deserialize attribute: {}, using default value",
           key);
 }

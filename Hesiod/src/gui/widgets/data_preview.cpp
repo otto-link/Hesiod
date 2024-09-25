@@ -21,9 +21,9 @@ namespace hesiod
 DataPreview::DataPreview(gngui::NodeProxy *p_proxy_node)
     : QLabel(), p_proxy_node(p_proxy_node)
 {
-  HSDLOG->trace("DataPreview::DataPreview, node {}({})",
-                p_proxy_node->get_caption(),
-                p_proxy_node->get_id());
+  LOG->trace("DataPreview::DataPreview, node {}({})",
+             p_proxy_node->get_caption(),
+             p_proxy_node->get_id());
 
   int width = (int)(GN_STYLE->node.width + 2.f * GN_STYLE->node.padding -
                     2.f * GN_STYLE->node.padding_widget_width);
@@ -117,7 +117,7 @@ void DataPreview::update_image()
 
   QImage preview_image;
 
-  HSDLOG->trace("DataPreview::update_image, data_type: {}", data_type);
+  LOG->trace("DataPreview::update_image, data_type: {}", data_type);
 
   // Preview image (transparent by default if no data or no rendering
   // for the requested data type)

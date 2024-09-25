@@ -15,13 +15,13 @@ namespace hesiod
 GraphNode::GraphNode(const std::string &id, std::shared_ptr<ModelConfig> config)
     : gnode::Graph(), id(id), config(config)
 {
-  HSDLOG->trace("GraphNode::GraphNode");
+  LOG->trace("GraphNode::GraphNode");
   this->config->log_debug();
 }
 
 void GraphNode::json_from(nlohmann::json const &json)
 {
-  HSDLOG->trace("GraphNode::json_from, graph {}", this->get_id());
+  LOG->trace("GraphNode::json_from, graph {}", this->get_id());
 
   this->clear();
   this->set_id(json["id"]);
@@ -30,7 +30,7 @@ void GraphNode::json_from(nlohmann::json const &json)
   // populate nodes
   for (auto &json_node : json["nodes"])
   {
-    HSDLOG->trace("GraphNode::json_from, node type: {}", json_node["label"]);
+    LOG->trace("GraphNode::json_from, node type: {}", json_node["label"]);
 
     // instanciate the node
     std::string                  node_type = json_node["label"];
@@ -51,7 +51,7 @@ void GraphNode::json_from(nlohmann::json const &json)
 
 nlohmann::json GraphNode::json_to() const
 {
-  HSDLOG->trace("GraphNode::json_to, graph {}", this->get_id());
+  LOG->trace("GraphNode::json_to, graph {}", this->get_id());
 
   nlohmann::json json;
   json["id"] = this->get_id();

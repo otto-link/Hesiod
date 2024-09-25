@@ -25,6 +25,12 @@
 #include "hesiod/gui/widgets/data_preview.hpp"
 #include "hesiod/model/model_config.hpp"
 
+#define GET(key, aclass) this->attr.at(key)->get_ref<attr::aclass>()->get_value()
+#define GET_ATTR(key, aclass, what)                                                      \
+  this->attr.at(key)->get_ref<attr::aclass>()->get_##what()
+
+#define NEW(aclass, ...) attr::create_attr<attr::aclass>(__VA_ARGS__)
+
 namespace hesiod
 {
 

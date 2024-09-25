@@ -9,7 +9,7 @@ namespace hesiod
 // Initialize the static member
 std::shared_ptr<spdlog::logger> Logger::instance = nullptr;
 
-std::shared_ptr<spdlog::logger> &Logger::get_logger()
+std::shared_ptr<spdlog::logger> &Logger::log()
 {
   if (!instance)
   {

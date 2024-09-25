@@ -16,10 +16,10 @@ typedef unsigned int uint;
 
 int main(int argc, char *argv[])
 {
-  HSDLOG->info("Welcome to Hesiod v{}.{}.{}!",
-               HESIOD_VERSION_MAJOR,
-               HESIOD_VERSION_MINOR,
-               HESIOD_VERSION_PATCH);
+  LOG->info("Welcome to Hesiod v{}.{}.{}!",
+            HESIOD_VERSION_MAJOR,
+            HESIOD_VERSION_MINOR,
+            HESIOD_VERSION_PATCH);
 
   QApplication app(argc, argv);
 

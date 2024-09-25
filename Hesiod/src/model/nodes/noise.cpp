@@ -18,7 +18,7 @@ namespace hesiod
 
 Noise::Noise(std::shared_ptr<ModelConfig> config) : BaseNode("Noise", config)
 {
-  HSDLOG->trace("Noise::Noise");
+  LOG->trace("Noise::Noise");
 
   // input port(s)
   this->add_port<hmap::HeightMap>(gnode::PortType::IN, "dx");
@@ -33,12 +33,11 @@ Noise::Noise(std::shared_ptr<ModelConfig> config) : BaseNode("Noise", config)
                                   config->overlap);
 
   // attribute(s)
-  this->attr["noise_type"] = attr::create_attr<attr::MapEnumAttribute>(noise_type_map,
-                                                                       "Noise type");
-  this->attr["kw"] = attr::create_attr<attr::WaveNbAttribute>();
-  this->attr["seed"] = attr::create_attr<attr::SeedAttribute>();
-  this->attr["inverse"] = attr::create_attr<attr::BoolAttribute>(false, "Inverse");
-  this->attr["remap"] = attr::create_attr<attr::RangeAttribute>("Remap range");
+  this->attr["noise_type"] = NEW(MapEnumAttribute, noise_type_map, "Noise type");
+  this->attr["kw"] = NEW(WaveNbAttribute);
+  this->attr["seed"] = NEW(SeedAttribute);
+  this->attr["inverse"] = NEW(BoolAttribute, false, "Inverse");
+  this->attr["remap"] = NEW(RangeAttribute, "Remap range");
 
   // attribute(s) order
   this->attr_ordered_key =
@@ -49,7 +48,7 @@ void Noise::compute()
 {
   Q_EMIT this->compute_started(this->get_id());
 
-  HSDLOG->trace("computing node {}", this->get_label());
+  LOG->trace("computing node {}", this->get_label());
 
   // base noise function
   hmap::HeightMap *p_dx = this->get_value_ref<hmap::HeightMap>("dx");
@@ -65,15 +64,14 @@ void Noise::compute()
                     hmap::Array      *p_noise_x,
                     hmap::Array      *p_noise_y)
              {
-               return hmap::noise(
-                   (hmap::NoiseType)this->get_attr<attr::MapEnumAttribute>("noise_type"),
-                   shape,
-                   this->get_attr<attr::WaveNbAttribute>("kw"),
-                   this->get_attr<attr::SeedAttribute>("seed"),
-                   p_noise_x,
-                   p_noise_y,
-                   nullptr,
-                   bbox);
+               return hmap::noise((hmap::NoiseType)GET("noise_type", MapEnumAttribute),
+                                  shape,
+                                  GET("kw", WaveNbAttribute),
+                                  GET("seed", SeedAttribute),
+                                  p_noise_x,
+                                  p_noise_y,
+                                  nullptr,
+                                  bbox);
              });
 
   // add envelope
@@ -90,16 +88,15 @@ void Noise::compute()
   }
 
   // post-process
-  post_process_heightmap(
-      *p_out,
-      this->get_attr<attr::BoolAttribute>("inverse"),
-      false, // smooth
-      0,
-      false, // saturate
-      {0.f, 0.f},
-      0.f,
-      this->attr.at("remap")->get_ref<attr::RangeAttribute>()->get_is_active(),
-      this->get_attr<attr::RangeAttribute>("remap"));
+  post_process_heightmap(*p_out,
+                         GET("inverse", BoolAttribute),
+                         false, // smooth
+                         0,
+                         false, // saturate
+                         {0.f, 0.f},
+                         0.f,
+                         GET_ATTR("remap", RangeAttribute, is_active),
+                         GET("remap", RangeAttribute));
 
   Q_EMIT this->compute_finished(this->get_id());
 }

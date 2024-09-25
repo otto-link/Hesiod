@@ -16,7 +16,7 @@ namespace hesiod
 
 Remap::Remap(std::shared_ptr<ModelConfig> config) : BaseNode("Remap", config)
 {
-  HSDLOG->trace("Remap::Remap");
+  LOG->trace("Remap::Remap");
 
   // input port(s)
   this->add_port<hmap::HeightMap>(gnode::PortType::IN, "input");
@@ -29,14 +29,14 @@ Remap::Remap(std::shared_ptr<ModelConfig> config) : BaseNode("Remap", config)
                                   config->overlap);
 
   // attribute(s)
-  this->attr["remap"] = attr::create_attr<attr::RangeAttribute>();
+  this->attr["remap"] = NEW(RangeAttribute, "Remap range");
 }
 
 void Remap::compute()
 {
   Q_EMIT this->compute_started(this->get_id());
 
-  HSDLOG->trace("computing node {}", this->get_label());
+  LOG->trace("computing node {}", this->get_label());
 
   // base noise function
   hmap::HeightMap *p_in = this->get_value_ref<hmap::HeightMap>("input");
@@ -45,8 +45,7 @@ void Remap::compute()
   if (p_in)
   {
     *p_out = *p_in;
-    p_out->remap(this->get_attr<attr::RangeAttribute>("remap")[0],
-                 this->get_attr<attr::RangeAttribute>("remap")[1]);
+    p_out->remap(GET("remap", RangeAttribute)[0], GET("remap", RangeAttribute)[1]);
   }
 
   Q_EMIT this->compute_finished(this->get_id());
