@@ -5,6 +5,8 @@
 #include "highmap/filters.hpp"
 #include "highmap/heightmap.hpp"
 
+#include "attributes.hpp"
+
 #include "hesiod/logger.hpp"
 #include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/nodes/filters.hpp"
@@ -29,7 +31,10 @@ GammaCorrection::GammaCorrection(std::shared_ptr<ModelConfig> config)
                                   config->overlap);
 
   // attribute(s)
-  this->attr["gamma"] = create_attr<FloatAttribute>(2.f, 0.01f, 10.f);
+  this->attr["gamma"] = attr::create_attr<attr::FloatAttribute>(2.f,
+                                                                0.01f,
+                                                                10.f,
+                                                                "gamma");
 }
 
 void GammaCorrection::compute()
@@ -52,11 +57,14 @@ void GammaCorrection::compute()
 
     p_out->remap(0.f, 1.f, hmin, hmax);
 
-    hmap::transform(
-        *p_out,
-        p_mask,
-        [this](hmap::Array &x, hmap::Array *p_mask)
-        { hmap::gamma_correction(x, this->get_attr<FloatAttribute>("gamma"), p_mask); });
+    hmap::transform(*p_out,
+                    p_mask,
+                    [this](hmap::Array &x, hmap::Array *p_mask) {
+                      hmap::gamma_correction(
+                          x,
+                          this->get_attr<attr::FloatAttribute>("gamma"),
+                          p_mask);
+                    });
 
     p_out->remap(hmin, hmax, 0.f, 1.f);
   }

@@ -16,15 +16,14 @@
 #pragma once
 #include <QObject>
 
-#include "nlohmann/json.hpp"
-
 #include "gnode/node.hpp"
 #include "gnodegui/node_proxy.hpp"
+#include "nlohmann/json.hpp"
 
-#include "hesiod/model/attributes/attributes.hpp"
-#include "hesiod/model/model_config.hpp"
+#include "attributes/abstract_attribute.hpp"
 
 #include "hesiod/gui/widgets/data_preview.hpp"
+#include "hesiod/model/model_config.hpp"
 
 namespace hesiod
 {
@@ -37,13 +36,12 @@ public:
 
   BaseNode(const std::string &label, std::shared_ptr<ModelConfig> config);
 
-  template <typename AttributeType>
-  auto get_attr(const std::string &key) -> decltype(auto)
+  template <typename T> auto get_attr(const std::string &key) -> decltype(auto)
   {
-    return this->attr.at(key)->get_ref<AttributeType>()->get();
+    return this->attr.at(key)->get_ref<T>()->get_value();
   }
 
-  std::map<std::string, std::unique_ptr<Attribute>> *get_attr_ref()
+  std::map<std::string, std::unique_ptr<attr::AbstractAttribute>> *get_attr_ref()
   {
     return &this->attr;
   };
@@ -98,7 +96,7 @@ Q_SIGNALS:
   void compute_started(const std::string &id);
 
 protected:
-  std::map<std::string, std::unique_ptr<Attribute>> attr = {};
+  std::map<std::string, std::unique_ptr<attr::AbstractAttribute>> attr = {};
 
   /**
    * @brief Defines a preferred display order of the attributes.

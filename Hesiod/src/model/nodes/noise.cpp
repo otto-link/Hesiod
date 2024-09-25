@@ -6,6 +6,8 @@
 #include "highmap/heightmap.hpp"
 #include "highmap/primitives.hpp"
 
+#include "attributes.hpp"
+
 #include "hesiod/logger.hpp"
 #include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/nodes/primitives.hpp"
@@ -31,22 +33,16 @@ Noise::Noise(std::shared_ptr<ModelConfig> config) : BaseNode("Noise", config)
                                   config->overlap);
 
   // attribute(s)
-  this->attr["noise_type"] = create_attr<MapEnumAttribute>(noise_type_map);
-  this->attr["kw"] = create_attr<WaveNbAttribute>();
-  this->attr["seed"] = create_attr<SeedAttribute>();
-  this->attr["inverse"] = create_attr<BoolAttribute>(false);
-  this->attr["remap"] = create_attr<BoolAttribute>(true);
-  this->attr["remap_range"] = create_attr<RangeAttribute>();
+  this->attr["noise_type"] = attr::create_attr<attr::MapEnumAttribute>(noise_type_map,
+                                                                       "Noise type");
+  this->attr["kw"] = attr::create_attr<attr::WaveNbAttribute>();
+  this->attr["seed"] = attr::create_attr<attr::SeedAttribute>();
+  this->attr["inverse"] = attr::create_attr<attr::BoolAttribute>(false, "Inverse");
+  this->attr["remap"] = attr::create_attr<attr::RangeAttribute>("Remap range");
 
   // attribute(s) order
-  this->attr_ordered_key = {"noise_type",
-                            "_SEPARATOR_",
-                            "kw",
-                            "seed",
-                            "_SEPARATOR_",
-                            "inverse",
-                            "remap",
-                            "remap_range"};
+  this->attr_ordered_key =
+      {"noise_type", "_SEPARATOR_", "kw", "seed", "_SEPARATOR_", "inverse", "remap"};
 }
 
 void Noise::compute()
@@ -70,10 +66,10 @@ void Noise::compute()
                     hmap::Array      *p_noise_y)
              {
                return hmap::noise(
-                   (hmap::NoiseType)this->get_attr<MapEnumAttribute>("noise_type"),
+                   (hmap::NoiseType)this->get_attr<attr::MapEnumAttribute>("noise_type"),
                    shape,
-                   this->get_attr<WaveNbAttribute>("kw"),
-                   this->get_attr<SeedAttribute>("seed"),
+                   this->get_attr<attr::WaveNbAttribute>("kw"),
+                   this->get_attr<attr::SeedAttribute>("seed"),
                    p_noise_x,
                    p_noise_y,
                    nullptr,
@@ -94,15 +90,16 @@ void Noise::compute()
   }
 
   // post-process
-  post_process_heightmap(*p_out,
-                         this->get_attr<BoolAttribute>("inverse"),
-                         false, // smooth
-                         0,
-                         false, // saturate
-                         {0.f, 0.f},
-                         0.f,
-                         this->get_attr<BoolAttribute>("remap"),
-                         this->get_attr<RangeAttribute>("remap_range"));
+  post_process_heightmap(
+      *p_out,
+      this->get_attr<attr::BoolAttribute>("inverse"),
+      false, // smooth
+      0,
+      false, // saturate
+      {0.f, 0.f},
+      0.f,
+      this->attr.at("remap")->get_ref<attr::RangeAttribute>()->get_is_active(),
+      this->get_attr<attr::RangeAttribute>("remap"));
 
   Q_EMIT this->compute_finished(this->get_id());
 }

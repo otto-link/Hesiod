@@ -34,9 +34,6 @@ target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
 target_include_directories(${PROJECT_NAME} PRIVATE ${HESIOD_INCLUDE}
                                                    ${CMAKE_BINARY_DIR}/include)
 
-# target_precompile_headers( ${PROJECT_NAME} PRIVATE
-# ${CMAKE_CURRENT_SOURCE_DIR}/include/hesiod/model/attributes.hpp)
-
 # Link libraries
 target_link_libraries(
   ${PROJECT_NAME}
@@ -46,6 +43,7 @@ target_link_libraries(
           highmap
           gnode
           gnodegui
+          attributes
           Qt6::Core
           Qt6::OpenGL
           Qt6::Widgets

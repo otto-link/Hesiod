@@ -7,9 +7,11 @@
 
 #include "gnodegui/style.hpp"
 
+#include "attributes/widgets/abstract_widget.hpp"
+#include "attributes/widgets/attributes_widget.hpp"
+
 #include "hesiod/graph_editor.hpp"
 #include "hesiod/gui/gui_utils.hpp"
-#include "hesiod/gui/widgets/widgets.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
@@ -219,21 +221,21 @@ void GraphEditor::on_node_right_clicked(const std::string &node_id, QPointF scen
 
       QMenu *menu = new QMenu();
 
-      // --- add label
+      // // --- add label
 
-      {
-        QLabel *label = new QLabel(p_node->get_caption().c_str());
-        resize_font(label, 1);
-        QWidgetAction *widget_action = new QWidgetAction(menu);
-        widget_action->setDefaultWidget(label);
-        menu->addAction(widget_action);
-      }
+      // {
+      //   QLabel *label = new QLabel(p_node->get_caption().c_str());
+      //   resize_font(label, 1);
+      //   QWidgetAction *widget_action = new QWidgetAction(menu);
+      //   widget_action->setDefaultWidget(label);
+      //   menu->addAction(widget_action);
+      // }
 
-      menu->addSeparator();
+      // // menu->addSeparator();
 
       // --- add attributes
 
-      AttributesWidget *attributes_widget = new AttributesWidget(
+      attr::AttributesWidget *attributes_widget = new attr::AttributesWidget(
           p_node->get_attr_ref(),
           p_node->get_attr_ordered_key_ref());
 
@@ -244,7 +246,7 @@ void GraphEditor::on_node_right_clicked(const std::string &node_id, QPointF scen
       }
 
       connect(attributes_widget,
-              &AttributesWidget::value_changed,
+              &attr::AttributesWidget::value_changed,
               [this, p_node]()
               {
                 std::string node_id = p_node->get_id();
@@ -252,7 +254,7 @@ void GraphEditor::on_node_right_clicked(const std::string &node_id, QPointF scen
               });
 
       connect(attributes_widget,
-              &AttributesWidget::update_button_released,
+              &attr::AttributesWidget::update_button_released,
               [this, p_node]() { this->update(p_node->get_id()); });
 
       menu->popup(QCursor::pos());

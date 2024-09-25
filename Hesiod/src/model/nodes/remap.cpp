@@ -5,6 +5,8 @@
 #include "highmap/heightmap.hpp"
 #include "highmap/range.hpp"
 
+#include "attributes.hpp"
+
 #include "hesiod/logger.hpp"
 #include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/nodes/range.hpp"
@@ -27,7 +29,7 @@ Remap::Remap(std::shared_ptr<ModelConfig> config) : BaseNode("Remap", config)
                                   config->overlap);
 
   // attribute(s)
-  this->attr["remap"] = create_attr<RangeAttribute>();
+  this->attr["remap"] = attr::create_attr<attr::RangeAttribute>();
 }
 
 void Remap::compute()
@@ -43,8 +45,8 @@ void Remap::compute()
   if (p_in)
   {
     *p_out = *p_in;
-    p_out->remap(this->get_attr<RangeAttribute>("remap").x,
-                 this->get_attr<RangeAttribute>("remap").y);
+    p_out->remap(this->get_attr<attr::RangeAttribute>("remap")[0],
+                 this->get_attr<attr::RangeAttribute>("remap")[1]);
   }
 
   Q_EMIT this->compute_finished(this->get_id());

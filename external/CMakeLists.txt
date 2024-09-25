@@ -9,18 +9,17 @@ set(GNODE_ENABLE_TESTS OFF)
 add_subdirectory(GNode)
 
 # GNode GUI
+set(GNODEGUI_ENABLE_TESTS OFF)
 add_subdirectory(GNodeGUI)
 
+# Attributes
+set(ATTRIBUTES_ENABLE_TESTS OFF)
+add_subdirectory(Attributes)
+
 # HighMap
-set(HIGHMAP_ENABLE_DOCS
-    OFF
-    CACHE BOOL "")
-set(HIGHMAP_ENABLE_EXAMPLES
-    OFF
-    CACHE BOOL "")
-set(HIGHMAP_ENABLE_TESTS
-    OFF
-    CACHE BOOL "")
+set(HIGHMAP_ENABLE_DOCS OFF)
+set(HIGHMAP_ENABLE_EXAMPLES OFF)
+set(HIGHMAP_ENABLE_TESTS OFF)
 add_subdirectory(HighMap)
 
 # add it ony if it has not being added before by any other dependency
