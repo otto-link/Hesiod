@@ -10,3 +10,6 @@
 [submodule "external/GNodeGUI"]
 	path = external/GNodeGUI
 	url = git@github.com:otto-link/GNodeGUI.git
+[submodule "external/GNode"]
+	path = external/GNode
+	url = git@github.com:otto-link/GNode.git
