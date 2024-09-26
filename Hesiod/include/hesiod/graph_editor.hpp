@@ -37,6 +37,10 @@ public:
 
   gngui::GraphViewer *get_p_viewer() { return this->viewer.get(); }
 
+  void json_from(nlohmann::json const &json);
+
+  nlohmann::json json_to() const;
+
 public Q_SLOTS:
   void on_connection_deleted(const std::string &id_out,
                              const std::string &port_id_out,
@@ -50,7 +54,16 @@ public Q_SLOTS:
 
   void on_graph_clear_request();
 
+  void on_graph_load_request();
+
   void on_graph_reload_request();
+
+  void on_graph_save_as_request();
+
+  void on_graph_save_request();
+
+  // for serialization only
+  void on_new_graphics_node_request(const std::string &node_id, QPointF scene_pos);
 
   void on_new_node_request(const std::string &node_type, QPointF scene_pos);
 
@@ -63,6 +76,8 @@ public Q_SLOTS:
 private:
   std::unique_ptr<gngui::GraphViewer> viewer = std::unique_ptr<gngui::GraphViewer>(
       nullptr);
+
+  std::filesystem::path fname = "";
 };
 
 } // namespace hesiod

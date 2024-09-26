@@ -1,7 +1,12 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include <filesystem>
+#include <fstream>
+
+#include <QFileDialog>
 #include <QMenu>
+#include <QMessageBox>
 #include <QPushButton>
 #include <QWidgetAction>
 
@@ -58,9 +63,29 @@ GraphEditor::GraphEditor(const std::string           &id,
                   &GraphEditor::on_graph_clear_request);
 
     this->connect(this->viewer.get(),
+                  &gngui::GraphViewer::graph_load_request,
+                  this,
+                  &GraphEditor::on_graph_load_request);
+
+    this->connect(this->viewer.get(),
                   &gngui::GraphViewer::graph_reload_request,
                   this,
                   &GraphEditor::on_graph_reload_request);
+
+    this->connect(this->viewer.get(),
+                  &gngui::GraphViewer::graph_save_as_request,
+                  this,
+                  &GraphEditor::on_graph_save_as_request);
+
+    this->connect(this->viewer.get(),
+                  &gngui::GraphViewer::graph_save_request,
+                  this,
+                  &GraphEditor::on_graph_save_request);
+
+    this->connect(this->viewer.get(),
+                  &gngui::GraphViewer::new_graphics_node_request,
+                  this,
+                  &GraphEditor::on_new_graphics_node_request);
 
     this->connect(this->viewer.get(),
                   &gngui::GraphViewer::new_node_request,
@@ -106,6 +131,30 @@ GraphEditor::GraphEditor(const std::string           &id,
                                    {"Biomes", QColor(133, 153, 0, 255)}};
 }
 
+void GraphEditor::json_from(nlohmann::json const &json)
+{
+  GraphNode::json_from(json["graph_node"]);
+
+  if (this->viewer && !json["headless"])
+  {
+    LOG->trace("here");
+    this->viewer->json_from(json["graph_viewer"]);
+  }
+}
+
+nlohmann::json GraphEditor::json_to() const
+{
+  nlohmann::json json;
+
+  json["graph_node"] = GraphNode::json_to();
+
+  json["headless"] = this->viewer ? false : true;
+  if (this->viewer)
+    json["graph_viewer"] = this->viewer->json_to();
+
+  return json;
+}
+
 void GraphEditor::on_connection_deleted(const std::string &id_out,
                                         const std::string &port_id_out,
                                         const std::string &id_in,
@@ -139,9 +188,56 @@ void GraphEditor::on_connection_finished(const std::string &id_out,
 void GraphEditor::on_graph_clear_request()
 {
   LOG->trace("GraphEditor::on_graph_clear_request");
-  this->clear();
-  if (this->viewer)
-    this->viewer->clear();
+
+  QMessageBox::StandardButton reply = QMessageBox::question(
+      nullptr,
+      "?",
+      "This will clear everything. Are you sure?",
+      QMessageBox::Yes | QMessageBox::No);
+
+  if (reply == QMessageBox::Yes)
+  {
+    this->clear();
+    if (this->viewer)
+      this->viewer->clear();
+  }
+}
+
+void GraphEditor::on_graph_load_request()
+{
+  LOG->trace("GraphEditor::on_graph_load_request");
+
+  std::filesystem::path path = this->fname.parent_path();
+
+  QString load_fname = QFileDialog::getOpenFileName(this->viewer.get(),
+                                                    "Load...",
+                                                    path.string().c_str(),
+                                                    "Hesiod files (*.hsd)");
+
+  if (!load_fname.isNull() && !load_fname.isEmpty())
+  {
+    // load json
+    nlohmann::json json;
+    std::ifstream  file(load_fname.toStdString());
+
+    if (file.is_open())
+    {
+      file >> json;
+      file.close();
+      LOG->trace("JSON successfully loaded from {}", fname.string());
+
+      this->fname = load_fname.toStdString();
+
+      this->clear();
+      if (this->viewer)
+        this->viewer->clear();
+
+      this->json_from(json);
+      this->update();
+    }
+    else
+      LOG->error("Could not open file {} to save JSON", fname.string());
+  }
 }
 
 void GraphEditor::on_graph_reload_request()
@@ -149,6 +245,80 @@ void GraphEditor::on_graph_reload_request()
   LOG->trace("GraphEditor::on_graph_reload_request");
   this->update();
   // TODO signals back to GUI before / after
+}
+
+void GraphEditor::on_graph_save_as_request()
+{
+  LOG->trace("GraphEditor::on_graph_save_as_request");
+
+  std::filesystem::path path = this->fname.parent_path();
+
+  QString new_fname = QFileDialog::getSaveFileName(this->viewer.get(),
+                                                   "Save as...",
+                                                   path.string().c_str(),
+                                                   "Hesiod files (*.hsd)");
+
+  if (!new_fname.isNull() && !new_fname.isEmpty())
+  {
+    this->fname = new_fname.toStdString();
+    this->on_graph_save_request();
+  }
+}
+
+void GraphEditor::on_graph_save_request()
+{
+  LOG->trace("GraphEditor::on_graph_save_request");
+
+  if (this->fname == "")
+  {
+    this->on_graph_save_as_request();
+    return;
+  }
+
+  // fill-in json
+  nlohmann::json json = this->json_to();
+
+  // save file
+  std::ofstream file(fname);
+
+  if (file.is_open())
+  {
+    file << json.dump(4);
+    file.close();
+    LOG->trace("JSON successfully written to {}", fname.string());
+  }
+  else
+    LOG->error("Could not open file {} to load JSON", fname.string());
+}
+
+void GraphEditor::on_new_graphics_node_request(const std::string &node_id,
+                                               QPointF            scene_pos)
+{
+  // this is used only for serialization, when the graph viewer
+  // requests the creation of a graphics node while the base node has
+  // aldready been created when the GraphNode has been deserialized
+
+  if (this->viewer)
+  {
+    BaseNode *p_node = this->get_node_ref_by_id<BaseNode>(node_id);
+    this->viewer->add_node(p_node->get_proxy_ref(), scene_pos, node_id);
+
+    gngui::GraphicsNode *p_gx_node = this->viewer->get_graphics_node_by_id(node_id);
+
+    this->connect(p_node,
+                  &BaseNode::compute_started,
+                  [this, p_gx_node]()
+                  {
+                    p_gx_node->on_compute_started();
+                    p_gx_node->update();
+                    // this->viewer->viewport()->update();
+                  });
+
+    this->connect(p_node,
+                  &BaseNode::compute_finished,
+                  p_gx_node,
+                  &gngui::GraphicsNode::on_compute_finished);
+  }
 }
 
 void GraphEditor::on_new_node_request(const std::string &node_type, QPointF scene_pos)
@@ -164,11 +334,6 @@ void GraphEditor::on_new_node_request(const std::string &node_type, QPointF scen
     this->viewer->add_node(p_node->get_proxy_ref(), scene_pos, node_id);
 
     gngui::GraphicsNode *p_gx_node = this->viewer->get_graphics_node_by_id(node_id);
-
-    // this->connect(p_node,
-    //               &BaseNode::compute_started,
-    //               p_gx_node,
-    //               &gngui::GraphicsNode::on_compute_started);
 
     this->connect(p_node,
                   &BaseNode::compute_started,

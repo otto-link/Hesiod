@@ -58,6 +58,8 @@ nlohmann::json GraphNode::json_to() const
   json["id_count"] = this->get_id_count();
 
   // nodes
+  json["nodes"] = nlohmann::json::array();
+
   for (auto &[key, p_node] : this->nodes)
   {
     nlohmann::json json_node;
@@ -66,6 +68,8 @@ nlohmann::json GraphNode::json_to() const
   }
 
   // links
+  json["links"] = nlohmann::json::array();
+
   for (auto &link : this->links)
   {
     nlohmann::json json_link;
@@ -80,8 +84,6 @@ nlohmann::json GraphNode::json_to() const
 
     json["links"].push_back(json_link);
   }
-
-  std::cout << json.dump(4) << std::endl;
 
   return json;
 }
