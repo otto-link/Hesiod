@@ -115,12 +115,13 @@ void DataPreview::update_image()
   hmap::Vec2<int> shape_preview = hmap::Vec2<int>(128, 128);
   this->resize(shape_preview.x, shape_preview.y);
 
-  QImage preview_image;
-
   LOG->trace("DataPreview::update_image, data_type: {}", data_type);
 
   // Preview image (transparent by default if no data or no rendering
   // for the requested data type)
+  QImage preview_image = QImage(shape_preview.x,
+                                shape_preview.y,
+                                QImage::Format_Grayscale8);
   preview_image.fill(Qt::transparent);
 
   // Update preview

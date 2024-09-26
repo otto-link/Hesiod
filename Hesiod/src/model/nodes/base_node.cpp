@@ -41,7 +41,7 @@ gngui::PortType BaseNode::get_port_type(int port_index) const
   else
     return gngui::PortType::OUT;
 }
-#include <QPushButton>
+
 QWidget *BaseNode::get_qwidget_ref()
 {
   if (!this->data_preview)

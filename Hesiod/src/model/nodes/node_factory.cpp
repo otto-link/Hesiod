@@ -4,6 +4,7 @@
 #include <stdexcept>
 
 #include "hesiod/logger.hpp"
+#include "hesiod/model/nodes/export.hpp"
 #include "hesiod/model/nodes/filters.hpp"
 #include "hesiod/model/nodes/node_factory.hpp"
 #include "hesiod/model/nodes/primitives.hpp"
@@ -26,6 +27,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
   switch(str2int(node_type.c_str()))
   {
     HSD_NODE_CASE(GammaCorrection);
+    HSD_NODE_CASE(ExportHeightmap);
     HSD_NODE_CASE(Noise);
     HSD_NODE_CASE(Remap);
   default:

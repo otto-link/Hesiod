@@ -1,30 +1,35 @@
 #!/bin/bash
 DIRS="Hesiod/src"
 
-search=("NEW_ATTR_BOOL" \
-	    "NEW_ATTR_INT" \
-	    "NEW_ATTR_FLOAT" \
-	    "NEW_ATTR_MAPENUM" \
-	    "NEW_ATTR_RANGE" \
-	    "NEW_ATTR_SEED" \
-	    "NEW_ATTR_WAVENB" \
+search=("NEW_ATTR_BOOL(" \
+	    "NEW_ATTR_INT(" \
+	    "NEW_ATTR_FILENAME(" \
+	    "NEW_ATTR_FLOAT(" \
+	    "NEW_ATTR_MAPENUM(" \
+	    "NEW_ATTR_RANGE(" \
+	    "NEW_ATTR_SEED(" \
+	    "NEW_ATTR_WAVENB(" \
 	    #
 	    "GET_ATTR_BOOL" \
-		"GET_ATTR_INT" \
-		"GET_ATTR_FLOAT" \
+	    "GET_ATTR_INT" \
+	    "GET_ATTR_FLOAT" \
 	    "GET_ATTR_MAPENUM" \
 	    "GET_ATTR_RANGE" \
 	    "GET_ATTR_SEED" \
 	    "GET_ATTR_WAVENB" \
+	    #
+	    "computingStarted()" \
+	    "computingFinished()" \
        )
 
-replace=("create_attr<BoolAttribute>" \
-	     "create_attr<IntAttribute>" \
-	     "create_attr<FloatAttribute>" \
-	     "create_attr<MapEnumAttribute>" \
-	     "create_attr<RangeAttribute>" \
-	     "create_attr<SeedAttribute>" \
-	     "create_attr<WaveNbAttribute>" \
+replace=("NEW(BoolAttribute, " \
+	     "NEW(IntAttribute, " \
+	     "NEW(FilenameAttribute, " \
+	     "NEW(FloatAttribute, " \
+	     "NEW(MapEnumAttribute, " \
+	     "NEW(RangeAttribute, " \
+	     "NEW(SeedAttribute, " \
+	     "NEW(WaveNbAttribute, " \
 	     #
 	     "this->get_attr<BoolAttribute>" \
 	     "this->get_attr<IntAttribute>" \
@@ -33,6 +38,9 @@ replace=("create_attr<BoolAttribute>" \
 	     "this->get_attr<RangeAttribute>" \
 	     "this->get_attr<SeedAttribute>" \
 	     "this->get_attr<WaveNbAttribute>" \
+	     #
+	     "compute_started(this->get_id())" \
+	     "compute_finished(this->get_id())" \
 	)
 
 len=${#search[@]}
