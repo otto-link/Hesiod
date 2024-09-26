@@ -28,6 +28,7 @@ ExportHeightmap::ExportHeightmap(std::shared_ptr<ModelConfig> config)
   // attribute(s)
   this->attr["fname"] = NEW(FilenameAttribute, "hmap.png", "", "Filename");
   this->attr["format"] = NEW(MapEnumAttribute,
+                             "png (8 bit)",
                              heightmap_export_format_map,
                              "Export format");
   this->attr["auto_export"] = NEW(BoolAttribute, true, "Automatic export");
