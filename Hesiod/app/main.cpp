@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 
   QApplication app(argc, argv);
 
-  QFont font("Roboto");
+  QFont font = app.font();
   font.setPointSize(10);
   app.setFont(font);
 
@@ -40,16 +40,6 @@ int main(int argc, char *argv[])
   graph.get_p_viewer()->show();
 
   return app.exec();
-
-  // hesiod::GraphNode graph = hesiod::GraphNode("graph1", config);
-  // graph.get_node_ref_by_id<hesiod::Noise>(id1)->get_proxy_ref()->log_debug();
-
-  // // nlohmann::json json = graph.json_to();
-  // // graph.clear();
-  // // graph.print();
-  // // graph.json_from(json);
-  // // graph.print();
-  // // graph.update(id1);
 
   return 0;
 }
