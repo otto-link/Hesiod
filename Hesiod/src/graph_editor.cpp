@@ -106,11 +106,17 @@ GraphEditor::GraphEditor(const std::string           &id,
                   &gngui::GraphViewer::node_right_clicked,
                   this,
                   &GraphEditor::on_node_right_clicked);
+
+    this->connect(this->viewer.get(),
+                  &gngui::GraphViewer::viewport_request,
+                  this,
+                  &GraphEditor::on_viewport_request);
   }
 
   // --- syles
 
   // TODO move somewhere else
+
   // GN_STYLE->node.color_port_data[] = QColor(189, 147, 249, 255);
 
   GN_STYLE->node.color_category = {{"Converter", QColor(188, 182, 163, 255)},
@@ -424,6 +430,11 @@ void GraphEditor::on_node_right_clicked(const std::string &node_id, QPointF scen
       menu->popup(QCursor::pos());
     }
   }
+}
+
+void GraphEditor::on_viewport_request()
+{
+  LOG->trace("GraphEditor::on_viewport_request");
 }
 
 } // namespace hesiod
