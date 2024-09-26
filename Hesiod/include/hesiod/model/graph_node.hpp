@@ -33,6 +33,8 @@ public:
 
   std::string get_id() const { return this->id; }
 
+  ModelConfig *get_config_ref() { return this->config.get(); }
+
   void json_from(nlohmann::json const &json);
 
   nlohmann::json json_to() const;

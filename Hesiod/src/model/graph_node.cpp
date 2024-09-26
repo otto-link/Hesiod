@@ -26,6 +26,7 @@ void GraphNode::json_from(nlohmann::json const &json)
   this->clear();
   this->set_id(json["id"]);
   this->set_id_count(json["id_count"]);
+  this->config->json_from(json["model_config"]);
 
   // populate nodes
   for (auto &json_node : json["nodes"])
@@ -56,6 +57,7 @@ nlohmann::json GraphNode::json_to() const
   nlohmann::json json;
   json["id"] = this->get_id();
   json["id_count"] = this->get_id_count();
+  json["model_config"] = this->config->json_to();
 
   // nodes
   json["nodes"] = nlohmann::json::array();
