@@ -161,6 +161,7 @@ static std::map<std::string, int> noise_type_map_fbm = {
     {"Worley (value)", hmap::NoiseType::WORLEY_VALUE}};
 
 static std::map<std::string, std::string> node_inventory = {
+    {"Brush", "Primitive/Authoring"},
     {"Noise", "Primitive/Coherent"},
     {"ExportHeightmap", "IO/Files"},
     {"GammaCorrection", "Filter/Recurve"},
