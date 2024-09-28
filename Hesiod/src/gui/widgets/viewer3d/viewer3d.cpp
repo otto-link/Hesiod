@@ -78,18 +78,8 @@ Viewer3d::Viewer3d(GraphEditor *p_graph_editor, QWidget *parent, std::string lab
 
   row += 2;
 
-  // rendering image
-  this->label_render_image = new QLabel();
-  layout->addWidget(this->label_render_image, row++, 0, 1, 3);
-
-  this->label_render_image->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-
-  this->render_image = QImage(DEFAULT_VIEWER3D_WIDTH,
-                              DEFAULT_VIEWER3D_WIDTH,
-                              QImage::Format_RGB888);
-  this->render_image.fill(Qt::black);
-
-  this->label_render_image->setPixmap(QPixmap::fromImage(this->render_image));
+  // renderer widget
+  layout->addWidget(this->render_widget, row++, 0, 1, 3);
 
   // update contents
   this->update_view_param_widgets();
@@ -172,16 +162,6 @@ void Viewer3d::on_node_selected(const std::string &id)
   this->update_view_param_widgets();
 
   Q_EMIT this->view_param_changed();
-}
-
-void Viewer3d::resizeEvent(QResizeEvent *event)
-{
-  QWidget::resizeEvent(event);
-
-  // resize image to fully use the label extent
-  this->render_image = QImage(this->label_render_image->size(), QImage::Format_RGB888);
-  this->render_image.fill(Qt::black);
-  this->label_render_image->setPixmap(QPixmap::fromImage(this->render_image));
 }
 
 void Viewer3d::update_view_param_widgets()

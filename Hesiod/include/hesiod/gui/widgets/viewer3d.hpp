@@ -61,9 +61,6 @@ public Q_SLOTS:
 
   void on_node_selected(const std::string &id);
 
-protected:
-  void resizeEvent(QResizeEvent *event) override;
-
 private:
   GraphEditor *p_graph_editor;
   std::string  label;
@@ -82,8 +79,7 @@ private:
 
   std::map<std::string, NodeViewParam> node_view_param_map;
 
-  QLabel *label_render_image;
-  QImage  render_image;
+  QWidget *render_widget = nullptr;
 
   QLabel    *label_node_id;
   QComboBox *combo_elev;

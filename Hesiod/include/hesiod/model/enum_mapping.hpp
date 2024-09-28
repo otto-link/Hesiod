@@ -163,6 +163,7 @@ static std::map<std::string, int> noise_type_map_fbm = {
 static std::map<std::string, std::string> node_inventory = {
     {"Brush", "Primitive/Authoring"},
     {"Noise", "Primitive/Coherent"},
+    {"NoiseFbm", "Primitive/Coherent"},
     {"ExportHeightmap", "IO/Files"},
     {"GammaCorrection", "Filter/Recurve"},
     {"Remap", "Filter/Range"}};

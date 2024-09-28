@@ -31,6 +31,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     HSD_NODE_CASE(GammaCorrection);
     HSD_NODE_CASE(ExportHeightmap);
     HSD_NODE_CASE(Noise);
+    HSD_NODE_CASE(NoiseFbm);
     HSD_NODE_CASE(Remap);
   default:
     // clang-format on

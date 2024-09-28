@@ -27,4 +27,11 @@ struct Noise : public BaseNode
   void compute() override;
 };
 
+struct NoiseFbm : public BaseNode
+{
+  NoiseFbm(std::shared_ptr<ModelConfig> config);
+
+  void compute() override;
+};
+
 } // namespace hesiod
