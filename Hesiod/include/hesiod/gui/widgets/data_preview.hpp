@@ -50,6 +50,7 @@ private:
   gngui::NodeProxy *p_proxy_node;
   int               preview_port_index;
   PreviewType       preview_type = PreviewType::GRAYSCALE;
+  QImage            preview_image;
 };
 
 } // namespace hesiod

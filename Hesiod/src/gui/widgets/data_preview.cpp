@@ -119,17 +119,12 @@ void DataPreview::update_image()
 
   // Preview image (transparent by default if no data or no rendering
   // for the requested data type)
-  QImage preview_image = QImage(shape_preview.x,
-                                shape_preview.y,
-                                QImage::Format_Grayscale8);
-  preview_image.fill(Qt::transparent);
+  QImage::Format       img_format = QImage::Format_Grayscale8;
+  std::vector<uint8_t> img(shape_preview.x * shape_preview.y);
 
   // Update preview
   if (blind_data_ptr)
   {
-    QImage::Format       img_format = QImage::Format_Grayscale8;
-    std::vector<uint8_t> img;
-
     if (data_type == typeid(hmap::HeightMap).name())
     {
       hmap::HeightMap *p_h = static_cast<hmap::HeightMap *>(blind_data_ptr);
@@ -163,10 +158,9 @@ void DataPreview::update_image()
         img_format = QImage::Format_RGB888;
       }
     }
-
-    preview_image = QImage(img.data(), shape_preview.x, shape_preview.y, img_format);
   }
 
+  this->preview_image = QImage(img.data(), shape_preview.x, shape_preview.y, img_format);
   this->setPixmap(QPixmap::fromImage(preview_image));
   this->update();
 }
