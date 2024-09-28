@@ -66,9 +66,6 @@ void DataPreview::contextMenuEvent(QContextMenuEvent *event)
 
   for (int k = 0; k < this->p_proxy_node->get_nports(); k++)
   {
-    std::string port_type = this->p_proxy_node->get_port_type(k) == gngui::PortType::IN
-                                ? " (IN)"
-                                : " (OUT)";
     std::string action_label = this->p_proxy_node->get_port_caption(k);
 
     QAction *action = context_menu.addAction(action_label.c_str());

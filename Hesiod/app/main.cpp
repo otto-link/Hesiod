@@ -14,6 +14,8 @@ typedef unsigned int uint;
 #include "hesiod/model/nodes/primitives.hpp"
 #include "hesiod/model/nodes/range.hpp"
 
+#include "hesiod/gui/widgets/viewer3d.hpp"
+
 int main(int argc, char *argv[])
 {
   LOG->info("Welcome to Hesiod v{}.{}.{}!",
@@ -38,6 +40,9 @@ int main(int argc, char *argv[])
 
   graph.get_p_viewer()->resize(1000, 800);
   graph.get_p_viewer()->show();
+
+  auto v3 = hesiod::Viewer3d(&graph);
+  v3.show();
 
   return app.exec();
 
