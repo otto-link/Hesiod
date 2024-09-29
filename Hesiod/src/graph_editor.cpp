@@ -317,37 +317,6 @@ void GraphEditor::on_new_graphics_node_request(const std::string &node_id,
                   {
                     p_gx_node->on_compute_started();
                     p_gx_node->update();
-                    // this->viewer->viewport()->update();
-                  });
-
-    this->connect(p_node,
-                  &BaseNode::compute_finished,
-                  p_gx_node,
-                  &gngui::GraphicsNode::on_compute_finished);
-  }
-}
-
-void GraphEditor::on_new_node_request(const std::string &node_type, QPointF scene_pos)
-{
-  if (node_type == "")
-    return;
-
-  std::string node_id = this->new_node(node_type);
-
-  if (this->viewer)
-  {
-    BaseNode *p_node = this->get_node_ref_by_id<BaseNode>(node_id);
-    this->viewer->add_node(p_node->get_proxy_ref(), scene_pos, node_id);
-
-    gngui::GraphicsNode *p_gx_node = this->viewer->get_graphics_node_by_id(node_id);
-
-    this->connect(p_node,
-                  &BaseNode::compute_started,
-                  [this, p_gx_node]()
-                  {
-                    p_gx_node->on_compute_started();
-                    p_gx_node->update();
-                    // this->viewer->viewport()->update();
                   });
 
     this->connect(p_node,
@@ -360,6 +329,18 @@ void GraphEditor::on_new_node_request(const std::string &node_type, QPointF scen
                   [this, p_node]()
                   { Q_EMIT this->node_compute_finished(p_node->get_id()); });
   }
+}
+
+void GraphEditor::on_new_node_request(const std::string &node_type, QPointF scene_pos)
+{
+  if (node_type == "")
+    return;
+
+  // add control node (compute)
+  std::string node_id = this->new_node(node_type);
+
+  // add cooresponding graphics node (GUI)
+  this->on_new_graphics_node_request(node_id, scene_pos);
 }
 
 void GraphEditor::on_node_deleted_request(const std::string &node_id)
