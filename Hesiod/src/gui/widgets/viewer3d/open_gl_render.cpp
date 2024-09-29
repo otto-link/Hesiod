@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include "highmap/colorize.hpp"
 #include "highmap/heightmap.hpp"
 #include "highmap/operator.hpp"
 #include "highmap/range.hpp"
@@ -233,14 +234,16 @@ void OpenGLRender::set_data(BaseNode          *new_p_node,
     LOG->trace("OpenGLRender::set_data, p_node is NOT nullptr");
 
     int         port_index_elev = this->p_node->get_port_index(this->port_id_elev);
-    std::string data_type = this->p_node->get_data_type(port_index_elev);
+    std::string data_type_elev = this->p_node->get_data_type(port_index_elev);
 
     // check that data are indeed available
     if (p_node->get_data_ref(port_index_elev))
     {
-      if (data_type == typeid(hmap::HeightMap).name())
+      if (data_type_elev == typeid(hmap::HeightMap).name())
       {
         LOG->trace("OpenGLRender::set_data, HeightMap data");
+
+        // --- elevation
 
         hmap::HeightMap *p_h = this->p_node->get_value_ref<hmap::HeightMap>(
             port_index_elev);
@@ -254,7 +257,51 @@ void OpenGLRender::set_data(BaseNode          *new_p_node,
 
         update_vertex_elevations(array, this->vertices);
 
-        // default
+        // --- color array
+
+        bool color_done = false;
+
+        // colorize based on the selected data (if any)
+        if (this->port_id_color != "")
+        {
+          int port_index_color = this->p_node->get_port_index(this->port_id_color);
+          std::string data_type_color = this->p_node->get_data_type(port_index_color);
+
+          if (p_node->get_data_ref(port_index_color))
+          {
+            if (data_type_color == typeid(hmap::HeightMap).name())
+            {
+              hmap::HeightMap *p_c = this->p_node->get_value_ref<hmap::HeightMap>(
+                  port_index_color);
+              hmap::Array c = p_c->to_array();
+
+              this->texture_img = generate_selector_image(c);
+              this->texture_shape = p_c->shape;
+
+              hmap::apply_hillshade(this->texture_img, array, 0.f, 1.f, 1.5f, true);
+
+              color_done = true;
+            }
+            //
+            else if (data_type_color == typeid(hmap::HeightMapRGBA).name())
+            {
+              hmap::HeightMapRGBA *p_c = this->p_node->get_value_ref<hmap::HeightMapRGBA>(
+                  port_index_color);
+
+              this->texture_img = p_c->to_img_8bit(p_c->shape);
+              this->texture_shape = p_c->shape;
+
+              // 'true' for RGBA, '0.9f' is exponent applied to shadows
+              hmap::apply_hillshade(this->texture_img, array, 0.f, 1.5f, 0.9f, true);
+
+              color_done = true;
+            }
+          }
+        }
+
+        // default coloring (if no data available or no coloring
+        // strategy for the data type)
+        if (!color_done)
         {
           this->texture_img.resize(4 * array.shape.x * array.shape.y);
 

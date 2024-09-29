@@ -53,6 +53,21 @@ Viewer3d::Viewer3d(GraphEditor *p_graph_editor, QWidget *parent, std::string lab
   this->combo_elev = new QComboBox();
   this->combo_color = new QComboBox();
 
+  this->connect(this->button_pin_current_node,
+                &QPushButton::toggled,
+                [this]()
+                {
+                  // if the button is switch from pinned to unpinned,
+                  // reset the view param
+                  if (!this->button_pin_current_node->isChecked())
+                  {
+                    this->current_node_id = "";
+                    this->current_view_param = NodeViewParam();
+                    this->update_view_param_widgets();
+                    this->emit_view_param_changed();
+                  }
+                });
+
   this->connect(this->combo_elev,
                 QOverload<int>::of(&QComboBox::currentIndexChanged),
                 [this]()
