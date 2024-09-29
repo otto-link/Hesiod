@@ -354,6 +354,11 @@ void GraphEditor::on_new_node_request(const std::string &node_type, QPointF scen
                   &BaseNode::compute_finished,
                   p_gx_node,
                   &gngui::GraphicsNode::on_compute_finished);
+
+    this->connect(p_node,
+                  &BaseNode::compute_finished,
+                  [this, p_node]()
+                  { Q_EMIT this->node_compute_finished(p_node->get_id()); });
   }
 }
 

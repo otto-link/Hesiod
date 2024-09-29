@@ -15,12 +15,14 @@
 #pragma once
 #include <QComboBox>
 #include <QLabel>
+#include <QPushButton>
 #include <QWidget>
 
 #include "nlohmann/json.hpp"
 
 #include "hesiod/graph_editor.hpp"
 #include "hesiod/logger.hpp"
+#include "hesiod/model/nodes/base_node.hpp"
 
 #define DEFAULT_VIEWER3D_WIDTH 512
 
@@ -42,21 +44,14 @@ public:
 
   nlohmann::json json_to() const;
 
-  void print()
-  {
-    LOG->trace("current_node_id: {}", current_node_id);
-    for (auto &[key, param] : node_view_param_map)
-    {
-      LOG->trace("  - id: {}", key);
-      LOG->trace("    - port_id_elev: {}", param.port_id_elev);
-      LOG->trace("    - port_id_color: {}", param.port_id_color);
-    }
-  }
-
 Q_SIGNALS:
-  void view_param_changed();
+  void view_param_changed(BaseNode          *p_node,
+                          const std::string &port_id_elev,
+                          const std::string &port_id_color);
 
 public Q_SLOTS:
+  void on_node_compute_finished(const std::string &id);
+
   void on_node_deselected(const std::string &id);
 
   void on_node_selected(const std::string &id);
@@ -81,13 +76,23 @@ private:
 
   QWidget *render_widget = nullptr;
 
-  QLabel    *label_node_id;
-  QComboBox *combo_elev;
-  QComboBox *combo_color;
+  QPushButton *button_pin_current_node;
+  QLabel      *label_node_id;
+  QComboBox   *combo_elev;
+  QComboBox   *combo_color;
 
   // used to avoid interfering with the combo and the data when programmatically modifying
   // the combo
   bool freeze_combo_change_event = false;
+
+  // wrapper to ease code maintainability and readability
+  void emit_view_param_changed()
+  {
+    Q_EMIT this->view_param_changed(
+        this->p_graph_editor->get_node_ref_by_id<BaseNode>(this->current_node_id),
+        this->current_view_param.port_id_elev,
+        this->current_view_param.port_id_color);
+  }
 
   void update_view_param_widgets();
 };

@@ -42,6 +42,9 @@ public:
 
   nlohmann::json json_to() const;
 
+Q_SIGNALS:
+  void node_compute_finished(const std::string &id);
+
 public Q_SLOTS:
   void on_connection_deleted(const std::string &id_out,
                              const std::string &port_id_out,

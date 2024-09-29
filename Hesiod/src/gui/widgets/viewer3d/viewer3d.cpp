@@ -8,9 +8,9 @@
 
 #include "highmap/heightmap.hpp"
 
+#include "hesiod/gui/widgets/open_gl_render.hpp"
 #include "hesiod/gui/widgets/viewer3d.hpp"
 #include "hesiod/logger.hpp"
-#include "hesiod/model/nodes/base_node.hpp"
 
 namespace hesiod
 {
@@ -30,15 +30,24 @@ Viewer3d::Viewer3d(GraphEditor *p_graph_editor, QWidget *parent, std::string lab
                 this,
                 &Viewer3d::on_node_selected);
 
+  this->connect(p_graph_editor,
+                &GraphEditor::node_compute_finished,
+                this,
+                &Viewer3d::on_node_compute_finished);
+
   QGridLayout *layout = new QGridLayout(this);
   this->setLayout(layout);
 
   // current node preview info
   int row = 0;
 
-  layout->addWidget(new QLabel("Node"), row, 0);
-  layout->addWidget(new QLabel("Elevation"), row, 1);
-  layout->addWidget(new QLabel("Texture"), row, 2);
+  layout->addWidget(new QLabel("Node"), row, 1);
+  layout->addWidget(new QLabel("Elevation"), row, 2);
+  layout->addWidget(new QLabel("Texture"), row, 3);
+
+  this->button_pin_current_node = new QPushButton("Pin current node");
+  this->button_pin_current_node->setCheckable(true);
+  this->button_pin_current_node->setChecked(false);
 
   this->label_node_id = new QLabel();
   this->combo_elev = new QComboBox();
@@ -52,7 +61,7 @@ Viewer3d::Viewer3d(GraphEditor *p_graph_editor, QWidget *parent, std::string lab
                   {
                     std::string port_id = this->combo_elev->currentText().toStdString();
                     this->current_view_param.port_id_elev = port_id;
-                    Q_EMIT this->view_param_changed();
+                    this->emit_view_param_changed();
                   }
                 });
 
@@ -64,7 +73,7 @@ Viewer3d::Viewer3d(GraphEditor *p_graph_editor, QWidget *parent, std::string lab
                   {
                     std::string port_id = this->combo_color->currentText().toStdString();
                     this->current_view_param.port_id_color = port_id;
-                    Q_EMIT this->view_param_changed();
+                    this->emit_view_param_changed();
                   }
                 });
 
@@ -72,34 +81,86 @@ Viewer3d::Viewer3d(GraphEditor *p_graph_editor, QWidget *parent, std::string lab
                 &Viewer3d::view_param_changed,
                 [this]() { LOG->trace("Q_SIGNALS: Viewer3d::view_param_changed"); });
 
-  layout->addWidget(this->label_node_id, row + 1, 0);
-  layout->addWidget(this->combo_elev, row + 1, 1);
-  layout->addWidget(this->combo_color, row + 1, 2);
+  layout->addWidget(this->button_pin_current_node, row + 1, 0);
+  layout->addWidget(this->label_node_id, row + 1, 1);
+  layout->addWidget(this->combo_elev, row + 1, 2);
+  layout->addWidget(this->combo_color, row + 1, 3);
 
   row += 2;
 
   // renderer widget
-  layout->addWidget(this->render_widget, row++, 0, 1, 3);
+  {
+    this->render_widget = new OpenGLRender();
+
+    this->connect(this,
+                  &Viewer3d::view_param_changed,
+                  (OpenGLRender *)this->render_widget,
+                  &OpenGLRender::set_data);
+  }
+
+  layout->addWidget(this->render_widget, row++, 0, 1, 4);
 
   // update contents
   this->update_view_param_widgets();
-
-  Q_EMIT this->view_param_changed();
+  this->emit_view_param_changed();
 }
 
-void Viewer3d::json_from(nlohmann::json const &json) {}
+void Viewer3d::json_from(nlohmann::json const &json)
+{
+  this->label = json["label"];
+  this->current_node_id = json["current_node_id"];
+
+  // TODO rebuild map
+  this->node_view_param_map.clear();
+
+  for (auto &[key, sub_json] : json["node_view_param_map"].items())
+  {
+    NodeViewParam param;
+    param.port_id_elev = sub_json["port_id_elev"];
+    param.port_id_color = sub_json["port_id_color"];
+
+    this->node_view_param_map[key] = param;
+  }
+}
 
 nlohmann::json Viewer3d::json_to() const
 {
   nlohmann::json json;
 
+  json["label"] = this->label;
+  json["current_node_id"] = this->current_node_id;
+
+  for (auto &[key, param] : this->node_view_param_map)
+  {
+    nlohmann::json json_param;
+    json_param["port_id_elev"] = param.port_id_elev;
+    json_param["port_id_color"] = param.port_id_color;
+
+    json["node_view_param_map"][key] = json_param;
+  }
+
+  LOG->trace("{}", json.dump(4));
+
   return json;
+}
+
+void Viewer3d::on_node_compute_finished(const std::string &id)
+{
+  LOG->trace("Viewer3d::on_node_compute_finished {}", id);
+
+  if (id == this->current_node_id)
+    this->emit_view_param_changed();
 }
 
 void Viewer3d::on_node_deselected(const std::string &id)
 {
   LOG->trace("Viewer3d::on_node_deselected {}", id);
 
+  // prevent any setup change if the current node is pinned
+  if (this->button_pin_current_node->isChecked())
+    return;
+
+  // if not pinned, keep going
   this->current_node_id = "";
 
   // backup view parameter for this node
@@ -107,14 +168,18 @@ void Viewer3d::on_node_deselected(const std::string &id)
 
   // update the widgets
   this->update_view_param_widgets();
-
-  Q_EMIT this->view_param_changed();
+  this->emit_view_param_changed();
 }
 
 void Viewer3d::on_node_selected(const std::string &id)
 {
   LOG->trace("Viewer3d::on_node_selected {}", id);
 
+  // prevent any setup change if the current node is pinned
+  if (this->button_pin_current_node->isChecked())
+    return;
+
+  // if not pinned, keep going
   this->current_node_id = id;
 
   // retrieve view parameters for this node if it already exists
@@ -160,8 +225,7 @@ void Viewer3d::on_node_selected(const std::string &id)
 
   // update the widgets
   this->update_view_param_widgets();
-
-  Q_EMIT this->view_param_changed();
+  this->emit_view_param_changed();
 }
 
 void Viewer3d::update_view_param_widgets()
