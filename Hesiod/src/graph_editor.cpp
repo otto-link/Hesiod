@@ -300,7 +300,7 @@ void GraphEditor::on_graph_save_request()
 void GraphEditor::on_new_graphics_node_request(const std::string &node_id,
                                                QPointF            scene_pos)
 {
-  // this is used only for serialization, when the graph viewer
+  // this one is also used for serialization, when the graph viewer
   // requests the creation of a graphics node while the base node has
   // aldready been created when the GraphNode has been deserialized
 
@@ -377,17 +377,17 @@ void GraphEditor::on_node_right_clicked(const std::string &node_id, QPointF scen
 
       QMenu *menu = new QMenu();
 
-      // // --- add label
+      // --- add label
 
-      // {
-      //   QLabel *label = new QLabel(p_node->get_caption().c_str());
-      //   resize_font(label, 1);
-      //   QWidgetAction *widget_action = new QWidgetAction(menu);
-      //   widget_action->setDefaultWidget(label);
-      //   menu->addAction(widget_action);
-      // }
+      {
+        QLabel *label = new QLabel(p_node->get_caption().c_str());
+        resize_font(label, 1);
+        QWidgetAction *widget_action = new QWidgetAction(menu);
+        widget_action->setDefaultWidget(label);
+        menu->addAction(widget_action);
+      }
 
-      // // menu->addSeparator();
+      // menu->addSeparator();
 
       // --- add attributes
 

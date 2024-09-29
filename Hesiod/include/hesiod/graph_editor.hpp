@@ -66,7 +66,6 @@ public Q_SLOTS:
 
   void on_graph_save_request();
 
-  // for serialization only
   void on_new_graphics_node_request(const std::string &node_id, QPointF scene_pos);
 
   void on_new_node_request(const std::string &node_type, QPointF scene_pos);
