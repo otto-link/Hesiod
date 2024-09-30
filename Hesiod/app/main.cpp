@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
 
   hesiod::GraphEditor graph = hesiod::GraphEditor("graph1", config);
 
-  graph.on_new_node_request("Noise", QPointF(200, 200));
+  graph.on_new_node_request("NoiseFbm", QPointF(200, 200));
   graph.on_new_node_request("Remap", QPointF(400, 200));
   graph.on_new_node_request("GammaCorrection", QPointF(600, 200));
   graph.get_p_viewer()->zoom_to_content();

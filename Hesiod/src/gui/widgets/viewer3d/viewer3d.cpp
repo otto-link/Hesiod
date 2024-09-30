@@ -21,6 +21,11 @@ Viewer3d::Viewer3d(GraphEditor *p_graph_editor, QWidget *parent, std::string lab
   this->setMinimumSize(512, 512);
 
   this->connect(p_graph_editor->get_p_viewer(),
+                &gngui::GraphViewer::node_deleted,
+                this,
+                &Viewer3d::on_node_deleted);
+
+  this->connect(p_graph_editor->get_p_viewer(),
                 &gngui::GraphViewer::node_deselected,
                 this,
                 &Viewer3d::on_node_deselected);
@@ -58,14 +63,10 @@ Viewer3d::Viewer3d(GraphEditor *p_graph_editor, QWidget *parent, std::string lab
                 [this]()
                 {
                   // if the button is switch from pinned to unpinned,
-                  // reset the view param
+                  // reset the view param (and update view param and
+                  // both cases)
                   if (!this->button_pin_current_node->isChecked())
-                  {
-                    this->current_node_id = "";
-                    this->current_view_param = NodeViewParam();
-                    this->update_view_param_widgets();
-                    this->emit_view_param_changed();
-                  }
+                    this->clear();
                 });
 
   this->connect(this->combo_elev,
@@ -92,9 +93,9 @@ Viewer3d::Viewer3d(GraphEditor *p_graph_editor, QWidget *parent, std::string lab
                   }
                 });
 
-  this->connect(this,
-                &Viewer3d::view_param_changed,
-                [this]() { LOG->trace("Q_SIGNALS: Viewer3d::view_param_changed"); });
+  // this->connect(this,
+  //               &Viewer3d::view_param_changed,
+  //               [this]() { LOG->trace("Q_SIGNALS: Viewer3d::view_param_changed"); });
 
   layout->addWidget(this->button_pin_current_node, row + 1, 0);
   layout->addWidget(this->label_node_id, row + 1, 1);
@@ -118,6 +119,24 @@ Viewer3d::Viewer3d(GraphEditor *p_graph_editor, QWidget *parent, std::string lab
   // update contents
   this->update_view_param_widgets();
   this->emit_view_param_changed();
+}
+
+void Viewer3d::clear()
+{
+  this->current_node_id = "";
+  this->current_view_param = NodeViewParam();
+  this->update_view_param_widgets();
+  this->emit_view_param_changed();
+}
+
+void Viewer3d::emit_view_param_changed()
+{
+  LOG->trace("Viewer3d::emit_view_param_changed: {}", this->current_node_id);
+
+  Q_EMIT this->view_param_changed(
+      this->p_graph_editor->get_node_ref_by_id<BaseNode>(this->current_node_id),
+      this->current_view_param.port_id_elev,
+      this->current_view_param.port_id_color);
 }
 
 void Viewer3d::json_from(nlohmann::json const &json)
@@ -154,7 +173,7 @@ nlohmann::json Viewer3d::json_to() const
     json["node_view_param_map"][key] = json_param;
   }
 
-  LOG->trace("{}", json.dump(4));
+  // LOG->trace("{}", json.dump(4));
 
   return json;
 }
@@ -167,6 +186,14 @@ void Viewer3d::on_node_compute_finished(const std::string &id)
     this->emit_view_param_changed();
 }
 
+void Viewer3d::on_node_deleted(const std::string &id)
+{
+  LOG->trace("Viewer3d::on_node_deleted {}", id);
+
+  if (id == this->current_node_id)
+    this->clear();
+}
+
 void Viewer3d::on_node_deselected(const std::string &id)
 {
   LOG->trace("Viewer3d::on_node_deselected {}", id);
@@ -175,15 +202,7 @@ void Viewer3d::on_node_deselected(const std::string &id)
   if (this->button_pin_current_node->isChecked())
     return;
 
-  // if not pinned, keep going
-  this->current_node_id = "";
-
-  // backup view parameter for this node
-  this->node_view_param_map[id] = this->current_view_param;
-
-  // update the widgets
-  this->update_view_param_widgets();
-  this->emit_view_param_changed();
+  this->clear();
 }
 
 void Viewer3d::on_node_selected(const std::string &id)

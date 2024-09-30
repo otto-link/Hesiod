@@ -33,7 +33,7 @@ NoiseFbm::NoiseFbm(std::shared_ptr<ModelConfig> config) : BaseNode("NoiseFbm", c
                                   config->overlap);
 
   // attribute(s)
-  this->attr["noise_type"] = NEW(MapEnumAttribute, noise_type_map, "Noise type");
+  this->attr["noise_type"] = NEW(MapEnumAttribute, noise_type_map_fbm, "Noise type");
   this->attr["kw"] = NEW(WaveNbAttribute);
   this->attr["seed"] = NEW(SeedAttribute);
   this->attr["octaves"] = NEW(IntAttribute, 8, 0, 32, "Octaves");

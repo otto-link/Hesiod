@@ -52,6 +52,8 @@ Q_SIGNALS:
 public Q_SLOTS:
   void on_node_compute_finished(const std::string &id);
 
+  void on_node_deleted(const std::string &id);
+
   void on_node_deselected(const std::string &id);
 
   void on_node_selected(const std::string &id);
@@ -85,14 +87,10 @@ private:
   // the combo
   bool freeze_combo_change_event = false;
 
+  void clear();
+
   // wrapper to ease code maintainability and readability
-  void emit_view_param_changed()
-  {
-    Q_EMIT this->view_param_changed(
-        this->p_graph_editor->get_node_ref_by_id<BaseNode>(this->current_node_id),
-        this->current_view_param.port_id_elev,
-        this->current_view_param.port_id_color);
-  }
+  void emit_view_param_changed();
 
   void update_view_param_widgets();
 };
