@@ -17,6 +17,7 @@
 
 #include "hesiod/graph_editor.hpp"
 #include "hesiod/gui/gui_utils.hpp"
+#include "hesiod/gui/widgets/viewer3d.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
@@ -421,6 +422,22 @@ void GraphEditor::on_node_right_clicked(const std::string &node_id, QPointF scen
 void GraphEditor::on_viewport_request()
 {
   LOG->trace("GraphEditor::on_viewport_request");
+
+  this->viewers.push_back(std::make_unique<Viewer3d>(this));
+  this->viewers.back()->show();
+
+  Viewer3d *p_viewer = dynamic_cast<Viewer3d *>(this->viewers.back().get());
+
+  // remove (and hence destroy) the widget from the widget list if it
+  // is closed
+  this->connect(p_viewer,
+                &Viewer3d::widget_close,
+                [this, p_viewer]()
+                {
+                  std::erase_if(this->viewers,
+                                [p_viewer](const std::unique_ptr<QWidget> &sptr)
+                                { return sptr.get() == p_viewer; });
+                });
 }
 
 } // namespace hesiod

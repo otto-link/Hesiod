@@ -45,6 +45,8 @@ public:
   nlohmann::json json_to() const;
 
 Q_SIGNALS:
+  void widget_close();
+
   void view_param_changed(BaseNode          *p_node,
                           const std::string &port_id_elev,
                           const std::string &port_id_color);
@@ -57,6 +59,9 @@ public Q_SLOTS:
   void on_node_deselected(const std::string &id);
 
   void on_node_selected(const std::string &id);
+
+protected:
+  void closeEvent(QCloseEvent *event) override;
 
 private:
   GraphEditor *p_graph_editor;

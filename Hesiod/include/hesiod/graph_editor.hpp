@@ -83,6 +83,8 @@ private:
       nullptr);
 
   std::filesystem::path fname = "";
+
+  std::vector<std::unique_ptr<QWidget>> viewers;
 };
 
 } // namespace hesiod

@@ -129,6 +129,12 @@ void Viewer3d::clear()
   this->emit_view_param_changed();
 }
 
+void Viewer3d::closeEvent(QCloseEvent *event)
+{
+  Q_EMIT this->widget_close();
+  QWidget::closeEvent(event);
+}
+
 void Viewer3d::emit_view_param_changed()
 {
   LOG->trace("Viewer3d::emit_view_param_changed: {}", this->current_node_id);

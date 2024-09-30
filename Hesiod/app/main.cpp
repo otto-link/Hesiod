@@ -41,9 +41,6 @@ int main(int argc, char *argv[])
   graph.get_p_viewer()->resize(1000, 800);
   graph.get_p_viewer()->show();
 
-  auto v3 = hesiod::Viewer3d(&graph);
-  v3.show();
-
   return app.exec();
 
   return 0;
