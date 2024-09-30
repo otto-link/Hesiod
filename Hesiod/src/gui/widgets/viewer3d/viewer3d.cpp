@@ -208,6 +208,14 @@ void Viewer3d::on_node_deselected(const std::string &id)
   if (this->button_pin_current_node->isChecked())
     return;
 
+  // bckp view parameter for this specific node (if the viewer is
+  // opened while a node is already selected this can leave an empty
+  // parameter setup, hence checking if the elevation port is indeed
+  // set)
+  if (this->current_view_param.port_id_elev != "")
+    this->node_view_param_map[id] = this->current_view_param;
+
+  // clear everything
   this->clear();
 }
 
