@@ -68,7 +68,9 @@ public Q_SLOTS:
 
   void on_new_graphics_node_request(const std::string &node_id, QPointF scene_pos);
 
-  void on_new_node_request(const std::string &node_type, QPointF scene_pos);
+  void on_new_node_request(const std::string &node_type,
+                           QPointF            scene_pos,
+                           std::string       *p_new_node_id = nullptr);
 
   void on_node_deleted_request(const std::string &node_id);
 
@@ -76,11 +78,21 @@ public Q_SLOTS:
 
   void on_node_right_clicked(const std::string &node_id, QPointF scene_pos);
 
+  void on_nodes_copy_request(const std::vector<std::string> &id_list,
+                             const std::vector<QPointF>     &scene_pos_list);
+
+  void on_nodes_duplicate_request(const std::vector<std::string> &id_list,
+                                  const std::vector<QPointF>     &scene_pos_list);
+
+  void on_nodes_paste_request();
+
   void on_viewport_request();
 
 private:
   std::unique_ptr<gngui::GraphViewer> viewer = std::unique_ptr<gngui::GraphViewer>(
       nullptr);
+
+  nlohmann::json json_copy_buffer;
 
   std::filesystem::path fname = "";
 

@@ -46,7 +46,7 @@ GraphEditor::GraphEditor(const std::string           &id,
 
     this->viewer->set_node_inventory(node_inventory);
 
-    // --- connect with core node graph (GraphNode)
+    // --- connect with graph viewer
 
     this->connect(this->viewer.get(),
                   &gngui::GraphViewer::connection_deleted,
@@ -90,8 +90,8 @@ GraphEditor::GraphEditor(const std::string           &id,
 
     this->connect(this->viewer.get(),
                   &gngui::GraphViewer::new_node_request,
-                  this,
-                  &GraphEditor::on_new_node_request);
+                  [this](const std::string &node_type, QPointF scene_pos)
+                  { this->on_new_node_request(node_type, scene_pos, nullptr); });
 
     this->connect(this->viewer.get(),
                   &gngui::GraphViewer::node_deleted,
@@ -107,6 +107,21 @@ GraphEditor::GraphEditor(const std::string           &id,
                   &gngui::GraphViewer::node_right_clicked,
                   this,
                   &GraphEditor::on_node_right_clicked);
+
+    this->connect(this->viewer.get(),
+                  &gngui::GraphViewer::nodes_copy_request,
+                  this,
+                  &GraphEditor::on_nodes_copy_request);
+
+    this->connect(this->viewer.get(),
+                  &gngui::GraphViewer::nodes_duplicate_request,
+                  this,
+                  &GraphEditor::on_nodes_duplicate_request);
+
+    this->connect(this->viewer.get(),
+                  &gngui::GraphViewer::nodes_paste_request,
+                  this,
+                  &GraphEditor::on_nodes_paste_request);
 
     this->connect(this->viewer.get(),
                   &gngui::GraphViewer::viewport_request,
@@ -332,7 +347,9 @@ void GraphEditor::on_new_graphics_node_request(const std::string &node_id,
   }
 }
 
-void GraphEditor::on_new_node_request(const std::string &node_type, QPointF scene_pos)
+void GraphEditor::on_new_node_request(const std::string &node_type,
+                                      QPointF            scene_pos,
+                                      std::string       *p_new_node_id)
 {
   if (node_type == "")
     return;
@@ -342,6 +359,10 @@ void GraphEditor::on_new_node_request(const std::string &node_type, QPointF scen
 
   // add cooresponding graphics node (GUI)
   this->on_new_graphics_node_request(node_id, scene_pos);
+
+  // return node id value if requested
+  if (p_new_node_id)
+    *p_new_node_id = node_id;
 }
 
 void GraphEditor::on_node_deleted_request(const std::string &node_id)
@@ -416,6 +437,73 @@ void GraphEditor::on_node_right_clicked(const std::string &node_id, QPointF scen
 
       menu->popup(QCursor::pos());
     }
+  }
+}
+
+void GraphEditor::on_nodes_copy_request(const std::vector<std::string> &id_list,
+                                        const std::vector<QPointF>     &scene_pos_list)
+{
+  LOG->trace("GraphEditor::on_nodes_copy_request");
+
+  // dump the nodes data into the copy buffer (for the node positions,
+  // save the node position relative to the mouse cursor)
+  this->json_copy_buffer.clear();
+
+  QPoint  mouse_view_pos = this->viewer->mapFromGlobal(QCursor::pos());
+  QPointF mouse_scene_pos = this->viewer->mapToScene(mouse_view_pos);
+
+  for (size_t k = 0; k < id_list.size(); k++)
+  {
+    BaseNode *p_node = this->get_node_ref_by_id<BaseNode>(id_list[k]);
+
+    QPointF delta = scene_pos_list[k] - mouse_scene_pos;
+
+    this->json_copy_buffer[p_node->get_id()] = p_node->json_to();
+    this->json_copy_buffer[p_node->get_id()]["delta.x"] = delta.x();
+    this->json_copy_buffer[p_node->get_id()]["delta.y"] = delta.y();
+  }
+}
+
+void GraphEditor::on_nodes_duplicate_request(const std::vector<std::string> &id_list,
+                                             const std::vector<QPointF> &scene_pos_list)
+{
+  LOG->trace("GraphEditor::on_nodes_duplicate_request");
+
+  std::vector<QPointF> scene_pos_shifted = {};
+
+  for (auto &p : scene_pos_list)
+    scene_pos_shifted.push_back(p + QPointF(200.f, 200.f));
+
+  this->on_nodes_copy_request(id_list, scene_pos_shifted);
+  this->on_nodes_paste_request();
+}
+
+void GraphEditor::on_nodes_paste_request()
+{
+  LOG->trace("GraphEditor::on_nodes_paste_request");
+
+  // add new nodes using the copy buffer data
+  QPoint  mouse_view_pos = this->viewer->mapFromGlobal(QCursor::pos());
+  QPointF mouse_scene_pos = this->viewer->mapToScene(mouse_view_pos);
+
+  for (auto &[_, json] : this->json_copy_buffer.items())
+  {
+    std::string node_type = json["label"];
+    std::string node_id;
+    QPointF     delta = QPointF(json["delta.x"], json["delta.y"]);
+
+    // create the node
+    this->on_new_node_request(node_type, mouse_scene_pos + delta, &node_id);
+
+    // retrieve the node state
+    BaseNode *p_node = this->get_node_ref_by_id<BaseNode>(node_id);
+    p_node->json_from(json);
+
+    // set the ID again because if has been overriden by the deserialization
+    p_node->set_id(node_id);
+
+    // recompute
+    this->update(node_id);
   }
 }
 
