@@ -27,4 +27,11 @@ struct Brush : public BaseNode
   void compute() override;
 };
 
+struct Cloud : public BaseNode
+{
+  Cloud(std::shared_ptr<ModelConfig> config);
+
+  void compute() override;
+};
+
 } // namespace hesiod

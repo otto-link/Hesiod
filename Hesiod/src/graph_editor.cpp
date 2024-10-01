@@ -10,6 +10,9 @@
 #include <QPushButton>
 #include <QWidgetAction>
 
+#include "highmap/geometry/cloud.hpp" // for link colors
+#include "highmap/heightmap.hpp"
+
 #include "gnodegui/style.hpp"
 
 #include "attributes/widgets/abstract_widget.hpp"
@@ -133,7 +136,26 @@ GraphEditor::GraphEditor(const std::string           &id,
 
   // TODO move somewhere else
 
-  // GN_STYLE->node.color_port_data[] = QColor(189, 147, 249, 255);
+  // if (QString::compare(typeId, "ArrayData") == 0)
+  //   return QColor::fromRgb(255, 121, 198);
+  // else if (QString::compare(typeId, "CloudData") == 0)
+  //   return QColor::fromRgb(139, 233, 253);
+  // else if (QString::compare(typeId, "HeightMapData") == 0)
+  //   return QColor::fromRgb(248, 248, 242);
+  // else if (QString::compare(typeId, "HeightMapRGBAData") == 0)
+  //   return QColor::fromRgb(255, 184, 108);
+  // else if (QString::compare(typeId, "HeightMapVectorData") == 0)
+  //   return QColor::fromRgb(248, 123, 80);
+  // else if (QString::compare(typeId, "KernelData") == 0)
+  //   return QColor::fromRgb(255, 121, 198);
+  // else if (QString::compare(typeId, "PathData") == 0)
+  //   return QColor::fromRgb(80, 250, 123);
+
+  GN_STYLE->node.color_port_data[typeid(hmap::Cloud).name()] = QColor(139, 233, 253, 255);
+  GN_STYLE->node.color_port_data[typeid(hmap::HeightMap).name()] = QColor(248,
+                                                                          248,
+                                                                          242,
+                                                                          255);
 
   GN_STYLE->node.color_category = {{"Converter", QColor(188, 182, 163, 255)},
                                    {"Comment", QColor(170, 170, 170, 255)},

@@ -28,6 +28,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
   switch(str2int(node_type.c_str()))
   {
     HSD_NODE_CASE(Brush);
+    HSD_NODE_CASE(Cloud);
     HSD_NODE_CASE(GammaCorrection);
     HSD_NODE_CASE(ExportHeightmap);
     HSD_NODE_CASE(Noise);
