@@ -21,6 +21,20 @@ constexpr unsigned int str2int(const char *str, int h = 0)
   return !str[h] ? 5381 : (str2int(str, h + 1) * 33) ^ str[h];
 }
 
+std::map<std::string, std::string> get_node_inventory()
+{
+  std::map<std::string, std::string> node_inventory = {
+      {"Brush", "Primitive/Authoring"},
+      {"Cloud", "Geometry/Cloud"},
+      {"Noise", "Primitive/Coherent"},
+      {"NoiseFbm", "Primitive/Coherent"},
+      {"ExportHeightmap", "IO/Files"},
+      {"GammaCorrection", "Filter/Recurve"},
+      {"Remap", "Filter/Range"}};
+
+  return node_inventory;
+}
+
 std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type,
                                           std::shared_ptr<ModelConfig> config)
 {

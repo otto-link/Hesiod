@@ -54,6 +54,17 @@ namespace hesiod
 {
 
 /**
+ * @brief Retrieves a map of node inventory.
+ *
+ * This function returns a map where the key represents the node type and the value
+ * represents the corresponding node category.
+ *
+ * @return std::map<std::string, std::string>
+ * A map containing node identifiers as keys and node descriptions as values.
+ */
+std::map<std::string, std::string> get_node_inventory();
+
+/**
  * @brief Factory function to create nodes based on the provided node type.
  *
  * This function creates and returns a shared pointer to a node of the specified type.

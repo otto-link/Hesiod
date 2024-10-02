@@ -24,6 +24,7 @@
 #include "hesiod/logger.hpp"
 #include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
+#include "hesiod/model/nodes/node_factory.hpp"
 
 namespace hesiod
 {
@@ -47,7 +48,7 @@ GraphEditor::GraphEditor(const std::string           &id,
 
     this->viewer = std::make_unique<gngui::GraphViewer>(this->get_id());
 
-    this->viewer->set_node_inventory(node_inventory);
+    this->viewer->set_node_inventory(get_node_inventory());
 
     // --- connect with graph viewer
 
