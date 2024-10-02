@@ -59,6 +59,8 @@ public:
 
   std::string get_category() const override { return this->category; }
 
+  ModelConfig *get_config_ref() { return this->config.get(); }
+
   nlohmann::json get_documentation() const { return this->documentation; }
 
   std::string get_id() const override { return gnode::Node::get_id(); }

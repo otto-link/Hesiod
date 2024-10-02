@@ -6,6 +6,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "highmap/colorize.hpp"
+#include "highmap/geometry/cloud.hpp"
 #include "highmap/heightmap.hpp"
 #include "highmap/operator.hpp"
 #include "highmap/range.hpp"
@@ -239,16 +240,40 @@ void OpenGLRender::set_data(BaseNode          *new_p_node,
     // check that data are indeed available
     if (p_node->get_data_ref(port_index_elev))
     {
-      if (data_type_elev == typeid(hmap::HeightMap).name())
+
+      // --- elevation
+
+      bool        elev_done = false;
+      hmap::Array array;
+
+      if (data_type_elev == typeid(hmap::Cloud).name())
+      {
+        LOG->trace("OpenGLRender::set_data, Cloud data");
+
+        hmap::Cloud *p_cloud = this->p_node->get_value_ref<hmap::Cloud>(port_index_elev);
+        array = hmap::Array(p_node->get_config_ref()->shape);
+
+        if (p_cloud->get_npoints() > 0)
+        {
+          hmap::Vec4<float> bbox = hmap::Vec4<float>(0.f, 1.f, 0.f, 1.f);
+          p_cloud->to_array(array, bbox);
+        }
+
+        elev_done = true;
+      }
+      else if (data_type_elev == typeid(hmap::HeightMap).name())
       {
         LOG->trace("OpenGLRender::set_data, HeightMap data");
 
-        // --- elevation
-
         hmap::HeightMap *p_h = this->p_node->get_value_ref<hmap::HeightMap>(
             port_index_elev);
-        hmap::Array array = p_h->to_array();
+        array = p_h->to_array();
 
+        elev_done = true;
+      }
+
+      if (elev_done)
+      {
         // generate the basemesh (NB - shape can be modified while
         // editing the graph when the model configuration is changed by
         // the user)
@@ -269,7 +294,28 @@ void OpenGLRender::set_data(BaseNode          *new_p_node,
 
           if (p_node->get_data_ref(port_index_color))
           {
-            if (data_type_color == typeid(hmap::HeightMap).name())
+            if (data_type_color == typeid(hmap::Cloud).name())
+            {
+              hmap::Cloud cloud = *this->p_node->get_value_ref<hmap::Cloud>(
+                  port_index_elev);
+              hmap::Array c = hmap::Array(p_node->get_config_ref()->shape);
+
+              if (cloud.get_npoints() > 0)
+              {
+                hmap::Vec4<float> bbox = hmap::Vec4<float>(0.f, 1.f, 0.f, 1.f);
+                cloud.remap_values(0.5f, 1.f);
+                cloud.to_array(c, bbox);
+              }
+
+              this->texture_img = generate_selector_image(c);
+              this->texture_shape = c.shape;
+
+              hmap::apply_hillshade(this->texture_img, array, 0.f, 1.f, 1.5f, true);
+
+              color_done = true;
+            }
+            //
+            else if (data_type_color == typeid(hmap::HeightMap).name())
             {
               hmap::HeightMap *p_c = this->p_node->get_value_ref<hmap::HeightMap>(
                   port_index_color);
@@ -325,10 +371,16 @@ void OpenGLRender::set_data(BaseNode          *new_p_node,
           this->texture_shape = array.shape;
         }
 
-        // send to OpenGL buffers
+        // send to OpenGL buffers and update
         this->bind_gl_buffers();
       }
+      else
+        LOG->trace("OpenGLRender::set_data, no known rendering for type {}",
+                   data_type_elev);
     }
+    else
+      LOG->trace("OpenGLRender::set_data, data not available for port {}",
+                 this->port_id_elev);
   }
   else
   {
