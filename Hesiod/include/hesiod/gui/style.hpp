@@ -32,7 +32,7 @@ static std::map<std::string, QColor> data_color_map = {
     {typeid(hmap::Path).name(), QColor(255, 184, 108, 255)},
 };
 
-static std::map<std::string, QColor> cateogry_color_category_map = {
+static std::map<std::string, QColor> category_color_map = {
     {"Converter", QColor(188, 182, 163, 255)},
     {"Comment", QColor(170, 170, 170, 255)},
     {"Debug", QColor(200, 0, 0, 255)},

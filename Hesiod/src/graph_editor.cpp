@@ -137,7 +137,7 @@ GraphEditor::GraphEditor(const std::string           &id,
   // --- syles
 
   GN_STYLE->node.color_port_data = data_color_map;
-  GN_STYLE->node.color_category = cateogry_color_category_map;
+  GN_STYLE->node.color_category = category_color_map;
 }
 
 void GraphEditor::json_from(nlohmann::json const &json, bool override_config)
