@@ -14,6 +14,7 @@
  */
 
 #pragma once
+#include <filesystem>
 #include <memory>
 
 #include <QObject>
@@ -38,9 +39,12 @@ public:
 
   gngui::GraphViewer *get_p_viewer() { return this->viewer.get(); }
 
-  void json_from(nlohmann::json const &json);
+  void json_from(nlohmann::json const &json, bool override_config = true);
 
   nlohmann::json json_to() const;
+
+  void load_from_file(const std::filesystem::path &load_fname,
+                      bool                         override_config = true);
 
 Q_SIGNALS:
   void node_compute_finished(const std::string &id);

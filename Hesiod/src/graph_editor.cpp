@@ -175,15 +175,12 @@ GraphEditor::GraphEditor(const std::string           &id,
                                    {"Biomes", QColor(133, 153, 0, 255)}};
 }
 
-void GraphEditor::json_from(nlohmann::json const &json)
+void GraphEditor::json_from(nlohmann::json const &json, bool override_config)
 {
-  GraphNode::json_from(json["graph_node"]);
+  GraphNode::json_from(json["graph_node"], override_config);
 
   if (this->viewer && !json["headless"])
-  {
-    LOG->trace("here");
     this->viewer->json_from(json["graph_viewer"]);
-  }
 }
 
 nlohmann::json GraphEditor::json_to() const
@@ -197,6 +194,32 @@ nlohmann::json GraphEditor::json_to() const
     json["graph_viewer"] = this->viewer->json_to();
 
   return json;
+}
+
+void GraphEditor::load_from_file(const std::filesystem::path &load_fname,
+                                 bool                         override_config)
+{
+  // load json
+  nlohmann::json json;
+  std::ifstream  file(load_fname);
+
+  if (file.is_open())
+  {
+    file >> json;
+    file.close();
+    LOG->trace("JSON successfully loaded from {}", load_fname.string());
+
+    this->fname = load_fname;
+
+    this->clear();
+    if (this->viewer)
+      this->viewer->clear();
+
+    this->json_from(json, override_config);
+    this->update();
+  }
+  else
+    LOG->error("Could not open file {} to load JSON", load_fname.string());
 }
 
 void GraphEditor::on_connection_deleted(const std::string &id_out,
@@ -260,27 +283,7 @@ void GraphEditor::on_graph_load_request()
 
   if (!load_fname.isNull() && !load_fname.isEmpty())
   {
-    // load json
-    nlohmann::json json;
-    std::ifstream  file(load_fname.toStdString());
-
-    if (file.is_open())
-    {
-      file >> json;
-      file.close();
-      LOG->trace("JSON successfully loaded from {}", fname.string());
-
-      this->fname = load_fname.toStdString();
-
-      this->clear();
-      if (this->viewer)
-        this->viewer->clear();
-
-      this->json_from(json);
-      this->update();
-    }
-    else
-      LOG->error("Could not open file {} to save JSON", fname.string());
+    this->load_from_file(load_fname.toStdString());
   }
 }
 

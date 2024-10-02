@@ -19,14 +19,19 @@ GraphNode::GraphNode(const std::string &id, std::shared_ptr<ModelConfig> config)
   this->config->log_debug();
 }
 
-void GraphNode::json_from(nlohmann::json const &json)
+void GraphNode::json_from(nlohmann::json const &json, bool override_config)
 {
   LOG->trace("GraphNode::json_from, graph {}", this->get_id());
 
   this->clear();
   this->set_id(json["id"]);
   this->set_id_count(json["id_count"]);
-  this->config->json_from(json["model_config"]);
+
+  // if set to false, the actual state of the configuration is used
+  // (can for instance be used when modifying the configuration of an
+  // existing graph)
+  if (override_config)
+    this->config->json_from(json["model_config"]);
 
   // populate nodes
   for (auto &json_node : json["nodes"])
@@ -36,6 +41,7 @@ void GraphNode::json_from(nlohmann::json const &json)
     // instanciate the node
     std::string                  node_type = json_node["label"];
     std::shared_ptr<gnode::Node> node = node_factory(node_type, this->config);
+
     this->add_node(node, json_node["id"]);
 
     // set its parameters
