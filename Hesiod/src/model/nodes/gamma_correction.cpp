@@ -40,13 +40,13 @@ void GammaCorrection::compute()
 
   LOG->trace("computing node {}", this->get_label());
 
-  // base noise function
   hmap::HeightMap *p_in = this->get_value_ref<hmap::HeightMap>("input");
-  hmap::HeightMap *p_mask = this->get_value_ref<hmap::HeightMap>("mask");
-  hmap::HeightMap *p_out = this->get_value_ref<hmap::HeightMap>("output");
 
   if (p_in)
   {
+    hmap::HeightMap *p_mask = this->get_value_ref<hmap::HeightMap>("mask");
+    hmap::HeightMap *p_out = this->get_value_ref<hmap::HeightMap>("output");
+
     *p_out = *p_in;
 
     float hmin = p_out->min();

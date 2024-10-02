@@ -8,7 +8,7 @@
 
 #include "hesiod/logger.hpp"
 #include "hesiod/model/enum_mapping.hpp"
-#include "hesiod/model/nodes/authoring.hpp"
+#include "hesiod/model/nodes/geometry.hpp"
 #include "hesiod/model/utils.hpp"
 
 namespace hesiod

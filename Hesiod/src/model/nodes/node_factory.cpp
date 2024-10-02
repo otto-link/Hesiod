@@ -7,6 +7,8 @@
 #include "hesiod/model/nodes/authoring.hpp"
 #include "hesiod/model/nodes/export.hpp"
 #include "hesiod/model/nodes/filters.hpp"
+#include "hesiod/model/nodes/geometry.hpp"
+#include "hesiod/model/nodes/math.hpp"
 #include "hesiod/model/nodes/node_factory.hpp"
 #include "hesiod/model/nodes/primitives.hpp"
 #include "hesiod/model/nodes/range.hpp"
@@ -26,10 +28,11 @@ std::map<std::string, std::string> get_node_inventory()
   std::map<std::string, std::string> node_inventory = {
       {"Brush", "Primitive/Authoring"},
       {"Cloud", "Geometry/Cloud"},
-      {"Noise", "Primitive/Coherent"},
-      {"NoiseFbm", "Primitive/Coherent"},
       {"ExportHeightmap", "IO/Files"},
       {"GammaCorrection", "Filter/Recurve"},
+      {"Gradient", "Math/Gradient"},
+      {"Noise", "Primitive/Coherent"},
+      {"NoiseFbm", "Primitive/Coherent"},
       {"Remap", "Filter/Range"}};
 
   return node_inventory;
@@ -44,6 +47,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     HSD_NODE_CASE(Brush);
     HSD_NODE_CASE(Cloud);
     HSD_NODE_CASE(GammaCorrection);
+    HSD_NODE_CASE(Gradient);
     HSD_NODE_CASE(ExportHeightmap);
     HSD_NODE_CASE(Noise);
     HSD_NODE_CASE(NoiseFbm);

@@ -38,12 +38,12 @@ void Remap::compute()
 
   LOG->trace("computing node {}", this->get_label());
 
-  // base noise function
   hmap::HeightMap *p_in = this->get_value_ref<hmap::HeightMap>("input");
-  hmap::HeightMap *p_out = this->get_value_ref<hmap::HeightMap>("output");
 
   if (p_in)
   {
+    hmap::HeightMap *p_out = this->get_value_ref<hmap::HeightMap>("output");
+
     *p_out = *p_in;
     p_out->remap(GET("remap", RangeAttribute)[0], GET("remap", RangeAttribute)[1]);
   }

@@ -3,7 +3,7 @@
  * this software. */
 
 /**
- * @file authoring.hpp
+ * @file math.hpp
  * @author Otto Link (otto.link.bv@gmail.com)
  * @brief
  * @version 0.1
@@ -20,9 +20,9 @@
 namespace hesiod
 {
 
-struct Brush : public BaseNode
+struct Gradient : public BaseNode
 {
-  Brush(std::shared_ptr<ModelConfig> config);
+  Gradient(std::shared_ptr<ModelConfig> config);
 
   void compute() override;
 };
