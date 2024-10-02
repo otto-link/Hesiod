@@ -20,6 +20,7 @@
 
 #include "hesiod/graph_editor.hpp"
 #include "hesiod/gui/gui_utils.hpp"
+#include "hesiod/gui/style.hpp"
 #include "hesiod/gui/widgets/viewer3d.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/enum_mapping.hpp"
@@ -135,45 +136,8 @@ GraphEditor::GraphEditor(const std::string           &id,
 
   // --- syles
 
-  // TODO move somewhere else
-
-  // if (QString::compare(typeId, "ArrayData") == 0)
-  //   return QColor::fromRgb(255, 121, 198);
-  // else if (QString::compare(typeId, "CloudData") == 0)
-  //   return QColor::fromRgb(139, 233, 253);
-  // else if (QString::compare(typeId, "HeightMapData") == 0)
-  //   return QColor::fromRgb(248, 248, 242);
-  // else if (QString::compare(typeId, "HeightMapRGBAData") == 0)
-  //   return QColor::fromRgb(255, 184, 108);
-  // else if (QString::compare(typeId, "HeightMapVectorData") == 0)
-  //   return QColor::fromRgb(248, 123, 80);
-  // else if (QString::compare(typeId, "KernelData") == 0)
-  //   return QColor::fromRgb(255, 121, 198);
-  // else if (QString::compare(typeId, "PathData") == 0)
-  //   return QColor::fromRgb(80, 250, 123);
-
-  GN_STYLE->node.color_port_data[typeid(hmap::Cloud).name()] = QColor(139, 233, 253, 255);
-  GN_STYLE->node.color_port_data[typeid(hmap::HeightMap).name()] = QColor(248,
-                                                                          248,
-                                                                          242,
-                                                                          255);
-
-  GN_STYLE->node.color_category = {{"Converter", QColor(188, 182, 163, 255)},
-                                   {"Comment", QColor(170, 170, 170, 255)},
-                                   {"Debug", QColor(200, 0, 0, 255)},
-                                   {"Math", QColor(0, 43, 54, 255)},
-                                   {"Geometry", QColor(101, 123, 131, 255)},
-                                   {"Roads", QColor(147, 161, 161, 255)},
-                                   {"Routing", QColor(188, 182, 163, 255)},
-                                   {"IO", QColor(203, 196, 177, 255)},
-                                   {"Features", QColor(181, 137, 0, 255)},
-                                   {"Erosion", QColor(203, 75, 22, 255)},
-                                   {"Mask", QColor(211, 54, 130, 255)},
-                                   {"Filter", QColor(108, 113, 196, 255)},
-                                   {"Operator", QColor(108, 113, 196, 255)},
-                                   {"Hydrology", QColor(38, 139, 210, 255)},
-                                   {"Primitive", QColor(42, 161, 152, 255)},
-                                   {"Biomes", QColor(133, 153, 0, 255)}};
+  GN_STYLE->node.color_port_data = data_color_map;
+  GN_STYLE->node.color_category = cateogry_color_category_map;
 }
 
 void GraphEditor::json_from(nlohmann::json const &json, bool override_config)
