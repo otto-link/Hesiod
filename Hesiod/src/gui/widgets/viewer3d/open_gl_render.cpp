@@ -12,7 +12,7 @@
 #include "highmap/range.hpp"
 #include "highmap/shadows.hpp"
 
-#include "hesiod/gui/widgets/open_gl_render.hpp"
+#include "hesiod/gui/widgets/open_gl/open_gl_render.hpp"
 #include "hesiod/logger.hpp"
 
 namespace hesiod

@@ -21,6 +21,7 @@
 #include <QOpenGLWidget>
 
 #include "highmap/algebra.hpp"
+#include "highmap/array.hpp"
 
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
@@ -33,9 +34,17 @@ class OpenGLRender : public QOpenGLWidget, protected QOpenGLFunctions
 public:
   OpenGLRender(QWidget *parent = nullptr);
 
+  float get_h_scale() { return this->h_scale; }
+
   void set_data(BaseNode          *new_p_node,
                 const std::string &new_port_id_elev,
                 const std::string &new_port_id_color);
+
+  void set_h_scale(float new_h_scale)
+  {
+    this->h_scale = new_h_scale;
+    this->repaint();
+  }
 
 protected:
   void initializeGL() override;

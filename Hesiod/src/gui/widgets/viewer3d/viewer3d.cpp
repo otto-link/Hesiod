@@ -8,7 +8,7 @@
 
 #include "highmap/heightmap.hpp"
 
-#include "hesiod/gui/widgets/open_gl_render.hpp"
+#include "hesiod/gui/widgets/open_gl/open_gl_widget.hpp"
 #include "hesiod/gui/widgets/viewer3d.hpp"
 #include "hesiod/logger.hpp"
 
@@ -93,10 +93,6 @@ Viewer3d::Viewer3d(GraphEditor *p_graph_editor, QWidget *parent, std::string lab
                   }
                 });
 
-  // this->connect(this,
-  //               &Viewer3d::view_param_changed,
-  //               [this]() { LOG->trace("Q_SIGNALS: Viewer3d::view_param_changed"); });
-
   layout->addWidget(this->button_pin_current_node, row + 1, 0);
   layout->addWidget(this->label_node_id, row + 1, 1);
   layout->addWidget(this->combo_elev, row + 1, 2);
@@ -106,12 +102,12 @@ Viewer3d::Viewer3d(GraphEditor *p_graph_editor, QWidget *parent, std::string lab
 
   // renderer widget
   {
-    this->render_widget = new OpenGLRender();
+    this->render_widget = new OpenGLWidget();
 
     this->connect(this,
                   &Viewer3d::view_param_changed,
-                  (OpenGLRender *)this->render_widget,
-                  &OpenGLRender::set_data);
+                  static_cast<OpenGLWidget *>(this->render_widget),
+                  &OpenGLWidget::set_data);
   }
 
   layout->addWidget(this->render_widget, row++, 0, 1, 4);
