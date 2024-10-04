@@ -144,6 +144,17 @@ void GraphEditor::json_from(nlohmann::json const &json, bool override_config)
 {
   GraphNode::json_from(json["graph_node"], override_config);
 
+  std::string version_file = json["Hesiod version"];
+  std::string version = "v" + std::to_string(HESIOD_VERSION_MAJOR) + "." +
+                        std::to_string(HESIOD_VERSION_MINOR) + "." +
+                        std::to_string(HESIOD_VERSION_PATCH);
+
+  if (version != version_file)
+    LOG->warn(
+        "Hesiod version for this json {} is different for this executable version {}",
+        version_file,
+        version);
+
   if (this->viewer && !json["headless"])
     this->viewer->json_from(json["graph_viewer"]);
 }
@@ -152,6 +163,9 @@ nlohmann::json GraphEditor::json_to() const
 {
   nlohmann::json json;
 
+  json["Hesiod version"] = "v" + std::to_string(HESIOD_VERSION_MAJOR) + "." +
+                           std::to_string(HESIOD_VERSION_MINOR) + "." +
+                           std::to_string(HESIOD_VERSION_PATCH);
   json["graph_node"] = GraphNode::json_to();
 
   json["headless"] = this->viewer ? false : true;
