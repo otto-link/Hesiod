@@ -9,6 +9,7 @@
 #include <QMessageBox>
 #include <QPushButton>
 #include <QWidgetAction>
+#include <QApplication>
 
 #include "highmap/geometry/cloud.hpp" // for link colors
 #include "highmap/heightmap.hpp"
@@ -336,7 +337,7 @@ void GraphEditor::on_new_graphics_node_request(const std::string &node_id,
                   [this, p_gx_node]()
                   {
                     p_gx_node->on_compute_started();
-                    p_gx_node->update();
+		    QApplication::processEvents();
                   });
 
     this->connect(p_node,
