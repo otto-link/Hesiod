@@ -3,54 +3,44 @@
  * this software. */
 
 #include "highmap/gradient.hpp"
+#include "highmap/heightmap.hpp"
 
 #include "attributes.hpp"
 
 #include "hesiod/logger.hpp"
-#include "hesiod/model/enum_mapping.hpp"
-#include "hesiod/model/nodes/math.hpp"
+#include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/utils.hpp"
+
+using namespace attr;
 
 namespace hesiod
 {
 
-Gradient::Gradient(std::shared_ptr<ModelConfig> config) : BaseNode("Gradient", config)
+void setup_gradient_node(BaseNode *p_node)
 {
-  LOG->trace("Gradient::Gradient");
+  LOG->trace("setup_gradient_node");
 
-  // input port(s)
-  this->add_port<hmap::HeightMap>(gnode::PortType::IN, "input");
-
-  // output port(s)
-  this->add_port<hmap::HeightMap>(gnode::PortType::OUT,
-                                  "dx",
-                                  config->shape,
-                                  config->tiling,
-                                  config->overlap);
-  this->add_port<hmap::HeightMap>(gnode::PortType::OUT,
-                                  "dy",
-                                  config->shape,
-                                  config->tiling,
-                                  config->overlap);
+  // port(s)
+  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "input");
+  p_node->add_port<hmap::HeightMap>(gnode::PortType::OUT, "dx", CONFIG);
+  p_node->add_port<hmap::HeightMap>(gnode::PortType::OUT, "dy", CONFIG);
 
   // attribute(s)
-  this->attr["remap"] = NEW(RangeAttribute, "Remap range");
-
-  // attribute(s) order
+  p_node->add_attr<RangeAttribute>("remap", "Remap range");
 }
 
-void Gradient::compute()
+void compute_gradient_node(BaseNode *p_node)
 {
-  Q_EMIT this->compute_started(this->get_id());
+  Q_EMIT p_node->compute_started(p_node->get_id());
 
-  LOG->trace("computing node {}", this->get_label());
+  LOG->trace("computing node {}", p_node->get_label());
 
-  hmap::HeightMap *p_in = this->get_value_ref<hmap::HeightMap>("input");
+  hmap::HeightMap *p_in = p_node->get_value_ref<hmap::HeightMap>("input");
 
   if (p_in)
   {
-    hmap::HeightMap *p_dx = this->get_value_ref<hmap::HeightMap>("dx");
-    hmap::HeightMap *p_dy = this->get_value_ref<hmap::HeightMap>("dy");
+    hmap::HeightMap *p_dx = p_node->get_value_ref<hmap::HeightMap>("dx");
+    hmap::HeightMap *p_dy = p_node->get_value_ref<hmap::HeightMap>("dy");
 
     hmap::transform(*p_dx,
                     *p_in,
@@ -85,7 +75,7 @@ void Gradient::compute()
                            GET("remap", RangeAttribute));
   }
 
-  Q_EMIT this->compute_finished(this->get_id());
+  Q_EMIT p_node->compute_finished(p_node->get_id());
 }
 
 } // namespace hesiod

@@ -18,37 +18,13 @@
 #include "gnode/node.hpp"
 
 #include "hesiod/model/model_config.hpp"
+#include "hesiod/model/nodes/base_node.hpp"
 
-/**
- * @brief Macro to generate a case statement for creating a node of the specified type.
- *
- * This macro is used in a switch statement to compare a hashed node type string
- * (computed using `str2int`) and return a shared pointer to an instance of the
- * corresponding node type from the `hesiod` namespace.
- *
- * @param NodeType The name of the node type (e.g., "Noise", "Remap") to create. This
- * should correspond to a class in the `hesiod` namespace.
- *
- * Example usage:
- * @code
- * switch (str2int(node_type.c_str())) {
- *   HSD_NODE_CASE(Noise);
- *   HSD_NODE_CASE(Remap);
- *   // Add more node types as needed
- *   default:
- *     throw std::invalid_argument("Unknown node type in node_factory: " + node_type);
- * }
- * @endcode
- *
- * The macro expands to:
- * @code
- * case str2int("NodeType"):
- *   return std::make_shared<hesiod::NodeType>(config);
- * @endcode
- */
-#define HSD_NODE_CASE(NodeType)                                                          \
+#define SETUP_NODE(NodeType, node_type)                                                  \
   case str2int(#NodeType):                                                               \
-    return std::make_shared<hesiod::NodeType>(config);
+    setup_##node_type##_node(sptr.get());                                                \
+    sptr->set_compute_fct(&compute_##node_type##_node);                                  \
+    break;
 
 namespace hesiod
 {
@@ -89,5 +65,31 @@ std::map<std::string, std::string> get_node_inventory();
  */
 std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type,
                                           std::shared_ptr<ModelConfig> config);
+
+// nodes functions
+
+void setup_brush_node(BaseNode *p_node);
+void compute_brush_node(BaseNode *p_node);
+
+void setup_cloud_node(BaseNode *p_node);
+void compute_cloud_node(BaseNode *p_node);
+
+void setup_export_heightmap_node(BaseNode *p_node);
+void compute_export_heightmap_node(BaseNode *p_node);
+
+void setup_gamma_correction_node(BaseNode *p_node);
+void compute_gamma_correction_node(BaseNode *p_node);
+
+void setup_gradient_node(BaseNode *p_node);
+void compute_gradient_node(BaseNode *p_node);
+
+void setup_noise_node(BaseNode *p_node);
+void compute_noise_node(BaseNode *p_node);
+
+void setup_noise_fbm_node(BaseNode *p_node);
+void compute_noise_fbm_node(BaseNode *p_node);
+
+void setup_remap_node(BaseNode *p_node);
+void compute_remap_node(BaseNode *p_node);
 
 } // namespace hesiod

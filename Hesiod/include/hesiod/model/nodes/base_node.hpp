@@ -14,6 +14,8 @@
  */
 
 #pragma once
+#include <functional>
+
 #include <QObject>
 
 #include "gnode/node.hpp"
@@ -25,11 +27,12 @@
 #include "hesiod/gui/widgets/data_preview.hpp"
 #include "hesiod/model/model_config.hpp"
 
-#define GET(key, aclass) this->attr.at(key)->get_ref<attr::aclass>()->get_value()
-#define GET_ATTR(key, aclass, what)                                                      \
-  this->attr.at(key)->get_ref<attr::aclass>()->get_##what()
+// clang-format off
+#define GET(key, aclass) p_node->get_attr_ref()->at(key)->get_ref<attr::aclass>()->get_value()
+#define GET_ATTR(key, aclass, what) p_node->get_attr_ref()->at(key)->get_ref<attr::aclass>()->get_##what()
 
-#define NEW(aclass, ...) attr::create_attr<attr::aclass>(__VA_ARGS__)
+#define CONFIG p_node->get_config_ref()->shape, p_node->get_config_ref()->tiling, p_node->get_config_ref()->overlap
+// clang-format on
 
 namespace hesiod
 {
@@ -41,6 +44,14 @@ public:
   BaseNode() = default;
 
   BaseNode(const std::string &label, std::shared_ptr<ModelConfig> config);
+
+  template <typename T, typename... Args>
+  void add_attr(const std::string &key, Args &&...args)
+  {
+    this->attr[key] = std::make_unique<T>(std::forward<Args>(args)...);
+  }
+
+  void compute() override { this->compute_fct(this); }
 
   template <typename T> auto get_attr(const std::string &key) -> decltype(auto)
   {
@@ -68,6 +79,16 @@ public:
   void json_from(nlohmann::json const &json);
 
   nlohmann::json json_to() const;
+
+  void set_attr_ordered_key(const std::vector<std::string> &new_attr_ordered_key)
+  {
+    this->attr_ordered_key = new_attr_ordered_key;
+  }
+
+  void set_compute_fct(std::function<void(BaseNode *p_node)> new_compute_fct)
+  {
+    this->compute_fct = new_compute_fct;
+  }
 
   void set_id(const std::string &new_id) override { gnode::Node::set_id(new_id); }
 
@@ -103,7 +124,7 @@ Q_SIGNALS:
 
   void compute_started(const std::string &id);
 
-protected:
+private:
   std::map<std::string, std::unique_ptr<attr::AbstractAttribute>> attr = {};
 
   /**
@@ -113,10 +134,11 @@ protected:
 
   std::string category;
 
-private:
   std::shared_ptr<ModelConfig> config;
 
   nlohmann::json documentation;
+
+  std::function<void(BaseNode *p_node)> compute_fct = 0;
 
   // ownership of this pointer will be taken by the gngui::GraphicsNode instance
   DataPreview *data_preview = nullptr;
