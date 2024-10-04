@@ -23,6 +23,7 @@
 #include "highmap/algebra.hpp"
 #include "highmap/array.hpp"
 
+#include "hesiod/gui/widgets/open_gl/open_gl_shaders.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 
@@ -45,6 +46,8 @@ public:
     this->h_scale = new_h_scale;
     this->repaint();
   }
+
+  void set_shader(ShaderType shader_type = ShaderType::TEXTURE);
 
 protected:
   void initializeGL() override;
@@ -96,8 +99,6 @@ private:
   float   alpha_x_bckp, alpha_y_bckp, delta_x_bckp, delta_y_bckp;
 
   void bind_gl_buffers();
-
-  void set_shader();
 };
 
 // helpers

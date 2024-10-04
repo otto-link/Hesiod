@@ -13,6 +13,7 @@
 #include "highmap/shadows.hpp"
 
 #include "hesiod/gui/widgets/open_gl/open_gl_render.hpp"
+#include "hesiod/gui/widgets/open_gl/open_gl_shaders.hpp"
 #include "hesiod/logger.hpp"
 
 namespace hesiod
@@ -45,6 +46,7 @@ void OpenGLRender::bind_gl_buffers()
                sizeof(this->vertices[0]) * this->vertices.size(),
                (GLvoid *)&this->vertices[0],
                GL_STATIC_DRAW);
+
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)0);
   glEnableVertexAttribArray(0);
 
@@ -390,56 +392,29 @@ void OpenGLRender::set_data(BaseNode          *new_p_node,
   this->repaint();
 }
 
-void OpenGLRender::set_shader()
+void OpenGLRender::set_shader(ShaderType shader_type)
 {
   LOG->trace("OpenGLRender::set_shader");
 
-  std::string vertex_shader_code;
+  char const *vs_ptr = nullptr;
+  char const *fs_ptr = nullptr;
+
+  switch (shader_type)
   {
-    const std::string code = R""(
-#version 330 core
-
-layout(location = 0) in vec3 pos;
-layout(location = 1) in vec2 uv;
-
-uniform mat4 modelMatrix;
-out vec2 texCoord;
-
-void main(){
-    gl_Position = modelMatrix * vec4(pos, 1.0);
-    texCoord = vec2(uv);
-}
-)"";
-    vertex_shader_code = code.c_str();
-  }
-  char const *vertex_shader_source_pointer = vertex_shader_code.c_str();
-
-  std::string fragment_shader_code;
+  //
+  case ShaderType::TEXTURE:
+  default:
   {
-    const std::string code = R""(
-#version 330 core
-
-out vec4 color;
-in vec2 texCoord;
-
-uniform sampler2D textureSampler;
-
-void main()
-{
-    color = texture(textureSampler, texCoord);
-}
-)"";
-    fragment_shader_code = code.c_str();
+    vs_ptr = vertex_texture.c_str();
+    fs_ptr = fragment_texture.c_str();
   }
-  char const *fragment_shader_source_pointer = fragment_shader_code.c_str();
+  }
 
   // compile shaders
-  if (!this->shader.addShaderFromSourceCode(QOpenGLShader::Vertex,
-                                            vertex_shader_source_pointer))
+  if (!this->shader.addShaderFromSourceCode(QOpenGLShader::Vertex, vs_ptr))
     throw std::runtime_error("Failed to compile vertex shader");
 
-  if (!this->shader.addShaderFromSourceCode(QOpenGLShader::Fragment,
-                                            fragment_shader_source_pointer))
+  if (!this->shader.addShaderFromSourceCode(QOpenGLShader::Fragment, fs_ptr))
     throw std::runtime_error("Failed to compile fragment shader");
 }
 
