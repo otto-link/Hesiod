@@ -4,12 +4,12 @@
 #include <filesystem>
 #include <fstream>
 
+#include <QApplication>
 #include <QFileDialog>
 #include <QMenu>
 #include <QMessageBox>
 #include <QPushButton>
 #include <QWidgetAction>
-#include <QApplication>
 
 #include "highmap/geometry/cloud.hpp" // for link colors
 #include "highmap/heightmap.hpp"
@@ -22,6 +22,7 @@
 #include "hesiod/graph_editor.hpp"
 #include "hesiod/gui/gui_utils.hpp"
 #include "hesiod/gui/style.hpp"
+#include "hesiod/gui/widgets/model_config_widget.hpp"
 #include "hesiod/gui/widgets/viewer3d.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/enum_mapping.hpp"
@@ -75,6 +76,11 @@ GraphEditor::GraphEditor(const std::string           &id,
                   &GraphEditor::on_graph_load_request);
 
     this->connect(this->viewer.get(),
+                  &gngui::GraphViewer::graph_new_request,
+                  this,
+                  &GraphEditor::on_graph_new_request);
+
+    this->connect(this->viewer.get(),
                   &gngui::GraphViewer::graph_reload_request,
                   this,
                   &GraphEditor::on_graph_reload_request);
@@ -88,6 +94,11 @@ GraphEditor::GraphEditor(const std::string           &id,
                   &gngui::GraphViewer::graph_save_request,
                   this,
                   &GraphEditor::on_graph_save_request);
+
+    this->connect(this->viewer.get(),
+                  &gngui::GraphViewer::graph_settings_request,
+                  this,
+                  &GraphEditor::on_graph_settings_request);
 
     this->connect(this->viewer.get(),
                   &gngui::GraphViewer::new_graphics_node_request,
@@ -267,6 +278,11 @@ void GraphEditor::on_graph_load_request()
   }
 }
 
+void GraphEditor::on_graph_new_request()
+{
+  LOG->trace("GraphEditor::on_graph_new_request");
+}
+
 void GraphEditor::on_graph_reload_request()
 {
   LOG->trace("GraphEditor::on_graph_reload_request");
@@ -318,6 +334,37 @@ void GraphEditor::on_graph_save_request()
     LOG->error("Could not open file {} to load JSON", fname.string());
 }
 
+void GraphEditor::on_graph_settings_request()
+{
+  LOG->trace("GraphEditor::on_graph_settings_request");
+
+  // work on a copy of the model configuration before
+  // apllying modifications
+  ModelConfig       new_model_config = *this->get_config_ref();
+  ModelConfigWidget model_config_editor(&new_model_config);
+
+  int ret = model_config_editor.exec();
+
+  if (ret)
+  {
+    *this->get_config_ref() = new_model_config;
+
+    // serialize
+    nlohmann::json json = this->json_to();
+
+    // clear (only the model part, not the GUI node instances)
+    this->clear();
+    if (this->viewer)
+      this->viewer->clear();
+
+    // deserialize but do not deserialize config, keep current one
+    bool override_config = false;
+    this->json_from(json, override_config);
+
+    this->update();
+  }
+}
+
 void GraphEditor::on_new_graphics_node_request(const std::string &node_id,
                                                QPointF            scene_pos)
 {
@@ -337,7 +384,7 @@ void GraphEditor::on_new_graphics_node_request(const std::string &node_id,
                   [this, p_gx_node]()
                   {
                     p_gx_node->on_compute_started();
-		    QApplication::processEvents();
+                    QApplication::processEvents();
                   });
 
     this->connect(p_node,

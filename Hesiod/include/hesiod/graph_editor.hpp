@@ -64,11 +64,15 @@ public Q_SLOTS:
 
   void on_graph_load_request();
 
+  void on_graph_new_request();
+
   void on_graph_reload_request();
 
   void on_graph_save_as_request();
 
   void on_graph_save_request();
+
+  void on_graph_settings_request();
 
   void on_new_graphics_node_request(const std::string &node_id, QPointF scene_pos);
 

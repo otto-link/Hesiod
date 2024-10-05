@@ -89,6 +89,9 @@ void compute_noise_node(BaseNode *p_node);
 void setup_noise_fbm_node(BaseNode *p_node);
 void compute_noise_fbm_node(BaseNode *p_node);
 
+void setup_path_node(BaseNode *p_node);
+void compute_path_node(BaseNode *p_node);
+
 void setup_remap_node(BaseNode *p_node);
 void compute_remap_node(BaseNode *p_node);
 

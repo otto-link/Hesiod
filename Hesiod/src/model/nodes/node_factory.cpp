@@ -26,6 +26,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Gradient", "Math/Gradient"},
       {"Noise", "Primitive/Coherent"},
       {"NoiseFbm", "Primitive/Coherent"},
+      {"Path", "Geometry/Path"},
       {"Remap", "Filter/Range"}};
 
   return node_inventory;
@@ -45,6 +46,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(Gradient, gradient);
     SETUP_NODE(Noise, noise);
     SETUP_NODE(NoiseFbm, noise_fbm);
+    SETUP_NODE(Path, path);
     SETUP_NODE(Remap, remap);
   default:
     throw std::invalid_argument("Unknown node type in node_factory: " + node_type);
