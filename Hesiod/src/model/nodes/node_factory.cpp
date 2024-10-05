@@ -24,6 +24,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"ExportHeightmap", "IO/Files"},
       {"GammaCorrection", "Filter/Recurve"},
       {"Gradient", "Math/Gradient"},
+      {"GradientNorm", "Math/Gradient"},
       {"Noise", "Primitive/Coherent"},
       {"NoiseFbm", "Primitive/Coherent"},
       {"Path", "Geometry/Path"},
@@ -45,6 +46,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(ExportHeightmap, export_heightmap);
     SETUP_NODE(GammaCorrection, gamma_correction);
     SETUP_NODE(Gradient, gradient);
+    SETUP_NODE(GradientNorm, gradient_norm);
     SETUP_NODE(Noise, noise);
     SETUP_NODE(NoiseFbm, noise_fbm);
     SETUP_NODE(Path, path);
