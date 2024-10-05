@@ -7,6 +7,7 @@
 
 #include "highmap/colorize.hpp"
 #include "highmap/geometry/cloud.hpp"
+#include "highmap/geometry/path.hpp"
 #include "highmap/heightmap.hpp"
 #include "highmap/operator.hpp"
 #include "highmap/range.hpp"
@@ -344,6 +345,27 @@ void OpenGLRender::set_data(BaseNode          *new_p_node,
 
               color_done = true;
             }
+            //
+            else if (data_type_color == typeid(hmap::Path).name())
+            {
+              hmap::Path path = *this->p_node->get_value_ref<hmap::Path>(port_index_elev);
+              hmap::Array c = hmap::Array(p_node->get_config_ref()->shape);
+
+              if (path.get_npoints() > 0)
+              {
+                hmap::Vec4<float> bbox = hmap::Vec4<float>(0.f, 1.f, 0.f, 1.f);
+                path.remap_values(0.5f, 1.f);
+                path.to_array(c, bbox);
+              }
+
+              this->texture_img = generate_selector_image(c);
+              this->texture_shape = c.shape;
+
+              hmap::apply_hillshade(this->texture_img, array, 0.f, 1.f, 1.5f, true);
+
+              color_done = true;
+            }
+            //
           }
         }
 

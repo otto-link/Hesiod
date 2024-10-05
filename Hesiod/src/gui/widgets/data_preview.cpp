@@ -10,6 +10,7 @@
 
 #include "highmap/colorize.hpp"
 #include "highmap/geometry/cloud.hpp"
+#include "highmap/geometry/path.hpp"
 #include "highmap/heightmap.hpp"
 #include "highmap/tensor.hpp"
 
@@ -167,6 +168,23 @@ void DataPreview::update_image()
         hmap::Vec4<float> bbox = hmap::Vec4<float>(0.f, 1.f, 0.f, 1.f);
         cloud.remap_values(0.1f, 1.f);
         cloud.to_array(array, bbox);
+      }
+
+      img = hmap::colorize(array, array.min(), array.max(), hmap::Cmap::MAGMA, false)
+                .to_img_8bit();
+      img_format = QImage::Format_RGB888;
+    }
+    //
+    else if (data_type == typeid(hmap::Path).name())
+    {
+      hmap::Path  path = *static_cast<hmap::Path *>(blind_data_ptr);
+      hmap::Array array = hmap::Array(shape_preview);
+
+      if (path.get_npoints() > 0)
+      {
+        hmap::Vec4<float> bbox = hmap::Vec4<float>(0.f, 1.f, 0.f, 1.f);
+        path.remap_values(0.1f, 1.f);
+        path.to_array(array, bbox);
       }
 
       img = hmap::colorize(array, array.min(), array.max(), hmap::Cmap::MAGMA, false)
