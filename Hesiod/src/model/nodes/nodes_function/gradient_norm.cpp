@@ -21,7 +21,6 @@ void setup_gradient_norm_node(BaseNode *p_node)
   p_node->add_port<hmap::HeightMap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<BoolAttribute>("remap", true, "remap");
   p_node->add_attr<RangeAttribute>("remap_range", "remap_range");
 
   // attribute(s) order
@@ -55,8 +54,8 @@ void compute_gradient_norm_node(BaseNode *p_node)
                            false, // saturate
                            {0.f, 0.f},
                            0.f,
-                           GET("remap", BoolAttribute),
-                           GET("remap_range", RangeAttribute));
+                           GET_ATTR("remap", RangeAttribute, is_active),
+                           GET("remap", RangeAttribute));
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());
