@@ -227,7 +227,10 @@ void OpenGLRender::set_data(BaseNode          *new_p_node,
                             const std::string &new_port_id_elev,
                             const std::string &new_port_id_color)
 {
-  LOG->trace("OpenGLRender::set_data");
+  LOG->trace("OpenGLRender::set_data, [{}] [{}] [{}]",
+             p_node ? "non-nullptr" : "nullptr",
+             new_port_id_elev,
+             new_port_id_color);
 
   this->p_node = new_p_node;
   this->port_id_elev = new_port_id_elev;

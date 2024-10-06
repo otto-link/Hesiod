@@ -568,8 +568,7 @@ void GraphEditor::on_viewport_request()
 
   Viewer3d *p_viewer = dynamic_cast<Viewer3d *>(this->viewers.back().get());
 
-  // remove (and hence destroy) the widget from the widget list if it
-  // is closed
+  // remove the widget from the widget list if it is closed
   this->connect(p_viewer,
                 &Viewer3d::widget_close,
                 [this, p_viewer]()
@@ -578,6 +577,12 @@ void GraphEditor::on_viewport_request()
                                 [p_viewer](const std::unique_ptr<QWidget> &sptr)
                                 { return sptr.get() == p_viewer; });
                 });
+
+  // set data of the currently selected node, if any
+  std::vector<std::string> selected_ids = this->viewer->get_selected_node_ids();
+
+  if (selected_ids.size())
+    p_viewer->on_node_selected(selected_ids.back());
 }
 
 } // namespace hesiod
