@@ -23,6 +23,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Clamp", "Filter/Range"},
       {"Cloud", "Geometry/Cloud"},
       {"ExportHeightmap", "IO/Files"},
+      {"Falloff", "Math/Boundaries"},
       {"GammaCorrection", "Filter/Recurve"},
       {"Gradient", "Math/Gradient"},
       {"GradientNorm", "Math/Gradient"},
@@ -47,6 +48,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(Clamp, clamp);
     SETUP_NODE(Cloud, cloud);
     SETUP_NODE(ExportHeightmap, export_heightmap);
+    SETUP_NODE(Falloff, falloff);
     SETUP_NODE(GammaCorrection, gamma_correction);
     SETUP_NODE(Gradient, gradient);
     SETUP_NODE(GradientNorm, gradient_norm);
