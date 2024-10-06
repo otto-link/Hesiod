@@ -71,6 +71,9 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
 void setup_brush_node(BaseNode *p_node);
 void compute_brush_node(BaseNode *p_node);
 
+void setup_clamp_node(BaseNode *p_node);
+void compute_clamp_node(BaseNode *p_node);
+
 void setup_cloud_node(BaseNode *p_node);
 void compute_cloud_node(BaseNode *p_node);
 

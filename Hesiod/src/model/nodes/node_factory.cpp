@@ -20,6 +20,7 @@ std::map<std::string, std::string> get_node_inventory()
 {
   std::map<std::string, std::string> node_inventory = {
       {"Brush", "Primitive/Authoring"},
+      {"Clamp", "Filter/Range"},
       {"Cloud", "Geometry/Cloud"},
       {"ExportHeightmap", "IO/Files"},
       {"GammaCorrection", "Filter/Recurve"},
@@ -43,6 +44,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
   switch (str2int(node_type.c_str()))
   {
     SETUP_NODE(Brush, brush);
+    SETUP_NODE(Clamp, clamp);
     SETUP_NODE(Cloud, cloud);
     SETUP_NODE(ExportHeightmap, export_heightmap);
     SETUP_NODE(GammaCorrection, gamma_correction);
