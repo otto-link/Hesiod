@@ -360,8 +360,7 @@ void OpenGLRender::set_data(BaseNode          *new_p_node,
         }
         else
         {
-          // NB - shape can be modified while editing the graph when
-          // the model configuration is changed by the user
+          // necessary if the model configuration is changed by the user
           if (array.size() != (int)this->vertices.size())
             generate_basemesh(array.shape, this->vertices, this->indices);
 
