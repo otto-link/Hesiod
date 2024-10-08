@@ -19,6 +19,7 @@ constexpr unsigned int str2int(const char *str, int h = 0)
 std::map<std::string, std::string> get_node_inventory()
 {
   std::map<std::string, std::string> node_inventory = {
+      {"Blend", "Operator/Blend"},
       {"Brush", "Primitive/Authoring"},
       {"Clamp", "Filter/Range"},
       {"Cloud", "Geometry/Cloud"},
@@ -47,6 +48,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
 
   switch (str2int(node_type.c_str()))
   {
+    SETUP_NODE(Blend, blend);
     SETUP_NODE(Brush, brush);
     SETUP_NODE(Clamp, clamp);
     SETUP_NODE(Cloud, cloud);
