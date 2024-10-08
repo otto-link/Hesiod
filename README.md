@@ -31,7 +31,7 @@ git clone --recurse-submodules git@github.com:otto-link/Hesiod.git
 
 To get the submodules, you will need a GitHub account with its SSH key configured.
 
-Install [Qt5 SDK](https://wiki.qt.io/Install_Qt_5_Dev_Suite_Windows) and install the missing OpenSource dependencies using `vcpkg`:
+Install [Qt6](https://doc.qt.io/qt-6/windows.html) and install the missing OpenSource dependencies using `vcpkg`:
 ```
 vcpkg install glfw3 opengl gsl glew freeglut glm libpng glm opencl assimp spdlog opencv
 ```
