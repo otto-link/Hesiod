@@ -27,6 +27,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"GammaCorrection", "Filter/Recurve"},
       {"Gradient", "Math/Gradient"},
       {"GradientNorm", "Math/Gradient"},
+      {"HydraulicStreamUpscaleAmplification", "Erosion/Hydraulic"},
       {"Noise", "Primitive/Coherent"},
       {"NoiseFbm", "Primitive/Coherent"},
       {"NoiseIq", "Primitive/Coherent"},
@@ -53,6 +54,8 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(GammaCorrection, gamma_correction);
     SETUP_NODE(Gradient, gradient);
     SETUP_NODE(GradientNorm, gradient_norm);
+    SETUP_NODE(HydraulicStreamUpscaleAmplification,
+               hydraulic_stream_upscale_amplification);
     SETUP_NODE(Noise, noise);
     SETUP_NODE(NoiseFbm, noise_fbm);
     SETUP_NODE(NoiseIq, noise_iq);
