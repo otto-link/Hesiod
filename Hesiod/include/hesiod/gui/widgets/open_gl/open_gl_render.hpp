@@ -15,6 +15,8 @@
 #pragma once
 #include <filesystem>
 
+#include <glm/glm.hpp>
+
 #include <QOpenGLFunctions>
 #include <QOpenGLShaderProgram>
 #include <QOpenGLVertexArrayObject>
@@ -33,13 +35,15 @@ namespace hesiod
 class OpenGLRender : public QOpenGLWidget, protected QOpenGLFunctions
 {
 public:
-  OpenGLRender(QWidget *parent = nullptr);
+  OpenGLRender(QWidget *parent = nullptr, ShaderType shader_type = ShaderType::TEXTURE);
 
   float get_h_scale() { return this->h_scale; }
 
-  void set_data(BaseNode          *new_p_node,
-                const std::string &new_port_id_elev,
-                const std::string &new_port_id_color);
+  bool get_wireframe_mode() { return this->wireframe_mode; }
+
+  virtual void set_data(BaseNode          *new_p_node,
+                        const std::string &new_port_id_elev,
+                        const std::string &new_port_id_color);
 
   void set_h_scale(float new_h_scale)
   {
@@ -47,7 +51,11 @@ public:
     this->repaint();
   }
 
-  void set_shader(ShaderType shader_type = ShaderType::TEXTURE);
+  void set_shader_type(const ShaderType &new_shader_type);
+
+  void set_wireframe_mode(bool new_wireframe_mode);
+
+  void setup_shader();
 
 protected:
   void initializeGL() override;
@@ -60,11 +68,20 @@ protected:
 
   void resizeEvent(QResizeEvent *event) override;
 
-  void resizeGL(int w, int h) override { this->glViewport(0, 0, w, h); }
+  void resizeGL(int w, int h) override
+  {
+    this->glViewport(0, 0, w, h);
+    this->repaint();
+  }
+
+  void set_data_again()
+  {
+    this->set_data(this->p_node, this->port_id_elev, this->port_id_color);
+  }
 
   void wheelEvent(QWheelEvent *event) override;
 
-private:
+protected:
   BaseNode   *p_node;
   std::string port_id_elev;
   std::string port_id_color;
@@ -75,11 +92,16 @@ private:
   GLuint                   vbo;
   GLuint                   ebo;
   GLuint                   texture_id;
+  GLuint                   normal_map_id;
+  // bool                     use_normals = false;
+  bool                     use_normal_map = true;
+  ShaderType               shader_type;
 
   // mesh and texture
   std::vector<GLfloat> vertices = {};
   std::vector<uint>    indices = {};
-  std::vector<uint8_t> texture_img = {};
+  std::vector<uint8_t> texture_diffuse = {};
+  std::vector<uint8_t> texture_normal_map = {};
   hmap::Vec2<int>      texture_shape = hmap::Vec2<int>(0, 0);
 
   // view parameters
@@ -95,6 +117,8 @@ private:
   float near_plane = 0.1f;
   float far_plane = 100.0f;
 
+  bool wireframe_mode = false;
+
   QPointF mouse_pos_bckp;
   float   alpha_x_bckp, alpha_y_bckp, delta_x_bckp, delta_y_bckp;
 
@@ -103,9 +127,19 @@ private:
 
 // helpers
 
+std::vector<glm::vec3> compute_point_normals(const std::vector<glm::vec3>  &points,
+                                             const std::vector<glm::ivec3> &triangles);
+
 void generate_basemesh(hmap::Vec2<int>       shape,
                        std::vector<GLfloat> &vertices,
                        std::vector<uint>    &indices);
+
+void generate_mesh_approximation(hmap::Array          &z,
+                                 std::vector<GLfloat> &vertices,
+                                 std::vector<uint>    &indices,
+                                 float                 max_error,
+                                 bool                  add_base = true,
+                                 bool                  compute_normals = false);
 
 void update_vertex_elevations(hmap::Array &z, std::vector<GLfloat> &vertices);
 

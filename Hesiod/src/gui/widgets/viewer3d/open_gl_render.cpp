@@ -20,8 +20,9 @@
 namespace hesiod
 {
 
-OpenGLRender::OpenGLRender(QWidget *parent)
-    : QOpenGLWidget(parent), p_node(nullptr), port_id_elev(""), port_id_color("")
+OpenGLRender::OpenGLRender(QWidget *parent, ShaderType shader_type)
+    : QOpenGLWidget(parent), p_node(nullptr), port_id_elev(""), port_id_color(""),
+      shader_type(shader_type)
 {
   LOG->trace("OpenGLRender::OpenGLRender");
 
@@ -34,6 +35,7 @@ void OpenGLRender::bind_gl_buffers()
   // make sure OpenGL context is set
   QOpenGLWidget::makeCurrent();
 
+  this->shader.bind();
   this->qvao.bind();
 
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -48,16 +50,33 @@ void OpenGLRender::bind_gl_buffers()
                (GLvoid *)&this->vertices[0],
                GL_STATIC_DRAW);
 
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)0);
+  // int nfields = this->use_normals ? 8 : 5;
+  int nfields = 5;
+  
+  // postion
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, nfields * sizeof(float), (void *)0);
   glEnableVertexAttribArray(0);
 
+  // texture uv coordinates
   glVertexAttribPointer(1,
                         2,
                         GL_FLOAT,
                         GL_FALSE,
-                        5 * sizeof(float),
+                        nfields * sizeof(float),
                         (void *)(3 * sizeof(float)));
   glEnableVertexAttribArray(1);
+
+  // // normals (if any)
+  // if (this->use_normals)
+  // {
+  //   glVertexAttribPointer(2,
+  //                         3,
+  //                         GL_FLOAT,
+  //                         GL_FALSE,
+  //                         nfields * sizeof(float),
+  //                         (void *)(5 * sizeof(float)));
+  //   glEnableVertexAttribArray(2);
+  // }
 
   // face indices
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->ebo);
@@ -67,6 +86,7 @@ void OpenGLRender::bind_gl_buffers()
                GL_STATIC_DRAW);
 
   // texture
+  glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, this->texture_id);
 
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -77,13 +97,42 @@ void OpenGLRender::bind_gl_buffers()
   glTexImage2D(GL_TEXTURE_2D,
                0,
                GL_RGBA,
-               texture_shape.x,
-               texture_shape.y,
+               this->texture_shape.x,
+               this->texture_shape.y,
                0,
                GL_RGBA,
                GL_UNSIGNED_BYTE,
-               this->texture_img.data());
+               this->texture_diffuse.data());
   glGenerateMipmap(GL_TEXTURE_2D);
+
+  // assign to texture sampler #0
+  this->shader.setUniformValue("textureDiffuse", 0);
+
+  // normal map
+  if (this->use_normal_map)
+  {
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, this->normal_map_id);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    glTexImage2D(GL_TEXTURE_2D,
+                 0,
+                 GL_RGB,
+                 this->texture_shape.x,
+                 this->texture_shape.y,
+                 0,
+                 GL_RGB,
+                 GL_UNSIGNED_BYTE,
+                 this->texture_normal_map.data());
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    // assign to texture sampler #1
+    this->shader.setUniformValue("normalMap", 1);
+  }
 
   // and... we're done
   this->qvao.release();
@@ -91,6 +140,8 @@ void OpenGLRender::bind_gl_buffers()
 
 void OpenGLRender::initializeGL()
 {
+  LOG->trace("OpenGLRender::initializeGL");
+
   QOpenGLFunctions::initializeOpenGLFunctions();
 
   // initialize OpenGL buffers
@@ -99,8 +150,11 @@ void OpenGLRender::initializeGL()
   glGenBuffers(1, &this->ebo);
   glGenTextures(1, &this->texture_id);
 
+  if (this->use_normal_map)
+    glGenTextures(1, &this->normal_map_id);
+
   // shader program
-  this->set_shader();
+  this->setup_shader();
 
   // bind
   this->shader.bind();
@@ -167,7 +221,6 @@ void OpenGLRender::paintGL()
 
       // --- transformations
 
-      glm::mat4 combined_matrix;
       {
         // compensate for viewport aspect ratio
         this->aspect_ratio = (float)this->width() / (float)this->height();
@@ -186,7 +239,7 @@ void OpenGLRender::paintGL()
 
         glm::mat4 rotation_matrix = rotation_matrix_x * rotation_matrix_y;
 
-        glm::mat4 transalation_matrix = glm::translate(
+        glm::mat4 translation_matrix = glm::translate(
             glm::mat4(1.f),
             glm::vec3(this->delta_x, this->delta_y, 0.f));
 
@@ -198,19 +251,33 @@ void OpenGLRender::paintGL()
                                                        this->near_plane,
                                                        this->far_plane);
 
-        combined_matrix = projection_matrix * view_matrix * transalation_matrix *
-                          rotation_matrix * scale_matrix;
+        glm::mat4 model_matrix = translation_matrix * rotation_matrix * scale_matrix;
+
+        this->shader.setUniformValue(
+            "model",
+            QMatrix4x4(glm::value_ptr(model_matrix)).transposed());
+
+        this->shader.setUniformValue(
+            "view",
+            QMatrix4x4(glm::value_ptr(view_matrix)).transposed());
+
+        this->shader.setUniformValue(
+            "projection",
+            QMatrix4x4(glm::value_ptr(projection_matrix)).transposed());
       }
 
-      this->shader.setUniformValue(
-          "modelMatrix",
-          QMatrix4x4(glm::value_ptr(combined_matrix)).transposed());
+      if (this->wireframe_mode)
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+      else
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
       // --- eventually render the surface
 
       this->qvao.bind();
       glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, 0);
       this->qvao.release();
+
+      this->shader.release();
     }
   }
 }
@@ -313,10 +380,10 @@ void OpenGLRender::set_data(BaseNode          *new_p_node,
                 cloud.to_array(c, bbox);
               }
 
-              this->texture_img = generate_selector_image(c);
+              this->texture_diffuse = generate_selector_image(c);
               this->texture_shape = c.shape;
 
-              hmap::apply_hillshade(this->texture_img, array, 0.f, 1.f, 1.5f, true);
+              hmap::apply_hillshade(this->texture_diffuse, array, 0.f, 1.f, 1.5f, true);
 
               color_done = true;
             }
@@ -327,10 +394,10 @@ void OpenGLRender::set_data(BaseNode          *new_p_node,
                   port_index_color);
               hmap::Array c = p_c->to_array();
 
-              this->texture_img = generate_selector_image(c);
+              this->texture_diffuse = generate_selector_image(c);
               this->texture_shape = p_c->shape;
 
-              hmap::apply_hillshade(this->texture_img, array, 0.f, 1.f, 1.5f, true);
+              hmap::apply_hillshade(this->texture_diffuse, array, 0.f, 1.f, 1.5f, true);
 
               color_done = true;
             }
@@ -340,11 +407,11 @@ void OpenGLRender::set_data(BaseNode          *new_p_node,
               hmap::HeightMapRGBA *p_c = this->p_node->get_value_ref<hmap::HeightMapRGBA>(
                   port_index_color);
 
-              this->texture_img = p_c->to_img_8bit(p_c->shape);
+              this->texture_diffuse = p_c->to_img_8bit(p_c->shape);
               this->texture_shape = p_c->shape;
 
               // 'true' for RGBA, '0.9f' is exponent applied to shadows
-              hmap::apply_hillshade(this->texture_img, array, 0.f, 1.5f, 0.9f, true);
+              hmap::apply_hillshade(this->texture_diffuse, array, 0.f, 1.5f, 0.9f, true);
 
               color_done = true;
             }
@@ -361,10 +428,10 @@ void OpenGLRender::set_data(BaseNode          *new_p_node,
                 path.to_array(c, bbox);
               }
 
-              this->texture_img = generate_selector_image(c);
+              this->texture_diffuse = generate_selector_image(c);
               this->texture_shape = c.shape;
 
-              hmap::apply_hillshade(this->texture_img, array, 0.f, 1.f, 1.5f, true);
+              hmap::apply_hillshade(this->texture_diffuse, array, 0.f, 1.f, 1.5f, true);
 
               color_done = true;
             }
@@ -376,7 +443,7 @@ void OpenGLRender::set_data(BaseNode          *new_p_node,
         // strategy for the data type)
         if (!color_done)
         {
-          this->texture_img.resize(4 * array.shape.x * array.shape.y);
+          this->texture_diffuse.resize(4 * array.shape.x * array.shape.y);
 
           hmap::Array hs = hillshade(array,
                                      180.f,
@@ -389,10 +456,10 @@ void OpenGLRender::set_data(BaseNode          *new_p_node,
           for (int j = array.shape.y - 1; j > -1; j--)
             for (int i = 0; i < array.shape.x; i++)
             {
-              this->texture_img[k++] = (uint8_t)(255.f * hs(i, j));
-              this->texture_img[k++] = (uint8_t)(255.f * hs(i, j));
-              this->texture_img[k++] = (uint8_t)(255.f * hs(i, j));
-              this->texture_img[k++] = (uint8_t)(255.f);
+              this->texture_diffuse[k++] = (uint8_t)(255.f * hs(i, j));
+              this->texture_diffuse[k++] = (uint8_t)(255.f * hs(i, j));
+              this->texture_diffuse[k++] = (uint8_t)(255.f * hs(i, j));
+              this->texture_diffuse[k++] = (uint8_t)(255.f);
             }
 
           this->texture_shape = array.shape;
@@ -417,15 +484,31 @@ void OpenGLRender::set_data(BaseNode          *new_p_node,
   this->repaint();
 }
 
-void OpenGLRender::set_shader(ShaderType shader_type)
+void OpenGLRender::set_shader_type(const ShaderType &new_shader_type)
 {
-  LOG->trace("OpenGLRender::set_shader");
+  this->shader_type = new_shader_type;
+  this->setup_shader();
+}
+
+void OpenGLRender::setup_shader()
+{
+  LOG->trace("OpenGLRender::setup_shader, shader: {}", this->shader_type);
+
+  this->shader.removeAllShaders();
 
   char const *vs_ptr = nullptr;
+  char const *gs_ptr = nullptr;
   char const *fs_ptr = nullptr;
 
-  switch (shader_type)
+  switch (this->shader_type)
   {
+    //
+  case ShaderType::NORMAL:
+  {
+    vs_ptr = vertex_normal.c_str();
+    fs_ptr = fragment_normal.c_str();
+  }
+  break;
   //
   case ShaderType::TEXTURE:
   default:
@@ -437,10 +520,31 @@ void OpenGLRender::set_shader(ShaderType shader_type)
 
   // compile shaders
   if (!this->shader.addShaderFromSourceCode(QOpenGLShader::Vertex, vs_ptr))
+  {
+    LOG->critical("shader compiler (vertex) log:\n{}", this->shader.log().toStdString());
     throw std::runtime_error("Failed to compile vertex shader");
+  }
+
+  if (gs_ptr)
+    if (!this->shader.addShaderFromSourceCode(QOpenGLShader::Geometry, gs_ptr))
+    {
+      LOG->critical("shader compiler (geometry) log:\n{}",
+                    this->shader.log().toStdString());
+      throw std::runtime_error("Failed to compile geometry shader");
+    }
 
   if (!this->shader.addShaderFromSourceCode(QOpenGLShader::Fragment, fs_ptr))
+  {
+    LOG->critical("shader compiler (fragment) log:\n{}",
+                  this->shader.log().toStdString());
     throw std::runtime_error("Failed to compile fragment shader");
+  }
+}
+
+void OpenGLRender::set_wireframe_mode(bool new_wireframe_mode)
+{
+  this->wireframe_mode = new_wireframe_mode;
+  this->set_data_again();
 }
 
 void OpenGLRender::wheelEvent(QWheelEvent *event)

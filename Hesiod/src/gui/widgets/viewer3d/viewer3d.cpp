@@ -8,6 +8,7 @@
 
 #include "highmap/heightmap.hpp"
 
+#include "hesiod/gui/widgets/open_gl/open_gl_hmm_widget.hpp"
 #include "hesiod/gui/widgets/open_gl/open_gl_widget.hpp"
 #include "hesiod/gui/widgets/viewer3d.hpp"
 #include "hesiod/logger.hpp"
@@ -101,13 +102,22 @@ Viewer3d::Viewer3d(GraphEditor *p_graph_editor, QWidget *parent, std::string lab
   row += 2;
 
   // renderer widget
+  // {
+  //   this->render_widget = new OpenGLWidget();
+
+  //   this->connect(this,
+  //                 &Viewer3d::view_param_changed,
+  //                 static_cast<OpenGLWidget *>(this->render_widget),
+  //                 &OpenGLWidget::set_data);
+  // }
+
   {
-    this->render_widget = new OpenGLWidget();
+    this->render_widget = new OpenGLHmmWidget();
 
     this->connect(this,
                   &Viewer3d::view_param_changed,
-                  static_cast<OpenGLWidget *>(this->render_widget),
-                  &OpenGLWidget::set_data);
+                  static_cast<OpenGLHmmWidget *>(this->render_widget),
+                  &OpenGLHmmWidget::set_data);
   }
 
   layout->addWidget(this->render_widget, row++, 0, 1, 4);
