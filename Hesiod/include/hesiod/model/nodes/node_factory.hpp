@@ -116,4 +116,7 @@ void compute_path_sdf_node(BaseNode *p_node);
 void setup_remap_node(BaseNode *p_node);
 void compute_remap_node(BaseNode *p_node);
 
+void setup_smooth_fill_node(BaseNode *p_node);
+void compute_smooth_fill_node(BaseNode *p_node);
+
 } // namespace hesiod

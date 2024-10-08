@@ -240,7 +240,7 @@ void GraphEditor::on_connection_finished(const std::string &id_out,
              port_id_in);
 
   this->new_link(id_out, port_id_out, id_in, port_id_in);
-  this->update(id_out);
+  this->update(id_in);
 }
 
 void GraphEditor::on_graph_clear_request()

@@ -34,7 +34,8 @@ std::map<std::string, std::string> get_node_inventory()
       {"NoiseJordan", "Primitive/Coherent"},
       {"Path", "Geometry/Path"},
       {"PathSDF", "Geometry/Path"},
-      {"Remap", "Filter/Range"}};
+      {"Remap", "Filter/Range"},
+      {"SmoothFill", "Filter/Smoothing"}};
 
   return node_inventory;
 }
@@ -63,6 +64,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(Path, path);
     SETUP_NODE(PathSDF, path_sdf);
     SETUP_NODE(Remap, remap);
+    SETUP_NODE(SmoothFill, smooth_fill);
   default:
     throw std::invalid_argument("Unknown node type in node_factory: " + node_type);
   }

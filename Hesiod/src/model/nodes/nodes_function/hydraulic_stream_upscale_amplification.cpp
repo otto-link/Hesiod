@@ -25,7 +25,7 @@ void setup_hydraulic_stream_upscale_amplification_node(BaseNode *p_node)
   p_node->add_port<hmap::HeightMap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("c_erosion", 0.05f, 0.01f, 0.1f, "c_erosion");
+  p_node->add_attr<FloatAttribute>("c_erosion", 0.05f, 0.001f, 0.1f, "c_erosion");
   p_node->add_attr<FloatAttribute>("talus_ref", 0.1f, 0.01f, 10.f, "talus_ref");
   p_node->add_attr<FloatAttribute>("radius", 0.f, 0.f, 0.05f, "radius");
   p_node->add_attr<FloatAttribute>("clipping_ratio", 10.f, 0.1f, 100.f, "clipping_ratio");
@@ -71,7 +71,7 @@ void compute_hydraulic_stream_upscale_amplification_node(BaseNode *p_node)
                           GET("c_erosion", FloatAttribute),
                           GET("talus_ref", FloatAttribute),
                           GET("upscaling_levels", IntAttribute),
-			  GET("persistence", FloatAttribute),
+                          GET("persistence", FloatAttribute),
                           ir,
                           GET("clipping_ratio", FloatAttribute));
                     });
