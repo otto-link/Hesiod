@@ -48,5 +48,4 @@ target_link_libraries(
           Qt6::Core
           Qt6::OpenGL
           Qt6::Widgets
-          Qt6::OpenGLWidgets
-          stdc++fs)
+          Qt6::OpenGLWidgets)

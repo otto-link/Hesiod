@@ -14,7 +14,6 @@
  */
 
 #pragma once
-#include <filesystem>
 #include <memory>
 
 #include <QObject>
@@ -23,6 +22,8 @@
 
 #include "hesiod/model/graph_node.hpp"
 #include "hesiod/model/model_config.hpp"
+
+#include <filesystem> // must be here, https://bugreports.qt.io/browse/QTBUG-73263
 
 namespace hesiod
 {
