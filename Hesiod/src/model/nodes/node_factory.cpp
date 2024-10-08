@@ -30,6 +30,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Noise", "Primitive/Coherent"},
       {"NoiseFbm", "Primitive/Coherent"},
       {"NoiseIq", "Primitive/Coherent"},
+      {"NoiseJordan", "Primitive/Coherent"},
       {"Path", "Geometry/Path"},
       {"PathSDF", "Geometry/Path"},
       {"Remap", "Filter/Range"}};
@@ -55,6 +56,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(Noise, noise);
     SETUP_NODE(NoiseFbm, noise_fbm);
     SETUP_NODE(NoiseIq, noise_iq);
+    SETUP_NODE(NoiseJordan, noise_iq);
     SETUP_NODE(Path, path);
     SETUP_NODE(PathSDF, path_sdf);
     SETUP_NODE(Remap, remap);
