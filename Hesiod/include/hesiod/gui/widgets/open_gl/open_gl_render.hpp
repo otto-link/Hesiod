@@ -37,9 +37,9 @@ class OpenGLRender : public QOpenGLWidget, protected QOpenGLFunctions
 public:
   OpenGLRender(QWidget *parent = nullptr, ShaderType shader_type = ShaderType::TEXTURE);
 
-  bool get_use_approx_mesh() { return this->use_approx_mesh; }
-
   float get_h_scale() { return this->h_scale; }
+
+  bool get_use_approx_mesh() { return this->use_approx_mesh; }
 
   bool get_wireframe_mode() { return this->wireframe_mode; }
 
