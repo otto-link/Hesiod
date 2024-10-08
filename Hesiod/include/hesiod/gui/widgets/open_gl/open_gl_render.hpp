@@ -37,6 +37,8 @@ class OpenGLRender : public QOpenGLWidget, protected QOpenGLFunctions
 public:
   OpenGLRender(QWidget *parent = nullptr, ShaderType shader_type = ShaderType::TEXTURE);
 
+  bool get_use_approx_mesh() { return this->use_approx_mesh; }
+
   float get_h_scale() { return this->h_scale; }
 
   bool get_wireframe_mode() { return this->wireframe_mode; }
@@ -51,7 +53,11 @@ public:
     this->repaint();
   }
 
+  void set_max_approx_error(float new_max_approx_error);
+
   void set_shader_type(const ShaderType &new_shader_type);
+
+  void set_use_approx_mesh(bool new_use_approx_mesh);
 
   void set_wireframe_mode(bool new_wireframe_mode);
 
@@ -93,7 +99,6 @@ protected:
   GLuint                   ebo;
   GLuint                   texture_id;
   GLuint                   normal_map_id;
-  // bool                     use_normals = false;
   bool                     use_normal_map = true;
   ShaderType               shader_type;
 
@@ -103,6 +108,9 @@ protected:
   std::vector<uint8_t> texture_diffuse = {};
   std::vector<uint8_t> texture_normal_map = {};
   hmap::Vec2<int>      texture_shape = hmap::Vec2<int>(0, 0);
+
+  bool  use_approx_mesh = true;
+  float max_approx_error = 5e-3f;
 
   // view parameters
   float scale = 0.7f;

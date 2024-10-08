@@ -161,9 +161,9 @@ void generate_mesh_approximation(hmap::Array          &z,
     for (auto &p : points)
     {
       // position
-      vertices.push_back(2.f * ay * p.y - 1.f);
+      vertices.push_back(1.f - 2.f * ay * p.y);
       vertices.push_back(p.z);
-      vertices.push_back(2.f * ax * p.x - 1.f);
+      vertices.push_back(1.f - 2.f * ax * p.x);
 
       // uv
       vertices.push_back(1.f - p.y * ay);

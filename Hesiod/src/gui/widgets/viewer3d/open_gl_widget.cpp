@@ -2,6 +2,7 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include <QGridLayout>
+#include <QPushButton>
 
 #include "doubleslider.hpp" // from external/Attributes
 
@@ -17,20 +18,85 @@ OpenGLWidget::OpenGLWidget(QWidget *parent) : QWidget(parent)
   this->setLayout(layout);
 
   this->renderer = new OpenGLRender(parent);
-  layout->addWidget(this->renderer, 0, 0);
+  layout->addWidget(this->renderer, 0, 0, 1, 4);
 
-  auto slider = new ValueSliders::DoubleSlider("Elevation scale", 0.4f, 0.f, 1.f);
-  layout->addWidget(slider, 1, 0);
+  // h scale
+  {
+    auto slider = new ValueSliders::DoubleSlider("Elevation scale", 0.4f, 0.f, 1.f);
+    layout->addWidget(slider, 1, 0);
 
-  this->renderer->set_h_scale(slider->getVal());
+    this->renderer->set_h_scale(slider->getVal());
 
-  this->connect(slider,
-                &ValueSliders::DoubleSlider::valueChanged,
-                [slider, this]()
-                {
-                  float v = slider->getVal();
-                  this->renderer->set_h_scale(v);
-                });
+    this->connect(slider,
+                  &ValueSliders::DoubleSlider::valueChanged,
+                  [slider, this]()
+                  {
+                    float v = slider->getVal();
+                    this->renderer->set_h_scale(v);
+                  });
+  }
+
+  // wireframe
+  {
+    std::string label = this->renderer->get_wireframe_mode() ? "Wireframe" : "Solid";
+
+    QPushButton *button = new QPushButton(label.c_str());
+    button->setCheckable(true);
+    layout->addWidget(button, 1, 1);
+    this->connect(button,
+                  &QPushButton::toggled,
+                  [this, button]()
+                  {
+                    this->renderer->set_wireframe_mode(
+                        !this->renderer->get_wireframe_mode());
+
+                    if (this->renderer->get_wireframe_mode())
+                      button->setText("Wireframe");
+                    else
+                      button->setText("Solid");
+                  });
+  }
+
+  // approx. mesh
+  {
+    std::string label = this->renderer->get_use_approx_mesh() ? "Approx. mesh"
+                                                              : "Exact mesh";
+
+    QPushButton *button = new QPushButton(label.c_str());
+    button->setCheckable(true);
+    layout->addWidget(button, 1, 2);
+    this->connect(button,
+                  &QPushButton::toggled,
+                  [this, button]()
+                  {
+                    this->renderer->set_use_approx_mesh(
+                        !this->renderer->get_use_approx_mesh());
+
+                    if (this->renderer->get_use_approx_mesh())
+                      button->setText("Approx. mesh");
+                    else
+                      button->setText("Exact");
+                  });
+  }
+
+  // approx. error
+  {
+    auto slider = new ValueSliders::DoubleSlider("Max. error", 5e-3f, 1e-5f, 1e-1f);
+    layout->addWidget(slider, 1, 3);
+
+    this->renderer->set_max_approx_error(slider->getVal());
+
+    this->connect(slider,
+                  &ValueSliders::DoubleSlider::valueChanged,
+                  [slider, this]()
+                  {
+                    float v = slider->getVal();
+                    this->renderer->set_max_approx_error(v);
+                  });
+  }
+
+  for (int i = 0; i < layout->columnCount(); i++)
+    layout->setColumnStretch(i, 1);
 }
 
 void OpenGLWidget::set_data(BaseNode          *new_p_node,

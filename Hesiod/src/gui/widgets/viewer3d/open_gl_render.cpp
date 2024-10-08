@@ -52,7 +52,7 @@ void OpenGLRender::bind_gl_buffers()
 
   // int nfields = this->use_normals ? 8 : 5;
   int nfields = 5;
-  
+
   // postion
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, nfields * sizeof(float), (void *)0);
   glEnableVertexAttribArray(0);
@@ -347,13 +347,26 @@ void OpenGLRender::set_data(BaseNode          *new_p_node,
 
       if (elev_done)
       {
-        // generate the basemesh (NB - shape can be modified while
-        // editing the graph when the model configuration is changed by
-        // the user)
-        if (array.size() != (int)this->vertices.size())
-          generate_basemesh(array.shape, this->vertices, this->indices);
+        // --- generate triangle mesh
 
-        update_vertex_elevations(array, this->vertices);
+        if (this->use_approx_mesh)
+        {
+          bool add_base = !this->wireframe_mode;
+          generate_mesh_approximation(array,
+                                      this->vertices,
+                                      this->indices,
+                                      this->max_approx_error,
+                                      add_base);
+        }
+        else
+        {
+          // NB - shape can be modified while editing the graph when
+          // the model configuration is changed by the user
+          if (array.size() != (int)this->vertices.size())
+            generate_basemesh(array.shape, this->vertices, this->indices);
+
+          update_vertex_elevations(array, this->vertices);
+        }
 
         // --- color array
 
@@ -484,10 +497,28 @@ void OpenGLRender::set_data(BaseNode          *new_p_node,
   this->repaint();
 }
 
+void OpenGLRender::set_max_approx_error(float new_max_approx_error)
+{
+  this->max_approx_error = new_max_approx_error;
+  this->set_data_again();
+}
+
 void OpenGLRender::set_shader_type(const ShaderType &new_shader_type)
 {
   this->shader_type = new_shader_type;
   this->setup_shader();
+}
+
+void OpenGLRender::set_use_approx_mesh(bool new_use_approx_mesh)
+{
+  this->use_approx_mesh = new_use_approx_mesh;
+  this->set_data_again();
+}
+
+void OpenGLRender::set_wireframe_mode(bool new_wireframe_mode)
+{
+  this->wireframe_mode = new_wireframe_mode;
+  this->set_data_again();
 }
 
 void OpenGLRender::setup_shader()
@@ -539,12 +570,6 @@ void OpenGLRender::setup_shader()
                   this->shader.log().toStdString());
     throw std::runtime_error("Failed to compile fragment shader");
   }
-}
-
-void OpenGLRender::set_wireframe_mode(bool new_wireframe_mode)
-{
-  this->wireframe_mode = new_wireframe_mode;
-  this->set_data_again();
 }
 
 void OpenGLRender::wheelEvent(QWheelEvent *event)
