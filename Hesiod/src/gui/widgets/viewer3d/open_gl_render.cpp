@@ -207,6 +207,15 @@ void OpenGLRender::mousePressEvent(QMouseEvent *event)
   }
 }
 
+void OpenGLRender::on_node_compute_finished(const std::string &id)
+{
+  LOG->trace("OpenGLRender::on_node_compute_finished {}", id);
+
+  if (this->p_node)
+    if (id == this->p_node->get_id())
+      this->set_data_again();
+}
+
 void OpenGLRender::paintGL()
 {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

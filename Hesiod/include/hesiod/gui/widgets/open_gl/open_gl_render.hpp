@@ -43,6 +43,8 @@ public:
 
   bool get_wireframe_mode() { return this->wireframe_mode; }
 
+  void on_node_compute_finished(const std::string &id);
+
   virtual void set_data(BaseNode          *new_p_node,
                         const std::string &new_port_id_elev,
                         const std::string &new_port_id_color);

@@ -33,6 +33,8 @@ public:
                 const std::string &new_port_id_elev,
                 const std::string &new_port_id_color);
 
+  void on_node_compute_finished(const std::string &id);
+
 private:
   OpenGLRender *renderer;
 };

@@ -99,6 +99,14 @@ OpenGLWidget::OpenGLWidget(QWidget *parent) : QWidget(parent)
     layout->setColumnStretch(i, 1);
 }
 
+void OpenGLWidget::on_node_compute_finished(const std::string &id)
+{
+  LOG->trace("OpenGLWidget::on_node_compute_finished {}", id);
+
+  // just a pass through...
+  this->renderer->on_node_compute_finished(id);
+}
+
 void OpenGLWidget::set_data(BaseNode          *new_p_node,
                             const std::string &new_port_id_elev,
                             const std::string &new_port_id_color)

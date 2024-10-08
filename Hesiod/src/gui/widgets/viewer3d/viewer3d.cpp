@@ -35,11 +35,6 @@ Viewer3d::Viewer3d(GraphEditor *p_graph_editor, QWidget *parent, std::string lab
                 this,
                 &Viewer3d::on_node_selected);
 
-  this->connect(p_graph_editor,
-                &GraphEditor::node_compute_finished,
-                this,
-                &Viewer3d::on_node_compute_finished);
-
   QGridLayout *layout = new QGridLayout(this);
   this->setLayout(layout);
 
@@ -103,6 +98,21 @@ Viewer3d::Viewer3d(GraphEditor *p_graph_editor, QWidget *parent, std::string lab
   // renderer widget
   {
     this->render_widget = new OpenGLWidget();
+
+    this->connect(this->p_graph_editor,
+                  &GraphEditor::node_compute_finished,
+                  static_cast<OpenGLWidget *>(this->render_widget),
+                  &OpenGLWidget::on_node_compute_finished);
+
+    // [this](const std::string &id)
+    // {
+    //   // send signal to renderer (first)
+    //   static_cast<OpenGLWidget *>(this->render_widget)->on_node_compute_finished(id);
+
+    //   // update widget
+    //   if (id == this->current_node_id)
+    //     this->emit_view_param_changed();
+    // });
 
     this->connect(this,
                   &Viewer3d::view_param_changed,
@@ -180,13 +190,13 @@ nlohmann::json Viewer3d::json_to() const
   return json;
 }
 
-void Viewer3d::on_node_compute_finished(const std::string &id)
-{
-  LOG->trace("Viewer3d::on_node_compute_finished {}", id);
+// void Viewer3d::on_node_compute_finished(const std::string &id)
+// {
+//   LOG->trace("Viewer3d::on_node_compute_finished {}", id);
 
-  if (id == this->current_node_id)
-    this->emit_view_param_changed();
-}
+//   // if (id == this->current_node_id)
+//   //   this->emit_view_param_changed();
+// }
 
 void Viewer3d::on_node_deleted(const std::string &id)
 {

@@ -52,8 +52,6 @@ Q_SIGNALS:
                           const std::string &port_id_color);
 
 public Q_SLOTS:
-  void on_node_compute_finished(const std::string &id);
-
   void on_node_deleted(const std::string &id);
 
   void on_node_deselected(const std::string &id);
