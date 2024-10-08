@@ -32,6 +32,7 @@ add_compile_definitions(
   HESIOD_VERSION_PATCH=${hesiod-root_VERSION_PATCH})
 
 set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # --- Dear ImGui
 find_package(spdlog REQUIRED)

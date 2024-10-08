@@ -17,6 +17,7 @@ configure_file(
 
 # Qt6
 set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOMOC_VERBOSE ON)
 
 # --- sources GUI headers need to be added in add_executable, otherwise the moc
 # won't parse them
