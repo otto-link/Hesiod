@@ -16,6 +16,8 @@ namespace hesiod
 
 void setup_gradient_norm_node(BaseNode *p_node)
 {
+  LOG->trace("setup node {}", p_node->get_label());
+
   // port(s)
   p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "input");
   p_node->add_port<hmap::HeightMap>(gnode::PortType::OUT, "output", CONFIG);

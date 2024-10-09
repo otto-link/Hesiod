@@ -18,7 +18,7 @@ namespace hesiod
 
 void setup_path_sdf_node(BaseNode *p_node)
 {
-  LOG->trace("setup_path_sdf_node");
+  LOG->trace("setup node {}", p_node->get_label());
 
   // port(s)
   p_node->add_port<hmap::Path>(gnode::PortType::IN, "path");

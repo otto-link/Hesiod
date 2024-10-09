@@ -19,6 +19,8 @@ namespace hesiod
 
 void setup_noise_iq_node(BaseNode *p_node)
 {
+  LOG->trace("setup node {}", p_node->get_label());
+
   // port(s)
   p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "dx");
   p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "dy");

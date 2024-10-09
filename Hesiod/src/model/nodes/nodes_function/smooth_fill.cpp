@@ -18,7 +18,7 @@ namespace hesiod
 
 void setup_smooth_fill_node(BaseNode *p_node)
 {
-  LOG->trace("setup_smooth_fill_node");
+  LOG->trace("setup node {}", p_node->get_label());
 
   // port(s)
   p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "input");

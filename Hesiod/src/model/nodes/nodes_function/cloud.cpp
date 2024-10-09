@@ -17,7 +17,7 @@ namespace hesiod
 
 void setup_cloud_node(BaseNode *p_node)
 {
-  LOG->trace("setup_cloud_node");
+  LOG->trace("setup node {}", p_node->get_label());
 
   // port(s)
   p_node->add_port<hmap::Cloud>(gnode::PortType::OUT, "cloud");
