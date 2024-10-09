@@ -25,6 +25,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Blend", "Operator/Blend"},
       {"Brush", "Primitive/Authoring"},
       {"Bump", "Primitives/Function"},
+      {"Caldera", "Primitives/Geological"},
       {"Clamp", "Filter/Range"},
       {"Cloud", "Geometry/Cloud"},
       {"ExportHeightmap", "IO/Files"},
@@ -59,6 +60,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(Blend, blend);
     SETUP_NODE(Brush, brush);
     SETUP_NODE(Bump, bump);
+    SETUP_NODE(Caldera, caldera);
     SETUP_NODE(Clamp, clamp);
     SETUP_NODE(Cloud, cloud);
     SETUP_NODE(ExportHeightmap, export_heightmap);
