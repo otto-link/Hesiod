@@ -158,6 +158,14 @@ void DataPreview::update_image()
       }
     }
     //
+    else if (data_type == typeid(hmap::HeightMapRGBA).name())
+    {
+      hmap::HeightMapRGBA *p_h = static_cast<hmap::HeightMapRGBA *>(blind_data_ptr);
+
+      img = p_h->to_img_8bit(shape_preview);
+      img_format = QImage::Format_RGBA8888;
+    }
+    //
     else if (data_type == typeid(hmap::Cloud).name())
     {
       hmap::Cloud cloud = *static_cast<hmap::Cloud *>(blind_data_ptr);

@@ -98,6 +98,9 @@ void compute_closing_node(BaseNode *p_node);
 void setup_cloud_node(BaseNode *p_node);
 void compute_cloud_node(BaseNode *p_node);
 
+void setup_colorize_gradient_node(BaseNode *p_node);
+void compute_colorize_gradient_node(BaseNode *p_node);
+
 void setup_hydraulic_stream_upscale_amplification_node(BaseNode *p_node);
 void compute_hydraulic_stream_upscale_amplification_node(BaseNode *p_node);
 
