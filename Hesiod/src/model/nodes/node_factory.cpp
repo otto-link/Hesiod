@@ -24,9 +24,10 @@ std::map<std::string, std::string> get_node_inventory()
       {"AccumulationCurvature", "Features/Landform"},
       {"Blend", "Operator/Blend"},
       {"Brush", "Primitive/Authoring"},
-      {"Bump", "Primitives/Function"},
-      {"Caldera", "Primitives/Geological"},
+      {"Bump", "Primitive/Function"},
+      {"Caldera", "Primitive/Geological"},
       {"Clamp", "Filter/Range"},
+      {"Closing", "Operator/Morphology"},
       {"Cloud", "Geometry/Cloud"},
       {"ExportHeightmap", "IO/Files"},
       {"Falloff", "Math/Boundaries"},
@@ -41,7 +42,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Path", "Geometry/Path"},
       {"PathSDF", "Geometry/Path"},
       {"Remap", "Filter/Range"},
-      {"Rift", "Primitives/Function"},
+      {"Rift", "Primitive/Function"},
       {"SmoothFill", "Filter/Smoothing"}};
 
   return node_inventory;
@@ -62,6 +63,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(Bump, bump);
     SETUP_NODE(Caldera, caldera);
     SETUP_NODE(Clamp, clamp);
+    SETUP_NODE(Closing, closing);
     SETUP_NODE(Cloud, cloud);
     SETUP_NODE(ExportHeightmap, export_heightmap);
     SETUP_NODE(Falloff, falloff);

@@ -92,6 +92,9 @@ void compute_caldera_node(BaseNode *p_node);
 void setup_clamp_node(BaseNode *p_node);
 void compute_clamp_node(BaseNode *p_node);
 
+void setup_closing_node(BaseNode *p_node);
+void compute_closing_node(BaseNode *p_node);
+
 void setup_cloud_node(BaseNode *p_node);
 void compute_cloud_node(BaseNode *p_node);
 
