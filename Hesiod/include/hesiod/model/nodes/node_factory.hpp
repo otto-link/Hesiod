@@ -74,6 +74,9 @@ void compute_abs_node(BaseNode *p_node);
 void setup_abs_smooth_node(BaseNode *p_node);
 void compute_abs_smooth_node(BaseNode *p_node);
 
+void setup_accumulation_curvature_node(BaseNode *p_node);
+void compute_accumulation_curvature_node(BaseNode *p_node);
+
 void setup_blend_node(BaseNode *p_node);
 void compute_blend_node(BaseNode *p_node);
 
