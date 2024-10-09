@@ -83,6 +83,9 @@ void compute_blend_node(BaseNode *p_node);
 void setup_brush_node(BaseNode *p_node);
 void compute_brush_node(BaseNode *p_node);
 
+void setup_bump_node(BaseNode *p_node);
+void compute_bump_node(BaseNode *p_node);
+
 void setup_clamp_node(BaseNode *p_node);
 void compute_clamp_node(BaseNode *p_node);
 
