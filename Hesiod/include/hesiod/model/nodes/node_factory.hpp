@@ -68,6 +68,9 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
 
 // nodes functions
 
+void setup_abs_node(BaseNode *p_node);
+void compute_abs_node(BaseNode *p_node);
+
 void setup_blend_node(BaseNode *p_node);
 void compute_blend_node(BaseNode *p_node);
 

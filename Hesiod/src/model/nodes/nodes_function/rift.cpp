@@ -62,11 +62,11 @@ void compute_rift_node(BaseNode *p_node)
              p_dx,
              p_dy,
              p_ctrl,
-             [p_node, &center](hmap::Vec2<int>   shape,
-                               hmap::Vec4<float> bbox,
-                               hmap::Array      *p_noise_x,
-                               hmap::Array      *p_noise_y,
-                               hmap::Array      *p_ctrl)
+             [p_node](hmap::Vec2<int>   shape,
+                      hmap::Vec4<float> bbox,
+                      hmap::Array      *p_noise_x,
+                      hmap::Array      *p_noise_y,
+                      hmap::Array      *p_ctrl)
              {
                return hmap::rift(shape,
                                  GET("angle", FloatAttribute),
