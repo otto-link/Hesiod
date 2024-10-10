@@ -28,7 +28,7 @@ static std::map<std::string, QColor> data_color_map = {
     {typeid(hmap::Array).name(), QColor(255, 121, 198, 255)},
     {typeid(hmap::Cloud).name(), QColor(139, 233, 253, 255)},
     {typeid(hmap::HeightMap).name(), QColor(248, 248, 242, 255)},
-    {typeid(hmap::HeightMapRGBA).name(), QColor(255, 184, 108, 255)},
+    {typeid(hmap::HeightMapRGBA).name(), QColor(189, 147, 249, 255)},
     {typeid(hmap::Path).name(), QColor(255, 184, 108, 255)},
 };
 

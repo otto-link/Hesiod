@@ -119,6 +119,9 @@ void compute_gradient_node(BaseNode *p_node);
 void setup_gradient_norm_node(BaseNode *p_node);
 void compute_gradient_norm_node(BaseNode *p_node);
 
+void setup_mix_texture_node(BaseNode *p_node);
+void compute_mix_texture_node(BaseNode *p_node);
+
 void setup_noise_node(BaseNode *p_node);
 void compute_noise_node(BaseNode *p_node);
 
