@@ -24,6 +24,7 @@ void setup_colorize_gradient_node(BaseNode *p_node)
   // port(s)
   p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "level");
   p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "alpha");
+  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "noise");
   p_node->add_port<hmap::HeightMapRGBA>(gnode::PortType::OUT, "texture", CONFIG);
 
   // attribute(s)
@@ -48,6 +49,7 @@ void compute_colorize_gradient_node(BaseNode *p_node)
   if (p_level)
   {
     hmap::HeightMap     *p_alpha = p_node->get_value_ref<hmap::HeightMap>("alpha");
+    hmap::HeightMap     *p_noise = p_node->get_value_ref<hmap::HeightMap>("noise");
     hmap::HeightMapRGBA *p_out = p_node->get_value_ref<hmap::HeightMapRGBA>("texture");
 
     // define colormap based on color gradient
@@ -81,12 +83,19 @@ void compute_colorize_gradient_node(BaseNode *p_node)
     float cmin = p_level->min();
     float cmax = p_level->max();
 
+    if (p_noise)
+    {
+      cmin += p_noise->min();
+      cmax += p_noise->max();
+    }
+
     p_out->colorize(*p_level,
                     cmin,
                     cmax,
                     colormap_colors,
                     p_alpha_copy,
-                    GET("reverse_colormap", BoolAttribute));
+                    GET("reverse_colormap", BoolAttribute),
+                    p_noise);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());
