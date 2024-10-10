@@ -363,6 +363,9 @@ void GraphEditor::on_graph_settings_request()
 
     this->update();
   }
+
+  // deactivate drag to fix some event issue between the dialog box and the graphics view
+  this->viewer->setDragMode(QGraphicsView::NoDrag);
 }
 
 void GraphEditor::on_new_graphics_node_request(const std::string &node_id,
