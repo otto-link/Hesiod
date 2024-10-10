@@ -202,7 +202,18 @@ void DataPreview::update_image()
   }
 
   this->preview_image = QImage(img.data(), shape_preview.x, shape_preview.y, img_format);
-  this->setPixmap(QPixmap::fromImage(preview_image));
+
+  QPixmap pixmap = QPixmap::fromImage(preview_image);
+
+  // add a border
+  QPainter painter(&pixmap);
+  QPen     pen(QColor(0, 0, 0));
+  pen.setWidth(1);
+  painter.setPen(pen);
+  painter.drawRect(0, 0, pixmap.width() - 1, pixmap.height() - 1);
+  painter.end();
+
+  this->setPixmap(pixmap);
   this->update();
 }
 
