@@ -388,28 +388,32 @@ void OpenGLRender::set_data(BaseNode          *new_p_node,
 
           if (p_node->get_data_ref(port_index_color))
           {
-            if (data_type_color == typeid(hmap::Cloud).name())
-            {
-              hmap::Cloud cloud = *this->p_node->get_value_ref<hmap::Cloud>(
-                  port_index_elev);
-              hmap::Array c = hmap::Array(p_node->get_config_ref()->shape);
 
-              if (cloud.get_npoints() > 0)
-              {
-                hmap::Vec4<float> bbox = hmap::Vec4<float>(0.f, 1.f, 0.f, 1.f);
-                cloud.remap_values(0.5f, 1.f);
-                cloud.to_array(c, bbox);
-              }
+            // if (data_type_color == typeid(hmap::Cloud).name())
+            // {
+            //   hmap::Cloud cloud = *this->p_node->get_value_ref<hmap::Cloud>(
+            //       port_index_elev);
+            //   hmap::Array c = hmap::Array(p_node->get_config_ref()->shape);
 
-              this->texture_diffuse = generate_selector_image(c);
-              this->texture_shape = c.shape;
+            //   if (cloud.get_npoints() > 0)
+            //   {
+            //     hmap::Vec4<float> bbox = hmap::Vec4<float>(0.f, 1.f, 0.f, 1.f);
+            //     cloud.remap_values(0.5f, 1.f);
+            //     cloud.to_array(c, bbox);
+            //   }
 
-              hmap::apply_hillshade(this->texture_diffuse, array, 0.f, 1.f, 1.5f, true);
+            //   this->texture_diffuse = generate_selector_image(c);
+            //   this->texture_shape = c.shape;
 
-              color_done = true;
-            }
-            //
-            else if (data_type_color == typeid(hmap::HeightMap).name())
+            //   hmap::apply_hillshade(this->texture_diffuse, array, 0.f, 1.f, 1.5f,
+            //   true);
+
+            //   color_done = true;
+            // }
+            // //
+            // else
+
+            if (data_type_color == typeid(hmap::HeightMap).name())
             {
               hmap::HeightMap *p_c = this->p_node->get_value_ref<hmap::HeightMap>(
                   port_index_color);
