@@ -95,6 +95,9 @@ void compute_clamp_node(BaseNode *p_node);
 void setup_closing_node(BaseNode *p_node);
 void compute_closing_node(BaseNode *p_node);
 
+void setup_cloud_merge_node(BaseNode *p_node);
+void compute_cloud_merge_node(BaseNode *p_node);
+
 void setup_cloud_node(BaseNode *p_node);
 void compute_cloud_node(BaseNode *p_node);
 
