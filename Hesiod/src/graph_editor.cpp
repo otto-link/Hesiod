@@ -167,8 +167,13 @@ void GraphEditor::json_from(nlohmann::json const &json, bool override_config)
         version_file,
         version);
 
-  if (this->viewer && !json["headless"])
+  if (this->viewer)
+  {
+    for (auto &v : this->viewers)
+      dynamic_cast<AbstractViewer *>(v.get())->clear();
+
     this->viewer->json_from(json["graph_viewer"]);
+  }
 }
 
 nlohmann::json GraphEditor::json_to() const
