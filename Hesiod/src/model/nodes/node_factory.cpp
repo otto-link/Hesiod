@@ -32,6 +32,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"CloudMerge", "Geometry/Cloud"},
       {"CloudLattice", "Geometry/Cloud"},
       {"CloudRandom", "Geometry/Cloud"},
+      {"CloudRemapValues", "Geometry/Cloud"},
       {"ColorizeGradient", "Texture"},
       {"ColorizeSolid", "Texture"},
       {"ExportHeightmap", "IO/Files"},
@@ -75,6 +76,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(CloudMerge, cloud_merge);
     SETUP_NODE(CloudLattice, cloud_lattice);
     SETUP_NODE(CloudRandom, cloud_random);
+    SETUP_NODE(CloudRemapValues, cloud_remap_values);
     SETUP_NODE(ColorizeGradient, colorize_gradient);
     SETUP_NODE(ColorizeSolid, colorize_solid);
     SETUP_NODE(ExportHeightmap, export_heightmap);

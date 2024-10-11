@@ -107,6 +107,9 @@ void compute_cloud_lattice_node(BaseNode *p_node);
 void setup_cloud_random_node(BaseNode *p_node);
 void compute_cloud_random_node(BaseNode *p_node);
 
+void setup_cloud_remap_values_node(BaseNode *p_node);
+void compute_cloud_remap_values_node(BaseNode *p_node);
+
 void setup_colorize_gradient_node(BaseNode *p_node);
 void compute_colorize_gradient_node(BaseNode *p_node);
 
