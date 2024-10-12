@@ -195,6 +195,9 @@ nlohmann::json GraphEditor::json_to() const
 void GraphEditor::load_from_file(const std::filesystem::path &load_fname,
                                  bool                         override_config)
 {
+  if (this->viewer)
+    this->viewer->setEnabled(false);
+
   // load json
   nlohmann::json json;
   std::ifstream  file(load_fname);
@@ -216,6 +219,12 @@ void GraphEditor::load_from_file(const std::filesystem::path &load_fname,
   }
   else
     LOG->error("Could not open file {} to load JSON", load_fname.string());
+
+  if (this->viewer)
+  {
+    this->viewer->setEnabled(true);
+    this->viewer->setDragMode(QGraphicsView::NoDrag);
+  }
 }
 
 void GraphEditor::on_connection_deleted(const std::string &id_out,
@@ -337,6 +346,9 @@ void GraphEditor::on_graph_save_request()
   }
   else
     LOG->error("Could not open file {} to load JSON", fname.string());
+
+  if (this->viewer)
+    this->viewer->setDragMode(QGraphicsView::NoDrag);
 }
 
 void GraphEditor::on_graph_settings_request()
@@ -359,8 +371,8 @@ void GraphEditor::on_graph_settings_request()
 
     // clear (only the model part, not the GUI node instances)
     this->clear();
-    if (this->viewer)
-      this->viewer->clear();
+    this->viewer->clear();
+    this->viewer->setEnabled(false);
 
     // deserialize but do not deserialize config, keep current one
     bool override_config = false;
@@ -371,6 +383,7 @@ void GraphEditor::on_graph_settings_request()
 
   // deactivate drag to fix some event issue between the dialog box and the graphics view
   this->viewer->setDragMode(QGraphicsView::NoDrag);
+  this->viewer->setEnabled(true);
 }
 
 void GraphEditor::on_new_graphics_node_request(const std::string &node_id,
