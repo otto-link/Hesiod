@@ -29,6 +29,8 @@
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 
+typedef unsigned int uint;
+
 namespace hesiod
 {
 
