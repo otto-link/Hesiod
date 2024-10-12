@@ -116,6 +116,9 @@ void compute_cloud_sdf_node(BaseNode *p_node);
 void setup_cloud_to_array_interp_node(BaseNode *p_node);
 void compute_cloud_to_array_interp_node(BaseNode *p_node);
 
+void setup_cloud_to_path_node(BaseNode *p_node);
+void compute_cloud_to_path_node(BaseNode *p_node);
+
 void setup_colorize_gradient_node(BaseNode *p_node);
 void compute_colorize_gradient_node(BaseNode *p_node);
 
