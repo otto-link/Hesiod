@@ -125,6 +125,9 @@ void compute_colorize_gradient_node(BaseNode *p_node);
 void setup_colorize_solid_node(BaseNode *p_node);
 void compute_colorize_solid_node(BaseNode *p_node);
 
+void setup_cos_node(BaseNode *p_node);
+void compute_cos_node(BaseNode *p_node);
+
 void setup_hydraulic_stream_upscale_amplification_node(BaseNode *p_node);
 void compute_hydraulic_stream_upscale_amplification_node(BaseNode *p_node);
 

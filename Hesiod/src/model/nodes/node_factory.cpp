@@ -38,6 +38,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"CloudToPath", "Geometry/Cloud"},
       {"ColorizeGradient", "Texture"},
       {"ColorizeSolid", "Texture"},
+      {"Cos", "Math/Base"},
       {"ExportHeightmap", "IO/Files"},
       {"Falloff", "Math/Boundaries"},
       {"GammaCorrection", "Filter/Recurve"},
@@ -85,6 +86,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(CloudToPath, cloud_to_path);
     SETUP_NODE(ColorizeGradient, colorize_gradient);
     SETUP_NODE(ColorizeSolid, colorize_solid);
+    SETUP_NODE(Cos, cos);
     SETUP_NODE(ExportHeightmap, export_heightmap);
     SETUP_NODE(Falloff, falloff);
     SETUP_NODE(GammaCorrection, gamma_correction);
