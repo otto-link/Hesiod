@@ -137,6 +137,9 @@ void compute_export_heightmap_node(BaseNode *p_node);
 void setup_falloff_node(BaseNode *p_node);
 void compute_falloff_node(BaseNode *p_node);
 
+void setup_fold_node(BaseNode *p_node);
+void compute_fold_node(BaseNode *p_node);
+
 void setup_gamma_correction_node(BaseNode *p_node);
 void compute_gamma_correction_node(BaseNode *p_node);
 
