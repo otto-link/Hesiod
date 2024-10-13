@@ -43,6 +43,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Crater", "Primitive/Geological"},
       {"Dendry", "Primitive/Coherent"},
       {"DepressionFilling", "Erosion"},
+      {"Detrend", "Filter/Recurve"},
       {"ExportHeightmap", "IO/Files"},
       {"Falloff", "Math/Boundaries"},
       {"Fold", "Filter/Recast"},
@@ -96,6 +97,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(Crater, crater);
     SETUP_NODE(Dendry, dendry);
     SETUP_NODE(DepressionFilling, depression_filling);
+    SETUP_NODE(Detrend, detrend);
     SETUP_NODE(ExportHeightmap, export_heightmap);
     SETUP_NODE(Falloff, falloff);
     SETUP_NODE(Fold, fold);
