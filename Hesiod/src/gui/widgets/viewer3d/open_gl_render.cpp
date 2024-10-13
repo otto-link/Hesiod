@@ -275,10 +275,12 @@ void OpenGLRender::paintGL()
             QMatrix4x4(glm::value_ptr(projection_matrix)).transposed());
       }
 
+#ifdef HSD_OS_LINUX
       if (this->wireframe_mode)
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
       else
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+#endif
 
       // --- eventually render the surface
 

@@ -6,7 +6,10 @@
 #include "hesiod/logger.hpp"
 #include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/nodes/node_factory.hpp"
-// #include "hesiod/model/nodes/runtime_doc.hpp"
+
+#ifdef HSD_OS_LINUX
+#include "hesiod/model/nodes/runtime_doc.hpp"
+#endif
 
 #include <iostream>
 
@@ -21,7 +24,9 @@ BaseNode::BaseNode(const std::string &label, std::shared_ptr<ModelConfig> config
   this->category = get_node_inventory().at(label);
 
   // initialize documentation
-  // this->documentation = nlohmann::json::parse(runtime_doc)[label];
+#ifdef HSD_OS_LINUX
+  this->documentation = nlohmann::json::parse(runtime_doc)[label];
+#endif
 
   // connections
   this->connect(this,
