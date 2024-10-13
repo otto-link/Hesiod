@@ -48,6 +48,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"DistanceTransform", "Operator/Morphology"},
       {"Erosion", "Operator/Morphology"},
       {"ExportHeightmap", "IO/Files"},
+      {"ExportNormalMap", "IO/Files"},
       {"Falloff", "Math/Boundaries"},
       {"Fold", "Filter/Recast"},
       {"GammaCorrection", "Filter/Recurve"},
@@ -105,6 +106,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(DistanceTransform, distance_transform);
     SETUP_NODE(Erosion, erosion);
     SETUP_NODE(ExportHeightmap, export_heightmap);
+    SETUP_NODE(ExportNormalMap, export_normal_map);
     SETUP_NODE(Falloff, falloff);
     SETUP_NODE(Fold, fold);
     SETUP_NODE(GammaCorrection, gamma_correction);
