@@ -6,7 +6,7 @@
 #include "hesiod/logger.hpp"
 #include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/nodes/node_factory.hpp"
-#include "hesiod/model/nodes/runtime_doc.hpp"
+// #include "hesiod/model/nodes/runtime_doc.hpp"
 
 #include <iostream>
 
@@ -21,7 +21,7 @@ BaseNode::BaseNode(const std::string &label, std::shared_ptr<ModelConfig> config
   this->category = get_node_inventory().at(label);
 
   // initialize documentation
-  this->documentation = nlohmann::json::parse(runtime_doc)[label];
+  // this->documentation = nlohmann::json::parse(runtime_doc)[label];
 
   // connections
   this->connect(this,

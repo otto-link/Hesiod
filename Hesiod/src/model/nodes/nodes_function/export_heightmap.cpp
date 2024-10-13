@@ -50,15 +50,15 @@ void compute_export_heightmap_node(BaseNode *p_node)
     switch (GET("format", MapEnumAttribute))
     {
     case ExportFormat::PNG8BIT:
-      p_in->to_array().to_png_grayscale(fname, CV_8U);
+      p_in->to_array().to_png_grayscale(fname.string(), CV_8U);
       break;
 
     case ExportFormat::PNG16BIT:
-      p_in->to_array().to_png_grayscale(fname, CV_16U);
+      p_in->to_array().to_png_grayscale(fname.string(), CV_16U);
       break;
 
     case ExportFormat::RAW16BIT:
-      p_in->to_array().to_raw_16bit(fname);
+      p_in->to_array().to_raw_16bit(fname.string());
       break;
     }
   }
