@@ -40,6 +40,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"ColorizeSolid", "Texture"},
       {"CombineMask", "Mask"},
       {"Cos", "Math/Base"},
+      {"Crater", "Primitive/Geological"},
       {"ExportHeightmap", "IO/Files"},
       {"Falloff", "Math/Boundaries"},
       {"Fold", "Filter/Recast"},
@@ -90,6 +91,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(ColorizeSolid, colorize_solid);
     SETUP_NODE(CombineMask, combine_mask);
     SETUP_NODE(Cos, cos);
+    SETUP_NODE(Crater, crater);
     SETUP_NODE(ExportHeightmap, export_heightmap);
     SETUP_NODE(Falloff, falloff);
     SETUP_NODE(Fold, fold);
