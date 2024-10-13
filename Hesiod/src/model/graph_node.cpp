@@ -36,7 +36,8 @@ void GraphNode::json_from(nlohmann::json const &json, bool override_config)
   // populate nodes
   for (auto &json_node : json["nodes"])
   {
-    LOG->trace("GraphNode::json_from, node type: {}", json_node["label"]);
+    LOG->trace("GraphNode::json_from, node type: {}",
+               json_node["label"].get<std::string>());
 
     // instanciate the node
     std::string                  node_type = json_node["label"];
