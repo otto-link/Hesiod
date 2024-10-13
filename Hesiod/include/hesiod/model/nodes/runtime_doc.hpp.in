@@ -14,10 +14,11 @@
  */
 
 #pragma once
+#include <string>
 
 namespace hesiod
 {
 
-const char* runtime_doc = R"(@JSON_CONTENT@)";
+const std::string runtime_doc = R"(@JSON_CONTENT@)";
 
 }
