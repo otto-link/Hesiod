@@ -535,7 +535,7 @@ void OpenGLRender::set_wireframe_mode(bool new_wireframe_mode)
 
 void OpenGLRender::setup_shader()
 {
-  LOG->trace("OpenGLRender::setup_shader, shader: {}", this->shader_type);
+  LOG->trace("OpenGLRender::setup_shader");
 
   this->shader.removeAllShaders();
 
