@@ -26,6 +26,10 @@
     sptr->set_compute_fct(&compute_##node_type##_node);                                  \
     break;
 
+#define DECLARE_NODE(node_type)                                                          \
+  void setup_##node_type##_node(BaseNode *p_node);                                       \
+  void compute_##node_type##_node(BaseNode *p_node);
+
 namespace hesiod
 {
 
@@ -68,118 +72,44 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
 
 // nodes functions
 
-void setup_abs_node(BaseNode *p_node);
-void compute_abs_node(BaseNode *p_node);
-
-void setup_abs_smooth_node(BaseNode *p_node);
-void compute_abs_smooth_node(BaseNode *p_node);
-
-void setup_accumulation_curvature_node(BaseNode *p_node);
-void compute_accumulation_curvature_node(BaseNode *p_node);
-
-void setup_blend_node(BaseNode *p_node);
-void compute_blend_node(BaseNode *p_node);
-
-void setup_brush_node(BaseNode *p_node);
-void compute_brush_node(BaseNode *p_node);
-
-void setup_bump_node(BaseNode *p_node);
-void compute_bump_node(BaseNode *p_node);
-
-void setup_caldera_node(BaseNode *p_node);
-void compute_caldera_node(BaseNode *p_node);
-
-void setup_clamp_node(BaseNode *p_node);
-void compute_clamp_node(BaseNode *p_node);
-
-void setup_closing_node(BaseNode *p_node);
-void compute_closing_node(BaseNode *p_node);
-
-void setup_cloud_merge_node(BaseNode *p_node);
-void compute_cloud_merge_node(BaseNode *p_node);
-
-void setup_cloud_node(BaseNode *p_node);
-void compute_cloud_node(BaseNode *p_node);
-
-void setup_cloud_lattice_node(BaseNode *p_node);
-void compute_cloud_lattice_node(BaseNode *p_node);
-
-void setup_cloud_random_node(BaseNode *p_node);
-void compute_cloud_random_node(BaseNode *p_node);
-
-void setup_cloud_remap_values_node(BaseNode *p_node);
-void compute_cloud_remap_values_node(BaseNode *p_node);
-
-void setup_cloud_sdf_node(BaseNode *p_node);
-void compute_cloud_sdf_node(BaseNode *p_node);
-
-void setup_cloud_to_array_interp_node(BaseNode *p_node);
-void compute_cloud_to_array_interp_node(BaseNode *p_node);
-
-void setup_cloud_to_path_node(BaseNode *p_node);
-void compute_cloud_to_path_node(BaseNode *p_node);
-
-void setup_colorize_gradient_node(BaseNode *p_node);
-void compute_colorize_gradient_node(BaseNode *p_node);
-
-void setup_colorize_solid_node(BaseNode *p_node);
-void compute_colorize_solid_node(BaseNode *p_node);
-
-void setup_cos_node(BaseNode *p_node);
-void compute_cos_node(BaseNode *p_node);
-
-void setup_hydraulic_stream_upscale_amplification_node(BaseNode *p_node);
-void compute_hydraulic_stream_upscale_amplification_node(BaseNode *p_node);
-
-void setup_export_heightmap_node(BaseNode *p_node);
-void compute_export_heightmap_node(BaseNode *p_node);
-
-void setup_falloff_node(BaseNode *p_node);
-void compute_falloff_node(BaseNode *p_node);
-
-void setup_fold_node(BaseNode *p_node);
-void compute_fold_node(BaseNode *p_node);
-
-void setup_gamma_correction_node(BaseNode *p_node);
-void compute_gamma_correction_node(BaseNode *p_node);
-
-void setup_gradient_node(BaseNode *p_node);
-void compute_gradient_node(BaseNode *p_node);
-
-void setup_gradient_norm_node(BaseNode *p_node);
-void compute_gradient_norm_node(BaseNode *p_node);
-
-void setup_mix_texture_node(BaseNode *p_node);
-void compute_mix_texture_node(BaseNode *p_node);
-
-void setup_noise_node(BaseNode *p_node);
-void compute_noise_node(BaseNode *p_node);
-
-void setup_noise_fbm_node(BaseNode *p_node);
-void compute_noise_fbm_node(BaseNode *p_node);
-
-void setup_noise_iq_node(BaseNode *p_node);
-void compute_noise_iq_node(BaseNode *p_node);
-
-void setup_noise_jordan_node(BaseNode *p_node);
-void compute_noise_jordan_node(BaseNode *p_node);
-
-void setup_path_node(BaseNode *p_node);
-void compute_path_node(BaseNode *p_node);
-
-void setup_path_sdf_node(BaseNode *p_node);
-void compute_path_sdf_node(BaseNode *p_node);
-
-void setup_preview_node(BaseNode *p_node);
-void compute_preview_node(BaseNode *p_node);
-
-void setup_remap_node(BaseNode *p_node);
-void compute_remap_node(BaseNode *p_node);
-
-void setup_rift_node(BaseNode *p_node);
-void compute_rift_node(BaseNode *p_node);
-
-void setup_smooth_fill_node(BaseNode *p_node);
-void compute_smooth_fill_node(BaseNode *p_node);
+DECLARE_NODE(abs)
+DECLARE_NODE(abs_smooth)
+DECLARE_NODE(accumulation_curvature)
+DECLARE_NODE(blend)
+DECLARE_NODE(brush)
+DECLARE_NODE(bump)
+DECLARE_NODE(caldera)
+DECLARE_NODE(clamp)
+DECLARE_NODE(closing)
+DECLARE_NODE(cloud)
+DECLARE_NODE(cloud_lattice)
+DECLARE_NODE(cloud_merge)
+DECLARE_NODE(cloud_random)
+DECLARE_NODE(cloud_remap_values)
+DECLARE_NODE(cloud_sdf)
+DECLARE_NODE(cloud_to_array_interp)
+DECLARE_NODE(cloud_to_path)
+DECLARE_NODE(colorize_gradient)
+DECLARE_NODE(colorize_solid)
+DECLARE_NODE(cos)
+DECLARE_NODE(combine_mask)
+DECLARE_NODE(hydraulic_stream_upscale_amplification)
+DECLARE_NODE(export_heightmap)
+DECLARE_NODE(falloff)
+DECLARE_NODE(fold)
+DECLARE_NODE(gamma_correction)
+DECLARE_NODE(gradient)
+DECLARE_NODE(gradient_norm)
+DECLARE_NODE(mix_texture)
+DECLARE_NODE(noise)
+DECLARE_NODE(noise_fbm)
+DECLARE_NODE(noise_iq)
+DECLARE_NODE(noise_jordan)
+DECLARE_NODE(path)
+DECLARE_NODE(path_sdf)
+DECLARE_NODE(preview)
+DECLARE_NODE(remap)
+DECLARE_NODE(rift)
+DECLARE_NODE(smooth_fill)
 
 } // namespace hesiod
