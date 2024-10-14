@@ -44,6 +44,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Dendry", "Primitive/Coherent"},
       {"DepressionFilling", "Erosion"},
       {"Detrend", "Filter/Recurve"},
+      {"DiffusionLimitedAggregation", "Primitive/Coherent"},
       {"Dilation", "Operator/Morphology"},
       {"DistanceTransform", "Operator/Morphology"},
       {"Erosion", "Operator/Morphology"},
@@ -108,6 +109,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(Dendry, dendry);
     SETUP_NODE(DepressionFilling, depression_filling);
     SETUP_NODE(Detrend, detrend);
+    SETUP_NODE(DiffusionLimitedAggregation, diffusion_limited_aggregation);
     SETUP_NODE(Dilation, dilation);
     SETUP_NODE(DistanceTransform, distance_transform);
     SETUP_NODE(Erosion, erosion);
