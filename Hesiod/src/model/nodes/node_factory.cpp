@@ -63,6 +63,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Gradient", "Math/Gradient"},
       {"GradientNorm", "Math/Gradient"},
       {"HydraulicStreamUpscaleAmplification", "Erosion/Hydraulic"},
+      {"ImportTexture", "Texture"},
       {"MixTexture", "Texture"},
       {"Noise", "Primitive/Coherent"},
       {"NoiseFbm", "Primitive/Coherent"},
@@ -130,6 +131,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(GradientNorm, gradient_norm);
     SETUP_NODE(HydraulicStreamUpscaleAmplification,
                hydraulic_stream_upscale_amplification);
+    SETUP_NODE(ImportTexture, import_texture);
     SETUP_NODE(MixTexture, mix_texture);
     SETUP_NODE(Noise, noise);
     SETUP_NODE(NoiseFbm, noise_fbm);
