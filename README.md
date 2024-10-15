@@ -7,7 +7,7 @@ A desktop application for node-based procedural terrain generation.
 >[!WARNING] 
 > Work in progress, use at your own risk!
 
-![Screenshot_2024-10-15_21-39-10](https://github.com/user-attachments/assets/a57f9148-8073-40ed-966d-875677fdb8a8)
+![Untitled](https://github.com/user-attachments/assets/5679437d-952c-4ea6-8fda-039313a675bc)
 
 ## License
 
