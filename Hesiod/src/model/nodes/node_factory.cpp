@@ -56,6 +56,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"ExportPath", "IO/Files"},
       {"ExportTexture", "IO/Files"},
       {"Falloff", "Math/Boundaries"},
+      {"FillTalus", "Operator/Transform"},
       {"Fold", "Filter/Recast"},
       {"Gain", "Filter/Recurve"},
       {"GammaCorrection", "Filter/Recurve"},
@@ -123,6 +124,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(ExportPath, export_path);
     SETUP_NODE(ExportTexture, export_texture);
     SETUP_NODE(Falloff, falloff);
+    SETUP_NODE(FillTalus, fill_talus);
     SETUP_NODE(Fold, fold);
     SETUP_NODE(Gain, gain);
     SETUP_NODE(GammaCorrection, gamma_correction);
