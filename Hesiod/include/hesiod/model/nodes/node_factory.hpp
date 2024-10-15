@@ -151,5 +151,7 @@ DECLARE_NODE(remap)
 DECLARE_NODE(rift)
 DECLARE_NODE(set_alpha)
 DECLARE_NODE(smooth_fill)
+DECLARE_NODE(smoothstep3)
+DECLARE_NODE(smoothstep5)
 
 } // namespace hesiod

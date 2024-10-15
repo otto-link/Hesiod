@@ -97,7 +97,10 @@ std::map<std::string, std::string> get_node_inventory()
       {"Remap", "Filter/Range"},
       {"Rift", "Primitive/Function"},
       {"SetAlpha", "Texture"},
-      {"SmoothFill", "Filter/Smoothing"}};
+      {"SmoothFill", "Filter/Smoothing"},
+      {"Smoothstep3", "Math/Base"},
+      {"Smoothstep5", "Math/Base"},
+  };
 
   return node_inventory;
 }
@@ -189,6 +192,8 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(Rift, rift);
     SETUP_NODE(SetAlpha, set_alpha);
     SETUP_NODE(SmoothFill, smooth_fill);
+    SETUP_NODE(Smoothstep3, smoothstep3);
+    SETUP_NODE(Smoothstep5, smoothstep5);
   default:
     throw std::invalid_argument("Unknown node type in node_factory: " + node_type);
   }
