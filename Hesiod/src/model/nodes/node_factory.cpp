@@ -95,6 +95,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"PathSDF", "Geometry/Path"},
       {"Preview", "Debug"},
       {"RecastCliff", "Filter/Recast"},
+      {"RecastSag", "Filter/Recast"},
       {"Remap", "Filter/Range"},
       {"Rift", "Primitive/Function"},
       {"SetAlpha", "Texture"},
@@ -190,6 +191,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(PathSDF, path_sdf);
     SETUP_NODE(Preview, preview);
     SETUP_NODE(RecastCliff, recast_cliff);
+    SETUP_NODE(RecastSag, recast_sag);
     SETUP_NODE(Remap, remap);
     SETUP_NODE(Rift, rift);
     SETUP_NODE(SetAlpha, set_alpha);
