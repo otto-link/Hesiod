@@ -70,6 +70,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"HeightmapToKernel", "Converter"},
       {"HydraulicStreamUpscaleAmplification", "Erosion/Hydraulic"},
       {"ImportTexture", "Texture"},
+      {"Inverse", "Math/Base"},
       {"Laplace", "Filter/Smoothing"},
       {"Lerp", "Math/Base"},
       {"MakeBinary", "Operator/Morphology"},
@@ -153,6 +154,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(HydraulicStreamUpscaleAmplification,
                hydraulic_stream_upscale_amplification);
     SETUP_NODE(ImportTexture, import_texture);
+    SETUP_NODE(Inverse, inverse);
     SETUP_NODE(Laplace, laplace);
     SETUP_NODE(Lerp, lerp);
     SETUP_NODE(MixTexture, mix_texture);
