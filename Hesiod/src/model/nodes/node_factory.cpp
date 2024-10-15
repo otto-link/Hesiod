@@ -75,6 +75,8 @@ std::map<std::string, std::string> get_node_inventory()
       {"ImportTexture", "Texture"},
       {"Inverse", "Math/Base"},
       {"KernelPrim", "Primitive/Kernel"},
+      {"KmeansClustering2", "Features/Clustering"},
+      {"KmeansClustering3", "Features/Clustering"},
       {"Laplace", "Filter/Smoothing"},
       {"Lerp", "Math/Base"},
       {"MakeBinary", "Operator/Morphology"},
@@ -163,6 +165,8 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(ImportTexture, import_texture);
     SETUP_NODE(Inverse, inverse);
     SETUP_NODE(KernelPrim, kernel_prim);
+    SETUP_NODE(KmeansClustering2, kmeans_clustering2);
+    SETUP_NODE(KmeansClustering3, kmeans_clustering3);
     SETUP_NODE(Laplace, laplace);
     SETUP_NODE(Lerp, lerp);
     SETUP_NODE(MixTexture, mix_texture);
