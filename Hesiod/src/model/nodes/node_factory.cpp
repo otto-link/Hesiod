@@ -77,6 +77,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Median3x3", "Filter/Smoothing"},
       {"MixTexture", "Texture"},
       {"Mixer", "Operator/Blend"},
+      {"MorphologicalGradient", "Operator/Morphology"},
       {"Noise", "Primitive/Coherent"},
       {"NoiseFbm", "Primitive/Coherent"},
       {"NoiseIq", "Primitive/Coherent"},
@@ -158,6 +159,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(MakePeriodicStitching, make_periodic_stitching);
     SETUP_NODE(Median3x3, median3x3);
     SETUP_NODE(Mixer, mixer);
+    SETUP_NODE(MorphologicalGradient, morphological_gradient);
     SETUP_NODE(Noise, noise);
     SETUP_NODE(NoiseFbm, noise_fbm);
     SETUP_NODE(NoiseIq, noise_iq);
