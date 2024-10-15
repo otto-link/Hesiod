@@ -39,6 +39,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"ColorizeGradient", "Texture"},
       {"ColorizeSolid", "Texture"},
       {"CombineMask", "Mask"},
+      {"ConvolveSVD", "Math/Convolution"},
       {"Cos", "Math/Base"},
       {"Crater", "Primitive/Geological"},
       {"Dendry", "Primitive/Coherent"},
@@ -68,6 +69,8 @@ std::map<std::string, std::string> get_node_inventory()
       {"GradientNorm", "Math/Gradient"},
       {"GradientTalus", "Math/Gradient"},
       {"HeightmapToKernel", "Converter"},
+      {"HeightmapToMask", "Converter"},
+      {"HeightmapToRGBA", "Converter"},
       {"HydraulicStreamUpscaleAmplification", "Erosion/Hydraulic"},
       {"ImportTexture", "Texture"},
       {"Inverse", "Math/Base"},
@@ -123,6 +126,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(ColorizeSolid, colorize_solid);
     SETUP_NODE(CombineMask, combine_mask);
     SETUP_NODE(Cos, cos);
+    SETUP_NODE(ConvolveSVD, convolve_svd);
     SETUP_NODE(Crater, crater);
     SETUP_NODE(Dendry, dendry);
     SETUP_NODE(DepressionFilling, depression_filling);
@@ -151,6 +155,8 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(GradientNorm, gradient_norm);
     SETUP_NODE(GradientTalus, gradient_talus);
     SETUP_NODE(HeightmapToKernel, heightmap_to_kernel);
+    SETUP_NODE(HeightmapToMask, heightmap_to_mask);
+    SETUP_NODE(HeightmapToRGBA, heightmap_to_rgba);
     SETUP_NODE(HydraulicStreamUpscaleAmplification,
                hydraulic_stream_upscale_amplification);
     SETUP_NODE(ImportTexture, import_texture);
