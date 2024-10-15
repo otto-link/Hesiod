@@ -130,6 +130,7 @@ DECLARE_NODE(path_sdf)
 DECLARE_NODE(preview)
 DECLARE_NODE(remap)
 DECLARE_NODE(rift)
+DECLARE_NODE(set_alpha)
 DECLARE_NODE(smooth_fill)
 
 } // namespace hesiod
