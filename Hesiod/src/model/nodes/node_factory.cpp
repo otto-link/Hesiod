@@ -74,6 +74,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"MakeBinary", "Operator/Morphology"},
       {"MakePeriodic", "Operator/Tiling"},
       {"MakePeriodicStitching", "Operator/Tiling"},
+      {"Median3x3", "Filter/Smoothing"},
       {"MixTexture", "Texture"},
       {"Noise", "Primitive/Coherent"},
       {"NoiseFbm", "Primitive/Coherent"},
@@ -154,6 +155,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(MakeBinary, make_binary);
     SETUP_NODE(MakePeriodic, make_periodic);
     SETUP_NODE(MakePeriodicStitching, make_periodic_stitching);
+    SETUP_NODE(Median3x3, median3x3);
     SETUP_NODE(Noise, noise);
     SETUP_NODE(NoiseFbm, noise_fbm);
     SETUP_NODE(NoiseIq, noise_iq);
