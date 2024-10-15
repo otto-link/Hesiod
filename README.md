@@ -83,8 +83,8 @@ Try to install the package `glfw` or `glfw-devel`!
 ## Dependencies
 
 - https://github.com/otto-link/HighMap / A C++ library to generate two-dimensional terrain heightmaps for software rendering or video games.
+- https://github.com/otto-link/GNode / A generic node-based data structure for node graph programming in C++.
+- https://github.com/otto-link/GNodeGUI / a C++ graphical node editor library aimed at providing an interface for building and manipulating nodes in a graphical context.
+- https://github.com/otto-link/Attributes / A C++ library that provides a collection of standard attributes, each paired with a corresponding Qt widget for editing their values.
 
-- https://github.com/paceholder/nodeeditor/tree/master / Qt Node Editor. Dataflow programming framework
-- https://github.com/dmcrodrigues/macro-logger / A simplified logging system using macros
 - https://github.com/mgaillard/Noise / Dendry: A Procedural Model for Dendritic Patterns
-- https://github.com/Taywee/args / A simple header-only C++ argument parser library
