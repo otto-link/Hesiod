@@ -37,7 +37,7 @@ void setup_noise_fbm_node(BaseNode *p_node)
   p_node->add_attr<FloatAttribute>("persistence", 0.5f, 0.f, 1.f, "Persistence");
   p_node->add_attr<FloatAttribute>("lacunarity", 2.f, 0.01f, 4.f, "Lacunarity");
   p_node->add_attr<BoolAttribute>("inverse", false, "Inverse");
-  p_node->add_attr<RangeAttribute>("remap", "Remap range");
+  p_node->add_attr<RangeAttribute>("remap_range", "Remap range");
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"noise_type",
@@ -50,7 +50,7 @@ void setup_noise_fbm_node(BaseNode *p_node)
                                 "lacunarity",
                                 "_SEPARATOR_",
                                 "inverse",
-                                "remap"});
+                                "remap_range"});
 }
 
 void compute_noise_fbm_node(BaseNode *p_node)
@@ -113,8 +113,8 @@ void compute_noise_fbm_node(BaseNode *p_node)
                          false, // saturate
                          {0.f, 0.f},
                          0.f,
-                         GET_ATTR("remap", RangeAttribute, is_active),
-                         GET("remap", RangeAttribute));
+                         GET_ATTR("remap_range", RangeAttribute, is_active),
+                         GET("remap_range", RangeAttribute));
 
   Q_EMIT p_node->compute_finished(p_node->get_id());
 }
