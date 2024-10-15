@@ -124,11 +124,23 @@ void DataPreview::update_image()
   // Update preview
   if (blind_data_ptr)
   {
-    if (data_type == typeid(hmap::HeightMap).name())
+    if (data_type == typeid(hmap::HeightMap).name() ||
+        data_type == typeid(hmap::Array).name())
     {
-      hmap::HeightMap *p_h = static_cast<hmap::HeightMap *>(blind_data_ptr);
-      hmap::Array      array = p_h->to_array(shape_preview);
+      hmap::Array array;
 
+      if (data_type == typeid(hmap::HeightMap).name())
+      {
+        hmap::HeightMap *p_h = static_cast<hmap::HeightMap *>(blind_data_ptr);
+        array = p_h->to_array(shape_preview);
+      }
+      else
+      {
+        array = *static_cast<hmap::Array *>(blind_data_ptr);
+        array = array.resample_to_shape_nearest(shape_preview);
+      }
+
+      // build preview
       if (this->preview_type == PreviewType::GRAYSCALE)
       {
         img = hmap::colorize_grayscale(array).to_img_8bit();

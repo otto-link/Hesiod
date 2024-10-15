@@ -330,7 +330,14 @@ void OpenGLRender::set_data(BaseNode          *new_p_node,
       bool        elev_done = false;
       hmap::Array array;
 
-      if (data_type_elev == typeid(hmap::Cloud).name())
+      if (data_type_elev == typeid(hmap::Array).name())
+      {
+        LOG->trace("OpenGLRender::set_data, Array data");
+
+        array = *this->p_node->get_value_ref<hmap::Array>(port_index_elev);
+        elev_done = true;
+      }
+      else if (data_type_elev == typeid(hmap::Cloud).name())
       {
         LOG->trace("OpenGLRender::set_data, Cloud data");
 
