@@ -23,7 +23,7 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 else()
   # GNU compiler options
   set(CMAKE_CXX_FLAGS
-      "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wno-dangling-reference -O3 -pthread -DLOG_LEVEL=3"
+      "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wno-dangling-reference -Ofast -ffast-math -pthread -DLOG_LEVEL=3"
   )
 endif()
 
