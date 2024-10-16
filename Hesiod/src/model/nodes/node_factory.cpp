@@ -93,6 +93,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Opening", "Operator/Morphology"},
       {"Path", "Geometry/Path"},
       {"PathSDF", "Geometry/Path"},
+      {"Plateau", "Filter/Recurve"},
       {"Preview", "Debug"},
       {"RecastCliff", "Filter/Recast"},
       {"RecastSag", "Filter/Recast"},
@@ -102,6 +103,8 @@ std::map<std::string, std::string> get_node_inventory()
       {"SmoothFill", "Filter/Smoothing"},
       {"Smoothstep3", "Math/Base"},
       {"Smoothstep5", "Math/Base"},
+      {"Stratify", "Erosion/Stratify"},
+      {"StratifyOblique", "Erosion/Stratify"},
   };
 
   return node_inventory;
@@ -189,6 +192,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(Opening, opening);
     SETUP_NODE(Path, path);
     SETUP_NODE(PathSDF, path_sdf);
+    SETUP_NODE(Plateau, plateau);
     SETUP_NODE(Preview, preview);
     SETUP_NODE(RecastCliff, recast_cliff);
     SETUP_NODE(RecastSag, recast_sag);
@@ -198,6 +202,8 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(SmoothFill, smooth_fill);
     SETUP_NODE(Smoothstep3, smoothstep3);
     SETUP_NODE(Smoothstep5, smoothstep5);
+    SETUP_NODE(Stratify, stratify);
+    SETUP_NODE(StratifyOblique, stratify_oblique);
   default:
     throw std::invalid_argument("Unknown node type in node_factory: " + node_type);
   }

@@ -25,13 +25,13 @@ void setup_hydraulic_stream_upscale_amplification_node(BaseNode *p_node)
   p_node->add_port<hmap::HeightMap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("c_erosion", 0.05f, 0.001f, 0.1f, "c_erosion");
+  p_node->add_attr<FloatAttribute>("c_erosion", 0.01f, 0.001f, 0.1f, "c_erosion");
   p_node->add_attr<FloatAttribute>("talus_ref", 0.1f, 0.01f, 10.f, "talus_ref");
   p_node->add_attr<FloatAttribute>("radius", 0.f, 0.f, 0.05f, "radius");
   p_node->add_attr<FloatAttribute>("clipping_ratio", 10.f, 0.1f, 100.f, "clipping_ratio");
 
   p_node->add_attr<IntAttribute>("upscaling_levels", 1, 0, 4, "upscaling_levels");
-  p_node->add_attr<FloatAttribute>("persistence", 0.75f, 0.f, 1.f, "persistence");
+  p_node->add_attr<FloatAttribute>("persistence", 0.5f, 0.f, 1.f, "persistence");
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"c_erosion",
