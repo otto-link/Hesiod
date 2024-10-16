@@ -105,6 +105,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"SelectGt", "Mask/Selector"},
       {"SelectInterval", "Mask/Selector"},
       {"SelectInwardOutward", "Mask/Selector"},
+      {"SelectMidrange", "Mask/Selector"},
       {"SelectMultiband3", "Mask/Selector"},
       {"SelectRivers", "Mask/Selector"},
       {"SelectTransitions", "Mask/Selector"},
@@ -214,6 +215,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(SelectInterval, select_interval);
     SETUP_NODE(SelectInwardOutward, select_inward_outward);
     SETUP_NODE(SelectMultiband3, select_multiband3);
+    SETUP_NODE(SelectMidrange, select_midrange);
     SETUP_NODE(SelectRivers, select_rivers);
     SETUP_NODE(SelectTransitions, select_transitions);
     SETUP_NODE(SetAlpha, set_alpha);
