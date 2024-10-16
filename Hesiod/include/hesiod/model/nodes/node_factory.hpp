@@ -172,6 +172,8 @@ DECLARE_NODE(smoothstep5)
 DECLARE_NODE(stratify)
 DECLARE_NODE(stratify_oblique)
 DECLARE_NODE(white)
+DECLARE_NODE(white_density_map)
+DECLARE_NODE(white_sparse)
 DECLARE_NODE(zeroed_edges)
 
 } // namespace hesiod

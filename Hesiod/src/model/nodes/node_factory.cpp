@@ -119,6 +119,8 @@ std::map<std::string, std::string> get_node_inventory()
       {"Stratify", "Erosion/Stratify"},
       {"StratifyOblique", "Erosion/Stratify"},
       {"White", "Primitive/Random"},
+      {"WhiteDensityMap", "Primitive/Random"},
+      {"WhiteSparse", "Primitive/Random"},
       {"ZeroedEdges", "Primitive/Random"},
   };
 
@@ -233,6 +235,8 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(Stratify, stratify);
     SETUP_NODE(StratifyOblique, stratify_oblique);
     SETUP_NODE(White, white);
+    SETUP_NODE(WhiteDensityMap, white_density_map);
+    SETUP_NODE(WhiteSparse, white_sparse);
     SETUP_NODE(ZeroedEdges, zeroed_edges);
   default:
     throw std::invalid_argument("Unknown node type in node_factory: " + node_type);
