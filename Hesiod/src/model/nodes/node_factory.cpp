@@ -99,6 +99,12 @@ std::map<std::string, std::string> get_node_inventory()
       {"RecastSag", "Filter/Recast"},
       {"Remap", "Filter/Range"},
       {"Rift", "Primitive/Function"},
+      {"SelectAngle", "Mask/Selector"},
+      {"SelectBlobLog", "Mask/Selector"},
+      {"SelectCavities", "Mask/Selector"},
+      {"SelectGt", "Mask/Selector"},
+      {"SelectInterval", "Mask/Selector"},
+      {"SelectInwardOutward", "Mask/Selector"},
       {"SetAlpha", "Texture"},
       {"SmoothFill", "Filter/Smoothing"},
       {"Smoothstep3", "Math/Base"},
@@ -108,7 +114,7 @@ std::map<std::string, std::string> get_node_inventory()
   };
 
   return node_inventory;
-}
+} // namespace hesiod
 
 std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type,
                                           std::shared_ptr<ModelConfig> config)
@@ -198,6 +204,12 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(RecastSag, recast_sag);
     SETUP_NODE(Remap, remap);
     SETUP_NODE(Rift, rift);
+    SETUP_NODE(SelectAngle, select_angle);
+    SETUP_NODE(SelectBlobLog, select_blob_log);
+    SETUP_NODE(SelectCavities, select_cavities);
+    SETUP_NODE(SelectGt, select_gt);
+    SETUP_NODE(SelectInterval, select_interval);
+    SETUP_NODE(SelectInwardOutward, select_inward_outward);
     SETUP_NODE(SetAlpha, set_alpha);
     SETUP_NODE(SmoothFill, smooth_fill);
     SETUP_NODE(Smoothstep3, smoothstep3);
