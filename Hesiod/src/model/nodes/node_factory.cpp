@@ -96,6 +96,8 @@ std::map<std::string, std::string> get_node_inventory()
       {"PathSDF", "Geometry/Path"},
       {"Plateau", "Filter/Recurve"},
       {"Preview", "Debug"},
+      {"QuiltingExpand", "Operator/Resynthesis"},
+      {"QuiltingShuffle", "Operator/Resynthesis"},
       {"RecastCliff", "Filter/Recast"},
       {"RecastSag", "Filter/Recast"},
       {"Remap", "Filter/Range"},
@@ -206,6 +208,8 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(PathSDF, path_sdf);
     SETUP_NODE(Plateau, plateau);
     SETUP_NODE(Preview, preview);
+    SETUP_NODE(QuiltingExpand, quilting_expand);
+    SETUP_NODE(QuiltingShuffle, quilting_shuffle);
     SETUP_NODE(RecastCliff, recast_cliff);
     SETUP_NODE(RecastSag, recast_sag);
     SETUP_NODE(Remap, remap);
