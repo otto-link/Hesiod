@@ -72,6 +72,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"HeightmapToMask", "Converter"},
       {"HeightmapToRGBA", "Converter"},
       {"HydraulicStreamUpscaleAmplification", "Erosion/Hydraulic"},
+      {"ImportHeightmap", "Texture"},
       {"ImportTexture", "Texture"},
       {"Inverse", "Math/Base"},
       {"KernelPrim", "Primitive/Kernel"},
@@ -181,6 +182,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(HeightmapToRGBA, heightmap_to_rgba);
     SETUP_NODE(HydraulicStreamUpscaleAmplification,
                hydraulic_stream_upscale_amplification);
+    SETUP_NODE(ImportHeightmap, import_heightmap);
     SETUP_NODE(ImportTexture, import_texture);
     SETUP_NODE(Inverse, inverse);
     SETUP_NODE(KernelPrim, kernel_prim);

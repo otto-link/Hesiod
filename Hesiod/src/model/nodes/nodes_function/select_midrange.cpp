@@ -60,10 +60,11 @@ void compute_select_midrange_node(BaseNode *p_node)
     hmap::transform(
         *p_out,
         *p_in,
-        [p_node, vmin, vmax](hmap::Array &array)
-        { return hmap::select_midrange(array, GET("gain", FloatAttribute), vmin, vmax); });
+        [p_node, vmin, vmax](hmap::Array &array) {
+          return hmap::select_midrange(array, GET("gain", FloatAttribute), vmin, vmax);
+        });
 
-     // post-process
+    // post-process
     post_process_heightmap(*p_out,
                            GET("inverse", BoolAttribute),
                            GET("smoothing", BoolAttribute),
