@@ -102,6 +102,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"RecastSag", "Filter/Recast"},
       {"Remap", "Filter/Range"},
       {"Rift", "Primitive/Function"},
+      {"Rugosity", "Features"},
       {"SelectAngle", "Mask/Selector"},
       {"SelectBlobLog", "Mask/Selector"},
       {"SelectCavities", "Mask/Selector"},
@@ -118,6 +119,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Smoothstep5", "Math/Base"},
       {"Stratify", "Erosion/Stratify"},
       {"StratifyOblique", "Erosion/Stratify"},
+      {"Unsphericity", "Features/Landform"},
       {"ValleyWidth", "Features/Landform"},
       {"Warp", "Operator/Transform"},
       {"WarpDownslope", "Operator/Transform"},
@@ -225,6 +227,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(RecastSag, recast_sag);
     SETUP_NODE(Remap, remap);
     SETUP_NODE(Rift, rift);
+    SETUP_NODE(Rugosity, rugosity);
     SETUP_NODE(SelectAngle, select_angle);
     SETUP_NODE(SelectBlobLog, select_blob_log);
     SETUP_NODE(SelectCavities, select_cavities);
@@ -241,6 +244,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(Smoothstep5, smoothstep5);
     SETUP_NODE(Stratify, stratify);
     SETUP_NODE(StratifyOblique, stratify_oblique);
+    SETUP_NODE(Unsphericity, unsphericity);
     SETUP_NODE(ValleyWidth, valley_width);
     SETUP_NODE(Warp, warp);
     SETUP_NODE(WarpDownslope, warp_downslope);
