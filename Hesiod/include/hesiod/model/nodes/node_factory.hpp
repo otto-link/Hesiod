@@ -171,6 +171,10 @@ DECLARE_NODE(smoothstep3)
 DECLARE_NODE(smoothstep5)
 DECLARE_NODE(stratify)
 DECLARE_NODE(stratify_oblique)
+DECLARE_NODE(wave_dune);
+DECLARE_NODE(wave_sine);
+DECLARE_NODE(wave_square);
+DECLARE_NODE(wave_triangular);
 DECLARE_NODE(white)
 DECLARE_NODE(white_density_map)
 DECLARE_NODE(white_sparse)

@@ -118,6 +118,10 @@ std::map<std::string, std::string> get_node_inventory()
       {"Smoothstep5", "Math/Base"},
       {"Stratify", "Erosion/Stratify"},
       {"StratifyOblique", "Erosion/Stratify"},
+      {"WaveDune", "Primitive/Function"},
+      {"WaveSine", "Primitive/Function"},
+      {"WaveSquare", "Primitive/Function"},
+      {"WaveTriangular", "Primitive/Function"},
       {"White", "Primitive/Random"},
       {"WhiteDensityMap", "Primitive/Random"},
       {"WhiteSparse", "Primitive/Random"},
@@ -234,6 +238,10 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(Smoothstep5, smoothstep5);
     SETUP_NODE(Stratify, stratify);
     SETUP_NODE(StratifyOblique, stratify_oblique);
+    SETUP_NODE(WaveDune, wave_dune);
+    SETUP_NODE(WaveSine, wave_sine);
+    SETUP_NODE(WaveSquare, wave_square);
+    SETUP_NODE(WaveTriangular, wave_triangular);
     SETUP_NODE(White, white);
     SETUP_NODE(WhiteDensityMap, white_density_map);
     SETUP_NODE(WhiteSparse, white_sparse);
