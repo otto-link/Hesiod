@@ -103,6 +103,8 @@ std::map<std::string, std::string> get_node_inventory()
       {"Remap", "Filter/Range"},
       {"Rift", "Primitive/Function"},
       {"Rugosity", "Features"},
+      {"Saturate", "Filter/Recurve"},
+      {"ScanMask", "Mask"},
       {"SelectAngle", "Mask/Selector"},
       {"SelectBlobLog", "Mask/Selector"},
       {"SelectCavities", "Mask/Selector"},
@@ -117,8 +119,13 @@ std::map<std::string, std::string> get_node_inventory()
       {"SmoothFill", "Filter/Smoothing"},
       {"Smoothstep3", "Math/Base"},
       {"Smoothstep5", "Math/Base"},
+      {"Stamping", "Primitive/Coherent"},
+      {"Step", "Primitive/Function"},
       {"Stratify", "Erosion/Stratify"},
       {"StratifyOblique", "Erosion/Stratify"},
+      {"Thermal", "Erosion/Thermal"},
+      {"ThermalRib", "Erosion/Thermal"},
+      {"Translate", "Operator/Transform"},
       {"Unsphericity", "Features/Landform"},
       {"ValleyWidth", "Features/Landform"},
       {"Warp", "Operator/Transform"},
@@ -131,6 +138,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"WhiteDensityMap", "Primitive/Random"},
       {"WhiteSparse", "Primitive/Random"},
       {"ZeroedEdges", "Primitive/Random"},
+      {"Zoom", "Operator/Transform"},
   };
 
   return node_inventory;
@@ -228,6 +236,8 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(Remap, remap);
     SETUP_NODE(Rift, rift);
     SETUP_NODE(Rugosity, rugosity);
+    SETUP_NODE(Saturate, saturate);
+    SETUP_NODE(ScanMask, scan_mask);
     SETUP_NODE(SelectAngle, select_angle);
     SETUP_NODE(SelectBlobLog, select_blob_log);
     SETUP_NODE(SelectCavities, select_cavities);
@@ -242,8 +252,13 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(SmoothFill, smooth_fill);
     SETUP_NODE(Smoothstep3, smoothstep3);
     SETUP_NODE(Smoothstep5, smoothstep5);
+    SETUP_NODE(Stamping, stamping);
+    SETUP_NODE(Step, step);
     SETUP_NODE(Stratify, stratify);
     SETUP_NODE(StratifyOblique, stratify_oblique);
+    SETUP_NODE(Translate, translate);
+    SETUP_NODE(Thermal, thermal);
+    SETUP_NODE(ThermalRib, thermal_rib);
     SETUP_NODE(Unsphericity, unsphericity);
     SETUP_NODE(ValleyWidth, valley_width);
     SETUP_NODE(Warp, warp);
@@ -256,6 +271,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(WhiteDensityMap, white_density_map);
     SETUP_NODE(WhiteSparse, white_sparse);
     SETUP_NODE(ZeroedEdges, zeroed_edges);
+    SETUP_NODE(Zoom, zoom);
   default:
     throw std::invalid_argument("Unknown node type in node_factory: " + node_type);
   }
