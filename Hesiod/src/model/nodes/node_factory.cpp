@@ -113,10 +113,18 @@ std::map<std::string, std::string> get_node_inventory()
       {"SelectInwardOutward", "Mask/Selector"},
       {"SelectMidrange", "Mask/Selector"},
       {"SelectMultiband3", "Mask/Selector"},
+      {"SelectPulse", "Mask/Selector"},
       {"SelectRivers", "Mask/Selector"},
       {"SelectTransitions", "Mask/Selector"},
       {"SetAlpha", "Texture"},
+      {"ShapeIndex", "Filter/Smoothing"},
+      {"SharpenCone", "Filter/Smoothing"},
+      {"ShiftElevation", "Filter/Range"},
+      {"Slope", "Primitive/Function"},
+      {"SmoothCpulse", "Filter/Smoothing"},
       {"SmoothFill", "Filter/Smoothing"},
+      {"SmoothFillHoles", "Filter/Smoothing"},
+      {"SmoothFillSmearPeaks", "Filter/Smoothing"},
       {"Smoothstep3", "Math/Base"},
       {"Smoothstep5", "Math/Base"},
       {"Stamping", "Primitive/Coherent"},
@@ -246,10 +254,18 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(SelectInwardOutward, select_inward_outward);
     SETUP_NODE(SelectMultiband3, select_multiband3);
     SETUP_NODE(SelectMidrange, select_midrange);
+    SETUP_NODE(SelectPulse, select_pulse);
     SETUP_NODE(SelectRivers, select_rivers);
     SETUP_NODE(SelectTransitions, select_transitions);
     SETUP_NODE(SetAlpha, set_alpha);
+    SETUP_NODE(ShapeIndex, shape_index);
+    SETUP_NODE(SharpenCone, sharpen_cone);
+    SETUP_NODE(ShiftElevation, shift_elevation);
+    SETUP_NODE(Slope, slope);
+    SETUP_NODE(SmoothCpulse, smooth_cpulse);
     SETUP_NODE(SmoothFill, smooth_fill);
+    SETUP_NODE(SmoothFillHoles, smooth_fill_holes);
+    SETUP_NODE(SmoothFillSmearPeaks, smooth_fill_smear_peaks);
     SETUP_NODE(Smoothstep3, smoothstep3);
     SETUP_NODE(Smoothstep5, smoothstep5);
     SETUP_NODE(Stamping, stamping);
