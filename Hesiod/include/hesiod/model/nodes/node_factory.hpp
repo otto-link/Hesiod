@@ -144,6 +144,11 @@ DECLARE_NODE(noise)
 DECLARE_NODE(noise_fbm)
 DECLARE_NODE(noise_iq)
 DECLARE_NODE(noise_jordan)
+DECLARE_NODE(noise_parberry);
+DECLARE_NODE(noise_pingpong);
+DECLARE_NODE(noise_ridged);
+DECLARE_NODE(noise_swiss);
+DECLARE_NODE(normal_displacement)
 DECLARE_NODE(opening)
 DECLARE_NODE(paraboloid)
 DECLARE_NODE(path)

@@ -91,6 +91,11 @@ std::map<std::string, std::string> get_node_inventory()
       {"NoiseFbm", "Primitive/Coherent"},
       {"NoiseIq", "Primitive/Coherent"},
       {"NoiseJordan", "Primitive/Coherent"},
+      {"NoiseParberry", "Primitive/Coherent"},
+      {"NoisePingpong", "Primitive/Coherent"},
+      {"NoiseRidged", "Primitive/Coherent"},
+      {"NoiseSwiss", "Primitive/Coherent"},
+      {"NormalDisplacement", "Filter/Recast"},
       {"Opening", "Operator/Morphology"},
       {"Paraboloid", "Primitive/Function"},
       {"Path", "Geometry/Path"},
@@ -249,6 +254,11 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(NoiseFbm, noise_fbm);
     SETUP_NODE(NoiseIq, noise_iq);
     SETUP_NODE(NoiseJordan, noise_iq);
+    SETUP_NODE(NoiseParberry, noise_parberry);
+    SETUP_NODE(NoisePingpong, noise_pingpong);
+    SETUP_NODE(NoiseRidged, noise_ridged);
+    SETUP_NODE(NoiseSwiss, noise_swiss);
+    SETUP_NODE(NormalDisplacement, normal_displacement);
     SETUP_NODE(Opening, opening);
     SETUP_NODE(Paraboloid, paraboloid);
     SETUP_NODE(Path, path);

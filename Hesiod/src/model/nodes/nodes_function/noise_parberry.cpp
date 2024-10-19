@@ -15,7 +15,7 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_noise_fbm_node(BaseNode *p_node)
+void setup_noise_parberry_node(BaseNode *p_node)
 {
   LOG->trace("setup node {}", p_node->get_label());
 
@@ -27,31 +27,31 @@ void setup_noise_fbm_node(BaseNode *p_node)
   p_node->add_port<hmap::HeightMap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<MapEnumAttribute>("noise_type", noise_type_map_fbm, "Noise type");
   p_node->add_attr<WaveNbAttribute>("kw");
   p_node->add_attr<SeedAttribute>("seed");
-  p_node->add_attr<IntAttribute>("octaves", 8, 0, 32, "Octaves");
-  p_node->add_attr<FloatAttribute>("weight", 0.7f, 0.f, 1.f, "Weight");
-  p_node->add_attr<FloatAttribute>("persistence", 0.5f, 0.f, 1.f, "Persistence");
-  p_node->add_attr<FloatAttribute>("lacunarity", 2.f, 0.01f, 4.f, "Lacunarity");
-  p_node->add_attr<BoolAttribute>("inverse", false, "Inverse");
-  p_node->add_attr<RangeAttribute>("remap_range", "Remap range");
+  p_node->add_attr<IntAttribute>("octaves", 8, 0, 32, "octaves");
+  p_node->add_attr<FloatAttribute>("weight", 0.7f, 0.f, 1.f, "weight");
+  p_node->add_attr<FloatAttribute>("persistence", 0.5f, 0.f, 1.f, "persistence");
+  p_node->add_attr<FloatAttribute>("lacunarity", 2.f, 0.01f, 4.f, "lacunarity");
+  p_node->add_attr<FloatAttribute>("mu", 1.02f, 1.f, 1.2f, "mu");
+  p_node->add_attr<BoolAttribute>("inverse", false, "inverse");
+  p_node->add_attr<RangeAttribute>("remap_range", "remap_range");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"noise_type",
-                                "_SEPARATOR_",
-                                "kw",
+  p_node->set_attr_ordered_key({"kw",
                                 "seed",
                                 "octaves",
                                 "weight",
                                 "persistence",
                                 "lacunarity",
                                 "_SEPARATOR_",
+                                "mu",
+                                "_SEPARATOR_",
                                 "inverse",
                                 "remap_range"});
 }
 
-void compute_noise_fbm_node(BaseNode *p_node)
+void compute_noise_parberry_node(BaseNode *p_node)
 {
   Q_EMIT p_node->compute_started(p_node->get_id());
 
@@ -74,20 +74,19 @@ void compute_noise_fbm_node(BaseNode *p_node)
                       hmap::Array      *p_noise_y,
                       hmap::Array      *p_ctrl)
              {
-               return hmap::noise_fbm(
-                   (hmap::NoiseType)GET("noise_type", MapEnumAttribute),
-                   shape,
-                   GET("kw", WaveNbAttribute),
-                   GET("seed", SeedAttribute),
-                   GET("octaves", IntAttribute),
-                   GET("weight", FloatAttribute),
-                   GET("persistence", FloatAttribute),
-                   GET("lacunarity", FloatAttribute),
-                   p_ctrl,
-                   p_noise_x,
-                   p_noise_y,
-                   nullptr,
-                   bbox);
+               return hmap::noise_parberry(shape,
+                                           GET("kw", WaveNbAttribute),
+                                           GET("seed", SeedAttribute),
+                                           GET("octaves", IntAttribute),
+                                           GET("weight", FloatAttribute),
+                                           GET("persistence", FloatAttribute),
+                                           GET("lacunarity", FloatAttribute),
+                                           GET("mu", FloatAttribute),
+                                           p_ctrl,
+                                           p_noise_x,
+                                           p_noise_y,
+                                           nullptr,
+                                           bbox);
              });
 
   // add envelope
