@@ -71,10 +71,16 @@ std::map<std::string, std::string> get_node_inventory()
       {"HeightmapToKernel", "Converter"},
       {"HeightmapToMask", "Converter"},
       {"HeightmapToRGBA", "Converter"},
+      {"HydraulicBlur", "Erosion/Hydraulic"},
+      {"HydraulicParticle", "Erosion/Hydraulic"},
+      {"HydraulicRidge", "Erosion/Hydraulic"},
+      {"HydraulicStream", "Erosion/Hydraulic"},
       {"HydraulicStreamUpscaleAmplification", "Erosion/Hydraulic"},
+      {"HydraulicVpipes", "Erosion/Hydraulic"},
       {"ImportHeightmap", "Texture"},
       {"ImportTexture", "Texture"},
       {"Inverse", "Math/Base"},
+      {"KernelGabor", "Primitive/Kernel"},
       {"KernelPrim", "Primitive/Kernel"},
       {"KmeansClustering2", "Features/Clustering"},
       {"KmeansClustering3", "Features/Clustering"},
@@ -233,11 +239,17 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(HeightmapToKernel, heightmap_to_kernel);
     SETUP_NODE(HeightmapToMask, heightmap_to_mask);
     SETUP_NODE(HeightmapToRGBA, heightmap_to_rgba);
+    SETUP_NODE(HydraulicBlur, hydraulic_blur);
+    SETUP_NODE(HydraulicParticle, hydraulic_particle);
+    SETUP_NODE(HydraulicRidge, hydraulic_ridge);
+    SETUP_NODE(HydraulicStream, hydraulic_stream);
     SETUP_NODE(HydraulicStreamUpscaleAmplification,
                hydraulic_stream_upscale_amplification);
+    SETUP_NODE(HydraulicVpipes, hydraulic_vpipes);
     SETUP_NODE(ImportHeightmap, import_heightmap);
     SETUP_NODE(ImportTexture, import_texture);
     SETUP_NODE(Inverse, inverse);
+    SETUP_NODE(KernelGabor, kernel_gabor);
     SETUP_NODE(KernelPrim, kernel_prim);
     SETUP_NODE(KmeansClustering2, kmeans_clustering2);
     SETUP_NODE(KmeansClustering3, kmeans_clustering3);
