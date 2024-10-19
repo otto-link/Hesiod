@@ -92,6 +92,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"NoiseIq", "Primitive/Coherent"},
       {"NoiseJordan", "Primitive/Coherent"},
       {"Opening", "Operator/Morphology"},
+      {"Paraboloid", "Primitive/Function"},
       {"Path", "Geometry/Path"},
       {"PathBezier", "Geometry/Path"},
       {"PathBezierRound", "Geometry/Path"},
@@ -249,6 +250,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(NoiseIq, noise_iq);
     SETUP_NODE(NoiseJordan, noise_iq);
     SETUP_NODE(Opening, opening);
+    SETUP_NODE(Paraboloid, paraboloid);
     SETUP_NODE(Path, path);
     SETUP_NODE(PathBezier, path_bezier);
     SETUP_NODE(PathBezierRound, path_bezier_round);

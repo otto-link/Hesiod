@@ -145,6 +145,7 @@ DECLARE_NODE(noise_fbm)
 DECLARE_NODE(noise_iq)
 DECLARE_NODE(noise_jordan)
 DECLARE_NODE(opening)
+DECLARE_NODE(paraboloid)
 DECLARE_NODE(path)
 DECLARE_NODE(path_bezier);
 DECLARE_NODE(path_bezier_round);
