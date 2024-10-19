@@ -93,16 +93,29 @@ std::map<std::string, std::string> get_node_inventory()
       {"NoiseJordan", "Primitive/Coherent"},
       {"Opening", "Operator/Morphology"},
       {"Path", "Geometry/Path"},
+      {"PathBezier", "Geometry/Path"},
+      {"PathBezierRound", "Geometry/Path"},
+      {"PathBspline", "Geometry/Path"},
+      {"PathDecasteljau", "Geometry/Path"},
+      {"PathFractalize", "Geometry/Path"},
+      {"PathMeanderize", "Geometry/Path"},
+      {"PathResample", "Geometry/Path"},
       {"PathSDF", "Geometry/Path"},
+      {"PathToCloud", "Converter"},
+      {"PathToHeightmap", "Converter"},
       {"Plateau", "Filter/Recurve"},
       {"Preview", "Debug"},
       {"QuiltingExpand", "Operator/Resynthesis"},
       {"QuiltingShuffle", "Operator/Resynthesis"},
+      {"RadialDisplacementToXy", "Math"},
       {"RecastCliff", "Filter/Recast"},
       {"RecastSag", "Filter/Recast"},
       {"RecurveKura", "Filter/Recurve"},
       {"RecurveS", "Filter/Recurve"},
+      {"RelativeElevation", "Features/Landform"},
       {"Remap", "Filter/Range"},
+      {"Rescale", "Filter/Range"},
+      {"ReverseMidpoint", "Primitive/Authoring"},
       {"Ridgelines", "Primitive/Authoring"},
       {"Rift", "Primitive/Function"},
       {"Rugosity", "Features"},
@@ -237,16 +250,29 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(NoiseJordan, noise_iq);
     SETUP_NODE(Opening, opening);
     SETUP_NODE(Path, path);
+    SETUP_NODE(PathBezier, path_bezier);
+    SETUP_NODE(PathBezierRound, path_bezier_round);
+    SETUP_NODE(PathBspline, path_bspline);
+    SETUP_NODE(PathDecasteljau, path_decasteljau);
+    SETUP_NODE(PathFractalize, path_fractalize);
+    SETUP_NODE(PathMeanderize, path_meanderize);
+    SETUP_NODE(PathResample, path_resample);
     SETUP_NODE(PathSDF, path_sdf);
+    SETUP_NODE(PathToCloud, path_to_cloud);
+    SETUP_NODE(PathToHeightmap, path_to_heightmap);
     SETUP_NODE(Plateau, plateau);
     SETUP_NODE(Preview, preview);
     SETUP_NODE(QuiltingExpand, quilting_expand);
     SETUP_NODE(QuiltingShuffle, quilting_shuffle);
+    SETUP_NODE(RadialDisplacementToXy, radial_displacement_to_xy);
     SETUP_NODE(RecastCliff, recast_cliff);
     SETUP_NODE(RecastSag, recast_sag);
     SETUP_NODE(RecurveKura, recurve_kura);
     SETUP_NODE(RecurveS, recurve_s);
+    SETUP_NODE(RelativeElevation, relative_elevation);
     SETUP_NODE(Remap, remap);
+    SETUP_NODE(Rescale, rescale);
+    SETUP_NODE(ReverseMidpoint, reverse_midpoint);
     SETUP_NODE(Ridgelines, ridgelines);
     SETUP_NODE(Rift, rift);
     SETUP_NODE(Rugosity, rugosity);
