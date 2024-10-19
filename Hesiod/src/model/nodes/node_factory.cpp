@@ -103,6 +103,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"RecurveKura", "Filter/Recurve"},
       {"RecurveS", "Filter/Recurve"},
       {"Remap", "Filter/Range"},
+      {"Ridgelines", "Primitive/Authoring"},
       {"Rift", "Primitive/Function"},
       {"Rugosity", "Features"},
       {"Saturate", "Filter/Recurve"},
@@ -246,6 +247,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(RecurveKura, recurve_kura);
     SETUP_NODE(RecurveS, recurve_s);
     SETUP_NODE(Remap, remap);
+    SETUP_NODE(Ridgelines, ridgelines);
     SETUP_NODE(Rift, rift);
     SETUP_NODE(Rugosity, rugosity);
     SETUP_NODE(Saturate, saturate);

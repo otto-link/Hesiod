@@ -63,7 +63,7 @@ void compute_cloud_to_array_interp_node(BaseNode *p_node)
     }
     else
       // fill with zeroes
-      hmap::transform(*p_out, [](hmap::Array array) { array = 0.f; });
+      hmap::transform(*p_out, [](hmap::Array &array) { array = 0.f; });
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

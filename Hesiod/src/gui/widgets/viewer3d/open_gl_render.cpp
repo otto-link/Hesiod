@@ -398,31 +398,28 @@ void OpenGLRender::set_data(BaseNode          *new_p_node,
           if (p_node->get_data_ref(port_index_color))
           {
 
-            // if (data_type_color == typeid(hmap::Cloud).name())
-            // {
-            //   hmap::Cloud cloud = *this->p_node->get_value_ref<hmap::Cloud>(
-            //       port_index_elev);
-            //   hmap::Array c = hmap::Array(p_node->get_config_ref()->shape);
+            if (data_type_color == typeid(hmap::Cloud).name())
+            {
+              hmap::Cloud cloud = *this->p_node->get_value_ref<hmap::Cloud>(
+                  port_index_color);
 
-            //   if (cloud.get_npoints() > 0)
-            //   {
-            //     hmap::Vec4<float> bbox = hmap::Vec4<float>(0.f, 1.f, 0.f, 1.f);
-            //     cloud.remap_values(0.5f, 1.f);
-            //     cloud.to_array(c, bbox);
-            //   }
+              if (cloud.get_npoints() > 0)
+              {
+                hmap::Array       c = hmap::Array(p_node->get_config_ref()->shape);
+                hmap::Vec4<float> bbox = hmap::Vec4<float>(0.f, 1.f, 0.f, 1.f);
+                cloud.remap_values(0.5f, 1.f);
+                cloud.to_array(c, bbox);
 
-            //   this->texture_diffuse = generate_selector_image(c);
-            //   this->texture_shape = c.shape;
+                this->texture_diffuse = generate_selector_image(c);
+                this->texture_shape = c.shape;
 
-            //   hmap::apply_hillshade(this->texture_diffuse, array, 0.f, 1.f, 1.5f,
-            //   true);
+                hmap::apply_hillshade(this->texture_diffuse, array, 0.f, 1.f, 1.5f, true);
 
-            //   color_done = true;
-            // }
-            // //
-            // else
-
-            if (data_type_color == typeid(hmap::HeightMap).name())
+                color_done = true;
+              }
+            }
+            //
+            else if (data_type_color == typeid(hmap::HeightMap).name())
             {
               hmap::HeightMap *p_c = this->p_node->get_value_ref<hmap::HeightMap>(
                   port_index_color);
@@ -452,24 +449,24 @@ void OpenGLRender::set_data(BaseNode          *new_p_node,
             //
             else if (data_type_color == typeid(hmap::Path).name())
             {
-              hmap::Path path = *this->p_node->get_value_ref<hmap::Path>(port_index_elev);
-              hmap::Array c = hmap::Array(p_node->get_config_ref()->shape);
+              hmap::Path path = *this->p_node->get_value_ref<hmap::Path>(
+                  port_index_color);
 
               if (path.get_npoints() > 0)
               {
+                hmap::Array       c = hmap::Array(p_node->get_config_ref()->shape);
                 hmap::Vec4<float> bbox = hmap::Vec4<float>(0.f, 1.f, 0.f, 1.f);
                 path.remap_values(0.5f, 1.f);
                 path.to_array(c, bbox);
+
+                this->texture_diffuse = generate_selector_image(c);
+                this->texture_shape = c.shape;
+
+                hmap::apply_hillshade(this->texture_diffuse, array, 0.f, 1.f, 1.5f, true);
+
+                color_done = true;
               }
-
-              this->texture_diffuse = generate_selector_image(c);
-              this->texture_shape = c.shape;
-
-              hmap::apply_hillshade(this->texture_diffuse, array, 0.f, 1.f, 1.5f, true);
-
-              color_done = true;
             }
-            //
           }
         }
 
