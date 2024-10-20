@@ -36,6 +36,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"CloudSDF", "Geometry/Cloud"},
       {"CloudToArrayInterp", "Geometry/Cloud"},
       {"CloudToPath", "Geometry/Cloud"},
+      {"ColorizeCmap", "Texture"},
       {"ColorizeGradient", "Texture"},
       {"ColorizeSolid", "Texture"},
       {"CombineMask", "Mask"},
@@ -121,6 +122,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"QuiltingShuffle", "Operator/Resynthesis"},
       {"RadialDisplacementToXy", "Math"},
       {"RecastCliff", "Filter/Recast"},
+      {"RecastCliffDirectional", "Filter/Recast"},
       {"RecastSag", "Filter/Recast"},
       {"RecurveKura", "Filter/Recurve"},
       {"RecurveS", "Filter/Recurve"},
@@ -205,6 +207,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(CloudSDF, cloud_sdf);
     SETUP_NODE(CloudToArrayInterp, cloud_to_array_interp);
     SETUP_NODE(CloudToPath, cloud_to_path);
+    SETUP_NODE(ColorizeCmap, colorize_cmap);
     SETUP_NODE(ColorizeGradient, colorize_gradient);
     SETUP_NODE(ColorizeSolid, colorize_solid);
     SETUP_NODE(CombineMask, combine_mask);
@@ -291,6 +294,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(QuiltingShuffle, quilting_shuffle);
     SETUP_NODE(RadialDisplacementToXy, radial_displacement_to_xy);
     SETUP_NODE(RecastCliff, recast_cliff);
+    SETUP_NODE(RecastCliffDirectional, recast_cliff_directional);
     SETUP_NODE(RecastSag, recast_sag);
     SETUP_NODE(RecurveKura, recurve_kura);
     SETUP_NODE(RecurveS, recurve_s);

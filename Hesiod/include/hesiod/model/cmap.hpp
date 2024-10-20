@@ -3,7 +3,7 @@
  * this software. */
 
 /**
- * @file colormaps.hpp
+ * @file cmap.hpp
  * @author Otto Link (otto.link.bv@gmail.com)
  * @brief
  * @version 0.1
@@ -1160,4 +1160,5 @@ enum cmap : int
 std::vector<std::vector<float>> get_colormap_data(int cmap);
 
 std::map<std::string, int> get_colormap_mapping();
+
 } // namespace hesiod

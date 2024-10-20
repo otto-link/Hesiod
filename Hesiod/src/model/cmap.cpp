@@ -219,6 +219,7 @@ std::vector<std::vector<float>> get_colormap_data(int cmap)
   case hesiod::cmap::wsatavin:
     return CMAP_WSATAVIN;
   case hesiod::cmap::yierahon:
+  default:
     return CMAP_YIERAHON;
   }
 }
