@@ -24,9 +24,22 @@ class MainWindow : public QMainWindow
   Q_OBJECT
 
 public:
-  MainWindow(QApplication *p_app = nullptr, QWidget *p_parent = nullptr);
+  // Static method to get the singleton instance of MainWindow
+  static MainWindow *instance(QApplication *p_app = nullptr, QWidget *p_parent = nullptr)
+  {
+    static MainWindow *instance = nullptr;
+    if (!instance)
+    {
+      instance = new MainWindow(p_app, p_parent);
+    }
+    return instance;
+  }
 
-  ~MainWindow() override;
+  // Method to change the window title
+  void set_title(const std::string &new_title)
+  {
+    this->setWindowTitle(new_title.c_str());
+  }
 
 protected:
   void restore_state();
@@ -39,6 +52,16 @@ private Q_SLOTS:
   void on_quit();
 
 private:
+  // Constructor is private to prevent creating MainWindow elsewhere
+  MainWindow(QApplication *p_app = nullptr, QWidget *p_parent = nullptr);
+
+  ~MainWindow() override;
+
+  // Prevent copying and assignment
+  MainWindow(const MainWindow &) = delete;
+
+  MainWindow &operator=(const MainWindow &) = delete;
+
   void closeEvent(QCloseEvent *event) override;
 
   std::vector<GraphEditor *> graph_editors = {};

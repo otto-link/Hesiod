@@ -160,8 +160,8 @@ int main(int argc, char *argv[])
 
   app.setStyleSheet(style_sheet.c_str());
 
-  hesiod::MainWindow main_window(&app);
-  main_window.show();
+  hesiod::MainWindow *main_window = hesiod::MainWindow::instance(&app);
+  main_window->show();
 
   return app.exec();
 

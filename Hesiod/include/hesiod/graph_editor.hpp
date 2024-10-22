@@ -106,6 +106,10 @@ private:
   std::filesystem::path fname = "";
 
   std::vector<std::unique_ptr<QWidget>> viewers;
+
+  void set_fname(const std::filesystem::path &new_fname);
+
+  void set_fname(const std::string &new_fname);
 };
 
 } // namespace hesiod

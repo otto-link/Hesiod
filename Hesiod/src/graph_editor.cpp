@@ -21,6 +21,7 @@
 
 #include "hesiod/graph_editor.hpp"
 #include "hesiod/gui/gui_utils.hpp"
+#include "hesiod/gui/main_window.hpp"
 #include "hesiod/gui/style.hpp"
 #include "hesiod/gui/widgets/model_config_widget.hpp"
 #include "hesiod/gui/widgets/viewer3d.hpp"
@@ -208,7 +209,7 @@ void GraphEditor::load_from_file(const std::filesystem::path &load_fname,
     file.close();
     LOG->trace("JSON successfully loaded from {}", load_fname.string());
 
-    this->fname = load_fname;
+    this->set_fname(load_fname);
 
     this->clear();
     if (this->viewer)
@@ -295,6 +296,7 @@ void GraphEditor::on_graph_load_request()
 void GraphEditor::on_graph_new_request()
 {
   LOG->trace("GraphEditor::on_graph_new_request");
+  LOG->critical("GraphEditor::on_graph_new_request, NOT IMPLEMENTED");
 }
 
 void GraphEditor::on_graph_reload_request()
@@ -317,7 +319,7 @@ void GraphEditor::on_graph_save_as_request()
 
   if (!new_fname.isNull() && !new_fname.isEmpty())
   {
-    this->fname = new_fname.toStdString();
+    this->set_fname(new_fname.toStdString());
     this->on_graph_save_request();
   }
 }
@@ -604,6 +606,22 @@ void GraphEditor::on_viewport_request()
 
   if (selected_ids.size())
     p_viewer->on_node_selected(selected_ids.back());
+}
+
+void GraphEditor::set_fname(const std::filesystem::path &new_fname)
+{
+  this->fname = new_fname;
+
+  std::string title = "Hesiod";
+  if (!this->fname.empty())
+    title += " - " + this->fname.string();
+
+  MainWindow::instance()->set_title(title.c_str());
+}
+
+void GraphEditor::set_fname(const std::string &new_fname)
+{
+  this->set_fname(std::filesystem::path(new_fname));
 }
 
 } // namespace hesiod

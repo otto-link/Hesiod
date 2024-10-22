@@ -93,12 +93,12 @@ void compute_stratify_multiscale_node(BaseNode *p_node)
       if (k >= GET("gamma_list", VecFloatAttribute).size())
         gamma_list[k] = 2.f;
       else
-        gamma_list[k] = GET("gamma_list", VecFloatAttribute).back();
+        gamma_list[k] = GET("gamma_list", VecFloatAttribute)[k];
 
       if (k >= GET("gamma_noise", VecFloatAttribute).size())
         gamma_noise[k] = 0.f;
       else
-        gamma_noise[k] = GET("gamma_noise", VecFloatAttribute).back();
+        gamma_noise[k] = GET("gamma_noise", VecFloatAttribute)[k];
     }
 
     // eventually compute
