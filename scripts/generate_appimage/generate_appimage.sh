@@ -1,4 +1,6 @@
 #!/bin/bash
+qtchooser -install qt6 $(which qmake6)
+export QT_SELECT=qt6
 
 rm -rf AppDir
 
