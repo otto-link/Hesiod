@@ -162,6 +162,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Step", "Primitive/Function"},
       {"Stratify", "Erosion/Stratify"},
       {"StratifyOblique", "Erosion/Stratify"},
+      {"StratifyMultiscale", "Erosion/Stratify"},
       {"Thermal", "Erosion/Thermal"},
       {"ThermalRib", "Erosion/Thermal"},
       {"Translate", "Operator/Transform"},
@@ -334,6 +335,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(Step, step);
     SETUP_NODE(Stratify, stratify);
     SETUP_NODE(StratifyOblique, stratify_oblique);
+    SETUP_NODE(StratifyMultiscale, stratify_multiscale);
     SETUP_NODE(Translate, translate);
     SETUP_NODE(Thermal, thermal);
     SETUP_NODE(ThermalRib, thermal_rib);
