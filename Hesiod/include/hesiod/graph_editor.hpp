@@ -47,6 +47,10 @@ public:
   void load_from_file(const std::filesystem::path &load_fname,
                       bool                         override_config = true);
 
+  void update(); // GNode::Graph
+
+  void update(std::string id); // GNode::Graph
+
 Q_SIGNALS:
   void node_compute_finished(const std::string &id);
 
@@ -107,9 +111,15 @@ private:
 
   std::vector<std::unique_ptr<QWidget>> viewers;
 
+  bool update_node_on_new_link = true;
+
   void set_fname(const std::filesystem::path &new_fname);
 
   void set_fname(const std::string &new_fname);
+
+  void viewer_disable();
+
+  void viewer_enable();
 };
 
 } // namespace hesiod

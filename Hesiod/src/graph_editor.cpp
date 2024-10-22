@@ -173,7 +173,13 @@ void GraphEditor::json_from(nlohmann::json const &json, bool override_config)
     for (auto &v : this->viewers)
       dynamic_cast<AbstractViewer *>(v.get())->clear();
 
+    // to prevent nodes update at each link creation when the loading
+    // the graph (very slooow)
+    this->update_node_on_new_link = false;
+
     this->viewer->json_from(json["graph_viewer"]);
+
+    this->update_node_on_new_link = true;
   }
 }
 
@@ -196,8 +202,7 @@ nlohmann::json GraphEditor::json_to() const
 void GraphEditor::load_from_file(const std::filesystem::path &load_fname,
                                  bool                         override_config)
 {
-  if (this->viewer)
-    this->viewer->setEnabled(false);
+  this->viewer_disable();
 
   // load json
   nlohmann::json json;
@@ -221,11 +226,7 @@ void GraphEditor::load_from_file(const std::filesystem::path &load_fname,
   else
     LOG->error("Could not open file {} to load JSON", load_fname.string());
 
-  if (this->viewer)
-  {
-    this->viewer->setEnabled(true);
-    this->viewer->setDragMode(QGraphicsView::NoDrag);
-  }
+  this->viewer_enable();
 }
 
 void GraphEditor::on_connection_deleted(const std::string &id_out,
@@ -255,7 +256,9 @@ void GraphEditor::on_connection_finished(const std::string &id_out,
              port_id_in);
 
   this->new_link(id_out, port_id_out, id_in, port_id_in);
-  this->update(id_in);
+
+  if (this->update_node_on_new_link)
+    this->update(id_in);
 }
 
 void GraphEditor::on_graph_clear_request()
@@ -302,8 +305,9 @@ void GraphEditor::on_graph_new_request()
 void GraphEditor::on_graph_reload_request()
 {
   LOG->trace("GraphEditor::on_graph_reload_request");
-  this->update();
+
   // TODO signals back to GUI before / after
+  this->update();
 }
 
 void GraphEditor::on_graph_save_as_request()
@@ -452,8 +456,9 @@ void GraphEditor::on_node_deleted_request(const std::string &node_id)
 void GraphEditor::on_node_reload_request(const std::string &node_id)
 {
   LOG->trace("GraphNode::on_node_reload_request, node {}", node_id);
-  this->update(node_id);
+
   // TODO signals back to GUI before / after
+  this->update(node_id);
 }
 
 void GraphEditor::on_node_right_clicked(const std::string &node_id, QPointF scene_pos)
@@ -508,7 +513,11 @@ void GraphEditor::on_node_right_clicked(const std::string &node_id, QPointF scen
 
       connect(attributes_widget,
               &attr::AttributesWidget::update_button_released,
-              [this, p_node]() { this->update(p_node->get_id()); });
+              [this, p_node]()
+              {
+                std::string node_id = p_node->get_id();
+                this->update(node_id);
+              });
 
       menu->popup(QCursor::pos());
     }
@@ -622,6 +631,38 @@ void GraphEditor::set_fname(const std::filesystem::path &new_fname)
 void GraphEditor::set_fname(const std::string &new_fname)
 {
   this->set_fname(std::filesystem::path(new_fname));
+}
+
+void GraphEditor::update()
+{
+  this->viewer_disable();
+  GraphNode::update();
+  this->viewer_enable();
+}
+
+void GraphEditor::update(std::string id)
+{
+  this->viewer_disable();
+  GraphNode::update(id);
+  this->viewer_enable();
+}
+
+void GraphEditor::viewer_disable()
+{
+  if (this->viewer)
+  {
+    this->viewer->setDragMode(QGraphicsView::NoDrag);
+    this->viewer->setEnabled(false);
+  }
+}
+
+void GraphEditor::viewer_enable()
+{
+  if (this->viewer)
+  {
+    this->viewer->setEnabled(true);
+    this->viewer->setDragMode(QGraphicsView::NoDrag);
+  }
 }
 
 } // namespace hesiod
