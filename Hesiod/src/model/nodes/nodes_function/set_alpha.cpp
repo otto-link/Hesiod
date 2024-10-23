@@ -26,10 +26,11 @@ void setup_set_alpha_node(BaseNode *p_node)
 
   // attribute(s)
   p_node->add_attr<FloatAttribute>("alpha", 1.f, 0.f, 1.f, "alpha");
-  p_node->add_attr<BoolAttribute>("clamp_alpha", true, "clamp_alpha");
+  p_node->add_attr<BoolAttribute>("reverse", false, "reverse");
+  p_node->add_attr<BoolAttribute>("clamp", true, "clamp");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"alpha", "clamp_alpha"});
+  p_node->set_attr_ordered_key({"alpha", "reverse", "clamp"});
 }
 
 void compute_set_alpha_node(BaseNode *p_node)
@@ -50,13 +51,25 @@ void compute_set_alpha_node(BaseNode *p_node)
 
     if (p_alpha)
     {
-      if (GET("clamp_alpha", BoolAttribute))
-        hmap::transform(*p_alpha, [](hmap::Array &x) { hmap::clamp(x, 0.f, 1.f); });
+      hmap::HeightMap alpha_copy = *p_alpha;
 
-      p_out->set_alpha(*p_alpha);
+      if (GET("clamp", BoolAttribute))
+        hmap::transform(alpha_copy, [](hmap::Array &x) { hmap::clamp(x, 0.f, 1.f); });
+
+      if (GET("reverse", BoolAttribute))
+        alpha_copy.inverse();
+
+      p_out->set_alpha(alpha_copy);
     }
     else
-      p_out->set_alpha(GET("alpha", FloatAttribute));
+    {
+      float alpha = GET("alpha", FloatAttribute);
+
+      if (GET("reverse", BoolAttribute))
+        alpha = 1.f - alpha;
+
+      p_out->set_alpha(alpha);
+    }
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());
