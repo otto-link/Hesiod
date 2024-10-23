@@ -22,6 +22,7 @@ void setup_set_alpha_node(BaseNode *p_node)
   // port(s)
   p_node->add_port<hmap::HeightMapRGBA>(gnode::PortType::IN, "texture in");
   p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "alpha");
+  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "noise");
   p_node->add_port<hmap::HeightMapRGBA>(gnode::PortType::OUT, "texture out", CONFIG);
 
   // attribute(s)
@@ -44,6 +45,7 @@ void compute_set_alpha_node(BaseNode *p_node)
   if (p_in)
   {
     hmap::HeightMap     *p_alpha = p_node->get_value_ref<hmap::HeightMap>("alpha");
+    hmap::HeightMap     *p_noise = p_node->get_value_ref<hmap::HeightMap>("noise");
     hmap::HeightMapRGBA *p_out = p_node->get_value_ref<hmap::HeightMapRGBA>(
         "texture out");
 
@@ -52,6 +54,11 @@ void compute_set_alpha_node(BaseNode *p_node)
     if (p_alpha)
     {
       hmap::HeightMap alpha_copy = *p_alpha;
+
+      if (p_noise)
+        hmap::transform(alpha_copy,
+                        *p_noise,
+                        [](hmap::Array &x, hmap::Array &y) { x += y; });
 
       if (GET("clamp", BoolAttribute))
         hmap::transform(alpha_copy, [](hmap::Array &x) { hmap::clamp(x, 0.f, 1.f); });
