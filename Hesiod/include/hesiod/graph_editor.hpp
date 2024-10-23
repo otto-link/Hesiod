@@ -38,6 +38,8 @@ public:
               std::shared_ptr<ModelConfig> config,
               bool                         headless = false);
 
+  void clear();
+
   gngui::GraphViewer *get_p_viewer() { return this->viewer.get(); }
 
   void json_from(nlohmann::json const &json, bool override_config = true);

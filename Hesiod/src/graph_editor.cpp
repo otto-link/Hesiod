@@ -153,6 +153,28 @@ GraphEditor::GraphEditor(const std::string           &id,
   GN_STYLE->node.color_category = category_color_map;
 }
 
+void GraphEditor::clear()
+{
+  this->viewer_disable();
+
+  // clear graph viewer
+  if (this->viewer)
+  {
+    for (auto &v : this->viewers)
+      dynamic_cast<AbstractViewer *>(v.get())->clear();
+
+    this->viewer->clear();
+  }
+  
+  // clear node data structure
+  GraphNode::clear();
+
+  // clear editor
+  this->fname = "";
+
+  this->viewer_enable();
+}
+
 void GraphEditor::json_from(nlohmann::json const &json, bool override_config)
 {
   GraphNode::json_from(json["graph_node"], override_config);
@@ -176,9 +198,7 @@ void GraphEditor::json_from(nlohmann::json const &json, bool override_config)
     // to prevent nodes update at each link creation when the loading
     // the graph (very slooow)
     this->update_node_on_new_link = false;
-
     this->viewer->json_from(json["graph_viewer"]);
-
     this->update_node_on_new_link = true;
   }
 }
@@ -299,7 +319,7 @@ void GraphEditor::on_graph_load_request()
 void GraphEditor::on_graph_new_request()
 {
   LOG->trace("GraphEditor::on_graph_new_request");
-  LOG->critical("GraphEditor::on_graph_new_request, NOT IMPLEMENTED");
+  this->clear();
 }
 
 void GraphEditor::on_graph_reload_request()
