@@ -24,7 +24,11 @@ void setup_export_heightmap_node(BaseNode *p_node)
   p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "input");
 
   // attribute(s)
-  p_node->add_attr<FilenameAttribute>("fname", "hmap.png", "", "Filename");
+  p_node->add_attr<FilenameAttribute>("fname",
+                                      "hmap.png",
+                                      true, // save
+                                      "*",
+                                      "Filename");
   p_node->add_attr<MapEnumAttribute>("format",
                                      "png (8 bit)",
                                      heightmap_export_format_map,

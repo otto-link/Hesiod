@@ -165,7 +165,7 @@ void GraphEditor::clear()
 
     this->viewer->clear();
   }
-  
+
   // clear node data structure
   GraphNode::clear();
 

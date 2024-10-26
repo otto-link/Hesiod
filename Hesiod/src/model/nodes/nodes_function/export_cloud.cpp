@@ -24,7 +24,11 @@ void setup_export_cloud_node(BaseNode *p_node)
   p_node->add_port<hmap::Cloud>(gnode::PortType::IN, "input");
 
   // attribute(s)
-  p_node->add_attr<FilenameAttribute>("fname", "cloud.csv", "fname");
+  p_node->add_attr<FilenameAttribute>("fname",
+                                      "cloud.csv",
+                                      true, // save
+                                      "CSV (*.csv)",
+                                      "fname");
   p_node->add_attr<BoolAttribute>("auto_export", true, "auto_export");
 
   // attribute(s) order

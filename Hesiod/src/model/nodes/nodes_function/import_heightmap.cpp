@@ -24,6 +24,7 @@ void setup_import_heightmap_node(BaseNode *p_node)
   // attribute(s)
   p_node->add_attr<FilenameAttribute>("fname (8bit grayscale)",
                                       "",
+                                      false, // loading
                                       "PNG (*.png)",
                                       "fname (8bit grayscale)");
   p_node->add_attr<BoolAttribute>("remap", true, "remap");

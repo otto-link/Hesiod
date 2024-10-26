@@ -24,7 +24,11 @@ void setup_export_normal_map_node(BaseNode *p_node)
   p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "input");
 
   // attribute(s)
-  p_node->add_attr<FilenameAttribute>("fname", "nmap.png", "fname");
+  p_node->add_attr<FilenameAttribute>("fname",
+                                      "nmap.png",
+                                      true, // save
+                                      "PNG (*.png)",
+                                      "fname");
   p_node->add_attr<BoolAttribute>("16bit", false, "16bit");
   p_node->add_attr<BoolAttribute>("auto_export", true, "auto_export");
 
