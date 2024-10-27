@@ -18,12 +18,15 @@ OpenGLWidget::OpenGLWidget(QWidget *parent) : QWidget(parent)
   this->setLayout(layout);
 
   this->renderer = new OpenGLRender(parent);
-  layout->addWidget(this->renderer, 0, 0, 1, 4);
+  layout->addWidget(this->renderer, 0, 0, 1, 5);
+
+  int col = 0;
+  int row = 1;
 
   // h scale
   {
     auto slider = new ValueSliders::DoubleSlider("Elevation scale", 0.4f, 0.f, 1.f);
-    layout->addWidget(slider, 1, 0);
+    layout->addWidget(slider, row, col++);
 
     this->renderer->set_h_scale(slider->getVal());
 
@@ -42,7 +45,7 @@ OpenGLWidget::OpenGLWidget(QWidget *parent) : QWidget(parent)
 
     QPushButton *button = new QPushButton(label.c_str());
     button->setCheckable(true);
-    layout->addWidget(button, 1, 1);
+    layout->addWidget(button, row, col++);
     this->connect(button,
                   &QPushButton::toggled,
                   [this, button]()
@@ -57,6 +60,20 @@ OpenGLWidget::OpenGLWidget(QWidget *parent) : QWidget(parent)
                   });
   }
 
+  // normal map
+  {
+    std::string label = "Normal map";
+
+    QPushButton *button = new QPushButton(label.c_str());
+    button->setCheckable(true);
+    layout->addWidget(button, row, col++);
+    this->connect(
+        button,
+        &QPushButton::toggled,
+        [this, button]()
+        { this->renderer->set_show_normal_map(!this->renderer->get_show_normal_map()); });
+  }
+
   // approx. mesh
   {
     std::string label = this->renderer->get_use_approx_mesh() ? "Approx. mesh"
@@ -64,7 +81,7 @@ OpenGLWidget::OpenGLWidget(QWidget *parent) : QWidget(parent)
 
     QPushButton *button = new QPushButton(label.c_str());
     button->setCheckable(true);
-    layout->addWidget(button, 1, 2);
+    layout->addWidget(button, row, col++);
     this->connect(button,
                   &QPushButton::toggled,
                   [this, button]()
@@ -82,7 +99,7 @@ OpenGLWidget::OpenGLWidget(QWidget *parent) : QWidget(parent)
   // approx. error
   {
     auto slider = new ValueSliders::DoubleSlider("Max. error", 5e-3f, 1e-5f, 1e-1f);
-    layout->addWidget(slider, 1, 3);
+    layout->addWidget(slider, row, col++);
 
     this->renderer->set_max_approx_error(slider->getVal());
 
@@ -94,6 +111,92 @@ OpenGLWidget::OpenGLWidget(QWidget *parent) : QWidget(parent)
                     this->renderer->set_max_approx_error(v);
                   });
   }
+
+  // --- second line
+
+  row++;
+  col = 0;
+
+  // zenith
+  {
+    auto slider = new ValueSliders::DoubleSlider("Light zenith", 0.f, 0.f, 90.f);
+    layout->addWidget(slider, row, col++);
+
+    this->renderer->set_zenith(slider->getVal());
+
+    this->connect(slider,
+                  &ValueSliders::DoubleSlider::valueChanged,
+                  [slider, this]()
+                  {
+                    float v = slider->getVal();
+                    this->renderer->set_zenith(v);
+                  });
+  }
+
+  // azimuth
+  {
+    auto slider = new ValueSliders::DoubleSlider("Light azimuth", 0.f, -180.f, 180.f);
+    layout->addWidget(slider, row, col++);
+
+    this->renderer->set_azimuth(slider->getVal());
+
+    this->connect(slider,
+                  &ValueSliders::DoubleSlider::valueChanged,
+                  [slider, this]()
+                  {
+                    float v = slider->getVal();
+                    this->renderer->set_azimuth(v);
+                  });
+  }
+
+  // saturation
+  {
+    auto slider = new ValueSliders::DoubleSlider("Shadow saturation", 0.f, -1.f, 1.f);
+    layout->addWidget(slider, row, col++);
+
+    this->renderer->set_shadow_saturation(slider->getVal());
+
+    this->connect(slider,
+                  &ValueSliders::DoubleSlider::valueChanged,
+                  [slider, this]()
+                  {
+                    float v = slider->getVal();
+                    this->renderer->set_shadow_saturation(v);
+                  });
+  }
+
+  // strength
+  {
+    auto slider = new ValueSliders::DoubleSlider("Shadow strength", 1.f, 0.f, 1.f);
+    layout->addWidget(slider, row, col++);
+
+    this->renderer->set_shadow_strength(slider->getVal());
+
+    this->connect(slider,
+                  &ValueSliders::DoubleSlider::valueChanged,
+                  [slider, this]()
+                  {
+                    float v = slider->getVal();
+                    this->renderer->set_shadow_strength(v);
+                  });
+  }
+
+  // gamma
+  {
+    auto slider = new ValueSliders::DoubleSlider("Shadow gamma", 1.f, 0.1f, 2.f);
+    layout->addWidget(slider, row, col++);
+
+    this->renderer->set_shadow_gamma(slider->getVal());
+
+    this->connect(slider,
+                  &ValueSliders::DoubleSlider::valueChanged,
+                  [slider, this]()
+                  {
+                    float v = slider->getVal();
+                    this->renderer->set_shadow_gamma(v);
+                  });
+  }
+  // --- fix column width
 
   for (int i = 0; i < layout->columnCount(); i++)
     layout->setColumnStretch(i, 1);

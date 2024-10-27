@@ -39,34 +39,115 @@ struct ShaderConfig
 static const std::string vertex_texture = R""(
 #version 330 core
 
-layout(location = 0) in vec3 pos;
+// IN
+layout(location = 0) in vec2 pos;
 layout(location = 1) in vec2 uv;
 
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
+uniform float zmin;
+uniform float zmax;
+uniform float mesh_size;
 
-out vec2 texCoord;
+uniform sampler2D textureHmap;
+
+// OUT
+out vec2 tex_coord;
+out float h;
 
 void main()
 {
-    gl_Position = projection * view * model * vec4(pos, 1.0);
-    texCoord = vec2(uv);
+    h = texture(textureHmap, uv).r;
+    float elevation = zmin + (zmax - zmin) * h;
+    vec4 pos_dz = vec4(pos.x, elevation, pos.y, 1.0);
+    gl_Position = projection * view * model * pos_dz;
+
+    tex_coord = vec2(uv);
 }
 )"";
 
 static const std::string fragment_texture = R""(
 #version 330 core
 
-out vec4 color;
-in vec2 texCoord;
+// IN
+in vec2 tex_coord;
+in float h; // elevation in [0, 1]
+
+uniform float mesh_size;
+uniform bool use_texture_diffuse;
+uniform bool show_normal_map;
+uniform vec3 light_dir;
+uniform float shadow_saturation;
+uniform float shadow_strength;
+uniform float shadow_gamma;
 
 uniform sampler2D textureDiffuse;
+uniform sampler2D textureHmap;
 uniform sampler2D normalMap;
+
+// OUT
+out vec4 color;
+
+// https://www.shadertoy.com/view/WlfXRN
+vec3 plasma(float t) {
+    const vec3 c0 = vec3(0.05873234392399702, 0.02333670892565664, 0.5433401826748754);
+    const vec3 c1 = vec3(2.176514634195958, 0.2383834171260182, 0.7539604599784036);
+    const vec3 c2 = vec3(-2.689460476458034, -7.455851135738909, 3.110799939717086);
+    const vec3 c3 = vec3(6.130348345893603, 42.3461881477227, -28.51885465332158);
+    const vec3 c4 = vec3(-11.10743619062271, -82.66631109428045, 60.13984767418263);
+    const vec3 c5 = vec3(10.02306557647065, 71.41361770095349, -54.07218655560067);
+    const vec3 c6 = vec3(-3.658713842777788, -22.93153465461149, 18.19190778539828);
+    return c0+t*(c1+t*(c2+t*(c3+t*(c4+t*(c5+t*c6)))));
+}
+
+// https://www.shadertoy.com/view/3lBXR3
+vec3 turbo(float t) {
+    const vec3 c0 = vec3(0.1140890109226559, 0.06288340699912215, 0.2248337216805064);
+    const vec3 c1 = vec3(6.716419496985708, 3.182286745507602, 7.571581586103393);
+    const vec3 c2 = vec3(-66.09402360453038, -4.9279827041226, -10.09439367561635);
+    const vec3 c3 = vec3(228.7660791526501, 25.04986699771073, -91.54105330182436);
+    const vec3 c4 = vec3(-334.8351565777451, -69.31749712757485, 288.5858850615712);
+    const vec3 c5 = vec3(218.7637218434795, 67.52150567819112, -305.2045772184957);
+    const vec3 c6 = vec3(-52.88903478218835, -21.54527364654712, 110.5174647748972);
+    return c0+t*(c1+t*(c2+t*(c3+t*(c4+t*(c5+t*c6)))));
+}
 
 void main()
 {
-    color = texture(textureDiffuse, texCoord);
+    // compute normals
+    vec2 dx = vec2(mesh_size, 0.f);
+    vec2 dy = vec2(0.f, mesh_size);
+
+    vec3 normal;
+
+    normal.x = texture(textureHmap, tex_coord + dx).r - texture(textureHmap, tex_coord - dx).r;
+    normal.y = 2.f * mesh_size;
+    normal.z = texture(textureHmap, tex_coord + dy).r - texture(textureHmap, tex_coord - dy).r;
+    normal = normalize(normal);
+
+    if (show_normal_map)
+    {
+        color = vec4(0.5f * normal.xzy + 0.5f, 1.f);
+    }
+    else
+    {
+        if (use_texture_diffuse)
+            color = texture(textureDiffuse, tex_coord);
+        else
+            color = vec4(1.f, 1.f, 1.f, 1.f);
+
+        // color = vec4(turbo(h), 1.f);
+
+        // hillshading
+        float hillshade = (dot(normal, -light_dir) + 1.f - shadow_saturation) / (2.f - 2.f * shadow_saturation);
+        hillshade = clamp(hillshade, 0.f, 1.f);
+        hillshade = pow(hillshade, shadow_gamma);
+        hillshade = (1.f - shadow_strength) + shadow_strength * hillshade;
+
+        color *= vec4(vec3(hillshade), 1.f);
+    }
+
 }
 )"";
 
@@ -83,13 +164,13 @@ uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 
-out vec2 texCoord;
+out vec2 tex_coord;
 out vec3 fragNormal;
 
 void main()
 {
     gl_Position = projection * view * model * vec4(pos, 1.0);
-    texCoord = vec2(uv);
+    tex_coord = vec2(uv);
     fragNormal = normal; // mat3(transpose(inverse(model))) * normal;
 }
 )"";
@@ -98,7 +179,7 @@ static const std::string fragment_normal = R""(
 #version 330 core
 
 out vec4 color;
-in vec2 texCoord;
+in vec2 tex_coord;
 in vec3 fragNormal;
 
 uniform sampler2D textureDiffuse;
@@ -106,7 +187,7 @@ uniform sampler2D normalMap;
 
 void main()
 {
-    color = texture(normalMap, texCoord);
+    color = texture(normalMap, tex_coord);
 }
 )"";
 

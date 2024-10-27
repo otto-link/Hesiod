@@ -50,11 +50,10 @@ void OpenGLRender::bind_gl_buffers()
                (GLvoid *)&this->vertices[0],
                GL_STATIC_DRAW);
 
-  // int nfields = this->use_normals ? 8 : 5;
-  int nfields = 5;
+  int nfields = 4; // x, y, u, v
 
-  // postion
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, nfields * sizeof(float), (void *)0);
+  // position
+  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, nfields * sizeof(float), (void *)0);
   glEnableVertexAttribArray(0);
 
   // texture uv coordinates
@@ -63,20 +62,8 @@ void OpenGLRender::bind_gl_buffers()
                         GL_FLOAT,
                         GL_FALSE,
                         nfields * sizeof(float),
-                        (void *)(3 * sizeof(float)));
+                        (void *)(2 * sizeof(float)));
   glEnableVertexAttribArray(1);
-
-  // // normals (if any)
-  // if (this->use_normals)
-  // {
-  //   glVertexAttribPointer(2,
-  //                         3,
-  //                         GL_FLOAT,
-  //                         GL_FALSE,
-  //                         nfields * sizeof(float),
-  //                         (void *)(5 * sizeof(float)));
-  //   glEnableVertexAttribArray(2);
-  // }
 
   // face indices
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->ebo);
@@ -85,9 +72,9 @@ void OpenGLRender::bind_gl_buffers()
                (GLvoid *)&this->indices[0],
                GL_STATIC_DRAW);
 
-  // texture
+  // --- texture
   glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, this->texture_id);
+  glBindTexture(GL_TEXTURE_2D, this->texture_diffuse_id);
 
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -97,42 +84,61 @@ void OpenGLRender::bind_gl_buffers()
   glTexImage2D(GL_TEXTURE_2D,
                0,
                GL_RGBA,
-               this->texture_shape.x,
-               this->texture_shape.y,
+               this->texture_diffuse_shape.x,
+               this->texture_diffuse_shape.y,
                0,
                GL_RGBA,
                GL_UNSIGNED_BYTE,
                this->texture_diffuse.data());
-  glGenerateMipmap(GL_TEXTURE_2D);
 
-  // assign to texture sampler #0
   this->shader.setUniformValue("textureDiffuse", 0);
 
-  // normal map
-  if (this->use_normal_map)
-  {
-    glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, this->normal_map_id);
+  // --- hmap
+  glActiveTexture(GL_TEXTURE1);
+  glBindTexture(GL_TEXTURE_2D, this->texture_hmap_id);
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    glTexImage2D(GL_TEXTURE_2D,
-                 0,
-                 GL_RGB,
-                 this->texture_shape.x,
-                 this->texture_shape.y,
-                 0,
-                 GL_RGB,
-                 GL_UNSIGNED_BYTE,
-                 this->texture_normal_map.data());
-    glGenerateMipmap(GL_TEXTURE_2D);
+  glTexImage2D(GL_TEXTURE_2D,
+               0,
+               GL_RED, // grayscale
+               this->texture_hmap_shape.x,
+               this->texture_hmap_shape.y,
+               0,
+               GL_RED,
+               GL_UNSIGNED_SHORT, // uint16_t
+               this->texture_hmap.data());
 
-    // assign to texture sampler #1
-    this->shader.setUniformValue("normalMap", 1);
-  }
+  this->shader.setUniformValue("textureHmap", 1);
+
+  // // --- normal map
+  // if (this->use_normal_map)
+  // {
+  //   glActiveTexture(GL_TEXTURE2);
+  //   glBindTexture(GL_TEXTURE_2D, this->texture_normal_map_id);
+
+  //   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  //   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  //   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  //   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+  //   glTexImage2D(GL_TEXTURE_2D,
+  //                0,
+  //                GL_RGB,
+  //                this->texture_shape.x,
+  //                this->texture_shape.y,
+  //                0,
+  //                GL_RGB,
+  //                GL_UNSIGNED_BYTE,
+  //                this->texture_normal_map.data());
+  //   glGenerateMipmap(GL_TEXTURE_2D);
+
+  //   // assign to texture sampler
+  //   this->shader.setUniformValue("normalMap", 2);
+  // }
 
   // and... we're done
   this->qvao.release();
@@ -148,10 +154,8 @@ void OpenGLRender::initializeGL()
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
   glGenBuffers(1, &this->vbo);
   glGenBuffers(1, &this->ebo);
-  glGenTextures(1, &this->texture_id);
-
-  if (this->use_normal_map)
-    glGenTextures(1, &this->normal_map_id);
+  glGenTextures(1, &this->texture_diffuse_id);
+  glGenTextures(1, &this->texture_hmap_id);
 
   // shader program
   this->setup_shader();
@@ -262,6 +266,15 @@ void OpenGLRender::paintGL()
 
         glm::mat4 model_matrix = translation_matrix * rotation_matrix * scale_matrix;
 
+        // light direction
+        float zenith_rad = this->zenith / 180.f * 3.1415f;
+        float azimuth_rad = this->azimuth / 180.f * 3.1415f;
+
+        glm::vec3 light_dir = glm::vec3(std::cos(azimuth_rad) * std::cos(zenith_rad),
+                                        std::sin(zenith_rad),
+                                        std::sin(azimuth_rad) * std::cos(zenith_rad));
+
+        // send to shader
         this->shader.setUniformValue(
             "model",
             QMatrix4x4(glm::value_ptr(model_matrix)).transposed());
@@ -273,6 +286,18 @@ void OpenGLRender::paintGL()
         this->shader.setUniformValue(
             "projection",
             QMatrix4x4(glm::value_ptr(projection_matrix)).transposed());
+
+        this->shader.setUniformValue("mesh_size",
+                                     (float)(0.5f / this->texture_hmap_shape.x));
+        this->shader.setUniformValue("zmin", this->zmin);
+        this->shader.setUniformValue("zmax", this->zmax);
+        this->shader.setUniformValue("use_texture_diffuse", this->use_texture_diffuse);
+
+        this->shader.setUniformValue("light_dir", light_dir.x, light_dir.y, light_dir.z);
+        this->shader.setUniformValue("show_normal_map", this->show_normal_map);
+        this->shader.setUniformValue("shadow_saturation", this->shadow_saturation);
+        this->shader.setUniformValue("shadow_strength", this->shadow_strength);
+        this->shader.setUniformValue("shadow_gamma", this->shadow_gamma);
       }
 
 #ifdef HSD_OS_LINUX
@@ -321,73 +346,44 @@ void OpenGLRender::set_data(BaseNode          *new_p_node,
     int         port_index_elev = this->p_node->get_port_index(this->port_id_elev);
     std::string data_type_elev = this->p_node->get_data_type(port_index_elev);
 
+    // by default, no diffuse texture
+    this->use_texture_diffuse = false;
+
     // check that data are indeed available
     if (p_node->get_data_ref(port_index_elev))
     {
-
-      // --- elevation
-
-      bool        elev_done = false;
-      hmap::Array array;
-
-      if (data_type_elev == typeid(hmap::Array).name())
+      if (data_type_elev == typeid(hmap::HeightMap).name())
       {
-        LOG->trace("OpenGLRender::set_data, Array data");
+        // --- elevation
 
-        array = *this->p_node->get_value_ref<hmap::Array>(port_index_elev);
-        elev_done = true;
-      }
-      else if (data_type_elev == typeid(hmap::Cloud).name())
-      {
-        LOG->trace("OpenGLRender::set_data, Cloud data");
-
-        hmap::Cloud *p_cloud = this->p_node->get_value_ref<hmap::Cloud>(port_index_elev);
-        array = hmap::Array(p_node->get_config_ref()->shape);
-
-        if (p_cloud->get_npoints() > 0)
-        {
-          hmap::Vec4<float> bbox = hmap::Vec4<float>(0.f, 1.f, 0.f, 1.f);
-          p_cloud->to_array(array, bbox);
-        }
-
-        elev_done = true;
-      }
-      else if (data_type_elev == typeid(hmap::HeightMap).name())
-      {
         LOG->trace("OpenGLRender::set_data, HeightMap data");
 
         hmap::HeightMap *p_h = this->p_node->get_value_ref<hmap::HeightMap>(
             port_index_elev);
-        array = p_h->to_array();
 
-        elev_done = true;
-      }
+        this->texture_hmap = p_h->to_grayscale_image_16bit();
+        this->texture_hmap_shape = p_h->shape;
 
-      if (elev_done)
-      {
         // --- generate triangle mesh
 
         if (this->use_approx_mesh)
         {
-          bool add_base = !this->wireframe_mode;
+          hmap::Array array = p_h->to_array();
+
           generate_mesh_approximation(array,
                                       this->vertices,
                                       this->indices,
-                                      this->max_approx_error,
-                                      add_base);
+                                      this->max_approx_error);
         }
         else
         {
           // necessary if the model configuration is changed by the user
-          if (array.size() != (int)this->vertices.size())
-            generate_basemesh(array.shape, this->vertices, this->indices);
-
-          update_vertex_elevations(array, this->vertices);
+          if (4 * this->texture_hmap_shape.x * this->texture_hmap_shape.y !=
+              (int)this->vertices.size())
+            generate_basemesh(this->texture_hmap_shape, this->vertices, this->indices);
         }
 
         // --- color array
-
-        bool color_done = false;
 
         // colorize based on the selected data (if any)
         if (this->port_id_color != "")
@@ -411,11 +407,8 @@ void OpenGLRender::set_data(BaseNode          *new_p_node,
                 cloud.to_array(c, bbox);
 
                 this->texture_diffuse = generate_selector_image(c);
-                this->texture_shape = c.shape;
-
-                hmap::apply_hillshade(this->texture_diffuse, array, 0.f, 1.f, 1.5f, true);
-
-                color_done = true;
+                this->texture_diffuse_shape = c.shape;
+                this->use_texture_diffuse = true;
               }
             }
             //
@@ -426,11 +419,8 @@ void OpenGLRender::set_data(BaseNode          *new_p_node,
               hmap::Array c = p_c->to_array();
 
               this->texture_diffuse = generate_selector_image(c);
-              this->texture_shape = p_c->shape;
-
-              hmap::apply_hillshade(this->texture_diffuse, array, 0.f, 1.f, 1.5f, true);
-
-              color_done = true;
+              this->texture_diffuse_shape = p_c->shape;
+              this->use_texture_diffuse = true;
             }
             //
             else if (data_type_color == typeid(hmap::HeightMapRGBA).name())
@@ -439,12 +429,8 @@ void OpenGLRender::set_data(BaseNode          *new_p_node,
                   port_index_color);
 
               this->texture_diffuse = p_c->to_img_8bit(p_c->shape);
-              this->texture_shape = p_c->shape;
-
-              // 'true' for RGBA, '0.9f' is exponent applied to shadows
-              hmap::apply_hillshade(this->texture_diffuse, array, 0.f, 1.5f, 0.9f, true);
-
-              color_done = true;
+              this->texture_diffuse_shape = p_c->shape;
+              this->use_texture_diffuse = true;
             }
             //
             else if (data_type_color == typeid(hmap::Path).name())
@@ -460,40 +446,11 @@ void OpenGLRender::set_data(BaseNode          *new_p_node,
                 path.to_array(c, bbox);
 
                 this->texture_diffuse = generate_selector_image(c);
-                this->texture_shape = c.shape;
-
-                hmap::apply_hillshade(this->texture_diffuse, array, 0.f, 1.f, 1.5f, true);
-
-                color_done = true;
+                this->texture_diffuse_shape = c.shape;
+                this->use_texture_diffuse = true;
               }
             }
           }
-        }
-
-        // default coloring (if no data available or no coloring
-        // strategy for the data type)
-        if (!color_done)
-        {
-          this->texture_diffuse.resize(4 * array.shape.x * array.shape.y);
-
-          hmap::Array hs = hillshade(array,
-                                     180.f,
-                                     45.f,
-                                     10.f * array.ptp() / (float)array.shape.x);
-          hmap::remap(hs);
-          hs = hmap::pow(hs, 1.5f);
-
-          int k = 0;
-          for (int j = array.shape.y - 1; j > -1; j--)
-            for (int i = 0; i < array.shape.x; i++)
-            {
-              this->texture_diffuse[k++] = (uint8_t)(255.f * hs(i, j));
-              this->texture_diffuse[k++] = (uint8_t)(255.f * hs(i, j));
-              this->texture_diffuse[k++] = (uint8_t)(255.f * hs(i, j));
-              this->texture_diffuse[k++] = (uint8_t)(255.f);
-            }
-
-          this->texture_shape = array.shape;
         }
 
         // send to OpenGL buffers and update
@@ -515,6 +472,12 @@ void OpenGLRender::set_data(BaseNode          *new_p_node,
   this->repaint();
 }
 
+void OpenGLRender::set_azimuth(float new_azimuth)
+{
+  this->azimuth = new_azimuth;
+  this->update();
+}
+
 void OpenGLRender::set_max_approx_error(float new_max_approx_error)
 {
   this->max_approx_error = new_max_approx_error;
@@ -527,6 +490,30 @@ void OpenGLRender::set_shader_type(const ShaderType &new_shader_type)
   this->setup_shader();
 }
 
+void OpenGLRender::set_shadow_saturation(float new_shadow_saturation)
+{
+  this->shadow_saturation = new_shadow_saturation;
+  this->update();
+}
+
+void OpenGLRender::set_shadow_strength(float new_shadow_strength)
+{
+  this->shadow_strength = new_shadow_strength;
+  this->update();
+}
+
+void OpenGLRender::set_shadow_gamma(float new_shadow_gamma)
+{
+  this->shadow_gamma = new_shadow_gamma;
+  this->update();
+}
+
+void OpenGLRender::set_show_normal_map(bool new_show_normal_map)
+{
+  this->show_normal_map = new_show_normal_map;
+  this->update();
+}
+
 void OpenGLRender::set_use_approx_mesh(bool new_use_approx_mesh)
 {
   this->use_approx_mesh = new_use_approx_mesh;
@@ -537,6 +524,12 @@ void OpenGLRender::set_wireframe_mode(bool new_wireframe_mode)
 {
   this->wireframe_mode = new_wireframe_mode;
   this->set_data_again();
+}
+
+void OpenGLRender::set_zenith(float new_zenith)
+{
+  this->zenith = new_zenith;
+  this->update();
 }
 
 void OpenGLRender::setup_shader()

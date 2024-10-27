@@ -18,8 +18,6 @@ namespace hesiod
 Viewer3d::Viewer3d(GraphEditor *p_graph_editor, QWidget *parent, std::string label)
     : AbstractViewer(p_graph_editor, parent, label)
 {
-  // AbstractViewer::AbstractViewer(p_graph_editor, parent, label);
-
   QGridLayout *layout = dynamic_cast<QGridLayout *>(this->layout());
   int          row = layout->rowCount();
 

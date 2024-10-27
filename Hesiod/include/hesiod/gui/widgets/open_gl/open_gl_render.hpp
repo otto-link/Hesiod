@@ -43,9 +43,13 @@ public:
 
   bool get_use_approx_mesh() { return this->use_approx_mesh; }
 
+  bool get_show_normal_map() { return this->show_normal_map; }
+
   bool get_wireframe_mode() { return this->wireframe_mode; }
 
   void on_node_compute_finished(const std::string &id);
+
+  void set_azimuth(float new_azimuth);
 
   virtual void set_data(BaseNode          *new_p_node,
                         const std::string &new_port_id_elev,
@@ -61,9 +65,19 @@ public:
 
   void set_shader_type(const ShaderType &new_shader_type);
 
+  void set_shadow_saturation(float new_shadow_saturation);
+
+  void set_shadow_strength(float new_shadow_strength);
+
+  void set_shadow_gamma(float new_shadow_gamma);
+
+  void set_show_normal_map(bool new_show_normal_map);
+
   void set_use_approx_mesh(bool new_use_approx_mesh);
 
   void set_wireframe_mode(bool new_wireframe_mode);
+
+  void set_zenith(float new_zenith);
 
   void setup_shader();
 
@@ -101,22 +115,25 @@ protected:
   QOpenGLShaderProgram     shader;
   GLuint                   vbo;
   GLuint                   ebo;
-  GLuint                   texture_id;
-  GLuint                   normal_map_id;
-  bool                     use_normal_map = true;
+  GLuint                   texture_diffuse_id;
+  GLuint                   texture_hmap_id;
   ShaderType               shader_type;
 
   // mesh and texture
-  std::vector<GLfloat> vertices = {};
-  std::vector<uint>    indices = {};
-  std::vector<uint8_t> texture_diffuse = {};
-  std::vector<uint8_t> texture_normal_map = {};
-  hmap::Vec2<int>      texture_shape = hmap::Vec2<int>(0, 0);
+  std::vector<GLfloat>  vertices = {};
+  std::vector<uint>     indices = {};
+  std::vector<uint8_t>  texture_diffuse = {};
+  std::vector<uint16_t> texture_hmap = {};
+  hmap::Vec2<int>       texture_diffuse_shape = hmap::Vec2<int>(0, 0);
+  hmap::Vec2<int>       texture_hmap_shape = hmap::Vec2<int>(0, 0);
 
-  bool  use_approx_mesh = true;
-  float max_approx_error = 5e-3f;
+  // states whether the texture diffuse has been defined and is to be used in the shader
+  bool use_texture_diffuse;
 
-  // view parameters
+  // user view parameters
+  float zmin = 0.f;
+  float zmax = 1.f;
+
   float scale = 0.7f;
   float h_scale = 0.4f;
   float alpha_x = 35.f;
@@ -124,12 +141,23 @@ protected:
   float delta_x = 0.f;
   float delta_y = 0.f;
 
+  float zenith = 0.f;
+  float azimuth = 0.f;
+
+  float shadow_saturation = 0.f;
+  float shadow_strength = 1.f;
+  float shadow_gamma = 1.f;
+
   float fov = 60.0f;
   float aspect_ratio = 1.f;
   float near_plane = 0.1f;
   float far_plane = 100.0f;
 
   bool wireframe_mode = false;
+  bool show_normal_map = false;
+
+  bool  use_approx_mesh = false;
+  float max_approx_error = 5e-3f;
 
   QPointF mouse_pos_bckp;
   float   alpha_x_bckp, alpha_y_bckp, delta_x_bckp, delta_y_bckp;
@@ -139,9 +167,6 @@ protected:
 
 // helpers
 
-std::vector<glm::vec3> compute_point_normals(const std::vector<glm::vec3>  &points,
-                                             const std::vector<glm::ivec3> &triangles);
-
 void generate_basemesh(hmap::Vec2<int>       shape,
                        std::vector<GLfloat> &vertices,
                        std::vector<uint>    &indices);
@@ -149,11 +174,15 @@ void generate_basemesh(hmap::Vec2<int>       shape,
 void generate_mesh_approximation(hmap::Array          &z,
                                  std::vector<GLfloat> &vertices,
                                  std::vector<uint>    &indices,
-                                 float                 max_error,
-                                 bool                  add_base = true,
-                                 bool                  compute_normals = false);
+                                 float                 max_error);
 
-void update_vertex_elevations(hmap::Array &z, std::vector<GLfloat> &vertices);
+std::vector<uint16_t> generate_grayscale_image_16bit(hmap::Array &array,
+                                                     float        vmin = 0.f,
+                                                     float        vmax = 1.f);
+
+std::vector<uint8_t> generate_grayscale_image_8bit(hmap::Array &array,
+                                                   float        vmin = 0.f,
+                                                   float        vmax = 1.f);
 
 std::vector<uint8_t> generate_selector_image(hmap::Array &array);
 
