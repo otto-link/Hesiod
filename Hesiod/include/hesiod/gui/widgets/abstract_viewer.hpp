@@ -51,7 +51,8 @@ Q_SIGNALS:
 
   void view_param_changed(BaseNode          *p_node,
                           const std::string &port_id_elev,
-                          const std::string &port_id_color);
+                          const std::string &port_id_color,
+                          const std::string &port_id_normal_map);
 
 public Q_SLOTS:
   void on_node_deleted(const std::string &id);
@@ -73,6 +74,7 @@ protected:
 
     std::string port_id_elev = "";
     std::string port_id_color = "";
+    std::string port_id_normal_map = "";
   };
 
   std::string current_node_id;
@@ -87,6 +89,7 @@ protected:
   QLabel      *label_node_id;
   QComboBox   *combo_elev;
   QComboBox   *combo_color;
+  QComboBox   *combo_normal_map;
 
   // used to avoid interfering with the combo and the data when programmatically modifying
   // the combo

@@ -1,6 +1,7 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include <QComboBox>
 #include <QGridLayout>
 #include <QPushButton>
 
@@ -62,16 +63,29 @@ OpenGLWidget::OpenGLWidget(QWidget *parent) : QWidget(parent)
 
   // normal map
   {
-    std::string label = "Normal map";
+    std::vector<std::string> labels = {"Texture", "Normal map", "Heightmap"};
 
-    QPushButton *button = new QPushButton(label.c_str());
-    button->setCheckable(true);
-    layout->addWidget(button, row, col++);
-    this->connect(
-        button,
-        &QPushButton::toggled,
-        [this, button]()
-        { this->renderer->set_show_normal_map(!this->renderer->get_show_normal_map()); });
+    QComboBox *combobox = new QComboBox();
+
+    for (auto &label : labels)
+      combobox->addItem(label.c_str());
+
+    layout->addWidget(combobox, row, col++);
+
+    connect(combobox,
+            QOverload<int>::of(&QComboBox::currentIndexChanged),
+            [this, combobox]()
+            {
+              std::string current_choice = combobox->currentText().toStdString();
+
+              this->renderer->set_show_normal_map(false);
+              this->renderer->set_show_heightmap(false);
+
+              if (current_choice == "Normal map")
+                this->renderer->set_show_normal_map(true);
+              else if (current_choice == "Heightmap")
+                this->renderer->set_show_heightmap(true);
+            });
   }
 
   // approx. mesh
@@ -212,10 +226,14 @@ void OpenGLWidget::on_node_compute_finished(const std::string &id)
 
 void OpenGLWidget::set_data(BaseNode          *new_p_node,
                             const std::string &new_port_id_elev,
-                            const std::string &new_port_id_color)
+                            const std::string &new_port_id_color,
+                            const std::string &new_port_id_normal_map)
 {
   // pass through the renderer
-  this->renderer->set_data(new_p_node, new_port_id_elev, new_port_id_color);
+  this->renderer->set_data(new_p_node,
+                           new_port_id_elev,
+                           new_port_id_color,
+                           new_port_id_normal_map);
 }
 
 } // namespace hesiod

@@ -76,7 +76,9 @@ in float h; // elevation in [0, 1]
 
 uniform float mesh_size;
 uniform bool use_texture_diffuse;
+uniform bool use_texture_normal;
 uniform bool show_normal_map;
+uniform bool show_heightmap;
 uniform vec3 light_dir;
 uniform float shadow_saturation;
 uniform float shadow_strength;
@@ -84,22 +86,10 @@ uniform float shadow_gamma;
 
 uniform sampler2D textureDiffuse;
 uniform sampler2D textureHmap;
-uniform sampler2D normalMap;
+uniform sampler2D textureNormal;
 
 // OUT
 out vec4 color;
-
-// https://www.shadertoy.com/view/WlfXRN
-vec3 plasma(float t) {
-    const vec3 c0 = vec3(0.05873234392399702, 0.02333670892565664, 0.5433401826748754);
-    const vec3 c1 = vec3(2.176514634195958, 0.2383834171260182, 0.7539604599784036);
-    const vec3 c2 = vec3(-2.689460476458034, -7.455851135738909, 3.110799939717086);
-    const vec3 c3 = vec3(6.130348345893603, 42.3461881477227, -28.51885465332158);
-    const vec3 c4 = vec3(-11.10743619062271, -82.66631109428045, 60.13984767418263);
-    const vec3 c5 = vec3(10.02306557647065, 71.41361770095349, -54.07218655560067);
-    const vec3 c6 = vec3(-3.658713842777788, -22.93153465461149, 18.19190778539828);
-    return c0+t*(c1+t*(c2+t*(c3+t*(c4+t*(c5+t*c6)))));
-}
 
 // https://www.shadertoy.com/view/3lBXR3
 vec3 turbo(float t) {
@@ -126,18 +116,28 @@ void main()
     normal.z = texture(textureHmap, tex_coord + dy).r - texture(textureHmap, tex_coord - dy).r;
     normal = normalize(normal);
 
+    if (use_texture_normal)
+    {
+        // add details
+        vec3 normal_detail = texture(textureNormal, tex_coord).xyz;
+        normal_detail = vec3(normal_detail.x, normal_detail.z, normal_detail.y);
+
+        normal += normal_detail;
+        normal = normalize(normal);
+    }
+
     if (show_normal_map)
     {
         color = vec4(0.5f * normal.xzy + 0.5f, 1.f);
     }
     else
     {
-        if (use_texture_diffuse)
+        if (show_heightmap)
+            color = vec4(turbo(h), 1.f);
+        else if (use_texture_diffuse)
             color = texture(textureDiffuse, tex_coord);
         else
             color = vec4(1.f, 1.f, 1.f, 1.f);
-
-        // color = vec4(turbo(h), 1.f);
 
         // hillshading
         float hillshade = (dot(normal, -light_dir) + 1.f - shadow_saturation) / (2.f - 2.f * shadow_saturation);

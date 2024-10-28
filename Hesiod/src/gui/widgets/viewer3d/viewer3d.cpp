@@ -36,7 +36,7 @@ Viewer3d::Viewer3d(GraphEditor *p_graph_editor, QWidget *parent, std::string lab
                   &OpenGLWidget::set_data);
   }
 
-  layout->addWidget(this->render_widget, row++, 0, 1, 4);
+  layout->addWidget(this->render_widget, row++, 0, 1, layout->columnCount());
 
   // update contents
   this->update_view_param_widgets();

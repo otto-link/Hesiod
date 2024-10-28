@@ -31,7 +31,8 @@ public:
 
   void set_data(BaseNode          *new_p_node,
                 const std::string &new_port_id_elev,
-                const std::string &new_port_id_color);
+                const std::string &new_port_id_color,
+                const std::string &new_port_id_normal_map);
 
   void on_node_compute_finished(const std::string &id);
 

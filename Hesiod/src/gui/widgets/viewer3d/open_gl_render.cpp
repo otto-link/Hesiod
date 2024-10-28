@@ -114,31 +114,26 @@ void OpenGLRender::bind_gl_buffers()
 
   this->shader.setUniformValue("textureHmap", 1);
 
-  // // --- normal map
-  // if (this->use_normal_map)
-  // {
-  //   glActiveTexture(GL_TEXTURE2);
-  //   glBindTexture(GL_TEXTURE_2D, this->texture_normal_map_id);
+  // --- normal map
+  glActiveTexture(GL_TEXTURE2);
+  glBindTexture(GL_TEXTURE_2D, this->texture_normal_id);
 
-  //   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  //   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-  //   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  //   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-  //   glTexImage2D(GL_TEXTURE_2D,
-  //                0,
-  //                GL_RGB,
-  //                this->texture_shape.x,
-  //                this->texture_shape.y,
-  //                0,
-  //                GL_RGB,
-  //                GL_UNSIGNED_BYTE,
-  //                this->texture_normal_map.data());
-  //   glGenerateMipmap(GL_TEXTURE_2D);
+  glTexImage2D(GL_TEXTURE_2D,
+               0,
+               GL_RGBA,
+               this->texture_normal_shape.x,
+               this->texture_normal_shape.y,
+               0,
+               GL_RGBA,
+               GL_UNSIGNED_BYTE,
+               this->texture_normal.data());
 
-  //   // assign to texture sampler
-  //   this->shader.setUniformValue("normalMap", 2);
-  // }
+  this->shader.setUniformValue("textureNormal", 2);
 
   // and... we're done
   this->qvao.release();
@@ -156,6 +151,7 @@ void OpenGLRender::initializeGL()
   glGenBuffers(1, &this->ebo);
   glGenTextures(1, &this->texture_diffuse_id);
   glGenTextures(1, &this->texture_hmap_id);
+  glGenTextures(1, &this->texture_normal_id);
 
   // shader program
   this->setup_shader();
@@ -292,9 +288,11 @@ void OpenGLRender::paintGL()
         this->shader.setUniformValue("zmin", this->zmin);
         this->shader.setUniformValue("zmax", this->zmax);
         this->shader.setUniformValue("use_texture_diffuse", this->use_texture_diffuse);
+        this->shader.setUniformValue("use_texture_normal", this->use_texture_normal);
 
         this->shader.setUniformValue("light_dir", light_dir.x, light_dir.y, light_dir.z);
         this->shader.setUniformValue("show_normal_map", this->show_normal_map);
+        this->shader.setUniformValue("show_heightmap", this->show_heightmap);
         this->shader.setUniformValue("shadow_saturation", this->shadow_saturation);
         this->shader.setUniformValue("shadow_strength", this->shadow_strength);
         this->shader.setUniformValue("shadow_gamma", this->shadow_gamma);
@@ -328,16 +326,19 @@ void OpenGLRender::resizeEvent(QResizeEvent *event)
 
 void OpenGLRender::set_data(BaseNode          *new_p_node,
                             const std::string &new_port_id_elev,
-                            const std::string &new_port_id_color)
+                            const std::string &new_port_id_color,
+                            const std::string &new_port_id_normal_map)
 {
-  LOG->trace("OpenGLRender::set_data, [{}] [{}] [{}]",
+  LOG->trace("OpenGLRender::set_data, [{}] [{}] [{}] [{}]",
              p_node ? "non-nullptr" : "nullptr",
              new_port_id_elev,
-             new_port_id_color);
+             new_port_id_color,
+             new_port_id_normal_map);
 
   this->p_node = new_p_node;
   this->port_id_elev = new_port_id_elev;
   this->port_id_color = new_port_id_color;
+  this->port_id_normal_map = new_port_id_normal_map;
 
   if (this->p_node)
   {
@@ -346,8 +347,9 @@ void OpenGLRender::set_data(BaseNode          *new_p_node,
     int         port_index_elev = this->p_node->get_port_index(this->port_id_elev);
     std::string data_type_elev = this->p_node->get_data_type(port_index_elev);
 
-    // by default, no diffuse texture
+    // by default, no diffuse texture or normal map
     this->use_texture_diffuse = false;
+    this->use_texture_normal = false;
 
     // check that data are indeed available
     if (p_node->get_data_ref(port_index_elev))
@@ -451,6 +453,32 @@ void OpenGLRender::set_data(BaseNode          *new_p_node,
               }
             }
           }
+
+          // --- normal map
+
+          // send normal map
+          if (this->port_id_normal_map != "")
+          {
+            int port_index_normal_map = this->p_node->get_port_index(
+                this->port_id_normal_map);
+            std::string data_type_normal_map = this->p_node->get_data_type(
+                port_index_normal_map);
+
+            if (p_node->get_data_ref(port_index_normal_map))
+            {
+
+              if (data_type_normal_map == typeid(hmap::HeightMapRGBA).name())
+              {
+                hmap::HeightMapRGBA *p_c = this->p_node
+                                               ->get_value_ref<hmap::HeightMapRGBA>(
+                                                   port_index_normal_map);
+
+                this->texture_normal = p_c->to_img_8bit(p_c->shape);
+                this->texture_normal_shape = p_c->shape;
+                this->use_texture_normal = true;
+              }
+            }
+          }
         }
 
         // send to OpenGL buffers and update
@@ -505,6 +533,12 @@ void OpenGLRender::set_shadow_strength(float new_shadow_strength)
 void OpenGLRender::set_shadow_gamma(float new_shadow_gamma)
 {
   this->shadow_gamma = new_shadow_gamma;
+  this->update();
+}
+
+void OpenGLRender::set_show_heightmap(bool new_show_heightmap)
+{
+  this->show_heightmap = new_show_heightmap;
   this->update();
 }
 

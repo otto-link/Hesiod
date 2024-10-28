@@ -20,6 +20,7 @@ void setup_preview_node(BaseNode *p_node)
   // port(s)
   p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "elevation");
   p_node->add_port<hmap::HeightMapRGBA>(gnode::PortType::IN, "texture");
+  p_node->add_port<hmap::HeightMapRGBA>(gnode::PortType::IN, "normal map");
 }
 
 void compute_preview_node(BaseNode *p_node)

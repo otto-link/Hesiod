@@ -53,7 +53,8 @@ public:
 
   virtual void set_data(BaseNode          *new_p_node,
                         const std::string &new_port_id_elev,
-                        const std::string &new_port_id_color);
+                        const std::string &new_port_id_color,
+                        const std::string &new_port_id_normal_map);
 
   void set_h_scale(float new_h_scale)
   {
@@ -70,6 +71,8 @@ public:
   void set_shadow_strength(float new_shadow_strength);
 
   void set_shadow_gamma(float new_shadow_gamma);
+
+  void set_show_heightmap(bool new_show_heightmap);
 
   void set_show_normal_map(bool new_show_normal_map);
 
@@ -100,7 +103,10 @@ protected:
 
   void set_data_again()
   {
-    this->set_data(this->p_node, this->port_id_elev, this->port_id_color);
+    this->set_data(this->p_node,
+                   this->port_id_elev,
+                   this->port_id_color,
+                   this->port_id_normal_map);
   }
 
   void wheelEvent(QWheelEvent *event) override;
@@ -109,6 +115,7 @@ protected:
   BaseNode   *p_node;
   std::string port_id_elev;
   std::string port_id_color;
+  std::string port_id_normal_map;
 
   // OpenGL
   QOpenGLVertexArrayObject qvao;
@@ -117,6 +124,7 @@ protected:
   GLuint                   ebo;
   GLuint                   texture_diffuse_id;
   GLuint                   texture_hmap_id;
+  GLuint                   texture_normal_id;
   ShaderType               shader_type;
 
   // mesh and texture
@@ -124,11 +132,14 @@ protected:
   std::vector<uint>     indices = {};
   std::vector<uint8_t>  texture_diffuse = {};
   std::vector<uint16_t> texture_hmap = {};
+  std::vector<uint8_t>  texture_normal = {};
   hmap::Vec2<int>       texture_diffuse_shape = hmap::Vec2<int>(0, 0);
   hmap::Vec2<int>       texture_hmap_shape = hmap::Vec2<int>(0, 0);
+  hmap::Vec2<int>       texture_normal_shape = hmap::Vec2<int>(0, 0);
 
   // states whether the texture diffuse has been defined and is to be used in the shader
   bool use_texture_diffuse;
+  bool use_texture_normal;
 
   // user view parameters
   float zmin = 0.f;
@@ -155,6 +166,7 @@ protected:
 
   bool wireframe_mode = false;
   bool show_normal_map = false;
+  bool show_heightmap = false;
 
   bool  use_approx_mesh = false;
   float max_approx_error = 5e-3f;
