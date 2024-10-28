@@ -33,7 +33,7 @@ void setup_mix_normal_map_node(BaseNode *p_node)
                                      "blending_method");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({});
+  p_node->set_attr_ordered_key({"detail_scaling", "blending_method"});
 }
 
 void compute_mix_normal_map_node(BaseNode *p_node)
