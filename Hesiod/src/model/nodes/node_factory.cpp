@@ -91,6 +91,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"MakePeriodic", "Operator/Tiling"},
       {"MakePeriodicStitching", "Operator/Tiling"},
       {"Median3x3", "Filter/Smoothing"},
+      {"MixNormalMap", "Texture"},
       {"MixTexture", "Texture"},
       {"Mixer", "Operator/Blend"},
       {"MorphologicalGradient", "Operator/Morphology"},
@@ -261,12 +262,13 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(KmeansClustering3, kmeans_clustering3);
     SETUP_NODE(Laplace, laplace);
     SETUP_NODE(Lerp, lerp);
-    SETUP_NODE(MixTexture, mix_texture);
     SETUP_NODE(MakeBinary, make_binary);
     SETUP_NODE(MakePeriodic, make_periodic);
     SETUP_NODE(MakePeriodicStitching, make_periodic_stitching);
     SETUP_NODE(Median3x3, median3x3);
     SETUP_NODE(Mixer, mixer);
+    SETUP_NODE(MixNormalMap, mix_normal_map);
+    SETUP_NODE(MixTexture, mix_texture);
     SETUP_NODE(MorphologicalGradient, morphological_gradient);
     SETUP_NODE(Noise, noise);
     SETUP_NODE(NoiseFbm, noise_fbm);
