@@ -119,6 +119,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"PathToHeightmap", "Converter"},
       {"Plateau", "Filter/Recurve"},
       {"Preview", "Debug"},
+      {"QuiltingBlend", "Operator/Resynthesis"},
       {"QuiltingExpand", "Operator/Resynthesis"},
       {"QuiltingShuffle", "Operator/Resynthesis"},
       {"RadialDisplacementToXy", "Math"},
@@ -294,6 +295,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(PathToHeightmap, path_to_heightmap);
     SETUP_NODE(Plateau, plateau);
     SETUP_NODE(Preview, preview);
+    SETUP_NODE(QuiltingBlend, quilting_blend);
     SETUP_NODE(QuiltingExpand, quilting_expand);
     SETUP_NODE(QuiltingShuffle, quilting_shuffle);
     SETUP_NODE(RadialDisplacementToXy, radial_displacement_to_xy);
