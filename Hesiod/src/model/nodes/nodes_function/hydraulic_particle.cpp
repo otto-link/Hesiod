@@ -43,7 +43,7 @@ void setup_hydraulic_particle_node(BaseNode *p_node)
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"seed",
-                                "nparticles",
+                                "particle_density",
                                 "c_capacity",
                                 "c_erosion",
                                 "c_deposition",
