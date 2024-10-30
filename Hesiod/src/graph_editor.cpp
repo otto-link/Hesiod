@@ -155,12 +155,12 @@ GraphEditor::GraphEditor(const std::string           &id,
 
 void GraphEditor::clear()
 {
-  this->viewer_disable();
+  this->graph_viewer_disable();
 
   // clear graph viewer
   if (this->viewer)
   {
-    for (auto &v : this->viewers)
+    for (auto &v : this->data_viewers)
       dynamic_cast<AbstractViewer *>(v.get())->clear();
 
     this->viewer->clear();
@@ -172,7 +172,7 @@ void GraphEditor::clear()
   // clear editor
   this->fname = "";
 
-  this->viewer_enable();
+  this->graph_viewer_enable();
 }
 
 void GraphEditor::json_from(nlohmann::json const &json, bool override_config)
@@ -192,7 +192,7 @@ void GraphEditor::json_from(nlohmann::json const &json, bool override_config)
 
   if (this->viewer)
   {
-    for (auto &v : this->viewers)
+    for (auto &v : this->data_viewers)
       dynamic_cast<AbstractViewer *>(v.get())->clear();
 
     // to prevent nodes update at each link creation when the loading
@@ -222,7 +222,7 @@ nlohmann::json GraphEditor::json_to() const
 void GraphEditor::load_from_file(const std::filesystem::path &load_fname,
                                  bool                         override_config)
 {
-  this->viewer_disable();
+  this->graph_viewer_disable();
 
   // load json
   nlohmann::json json;
@@ -246,7 +246,7 @@ void GraphEditor::load_from_file(const std::filesystem::path &load_fname,
   else
     LOG->error("Could not open file {} to load JSON", load_fname.string());
 
-  this->viewer_enable();
+  this->graph_viewer_enable();
 }
 
 void GraphEditor::on_connection_deleted(const std::string &id_out,
@@ -615,17 +615,17 @@ void GraphEditor::on_viewport_request()
 {
   LOG->trace("GraphEditor::on_viewport_request");
 
-  this->viewers.push_back(std::make_unique<Viewer3d>(this));
-  this->viewers.back()->show();
+  this->data_viewers.push_back(std::make_unique<Viewer3d>(this));
+  this->data_viewers.back()->show();
 
-  Viewer3d *p_viewer = dynamic_cast<Viewer3d *>(this->viewers.back().get());
+  Viewer3d *p_viewer = dynamic_cast<Viewer3d *>(this->data_viewers.back().get());
 
   // remove the widget from the widget list if it is closed
   this->connect(p_viewer,
                 &Viewer3d::widget_close,
                 [this, p_viewer]()
                 {
-                  std::erase_if(this->viewers,
+                  std::erase_if(this->data_viewers,
                                 [p_viewer](const std::unique_ptr<QWidget> &sptr)
                                 { return sptr.get() == p_viewer; });
                 });
@@ -655,19 +655,19 @@ void GraphEditor::set_fname(const std::string &new_fname)
 
 void GraphEditor::update()
 {
-  this->viewer_disable();
+  this->graph_viewer_disable();
   GraphNode::update();
-  this->viewer_enable();
+  this->graph_viewer_enable();
 }
 
 void GraphEditor::update(std::string id)
 {
-  this->viewer_disable();
+  this->graph_viewer_disable();
   GraphNode::update(id);
-  this->viewer_enable();
+  this->graph_viewer_enable();
 }
 
-void GraphEditor::viewer_disable()
+void GraphEditor::graph_viewer_disable()
 {
   if (this->viewer)
   {
@@ -676,7 +676,7 @@ void GraphEditor::viewer_disable()
   }
 }
 
-void GraphEditor::viewer_enable()
+void GraphEditor::graph_viewer_enable()
 {
   if (this->viewer)
   {

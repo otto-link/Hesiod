@@ -111,7 +111,7 @@ private:
 
   std::filesystem::path fname = "";
 
-  std::vector<std::unique_ptr<QWidget>> viewers;
+  std::vector<std::unique_ptr<QWidget>> data_viewers;
 
   bool update_node_on_new_link = true;
 
@@ -119,9 +119,9 @@ private:
 
   void set_fname(const std::string &new_fname);
 
-  void viewer_disable();
+  void graph_viewer_disable();
 
-  void viewer_enable();
+  void graph_viewer_enable();
 };
 
 } // namespace hesiod
