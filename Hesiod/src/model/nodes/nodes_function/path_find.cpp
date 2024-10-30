@@ -1,7 +1,6 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-#include "highmap/filters.hpp"
 #include "highmap/geometry/path.hpp"
 
 #include "attributes.hpp"
@@ -26,9 +25,9 @@ void setup_path_find_node(BaseNode *p_node)
   p_node->add_port<hmap::Path>(gnode::PortType::OUT, "path");
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("elevation_ratio", 0.5f, 0.f, 0.9f, "elevation_ratio");
+  p_node->add_attr<FloatAttribute>("elevation_ratio", 0.1f, 0.f, 0.9f, "elevation_ratio");
   p_node->add_attr<FloatAttribute>("distance_exponent",
-                                   2.f,
+                                   1.f,
                                    0.5f,
                                    2.f,
                                    "distance_exponent");

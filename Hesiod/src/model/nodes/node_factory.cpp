@@ -111,6 +111,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"PathBezierRound", "Geometry/Path"},
       {"PathBspline", "Geometry/Path"},
       {"PathDecasteljau", "Geometry/Path"},
+      {"PathDig", "Geometry/Path"},
       {"PathFind", "Geometry/Path"},
       {"PathFractalize", "Geometry/Path"},
       {"PathMeanderize", "Geometry/Path"},
@@ -289,6 +290,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(PathBezierRound, path_bezier_round);
     SETUP_NODE(PathBspline, path_bspline);
     SETUP_NODE(PathDecasteljau, path_decasteljau);
+    SETUP_NODE(PathDig, path_dig);
     SETUP_NODE(PathFind, path_find);
     SETUP_NODE(PathFractalize, path_fractalize);
     SETUP_NODE(PathMeanderize, path_meanderize);

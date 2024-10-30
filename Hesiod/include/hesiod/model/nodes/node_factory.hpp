@@ -164,6 +164,7 @@ DECLARE_NODE(path_bezier);
 DECLARE_NODE(path_bezier_round);
 DECLARE_NODE(path_bspline);
 DECLARE_NODE(path_decasteljau);
+DECLARE_NODE(path_dig);
 DECLARE_NODE(path_find);
 DECLARE_NODE(path_fractalize);
 DECLARE_NODE(path_meanderize);
