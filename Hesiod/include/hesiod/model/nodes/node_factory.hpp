@@ -170,6 +170,7 @@ DECLARE_NODE(path_fractalize);
 DECLARE_NODE(path_meanderize);
 DECLARE_NODE(path_resample);
 DECLARE_NODE(path_sdf);
+DECLARE_NODE(path_smooth);
 DECLARE_NODE(path_to_cloud)
 DECLARE_NODE(path_to_heightmap)
 DECLARE_NODE(plateau)

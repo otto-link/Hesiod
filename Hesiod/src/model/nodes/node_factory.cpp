@@ -117,6 +117,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"PathMeanderize", "Geometry/Path"},
       {"PathResample", "Geometry/Path"},
       {"PathSDF", "Geometry/Path"},
+      {"PathSmooth", "Geometry/Path"},
       {"PathToCloud", "Converter"},
       {"PathToHeightmap", "Converter"},
       {"Plateau", "Filter/Recurve"},
@@ -296,6 +297,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(PathMeanderize, path_meanderize);
     SETUP_NODE(PathResample, path_resample);
     SETUP_NODE(PathSDF, path_sdf);
+    SETUP_NODE(PathSmooth, path_smooth);
     SETUP_NODE(PathToCloud, path_to_cloud);
     SETUP_NODE(PathToHeightmap, path_to_heightmap);
     SETUP_NODE(Plateau, plateau);
