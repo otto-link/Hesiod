@@ -366,6 +366,9 @@ void OpenGLRender::set_data(BaseNode          *new_p_node,
         this->texture_hmap = p_h->to_grayscale_image_16bit();
         this->texture_hmap_shape = p_h->shape;
 
+        this->zmin = p_h->min();
+        this->zmax = p_h->max();
+
         // --- generate triangle mesh
 
         if (this->use_approx_mesh)
