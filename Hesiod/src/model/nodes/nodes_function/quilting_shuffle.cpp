@@ -69,6 +69,7 @@ void compute_quilting_shuffle_node(BaseNode *p_node)
                                        patch_base_shape,
                                        GET("overlap", FloatAttribute),
                                        GET("seed", SeedAttribute),
+                                       {}, // no secondary arrays
                                        GET("patch_flip", BoolAttribute),
                                        GET("patch_rotate", BoolAttribute),
                                        GET("patch_transpose", BoolAttribute),

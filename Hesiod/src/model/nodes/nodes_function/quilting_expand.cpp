@@ -72,8 +72,9 @@ void compute_quilting_expand_node(BaseNode *p_node)
                                       GET("expansion_ratio", FloatAttribute),
                                       patch_base_shape,
                                       GET("overlap", FloatAttribute),
-                                      true, // keep_input_shape
                                       GET("seed", SeedAttribute),
+                                      {},   // no secondary arrays
+                                      true, // keep_input_shape
                                       GET("patch_flip", BoolAttribute),
                                       GET("patch_rotate", BoolAttribute),
                                       GET("patch_transpose", BoolAttribute),
