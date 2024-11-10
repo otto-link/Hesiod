@@ -126,6 +126,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"QuiltingExpand", "Operator/Resynthesis"},
       {"QuiltingShuffle", "Operator/Resynthesis"},
       {"RadialDisplacementToXy", "Math"},
+      {"RecastCanyon", "Filter/Recast"},
       {"RecastCliff", "Filter/Recast"},
       {"RecastCliffDirectional", "Filter/Recast"},
       {"RecastSag", "Filter/Recast"},
@@ -309,6 +310,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(QuiltingExpand, quilting_expand);
     SETUP_NODE(QuiltingShuffle, quilting_shuffle);
     SETUP_NODE(RadialDisplacementToXy, radial_displacement_to_xy);
+    SETUP_NODE(RecastCanyon, recast_canyon);
     SETUP_NODE(RecastCliff, recast_cliff);
     SETUP_NODE(RecastCliffDirectional, recast_cliff_directional);
     SETUP_NODE(RecastSag, recast_sag);
