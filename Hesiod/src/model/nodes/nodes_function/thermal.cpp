@@ -21,7 +21,6 @@ void setup_thermal_node(BaseNode *p_node)
 
   // port(s)
   p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "input");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "bedrock");
   p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "mask");
   p_node->add_port<hmap::HeightMap>(gnode::PortType::OUT, "output", CONFIG);
   p_node->add_port<hmap::HeightMap>(gnode::PortType::OUT, "deposition", CONFIG);
@@ -29,9 +28,13 @@ void setup_thermal_node(BaseNode *p_node)
   // attribute(s)
   p_node->add_attr<FloatAttribute>("talus_global", 1.f, 0.f, 4.f, "talus_global");
   p_node->add_attr<IntAttribute>("iterations", 10, 1, 200, "iterations");
+  p_node->add_attr<BoolAttribute>("scale_talus_with_elevation",
+                                  false,
+                                  "scale_talus_with_elevation");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"talus_global", "iterations"});
+  p_node->set_attr_ordered_key(
+      {"talus_global", "iterations", "scale_talus_with_elevation"});
 }
 
 void compute_thermal_node(BaseNode *p_node)
@@ -44,9 +47,7 @@ void compute_thermal_node(BaseNode *p_node)
 
   if (p_in)
   {
-    hmap::HeightMap *p_bedrock = p_node->get_value_ref<hmap::HeightMap>("bedrock");
     hmap::HeightMap *p_mask = p_node->get_value_ref<hmap::HeightMap>("mask");
-
     hmap::HeightMap *p_out = p_node->get_value_ref<hmap::HeightMap>("output");
     hmap::HeightMap *p_deposition_map = p_node->get_value_ref<hmap::HeightMap>(
         "deposition");
@@ -56,20 +57,28 @@ void compute_thermal_node(BaseNode *p_node)
 
     float talus = GET("talus_global", FloatAttribute) / (float)p_out->shape.x;
 
+    hmap::HeightMap talus_map = hmap::HeightMap(CONFIG, talus);
+
+    if (GET("scale_talus_with_elevation", BoolAttribute))
+    {
+      talus_map = *p_in;
+      talus_map.remap(talus / 100.f, talus);
+    }
+
     hmap::transform(*p_out,
-                    p_bedrock,
                     p_mask,
+                    &talus_map,
                     p_deposition_map,
                     [p_node, &talus](hmap::Array &h_out,
-                                     hmap::Array *p_bedrock_array,
                                      hmap::Array *p_mask_array,
+                                     hmap::Array *p_talus_array,
                                      hmap::Array *p_deposition_array)
                     {
                       hmap::thermal(h_out,
                                     p_mask_array,
-                                    hmap::constant(h_out.shape, talus),
+                                    *p_talus_array,
                                     GET("iterations", IntAttribute),
-                                    p_bedrock_array,
+                                    nullptr, // bedrock
                                     p_deposition_array);
                     });
 
