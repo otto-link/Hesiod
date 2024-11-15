@@ -22,15 +22,16 @@ void setup_import_heightmap_node(BaseNode *p_node)
   p_node->add_port<hmap::HeightMap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FilenameAttribute>("fname (8bit grayscale)",
+  p_node->add_attr<FilenameAttribute>("fname",
                                       "",
                                       false, // loading
-                                      "PNG (*.png)",
-                                      "fname (8bit grayscale)");
+                                      "Image files (*.bmp *.dib *.jpeg *.jpg *.png *.pbm "
+                                      "*.pgm *.ppm *.pxm *.pnm *.tiff *.tif *.hdr *.pic)",
+                                      "fname");
   p_node->add_attr<BoolAttribute>("remap", true, "remap");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"fname (8bit grayscale)", "remap"});
+  p_node->set_attr_ordered_key({"fname", "remap"});
 }
 
 void compute_import_heightmap_node(BaseNode *p_node)
@@ -41,12 +42,11 @@ void compute_import_heightmap_node(BaseNode *p_node)
 
   hmap::HeightMap *p_out = p_node->get_value_ref<hmap::HeightMap>("output");
 
-  std::ifstream f(GET("fname (8bit grayscale)", FilenameAttribute).c_str());
+  std::ifstream f(GET("fname", FilenameAttribute).c_str());
 
   if (f.good())
   {
-    hmap::Array z = hmap::Array(
-        GET("fname (8bit grayscale)", FilenameAttribute).string());
+    hmap::Array z = hmap::Array(GET("fname", FilenameAttribute).string());
 
     p_out->from_array_interp(z);
 
