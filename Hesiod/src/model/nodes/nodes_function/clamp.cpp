@@ -30,9 +30,11 @@ void setup_clamp_node(BaseNode *p_node)
   p_node->add_attr<FloatAttribute>("k_min", 0.05f, 0.01f, 1.f, "k_min");
   p_node->add_attr<BoolAttribute>("smooth_max", false, "smooth_max");
   p_node->add_attr<FloatAttribute>("k_max", 0.05f, 0.01f, 1.f, "k_max");
+  p_node->add_attr<BoolAttribute>("remap", false, "remap");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"clamp", "smooth_min", "k_min", "smooth_max", "k_max"});
+  p_node->set_attr_ordered_key(
+      {"clamp", "smooth_min", "k_min", "smooth_max", "k_max", "remap"});
 }
 
 void compute_clamp_node(BaseNode *p_node)
@@ -81,6 +83,9 @@ void compute_clamp_node(BaseNode *p_node)
         hmap::transform(*p_out,
                         [&crange](hmap::Array &x) { hmap::clamp_max(x, crange.y); });
     }
+
+    if (GET("remap", BoolAttribute))
+      p_out->remap();
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());
