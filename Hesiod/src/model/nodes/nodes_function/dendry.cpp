@@ -29,7 +29,7 @@ void setup_dendry_node(BaseNode *p_node)
 
   // attribute(s)
   p_node->add_attr<IntAttribute>("subsampling", 4, 1, 8, "subsampling");
-  p_node->add_attr<WaveNbAttribute>("kw", std::vector<float>(8.f, 8.f), 0.f, 32.f, "kw");
+  p_node->add_attr<WaveNbAttribute>("kw", std::vector<float>(2, 8.f), 0.f, 32.f, "kw");
   p_node->add_attr<SeedAttribute>("seed");
   p_node->add_attr<FloatAttribute>("eps", 0.2f, 0.f, 1.f, "eps");
   p_node->add_attr<IntAttribute>("resolution", 1, 1, 8, "resolution");
@@ -80,7 +80,7 @@ void compute_dendry_node(BaseNode *p_node)
   if (p_ctrl)
   {
     // TODO shape
-    hmap::Array ctrl_array = p_ctrl->to_array({128, 128});
+    hmap::Array ctrl_array = p_ctrl->to_array(hmap::Vec2<int>(128, 128));
 
     hmap::fill(*p_out,
                p_dx,
