@@ -48,7 +48,7 @@ void compute_import_heightmap_node(BaseNode *p_node)
   {
     hmap::Array z = hmap::Array(GET("fname", FilenameAttribute).string());
 
-    p_out->from_array_interp(z);
+    p_out->from_array_interp_bicubic(z);
 
     if (GET("remap", BoolAttribute))
       p_out->remap();
