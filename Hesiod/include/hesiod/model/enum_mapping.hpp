@@ -5,6 +5,7 @@
 
 #include "highmap/authoring.hpp"
 #include "highmap/colormaps.hpp"
+#include "highmap/erosion.hpp"
 #include "highmap/kernels.hpp"
 #include "highmap/math.hpp"
 #include "highmap/primitives.hpp"
@@ -159,5 +160,15 @@ static std::map<std::string, int> noise_type_map_fbm = {
     {"Worley", hmap::NoiseType::WORLEY},
     {"Worley (doube)", hmap::NoiseType::WORLEY_DOUBLE},
     {"Worley (value)", hmap::NoiseType::WORLEY_VALUE}};
+
+static std::map<std::string, int> erosion_profile_map = {
+    {"Cosine", hmap::ErosionProfile::COSINE},
+    {"Saw sharp", hmap::ErosionProfile::SAW_SHARP},
+    {"Saw smooth", hmap::ErosionProfile::SAW_SMOOTH},
+    {"Sharp valleys", hmap::ErosionProfile::SHARP_VALLEYS},
+    {"Square smooth", hmap::ErosionProfile::SQUARE_SMOOTH},
+    {"Triangle Grenier", hmap::ErosionProfile::TRIANGLE_GRENIER},
+    {"Triangle sharp", hmap::ErosionProfile::TRIANGLE_SHARP},
+    {"Triangle smooth", hmap::ErosionProfile::TRIANGLE_SMOOTH}};
 
 } // namespace hesiod
