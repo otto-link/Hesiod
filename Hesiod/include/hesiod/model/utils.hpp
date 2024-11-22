@@ -20,7 +20,7 @@
 namespace hesiod
 {
 
-void post_process_heightmap(hmap::HeightMap  &h,
+void post_process_heightmap(hmap::Heightmap  &h,
                             bool              inverse,
                             bool              smoothing,
                             float             smoothing_radius,

@@ -18,11 +18,11 @@ void setup_heightmap_to_rgba_node(BaseNode *p_node)
   LOG->trace("setup node {}", p_node->get_label());
 
   // port(s)
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "R");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "G");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "B");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "A");
-  p_node->add_port<hmap::HeightMapRGBA>(gnode::PortType::OUT, "RGBA", CONFIG);
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "R");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "G");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "B");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "A");
+  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "RGBA", CONFIG);
 }
 
 void compute_heightmap_to_rgba_node(BaseNode *p_node)
@@ -31,14 +31,14 @@ void compute_heightmap_to_rgba_node(BaseNode *p_node)
 
   LOG->trace("computing node {}", p_node->get_label());
 
-  hmap::HeightMap *p_r = p_node->get_value_ref<hmap::HeightMap>("R");
-  hmap::HeightMap *p_g = p_node->get_value_ref<hmap::HeightMap>("G");
-  hmap::HeightMap *p_b = p_node->get_value_ref<hmap::HeightMap>("B");
-  hmap::HeightMap *p_a = p_node->get_value_ref<hmap::HeightMap>("A");
+  hmap::Heightmap *p_r = p_node->get_value_ref<hmap::Heightmap>("R");
+  hmap::Heightmap *p_g = p_node->get_value_ref<hmap::Heightmap>("G");
+  hmap::Heightmap *p_b = p_node->get_value_ref<hmap::Heightmap>("B");
+  hmap::Heightmap *p_a = p_node->get_value_ref<hmap::Heightmap>("A");
 
   if (p_r || p_g || p_b || p_a)
   {
-    hmap::HeightMapRGBA *p_out = p_node->get_value_ref<hmap::HeightMapRGBA>("RGBA");
+    hmap::HeightmapRGBA *p_out = p_node->get_value_ref<hmap::HeightmapRGBA>("RGBA");
 
     hmap::Vec2<int> shape;
     hmap::Vec2<int> tiling;
@@ -53,16 +53,16 @@ void compute_heightmap_to_rgba_node(BaseNode *p_node)
         break;
       }
 
-    hmap::HeightMap hr = p_r == nullptr ? hmap::HeightMap(shape, tiling, overlap, 0.f)
+    hmap::Heightmap hr = p_r == nullptr ? hmap::Heightmap(shape, tiling, overlap, 0.f)
                                         : *p_r;
-    hmap::HeightMap hg = p_g == nullptr ? hmap::HeightMap(shape, tiling, overlap, 0.f)
+    hmap::Heightmap hg = p_g == nullptr ? hmap::Heightmap(shape, tiling, overlap, 0.f)
                                         : *p_g;
-    hmap::HeightMap hb = p_b == nullptr ? hmap::HeightMap(shape, tiling, overlap, 0.f)
+    hmap::Heightmap hb = p_b == nullptr ? hmap::Heightmap(shape, tiling, overlap, 0.f)
                                         : *p_b;
-    hmap::HeightMap ha = p_a == nullptr ? hmap::HeightMap(shape, tiling, overlap, 1.f)
+    hmap::Heightmap ha = p_a == nullptr ? hmap::Heightmap(shape, tiling, overlap, 1.f)
                                         : *p_a;
 
-    *p_out = hmap::HeightMapRGBA(hr, hg, hb, ha);
+    *p_out = hmap::HeightmapRGBA(hr, hg, hb, ha);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

@@ -19,20 +19,20 @@ void setup_texture_quilting_expand_node(BaseNode *p_node)
   LOG->trace("setup node {}", p_node->get_label());
 
   // port(s)
-  p_node->add_port<hmap::HeightMapRGBA>(gnode::PortType::IN, "texture (guide)");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "heightmap (guide)");
-  p_node->add_port<hmap::HeightMapRGBA>(gnode::PortType::OUT, "texture", CONFIG);
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::OUT, "heightmap", CONFIG);
+  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture (guide)");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "heightmap (guide)");
+  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture", CONFIG);
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "heightmap", CONFIG);
 
-  p_node->add_port<hmap::HeightMapRGBA>(gnode::PortType::IN, "texture A");
-  p_node->add_port<hmap::HeightMapRGBA>(gnode::PortType::IN, "texture B");
-  p_node->add_port<hmap::HeightMapRGBA>(gnode::PortType::IN, "texture C");
-  p_node->add_port<hmap::HeightMapRGBA>(gnode::PortType::IN, "texture D");
+  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture A");
+  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture B");
+  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture C");
+  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture D");
 
-  p_node->add_port<hmap::HeightMapRGBA>(gnode::PortType::OUT, "texture A out", CONFIG);
-  p_node->add_port<hmap::HeightMapRGBA>(gnode::PortType::OUT, "texture B out", CONFIG);
-  p_node->add_port<hmap::HeightMapRGBA>(gnode::PortType::OUT, "texture C out", CONFIG);
-  p_node->add_port<hmap::HeightMapRGBA>(gnode::PortType::OUT, "texture D out", CONFIG);
+  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture A out", CONFIG);
+  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture B out", CONFIG);
+  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture C out", CONFIG);
+  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture D out", CONFIG);
 
   // attribute(s)
   p_node->add_attr<FloatAttribute>("expansion_ratio", 2.f, 1.f, 16.f, "expansion_ratio");
@@ -65,34 +65,34 @@ void compute_texture_quilting_expand_node(BaseNode *p_node)
 
   LOG->trace("computing node {}", p_node->get_label());
 
-  hmap::HeightMapRGBA *p_texture_guide = p_node->get_value_ref<hmap::HeightMapRGBA>(
+  hmap::HeightmapRGBA *p_texture_guide = p_node->get_value_ref<hmap::HeightmapRGBA>(
       "texture (guide)");
-  hmap::HeightMap *p_hmap_guide = p_node->get_value_ref<hmap::HeightMap>(
+  hmap::Heightmap *p_hmap_guide = p_node->get_value_ref<hmap::Heightmap>(
       "heightmap (guide)");
 
   if (p_texture_guide)
   {
 
-    hmap::HeightMap     *p_hmap_out = p_node->get_value_ref<hmap::HeightMap>("heightmap");
-    hmap::HeightMapRGBA *p_texture_out = p_node->get_value_ref<hmap::HeightMapRGBA>(
+    hmap::Heightmap     *p_hmap_out = p_node->get_value_ref<hmap::Heightmap>("heightmap");
+    hmap::HeightmapRGBA *p_texture_out = p_node->get_value_ref<hmap::HeightmapRGBA>(
         "texture");
 
-    hmap::HeightMapRGBA *p_tex_a = p_node->get_value_ref<hmap::HeightMapRGBA>(
+    hmap::HeightmapRGBA *p_tex_a = p_node->get_value_ref<hmap::HeightmapRGBA>(
         "texture A");
-    hmap::HeightMapRGBA *p_tex_b = p_node->get_value_ref<hmap::HeightMapRGBA>(
+    hmap::HeightmapRGBA *p_tex_b = p_node->get_value_ref<hmap::HeightmapRGBA>(
         "texture B");
-    hmap::HeightMapRGBA *p_tex_c = p_node->get_value_ref<hmap::HeightMapRGBA>(
+    hmap::HeightmapRGBA *p_tex_c = p_node->get_value_ref<hmap::HeightmapRGBA>(
         "texture C");
-    hmap::HeightMapRGBA *p_tex_d = p_node->get_value_ref<hmap::HeightMapRGBA>(
+    hmap::HeightmapRGBA *p_tex_d = p_node->get_value_ref<hmap::HeightmapRGBA>(
         "texture D");
 
-    hmap::HeightMapRGBA *p_tex_out_a = p_node->get_value_ref<hmap::HeightMapRGBA>(
+    hmap::HeightmapRGBA *p_tex_out_a = p_node->get_value_ref<hmap::HeightmapRGBA>(
         "texture A out");
-    hmap::HeightMapRGBA *p_tex_out_b = p_node->get_value_ref<hmap::HeightMapRGBA>(
+    hmap::HeightmapRGBA *p_tex_out_b = p_node->get_value_ref<hmap::HeightmapRGBA>(
         "texture B out");
-    hmap::HeightMapRGBA *p_tex_out_c = p_node->get_value_ref<hmap::HeightMapRGBA>(
+    hmap::HeightmapRGBA *p_tex_out_c = p_node->get_value_ref<hmap::HeightmapRGBA>(
         "texture C out");
-    hmap::HeightMapRGBA *p_tex_out_d = p_node->get_value_ref<hmap::HeightMapRGBA>(
+    hmap::HeightmapRGBA *p_tex_out_d = p_node->get_value_ref<hmap::HeightmapRGBA>(
         "texture D out");
 
     // for the guide array used to defined the quilting parameters,
@@ -103,7 +103,7 @@ void compute_texture_quilting_expand_node(BaseNode *p_node)
       guide_array = p_hmap_guide->to_array();
     else
     {
-      hmap::HeightMap luminance = p_texture_guide->luminance();
+      hmap::Heightmap luminance = p_texture_guide->luminance();
       guide_array = luminance.to_array();
     }
 
@@ -128,7 +128,7 @@ void compute_texture_quilting_expand_node(BaseNode *p_node)
     for (auto &v : secondary_arrays_storage)
       secondary_arrays_ptr.push_back(&v);
 
-    // hmap::HeightMap *p_out = p_node->get_value_ref<hmap::HeightMap>("heightmap");
+    // hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("heightmap");
 
     int ir = std::max(1, (int)(GET("patch_width", FloatAttribute) * p_hmap_out->shape.x));
     hmap::Vec2<int> patch_base_shape = hmap::Vec2<int>(ir, ir);
@@ -152,12 +152,12 @@ void compute_texture_quilting_expand_node(BaseNode *p_node)
     p_hmap_out->from_array_interp_nearest(out_array);
 
     // textures
-    std::vector<hmap::HeightMapRGBA *> pt_in_vec = {p_texture_guide,
+    std::vector<hmap::HeightmapRGBA *> pt_in_vec = {p_texture_guide,
                                                     p_tex_a,
                                                     p_tex_b,
                                                     p_tex_c,
                                                     p_tex_d};
-    std::vector<hmap::HeightMapRGBA *> pt_out_vec = {p_texture_out,
+    std::vector<hmap::HeightmapRGBA *> pt_out_vec = {p_texture_out,
                                                      p_tex_out_a,
                                                      p_tex_out_b,
                                                      p_tex_out_c,
@@ -169,8 +169,8 @@ void compute_texture_quilting_expand_node(BaseNode *p_node)
     for (size_t k = 0; k < pt_in_vec.size(); k++)
       if (pt_in_vec[k])
       {
-        // rebuild the texture from HeightMap
-        hmap::HeightMap r(CONFIG), g(CONFIG), b(CONFIG), a(CONFIG);
+        // rebuild the texture from Heightmap
+        hmap::Heightmap r(CONFIG), g(CONFIG), b(CONFIG), a(CONFIG);
 
         r.from_array_interp_nearest(*secondary_arrays_ptr[current_idx]);
         g.from_array_interp_nearest(*secondary_arrays_ptr[current_idx + 1]);
@@ -179,7 +179,7 @@ void compute_texture_quilting_expand_node(BaseNode *p_node)
 
         current_idx += 4;
 
-        *pt_out_vec[k] = hmap::HeightMapRGBA(r, g, b, a);
+        *pt_out_vec[k] = hmap::HeightmapRGBA(r, g, b, a);
       }
   }
 

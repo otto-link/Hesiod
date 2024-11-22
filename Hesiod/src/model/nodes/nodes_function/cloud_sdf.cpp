@@ -19,9 +19,9 @@ void setup_cloud_sdf_node(BaseNode *p_node)
 
   // port(s)
   p_node->add_port<hmap::Cloud>(gnode::PortType::IN, "cloud");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "dx");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "dy");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::OUT, "sdf", CONFIG);
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "dx");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "sdf", CONFIG);
 
   // attribute(s)
   p_node->add_attr<BoolAttribute>("remap", false, "remap");
@@ -38,14 +38,14 @@ void compute_cloud_sdf_node(BaseNode *p_node)
   LOG->trace("computing node {}", p_node->get_label());
 
   hmap::Cloud     *p_cloud = p_node->get_value_ref<hmap::Cloud>("cloud");
-  hmap::HeightMap *p_out = p_node->get_value_ref<hmap::HeightMap>("sdf");
+  hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("sdf");
 
   if (p_cloud)
   {
     if (p_cloud->get_npoints() > 1)
     {
-      hmap::HeightMap *p_dx = p_node->get_value_ref<hmap::HeightMap>("dx");
-      hmap::HeightMap *p_dy = p_node->get_value_ref<hmap::HeightMap>("dy");
+      hmap::Heightmap *p_dx = p_node->get_value_ref<hmap::Heightmap>("dx");
+      hmap::Heightmap *p_dy = p_node->get_value_ref<hmap::Heightmap>("dy");
 
       hmap::fill(
           *p_out,

@@ -18,7 +18,7 @@ void setup_colorize_solid_node(BaseNode *p_node)
   LOG->trace("setup node {}", p_node->get_label());
 
   // port(s)
-  p_node->add_port<hmap::HeightMapRGBA>(gnode::PortType::OUT, "texture", CONFIG);
+  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture", CONFIG);
 
   // attribute(s)
   p_node->add_attr<ColorAttribute>("color", 1.f, 1.f, 1.f, 1.f, "color");
@@ -34,13 +34,13 @@ void compute_colorize_solid_node(BaseNode *p_node)
 
   LOG->trace("computing node {}", p_node->get_label());
 
-  hmap::HeightMapRGBA *p_out = p_node->get_value_ref<hmap::HeightMapRGBA>("texture");
+  hmap::HeightmapRGBA *p_out = p_node->get_value_ref<hmap::HeightmapRGBA>("texture");
   std::vector<float>   col3 = GET("color", ColorAttribute);
 
   for (int k = 0; k < 4; k++)
   {
     float color = k < 3 ? col3[k] : GET("alpha", FloatAttribute);
-    p_out->rgba[k] = hmap::HeightMap(CONFIG, color);
+    p_out->rgba[k] = hmap::Heightmap(CONFIG, color);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

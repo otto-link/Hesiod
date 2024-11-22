@@ -19,9 +19,9 @@ void setup_radial_displacement_to_xy_node(BaseNode *p_node)
   LOG->trace("setup node {}", p_node->get_label());
 
   // port(s)
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "dr");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::OUT, "dx", CONFIG);
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::OUT, "dy", CONFIG);
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "dr");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "dx", CONFIG);
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "dy", CONFIG);
 
   // attribute(s)
   p_node->add_attr<FloatAttribute>("smoothing", 1.f, 0.f, 10.f, "smoothing");
@@ -37,12 +37,12 @@ void compute_radial_displacement_to_xy_node(BaseNode *p_node)
 
   LOG->trace("computing node {}", p_node->get_label());
 
-  hmap::HeightMap *p_dr = p_node->get_value_ref<hmap::HeightMap>("dr");
+  hmap::Heightmap *p_dr = p_node->get_value_ref<hmap::Heightmap>("dr");
 
   if (p_dr)
   {
-    hmap::HeightMap *p_dx = p_node->get_value_ref<hmap::HeightMap>("dx");
-    hmap::HeightMap *p_dy = p_node->get_value_ref<hmap::HeightMap>("dy");
+    hmap::Heightmap *p_dx = p_node->get_value_ref<hmap::Heightmap>("dx");
+    hmap::Heightmap *p_dy = p_node->get_value_ref<hmap::Heightmap>("dy");
 
     hmap::transform(*p_dr,
                     *p_dx,

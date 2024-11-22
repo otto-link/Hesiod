@@ -22,7 +22,7 @@ void setup_stamping_node(BaseNode *p_node)
   // port(s)
   p_node->add_port<hmap::Cloud>(gnode::PortType::IN, "cloud");
   p_node->add_port<hmap::Array>(gnode::PortType::IN, "kernel");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::OUT, "output", CONFIG);
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
   p_node->add_attr<FloatAttribute>("kernel_radius", 0.1f, 0.01f, 0.5f, "kernel_radius");
@@ -66,7 +66,7 @@ void compute_stamping_node(BaseNode *p_node)
 
   if (p_cloud && p_kernel)
   {
-    hmap::HeightMap *p_out = p_node->get_value_ref<hmap::HeightMap>("output");
+    hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
     std::vector<float> xp = p_cloud->get_x();
     std::vector<float> yp = p_cloud->get_y();

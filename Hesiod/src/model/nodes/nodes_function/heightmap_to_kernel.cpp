@@ -20,7 +20,7 @@ void setup_heightmap_to_kernel_node(BaseNode *p_node)
   LOG->trace("setup node {}", p_node->get_label());
 
   // port(s)
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "heightmap");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "heightmap");
   p_node->add_port<hmap::Array>(gnode::PortType::OUT,
                                 "kernel",
                                 p_node->get_config_ref()->shape);
@@ -45,7 +45,7 @@ void compute_heightmap_to_kernel_node(BaseNode *p_node)
 
   LOG->trace("computing node {}", p_node->get_label());
 
-  hmap::HeightMap *p_in = p_node->get_value_ref<hmap::HeightMap>("heightmap");
+  hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("heightmap");
 
   if (p_in)
   {

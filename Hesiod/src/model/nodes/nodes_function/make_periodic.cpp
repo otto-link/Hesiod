@@ -19,8 +19,8 @@ void setup_make_periodic_node(BaseNode *p_node)
   LOG->trace("setup node {}", p_node->get_label());
 
   // port(s)
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "input");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::OUT, "output", CONFIG);
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
   p_node->add_attr<FloatAttribute>("overlap", 0.25f, 0.05f, 0.5f, "overlap");
@@ -32,11 +32,11 @@ void compute_make_periodic_node(BaseNode *p_node)
 
   LOG->trace("computing node {}", p_node->get_label());
 
-  hmap::HeightMap *p_in = p_node->get_value_ref<hmap::HeightMap>("input");
+  hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
 
   if (p_in)
   {
-    hmap::HeightMap *p_out = p_node->get_value_ref<hmap::HeightMap>("output");
+    hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
     int nbuffer = std::max(1, (int)(GET("overlap", FloatAttribute) * p_out->shape.x));
 

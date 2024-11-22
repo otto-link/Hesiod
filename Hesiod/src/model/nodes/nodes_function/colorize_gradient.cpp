@@ -22,10 +22,10 @@ void setup_colorize_gradient_node(BaseNode *p_node)
   LOG->trace("setup node {}", p_node->get_label());
 
   // port(s)
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "level");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "alpha");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "noise");
-  p_node->add_port<hmap::HeightMapRGBA>(gnode::PortType::OUT, "texture", CONFIG);
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "level");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "alpha");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "noise");
+  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture", CONFIG);
 
   // attribute(s)
   p_node->add_attr<ColorGradientAttribute>("gradient", "gradient");
@@ -44,13 +44,13 @@ void compute_colorize_gradient_node(BaseNode *p_node)
 
   LOG->trace("computing node {}", p_node->get_label());
 
-  hmap::HeightMap *p_level = p_node->get_value_ref<hmap::HeightMap>("level");
+  hmap::Heightmap *p_level = p_node->get_value_ref<hmap::Heightmap>("level");
 
   if (p_level)
   {
-    hmap::HeightMap     *p_alpha = p_node->get_value_ref<hmap::HeightMap>("alpha");
-    hmap::HeightMap     *p_noise = p_node->get_value_ref<hmap::HeightMap>("noise");
-    hmap::HeightMapRGBA *p_out = p_node->get_value_ref<hmap::HeightMapRGBA>("texture");
+    hmap::Heightmap     *p_alpha = p_node->get_value_ref<hmap::Heightmap>("alpha");
+    hmap::Heightmap     *p_noise = p_node->get_value_ref<hmap::Heightmap>("noise");
+    hmap::HeightmapRGBA *p_out = p_node->get_value_ref<hmap::HeightmapRGBA>("texture");
 
     // define colormap based on color gradient
     std::vector<std::vector<float>> gradient = GET("gradient", ColorGradientAttribute);
@@ -62,8 +62,8 @@ void compute_colorize_gradient_node(BaseNode *p_node)
     LOG->trace("ncolors: {}", colormap_colors.size());
 
     // reverse alpha
-    hmap::HeightMap  alpha_copy;
-    hmap::HeightMap *p_alpha_copy = nullptr;
+    hmap::Heightmap  alpha_copy;
+    hmap::Heightmap *p_alpha_copy = nullptr;
 
     if (!p_alpha)
       p_alpha_copy = p_alpha;

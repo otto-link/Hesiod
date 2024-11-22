@@ -20,8 +20,8 @@ void setup_path_find_node(BaseNode *p_node)
 
   // port(s)
   p_node->add_port<hmap::Path>(gnode::PortType::IN, "waypoints");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "heightmap");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "mask nogo");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "heightmap");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "mask nogo");
   p_node->add_port<hmap::Path>(gnode::PortType::OUT, "path");
 
   // attribute(s)
@@ -44,11 +44,11 @@ void compute_path_find_node(BaseNode *p_node)
   LOG->trace("computing node {}", p_node->get_label());
 
   hmap::Path      *p_waypoints = p_node->get_value_ref<hmap::Path>("waypoints");
-  hmap::HeightMap *p_hmap = p_node->get_value_ref<hmap::HeightMap>("heightmap");
+  hmap::Heightmap *p_hmap = p_node->get_value_ref<hmap::Heightmap>("heightmap");
 
   if (p_waypoints && p_hmap)
   {
-    hmap::HeightMap *p_mask = p_node->get_value_ref<hmap::HeightMap>("mask nogo");
+    hmap::Heightmap *p_mask = p_node->get_value_ref<hmap::Heightmap>("mask nogo");
     hmap::Path      *p_out = p_node->get_value_ref<hmap::Path>("path");
 
     // copy the input heightmap

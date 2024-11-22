@@ -124,14 +124,14 @@ void DataPreview::update_image()
   // Update preview
   if (blind_data_ptr)
   {
-    if (data_type == typeid(hmap::HeightMap).name() ||
+    if (data_type == typeid(hmap::Heightmap).name() ||
         data_type == typeid(hmap::Array).name())
     {
       hmap::Array array;
 
-      if (data_type == typeid(hmap::HeightMap).name())
+      if (data_type == typeid(hmap::Heightmap).name())
       {
-        hmap::HeightMap *p_h = static_cast<hmap::HeightMap *>(blind_data_ptr);
+        hmap::Heightmap *p_h = static_cast<hmap::Heightmap *>(blind_data_ptr);
         array = p_h->to_array(shape_preview);
       }
       else
@@ -170,9 +170,9 @@ void DataPreview::update_image()
       }
     }
     //
-    else if (data_type == typeid(hmap::HeightMapRGBA).name())
+    else if (data_type == typeid(hmap::HeightmapRGBA).name())
     {
-      hmap::HeightMapRGBA *p_h = static_cast<hmap::HeightMapRGBA *>(blind_data_ptr);
+      hmap::HeightmapRGBA *p_h = static_cast<hmap::HeightmapRGBA *>(blind_data_ptr);
 
       img = p_h->to_img_8bit(shape_preview);
       img_format = QImage::Format_RGBA8888;

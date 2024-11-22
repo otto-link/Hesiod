@@ -20,10 +20,10 @@ void setup_set_alpha_node(BaseNode *p_node)
   LOG->trace("setup node {}", p_node->get_label());
 
   // port(s)
-  p_node->add_port<hmap::HeightMapRGBA>(gnode::PortType::IN, "texture in");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "alpha");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "noise");
-  p_node->add_port<hmap::HeightMapRGBA>(gnode::PortType::OUT, "texture out", CONFIG);
+  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture in");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "alpha");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "noise");
+  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture out", CONFIG);
 
   // attribute(s)
   p_node->add_attr<FloatAttribute>("alpha", 1.f, 0.f, 1.f, "alpha");
@@ -40,20 +40,20 @@ void compute_set_alpha_node(BaseNode *p_node)
 
   LOG->trace("computing node {}", p_node->get_label());
 
-  hmap::HeightMapRGBA *p_in = p_node->get_value_ref<hmap::HeightMapRGBA>("texture in");
+  hmap::HeightmapRGBA *p_in = p_node->get_value_ref<hmap::HeightmapRGBA>("texture in");
 
   if (p_in)
   {
-    hmap::HeightMap     *p_alpha = p_node->get_value_ref<hmap::HeightMap>("alpha");
-    hmap::HeightMap     *p_noise = p_node->get_value_ref<hmap::HeightMap>("noise");
-    hmap::HeightMapRGBA *p_out = p_node->get_value_ref<hmap::HeightMapRGBA>(
+    hmap::Heightmap     *p_alpha = p_node->get_value_ref<hmap::Heightmap>("alpha");
+    hmap::Heightmap     *p_noise = p_node->get_value_ref<hmap::Heightmap>("noise");
+    hmap::HeightmapRGBA *p_out = p_node->get_value_ref<hmap::HeightmapRGBA>(
         "texture out");
 
     *p_out = *p_in;
 
     if (p_alpha)
     {
-      hmap::HeightMap alpha_copy = *p_alpha;
+      hmap::Heightmap alpha_copy = *p_alpha;
 
       if (p_noise)
         hmap::transform(alpha_copy,

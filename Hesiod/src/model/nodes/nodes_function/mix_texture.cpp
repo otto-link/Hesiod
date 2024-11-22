@@ -22,11 +22,11 @@ void setup_mix_texture_node(BaseNode *p_node)
   LOG->trace("setup node {}", p_node->get_label());
 
   // port(s)
-  p_node->add_port<hmap::HeightMapRGBA>(gnode::PortType::IN, "texture1");
-  p_node->add_port<hmap::HeightMapRGBA>(gnode::PortType::IN, "texture2");
-  p_node->add_port<hmap::HeightMapRGBA>(gnode::PortType::IN, "texture3");
-  p_node->add_port<hmap::HeightMapRGBA>(gnode::PortType::IN, "texture4");
-  p_node->add_port<hmap::HeightMapRGBA>(gnode::PortType::OUT, "texture", CONFIG);
+  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture1");
+  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture2");
+  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture3");
+  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture4");
+  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture", CONFIG);
 
   // attribute(s)
   p_node->add_attr<BoolAttribute>("use_sqrt_avg", true, "use_sqrt_avg");
@@ -42,13 +42,13 @@ void compute_mix_texture_node(BaseNode *p_node)
 
   LOG->trace("computing node {}", p_node->get_label());
 
-  hmap::HeightMapRGBA *p_in1 = p_node->get_value_ref<hmap::HeightMapRGBA>("texture1");
-  hmap::HeightMapRGBA *p_in2 = p_node->get_value_ref<hmap::HeightMapRGBA>("texture2");
-  hmap::HeightMapRGBA *p_in3 = p_node->get_value_ref<hmap::HeightMapRGBA>("texture3");
-  hmap::HeightMapRGBA *p_in4 = p_node->get_value_ref<hmap::HeightMapRGBA>("texture4");
-  hmap::HeightMapRGBA *p_out = p_node->get_value_ref<hmap::HeightMapRGBA>("texture");
+  hmap::HeightmapRGBA *p_in1 = p_node->get_value_ref<hmap::HeightmapRGBA>("texture1");
+  hmap::HeightmapRGBA *p_in2 = p_node->get_value_ref<hmap::HeightmapRGBA>("texture2");
+  hmap::HeightmapRGBA *p_in3 = p_node->get_value_ref<hmap::HeightmapRGBA>("texture3");
+  hmap::HeightmapRGBA *p_in4 = p_node->get_value_ref<hmap::HeightmapRGBA>("texture4");
+  hmap::HeightmapRGBA *p_out = p_node->get_value_ref<hmap::HeightmapRGBA>("texture");
 
-  std::vector<hmap::HeightMapRGBA *> ptr_list = {};
+  std::vector<hmap::HeightmapRGBA *> ptr_list = {};
 
   for (auto &ptr : {p_in1, p_in2, p_in3, p_in4})
     if (ptr)

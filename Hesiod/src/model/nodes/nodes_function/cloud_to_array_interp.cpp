@@ -19,9 +19,9 @@ void setup_cloud_to_array_interp_node(BaseNode *p_node)
 
   // port(s)
   p_node->add_port<hmap::Cloud>(gnode::PortType::IN, "cloud");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "dx");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "dy");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::OUT, "heightmap", CONFIG);
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "dx");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "heightmap", CONFIG);
 }
 
 void compute_cloud_to_array_interp_node(BaseNode *p_node)
@@ -34,12 +34,12 @@ void compute_cloud_to_array_interp_node(BaseNode *p_node)
 
   if (p_cloud)
   {
-    hmap::HeightMap *p_out = p_node->get_value_ref<hmap::HeightMap>("heightmap");
+    hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("heightmap");
 
     if (p_cloud->get_npoints() > 0)
     {
-      hmap::HeightMap *p_dx = p_node->get_value_ref<hmap::HeightMap>("dx");
-      hmap::HeightMap *p_dy = p_node->get_value_ref<hmap::HeightMap>("dy");
+      hmap::Heightmap *p_dx = p_node->get_value_ref<hmap::Heightmap>("dx");
+      hmap::Heightmap *p_dy = p_node->get_value_ref<hmap::Heightmap>("dy");
 
       hmap::fill(*p_out,
                  p_dx,

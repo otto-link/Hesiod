@@ -22,9 +22,9 @@ void setup_export_asset_node(BaseNode *p_node)
   LOG->trace("setup node {}", p_node->get_label());
 
   // port(s)
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "elevation");
-  p_node->add_port<hmap::HeightMapRGBA>(gnode::PortType::IN, "texture");
-  p_node->add_port<hmap::HeightMapRGBA>(gnode::PortType::IN, "normal map detail");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "elevation");
+  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture");
+  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "normal map detail");
 
   // attribute(s)
   p_node->add_attr<BoolAttribute>("auto_export", true, "auto_export");
@@ -88,12 +88,12 @@ void compute_export_asset_node(BaseNode *p_node)
 
   LOG->trace("computing node {}", p_node->get_label());
 
-  hmap::HeightMap *p_elev = p_node->get_value_ref<hmap::HeightMap>("elevation");
+  hmap::Heightmap *p_elev = p_node->get_value_ref<hmap::Heightmap>("elevation");
 
   if (p_elev)
   {
-    hmap::HeightMapRGBA *p_color = p_node->get_value_ref<hmap::HeightMapRGBA>("texture");
-    hmap::HeightMapRGBA *p_nmap = p_node->get_value_ref<hmap::HeightMapRGBA>(
+    hmap::HeightmapRGBA *p_color = p_node->get_value_ref<hmap::HeightmapRGBA>("texture");
+    hmap::HeightmapRGBA *p_nmap = p_node->get_value_ref<hmap::HeightmapRGBA>(
         "normal map detail");
 
     hmap::Array array = p_elev->to_array();
@@ -116,7 +116,7 @@ void compute_export_asset_node(BaseNode *p_node)
     // TODO optimize / distribute this
     hmap::Tensor nvec = hmap::normal_map(p_elev->to_array());
 
-    hmap::HeightMapRGBA normal_map = hmap::HeightMapRGBA(p_elev->shape,
+    hmap::HeightmapRGBA normal_map = hmap::HeightmapRGBA(p_elev->shape,
                                                          p_elev->tiling,
                                                          p_elev->overlap,
                                                          nvec.get_slice(0),

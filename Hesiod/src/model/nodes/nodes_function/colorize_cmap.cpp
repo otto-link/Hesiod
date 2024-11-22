@@ -20,9 +20,9 @@ void setup_colorize_cmap_node(BaseNode *p_node)
   LOG->trace("setup node {}", p_node->get_label());
 
   // port(s)
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "level");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "alpha");
-  p_node->add_port<hmap::HeightMapRGBA>(gnode::PortType::OUT, "texture", CONFIG);
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "level");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "alpha");
+  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture", CONFIG);
 
   // attribute(s)
   p_node->add_attr<MapEnumAttribute>("colormap", get_colormap_mapping(), "colormap");
@@ -48,13 +48,13 @@ void compute_colorize_cmap_node(BaseNode *p_node)
 
   LOG->trace("computing node {}", p_node->get_label());
 
-  hmap::HeightMap *p_level = p_node->get_value_ref<hmap::HeightMap>("level");
+  hmap::Heightmap *p_level = p_node->get_value_ref<hmap::Heightmap>("level");
 
   // colorize
   if (p_level)
   {
-    hmap::HeightMap     *p_alpha = p_node->get_value_ref<hmap::HeightMap>("alpha");
-    hmap::HeightMapRGBA *p_out = p_node->get_value_ref<hmap::HeightMapRGBA>("texture");
+    hmap::Heightmap     *p_alpha = p_node->get_value_ref<hmap::Heightmap>("alpha");
+    hmap::HeightmapRGBA *p_out = p_node->get_value_ref<hmap::HeightmapRGBA>("texture");
 
     std::vector<std::vector<float>> colormap_colors = hesiod::get_colormap_data(
         GET("colormap", MapEnumAttribute));
@@ -75,8 +75,8 @@ void compute_colorize_cmap_node(BaseNode *p_node)
     }
 
     // reverse alpha
-    hmap::HeightMap  alpha_copy;
-    hmap::HeightMap *p_alpha_copy = nullptr;
+    hmap::Heightmap  alpha_copy;
+    hmap::Heightmap *p_alpha_copy = nullptr;
 
     if (!p_alpha)
       p_alpha_copy = p_alpha;

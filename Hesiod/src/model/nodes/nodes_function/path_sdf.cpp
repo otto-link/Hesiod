@@ -22,9 +22,9 @@ void setup_path_sdf_node(BaseNode *p_node)
 
   // port(s)
   p_node->add_port<hmap::Path>(gnode::PortType::IN, "path");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "dx");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "dy");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::OUT, "sdf", CONFIG);
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "dx");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "sdf", CONFIG);
 
   // attribute(s)
   p_node->add_attr<BoolAttribute>("remap", false, "Remap");
@@ -41,9 +41,9 @@ void compute_path_sdf_node(BaseNode *p_node)
 
   if (p_path)
   {
-    hmap::HeightMap *p_dx = p_node->get_value_ref<hmap::HeightMap>("dx");
-    hmap::HeightMap *p_dy = p_node->get_value_ref<hmap::HeightMap>("dy");
-    hmap::HeightMap *p_out = p_node->get_value_ref<hmap::HeightMap>("sdf");
+    hmap::Heightmap *p_dx = p_node->get_value_ref<hmap::Heightmap>("dx");
+    hmap::Heightmap *p_dy = p_node->get_value_ref<hmap::Heightmap>("dy");
+    hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("sdf");
 
     if (p_path->get_npoints() > 1)
     {

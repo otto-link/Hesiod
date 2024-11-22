@@ -19,9 +19,9 @@ void setup_convolve_svd_node(BaseNode *p_node)
   LOG->trace("setup node {}", p_node->get_label());
 
   // port(s)
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "input");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   p_node->add_port<hmap::Array>(gnode::PortType::IN, "kernel");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::OUT, "output", CONFIG);
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
   p_node->add_attr<IntAttribute>("rank", 4, 1, 8, "rank");
@@ -37,12 +37,12 @@ void compute_convolve_svd_node(BaseNode *p_node)
 
   LOG->trace("computing node {}", p_node->get_label());
 
-  hmap::HeightMap *p_in = p_node->get_value_ref<hmap::HeightMap>("input");
+  hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
   hmap::Array     *p_kernel = p_node->get_value_ref<hmap::Array>("kernel");
 
   if (p_in && p_kernel)
   {
-    hmap::HeightMap *p_out = p_node->get_value_ref<hmap::HeightMap>("output");
+    hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
     hmap::transform(
         *p_out,

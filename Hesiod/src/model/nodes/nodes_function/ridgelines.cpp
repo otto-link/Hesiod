@@ -20,9 +20,9 @@ void setup_ridgelines_node(BaseNode *p_node)
 
   // port(s)
   p_node->add_port<hmap::Path>(gnode::PortType::IN, "path");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "dx");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "dy");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::OUT, "heightmap", CONFIG);
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "dx");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "heightmap", CONFIG);
 
   // attribute(s)
   p_node->add_attr<FloatAttribute>("talus_global", 4.f, -16.f, 16.f, "talus_global");
@@ -41,12 +41,12 @@ void compute_ridgelines_node(BaseNode *p_node)
 
   if (p_path)
   {
-    hmap::HeightMap *p_out = p_node->get_value_ref<hmap::HeightMap>("heightmap");
+    hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("heightmap");
 
     if (p_path->get_npoints() > 1)
     {
-      hmap::HeightMap *p_dx = p_node->get_value_ref<hmap::HeightMap>("dx");
-      hmap::HeightMap *p_dy = p_node->get_value_ref<hmap::HeightMap>("dy");
+      hmap::Heightmap *p_dx = p_node->get_value_ref<hmap::Heightmap>("dx");
+      hmap::Heightmap *p_dy = p_node->get_value_ref<hmap::Heightmap>("dy");
 
       std::vector<float> xs, ys, zs = {};
 

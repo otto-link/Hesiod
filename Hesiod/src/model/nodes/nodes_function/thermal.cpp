@@ -20,10 +20,10 @@ void setup_thermal_node(BaseNode *p_node)
   LOG->trace("setup node {}", p_node->get_label());
 
   // port(s)
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "input");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "mask");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::OUT, "output", CONFIG);
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::OUT, "deposition", CONFIG);
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "deposition", CONFIG);
 
   // attribute(s)
   p_node->add_attr<FloatAttribute>("talus_global", 1.f, 0.f, 4.f, "talus_global");
@@ -43,13 +43,13 @@ void compute_thermal_node(BaseNode *p_node)
 
   LOG->trace("computing node {}", p_node->get_label());
 
-  hmap::HeightMap *p_in = p_node->get_value_ref<hmap::HeightMap>("input");
+  hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
 
   if (p_in)
   {
-    hmap::HeightMap *p_mask = p_node->get_value_ref<hmap::HeightMap>("mask");
-    hmap::HeightMap *p_out = p_node->get_value_ref<hmap::HeightMap>("output");
-    hmap::HeightMap *p_deposition_map = p_node->get_value_ref<hmap::HeightMap>(
+    hmap::Heightmap *p_mask = p_node->get_value_ref<hmap::Heightmap>("mask");
+    hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
+    hmap::Heightmap *p_deposition_map = p_node->get_value_ref<hmap::Heightmap>(
         "deposition");
 
     // copy the input heightmap
@@ -57,7 +57,7 @@ void compute_thermal_node(BaseNode *p_node)
 
     float talus = GET("talus_global", FloatAttribute) / (float)p_out->shape.x;
 
-    hmap::HeightMap talus_map = hmap::HeightMap(CONFIG, talus);
+    hmap::Heightmap talus_map = hmap::Heightmap(CONFIG, talus);
 
     if (GET("scale_talus_with_elevation", BoolAttribute))
     {

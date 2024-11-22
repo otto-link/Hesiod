@@ -20,7 +20,7 @@ void setup_brush_node(BaseNode *p_node)
   LOG->trace("setup node {}", p_node->get_label());
 
   // port(s)
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::OUT, "out", CONFIG);
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "out", CONFIG);
 
   // attribute(s)
   p_node->add_attr<ArrayAttribute>("hmap", "Heightmap", hmap::Vec2<int>(512, 512));
@@ -38,7 +38,7 @@ void compute_brush_node(BaseNode *p_node)
   LOG->trace("computing node {}", p_node->get_label());
 
   // base noise function
-  hmap::HeightMap *p_out = p_node->get_value_ref<hmap::HeightMap>("out");
+  hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("out");
 
   hmap::Array array = GET("hmap", ArrayAttribute);
   p_out->from_array_interp(array);

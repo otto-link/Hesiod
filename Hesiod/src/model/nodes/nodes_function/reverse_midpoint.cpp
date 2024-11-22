@@ -20,7 +20,7 @@ void setup_reverse_midpoint_node(BaseNode *p_node)
 
   // port(s)
   p_node->add_port<hmap::Path>(gnode::PortType::IN, "path");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::OUT, "heightmap", CONFIG);
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "heightmap", CONFIG);
 
   // attribute(s)
   p_node->add_attr<FloatAttribute>("noise_scale", 1.f, 0.01f, 2.f, "noise_scale");
@@ -43,7 +43,7 @@ void compute_reverse_midpoint_node(BaseNode *p_node)
 
   if (p_path)
   {
-    hmap::HeightMap *p_out = p_node->get_value_ref<hmap::HeightMap>("heightmap");
+    hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("heightmap");
 
     if (p_path->get_npoints() > 1)
     {

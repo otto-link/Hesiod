@@ -20,10 +20,10 @@ void setup_lerp_node(BaseNode *p_node)
   LOG->trace("setup node {}", p_node->get_label());
 
   // port(s)
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "a");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "b");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "t");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::OUT, "output", CONFIG);
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "a");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "b");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "t");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
   p_node->add_attr<FloatAttribute>("t", 0.5f, 0.f, 1.f, "t");
@@ -35,13 +35,13 @@ void compute_lerp_node(BaseNode *p_node)
 
   LOG->trace("computing node {}", p_node->get_label());
 
-  hmap::HeightMap *p_a = p_node->get_value_ref<hmap::HeightMap>("a");
-  hmap::HeightMap *p_b = p_node->get_value_ref<hmap::HeightMap>("b");
+  hmap::Heightmap *p_a = p_node->get_value_ref<hmap::Heightmap>("a");
+  hmap::Heightmap *p_b = p_node->get_value_ref<hmap::Heightmap>("b");
 
   if (p_a && p_b)
   {
-    hmap::HeightMap *p_t = p_node->get_value_ref<hmap::HeightMap>("t");
-    hmap::HeightMap *p_out = p_node->get_value_ref<hmap::HeightMap>("output");
+    hmap::Heightmap *p_t = p_node->get_value_ref<hmap::Heightmap>("t");
+    hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
     if (p_t)
       hmap::transform(*p_out,

@@ -354,13 +354,13 @@ void OpenGLRender::set_data(BaseNode          *new_p_node,
     // check that data are indeed available
     if (p_node->get_data_ref(port_index_elev))
     {
-      if (data_type_elev == typeid(hmap::HeightMap).name())
+      if (data_type_elev == typeid(hmap::Heightmap).name())
       {
         // --- elevation
 
-        LOG->trace("OpenGLRender::set_data, HeightMap data");
+        LOG->trace("OpenGLRender::set_data, Heightmap data");
 
-        hmap::HeightMap *p_h = this->p_node->get_value_ref<hmap::HeightMap>(
+        hmap::Heightmap *p_h = this->p_node->get_value_ref<hmap::Heightmap>(
             port_index_elev);
 
         this->texture_hmap = p_h->to_grayscale_image_16bit();
@@ -417,9 +417,9 @@ void OpenGLRender::set_data(BaseNode          *new_p_node,
               }
             }
             //
-            else if (data_type_color == typeid(hmap::HeightMap).name())
+            else if (data_type_color == typeid(hmap::Heightmap).name())
             {
-              hmap::HeightMap *p_c = this->p_node->get_value_ref<hmap::HeightMap>(
+              hmap::Heightmap *p_c = this->p_node->get_value_ref<hmap::Heightmap>(
                   port_index_color);
               hmap::Array c = p_c->to_array();
 
@@ -428,9 +428,9 @@ void OpenGLRender::set_data(BaseNode          *new_p_node,
               this->use_texture_diffuse = true;
             }
             //
-            else if (data_type_color == typeid(hmap::HeightMapRGBA).name())
+            else if (data_type_color == typeid(hmap::HeightmapRGBA).name())
             {
-              hmap::HeightMapRGBA *p_c = this->p_node->get_value_ref<hmap::HeightMapRGBA>(
+              hmap::HeightmapRGBA *p_c = this->p_node->get_value_ref<hmap::HeightmapRGBA>(
                   port_index_color);
 
               this->texture_diffuse = p_c->to_img_8bit(p_c->shape);
@@ -470,10 +470,10 @@ void OpenGLRender::set_data(BaseNode          *new_p_node,
             if (p_node->get_data_ref(port_index_normal_map))
             {
 
-              if (data_type_normal_map == typeid(hmap::HeightMapRGBA).name())
+              if (data_type_normal_map == typeid(hmap::HeightmapRGBA).name())
               {
-                hmap::HeightMapRGBA *p_c = this->p_node
-                                               ->get_value_ref<hmap::HeightMapRGBA>(
+                hmap::HeightmapRGBA *p_c = this->p_node
+                                               ->get_value_ref<hmap::HeightmapRGBA>(
                                                    port_index_normal_map);
 
                 this->texture_normal = p_c->to_img_8bit(p_c->shape);

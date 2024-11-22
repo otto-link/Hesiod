@@ -20,10 +20,10 @@ void setup_kmeans_clustering2_node(BaseNode *p_node)
   LOG->trace("setup node {}", p_node->get_label());
 
   // port(s)
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "feature 1");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "feature 2");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::OUT, "output", CONFIG);
-  p_node->add_port<std::vector<hmap::HeightMap>>(gnode::PortType::OUT, "scoring");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "feature 1");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "feature 2");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  p_node->add_port<std::vector<hmap::Heightmap>>(gnode::PortType::OUT, "scoring");
 
   // attribute(s)
   p_node->add_attr<SeedAttribute>("seed");
@@ -50,12 +50,12 @@ void compute_kmeans_clustering2_node(BaseNode *p_node)
   LOG->trace("computing node {}", p_node->get_label());
 
   // base noise function
-  hmap::HeightMap *p_in1 = p_node->get_value_ref<hmap::HeightMap>("feature 1");
-  hmap::HeightMap *p_in2 = p_node->get_value_ref<hmap::HeightMap>("feature 2");
-  hmap::HeightMap *p_out = p_node->get_value_ref<hmap::HeightMap>("output");
+  hmap::Heightmap *p_in1 = p_node->get_value_ref<hmap::Heightmap>("feature 1");
+  hmap::Heightmap *p_in2 = p_node->get_value_ref<hmap::Heightmap>("feature 2");
+  hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
-  std::vector<hmap::HeightMap>
-      *p_scoring = p_node->get_value_ref<std::vector<hmap::HeightMap>>("scoring");
+  std::vector<hmap::Heightmap>
+      *p_scoring = p_node->get_value_ref<std::vector<hmap::Heightmap>>("scoring");
 
   if (p_in1 && p_in2)
   {
@@ -104,7 +104,7 @@ void compute_kmeans_clustering2_node(BaseNode *p_node)
 
     for (size_t k = 0; k < scoring_arrays.size(); k++)
     {
-      hmap::HeightMap h;
+      hmap::Heightmap h;
       h.set_sto(CONFIG);
       h.from_array_interp_nearest(scoring_arrays[k]);
       p_scoring->push_back(h);

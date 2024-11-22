@@ -240,12 +240,12 @@ void AbstractViewer::on_node_selected(const std::string &id)
     }
 
     // for the color/texture, use first output of type
-    // "HeightMapRGBA", or the last input
+    // "HeightmapRGBA", or the last input
     {
       int port_idx = -1;
       for (int k = 0; k < p_node->get_nports(); k++)
         if (p_node->get_port_label(k) == "texture" &&
-            p_node->get_data_type(k) == typeid(hmap::HeightMapRGBA).name())
+            p_node->get_data_type(k) == typeid(hmap::HeightmapRGBA).name())
         {
           port_idx = k;
           break;
@@ -262,7 +262,7 @@ void AbstractViewer::on_node_selected(const std::string &id)
       int port_idx = -1;
       for (int k = 0; k < p_node->get_nports(); k++)
         if (p_node->get_port_label(k) == "normal map" &&
-            p_node->get_data_type(k) == typeid(hmap::HeightMapRGBA).name())
+            p_node->get_data_type(k) == typeid(hmap::HeightmapRGBA).name())
         {
           port_idx = k;
           break;

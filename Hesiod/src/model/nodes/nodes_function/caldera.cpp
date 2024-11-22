@@ -21,8 +21,8 @@ void setup_caldera_node(BaseNode *p_node)
   LOG->trace("setup node {}", p_node->get_label());
 
   // port(s)
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "dr");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::OUT, "output", CONFIG);
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "dr");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
   p_node->add_attr<FloatAttribute>("radius", 0.25f, 0.01f, 1.f, "radius");
@@ -55,8 +55,8 @@ void compute_caldera_node(BaseNode *p_node)
   LOG->trace("computing node {}", p_node->get_label());
 
   // base noise function
-  hmap::HeightMap *p_dr = p_node->get_value_ref<hmap::HeightMap>("dr");
-  hmap::HeightMap *p_out = p_node->get_value_ref<hmap::HeightMap>("output");
+  hmap::Heightmap *p_dr = p_node->get_value_ref<hmap::Heightmap>("dr");
+  hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
   float radius_pixel = std::max(1.f, GET("radius", FloatAttribute) * p_out->shape.x);
   float sigma_inner_pixel = std::max(1.f,

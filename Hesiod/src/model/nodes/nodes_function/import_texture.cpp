@@ -21,7 +21,7 @@ void setup_import_texture_node(BaseNode *p_node)
   LOG->trace("setup node {}", p_node->get_label());
 
   // port(s)
-  p_node->add_port<hmap::HeightMapRGBA>(gnode::PortType::OUT, "texture", CONFIG);
+  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture", CONFIG);
 
   // attribute(s)
   p_node->add_attr<FilenameAttribute>("fname",
@@ -38,7 +38,7 @@ void compute_import_texture_node(BaseNode *p_node)
 
   LOG->trace("computing node {}", p_node->get_label());
 
-  hmap::HeightMapRGBA *p_out = p_node->get_value_ref<hmap::HeightMapRGBA>("texture");
+  hmap::HeightmapRGBA *p_out = p_node->get_value_ref<hmap::HeightmapRGBA>("texture");
 
   std::string fname = GET("fname", FilenameAttribute).string();
 
@@ -50,10 +50,10 @@ void compute_import_texture_node(BaseNode *p_node)
     hmap::Tensor tensor4(fname);
     tensor4 = tensor4.resample_to_shape_xy(p_node->get_config_ref()->shape);
 
-    hmap::HeightMap r(CONFIG);
-    hmap::HeightMap g(CONFIG);
-    hmap::HeightMap b(CONFIG);
-    hmap::HeightMap a(CONFIG);
+    hmap::Heightmap r(CONFIG);
+    hmap::Heightmap g(CONFIG);
+    hmap::Heightmap b(CONFIG);
+    hmap::Heightmap a(CONFIG);
 
     hmap::Array ra = tensor4.get_slice(0);
     hmap::Array ga = tensor4.get_slice(1);
@@ -65,7 +65,7 @@ void compute_import_texture_node(BaseNode *p_node)
     b.from_array_interp(ba);
     a.from_array_interp(aa);
 
-    *p_out = hmap::HeightMapRGBA(r, g, b, a);
+    *p_out = hmap::HeightmapRGBA(r, g, b, a);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

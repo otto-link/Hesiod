@@ -19,10 +19,10 @@ void setup_paraboloid_node(BaseNode *p_node)
   LOG->trace("setup node {}", p_node->get_label());
 
   // port(s)
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "dx");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "dy");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "envelope");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::OUT, "output", CONFIG);
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "dx");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "envelope");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
   p_node->add_attr<FloatAttribute>("angle", 0.f, -180.f, 180.f, "angle");
@@ -55,10 +55,10 @@ void compute_paraboloid_node(BaseNode *p_node)
   LOG->trace("computing node {}", p_node->get_label());
 
   // base noise function
-  hmap::HeightMap *p_dx = p_node->get_value_ref<hmap::HeightMap>("dx");
-  hmap::HeightMap *p_dy = p_node->get_value_ref<hmap::HeightMap>("dy");
-  hmap::HeightMap *p_env = p_node->get_value_ref<hmap::HeightMap>("envelope");
-  hmap::HeightMap *p_out = p_node->get_value_ref<hmap::HeightMap>("output");
+  hmap::Heightmap *p_dx = p_node->get_value_ref<hmap::Heightmap>("dx");
+  hmap::Heightmap *p_dy = p_node->get_value_ref<hmap::Heightmap>("dy");
+  hmap::Heightmap *p_env = p_node->get_value_ref<hmap::Heightmap>("envelope");
+  hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
   hmap::fill(*p_out,
              p_dx,

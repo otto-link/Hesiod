@@ -19,9 +19,9 @@ void setup_depression_filling_node(BaseNode *p_node)
   LOG->trace("setup node {}", p_node->get_label());
 
   // port(s)
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "input");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::OUT, "output", CONFIG);
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::OUT, "fill map", CONFIG);
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "fill map", CONFIG);
 
   // attribute(s)
   p_node->add_attr<IntAttribute>("iterations", 1000, 1, 5000, "iterations");
@@ -38,12 +38,12 @@ void compute_depression_filling_node(BaseNode *p_node)
 
   LOG->trace("computing node {}", p_node->get_label());
 
-  hmap::HeightMap *p_in = p_node->get_value_ref<hmap::HeightMap>("input");
+  hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
 
   if (p_in)
   {
-    hmap::HeightMap *p_out = p_node->get_value_ref<hmap::HeightMap>("output");
-    hmap::HeightMap *p_fill_map = p_node->get_value_ref<hmap::HeightMap>("fill map");
+    hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
+    hmap::Heightmap *p_fill_map = p_node->get_value_ref<hmap::Heightmap>("fill map");
 
     // work on a single array (as a temporary solution?)
     hmap::Array z_array = p_in->to_array();

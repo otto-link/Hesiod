@@ -22,9 +22,9 @@ void setup_mix_normal_map_node(BaseNode *p_node)
   LOG->trace("setup node {}", p_node->get_label());
 
   // port(s)
-  p_node->add_port<hmap::HeightMapRGBA>(gnode::PortType::IN, "normal map base");
-  p_node->add_port<hmap::HeightMapRGBA>(gnode::PortType::IN, "normal map detail");
-  p_node->add_port<hmap::HeightMapRGBA>(gnode::PortType::OUT, "normal map", CONFIG);
+  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "normal map base");
+  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "normal map detail");
+  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "normal map", CONFIG);
 
   // attribute(s)
   p_node->add_attr<FloatAttribute>("detail_scaling", 1.f, 0.f, 4.f, "detail_scaling");
@@ -42,14 +42,14 @@ void compute_mix_normal_map_node(BaseNode *p_node)
 
   LOG->trace("computing node {}", p_node->get_label());
 
-  hmap::HeightMapRGBA *p_in1 = p_node->get_value_ref<hmap::HeightMapRGBA>(
+  hmap::HeightmapRGBA *p_in1 = p_node->get_value_ref<hmap::HeightmapRGBA>(
       "normal map base");
-  hmap::HeightMapRGBA *p_in2 = p_node->get_value_ref<hmap::HeightMapRGBA>(
+  hmap::HeightmapRGBA *p_in2 = p_node->get_value_ref<hmap::HeightmapRGBA>(
       "normal map detail");
 
   if (p_in1 && p_in2)
   {
-    hmap::HeightMapRGBA *p_out = p_node->get_value_ref<hmap::HeightMapRGBA>("normal map");
+    hmap::HeightmapRGBA *p_out = p_node->get_value_ref<hmap::HeightmapRGBA>("normal map");
 
     *p_out = hmap::mix_normal_map_rgba(
         *p_in1,

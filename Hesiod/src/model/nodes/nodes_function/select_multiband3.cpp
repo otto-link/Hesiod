@@ -19,10 +19,10 @@ void setup_select_multiband3_node(BaseNode *p_node)
   LOG->trace("setup node {}", p_node->get_label());
 
   // port(s)
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "input");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::OUT, "low", CONFIG);
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::OUT, "mid", CONFIG);
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::OUT, "high", CONFIG);
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "low", CONFIG);
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "mid", CONFIG);
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "high", CONFIG);
 
   // attribute(s)
   p_node->add_attr<FloatAttribute>("ratio1", 0.2f, 0.f, 1.f, "ratio1");
@@ -39,13 +39,13 @@ void compute_select_multiband3_node(BaseNode *p_node)
 
   LOG->trace("computing node {}", p_node->get_label());
 
-  hmap::HeightMap *p_in = p_node->get_value_ref<hmap::HeightMap>("input");
+  hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
 
   if (p_in)
   {
-    hmap::HeightMap *p_low = p_node->get_value_ref<hmap::HeightMap>("low");
-    hmap::HeightMap *p_mid = p_node->get_value_ref<hmap::HeightMap>("mid");
-    hmap::HeightMap *p_high = p_node->get_value_ref<hmap::HeightMap>("high");
+    hmap::Heightmap *p_low = p_node->get_value_ref<hmap::Heightmap>("low");
+    hmap::Heightmap *p_mid = p_node->get_value_ref<hmap::Heightmap>("mid");
+    hmap::Heightmap *p_high = p_node->get_value_ref<hmap::Heightmap>("high");
 
     float vmin = p_in->min();
     float vmax = p_in->max();

@@ -20,8 +20,8 @@ void setup_path_dig_node(BaseNode *p_node)
 
   // port(s)
   p_node->add_port<hmap::Path>(gnode::PortType::IN, "path");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "input");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::OUT, "output");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output");
 
   // attribute(s)
   p_node->add_attr<FloatAttribute>("width", 0.001f, 0.f, 0.1f, "width");
@@ -46,12 +46,12 @@ void compute_path_dig_node(BaseNode *p_node)
   LOG->trace("computing node {}", p_node->get_label());
 
   hmap::Path      *p_path = p_node->get_value_ref<hmap::Path>("path");
-  hmap::HeightMap *p_in = p_node->get_value_ref<hmap::HeightMap>("input");
+  hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
 
   if (p_path && p_in)
     if (p_path->get_npoints() > 1)
     {
-      hmap::HeightMap *p_out = p_node->get_value_ref<hmap::HeightMap>("output");
+      hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
       *p_out = *p_in;
 

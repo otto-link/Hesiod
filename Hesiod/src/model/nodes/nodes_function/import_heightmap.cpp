@@ -19,7 +19,7 @@ void setup_import_heightmap_node(BaseNode *p_node)
   LOG->trace("setup node {}", p_node->get_label());
 
   // port(s)
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::OUT, "output", CONFIG);
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
   p_node->add_attr<FilenameAttribute>("fname",
@@ -40,7 +40,7 @@ void compute_import_heightmap_node(BaseNode *p_node)
 
   LOG->trace("computing node {}", p_node->get_label());
 
-  hmap::HeightMap *p_out = p_node->get_value_ref<hmap::HeightMap>("output");
+  hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
   std::ifstream f(GET("fname", FilenameAttribute).c_str());
 

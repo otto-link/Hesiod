@@ -19,8 +19,8 @@ void setup_heightmap_to_mask_node(BaseNode *p_node)
   LOG->trace("setup node {}", p_node->get_label());
 
   // port(s)
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "input");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::OUT, "mask", CONFIG);
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "mask", CONFIG);
 
   // attribute(s)
   p_node->add_attr<BoolAttribute>("inverse", false, "inverse");
@@ -44,11 +44,11 @@ void compute_heightmap_to_mask_node(BaseNode *p_node)
 
   LOG->trace("computing node {}", p_node->get_label());
 
-  hmap::HeightMap *p_in = p_node->get_value_ref<hmap::HeightMap>("input");
+  hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
 
   if (p_in)
   {
-    hmap::HeightMap *p_mask = p_node->get_value_ref<hmap::HeightMap>("mask");
+    hmap::Heightmap *p_mask = p_node->get_value_ref<hmap::Heightmap>("mask");
 
     // copy the input heightmap
     *p_mask = *p_in;

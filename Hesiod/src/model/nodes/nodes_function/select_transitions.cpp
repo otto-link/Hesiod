@@ -19,10 +19,10 @@ void setup_select_transitions_node(BaseNode *p_node)
   LOG->trace("setup node {}", p_node->get_label());
 
   // port(s)
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "input 1");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "input 2");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "blend");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::OUT, "output", CONFIG);
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input 1");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input 2");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "blend");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
   p_node->add_attr<BoolAttribute>("inverse", false, "inverse");
@@ -43,13 +43,13 @@ void compute_select_transitions_node(BaseNode *p_node)
 
   LOG->trace("computing node {}", p_node->get_label());
 
-  hmap::HeightMap *p_in1 = p_node->get_value_ref<hmap::HeightMap>("input 1");
-  hmap::HeightMap *p_in2 = p_node->get_value_ref<hmap::HeightMap>("input 2");
-  hmap::HeightMap *p_blend = p_node->get_value_ref<hmap::HeightMap>("blend");
+  hmap::Heightmap *p_in1 = p_node->get_value_ref<hmap::Heightmap>("input 1");
+  hmap::Heightmap *p_in2 = p_node->get_value_ref<hmap::Heightmap>("input 2");
+  hmap::Heightmap *p_blend = p_node->get_value_ref<hmap::Heightmap>("blend");
 
   if (p_in1 && p_in2 && p_blend)
   {
-    hmap::HeightMap *p_out = p_node->get_value_ref<hmap::HeightMap>("output");
+    hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
     hmap::transform(*p_out,
                     *p_in1,

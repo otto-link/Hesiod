@@ -19,13 +19,13 @@ void setup_hydraulic_particle_node(BaseNode *p_node)
   LOG->trace("setup node {}", p_node->get_label());
 
   // port(s)
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "input");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "bedrock");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "moisture");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "mask");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::OUT, "output", CONFIG);
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::OUT, "erosion", CONFIG);
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::OUT, "deposition", CONFIG);
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "bedrock");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "moisture");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "erosion", CONFIG);
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "deposition", CONFIG);
 
   // attribute(s)
   p_node->add_attr<SeedAttribute>("seed");
@@ -58,17 +58,17 @@ void compute_hydraulic_particle_node(BaseNode *p_node)
 
   LOG->trace("computing node {}", p_node->get_label());
 
-  hmap::HeightMap *p_in = p_node->get_value_ref<hmap::HeightMap>("input");
+  hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
 
   if (p_in)
   {
-    hmap::HeightMap *p_bedrock = p_node->get_value_ref<hmap::HeightMap>("bedrock");
-    hmap::HeightMap *p_moisture_map = p_node->get_value_ref<hmap::HeightMap>("moisture");
-    hmap::HeightMap *p_mask = p_node->get_value_ref<hmap::HeightMap>("mask");
+    hmap::Heightmap *p_bedrock = p_node->get_value_ref<hmap::Heightmap>("bedrock");
+    hmap::Heightmap *p_moisture_map = p_node->get_value_ref<hmap::Heightmap>("moisture");
+    hmap::Heightmap *p_mask = p_node->get_value_ref<hmap::Heightmap>("mask");
 
-    hmap::HeightMap *p_out = p_node->get_value_ref<hmap::HeightMap>("output");
-    hmap::HeightMap *p_erosion_map = p_node->get_value_ref<hmap::HeightMap>("erosion");
-    hmap::HeightMap *p_deposition_map = p_node->get_value_ref<hmap::HeightMap>(
+    hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
+    hmap::Heightmap *p_erosion_map = p_node->get_value_ref<hmap::Heightmap>("erosion");
+    hmap::Heightmap *p_deposition_map = p_node->get_value_ref<hmap::Heightmap>(
         "deposition");
 
     // copy the input heightmap

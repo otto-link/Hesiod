@@ -21,11 +21,11 @@ void setup_smooth_fill_node(BaseNode *p_node)
   LOG->trace("setup node {}", p_node->get_label());
 
   // port(s)
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "input");
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::IN, "mask");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
 
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::OUT, "output", CONFIG);
-  p_node->add_port<hmap::HeightMap>(gnode::PortType::OUT, "deposition", CONFIG);
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "deposition", CONFIG);
 
   // attribute(s)
   p_node->add_attr<FloatAttribute>("radius", 0.05f, 0.001f, 0.2f, "radius");
@@ -42,13 +42,13 @@ void compute_smooth_fill_node(BaseNode *p_node)
 
   Q_EMIT p_node->compute_started(p_node->get_id());
 
-  hmap::HeightMap *p_in = p_node->get_value_ref<hmap::HeightMap>("input");
+  hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
 
   if (p_in)
   {
-    hmap::HeightMap *p_mask = p_node->get_value_ref<hmap::HeightMap>("mask");
-    hmap::HeightMap *p_out = p_node->get_value_ref<hmap::HeightMap>("output");
-    hmap::HeightMap *p_deposition_map = p_node->get_value_ref<hmap::HeightMap>(
+    hmap::Heightmap *p_mask = p_node->get_value_ref<hmap::Heightmap>("mask");
+    hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
+    hmap::Heightmap *p_deposition_map = p_node->get_value_ref<hmap::Heightmap>(
         "deposition");
 
     // copy the input heightmap
