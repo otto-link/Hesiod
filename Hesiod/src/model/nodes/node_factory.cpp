@@ -153,6 +153,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"SelectMultiband3", "Mask/Selector"},
       {"SelectPulse", "Mask/Selector"},
       {"SelectRivers", "Mask/Selector"},
+      {"SelectSlope", "Mask/Selector"},
       {"SelectTransitions", "Mask/Selector"},
       {"SetAlpha", "Texture"},
       {"ShapeIndex", "Filter/Smoothing"},
@@ -338,6 +339,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(SelectMidrange, select_midrange);
     SETUP_NODE(SelectPulse, select_pulse);
     SETUP_NODE(SelectRivers, select_rivers);
+    SETUP_NODE(SelectSlope, select_slope);
     SETUP_NODE(SelectTransitions, select_transitions);
     SETUP_NODE(SetAlpha, set_alpha);
     SETUP_NODE(ShapeIndex, shape_index);
