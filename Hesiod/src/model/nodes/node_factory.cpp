@@ -143,6 +143,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Rugosity", "Features"},
       {"Saturate", "Filter/Recurve"},
       {"ScanMask", "Mask"},
+      {"SedimentDeposition", "Erosion/Deposition"},
       {"SelectAngle", "Mask/Selector"},
       {"SelectBlobLog", "Mask/Selector"},
       {"SelectCavities", "Mask/Selector"},
@@ -329,6 +330,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(Rugosity, rugosity);
     SETUP_NODE(Saturate, saturate);
     SETUP_NODE(ScanMask, scan_mask);
+    SETUP_NODE(SedimentDeposition, sediment_deposition);
     SETUP_NODE(SelectAngle, select_angle);
     SETUP_NODE(SelectBlobLog, select_blob_log);
     SETUP_NODE(SelectCavities, select_cavities);
