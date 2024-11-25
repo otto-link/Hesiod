@@ -58,13 +58,13 @@ void compute_hydraulic_schott_node(BaseNode *p_node)
 
     hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
     hmap::Heightmap *p_flow_map = p_node->get_value_ref<hmap::Heightmap>("flow_map");
-        
+
     // copy the input heightmap
     *p_out = *p_in;
 
     // use a flat flow map as input
     hmap::Heightmap flow_map = hmap::Heightmap(CONFIG, 1.f);
-    
+
     hmap::transform(*p_out,
                     p_mask,
                     p_softness,
@@ -88,10 +88,10 @@ void compute_hydraulic_schott_node(BaseNode *p_node)
     p_out->smooth_overlap_buffers();
 
     if (p_flow_map)
-      {
-	*p_flow_map = flow_map;
-	p_flow_map->smooth_overlap_buffers();
-      }
+    {
+      *p_flow_map = flow_map;
+      p_flow_map->smooth_overlap_buffers();
+    }
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

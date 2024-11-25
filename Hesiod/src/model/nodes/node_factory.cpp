@@ -180,6 +180,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"TextureQuiltingShuffle", "Operator/Resynthesis"},
       {"Thermal", "Erosion/Thermal"},
       {"ThermalRib", "Erosion/Thermal"},
+      {"ThermalSchott", "Erosion/Thermal"},
       {"Translate", "Operator/Transform"},
       {"Unsphericity", "Features/Landform"},
       {"ValleyWidth", "Features/Landform"},
@@ -370,6 +371,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(Translate, translate);
     SETUP_NODE(Thermal, thermal);
     SETUP_NODE(ThermalRib, thermal_rib);
+    SETUP_NODE(ThermalSchott, thermal_schott);
     SETUP_NODE(Unsphericity, unsphericity);
     SETUP_NODE(ValleyWidth, valley_width);
     SETUP_NODE(Warp, warp);
