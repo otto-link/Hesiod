@@ -49,7 +49,7 @@ void setup_hydraulic_procedural_node(BaseNode *p_node)
   p_node->add_attr<FloatAttribute>("phase_noise_amp", 3.f, 0.f, 6.f, "phase_noise_amp");
   p_node->add_attr<BoolAttribute>("reverse_phase", false, "reverse_phase");
   p_node->add_attr<BoolAttribute>("use_default_mask", true, "use_default_mask");
-  p_node->add_attr<FloatAttribute>("slope_mask", 16.f, 0.f, 32.f, "slope_mask");
+  p_node->add_attr<FloatAttribute>("slope_mask", 6.f, 0.f, 32.f, "slope_mask");
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"seed",
