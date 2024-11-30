@@ -25,7 +25,7 @@ void setup_import_texture_node(BaseNode *p_node)
 
   // attribute(s)
   p_node->add_attr<FilenameAttribute>("fname",
-                                      "",
+                                      std::filesystem::path(""),
                                       false, // load
                                       "Image files (*.bmp *.dib *.jpeg *.jpg *.png *.pbm "
                                       "*.pgm *.ppm *.pxm *.pnm *.tiff *.tif *.hdr *.pic)",

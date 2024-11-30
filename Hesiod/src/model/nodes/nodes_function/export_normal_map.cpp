@@ -25,7 +25,7 @@ void setup_export_normal_map_node(BaseNode *p_node)
 
   // attribute(s)
   p_node->add_attr<FilenameAttribute>("fname",
-                                      "nmap.png",
+                                      std::filesystem::path("nmap.png"),
                                       true, // save
                                       "PNG (*.png)",
                                       "fname");

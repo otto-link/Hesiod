@@ -25,7 +25,7 @@ void setup_export_heightmap_node(BaseNode *p_node)
 
   // attribute(s)
   p_node->add_attr<FilenameAttribute>("fname",
-                                      "hmap.png",
+                                      std::filesystem::path("hmap.png"),
                                       true, // save
                                       "*",
                                       "Filename");

@@ -29,7 +29,7 @@ void setup_export_asset_node(BaseNode *p_node)
   // attribute(s)
   p_node->add_attr<BoolAttribute>("auto_export", true, "auto_export");
   p_node->add_attr<FilenameAttribute>("fname",
-                                      "export",
+                                      std::filesystem::path("export"),
                                       true, // save
                                       "*",
                                       "fname");

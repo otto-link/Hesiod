@@ -25,7 +25,7 @@ void setup_export_cloud_node(BaseNode *p_node)
 
   // attribute(s)
   p_node->add_attr<FilenameAttribute>("fname",
-                                      "cloud.csv",
+                                      std::filesystem::path("cloud.csv"),
                                       true, // save
                                       "CSV (*.csv)",
                                       "fname");

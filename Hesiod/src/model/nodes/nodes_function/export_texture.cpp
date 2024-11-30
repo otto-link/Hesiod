@@ -24,7 +24,7 @@ void setup_export_texture_node(BaseNode *p_node)
 
   // attribute(s)
   p_node->add_attr<FilenameAttribute>("fname",
-                                      "texture.png",
+                                      std::filesystem::path("texture.png"),
                                       true, // save
                                       "PNG (*.png)",
                                       "fname");

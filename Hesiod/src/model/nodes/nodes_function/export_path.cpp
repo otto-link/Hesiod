@@ -25,7 +25,7 @@ void setup_export_path_node(BaseNode *p_node)
 
   // attribute(s)
   p_node->add_attr<FilenameAttribute>("fname",
-                                      "path.csv",
+                                      std::filesystem::path("path.csv"),
                                       true, // save
                                       "CSV (*.csv)",
                                       "fname");
