@@ -163,13 +163,6 @@ void DataPreview::update_image()
         img = hmap::colorize_histogram(array).to_img_8bit();
         img_format = QImage::Format_Grayscale8;
       }
-      else if (this->preview_type == PreviewType::PSD)
-      {
-        float threshold = 1e-3f;
-        img = hmap::colorize_psd(array, hmap::Cmap::NIPY_SPECTRAL, threshold)
-                  .to_img_8bit();
-        img_format = QImage::Format_RGB888;
-      }
       else if (this->preview_type == PreviewType::SLOPE_ELEVATION_HEATMAP)
       {
         img = hmap::colorize_slope_height_heatmap(array, hmap::Cmap::HOT).to_img_8bit();

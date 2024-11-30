@@ -27,7 +27,6 @@ static std::map<std::string, PreviewType> preview_type_map = {
     {"cmap Grayscale", PreviewType::GRAYSCALE},
     {"cmap Magma", PreviewType::MAGMA},
     {"cmap Terrain (hillshade)", PreviewType::TERRAIN},
-    {"Power spectral density", PreviewType::PSD},
     {"Histogram view", PreviewType::HISTOGRAM},
     // {"Slope/elev. heatmap", PreviewType::SLOPE_ELEVATION_HEATMAP},
 };
