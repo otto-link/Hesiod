@@ -48,6 +48,7 @@ void setup_hydraulic_procedural_node(BaseNode *p_node)
   p_node->add_attr<FloatAttribute>("phase_smoothing", 2.f, 0.f, 10.f, "phase_smoothing");
   p_node->add_attr<FloatAttribute>("phase_noise_amp", 3.f, 0.f, 6.f, "phase_noise_amp");
   p_node->add_attr<BoolAttribute>("reverse_phase", false, "reverse_phase");
+  p_node->add_attr<BoolAttribute>("rotate90", false, "rotate90");
   p_node->add_attr<BoolAttribute>("use_default_mask", true, "use_default_mask");
   p_node->add_attr<FloatAttribute>("slope_mask", 6.f, 0.f, 32.f, "slope_mask");
 
@@ -64,6 +65,7 @@ void setup_hydraulic_procedural_node(BaseNode *p_node)
                                 "phase_smoothing",
                                 "phase_noise_amp",
                                 "reverse_phase",
+                                "rotate90",
                                 "_SEPARATOR_",
                                 "use_default_mask",
                                 "slope_mask"});
@@ -115,6 +117,7 @@ void compute_hydraulic_procedural_node(BaseNode *p_node)
                           GET("phase_smoothing", FloatAttribute),
                           GET("phase_noise_amp", FloatAttribute),
                           GET("reverse_phase", BoolAttribute),
+                          GET("rotate90", BoolAttribute),
                           GET("use_default_mask", BoolAttribute),
                           talus_mask,
                           p_mask_array,
