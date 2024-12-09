@@ -39,7 +39,6 @@ void setup_hydraulic_particle_node(BaseNode *p_node)
   p_node->add_attr<FloatAttribute>("c_deposition", 0.1f, 0.01f, 0.1f, "c_deposition");
   p_node->add_attr<FloatAttribute>("drag_rate", 0.01f, 0.f, 1.f, "drag_rate");
   p_node->add_attr<FloatAttribute>("evap_rate", 0.001f, 0.f, 1.f, "evap_rate");
-  p_node->add_attr<IntAttribute>("c_radius", 0, 0, 16, "c_radius");
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"seed",
@@ -48,8 +47,7 @@ void setup_hydraulic_particle_node(BaseNode *p_node)
                                 "c_erosion",
                                 "c_deposition",
                                 "drag_rate",
-                                "evap_rate",
-                                "c_radius"});
+                                "evap_rate"});
 }
 
 void compute_hydraulic_particle_node(BaseNode *p_node)
@@ -100,7 +98,6 @@ void compute_hydraulic_particle_node(BaseNode *p_node)
                                                p_moisture_map_array,
                                                p_erosion_map_array,
                                                p_deposition_map_array,
-                                               GET("c_radius", IntAttribute),
                                                GET("c_capacity", FloatAttribute),
                                                GET("c_erosion", FloatAttribute),
                                                GET("c_deposition", FloatAttribute),
