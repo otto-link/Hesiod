@@ -21,6 +21,7 @@ void setup_thermal_schott_node(BaseNode *p_node)
 
   // port(s)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
@@ -46,6 +47,7 @@ void compute_thermal_schott_node(BaseNode *p_node)
 
   if (p_in)
   {
+    hmap::Heightmap *p_mask = p_node->get_value_ref<hmap::Heightmap>("mask");
     hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
     // copy the input heightmap
@@ -63,11 +65,15 @@ void compute_thermal_schott_node(BaseNode *p_node)
     }
 
     hmap::transform(*p_out,
+                    p_mask,
                     &talus_map,
-                    [p_node, intensity](hmap::Array &h_out, hmap::Array *p_talus_array)
+                    [p_node, intensity](hmap::Array &h_out,
+                                        hmap::Array *p_mask_array,
+                                        hmap::Array *p_talus_array)
                     {
                       hmap::thermal_schott(h_out,
                                            *p_talus_array,
+                                           p_mask_array,
                                            GET("iterations", IntAttribute),
                                            intensity);
                     });

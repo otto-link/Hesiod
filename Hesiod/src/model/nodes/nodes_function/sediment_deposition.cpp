@@ -34,10 +34,16 @@ void setup_sediment_deposition_node(BaseNode *p_node)
                                  1,
                                  200,
                                  "thermal_subiterations");
+  p_node->add_attr<BoolAttribute>("scale_talus_with_elevation",
+                                  true,
+                                  "scale_talus_with_elevation");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key(
-      {"talus_global", "max_deposition", "iterations", "thermal_subiterations"});
+  p_node->set_attr_ordered_key({"talus_global",
+                                "max_deposition",
+                                "iterations",
+                                "thermal_subiterations",
+                                "scale_talus_with_elevation"});
 }
 
 void compute_sediment_deposition_node(BaseNode *p_node)
@@ -62,19 +68,11 @@ void compute_sediment_deposition_node(BaseNode *p_node)
 
     hmap::Heightmap talus_map = hmap::Heightmap(CONFIG, talus);
 
-    // if (GET("scale_talus_with_elevation", BoolAttribute))
-    // {
-    //   talus_map = *p_in;
-    //   talus_map.remap(talus / 100.f, talus);
-    // }
-
-    // void sediment_deposition(Array       &z,
-    //                        Array       *p_mask,
-    //                        const Array &talus,
-    //                        Array       *p_deposition_map = nullptr,
-    //                        float        max_deposition = 0.01,
-    //                        int          iterations = 5,
-    //                        int          thermal_subiterations = 10);
+    if (GET("scale_talus_with_elevation", BoolAttribute))
+    {
+      talus_map = *p_in;
+      talus_map.remap(talus / 100.f, talus);
+    }
 
     hmap::transform(*p_out,
                     p_mask,
