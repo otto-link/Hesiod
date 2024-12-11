@@ -53,7 +53,7 @@ void compute_distance_transform_node(BaseNode *p_node)
       z_array = 1.f - z_array;
     }
 
-    z_array = hmap::distance_transform(z_array);
+    z_array = hmap::distance_transform_approx(z_array);
 
     p_out->from_array_interp(z_array);
 
