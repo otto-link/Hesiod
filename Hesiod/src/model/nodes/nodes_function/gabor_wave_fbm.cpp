@@ -30,6 +30,12 @@ void setup_gabor_wave_fbm_node(BaseNode *p_node)
   // attribute(s)
   p_node->add_attr<WaveNbAttribute>("kw");
   p_node->add_attr<SeedAttribute>("seed");
+  p_node->add_attr<FloatAttribute>("angle", 0.f, -180.f, 180.f, "angle");
+  p_node->add_attr<FloatAttribute>("angle_spread_ratio",
+                                   1.f,
+                                   0.f,
+                                   1.f,
+                                   "angle_spread_ratio");
   p_node->add_attr<IntAttribute>("octaves", 8, 0, 32, "Octaves");
   p_node->add_attr<FloatAttribute>("weight", 0.7f, 0.f, 1.f, "Weight");
   p_node->add_attr<FloatAttribute>("persistence", 0.5f, 0.f, 1.f, "Persistence");
@@ -40,6 +46,8 @@ void setup_gabor_wave_fbm_node(BaseNode *p_node)
   // attribute(s) order
   p_node->set_attr_ordered_key({"kw",
                                 "seed",
+                                "angle",
+                                "angle_spread_ratio",
                                 "octaves",
                                 "weight",
                                 "persistence",
@@ -65,16 +73,19 @@ void compute_gabor_wave_fbm_node(BaseNode *p_node)
   hmap::Array dy_array = p_dy ? p_dy->to_array() : hmap::Array();
   hmap::Array ctrl_array = p_ctrl ? p_ctrl->to_array() : hmap::Array();
 
-  hmap::Array out_array = hmap::gpu::gabor_wave_fbm(p_out->shape,
-                                                    GET("kw", WaveNbAttribute),
-                                                    GET("seed", SeedAttribute),
-                                                    GET("octaves", IntAttribute),
-                                                    GET("weight", FloatAttribute),
-                                                    GET("persistence", FloatAttribute),
-                                                    GET("lacunarity", FloatAttribute),
-                                                    p_ctrl ? &ctrl_array : nullptr,
-                                                    p_dx ? &dx_array : nullptr,
-                                                    p_dy ? &dy_array : nullptr);
+  hmap::Array out_array = hmap::gpu::gabor_wave_fbm(
+      p_out->shape,
+      GET("kw", WaveNbAttribute),
+      GET("seed", SeedAttribute),
+      GET("angle", FloatAttribute),
+      GET("angle_spread_ratio", FloatAttribute),
+      GET("octaves", IntAttribute),
+      GET("weight", FloatAttribute),
+      GET("persistence", FloatAttribute),
+      GET("lacunarity", FloatAttribute),
+      p_ctrl ? &ctrl_array : nullptr,
+      p_dx ? &dx_array : nullptr,
+      p_dy ? &dy_array : nullptr);
 
   p_out->from_array_interp_nearest(out_array);
 
