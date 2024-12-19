@@ -60,6 +60,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Falloff", "Math/Boundaries"},
       {"FillTalus", "Operator/Transform"},
       {"Fold", "Filter/Recast"},
+      {"GaborWaveFbm", "Primitive/Coherent"},
       {"Gain", "Filter/Recurve"},
       {"GammaCorrection", "Filter/Recurve"},
       {"GammaCorrectionLocal", "Filter/Recurve"},
@@ -187,6 +188,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Translate", "Operator/Transform"},
       {"Unsphericity", "Features/Landform"},
       {"ValleyWidth", "Features/Landform"},
+      {"Voronoise", "Primitive/Coherent"},
       {"Warp", "Operator/Transform"},
       {"WarpDownslope", "Operator/Transform"},
       {"WaveDune", "Primitive/Function"},
@@ -252,6 +254,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(Falloff, falloff);
     SETUP_NODE(FillTalus, fill_talus);
     SETUP_NODE(Fold, fold);
+    SETUP_NODE(GaborWaveFbm, gabor_wave_fbm);
     SETUP_NODE(Gain, gain);
     SETUP_NODE(GammaCorrection, gamma_correction);
     SETUP_NODE(GammaCorrectionLocal, gamma_correction_local);
@@ -380,6 +383,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(ThermalSchott, thermal_schott);
     SETUP_NODE(Unsphericity, unsphericity);
     SETUP_NODE(ValleyWidth, valley_width);
+    SETUP_NODE(Voronoise, voronoise);
     SETUP_NODE(Warp, warp);
     SETUP_NODE(WarpDownslope, warp_downslope);
     SETUP_NODE(WaveDune, wave_dune);

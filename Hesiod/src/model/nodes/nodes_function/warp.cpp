@@ -1,6 +1,7 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include "highmap/opencl/gpu_opencl.hpp"
 #include "highmap/transform.hpp"
 
 #include "attributes.hpp"
@@ -23,6 +24,9 @@ void setup_warp_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "dx");
   p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+
+  // attribute(s)
+  p_node->add_attr<BoolAttribute>("GPU", true, "GPU");
 }
 
 void compute_warp_node(BaseNode *p_node)
@@ -57,7 +61,14 @@ void compute_warp_node(BaseNode *p_node)
       p_dy_array = &dy_array;
     }
 
-    hmap::warp(z_array, p_dx_array, p_dy_array);
+    if (GET("GPU", BoolAttribute))
+    {
+      hmap::gpu::warp(z_array, p_dx_array, p_dy_array);
+    }
+    else
+    {
+      hmap::warp(z_array, p_dx_array, p_dy_array);
+    }
 
     p_out->from_array_interp_nearest(z_array);
   }

@@ -7,6 +7,7 @@ typedef unsigned int uint;
 #include <QApplication>
 
 #include "highmap/algebra.hpp"
+#include "highmap/opencl/gpu_opencl.hpp"
 
 #include "hesiod/gui/main_window.hpp"
 #include "hesiod/logger.hpp"
@@ -23,6 +24,9 @@ std::istream &operator>>(std::istream &is, hmap::Vec2<int> &vec2)
 
 int main(int argc, char *argv[])
 {
+  hmap::gpu::init_opencl();
+  clwrapper::KernelManager::get_instance().set_block_size(32);
+
   QApplication app(argc, argv); // enven if headless (for QObject)
 
   LOG->info("Welcome to Hesiod v{}.{}.{}!",

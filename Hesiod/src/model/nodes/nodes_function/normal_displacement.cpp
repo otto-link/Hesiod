@@ -2,6 +2,7 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include "highmap/filters.hpp"
+#include "highmap/opencl/gpu_opencl.hpp"
 
 #include "attributes.hpp"
 
@@ -28,9 +29,11 @@ void setup_normal_displacement_node(BaseNode *p_node)
   p_node->add_attr<FloatAttribute>("amount", 5.f, 0.f, 20.f, "amount");
   p_node->add_attr<BoolAttribute>("reverse", false, "reverse");
   p_node->add_attr<IntAttribute>("iterations", 1, 1, 10, "iterations");
+  p_node->add_attr<BoolAttribute>("GPU", true, "GPU");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"radius", "amount", "reverse", "iterations"});
+  p_node->set_attr_ordered_key(
+      {"radius", "amount", "reverse", "iterations", "_SEPARATOR_", "GPU"});
 }
 
 void compute_normal_displacement_node(BaseNode *p_node)
@@ -53,16 +56,32 @@ void compute_normal_displacement_node(BaseNode *p_node)
 
     for (int it = 0; it < GET("iterations", IntAttribute); it++)
     {
-      hmap::transform(*p_out,
-                      p_mask,
-                      [p_node, &ir](hmap::Array &x, hmap::Array *p_mask)
-                      {
-                        hmap::normal_displacement(x,
-                                                  p_mask,
-                                                  GET("amount", FloatAttribute),
-                                                  ir,
-                                                  GET("reverse", BoolAttribute));
-                      });
+      if (GET("GPU", BoolAttribute))
+      {
+        hmap::transform(*p_out,
+                        p_mask,
+                        [p_node, &ir](hmap::Array &x, hmap::Array *p_mask)
+                        {
+                          hmap::gpu::normal_displacement(x,
+                                                         p_mask,
+                                                         GET("amount", FloatAttribute),
+                                                         ir,
+                                                         GET("reverse", BoolAttribute));
+                        });
+      }
+      else
+      {
+        hmap::transform(*p_out,
+                        p_mask,
+                        [p_node, &ir](hmap::Array &x, hmap::Array *p_mask)
+                        {
+                          hmap::normal_displacement(x,
+                                                    p_mask,
+                                                    GET("amount", FloatAttribute),
+                                                    ir,
+                                                    GET("reverse", BoolAttribute));
+                        });
+      }
       p_out->smooth_overlap_buffers();
     }
   }

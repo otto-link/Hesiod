@@ -1,9 +1,9 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-
 #include "highmap/filters.hpp"
 #include "highmap/kernels.hpp"
+#include "highmap/opencl/gpu_opencl.hpp"
 
 #include "attributes.hpp"
 
@@ -30,9 +30,10 @@ void setup_expand_shrink_node(BaseNode *p_node)
   p_node->add_attr<MapEnumAttribute>("kernel", "cubic_pulse", kernel_type_map, "kernel");
   p_node->add_attr<FloatAttribute>("radius", 0.05f, 0.01f, 0.2f, "radius");
   p_node->add_attr<BoolAttribute>("shrink", false, "expand", "shrink");
+  p_node->add_attr<BoolAttribute>("GPU", true, "GPU");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"kernel", "radius", "shrink"});
+  p_node->set_attr_ordered_key({"kernel", "radius", "shrink", "_SEPARATOR_", "GPU"});
 }
 
 void compute_expand_shrink_node(BaseNode *p_node)
@@ -63,12 +64,24 @@ void compute_expand_shrink_node(BaseNode *p_node)
     // core operator
     std::function<void(hmap::Array &, hmap::Array *)> lambda;
 
-    if (GET("shrink", BoolAttribute))
-      lambda = [&kernel_array](hmap::Array &x, hmap::Array *p_mask)
-      { hmap::shrink(x, kernel_array, p_mask); };
+    if (GET("GPU", BoolAttribute))
+    {
+      if (GET("shrink", BoolAttribute))
+        lambda = [&kernel_array](hmap::Array &x, hmap::Array *p_mask)
+        { hmap::gpu::shrink(x, kernel_array, p_mask); };
+      else
+        lambda = [&kernel_array](hmap::Array &x, hmap::Array *p_mask)
+        { hmap::gpu::expand(x, kernel_array, p_mask); };
+    }
     else
-      lambda = [&kernel_array](hmap::Array &x, hmap::Array *p_mask)
-      { hmap::expand(x, kernel_array, p_mask); };
+    {
+      if (GET("shrink", BoolAttribute))
+        lambda = [&kernel_array](hmap::Array &x, hmap::Array *p_mask)
+        { hmap::shrink(x, kernel_array, p_mask); };
+      else
+        lambda = [&kernel_array](hmap::Array &x, hmap::Array *p_mask)
+        { hmap::expand(x, kernel_array, p_mask); };
+    }
 
     hmap::transform(*p_out, p_mask, lambda);
     p_out->smooth_overlap_buffers();

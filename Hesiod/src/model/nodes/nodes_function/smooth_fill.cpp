@@ -1,9 +1,8 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-
 #include "highmap/filters.hpp"
-#include "highmap/heightmap.hpp"
+#include "highmap/opencl/gpu_opencl.hpp"
 
 #include "attributes.hpp"
 
@@ -31,9 +30,10 @@ void setup_smooth_fill_node(BaseNode *p_node)
   p_node->add_attr<FloatAttribute>("radius", 0.05f, 0.001f, 0.2f, "radius");
   p_node->add_attr<FloatAttribute>("k", 0.01f, 0.01f, 1.f, "k");
   p_node->add_attr<BoolAttribute>("normalized_map", true, "normalized_map");
+  p_node->add_attr<BoolAttribute>("GPU", true, "GPU");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"radius", "k", "normalized_map"});
+  p_node->set_attr_ordered_key({"radius", "k", "normalized_map", "_SEPARATOR_", "GPU"});
 }
 
 void compute_smooth_fill_node(BaseNode *p_node)
@@ -56,12 +56,25 @@ void compute_smooth_fill_node(BaseNode *p_node)
 
     int ir = std::max(1, (int)(GET("radius", FloatAttribute) * p_out->shape.x));
 
-    hmap::transform(
-        *p_out,
-        p_mask,
-        p_deposition_map,
-        [p_node, &ir](hmap::Array &x, hmap::Array *p_mask, hmap::Array *p_deposition)
-        { hmap::smooth_fill(x, ir, p_mask, GET("k", FloatAttribute), p_deposition); });
+    if (GET("GPU", BoolAttribute))
+    {
+      hmap::transform(
+          *p_out,
+          p_mask,
+          p_deposition_map,
+          [p_node, &ir](hmap::Array &x, hmap::Array *p_mask, hmap::Array *p_deposition)
+          { hmap::smooth_fill(x, ir, p_mask, GET("k", FloatAttribute), p_deposition); });
+    }
+    else
+    {
+      hmap::transform(
+          *p_out,
+          p_mask,
+          p_deposition_map,
+          [p_node, &ir](hmap::Array &x, hmap::Array *p_mask, hmap::Array *p_deposition) {
+            hmap::gpu::smooth_fill(x, ir, p_mask, GET("k", FloatAttribute), p_deposition);
+          });
+    }
 
     p_out->smooth_overlap_buffers();
     p_deposition_map->smooth_overlap_buffers();

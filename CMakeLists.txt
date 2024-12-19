@@ -39,6 +39,17 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(spdlog REQUIRED)
 find_package(Qt6 REQUIRED COMPONENTS Core Widgets OpenGL OpenGLWidgets)
 
+set(HESIOD_ENABLE_OPENCL ON)
+if(HESIOD_ENABLE_OPENCL)
+  find_package(OpenCL REQUIRED)
+  message(STATUS "Hesiod: OpenCL enabled")
+  add_definitions("-DENABLE_OPENCL")
+  add_definitions("-DCL_HPP_MINIMUM_OPENCL_VERSION=120")
+  add_definitions("-DCL_HPP_TARGET_OPENCL_VERSION=300")
+else()
+  message(STATUS "Hesiod: OpenCL disabled")
+endif(HESIOD_ENABLE_OPENCL)
+
 add_subdirectory(external)
 
 add_subdirectory(Hesiod)

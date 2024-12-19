@@ -2,6 +2,7 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include "highmap/filters.hpp"
+#include "highmap/opencl/gpu_opencl.hpp"
 
 #include "attributes.hpp"
 
@@ -25,6 +26,10 @@ void setup_smooth_cpulse_node(BaseNode *p_node)
 
   // attribute(s)
   p_node->add_attr<FloatAttribute>("radius", 0.05f, 0.f, 0.2f, "radius");
+  p_node->add_attr<BoolAttribute>("GPU", true, "GPU");
+
+  // attribute(s) order
+  p_node->set_attr_ordered_key({"radius", "_SEPARATOR_", "GPU"});
 }
 
 void compute_smooth_cpulse_node(BaseNode *p_node)
@@ -45,10 +50,20 @@ void compute_smooth_cpulse_node(BaseNode *p_node)
 
     int ir = std::max(1, (int)(GET("radius", FloatAttribute) * p_out->shape.x));
 
-    hmap::transform(*p_out,
-                    p_mask,
-                    [&ir](hmap::Array &x, hmap::Array *p_mask)
-                    { hmap::smooth_cpulse(x, ir, p_mask); });
+    if (GET("GPU", BoolAttribute))
+    {
+      hmap::transform(*p_out,
+                      p_mask,
+                      [&ir](hmap::Array &x, hmap::Array *p_mask)
+                      { hmap::gpu::smooth_cpulse(x, ir, p_mask); });
+    }
+    else
+    {
+      hmap::transform(*p_out,
+                      p_mask,
+                      [&ir](hmap::Array &x, hmap::Array *p_mask)
+                      { hmap::smooth_cpulse(x, ir, p_mask); });
+    }
 
     p_out->smooth_overlap_buffers();
   }
