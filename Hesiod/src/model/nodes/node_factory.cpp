@@ -66,6 +66,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"GammaCorrectionLocal", "Filter/Recurve"},
       {"GaussianDecay", "Math/Base"},
       {"GaussianPulse", "Primitive/Function"},
+      {"Gavoronoise", "Primitive/Coherent"},
       {"Gradient", "Math/Gradient"},
       {"GradientAngle", "Math/Gradient"},
       {"GradientNorm", "Math/Gradient"},
@@ -260,6 +261,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(GammaCorrectionLocal, gamma_correction_local);
     SETUP_NODE(GaussianDecay, gaussian_decay);
     SETUP_NODE(GaussianPulse, gaussian_pulse);
+    SETUP_NODE(Gavoronoise, gavoronoise);
     SETUP_NODE(Gradient, gradient);
     SETUP_NODE(GradientAngle, gradient_angle);
     SETUP_NODE(GradientNorm, gradient_norm);
