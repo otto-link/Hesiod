@@ -41,9 +41,9 @@ struct ModelConfig
    * @brief Tile overlap ratio in the range [0, 1].
    *
    * Specifies the overlap between tiles as a floating-point value. The default
-   * overlap is 0.25, meaning there is 25% overlap between adjacent tiles.
+   * overlap is 0.5, meaning there is 50% overlap between adjacent tiles.
    */
-  float overlap = 0.25f;
+  float overlap = 0.5f;
 
   /**
    * @brief Logs debug information about the current model configuration.
