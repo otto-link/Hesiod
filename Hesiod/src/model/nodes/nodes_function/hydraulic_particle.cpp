@@ -2,6 +2,7 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include "highmap/erosion.hpp"
+#include "highmap/multiscale/downscaling.hpp"
 #include "highmap/opencl/gpu_opencl.hpp"
 
 #include "attributes.hpp"
@@ -33,14 +34,17 @@ void setup_hydraulic_particle_node(BaseNode *p_node)
   p_node->add_attr<FloatAttribute>("particle_density",
                                    0.2f,
                                    0.f,
-                                   1.f,
+                                   2.f,
                                    "particle_density");
   p_node->add_attr<FloatAttribute>("c_capacity", 10.f, 0.1f, 100.f, "c_capacity");
-  p_node->add_attr<FloatAttribute>("c_erosion", 0.05f, 0.01f, 0.1f, "c_erosion");
-  p_node->add_attr<FloatAttribute>("c_deposition", 0.05f, 0.01f, 0.1f, "c_deposition");
+  p_node->add_attr<FloatAttribute>("c_erosion", 0.05f, 0.01f, 0.5f, "c_erosion");
+  p_node->add_attr<FloatAttribute>("c_deposition", 0.05f, 0.01f, 0.5f, "c_deposition");
   p_node->add_attr<FloatAttribute>("drag_rate", 0.001f, 0.f, 1.f, "drag_rate");
   p_node->add_attr<FloatAttribute>("evap_rate", 0.001f, 0.f, 1.f, "evap_rate");
   p_node->add_attr<BoolAttribute>("GPU", true, "GPU");
+
+  p_node->add_attr<BoolAttribute>("downscale", true, "downscale");
+  p_node->add_attr<FloatAttribute>("kc", 256.f, 0.f, 2048.f, "kc");
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"seed",
@@ -51,7 +55,10 @@ void setup_hydraulic_particle_node(BaseNode *p_node)
                                 "drag_rate",
                                 "evap_rate",
                                 "_SEPARATOR_",
-                                "GPU"});
+                                "GPU",
+                                "_SEPARATOR_",
+                                "downscale",
+                                "kc"});
 }
 
 void compute_hydraulic_particle_node(BaseNode *p_node)
@@ -83,33 +90,64 @@ void compute_hydraulic_particle_node(BaseNode *p_node)
 
     if (GET("GPU", BoolAttribute))
     {
-      hmap::transform(*p_out,
-                      p_bedrock,
-                      p_moisture_map,
-                      p_mask,
-                      p_erosion_map,
-                      p_deposition_map,
-                      [p_node, &nparticles_tile](hmap::Array &h_out,
-                                                 hmap::Array *p_bedrock_array,
-                                                 hmap::Array *p_moisture_map_array,
-                                                 hmap::Array *p_mask_array,
-                                                 hmap::Array *p_erosion_map_array,
-                                                 hmap::Array *p_deposition_map_array)
-                      {
-                        hmap::hydraulic_particle(h_out,
-                                                 p_mask_array,
-                                                 nparticles_tile,
-                                                 GET("seed", SeedAttribute),
-                                                 p_bedrock_array,
-                                                 p_moisture_map_array,
-                                                 p_erosion_map_array,
-                                                 p_deposition_map_array,
-                                                 GET("c_capacity", FloatAttribute),
-                                                 GET("c_erosion", FloatAttribute),
-                                                 GET("c_deposition", FloatAttribute),
-                                                 GET("drag_rate", FloatAttribute),
-                                                 GET("evap_rate", FloatAttribute));
-                      });
+      if (!GET("downscale", BoolAttribute))
+      {
+        hmap::transform(*p_out,
+                        p_bedrock,
+                        p_moisture_map,
+                        p_mask,
+                        p_erosion_map,
+                        p_deposition_map,
+                        [p_node, &nparticles_tile](hmap::Array &h_out,
+                                                   hmap::Array *p_bedrock_array,
+                                                   hmap::Array *p_moisture_map_array,
+                                                   hmap::Array *p_mask_array,
+                                                   hmap::Array *p_erosion_map_array,
+                                                   hmap::Array *p_deposition_map_array)
+                        {
+                          hmap::hydraulic_particle(h_out,
+                                                   p_mask_array,
+                                                   nparticles_tile,
+                                                   GET("seed", SeedAttribute),
+                                                   p_bedrock_array,
+                                                   p_moisture_map_array,
+                                                   p_erosion_map_array,
+                                                   p_deposition_map_array,
+                                                   GET("c_capacity", FloatAttribute),
+                                                   GET("c_erosion", FloatAttribute),
+                                                   GET("c_deposition", FloatAttribute),
+                                                   GET("drag_rate", FloatAttribute),
+                                                   GET("evap_rate", FloatAttribute));
+                        });
+      }
+      else
+      {
+        hmap::Array out_array = p_out->to_array();
+
+        // adjust particle counts to the new working resolution
+        nparticles = (int)(GET("kc", FloatAttribute) / p_out->shape.x * nparticles);
+
+        auto lambda = [p_node, nparticles](hmap::Array &x)
+        {
+          hmap::gpu::hydraulic_particle(x,
+                                        nullptr,
+                                        nparticles,
+                                        GET("seed", SeedAttribute),
+                                        nullptr,
+                                        nullptr,
+                                        nullptr,
+                                        nullptr,
+                                        GET("c_capacity", FloatAttribute),
+                                        GET("c_erosion", FloatAttribute),
+                                        GET("c_deposition", FloatAttribute),
+                                        GET("drag_rate", FloatAttribute),
+                                        GET("evap_rate", FloatAttribute));
+        };
+
+        hmap::downscale_transform(out_array, GET("kc", FloatAttribute), lambda);
+
+        p_out->from_array_interp_nearest(out_array);
+      }
     }
     else
     {
