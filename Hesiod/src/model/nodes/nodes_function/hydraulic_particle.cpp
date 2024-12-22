@@ -32,13 +32,13 @@ void setup_hydraulic_particle_node(BaseNode *p_node)
   // attribute(s)
   p_node->add_attr<SeedAttribute>("seed");
   p_node->add_attr<FloatAttribute>("particle_density",
-                                   0.2f,
+                                   0.4f,
                                    0.f,
                                    2.f,
                                    "particle_density");
   p_node->add_attr<FloatAttribute>("c_capacity", 10.f, 0.1f, 100.f, "c_capacity");
   p_node->add_attr<FloatAttribute>("c_erosion", 0.05f, 0.01f, 0.2f, "c_erosion");
-  p_node->add_attr<FloatAttribute>("c_deposition", 0.05f, 0.01f, 0.2f, "c_deposition");
+  p_node->add_attr<FloatAttribute>("c_deposition", 0.1f, 0.01f, 0.2f, "c_deposition");
   p_node->add_attr<FloatAttribute>("drag_rate", 0.001f, 0.f, 1.f, "drag_rate");
   p_node->add_attr<FloatAttribute>("evap_rate", 0.001f, 0.f, 1.f, "evap_rate");
   p_node->add_attr<BoolAttribute>("GPU", true, "GPU");
