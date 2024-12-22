@@ -129,6 +129,7 @@ DECLARE_NODE(heightmap_to_mask)
 DECLARE_NODE(heightmap_to_rgba)
 DECLARE_NODE(hydraulic_blur);
 DECLARE_NODE(hydraulic_schott);
+DECLARE_NODE(hydraulic_musgrave);
 DECLARE_NODE(hydraulic_particle);
 DECLARE_NODE(hydraulic_procedural);
 DECLARE_NODE(hydraulic_ridge);
