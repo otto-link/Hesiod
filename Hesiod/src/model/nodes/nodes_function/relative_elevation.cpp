@@ -2,6 +2,7 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include "highmap/features.hpp"
+#include "highmap/opencl/gpu_opencl.hpp"
 
 #include "attributes.hpp"
 
@@ -24,6 +25,10 @@ void setup_relative_elevation_node(BaseNode *p_node)
 
   // attribute(s)
   p_node->add_attr<FloatAttribute>("radius", 0.05f, 0.f, 0.2f, "radius");
+  p_node->add_attr<BoolAttribute>("GPU", true, "GPU");
+
+  // attribute(s) order
+  p_node->set_attr_ordered_key({"radius", "_SEPARATOR_", "GPU"});
 }
 
 void compute_relative_elevation_node(BaseNode *p_node)
@@ -43,8 +48,17 @@ void compute_relative_elevation_node(BaseNode *p_node)
 
     int ir = std::max(1, (int)(GET("radius", FloatAttribute) * p_out->shape.x));
 
-    hmap::transform(*p_out,
-                    [&ir](hmap::Array &x) { x = hmap::relative_elevation(x, ir); });
+    if (GET("GPU", BoolAttribute))
+    {
+      hmap::transform(*p_out,
+                      [&ir](hmap::Array &x)
+                      { x = hmap::gpu::relative_elevation(x, ir); });
+    }
+    else
+    {
+      hmap::transform(*p_out,
+                      [&ir](hmap::Array &x) { x = hmap::relative_elevation(x, ir); });
+    }
 
     p_out->smooth_overlap_buffers();
     p_out->remap();
