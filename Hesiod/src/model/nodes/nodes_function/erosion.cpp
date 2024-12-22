@@ -2,6 +2,7 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include "highmap/morphology.hpp"
+#include "highmap/opencl/gpu_opencl.hpp"
 
 #include "attributes.hpp"
 
@@ -24,6 +25,10 @@ void setup_erosion_node(BaseNode *p_node)
 
   // attribute(s)
   p_node->add_attr<FloatAttribute>("radius", 0.01f, 0.f, 0.05f, "radius");
+  p_node->add_attr<BoolAttribute>("GPU", true, "GPU");
+
+  // attribute(s) order
+  p_node->set_attr_ordered_key({"radius", "_SEPARATOR_", "GPU"});
 }
 
 void compute_erosion_node(BaseNode *p_node)
@@ -40,10 +45,21 @@ void compute_erosion_node(BaseNode *p_node)
 
     int ir = std::max(1, (int)(GET("radius", FloatAttribute) * p_out->shape.x));
 
-    hmap::transform(*p_out,
-                    *p_in,
-                    [&ir](hmap::Array &out, hmap::Array &in)
-                    { out = hmap::erosion(in, ir); });
+    if (GET("GPU", BoolAttribute))
+    {
+      hmap::transform(*p_out,
+                      *p_in,
+                      [&ir](hmap::Array &out, hmap::Array &in)
+                      { out = hmap::gpu::erosion(in, ir); });
+    }
+    else
+    {
+      hmap::transform(*p_out,
+                      *p_in,
+                      [&ir](hmap::Array &out, hmap::Array &in)
+                      { out = hmap::erosion(in, ir); });
+    }
+
     p_out->smooth_overlap_buffers();
   }
 

@@ -29,7 +29,7 @@ void setup_thermal_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "deposition", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("talus_global", 1.f, 0.f, 4.f, "talus_global");
+  p_node->add_attr<FloatAttribute>("talus_global", 1.f, 0.f, 16.f, "talus_global");
   p_node->add_attr<IntAttribute>("iterations", 100, 1, 200, "iterations");
   p_node->add_attr<BoolAttribute>("scale_talus_with_elevation",
                                   false,

@@ -2,6 +2,7 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include "highmap/morphology.hpp"
+#include "highmap/opencl/gpu_opencl.hpp"
 
 #include "attributes.hpp"
 
@@ -26,9 +27,11 @@ void setup_morphological_gradient_node(BaseNode *p_node)
   p_node->add_attr<FloatAttribute>("radius", 0.01f, 0.f, 0.05f, "radius");
   p_node->add_attr<BoolAttribute>("inverse", false, "inverse");
   p_node->add_attr<RangeAttribute>("remap_range", "remap_range");
+  p_node->add_attr<BoolAttribute>("GPU", true, "GPU");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"radius", "_SEPARATOR_", "inverse", "remap_range"});
+  p_node->set_attr_ordered_key(
+      {"radius", "_SEPARATOR_", "inverse", "remap_range", "_SEPARATOR_", "GPU"});
 }
 
 void compute_morphological_gradient_node(BaseNode *p_node)
@@ -45,10 +48,21 @@ void compute_morphological_gradient_node(BaseNode *p_node)
 
     int ir = std::max(1, (int)(GET("radius", FloatAttribute) * p_out->shape.x));
 
-    hmap::transform(*p_out,
-                    *p_in,
-                    [&ir](hmap::Array &out, hmap::Array &in)
-                    { out = hmap::morphological_gradient(in, ir); });
+    if (GET("GPU", BoolAttribute))
+    {
+      hmap::transform(*p_out,
+                      *p_in,
+                      [&ir](hmap::Array &out, hmap::Array &in)
+                      { out = hmap::gpu::morphological_gradient(in, ir); });
+    }
+    else
+    {
+      hmap::transform(*p_out,
+                      *p_in,
+                      [&ir](hmap::Array &out, hmap::Array &in)
+                      { out = hmap::morphological_gradient(in, ir); });
+    }
+
     p_out->smooth_overlap_buffers();
 
     // post-process
