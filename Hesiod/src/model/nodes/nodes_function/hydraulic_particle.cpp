@@ -41,10 +41,11 @@ void setup_hydraulic_particle_node(BaseNode *p_node)
   p_node->add_attr<FloatAttribute>("c_deposition", 0.1f, 0.01f, 0.2f, "c_deposition");
   p_node->add_attr<FloatAttribute>("drag_rate", 0.001f, 0.f, 1.f, "drag_rate");
   p_node->add_attr<FloatAttribute>("evap_rate", 0.001f, 0.f, 1.f, "evap_rate");
+  p_node->add_attr<BoolAttribute>("post-filtering", true, "post-filtering");
   p_node->add_attr<BoolAttribute>("GPU", true, "GPU");
 
   p_node->add_attr<BoolAttribute>("downscale", true, "downscale");
-  p_node->add_attr<FloatAttribute>("kc", 256.f, 0.f, 2048.f, "kc");
+  p_node->add_attr<FloatAttribute>("kc", 512.f, 0.f, 2048.f, "kc");
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"seed",
@@ -54,11 +55,12 @@ void setup_hydraulic_particle_node(BaseNode *p_node)
                                 "c_deposition",
                                 "drag_rate",
                                 "evap_rate",
-                                "_SEPARATOR_",
-                                "GPU",
+                                "post-filtering",
                                 "_SEPARATOR_",
                                 "downscale",
-                                "kc"});
+                                "kc",
+                                "_SEPARATOR_",
+                                "GPU"});
 }
 
 void compute_hydraulic_particle_node(BaseNode *p_node)
@@ -117,7 +119,8 @@ void compute_hydraulic_particle_node(BaseNode *p_node)
                                                    GET("c_erosion", FloatAttribute),
                                                    GET("c_deposition", FloatAttribute),
                                                    GET("drag_rate", FloatAttribute),
-                                                   GET("evap_rate", FloatAttribute));
+                                                   GET("evap_rate", FloatAttribute),
+                                                   GET("post-filtering", BoolAttribute));
                         });
       }
       else
@@ -141,7 +144,8 @@ void compute_hydraulic_particle_node(BaseNode *p_node)
                                         GET("c_erosion", FloatAttribute),
                                         GET("c_deposition", FloatAttribute),
                                         GET("drag_rate", FloatAttribute),
-                                        GET("evap_rate", FloatAttribute));
+                                        GET("evap_rate", FloatAttribute),
+                                        GET("post-filtering", BoolAttribute));
         };
 
         hmap::downscale_transform(out_array, GET("kc", FloatAttribute), lambda);
@@ -164,19 +168,21 @@ void compute_hydraulic_particle_node(BaseNode *p_node)
                                                  hmap::Array *p_erosion_map_array,
                                                  hmap::Array *p_deposition_map_array)
                       {
-                        hmap::gpu::hydraulic_particle(h_out,
-                                                      p_mask_array,
-                                                      nparticles_tile,
-                                                      GET("seed", SeedAttribute),
-                                                      p_bedrock_array,
-                                                      p_moisture_map_array,
-                                                      p_erosion_map_array,
-                                                      p_deposition_map_array,
-                                                      GET("c_capacity", FloatAttribute),
-                                                      GET("c_erosion", FloatAttribute),
-                                                      GET("c_deposition", FloatAttribute),
-                                                      GET("drag_rate", FloatAttribute),
-                                                      GET("evap_rate", FloatAttribute));
+                        hmap::gpu::hydraulic_particle(
+                            h_out,
+                            p_mask_array,
+                            nparticles_tile,
+                            GET("seed", SeedAttribute),
+                            p_bedrock_array,
+                            p_moisture_map_array,
+                            p_erosion_map_array,
+                            p_deposition_map_array,
+                            GET("c_capacity", FloatAttribute),
+                            GET("c_erosion", FloatAttribute),
+                            GET("c_deposition", FloatAttribute),
+                            GET("drag_rate", FloatAttribute),
+                            GET("evap_rate", FloatAttribute),
+                            GET("post-filtering", BoolAttribute));
                       });
     }
 
