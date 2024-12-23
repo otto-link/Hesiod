@@ -230,7 +230,8 @@ void AbstractViewer::on_node_selected(const std::string &id)
     {
       int port_idx = 0;
       for (int k = 0; k < p_node->get_nports(); k++)
-        if (p_node->get_port_type(k) == gngui::PortType::OUT)
+        if (p_node->get_port_type(k) == gngui::PortType::OUT &&
+            p_node->get_data_type(k) == typeid(hmap::Heightmap).name())
         {
           port_idx = k;
           break;

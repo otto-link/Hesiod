@@ -22,6 +22,7 @@ void setup_colorize_cmap_node(BaseNode *p_node)
   // port(s)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "level");
   p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "alpha");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "noise");
   p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture", CONFIG);
 
   // attribute(s)
@@ -54,6 +55,7 @@ void compute_colorize_cmap_node(BaseNode *p_node)
   if (p_level)
   {
     hmap::Heightmap     *p_alpha = p_node->get_value_ref<hmap::Heightmap>("alpha");
+    hmap::Heightmap     *p_noise = p_node->get_value_ref<hmap::Heightmap>("noise");
     hmap::HeightmapRGBA *p_out = p_node->get_value_ref<hmap::HeightmapRGBA>("texture");
 
     std::vector<std::vector<float>> colormap_colors = hesiod::get_colormap_data(
@@ -72,6 +74,12 @@ void compute_colorize_cmap_node(BaseNode *p_node)
 
       cmin = (1.f - crange.x) * hmin + crange.x * hmax;
       cmax = (1.f - crange.y) * hmin + crange.y * hmax;
+    }
+
+    if (p_noise)
+    {
+      cmin += p_noise->min();
+      cmax += p_noise->max();
     }
 
     // reverse alpha
@@ -107,7 +115,8 @@ void compute_colorize_cmap_node(BaseNode *p_node)
                     cmax,
                     colormap_colors,
                     p_alpha_copy,
-                    GET("reverse_colormap", BoolAttribute));
+                    GET("reverse_colormap", BoolAttribute),
+                    p_noise);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());
