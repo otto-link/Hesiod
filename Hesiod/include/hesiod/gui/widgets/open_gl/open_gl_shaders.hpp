@@ -103,6 +103,18 @@ vec3 turbo(float t) {
     return c0+t*(c1+t*(c2+t*(c3+t*(c4+t*(c5+t*c6)))));
 }
 
+// https://www.shadertoy.com/view/WdjSW3
+vec3 tonemap_ACES(vec3 x)
+{
+    // Narkowicz 2015, "ACES Filmic Tone Mapping Curve"
+    const float a = 2.51;
+    const float b = 0.03;
+    const float c = 2.43;
+    const float d = 0.59;
+    const float e = 0.14;
+    return (x * (a * x + b)) / (x * (c * x + d) + e);
+}
+
 void main()
 {
     // compute normals
@@ -135,7 +147,10 @@ void main()
         if (show_heightmap)
             color = vec4(turbo(h), 1.f);
         else if (use_texture_diffuse)
+        {
             color = texture(textureDiffuse, tex_coord);
+            color.xyz = tonemap_ACES(color.xyz);
+        }
         else
             color = vec4(1.f, 1.f, 1.f, 1.f);
 
@@ -147,7 +162,6 @@ void main()
 
         color *= vec4(vec3(hillshade), 1.f);
     }
-
 }
 )"";
 
