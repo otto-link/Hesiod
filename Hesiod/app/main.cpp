@@ -12,6 +12,8 @@ typedef unsigned int uint;
 #include "hesiod/gui/main_window.hpp"
 #include "hesiod/logger.hpp"
 
+#include "hesiod/model/nodes/node_factory.hpp"
+
 // in this order, required by args.hxx
 std::istream &operator>>(std::istream &is, hmap::Vec2<int> &vec2)
 {
@@ -44,6 +46,8 @@ int main(int argc, char *argv[])
                     args::Group::Validators::DontCare);
 
   args::Flag snapshot_generation(group, "", "Node snapshot generation", {"snapshot"});
+
+  args::Flag node_inventory(group, "", "Node inventory output", {"inventory"});
 
   args::ValueFlag<std::string> batch(group,
                                      "hsd file",
@@ -141,6 +145,15 @@ int main(int argc, char *argv[])
 
       // TODO
 
+      return 0;
+    }
+
+    // --- inventory mode
+
+    if (node_inventory)
+    {
+      LOG->info("executing Hesiod in node inventory mode");
+      hesiod::dump_node_inventory("node_inventory.csv");
       return 0;
     }
   }

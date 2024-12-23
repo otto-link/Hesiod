@@ -1,6 +1,7 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include <fstream>
 #include <stdexcept>
 
 #include "hesiod/logger.hpp"
@@ -9,11 +10,76 @@
 namespace hesiod
 {
 
-// HELPER
+// HELPERS
 constexpr unsigned int str2int(const char *str, int h = 0)
 {
   // https://stackoverflow.com/questions/16388510
   return !str[h] ? 5381 : (str2int(str, h + 1) * 33) ^ str[h];
+}
+
+std::vector<std::string> split_string(const std::string &string, char delimiter)
+{
+  std::vector<std::string> result;
+  std::stringstream        ss(string);
+  std::string              word;
+
+  while (std::getline(ss, word, delimiter))
+    result.push_back(word);
+
+  return result;
+}
+
+void dump_node_inventory(const std::string &fname)
+{
+  std::map<std::string, std::string> ni = hesiod::get_node_inventory();
+
+  // --- export to mermaid also
+
+  std::fstream f;
+  f.open(fname, std::ios::out);
+
+  for (auto [name, category] : ni)
+  {
+    f << name << ";";
+    for (auto v : split_string(category, '/'))
+      f << v << ";";
+    f << "\n";
+  }
+
+  f.close();
+
+  // --- export to mermaid also
+
+  f.open(fname + ".mmd", std::ios::out);
+
+  f << "---\n";
+  f << "title: Hesiod nodes\n";
+  f << "---\n";
+  f << "flowchart LR\n";
+
+  std::vector<std::string> edges = {};
+
+  for (auto [name, category] : ni)
+  {
+    std::vector<std::string> categories = split_string(category, '/');
+    categories.insert(categories.begin(), "NODES[(NODES)]");
+    categories.push_back("#" + name + "([" + name + "])");
+
+    for (size_t k = 0; k < categories.size() - 1; k++)
+    {
+      std::string new_edge = categories[k] + " --> " + categories[k + 1];
+
+      if (std::find(edges.begin(), edges.end(), new_edge) == edges.end())
+      {
+        edges.push_back(new_edge);
+        f << new_edge << "\n";
+      }
+    }
+
+    f << "style " << "#" + name << " fill:#f9f\n";
+  }
+
+  f.close();
 }
 
 std::map<std::string, std::string> get_node_inventory()

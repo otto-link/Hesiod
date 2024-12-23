@@ -33,6 +33,8 @@
 namespace hesiod
 {
 
+void dump_node_inventory(const std::string &fname);
+
 /**
  * @brief Retrieves a map of node inventory.
  *
