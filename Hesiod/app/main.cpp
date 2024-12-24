@@ -127,7 +127,8 @@ int main(int argc, char *argv[])
       if (overlap >= 0.f)
         config->overlap = overlap;
 
-      // instanciate and compute the graph (but keep the input config)
+      // instanciate and compute the graph (but replace the config
+      // from the file by the input config from the CLI)
       bool                is_headless = true;
       hesiod::GraphEditor ed = hesiod::GraphEditor("graph1", config, is_headless);
       bool                override_config = false;
@@ -142,9 +143,7 @@ int main(int argc, char *argv[])
     if (snapshot_generation)
     {
       LOG->info("executing Hesiod in snapshot generation mode");
-
-      // TODO
-
+      LOG->critical("TODO");
       return 0;
     }
 
@@ -153,7 +152,7 @@ int main(int argc, char *argv[])
     if (node_inventory)
     {
       LOG->info("executing Hesiod in node inventory mode");
-      hesiod::dump_node_inventory("node_inventory.csv");
+      hesiod::dump_node_inventory("node_inventory");
       return 0;
     }
   }

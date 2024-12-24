@@ -36,7 +36,7 @@ void dump_node_inventory(const std::string &fname)
   // --- export to mermaid also
 
   std::fstream f;
-  f.open(fname, std::ios::out);
+  f.open(fname + ".csv", std::ios::out);
 
   for (auto [name, category] : ni)
   {
