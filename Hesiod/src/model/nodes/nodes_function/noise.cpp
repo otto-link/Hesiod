@@ -1,8 +1,8 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-
 #include "highmap/heightmap.hpp"
+#include "highmap/opencl/gpu_opencl.hpp"
 #include "highmap/primitives.hpp"
 
 #include "attributes.hpp"
@@ -33,10 +33,18 @@ void setup_noise_node(BaseNode *p_node)
   p_node->add_attr<SeedAttribute>("seed");
   p_node->add_attr<BoolAttribute>("inverse", false, "Inverse");
   p_node->add_attr<RangeAttribute>("remap", "Remap range");
+  p_node->add_attr<BoolAttribute>("GPU", true, "GPU");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key(
-      {"noise_type", "_SEPARATOR_", "kw", "seed", "_SEPARATOR_", "inverse", "remap"});
+  p_node->set_attr_ordered_key({"noise_type",
+                                "_SEPARATOR_",
+                                "kw",
+                                "seed",
+                                "_SEPARATOR_",
+                                "inverse",
+                                "remap",
+                                "_SEPARATOR_",
+                                "GPU"});
 }
 
 void compute_noise_node(BaseNode *p_node)
@@ -50,24 +58,41 @@ void compute_noise_node(BaseNode *p_node)
   hmap::Heightmap *p_dy = p_node->get_value_ref<hmap::Heightmap>("dy");
   hmap::Heightmap *p_env = p_node->get_value_ref<hmap::Heightmap>("envelope");
   hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("out");
+  if (GET("GPU", BoolAttribute))
+  {
+    hmap::Array dx_array = p_dx ? p_dx->to_array() : hmap::Array();
+    hmap::Array dy_array = p_dy ? p_dy->to_array() : hmap::Array();
 
-  hmap::fill(*p_out,
-             p_dx,
-             p_dy,
-             [p_node](hmap::Vec2<int>   shape,
-                      hmap::Vec4<float> bbox,
-                      hmap::Array      *p_noise_x,
-                      hmap::Array      *p_noise_y)
-             {
-               return hmap::noise((hmap::NoiseType)GET("noise_type", MapEnumAttribute),
-                                  shape,
-                                  GET("kw", WaveNbAttribute),
-                                  GET("seed", SeedAttribute),
-                                  p_noise_x,
-                                  p_noise_y,
-                                  nullptr,
-                                  bbox);
-             });
+    hmap::Array out_array = hmap::gpu::noise(
+        (hmap::NoiseType)GET("noise_type", MapEnumAttribute),
+        p_out->shape,
+        GET("kw", WaveNbAttribute),
+        GET("seed", SeedAttribute),
+        p_dx ? &dx_array : nullptr,
+        p_dy ? &dy_array : nullptr);
+
+    p_out->from_array_interp_nearest(out_array);
+  }
+  else
+  {
+    hmap::fill(*p_out,
+               p_dx,
+               p_dy,
+               [p_node](hmap::Vec2<int>   shape,
+                        hmap::Vec4<float> bbox,
+                        hmap::Array      *p_noise_x,
+                        hmap::Array      *p_noise_y)
+               {
+                 return hmap::noise((hmap::NoiseType)GET("noise_type", MapEnumAttribute),
+                                    shape,
+                                    GET("kw", WaveNbAttribute),
+                                    GET("seed", SeedAttribute),
+                                    p_noise_x,
+                                    p_noise_y,
+                                    nullptr,
+                                    bbox);
+               });
+  }
 
   // add envelope
   if (p_env)
