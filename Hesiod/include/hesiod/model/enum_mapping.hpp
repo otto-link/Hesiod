@@ -85,16 +85,18 @@ static std::map<std::string, int> distance_function_map = {
 };
 
 /**
- * @brief Plain text / enumerate mapping for the stamping blend method.
+ * @brief Plain text / enumerate mapping for the HighMap erosion profiles (procedural
+ * erosion).
  */
-static std::map<std::string, int> stamping_blend_method_map = {
-    {"add", hmap::StampingBlendMethod::ADD},
-    {"maximum", hmap::StampingBlendMethod::MAXIMUM},
-    // {"maximum_smooth", hmap::StampingBlendMethod::MAXIMUM_SMOOTH},
-    {"minimum", hmap::StampingBlendMethod::MINIMUM},
-    // {"minimum_smooth", hmap::StampingBlendMethod::MINIMUM_SMOOTH},
-    {"multiply", hmap::StampingBlendMethod::MULTIPLY},
-    {"substract", hmap::StampingBlendMethod::SUBSTRACT}};
+static std::map<std::string, int> erosion_profile_map = {
+    {"Cosine", hmap::ErosionProfile::COSINE},
+    {"Saw sharp", hmap::ErosionProfile::SAW_SHARP},
+    {"Saw smooth", hmap::ErosionProfile::SAW_SMOOTH},
+    {"Sharp valleys", hmap::ErosionProfile::SHARP_VALLEYS},
+    {"Square smooth", hmap::ErosionProfile::SQUARE_SMOOTH},
+    {"Triangle Grenier", hmap::ErosionProfile::TRIANGLE_GRENIER},
+    {"Triangle sharp", hmap::ErosionProfile::TRIANGLE_SHARP},
+    {"Triangle smooth", hmap::ErosionProfile::TRIANGLE_SMOOTH}};
 
 /**
  * @brief Plain text / enumerate mapping for the heightmap export formats (see
@@ -161,14 +163,16 @@ static std::map<std::string, int> noise_type_map_fbm = {
     {"Worley (doube)", hmap::NoiseType::WORLEY_DOUBLE},
     {"Worley (value)", hmap::NoiseType::WORLEY_VALUE}};
 
-static std::map<std::string, int> erosion_profile_map = {
-    {"Cosine", hmap::ErosionProfile::COSINE},
-    {"Saw sharp", hmap::ErosionProfile::SAW_SHARP},
-    {"Saw smooth", hmap::ErosionProfile::SAW_SMOOTH},
-    {"Sharp valleys", hmap::ErosionProfile::SHARP_VALLEYS},
-    {"Square smooth", hmap::ErosionProfile::SQUARE_SMOOTH},
-    {"Triangle Grenier", hmap::ErosionProfile::TRIANGLE_GRENIER},
-    {"Triangle sharp", hmap::ErosionProfile::TRIANGLE_SHARP},
-    {"Triangle smooth", hmap::ErosionProfile::TRIANGLE_SMOOTH}};
+/**
+ * @brief Plain text / enumerate mapping for the stamping blend method.
+ */
+static std::map<std::string, int> stamping_blend_method_map = {
+    {"add", hmap::StampingBlendMethod::ADD},
+    {"maximum", hmap::StampingBlendMethod::MAXIMUM},
+    // {"maximum_smooth", hmap::StampingBlendMethod::MAXIMUM_SMOOTH},
+    {"minimum", hmap::StampingBlendMethod::MINIMUM},
+    // {"minimum_smooth", hmap::StampingBlendMethod::MINIMUM_SMOOTH},
+    {"multiply", hmap::StampingBlendMethod::MULTIPLY},
+    {"substract", hmap::StampingBlendMethod::SUBSTRACT}};
 
 } // namespace hesiod
