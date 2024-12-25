@@ -1,6 +1,7 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include "highmap/opencl/gpu_opencl.hpp"
 #include "highmap/primitives.hpp"
 
 #include "attributes.hpp"
@@ -36,6 +37,7 @@ void setup_noise_fbm_node(BaseNode *p_node)
   p_node->add_attr<FloatAttribute>("lacunarity", 2.f, 0.01f, 4.f, "Lacunarity");
   p_node->add_attr<BoolAttribute>("inverse", false, "Inverse");
   p_node->add_attr<RangeAttribute>("remap_range", "Remap range");
+  p_node->add_attr<BoolAttribute>("GPU", true, "GPU");
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"noise_type",
@@ -48,7 +50,9 @@ void setup_noise_fbm_node(BaseNode *p_node)
                                 "lacunarity",
                                 "_SEPARATOR_",
                                 "inverse",
-                                "remap_range"});
+                                "remap_range",
+                                "_SEPARATOR_",
+                                "GPU"});
 }
 
 void compute_noise_fbm_node(BaseNode *p_node)
@@ -64,31 +68,56 @@ void compute_noise_fbm_node(BaseNode *p_node)
   hmap::Heightmap *p_env = p_node->get_value_ref<hmap::Heightmap>("envelope");
   hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
-  hmap::fill(*p_out,
-             p_dx,
-             p_dy,
-             p_ctrl,
-             [p_node](hmap::Vec2<int>   shape,
-                      hmap::Vec4<float> bbox,
-                      hmap::Array      *p_noise_x,
-                      hmap::Array      *p_noise_y,
-                      hmap::Array      *p_ctrl)
-             {
-               return hmap::noise_fbm(
-                   (hmap::NoiseType)GET("noise_type", MapEnumAttribute),
-                   shape,
-                   GET("kw", WaveNbAttribute),
-                   GET("seed", SeedAttribute),
-                   GET("octaves", IntAttribute),
-                   GET("weight", FloatAttribute),
-                   GET("persistence", FloatAttribute),
-                   GET("lacunarity", FloatAttribute),
-                   p_ctrl,
-                   p_noise_x,
-                   p_noise_y,
-                   nullptr,
-                   bbox);
-             });
+  if (GET("GPU", BoolAttribute))
+  {
+    hmap::Array ctrl_array = p_ctrl ? p_ctrl->to_array() : hmap::Array();
+    hmap::Array dx_array = p_dx ? p_dx->to_array() : hmap::Array();
+    hmap::Array dy_array = p_dy ? p_dy->to_array() : hmap::Array();
+
+    hmap::Array out_array = hmap::gpu::noise_fbm(
+        (hmap::NoiseType)GET("noise_type", MapEnumAttribute),
+        p_out->shape,
+        GET("kw", WaveNbAttribute),
+        GET("seed", SeedAttribute),
+        GET("octaves", IntAttribute),
+        GET("weight", FloatAttribute),
+        GET("persistence", FloatAttribute),
+        GET("lacunarity", FloatAttribute),
+        p_ctrl ? &ctrl_array : nullptr,
+        p_dx ? &dx_array : nullptr,
+        p_dy ? &dy_array : nullptr,
+        nullptr);
+
+    p_out->from_array_interp_nearest(out_array);
+  }
+  else
+  {
+    hmap::fill(*p_out,
+               p_dx,
+               p_dy,
+               p_ctrl,
+               [p_node](hmap::Vec2<int>   shape,
+                        hmap::Vec4<float> bbox,
+                        hmap::Array      *p_noise_x,
+                        hmap::Array      *p_noise_y,
+                        hmap::Array      *p_ctrl)
+               {
+                 return hmap::noise_fbm(
+                     (hmap::NoiseType)GET("noise_type", MapEnumAttribute),
+                     shape,
+                     GET("kw", WaveNbAttribute),
+                     GET("seed", SeedAttribute),
+                     GET("octaves", IntAttribute),
+                     GET("weight", FloatAttribute),
+                     GET("persistence", FloatAttribute),
+                     GET("lacunarity", FloatAttribute),
+                     p_ctrl,
+                     p_noise_x,
+                     p_noise_y,
+                     nullptr,
+                     bbox);
+               });
+  }
 
   // add envelope
   if (p_env)

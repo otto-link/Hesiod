@@ -58,6 +58,7 @@ void compute_noise_node(BaseNode *p_node)
   hmap::Heightmap *p_dy = p_node->get_value_ref<hmap::Heightmap>("dy");
   hmap::Heightmap *p_env = p_node->get_value_ref<hmap::Heightmap>("envelope");
   hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("out");
+
   if (GET("GPU", BoolAttribute))
   {
     hmap::Array dx_array = p_dx ? p_dx->to_array() : hmap::Array();

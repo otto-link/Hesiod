@@ -159,6 +159,7 @@ static std::map<std::string, int> noise_type_map_fbm = {
     {"OpenSimplex2S", hmap::NoiseType::SIMPLEX2S},
     {"Value", hmap::NoiseType::VALUE},
     {"Value (cubic)", hmap::NoiseType::VALUE_CUBIC},
+    {"Value (linear)", hmap::NoiseType::VALUE_LINEAR},
     {"Worley", hmap::NoiseType::WORLEY},
     {"Worley (doube)", hmap::NoiseType::WORLEY_DOUBLE},
     {"Worley (value)", hmap::NoiseType::WORLEY_VALUE}};
