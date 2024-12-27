@@ -70,53 +70,62 @@ void compute_noise_fbm_node(BaseNode *p_node)
 
   if (GET("GPU", BoolAttribute))
   {
-    hmap::Array ctrl_array = p_ctrl ? p_ctrl->to_array() : hmap::Array();
-    hmap::Array dx_array = p_dx ? p_dx->to_array() : hmap::Array();
-    hmap::Array dy_array = p_dy ? p_dy->to_array() : hmap::Array();
+    hmap::transform(
+        {p_out, p_ctrl, p_dx, p_dy},
+        [p_node](std::vector<hmap::Array *> p_arrays,
+                 hmap::Vec2<int>            shape,
+                 hmap::Vec4<float>          bbox)
+        {
+          hmap::Array *pa_out = p_arrays[0];
+          hmap::Array *pa_ctrl = p_arrays[1];
+          hmap::Array *pa_dx = p_arrays[2];
+          hmap::Array *pa_dy = p_arrays[3];
 
-    hmap::Array out_array = hmap::gpu::noise_fbm(
-        (hmap::NoiseType)GET("noise_type", MapEnumAttribute),
-        p_out->shape,
-        GET("kw", WaveNbAttribute),
-        GET("seed", SeedAttribute),
-        GET("octaves", IntAttribute),
-        GET("weight", FloatAttribute),
-        GET("persistence", FloatAttribute),
-        GET("lacunarity", FloatAttribute),
-        p_ctrl ? &ctrl_array : nullptr,
-        p_dx ? &dx_array : nullptr,
-        p_dy ? &dy_array : nullptr,
-        nullptr);
-
-    p_out->from_array_interp_nearest(out_array);
+          *pa_out = hmap::gpu::noise_fbm(
+              (hmap::NoiseType)GET("noise_type", MapEnumAttribute),
+              shape,
+              GET("kw", WaveNbAttribute),
+              GET("seed", SeedAttribute),
+              GET("octaves", IntAttribute),
+              GET("weight", FloatAttribute),
+              GET("persistence", FloatAttribute),
+              GET("lacunarity", FloatAttribute),
+              pa_ctrl,
+              pa_dx,
+              pa_dy,
+              nullptr,
+              bbox);
+        },
+        hmap::TransformMode::DISTRIBUTED);
   }
   else
   {
-    hmap::fill(*p_out,
-               p_dx,
-               p_dy,
-               p_ctrl,
-               [p_node](hmap::Vec2<int>   shape,
-                        hmap::Vec4<float> bbox,
-                        hmap::Array      *p_noise_x,
-                        hmap::Array      *p_noise_y,
-                        hmap::Array      *p_ctrl)
-               {
-                 return hmap::noise_fbm(
-                     (hmap::NoiseType)GET("noise_type", MapEnumAttribute),
-                     shape,
-                     GET("kw", WaveNbAttribute),
-                     GET("seed", SeedAttribute),
-                     GET("octaves", IntAttribute),
-                     GET("weight", FloatAttribute),
-                     GET("persistence", FloatAttribute),
-                     GET("lacunarity", FloatAttribute),
-                     p_ctrl,
-                     p_noise_x,
-                     p_noise_y,
-                     nullptr,
-                     bbox);
-               });
+    hmap::transform(
+        {p_out, p_ctrl, p_dx, p_dy},
+        [p_node](std::vector<hmap::Array *> p_arrays,
+                 hmap::Vec2<int>            shape,
+                 hmap::Vec4<float>          bbox)
+        {
+          hmap::Array *pa_out = p_arrays[0];
+          hmap::Array *pa_ctrl = p_arrays[1];
+          hmap::Array *pa_dx = p_arrays[2];
+          hmap::Array *pa_dy = p_arrays[3];
+
+          *pa_out = hmap::noise_fbm((hmap::NoiseType)GET("noise_type", MapEnumAttribute),
+                                    shape,
+                                    GET("kw", WaveNbAttribute),
+                                    GET("seed", SeedAttribute),
+                                    GET("octaves", IntAttribute),
+                                    GET("weight", FloatAttribute),
+                                    GET("persistence", FloatAttribute),
+                                    GET("lacunarity", FloatAttribute),
+                                    pa_ctrl,
+                                    pa_dx,
+                                    pa_dy,
+                                    nullptr,
+                                    bbox);
+        },
+        hmap::TransformMode::DISTRIBUTED);
   }
 
   // add envelope
