@@ -39,12 +39,12 @@ R""(
     {
 	width: 14px;
 	height: 14px;
-	border: 1px solid #5B5B5B;
+	border: 1px solid #4772b3;
     }
 
     QCheckBox::indicator:checked
     {
-	background-color: #DFE1E2;	
+	background-color: #4772b3;
     }
  
     /* QComboBox */
@@ -102,7 +102,7 @@ R""(
     QMenu {
 	border: 0px solid #5B5B5B;
 	color: #DFE1E2;
-	margin: 2px;
+	margin: 1px;
 	border-radius: 4px;
 	background-color: #2B2B2B;
 	selection-background-color: #ABABAB;
@@ -136,7 +136,7 @@ R""(
 
     QPushButton:checked
     {
-	background-color: #5B5B5B;
+	background-color: #4772b3;
 	border-radius: 4px;
 	padding: 4px;
 	outline: none;
@@ -266,7 +266,7 @@ R""(
 
     QProgressBar::chunk
     {
-	background-color: #5B5B5B;
+	background-color: #4772b3;
 	width: 20px;
     }
     

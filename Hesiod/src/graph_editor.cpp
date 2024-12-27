@@ -509,19 +509,24 @@ void GraphEditor::on_node_right_clicked(const std::string &node_id, QPointF scen
         menu->addAction(widget_action);
       }
 
-      // menu->addSeparator();
-
       // --- add attributes
 
       attr::AttributesWidget *attributes_widget = new attr::AttributesWidget(
           p_node->get_attr_ref(),
           p_node->get_attr_ordered_key_ref());
 
+      // change the attribute widget layout spacing a posteriori
+      QVBoxLayout *retrieved_layout = qobject_cast<QVBoxLayout *>(
+          attributes_widget->layout());
+      if (retrieved_layout)
       {
-        QWidgetAction *widget_action = new QWidgetAction(menu);
-        widget_action->setDefaultWidget(attributes_widget);
-        menu->addAction(widget_action);
+        retrieved_layout->setSpacing(0);
+        retrieved_layout->setContentsMargins(0, 0, 0, 0);
       }
+
+      QWidgetAction *widget_action = new QWidgetAction(menu);
+      widget_action->setDefaultWidget(attributes_widget);
+      menu->addAction(widget_action);
 
       connect(attributes_widget,
               &attr::AttributesWidget::value_changed,
