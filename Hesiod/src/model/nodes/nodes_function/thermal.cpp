@@ -71,63 +71,47 @@ void compute_thermal_node(BaseNode *p_node)
 
     if (GET("GPU", BoolAttribute))
     {
-      hmap::Timer::Start("thermal");
+      hmap::transform(
+          {p_out, p_mask, &talus_map, p_deposition_map},
+          [p_node, &talus](std::vector<hmap::Array *> p_arrays,
+                           hmap::Vec2<int>,
+                           hmap::Vec4<float>)
+          {
+            hmap::Array *pa_out = p_arrays[0];
+            hmap::Array *pa_mask = p_arrays[1];
+            hmap::Array *pa_talus_map = p_arrays[2];
+            hmap::Array *pa_deposition_map = p_arrays[3];
 
-      hmap::transform(*p_out,
-                      p_mask,
-                      &talus_map,
-                      p_deposition_map,
-                      [p_node, &talus](hmap::Array &h_out,
-                                       hmap::Array *p_mask_array,
-                                       hmap::Array *p_talus_array,
-                                       hmap::Array *p_deposition_array)
-                      {
-                        hmap::gpu::thermal(h_out,
-                                           p_mask_array,
-                                           *p_talus_array,
-                                           GET("iterations", IntAttribute),
-                                           nullptr, // bedrock
-                                           p_deposition_array);
-                      });
-
-      hmap::Timer::Stop("thermal");
-      hmap::Timer::Dump();
-
-      // hmap::Timer::Start("thermal array");
-
-      // hmap::Array out_array = p_in->to_array();
-      // hmap::Array talus_array = talus_map.to_array();
-
-      // hmap::gpu::thermal(out_array,
-      // 			 nullptr,
-      // 			 talus_array,
-      // 			 GET("iterations", IntAttribute),
-      // 			 nullptr, // bedrock
-      // 			 nullptr);
-
-      // p_out->from_array_interp_nearest(out_array);
-
-      // hmap::Timer::Stop("thermal array");
-      // hmap::Timer::Dump();
+            hmap::gpu::thermal(*pa_out,
+                               pa_mask,
+                               *pa_talus_map,
+                               GET("iterations", IntAttribute),
+                               nullptr, // bedrock
+                               pa_deposition_map);
+          },
+          hmap::TransformMode::DISTRIBUTED);
     }
     else
     {
-      hmap::transform(*p_out,
-                      p_mask,
-                      &talus_map,
-                      p_deposition_map,
-                      [p_node, &talus](hmap::Array &h_out,
-                                       hmap::Array *p_mask_array,
-                                       hmap::Array *p_talus_array,
-                                       hmap::Array *p_deposition_array)
-                      {
-                        hmap::thermal(h_out,
-                                      p_mask_array,
-                                      *p_talus_array,
-                                      GET("iterations", IntAttribute),
-                                      nullptr, // bedrock
-                                      p_deposition_array);
-                      });
+      hmap::transform(
+          {p_out, p_mask, &talus_map, p_deposition_map},
+          [p_node, &talus](std::vector<hmap::Array *> p_arrays,
+                           hmap::Vec2<int>,
+                           hmap::Vec4<float>)
+          {
+            hmap::Array *pa_out = p_arrays[0];
+            hmap::Array *pa_mask = p_arrays[1];
+            hmap::Array *pa_talus_map = p_arrays[2];
+            hmap::Array *pa_deposition_map = p_arrays[3];
+
+            hmap::thermal(*pa_out,
+                          pa_mask,
+                          *pa_talus_map,
+                          GET("iterations", IntAttribute),
+                          nullptr, // bedrock
+                          pa_deposition_map);
+          },
+          hmap::TransformMode::DISTRIBUTED);
     }
 
     p_out->smooth_overlap_buffers();

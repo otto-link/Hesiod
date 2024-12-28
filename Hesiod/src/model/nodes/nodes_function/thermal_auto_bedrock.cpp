@@ -2,6 +2,7 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include "highmap/erosion.hpp"
+#include "highmap/opencl/gpu_opencl.hpp"
 #include "highmap/primitives.hpp"
 
 #include "attributes.hpp"
@@ -26,14 +27,15 @@ void setup_thermal_auto_bedrock_node(BaseNode *p_node)
 
   // attribute(s)
   p_node->add_attr<FloatAttribute>("talus_global", 2.f, 0.f, 4.f, "talus_global");
-  p_node->add_attr<IntAttribute>("iterations", 50, 1, 200, "iterations");
+  p_node->add_attr<IntAttribute>("iterations", 100, 1, 200, "iterations");
   p_node->add_attr<BoolAttribute>("scale_talus_with_elevation",
                                   true,
                                   "scale_talus_with_elevation");
+  p_node->add_attr<BoolAttribute>("GPU", true, "GPU");
 
   // attribute(s) order
   p_node->set_attr_ordered_key(
-      {"talus_global", "iterations", "scale_talus_with_elevation"});
+      {"talus_global", "iterations", "scale_talus_with_elevation", "_SEPARATOR_", "GPU"});
 }
 
 void compute_thermal_auto_bedrock_node(BaseNode *p_node)
@@ -63,18 +65,44 @@ void compute_thermal_auto_bedrock_node(BaseNode *p_node)
       talus_map.remap(talus / 100.f, talus);
     }
 
-    hmap::transform(*p_out,
-                    &talus_map,
-                    p_deposition_map,
-                    [p_node, &talus](hmap::Array &h_out,
-                                     hmap::Array *p_talus_array,
-                                     hmap::Array *p_deposition_array)
-                    {
-                      hmap::thermal_auto_bedrock(h_out,
-                                                 *p_talus_array,
-                                                 GET("iterations", IntAttribute),
-                                                 p_deposition_array);
-                    });
+    if (GET("GPU", BoolAttribute))
+    {
+      hmap::transform(
+          {p_out, &talus_map, p_deposition_map},
+          [p_node, &talus](std::vector<hmap::Array *> p_arrays,
+                           hmap::Vec2<int>,
+                           hmap::Vec4<float>)
+          {
+            hmap::Array *pa_out = p_arrays[0];
+            hmap::Array *pa_talus_map = p_arrays[1];
+            hmap::Array *pa_deposition_map = p_arrays[2];
+
+            hmap::gpu::thermal_auto_bedrock(*pa_out,
+                                            *pa_talus_map,
+                                            GET("iterations", IntAttribute),
+                                            pa_deposition_map);
+          },
+          hmap::TransformMode::DISTRIBUTED);
+    }
+    else
+    {
+      hmap::transform(
+          {p_out, &talus_map, p_deposition_map},
+          [p_node, &talus](std::vector<hmap::Array *> p_arrays,
+                           hmap::Vec2<int>,
+                           hmap::Vec4<float>)
+          {
+            hmap::Array *pa_out = p_arrays[0];
+            hmap::Array *pa_talus_map = p_arrays[1];
+            hmap::Array *pa_deposition_map = p_arrays[2];
+
+            hmap::gpu::thermal_auto_bedrock(*pa_out,
+                                            *pa_talus_map,
+                                            GET("iterations", IntAttribute),
+                                            pa_deposition_map);
+          },
+          hmap::TransformMode::DISTRIBUTED);
+    }
 
     p_out->smooth_overlap_buffers();
 
