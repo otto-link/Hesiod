@@ -149,7 +149,7 @@ void main()
         else if (use_texture_diffuse)
         {
             color = texture(textureDiffuse, tex_coord);
-            color.xyz = tonemap_ACES(color.xyz);
+            // color.xyz = tonemap_ACES(color.xyz);
         }
         else
             color = vec4(1.f, 1.f, 1.f, 1.f);
