@@ -24,17 +24,21 @@ std::istream &operator>>(std::istream &is, hmap::Vec2<int> &vec2)
 }
 #include <args.hxx>
 
+#include "hesiod/model/cmap.hpp"
+
 int main(int argc, char *argv[])
 {
-  hmap::gpu::init_opencl();
-  clwrapper::KernelManager::get_instance().set_block_size(32);
-
-  QApplication app(argc, argv); // enven if headless (for QObject)
-
   LOG->info("Welcome to Hesiod v{}.{}.{}!",
             HESIOD_VERSION_MAJOR,
             HESIOD_VERSION_MINOR,
             HESIOD_VERSION_PATCH);
+
+  hmap::gpu::init_opencl();
+  clwrapper::KernelManager::get_instance().set_block_size(32);
+
+  hesiod::CmapManager::get_instance();
+
+  QApplication app(argc, argv); // even if headless (for QObject)
 
   // --- parse command line arguments
 

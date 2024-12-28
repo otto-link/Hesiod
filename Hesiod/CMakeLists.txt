@@ -35,6 +35,12 @@ target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
 target_include_directories(${PROJECT_NAME} PRIVATE ${HESIOD_INCLUDE}
                                                    ${CMAKE_BINARY_DIR}/include)
 
+# data (two locations for convenience aka lazyness)
+file(COPY ${CMAKE_SOURCE_DIR}/Hesiod/data
+     DESTINATION ${EXECUTABLE_OUTPUT_PATH}/.)
+file(COPY ${CMAKE_SOURCE_DIR}/Hesiod/data
+     DESTINATION ${EXECUTABLE_OUTPUT_PATH}/../.)
+
 # Link libraries
 target_link_libraries(
   ${PROJECT_NAME}
