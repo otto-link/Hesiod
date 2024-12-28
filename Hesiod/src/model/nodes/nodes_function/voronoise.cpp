@@ -45,42 +45,31 @@ void compute_voronoise_node(BaseNode *p_node)
 
   LOG->trace("computing node {}", p_node->get_label());
 
+  hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
   hmap::Heightmap *p_dx = p_node->get_value_ref<hmap::Heightmap>("dx");
   hmap::Heightmap *p_dy = p_node->get_value_ref<hmap::Heightmap>("dy");
   hmap::Heightmap *p_env = p_node->get_value_ref<hmap::Heightmap>("envelope");
-  hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
-  hmap::Array dx_array = p_dx ? p_dx->to_array() : hmap::Array();
-  hmap::Array dy_array = p_dy ? p_dy->to_array() : hmap::Array();
+  hmap::transform(
+      {p_out, p_dx, p_dy},
+      [p_node](std::vector<hmap::Array *> p_arrays,
+               hmap::Vec2<int>            shape,
+               hmap::Vec4<float>          bbox)
+      {
+        hmap::Array *pa_out = p_arrays[0];
+        hmap::Array *pa_dx = p_arrays[1];
+        hmap::Array *pa_dy = p_arrays[2];
 
-  hmap::Array out_array = hmap::gpu::voronoise(p_out->shape,
-                                               GET("kw", WaveNbAttribute),
-                                               GET("u", FloatAttribute),
-                                               GET("v", FloatAttribute),
-                                               GET("seed", SeedAttribute),
-                                               p_dx ? &dx_array : nullptr,
-                                               p_dy ? &dy_array : nullptr);
-
-  p_out->from_array_interp_nearest(out_array);
-
-  // hmap::fill(*p_out,
-  //            [p_node](hmap::Vec2<int> shape, hmap::Vec4<float> bbox)
-  //            {
-  //              // return hmap::gpu::voronoise(shape,
-  //              //                                  GET("kw", WaveNbAttribute),
-  //              //                                  GET("seed", SeedAttribute),
-  //              //                                  GET("octaves", IntAttribute),
-  //              //                                  GET("weight", FloatAttribute),
-  //              //                                  GET("persistence", FloatAttribute),
-  //              //                                  GET("lacunarity", FloatAttribute),
-  //              //                                  bbox);
-  //
-  // 	                      return hmap::gpu::voronoise(shape,
-  //                                               GET("kw", WaveNbAttribute),
-  //                                               GET("seed", SeedAttribute),
-  // 							  0.5f, 0.5f,
-  // 							  bbox);
-  //            });
+        *pa_out = hmap::gpu::voronoise(shape,
+                                       GET("kw", WaveNbAttribute),
+                                       GET("u", FloatAttribute),
+                                       GET("v", FloatAttribute),
+                                       GET("seed", SeedAttribute),
+                                       pa_dx,
+                                       pa_dy,
+                                       bbox);
+      },
+      hmap::TransformMode::DISTRIBUTED);
 
   // add envelope
   if (p_env)
