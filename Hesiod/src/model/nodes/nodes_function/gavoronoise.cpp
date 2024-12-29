@@ -25,6 +25,7 @@ void setup_gavoronoise_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
   p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "control");
   p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "envelope");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "angle");
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
@@ -83,50 +84,49 @@ void compute_gavoronoise_node(BaseNode *p_node)
   hmap::Heightmap *p_ctrl = p_node->get_value_ref<hmap::Heightmap>("control");
   hmap::Heightmap *p_env = p_node->get_value_ref<hmap::Heightmap>("envelope");
   hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
+  hmap::Heightmap *p_angle = p_node->get_value_ref<hmap::Heightmap>("angle");
 
-  hmap::Array dx_array = p_dx ? p_dx->to_array() : hmap::Array();
-  hmap::Array dy_array = p_dy ? p_dy->to_array() : hmap::Array();
-  hmap::Array ctrl_array = p_ctrl ? p_ctrl->to_array() : hmap::Array();
+  // manage angle (as a scalar parameter or as an input heightmap if
+  // provided)
+  hmap::Heightmap angle_map = !p_angle
+                                  ? hmap::Heightmap(CONFIG, GET("angle", FloatAttribute))
+                                  : hmap::Heightmap();
+  p_angle = p_angle ? p_angle : &angle_map;
 
-  hmap::Array out_array = hmap::gpu::gavoronoise(
-      p_out->shape,
-      GET("kw", WaveNbAttribute),
-      GET("seed", SeedAttribute),
-      GET("angle", FloatAttribute),
-      GET("amplitude", FloatAttribute),
-      GET("angle_spread_ratio", FloatAttribute),
-      GET("kw_multiplier", WaveNbAttribute),
-      GET("slope_strength", FloatAttribute),
-      GET("branch_strength", FloatAttribute),
-      GET("z_cut_min", FloatAttribute),
-      GET("z_cut_max", FloatAttribute),
-      GET("octaves", IntAttribute),
-      GET("persistence", FloatAttribute),
-      GET("lacunarity", FloatAttribute),
-      p_ctrl ? &ctrl_array : nullptr,
-      p_dx ? &dx_array : nullptr,
-      p_dy ? &dy_array : nullptr);
+  hmap::transform(
+      {p_out, p_ctrl, p_dx, p_dy, p_angle},
+      [p_node](std::vector<hmap::Array *> p_arrays,
+               hmap::Vec2<int>            shape,
+               hmap::Vec4<float>          bbox)
+      {
+        hmap::Array *pa_out = p_arrays[0];
+        hmap::Array *pa_ctrl = p_arrays[1];
+        hmap::Array *pa_dx = p_arrays[2];
+        hmap::Array *pa_dy = p_arrays[3];
+        hmap::Array *pa_angle = p_arrays[4];
 
-  p_out->from_array_interp_nearest(out_array);
+        hmap::Array angle_deg = 180.f / M_PI * (*pa_angle);
 
-  // hmap::fill(*p_out,
-  //            [p_node](hmap::Vec2<int> shape, hmap::Vec4<float> bbox)
-  //            {
-  //              // return hmap::gpu::gavoronoise(shape,
-  //              //                                  GET("kw", WaveNbAttribute),
-  //              //                                  GET("seed", SeedAttribute),
-  //              //                                  GET("octaves", IntAttribute),
-  //              //                                  GET("weight", FloatAttribute),
-  //              //                                  GET("persistence", FloatAttribute),
-  //              //                                  GET("lacunarity", FloatAttribute),
-  //              //                                  bbox);
-  //
-  // 	                      return hmap::gpu::voronoise(shape,
-  //                                               GET("kw", WaveNbAttribute),
-  //                                               GET("seed", SeedAttribute),
-  // 							  0.5f, 0.5f,
-  // 							  bbox);
-  //            });
+        *pa_out = hmap::gpu::gavoronoise(shape,
+                                         GET("kw", WaveNbAttribute),
+                                         GET("seed", SeedAttribute),
+                                         angle_deg,
+                                         GET("amplitude", FloatAttribute),
+                                         GET("angle_spread_ratio", FloatAttribute),
+                                         GET("kw_multiplier", WaveNbAttribute),
+                                         GET("slope_strength", FloatAttribute),
+                                         GET("branch_strength", FloatAttribute),
+                                         GET("z_cut_min", FloatAttribute),
+                                         GET("z_cut_max", FloatAttribute),
+                                         GET("octaves", IntAttribute),
+                                         GET("persistence", FloatAttribute),
+                                         GET("lacunarity", FloatAttribute),
+                                         pa_ctrl,
+                                         pa_dx,
+                                         pa_dy,
+                                         bbox);
+      },
+      hmap::TransformMode::DISTRIBUTED);
 
   // add envelope
   if (p_env)

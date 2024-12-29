@@ -27,7 +27,8 @@ void setup_gradient_angle_node(BaseNode *p_node)
                                    std::vector<float>({-1.f, 1.f}),
                                    -1.f,
                                    1.f,
-                                   "remap_range");
+                                   "remap_range",
+                                   false);
 }
 
 void compute_gradient_angle_node(BaseNode *p_node)
