@@ -33,9 +33,10 @@ int main(int argc, char *argv[])
             HESIOD_VERSION_MINOR,
             HESIOD_VERSION_PATCH);
 
+  // start OpenCL
   hmap::gpu::init_opencl();
-  clwrapper::KernelManager::get_instance().set_block_size(32);
 
+  // load colormaps
   hesiod::CmapManager::get_instance();
 
   QApplication app(argc, argv); // even if headless (for QObject)
