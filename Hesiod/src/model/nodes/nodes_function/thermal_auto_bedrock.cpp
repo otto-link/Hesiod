@@ -22,6 +22,7 @@ void setup_thermal_auto_bedrock_node(BaseNode *p_node)
 
   // port(s)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "deposition", CONFIG);
 
@@ -49,6 +50,7 @@ void compute_thermal_auto_bedrock_node(BaseNode *p_node)
   if (p_in)
   {
     hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
+    hmap::Heightmap *p_mask = p_node->get_value_ref<hmap::Heightmap>("mask");
     hmap::Heightmap *p_deposition_map = p_node->get_value_ref<hmap::Heightmap>(
         "deposition");
 
@@ -68,16 +70,18 @@ void compute_thermal_auto_bedrock_node(BaseNode *p_node)
     if (GET("GPU", BoolAttribute))
     {
       hmap::transform(
-          {p_out, &talus_map, p_deposition_map},
+          {p_out, p_mask, &talus_map, p_deposition_map},
           [p_node, &talus](std::vector<hmap::Array *> p_arrays,
                            hmap::Vec2<int>,
                            hmap::Vec4<float>)
           {
             hmap::Array *pa_out = p_arrays[0];
-            hmap::Array *pa_talus_map = p_arrays[1];
-            hmap::Array *pa_deposition_map = p_arrays[2];
+            hmap::Array *pa_mask = p_arrays[1];
+            hmap::Array *pa_talus_map = p_arrays[2];
+            hmap::Array *pa_deposition_map = p_arrays[3];
 
             hmap::gpu::thermal_auto_bedrock(*pa_out,
+                                            pa_mask,
                                             *pa_talus_map,
                                             GET("iterations", IntAttribute),
                                             pa_deposition_map);
@@ -93,10 +97,12 @@ void compute_thermal_auto_bedrock_node(BaseNode *p_node)
                            hmap::Vec4<float>)
           {
             hmap::Array *pa_out = p_arrays[0];
-            hmap::Array *pa_talus_map = p_arrays[1];
-            hmap::Array *pa_deposition_map = p_arrays[2];
+            hmap::Array *pa_mask = p_arrays[1];
+            hmap::Array *pa_talus_map = p_arrays[2];
+            hmap::Array *pa_deposition_map = p_arrays[3];
 
             hmap::gpu::thermal_auto_bedrock(*pa_out,
+                                            pa_mask,
                                             *pa_talus_map,
                                             GET("iterations", IntAttribute),
                                             pa_deposition_map);
