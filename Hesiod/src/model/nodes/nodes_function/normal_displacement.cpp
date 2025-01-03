@@ -29,7 +29,7 @@ void setup_normal_displacement_node(BaseNode *p_node)
   p_node->add_attr<FloatAttribute>("amount", 5.f, 0.f, 20.f, "amount");
   p_node->add_attr<BoolAttribute>("reverse", false, "reverse");
   p_node->add_attr<IntAttribute>("iterations", 1, 1, 10, "iterations");
-  p_node->add_attr<BoolAttribute>("GPU", true, "GPU");
+  p_node->add_attr<BoolAttribute>("GPU", HSD_DEFAULT_GPU_MODE, "GPU");
 
   // attribute(s) order
   p_node->set_attr_ordered_key(

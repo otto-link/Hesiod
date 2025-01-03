@@ -26,7 +26,7 @@ void setup_warp_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<BoolAttribute>("GPU", true, "GPU");
+  p_node->add_attr<BoolAttribute>("GPU", HSD_DEFAULT_GPU_MODE, "GPU");
 }
 
 void compute_warp_node(BaseNode *p_node)

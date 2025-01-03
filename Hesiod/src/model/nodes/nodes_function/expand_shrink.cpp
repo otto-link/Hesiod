@@ -30,7 +30,7 @@ void setup_expand_shrink_node(BaseNode *p_node)
   p_node->add_attr<MapEnumAttribute>("kernel", "cubic_pulse", kernel_type_map, "kernel");
   p_node->add_attr<FloatAttribute>("radius", 0.05f, 0.01f, 0.2f, "radius");
   p_node->add_attr<BoolAttribute>("shrink", false, "expand", "shrink");
-  p_node->add_attr<BoolAttribute>("GPU", true, "GPU");
+  p_node->add_attr<BoolAttribute>("GPU", HSD_DEFAULT_GPU_MODE, "GPU");
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"kernel", "radius", "shrink", "_SEPARATOR_", "GPU"});

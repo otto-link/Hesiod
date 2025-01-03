@@ -42,7 +42,8 @@ void setup_hydraulic_particle_node(BaseNode *p_node)
   p_node->add_attr<FloatAttribute>("drag_rate", 0.001f, 0.f, 1.f, "drag_rate");
   p_node->add_attr<FloatAttribute>("evap_rate", 0.001f, 0.f, 1.f, "evap_rate");
   p_node->add_attr<BoolAttribute>("post-filtering", true, "post-filtering");
-  p_node->add_attr<BoolAttribute>("GPU", true, "GPU");
+  p_node->add_attr<BoolAttribute>("deposition_only", false, "deposition_only");
+  p_node->add_attr<BoolAttribute>("GPU", HSD_DEFAULT_GPU_MODE, "GPU");
 
   p_node->add_attr<BoolAttribute>("downscale", true, "downscale");
   p_node->add_attr<FloatAttribute>("kc", 512.f, 0.f, 2048.f, "kc");
@@ -56,6 +57,7 @@ void setup_hydraulic_particle_node(BaseNode *p_node)
                                 "drag_rate",
                                 "evap_rate",
                                 "post-filtering",
+                                "deposition_only",
                                 "_SEPARATOR_",
                                 "downscale",
                                 "kc",
@@ -85,6 +87,12 @@ void compute_hydraulic_particle_node(BaseNode *p_node)
     // copy the input heightmap
     *p_out = *p_in;
 
+    // set the bedrock at the input heightmap to prevent any erosion,
+    // if requested
+    if (GET("deposition_only", BoolAttribute))
+      p_bedrock = p_in;
+
+    // number of particles based on the input particle density
     int nparticles = (int)(GET("particle_density", FloatAttribute) * p_out->shape.x *
                            p_out->shape.y);
 
@@ -126,64 +134,212 @@ void compute_hydraulic_particle_node(BaseNode *p_node)
       }
       else
       {
-        hmap::Array out_array = p_out->to_array();
-
         // adjust particle counts to the new working resolution
         nparticles = (int)(GET("kc", FloatAttribute) / p_out->shape.x * nparticles);
 
-        auto lambda = [p_node, nparticles](hmap::Array &x)
-        {
-          hmap::gpu::hydraulic_particle(x,
-                                        nullptr,
-                                        nparticles,
-                                        GET("seed", SeedAttribute),
-                                        nullptr,
-                                        nullptr,
-                                        nullptr,
-                                        nullptr,
-                                        GET("c_capacity", FloatAttribute),
-                                        GET("c_erosion", FloatAttribute),
-                                        GET("c_deposition", FloatAttribute),
-                                        GET("drag_rate", FloatAttribute),
-                                        GET("evap_rate", FloatAttribute),
-                                        GET("post-filtering", BoolAttribute));
-        };
+        hmap::transform(
+            {p_out, p_bedrock, p_moisture_map, p_mask, p_erosion_map, p_deposition_map},
+            [p_node, nparticles](std::vector<hmap::Array *> p_arrays,
+                                 hmap::Vec2<int>            shape,
+                                 hmap::Vec4<float>)
+            {
+              hmap::Array *pa_out = p_arrays[0];
+              hmap::Array *pa_bedrock = p_arrays[1];
+              hmap::Array *pa_moisture_map = p_arrays[2];
+              hmap::Array *pa_mask = p_arrays[3];
+              hmap::Array *pa_erosion_map = p_arrays[4];
+              hmap::Array *pa_deposition_map = p_arrays[5];
 
-        hmap::downscale_transform(out_array, GET("kc", FloatAttribute), lambda);
+              auto lambda = [p_node,
+                             shape,
+                             nparticles,
+                             pa_mask,
+                             pa_bedrock,
+                             pa_moisture_map,
+                             pa_erosion_map,
+                             pa_deposition_map](hmap::Array &x)
+              {
+                // downscaled shape
+                hmap::Vec2<int> shape_coarse = x.shape;
 
-        p_out->from_array_interp_nearest(out_array);
+                // generate coarse arrays if needed
+                std::vector<hmap::Array>   coarse_arrays = {};
+                std::vector<hmap::Array *> p_coarse_arrays = {};
+
+                for (auto pa : {pa_mask,
+                                pa_bedrock,
+                                pa_moisture_map,
+                                pa_erosion_map,
+                                pa_deposition_map})
+                {
+                  if (pa)
+                    coarse_arrays.push_back(
+                        std::move(pa->resample_to_shape(shape_coarse)));
+                  else
+                    coarse_arrays.push_back(hmap::Array());
+                }
+
+                int k = 0;
+                for (auto pa : {pa_mask,
+                                pa_bedrock,
+                                pa_moisture_map,
+                                pa_erosion_map,
+                                pa_deposition_map})
+                {
+                  if (pa)
+                    p_coarse_arrays.push_back(&coarse_arrays[k]);
+                  else
+                    p_coarse_arrays.push_back(nullptr);
+                  k++;
+                }
+
+                hmap::gpu::hydraulic_particle(x,
+                                              p_coarse_arrays[0], // mask
+                                              nparticles,
+                                              GET("seed", SeedAttribute),
+                                              p_coarse_arrays[1], // bedrock
+                                              p_coarse_arrays[2], // moisture
+                                              p_coarse_arrays[3], // ero map
+                                              p_coarse_arrays[4], // depo map
+                                              GET("c_capacity", FloatAttribute),
+                                              GET("c_erosion", FloatAttribute),
+                                              GET("c_deposition", FloatAttribute),
+                                              GET("drag_rate", FloatAttribute),
+                                              GET("evap_rate", FloatAttribute),
+                                              GET("post-filtering", BoolAttribute));
+
+                // resample output fields to their original shape
+                if (pa_erosion_map)
+                  *pa_erosion_map = coarse_arrays[3].resample_to_shape_bicubic(shape);
+                if (pa_deposition_map)
+                  *pa_deposition_map = coarse_arrays[4].resample_to_shape_bicubic(shape);
+              };
+
+              hmap::downscale_transform(*pa_out, GET("kc", FloatAttribute), lambda);
+            },
+            hmap::TransformMode::SINGLE_ARRAY);
       }
     }
     else
     {
-      hmap::transform(*p_out,
-                      p_bedrock,
-                      p_moisture_map,
-                      p_mask,
-                      p_erosion_map,
-                      p_deposition_map,
-                      [p_node, &nparticles_tile](hmap::Array &h_out,
-                                                 hmap::Array *p_bedrock_array,
-                                                 hmap::Array *p_moisture_map_array,
-                                                 hmap::Array *p_mask_array,
-                                                 hmap::Array *p_erosion_map_array,
-                                                 hmap::Array *p_deposition_map_array)
-                      {
-                        hmap::hydraulic_particle(h_out,
-                                                 p_mask_array,
-                                                 nparticles_tile,
-                                                 GET("seed", SeedAttribute),
-                                                 p_bedrock_array,
-                                                 p_moisture_map_array,
-                                                 p_erosion_map_array,
-                                                 p_deposition_map_array,
-                                                 GET("c_capacity", FloatAttribute),
-                                                 GET("c_erosion", FloatAttribute),
-                                                 GET("c_deposition", FloatAttribute),
-                                                 GET("drag_rate", FloatAttribute),
-                                                 GET("evap_rate", FloatAttribute),
-                                                 GET("post-filtering", BoolAttribute));
-                      });
+      if (!GET("downscale", BoolAttribute))
+      {
+        hmap::transform(*p_out,
+                        p_bedrock,
+                        p_moisture_map,
+                        p_mask,
+                        p_erosion_map,
+                        p_deposition_map,
+                        [p_node, &nparticles_tile](hmap::Array &h_out,
+                                                   hmap::Array *p_bedrock_array,
+                                                   hmap::Array *p_moisture_map_array,
+                                                   hmap::Array *p_mask_array,
+                                                   hmap::Array *p_erosion_map_array,
+                                                   hmap::Array *p_deposition_map_array)
+                        {
+                          hmap::hydraulic_particle(h_out,
+                                                   p_mask_array,
+                                                   nparticles_tile,
+                                                   GET("seed", SeedAttribute),
+                                                   p_bedrock_array,
+                                                   p_moisture_map_array,
+                                                   p_erosion_map_array,
+                                                   p_deposition_map_array,
+                                                   GET("c_capacity", FloatAttribute),
+                                                   GET("c_erosion", FloatAttribute),
+                                                   GET("c_deposition", FloatAttribute),
+                                                   GET("drag_rate", FloatAttribute),
+                                                   GET("evap_rate", FloatAttribute),
+                                                   GET("post-filtering", BoolAttribute));
+                        });
+      }
+      else
+      {
+        // adjust particle counts to the new working resolution
+        nparticles = (int)(GET("kc", FloatAttribute) / p_out->shape.x * nparticles);
+
+        hmap::transform(
+            {p_out, p_bedrock, p_moisture_map, p_mask, p_erosion_map, p_deposition_map},
+            [p_node, nparticles](std::vector<hmap::Array *> p_arrays,
+                                 hmap::Vec2<int>            shape,
+                                 hmap::Vec4<float>)
+            {
+              hmap::Array *pa_out = p_arrays[0];
+              hmap::Array *pa_bedrock = p_arrays[1];
+              hmap::Array *pa_moisture_map = p_arrays[2];
+              hmap::Array *pa_mask = p_arrays[3];
+              hmap::Array *pa_erosion_map = p_arrays[4];
+              hmap::Array *pa_deposition_map = p_arrays[5];
+
+              auto lambda = [p_node,
+                             shape,
+                             nparticles,
+                             pa_mask,
+                             pa_bedrock,
+                             pa_moisture_map,
+                             pa_erosion_map,
+                             pa_deposition_map](hmap::Array &x)
+              {
+                // downscaled shape
+                hmap::Vec2<int> shape_coarse = x.shape;
+
+                // generate coarse arrays if needed
+                std::vector<hmap::Array>   coarse_arrays = {};
+                std::vector<hmap::Array *> p_coarse_arrays = {};
+
+                for (auto pa : {pa_mask,
+                                pa_bedrock,
+                                pa_moisture_map,
+                                pa_erosion_map,
+                                pa_deposition_map})
+                {
+                  if (pa)
+                    coarse_arrays.push_back(
+                        std::move(pa->resample_to_shape(shape_coarse)));
+                  else
+                    coarse_arrays.push_back(hmap::Array());
+                }
+
+                int k = 0;
+                for (auto pa : {pa_mask,
+                                pa_bedrock,
+                                pa_moisture_map,
+                                pa_erosion_map,
+                                pa_deposition_map})
+                {
+                  if (pa)
+                    p_coarse_arrays.push_back(&coarse_arrays[k]);
+                  else
+                    p_coarse_arrays.push_back(nullptr);
+                  k++;
+                }
+
+                hmap::hydraulic_particle(x,
+                                         p_coarse_arrays[0], // mask
+                                         nparticles,
+                                         GET("seed", SeedAttribute),
+                                         p_coarse_arrays[1], // bedrock
+                                         p_coarse_arrays[2], // moisture
+                                         p_coarse_arrays[3], // ero map
+                                         p_coarse_arrays[4], // depo map
+                                         GET("c_capacity", FloatAttribute),
+                                         GET("c_erosion", FloatAttribute),
+                                         GET("c_deposition", FloatAttribute),
+                                         GET("drag_rate", FloatAttribute),
+                                         GET("evap_rate", FloatAttribute),
+                                         GET("post-filtering", BoolAttribute));
+
+                // resample output fields to their original shape
+                if (pa_erosion_map)
+                  *pa_erosion_map = coarse_arrays[3].resample_to_shape_bicubic(shape);
+                if (pa_deposition_map)
+                  *pa_deposition_map = coarse_arrays[4].resample_to_shape_bicubic(shape);
+              };
+
+              hmap::downscale_transform(*pa_out, GET("kc", FloatAttribute), lambda);
+            },
+            hmap::TransformMode::SINGLE_ARRAY);
+      }
     }
 
     p_out->smooth_overlap_buffers();

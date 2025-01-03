@@ -33,7 +33,7 @@ void setup_noise_node(BaseNode *p_node)
   p_node->add_attr<SeedAttribute>("seed");
   p_node->add_attr<BoolAttribute>("inverse", false, "Inverse");
   p_node->add_attr<RangeAttribute>("remap", "Remap range");
-  p_node->add_attr<BoolAttribute>("GPU", true, "GPU");
+  p_node->add_attr<BoolAttribute>("GPU", HSD_DEFAULT_GPU_MODE, "GPU");
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"noise_type",

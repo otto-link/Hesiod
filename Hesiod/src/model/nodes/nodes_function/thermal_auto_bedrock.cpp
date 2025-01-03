@@ -32,7 +32,7 @@ void setup_thermal_auto_bedrock_node(BaseNode *p_node)
   p_node->add_attr<BoolAttribute>("scale_talus_with_elevation",
                                   true,
                                   "scale_talus_with_elevation");
-  p_node->add_attr<BoolAttribute>("GPU", true, "GPU");
+  p_node->add_attr<BoolAttribute>("GPU", HSD_DEFAULT_GPU_MODE, "GPU");
 
   // attribute(s) order
   p_node->set_attr_ordered_key(

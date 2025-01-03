@@ -27,7 +27,7 @@ void setup_morphological_gradient_node(BaseNode *p_node)
   p_node->add_attr<FloatAttribute>("radius", 0.01f, 0.f, 0.05f, "radius");
   p_node->add_attr<BoolAttribute>("inverse", false, "inverse");
   p_node->add_attr<RangeAttribute>("remap_range", "remap_range");
-  p_node->add_attr<BoolAttribute>("GPU", true, "GPU");
+  p_node->add_attr<BoolAttribute>("GPU", HSD_DEFAULT_GPU_MODE, "GPU");
 
   // attribute(s) order
   p_node->set_attr_ordered_key(

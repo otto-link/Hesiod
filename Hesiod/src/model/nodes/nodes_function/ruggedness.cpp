@@ -33,7 +33,7 @@ void setup_ruggedness_node(BaseNode *p_node)
                                    0.f,
                                    0.2f,
                                    "smoothing_radius");
-  p_node->add_attr<BoolAttribute>("GPU", true, "GPU");
+  p_node->add_attr<BoolAttribute>("GPU", HSD_DEFAULT_GPU_MODE, "GPU");
 
   // attribute(s) order
   p_node->set_attr_ordered_key(

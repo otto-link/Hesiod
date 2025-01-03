@@ -35,7 +35,6 @@ add_compile_definitions(
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# --- Dear ImGui
 find_package(spdlog REQUIRED)
 find_package(Qt6 REQUIRED COMPONENTS Core Widgets OpenGL OpenGLWidgets)
 
@@ -43,9 +42,9 @@ set(HESIOD_ENABLE_OPENCL ON)
 if(HESIOD_ENABLE_OPENCL)
   find_package(OpenCL REQUIRED)
   message(STATUS "Hesiod: OpenCL enabled")
-  add_definitions("-DENABLE_OPENCL")
-  add_compile_definitions(CL_HPP_MINIMUM_OPENCL_VERSION=120
-                          CL_HPP_TARGET_OPENCL_VERSION=120 ENABLE_OPENCL=1)
+  add_compile_definitions(
+    CL_HPP_MINIMUM_OPENCL_VERSION=120 CL_HPP_TARGET_OPENCL_VERSION=120
+    ENABLE_OPENCL=1 HSD_DEFAULT_GPU_MODE=true)
 else()
   message(STATUS "Hesiod: OpenCL disabled")
 endif(HESIOD_ENABLE_OPENCL)

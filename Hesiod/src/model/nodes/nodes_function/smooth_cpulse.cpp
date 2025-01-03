@@ -26,7 +26,7 @@ void setup_smooth_cpulse_node(BaseNode *p_node)
 
   // attribute(s)
   p_node->add_attr<FloatAttribute>("radius", 0.05f, 0.f, 0.2f, "radius");
-  p_node->add_attr<BoolAttribute>("GPU", true, "GPU");
+  p_node->add_attr<BoolAttribute>("GPU", HSD_DEFAULT_GPU_MODE, "GPU");
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"radius", "_SEPARATOR_", "GPU"});
