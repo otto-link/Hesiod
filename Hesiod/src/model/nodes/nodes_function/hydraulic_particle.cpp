@@ -102,35 +102,35 @@ void compute_hydraulic_particle_node(BaseNode *p_node)
     {
       if (!GET("downscale", BoolAttribute))
       {
-        hmap::transform(*p_out,
-                        p_bedrock,
-                        p_moisture_map,
-                        p_mask,
-                        p_erosion_map,
-                        p_deposition_map,
-                        [p_node, &nparticles_tile](hmap::Array &h_out,
-                                                   hmap::Array *p_bedrock_array,
-                                                   hmap::Array *p_moisture_map_array,
-                                                   hmap::Array *p_mask_array,
-                                                   hmap::Array *p_erosion_map_array,
-                                                   hmap::Array *p_deposition_map_array)
-                        {
-                          hmap::gpu::hydraulic_particle(
-                              h_out,
-                              p_mask_array,
-                              nparticles_tile,
-                              GET("seed", SeedAttribute),
-                              p_bedrock_array,
-                              p_moisture_map_array,
-                              p_erosion_map_array,
-                              p_deposition_map_array,
-                              GET("c_capacity", FloatAttribute),
-                              GET("c_erosion", FloatAttribute),
-                              GET("c_deposition", FloatAttribute),
-                              GET("drag_rate", FloatAttribute),
-                              GET("evap_rate", FloatAttribute),
-                              GET("post-filtering", BoolAttribute));
-                        });
+        hmap::transform(
+            {p_out, p_bedrock, p_moisture_map, p_mask, p_erosion_map, p_deposition_map},
+            [p_node, &nparticles_tile](std::vector<hmap::Array *> p_arrays,
+                                       hmap::Vec2<int>,
+                                       hmap::Vec4<float>)
+            {
+              hmap::Array *pa_out = p_arrays[0];
+              hmap::Array *pa_bedrock = p_arrays[1];
+              hmap::Array *pa_moisture_map = p_arrays[2];
+              hmap::Array *pa_mask = p_arrays[3];
+              hmap::Array *pa_erosion_map = p_arrays[4];
+              hmap::Array *pa_deposition_map = p_arrays[5];
+
+              hmap::gpu::hydraulic_particle(*pa_out,
+                                            pa_mask,
+                                            nparticles_tile,
+                                            GET("seed", SeedAttribute),
+                                            pa_bedrock,
+                                            pa_moisture_map,
+                                            pa_erosion_map,
+                                            pa_deposition_map,
+                                            GET("c_capacity", FloatAttribute),
+                                            GET("c_erosion", FloatAttribute),
+                                            GET("c_deposition", FloatAttribute),
+                                            GET("drag_rate", FloatAttribute),
+                                            GET("evap_rate", FloatAttribute),
+                                            GET("post-filtering", BoolAttribute));
+            },
+            hmap::TransformMode::DISTRIBUTED);
       }
       else
       {
@@ -224,34 +224,35 @@ void compute_hydraulic_particle_node(BaseNode *p_node)
     {
       if (!GET("downscale", BoolAttribute))
       {
-        hmap::transform(*p_out,
-                        p_bedrock,
-                        p_moisture_map,
-                        p_mask,
-                        p_erosion_map,
-                        p_deposition_map,
-                        [p_node, &nparticles_tile](hmap::Array &h_out,
-                                                   hmap::Array *p_bedrock_array,
-                                                   hmap::Array *p_moisture_map_array,
-                                                   hmap::Array *p_mask_array,
-                                                   hmap::Array *p_erosion_map_array,
-                                                   hmap::Array *p_deposition_map_array)
-                        {
-                          hmap::hydraulic_particle(h_out,
-                                                   p_mask_array,
-                                                   nparticles_tile,
-                                                   GET("seed", SeedAttribute),
-                                                   p_bedrock_array,
-                                                   p_moisture_map_array,
-                                                   p_erosion_map_array,
-                                                   p_deposition_map_array,
-                                                   GET("c_capacity", FloatAttribute),
-                                                   GET("c_erosion", FloatAttribute),
-                                                   GET("c_deposition", FloatAttribute),
-                                                   GET("drag_rate", FloatAttribute),
-                                                   GET("evap_rate", FloatAttribute),
-                                                   GET("post-filtering", BoolAttribute));
-                        });
+        hmap::transform(
+            {p_out, p_bedrock, p_moisture_map, p_mask, p_erosion_map, p_deposition_map},
+            [p_node, &nparticles_tile](std::vector<hmap::Array *> p_arrays,
+                                       hmap::Vec2<int>,
+                                       hmap::Vec4<float>)
+            {
+              hmap::Array *pa_out = p_arrays[0];
+              hmap::Array *pa_bedrock = p_arrays[1];
+              hmap::Array *pa_moisture_map = p_arrays[2];
+              hmap::Array *pa_mask = p_arrays[3];
+              hmap::Array *pa_erosion_map = p_arrays[4];
+              hmap::Array *pa_deposition_map = p_arrays[5];
+
+              hmap::hydraulic_particle(*pa_out,
+                                       pa_mask,
+                                       nparticles_tile,
+                                       GET("seed", SeedAttribute),
+                                       pa_bedrock,
+                                       pa_moisture_map,
+                                       pa_erosion_map,
+                                       pa_deposition_map,
+                                       GET("c_capacity", FloatAttribute),
+                                       GET("c_erosion", FloatAttribute),
+                                       GET("c_deposition", FloatAttribute),
+                                       GET("drag_rate", FloatAttribute),
+                                       GET("evap_rate", FloatAttribute),
+                                       GET("post-filtering", BoolAttribute));
+            },
+            hmap::TransformMode::DISTRIBUTED);
       }
       else
       {
