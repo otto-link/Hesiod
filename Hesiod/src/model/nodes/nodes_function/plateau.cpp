@@ -53,18 +53,31 @@ void compute_plateau_node(BaseNode *p_node)
 
     if (GET("GPU", BoolAttribute))
     {
-      hmap::transform(*p_out,
-                      p_mask,
-                      [p_node, &ir](hmap::Array &x, hmap::Array *p_mask) {
-                        hmap::gpu::plateau(x, p_mask, ir, GET("factor", FloatAttribute));
-                      });
+      hmap::transform(
+          {p_out, p_mask},
+          [p_node,
+           &ir](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+          {
+            hmap::Array *pa_out = p_arrays[0];
+            hmap::Array *pa_mask = p_arrays[1];
+
+            hmap::gpu::plateau(*pa_out, pa_mask, ir, GET("factor", FloatAttribute));
+          },
+          hmap::TransformMode::DISTRIBUTED);
     }
     else
     {
-      hmap::transform(*p_out,
-                      p_mask,
-                      [p_node, &ir](hmap::Array &x, hmap::Array *p_mask)
-                      { hmap::plateau(x, p_mask, ir, GET("factor", FloatAttribute)); });
+      hmap::transform(
+          {p_out, p_mask},
+          [p_node,
+           &ir](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+          {
+            hmap::Array *pa_out = p_arrays[0];
+            hmap::Array *pa_mask = p_arrays[1];
+
+            hmap::plateau(*pa_out, pa_mask, ir, GET("factor", FloatAttribute));
+          },
+          hmap::TransformMode::DISTRIBUTED);
     }
 
     p_out->smooth_overlap_buffers();
