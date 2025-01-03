@@ -1,10 +1,14 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include <QComboBox>
 #include <QDialogButtonBox>
 #include <QGridLayout>
 
+#include "highmap/opencl/gpu_opencl.hpp"
+
 #include "hesiod/gui/widgets/model_config_widget.hpp"
+#include "hesiod/logger.hpp"
 
 namespace hesiod
 {
@@ -26,7 +30,7 @@ ModelConfigWidget::ModelConfigWidget(ModelConfig *p_model_config, QWidget *paren
 
   int row = 0;
 
-  // shape
+  // --- shape
 
   QLabel *label_shape_text = new QLabel("shape");
   layout->addWidget(label_shape_text, row, 0);
@@ -58,7 +62,7 @@ ModelConfigWidget::ModelConfigWidget(ModelConfig *p_model_config, QWidget *paren
 
   row++;
 
-  // tiling
+  // --- tiling
 
   QLabel *label_tiling_text = new QLabel("tiling");
   layout->addWidget(label_tiling_text, row, 0);
@@ -90,7 +94,7 @@ ModelConfigWidget::ModelConfigWidget(ModelConfig *p_model_config, QWidget *paren
 
   row++;
 
-  // overlap
+  // --- overlap
 
   QLabel *label_overlap_text = new QLabel("overlap");
   layout->addWidget(label_overlap_text, row, 0);
@@ -124,7 +128,69 @@ ModelConfigWidget::ModelConfigWidget(ModelConfig *p_model_config, QWidget *paren
 
   row++;
 
-  // buttons
+  // --- OpenCL configuration
+
+  QLabel *label_opencl = new QLabel("Hardware acceleration (OpenCL)");
+  layout->addWidget(label_opencl, row, 0);
+  row++;
+
+  // get available devices
+  std::map<size_t, std::string> cl_device_map = clwrapper::DeviceManager::get_instance()
+                                                    .get_available_devices();
+  size_t current_device = clwrapper::DeviceManager::get_instance().get_device_id();
+
+  // setup combobox / device
+  {
+    QComboBox *combobox = new QComboBox();
+
+    QStringList items;
+    for (auto &[id, name] : cl_device_map)
+      combobox->addItem(name.c_str());
+
+    combobox->setCurrentText(cl_device_map.at(current_device).c_str());
+
+    connect(combobox,
+            QOverload<int>::of(&QComboBox::currentIndexChanged),
+            [cl_device_map, combobox]()
+            {
+              size_t choice_index = static_cast<size_t>(combobox->currentIndex());
+
+              LOG->trace("{}", choice_index);
+              LOG->trace("{}, {}", choice_index, cl_device_map.at(choice_index));
+
+              if (clwrapper::DeviceManager::get_instance().set_device(choice_index))
+                clwrapper::KernelManager::get_instance().build_program();
+              else
+                LOG->error("device selection failed");
+            });
+
+    layout->addWidget(combobox, row, 0, 1, 3);
+  }
+  row++;
+
+  // setup combobox / block size
+  {
+    QComboBox *combobox = new QComboBox();
+
+    QStringList items;
+    for (int k = 0; k < 7; k++)
+      combobox->addItem(std::to_string((int)pow(2, k)).c_str());
+
+    // combobox->setCurrentText(cl_device_map.at(current_device).c_str());
+
+    connect(combobox,
+            QOverload<int>::of(&QComboBox::currentIndexChanged),
+            [cl_device_map, combobox]()
+            {
+              int k = combobox->currentIndex();
+              clwrapper::KernelManager::get_instance().set_block_size((int)pow(2, k));
+            });
+
+    layout->addWidget(combobox, row, 0, 1, 3);
+  }
+  row++;
+
+  // --- buttons
 
   QDialogButtonBox *button_box = new QDialogButtonBox(QDialogButtonBox::Ok |
                                                       QDialogButtonBox::Cancel);

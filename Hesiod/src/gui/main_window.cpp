@@ -42,8 +42,6 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
     hesiod::GraphEditor *p_graph = new hesiod::GraphEditor("graph1", config);
 
     p_graph->on_new_node_request("NoiseFbm", QPointF(200, 200));
-    p_graph->on_new_node_request("Remap", QPointF(400, 200));
-    p_graph->on_new_node_request("GammaCorrection", QPointF(600, 200));
     p_graph->get_p_viewer()->zoom_to_content();
 
     this->graph_editors.push_back(p_graph);
