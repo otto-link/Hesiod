@@ -88,9 +88,10 @@ void compute_gavoronoise_node(BaseNode *p_node)
 
   // manage angle (as a scalar parameter or as an input heightmap if
   // provided)
-  hmap::Heightmap angle_map = !p_angle
-                                  ? hmap::Heightmap(CONFIG, GET("angle", FloatAttribute))
-                                  : hmap::Heightmap();
+  hmap::Heightmap angle_map = !p_angle ? hmap::Heightmap(CONFIG,
+                                                         M_PI / 180.f *
+                                                             GET("angle", FloatAttribute))
+                                       : hmap::Heightmap();
   p_angle = p_angle ? p_angle : &angle_map;
 
   hmap::transform(
