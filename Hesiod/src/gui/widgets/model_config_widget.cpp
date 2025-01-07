@@ -168,28 +168,6 @@ ModelConfigWidget::ModelConfigWidget(ModelConfig *p_model_config, QWidget *paren
   }
   row++;
 
-  // setup combobox / block size
-  {
-    QComboBox *combobox = new QComboBox();
-
-    QStringList items;
-    for (int k = 0; k < 7; k++)
-      combobox->addItem(std::to_string((int)pow(2, k)).c_str());
-
-    // combobox->setCurrentText(cl_device_map.at(current_device).c_str());
-
-    connect(combobox,
-            QOverload<int>::of(&QComboBox::currentIndexChanged),
-            [cl_device_map, combobox]()
-            {
-              int k = combobox->currentIndex();
-              clwrapper::KernelManager::get_instance().set_block_size((int)pow(2, k));
-            });
-
-    layout->addWidget(combobox, row, 0, 1, 3);
-  }
-  row++;
-
   // --- buttons
 
   QDialogButtonBox *button_box = new QDialogButtonBox(QDialogButtonBox::Ok |
