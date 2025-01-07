@@ -26,6 +26,7 @@ void setup_mountain_range_radial_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "control");
   p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "envelope");
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "angle", CONFIG);
 
   // attribute(s)
   p_node->add_attr<WaveNbAttribute>("kw",
@@ -83,9 +84,10 @@ void compute_mountain_range_radial_node(BaseNode *p_node)
   hmap::Heightmap *p_ctrl = p_node->get_value_ref<hmap::Heightmap>("control");
   hmap::Heightmap *p_env = p_node->get_value_ref<hmap::Heightmap>("envelope");
   hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
+  hmap::Heightmap *p_angle = p_node->get_value_ref<hmap::Heightmap>("angle");
 
   hmap::transform(
-      {p_out, p_ctrl, p_dx, p_dy},
+      {p_out, p_ctrl, p_dx, p_dy, p_angle},
       [p_node](std::vector<hmap::Array *> p_arrays,
                hmap::Vec2<int>            shape,
                hmap::Vec4<float>          bbox)
@@ -94,6 +96,7 @@ void compute_mountain_range_radial_node(BaseNode *p_node)
         hmap::Array *pa_ctrl = p_arrays[1];
         hmap::Array *pa_dx = p_arrays[2];
         hmap::Array *pa_dy = p_arrays[3];
+        hmap::Array *pa_angle = p_arrays[4];
 
         *pa_out = hmap::gpu::mountain_range_radial(
             shape,
@@ -110,6 +113,7 @@ void compute_mountain_range_radial_node(BaseNode *p_node)
             pa_ctrl,
             pa_dx,
             pa_dy,
+            pa_angle,
             bbox);
       },
       hmap::TransformMode::DISTRIBUTED);

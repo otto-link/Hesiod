@@ -86,14 +86,6 @@ void compute_gavoronoise_node(BaseNode *p_node)
   hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
   hmap::Heightmap *p_angle = p_node->get_value_ref<hmap::Heightmap>("angle");
 
-  // manage angle (as a scalar parameter or as an input heightmap if
-  // provided)
-  hmap::Heightmap angle_map = !p_angle ? hmap::Heightmap(CONFIG,
-                                                         M_PI / 180.f *
-                                                             GET("angle", FloatAttribute))
-                                       : hmap::Heightmap();
-  p_angle = p_angle ? p_angle : &angle_map;
-
   hmap::transform(
       {p_out, p_ctrl, p_dx, p_dy, p_angle},
       [p_node](std::vector<hmap::Array *> p_arrays,
@@ -106,7 +98,10 @@ void compute_gavoronoise_node(BaseNode *p_node)
         hmap::Array *pa_dy = p_arrays[3];
         hmap::Array *pa_angle = p_arrays[4];
 
-        hmap::Array angle_deg = 180.f / M_PI * (*pa_angle);
+        hmap::Array angle_deg(shape, GET("angle", FloatAttribute));
+
+        if (pa_angle)
+          angle_deg += (*pa_angle) * 180.f / M_PI;
 
         *pa_out = hmap::gpu::gavoronoise(shape,
                                          GET("kw", WaveNbAttribute),
