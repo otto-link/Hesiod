@@ -125,6 +125,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"ExportTexture", "IO/Files"},
       {"Falloff", "Math/Boundaries"},
       {"FillTalus", "Operator/Transform"},
+      {"FlowStream", "Hydrology"},
       {"Fold", "Filter/Recast"},
       {"GaborWaveFbm", "Primitive/Coherent"},
       {"Gain", "Filter/Recurve"},
@@ -324,6 +325,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(ExportTexture, export_texture);
     SETUP_NODE(Falloff, falloff);
     SETUP_NODE(FillTalus, fill_talus);
+    SETUP_NODE(FlowStream, flow_stream);
     SETUP_NODE(Fold, fold);
     SETUP_NODE(GaborWaveFbm, gabor_wave_fbm);
     SETUP_NODE(Gain, gain);
