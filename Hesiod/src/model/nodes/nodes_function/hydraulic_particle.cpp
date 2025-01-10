@@ -4,6 +4,7 @@
 #include "highmap/erosion.hpp"
 #include "highmap/multiscale/downscaling.hpp"
 #include "highmap/opencl/gpu_opencl.hpp"
+#include "highmap/range.hpp"
 
 #include "attributes.hpp"
 
@@ -31,17 +32,14 @@ void setup_hydraulic_particle_node(BaseNode *p_node)
 
   // attribute(s)
   p_node->add_attr<SeedAttribute>("seed");
-  p_node->add_attr<FloatAttribute>("particle_density",
-                                   0.4f,
-                                   0.f,
-                                   2.f,
-                                   "particle_density");
+  p_node->add_attr<FloatAttribute>("particle_density", 1.f, 0.f, 4.f, "particle_density");
   p_node->add_attr<FloatAttribute>("c_capacity", 10.f, 0.1f, 100.f, "c_capacity");
   p_node->add_attr<FloatAttribute>("c_erosion", 0.05f, 0.f, 0.1f, "c_erosion");
   p_node->add_attr<FloatAttribute>("c_deposition", 0.01f, 0.f, 0.1f, "c_deposition");
   p_node->add_attr<FloatAttribute>("drag_rate", 0.001f, 0.f, 0.02f, "drag_rate");
   p_node->add_attr<FloatAttribute>("evap_rate", 0.001f, 0.f, 0.05f, "evap_rate");
-  p_node->add_attr<BoolAttribute>("post-filtering", true, "post-filtering");
+  p_node->add_attr<BoolAttribute>("post_filtering", true, "post_filtering");
+  p_node->add_attr<BoolAttribute>("post_filtering_local", true, "post_filtering_local");
   p_node->add_attr<BoolAttribute>("deposition_only", false, "deposition_only");
   p_node->add_attr<BoolAttribute>("GPU", HSD_DEFAULT_GPU_MODE, "GPU");
 
@@ -56,7 +54,8 @@ void setup_hydraulic_particle_node(BaseNode *p_node)
                                 "c_deposition",
                                 "drag_rate",
                                 "evap_rate",
-                                "post-filtering",
+                                "post_filtering",
+                                "post_filtering_local",
                                 "deposition_only",
                                 "_SEPARATOR_",
                                 "downscale",
@@ -128,9 +127,9 @@ void compute_hydraulic_particle_node(BaseNode *p_node)
                                             GET("c_deposition", FloatAttribute),
                                             GET("drag_rate", FloatAttribute),
                                             GET("evap_rate", FloatAttribute),
-                                            GET("post-filtering", BoolAttribute));
+                                            GET("post_filtering", BoolAttribute));
             },
-            hmap::TransformMode::DISTRIBUTED);
+            hmap::TransformMode::SINGLE_ARRAY);
       }
       else
       {
@@ -206,7 +205,7 @@ void compute_hydraulic_particle_node(BaseNode *p_node)
                                               GET("c_deposition", FloatAttribute),
                                               GET("drag_rate", FloatAttribute),
                                               GET("evap_rate", FloatAttribute),
-                                              GET("post-filtering", BoolAttribute));
+                                              GET("post_filtering", BoolAttribute));
 
                 // resample output fields to their original shape
                 if (pa_erosion_map)
@@ -250,7 +249,7 @@ void compute_hydraulic_particle_node(BaseNode *p_node)
                                        GET("c_deposition", FloatAttribute),
                                        GET("drag_rate", FloatAttribute),
                                        GET("evap_rate", FloatAttribute),
-                                       GET("post-filtering", BoolAttribute));
+                                       GET("post_filtering", BoolAttribute));
             },
             hmap::TransformMode::DISTRIBUTED);
       }
@@ -328,7 +327,7 @@ void compute_hydraulic_particle_node(BaseNode *p_node)
                                          GET("c_deposition", FloatAttribute),
                                          GET("drag_rate", FloatAttribute),
                                          GET("evap_rate", FloatAttribute),
-                                         GET("post-filtering", BoolAttribute));
+                                         GET("post_filtering", BoolAttribute));
 
                 // resample output fields to their original shape
                 if (pa_erosion_map)
@@ -345,16 +344,33 @@ void compute_hydraulic_particle_node(BaseNode *p_node)
 
     p_out->smooth_overlap_buffers();
 
-    if (p_erosion_map)
-    {
-      p_erosion_map->smooth_overlap_buffers();
-      p_erosion_map->remap();
-    }
+    p_erosion_map->smooth_overlap_buffers();
+    p_erosion_map->remap();
 
-    if (p_deposition_map)
+    p_deposition_map->smooth_overlap_buffers();
+    p_deposition_map->remap();
+
+    // clean-up erosion and deposition surfaces
+    if (GET("post_filtering_local", BoolAttribute))
     {
-      p_deposition_map->smooth_overlap_buffers();
-      p_deposition_map->remap();
+      hmap::transform(
+          {p_out, p_erosion_map, p_deposition_map},
+          [p_node, nparticles](std::vector<hmap::Array *> p_arrays,
+                               hmap::Vec2<int>,
+                               hmap::Vec4<float>)
+          {
+            hmap::Array *pa_out = p_arrays[0];
+            hmap::Array *pa_erosion_map = p_arrays[1];
+            hmap::Array *pa_deposition_map = p_arrays[2];
+
+            // TODO harcoded parameters
+            hmap::Array mask = hmap::maximum_smooth(*pa_erosion_map,
+                                                    *pa_deposition_map,
+                                                    0.05f);
+            hmap::gpu::smooth_cpulse(mask, 4);
+            hmap::gpu::smooth_cpulse(*pa_out, 32, &mask);
+          },
+          hmap::TransformMode::SINGLE_ARRAY);
     }
   }
 
