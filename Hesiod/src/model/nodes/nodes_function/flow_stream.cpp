@@ -42,10 +42,12 @@ void setup_flow_stream_node(BaseNode *p_node)
                                    1000.f,
                                    "upward_penalization");
   p_node->add_attr<FloatAttribute>("riverbank_slope", 1.f, 0.f, 16.f, "riverbank_slope");
+  p_node->add_attr<FloatAttribute>("river_radius", 0.001f, 0.001f, 0.1f, "river_radius");
+  p_node->add_attr<FloatAttribute>("depth", 0.01f, 0.f, 0.2f, "depth");
   p_node->add_attr<FloatAttribute>("merging_radius",
-                                   0.05f,
-                                   0.01f,
-                                   0.2f,
+                                   0.001f,
+                                   0.f,
+                                   0.1f,
                                    "merging_radius");
   p_node->add_attr<FloatAttribute>("riverbed_slope", 0.01f, 0.f, 0.1f, "riverbed_slope");
   p_node->add_attr<FloatAttribute>("noise_ratio", 0.9f, 0.f, 1.f, "noise_ratio");
@@ -57,6 +59,8 @@ void setup_flow_stream_node(BaseNode *p_node)
                                 "upward_penalization",
                                 "_SEPARATOR_",
                                 "riverbank_slope",
+				"river_radius",
+				"depth",
                                 "merging_radius",
                                 "riverbed_slope",
                                 "_SEPARATOR_",
@@ -110,12 +114,17 @@ void compute_flow_stream_node(BaseNode *p_node)
 
           // dig the rivers
           int merging_ir = int(GET("merging_radius", FloatAttribute) * (shape.x - 1.f));
+	  merging_ir = std::max(1, merging_ir);
 
+	  int river_ir = int(GET("river_radius", FloatAttribute) * (shape.x - 1.f));
+	  
           hmap::dig_river(*pa_out,
                           path_list,
                           GET("riverbank_slope", FloatAttribute) / (shape.x - 1.f),
+			  river_ir,
                           merging_ir,
-                          GET("riverbed_slope", FloatAttribute) / (shape.x - 1.f),
+			  GET("depth", FloatAttribute),
+                          GET("riverbed_slope", FloatAttribute),
                           GET("noise_ratio", FloatAttribute),
                           GET("seed", SeedAttribute),
                           pa_mask);
