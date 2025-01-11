@@ -367,7 +367,8 @@ void compute_hydraulic_particle_node(BaseNode *p_node)
             hmap::Array mask = hmap::maximum_smooth(*pa_erosion_map,
                                                     *pa_deposition_map,
                                                     0.05f);
-            hmap::gpu::smooth_cpulse(mask, 4);
+            mask = hmap::pow(mask, 0.5f);
+            hmap::gpu::smooth_cpulse(mask, 2);
             hmap::gpu::smooth_cpulse(*pa_out, 32, &mask);
           },
           hmap::TransformMode::SINGLE_ARRAY);
