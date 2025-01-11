@@ -104,7 +104,7 @@ void OpenGLRender::bind_gl_buffers()
 
   glTexImage2D(GL_TEXTURE_2D,
                0,
-               GL_RED, // grayscale
+               GL_R16, // explicitly specify 16-bit internal format (for Windows)
                this->texture_hmap_shape.x,
                this->texture_hmap_shape.y,
                0,
