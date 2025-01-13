@@ -130,8 +130,8 @@ std::map<std::string, std::string> get_node_inventory()
       {"Crater", "Primitive/Geological"},
       {"Dendry", "Primitive/Coherent"},
       {"DepressionFilling", "Erosion"},
-      {"Detrend", "Filter/Recurve"},
-      {"DiffusionLimitedAggregation", "Primitive/Coherent"},
+      {"Detrend", "WIP"},                     // Filter/Recurve
+      {"DiffusionLimitedAggregation", "WIP"}, // Primitive/Coherent
       {"Dilation", "Operator/Morphology"},
       {"DistanceTransform", "Operator/Morphology"},
       {"Erosion", "Operator/Morphology"},
@@ -143,8 +143,8 @@ std::map<std::string, std::string> get_node_inventory()
       {"ExportPath", "IO/Files"},
       {"ExportTexture", "IO/Files"},
       {"Falloff", "Math/Boundaries"},
-      {"FillTalus", "Operator/Transform"},
-      {"FlowStream", "Hydrology"},
+      {"FillTalus", "WIP"},  // Operator/Transform
+      {"FlowStream", "WIP"}, // Hydrology
       {"Fold", "Filter/Recast"},
       {"GaborWaveFbm", "Primitive/Coherent"},
       {"Gain", "Filter/Recurve"},
@@ -160,15 +160,15 @@ std::map<std::string, std::string> get_node_inventory()
       {"HeightmapToKernel", "Converter"},
       {"HeightmapToMask", "Converter"},
       {"HeightmapToRGBA", "Converter"},
-      {"HydraulicBlur", "Erosion/Hydraulic"},
+      {"HydraulicBlur", "WIP"}, // "Erosion/Hydraulic"
       {"HydraulicMusgrave", "Erosion/Hydraulic"},
       {"HydraulicParticle", "Erosion/Hydraulic"},
       {"HydraulicProcedural", "Erosion/Hydraulic"},
-      {"HydraulicRidge", "Erosion/Hydraulic"},
+      {"HydraulicRidge", "WIP"}, // "Erosion/Hydraulic"
       {"HydraulicSchott", "Erosion/Hydraulic"},
       {"HydraulicStream", "Erosion/Hydraulic"},
-      {"HydraulicStreamUpscaleAmplification", "Erosion/Hydraulic"},
-      {"HydraulicVpipes", "Erosion/Hydraulic"},
+      {"HydraulicStreamUpscaleAmplification", "WIP"}, // "Erosion/Hydraulic"
+      {"HydraulicVpipes", "WIP"},                     // "Erosion/Hydraulic"
       {"ImportHeightmap", "IO/Files"},
       {"ImportTexture", "IO/Files"},
       {"Inverse", "Math/Base"},
@@ -176,7 +176,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"KernelPrim", "Primitive/Kernel"},
       {"KmeansClustering2", "Features/Clustering"},
       {"KmeansClustering3", "Features/Clustering"},
-      {"Kuwahara", "Filter/Smoothing"},
+      {"Kuwahara", "WIP"}, // Filter/Smoothing
       {"Laplace", "Filter/Smoothing"},
       {"Lerp", "Math/Base"},
       {"MakeBinary", "Operator/Morphology"},
@@ -231,7 +231,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Remap", "Filter/Range"},
       {"Rescale", "Filter/Range"},
       {"Reverse", "Math/Base"},
-      {"ReverseMidpoint", "Primitive/Authoring"},
+      {"ReverseMidpoint", "WIP"}, // Primitive/Authoring
       {"Ridgelines", "Primitive/Authoring"},
       {"Rift", "Primitive/Function"},
       {"Ruggedness", "Features"},
@@ -274,15 +274,15 @@ std::map<std::string, std::string> get_node_inventory()
       {"TextureQuiltingShuffle", "Operator/Resynthesis"},
       {"Thermal", "Erosion/Thermal"},
       {"ThermalAutoBedrock", "Erosion/Thermal"},
-      {"ThermalFlatten", "WIP"}, // "Erosion/Thermal"},
-      {"ThermalRib", "WIP"},     // "Erosion/Thermal"},
-      {"ThermalSchott", "Erosion/Thermal"},
+      {"ThermalFlatten", "WIP"}, // "Erosion/Thermal"
+      {"ThermalRib", "WIP"},     // "Erosion/Thermal"
+      {"ThermalSchott", "WIP"},  // "Erosion/Thermal"
       {"Translate", "Operator/Transform"},
       {"Unsphericity", "Features/Landform"},
       {"ValleyWidth", "Features/Landform"},
       {"Voronoise", "Primitive/Coherent"},
       {"Warp", "Operator/Transform"},
-      {"WarpDownslope", "Operator/Transform"},
+      {"WarpDownslope", "WIP"}, // Operator/Transform
       {"WaveDune", "Primitive/Function"},
       {"WaveSine", "Primitive/Function"},
       {"WaveSquare", "Primitive/Function"},
@@ -290,7 +290,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"White", "Primitive/Random"},
       {"WhiteDensityMap", "Primitive/Random"},
       {"WhiteSparse", "Primitive/Random"},
-      {"Wrinkle", "Filter/Recast"},
+      {"Wrinkle", "WIP"}, // Filter/Recast
       {"ZeroedEdges", "Primitive/Random"},
       {"Zoom", "Operator/Transform"},
   };
