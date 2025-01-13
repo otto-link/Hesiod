@@ -51,6 +51,7 @@ static std::map<std::string, QColor> category_color_map = {
     {"Primitive", QColor(42, 161, 152, 255)},
     {"Biomes", QColor(133, 153, 0, 255)},
     {"Texture", QColor(0, 0, 0, 255)},
+    {"WIP", QColor(255, 255, 255, 255)},
 };
 
 } // namespace hesiod
