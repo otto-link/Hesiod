@@ -65,7 +65,7 @@ void compute_ruggedness_node(BaseNode *p_node)
 
             *pa_out = hmap::gpu::ruggedness(*pa_in, ir);
           },
-          hmap::TransformMode::DISTRIBUTED);
+          p_node->get_config_ref()->hmap_transform_mode_gpu);
     }
     else
     {
@@ -78,7 +78,7 @@ void compute_ruggedness_node(BaseNode *p_node)
 
             *pa_out = hmap::ruggedness(*pa_in, ir);
           },
-          hmap::TransformMode::DISTRIBUTED);
+          p_node->get_config_ref()->hmap_transform_mode_cpu);
     }
 
     p_out->smooth_overlap_buffers();

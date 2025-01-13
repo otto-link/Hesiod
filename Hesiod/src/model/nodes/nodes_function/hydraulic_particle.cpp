@@ -129,7 +129,7 @@ void compute_hydraulic_particle_node(BaseNode *p_node)
                                             GET("evap_rate", FloatAttribute),
                                             GET("post_filtering", BoolAttribute));
             },
-            hmap::TransformMode::SINGLE_ARRAY);
+            p_node->get_config_ref()->hmap_transform_mode_gpu);
       }
       else
       {
@@ -251,7 +251,7 @@ void compute_hydraulic_particle_node(BaseNode *p_node)
                                        GET("evap_rate", FloatAttribute),
                                        GET("post_filtering", BoolAttribute));
             },
-            hmap::TransformMode::DISTRIBUTED);
+            p_node->get_config_ref()->hmap_transform_mode_cpu);
       }
       else
       {
@@ -371,7 +371,7 @@ void compute_hydraulic_particle_node(BaseNode *p_node)
             hmap::gpu::smooth_cpulse(mask, 2);
             hmap::gpu::smooth_cpulse(*pa_out, 32, &mask);
           },
-          hmap::TransformMode::SINGLE_ARRAY);
+          p_node->get_config_ref()->hmap_transform_mode_gpu);
     }
   }
 

@@ -75,7 +75,7 @@ void compute_thermal_flatten_node(BaseNode *p_node)
                                 bedrock,
                                 GET("iterations", IntAttribute));
         },
-        hmap::TransformMode::DISTRIBUTED);
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
 
     p_out->smooth_overlap_buffers();
   }

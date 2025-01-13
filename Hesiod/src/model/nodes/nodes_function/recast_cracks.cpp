@@ -61,7 +61,7 @@ void compute_recast_cracks_node(BaseNode *p_node)
                               hmin,
                               hmax);
         },
-        hmap::TransformMode::DISTRIBUTED);
+        p_node->get_config_ref()->hmap_transform_mode_gpu);
 
     p_out->smooth_overlap_buffers();
   }

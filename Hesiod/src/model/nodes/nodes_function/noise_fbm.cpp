@@ -96,7 +96,7 @@ void compute_noise_fbm_node(BaseNode *p_node)
               nullptr,
               bbox);
         },
-        hmap::TransformMode::DISTRIBUTED);
+        p_node->get_config_ref()->hmap_transform_mode_gpu);
   }
   else
   {
@@ -125,7 +125,7 @@ void compute_noise_fbm_node(BaseNode *p_node)
                                     nullptr,
                                     bbox);
         },
-        hmap::TransformMode::DISTRIBUTED);
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
   }
 
   // add envelope

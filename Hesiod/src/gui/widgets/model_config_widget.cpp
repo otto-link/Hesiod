@@ -131,7 +131,7 @@ ModelConfigWidget::ModelConfigWidget(ModelConfig *p_model_config, QWidget *paren
   // --- OpenCL configuration
 
   QLabel *label_opencl = new QLabel("Hardware acceleration (OpenCL)");
-  layout->addWidget(label_opencl, row, 0);
+  layout->addWidget(label_opencl, row, 0, 1, 3);
   row++;
 
   // get available devices
@@ -167,6 +167,75 @@ ModelConfigWidget::ModelConfigWidget(ModelConfig *p_model_config, QWidget *paren
     layout->addWidget(combobox, row, 0, 1, 3);
   }
   row++;
+
+  // transform modes
+  {
+    QLabel *label = new QLabel("Node calculation mode");
+    layout->addWidget(label, row, 0, 1, 3);
+    row++;
+  }
+
+  {
+    QLabel *label = new QLabel("CPU");
+    layout->addWidget(label, row, 0);
+
+    QComboBox *combobox = new QComboBox();
+
+    QStringList items;
+    for (auto &[name, id] : hmap::transform_mode_as_string)
+    {
+      combobox->addItem(name.c_str());
+      if (id == (int)this->p_model_config->hmap_transform_mode_cpu)
+        combobox->setCurrentText(name.c_str());
+    }
+
+    connect(combobox,
+            QOverload<int>::of(&QComboBox::currentIndexChanged),
+            [this, combobox]()
+            {
+              std::string current_choice = combobox->currentText().toStdString();
+
+              LOG->trace("{}", current_choice);
+              this->p_model_config
+                  ->hmap_transform_mode_cpu = static_cast<hmap::TransformMode>(
+                  hmap::transform_mode_as_string.at(current_choice));
+            });
+
+    layout->addWidget(combobox, row, 1, 1, 3);
+
+    row++;
+  }
+
+  {
+    QLabel *label = new QLabel("GPU");
+    layout->addWidget(label, row, 0);
+
+    QComboBox *combobox = new QComboBox();
+
+    QStringList items;
+    for (auto &[name, id] : hmap::transform_mode_as_string)
+    {
+      combobox->addItem(name.c_str());
+      if (id == (int)this->p_model_config->hmap_transform_mode_gpu)
+        combobox->setCurrentText(name.c_str());
+    }
+
+    connect(combobox,
+            QOverload<int>::of(&QComboBox::currentIndexChanged),
+            [this, combobox]()
+            {
+              std::string current_choice = combobox->currentText().toStdString();
+
+              LOG->trace("{}", current_choice);
+              this->p_model_config
+                  ->hmap_transform_mode_gpu = static_cast<hmap::TransformMode>(
+                  hmap::transform_mode_as_string.at(current_choice));
+            });
+
+    layout->addWidget(combobox, row, 1, 1, 3);
+
+    row++;
+  }
 
   // --- buttons
 

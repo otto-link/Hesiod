@@ -116,7 +116,7 @@ void compute_mountain_range_radial_node(BaseNode *p_node)
             pa_angle,
             bbox);
       },
-      hmap::TransformMode::DISTRIBUTED);
+      p_node->get_config_ref()->hmap_transform_mode_gpu);
 
   // add envelope
   if (p_env)

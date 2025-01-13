@@ -22,6 +22,8 @@ void ModelConfig::json_from(nlohmann::json const &json)
   this->tiling.x = json["tiling.x"];
   this->tiling.y = json["tiling.y"];
   this->overlap = json["overlap"];
+  this->hmap_transform_mode_cpu = json["hmap_transform_mode_cpu"];
+  this->hmap_transform_mode_gpu = json["hmap_transform_mode_gpu"];
 }
 
 nlohmann::json ModelConfig::json_to() const
@@ -32,6 +34,8 @@ nlohmann::json ModelConfig::json_to() const
   json["tiling.x"] = this->tiling.x;
   json["tiling.y"] = this->tiling.y;
   json["overlap"] = this->overlap;
+  json["hmap_transform_mode_cpu"] = this->hmap_transform_mode_cpu;
+  json["hmap_transform_mode_gpu"] = this->hmap_transform_mode_gpu;
   return json;
 }
 

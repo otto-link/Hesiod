@@ -3,8 +3,10 @@
  * this software. */
 #pragma once
 
-#include "highmap/algebra.hpp"
 #include "nlohmann/json.hpp"
+
+#include "highmap/algebra.hpp"
+#include "highmap/heightmap.hpp"
 
 namespace hesiod
 {
@@ -44,6 +46,16 @@ struct ModelConfig
    * overlap is 0.5, meaning there is 50% overlap between adjacent tiles.
    */
   float overlap = 0.5f;
+
+  /**
+   * @brief Heightmap default transform mode for CPU backend.
+   */
+  hmap::TransformMode hmap_transform_mode_cpu = hmap::TransformMode::DISTRIBUTED;
+
+  /**
+   * @brief Heightmap default transform mode for GPU backend.
+   */
+  hmap::TransformMode hmap_transform_mode_gpu = hmap::TransformMode::SINGLE_ARRAY;
 
   /**
    * @brief Logs debug information about the current model configuration.
