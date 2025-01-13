@@ -62,15 +62,18 @@ void compute_thermal_flatten_node(BaseNode *p_node)
 
     hmap::transform(
         {p_out, &talus_map},
-        [p_node,
-         &talus](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+        [p_node, &talus](std::vector<hmap::Array *> p_arrays,
+                         hmap::Vec2<int>            shape,
+                         hmap::Vec4<float>)
         {
           hmap::Array *pa_out = p_arrays[0];
           hmap::Array *pa_talus_map = p_arrays[1];
+          hmap::Array  bedrock(shape, -std::numeric_limits<float>::max());
 
-          // TODO talus map instead of scalar
-
-          hmap::thermal_flatten(*pa_out, talus, GET("iterations", IntAttribute));
+          hmap::thermal_flatten(*pa_out,
+                                *pa_talus_map,
+                                bedrock,
+                                GET("iterations", IntAttribute));
         },
         hmap::TransformMode::DISTRIBUTED);
 
