@@ -79,6 +79,7 @@ uniform bool use_texture_diffuse;
 uniform bool use_texture_normal;
 uniform bool show_normal_map;
 uniform bool show_heightmap;
+uniform bool show_terrain_cmap;
 uniform vec3 light_dir;
 uniform float shadow_saturation;
 uniform float shadow_strength;
@@ -115,6 +116,49 @@ vec3 tonemap_ACES(vec3 x)
     return (x * (a * x + b)) / (x * (c * x + d) + e);
 }
 
+// colors from https://www.shadertoy.com/view/7ljcRW
+#define CLIFF_COLOR1  vec3(0.11, 0.1, 0.1)
+#define CLIFF_COLOR2  vec3(0.22, 0.2, 0.2)
+#define DIRT_COLOR   vec3(0.6, 0.5, 0.4)
+#define GRASS_COLOR1 vec3(0.15, 0.3, 0.1)
+#define GRASS_COLOR2 vec3(0.4, 0.5, 0.2)
+#define SNOW_COLOR  vec3(1.0, 1.0, 1.0)
+
+vec2 hash( vec2 p , float fseed) // replace this by something better
+{
+	p = vec2( dot(p,vec2(127.1,311.7)), dot(p,vec2(269.5,183.3)) );
+	return -1.0 + 2.0*fract(sin(p + fseed)*43758.5453123);
+}
+
+float noise( in vec2 p, in float fseed )
+{
+    const float K1 = 0.366025404; // (sqrt(3)-1)/2;
+    const float K2 = 0.211324865; // (3-sqrt(3))/6;
+
+	vec2  i = floor( p + (p.x+p.y)*K1 );
+    vec2  a = p - i + (i.x+i.y)*K2;
+    float m = step(a.y,a.x);
+    vec2  o = vec2(m,1.0-m);
+    vec2  b = a - o + K2;
+	vec2  c = a - 1.0 + 2.0*K2;
+    vec3  h = max( 0.5-vec3(dot(a,a), dot(b,b), dot(c,c) ), 0.0 );
+	vec3  n = h*h*h*h*vec3( dot(a,hash(i+0.0, fseed)), dot(b,hash(i+o, fseed)), dot(c,hash(i+1.0, fseed)));
+    return dot( n, vec3(70.0) );
+}
+
+float fbm(in vec2 p)
+{
+    float n = 0.f;
+    float nf = 1.f;
+    float na = 0.6f;
+    for (int i = 0; i < 8; i++) {
+       n += noise(p * nf, 1.f) * na;
+       na *= 0.5;
+       nf *= 2.0;
+    }
+    return n;
+}
+
 void main()
 {
     // compute normals
@@ -126,7 +170,11 @@ void main()
     normal.x = texture(textureHmap, tex_coord + dx).r - texture(textureHmap, tex_coord - dx).r;
     normal.y = 2.f * mesh_size;
     normal.z = texture(textureHmap, tex_coord + dy).r - texture(textureHmap, tex_coord - dy).r;
+
+    float grad_norm = 1.f - clamp(0.05f * length(normal.xz) / mesh_size, 0.f, 1.f);
+
     normal = normalize(normal);
+
 
     if (use_texture_normal)
     {
@@ -145,14 +193,35 @@ void main()
     else
     {
         if (show_heightmap)
+        {
             color = vec4(turbo(h), 1.f);
+        }
         else if (use_texture_diffuse)
         {
             color = texture(textureDiffuse, tex_coord);
             // color.xyz = tonemap_ACES(color.xyz);
         }
+        else if (show_terrain_cmap)
+        {
+            float amp = 0.1;
+            float hn = h + amp * fbm(16.f * tex_coord);
+            hn = clamp((hn + amp) / (1.f + 1 * amp), 0.f, 1.f);
+
+            vec3 c3 = DIRT_COLOR;
+            c3 = mix(c3, GRASS_COLOR2, smoothstep(0.f, 0.3f, hn));
+            c3 = mix(c3, GRASS_COLOR1, smoothstep(0.3f, 0.6f, hn));
+            c3 = mix(c3, CLIFF_COLOR1, smoothstep(0.6f, 0.8f, hn));
+            c3 = mix(c3, SNOW_COLOR, smoothstep(0.8f, 1.0f, hn));
+
+            c3 = mix(CLIFF_COLOR2, c3, grad_norm);
+            c3 = tonemap_ACES(c3);
+
+            color = vec4(c3, 1.f);
+        }
         else
+        {
             color = vec4(1.f, 1.f, 1.f, 1.f);
+        }
 
         // hillshading
         float hillshade = (dot(normal, -light_dir) + 1.f - shadow_saturation) / (2.f - 2.f * shadow_saturation);

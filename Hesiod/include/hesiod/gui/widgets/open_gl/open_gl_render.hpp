@@ -76,6 +76,8 @@ public:
 
   void set_show_normal_map(bool new_show_normal_map);
 
+  void set_show_terrain_cmap(bool new_show_terrain_cmap);
+
   void set_use_approx_mesh(bool new_use_approx_mesh);
 
   void set_wireframe_mode(bool new_wireframe_mode);
@@ -167,6 +169,7 @@ protected:
   bool wireframe_mode = false;
   bool show_normal_map = false;
   bool show_heightmap = false;
+  bool show_terrain_cmap = false;
 
   bool  use_approx_mesh = false;
   float max_approx_error = 5e-3f;

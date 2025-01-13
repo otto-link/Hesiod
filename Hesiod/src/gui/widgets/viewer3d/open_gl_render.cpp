@@ -293,6 +293,7 @@ void OpenGLRender::paintGL()
         this->shader.setUniformValue("light_dir", light_dir.x, light_dir.y, light_dir.z);
         this->shader.setUniformValue("show_normal_map", this->show_normal_map);
         this->shader.setUniformValue("show_heightmap", this->show_heightmap);
+        this->shader.setUniformValue("show_terrain_cmap", this->show_terrain_cmap);
         this->shader.setUniformValue("shadow_saturation", this->shadow_saturation);
         this->shader.setUniformValue("shadow_strength", this->shadow_strength);
         this->shader.setUniformValue("shadow_gamma", this->shadow_gamma);
@@ -542,6 +543,12 @@ void OpenGLRender::set_shadow_gamma(float new_shadow_gamma)
 void OpenGLRender::set_show_heightmap(bool new_show_heightmap)
 {
   this->show_heightmap = new_show_heightmap;
+  this->update();
+}
+
+void OpenGLRender::set_show_terrain_cmap(bool new_show_terrain_cmap)
+{
+  this->show_terrain_cmap = new_show_terrain_cmap;
   this->update();
 }
 

@@ -63,7 +63,7 @@ OpenGLWidget::OpenGLWidget(QWidget *parent) : QWidget(parent)
 
   // normal map
   {
-    std::vector<std::string> labels = {"Texture", "Normal map", "Heightmap"};
+    std::vector<std::string> labels = {"Texture", "Normal map", "Heightmap", "Terrain"};
 
     QComboBox *combobox = new QComboBox();
 
@@ -80,11 +80,14 @@ OpenGLWidget::OpenGLWidget(QWidget *parent) : QWidget(parent)
 
               this->renderer->set_show_normal_map(false);
               this->renderer->set_show_heightmap(false);
+              this->renderer->set_show_terrain_cmap(false);
 
               if (current_choice == "Normal map")
                 this->renderer->set_show_normal_map(true);
               else if (current_choice == "Heightmap")
                 this->renderer->set_show_heightmap(true);
+              else if (current_choice == "Terrain")
+                this->renderer->set_show_terrain_cmap(true);
             });
   }
 
