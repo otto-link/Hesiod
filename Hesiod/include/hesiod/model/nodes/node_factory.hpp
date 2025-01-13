@@ -35,6 +35,9 @@ namespace hesiod
 
 void dump_node_inventory(const std::string &fname);
 
+void dump_node_documentation_stub(const std::string           &fname,
+                                  std::shared_ptr<ModelConfig> config);
+
 /**
  * @brief Retrieves a map of node inventory.
  *

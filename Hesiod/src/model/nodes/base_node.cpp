@@ -82,4 +82,56 @@ nlohmann::json BaseNode::json_to() const
   return json;
 }
 
+nlohmann::json BaseNode::node_parameters_to_json()
+{
+  nlohmann::json json;
+
+  // --- node info
+
+  json["label"] = this->get_label();
+  json["category"] = this->category;
+  json["description"] = "TODO";
+
+  // --- ports
+
+  nlohmann::json json_ports = nlohmann::json::array();
+
+  for (int k = 0; k < this->get_nports(); k++)
+  {
+    nlohmann::json json_this_port;
+
+    std::string stype = this->get_port_type(k) == gngui::PortType::IN ? "input"
+                                                                      : "output";
+
+    json_this_port["type"] = stype;
+    json_this_port["caption"] = this->get_port_caption(k);
+    json_this_port["data_type"] = this->get_data_type(k);
+    json_this_port["description"] = "TODO";
+
+    json_ports.push_back(json_this_port);
+  }
+
+  json["ports"] = json_ports;
+
+  // --- attributes
+
+  nlohmann::json json_attrs = nlohmann::json::array();
+
+  for (auto &[key, p_attr] : this->attr)
+  {
+    nlohmann::json json_this_attr;
+
+    json_this_attr["key"] = key;
+    json_this_attr["label"] = p_attr->get_label();
+    json_this_attr["type"] = attr::attribute_type_map.at(p_attr->get_type());
+    json_this_attr["description"] = "TODO";
+
+    json_attrs.push_back(json_this_attr);
+  }
+
+  json["attributes"] = json_attrs;
+
+  return json;
+}
+
 } // namespace hesiod

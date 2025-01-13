@@ -82,6 +82,25 @@ void dump_node_inventory(const std::string &fname)
   f.close();
 }
 
+void dump_node_documentation_stub(const std::string           &fname,
+                                  std::shared_ptr<ModelConfig> config)
+{
+  std::map<std::string, std::string> ni = hesiod::get_node_inventory();
+
+  nlohmann::json json;
+  for (auto [name, category] : ni)
+  {
+    std::shared_ptr<gnode::Node> p_node = node_factory(name, config);
+    hesiod::BaseNode *p_base_node = dynamic_cast<hesiod::BaseNode *>(p_node.get());
+    json[name] = p_base_node->node_parameters_to_json();
+  }
+
+  std::fstream f;
+  f.open(fname, std::ios::out);
+  f << json.dump(4) << "\n";
+  f.close();
+}
+
 std::map<std::string, std::string> get_node_inventory()
 {
   std::map<std::string, std::string> node_inventory = {

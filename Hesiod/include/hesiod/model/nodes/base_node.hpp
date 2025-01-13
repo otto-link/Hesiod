@@ -59,6 +59,8 @@ public:
     return this->attr.at(key)->get_ref<T>()->get_value();
   }
 
+  nlohmann::json node_parameters_to_json();
+
   std::map<std::string, std::unique_ptr<attr::AbstractAttribute>> *get_attr_ref()
   {
     return &this->attr;

@@ -158,6 +158,9 @@ int main(int argc, char *argv[])
     {
       LOG->info("executing Hesiod in node inventory mode");
       hesiod::dump_node_inventory("node_inventory");
+
+      auto config = std::make_shared<hesiod::ModelConfig>();
+      hesiod::dump_node_documentation_stub("node_documentation_stub.json", config);
       return 0;
     }
   }
