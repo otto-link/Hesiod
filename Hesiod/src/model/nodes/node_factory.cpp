@@ -160,8 +160,8 @@ std::map<std::string, std::string> get_node_inventory()
       {"HeightmapToKernel", "Converter"},
       {"HeightmapToMask", "Converter"},
       {"HeightmapToRGBA", "Converter"},
-      {"HydraulicBlur", "WIP"}, // "Erosion/Hydraulic"
-      {"HydraulicMusgrave", "Erosion/Hydraulic"},
+      {"HydraulicBlur", "WIP"},     // "Erosion/Hydraulic"
+      {"HydraulicMusgrave", "WIP"}, // "Erosion/Hydraulic"
       {"HydraulicParticle", "Erosion/Hydraulic"},
       {"HydraulicProcedural", "Erosion/Hydraulic"},
       {"HydraulicRidge", "WIP"}, // "Erosion/Hydraulic"
