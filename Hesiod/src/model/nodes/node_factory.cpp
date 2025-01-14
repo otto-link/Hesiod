@@ -163,8 +163,8 @@ std::map<std::string, std::string> get_node_inventory()
       {"HydraulicBlur", "WIP"},     // "Erosion/Hydraulic"
       {"HydraulicMusgrave", "WIP"}, // "Erosion/Hydraulic"
       {"HydraulicParticle", "Erosion/Hydraulic"},
-      {"HydraulicProcedural", "Erosion/Hydraulic"},
-      {"HydraulicRidge", "WIP"}, // "Erosion/Hydraulic"
+      {"HydraulicProcedural", "WIP"}, // "Erosion/Hydraulic"
+      {"HydraulicRidge", "WIP"},      // "Erosion/Hydraulic"
       {"HydraulicSchott", "Erosion/Hydraulic"},
       {"HydraulicStream", "Erosion/Hydraulic"},
       {"HydraulicStreamUpscaleAmplification", "WIP"}, // "Erosion/Hydraulic"
@@ -238,7 +238,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Rugosity", "Features"},
       {"Saturate", "Filter/Recurve"},
       {"ScanMask", "Mask"},
-      {"SedimentDeposition", "Erosion/Deposition"},
+      {"SedimentDeposition", "WIP"}, // "Erosion/Deposition"
       {"SelectAngle", "Mask/Selector"},
       {"SelectBlobLog", "Mask/Selector"},
       {"SelectCavities", "Mask/Selector"},

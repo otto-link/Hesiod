@@ -46,7 +46,7 @@ void setup_hydraulic_procedural_node(BaseNode *p_node)
                                    8.f,
                                    "kernel_width_ratio");
   p_node->add_attr<FloatAttribute>("phase_smoothing", 2.f, 0.f, 10.f, "phase_smoothing");
-  p_node->add_attr<FloatAttribute>("phase_noise_amp", 3.f, 0.f, 6.f, "phase_noise_amp");
+  p_node->add_attr<FloatAttribute>("phase_noise_amp", 0.f, 0.f, 6.f, "phase_noise_amp");
   p_node->add_attr<BoolAttribute>("reverse_phase", false, "reverse_phase");
   p_node->add_attr<BoolAttribute>("rotate90", false, "rotate90");
   p_node->add_attr<BoolAttribute>("use_default_mask", true, "use_default_mask");
@@ -95,36 +95,40 @@ void compute_hydraulic_procedural_node(BaseNode *p_node)
     float global_wavelength = GET("ridge_wavelength", FloatAttribute) *
                               (float)p_out->tiling.x;
 
-    hmap::transform(*p_out,
-                    p_mask,
-                    p_ridge_mask,
-                    [p_node, hmin, hmax, talus_mask, global_wavelength](
-                        hmap::Array &h_out,
-                        hmap::Array *p_mask_array,
-                        hmap::Array *p_ridge_mask_array)
-                    {
-                      hmap::hydraulic_procedural(
-                          h_out,
-                          GET("seed", SeedAttribute),
-                          global_wavelength,
-                          GET("ridge_scaling", FloatAttribute),
-                          (hmap::ErosionProfile)GET("erosion_profile", MapEnumAttribute),
-                          GET("delta", FloatAttribute),
-                          GET("noise_ratio", FloatAttribute),
-                          -1, // prefilter_ir,
-                          GET("density_factor", FloatAttribute),
-                          GET("kernel_width_ratio", FloatAttribute),
-                          GET("phase_smoothing", FloatAttribute),
-                          GET("phase_noise_amp", FloatAttribute),
-                          GET("reverse_phase", BoolAttribute),
-                          GET("rotate90", BoolAttribute),
-                          GET("use_default_mask", BoolAttribute),
-                          talus_mask,
-                          p_mask_array,
-                          p_ridge_mask_array,
-                          hmin,
-                          hmax);
-                    });
+    hmap::transform(
+        {p_out, p_mask, p_ridge_mask},
+        [p_node, hmin, hmax, talus_mask, global_wavelength](
+            std::vector<hmap::Array *> p_arrays,
+            hmap::Vec2<int>,
+            hmap::Vec4<float>)
+        {
+          hmap::Array *pa_out = p_arrays[0];
+          hmap::Array *pa_mask = p_arrays[1];
+          hmap::Array *pa_ridge_mask = p_arrays[2];
+
+          hmap::hydraulic_procedural(
+              *pa_out,
+              GET("seed", SeedAttribute),
+              global_wavelength,
+              GET("ridge_scaling", FloatAttribute),
+              (hmap::ErosionProfile)GET("erosion_profile", MapEnumAttribute),
+              GET("delta", FloatAttribute),
+              GET("noise_ratio", FloatAttribute),
+              -1, // prefilter_ir,
+              GET("density_factor", FloatAttribute),
+              GET("kernel_width_ratio", FloatAttribute),
+              GET("phase_smoothing", FloatAttribute),
+              GET("phase_noise_amp", FloatAttribute),
+              GET("reverse_phase", BoolAttribute),
+              GET("rotate90", BoolAttribute),
+              GET("use_default_mask", BoolAttribute),
+              talus_mask,
+              pa_mask,
+              pa_ridge_mask,
+              hmin,
+              hmax);
+        },
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
 
     p_out->smooth_overlap_buffers();
   }
