@@ -58,29 +58,28 @@ void compute_hydraulic_stream_node(BaseNode *p_node)
 
     int ir = (int)(GET("radius", FloatAttribute) * p_out->shape.x);
 
-    hmap::transform(*p_out,
-                    p_bedrock,
-                    p_moisture_map,
-                    p_mask,
-                    p_erosion_map,
-                    nullptr, // p_deposition_map,
-                    [p_node, &ir](hmap::Array &h_out,
-                                  hmap::Array *p_bedrock_array,
-                                  hmap::Array *p_moisture_map_array,
-                                  hmap::Array *p_mask_array,
-                                  hmap::Array *p_erosion_map_array,
-                                  hmap::Array * /*p_deposition_map_array*/)
-                    {
-                      hmap::hydraulic_stream(h_out,
-                                             p_mask_array,
-                                             GET("c_erosion", FloatAttribute),
-                                             GET("talus_ref", FloatAttribute),
-                                             p_bedrock_array,
-                                             p_moisture_map_array,
-                                             p_erosion_map_array,
-                                             ir,
-                                             GET("clipping_ratio", FloatAttribute));
-                    });
+    hmap::transform(
+        {p_out, p_bedrock, p_moisture_map, p_mask, p_erosion_map},
+        [p_node,
+         &ir](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+        {
+          hmap::Array *pa_out = p_arrays[0];
+          hmap::Array *pa_bedrock = p_arrays[1];
+          hmap::Array *pa_moisture_map = p_arrays[2];
+          hmap::Array *pa_mask = p_arrays[3];
+          hmap::Array *pa_erosion_map = p_arrays[4];
+
+          hmap::hydraulic_stream(*pa_out,
+                                 pa_mask,
+                                 GET("c_erosion", FloatAttribute),
+                                 GET("talus_ref", FloatAttribute),
+                                 pa_bedrock,
+                                 pa_moisture_map,
+                                 pa_erosion_map,
+                                 ir,
+                                 GET("clipping_ratio", FloatAttribute));
+        },
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
 
     p_out->smooth_overlap_buffers();
 
