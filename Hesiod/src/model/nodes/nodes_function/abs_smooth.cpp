@@ -46,14 +46,18 @@ void compute_abs_smooth_node(BaseNode *p_node)
   {
     hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
-    hmap::transform(*p_out,
-                    *p_in,
-                    [p_node](hmap::Array &out, hmap::Array &in)
-                    {
-                      out = hmap::abs_smooth(in,
-                                             GET("mu", FloatAttribute),
-                                             GET("vshift", FloatAttribute));
-                    });
+    hmap::transform(
+        {p_out, p_in},
+        [p_node](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+        {
+          hmap::Array *pa_out = p_arrays[0];
+          hmap::Array *pa_in = p_arrays[1];
+
+          *pa_out = hmap::abs_smooth(*pa_in,
+                                     GET("mu", FloatAttribute),
+                                     GET("vshift", FloatAttribute));
+        },
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
 
     // post-process
     post_process_heightmap(*p_out,
