@@ -8,6 +8,7 @@
 #include "highmap/erosion.hpp"
 #include "highmap/kernels.hpp"
 #include "highmap/math.hpp"
+#include "highmap/morphology.hpp"
 #include "highmap/primitives.hpp"
 
 namespace hesiod
@@ -82,6 +83,16 @@ static std::map<std::string, int> distance_function_map = {
     {"Euclidian", hmap::DistanceFunction::EUCLIDIAN},
     {"Euclidian/Chebyshev", hmap::DistanceFunction::EUCLISHEV},
     {"Manhattan", hmap::DistanceFunction::MANHATTAN},
+};
+
+/**
+ * @brief Plain text / enumerate mapping for the HighMap distance transform function
+ * selection.
+ */
+static std::map<std::string, int> distance_transform_type_map = {
+    {"Exact", hmap::DistanceTransformType::DT_EXACT},
+    {"Approx. (fast)", hmap::DistanceTransformType::DT_APPROX},
+    {"Manhattan (fast)", hmap::DistanceTransformType::DT_MANHATTAN},
 };
 
 /**

@@ -7,6 +7,7 @@
 #include "attributes.hpp"
 
 #include "hesiod/logger.hpp"
+#include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/utils.hpp"
 
@@ -24,12 +25,22 @@ void setup_distance_transform_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<BoolAttribute>("reverse", false, "reverse");
-  p_node->add_attr<BoolAttribute>("inverse", false, "inverse");
+  p_node->add_attr<MapEnumAttribute>("transform_type",
+                                     "Approx. (fast)",
+                                     distance_transform_type_map,
+                                     "transform_type");
+  p_node->add_attr<BoolAttribute>("reverse_input", false, "reverse_input");
+  p_node->add_attr<FloatAttribute>("threshold", 0.5f, -1.f, 2.f, "threshold");
+  p_node->add_attr<BoolAttribute>("reverse_output", false, "reverse_output");
   p_node->add_attr<BoolAttribute>("remap", true, "remap");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"reverse", "_SEPARATOR_", "inverse", "remap"});
+  p_node->set_attr_ordered_key({"transform_type",
+                                "reverse_input",
+                                "threshold",
+                                "_SEPARATOR_",
+                                "reverse_output",
+                                "remap"});
 }
 
 void compute_distance_transform_node(BaseNode *p_node)
@@ -44,22 +55,41 @@ void compute_distance_transform_node(BaseNode *p_node)
   {
     hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
-    // not distributed, work on a single array
-    hmap::Array z_array = p_in->to_array();
+    hmap::transform(
+        {p_out, p_in},
+        [p_node](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+        {
+          hmap::Array *pa_out = p_arrays[0];
+          hmap::Array *pa_in = p_arrays[1];
 
-    if (GET("reverse", BoolAttribute))
-    {
-      make_binary(z_array);
-      z_array = 1.f - z_array;
-    }
+          *pa_out = *pa_in;
+          make_binary(*pa_out, GET("threshold", FloatAttribute));
 
-    z_array = hmap::distance_transform_approx(z_array);
+          if (GET("reverse_input", BoolAttribute))
+            *pa_out = 1.f - *pa_out;
 
-    p_out->from_array_interp(z_array);
+          auto type = static_cast<hmap::DistanceTransformType>(
+              GET("transform_type", MapEnumAttribute));
+
+          switch (type)
+          {
+          case hmap::DistanceTransformType::DT_EXACT:
+            *pa_out = hmap::distance_transform(*pa_out);
+            break;
+          case hmap::DistanceTransformType::DT_MANHATTAN:
+            *pa_out = hmap::distance_transform_manhattan(*pa_out);
+            break;
+          case hmap::DistanceTransformType::DT_APPROX:
+          default:
+            *pa_out = hmap::distance_transform_approx(*pa_out);
+            break;
+          }
+        },
+        hmap::TransformMode::SINGLE_ARRAY); // mandatory
 
     // post-process
     post_process_heightmap(*p_out,
-                           GET("inverse", BoolAttribute),
+                           GET("reverse_output", BoolAttribute),
                            false, // smooth
                            0,
                            false, // saturate
