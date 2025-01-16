@@ -23,6 +23,7 @@ void setup_hydraulic_stream_log_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "erosion", CONFIG);
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "flow_map", CONFIG);
 
   // attribute(s)
   p_node->add_attr<FloatAttribute>("c_erosion", 0.05f, 0.01f, 0.1f, "c_erosion");
@@ -36,7 +37,8 @@ void setup_hydraulic_stream_log_node(BaseNode *p_node)
   p_node->add_attr<FloatAttribute>("radius", 0.f, 0.f, 0.05f, "radius");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"c_erosion", "gamma", "saturation_ratio", "talus_ref", "radius"});
+  p_node->set_attr_ordered_key(
+      {"c_erosion", "gamma", "saturation_ratio", "talus_ref", "radius"});
 }
 
 void compute_hydraulic_stream_log_node(BaseNode *p_node)
@@ -52,6 +54,7 @@ void compute_hydraulic_stream_log_node(BaseNode *p_node)
     hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
     hmap::Heightmap *p_mask = p_node->get_value_ref<hmap::Heightmap>("mask");
     hmap::Heightmap *p_erosion_map = p_node->get_value_ref<hmap::Heightmap>("erosion");
+    hmap::Heightmap *p_flow_map = p_node->get_value_ref<hmap::Heightmap>("flow_map");
 
     // copy the input heightmap
     *p_out = *p_in;
@@ -59,13 +62,14 @@ void compute_hydraulic_stream_log_node(BaseNode *p_node)
     int ir = (int)(GET("radius", FloatAttribute) * p_out->shape.x);
 
     hmap::transform(
-        {p_out, p_mask, p_erosion_map},
+        {p_out, p_mask, p_erosion_map, p_flow_map},
         [p_node,
          &ir](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
         {
           hmap::Array *pa_out = p_arrays[0];
           hmap::Array *pa_mask = p_arrays[1];
           hmap::Array *pa_erosion_map = p_arrays[2];
+          hmap::Array *pa_flow_map = p_arrays[3];
 
           hmap::hydraulic_stream_log(*pa_out,
                                      GET("c_erosion", FloatAttribute),
@@ -76,6 +80,7 @@ void compute_hydraulic_stream_log_node(BaseNode *p_node)
                                      nullptr,
                                      nullptr,
                                      pa_erosion_map,
+                                     pa_flow_map,
                                      ir);
         },
         p_node->get_config_ref()->hmap_transform_mode_cpu);
@@ -84,6 +89,9 @@ void compute_hydraulic_stream_log_node(BaseNode *p_node)
 
     p_erosion_map->smooth_overlap_buffers();
     p_erosion_map->remap();
+
+    p_flow_map->smooth_overlap_buffers();
+    p_flow_map->remap();
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());
