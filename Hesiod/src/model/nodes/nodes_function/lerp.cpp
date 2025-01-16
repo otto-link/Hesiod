@@ -44,18 +44,32 @@ void compute_lerp_node(BaseNode *p_node)
     hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
     if (p_t)
-      hmap::transform(*p_out,
-                      *p_a,
-                      *p_b,
-                      *p_t,
-                      [](hmap::Array &out, hmap::Array &a, hmap::Array &b, hmap::Array &t)
-                      { out = hmap::lerp(a, b, t); });
+      hmap::transform(
+          {p_out, p_a, p_b, p_t},
+          [](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+          {
+            hmap::Array *pa_out = p_arrays[0];
+            hmap::Array *pa_a = p_arrays[1];
+            hmap::Array *pa_b = p_arrays[2];
+            hmap::Array *pa_t = p_arrays[3];
+
+            *pa_out = hmap::lerp(*pa_a, *pa_b, *pa_t);
+          },
+          p_node->get_config_ref()->hmap_transform_mode_cpu);
     else
-      hmap::transform(*p_out,
-                      *p_a,
-                      *p_b,
-                      [p_node](hmap::Array &out, hmap::Array &a, hmap::Array &b)
-                      { out = hmap::lerp(a, b, GET("t", FloatAttribute)); });
+      hmap::transform(
+          {p_out, p_a, p_b},
+          [p_node](std::vector<hmap::Array *> p_arrays,
+                   hmap::Vec2<int>,
+                   hmap::Vec4<float>)
+          {
+            hmap::Array *pa_out = p_arrays[0];
+            hmap::Array *pa_a = p_arrays[1];
+            hmap::Array *pa_b = p_arrays[2];
+
+            *pa_out = hmap::lerp(*pa_a, *pa_b, GET("t", FloatAttribute));
+          },
+          p_node->get_config_ref()->hmap_transform_mode_cpu);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());
