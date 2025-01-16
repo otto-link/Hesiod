@@ -66,7 +66,8 @@ void compute_select_rivers_node(BaseNode *p_node)
     p_out->from_array_interp(z_array);
 
     // post-process
-    post_process_heightmap(*p_out,
+    post_process_heightmap(p_node,
+                           *p_out,
                            GET("inverse", BoolAttribute),
                            GET("smoothing", BoolAttribute),
                            GET("smoothing_radius", FloatAttribute),

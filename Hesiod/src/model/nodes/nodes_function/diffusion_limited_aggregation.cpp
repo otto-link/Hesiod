@@ -68,7 +68,8 @@ void compute_diffusion_limited_aggregation_node(BaseNode *p_node)
   p_out->from_array_interp_nearest(array);
 
   // post-process
-  post_process_heightmap(*p_out,
+  post_process_heightmap(p_node,
+                         *p_out,
                          GET("inverse", BoolAttribute),
                          false, // smooth
                          0,

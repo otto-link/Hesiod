@@ -59,7 +59,8 @@ void compute_select_transitions_node(BaseNode *p_node)
                     { m = hmap::select_transitions(a1, a2, a3); });
 
     // post-process
-    post_process_heightmap(*p_out,
+    post_process_heightmap(p_node,
+                           *p_out,
                            GET("inverse", BoolAttribute),
                            GET("smoothing", BoolAttribute),
                            GET("smoothing_radius", FloatAttribute),

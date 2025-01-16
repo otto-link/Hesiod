@@ -55,7 +55,8 @@ void compute_select_gt_node(BaseNode *p_node)
                     { out = hmap::select_gt(in, GET("value", FloatAttribute)); });
 
     // post-process
-    post_process_heightmap(*p_out,
+    post_process_heightmap(p_node,
+                           *p_out,
                            GET("inverse", BoolAttribute),
                            GET("smoothing", BoolAttribute),
                            GET("smoothing_radius", FloatAttribute),

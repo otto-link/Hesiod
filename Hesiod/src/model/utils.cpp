@@ -1,15 +1,18 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-
 #include "highmap/filters.hpp"
 #include "highmap/heightmap.hpp"
+#include "highmap/opencl/gpu_opencl.hpp"
 #include "highmap/range.hpp"
+
+#include "hesiod/model/nodes/base_node.hpp"
 
 namespace hesiod
 {
 
-void post_process_heightmap(hmap::Heightmap  &h,
+void post_process_heightmap(BaseNode         *p_node,
+                            hmap::Heightmap  &h,
                             bool              inverse,
                             bool              smoothing,
                             float             smoothing_radius,
@@ -26,8 +29,15 @@ void post_process_heightmap(hmap::Heightmap  &h,
   {
     int ir = std::max(1, (int)(smoothing_radius * h.shape.x));
 
-    hmap::transform(h,
-                    [&ir](hmap::Array &array) { return hmap::smooth_cpulse(array, ir); });
+    hmap::transform(
+        {&h},
+        [&ir](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+        {
+          hmap::Array *pa_out = p_arrays[0];
+          return hmap::gpu::smooth_cpulse(*pa_out, ir);
+        },
+        p_node->get_config_ref()->hmap_transform_mode_gpu);
+
     h.smooth_overlap_buffers();
   }
 

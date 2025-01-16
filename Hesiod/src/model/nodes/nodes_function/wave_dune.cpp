@@ -68,7 +68,9 @@ void compute_wave_dune_node(BaseNode *p_node)
              });
 
   // post-process
-  post_process_heightmap(*p_out,
+  post_process_heightmap(p_node,
+                         *p_out,
+
                          GET("inverse", BoolAttribute),
                          false, // smooth
                          0,

@@ -88,7 +88,8 @@ void compute_distance_transform_node(BaseNode *p_node)
         hmap::TransformMode::SINGLE_ARRAY); // mandatory
 
     // post-process
-    post_process_heightmap(*p_out,
+    post_process_heightmap(p_node,
+                           *p_out,
                            GET("reverse_output", BoolAttribute),
                            false, // smooth
                            0,

@@ -60,7 +60,8 @@ void compute_hydraulic_blur_node(BaseNode *p_node)
     p_out->smooth_overlap_buffers();
 
     // post-process
-    post_process_heightmap(*p_out,
+    post_process_heightmap(p_node,
+                           *p_out,
                            false, // inverse
                            false, // smooth
                            0,

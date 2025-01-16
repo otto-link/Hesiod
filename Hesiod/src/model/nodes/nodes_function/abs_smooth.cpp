@@ -60,7 +60,8 @@ void compute_abs_smooth_node(BaseNode *p_node)
         p_node->get_config_ref()->hmap_transform_mode_cpu);
 
     // post-process
-    post_process_heightmap(*p_out,
+    post_process_heightmap(p_node,
+                           *p_out,
                            GET("inverse", BoolAttribute),
                            false, // smooth
                            0,

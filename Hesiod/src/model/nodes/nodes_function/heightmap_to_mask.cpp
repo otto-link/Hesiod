@@ -57,7 +57,8 @@ void compute_heightmap_to_mask_node(BaseNode *p_node)
     hmap::transform(*p_mask, [](hmap::Array &x) { hmap::clamp(x, 0.f, 1.f); });
 
     // post-process
-    post_process_heightmap(*p_mask,
+    post_process_heightmap(p_node,
+                           *p_mask,
                            GET("inverse", BoolAttribute),
                            GET("smoothing", BoolAttribute),
                            GET("smoothing_radius", FloatAttribute),

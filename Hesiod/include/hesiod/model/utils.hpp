@@ -17,10 +17,13 @@
 
 #include "highmap/heightmap.hpp"
 
+#include "hesiod/model/nodes/base_node.hpp"
+
 namespace hesiod
 {
 
-void post_process_heightmap(hmap::Heightmap  &h,
+void post_process_heightmap(BaseNode         *p_node,
+                            hmap::Heightmap  &h,
                             bool              inverse,
                             bool              smoothing,
                             float             smoothing_radius,

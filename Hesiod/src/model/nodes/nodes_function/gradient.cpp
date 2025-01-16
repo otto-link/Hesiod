@@ -54,7 +54,8 @@ void compute_gradient_node(BaseNode *p_node)
     p_dy->smooth_overlap_buffers();
 
     // post-process
-    post_process_heightmap(*p_dx,
+    post_process_heightmap(p_node,
+                           *p_dx,
                            false, // inverse
                            false, // smooth
                            0,
@@ -64,7 +65,8 @@ void compute_gradient_node(BaseNode *p_node)
                            GET_ATTR("remap", RangeAttribute, is_active),
                            GET("remap", RangeAttribute));
 
-    post_process_heightmap(*p_dy,
+    post_process_heightmap(p_node,
+                           *p_dy,
                            false, // inverse
                            false, // smooth
                            0,
