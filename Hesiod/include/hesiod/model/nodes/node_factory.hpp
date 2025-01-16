@@ -140,6 +140,7 @@ DECLARE_NODE(hydraulic_particle);
 DECLARE_NODE(hydraulic_procedural);
 DECLARE_NODE(hydraulic_ridge);
 DECLARE_NODE(hydraulic_stream);
+DECLARE_NODE(hydraulic_stream_log);
 DECLARE_NODE(hydraulic_stream_upscale_amplification)
 DECLARE_NODE(hydraulic_vpipes);
 DECLARE_NODE(import_heightmap)

@@ -14,7 +14,7 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_hydraulic_stream_node(BaseNode *p_node)
+void setup_hydraulic_stream_log_node(BaseNode *p_node)
 {
   LOG->trace("setup node {}", p_node->get_label());
 
@@ -26,15 +26,20 @@ void setup_hydraulic_stream_node(BaseNode *p_node)
 
   // attribute(s)
   p_node->add_attr<FloatAttribute>("c_erosion", 0.05f, 0.01f, 0.1f, "c_erosion");
+  p_node->add_attr<FloatAttribute>("saturation_ratio",
+                                   1.f,
+                                   0.01f,
+                                   1.f,
+                                   "saturation_ratio");
+  p_node->add_attr<FloatAttribute>("gamma", 1.f, 0.01f, 10.f, "gamma");
   p_node->add_attr<FloatAttribute>("talus_ref", 0.1f, 0.01f, 10.f, "talus_ref");
   p_node->add_attr<FloatAttribute>("radius", 0.f, 0.f, 0.05f, "radius");
-  p_node->add_attr<FloatAttribute>("clipping_ratio", 10.f, 0.1f, 100.f, "clipping_ratio");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"c_erosion", "talus_ref", "radius", "clipping_ratio"});
+  p_node->set_attr_ordered_key({"c_erosion", "gamma", "saturation_ratio", "talus_ref", "radius"});
 }
 
-void compute_hydraulic_stream_node(BaseNode *p_node)
+void compute_hydraulic_stream_log_node(BaseNode *p_node)
 {
   Q_EMIT p_node->compute_started(p_node->get_id());
 
@@ -62,15 +67,16 @@ void compute_hydraulic_stream_node(BaseNode *p_node)
           hmap::Array *pa_mask = p_arrays[1];
           hmap::Array *pa_erosion_map = p_arrays[2];
 
-          hmap::hydraulic_stream(*pa_out,
-                                 pa_mask,
-                                 GET("c_erosion", FloatAttribute),
-                                 GET("talus_ref", FloatAttribute),
-                                 nullptr,
-                                 nullptr,
-                                 pa_erosion_map,
-                                 ir,
-                                 GET("clipping_ratio", FloatAttribute));
+          hmap::hydraulic_stream_log(*pa_out,
+                                     GET("c_erosion", FloatAttribute),
+                                     GET("talus_ref", FloatAttribute),
+                                     pa_mask,
+                                     GET("gamma", FloatAttribute),
+                                     GET("saturation_ratio", FloatAttribute),
+                                     nullptr,
+                                     nullptr,
+                                     pa_erosion_map,
+                                     ir);
         },
         p_node->get_config_ref()->hmap_transform_mode_cpu);
 
