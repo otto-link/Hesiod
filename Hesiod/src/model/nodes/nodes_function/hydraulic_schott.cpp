@@ -27,7 +27,7 @@ void setup_hydraulic_schott_node(BaseNode *p_node)
   // attribute(s)
   p_node->add_attr<IntAttribute>("iterations", 100, 1, 500, "iterations");
   p_node->add_attr<FloatAttribute>("c_erosion", 1.f, 0.f, 2.f, "c_erosion");
-  p_node->add_attr<FloatAttribute>("c_deposition", 0.1f, 0.f, 2.f, "c_deposition");
+  p_node->add_attr<FloatAttribute>("c_deposition", 0.4f, 0.f, 2.f, "c_deposition");
   p_node->add_attr<FloatAttribute>("c_thermal", 0.1f, 0.f, 2.f, "c_thermal");
   p_node->add_attr<FloatAttribute>("talus_global", 1.5f, 0.f, 16.f, "talus_global");
   p_node->add_attr<BoolAttribute>("scale_talus_with_elevation",
@@ -48,9 +48,9 @@ void setup_hydraulic_schott_node(BaseNode *p_node)
                                    0.01f,
                                    2.f,
                                    "flow_routing_exponent");
-  p_node->add_attr<FloatAttribute>("thermal_weight", 1.f, 0.f, 5.f, "thermal_weight");
+  p_node->add_attr<FloatAttribute>("thermal_weight", 0.f, 0.f, 5.f, "thermal_weight");
   p_node->add_attr<FloatAttribute>("deposition_weight",
-                                   0.5f,
+                                   1.f,
                                    0.f,
                                    5.f,
                                    "deposition_weight");
