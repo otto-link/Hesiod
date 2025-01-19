@@ -47,7 +47,7 @@ void CmapManager::update_colormap_data(bool append)
       CmapData cdata;
       cdata.id = key;
       cdata.id_int = this->count_id;
-      cdata.label = val["label"];
+      cdata.label = "UNDEFINED"; // val["label"];
       cdata.colors = val["colors"].get<std::vector<std::vector<float>>>();
 
       this->cmaps[key] = cdata;
