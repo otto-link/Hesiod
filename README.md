@@ -2,7 +2,7 @@
 
 A desktop application for node-based procedural terrain generation.
 - binaries: https://sourceforge.net/projects/hesiod
-- Discord: [https://discord.gg/fe7ACPwu](https://discord.gg/HBgFCjdV8W)
+- Discord: https://discord.gg/HBgFCjdV8W
 - tutorial videos (WIP): https://www.youtube.com/playlist?list=PLvla2FXp5tDxbPypf_Mp66gWzX_Lga3DK
 - documentation (WIP): https://hesioddoc.readthedocs.io
 
