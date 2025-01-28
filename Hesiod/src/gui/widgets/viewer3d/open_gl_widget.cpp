@@ -200,7 +200,7 @@ OpenGLWidget::OpenGLWidget(QWidget *parent) : QWidget(parent)
 
   // gamma
   {
-    auto slider = new ValueSliders::DoubleSlider("Shadow gamma", 1.f, 0.1f, 2.f);
+    auto slider = new ValueSliders::DoubleSlider("Shadow gamma", 0.7f, 0.1f, 2.f);
     layout->addWidget(slider, row, col++);
 
     this->renderer->set_shadow_gamma(slider->getVal());

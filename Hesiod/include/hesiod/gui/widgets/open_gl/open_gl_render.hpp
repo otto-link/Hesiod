@@ -159,7 +159,7 @@ protected:
 
   float shadow_saturation = 0.f;
   float shadow_strength = 1.f;
-  float shadow_gamma = 1.f;
+  float shadow_gamma = 0.7f;
 
   float fov = 60.0f;
   float aspect_ratio = 1.f;
