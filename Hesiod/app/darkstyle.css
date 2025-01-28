@@ -11,6 +11,13 @@ R""(
 	background-color: #2B2B2B;
     }
 
+    QPushButton::disabled, QProgressBar::disabled, QProgressBar::chunk::disabled
+    {
+    color: #3C3C3C;
+    background-color: #3C3C3C;
+    }
+
+
     /* QMainWindow */
 
 
