@@ -3,6 +3,7 @@
  * this software. */
 #include "highmap/gradient.hpp"
 #include "highmap/morphology.hpp"
+#include "highmap/opencl/gpu_opencl.hpp"
 
 #include "attributes.hpp"
 
@@ -33,10 +34,17 @@ void setup_select_slope_node(BaseNode *p_node)
                                    0.2f,
                                    "smoothing_radius");
   p_node->add_attr<RangeAttribute>("saturate", "saturate", false);
+  p_node->add_attr<BoolAttribute>("GPU", HSD_DEFAULT_GPU_MODE, "GPU");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key(
-      {"radius", "_SEPARATOR_", "inverse", "smoothing", "smoothing_radius", "saturate"});
+  p_node->set_attr_ordered_key({"radius",
+                                "_SEPARATOR_",
+                                "inverse",
+                                "smoothing",
+                                "smoothing_radius",
+                                "saturate",
+                                "_SEPARATOR_",
+                                "GPU"});
 }
 
 void compute_select_slope_node(BaseNode *p_node)
@@ -54,15 +62,49 @@ void compute_select_slope_node(BaseNode *p_node)
     int ir = (int)(GET("radius", FloatAttribute) * p_out->shape.x);
 
     if (ir > 0)
-      hmap::transform(*p_out,
-                      *p_in,
-                      [p_node, ir](hmap::Array &out, hmap::Array &in)
-                      { out = hmap::morphological_gradient(in, ir); });
+    {
+      if (GET("GPU", BoolAttribute))
+      {
+        hmap::transform(
+            {p_out, p_in},
+            [p_node,
+             ir](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+            {
+              hmap::Array *pa_out = p_arrays[0];
+              hmap::Array *pa_in = p_arrays[1];
+
+              *pa_out = hmap::gpu::morphological_gradient(*pa_in, ir);
+            },
+            p_node->get_config_ref()->hmap_transform_mode_gpu);
+      }
+      else
+      {
+        hmap::transform(
+            {p_out, p_in},
+            [p_node,
+             ir](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+            {
+              hmap::Array *pa_out = p_arrays[0];
+              hmap::Array *pa_in = p_arrays[1];
+
+              *pa_out = hmap::morphological_gradient(*pa_in, ir);
+            },
+            p_node->get_config_ref()->hmap_transform_mode_cpu);
+      }
+    }
     else
-      hmap::transform(*p_out,
-                      *p_in,
-                      [p_node](hmap::Array &out, hmap::Array &in)
-                      { out = hmap::gradient_norm(in); });
+      hmap::transform(
+          {p_out, p_in},
+          [p_node](std::vector<hmap::Array *> p_arrays,
+                   hmap::Vec2<int>,
+                   hmap::Vec4<float>)
+          {
+            hmap::Array *pa_out = p_arrays[0];
+            hmap::Array *pa_in = p_arrays[1];
+
+            *pa_out = hmap::gradient_norm(*pa_in);
+          },
+          p_node->get_config_ref()->hmap_transform_mode_cpu);
 
     p_out->smooth_overlap_buffers();
 
