@@ -138,7 +138,6 @@ DECLARE_NODE(hydraulic_schott);
 DECLARE_NODE(hydraulic_musgrave);
 DECLARE_NODE(hydraulic_particle);
 DECLARE_NODE(hydraulic_procedural);
-DECLARE_NODE(hydraulic_ridge);
 DECLARE_NODE(hydraulic_stream);
 DECLARE_NODE(hydraulic_stream_log);
 DECLARE_NODE(hydraulic_stream_upscale_amplification)
@@ -251,6 +250,7 @@ DECLARE_NODE(thermal_auto_bedrock)
 DECLARE_NODE(thermal_flatten)
 DECLARE_NODE(thermal_rib)
 DECLARE_NODE(thermal_schott)
+DECLARE_NODE(thermal_scree)
 DECLARE_NODE(translate)
 DECLARE_NODE(unsphericity)
 DECLARE_NODE(valley_width)

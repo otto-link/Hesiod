@@ -30,7 +30,7 @@ void setup_thermal_node(BaseNode *p_node)
 
   // attribute(s)
   p_node->add_attr<FloatAttribute>("talus_global", 1.f, 0.f, 16.f, "talus_global");
-  p_node->add_attr<IntAttribute>("iterations", 100, 1, 200, "iterations");
+  p_node->add_attr<IntAttribute>("iterations", 100, 1, 2000, "iterations");
   p_node->add_attr<BoolAttribute>("scale_talus_with_elevation",
                                   false,
                                   "scale_talus_with_elevation");
