@@ -276,7 +276,8 @@ std::map<std::string, std::string> get_node_inventory()
       {"ThermalAutoBedrock", "Erosion/Thermal"},
       {"ThermalFlatten", "WIP"}, // "Erosion/Thermal"
       {"ThermalRib", "WIP"},     // "Erosion/Thermal"
-      {"ThermalSchott", "WIP"},  // "Erosion/Thermal"
+      {"ThermalRidge", "Erosion/Thermal"},
+      {"ThermalSchott", "WIP"}, // "Erosion/Thermal"
       {"ThermalScree", "Erosion/Thermal"},
       {"Translate", "Operator/Transform"},
       {"Unsphericity", "Features/Landform"},
@@ -480,6 +481,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(ThermalAutoBedrock, thermal_auto_bedrock);
     SETUP_NODE(ThermalFlatten, thermal_flatten);
     SETUP_NODE(ThermalRib, thermal_rib);
+    SETUP_NODE(ThermalRidge, thermal_ridge);
     SETUP_NODE(ThermalSchott, thermal_schott);
     SETUP_NODE(ThermalScree, thermal_scree);
     SETUP_NODE(Unsphericity, unsphericity);

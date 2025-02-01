@@ -16,35 +16,32 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_thermal_scree_node(BaseNode *p_node)
+void setup_thermal_ridge_node(BaseNode *p_node)
 {
   LOG->trace("setup node {}", p_node->get_label());
 
   // port(s)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "zmax");
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "deposition", CONFIG);
 
   // attribute(s)
   p_node->add_attr<FloatAttribute>("talus_global", 2.f, 0.f, 16.f, "talus_global");
-  p_node->add_attr<FloatAttribute>("zmax", 0.5f, -1.f, 2.f, "zmax");
   p_node->add_attr<IntAttribute>("iterations", 500, 1, 4000, "iterations");
-  p_node->add_attr<BoolAttribute>("talus_constraint", true, "talus_constraint");
   p_node->add_attr<BoolAttribute>("scale_talus_with_elevation",
-                                  true,
+                                  false,
                                   "scale_talus_with_elevation");
+  p_node->add_attr<RangeAttribute>("remap", "remap");
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"talus_global",
-                                "zmax",
                                 "iterations",
-                                "talus_constraint",
-                                "scale_talus_with_elevation"});
+                                "scale_talus_with_elevation",
+                                "_SEPARATOR_",
+                                "remap"});
 }
 
-void compute_thermal_scree_node(BaseNode *p_node)
+void compute_thermal_ridge_node(BaseNode *p_node)
 {
   Q_EMIT p_node->compute_started(p_node->get_id());
 
@@ -55,10 +52,7 @@ void compute_thermal_scree_node(BaseNode *p_node)
   if (p_in)
   {
     hmap::Heightmap *p_mask = p_node->get_value_ref<hmap::Heightmap>("mask");
-    hmap::Heightmap *p_zmax = p_node->get_value_ref<hmap::Heightmap>("zmax");
     hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
-    hmap::Heightmap *p_deposition_map = p_node->get_value_ref<hmap::Heightmap>(
-        "deposition");
 
     // copy the input heightmap
     *p_out = *p_in;
@@ -73,44 +67,35 @@ void compute_thermal_scree_node(BaseNode *p_node)
       talus_map.remap(talus / 10.f, talus);
     }
 
-    hmap::Heightmap zmax = hmap::Heightmap();
-
-    if (!p_zmax)
-    {
-      zmax = hmap::Heightmap(CONFIG, GET("zmax", FloatAttribute));
-      p_zmax = &zmax;
-    }
-
     hmap::transform(
-        {p_out, p_mask, &talus_map, p_zmax, p_deposition_map},
+        {p_out, p_mask, &talus_map},
         [p_node,
          &talus](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
         {
           hmap::Array *pa_out = p_arrays[0];
           hmap::Array *pa_mask = p_arrays[1];
           hmap::Array *pa_talus_map = p_arrays[2];
-          hmap::Array *pa_zmax = p_arrays[3];
-          hmap::Array *pa_deposition_map = p_arrays[4];
 
-          pa_zmax->infos();
-
-          hmap::gpu::thermal_scree(*pa_out,
+          hmap::gpu::thermal_ridge(*pa_out,
                                    pa_mask,
                                    *pa_talus_map,
-                                   *pa_zmax,
-                                   GET("iterations", IntAttribute),
-                                   GET("talus_constraint", BoolAttribute),
-                                   pa_deposition_map);
+                                   GET("iterations", IntAttribute));
         },
         p_node->get_config_ref()->hmap_transform_mode_gpu);
 
     p_out->smooth_overlap_buffers();
 
-    if (p_deposition_map)
-    {
-      p_deposition_map->smooth_overlap_buffers();
-      p_deposition_map->remap();
-    }
+    // post-process
+    post_process_heightmap(p_node,
+                           *p_out,
+                           false, // inverse
+                           false, // smooth
+                           0,
+                           false, // saturate
+                           {0.f, 0.f},
+                           0.f,
+                           GET_ATTR("remap", RangeAttribute, is_active),
+                           GET("remap", RangeAttribute));
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());
