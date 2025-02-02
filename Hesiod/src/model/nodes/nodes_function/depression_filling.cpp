@@ -25,7 +25,7 @@ void setup_depression_filling_node(BaseNode *p_node)
 
   // attribute(s)
   p_node->add_attr<IntAttribute>("iterations", 1000, 1, 5000, "iterations");
-  p_node->add_attr<FloatAttribute>("epsilon", 1e-4, 1e-5, 1e-2, "epsilon");
+  p_node->add_attr<FloatAttribute>("epsilon", 1e-4, 1e-5, 1e-1, "epsilon");
   p_node->add_attr<BoolAttribute>("remap fill map", true, "remap fill map");
 
   // attribute(s) order
@@ -48,9 +48,11 @@ void compute_depression_filling_node(BaseNode *p_node)
     // work on a single array (as a temporary solution?)
     hmap::Array z_array = p_in->to_array();
 
+    float epsilon_normalized = GET("epsilon", FloatAttribute) / (float)p_in->shape.x;
+
     hmap::depression_filling(z_array,
                              GET("iterations", IntAttribute),
-                             GET("epsilon", FloatAttribute));
+                             epsilon_normalized);
     p_out->from_array_interp(z_array);
 
     hmap::transform(*p_fill_map,
