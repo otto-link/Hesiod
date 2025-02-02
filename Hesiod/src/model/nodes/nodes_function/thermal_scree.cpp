@@ -92,8 +92,6 @@ void compute_thermal_scree_node(BaseNode *p_node)
           hmap::Array *pa_zmax = p_arrays[3];
           hmap::Array *pa_deposition_map = p_arrays[4];
 
-          pa_zmax->infos();
-
           hmap::gpu::thermal_scree(*pa_out,
                                    pa_mask,
                                    *pa_talus_map,
