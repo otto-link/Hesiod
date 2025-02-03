@@ -25,6 +25,10 @@ void setup_smooth_fill_smear_peaks_node(BaseNode *p_node)
 
   // attribute(s)
   p_node->add_attr<FloatAttribute>("radius", 0.05f, 0.001f, 0.2f, "radius");
+  p_node->add_attr<BoolAttribute>("GPU", HSD_DEFAULT_GPU_MODE, "GPU");
+
+  // attribute(s) order
+  p_node->set_attr_ordered_key({"radius", "_SEPARATOR_", "GPU"});
 }
 
 void compute_smooth_fill_smear_peaks_node(BaseNode *p_node)
@@ -45,10 +49,32 @@ void compute_smooth_fill_smear_peaks_node(BaseNode *p_node)
 
     int ir = std::max(1, (int)(GET("radius", FloatAttribute) * p_out->shape.x));
 
-    hmap::transform(*p_out,
-                    p_mask,
-                    [p_node, &ir](hmap::Array &x, hmap::Array *p_mask)
-                    { hmap::smooth_fill_smear_peaks(x, ir, p_mask); });
+    if (GET("GPU", BoolAttribute))
+    {
+      hmap::transform(
+          {p_out, p_mask},
+          [&ir](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+          {
+            hmap::Array *pa_out = p_arrays[0];
+            hmap::Array *pa_mask = p_arrays[1];
+
+            hmap::gpu::smooth_fill_smear_peaks(*pa_out, ir, pa_mask);
+          },
+          p_node->get_config_ref()->hmap_transform_mode_gpu);
+    }
+    else
+    {
+      hmap::transform(
+          {p_out, p_mask},
+          [&ir](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+          {
+            hmap::Array *pa_out = p_arrays[0];
+            hmap::Array *pa_mask = p_arrays[1];
+
+            hmap::smooth_fill_smear_peaks(*pa_out, ir, pa_mask);
+          },
+          p_node->get_config_ref()->hmap_transform_mode_cpu);
+    }
 
     p_out->smooth_overlap_buffers();
   }

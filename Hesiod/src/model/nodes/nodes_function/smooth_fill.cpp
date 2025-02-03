@@ -59,21 +59,40 @@ void compute_smooth_fill_node(BaseNode *p_node)
     if (GET("GPU", BoolAttribute))
     {
       hmap::transform(
-          *p_out,
-          p_mask,
-          p_deposition_map,
-          [p_node, &ir](hmap::Array &x, hmap::Array *p_mask, hmap::Array *p_deposition)
-          { hmap::smooth_fill(x, ir, p_mask, GET("k", FloatAttribute), p_deposition); });
+          {p_out, p_mask, p_deposition_map},
+          [p_node,
+           &ir](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+          {
+            hmap::Array *pa_out = p_arrays[0];
+            hmap::Array *pa_mask = p_arrays[1];
+            hmap::Array *pa_deposition = p_arrays[2];
+
+            hmap::gpu::smooth_fill(*pa_out,
+                                   ir,
+                                   pa_mask,
+                                   GET("k", FloatAttribute),
+                                   pa_deposition);
+          },
+          p_node->get_config_ref()->hmap_transform_mode_gpu);
     }
     else
     {
       hmap::transform(
-          *p_out,
-          p_mask,
-          p_deposition_map,
-          [p_node, &ir](hmap::Array &x, hmap::Array *p_mask, hmap::Array *p_deposition) {
-            hmap::gpu::smooth_fill(x, ir, p_mask, GET("k", FloatAttribute), p_deposition);
-          });
+          {p_out, p_mask, p_deposition_map},
+          [p_node,
+           &ir](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+          {
+            hmap::Array *pa_out = p_arrays[0];
+            hmap::Array *pa_mask = p_arrays[1];
+            hmap::Array *pa_deposition = p_arrays[2];
+
+            hmap::smooth_fill(*pa_out,
+                              ir,
+                              pa_mask,
+                              GET("k", FloatAttribute),
+                              pa_deposition);
+          },
+          p_node->get_config_ref()->hmap_transform_mode_cpu);
     }
 
     p_out->smooth_overlap_buffers();
