@@ -1,10 +1,13 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include "highmap/geometry/cloud.hpp"
+#include "highmap/geometry/path.hpp"
+#include "highmap/heightmap.hpp"
 
-#include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/enum_mapping.hpp"
+#include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/node_factory.hpp"
 
 #ifdef HSD_OS_LINUX
@@ -107,6 +110,20 @@ nlohmann::json BaseNode::node_parameters_to_json()
     json_this_port["caption"] = this->get_port_caption(k);
     json_this_port["data_type"] = this->get_data_type(k);
     json_this_port["description"] = "TODO";
+
+    // overwrite data type
+    if (this->get_data_type(k) == typeid(hmap::Array).name())
+      json_this_port["data_type"] = "Array";
+    else if (this->get_data_type(k) == typeid(hmap::Cloud).name())
+      json_this_port["data_type"] = "Cloud";
+    else if (this->get_data_type(k) == typeid(hmap::Heightmap).name())
+      json_this_port["data_type"] = "Heightmap";
+    else if (this->get_data_type(k) == typeid(hmap::HeightmapRGBA).name())
+      json_this_port["data_type"] = "HeightmapRGBA";
+    else if (this->get_data_type(k) == typeid(hmap::Path).name())
+      json_this_port["data_type"] = "Path";
+    else if (this->get_data_type(k) == typeid(std::vector<hmap::Heightmap>).name())
+      json_this_port["data_type"] = "vector<Heightmap>";
 
     json_ports.push_back(json_this_port);
   }
