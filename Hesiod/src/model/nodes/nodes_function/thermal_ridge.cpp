@@ -31,7 +31,7 @@ void setup_thermal_ridge_node(BaseNode *p_node)
   p_node->add_attr<BoolAttribute>("scale_talus_with_elevation",
                                   false,
                                   "scale_talus_with_elevation");
-  p_node->add_attr<RangeAttribute>("remap", "remap");
+  p_node->add_attr<RangeAttribute>("remap", "remap", false);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"talus_global",
