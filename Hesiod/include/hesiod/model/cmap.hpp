@@ -40,7 +40,7 @@ public:
 
   std::vector<std::vector<float>> get_colormap_data(int cmap_id);
 
-  std::map<std::string, int> get_colormap_mapping();
+  std::map<std::string, int> get_colormap_name_mapping();
 
   void update_colormap_data(bool append = false);
 

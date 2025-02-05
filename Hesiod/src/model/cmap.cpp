@@ -67,7 +67,7 @@ std::vector<std::vector<float>> CmapManager::get_colormap_data(int cmap_id)
   return {{0.f, 0.f, 0.f}};
 }
 
-std::map<std::string, int> CmapManager::get_colormap_mapping()
+std::map<std::string, int> CmapManager::get_colormap_name_mapping()
 {
   std::map<std::string, int> mapping = {};
   for (auto &[id, cmap_data] : this->cmaps)

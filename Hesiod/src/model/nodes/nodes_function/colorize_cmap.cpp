@@ -28,7 +28,7 @@ void setup_colorize_cmap_node(BaseNode *p_node)
   // attribute(s)
   p_node->add_attr<MapEnumAttribute>(
       "colormap",
-      hesiod::CmapManager::get_instance().get_colormap_mapping(),
+      hesiod::CmapManager::get_instance().get_colormap_name_mapping(),
       "colormap");
   p_node->add_attr<BoolAttribute>("reverse_colormap", false, "reverse_colormap");
   p_node->add_attr<BoolAttribute>("reverse_alpha", false, "reverse_alpha");
