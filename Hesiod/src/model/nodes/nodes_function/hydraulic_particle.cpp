@@ -45,7 +45,7 @@ void setup_hydraulic_particle_node(BaseNode *p_node)
   p_node->add_attr<BoolAttribute>("deposition_only", false, "deposition_only");
   p_node->add_attr<BoolAttribute>("GPU", HSD_DEFAULT_GPU_MODE, "GPU");
 
-  p_node->add_attr<BoolAttribute>("downscale", true, "downscale");
+  p_node->add_attr<BoolAttribute>("downscale", false, "downscale");
   p_node->add_attr<FloatAttribute>("kc", 512.f, 0.f, 2048.f, "kc");
 
   // attribute(s) order
@@ -105,9 +105,9 @@ void compute_hydraulic_particle_node(BaseNode *p_node)
       {
         hmap::transform(
             {p_out, p_bedrock, p_moisture_map, p_mask, p_erosion_map, p_deposition_map},
-            [p_node, &nparticles_tile](std::vector<hmap::Array *> p_arrays,
-                                       hmap::Vec2<int>,
-                                       hmap::Vec4<float>)
+            [p_node, &nparticles](std::vector<hmap::Array *> p_arrays,
+                                  hmap::Vec2<int>,
+                                  hmap::Vec4<float>)
             {
               hmap::Array *pa_out = p_arrays[0];
               hmap::Array *pa_bedrock = p_arrays[1];
@@ -118,7 +118,7 @@ void compute_hydraulic_particle_node(BaseNode *p_node)
 
               hmap::gpu::hydraulic_particle(*pa_out,
                                             pa_mask,
-                                            nparticles_tile,
+                                            nparticles,
                                             GET("seed", SeedAttribute),
                                             pa_bedrock,
                                             pa_moisture_map,
