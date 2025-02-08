@@ -50,14 +50,25 @@ void compute_relative_elevation_node(BaseNode *p_node)
 
     if (GET("GPU", BoolAttribute))
     {
-      hmap::transform(*p_out,
-                      [&ir](hmap::Array &x)
-                      { x = hmap::gpu::relative_elevation(x, ir); });
+      hmap::transform(
+          {p_out},
+          [&ir](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+          {
+            hmap::Array *pa_out = p_arrays[0];
+            *pa_out = hmap::gpu::relative_elevation(*pa_out, ir);
+          },
+          p_node->get_config_ref()->hmap_transform_mode_gpu);
     }
     else
     {
-      hmap::transform(*p_out,
-                      [&ir](hmap::Array &x) { x = hmap::relative_elevation(x, ir); });
+      hmap::transform(
+          {p_out},
+          [&ir](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+          {
+            hmap::Array *pa_out = p_arrays[0];
+            *pa_out = hmap::relative_elevation(*pa_out, ir);
+          },
+          p_node->get_config_ref()->hmap_transform_mode_cpu);
     }
 
     p_out->smooth_overlap_buffers();
