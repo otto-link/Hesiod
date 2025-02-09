@@ -2191,135 +2191,135 @@
     },
     "Gavoronoise": {
         "category": "Primitive/Coherent",
-        "description": "TODO",
+        "description": "Generates a 2D heightmap using the GavoroNoise algorithm, a procedural noise technique for terrain generation.",
         "label": "Gavoronoise",
         "parameters": {
             "amplitude": {
-                "description": "TODO",
+                "description": "Controls the overall intensity of the noise function.",
                 "key": "amplitude",
-                "label": "amplitude",
+                "label": "Amplitude",
                 "type": "Float"
             },
             "angle": {
-                "description": "TODO",
+                "description": "Sets the primary orientation of the wave structures in the noise.",
                 "key": "angle",
-                "label": "angle",
+                "label": "Angle",
                 "type": "Float"
             },
             "angle_spread_ratio": {
-                "description": "TODO",
+                "description": "Determines the degree of variation in the angle of the wave structures. Lower values create more aligned structures.",
                 "key": "angle_spread_ratio",
-                "label": "angle_spread_ratio",
+                "label": "Angle Spread Ratio",
                 "type": "Float"
             },
             "branch_strength": {
-                "description": "TODO",
+                "description": "Controls the prominence of branch-like features in the generated noise.",
                 "key": "branch_strength",
-                "label": "branch_strength",
+                "label": "Branch Strength",
                 "type": "Float"
             },
             "inverse": {
-                "description": "Toggle inversion of the output values.",
+                "description": "Invert the output values of the noise function.",
                 "key": "inverse",
                 "label": "Inverse",
                 "type": "Bool"
             },
             "kw": {
-                "description": "TODO",
+                "description": "Wave number vector that determines the base frequency of the noise.",
                 "key": "kw",
                 "label": "Wavenumber",
                 "type": "Wavenumber"
             },
             "kw_multiplier": {
-                "description": "TODO",
+                "description": "Multiplier applied to the wave numbers, affecting the frequency scaling of the noise function.",
                 "key": "kw_multiplier",
-                "label": "kw_multiplier",
+                "label": "Wavenumber Multiplier",
                 "type": "Wavenumber"
             },
             "lacunarity": {
-                "description": "TODO",
+                "description": "Controls the frequency scaling between successive octaves in the fractal noise function. Higher values create larger gaps between frequencies.",
                 "key": "lacunarity",
                 "label": "Lacunarity",
                 "type": "Float"
             },
             "octaves": {
-                "description": "TODO",
+                "description": "Number of noise layers (octaves) used in fractal Brownian motion (fBm). More octaves add finer details.",
                 "key": "octaves",
                 "label": "Octaves",
                 "type": "Integer"
             },
             "persistence": {
-                "description": "TODO",
+                "description": "Determines how much each successive octave contributes to the final noise pattern. Higher values amplify finer details.",
                 "key": "persistence",
                 "label": "Persistence",
                 "type": "Float"
             },
             "remap_range": {
-                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
+                "description": "Remap the noise output values to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
-                "label": "Remap range",
+                "label": "Remap Range",
                 "type": "Value range"
             },
             "seed": {
-                "description": "TODO",
+                "description": "Sets the random seed for reproducible noise generation.",
                 "key": "seed",
                 "label": "Seed",
                 "type": "Random seed number"
             },
             "slope_strength": {
-                "description": "TODO",
+                "description": "Controls the strength of slope-based directional erosion in the noise function.",
                 "key": "slope_strength",
-                "label": "slope_strength",
-                "type": "Float"
-            },
-            "z_cut_max": {
-                "description": "TODO",
-                "key": "z_cut_max",
-                "label": "z_cut_max",
+                "label": "Slope Strength",
                 "type": "Float"
             },
             "z_cut_min": {
-                "description": "TODO",
+                "description": "Defines the minimum cutoff value for the Z-axis in the generated noise.",
                 "key": "z_cut_min",
-                "label": "z_cut_min",
+                "label": "Z Cut Min",
+                "type": "Float"
+            },
+            "z_cut_max": {
+                "description": "Defines the maximum cutoff value for the Z-axis in the generated noise.",
+                "key": "z_cut_max",
+                "label": "Z Cut Max",
                 "type": "Float"
             }
         },
         "ports": {
             "angle": {
-                "caption": "angle",
+                "caption": "Angle",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Optional input for dynamically modifying the wavelet orientation per pixel.",
                 "type": "input"
             },
             "control": {
-                "caption": "control",
+                "caption": "Control",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Optional input that modulates noise intensity or distribution.",
                 "type": "input"
             },
             "dx": {
                 "caption": "dx",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Optional input for perturbing noise in the X-direction.",
                 "type": "input"
             },
             "dy": {
                 "caption": "dy",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Optional input for perturbing noise in the Y-direction.",
                 "type": "input"
             },
             "envelope": {
-                "caption": "envelope",
+                "caption": "Envelope",
                 "data_type": "Heightmap",
-                "description": "Output noise amplitude envelope.",
+                "description": "Modulates the amplitude of the noise across the heightmap.",
                 "type": "input"
             },
             "output": {
-                "caption": "output",
+                "caption": "Output",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "The final heightmap generated using the GavoroNoise algorithm.",
                 "type": "output"
             }
         }
