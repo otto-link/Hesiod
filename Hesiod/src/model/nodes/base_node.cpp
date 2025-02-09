@@ -125,9 +125,14 @@ nlohmann::json BaseNode::node_parameters_to_json()
     json_this_port["description"] = "TODO";
 
     if (this->documentation.contains("ports"))
+    {
       if (this->documentation["ports"].contains(this->get_port_caption(k)))
         json_this_port["description"] = this->documentation["ports"]
-                                                           [this->get_port_caption(k)]["description"] ;
+                                                           [this->get_port_caption(k)]
+                                                           ["description"];
+      else
+        LOG->warn("no documentation description for port {}", this->get_port_caption(k));
+    }
 
     // overwrite data type
     if (this->get_data_type(k) == typeid(hmap::Array).name())
@@ -157,11 +162,16 @@ nlohmann::json BaseNode::node_parameters_to_json()
     json_this_attr["type"] = attr::attribute_type_map.at(p_attr->get_type());
     json_this_attr["description"] = "TODO";
 
-    if (this->documentation.contains("attributes"))
-      if (this->documentation["attributes"].contains(key))
-        json_this_attr["description"] = this->documentation["attributes"][key]["description"] ;
+    if (this->documentation.contains("parameters"))
+    {
+      if (this->documentation["parameters"].contains(key))
+        json_this_attr["description"] = this->documentation["parameters"][key]
+                                                           ["description"];
+      else
+        LOG->warn("no documentation description for attribute {}", key);
+    }
 
-    json["attributes"][key] = json_this_attr;
+    json["parameters"][key] = json_this_attr;
   }
 
   return json;
