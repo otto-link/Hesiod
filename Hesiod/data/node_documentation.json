@@ -409,7 +409,7 @@
     },
     "Closing": {
         "category": "Operator/Morphology",
-        "description": "Closing is a combination of dilation followed by erosion. It is primarily used for closing small holes or gaps in objects. Use Cases: Hole filling: Closing can fill small holes or gaps in objects, making them more solid and complete. Connecting broken objects: Closing can help connect broken segments or regions in an image, making objects more continuous.",
+        "description": "Closing is a combination of dilation followed by erosion. It is primarily used for closing small holes or gaps in mask.",
         "label": "Closing",
         "parameters": {
             "GPU": {
