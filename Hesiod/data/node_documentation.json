@@ -1884,116 +1884,116 @@
         }
     },
     "GaborWaveFbm": {
-        "category": "Primitive/Coherent",
-        "description": "TODO",
-        "label": "GaborWaveFbm",
-        "parameters": {
+	"category": "Primitive/Coherent",
+	"description": "Generates fractal Brownian motion (fBm) noise using Gabor wavelets, producing anisotropic textures with directional control.",
+	"label": "GaborWaveFbm",
+	"parameters": {
             "angle": {
-                "description": "TODO",
-                "key": "angle",
-                "label": "angle",
-                "type": "Float"
+		"description": "Controls the base orientation of the Gabor wavelets, influencing the dominant direction of the noise pattern.",
+		"key": "angle",
+		"label": "Angle",
+		"type": "Float"
             },
             "angle_spread_ratio": {
-                "description": "TODO",
-                "key": "angle_spread_ratio",
-                "label": "angle_spread_ratio",
-                "type": "Float"
+		"description": "Determines how much the local angle of the Gabor kernel can vary. A low value results in straighter structures, while a high value introduces more directional variation.",
+		"key": "angle_spread_ratio",
+		"label": "Angle Spread Ratio",
+		"type": "Float"
             },
             "inverse": {
-                "description": "Toggle inversion of the output values.",
-                "key": "inverse",
-                "label": "Inverse",
-                "type": "Bool"
+		"description": "Invert the output values.",
+		"key": "inverse",
+		"label": "Inverse",
+		"type": "Bool"
             },
             "kw": {
-                "description": "TODO",
-                "key": "kw",
-                "label": "Wavenumber",
-                "type": "Wavenumber"
+		"description": "Defines the wavenumber, which controls the frequency of the Gabor wavelets in the noise function.",
+		"key": "kw",
+		"label": "Wavenumber",
+		"type": "Wavenumber"
             },
             "lacunarity": {
-                "description": "TODO",
-                "key": "lacunarity",
-                "label": "Lacunarity",
-                "type": "Float"
+		"description": "Controls the frequency scaling between successive octaves of the fractal noise. Higher values create larger gaps between frequencies.",
+		"key": "lacunarity",
+		"label": "Lacunarity",
+		"type": "Float"
             },
             "octaves": {
-                "description": "TODO",
-                "key": "octaves",
-                "label": "Octaves",
-                "type": "Integer"
+		"description": "Specifies the number of noise layers (octaves) used in the fractal Brownian motion. More octaves add finer details.",
+		"key": "octaves",
+		"label": "Octaves",
+		"type": "Integer"
             },
             "persistence": {
-                "description": "TODO",
-                "key": "persistence",
-                "label": "Persistence",
-                "type": "Float"
+		"description": "Controls how much each successive octave contributes to the final noise pattern. Higher values result in more prominent fine details.",
+		"key": "persistence",
+		"label": "Persistence",
+		"type": "Float"
             },
             "remap_range": {
-                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "Remap range",
-                "type": "Value range"
+		"description": "Remap the output values to a specified range, defaulting to [0, 1].",
+		"key": "remap_range",
+		"label": "Remap Range",
+		"type": "Value range"
             },
             "seed": {
-                "description": "TODO",
-                "key": "seed",
-                "label": "Seed",
-                "type": "Random seed number"
+		"description": "Sets the random seed for noise generation, ensuring reproducibility.",
+		"key": "seed",
+		"label": "Seed",
+		"type": "Random seed number"
             },
             "weight": {
-                "description": "TODO",
-                "key": "weight",
-                "label": "Weight",
-                "type": "Float"
+		"description": "Adjusts the intensity of the noise contribution at each point.",
+		"key": "weight",
+		"label": "Weight",
+		"type": "Float"
             }
-        },
-        "ports": {
+	},
+	"ports": {
             "angle": {
-                "caption": "angle",
-                "data_type": "Heightmap",
-                "description": "TODO",
-                "type": "input"
+		"caption": "angle",
+		"data_type": "Heightmap",
+		"description": "Optional input for dynamically controlling the wavelet orientation per pixel.",
+		"type": "input"
             },
             "control": {
-                "caption": "control",
-                "data_type": "Heightmap",
-                "description": "TODO",
-                "type": "input"
+		"caption": "control",
+		"data_type": "Heightmap",
+		"description": "Optional input for modulating noise intensity or distribution.",
+		"type": "input"
             },
             "dx": {
-                "caption": "dx",
-                "data_type": "Heightmap",
-                "description": "TODO",
-                "type": "input"
+		"caption": "dx",
+		"data_type": "Heightmap",
+		"description": "Optional input to control horizontal displacement in the noise generation.",
+		"type": "input"
             },
             "dy": {
-                "caption": "dy",
-                "data_type": "Heightmap",
-                "description": "TODO",
-                "type": "input"
+		"caption": "dy",
+		"data_type": "Heightmap",
+		"description": "Optional input to control vertical displacement in the noise generation.",
+		"type": "input"
             },
             "envelope": {
-                "caption": "envelope",
-                "data_type": "Heightmap",
-                "description": "Output noise amplitude envelope.",
-                "type": "input"
+		"caption": "envelope",
+		"data_type": "Heightmap",
+		"description": "Modulates the noise amplitude across the heightmap.",
+		"type": "input"
             },
             "output": {
-                "caption": "output",
-                "data_type": "Heightmap",
-                "description": "TODO",
-                "type": "output"
+		"caption": "output",
+		"data_type": "Heightmap",
+		"description": "The generated Gabor wavelet-based fractal noise heightmap.",
+		"type": "output"
             }
-        }
+	}
     },
     "Gain": {
         "category": "Filter/Recurve",
         "description": "Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
         "label": "Gain",
         "parameters": {
-            "gain": {
+	    "gain": {
                 "description": "Power law exponent.",
                 "key": "gain",
                 "label": "gain",

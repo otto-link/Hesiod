@@ -66,7 +66,7 @@ std::string BaseNode::get_documentation_html() const
 
   html += "<h2>Ports</h2>";
   html += "<table border='1' cellspacing='0' cellpadding='5'>";
-  html += "<tr><th>Name</th><th>in | out</th><th>Data type</th><th>Description</th></tr>";
+  html += "<tr><th>Name</th><th>I/O</th><th>Data type</th><th>Description</th></tr>";
 
   for (auto &[k, v] : this->documentation["ports"].items())
   {
