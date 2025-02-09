@@ -11,6 +11,8 @@
 #include <QPushButton>
 #include <QWidgetAction>
 
+#include <QTextBrowser>
+
 #include "highmap/geometry/cloud.hpp" // for link colors
 #include "highmap/heightmap.hpp"
 
@@ -507,6 +509,26 @@ void GraphEditor::on_node_right_clicked(const std::string &node_id, QPointF scen
         QWidgetAction *widget_action = new QWidgetAction(menu);
         widget_action->setDefaultWidget(label);
         menu->addAction(widget_action);
+      }
+
+      // documentation button
+      {
+        QPushButton   *button = new QPushButton("Help!");
+        QWidgetAction *widget_action = new QWidgetAction(menu);
+        widget_action->setDefaultWidget(button);
+        menu->addAction(widget_action);
+
+        connect(button,
+                &QPushButton::pressed,
+                [this, p_node]()
+                {
+                  DocumentationPopup *popup = new DocumentationPopup(
+                      p_node->get_label(),
+                      p_node->get_documentation_html());
+
+                  popup->setAttribute(Qt::WA_DeleteOnClose);
+                  popup->show();
+                });
       }
 
       // --- add attributes

@@ -1,6 +1,7 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include <format>
 #include <fstream>
 
 #include "highmap/geometry/cloud.hpp"
@@ -50,6 +51,52 @@ BaseNode::BaseNode(const std::string &label, std::shared_ptr<ModelConfig> config
                   if (this->data_preview)
                     this->data_preview->update_image();
                 });
+}
+
+std::string BaseNode::get_documentation_html() const
+{
+  std::string html = "";
+
+  html += std::format("<h1>{} node</h1>", this->get_label());
+  html += std::format("<p><b>Categories: {}</b></p>",
+                      this->documentation["category"].get<std::string>());
+  html += std::format("<p>{}</p>", this->documentation["description"].get<std::string>());
+
+  // --- ports
+
+  html += "<h2>Ports</h2>";
+  html += "<table border='1' cellspacing='0' cellpadding='5'>";
+  html += "<tr><th>Name</th><th>in | out</th><th>Data type</th><th>Description</th></tr>";
+
+  for (auto &[k, v] : this->documentation["ports"].items())
+  {
+    html += std::format(
+        "<tr> <td><b>{}</b></td> <td>{}</td> <td>{}</td> <td>{}</td> </tr>",
+        v["caption"].get<std::string>(),
+        v["type"].get<std::string>(),
+        v["data_type"].get<std::string>(),
+        v["description"].get<std::string>());
+  }
+
+  html += "</table>";
+
+  // --- parameters
+
+  html += "<h2>Parameters</h2>";
+  html += "<table border='1' cellspacing='0' cellpadding='5'>";
+  html += "<tr><th>Name</th><th>Data type</th><th>Description</th></tr>";
+
+  for (auto &[k, v] : this->documentation["parameters"].items())
+  {
+    html += std::format("<tr> <td><b>{}</b></td> <td>{}</td> <td>{}</td> </tr>",
+                        v["label"].get<std::string>(),
+                        v["type"].get<std::string>(),
+                        v["description"].get<std::string>());
+  }
+
+  html += "</table>";
+
+  return html;
 }
 
 gngui::PortType BaseNode::get_port_type(int port_index) const
