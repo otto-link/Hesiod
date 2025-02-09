@@ -32,7 +32,7 @@
         "label": "AbsSmooth",
         "parameters": {
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
@@ -44,7 +44,7 @@
                 "type": "Float"
             },
             "remap_range": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
                 "label": "remap_range",
                 "type": "Value range"
@@ -77,13 +77,13 @@
         "label": "AccumulationCurvature",
         "parameters": {
             "GPU": {
-                "description": "TODO",
+                "description": "Toogle GPU acceleration on or off.",
                 "key": "GPU",
                 "label": "GPU",
                 "type": "Bool"
             },
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
@@ -95,7 +95,7 @@
                 "type": "Float"
             },
             "remap": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap",
                 "label": "remap",
                 "type": "Bool"
@@ -140,7 +140,7 @@
                 "type": "Enumeration"
             },
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
@@ -158,7 +158,7 @@
                 "type": "Float"
             },
             "remap_range": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
                 "label": "remap_range",
                 "type": "Value range"
@@ -197,13 +197,13 @@
                 "type": "Array"
             },
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "Inverse",
                 "type": "Bool"
             },
             "remap": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap",
                 "label": "Remap range",
                 "type": "Value range"
@@ -224,7 +224,7 @@
         "label": "Bump",
         "parameters": {
             "center": {
-                "description": "TODO",
+                "description": "Reference center within the heightmap.",
                 "key": "center",
                 "label": "center",
                 "type": "Vec2Float"
@@ -236,13 +236,13 @@
                 "type": "Float"
             },
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
             },
             "remap_range": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
                 "label": "remap_range",
                 "type": "Value range"
@@ -281,13 +281,13 @@
         "label": "Caldera",
         "parameters": {
             "center": {
-                "description": "TODO",
+                "description": "Reference center within the heightmap.",
                 "key": "center",
                 "label": "center",
                 "type": "Vec2Float"
             },
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
@@ -311,7 +311,7 @@
                 "type": "Float"
             },
             "remap_range": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
                 "label": "remap_range",
                 "type": "Value range"
@@ -374,7 +374,7 @@
                 "type": "Float"
             },
             "remap": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap",
                 "label": "remap",
                 "type": "Bool"
@@ -413,7 +413,7 @@
         "label": "Closing",
         "parameters": {
             "GPU": {
-                "description": "TODO",
+                "description": "Toogle GPU acceleration on or off.",
                 "key": "GPU",
                 "label": "GPU",
                 "type": "Bool"
@@ -479,7 +479,7 @@
                 "type": "Wavenumber"
             },
             "remap_range": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
                 "label": "remap_range",
                 "type": "Value range"
@@ -543,7 +543,7 @@
                 "type": "Integer"
             },
             "remap_range": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
                 "label": "remap_range",
                 "type": "Value range"
@@ -570,7 +570,7 @@
         "label": "CloudRemapValues",
         "parameters": {
             "remap_range": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
                 "label": "remap_range",
                 "type": "Value range"
@@ -597,13 +597,13 @@
         "label": "CloudSDF",
         "parameters": {
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
             },
             "remap": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap",
                 "label": "remap",
                 "type": "Bool"
@@ -898,7 +898,7 @@
                 "type": "Integer"
             },
             "remap_range": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
                 "label": "remap_range",
                 "type": "Value range"
@@ -937,7 +937,7 @@
                 "type": "Float"
             },
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
@@ -949,7 +949,7 @@
                 "type": "Float"
             },
             "remap_range": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
                 "label": "remap_range",
                 "type": "Value range"
@@ -976,7 +976,7 @@
         "label": "Crater",
         "parameters": {
             "center": {
-                "description": "TODO",
+                "description": "Reference center within the heightmap.",
                 "key": "center",
                 "label": "center",
                 "type": "Vec2Float"
@@ -988,7 +988,7 @@
                 "type": "Float"
             },
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
@@ -1012,7 +1012,7 @@
                 "type": "Float"
             },
             "remap_range": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
                 "label": "remap_range",
                 "type": "Value range"
@@ -1063,7 +1063,7 @@
                 "type": "Float"
             },
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
@@ -1087,7 +1087,7 @@
                 "type": "Integer"
             },
             "remap_range": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
                 "label": "remap_range",
                 "type": "Value range"
@@ -1220,7 +1220,7 @@
         "label": "DiffusionLimitedAggregation",
         "parameters": {
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
@@ -1232,7 +1232,7 @@
                 "type": "Float"
             },
             "remap_range": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
                 "label": "remap_range",
                 "type": "Value range"
@@ -1283,7 +1283,7 @@
         "label": "Dilation",
         "parameters": {
             "GPU": {
-                "description": "TODO",
+                "description": "Toogle GPU acceleration on or off.",
                 "key": "GPU",
                 "label": "GPU",
                 "type": "Bool"
@@ -1316,7 +1316,7 @@
         "label": "DistanceTransform",
         "parameters": {
             "remap": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap",
                 "label": "remap",
                 "type": "Bool"
@@ -1367,7 +1367,7 @@
         "label": "Erosion",
         "parameters": {
             "GPU": {
-                "description": "TODO",
+                "description": "Toogle GPU acceleration on or off.",
                 "key": "GPU",
                 "label": "GPU",
                 "type": "Bool"
@@ -1400,7 +1400,7 @@
         "label": "ExpandShrink",
         "parameters": {
             "GPU": {
-                "description": "TODO",
+                "description": "Toogle GPU acceleration on or off.",
                 "key": "GPU",
                 "label": "GPU",
                 "type": "Bool"
@@ -1685,7 +1685,7 @@
                 "type": "Enumeration"
             },
             "remap_range": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
                 "label": "remap_range",
                 "type": "Value range"
@@ -1901,7 +1901,7 @@
                 "type": "Float"
             },
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "Inverse",
                 "type": "Bool"
@@ -1931,7 +1931,7 @@
                 "type": "Float"
             },
             "remap_range": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
                 "label": "Remap range",
                 "type": "Value range"
@@ -2132,13 +2132,13 @@
         "label": "GaussianPulse",
         "parameters": {
             "center": {
-                "description": "TODO",
+                "description": "Reference center within the heightmap.",
                 "key": "center",
                 "label": "center",
                 "type": "Vec2Float"
             },
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
@@ -2150,7 +2150,7 @@
                 "type": "Float"
             },
             "remap_range": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
                 "label": "remap_range",
                 "type": "Value range"
@@ -2213,7 +2213,7 @@
                 "type": "Float"
             },
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "Inverse",
                 "type": "Bool"
@@ -2249,7 +2249,7 @@
                 "type": "Float"
             },
             "remap_range": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
                 "label": "Remap range",
                 "type": "Value range"
@@ -2324,7 +2324,7 @@
         "label": "Gradient",
         "parameters": {
             "remap": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap",
                 "label": "Remap range",
                 "type": "Value range"
@@ -2357,7 +2357,7 @@
         "label": "GradientAngle",
         "parameters": {
             "remap_range": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
                 "label": "remap_range",
                 "type": "Value range"
@@ -2384,7 +2384,7 @@
         "label": "GradientNorm",
         "parameters": {
             "remap_range": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
                 "label": "remap_range",
                 "type": "Value range"
@@ -2411,7 +2411,7 @@
         "label": "GradientTalus",
         "parameters": {
             "remap_range": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
                 "label": "remap_range",
                 "type": "Value range"
@@ -2483,7 +2483,7 @@
         "label": "HeightmapToMask",
         "parameters": {
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
@@ -2583,7 +2583,7 @@
                 "type": "Float"
             },
             "remap_range": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
                 "label": "remap_range",
                 "type": "Value range"
@@ -2679,7 +2679,7 @@
         "label": "HydraulicParticle",
         "parameters": {
             "GPU": {
-                "description": "TODO",
+                "description": "Toogle GPU acceleration on or off.",
                 "key": "GPU",
                 "label": "GPU",
                 "type": "Bool"
@@ -3081,7 +3081,7 @@
         "label": "HydraulicStreamLog",
         "parameters": {
             "GPU": {
-                "description": "TODO",
+                "description": "Toogle GPU acceleration on or off.",
                 "key": "GPU",
                 "label": "GPU",
                 "type": "Bool"
@@ -3981,13 +3981,13 @@
         "label": "MorphologicalGradient",
         "parameters": {
             "GPU": {
-                "description": "TODO",
+                "description": "Toogle GPU acceleration on or off.",
                 "key": "GPU",
                 "label": "GPU",
                 "type": "Bool"
             },
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
@@ -3999,7 +3999,7 @@
                 "type": "Float"
             },
             "remap_range": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
                 "label": "remap_range",
                 "type": "Value range"
@@ -4032,7 +4032,7 @@
                 "type": "Float"
             },
             "center": {
-                "description": "TODO",
+                "description": "Reference center within the heightmap.",
                 "key": "center",
                 "label": "center",
                 "type": "Vec2Float"
@@ -4050,7 +4050,7 @@
                 "type": "Float"
             },
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
@@ -4080,7 +4080,7 @@
                 "type": "Float"
             },
             "remap_range": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
                 "label": "remap_range",
                 "type": "Value range"
@@ -4143,13 +4143,13 @@
         "label": "Noise",
         "parameters": {
             "GPU": {
-                "description": "TODO",
+                "description": "Toogle GPU acceleration on or off.",
                 "key": "GPU",
                 "label": "GPU",
                 "type": "Bool"
             },
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "Inverse",
                 "type": "Bool"
@@ -4167,7 +4167,7 @@
                 "type": "Enumeration"
             },
             "remap": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap",
                 "label": "Remap range",
                 "type": "Value range"
@@ -4212,13 +4212,13 @@
         "label": "NoiseFbm",
         "parameters": {
             "GPU": {
-                "description": "TODO",
+                "description": "Toogle GPU acceleration on or off.",
                 "key": "GPU",
                 "label": "GPU",
                 "type": "Bool"
             },
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "Inverse",
                 "type": "Bool"
@@ -4254,7 +4254,7 @@
                 "type": "Float"
             },
             "remap_range": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
                 "label": "Remap range",
                 "type": "Value range"
@@ -4317,7 +4317,7 @@
                 "type": "Float"
             },
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
@@ -4353,7 +4353,7 @@
                 "type": "Float"
             },
             "remap": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap",
                 "label": "remap",
                 "type": "Value range"
@@ -4416,7 +4416,7 @@
                 "type": "Float"
             },
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
@@ -4452,7 +4452,7 @@
                 "type": "Float"
             },
             "remap": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap",
                 "label": "remap",
                 "type": "Value range"
@@ -4509,7 +4509,7 @@
         "label": "NoiseParberry",
         "parameters": {
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
@@ -4545,7 +4545,7 @@
                 "type": "Float"
             },
             "remap_range": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
                 "label": "remap_range",
                 "type": "Value range"
@@ -4602,7 +4602,7 @@
         "label": "NoisePingpong",
         "parameters": {
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
@@ -4638,7 +4638,7 @@
                 "type": "Float"
             },
             "remap_range": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
                 "label": "remap_range",
                 "type": "Value range"
@@ -4695,7 +4695,7 @@
         "label": "NoiseRidged",
         "parameters": {
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
@@ -4737,7 +4737,7 @@
                 "type": "Float"
             },
             "remap_range": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
                 "label": "remap_range",
                 "type": "Value range"
@@ -4794,7 +4794,7 @@
         "label": "NoiseSwiss",
         "parameters": {
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
@@ -4830,7 +4830,7 @@
                 "type": "Float"
             },
             "remap_range": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
                 "label": "remap_range",
                 "type": "Value range"
@@ -4893,7 +4893,7 @@
         "label": "NormalDisplacement",
         "parameters": {
             "GPU": {
-                "description": "TODO",
+                "description": "Toogle GPU acceleration on or off.",
                 "key": "GPU",
                 "label": "GPU",
                 "type": "Bool"
@@ -4950,7 +4950,7 @@
         "label": "Opening",
         "parameters": {
             "GPU": {
-                "description": "TODO",
+                "description": "Toogle GPU acceleration on or off.",
                 "key": "GPU",
                 "label": "GPU",
                 "type": "Bool"
@@ -5001,19 +5001,19 @@
                 "type": "Float"
             },
             "center": {
-                "description": "TODO",
+                "description": "Reference center within the heightmap.",
                 "key": "center",
                 "label": "center",
                 "type": "Vec2Float"
             },
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
             },
             "remap_range": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
                 "label": "remap_range",
                 "type": "Value range"
@@ -5454,13 +5454,13 @@
         "label": "PathSDF",
         "parameters": {
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "Inverse",
                 "type": "Bool"
             },
             "remap": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap",
                 "label": "Remap",
                 "type": "Bool"
@@ -5563,13 +5563,13 @@
                 "type": "Bool"
             },
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
             },
             "remap": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap",
                 "label": "remap",
                 "type": "Bool"
@@ -5608,7 +5608,7 @@
         "label": "Plateau",
         "parameters": {
             "GPU": {
-                "description": "TODO",
+                "description": "Toogle GPU acceleration on or off.",
                 "key": "GPU",
                 "label": "GPU",
                 "type": "Bool"
@@ -5897,7 +5897,7 @@
         "label": "RadialDisplacementToXy",
         "parameters": {
             "center": {
-                "description": "TODO",
+                "description": "Reference center within the heightmap.",
                 "key": "center",
                 "label": "center",
                 "type": "Vec2Float"
@@ -6264,7 +6264,7 @@
         "label": "RelativeElevation",
         "parameters": {
             "GPU": {
-                "description": "TODO",
+                "description": "Toogle GPU acceleration on or off.",
                 "key": "GPU",
                 "label": "GPU",
                 "type": "Bool"
@@ -6376,7 +6376,7 @@
         "label": "ReverseMidpoint",
         "parameters": {
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
@@ -6388,7 +6388,7 @@
                 "type": "Float"
             },
             "remap": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap",
                 "label": "remap",
                 "type": "Bool"
@@ -6484,19 +6484,19 @@
                 "type": "Float"
             },
             "center": {
-                "description": "TODO",
+                "description": "Reference center within the heightmap.",
                 "key": "center",
                 "label": "center",
                 "type": "Vec2Float"
             },
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
             },
             "remap_range": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
                 "label": "remap_range",
                 "type": "Value range"
@@ -6553,13 +6553,13 @@
         "label": "Ruggedness",
         "parameters": {
             "GPU": {
-                "description": "TODO",
+                "description": "Toogle GPU acceleration on or off.",
                 "key": "GPU",
                 "label": "GPU",
                 "type": "Bool"
             },
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
@@ -6604,7 +6604,7 @@
         "label": "Rugosity",
         "parameters": {
             "GPU": {
-                "description": "TODO",
+                "description": "Toogle GPU acceleration on or off.",
                 "key": "GPU",
                 "label": "GPU",
                 "type": "Bool"
@@ -6616,7 +6616,7 @@
                 "type": "Bool"
             },
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
@@ -6718,7 +6718,7 @@
                 "type": "Float"
             },
             "remap": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap",
                 "label": "remap",
                 "type": "Bool"
@@ -6814,7 +6814,7 @@
                 "type": "Float"
             },
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
@@ -6865,7 +6865,7 @@
         "label": "SelectBlobLog",
         "parameters": {
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
@@ -6916,7 +6916,7 @@
                 "type": "Bool"
             },
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
@@ -6961,7 +6961,7 @@
         "label": "SelectGt",
         "parameters": {
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
@@ -7006,7 +7006,7 @@
         "label": "SelectInterval",
         "parameters": {
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
@@ -7057,13 +7057,13 @@
         "label": "SelectInwardOutward",
         "parameters": {
             "center": {
-                "description": "TODO",
+                "description": "Reference center within the heightmap.",
                 "key": "center",
                 "label": "center",
                 "type": "Vec2Float"
             },
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
@@ -7108,7 +7108,7 @@
                 "type": "Float"
             },
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
@@ -7198,13 +7198,13 @@
         "label": "SelectPulse",
         "parameters": {
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
             },
             "remap": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap",
                 "label": "remap",
                 "type": "Bool"
@@ -7261,13 +7261,13 @@
                 "type": "Float"
             },
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
             },
             "remap": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap",
                 "label": "remap",
                 "type": "Bool"
@@ -7312,13 +7312,13 @@
         "label": "SelectSlope",
         "parameters": {
             "GPU": {
-                "description": "TODO",
+                "description": "Toogle GPU acceleration on or off.",
                 "key": "GPU",
                 "label": "GPU",
                 "type": "Bool"
             },
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
@@ -7369,7 +7369,7 @@
         "label": "SelectTransitions",
         "parameters": {
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
@@ -7420,13 +7420,13 @@
         "label": "SelectValley",
         "parameters": {
             "GPU": {
-                "description": "TODO",
+                "description": "Toogle GPU acceleration on or off.",
                 "key": "GPU",
                 "label": "GPU",
                 "type": "Bool"
             },
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
@@ -7522,7 +7522,7 @@
         "label": "ShapeIndex",
         "parameters": {
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
@@ -7639,19 +7639,19 @@
                 "type": "Float"
             },
             "center": {
-                "description": "TODO",
+                "description": "Reference center within the heightmap.",
                 "key": "center",
                 "label": "center",
                 "type": "Vec2Float"
             },
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
             },
             "remap_range": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
                 "label": "remap_range",
                 "type": "Value range"
@@ -7696,7 +7696,7 @@
         "label": "SmoothCpulse",
         "parameters": {
             "GPU": {
-                "description": "TODO",
+                "description": "Toogle GPU acceleration on or off.",
                 "key": "GPU",
                 "label": "GPU",
                 "type": "Bool"
@@ -7735,7 +7735,7 @@
         "label": "SmoothFill",
         "parameters": {
             "GPU": {
-                "description": "TODO",
+                "description": "Toogle GPU acceleration on or off.",
                 "key": "GPU",
                 "label": "GPU",
                 "type": "Bool"
@@ -7792,7 +7792,7 @@
         "label": "SmoothFillHoles",
         "parameters": {
             "GPU": {
-                "description": "TODO",
+                "description": "Toogle GPU acceleration on or off.",
                 "key": "GPU",
                 "label": "GPU",
                 "type": "Bool"
@@ -7831,7 +7831,7 @@
         "label": "SmoothFillSmearPeaks",
         "parameters": {
             "GPU": {
-                "description": "TODO",
+                "description": "Toogle GPU acceleration on or off.",
                 "key": "GPU",
                 "label": "GPU",
                 "type": "Bool"
@@ -7914,7 +7914,7 @@
                 "type": "Enumeration"
             },
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
@@ -7956,7 +7956,7 @@
                 "type": "Bool"
             },
             "remap_range": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
                 "label": "remap_range",
                 "type": "Value range"
@@ -8052,19 +8052,19 @@
                 "type": "Float"
             },
             "center": {
-                "description": "TODO",
+                "description": "Reference center within the heightmap.",
                 "key": "center",
                 "label": "center",
                 "type": "Vec2Float"
             },
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
             },
             "remap_range": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
                 "label": "remap_range",
                 "type": "Value range"
@@ -8619,7 +8619,7 @@
         "label": "Thermal",
         "parameters": {
             "GPU": {
-                "description": "TODO",
+                "description": "Toogle GPU acceleration on or off.",
                 "key": "GPU",
                 "label": "GPU",
                 "type": "Bool"
@@ -8676,7 +8676,7 @@
         "label": "ThermalAutoBedrock",
         "parameters": {
             "GPU": {
-                "description": "TODO",
+                "description": "Toogle GPU acceleration on or off.",
                 "key": "GPU",
                 "label": "GPU",
                 "type": "Bool"
@@ -8856,7 +8856,7 @@
                 "type": "Integer"
             },
             "remap": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap",
                 "label": "remap",
                 "type": "Value range"
@@ -9066,7 +9066,7 @@
         "label": "Unsphericity",
         "parameters": {
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
@@ -9078,7 +9078,7 @@
                 "type": "Float"
             },
             "remap": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap",
                 "label": "remap",
                 "type": "Bool"
@@ -9123,7 +9123,7 @@
                 "type": "Float"
             },
             "remap_range": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
                 "label": "remap_range",
                 "type": "Value range"
@@ -9150,7 +9150,7 @@
         "label": "Voronoise",
         "parameters": {
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
@@ -9162,7 +9162,7 @@
                 "type": "Wavenumber"
             },
             "remap_range": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
                 "label": "remap_range",
                 "type": "Value range"
@@ -9219,7 +9219,7 @@
         "label": "Warp",
         "parameters": {
             "GPU": {
-                "description": "TODO",
+                "description": "Toogle GPU acceleration on or off.",
                 "key": "GPU",
                 "label": "GPU",
                 "type": "Bool"
@@ -9309,7 +9309,7 @@
                 "type": "Float"
             },
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
@@ -9327,7 +9327,7 @@
                 "type": "Float"
             },
             "remap_range": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
                 "label": "remap_range",
                 "type": "Value range"
@@ -9372,7 +9372,7 @@
                 "type": "Float"
             },
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
@@ -9390,7 +9390,7 @@
                 "type": "Float"
             },
             "remap_range": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
                 "label": "remap_range",
                 "type": "Value range"
@@ -9423,7 +9423,7 @@
                 "type": "Float"
             },
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
@@ -9441,7 +9441,7 @@
                 "type": "Float"
             },
             "remap_range": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
                 "label": "remap_range",
                 "type": "Value range"
@@ -9474,7 +9474,7 @@
                 "type": "Float"
             },
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
@@ -9492,7 +9492,7 @@
                 "type": "Float"
             },
             "remap_range": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
                 "label": "remap_range",
                 "type": "Value range"
@@ -9525,13 +9525,13 @@
         "label": "White",
         "parameters": {
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
             },
             "remap_range": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
                 "label": "remap_range",
                 "type": "Value range"
@@ -9564,13 +9564,13 @@
         "label": "WhiteDensityMap",
         "parameters": {
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
             },
             "remap_range": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
                 "label": "remap_range",
                 "type": "Value range"
@@ -9615,13 +9615,13 @@
                 "type": "Float"
             },
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
             },
             "remap_range": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
                 "label": "remap_range",
                 "type": "Value range"
@@ -9735,7 +9735,7 @@
                 "type": "Enumeration"
             },
             "remap_range": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
                 "label": "remap_range",
                 "type": "Value range"
@@ -9774,7 +9774,7 @@
         "label": "Zoom",
         "parameters": {
             "center": {
-                "description": "TODO",
+                "description": "Reference center within the heightmap.",
                 "key": "center",
                 "label": "center",
                 "type": "Vec2Float"
@@ -9786,7 +9786,7 @@
                 "type": "Bool"
             },
             "remap": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap",
                 "label": "remap",
                 "type": "Bool"
