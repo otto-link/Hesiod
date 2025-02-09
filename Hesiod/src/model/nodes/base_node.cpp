@@ -127,7 +127,7 @@ nlohmann::json BaseNode::node_parameters_to_json()
     if (this->documentation.contains("ports"))
       if (this->documentation["ports"].contains(this->get_port_caption(k)))
         json_this_port["description"] = this->documentation["ports"]
-                                                           [this->get_port_caption(k)];
+                                                           [this->get_port_caption(k)]["description"] ;
 
     // overwrite data type
     if (this->get_data_type(k) == typeid(hmap::Array).name())
@@ -159,7 +159,7 @@ nlohmann::json BaseNode::node_parameters_to_json()
 
     if (this->documentation.contains("attributes"))
       if (this->documentation["attributes"].contains(key))
-        json_this_attr["description"] = this->documentation["attributes"][key];
+        json_this_attr["description"] = this->documentation["attributes"][key]["description"] ;
 
     json["attributes"][key] = json_this_attr;
   }
