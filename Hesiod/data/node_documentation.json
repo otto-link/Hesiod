@@ -186,37 +186,37 @@
         }
     },
     "Brush": {
-        "category": "Primitive/Authoring",
-        "description": "TODO",
-        "label": "Brush",
-        "parameters": {
+    "category": "Primitive/Authoring",
+	"description": "A manual brush tool for directly painting heightmaps, allowing interactive terrain editing.",
+	"label": "Brush",
+	"parameters": {
             "hmap": {
-                "description": "TODO",
-                "key": "hmap",
-                "label": "Heightmap",
-                "type": "Array"
+		"description": "The heightmap data representing the painted terrain.",
+		"key": "hmap",
+		"label": "Heightmap",
+		"type": "Array"
             },
             "inverse": {
-                "description": "Toggle inversion of the output values.",
-                "key": "inverse",
-                "label": "Inverse",
-                "type": "Bool"
+            "description": "Invert the drawn values, swapping elevations between high and low.",
+		"key": "inverse",
+		"label": "Inverse",
+		"type": "Bool"
             },
             "remap": {
-                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap",
-                "label": "Remap range",
-                "type": "Value range"
+		"description": "Remap the brush output to a specified range, defaulting to [0, 1].",
+		"key": "remap",
+		"label": "Remap range",
+		"type": "Value range"
             }
-        },
-        "ports": {
+	},
+	"ports": {
             "out": {
-                "caption": "out",
-                "data_type": "Heightmap",
-                "description": "TODO",
-                "type": "output"
+		"caption": "out",
+		"data_type": "Heightmap",
+		"description": "The generated heightmap from brush strokes.",
+		"type": "output"
             }
-        }
+	}
     },
     "Bump": {
         "category": "Primitive/Function",
