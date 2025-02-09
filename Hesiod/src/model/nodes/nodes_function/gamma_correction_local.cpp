@@ -22,6 +22,7 @@ void setup_gamma_correction_local_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  p_node->add_attr<BoolAttribute>("GPU", HSD_DEFAULT_GPU_MODE, "GPU");
 
   // attribute(s)
   p_node->add_attr<FloatAttribute>("radius", 0.05f, 0.01f, 0.2f, "radius");
@@ -29,7 +30,7 @@ void setup_gamma_correction_local_node(BaseNode *p_node)
   p_node->add_attr<FloatAttribute>("k", 0.1f, 0.f, 0.5f, "k");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"radius", "gamma", "k"});
+  p_node->set_attr_ordered_key({"radius", "gamma", "k", "_SEPARATOR_", "GPU"});
 }
 
 void compute_gamma_correction_local_node(BaseNode *p_node)
@@ -54,16 +55,42 @@ void compute_gamma_correction_local_node(BaseNode *p_node)
     float hmax = p_out->max();
     p_out->remap(0.f, 1.f, hmin, hmax);
 
-    hmap::transform(*p_out,
-                    p_mask,
-                    [p_node, &ir](hmap::Array &x, hmap::Array *p_mask)
-                    {
-                      hmap::gamma_correction_local(x,
-                                                   GET("gamma", FloatAttribute),
-                                                   ir,
-                                                   p_mask,
-                                                   GET("k", FloatAttribute));
-                    });
+    if (GET("GPU", BoolAttribute))
+    {
+      hmap::transform(
+          {p_out, p_mask},
+          [p_node,
+           &ir](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+          {
+            hmap::Array *pa_out = p_arrays[0];
+            hmap::Array *pa_mask = p_arrays[1];
+
+            hmap::gpu::gamma_correction_local(*pa_out,
+                                              GET("gamma", FloatAttribute),
+                                              ir,
+                                              pa_mask,
+                                              GET("k", FloatAttribute));
+          },
+          p_node->get_config_ref()->hmap_transform_mode_gpu);
+    }
+    else
+    {
+      hmap::transform(
+          {p_out, p_mask},
+          [p_node,
+           &ir](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+          {
+            hmap::Array *pa_out = p_arrays[0];
+            hmap::Array *pa_mask = p_arrays[1];
+
+            hmap::gamma_correction_local(*pa_out,
+                                         GET("gamma", FloatAttribute),
+                                         ir,
+                                         pa_mask,
+                                         GET("k", FloatAttribute));
+          },
+          p_node->get_config_ref()->hmap_transform_mode_cpu);
+    }
 
     p_out->remap(hmin, hmax, 0.f, 1.f);
     p_out->smooth_overlap_buffers();
