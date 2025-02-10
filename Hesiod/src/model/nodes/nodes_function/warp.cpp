@@ -43,31 +43,33 @@ void compute_warp_node(BaseNode *p_node)
     hmap::Heightmap *p_dy = p_node->get_value_ref<hmap::Heightmap>("dy");
     hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
-    // --- work on a single array (as a temporary solution?)
-    hmap::Array z_array = p_in->to_array();
-
-    hmap::Array  dx_array, dy_array;
-    hmap::Array *p_dx_array = nullptr, *p_dy_array = nullptr;
-
-    if (p_dx)
-    {
-      dx_array = p_dx->to_array();
-      p_dx_array = &dx_array;
-    }
-
-    if (p_dy)
-    {
-      dy_array = p_dy->to_array();
-      p_dy_array = &dy_array;
-    }
-
     if (GET("GPU", BoolAttribute))
     {
-      hmap::gpu::warp(z_array, p_dx_array, p_dy_array);
+      hmap::transform(
+          {p_out, p_dx, p_dy},
+          [&ir](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+          {
+            hmap::Array *pa_out = p_arrays[0];
+            hmap::Array *pa_dx = p_arrays[1];
+            hmap::Array *pa_dy = p_arrays[2];
+
+            hmap::gpu::warp(*pa_out, *pa_dx, *pa_dy);
+          },
+          p_node->get_config_ref()->hmap_transform_mode_gpu);
     }
     else
     {
-      hmap::warp(z_array, p_dx_array, p_dy_array);
+      hmap::transform(
+          {p_out, p_dx, p_dy},
+          [&ir](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+          {
+            hmap::Array *pa_out = p_arrays[0];
+            hmap::Array *pa_dx = p_arrays[1];
+            hmap::Array *pa_dy = p_arrays[2];
+
+            hmap::warp(*pa_out, *pa_dx, *pa_dy);
+          },
+          p_node->get_config_ref()->hmap_transform_mode_cpu);
     }
 
     p_out->from_array_interp_nearest(z_array);
