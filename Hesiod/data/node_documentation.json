@@ -2773,13 +2773,13 @@
             "deposition": {
                 "caption": "deposition",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Deposition map (in [0, 1]).",
                 "type": "output"
             },
             "erosion": {
                 "caption": "erosion",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Erosion map (in [0, 1]).",
                 "type": "output"
             },
             "input": {
@@ -3058,7 +3058,7 @@
             "erosion": {
                 "caption": "erosion",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Erosion map (in [0, 1]).",
                 "type": "output"
             },
             "input": {
@@ -3145,13 +3145,13 @@
             "deposition": {
                 "caption": "deposition",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Deposition map (in [0, 1]).",
                 "type": "output"
             },
             "erosion": {
                 "caption": "erosion",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Erosion map (in [0, 1]).",
                 "type": "output"
             },
             "flow_map": {
@@ -3301,13 +3301,13 @@
             "deposition": {
                 "caption": "deposition",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Deposition map (in [0, 1]).",
                 "type": "output"
             },
             "erosion": {
                 "caption": "erosion",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Erosion map (in [0, 1]).",
                 "type": "output"
             },
             "input": {
@@ -6785,7 +6785,7 @@
             "deposition": {
                 "caption": "deposition",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Deposition map (in [0, 1]).",
                 "type": "output"
             },
             "input": {
@@ -7769,7 +7769,7 @@
             "deposition": {
                 "caption": "deposition",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Deposition map (in [0, 1]).",
                 "type": "output"
             },
             "input": {
@@ -8653,7 +8653,7 @@
             "deposition": {
                 "caption": "deposition",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Deposition map (in [0, 1]).",
                 "type": "output"
             },
             "input": {
@@ -8710,7 +8710,7 @@
             "deposition": {
                 "caption": "deposition",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Deposition map (in [0, 1]).",
                 "type": "output"
             },
             "input": {
@@ -8986,7 +8986,7 @@
             "deposition": {
                 "caption": "deposition",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Deposition map (in [0, 1]).",
                 "type": "output"
             },
             "input": {
