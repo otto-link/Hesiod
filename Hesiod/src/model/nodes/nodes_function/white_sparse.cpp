@@ -47,22 +47,33 @@ void compute_white_sparse_node(BaseNode *p_node)
   float density = GET("density", FloatAttribute);
   float density_per_tile = density / (float)p_out->get_ntiles();
 
-  hmap::fill(*p_out,
-             [&density_per_tile, &seed](hmap::Vec2<int> shape) {
-               return hmap::white_sparse(shape, 0.f, 1.f, density_per_tile, (uint)seed++);
-             });
+  hmap::transform(
+      {p_out},
+      [&density_per_tile, &seed](std::vector<hmap::Array *> p_arrays,
+                                 hmap::Vec2<int>            shape,
+                                 hmap::Vec4<float>)
+      {
+        hmap::Array *pa_out = p_arrays[0];
+
+        *pa_out = hmap::white_sparse(shape, 0.f, 1.f, density_per_tile, (uint)seed++);
+      },
+      p_node->get_config_ref()->hmap_transform_mode_cpu);
 
   // add envelope
   if (p_env)
   {
     float hmin = p_out->min();
-    hmap::transform(*p_out,
-                    *p_env,
-                    [&hmin](hmap::Array &a, hmap::Array &b)
-                    {
-                      a -= hmin;
-                      a *= b;
-                    });
+    hmap::transform(
+        {p_out, p_env},
+        [&hmin](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+        {
+          hmap::Array *pa_a = p_arrays[0];
+          hmap::Array *pa_b = p_arrays[1];
+
+          *pa_a -= hmin;
+          *pa_a *= *pa_b;
+        },
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
   }
 
   // post-process

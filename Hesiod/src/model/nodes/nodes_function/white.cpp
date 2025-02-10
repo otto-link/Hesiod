@@ -43,27 +43,38 @@ void compute_white_node(BaseNode *p_node)
 
   int seed = (int)GET("seed", SeedAttribute);
 
-  hmap::fill(*p_out,
-             [&seed](hmap::Vec2<int> shape)
-             { return hmap::white(shape, 0.f, 1.f, (uint)seed++); });
+  hmap::transform(
+      {p_out},
+      [&seed](std::vector<hmap::Array *> p_arrays,
+              hmap::Vec2<int>            shape,
+              hmap::Vec4<float>)
+      {
+        hmap::Array *pa_out = p_arrays[0];
+
+        *pa_out = hmap::white(shape, 0.f, 1.f, (uint)seed++);
+      },
+      p_node->get_config_ref()->hmap_transform_mode_cpu);
 
   // add envelope
   if (p_env)
   {
     float hmin = p_out->min();
-    hmap::transform(*p_out,
-                    *p_env,
-                    [&hmin](hmap::Array &a, hmap::Array &b)
-                    {
-                      a -= hmin;
-                      a *= b;
-                    });
+    hmap::transform(
+        {p_out, p_env},
+        [&hmin](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+        {
+          hmap::Array *pa_a = p_arrays[0];
+          hmap::Array *pa_b = p_arrays[1];
+
+          *pa_a -= hmin;
+          *pa_a *= *pa_b;
+        },
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
   }
 
   // post-process
   post_process_heightmap(p_node,
                          *p_out,
-
                          GET("inverse", BoolAttribute),
                          false, // smooth
                          0,

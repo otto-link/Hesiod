@@ -48,22 +48,32 @@ void compute_white_density_map_node(BaseNode *p_node)
     // base noise function
     int seed = GET("seed", SeedAttribute);
 
-    hmap::transform(*p_out,
-                    *p_density,
-                    [p_node, &seed](hmap::Array &h_out, hmap::Array &density_map)
-                    { h_out = hmap::white_density_map(density_map, (uint)seed++); });
+    hmap::transform(
+        {p_out, p_density},
+        [&seed](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+        {
+          hmap::Array *pa_out = p_arrays[0];
+          hmap::Array *pa_density = p_arrays[1];
+
+          *pa_out = hmap::white_density_map(*pa_density, (uint)seed++);
+        },
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
 
     // add envelope
     if (p_env)
     {
       float hmin = p_out->min();
-      hmap::transform(*p_out,
-                      *p_env,
-                      [&hmin](hmap::Array &a, hmap::Array &b)
-                      {
-                        a -= hmin;
-                        a *= b;
-                      });
+      hmap::transform(
+          {p_out, p_env},
+          [&hmin](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+          {
+            hmap::Array *pa_a = p_arrays[0];
+            hmap::Array *pa_b = p_arrays[1];
+
+            *pa_a -= hmin;
+            *pa_a *= *pa_b;
+          },
+          p_node->get_config_ref()->hmap_transform_mode_cpu);
     }
 
     // post-process
