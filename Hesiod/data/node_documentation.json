@@ -4028,117 +4028,117 @@
     },
     "MountainRangeRadial": {
         "category": "Primitive/Geological",
-        "description": "TODO",
+        "description": "Generates a heightmap representing a radial mountain range emanating from a specified center.",
         "label": "MountainRangeRadial",
         "parameters": {
             "angle_spread_ratio": {
-                "description": "TODO",
+                "description": "Controls the angular spread of the mountain range. Lower values create more concentrated ridges, while higher values distribute them more evenly.",
                 "key": "angle_spread_ratio",
-                "label": "angle_spread_ratio",
+                "label": "Angle Spread Ratio",
                 "type": "Float"
             },
             "center": {
-                "description": "Reference center within the heightmap.",
+                "description": "The center point of the radial mountain range as normalized coordinates within [0, 1].",
                 "key": "center",
-                "label": "center",
+                "label": "Center",
                 "type": "Vec2Float"
             },
             "core_size_ratio": {
-                "description": "TODO",
+                "description": "Determines the relative size of the core mountain region before tapering begins.",
                 "key": "core_size_ratio",
-                "label": "core_size_ratio",
+                "label": "Core Size Ratio",
                 "type": "Float"
             },
             "half_width": {
-                "description": "TODO",
+                "description": "Defines the half-width of the radial mountain range, controlling its spread.",
                 "key": "half_width",
-                "label": "half_width",
+                "label": "Half Width",
                 "type": "Float"
             },
             "inverse": {
-                "description": "Toggle inversion of the output values.",
+                "description": "Toggle inversion of the output values, flipping elevations.",
                 "key": "inverse",
-                "label": "inverse",
+                "label": "Inverse",
                 "type": "Bool"
             },
             "kw": {
-                "description": "TODO",
+                "description": "The wave numbers (frequency components) that define the base frequency of the noise function.",
                 "key": "kw",
-                "label": "kw",
+                "label": "Wavenumber",
                 "type": "Wavenumber"
             },
             "lacunarity": {
-                "description": "TODO",
+                "description": "The frequency scaling factor for successive noise octaves. Higher values increase the frequency of each successive octave.",
                 "key": "lacunarity",
-                "label": "lacunarity",
+                "label": "Lacunarity",
                 "type": "Float"
             },
             "octaves": {
-                "description": "TODO",
+                "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
-                "label": "octaves",
+                "label": "Octaves",
                 "type": "Integer"
             },
             "persistence": {
-                "description": "TODO",
+                "description": "The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.",
                 "key": "persistence",
-                "label": "persistence",
+                "label": "Persistence",
                 "type": "Float"
             },
             "remap_range": {
-                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
+                "description": "Remaps the operator's output values to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
-                "label": "remap_range",
+                "label": "Remap Range",
                 "type": "Value range"
             },
             "seed": {
-                "description": "TODO",
+                "description": "Sets the seed for random noise generation, ensuring reproducibility.",
                 "key": "seed",
                 "label": "Seed",
                 "type": "Random seed number"
             },
             "weight": {
-                "description": "TODO",
+                "description": "Initial weight for noise contribution. Higher values amplify the primary terrain features.",
                 "key": "weight",
-                "label": "weight",
+                "label": "Weight",
                 "type": "Float"
             }
         },
         "ports": {
             "angle": {
-                "caption": "angle",
+                "caption": "Angle",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Optional output providing the computed angle values for terrain features.",
                 "type": "output"
             },
             "control": {
-                "caption": "control",
+                "caption": "Control",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Optional input that modulates the terrain shape and noise distribution.",
                 "type": "input"
             },
             "dx": {
                 "caption": "dx",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Optional input for perturbing the terrain in the X-direction.",
                 "type": "input"
             },
             "dy": {
                 "caption": "dy",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Optional input for perturbing the terrain in the Y-direction.",
                 "type": "input"
             },
             "envelope": {
-                "caption": "envelope",
+                "caption": "Envelope",
                 "data_type": "Heightmap",
-                "description": "Output noise amplitude envelope.",
+                "description": "Modulates the amplitude of the mountain range across the heightmap.",
                 "type": "input"
             },
             "output": {
-                "caption": "output",
+                "caption": "Output",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "The final heightmap representing the radial mountain range.",
                 "type": "output"
             }
         }
