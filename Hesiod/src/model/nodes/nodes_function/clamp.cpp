@@ -62,26 +62,64 @@ void compute_clamp_node(BaseNode *p_node)
     // compute
     if (!smooth_min && !smooth_max)
     {
-      hmap::transform(*p_out,
-                      [&crange](hmap::Array &x) { hmap::clamp(x, crange.x, crange.y); });
+      hmap::transform(
+          {p_out},
+          [&crange](std::vector<hmap::Array *> p_arrays,
+                    hmap::Vec2<int>,
+                    hmap::Vec4<float>)
+          {
+            hmap::Array *pa_out = p_arrays[0];
+            hmap::clamp(*pa_out, crange.x, crange.y);
+          },
+          p_node->get_config_ref()->hmap_transform_mode_cpu);
     }
     else
     {
       if (smooth_min)
-        hmap::transform(*p_out,
-                        [&crange, &k_min](hmap::Array &x)
-                        { hmap::clamp_min_smooth(x, crange.x, k_min); });
+        hmap::transform(
+            {p_out},
+            [&crange, &k_min](std::vector<hmap::Array *> p_arrays,
+                              hmap::Vec2<int>,
+                              hmap::Vec4<float>)
+            {
+              hmap::Array *pa_out = p_arrays[0];
+              hmap::clamp_min_smooth(*pa_out, crange.x, k_min);
+            },
+            p_node->get_config_ref()->hmap_transform_mode_cpu);
       else
-        hmap::transform(*p_out,
-                        [&crange](hmap::Array &x) { hmap::clamp_min(x, crange.x); });
+        hmap::transform(
+            {p_out},
+            [&crange](std::vector<hmap::Array *> p_arrays,
+                      hmap::Vec2<int>,
+                      hmap::Vec4<float>)
+            {
+              hmap::Array *pa_out = p_arrays[0];
+              hmap::clamp_min(*pa_out, crange.x);
+            },
+            p_node->get_config_ref()->hmap_transform_mode_cpu);
 
       if (smooth_max)
-        hmap::transform(*p_out,
-                        [&crange, &k_max](hmap::Array &x)
-                        { hmap::clamp_max_smooth(x, crange.y, k_max); });
+        hmap::transform(
+            {p_out},
+            [&crange, &k_max](std::vector<hmap::Array *> p_arrays,
+                              hmap::Vec2<int>,
+                              hmap::Vec4<float>)
+            {
+              hmap::Array *pa_out = p_arrays[0];
+              hmap::clamp_max_smooth(*pa_out, crange.y, k_max);
+            },
+            p_node->get_config_ref()->hmap_transform_mode_cpu);
       else
-        hmap::transform(*p_out,
-                        [&crange](hmap::Array &x) { hmap::clamp_max(x, crange.y); });
+        hmap::transform(
+            {p_out},
+            [&crange](std::vector<hmap::Array *> p_arrays,
+                      hmap::Vec2<int>,
+                      hmap::Vec4<float>)
+            {
+              hmap::Array *pa_out = p_arrays[0];
+              hmap::clamp_max(*pa_out, crange.y);
+            },
+            p_node->get_config_ref()->hmap_transform_mode_cpu);
     }
 
     if (GET("remap", BoolAttribute))
