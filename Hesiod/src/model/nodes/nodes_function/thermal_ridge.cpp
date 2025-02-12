@@ -24,6 +24,7 @@ void setup_thermal_ridge_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "deposition", CONFIG);
 
   // attribute(s)
   p_node->add_attr<FloatAttribute>("talus_global", 2.f, 0.f, 16.f, "talus_global");
@@ -53,6 +54,8 @@ void compute_thermal_ridge_node(BaseNode *p_node)
   {
     hmap::Heightmap *p_mask = p_node->get_value_ref<hmap::Heightmap>("mask");
     hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
+    hmap::Heightmap *p_deposition_map = p_node->get_value_ref<hmap::Heightmap>(
+        "deposition");
 
     // copy the input heightmap
     *p_out = *p_in;
@@ -68,22 +71,27 @@ void compute_thermal_ridge_node(BaseNode *p_node)
     }
 
     hmap::transform(
-        {p_out, p_mask, &talus_map},
+        {p_out, p_mask, &talus_map, p_deposition_map},
         [p_node,
          &talus](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
         {
           hmap::Array *pa_out = p_arrays[0];
           hmap::Array *pa_mask = p_arrays[1];
           hmap::Array *pa_talus_map = p_arrays[2];
+          hmap::Array *pa_deposition_map = p_arrays[3];
 
           hmap::gpu::thermal_ridge(*pa_out,
                                    pa_mask,
                                    *pa_talus_map,
-                                   GET("iterations", IntAttribute));
+                                   GET("iterations", IntAttribute),
+                                   pa_deposition_map);
         },
         p_node->get_config_ref()->hmap_transform_mode_gpu);
 
     p_out->smooth_overlap_buffers();
+
+    p_deposition_map->smooth_overlap_buffers();
+    p_deposition_map->remap();
 
     // post-process
     post_process_heightmap(p_node,

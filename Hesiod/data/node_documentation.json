@@ -2197,25 +2197,25 @@
             "amplitude": {
                 "description": "Controls the overall intensity of the noise function.",
                 "key": "amplitude",
-                "label": "Amplitude",
+                "label": "amplitude",
                 "type": "Float"
             },
             "angle": {
                 "description": "Sets the primary orientation of the wave structures in the noise.",
                 "key": "angle",
-                "label": "Angle",
+                "label": "angle",
                 "type": "Float"
             },
             "angle_spread_ratio": {
                 "description": "Determines the degree of variation in the angle of the wave structures. Lower values create more aligned structures.",
                 "key": "angle_spread_ratio",
-                "label": "Angle Spread Ratio",
+                "label": "angle_spread_ratio",
                 "type": "Float"
             },
             "branch_strength": {
                 "description": "Controls the prominence of branch-like features in the generated noise.",
                 "key": "branch_strength",
-                "label": "Branch Strength",
+                "label": "branch_strength",
                 "type": "Float"
             },
             "inverse": {
@@ -2233,7 +2233,7 @@
             "kw_multiplier": {
                 "description": "Multiplier applied to the wave numbers, affecting the frequency scaling of the noise function.",
                 "key": "kw_multiplier",
-                "label": "Wavenumber Multiplier",
+                "label": "kw_multiplier",
                 "type": "Wavenumber"
             },
             "lacunarity": {
@@ -2257,7 +2257,7 @@
             "remap_range": {
                 "description": "Remap the noise output values to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
-                "label": "Remap Range",
+                "label": "Remap range",
                 "type": "Value range"
             },
             "seed": {
@@ -2269,31 +2269,31 @@
             "slope_strength": {
                 "description": "Controls the strength of slope-based directional erosion in the noise function.",
                 "key": "slope_strength",
-                "label": "Slope Strength",
-                "type": "Float"
-            },
-            "z_cut_min": {
-                "description": "Defines the minimum cutoff value for the Z-axis in the generated noise.",
-                "key": "z_cut_min",
-                "label": "Z Cut Min",
+                "label": "slope_strength",
                 "type": "Float"
             },
             "z_cut_max": {
                 "description": "Defines the maximum cutoff value for the Z-axis in the generated noise.",
                 "key": "z_cut_max",
-                "label": "Z Cut Max",
+                "label": "z_cut_max",
+                "type": "Float"
+            },
+            "z_cut_min": {
+                "description": "Defines the minimum cutoff value for the Z-axis in the generated noise.",
+                "key": "z_cut_min",
+                "label": "z_cut_min",
                 "type": "Float"
             }
         },
         "ports": {
             "angle": {
-                "caption": "Angle",
+                "caption": "angle",
                 "data_type": "Heightmap",
                 "description": "Optional input for dynamically modifying the wavelet orientation per pixel.",
                 "type": "input"
             },
             "control": {
-                "caption": "Control",
+                "caption": "control",
                 "data_type": "Heightmap",
                 "description": "Optional input that modulates noise intensity or distribution.",
                 "type": "input"
@@ -2311,13 +2311,13 @@
                 "type": "input"
             },
             "envelope": {
-                "caption": "Envelope",
+                "caption": "envelope",
                 "data_type": "Heightmap",
                 "description": "Modulates the amplitude of the noise across the heightmap.",
                 "type": "input"
             },
             "output": {
-                "caption": "Output",
+                "caption": "output",
                 "data_type": "Heightmap",
                 "description": "The final heightmap generated using the GavoroNoise algorithm.",
                 "type": "output"
@@ -2908,7 +2908,7 @@
             "mask": {
                 "caption": "mask",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Mask defining the filtering intensity (expected in [0, 1]).",
                 "type": "input"
             },
             "output": {
@@ -3013,7 +3013,7 @@
             "mask": {
                 "caption": "mask",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Mask defining the filtering intensity (expected in [0, 1]).",
                 "type": "input"
             },
             "output": {
@@ -3169,7 +3169,7 @@
             "mask": {
                 "caption": "mask",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Mask defining the filtering intensity (expected in [0, 1]).",
                 "type": "input"
             },
             "output": {
@@ -3232,7 +3232,7 @@
             "mask": {
                 "caption": "mask",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Mask defining the filtering intensity (expected in [0, 1]).",
                 "type": "input"
             },
             "output": {
@@ -3653,7 +3653,7 @@
             "mask": {
                 "caption": "mask",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Mask defining the filtering intensity (expected in [0, 1]).",
                 "type": "input"
             },
             "output": {
@@ -4034,61 +4034,61 @@
             "angle_spread_ratio": {
                 "description": "Controls the angular spread of the mountain range. Lower values create more concentrated ridges, while higher values distribute them more evenly.",
                 "key": "angle_spread_ratio",
-                "label": "Angle Spread Ratio",
+                "label": "angle_spread_ratio",
                 "type": "Float"
             },
             "center": {
                 "description": "The center point of the radial mountain range as normalized coordinates within [0, 1].",
                 "key": "center",
-                "label": "Center",
+                "label": "center",
                 "type": "Vec2Float"
             },
             "core_size_ratio": {
                 "description": "Determines the relative size of the core mountain region before tapering begins.",
                 "key": "core_size_ratio",
-                "label": "Core Size Ratio",
+                "label": "core_size_ratio",
                 "type": "Float"
             },
             "half_width": {
                 "description": "Defines the half-width of the radial mountain range, controlling its spread.",
                 "key": "half_width",
-                "label": "Half Width",
+                "label": "half_width",
                 "type": "Float"
             },
             "inverse": {
                 "description": "Toggle inversion of the output values, flipping elevations.",
                 "key": "inverse",
-                "label": "Inverse",
+                "label": "inverse",
                 "type": "Bool"
             },
             "kw": {
                 "description": "The wave numbers (frequency components) that define the base frequency of the noise function.",
                 "key": "kw",
-                "label": "Wavenumber",
+                "label": "kw",
                 "type": "Wavenumber"
             },
             "lacunarity": {
                 "description": "The frequency scaling factor for successive noise octaves. Higher values increase the frequency of each successive octave.",
                 "key": "lacunarity",
-                "label": "Lacunarity",
+                "label": "lacunarity",
                 "type": "Float"
             },
             "octaves": {
                 "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
-                "label": "Octaves",
+                "label": "octaves",
                 "type": "Integer"
             },
             "persistence": {
                 "description": "The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.",
                 "key": "persistence",
-                "label": "Persistence",
+                "label": "persistence",
                 "type": "Float"
             },
             "remap_range": {
                 "description": "Remaps the operator's output values to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
-                "label": "Remap Range",
+                "label": "remap_range",
                 "type": "Value range"
             },
             "seed": {
@@ -4100,19 +4100,19 @@
             "weight": {
                 "description": "Initial weight for noise contribution. Higher values amplify the primary terrain features.",
                 "key": "weight",
-                "label": "Weight",
+                "label": "weight",
                 "type": "Float"
             }
         },
         "ports": {
             "angle": {
-                "caption": "Angle",
+                "caption": "angle",
                 "data_type": "Heightmap",
                 "description": "Optional output providing the computed angle values for terrain features.",
                 "type": "output"
             },
             "control": {
-                "caption": "Control",
+                "caption": "control",
                 "data_type": "Heightmap",
                 "description": "Optional input that modulates the terrain shape and noise distribution.",
                 "type": "input"
@@ -4130,13 +4130,13 @@
                 "type": "input"
             },
             "envelope": {
-                "caption": "Envelope",
+                "caption": "envelope",
                 "data_type": "Heightmap",
                 "description": "Modulates the amplitude of the mountain range across the heightmap.",
                 "type": "input"
             },
             "output": {
-                "caption": "Output",
+                "caption": "output",
                 "data_type": "Heightmap",
                 "description": "The final heightmap representing the radial mountain range.",
                 "type": "output"
@@ -5964,7 +5964,7 @@
             "mask": {
                 "caption": "mask",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Mask defining the filtering intensity (expected in [0, 1]).",
                 "type": "input"
             },
             "noise": {
@@ -6078,7 +6078,7 @@
             "mask": {
                 "caption": "mask",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Mask defining the filtering intensity (expected in [0, 1]).",
                 "type": "input"
             },
             "output": {
@@ -6189,7 +6189,7 @@
             "mask": {
                 "caption": "mask",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Mask defining the filtering intensity (expected in [0, 1]).",
                 "type": "input"
             },
             "output": {
@@ -6763,7 +6763,7 @@
                 "type": "Float"
             },
             "scale_talus_with_elevation": {
-                "description": "TODO",
+                "description": "Scales the talus amplitude based on heightmap elevation, reducing it at lower elevations and maintaining the nominal value at higher elevations.",
                 "key": "scale_talus_with_elevation",
                 "label": "scale_talus_with_elevation",
                 "type": "Bool"
@@ -6797,7 +6797,7 @@
             "mask": {
                 "caption": "mask",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Mask defining the filtering intensity (expected in [0, 1]).",
                 "type": "input"
             },
             "output": {
@@ -8035,7 +8035,7 @@
             "mask": {
                 "caption": "mask",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Mask defining the filtering intensity (expected in [0, 1]).",
                 "type": "input"
             },
             "output": {
@@ -8218,7 +8218,7 @@
             "mask": {
                 "caption": "mask",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Mask defining the filtering intensity (expected in [0, 1]).",
                 "type": "input"
             },
             "noise": {
@@ -8350,7 +8350,7 @@
             "mask": {
                 "caption": "mask",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Mask defining the filtering intensity (expected in [0, 1]).",
                 "type": "input"
             },
             "noise": {
@@ -8637,7 +8637,7 @@
                 "type": "Integer"
             },
             "scale_talus_with_elevation": {
-                "description": "TODO",
+                "description": "Scales the talus amplitude based on heightmap elevation, reducing it at lower elevations and maintaining the nominal value at higher elevations.",
                 "key": "scale_talus_with_elevation",
                 "label": "scale_talus_with_elevation",
                 "type": "Bool"
@@ -8694,7 +8694,7 @@
                 "type": "Integer"
             },
             "scale_talus_with_elevation": {
-                "description": "TODO",
+                "description": "Scales the talus amplitude based on heightmap elevation, reducing it at lower elevations and maintaining the nominal value at higher elevations.",
                 "key": "scale_talus_with_elevation",
                 "label": "scale_talus_with_elevation",
                 "type": "Bool"
@@ -8722,7 +8722,7 @@
             "mask": {
                 "caption": "mask",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Mask defining the filtering intensity (expected in [0, 1]).",
                 "type": "input"
             },
             "output": {
@@ -8745,7 +8745,7 @@
                 "type": "Integer"
             },
             "scale_talus_with_elevation": {
-                "description": "TODO",
+                "description": "Scales the talus amplitude based on heightmap elevation, reducing it at lower elevations and maintaining the nominal value at higher elevations.",
                 "key": "scale_talus_with_elevation",
                 "label": "scale_talus_with_elevation",
                 "type": "Bool"
@@ -8784,7 +8784,7 @@
                 "type": "Integer"
             },
             "scale_talus_with_elevation": {
-                "description": "TODO",
+                "description": "Scales the talus amplitude based on heightmap elevation, reducing it at lower elevations and maintaining the nominal value at higher elevations.",
                 "key": "scale_talus_with_elevation",
                 "label": "scale_talus_with_elevation",
                 "type": "Bool"
@@ -8806,7 +8806,7 @@
             "mask": {
                 "caption": "mask",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Mask defining the filtering intensity (expected in [0, 1]).",
                 "type": "input"
             },
             "output": {
@@ -8868,7 +8868,7 @@
                 "type": "Value range"
             },
             "scale_talus_with_elevation": {
-                "description": "TODO",
+                "description": "Scales the talus amplitude based on heightmap elevation, reducing it at lower elevations and maintaining the nominal value at higher elevations.",
                 "key": "scale_talus_with_elevation",
                 "label": "scale_talus_with_elevation",
                 "type": "Bool"
@@ -8881,6 +8881,12 @@
             }
         },
         "ports": {
+            "deposition": {
+                "caption": "deposition",
+                "data_type": "Heightmap",
+                "description": "Deposition map (in [0, 1]).",
+                "type": "output"
+            },
             "input": {
                 "caption": "input",
                 "data_type": "Heightmap",
@@ -8890,7 +8896,7 @@
             "mask": {
                 "caption": "mask",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Mask defining the filtering intensity (expected in [0, 1]).",
                 "type": "input"
             },
             "output": {
@@ -8913,7 +8919,7 @@
                 "type": "Integer"
             },
             "scale_talus_with_elevation": {
-                "description": "TODO",
+                "description": "Scales the talus amplitude based on heightmap elevation, reducing it at lower elevations and maintaining the nominal value at higher elevations.",
                 "key": "scale_talus_with_elevation",
                 "label": "scale_talus_with_elevation",
                 "type": "Bool"
@@ -8935,7 +8941,7 @@
             "mask": {
                 "caption": "mask",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Mask defining the filtering intensity (expected in [0, 1]).",
                 "type": "input"
             },
             "output": {
@@ -8958,7 +8964,7 @@
                 "type": "Integer"
             },
             "scale_talus_with_elevation": {
-                "description": "TODO",
+                "description": "Scales the talus amplitude based on heightmap elevation, reducing it at lower elevations and maintaining the nominal value at higher elevations.",
                 "key": "scale_talus_with_elevation",
                 "label": "scale_talus_with_elevation",
                 "type": "Bool"
@@ -8998,7 +9004,7 @@
             "mask": {
                 "caption": "mask",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Mask defining the filtering intensity (expected in [0, 1]).",
                 "type": "input"
             },
             "output": {
@@ -9071,6 +9077,12 @@
         "description": "Unsphericity is a measure used to quantify the deviation of the heightmap shape from a perfect sphere. In other words, it indicates how much the terrain differs from being perfectly round or spherical.",
         "label": "Unsphericity",
         "parameters": {
+            "GPU": {
+                "description": "Toogle GPU acceleration on or off.",
+                "key": "GPU",
+                "label": "GPU",
+                "type": "Bool"
+            },
             "inverse": {
                 "description": "Toggle inversion of the output values.",
                 "key": "inverse",
@@ -9718,7 +9730,7 @@
             "mask": {
                 "caption": "mask",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Mask defining the filtering intensity (expected in [0, 1]).",
                 "type": "input"
             },
             "output": {
