@@ -505,15 +505,17 @@ void GraphEditor::on_node_right_clicked(const std::string &node_id, QPointF scen
 
       {
         QLabel *label = new QLabel(p_node->get_caption().c_str());
-        resize_font(label, 1);
+        resize_font(label, 2);
         QWidgetAction *widget_action = new QWidgetAction(menu);
         widget_action->setDefaultWidget(label);
         menu->addAction(widget_action);
       }
 
-      // documentation button
+      // help button
       {
-        QPushButton   *button = new QPushButton("Help!");
+        QPushButton *button = new QPushButton("Help!");
+        button->setIcon(button->style()->standardIcon(QStyle::SP_DialogHelpButton));
+
         QWidgetAction *widget_action = new QWidgetAction(menu);
         widget_action->setDefaultWidget(button);
         menu->addAction(widget_action);
@@ -565,6 +567,8 @@ void GraphEditor::on_node_right_clicked(const std::string &node_id, QPointF scen
                 std::string node_id = p_node->get_id();
                 this->update(node_id);
               });
+
+      // --- show menu
 
       menu->popup(QCursor::pos());
     }
