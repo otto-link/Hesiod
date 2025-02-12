@@ -2507,13 +2507,13 @@
                 "type": "Value range"
             },
             "smoothing": {
-                "description": "TODO",
+                "description": "Enable or disable smoothing to reduce noise in the curvature computation.",
                 "key": "smoothing",
                 "label": "smoothing",
                 "type": "Bool"
             },
             "smoothing_radius": {
-                "description": "TODO",
+                "description": "Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.",
                 "key": "smoothing_radius",
                 "label": "smoothing_radius",
                 "type": "Float"
@@ -5581,13 +5581,13 @@
                 "type": "Bool"
             },
             "smoothing": {
-                "description": "TODO",
+                "description": "Enable or disable smoothing to reduce noise in the curvature computation.",
                 "key": "smoothing",
                 "label": "smoothing",
                 "type": "Bool"
             },
             "smoothing_radius": {
-                "description": "TODO",
+                "description": "Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.",
                 "key": "smoothing_radius",
                 "label": "smoothing_radius",
                 "type": "Float"
@@ -6577,13 +6577,13 @@
                 "type": "Float"
             },
             "smoothing": {
-                "description": "TODO",
+                "description": "Enable or disable smoothing to reduce noise in the curvature computation.",
                 "key": "smoothing",
                 "label": "smoothing",
                 "type": "Bool"
             },
             "smoothing_radius": {
-                "description": "TODO",
+                "description": "Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.",
                 "key": "smoothing_radius",
                 "label": "smoothing_radius",
                 "type": "Float"
@@ -6640,13 +6640,13 @@
                 "type": "Value range"
             },
             "smoothing": {
-                "description": "TODO",
+                "description": "Enable or disable smoothing to reduce noise in the curvature computation.",
                 "key": "smoothing",
                 "label": "smoothing",
                 "type": "Bool"
             },
             "smoothing_radius": {
-                "description": "TODO",
+                "description": "Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.",
                 "key": "smoothing_radius",
                 "label": "smoothing_radius",
                 "type": "Float"
@@ -6838,13 +6838,13 @@
                 "type": "Float"
             },
             "smoothing": {
-                "description": "TODO",
+                "description": "Enable or disable smoothing to reduce noise in the curvature computation.",
                 "key": "smoothing",
                 "label": "smoothing",
                 "type": "Bool"
             },
             "smoothing_radius": {
-                "description": "TODO",
+                "description": "Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.",
                 "key": "smoothing_radius",
                 "label": "smoothing_radius",
                 "type": "Float"
@@ -6883,13 +6883,13 @@
                 "type": "Float"
             },
             "smoothing": {
-                "description": "TODO",
+                "description": "Enable or disable smoothing to reduce noise in the curvature computation.",
                 "key": "smoothing",
                 "label": "smoothing",
                 "type": "Bool"
             },
             "smoothing_radius": {
-                "description": "TODO",
+                "description": "Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.",
                 "key": "smoothing_radius",
                 "label": "smoothing_radius",
                 "type": "Float"
@@ -6934,13 +6934,13 @@
                 "type": "Float"
             },
             "smoothing": {
-                "description": "TODO",
+                "description": "Enable or disable smoothing to reduce noise in the curvature computation.",
                 "key": "smoothing",
                 "label": "smoothing",
                 "type": "Bool"
             },
             "smoothing_radius": {
-                "description": "TODO",
+                "description": "Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.",
                 "key": "smoothing_radius",
                 "label": "smoothing_radius",
                 "type": "Float"
@@ -6973,13 +6973,13 @@
                 "type": "Bool"
             },
             "smoothing": {
-                "description": "TODO",
+                "description": "Enable or disable smoothing to reduce noise in the curvature computation.",
                 "key": "smoothing",
                 "label": "smoothing",
                 "type": "Bool"
             },
             "smoothing_radius": {
-                "description": "TODO",
+                "description": "Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.",
                 "key": "smoothing_radius",
                 "label": "smoothing_radius",
                 "type": "Float"
@@ -7018,13 +7018,13 @@
                 "type": "Bool"
             },
             "smoothing": {
-                "description": "TODO",
+                "description": "Enable or disable smoothing to reduce noise in the curvature computation.",
                 "key": "smoothing",
                 "label": "smoothing",
                 "type": "Bool"
             },
             "smoothing_radius": {
-                "description": "TODO",
+                "description": "Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.",
                 "key": "smoothing_radius",
                 "label": "smoothing_radius",
                 "type": "Float"
@@ -7075,13 +7075,13 @@
                 "type": "Bool"
             },
             "smoothing": {
-                "description": "TODO",
+                "description": "Enable or disable smoothing to reduce noise in the curvature computation.",
                 "key": "smoothing",
                 "label": "smoothing",
                 "type": "Bool"
             },
             "smoothing_radius": {
-                "description": "TODO",
+                "description": "Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.",
                 "key": "smoothing_radius",
                 "label": "smoothing_radius",
                 "type": "Float"
@@ -7120,13 +7120,13 @@
                 "type": "Bool"
             },
             "smoothing": {
-                "description": "TODO",
+                "description": "Enable or disable smoothing to reduce noise in the curvature computation.",
                 "key": "smoothing",
                 "label": "smoothing",
                 "type": "Bool"
             },
             "smoothing_radius": {
-                "description": "TODO",
+                "description": "Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.",
                 "key": "smoothing_radius",
                 "label": "smoothing_radius",
                 "type": "Float"
@@ -7222,13 +7222,13 @@
                 "type": "Float"
             },
             "smoothing": {
-                "description": "TODO",
+                "description": "Enable or disable smoothing to reduce noise in the curvature computation.",
                 "key": "smoothing",
                 "label": "smoothing",
                 "type": "Bool"
             },
             "smoothing_radius": {
-                "description": "TODO",
+                "description": "Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.",
                 "key": "smoothing_radius",
                 "label": "smoothing_radius",
                 "type": "Float"
@@ -7279,13 +7279,13 @@
                 "type": "Bool"
             },
             "smoothing": {
-                "description": "TODO",
+                "description": "Enable or disable smoothing to reduce noise in the curvature computation.",
                 "key": "smoothing",
                 "label": "smoothing",
                 "type": "Bool"
             },
             "smoothing_radius": {
-                "description": "TODO",
+                "description": "Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.",
                 "key": "smoothing_radius",
                 "label": "smoothing_radius",
                 "type": "Float"
@@ -7342,13 +7342,13 @@
                 "type": "Value range"
             },
             "smoothing": {
-                "description": "TODO",
+                "description": "Enable or disable smoothing to reduce noise in the curvature computation.",
                 "key": "smoothing",
                 "label": "smoothing",
                 "type": "Bool"
             },
             "smoothing_radius": {
-                "description": "TODO",
+                "description": "Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.",
                 "key": "smoothing_radius",
                 "label": "smoothing_radius",
                 "type": "Float"
@@ -7381,13 +7381,13 @@
                 "type": "Bool"
             },
             "smoothing": {
-                "description": "TODO",
+                "description": "Enable or disable smoothing to reduce noise in the curvature computation.",
                 "key": "smoothing",
                 "label": "smoothing",
                 "type": "Bool"
             },
             "smoothing_radius": {
-                "description": "TODO",
+                "description": "Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.",
                 "key": "smoothing_radius",
                 "label": "smoothing_radius",
                 "type": "Float"
@@ -7444,13 +7444,13 @@
                 "type": "Float"
             },
             "smoothing": {
-                "description": "TODO",
+                "description": "Enable or disable smoothing to reduce noise in the curvature computation.",
                 "key": "smoothing",
                 "label": "smoothing",
                 "type": "Bool"
             },
             "smoothing_radius": {
-                "description": "TODO",
+                "description": "Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.",
                 "key": "smoothing_radius",
                 "label": "smoothing_radius",
                 "type": "Float"
@@ -7540,13 +7540,13 @@
                 "type": "Float"
             },
             "smoothing": {
-                "description": "TODO",
+                "description": "Enable or disable smoothing to reduce noise in the curvature computation.",
                 "key": "smoothing",
                 "label": "smoothing",
                 "type": "Bool"
             },
             "smoothing_radius": {
-                "description": "TODO",
+                "description": "Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.",
                 "key": "smoothing_radius",
                 "label": "smoothing_radius",
                 "type": "Float"
@@ -9090,13 +9090,13 @@
                 "type": "Bool"
             },
             "smoothing": {
-                "description": "TODO",
+                "description": "Enable or disable smoothing to reduce noise in the curvature computation.",
                 "key": "smoothing",
                 "label": "smoothing",
                 "type": "Bool"
             },
             "smoothing_radius": {
-                "description": "TODO",
+                "description": "Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.",
                 "key": "smoothing_radius",
                 "label": "smoothing_radius",
                 "type": "Float"
