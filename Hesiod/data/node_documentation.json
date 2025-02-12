@@ -6634,7 +6634,7 @@
                 "type": "Float"
             },
             "saturate": {
-                "description": "TODO",
+                "description": "A process that modifies the amplitude of elevations by first clamping them to a given interval and then scaling them so that the restricted interval matches the original input range. This enhances contrast in elevation variations while maintaining overall structure.",
                 "key": "saturate",
                 "label": "saturate",
                 "type": "Value range"
@@ -6675,7 +6675,7 @@
     },
     "Saturate": {
         "category": "Filter/Recurve",
-        "description": "Saturate limits the amplitude of a signal to a predefined range while keeping the initial input range.",
+        "description": "A process that modifies the amplitude of elevations by first clamping them to a given interval and then scaling them so that the restricted interval matches the original input range. This enhances contrast in elevation variations while maintaining overall structure.",
         "label": "Saturate",
         "parameters": {
             "k_smoothing": {
@@ -7336,7 +7336,7 @@
                 "type": "Float"
             },
             "saturate": {
-                "description": "TODO",
+                "description": "A process that modifies the amplitude of elevations by first clamping them to a given interval and then scaling them so that the restricted interval matches the original input range. This enhances contrast in elevation variations while maintaining overall structure.",
                 "key": "saturate",
                 "label": "saturate",
                 "type": "Value range"
