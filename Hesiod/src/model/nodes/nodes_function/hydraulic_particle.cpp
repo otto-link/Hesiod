@@ -37,11 +37,11 @@ void setup_hydraulic_particle_node(BaseNode *p_node)
   p_node->add_attr<FloatAttribute>("particle_density", 1.f, 0.f, 4.f, "particle_density");
   p_node->add_attr<FloatAttribute>("c_capacity", 10.f, 0.1f, 100.f, "c_capacity");
   p_node->add_attr<FloatAttribute>("c_erosion", 0.05f, 0.f, 0.1f, "c_erosion");
-  p_node->add_attr<FloatAttribute>("c_deposition", 0.01f, 0.f, 0.1f, "c_deposition");
+  p_node->add_attr<FloatAttribute>("c_deposition", 0.005f, 0.f, 0.05f, "c_deposition");
   p_node->add_attr<FloatAttribute>("drag_rate", 0.001f, 0.f, 0.02f, "drag_rate");
   p_node->add_attr<FloatAttribute>("evap_rate", 0.001f, 0.f, 0.05f, "evap_rate");
   p_node->add_attr<BoolAttribute>("post_filtering", true, "post_filtering");
-  p_node->add_attr<BoolAttribute>("post_filtering_local", true, "post_filtering_local");
+  p_node->add_attr<BoolAttribute>("post_filtering_local", false, "post_filtering_local");
   p_node->add_attr<BoolAttribute>("deposition_only", false, "deposition_only");
   p_node->add_attr<BoolAttribute>("GPU", HSD_DEFAULT_GPU_MODE, "GPU");
 
