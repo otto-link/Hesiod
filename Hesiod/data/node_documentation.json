@@ -185,6 +185,57 @@
             }
         }
     },
+    "BlendPoissonBf": {
+        "category": "Operator/Blend",
+        "description": "TODO",
+        "label": "BlendPoissonBf",
+        "parameters": {
+            "inverse": {
+                "description": "TODO",
+                "key": "inverse",
+                "label": "inverse",
+                "type": "Bool"
+            },
+            "iterations": {
+                "description": "TODO",
+                "key": "iterations",
+                "label": "iterations",
+                "type": "Integer"
+            },
+            "remap_range": {
+                "description": "TODO",
+                "key": "remap_range",
+                "label": "remap_range",
+                "type": "Value range"
+            }
+        },
+        "ports": {
+            "input 1": {
+                "caption": "input 1",
+                "data_type": "Heightmap",
+                "description": "TODO",
+                "type": "input"
+            },
+            "input 2": {
+                "caption": "input 2",
+                "data_type": "Heightmap",
+                "description": "TODO",
+                "type": "input"
+            },
+            "mask": {
+                "caption": "mask",
+                "data_type": "Heightmap",
+                "description": "TODO",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "Heightmap",
+                "description": "TODO",
+                "type": "output"
+            }
+        }
+    },
     "Brush": {
         "category": "Primitive/Authoring",
         "description": "A manual brush tool for directly painting heightmaps, allowing interactive terrain editing.",
