@@ -1,7 +1,7 @@
 #!/bin/bash
 
-jq . docs/runtime_doc.json > tmp.json
-mv tmp.json docs/runtime_doc.json
+jq . Hesiod/data/node_documentation.json --indent 4 > tmp.json
+mv tmp.json Hesiod/data/node_documentation.json
 
 # directories to be formatted (recursive search)
 DIRS="Hesiod/include Hesiod/src Hesiod/app"

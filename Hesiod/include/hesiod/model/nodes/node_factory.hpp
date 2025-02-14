@@ -81,6 +81,7 @@ DECLARE_NODE(abs)
 DECLARE_NODE(abs_smooth)
 DECLARE_NODE(accumulation_curvature)
 DECLARE_NODE(blend)
+DECLARE_NODE(blend_poisson_bf)
 DECLARE_NODE(brush)
 DECLARE_NODE(bump)
 DECLARE_NODE(caldera)
@@ -138,7 +139,6 @@ DECLARE_NODE(hydraulic_schott);
 DECLARE_NODE(hydraulic_musgrave);
 DECLARE_NODE(hydraulic_particle);
 DECLARE_NODE(hydraulic_procedural);
-DECLARE_NODE(hydraulic_ridge);
 DECLARE_NODE(hydraulic_stream);
 DECLARE_NODE(hydraulic_stream_log);
 DECLARE_NODE(hydraulic_stream_upscale_amplification)
@@ -249,8 +249,11 @@ DECLARE_NODE(texture_quilting_shuffle)
 DECLARE_NODE(thermal)
 DECLARE_NODE(thermal_auto_bedrock)
 DECLARE_NODE(thermal_flatten)
+DECLARE_NODE(thermal_inflate)
 DECLARE_NODE(thermal_rib)
+DECLARE_NODE(thermal_ridge)
 DECLARE_NODE(thermal_schott)
+DECLARE_NODE(thermal_scree)
 DECLARE_NODE(translate)
 DECLARE_NODE(unsphericity)
 DECLARE_NODE(valley_width)

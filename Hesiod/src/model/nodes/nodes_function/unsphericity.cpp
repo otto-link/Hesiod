@@ -33,6 +33,16 @@ void setup_unsphericity_node(BaseNode *p_node)
                                    0.f,
                                    0.2f,
                                    "smoothing_radius");
+  p_node->add_attr<BoolAttribute>("GPU", HSD_DEFAULT_GPU_MODE, "GPU");
+
+  // attribute(s) order
+  p_node->set_attr_ordered_key({"radius",
+                                "inverse",
+                                "remap",
+                                "smoothing",
+                                "smoothing_radius",
+                                "_SEPARATOR_",
+                                "GPU"});
 }
 
 void compute_unsphericity_node(BaseNode *p_node)
@@ -50,10 +60,32 @@ void compute_unsphericity_node(BaseNode *p_node)
     // zero radius accepted
     int ir = std::max(0, (int)(GET("radius", FloatAttribute) * p_out->shape.x));
 
-    hmap::transform(*p_out,
-                    *p_in,
-                    [&ir](hmap::Array &out, hmap::Array &in)
-                    { out = hmap::unsphericity(in, ir); });
+    if (GET("GPU", BoolAttribute))
+    {
+      hmap::transform(
+          {p_out, p_in},
+          [&ir](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+          {
+            hmap::Array *pa_out = p_arrays[0];
+            hmap::Array *pa_in = p_arrays[1];
+
+            *pa_out = hmap::gpu::unsphericity(*pa_in, ir);
+          },
+          p_node->get_config_ref()->hmap_transform_mode_gpu);
+    }
+    else
+    {
+      hmap::transform(
+          {p_out, p_in},
+          [&ir](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+          {
+            hmap::Array *pa_out = p_arrays[0];
+            hmap::Array *pa_in = p_arrays[1];
+
+            *pa_out = hmap::unsphericity(*pa_in, ir);
+          },
+          p_node->get_config_ref()->hmap_transform_mode_cpu);
+    }
 
     p_out->smooth_overlap_buffers();
 

@@ -48,27 +48,22 @@ void compute_mixer_node(BaseNode *p_node)
   {
     hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
-    hmap::transform(*p_out,
-                    p_in1,
-                    p_in2,
-                    p_in3,
-                    p_in4,
-                    p_t,
-                    [](hmap::Array &out,
-                       hmap::Array *p_a_in1,
-                       hmap::Array *p_a_in2,
-                       hmap::Array *p_a_in3,
-                       hmap::Array *p_a_in4,
-                       hmap::Array *p_a_t)
-                    {
-                      std::vector<hmap::Array *> arrays = {};
+    hmap::transform(
+        {p_out, p_in1, p_in2, p_in3, p_in4, p_t},
+        [](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+        {
+          hmap::Array *pa_out = p_arrays.front();
+          hmap::Array *pa_t = p_arrays.back();
 
-                      for (auto &ptr : {p_a_in1, p_a_in2, p_a_in3, p_a_in4})
-                        if (ptr)
-                          arrays.push_back(ptr);
+          std::vector<hmap::Array *> arrays = {};
 
-                      out = hmap::mixer(*p_a_t, arrays);
-                    });
+          for (size_t k = 1; k < p_arrays.size() - 1; k++)
+            if (p_arrays[k])
+              arrays.push_back(p_arrays[k]);
+
+          *pa_out = hmap::mixer(*pa_t, arrays);
+        },
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

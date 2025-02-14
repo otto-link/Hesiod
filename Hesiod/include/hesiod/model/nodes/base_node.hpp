@@ -77,6 +77,8 @@ public:
 
   nlohmann::json get_documentation() const { return this->documentation; }
 
+  std::string get_documentation_html() const;
+
   std::string get_id() const override { return gnode::Node::get_id(); }
 
   void json_from(nlohmann::json const &json);

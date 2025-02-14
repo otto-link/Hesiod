@@ -28,12 +28,12 @@ void setup_stratify_multiscale_node(BaseNode *p_node)
   // attribute(s)
   p_node->add_attr<SeedAttribute>("seed");
 
-  std::vector<int>   n_strata = {2, 3, 6};
-  std::vector<float> strata_noise = {0.5f, 0.5f, 0.5f};
-  std::vector<float> gamma_list = {2.f, 0.5f, 1.f};
-  std::vector<float> gamma_noise = {0.2f, 0.2f, 0.2f};
+  std::vector<int>   n_strata = {4, 4};
+  std::vector<float> strata_noise = {0.5f, 0.5f};
+  std::vector<float> gamma_list = {0.6f, 0.5f};
+  std::vector<float> gamma_noise = {0.2f, 0.2f};
 
-  p_node->add_attr<VecIntAttribute>("n_strata", n_strata, 1, 16, "n_strata");
+  p_node->add_attr<VecIntAttribute>("n_strata", n_strata, 1, 32, "n_strata");
   p_node->add_attr<VecFloatAttribute>("strata_noise",
                                       strata_noise,
                                       0.f,

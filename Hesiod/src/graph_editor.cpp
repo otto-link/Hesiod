@@ -11,6 +11,8 @@
 #include <QPushButton>
 #include <QWidgetAction>
 
+#include <QTextBrowser>
+
 #include "highmap/geometry/cloud.hpp" // for link colors
 #include "highmap/heightmap.hpp"
 
@@ -503,10 +505,32 @@ void GraphEditor::on_node_right_clicked(const std::string &node_id, QPointF scen
 
       {
         QLabel *label = new QLabel(p_node->get_caption().c_str());
-        resize_font(label, 1);
+        resize_font(label, 2);
         QWidgetAction *widget_action = new QWidgetAction(menu);
         widget_action->setDefaultWidget(label);
         menu->addAction(widget_action);
+      }
+
+      // help button
+      {
+        QPushButton *button = new QPushButton("Help!");
+        button->setIcon(button->style()->standardIcon(QStyle::SP_DialogHelpButton));
+
+        QWidgetAction *widget_action = new QWidgetAction(menu);
+        widget_action->setDefaultWidget(button);
+        menu->addAction(widget_action);
+
+        connect(button,
+                &QPushButton::pressed,
+                [this, p_node]()
+                {
+                  DocumentationPopup *popup = new DocumentationPopup(
+                      p_node->get_label(),
+                      p_node->get_documentation_html());
+
+                  popup->setAttribute(Qt::WA_DeleteOnClose);
+                  popup->show();
+                });
       }
 
       // --- add attributes
@@ -543,6 +567,8 @@ void GraphEditor::on_node_right_clicked(const std::string &node_id, QPointF scen
                 std::string node_id = p_node->get_id();
                 this->update(node_id);
               });
+
+      // --- show menu
 
       menu->popup(QCursor::pos());
     }

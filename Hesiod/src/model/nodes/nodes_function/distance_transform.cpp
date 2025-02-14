@@ -37,9 +37,9 @@ void setup_distance_transform_node(BaseNode *p_node)
   // attribute(s) order
   p_node->set_attr_ordered_key({"transform_type",
                                 "reverse_input",
+                                "reverse_output",
                                 "threshold",
                                 "_SEPARATOR_",
-                                "reverse_output",
                                 "remap"});
 }
 

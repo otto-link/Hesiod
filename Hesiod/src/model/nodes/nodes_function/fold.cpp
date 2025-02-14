@@ -46,15 +46,21 @@ void compute_fold_node(BaseNode *p_node)
     float hmin = p_out->min();
     float hmax = p_out->max();
 
-    hmap::transform(*p_out,
-                    [p_node, &hmin, &hmax](hmap::Array &x)
-                    {
-                      hmap::fold(x,
-                                 hmin,
-                                 hmax,
-                                 GET("iterations", IntAttribute),
-                                 GET("k", FloatAttribute));
-                    });
+    hmap::transform(
+        {p_out},
+        [p_node, &hmin, &hmax](std::vector<hmap::Array *> p_arrays,
+                               hmap::Vec2<int>,
+                               hmap::Vec4<float>)
+        {
+          hmap::Array *pa_out = p_arrays[0];
+
+          hmap::fold(*pa_out,
+                     hmin,
+                     hmax,
+                     GET("iterations", IntAttribute),
+                     GET("k", FloatAttribute));
+        },
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
 
     p_out->remap(hmin, hmax);
   }

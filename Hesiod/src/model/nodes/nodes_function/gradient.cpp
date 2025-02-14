@@ -42,13 +42,27 @@ void compute_gradient_node(BaseNode *p_node)
     hmap::Heightmap *p_dx = p_node->get_value_ref<hmap::Heightmap>("dx");
     hmap::Heightmap *p_dy = p_node->get_value_ref<hmap::Heightmap>("dy");
 
-    hmap::transform(*p_dx,
-                    *p_in,
-                    [](hmap::Array &out, hmap::Array &in) { hmap::gradient_x(in, out); });
+    hmap::transform(
+        {p_dx, p_in},
+        [](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+        {
+          hmap::Array *pa_dx = p_arrays[0];
+          hmap::Array *pa_in = p_arrays[1];
 
-    hmap::transform(*p_dy,
-                    *p_in,
-                    [](hmap::Array &out, hmap::Array &in) { hmap::gradient_y(in, out); });
+          hmap::gradient_x(*pa_in, *pa_dx);
+        },
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
+
+    hmap::transform(
+        {p_dy, p_in},
+        [](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+        {
+          hmap::Array *pa_dy = p_arrays[0];
+          hmap::Array *pa_in = p_arrays[1];
+
+          hmap::gradient_y(*pa_in, *pa_dy);
+        },
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
 
     p_dx->smooth_overlap_buffers();
     p_dy->smooth_overlap_buffers();

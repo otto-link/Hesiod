@@ -1,17 +1,17 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include <format>
+#include <fstream>
 
-#include "hesiod/model/nodes/base_node.hpp"
+#include "highmap/geometry/cloud.hpp"
+#include "highmap/geometry/path.hpp"
+#include "highmap/heightmap.hpp"
+
 #include "hesiod/logger.hpp"
 #include "hesiod/model/enum_mapping.hpp"
+#include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/node_factory.hpp"
-
-#ifdef HSD_OS_LINUX
-#include "hesiod/model/nodes/runtime_doc.hpp"
-#endif
-
-#include <iostream>
 
 namespace hesiod
 {
@@ -24,9 +24,24 @@ BaseNode::BaseNode(const std::string &label, std::shared_ptr<ModelConfig> config
   this->category = get_node_inventory().at(label);
 
   // initialize documentation
-#ifdef HSD_OS_LINUX
-  this->documentation = nlohmann::json::parse(runtime_doc)[label];
-#endif
+  std::string fname = "data/node_documentation.json"; // TODO fix, hardcoded
+
+  nlohmann::json json;
+  std::ifstream  file(fname);
+
+  if (file.is_open())
+  {
+    file >> json;
+    file.close();
+    LOG->trace("JSON successfully loaded from {}", fname);
+  }
+  else
+    LOG->error("Could not open file {} to load JSON", fname);
+
+  if (json.contains(label))
+    this->documentation = json[label];
+  else
+    LOG->error("Could not find documentation entry for node {}", label);
 
   // connections
   this->connect(this,
@@ -36,6 +51,52 @@ BaseNode::BaseNode(const std::string &label, std::shared_ptr<ModelConfig> config
                   if (this->data_preview)
                     this->data_preview->update_image();
                 });
+}
+
+std::string BaseNode::get_documentation_html() const
+{
+  std::string html = "";
+
+  html += std::format("<h1>{} node</h1>", this->get_label());
+  html += std::format("<p><b>Categories: {}</b></p>",
+                      this->documentation["category"].get<std::string>());
+  html += std::format("<p>{}</p>", this->documentation["description"].get<std::string>());
+
+  // --- ports
+
+  html += "<h2>Ports</h2>";
+  html += "<table border='1' cellspacing='0' cellpadding='5'>";
+  html += "<tr><th>Name</th><th>I/O</th><th>Data type</th><th>Description</th></tr>";
+
+  for (auto &[k, v] : this->documentation["ports"].items())
+  {
+    html += std::format(
+        "<tr> <td><b>{}</b></td> <td>{}</td> <td>{}</td> <td>{}</td> </tr>",
+        v["caption"].get<std::string>(),
+        v["type"].get<std::string>(),
+        v["data_type"].get<std::string>(),
+        v["description"].get<std::string>());
+  }
+
+  html += "</table>";
+
+  // --- parameters
+
+  html += "<h2>Parameters</h2>";
+  html += "<table border='1' cellspacing='0' cellpadding='5'>";
+  html += "<tr><th>Name</th><th>Data type</th><th>Description</th></tr>";
+
+  for (auto &[k, v] : this->documentation["parameters"].items())
+  {
+    html += std::format("<tr> <td><b>{}</b></td> <td>{}</td> <td>{}</td> </tr>",
+                        v["label"].get<std::string>(),
+                        v["type"].get<std::string>(),
+                        v["description"].get<std::string>());
+  }
+
+  html += "</table>";
+
+  return html;
 }
 
 gngui::PortType BaseNode::get_port_type(int port_index) const
@@ -90,11 +151,13 @@ nlohmann::json BaseNode::node_parameters_to_json()
 
   json["label"] = this->get_label();
   json["category"] = this->category;
-  json["description"] = "TODO";
+
+  if (this->documentation.contains("description"))
+    json["description"] = this->documentation["description"];
+  else
+    json["description"] = "TODO";
 
   // --- ports
-
-  nlohmann::json json_ports = nlohmann::json::array();
 
   for (int k = 0; k < this->get_nports(); k++)
   {
@@ -108,14 +171,34 @@ nlohmann::json BaseNode::node_parameters_to_json()
     json_this_port["data_type"] = this->get_data_type(k);
     json_this_port["description"] = "TODO";
 
-    json_ports.push_back(json_this_port);
+    if (this->documentation.contains("ports"))
+    {
+      if (this->documentation["ports"].contains(this->get_port_caption(k)))
+        json_this_port["description"] = this->documentation["ports"]
+                                                           [this->get_port_caption(k)]
+                                                           ["description"];
+      else
+        LOG->warn("no documentation description for port {}", this->get_port_caption(k));
+    }
+
+    // overwrite data type
+    if (this->get_data_type(k) == typeid(hmap::Array).name())
+      json_this_port["data_type"] = "Array";
+    else if (this->get_data_type(k) == typeid(hmap::Cloud).name())
+      json_this_port["data_type"] = "Cloud";
+    else if (this->get_data_type(k) == typeid(hmap::Heightmap).name())
+      json_this_port["data_type"] = "Heightmap";
+    else if (this->get_data_type(k) == typeid(hmap::HeightmapRGBA).name())
+      json_this_port["data_type"] = "HeightmapRGBA";
+    else if (this->get_data_type(k) == typeid(hmap::Path).name())
+      json_this_port["data_type"] = "Path";
+    else if (this->get_data_type(k) == typeid(std::vector<hmap::Heightmap>).name())
+      json_this_port["data_type"] = "vector<Heightmap>";
+
+    json["ports"][this->get_port_caption(k)] = json_this_port;
   }
 
-  json["ports"] = json_ports;
-
   // --- attributes
-
-  nlohmann::json json_attrs = nlohmann::json::array();
 
   for (auto &[key, p_attr] : this->attr)
   {
@@ -126,10 +209,17 @@ nlohmann::json BaseNode::node_parameters_to_json()
     json_this_attr["type"] = attr::attribute_type_map.at(p_attr->get_type());
     json_this_attr["description"] = "TODO";
 
-    json_attrs.push_back(json_this_attr);
-  }
+    if (this->documentation.contains("parameters"))
+    {
+      if (this->documentation["parameters"].contains(key))
+        json_this_attr["description"] = this->documentation["parameters"][key]
+                                                           ["description"];
+      else
+        LOG->warn("no documentation description for attribute {}", key);
+    }
 
-  json["attributes"] = json_attrs;
+    json["parameters"][key] = json_this_attr;
+  }
 
   return json;
 }

@@ -50,25 +50,27 @@ void compute_bump_node(BaseNode *p_node)
   hmap::Heightmap *p_ctrl = p_node->get_value_ref<hmap::Heightmap>("control");
   hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
-  hmap::fill(*p_out,
-             p_dx,
-             p_dy,
-             p_ctrl,
-             [p_node](hmap::Vec2<int>   shape,
-                      hmap::Vec4<float> bbox,
-                      hmap::Array      *p_noise_x,
-                      hmap::Array      *p_noise_y,
-                      hmap::Array      *p_ctrl)
-             {
-               return hmap::bump(shape,
-                                 GET("gain", FloatAttribute),
-                                 p_ctrl,
-                                 p_noise_x,
-                                 p_noise_y,
-                                 nullptr,
-                                 GET("center", Vec2FloatAttribute),
-                                 bbox);
-             });
+  hmap::transform(
+      {p_out, p_dx, p_dy, p_ctrl},
+      [p_node](std::vector<hmap::Array *> p_arrays,
+               hmap::Vec2<int>            shape,
+               hmap::Vec4<float>          bbox)
+      {
+        hmap::Array *pa_out = p_arrays[0];
+        hmap::Array *pa_ctrl = p_arrays[1];
+        hmap::Array *pa_dx = p_arrays[2];
+        hmap::Array *pa_dy = p_arrays[3];
+
+        *pa_out = hmap::bump(shape,
+                             GET("gain", FloatAttribute),
+                             pa_ctrl,
+                             pa_dx,
+                             pa_dy,
+                             nullptr,
+                             GET("center", Vec2FloatAttribute),
+                             bbox);
+      },
+      p_node->get_config_ref()->hmap_transform_mode_cpu);
 
   // post-process
   post_process_heightmap(p_node,

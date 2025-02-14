@@ -1,7 +1,7 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-#include "highmap/primitives.hpp"
+#include "highmap/blending.hpp"
 
 #include "attributes.hpp"
 
@@ -14,67 +14,56 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_white_density_map_node(BaseNode *p_node)
+void setup_blend_poisson_bf_node(BaseNode *p_node)
 {
   LOG->trace("setup node {}", p_node->get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "density");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "envelope");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input 1");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input 2");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<SeedAttribute>("seed");
+  p_node->add_attr<IntAttribute>("iterations", 500, 1, 5000, "iterations");
   p_node->add_attr<BoolAttribute>("inverse", false, "inverse");
   p_node->add_attr<RangeAttribute>("remap_range", "remap_range");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"seed", "_SEPARATOR_", "inverse", "remap_range"});
+  p_node->set_attr_ordered_key({"iterations", "_SEPARATOR_", "inverse", "remap_range"});
 }
 
-void compute_white_density_map_node(BaseNode *p_node)
+void compute_blend_poisson_bf_node(BaseNode *p_node)
 {
   Q_EMIT p_node->compute_started(p_node->get_id());
 
   LOG->trace("computing node {}", p_node->get_label());
 
-  hmap::Heightmap *p_density = p_node->get_value_ref<hmap::Heightmap>("density");
+  hmap::Heightmap *p_in1 = p_node->get_value_ref<hmap::Heightmap>("input 1");
+  hmap::Heightmap *p_in2 = p_node->get_value_ref<hmap::Heightmap>("input 2");
 
-  if (p_density)
+  if (p_in1 && p_in2)
   {
-    hmap::Heightmap *p_env = p_node->get_value_ref<hmap::Heightmap>("envelope");
     hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
-
-    // base noise function
-    int seed = GET("seed", SeedAttribute);
+    hmap::Heightmap *p_mask = p_node->get_value_ref<hmap::Heightmap>("mask");
 
     hmap::transform(
-        {p_out, p_density},
-        [&seed](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+        {p_out, p_in1, p_in2, p_mask},
+        [p_node](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
         {
           hmap::Array *pa_out = p_arrays[0];
-          hmap::Array *pa_density = p_arrays[1];
+          hmap::Array *pa_in1 = p_arrays[1];
+          hmap::Array *pa_in2 = p_arrays[2];
+          hmap::Array *pa_mask = p_arrays[3];
 
-          *pa_out = hmap::white_density_map(*pa_density, (uint)seed++);
+          *pa_out = hmap::gpu::blend_poisson_bf(*pa_in1,
+                                                *pa_in2,
+                                                GET("iterations", IntAttribute),
+                                                pa_mask);
         },
-        p_node->get_config_ref()->hmap_transform_mode_cpu);
+        p_node->get_config_ref()->hmap_transform_mode_gpu);
 
-    // add envelope
-    if (p_env)
-    {
-      float hmin = p_out->min();
-      hmap::transform(
-          {p_out, p_env},
-          [&hmin](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
-          {
-            hmap::Array *pa_a = p_arrays[0];
-            hmap::Array *pa_b = p_arrays[1];
-
-            *pa_a -= hmin;
-            *pa_a *= *pa_b;
-          },
-          p_node->get_config_ref()->hmap_transform_mode_cpu);
-    }
+    p_out->smooth_overlap_buffers();
 
     // post-process
     post_process_heightmap(p_node,

@@ -67,23 +67,58 @@ void compute_expand_shrink_node(BaseNode *p_node)
     if (GET("GPU", BoolAttribute))
     {
       if (GET("shrink", BoolAttribute))
-        lambda = [&kernel_array](hmap::Array &x, hmap::Array *p_mask)
-        { hmap::gpu::shrink(x, kernel_array, p_mask); };
+        hmap::transform(
+            {p_out, p_mask},
+            [&kernel_array](std::vector<hmap::Array *> p_arrays,
+                            hmap::Vec2<int>,
+                            hmap::Vec4<float>)
+            {
+              hmap::Array *pa_out = p_arrays[0];
+              hmap::Array *pa_mask = p_arrays[1];
+              hmap::gpu::shrink(*pa_out, kernel_array, pa_mask);
+            },
+            p_node->get_config_ref()->hmap_transform_mode_gpu);
       else
-        lambda = [&kernel_array](hmap::Array &x, hmap::Array *p_mask)
-        { hmap::gpu::expand(x, kernel_array, p_mask); };
+        hmap::transform(
+            {p_out, p_mask},
+            [&kernel_array](std::vector<hmap::Array *> p_arrays,
+                            hmap::Vec2<int>,
+                            hmap::Vec4<float>)
+            {
+              hmap::Array *pa_out = p_arrays[0];
+              hmap::Array *pa_mask = p_arrays[1];
+              hmap::gpu::expand(*pa_out, kernel_array, pa_mask);
+            },
+            p_node->get_config_ref()->hmap_transform_mode_gpu);
     }
     else
     {
       if (GET("shrink", BoolAttribute))
-        lambda = [&kernel_array](hmap::Array &x, hmap::Array *p_mask)
-        { hmap::shrink(x, kernel_array, p_mask); };
+        hmap::transform(
+            {p_out, p_mask},
+            [&kernel_array](std::vector<hmap::Array *> p_arrays,
+                            hmap::Vec2<int>,
+                            hmap::Vec4<float>)
+            {
+              hmap::Array *pa_out = p_arrays[0];
+              hmap::Array *pa_mask = p_arrays[1];
+              hmap::shrink(*pa_out, kernel_array, pa_mask);
+            },
+            p_node->get_config_ref()->hmap_transform_mode_cpu);
       else
-        lambda = [&kernel_array](hmap::Array &x, hmap::Array *p_mask)
-        { hmap::expand(x, kernel_array, p_mask); };
+        hmap::transform(
+            {p_out, p_mask},
+            [&kernel_array](std::vector<hmap::Array *> p_arrays,
+                            hmap::Vec2<int>,
+                            hmap::Vec4<float>)
+            {
+              hmap::Array *pa_out = p_arrays[0];
+              hmap::Array *pa_mask = p_arrays[1];
+              hmap::expand(*pa_out, kernel_array, pa_mask);
+            },
+            p_node->get_config_ref()->hmap_transform_mode_cpu);
     }
 
-    hmap::transform(*p_out, p_mask, lambda);
     p_out->smooth_overlap_buffers();
   }
 

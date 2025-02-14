@@ -25,10 +25,10 @@ void setup_normal_displacement_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("radius", 0.f, 0.f, 0.2f, "radius");
+  p_node->add_attr<FloatAttribute>("radius", 0.05f, 0.f, 0.2f, "radius");
   p_node->add_attr<FloatAttribute>("amount", 5.f, 0.f, 20.f, "amount");
   p_node->add_attr<BoolAttribute>("reverse", false, "reverse");
-  p_node->add_attr<IntAttribute>("iterations", 1, 1, 10, "iterations");
+  p_node->add_attr<IntAttribute>("iterations", 3, 1, 10, "iterations");
   p_node->add_attr<BoolAttribute>("GPU", HSD_DEFAULT_GPU_MODE, "GPU");
 
   // attribute(s) order
@@ -58,29 +58,39 @@ void compute_normal_displacement_node(BaseNode *p_node)
     {
       if (GET("GPU", BoolAttribute))
       {
-        hmap::transform(*p_out,
-                        p_mask,
-                        [p_node, &ir](hmap::Array &x, hmap::Array *p_mask)
-                        {
-                          hmap::gpu::normal_displacement(x,
-                                                         p_mask,
-                                                         GET("amount", FloatAttribute),
-                                                         ir,
-                                                         GET("reverse", BoolAttribute));
-                        });
+        hmap::transform(
+            {p_out, p_mask},
+            [p_node,
+             &ir](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+            {
+              hmap::Array *pa_out = p_arrays[0];
+              hmap::Array *pa_mask = p_arrays[1];
+
+              hmap::gpu::normal_displacement(*pa_out,
+                                             pa_mask,
+                                             GET("amount", FloatAttribute),
+                                             ir,
+                                             GET("reverse", BoolAttribute));
+            },
+            p_node->get_config_ref()->hmap_transform_mode_gpu);
       }
       else
       {
-        hmap::transform(*p_out,
-                        p_mask,
-                        [p_node, &ir](hmap::Array &x, hmap::Array *p_mask)
-                        {
-                          hmap::normal_displacement(x,
-                                                    p_mask,
-                                                    GET("amount", FloatAttribute),
-                                                    ir,
-                                                    GET("reverse", BoolAttribute));
-                        });
+        hmap::transform(
+            {p_out, p_mask},
+            [p_node,
+             &ir](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+            {
+              hmap::Array *pa_out = p_arrays[0];
+              hmap::Array *pa_mask = p_arrays[1];
+
+              hmap::normal_displacement(*pa_out,
+                                        pa_mask,
+                                        GET("amount", FloatAttribute),
+                                        ir,
+                                        GET("reverse", BoolAttribute));
+            },
+            p_node->get_config_ref()->hmap_transform_mode_cpu);
       }
       p_out->smooth_overlap_buffers();
     }

@@ -1,6 +1,7 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include "highmap/geometry/grids.hpp"
 #include "highmap/selector.hpp"
 
 #include "attributes.hpp"
@@ -49,7 +50,7 @@ void compute_select_blob_log_node(BaseNode *p_node)
   {
     hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
-    int ir = std::max(1, (int)(GET("radius", FloatAttribute) * p_out->shape.x));
+    int ir = hmap::convert_length_to_pixel(GET("radius", FloatAttribute), p_out->shape.x);
 
     hmap::transform(*p_out,
                     *p_in,

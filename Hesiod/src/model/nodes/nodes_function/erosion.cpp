@@ -47,17 +47,29 @@ void compute_erosion_node(BaseNode *p_node)
 
     if (GET("GPU", BoolAttribute))
     {
-      hmap::transform(*p_out,
-                      *p_in,
-                      [&ir](hmap::Array &out, hmap::Array &in)
-                      { out = hmap::gpu::erosion(in, ir); });
+      hmap::transform(
+          {p_out, p_in},
+          [&ir](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+          {
+            hmap::Array *pa_out = p_arrays[0];
+            hmap::Array *pa_in = p_arrays[1];
+
+            *pa_out = hmap::gpu::erosion(*pa_in, ir);
+          },
+          p_node->get_config_ref()->hmap_transform_mode_gpu);
     }
     else
     {
-      hmap::transform(*p_out,
-                      *p_in,
-                      [&ir](hmap::Array &out, hmap::Array &in)
-                      { out = hmap::erosion(in, ir); });
+      hmap::transform(
+          {p_out, p_in},
+          [&ir](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+          {
+            hmap::Array *pa_out = p_arrays[0];
+            hmap::Array *pa_in = p_arrays[1];
+
+            *pa_out = hmap::erosion(*pa_in, ir);
+          },
+          p_node->get_config_ref()->hmap_transform_mode_cpu);
     }
 
     p_out->smooth_overlap_buffers();

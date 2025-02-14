@@ -108,6 +108,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"AbsSmooth", "Math/Base"},
       {"AccumulationCurvature", "Features/Landform"},
       {"Blend", "Operator/Blend"},
+      {"BlendPoissonBf", "Operator/Blend"},
       {"Brush", "Primitive/Authoring"},
       {"Bump", "Primitive/Function"},
       {"Caldera", "Primitive/Geological"},
@@ -164,7 +165,6 @@ std::map<std::string, std::string> get_node_inventory()
       {"HydraulicMusgrave", "WIP"}, // "Erosion/Hydraulic"
       {"HydraulicParticle", "Erosion/Hydraulic"},
       {"HydraulicProcedural", "WIP"}, // "Erosion/Hydraulic"
-      {"HydraulicRidge", "WIP"},      // "Erosion/Hydraulic"
       {"HydraulicSchott", "Erosion/Hydraulic"},
       {"HydraulicStream", "WIP"}, // "Erosion/Hydraulic"
       {"HydraulicStreamLog", "Erosion/Hydraulic"},
@@ -276,8 +276,11 @@ std::map<std::string, std::string> get_node_inventory()
       {"Thermal", "Erosion/Thermal"},
       {"ThermalAutoBedrock", "Erosion/Thermal"},
       {"ThermalFlatten", "WIP"}, // "Erosion/Thermal"
-      {"ThermalRib", "WIP"},     // "Erosion/Thermal"
-      {"ThermalSchott", "WIP"},  // "Erosion/Thermal"
+      {"ThermalInflate", "Erosion/Thermal"},
+      {"ThermalRib", "WIP"}, // "Erosion/Thermal"
+      {"ThermalRidge", "Erosion/Thermal"},
+      {"ThermalSchott", "WIP"}, // "Erosion/Thermal"
+      {"ThermalScree", "Erosion/Thermal"},
       {"Translate", "Operator/Transform"},
       {"Unsphericity", "Features/Landform"},
       {"ValleyWidth", "Features/Landform"},
@@ -310,6 +313,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(AbsSmooth, abs_smooth);
     SETUP_NODE(AccumulationCurvature, accumulation_curvature);
     SETUP_NODE(Blend, blend);
+    SETUP_NODE(BlendPoissonBf, blend_poisson_bf);
     SETUP_NODE(Brush, brush);
     SETUP_NODE(Bump, bump);
     SETUP_NODE(Caldera, caldera);
@@ -366,7 +370,6 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(HydraulicMusgrave, hydraulic_musgrave);
     SETUP_NODE(HydraulicParticle, hydraulic_particle);
     SETUP_NODE(HydraulicProcedural, hydraulic_procedural);
-    SETUP_NODE(HydraulicRidge, hydraulic_ridge);
     SETUP_NODE(HydraulicSchott, hydraulic_schott);
     SETUP_NODE(HydraulicStream, hydraulic_stream);
     SETUP_NODE(HydraulicStreamLog, hydraulic_stream_log);
@@ -480,8 +483,11 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(Thermal, thermal);
     SETUP_NODE(ThermalAutoBedrock, thermal_auto_bedrock);
     SETUP_NODE(ThermalFlatten, thermal_flatten);
+    SETUP_NODE(ThermalInflate, thermal_inflate);
     SETUP_NODE(ThermalRib, thermal_rib);
+    SETUP_NODE(ThermalRidge, thermal_ridge);
     SETUP_NODE(ThermalSchott, thermal_schott);
+    SETUP_NODE(ThermalScree, thermal_scree);
     SETUP_NODE(Unsphericity, unsphericity);
     SETUP_NODE(ValleyWidth, valley_width);
     SETUP_NODE(Voronoise, voronoise);

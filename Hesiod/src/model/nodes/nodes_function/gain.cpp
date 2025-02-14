@@ -48,10 +48,16 @@ void compute_gain_node(BaseNode *p_node)
     float hmax = p_out->max();
     p_out->remap(0.f, 1.f, hmin, hmax);
 
-    hmap::transform(*p_out,
-                    p_mask,
-                    [p_node](hmap::Array &x, hmap::Array *p_mask)
-                    { hmap::gain(x, GET("gain", FloatAttribute), p_mask); });
+    hmap::transform(
+        {p_out, p_mask},
+        [p_node](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+        {
+          hmap::Array *pa_out = p_arrays[0];
+          hmap::Array *pa_mask = p_arrays[1];
+
+          hmap::gain(*pa_out, GET("gain", FloatAttribute), pa_mask);
+        },
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
 
     p_out->remap(hmin, hmax, 0.f, 1.f);
   }

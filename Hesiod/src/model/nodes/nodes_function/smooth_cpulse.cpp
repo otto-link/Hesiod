@@ -52,17 +52,29 @@ void compute_smooth_cpulse_node(BaseNode *p_node)
 
     if (GET("GPU", BoolAttribute))
     {
-      hmap::transform(*p_out,
-                      p_mask,
-                      [&ir](hmap::Array &x, hmap::Array *p_mask)
-                      { hmap::gpu::smooth_cpulse(x, ir, p_mask); });
+      hmap::transform(
+          {p_out, p_mask},
+          [&ir](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+          {
+            hmap::Array *pa_out = p_arrays[0];
+            hmap::Array *pa_mask = p_arrays[1];
+
+            hmap::gpu::smooth_cpulse(*pa_out, ir, pa_mask);
+          },
+          p_node->get_config_ref()->hmap_transform_mode_gpu);
     }
     else
     {
-      hmap::transform(*p_out,
-                      p_mask,
-                      [&ir](hmap::Array &x, hmap::Array *p_mask)
-                      { hmap::smooth_cpulse(x, ir, p_mask); });
+      hmap::transform(
+          {p_out, p_mask},
+          [&ir](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+          {
+            hmap::Array *pa_out = p_arrays[0];
+            hmap::Array *pa_mask = p_arrays[1];
+
+            hmap::smooth_cpulse(*pa_out, ir, pa_mask);
+          },
+          p_node->get_config_ref()->hmap_transform_mode_cpu);
     }
 
     p_out->smooth_overlap_buffers();
