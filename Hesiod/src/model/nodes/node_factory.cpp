@@ -165,8 +165,8 @@ std::map<std::string, std::string> get_node_inventory()
       {"HydraulicMusgrave", "WIP"}, // "Erosion/Hydraulic"
       {"HydraulicParticle", "Erosion/Hydraulic"},
       {"HydraulicProcedural", "WIP"}, // "Erosion/Hydraulic"
-      {"HydraulicSchott", "Erosion/Hydraulic"},
-      {"HydraulicStream", "WIP"}, // "Erosion/Hydraulic"
+      {"HydraulicSchott", "WIP"},     // "Erosion/Hydraulic"
+      {"HydraulicStream", "WIP"},     // "Erosion/Hydraulic"
       {"HydraulicStreamLog", "Erosion/Hydraulic"},
       {"HydraulicStreamUpscaleAmplification", "WIP"}, // "Erosion/Hydraulic"
       {"HydraulicVpipes", "WIP"},                     // "Erosion/Hydraulic"
