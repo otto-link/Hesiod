@@ -40,16 +40,18 @@ void compute_scan_mask_node(BaseNode *p_node)
   {
     hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
-    // copy the input heightmap
-    *p_out = *p_in;
+    hmap::transform(
+        {p_out, p_in},
+        [p_node](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+        {
+          hmap::Array *pa_out = p_arrays[0];
+          hmap::Array *pa_in = p_arrays[1];
 
-    hmap::transform(*p_out,
-                    [p_node](hmap::Array &x)
-                    {
-                      x = hmap::scan_mask(x,
-                                          GET("brightness", FloatAttribute),
-                                          GET("contrast", FloatAttribute));
-                    });
+          *pa_out = hmap::scan_mask(*pa_in,
+                                    GET("brightness", FloatAttribute),
+                                    GET("contrast", FloatAttribute));
+        },
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
 
     if (GET("remap", BoolAttribute))
       p_out->remap();

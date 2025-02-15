@@ -39,22 +39,28 @@ void compute_saturate_node(BaseNode *p_node)
   {
     hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
-    // copy the input heightmap
-    *p_out = *p_in;
+    float hmin = p_in->min();
+    float hmax = p_in->max();
 
-    float hmin = p_out->min();
-    float hmax = p_out->max();
+    hmap::transform(
+        {p_out, p_in},
+        [p_node, &hmin, &hmax](std::vector<hmap::Array *> p_arrays,
+                               hmap::Vec2<int>,
+                               hmap::Vec4<float>)
+        {
+          hmap::Array *pa_out = p_arrays[0];
+          hmap::Array *pa_in = p_arrays[1];
 
-    hmap::transform(*p_out,
-                    [p_node, &hmin, &hmax](hmap::Array &x)
-                    {
-                      hmap::saturate(x,
-                                     GET("range", RangeAttribute)[0],
-                                     GET("range", RangeAttribute)[1],
-                                     hmin,
-                                     hmax,
-                                     GET("k_smoothing", FloatAttribute));
-                    });
+          *pa_out = *pa_in;
+
+          hmap::saturate(*pa_out,
+                         GET("range", RangeAttribute)[0],
+                         GET("range", RangeAttribute)[1],
+                         hmin,
+                         hmax,
+                         GET("k_smoothing", FloatAttribute));
+        },
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());
