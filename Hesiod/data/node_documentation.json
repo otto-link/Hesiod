@@ -6606,7 +6606,7 @@
     },
     "Ruggedness": {
         "category": "Features",
-        "description": "TODO",
+        "description": "Measures the terrain roughness by computing the square root of the sum of squared elevation differences within a specified radius. Indicates how rough or smooth the terrain is by analyzing how much the elevation changes between neighboring areas. Higher values mean a more rugged, uneven surface, while lower values indicate a flatter, smoother landscape.",
         "label": "Ruggedness",
         "parameters": {
             "GPU": {
@@ -6622,7 +6622,7 @@
                 "type": "Bool"
             },
             "radius": {
-                "description": "TODO",
+                "description": "Defines the neighborhood radius used for computing ruggedness. Larger values consider a wider area, capturing broader terrain variations.",
                 "key": "radius",
                 "label": "radius",
                 "type": "Float"
@@ -6644,13 +6644,13 @@
             "input": {
                 "caption": "input",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Heightmap input representing terrain elevations, used to calculate ruggedness.",
                 "type": "input"
             },
             "output": {
                 "caption": "output",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Resulting heightmap where each pixel represents the calculated ruggedness value.",
                 "type": "output"
             }
         }

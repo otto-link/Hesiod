@@ -50,9 +50,16 @@ void compute_rescale_node(BaseNode *p_node)
     if (GET("centered", BoolAttribute))
       vref = p_out->mean();
 
-    hmap::transform(*p_out,
-                    [p_node, &vref](hmap::Array &x)
-                    { hmap::rescale(x, GET("scaling", FloatAttribute), vref); });
+    hmap::transform(
+        {p_out},
+        [p_node,
+         vref](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+        {
+          hmap::Array *pa_out = p_arrays[0];
+
+          hmap::rescale(*pa_out, GET("scaling", FloatAttribute), vref);
+        },
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());
