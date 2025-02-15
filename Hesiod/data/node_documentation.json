@@ -2410,7 +2410,7 @@
     },
     "GradientAngle": {
         "category": "Math/Gradient",
-        "description": "The gradient angle of a heightmap refers to the direction in which the elevation changes most rapidly at each point on the map. It represents the slope or inclination of the terrain surface relative to a horizontal plane",
+        "description": "The gradient angle of a heightmap refers to the direction in which the slope points toward. It represents the orientation of the terrain surface relative to a horizontal plane",
         "label": "GradientAngle",
         "parameters": {
             "remap_range": {
