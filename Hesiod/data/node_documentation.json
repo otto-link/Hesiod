@@ -236,6 +236,45 @@
             }
         }
     },
+    "Border": {
+        "category": "Operator/Morphology",
+        "description": "Highlights terrain boundaries by subtracting the eroded version of a DEM from the original. Useful for detecting ridges, valleys, and sharp elevation transitions in terrain analysis.",
+        "label": "Border",
+        "parameters": {
+            "GPU": {
+                "description": "Toogle GPU acceleration on or off.",
+                "key": "GPU",
+                "label": "GPU",
+                "type": "Bool"
+            },
+            "radius": {
+                "description": "Filter radius with respect to the domain size.",
+                "key": "radius",
+                "label": "radius",
+                "type": "Float"
+            },
+            "remap": {
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
+                "key": "remap",
+                "label": "remap",
+                "type": "Value range"
+            }
+        },
+        "ports": {
+            "input": {
+                "caption": "input",
+                "data_type": "Heightmap",
+                "description": "Heightmap input on which the morphological border operation is applied.",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "Heightmap",
+                "description": "Resulting heightmap after computing the morphological border.",
+                "type": "output"
+            }
+        }
+    },
     "Brush": {
         "category": "Primitive/Authoring",
         "description": "A manual brush tool for directly painting heightmaps, allowing interactive terrain editing.",
@@ -2977,7 +3016,7 @@
         }
     },
     "HydraulicSchott": {
-        "category": "Erosion/Hydraulic",
+        "category": "WIP",
         "description": "TODO",
         "label": "HydraulicSchott",
         "parameters": {
