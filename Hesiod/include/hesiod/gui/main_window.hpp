@@ -35,6 +35,8 @@ public:
     return instance;
   }
 
+  static bool exists() { return instance() != nullptr; }
+
   // Method to change the window title
   void set_title(const std::string &new_title)
   {

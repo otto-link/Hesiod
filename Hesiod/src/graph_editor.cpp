@@ -236,7 +236,7 @@ void GraphEditor::load_from_file(const std::filesystem::path &load_fname,
     file.close();
     LOG->trace("JSON successfully loaded from {}", load_fname.string());
 
-    this->set_fname(load_fname);
+    // this->set_fname(load_fname);
 
     this->clear();
     if (this->viewer)
@@ -676,7 +676,9 @@ void GraphEditor::set_fname(const std::filesystem::path &new_fname)
   if (!this->fname.empty())
     title += " - " + this->fname.string();
 
-  MainWindow::instance()->set_title(title.c_str());
+  // check that the main window exist in this case to avoid an endless loop...
+  if (MainWindow::exists())
+    MainWindow::instance()->set_title(title.c_str());
 }
 
 void GraphEditor::set_fname(const std::string &new_fname)
