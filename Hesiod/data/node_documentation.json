@@ -191,19 +191,19 @@
         "label": "BlendPoissonBf",
         "parameters": {
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
             },
             "iterations": {
-                "description": "TODO",
+                "description": "Number of solver iterations for the Poisson blending process.",
                 "key": "iterations",
                 "label": "iterations",
                 "type": "Integer"
             },
             "remap_range": {
-                "description": "TODO",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap_range",
                 "label": "remap_range",
                 "type": "Value range"
@@ -213,25 +213,25 @@
             "input 1": {
                 "caption": "input 1",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Primary heightmap input.",
                 "type": "input"
             },
             "input 2": {
                 "caption": "input 2",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Secondary heightmap input for blending.",
                 "type": "input"
             },
             "mask": {
                 "caption": "mask",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Mask heightmap controlling blending regions.",
                 "type": "input"
             },
             "output": {
                 "caption": "output",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Resulting heightmap after Poisson blending.",
                 "type": "output"
             }
         }
