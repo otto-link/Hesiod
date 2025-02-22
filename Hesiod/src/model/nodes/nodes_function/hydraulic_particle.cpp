@@ -38,6 +38,7 @@ void setup_hydraulic_particle_node(BaseNode *p_node)
   p_node->add_attr<FloatAttribute>("c_capacity", 10.f, 0.1f, 100.f, "c_capacity");
   p_node->add_attr<FloatAttribute>("c_erosion", 0.05f, 0.f, 0.1f, "c_erosion");
   p_node->add_attr<FloatAttribute>("c_deposition", 0.005f, 0.f, 0.05f, "c_deposition");
+  p_node->add_attr<FloatAttribute>("c_inertia", 0.3f, 0.01f, 2.f, "c_inertia");
   p_node->add_attr<FloatAttribute>("drag_rate", 0.001f, 0.f, 0.02f, "drag_rate");
   p_node->add_attr<FloatAttribute>("evap_rate", 0.001f, 0.f, 0.05f, "evap_rate");
   p_node->add_attr<BoolAttribute>("post_filtering", true, "post_filtering");
@@ -54,6 +55,7 @@ void setup_hydraulic_particle_node(BaseNode *p_node)
                                 "c_capacity",
                                 "c_erosion",
                                 "c_deposition",
+                                "c_inertia",
                                 "drag_rate",
                                 "evap_rate",
                                 "post_filtering",
@@ -127,6 +129,7 @@ void compute_hydraulic_particle_node(BaseNode *p_node)
                                             GET("c_capacity", FloatAttribute),
                                             GET("c_erosion", FloatAttribute),
                                             GET("c_deposition", FloatAttribute),
+                                            GET("c_inertia", FloatAttribute),
                                             GET("drag_rate", FloatAttribute),
                                             GET("evap_rate", FloatAttribute),
                                             GET("post_filtering", BoolAttribute));
@@ -205,6 +208,7 @@ void compute_hydraulic_particle_node(BaseNode *p_node)
                                               GET("c_capacity", FloatAttribute),
                                               GET("c_erosion", FloatAttribute),
                                               GET("c_deposition", FloatAttribute),
+                                              GET("c_inertia", FloatAttribute),
                                               GET("drag_rate", FloatAttribute),
                                               GET("evap_rate", FloatAttribute),
                                               GET("post_filtering", BoolAttribute));
@@ -249,6 +253,7 @@ void compute_hydraulic_particle_node(BaseNode *p_node)
                                        GET("c_capacity", FloatAttribute),
                                        GET("c_erosion", FloatAttribute),
                                        GET("c_deposition", FloatAttribute),
+                                       GET("c_inertia", FloatAttribute),
                                        GET("drag_rate", FloatAttribute),
                                        GET("evap_rate", FloatAttribute),
                                        GET("post_filtering", BoolAttribute));
@@ -327,6 +332,7 @@ void compute_hydraulic_particle_node(BaseNode *p_node)
                                          GET("c_capacity", FloatAttribute),
                                          GET("c_erosion", FloatAttribute),
                                          GET("c_deposition", FloatAttribute),
+                                         GET("c_inertia", FloatAttribute),
                                          GET("drag_rate", FloatAttribute),
                                          GET("evap_rate", FloatAttribute),
                                          GET("post_filtering", BoolAttribute));
