@@ -7,6 +7,12 @@
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/node_factory.hpp"
 
+#define SETUP_NODE(NodeType, node_type)                                                  \
+  case str2int(#NodeType):                                                               \
+    setup_##node_type##_node(sptr.get());                                                \
+    sptr->set_compute_fct(&compute_##node_type##_node);                                  \
+    break;
+
 namespace hesiod
 {
 

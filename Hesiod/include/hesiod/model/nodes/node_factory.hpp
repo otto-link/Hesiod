@@ -20,12 +20,6 @@
 #include "hesiod/model/model_config.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 
-#define SETUP_NODE(NodeType, node_type)                                                  \
-  case str2int(#NodeType):                                                               \
-    setup_##node_type##_node(sptr.get());                                                \
-    sptr->set_compute_fct(&compute_##node_type##_node);                                  \
-    break;
-
 #define DECLARE_NODE(node_type)                                                          \
   void setup_##node_type##_node(BaseNode *p_node);                                       \
   void compute_##node_type##_node(BaseNode *p_node);
