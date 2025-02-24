@@ -29,7 +29,7 @@ void setup_stratify_node(BaseNode *p_node)
   p_node->add_attr<SeedAttribute>("seed");
   p_node->add_attr<IntAttribute>("n_strata", 3, 1, 16, "n_strata");
   p_node->add_attr<FloatAttribute>("strata_noise", 0.f, 0.f, 1.f, "strata_noise");
-  p_node->add_attr<FloatAttribute>("gamma", 0.7f, 0.01f, 5.f, "gamma");
+  p_node->add_attr<FloatAttribute>("gamma", 0.7f, 0.1f, 2.f, "gamma");
   p_node->add_attr<FloatAttribute>("gamma_noise", 0.f, 0.f, 1.f, "gamma_noise");
 
   // attribute(s) order
@@ -74,13 +74,19 @@ void compute_stratify_node(BaseNode *p_node)
                                   GET("n_strata", IntAttribute),
                                   GET("seed", SeedAttribute));
 
-    hmap::transform(*p_out,
-                    p_mask,
-                    p_noise,
-                    [p_node, &hs, &gs](hmap::Array &h_out,
-                                       hmap::Array *p_mask_array,
-                                       hmap::Array *p_noise_array)
-                    { hmap::stratify(h_out, p_mask_array, hs, gs, p_noise_array); });
+    hmap::transform(
+        {p_out, p_mask, p_noise},
+        [p_node, &hs, &gs](std::vector<hmap::Array *> p_arrays,
+                           hmap::Vec2<int>,
+                           hmap::Vec4<float>)
+        {
+          hmap::Array *pa_out = p_arrays[0];
+          hmap::Array *pa_mask = p_arrays[1];
+          hmap::Array *pa_noise = p_arrays[2];
+
+          hmap::stratify(*pa_out, pa_mask, hs, gs, pa_noise);
+        },
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
 
     p_out->smooth_overlap_buffers();
   }
