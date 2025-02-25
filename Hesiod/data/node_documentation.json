@@ -670,13 +670,13 @@
             "input": {
                 "caption": "input",
                 "data_type": "Cloud",
-                "description": "TODO",
+                "description": "Input cloud.",
                 "type": "input"
             },
             "output": {
                 "caption": "output",
                 "data_type": "Cloud",
-                "description": "TODO",
+                "description": "Output cloud with new value range.",
                 "type": "output"
             }
         }
@@ -709,13 +709,13 @@
             "dx": {
                 "caption": "dx",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Displacement with respect to the domain size (x-direction).",
                 "type": "input"
             },
             "dy": {
                 "caption": "dy",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Displacement with respect to the domain size (y-direction).",
                 "type": "input"
             },
             "sdf": {
@@ -802,7 +802,7 @@
                 "type": "Bool"
             },
             "colormap": {
-                "description": "Color mapping selection. Available values: adrceist, aneprosi, angghore, anilyftp, anthatly, ascaired, aselllfa, aveflili, blesiblh, blywixps, boustous, byapsahi, bychpmem, cecelldf, ceitwope, cesintho, coffrrea, ctthaton, dffygutu, dfvieryo, drctheet, drfftiee, dwinthed, eafbissf, eporepop, ewntherb, feredwnt, fffadeng, ffwatsan, fleoreha, fromsesh, ftapewon, gsercrts, haviarof, hendesth, imongsir, indthsad, inosulul, intoshee, iresetyl, isungror, itteloud, ivericed, lereitth, majucent, mburmats, mearesit, meppremb, mofhewon, nalymeve, noasbian, ofasnfoi, ofoffrmp, oleonowh, onaaloni, ontomayw, outtsthe, owwheplu, pechrede, pellaine, piventon, plfgsthi, rbonblnc, rredtthe, sarermat, seclytme, sfreante, sheshesa, sinabuse, sindwirt, snotheca, ssemeool, suttlseb, taldidov, teasitis, teieebit, tharetwe, thengici, therinon, thesihas, thisathe, thoeftsw, tiamatsp, tinusprr, tiomithe, tnymeewh, tonndind, trererat, ttyaveft, tyfotinm, ucerecen, ucererds, upeesith, usoerlea, veranghh, verdeisu, wadsuthe, wbegweic, whetitat, whhorefr, wminamin, wsatavin, yierahon.",
+                "description": "Color mapping selection.",
                 "key": "colormap",
                 "label": "colormap",
                 "type": "Enumeration"
