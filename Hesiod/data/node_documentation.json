@@ -2798,6 +2798,12 @@
                 "label": "c_erosion",
                 "type": "Float"
             },
+            "c_inertia": {
+                "description": "TODO",
+                "key": "c_inertia",
+                "label": "c_inertia",
+                "type": "Float"
+            },
             "deposition_only": {
                 "description": "TODO",
                 "key": "deposition_only",
@@ -3909,6 +3915,57 @@
                 "caption": "output",
                 "data_type": "Heightmap",
                 "description": "Binary heightmap.",
+                "type": "output"
+            }
+        }
+    },
+    "MeanShift": {
+        "category": "Filter/Smoothing",
+        "description": "TODO",
+        "label": "MeanShift",
+        "parameters": {
+            "GPU": {
+                "description": "TODO",
+                "key": "GPU",
+                "label": "GPU",
+                "type": "Bool"
+            },
+            "iterations": {
+                "description": "TODO",
+                "key": "iterations",
+                "label": "iterations",
+                "type": "Integer"
+            },
+            "radius": {
+                "description": "TODO",
+                "key": "radius",
+                "label": "radius",
+                "type": "Float"
+            },
+            "talus_global": {
+                "description": "TODO",
+                "key": "talus_global",
+                "label": "talus_global",
+                "type": "Float"
+            },
+            "talus_weighted": {
+                "description": "TODO",
+                "key": "talus_weighted",
+                "label": "talus_weighted",
+                "type": "Bool"
+            }
+        },
+        "ports": {
+            "input": {
+                "caption": "input",
+                "data_type": "Heightmap",
+                "description": "TODO",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "Heightmap",
+                "description": "TODO",
                 "type": "output"
             }
         }
@@ -8833,6 +8890,12 @@
                 "key": "iterations",
                 "label": "iterations",
                 "type": "Integer"
+            },
+            "post_filter_radius": {
+                "description": "TODO",
+                "key": "post_filter_radius",
+                "label": "post_filter_radius",
+                "type": "Float"
             },
             "scale_talus_with_elevation": {
                 "description": "Scales the talus amplitude based on heightmap elevation, reducing it at lower elevations and maintaining the nominal value at higher elevations.",
