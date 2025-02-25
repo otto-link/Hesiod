@@ -2562,13 +2562,13 @@
             "heightmap": {
                 "caption": "heightmap",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Input heightmap.",
                 "type": "input"
             },
             "kernel": {
                 "caption": "kernel",
                 "data_type": "Array",
-                "description": "Kernel.",
+                "description": "Output kernel.",
                 "type": "output"
             }
         }
@@ -3432,7 +3432,7 @@
         "label": "ImportHeightmap",
         "parameters": {
             "fname": {
-                "description": "TODO",
+                "description": "Filename of the image file to import.",
                 "key": "fname",
                 "label": "fname",
                 "type": "Filename"
@@ -3448,7 +3448,7 @@
             "output": {
                 "caption": "output",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Output heightmap.",
                 "type": "output"
             }
         }
@@ -3495,7 +3495,7 @@
     },
     "KernelGabor": {
         "category": "Primitive/Kernel",
-        "description": ".",
+        "description": "KernelGabor generates a Gabor kernel.",
         "label": "KernelGabor",
         "parameters": {
             "angle": {
@@ -3527,14 +3527,14 @@
             "kernel": {
                 "caption": "kernel",
                 "data_type": "Array",
-                "description": "KernelGabor generates a Gabor kernel.",
+                "description": "Output kernel.",
                 "type": "output"
             }
         }
     },
     "KernelPrim": {
         "category": "Primitive/Kernel",
-        "description": ".",
+        "description": "KernelPrim generates a 'kernel', refering to a small matrix used to apply specific effects based on convolution for instance.",
         "label": "KernelPrim",
         "parameters": {
             "kernel": {
@@ -3560,7 +3560,7 @@
             "kernel": {
                 "caption": "kernel",
                 "data_type": "Array",
-                "description": "KernelPrim generates a 'kernel', refering to a small matrix used to apply specific effects based on convolution for instance.",
+                "description": "Output kernel.",
                 "type": "output"
             }
         }
