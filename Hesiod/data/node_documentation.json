@@ -5686,7 +5686,7 @@
         }
     },
     "PathToCloud": {
-        "category": "Converter",
+        "category": "Geometry/Path",
         "description": "PathToCloud convert a Path to a set of points (Cloud).",
         "label": "PathToCloud",
         "ports": {
@@ -5705,7 +5705,7 @@
         }
     },
     "PathToHeightmap": {
-        "category": "Converter",
+        "category": "Geometry/Path",
         "description": "PathToHeightmap Project path points to an heightmap.",
         "label": "PathToHeightmap",
         "parameters": {
