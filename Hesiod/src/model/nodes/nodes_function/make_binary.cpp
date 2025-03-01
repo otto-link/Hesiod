@@ -23,7 +23,7 @@ void setup_make_binary_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("threshold", 0.f, -1.f, 1.f, "threshold");
+  p_node->add_attr<FloatAttribute>("threshold", 0.5f, -1.f, 1.f, "threshold");
 }
 
 void compute_make_binary_node(BaseNode *p_node)
@@ -38,12 +38,18 @@ void compute_make_binary_node(BaseNode *p_node)
   {
     hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
-    // copy the input heightmap
-    *p_out = *p_in;
+    hmap::transform(
+        {p_out, p_in},
+        [p_node](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+        {
+          hmap::Array *pa_out = p_arrays[0];
+          hmap::Array *pa_in = p_arrays[1];
 
-    hmap::transform(*p_out,
-                    [p_node](hmap::Array &x)
-                    { hmap::make_binary(x, GET("threshold", FloatAttribute)); });
+          *pa_out = *pa_in;
+
+          hmap::make_binary(*pa_out, GET("threshold", FloatAttribute));
+        },
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

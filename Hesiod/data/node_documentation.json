@@ -3867,11 +3867,11 @@
     },
     "MakePeriodic": {
         "category": "Operator/Tiling",
-        "description": "MakePeriodic makes the input heightmap tileable by building a smooth lineat transition at the boundaries.",
+        "description": "Makes the input heightmap tileable by creating a smooth linear transition at the boundaries. This is useful for generating seamless textures or terrains that can be repeated without visible seams.",
         "label": "MakePeriodic",
         "parameters": {
             "overlap": {
-                "description": "Overlap ratio at the boundaries.",
+                "description": "The ratio of overlap at the boundaries. A higher value creates a smoother transition but may reduce the usable area of the heightmap.",
                 "key": "overlap",
                 "label": "overlap",
                 "type": "Float"
@@ -3881,24 +3881,24 @@
             "input": {
                 "caption": "input",
                 "data_type": "Heightmap",
-                "description": "Input heightmap.",
+                "description": "The input heightmap to be made tileable.",
                 "type": "input"
             },
             "output": {
                 "caption": "output",
                 "data_type": "Heightmap",
-                "description": "Binary heightmap.",
+                "description": "The output heightmap with smooth transitions at the boundaries, making it tileable.",
                 "type": "output"
             }
         }
     },
     "MakePeriodicStitching": {
         "category": "Operator/Tiling",
-        "description": "MakePeriodicStitching makes the input heightmap tileable by seamlessly stitching together the domain boundaries.",
+        "description": "Makes the input heightmap tileable by creating a smooth transition at the boundaries using stitching. This is useful for generating seamless textures or terrains that can be repeated without visible seams.",
         "label": "MakePeriodicStitching",
         "parameters": {
             "overlap": {
-                "description": "Overlap ratio at the boundaries.",
+                "description": "The ratio of overlap at the boundaries. A higher value creates a smoother transition but may reduce the usable area of the heightmap.",
                 "key": "overlap",
                 "label": "overlap",
                 "type": "Float"
@@ -3908,13 +3908,13 @@
             "input": {
                 "caption": "input",
                 "data_type": "Heightmap",
-                "description": "Input heightmap.",
+                "description": "The input heightmap to be made tileable.",
                 "type": "input"
             },
             "output": {
                 "caption": "output",
                 "data_type": "Heightmap",
-                "description": "Binary heightmap.",
+                "description": "The output heightmap with smooth transitions at the boundaries, making it tileable.",
                 "type": "output"
             }
         }
