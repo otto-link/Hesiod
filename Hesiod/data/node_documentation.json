@@ -3925,7 +3925,7 @@
         "label": "MeanShift",
         "parameters": {
             "GPU": {
-                "description": "TODO",
+                "description": "Toogle GPU acceleration on or off.",
                 "key": "GPU",
                 "label": "GPU",
                 "type": "Bool"
@@ -3974,6 +3974,14 @@
         "category": "Filter/Smoothing",
         "description": "Median3x3 filter is a median filter with a 3x3 kernel used to reduce noise while preserving edges in an image. This process removes outliers and smooths the image without noise reduction and feature preservation in digital images.",
         "label": "Median3x3",
+        "parameters": {
+            "GPU": {
+                "description": "Toogle GPU acceleration on or off.",
+                "key": "GPU",
+                "label": "GPU",
+                "type": "Bool"
+            }
+        },
         "ports": {
             "input": {
                 "caption": "input",
@@ -5219,17 +5227,17 @@
     },
     "Path": {
         "category": "Geometry/Path",
-        "description": "Polyline definition.",
+        "description": "A polyline defined by a series of connected points (x, y) with elevation data (z). Paths can represent linear features such as roads, rivers, or boundaries.",
         "label": "Path",
         "parameters": {
             "path": {
-                "description": "Path data.",
+                "description": "The sequence of points defining the path. Each point consists of coordinates (x, y) and an elevation (z).",
                 "key": "path",
                 "label": "Path",
                 "type": "Path"
             },
             "reverse": {
-                "description": "TODO",
+                "description": "If true, reverses the order of the points in the path. This can be useful for changing the direction of the path.",
                 "key": "reverse",
                 "label": "reverse",
                 "type": "Bool"
@@ -5239,7 +5247,7 @@
             "path": {
                 "caption": "path",
                 "data_type": "Path",
-                "description": "Set of directed points (x, y) and elevations z.",
+                "description": "Outputs the path as a set of directed points (x, y) and elevations (z).",
                 "type": "output"
             }
         }

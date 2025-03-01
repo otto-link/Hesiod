@@ -190,7 +190,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"MakeBinary", "Operator/Morphology"},
       {"MakePeriodic", "Operator/Tiling"},
       {"MakePeriodicStitching", "Operator/Tiling"},
-      {"MeanShift", "Filter/Smoothing"},
+      {"MeanShift", "WIP"},
       {"Median3x3", "Filter/Smoothing"},
       {"MixNormalMap", "Texture"},
       {"MixTexture", "Texture"},
