@@ -24,7 +24,7 @@ void setup_export_asset_node(BaseNode *p_node)
   // port(s)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "elevation");
   p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture");
-  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "normal map detail");
+  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "normal map details");
 
   // attribute(s)
   p_node->add_attr<BoolAttribute>("auto_export", true, "auto_export");
@@ -68,7 +68,7 @@ void setup_export_asset_node(BaseNode *p_node)
   p_node->add_attr<FloatAttribute>("detail_scaling", 1.f, 0.f, 4.f, "detail_scaling");
   p_node->add_attr<MapEnumAttribute>("blending_method",
                                      hmap::normal_map_blending_method_as_string,
-                                     "blending_method");
+                                     "Details normal map blending method");
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"auto_export",
@@ -94,7 +94,7 @@ void compute_export_asset_node(BaseNode *p_node)
   {
     hmap::HeightmapRGBA *p_color = p_node->get_value_ref<hmap::HeightmapRGBA>("texture");
     hmap::HeightmapRGBA *p_nmap = p_node->get_value_ref<hmap::HeightmapRGBA>(
-        "normal map detail");
+        "normal map details");
 
     hmap::Array array = p_elev->to_array();
     std::string fname = GET("fname", FilenameAttribute).string();
