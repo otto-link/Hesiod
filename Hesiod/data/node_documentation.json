@@ -7577,35 +7577,41 @@
     },
     "SelectValley": {
         "category": "Mask/Selector",
-        "description": "TODO",
+        "description": "Identifies and selects valley-like regions in the heightmap based on curvature analysis. The selection can be inverted, and additional parameters allow fine-tuning of the selection process. The output is a mask representing the relative width of the valley. The value is 1 at the valley center and decreases to 0 at the edges of the valley.",
         "label": "SelectValley",
         "parameters": {
             "GPU": {
-                "description": "Toogle GPU acceleration on or off.",
+                "description": "Enables or disables GPU acceleration for faster processing.",
                 "key": "GPU",
                 "label": "GPU",
                 "type": "Bool"
             },
             "inverse": {
-                "description": "Toggle inversion of the output values.",
+                "description": "Inverts the selection, highlighting ridges instead of valleys.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
             },
             "radius": {
-                "description": "TODO",
+                "description": "Defines the search radius for valley detection, controlling how localized or broad the selection is.",
                 "key": "radius",
                 "label": "radius",
                 "type": "Float"
             },
+            "ridge_select": {
+                "description": "If enabled, selects ridges instead of valleys.",
+                "key": "ridge_select",
+                "label": "ridge_select",
+                "type": "Bool"
+            },
             "smoothing": {
-                "description": "Enable or disable smoothing to reduce noise in the curvature computation.",
+                "description": "Applies smoothing to reduce noise in curvature calculations, resulting in a cleaner selection.",
                 "key": "smoothing",
                 "label": "smoothing",
                 "type": "Bool"
             },
             "smoothing_radius": {
-                "description": "Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.",
+                "description": "Defines the radius for the smoothing operation, determining how much curvature values are averaged over neighboring pixels.",
                 "key": "smoothing_radius",
                 "label": "smoothing_radius",
                 "type": "Float"
@@ -7615,13 +7621,13 @@
             "input": {
                 "caption": "input",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Heightmap data used as input for valley detection.",
                 "type": "input"
             },
             "output": {
                 "caption": "output",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "A mask representing the relative width of the valley. The value is 1 at the valley center and decreases to 0 at the edges of the valley.",
                 "type": "output"
             }
         }
