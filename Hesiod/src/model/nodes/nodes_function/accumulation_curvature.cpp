@@ -25,7 +25,7 @@ void setup_accumulation_curvature_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("radius", 0.01f, 0.f, 0.2f, "radius");
+  p_node->add_attr<FloatAttribute>("radius", 0.f, 0.f, 0.2f, "radius");
   p_node->add_attr<BoolAttribute>("remap", true, "remap");
   p_node->add_attr<BoolAttribute>("inverse", false, "inverse");
   p_node->add_attr<BoolAttribute>("smoothing", false, "smoothing");
