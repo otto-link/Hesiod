@@ -9904,25 +9904,25 @@
     },
     "ZeroedEdges": {
         "category": "Math/Boundaries",
-        "description": "ZeroedEdges is an operator that enforces values close to zero at the domain edges.",
+        "description": "An operator that enforces values close to zero at the domain edges.",
         "label": "ZeroedEdges",
         "parameters": {
             "distance_function": {
-                "description": "Measure used for the distance calculation. Available values: Chebyshev, Euclidian, Euclidian/Chebyshev, Manhattan.",
+                "description": "Determines the method used for distance calculation. Options: Chebyshev, Euclidean, Euclidean/Chebyshev, Manhattan.",
                 "key": "distance_function",
-                "label": "distance_function",
+                "label": "Distance Function",
                 "type": "Enumeration"
             },
             "remap_range": {
-                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
+                "description": "Specifies the output range for the operator. Defaults to [0, 1].",
                 "key": "remap_range",
-                "label": "remap_range",
-                "type": "Value range"
+                "label": "Remap Range",
+                "type": "Value Range"
             },
             "sigma": {
-                "description": "Shape power law.",
+                "description": "Controls the shape power law.",
                 "key": "sigma",
-                "label": "sigma",
+                "label": "Sigma",
                 "type": "Float"
             }
         },
@@ -9930,19 +9930,19 @@
             "dr": {
                 "caption": "dr",
                 "data_type": "Heightmap",
-                "description": "Displacement with respect to the domain size (radial direction).",
+                "description": "Displacement relative to the domain size (radial direction).",
                 "type": "input"
             },
             "input": {
-                "caption": "input",
+                "caption": "Input",
                 "data_type": "Heightmap",
-                "description": "Input heightmap.",
+                "description": "The input heightmap.",
                 "type": "input"
             },
             "output": {
-                "caption": "output",
+                "caption": "Output",
                 "data_type": "Heightmap",
-                "description": "Filtered heightmap.",
+                "description": "The filtered heightmap result.",
                 "type": "output"
             }
         }
