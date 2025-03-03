@@ -303,7 +303,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"WhiteDensityMap", "Primitive/Random"},
       {"WhiteSparse", "Primitive/Random"},
       {"Wrinkle", "WIP"}, // Filter/Recast
-      {"ZeroedEdges", "Primitive/Random"},
+      {"ZeroedEdges", "Math/Boundaries"},
       {"Zoom", "Operator/Transform"},
   };
 

@@ -3920,7 +3920,7 @@
         }
     },
     "MeanShift": {
-        "category": "Filter/Smoothing",
+        "category": "WIP",
         "description": "TODO",
         "label": "MeanShift",
         "parameters": {
@@ -9903,7 +9903,7 @@
         }
     },
     "ZeroedEdges": {
-        "category": "Primitive/Random",
+        "category": "Math/Boundaries",
         "description": "ZeroedEdges is an operator that enforces values close to zero at the domain edges.",
         "label": "ZeroedEdges",
         "parameters": {
