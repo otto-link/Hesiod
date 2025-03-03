@@ -1020,7 +1020,7 @@ Filter/Recast
 ## ExportAsset
 
 
-ExportAsset exporting both the heightmap and texture to a single asset.
+Exports both the heightmap and texture as a single asset. The mesh can either be used as is or retriangulated using an optimization algorithm. Additionally, a normal map can be provided to model light effects of small details not represented by the mesh.
 
 ![img](../images/nodes/ExportAsset.png)
 ### Category
@@ -1031,22 +1031,22 @@ IO/Files
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|elevation|Heightmap|Data values for elevation.|
-|normal map detail|HeightmapRGBA|TODO|
-|texture|HeightmapRGBA|Data values for color.|
+|elevation|Heightmap|Heightmap data defining elevation values.|
+|normal map details|HeightmapRGBA|Optional normal map for enhancing lighting effects on small details.|
+|texture|HeightmapRGBA|Heightmap data defining texture color values.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|auto_export|Bool|Decides whether the export is automatically performed when the node is updated.|
-|blending_method|Enumeration|TODO|
-|detail_scaling|Float|TODO|
-|elevation_scaling|Float|Elevation scaling.|
-|export_format|Enumeration|Export format. Available values: Assimp Binary - *.assbin, Assxml Document - *.assxml, Autodesk 3DS (legacy) - *.3ds, Autodesk FBX (ascii) - *.fbx, Autodesk FBX (binary) - *.fbx, COLLADA - Digital Asset Exchange Schema - *.dae, Extensible 3D - *.x3d, GL Transmission Format (binary) - *.glb, GL Transmission Format - *.gltf, GL Transmission Format v. 2 (binary) - *.glb, GL Transmission Format v. 2 - *.gltf, Stanford Polygon Library (binary) - *.ply, Stanford Polygon Library - *.ply, Step Files - *.stp, Stereolithography (binary) - *.stl, Stereolithography - *.stl, The 3MF-File-Format - *.3mf, Wavefront OBJ format - *.obj, Wavefront OBJ format without material file - *.obj.|
-|fname|Filename|Export file name.|
-|max_error|Float|Maximum error (for optimized triangulated mesh).|
-|mesh_type|Enumeration|Mesh type for the geometry. Available values: triangles, triangles (optimized).|
+|auto_export|Bool|Automatically exports the asset when the node is updated.|
+|Details normal map blending method|Enumeration|Defines the method used to blend the normal map for small details.|
+|detail_scaling|Float|Scaling factor applied to the detail normal map.|
+|elevation_scaling|Float|Factor used to scale elevation values.|
+|export_format|Enumeration|Defines the file format for export. Available formats include Assimp Binary (*.assbin), Assxml Document (*.assxml), Autodesk 3DS (*.3ds), Autodesk FBX (ASCII/Binary) (*.fbx), COLLADA (*.dae), Extensible 3D (*.x3d), GL Transmission Format (GLB/GLTF v1 & v2), Stanford Polygon Library (*.ply), Step Files (*.stp), Stereolithography (*.stl), 3MF (*.3mf), and Wavefront OBJ (*.obj) with or without material files.|
+|fname|Filename|Specifies the name of the exported file.|
+|max_error|Float|Maximum allowable error when generating an optimized triangulated mesh.|
+|mesh_type|Enumeration|Specifies the type of mesh geometry used. Options include 'triangles' and 'triangles (optimized)'.|
 
 ## ExportCloud
 
@@ -2445,7 +2445,7 @@ TODO
 ### Category
 
 
-Filter/Smoothing
+WIP
 ### Inputs
 
 |Name|Type|Description|
@@ -6049,33 +6049,33 @@ WIP
 ## ZeroedEdges
 
 
-ZeroedEdges is an operator that enforces values close to zero at the domain edges.
+An operator that enforces values close to zero at the domain edges.
 
 ![img](../images/nodes/ZeroedEdges.png)
 ### Category
 
 
-Primitive/Random
+Math/Boundaries
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|dr|Heightmap|Displacement with respect to the domain size (radial direction).|
-|input|Heightmap|Input heightmap.|
+|dr|Heightmap|Displacement relative to the domain size (radial direction).|
+|input|Heightmap|The input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|Filtered heightmap.|
+|output|Heightmap|The filtered heightmap result.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|distance_function|Enumeration|Measure used for the distance calculation. Available values: Chebyshev, Euclidian, Euclidian/Chebyshev, Manhattan.|
-|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
-|sigma|Float|Shape power law.|
+|distance_function|Enumeration|Determines the method used for distance calculation. Options: Chebyshev, Euclidean, Euclidean/Chebyshev, Manhattan.|
+|remap_range|Value range|Specifies the output range for the operator. Defaults to [0, 1].|
+|sigma|Float|Controls the shape power law.|
 
 ## Zoom
 

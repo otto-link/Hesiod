@@ -16,13 +16,13 @@ Node Categories
 |Filter|Range|Clamp, Remap, Rescale, ShiftElevation|
 |Filter|Recast|ExpandShrink, Fold, NormalDisplacement, RecastCanyon, RecastCliff, RecastCliffDirectional, RecastCracks, RecastSag, SteepenConvective|
 |Filter|Recurve|Gain, GammaCorrection, GammaCorrectionLocal, Plateau, Recurve, RecurveKura, RecurveS, Saturate, Terrace|
-|Filter|Smoothing|Laplace, MeanShift, Median3x3, ShapeIndex, SharpenCone, SmoothCpulse, SmoothFill, SmoothFillHoles, SmoothFillSmearPeaks|
+|Filter|Smoothing|Laplace, Median3x3, ShapeIndex, SharpenCone, SmoothCpulse, SmoothFill, SmoothFillHoles, SmoothFillSmearPeaks|
 |Geometry|Cloud|Cloud, CloudLattice, CloudMerge, CloudRandom, CloudRemapValues, CloudSDF, CloudToArrayInterp, CloudToPath|
 |Geometry|Path|Path, PathBezier, PathBezierRound, PathBspline, PathDecasteljau, PathDig, PathFind, PathFractalize, PathMeanderize, PathResample, PathSDF, PathSmooth, PathToCloud, PathToHeightmap|
 |IO|Files|ExportAsset, ExportCloud, ExportHeightmap, ExportNormalMap, ExportPath, ExportTexture, ImportHeightmap, ImportTexture|
 |Mask|Selector|SelectAngle, SelectBlobLog, SelectCavities, SelectGt, SelectInterval, SelectInwardOutward, SelectMidrange, SelectMultiband3, SelectPulse, SelectRivers, SelectSlope, SelectTransitions, SelectValley|
 |Math|Base|Abs, AbsSmooth, Cos, GaussianDecay, Inverse, Lerp, Reverse, Smoothstep3, Smoothstep5|
-|Math|Boundaries|Falloff|
+|Math|Boundaries|Falloff, ZeroedEdges|
 |Math|Convolution|ConvolveSVD|
 |Math|Gradient|Gradient, GradientAngle, GradientNorm, GradientTalus|
 |Operator|Blend|Blend, BlendPoissonBf, Mixer|
@@ -35,6 +35,6 @@ Node Categories
 |Primitive|Function|Bump, GaussianPulse, Paraboloid, Rift, Slope, Step, WaveDune, WaveSine, WaveSquare, WaveTriangular|
 |Primitive|Geological|Caldera, Crater, MountainRangeRadial|
 |Primitive|Kernel|KernelGabor, KernelPrim|
-|Primitive|Random|White, WhiteDensityMap, WhiteSparse, ZeroedEdges|
+|Primitive|Random|White, WhiteDensityMap, WhiteSparse|
 |Texture||ColorizeCmap, ColorizeGradient, ColorizeSolid, MixNormalMap, MixTexture, SetAlpha|
-|WIP||Detrend, DiffusionLimitedAggregation, FillTalus, FlowStream, HydraulicBlur, HydraulicMusgrave, HydraulicProcedural, HydraulicSchott, HydraulicStream, HydraulicStreamUpscaleAmplification, HydraulicVpipes, Kuwahara, ReverseMidpoint, SedimentDeposition, ThermalFlatten, ThermalRib, ThermalSchott, WarpDownslope, Wrinkle|
+|WIP||Detrend, DiffusionLimitedAggregation, FillTalus, FlowStream, HydraulicBlur, HydraulicMusgrave, HydraulicProcedural, HydraulicSchott, HydraulicStream, HydraulicStreamUpscaleAmplification, HydraulicVpipes, Kuwahara, MeanShift, ReverseMidpoint, SedimentDeposition, ThermalFlatten, ThermalRib, ThermalSchott, WarpDownslope, Wrinkle|
