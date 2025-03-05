@@ -70,10 +70,10 @@ void compute_select_valley_node(BaseNode *p_node)
             hmap::Array *pa_out = p_arrays[0];
             hmap::Array *pa_in = p_arrays[1];
 
-            if (GET("ridge_select", BoolAttribute))
-              *pa_out = hmap::gpu::select_valley(-*pa_in, ir);
-            else
-              *pa_out = hmap::gpu::select_valley(*pa_in, ir);
+            *pa_out = hmap::gpu::select_valley(*pa_in,
+                                               ir,
+                                               true,
+                                               GET("ridge_select", BoolAttribute));
           },
           p_node->get_config_ref()->hmap_transform_mode_gpu);
     }
@@ -87,10 +87,10 @@ void compute_select_valley_node(BaseNode *p_node)
             hmap::Array *pa_out = p_arrays[0];
             hmap::Array *pa_in = p_arrays[1];
 
-            if (GET("ridge_select", BoolAttribute))
-              *pa_out = hmap::select_valley(-*pa_in, ir);
-            else
-              *pa_out = hmap::select_valley(*pa_in, ir);
+            *pa_out = hmap::select_valley(*pa_in,
+                                          ir,
+                                          true,
+                                          GET("ridge_select", BoolAttribute));
           },
           p_node->get_config_ref()->hmap_transform_mode_cpu);
     }

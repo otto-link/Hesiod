@@ -7688,6 +7688,12 @@
         "description": "ShapeIndex is a measure used to quantify the shape complexity of landforms in an heightmap. It is calculated based on the second derivatives of the elevation surface. The surface index is greater than 0.5 for convex surface and lower than 0.5 for concave surface.",
         "label": "ShapeIndex",
         "parameters": {
+            "GPU": {
+                "description": "TODO",
+                "key": "GPU",
+                "label": "GPU",
+                "type": "Bool"
+            },
             "inverse": {
                 "description": "Toggle inversion of the output values.",
                 "key": "inverse",
@@ -9312,6 +9318,12 @@
                 "key": "remap_range",
                 "label": "remap_range",
                 "type": "Value range"
+            },
+            "ridge_select": {
+                "description": "If enabled, selects ridges instead of valleys.",
+                "key": "ridge_select",
+                "label": "ridge_select",
+                "type": "Bool"
             }
         },
         "ports": {

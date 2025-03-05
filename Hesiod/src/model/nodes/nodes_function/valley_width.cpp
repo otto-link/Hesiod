@@ -24,6 +24,7 @@ void setup_valley_width_node(BaseNode *p_node)
 
   // attribute(s)
   p_node->add_attr<FloatAttribute>("radius", 0.1f, 0.f, 0.2f, "radius");
+  p_node->add_attr<BoolAttribute>("ridge_select", false, "ridge_select");
   p_node->add_attr<RangeAttribute>("remap_range",
                                    std::vector<float>({0.f, 1.f}),
                                    0.f,
@@ -31,7 +32,7 @@ void setup_valley_width_node(BaseNode *p_node)
                                    "remap_range");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"radius", "_SEPARATOR_", "remap_range"});
+  p_node->set_attr_ordered_key({"radius", "ridge_select", "_SEPARATOR_", "remap_range"});
 }
 
 void compute_valley_width_node(BaseNode *p_node)
@@ -48,10 +49,17 @@ void compute_valley_width_node(BaseNode *p_node)
 
     int ir = std::max(1, (int)(GET("radius", FloatAttribute) * p_out->shape.x));
 
-    hmap::transform(*p_out,
-                    *p_in,
-                    [&ir](hmap::Array &out, hmap::Array &in)
-                    { out = hmap::valley_width(in, ir); });
+    hmap::transform(
+        {p_out, p_in},
+        [p_node,
+         ir](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+        {
+          hmap::Array *pa_out = p_arrays[0];
+          hmap::Array *pa_in = p_arrays[1];
+
+          *pa_out = hmap::valley_width(*pa_in, ir, GET("ridge_select", BoolAttribute));
+        },
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
 
     p_out->smooth_overlap_buffers();
 
