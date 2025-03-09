@@ -533,6 +533,24 @@ void GraphEditor::on_node_right_clicked(const std::string &node_id, QPointF scen
                 });
       }
 
+      // force update button
+      {
+        QPushButton *button = new QPushButton("Force update");
+        button->setIcon(button->style()->standardIcon(QStyle::SP_BrowserReload));
+
+        QWidgetAction *widget_action = new QWidgetAction(menu);
+        widget_action->setDefaultWidget(button);
+        menu->addAction(widget_action);
+
+        connect(button,
+                &QPushButton::pressed,
+                [this, p_node]()
+                {
+                  std::string node_id = p_node->get_id();
+                  this->update(node_id);
+                });
+      }
+
       // --- add attributes
 
       attr::AttributesWidget *attributes_widget = new attr::AttributesWidget(
