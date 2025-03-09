@@ -25,15 +25,12 @@ void setup_zeroed_edges_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("sigma", 2.f, 1.f, 4.f, "sigma");
-  p_node->add_attr<MapEnumAttribute>("distance_function",
-                                     "Euclidian",
-                                     distance_function_map,
-                                     "distance_function");
-  p_node->add_attr<RangeAttribute>("remap_range", "remap_range");
+  ADD_ATTR(FloatAttribute, "sigma", 2.f, 1.f, 4.f);
+  ADD_ATTR(EnumAttribute, "distance_function", distance_function_map, "Euclidian");
+  ADD_ATTR(RangeAttribute, "remap");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"sigma", "distance_function", "remap_range"});
+  p_node->set_attr_ordered_key({"sigma", "distance_function", "remap"});
 }
 
 void compute_zeroed_edges_node(BaseNode *p_node)
@@ -66,7 +63,7 @@ void compute_zeroed_edges_node(BaseNode *p_node)
           hmap::zeroed_edges(
               *pa_out,
               sigma,
-              (hmap::DistanceFunction)GET("distance_function", MapEnumAttribute),
+              (hmap::DistanceFunction)GET("distance_function", EnumAttribute),
               pa_dr,
               bbox);
         },
@@ -81,8 +78,8 @@ void compute_zeroed_edges_node(BaseNode *p_node)
                            false, // saturate
                            {0.f, 0.f},
                            0.f,
-                           GET_ATTR("remap_range", RangeAttribute, is_active),
-                           GET("remap_range", RangeAttribute));
+                           GET_ATTR("remap", RangeAttribute, is_active),
+                           GET("remap", RangeAttribute));
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

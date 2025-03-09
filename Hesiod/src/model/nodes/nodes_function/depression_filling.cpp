@@ -24,9 +24,9 @@ void setup_depression_filling_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "fill map", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<IntAttribute>("iterations", 1000, 1, 5000, "iterations");
-  p_node->add_attr<FloatAttribute>("epsilon", 1e-4, 1e-5, 1e-1, "epsilon");
-  p_node->add_attr<BoolAttribute>("remap fill map", true, "remap fill map");
+  ADD_ATTR(IntAttribute, "iterations", 1000, 1, INT_MAX);
+  ADD_ATTR(FloatAttribute, "epsilon", 1e-4, 1e-5, 1e-1);
+  ADD_ATTR(BoolAttribute, "remap fill map", true);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"iterations", "epsilon", "remap fill map"});

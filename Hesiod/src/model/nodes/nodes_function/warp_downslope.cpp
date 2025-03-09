@@ -24,9 +24,9 @@ void setup_warp_downslope_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("amount", 0.02f, 0.f, 1.f, "amount");
-  p_node->add_attr<FloatAttribute>("radius", 0.05f, 0.f, 0.2f, "radius");
-  p_node->add_attr<BoolAttribute>("reverse", true, "reverse");
+  ADD_ATTR(FloatAttribute, "amount", 0.02f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "radius", 0.05f, 0.f, 0.2f);
+  ADD_ATTR(BoolAttribute, "reverse", true);
 }
 
 void compute_warp_downslope_node(BaseNode *p_node)

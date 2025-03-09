@@ -27,12 +27,10 @@ void setup_thermal_auto_bedrock_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "deposition", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("talus_global", 2.f, 0.f, 16.f, "talus_global");
-  p_node->add_attr<IntAttribute>("iterations", 100, 1, 200, "iterations");
-  p_node->add_attr<BoolAttribute>("scale_talus_with_elevation",
-                                  true,
-                                  "scale_talus_with_elevation");
-  p_node->add_attr<BoolAttribute>("GPU", HSD_DEFAULT_GPU_MODE, "GPU");
+  ADD_ATTR(FloatAttribute, "talus_global", 2.f, 0.f, FLT_MAX);
+  ADD_ATTR(IntAttribute, "iterations", 100, 1, INT_MAX);
+  ADD_ATTR(BoolAttribute, "scale_talus_with_elevation", true);
+  ADD_ATTR(BoolAttribute, "GPU", HSD_DEFAULT_GPU_MODE);
 
   // attribute(s) order
   p_node->set_attr_ordered_key(

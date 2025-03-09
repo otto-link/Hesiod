@@ -43,10 +43,10 @@
                 "label": "mu",
                 "type": "Float"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "vshift": {
@@ -157,10 +157,10 @@
                 "label": "radius",
                 "type": "Float"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             }
         },
@@ -202,10 +202,10 @@
                 "label": "iterations",
                 "type": "Integer"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             }
         },
@@ -331,10 +331,10 @@
                 "label": "inverse",
                 "type": "Bool"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             }
         },
@@ -400,10 +400,10 @@
                 "label": "radius",
                 "type": "Float"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "sigma_inner": {
@@ -568,10 +568,10 @@
                 "label": "jitter_ratio",
                 "type": "Wavenumber"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "seed": {
@@ -632,10 +632,10 @@
                 "label": "npoints",
                 "type": "Integer"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "seed": {
@@ -659,10 +659,10 @@
         "description": "CloudRemapValues remap the range of the cloud point values.",
         "label": "CloudRemapValues",
         "parameters": {
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             }
         },
@@ -987,10 +987,10 @@
                 "label": "rank",
                 "type": "Integer"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             }
         },
@@ -1038,10 +1038,10 @@
                 "label": "phase_shift",
                 "type": "Float"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             }
         },
@@ -1101,10 +1101,10 @@
                 "label": "radius",
                 "type": "Float"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             }
         },
@@ -1176,10 +1176,10 @@
                 "label": "primitives_resolution_steps",
                 "type": "Integer"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "resolution": {
@@ -1321,10 +1321,10 @@
                 "label": "noise_ratio",
                 "type": "Float"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "scale": {
@@ -1774,10 +1774,10 @@
                 "label": "distance_function",
                 "type": "Enumeration"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "strength": {
@@ -2020,9 +2020,9 @@
                 "label": "Persistence",
                 "type": "Float"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the output values to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
+                "key": "remap",
                 "label": "Remap range",
                 "type": "Value range"
             },
@@ -2245,10 +2245,10 @@
                 "label": "radius",
                 "type": "Float"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             }
         },
@@ -2344,9 +2344,9 @@
                 "label": "Persistence",
                 "type": "Float"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the noise output values to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
+                "key": "remap",
                 "label": "Remap range",
                 "type": "Value range"
             },
@@ -2452,10 +2452,10 @@
         "description": "The gradient angle of a heightmap refers to the direction in which the slope points toward. It represents the orientation of the terrain surface relative to a horizontal plane",
         "label": "GradientAngle",
         "parameters": {
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             }
         },
@@ -2479,10 +2479,10 @@
         "description": "The gradient norm of a heightmap refers to the magnitude or intensity of the rate of change of elevation at each point on the map. It represents the steepness or slope of the terrain surface, irrespective of its direction.",
         "label": "GradientNorm",
         "parameters": {
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             }
         },
@@ -2506,10 +2506,10 @@
         "description": "Gradient talus refers to the local steepest downslope, or the direction in which the terrain descends most rapidly, at each point on the heightmap.",
         "label": "GradientTalus",
         "parameters": {
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             }
         },
@@ -2678,10 +2678,10 @@
                 "label": "radius",
                 "type": "Float"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "vmax": {
@@ -4159,10 +4159,10 @@
                 "label": "radius",
                 "type": "Float"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             }
         },
@@ -4240,10 +4240,10 @@
                 "label": "persistence",
                 "type": "Float"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remaps the operator's output values to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "seed": {
@@ -4414,9 +4414,9 @@
                 "label": "Persistence",
                 "type": "Float"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
+                "key": "remap",
                 "label": "Remap range",
                 "type": "Value range"
             },
@@ -4705,10 +4705,10 @@
                 "label": "persistence",
                 "type": "Float"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "seed": {
@@ -4798,10 +4798,10 @@
                 "label": "persistence",
                 "type": "Float"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "seed": {
@@ -4897,10 +4897,10 @@
                 "label": "persistence",
                 "type": "Float"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "seed": {
@@ -4990,10 +4990,10 @@
                 "label": "persistence",
                 "type": "Float"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "seed": {
@@ -5173,10 +5173,10 @@
                 "label": "inverse",
                 "type": "Bool"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "reverse_x": {
@@ -6656,10 +6656,10 @@
                 "label": "inverse",
                 "type": "Bool"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "sharp_bottom": {
@@ -7823,10 +7823,10 @@
                 "label": "inverse",
                 "type": "Bool"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "talus_global": {
@@ -8128,10 +8128,10 @@
                 "label": "kernel_scale_radius",
                 "type": "Bool"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "seed": {
@@ -8236,10 +8236,10 @@
                 "label": "inverse",
                 "type": "Bool"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "slope": {
@@ -9313,10 +9313,10 @@
                 "label": "radius",
                 "type": "Float"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "ridge_select": {
@@ -9358,10 +9358,10 @@
                 "label": "Wavenumber",
                 "type": "Wavenumber"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "seed": {
@@ -9523,10 +9523,10 @@
                 "label": "phase_shift",
                 "type": "Float"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "xbottom": {
@@ -9586,10 +9586,10 @@
                 "label": "phase_shift",
                 "type": "Float"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             }
         },
@@ -9637,10 +9637,10 @@
                 "label": "phase_shift",
                 "type": "Float"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             }
         },
@@ -9688,10 +9688,10 @@
                 "label": "phase_shift",
                 "type": "Float"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "slant_ratio": {
@@ -9727,10 +9727,10 @@
                 "label": "inverse",
                 "type": "Bool"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "seed": {
@@ -9766,10 +9766,10 @@
                 "label": "inverse",
                 "type": "Bool"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "seed": {
@@ -9817,10 +9817,10 @@
                 "label": "inverse",
                 "type": "Bool"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "seed": {
@@ -9931,10 +9931,10 @@
                 "label": "distance_function",
                 "type": "Enumeration"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Specifies the output range for the operator. Defaults to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "sigma": {

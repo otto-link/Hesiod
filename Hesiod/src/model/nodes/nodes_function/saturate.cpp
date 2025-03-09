@@ -23,8 +23,8 @@ void setup_saturate_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<RangeAttribute>("range", "range");
-  p_node->add_attr<FloatAttribute>("k_smoothing", 0.1f, 0.01, 1.f, "k_smoothing");
+  ADD_ATTR(RangeAttribute, "range");
+  ADD_ATTR(FloatAttribute, "k_smoothing", 0.1f, 0.01, 1.f);
 }
 
 void compute_saturate_node(BaseNode *p_node)

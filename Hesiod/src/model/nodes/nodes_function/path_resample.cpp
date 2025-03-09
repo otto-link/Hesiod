@@ -23,7 +23,7 @@ void setup_path_resample_node(BaseNode *p_node)
   p_node->add_port<hmap::Path>(gnode::PortType::OUT, "output");
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("delta", 0.01f, 0.001f, 0.2f, "delta");
+  ADD_ATTR(FloatAttribute, "delta", 0.01f, 0.001f, 0.2f);
 }
 
 void compute_path_resample_node(BaseNode *p_node)

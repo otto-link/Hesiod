@@ -24,16 +24,10 @@ void setup_thermal_flatten_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("talus_global", 1.f, 0.f, 16.f, "talus_global");
-  p_node->add_attr<IntAttribute>("iterations", 100, 1, 200, "iterations");
-  p_node->add_attr<BoolAttribute>("scale_talus_with_elevation",
-                                  false,
-                                  "scale_talus_with_elevation");
-  p_node->add_attr<FloatAttribute>("post_filter_radius",
-                                   0.01f,
-                                   0.f,
-                                   0.1f,
-                                   "post_filter_radius");
+  ADD_ATTR(FloatAttribute, "talus_global", 1.f, 0.f, FLT_MAX);
+  ADD_ATTR(IntAttribute, "iterations", 100, 1, INT_MAX);
+  ADD_ATTR(BoolAttribute, "scale_talus_with_elevation", false);
+  ADD_ATTR(FloatAttribute, "post_filter_radius", 0.01f, 0.f, 0.1f);
 
   // attribute(s) order
   p_node->set_attr_ordered_key(

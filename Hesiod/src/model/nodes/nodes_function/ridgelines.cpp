@@ -25,10 +25,10 @@ void setup_ridgelines_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "heightmap", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("talus_global", 4.f, -16.f, 16.f, "talus_global");
-  p_node->add_attr<FloatAttribute>("k_smoothing", 1.f, 0.01f, 2.f, "k_smoothing");
-  p_node->add_attr<FloatAttribute>("width", 0.1f, 0.f, 1.f, "width");
-  p_node->add_attr<FloatAttribute>("vmin", 0.f, -1.f, 1.f, "vmin");
+  ADD_ATTR(FloatAttribute, "talus_global", 4.f, -FLT_MAX, FLT_MAX);
+  ADD_ATTR(FloatAttribute, "k_smoothing", 1.f, 0.01f, 2.f);
+  ADD_ATTR(FloatAttribute, "width", 0.1f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "vmin", 0.f, -1.f, 1.f);
 }
 
 void compute_ridgelines_node(BaseNode *p_node)

@@ -23,9 +23,9 @@ void setup_scan_mask_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("contrast", 0.5f, 0.f, 1.f, "contrast");
-  p_node->add_attr<FloatAttribute>("brightness", 0.5f, 0.f, 1.f, "brightness");
-  p_node->add_attr<BoolAttribute>("remap", false, "remap");
+  ADD_ATTR(FloatAttribute, "contrast", 0.5f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "brightness", 0.5f, 0.f, 1.f);
+  ADD_ATTR(BoolAttribute, "remap", false);
 }
 
 void compute_scan_mask_node(BaseNode *p_node)

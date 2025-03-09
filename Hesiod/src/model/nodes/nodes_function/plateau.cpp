@@ -25,9 +25,9 @@ void setup_plateau_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("radius", 0.05f, 0.01f, 0.5f, "radius");
-  p_node->add_attr<FloatAttribute>("factor", 4.f, 0.01f, 10.f, "factor");
-  p_node->add_attr<BoolAttribute>("GPU", HSD_DEFAULT_GPU_MODE, "GPU");
+  ADD_ATTR(FloatAttribute, "radius", 0.05f, 0.01f, 0.5f);
+  ADD_ATTR(FloatAttribute, "factor", 4.f, 0.01f, 10.f);
+  ADD_ATTR(BoolAttribute, "GPU", HSD_DEFAULT_GPU_MODE);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"radius", "factor", "_SEPARATOR_", "GPU"});

@@ -24,8 +24,8 @@ void setup_fold_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("k", 0.1f, 0.f, 0.2f, "k");
-  p_node->add_attr<IntAttribute>("iterations", 3, 1, 10, "iterations");
+  ADD_ATTR(FloatAttribute, "k", 0.1f, 0.f, 0.2f);
+  ADD_ATTR(IntAttribute, "iterations", 3, 1, 10);
 }
 
 void compute_fold_node(BaseNode *p_node)

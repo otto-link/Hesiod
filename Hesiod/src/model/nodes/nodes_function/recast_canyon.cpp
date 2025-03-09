@@ -25,8 +25,8 @@ void setup_recast_canyon_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("vcut", 0.5f, -1.f, 2.f, "vcut");
-  p_node->add_attr<FloatAttribute>("gamma", 4.f, 0.01f, 10.f, "gamma");
+  ADD_ATTR(FloatAttribute, "vcut", 0.5f, -1.f, 2.f);
+  ADD_ATTR(FloatAttribute, "gamma", 4.f, 0.01f, 10.f);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"vcut", "gamma"});

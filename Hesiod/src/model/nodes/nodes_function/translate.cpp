@@ -25,9 +25,9 @@ void setup_translate_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("dx", 0.1f, -1.f, 1.f, "dx");
-  p_node->add_attr<FloatAttribute>("dy", 0.1f, -1.f, 1.f, "dy");
-  p_node->add_attr<BoolAttribute>("periodic", false, "periodic");
+  ADD_ATTR(FloatAttribute, "dx", 0.1f, -1.f, 1.f);
+  ADD_ATTR(FloatAttribute, "dy", 0.1f, -1.f, 1.f);
+  ADD_ATTR(BoolAttribute, "periodic", false);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"dx", "dy", "periodic"});

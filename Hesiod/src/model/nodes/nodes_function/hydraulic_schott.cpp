@@ -25,35 +25,17 @@ void setup_hydraulic_schott_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "flow_map", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<IntAttribute>("iterations", 100, 1, 500, "iterations");
-  p_node->add_attr<FloatAttribute>("c_erosion", 1.f, 0.f, 2.f, "c_erosion");
-  p_node->add_attr<FloatAttribute>("c_deposition", 0.4f, 0.f, 2.f, "c_deposition");
-  p_node->add_attr<FloatAttribute>("c_thermal", 0.1f, 0.f, 2.f, "c_thermal");
-  p_node->add_attr<FloatAttribute>("talus_global", 1.5f, 0.f, 16.f, "talus_global");
-  p_node->add_attr<BoolAttribute>("scale_talus_with_elevation",
-                                  false,
-                                  "scale_talus_with_elevation");
-  p_node->add_attr<FloatAttribute>("flow_acc_exponent",
-                                   0.8f,
-                                   0.01f,
-                                   1.f,
-                                   "flow_acc_exponent");
-  p_node->add_attr<FloatAttribute>("flow_acc_exponent_depo",
-                                   0.8f,
-                                   0.01f,
-                                   1.f,
-                                   "flow_acc_exponent_depo");
-  p_node->add_attr<FloatAttribute>("flow_routing_exponent",
-                                   1.3f,
-                                   0.01f,
-                                   2.f,
-                                   "flow_routing_exponent");
-  p_node->add_attr<FloatAttribute>("thermal_weight", 0.f, 0.f, 5.f, "thermal_weight");
-  p_node->add_attr<FloatAttribute>("deposition_weight",
-                                   1.f,
-                                   0.f,
-                                   5.f,
-                                   "deposition_weight");
+  ADD_ATTR(IntAttribute, "iterations", 100, 1, INT_MAX);
+  ADD_ATTR(FloatAttribute, "c_erosion", 1.f, 0.f, 2.f);
+  ADD_ATTR(FloatAttribute, "c_deposition", 0.4f, 0.f, 2.f);
+  ADD_ATTR(FloatAttribute, "c_thermal", 0.1f, 0.f, 2.f);
+  ADD_ATTR(FloatAttribute, "talus_global", 1.5f, 0.f, 16.f);
+  ADD_ATTR(BoolAttribute, "scale_talus_with_elevation", false);
+  ADD_ATTR(FloatAttribute, "flow_acc_exponent", 0.8f, 0.01f, 1.f);
+  ADD_ATTR(FloatAttribute, "flow_acc_exponent_depo", 0.8f, 0.01f, 1.f);
+  ADD_ATTR(FloatAttribute, "flow_routing_exponent", 1.3f, 0.01f, 2.f);
+  ADD_ATTR(FloatAttribute, "thermal_weight", 0.f, 0.f, 5.f);
+  ADD_ATTR(FloatAttribute, "deposition_weight", 1.f, 0.f, 5.f);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"iterations",

@@ -24,12 +24,12 @@ void setup_import_texture_node(BaseNode *p_node)
   p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FilenameAttribute>("fname",
-                                      std::filesystem::path(""),
-                                      false, // load
-                                      "Image files (*.bmp *.dib *.jpeg *.jpg *.png *.pbm "
-                                      "*.pgm *.ppm *.pxm *.pnm *.tiff *.tif *.hdr *.pic)",
-                                      "fname");
+  ADD_ATTR(FilenameAttribute,
+           "fname",
+           std::filesystem::path(""),
+           "Image files (*.bmp *.dib *.jpeg *.jpg *.png *.pbm "
+           "*.pgm *.ppm *.pxm *.pnm *.tiff *.tif *.hdr *.pic)",
+           false);
 }
 
 void compute_import_texture_node(BaseNode *p_node)

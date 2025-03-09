@@ -21,7 +21,7 @@ void setup_shift_elevation_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("shift", 0.f, -2.f, 2.f, "shift");
+  ADD_ATTR(FloatAttribute, "shift", 0.f, -2.f, 2.f);
 }
 
 void compute_shift_elevation_node(BaseNode *p_node)

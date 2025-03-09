@@ -24,7 +24,7 @@ void setup_thermal_rib_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<IntAttribute>("iterations", 10, 1, 100, "iterations");
+  ADD_ATTR(IntAttribute, "iterations", 10, 1, INT_MAX);
 }
 
 void compute_thermal_rib_node(BaseNode *p_node)

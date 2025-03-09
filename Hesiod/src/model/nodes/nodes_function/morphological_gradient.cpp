@@ -24,14 +24,14 @@ void setup_morphological_gradient_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("radius", 0.01f, 0.f, 0.05f, "radius");
-  p_node->add_attr<BoolAttribute>("inverse", false, "inverse");
-  p_node->add_attr<RangeAttribute>("remap_range", "remap_range");
-  p_node->add_attr<BoolAttribute>("GPU", HSD_DEFAULT_GPU_MODE, "GPU");
+  ADD_ATTR(FloatAttribute, "radius", 0.01f, 0.f, 0.05f);
+  ADD_ATTR(BoolAttribute, "inverse", false);
+  ADD_ATTR(RangeAttribute, "remap");
+  ADD_ATTR(BoolAttribute, "GPU", HSD_DEFAULT_GPU_MODE);
 
   // attribute(s) order
   p_node->set_attr_ordered_key(
-      {"radius", "_SEPARATOR_", "inverse", "remap_range", "_SEPARATOR_", "GPU"});
+      {"radius", "_SEPARATOR_", "inverse", "remap", "_SEPARATOR_", "GPU"});
 }
 
 void compute_morphological_gradient_node(BaseNode *p_node)
@@ -86,8 +86,8 @@ void compute_morphological_gradient_node(BaseNode *p_node)
                            false, // saturate
                            {0.f, 0.f},
                            0.f,
-                           GET_ATTR("remap_range", RangeAttribute, is_active),
-                           GET("remap_range", RangeAttribute));
+                           GET_ATTR("remap", RangeAttribute, is_active),
+                           GET("remap", RangeAttribute));
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

@@ -26,7 +26,7 @@ replace=("NEW(BoolAttribute, " \
 	     "NEW(IntAttribute, " \
 	     "NEW(FilenameAttribute, " \
 	     "NEW(FloatAttribute, " \
-	     "NEW(MapEnumAttribute, " \
+	     "NEW(EnumAttribute, " \
 	     "NEW(RangeAttribute, " \
 	     "NEW(SeedAttribute, " \
 	     "NEW(WaveNbAttribute, " \
@@ -34,7 +34,7 @@ replace=("NEW(BoolAttribute, " \
 	     "this->get_attr<BoolAttribute>" \
 	     "this->get_attr<IntAttribute>" \
 	     "this->get_attr<FloatAttribute>" \
-	     "this->get_attr<MapEnumAttribute>" \
+	     "this->get_attr<EnumAttribute>" \
 	     "this->get_attr<RangeAttribute>" \
 	     "this->get_attr<SeedAttribute>" \
 	     "this->get_attr<WaveNbAttribute>" \

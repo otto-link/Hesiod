@@ -25,7 +25,7 @@ void setup_gain_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("gain", 2.f, 0.01f, 10.f, "gain");
+  ADD_ATTR(FloatAttribute, "gain", 2.f, 0.01f, 10.f);
 }
 
 void compute_gain_node(BaseNode *p_node)

@@ -28,25 +28,17 @@ void setup_dendry_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "out", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<IntAttribute>("subsampling", 4, 1, 8, "subsampling");
-  p_node->add_attr<WaveNbAttribute>("kw", std::vector<float>(2, 8.f), 0.f, 32.f, "kw");
-  p_node->add_attr<SeedAttribute>("seed");
-  p_node->add_attr<FloatAttribute>("eps", 0.2f, 0.f, 1.f, "eps");
-  p_node->add_attr<IntAttribute>("resolution", 1, 1, 8, "resolution");
-  p_node->add_attr<FloatAttribute>("displacement", 0.075f, 0.f, 0.2f, "displacement");
-  p_node->add_attr<IntAttribute>("primitives_resolution_steps",
-                                 3,
-                                 1,
-                                 8,
-                                 "primitives_resolution_steps");
-  p_node->add_attr<FloatAttribute>("slope_power", 1.f, 0.f, 2.f, "slope_power");
-  p_node->add_attr<FloatAttribute>("noise_amplitude_proportion",
-                                   0.01f,
-                                   0.f,
-                                   1.f,
-                                   "noise_amplitude_proportion");
-  p_node->add_attr<BoolAttribute>("inverse", false, "inverse");
-  p_node->add_attr<RangeAttribute>("remap_range", "remap_range");
+  ADD_ATTR(IntAttribute, "subsampling", 4, 1, 8);
+  ADD_ATTR(WaveNbAttribute, "kw", std::vector<float>(2, 8.f), 0.f, FLT_MAX);
+  ADD_ATTR(SeedAttribute, "seed");
+  ADD_ATTR(FloatAttribute, "eps", 0.2f, 0.f, 1.f);
+  ADD_ATTR(IntAttribute, "resolution", 1, 1, 8);
+  ADD_ATTR(FloatAttribute, "displacement", 0.075f, 0.f, 0.2f);
+  ADD_ATTR(IntAttribute, "primitives_resolution_steps", 3, 1, 8);
+  ADD_ATTR(FloatAttribute, "slope_power", 1.f, 0.f, 2.f);
+  ADD_ATTR(FloatAttribute, "noise_amplitude_proportion", 0.01f, 0.f, 1.f);
+  ADD_ATTR(BoolAttribute, "inverse", false);
+  ADD_ATTR(RangeAttribute, "remap");
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"subsampling",
@@ -61,7 +53,7 @@ void setup_dendry_node(BaseNode *p_node)
                                 "noise_amplitude_proportion",
                                 "_SEPARATOR_",
                                 "inverse",
-                                "remap_range"});
+                                "remap"});
 }
 
 void compute_dendry_node(BaseNode *p_node)
@@ -133,8 +125,8 @@ void compute_dendry_node(BaseNode *p_node)
                            false, // saturate
                            {0.f, 0.f},
                            0.f,
-                           GET_ATTR("remap_range", RangeAttribute, is_active),
-                           GET("remap_range", RangeAttribute));
+                           GET_ATTR("remap", RangeAttribute, is_active),
+                           GET("remap", RangeAttribute));
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

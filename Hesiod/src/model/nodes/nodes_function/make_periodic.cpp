@@ -23,7 +23,7 @@ void setup_make_periodic_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("overlap", 0.25f, 0.05f, 0.5f, "overlap");
+  ADD_ATTR(FloatAttribute, "overlap", 0.25f, 0.05f, 0.5f);
 }
 
 void compute_make_periodic_node(BaseNode *p_node)

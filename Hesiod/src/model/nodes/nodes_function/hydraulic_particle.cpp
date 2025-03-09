@@ -33,21 +33,20 @@ void setup_hydraulic_particle_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "deposition", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<SeedAttribute>("seed");
-  p_node->add_attr<FloatAttribute>("particle_density", 1.f, 0.f, 4.f, "particle_density");
-  p_node->add_attr<FloatAttribute>("c_capacity", 10.f, 0.1f, 100.f, "c_capacity");
-  p_node->add_attr<FloatAttribute>("c_erosion", 0.05f, 0.f, 0.1f, "c_erosion");
-  p_node->add_attr<FloatAttribute>("c_deposition", 0.005f, 0.f, 0.05f, "c_deposition");
-  p_node->add_attr<FloatAttribute>("c_inertia", 0.3f, 0.01f, 2.f, "c_inertia");
-  p_node->add_attr<FloatAttribute>("drag_rate", 0.001f, 0.f, 0.02f, "drag_rate");
-  p_node->add_attr<FloatAttribute>("evap_rate", 0.001f, 0.f, 0.05f, "evap_rate");
-  p_node->add_attr<BoolAttribute>("post_filtering", true, "post_filtering");
-  p_node->add_attr<BoolAttribute>("post_filtering_local", false, "post_filtering_local");
-  p_node->add_attr<BoolAttribute>("deposition_only", false, "deposition_only");
-  p_node->add_attr<BoolAttribute>("GPU", HSD_DEFAULT_GPU_MODE, "GPU");
-
-  p_node->add_attr<BoolAttribute>("downscale", false, "downscale");
-  p_node->add_attr<FloatAttribute>("kc", 512.f, 0.f, 2048.f, "kc");
+  ADD_ATTR(SeedAttribute, "seed");
+  ADD_ATTR(FloatAttribute, "particle_density", 1.f, 0.f, 4.f);
+  ADD_ATTR(FloatAttribute, "c_capacity", 10.f, 0.1f, 100.f);
+  ADD_ATTR(FloatAttribute, "c_erosion", 0.05f, 0.f, 0.1f);
+  ADD_ATTR(FloatAttribute, "c_deposition", 0.005f, 0.f, 0.05f);
+  ADD_ATTR(FloatAttribute, "c_inertia", 0.3f, 0.01f, 2.f);
+  ADD_ATTR(FloatAttribute, "drag_rate", 0.001f, 0.f, 0.02f);
+  ADD_ATTR(FloatAttribute, "evap_rate", 0.001f, 0.f, 0.05f);
+  ADD_ATTR(BoolAttribute, "post_filtering", true);
+  ADD_ATTR(BoolAttribute, "post_filtering_local", false);
+  ADD_ATTR(BoolAttribute, "deposition_only", false);
+  ADD_ATTR(BoolAttribute, "GPU", HSD_DEFAULT_GPU_MODE);
+  ADD_ATTR(BoolAttribute, "downscale", false);
+  ADD_ATTR(FloatAttribute, "kc", 512.f, 0.f, FLT_MAX);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"seed",

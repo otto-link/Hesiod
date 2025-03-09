@@ -25,12 +25,12 @@ void setup_clamp_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<RangeAttribute>("clamp", "clamp");
-  p_node->add_attr<BoolAttribute>("smooth_min", false, "smooth_min");
-  p_node->add_attr<FloatAttribute>("k_min", 0.05f, 0.01f, 1.f, "k_min");
-  p_node->add_attr<BoolAttribute>("smooth_max", false, "smooth_max");
-  p_node->add_attr<FloatAttribute>("k_max", 0.05f, 0.01f, 1.f, "k_max");
-  p_node->add_attr<BoolAttribute>("remap", false, "remap");
+  ADD_ATTR(RangeAttribute, "clamp");
+  ADD_ATTR(BoolAttribute, "smooth_min", false);
+  ADD_ATTR(FloatAttribute, "k_min", 0.05f, 0.01f, 1.f);
+  ADD_ATTR(BoolAttribute, "smooth_max", false);
+  ADD_ATTR(FloatAttribute, "k_max", 0.05f, 0.01f, 1.f);
+  ADD_ATTR(BoolAttribute, "remap", false);
 
   // attribute(s) order
   p_node->set_attr_ordered_key(

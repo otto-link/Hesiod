@@ -26,10 +26,10 @@ void setup_terrace_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<IntAttribute>("nlevels", 4, 1, 32, "nlevels");
-  p_node->add_attr<FloatAttribute>("gain", 2.f, 0.01f, 10.f, "gain");
-  p_node->add_attr<FloatAttribute>("noise_ratio", 0.1f, 0.f, 0.5f, "noise_ratio");
-  p_node->add_attr<SeedAttribute>("seed");
+  ADD_ATTR(IntAttribute, "nlevels", 4, 1, 32);
+  ADD_ATTR(FloatAttribute, "gain", 2.f, 0.01f, 10.f);
+  ADD_ATTR(FloatAttribute, "noise_ratio", 0.1f, 0.f, 0.5f);
+  ADD_ATTR(SeedAttribute, "seed");
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"nlevels", "gain", "noise_ratio", "seed"});

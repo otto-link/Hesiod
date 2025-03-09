@@ -25,21 +25,16 @@ void setup_stamping_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("kernel_radius", 0.1f, 0.01f, 0.5f, "kernel_radius");
-  p_node->add_attr<BoolAttribute>("kernel_scale_radius", false, "kernel_scale_radius");
-  p_node->add_attr<BoolAttribute>("kernel_scale_amplitude",
-                                  true,
-                                  "kernel_scale_amplitude");
-  p_node->add_attr<MapEnumAttribute>("blend_method",
-                                     "maximum",
-                                     stamping_blend_method_map,
-                                     "blend_method");
-  p_node->add_attr<SeedAttribute>("seed");
-  p_node->add_attr<FloatAttribute>("k_smoothing", 0.1f, 0.01f, 1.f, "k_smoothing");
-  p_node->add_attr<BoolAttribute>("kernel_flip", false, "kernel_flip");
-  p_node->add_attr<BoolAttribute>("kernel_rotate", false, "kernel_rotate");
-  p_node->add_attr<BoolAttribute>("inverse", false, "inverse");
-  p_node->add_attr<RangeAttribute>("remap_range", "remap_range");
+  ADD_ATTR(FloatAttribute, "kernel_radius", 0.1f, 0.01f, 0.5f);
+  ADD_ATTR(BoolAttribute, "kernel_scale_radius", false);
+  ADD_ATTR(BoolAttribute, "kernel_scale_amplitude", true);
+  ADD_ATTR(EnumAttribute, "blend_method", stamping_blend_method_map, "maximum");
+  ADD_ATTR(SeedAttribute, "seed");
+  ADD_ATTR(FloatAttribute, "k_smoothing", 0.1f, 0.01f, 1.f);
+  ADD_ATTR(BoolAttribute, "kernel_flip", false);
+  ADD_ATTR(BoolAttribute, "kernel_rotate", false);
+  ADD_ATTR(BoolAttribute, "inverse", false);
+  ADD_ATTR(RangeAttribute, "remap");
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"kernel_radius",
@@ -52,7 +47,7 @@ void setup_stamping_node(BaseNode *p_node)
                                 "kernel_rotate",
                                 "_SEPARATOR_",
                                 "inverse",
-                                "remap_range"});
+                                "remap"});
 }
 
 void compute_stamping_node(BaseNode *p_node)
@@ -88,7 +83,7 @@ void compute_stamping_node(BaseNode *p_node)
                      ir,
                      GET("kernel_scale_radius", BoolAttribute),
                      GET("kernel_scale_amplitude", BoolAttribute),
-                     (hmap::StampingBlendMethod)GET("blend_method", MapEnumAttribute),
+                     (hmap::StampingBlendMethod)GET("blend_method", EnumAttribute),
                      seed++,
                      GET("k_smoothing", FloatAttribute),
                      GET("kernel_flip", BoolAttribute),
@@ -107,8 +102,8 @@ void compute_stamping_node(BaseNode *p_node)
                            false, // saturate
                            {0.f, 0.f},
                            0.f,
-                           GET_ATTR("remap_range", RangeAttribute, is_active),
-                           GET("remap_range", RangeAttribute));
+                           GET_ATTR("remap", RangeAttribute, is_active),
+                           GET("remap", RangeAttribute));
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

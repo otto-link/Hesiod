@@ -24,8 +24,8 @@ void setup_brush_node(BaseNode *p_node)
 
   // attribute(s)
   p_node->add_attr<ArrayAttribute>("hmap", "Heightmap", hmap::Vec2<int>(512, 512));
-  p_node->add_attr<BoolAttribute>("inverse", false, "Inverse");
-  p_node->add_attr<RangeAttribute>("remap", "Remap range");
+  ADD_ATTR(BoolAttribute, "inverse", false);
+  ADD_ATTR(RangeAttribute, "remap");
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"hmap", "inverse", "remap"});

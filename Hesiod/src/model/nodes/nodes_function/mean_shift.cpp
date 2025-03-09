@@ -25,11 +25,11 @@ void setup_mean_shift_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("radius", 0.05f, 0.01f, 0.2f, "radius");
-  p_node->add_attr<FloatAttribute>("talus_global", 16.f, 0.f, 64.f, "talus_global");
-  p_node->add_attr<IntAttribute>("iterations", 4, 1, 10, "iterations");
-  p_node->add_attr<BoolAttribute>("talus_weighted", true, "talus_weighted");
-  p_node->add_attr<BoolAttribute>("GPU", HSD_DEFAULT_GPU_MODE, "GPU");
+  ADD_ATTR(FloatAttribute, "radius", 0.05f, 0.01f, 0.2f);
+  ADD_ATTR(FloatAttribute, "talus_global", 16.f, 0.f, FLT_MAX);
+  ADD_ATTR(IntAttribute, "iterations", 4, 1, 10);
+  ADD_ATTR(BoolAttribute, "talus_weighted", true);
+  ADD_ATTR(BoolAttribute, "GPU", HSD_DEFAULT_GPU_MODE);
 
   // attribute(s) order
   p_node->set_attr_ordered_key(

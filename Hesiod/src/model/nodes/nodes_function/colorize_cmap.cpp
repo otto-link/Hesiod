@@ -26,15 +26,14 @@ void setup_colorize_cmap_node(BaseNode *p_node)
   p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<MapEnumAttribute>(
-      "colormap",
-      hesiod::CmapManager::get_instance().get_colormap_name_mapping(),
-      "colormap");
-  p_node->add_attr<BoolAttribute>("reverse_colormap", false, "reverse_colormap");
-  p_node->add_attr<BoolAttribute>("reverse_alpha", false, "reverse_alpha");
-  p_node->add_attr<BoolAttribute>("clamp_alpha", true, "clamp_alpha");
-  p_node->add_attr<RangeAttribute>("saturate_input", "saturate_input", false);
-  p_node->add_attr<RangeAttribute>("saturate_alpha", "saturate_alpha", false);
+  ADD_ATTR(EnumAttribute,
+           "colormap",
+           hesiod::CmapManager::get_instance().get_colormap_name_mapping());
+  ADD_ATTR(BoolAttribute, "reverse_colormap", false);
+  ADD_ATTR(BoolAttribute, "reverse_alpha", false);
+  ADD_ATTR(BoolAttribute, "clamp_alpha", true);
+  ADD_ATTR(RangeAttribute, "saturate_input", false);
+  ADD_ATTR(RangeAttribute, "saturate_alpha", false);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"colormap",
@@ -63,7 +62,7 @@ void compute_colorize_cmap_node(BaseNode *p_node)
 
     std::vector<std::vector<float>>
         colormap_colors = hesiod::CmapManager::get_instance().get_colormap_data(
-            GET("colormap", MapEnumAttribute));
+            GET("colormap", EnumAttribute));
 
     // input saturation (clamping and then remapping to [0, 1])
     float cmin = 0.f;

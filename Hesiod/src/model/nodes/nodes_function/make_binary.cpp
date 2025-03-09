@@ -23,7 +23,7 @@ void setup_make_binary_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("threshold", 0.5f, -1.f, 1.f, "threshold");
+  ADD_ATTR(FloatAttribute, "threshold", 0.5f, -1.f, 1.f);
 }
 
 void compute_make_binary_node(BaseNode *p_node)

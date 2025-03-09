@@ -25,15 +25,15 @@ void setup_paraboloid_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("angle", 0.f, -180.f, 180.f, "angle");
-  p_node->add_attr<FloatAttribute>("a", 1.f, 0.01f, 5.f, "a");
-  p_node->add_attr<FloatAttribute>("b", 1.f, 0.01f, 5.f, "b");
-  p_node->add_attr<FloatAttribute>("v0", 0.f, -2.f, 2.f, "v0");
-  p_node->add_attr<BoolAttribute>("reverse_x", false, "reverse_x");
-  p_node->add_attr<BoolAttribute>("reverse_y", false, "reverse_y");
-  p_node->add_attr<Vec2FloatAttribute>("center", "center");
-  p_node->add_attr<BoolAttribute>("inverse", false, "inverse");
-  p_node->add_attr<RangeAttribute>("remap_range", "remap_range");
+  ADD_ATTR(FloatAttribute, "angle", 0.f, -180.f, 180.f);
+  ADD_ATTR(FloatAttribute, "a", 1.f, 0.01f, 5.f);
+  ADD_ATTR(FloatAttribute, "b", 1.f, 0.01f, 5.f);
+  ADD_ATTR(FloatAttribute, "v0", 0.f, -2.f, 2.f);
+  ADD_ATTR(BoolAttribute, "reverse_x", false);
+  ADD_ATTR(BoolAttribute, "reverse_y", false);
+  ADD_ATTR(Vec2FloatAttribute, "center");
+  ADD_ATTR(BoolAttribute, "inverse", false);
+  ADD_ATTR(RangeAttribute, "remap");
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"angle",
@@ -45,7 +45,7 @@ void setup_paraboloid_node(BaseNode *p_node)
                                 "center",
                                 "_SEPARATOR_",
                                 "inverse",
-                                "remap_range"});
+                                "remap"});
 }
 
 void compute_paraboloid_node(BaseNode *p_node)
@@ -105,8 +105,8 @@ void compute_paraboloid_node(BaseNode *p_node)
                          false, // saturate
                          {0.f, 0.f},
                          0.f,
-                         GET_ATTR("remap_range", RangeAttribute, is_active),
-                         GET("remap_range", RangeAttribute));
+                         GET_ATTR("remap", RangeAttribute, is_active),
+                         GET("remap", RangeAttribute));
 
   Q_EMIT p_node->compute_finished(p_node->get_id());
 }

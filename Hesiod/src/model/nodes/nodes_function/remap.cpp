@@ -24,7 +24,7 @@ void setup_remap_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<RangeAttribute>("remap", "Remap range");
+  ADD_ATTR(RangeAttribute, "remap");
 }
 
 void compute_remap_node(BaseNode *p_node)

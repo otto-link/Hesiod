@@ -26,13 +26,10 @@ void setup_heightmap_to_kernel_node(BaseNode *p_node)
                                 p_node->get_config_ref()->shape);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("radius", 0.1f, 0.001f, 0.2f, "radius");
-  p_node->add_attr<BoolAttribute>("normalize", false, "normalize");
-  p_node->add_attr<BoolAttribute>("envelope", false, "envelope");
-  p_node->add_attr<MapEnumAttribute>("envelope_kernel",
-                                     "cubic_pulse",
-                                     kernel_type_map,
-                                     "envelope_kernel");
+  ADD_ATTR(FloatAttribute, "radius", 0.1f, 0.001f, 0.2f);
+  ADD_ATTR(BoolAttribute, "normalize", false);
+  ADD_ATTR(BoolAttribute, "envelope", false);
+  ADD_ATTR(EnumAttribute, "envelope_kernel", kernel_type_map, "cubic_pulse");
 
   // attribute(s) order
   p_node->set_attr_ordered_key(
@@ -63,7 +60,7 @@ void compute_heightmap_to_kernel_node(BaseNode *p_node)
     {
       hmap::Array env = hmap::get_kernel(
           kernel_shape,
-          (hmap::KernelType)GET("envelope_kernel", MapEnumAttribute));
+          (hmap::KernelType)GET("envelope_kernel", EnumAttribute));
 
       *p_out *= env;
     }

@@ -23,7 +23,7 @@ void setup_gaussian_decay_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("sigma", 0.1f, 0.001f, 0.2f, "sigma");
+  ADD_ATTR(FloatAttribute, "sigma", 0.1f, 0.001f, 0.2f);
 }
 
 void compute_gaussian_decay_node(BaseNode *p_node)

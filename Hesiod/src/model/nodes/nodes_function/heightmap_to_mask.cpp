@@ -23,15 +23,11 @@ void setup_heightmap_to_mask_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "mask", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<BoolAttribute>("inverse", false, "inverse");
-  p_node->add_attr<BoolAttribute>("smoothing", false, "smoothing");
-  p_node->add_attr<FloatAttribute>("smoothing_radius",
-                                   0.05f,
-                                   0.f,
-                                   0.2f,
-                                   "smoothing_radius");
-  p_node->add_attr<RangeAttribute>("saturate_range", "saturate_range");
-  p_node->add_attr<FloatAttribute>("saturate_k", 0.01f, 0.01f, 1.f, "saturate_k");
+  ADD_ATTR(BoolAttribute, "inverse", false);
+  ADD_ATTR(BoolAttribute, "smoothing", false);
+  ADD_ATTR(FloatAttribute, "smoothing_radius", 0.05f, 0.f, 0.2f);
+  ADD_ATTR(RangeAttribute, "saturate_range");
+  ADD_ATTR(FloatAttribute, "saturate_k", 0.01f, 0.01f, 1.f);
 
   // attribute(s) order
   p_node->set_attr_ordered_key(

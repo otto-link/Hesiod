@@ -26,13 +26,13 @@ void setup_stratify_oblique_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<SeedAttribute>("seed");
-  p_node->add_attr<IntAttribute>("n_strata", 3, 1, 16, "n_strata");
-  p_node->add_attr<FloatAttribute>("strata_noise", 0.f, 0.f, 1.f, "strata_noise");
-  p_node->add_attr<FloatAttribute>("gamma", 0.7f, 0.01f, 5.f, "gamma");
-  p_node->add_attr<FloatAttribute>("gamma_noise", 0.f, 0.f, 1.f, "gamma_noise");
-  p_node->add_attr<FloatAttribute>("talus_global", 1.f, 0.f, 8.f, "talus_global");
-  p_node->add_attr<FloatAttribute>("angle", 30.f, -180.f, 180.f, "angle");
+  ADD_ATTR(SeedAttribute, "seed");
+  ADD_ATTR(IntAttribute, "n_strata", 3, 1, 16);
+  ADD_ATTR(FloatAttribute, "strata_noise", 0.f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "gamma", 0.7f, 0.01f, 5.f);
+  ADD_ATTR(FloatAttribute, "gamma_noise", 0.f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "talus_global", 1.f, 0.f, FLT_MAX);
+  ADD_ATTR(FloatAttribute, "angle", 30.f, -180.f, 180.f);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"seed",

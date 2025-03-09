@@ -25,9 +25,9 @@ void setup_kernel_prim_node(BaseNode *p_node)
                                 p_node->get_config_ref()->shape);
 
   // attribute(s)
-  p_node->add_attr<MapEnumAttribute>("kernel", "cubic_pulse", kernel_type_map, "kernel");
-  p_node->add_attr<FloatAttribute>("radius", 0.1f, 0.001f, 0.2f, "radius");
-  p_node->add_attr<BoolAttribute>("normalize", false, "normalize");
+  ADD_ATTR(EnumAttribute, "kernel", kernel_type_map, "cubic_pulse");
+  ADD_ATTR(FloatAttribute, "radius", 0.1f, 0.001f, 0.2f);
+  ADD_ATTR(BoolAttribute, "normalize", false);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"kernel", "radius", "normalize"});
@@ -48,8 +48,7 @@ void compute_kernel_prim_node(BaseNode *p_node)
   // kernel definition
   hmap::Vec2<int> kernel_shape = {2 * ir + 1, 2 * ir + 1};
 
-  *p_out = hmap::get_kernel(kernel_shape,
-                            (hmap::KernelType)GET("kernel", MapEnumAttribute));
+  *p_out = hmap::get_kernel(kernel_shape, (hmap::KernelType)GET("kernel", EnumAttribute));
 
   if (GET("normalize", BoolAttribute))
     *p_out /= p_out->sum();

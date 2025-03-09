@@ -26,7 +26,7 @@ void setup_gradient_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "dy", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<RangeAttribute>("remap", "Remap range");
+  ADD_ATTR(RangeAttribute, "remap");
 }
 
 void compute_gradient_node(BaseNode *p_node)

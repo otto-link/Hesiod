@@ -26,14 +26,13 @@ void setup_gaussian_pulse_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("radius", 0.1f, 0.f, 1.f, "radius");
-  p_node->add_attr<Vec2FloatAttribute>("center", "center");
-  p_node->add_attr<BoolAttribute>("inverse", false, "inverse");
-  p_node->add_attr<RangeAttribute>("remap_range", "remap_range");
+  ADD_ATTR(FloatAttribute, "radius", 0.1f, 0.f, 1.f);
+  ADD_ATTR(Vec2FloatAttribute, "center");
+  ADD_ATTR(BoolAttribute, "inverse", false);
+  ADD_ATTR(RangeAttribute, "remap");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key(
-      {"radius", "center", "_SEPARATOR_", "inverse", "remap_range"});
+  p_node->set_attr_ordered_key({"radius", "center", "_SEPARATOR_", "inverse", "remap"});
 }
 
 void compute_gaussian_pulse_node(BaseNode *p_node)
@@ -77,8 +76,8 @@ void compute_gaussian_pulse_node(BaseNode *p_node)
                          false, // saturate
                          {0.f, 0.f},
                          0.f,
-                         GET_ATTR("remap_range", RangeAttribute, is_active),
-                         GET("remap_range", RangeAttribute));
+                         GET_ATTR("remap", RangeAttribute, is_active),
+                         GET("remap", RangeAttribute));
 
   Q_EMIT p_node->compute_finished(p_node->get_id());
 }

@@ -23,9 +23,9 @@ void setup_recast_cracks_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("cut_min", 0.05f, 0.f, 1.f, "cut_min");
-  p_node->add_attr<FloatAttribute>("cut_max", 0.5f, 0.f, 1.f, "cut_max");
-  p_node->add_attr<FloatAttribute>("k_smoothing", 0.01f, 0.f, 1.f, "k_smoothing");
+  ADD_ATTR(FloatAttribute, "cut_min", 0.05f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "cut_max", 0.5f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "k_smoothing", 0.01f, 0.f, 1.f);
 }
 
 void compute_recast_cracks_node(BaseNode *p_node)

@@ -25,15 +25,12 @@ void setup_falloff_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("strength", 1.f, 0.f, 4.f, "strength");
-  p_node->add_attr<MapEnumAttribute>("distance_function",
-                                     "Euclidian",
-                                     distance_function_map,
-                                     "distance_function");
-  p_node->add_attr<RangeAttribute>("remap_range", "remap_range");
+  ADD_ATTR(FloatAttribute, "strength", 1.f, 0.f, 4.f);
+  ADD_ATTR(EnumAttribute, "distance_function", distance_function_map, "Euclidian");
+  ADD_ATTR(RangeAttribute, "remap");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"strength", "distance_function", "remap_range"});
+  p_node->set_attr_ordered_key({"strength", "distance_function", "remap"});
 }
 
 void compute_falloff_node(BaseNode *p_node)
@@ -55,16 +52,16 @@ void compute_falloff_node(BaseNode *p_node)
     float strength = GET("strength", FloatAttribute);
 
     if (!p_dr)
-      hmap::transform(*p_out,
-                      [p_node, &strength](hmap::Array &z, hmap::Vec4<float> bbox)
-                      {
-                        hmap::falloff(z,
-                                      strength,
-                                      (hmap::DistanceFunction)GET("distance_function",
-                                                                  MapEnumAttribute),
-                                      nullptr,
-                                      bbox);
-                      });
+      hmap::transform(
+          *p_out,
+          [p_node, &strength](hmap::Array &z, hmap::Vec4<float> bbox)
+          {
+            hmap::falloff(z,
+                          strength,
+                          (hmap::DistanceFunction)GET("distance_function", EnumAttribute),
+                          nullptr,
+                          bbox);
+          });
 
     else
       hmap::transform(
@@ -72,17 +69,15 @@ void compute_falloff_node(BaseNode *p_node)
           *p_dr,
           [p_node, &strength](hmap::Array &z, hmap::Array &dr, hmap::Vec4<float> bbox)
           {
-            hmap::falloff(
-                z,
-                strength,
-                (hmap::DistanceFunction)GET("distance_function", MapEnumAttribute),
-                &dr,
-                bbox);
+            hmap::falloff(z,
+                          strength,
+                          (hmap::DistanceFunction)GET("distance_function", EnumAttribute),
+                          &dr,
+                          bbox);
           });
 
-    if (GET_ATTR("remap_range", RangeAttribute, is_active))
-      p_out->remap(GET("remap_range", RangeAttribute)[0],
-                   GET("remap_range", RangeAttribute)[1]);
+    if (GET_ATTR("remap", RangeAttribute, is_active))
+      p_out->remap(GET("remap", RangeAttribute)[0], GET("remap", RangeAttribute)[1]);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

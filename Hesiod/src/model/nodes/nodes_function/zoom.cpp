@@ -25,10 +25,10 @@ void setup_zoom_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("zoom_factor", 2.f, 1.f, 10.f, "zoom_factor");
-  p_node->add_attr<BoolAttribute>("periodic", false, "periodic");
-  p_node->add_attr<Vec2FloatAttribute>("center", "center");
-  p_node->add_attr<BoolAttribute>("remap", false, "remap");
+  ADD_ATTR(FloatAttribute, "zoom_factor", 2.f, 1.f, 10.f);
+  ADD_ATTR(BoolAttribute, "periodic", false);
+  ADD_ATTR(Vec2FloatAttribute, "center");
+  ADD_ATTR(BoolAttribute, "remap", false);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"zoom_factor", "periodic", "center", "remap"});

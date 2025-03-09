@@ -25,10 +25,10 @@ void setup_hydraulic_stream_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "erosion", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("c_erosion", 0.05f, 0.01f, 0.1f, "c_erosion");
-  p_node->add_attr<FloatAttribute>("talus_ref", 0.1f, 0.01f, 10.f, "talus_ref");
-  p_node->add_attr<FloatAttribute>("radius", 0.f, 0.f, 0.05f, "radius");
-  p_node->add_attr<FloatAttribute>("clipping_ratio", 10.f, 0.1f, 100.f, "clipping_ratio");
+  ADD_ATTR(FloatAttribute, "c_erosion", 0.05f, 0.01f, 0.1f);
+  ADD_ATTR(FloatAttribute, "talus_ref", 0.1f, 0.01f, 10.f);
+  ADD_ATTR(FloatAttribute, "radius", 0.f, 0.f, 0.05f);
+  ADD_ATTR(FloatAttribute, "clipping_ratio", 10.f, 0.1f, 100.f);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"c_erosion", "talus_ref", "radius", "clipping_ratio"});

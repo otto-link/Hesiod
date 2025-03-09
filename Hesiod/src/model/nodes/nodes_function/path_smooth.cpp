@@ -23,13 +23,9 @@ void setup_path_smooth_node(BaseNode *p_node)
   p_node->add_port<hmap::Path>(gnode::PortType::OUT, "output");
 
   // attribute(s)
-  p_node->add_attr<IntAttribute>("navg", 1, 1, 10, "navg");
-  p_node->add_attr<FloatAttribute>("averaging_intensity",
-                                   1.f,
-                                   0.f,
-                                   1.f,
-                                   "averaging_intensity");
-  p_node->add_attr<FloatAttribute>("inertia", 0.f, 0.f, 1.f, "inertia");
+  ADD_ATTR(IntAttribute, "navg", 1, 1, 10);
+  ADD_ATTR(FloatAttribute, "averaging_intensity", 1.f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "inertia", 0.f, 0.f, 1.f);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"navg", "averaging_intensity", "inertia"});

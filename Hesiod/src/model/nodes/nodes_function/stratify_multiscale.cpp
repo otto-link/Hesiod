@@ -26,25 +26,17 @@ void setup_stratify_multiscale_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<SeedAttribute>("seed");
+  ADD_ATTR(SeedAttribute, "seed");
 
   std::vector<int>   n_strata = {4, 4};
   std::vector<float> strata_noise = {0.5f, 0.5f};
   std::vector<float> gamma_list = {0.6f, 0.5f};
   std::vector<float> gamma_noise = {0.2f, 0.2f};
 
-  p_node->add_attr<VecIntAttribute>("n_strata", n_strata, 1, 32, "n_strata");
-  p_node->add_attr<VecFloatAttribute>("strata_noise",
-                                      strata_noise,
-                                      0.f,
-                                      1.f,
-                                      "strata_noise");
-  p_node->add_attr<VecFloatAttribute>("gamma_list", gamma_list, 0.01f, 5.f, "gamma_list");
-  p_node->add_attr<VecFloatAttribute>("gamma_noise",
-                                      gamma_noise,
-                                      0.f,
-                                      1.f,
-                                      "gamma_noise");
+  ADD_ATTR(VecIntAttribute, "n_strata", n_strata, 1, 32);
+  ADD_ATTR(VecFloatAttribute, "strata_noise", strata_noise, 0.f, 1.f);
+  ADD_ATTR(VecFloatAttribute, "gamma_list", gamma_list, 0.01f, 5.f);
+  ADD_ATTR(VecFloatAttribute, "gamma_noise", gamma_noise, 0.f, 1.f);
 
   // attribute(s) order
   p_node->set_attr_ordered_key(

@@ -29,31 +29,18 @@ void setup_mountain_range_radial_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "angle", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<WaveNbAttribute>("kw",
-                                    std::vector<float>(2, 4.f),
-                                    0.f,
-                                    32.f,
-                                    true,
-                                    "kw");
-  p_node->add_attr<SeedAttribute>("seed");
-  p_node->add_attr<FloatAttribute>("half_width", 0.2f, 0.f, 1.f, "half_width");
-  p_node->add_attr<FloatAttribute>("angle_spread_ratio",
-                                   0.5f,
-                                   0.f,
-                                   1.f,
-                                   "angle_spread_ratio");
-  p_node->add_attr<FloatAttribute>("core_size_ratio",
-                                   0.2f,
-                                   0.01f,
-                                   2.f,
-                                   "core_size_ratio");
-  p_node->add_attr<Vec2FloatAttribute>("center", "center");
-  p_node->add_attr<IntAttribute>("octaves", 8, 0, 32, "octaves");
-  p_node->add_attr<FloatAttribute>("weight", 0.7f, 0.f, 1.f, "weight");
-  p_node->add_attr<FloatAttribute>("persistence", 0.5f, 0.f, 1.f, "persistence");
-  p_node->add_attr<FloatAttribute>("lacunarity", 2.f, 0.01f, 4.f, "lacunarity");
-  p_node->add_attr<BoolAttribute>("inverse", false, "inverse");
-  p_node->add_attr<RangeAttribute>("remap_range", "remap_range");
+  ADD_ATTR(WaveNbAttribute, "kw", std::vector<float>(2, 4.f), 0.f, FLT_MAX, true);
+  ADD_ATTR(SeedAttribute, "seed");
+  ADD_ATTR(FloatAttribute, "half_width", 0.2f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "angle_spread_ratio", 0.5f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "core_size_ratio", 0.2f, 0.01f, 2.f);
+  ADD_ATTR(Vec2FloatAttribute, "center");
+  ADD_ATTR(IntAttribute, "octaves", 8, 0, 32);
+  ADD_ATTR(FloatAttribute, "weight", 0.7f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "persistence", 0.5f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "lacunarity", 2.f, 0.01f, 4.f);
+  ADD_ATTR(BoolAttribute, "inverse", false);
+  ADD_ATTR(RangeAttribute, "remap");
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"kw",
@@ -69,7 +56,7 @@ void setup_mountain_range_radial_node(BaseNode *p_node)
                                 "lacunarity",
                                 "_SEPARATOR_",
                                 "inverse",
-                                "remap_range"});
+                                "remap"});
 }
 
 void compute_mountain_range_radial_node(BaseNode *p_node)
@@ -141,8 +128,8 @@ void compute_mountain_range_radial_node(BaseNode *p_node)
                          false, // saturate
                          {0.f, 0.f},
                          0.f,
-                         GET_ATTR("remap_range", RangeAttribute, is_active),
-                         GET("remap_range", RangeAttribute));
+                         GET_ATTR("remap", RangeAttribute, is_active),
+                         GET("remap", RangeAttribute));
 
   Q_EMIT p_node->compute_finished(p_node->get_id());
 }

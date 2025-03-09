@@ -22,8 +22,8 @@ void setup_cloud_to_path_node(BaseNode *p_node)
   p_node->add_port<hmap::Path>(gnode::PortType::OUT, "path");
 
   // attribute(s)
-  p_node->add_attr<BoolAttribute>("closed", false, "closed");
-  p_node->add_attr<BoolAttribute>("reorder_nns", false, "reorder_nns");
+  ADD_ATTR(BoolAttribute, "closed", false);
+  ADD_ATTR(BoolAttribute, "reorder_nns", false);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"closed", "reorder_nns"});

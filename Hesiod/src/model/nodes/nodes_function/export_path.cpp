@@ -24,12 +24,12 @@ void setup_export_path_node(BaseNode *p_node)
   p_node->add_port<hmap::Path>(gnode::PortType::IN, "input");
 
   // attribute(s)
-  p_node->add_attr<FilenameAttribute>("fname",
-                                      std::filesystem::path("path.csv"),
-                                      true, // save
-                                      "CSV (*.csv)",
-                                      "fname");
-  p_node->add_attr<BoolAttribute>("auto_export", true, "auto_export");
+  ADD_ATTR(FilenameAttribute,
+           "fname",
+           std::filesystem::path("path.csv"),
+           "CSV (*.csv)",
+           true);
+  ADD_ATTR(BoolAttribute, "auto_export", true);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"fname", "auto_export"});

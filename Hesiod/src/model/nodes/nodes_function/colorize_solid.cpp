@@ -21,8 +21,8 @@ void setup_colorize_solid_node(BaseNode *p_node)
   p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<ColorAttribute>("color", 1.f, 1.f, 1.f, 1.f, "color");
-  p_node->add_attr<FloatAttribute>("alpha", 1.f, 0.f, 1.f, "alpha");
+  ADD_ATTR(ColorAttribute, "color", 1.f, 1.f, 1.f, 1.f);
+  ADD_ATTR(FloatAttribute, "alpha", 1.f, 0.f, 1.f);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"color", "alpha"});

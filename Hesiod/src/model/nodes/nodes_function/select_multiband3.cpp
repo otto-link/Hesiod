@@ -25,9 +25,9 @@ void setup_select_multiband3_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "high", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("ratio1", 0.2f, 0.f, 1.f, "ratio1");
-  p_node->add_attr<FloatAttribute>("ratio2", 0.5f, 0.f, 1.f, "ratio2");
-  p_node->add_attr<FloatAttribute>("overlap", 0.5f, 0.f, 1.f, "overlap");
+  ADD_ATTR(FloatAttribute, "ratio1", 0.2f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "ratio2", 0.5f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "overlap", 0.5f, 0.f, 1.f);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"ratio1", "ratio2", "overlap"});
