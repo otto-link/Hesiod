@@ -20,6 +20,10 @@ R""(
 
     /* QMainWindow */
 
+    QRadioButton
+    {
+	color: #DFE1E2;
+    }
 
     /* QAbstractSpinBox */
 
