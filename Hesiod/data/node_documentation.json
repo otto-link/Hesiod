@@ -8033,11 +8033,11 @@
     },
     "Smoothstep": {
         "category": "Math/Base",
-        "description": "TODO",
+        "description": "Applies a smoothstep function to the input heightmap, creating a smooth transition between values.",
         "label": "Smoothstep",
         "parameters": {
             "order": {
-                "description": "TODO",
+                "description": "The order of the smoothstep function, determining the smoothness of the transition.",
                 "key": "order",
                 "label": "order",
                 "type": "Choice"
@@ -8053,7 +8053,7 @@
             "output": {
                 "caption": "output",
                 "data_type": "Heightmap",
-                "description": "Output heightmap.",
+                "description": "Output heightmap with the smoothstep function applied.",
                 "type": "output"
             }
         }
