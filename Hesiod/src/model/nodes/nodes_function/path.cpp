@@ -23,8 +23,7 @@ void setup_path_node(BaseNode *p_node)
   p_node->add_port<hmap::Path>(gnode::PortType::OUT, "path");
 
   // attribute(s)
-  p_node->add_attr<PathAttribute>("path", "Path");
-  p_node->add_attr<BoolAttribute>("reverse", false, "reverse");
+  ADD_ATTR(PathAttribute, "path");
 }
 
 void compute_path_node(BaseNode *p_node)
@@ -35,9 +34,6 @@ void compute_path_node(BaseNode *p_node)
 
   hmap::Path *p_out = p_node->get_value_ref<hmap::Path>("path");
   *p_out = GET("path", PathAttribute);
-
-  if (GET("reverse", BoolAttribute))
-    p_out->reverse();
 
   Q_EMIT p_node->compute_finished(p_node->get_id());
 }

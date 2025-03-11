@@ -26,11 +26,9 @@ void setup_thermal_inflate_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("talus_global", 2.f, 0.f, 16.f, "talus_global");
-  p_node->add_attr<IntAttribute>("iterations", 500, 1, 4000, "iterations");
-  p_node->add_attr<BoolAttribute>("scale_talus_with_elevation",
-                                  true,
-                                  "scale_talus_with_elevation");
+  ADD_ATTR(FloatAttribute, "talus_global", 2.f, 0.f, FLT_MAX);
+  ADD_ATTR(IntAttribute, "iterations", 500, 1, INT_MAX);
+  ADD_ATTR(BoolAttribute, "scale_talus_with_elevation", true);
 
   // attribute(s) order
   p_node->set_attr_ordered_key(

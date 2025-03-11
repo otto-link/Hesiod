@@ -23,7 +23,7 @@ void setup_gradient_talus_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<RangeAttribute>("remap_range", "remap_range");
+  ADD_ATTR(RangeAttribute, "remap");
 }
 
 void compute_gradient_talus_node(BaseNode *p_node)
@@ -38,10 +38,16 @@ void compute_gradient_talus_node(BaseNode *p_node)
   {
     hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
-    hmap::transform(*p_out,
-                    *p_in,
-                    [](hmap::Array &out, hmap::Array &in)
-                    { out = hmap::gradient_talus(in); });
+    hmap::transform(
+        {p_out, p_in},
+        [](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+        {
+          hmap::Array *pa_out = p_arrays[0];
+          hmap::Array *pa_in = p_arrays[1];
+
+          *pa_out = hmap::gradient_talus(*pa_in);
+        },
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
 
     p_out->smooth_overlap_buffers();
 
@@ -54,8 +60,8 @@ void compute_gradient_talus_node(BaseNode *p_node)
                            false, // saturate
                            {0.f, 0.f},
                            0.f,
-                           GET_ATTR("remap_range", RangeAttribute, is_active),
-                           GET("remap_range", RangeAttribute));
+                           GET_ATTR("remap", RangeAttribute, is_active),
+                           GET("remap", RangeAttribute));
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

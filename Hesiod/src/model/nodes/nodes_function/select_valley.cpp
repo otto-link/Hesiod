@@ -24,18 +24,16 @@ void setup_select_valley_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("radius", 0.05f, 0.001f, 0.2f, "radius");
-  p_node->add_attr<BoolAttribute>("inverse", false, "inverse");
-  p_node->add_attr<BoolAttribute>("smoothing", true, "smoothing");
-  p_node->add_attr<FloatAttribute>("smoothing_radius",
-                                   0.01f,
-                                   0.f,
-                                   0.2f,
-                                   "smoothing_radius");
-  p_node->add_attr<BoolAttribute>("GPU", HSD_DEFAULT_GPU_MODE, "GPU");
+  ADD_ATTR(FloatAttribute, "radius", 0.05f, 0.001f, 0.2f);
+  ADD_ATTR(BoolAttribute, "ridge_select", false);
+  ADD_ATTR(BoolAttribute, "inverse", false);
+  ADD_ATTR(BoolAttribute, "smoothing", true);
+  ADD_ATTR(FloatAttribute, "smoothing_radius", 0.01f, 0.f, 0.2f);
+  ADD_ATTR(BoolAttribute, "GPU", HSD_DEFAULT_GPU_MODE);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"radius",
+                                "ridge_select",
                                 "_SEPARATOR_",
                                 "inverse",
                                 "smoothing",
@@ -62,12 +60,16 @@ void compute_select_valley_node(BaseNode *p_node)
     {
       hmap::transform(
           {p_out, p_in},
-          [ir](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+          [p_node,
+           ir](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
           {
             hmap::Array *pa_out = p_arrays[0];
             hmap::Array *pa_in = p_arrays[1];
 
-            *pa_out = hmap::gpu::select_valley(*pa_in, ir);
+            *pa_out = hmap::gpu::select_valley(*pa_in,
+                                               ir,
+                                               true,
+                                               GET("ridge_select", BoolAttribute));
           },
           p_node->get_config_ref()->hmap_transform_mode_gpu);
     }
@@ -75,12 +77,16 @@ void compute_select_valley_node(BaseNode *p_node)
     {
       hmap::transform(
           {p_out, p_in},
-          [ir](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+          [p_node,
+           ir](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
           {
             hmap::Array *pa_out = p_arrays[0];
             hmap::Array *pa_in = p_arrays[1];
 
-            *pa_out = hmap::select_valley(*pa_in, ir);
+            *pa_out = hmap::select_valley(*pa_in,
+                                          ir,
+                                          true,
+                                          GET("ridge_select", BoolAttribute));
           },
           p_node->get_config_ref()->hmap_transform_mode_cpu);
     }

@@ -23,7 +23,7 @@ void setup_make_periodic_stitching_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("overlap", 0.4f, 0.05f, 0.95f, "overlap");
+  ADD_ATTR(FloatAttribute, "overlap", 0.5f, 0.05f, 0.95f);
 }
 
 void compute_make_periodic_stitching_node(BaseNode *p_node)
@@ -38,12 +38,16 @@ void compute_make_periodic_stitching_node(BaseNode *p_node)
   {
     hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
-    hmap::Array in_array = p_in->to_array();
-    hmap::Array out_array = hmap::Array(p_out->shape);
+    hmap::transform(
+        {p_out, p_in},
+        [p_node](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+        {
+          hmap::Array *pa_out = p_arrays[0];
+          hmap::Array *pa_in = p_arrays[1];
 
-    out_array = hmap::make_periodic_stitching(in_array, GET("overlap", FloatAttribute));
-
-    p_out->from_array_interp_nearest(out_array);
+          *pa_out = hmap::make_periodic_stitching(*pa_in, GET("overlap", FloatAttribute));
+        },
+        hmap::TransformMode::SINGLE_ARRAY);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

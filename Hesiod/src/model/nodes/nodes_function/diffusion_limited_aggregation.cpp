@@ -23,18 +23,14 @@ void setup_diffusion_limited_aggregation_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<SeedAttribute>("seed");
-  p_node->add_attr<FloatAttribute>("scale", 0.01f, 0.005f, 0.1f, "scale");
-  p_node->add_attr<FloatAttribute>("seeding_radius", 0.4f, 0.1f, 0.5f, "seeding_radius");
-  p_node->add_attr<FloatAttribute>("seeding_outer_radius_ratio",
-                                   0.2f,
-                                   0.01f,
-                                   0.5f,
-                                   "seeding_outer_radius_ratio");
-  p_node->add_attr<FloatAttribute>("slope", 8.f, 0.1f, 32.f, "slope");
-  p_node->add_attr<FloatAttribute>("noise_ratio", 0.2f, 0.f, 1.f, "noise_ratio");
-  p_node->add_attr<BoolAttribute>("inverse", false, "inverse");
-  p_node->add_attr<RangeAttribute>("remap_range", "remap_range");
+  ADD_ATTR(SeedAttribute, "seed");
+  ADD_ATTR(FloatAttribute, "scale", 0.01f, 0.005f, 0.1f);
+  ADD_ATTR(FloatAttribute, "seeding_radius", 0.4f, 0.1f, 0.5f);
+  ADD_ATTR(FloatAttribute, "seeding_outer_radius_ratio", 0.2f, 0.01f, 0.5f);
+  ADD_ATTR(FloatAttribute, "slope", 8.f, 0.1f, FLT_MAX);
+  ADD_ATTR(FloatAttribute, "noise_ratio", 0.2f, 0.f, 1.f);
+  ADD_ATTR(BoolAttribute, "inverse", false);
+  ADD_ATTR(RangeAttribute, "remap");
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"seed",
@@ -45,7 +41,7 @@ void setup_diffusion_limited_aggregation_node(BaseNode *p_node)
                                 "noise_ratio",
                                 "_SEPARATOR_",
                                 "inverse",
-                                "remap_range"});
+                                "remap"});
 }
 
 void compute_diffusion_limited_aggregation_node(BaseNode *p_node)
@@ -76,8 +72,8 @@ void compute_diffusion_limited_aggregation_node(BaseNode *p_node)
                          false, // saturate
                          {0.f, 0.f},
                          0.f,
-                         GET_ATTR("remap_range", RangeAttribute, is_active),
-                         GET("remap_range", RangeAttribute));
+                         GET_ATTR("remap", RangeAttribute, is_active),
+                         GET("remap", RangeAttribute));
 
   Q_EMIT p_node->compute_finished(p_node->get_id());
 }

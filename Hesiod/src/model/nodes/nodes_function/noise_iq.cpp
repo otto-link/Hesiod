@@ -29,20 +29,16 @@ void setup_noise_iq_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<MapEnumAttribute>("noise_type", noise_type_map_fbm, "noise_type");
-  p_node->add_attr<WaveNbAttribute>("kw");
-  p_node->add_attr<SeedAttribute>("seed");
-  p_node->add_attr<IntAttribute>("octaves", 8, 0, 32, "octaves");
-  p_node->add_attr<FloatAttribute>("weight", 0.7f, 0.f, 1.f, "weight");
-  p_node->add_attr<FloatAttribute>("persistence", 0.5f, 0.f, 1.f, "persistence");
-  p_node->add_attr<FloatAttribute>("lacunarity", 2.f, 0.01f, 4.f, "lacunarity");
-  p_node->add_attr<FloatAttribute>("gradient_scale",
-                                   0.05f,
-                                   0.01f,
-                                   0.1f,
-                                   "gradient_scale");
-  p_node->add_attr<BoolAttribute>("inverse", false, "inverse");
-  p_node->add_attr<RangeAttribute>("remap", "remap");
+  ADD_ATTR(EnumAttribute, "noise_type", noise_type_map_fbm);
+  ADD_ATTR(WaveNbAttribute, "kw");
+  ADD_ATTR(SeedAttribute, "seed");
+  ADD_ATTR(IntAttribute, "octaves", 8, 0, 32);
+  ADD_ATTR(FloatAttribute, "weight", 0.7f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "persistence", 0.5f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "lacunarity", 2.f, 0.01f, 4.f);
+  ADD_ATTR(FloatAttribute, "gradient_scale", 0.05f, 0.01f, 0.1f);
+  ADD_ATTR(BoolAttribute, "inverse", false);
+  ADD_ATTR(RangeAttribute, "remap");
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"noise_type",
@@ -83,7 +79,7 @@ void compute_noise_iq_node(BaseNode *p_node)
                       hmap::Array      *p_noise_y,
                       hmap::Array      *p_ctrl)
              {
-               return hmap::noise_iq((hmap::NoiseType)GET("noise_type", MapEnumAttribute),
+               return hmap::noise_iq((hmap::NoiseType)GET("noise_type", EnumAttribute),
                                      shape,
                                      GET("kw", WaveNbAttribute),
                                      GET("seed", SeedAttribute),

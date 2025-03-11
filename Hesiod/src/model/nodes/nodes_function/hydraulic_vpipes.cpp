@@ -28,13 +28,13 @@ void setup_hydraulic_vpipes_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "deposition", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<IntAttribute>("iterations", 50, 1, 500, "iterations");
-  p_node->add_attr<FloatAttribute>("water_height", 0.01f, 0.01f, 0.5f, "water_height");
-  p_node->add_attr<FloatAttribute>("c_capacity", 0.1f, 0.01f, 0.5f, "c_capacity");
-  p_node->add_attr<FloatAttribute>("c_erosion", 0.01f, 0.f, 0.5f, "c_erosion");
-  p_node->add_attr<FloatAttribute>("c_deposition", 0.01f, 0.f, 0.5f, "c_deposition");
-  p_node->add_attr<FloatAttribute>("rain_rate", 0.f, 0.f, 0.1f, "rain_rate");
-  p_node->add_attr<FloatAttribute>("evap_rate", 0.01f, 0.01f, 0.1f, "evap_rate");
+  ADD_ATTR(IntAttribute, "iterations", 50, 1, INT_MAX);
+  ADD_ATTR(FloatAttribute, "water_height", 0.01f, 0.01f, 0.5f);
+  ADD_ATTR(FloatAttribute, "c_capacity", 0.1f, 0.01f, 0.5f);
+  ADD_ATTR(FloatAttribute, "c_erosion", 0.01f, 0.f, 0.5f);
+  ADD_ATTR(FloatAttribute, "c_deposition", 0.01f, 0.f, 0.5f);
+  ADD_ATTR(FloatAttribute, "rain_rate", 0.f, 0.f, 0.1f);
+  ADD_ATTR(FloatAttribute, "evap_rate", 0.01f, 0.01f, 0.1f);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"iterations",

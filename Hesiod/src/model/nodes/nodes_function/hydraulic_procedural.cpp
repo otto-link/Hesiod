@@ -26,31 +26,20 @@ void setup_hydraulic_procedural_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "ridge_mask", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<SeedAttribute>("seed");
-  p_node->add_attr<FloatAttribute>("ridge_wavelength",
-                                   0.1f,
-                                   0.01f,
-                                   0.2f,
-                                   "ridge_wavelength");
-  p_node->add_attr<FloatAttribute>("ridge_scaling", 0.3f, 0.01f, 1.f, "ridge_scaling");
-  p_node->add_attr<MapEnumAttribute>("erosion_profile",
-                                     "Triangle smooth",
-                                     erosion_profile_map,
-                                     "erosion_profile");
-  p_node->add_attr<FloatAttribute>("delta", 0.2f, 0.f, 1.f, "delta");
-  p_node->add_attr<FloatAttribute>("noise_ratio", 0.2f, 0.f, 1.f, "noise_ratio");
-  p_node->add_attr<FloatAttribute>("density_factor", 1.f, 0.1f, 10.f, "density_factor");
-  p_node->add_attr<FloatAttribute>("kernel_width_ratio",
-                                   2.f,
-                                   0.1f,
-                                   8.f,
-                                   "kernel_width_ratio");
-  p_node->add_attr<FloatAttribute>("phase_smoothing", 2.f, 0.f, 10.f, "phase_smoothing");
-  p_node->add_attr<FloatAttribute>("phase_noise_amp", 0.f, 0.f, 6.f, "phase_noise_amp");
-  p_node->add_attr<BoolAttribute>("reverse_phase", false, "reverse_phase");
-  p_node->add_attr<BoolAttribute>("rotate90", false, "rotate90");
-  p_node->add_attr<BoolAttribute>("use_default_mask", true, "use_default_mask");
-  p_node->add_attr<FloatAttribute>("slope_mask", 6.f, 0.f, 32.f, "slope_mask");
+  ADD_ATTR(SeedAttribute, "seed");
+  ADD_ATTR(FloatAttribute, "ridge_wavelength", 0.1f, 0.01f, 0.2f);
+  ADD_ATTR(FloatAttribute, "ridge_scaling", 0.3f, 0.01f, 1.f);
+  ADD_ATTR(EnumAttribute, "erosion_profile", erosion_profile_map, "Triangle smooth");
+  ADD_ATTR(FloatAttribute, "delta", 0.2f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "noise_ratio", 0.2f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "density_factor", 1.f, 0.1f, 10.f);
+  ADD_ATTR(FloatAttribute, "kernel_width_ratio", 2.f, 0.1f, 8.f);
+  ADD_ATTR(FloatAttribute, "phase_smoothing", 2.f, 0.f, 10.f);
+  ADD_ATTR(FloatAttribute, "phase_noise_amp", 0.f, 0.f, 6.f);
+  ADD_ATTR(BoolAttribute, "reverse_phase", false);
+  ADD_ATTR(BoolAttribute, "rotate90", false);
+  ADD_ATTR(BoolAttribute, "use_default_mask", true);
+  ADD_ATTR(FloatAttribute, "slope_mask", 6.f, 0.f, 32.f);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"seed",
@@ -111,7 +100,7 @@ void compute_hydraulic_procedural_node(BaseNode *p_node)
               GET("seed", SeedAttribute),
               global_wavelength,
               GET("ridge_scaling", FloatAttribute),
-              (hmap::ErosionProfile)GET("erosion_profile", MapEnumAttribute),
+              (hmap::ErosionProfile)GET("erosion_profile", EnumAttribute),
               GET("delta", FloatAttribute),
               GET("noise_ratio", FloatAttribute),
               -1, // prefilter_ir,

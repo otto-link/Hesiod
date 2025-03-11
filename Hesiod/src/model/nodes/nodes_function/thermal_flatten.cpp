@@ -24,15 +24,14 @@ void setup_thermal_flatten_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("talus_global", 1.f, 0.f, 16.f, "talus_global");
-  p_node->add_attr<IntAttribute>("iterations", 100, 1, 200, "iterations");
-  p_node->add_attr<BoolAttribute>("scale_talus_with_elevation",
-                                  false,
-                                  "scale_talus_with_elevation");
+  ADD_ATTR(FloatAttribute, "talus_global", 1.f, 0.f, FLT_MAX);
+  ADD_ATTR(IntAttribute, "iterations", 100, 1, INT_MAX);
+  ADD_ATTR(BoolAttribute, "scale_talus_with_elevation", false);
+  ADD_ATTR(FloatAttribute, "post_filter_radius", 0.01f, 0.f, 0.1f);
 
   // attribute(s) order
   p_node->set_attr_ordered_key(
-      {"talus_global", "iterations", "scale_talus_with_elevation"});
+      {"talus_global", "iterations", "scale_talus_with_elevation", "post_filter_radius"});
 }
 
 void compute_thermal_flatten_node(BaseNode *p_node)
@@ -60,11 +59,14 @@ void compute_thermal_flatten_node(BaseNode *p_node)
       talus_map.remap(talus / 100.f, talus);
     }
 
+    int ir = std::max(1,
+                      (int)(GET("post_filter_radius", FloatAttribute) * p_out->shape.x));
+
     hmap::transform(
         {p_out, &talus_map},
-        [p_node, &talus](std::vector<hmap::Array *> p_arrays,
-                         hmap::Vec2<int>            shape,
-                         hmap::Vec4<float>)
+        [p_node, talus, ir](std::vector<hmap::Array *> p_arrays,
+                            hmap::Vec2<int>            shape,
+                            hmap::Vec4<float>)
         {
           hmap::Array *pa_out = p_arrays[0];
           hmap::Array *pa_talus_map = p_arrays[1];
@@ -73,7 +75,8 @@ void compute_thermal_flatten_node(BaseNode *p_node)
           hmap::thermal_flatten(*pa_out,
                                 *pa_talus_map,
                                 bedrock,
-                                GET("iterations", IntAttribute));
+                                GET("iterations", IntAttribute),
+                                ir);
         },
         p_node->get_config_ref()->hmap_transform_mode_cpu);
 

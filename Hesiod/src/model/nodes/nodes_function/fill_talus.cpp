@@ -23,9 +23,9 @@ void setup_fill_talus_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("slope", 4.f, 0.1f, 16.f, "slope");
-  p_node->add_attr<FloatAttribute>("noise_ratio", 0.2f, 0.f, 1.f, "noise_ratio");
-  p_node->add_attr<SeedAttribute>("seed");
+  ADD_ATTR(FloatAttribute, "slope", 4.f, 0.1f, FLT_MAX);
+  ADD_ATTR(FloatAttribute, "noise_ratio", 0.2f, 0.f, 1.f);
+  ADD_ATTR(SeedAttribute, "seed");
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"slope", "noise_ratio", "seed"});

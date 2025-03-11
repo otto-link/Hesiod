@@ -128,10 +128,11 @@ R""(
     {
 	outline: none;
     }
-    
+
     /* QPushButton */
 
-    QPushButton
+    QPushButton,
+    QToolButton
     {
 	background-color: #2B2B2B;
 	color: #DFE1E2;
@@ -141,7 +142,8 @@ R""(
 	border: 1px solid #5B5B5B;
     }
 
-    QPushButton:checked
+    QPushButton,
+    QToolButton:checked
     {
 	background-color: #4772b3;
 	border-radius: 4px;
@@ -149,18 +151,21 @@ R""(
 	outline: none;
     }
 
-    QPushButton:hover
+    QPushButton,
+    QToolButton:hover
     {
 	background-color: #8B8B8B;
 	color: #DFE1E2;
     }
 
-    QPushButton:pressed
+    QPushButton,
+    QToolButton:pressed
     {
 	background-color: #ABABAB;
     }
 
-    QPushButton:selected
+    QPushButton,
+    QToolButton:selected
     {
 	background: #5B5B5B;
 	color: #DFE1E2;

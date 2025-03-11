@@ -23,8 +23,8 @@ void setup_path_bezier_node(BaseNode *p_node)
   p_node->add_port<hmap::Path>(gnode::PortType::OUT, "output");
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("curvature_ratio", 0.3f, 0.f, 1.f, "curvature_ratio");
-  p_node->add_attr<IntAttribute>("edge_divisions", 10, 1, 32, "edge_divisions");
+  ADD_ATTR(FloatAttribute, "curvature_ratio", 0.3f, 0.f, 1.f);
+  ADD_ATTR(IntAttribute, "edge_divisions", 10, 1, 32);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"curvature_ratio", "edge_divisions"});

@@ -20,12 +20,6 @@
 #include "hesiod/model/model_config.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 
-#define SETUP_NODE(NodeType, node_type)                                                  \
-  case str2int(#NodeType):                                                               \
-    setup_##node_type##_node(sptr.get());                                                \
-    sptr->set_compute_fct(&compute_##node_type##_node);                                  \
-    break;
-
 #define DECLARE_NODE(node_type)                                                          \
   void setup_##node_type##_node(BaseNode *p_node);                                       \
   void compute_##node_type##_node(BaseNode *p_node);
@@ -82,6 +76,7 @@ DECLARE_NODE(abs_smooth)
 DECLARE_NODE(accumulation_curvature)
 DECLARE_NODE(blend)
 DECLARE_NODE(blend_poisson_bf)
+DECLARE_NODE(border)
 DECLARE_NODE(brush)
 DECLARE_NODE(bump)
 DECLARE_NODE(caldera)
@@ -156,6 +151,7 @@ DECLARE_NODE(lerp)
 DECLARE_NODE(make_binary)
 DECLARE_NODE(make_periodic)
 DECLARE_NODE(make_periodic_stitching)
+DECLARE_NODE(mean_shift)
 DECLARE_NODE(median3x3)
 DECLARE_NODE(mix_normal_map)
 DECLARE_NODE(mix_texture)

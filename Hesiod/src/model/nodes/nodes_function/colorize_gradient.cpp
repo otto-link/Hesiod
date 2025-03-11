@@ -28,10 +28,10 @@ void setup_colorize_gradient_node(BaseNode *p_node)
   p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<ColorGradientAttribute>("gradient", "gradient");
-  p_node->add_attr<BoolAttribute>("reverse_colormap", false, "reverse_colormap");
-  p_node->add_attr<BoolAttribute>("reverse_alpha", false, "reverse_alpha");
-  p_node->add_attr<BoolAttribute>("clamp_alpha", true, "clamp_alpha");
+  ADD_ATTR(ColorGradientAttribute, "gradient");
+  ADD_ATTR(BoolAttribute, "reverse_colormap", false);
+  ADD_ATTR(BoolAttribute, "reverse_alpha", false);
+  ADD_ATTR(BoolAttribute, "clamp_alpha", true);
 
   // attribute(s) order
   p_node->set_attr_ordered_key(

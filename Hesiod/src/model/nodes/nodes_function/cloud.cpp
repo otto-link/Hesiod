@@ -23,7 +23,7 @@ void setup_cloud_node(BaseNode *p_node)
   p_node->add_port<hmap::Cloud>(gnode::PortType::OUT, "cloud");
 
   // attribute(s)
-  p_node->add_attr<CloudAttribute>("cloud", "Cloud");
+  ADD_ATTR(CloudAttribute, "cloud");
 }
 
 void compute_cloud_node(BaseNode *p_node)

@@ -1,156 +1,135 @@
 import json
-from mdutils.mdutils import MdUtils
-from mdutils.tools import Html
-from mdutils.tools import Image
 import os
 import shutil
 import sys
+from mdutils.mdutils import MdUtils
+from mdutils.tools import Image
 
+# Paths for build, data, and documentation directories
 BUILD_PATH = "build"
+HSD_DATA_PATH = "Hesiod/data"
 NODE_SNAPSHOT_PATH = "docs/images/nodes/"
 NODE_MARKDOWN_PATH = "docs/node_reference/"
 
-if __name__ == "__main__":
+def generate_snapshots():
+    """Generate node snapshots using the Hesiod executable."""
+    print("Generating snapshots...")
+    os.system(f"cd {BUILD_PATH} ; bin/./hesiod --snapshot")
 
-    img_relative_path = os.path.relpath(NODE_SNAPSHOT_PATH, NODE_MARKDOWN_PATH)
-
-    print(img_relative_path)
-    
-    # --- generate snapshots and data
-
-    print("generating snapshots...")
-    
-    os.system("cd {} ; bin/./hesiod --snapshot".format(BUILD_PATH))
-    
-    # --- retrieve data from json file
-
-    fname = os.path.join(BUILD_PATH, "nodes_description.json")
-
+def load_node_data():
+    """Load node documentation data from a JSON file."""
+    fname = os.path.join(HSD_DATA_PATH, "node_documentation.json")
     with open(fname, "r") as f:
-        data = json.load(f)
-    
-    # --- categories
+        return json.load(f)
 
+def generate_categories_markdown(data):
+    """Generate markdown documentation for node categories."""
     md_file = MdUtils(file_name=os.path.join(NODE_MARKDOWN_PATH, "categories"),
                       title="Node Categories")
-
     md_file.new_header(level=1, title="Categories")
-
+    
+    # Dictionary to store primary categories and their subcategories
+    # and dictionary to store nodes grouped by category
     cat = {}
     node_per_cat = {}
+    
+    # Organizing node data into categories
     for node_type, node_data in data.items():
-
-        if (node_data["category"]) not in node_per_cat.keys():
-            node_per_cat[node_data["category"]] = []
-        node_per_cat[node_data["category"]] += [node_type]
+        category = node_data["category"]
+        node_per_cat.setdefault(category, []).append(node_type)
         
-        node_cat = node_data["category"].split("/")
-        if node_cat[0] not in cat.keys():
-            cat[node_cat[0]] = []
-            
-        if (len(node_cat) > 1):
-            for k in range(1, len(node_cat)):
-                cat[node_cat[0]] += [node_cat[k]]
-
+        node_cat = category.split("/")
+        cat.setdefault(node_cat[0], []).extend(node_cat[1:])
+    
     cat_table = ["Primary", "Secondary", "Nodes"]
-    for c in sorted(cat.keys()):       
-        if (len(cat[c])):
-            for sc in sorted(set(cat[c])):
-                node_list = []
-                for s in node_per_cat[c + "/" + sc]:
-                    node_list += [s]
-                
-                cat_table.extend([c, sc, ", ".join(sorted(node_list))])
+    
+    # Constructing category markdown table
+    for primary in sorted(cat.keys()):
+        secondary_list = sorted(set(cat[primary]))
+        
+        if secondary_list:
+            for secondary in secondary_list:
+                node_list = sorted(node_per_cat.get(f"{primary}/{secondary}", []))
+                cat_table.extend([primary, secondary, ", ".join(node_list)])
         else:
-            node_list = []
-            for s in node_per_cat[c]:
-                node_list += [s]
-
-            cat_table.extend([c, "", ", ".join(sorted(node_list))])
-                
-    md_file.new_line()
-    md_file.new_table(columns=3,
-                      rows=int(len(cat_table) / 3),
-                      text=cat_table,
-                      text_align="left")
+            node_list = sorted(node_per_cat.get(primary, []))
+            cat_table.extend([primary, "", ", ".join(node_list)])
     
+    md_file.new_table(columns=3, rows=len(cat_table) // 3, text=cat_table, text_align="left")
     md_file.create_md_file()
-    
-    # --- all nodes
-    
+
+def generate_node_markdown(data):
+    """Generate markdown documentation for all nodes."""
+    img_relative_path = os.path.relpath(NODE_SNAPSHOT_PATH, NODE_MARKDOWN_PATH)
     md_file = MdUtils(file_name=os.path.join(NODE_MARKDOWN_PATH, "nodes"),
                       title="Node Reference")
-
-    md_file.new_header(level=1, title="Some kind of introduction")
     
+    md_file.new_header(level=1, title="Some kind of introduction")
     md_file.new_header(level=1, title="Nodes")
     
-    for node_type in data.keys():
-        # print(node_type)
-
+    for node_type, node_info in data.items():
         md_file.new_header(level=2, title=node_type)
-                
-        md_file.new_paragraph(data[node_type]["description"])
-
-        img_fname_src = os.path.join(BUILD_PATH, data[node_type]["snapshot"])
-        img_fname_dst = os.path.join(NODE_SNAPSHOT_PATH, data[node_type]["snapshot"])
-
-        shutil.copy2(img_fname_src, img_fname_dst)
-
-        img_fname_rel = os.path.join(img_relative_path, data[node_type]["snapshot"])
-                     
-        md_file.new_paragraph(Image.Image.new_inline_image(text="img",
-                                                           path=img_fname_rel))
-
-        md_file.new_line()
+        md_file.new_paragraph(node_info["description"])
+        
+        # Handle node snapshot images
+        img_fname = node_type + ".png"
+        src_path = os.path.join(BUILD_PATH, img_fname)
+        dst_path = os.path.join(NODE_SNAPSHOT_PATH, img_fname)
+        if os.path.isfile(src_path):
+            shutil.copy2(src_path, dst_path)
+        
+        img_path_rel = os.path.join(img_relative_path, img_fname)
+        md_file.new_paragraph(Image.Image.new_inline_image(text="img", path=img_path_rel))
+        
+        # Category
         md_file.new_header(level=3, title="Category")
-        md_file.new_paragraph(data[node_type]["category"])
+        md_file.new_paragraph(node_info["category"])
         
-        # inputs
-        
-        inputs_table = ["Name", "Type", "Description"]
-        for data_inputs in data[node_type]["inputs"]:
-            inputs_table.extend([data_inputs["caption"],
-                                  data_inputs["type"],
-                                  data_inputs["description"]])
-
-        md_file.new_line()
-        md_file.new_header(level=3, title="Inputs")
-        md_file.new_table(columns=3,
-                          rows=len(data[node_type]["inputs"]) + 1,
-                          text=inputs_table,
-                          text_align="left")
-
-        # outputs
-        
-        outputs_table = ["Name", "Type", "Description"]
-        for data_outputs in data[node_type]["outputs"]:
-            outputs_table.extend([data_outputs["caption"],
-                                  data_outputs["type"],
-                                  data_outputs["description"]])
-
-        md_file.new_line()
-        md_file.new_header(level=3, title="Outputs")
-        md_file.new_table(columns=3,
-                          rows=len(data[node_type]["outputs"]) + 1,
-                          text=outputs_table,
-                          text_align="left")
-
-        # parameters
-
-        attr_table = ["Name", "Type", "Description"]
-        for data_attr in data[node_type]["parameters"]:
-            attr_table.extend([data_attr["key"],
-                                  data_attr["type"],
-                                  data_attr["description"]])
-
-        md_file.new_line()
-        md_file.new_header(level=3, title="Parameters")
-        md_file.new_table(columns=3,
-                          rows=len(data[node_type]["parameters"]) + 1,
-                          text=attr_table,
-                          text_align="left")
-            
-    # eventually dump markdown content to disk
-    md_file.create_md_file()
+        # Generate tables for inputs, outputs, and parameters
+        generate_ports_table(md_file, node_info, "input", "Inputs")
+        generate_ports_table(md_file, node_info, "output", "Outputs")
+        generate_parameters_table(md_file, node_info)
     
+    md_file.create_md_file()
+
+def generate_ports_table(md_file, node_info, port_type, title):
+    """Generate markdown table for input or output ports."""
+    table = ["Name", "Type", "Description"]
+    entries = [
+        [p["caption"], p["data_type"], p["description"]]
+        for p in node_info["ports"].values()
+        if p["type"] == port_type
+    ]
+    
+    if entries:
+        for entry in entries:
+            table.extend(entry)
+        
+        md_file.new_header(level=3, title=title)
+        md_file.new_table(columns=3, rows=len(entries) + 1, text=table, text_align="left")
+
+def generate_parameters_table(md_file, node_info):
+    """Generate markdown table for node parameters."""
+    table = ["Name", "Type", "Description"]
+    parameters = node_info.get("parameters", {})
+    entries = [[p["label"], p["type"], p["description"]] for p in parameters.values()]
+    
+    if entries:
+        for entry in entries:
+            table.extend(entry)
+        
+        md_file.new_header(level=3, title="Parameters")
+        md_file.new_table(columns=3, rows=len(entries) + 1, text=table, text_align="left")
+
+def main():
+    """Main function to generate markdown documentation."""
+    generate_snapshots()  # Generate node snapshots
+
+    print("Updating markdown documentation...")
+
+    node_data = load_node_data()
+    generate_categories_markdown(node_data)
+    generate_node_markdown(node_data)
+
+if __name__ == "__main__":
+    main()

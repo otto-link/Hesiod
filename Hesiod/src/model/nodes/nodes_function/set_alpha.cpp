@@ -26,9 +26,9 @@ void setup_set_alpha_node(BaseNode *p_node)
   p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture out", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("alpha", 1.f, 0.f, 1.f, "alpha");
-  p_node->add_attr<BoolAttribute>("reverse", false, "reverse");
-  p_node->add_attr<BoolAttribute>("clamp", true, "clamp");
+  ADD_ATTR(FloatAttribute, "alpha", 1.f, 0.f, 1.f);
+  ADD_ATTR(BoolAttribute, "reverse", false);
+  ADD_ATTR(BoolAttribute, "clamp", true);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"alpha", "reverse", "clamp"});

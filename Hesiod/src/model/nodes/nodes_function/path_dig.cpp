@@ -24,15 +24,11 @@ void setup_path_dig_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output");
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("width", 0.001f, 0.f, 0.1f, "width");
-  p_node->add_attr<FloatAttribute>("decay", 0.001f, 0.f, 0.1f, "decay");
-  p_node->add_attr<FloatAttribute>("flattening_radius",
-                                   0.001f,
-                                   0.f,
-                                   0.1f,
-                                   "flattening_radius");
-  p_node->add_attr<FloatAttribute>("depth", 0.f, -0.2f, 0.2f, "depth");
-  p_node->add_attr<BoolAttribute>("force_downhill", false, "force_downhill");
+  ADD_ATTR(FloatAttribute, "width", 0.001f, 0.f, 0.1f);
+  ADD_ATTR(FloatAttribute, "decay", 0.001f, 0.f, 0.1f);
+  ADD_ATTR(FloatAttribute, "flattening_radius", 0.001f, 0.f, 0.1f);
+  ADD_ATTR(FloatAttribute, "depth", 0.f, -0.2f, 0.2f);
+  ADD_ATTR(BoolAttribute, "force_downhill", false);
 
   // attribute(s) order
   p_node->set_attr_ordered_key(

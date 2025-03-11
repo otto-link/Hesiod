@@ -24,8 +24,8 @@ void setup_kuwahara_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("radius", 0.05f, 0.f, 0.2f, "radius");
-  p_node->add_attr<FloatAttribute>("mix_ratio", 1.f, 0.f, 1.f, "mix_ratio");
+  ADD_ATTR(FloatAttribute, "radius", 0.05f, 0.f, 0.2f);
+  ADD_ATTR(FloatAttribute, "mix_ratio", 1.f, 0.f, 1.f);
 }
 
 void compute_kuwahara_node(BaseNode *p_node)

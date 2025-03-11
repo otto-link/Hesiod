@@ -25,10 +25,7 @@ void setup_combine_mask_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<MapEnumAttribute>("method",
-                                     "intersection",
-                                     mask_combine_method_map,
-                                     "method");
+  ADD_ATTR(EnumAttribute, "method", mask_combine_method_map, "intersection");
 }
 
 void compute_combine_mask_node(BaseNode *p_node)
@@ -46,7 +43,7 @@ void compute_combine_mask_node(BaseNode *p_node)
 
     std::function<void(hmap::Array &, hmap::Array &, hmap::Array &)> lambda;
 
-    int method = GET("method", MapEnumAttribute);
+    int method = GET("method", EnumAttribute);
 
     switch (method)
     {

@@ -26,18 +26,15 @@ void setup_blend_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<MapEnumAttribute>("blending_method",
-                                     "minimum_smooth",
-                                     blending_method_map,
-                                     "blending_method");
-  p_node->add_attr<FloatAttribute>("k", 0.1f, 0.01f, 1.f, "k");
-  p_node->add_attr<FloatAttribute>("radius", 0.05f, 0.f, 0.2f, "radius");
-  p_node->add_attr<BoolAttribute>("inverse", false, "inverse");
-  p_node->add_attr<RangeAttribute>("remap_range", "remap_range");
+  ADD_ATTR(EnumAttribute, "blending_method", blending_method_map, "minimum_smooth");
+  ADD_ATTR(FloatAttribute, "k", 0.1f, 0.01f, 1.f);
+  ADD_ATTR(FloatAttribute, "radius", 0.05f, 0.f, 0.2f);
+  ADD_ATTR(BoolAttribute, "inverse", false);
+  ADD_ATTR(RangeAttribute, "remap");
 
   // attribute(s) order
   p_node->set_attr_ordered_key(
-      {"blending_method", "k", "radius", "_SEPARATOR_", "inverse", "remap_range"});
+      {"blending_method", "k", "radius", "_SEPARATOR_", "inverse", "remap"});
 }
 
 void compute_blend_node(BaseNode *p_node)
@@ -57,7 +54,7 @@ void compute_blend_node(BaseNode *p_node)
 
     float k = GET("k", FloatAttribute);
     int   ir = std::max(1, (int)(GET("radius", FloatAttribute) * p_out->shape.x));
-    int   method = GET("blending_method", MapEnumAttribute);
+    int   method = GET("blending_method", EnumAttribute);
 
     switch (method)
     {
@@ -137,8 +134,8 @@ void compute_blend_node(BaseNode *p_node)
                            false, // saturate
                            {0.f, 0.f},
                            0.f,
-                           GET_ATTR("remap_range", RangeAttribute, is_active),
-                           GET("remap_range", RangeAttribute));
+                           GET_ATTR("remap", RangeAttribute, is_active),
+                           GET("remap", RangeAttribute));
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

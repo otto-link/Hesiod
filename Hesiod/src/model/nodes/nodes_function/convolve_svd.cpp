@@ -24,11 +24,11 @@ void setup_convolve_svd_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<IntAttribute>("rank", 4, 1, 8, "rank");
-  p_node->add_attr<RangeAttribute>("remap_range", "remap_range");
+  ADD_ATTR(IntAttribute, "rank", 4, 1, 8);
+  ADD_ATTR(RangeAttribute, "remap");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"rank", "_SEPARATOR_", "remap_range"});
+  p_node->set_attr_ordered_key({"rank", "_SEPARATOR_", "remap"});
 }
 
 void compute_convolve_svd_node(BaseNode *p_node)
@@ -61,8 +61,8 @@ void compute_convolve_svd_node(BaseNode *p_node)
                            false, // saturate
                            {0.f, 0.f},
                            0.f,
-                           GET_ATTR("remap_range", RangeAttribute, is_active),
-                           GET("remap_range", RangeAttribute));
+                           GET_ATTR("remap", RangeAttribute, is_active),
+                           GET("remap", RangeAttribute));
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

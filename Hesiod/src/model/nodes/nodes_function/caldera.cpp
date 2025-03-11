@@ -25,15 +25,15 @@ void setup_caldera_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("radius", 0.25f, 0.01f, 1.f, "radius");
-  p_node->add_attr<FloatAttribute>("sigma_inner", 0.05f, 0.f, 0.3f, "sigma_inner");
-  p_node->add_attr<FloatAttribute>("sigma_outer", 0.1f, 0.f, 0.3f, "sigma_outer");
-  p_node->add_attr<FloatAttribute>("noise_r_amp", 0.1f, 0.f, 0.3f, "noise_r_amp");
-  p_node->add_attr<FloatAttribute>("z_bottom", 0.5f, 0.f, 1.f, "z_bottom");
-  p_node->add_attr<FloatAttribute>("noise_ratio_z", 0.1f, 0.f, 1.f, "noise_ratio_z");
-  p_node->add_attr<Vec2FloatAttribute>("center", "center");
-  p_node->add_attr<BoolAttribute>("inverse", false, "inverse");
-  p_node->add_attr<RangeAttribute>("remap_range", "remap_range");
+  ADD_ATTR(FloatAttribute, "radius", 0.25f, 0.01f, 1.f);
+  ADD_ATTR(FloatAttribute, "sigma_inner", 0.05f, 0.f, 0.3f);
+  ADD_ATTR(FloatAttribute, "sigma_outer", 0.1f, 0.f, 0.3f);
+  ADD_ATTR(FloatAttribute, "noise_r_amp", 0.1f, 0.f, 0.3f);
+  ADD_ATTR(FloatAttribute, "z_bottom", 0.5f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "noise_ratio_z", 0.1f, 0.f, 1.f);
+  ADD_ATTR(Vec2FloatAttribute, "center");
+  ADD_ATTR(BoolAttribute, "inverse", false);
+  ADD_ATTR(RangeAttribute, "remap");
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"radius",
@@ -45,7 +45,7 @@ void setup_caldera_node(BaseNode *p_node)
                                 "center",
                                 "_SEPARATOR_",
                                 "inverse",
-                                "remap_range"});
+                                "remap"});
 }
 
 void compute_caldera_node(BaseNode *p_node)
@@ -95,8 +95,8 @@ void compute_caldera_node(BaseNode *p_node)
                          false, // saturate
                          {0.f, 0.f},
                          0.f,
-                         GET_ATTR("remap_range", RangeAttribute, is_active),
-                         GET("remap_range", RangeAttribute));
+                         GET_ATTR("remap", RangeAttribute, is_active),
+                         GET("remap", RangeAttribute));
 
   Q_EMIT p_node->compute_finished(p_node->get_id());
 }

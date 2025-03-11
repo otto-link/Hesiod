@@ -35,18 +35,14 @@ void setup_texture_quilting_expand_node(BaseNode *p_node)
   p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture D out", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("expansion_ratio", 2.f, 1.f, 16.f, "expansion_ratio");
-  p_node->add_attr<FloatAttribute>("patch_width", 0.3f, 0.1f, 1.f, "patch_width");
-  p_node->add_attr<FloatAttribute>("overlap", 0.9f, 0.05f, 0.95f, "overlap");
-  p_node->add_attr<SeedAttribute>("seed");
-  p_node->add_attr<BoolAttribute>("patch_flip", true, "patch_flip");
-  p_node->add_attr<BoolAttribute>("patch_rotate", true, "patch_rotate");
-  p_node->add_attr<BoolAttribute>("patch_transpose", true, "patch_transpose");
-  p_node->add_attr<FloatAttribute>("filter_width_ratio",
-                                   0.5f,
-                                   0.f,
-                                   1.f,
-                                   "filter_width_ratio");
+  ADD_ATTR(FloatAttribute, "expansion_ratio", 2.f, 1.f, FLT_MAX);
+  ADD_ATTR(FloatAttribute, "patch_width", 0.3f, 0.1f, 1.f);
+  ADD_ATTR(FloatAttribute, "overlap", 0.9f, 0.05f, 0.95f);
+  ADD_ATTR(SeedAttribute, "seed");
+  ADD_ATTR(BoolAttribute, "patch_flip", true);
+  ADD_ATTR(BoolAttribute, "patch_rotate", true);
+  ADD_ATTR(BoolAttribute, "patch_transpose", true);
+  ADD_ATTR(FloatAttribute, "filter_width_ratio", 0.5f, 0.f, 1.f);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"expansion_ratio",

@@ -21,12 +21,12 @@ void setup_cloud_random_node(BaseNode *p_node)
   p_node->add_port<hmap::Cloud>(gnode::PortType::OUT, "cloud");
 
   // attribute(s)
-  p_node->add_attr<IntAttribute>("npoints", 50, 1, 1000, "npoints");
-  p_node->add_attr<SeedAttribute>("seed");
-  p_node->add_attr<RangeAttribute>("remap_range", "remap_range");
+  ADD_ATTR(IntAttribute, "npoints", 50, 1, INT_MAX);
+  ADD_ATTR(SeedAttribute, "seed");
+  ADD_ATTR(RangeAttribute, "remap");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"npoints", "seed", "_SEPARATOR_", "remap_range"});
+  p_node->set_attr_ordered_key({"npoints", "seed", "_SEPARATOR_", "remap"});
 }
 
 void compute_cloud_random_node(BaseNode *p_node)
@@ -39,9 +39,8 @@ void compute_cloud_random_node(BaseNode *p_node)
 
   *p_out = hmap::Cloud(GET("npoints", IntAttribute), GET("seed", SeedAttribute));
 
-  if (GET_ATTR("remap_range", RangeAttribute, is_active))
-    p_out->remap_values(GET("remap_range", RangeAttribute)[0],
-                        GET("remap_range", RangeAttribute)[1]);
+  if (GET_ATTR("remap", RangeAttribute, is_active))
+    p_out->remap_values(GET("remap", RangeAttribute)[0], GET("remap", RangeAttribute)[1]);
 
   Q_EMIT p_node->compute_finished(p_node->get_id());
 }

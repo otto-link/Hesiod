@@ -25,7 +25,7 @@ void setup_gamma_correction_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("gamma", 2.f, 0.01f, 10.f, "Gamma");
+  ADD_ATTR(FloatAttribute, "gamma", 2.f, 0.01f, 10.f);
 }
 
 void compute_gamma_correction_node(BaseNode *p_node)

@@ -7,6 +7,12 @@
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/node_factory.hpp"
 
+#define SETUP_NODE(NodeType, node_type)                                                  \
+  case str2int(#NodeType):                                                               \
+    setup_##node_type##_node(sptr.get());                                                \
+    sptr->set_compute_fct(&compute_##node_type##_node);                                  \
+    break;
+
 namespace hesiod
 {
 
@@ -109,6 +115,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"AccumulationCurvature", "Features/Landform"},
       {"Blend", "Operator/Blend"},
       {"BlendPoissonBf", "Operator/Blend"},
+      {"Border", "Operator/Morphology"},
       {"Brush", "Primitive/Authoring"},
       {"Bump", "Primitive/Function"},
       {"Caldera", "Primitive/Geological"},
@@ -165,8 +172,8 @@ std::map<std::string, std::string> get_node_inventory()
       {"HydraulicMusgrave", "WIP"}, // "Erosion/Hydraulic"
       {"HydraulicParticle", "Erosion/Hydraulic"},
       {"HydraulicProcedural", "WIP"}, // "Erosion/Hydraulic"
-      {"HydraulicSchott", "Erosion/Hydraulic"},
-      {"HydraulicStream", "WIP"}, // "Erosion/Hydraulic"
+      {"HydraulicSchott", "WIP"},     // "Erosion/Hydraulic"
+      {"HydraulicStream", "WIP"},     // "Erosion/Hydraulic"
       {"HydraulicStreamLog", "Erosion/Hydraulic"},
       {"HydraulicStreamUpscaleAmplification", "WIP"}, // "Erosion/Hydraulic"
       {"HydraulicVpipes", "WIP"},                     // "Erosion/Hydraulic"
@@ -183,6 +190,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"MakeBinary", "Operator/Morphology"},
       {"MakePeriodic", "Operator/Tiling"},
       {"MakePeriodicStitching", "Operator/Tiling"},
+      {"MeanShift", "WIP"},
       {"Median3x3", "Filter/Smoothing"},
       {"MixNormalMap", "Texture"},
       {"MixTexture", "Texture"},
@@ -212,8 +220,8 @@ std::map<std::string, std::string> get_node_inventory()
       {"PathResample", "Geometry/Path"},
       {"PathSDF", "Geometry/Path"},
       {"PathSmooth", "Geometry/Path"},
-      {"PathToCloud", "Converter"},
-      {"PathToHeightmap", "Converter"},
+      {"PathToCloud", "Geometry/Path"},
+      {"PathToHeightmap", "Geometry/Path"},
       {"Plateau", "Filter/Recurve"},
       {"Preview", "Debug"},
       {"QuiltingBlend", "Operator/Resynthesis"},
@@ -295,7 +303,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"WhiteDensityMap", "Primitive/Random"},
       {"WhiteSparse", "Primitive/Random"},
       {"Wrinkle", "WIP"}, // Filter/Recast
-      {"ZeroedEdges", "Primitive/Random"},
+      {"ZeroedEdges", "Math/Boundaries"},
       {"Zoom", "Operator/Transform"},
   };
 
@@ -314,6 +322,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(AccumulationCurvature, accumulation_curvature);
     SETUP_NODE(Blend, blend);
     SETUP_NODE(BlendPoissonBf, blend_poisson_bf);
+    SETUP_NODE(Border, border);
     SETUP_NODE(Brush, brush);
     SETUP_NODE(Bump, bump);
     SETUP_NODE(Caldera, caldera);
@@ -389,6 +398,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(MakeBinary, make_binary);
     SETUP_NODE(MakePeriodic, make_periodic);
     SETUP_NODE(MakePeriodicStitching, make_periodic_stitching);
+    SETUP_NODE(MeanShift, mean_shift);
     SETUP_NODE(Median3x3, median3x3);
     SETUP_NODE(Mixer, mixer);
     SETUP_NODE(MixNormalMap, mix_normal_map);

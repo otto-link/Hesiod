@@ -28,13 +28,11 @@ void setup_thermal_scree_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "deposition", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("talus_global", 2.f, 0.f, 16.f, "talus_global");
-  p_node->add_attr<FloatAttribute>("zmax", 0.5f, -1.f, 2.f, "zmax");
-  p_node->add_attr<IntAttribute>("iterations", 500, 1, 4000, "iterations");
-  p_node->add_attr<BoolAttribute>("talus_constraint", true, "talus_constraint");
-  p_node->add_attr<BoolAttribute>("scale_talus_with_elevation",
-                                  true,
-                                  "scale_talus_with_elevation");
+  ADD_ATTR(FloatAttribute, "talus_global", 2.f, 0.f, FLT_MAX);
+  ADD_ATTR(FloatAttribute, "zmax", 0.5f, -1.f, 2.f);
+  ADD_ATTR(IntAttribute, "iterations", 500, 1, FLT_MAX);
+  ADD_ATTR(BoolAttribute, "talus_constraint", true);
+  ADD_ATTR(BoolAttribute, "scale_talus_with_elevation", true);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"talus_global",

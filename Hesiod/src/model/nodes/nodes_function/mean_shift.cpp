@@ -1,7 +1,8 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-#include "highmap/morphology.hpp"
+#include "highmap/filters.hpp"
+#include "highmap/kernels.hpp"
 #include "highmap/opencl/gpu_opencl.hpp"
 
 #include "attributes.hpp"
@@ -15,7 +16,7 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_closing_node(BaseNode *p_node)
+void setup_mean_shift_node(BaseNode *p_node)
 {
   LOG->trace("setup node {}", p_node->get_label());
 
@@ -24,14 +25,18 @@ void setup_closing_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(FloatAttribute, "radius", 0.01f, 0.f, 0.2f);
+  ADD_ATTR(FloatAttribute, "radius", 0.05f, 0.01f, 0.2f);
+  ADD_ATTR(FloatAttribute, "talus_global", 16.f, 0.f, FLT_MAX);
+  ADD_ATTR(IntAttribute, "iterations", 4, 1, 10);
+  ADD_ATTR(BoolAttribute, "talus_weighted", true);
   ADD_ATTR(BoolAttribute, "GPU", HSD_DEFAULT_GPU_MODE);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"radius", "_SEPARATOR_", "GPU"});
+  p_node->set_attr_ordered_key(
+      {"radius", "talus_global", "iterations", "talus_weighted", "_SEPARATOR_", "GPU"});
 }
 
-void compute_closing_node(BaseNode *p_node)
+void compute_mean_shift_node(BaseNode *p_node)
 {
   Q_EMIT p_node->compute_started(p_node->get_id());
 
@@ -43,18 +48,25 @@ void compute_closing_node(BaseNode *p_node)
   {
     hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
-    int ir = std::max(1, (int)(GET("radius", FloatAttribute) * p_out->shape.x));
+    int   ir = std::max(1, (int)(GET("radius", FloatAttribute) * p_out->shape.x));
+    float talus = GET("talus_global", FloatAttribute) / (float)p_out->shape.x;
 
     if (GET("GPU", BoolAttribute))
     {
       hmap::transform(
           {p_out, p_in},
-          [&ir](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+          [p_node, ir, talus](std::vector<hmap::Array *> p_arrays,
+                              hmap::Vec2<int>,
+                              hmap::Vec4<float>)
           {
             hmap::Array *pa_out = p_arrays[0];
             hmap::Array *pa_in = p_arrays[1];
 
-            *pa_out = hmap::gpu::closing(*pa_in, ir);
+            *pa_out = hmap::gpu::mean_shift(*pa_in,
+                                            ir,
+                                            talus,
+                                            GET("iterations", IntAttribute),
+                                            GET("talus_weighted", BoolAttribute));
           },
           p_node->get_config_ref()->hmap_transform_mode_gpu);
     }
@@ -62,12 +74,18 @@ void compute_closing_node(BaseNode *p_node)
     {
       hmap::transform(
           {p_out, p_in},
-          [&ir](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+          [p_node, ir, talus](std::vector<hmap::Array *> p_arrays,
+                              hmap::Vec2<int>,
+                              hmap::Vec4<float>)
           {
             hmap::Array *pa_out = p_arrays[0];
             hmap::Array *pa_in = p_arrays[1];
 
-            *pa_out = hmap::closing(*pa_in, ir);
+            *pa_out = hmap::mean_shift(*pa_in,
+                                       ir,
+                                       talus,
+                                       GET("iterations", IntAttribute),
+                                       GET("talus_weighted", BoolAttribute));
           },
           p_node->get_config_ref()->hmap_transform_mode_cpu);
     }

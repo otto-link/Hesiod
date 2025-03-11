@@ -25,14 +25,14 @@ void setup_distance_transform_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<MapEnumAttribute>("transform_type",
-                                     "Approx. (fast)",
-                                     distance_transform_type_map,
-                                     "transform_type");
-  p_node->add_attr<BoolAttribute>("reverse_input", false, "reverse_input");
-  p_node->add_attr<FloatAttribute>("threshold", 0.5f, -1.f, 2.f, "threshold");
-  p_node->add_attr<BoolAttribute>("reverse_output", false, "reverse_output");
-  p_node->add_attr<BoolAttribute>("remap", true, "remap");
+  ADD_ATTR(EnumAttribute,
+           "transform_type",
+           distance_transform_type_map,
+           "Approx. (fast)");
+  ADD_ATTR(BoolAttribute, "reverse_input", false);
+  ADD_ATTR(FloatAttribute, "threshold", 0.5f, -1.f, 2.f);
+  ADD_ATTR(BoolAttribute, "reverse_output", false);
+  ADD_ATTR(BoolAttribute, "remap", true);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"transform_type",
@@ -69,7 +69,7 @@ void compute_distance_transform_node(BaseNode *p_node)
             *pa_out = 1.f - *pa_out;
 
           auto type = static_cast<hmap::DistanceTransformType>(
-              GET("transform_type", MapEnumAttribute));
+              GET("transform_type", EnumAttribute));
 
           switch (type)
           {

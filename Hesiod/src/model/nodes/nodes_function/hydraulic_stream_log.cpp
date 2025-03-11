@@ -28,35 +28,15 @@ void setup_hydraulic_stream_log_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "flow_map", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("c_erosion", 0.1f, 0.01f, 1.f, "c_erosion");
-  p_node->add_attr<FloatAttribute>("talus_ref", 0.1f, 0.01f, 10.f, "talus_ref");
-  p_node->add_attr<FloatAttribute>("deposition_radius",
-                                   0.1f,
-                                   0.f,
-                                   0.2f,
-                                   "deposition_radius");
-  p_node->add_attr<FloatAttribute>("deposition_scale_ratio",
-                                   1.f,
-                                   0.f,
-                                   1.f,
-                                   "deposition_scale_ratio");
-  p_node->add_attr<FloatAttribute>("gradient_power", 0.8f, 0.1f, 2.f, "gradient_power");
-  p_node->add_attr<FloatAttribute>("gradient_scaling_ratio",
-                                   1.f,
-                                   0.f,
-                                   1.f,
-                                   "gradient_scaling_ratio");
-  p_node->add_attr<FloatAttribute>("gradient_prefilter_radius",
-                                   0.1f,
-                                   0.f,
-                                   0.2f,
-                                   "gradient_prefilter_radius");
-  p_node->add_attr<FloatAttribute>("saturation_ratio",
-                                   1.f,
-                                   0.01f,
-                                   1.f,
-                                   "saturation_ratio");
-  p_node->add_attr<BoolAttribute>("GPU", HSD_DEFAULT_GPU_MODE, "GPU");
+  ADD_ATTR(FloatAttribute, "c_erosion", 0.1f, 0.01f, 1.f);
+  ADD_ATTR(FloatAttribute, "talus_ref", 0.1f, 0.01f, 10.f);
+  ADD_ATTR(FloatAttribute, "deposition_radius", 0.1f, 0.f, 0.2f);
+  ADD_ATTR(FloatAttribute, "deposition_scale_ratio", 1.f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "gradient_power", 0.8f, 0.1f, 2.f);
+  ADD_ATTR(FloatAttribute, "gradient_scaling_ratio", 1.f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "gradient_prefilter_radius", 0.1f, 0.f, 0.2f);
+  ADD_ATTR(FloatAttribute, "saturation_ratio", 1.f, 0.01f, 1.f);
+  ADD_ATTR(BoolAttribute, "GPU", HSD_DEFAULT_GPU_MODE);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"c_erosion",

@@ -24,10 +24,10 @@ void setup_kernel_gabor_node(BaseNode *p_node)
                                 p_node->get_config_ref()->shape);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("radius", 0.1f, 0.001f, 0.2f, "radius");
-  p_node->add_attr<BoolAttribute>("normalize", false, "normalize");
-  p_node->add_attr<FloatAttribute>("kw", 2.f, 0.01f, 32.f, "kw");
-  p_node->add_attr<FloatAttribute>("angle", 0.f, -180.f, 180.f, "angle");
+  ADD_ATTR(FloatAttribute, "radius", 0.1f, 0.001f, 0.2f);
+  ADD_ATTR(BoolAttribute, "normalize", false);
+  ADD_ATTR(FloatAttribute, "kw", 2.f, 0.01f, FLT_MAX);
+  ADD_ATTR(FloatAttribute, "angle", 0.f, -180.f, 180.f);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"radius", "normalize", "_SEPARATOR_", "kw", "angle"});

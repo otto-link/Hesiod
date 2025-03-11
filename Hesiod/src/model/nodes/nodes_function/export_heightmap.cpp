@@ -24,16 +24,9 @@ void setup_export_heightmap_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
 
   // attribute(s)
-  p_node->add_attr<FilenameAttribute>("fname",
-                                      std::filesystem::path("hmap.png"),
-                                      true, // save
-                                      "*",
-                                      "Filename");
-  p_node->add_attr<MapEnumAttribute>("format",
-                                     "png (8 bit)",
-                                     heightmap_export_format_map,
-                                     "Export format");
-  p_node->add_attr<BoolAttribute>("auto_export", true, "Automatic export");
+  ADD_ATTR(FilenameAttribute, "fname", std::filesystem::path("hmap.png"), "*", true);
+  ADD_ATTR(EnumAttribute, "format", heightmap_export_format_map, "png (8 bit)");
+  ADD_ATTR(BoolAttribute, "auto_export", true);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"fname", "format", "auto_export"});
@@ -51,7 +44,7 @@ void compute_export_heightmap_node(BaseNode *p_node)
   {
     std::string fname = GET("fname", FilenameAttribute).string();
 
-    switch (GET("format", MapEnumAttribute))
+    switch (GET("format", EnumAttribute))
     {
     case ExportFormat::PNG8BIT:
       p_in->to_array().to_png_grayscale(fname, CV_8U);

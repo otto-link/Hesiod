@@ -24,22 +24,14 @@ void setup_wrinkle_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("wrinkle_amplitude",
-                                   0.03f,
-                                   0.f,
-                                   0.2f,
-                                   "wrinkle_amplitude");
-  p_node->add_attr<FloatAttribute>("wrinkle_angle", 0.f, -180.f, 180.f, "wrinkle_angle");
-  p_node->add_attr<FloatAttribute>("displacement_amplitude",
-                                   0.5f,
-                                   0.f,
-                                   2.f,
-                                   "displacement_amplitude");
-  p_node->add_attr<FloatAttribute>("radius", 0.f, 0.f, 0.2f, "radius");
-  p_node->add_attr<FloatAttribute>("kw", 2.f, 0.f, 8.f, "kw");
-  p_node->add_attr<SeedAttribute>("seed");
-  p_node->add_attr<IntAttribute>("octaves", 8, 0, 32, "Octaves");
-  p_node->add_attr<FloatAttribute>("weight", 1.f, 0.f, 1.f, "Weight");
+  ADD_ATTR(FloatAttribute, "wrinkle_amplitude", 0.03f, 0.f, 0.2f);
+  ADD_ATTR(FloatAttribute, "wrinkle_angle", 0.f, -180.f, 180.f);
+  ADD_ATTR(FloatAttribute, "displacement_amplitude", 0.5f, 0.f, 2.f);
+  ADD_ATTR(FloatAttribute, "radius", 0.f, 0.f, 0.2f);
+  ADD_ATTR(FloatAttribute, "kw", 2.f, 0.f, FLT_MAX);
+  ADD_ATTR(SeedAttribute, "seed");
+  ADD_ATTR(IntAttribute, "octaves", 8, 0, 32);
+  ADD_ATTR(FloatAttribute, "weight", 1.f, 0.f, 1.f);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"wrinkle_amplitude",

@@ -27,8 +27,8 @@ void setup_path_sdf_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "sdf", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<BoolAttribute>("remap", false, "Remap");
-  p_node->add_attr<BoolAttribute>("inverse", false, "Inverse");
+  ADD_ATTR(BoolAttribute, "remap", false);
+  ADD_ATTR(BoolAttribute, "inverse", false);
 }
 
 void compute_path_sdf_node(BaseNode *p_node)

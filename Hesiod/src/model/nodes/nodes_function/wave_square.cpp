@@ -23,15 +23,15 @@ void setup_wave_square_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("kw", 2.f, 0.01f, 32.f, "kw");
-  p_node->add_attr<FloatAttribute>("angle", 0.f, 0.f, 180.f, "angle");
-  p_node->add_attr<FloatAttribute>("phase_shift", 0.f, -1.f, 1.f, "phase_shift");
-  p_node->add_attr<BoolAttribute>("inverse", false, "inverse");
-  p_node->add_attr<RangeAttribute>("remap_range", "remap_range");
+  ADD_ATTR(FloatAttribute, "kw", 2.f, 0.01f, FLT_MAX);
+  ADD_ATTR(FloatAttribute, "angle", 0.f, 0.f, 180.f);
+  ADD_ATTR(FloatAttribute, "phase_shift", 0.f, -1.f, 1.f);
+  ADD_ATTR(BoolAttribute, "inverse", false);
+  ADD_ATTR(RangeAttribute, "remap");
 
   // attribute(s) order
   p_node->set_attr_ordered_key(
-      {"kw", "angle", "phase_shift", "_SEPARATOR_", "inverse", "remap_range"});
+      {"kw", "angle", "phase_shift", "_SEPARATOR_", "inverse", "remap"});
 }
 
 void compute_wave_square_node(BaseNode *p_node)
@@ -68,8 +68,8 @@ void compute_wave_square_node(BaseNode *p_node)
                          false, // saturate
                          {0.f, 0.f},
                          0.f,
-                         GET_ATTR("remap_range", RangeAttribute, is_active),
-                         GET("remap_range", RangeAttribute));
+                         GET_ATTR("remap", RangeAttribute, is_active),
+                         GET("remap", RangeAttribute));
 
   Q_EMIT p_node->compute_finished(p_node->get_id());
 }

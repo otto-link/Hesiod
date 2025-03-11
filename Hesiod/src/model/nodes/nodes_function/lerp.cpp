@@ -26,7 +26,7 @@ void setup_lerp_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("t", 0.5f, 0.f, 1.f, "t");
+  ADD_ATTR(FloatAttribute, "t", 0.5f, 0.f, 1.f);
 }
 
 void compute_lerp_node(BaseNode *p_node)

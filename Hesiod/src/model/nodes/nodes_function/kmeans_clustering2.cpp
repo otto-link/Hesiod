@@ -26,12 +26,12 @@ void setup_kmeans_clustering2_node(BaseNode *p_node)
   p_node->add_port<std::vector<hmap::Heightmap>>(gnode::PortType::OUT, "scoring");
 
   // attribute(s)
-  p_node->add_attr<SeedAttribute>("seed");
-  p_node->add_attr<IntAttribute>("nclusters", 4, 1, 16, "nclusters");
-  p_node->add_attr<FloatAttribute>("weights.x", 1.f, 0.01f, 2.f, "weights.x");
-  p_node->add_attr<FloatAttribute>("weights.y", 1.f, 0.01f, 2.f, "weights.y");
-  p_node->add_attr<BoolAttribute>("normalize_inputs", true, "normalize_inputs");
-  p_node->add_attr<BoolAttribute>("compute_scoring", true, "compute_scoring");
+  ADD_ATTR(SeedAttribute, "seed");
+  ADD_ATTR(IntAttribute, "nclusters", 4, 1, 16);
+  ADD_ATTR(FloatAttribute, "weights.x", 1.f, 0.01f, 2.f);
+  ADD_ATTR(FloatAttribute, "weights.y", 1.f, 0.01f, 2.f);
+  ADD_ATTR(BoolAttribute, "normalize_inputs", true);
+  ADD_ATTR(BoolAttribute, "compute_scoring", true);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"seed",

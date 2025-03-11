@@ -24,8 +24,8 @@ void setup_radial_displacement_to_xy_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "dy", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("smoothing", 1.f, 0.f, 10.f, "smoothing");
-  p_node->add_attr<Vec2FloatAttribute>("center", "center");
+  ADD_ATTR(FloatAttribute, "smoothing", 1.f, 0.f, 10.f);
+  ADD_ATTR(Vec2FloatAttribute, "center");
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"smoothing", "center"});

@@ -23,15 +23,11 @@ void setup_select_interval_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("value1", 0.f, -0.5f, 1.5f, "value1");
-  p_node->add_attr<FloatAttribute>("value2", 0.5f, -0.5f, 1.5f, "value2");
-  p_node->add_attr<BoolAttribute>("inverse", false, "inverse");
-  p_node->add_attr<BoolAttribute>("smoothing", false, "smoothing");
-  p_node->add_attr<FloatAttribute>("smoothing_radius",
-                                   0.05f,
-                                   0.f,
-                                   0.2f,
-                                   "smoothing_radius");
+  ADD_ATTR(FloatAttribute, "value1", 0.f, -0.5f, 1.5f);
+  ADD_ATTR(FloatAttribute, "value2", 0.5f, -0.5f, 1.5f);
+  ADD_ATTR(BoolAttribute, "inverse", false);
+  ADD_ATTR(BoolAttribute, "smoothing", false);
+  ADD_ATTR(FloatAttribute, "smoothing_radius", 0.05f, 0.f, 0.2f);
 
   // attribute(s) order
   p_node->set_attr_ordered_key(

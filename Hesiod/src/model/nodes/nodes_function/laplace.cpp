@@ -26,8 +26,8 @@ void setup_laplace_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("sigma", 0.25f, 0.f, 0.25f, "sigma");
-  p_node->add_attr<IntAttribute>("iterations", 1, 1, 10, "iterations");
+  ADD_ATTR(FloatAttribute, "sigma", 0.25f, 0.f, 0.25f);
+  ADD_ATTR(IntAttribute, "iterations", 1, 1, 10);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"sigma", "iterations"});

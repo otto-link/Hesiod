@@ -11,26 +11,22 @@ Node Reference
 
 Apply an absolute function to every values.
 
-![img](../images/nodes/Abs.png)  
-
+![img](../images/nodes/Abs.png)
 ### Category
 
 
-Math/Base  
-
+Math/Base
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Output heightmap.|
-  
+|output|Heightmap|Output heightmap.|
 
 ### Parameters
 
@@ -43,172 +39,249 @@ Math/Base
 
 Apply a smooth absolute value function to every values. The smooth absolute operator computes the absolute value of an input while providing a smooth transition around zero, ensuring continuity and smoothness in the output.
 
-![img](../images/nodes/AbsSmooth.png)  
-
+![img](../images/nodes/AbsSmooth.png)
 ### Category
 
 
-Math/Base  
-
+Math/Base
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Output heightmap.|
-  
+|output|Heightmap|Output heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|inverse|Bool|Toggle inversion of the output values.|
 |mu|Float|Smoothing intensity.|
+|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 |vshift|Float|Reference value for the zero-equivalent value of the absolute value.|
 
 ## AccumulationCurvature
 
 
-AccumulationCurvature is a specific type of curvature reflecting how the shape of the heightmap influences the accumulation of water. Positive accumulation curvature indicates converging flow, where water tends to accumulate and concentrate, often leading to the formation of channels or gullies. Negative accumulation curvature suggests diverging flow, where water is dispersed over a broader area, which is typical of ridges or hilltops.
+Computes the accumulation curvature of a heightmap, indicating how terrain shape influences water flow. Positive values suggest converging flow (e.g., channels or valleys), while negative values indicate diverging flow (e.g., ridges or hilltops).
 
-![img](../images/nodes/AccumulationCurvature.png)  
-
+![img](../images/nodes/AccumulationCurvature.png)
 ### Category
 
 
-Features/Landform  
-
+Features/Landform
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap used for accumulation curvature analysis.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Accumulation curvature.|
-  
+|output|Heightmap|Computed accumulation curvature of the input heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|radius|Float|Filter radius with respect to the domain size.|
+|GPU|Bool|Toggle GPU acceleration on or off.|
+|inverse|Bool|Invert the output values.|
+|radius|Float|Defines the filter radius relative to the domain size, controlling the scale of curvature analysis.|
+|remap|Bool|Remap the output values to a specified range, defaulting to [0, 1].|
+|smoothing|Bool|Enable or disable smoothing to reduce noise in the curvature computation.|
+|smoothing_radius|Float|Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.|
 
 ## Blend
 
 
 The Blend operator takes two input heightmaps.
 
-![img](../images/nodes/Blend.png)  
-
+![img](../images/nodes/Blend.png)
 ### Category
 
 
-Operator/Blend  
-
+Operator/Blend
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input 1|HeightMapData|Input heightmap.|
-|input 2|HeightMapData|Input heightmap.|
-  
+|input 1|Heightmap|Input heightmap.|
+|input 2|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Output heightmap.|
-  
+|output|Heightmap|Output heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |blending_method|Enumeration|Blending method. Available values: add, exclusion, gradients, maximum, maximum_smooth, minimum, minimum_smooth, multiply, multiply_add, negate, overlay, soft, substract.|
+|inverse|Bool|Toggle inversion of the output values.|
 |k|Float|Smoothing intensity (if any).|
 |radius|Float|Filter radius with respect to the domain size (if any).|
+|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+
+## BlendPoissonBf
+
+
+TODO
+
+![img](../images/nodes/BlendPoissonBf.png)
+### Category
+
+
+Operator/Blend
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input 1|Heightmap|Primary heightmap input.|
+|input 2|Heightmap|Secondary heightmap input for blending.|
+|mask|Heightmap|Mask heightmap controlling blending regions.|
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|Heightmap|Resulting heightmap after Poisson blending.|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|inverse|Bool|Toggle inversion of the output values.|
+|iterations|Integer|Number of solver iterations for the Poisson blending process.|
+|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+
+## Border
+
+
+Highlights terrain boundaries by subtracting the eroded version of a DEM from the original. Useful for detecting ridges, valleys, and sharp elevation transitions in terrain analysis.
+
+![img](../images/nodes/Border.png)
+### Category
+
+
+Operator/Morphology
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|Heightmap|Heightmap input on which the morphological border operation is applied.|
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|Heightmap|Resulting heightmap after computing the morphological border.|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|GPU|Bool|Toogle GPU acceleration on or off.|
+|radius|Float|Filter radius with respect to the domain size.|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+
+## Brush
+
+
+A manual brush tool for directly painting heightmaps, allowing interactive terrain editing.
+
+![img](../images/nodes/Brush.png)
+### Category
+
+
+Primitive/Authoring
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|out|Heightmap|The generated heightmap from brush strokes.|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|Heightmap|Array|The heightmap data representing the painted terrain.|
+|Inverse|Bool|Invert the drawn values, swapping elevations between high and low.|
+|Remap range|Value range|Remap the brush output to a specified range, defaulting to [0, 1].|
 
 ## Bump
 
 
 Bump generates a smooth transitions between zero-valued boundaries and the center of the domain.
 
-![img](../images/nodes/Bump.png)  
-
+![img](../images/nodes/Bump.png)
 ### Category
 
 
-Primitive/Function  
-
+Primitive/Function
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|dx|HeightMapData|Displacement with respect to the domain size (x-direction).|
-|dy|HeightMapData|Displacement with respect to the domain size (y-direction).|
-|control|HeightMapData|Control parameter, acts as a multiplier for the weight parameter.|
-  
+|control|Heightmap|Control parameter, acts as a multiplier for the weight parameter.|
+|dx|Heightmap|Displacement with respect to the domain size (x-direction).|
+|dy|Heightmap|Displacement with respect to the domain size (y-direction).|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Bump heightmap.|
-  
+|output|Heightmap|Bump heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|center.x|Float|Center x coordinate.|
-|center.y|Float|Center y coordinate.|
+|center|Vec2Float|Reference center within the heightmap.|
 |gain|Float|Shape control parameter.|
+|inverse|Bool|Toggle inversion of the output values.|
+|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 
 ## Caldera
 
 
 Caldera generates a volcanic caldera landscape.
 
-![img](../images/nodes/Caldera.png)  
-
+![img](../images/nodes/Caldera.png)
 ### Category
 
 
-Primitive/Geological  
-
+Primitive/Geological
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|dr|HeightMapData|Displacement with respect to the domain size (normal direction).|
-  
+|dr|Heightmap|Displacement with respect to the domain size (normal direction).|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Caldera heightmap.|
-  
+|output|Heightmap|Caldera heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|center.x|Float|Center x coordinate.|
-|center.y|Float|Center y coordinate.|
+|center|Vec2Float|Reference center within the heightmap.|
+|inverse|Bool|Toggle inversion of the output values.|
 |noise_r_amp|Float|Noise amplitude for the radial displacement.|
 |noise_ratio_z|Float|Noise amplitude for the vertical displacement.|
 |radius|Float|Crater radius.|
+|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 |sigma_inner|Float|Crater inner lip half-width.|
 |sigma_outer|Float|Crater outer lip half-width.|
 |z_bottom|Float|Crater bottom elevation.|
@@ -218,26 +291,22 @@ Primitive/Geological
 
 Clamp restrict a value within a specified range. Essentially, it ensures that a value does not exceed a defined upper limit or fall below a defined lower limit.
 
-![img](../images/nodes/Clamp.png)  
-
+![img](../images/nodes/Clamp.png)
 ### Category
 
 
-Filter/Range  
-
+Filter/Range
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Clamped heightmap.|
-  
+|output|Heightmap|Clamped heightmap.|
 
 ### Parameters
 
@@ -246,39 +315,37 @@ Filter/Range
 |clamp|Value range|Clamping range.|
 |k_max|Float|Upper bound smoothing intensity.|
 |k_min|Float|Lower bound smoothing intensity.|
+|remap|Bool|Remap the operator's output to a specified range, defaulting to [0, 1].|
 |smooth_max|Bool|Activate smooth clamping for the upper bound.|
 |smooth_min|Bool|Activate smooth clamping for the lower bound.|
 
 ## Closing
 
 
-Closing is a combination of dilation followed by erosion. It is primarily used for closing small holes or gaps in objects. Use Cases: Hole filling: Closing can fill small holes or gaps in objects, making them more solid and complete. Connecting broken objects: Closing can help connect broken segments or regions in an image, making objects more continuous.
+Closing is a combination of dilation followed by erosion. It is primarily used for closing small holes or gaps in mask.
 
-![img](../images/nodes/Closing.png)  
-
+![img](../images/nodes/Closing.png)
 ### Category
 
 
-Operator/Morphology  
-
+Operator/Morphology
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Dilated heightmap.|
-  
+|output|Heightmap|Dilated heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|GPU|Bool|Toogle GPU acceleration on or off.|
 |radius|Float|Filter radius with respect to the domain size.|
 
 ## Cloud
@@ -286,56 +353,38 @@ Operator/Morphology
 
 Set of points.
 
-![img](../images/nodes/Cloud.png)  
-
+![img](../images/nodes/Cloud.png)
 ### Category
 
 
-Geometry/Cloud  
-
-### Inputs
-
-|Name|Type|Description|
-| :--- | :--- | :--- |
-  
-
+Geometry/Cloud
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|cloud|CloudData|Set of points (x, y) and elevations z.|
-  
+|cloud|Cloud|Set of points (x, y) and elevations z.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|cloud|HighMap Cloud Object|Cloud data.|
+|Cloud|Cloud|Cloud data.|
 
 ## CloudLattice
 
 
 Generate a grid lattice set of points.
 
-![img](../images/nodes/CloudLattice.png)  
-
+![img](../images/nodes/CloudLattice.png)
 ### Category
 
 
-Geometry/Cloud  
-
-### Inputs
-
-|Name|Type|Description|
-| :--- | :--- | :--- |
-  
-
+Geometry/Cloud
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|cloud|CloudData|Set of points (x, y) and elevations z.|
-  
+|cloud|Cloud|Set of points (x, y) and elevations z.|
 
 ### Parameters
 
@@ -343,7 +392,8 @@ Geometry/Cloud
 | :--- | :--- | :--- |
 |delta|Wavenumber|Point spacing in x and y directions.|
 |jitter_ratio|Wavenumber|Point jittering (noise) in x and y directions.|
-|seed|Random seed|Random seed number|
+|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|Seed|Random seed number|Random seed number|
 |stagger_ratio|Wavenumber|Point offset in x and y directions for every two lines or columns.|
 
 ## CloudMerge
@@ -351,185 +401,152 @@ Geometry/Cloud
 
 CloudMerge merges two clouds into a single one.
 
-![img](../images/nodes/CloudMerge.png)  
-
+![img](../images/nodes/CloudMerge.png)
 ### Category
 
 
-Geometry/Cloud  
-
+Geometry/Cloud
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|cloud1|CloudData|Input cloud.|
-|cloud2|CloudData|Input cloud.|
-  
+|cloud1|Cloud|Input cloud.|
+|cloud2|Cloud|Input cloud.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|cloud|CloudData|Merged cloud.|
-  
-
-### Parameters
-
-|Name|Type|Description|
-| :--- | :--- | :--- |
+|cloud|Cloud|Merged cloud.|
 
 ## CloudRandom
 
 
 Random set of points.
 
-![img](../images/nodes/CloudRandom.png)  
-
+![img](../images/nodes/CloudRandom.png)
 ### Category
 
 
-Geometry/Cloud  
-
-### Inputs
-
-|Name|Type|Description|
-| :--- | :--- | :--- |
-  
-
+Geometry/Cloud
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|cloud|CloudData|Set of points (x, y) and elevations z.|
-  
+|cloud|Cloud|Set of points (x, y) and elevations z.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |npoints|Integer|Number of points.|
-|seed|Random seed|Random seed number.|
+|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|Seed|Random seed number|Random seed number.|
 
 ## CloudRemapValues
 
 
 CloudRemapValues remap the range of the cloud point values.
 
-![img](../images/nodes/CloudRemapValues.png)  
-
+![img](../images/nodes/CloudRemapValues.png)
 ### Category
 
 
-Geometry/Cloud  
-
+Geometry/Cloud
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|cloud|CloudData|Input cloud.|
-  
+|input|Cloud|Input cloud.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|cloud|CloudData|Output cloud.|
-  
+|output|Cloud|Output cloud with new value range.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 
 ## CloudSDF
 
 
 CloudSDF evaluates the signed distance function of a set of points. It assigns a signed distance value to every point in space.
 
-![img](../images/nodes/CloudSDF.png)  
-
+![img](../images/nodes/CloudSDF.png)
 ### Category
 
 
-Geometry/Cloud  
-
+Geometry/Cloud
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|cloud|CloudData|Input cloud.|
-  
+|cloud|Cloud|Input cloud.|
+|dx|Heightmap|Displacement with respect to the domain size (x-direction).|
+|dy|Heightmap|Displacement with respect to the domain size (y-direction).|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|sdf|HeightMapData|Signed distance as an heightmap.|
-  
+|sdf|Heightmap|Signed distance as an heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|inverse|Bool|Toggle inversion of the output values.|
+|remap|Bool|Remap the operator's output to a specified range, defaulting to [0, 1].|
 
 ## CloudToArrayInterp
 
 
 CloudToArrayInterp generates a smooth and continuous 2D elevation map from a set of scattered points using Delaunay linear interpolation.
 
-![img](../images/nodes/CloudToArrayInterp.png)  
-
+![img](../images/nodes/CloudToArrayInterp.png)
 ### Category
 
 
-Primitive/Authoring  
-
+Geometry/Cloud
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|cloud|CloudData|Set of points (x, y) and elevations z.|
-|dx|HeightMapData|Displacement with respect to the domain size (x-direction).|
-|dy|HeightMapData|Displacement with respect to the domain size (y-direction).|
-  
+|cloud|Cloud|Set of points (x, y) and elevations z.|
+|dx|Heightmap|Displacement with respect to the domain size (x-direction).|
+|dy|Heightmap|Displacement with respect to the domain size (y-direction).|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|heightmap|HeightMapData|Interpolated heightmap.|
-  
-
-### Parameters
-
-|Name|Type|Description|
-| :--- | :--- | :--- |
+|heightmap|Heightmap|Interpolated heightmap.|
 
 ## CloudToPath
 
 
 CloudToPath convert a Cloud to a Path.
 
-![img](../images/nodes/CloudToPath.png)  
-
+![img](../images/nodes/CloudToPath.png)
 ### Category
 
 
-Converter  
-
+Geometry/Cloud
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|cloud|CloudData|Input cloud.|
-  
+|cloud|Cloud|Input cloud.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|path|PathData|Output path.|
-  
+|path|Path|Output path.|
 
 ### Parameters
 
@@ -543,63 +560,59 @@ Converter
 
 ColorizeCmap generates a texture based on colormaps to assign colors to data values.
 
-![img](../images/nodes/ColorizeCmap.png)  
-
+![img](../images/nodes/ColorizeCmap.png)
 ### Category
 
 
-Texture  
-
+Texture
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|level|HeightMapData|Data values for color selection.|
-|alpha|HeightMapData|Texture alpha map.|
-  
+|alpha|Heightmap|Texture alpha map.|
+|level|Heightmap|Data values for color selection.|
+|noise|Heightmap|TODO|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|texture|HeightMapRGBAData|Texture (RGBA).|
-  
+|texture|HeightmapRGBA|Texture (RGBA).|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |clamp_alpha|Bool|Clamp to [0, 1] to input alpha map.|
-|colormap|Enumeration|Color mapping selection. Available values: adrceist, aneprosi, angghore, anilyftp, anthatly, ascaired, aselllfa, aveflili, blesiblh, blywixps, boustous, byapsahi, bychpmem, cecelldf, ceitwope, cesintho, coffrrea, ctthaton, dffygutu, dfvieryo, drctheet, drfftiee, dwinthed, eafbissf, eporepop, ewntherb, feredwnt, fffadeng, ffwatsan, fleoreha, fromsesh, ftapewon, gsercrts, haviarof, hendesth, imongsir, indthsad, inosulul, intoshee, iresetyl, isungror, itteloud, ivericed, lereitth, majucent, mburmats, mearesit, meppremb, mofhewon, nalymeve, noasbian, ofasnfoi, ofoffrmp, oleonowh, onaaloni, ontomayw, outtsthe, owwheplu, pechrede, pellaine, piventon, plfgsthi, rbonblnc, rredtthe, sarermat, seclytme, sfreante, sheshesa, sinabuse, sindwirt, snotheca, ssemeool, suttlseb, taldidov, teasitis, teieebit, tharetwe, thengici, therinon, thesihas, thisathe, thoeftsw, tiamatsp, tinusprr, tiomithe, tnymeewh, tonndind, trererat, ttyaveft, tyfotinm, ucerecen, ucererds, upeesith, usoerlea, veranghh, verdeisu, wadsuthe, wbegweic, whetitat, whhorefr, wminamin, wsatavin, yierahon.|
+|colormap|Enumeration|Color mapping selection.|
 |reverse_alpha|Bool|Reverse the input alpha map.|
 |reverse_colormap|Bool|Reverse the colormap range.|
+|saturate_alpha|Value range|TODO|
+|saturate_input|Value range|TODO|
 
 ## ColorizeGradient
 
 
 ColorizeGradient generates a texture based on colormaps to assign colors to data values.
 
-![img](../images/nodes/ColorizeGradient.png)  
-
+![img](../images/nodes/ColorizeGradient.png)
 ### Category
 
 
-Texture  
-
+Texture
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|level|HeightMapData|Data values for color selection.|
-|alpha|HeightMapData|Texture alpha map.|
-  
+|alpha|Heightmap|Texture alpha map.|
+|level|Heightmap|Data values for color selection.|
+|noise|Heightmap|TODO|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|texture|HeightMapRGBAData|Texture (RGBA).|
-  
+|texture|HeightmapRGBA|Texture (RGBA).|
 
 ### Parameters
 
@@ -615,25 +628,16 @@ Texture
 
 ColorizeSolid generates an uniform texture based on an input color.
 
-![img](../images/nodes/ColorizeSolid.png)  
-
+![img](../images/nodes/ColorizeSolid.png)
 ### Category
 
 
-Texture  
-
-### Inputs
-
-|Name|Type|Description|
-| :--- | :--- | :--- |
-  
-
+Texture
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|texture|HeightMapRGBAData|Texture (RGBA).|
-  
+|texture|HeightmapRGBA|Texture (RGBA).|
 
 ### Parameters
 
@@ -647,27 +651,23 @@ Texture
 
 CombineMask performs basic logical operations on a pair of heightmaps (assuming they are used as masks).
 
-![img](../images/nodes/CombineMask.png)  
-
+![img](../images/nodes/CombineMask.png)
 ### Category
 
 
-Mask  
-
+Mask
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input 1|HeightMapData|Input mask.|
-|input 2|HeightMapData|Input mask.|
-  
+|input 1|Heightmap|Input mask.|
+|input 2|Heightmap|Input mask.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Combined mask.|
-  
+|output|Heightmap|Combined mask.|
 
 ### Parameters
 
@@ -675,228 +675,127 @@ Mask
 | :--- | :--- | :--- |
 |method|Enumeration|Combining method. Available values: exclusion, intersection, union.|
 
-## Comment
-
-
-Comment node is a passive node holding a comment text.
-
-![img](../images/nodes/Comment.png)  
-
-### Category
-
-
-Comment  
-
-### Inputs
-
-|Name|Type|Description|
-| :--- | :--- | :--- |
-  
-
-### Outputs
-
-|Name|Type|Description|
-| :--- | :--- | :--- |
-  
-
-### Parameters
-
-|Name|Type|Description|
-| :--- | :--- | :--- |
-|comment|String|Text comment.|
-
 ## ConvolveSVD
 
 
 ConvolveSVD performs convolution using a Singular Value Decomposition (SVD) of the kernel to accelerate the process.
 
-![img](../images/nodes/ConvolveSVD.png)  
-
+![img](../images/nodes/ConvolveSVD.png)
 ### Category
 
 
-Math/Convolution  
-
+Math/Convolution
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-|kernel|KernelData|Convolution kernel.|
-  
+|input|Heightmap|Input heightmap.|
+|kernel|Array|Convolution kernel.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Output heightmap.|
-  
+|output|Heightmap|Output heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |rank|Integer|Rank of the singular value decomposition.|
+|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 
 ## Cos
 
 
 Apply a cosine function to every values.
 
-![img](../images/nodes/Cos.png)  
-
+![img](../images/nodes/Cos.png)
 ### Category
 
 
-Math/Base  
-
+Math/Base
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Output heightmap.|
-  
+|output|Heightmap|Output heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |frequency|Float|Frequency.|
+|inverse|Bool|Toggle inversion of the output values.|
 |phase_shift|Float|Phase shift.|
+|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 
 ## Crater
 
 
 Crater generates a crater landscape..
 
-![img](../images/nodes/Crater.png)  
-
+![img](../images/nodes/Crater.png)
 ### Category
 
 
-Primitive/Geological  
-
+Primitive/Geological
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|dx|HeightMapData|Displacement with respect to the domain size (x-direction).|
-|dy|HeightMapData|Displacement with respect to the domain size (y-direction).|
-|control|HeightMapData|Control parameter, acts as a multiplier for the weight parameter.|
-  
+|control|Heightmap|Control parameter, acts as a multiplier for the weight parameter.|
+|dx|Heightmap|Displacement with respect to the domain size (x-direction).|
+|dy|Heightmap|Displacement with respect to the domain size (y-direction).|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Crater heightmap.|
-  
+|output|Heightmap|Crater heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|center|Vec2Float|Reference center within the heightmap.|
 |depth|Float|Crater depth.|
+|inverse|Bool|Toggle inversion of the output values.|
 |lip_decay|Float|Ejecta lip decay.|
 |lip_height_ratio|Float|Controls the ejecta lip relative height.|
 |radius|Float|Crater radius.|
-
-## DataAnalysis
-
-
-DataAnalysis.
-
-![img](../images/nodes/DataAnalysis.png)  
-
-### Category
-
-
-Debug  
-
-### Inputs
-
-|Name|Type|Description|
-| :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
-
-### Outputs
-
-|Name|Type|Description|
-| :--- | :--- | :--- |
-  
-
-### Parameters
-
-|Name|Type|Description|
-| :--- | :--- | :--- |
-
-## DataPreview
-
-
-DataPreview.
-
-![img](../images/nodes/DataPreview.png)  
-
-### Category
-
-
-Debug  
-
-### Inputs
-
-|Name|Type|Description|
-| :--- | :--- | :--- |
-|elevation|HeightMapData|Data values for elevation preview.|
-|texture|HeightMapRGBAData|Data values for color preview.|
-  
-
-### Outputs
-
-|Name|Type|Description|
-| :--- | :--- | :--- |
-  
-
-### Parameters
-
-|Name|Type|Description|
-| :--- | :--- | :--- |
+|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 
 ## Dendry
 
 
 Dendry is a procedural model for dendritic patterns generation.
 
-![img](../images/nodes/Dendry.png)  
-
+![img](../images/nodes/Dendry.png)
 ### Category
 
 
-Primitive/Coherent Noise  
-
+Primitive/Coherent
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|control|HeightMapData|Global control heightmap that defines the overall shape of the output.|
-|dx|HeightMapData|Displacement with respect to the domain size (x-direction).|
-|dy|HeightMapData|Displacement with respect to the domain size (y-direction).|
-|envelope|HeightMapData|Output noise amplitude envelope.|
-  
+|control|Heightmap|Global control heightmap that defines the overall shape of the output.|
+|dx|Heightmap|Displacement with respect to the domain size (x-direction).|
+|dy|Heightmap|Displacement with respect to the domain size (y-direction).|
+|envelope|Heightmap|Output noise amplitude envelope.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Generated noise.|
-  
+|out|Heightmap|TODO|
 
 ### Parameters
 
@@ -904,11 +803,13 @@ Primitive/Coherent Noise
 | :--- | :--- | :--- |
 |displacement|Float|Maximum displacement of segments.|
 |eps|Float|Used to bias the area where points are generated in cells.|
-|kw|Wavenumber|Noise wavenumbers (kx, ky) for each directions.|
+|inverse|Bool|Toggle inversion of the output values.|
+||Wavenumber|Noise wavenumbers (kx, ky) for each directions.|
 |noise_amplitude_proportion|Float|Proportion of the amplitude of the control function as noise.|
 |primitives_resolution_steps|Integer|Additional resolution steps in the primitive resolution.|
+|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 |resolution|Integer|Number of resolutions in the noise function.|
-|seed|Random seed|Random seed number.|
+|Seed|Random seed number|Random seed number.|
 |slope_power|Float|Additional parameter to control the variation of slope on terrains.|
 |subsampling|Integer|Function evaluation subsampling, use higher values for faster computation at the cost of a coarser resolution.|
 
@@ -917,27 +818,23 @@ Primitive/Coherent Noise
 
 DepressionFilling is used to fill depressions or sinks in an heightmap. It ensures that there are no depressions, i.e. areas within a digital elevation model that are surrounded by higher terrain, with no outlet to lower areas.
 
-![img](../images/nodes/DepressionFilling.png)  
-
+![img](../images/nodes/DepressionFilling.png)
 ### Category
 
 
-Erosion  
-
+Erosion
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Filled heightmap.|
-|fill map|HeightMapData|Filling map.|
-  
+|fill map|Heightmap|Filling map.|
+|output|Heightmap|Filled heightmap.|
 
 ### Parameters
 
@@ -952,64 +849,48 @@ Erosion
 
 The Detrend operator is used to adjust the elevation using a very basic (uncorrect) detrending operator.
 
-![img](../images/nodes/Detrend.png)  
-
+![img](../images/nodes/Detrend.png)
 ### Category
 
 
-Filter/Recurve  
-
+WIP
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Detrended heightmap.|
-  
-
-### Parameters
-
-|Name|Type|Description|
-| :--- | :--- | :--- |
+|output|Heightmap|Detrended heightmap.|
 
 ## DiffusionLimitedAggregation
 
 
 DiffusionLimitedAggregation creates branching, fractal-like structures that resemble the rugged, irregular contours of mountain ranges.
 
-![img](../images/nodes/DiffusionLimitedAggregation.png)  
-
+![img](../images/nodes/DiffusionLimitedAggregation.png)
 ### Category
 
 
-Primitive/Coherent Noise  
-
-### Inputs
-
-|Name|Type|Description|
-| :--- | :--- | :--- |
-  
-
+WIP
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|DiffusionLimitedAggregation heightmap.|
-  
+|output|Heightmap|DiffusionLimitedAggregation heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|inverse|Bool|Toggle inversion of the output values.|
 |noise_ratio|Float| A parameter that controls the amount of randomness or noise introduced in the talus formation process.|
+|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 |scale|Float|A scaling factor that influences the density of the particles in the DLA pattern.|
-|seed|Random seed|The seed for the random number generator.|
+|Seed|Random seed number|The seed for the random number generator.|
 |seeding_outer_radius_ratio|Float|The ratio between the outer seeding radius and the initial seeding radius. It determines the outer boundary for particle seeding.|
 |seeding_radius|Float|The radius within which initial seeding of particles occurs. This radius defines the area where the first particles are placed.|
 |slope|Float|Slope of the talus added to the DLA pattern.|
@@ -1019,94 +900,89 @@ Primitive/Coherent Noise
 
 Dilation expands the boundaries of objects in an image and fills in small gaps or holes in those objects. Use Cases: (+) Filling gaps: Dilation can be used to fill small gaps or holes in objects, making them more solid. (+) Merging objects: Dilation can help merge nearby objects or connect broken segments in an image.
 
-![img](../images/nodes/Dilation.png)  
-
+![img](../images/nodes/Dilation.png)
 ### Category
 
 
-Operator/Morphology  
-
+Operator/Morphology
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Dilated heightmap.|
-  
+|output|Heightmap|Dilated heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|GPU|Bool|Toogle GPU acceleration on or off.|
 |radius|Float|Filter radius with respect to the domain size.|
 
 ## DistanceTransform
 
 
-DistanceTransform is a distance map or distance image where each pixel's value represents the shortest distance to the nearest non-zero value in the input heightmap.
+Generates a distance map where each pixel's value represents the shortest distance to the nearest non-zero value in the input heightmap.
 
-![img](../images/nodes/DistanceTransform.png)  
-
+![img](../images/nodes/DistanceTransform.png)
 ### Category
 
 
-Operator/Morphology  
-
+Operator/Morphology
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap used to compute the distance transform.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Output heightmap.|
-  
+|output|Heightmap|Generated distance map based on the input heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|remap|Bool|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|reverse_input|Bool|Invert the input values before processing.|
+|reverse_output|Bool|Invert the output values after processing.|
+|threshold|Float|Defines the cutoff value for considering non-zero input pixels.|
+|transform_type|Enumeration|Specifies the distance metric used for transformation (e.g., Euclidean, Manhattan, or Chessboard distance).|
 
 ## Erosion
 
 
 Erosion removes small structures or noise from an image, and it also shrinks the boundaries of objects in an image. Use Cases: (+) Noise reduction: Erosion can help remove small, unwanted pixels or noise from the image. (+) Separating objects: Erosion can be used to separate touching or overlapping objects in an image by shrinking their boundaries.
 
-![img](../images/nodes/Erosion.png)  
-
+![img](../images/nodes/Erosion.png)
 ### Category
 
 
-Operator/Morphology  
-
+Operator/Morphology
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Dilated heightmap.|
-  
+|output|Heightmap|Dilated heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|GPU|Bool|Toogle GPU acceleration on or off.|
 |radius|Float|Filter radius with respect to the domain size.|
 
 ## ExpandShrink
@@ -1114,97 +990,79 @@ Operator/Morphology
 
 ExpandShrink is a maximum/minimum filter with a weighted kernel. It can be used to enhance or extract features while preserving the essential structure of the heightmap.
 
-![img](../images/nodes/ExpandShrink.png)  
-
+![img](../images/nodes/ExpandShrink.png)
 ### Category
 
 
-Filter/Recast  
-
+Filter/Recast
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-|mask|HeightMapData|Mask defining the filtering intensity (expected in [0, 1]).|
-  
+|input|Heightmap|Input heightmap.|
+|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Filtered heightmap.|
-  
+|output|Heightmap|Filtered heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|GPU|Bool|Toogle GPU acceleration on or off.|
 |kernel|Enumeration|Weighting kernel. Available values: biweight, cone, cone_smooth, cubic_pulse, disk, lorentzian, smooth_cosine, square, tricube.|
 |radius|Float|Filter radius with respect to the domain size.|
-|shrink|Bool|Shrink (if true) or expand (if false).|
+|expand|Bool|Shrink (if true) or expand (if false).|
 
 ## ExportAsset
 
 
-ExportAsset exporting both the heightmap and texture to a single asset.
+Exports both the heightmap and texture as a single asset. The mesh can either be used as is or retriangulated using an optimization algorithm. Additionally, a normal map can be provided to model light effects of small details not represented by the mesh.
 
-![img](../images/nodes/ExportAsset.png)  
-
+![img](../images/nodes/ExportAsset.png)
 ### Category
 
 
-IO/Files  
-
+IO/Files
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|elevation|HeightMapData|Data values for elevation.|
-|texture|HeightMapRGBAData|Data values for color.|
-  
-
-### Outputs
-
-|Name|Type|Description|
-| :--- | :--- | :--- |
-  
+|elevation|Heightmap|Heightmap data defining elevation values.|
+|normal map details|HeightmapRGBA|Optional normal map for enhancing lighting effects on small details.|
+|texture|HeightmapRGBA|Heightmap data defining texture color values.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|auto_export|Bool|Decides whether the export is automatically performed when the node is updated.|
-|elevation_scaling|Float|Elevation scaling.|
-|export_format|Enumeration|Export format. Available values: Assimp Binary - *.assbin, Assxml Document - *.assxml, Autodesk 3DS (legacy) - *.3ds, Autodesk FBX (ascii) - *.fbx, Autodesk FBX (binary) - *.fbx, COLLADA - Digital Asset Exchange Schema - *.dae, Extensible 3D - *.x3d, GL Transmission Format (binary) - *.glb, GL Transmission Format - *.gltf, GL Transmission Format v. 2 (binary) - *.glb, GL Transmission Format v. 2 - *.gltf, Stanford Polygon Library (binary) - *.ply, Stanford Polygon Library - *.ply, Step Files - *.stp, Stereolithography (binary) - *.stl, Stereolithography - *.stl, The 3MF-File-Format - *.3mf, Wavefront OBJ format - *.obj, Wavefront OBJ format without material file - *.obj.|
-|fname|Filename|Export file name.|
-|max_error|Float|Maximum error (for optimized triangulated mesh).|
-|mesh_type|Enumeration|Mesh type for the geometry. Available values: triangles, triangles (optimized).|
+|auto_export|Bool|Automatically exports the asset when the node is updated.|
+|Details normal map blending method|Enumeration|Defines the method used to blend the normal map for small details.|
+|detail_scaling|Float|Scaling factor applied to the detail normal map.|
+|elevation_scaling|Float|Factor used to scale elevation values.|
+|export_format|Enumeration|Defines the file format for export. Available formats include Assimp Binary (*.assbin), Assxml Document (*.assxml), Autodesk 3DS (*.3ds), Autodesk FBX (ASCII/Binary) (*.fbx), COLLADA (*.dae), Extensible 3D (*.x3d), GL Transmission Format (GLB/GLTF v1 & v2), Stanford Polygon Library (*.ply), Step Files (*.stp), Stereolithography (*.stl), 3MF (*.3mf), and Wavefront OBJ (*.obj) with or without material files.|
+|fname|Filename|Specifies the name of the exported file.|
+|max_error|Float|Maximum allowable error when generating an optimized triangulated mesh.|
+|mesh_type|Enumeration|Specifies the type of mesh geometry used. Options include 'triangles' and 'triangles (optimized)'.|
 
 ## ExportCloud
 
 
 ExportCloud is an operator for exporting cloud data to a csv file.
 
-![img](../images/nodes/ExportCloud.png)  
-
+![img](../images/nodes/ExportCloud.png)
 ### Category
 
 
-IO/Files  
-
+IO/Files
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|CloudData|Input heightmap.|
-  
-
-### Outputs
-
-|Name|Type|Description|
-| :--- | :--- | :--- |
-  
+|input|Cloud|Input heightmap.|
 
 ### Parameters
 
@@ -1218,58 +1076,40 @@ IO/Files
 
 ExportHeightmap is an operator for exporting a heightmap in various file formats.
 
-![img](../images/nodes/ExportHeightmap.png)  
-
+![img](../images/nodes/ExportHeightmap.png)
 ### Category
 
 
-IO/Files  
-
+IO/Files
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
-
-### Outputs
-
-|Name|Type|Description|
-| :--- | :--- | :--- |
-  
+|input|Heightmap|Input heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|auto_export|Bool|Decides whether the export is automatically performed when the node is updated.|
-|fname|Filename|Export file name.|
-|format|Enumeration|Export format. Available values: png (16 bit), png (8 bit), raw (16 bit, Unity).|
+|Automatic export|Bool|Decides whether the export is automatically performed when the node is updated.|
+|Filename|Filename|Export file name.|
+|Export format|Enumeration|Export format. Available values: png (16 bit), png (8 bit), raw (16 bit, Unity).|
 
 ## ExportNormalMap
 
 
 ExportNormalMap is an operator for exporting the normal map of an heightmap as a PNG image file.
 
-![img](../images/nodes/ExportNormalMap.png)  
-
+![img](../images/nodes/ExportNormalMap.png)
 ### Category
 
 
-IO/Files  
-
+IO/Files
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
-
-### Outputs
-
-|Name|Type|Description|
-| :--- | :--- | :--- |
-  
+|input|Heightmap|Input heightmap.|
 
 ### Parameters
 
@@ -1284,25 +1124,16 @@ IO/Files
 
 ExportPath is an operator for exporting path data to a csv file.
 
-![img](../images/nodes/ExportPath.png)  
-
+![img](../images/nodes/ExportPath.png)
 ### Category
 
 
-IO/Files  
-
+IO/Files
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|PathData|Input heightmap.|
-  
-
-### Outputs
-
-|Name|Type|Description|
-| :--- | :--- | :--- |
-  
+|input|Path|Input heightmap.|
 
 ### Parameters
 
@@ -1316,25 +1147,16 @@ IO/Files
 
 ExportTexture is a texture to a PNG image file.
 
-![img](../images/nodes/ExportTexture.png)  
-
+![img](../images/nodes/ExportTexture.png)
 ### Category
 
 
-IO/Files  
-
+IO/Files
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|texture|HeightMapRGBAData|Input texture.|
-  
-
-### Outputs
-
-|Name|Type|Description|
-| :--- | :--- | :--- |
-  
+|texture|HeightmapRGBA|Input texture.|
 
 ### Parameters
 
@@ -1349,33 +1171,30 @@ IO/Files
 
 Falloff is an operator that enforces values close to zero at the domain edges.
 
-![img](../images/nodes/Falloff.png)  
-
+![img](../images/nodes/Falloff.png)
 ### Category
 
 
-Math/Boundaries  
-
+Math/Boundaries
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-|dr|HeightMapData|Displacement with respect to the domain size (radial direction).|
-  
+|dr|Heightmap|Displacement with respect to the domain size (radial direction).|
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Filtered heightmap.|
-  
+|output|Heightmap|Filtered heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |distance_function|Enumeration|Measure used for the distance calculation. Available values: Chebyshev, Euclidian, Euclidian/Chebyshev, Manhattan.|
+|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 |strength|Float|Falloff strength.|
 
 ## FillTalus
@@ -1383,60 +1202,91 @@ Math/Boundaries
 
 Fill the heightmap starting from the highest elevations using a regular downslope.
 
-![img](../images/nodes/FillTalus.png)  
-
+![img](../images/nodes/FillTalus.png)
 ### Category
 
 
-Operator/Transform  
-
+WIP
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Output heightmap.|
-  
+|output|Heightmap|Output heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |noise_ratio|Float|Noise ratio, added to the downslope.|
-|seed|Random seed|Random seed number.|
+|Seed|Random seed number|Random seed number.|
 |slope|Float|Downslope used for filling.|
+
+## FlowStream
+
+
+TODO
+
+![img](../images/nodes/FlowStream.png)
+### Category
+
+
+WIP
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|Heightmap|TODO|
+|sources|Cloud|TODO|
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|Heightmap|TODO|
+|river_mask|Heightmap|TODO|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|depth|Float|TODO|
+|distance_exponent|Float|TODO|
+|elevation_ratio|Float|TODO|
+|merging_radius|Float|TODO|
+|noise_ratio|Float|TODO|
+|river_radius|Float|TODO|
+|riverbank_slope|Float|TODO|
+|riverbed_slope|Float|TODO|
+|Seed|Random seed number|TODO|
+|upward_penalization|Float|TODO|
 
 ## Fold
 
 
 Fold iteratively applies the absolute value function to the input field, effectively folding negative values to their positive counterparts.
 
-![img](../images/nodes/Fold.png)  
-
+![img](../images/nodes/Fold.png)
 ### Category
 
 
-Filter/Recast  
-
+Filter/Recast
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Folded heightmap.|
-  
+|output|Heightmap|Folded heightmap.|
 
 ### Parameters
 
@@ -1445,32 +1295,69 @@ Filter/Recast
 |iterations|Integer|Number of successive foldings.|
 |k|Float|Smoothing parameter of the smooth absolute value.|
 
-## Gain
+## GaborWaveFbm
 
 
-Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.
+Generates fractal Brownian motion (fBm) noise using Gabor wavelets, producing anisotropic textures with directional control.
 
-![img](../images/nodes/Gain.png)  
-
+![img](../images/nodes/GaborWaveFbm.png)
 ### Category
 
 
-Filter/Recurve  
-
+Primitive/Coherent
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-|mask|HeightMapData|Mask defining the filtering intensity (expected in [0, 1]).|
-  
+|angle|Heightmap|Optional input for dynamically controlling the wavelet orientation per pixel.|
+|control|Heightmap|Optional input for modulating noise intensity or distribution.|
+|dx|Heightmap|Optional input to control horizontal displacement in the noise generation.|
+|dy|Heightmap|Optional input to control vertical displacement in the noise generation.|
+|envelope|Heightmap|Modulates the noise amplitude across the heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Filtered heightmap.|
-  
+|output|Heightmap|The generated Gabor wavelet-based fractal noise heightmap.|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|angle|Float|Controls the base orientation of the Gabor wavelets, influencing the dominant direction of the noise pattern.|
+|angle_spread_ratio|Float|Determines how much the local angle of the Gabor kernel can vary. A low value results in straighter structures, while a high value introduces more directional variation.|
+|Inverse|Bool|Invert the output values.|
+|Wavenumber|Wavenumber|Defines the wavenumber, which controls the frequency of the Gabor wavelets in the noise function.|
+|Lacunarity|Float|Controls the frequency scaling between successive octaves of the fractal noise. Higher values create larger gaps between frequencies.|
+|Octaves|Integer|Specifies the number of noise layers (octaves) used in the fractal Brownian motion. More octaves add finer details.|
+|Persistence|Float|Controls how much each successive octave contributes to the final noise pattern. Higher values result in more prominent fine details.|
+|Remap range|Value range|Remap the output values to a specified range, defaulting to [0, 1].|
+|Seed|Random seed number|Sets the random seed for noise generation, ensuring reproducibility.|
+|Weight|Float|Adjusts the intensity of the noise contribution at each point.|
+
+## Gain
+
+
+Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.
+
+![img](../images/nodes/Gain.png)
+### Category
+
+
+Filter/Recurve
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|Heightmap|Input heightmap.|
+|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|Heightmap|Filtered heightmap.|
 
 ### Parameters
 
@@ -1483,65 +1370,58 @@ Filter/Recurve
 
 Gamma correction involves applying a nonlinear transformation to the pixel values of the heightmap. This transformation is based on a power-law function, where each pixel value is raised to the power of the gamma value. The gamma value is a parameter that determines the degree and direction of the correction.
 
-![img](../images/nodes/GammaCorrection.png)  
-
+![img](../images/nodes/GammaCorrection.png)
 ### Category
 
 
-Filter/Recurve  
-
+Filter/Recurve
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-|mask|HeightMapData|Mask defining the filtering intensity (expected in [0, 1]).|
-  
+|input|Heightmap|Input heightmap.|
+|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Filtered heightmap.|
-  
+|output|Heightmap|Filtered heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|gamma|Float|Gamma exponent.|
+|Gamma|Float|Gamma exponent.|
 
 ## GammaCorrectionLocal
 
 
 Gamma correction involves applying a nonlinear transformation to the pixel values of the heightmap. For GammaCorrectionLocal, the transformation parameters are locally defined within a perimeter 'radius'.
 
-![img](../images/nodes/GammaCorrectionLocal.png)  
-
+![img](../images/nodes/GammaCorrectionLocal.png)
 ### Category
 
 
-Filter/Recurve  
-
+Filter/Recurve
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-|mask|HeightMapData|Mask defining the filtering intensity (expected in [0, 1]).|
-  
+|input|Heightmap|Input heightmap.|
+|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Filtered heightmap.|
-  
+|output|Heightmap|Filtered heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|GPU|Bool|Toogle GPU acceleration on or off.|
 |gamma|Float|Gamma exponent.|
 |k|Float|Smoothing factor (typically in [0, 1]).|
 |radius|Float|Filter radius with respect to the domain size.|
@@ -1551,26 +1431,22 @@ Filter/Recurve
 
 Apply a Gaussian function to every values.
 
-![img](../images/nodes/GaussianDecay.png)  
-
+![img](../images/nodes/GaussianDecay.png)
 ### Category
 
 
-Math/Base  
-
+Math/Base
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Output heightmap.|
-  
+|output|Heightmap|Output heightmap.|
 
 ### Parameters
 
@@ -1583,187 +1459,214 @@ Math/Base
 
 GaussianPulse generates a Gaussian pulse.
 
-![img](../images/nodes/GaussianPulse.png)  
-
+![img](../images/nodes/GaussianPulse.png)
 ### Category
 
 
-Primitive/Function  
-
+Primitive/Function
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|dx|HeightMapData|Displacement with respect to the domain size (x-direction).|
-|dy|HeightMapData|Displacement with respect to the domain size (y-direction).|
-|control|HeightMapData|Control parameter, acts as a multiplier for the weight parameter.|
-  
+|control|Heightmap|Control parameter, acts as a multiplier for the weight parameter.|
+|dx|Heightmap|Displacement with respect to the domain size (x-direction).|
+|dy|Heightmap|Displacement with respect to the domain size (y-direction).|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Gaussian heightmap.|
-  
+|output|Heightmap|Gaussian heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|center.x|Float|Center x coordinate.|
-|center.y|Float|Center y coordinate.|
+|center|Vec2Float|Reference center within the heightmap.|
+|inverse|Bool|Toggle inversion of the output values.|
 |radius|Float|Pulse half-width.|
+|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+
+## Gavoronoise
+
+
+Generates a 2D heightmap using the GavoroNoise algorithm, a procedural noise technique for terrain generation.
+
+![img](../images/nodes/Gavoronoise.png)
+### Category
+
+
+Primitive/Coherent
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|angle|Heightmap|Optional input for dynamically modifying the wavelet orientation per pixel.|
+|control|Heightmap|Optional input that modulates noise intensity or distribution.|
+|dx|Heightmap|Optional input for perturbing noise in the X-direction.|
+|dy|Heightmap|Optional input for perturbing noise in the Y-direction.|
+|envelope|Heightmap|Modulates the amplitude of the noise across the heightmap.|
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|Heightmap|The final heightmap generated using the GavoroNoise algorithm.|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|amplitude|Float|Controls the overall intensity of the noise function.|
+|angle|Float|Sets the primary orientation of the wave structures in the noise.|
+|angle_spread_ratio|Float|Determines the degree of variation in the angle of the wave structures. Lower values create more aligned structures.|
+|branch_strength|Float|Controls the prominence of branch-like features in the generated noise.|
+|Inverse|Bool|Invert the output values of the noise function.|
+|Wavenumber|Wavenumber|Wave number vector that determines the base frequency of the noise.|
+|kw_multiplier|Wavenumber|Multiplier applied to the wave numbers, affecting the frequency scaling of the noise function.|
+|Lacunarity|Float|Controls the frequency scaling between successive octaves in the fractal noise function. Higher values create larger gaps between frequencies.|
+|Octaves|Integer|Number of noise layers (octaves) used in fractal Brownian motion (fBm). More octaves add finer details.|
+|Persistence|Float|Determines how much each successive octave contributes to the final noise pattern. Higher values amplify finer details.|
+|Remap range|Value range|Remap the noise output values to a specified range, defaulting to [0, 1].|
+|Seed|Random seed number|Sets the random seed for reproducible noise generation.|
+|slope_strength|Float|Controls the strength of slope-based directional erosion in the noise function.|
+|z_cut_max|Float|Defines the maximum cutoff value for the Z-axis in the generated noise.|
+|z_cut_min|Float|Defines the minimum cutoff value for the Z-axis in the generated noise.|
 
 ## Gradient
 
 
 Gradient provides insight into the spatial distribution of a function's gradient, conveying both direction and intensity of change across the xy-plane
 
-![img](../images/nodes/Gradient.png)  
-
+![img](../images/nodes/Gradient.png)
 ### Category
 
 
-Math/Gradient  
-
+Math/Gradient
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|dx|HeightMapData|Gradient with respect to the x-direction.|
-|dy|HeightMapData|Gradient with respect to the y-direction.|
-  
+|dx|Heightmap|Gradient with respect to the x-direction.|
+|dy|Heightmap|Gradient with respect to the y-direction.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|Remap range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 
 ## GradientAngle
 
 
-The gradient angle of a heightmap refers to the direction in which the elevation changes most rapidly at each point on the map. It represents the slope or inclination of the terrain surface relative to a horizontal plane
+The gradient angle of a heightmap refers to the direction in which the slope points toward. It represents the orientation of the terrain surface relative to a horizontal plane
 
-![img](../images/nodes/GradientAngle.png)  
-
+![img](../images/nodes/GradientAngle.png)
 ### Category
 
 
-Math/Gradient  
-
+Math/Gradient
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Gradient angle.|
-  
+|output|Heightmap|Gradient angle.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 
 ## GradientNorm
 
 
 The gradient norm of a heightmap refers to the magnitude or intensity of the rate of change of elevation at each point on the map. It represents the steepness or slope of the terrain surface, irrespective of its direction.
 
-![img](../images/nodes/GradientNorm.png)  
-
+![img](../images/nodes/GradientNorm.png)
 ### Category
 
 
-Math/Gradient  
-
+Math/Gradient
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Gradient norm.|
-  
+|output|Heightmap|Gradient norm.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 
 ## GradientTalus
 
 
 Gradient talus refers to the local steepest downslope, or the direction in which the terrain descends most rapidly, at each point on the heightmap.
 
-![img](../images/nodes/GradientTalus.png)  
-
+![img](../images/nodes/GradientTalus.png)
 ### Category
 
 
-Math/Gradient  
-
+Math/Gradient
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Gradient talus.|
-  
+|output|Heightmap|Gradient talus.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 
 ## HeightmapToKernel
 
 
 Convert an heightmap to a kernel.
 
-![img](../images/nodes/HeightmapToKernel.png)  
-
+![img](../images/nodes/HeightmapToKernel.png)
 ### Category
 
 
-Converter  
-
+Converter
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Heightmap.|
-  
+|heightmap|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|kernel|KernelData|Kernel.|
-  
+|kernel|Array|Output kernel.|
 
 ### Parameters
 
@@ -1779,91 +1682,79 @@ Converter
 
 Convert an heightmap to a mask (remap values).
 
-![img](../images/nodes/HeightmapToMask.png)  
-
+![img](../images/nodes/HeightmapToMask.png)
 ### Category
 
 
-Converter  
-
+Converter
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Heightmap.|
-  
+|input|Heightmap|Heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|mask|HeightMapData|Mask.|
-  
+|mask|Heightmap|Mask.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|inverse|Bool|Toggle inversion of the output values.|
+|saturate_k|Float|TODO|
+|saturate_range|Value range|TODO|
+|smoothing|Bool|Enable or disable smoothing to reduce noise in the curvature computation.|
+|smoothing_radius|Float|Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.|
 
 ## HeightmapToRGBA
 
 
 HeightmapToRGBA converts a series of heightmaps into an RGBA splatmap.
 
-![img](../images/nodes/HeightmapToRGBA.png)  
-
+![img](../images/nodes/HeightmapToRGBA.png)
 ### Category
 
 
-Converter  
-
+Converter
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|R|HeightMapData|Red channel.|
-|G|HeightMapData|Green channel.|
-|B|HeightMapData|Blue channel.|
-|A|HeightMapData|Alpha channel.|
-  
+|A|Heightmap|Alpha channel.|
+|B|Heightmap|Blue channel.|
+|G|Heightmap|Green channel.|
+|R|Heightmap|Red channel.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|RGBA|HeightMapRGBAData|RGBA heightmap.|
-  
-
-### Parameters
-
-|Name|Type|Description|
-| :--- | :--- | :--- |
+|RGBA|HeightmapRGBA|RGBA heightmap.|
 
 ## HydraulicBlur
 
 
 Hydraulic Blur applied a cell-based hydraulic erosion using a nonlinear diffusion model.
 
-![img](../images/nodes/HydraulicBlur.png)  
-
+![img](../images/nodes/HydraulicBlur.png)
 ### Category
 
 
-Erosion/Hydraulic  
-
+WIP
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Eroded heightmap.|
-  
+|output|Heightmap|Eroded heightmap.|
 
 ### Parameters
 
@@ -1871,120 +1762,195 @@ Erosion/Hydraulic
 | :--- | :--- | :--- |
 |k_smoothing|Float|Smoothing factor, if any.|
 |radius|Float|Gaussian filter radius (with respect to a unit domain).|
+|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 |vmax|Float|Maximum elevation for the details.|
+
+## HydraulicMusgrave
+
+
+TODO
+
+![img](../images/nodes/HydraulicMusgrave.png)
+### Category
+
+
+WIP
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|Heightmap|TODO|
+|moisture|Heightmap|TODO|
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|Heightmap|TODO|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|c_capacity|Float|TODO|
+|c_deposition|Float|TODO|
+|c_erosion|Float|TODO|
+|evap_rate|Float|TODO|
+|iterations|Integer|TODO|
+|water_level|Float|TODO|
 
 ## HydraulicParticle
 
 
 HydraulicParticle is a particle-based hydraulic erosion operator that simulates the erosion and sediment transport processes that occur due to the flow of water over a terrain represented by the input heightmap. This type of operator models erosion by tracking the movement of virtual particles (or sediment particles) as they are transported by water flow and interact with the terrain.
 
-![img](../images/nodes/HydraulicParticle.png)  
-
+![img](../images/nodes/HydraulicParticle.png)
 ### Category
 
 
-Erosion/Hydraulic  
-
+Erosion/Hydraulic
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-|bedrock|HeightMapData|Bedrock elevation, erosion process cannot carve the heightmap further down this point.|
-|moisture|HeightMapData|Moisture map, influences the amount of water locally deposited.|
-|mask|HeightMapData|Mask defining the filtering intensity (expected in [0, 1]).|
-  
+|bedrock|Heightmap|Bedrock elevation, erosion process cannot carve the heightmap further down this point.|
+|input|Heightmap|Input heightmap.|
+|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
+|moisture|Heightmap|Moisture map, influences the amount of water locally deposited.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Eroded heightmap.|
-|erosion map|HeightMapData|Erosion map|
-|depo. map|HeightMapData|Deposition map|
-  
+|deposition|Heightmap|Deposition map (in [0, 1]).|
+|erosion|Heightmap|Erosion map (in [0, 1]).|
+|output|Heightmap|Eroded heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|GPU|Bool|Toogle GPU acceleration on or off.|
 |c_capacity|Float|Particle capacity.|
 |c_deposition|Float|Particle deposition coefficient.|
 |c_erosion|Float|Particle erosion cofficient.|
-|c_radius|Integer|Particle radius (c_radius = 0 for a pixel-based algorithm and c_radius > 0 for a kernel-based algorithm, which can be significantly slower).|
+|c_inertia|Float|TODO|
+|deposition_only|Bool|TODO|
+|downscale|Bool|TODO|
 |drag_rate|Float|Particle drag rate.|
 |evap_rate|Float|Particle water evaporation rate.|
-|nparticles|Integer|Number of simulated particles.|
-|seed|Random seed|Random seed number.|
+|kc|Float|TODO|
+|particle_density|Float|TODO|
+|post_filtering|Bool|TODO|
+|post_filtering_local|Bool|TODO|
+|Seed|Random seed number|Random seed number.|
 
-## HydraulicRidge
+## HydraulicProcedural
 
 
-HydraulicRidge .
+TODO
 
-![img](../images/nodes/HydraulicRidge.png)  
-
+![img](../images/nodes/HydraulicProcedural.png)
 ### Category
 
 
-Erosion/Hydraulic  
-
+WIP
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-|mask|HeightMapData|Mask defining the filtering intensity (expected in [0, 1]).|
-  
+|input|Heightmap|TODO|
+|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Filtered heightmap.|
-  
+|output|Heightmap|TODO|
+|ridge_mask|Heightmap|TODO|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|erosion_factor|Float|Erosion factor, generally in ]0, 10]. Smaller values tend to flatten the map.|
-|intensity|Float|Intensity mask, expected in [0, 1] (applied as a post-processing).|
-|noise_ratio|Float|Ridge talus noise ratio in [0, 1].|
-|radius|Float|Pre-filter radius with respect to the domain size.|
-|seed|Random seed|Random seed number.|
-|smoothing_factor|Float|Smooothing factor in ]0, 1] (1 for no smoothing).|
-|talus_global|Float|Ridge slope.|
+|delta|Float|TODO|
+|density_factor|Float|TODO|
+|erosion_profile|Enumeration|TODO|
+|kernel_width_ratio|Float|TODO|
+|noise_ratio|Float|TODO|
+|phase_noise_amp|Float|TODO|
+|phase_smoothing|Float|TODO|
+|reverse_phase|Bool|TODO|
+|ridge_scaling|Float|TODO|
+|ridge_wavelength|Float|TODO|
+|rotate90|Bool|TODO|
+|Seed|Random seed number|TODO|
+|slope_mask|Float|TODO|
+|use_default_mask|Bool|TODO|
+
+## HydraulicSchott
+
+
+TODO
+
+![img](../images/nodes/HydraulicSchott.png)
+### Category
+
+
+WIP
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|Heightmap|TODO|
+|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|flow_map|Heightmap|TODO|
+|output|Heightmap|TODO|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|c_deposition|Float|TODO|
+|c_erosion|Float|TODO|
+|c_thermal|Float|TODO|
+|deposition_weight|Float|TODO|
+|flow_acc_exponent|Float|TODO|
+|flow_acc_exponent_depo|Float|TODO|
+|flow_routing_exponent|Float|TODO|
+|iterations|Integer|TODO|
+|scale_talus_with_elevation|Bool|TODO|
+|talus_global|Float|TODO|
+|thermal_weight|Float|TODO|
 
 ## HydraulicStream
 
 
 HydraulicStream is an hydraulic erosion operator using the flow stream approach and an infinite flow direction algorithm for simulating the erosion processes. Simulate water flow across the terrain using the infinite flow direction algorithm. As water flows over the terrain, flow accumulation representing the volume of water that passes through each point on the map, is computed to evaluate the erosive power of the water flow.
 
-![img](../images/nodes/HydraulicStream.png)  
-
+![img](../images/nodes/HydraulicStream.png)
 ### Category
 
 
-Erosion/Hydraulic  
-
+WIP
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-|bedrock|HeightMapData|Bedrock elevation, erosion process cannot carve the heightmap further down this point.|
-|moisture|HeightMapData|Moisture map, influences the amount of water locally deposited.|
-|mask|HeightMapData|Mask defining the filtering intensity (expected in [0, 1]).|
-  
+|input|Heightmap|Input heightmap.|
+|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Eroded heightmap.|
-|erosion map|HeightMapData|Erosion map|
-  
+|erosion|Heightmap|Erosion map (in [0, 1]).|
+|output|Heightmap|Eroded heightmap.|
 
 ### Parameters
 
@@ -1995,36 +1961,106 @@ Erosion/Hydraulic
 |radius|Float|Carving kernel radius.|
 |talus_ref|Float|Reference talus, with small values of talus_ref  leading to thinner flow streams.|
 
-## HydraulicVpipes
+## HydraulicStreamLog
 
 
-HydraulicVpipes performs hydraulic erosion using a virtual pipe algorithm, which is a method that simulates erosion and sediment transport processes by mimicking the behavior of water flowing through a network of virtual pipes. This approach models erosion based on the principles of fluid dynamics and sediment transport, while also considering the local topography of the terrain represented by the input heightmap.
+TODO
 
-![img](../images/nodes/HydraulicVpipes.png)  
-
+![img](../images/nodes/HydraulicStreamLog.png)
 ### Category
 
 
-Erosion/Hydraulic  
-
+Erosion/Hydraulic
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-|bedrock|HeightMapData|Bedrock elevation, erosion process cannot carve the heightmap further down this point.|
-|moisture|HeightMapData|Moisture map, influences the amount of water locally deposited.|
-|mask|HeightMapData|Mask defining the filtering intensity (expected in [0, 1]).|
-  
+|input|Heightmap|TODO|
+|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Eroded heightmap.|
-|erosion map|HeightMapData|Erosion map|
-|depo. map|HeightMapData|Deposition map|
-  
+|deposition|Heightmap|Deposition map (in [0, 1]).|
+|erosion|Heightmap|Erosion map (in [0, 1]).|
+|flow_map|Heightmap|TODO|
+|output|Heightmap|TODO|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|GPU|Bool|Toogle GPU acceleration on or off.|
+|c_erosion|Float|TODO|
+|deposition_radius|Float|TODO|
+|deposition_scale_ratio|Float|TODO|
+|gradient_power|Float|TODO|
+|gradient_prefilter_radius|Float|TODO|
+|gradient_scaling_ratio|Float|TODO|
+|saturation_ratio|Float|TODO|
+|talus_ref|Float|TODO|
+
+## HydraulicStreamUpscaleAmplification
+
+
+TODO
+
+![img](../images/nodes/HydraulicStreamUpscaleAmplification.png)
+### Category
+
+
+WIP
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|Heightmap|TODO|
+|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|Heightmap|TODO|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|c_erosion|Float|TODO|
+|clipping_ratio|Float|TODO|
+|persistence|Float|TODO|
+|radius|Float|TODO|
+|talus_ref|Float|TODO|
+|upscaling_levels|Integer|TODO|
+
+## HydraulicVpipes
+
+
+HydraulicVpipes performs hydraulic erosion using a virtual pipe algorithm, which is a method that simulates erosion and sediment transport processes by mimicking the behavior of water flowing through a network of virtual pipes. This approach models erosion based on the principles of fluid dynamics and sediment transport, while also considering the local topography of the terrain represented by the input heightmap.
+
+![img](../images/nodes/HydraulicVpipes.png)
+### Category
+
+
+WIP
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|bedrock|Heightmap|Bedrock elevation, erosion process cannot carve the heightmap further down this point.|
+|input|Heightmap|Input heightmap.|
+|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
+|moisture|Heightmap|Moisture map, influences the amount of water locally deposited.|
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|deposition|Heightmap|Deposition map (in [0, 1]).|
+|erosion|Heightmap|Erosion map (in [0, 1]).|
+|output|Heightmap|Eroded heightmap.|
 
 ### Parameters
 
@@ -2043,88 +2079,83 @@ Erosion/Hydraulic
 
 ImportHeightmap imports an heighmap from a grayscale PNG 8bit file.
 
-![img](../images/nodes/ImportHeightmap.png)  
-
+![img](../images/nodes/ImportHeightmap.png)
 ### Category
 
 
-IO/Files  
-
-### Inputs
-
-|Name|Type|Description|
-| :--- | :--- | :--- |
-  
-
+IO/Files
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|texture|HeightMapData|Heightmap.|
-  
+|output|Heightmap|Output heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|fname (8bit grayscale)|Filename|Import file name.|
+|fname|Filename|Filename of the image file to import.|
 |remap|Bool|Remap imported heightmap elevation to [0, 1].|
+
+## ImportTexture
+
+
+TODO
+
+![img](../images/nodes/ImportTexture.png)
+### Category
+
+
+IO/Files
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|texture|HeightmapRGBA|TODO|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|fname|Filename|TODO|
 
 ## Inverse
 
 
 Inverse flips the sign of every values.
 
-![img](../images/nodes/Inverse.png)  
-
+![img](../images/nodes/Inverse.png)
 ### Category
 
 
-Math/Base  
-
+Math/Base
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Binary heightmap.|
-  
-
-### Parameters
-
-|Name|Type|Description|
-| :--- | :--- | :--- |
+|output|Heightmap|Binary heightmap.|
 
 ## KernelGabor
 
 
-.
+KernelGabor generates a Gabor kernel.
 
-![img](../images/nodes/KernelGabor.png)  
-
+![img](../images/nodes/KernelGabor.png)
 ### Category
 
 
-Primitive/Kernel  
-
-### Inputs
-
-|Name|Type|Description|
-| :--- | :--- | :--- |
-  
-
+Primitive/Kernel
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|kernel|KernelData|KernelGabor generates a Gabor kernel.|
-  
+|kernel|Array|Output kernel.|
 
 ### Parameters
 
@@ -2138,27 +2169,18 @@ Primitive/Kernel
 ## KernelPrim
 
 
-.
+KernelPrim generates a 'kernel', refering to a small matrix used to apply specific effects based on convolution for instance.
 
-![img](../images/nodes/KernelPrim.png)  
-
+![img](../images/nodes/KernelPrim.png)
 ### Category
 
 
-Primitive/Kernel  
-
-### Inputs
-
-|Name|Type|Description|
-| :--- | :--- | :--- |
-  
-
+Primitive/Kernel
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|kernel|KernelData|KernelPrim generates a 'kernel', refering to a small matrix used to apply specific effects based on convolution for instance.|
-  
+|kernel|Array|Output kernel.|
 
 ### Parameters
 
@@ -2173,28 +2195,24 @@ Primitive/Kernel
 
 KmeansClustering2 node groups the data into clusters based on the values of the two input features.
 
-![img](../images/nodes/KmeansClustering2.png)  
-
+![img](../images/nodes/KmeansClustering2.png)
 ### Category
 
 
-Features/Clustering  
-
+Features/Clustering
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|feature 1|HeightMapData|First measurable property or characteristic of the data points being analyzed (e.g elevation, gradient norm, etc...|
-|feature 2|HeightMapData|Second measurable property or characteristic of the data points being analyzed (e.g elevation, gradient norm, etc...|
-  
+|feature 1|Heightmap|First measurable property or characteristic of the data points being analyzed (e.g elevation, gradient norm, etc...|
+|feature 2|Heightmap|Second measurable property or characteristic of the data points being analyzed (e.g elevation, gradient norm, etc...|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Cluster labelling.|
-|scoring|HeightMapVectorData|Score in [0, 1] of the cell to belong to a given cluster|
-  
+|output|Heightmap|Cluster labelling.|
+|scoring|vector<Heightmap>|Score in [0, 1] of the cell to belong to a given cluster|
 
 ### Parameters
 
@@ -2203,7 +2221,7 @@ Features/Clustering
 |compute_scoring|Bool|Determine whether scoring is computed.|
 |nclusters|Integer|Number of clusters.|
 |normalize_inputs|Bool|Determine whether the feature amplitudes are normalized before the clustering.|
-|seed|Random seed|Random seed number.|
+|Seed|Random seed number|Random seed number.|
 |weights.x|Float|Weight of the first feature.|
 |weights.y|Float|Weight of the second feature.|
 
@@ -2212,29 +2230,25 @@ Features/Clustering
 
 KmeansClustering2 node groups the data into clusters based on the values of the three input features.
 
-![img](../images/nodes/KmeansClustering3.png)  
-
+![img](../images/nodes/KmeansClustering3.png)
 ### Category
 
 
-Features/Clustering  
-
+Features/Clustering
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|feature 1|HeightMapData|First measurable property or characteristic of the data points being analyzed (e.g elevation, gradient norm, etc...|
-|feature 2|HeightMapData|First measurable property or characteristic of the data points being analyzed (e.g elevation, gradient norm, etc...|
-|feature 3|HeightMapData|Third measurable property or characteristic of the data points being analyzed (e.g elevation, gradient norm, etc...|
-  
+|feature 1|Heightmap|First measurable property or characteristic of the data points being analyzed (e.g elevation, gradient norm, etc...|
+|feature 2|Heightmap|First measurable property or characteristic of the data points being analyzed (e.g elevation, gradient norm, etc...|
+|feature 3|Heightmap|Third measurable property or characteristic of the data points being analyzed (e.g elevation, gradient norm, etc...|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Cluster labelling.|
-|scoring|HeightMapVectorData|Score in [0, 1] of the cell to belong to a given cluster|
-  
+|output|Heightmap|Cluster labelling.|
+|scoring|vector<Heightmap>|Score in [0, 1] of the cell to belong to a given cluster|
 
 ### Parameters
 
@@ -2243,36 +2257,63 @@ Features/Clustering
 |compute_scoring|Bool|Determine whether scoring is computed.|
 |nclusters|Integer|Number of clusters.|
 |normalize_inputs|Bool|Determine whether the feature amplitudes are normalized before the clustering.|
-|seed|Random seed|Random seed number.|
+|Seed|Random seed number|Random seed number.|
 |weights.x|Float|Weight of the first feature.|
 |weights.y|Float|Weight of the third feature.|
+|weights.z|Float|TODO|
+
+## Kuwahara
+
+
+TODO
+
+![img](../images/nodes/Kuwahara.png)
+### Category
+
+
+WIP
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|Heightmap|TODO|
+|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|Heightmap|TODO|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|mix_ratio|Float|TODO|
+|radius|Float|TODO|
 
 ## Laplace
 
 
 Laplace smoothing filter reduces noise and smooth out variations in pixel intensity while preserving the overall structure of an image.
 
-![img](../images/nodes/Laplace.png)  
-
+![img](../images/nodes/Laplace.png)
 ### Category
 
 
-Filter/Smoothing  
-
+Filter/Smoothing
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-|mask|HeightMapData|Mask defining the filtering intensity (expected in [0, 1]).|
-  
+|input|Heightmap|Input heightmap.|
+|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Filtered heightmap.|
-  
+|output|Heightmap|Filtered heightmap.|
 
 ### Parameters
 
@@ -2286,28 +2327,24 @@ Filter/Smoothing
 
 The Lerp operator, short for linear interpolation, is a method for smoothly transitioning between two values over a specified range or interval.
 
-![img](../images/nodes/Lerp.png)  
-
+![img](../images/nodes/Lerp.png)
 ### Category
 
 
-Operator/Blend  
-
+Math/Base
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|a|HeightMapData|Start heightmap (t = 0).|
-|b|HeightMapData|End heightmap (t = 1).|
-|t|HeightMapData|Lerp factor, expected in [0, 1].|
-  
+|a|Heightmap|Start heightmap (t = 0).|
+|b|Heightmap|End heightmap (t = 1).|
+|t|Heightmap|Lerp factor, expected in [0, 1].|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Interpolated heightmap.|
-  
+|output|Heightmap|Interpolated heightmap.|
 
 ### Parameters
 
@@ -2320,26 +2357,22 @@ Operator/Blend
 
 MakeBinary is a thresholding operator. It transforms an input heightmap into a binary heightmap, where each pixel is assigned either a value of 0 or 1, depending on whether its intensity value surpasses a specified threshold.
 
-![img](../images/nodes/MakeBinary.png)  
-
+![img](../images/nodes/MakeBinary.png)
 ### Category
 
 
-Operator/Morphology  
-
+Operator/Morphology
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Binary heightmap.|
-  
+|output|Heightmap|Binary heightmap.|
 
 ### Parameters
 
@@ -2350,127 +2383,174 @@ Operator/Morphology
 ## MakePeriodic
 
 
-MakePeriodic makes the input heightmap tileable by building a smooth lineat transition at the boundaries.
+Makes the input heightmap tileable by creating a smooth linear transition at the boundaries. This is useful for generating seamless textures or terrains that can be repeated without visible seams.
 
-![img](../images/nodes/MakePeriodic.png)  
-
+![img](../images/nodes/MakePeriodic.png)
 ### Category
 
 
-Operator/Tiling  
-
+Operator/Tiling
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|The input heightmap to be made tileable.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Binary heightmap.|
-  
+|output|Heightmap|The output heightmap with smooth transitions at the boundaries, making it tileable.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|overlap|Float|Overlap ratio at the boundaries.|
+|overlap|Float|The ratio of overlap at the boundaries. A higher value creates a smoother transition but may reduce the usable area of the heightmap.|
 
 ## MakePeriodicStitching
 
 
-MakePeriodicStitching makes the input heightmap tileable by seamlessly stitching together the domain boundaries.
+Makes the input heightmap tileable by creating a smooth transition at the boundaries using stitching. This is useful for generating seamless textures or terrains that can be repeated without visible seams.
 
-![img](../images/nodes/MakePeriodicStitching.png)  
-
+![img](../images/nodes/MakePeriodicStitching.png)
 ### Category
 
 
-Operator/Tiling  
-
+Operator/Tiling
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|The input heightmap to be made tileable.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Binary heightmap.|
-  
+|output|Heightmap|The output heightmap with smooth transitions at the boundaries, making it tileable.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|overlap|Float|Overlap ratio at the boundaries.|
+|overlap|Float|The ratio of overlap at the boundaries. A higher value creates a smoother transition but may reduce the usable area of the heightmap.|
+
+## MeanShift
+
+
+TODO
+
+![img](../images/nodes/MeanShift.png)
+### Category
+
+
+WIP
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|Heightmap|TODO|
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|Heightmap|TODO|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|GPU|Bool|Toogle GPU acceleration on or off.|
+|iterations|Integer|TODO|
+|radius|Float|TODO|
+|talus_global|Float|TODO|
+|talus_weighted|Bool|TODO|
 
 ## Median3x3
 
 
 Median3x3 filter is a median filter with a 3x3 kernel used to reduce noise while preserving edges in an image. This process removes outliers and smooths the image without noise reduction and feature preservation in digital images.
 
-![img](../images/nodes/Median3x3.png)  
-
+![img](../images/nodes/Median3x3.png)
 ### Category
 
 
-Filter/Smoothing  
-
+Filter/Smoothing
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-|mask|HeightMapData|Mask defining the filtering intensity (expected in [0, 1]).|
-  
+|input|Heightmap|Input heightmap.|
+|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Filtered heightmap.|
-  
+|output|Heightmap|Filtered heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|GPU|Bool|Toogle GPU acceleration on or off.|
+
+## MixNormalMap
+
+
+TODO
+
+![img](../images/nodes/MixNormalMap.png)
+### Category
+
+
+Texture
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|normal map base|HeightmapRGBA|TODO|
+|normal map detail|HeightmapRGBA|TODO|
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|normal map|HeightmapRGBA|TODO|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|blending_method|Enumeration|TODO|
+|detail_scaling|Float|TODO|
 
 ## MixTexture
 
 
 MixTexture enables the seamless integration of multiple textures by utilizing the alpha channel information to control the blending.
 
-![img](../images/nodes/MixTexture.png)  
-
+![img](../images/nodes/MixTexture.png)
 ### Category
 
 
-Texture  
-
+Texture
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|texture1|HeightMapRGBAData|Input texture.|
-|texture2|HeightMapRGBAData|Input texture.|
-|texture3|HeightMapRGBAData|Input texture.|
-|texture4|HeightMapRGBAData|Input texture.|
-  
+|texture1|HeightmapRGBA|Input texture.|
+|texture2|HeightmapRGBA|Input texture.|
+|texture3|HeightmapRGBA|Input texture.|
+|texture4|HeightmapRGBA|Input texture.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|texture|HeightMapRGBAData|Output texture.|
-  
+|texture|HeightmapRGBA|Output texture.|
 
 ### Parameters
 
@@ -2484,185 +2564,214 @@ Texture
 
 The Mixer operator takes several input heightmaps and blend them according to a mixing parameter expected in [0, 1].
 
-![img](../images/nodes/Mixer.png)  
-
+![img](../images/nodes/Mixer.png)
 ### Category
 
 
-Operator/Blend  
-
+Operator/Blend
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input 1|HeightMapData|Input heightmap.|
-|input 2|HeightMapData|Input heightmap.|
-|input 3|HeightMapData|Input heightmap.|
-|input 4|HeightMapData|Input heightmap.|
-|t|HeightMapData|Mixing parameter, expected in [0, 1].|
-  
+|input 1|Heightmap|Input heightmap.|
+|input 2|Heightmap|Input heightmap.|
+|input 3|Heightmap|Input heightmap.|
+|input 4|Heightmap|Input heightmap.|
+|t|Heightmap|Mixing parameter, expected in [0, 1].|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Output heightmap.|
-  
-
-### Parameters
-
-|Name|Type|Description|
-| :--- | :--- | :--- |
+|output|Heightmap|Output heightmap.|
 
 ## MorphologicalGradient
 
 
 MorphologicalGradient calculates the difference between dilation and erosion of an image, resulting in the outline of objects. Use Cases: Edge detection, boundary extraction.
 
-![img](../images/nodes/MorphologicalGradient.png)  
-
+![img](../images/nodes/MorphologicalGradient.png)
 ### Category
 
 
-Operator/Morphology  
-
+Operator/Morphology
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Gradient heightmap.|
-  
+|output|Heightmap|Gradient heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|GPU|Bool|Toogle GPU acceleration on or off.|
+|inverse|Bool|Toggle inversion of the output values.|
 |radius|Float|Filter radius with respect to the domain size.|
+|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+
+## MountainRangeRadial
+
+
+Generates a heightmap representing a radial mountain range emanating from a specified center.
+
+![img](../images/nodes/MountainRangeRadial.png)
+### Category
+
+
+Primitive/Geological
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|control|Heightmap|Optional input that modulates the terrain shape and noise distribution.|
+|dx|Heightmap|Optional input for perturbing the terrain in the X-direction.|
+|dy|Heightmap|Optional input for perturbing the terrain in the Y-direction.|
+|envelope|Heightmap|Modulates the amplitude of the mountain range across the heightmap.|
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|angle|Heightmap|Optional output providing the computed angle values for terrain features.|
+|output|Heightmap|The final heightmap representing the radial mountain range.|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|angle_spread_ratio|Float|Controls the angular spread of the mountain range. Lower values create more concentrated ridges, while higher values distribute them more evenly.|
+|center|Vec2Float|The center point of the radial mountain range as normalized coordinates within [0, 1].|
+|core_size_ratio|Float|Determines the relative size of the core mountain region before tapering begins.|
+|half_width|Float|Defines the half-width of the radial mountain range, controlling its spread.|
+|inverse|Bool|Toggle inversion of the output values, flipping elevations.|
+|kw|Wavenumber|The wave numbers (frequency components) that define the base frequency of the noise function.|
+|lacunarity|Float|The frequency scaling factor for successive noise octaves. Higher values increase the frequency of each successive octave.|
+|octaves|Integer|The number of octaves for fractal noise generation. More octaves add finer details to the terrain.|
+|persistence|Float|The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.|
+|remap_range|Value range|Remaps the operator's output values to a specified range, defaulting to [0, 1].|
+|Seed|Random seed number|Sets the seed for random noise generation, ensuring reproducibility.|
+|weight|Float|Initial weight for noise contribution. Higher values amplify the primary terrain features.|
 
 ## Noise
 
 
 Noise node generates coherent and random-looking patterns.
 
-![img](../images/nodes/Noise.png)  
-
+![img](../images/nodes/Noise.png)
 ### Category
 
 
-Primitive/Coherent Noise  
-
+Primitive/Coherent
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|dx|HeightMapData|Displacement with respect to the domain size (x-direction).|
-|dy|HeightMapData|Displacement with respect to the domain size (y-direction).|
-|envelope|HeightMapData|Output noise amplitude envelope.|
-  
+|dx|Heightmap|Displacement with respect to the domain size (x-direction).|
+|dy|Heightmap|Displacement with respect to the domain size (y-direction).|
+|envelope|Heightmap|Output noise amplitude envelope.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Generated noise.|
-  
+|out|Heightmap|TODO|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|kw|Wavenumber|Noise wavenumbers (kx, ky) for each directions.|
-|noise_type|Enumeration|Base primitive noise. Available values: OpenSimplex2, OpenSimplex2S, Perlin, Perlin (billow), Perlin (half), Value, Value (cubic), Value (delaunay), Value (linear), Worley, Worley (doube), Worley (value).|
-|seed|Random seed|Random seed number.|
+|GPU|Bool|Toogle GPU acceleration on or off.|
+|Inverse|Bool|Toggle inversion of the output values.|
+|Wavenumber|Wavenumber|Noise wavenumbers (kx, ky) for each directions.|
+|Noise type|Enumeration|Base primitive noise. Available values: OpenSimplex2, OpenSimplex2S, Perlin, Perlin (billow), Perlin (half), Value, Value (cubic), Value (delaunay), Value (linear), Worley, Worley (doube), Worley (value).|
+|Remap range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|Seed|Random seed number|Random seed number.|
 
 ## NoiseFbm
 
 
 Fractal noise is a mathematical algorithm used to generate complex and detailed patterns characterized by self-similarity across different scales.
 
-![img](../images/nodes/NoiseFbm.png)  
-
+![img](../images/nodes/NoiseFbm.png)
 ### Category
 
 
-Primitive/Coherent Noise  
-
+Primitive/Coherent
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|dx|HeightMapData|Displacement with respect to the domain size (x-direction).|
-|dy|HeightMapData|Displacement with respect to the domain size (y-direction).|
-|control|HeightMapData|Control parameter, acts as a multiplier for the weight parameter.|
-|envelope|HeightMapData|Output noise amplitude envelope.|
-  
+|control|Heightmap|Control parameter, acts as a multiplier for the weight parameter.|
+|dx|Heightmap|Displacement with respect to the domain size (x-direction).|
+|dy|Heightmap|Displacement with respect to the domain size (y-direction).|
+|envelope|Heightmap|Output noise amplitude envelope.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Generated noise.|
-  
+|output|Heightmap|Generated noise.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|kw|Wavenumber|Noise wavenumbers (kx, ky) for each directions.|
-|lacunarity|Float|Wavenumber ratio between each octaves.|
-|noise_type|Enumeration|Base primitive noise. Available values: OpenSimplex2, OpenSimplex2S, Perlin, Perlin (billow), Perlin (half), Value, Value (cubic), Worley, Worley (doube), Worley (value).|
-|octaves|Integer|Number of octaves.|
-|persistence|Float|Octave persistence.|
-|seed|Random seed|Random seed number.|
-|weight|Float|Octave weighting.|
+|GPU|Bool|Toogle GPU acceleration on or off.|
+|Inverse|Bool|Toggle inversion of the output values.|
+|Wavenumber|Wavenumber|Noise wavenumbers (kx, ky) for each directions.|
+|Lacunarity|Float|Wavenumber ratio between each octaves.|
+|Noise type|Enumeration|Base primitive noise. Available values: OpenSimplex2, OpenSimplex2S, Perlin, Perlin (billow), Perlin (half), Value, Value (cubic), Worley, Worley (doube), Worley (value).|
+|Octaves|Integer|Number of octaves.|
+|Persistence|Float|Octave persistence.|
+|Remap range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|Seed|Random seed number|Random seed number.|
+|Weight|Float|Octave weighting.|
 
 ## NoiseIq
 
 
 NoiseIq, variant of NoiseFbm.
 
-![img](../images/nodes/NoiseIq.png)  
-
+![img](../images/nodes/NoiseIq.png)
 ### Category
 
 
-Primitive/Coherent Noise  
-
+Primitive/Coherent
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|dx|HeightMapData|Displacement with respect to the domain size (x-direction).|
-|dy|HeightMapData|Displacement with respect to the domain size (y-direction).|
-|control|HeightMapData|Control parameter, acts as a multiplier for the weight parameter.|
-|envelope|HeightMapData|Output noise amplitude envelope.|
-  
+|control|Heightmap|Control parameter, acts as a multiplier for the weight parameter.|
+|dx|Heightmap|Displacement with respect to the domain size (x-direction).|
+|dy|Heightmap|Displacement with respect to the domain size (y-direction).|
+|envelope|Heightmap|Output noise amplitude envelope.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Generated noise.|
-  
+|output|Heightmap|Generated noise.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |gradient_scale|Float|Gradient influence scaling.|
-|kw|Wavenumber|Noise wavenumbers (kx, ky) for each directions.|
+|inverse|Bool|Toggle inversion of the output values.|
+|Wavenumber|Wavenumber|Noise wavenumbers (kx, ky) for each directions.|
 |lacunarity|Float|Wavenumber ratio between each octaves.|
 |noise_type|Enumeration|Base primitive noise. Available values: OpenSimplex2, OpenSimplex2S, Perlin, Perlin (billow), Perlin (half), Value, Value (cubic), Worley, Worley (doube), Worley (value).|
 |octaves|Integer|Number of octaves.|
 |persistence|Float|Octave persistence.|
-|seed|Random seed|Random seed number.|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|Seed|Random seed number|Random seed number.|
 |weight|Float|Octave weighting.|
 
 ## NoiseJordan
@@ -2670,44 +2779,39 @@ Primitive/Coherent Noise
 
 NoiseJordan, variant of NoiseFbm.
 
-![img](../images/nodes/NoiseJordan.png)  
-
+![img](../images/nodes/NoiseJordan.png)
 ### Category
 
 
-Primitive/Coherent Noise  
-
+Primitive/Coherent
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|dx|HeightMapData|Displacement with respect to the domain size (x-direction).|
-|dy|HeightMapData|Displacement with respect to the domain size (y-direction).|
-|control|HeightMapData|Control parameter, acts as a multiplier for the weight parameter.|
-|envelope|HeightMapData|Output noise amplitude envelope.|
-  
+|control|Heightmap|Control parameter, acts as a multiplier for the weight parameter.|
+|dx|Heightmap|Displacement with respect to the domain size (x-direction).|
+|dy|Heightmap|Displacement with respect to the domain size (y-direction).|
+|envelope|Heightmap|Output noise amplitude envelope.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Generated noise.|
-  
+|output|Heightmap|Generated noise.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|damp0|Float|Damping initial value.|
-|damp_scale|Float|Damping influence scaling.|
-|kw|Wavenumber|Noise wavenumbers (kx, ky) for each directions.|
+|gradient_scale|Float|TODO|
+|inverse|Bool|Toggle inversion of the output values.|
+|Wavenumber|Wavenumber|Noise wavenumbers (kx, ky) for each directions.|
 |lacunarity|Float|Wavenumber ratio between each octaves.|
 |noise_type|Enumeration|Base primitive noise. Available values: OpenSimplex2, OpenSimplex2S, Perlin, Perlin (billow), Perlin (half), Value, Value (cubic), Worley, Worley (doube), Worley (value).|
 |octaves|Integer|Number of octaves.|
 |persistence|Float|Octave persistence.|
-|seed|Random seed|Random seed number.|
-|warp0|Float|Warping initial value.|
-|warp_scale|Float|Warping influence scaling.|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|Seed|Random seed number|Random seed number.|
 |weight|Float|Octave weighting.|
 
 ## NoiseParberry
@@ -2715,40 +2819,38 @@ Primitive/Coherent Noise
 
 NoiseParberry, variant of NoiseFbm, is a Perlin noise based terrain generator from Ian Parberry, Tobler's First Law of Geography, Self Similarity, and Perlin Noise: A Large Scale Analysis of Gradient Distribution in Southern Utah with Application to Procedural Terrain Generation.
 
-![img](../images/nodes/NoiseParberry.png)  
-
+![img](../images/nodes/NoiseParberry.png)
 ### Category
 
 
-Primitive/Coherent Noise  
-
+Primitive/Coherent
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|dx|HeightMapData|Displacement with respect to the domain size (x-direction).|
-|dy|HeightMapData|Displacement with respect to the domain size (y-direction).|
-|control|HeightMapData|Control parameter, acts as a multiplier for the weight parameter.|
-|envelope|HeightMapData|Output noise amplitude envelope.|
-  
+|control|Heightmap|Control parameter, acts as a multiplier for the weight parameter.|
+|dx|Heightmap|Displacement with respect to the domain size (x-direction).|
+|dy|Heightmap|Displacement with respect to the domain size (y-direction).|
+|envelope|Heightmap|Output noise amplitude envelope.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Generated noise.|
-  
+|output|Heightmap|Generated noise.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|kw|Wavenumber|Noise wavenumbers (kx, ky) for each directions.|
+|inverse|Bool|Toggle inversion of the output values.|
+|Wavenumber|Wavenumber|Noise wavenumbers (kx, ky) for each directions.|
 |lacunarity|Float|Wavenumber ratio between each octaves.|
 |mu|Float|Gradient magnitude exponent.|
 |octaves|Integer|Number of octaves.|
 |persistence|Float|Octave persistence.|
-|seed|Random seed|Random seed number.|
+|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|Seed|Random seed number|Random seed number.|
 |weight|Float|Octave weighting.|
 
 ## NoisePingpong
@@ -2756,40 +2858,38 @@ Primitive/Coherent Noise
 
 NoisePingPong, variant of NoiseFbm.
 
-![img](../images/nodes/NoisePingpong.png)  
-
+![img](../images/nodes/NoisePingpong.png)
 ### Category
 
 
-Primitive/Coherent Noise  
-
+Primitive/Coherent
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|dx|HeightMapData|Displacement with respect to the domain size (x-direction).|
-|dy|HeightMapData|Displacement with respect to the domain size (y-direction).|
-|control|HeightMapData|Control parameter, acts as a multiplier for the weight parameter.|
-|envelope|HeightMapData|Output noise amplitude envelope.|
-  
+|control|Heightmap|Control parameter, acts as a multiplier for the weight parameter.|
+|dx|Heightmap|Displacement with respect to the domain size (x-direction).|
+|dy|Heightmap|Displacement with respect to the domain size (y-direction).|
+|envelope|Heightmap|Output noise amplitude envelope.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Generated noise.|
-  
+|output|Heightmap|Generated noise.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|kw|Wavenumber|Noise wavenumbers (kx, ky) for each directions.|
+|inverse|Bool|Toggle inversion of the output values.|
+|Wavenumber|Wavenumber|Noise wavenumbers (kx, ky) for each directions.|
 |lacunarity|Float|Wavenumber ratio between each octaves.|
 |noise_type|Enumeration|Base primitive noise. Available values: OpenSimplex2, OpenSimplex2S, Perlin, Perlin (billow), Perlin (half), Value, Value (cubic), Worley, Worley (doube), Worley (value).|
 |octaves|Integer|Number of octaves.|
 |persistence|Float|Octave persistence.|
-|seed|Random seed|Random seed number.|
+|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|Seed|Random seed number|Random seed number.|
 |weight|Float|Octave weighting.|
 
 ## NoiseRidged
@@ -2797,41 +2897,39 @@ Primitive/Coherent Noise
 
 NoiseRidged, variant of NoiseFbm.
 
-![img](../images/nodes/NoiseRidged.png)  
-
+![img](../images/nodes/NoiseRidged.png)
 ### Category
 
 
-Primitive/Coherent Noise  
-
+Primitive/Coherent
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|dx|HeightMapData|Displacement with respect to the domain size (x-direction).|
-|dy|HeightMapData|Displacement with respect to the domain size (y-direction).|
-|control|HeightMapData|Control parameter, acts as a multiplier for the weight parameter.|
-|envelope|HeightMapData|Output noise amplitude envelope.|
-  
+|control|Heightmap|Control parameter, acts as a multiplier for the weight parameter.|
+|dx|Heightmap|Displacement with respect to the domain size (x-direction).|
+|dy|Heightmap|Displacement with respect to the domain size (y-direction).|
+|envelope|Heightmap|Output noise amplitude envelope.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Generated noise.|
-  
+|output|Heightmap|Generated noise.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|inverse|Bool|Toggle inversion of the output values.|
 |k_smoothing|Float|Smoothing coefficient of the aboslute value.|
-|kw|Wavenumber|Noise wavenumbers (kx, ky) for each directions.|
+|Wavenumber|Wavenumber|Noise wavenumbers (kx, ky) for each directions.|
 |lacunarity|Float|Wavenumber ratio between each octaves.|
 |noise_type|Enumeration|Base primitive noise. Available values: OpenSimplex2, OpenSimplex2S, Perlin, Perlin (billow), Perlin (half), Value, Value (cubic), Worley, Worley (doube), Worley (value).|
 |octaves|Integer|Number of octaves.|
 |persistence|Float|Octave persistence.|
-|seed|Random seed|Random seed number.|
+|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|Seed|Random seed number|Random seed number.|
 |weight|Float|Octave weighting.|
 
 ## NoiseSwiss
@@ -2839,40 +2937,38 @@ Primitive/Coherent Noise
 
 NoiseSwiss, variant of NoiseFbm.
 
-![img](../images/nodes/NoiseSwiss.png)  
-
+![img](../images/nodes/NoiseSwiss.png)
 ### Category
 
 
-Primitive/Coherent Noise  
-
+Primitive/Coherent
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|dx|HeightMapData|Displacement with respect to the domain size (x-direction).|
-|dy|HeightMapData|Displacement with respect to the domain size (y-direction).|
-|control|HeightMapData|Control parameter, acts as a multiplier for the weight parameter.|
-|envelope|HeightMapData|Output noise amplitude envelope.|
-  
+|control|Heightmap|Control parameter, acts as a multiplier for the weight parameter.|
+|dx|Heightmap|Displacement with respect to the domain size (x-direction).|
+|dy|Heightmap|Displacement with respect to the domain size (y-direction).|
+|envelope|Heightmap|Output noise amplitude envelope.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Generated noise.|
-  
+|output|Heightmap|Generated noise.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|kw|Wavenumber|Noise wavenumbers (kx, ky) for each directions.|
+|inverse|Bool|Toggle inversion of the output values.|
+|Wavenumber|Wavenumber|Noise wavenumbers (kx, ky) for each directions.|
 |lacunarity|Float|Wavenumber ratio between each octaves.|
 |noise_type|Enumeration|Base primitive noise. Available values: OpenSimplex2, OpenSimplex2S, Perlin, Perlin (billow), Perlin (half), Value, Value (cubic), Worley, Worley (doube), Worley (value).|
 |octaves|Integer|Number of octaves.|
 |persistence|Float|Octave persistence.|
-|seed|Random seed|Random seed number.|
+|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|Seed|Random seed number|Random seed number.|
 |warp_scale|Float|Warping influence scaling.|
 |weight|Float|Octave weighting.|
 
@@ -2881,32 +2977,29 @@ Primitive/Coherent Noise
 
 NormalDisplacement applies a displacement to the terrain along the normal direction.
 
-![img](../images/nodes/NormalDisplacement.png)  
-
+![img](../images/nodes/NormalDisplacement.png)
 ### Category
 
 
-Filter/Recast  
-
+Filter/Recast
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-|mask|HeightMapData|Mask defining the filtering intensity (expected in [0, 1]).|
-  
+|input|Heightmap|Input heightmap.|
+|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Output heightmap.|
-  
+|output|Heightmap|Output heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|GPU|Bool|Toogle GPU acceleration on or off.|
 |amount|Float|Displacement scaling.|
 |iterations|Integer|Number of successive use of the operator.|
 |radius|Float|Filter radius with respect to the domain size.|
@@ -2917,31 +3010,28 @@ Filter/Recast
 
 Opening is a combination of erosion followed by dilation. It is primarily used for removing noise while preserving the shape and size of objects. Use Cases: Noise removal: Opening is effective in removing small, isolated noise regions while keeping the main objects intact. Smoothing object boundaries: Opening can help smooth the boundaries of objects in an image while preserving their overall shape.
 
-![img](../images/nodes/Opening.png)  
-
+![img](../images/nodes/Opening.png)
 ### Category
 
 
-Operator/Morphology  
-
+Operator/Morphology
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Dilated heightmap.|
-  
+|output|Heightmap|Dilated heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|GPU|Bool|Toogle GPU acceleration on or off.|
 |radius|Float|Filter radius with respect to the domain size.|
 
 ## Paraboloid
@@ -2949,28 +3039,24 @@ Operator/Morphology
 
 .
 
-![img](../images/nodes/Paraboloid.png)  
-
+![img](../images/nodes/Paraboloid.png)
 ### Category
 
 
-Primitive/Function  
-
+Primitive/Function
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|dx|HeightMapData|Displacement with respect to the domain size (x-direction).|
-|dy|HeightMapData|Displacement with respect to the domain size (y-direction).|
-|envelope|HeightMapData|Output noise amplitude envelope.|
-  
+|dx|Heightmap|Displacement with respect to the domain size (x-direction).|
+|dy|Heightmap|Displacement with respect to the domain size (y-direction).|
+|envelope|Heightmap|Output noise amplitude envelope.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Paraboloid.|
-  
+|output|Heightmap|Paraboloid.|
 
 ### Parameters
 
@@ -2979,8 +3065,9 @@ Primitive/Function
 |a|Float|Curvature parameter, first principal axis.|
 |angle|Float|Angle.|
 |b|Float|Curvature parameter, second principal axis.|
-|center.x|Float|Center x coordinate.|
-|center.y|Float|Center y coordinate.|
+|center|Vec2Float|Reference center within the heightmap.|
+|inverse|Bool|Toggle inversion of the output values.|
+|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 |reverse_x|Bool|Reverse coefficient of first principal axis.|
 |reverse_y|Bool|Reverse coefficient of second principal axis.|
 |v0|Float|Value at the paraboloid center.|
@@ -2988,61 +3075,47 @@ Primitive/Function
 ## Path
 
 
-Polyline definition.
+A polyline defined by a series of connected points (x, y) with elevation data (z). Paths can represent linear features such as roads, rivers, or boundaries.
 
-![img](../images/nodes/Path.png)  
-
+![img](../images/nodes/Path.png)
 ### Category
 
 
-Geometry/Path  
-
-### Inputs
-
-|Name|Type|Description|
-| :--- | :--- | :--- |
-  
-
+Geometry/Path
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|path|PathData|Set of directed points (x, y) and elevations z.|
-  
+|path|Path|Outputs the path as a set of directed points (x, y) and elevations (z).|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|closed|Bool|Decides whether the path is open and closed on itself.|
-|path|HighMap Path object|Path data.|
-|reorder_nns|Bool|Decides whether the path points are reordered using a nearest neighbor search.|
+|Path|Path|The sequence of points defining the path. Each point consists of coordinates (x, y) and an elevation (z).|
+|reverse|Bool|If true, reverses the order of the points in the path. This can be useful for changing the direction of the path.|
 
 ## PathBezier
 
 
 PathBezier uses Bezier interpolation to replace sharp angles and straight segments with smooth, flowing curves.
 
-![img](../images/nodes/PathBezier.png)  
-
+![img](../images/nodes/PathBezier.png)
 ### Category
 
 
-Geometry/Path  
-
+Geometry/Path
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|PathData|Input path.|
-  
+|input|Path|Input path.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|PathData|Output path.|
-  
+|output|Path|Output path.|
 
 ### Parameters
 
@@ -3056,26 +3129,22 @@ Geometry/Path
 
 PathBezierRound uses Bezier interpolation to replace sharp angles and straight segments with smooth, round and flowing curves. PathBezierRound is an alternative to PathBezier.
 
-![img](../images/nodes/PathBezierRound.png)  
-
+![img](../images/nodes/PathBezierRound.png)
 ### Category
 
 
-Geometry/Path  
-
+Geometry/Path
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|PathData|Input path.|
-  
+|input|Path|Input path.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|PathData|Output path.|
-  
+|output|Path|Output path.|
 
 ### Parameters
 
@@ -3089,26 +3158,22 @@ Geometry/Path
 
 PathBspline uses Bspline interpolation to replace sharp angles and straight segments with smooth, flowing curves.
 
-![img](../images/nodes/PathBspline.png)  
-
+![img](../images/nodes/PathBspline.png)
 ### Category
 
 
-Geometry/Path  
-
+Geometry/Path
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|PathData|Input path.|
-  
+|input|Path|Input path.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|PathData|Output path.|
-  
+|output|Path|Output path.|
 
 ### Parameters
 
@@ -3121,26 +3186,22 @@ Geometry/Path
 
 PathDecasteljau uses Decasteljau interpolation to replace sharp angles and straight segments with smooth, flowing curves.
 
-![img](../images/nodes/PathDecasteljau.png)  
-
+![img](../images/nodes/PathDecasteljau.png)
 ### Category
 
 
-Geometry/Path  
-
+Geometry/Path
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|PathData|Input path.|
-  
+|input|Path|Input path.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|PathData|Output path.|
-  
+|output|Path|Output path.|
 
 ### Parameters
 
@@ -3148,31 +3209,92 @@ Geometry/Path
 | :--- | :--- | :--- |
 |edge_divisions|Integer|Edge sub-divisions of each edge. After the operation, the path is remeshed based on this new sub-division.|
 
-## PathFractalize
+## PathDig
 
 
-PathFractalize fractalizes a polyline using a mid-point displacement algorithm. The procedure involves iteratively modifying the polyline's geometry to increase its complexity, mimicking fractal characteristics.
+TODO
 
-![img](../images/nodes/PathFractalize.png)  
-
+![img](../images/nodes/PathDig.png)
 ### Category
 
 
-Geometry/Path  
-
+Geometry/Path
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|PathData|Input path.|
-  
+|input|Heightmap|TODO|
+|path|Path|TODO|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|PathData|Output path.|
-  
+|output|Heightmap|TODO|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|decay|Float|TODO|
+|depth|Float|TODO|
+|flattening_radius|Float|TODO|
+|force_downhill|Bool|TODO|
+|width|Float|TODO|
+
+## PathFind
+
+
+TODO
+
+![img](../images/nodes/PathFind.png)
+### Category
+
+
+Geometry/Path
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|heightmap|Heightmap|TODO|
+|mask nogo|Heightmap|TODO|
+|waypoints|Path|TODO|
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|path|Path|TODO|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|distance_exponent|Float|TODO|
+|downsampling|Integer|TODO|
+|elevation_ratio|Float|TODO|
+
+## PathFractalize
+
+
+PathFractalize fractalizes a polyline using a mid-point displacement algorithm. The procedure involves iteratively modifying the polyline's geometry to increase its complexity, mimicking fractal characteristics.
+
+![img](../images/nodes/PathFractalize.png)
+### Category
+
+
+Geometry/Path
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|Path|Input path.|
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|Path|Output path.|
 
 ### Parameters
 
@@ -3181,7 +3303,7 @@ Geometry/Path
 |iterations|Integer|Number of mid-point displacement iterations.|
 |orientation|Integer|Displacement orientation (0 for random inward/outward displacement, 1 to inflate the path and -1 to deflate the path).|
 |persistence|Float|Noise persistence (with iteration number).|
-|seed|Random seed|Random seed number.|
+|Seed|Random seed number|Random seed number.|
 |sigma|Float|Half-width of the random Gaussian displacement, normalized by the distance between points.|
 
 ## PathMeanderize
@@ -3189,26 +3311,22 @@ Geometry/Path
 
 PathMeanderize uses Bezier interpolation to add menaders to the input path.
 
-![img](../images/nodes/PathMeanderize.png)  
-
+![img](../images/nodes/PathMeanderize.png)
 ### Category
 
 
-Geometry/Path  
-
+Geometry/Path
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|PathData|Input path.|
-  
+|input|Path|Input path.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|PathData|Output path.|
-  
+|output|Path|Output path.|
 
 ### Parameters
 
@@ -3218,33 +3336,29 @@ Geometry/Path
 |iterations|Integer|Number of meandering iterations.|
 |noise_ratio|Float|Randomness ratio.|
 |ratio|Float|Meander amplitude ratio.|
-|seed|Random seed|Random seed number|
+|Seed|Random seed number|Random seed number|
 
 ## PathResample
 
 
 PathResample resamples the path based to get (approximately) a given distance between points.
 
-![img](../images/nodes/PathResample.png)  
-
+![img](../images/nodes/PathResample.png)
 ### Category
 
 
-Geometry/Path  
-
+Geometry/Path
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|PathData|Input path.|
-  
+|input|Path|Input path.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|PathData|Output path.|
-  
+|output|Path|Output path.|
 
 ### Parameters
 
@@ -3257,154 +3371,224 @@ Geometry/Path
 
 PathSDF evaluates the signed distance function of a polyline. It assigns a signed distance value to every point in space. For points outside the polyline, the distance is positive, while for points inside, it's negative. The zero level set of this function precisely defines the polyline's path Project path points to an heightmap.
 
-![img](../images/nodes/PathSDF.png)  
-
+![img](../images/nodes/PathSDF.png)
 ### Category
 
 
-Geometry/Path  
-
+Geometry/Path
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|path|PathData|Input path.|
-  
+|dx|Heightmap|TODO|
+|dy|Heightmap|TODO|
+|path|Path|Input path.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|sdf|HeightMapData|Signed distance as an heightmap.|
-  
+|sdf|Heightmap|Signed distance as an heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|Inverse|Bool|Toggle inversion of the output values.|
+|Remap|Bool|Remap the operator's output to a specified range, defaulting to [0, 1].|
+
+## PathSmooth
+
+
+TODO
+
+![img](../images/nodes/PathSmooth.png)
+### Category
+
+
+Geometry/Path
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|Path|TODO|
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|Path|TODO|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|averaging_intensity|Float|TODO|
+|inertia|Float|TODO|
+|navg|Integer|TODO|
 
 ## PathToCloud
 
 
 PathToCloud convert a Path to a set of points (Cloud).
 
-![img](../images/nodes/PathToCloud.png)  
-
+![img](../images/nodes/PathToCloud.png)
 ### Category
 
 
-Converter  
-
+Geometry/Path
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|path|PathData|Input path.|
-  
+|path|Path|Input path.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|cloud|CloudData|Output cloud.|
-  
-
-### Parameters
-
-|Name|Type|Description|
-| :--- | :--- | :--- |
+|cloud|Cloud|Output cloud.|
 
 ## PathToHeightmap
 
 
 PathToHeightmap Project path points to an heightmap.
 
-![img](../images/nodes/PathToHeightmap.png)  
-
+![img](../images/nodes/PathToHeightmap.png)
 ### Category
 
 
-Geometry/Path  
-
+Geometry/Path
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|path|PathData|Input path.|
-  
+|path|Path|Input path.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|heightmap|HeightMapData|Output heightmap.|
-  
+|heightmap|Heightmap|Output heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |filled|Bool|Whether the resulting path contour is filled (input Path needs to be closed).|
+|inverse|Bool|Toggle inversion of the output values.|
+|remap|Bool|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|smoothing|Bool|Enable or disable smoothing to reduce noise in the curvature computation.|
+|smoothing_radius|Float|Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.|
 
 ## Plateau
 
 
 Plateau node manipulates the elevation values to create flats, elevated regions surrounded by steep slopes.
 
-![img](../images/nodes/Plateau.png)  
-
+![img](../images/nodes/Plateau.png)
 ### Category
 
 
-Filter/Recurve  
-
+Filter/Recurve
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-|mask|HeightMapData|Mask defining the filtering intensity (expected in [0, 1]).|
-  
+|input|Heightmap|Input heightmap.|
+|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Filtered heightmap.|
-  
+|output|Heightmap|Filtered heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|GPU|Bool|Toogle GPU acceleration on or off.|
 |factor|Float|Influence the cliff elevation profile.|
 |radius|Float|Filter radius with respect to the domain size.|
+
+## Preview
+
+
+TODO
+
+![img](../images/nodes/Preview.png)
+### Category
+
+
+Debug
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|elevation|Heightmap|TODO|
+|normal map|HeightmapRGBA|TODO|
+|scalar|Heightmap|TODO|
+|texture|HeightmapRGBA|TODO|
+
+## QuiltingBlend
+
+
+TODO
+
+![img](../images/nodes/QuiltingBlend.png)
+### Category
+
+
+Operator/Resynthesis
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input 1|Heightmap|TODO|
+|input 2|Heightmap|TODO|
+|input 3|Heightmap|TODO|
+|input 4|Heightmap|TODO|
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|Heightmap|TODO|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|filter_width_ratio|Float|TODO|
+|overlap|Float|TODO|
+|patch_flip|Bool|TODO|
+|patch_rotate|Bool|TODO|
+|patch_transpose|Bool|TODO|
+|patch_width|Float|TODO|
+|Seed|Random seed number|TODO|
 
 ## QuiltingExpand
 
 
 QuiltingExpand is an operator based on quilting that changes the feature wavenumber of a heightmap by modifying the frequency or scale of features present in the heightmap using a quilting-like technique. This operator allows for the synthesis of heightmaps with different levels of detail or spatial frequency content.
 
-![img](../images/nodes/QuiltingExpand.png)  
-
+![img](../images/nodes/QuiltingExpand.png)
 ### Category
 
 
-Operator/Expand  
-
+Operator/Resynthesis
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Synthetized heightmap.|
-  
+|output|Heightmap|Synthetized heightmap.|
 
 ### Parameters
 
@@ -3417,33 +3601,29 @@ Operator/Expand
 |patch_rotate|Bool|Allow patch 90 degree rotation.|
 |patch_transpose|Bool|Allow patch tranposition.|
 |patch_width|Float|Decide on the size (with respect to the domain size) of the patches that will be used to create the new heightmap. This determines the level of detail and texture in the final result.|
-|seed|Random seed|Random seed number.|
+|Seed|Random seed number|Random seed number.|
 
 ## QuiltingShuffle
 
 
 QuiltingShuffle performs a quilting procedure and generates a new image by seamlessly stitching together patches from an existing image.
 
-![img](../images/nodes/QuiltingShuffle.png)  
-
+![img](../images/nodes/QuiltingShuffle.png)
 ### Category
 
 
-Operator/Resynthesis  
-
+Operator/Resynthesis
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Synthetized heightmap.|
-  
+|output|Heightmap|Synthetized heightmap.|
 
 ### Parameters
 
@@ -3455,69 +3635,91 @@ Operator/Resynthesis
 |patch_rotate|Bool|Allow patch 90 degree rotation.|
 |patch_transpose|Bool|Allow patch tranposition.|
 |patch_width|Float|Decide on the size (with respect to the domain size) of the patches that will be used to create the new heightmap. This determines the level of detail and texture in the final result.|
-|seed|Random seed|Random seed number.|
+|Seed|Random seed number|Random seed number.|
 
 ## RadialDisplacementToXy
 
 
 RadialDisplacementToXy interprets the input array dr as a radial displacement and convert it to a pair of displacements dx and dy in cartesian coordinates.
 
-![img](../images/nodes/RadialDisplacementToXy.png)  
-
+![img](../images/nodes/RadialDisplacementToXy.png)
 ### Category
 
 
-Math  
-
+Math
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|dr|HeightMapData|Radial displacement.|
-  
+|dr|Heightmap|Radial displacement.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|dx|HeightMapData|Displacement for  the x-direction.|
-|dy|HeightMapData|Displacement for  the y-direction.|
-  
+|dx|Heightmap|Displacement for  the x-direction.|
+|dy|Heightmap|Displacement for  the y-direction.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|center.x|Float|Center x coordinate.|
-|center.y|Float|Center y coordinate.|
+|center|Vec2Float|Reference center within the heightmap.|
 |smoothing|Float|Smoothing parameter to avoid discontinuity at the origin.|
+
+## RecastCanyon
+
+
+TODO
+
+![img](../images/nodes/RecastCanyon.png)
+### Category
+
+
+Filter/Recast
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|Heightmap|TODO|
+|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
+|noise|Heightmap|TODO|
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|Heightmap|TODO|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|gamma|Float|TODO|
+|vcut|Float|TODO|
 
 ## RecastCliff
 
 
 RecastCliff add cliffs in a heightmap by introducing sharp changes in elevation to simulate steep vertical terrain features such as cliffs or escarpments.
 
-![img](../images/nodes/RecastCliff.png)  
-
+![img](../images/nodes/RecastCliff.png)
 ### Category
 
 
-Filter/Recast  
-
+Filter/Recast
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-|mask|HeightMapData|Mask defining the filtering intensity (expected in [0, 1]).|
-  
+|input|Heightmap|Input heightmap.|
+|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Filtered heightmap.|
-  
+|output|Heightmap|Filtered heightmap.|
 
 ### Parameters
 
@@ -3528,32 +3730,91 @@ Filter/Recast
 |radius|Float|Filter influence radius.|
 |talus_global|Float|Reference talus at which the cliff are added.|
 
-## RecastSag
+## RecastCliffDirectional
 
 
-RecastSag add cliffs in a heightmap by introducing sinks, droops, or bends downward changes in elevation.
+TODO
 
-![img](../images/nodes/RecastSag.png)  
-
+![img](../images/nodes/RecastCliffDirectional.png)
 ### Category
 
 
-Filter/Recast  
-
+Filter/Recast
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-|mask|HeightMapData|Mask defining the filtering intensity (expected in [0, 1]).|
-  
+|input|Heightmap|TODO|
+|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Filtered heightmap.|
-  
+|output|Heightmap|TODO|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|amplitude|Float|TODO|
+|angle|Float|TODO|
+|gain|Float|TODO|
+|radius|Float|TODO|
+|talus_global|Float|TODO|
+
+## RecastCracks
+
+
+TODO
+
+![img](../images/nodes/RecastCracks.png)
+### Category
+
+
+Filter/Recast
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|Heightmap|TODO|
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|Heightmap|TODO|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|cut_max|Float|TODO|
+|cut_min|Float|TODO|
+|k_smoothing|Float|TODO|
+
+## RecastSag
+
+
+RecastSag add cliffs in a heightmap by introducing sinks, droops, or bends downward changes in elevation.
+
+![img](../images/nodes/RecastSag.png)
+### Category
+
+
+Filter/Recast
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|Heightmap|Input heightmap.|
+|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|Heightmap|Filtered heightmap.|
 
 ### Parameters
 
@@ -3562,32 +3823,57 @@ Filter/Recast
 |k|Float|Smoothing parameter.|
 |vref|Float|Reference elevation for the folding.|
 
-## RecurveKura
+## Recurve
 
 
-RecurveKura is an operator based on the Kumaraswamy distribution that can be used to adjust the amplitude levels of a dataset.
+TODO
 
-![img](../images/nodes/RecurveKura.png)  
-
+![img](../images/nodes/Recurve.png)
 ### Category
 
 
-Filter/Recurve  
-
+Filter/Recurve
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-|mask|HeightMapData|Mask defining the filtering intensity (expected in [0, 1]).|
-  
+|input|Heightmap|TODO|
+|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Filtered heightmap.|
-  
+|output|Heightmap|TODO|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|values|Vector of floats|TODO|
+
+## RecurveKura
+
+
+RecurveKura is an operator based on the Kumaraswamy distribution that can be used to adjust the amplitude levels of a dataset.
+
+![img](../images/nodes/RecurveKura.png)
+### Category
+
+
+Filter/Recurve
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|Heightmap|Input heightmap.|
+|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|Heightmap|Filtered heightmap.|
 
 ### Parameters
 
@@ -3601,63 +3887,51 @@ Filter/Recurve
 
 RecurveS applied a curve adjustment filter using a smooth S-shape curve.
 
-![img](../images/nodes/RecurveS.png)  
-
+![img](../images/nodes/RecurveS.png)
 ### Category
 
 
-Filter/Recurve  
-
+Filter/Recurve
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-|mask|HeightMapData|Mask defining the filtering intensity (expected in [0, 1]).|
-  
+|input|Heightmap|Input heightmap.|
+|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Filtered heightmap.|
-  
-
-### Parameters
-
-|Name|Type|Description|
-| :--- | :--- | :--- |
+|output|Heightmap|Filtered heightmap.|
 
 ## RelativeElevation
 
 
 RelativeElevation identifies heightmap relative elevation based on the surrounding heightmap values.
 
-![img](../images/nodes/RelativeElevation.png)  
-
+![img](../images/nodes/RelativeElevation.png)
 ### Category
 
 
-Features/Landform  
-
+Features/Landform
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Relative elevation.|
-  
+|output|Heightmap|Relative elevation.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|GPU|Bool|Toogle GPU acceleration on or off.|
 |radius|Float|Filter radius with respect to the domain size.|
 
 ## Remap
@@ -3665,58 +3939,50 @@ Features/Landform
 
 The Remap operator is used to adjust the elevation values across the entire dataset, effectively changing the range of elevation data to match a desired output scale or to normalize the data.
 
-![img](../images/nodes/Remap.png)  
-
+![img](../images/nodes/Remap.png)
 ### Category
 
 
-Filter/Range  
-
+Filter/Range
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Remapped heightmap.|
-  
+|output|Heightmap|Remapped heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|remap|Value range|Target range: define the new minimum and maximum values to remap the elevation values to.|
+|Remap range|Value range|Target range: define the new minimum and maximum values to remap the elevation values to.|
 
 ## Rescale
 
 
 The Rescale operator involves adjusting each data point by multiplying it with a predetermined constant.
 
-![img](../images/nodes/Rescale.png)  
-
+![img](../images/nodes/Rescale.png)
 ### Category
 
 
-Filter/Range  
-
+Filter/Range
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Rescaled heightmap.|
-  
+|output|Heightmap|Rescaled heightmap.|
 
 ### Parameters
 
@@ -3725,66 +3991,82 @@ Filter/Range
 |centered|Bool|Determine whether a mean offset is applied to the values to center the scaling.|
 |scaling|Float|Constant by which each elevation values will be multiplied.|
 
-## ReverseMidpoint
+## Reverse
 
 
-ReverseMidpoint generates an heightmap. It uses a polyline as a base, then recursively interpolate and displace midpoints to generate a terrain.
+TODO
 
-![img](../images/nodes/ReverseMidpoint.png)  
-
+![img](../images/nodes/Reverse.png)
 ### Category
 
 
-Primitive/Authoring  
-
+Math/Base
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|path|PathData|Set of points (x, y) and elevations z.|
-  
+|input|Heightmap|TODO|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|heightmap|HeightMapData|Interpolated heightmap.|
-  
+|output|Heightmap|TODO|
+
+## ReverseMidpoint
+
+
+ReverseMidpoint generates an heightmap. It uses a polyline as a base, then recursively interpolate and displace midpoints to generate a terrain.
+
+![img](../images/nodes/ReverseMidpoint.png)
+### Category
+
+
+WIP
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|path|Path|Set of points (x, y) and elevations z.|
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|heightmap|Heightmap|Interpolated heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|inverse|Bool|Toggle inversion of the output values.|
 |noise_scale|Float|Added noise scaling.|
-|seed|Random seed|Random seed number.|
+|remap|Bool|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|Seed|Random seed number|Random seed number.|
 
 ## Ridgelines
 
 
 Ridgelines generates an heightmap assuming the input path defines a ridgeline.
 
-![img](../images/nodes/Ridgelines.png)  
-
+![img](../images/nodes/Ridgelines.png)
 ### Category
 
 
-Primitive/Authoring  
-
+Primitive/Authoring
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|path|PathData|Set of points (x, y) and elevations z.|
-|dx|HeightMapData|Displacement with respect to the domain size (x-direction).|
-|dy|HeightMapData|Displacement with respect to the domain size (y-direction).|
-  
+|dx|Heightmap|Displacement with respect to the domain size (x-direction).|
+|dy|Heightmap|Displacement with respect to the domain size (y-direction).|
+|path|Path|Set of points (x, y) and elevations z.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|heightmap|HeightMapData|Interpolated heightmap.|
-  
+|heightmap|Heightmap|Interpolated heightmap.|
 
 ### Parameters
 
@@ -3800,99 +4082,125 @@ Primitive/Authoring
 
 Rift is function used to represent a conceptualized rift.
 
-![img](../images/nodes/Rift.png)  
-
+![img](../images/nodes/Rift.png)
 ### Category
 
 
-Primitive/Function  
-
+Primitive/Function
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|dx|HeightMapData|Displacement with respect to the domain size (x-direction).|
-|dy|HeightMapData|Displacement with respect to the domain size (y-direction).|
-|control|HeightMapData|Control parameter, acts as a multiplier for the width parameter.|
-  
+|control|Heightmap|Control parameter, acts as a multiplier for the width parameter.|
+|dx|Heightmap|Displacement with respect to the domain size (x-direction).|
+|dy|Heightmap|Displacement with respect to the domain size (y-direction).|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Rift heightmap.|
-  
+|output|Heightmap|Rift heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |angle|Float|Angle.|
-|center.x|Float|Center x coordinate.|
-|center.y|Float|Center y coordinate.|
+|center|Vec2Float|Reference center within the heightmap.|
+|inverse|Bool|Toggle inversion of the output values.|
+|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 |sharp_bottom|Bool|Decide whether the rift bottom is sharp or not.|
 |slope|Float|Rift slope.|
 |width|Float|Rift width.|
+
+## Ruggedness
+
+
+Measures the terrain roughness by computing the square root of the sum of squared elevation differences within a specified radius. Indicates how rough or smooth the terrain is by analyzing how much the elevation changes between neighboring areas. Higher values mean a more rugged, uneven surface, while lower values indicate a flatter, smoother landscape.
+
+![img](../images/nodes/Ruggedness.png)
+### Category
+
+
+Features
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|Heightmap|Heightmap input representing terrain elevations, used to calculate ruggedness.|
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|Heightmap|Resulting heightmap where each pixel represents the calculated ruggedness value.|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|GPU|Bool|Toogle GPU acceleration on or off.|
+|inverse|Bool|Toggle inversion of the output values.|
+|radius|Float|Defines the neighborhood radius used for computing ruggedness. Larger values consider a wider area, capturing broader terrain variations.|
+|smoothing|Bool|Enable or disable smoothing to reduce noise in the curvature computation.|
+|smoothing_radius|Float|Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.|
 
 ## Rugosity
 
 
 Rugosity identifies heightmap rugosity, i.e. the roughness or irregularity of the surface.
 
-![img](../images/nodes/Rugosity.png)  
-
+![img](../images/nodes/Rugosity.png)
 ### Category
 
 
-Features  
-
+Features
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Rugosity.|
-  
+|output|Heightmap|Rugosity.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|GPU|Bool|Toogle GPU acceleration on or off.|
 |clamp_max|Bool|Decides whether the rugosity values are clamped.|
+|inverse|Bool|Toggle inversion of the output values.|
 |radius|Float|Filter radius with respect to the domain size.|
+|saturate|Value range|A process that modifies the amplitude of elevations by first clamping them to a given interval and then scaling them so that the restricted interval matches the original input range. This enhances contrast in elevation variations while maintaining overall structure.|
+|smoothing|Bool|Enable or disable smoothing to reduce noise in the curvature computation.|
+|smoothing_radius|Float|Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.|
 |vc_max|Float|Rugosity clamping upper bound.|
 
 ## Saturate
 
 
-Saturate limits the amplitude of a signal to a predefined range while keeping the initial input range.
+A process that modifies the amplitude of elevations by first clamping them to a given interval and then scaling them so that the restricted interval matches the original input range. This enhances contrast in elevation variations while maintaining overall structure.
 
-![img](../images/nodes/Saturate.png)  
-
+![img](../images/nodes/Saturate.png)
 ### Category
 
 
-Filter/Recurve  
-
+Filter/Recurve
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Saturated heightmap.|
-  
+|output|Heightmap|Saturated heightmap.|
 
 ### Parameters
 
@@ -3906,26 +4214,22 @@ Filter/Recurve
 
 ScanMask adjusts the brightness and contrast of an input mask.
 
-![img](../images/nodes/ScanMask.png)  
-
+![img](../images/nodes/ScanMask.png)
 ### Category
 
 
-Mask/Adjust  
-
+Mask
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Adjusted heightmap.|
-  
+|output|Heightmap|Adjusted heightmap.|
 
 ### Parameters
 
@@ -3933,168 +4237,167 @@ Mask/Adjust
 | :--- | :--- | :--- |
 |brightness|Float|Brightness adjustment.|
 |contrast|Float|Contrast adjustment.|
+|remap|Bool|Remap the operator's output to a specified range, defaulting to [0, 1].|
+
+## SedimentDeposition
+
+
+TODO
+
+![img](../images/nodes/SedimentDeposition.png)
+### Category
+
+
+WIP
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|Heightmap|TODO|
+|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|deposition|Heightmap|Deposition map (in [0, 1]).|
+|output|Heightmap|TODO|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|iterations|Integer|TODO|
+|max_deposition|Float|TODO|
+|scale_talus_with_elevation|Bool|Scales the talus amplitude based on heightmap elevation, reducing it at lower elevations and maintaining the nominal value at higher elevations.|
+|talus_global|Float|TODO|
+|thermal_subiterations|Integer|TODO|
 
 ## SelectAngle
 
 
 SelectAngle is a thresholding operator. It selects angle values within a specified range defined by the shape of a Gaussian pulse.
 
-![img](../images/nodes/SelectAngle.png)  
-
+![img](../images/nodes/SelectAngle.png)
 ### Category
 
 
-Mask/Selector  
-
+Mask/Selector
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Mask heightmap (in [0, 1]).|
-  
+|output|Heightmap|Mask heightmap (in [0, 1]).|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |angle|Float|Selection center value.|
+|inverse|Bool|Toggle inversion of the output values.|
 |radius|Float|Pre-filter radius.|
 |sigma|Float|Selection half-width.|
+|smoothing|Bool|Enable or disable smoothing to reduce noise in the curvature computation.|
+|smoothing_radius|Float|Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.|
 
 ## SelectBlobLog
 
 
 SelectBlobLog performs 'blob' detection using oa Laplacian of Gaussian (log) method. Blobs are areas in an image that are either brighter or darker than the surrounding areas.
 
-![img](../images/nodes/SelectBlobLog.png)  
-
+![img](../images/nodes/SelectBlobLog.png)
 ### Category
 
 
-Mask/Selector  
-
+Mask/Selector
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Mask heightmap (in [0, 1]).|
-  
+|output|Heightmap|Mask heightmap (in [0, 1]).|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|inverse|Bool|Toggle inversion of the output values.|
 |radius|Float|Detection radius with respect to the domain size.|
+|smoothing|Bool|Enable or disable smoothing to reduce noise in the curvature computation.|
+|smoothing_radius|Float|Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.|
 
 ## SelectCavities
 
 
 SelectCavities analyzes the curvature of an heightmap to identify concave or convex features such as valleys, depressions, ridges, or peaks.
 
-![img](../images/nodes/SelectCavities.png)  
-
+![img](../images/nodes/SelectCavities.png)
 ### Category
 
 
-Mask/Selector  
-
+Mask/Selector
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Mask heightmap (in [0, 1]).|
-  
+|output|Heightmap|Mask heightmap (in [0, 1]).|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |concave|Bool|Decides whether concave or convex features are detected.|
+|inverse|Bool|Toggle inversion of the output values.|
 |radius|Float|Detection radius with respect to the domain size.|
-
-## SelectElevationSlope
-
-
-SelectElevationSlope select regions based a combinaison of elevation and slope values.
-
-![img](../images/nodes/SelectElevationSlope.png)  
-
-### Category
-
-
-Mask/Selector  
-
-### Inputs
-
-|Name|Type|Description|
-| :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
-
-### Outputs
-
-|Name|Type|Description|
-| :--- | :--- | :--- |
-|output|HeightMapData|Mask heightmap (in [0, 1]).|
-  
-
-### Parameters
-
-|Name|Type|Description|
-| :--- | :--- | :--- |
-|gradient_scale|Float|Gradient scaling, with respect to elevation.|
+|smoothing|Bool|Enable or disable smoothing to reduce noise in the curvature computation.|
+|smoothing_radius|Float|Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.|
 
 ## SelectGt
 
 
 SelectGt is a thresholding operator. It transforms an input heightmap into a binary heightmap, where each pixel is assigned either a value of 0 or 1, depending on whether its intensity value surpasses a specified threshold value.
 
-![img](../images/nodes/SelectGt.png)  
-
+![img](../images/nodes/SelectGt.png)
 ### Category
 
 
-Mask/Selector  
-
+Mask/Selector
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Mask heightmap (in [0, 1]).|
-  
+|output|Heightmap|Mask heightmap (in [0, 1]).|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|inverse|Bool|Toggle inversion of the output values.|
+|smoothing|Bool|Enable or disable smoothing to reduce noise in the curvature computation.|
+|smoothing_radius|Float|Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.|
 |value|Float|Selection value.|
 
 ## SelectInterval
@@ -4102,31 +4405,30 @@ Mask/Selector
 
 SelectInterval is a thresholding operator. It transforms an input heightmap into a binary heightmap, where each pixel is assigned either a value of 0 or 1, depending on whether its intensity value is within an interval of values.
 
-![img](../images/nodes/SelectInterval.png)  
-
+![img](../images/nodes/SelectInterval.png)
 ### Category
 
 
-Mask/Selector  
-
+Mask/Selector
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Mask heightmap (in [0, 1]).|
-  
+|output|Heightmap|Mask heightmap (in [0, 1]).|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|inverse|Bool|Toggle inversion of the output values.|
+|smoothing|Bool|Enable or disable smoothing to reduce noise in the curvature computation.|
+|smoothing_radius|Float|Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.|
 |value1|Float|Selection value, lower bound.|
 |value2|Float|Selection value, upper bound.|
 
@@ -4135,65 +4437,126 @@ Mask/Selector
 
 SelectInwardOutward returns values > 0.5 if the slope is pointing to the center (slope is inward), and values < 0.5 otherwise (slope is outward).
 
-![img](../images/nodes/SelectInwardOutward.png)  
-
+![img](../images/nodes/SelectInwardOutward.png)
 ### Category
 
 
-Mask/Selector  
-
+Mask/Selector
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Mask heightmap (in [0, 1]).|
-  
+|output|Heightmap|Mask heightmap (in [0, 1]).|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|center.x|Float|Reference center x coordinate.|
-|center.y|Float|Reference center y coordinate.|
+|center|Vec2Float|Reference center within the heightmap.|
+|inverse|Bool|Toggle inversion of the output values.|
+|smoothing|Bool|Enable or disable smoothing to reduce noise in the curvature computation.|
+|smoothing_radius|Float|Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.|
+
+## SelectMidrange
+
+
+TODO
+
+![img](../images/nodes/SelectMidrange.png)
+### Category
+
+
+Mask/Selector
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|Heightmap|TODO|
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|Heightmap|TODO|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|gain|Float|TODO|
+|inverse|Bool|Toggle inversion of the output values.|
+|smoothing|Bool|Enable or disable smoothing to reduce noise in the curvature computation.|
+|smoothing_radius|Float|Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.|
+
+## SelectMultiband3
+
+
+TODO
+
+![img](../images/nodes/SelectMultiband3.png)
+### Category
+
+
+Mask/Selector
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|Heightmap|TODO|
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|high|Heightmap|TODO|
+|low|Heightmap|TODO|
+|mid|Heightmap|TODO|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|overlap|Float|TODO|
+|ratio1|Float|TODO|
+|ratio2|Float|TODO|
 
 ## SelectPulse
 
 
 SelectPulse is a thresholding operator. It selects values within a specified range defined by the shape of a Gaussian pulse.
 
-![img](../images/nodes/SelectPulse.png)  
-
+![img](../images/nodes/SelectPulse.png)
 ### Category
 
 
-Mask/Selector  
-
+Mask/Selector
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Mask heightmap (in [0, 1]).|
-  
+|output|Heightmap|Mask heightmap (in [0, 1]).|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|inverse|Bool|Toggle inversion of the output values.|
+|remap|Bool|Remap the operator's output to a specified range, defaulting to [0, 1].|
 |sigma|Float|Selection half-width.|
+|smoothing|Bool|Enable or disable smoothing to reduce noise in the curvature computation.|
+|smoothing_radius|Float|Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.|
 |value|Float|Selection center value.|
 
 ## SelectRivers
@@ -4201,157 +4564,217 @@ Mask/Selector
 
 SelectRivers is a thresholding operator. It creates a mask for river systems based on a flow accumulation threshold.
 
-![img](../images/nodes/SelectRivers.png)  
-
+![img](../images/nodes/SelectRivers.png)
 ### Category
 
 
-Mask/Selector  
-
+Mask/Selector
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Mask heightmap (in [0, 1]).|
-  
+|output|Heightmap|Mask heightmap (in [0, 1]).|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|clipping_ratio|Float|TODO|
+|inverse|Bool|Toggle inversion of the output values.|
+|remap|Bool|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|smoothing|Bool|Enable or disable smoothing to reduce noise in the curvature computation.|
+|smoothing_radius|Float|Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.|
+|talus_ref|Float|TODO|
+
+## SelectSlope
+
+
+TODO
+
+![img](../images/nodes/SelectSlope.png)
+### Category
+
+
+Mask/Selector
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|Heightmap|TODO|
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|Heightmap|TODO|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|GPU|Bool|Toogle GPU acceleration on or off.|
+|inverse|Bool|Toggle inversion of the output values.|
+|radius|Float|TODO|
+|saturate|Value range|A process that modifies the amplitude of elevations by first clamping them to a given interval and then scaling them so that the restricted interval matches the original input range. This enhances contrast in elevation variations while maintaining overall structure.|
+|smoothing|Bool|Enable or disable smoothing to reduce noise in the curvature computation.|
+|smoothing_radius|Float|Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.|
 
 ## SelectTransitions
 
 
 SelectTransitions returns a mask filled with 1 at the blending transition between two heightmaps, and 0 elsewhere.
 
-![img](../images/nodes/SelectTransitions.png)  
-
+![img](../images/nodes/SelectTransitions.png)
 ### Category
 
 
-Mask/Selector  
-
+Mask/Selector
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input 1|HeightMapData|Input heightmap 1.|
-|input 2|HeightMapData|Input heightmap 2.|
-|blend|HeightMapData|Blended heightmap.|
-  
+|blend|Heightmap|Blended heightmap.|
+|input 1|Heightmap|Input heightmap 1.|
+|input 2|Heightmap|Input heightmap 2.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Mask heightmap (in [0, 1]).|
-  
+|output|Heightmap|Mask heightmap (in [0, 1]).|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|inverse|Bool|Toggle inversion of the output values.|
+|smoothing|Bool|Enable or disable smoothing to reduce noise in the curvature computation.|
+|smoothing_radius|Float|Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.|
+
+## SelectValley
+
+
+Identifies and selects valley-like regions in the heightmap based on curvature analysis. The selection can be inverted, and additional parameters allow fine-tuning of the selection process. The output is a mask representing the relative width of the valley. The value is 1 at the valley center and decreases to 0 at the edges of the valley.
+
+![img](../images/nodes/SelectValley.png)
+### Category
+
+
+Mask/Selector
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|Heightmap|Heightmap data used as input for valley detection.|
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|Heightmap|A mask representing the relative width of the valley. The value is 1 at the valley center and decreases to 0 at the edges of the valley.|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|GPU|Bool|Enables or disables GPU acceleration for faster processing.|
+|inverse|Bool|Inverts the selection, highlighting ridges instead of valleys.|
+|radius|Float|Defines the search radius for valley detection, controlling how localized or broad the selection is.|
+|ridge_select|Bool|If enabled, selects ridges instead of valleys.|
+|smoothing|Bool|Applies smoothing to reduce noise in curvature calculations, resulting in a cleaner selection.|
+|smoothing_radius|Float|Defines the radius for the smoothing operation, determining how much curvature values are averaged over neighboring pixels.|
 
 ## SetAlpha
 
 
 SetAlpha adjusts the transparency of a texture based on an input alpha value, which can either be a single scalar or an array. When provided with a scalar alpha value, the function uniformly adjusts the transparency of the entire texture. Alternatively, when given an array of alpha values, it enables fine-grained control over the transparency of different parts of the texture, allowing for varied opacity across the texture's surface.
 
-![img](../images/nodes/SetAlpha.png)  
-
+![img](../images/nodes/SetAlpha.png)
 ### Category
 
 
-Texture  
-
+Texture
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|in|HeightMapRGBAData|Input texture.|
-|alpha|HeightMapData|Transparency (expected to be in [0, 1]).|
-  
+|alpha|Heightmap|Transparency (expected to be in [0, 1]).|
+|noise|Heightmap|TODO|
+|texture in|HeightmapRGBA|TODO|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|out|HeightMapRGBAData|Texture with new transparency.|
-  
+|texture out|HeightmapRGBA|TODO|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |alpha|Float|Transparency as a scalar value (overriden if this alpha input is set).|
-|clamp_alpha|Bool|Clamp to [0, 1] to input alpha map.|
+|clamp|Bool|TODO|
+|reverse|Bool|TODO|
 
 ## ShapeIndex
 
 
 ShapeIndex is a measure used to quantify the shape complexity of landforms in an heightmap. It is calculated based on the second derivatives of the elevation surface. The surface index is greater than 0.5 for convex surface and lower than 0.5 for concave surface.
 
-![img](../images/nodes/ShapeIndex.png)  
-
+![img](../images/nodes/ShapeIndex.png)
 ### Category
 
 
-Features/Landform  
-
+Filter/Smoothing
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Shape index.|
-  
+|output|Heightmap|Shape index.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|inverse|Bool|Toggle inversion of the output values.|
 |radius|Float|Filter radius with respect to the domain size.|
+|smoothing|Bool|Enable or disable smoothing to reduce noise in the curvature computation.|
+|smoothing_radius|Float|Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.|
 
 ## SharpenCone
 
 
 SharpenCone is a cone kernel-based sharpen operator enhancing sharpness by emphasizing edges and fine details using a radial gradient shape.
 
-![img](../images/nodes/SharpenCone.png)  
-
+![img](../images/nodes/SharpenCone.png)
 ### Category
 
 
-Filter/Smoothing  
-
+Filter/Smoothing
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-|mask|HeightMapData|Mask defining the filtering intensity (expected in [0, 1]).|
-  
+|input|Heightmap|Input heightmap.|
+|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Filtered heightmap.|
-  
+|output|Heightmap|Filtered heightmap.|
 
 ### Parameters
 
@@ -4365,26 +4788,22 @@ Filter/Smoothing
 
 The ShiftElevation operator involves adjusting each data point by adding it with a predetermined constant.
 
-![img](../images/nodes/ShiftElevation.png)  
-
+![img](../images/nodes/ShiftElevation.png)
 ### Category
 
 
-Filter/Range  
-
+Filter/Range
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Output heightmap.|
-  
+|output|Heightmap|Output heightmap.|
 
 ### Parameters
 
@@ -4397,36 +4816,33 @@ Filter/Range
 
 Slope is function used to represent continuous terrain slope.
 
-![img](../images/nodes/Slope.png)  
-
+![img](../images/nodes/Slope.png)
 ### Category
 
 
-Primitive/Function  
-
+Primitive/Function
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|dx|HeightMapData|Displacement with respect to the domain size (x-direction).|
-|dy|HeightMapData|Displacement with respect to the domain size (y-direction).|
-|control|HeightMapData|Control parameter, acts as a multiplier for the weight parameter.|
-  
+|control|Heightmap|Control parameter, acts as a multiplier for the weight parameter.|
+|dx|Heightmap|Displacement with respect to the domain size (x-direction).|
+|dy|Heightmap|Displacement with respect to the domain size (y-direction).|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Slope heightmap.|
-  
+|output|Heightmap|Slope heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |angle|Float|Angle.|
-|center.x|Float|Center x coordinate.|
-|center.y|Float|Center y coordinate.|
+|center|Vec2Float|Reference center within the heightmap.|
+|inverse|Bool|Toggle inversion of the output values.|
+|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 |talus_global|Float|Slope slope...|
 
 ## SmoothCpulse
@@ -4434,32 +4850,29 @@ Primitive/Function
 
 Smoothing using a cubic pulse kernel can be considered somewhat similar to Gaussian smoothing. This technique is used to reduce noise and smooth data. The cubic pulse kernel has a cubic decrease in influence with distance within a finite interval. It is zero beyond a certain radius, providing a compact support that affects only nearby points.
 
-![img](../images/nodes/SmoothCpulse.png)  
-
+![img](../images/nodes/SmoothCpulse.png)
 ### Category
 
 
-Filter/Smoothing  
-
+Filter/Smoothing
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-|mask|HeightMapData|Mask defining the filtering intensity (expected in [0, 1]).|
-  
+|input|Heightmap|Input heightmap.|
+|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Filtered heightmap.|
-  
+|output|Heightmap|Filtered heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|GPU|Bool|Toogle GPU acceleration on or off.|
 |radius|Float|Filter radius with respect to the domain size.|
 
 ## SmoothFill
@@ -4467,33 +4880,30 @@ Filter/Smoothing
 
 SmoothFill is a smoothing technique that takes the maximum between the input and the filtered field to simulate a sediment deposition effect.
 
-![img](../images/nodes/SmoothFill.png)  
-
+![img](../images/nodes/SmoothFill.png)
 ### Category
 
 
-Filter/Smoothing  
-
+Filter/Smoothing
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-|mask|HeightMapData|Mask defining the filtering intensity (expected in [0, 1]).|
-  
+|input|Heightmap|Input heightmap.|
+|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Filtered heightmap.|
-|depo. map|HeightMapData|Deposition map.|
-  
+|deposition|Heightmap|Deposition map (in [0, 1]).|
+|output|Heightmap|Filtered heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|GPU|Bool|Toogle GPU acceleration on or off.|
 |k|Float|Smoothing intensity of the maximum operator.|
 |normalized_map|Bool|Decides if the deposition map is normalized.|
 |radius|Float|Filter radius with respect to the domain size.|
@@ -4503,32 +4913,29 @@ Filter/Smoothing
 
 SmoothFillHoles is a smoothing technique that restricts smoothing effect to convex regions.
 
-![img](../images/nodes/SmoothFillHoles.png)  
-
+![img](../images/nodes/SmoothFillHoles.png)
 ### Category
 
 
-Filter/Smoothing  
-
+Filter/Smoothing
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-|mask|HeightMapData|Mask defining the filtering intensity (expected in [0, 1]).|
-  
+|input|Heightmap|Input heightmap.|
+|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Filtered heightmap.|
-  
+|output|Heightmap|Filtered heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|GPU|Bool|Toogle GPU acceleration on or off.|
 |radius|Float|Filter radius with respect to the domain size.|
 
 ## SmoothFillSmearPeaks
@@ -4536,32 +4943,29 @@ Filter/Smoothing
 
 SmoothFillSmearPeaks is a smoothing technique that restricts smoothing effect to concave regions.
 
-![img](../images/nodes/SmoothFillSmearPeaks.png)  
-
+![img](../images/nodes/SmoothFillSmearPeaks.png)
 ### Category
 
 
-Filter/Smoothing  
-
+Filter/Smoothing
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-|mask|HeightMapData|Mask defining the filtering intensity (expected in [0, 1]).|
-  
+|input|Heightmap|Input heightmap.|
+|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Filtered heightmap.|
-  
+|output|Heightmap|Filtered heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|GPU|Bool|Toogle GPU acceleration on or off.|
 |radius|Float|Filter radius with respect to the domain size.|
 
 ## Smoothstep3
@@ -4569,138 +4973,147 @@ Filter/Smoothing
 
 Apply a 3rd-order smoothstep function to every values.
 
-![img](../images/nodes/Smoothstep3.png)  
-
+![img](../images/nodes/Smoothstep3.png)
 ### Category
 
 
-Math/Base  
-
+Math/Base
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Output heightmap.|
-  
-
-### Parameters
-
-|Name|Type|Description|
-| :--- | :--- | :--- |
+|output|Heightmap|Output heightmap.|
 
 ## Smoothstep5
 
 
 Apply a 5th-order smoothstep function to every values.
 
-![img](../images/nodes/Smoothstep5.png)  
-
+![img](../images/nodes/Smoothstep5.png)
 ### Category
 
 
-Math/Base  
-
+Math/Base
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Output heightmap.|
-  
-
-### Parameters
-
-|Name|Type|Description|
-| :--- | :--- | :--- |
+|output|Heightmap|Output heightmap.|
 
 ## Stamping
 
 
 Stamping .
 
-![img](../images/nodes/Stamping.png)  
-
+![img](../images/nodes/Stamping.png)
 ### Category
 
 
-Primitive/Authoring  
-
+Primitive/Coherent
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|cloud|CloudData|Stamping locations and intensities (as a Cloud).|
-|kernel|KernelData|Kernel to be stamped.|
-  
+|cloud|Cloud|Stamping locations and intensities (as a Cloud).|
+|kernel|Array|Kernel to be stamped.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Output heightmap.|
-  
+|output|Heightmap|Output heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |blend_method|Enumeration|Blending method. Available values: add, maximum, minimum, multiply, substract.|
+|inverse|Bool|Toggle inversion of the output values.|
 |k_smoothing|Float|Smoothing parameter (if any).|
 |kernel_flip|Bool|Randomly flip, or not, the kernel before stamping (includes tranposing).|
 |kernel_radius|Float|Kernel base radius, with respect a unit square domain.|
 |kernel_rotate|Bool|Randomly rotate, or not, the kernel before stamping (can be any rotation angle, can also be ressource consuming).|
 |kernel_scale_amplitude|Bool|Determine whether the kernel amplitude is scaled with the point values.|
 |kernel_scale_radius|Bool|Determine whether the kernel radius is scaled with the point values.|
-|seed|Random seed|Random seed number.|
+|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|Seed|Random seed number|Random seed number.|
+
+## SteepenConvective
+
+
+TODO
+
+![img](../images/nodes/SteepenConvective.png)
+### Category
+
+
+Filter/Recast
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|Heightmap|TODO|
+|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|Heightmap|TODO|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|angle|Float|TODO|
+|dt|Float|TODO|
+|iterations|Integer|TODO|
+|radius|Float|TODO|
 
 ## Step
 
 
 Step is function used to represent a conceptualized escarpment, it serves as a tool for creating sharp, distinct changes in elevation.
 
-![img](../images/nodes/Step.png)  
-
+![img](../images/nodes/Step.png)
 ### Category
 
 
-Primitive/Function  
-
+Primitive/Function
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|dx|HeightMapData|Displacement with respect to the domain size (x-direction).|
-|dy|HeightMapData|Displacement with respect to the domain size (y-direction).|
-|control|HeightMapData|Control parameter, acts as a multiplier for the weight parameter.|
-  
+|control|Heightmap|Control parameter, acts as a multiplier for the weight parameter.|
+|dx|Heightmap|Displacement with respect to the domain size (x-direction).|
+|dy|Heightmap|Displacement with respect to the domain size (y-direction).|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Step heightmap.|
-  
+|output|Heightmap|Step heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |angle|Float|Angle.|
-|center.x|Float|Center x coordinate.|
-|center.y|Float|Center y coordinate.|
+|center|Vec2Float|Reference center within the heightmap.|
+|inverse|Bool|Toggle inversion of the output values.|
+|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 |slope|Float|Step slope.|
 
 ## Stratify
@@ -4708,28 +5121,24 @@ Primitive/Function
 
 Stratify adds horizontal stratifications to the input heightmap.
 
-![img](../images/nodes/Stratify.png)  
-
+![img](../images/nodes/Stratify.png)
 ### Category
 
 
-Erosion/Stratify  
-
+Erosion/Stratify
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-|noise|HeightMapData|Local elevation noise, value range expected to be scaled with the one of the input heightmap.|
-|mask|HeightMapData|Mask defining the filtering intensity (expected in [0, 1]).|
-  
+|input|Heightmap|Input heightmap.|
+|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
+|noise|Heightmap|Local elevation noise, value range expected to be scaled with the one of the input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Eroded heightmap.|
-  
+|output|Heightmap|Eroded heightmap.|
 
 ### Parameters
 
@@ -4738,36 +5147,66 @@ Erosion/Stratify
 |gamma|Float|Reference value for the gamma correction applied to each strata, influence the cliff elevation profile.|
 |gamma_noise|Float|Noise range for the gamma value.|
 |n_strata|Integer|Numbner of strata.|
-|seed|Random seed|Random seed number.|
+|Seed|Random seed number|Random seed number.|
 |strata_noise|Float|Noise range for the strata elevations.|
+
+## StratifyMultiscale
+
+
+TODO
+
+![img](../images/nodes/StratifyMultiscale.png)
+### Category
+
+
+Erosion/Stratify
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|Heightmap|TODO|
+|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
+|noise|Heightmap|TODO|
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|Heightmap|TODO|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|gamma_list|Vector of floats|TODO|
+|gamma_noise|Vector of floats|TODO|
+|n_strata|Vector of integers|TODO|
+|Seed|Random seed number|TODO|
+|strata_noise|Vector of floats|TODO|
 
 ## StratifyOblique
 
 
 StratifyOblique adds oblique stratifications to the input heightmap.
 
-![img](../images/nodes/StratifyOblique.png)  
-
+![img](../images/nodes/StratifyOblique.png)
 ### Category
 
 
-Erosion/Stratify  
-
+Erosion/Stratify
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-|noise|HeightMapData|Local elevation noise, value range expected to be scaled with the one of the input heightmap.|
-|mask|HeightMapData|Mask defining the filtering intensity (expected in [0, 1]).|
-  
+|input|Heightmap|Input heightmap.|
+|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
+|noise|Heightmap|Local elevation noise, value range expected to be scaled with the one of the input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Eroded heightmap.|
-  
+|output|Heightmap|Eroded heightmap.|
 
 ### Parameters
 
@@ -4777,72 +5216,282 @@ Erosion/Stratify
 |gamma|Float|Reference value for the gamma correction applied to each strata, influence the cliff elevation profile.|
 |gamma_noise|Float|Noise range for the gamma value.|
 |n_strata|Integer|Numbner of strata.|
-|seed|Random seed|Random seed number.|
+|Seed|Random seed number|Random seed number.|
 |strata_noise|Float|Noise range for the strata elevations.|
 |talus_global|Float|Step slope.|
+
+## Terrace
+
+
+TODO
+
+![img](../images/nodes/Terrace.png)
+### Category
+
+
+Filter/Recurve
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|Heightmap|TODO|
+|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
+|noise|Heightmap|TODO|
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|Heightmap|TODO|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|gain|Float|TODO|
+|nlevels|Integer|TODO|
+|noise_ratio|Float|TODO|
+|Seed|Random seed number|TODO|
+
+## TextureQuiltingExpand
+
+
+TODO
+
+![img](../images/nodes/TextureQuiltingExpand.png)
+### Category
+
+
+Operator/Resynthesis
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|heightmap (guide)|Heightmap|TODO|
+|texture (guide)|HeightmapRGBA|TODO|
+|texture A|HeightmapRGBA|TODO|
+|texture B|HeightmapRGBA|TODO|
+|texture C|HeightmapRGBA|TODO|
+|texture D|HeightmapRGBA|TODO|
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|heightmap|Heightmap|TODO|
+|texture|HeightmapRGBA|TODO|
+|texture A out|HeightmapRGBA|TODO|
+|texture B out|HeightmapRGBA|TODO|
+|texture C out|HeightmapRGBA|TODO|
+|texture D out|HeightmapRGBA|TODO|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|expansion_ratio|Float|TODO|
+|filter_width_ratio|Float|TODO|
+|overlap|Float|TODO|
+|patch_flip|Bool|TODO|
+|patch_rotate|Bool|TODO|
+|patch_transpose|Bool|TODO|
+|patch_width|Float|TODO|
+|Seed|Random seed number|TODO|
+
+## TextureQuiltingShuffle
+
+
+TODO
+
+![img](../images/nodes/TextureQuiltingShuffle.png)
+### Category
+
+
+Operator/Resynthesis
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|heightmap (guide)|Heightmap|TODO|
+|texture (guide)|HeightmapRGBA|TODO|
+|texture A|HeightmapRGBA|TODO|
+|texture B|HeightmapRGBA|TODO|
+|texture C|HeightmapRGBA|TODO|
+|texture D|HeightmapRGBA|TODO|
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|heightmap|Heightmap|TODO|
+|texture|HeightmapRGBA|TODO|
+|texture A out|HeightmapRGBA|TODO|
+|texture B out|HeightmapRGBA|TODO|
+|texture C out|HeightmapRGBA|TODO|
+|texture D out|HeightmapRGBA|TODO|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|filter_width_ratio|Float|TODO|
+|overlap|Float|TODO|
+|patch_flip|Bool|TODO|
+|patch_rotate|Bool|TODO|
+|patch_transpose|Bool|TODO|
+|patch_width|Float|TODO|
+|Seed|Random seed number|TODO|
 
 ## Thermal
 
 
 Thermal is an erosion operator used to simulate the process of thermal erosion, which is a type of erosion that occurs due to temperature fluctuations causing the breakdown and movement of soil and rock materials.
 
-![img](../images/nodes/Thermal.png)  
-
+![img](../images/nodes/Thermal.png)
 ### Category
 
 
-Erosion/Thermal  
-
+Erosion/Thermal
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-|bedrock|HeightMapData|Bedrock elevation, erosion process cannot carve the heightmap further down this point.|
-|mask|HeightMapData|Mask defining the filtering intensity (expected in [0, 1]).|
-  
+|input|Heightmap|Input heightmap.|
+|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Eroded heightmap.|
-|depo. map|HeightMapData|Deposition map|
-  
+|deposition|Heightmap|Deposition map (in [0, 1]).|
+|output|Heightmap|Eroded heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|GPU|Bool|Toogle GPU acceleration on or off.|
 |iterations|Integer|Number of iterations.|
+|scale_talus_with_elevation|Bool|Scales the talus amplitude based on heightmap elevation, reducing it at lower elevations and maintaining the nominal value at higher elevations.|
 |talus_global|Float|Repose slope.|
+
+## ThermalAutoBedrock
+
+
+TODO
+
+![img](../images/nodes/ThermalAutoBedrock.png)
+### Category
+
+
+Erosion/Thermal
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|Heightmap|TODO|
+|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|deposition|Heightmap|Deposition map (in [0, 1]).|
+|output|Heightmap|TODO|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|GPU|Bool|Toogle GPU acceleration on or off.|
+|iterations|Integer|TODO|
+|scale_talus_with_elevation|Bool|Scales the talus amplitude based on heightmap elevation, reducing it at lower elevations and maintaining the nominal value at higher elevations.|
+|talus_global|Float|TODO|
+
+## ThermalFlatten
+
+
+TODO
+
+![img](../images/nodes/ThermalFlatten.png)
+### Category
+
+
+WIP
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|Heightmap|TODO|
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|Heightmap|TODO|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|iterations|Integer|TODO|
+|post_filter_radius|Float|TODO|
+|scale_talus_with_elevation|Bool|Scales the talus amplitude based on heightmap elevation, reducing it at lower elevations and maintaining the nominal value at higher elevations.|
+|talus_global|Float|TODO|
+
+## ThermalInflate
+
+
+TODO
+
+![img](../images/nodes/ThermalInflate.png)
+### Category
+
+
+Erosion/Thermal
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|Heightmap|TODO|
+|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|Heightmap|TODO|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|iterations|Integer|TODO|
+|scale_talus_with_elevation|Bool|Scales the talus amplitude based on heightmap elevation, reducing it at lower elevations and maintaining the nominal value at higher elevations.|
+|talus_global|Float|TODO|
 
 ## ThermalRib
 
 
 ThermalRib performs thermal erosion using a 'rib' algorithm (taken from Geomorph)
 
-![img](../images/nodes/ThermalRib.png)  
-
+![img](../images/nodes/ThermalRib.png)
 ### Category
 
 
-Erosion/Thermal  
-
+WIP
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-|bedrock|HeightMapData|Bedrock elevation, erosion process cannot carve the heightmap further down this point.|
-  
+|bedrock|Heightmap|Bedrock elevation, erosion process cannot carve the heightmap further down this point.|
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Eroded heightmap.|
-  
+|output|Heightmap|Eroded heightmap.|
 
 ### Parameters
 
@@ -4850,33 +5499,128 @@ Erosion/Thermal
 | :--- | :--- | :--- |
 |iterations|Integer|Number of iterations.|
 
-## Translate
+## ThermalRidge
 
 
-Translates an heightmap by a specified amount along the x and y axes. This function shifts the contents of the input array by `dx` and `dy` units along the x and y axes, respectively. It supports both periodic boundary conditions, where the array wraps around, and non-periodic conditions.
+TODO
 
-![img](../images/nodes/Translate.png)  
-
+![img](../images/nodes/ThermalRidge.png)
 ### Category
 
 
-Operator/Transform  
-
+Erosion/Thermal
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Displacement with respect to the domain size (x-direction).|
-|dx|HeightMapData|Displacement with respect to the domain size (y-direction).|
-|dy|HeightMapData|Control parameter, acts as a multiplier for the weight parameter.|
-  
+|input|Heightmap|TODO|
+|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Translate heightmap.|
-  
+|deposition|Heightmap|Deposition map (in [0, 1]).|
+|output|Heightmap|TODO|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|iterations|Integer|TODO|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|scale_talus_with_elevation|Bool|Scales the talus amplitude based on heightmap elevation, reducing it at lower elevations and maintaining the nominal value at higher elevations.|
+|talus_global|Float|TODO|
+
+## ThermalSchott
+
+
+TODO
+
+![img](../images/nodes/ThermalSchott.png)
+### Category
+
+
+WIP
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|Heightmap|TODO|
+|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|Heightmap|TODO|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|iterations|Integer|TODO|
+|scale_talus_with_elevation|Bool|Scales the talus amplitude based on heightmap elevation, reducing it at lower elevations and maintaining the nominal value at higher elevations.|
+|talus_global|Float|TODO|
+
+## ThermalScree
+
+
+TODO
+
+![img](../images/nodes/ThermalScree.png)
+### Category
+
+
+Erosion/Thermal
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|Heightmap|TODO|
+|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
+|zmax|Heightmap|TODO|
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|deposition|Heightmap|Deposition map (in [0, 1]).|
+|output|Heightmap|TODO|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|iterations|Integer|TODO|
+|scale_talus_with_elevation|Bool|Scales the talus amplitude based on heightmap elevation, reducing it at lower elevations and maintaining the nominal value at higher elevations.|
+|talus_constraint|Bool|TODO|
+|talus_global|Float|TODO|
+|zmax|Float|TODO|
+
+## Translate
+
+
+Translates an heightmap by a specified amount along the x and y axes. This function shifts the contents of the input array by `dx` and `dy` units along the x and y axes, respectively. It supports both periodic boundary conditions, where the array wraps around, and non-periodic conditions.
+
+![img](../images/nodes/Translate.png)
+### Category
+
+
+Operator/Transform
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|dx|Heightmap|Displacement with respect to the domain size (y-direction).|
+|dy|Heightmap|Control parameter, acts as a multiplier for the weight parameter.|
+|input|Heightmap|Displacement with respect to the domain size (x-direction).|
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|Heightmap|Translate heightmap.|
 
 ### Parameters
 
@@ -4886,168 +5630,155 @@ Operator/Transform
 |dy|Float|The translation distance along the y-axis. Positive values shift the array downward.|
 |periodic|Bool|If set to `true`, the translation is periodic, meaning that elements that move out of one side of the array reappear on the opposite side.|
 
-## Unpack
-
-
-KmeansClustering2 node groups the data into clusters based on the values of the two input features.
-
-![img](../images/nodes/Unpack.png)  
-
-### Category
-
-
-Routing  
-
-### Inputs
-
-|Name|Type|Description|
-| :--- | :--- | :--- |
-|feature 1|HeightMapData|First measurable property or characteristic of the data points being analyzed (e.g elevation, gradient norm, etc...|
-|feature 2|HeightMapData|Second measurable property or characteristic of the data points being analyzed (e.g elevation, gradient norm, etc...|
-  
-
-### Outputs
-
-|Name|Type|Description|
-| :--- | :--- | :--- |
-|output|HeightMapData|Cluster labelling.|
-|scoring|HeightMapVectorData|Score in [0, 1] of the cell to belong to a given cluster|
-  
-
-### Parameters
-
-|Name|Type|Description|
-| :--- | :--- | :--- |
-|compute_scoring|Bool|Determine whether scoring is computed.|
-|nclusters|Integer|Number of clusters.|
-|normalize_inputs|Bool|Determine whether the feature amplitudes are normalized before the clustering.|
-|seed|Random seed|Random seed number.|
-|weights.x|Float|Weight of the first feature.|
-|weights.y|Float|Weight of the second feature.|
-
 ## Unsphericity
 
 
 Unsphericity is a measure used to quantify the deviation of the heightmap shape from a perfect sphere. In other words, it indicates how much the terrain differs from being perfectly round or spherical.
 
-![img](../images/nodes/Unsphericity.png)  
-
+![img](../images/nodes/Unsphericity.png)
 ### Category
 
 
-Features/Landform  
-
+Features/Landform
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Shape index.|
-  
+|output|Heightmap|Shape index.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|GPU|Bool|Toogle GPU acceleration on or off.|
+|inverse|Bool|Toggle inversion of the output values.|
 |radius|Float|Filter radius with respect to the domain size.|
+|remap|Bool|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|smoothing|Bool|Enable or disable smoothing to reduce noise in the curvature computation.|
+|smoothing_radius|Float|Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.|
 
 ## ValleyWidth
 
 
 ValleyWidth identifies valley lines and measure the width of the valley at each cross-section.
 
-![img](../images/nodes/ValleyWidth.png)  
-
+![img](../images/nodes/ValleyWidth.png)
 ### Category
 
 
-Features/Landform  
-
+Features/Landform
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-  
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Valley width heightmap.|
-  
+|output|Heightmap|Valley width heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |radius|Float|Filter radius with respect to the domain size.|
+|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+
+## Voronoise
+
+
+TODO
+
+![img](../images/nodes/Voronoise.png)
+### Category
+
+
+Primitive/Coherent
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|dx|Heightmap|TODO|
+|dy|Heightmap|TODO|
+|envelope|Heightmap|Output noise amplitude envelope.|
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|Heightmap|TODO|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|inverse|Bool|Toggle inversion of the output values.|
+|Wavenumber|Wavenumber|TODO|
+|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|Seed|Random seed number|TODO|
+|u|Float|TODO|
+|v|Float|TODO|
 
 ## Warp
 
 
 The Warp node transforms a base heightmap by warping/pushing pixels as defined by the input displacements.
 
-![img](../images/nodes/Warp.png)  
-
+![img](../images/nodes/Warp.png)
 ### Category
 
 
-Operator/Transform  
-
+Operator/Transform
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-|dx|HeightMapData|Displacement with respect to the domain size (x-direction).|
-|dy|HeightMapData|Displacement with respect to the domain size (y-direction).|
-  
+|dx|Heightmap|Displacement with respect to the domain size (x-direction).|
+|dy|Heightmap|Displacement with respect to the domain size (y-direction).|
+|input|Heightmap|Input heightmap.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Warped heightmap.|
-  
+|output|Heightmap|Warped heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|GPU|Bool|Toogle GPU acceleration on or off.|
 
 ## WarpDownslope
 
 
 Warp the heightmap with a direction and amount based on the local downslope.
 
-![img](../images/nodes/WarpDownslope.png)  
-
+![img](../images/nodes/WarpDownslope.png)
 ### Category
 
 
-Operator/Transform  
-
+WIP
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-|mask|HeightMapData|Mask defining the filtering intensity (expected in [0, 1]).|
-  
+|input|Heightmap|Input heightmap.|
+|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Filtered heightmap.|
-  
+|output|Heightmap|Filtered heightmap.|
 
 ### Parameters
 
@@ -5062,34 +5793,32 @@ Operator/Transform
 
 WaveDune mimics using a periodic function the formation and spatial distribution of transverse sand dunes on a terrain.
 
-![img](../images/nodes/WaveDune.png)  
-
+![img](../images/nodes/WaveDune.png)
 ### Category
 
 
-Primitive/Function  
-
+Primitive/Function
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|dr|HeightMapData|Displacement with respect to the domain size (normal direction).|
-  
+|dr|Heightmap|Displacement with respect to the domain size (normal direction).|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|WaveDune heightmap.|
-  
+|output|Heightmap|WaveDune heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |angle|Float|Angle in the horizontal plane.|
+|inverse|Bool|Toggle inversion of the output values.|
 |kw|Float|Noise wavenumbers (kx, ky) for each directions.|
 |phase_shift|Float|Phase shift.|
+|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 |xbottom|Float|Relative position of the dune bottom, in [0, 1].|
 |xtop|Float|Relative position of the dune top, in [0, 1].|
 
@@ -5098,102 +5827,96 @@ Primitive/Function
 
 WaveSine generates sine waves.
 
-![img](../images/nodes/WaveSine.png)  
-
+![img](../images/nodes/WaveSine.png)
 ### Category
 
 
-Primitive/Function  
-
+Primitive/Function
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|dr|HeightMapData|Displacement with respect to the domain size (normal direction).|
-  
+|dr|Heightmap|Displacement with respect to the domain size (normal direction).|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|WaveSine heightmap.|
-  
+|output|Heightmap|WaveSine heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |angle|Float|Angle in the horizontal plane.|
+|inverse|Bool|Toggle inversion of the output values.|
 |kw|Float|Noise wavenumbers (kx, ky) for each directions.|
 |phase_shift|Float|Phase shift.|
+|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 
 ## WaveSquare
 
 
 WaveSquare generates square waves.
 
-![img](../images/nodes/WaveSquare.png)  
-
+![img](../images/nodes/WaveSquare.png)
 ### Category
 
 
-Primitive/Function  
-
+Primitive/Function
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|dr|HeightMapData|Displacement with respect to the domain size (normal direction).|
-  
+|dr|Heightmap|Displacement with respect to the domain size (normal direction).|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|WaveSquare heightmap.|
-  
+|output|Heightmap|WaveSquare heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |angle|Float|Angle in the horizontal plane.|
+|inverse|Bool|Toggle inversion of the output values.|
 |kw|Float|Noise wavenumbers (kx, ky) for each directions.|
 |phase_shift|Float|Phase shift.|
+|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 
 ## WaveTriangular
 
 
 WaveTriangular generates triangular waves.
 
-![img](../images/nodes/WaveTriangular.png)  
-
+![img](../images/nodes/WaveTriangular.png)
 ### Category
 
 
-Primitive/Function  
-
+Primitive/Function
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|dr|HeightMapData|Displacement with respect to the domain size (normal direction).|
-  
+|dr|Heightmap|Displacement with respect to the domain size (normal direction).|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|WaveTriangular heightmap.|
-  
+|output|Heightmap|WaveTriangular heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |angle|Float|Angle in the horizontal plane.|
+|inverse|Bool|Toggle inversion of the output values.|
 |kw|Float|Noise wavenumbers (kx, ky) for each directions.|
 |phase_shift|Float|Phase shift.|
+|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 |slant_ratio|Float|Decides on wave asymmetry, expected in [0, 1].|
 
 ## White
@@ -5201,165 +5924,189 @@ Primitive/Function
 
 White noise operator generates a random signal with a flat power spectral density.
 
-![img](../images/nodes/White.png)  
-
+![img](../images/nodes/White.png)
 ### Category
 
 
-Primitive/Random  
-
+Primitive/Random
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|envelope|HeightMapData|Output noise amplitude envelope.|
-  
+|envelope|Heightmap|Output noise amplitude envelope.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Generated noise.|
-  
+|output|Heightmap|Generated noise.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|seed|Random seed|Random seed number.|
+|inverse|Bool|Toggle inversion of the output values.|
+|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|Seed|Random seed number|Random seed number.|
 
 ## WhiteDensityMap
 
 
 WhiteDensityMap noise operator generates a random signal with a flat power and a spatial density defined by an input heightmap.
 
-![img](../images/nodes/WhiteDensityMap.png)  
-
+![img](../images/nodes/WhiteDensityMap.png)
 ### Category
 
 
-Primitive/Random  
-
+Primitive/Random
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|density|HeightMapData|Output noise amplitude envelope.|
-  
+|density|Heightmap|Output noise amplitude envelope.|
+|envelope|Heightmap|Output noise amplitude envelope.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Generated noise.|
-  
+|output|Heightmap|Generated noise.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|seed|Random seed|Random seed number.|
+|inverse|Bool|Toggle inversion of the output values.|
+|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|Seed|Random seed number|Random seed number.|
 
 ## WhiteSparse
 
 
 WhiteSparse noise operator generates a random signal with a flat power spectral density, but with a sparse spatial density.
 
-![img](../images/nodes/WhiteSparse.png)  
-
+![img](../images/nodes/WhiteSparse.png)
 ### Category
 
 
-Primitive/Random  
-
+Primitive/Random
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|envelope|HeightMapData|Output noise amplitude envelope.|
-  
+|envelope|Heightmap|Output noise amplitude envelope.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Generated noise.|
-  
+|output|Heightmap|Generated noise.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |density|Float|Noise density.|
-|seed|Random seed|Random seed number.|
+|inverse|Bool|Toggle inversion of the output values.|
+|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|Seed|Random seed number|Random seed number.|
 
-## ZeroedEdges
+## Wrinkle
 
 
-ZeroedEdges is an operator that enforces values close to zero at the domain edges.
+TODO
 
-![img](../images/nodes/ZeroedEdges.png)  
-
+![img](../images/nodes/Wrinkle.png)
 ### Category
 
 
-Math/Boundaries  
-
+WIP
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Input heightmap.|
-|dr|HeightMapData|Displacement with respect to the domain size (radial direction).|
-  
+|input|Heightmap|TODO|
+|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Filtered heightmap.|
-  
+|output|Heightmap|TODO|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|distance_function|Enumeration|Measure used for the distance calculation. Available values: Chebyshev, Euclidian, Euclidian/Chebyshev, Manhattan.|
-|sigma|Float|Shape power law.|
+|displacement_amplitude|Float|TODO|
+|kw|Float|TODO|
+|Octaves|Integer|TODO|
+|radius|Float|TODO|
+|Seed|Random seed number|TODO|
+|Weight|Float|TODO|
+|wrinkle_amplitude|Float|TODO|
+|wrinkle_angle|Float|TODO|
+
+## ZeroedEdges
+
+
+An operator that enforces values close to zero at the domain edges.
+
+![img](../images/nodes/ZeroedEdges.png)
+### Category
+
+
+Math/Boundaries
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|dr|Heightmap|Displacement relative to the domain size (radial direction).|
+|input|Heightmap|The input heightmap.|
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|Heightmap|The filtered heightmap result.|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|distance_function|Enumeration|Determines the method used for distance calculation. Options: Chebyshev, Euclidean, Euclidean/Chebyshev, Manhattan.|
+|remap_range|Value range|Specifies the output range for the operator. Defaults to [0, 1].|
+|sigma|Float|Controls the shape power law.|
 
 ## Zoom
 
 
 Applies a zoom effect to an heightmap with an adjustable center. This function scales the input 2D array by a specified zoom factor, effectively resizing the array's contents. The zoom operation is centered around a specified point within the array, allowing for flexible zooming behavior.
 
-![img](../images/nodes/Zoom.png)  
-
+![img](../images/nodes/Zoom.png)
 ### Category
 
 
-Operator/Transform  
-
+Operator/Transform
 ### Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|HeightMapData|Displacement with respect to the domain size (x-direction).|
-|dx|HeightMapData|Displacement with respect to the domain size (y-direction).|
-|dy|HeightMapData|Control parameter, acts as a multiplier for the weight parameter.|
-  
+|dx|Heightmap|Displacement with respect to the domain size (y-direction).|
+|dy|Heightmap|Control parameter, acts as a multiplier for the weight parameter.|
+|input|Heightmap|Displacement with respect to the domain size (x-direction).|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightMapData|Zoom heightmap.|
-  
+|output|Heightmap|Zoom heightmap.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|center.x|Float|Center of the zoom operation.|
-|center.y|Float|Center of the zoom operation.|
+|center|Vec2Float|Reference center within the heightmap.|
 |periodic|Bool|If set to `true`, the zoom is periodic.|
+|remap|Bool|Remap the operator's output to a specified range, defaulting to [0, 1].|
 |zoom_factor|Float|The factor by which to zoom the heightmap.|

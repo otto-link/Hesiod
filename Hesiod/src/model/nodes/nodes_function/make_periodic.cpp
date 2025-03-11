@@ -23,7 +23,7 @@ void setup_make_periodic_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("overlap", 0.25f, 0.05f, 0.5f, "overlap");
+  ADD_ATTR(FloatAttribute, "overlap", 0.25f, 0.05f, 0.5f);
 }
 
 void compute_make_periodic_node(BaseNode *p_node)
@@ -40,12 +40,18 @@ void compute_make_periodic_node(BaseNode *p_node)
 
     int nbuffer = std::max(1, (int)(GET("overlap", FloatAttribute) * p_out->shape.x));
 
-    hmap::Array in_array = p_in->to_array();
-    hmap::Array out_array = in_array;
+    hmap::transform(
+        {p_out, p_in},
+        [nbuffer](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+        {
+          hmap::Array *pa_out = p_arrays[0];
+          hmap::Array *pa_in = p_arrays[1];
 
-    hmap::make_periodic(out_array, nbuffer);
+          *pa_out = *pa_in;
 
-    p_out->from_array_interp_nearest(out_array);
+          hmap::make_periodic(*pa_out, nbuffer);
+        },
+        hmap::TransformMode::SINGLE_ARRAY);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

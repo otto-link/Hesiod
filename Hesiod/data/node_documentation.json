@@ -43,10 +43,10 @@
                 "label": "mu",
                 "type": "Float"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "vshift": {
@@ -157,10 +157,10 @@
                 "label": "radius",
                 "type": "Float"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             }
         },
@@ -191,21 +191,21 @@
         "label": "BlendPoissonBf",
         "parameters": {
             "inverse": {
-                "description": "TODO",
+                "description": "Toggle inversion of the output values.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
             },
             "iterations": {
-                "description": "TODO",
+                "description": "Number of solver iterations for the Poisson blending process.",
                 "key": "iterations",
                 "label": "iterations",
                 "type": "Integer"
             },
-            "remap_range": {
-                "description": "TODO",
-                "key": "remap_range",
-                "label": "remap_range",
+            "remap": {
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             }
         },
@@ -213,25 +213,64 @@
             "input 1": {
                 "caption": "input 1",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Primary heightmap input.",
                 "type": "input"
             },
             "input 2": {
                 "caption": "input 2",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Secondary heightmap input for blending.",
                 "type": "input"
             },
             "mask": {
                 "caption": "mask",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Mask heightmap controlling blending regions.",
                 "type": "input"
             },
             "output": {
                 "caption": "output",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Resulting heightmap after Poisson blending.",
+                "type": "output"
+            }
+        }
+    },
+    "Border": {
+        "category": "Operator/Morphology",
+        "description": "Highlights terrain boundaries by subtracting the eroded version of a DEM from the original. Useful for detecting ridges, valleys, and sharp elevation transitions in terrain analysis.",
+        "label": "Border",
+        "parameters": {
+            "GPU": {
+                "description": "Toogle GPU acceleration on or off.",
+                "key": "GPU",
+                "label": "GPU",
+                "type": "Bool"
+            },
+            "radius": {
+                "description": "Filter radius with respect to the domain size.",
+                "key": "radius",
+                "label": "radius",
+                "type": "Float"
+            },
+            "remap": {
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
+                "key": "remap",
+                "label": "remap",
+                "type": "Value range"
+            }
+        },
+        "ports": {
+            "input": {
+                "caption": "input",
+                "data_type": "Heightmap",
+                "description": "Heightmap input on which the morphological border operation is applied.",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "Heightmap",
+                "description": "Resulting heightmap after computing the morphological border.",
                 "type": "output"
             }
         }
@@ -292,10 +331,10 @@
                 "label": "inverse",
                 "type": "Bool"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             }
         },
@@ -361,10 +400,10 @@
                 "label": "radius",
                 "type": "Float"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "sigma_inner": {
@@ -529,10 +568,10 @@
                 "label": "jitter_ratio",
                 "type": "Wavenumber"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "seed": {
@@ -593,10 +632,10 @@
                 "label": "npoints",
                 "type": "Integer"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "seed": {
@@ -620,10 +659,10 @@
         "description": "CloudRemapValues remap the range of the cloud point values.",
         "label": "CloudRemapValues",
         "parameters": {
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             }
         },
@@ -631,13 +670,13 @@
             "input": {
                 "caption": "input",
                 "data_type": "Cloud",
-                "description": "TODO",
+                "description": "Input cloud.",
                 "type": "input"
             },
             "output": {
                 "caption": "output",
                 "data_type": "Cloud",
-                "description": "TODO",
+                "description": "Output cloud with new value range.",
                 "type": "output"
             }
         }
@@ -670,13 +709,13 @@
             "dx": {
                 "caption": "dx",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Displacement with respect to the domain size (x-direction).",
                 "type": "input"
             },
             "dy": {
                 "caption": "dy",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Displacement with respect to the domain size (y-direction).",
                 "type": "input"
             },
             "sdf": {
@@ -763,7 +802,7 @@
                 "type": "Bool"
             },
             "colormap": {
-                "description": "Color mapping selection. Available values: adrceist, aneprosi, angghore, anilyftp, anthatly, ascaired, aselllfa, aveflili, blesiblh, blywixps, boustous, byapsahi, bychpmem, cecelldf, ceitwope, cesintho, coffrrea, ctthaton, dffygutu, dfvieryo, drctheet, drfftiee, dwinthed, eafbissf, eporepop, ewntherb, feredwnt, fffadeng, ffwatsan, fleoreha, fromsesh, ftapewon, gsercrts, haviarof, hendesth, imongsir, indthsad, inosulul, intoshee, iresetyl, isungror, itteloud, ivericed, lereitth, majucent, mburmats, mearesit, meppremb, mofhewon, nalymeve, noasbian, ofasnfoi, ofoffrmp, oleonowh, onaaloni, ontomayw, outtsthe, owwheplu, pechrede, pellaine, piventon, plfgsthi, rbonblnc, rredtthe, sarermat, seclytme, sfreante, sheshesa, sinabuse, sindwirt, snotheca, ssemeool, suttlseb, taldidov, teasitis, teieebit, tharetwe, thengici, therinon, thesihas, thisathe, thoeftsw, tiamatsp, tinusprr, tiomithe, tnymeewh, tonndind, trererat, ttyaveft, tyfotinm, ucerecen, ucererds, upeesith, usoerlea, veranghh, verdeisu, wadsuthe, wbegweic, whetitat, whhorefr, wminamin, wsatavin, yierahon.",
+                "description": "Color mapping selection.",
                 "key": "colormap",
                 "label": "colormap",
                 "type": "Enumeration"
@@ -948,10 +987,10 @@
                 "label": "rank",
                 "type": "Integer"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             }
         },
@@ -999,10 +1038,10 @@
                 "label": "phase_shift",
                 "type": "Float"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             }
         },
@@ -1062,10 +1101,10 @@
                 "label": "radius",
                 "type": "Float"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             }
         },
@@ -1137,10 +1176,10 @@
                 "label": "primitives_resolution_steps",
                 "type": "Integer"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "resolution": {
@@ -1282,10 +1321,10 @@
                 "label": "noise_ratio",
                 "type": "Float"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "scale": {
@@ -1498,53 +1537,53 @@
     },
     "ExportAsset": {
         "category": "IO/Files",
-        "description": "ExportAsset exporting both the heightmap and texture to a single asset.",
+        "description": "Exports both the heightmap and texture as a single asset. The mesh can either be used as is or retriangulated using an optimization algorithm. Additionally, a normal map can be provided to model light effects of small details not represented by the mesh.",
         "label": "ExportAsset",
         "parameters": {
             "auto_export": {
-                "description": "Decides whether the export is automatically performed when the node is updated.",
+                "description": "Automatically exports the asset when the node is updated.",
                 "key": "auto_export",
                 "label": "auto_export",
                 "type": "Bool"
             },
             "blending_method": {
-                "description": "TODO",
+                "description": "Defines the method used to blend the normal map for small details.",
                 "key": "blending_method",
-                "label": "blending_method",
+                "label": "Details normal map blending method",
                 "type": "Enumeration"
             },
             "detail_scaling": {
-                "description": "TODO",
+                "description": "Scaling factor applied to the detail normal map.",
                 "key": "detail_scaling",
                 "label": "detail_scaling",
                 "type": "Float"
             },
             "elevation_scaling": {
-                "description": "Elevation scaling.",
+                "description": "Factor used to scale elevation values.",
                 "key": "elevation_scaling",
                 "label": "elevation_scaling",
                 "type": "Float"
             },
             "export_format": {
-                "description": "Export format. Available values: Assimp Binary - *.assbin, Assxml Document - *.assxml, Autodesk 3DS (legacy) - *.3ds, Autodesk FBX (ascii) - *.fbx, Autodesk FBX (binary) - *.fbx, COLLADA - Digital Asset Exchange Schema - *.dae, Extensible 3D - *.x3d, GL Transmission Format (binary) - *.glb, GL Transmission Format - *.gltf, GL Transmission Format v. 2 (binary) - *.glb, GL Transmission Format v. 2 - *.gltf, Stanford Polygon Library (binary) - *.ply, Stanford Polygon Library - *.ply, Step Files - *.stp, Stereolithography (binary) - *.stl, Stereolithography - *.stl, The 3MF-File-Format - *.3mf, Wavefront OBJ format - *.obj, Wavefront OBJ format without material file - *.obj.",
+                "description": "Defines the file format for export. Available formats include Assimp Binary (*.assbin), Assxml Document (*.assxml), Autodesk 3DS (*.3ds), Autodesk FBX (ASCII/Binary) (*.fbx), COLLADA (*.dae), Extensible 3D (*.x3d), GL Transmission Format (GLB/GLTF v1 & v2), Stanford Polygon Library (*.ply), Step Files (*.stp), Stereolithography (*.stl), 3MF (*.3mf), and Wavefront OBJ (*.obj) with or without material files.",
                 "key": "export_format",
                 "label": "export_format",
                 "type": "Enumeration"
             },
             "fname": {
-                "description": "Export file name.",
+                "description": "Specifies the name of the exported file.",
                 "key": "fname",
                 "label": "fname",
                 "type": "Filename"
             },
             "max_error": {
-                "description": "Maximum error (for optimized triangulated mesh).",
+                "description": "Maximum allowable error when generating an optimized triangulated mesh.",
                 "key": "max_error",
                 "label": "max_error",
                 "type": "Float"
             },
             "mesh_type": {
-                "description": "Mesh type for the geometry. Available values: triangles, triangles (optimized).",
+                "description": "Specifies the type of mesh geometry used. Options include 'triangles' and 'triangles (optimized)'.",
                 "key": "mesh_type",
                 "label": "mesh_type",
                 "type": "Enumeration"
@@ -1554,19 +1593,19 @@
             "elevation": {
                 "caption": "elevation",
                 "data_type": "Heightmap",
-                "description": "Data values for elevation.",
+                "description": "Heightmap data defining elevation values.",
                 "type": "input"
             },
-            "normal map detail": {
-                "caption": "normal map detail",
+            "normal map details": {
+                "caption": "normal map details",
                 "data_type": "HeightmapRGBA",
-                "description": "TODO",
+                "description": "Optional normal map for enhancing lighting effects on small details.",
                 "type": "input"
             },
             "texture": {
                 "caption": "texture",
                 "data_type": "HeightmapRGBA",
-                "description": "Data values for color.",
+                "description": "Heightmap data defining texture color values.",
                 "type": "input"
             }
         }
@@ -1735,10 +1774,10 @@
                 "label": "distance_function",
                 "type": "Enumeration"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "strength": {
@@ -1981,9 +2020,9 @@
                 "label": "Persistence",
                 "type": "Float"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the output values to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
+                "key": "remap",
                 "label": "Remap range",
                 "type": "Value range"
             },
@@ -2206,10 +2245,10 @@
                 "label": "radius",
                 "type": "Float"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             }
         },
@@ -2305,9 +2344,9 @@
                 "label": "Persistence",
                 "type": "Float"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the noise output values to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
+                "key": "remap",
                 "label": "Remap range",
                 "type": "Value range"
             },
@@ -2410,13 +2449,13 @@
     },
     "GradientAngle": {
         "category": "Math/Gradient",
-        "description": "The gradient angle of a heightmap refers to the direction in which the elevation changes most rapidly at each point on the map. It represents the slope or inclination of the terrain surface relative to a horizontal plane",
+        "description": "The gradient angle of a heightmap refers to the direction in which the slope points toward. It represents the orientation of the terrain surface relative to a horizontal plane",
         "label": "GradientAngle",
         "parameters": {
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             }
         },
@@ -2440,10 +2479,10 @@
         "description": "The gradient norm of a heightmap refers to the magnitude or intensity of the rate of change of elevation at each point on the map. It represents the steepness or slope of the terrain surface, irrespective of its direction.",
         "label": "GradientNorm",
         "parameters": {
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             }
         },
@@ -2467,10 +2506,10 @@
         "description": "Gradient talus refers to the local steepest downslope, or the direction in which the terrain descends most rapidly, at each point on the heightmap.",
         "label": "GradientTalus",
         "parameters": {
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             }
         },
@@ -2523,13 +2562,13 @@
             "heightmap": {
                 "caption": "heightmap",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Input heightmap.",
                 "type": "input"
             },
             "kernel": {
                 "caption": "kernel",
                 "data_type": "Array",
-                "description": "Kernel.",
+                "description": "Output kernel.",
                 "type": "output"
             }
         }
@@ -2639,10 +2678,10 @@
                 "label": "radius",
                 "type": "Float"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "vmax": {
@@ -2757,6 +2796,12 @@
                 "description": "Particle erosion cofficient.",
                 "key": "c_erosion",
                 "label": "c_erosion",
+                "type": "Float"
+            },
+            "c_inertia": {
+                "description": "TODO",
+                "key": "c_inertia",
+                "label": "c_inertia",
                 "type": "Float"
             },
             "deposition_only": {
@@ -2977,7 +3022,7 @@
         }
     },
     "HydraulicSchott": {
-        "category": "Erosion/Hydraulic",
+        "category": "WIP",
         "description": "TODO",
         "label": "HydraulicSchott",
         "parameters": {
@@ -3393,7 +3438,7 @@
         "label": "ImportHeightmap",
         "parameters": {
             "fname": {
-                "description": "TODO",
+                "description": "Filename of the image file to import.",
                 "key": "fname",
                 "label": "fname",
                 "type": "Filename"
@@ -3409,7 +3454,7 @@
             "output": {
                 "caption": "output",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Output heightmap.",
                 "type": "output"
             }
         }
@@ -3456,7 +3501,7 @@
     },
     "KernelGabor": {
         "category": "Primitive/Kernel",
-        "description": ".",
+        "description": "KernelGabor generates a Gabor kernel.",
         "label": "KernelGabor",
         "parameters": {
             "angle": {
@@ -3488,14 +3533,14 @@
             "kernel": {
                 "caption": "kernel",
                 "data_type": "Array",
-                "description": "KernelGabor generates a Gabor kernel.",
+                "description": "Output kernel.",
                 "type": "output"
             }
         }
     },
     "KernelPrim": {
         "category": "Primitive/Kernel",
-        "description": ".",
+        "description": "KernelPrim generates a 'kernel', refering to a small matrix used to apply specific effects based on convolution for instance.",
         "label": "KernelPrim",
         "parameters": {
             "kernel": {
@@ -3521,7 +3566,7 @@
             "kernel": {
                 "caption": "kernel",
                 "data_type": "Array",
-                "description": "KernelPrim generates a 'kernel', refering to a small matrix used to apply specific effects based on convolution for instance.",
+                "description": "Output kernel.",
                 "type": "output"
             }
         }
@@ -3822,11 +3867,11 @@
     },
     "MakePeriodic": {
         "category": "Operator/Tiling",
-        "description": "MakePeriodic makes the input heightmap tileable by building a smooth lineat transition at the boundaries.",
+        "description": "Makes the input heightmap tileable by creating a smooth linear transition at the boundaries. This is useful for generating seamless textures or terrains that can be repeated without visible seams.",
         "label": "MakePeriodic",
         "parameters": {
             "overlap": {
-                "description": "Overlap ratio at the boundaries.",
+                "description": "The ratio of overlap at the boundaries. A higher value creates a smoother transition but may reduce the usable area of the heightmap.",
                 "key": "overlap",
                 "label": "overlap",
                 "type": "Float"
@@ -3836,24 +3881,24 @@
             "input": {
                 "caption": "input",
                 "data_type": "Heightmap",
-                "description": "Input heightmap.",
+                "description": "The input heightmap to be made tileable.",
                 "type": "input"
             },
             "output": {
                 "caption": "output",
                 "data_type": "Heightmap",
-                "description": "Binary heightmap.",
+                "description": "The output heightmap with smooth transitions at the boundaries, making it tileable.",
                 "type": "output"
             }
         }
     },
     "MakePeriodicStitching": {
         "category": "Operator/Tiling",
-        "description": "MakePeriodicStitching makes the input heightmap tileable by seamlessly stitching together the domain boundaries.",
+        "description": "Makes the input heightmap tileable by creating a smooth transition at the boundaries using stitching. This is useful for generating seamless textures or terrains that can be repeated without visible seams.",
         "label": "MakePeriodicStitching",
         "parameters": {
             "overlap": {
-                "description": "Overlap ratio at the boundaries.",
+                "description": "The ratio of overlap at the boundaries. A higher value creates a smoother transition but may reduce the usable area of the heightmap.",
                 "key": "overlap",
                 "label": "overlap",
                 "type": "Float"
@@ -3863,13 +3908,64 @@
             "input": {
                 "caption": "input",
                 "data_type": "Heightmap",
-                "description": "Input heightmap.",
+                "description": "The input heightmap to be made tileable.",
                 "type": "input"
             },
             "output": {
                 "caption": "output",
                 "data_type": "Heightmap",
-                "description": "Binary heightmap.",
+                "description": "The output heightmap with smooth transitions at the boundaries, making it tileable.",
+                "type": "output"
+            }
+        }
+    },
+    "MeanShift": {
+        "category": "WIP",
+        "description": "TODO",
+        "label": "MeanShift",
+        "parameters": {
+            "GPU": {
+                "description": "Toogle GPU acceleration on or off.",
+                "key": "GPU",
+                "label": "GPU",
+                "type": "Bool"
+            },
+            "iterations": {
+                "description": "TODO",
+                "key": "iterations",
+                "label": "iterations",
+                "type": "Integer"
+            },
+            "radius": {
+                "description": "TODO",
+                "key": "radius",
+                "label": "radius",
+                "type": "Float"
+            },
+            "talus_global": {
+                "description": "TODO",
+                "key": "talus_global",
+                "label": "talus_global",
+                "type": "Float"
+            },
+            "talus_weighted": {
+                "description": "TODO",
+                "key": "talus_weighted",
+                "label": "talus_weighted",
+                "type": "Bool"
+            }
+        },
+        "ports": {
+            "input": {
+                "caption": "input",
+                "data_type": "Heightmap",
+                "description": "TODO",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "Heightmap",
+                "description": "TODO",
                 "type": "output"
             }
         }
@@ -3878,6 +3974,14 @@
         "category": "Filter/Smoothing",
         "description": "Median3x3 filter is a median filter with a 3x3 kernel used to reduce noise while preserving edges in an image. This process removes outliers and smooths the image without noise reduction and feature preservation in digital images.",
         "label": "Median3x3",
+        "parameters": {
+            "GPU": {
+                "description": "Toogle GPU acceleration on or off.",
+                "key": "GPU",
+                "label": "GPU",
+                "type": "Bool"
+            }
+        },
         "ports": {
             "input": {
                 "caption": "input",
@@ -4055,10 +4159,10 @@
                 "label": "radius",
                 "type": "Float"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             }
         },
@@ -4136,10 +4240,10 @@
                 "label": "persistence",
                 "type": "Float"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remaps the operator's output values to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "seed": {
@@ -4310,9 +4414,9 @@
                 "label": "Persistence",
                 "type": "Float"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
+                "key": "remap",
                 "label": "Remap range",
                 "type": "Value range"
             },
@@ -4601,10 +4705,10 @@
                 "label": "persistence",
                 "type": "Float"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "seed": {
@@ -4694,10 +4798,10 @@
                 "label": "persistence",
                 "type": "Float"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "seed": {
@@ -4793,10 +4897,10 @@
                 "label": "persistence",
                 "type": "Float"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "seed": {
@@ -4886,10 +4990,10 @@
                 "label": "persistence",
                 "type": "Float"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "seed": {
@@ -5069,10 +5173,10 @@
                 "label": "inverse",
                 "type": "Bool"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "reverse_x": {
@@ -5123,17 +5227,17 @@
     },
     "Path": {
         "category": "Geometry/Path",
-        "description": "Polyline definition.",
+        "description": "A polyline defined by a series of connected points (x, y) with elevation data (z). Paths can represent linear features such as roads, rivers, or boundaries.",
         "label": "Path",
         "parameters": {
             "path": {
-                "description": "Path data.",
+                "description": "The sequence of points defining the path. Each point consists of coordinates (x, y) and an elevation (z).",
                 "key": "path",
                 "label": "Path",
                 "type": "Path"
             },
             "reverse": {
-                "description": "TODO",
+                "description": "If true, reverses the order of the points in the path. This can be useful for changing the direction of the path.",
                 "key": "reverse",
                 "label": "reverse",
                 "type": "Bool"
@@ -5143,7 +5247,7 @@
             "path": {
                 "caption": "path",
                 "data_type": "Path",
-                "description": "Set of directed points (x, y) and elevations z.",
+                "description": "Outputs the path as a set of directed points (x, y) and elevations (z).",
                 "type": "output"
             }
         }
@@ -5590,7 +5694,7 @@
         }
     },
     "PathToCloud": {
-        "category": "Converter",
+        "category": "Geometry/Path",
         "description": "PathToCloud convert a Path to a set of points (Cloud).",
         "label": "PathToCloud",
         "ports": {
@@ -5609,7 +5713,7 @@
         }
     },
     "PathToHeightmap": {
-        "category": "Converter",
+        "category": "Geometry/Path",
         "description": "PathToHeightmap Project path points to an heightmap.",
         "label": "PathToHeightmap",
         "parameters": {
@@ -6552,10 +6656,10 @@
                 "label": "inverse",
                 "type": "Bool"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "sharp_bottom": {
@@ -6606,7 +6710,7 @@
     },
     "Ruggedness": {
         "category": "Features",
-        "description": "TODO",
+        "description": "Measures the terrain roughness by computing the square root of the sum of squared elevation differences within a specified radius. Indicates how rough or smooth the terrain is by analyzing how much the elevation changes between neighboring areas. Higher values mean a more rugged, uneven surface, while lower values indicate a flatter, smoother landscape.",
         "label": "Ruggedness",
         "parameters": {
             "GPU": {
@@ -6622,7 +6726,7 @@
                 "type": "Bool"
             },
             "radius": {
-                "description": "TODO",
+                "description": "Defines the neighborhood radius used for computing ruggedness. Larger values consider a wider area, capturing broader terrain variations.",
                 "key": "radius",
                 "label": "radius",
                 "type": "Float"
@@ -6644,13 +6748,13 @@
             "input": {
                 "caption": "input",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Heightmap input representing terrain elevations, used to calculate ruggedness.",
                 "type": "input"
             },
             "output": {
                 "caption": "output",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Resulting heightmap where each pixel represents the calculated ruggedness value.",
                 "type": "output"
             }
         }
@@ -7473,35 +7577,41 @@
     },
     "SelectValley": {
         "category": "Mask/Selector",
-        "description": "TODO",
+        "description": "Identifies and selects valley-like regions in the heightmap based on curvature analysis. The selection can be inverted, and additional parameters allow fine-tuning of the selection process. The output is a mask representing the relative width of the valley. The value is 1 at the valley center and decreases to 0 at the edges of the valley.",
         "label": "SelectValley",
         "parameters": {
             "GPU": {
-                "description": "Toogle GPU acceleration on or off.",
+                "description": "Enables or disables GPU acceleration for faster processing.",
                 "key": "GPU",
                 "label": "GPU",
                 "type": "Bool"
             },
             "inverse": {
-                "description": "Toggle inversion of the output values.",
+                "description": "Inverts the selection, highlighting ridges instead of valleys.",
                 "key": "inverse",
                 "label": "inverse",
                 "type": "Bool"
             },
             "radius": {
-                "description": "TODO",
+                "description": "Defines the search radius for valley detection, controlling how localized or broad the selection is.",
                 "key": "radius",
                 "label": "radius",
                 "type": "Float"
             },
+            "ridge_select": {
+                "description": "If enabled, selects ridges instead of valleys.",
+                "key": "ridge_select",
+                "label": "ridge_select",
+                "type": "Bool"
+            },
             "smoothing": {
-                "description": "Enable or disable smoothing to reduce noise in the curvature computation.",
+                "description": "Applies smoothing to reduce noise in curvature calculations, resulting in a cleaner selection.",
                 "key": "smoothing",
                 "label": "smoothing",
                 "type": "Bool"
             },
             "smoothing_radius": {
-                "description": "Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.",
+                "description": "Defines the radius for the smoothing operation, determining how much curvature values are averaged over neighboring pixels.",
                 "key": "smoothing_radius",
                 "label": "smoothing_radius",
                 "type": "Float"
@@ -7511,13 +7621,13 @@
             "input": {
                 "caption": "input",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Heightmap data used as input for valley detection.",
                 "type": "input"
             },
             "output": {
                 "caption": "output",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "A mask representing the relative width of the valley. The value is 1 at the valley center and decreases to 0 at the edges of the valley.",
                 "type": "output"
             }
         }
@@ -7578,6 +7688,12 @@
         "description": "ShapeIndex is a measure used to quantify the shape complexity of landforms in an heightmap. It is calculated based on the second derivatives of the elevation surface. The surface index is greater than 0.5 for convex surface and lower than 0.5 for concave surface.",
         "label": "ShapeIndex",
         "parameters": {
+            "GPU": {
+                "description": "TODO",
+                "key": "GPU",
+                "label": "GPU",
+                "type": "Bool"
+            },
             "inverse": {
                 "description": "Toggle inversion of the output values.",
                 "key": "inverse",
@@ -7707,10 +7823,10 @@
                 "label": "inverse",
                 "type": "Bool"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "talus_global": {
@@ -8012,10 +8128,10 @@
                 "label": "kernel_scale_radius",
                 "type": "Bool"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "seed": {
@@ -8120,10 +8236,10 @@
                 "label": "inverse",
                 "type": "Bool"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "slope": {
@@ -8795,6 +8911,12 @@
                 "label": "iterations",
                 "type": "Integer"
             },
+            "post_filter_radius": {
+                "description": "TODO",
+                "key": "post_filter_radius",
+                "label": "post_filter_radius",
+                "type": "Float"
+            },
             "scale_talus_with_elevation": {
                 "description": "Scales the talus amplitude based on heightmap elevation, reducing it at lower elevations and maintaining the nominal value at higher elevations.",
                 "key": "scale_talus_with_elevation",
@@ -9191,11 +9313,17 @@
                 "label": "radius",
                 "type": "Float"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
+            },
+            "ridge_select": {
+                "description": "If enabled, selects ridges instead of valleys.",
+                "key": "ridge_select",
+                "label": "ridge_select",
+                "type": "Bool"
             }
         },
         "ports": {
@@ -9230,10 +9358,10 @@
                 "label": "Wavenumber",
                 "type": "Wavenumber"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "seed": {
@@ -9395,10 +9523,10 @@
                 "label": "phase_shift",
                 "type": "Float"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "xbottom": {
@@ -9458,10 +9586,10 @@
                 "label": "phase_shift",
                 "type": "Float"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             }
         },
@@ -9509,10 +9637,10 @@
                 "label": "phase_shift",
                 "type": "Float"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             }
         },
@@ -9560,10 +9688,10 @@
                 "label": "phase_shift",
                 "type": "Float"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "slant_ratio": {
@@ -9599,10 +9727,10 @@
                 "label": "inverse",
                 "type": "Bool"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "seed": {
@@ -9638,10 +9766,10 @@
                 "label": "inverse",
                 "type": "Bool"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "seed": {
@@ -9689,10 +9817,10 @@
                 "label": "inverse",
                 "type": "Bool"
             },
-            "remap_range": {
+            "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "seed": {
@@ -9793,24 +9921,24 @@
         }
     },
     "ZeroedEdges": {
-        "category": "Primitive/Random",
-        "description": "ZeroedEdges is an operator that enforces values close to zero at the domain edges.",
+        "category": "Math/Boundaries",
+        "description": "An operator that enforces values close to zero at the domain edges.",
         "label": "ZeroedEdges",
         "parameters": {
             "distance_function": {
-                "description": "Measure used for the distance calculation. Available values: Chebyshev, Euclidian, Euclidian/Chebyshev, Manhattan.",
+                "description": "Determines the method used for distance calculation. Options: Chebyshev, Euclidean, Euclidean/Chebyshev, Manhattan.",
                 "key": "distance_function",
                 "label": "distance_function",
                 "type": "Enumeration"
             },
-            "remap_range": {
-                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap_range",
-                "label": "remap_range",
+            "remap": {
+                "description": "Specifies the output range for the operator. Defaults to [0, 1].",
+                "key": "remap",
+                "label": "remap",
                 "type": "Value range"
             },
             "sigma": {
-                "description": "Shape power law.",
+                "description": "Controls the shape power law.",
                 "key": "sigma",
                 "label": "sigma",
                 "type": "Float"
@@ -9820,19 +9948,19 @@
             "dr": {
                 "caption": "dr",
                 "data_type": "Heightmap",
-                "description": "Displacement with respect to the domain size (radial direction).",
+                "description": "Displacement relative to the domain size (radial direction).",
                 "type": "input"
             },
             "input": {
                 "caption": "input",
                 "data_type": "Heightmap",
-                "description": "Input heightmap.",
+                "description": "The input heightmap.",
                 "type": "input"
             },
             "output": {
                 "caption": "output",
                 "data_type": "Heightmap",
-                "description": "Filtered heightmap.",
+                "description": "The filtered heightmap result.",
                 "type": "output"
             }
         }

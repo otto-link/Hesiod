@@ -23,7 +23,7 @@ void setup_path_bspline_node(BaseNode *p_node)
   p_node->add_port<hmap::Path>(gnode::PortType::OUT, "output");
 
   // attribute(s)
-  p_node->add_attr<IntAttribute>("edge_divisions", 10, 1, 32, "edge_divisions");
+  ADD_ATTR(IntAttribute, "edge_divisions", 10, 1, 32);
 }
 
 void compute_path_bspline_node(BaseNode *p_node)

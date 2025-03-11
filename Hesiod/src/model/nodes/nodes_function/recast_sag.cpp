@@ -24,8 +24,8 @@ void setup_recast_sag_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("vref", 0.5f, 0.f, 1.f, "vref");
-  p_node->add_attr<FloatAttribute>("k", 0.01f, 0.001f, 1.f, "k");
+  ADD_ATTR(FloatAttribute, "vref", 0.5f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "k", 0.01f, 0.001f, 1.f);
 }
 
 void compute_recast_sag_node(BaseNode *p_node)

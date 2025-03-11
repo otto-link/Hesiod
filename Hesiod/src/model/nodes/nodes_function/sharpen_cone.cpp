@@ -24,8 +24,8 @@ void setup_sharpen_cone_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("radius", 0.1f, 0.f, 0.5f, "radius");
-  p_node->add_attr<FloatAttribute>("scale", 0.1f, 0.f, 2.f, "scale");
+  ADD_ATTR(FloatAttribute, "radius", 0.1f, 0.f, 0.5f);
+  ADD_ATTR(FloatAttribute, "scale", 0.1f, 0.f, 2.f);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"radius", "scale"});

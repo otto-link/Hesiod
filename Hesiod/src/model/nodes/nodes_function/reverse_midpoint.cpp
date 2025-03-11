@@ -23,10 +23,10 @@ void setup_reverse_midpoint_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "heightmap", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("noise_scale", 1.f, 0.01f, 2.f, "noise_scale");
-  p_node->add_attr<SeedAttribute>("seed");
-  p_node->add_attr<BoolAttribute>("inverse", false, "inverse");
-  p_node->add_attr<BoolAttribute>("remap", true, "remap");
+  ADD_ATTR(FloatAttribute, "noise_scale", 1.f, 0.01f, 2.f);
+  ADD_ATTR(SeedAttribute, "seed");
+  ADD_ATTR(BoolAttribute, "inverse", false);
+  ADD_ATTR(BoolAttribute, "remap", true);
 
   // attribute(s) order
   p_node->set_attr_ordered_key(

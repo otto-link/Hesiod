@@ -23,15 +23,12 @@ void setup_valley_width_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("radius", 0.1f, 0.f, 0.2f, "radius");
-  p_node->add_attr<RangeAttribute>("remap_range",
-                                   std::vector<float>({0.f, 1.f}),
-                                   0.f,
-                                   1.f,
-                                   "remap_range");
+  ADD_ATTR(FloatAttribute, "radius", 0.1f, 0.f, 0.2f);
+  ADD_ATTR(BoolAttribute, "ridge_select", false);
+  ADD_ATTR(RangeAttribute, "remap", std::vector<float>({0.f, 1.f}), 0.f, 1.f);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"radius", "_SEPARATOR_", "remap_range"});
+  p_node->set_attr_ordered_key({"radius", "ridge_select", "_SEPARATOR_", "remap"});
 }
 
 void compute_valley_width_node(BaseNode *p_node)
@@ -48,10 +45,17 @@ void compute_valley_width_node(BaseNode *p_node)
 
     int ir = std::max(1, (int)(GET("radius", FloatAttribute) * p_out->shape.x));
 
-    hmap::transform(*p_out,
-                    *p_in,
-                    [&ir](hmap::Array &out, hmap::Array &in)
-                    { out = hmap::valley_width(in, ir); });
+    hmap::transform(
+        {p_out, p_in},
+        [p_node,
+         ir](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+        {
+          hmap::Array *pa_out = p_arrays[0];
+          hmap::Array *pa_in = p_arrays[1];
+
+          *pa_out = hmap::valley_width(*pa_in, ir, GET("ridge_select", BoolAttribute));
+        },
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
 
     p_out->smooth_overlap_buffers();
 
@@ -64,8 +68,8 @@ void compute_valley_width_node(BaseNode *p_node)
                            false, // saturate
                            {0.f, 0.f},
                            0.f,
-                           GET_ATTR("remap_range", RangeAttribute, is_active),
-                           GET("remap_range", RangeAttribute));
+                           GET_ATTR("remap", RangeAttribute, is_active),
+                           GET("remap", RangeAttribute));
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

@@ -23,13 +23,13 @@ void setup_export_texture_node(BaseNode *p_node)
   p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture");
 
   // attribute(s)
-  p_node->add_attr<FilenameAttribute>("fname",
-                                      std::filesystem::path("texture.png"),
-                                      true, // save
-                                      "PNG (*.png)",
-                                      "fname");
-  p_node->add_attr<BoolAttribute>("16 bit", false, "16 bit");
-  p_node->add_attr<BoolAttribute>("auto_export", true, "auto_export");
+  ADD_ATTR(FilenameAttribute,
+           "fname",
+           std::filesystem::path("texture.png"),
+           "PNG (*.png)",
+           true);
+  ADD_ATTR(BoolAttribute, "16 bit", false);
+  ADD_ATTR(BoolAttribute, "auto_export", true);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"fname", "16 bit", "auto_export"});

@@ -24,14 +24,14 @@ void setup_cos_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("frequency", 1.f, 0.f, 8.f, "frequency");
-  p_node->add_attr<FloatAttribute>("phase_shift", 0.f, 0.f, 6.28f, "phase_shift");
-  p_node->add_attr<BoolAttribute>("inverse", false, "inverse");
-  p_node->add_attr<RangeAttribute>("remap_range", "remap_range");
+  ADD_ATTR(FloatAttribute, "frequency", 1.f, 0.f, FLT_MAX);
+  ADD_ATTR(FloatAttribute, "phase_shift", 0.f, 0.f, 6.28f);
+  ADD_ATTR(BoolAttribute, "inverse", false);
+  ADD_ATTR(RangeAttribute, "remap");
 
   // attribute(s) order
   p_node->set_attr_ordered_key(
-      {"frequency", "phase_shift", "_SEPARATOR_", "inverse", "remap_range"});
+      {"frequency", "phase_shift", "_SEPARATOR_", "inverse", "remap"});
 }
 
 void compute_cos_node(BaseNode *p_node)
@@ -46,13 +46,16 @@ void compute_cos_node(BaseNode *p_node)
   {
     hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
-    hmap::transform(*p_out,
-                    *p_in,
-                    [p_node](hmap::Array &out, hmap::Array &in)
-                    {
-                      out = hmap::cos(6.283185f * GET("frequency", FloatAttribute) * in +
-                                      GET("phase_shift", FloatAttribute));
-                    });
+    hmap::transform(
+        {p_out, p_in},
+        [p_node](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+        {
+          hmap::Array *pa_out = p_arrays[0];
+          hmap::Array *pa_in = p_arrays[1];
+
+          *pa_out = hmap::cos(6.283185f * GET("frequency", FloatAttribute) * (*pa_in) +
+                              GET("phase_shift", FloatAttribute));
+        });
 
     // post-process
     post_process_heightmap(p_node,
@@ -63,8 +66,8 @@ void compute_cos_node(BaseNode *p_node)
                            false, // saturate
                            {0.f, 0.f},
                            0.f,
-                           GET_ATTR("remap_range", RangeAttribute, is_active),
-                           GET("remap_range", RangeAttribute));
+                           GET_ATTR("remap", RangeAttribute, is_active),
+                           GET("remap", RangeAttribute));
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

@@ -23,11 +23,11 @@ void setup_path_fractalize_node(BaseNode *p_node)
   p_node->add_port<hmap::Path>(gnode::PortType::OUT, "output");
 
   // attribute(s)
-  p_node->add_attr<IntAttribute>("iterations", 4, 1, 10, "iterations");
-  p_node->add_attr<SeedAttribute>("seed");
-  p_node->add_attr<FloatAttribute>("sigma", 0.3f, 0.f, 1.f, "sigma");
-  p_node->add_attr<IntAttribute>("orientation", 0, 0, 1, "orientation");
-  p_node->add_attr<FloatAttribute>("persistence", 1.f, 0.01f, 4.f, "persistence");
+  ADD_ATTR(IntAttribute, "iterations", 4, 1, 10);
+  ADD_ATTR(SeedAttribute, "seed");
+  ADD_ATTR(FloatAttribute, "sigma", 0.3f, 0.f, 1.f);
+  ADD_ATTR(IntAttribute, "orientation", 0, 0, 1);
+  ADD_ATTR(FloatAttribute, "persistence", 1.f, 0.01f, 4.f);
 
   // attribute(s) order
   p_node->set_attr_ordered_key(

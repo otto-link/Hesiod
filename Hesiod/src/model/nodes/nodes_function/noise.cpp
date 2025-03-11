@@ -28,12 +28,12 @@ void setup_noise_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "out", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<MapEnumAttribute>("noise_type", noise_type_map, "Noise type");
-  p_node->add_attr<WaveNbAttribute>("kw");
-  p_node->add_attr<SeedAttribute>("seed");
-  p_node->add_attr<BoolAttribute>("inverse", false, "Inverse");
-  p_node->add_attr<RangeAttribute>("remap", "Remap range");
-  p_node->add_attr<BoolAttribute>("GPU", HSD_DEFAULT_GPU_MODE, "GPU");
+  ADD_ATTR(EnumAttribute, "noise_type", noise_type_map);
+  ADD_ATTR(WaveNbAttribute, "kw");
+  ADD_ATTR(SeedAttribute, "seed");
+  ADD_ATTR(BoolAttribute, "inverse", false);
+  ADD_ATTR(RangeAttribute, "remap");
+  ADD_ATTR(BoolAttribute, "GPU", HSD_DEFAULT_GPU_MODE);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"noise_type",
@@ -71,7 +71,7 @@ void compute_noise_node(BaseNode *p_node)
           hmap::Array *pa_dx = p_arrays[1];
           hmap::Array *pa_dy = p_arrays[2];
 
-          *pa_out = hmap::gpu::noise((hmap::NoiseType)GET("noise_type", MapEnumAttribute),
+          *pa_out = hmap::gpu::noise((hmap::NoiseType)GET("noise_type", EnumAttribute),
                                      shape,
                                      GET("kw", WaveNbAttribute),
                                      GET("seed", SeedAttribute),
@@ -94,7 +94,7 @@ void compute_noise_node(BaseNode *p_node)
           hmap::Array *pa_dx = p_arrays[1];
           hmap::Array *pa_dy = p_arrays[2];
 
-          *pa_out = hmap::noise((hmap::NoiseType)GET("noise_type", MapEnumAttribute),
+          *pa_out = hmap::noise((hmap::NoiseType)GET("noise_type", EnumAttribute),
                                 shape,
                                 GET("kw", WaveNbAttribute),
                                 GET("seed", SeedAttribute),

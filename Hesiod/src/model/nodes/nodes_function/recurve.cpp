@@ -27,7 +27,7 @@ void setup_recurve_node(BaseNode *p_node)
   // attribute(s)
   std::vector<float> default_values = {0.f, 0.25f, 0.5f, 0.75f, 1.f};
 
-  p_node->add_attr<VecFloatAttribute>("values", default_values, 0.f, 1.f, "values");
+  ADD_ATTR(VecFloatAttribute, "values", default_values, 0.f, 1.f);
 }
 
 void compute_recurve_node(BaseNode *p_node)

@@ -24,8 +24,8 @@ void setup_recurve_kura_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("a", 2.f, 0.01f, 4.f, "a");
-  p_node->add_attr<FloatAttribute>("b", 2.f, 0.01f, 4.f, "b");
+  ADD_ATTR(FloatAttribute, "a", 2.f, 0.01f, 4.f);
+  ADD_ATTR(FloatAttribute, "b", 2.f, 0.01f, 4.f);
 }
 
 void compute_recurve_kura_node(BaseNode *p_node)

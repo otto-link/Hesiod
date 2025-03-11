@@ -26,28 +26,16 @@ void setup_flow_stream_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "river_mask", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("elevation_ratio",
-                                   0.5f,
-                                   0.f,
-                                   0.95f,
-                                   "elevation_ratio");
-  p_node->add_attr<FloatAttribute>("distance_exponent",
-                                   2.f,
-                                   0.1f,
-                                   4.f,
-                                   "distance_exponent");
-  p_node->add_attr<FloatAttribute>("upward_penalization",
-                                   100.f,
-                                   1.f,
-                                   1000.f,
-                                   "upward_penalization");
-  p_node->add_attr<FloatAttribute>("riverbank_slope", 1.f, 0.f, 16.f, "riverbank_slope");
-  p_node->add_attr<FloatAttribute>("river_radius", 0.001f, 0.001f, 0.1f, "river_radius");
-  p_node->add_attr<FloatAttribute>("depth", 0.01f, 0.f, 0.2f, "depth");
-  p_node->add_attr<FloatAttribute>("merging_radius", 0.001f, 0.f, 0.1f, "merging_radius");
-  p_node->add_attr<FloatAttribute>("riverbed_slope", 0.01f, 0.f, 0.1f, "riverbed_slope");
-  p_node->add_attr<FloatAttribute>("noise_ratio", 0.9f, 0.f, 1.f, "noise_ratio");
-  p_node->add_attr<SeedAttribute>("seed");
+  ADD_ATTR(FloatAttribute, "elevation_ratio", 0.5f, 0.f, 0.95f);
+  ADD_ATTR(FloatAttribute, "distance_exponent", 2.f, 0.1f, 4.f);
+  ADD_ATTR(FloatAttribute, "upward_penalization", 100.f, 1.f, FLT_MAX);
+  ADD_ATTR(FloatAttribute, "riverbank_slope", 1.f, 0.f, 16.f);
+  ADD_ATTR(FloatAttribute, "river_radius", 0.001f, 0.001f, 0.1f);
+  ADD_ATTR(FloatAttribute, "depth", 0.01f, 0.f, 0.2f);
+  ADD_ATTR(FloatAttribute, "merging_radius", 0.001f, 0.f, 0.1f);
+  ADD_ATTR(FloatAttribute, "riverbed_slope", 0.01f, 0.f, 0.1f);
+  ADD_ATTR(FloatAttribute, "noise_ratio", 0.9f, 0.f, 1.f);
+  ADD_ATTR(SeedAttribute, "seed");
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"elevation_ratio",

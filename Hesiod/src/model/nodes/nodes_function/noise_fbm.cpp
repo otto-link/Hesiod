@@ -28,16 +28,16 @@ void setup_noise_fbm_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<MapEnumAttribute>("noise_type", noise_type_map_fbm, "Noise type");
-  p_node->add_attr<WaveNbAttribute>("kw");
-  p_node->add_attr<SeedAttribute>("seed");
-  p_node->add_attr<IntAttribute>("octaves", 8, 0, 32, "Octaves");
-  p_node->add_attr<FloatAttribute>("weight", 0.7f, 0.f, 1.f, "Weight");
-  p_node->add_attr<FloatAttribute>("persistence", 0.5f, 0.f, 1.f, "Persistence");
-  p_node->add_attr<FloatAttribute>("lacunarity", 2.f, 0.01f, 4.f, "Lacunarity");
-  p_node->add_attr<BoolAttribute>("inverse", false, "Inverse");
-  p_node->add_attr<RangeAttribute>("remap_range", "Remap range");
-  p_node->add_attr<BoolAttribute>("GPU", HSD_DEFAULT_GPU_MODE, "GPU");
+  ADD_ATTR(EnumAttribute, "noise_type", noise_type_map_fbm);
+  ADD_ATTR(WaveNbAttribute, "kw");
+  ADD_ATTR(SeedAttribute, "seed");
+  ADD_ATTR(IntAttribute, "octaves", 8, 0, 32);
+  ADD_ATTR(FloatAttribute, "weight", 0.7f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "persistence", 0.5f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "lacunarity", 2.f, 0.01f, 4.f);
+  ADD_ATTR(BoolAttribute, "inverse", false);
+  ADD_ATTR(RangeAttribute, "remap");
+  ADD_ATTR(BoolAttribute, "GPU", HSD_DEFAULT_GPU_MODE);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"noise_type",
@@ -50,7 +50,7 @@ void setup_noise_fbm_node(BaseNode *p_node)
                                 "lacunarity",
                                 "_SEPARATOR_",
                                 "inverse",
-                                "remap_range",
+                                "remap",
                                 "_SEPARATOR_",
                                 "GPU"});
 }
@@ -82,7 +82,7 @@ void compute_noise_fbm_node(BaseNode *p_node)
           hmap::Array *pa_dy = p_arrays[3];
 
           *pa_out = hmap::gpu::noise_fbm(
-              (hmap::NoiseType)GET("noise_type", MapEnumAttribute),
+              (hmap::NoiseType)GET("noise_type", EnumAttribute),
               shape,
               GET("kw", WaveNbAttribute),
               GET("seed", SeedAttribute),
@@ -111,7 +111,7 @@ void compute_noise_fbm_node(BaseNode *p_node)
           hmap::Array *pa_dx = p_arrays[2];
           hmap::Array *pa_dy = p_arrays[3];
 
-          *pa_out = hmap::noise_fbm((hmap::NoiseType)GET("noise_type", MapEnumAttribute),
+          *pa_out = hmap::noise_fbm((hmap::NoiseType)GET("noise_type", EnumAttribute),
                                     shape,
                                     GET("kw", WaveNbAttribute),
                                     GET("seed", SeedAttribute),
@@ -151,8 +151,8 @@ void compute_noise_fbm_node(BaseNode *p_node)
                          false, // saturate
                          {0.f, 0.f},
                          0.f,
-                         GET_ATTR("remap_range", RangeAttribute, is_active),
-                         GET("remap_range", RangeAttribute));
+                         GET_ATTR("remap", RangeAttribute, is_active),
+                         GET("remap", RangeAttribute));
 
   Q_EMIT p_node->compute_finished(p_node->get_id());
 }

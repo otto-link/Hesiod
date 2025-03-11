@@ -29,30 +29,21 @@ void setup_gavoronoise_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<WaveNbAttribute>("kw");
-  p_node->add_attr<SeedAttribute>("seed");
-  p_node->add_attr<FloatAttribute>("amplitude", 0.05f, 0.001f, 0.2f, "amplitude");
-  p_node->add_attr<WaveNbAttribute>("kw_multiplier",
-                                    std::vector<float>(2, 8.f),
-                                    0.f,
-                                    32.f,
-                                    true,
-                                    "kw_multiplier");
-  p_node->add_attr<FloatAttribute>("angle", 0.f, -180.f, 180.f, "angle");
-  p_node->add_attr<FloatAttribute>("angle_spread_ratio",
-                                   1.f,
-                                   0.f,
-                                   1.f,
-                                   "angle_spread_ratio");
-  p_node->add_attr<FloatAttribute>("slope_strength", 0.5f, 0.f, 8.f, "slope_strength");
-  p_node->add_attr<FloatAttribute>("branch_strength", 2.f, 0.f, 8.f, "branch_strength");
-  p_node->add_attr<FloatAttribute>("z_cut_min", 0.2f, -1.f, 2.f, "z_cut_min");
-  p_node->add_attr<FloatAttribute>("z_cut_max", 1.f, -1.f, 2.f, "z_cut_max");
-  p_node->add_attr<IntAttribute>("octaves", 8, 0, 32, "Octaves");
-  p_node->add_attr<FloatAttribute>("persistence", 0.4f, 0.f, 1.f, "Persistence");
-  p_node->add_attr<FloatAttribute>("lacunarity", 2.f, 0.01f, 4.f, "Lacunarity");
-  p_node->add_attr<BoolAttribute>("inverse", false, "Inverse");
-  p_node->add_attr<RangeAttribute>("remap_range", "Remap range");
+  ADD_ATTR(WaveNbAttribute, "kw");
+  ADD_ATTR(SeedAttribute, "seed");
+  ADD_ATTR(FloatAttribute, "amplitude", 0.05f, 0.001f, 0.2f);
+  ADD_ATTR(WaveNbAttribute, "kw_multiplier", std::vector<float>(2, 8.f), 0.f, 32.f, true);
+  ADD_ATTR(FloatAttribute, "angle", 0.f, -180.f, 180.f);
+  ADD_ATTR(FloatAttribute, "angle_spread_ratio", 1.f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "slope_strength", 0.5f, 0.f, 8.f);
+  ADD_ATTR(FloatAttribute, "branch_strength", 2.f, 0.f, 8.f);
+  ADD_ATTR(FloatAttribute, "z_cut_min", 0.2f, -1.f, 2.f);
+  ADD_ATTR(FloatAttribute, "z_cut_max", 1.f, -1.f, 2.f);
+  ADD_ATTR(IntAttribute, "octaves", 8, 0, 32);
+  ADD_ATTR(FloatAttribute, "persistence", 0.4f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "lacunarity", 2.f, 0.01f, 4.f);
+  ADD_ATTR(BoolAttribute, "inverse", false);
+  ADD_ATTR(RangeAttribute, "remap");
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"kw",
@@ -70,7 +61,7 @@ void setup_gavoronoise_node(BaseNode *p_node)
                                 "lacunarity",
                                 "_SEPARATOR_",
                                 "inverse",
-                                "remap_range"});
+                                "remap"});
 }
 
 void compute_gavoronoise_node(BaseNode *p_node)
@@ -147,8 +138,8 @@ void compute_gavoronoise_node(BaseNode *p_node)
                          false, // saturate
                          {0.f, 0.f},
                          0.f,
-                         GET_ATTR("remap_range", RangeAttribute, is_active),
-                         GET("remap_range", RangeAttribute));
+                         GET_ATTR("remap", RangeAttribute, is_active),
+                         GET("remap", RangeAttribute));
 
   Q_EMIT p_node->compute_finished(p_node->get_id());
 }

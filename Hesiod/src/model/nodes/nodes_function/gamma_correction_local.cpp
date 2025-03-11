@@ -22,12 +22,12 @@ void setup_gamma_correction_local_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
-  p_node->add_attr<BoolAttribute>("GPU", HSD_DEFAULT_GPU_MODE, "GPU");
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("radius", 0.05f, 0.01f, 0.2f, "radius");
-  p_node->add_attr<FloatAttribute>("gamma", 2.f, 0.01f, 10.f, "gamma");
-  p_node->add_attr<FloatAttribute>("k", 0.1f, 0.f, 0.5f, "k");
+  ADD_ATTR(FloatAttribute, "radius", 0.05f, 0.01f, 0.2f);
+  ADD_ATTR(FloatAttribute, "gamma", 2.f, 0.01f, 10.f);
+  ADD_ATTR(FloatAttribute, "k", 0.1f, 0.f, 0.5f);
+  ADD_ATTR(BoolAttribute, "GPU", HSD_DEFAULT_GPU_MODE);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"radius", "gamma", "k", "_SEPARATOR_", "GPU"});

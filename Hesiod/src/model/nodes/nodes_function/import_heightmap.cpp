@@ -22,13 +22,13 @@ void setup_import_heightmap_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FilenameAttribute>("fname",
-                                      std::filesystem::path(""),
-                                      false, // loading
-                                      "Image files (*.bmp *.dib *.jpeg *.jpg *.png *.pbm "
-                                      "*.pgm *.ppm *.pxm *.pnm *.tiff *.tif *.hdr *.pic)",
-                                      "fname");
-  p_node->add_attr<BoolAttribute>("remap", true, "remap");
+  ADD_ATTR(FilenameAttribute,
+           "fname",
+           std::filesystem::path(""),
+           "Image files (*.bmp *.dib *.jpeg *.jpg *.png *.pbm "
+           "*.pgm *.ppm *.pxm *.pnm *.tiff *.tif *.hdr *.pic)",
+           false);
+  ADD_ATTR(BoolAttribute, "remap", true);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"fname", "remap"});

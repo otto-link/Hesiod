@@ -23,11 +23,11 @@ void setup_path_meanderize_node(BaseNode *p_node)
   p_node->add_port<hmap::Path>(gnode::PortType::OUT, "output");
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("ratio", 0.2f, 0.f, 1.f, "ratio");
-  p_node->add_attr<FloatAttribute>("noise_ratio", 0.1f, 0.f, 1.f, "noise_ratio");
-  p_node->add_attr<SeedAttribute>("seed");
-  p_node->add_attr<IntAttribute>("iterations", 2, 1, 8, "iterations");
-  p_node->add_attr<IntAttribute>("edge_divisions", 10, 1, 32, "edge_divisions");
+  ADD_ATTR(FloatAttribute, "ratio", 0.2f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "noise_ratio", 0.1f, 0.f, 1.f);
+  ADD_ATTR(SeedAttribute, "seed");
+  ADD_ATTR(IntAttribute, "iterations", 2, 1, 8);
+  ADD_ATTR(IntAttribute, "edge_divisions", 10, 1, 32);
 
   // attribute(s) order
   p_node->set_attr_ordered_key(

@@ -9,9 +9,9 @@
 #include <QMenu>
 #include <QMessageBox>
 #include <QPushButton>
-#include <QWidgetAction>
-
 #include <QTextBrowser>
+#include <QToolButton>
+#include <QWidgetAction>
 
 #include "highmap/geometry/cloud.hpp" // for link colors
 #include "highmap/heightmap.hpp"
@@ -236,7 +236,7 @@ void GraphEditor::load_from_file(const std::filesystem::path &load_fname,
     file.close();
     LOG->trace("JSON successfully loaded from {}", load_fname.string());
 
-    this->set_fname(load_fname);
+    // this->set_fname(load_fname);
 
     this->clear();
     if (this->viewer)
@@ -501,6 +501,18 @@ void GraphEditor::on_node_right_clicked(const std::string &node_id, QPointF scen
 
       QMenu *menu = new QMenu();
 
+      // create the widget holding all the attribute widgets (created
+      // here, needed for connect below)
+
+      bool        add_save_reset_state_buttons = false;
+      std::string window_title = "";
+
+      attr::AttributesWidget *attributes_widget = new attr::AttributesWidget(
+          p_node->get_attr_ref(),
+          p_node->get_attr_ordered_key_ref(),
+          window_title,
+          add_save_reset_state_buttons);
+
       // --- add label
 
       {
@@ -511,33 +523,104 @@ void GraphEditor::on_node_right_clicked(const std::string &node_id, QPointF scen
         menu->addAction(widget_action);
       }
 
-      // help button
+      // --- fake ToolBar
+
       {
-        QPushButton *button = new QPushButton("Help!");
-        button->setIcon(button->style()->standardIcon(QStyle::SP_DialogHelpButton));
+        QWidget     *toolbar = new QWidget;
+        QHBoxLayout *layout = new QHBoxLayout(toolbar);
+        layout->setContentsMargins(0, 0, 0, 0);
 
+        QToolButton *update_button = new QToolButton;
+        update_button->setText("Force\nupdate");
+        update_button->setIcon(
+            update_button->style()->standardIcon(QStyle::SP_BrowserReload));
+
+        QToolButton *bckp_button = new QToolButton;
+        bckp_button->setText("Backup\nstate");
+        bckp_button->setIcon(bckp_button->style()->standardIcon(QStyle::SP_DriveHDIcon));
+
+        QToolButton *reset_button = new QToolButton;
+        reset_button->setText("Revert\nstate");
+        reset_button->setIcon(
+            reset_button->style()->standardIcon(QStyle::SP_DialogCloseButton));
+
+        QToolButton *load_button = new QToolButton;
+        load_button->setText("Load\npreset");
+        load_button->setIcon(
+            load_button->style()->standardIcon(QStyle::SP_DialogOpenButton));
+
+        QToolButton *save_button = new QToolButton;
+        save_button->setText("Save\npreset");
+        save_button->setIcon(
+            save_button->style()->standardIcon(QStyle::SP_DialogSaveButton));
+
+        QToolButton *help_button = new QToolButton;
+        help_button->setText("Help!");
+        help_button->setIcon(
+            help_button->style()->standardIcon(QStyle::SP_DialogHelpButton));
+
+        for (auto p : {update_button,
+                       bckp_button,
+                       reset_button,
+                       load_button,
+                       save_button,
+                       help_button})
+        {
+          p->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+          resize_font(p, -1);
+          p->setFixedSize(48, 64);
+          layout->addWidget(p);
+        }
+
+        layout->addStretch(1);
+
+        // connections
+        this->connect(update_button,
+                      &QPushButton::pressed,
+                      [this, p_node]()
+                      {
+                        std::string node_id = p_node->get_id();
+                        this->update(node_id);
+                      });
+
+        this->connect(bckp_button,
+                      &QPushButton::pressed,
+                      [attributes_widget]() { attributes_widget->on_save_state(); });
+
+        this->connect(reset_button,
+                      &QPushButton::pressed,
+                      [attributes_widget]()
+                      { attributes_widget->on_restore_save_state(); });
+
+        this->connect(load_button,
+                      &QPushButton::pressed,
+                      [attributes_widget]() { attributes_widget->on_load_preset(); });
+
+        this->connect(save_button,
+                      &QPushButton::pressed,
+                      [attributes_widget]() { attributes_widget->on_save_preset(); });
+
+        this->connect(help_button,
+                      &QPushButton::pressed,
+                      [this, p_node]()
+                      {
+                        DocumentationPopup *popup = new DocumentationPopup(
+                            p_node->get_label(),
+                            p_node->get_documentation_html());
+
+                        popup->setAttribute(Qt::WA_DeleteOnClose);
+                        popup->show();
+                      });
+
+        // convert the widget into a QWidgetAction for the QMenu
         QWidgetAction *widget_action = new QWidgetAction(menu);
-        widget_action->setDefaultWidget(button);
+        widget_action->setDefaultWidget(toolbar);
+
+        // add the simulated menu bar to the context menu
         menu->addAction(widget_action);
-
-        connect(button,
-                &QPushButton::pressed,
-                [this, p_node]()
-                {
-                  DocumentationPopup *popup = new DocumentationPopup(
-                      p_node->get_label(),
-                      p_node->get_documentation_html());
-
-                  popup->setAttribute(Qt::WA_DeleteOnClose);
-                  popup->show();
-                });
       }
 
       // --- add attributes
-
-      attr::AttributesWidget *attributes_widget = new attr::AttributesWidget(
-          p_node->get_attr_ref(),
-          p_node->get_attr_ordered_key_ref());
 
       // change the attribute widget layout spacing a posteriori
       QVBoxLayout *retrieved_layout = qobject_cast<QVBoxLayout *>(
@@ -676,7 +759,9 @@ void GraphEditor::set_fname(const std::filesystem::path &new_fname)
   if (!this->fname.empty())
     title += " - " + this->fname.string();
 
-  MainWindow::instance()->set_title(title.c_str());
+  // check that the main window exist in this case to avoid an endless loop...
+  if (MainWindow::exists())
+    MainWindow::instance()->set_title(title.c_str());
 }
 
 void GraphEditor::set_fname(const std::string &new_fname)

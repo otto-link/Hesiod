@@ -25,7 +25,7 @@ void setup_abs_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("vshift", 0.5f, 0.f, 1.f, "vshift");
+  ADD_ATTR(FloatAttribute, "vshift", 0.5f, 0.f, 1.f);
 }
 
 void compute_abs_node(BaseNode *p_node)

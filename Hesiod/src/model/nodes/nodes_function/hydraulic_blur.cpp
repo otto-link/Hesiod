@@ -23,14 +23,13 @@ void setup_hydraulic_blur_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("radius", 0.1f, 0.01f, 0.5f, "radius");
-  p_node->add_attr<FloatAttribute>("vmax", 0.5f, -1.f, 2.f, "vmax");
-  p_node->add_attr<FloatAttribute>("k_smoothing", 0.1f, 0.f, 1.f, "k_smoothing");
-  p_node->add_attr<RangeAttribute>("remap_range", "remap_range");
+  ADD_ATTR(FloatAttribute, "radius", 0.1f, 0.01f, 0.5f);
+  ADD_ATTR(FloatAttribute, "vmax", 0.5f, -1.f, 2.f);
+  ADD_ATTR(FloatAttribute, "k_smoothing", 0.1f, 0.f, 1.f);
+  ADD_ATTR(RangeAttribute, "remap");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key(
-      {"radius", "vmax", "k_smoothing", "_SEPARATOR_", "remap_range"});
+  p_node->set_attr_ordered_key({"radius", "vmax", "k_smoothing", "_SEPARATOR_", "remap"});
 }
 
 void compute_hydraulic_blur_node(BaseNode *p_node)
@@ -68,8 +67,8 @@ void compute_hydraulic_blur_node(BaseNode *p_node)
                            false, // saturate
                            {0.f, 0.f},
                            0.f,
-                           GET_ATTR("remap_range", RangeAttribute, is_active),
-                           GET("remap_range", RangeAttribute));
+                           GET_ATTR("remap", RangeAttribute, is_active),
+                           GET("remap", RangeAttribute));
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

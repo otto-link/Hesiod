@@ -25,13 +25,9 @@ void setup_path_find_node(BaseNode *p_node)
   p_node->add_port<hmap::Path>(gnode::PortType::OUT, "path");
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("elevation_ratio", 0.1f, 0.f, 0.9f, "elevation_ratio");
-  p_node->add_attr<FloatAttribute>("distance_exponent",
-                                   1.f,
-                                   0.5f,
-                                   2.f,
-                                   "distance_exponent");
-  p_node->add_attr<IntAttribute>("downsampling", 4, 1, 10, "downsampling");
+  ADD_ATTR(FloatAttribute, "elevation_ratio", 0.1f, 0.f, 0.9f);
+  ADD_ATTR(FloatAttribute, "distance_exponent", 1.f, 0.5f, 2.f);
+  ADD_ATTR(IntAttribute, "downsampling", 4, 1, 10);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"elevation_ratio", "distance_exponent", "downsampling"});

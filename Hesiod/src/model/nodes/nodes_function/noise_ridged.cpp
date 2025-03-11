@@ -27,16 +27,16 @@ void setup_noise_ridged_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<MapEnumAttribute>("noise_type", noise_type_map_fbm, "noise_type");
-  p_node->add_attr<WaveNbAttribute>("kw");
-  p_node->add_attr<SeedAttribute>("seed");
-  p_node->add_attr<IntAttribute>("octaves", 8, 0, 32, "octaves");
-  p_node->add_attr<FloatAttribute>("weight", 0.7f, 0.f, 1.f, "weight");
-  p_node->add_attr<FloatAttribute>("persistence", 0.5f, 0.f, 1.f, "persistence");
-  p_node->add_attr<FloatAttribute>("lacunarity", 2.f, 0.01f, 4.f, "lacunarity");
-  p_node->add_attr<FloatAttribute>("k_smoothing", 0.2f, 0.f, 1.f, "k_smoothing");
-  p_node->add_attr<BoolAttribute>("inverse", false, "inverse");
-  p_node->add_attr<RangeAttribute>("remap_range", "remap_range");
+  ADD_ATTR(EnumAttribute, "noise_type", noise_type_map_fbm);
+  ADD_ATTR(WaveNbAttribute, "kw");
+  ADD_ATTR(SeedAttribute, "seed");
+  ADD_ATTR(IntAttribute, "octaves", 8, 0, 32);
+  ADD_ATTR(FloatAttribute, "weight", 0.7f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "persistence", 0.5f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "lacunarity", 2.f, 0.01f, 4.f);
+  ADD_ATTR(FloatAttribute, "k_smoothing", 0.2f, 0.f, 1.f);
+  ADD_ATTR(BoolAttribute, "inverse", false);
+  ADD_ATTR(RangeAttribute, "remap");
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"noise_type",
@@ -51,7 +51,7 @@ void setup_noise_ridged_node(BaseNode *p_node)
                                 "k_smoothing",
                                 "_SEPARATOR_",
                                 "inverse",
-                                "remap_range"});
+                                "remap"});
 }
 
 void compute_noise_ridged_node(BaseNode *p_node)
@@ -78,7 +78,7 @@ void compute_noise_ridged_node(BaseNode *p_node)
                       hmap::Array      *p_ctrl)
              {
                return hmap::noise_ridged(
-                   (hmap::NoiseType)GET("noise_type", MapEnumAttribute),
+                   (hmap::NoiseType)GET("noise_type", EnumAttribute),
                    shape,
                    GET("kw", WaveNbAttribute),
                    GET("seed", SeedAttribute),
@@ -117,8 +117,8 @@ void compute_noise_ridged_node(BaseNode *p_node)
                          false, // saturate
                          {0.f, 0.f},
                          0.f,
-                         GET_ATTR("remap_range", RangeAttribute, is_active),
-                         GET("remap_range", RangeAttribute));
+                         GET_ATTR("remap", RangeAttribute, is_active),
+                         GET("remap", RangeAttribute));
 
   Q_EMIT p_node->compute_finished(p_node->get_id());
 }

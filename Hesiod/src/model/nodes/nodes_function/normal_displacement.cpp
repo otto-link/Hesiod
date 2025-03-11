@@ -25,11 +25,11 @@ void setup_normal_displacement_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<FloatAttribute>("radius", 0.05f, 0.f, 0.2f, "radius");
-  p_node->add_attr<FloatAttribute>("amount", 5.f, 0.f, 20.f, "amount");
-  p_node->add_attr<BoolAttribute>("reverse", false, "reverse");
-  p_node->add_attr<IntAttribute>("iterations", 3, 1, 10, "iterations");
-  p_node->add_attr<BoolAttribute>("GPU", HSD_DEFAULT_GPU_MODE, "GPU");
+  ADD_ATTR(FloatAttribute, "radius", 0.05f, 0.f, 0.2f);
+  ADD_ATTR(FloatAttribute, "amount", 5.f, 0.f, 20.f);
+  ADD_ATTR(BoolAttribute, "reverse", false);
+  ADD_ATTR(IntAttribute, "iterations", 3, 1, 10);
+  ADD_ATTR(BoolAttribute, "GPU", HSD_DEFAULT_GPU_MODE);
 
   // attribute(s) order
   p_node->set_attr_ordered_key(
