@@ -145,6 +145,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Erosion", "Operator/Morphology"},
       {"ExpandShrink", "Filter/Recast"},
       {"ExportAsset", "IO/Files"},
+      {"ExportAsCubemap", "WIP"}, // "IO/Files"},
       {"ExportCloud", "IO/Files"},
       {"ExportHeightmap", "IO/Files"},
       {"ExportNormalMap", "IO/Files"},
@@ -351,6 +352,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(Erosion, erosion);
     SETUP_NODE(ExpandShrink, expand_shrink);
     SETUP_NODE(ExportAsset, export_asset);
+    SETUP_NODE(ExportAsCubemap, export_as_cubemap);
     SETUP_NODE(ExportCloud, export_cloud);
     SETUP_NODE(ExportHeightmap, export_heightmap);
     SETUP_NODE(ExportNormalMap, export_normal_map);
