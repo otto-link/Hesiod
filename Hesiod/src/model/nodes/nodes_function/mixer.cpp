@@ -55,7 +55,7 @@ void compute_mixer_node(BaseNode *p_node)
           hmap::Array *pa_out = p_arrays.front();
           hmap::Array *pa_t = p_arrays.back();
 
-          std::vector<hmap::Array *> arrays = {};
+          std::vector<const hmap::Array *> arrays = {};
 
           for (size_t k = 1; k < p_arrays.size() - 1; k++)
             if (p_arrays[k])
