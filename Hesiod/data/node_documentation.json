@@ -2585,13 +2585,13 @@
                 "type": "Bool"
             },
             "saturate_k": {
-                "description": "TODO",
+                "description": "Smoothing intensity of the amplitude saturation.",
                 "key": "saturate_k",
                 "label": "saturate_k",
                 "type": "Float"
             },
             "saturate_range": {
-                "description": "TODO",
+                "description": "Saturation range: define the minimum and maximum values of the saturation process.",
                 "key": "saturate_range",
                 "label": "saturate_range",
                 "type": "Value range"
@@ -3144,7 +3144,7 @@
                 "type": "Float"
             },
             "talus_ref": {
-                "description": "Reference talus, with small values of talus_ref  leading to thinner flow streams.",
+                "description": "Reference talus, with small values of talus_ref leading to thinner flow streams.",
                 "key": "talus_ref",
                 "label": "talus_ref",
                 "type": "Float"
@@ -3179,7 +3179,7 @@
     },
     "HydraulicStreamLog": {
         "category": "Erosion/Hydraulic",
-        "description": "TODO",
+        "description": "HydraulicStream is an hydraulic erosion operator using the flow stream approach and an infinite flow direction algorithm for simulating the erosion processes. Simulate water flow across the terrain using the infinite flow direction algorithm. As water flows over the terrain, flow accumulation representing the volume of water that passes through each point on the map, is computed to evaluate the erosive power of the water flow. Deposition is mimicked using convolution filters.",
         "label": "HydraulicStreamLog",
         "parameters": {
             "GPU": {
@@ -3189,7 +3189,7 @@
                 "type": "Bool"
             },
             "c_erosion": {
-                "description": "TODO",
+                "description": "Erosion intensity.",
                 "key": "c_erosion",
                 "label": "c_erosion",
                 "type": "Float"
@@ -3225,13 +3225,13 @@
                 "type": "Float"
             },
             "saturation_ratio": {
-                "description": "TODO",
+                "description": "Flow accumulation clipping ratio.",
                 "key": "saturation_ratio",
                 "label": "saturation_ratio",
                 "type": "Float"
             },
             "talus_ref": {
-                "description": "TODO",
+                "description": "Reference talus, with small values of talus_ref  leading to thinner flow streams.",
                 "key": "talus_ref",
                 "label": "talus_ref",
                 "type": "Float"
