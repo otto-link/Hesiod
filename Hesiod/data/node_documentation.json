@@ -8820,6 +8820,27 @@
             }
         }
     },
+    "TextureUvChecker": {
+        "category": "Texture",
+        "description": "TODO",
+        "label": "TextureUvChecker",
+        "parameters": {
+            "size": {
+                "description": "TODO",
+                "key": "size",
+                "label": "size",
+                "type": "Choice"
+            }
+        },
+        "ports": {
+            "texture": {
+                "caption": "texture",
+                "data_type": "HeightmapRGBA",
+                "description": "TODO",
+                "type": "output"
+            }
+        }
+    },
     "Thermal": {
         "category": "Erosion/Thermal",
         "description": "Thermal is an erosion operator used to simulate the process of thermal erosion, which is a type of erosion that occurs due to temperature fluctuations causing the breakdown and movement of soil and rock materials.",
