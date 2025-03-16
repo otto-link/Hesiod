@@ -7728,6 +7728,63 @@
             }
         }
     },
+    "SetBorders": {
+        "category": "Math/Boundaries",
+        "description": "TODO",
+        "label": "SetBorders",
+        "parameters": {
+            "radius": {
+                "description": "TODO",
+                "key": "radius",
+                "label": "radius",
+                "type": "Float"
+            },
+            "unique_border_value": {
+                "description": "TODO",
+                "key": "unique_border_value",
+                "label": "unique_border_value",
+                "type": "Bool"
+            },
+            "value_east": {
+                "description": "TODO",
+                "key": "value_east",
+                "label": "value_east",
+                "type": "Float"
+            },
+            "value_north": {
+                "description": "TODO",
+                "key": "value_north",
+                "label": "value_north",
+                "type": "Float"
+            },
+            "value_south": {
+                "description": "TODO",
+                "key": "value_south",
+                "label": "value_south",
+                "type": "Float"
+            },
+            "value_west": {
+                "description": "TODO",
+                "key": "value_west",
+                "label": "value_west",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "input": {
+                "caption": "input",
+                "data_type": "Heightmap",
+                "description": "TODO",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "Heightmap",
+                "description": "TODO",
+                "type": "output"
+            }
+        }
+    },
     "ShapeIndex": {
         "category": "Filter/Smoothing",
         "description": "ShapeIndex is a measure used to quantify the shape complexity of landforms in an heightmap. It is calculated based on the second derivatives of the elevation surface. The surface index is greater than 0.5 for convex surface and lower than 0.5 for concave surface.",
