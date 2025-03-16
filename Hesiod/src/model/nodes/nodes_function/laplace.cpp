@@ -46,18 +46,22 @@ void compute_laplace_node(BaseNode *p_node)
     hmap::Heightmap *p_mask = p_node->get_value_ref<hmap::Heightmap>("mask");
     hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
-    // copy the input heightmap
-    *p_out = *p_in;
+    hmap::transform(
+        {p_out, p_in, p_mask},
+        [p_node](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+        {
+          hmap::Array *pa_out = p_arrays[0];
+          hmap::Array *pa_in = p_arrays[1];
+          hmap::Array *pa_mask = p_arrays[2];
 
-    hmap::transform(*p_out,
-                    p_mask,
-                    [p_node](hmap::Array &x, hmap::Array *p_mask)
-                    {
-                      hmap::laplace(x,
-                                    p_mask,
-                                    GET("sigma", FloatAttribute),
-                                    GET("iterations", IntAttribute));
-                    });
+          *pa_out = *pa_in;
+
+          hmap::laplace(*pa_out,
+                        pa_mask,
+                        GET("sigma", FloatAttribute),
+                        GET("iterations", IntAttribute));
+        },
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
 
     p_out->smooth_overlap_buffers();
   }
