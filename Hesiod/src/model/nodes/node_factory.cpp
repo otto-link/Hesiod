@@ -279,8 +279,8 @@ std::map<std::string, std::string> get_node_inventory()
       {"StratifyOblique", "Erosion/Stratify"},
       {"StratifyMultiscale", "Erosion/Stratify"},
       {"Terrace", "Filter/Recurve"},
-      {"TextureQuiltingExpand", "Operator/Resynthesis"},
-      {"TextureQuiltingShuffle", "Operator/Resynthesis"},
+      {"TextureQuiltingExpand", "Texture"},
+      {"TextureQuiltingShuffle", "Texture"},
       {"Thermal", "Erosion/Thermal"},
       {"ThermalAutoBedrock", "Erosion/Thermal"},
       {"ThermalFlatten", "WIP"}, // "Erosion/Thermal"
