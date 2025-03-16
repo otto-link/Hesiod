@@ -7840,7 +7840,7 @@
             "output": {
                 "caption": "output",
                 "data_type": "Heightmap",
-                "description": "Output heightmap.",
+                "description": "Resulting heightmap after applying the shift.",
                 "type": "output"
             }
         }
