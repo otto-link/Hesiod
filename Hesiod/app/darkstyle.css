@@ -20,6 +20,10 @@ R""(
 
     /* QMainWindow */
 
+    QRadioButton
+    {
+	color: #DFE1E2;
+    }
 
     /* QAbstractSpinBox */
 
@@ -142,7 +146,7 @@ R""(
 	border: 1px solid #5B5B5B;
     }
 
-    QPushButton,
+    QPushButton:checked,
     QToolButton:checked
     {
 	background-color: #4772b3;
@@ -151,20 +155,20 @@ R""(
 	outline: none;
     }
 
-    QPushButton,
+    QPushButton:hover,
     QToolButton:hover
     {
 	background-color: #8B8B8B;
 	color: #DFE1E2;
     }
 
-    QPushButton,
+    QPushButton:pressed,
     QToolButton:pressed
     {
 	background-color: #ABABAB;
     }
 
-    QPushButton,
+    QPushButton:selected,
     QToolButton:selected
     {
 	background: #5B5B5B;
