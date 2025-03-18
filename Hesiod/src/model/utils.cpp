@@ -11,6 +11,26 @@
 namespace hesiod
 {
 
+void post_apply_enveloppe(BaseNode *p_node, hmap::Heightmap &h, hmap::Heightmap *p_env)
+{
+  if (p_env)
+  {
+    float hmin = h.min();
+
+    hmap::transform(
+        {&h, p_env},
+        [hmin](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+        {
+          hmap::Array *pa_out = p_arrays[0];
+          hmap::Array *pa_env = p_arrays[1];
+
+          *pa_out -= hmin;
+          *pa_out *= *pa_env;
+        },
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
+  }
+}
+
 void post_process_heightmap(BaseNode         *p_node,
                             hmap::Heightmap  &h,
                             bool              inverse,

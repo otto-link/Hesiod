@@ -22,6 +22,8 @@
 namespace hesiod
 {
 
+void post_apply_enveloppe(BaseNode *p_node, hmap::Heightmap &h, hmap::Heightmap *p_env);
+
 void post_process_heightmap(BaseNode         *p_node,
                             hmap::Heightmap  &h,
                             bool              inverse,
@@ -33,4 +35,4 @@ void post_process_heightmap(BaseNode         *p_node,
                             bool              remap,
                             hmap::Vec2<float> remap_range);
 
-}
+} // namespace hesiod
