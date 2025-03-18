@@ -70,9 +70,7 @@ void compute_set_borders_node(BaseNode *p_node)
 
     hmap::transform(
         {p_out, p_in},
-        [border_values, buffer_sizes](std::vector<hmap::Array *> p_arrays,
-                                      hmap::Vec2<int>,
-                                      hmap::Vec4<float>)
+        [border_values, buffer_sizes](std::vector<hmap::Array *> p_arrays)
         {
           hmap::Array *pa_out = p_arrays[0];
           hmap::Array *pa_in = p_arrays[1];

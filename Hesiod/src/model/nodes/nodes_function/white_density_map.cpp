@@ -50,7 +50,7 @@ void compute_white_density_map_node(BaseNode *p_node)
 
     hmap::transform(
         {p_out, p_density},
-        [&seed](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+        [&seed](std::vector<hmap::Array *> p_arrays)
         {
           hmap::Array *pa_out = p_arrays[0];
           hmap::Array *pa_density = p_arrays[1];
@@ -65,7 +65,7 @@ void compute_white_density_map_node(BaseNode *p_node)
       float hmin = p_out->min();
       hmap::transform(
           {p_out, p_env},
-          [&hmin](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+          [&hmin](std::vector<hmap::Array *> p_arrays)
           {
             hmap::Array *pa_a = p_arrays[0];
             hmap::Array *pa_b = p_arrays[1];

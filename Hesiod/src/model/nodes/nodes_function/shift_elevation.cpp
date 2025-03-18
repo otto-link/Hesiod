@@ -38,7 +38,7 @@ void compute_shift_elevation_node(BaseNode *p_node)
 
     hmap::transform(
         {p_out, p_in},
-        [p_node](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+        [p_node](std::vector<hmap::Array *> p_arrays)
         {
           hmap::Array *pa_out = p_arrays[0];
           hmap::Array *pa_in = p_arrays[1];

@@ -50,7 +50,7 @@ void compute_mixer_node(BaseNode *p_node)
 
     hmap::transform(
         {p_out, p_in1, p_in2, p_in3, p_in4, p_t},
-        [](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+        [](std::vector<hmap::Array *> p_arrays)
         {
           hmap::Array *pa_out = p_arrays.front();
           hmap::Array *pa_t = p_arrays.back();

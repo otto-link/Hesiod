@@ -46,7 +46,7 @@ void compute_lerp_node(BaseNode *p_node)
     if (p_t)
       hmap::transform(
           {p_out, p_a, p_b, p_t},
-          [](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+          [](std::vector<hmap::Array *> p_arrays)
           {
             hmap::Array *pa_out = p_arrays[0];
             hmap::Array *pa_a = p_arrays[1];
@@ -59,9 +59,7 @@ void compute_lerp_node(BaseNode *p_node)
     else
       hmap::transform(
           {p_out, p_a, p_b},
-          [p_node](std::vector<hmap::Array *> p_arrays,
-                   hmap::Vec2<int>,
-                   hmap::Vec4<float>)
+          [p_node](std::vector<hmap::Array *> p_arrays)
           {
             hmap::Array *pa_out = p_arrays[0];
             hmap::Array *pa_a = p_arrays[1];

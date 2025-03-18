@@ -46,16 +46,16 @@ void compute_cos_node(BaseNode *p_node)
   {
     hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
-    hmap::transform(
-        {p_out, p_in},
-        [p_node](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
-        {
-          hmap::Array *pa_out = p_arrays[0];
-          hmap::Array *pa_in = p_arrays[1];
+    hmap::transform({p_out, p_in},
+                    [p_node](std::vector<hmap::Array *> p_arrays)
+                    {
+                      hmap::Array *pa_out = p_arrays[0];
+                      hmap::Array *pa_in = p_arrays[1];
 
-          *pa_out = hmap::cos(6.283185f * GET("frequency", FloatAttribute) * (*pa_in) +
-                              GET("phase_shift", FloatAttribute));
-        });
+                      *pa_out = hmap::cos(6.283185f * GET("frequency", FloatAttribute) *
+                                              (*pa_in) +
+                                          GET("phase_shift", FloatAttribute));
+                    });
 
     // post-process
     post_process_heightmap(p_node,

@@ -19,7 +19,7 @@ void post_apply_enveloppe(BaseNode *p_node, hmap::Heightmap &h, hmap::Heightmap 
 
     hmap::transform(
         {&h, p_env},
-        [hmin](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+        [hmin](std::vector<hmap::Array *> p_arrays)
         {
           hmap::Array *pa_out = p_arrays[0];
           hmap::Array *pa_env = p_arrays[1];
@@ -51,7 +51,7 @@ void post_process_heightmap(BaseNode         *p_node,
 
     hmap::transform(
         {&h},
-        [&ir](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+        [&ir](std::vector<hmap::Array *> p_arrays)
         {
           hmap::Array *pa_out = p_arrays[0];
           return hmap::gpu::smooth_cpulse(*pa_out, ir);
