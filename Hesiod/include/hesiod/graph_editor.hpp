@@ -42,12 +42,16 @@ public:
 
   gngui::GraphViewer *get_p_viewer() { return this->viewer.get(); }
 
-  void json_from(nlohmann::json const &json, bool override_config = true);
+  void json_from(nlohmann::json const &json,
+                 bool                  override_config = true,
+                 bool                  clear_existing_content = true,
+                 const std::string    &prefix_id = "");
 
   nlohmann::json json_to() const;
 
   void load_from_file(const std::filesystem::path &load_fname,
-                      bool                         override_config = true);
+                      bool                         override_config = true,
+                      bool                         clear_existing_content = true);
 
   void update(); // GNode::Graph
 
@@ -68,6 +72,8 @@ public Q_SLOTS:
                               const std::string &port_id_in);
 
   void on_graph_clear_request();
+
+  void on_graph_import_request();
 
   void on_graph_load_request();
 
@@ -114,6 +120,8 @@ private:
   std::vector<std::unique_ptr<QWidget>> data_viewers;
 
   bool update_node_on_new_link = true;
+
+  bool is_very_first_load = true;
 
   void set_fname(const std::filesystem::path &new_fname);
 

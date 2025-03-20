@@ -74,6 +74,11 @@ GraphEditor::GraphEditor(const std::string           &id,
                   &GraphEditor::on_graph_clear_request);
 
     this->connect(this->viewer.get(),
+                  &gngui::GraphViewer::graph_import_request,
+                  this,
+                  &GraphEditor::on_graph_import_request);
+
+    this->connect(this->viewer.get(),
                   &gngui::GraphViewer::graph_load_request,
                   this,
                   &GraphEditor::on_graph_load_request);
@@ -177,9 +182,15 @@ void GraphEditor::clear()
   this->graph_viewer_enable();
 }
 
-void GraphEditor::json_from(nlohmann::json const &json, bool override_config)
+void GraphEditor::json_from(nlohmann::json const &json,
+                            bool                  override_config,
+                            bool                  clear_existing_content,
+                            const std::string    &prefix_id)
 {
-  GraphNode::json_from(json["graph_node"], override_config);
+  GraphNode::json_from(json["graph_node"],
+                       override_config,
+                       clear_existing_content,
+                       prefix_id);
 
   std::string version_file = json["Hesiod version"];
   std::string version = "v" + std::to_string(HESIOD_VERSION_MAJOR) + "." +
@@ -200,7 +211,7 @@ void GraphEditor::json_from(nlohmann::json const &json, bool override_config)
     // to prevent nodes update at each link creation when the loading
     // the graph (very slooow)
     this->update_node_on_new_link = false;
-    this->viewer->json_from(json["graph_viewer"]);
+    this->viewer->json_from(json["graph_viewer"], clear_existing_content, prefix_id);
     this->update_node_on_new_link = true;
   }
 }
@@ -222,7 +233,8 @@ nlohmann::json GraphEditor::json_to() const
 }
 
 void GraphEditor::load_from_file(const std::filesystem::path &load_fname,
-                                 bool                         override_config)
+                                 bool                         override_config,
+                                 bool                         clear_existing_content)
 {
   this->graph_viewer_disable();
 
@@ -236,14 +248,35 @@ void GraphEditor::load_from_file(const std::filesystem::path &load_fname,
     file.close();
     LOG->trace("JSON successfully loaded from {}", load_fname.string());
 
-    // this->set_fname(load_fname);
+    // to avoid some endless loop when the graph is created but the
+    // main window does not exist yet
+    if (!this->is_very_first_load)
+      this->set_fname(load_fname);
 
-    this->clear();
-    if (this->viewer)
-      this->viewer->clear();
+    // not cleared when importing for instance
+    std::string prefix_id = "";
 
-    this->json_from(json, override_config);
+    if (clear_existing_content)
+    {
+      this->clear();
+      if (this->viewer)
+        this->viewer->clear();
+    }
+    else
+    {
+      // if a graph is imported, used the current node id count to
+      // prefix all the node from the imported graph to avoid any
+      // duplicate
+      uint current_id_count = this->get_id_count() + 1;
+      this->set_id_count(current_id_count);
+
+      prefix_id = std::to_string(current_id_count) + "/";
+    }
+
+    this->json_from(json, override_config, clear_existing_content, prefix_id);
     this->update();
+
+    this->is_very_first_load = false;
   }
   else
     LOG->error("Could not open file {} to load JSON", load_fname.string());
@@ -298,6 +331,28 @@ void GraphEditor::on_graph_clear_request()
     this->clear();
     if (this->viewer)
       this->viewer->clear();
+  }
+}
+
+void GraphEditor::on_graph_import_request()
+{
+  LOG->trace("GraphEditor::on_graph_import_request");
+
+  std::filesystem::path path = this->fname.parent_path();
+
+  QString load_fname = QFileDialog::getOpenFileName(this->viewer.get(),
+                                                    "Import...",
+                                                    path.string().c_str(),
+                                                    "Hesiod files (*.hsd)");
+
+  if (!load_fname.isNull() && !load_fname.isEmpty())
+  {
+    bool override_config = true;
+    bool clear_existing_content = false;
+
+    this->load_from_file(load_fname.toStdString(),
+                         override_config,
+                         clear_existing_content);
   }
 }
 
