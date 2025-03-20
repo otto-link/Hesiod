@@ -64,7 +64,7 @@ void compute_white_sparse_node(BaseNode *p_node)
     float hmin = p_out->min();
     hmap::transform(
         {p_out, p_env},
-        [&hmin](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+        [&hmin](std::vector<hmap::Array *> p_arrays)
         {
           hmap::Array *pa_a = p_arrays[0];
           hmap::Array *pa_b = p_arrays[1];

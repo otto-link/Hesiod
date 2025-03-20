@@ -44,7 +44,7 @@ void compute_gradient_node(BaseNode *p_node)
 
     hmap::transform(
         {p_dx, p_in},
-        [](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+        [](std::vector<hmap::Array *> p_arrays)
         {
           hmap::Array *pa_dx = p_arrays[0];
           hmap::Array *pa_in = p_arrays[1];
@@ -55,7 +55,7 @@ void compute_gradient_node(BaseNode *p_node)
 
     hmap::transform(
         {p_dy, p_in},
-        [](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+        [](std::vector<hmap::Array *> p_arrays)
         {
           hmap::Array *pa_dy = p_arrays[0];
           hmap::Array *pa_in = p_arrays[1];

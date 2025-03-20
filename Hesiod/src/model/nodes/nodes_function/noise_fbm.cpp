@@ -128,23 +128,11 @@ void compute_noise_fbm_node(BaseNode *p_node)
         p_node->get_config_ref()->hmap_transform_mode_cpu);
   }
 
-  // add envelope
-  if (p_env)
-  {
-    float hmin = p_out->min();
-    hmap::transform(*p_out,
-                    *p_env,
-                    [&hmin](hmap::Array &a, hmap::Array &b)
-                    {
-                      a -= hmin;
-                      a *= b;
-                    });
-  }
-
   // post-process
+  post_apply_enveloppe(p_node, *p_out, p_env);
+
   post_process_heightmap(p_node,
                          *p_out,
-
                          GET("inverse", BoolAttribute),
                          false, // smooth
                          0,

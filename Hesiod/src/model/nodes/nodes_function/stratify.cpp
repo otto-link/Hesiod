@@ -76,9 +76,7 @@ void compute_stratify_node(BaseNode *p_node)
 
     hmap::transform(
         {p_out, p_mask, p_noise},
-        [p_node, &hs, &gs](std::vector<hmap::Array *> p_arrays,
-                           hmap::Vec2<int>,
-                           hmap::Vec4<float>)
+        [p_node, &hs, &gs](std::vector<hmap::Array *> p_arrays)
         {
           hmap::Array *pa_out = p_arrays[0];
           hmap::Array *pa_mask = p_arrays[1];

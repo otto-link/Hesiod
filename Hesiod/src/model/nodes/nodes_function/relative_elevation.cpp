@@ -52,7 +52,7 @@ void compute_relative_elevation_node(BaseNode *p_node)
     {
       hmap::transform(
           {p_out},
-          [&ir](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+          [&ir](std::vector<hmap::Array *> p_arrays)
           {
             hmap::Array *pa_out = p_arrays[0];
             *pa_out = hmap::gpu::relative_elevation(*pa_out, ir);
@@ -63,7 +63,7 @@ void compute_relative_elevation_node(BaseNode *p_node)
     {
       hmap::transform(
           {p_out},
-          [&ir](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+          [&ir](std::vector<hmap::Array *> p_arrays)
           {
             hmap::Array *pa_out = p_arrays[0];
             *pa_out = hmap::relative_elevation(*pa_out, ir);

@@ -61,7 +61,7 @@ public:
     return this->attr.at(key)->get_ref<T>()->get_value();
   }
 
-  nlohmann::json node_parameters_to_json();
+  nlohmann::json node_parameters_to_json() const;
 
   std::map<std::string, std::unique_ptr<attr::AbstractAttribute>> *get_attr_ref()
   {
@@ -94,7 +94,7 @@ public:
 
   void set_compute_fct(std::function<void(BaseNode *p_node)> new_compute_fct)
   {
-    this->compute_fct = new_compute_fct;
+    this->compute_fct = std::move(new_compute_fct);
   }
 
   void set_id(const std::string &new_id) override { gnode::Node::set_id(new_id); }

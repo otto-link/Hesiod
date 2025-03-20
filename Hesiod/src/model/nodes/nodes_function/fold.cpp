@@ -48,9 +48,7 @@ void compute_fold_node(BaseNode *p_node)
 
     hmap::transform(
         {p_out},
-        [p_node, &hmin, &hmax](std::vector<hmap::Array *> p_arrays,
-                               hmap::Vec2<int>,
-                               hmap::Vec4<float>)
+        [p_node, &hmin, &hmax](std::vector<hmap::Array *> p_arrays)
         {
           hmap::Array *pa_out = p_arrays[0];
 

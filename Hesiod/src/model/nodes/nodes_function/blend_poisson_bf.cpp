@@ -49,7 +49,7 @@ void compute_blend_poisson_bf_node(BaseNode *p_node)
 
     hmap::transform(
         {p_out, p_in1, p_in2, p_mask},
-        [p_node](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+        [p_node](std::vector<hmap::Array *> p_arrays)
         {
           hmap::Array *pa_out = p_arrays[0];
           hmap::Array *pa_in1 = p_arrays[1];

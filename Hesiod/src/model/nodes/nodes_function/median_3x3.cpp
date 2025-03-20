@@ -44,7 +44,7 @@ void compute_median3x3_node(BaseNode *p_node)
     {
       hmap::transform(
           {p_out, p_in, p_mask},
-          [](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+          [](std::vector<hmap::Array *> p_arrays)
           {
             hmap::Array *pa_out = p_arrays[0];
             hmap::Array *pa_in = p_arrays[1];
@@ -60,7 +60,7 @@ void compute_median3x3_node(BaseNode *p_node)
     {
       hmap::transform(
           {p_out, p_in, p_mask},
-          [](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+          [](std::vector<hmap::Array *> p_arrays)
           {
             hmap::Array *pa_out = p_arrays[0];
             hmap::Array *pa_in = p_arrays[1];

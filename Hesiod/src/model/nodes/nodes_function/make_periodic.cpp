@@ -42,7 +42,7 @@ void compute_make_periodic_node(BaseNode *p_node)
 
     hmap::transform(
         {p_out, p_in},
-        [nbuffer](std::vector<hmap::Array *> p_arrays, hmap::Vec2<int>, hmap::Vec4<float>)
+        [nbuffer](std::vector<hmap::Array *> p_arrays)
         {
           hmap::Array *pa_out = p_arrays[0];
           hmap::Array *pa_in = p_arrays[1];

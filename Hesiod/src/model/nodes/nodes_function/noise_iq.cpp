@@ -69,49 +69,39 @@ void compute_noise_iq_node(BaseNode *p_node)
   hmap::Heightmap *p_env = p_node->get_value_ref<hmap::Heightmap>("envelope");
   hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
-  hmap::fill(*p_out,
-             p_dx,
-             p_dy,
-             p_ctrl,
-             [p_node](hmap::Vec2<int>   shape,
-                      hmap::Vec4<float> bbox,
-                      hmap::Array      *p_noise_x,
-                      hmap::Array      *p_noise_y,
-                      hmap::Array      *p_ctrl)
-             {
-               return hmap::noise_iq((hmap::NoiseType)GET("noise_type", EnumAttribute),
-                                     shape,
-                                     GET("kw", WaveNbAttribute),
-                                     GET("seed", SeedAttribute),
-                                     GET("octaves", IntAttribute),
-                                     GET("weight", FloatAttribute),
-                                     GET("persistence", FloatAttribute),
-                                     GET("lacunarity", FloatAttribute),
-                                     GET("gradient_scale", FloatAttribute),
-                                     p_ctrl,
-                                     p_noise_x,
-                                     p_noise_y,
-                                     nullptr,
-                                     bbox);
-             });
+  hmap::transform(
+      {p_out, p_dx, p_dy, p_ctrl},
+      [p_node](std::vector<hmap::Array *> p_arrays,
+               hmap::Vec2<int>            shape,
+               hmap::Vec4<float>          bbox)
+      {
+        hmap::Array *pa_out = p_arrays[0];
+        hmap::Array *pa_dx = p_arrays[1];
+        hmap::Array *pa_dy = p_arrays[2];
+        hmap::Array *pa_ctrl = p_arrays[3];
 
-  // add envelope
-  if (p_env)
-  {
-    float hmin = p_out->min();
-    hmap::transform(*p_out,
-                    *p_env,
-                    [&hmin](hmap::Array &a, hmap::Array &b)
-                    {
-                      a -= hmin;
-                      a *= b;
-                    });
-  }
+        *pa_out = hmap::noise_iq((hmap::NoiseType)GET("noise_type", EnumAttribute),
+                                 shape,
+                                 GET("kw", WaveNbAttribute),
+                                 GET("seed", SeedAttribute),
+                                 GET("octaves", IntAttribute),
+                                 GET("weight", FloatAttribute),
+                                 GET("persistence", FloatAttribute),
+                                 GET("lacunarity", FloatAttribute),
+                                 GET("gradient_scale", FloatAttribute),
+                                 pa_ctrl,
+                                 pa_dx,
+                                 pa_dy,
+                                 nullptr,
+                                 bbox);
+      },
+      p_node->get_config_ref()->hmap_transform_mode_cpu);
 
   // post-process
+  post_apply_enveloppe(p_node, *p_out, p_env);
+
   post_process_heightmap(p_node,
                          *p_out,
-
                          GET("inverse", BoolAttribute),
                          false, // smooth
                          0,

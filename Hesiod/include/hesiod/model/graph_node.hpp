@@ -35,7 +35,10 @@ public:
 
   ModelConfig *get_config_ref() { return this->config.get(); }
 
-  void json_from(nlohmann::json const &json, bool override_config = true);
+  void json_from(nlohmann::json const &json,
+                 bool                  override_config = true,
+                 bool                  clear_existing_content = true,
+                 const std::string    &prefix_id = "");
 
   nlohmann::json json_to() const;
 

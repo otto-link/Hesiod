@@ -36,11 +36,16 @@ void compute_shift_elevation_node(BaseNode *p_node)
   {
     hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
-    // copy the input heightmap
-    *p_out = *p_in;
+    hmap::transform(
+        {p_out, p_in},
+        [p_node](std::vector<hmap::Array *> p_arrays)
+        {
+          hmap::Array *pa_out = p_arrays[0];
+          hmap::Array *pa_in = p_arrays[1];
 
-    hmap::transform(*p_out,
-                    [p_node](hmap::Array &x) { x += GET("shift", FloatAttribute); });
+          *pa_out = *pa_in + GET("shift", FloatAttribute);
+        },
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

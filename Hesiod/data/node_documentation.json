@@ -1535,6 +1535,57 @@
             }
         }
     },
+    "ExportAsCubemap": {
+        "category": "WIP",
+        "description": "TODO",
+        "label": "ExportAsCubemap",
+        "parameters": {
+            "auto_export": {
+                "description": "TODO",
+                "key": "auto_export",
+                "label": "auto_export",
+                "type": "Bool"
+            },
+            "cubemap_resolution": {
+                "description": "TODO",
+                "key": "cubemap_resolution",
+                "label": "cubemap_resolution",
+                "type": "Integer"
+            },
+            "fname": {
+                "description": "TODO",
+                "key": "fname",
+                "label": "fname",
+                "type": "Filename"
+            },
+            "ir": {
+                "description": "TODO",
+                "key": "ir",
+                "label": "ir",
+                "type": "Integer"
+            },
+            "overlap": {
+                "description": "TODO",
+                "key": "overlap",
+                "label": "overlap",
+                "type": "Float"
+            },
+            "splitted": {
+                "description": "TODO",
+                "key": "splitted",
+                "label": "splitted",
+                "type": "Bool"
+            }
+        },
+        "ports": {
+            "input": {
+                "caption": "input",
+                "data_type": "Heightmap",
+                "description": "TODO",
+                "type": "input"
+            }
+        }
+    },
     "ExportAsset": {
         "category": "IO/Files",
         "description": "Exports both the heightmap and texture as a single asset. The mesh can either be used as is or retriangulated using an optimization algorithm. Additionally, a normal map can be provided to model light effects of small details not represented by the mesh.",
@@ -7677,6 +7728,63 @@
             }
         }
     },
+    "SetBorders": {
+        "category": "Math/Boundaries",
+        "description": "TODO",
+        "label": "SetBorders",
+        "parameters": {
+            "radius": {
+                "description": "TODO",
+                "key": "radius",
+                "label": "radius",
+                "type": "Float"
+            },
+            "unique_border_value": {
+                "description": "TODO",
+                "key": "unique_border_value",
+                "label": "unique_border_value",
+                "type": "Bool"
+            },
+            "value_east": {
+                "description": "TODO",
+                "key": "value_east",
+                "label": "value_east",
+                "type": "Float"
+            },
+            "value_north": {
+                "description": "TODO",
+                "key": "value_north",
+                "label": "value_north",
+                "type": "Float"
+            },
+            "value_south": {
+                "description": "TODO",
+                "key": "value_south",
+                "label": "value_south",
+                "type": "Float"
+            },
+            "value_west": {
+                "description": "TODO",
+                "key": "value_west",
+                "label": "value_west",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "input": {
+                "caption": "input",
+                "data_type": "Heightmap",
+                "description": "TODO",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "Heightmap",
+                "description": "TODO",
+                "type": "output"
+            }
+        }
+    },
     "ShapeIndex": {
         "category": "Filter/Smoothing",
         "description": "ShapeIndex is a measure used to quantify the shape complexity of landforms in an heightmap. It is calculated based on the second derivatives of the elevation surface. The surface index is greater than 0.5 for convex surface and lower than 0.5 for concave surface.",
@@ -7789,7 +7897,7 @@
             "output": {
                 "caption": "output",
                 "data_type": "Heightmap",
-                "description": "Output heightmap.",
+                "description": "Resulting heightmap after applying the shift.",
                 "type": "output"
             }
         }
@@ -8518,7 +8626,7 @@
         }
     },
     "TextureQuiltingExpand": {
-        "category": "Operator/Resynthesis",
+        "category": "Texture",
         "description": "TODO",
         "label": "TextureQuiltingExpand",
         "parameters": {
@@ -8647,7 +8755,7 @@
         }
     },
     "TextureQuiltingShuffle": {
-        "category": "Operator/Resynthesis",
+        "category": "Texture",
         "description": "TODO",
         "label": "TextureQuiltingShuffle",
         "parameters": {
@@ -8763,6 +8871,27 @@
             },
             "texture D out": {
                 "caption": "texture D out",
+                "data_type": "HeightmapRGBA",
+                "description": "TODO",
+                "type": "output"
+            }
+        }
+    },
+    "TextureUvChecker": {
+        "category": "Texture",
+        "description": "TODO",
+        "label": "TextureUvChecker",
+        "parameters": {
+            "size": {
+                "description": "TODO",
+                "key": "size",
+                "label": "size",
+                "type": "Choice"
+            }
+        },
+        "ports": {
+            "texture": {
+                "caption": "texture",
                 "data_type": "HeightmapRGBA",
                 "description": "TODO",
                 "type": "output"

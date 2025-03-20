@@ -69,9 +69,7 @@ void compute_expand_shrink_node(BaseNode *p_node)
       if (GET("shrink", BoolAttribute))
         hmap::transform(
             {p_out, p_mask},
-            [&kernel_array](std::vector<hmap::Array *> p_arrays,
-                            hmap::Vec2<int>,
-                            hmap::Vec4<float>)
+            [&kernel_array](std::vector<hmap::Array *> p_arrays)
             {
               hmap::Array *pa_out = p_arrays[0];
               hmap::Array *pa_mask = p_arrays[1];
@@ -81,9 +79,7 @@ void compute_expand_shrink_node(BaseNode *p_node)
       else
         hmap::transform(
             {p_out, p_mask},
-            [&kernel_array](std::vector<hmap::Array *> p_arrays,
-                            hmap::Vec2<int>,
-                            hmap::Vec4<float>)
+            [&kernel_array](std::vector<hmap::Array *> p_arrays)
             {
               hmap::Array *pa_out = p_arrays[0];
               hmap::Array *pa_mask = p_arrays[1];
@@ -96,9 +92,7 @@ void compute_expand_shrink_node(BaseNode *p_node)
       if (GET("shrink", BoolAttribute))
         hmap::transform(
             {p_out, p_mask},
-            [&kernel_array](std::vector<hmap::Array *> p_arrays,
-                            hmap::Vec2<int>,
-                            hmap::Vec4<float>)
+            [&kernel_array](std::vector<hmap::Array *> p_arrays)
             {
               hmap::Array *pa_out = p_arrays[0];
               hmap::Array *pa_mask = p_arrays[1];
@@ -108,9 +102,7 @@ void compute_expand_shrink_node(BaseNode *p_node)
       else
         hmap::transform(
             {p_out, p_mask},
-            [&kernel_array](std::vector<hmap::Array *> p_arrays,
-                            hmap::Vec2<int>,
-                            hmap::Vec4<float>)
+            [&kernel_array](std::vector<hmap::Array *> p_arrays)
             {
               hmap::Array *pa_out = p_arrays[0];
               hmap::Array *pa_mask = p_arrays[1];

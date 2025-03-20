@@ -143,7 +143,7 @@ nlohmann::json BaseNode::json_to() const
   return json;
 }
 
-nlohmann::json BaseNode::node_parameters_to_json()
+nlohmann::json BaseNode::node_parameters_to_json() const
 {
   nlohmann::json json;
 
