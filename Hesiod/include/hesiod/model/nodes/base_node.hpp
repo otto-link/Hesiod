@@ -99,9 +99,7 @@ public:
 
   void set_id(const std::string &new_id) override { gnode::Node::set_id(new_id); }
 
-  //--------------------
-  // NodeProxy wrapper - fetches the infos necessary to build up the node GUI
-  //--------------------
+  //>>> NodeProxy wrapper - fetches the infos necessary to build up the node GUI
 
   std::string get_caption() const override { return this->get_label(); }
 
@@ -125,6 +123,8 @@ public:
   gngui::PortType get_port_type(int port_index) const override;
 
   virtual QWidget *get_qwidget_ref() override;
+
+  //<<< NodeProxy wrapper end
 
 Q_SIGNALS:
   void compute_finished(const std::string &id);
