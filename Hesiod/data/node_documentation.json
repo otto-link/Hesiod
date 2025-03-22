@@ -4234,11 +4234,11 @@
     },
     "MorphologicalTopHat": {
         "category": "Operator/Morphology",
-        "description": "TODO",
+        "description": "Applies a morphological operator to detect ridges (top hat) or valleys (black hat) in a Digital Elevation Model (DEM).",
         "label": "MorphologicalTopHat",
         "parameters": {
             "GPU": {
-                "description": "Applies a morphological operator to detect ridges (top hat) or valleys (black hat) in a Digital Elevation Model (DEM).",
+                "description": "Toogle GPU acceleration on or off.",
                 "key": "GPU",
                 "label": "GPU",
                 "type": "Bool"
