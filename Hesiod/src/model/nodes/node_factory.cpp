@@ -197,6 +197,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"MixTexture", "Texture"},
       {"Mixer", "Operator/Blend"},
       {"MorphologicalGradient", "Operator/Morphology"},
+      {"MorphologicalTopHat", "Operator/Morphology"},
       {"MountainRangeRadial", "Primitive/Geological"},
       {"Noise", "Primitive/Coherent"},
       {"NoiseFbm", "Primitive/Coherent"},
@@ -407,6 +408,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(MixNormalMap, mix_normal_map);
     SETUP_NODE(MixTexture, mix_texture);
     SETUP_NODE(MorphologicalGradient, morphological_gradient);
+    SETUP_NODE(MorphologicalTopHat, morphological_top_hat);
     SETUP_NODE(MountainRangeRadial, mountain_range_radial);
     SETUP_NODE(Noise, noise);
     SETUP_NODE(NoiseFbm, noise_fbm);

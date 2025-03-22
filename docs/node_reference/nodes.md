@@ -62,7 +62,7 @@ Math/Base
 | :--- | :--- | :--- |
 |inverse|Bool|Toggle inversion of the output values.|
 |mu|Float|Smoothing intensity.|
-|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 |vshift|Float|Reference value for the zero-equivalent value of the absolute value.|
 
 ## AccumulationCurvature
@@ -129,7 +129,7 @@ Operator/Blend
 |inverse|Bool|Toggle inversion of the output values.|
 |k|Float|Smoothing intensity (if any).|
 |radius|Float|Filter radius with respect to the domain size (if any).|
-|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 
 ## BlendPoissonBf
 
@@ -161,7 +161,7 @@ Operator/Blend
 | :--- | :--- | :--- |
 |inverse|Bool|Toggle inversion of the output values.|
 |iterations|Integer|Number of solver iterations for the Poisson blending process.|
-|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 
 ## Border
 
@@ -214,8 +214,8 @@ Primitive/Authoring
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |Heightmap|Array|The heightmap data representing the painted terrain.|
-|Inverse|Bool|Invert the drawn values, swapping elevations between high and low.|
-|Remap range|Value range|Remap the brush output to a specified range, defaulting to [0, 1].|
+|inverse|Bool|Invert the drawn values, swapping elevations between high and low.|
+|remap|Value range|Remap the brush output to a specified range, defaulting to [0, 1].|
 
 ## Bump
 
@@ -248,7 +248,7 @@ Primitive/Function
 |center|Vec2Float|Reference center within the heightmap.|
 |gain|Float|Shape control parameter.|
 |inverse|Bool|Toggle inversion of the output values.|
-|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 
 ## Caldera
 
@@ -281,7 +281,7 @@ Primitive/Geological
 |noise_r_amp|Float|Noise amplitude for the radial displacement.|
 |noise_ratio_z|Float|Noise amplitude for the vertical displacement.|
 |radius|Float|Crater radius.|
-|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 |sigma_inner|Float|Crater inner lip half-width.|
 |sigma_outer|Float|Crater outer lip half-width.|
 |z_bottom|Float|Crater bottom elevation.|
@@ -368,7 +368,7 @@ Geometry/Cloud
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|Cloud|Cloud|Cloud data.|
+|cloud|Cloud|Cloud data.|
 
 ## CloudLattice
 
@@ -392,8 +392,8 @@ Geometry/Cloud
 | :--- | :--- | :--- |
 |delta|Wavenumber|Point spacing in x and y directions.|
 |jitter_ratio|Wavenumber|Point jittering (noise) in x and y directions.|
-|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
-|Seed|Random seed number|Random seed number|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|seed|Random seed number|Random seed number|
 |stagger_ratio|Wavenumber|Point offset in x and y directions for every two lines or columns.|
 
 ## CloudMerge
@@ -440,8 +440,8 @@ Geometry/Cloud
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |npoints|Integer|Number of points.|
-|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
-|Seed|Random seed number|Random seed number.|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|seed|Random seed number|Random seed number.|
 
 ## CloudRemapValues
 
@@ -469,7 +469,7 @@ Geometry/Cloud
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 
 ## CloudSDF
 
@@ -703,7 +703,7 @@ Math/Convolution
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |rank|Integer|Rank of the singular value decomposition.|
-|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 
 ## Cos
 
@@ -734,7 +734,7 @@ Math/Base
 |frequency|Float|Frequency.|
 |inverse|Bool|Toggle inversion of the output values.|
 |phase_shift|Float|Phase shift.|
-|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 
 ## Crater
 
@@ -770,7 +770,7 @@ Primitive/Geological
 |lip_decay|Float|Ejecta lip decay.|
 |lip_height_ratio|Float|Controls the ejecta lip relative height.|
 |radius|Float|Crater radius.|
-|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 
 ## Dendry
 
@@ -804,12 +804,12 @@ Primitive/Coherent
 |displacement|Float|Maximum displacement of segments.|
 |eps|Float|Used to bias the area where points are generated in cells.|
 |inverse|Bool|Toggle inversion of the output values.|
-||Wavenumber|Noise wavenumbers (kx, ky) for each directions.|
+|kw|Wavenumber|Noise wavenumbers (kx, ky) for each directions.|
 |noise_amplitude_proportion|Float|Proportion of the amplitude of the control function as noise.|
 |primitives_resolution_steps|Integer|Additional resolution steps in the primitive resolution.|
-|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 |resolution|Integer|Number of resolutions in the noise function.|
-|Seed|Random seed number|Random seed number.|
+|seed|Random seed number|Random seed number.|
 |slope_power|Float|Additional parameter to control the variation of slope on terrains.|
 |subsampling|Integer|Function evaluation subsampling, use higher values for faster computation at the cost of a coarser resolution.|
 
@@ -888,9 +888,9 @@ WIP
 | :--- | :--- | :--- |
 |inverse|Bool|Toggle inversion of the output values.|
 |noise_ratio|Float| A parameter that controls the amount of randomness or noise introduced in the talus formation process.|
-|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 |scale|Float|A scaling factor that influences the density of the particles in the DLA pattern.|
-|Seed|Random seed number|The seed for the random number generator.|
+|seed|Random seed number|The seed for the random number generator.|
 |seeding_outer_radius_ratio|Float|The ratio between the outer seeding radius and the initial seeding radius. It determines the outer boundary for particle seeding.|
 |seeding_radius|Float|The radius within which initial seeding of particles occurs. This radius defines the area where the first particles are placed.|
 |slope|Float|Slope of the talus added to the DLA pattern.|
@@ -1015,7 +1015,34 @@ Filter/Recast
 |GPU|Bool|Toogle GPU acceleration on or off.|
 |kernel|Enumeration|Weighting kernel. Available values: biweight, cone, cone_smooth, cubic_pulse, disk, lorentzian, smooth_cosine, square, tricube.|
 |radius|Float|Filter radius with respect to the domain size.|
-|expand|Bool|Shrink (if true) or expand (if false).|
+|shrink|Bool|Shrink (if true) or expand (if false).|
+
+## ExportAsCubemap
+
+
+TODO
+
+![img](../images/nodes/ExportAsCubemap.png)
+### Category
+
+
+WIP
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|Heightmap|TODO|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|auto_export|Bool|TODO|
+|cubemap_resolution|Integer|TODO|
+|fname|Filename|TODO|
+|ir|Integer|TODO|
+|overlap|Float|TODO|
+|splitted|Bool|TODO|
 
 ## ExportAsset
 
@@ -1040,7 +1067,7 @@ IO/Files
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |auto_export|Bool|Automatically exports the asset when the node is updated.|
-|Details normal map blending method|Enumeration|Defines the method used to blend the normal map for small details.|
+|blending_method|Enumeration|Defines the method used to blend the normal map for small details.|
 |detail_scaling|Float|Scaling factor applied to the detail normal map.|
 |elevation_scaling|Float|Factor used to scale elevation values.|
 |export_format|Enumeration|Defines the file format for export. Available formats include Assimp Binary (*.assbin), Assxml Document (*.assxml), Autodesk 3DS (*.3ds), Autodesk FBX (ASCII/Binary) (*.fbx), COLLADA (*.dae), Extensible 3D (*.x3d), GL Transmission Format (GLB/GLTF v1 & v2), Stanford Polygon Library (*.ply), Step Files (*.stp), Stereolithography (*.stl), 3MF (*.3mf), and Wavefront OBJ (*.obj) with or without material files.|
@@ -1091,9 +1118,9 @@ IO/Files
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|Automatic export|Bool|Decides whether the export is automatically performed when the node is updated.|
-|Filename|Filename|Export file name.|
-|Export format|Enumeration|Export format. Available values: png (16 bit), png (8 bit), raw (16 bit, Unity).|
+|auto_export|Bool|Decides whether the export is automatically performed when the node is updated.|
+|fname|Filename|Export file name.|
+|format|Enumeration|Export format. Available values: png (16 bit), png (8 bit), raw (16 bit, Unity).|
 
 ## ExportNormalMap
 
@@ -1194,7 +1221,7 @@ Math/Boundaries
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |distance_function|Enumeration|Measure used for the distance calculation. Available values: Chebyshev, Euclidian, Euclidian/Chebyshev, Manhattan.|
-|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 |strength|Float|Falloff strength.|
 
 ## FillTalus
@@ -1224,7 +1251,7 @@ WIP
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |noise_ratio|Float|Noise ratio, added to the downslope.|
-|Seed|Random seed number|Random seed number.|
+|seed|Random seed number|Random seed number.|
 |slope|Float|Downslope used for filling.|
 
 ## FlowStream
@@ -1263,7 +1290,7 @@ WIP
 |river_radius|Float|TODO|
 |riverbank_slope|Float|TODO|
 |riverbed_slope|Float|TODO|
-|Seed|Random seed number|TODO|
+|seed|Random seed number|TODO|
 |upward_penalization|Float|TODO|
 
 ## Fold
@@ -1327,14 +1354,14 @@ Primitive/Coherent
 | :--- | :--- | :--- |
 |angle|Float|Controls the base orientation of the Gabor wavelets, influencing the dominant direction of the noise pattern.|
 |angle_spread_ratio|Float|Determines how much the local angle of the Gabor kernel can vary. A low value results in straighter structures, while a high value introduces more directional variation.|
-|Inverse|Bool|Invert the output values.|
-|Wavenumber|Wavenumber|Defines the wavenumber, which controls the frequency of the Gabor wavelets in the noise function.|
-|Lacunarity|Float|Controls the frequency scaling between successive octaves of the fractal noise. Higher values create larger gaps between frequencies.|
-|Octaves|Integer|Specifies the number of noise layers (octaves) used in the fractal Brownian motion. More octaves add finer details.|
-|Persistence|Float|Controls how much each successive octave contributes to the final noise pattern. Higher values result in more prominent fine details.|
-|Remap range|Value range|Remap the output values to a specified range, defaulting to [0, 1].|
-|Seed|Random seed number|Sets the random seed for noise generation, ensuring reproducibility.|
-|Weight|Float|Adjusts the intensity of the noise contribution at each point.|
+|inverse|Bool|Invert the output values.|
+|kw|Wavenumber|Defines the wavenumber, which controls the frequency of the Gabor wavelets in the noise function.|
+|lacunarity|Float|Controls the frequency scaling between successive octaves of the fractal noise. Higher values create larger gaps between frequencies.|
+|octaves|Integer|Specifies the number of noise layers (octaves) used in the fractal Brownian motion. More octaves add finer details.|
+|persistence|Float|Controls how much each successive octave contributes to the final noise pattern. Higher values result in more prominent fine details.|
+|remap|Value range|Remap the output values to a specified range, defaulting to [0, 1].|
+|seed|Random seed number|Sets the random seed for noise generation, ensuring reproducibility.|
+|weight|Float|Adjusts the intensity of the noise contribution at each point.|
 
 ## Gain
 
@@ -1392,7 +1419,7 @@ Filter/Recurve
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|Gamma|Float|Gamma exponent.|
+|gamma|Float|Gamma exponent.|
 
 ## GammaCorrectionLocal
 
@@ -1485,7 +1512,7 @@ Primitive/Function
 |center|Vec2Float|Reference center within the heightmap.|
 |inverse|Bool|Toggle inversion of the output values.|
 |radius|Float|Pulse half-width.|
-|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 
 ## Gavoronoise
 
@@ -1521,14 +1548,14 @@ Primitive/Coherent
 |angle|Float|Sets the primary orientation of the wave structures in the noise.|
 |angle_spread_ratio|Float|Determines the degree of variation in the angle of the wave structures. Lower values create more aligned structures.|
 |branch_strength|Float|Controls the prominence of branch-like features in the generated noise.|
-|Inverse|Bool|Invert the output values of the noise function.|
-|Wavenumber|Wavenumber|Wave number vector that determines the base frequency of the noise.|
+|inverse|Bool|Invert the output values of the noise function.|
+|kw|Wavenumber|Wave number vector that determines the base frequency of the noise.|
 |kw_multiplier|Wavenumber|Multiplier applied to the wave numbers, affecting the frequency scaling of the noise function.|
-|Lacunarity|Float|Controls the frequency scaling between successive octaves in the fractal noise function. Higher values create larger gaps between frequencies.|
-|Octaves|Integer|Number of noise layers (octaves) used in fractal Brownian motion (fBm). More octaves add finer details.|
-|Persistence|Float|Determines how much each successive octave contributes to the final noise pattern. Higher values amplify finer details.|
-|Remap range|Value range|Remap the noise output values to a specified range, defaulting to [0, 1].|
-|Seed|Random seed number|Sets the random seed for reproducible noise generation.|
+|lacunarity|Float|Controls the frequency scaling between successive octaves in the fractal noise function. Higher values create larger gaps between frequencies.|
+|octaves|Integer|Number of noise layers (octaves) used in fractal Brownian motion (fBm). More octaves add finer details.|
+|persistence|Float|Determines how much each successive octave contributes to the final noise pattern. Higher values amplify finer details.|
+|remap|Value range|Remap the noise output values to a specified range, defaulting to [0, 1].|
+|seed|Random seed number|Sets the random seed for reproducible noise generation.|
 |slope_strength|Float|Controls the strength of slope-based directional erosion in the noise function.|
 |z_cut_max|Float|Defines the maximum cutoff value for the Z-axis in the generated noise.|
 |z_cut_min|Float|Defines the minimum cutoff value for the Z-axis in the generated noise.|
@@ -1560,7 +1587,7 @@ Math/Gradient
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|Remap range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 
 ## GradientAngle
 
@@ -1588,7 +1615,7 @@ Math/Gradient
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 
 ## GradientNorm
 
@@ -1616,7 +1643,7 @@ Math/Gradient
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 
 ## GradientTalus
 
@@ -1644,7 +1671,7 @@ Math/Gradient
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 
 ## HeightmapToKernel
 
@@ -1704,8 +1731,8 @@ Converter
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |inverse|Bool|Toggle inversion of the output values.|
-|saturate_k|Float|TODO|
-|saturate_range|Value range|TODO|
+|saturate_k|Float|Smoothing intensity of the amplitude saturation.|
+|saturate_range|Value range|Saturation range: define the minimum and maximum values of the saturation process.|
 |smoothing|Bool|Enable or disable smoothing to reduce noise in the curvature computation.|
 |smoothing_radius|Float|Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.|
 
@@ -1762,7 +1789,7 @@ WIP
 | :--- | :--- | :--- |
 |k_smoothing|Float|Smoothing factor, if any.|
 |radius|Float|Gaussian filter radius (with respect to a unit domain).|
-|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 |vmax|Float|Maximum elevation for the details.|
 
 ## HydraulicMusgrave
@@ -1843,7 +1870,7 @@ Erosion/Hydraulic
 |particle_density|Float|TODO|
 |post_filtering|Bool|TODO|
 |post_filtering_local|Bool|TODO|
-|Seed|Random seed number|Random seed number.|
+|seed|Random seed number|Random seed number.|
 
 ## HydraulicProcedural
 
@@ -1884,7 +1911,7 @@ WIP
 |ridge_scaling|Float|TODO|
 |ridge_wavelength|Float|TODO|
 |rotate90|Bool|TODO|
-|Seed|Random seed number|TODO|
+|seed|Random seed number|TODO|
 |slope_mask|Float|TODO|
 |use_default_mask|Bool|TODO|
 
@@ -1959,12 +1986,12 @@ WIP
 |c_erosion|Float|Erosion intensity.|
 |clipping_ratio|Float|Flow accumulation clipping ratio.|
 |radius|Float|Carving kernel radius.|
-|talus_ref|Float|Reference talus, with small values of talus_ref  leading to thinner flow streams.|
+|talus_ref|Float|Reference talus, with small values of talus_ref leading to thinner flow streams.|
 
 ## HydraulicStreamLog
 
 
-TODO
+HydraulicStream is an hydraulic erosion operator using the flow stream approach and an infinite flow direction algorithm for simulating the erosion processes. Simulate water flow across the terrain using the infinite flow direction algorithm. As water flows over the terrain, flow accumulation representing the volume of water that passes through each point on the map, is computed to evaluate the erosive power of the water flow. Deposition is mimicked using convolution filters.
 
 ![img](../images/nodes/HydraulicStreamLog.png)
 ### Category
@@ -1992,14 +2019,14 @@ Erosion/Hydraulic
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |GPU|Bool|Toogle GPU acceleration on or off.|
-|c_erosion|Float|TODO|
+|c_erosion|Float|Erosion intensity.|
 |deposition_radius|Float|TODO|
 |deposition_scale_ratio|Float|TODO|
 |gradient_power|Float|TODO|
 |gradient_prefilter_radius|Float|TODO|
 |gradient_scaling_ratio|Float|TODO|
-|saturation_ratio|Float|TODO|
-|talus_ref|Float|TODO|
+|saturation_ratio|Float|Flow accumulation clipping ratio.|
+|talus_ref|Float|Reference talus, with small values of talus_ref  leading to thinner flow streams.|
 
 ## HydraulicStreamUpscaleAmplification
 
@@ -2221,7 +2248,7 @@ Features/Clustering
 |compute_scoring|Bool|Determine whether scoring is computed.|
 |nclusters|Integer|Number of clusters.|
 |normalize_inputs|Bool|Determine whether the feature amplitudes are normalized before the clustering.|
-|Seed|Random seed number|Random seed number.|
+|seed|Random seed number|Random seed number.|
 |weights.x|Float|Weight of the first feature.|
 |weights.y|Float|Weight of the second feature.|
 
@@ -2257,7 +2284,7 @@ Features/Clustering
 |compute_scoring|Bool|Determine whether scoring is computed.|
 |nclusters|Integer|Number of clusters.|
 |normalize_inputs|Bool|Determine whether the feature amplitudes are normalized before the clustering.|
-|Seed|Random seed number|Random seed number.|
+|seed|Random seed number|Random seed number.|
 |weights.x|Float|Weight of the first feature.|
 |weights.y|Float|Weight of the third feature.|
 |weights.z|Float|TODO|
@@ -2614,7 +2641,39 @@ Operator/Morphology
 |GPU|Bool|Toogle GPU acceleration on or off.|
 |inverse|Bool|Toggle inversion of the output values.|
 |radius|Float|Filter radius with respect to the domain size.|
-|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+
+## MorphologicalTopHat
+
+
+TODO
+
+![img](../images/nodes/MorphologicalTopHat.png)
+### Category
+
+
+Operator/Morphology
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|Heightmap|Input heightmap.|
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|Heightmap|Output heightmap.|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|GPU|Bool|Applies a morphological operator to detect ridges (top hat) or valleys (black hat) in a Digital Elevation Model (DEM).|
+|inverse|Bool|Toggle inversion of the output values.|
+|radius|Float|Filter radius with respect to the domain size.|
+|remap|Value range|Remaps the operator's output values to a specified range, defaulting to [0, 1].|
+|top_hat|Bool|Toggle between top hat (ridge detection) and black hat (valley detection) morphological operator.|
 
 ## MountainRangeRadial
 
@@ -2655,8 +2714,8 @@ Primitive/Geological
 |lacunarity|Float|The frequency scaling factor for successive noise octaves. Higher values increase the frequency of each successive octave.|
 |octaves|Integer|The number of octaves for fractal noise generation. More octaves add finer details to the terrain.|
 |persistence|Float|The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.|
-|remap_range|Value range|Remaps the operator's output values to a specified range, defaulting to [0, 1].|
-|Seed|Random seed number|Sets the seed for random noise generation, ensuring reproducibility.|
+|remap|Value range|Remaps the operator's output values to a specified range, defaulting to [0, 1].|
+|seed|Random seed number|Sets the seed for random noise generation, ensuring reproducibility.|
 |weight|Float|Initial weight for noise contribution. Higher values amplify the primary terrain features.|
 
 ## Noise
@@ -2688,11 +2747,11 @@ Primitive/Coherent
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |GPU|Bool|Toogle GPU acceleration on or off.|
-|Inverse|Bool|Toggle inversion of the output values.|
-|Wavenumber|Wavenumber|Noise wavenumbers (kx, ky) for each directions.|
-|Noise type|Enumeration|Base primitive noise. Available values: OpenSimplex2, OpenSimplex2S, Perlin, Perlin (billow), Perlin (half), Value, Value (cubic), Value (delaunay), Value (linear), Worley, Worley (doube), Worley (value).|
-|Remap range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
-|Seed|Random seed number|Random seed number.|
+|inverse|Bool|Toggle inversion of the output values.|
+|kw|Wavenumber|Noise wavenumbers (kx, ky) for each directions.|
+|noise_type|Enumeration|Base primitive noise. Available values: OpenSimplex2, OpenSimplex2S, Perlin, Perlin (billow), Perlin (half), Value, Value (cubic), Value (delaunay), Value (linear), Worley, Worley (doube), Worley (value).|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|seed|Random seed number|Random seed number.|
 
 ## NoiseFbm
 
@@ -2724,15 +2783,15 @@ Primitive/Coherent
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |GPU|Bool|Toogle GPU acceleration on or off.|
-|Inverse|Bool|Toggle inversion of the output values.|
-|Wavenumber|Wavenumber|Noise wavenumbers (kx, ky) for each directions.|
-|Lacunarity|Float|Wavenumber ratio between each octaves.|
-|Noise type|Enumeration|Base primitive noise. Available values: OpenSimplex2, OpenSimplex2S, Perlin, Perlin (billow), Perlin (half), Value, Value (cubic), Worley, Worley (doube), Worley (value).|
-|Octaves|Integer|Number of octaves.|
-|Persistence|Float|Octave persistence.|
-|Remap range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
-|Seed|Random seed number|Random seed number.|
-|Weight|Float|Octave weighting.|
+|inverse|Bool|Toggle inversion of the output values.|
+|kw|Wavenumber|Noise wavenumbers (kx, ky) for each directions.|
+|lacunarity|Float|Wavenumber ratio between each octaves.|
+|noise_type|Enumeration|Base primitive noise. Available values: OpenSimplex2, OpenSimplex2S, Perlin, Perlin (billow), Perlin (half), Value, Value (cubic), Worley, Worley (doube), Worley (value).|
+|octaves|Integer|Number of octaves.|
+|persistence|Float|Octave persistence.|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|seed|Random seed number|Random seed number.|
+|weight|Float|Octave weighting.|
 
 ## NoiseIq
 
@@ -2765,13 +2824,13 @@ Primitive/Coherent
 | :--- | :--- | :--- |
 |gradient_scale|Float|Gradient influence scaling.|
 |inverse|Bool|Toggle inversion of the output values.|
-|Wavenumber|Wavenumber|Noise wavenumbers (kx, ky) for each directions.|
+|kw|Wavenumber|Noise wavenumbers (kx, ky) for each directions.|
 |lacunarity|Float|Wavenumber ratio between each octaves.|
 |noise_type|Enumeration|Base primitive noise. Available values: OpenSimplex2, OpenSimplex2S, Perlin, Perlin (billow), Perlin (half), Value, Value (cubic), Worley, Worley (doube), Worley (value).|
 |octaves|Integer|Number of octaves.|
 |persistence|Float|Octave persistence.|
 |remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
-|Seed|Random seed number|Random seed number.|
+|seed|Random seed number|Random seed number.|
 |weight|Float|Octave weighting.|
 
 ## NoiseJordan
@@ -2805,13 +2864,13 @@ Primitive/Coherent
 | :--- | :--- | :--- |
 |gradient_scale|Float|TODO|
 |inverse|Bool|Toggle inversion of the output values.|
-|Wavenumber|Wavenumber|Noise wavenumbers (kx, ky) for each directions.|
+|kw|Wavenumber|Noise wavenumbers (kx, ky) for each directions.|
 |lacunarity|Float|Wavenumber ratio between each octaves.|
 |noise_type|Enumeration|Base primitive noise. Available values: OpenSimplex2, OpenSimplex2S, Perlin, Perlin (billow), Perlin (half), Value, Value (cubic), Worley, Worley (doube), Worley (value).|
 |octaves|Integer|Number of octaves.|
 |persistence|Float|Octave persistence.|
 |remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
-|Seed|Random seed number|Random seed number.|
+|seed|Random seed number|Random seed number.|
 |weight|Float|Octave weighting.|
 
 ## NoiseParberry
@@ -2844,13 +2903,13 @@ Primitive/Coherent
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |inverse|Bool|Toggle inversion of the output values.|
-|Wavenumber|Wavenumber|Noise wavenumbers (kx, ky) for each directions.|
+|kw|Wavenumber|Noise wavenumbers (kx, ky) for each directions.|
 |lacunarity|Float|Wavenumber ratio between each octaves.|
 |mu|Float|Gradient magnitude exponent.|
 |octaves|Integer|Number of octaves.|
 |persistence|Float|Octave persistence.|
-|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
-|Seed|Random seed number|Random seed number.|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|seed|Random seed number|Random seed number.|
 |weight|Float|Octave weighting.|
 
 ## NoisePingpong
@@ -2883,13 +2942,13 @@ Primitive/Coherent
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |inverse|Bool|Toggle inversion of the output values.|
-|Wavenumber|Wavenumber|Noise wavenumbers (kx, ky) for each directions.|
+|kw|Wavenumber|Noise wavenumbers (kx, ky) for each directions.|
 |lacunarity|Float|Wavenumber ratio between each octaves.|
 |noise_type|Enumeration|Base primitive noise. Available values: OpenSimplex2, OpenSimplex2S, Perlin, Perlin (billow), Perlin (half), Value, Value (cubic), Worley, Worley (doube), Worley (value).|
 |octaves|Integer|Number of octaves.|
 |persistence|Float|Octave persistence.|
-|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
-|Seed|Random seed number|Random seed number.|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|seed|Random seed number|Random seed number.|
 |weight|Float|Octave weighting.|
 
 ## NoiseRidged
@@ -2923,13 +2982,13 @@ Primitive/Coherent
 | :--- | :--- | :--- |
 |inverse|Bool|Toggle inversion of the output values.|
 |k_smoothing|Float|Smoothing coefficient of the aboslute value.|
-|Wavenumber|Wavenumber|Noise wavenumbers (kx, ky) for each directions.|
+|kw|Wavenumber|Noise wavenumbers (kx, ky) for each directions.|
 |lacunarity|Float|Wavenumber ratio between each octaves.|
 |noise_type|Enumeration|Base primitive noise. Available values: OpenSimplex2, OpenSimplex2S, Perlin, Perlin (billow), Perlin (half), Value, Value (cubic), Worley, Worley (doube), Worley (value).|
 |octaves|Integer|Number of octaves.|
 |persistence|Float|Octave persistence.|
-|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
-|Seed|Random seed number|Random seed number.|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|seed|Random seed number|Random seed number.|
 |weight|Float|Octave weighting.|
 
 ## NoiseSwiss
@@ -2962,13 +3021,13 @@ Primitive/Coherent
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |inverse|Bool|Toggle inversion of the output values.|
-|Wavenumber|Wavenumber|Noise wavenumbers (kx, ky) for each directions.|
+|kw|Wavenumber|Noise wavenumbers (kx, ky) for each directions.|
 |lacunarity|Float|Wavenumber ratio between each octaves.|
 |noise_type|Enumeration|Base primitive noise. Available values: OpenSimplex2, OpenSimplex2S, Perlin, Perlin (billow), Perlin (half), Value, Value (cubic), Worley, Worley (doube), Worley (value).|
 |octaves|Integer|Number of octaves.|
 |persistence|Float|Octave persistence.|
-|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
-|Seed|Random seed number|Random seed number.|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|seed|Random seed number|Random seed number.|
 |warp_scale|Float|Warping influence scaling.|
 |weight|Float|Octave weighting.|
 
@@ -3067,7 +3126,7 @@ Primitive/Function
 |b|Float|Curvature parameter, second principal axis.|
 |center|Vec2Float|Reference center within the heightmap.|
 |inverse|Bool|Toggle inversion of the output values.|
-|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 |reverse_x|Bool|Reverse coefficient of first principal axis.|
 |reverse_y|Bool|Reverse coefficient of second principal axis.|
 |v0|Float|Value at the paraboloid center.|
@@ -3092,8 +3151,7 @@ Geometry/Path
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|Path|Path|The sequence of points defining the path. Each point consists of coordinates (x, y) and an elevation (z).|
-|reverse|Bool|If true, reverses the order of the points in the path. This can be useful for changing the direction of the path.|
+|path|Path|The sequence of points defining the path. Each point consists of coordinates (x, y) and an elevation (z).|
 
 ## PathBezier
 
@@ -3303,7 +3361,7 @@ Geometry/Path
 |iterations|Integer|Number of mid-point displacement iterations.|
 |orientation|Integer|Displacement orientation (0 for random inward/outward displacement, 1 to inflate the path and -1 to deflate the path).|
 |persistence|Float|Noise persistence (with iteration number).|
-|Seed|Random seed number|Random seed number.|
+|seed|Random seed number|Random seed number.|
 |sigma|Float|Half-width of the random Gaussian displacement, normalized by the distance between points.|
 
 ## PathMeanderize
@@ -3336,7 +3394,7 @@ Geometry/Path
 |iterations|Integer|Number of meandering iterations.|
 |noise_ratio|Float|Randomness ratio.|
 |ratio|Float|Meander amplitude ratio.|
-|Seed|Random seed number|Random seed number|
+|seed|Random seed number|Random seed number|
 
 ## PathResample
 
@@ -3394,8 +3452,8 @@ Geometry/Path
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|Inverse|Bool|Toggle inversion of the output values.|
-|Remap|Bool|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|inverse|Bool|Toggle inversion of the output values.|
+|remap|Bool|Remap the operator's output to a specified range, defaulting to [0, 1].|
 
 ## PathSmooth
 
@@ -3566,7 +3624,7 @@ Operator/Resynthesis
 |patch_rotate|Bool|TODO|
 |patch_transpose|Bool|TODO|
 |patch_width|Float|TODO|
-|Seed|Random seed number|TODO|
+|seed|Random seed number|TODO|
 
 ## QuiltingExpand
 
@@ -3601,7 +3659,7 @@ Operator/Resynthesis
 |patch_rotate|Bool|Allow patch 90 degree rotation.|
 |patch_transpose|Bool|Allow patch tranposition.|
 |patch_width|Float|Decide on the size (with respect to the domain size) of the patches that will be used to create the new heightmap. This determines the level of detail and texture in the final result.|
-|Seed|Random seed number|Random seed number.|
+|seed|Random seed number|Random seed number.|
 
 ## QuiltingShuffle
 
@@ -3635,7 +3693,7 @@ Operator/Resynthesis
 |patch_rotate|Bool|Allow patch 90 degree rotation.|
 |patch_transpose|Bool|Allow patch tranposition.|
 |patch_width|Float|Decide on the size (with respect to the domain size) of the patches that will be used to create the new heightmap. This determines the level of detail and texture in the final result.|
-|Seed|Random seed number|Random seed number.|
+|seed|Random seed number|Random seed number.|
 
 ## RadialDisplacementToXy
 
@@ -3960,7 +4018,7 @@ Filter/Range
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|Remap range|Value range|Target range: define the new minimum and maximum values to remap the elevation values to.|
+|remap|Value range|Target range: define the new minimum and maximum values to remap the elevation values to.|
 
 ## Rescale
 
@@ -4042,7 +4100,7 @@ WIP
 |inverse|Bool|Toggle inversion of the output values.|
 |noise_scale|Float|Added noise scaling.|
 |remap|Bool|Remap the operator's output to a specified range, defaulting to [0, 1].|
-|Seed|Random seed number|Random seed number.|
+|seed|Random seed number|Random seed number.|
 
 ## Ridgelines
 
@@ -4108,7 +4166,7 @@ Primitive/Function
 |angle|Float|Angle.|
 |center|Vec2Float|Reference center within the heightmap.|
 |inverse|Bool|Toggle inversion of the output values.|
-|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 |sharp_bottom|Bool|Decide whether the rift bottom is sharp or not.|
 |slope|Float|Rift slope.|
 |width|Float|Rift width.|
@@ -4722,6 +4780,39 @@ Texture
 |clamp|Bool|TODO|
 |reverse|Bool|TODO|
 
+## SetBorders
+
+
+TODO
+
+![img](../images/nodes/SetBorders.png)
+### Category
+
+
+Math/Boundaries
+### Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|input|Heightmap|TODO|
+
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|output|Heightmap|TODO|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|radius|Float|TODO|
+|unique_border_value|Bool|TODO|
+|value_east|Float|TODO|
+|value_north|Float|TODO|
+|value_south|Float|TODO|
+|value_west|Float|TODO|
+
 ## ShapeIndex
 
 
@@ -4748,6 +4839,7 @@ Filter/Smoothing
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|GPU|Bool|TODO|
 |inverse|Bool|Toggle inversion of the output values.|
 |radius|Float|Filter radius with respect to the domain size.|
 |smoothing|Bool|Enable or disable smoothing to reduce noise in the curvature computation.|
@@ -4803,7 +4895,7 @@ Filter/Range
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|Output heightmap.|
+|output|Heightmap|Resulting heightmap after applying the shift.|
 
 ### Parameters
 
@@ -4842,7 +4934,7 @@ Primitive/Function
 |angle|Float|Angle.|
 |center|Vec2Float|Reference center within the heightmap.|
 |inverse|Bool|Toggle inversion of the output values.|
-|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 |talus_global|Float|Slope slope...|
 
 ## SmoothCpulse
@@ -4968,12 +5060,12 @@ Filter/Smoothing
 |GPU|Bool|Toogle GPU acceleration on or off.|
 |radius|Float|Filter radius with respect to the domain size.|
 
-## Smoothstep3
+## Smoothstep
 
 
-Apply a 3rd-order smoothstep function to every values.
+Applies a smoothstep function to the input heightmap, creating a smooth transition between values.
 
-![img](../images/nodes/Smoothstep3.png)
+![img](../images/nodes/Smoothstep.png)
 ### Category
 
 
@@ -4988,29 +5080,13 @@ Math/Base
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|Output heightmap.|
+|output|Heightmap|Output heightmap with the smoothstep function applied.|
 
-## Smoothstep5
-
-
-Apply a 5th-order smoothstep function to every values.
-
-![img](../images/nodes/Smoothstep5.png)
-### Category
-
-
-Math/Base
-### Inputs
+### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|Heightmap|Input heightmap.|
-
-### Outputs
-
-|Name|Type|Description|
-| :--- | :--- | :--- |
-|output|Heightmap|Output heightmap.|
+|order|Choice|The order of the smoothstep function, determining the smoothness of the transition.|
 
 ## Stamping
 
@@ -5047,8 +5123,8 @@ Primitive/Coherent
 |kernel_rotate|Bool|Randomly rotate, or not, the kernel before stamping (can be any rotation angle, can also be ressource consuming).|
 |kernel_scale_amplitude|Bool|Determine whether the kernel amplitude is scaled with the point values.|
 |kernel_scale_radius|Bool|Determine whether the kernel radius is scaled with the point values.|
-|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
-|Seed|Random seed number|Random seed number.|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|seed|Random seed number|Random seed number.|
 
 ## SteepenConvective
 
@@ -5113,7 +5189,7 @@ Primitive/Function
 |angle|Float|Angle.|
 |center|Vec2Float|Reference center within the heightmap.|
 |inverse|Bool|Toggle inversion of the output values.|
-|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 |slope|Float|Step slope.|
 
 ## Stratify
@@ -5147,7 +5223,7 @@ Erosion/Stratify
 |gamma|Float|Reference value for the gamma correction applied to each strata, influence the cliff elevation profile.|
 |gamma_noise|Float|Noise range for the gamma value.|
 |n_strata|Integer|Numbner of strata.|
-|Seed|Random seed number|Random seed number.|
+|seed|Random seed number|Random seed number.|
 |strata_noise|Float|Noise range for the strata elevations.|
 
 ## StratifyMultiscale
@@ -5181,7 +5257,7 @@ Erosion/Stratify
 |gamma_list|Vector of floats|TODO|
 |gamma_noise|Vector of floats|TODO|
 |n_strata|Vector of integers|TODO|
-|Seed|Random seed number|TODO|
+|seed|Random seed number|TODO|
 |strata_noise|Vector of floats|TODO|
 
 ## StratifyOblique
@@ -5216,7 +5292,7 @@ Erosion/Stratify
 |gamma|Float|Reference value for the gamma correction applied to each strata, influence the cliff elevation profile.|
 |gamma_noise|Float|Noise range for the gamma value.|
 |n_strata|Integer|Numbner of strata.|
-|Seed|Random seed number|Random seed number.|
+|seed|Random seed number|Random seed number.|
 |strata_noise|Float|Noise range for the strata elevations.|
 |talus_global|Float|Step slope.|
 
@@ -5251,7 +5327,7 @@ Filter/Recurve
 |gain|Float|TODO|
 |nlevels|Integer|TODO|
 |noise_ratio|Float|TODO|
-|Seed|Random seed number|TODO|
+|seed|Random seed number|TODO|
 
 ## TextureQuiltingExpand
 
@@ -5262,7 +5338,7 @@ TODO
 ### Category
 
 
-Operator/Resynthesis
+Texture
 ### Inputs
 
 |Name|Type|Description|
@@ -5296,7 +5372,7 @@ Operator/Resynthesis
 |patch_rotate|Bool|TODO|
 |patch_transpose|Bool|TODO|
 |patch_width|Float|TODO|
-|Seed|Random seed number|TODO|
+|seed|Random seed number|TODO|
 
 ## TextureQuiltingShuffle
 
@@ -5307,7 +5383,7 @@ TODO
 ### Category
 
 
-Operator/Resynthesis
+Texture
 ### Inputs
 
 |Name|Type|Description|
@@ -5340,7 +5416,29 @@ Operator/Resynthesis
 |patch_rotate|Bool|TODO|
 |patch_transpose|Bool|TODO|
 |patch_width|Float|TODO|
-|Seed|Random seed number|TODO|
+|seed|Random seed number|TODO|
+
+## TextureUvChecker
+
+
+TODO
+
+![img](../images/nodes/TextureUvChecker.png)
+### Category
+
+
+Texture
+### Outputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|texture|HeightmapRGBA|TODO|
+
+### Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|size|Choice|TODO|
 
 ## Thermal
 
@@ -5690,7 +5788,8 @@ Features/Landform
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |radius|Float|Filter radius with respect to the domain size.|
-|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|ridge_select|Bool|If enabled, selects ridges instead of valleys.|
 
 ## Voronoise
 
@@ -5721,9 +5820,9 @@ Primitive/Coherent
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |inverse|Bool|Toggle inversion of the output values.|
-|Wavenumber|Wavenumber|TODO|
-|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
-|Seed|Random seed number|TODO|
+|kw|Wavenumber|TODO|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|seed|Random seed number|TODO|
 |u|Float|TODO|
 |v|Float|TODO|
 
@@ -5818,7 +5917,7 @@ Primitive/Function
 |inverse|Bool|Toggle inversion of the output values.|
 |kw|Float|Noise wavenumbers (kx, ky) for each directions.|
 |phase_shift|Float|Phase shift.|
-|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 |xbottom|Float|Relative position of the dune bottom, in [0, 1].|
 |xtop|Float|Relative position of the dune top, in [0, 1].|
 
@@ -5852,7 +5951,7 @@ Primitive/Function
 |inverse|Bool|Toggle inversion of the output values.|
 |kw|Float|Noise wavenumbers (kx, ky) for each directions.|
 |phase_shift|Float|Phase shift.|
-|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 
 ## WaveSquare
 
@@ -5884,7 +5983,7 @@ Primitive/Function
 |inverse|Bool|Toggle inversion of the output values.|
 |kw|Float|Noise wavenumbers (kx, ky) for each directions.|
 |phase_shift|Float|Phase shift.|
-|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 
 ## WaveTriangular
 
@@ -5916,7 +6015,7 @@ Primitive/Function
 |inverse|Bool|Toggle inversion of the output values.|
 |kw|Float|Noise wavenumbers (kx, ky) for each directions.|
 |phase_shift|Float|Phase shift.|
-|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 |slant_ratio|Float|Decides on wave asymmetry, expected in [0, 1].|
 
 ## White
@@ -5946,8 +6045,8 @@ Primitive/Random
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |inverse|Bool|Toggle inversion of the output values.|
-|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
-|Seed|Random seed number|Random seed number.|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|seed|Random seed number|Random seed number.|
 
 ## WhiteDensityMap
 
@@ -5977,8 +6076,8 @@ Primitive/Random
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |inverse|Bool|Toggle inversion of the output values.|
-|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
-|Seed|Random seed number|Random seed number.|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|seed|Random seed number|Random seed number.|
 
 ## WhiteSparse
 
@@ -6008,8 +6107,8 @@ Primitive/Random
 | :--- | :--- | :--- |
 |density|Float|Noise density.|
 |inverse|Bool|Toggle inversion of the output values.|
-|remap_range|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
-|Seed|Random seed number|Random seed number.|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|seed|Random seed number|Random seed number.|
 
 ## Wrinkle
 
@@ -6040,10 +6139,10 @@ WIP
 | :--- | :--- | :--- |
 |displacement_amplitude|Float|TODO|
 |kw|Float|TODO|
-|Octaves|Integer|TODO|
+|octaves|Integer|TODO|
 |radius|Float|TODO|
-|Seed|Random seed number|TODO|
-|Weight|Float|TODO|
+|seed|Random seed number|TODO|
+|weight|Float|TODO|
 |wrinkle_amplitude|Float|TODO|
 |wrinkle_angle|Float|TODO|
 
@@ -6075,7 +6174,7 @@ Math/Boundaries
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |distance_function|Enumeration|Determines the method used for distance calculation. Options: Chebyshev, Euclidean, Euclidean/Chebyshev, Manhattan.|
-|remap_range|Value range|Specifies the output range for the operator. Defaults to [0, 1].|
+|remap|Value range|Specifies the output range for the operator. Defaults to [0, 1].|
 |sigma|Float|Controls the shape power law.|
 
 ## Zoom

@@ -4232,6 +4232,57 @@
             }
         }
     },
+    "MorphologicalTopHat": {
+        "category": "Operator/Morphology",
+        "description": "TODO",
+        "label": "MorphologicalTopHat",
+        "parameters": {
+            "GPU": {
+                "description": "Applies a morphological operator to detect ridges (top hat) or valleys (black hat) in a Digital Elevation Model (DEM).",
+                "key": "GPU",
+                "label": "GPU",
+                "type": "Bool"
+            },
+            "inverse": {
+                "description": "Toggle inversion of the output values.",
+                "key": "inverse",
+                "label": "inverse",
+                "type": "Bool"
+            },
+            "radius": {
+                "description": "Filter radius with respect to the domain size.",
+                "key": "radius",
+                "label": "radius",
+                "type": "Float"
+            },
+            "remap": {
+                "description": "Remaps the operator's output values to a specified range, defaulting to [0, 1].",
+                "key": "remap",
+                "label": "remap",
+                "type": "Value range"
+            },
+            "top_hat": {
+                "description": "Toggle between top hat (ridge detection) and black hat (valley detection) morphological operator.",
+                "key": "top_hat",
+                "label": "top_hat",
+                "type": "Bool"
+            }
+        },
+        "ports": {
+            "input": {
+                "caption": "input",
+                "data_type": "Heightmap",
+                "description": "Input heightmap.",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "Heightmap",
+                "description": "Output heightmap.",
+                "type": "output"
+            }
+        }
+    },
     "MountainRangeRadial": {
         "category": "Primitive/Geological",
         "description": "Generates a heightmap representing a radial mountain range emanating from a specified center.",

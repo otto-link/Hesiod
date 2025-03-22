@@ -21,13 +21,13 @@ Node Categories
 |Geometry|Path|Path, PathBezier, PathBezierRound, PathBspline, PathDecasteljau, PathDig, PathFind, PathFractalize, PathMeanderize, PathResample, PathSDF, PathSmooth, PathToCloud, PathToHeightmap|
 |IO|Files|ExportAsset, ExportCloud, ExportHeightmap, ExportNormalMap, ExportPath, ExportTexture, ImportHeightmap, ImportTexture|
 |Mask|Selector|SelectAngle, SelectBlobLog, SelectCavities, SelectGt, SelectInterval, SelectInwardOutward, SelectMidrange, SelectMultiband3, SelectPulse, SelectRivers, SelectSlope, SelectTransitions, SelectValley|
-|Math|Base|Abs, AbsSmooth, Cos, GaussianDecay, Inverse, Lerp, Reverse, Smoothstep3, Smoothstep5|
-|Math|Boundaries|Falloff, ZeroedEdges|
+|Math|Base|Abs, AbsSmooth, Cos, GaussianDecay, Inverse, Lerp, Reverse, Smoothstep|
+|Math|Boundaries|Falloff, SetBorders, ZeroedEdges|
 |Math|Convolution|ConvolveSVD|
 |Math|Gradient|Gradient, GradientAngle, GradientNorm, GradientTalus|
 |Operator|Blend|Blend, BlendPoissonBf, Mixer|
-|Operator|Morphology|Border, Closing, Dilation, DistanceTransform, Erosion, MakeBinary, MorphologicalGradient, Opening|
-|Operator|Resynthesis|QuiltingBlend, QuiltingExpand, QuiltingShuffle, TextureQuiltingExpand, TextureQuiltingShuffle|
+|Operator|Morphology|Border, Closing, Dilation, DistanceTransform, Erosion, MakeBinary, MorphologicalGradient, MorphologicalTopHat, Opening|
+|Operator|Resynthesis|QuiltingBlend, QuiltingExpand, QuiltingShuffle|
 |Operator|Tiling|MakePeriodic, MakePeriodicStitching|
 |Operator|Transform|Translate, Warp, Zoom|
 |Primitive|Authoring|Brush, Ridgelines|
@@ -36,5 +36,5 @@ Node Categories
 |Primitive|Geological|Caldera, Crater, MountainRangeRadial|
 |Primitive|Kernel|KernelGabor, KernelPrim|
 |Primitive|Random|White, WhiteDensityMap, WhiteSparse|
-|Texture||ColorizeCmap, ColorizeGradient, ColorizeSolid, MixNormalMap, MixTexture, SetAlpha|
-|WIP||Detrend, DiffusionLimitedAggregation, FillTalus, FlowStream, HydraulicBlur, HydraulicMusgrave, HydraulicProcedural, HydraulicSchott, HydraulicStream, HydraulicStreamUpscaleAmplification, HydraulicVpipes, Kuwahara, MeanShift, ReverseMidpoint, SedimentDeposition, ThermalFlatten, ThermalRib, ThermalSchott, WarpDownslope, Wrinkle|
+|Texture||ColorizeCmap, ColorizeGradient, ColorizeSolid, MixNormalMap, MixTexture, SetAlpha, TextureQuiltingExpand, TextureQuiltingShuffle, TextureUvChecker|
+|WIP||Detrend, DiffusionLimitedAggregation, ExportAsCubemap, FillTalus, FlowStream, HydraulicBlur, HydraulicMusgrave, HydraulicProcedural, HydraulicSchott, HydraulicStream, HydraulicStreamUpscaleAmplification, HydraulicVpipes, Kuwahara, MeanShift, ReverseMidpoint, SedimentDeposition, ThermalFlatten, ThermalRib, ThermalSchott, WarpDownslope, Wrinkle|
