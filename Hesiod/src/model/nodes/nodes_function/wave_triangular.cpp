@@ -45,20 +45,26 @@ void compute_wave_triangular_node(BaseNode *p_node)
   hmap::Heightmap *p_dr = p_node->get_value_ref<hmap::Heightmap>("dr");
   hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
-  hmap::fill(*p_out,
-             p_dr,
-             [p_node](hmap::Vec2<int> shape, hmap::Vec4<float> bbox, hmap::Array *p_noise)
-             {
-               return hmap::wave_triangular(shape,
-                                            GET("kw", FloatAttribute),
-                                            GET("angle", FloatAttribute),
-                                            GET("slant_ratio", FloatAttribute),
-                                            GET("phase_shift", FloatAttribute),
-                                            p_noise,
-                                            nullptr,
-                                            nullptr,
-                                            bbox);
-             });
+  hmap::transform(
+      {p_out, p_dr},
+      [p_node](std::vector<hmap::Array *> p_arrays,
+               hmap::Vec2<int>            shape,
+               hmap::Vec4<float>          bbox)
+      {
+        hmap::Array *pa_out = p_arrays[0];
+        hmap::Array *pa_dr = p_arrays[1];
+
+        *pa_out = hmap::wave_triangular(shape,
+                                        GET("kw", FloatAttribute),
+                                        GET("angle", FloatAttribute),
+                                        GET("slant_ratio", FloatAttribute),
+                                        GET("phase_shift", FloatAttribute),
+                                        pa_dr,
+                                        nullptr,
+                                        nullptr,
+                                        bbox);
+      },
+      p_node->get_config_ref()->hmap_transform_mode_cpu);
 
   // post-process
   post_process_heightmap(p_node,

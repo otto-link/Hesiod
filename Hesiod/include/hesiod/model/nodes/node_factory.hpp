@@ -58,7 +58,7 @@ std::map<std::string, std::string> get_node_inventory();
  *
  * @return           A `std::shared_ptr<gnode::Node>` pointing to the newly created node.
  *
- * @throws std::invalid_argumentifthe `node_type` is not recognized.
+ * @throws std::invalid_argumentifthe`node_type`isnotrecognized.
  *
  * Example usage:
  * @code auto noise_node = node_factory("Noise", config);
