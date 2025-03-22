@@ -2646,7 +2646,7 @@ Operator/Morphology
 ## MorphologicalTopHat
 
 
-TODO
+Applies a morphological operator to detect ridges (top hat) or valleys (black hat) in a Digital Elevation Model (DEM).
 
 ![img](../images/nodes/MorphologicalTopHat.png)
 ### Category
@@ -2669,7 +2669,7 @@ Operator/Morphology
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|GPU|Bool|Applies a morphological operator to detect ridges (top hat) or valleys (black hat) in a Digital Elevation Model (DEM).|
+|GPU|Bool|Toogle GPU acceleration on or off.|
 |inverse|Bool|Toggle inversion of the output values.|
 |radius|Float|Filter radius with respect to the domain size.|
 |remap|Value range|Remaps the operator's output values to a specified range, defaulting to [0, 1].|
