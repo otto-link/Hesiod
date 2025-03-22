@@ -1,10 +1,9 @@
-/* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
- * Public License. The full license is in the file LICENSE, distributed with
- * this software. */
+/* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General Public
+   License. The full license is in the file LICENSE, distributed with this software. */
 
 /**
  * @file graph_editor.hpp
- * @author Otto Link (otto.link.bv@gmail.com)
+ * @author  Otto Link (otto.link.bv@gmail.com)
  * @brief
  * @version 0.1
  * @date 2023-04-29
@@ -23,7 +22,8 @@
 #include "hesiod/model/graph_node.hpp"
 #include "hesiod/model/model_config.hpp"
 
-#include <filesystem> // must be here, https://bugreports.qt.io/browse/QTBUG-73263
+#include <filesystem> // must be here,
+                      // https://bugreports.qt.io/browse/QTBUG-73263
 
 namespace hesiod
 {

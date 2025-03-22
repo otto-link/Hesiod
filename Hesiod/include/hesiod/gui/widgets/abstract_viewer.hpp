@@ -1,10 +1,9 @@
-/* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
- * Public License. The full license is in the file LICENSE, distributed with
- * this software. */
+/* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General Public
+   License. The full license is in the file LICENSE, distributed with this software. */
 
 /**
  * @file abstract_viewer.hpp
- * @author Otto Link (otto.link.bv@gmail.com)
+ * @author  Otto Link (otto.link.bv@gmail.com)
  * @brief
  * @version 0.1
  * @date 2023-04-29
@@ -91,7 +90,8 @@ protected:
   QComboBox   *combo_color;
   QComboBox   *combo_normal_map;
 
-  // used to avoid interfering with the combo and the data when programmatically modifying
+  // used to avoid interfering with the combo and the data when programmatically
+  // modifying
   // the combo
   bool freeze_combo_change_event = false;
 

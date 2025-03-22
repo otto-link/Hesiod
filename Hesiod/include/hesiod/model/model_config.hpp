@@ -1,6 +1,5 @@
-/* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
- * Public License. The full license is in the file LICENSE, distributed with
- * this software. */
+/* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General Public
+   License. The full license is in the file LICENSE, distributed with this software. */
 #pragma once
 
 #include "nlohmann/json.hpp"
@@ -16,18 +15,18 @@ namespace hesiod
  * @brief Model configuration class that holds the base parameters of the node graph
  * model.
  *
- * This class represents the configuration for a model, including parameters such as
- * the heightmap shape, tiling for distributed computation, and tile overlap. It also
- * provides methods for logging the configuration details and serializing/deserializing
- * to/from JSON.
+ * This class represents the configuration for a model, including parameters such as the
+ * heightmap shape, tiling for distributed computation, and tile overlap. It also provides
+ * methods for logging the configuration details and serializing/deserializing to/from
+ * JSON.
  */
 struct ModelConfig
 {
   /**
    * @brief Heightmap shape, defining the width and height.
    *
-   * This parameter specifies the dimensions of the heightmap as a vector of integers.
-   * By default, the shape is set to {1024, 1024}.
+   * This parameter specifies the dimensions of the heightmap as a vector of
+   * integers. By default, the shape is set to {1024, 1024}.
    */
   hmap::Vec2<int> shape = {1024, 1024};
 
@@ -90,8 +89,8 @@ struct ModelConfig
    *
    * This function updates the internal shape of the object to the specified value.
    *
-   * @param new_shape A 2D vector representing the new shape dimensions (e.g., width and
-   * height).
+   * @param new_shape A 2D vector representing the new shape dimensions (e.g., width
+   *                  and height).
    */
   void set_shape(const hmap::Vec2<int> &new_shape) { this->shape = new_shape; }
 };

@@ -1,10 +1,9 @@
-/* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
- * Public License. The full license is in the file LICENSE, distributed with
- * this software. */
+/* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General Public
+   License. The full license is in the file LICENSE, distributed with this software. */
 
 /**
  * @file open_gl_render.hpp
- * @author Otto Link (otto.link.bv@gmail.com)
+ * @author  Otto Link (otto.link.bv@gmail.com)
  * @brief
  * @version 0.1
  * @date 2023-04-29
@@ -139,7 +138,8 @@ protected:
   hmap::Vec2<int>       texture_hmap_shape = hmap::Vec2<int>(0, 0);
   hmap::Vec2<int>       texture_normal_shape = hmap::Vec2<int>(0, 0);
 
-  // states whether the texture diffuse has been defined and is to be used in the shader
+  // states whether the texture diffuse has been defined and is to be used in the
+  // shader
   bool use_texture_diffuse;
   bool use_texture_normal;
 

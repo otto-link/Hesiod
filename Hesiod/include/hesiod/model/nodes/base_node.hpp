@@ -1,10 +1,9 @@
-/* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
- * Public License. The full license is in the file LICENSE, distributed with
- * this software. */
+/* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General Public
+   License. The full license is in the file LICENSE, distributed with this software. */
 
 /**
  * @file base_node.hpp
- * @author Otto Link (otto.link.bv@gmail.com)
+ * @author  Otto Link (otto.link.bv@gmail.com)
  * @brief
  * @version 0.1
  * @date 2023-04-29
@@ -31,7 +30,7 @@
 #define ADD_ATTR(aclass, key, ...) p_node->add_attr<aclass>(key, key, ## __VA_ARGS__)
 
 #define GET(key, aclass) p_node->get_attr_ref()->at(key)->get_ref<attr::aclass>()->get_value()
-#define GET_ATTR(key, aclass, what) p_node->get_attr_ref()->at(key)->get_ref<attr::aclass>()->get_##what()
+#define GET_ATTR(key, aclass, what) p_node->get_attr_ref()->at(key)->get_ref<attr::aclass>()->get_ ## what()
 #define GET_REF(key, aclass) p_node->get_attr_ref()->at(key)->get_ref<attr::aclass>()
 
 #define CONFIG p_node->get_config_ref()->shape, p_node->get_config_ref()->tiling, p_node->get_config_ref()->overlap
