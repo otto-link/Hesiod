@@ -60,45 +60,36 @@ void compute_paraboloid_node(BaseNode *p_node)
   hmap::Heightmap *p_env = p_node->get_value_ref<hmap::Heightmap>("envelope");
   hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
-  hmap::fill(*p_out,
-             p_dx,
-             p_dy,
-             [p_node](hmap::Vec2<int>   shape,
-                      hmap::Vec4<float> bbox,
-                      hmap::Array      *p_noise_x,
-                      hmap::Array      *p_noise_y)
-             {
-               return hmap::paraboloid(shape,
-                                       GET("angle", FloatAttribute),
-                                       GET("a", FloatAttribute),
-                                       GET("b", FloatAttribute),
-                                       GET("v0", FloatAttribute),
-                                       GET("reverse_x", BoolAttribute),
-                                       GET("reverse_y", BoolAttribute),
-                                       p_noise_x,
-                                       p_noise_y,
-                                       nullptr,
-                                       GET("center", Vec2FloatAttribute),
-                                       bbox);
-             });
+  hmap::transform(
+      {p_out, p_dx, p_dy},
+      [p_node](std::vector<hmap::Array *> p_arrays,
+               hmap::Vec2<int>            shape,
+               hmap::Vec4<float>          bbox)
+      {
+        hmap::Array *pa_out = p_arrays[0];
+        hmap::Array *pa_dx = p_arrays[1];
+        hmap::Array *pa_dy = p_arrays[2];
 
-  // add envelope
-  if (p_env)
-  {
-    float hmin = p_out->min();
-    hmap::transform(*p_out,
-                    *p_env,
-                    [&hmin](hmap::Array &a, hmap::Array &b)
-                    {
-                      a -= hmin;
-                      a *= b;
-                    });
-  }
+        *pa_out = hmap::paraboloid(shape,
+                                   GET("angle", FloatAttribute),
+                                   GET("a", FloatAttribute),
+                                   GET("b", FloatAttribute),
+                                   GET("v0", FloatAttribute),
+                                   GET("reverse_x", BoolAttribute),
+                                   GET("reverse_y", BoolAttribute),
+                                   pa_dx,
+                                   pa_dy,
+                                   nullptr,
+                                   GET("center", Vec2FloatAttribute),
+                                   bbox);
+      },
+      p_node->get_config_ref()->hmap_transform_mode_cpu);
 
   // post-process
+  post_apply_enveloppe(p_node, *p_out, p_env);
+
   post_process_heightmap(p_node,
                          *p_out,
-
                          GET("inverse", BoolAttribute),
                          false, // smooth
                          0,
