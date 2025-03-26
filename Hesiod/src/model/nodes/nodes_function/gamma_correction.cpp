@@ -3,8 +3,8 @@
  * this software. */
 
 #include "highmap/filters.hpp"
-#include "highmap/range.hpp"
 #include "highmap/heightmap.hpp"
+#include "highmap/range.hpp"
 
 #include "attributes.hpp"
 

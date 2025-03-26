@@ -136,9 +136,9 @@ int main(int argc, char *argv[])
       // from the file by the input config from the CLI)
       bool                is_headless = true;
       hesiod::GraphEditor ed = hesiod::GraphEditor("graph1", config, is_headless);
-      bool                override_config = false;
 
-      ed.load_from_file(filename, override_config);
+      bool override_config = false;
+      // ed.load_from_file(filename, override_config);
 
       return 0;
     }

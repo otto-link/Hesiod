@@ -1,270 +1,297 @@
 {
-    "Hesiod version": "v0.0.0",
-    "graph_node": {
-        "id": "graph1",
-        "id_count": 3,
-        "links": [
-            {
-                "node_id_from": "0",
-                "node_id_to": "1",
-                "port_id_from": "output",
-                "port_id_to": "input"
+    "GraphManager": {
+        "GraphEditors": {
+            "another graph": {
+                "graph_node": {
+                    "id": "another graph",
+                    "id_count": 1,
+                    "links": [],
+                    "model_config": {
+                        "hmap_transform_mode_cpu": 0,
+                        "hmap_transform_mode_gpu": 2,
+                        "overlap": 0.5,
+                        "shape.x": 1024,
+                        "shape.y": 1024,
+                        "tiling.x": 4,
+                        "tiling.y": 4
+                    },
+                    "nodes": [
+                        {
+                            "epsilon": {
+                                "label": "epsilon",
+                                "type": 6,
+                                "type_string": "Float",
+                                "value": 9.999999747378752e-05,
+                                "vmax": 0.10000000149011612,
+                                "vmin": 9.999999747378752e-06
+                            },
+                            "id": "0",
+                            "iterations": {
+                                "label": "iterations",
+                                "type": 10,
+                                "type_string": "Integer",
+                                "value": 1000,
+                                "vmax": 2147483647,
+                                "vmin": 1
+                            },
+                            "label": "DepressionFilling",
+                            "remap fill map": {
+                                "label": "remap fill map",
+                                "label_false": "",
+                                "label_true": "",
+                                "type": 0,
+                                "type_string": "Bool",
+                                "value": true
+                            }
+                        }
+                    ]
+                },
+                "graph_viewer": {
+                    "current_link_type": 2,
+                    "groups": [],
+                    "id": "",
+                    "links": [],
+                    "nodes": [
+                        {
+                            "caption": "DepressionFilling",
+                            "id": "0",
+                            "is_widget_visible": true,
+                            "scene_position.x": -328.0,
+                            "scene_position.y": -326.0
+                        }
+                    ]
+                },
+                "headless": false
             },
-            {
-                "node_id_from": "1",
-                "node_id_to": "2",
-                "port_id_from": "output",
-                "port_id_to": "input"
+            "base graph": {
+                "graph_node": {
+                    "id": "base graph",
+                    "id_count": 2,
+                    "links": [
+                        {
+                            "node_id_from": "0",
+                            "node_id_to": "1",
+                            "port_id_from": "output",
+                            "port_id_to": "input"
+                        }
+                    ],
+                    "model_config": {
+                        "hmap_transform_mode_cpu": 0,
+                        "hmap_transform_mode_gpu": 2,
+                        "overlap": 0.5,
+                        "shape.x": 1024,
+                        "shape.y": 1024,
+                        "tiling.x": 4,
+                        "tiling.y": 4
+                    },
+                    "nodes": [
+                        {
+                            "angle": {
+                                "label": "angle",
+                                "type": 6,
+                                "type_string": "Float",
+                                "value": 0.0,
+                                "vmax": 180.0,
+                                "vmin": -180.0
+                            },
+                            "angle_spread_ratio": {
+                                "label": "angle_spread_ratio",
+                                "type": 6,
+                                "type_string": "Float",
+                                "value": 1.0,
+                                "vmax": 1.0,
+                                "vmin": 0.0
+                            },
+                            "id": "0",
+                            "inverse": {
+                                "label": "inverse",
+                                "label_false": "",
+                                "label_true": "",
+                                "type": 0,
+                                "type_string": "Bool",
+                                "value": false
+                            },
+                            "kw": {
+                                "label": "kw",
+                                "link_xy": true,
+                                "type": 16,
+                                "type_string": "Wavenumber",
+                                "value": [
+                                    2.0,
+                                    2.0
+                                ],
+                                "vmax": 3.4028234663852886e+38,
+                                "vmin": 0.0
+                            },
+                            "label": "GaborWaveFbm",
+                            "lacunarity": {
+                                "label": "lacunarity",
+                                "type": 6,
+                                "type_string": "Float",
+                                "value": 2.0,
+                                "vmax": 4.0,
+                                "vmin": 0.009999999776482582
+                            },
+                            "octaves": {
+                                "label": "octaves",
+                                "type": 10,
+                                "type_string": "Integer",
+                                "value": 8,
+                                "vmax": 32,
+                                "vmin": 0
+                            },
+                            "persistence": {
+                                "label": "persistence",
+                                "type": 6,
+                                "type_string": "Float",
+                                "value": 0.5,
+                                "vmax": 1.0,
+                                "vmin": 0.0
+                            },
+                            "remap": {
+                                "is_active": true,
+                                "label": "remap",
+                                "type": 11,
+                                "type_string": "Value range",
+                                "value": [
+                                    0.0,
+                                    1.0
+                                ],
+                                "vmax": 2.0,
+                                "vmin": -1.0
+                            },
+                            "seed": {
+                                "label": "seed",
+                                "type": 12,
+                                "type_string": "Random seed number",
+                                "value": 0
+                            },
+                            "weight": {
+                                "label": "weight",
+                                "type": 6,
+                                "type_string": "Float",
+                                "value": 0.699999988079071,
+                                "vmax": 1.0,
+                                "vmin": 0.0
+                            }
+                        },
+                        {
+                            "GPU": {
+                                "label": "GPU",
+                                "label_false": "",
+                                "label_true": "",
+                                "type": 0,
+                                "type_string": "Bool",
+                                "value": true
+                            },
+                            "c_erosion": {
+                                "label": "c_erosion",
+                                "type": 6,
+                                "type_string": "Float",
+                                "value": 0.10000000149011612,
+                                "vmax": 1.0,
+                                "vmin": 0.009999999776482582
+                            },
+                            "deposition_radius": {
+                                "label": "deposition_radius",
+                                "type": 6,
+                                "type_string": "Float",
+                                "value": 0.10000000149011612,
+                                "vmax": 0.20000000298023224,
+                                "vmin": 0.0
+                            },
+                            "deposition_scale_ratio": {
+                                "label": "deposition_scale_ratio",
+                                "type": 6,
+                                "type_string": "Float",
+                                "value": 1.0,
+                                "vmax": 1.0,
+                                "vmin": 0.0
+                            },
+                            "gradient_power": {
+                                "label": "gradient_power",
+                                "type": 6,
+                                "type_string": "Float",
+                                "value": 0.800000011920929,
+                                "vmax": 2.0,
+                                "vmin": 0.10000000149011612
+                            },
+                            "gradient_prefilter_radius": {
+                                "label": "gradient_prefilter_radius",
+                                "type": 6,
+                                "type_string": "Float",
+                                "value": 0.10000000149011612,
+                                "vmax": 0.20000000298023224,
+                                "vmin": 0.0
+                            },
+                            "gradient_scaling_ratio": {
+                                "label": "gradient_scaling_ratio",
+                                "type": 6,
+                                "type_string": "Float",
+                                "value": 1.0,
+                                "vmax": 1.0,
+                                "vmin": 0.0
+                            },
+                            "id": "1",
+                            "label": "HydraulicStreamLog",
+                            "saturation_ratio": {
+                                "label": "saturation_ratio",
+                                "type": 6,
+                                "type_string": "Float",
+                                "value": 1.0,
+                                "vmax": 1.0,
+                                "vmin": 0.009999999776482582
+                            },
+                            "talus_ref": {
+                                "label": "talus_ref",
+                                "type": 6,
+                                "type_string": "Float",
+                                "value": 0.10000000149011612,
+                                "vmax": 10.0,
+                                "vmin": 0.009999999776482582
+                            }
+                        }
+                    ]
+                },
+                "graph_viewer": {
+                    "current_link_type": 2,
+                    "groups": [],
+                    "id": "",
+                    "links": [
+                        {
+                            "link_type": 2,
+                            "node_in_id": "1",
+                            "node_out_id": "0",
+                            "port_in_id": "input",
+                            "port_out_id": "output"
+                        }
+                    ],
+                    "nodes": [
+                        {
+                            "caption": "HydraulicStreamLog",
+                            "id": "1",
+                            "is_widget_visible": true,
+                            "scene_position.x": -704.0,
+                            "scene_position.y": -219.0
+                        },
+                        {
+                            "caption": "GaborWaveFbm",
+                            "id": "0",
+                            "is_widget_visible": true,
+                            "scene_position.x": -1111.0,
+                            "scene_position.y": -198.0
+                        }
+                    ]
+                },
+                "headless": false
             }
-        ],
-        "model_config": {
-            "hmap_transform_mode_cpu": 0,
-            "hmap_transform_mode_gpu": 2,
-            "overlap": 0.5,
-            "shape.x": 1024,
-            "shape.y": 1024,
-            "tiling.x": 4,
-            "tiling.y": 4
         },
-        "nodes": [
-            {
-                "angle": {
-                    "label": "angle",
-                    "type": 6,
-                    "type_string": "Float",
-                    "value": 0.0,
-                    "vmax": 180.0,
-                    "vmin": -180.0
-                },
-                "angle_spread_ratio": {
-                    "label": "angle_spread_ratio",
-                    "type": 6,
-                    "type_string": "Float",
-                    "value": 1.0,
-                    "vmax": 1.0,
-                    "vmin": 0.0
-                },
-                "id": "0",
-                "inverse": {
-                    "label": "inverse",
-                    "label_false": "",
-                    "label_true": "",
-                    "type": 0,
-                    "type_string": "Bool",
-                    "value": false
-                },
-                "kw": {
-                    "label": "kw",
-                    "link_xy": true,
-                    "type": 16,
-                    "type_string": "Wavenumber",
-                    "value": [
-                        2.0,
-                        2.0
-                    ],
-                    "vmax": 3.4028234663852886e+38,
-                    "vmin": 0.0
-                },
-                "label": "GaborWaveFbm",
-                "lacunarity": {
-                    "label": "lacunarity",
-                    "type": 6,
-                    "type_string": "Float",
-                    "value": 2.0,
-                    "vmax": 4.0,
-                    "vmin": 0.009999999776482582
-                },
-                "octaves": {
-                    "label": "octaves",
-                    "type": 10,
-                    "type_string": "Integer",
-                    "value": 8,
-                    "vmax": 32,
-                    "vmin": 0
-                },
-                "persistence": {
-                    "label": "persistence",
-                    "type": 6,
-                    "type_string": "Float",
-                    "value": 0.5,
-                    "vmax": 1.0,
-                    "vmin": 0.0
-                },
-                "remap": {
-                    "is_active": true,
-                    "label": "remap",
-                    "type": 11,
-                    "type_string": "Value range",
-                    "value": [
-                        0.0,
-                        1.0
-                    ],
-                    "vmax": 2.0,
-                    "vmin": -1.0
-                },
-                "seed": {
-                    "label": "seed",
-                    "type": 12,
-                    "type_string": "Random seed number",
-                    "value": 0
-                },
-                "weight": {
-                    "label": "weight",
-                    "type": 6,
-                    "type_string": "Float",
-                    "value": 0.699999988079071,
-                    "vmax": 1.0,
-                    "vmin": 0.0
-                }
-            },
-            {
-                "GPU": {
-                    "label": "GPU",
-                    "label_false": "",
-                    "label_true": "",
-                    "type": 0,
-                    "type_string": "Bool",
-                    "value": true
-                },
-                "c_erosion": {
-                    "label": "c_erosion",
-                    "type": 6,
-                    "type_string": "Float",
-                    "value": 0.10000000149011612,
-                    "vmax": 1.0,
-                    "vmin": 0.009999999776482582
-                },
-                "deposition_radius": {
-                    "label": "deposition_radius",
-                    "type": 6,
-                    "type_string": "Float",
-                    "value": 0.10000000149011612,
-                    "vmax": 0.20000000298023224,
-                    "vmin": 0.0
-                },
-                "deposition_scale_ratio": {
-                    "label": "deposition_scale_ratio",
-                    "type": 6,
-                    "type_string": "Float",
-                    "value": 1.0,
-                    "vmax": 1.0,
-                    "vmin": 0.0
-                },
-                "gradient_power": {
-                    "label": "gradient_power",
-                    "type": 6,
-                    "type_string": "Float",
-                    "value": 0.800000011920929,
-                    "vmax": 2.0,
-                    "vmin": 0.10000000149011612
-                },
-                "gradient_prefilter_radius": {
-                    "label": "gradient_prefilter_radius",
-                    "type": 6,
-                    "type_string": "Float",
-                    "value": 0.10000000149011612,
-                    "vmax": 0.20000000298023224,
-                    "vmin": 0.0
-                },
-                "gradient_scaling_ratio": {
-                    "label": "gradient_scaling_ratio",
-                    "type": 6,
-                    "type_string": "Float",
-                    "value": 1.0,
-                    "vmax": 1.0,
-                    "vmin": 0.0
-                },
-                "id": "1",
-                "label": "HydraulicStreamLog",
-                "saturation_ratio": {
-                    "label": "saturation_ratio",
-                    "type": 6,
-                    "type_string": "Float",
-                    "value": 1.0,
-                    "vmax": 1.0,
-                    "vmin": 0.009999999776482582
-                },
-                "talus_ref": {
-                    "label": "talus_ref",
-                    "type": 6,
-                    "type_string": "Float",
-                    "value": 0.10000000149011612,
-                    "vmax": 10.0,
-                    "vmin": 0.009999999776482582
-                }
-            },
-            {
-                "auto_export": {
-                    "label": "auto_export",
-                    "label_false": "",
-                    "label_true": "",
-                    "type": 0,
-                    "type_string": "Bool",
-                    "value": true
-                },
-                "fname": {
-                    "filter": "*",
-                    "for_saving": true,
-                    "label": "fname",
-                    "type": 5,
-                    "type_string": "Filename",
-                    "value": "hmap.png"
-                },
-                "format": {
-                    "choice": "png (8 bit)",
-                    "label": "format",
-                    "type": 4,
-                    "type_string": "Enumeration",
-                    "value": 0
-                },
-                "id": "2",
-                "label": "ExportHeightmap"
-            }
-        ]
-    },
-    "graph_viewer": {
-        "current_link_type": 2,
-        "groups": [],
-        "id": "graph1",
-        "links": [
-            {
-                "link_type": 2,
-                "node_in_id": "2",
-                "node_out_id": "1",
-                "port_in_id": "input",
-                "port_out_id": "output"
-            },
-            {
-                "link_type": 2,
-                "node_in_id": "1",
-                "node_out_id": "0",
-                "port_in_id": "input",
-                "port_out_id": "output"
-            }
+        "graph_order": [
+            "base graph",
+            "another graph"
         ],
-        "nodes": [
-            {
-                "caption": "ExportHeightmap",
-                "id": "2",
-                "is_widget_visible": true,
-                "scene_position.x": 160.0,
-                "scene_position.y": -173.0
-            },
-            {
-                "caption": "HydraulicStreamLog",
-                "id": "1",
-                "is_widget_visible": true,
-                "scene_position.x": -70.0,
-                "scene_position.y": -253.0
-            },
-            {
-                "caption": "GaborWaveFbm",
-                "id": "0",
-                "is_widget_visible": true,
-                "scene_position.x": -303.0,
-                "scene_position.y": -355.0
-            }
-        ]
+        "headless": false,
+        "id_count": 0
     },
-    "headless": false
+    "Hesiod version": "v0.0.0"
 }

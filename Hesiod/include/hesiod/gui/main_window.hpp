@@ -14,6 +14,7 @@
 #include <QMainWindow>
 
 #include "hesiod/graph_editor.hpp"
+#include "hesiod/graph_manager.hpp"
 
 namespace hesiod
 {
@@ -64,6 +65,9 @@ private:
   MainWindow &operator=(const MainWindow &) = delete;
 
   void closeEvent(QCloseEvent *event) override;
+
+  // graph-related storage
+  hesiod::GraphManager graph_manager;
 
   std::vector<GraphEditor *> graph_editors = {};
 };

@@ -25,6 +25,29 @@ R""(
 	color: #DFE1E2;
     }
 
+    /* https://stackoverflow.com/questions/38369015 */
+    QTabWidget::pane
+    {
+	color: #DFE1E2;
+	border: 1px solid #5B5B5B;
+	top:-1px; 
+	background: #2B2B2B;
+    } 
+
+    QTabBar::tab
+    {
+	color: #DFE1E2;
+	background: #2B2B2B;
+	border: 1px solid #5B5B5B;
+	padding: 5px 20px 5px 20px;
+    } 
+
+    QTabBar::tab:selected
+    { 
+	background: #4772b3;
+	margin-bottom: -1px; 
+    }
+    
     /* QAbstractSpinBox */
 
     QAbstractSpinBox

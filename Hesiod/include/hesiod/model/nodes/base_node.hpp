@@ -5,11 +5,8 @@
  * @file base_node.hpp
  * @author  Otto Link (otto.link.bv@gmail.com)
  * @brief
- * @version 0.1
- * @date 2023-04-29
  *
  * @copyright Copyright (c) 2023
- *
  */
 
 #pragma once

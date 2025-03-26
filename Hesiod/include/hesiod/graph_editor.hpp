@@ -5,11 +5,8 @@
  * @file graph_editor.hpp
  * @author  Otto Link (otto.link.bv@gmail.com)
  * @brief
- * @version 0.1
- * @date 2023-04-29
  *
  * @copyright Copyright (c) 2023
- *
  */
 
 #pragma once
@@ -18,6 +15,7 @@
 #include <QObject>
 
 #include "gnodegui/graph_viewer.hpp"
+#include "highmap/terrain/terrain.hpp"
 
 #include "hesiod/model/graph_node.hpp"
 #include "hesiod/model/model_config.hpp"
@@ -28,7 +26,7 @@
 namespace hesiod
 {
 
-class GraphEditor : public QObject, public GraphNode
+class GraphEditor : public QObject, public GraphNode, public hmap::Terrain
 {
   Q_OBJECT
 public:
@@ -49,9 +47,9 @@ public:
 
   nlohmann::json json_to() const;
 
-  void load_from_file(const std::filesystem::path &load_fname,
-                      bool                         override_config = true,
-                      bool                         clear_existing_content = true);
+  // void load_from_file(const std::filesystem::path &load_fname,
+  //                     bool                         override_config = true,
+  //                     bool                         clear_existing_content = true);
 
   void update(); // GNode::Graph
 
@@ -73,17 +71,17 @@ public Q_SLOTS:
 
   void on_graph_clear_request();
 
-  void on_graph_import_request();
+  // void on_graph_import_request();
 
-  void on_graph_load_request();
+  //  void on_graph_load_request();
 
   void on_graph_new_request();
 
   void on_graph_reload_request();
 
-  void on_graph_save_as_request();
+  // void on_graph_save_as_request();
 
-  void on_graph_save_request();
+  // void on_graph_save_request();
 
   void on_graph_settings_request();
 
