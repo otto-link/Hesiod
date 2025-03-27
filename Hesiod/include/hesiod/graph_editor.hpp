@@ -20,9 +20,6 @@
 #include "hesiod/model/graph_node.hpp"
 #include "hesiod/model/model_config.hpp"
 
-#include <filesystem> // must be here,
-                      // https://bugreports.qt.io/browse/QTBUG-73263
-
 namespace hesiod
 {
 
@@ -47,10 +44,6 @@ public:
 
   nlohmann::json json_to() const;
 
-  // void load_from_file(const std::filesystem::path &load_fname,
-  //                     bool                         override_config = true,
-  //                     bool                         clear_existing_content = true);
-
   void update(); // GNode::Graph
 
   void update(std::string id); // GNode::Graph
@@ -71,17 +64,9 @@ public Q_SLOTS:
 
   void on_graph_clear_request();
 
-  // void on_graph_import_request();
-
-  //  void on_graph_load_request();
-
   void on_graph_new_request();
 
   void on_graph_reload_request();
-
-  // void on_graph_save_as_request();
-
-  // void on_graph_save_request();
 
   void on_graph_settings_request();
 
@@ -113,17 +98,9 @@ private:
 
   nlohmann::json json_copy_buffer;
 
-  std::filesystem::path fname = "";
-
   std::vector<std::unique_ptr<QWidget>> data_viewers;
 
   bool update_node_on_new_link = true;
-
-  bool is_very_first_load = true;
-
-  void set_fname(const std::filesystem::path &new_fname);
-
-  void set_fname(const std::string &new_fname);
 
   void graph_viewer_disable();
 

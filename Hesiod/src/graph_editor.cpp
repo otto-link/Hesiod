@@ -1,20 +1,13 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-#include <filesystem>
-#include <fstream>
-
 #include <QApplication>
-#include <QFileDialog>
 #include <QMenu>
 #include <QMessageBox>
 #include <QPushButton>
 #include <QTextBrowser>
 #include <QToolButton>
 #include <QWidgetAction>
-
-#include "highmap/geometry/cloud.hpp" // for link colors
-#include "highmap/heightmap.hpp"
 
 #include "gnodegui/style.hpp"
 
@@ -23,7 +16,6 @@
 
 #include "hesiod/graph_editor.hpp"
 #include "hesiod/gui/gui_utils.hpp"
-#include "hesiod/gui/main_window.hpp"
 #include "hesiod/gui/style.hpp"
 #include "hesiod/gui/widgets/model_config_widget.hpp"
 #include "hesiod/gui/widgets/viewer3d.hpp"
@@ -73,16 +65,6 @@ GraphEditor::GraphEditor(const std::string           &id,
                   this,
                   &GraphEditor::on_graph_clear_request);
 
-    // this->connect(this->viewer.get(),
-    //               &gngui::GraphViewer::graph_import_request,
-    //               this,
-    //               &GraphEditor::on_graph_import_request);
-
-    // this->connect(this->viewer.get(),
-    //               &gngui::GraphViewer::graph_load_request,
-    //               this,
-    //               &GraphEditor::on_graph_load_request);
-
     this->connect(this->viewer.get(),
                   &gngui::GraphViewer::graph_new_request,
                   this,
@@ -92,16 +74,6 @@ GraphEditor::GraphEditor(const std::string           &id,
                   &gngui::GraphViewer::graph_reload_request,
                   this,
                   &GraphEditor::on_graph_reload_request);
-
-    // this->connect(this->viewer.get(),
-    //               &gngui::GraphViewer::graph_save_as_request,
-    //               this,
-    //               &GraphEditor::on_graph_save_as_request);
-
-    // this->connect(this->viewer.get(),
-    //               &gngui::GraphViewer::graph_save_request,
-    //               this,
-    //               &GraphEditor::on_graph_save_request);
 
     this->connect(this->viewer.get(),
                   &gngui::GraphViewer::graph_settings_request,
@@ -176,9 +148,6 @@ void GraphEditor::clear()
   // clear node data structure
   GraphNode::clear();
 
-  // clear editor
-  this->fname = "";
-
   this->graph_viewer_enable();
 }
 
@@ -191,17 +160,6 @@ void GraphEditor::json_from(nlohmann::json const &json,
                        override_config,
                        clear_existing_content,
                        prefix_id);
-
-  // std::string version_file = json["Hesiod version"];
-  // std::string version = "v" + std::to_string(HESIOD_VERSION_MAJOR) + "." +
-  //                       std::to_string(HESIOD_VERSION_MINOR) + "." +
-  //                       std::to_string(HESIOD_VERSION_PATCH);
-
-  // if (version != version_file)
-  //   LOG->warn(
-  //       "Hesiod version for this json {} is different for this executable version {}",
-  //       version_file,
-  //       version);
 
   if (this->viewer)
   {
@@ -220,9 +178,6 @@ nlohmann::json GraphEditor::json_to() const
 {
   nlohmann::json json;
 
-  // json["Hesiod version"] = "v" + std::to_string(HESIOD_VERSION_MAJOR) + "." +
-  //                          std::to_string(HESIOD_VERSION_MINOR) + "." +
-  //                          std::to_string(HESIOD_VERSION_PATCH);
   json["graph_node"] = GraphNode::json_to();
 
   json["headless"] = this->viewer ? false : true;
@@ -231,61 +186,6 @@ nlohmann::json GraphEditor::json_to() const
 
   return json;
 }
-
-// void GraphEditor::load_from_file(const std::filesystem::path &load_fname,
-//                                  bool                         override_config,
-//                                  bool                         clear_existing_content)
-// {
-//   this->graph_viewer_disable();
-
-//   // load json
-//   nlohmann::json json;
-//   std::ifstream  file(load_fname);
-
-//   if (file.is_open())
-//   {
-//     file >> json;
-//     file.close();
-//     LOG->trace("JSON successfully loaded from {}", load_fname.string());
-
-//     // only keep the part relevant to the current graph
-//     json = json[this->get_id()];
-
-//     // to avoid some endless loop when the graph is created but the
-//     // main window does not exist yet
-//     if (!this->is_very_first_load)
-//       this->set_fname(load_fname);
-
-//     // not cleared when importing for instance
-//     std::string prefix_id = "";
-
-//     if (clear_existing_content)
-//     {
-//       this->clear();
-//       if (this->viewer)
-//         this->viewer->clear();
-//     }
-//     else
-//     {
-//       // if a graph is imported, used the current node id count to
-//       // prefix all the node from the imported graph to avoid any
-//       // duplicate
-//       uint current_id_count = this->get_id_count() + 1;
-//       this->set_id_count(current_id_count);
-
-//       prefix_id = std::to_string(current_id_count) + "/";
-//     }
-
-//     this->json_from(json, override_config, clear_existing_content, prefix_id);
-//     this->update();
-
-//     this->is_very_first_load = false;
-//   }
-//   else
-//     LOG->error("Could not open file {} to load JSON", load_fname.string());
-
-//   this->graph_viewer_enable();
-// }
 
 void GraphEditor::on_connection_deleted(const std::string &id_out,
                                         const std::string &port_id_out,
@@ -337,45 +237,6 @@ void GraphEditor::on_graph_clear_request()
   }
 }
 
-// void GraphEditor::on_graph_import_request()
-// {
-//   LOG->trace("GraphEditor::on_graph_import_request");
-
-//   std::filesystem::path path = this->fname.parent_path();
-
-//   QString load_fname = QFileDialog::getOpenFileName(this->viewer.get(),
-//                                                     "Import...",
-//                                                     path.string().c_str(),
-//                                                     "Hesiod files (*.hsd)");
-
-//   if (!load_fname.isNull() && !load_fname.isEmpty())
-//   {
-//     bool override_config = true;
-//     bool clear_existing_content = false;
-
-//     this->load_from_file(load_fname.toStdString(),
-//                          override_config,
-//                          clear_existing_content);
-//   }
-// }
-
-// void GraphEditor::on_graph_load_request()
-// {
-//   LOG->trace("GraphEditor::on_graph_load_request");
-
-//   std::filesystem::path path = this->fname.parent_path();
-
-//   QString load_fname = QFileDialog::getOpenFileName(this->viewer.get(),
-//                                                     "Load...",
-//                                                     path.string().c_str(),
-//                                                     "Hesiod files (*.hsd)");
-
-//   if (!load_fname.isNull() && !load_fname.isEmpty())
-//   {
-//     this->load_from_file(load_fname.toStdString());
-//   }
-// }
-
 void GraphEditor::on_graph_new_request()
 {
   LOG->trace("GraphEditor::on_graph_new_request");
@@ -389,65 +250,6 @@ void GraphEditor::on_graph_reload_request()
   // TODO signals back to GUI before / after
   this->update();
 }
-
-// void GraphEditor::on_graph_save_as_request()
-// {
-//   LOG->trace("GraphEditor::on_graph_save_as_request");
-
-//   std::filesystem::path path = this->fname.parent_path();
-
-//   QString new_fname = QFileDialog::getSaveFileName(this->viewer.get(),
-//                                                    "Save as...",
-//                                                    path.string().c_str(),
-//                                                    "Hesiod files (*.hsd)");
-
-//   if (!new_fname.isNull() && !new_fname.isEmpty())
-//   {
-//     this->set_fname(new_fname.toStdString());
-//     this->on_graph_save_request();
-//   }
-// }
-
-// void GraphEditor::on_graph_save_request()
-// {
-//   LOG->trace("GraphEditor::on_graph_save_request");
-
-//   if (this->fname == "")
-//   {
-//     this->on_graph_save_as_request();
-//     return;
-//   }
-
-//   // retrieve any json data already in the file (several graphs and
-//   // other data may be in the file)
-
-//   nlohmann::json json;
-
-//   {
-//     std::ifstream file(this->fname);
-//     if (file.is_open())
-//       file >> json;
-//     file.close();
-//   }
-
-//   // fill-in json with graph data
-//   json[this->get_id()] = this->json_to();
-
-//   // save file
-//   std::ofstream file(this->fname);
-
-//   if (file.is_open())
-//   {
-//     file << json.dump(4);
-//     file.close();
-//     LOG->trace("JSON successfully written to {}", this->fname.string());
-//   }
-//   else
-//     LOG->error("Could not open file {} to load JSON", this->fname.string());
-
-//   if (this->viewer)
-//     this->viewer->setDragMode(QGraphicsView::NoDrag);
-// }
 
 void GraphEditor::on_graph_settings_request()
 {
@@ -819,24 +621,6 @@ void GraphEditor::on_viewport_request()
 
   if (selected_ids.size())
     p_viewer->on_node_selected(selected_ids.back());
-}
-
-void GraphEditor::set_fname(const std::filesystem::path &new_fname)
-{
-  this->fname = new_fname;
-
-  std::string title = "Hesiod";
-  if (!this->fname.empty())
-    title += " - " + this->fname.string();
-
-  // check that the main window exist in this case to avoid an endless loop...
-  if (MainWindow::exists())
-    MainWindow::instance()->set_title(title.c_str());
-}
-
-void GraphEditor::set_fname(const std::string &new_fname)
-{
-  this->set_fname(std::filesystem::path(new_fname));
 }
 
 void GraphEditor::update()

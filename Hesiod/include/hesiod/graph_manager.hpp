@@ -15,8 +15,15 @@
 
 #include "hesiod/graph_editor.hpp"
 
+#include <filesystem> // must be here,
+                      // https://bugreports.qt.io/browse/QTBUG-73263
+
 namespace hesiod
 {
+
+// - TODO add clear()
+// - TODO handle batch mode
+// - TODO import 1 graph
 
 class GraphManager
 {
@@ -60,6 +67,8 @@ public:
   nlohmann::json json_to() const;
 
   void load_from_file(const std::string &fname);
+
+  void remove_graph_editor(const std::string &id);
 
   void save_to_file(const std::string &fname) const;
 

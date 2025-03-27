@@ -58,14 +58,14 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
   this->graph_manager.set_tab_widget(tab_widget);
   this->graph_manager.load_from_file("data/default.hsd");
 
-  // {
-  //   auto config = std::make_shared<hesiod::ModelConfig>();
-  //   auto graph = std::make_shared<hesiod::GraphEditor>("", config);
+  {
+    auto config = std::make_shared<hesiod::ModelConfig>();
+    auto graph = std::make_shared<hesiod::GraphEditor>("", config);
 
-  //   this->graph_manager.add_graph_editor(graph, "base graph");
-  //   // graph->load_from_file("data/default.hsd");
-  //   // graph->get_p_viewer()->zoom_to_content();
-  // }
+    this->graph_manager.add_graph_editor(graph, "new graph");
+    // graph->load_from_file("data/default.hsd");
+    // graph->get_p_viewer()->zoom_to_content();
+  }
 
   // {
   //   auto config = std::make_shared<hesiod::ModelConfig>();
@@ -106,6 +106,8 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
   central_widget->setLayout(main_layout);
 
   this->setCentralWidget(central_widget);
+
+  this->graph_manager.remove_graph_editor("new graph");
 
   // --- connections
 

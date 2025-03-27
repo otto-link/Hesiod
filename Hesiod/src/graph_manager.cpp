@@ -204,6 +204,22 @@ void GraphManager::load_from_file(const std::string &fname)
     graph->update();
 }
 
+void GraphManager::remove_graph_editor(const std::string &id)
+{
+  LOG->trace("Removing graph editor: {}", id);
+
+  if (this->is_graph_id_available(id))
+    return;
+
+  this->graph_order.erase(
+      std::remove(this->graph_order.begin(), this->graph_order.end(), id),
+      this->graph_order.end());
+
+  this->graphs.erase(id);
+
+  this->update_tab_widget();
+}
+
 void GraphManager::save_to_file(const std::string &fname) const
 {
   // fill-in json with graph data
