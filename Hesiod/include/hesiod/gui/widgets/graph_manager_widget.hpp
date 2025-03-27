@@ -14,6 +14,8 @@
 
 #include "hesiod/graph_manager.hpp"
 
+#define LIST_ITEM_HEIGHT 64
+
 namespace hesiod
 {
 
@@ -32,6 +34,9 @@ private Q_SLOTS:
   void on_list_reordered(const QModelIndex &, int, int, const QModelIndex &, int);
 
   void show_context_menu(const QPoint &pos);
+
+private:
+  void add_list_item(const std::string &id);
 
 private:
   GraphManager *p_graph_manager;

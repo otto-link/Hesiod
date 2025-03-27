@@ -18,20 +18,19 @@ GraphManagerWidget::GraphManagerWidget(GraphManager *p_graph_manager, QWidget *p
 
   // --- build widget layout
   QGridLayout *layout = new QGridLayout(this);
+
   this->list_widget = new QListWidget(this);
-
-  layout->addWidget(this->list_widget);
-
+  this->list_widget->setStyleSheet(
+      "QListWidget::item { padding-bottom: 20px; padding-top: 20px; }");
+  this->list_widget->setViewMode(QListView::ListMode);
   this->list_widget->setDragDropMode(QAbstractItemView::InternalMove);
   this->list_widget->setContextMenuPolicy(Qt::CustomContextMenu);
 
+  layout->addWidget(this->list_widget);
+
   // populate with graph editor names
   for (auto &id : this->p_graph_manager->get_graph_order())
-  {
-    auto *item = new QListWidgetItem();
-    item->setText(id.c_str());
-    this->list_widget->addItem(item);
-  }
+    this->add_list_item(id);
 
   this->setLayout(layout);
 
@@ -51,6 +50,13 @@ GraphManagerWidget::GraphManagerWidget(GraphManager *p_graph_manager, QWidget *p
                 &QListWidget::itemDoubleClicked,
                 this,
                 &GraphManagerWidget::on_item_double_clicked);
+}
+
+void GraphManagerWidget::add_list_item(const std::string &id)
+{
+  auto *item = new QListWidgetItem();
+  item->setText(id.c_str());
+  this->list_widget->addItem(item);
 }
 
 void GraphManagerWidget::on_item_double_clicked(QListWidgetItem *item)
@@ -106,9 +112,7 @@ void GraphManagerWidget::show_context_menu(const QPoint &pos)
     std::string new_id = this->p_graph_manager->add_graph_editor(graph, "");
 
     // add to list widget
-    auto *item = new QListWidgetItem();
-    item->setText(new_id.c_str());
-    this->list_widget->addItem(item);
+    this->add_list_item(new_id);
   }
 }
 
