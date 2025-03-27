@@ -14,6 +14,8 @@
 #include "hesiod/gui/main_window.hpp"
 #include "hesiod/logger.hpp"
 
+#include "hesiod/gui/widgets/graph_manager_widget.hpp"
+
 namespace hesiod
 {
 
@@ -107,7 +109,10 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
 
   this->setCentralWidget(central_widget);
 
-  this->graph_manager.remove_graph_editor("new graph");
+  // this->graph_manager.remove_graph_editor("new graph");
+
+  GraphManagerWidget *gw = new GraphManagerWidget(&this->graph_manager, nullptr);
+  gw->show();
 
   // --- connections
 

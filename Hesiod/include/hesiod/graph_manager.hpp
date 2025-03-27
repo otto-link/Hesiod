@@ -22,8 +22,10 @@ namespace hesiod
 {
 
 // - TODO add clear()
+// - TODO add global default config widget
 // - TODO handle batch mode
 // - TODO import 1 graph
+// - TODO QDialog to select ID and config for add_graph
 
 class GraphManager
 {
@@ -53,6 +55,8 @@ public:
 
   GraphEditor *get_graph_ref_by_id_next(const std::string &id);
 
+  const std::vector<std::string> &get_graph_order() { return this->graph_order; }
+
   const std::map<std::string, std::shared_ptr<GraphEditor>> &get_graphs()
   {
     return this->graphs;
@@ -75,6 +79,10 @@ public:
   void set_fname_path(const std::filesystem::path &new_fname_path);
 
   void set_fname(const std::string &new_fname_path);
+
+  void set_graph_order(const std::vector<std::string> &new_graph_order);
+
+  void set_selected_tab(const std::string &id);
 
   void set_tab_widget(QTabWidget *new_tab_widget) { this->tab_widget = new_tab_widget; }
 

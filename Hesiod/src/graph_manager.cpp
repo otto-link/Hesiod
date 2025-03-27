@@ -262,6 +262,25 @@ void GraphManager::set_fname(const std::string &new_fname_path)
   this->set_fname_path(std::filesystem::path(new_fname_path));
 }
 
+void GraphManager::set_graph_order(const std::vector<std::string> &new_graph_order)
+{
+  this->graph_order = new_graph_order;
+  this->update_tab_widget();
+}
+
+void GraphManager::set_selected_tab(const std::string &id)
+{
+  if (!this->tab_widget)
+    return;
+
+  for (int i = 0; i < this->tab_widget->count(); ++i)
+  {
+    QString tab_label = tab_widget->tabText(i);
+    if (tab_label.toStdString() == id)
+      this->tab_widget->setCurrentIndex(i);
+  }
+}
+
 void GraphManager::update_tab_widget()
 {
   LOG->trace("GraphManager::update_tab_widget");
@@ -270,6 +289,9 @@ void GraphManager::update_tab_widget()
     return;
 
   // TODO optimize this
+
+  // backup currently selected tab to set it back afterwards
+  QString current_tab_label = this->tab_widget->tabText(this->tab_widget->currentIndex());
 
   // remove everything
   while (this->tab_widget->count() > 0)
@@ -284,7 +306,11 @@ void GraphManager::update_tab_widget()
     QHBoxLayout *layout = new QHBoxLayout();
     layout->addWidget(this->graphs.at(id)->get_p_viewer());
     tab->setLayout(layout);
-    tab_widget->addTab(tab, id.c_str());
+    this->tab_widget->addTab(tab, id.c_str());
+
+    // select this tab if it was selected before
+    if (id == current_tab_label.toStdString())
+      this->tab_widget->setCurrentWidget(tab);
   }
 }
 
