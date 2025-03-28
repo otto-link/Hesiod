@@ -13,7 +13,7 @@ namespace hesiod
 {
 
 GraphNode::GraphNode(const std::string &id, std::shared_ptr<ModelConfig> config)
-    : gnode::Graph(), id(id), config(config)
+    : gnode::Graph(id), config(config)
 {
   LOG->trace("GraphNode::GraphNode");
   this->config->log_debug();

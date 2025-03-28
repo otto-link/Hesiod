@@ -56,51 +56,15 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
 
   // boot graph manager
   bool headless = false;
-  this->graph_manager = hesiod::GraphManager(headless);
-  this->graph_manager.set_tab_widget(tab_widget);
-  this->graph_manager.load_from_file("data/default.hsd");
-
-  {
-    auto config = std::make_shared<hesiod::ModelConfig>();
-    auto graph = std::make_shared<hesiod::GraphEditor>("", config);
-
-    this->graph_manager.add_graph_editor(graph, "new graph");
-    // graph->load_from_file("data/default.hsd");
-    // graph->get_p_viewer()->zoom_to_content();
-  }
+  this->graph_manager = std::make_unique<hesiod::GraphManager>(headless);
+  this->graph_manager->set_tab_widget(tab_widget);
+  this->graph_manager->load_from_file("data/default.hsd");
 
   // {
   //   auto config = std::make_shared<hesiod::ModelConfig>();
   //   auto graph = std::make_shared<hesiod::GraphEditor>("", config);
-
-  //   this->graph_manager.add_graph_editor(graph, "another graph");
-  //   // graph->load_from_file("data/default.hsd");
-  //   // graph->get_p_viewer()->zoom_to_content();
+  //   this->graph_manager->add_graph_editor(graph, "new graph");
   // }
-
-  // // {
-  // //   auto config = std::make_shared<hesiod::ModelConfig>();
-  // //   auto graph = std::make_shared<hesiod::GraphEditor>("", config);
-
-  // //   // graph->load_from_file("data/default.hsd");
-  // //   graph->get_p_viewer()->zoom_to_content();
-  // //   // this->graph_manager.add_graph_editor(graph, "third one");
-  // //   this->graph_manager.add_graph_editor_after(graph, "base graph", "third one");
-  // // }
-
-  // this->graph_manager.dump();
-  // this->graph_manager.update_tab_widget();
-
-  // nlohmann::json json = this->graph_manager.json_to();
-  // this->graph_manager.json_from(json);
-
-  // this->graph_manager.save_to_file("test.hsd");
-  // this->graph_manager.load_from_file("test.hsd");
-
-  // std::cout << this->graph_manager.get_graph_ref_by_id_next("base graph")->get_id()
-  //           << "\n";
-  // std::cout << this->graph_manager.get_graph_ref_by_id_previous("third one")->get_id()
-  //           << "\n";
 
   // main central widget layout
   QHBoxLayout *main_layout = new QHBoxLayout(central_widget);
@@ -109,9 +73,7 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
 
   this->setCentralWidget(central_widget);
 
-  // this->graph_manager.remove_graph_editor("new graph");
-
-  GraphManagerWidget *gw = new GraphManagerWidget(&this->graph_manager, nullptr);
+  GraphManagerWidget *gw = new GraphManagerWidget(this->graph_manager.get(), nullptr);
   gw->show();
 
   // --- connections
@@ -123,7 +85,7 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
       &QAction::triggered,
       [this]()
       {
-        std::filesystem::path path = this->graph_manager.get_fname_path().parent_path();
+        std::filesystem::path path = this->graph_manager->get_fname_path().parent_path();
 
         QString load_fname = QFileDialog::getOpenFileName(this,
                                                           "Load...",
@@ -132,8 +94,8 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
 
         if (!load_fname.isNull() && !load_fname.isEmpty())
         {
-          this->graph_manager.set_fname_path(load_fname.toStdString());
-          this->graph_manager.load_from_file(load_fname.toStdString());
+          this->graph_manager->set_fname_path(load_fname.toStdString());
+          this->graph_manager->load_from_file(load_fname.toStdString());
         }
       });
 
@@ -155,7 +117,7 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
   {
     auto lambda_save_as = [this]()
     {
-      std::filesystem::path path = this->graph_manager.get_fname_path().parent_path();
+      std::filesystem::path path = this->graph_manager->get_fname_path().parent_path();
 
       QString new_fname = QFileDialog::getSaveFileName(this,
                                                        "Save as...",
@@ -164,8 +126,8 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
 
       if (!new_fname.isNull() && !new_fname.isEmpty())
       {
-        this->graph_manager.set_fname_path(new_fname.toStdString());
-        this->graph_manager.save_to_file(new_fname.toStdString());
+        this->graph_manager->set_fname_path(new_fname.toStdString());
+        this->graph_manager->save_to_file(new_fname.toStdString());
       }
     };
 
@@ -173,10 +135,10 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
             &QAction::triggered,
             [this, lambda_save_as]()
             {
-              if (this->graph_manager.get_fname_path() == "")
+              if (this->graph_manager->get_fname_path() == "")
                 lambda_save_as();
               else
-                this->graph_manager.save_to_file(this->graph_manager.get_fname_path());
+                this->graph_manager->save_to_file(this->graph_manager->get_fname_path());
             });
 
     connect(save_as, &QAction::triggered, lambda_save_as);

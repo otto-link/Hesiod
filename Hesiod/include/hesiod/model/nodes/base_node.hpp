@@ -36,6 +36,8 @@
 namespace hesiod
 {
 
+class GraphEditor; // forward
+
 class BaseNode : public QWidget, public gnode::Node, public gngui::NodeProxy
 {
   Q_OBJECT
@@ -111,6 +113,8 @@ public:
 
   int get_nports() const override { return gnode::Node::get_nports(); }
 
+  GraphEditor *get_p_graph_node() const { return this->p_graph_node; }
+
   std::string get_port_caption(int port_index) const override
   {
     return gnode::Node::get_port_label(port_index);
@@ -123,6 +127,8 @@ public:
   //<<< NodeProxy wrapper end
 
 Q_SIGNALS:
+  void broadcast_node_updated(const std::string &graph_id, const std::string &id);
+
   void compute_finished(const std::string &id);
 
   void compute_started(const std::string &id);
@@ -138,6 +144,9 @@ private:
   std::string category;
 
   std::shared_ptr<ModelConfig> config;
+
+  // keep track of the belonging graph node
+  GraphEditor *p_graph_node;
 
   nlohmann::json documentation;
 

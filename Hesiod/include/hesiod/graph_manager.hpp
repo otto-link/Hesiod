@@ -27,8 +27,10 @@ namespace hesiod
 // - TODO import 1 graph
 // - TODO QDialog to select ID and config for add_graph
 
-class GraphManager
+class GraphManager : public QObject
 {
+  Q_OBJECT
+
 public:
   GraphManager() = default;
 
@@ -36,14 +38,6 @@ public:
 
   std::string add_graph_editor(const std::shared_ptr<GraphEditor> &p_graph_editor,
                                const std::string                  &id = "");
-
-  std::string add_graph_editor_after(const std::shared_ptr<GraphEditor> &p_graph_editor,
-                                     const std::string &existing_graph_id,
-                                     const std::string &id = "");
-
-  std::string add_graph_editor_before(const std::shared_ptr<GraphEditor> &p_graph_editor,
-                                      const std::string &existing_graph_id,
-                                      const std::string &id = "");
 
   void dump() const;
 
@@ -87,6 +81,9 @@ public:
   void set_tab_widget(QTabWidget *new_tab_widget) { this->tab_widget = new_tab_widget; }
 
   void update_tab_widget();
+
+public Q_SLOTS:
+  void on_broadcast_node_updated(const std::string &graph_id, const std::string &id);
 
 private:
   std::map<std::string, std::shared_ptr<GraphEditor>> graphs;

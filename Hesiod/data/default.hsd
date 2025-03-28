@@ -66,11 +66,17 @@
             "base graph": {
                 "graph_node": {
                     "id": "base graph",
-                    "id_count": 2,
+                    "id_count": 3,
                     "links": [
                         {
                             "node_id_from": "0",
                             "node_id_to": "1",
+                            "port_id_from": "output",
+                            "port_id_to": "input"
+                        },
+                        {
+                            "node_id_from": "1",
+                            "node_id_to": "2",
                             "port_id_from": "output",
                             "port_id_to": "input"
                         }
@@ -250,6 +256,10 @@
                                 "vmax": 10.0,
                                 "vmin": 0.009999999776482582
                             }
+                        },
+                        {
+                            "id": "2",
+                            "label": "Broadcast"
                         }
                     ]
                 },
@@ -260,6 +270,13 @@
                     "links": [
                         {
                             "link_type": 2,
+                            "node_in_id": "2",
+                            "node_out_id": "1",
+                            "port_in_id": "input",
+                            "port_out_id": "output"
+                        },
+                        {
+                            "link_type": 2,
                             "node_in_id": "1",
                             "node_out_id": "0",
                             "port_in_id": "input",
@@ -268,11 +285,11 @@
                     ],
                     "nodes": [
                         {
-                            "caption": "HydraulicStreamLog",
-                            "id": "1",
+                            "caption": "Broadcast",
+                            "id": "2",
                             "is_widget_visible": true,
-                            "scene_position.x": -704.0,
-                            "scene_position.y": -219.0
+                            "scene_position.x": -443.75999549674975,
+                            "scene_position.y": -271.2400014801025
                         },
                         {
                             "caption": "GaborWaveFbm",
@@ -280,15 +297,48 @@
                             "is_widget_visible": true,
                             "scene_position.x": -1111.0,
                             "scene_position.y": -198.0
+                        },
+                        {
+                            "caption": "HydraulicStreamLog",
+                            "id": "1",
+                            "is_widget_visible": true,
+                            "scene_position.x": -704.0,
+                            "scene_position.y": -219.0
                         }
                     ]
+                },
+                "headless": false
+            },
+            "new graph": {
+                "graph_node": {
+                    "id": "new graph",
+                    "id_count": 0,
+                    "links": [],
+                    "model_config": {
+                        "hmap_transform_mode_cpu": 0,
+                        "hmap_transform_mode_gpu": 2,
+                        "overlap": 0.5,
+                        "shape.x": 1024,
+                        "shape.y": 1024,
+                        "tiling.x": 4,
+                        "tiling.y": 4
+                    },
+                    "nodes": []
+                },
+                "graph_viewer": {
+                    "current_link_type": 2,
+                    "groups": [],
+                    "id": "",
+                    "links": [],
+                    "nodes": []
                 },
                 "headless": false
             }
         },
         "graph_order": [
             "base graph",
-            "another graph"
+            "another graph",
+            "new graph"
         ],
         "headless": false,
         "id_count": 0

@@ -32,7 +32,7 @@ GraphEditor::GraphEditor(const std::string           &id,
                          bool                         headless)
     : GraphNode(id, config), hmap::Terrain()
 {
-  LOG->trace("GraphEditor::GraphEditor, graph id {}", this->get_id());
+  LOG->trace("GraphEditor::GraphEditor, graph id [{}]", this->get_id());
 
   if (headless)
   {
@@ -151,6 +151,19 @@ void GraphEditor::clear()
   this->graph_viewer_enable();
 }
 
+void GraphEditor::connect_node_for_broadcasting(BaseNode *p_node)
+{
+  this->connect(p_node,
+                &BaseNode::broadcast_node_updated,
+                [this](const std::string &graph_id, const std::string &id)
+                {
+                  // pass through, re-emit the signals by the graph
+                  // editor (to be handled by the graph manager above)
+                  LOG->trace("on broadcasting graph: [{}], node: [{}]", graph_id, id);
+                  Q_EMIT this->broadcast_node_updated(graph_id, id);
+                });
+}
+
 void GraphEditor::json_from(nlohmann::json const &json,
                             bool                  override_config,
                             bool                  clear_existing_content,
@@ -160,6 +173,10 @@ void GraphEditor::json_from(nlohmann::json const &json,
                        override_config,
                        clear_existing_content,
                        prefix_id);
+
+  // reconnect nodes for broadcasting
+  for (auto &[key, p_node] : this->nodes)
+    this->connect_node_for_broadcasting(dynamic_cast<BaseNode *>(p_node.get()));
 
   if (this->viewer)
   {
@@ -192,7 +209,7 @@ void GraphEditor::on_connection_deleted(const std::string &id_out,
                                         const std::string &id_in,
                                         const std::string &port_id_in)
 {
-  LOG->trace("GraphEditor::on_connection_deleted, {}:{} -> {}:{}",
+  LOG->trace("GraphEditor::on_connection_deleted, [{}]:[{}] -> [{}]:[{}]",
              id_out,
              port_id_out,
              id_in,
@@ -207,7 +224,7 @@ void GraphEditor::on_connection_finished(const std::string &id_out,
                                          const std::string &id_in,
                                          const std::string &port_id_in)
 {
-  LOG->trace("GraphEditor::on_connection_finished, {}:{} -> {}:{}",
+  LOG->trace("GraphEditor::on_connection_finished, [{}]:[{}] -> [{}]:[{}]",
              id_out,
              port_id_out,
              id_in,
@@ -329,6 +346,7 @@ void GraphEditor::on_new_node_request(const std::string &node_type,
 
   // add control node (compute)
   std::string node_id = this->new_node(node_type);
+  this->connect_node_for_broadcasting(this->get_node_ref_by_id<BaseNode>(node_id));
 
   // add corresponding graphics node (GUI)
   this->on_new_graphics_node_request(node_id, scene_pos);
@@ -338,9 +356,18 @@ void GraphEditor::on_new_node_request(const std::string &node_type,
     *p_new_node_id = node_id;
 }
 
+void GraphEditor::on_broadcast_node_updated(const std::string &graph_id,
+                                            const std::string &id)
+{
+  LOG->trace("GraphEditor::on_broadcast_node_updated: [{}] sees broadcast from [{}]:[{}]",
+             this->get_id(),
+             graph_id,
+             id);
+}
+
 void GraphEditor::on_node_deleted_request(const std::string &node_id)
 {
-  LOG->trace("GraphNode::on_node_deleted_request, node {}", node_id);
+  LOG->trace("GraphNode::on_node_deleted_request, node [{}]", node_id);
 
   this->remove_node(node_id);
   if (this->viewer)
@@ -349,7 +376,7 @@ void GraphEditor::on_node_deleted_request(const std::string &node_id)
 
 void GraphEditor::on_node_reload_request(const std::string &node_id)
 {
-  LOG->trace("GraphNode::on_node_reload_request, node {}", node_id);
+  LOG->trace("GraphNode::on_node_reload_request, node [{}]", node_id);
 
   // TODO signals back to GUI before / after
   this->update(node_id);
@@ -357,7 +384,7 @@ void GraphEditor::on_node_reload_request(const std::string &node_id)
 
 void GraphEditor::on_node_right_clicked(const std::string &node_id, QPointF scene_pos)
 {
-  LOG->trace("GraphNode::on_node_right_clicked, node {}", node_id);
+  LOG->trace("GraphNode::on_node_right_clicked, node [{}]", node_id);
 
   if (this->viewer)
   {
@@ -588,6 +615,7 @@ void GraphEditor::on_nodes_paste_request()
     // retrieve the node state
     BaseNode *p_node = this->get_node_ref_by_id<BaseNode>(node_id);
     p_node->json_from(json);
+    this->connect_node_for_broadcasting(p_node);
 
     // set the ID again because if has been overriden by the deserialization
     p_node->set_id(node_id);

@@ -22,6 +22,8 @@ std::string GraphManager::add_graph_editor(
     const std::shared_ptr<GraphEditor> &p_graph_editor,
     const std::string                  &id)
 {
+  LOG->trace("GraphManager::add_graph_editor: {}", id);
+
   std::string graph_id = id;
 
   // use node pointer as ID if none is provided
@@ -38,52 +40,13 @@ std::string GraphManager::add_graph_editor(
 
   this->graph_order.push_back(graph_id);
 
-  this->update_tab_widget();
+  // connections for broadcasting data between graphs
+  this->connect(p_graph_editor.get(),
+                &GraphEditor::broadcast_node_updated,
+                this,
+                &GraphManager::on_broadcast_node_updated);
 
-  return graph_id;
-}
-
-std::string GraphManager::add_graph_editor_after(
-    const std::shared_ptr<GraphEditor> &p_graph_editor,
-    const std::string                  &existing_graph_id,
-    const std::string                  &id)
-{
-  // check the reference graph id indeed exists
-  if (this->is_graph_id_available(existing_graph_id))
-    throw std::runtime_error("Unknown graph ID: " + existing_graph_id);
-
-  std::string graph_id = this->add_graph_editor(p_graph_editor, id);
-
-  // fix graph_order
-  this->graph_order.pop_back();
-  auto it = std::find(this->graph_order.begin(),
-                      this->graph_order.end(),
-                      existing_graph_id);
-  this->graph_order.insert(it + 1, id);
-
-  this->update_tab_widget();
-
-  return graph_id;
-}
-
-std::string GraphManager::add_graph_editor_before(
-    const std::shared_ptr<GraphEditor> &p_graph_editor,
-    const std::string                  &existing_graph_id,
-    const std::string                  &id)
-{
-  // check the reference graph id indeed exists
-  if (this->is_graph_id_available(existing_graph_id))
-    throw std::runtime_error("Unknown graph ID: " + existing_graph_id);
-
-  std::string graph_id = this->add_graph_editor(p_graph_editor, id);
-
-  // fix graph_order
-  this->graph_order.pop_back();
-  auto it = std::find(this->graph_order.begin(),
-                      this->graph_order.end(),
-                      existing_graph_id);
-  this->graph_order.insert(it, id);
-
+  // update GUI
   this->update_tab_widget();
 
   return graph_id;
@@ -160,6 +123,7 @@ void GraphManager::json_from(nlohmann::json const &json)
     auto graph = std::make_shared<hesiod::GraphEditor>("", config);
 
     graph->json_from(json["GraphEditors"][id]);
+
     this->add_graph_editor(graph, id);
   }
 }
@@ -202,6 +166,16 @@ void GraphManager::load_from_file(const std::string &fname)
   // update graphs
   for (auto &[id, graph] : this->graphs)
     graph->update();
+}
+
+void GraphManager::on_broadcast_node_updated(const std::string &graph_id,
+                                             const std::string &id)
+{
+  LOG->trace("GraphManager::on_broadcast_node_updated: broadcasting {}:{}", graph_id, id);
+
+  for (auto &[gid, graph] : this->graphs)
+    if (gid != graph_id)
+      graph->on_broadcast_node_updated(graph_id, id);
 }
 
 void GraphManager::remove_graph_editor(const std::string &id)

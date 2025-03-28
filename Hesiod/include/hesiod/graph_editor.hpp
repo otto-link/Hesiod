@@ -19,6 +19,7 @@
 
 #include "hesiod/model/graph_node.hpp"
 #include "hesiod/model/model_config.hpp"
+#include "hesiod/model/nodes/base_node.hpp"
 
 namespace hesiod
 {
@@ -26,6 +27,7 @@ namespace hesiod
 class GraphEditor : public QObject, public GraphNode, public hmap::Terrain
 {
   Q_OBJECT
+
 public:
   GraphEditor() = default;
 
@@ -49,9 +51,13 @@ public:
   void update(std::string id); // GNode::Graph
 
 Q_SIGNALS:
+  void broadcast_node_updated(const std::string &graph_id, const std::string &id);
+
   void node_compute_finished(const std::string &id);
 
 public Q_SLOTS:
+  void on_broadcast_node_updated(const std::string &graph_id, const std::string &id);
+
   void on_connection_deleted(const std::string &id_out,
                              const std::string &port_id_out,
                              const std::string &id_in,
@@ -91,6 +97,9 @@ public Q_SLOTS:
   void on_nodes_paste_request();
 
   void on_viewport_request();
+
+private:
+  void connect_node_for_broadcasting(BaseNode *p_node);
 
 private:
   std::unique_ptr<gngui::GraphViewer> viewer = std::unique_ptr<gngui::GraphViewer>(

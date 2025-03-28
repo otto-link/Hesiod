@@ -61,7 +61,6 @@ void GraphManagerWidget::add_list_item(const std::string &id)
 
 void GraphManagerWidget::on_item_double_clicked(QListWidgetItem *item)
 {
-  qDebug() << "Double-clicked on:" << item->text();
   this->p_graph_manager->set_selected_tab(item->text().toStdString());
 }
 

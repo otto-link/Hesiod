@@ -67,7 +67,7 @@ private:
   void closeEvent(QCloseEvent *event) override;
 
   // graph-related storage
-  hesiod::GraphManager graph_manager;
+  std::unique_ptr<hesiod::GraphManager> graph_manager;
 
   std::vector<GraphEditor *> graph_editors = {};
 };
