@@ -88,6 +88,20 @@ GraphEditor *GraphManager::get_graph_ref_by_id_next(const std::string &id)
   return nullptr;
 }
 
+bool GraphManager::is_graph_above(const std::string &graph_id,
+                                  const std::string &ref_graph_id)
+{
+  for (auto &id : this->graph_order)
+  {
+    if (id == graph_id)
+      return false;
+    else if (id == ref_graph_id)
+      return true;
+  }
+
+  return false;
+}
+
 void GraphManager::json_from(nlohmann::json const &json)
 {
   LOG->trace("GraphManager::json_from");
@@ -143,7 +157,7 @@ nlohmann::json GraphManager::json_to() const
 
   json["GraphEditors"] = json_graphs;
 
-  std::cout << json.dump(4) << "\n";
+  // std::cout << json.dump(4) << "\n";
 
   return json;
 }
@@ -168,14 +182,37 @@ void GraphManager::load_from_file(const std::string &fname)
     graph->update();
 }
 
-void GraphManager::on_broadcast_node_updated(const std::string &graph_id,
-                                             const std::string &id)
+void GraphManager::on_broadcast_node_updated(const std::string     &graph_id,
+                                             const std::string     &id,
+                                             const hmap::Heightmap *p_h)
 {
   LOG->trace("GraphManager::on_broadcast_node_updated: broadcasting {}:{}", graph_id, id);
 
   for (auto &[gid, graph] : this->graphs)
     if (gid != graph_id)
-      graph->on_broadcast_node_updated(graph_id, id);
+    {
+      // prevent any broadcast from a top layer to a sublayer, this
+      // could lead to endless loop in case of cross-broadcast
+      if (this->is_graph_above(gid, graph_id))
+      {
+        // retrieve terrain features to send them
+        hmap::Terrain *p_terrain_source = (hmap::Terrain *)this->graphs[graph_id].get();
+        hmap::Terrain *p_terrain_target = (hmap::Terrain *)this->graphs[gid].get();
+
+        graph->on_broadcast_node_updated(graph_id,
+                                         id,
+                                         p_terrain_source,
+                                         p_h,
+                                         p_terrain_target);
+      }
+      else
+      {
+        LOG->warn("GraphManager::on_broadcast_node_updated: broacast prevented, graph "
+                  "[{}] is below graph [{}], check graph order",
+                  gid,
+                  graph_id);
+      }
+    }
 }
 
 void GraphManager::remove_graph_editor(const std::string &id)

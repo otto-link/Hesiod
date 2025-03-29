@@ -23,6 +23,7 @@
 #include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/node_factory.hpp"
+#include "hesiod/model/nodes/receive_node.hpp"
 
 namespace hesiod
 {
@@ -30,7 +31,7 @@ namespace hesiod
 GraphEditor::GraphEditor(const std::string           &id,
                          std::shared_ptr<ModelConfig> config,
                          bool                         headless)
-    : GraphNode(id, config), hmap::Terrain()
+    : GraphNode(id, config)
 {
   LOG->trace("GraphEditor::GraphEditor, graph id [{}]", this->get_id());
 
@@ -153,15 +154,21 @@ void GraphEditor::clear()
 
 void GraphEditor::connect_node_for_broadcasting(BaseNode *p_node)
 {
-  this->connect(p_node,
-                &BaseNode::broadcast_node_updated,
-                [this](const std::string &graph_id, const std::string &id)
-                {
-                  // pass through, re-emit the signals by the graph
-                  // editor (to be handled by the graph manager above)
-                  LOG->trace("on broadcasting graph: [{}], node: [{}]", graph_id, id);
-                  Q_EMIT this->broadcast_node_updated(graph_id, id);
-                });
+  if (p_node->get_label() == "Broadcast")
+  {
+    this->connect(
+        p_node,
+        &BaseNode::broadcast_node_updated,
+        [this](const std::string     &graph_id,
+               const std::string     &id,
+               const hmap::Heightmap *p_h)
+        {
+          // pass through, re-emit the signals by the graph
+          // editor (to be handled by the graph manager above)
+          LOG->trace("graph_editor broadcasting graph: [{}], node: [{}]", graph_id, id);
+          Q_EMIT this->broadcast_node_updated(graph_id, id, p_h);
+        });
+  }
 }
 
 void GraphEditor::json_from(nlohmann::json const &json,
@@ -356,13 +363,44 @@ void GraphEditor::on_new_node_request(const std::string &node_type,
     *p_new_node_id = node_id;
 }
 
-void GraphEditor::on_broadcast_node_updated(const std::string &graph_id,
-                                            const std::string &id)
+void GraphEditor::on_broadcast_node_updated(const std::string     &graph_id,
+                                            const std::string     &id,
+                                            const hmap::Terrain   *t_source,
+                                            const hmap::Heightmap *p_h,
+                                            const hmap::Terrain   *t_target)
 {
-  LOG->trace("GraphEditor::on_broadcast_node_updated: [{}] sees broadcast from [{}]:[{}]",
+  LOG->trace("GraphEditor::on_broadcast_node_updated: [{}] <- [{}]:[{}]",
              this->get_id(),
              graph_id,
              id);
+
+  // loop over the nodes and update those with Receive type
+  for (auto &[node_id, p_gnode] : this->nodes)
+  {
+    BaseNode *p_node = dynamic_cast<BaseNode *>(p_gnode.get());
+
+    LOG->trace("- [{}]:[{}]:[{}]", graph_id, node_id, p_node->get_label());
+
+    if (p_node->get_label() == "Receive")
+    {
+      ReceiveNode *p_receive_node = dynamic_cast<ReceiveNode *>(p_node);
+
+      if (!p_receive_node)
+      {
+        LOG->critical("GraphEditor::on_broadcast_node_updated: could not properly recast "
+                      "the node as a receiver. Node [{}]:[{}]:[{}]",
+                      graph_id,
+                      node_id,
+                      p_node->get_label());
+        throw std::runtime_error("could not properly recast the node as a receiver");
+      }
+      else
+      {
+        p_receive_node->set_broadcast_parameters(t_source, p_h, t_target);
+        this->update(node_id);
+      }
+    }
+  }
 }
 
 void GraphEditor::on_node_deleted_request(const std::string &node_id)

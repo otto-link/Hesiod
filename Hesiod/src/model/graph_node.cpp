@@ -13,7 +13,7 @@ namespace hesiod
 {
 
 GraphNode::GraphNode(const std::string &id, std::shared_ptr<ModelConfig> config)
-    : gnode::Graph(id), config(config)
+    : gnode::Graph(id), hmap::Terrain(), config(config)
 {
   LOG->trace("GraphNode::GraphNode");
   this->config->log_debug();
@@ -38,6 +38,14 @@ void GraphNode::json_from(nlohmann::json const &json,
   // existing graph)
   if (override_config)
     this->config->json_from(json["model_config"]);
+
+  // hmap::Terrain
+  auto vo = json["origin"].get<std::vector<float>>();
+  auto vs = json["size"].get<std::vector<float>>();
+
+  this->set_origin(hmap::Vec2<float>(vo[0], vo[1]));
+  this->set_size(hmap::Vec2<float>(vs[0], vs[1]));
+  this->set_rotation_angle(json["rotation_angle"]);
 
   // populate nodes
   for (auto &json_node : json["nodes"])
@@ -71,6 +79,13 @@ nlohmann::json GraphNode::json_to() const
   json["id"] = this->get_id();
   json["id_count"] = this->get_id_count();
   json["model_config"] = this->config->json_to();
+
+  // hmap::Terrain
+  json["origin"] = {this->get_origin().x, this->get_origin().y};
+  json["size"] = {this->get_size().x, this->get_size().y};
+  json["rotation_angle"] = this->get_rotation_angle();
+
+  LOG->trace("SIZE: {} {}", this->get_size().x, this->get_size().y);
 
   // nodes
   json["nodes"] = nlohmann::json::array();

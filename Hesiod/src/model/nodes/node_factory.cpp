@@ -7,6 +7,9 @@
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/node_factory.hpp"
 
+// specific nodes
+#include "hesiod/model/nodes/receive_node.hpp"
+
 #define SETUP_NODE(NodeType, node_type)                                                  \
   case str2int(#NodeType):                                                               \
     setup_##node_type##_node(sptr.get());                                                \
@@ -236,6 +239,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"RecastCliffDirectional", "Filter/Recast"},
       {"RecastCracks", "Filter/Recast"},
       {"RecastSag", "Filter/Recast"},
+      {"Receive", "Routing"},
       {"Recurve", "Filter/Recurve"},
       {"RecurveKura", "Filter/Recurve"},
       {"RecurveS", "Filter/Recurve"},
@@ -317,6 +321,16 @@ std::map<std::string, std::string> get_node_inventory()
 std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type,
                                           std::shared_ptr<ModelConfig> config)
 {
+  // specialized nodes
+  if (node_type == "Receive")
+  {
+    auto sptr = std::make_shared<hesiod::ReceiveNode>(node_type, config);
+    setup_receive_node(sptr.get());
+    sptr->set_compute_fct(&compute_receive_node);
+    return sptr;
+  }
+
+  // generic nodes
   auto sptr = std::make_shared<hesiod::BaseNode>(node_type, config);
 
   switch (str2int(node_type.c_str()))

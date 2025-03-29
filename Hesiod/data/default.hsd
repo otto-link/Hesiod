@@ -44,6 +44,15 @@
                                 "value": true
                             }
                         }
+                    ],
+                    "origin": [
+                        0.0,
+                        0.0
+                    ],
+                    "rotation_angle": 0.0,
+                    "size": [
+                        1.0,
+                        1.0
                     ]
                 },
                 "graph_viewer": {
@@ -261,6 +270,15 @@
                             "id": "2",
                             "label": "Broadcast"
                         }
+                    ],
+                    "origin": [
+                        0.0,
+                        0.0
+                    ],
+                    "rotation_angle": 0.0,
+                    "size": [
+                        1.0,
+                        1.0
                     ]
                 },
                 "graph_viewer": {
@@ -288,8 +306,8 @@
                             "caption": "Broadcast",
                             "id": "2",
                             "is_widget_visible": true,
-                            "scene_position.x": -443.75999549674975,
-                            "scene_position.y": -271.2400014801025
+                            "scene_position.x": -443.760009765625,
+                            "scene_position.y": -271.239990234375
                         },
                         {
                             "caption": "GaborWaveFbm",
@@ -312,7 +330,7 @@
             "new graph": {
                 "graph_node": {
                     "id": "new graph",
-                    "id_count": 0,
+                    "id_count": 1,
                     "links": [],
                     "model_config": {
                         "hmap_transform_mode_cpu": 0,
@@ -323,14 +341,36 @@
                         "tiling.x": 4,
                         "tiling.y": 4
                     },
-                    "nodes": []
+                    "nodes": [
+                        {
+                            "id": "0",
+                            "label": "Receive"
+                        }
+                    ],
+                    "origin": [
+                        0.0,
+                        0.0
+                    ],
+                    "rotation_angle": 15.0,
+                    "size": [
+                        1.0,
+                        1.0
+                    ]
                 },
                 "graph_viewer": {
                     "current_link_type": 2,
                     "groups": [],
                     "id": "",
                     "links": [],
-                    "nodes": []
+                    "nodes": [
+                        {
+                            "caption": "Receive",
+                            "id": "0",
+                            "is_widget_visible": true,
+                            "scene_position.x": -164.0,
+                            "scene_position.y": -354.0
+                        }
+                    ]
                 },
                 "headless": false
             }

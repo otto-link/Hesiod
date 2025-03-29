@@ -12,13 +12,14 @@
 #include "nlohmann/json.hpp"
 
 #include "gnode/graph.hpp"
+#include "highmap/terrain/terrain.hpp"
 
 #include "hesiod/model/model_config.hpp"
 
 namespace hesiod
 {
 
-class GraphNode : public gnode::Graph
+class GraphNode : public gnode::Graph, public hmap::Terrain
 {
 public:
   GraphNode() = delete;

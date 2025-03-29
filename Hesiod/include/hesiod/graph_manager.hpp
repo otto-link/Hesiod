@@ -8,7 +8,6 @@
  *
  * @copyright Copyright (c) 2025
  */
-
 #pragma once
 #include <QObject>
 #include <QTabWidget>
@@ -58,6 +57,8 @@ public:
 
   bool get_headless() const { return this->headless; }
 
+  bool is_graph_above(const std::string &graph_id, const std::string &ref_graph_id);
+
   bool is_graph_id_available(const std::string &id);
 
   void json_from(nlohmann::json const &json);
@@ -83,7 +84,9 @@ public:
   void update_tab_widget();
 
 public Q_SLOTS:
-  void on_broadcast_node_updated(const std::string &graph_id, const std::string &id);
+  void on_broadcast_node_updated(const std::string     &graph_id,
+                                 const std::string     &id,
+                                 const hmap::Heightmap *p_h);
 
 private:
   std::map<std::string, std::shared_ptr<GraphEditor>> graphs;

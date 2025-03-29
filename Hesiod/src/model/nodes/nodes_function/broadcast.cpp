@@ -37,7 +37,7 @@ void compute_broadcast_node(BaseNode *p_node)
                node_id);
 
     // this goes to the graph editor
-    Q_EMIT p_node->broadcast_node_updated(graph_id, node_id);
+    Q_EMIT p_node->broadcast_node_updated(graph_id, node_id, p_in);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

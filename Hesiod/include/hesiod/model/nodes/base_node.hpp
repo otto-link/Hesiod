@@ -127,7 +127,9 @@ public:
   //<<< NodeProxy wrapper end
 
 Q_SIGNALS:
-  void broadcast_node_updated(const std::string &graph_id, const std::string &id);
+  void broadcast_node_updated(const std::string     &graph_id,
+                              const std::string     &id,
+                              const hmap::Heightmap *h);
 
   void compute_finished(const std::string &id);
 

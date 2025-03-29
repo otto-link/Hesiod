@@ -8,14 +8,12 @@
  *
  * @copyright Copyright (c) 2023
  */
-
 #pragma once
 #include <memory>
 
 #include <QObject>
 
 #include "gnodegui/graph_viewer.hpp"
-#include "highmap/terrain/terrain.hpp"
 
 #include "hesiod/model/graph_node.hpp"
 #include "hesiod/model/model_config.hpp"
@@ -24,7 +22,7 @@
 namespace hesiod
 {
 
-class GraphEditor : public QObject, public GraphNode, public hmap::Terrain
+class GraphEditor : public QObject, public GraphNode
 {
   Q_OBJECT
 
@@ -51,12 +49,18 @@ public:
   void update(std::string id); // GNode::Graph
 
 Q_SIGNALS:
-  void broadcast_node_updated(const std::string &graph_id, const std::string &id);
+  void broadcast_node_updated(const std::string     &graph_id,
+                              const std::string     &id,
+                              const hmap::Heightmap *p_h);
 
   void node_compute_finished(const std::string &id);
 
 public Q_SLOTS:
-  void on_broadcast_node_updated(const std::string &graph_id, const std::string &id);
+  void on_broadcast_node_updated(const std::string     &graph_id,
+                                 const std::string     &id,
+                                 const hmap::Terrain   *t_source,
+                                 const hmap::Heightmap *h_source,
+                                 const hmap::Terrain   *t_target);
 
   void on_connection_deleted(const std::string &id_out,
                              const std::string &port_id_out,
