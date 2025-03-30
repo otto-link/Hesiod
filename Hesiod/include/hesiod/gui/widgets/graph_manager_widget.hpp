@@ -33,6 +33,8 @@ private Q_SLOTS:
 
   void on_list_reordered(const QModelIndex &, int, int, const QModelIndex &, int);
 
+  void on_new_graph_request();
+
   void show_context_menu(const QPoint &pos);
 
 private:

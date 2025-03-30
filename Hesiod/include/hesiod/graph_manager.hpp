@@ -25,10 +25,8 @@ namespace hesiod
 // - TODO handle batch mode
 // - TODO import 1 graph
 // - TODO QDialog to select ID and config for add_graph
-// - TODO add graph in widget add even if zero graph
 // - TODO multiple node deletion only calls one connect
 // - TODO fix copying value of the broadcast tag when copy/pasting a node
-// - TODO update proper broadcast node when a receive node is updated
 // - TODO add setting to allow broadcast within the same graph
 // - TODO check tags to avoid undue Receive updates
 // - TODO serialize broadcast params
