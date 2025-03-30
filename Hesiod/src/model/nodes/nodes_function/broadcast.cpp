@@ -1,9 +1,12 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include "attributes.hpp"
+
 #include "hesiod/graph_editor.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
+#include "hesiod/model/nodes/broadcast_node.hpp"
 #include "hesiod/model/utils.hpp"
 
 using namespace attr;
@@ -17,6 +20,9 @@ void setup_broadcast_node(BaseNode *p_node)
 
   // port(s)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+
+  // attribute(s)
+  ADD_ATTR(StringAttribute, "tag", "UNDEFINED");
 }
 
 void compute_broadcast_node(BaseNode *p_node)
@@ -29,6 +35,9 @@ void compute_broadcast_node(BaseNode *p_node)
 
   if (p_in)
   {
+    BroadcastNode *p_broadcast_node = dynamic_cast<BroadcastNode *>(p_node);
+    std::string    broadcast_tag = p_broadcast_node->get_broadcast_tag();
+
     std::string graph_id = p_node->get_graph_id();
     std::string node_id = p_node->get_id();
 
@@ -36,8 +45,10 @@ void compute_broadcast_node(BaseNode *p_node)
                graph_id,
                node_id);
 
+    LOG->trace("broadcast_tag: {}", broadcast_tag);
+
     // this goes to the graph editor
-    Q_EMIT p_node->broadcast_node_updated(graph_id, node_id, p_in);
+    Q_EMIT p_node->broadcast_node_updated(graph_id, node_id, p_in, broadcast_tag);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

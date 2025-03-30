@@ -1,0 +1,39 @@
+/* Copyright (c) 2025 Otto Link. Distributed under the terms of the GNU General
+ * Public License. The full license is in the file LICENSE, distributed with
+ * this software. */
+#include "attributes.hpp"
+
+#include "hesiod/logger.hpp"
+#include "hesiod/model/nodes/broadcast_node.hpp"
+
+namespace hesiod
+{
+
+void BroadcastNode::generate_broadcast_tag()
+{
+  this->broadcast_tag = this->get_graph_id() + "/" + this->get_label() + "/" +
+                        this->get_id();
+
+  // set the attribute value accordingly so that the tag is visible in the GUI for the
+  // user
+  this->get_attr_ref()->at("tag")->get_ref<attr::StringAttribute>()->set_value(
+      this->broadcast_tag);
+}
+
+void BroadcastNode::json_from(nlohmann::json const &json)
+{
+  BaseNode::json_from(json);
+  this->broadcast_tag = json["broadcast_tag"];
+}
+
+nlohmann::json BroadcastNode::json_to() const
+{
+  nlohmann::json json;
+
+  json = BaseNode::json_to();
+  json["broadcast_tag"] = this->broadcast_tag;
+
+  return json;
+}
+
+} // namespace hesiod

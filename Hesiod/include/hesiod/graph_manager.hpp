@@ -25,6 +25,12 @@ namespace hesiod
 // - TODO handle batch mode
 // - TODO import 1 graph
 // - TODO QDialog to select ID and config for add_graph
+// - TODO add graph in widget add even if zero graph
+// - TODO multiple node deletion only calls one connect
+// - TODO fix copying value of the broadcast tag when copy/pasting a node
+// - TODO update proper broadcast node when a receive node is updated
+// - TODO add setting to allow broadcast within the same graph
+// - TODO move management of broadcast ptr data to graph manager
 
 class GraphManager : public QObject
 {
@@ -81,17 +87,26 @@ public:
 
   void set_tab_widget(QTabWidget *new_tab_widget) { this->tab_widget = new_tab_widget; }
 
+  void update_receive_nodes_tag_list();
+
   void update_tab_widget();
 
 public Q_SLOTS:
   void on_broadcast_node_updated(const std::string     &graph_id,
                                  const std::string     &id,
-                                 const hmap::Heightmap *p_h);
+                                 const hmap::Heightmap *p_h,
+                                 const std::string     &tag);
+
+  void on_new_broadcast_tag(const std::string &tag);
+
+  void on_remove_broadcast_tag(const std::string &tag);
 
 private:
   std::map<std::string, std::shared_ptr<GraphEditor>> graphs;
 
   std::vector<std::string> graph_order;
+
+  std::vector<std::string> broadcast_tags;
 
   int id_count = 0;
 

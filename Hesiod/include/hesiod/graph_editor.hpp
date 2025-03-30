@@ -51,16 +51,24 @@ public:
 Q_SIGNALS:
   void broadcast_node_updated(const std::string     &graph_id,
                               const std::string     &id,
-                              const hmap::Heightmap *p_h);
+                              const hmap::Heightmap *p_h,
+                              const std::string     &tag);
 
   void node_compute_finished(const std::string &id);
+
+  void new_broadcast_tag(const std::string &tag);
+
+  void remove_broadcast_tag(const std::string &tag);
+
+  void request_update_receive_nodes_tag_list();
 
 public Q_SLOTS:
   void on_broadcast_node_updated(const std::string     &graph_id,
                                  const std::string     &id,
                                  const hmap::Terrain   *t_source,
                                  const hmap::Heightmap *h_source,
-                                 const hmap::Terrain   *t_target);
+                                 const hmap::Terrain   *t_target,
+                                 const std::string     &tag);
 
   void on_connection_deleted(const std::string &id_out,
                              const std::string &port_id_out,

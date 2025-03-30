@@ -5,6 +5,7 @@
 #include "hesiod/model/graph_node.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
+#include "hesiod/model/nodes/broadcast_node.hpp"
 #include "hesiod/model/nodes/node_factory.hpp"
 
 #include <iostream>
@@ -124,6 +125,15 @@ std::string GraphNode::new_node(const std::string &node_type)
   node->compute();
 
   std::string node_id = this->add_node(node);
+
+  // for the Broadcast nodes, generate their broascasting ID
+  gnode::Node *p_node = this->get_node_ref_by_id(node_id);
+  if (p_node->get_label() == "Broadcast")
+  {
+    BroadcastNode *p_broadcast_node = dynamic_cast<BroadcastNode *>(p_node);
+    p_broadcast_node->generate_broadcast_tag();
+  }
+
   return node_id;
 }
 

@@ -22,6 +22,7 @@
 #include "hesiod/logger.hpp"
 #include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
+#include "hesiod/model/nodes/broadcast_node.hpp"
 #include "hesiod/model/nodes/node_factory.hpp"
 #include "hesiod/model/nodes/receive_node.hpp"
 
@@ -154,21 +155,18 @@ void GraphEditor::clear()
 
 void GraphEditor::connect_node_for_broadcasting(BaseNode *p_node)
 {
-  if (p_node->get_label() == "Broadcast")
-  {
-    this->connect(
-        p_node,
-        &BaseNode::broadcast_node_updated,
-        [this](const std::string     &graph_id,
-               const std::string     &id,
-               const hmap::Heightmap *p_h)
-        {
-          // pass through, re-emit the signals by the graph
-          // editor (to be handled by the graph manager above)
-          LOG->trace("graph_editor broadcasting graph: [{}], node: [{}]", graph_id, id);
-          Q_EMIT this->broadcast_node_updated(graph_id, id, p_h);
-        });
-  }
+  this->connect(p_node,
+                &BaseNode::broadcast_node_updated,
+                [this](const std::string     &graph_id,
+                       const std::string     &id,
+                       const hmap::Heightmap *p_h,
+                       const std::string     &tag)
+                {
+                  // pass through, re-emit the signals by the graph
+                  // editor (to be handled by the graph manager above)
+                  LOG->trace("graph_editor broadcasting, tag: {}", tag);
+                  Q_EMIT this->broadcast_node_updated(graph_id, id, p_h, tag);
+                });
 }
 
 void GraphEditor::json_from(nlohmann::json const &json,
@@ -183,7 +181,8 @@ void GraphEditor::json_from(nlohmann::json const &json,
 
   // reconnect nodes for broadcasting
   for (auto &[key, p_node] : this->nodes)
-    this->connect_node_for_broadcasting(dynamic_cast<BaseNode *>(p_node.get()));
+    if (p_node->get_label() == "Broadcast")
+      this->connect_node_for_broadcasting(dynamic_cast<BaseNode *>(p_node.get()));
 
   if (this->viewer)
   {
@@ -353,7 +352,20 @@ void GraphEditor::on_new_node_request(const std::string &node_type,
 
   // add control node (compute)
   std::string node_id = this->new_node(node_type);
-  this->connect_node_for_broadcasting(this->get_node_ref_by_id<BaseNode>(node_id));
+
+  if (node_type == "Broadcast")
+  {
+    this->connect_node_for_broadcasting(this->get_node_ref_by_id<BaseNode>(node_id));
+
+    // store broadcast tag (to be handled to the graph manage above)
+    std::string tag = this->get_node_ref_by_id<BroadcastNode>(node_id)
+                          ->get_broadcast_tag();
+    Q_EMIT this->new_broadcast_tag(tag);
+  }
+  else if (node_type == "Receive")
+  {
+    Q_EMIT this->request_update_receive_nodes_tag_list();
+  }
 
   // add corresponding graphics node (GUI)
   this->on_new_graphics_node_request(node_id, scene_pos);
@@ -367,7 +379,8 @@ void GraphEditor::on_broadcast_node_updated(const std::string     &graph_id,
                                             const std::string     &id,
                                             const hmap::Terrain   *t_source,
                                             const hmap::Heightmap *p_h,
-                                            const hmap::Terrain   *t_target)
+                                            const hmap::Terrain   *t_target,
+                                            const std::string     &tag)
 {
   LOG->trace("GraphEditor::on_broadcast_node_updated: [{}] <- [{}]:[{}]",
              this->get_id(),
@@ -396,7 +409,7 @@ void GraphEditor::on_broadcast_node_updated(const std::string     &graph_id,
       }
       else
       {
-        p_receive_node->set_broadcast_parameters(t_source, p_h, t_target);
+        p_receive_node->set_broadcast_parameters(t_source, p_h, t_target, tag);
         this->update(node_id);
       }
     }
@@ -407,6 +420,18 @@ void GraphEditor::on_node_deleted_request(const std::string &node_id)
 {
   LOG->trace("GraphNode::on_node_deleted_request, node [{}]", node_id);
 
+  // for a broadcast node, make use its tag will be removed by the
+  // graph manager above from the available tags
+  if (this->get_node_ref_by_id(node_id)->get_label() == "Broadcast")
+  {
+    LOG->trace("Removing a Broadcast node...");
+
+    std::string tag = this->get_node_ref_by_id<BroadcastNode>(node_id)
+                          ->get_broadcast_tag();
+    Q_EMIT this->remove_broadcast_tag(tag);
+  }
+
+  // actually remove the node
   this->remove_node(node_id);
   if (this->viewer)
     this->viewer->remove_node(node_id);

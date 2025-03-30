@@ -9,6 +9,7 @@
 #include "hesiod/graph_manager.hpp"
 #include "hesiod/gui/main_window.hpp"
 #include "hesiod/logger.hpp"
+#include "hesiod/model/nodes/receive_node.hpp"
 
 namespace hesiod
 {
@@ -45,6 +46,21 @@ std::string GraphManager::add_graph_editor(
                 &GraphEditor::broadcast_node_updated,
                 this,
                 &GraphManager::on_broadcast_node_updated);
+
+  this->connect(p_graph_editor.get(),
+                &GraphEditor::new_broadcast_tag,
+                this,
+                &GraphManager::on_new_broadcast_tag);
+
+  this->connect(p_graph_editor.get(),
+                &GraphEditor::remove_broadcast_tag,
+                this,
+                &GraphManager::on_remove_broadcast_tag);
+
+  this->connect(p_graph_editor.get(),
+                &GraphEditor::request_update_receive_nodes_tag_list,
+                this,
+                &GraphManager::update_receive_nodes_tag_list);
 
   // update GUI
   this->update_tab_widget();
@@ -140,6 +156,8 @@ void GraphManager::json_from(nlohmann::json const &json)
 
     this->add_graph_editor(graph, id);
   }
+
+  this->broadcast_tags = json["broadcast_tags"].get<std::vector<std::string>>();
 }
 
 nlohmann::json GraphManager::json_to() const
@@ -149,6 +167,7 @@ nlohmann::json GraphManager::json_to() const
   json["headless"] = this->headless;
   json["id_count"] = this->id_count;
   json["graph_order"] = this->graph_order;
+  json["broadcast_tags"] = this->broadcast_tags;
 
   // graphs
   nlohmann::json json_graphs;
@@ -184,12 +203,13 @@ void GraphManager::load_from_file(const std::string &fname)
 
 void GraphManager::on_broadcast_node_updated(const std::string     &graph_id,
                                              const std::string     &id,
-                                             const hmap::Heightmap *p_h)
+                                             const hmap::Heightmap *p_h,
+                                             const std::string     &tag)
 {
   LOG->trace("GraphManager::on_broadcast_node_updated: broadcasting {}:{}", graph_id, id);
 
   for (auto &[gid, graph] : this->graphs)
-    if (gid != graph_id)
+    if (true) // gid != graph_id)
     {
       // prevent any broadcast from a top layer to a sublayer, this
       // could lead to endless loop in case of cross-broadcast
@@ -203,7 +223,8 @@ void GraphManager::on_broadcast_node_updated(const std::string     &graph_id,
                                          id,
                                          p_terrain_source,
                                          p_h,
-                                         p_terrain_target);
+                                         p_terrain_target,
+                                         tag);
       }
       else
       {
@@ -213,6 +234,22 @@ void GraphManager::on_broadcast_node_updated(const std::string     &graph_id,
                   graph_id);
       }
     }
+}
+
+void GraphManager::on_new_broadcast_tag(const std::string &tag)
+{
+  LOG->trace("GraphManager::on_new_broadcast_tag: tag {}", tag);
+  this->broadcast_tags.push_back(tag);
+  this->update_receive_nodes_tag_list();
+}
+
+void GraphManager::on_remove_broadcast_tag(const std::string &tag)
+{
+  LOG->trace("GraphManager::on_remove_broadcast_tag: tag {}", tag);
+  this->broadcast_tags.erase(
+      std::remove(this->broadcast_tags.begin(), this->broadcast_tags.end(), tag),
+      this->broadcast_tags.end());
+  this->update_receive_nodes_tag_list();
 }
 
 void GraphManager::remove_graph_editor(const std::string &id)
@@ -290,6 +327,20 @@ void GraphManager::set_selected_tab(const std::string &id)
     if (tab_label.toStdString() == id)
       this->tab_widget->setCurrentIndex(i);
   }
+}
+
+void GraphManager::update_receive_nodes_tag_list()
+{
+  LOG->trace("GraphManager::update_receive_nodes_tag_list");
+
+  // update the tag list for all the Receive nodes of the graphs
+  for (auto &[gid, graph] : this->graphs)
+    for (auto &[nid, node] : graph->get_nodes())
+      if (node->get_label() == "Receive")
+      {
+        ReceiveNode *p_rnode = graph->get_node_ref_by_id<ReceiveNode>(nid);
+        p_rnode->update_tag_list(this->broadcast_tags);
+      }
 }
 
 void GraphManager::update_tab_widget()

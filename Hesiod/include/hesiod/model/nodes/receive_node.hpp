@@ -26,16 +26,21 @@ public:
 
   void set_broadcast_parameters(const hmap::Terrain   *new_t_source,
                                 const hmap::Heightmap *new_p_h,
-                                const hmap::Terrain   *new_t_target)
+                                const hmap::Terrain   *new_t_target,
+                                const std::string     &new_tag)
   {
     this->t_source = new_t_source;
     this->p_h = new_p_h;
     this->t_target = new_t_target;
+    this->tag = new_tag;
   }
+
+  void update_tag_list(const std::vector<std::string> &new_tags);
 
   const hmap::Terrain   *t_source = nullptr;
   const hmap::Heightmap *p_h = nullptr;
   const hmap::Terrain   *t_target = nullptr;
+  std::string            tag;
 };
 
 } // namespace hesiod

@@ -8,6 +8,7 @@
 #include "hesiod/model/nodes/node_factory.hpp"
 
 // specific nodes
+#include "hesiod/model/nodes/broadcast_node.hpp"
 #include "hesiod/model/nodes/receive_node.hpp"
 
 #define SETUP_NODE(NodeType, node_type)                                                  \
@@ -321,8 +322,16 @@ std::map<std::string, std::string> get_node_inventory()
 std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type,
                                           std::shared_ptr<ModelConfig> config)
 {
-  // specialized nodes
-  if (node_type == "Receive")
+  // --- specialized nodes
+
+  if (node_type == "Broadcast")
+  {
+    auto sptr = std::make_shared<hesiod::BroadcastNode>(node_type, config);
+    setup_broadcast_node(sptr.get());
+    sptr->set_compute_fct(&compute_broadcast_node);
+    return sptr;
+  }
+  else if (node_type == "Receive")
   {
     auto sptr = std::make_shared<hesiod::ReceiveNode>(node_type, config);
     setup_receive_node(sptr.get());
@@ -330,7 +339,8 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     return sptr;
   }
 
-  // generic nodes
+  // --- generic nodes
+
   auto sptr = std::make_shared<hesiod::BaseNode>(node_type, config);
 
   switch (str2int(node_type.c_str()))
@@ -342,7 +352,6 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(BlendPoissonBf, blend_poisson_bf);
     SETUP_NODE(Border, border);
     SETUP_NODE(Brush, brush);
-    SETUP_NODE(Broadcast, broadcast);
     SETUP_NODE(Bump, bump);
     SETUP_NODE(Caldera, caldera);
     SETUP_NODE(Clamp, clamp);

@@ -81,9 +81,9 @@ public:
 
   std::string get_id() const override { return gnode::Node::get_id(); }
 
-  void json_from(nlohmann::json const &json);
+  virtual void json_from(nlohmann::json const &json);
 
-  nlohmann::json json_to() const;
+  virtual nlohmann::json json_to() const;
 
   void set_attr_ordered_key(const std::vector<std::string> &new_attr_ordered_key)
   {
@@ -129,7 +129,8 @@ public:
 Q_SIGNALS:
   void broadcast_node_updated(const std::string     &graph_id,
                               const std::string     &id,
-                              const hmap::Heightmap *h);
+                              const hmap::Heightmap *h,
+                              const std::string     &tag);
 
   void compute_finished(const std::string &id);
 

@@ -58,13 +58,13 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
   bool headless = false;
   this->graph_manager = std::make_unique<hesiod::GraphManager>(headless);
   this->graph_manager->set_tab_widget(tab_widget);
-  this->graph_manager->load_from_file("data/default.hsd");
+  // this->graph_manager->load_from_file("data/default.hsd");
 
-  // {
-  //   auto config = std::make_shared<hesiod::ModelConfig>();
-  //   auto graph = std::make_shared<hesiod::GraphEditor>("", config);
-  //   this->graph_manager->add_graph_editor(graph, "new graph");
-  // }
+  {
+    auto config = std::make_shared<hesiod::ModelConfig>();
+    auto graph = std::make_shared<hesiod::GraphEditor>("", config);
+    this->graph_manager->add_graph_editor(graph, "new graph");
+  }
 
   // main central widget layout
   QHBoxLayout *main_layout = new QHBoxLayout(central_widget);
