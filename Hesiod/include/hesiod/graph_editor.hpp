@@ -51,6 +51,8 @@ public:
 
   nlohmann::json json_to() const;
 
+  void setup_broadcast_receive_node(const std::string &node_id);
+
   void set_p_broadcast_params(
       std::map<std::string, BroadcastParam> *new_p_broadcast_params)
   {

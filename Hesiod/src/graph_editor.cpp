@@ -185,10 +185,9 @@ void GraphEditor::json_from(nlohmann::json const &json,
                        clear_existing_content,
                        prefix_id);
 
-  // reconnect nodes for broadcasting
-  for (auto &[key, p_node] : this->nodes)
-    if (p_node->get_label() == "Broadcast")
-      this->connect_node_for_broadcasting(dynamic_cast<BaseNode *>(p_node.get()));
+  // specific to Broadcast and Receive nodes
+  for (auto &[id, p_node] : this->nodes)
+    this->setup_broadcast_receive_node(id);
 
   if (this->viewer)
   {
@@ -359,29 +358,8 @@ void GraphEditor::on_new_node_request(const std::string &node_type,
   // add control node (compute)
   std::string node_id = this->new_node(node_type);
 
-  if (node_type == "Broadcast")
-  {
-    this->connect_node_for_broadcasting(this->get_node_ref_by_id<BaseNode>(node_id));
-
-    // store broadcast parameters (to be handled to the graph manage
-    // above). Use an output port to store the data, to ensure it is
-    // always available, full of zeros in worst case scenario
-    const std::string tag = this->get_node_ref_by_id<BroadcastNode>(node_id)
-                                ->get_broadcast_tag();
-    const hmap::Terrain   *t_source = dynamic_cast<hmap::Terrain *>(this);
-    const hmap::Heightmap *h_source = this->get_node_ref_by_id(node_id)
-                                          ->get_value_ref<hmap::Heightmap>("thru");
-
-    Q_EMIT this->new_broadcast_tag(tag, t_source, h_source);
-  }
-  else if (node_type == "Receive")
-  {
-    ReceiveNode *p_receive_node = this->get_node_ref_by_id<ReceiveNode>(node_id);
-    p_receive_node->set_p_broadcast_params(this->p_broadcast_params);
-    p_receive_node->set_p_target_terrain(dynamic_cast<hmap::Terrain *>(this));
-
-    Q_EMIT this->request_update_receive_nodes_tag_list();
-  }
+  // specific to Broadcast and Receive nodes
+  this->setup_broadcast_receive_node(node_id);
 
   // add corresponding graphics node (GUI)
   this->on_new_graphics_node_request(node_id, scene_pos);
@@ -683,10 +661,12 @@ void GraphEditor::on_nodes_paste_request()
     // retrieve the node state
     BaseNode *p_node = this->get_node_ref_by_id<BaseNode>(node_id);
     p_node->json_from(json);
-    this->connect_node_for_broadcasting(p_node);
 
     // set the ID again because if has been overriden by the deserialization
     p_node->set_id(node_id);
+
+    // // specific to Broadcast and Receive nodes
+    // this->setup_broadcast_receive_node(node_id);
 
     // recompute
     this->update(node_id);
@@ -717,6 +697,35 @@ void GraphEditor::on_viewport_request()
 
   if (selected_ids.size())
     p_viewer->on_node_selected(selected_ids.back());
+}
+
+void GraphEditor::setup_broadcast_receive_node(const std::string &node_id)
+{
+  std::string node_type = this->get_node_ref_by_id(node_id)->get_label();
+
+  if (node_type == "Broadcast")
+  {
+    this->connect_node_for_broadcasting(this->get_node_ref_by_id<BaseNode>(node_id));
+
+    // store broadcast parameters (to be handled to the graph manage
+    // above). Use an output port to store the data, to ensure it is
+    // always available, full of zeros in worst case scenario
+    const std::string tag = this->get_node_ref_by_id<BroadcastNode>(node_id)
+                                ->get_broadcast_tag();
+    const hmap::Terrain   *t_source = dynamic_cast<hmap::Terrain *>(this);
+    const hmap::Heightmap *h_source = this->get_node_ref_by_id(node_id)
+                                          ->get_value_ref<hmap::Heightmap>("thru");
+
+    Q_EMIT this->new_broadcast_tag(tag, t_source, h_source);
+  }
+  else if (node_type == "Receive")
+  {
+    ReceiveNode *p_receive_node = this->get_node_ref_by_id<ReceiveNode>(node_id);
+    p_receive_node->set_p_broadcast_params(this->p_broadcast_params);
+    p_receive_node->set_p_target_terrain(dynamic_cast<hmap::Terrain *>(this));
+
+    Q_EMIT this->request_update_receive_nodes_tag_list();
+  }
 }
 
 void GraphEditor::update()

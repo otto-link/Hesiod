@@ -146,6 +146,8 @@ void GraphManager::json_from(nlohmann::json const &json)
   // keep deserializing
   this->headless = json["headless"];
   this->id_count = json["id_count"];
+
+  // graph order
   std::vector<std::string> gid_order = json["graph_order"];
 
   for (auto &id : gid_order)
@@ -155,12 +157,14 @@ void GraphManager::json_from(nlohmann::json const &json)
     auto config = std::make_shared<hesiod::ModelConfig>();
     auto graph = std::make_shared<hesiod::GraphEditor>("", config);
 
-    graph->json_from(json["GraphEditors"][id]);
-
+    // in this order, add the graph editor to the graph manager and
+    // then deserialize the graph editor because the Receive nodes, if
+    // any, need a reference to the broadcast_params of the
+    // GraphManager, which is provided to the graph editor when
+    // added...
     this->add_graph_editor(graph, id);
+    graph->json_from(json["GraphEditors"][id]);
   }
-
-  // this->broadcast_tags = json["broadcast_tags"].get<std::vector<std::string>>();
 }
 
 nlohmann::json GraphManager::json_to() const
@@ -170,7 +174,6 @@ nlohmann::json GraphManager::json_to() const
   json["headless"] = this->headless;
   json["id_count"] = this->id_count;
   json["graph_order"] = this->graph_order;
-  // json["broadcast_tags"] = this->broadcast_tags;
 
   // graphs
   nlohmann::json json_graphs;

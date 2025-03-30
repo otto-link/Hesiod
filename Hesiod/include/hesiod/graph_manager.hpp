@@ -29,7 +29,6 @@ namespace hesiod
 // - TODO fix copying value of the broadcast tag when copy/pasting a node
 // - TODO add setting to allow broadcast within the same graph
 // - TODO check tags to avoid undue Receive updates
-// - TODO serialize broadcast params
 
 struct BroadcastParam
 {
