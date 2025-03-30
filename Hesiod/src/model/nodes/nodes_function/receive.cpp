@@ -4,6 +4,7 @@
 #include "attributes.hpp"
 
 #include "hesiod/graph_editor.hpp"
+#include "hesiod/graph_manager.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/receive_node.hpp"
@@ -36,32 +37,68 @@ void compute_receive_node(BaseNode *p_node)
   LOG->trace("computing node {}", p_node->get_label());
 
   hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
+  std::string      tag = GET("tags", ChoiceAttribute);
 
   // cast to specialized node
   ReceiveNode *p_receive_node = dynamic_cast<ReceiveNode *>(p_node);
 
-  LOG->trace("R:{}, C:{}", p_receive_node->tag, GET("tags", ChoiceAttribute));
-
-  if (p_receive_node->tag == GET("tags", ChoiceAttribute))
+  if (!p_receive_node)
   {
-    if (p_receive_node->t_source && p_receive_node->p_h && p_receive_node->t_target)
+    LOG->error("compute_receive_node: Failed to cast to ReceiveNode");
+    return;
+  }
+
+  LOG->trace("p_broadcast_params {}",
+             p_receive_node->get_p_broadcast_params() ? "ok" : "nok");
+
+  LOG->trace("HERE {}", tag);
+
+  if (!p_receive_node->get_p_broadcast_params())
+  {
+    LOG->trace("NOT OK");
+    return;
+  }
+
+  LOG->trace("HERE 1");
+
+  if (p_receive_node->get_p_broadcast_params()->empty())
+  {
+    LOG->trace("empty map");
+    return;
+  }
+
+  LOG->trace("HERE 2");
+
+  // if (p_receive_node->get_p_broadcast_params()->size() > 0)
+  if (p_receive_node->get_p_broadcast_params()->contains(tag))
+  {
+    LOG->trace("HERE");
+    BroadcastParam broadcast_param = p_receive_node->get_p_broadcast_params()->at(tag);
+    LOG->trace("HERE");
+    // retrieve various pointers for this broadcast
+    const hmap::Terrain   *t_source = broadcast_param.t_source;
+    const hmap::Heightmap *p_h = broadcast_param.p_h;
+    hmap::Terrain         *t_target = p_receive_node->get_p_target_terrain();
+
+    LOG->trace("t_source {}", t_source ? "ok" : "nok");
+    LOG->trace("p_h {}", p_h ? "ok" : "nok");
+    LOG->trace("t_target {}", t_target ? "ok" : "nok");
+
+    if (t_source && p_h && t_target)
     {
-      hmap::Vec2<float> size_s = p_receive_node->t_source->get_size();
-      hmap::Vec2<float> size_t = p_receive_node->t_target->get_size();
+      hmap::Vec2<float> size_s = t_source->get_size();
+      hmap::Vec2<float> size_t = t_target->get_size();
 
       hmap::Vec4<float> bbox_s = {0.f, size_s.x, 0.f, size_s.y};
       hmap::Vec4<float> bbox_t = {0.f, size_t.x, 0.f, size_t.y};
 
       // work on a copy of the incoming heightmap
-      hmap::Heightmap h_src = *p_receive_node->p_h;
+      hmap::Heightmap h_src = *p_h;
 
       h_src.set_bbox(bbox_s);
       p_out->set_bbox(bbox_t);
 
-      hmap::interpolate_terrain_heightmap(*p_receive_node->t_source,
-                                          h_src,
-                                          *p_receive_node->t_target,
-                                          *p_out);
+      hmap::interpolate_terrain_heightmap(*t_source, h_src, *t_target, *p_out);
     }
     else
     {
@@ -70,9 +107,7 @@ void compute_receive_node(BaseNode *p_node)
   }
   else
   {
-    LOG->trace("no update, tags not matching. incoming: {}, selected {}",
-               p_receive_node->tag,
-               GET("tags", ChoiceAttribute));
+    LOG->trace("tag {} not available in broadcast_param", tag);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

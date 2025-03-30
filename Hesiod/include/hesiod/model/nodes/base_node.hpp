@@ -41,6 +41,7 @@ class GraphEditor; // forward
 class BaseNode : public QWidget, public gnode::Node, public gngui::NodeProxy
 {
   Q_OBJECT
+
 public:
   BaseNode() = default;
 
@@ -127,11 +128,6 @@ public:
   //<<< NodeProxy wrapper end
 
 Q_SIGNALS:
-  void broadcast_node_updated(const std::string     &graph_id,
-                              const std::string     &id,
-                              const hmap::Heightmap *h,
-                              const std::string     &tag);
-
   void compute_finished(const std::string &id);
 
   void compute_started(const std::string &id);

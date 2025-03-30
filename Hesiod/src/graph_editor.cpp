@@ -155,17 +155,23 @@ void GraphEditor::clear()
 
 void GraphEditor::connect_node_for_broadcasting(BaseNode *p_node)
 {
-  this->connect(p_node,
-                &BaseNode::broadcast_node_updated,
-                [this](const std::string     &graph_id,
-                       const std::string     &id,
-                       const hmap::Heightmap *p_h,
-                       const std::string     &tag)
+  BroadcastNode *p_broadcast_node = dynamic_cast<BroadcastNode *>(p_node);
+
+  if (!p_broadcast_node)
+  {
+    LOG->error("GraphEditor::connect_node_for_broadcasting: Invalid node type");
+    return;
+  }
+
+  this->connect(p_broadcast_node,
+                &BroadcastNode::broadcast_node_updated,
+                this,
+                [this](const std::string &graph_id, const std::string &tag)
                 {
                   // pass through, re-emit the signals by the graph
                   // editor (to be handled by the graph manager above)
                   LOG->trace("graph_editor broadcasting, tag: {}", tag);
-                  Q_EMIT this->broadcast_node_updated(graph_id, id, p_h, tag);
+                  Q_EMIT this->broadcast_node_updated(graph_id, tag);
                 });
 }
 
@@ -357,13 +363,23 @@ void GraphEditor::on_new_node_request(const std::string &node_type,
   {
     this->connect_node_for_broadcasting(this->get_node_ref_by_id<BaseNode>(node_id));
 
-    // store broadcast tag (to be handled to the graph manage above)
-    std::string tag = this->get_node_ref_by_id<BroadcastNode>(node_id)
-                          ->get_broadcast_tag();
-    Q_EMIT this->new_broadcast_tag(tag);
+    // store broadcast parameters (to be handled to the graph manage
+    // above). Use an output port to store the data, to ensure it is
+    // always available, full of zeros in worst case scenario
+    const std::string tag = this->get_node_ref_by_id<BroadcastNode>(node_id)
+                                ->get_broadcast_tag();
+    const hmap::Terrain   *t_source = dynamic_cast<hmap::Terrain *>(this);
+    const hmap::Heightmap *h_source = this->get_node_ref_by_id(node_id)
+                                          ->get_value_ref<hmap::Heightmap>("thru");
+
+    Q_EMIT this->new_broadcast_tag(tag, t_source, h_source);
   }
   else if (node_type == "Receive")
   {
+    ReceiveNode *p_receive_node = this->get_node_ref_by_id<ReceiveNode>(node_id);
+    p_receive_node->set_p_broadcast_params(this->p_broadcast_params);
+    p_receive_node->set_p_target_terrain(dynamic_cast<hmap::Terrain *>(this));
+
     Q_EMIT this->request_update_receive_nodes_tag_list();
   }
 
@@ -375,24 +391,14 @@ void GraphEditor::on_new_node_request(const std::string &node_type,
     *p_new_node_id = node_id;
 }
 
-void GraphEditor::on_broadcast_node_updated(const std::string     &graph_id,
-                                            const std::string     &id,
-                                            const hmap::Terrain   *t_source,
-                                            const hmap::Heightmap *p_h,
-                                            const hmap::Terrain   *t_target,
-                                            const std::string     &tag)
+void GraphEditor::on_broadcast_node_updated(const std::string &tag)
 {
-  LOG->trace("GraphEditor::on_broadcast_node_updated: [{}] <- [{}]:[{}]",
-             this->get_id(),
-             graph_id,
-             id);
+  LOG->trace("GraphEditor::on_broadcast_node_updated: tag: {}", tag);
 
   // loop over the nodes and update those with Receive type
   for (auto &[node_id, p_gnode] : this->nodes)
   {
     BaseNode *p_node = dynamic_cast<BaseNode *>(p_gnode.get());
-
-    LOG->trace("- [{}]:[{}]:[{}]", graph_id, node_id, p_node->get_label());
 
     if (p_node->get_label() == "Receive")
     {
@@ -401,15 +407,14 @@ void GraphEditor::on_broadcast_node_updated(const std::string     &graph_id,
       if (!p_receive_node)
       {
         LOG->critical("GraphEditor::on_broadcast_node_updated: could not properly recast "
-                      "the node as a receiver. Node [{}]:[{}]:[{}]",
-                      graph_id,
-                      node_id,
-                      p_node->get_label());
+                      "the node as a receiver. Tag {}",
+                      tag);
         throw std::runtime_error("could not properly recast the node as a receiver");
       }
       else
       {
-        p_receive_node->set_broadcast_parameters(t_source, p_h, t_target, tag);
+        // TODO check tags to avoid undue update
+
         this->update(node_id);
       }
     }

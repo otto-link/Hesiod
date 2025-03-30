@@ -35,9 +35,12 @@ std::string GraphManager::add_graph_editor(
   if (!this->is_graph_id_available(graph_id))
     throw std::runtime_error("Graph ID already used: " + graph_id);
 
-  // ddd the graph to the map and store the ID within the graph (in case of)
+  // add the graph to the map and store the ID within the graph (in case of)
   this->graphs[graph_id] = p_graph_editor;
   p_graph_editor->set_id(graph_id);
+
+  // store a reference to the global storage of broadcasting data
+  p_graph_editor->set_p_broadcast_params(&broadcast_params);
 
   this->graph_order.push_back(graph_id);
 
@@ -157,7 +160,7 @@ void GraphManager::json_from(nlohmann::json const &json)
     this->add_graph_editor(graph, id);
   }
 
-  this->broadcast_tags = json["broadcast_tags"].get<std::vector<std::string>>();
+  // this->broadcast_tags = json["broadcast_tags"].get<std::vector<std::string>>();
 }
 
 nlohmann::json GraphManager::json_to() const
@@ -167,7 +170,7 @@ nlohmann::json GraphManager::json_to() const
   json["headless"] = this->headless;
   json["id_count"] = this->id_count;
   json["graph_order"] = this->graph_order;
-  json["broadcast_tags"] = this->broadcast_tags;
+  // json["broadcast_tags"] = this->broadcast_tags;
 
   // graphs
   nlohmann::json json_graphs;
@@ -201,12 +204,10 @@ void GraphManager::load_from_file(const std::string &fname)
     graph->update();
 }
 
-void GraphManager::on_broadcast_node_updated(const std::string     &graph_id,
-                                             const std::string     &id,
-                                             const hmap::Heightmap *p_h,
-                                             const std::string     &tag)
+void GraphManager::on_broadcast_node_updated(const std::string &graph_id,
+                                             const std::string &tag)
 {
-  LOG->trace("GraphManager::on_broadcast_node_updated: broadcasting {}:{}", graph_id, id);
+  LOG->trace("GraphManager::on_broadcast_node_updated: broadcasting {}", tag);
 
   for (auto &[gid, graph] : this->graphs)
     if (true) // gid != graph_id)
@@ -215,16 +216,7 @@ void GraphManager::on_broadcast_node_updated(const std::string     &graph_id,
       // could lead to endless loop in case of cross-broadcast
       if (this->is_graph_above(gid, graph_id))
       {
-        // retrieve terrain features to send them
-        hmap::Terrain *p_terrain_source = (hmap::Terrain *)this->graphs[graph_id].get();
-        hmap::Terrain *p_terrain_target = (hmap::Terrain *)this->graphs[gid].get();
-
-        graph->on_broadcast_node_updated(graph_id,
-                                         id,
-                                         p_terrain_source,
-                                         p_h,
-                                         p_terrain_target,
-                                         tag);
+        graph->on_broadcast_node_updated(tag);
       }
       else
       {
@@ -236,19 +228,21 @@ void GraphManager::on_broadcast_node_updated(const std::string     &graph_id,
     }
 }
 
-void GraphManager::on_new_broadcast_tag(const std::string &tag)
+void GraphManager::on_new_broadcast_tag(const std::string     &tag,
+                                        const hmap::Terrain   *t_source,
+                                        const hmap::Heightmap *h_source)
 {
   LOG->trace("GraphManager::on_new_broadcast_tag: tag {}", tag);
-  this->broadcast_tags.push_back(tag);
+
+  this->broadcast_params[tag] = BroadcastParam(t_source, h_source);
   this->update_receive_nodes_tag_list();
 }
 
 void GraphManager::on_remove_broadcast_tag(const std::string &tag)
 {
   LOG->trace("GraphManager::on_remove_broadcast_tag: tag {}", tag);
-  this->broadcast_tags.erase(
-      std::remove(this->broadcast_tags.begin(), this->broadcast_tags.end(), tag),
-      this->broadcast_tags.end());
+
+  this->broadcast_params.erase(tag);
   this->update_receive_nodes_tag_list();
 }
 
@@ -339,7 +333,12 @@ void GraphManager::update_receive_nodes_tag_list()
       if (node->get_label() == "Receive")
       {
         ReceiveNode *p_rnode = graph->get_node_ref_by_id<ReceiveNode>(nid);
-        p_rnode->update_tag_list(this->broadcast_tags);
+
+        std::vector<std::string> tags = {};
+        for (auto &[tag, _] : this->broadcast_params)
+          tags.push_back(tag);
+
+        p_rnode->update_tag_list(tags);
       }
 }
 

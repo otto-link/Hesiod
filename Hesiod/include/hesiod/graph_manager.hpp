@@ -30,7 +30,14 @@ namespace hesiod
 // - TODO fix copying value of the broadcast tag when copy/pasting a node
 // - TODO update proper broadcast node when a receive node is updated
 // - TODO add setting to allow broadcast within the same graph
-// - TODO move management of broadcast ptr data to graph manager
+// - TODO check tags to avoid undue Receive updates
+// - TODO serialize broadcast params
+
+struct BroadcastParam
+{
+  const hmap::Terrain   *t_source = nullptr;
+  const hmap::Heightmap *p_h = nullptr;
+};
 
 class GraphManager : public QObject
 {
@@ -92,12 +99,11 @@ public:
   void update_tab_widget();
 
 public Q_SLOTS:
-  void on_broadcast_node_updated(const std::string     &graph_id,
-                                 const std::string     &id,
-                                 const hmap::Heightmap *p_h,
-                                 const std::string     &tag);
+  void on_broadcast_node_updated(const std::string &graph_id, const std::string &tag);
 
-  void on_new_broadcast_tag(const std::string &tag);
+  void on_new_broadcast_tag(const std::string     &tag,
+                            const hmap::Terrain   *t_source,
+                            const hmap::Heightmap *h_source);
 
   void on_remove_broadcast_tag(const std::string &tag);
 
@@ -106,7 +112,7 @@ private:
 
   std::vector<std::string> graph_order;
 
-  std::vector<std::string> broadcast_tags;
+  std::map<std::string, BroadcastParam> broadcast_params;
 
   int id_count = 0;
 

@@ -22,6 +22,8 @@
 namespace hesiod
 {
 
+struct BroadcastParam; // forward
+
 class GraphEditor : public QObject, public GraphNode
 {
   Q_OBJECT
@@ -35,6 +37,11 @@ public:
 
   void clear();
 
+  std::map<std::string, BroadcastParam> *get_p_broadcast_params()
+  {
+    return this->p_broadcast_params;
+  }
+
   gngui::GraphViewer *get_p_viewer() { return this->viewer.get(); }
 
   void json_from(nlohmann::json const &json,
@@ -44,31 +51,31 @@ public:
 
   nlohmann::json json_to() const;
 
+  void set_p_broadcast_params(
+      std::map<std::string, BroadcastParam> *new_p_broadcast_params)
+  {
+    this->p_broadcast_params = new_p_broadcast_params;
+  }
+
   void update(); // GNode::Graph
 
   void update(std::string id); // GNode::Graph
 
 Q_SIGNALS:
-  void broadcast_node_updated(const std::string     &graph_id,
-                              const std::string     &id,
-                              const hmap::Heightmap *p_h,
-                              const std::string     &tag);
+  void broadcast_node_updated(const std::string &graph_id, const std::string &tag);
 
   void node_compute_finished(const std::string &id);
 
-  void new_broadcast_tag(const std::string &tag);
+  void new_broadcast_tag(const std::string     &tag,
+                         const hmap::Terrain   *t_source,
+                         const hmap::Heightmap *h_source);
 
   void remove_broadcast_tag(const std::string &tag);
 
   void request_update_receive_nodes_tag_list();
 
 public Q_SLOTS:
-  void on_broadcast_node_updated(const std::string     &graph_id,
-                                 const std::string     &id,
-                                 const hmap::Terrain   *t_source,
-                                 const hmap::Heightmap *h_source,
-                                 const hmap::Terrain   *t_target,
-                                 const std::string     &tag);
+  void on_broadcast_node_updated(const std::string &tag);
 
   void on_connection_deleted(const std::string &id_out,
                              const std::string &port_id_out,
@@ -126,6 +133,9 @@ private:
   void graph_viewer_disable();
 
   void graph_viewer_enable();
+
+  // ownership by GraphManager
+  std::map<std::string, BroadcastParam> *p_broadcast_params = nullptr;
 };
 
 } // namespace hesiod

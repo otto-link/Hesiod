@@ -20,6 +20,7 @@ void setup_broadcast_node(BaseNode *p_node)
 
   // port(s)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "thru", CONFIG);
 
   // attribute(s)
   ADD_ATTR(StringAttribute, "tag", "UNDEFINED");
@@ -35,6 +36,9 @@ void compute_broadcast_node(BaseNode *p_node)
 
   if (p_in)
   {
+    hmap::Heightmap *p_thru = p_node->get_value_ref<hmap::Heightmap>("thru");
+    *p_thru = *p_in;
+
     BroadcastNode *p_broadcast_node = dynamic_cast<BroadcastNode *>(p_node);
     std::string    broadcast_tag = p_broadcast_node->get_broadcast_tag();
 
@@ -48,7 +52,7 @@ void compute_broadcast_node(BaseNode *p_node)
     LOG->trace("broadcast_tag: {}", broadcast_tag);
 
     // this goes to the graph editor
-    Q_EMIT p_node->broadcast_node_updated(graph_id, node_id, p_in, broadcast_tag);
+    Q_EMIT p_broadcast_node->broadcast_node_updated(graph_id, broadcast_tag);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());
