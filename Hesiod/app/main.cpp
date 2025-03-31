@@ -9,6 +9,7 @@ typedef unsigned int uint;
 #include "highmap/algebra.hpp"
 #include "highmap/opencl/gpu_opencl.hpp"
 
+#include "hesiod/config.hpp"
 #include "hesiod/gui/main_window.hpp"
 #include "hesiod/logger.hpp"
 
@@ -32,6 +33,8 @@ int main(int argc, char *argv[])
             HESIOD_VERSION_MAJOR,
             HESIOD_VERSION_MINOR,
             HESIOD_VERSION_PATCH);
+
+  CFG->dump();
 
   // start OpenCL
   hmap::gpu::init_opencl();

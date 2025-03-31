@@ -128,6 +128,7 @@ std::string GraphNode::new_node(const std::string &node_type)
 
   // for the Broadcast nodes, generate their broascasting ID
   gnode::Node *p_node = this->get_node_ref_by_id(node_id);
+
   if (p_node->get_label() == "Broadcast")
   {
     BroadcastNode *p_broadcast_node = dynamic_cast<BroadcastNode *>(p_node);

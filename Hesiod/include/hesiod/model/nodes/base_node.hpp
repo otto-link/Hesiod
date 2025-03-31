@@ -16,7 +16,6 @@
 
 #include "gnode/node.hpp"
 #include "gnodegui/node_proxy.hpp"
-#include "nlohmann/json.hpp"
 
 #include "attributes/abstract_attribute.hpp"
 

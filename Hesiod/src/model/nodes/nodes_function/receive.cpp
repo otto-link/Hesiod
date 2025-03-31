@@ -27,7 +27,7 @@ void setup_receive_node(BaseNode *p_node)
   // nothing by default, this is going to be updated and populated
   // automatically by the graph manager
   std::vector<std::string> choices = {"NO TAG AVAILABLE"};
-  ADD_ATTR(ChoiceAttribute, "tags", choices, choices.front());
+  ADD_ATTR(ChoiceAttribute, "tag", choices, choices.front());
 }
 
 void compute_receive_node(BaseNode *p_node)
@@ -37,7 +37,7 @@ void compute_receive_node(BaseNode *p_node)
   LOG->trace("computing node {}", p_node->get_label());
 
   hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
-  std::string      tag = GET("tags", ChoiceAttribute);
+  std::string      tag = GET("tag", ChoiceAttribute);
 
   // cast to specialized node
   ReceiveNode *p_receive_node = dynamic_cast<ReceiveNode *>(p_node);
