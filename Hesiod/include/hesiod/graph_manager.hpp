@@ -26,7 +26,6 @@ namespace hesiod
 // - TODO import 1 graph
 // - TODO QDialog to select ID and config for add_graph
 // - TODO multiple node deletion only calls one connect
-// - TODO fix copying value of the broadcast tag when copy/pasting a node
 // - TODO add setting to allow broadcast within the same graph
 // - TODO check tags to avoid undue Receive updates
 

@@ -665,8 +665,8 @@ void GraphEditor::on_nodes_paste_request()
     // set the ID again because if has been overriden by the deserialization
     p_node->set_id(node_id);
 
-    // // specific to Broadcast and Receive nodes
-    // this->setup_broadcast_receive_node(node_id);
+    // specific to Broadcast and Receive nodes
+    this->setup_broadcast_receive_node(node_id);
 
     // recompute
     this->update(node_id);

@@ -26,6 +26,14 @@ Config::Config()
 
   section += "Section 2/";
   this->add<attr::BoolAttribute>(section + "periodic", false);
+  this->add<attr::RangeAttribute>(section + "remap");
+  this->add<attr::SeedAttribute>(section + "seed");
+
+  // for (int k = 0; k < 25; ++k)
+  // {
+  //   std::string str = "test_" + std::to_string(k);
+  //   this->add<attr::BoolAttribute>(section + str, false);
+  // }
 
   section = "Graph editor/";
 

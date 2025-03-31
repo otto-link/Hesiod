@@ -12,8 +12,9 @@ typedef unsigned int uint;
 #include "hesiod/config.hpp"
 #include "hesiod/gui/main_window.hpp"
 #include "hesiod/logger.hpp"
-
 #include "hesiod/model/nodes/node_factory.hpp"
+
+#include "hesiod/gui/widgets/config_widget.hpp"
 
 // in this order, required by args.hxx
 std::istream &operator>>(std::istream &is, hmap::Vec2<int> &vec2)
@@ -34,8 +35,6 @@ int main(int argc, char *argv[])
             HESIOD_VERSION_MINOR,
             HESIOD_VERSION_PATCH);
 
-  CFG->dump();
-
   // start OpenCL
   hmap::gpu::init_opencl();
 
@@ -43,6 +42,13 @@ int main(int argc, char *argv[])
   hesiod::CmapManager::get_instance();
 
   QApplication app(argc, argv); // even if headless (for QObject)
+
+  // // DBG
+  // {
+  //   CFG->dump();
+  //   auto cw = new hesiod::ConfigWidget();
+  //   cw->show();
+  // }
 
   // --- parse command line arguments
 

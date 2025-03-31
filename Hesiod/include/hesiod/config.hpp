@@ -24,7 +24,7 @@ public:
   {
     // remove sections for the attribute label
     size_t            pos = key.find_last_of('/');
-    const std::string label = key.substr(pos);
+    const std::string label = key.substr(pos + 1);
 
     LOG->trace("KEY: {}, LABEL: {}", key, label);
 
@@ -42,6 +42,16 @@ public:
   {
     this->attr[key]->get_ref<T>->set_value(new_value);
   };
+
+  template <typename T> T get(const std::string &key)
+  {
+    this->attr[key]->get_ref<T>->get_value();
+  };
+
+  std::map<std::string, std::unique_ptr<attr::AbstractAttribute>> &get_attr()
+  {
+    return this->attr;
+  }
 
 private:
   // private constructor to prevent instantiation

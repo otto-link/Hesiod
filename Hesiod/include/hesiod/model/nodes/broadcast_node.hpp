@@ -28,7 +28,11 @@ public:
 
   void generate_broadcast_tag();
 
-  std::string get_broadcast_tag() const { return this->broadcast_tag; }
+  std::string get_broadcast_tag()
+  {
+    this->generate_broadcast_tag();
+    return this->broadcast_tag;
+  }
 
   void json_from(nlohmann::json const &json) override;
 
