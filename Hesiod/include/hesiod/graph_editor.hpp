@@ -59,9 +59,9 @@ public:
     this->p_broadcast_params = new_p_broadcast_params;
   }
 
-  void update(); // GNode::Graph
+  void update() override; // GNode::Graph
 
-  void update(std::string id); // GNode::Graph
+  void update(std::string id) override; // GNode::Graph
 
 Q_SIGNALS:
   void broadcast_node_updated(const std::string &graph_id, const std::string &tag);
