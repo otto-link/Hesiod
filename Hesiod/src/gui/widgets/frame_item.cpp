@@ -217,9 +217,17 @@ void FrameItem::set_z_depth(int new_z_depth)
 
 void FrameItem::update_item_geometry()
 {
-  this->setRect(0.f, 0.f, COORD_SCALE * size.x(), COORD_SCALE * size.y());
-  this->setPos(COORD_SCALE * origin);
-  this->setRotation(angle);
+  this->setRect(0.f, 0.f, COORD_SCALE * this->size.x(), COORD_SCALE * this->size.y());
+  this->setPos(COORD_SCALE * this->origin);
+  this->setRotation(this->angle);
+
+  const std::string tool_tip = this->id;
+  // + ": " + std::to_string(this->origin.x()) + ", " +
+  //                              std::to_string(this->origin.y()) + " " +
+  //                              std::to_string(this->size.x()) + "x" +
+  //                              std::to_string(this->size.y()) + " " +
+  //                              std::to_string(this->angle) + "°";
+  this->setToolTip(tool_tip.c_str());
 
   // corners (warning, y-scale is reversed...)
   this->rotation_rect = QRectF(this->rect().topRight() - QPointF(this->handle_size, 0.f),
