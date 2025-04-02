@@ -52,6 +52,7 @@ GraphManagerWidget::GraphManagerWidget(GraphManager *p_graph_manager, QWidget *p
   layout->addWidget(zoom_button, row, 2);
 
   this->apply_button = new QPushButton("Apply");
+  this->apply_button->setStyleSheet("QPushButton:enabled {background-color: #4772b3;}");
   layout->addWidget(apply_button, row, 3);
 
   row++;

@@ -127,9 +127,19 @@ void FrameItem::paint(QPainter                       *painter,
   QColor color_hovered(255, 255, 255, 255);
 
   // background
-  painter->setBrush(QBrush(color_bg));
-  painter->setPen(Qt::NoPen);
-  painter->drawRect(base_rect);
+  if (!this->image.isNull())
+  {
+    QImage scaled_image = this->image.scaled(this->rect().size().toSize(),
+                                             Qt::IgnoreAspectRatio,
+                                             Qt::SmoothTransformation);
+    painter->drawImage(this->rect(), scaled_image);
+  }
+  else
+  {
+    painter->setBrush(QBrush(color_bg));
+    painter->setPen(Qt::NoPen);
+    painter->drawRect(base_rect);
+  }
 
   // contour
   painter->setBrush(Qt::NoBrush);

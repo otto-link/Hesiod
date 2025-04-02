@@ -48,12 +48,18 @@ void compute_receive_node(BaseNode *p_node)
     return;
   }
 
-  LOG->trace("p_broadcast_params {}",
-             p_receive_node->get_p_broadcast_params() ? "ok" : "nok");
+  if (!p_receive_node->get_p_broadcast_params())
+  {
+    // at node construction, node may be computed without the graph
+    // infos being set
+    LOG->trace("compute_receive_node: p_broadcast_params {}",
+               p_receive_node->get_p_broadcast_params() ? "ok" : "NOK");
+    return;
+  }
 
   if (p_receive_node->get_p_broadcast_params()->empty())
   {
-    LOG->trace("empty map");
+    LOG->trace("compute_receive_node: empty map");
     return;
   }
 
