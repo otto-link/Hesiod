@@ -51,38 +51,21 @@ void compute_receive_node(BaseNode *p_node)
   LOG->trace("p_broadcast_params {}",
              p_receive_node->get_p_broadcast_params() ? "ok" : "nok");
 
-  LOG->trace("HERE {}", tag);
-
-  if (!p_receive_node->get_p_broadcast_params())
-  {
-    LOG->trace("NOT OK");
-    return;
-  }
-
-  LOG->trace("HERE 1");
-
   if (p_receive_node->get_p_broadcast_params()->empty())
   {
     LOG->trace("empty map");
     return;
   }
 
-  LOG->trace("HERE 2");
-
   // if (p_receive_node->get_p_broadcast_params()->size() > 0)
   if (p_receive_node->get_p_broadcast_params()->contains(tag))
   {
-    LOG->trace("HERE");
     BroadcastParam broadcast_param = p_receive_node->get_p_broadcast_params()->at(tag);
-    LOG->trace("HERE");
+
     // retrieve various pointers for this broadcast
     const hmap::Terrain   *t_source = broadcast_param.t_source;
     const hmap::Heightmap *p_h = broadcast_param.p_h;
     hmap::Terrain         *t_target = p_receive_node->get_p_target_terrain();
-
-    LOG->trace("t_source {}", t_source ? "ok" : "nok");
-    LOG->trace("p_h {}", p_h ? "ok" : "nok");
-    LOG->trace("t_target {}", t_target ? "ok" : "nok");
 
     if (t_source && p_h && t_target)
     {

@@ -78,6 +78,18 @@ void GraphManager::dump() const
     std::cout << " - id: " << id << "\n";
 }
 
+int GraphManager::get_graph_order_index(const std::string &id)
+{
+  if (this->is_graph_id_available(id))
+  {
+    LOG->critical("GraphManager::get_graph_order_index, graph ID not known: {}", id);
+    throw std::runtime_error("Graph ID not known: " + id);
+  }
+
+  auto itr = std::find(this->graph_order.begin(), this->graph_order.end(), id);
+  return (int)std::distance(this->graph_order.begin(), itr);
+}
+
 GraphEditor *GraphManager::get_graph_ref_by_id(const std::string &id)
 {
   auto it = graphs.find(id);
@@ -165,6 +177,8 @@ void GraphManager::json_from(nlohmann::json const &json)
     this->add_graph_editor(graph, id);
     graph->json_from(json["GraphEditors"][id]);
   }
+
+  // Q_EMIT this->has_been_deserialized();
 }
 
 nlohmann::json GraphManager::json_to() const
@@ -205,6 +219,8 @@ void GraphManager::load_from_file(const std::string &fname)
   // update graphs
   for (auto &[id, graph] : this->graphs)
     graph->update();
+
+  Q_EMIT this->has_been_loaded_from_file();
 }
 
 void GraphManager::on_broadcast_node_updated(const std::string &graph_id,

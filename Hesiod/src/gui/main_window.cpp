@@ -66,6 +66,12 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
     this->graph_manager->add_graph_editor(graph, "new graph");
   }
 
+  {
+    auto config = std::make_shared<hesiod::ModelConfig>();
+    auto graph = std::make_shared<hesiod::GraphEditor>("", config);
+    this->graph_manager->add_graph_editor(graph, "new graph 2");
+  }
+
   // main central widget layout
   QHBoxLayout *main_layout = new QHBoxLayout(central_widget);
   main_layout->addWidget(tab_widget);

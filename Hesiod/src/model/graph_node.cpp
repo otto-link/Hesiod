@@ -86,8 +86,6 @@ nlohmann::json GraphNode::json_to() const
   json["size"] = {this->get_size().x, this->get_size().y};
   json["rotation_angle"] = this->get_rotation_angle();
 
-  LOG->trace("SIZE: {} {}", this->get_size().x, this->get_size().y);
-
   // nodes
   json["nodes"] = nlohmann::json::array();
 

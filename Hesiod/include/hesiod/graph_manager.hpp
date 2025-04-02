@@ -10,6 +10,7 @@
  */
 #pragma once
 #include <QObject>
+#include <QPushButton>
 #include <QTabWidget>
 
 #include "hesiod/graph_editor.hpp"
@@ -28,6 +29,7 @@ namespace hesiod
 // - TODO multiple node deletion only calls one connect
 // - TODO add setting to allow broadcast within the same graph
 // - TODO check tags to avoid undue Receive updates
+// - TODO fix context menu in list graph
 
 struct BroadcastParam
 {
@@ -56,6 +58,8 @@ public:
   GraphEditor *get_graph_ref_by_id_previous(const std::string &id);
 
   GraphEditor *get_graph_ref_by_id_next(const std::string &id);
+
+  int get_graph_order_index(const std::string &id);
 
   const std::vector<std::string> &get_graph_order() { return this->graph_order; }
 
@@ -103,6 +107,9 @@ public Q_SLOTS:
 
   void on_remove_broadcast_tag(const std::string &tag);
 
+Q_SIGNALS:
+  void has_been_loaded_from_file();
+
 private:
   std::map<std::string, std::shared_ptr<GraphEditor>> graphs;
 
@@ -119,6 +126,8 @@ private:
   // GUI - keep track of the tab widget to allow its update when graphs are added or
   // removed (ownership by app MainWindow)
   QTabWidget *tab_widget = nullptr;
+
+  bool is_dirty;
 };
 
 } // namespace hesiod
