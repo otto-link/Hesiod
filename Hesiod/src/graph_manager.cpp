@@ -84,6 +84,7 @@ std::string GraphManager::add_graph_editor(
 void GraphManager::clear()
 {
   LOG->trace("GraphManager::clear");
+
   this->graphs.clear();
   this->graph_order.clear();
   this->update_tab_widget();

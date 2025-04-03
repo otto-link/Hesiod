@@ -38,101 +38,100 @@ GraphEditor::GraphEditor(const std::string           &id,
 
   if (headless)
   {
-    LOG->trace("GraphEditor::GraphEditor, running in headless mode for the graph editor");
+    LOG->trace("GraphEditor::GraphEditor, running in headless mode");
+    return;
   }
-  else
-  {
-    LOG->trace("GraphEditor::GraphEditor, initializing graph GUI");
 
-    // --- syles (GNodeGUI)
+  LOG->trace("GraphEditor::GraphEditor, initializing graph GUI");
 
-    GN_STYLE->viewer.add_new_icon = false;
-    GN_STYLE->viewer.add_load_save_icons = false;
-    GN_STYLE->node.color_port_data = data_color_map;
-    GN_STYLE->node.color_category = category_color_map;
+  // --- syles (GNodeGUI)
 
-    // --- instantiate
+  GN_STYLE->viewer.add_new_icon = false;
+  GN_STYLE->viewer.add_load_save_icons = false;
+  GN_STYLE->node.color_port_data = data_color_map;
+  GN_STYLE->node.color_category = category_color_map;
 
-    this->viewer = std::make_unique<gngui::GraphViewer>(this->get_id());
-    this->viewer->set_node_inventory(get_node_inventory());
+  // --- instantiate
 
-    // --- connect with graph viewer
+  this->viewer = std::make_unique<gngui::GraphViewer>(this->get_id());
+  this->viewer->set_node_inventory(get_node_inventory());
 
-    this->connect(this->viewer.get(),
-                  &gngui::GraphViewer::connection_deleted,
-                  this,
-                  &GraphEditor::on_connection_deleted);
+  // --- connect with graph viewer
 
-    this->connect(this->viewer.get(),
-                  &gngui::GraphViewer::connection_finished,
-                  this,
-                  &GraphEditor::on_connection_finished);
+  this->connect(this->viewer.get(),
+                &gngui::GraphViewer::connection_deleted,
+                this,
+                &GraphEditor::on_connection_deleted);
 
-    this->connect(this->viewer.get(),
-                  &gngui::GraphViewer::graph_clear_request,
-                  this,
-                  &GraphEditor::on_graph_clear_request);
+  this->connect(this->viewer.get(),
+                &gngui::GraphViewer::connection_finished,
+                this,
+                &GraphEditor::on_connection_finished);
 
-    this->connect(this->viewer.get(),
-                  &gngui::GraphViewer::graph_new_request,
-                  this,
-                  &GraphEditor::on_graph_new_request);
+  this->connect(this->viewer.get(),
+                &gngui::GraphViewer::graph_clear_request,
+                this,
+                &GraphEditor::on_graph_clear_request);
 
-    this->connect(this->viewer.get(),
-                  &gngui::GraphViewer::graph_reload_request,
-                  this,
-                  &GraphEditor::on_graph_reload_request);
+  this->connect(this->viewer.get(),
+                &gngui::GraphViewer::graph_new_request,
+                this,
+                &GraphEditor::on_graph_new_request);
 
-    this->connect(this->viewer.get(),
-                  &gngui::GraphViewer::graph_settings_request,
-                  this,
-                  &GraphEditor::on_graph_settings_request);
+  this->connect(this->viewer.get(),
+                &gngui::GraphViewer::graph_reload_request,
+                this,
+                &GraphEditor::on_graph_reload_request);
 
-    this->connect(this->viewer.get(),
-                  &gngui::GraphViewer::new_graphics_node_request,
-                  this,
-                  &GraphEditor::on_new_graphics_node_request);
+  this->connect(this->viewer.get(),
+                &gngui::GraphViewer::graph_settings_request,
+                this,
+                &GraphEditor::on_graph_settings_request);
 
-    this->connect(this->viewer.get(),
-                  &gngui::GraphViewer::new_node_request,
-                  [this](const std::string &node_type, QPointF scene_pos)
-                  { this->on_new_node_request(node_type, scene_pos, nullptr); });
+  this->connect(this->viewer.get(),
+                &gngui::GraphViewer::new_graphics_node_request,
+                this,
+                &GraphEditor::on_new_graphics_node_request);
 
-    this->connect(this->viewer.get(),
-                  &gngui::GraphViewer::node_deleted,
-                  this,
-                  &GraphEditor::on_node_deleted_request);
+  this->connect(this->viewer.get(),
+                &gngui::GraphViewer::new_node_request,
+                [this](const std::string &node_type, QPointF scene_pos)
+                { this->on_new_node_request(node_type, scene_pos, nullptr); });
 
-    this->connect(this->viewer.get(),
-                  &gngui::GraphViewer::node_reload_request,
-                  this,
-                  &GraphEditor::on_node_reload_request);
+  this->connect(this->viewer.get(),
+                &gngui::GraphViewer::node_deleted,
+                this,
+                &GraphEditor::on_node_deleted_request);
 
-    this->connect(this->viewer.get(),
-                  &gngui::GraphViewer::node_right_clicked,
-                  this,
-                  &GraphEditor::on_node_right_clicked);
+  this->connect(this->viewer.get(),
+                &gngui::GraphViewer::node_reload_request,
+                this,
+                &GraphEditor::on_node_reload_request);
 
-    this->connect(this->viewer.get(),
-                  &gngui::GraphViewer::nodes_copy_request,
-                  this,
-                  &GraphEditor::on_nodes_copy_request);
+  this->connect(this->viewer.get(),
+                &gngui::GraphViewer::node_right_clicked,
+                this,
+                &GraphEditor::on_node_right_clicked);
 
-    this->connect(this->viewer.get(),
-                  &gngui::GraphViewer::nodes_duplicate_request,
-                  this,
-                  &GraphEditor::on_nodes_duplicate_request);
+  this->connect(this->viewer.get(),
+                &gngui::GraphViewer::nodes_copy_request,
+                this,
+                &GraphEditor::on_nodes_copy_request);
 
-    this->connect(this->viewer.get(),
-                  &gngui::GraphViewer::nodes_paste_request,
-                  this,
-                  &GraphEditor::on_nodes_paste_request);
+  this->connect(this->viewer.get(),
+                &gngui::GraphViewer::nodes_duplicate_request,
+                this,
+                &GraphEditor::on_nodes_duplicate_request);
 
-    this->connect(this->viewer.get(),
-                  &gngui::GraphViewer::viewport_request,
-                  this,
-                  &GraphEditor::on_viewport_request);
-  }
+  this->connect(this->viewer.get(),
+                &gngui::GraphViewer::nodes_paste_request,
+                this,
+                &GraphEditor::on_nodes_paste_request);
+
+  this->connect(this->viewer.get(),
+                &gngui::GraphViewer::viewport_request,
+                this,
+                &GraphEditor::on_viewport_request);
 }
 
 void GraphEditor::clear()
