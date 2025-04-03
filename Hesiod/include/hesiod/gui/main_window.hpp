@@ -15,6 +15,7 @@
 
 #include "hesiod/graph_editor.hpp"
 #include "hesiod/graph_manager.hpp"
+#include "hesiod/gui/widgets/graph_manager_widget.hpp"
 
 namespace hesiod
 {
@@ -68,6 +69,9 @@ private:
 
   // graph-related storage
   std::unique_ptr<hesiod::GraphManager> graph_manager;
+
+  // ownership by MainWindow
+  GraphManagerWidget *graph_manager_widget = nullptr;
 
   std::vector<GraphEditor *> graph_editors = {};
 };

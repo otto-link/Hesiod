@@ -52,6 +52,13 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
   quit->setShortcut(tr("Ctrl+Q"));
   file_menu->addAction(quit);
 
+  QMenu *view_menu = menuBar()->addMenu("&View");
+
+  auto *show_graph_layout_manager = new QAction("Graph layout manager", this);
+  show_graph_layout_manager->setCheckable(true);
+  show_graph_layout_manager->setChecked(true);
+  view_menu->addAction(show_graph_layout_manager);
+
   QMenu *help = menuBar()->addMenu("&Help");
 
   auto *about = new QAction("&About", this);
@@ -87,28 +94,28 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
 
   this->setCentralWidget(central_widget);
 
-  GraphManagerWidget *gw = new GraphManagerWidget(this->graph_manager.get(), nullptr);
-  gw->show();
+  this->graph_manager_widget = new GraphManagerWidget(this->graph_manager.get(), nullptr);
+  this->graph_manager_widget->show();
 
   // --- connections
 
-  connect(about, &QAction::triggered, this, &MainWindow::show_about);
+  this->connect(about, &QAction::triggered, this, &MainWindow::show_about);
 
-  connect(new_action,
-          &QAction::triggered,
-          [this]()
-          {
-            QMessageBox::StandardButton reply;
-            reply = QMessageBox::question(nullptr,
-                                          "New",
-                                          "Clear everything, are you sure?",
-                                          QMessageBox::Yes | QMessageBox::No);
+  this->connect(new_action,
+                &QAction::triggered,
+                [this]()
+                {
+                  QMessageBox::StandardButton reply;
+                  reply = QMessageBox::question(nullptr,
+                                                "New",
+                                                "Clear everything, are you sure?",
+                                                QMessageBox::Yes | QMessageBox::No);
 
-            if (reply == QMessageBox::Yes)
-              this->graph_manager->clear();
-          });
+                  if (reply == QMessageBox::Yes)
+                    this->graph_manager->clear();
+                });
 
-  connect(
+  this->connect(
       load,
       &QAction::triggered,
       [this]()
@@ -127,19 +134,29 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
         }
       });
 
-  connect(quit,
-          &QAction::triggered,
-          [this]()
-          {
-            QMessageBox::StandardButton reply;
-            reply = QMessageBox::question(nullptr,
-                                          "Quit",
-                                          "Quitting the application, are you sure?",
-                                          QMessageBox::Yes | QMessageBox::No);
+  this->connect(show_graph_layout_manager,
+                &QAction::triggered,
+                this,
+                [this, show_graph_layout_manager]()
+                {
+                  bool state = this->graph_manager_widget->isVisible();
+                  this->graph_manager_widget->setVisible(!state);
+                  show_graph_layout_manager->setChecked(!state);
+                });
 
-            if (reply == QMessageBox::Yes)
-              this->on_quit();
-          });
+  this->connect(quit,
+                &QAction::triggered,
+                [this]()
+                {
+                  QMessageBox::StandardButton reply;
+                  reply = QMessageBox::question(nullptr,
+                                                "Quit",
+                                                "Quitting the application, are you sure?",
+                                                QMessageBox::Yes | QMessageBox::No);
+
+                  if (reply == QMessageBox::Yes)
+                    this->on_quit();
+                });
 
   // save / save as
   {
@@ -159,20 +176,21 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
       }
     };
 
-    connect(save,
-            &QAction::triggered,
-            [this, lambda_save_as]()
-            {
-              if (this->graph_manager->get_fname_path() == "")
-                lambda_save_as();
-              else
-                this->graph_manager->save_to_file(this->graph_manager->get_fname_path());
-            });
+    this->connect(save,
+                  &QAction::triggered,
+                  [this, lambda_save_as]()
+                  {
+                    if (this->graph_manager->get_fname_path() == "")
+                      lambda_save_as();
+                    else
+                      this->graph_manager->save_to_file(
+                          this->graph_manager->get_fname_path());
+                  });
 
-    connect(save_as, &QAction::triggered, lambda_save_as);
+    this->connect(save_as, &QAction::triggered, lambda_save_as);
   }
 
-  connect(p_app, &QApplication::aboutToQuit, [&]() { this->save_state(); });
+  this->connect(p_app, &QApplication::aboutToQuit, [&]() { this->save_state(); });
 }
 
 MainWindow::~MainWindow() { this->save_state(); }
