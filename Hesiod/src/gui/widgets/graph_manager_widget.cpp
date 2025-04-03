@@ -207,6 +207,9 @@ void GraphManagerWidget::show_context_menu(const QPoint &pos)
 
   QListWidgetItem *item = this->list_widget->itemAt(pos);
 
+  if (!item)
+    return;
+  
   std::string selected_id = item ? item->text().toStdString() : "";
   LOG->trace("selected_id: {}", selected_id);
 
@@ -214,7 +217,9 @@ void GraphManagerWidget::show_context_menu(const QPoint &pos)
   QAction *new_action = menu.addAction("New");
   QAction *set_focus_action = menu.addAction("Show in graph editor");
   QAction *delete_action = menu.addAction("Delete");
-  QAction *selected_action = menu.exec(mapToGlobal(pos));
+
+  QPoint global_pos = this->list_widget->mapToGlobal(pos);
+  QAction *selected_action = menu.exec(global_pos);
 
   if (selected_action == delete_action)
   {
