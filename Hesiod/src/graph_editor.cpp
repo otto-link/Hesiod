@@ -44,10 +44,16 @@ GraphEditor::GraphEditor(const std::string           &id,
   {
     LOG->trace("GraphEditor::GraphEditor, initializing graph GUI");
 
+    // --- syles (GNodeGUI)
+
+    GN_STYLE->viewer.add_new_icon = false;
+    GN_STYLE->viewer.add_load_save_icons = false;
+    GN_STYLE->node.color_port_data = data_color_map;
+    GN_STYLE->node.color_category = category_color_map;
+
     // --- instantiate
 
     this->viewer = std::make_unique<gngui::GraphViewer>(this->get_id());
-
     this->viewer->set_node_inventory(get_node_inventory());
 
     // --- connect with graph viewer
@@ -127,11 +133,6 @@ GraphEditor::GraphEditor(const std::string           &id,
                   this,
                   &GraphEditor::on_viewport_request);
   }
-
-  // --- syles
-
-  GN_STYLE->node.color_port_data = data_color_map;
-  GN_STYLE->node.color_category = category_color_map;
 }
 
 void GraphEditor::clear()

@@ -21,14 +21,13 @@
 namespace hesiod
 {
 
-// - TODO add clear()
 // - TODO add global default config widget
 // - TODO handle batch mode
 // - TODO import 1 graph
 // - TODO multiple node deletion only calls one connect
 // - TODO add setting to allow broadcast within the same graph
 // - TODO check tags to avoid undue Receive updates
-// - TODO remove load/save in graph editor
+// - TODO show "graph manager" in menu
 
 struct BroadcastParam
 {
@@ -47,6 +46,8 @@ public:
 
   std::string add_graph_editor(const std::shared_ptr<GraphEditor> &p_graph_editor,
                                const std::string                  &id = "");
+
+  void clear();
 
   void dump() const;
 
@@ -107,6 +108,8 @@ public Q_SLOTS:
   void on_remove_broadcast_tag(const std::string &tag);
 
 Q_SIGNALS:
+  void has_been_cleared();
+
   void has_been_loaded_from_file();
 
 private:

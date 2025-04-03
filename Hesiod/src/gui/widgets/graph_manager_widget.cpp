@@ -91,6 +91,11 @@ GraphManagerWidget::GraphManagerWidget(GraphManager *p_graph_manager, QWidget *p
                 &GraphManagerWidget::on_new_graph_request);
 
   this->connect(p_graph_manager,
+                &GraphManager::has_been_cleared,
+                this,
+                &GraphManagerWidget::reset);
+
+  this->connect(p_graph_manager,
                 &GraphManager::has_been_loaded_from_file,
                 this,
                 &GraphManagerWidget::reset);

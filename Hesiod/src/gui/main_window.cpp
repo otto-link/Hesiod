@@ -28,6 +28,12 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
 
   QMenu *file_menu = menuBar()->addMenu("&File");
 
+  auto *new_action = new QAction("New", this);
+  new_action->setShortcut(tr("Ctrl+N"));
+  file_menu->addAction(new_action);
+
+  file_menu->addSeparator();
+
   auto *load = new QAction("Open", this);
   load->setShortcut(tr("Ctrl+O"));
   file_menu->addAction(load);
@@ -39,6 +45,8 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
   auto *save_as = new QAction("Save As", this);
   save_as->setShortcut(tr("Ctrl+Shift+S"));
   file_menu->addAction(save_as);
+
+  file_menu->addSeparator();
 
   auto *quit = new QAction("Quit", this);
   quit->setShortcut(tr("Ctrl+Q"));
@@ -85,6 +93,20 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
   // --- connections
 
   connect(about, &QAction::triggered, this, &MainWindow::show_about);
+
+  connect(new_action,
+          &QAction::triggered,
+          [this]()
+          {
+            QMessageBox::StandardButton reply;
+            reply = QMessageBox::question(nullptr,
+                                          "New",
+                                          "Clear everything, are you sure?",
+                                          QMessageBox::Yes | QMessageBox::No);
+
+            if (reply == QMessageBox::Yes)
+              this->graph_manager->clear();
+          });
 
   connect(
       load,

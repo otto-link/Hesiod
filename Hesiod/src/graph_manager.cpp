@@ -71,6 +71,17 @@ std::string GraphManager::add_graph_editor(
   return graph_id;
 }
 
+void GraphManager::clear()
+{
+  LOG->trace("GraphManager::clear");
+  this->graphs.clear();
+  this->graph_order.clear();
+  this->update_tab_widget();
+  this->broadcast_params.clear();
+
+  Q_EMIT this->has_been_cleared();
+}
+
 void GraphManager::dump() const
 {
   std::cout << "GraphManager::dump\n";
@@ -140,9 +151,7 @@ void GraphManager::json_from(nlohmann::json const &json)
   // TODO fix config change in batch mode
 
   // clean-up current state
-  this->graphs.clear();
-  this->graph_order.clear();
-  this->update_tab_widget();
+  this->clear();
 
   // // check app version
   // std::string version_file = json["Hesiod version"];
