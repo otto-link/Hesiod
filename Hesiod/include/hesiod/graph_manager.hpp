@@ -54,10 +54,6 @@ public:
 
   GraphEditor *get_graph_ref_by_id(const std::string &id);
 
-  GraphEditor *get_graph_ref_by_id_previous(const std::string &id);
-
-  GraphEditor *get_graph_ref_by_id_next(const std::string &id);
-
   int get_graph_order_index(const std::string &id);
 
   const std::vector<std::string> &get_graph_order() { return this->graph_order; }

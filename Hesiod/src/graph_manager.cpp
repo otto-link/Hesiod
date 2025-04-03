@@ -121,26 +121,6 @@ GraphEditor *GraphManager::get_graph_ref_by_id(const std::string &id)
     return it->second.get();
 }
 
-GraphEditor *GraphManager::get_graph_ref_by_id_previous(const std::string &id)
-{
-  auto it = std::find(this->graph_order.begin(), this->graph_order.end(), id);
-
-  if (it != this->graph_order.begin() && it != this->graph_order.end())
-    return this->graphs[*(it - 1)].get();
-
-  return nullptr;
-}
-
-GraphEditor *GraphManager::get_graph_ref_by_id_next(const std::string &id)
-{
-  auto it = std::find(this->graph_order.begin(), this->graph_order.end(), id);
-
-  if (it != this->graph_order.end() && (it + 1) != this->graph_order.end())
-    return this->graphs[*(it + 1)].get();
-
-  return nullptr;
-}
-
 bool GraphManager::is_graph_above(const std::string &graph_id,
                                   const std::string &ref_graph_id)
 {
