@@ -392,9 +392,9 @@ void GraphEditor::on_broadcast_node_updated(const std::string &tag)
       }
       else
       {
-        // TODO check tags to avoid undue update
-
-        this->update(node_id);
+        // only update Receive nodes with the proper tag
+        if (p_receive_node->get_current_tag() == tag)
+          this->update(node_id);
       }
     }
   }

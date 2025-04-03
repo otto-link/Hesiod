@@ -54,7 +54,7 @@ public:
 
   void compute() override { this->compute_fct(this); }
 
-  template <typename T> auto get_attr(const std::string &key) -> decltype(auto)
+  template <typename T> auto get_attr(const std::string &key) const -> decltype(auto)
   {
     return this->attr.at(key)->get_ref<T>()->get_value();
   }

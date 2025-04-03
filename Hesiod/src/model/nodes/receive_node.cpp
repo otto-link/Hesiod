@@ -9,6 +9,11 @@
 namespace hesiod
 {
 
+std::string ReceiveNode::get_current_tag() const
+{
+  return this->get_attr<attr::ChoiceAttribute>("tag");
+}
+
 void ReceiveNode::update_tag_list(const std::vector<std::string> &new_tags)
 {
   auto p_attr = this->get_attr_ref()->at("tag")->get_ref<attr::ChoiceAttribute>();

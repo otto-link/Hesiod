@@ -31,6 +31,8 @@ public:
     return this->p_broadcast_params;
   }
 
+  std::string get_current_tag() const;
+
   hmap::Terrain *get_p_target_terrain() { return this->p_target_terrain; }
 
   void set_p_broadcast_params(
