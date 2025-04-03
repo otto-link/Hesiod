@@ -190,6 +190,10 @@ void GraphEditor::json_from(nlohmann::json const &json,
   for (auto &[id, p_node] : this->nodes)
     this->setup_broadcast_receive_node(id);
 
+  // signal node creation
+  for (auto &[id, p_node] : this->nodes)
+    Q_EMIT this->new_node_created(this->get_id(), id);
+
   if (this->viewer)
   {
     for (auto &v : this->data_viewers)
@@ -368,6 +372,8 @@ void GraphEditor::on_new_node_request(const std::string &node_type,
   // return node id value if requested
   if (p_new_node_id)
     *p_new_node_id = node_id;
+
+  Q_EMIT this->new_node_created(this->get_id(), node_id);
 }
 
 void GraphEditor::on_broadcast_node_updated(const std::string &tag)
@@ -419,6 +425,8 @@ void GraphEditor::on_node_deleted_request(const std::string &node_id)
   this->remove_node(node_id);
   if (this->viewer)
     this->viewer->remove_node(node_id);
+
+  Q_EMIT this->node_deleted(this->get_id(), node_id);
 }
 
 void GraphEditor::on_node_reload_request(const std::string &node_id)
@@ -671,6 +679,8 @@ void GraphEditor::on_nodes_paste_request()
 
     // recompute
     this->update(node_id);
+
+    Q_EMIT this->new_node_created(this->get_id(), node_id);
   }
 }
 

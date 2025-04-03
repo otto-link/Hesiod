@@ -104,6 +104,10 @@ public Q_SLOTS:
                             const hmap::Terrain   *t_source,
                             const hmap::Heightmap *h_source);
 
+  void on_new_node_created(const std::string &graph_id, const std::string &id);
+
+  void on_node_deleted(const std::string &graph_id, const std::string &id);
+
   void on_remove_broadcast_tag(const std::string &tag);
 
 Q_SIGNALS:

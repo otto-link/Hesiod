@@ -72,6 +72,10 @@ Q_SIGNALS:
                          const hmap::Terrain   *t_source,
                          const hmap::Heightmap *h_source);
 
+  void new_node_created(const std::string &graph_id, const std::string &id);
+
+  void node_deleted(const std::string &graph_id, const std::string &id);
+
   void remove_broadcast_tag(const std::string &tag);
 
   void request_update_receive_nodes_tag_list();

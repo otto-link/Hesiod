@@ -56,6 +56,16 @@ std::string GraphManager::add_graph_editor(
                 &GraphManager::on_new_broadcast_tag);
 
   this->connect(p_graph_editor.get(),
+                &GraphEditor::new_node_created,
+                this,
+                &GraphManager::on_new_node_created);
+
+  this->connect(p_graph_editor.get(),
+                &GraphEditor::node_deleted,
+                this,
+                &GraphManager::on_node_deleted);
+
+  this->connect(p_graph_editor.get(),
                 &GraphEditor::remove_broadcast_tag,
                 this,
                 &GraphManager::on_remove_broadcast_tag);
@@ -264,6 +274,16 @@ void GraphManager::on_new_broadcast_tag(const std::string     &tag,
 
   this->broadcast_params[tag] = BroadcastParam(t_source, h_source);
   this->update_receive_nodes_tag_list();
+}
+
+void GraphManager::on_new_node_created(const std::string &graph_id, const std::string &id)
+{
+  LOG->trace("GraphManager::on_new_node_created: {}/{}", graph_id, id);
+}
+
+void GraphManager::on_node_deleted(const std::string &graph_id, const std::string &id)
+{
+  LOG->trace("GraphManager::on_node_deleted: {}/{}", graph_id, id);
 }
 
 void GraphManager::on_remove_broadcast_tag(const std::string &tag)
