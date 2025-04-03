@@ -7,6 +7,8 @@
 
 #include "hesiod/gui/widgets/coord_frame_widget.hpp"
 #include "hesiod/gui/widgets/graph_manager_widget.hpp"
+#include "hesiod/gui/widgets/model_config_widget.hpp"
+#include "hesiod/gui/widgets/string_input_dialog.hpp"
 #include "hesiod/logger.hpp"
 
 #define MINIMUM_WIDTH 256
@@ -52,7 +54,9 @@ GraphManagerWidget::GraphManagerWidget(GraphManager *p_graph_manager, QWidget *p
   layout->addWidget(zoom_button, row, 2);
 
   this->apply_button = new QPushButton("Apply");
-  this->apply_button->setStyleSheet("QPushButton:enabled {background-color: #4772b3;}");
+  // this->apply_button->setStyleSheet("QPushButton:enabled {background-color:
+  // #4772b3;}");
+  this->apply_button->setStyleSheet("QPushButton:enabled {background-color: red;}");
   layout->addWidget(apply_button, row, 3);
 
   row++;
@@ -172,16 +176,39 @@ void GraphManagerWidget::on_list_reordered(const QModelIndex &,
 
 void GraphManagerWidget::on_new_graph_request()
 {
-  // TODO - add QDialog to select ID and config
-  auto        config = std::make_shared<hesiod::ModelConfig>();
-  auto        graph = std::make_shared<hesiod::GraphEditor>("", config);
-  std::string new_id = this->p_graph_manager->add_graph_editor(graph, "");
+  // get ID from user
+  std::vector<std::string> invalid_graph_ids = this->p_graph_manager->get_graph_order();
+
+  StringInputDialog id_dialog("Enter new graph ID", invalid_graph_ids);
+  std::string       new_graph_id;
+
+  {
+    int ret = id_dialog.exec();
+    if (!ret)
+      return;
+    else
+      new_graph_id = id_dialog.get_text_std_string();
+  }
+
+  // get config from user
+  auto              config = std::make_shared<hesiod::ModelConfig>();
+  ModelConfigWidget config_editor(config.get());
+
+  {
+    int ret = config_editor.exec();
+    if (!ret)
+      return;
+  }
+
+  // create new graph
+  auto graph = std::make_shared<hesiod::GraphEditor>(new_graph_id, config);
+  this->p_graph_manager->add_graph_editor(graph, new_graph_id);
 
   // add to list widget
-  this->add_list_item(new_id);
+  this->add_list_item(new_graph_id);
 
   // add to frames canvas
-  this->coord_frame_widget->add_frame(new_id);
+  this->coord_frame_widget->add_frame(new_graph_id);
 }
 
 void GraphManagerWidget::reset()
@@ -209,7 +236,7 @@ void GraphManagerWidget::show_context_menu(const QPoint &pos)
 
   if (!item)
     return;
-  
+
   std::string selected_id = item ? item->text().toStdString() : "";
   LOG->trace("selected_id: {}", selected_id);
 
@@ -218,7 +245,7 @@ void GraphManagerWidget::show_context_menu(const QPoint &pos)
   QAction *set_focus_action = menu.addAction("Show in graph editor");
   QAction *delete_action = menu.addAction("Delete");
 
-  QPoint global_pos = this->list_widget->mapToGlobal(pos);
+  QPoint   global_pos = this->list_widget->mapToGlobal(pos);
   QAction *selected_action = menu.exec(global_pos);
 
   if (selected_action == delete_action)

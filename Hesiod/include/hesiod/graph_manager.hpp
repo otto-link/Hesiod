@@ -25,10 +25,10 @@ namespace hesiod
 // - TODO add global default config widget
 // - TODO handle batch mode
 // - TODO import 1 graph
-// - TODO QDialog to select ID and config for add_graph
 // - TODO multiple node deletion only calls one connect
 // - TODO add setting to allow broadcast within the same graph
 // - TODO check tags to avoid undue Receive updates
+// - TODO remove load/save in graph editor
 
 struct BroadcastParam
 {
