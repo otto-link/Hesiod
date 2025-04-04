@@ -34,4 +34,6 @@ void post_process_heightmap(BaseNode         *p_node,
                             bool              remap,
                             hmap::Vec2<float> remap_range);
 
+std::vector<std::string> split_string(const std::string &string, char delimiter);
+
 } // namespace hesiod

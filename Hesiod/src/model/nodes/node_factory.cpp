@@ -6,6 +6,7 @@
 
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/node_factory.hpp"
+#include "hesiod/model/utils.hpp"
 
 // specific nodes
 #include "hesiod/model/nodes/broadcast_node.hpp"
@@ -25,18 +26,6 @@ constexpr unsigned int str2int(const char *str, int h = 0)
 {
   // https://stackoverflow.com/questions/16388510
   return !str[h] ? 5381 : (str2int(str, h + 1) * 33) ^ str[h];
-}
-
-std::vector<std::string> split_string(const std::string &string, char delimiter)
-{
-  std::vector<std::string> result;
-  std::stringstream        ss(string);
-  std::string              word;
-
-  while (std::getline(ss, word, delimiter))
-    result.push_back(word);
-
-  return result;
 }
 
 void dump_node_inventory(const std::string &fname)

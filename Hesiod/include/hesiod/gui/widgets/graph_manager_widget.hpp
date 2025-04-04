@@ -9,9 +9,11 @@
  * @copyright Copyright (c) 2025
  */
 #pragma once
+#include <QComboBox>
 #include <QListWidget>
 #include <QWidget>
 
+#include "hesiod/graph_editor.hpp"
 #include "hesiod/graph_manager.hpp"
 #include "hesiod/gui/widgets/coord_frame_widget.hpp"
 
@@ -20,7 +22,30 @@
 namespace hesiod
 {
 
-class GraphManager; // forward
+class GraphQListWidget : public QWidget
+{
+  Q_OBJECT
+
+public:
+  GraphQListWidget(GraphEditor *p_graph_editor, QWidget *parent = nullptr);
+
+  // QSize sizeHint() const override { return QSize(512, 128); }
+
+Q_SIGNALS:
+  void bg_image_updated(const std::string &graph_id, const QImage &image);
+
+public Q_SLOTS:
+  void update_combobox();
+
+  void on_combobox_changed();
+
+private:
+  GraphEditor *p_graph_editor;
+
+  QComboBox *combobox;
+
+  std::string current_bg_tag;
+};
 
 class GraphManagerWidget : public QWidget
 {
@@ -37,6 +62,8 @@ private Q_SLOTS:
   void on_list_reordered(const QModelIndex &, int, int, const QModelIndex &, int);
 
   void on_new_graph_request();
+
+  void on_nodes_ref_updated();
 
   void reset();
 

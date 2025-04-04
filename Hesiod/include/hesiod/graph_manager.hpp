@@ -27,6 +27,7 @@ namespace hesiod
 // - TODO multiple node deletion only calls one connect
 // - TODO add setting to allow broadcast within the same graph
 // - TODO background image setter
+// - TODO serialize parameters of GraphManagerWidget (bg image)
 
 struct BroadcastParam
 {

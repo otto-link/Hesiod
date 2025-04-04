@@ -127,12 +127,9 @@ void FrameItem::paint(QPainter                       *painter,
   QColor color_hovered(255, 255, 255, 255);
 
   // background
-  if (!this->image.isNull())
+  if (!this->pixmap.isNull())
   {
-    QImage scaled_image = this->image.scaled(this->rect().size().toSize(),
-                                             Qt::IgnoreAspectRatio,
-                                             Qt::SmoothTransformation);
-    painter->drawImage(this->rect(), scaled_image);
+    painter->drawPixmap(this->rect(), this->pixmap, this->pixmap.rect());
   }
   else
   {
@@ -161,16 +158,31 @@ void FrameItem::paint(QPainter                       *painter,
 void FrameItem::set_angle(float new_angle)
 {
   this->angle = new_angle;
-
   this->update_item_geometry();
 }
+
+void FrameItem::set_background_image(const QImage &new_image)
+{
+  LOG->trace("FrameItem::set_background_image: frame {}", this->id);
+
+  if (new_image.isNull())
+  {
+    this->pixmap = QPixmap();
+  }
+  else
+  {
+    this->pixmap = QPixmap::fromImage(new_image);
+    this->pixmap = this->pixmap.transformed(QTransform().scale(1.f, -1.f));
+  }
+
+  this->update();
+};
 
 void FrameItem::set_geometry(QPointF new_origin, QPointF new_size, float new_angle)
 {
   this->origin = new_origin;
   this->size = new_size;
   this->angle = new_angle;
-
   this->update_item_geometry();
 }
 

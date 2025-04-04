@@ -56,16 +56,6 @@ std::string GraphManager::add_graph_editor(
                 &GraphManager::on_new_broadcast_tag);
 
   this->connect(p_graph_editor.get(),
-                &GraphEditor::new_node_created,
-                this,
-                &GraphManager::on_new_node_created);
-
-  this->connect(p_graph_editor.get(),
-                &GraphEditor::node_deleted,
-                this,
-                &GraphManager::on_node_deleted);
-
-  this->connect(p_graph_editor.get(),
                 &GraphEditor::remove_broadcast_tag,
                 this,
                 &GraphManager::on_remove_broadcast_tag);
@@ -177,8 +167,6 @@ void GraphManager::json_from(nlohmann::json const &json)
     this->add_graph_editor(graph, id);
     graph->json_from(json["GraphEditors"][id]);
   }
-
-  // Q_EMIT this->has_been_deserialized();
 }
 
 nlohmann::json GraphManager::json_to() const
@@ -195,8 +183,6 @@ nlohmann::json GraphManager::json_to() const
     json_graphs[id] = graph->json_to();
 
   json["GraphEditors"] = json_graphs;
-
-  // std::cout << json.dump(4) << "\n";
 
   return json;
 }
@@ -260,11 +246,13 @@ void GraphManager::on_new_broadcast_tag(const std::string     &tag,
 void GraphManager::on_new_node_created(const std::string &graph_id, const std::string &id)
 {
   LOG->trace("GraphManager::on_new_node_created: {}/{}", graph_id, id);
+  // TODO keep this?
 }
 
 void GraphManager::on_node_deleted(const std::string &graph_id, const std::string &id)
 {
   LOG->trace("GraphManager::on_node_deleted: {}/{}", graph_id, id);
+  // TODO keep this?
 }
 
 void GraphManager::on_remove_broadcast_tag(const std::string &tag)

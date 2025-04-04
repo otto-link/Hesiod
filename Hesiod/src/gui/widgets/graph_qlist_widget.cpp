@@ -1,0 +1,139 @@
+/* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
+ * Public License. The full license is in the file LICENSE, distributed with
+ * this software. */
+#include <QGridLayout>
+
+#include "highmap/colorize.hpp"
+
+#include "hesiod/gui/widgets/graph_manager_widget.hpp"
+#include "hesiod/model/utils.hpp"
+
+namespace hesiod
+{
+
+GraphQListWidget::GraphQListWidget(GraphEditor *p_graph_editor, QWidget *parent)
+    : QWidget(parent), p_graph_editor(p_graph_editor)
+{
+  LOG->trace("GraphQListWidget::GraphQListWidget");
+
+  QGridLayout *layout = new QGridLayout(this);
+  this->setLayout(layout);
+
+  QLabel *label = new QLabel(p_graph_editor->get_id().c_str());
+  layout->addWidget(label, 0, 0);
+
+  this->combobox = new QComboBox(this);
+  this->current_bg_tag = "NO BACKGROUND";
+  this->update_combobox();
+  layout->addWidget(this->combobox, 0, 1);
+
+  // connections
+  this->connect(p_graph_editor,
+                &GraphEditor::new_node_created,
+                this,
+                &GraphQListWidget::update_combobox);
+
+  this->connect(p_graph_editor,
+                &GraphEditor::node_deleted,
+                this,
+                &GraphQListWidget::update_combobox);
+
+  this->connect(this->combobox,
+                QOverload<int>::of(&QComboBox::currentIndexChanged),
+                this,
+                &GraphQListWidget::on_combobox_changed);
+}
+
+void GraphQListWidget::on_combobox_changed()
+{
+  this->current_bg_tag = this->combobox->currentText().toStdString();
+
+  // retrieve node ID from tag
+  std::vector<std::string> tag_elements = split_string(current_bg_tag, '/');
+
+  // this excludes the "NO BACKGROUND" tag
+  if (tag_elements.size() != 3)
+  {
+    Q_EMIT this->bg_image_updated(this->p_graph_editor->get_id(), QImage());
+    return;
+  }
+
+  std::string node_id = tag_elements[1];
+  std::string port_id = tag_elements[2];
+
+  LOG->trace("GraphQListWidget::on_combobox_changed: node_id={}, port_id={}",
+             node_id,
+             port_id);
+
+  // TODO allow other data types (see data_preview)
+
+  // generate background image
+  QImage image;
+
+  hmap::Heightmap *p_h = this->p_graph_editor->get_node_ref_by_id(node_id)
+                             ->get_value_ref<hmap::Heightmap>(port_id);
+
+  if (p_h)
+  {
+    hmap::Array          array = p_h->to_array();
+    std::vector<uint8_t> img = hmap::colorize(array,
+                                              array.min(),
+                                              array.max(),
+                                              hmap::Cmap::TURBO,
+                                              true)
+                                   .to_img_8bit();
+    image = QImage(img.data(), p_h->shape.x, p_h->shape.y, QImage::Format_RGB888);
+  }
+  else
+  {
+    // null image
+    image = QImage();
+  }
+
+  Q_EMIT this->bg_image_updated(this->p_graph_editor->get_id(), image);
+}
+
+void GraphQListWidget::update_combobox()
+{
+  // backup current tag selection (modified by itemChanged signal of
+  // combobox)
+  const std::string tag_bckp = this->current_bg_tag;
+
+  this->combobox->clear();
+  this->combobox->addItem("NO BACKGROUND");
+
+  LOG->trace("GraphQListWidget::update_combobox, tag: {}", this->current_bg_tag);
+
+  // list of possible data available to show on the canvas as Pixmap
+  bool is_current_tag_in_combo = false;
+
+  for (auto &[id, node] : this->p_graph_editor->get_nodes())
+    for (auto &port : node->get_ports())
+    {
+      LOG->trace("GraphQListWidget::update_combobox: {}/{}",
+                 node->get_label(),
+                 port->get_label());
+
+      // TODO allow other data types
+
+      // only allow heighmap (for now)
+      if (port->get_data_type() == typeid(hmap::Heightmap).name())
+      {
+        const std::string tag = node->get_label() + "/" + node->get_id() + "/" +
+                                port->get_label();
+        this->combobox->addItem(tag.c_str());
+
+        if (tag_bckp == tag)
+          is_current_tag_in_combo = true;
+      }
+    }
+
+  // set selection only if it is still available
+  if (is_current_tag_in_combo)
+    this->combobox->setCurrentText(tag_bckp.c_str());
+
+  // for image update
+  this->on_combobox_changed();
+}
+
+} // namespace hesiod

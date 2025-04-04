@@ -11,7 +11,7 @@
 #include "hesiod/gui/widgets/string_input_dialog.hpp"
 #include "hesiod/logger.hpp"
 
-#define MINIMUM_WIDTH 256
+#define MINIMUM_WIDTH 384
 
 namespace hesiod
 {
@@ -33,8 +33,8 @@ GraphManagerWidget::GraphManagerWidget(GraphManager *p_graph_manager, QWidget *p
 
   // right pan
   this->list_widget = new QListWidget(this);
-  this->list_widget->setStyleSheet("QListWidget::item { border: 1px solid #5B5B5B; "
-                                   "padding-bottom: 20px; padding-top: 20px;}");
+  this->list_widget->setStyleSheet(
+      "QListWidget::item { border: 1px solid #5B5B5B; color: transparent; }");
   this->list_widget->setViewMode(QListView::ListMode);
   this->list_widget->setDragDropMode(QAbstractItemView::InternalMove);
   this->list_widget->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -54,8 +54,6 @@ GraphManagerWidget::GraphManagerWidget(GraphManager *p_graph_manager, QWidget *p
   layout->addWidget(zoom_button, row, 2);
 
   this->apply_button = new QPushButton("Apply");
-  // this->apply_button->setStyleSheet("QPushButton:enabled {background-color:
-  // #4772b3;}");
   this->apply_button->setStyleSheet("QPushButton:enabled {background-color: red;}");
   layout->addWidget(apply_button, row, 3);
 
@@ -117,9 +115,33 @@ GraphManagerWidget::GraphManagerWidget(GraphManager *p_graph_manager, QWidget *p
 
 void GraphManagerWidget::add_list_item(const std::string &id)
 {
+  // create the list item
   auto *item = new QListWidgetItem();
   item->setText(id.c_str());
+
+  // create the custom widget to embed inside the item
+  GraphQListWidget *widget = new GraphQListWidget(
+      this->p_graph_manager->get_graphs().at(id).get());
+
+  item->setSizeHint(widget->sizeHint());
+
+  // add the item and set the widget
   this->list_widget->addItem(item);
+  this->list_widget->setItemWidget(item, widget);
+
+  // connections
+  this->connect(
+      widget,
+      &GraphQListWidget::bg_image_updated,
+      this,
+      [this](const std::string &id, const QImage &image)
+      { this->coord_frame_widget->get_frame_ref(id)->set_background_image(image); });
+
+  this->connect(this->p_graph_manager->get_graphs().at(id).get(),
+                &GraphEditor::has_been_updated,
+                widget,
+                [widget](const std::string & /* graph_id */)
+                { widget->on_combobox_changed(); });
 }
 
 void GraphManagerWidget::on_apply_changes()
@@ -214,6 +236,11 @@ void GraphManagerWidget::on_new_graph_request()
 
   // add to frames canvas
   this->coord_frame_widget->add_frame(new_graph_id);
+}
+
+void GraphManagerWidget::on_nodes_ref_updated()
+{
+  LOG->trace("GraphManagerWidget::on_nodes_ref_updated");
 }
 
 void GraphManagerWidget::reset()

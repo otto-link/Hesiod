@@ -84,4 +84,16 @@ void post_process_heightmap(BaseNode         *p_node,
     h.remap(remap_range.x, remap_range.y);
 }
 
+std::vector<std::string> split_string(const std::string &string, char delimiter)
+{
+  std::vector<std::string> result;
+  std::stringstream        ss(string);
+  std::string              word;
+
+  while (std::getline(ss, word, delimiter))
+    result.push_back(word);
+
+  return result;
+}
+
 } // namespace hesiod

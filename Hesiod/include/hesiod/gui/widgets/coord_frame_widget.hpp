@@ -11,7 +11,7 @@
 #pragma once
 #include <QGraphicsRectItem>
 #include <QGraphicsView>
-#include <QImage>
+#include <QPixmap>
 
 #include "hesiod/graph_manager.hpp"
 
@@ -39,7 +39,7 @@ public:
 
   void set_angle(float new_angle);
 
-  void set_background_image(const QImage &new_image) { this->image = new_image; };
+  void set_background_image(const QImage &new_image);
 
   void set_geometry(QPointF new_origin, QPointF new_size, float new_angle);
 
@@ -76,7 +76,7 @@ private:
   float       angle;
   int         z_depth;
 
-  QImage image = QImage();
+  QPixmap pixmap = QPixmap();
 
   bool is_hovered = false;
   bool is_rotated = false;
@@ -85,7 +85,7 @@ private:
   // corners
   QRectF rotation_rect;
   QRectF resize_rect;
-  float  handle_size = 0.3f * COORD_SCALE;
+  float  handle_size = 0.2f * COORD_SCALE;
 };
 
 class CoordFrameWidget : public QGraphicsView

@@ -66,6 +66,8 @@ public:
 Q_SIGNALS:
   void broadcast_node_updated(const std::string &graph_id, const std::string &tag);
 
+  void has_been_updated(const std::string &graph_id);
+
   void node_compute_finished(const std::string &id);
 
   void new_broadcast_tag(const std::string     &tag,

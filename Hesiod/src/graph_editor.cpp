@@ -279,7 +279,6 @@ void GraphEditor::on_graph_reload_request()
 {
   LOG->trace("GraphEditor::on_graph_reload_request");
 
-  // TODO signals back to GUI before / after
   this->update();
 }
 
@@ -432,7 +431,6 @@ void GraphEditor::on_node_reload_request(const std::string &node_id)
 {
   LOG->trace("GraphNode::on_node_reload_request, node [{}]", node_id);
 
-  // TODO signals back to GUI before / after
   this->update(node_id);
 }
 
@@ -743,6 +741,8 @@ void GraphEditor::update()
   this->graph_viewer_disable();
   GraphNode::update();
   this->graph_viewer_enable();
+
+  Q_EMIT this->has_been_updated(this->get_id());
 }
 
 void GraphEditor::update(std::string id)
@@ -750,6 +750,8 @@ void GraphEditor::update(std::string id)
   this->graph_viewer_disable();
   GraphNode::update(id);
   this->graph_viewer_enable();
+
+  Q_EMIT this->has_been_updated(this->get_id());
 }
 
 void GraphEditor::graph_viewer_disable()
