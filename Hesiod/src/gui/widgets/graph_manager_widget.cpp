@@ -144,6 +144,36 @@ void GraphManagerWidget::add_list_item(const std::string &id)
                 { widget->on_combobox_changed(); });
 }
 
+void GraphManagerWidget::json_from(nlohmann::json const &json)
+{
+  for (int i = 0; i < this->list_widget->count(); ++i)
+  {
+    QListWidgetItem *item = this->list_widget->item(i);
+    std::string      id = item->text().toStdString();
+    QWidget         *widget = this->list_widget->itemWidget(item);
+
+    if (auto gw_widget = dynamic_cast<GraphQListWidget *>(widget))
+      gw_widget->json_from(json["frames"][id]);
+  }
+}
+
+nlohmann::json GraphManagerWidget::json_to() const
+{
+  nlohmann::json json;
+
+  for (int i = 0; i < this->list_widget->count(); ++i)
+  {
+    QListWidgetItem *item = this->list_widget->item(i);
+    std::string      id = item->text().toStdString();
+    QWidget         *widget = this->list_widget->itemWidget(item);
+
+    if (auto gw_widget = dynamic_cast<GraphQListWidget *>(widget))
+      json["frames"][id] = gw_widget->json_to();
+  }
+
+  return json;
+}
+
 void GraphManagerWidget::on_apply_changes()
 {
   LOG->trace("GraphManagerWidget::on_apply_changes");

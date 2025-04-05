@@ -44,8 +44,24 @@ GraphQListWidget::GraphQListWidget(GraphEditor *p_graph_editor, QWidget *parent)
                 &GraphQListWidget::on_combobox_changed);
 }
 
+void GraphQListWidget::json_from(nlohmann::json const &json)
+{
+  this->current_bg_tag = json["current_bg_tag"].get<std::string>();
+  this->combobox->setCurrentText(this->current_bg_tag.c_str());
+}
+
+nlohmann::json GraphQListWidget::json_to() const
+{
+  nlohmann::json json;
+  json["current_bg_tag"] = this->current_bg_tag;
+  return json;
+}
+
 void GraphQListWidget::on_combobox_changed()
 {
+  LOG->trace("GraphQListWidget::on_combobox_changed: current tag: {}",
+             this->current_bg_tag);
+
   this->current_bg_tag = this->combobox->currentText().toStdString();
 
   // retrieve node ID from tag

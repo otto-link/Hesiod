@@ -1,6 +1,8 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include <fstream>
+
 #include "highmap/filters.hpp"
 #include "highmap/heightmap.hpp"
 #include "highmap/opencl/gpu_opencl.hpp"
@@ -10,6 +12,41 @@
 
 namespace hesiod
 {
+
+nlohmann::json json_from_file(const std::string &fname)
+{
+  nlohmann::json json;
+  std::ifstream  file(fname);
+
+  if (file.is_open())
+  {
+    file >> json;
+    file.close();
+    LOG->trace("json_from_file: JSON successfully loaded from {}", fname);
+  }
+  else
+  {
+    LOG->error("json_from_file: Could not open file {} to load JSON", fname);
+  }
+
+  return json;
+}
+
+void json_to_file(const nlohmann::json &json, const std::string &fname)
+{
+  std::ofstream file(fname);
+
+  if (file.is_open())
+  {
+    file << json.dump(4);
+    file.close();
+    LOG->trace("json_to_file: JSON successfully written to {}", fname);
+  }
+  else
+  {
+    LOG->error("json_to_file: Could not open file {} to save JSON", fname);
+  }
+}
 
 void post_apply_enveloppe(BaseNode *p_node, hmap::Heightmap &h, hmap::Heightmap *p_env)
 {

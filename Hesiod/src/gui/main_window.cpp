@@ -13,6 +13,7 @@
 
 #include "hesiod/gui/main_window.hpp"
 #include "hesiod/logger.hpp"
+#include "hesiod/model/utils.hpp"
 
 #include "hesiod/gui/widgets/graph_manager_widget.hpp"
 
@@ -130,7 +131,7 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
         if (!load_fname.isNull() && !load_fname.isEmpty())
         {
           this->graph_manager->set_fname_path(load_fname.toStdString());
-          this->graph_manager->load_from_file(load_fname.toStdString());
+          this->load_from_file(load_fname.toStdString());
         }
       });
 
@@ -172,7 +173,7 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
       if (!new_fname.isNull() && !new_fname.isEmpty())
       {
         this->graph_manager->set_fname_path(new_fname.toStdString());
-        this->graph_manager->save_to_file(new_fname.toStdString());
+        this->save_to_file(new_fname.toStdString());
       }
     };
 
@@ -183,8 +184,7 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
                     if (this->graph_manager->get_fname_path() == "")
                       lambda_save_as();
                     else
-                      this->graph_manager->save_to_file(
-                          this->graph_manager->get_fname_path());
+                      this->save_to_file(this->graph_manager->get_fname_path());
                   });
 
     this->connect(save_as, &QAction::triggered, lambda_save_as);
@@ -206,6 +206,18 @@ void MainWindow::closeEvent(QCloseEvent *event)
     event->ignore();
 }
 
+void MainWindow::load_from_file(const std::string &fname)
+{
+  LOG->trace("MainWindow::load_from_file: {}", fname);
+
+  // model
+  this->graph_manager->load_from_file(fname);
+
+  // GUI
+  nlohmann::json json = json_from_file(fname);
+  this->graph_manager_widget->json_from(json["GUI"]["graph_manager_widget"]);
+}
+
 void MainWindow::on_quit() { QApplication::quit(); }
 
 void MainWindow::restore_state()
@@ -213,6 +225,19 @@ void MainWindow::restore_state()
   QSettings settings("olink", "hesiod");
   this->restoreState(settings.value("MainWindow/state").toByteArray());
   this->restoreGeometry(settings.value("MainWindow/geometry").toByteArray());
+}
+
+void MainWindow::save_to_file(const std::string &fname) const
+{
+  LOG->trace("MainWindow::save_to_file: {}", fname);
+
+  // model
+  this->graph_manager->save_to_file(fname);
+
+  // append GUI infos to the current graph data
+  nlohmann::json json = json_from_file(fname);
+  json["GUI"]["graph_manager_widget"] = this->graph_manager_widget->json_to();
+  json_to_file(json, fname);
 }
 
 void MainWindow::show_about()

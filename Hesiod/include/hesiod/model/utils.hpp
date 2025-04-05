@@ -21,6 +21,10 @@
 namespace hesiod
 {
 
+nlohmann::json json_from_file(const std::string &fname);
+
+void json_to_file(const nlohmann::json &json, const std::string &fname);
+
 void post_apply_enveloppe(BaseNode *p_node, hmap::Heightmap &h, hmap::Heightmap *p_env);
 
 void post_process_heightmap(BaseNode         *p_node,

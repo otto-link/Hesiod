@@ -74,6 +74,8 @@ public:
 
   nlohmann::json json_to() const;
 
+  // graph manager has its own load/save from file used for headless mode. In GUI mode,
+  // load/save are called by the MainWindow instance
   void load_from_file(const std::string &fname);
 
   void remove_graph_editor(const std::string &id);

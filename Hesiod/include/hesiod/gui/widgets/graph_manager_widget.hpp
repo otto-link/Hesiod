@@ -29,7 +29,9 @@ class GraphQListWidget : public QWidget
 public:
   GraphQListWidget(GraphEditor *p_graph_editor, QWidget *parent = nullptr);
 
-  // QSize sizeHint() const override { return QSize(512, 128); }
+  void json_from(nlohmann::json const &json);
+
+  nlohmann::json json_to() const;
 
 Q_SIGNALS:
   void bg_image_updated(const std::string &graph_id, const QImage &image);
@@ -53,6 +55,10 @@ class GraphManagerWidget : public QWidget
 
 public:
   GraphManagerWidget(GraphManager *p_graph_manager, QWidget *parent = nullptr);
+
+  void json_from(nlohmann::json const &json);
+
+  nlohmann::json json_to() const;
 
 private Q_SLOTS:
   void on_apply_changes();

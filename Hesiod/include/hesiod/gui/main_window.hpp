@@ -38,6 +38,10 @@ public:
 
   static bool exists() { return instance() != nullptr; }
 
+  void load_from_file(const std::string &fname);
+
+  void save_to_file(const std::string &fname) const;
+
   // Method to change the window title
   void set_title(const std::string &new_title)
   {
