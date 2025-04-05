@@ -28,7 +28,9 @@ class MainWindow : public QMainWindow
   Q_OBJECT
 
 public:
-  // Static method to get the singleton instance of MainWindow
+  // --- related to singleton class
+
+  // static method to get the singleton instance of MainWindow
   static MainWindow *instance(QApplication *p_app = nullptr, QWidget *p_parent = nullptr)
   {
     static MainWindow *instance = nullptr;
@@ -41,7 +43,7 @@ public:
 
   static bool exists() { return instance() != nullptr; }
 
-  // ---
+  // --- other
 
   void load_from_file(const std::string &fname);
 
@@ -53,7 +55,6 @@ public:
 
   void set_project_path(const std::filesystem::path &new_project_path);
 
-  // Method to change the window title
   void set_title(const std::string &new_title)
   {
     this->setWindowTitle(new_title.c_str());
@@ -76,15 +77,19 @@ private Q_SLOTS:
   void on_quit();
 
 private:
-  // Constructor is private to prevent creating MainWindow elsewhere
+  // --- related to singleton class
+
+  // constructor is private to prevent creating MainWindow elsewhere
   MainWindow(QApplication *p_app = nullptr, QWidget *p_parent = nullptr);
 
   ~MainWindow() override;
 
-  // Prevent copying and assignment
+  // prevent copying and assignment
   MainWindow(const MainWindow &) = delete;
 
   MainWindow &operator=(const MainWindow &) = delete;
+
+  // --- other
 
   std::filesystem::path project_path = "";
 
