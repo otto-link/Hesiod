@@ -10,6 +10,7 @@
 #include "hesiod/gui/main_window.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/receive_node.hpp"
+#include "hesiod/model/utils.hpp"
 
 namespace hesiod
 {
@@ -189,16 +190,7 @@ nlohmann::json GraphManager::json_to() const
 
 void GraphManager::load_from_file(const std::string &fname)
 {
-  // load json
-  nlohmann::json json;
-  std::ifstream  file(fname);
-
-  if (file.is_open())
-  {
-    file >> json;
-    file.close();
-    LOG->trace("JSON successfully loaded from {}", fname);
-  }
+  nlohmann::json json = json_from_file(fname);
 
   this->json_from(json["GraphManager"]);
 
@@ -290,17 +282,7 @@ void GraphManager::save_to_file(const std::string &fname) const
                            std::to_string(HESIOD_VERSION_MINOR) + "." +
                            std::to_string(HESIOD_VERSION_PATCH);
 
-  // save file
-  std::ofstream file(fname);
-
-  if (file.is_open())
-  {
-    file << json.dump(4);
-    file.close();
-    LOG->trace("JSON successfully written to {}", fname);
-  }
-  else
-    LOG->error("Could not open file {} to load JSON", fname);
+  json_to_file(json, fname);
 }
 
 void GraphManager::set_fname_path(const std::filesystem::path &new_fname_path)
