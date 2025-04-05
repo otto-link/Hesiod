@@ -9,6 +9,7 @@
  * @copyright Copyright (c) 2025
  */
 #pragma once
+#include <QAction>
 #include <QComboBox>
 #include <QListWidget>
 #include <QWidget>
@@ -63,6 +64,9 @@ public:
   void restore_window_state();
 
   void save_window_state() const;
+
+Q_SIGNALS:
+  void window_closed();
 
 private Q_SLOTS:
   void closeEvent(QCloseEvent *event) override;

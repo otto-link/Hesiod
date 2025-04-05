@@ -84,8 +84,8 @@ void CoordFrameWidget::on_zoom_to_content()
   QRectF bbox = this->scene()->itemsBoundingRect();
 
   // add a margin
-  float margin_x = 0.25f * bbox.width();
-  float margin_y = 0.25f * bbox.height();
+  float margin_x = 0.1f * bbox.width();
+  float margin_y = 0.1f * bbox.height();
   bbox.adjust(-margin_x, -margin_y, margin_x, margin_y);
 
   this->fitInView(bbox, Qt::KeepAspectRatio);

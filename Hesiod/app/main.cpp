@@ -192,6 +192,7 @@ int main(int argc, char *argv[])
       ;
 
   app.setStyleSheet(style_sheet.c_str());
+  app.setWindowIcon(QIcon("data/hesiod_icon.png"));
 
   hesiod::MainWindow *main_window = hesiod::MainWindow::instance(&app);
   main_window->show();

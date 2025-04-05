@@ -23,6 +23,7 @@ namespace hesiod
 MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(parent)
 {
   this->setWindowTitle(tr("Hesiod"));
+  // this->setWindowIcon(QIcon("data/hesiod_icon.png"));
   this->restore_state();
 
   // --- menu bar
@@ -55,10 +56,10 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
 
   QMenu *view_menu = menuBar()->addMenu("&View");
 
-  auto *show_graph_layout_manager = new QAction("Graph layout manager", this);
-  show_graph_layout_manager->setCheckable(true);
-  show_graph_layout_manager->setChecked(true);
-  view_menu->addAction(show_graph_layout_manager);
+  auto *show_layout_manager = new QAction("Graph layout manager", this);
+  show_layout_manager->setCheckable(true);
+  show_layout_manager->setChecked(true);
+  view_menu->addAction(show_layout_manager);
 
   QMenu *help = menuBar()->addMenu("&Help");
 
@@ -106,15 +107,19 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
 
   this->connect(load, &QAction::triggered, this, &MainWindow::on_load);
 
-  this->connect(show_graph_layout_manager,
+  this->connect(show_layout_manager,
                 &QAction::triggered,
                 this,
-                [this, show_graph_layout_manager]()
+                [this, show_layout_manager]()
                 {
                   bool state = this->graph_manager_widget->isVisible();
                   this->graph_manager_widget->setVisible(!state);
-                  show_graph_layout_manager->setChecked(!state);
+                  show_layout_manager->setChecked(!state);
                 });
+
+  this->connect(this->graph_manager_widget,
+                &GraphManagerWidget::window_closed,
+                [show_layout_manager]() { show_layout_manager->setChecked(false); });
 
   this->connect(quit, &QAction::triggered, this, &MainWindow::on_quit);
 

@@ -24,6 +24,8 @@ GraphManagerWidget::GraphManagerWidget(GraphManager *p_graph_manager, QWidget *p
   if (!p_graph_manager)
     throw std::runtime_error("p_graph_manager is nullptr");
 
+  this->setWindowTitle(tr("Hesiod - GraphManager"));
+
   // --- build widget layout
   int row = 0;
 
@@ -153,6 +155,7 @@ void GraphManagerWidget::closeEvent(QCloseEvent *event)
 {
   this->save_window_state();
   QWidget::closeEvent(event);
+  Q_EMIT this->window_closed();
 }
 
 void GraphManagerWidget::hideEvent(QHideEvent *event)
