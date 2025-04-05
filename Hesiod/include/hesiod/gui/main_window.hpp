@@ -59,6 +59,8 @@ protected:
   void show_about();
 
 private Q_SLOTS:
+  void closeEvent(QCloseEvent *event) override;
+
   void on_quit();
 
 private:
@@ -71,8 +73,6 @@ private:
   MainWindow(const MainWindow &) = delete;
 
   MainWindow &operator=(const MainWindow &) = delete;
-
-  void closeEvent(QCloseEvent *event) override;
 
   // graph-related storage
   std::unique_ptr<hesiod::GraphManager> graph_manager;
