@@ -4,7 +4,9 @@
 #include <QGridLayout>
 #include <QMenu>
 #include <QPushButton>
+#include <QSettings>
 
+#include "hesiod/gui/main_window.hpp"
 #include "hesiod/gui/widgets/coord_frame_widget.hpp"
 #include "hesiod/gui/widgets/graph_manager_widget.hpp"
 #include "hesiod/gui/widgets/model_config_widget.hpp"
@@ -111,6 +113,9 @@ GraphManagerWidget::GraphManagerWidget(GraphManager *p_graph_manager, QWidget *p
 
   // clean state
   this->set_is_dirty(false);
+
+  // restore window geometry
+  this->restore_window_state();
 }
 
 void GraphManagerWidget::add_list_item(const std::string &id)
@@ -142,6 +147,18 @@ void GraphManagerWidget::add_list_item(const std::string &id)
                 widget,
                 [widget](const std::string & /* graph_id */)
                 { widget->on_combobox_changed(); });
+}
+
+void GraphManagerWidget::closeEvent(QCloseEvent *event)
+{
+  this->save_window_state();
+  QWidget::closeEvent(event);
+}
+
+void GraphManagerWidget::hideEvent(QHideEvent *event)
+{
+  this->save_window_state();
+  QWidget::hideEvent(event);
 }
 
 void GraphManagerWidget::json_from(nlohmann::json const &json)
@@ -283,11 +300,29 @@ void GraphManagerWidget::reset()
   this->coord_frame_widget->reset();
 }
 
+void GraphManagerWidget::restore_window_state()
+{
+  QSettings settings(HSD_SETTINGS_ORG, HSD_SETTINGS_APP);
+  this->restoreGeometry(settings.value("GraphManagerWidget/geometry").toByteArray());
+}
+
+void GraphManagerWidget::save_window_state() const
+{
+  QSettings settings(HSD_SETTINGS_ORG, HSD_SETTINGS_APP);
+  settings.setValue("GraphManagerWidget/geometry", this->saveGeometry());
+}
+
 void GraphManagerWidget::set_is_dirty(bool new_is_dirty)
 {
   this->is_dirty = new_is_dirty;
   this->apply_button->setEnabled(this->is_dirty);
   this->update();
+}
+
+void GraphManagerWidget::showEvent(QShowEvent *event)
+{
+  QWidget::showEvent(event);
+  this->restore_window_state();
 }
 
 void GraphManagerWidget::show_context_menu(const QPoint &pos)

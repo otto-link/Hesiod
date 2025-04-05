@@ -60,7 +60,15 @@ public:
 
   nlohmann::json json_to() const;
 
+  void restore_window_state();
+
+  void save_window_state() const;
+
 private Q_SLOTS:
+  void closeEvent(QCloseEvent *event) override;
+
+  void hideEvent(QHideEvent *event) override;
+
   void on_apply_changes();
 
   void on_item_double_clicked(QListWidgetItem *item);
@@ -76,6 +84,8 @@ private Q_SLOTS:
   void set_is_dirty(bool new_is_dirty);
 
   void show_context_menu(const QPoint &pos);
+
+  void showEvent(QShowEvent *event) override;
 
 private:
   void add_list_item(const std::string &id);

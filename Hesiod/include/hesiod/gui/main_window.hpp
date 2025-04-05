@@ -17,6 +17,9 @@
 #include "hesiod/graph_manager.hpp"
 #include "hesiod/gui/widgets/graph_manager_widget.hpp"
 
+#define HSD_SETTINGS_ORG "olink"
+#define HSD_SETTINGS_APP "hesiod"
+
 namespace hesiod
 {
 

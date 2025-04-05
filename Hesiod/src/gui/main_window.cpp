@@ -222,7 +222,7 @@ void MainWindow::on_quit() { QApplication::quit(); }
 
 void MainWindow::restore_state()
 {
-  QSettings settings("olink", "hesiod");
+  QSettings settings(HSD_SETTINGS_ORG, HSD_SETTINGS_APP);
   this->restoreState(settings.value("MainWindow/state").toByteArray());
   this->restoreGeometry(settings.value("MainWindow/geometry").toByteArray());
 }
@@ -260,8 +260,6 @@ void MainWindow::save_state()
   QSettings settings("olink", "hesiod");
   settings.setValue("MainWindow/state", this->saveState());
   settings.setValue("MainWindow/geometry", this->saveGeometry());
-
-  // TODO do the same for main widgets of the main window
 }
 
 } // namespace hesiod
