@@ -102,38 +102,9 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
 
   this->connect(about, &QAction::triggered, this, &MainWindow::show_about);
 
-  this->connect(new_action,
-                &QAction::triggered,
-                [this]()
-                {
-                  QMessageBox::StandardButton reply;
-                  reply = QMessageBox::question(nullptr,
-                                                "New",
-                                                "Clear everything, are you sure?",
-                                                QMessageBox::Yes | QMessageBox::No);
+  this->connect(new_action, &QAction::triggered, this, &MainWindow::on_new);
 
-                  if (reply == QMessageBox::Yes)
-                    this->graph_manager->clear();
-                });
-
-  this->connect(
-      load,
-      &QAction::triggered,
-      [this]()
-      {
-        std::filesystem::path path = this->graph_manager->get_fname_path().parent_path();
-
-        QString load_fname = QFileDialog::getOpenFileName(this,
-                                                          "Load...",
-                                                          path.string().c_str(),
-                                                          "Hesiod files (*.hsd)");
-
-        if (!load_fname.isNull() && !load_fname.isEmpty())
-        {
-          this->graph_manager->set_fname_path(load_fname.toStdString());
-          this->load_from_file(load_fname.toStdString());
-        }
-      });
+  this->connect(load, &QAction::triggered, this, &MainWindow::on_load);
 
   this->connect(show_graph_layout_manager,
                 &QAction::triggered,
@@ -145,25 +116,13 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
                   show_graph_layout_manager->setChecked(!state);
                 });
 
-  this->connect(quit,
-                &QAction::triggered,
-                [this]()
-                {
-                  QMessageBox::StandardButton reply;
-                  reply = QMessageBox::question(nullptr,
-                                                "Quit",
-                                                "Quitting the application, are you sure?",
-                                                QMessageBox::Yes | QMessageBox::No);
-
-                  if (reply == QMessageBox::Yes)
-                    this->on_quit();
-                });
+  this->connect(quit, &QAction::triggered, this, &MainWindow::on_quit);
 
   // save / save as
   {
     auto lambda_save_as = [this]()
     {
-      std::filesystem::path path = this->graph_manager->get_fname_path().parent_path();
+      std::filesystem::path path = this->project_path.parent_path();
 
       QString new_fname = QFileDialog::getSaveFileName(this,
                                                        "Save as...",
@@ -172,7 +131,7 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
 
       if (!new_fname.isNull() && !new_fname.isEmpty())
       {
-        this->graph_manager->set_fname_path(new_fname.toStdString());
+        this->set_project_path(new_fname.toStdString());
         this->save_to_file(new_fname.toStdString());
       }
     };
@@ -181,10 +140,10 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
                   &QAction::triggered,
                   [this, lambda_save_as]()
                   {
-                    if (this->graph_manager->get_fname_path() == "")
+                    if (this->project_path.empty())
                       lambda_save_as();
                     else
-                      this->save_to_file(this->graph_manager->get_fname_path());
+                      this->save_to_file(this->project_path.string());
                   });
 
     this->connect(save_as, &QAction::triggered, lambda_save_as);
@@ -206,6 +165,14 @@ void MainWindow::closeEvent(QCloseEvent *event)
     event->ignore();
 }
 
+std::string MainWindow::get_project_name() const
+{
+  if (this->project_path.empty())
+    return std::string();
+  else
+    return this->project_path.filename();
+}
+
 void MainWindow::load_from_file(const std::string &fname)
 {
   LOG->trace("MainWindow::load_from_file: {}", fname);
@@ -218,13 +185,61 @@ void MainWindow::load_from_file(const std::string &fname)
   this->graph_manager_widget->json_from(json["GUI"]["graph_manager_widget"]);
 }
 
-void MainWindow::on_quit() { QApplication::quit(); }
+void MainWindow::on_load()
+{
+  std::filesystem::path path = this->project_path.parent_path();
+
+  QString load_fname = QFileDialog::getOpenFileName(this,
+                                                    "Load...",
+                                                    path.string().c_str(),
+                                                    "Hesiod files (*.hsd)");
+
+  if (!load_fname.isNull() && !load_fname.isEmpty())
+  {
+    this->set_project_path(load_fname.toStdString());
+    this->load_from_file(load_fname.toStdString());
+  }
+}
+
+void MainWindow::on_new()
+{
+  QMessageBox::StandardButton reply;
+  reply = QMessageBox::question(nullptr,
+                                "New",
+                                "Clear everything, are you sure?",
+                                QMessageBox::Yes | QMessageBox::No);
+
+  if (reply == QMessageBox::Yes)
+  {
+    this->graph_manager->clear();
+    this->set_project_path(std::filesystem::path());
+  }
+}
+
+void MainWindow::on_quit()
+{
+  QMessageBox::StandardButton reply;
+  reply = QMessageBox::question(nullptr,
+                                "Quit",
+                                "Quitting the application, are you sure?",
+                                QMessageBox::Yes | QMessageBox::No);
+
+  if (reply == QMessageBox::Yes)
+    QApplication::quit();
+}
 
 void MainWindow::restore_state()
 {
   QSettings settings(HSD_SETTINGS_ORG, HSD_SETTINGS_APP);
   this->restoreState(settings.value("MainWindow/state").toByteArray());
   this->restoreGeometry(settings.value("MainWindow/geometry").toByteArray());
+}
+
+void MainWindow::save_state()
+{
+  QSettings settings("olink", "hesiod");
+  settings.setValue("MainWindow/state", this->saveState());
+  settings.setValue("MainWindow/geometry", this->saveGeometry());
 }
 
 void MainWindow::save_to_file(const std::string &fname) const
@@ -236,8 +251,29 @@ void MainWindow::save_to_file(const std::string &fname) const
 
   // append GUI infos to the current graph data
   nlohmann::json json = json_from_file(fname);
+
+  json["Hesiod version"] = "v" + std::to_string(HESIOD_VERSION_MAJOR) + "." +
+                           std::to_string(HESIOD_VERSION_MINOR) + "." +
+                           std::to_string(HESIOD_VERSION_PATCH);
+
   json["GUI"]["graph_manager_widget"] = this->graph_manager_widget->json_to();
   json_to_file(json, fname);
+}
+
+void MainWindow::set_project_path(const std::string &new_project_path)
+{
+  this->set_project_path(std::filesystem::path(new_project_path));
+}
+
+void MainWindow::set_project_path(const std::filesystem::path &new_project_path)
+{
+  this->project_path = new_project_path;
+
+  std::string title = "Hesiod";
+  if (!this->project_path.empty())
+    title += " - " + this->get_project_name();
+
+  this->set_title(title.c_str());
 }
 
 void MainWindow::show_about()
@@ -253,13 +289,6 @@ void MainWindow::show_about()
   QMessageBox msg_box;
   msg_box.setText(msg.c_str());
   msg_box.exec();
-}
-
-void MainWindow::save_state()
-{
-  QSettings settings("olink", "hesiod");
-  settings.setValue("MainWindow/state", this->saveState());
-  settings.setValue("MainWindow/geometry", this->saveGeometry());
 }
 
 } // namespace hesiod

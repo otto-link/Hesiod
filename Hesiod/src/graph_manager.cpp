@@ -276,31 +276,7 @@ void GraphManager::save_to_file(const std::string &fname) const
   // fill-in json with graph data
   nlohmann::json json;
   json["GraphManager"] = this->json_to();
-
-  // add global infos
-  json["Hesiod version"] = "v" + std::to_string(HESIOD_VERSION_MAJOR) + "." +
-                           std::to_string(HESIOD_VERSION_MINOR) + "." +
-                           std::to_string(HESIOD_VERSION_PATCH);
-
   json_to_file(json, fname);
-}
-
-void GraphManager::set_fname_path(const std::filesystem::path &new_fname_path)
-{
-  this->fname_path = new_fname_path;
-
-  std::string title = "Hesiod";
-  if (!this->fname_path.empty())
-    title += " - " + this->fname_path.string();
-
-  // check that the main window exist in this case to avoid an endless loop...
-  if (MainWindow::exists())
-    MainWindow::instance()->set_title(title.c_str());
-}
-
-void GraphManager::set_fname(const std::string &new_fname_path)
-{
-  this->set_fname_path(std::filesystem::path(new_fname_path));
 }
 
 void GraphManager::set_graph_order(const std::vector<std::string> &new_graph_order)

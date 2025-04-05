@@ -51,8 +51,6 @@ public:
 
   void dump() const;
 
-  std::filesystem::path get_fname_path() const { return this->fname_path; };
-
   GraphEditor *get_graph_ref_by_id(const std::string &id);
 
   int get_graph_order_index(const std::string &id);
@@ -81,10 +79,6 @@ public:
   void remove_graph_editor(const std::string &id);
 
   void save_to_file(const std::string &fname) const;
-
-  void set_fname_path(const std::filesystem::path &new_fname_path);
-
-  void set_fname(const std::string &new_fname_path);
 
   void set_graph_order(const std::vector<std::string> &new_graph_order);
 
@@ -124,8 +118,6 @@ private:
   int id_count = 0;
 
   bool headless = false;
-
-  std::filesystem::path fname_path = "";
 
   // GUI - keep track of the tab widget to allow its update when graphs are added or
   // removed (ownership by app MainWindow)

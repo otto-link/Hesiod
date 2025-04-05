@@ -41,9 +41,17 @@ public:
 
   static bool exists() { return instance() != nullptr; }
 
+  // ---
+
   void load_from_file(const std::string &fname);
 
+  std::string get_project_name() const;
+
   void save_to_file(const std::string &fname) const;
+
+  void set_project_path(const std::string &new_project_path);
+
+  void set_project_path(const std::filesystem::path &new_project_path);
 
   // Method to change the window title
   void set_title(const std::string &new_title)
@@ -61,6 +69,10 @@ protected:
 private Q_SLOTS:
   void closeEvent(QCloseEvent *event) override;
 
+  void on_load();
+
+  void on_new();
+
   void on_quit();
 
 private:
@@ -73,6 +85,8 @@ private:
   MainWindow(const MainWindow &) = delete;
 
   MainWindow &operator=(const MainWindow &) = delete;
+
+  std::filesystem::path project_path = "";
 
   // graph-related storage
   std::unique_ptr<hesiod::GraphManager> graph_manager;
