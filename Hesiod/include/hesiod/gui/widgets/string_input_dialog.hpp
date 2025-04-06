@@ -19,6 +19,9 @@
 namespace hesiod
 {
 
+// =====================================
+// StringInputDialog
+// =====================================
 class StringInputDialog : public QDialog
 {
   Q_OBJECT
@@ -28,8 +31,7 @@ public:
                     const std::vector<std::string> &invalid_strings = {},
                     QWidget                        *parent = nullptr);
 
-  QString get_text() const { return input_line->text(); }
-
+  QString     get_text() const { return input_line->text(); }
   std::string get_text_std_string() const { return input_line->text().toStdString(); }
 
 private slots:
