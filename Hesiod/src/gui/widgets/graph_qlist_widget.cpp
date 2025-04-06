@@ -5,6 +5,7 @@
 
 #include "highmap/colorize.hpp"
 
+#include "hesiod/graph_editor.hpp"
 #include "hesiod/gui/widgets/graph_manager_widget.hpp"
 #include "hesiod/model/utils.hpp"
 

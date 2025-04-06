@@ -6,6 +6,8 @@
 #include <QPushButton>
 #include <QSettings>
 
+#include "hesiod/graph_editor.hpp"
+#include "hesiod/graph_manager.hpp"
 #include "hesiod/gui/main_window.hpp"
 #include "hesiod/gui/widgets/coord_frame_widget.hpp"
 #include "hesiod/gui/widgets/graph_manager_widget.hpp"

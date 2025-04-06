@@ -12,10 +12,11 @@
 #include <QAction>
 #include <QComboBox>
 #include <QListWidget>
+#include <QPushButton>
 #include <QWidget>
 
-#include "hesiod/graph_editor.hpp"
-#include "hesiod/graph_manager.hpp"
+#include "nlohmann/json.hpp"
+
 #include "hesiod/gui/widgets/coord_frame_widget.hpp"
 
 #define LIST_ITEM_HEIGHT 64
@@ -23,6 +24,14 @@
 namespace hesiod
 {
 
+// forward
+class GraphEditor;
+class GraphManager;
+class GraphManagerWidget;
+
+// =====================================
+// GraphQListWidget
+// =====================================
 class GraphQListWidget : public QWidget
 {
   Q_OBJECT
@@ -30,26 +39,30 @@ class GraphQListWidget : public QWidget
 public:
   GraphQListWidget(GraphEditor *p_graph_editor, QWidget *parent = nullptr);
 
-  void json_from(nlohmann::json const &json);
-
+  // --- Serialization ---
+  void           json_from(nlohmann::json const &json);
   nlohmann::json json_to() const;
 
-Q_SIGNALS:
+signals:
   void bg_image_updated(const std::string &graph_id, const QImage &image);
 
-public Q_SLOTS:
-  void update_combobox();
-
+public slots:
+  // --- User Actions ---
   void on_combobox_changed();
 
+  // --- GUI ---
+  void update_combobox();
+
 private:
+  // --- Members ---
   GraphEditor *p_graph_editor;
-
-  QComboBox *combobox;
-
-  std::string current_bg_tag;
+  QComboBox   *combobox;
+  std::string  current_bg_tag;
 };
 
+// =====================================
+// GraphManagerWidget
+// =====================================
 class GraphManagerWidget : public QWidget
 {
   Q_OBJECT
@@ -57,53 +70,47 @@ class GraphManagerWidget : public QWidget
 public:
   GraphManagerWidget(GraphManager *p_graph_manager, QWidget *parent = nullptr);
 
-  void json_from(nlohmann::json const &json);
-
+  // --- Serialization ---
+  void           json_from(nlohmann::json const &json);
   nlohmann::json json_to() const;
 
+  // --- State Management ---
   void restore_window_state();
-
   void save_window_state() const;
 
-Q_SIGNALS:
+signals:
   void window_closed();
 
-private Q_SLOTS:
+private slots:
+  // --- Qt Events ---
   void closeEvent(QCloseEvent *event) override;
-
   void hideEvent(QHideEvent *event) override;
-
-  void on_apply_changes();
-
-  void on_item_double_clicked(QListWidgetItem *item);
-
-  void on_list_reordered(const QModelIndex &, int, int, const QModelIndex &, int);
-
-  void on_new_graph_request();
-
-  void on_nodes_ref_updated();
-
-  void reset();
-
-  void set_is_dirty(bool new_is_dirty);
-
-  void show_context_menu(const QPoint &pos);
-
   void showEvent(QShowEvent *event) override;
 
+  // --- User Actions ---
+  void on_apply_changes();
+  void on_item_double_clicked(QListWidgetItem *item);
+  void on_list_reordered(const QModelIndex &, int, int, const QModelIndex &, int);
+  void on_new_graph_request();
+  void on_nodes_ref_updated();
+
+  // --- Internal State ---
+  void reset();
+  void set_is_dirty(bool new_is_dirty);
+
+  // --- GUI ---
+  void show_context_menu(const QPoint &pos);
+
 private:
+  // --- Helper(s) ---
   void add_list_item(const std::string &id);
 
-private:
-  GraphManager *p_graph_manager;
-
+  // --- Members ---
+  GraphManager     *p_graph_manager;
   CoordFrameWidget *coord_frame_widget;
-
-  QListWidget *list_widget;
-
-  QPushButton *apply_button;
-
-  bool is_dirty = false;
+  QListWidget      *list_widget;
+  QPushButton      *apply_button;
+  bool              is_dirty = false;
 };
 
 } // namespace hesiod
