@@ -21,21 +21,12 @@ class BroadcastNode : public BaseNode
   Q_OBJECT
 
 public:
-  BroadcastNode(const std::string &label, std::shared_ptr<ModelConfig> config)
-      : BaseNode(label, config)
-  {
-  }
+  BroadcastNode(const std::string &label, std::shared_ptr<ModelConfig> config);
 
-  void generate_broadcast_tag();
+  void        generate_broadcast_tag();
+  std::string get_broadcast_tag();
 
-  std::string get_broadcast_tag()
-  {
-    this->generate_broadcast_tag();
-    return this->broadcast_tag;
-  }
-
-  void json_from(nlohmann::json const &json) override;
-
+  void           json_from(nlohmann::json const &json) override;
   nlohmann::json json_to() const override;
 
 Q_SIGNALS:

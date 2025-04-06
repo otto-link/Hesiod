@@ -9,9 +9,37 @@
 namespace hesiod
 {
 
+ReceiveNode::ReceiveNode(const std::string &label, std::shared_ptr<ModelConfig> config)
+    : BaseNode(label, config)
+{
+}
+
 std::string ReceiveNode::get_current_tag() const
 {
   return this->get_attr<attr::ChoiceAttribute>("tag");
+}
+
+std::map<std::string, BroadcastParam> *ReceiveNode::get_p_broadcast_params()
+{
+  if (!this->p_broadcast_params)
+  {
+    LOG->warn("ReceiveNode::get_p_broadcast_params: p_broadcast_param is nullptr");
+  }
+
+  return this->p_broadcast_params;
+}
+
+hmap::Terrain *ReceiveNode::get_p_target_terrain() { return this->p_target_terrain; }
+
+void ReceiveNode::set_p_broadcast_params(
+    std::map<std::string, BroadcastParam> *new_p_broadcast_params)
+{
+  this->p_broadcast_params = new_p_broadcast_params;
+}
+
+void ReceiveNode::set_p_target_terrain(hmap::Terrain *new_p_target_terrain)
+{
+  this->p_target_terrain = new_p_target_terrain;
 }
 
 void ReceiveNode::update_tag_list(const std::vector<std::string> &new_tags)

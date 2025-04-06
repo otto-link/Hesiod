@@ -9,6 +9,12 @@
 namespace hesiod
 {
 
+BroadcastNode::BroadcastNode(const std::string           &label,
+                             std::shared_ptr<ModelConfig> config)
+    : BaseNode(label, config)
+{
+}
+
 void BroadcastNode::generate_broadcast_tag()
 {
   this->broadcast_tag = this->get_graph_id() + "/" + this->get_label() + "/" +
@@ -18,6 +24,12 @@ void BroadcastNode::generate_broadcast_tag()
   // user
   this->get_attr_ref()->at("tag")->get_ref<attr::StringAttribute>()->set_value(
       this->broadcast_tag);
+}
+
+std::string BroadcastNode::get_broadcast_tag()
+{
+  this->generate_broadcast_tag();
+  return this->broadcast_tag;
 }
 
 void BroadcastNode::json_from(nlohmann::json const &json)

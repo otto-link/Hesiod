@@ -64,7 +64,7 @@ std::map<std::string, std::string> get_node_inventory();
  * @code auto noise_node = node_factory("Noise", config);
  * auto remap_node = node_factory("Remap", config);
  * @endcode
- */s
+ */
 std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type,
                                           std::shared_ptr<ModelConfig> config);
 
