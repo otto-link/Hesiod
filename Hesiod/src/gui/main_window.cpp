@@ -130,19 +130,20 @@ bool MainWindow::save_to_file(const std::string &fname) const
 
   try
   {
-    // model
-    this->graph_manager->save_to_file(fname);
+    nlohmann::json json;
 
-    // append GUI infos to the current graph data
-    nlohmann::json json = json_from_file(fname);
-
+    // general infos
     json["Hesiod version"] = "v" + std::to_string(HESIOD_VERSION_MAJOR) + "." +
                              std::to_string(HESIOD_VERSION_MINOR) + "." +
                              std::to_string(HESIOD_VERSION_PATCH);
 
-    json["GUI"]["graph_manager_widget"] = this->graph_manager_widget->json_to();
-    json_to_file(json, fname);
+    // model
+    json["GraphManager"] = this->graph_manager->json_to();
 
+    // GUI
+    json["GUI"]["graph_manager_widget"] = this->graph_manager_widget->json_to();
+
+    json_to_file(json, fname);
     return true;
   }
   catch (const std::exception &e)
