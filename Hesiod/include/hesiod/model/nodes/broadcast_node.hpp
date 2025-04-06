@@ -16,6 +16,9 @@
 namespace hesiod
 {
 
+// =====================================
+// BroadcastNode
+// =====================================
 class BroadcastNode : public BaseNode
 {
   Q_OBJECT

@@ -30,12 +30,6 @@ namespace hesiod
 // - TODO keybindings to switch between editors
 // - add Graph file menu
 
-struct BroadcastParam
-{
-  const hmap::Terrain   *t_source = nullptr;
-  const hmap::Heightmap *p_h = nullptr;
-};
-
 class GraphManager : public QObject
 {
   Q_OBJECT
@@ -114,7 +108,7 @@ private:
 
   std::vector<std::string> graph_order;
 
-  std::map<std::string, BroadcastParam> broadcast_params;
+  BroadcastMap broadcast_params;
 
   int id_count = 0;
 

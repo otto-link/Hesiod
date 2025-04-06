@@ -19,7 +19,7 @@ std::string ReceiveNode::get_current_tag() const
   return this->get_attr<attr::ChoiceAttribute>("tag");
 }
 
-std::map<std::string, BroadcastParam> *ReceiveNode::get_p_broadcast_params()
+BroadcastMap *ReceiveNode::get_p_broadcast_params()
 {
   if (!this->p_broadcast_params)
   {
@@ -31,8 +31,7 @@ std::map<std::string, BroadcastParam> *ReceiveNode::get_p_broadcast_params()
 
 hmap::Terrain *ReceiveNode::get_p_target_terrain() { return this->p_target_terrain; }
 
-void ReceiveNode::set_p_broadcast_params(
-    std::map<std::string, BroadcastParam> *new_p_broadcast_params)
+void ReceiveNode::set_p_broadcast_params(BroadcastMap *new_p_broadcast_params)
 {
   this->p_broadcast_params = new_p_broadcast_params;
 }

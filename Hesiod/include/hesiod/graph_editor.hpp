@@ -17,6 +17,7 @@
 
 #include "hesiod/model/graph_node.hpp"
 #include "hesiod/model/model_config.hpp"
+#include "hesiod/model/broadcast_param.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 
 namespace hesiod
@@ -37,10 +38,7 @@ public:
 
   void clear();
 
-  std::map<std::string, BroadcastParam> *get_p_broadcast_params()
-  {
-    return this->p_broadcast_params;
-  }
+  BroadcastMap *get_p_broadcast_params() { return this->p_broadcast_params; }
 
   gngui::GraphViewer *get_p_viewer() { return this->viewer.get(); }
 
@@ -53,8 +51,7 @@ public:
 
   void setup_broadcast_receive_node(const std::string &node_id);
 
-  void set_p_broadcast_params(
-      std::map<std::string, BroadcastParam> *new_p_broadcast_params)
+  void set_p_broadcast_params(BroadcastMap *new_p_broadcast_params)
   {
     this->p_broadcast_params = new_p_broadcast_params;
   }
@@ -143,7 +140,7 @@ private:
   void graph_viewer_enable();
 
   // ownership by GraphManager
-  std::map<std::string, BroadcastParam> *p_broadcast_params = nullptr;
+  BroadcastMap *p_broadcast_params = nullptr;
 };
 
 } // namespace hesiod
