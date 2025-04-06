@@ -28,7 +28,8 @@ namespace hesiod
 // - TODO add setting to allow broadcast within the same graph
 // - TODO clean-up load/save with MainWindow
 // - TODO keybindings to switch between editors
-// - add Graph file menu
+// - TODO move Broadcast to GraphNpde
+// - TODO clear cut between model/GUI for upper classes GraphViewer and GraphManager
 
 class GraphManager : public QObject
 {

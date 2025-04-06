@@ -290,11 +290,6 @@ void GraphManagerWidget::on_new_graph_request()
   this->coord_frame_widget->add_frame(new_graph_id);
 }
 
-void GraphManagerWidget::on_nodes_ref_updated()
-{
-  LOG->trace("GraphManagerWidget::on_nodes_ref_updated");
-}
-
 void GraphManagerWidget::reset()
 {
   this->list_widget->clear();

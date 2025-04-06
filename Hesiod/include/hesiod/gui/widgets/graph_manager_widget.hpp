@@ -82,18 +82,18 @@ public:
 signals:
   void window_closed();
 
-private slots:
-  // --- Qt Events ---
-  void closeEvent(QCloseEvent *event) override;
-  void hideEvent(QHideEvent *event) override;
-  void showEvent(QShowEvent *event) override;
-
+public slots:
   // --- User Actions ---
   void on_apply_changes();
   void on_item_double_clicked(QListWidgetItem *item);
   void on_list_reordered(const QModelIndex &, int, int, const QModelIndex &, int);
   void on_new_graph_request();
-  void on_nodes_ref_updated();
+
+private slots:
+  // --- Qt Events ---
+  void closeEvent(QCloseEvent *event) override;
+  void hideEvent(QHideEvent *event) override;
+  void showEvent(QShowEvent *event) override;
 
   // --- Internal State ---
   void reset();

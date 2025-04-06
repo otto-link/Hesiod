@@ -246,6 +246,11 @@ void MainWindow::setup_menu_bar()
   quit->setShortcut(tr("Ctrl+Q"));
   file_menu->addAction(quit);
 
+  QMenu *graph_menu = menuBar()->addMenu("&Graph");
+
+  auto *new_graph = new QAction("New graph", this);
+  graph_menu->addAction(new_graph);
+
   QMenu *view_menu = menuBar()->addMenu("&View");
 
   auto *show_layout_manager = new QAction("Graph layout manager", this);
@@ -260,11 +265,9 @@ void MainWindow::setup_menu_bar()
 
   // --- connections
 
-  this->connect(about, &QAction::triggered, this, &MainWindow::show_about);
-
   this->connect(new_action, &QAction::triggered, this, &MainWindow::on_new);
-
   this->connect(load, &QAction::triggered, this, &MainWindow::on_load);
+  this->connect(about, &QAction::triggered, this, &MainWindow::show_about);
 
   this->connect(show_layout_manager,
                 &QAction::triggered,
@@ -310,6 +313,12 @@ void MainWindow::setup_menu_bar()
 
     this->connect(save_as, &QAction::triggered, lambda_save_as);
   }
+
+  // --- graphs
+  this->connect(new_graph,
+                &QAction::triggered,
+                this->graph_manager_widget,
+                &GraphManagerWidget::on_new_graph_request);
 
   this->connect(quit, &QAction::triggered, this, &MainWindow::on_quit);
 }
