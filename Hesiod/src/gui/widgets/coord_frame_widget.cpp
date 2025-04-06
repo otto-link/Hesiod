@@ -3,6 +3,7 @@
  * this software. */
 #include <QGraphicsRectItem>
 
+#include "hesiod/graph_manager.hpp"
 #include "hesiod/gui/widgets/coord_frame_widget.hpp"
 #include "hesiod/logger.hpp"
 

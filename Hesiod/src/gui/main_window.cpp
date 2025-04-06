@@ -11,11 +11,12 @@
 #include <QSettings>
 #include <QTabWidget>
 
+#include "hesiod/graph_editor.hpp"
+#include "hesiod/graph_manager.hpp"
 #include "hesiod/gui/main_window.hpp"
+#include "hesiod/gui/widgets/graph_manager_widget.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/utils.hpp"
-
-#include "hesiod/gui/widgets/graph_manager_widget.hpp"
 
 namespace hesiod
 {
@@ -53,6 +54,16 @@ std::string MainWindow::get_project_name() const
     return std::string();
   else
     return this->project_path.filename();
+}
+
+MainWindow *MainWindow::instance(QApplication *p_app, QWidget *p_parent)
+{
+  static MainWindow *instance = nullptr;
+  if (!instance)
+  {
+    instance = new MainWindow(p_app, p_parent);
+  }
+  return instance;
 }
 
 void MainWindow::load_from_file(const std::string &fname)
@@ -169,6 +180,11 @@ void MainWindow::set_project_path(const std::filesystem::path &new_project_path)
     title += " - " + this->get_project_name();
 
   this->set_title(title.c_str());
+}
+
+void MainWindow::set_title(const std::string &new_title)
+{
+  this->setWindowTitle(new_title.c_str());
 }
 
 void MainWindow::setup_central_widget()

@@ -10,6 +10,7 @@ typedef unsigned int uint;
 #include "highmap/opencl/gpu_opencl.hpp"
 
 #include "hesiod/config.hpp"
+#include "hesiod/graph_editor.hpp"
 #include "hesiod/gui/main_window.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/node_factory.hpp"

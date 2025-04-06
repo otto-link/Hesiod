@@ -19,6 +19,7 @@ FrameItem::FrameItem(const std::string &id, QPointF origin, QPointF size, float 
   this->setFlag(QGraphicsItem::ItemClipsChildrenToShape, false);
   this->setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
   this->setAcceptHoverEvents(true);
+
   this->setOpacity(0.7f);
   this->setZValue(0);
 
@@ -64,9 +65,7 @@ QVariant FrameItem::itemChange(GraphicsItemChange change, const QVariant &value)
 {
   if (change == QGraphicsItem::ItemPositionChange)
   {
-    QPointF new_pos = value.toPointF();
-    this->origin = new_pos / COORD_SCALE;
-
+    this->origin = value.toPointF() / COORD_SCALE;
     Q_EMIT this->has_changed(this->id);
   }
 
@@ -75,36 +74,35 @@ QVariant FrameItem::itemChange(GraphicsItemChange change, const QVariant &value)
 
 void FrameItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-  if (this->is_rotated && (event->buttons() & Qt::LeftButton))
+  const QPointF pos = event->pos();
+  const bool    left_button = event->buttons() & Qt::LeftButton;
+
+  if (this->is_rotated && left_button)
   {
     // adjust the angle to center the rectangle on the mouse cursor
-    QPointF pos = event->pos();
-    QPointF center = this->rotation_rect.center();
+    const QPointF center = this->rotation_rect.center();
 
     float pos_angle = std::atan2(pos.y(), pos.x());
     float center_angle = std::atan2(center.y(), center.x());
-    float delta = (pos_angle - center_angle) / 3.14159f * 180.f;
+    float delta = (pos_angle - center_angle) / M_PI * 180.f;
 
     this->set_angle(this->angle + delta);
   }
-  else if (this->is_resized && (event->buttons() & Qt::LeftButton))
+  else if (this->is_resized && left_button)
   {
-    QPointF pos = event->pos();
-    QPointF center = this->resize_rect.center();
-    QPointF delta = pos - center;
+    QPointF delta = pos - this->resize_rect.center();
 
     // 1:1 aspect ratio scaling if Shift
     if (event->modifiers() & Qt::ShiftModifier)
     {
-      float dmax = std::max(delta.x(), delta.y());
+      const float dmax = std::max(delta.x(), delta.y());
       delta = QPointF(dmax, dmax);
     }
 
     // prevent negative sizes
-    delta /= COORD_SCALE;
-    QPointF new_size = this->size + QPointF(delta.x(), delta.y());
-    new_size = QPointF(std::max(0.f, (float)new_size.x()),
-                       std::max(0.f, (float)new_size.y()));
+    QPointF new_size = this->size + delta / COORD_SCALE;
+    new_size = QPointF(std::max(0.f, static_cast<float>(new_size.x())),
+                       std::max(0.f, static_cast<float>(new_size.y())));
 
     this->set_size(new_size);
   }
@@ -140,12 +138,7 @@ void FrameItem::paint(QPainter                       *painter,
 
   // contour
   painter->setBrush(Qt::NoBrush);
-
-  if (this->is_hovered)
-    painter->setPen(QPen(color_hovered, 1.f));
-  else
-    painter->setPen(QPen(color_border, 1.f));
-
+  painter->setPen(QPen(is_hovered ? color_hovered : color_border, 1.f));
   painter->drawRect(base_rect);
 
   // corners
@@ -189,33 +182,13 @@ void FrameItem::set_geometry(QPointF new_origin, QPointF new_size, float new_ang
 void FrameItem::set_is_resized(bool new_is_resized)
 {
   this->is_resized = new_is_resized;
-
-  if (this->is_resized)
-  {
-    this->setFlag(QGraphicsItem::ItemIsMovable, false);
-    this->setCursor(Qt::SizeBDiagCursor);
-  }
-  else if (!this->is_rotated)
-  {
-    this->setFlag(QGraphicsItem::ItemIsMovable, true);
-    this->setCursor(Qt::ArrowCursor);
-  }
+  this->update_cursor_and_flags();
 }
 
 void FrameItem::set_is_rotated(bool new_is_rotated)
 {
   this->is_rotated = new_is_rotated;
-
-  if (this->is_rotated)
-  {
-    this->setFlag(QGraphicsItem::ItemIsMovable, false);
-    this->setCursor(Qt::CrossCursor);
-  }
-  else if (!this->is_resized)
-  {
-    this->setFlag(QGraphicsItem::ItemIsMovable, true);
-    this->setCursor(Qt::ArrowCursor);
-  }
+  this->update_cursor_and_flags();
 }
 
 void FrameItem::set_origin(QPointF new_origin)
@@ -237,19 +210,31 @@ void FrameItem::set_z_depth(int new_z_depth)
   this->update();
 }
 
+void FrameItem::update_cursor_and_flags()
+{
+  if (is_resized)
+  {
+    setFlag(QGraphicsItem::ItemIsMovable, false);
+    setCursor(Qt::SizeBDiagCursor);
+  }
+  else if (is_rotated)
+  {
+    setFlag(QGraphicsItem::ItemIsMovable, false);
+    setCursor(Qt::CrossCursor);
+  }
+  else
+  {
+    setFlag(QGraphicsItem::ItemIsMovable, true);
+    setCursor(Qt::ArrowCursor);
+  }
+}
+
 void FrameItem::update_item_geometry()
 {
   this->setRect(0.f, 0.f, COORD_SCALE * this->size.x(), COORD_SCALE * this->size.y());
   this->setPos(COORD_SCALE * this->origin);
   this->setRotation(this->angle);
-
-  const std::string tool_tip = this->id;
-  // + ": " + std::to_string(this->origin.x()) + ", " +
-  //                              std::to_string(this->origin.y()) + " " +
-  //                              std::to_string(this->size.x()) + "x" +
-  //                              std::to_string(this->size.y()) + " " +
-  //                              std::to_string(this->angle) + "°";
-  this->setToolTip(tool_tip.c_str());
+  this->setToolTip(QString::fromStdString(this->id));
 
   // corners (warning, y-scale is reversed...)
   this->rotation_rect = QRectF(this->rect().topRight() - QPointF(this->handle_size, 0.f),
@@ -260,7 +245,6 @@ void FrameItem::update_item_geometry()
                              QSizeF(this->handle_size, this->handle_size));
 
   this->update();
-
   Q_EMIT this->has_changed(this->id);
 }
 

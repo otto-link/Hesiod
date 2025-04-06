@@ -11,11 +11,9 @@
  */
 
 #pragma once
-#include <QMainWindow>
+#include <filesystem>
 
-#include "hesiod/graph_editor.hpp"
-#include "hesiod/graph_manager.hpp"
-#include "hesiod/gui/widgets/graph_manager_widget.hpp"
+#include <QMainWindow>
 
 #define HSD_SETTINGS_ORG "olink"
 #define HSD_SETTINGS_APP "hesiod"
@@ -25,82 +23,68 @@
 namespace hesiod
 {
 
+// forward
+class GraphEditor;
+class GraphManager;
+class GraphManagerWidget;
+
+// =====================================
+// FrameItem
+// =====================================
 class MainWindow : public QMainWindow
 {
   Q_OBJECT
 
 public:
-  // static method to get the singleton instance of MainWindow
-  static MainWindow *instance(QApplication *p_app = nullptr, QWidget *p_parent = nullptr)
-  {
-    static MainWindow *instance = nullptr;
-    if (!instance)
-    {
-      instance = new MainWindow(p_app, p_parent);
-    }
-    return instance;
-  }
+  // --- Singleton pattern ---
+  static MainWindow *instance(QApplication *p_app = nullptr, QWidget *p_parent = nullptr);
 
-  void load_from_file(const std::string &fname);
-
+  // --- Accessors ---
   std::string get_project_name() const;
+  void        set_project_path(const std::string &new_project_path);
+  void        set_project_path(const std::filesystem::path &new_project_path);
+  void        set_title(const std::string &new_title);
 
+  // --- Serialization on file ---
+  void load_from_file(const std::string &fname);
   bool save_to_file(const std::string &fname) const;
 
-  void set_project_path(const std::string &new_project_path);
-
-  void set_project_path(const std::filesystem::path &new_project_path);
-
-  void set_title(const std::string &new_title)
-  {
-    this->setWindowTitle(new_title.c_str());
-  }
-
 protected:
+  // --- State Management ---
   void restore_state();
-
   void save_state();
 
-  void show_about();
-
-private Q_SLOTS:
+private slots:
+  // --- Event Handling ---
   void closeEvent(QCloseEvent *event) override;
 
+  // --- User Actions ---
   void on_load();
-
   void on_new();
-
   void on_quit();
+  void show_about();
 
-private: // methods
-  // constructor is private to prevent creating MainWindow elsewhere
+private:
+  // --- Singleton pattern (private constructor to prevent copy) ---
   MainWindow(QApplication *p_app = nullptr, QWidget *p_parent = nullptr);
-
   ~MainWindow() override;
 
   // prevent copying and assignment
   MainWindow(const MainWindow &) = delete;
-
   MainWindow &operator=(const MainWindow &) = delete;
 
+  // --- Setup ---
   void setup_central_widget();
-
   void setup_graph_manager();
-
   void setup_menu_bar();
 
-private: // attributes
   std::filesystem::path project_path = "";
 
-  // graph-related storage
+  // --- Storage... ---
   std::unique_ptr<hesiod::GraphManager> graph_manager;
-
-  // ownership by MainWindow Qt object
-  GraphManagerWidget *graph_manager_widget = nullptr;
-
+  GraphManagerWidget *graph_manager_widget = nullptr; // ownership by MainWindow Qt object
   std::vector<GraphEditor *> graph_editors = {};
-
-  QTabWidget *tab_widget = nullptr;
+  QTabWidget                *tab_widget = nullptr;
 };
 
 } // namespace hesiod
