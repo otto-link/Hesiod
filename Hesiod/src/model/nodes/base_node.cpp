@@ -87,6 +87,16 @@ BaseNode::BaseNode(const std::string &label, std::shared_ptr<ModelConfig> config
                 });
 }
 
+std::map<std::string, std::unique_ptr<attr::AbstractAttribute>> *BaseNode::get_attr_ref()
+{
+  return &this->attr;
+};
+
+std::vector<std::string> *BaseNode::get_attr_ordered_key_ref()
+{
+  return &this->attr_ordered_key;
+};
+
 std::string BaseNode::get_documentation_html() const
 {
   std::string html;
@@ -152,22 +162,14 @@ std::string BaseNode::get_documentation_html() const
   return html;
 }
 
-gngui::PortType BaseNode::get_port_type(int port_index) const
+GraphEditor *BaseNode::get_p_graph_node() const
 {
-  gnode::PortType ptype = gnode::Node::get_port_type(this->get_port_label(port_index));
+  if (!this->p_graph_node)
+  {
+    LOG->warn("BaseNode::get_p_graph_node: p_graph_node is nullptr");
+  }
 
-  if (ptype == gnode::PortType::IN)
-    return gngui::PortType::IN;
-  else
-    return gngui::PortType::OUT;
-}
-
-QWidget *BaseNode::get_qwidget_ref()
-{
-  if (!this->data_preview)
-    this->data_preview = new DataPreview(this);
-
-  return (QWidget *)this->data_preview;
+  return this->p_graph_node;
 }
 
 void BaseNode::json_from(nlohmann::json const &json)
@@ -264,6 +266,16 @@ nlohmann::json BaseNode::node_parameters_to_json() const
   }
 
   return json;
+}
+
+void BaseNode::set_attr_ordered_key(const std::vector<std::string> &new_attr_ordered_key)
+{
+  this->attr_ordered_key = new_attr_ordered_key;
+}
+
+void BaseNode::set_compute_fct(std::function<void(BaseNode *p_node)> new_compute_fct)
+{
+  this->compute_fct = std::move(new_compute_fct);
 }
 
 } // namespace hesiod

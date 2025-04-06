@@ -47,7 +47,7 @@ void compute_abs_node(BaseNode *p_node)
           hmap::Array *pa_out = p_arrays[0];
           hmap::Array *pa_in = p_arrays[1];
 
-          *pa_out = hmap::abs(*pa_in - GET("vshift", FloatAttribute));
+          *pa_out = hmap::abs(*pa_in - get<FloatAttribute>(p_node, "vshift");
         },
         p_node->get_config_ref()->hmap_transform_mode_cpu);
   }
