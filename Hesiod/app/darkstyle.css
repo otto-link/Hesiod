@@ -13,11 +13,10 @@ R""(
 
     QPushButton::disabled, QProgressBar::disabled, QProgressBar::chunk::disabled
     {
-    color: #3C3C3C;
-    background-color: #3C3C3C;
+	color: #3C3C3C;
+	background-color: #3C3C3C;
     }
-
-
+    
     /* QMainWindow */
 
     QRadioButton

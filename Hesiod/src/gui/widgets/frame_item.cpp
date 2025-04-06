@@ -19,7 +19,7 @@ FrameItem::FrameItem(const std::string &id, QPointF origin, QPointF size, float 
   this->setFlag(QGraphicsItem::ItemClipsChildrenToShape, false);
   this->setFlag(QGraphicsItem::ItemSendsGeometryChanges, true);
   this->setAcceptHoverEvents(true);
-  this->setOpacity(1.f);
+  this->setOpacity(0.7f);
   this->setZValue(0);
 
   this->update_item_geometry();

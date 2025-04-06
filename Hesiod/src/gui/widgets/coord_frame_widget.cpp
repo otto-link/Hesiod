@@ -23,6 +23,7 @@ CoordFrameWidget::CoordFrameWidget(GraphManager *p_graph_manager, QWidget *paren
   this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   this->setDragMode(QGraphicsView::NoDrag);
   this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+  this->setStyleSheet("QGraphicsView { border: 1px solid #5B5B5B; border-radius: 4px;}");
 
   // flip Y-axis
   QTransform transform;
