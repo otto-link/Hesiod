@@ -19,6 +19,8 @@
 
 #define HSD_SETTINGS_ORG "olink"
 #define HSD_SETTINGS_APP "hesiod"
+#define HSD_DEFAULT_STARTUP_FILE "data/default.hsd"
+#define HSD_APP_ICON "data/hesiod_icon.png"
 
 namespace hesiod
 {
@@ -28,8 +30,6 @@ class MainWindow : public QMainWindow
   Q_OBJECT
 
 public:
-  // --- related to singleton class
-
   // static method to get the singleton instance of MainWindow
   static MainWindow *instance(QApplication *p_app = nullptr, QWidget *p_parent = nullptr)
   {
@@ -41,15 +41,11 @@ public:
     return instance;
   }
 
-  static bool exists() { return instance() != nullptr; }
-
-  // --- other
-
   void load_from_file(const std::string &fname);
 
   std::string get_project_name() const;
 
-  void save_to_file(const std::string &fname) const;
+  bool save_to_file(const std::string &fname) const;
 
   void set_project_path(const std::string &new_project_path);
 
@@ -76,9 +72,7 @@ private Q_SLOTS:
 
   void on_quit();
 
-private:
-  // --- related to singleton class
-
+private: // methods
   // constructor is private to prevent creating MainWindow elsewhere
   MainWindow(QApplication *p_app = nullptr, QWidget *p_parent = nullptr);
 
@@ -89,17 +83,24 @@ private:
 
   MainWindow &operator=(const MainWindow &) = delete;
 
-  // --- other
+  void setup_central_widget();
 
+  void setup_graph_manager();
+
+  void setup_menu_bar();
+
+private: // attributes
   std::filesystem::path project_path = "";
 
   // graph-related storage
   std::unique_ptr<hesiod::GraphManager> graph_manager;
 
-  // ownership by MainWindow
+  // ownership by MainWindow Qt object
   GraphManagerWidget *graph_manager_widget = nullptr;
 
   std::vector<GraphEditor *> graph_editors = {};
+
+  QTabWidget *tab_widget = nullptr;
 };
 
 } // namespace hesiod

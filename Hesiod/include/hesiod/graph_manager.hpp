@@ -28,6 +28,7 @@ namespace hesiod
 // - TODO add setting to allow broadcast within the same graph
 // - TODO clean-up load/save with MainWindow
 // - TODO keybindings to switch between editors
+// - add Graph file menu
 
 struct BroadcastParam
 {

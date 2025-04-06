@@ -63,7 +63,6 @@ void compute_receive_node(BaseNode *p_node)
     return;
   }
 
-  // if (p_receive_node->get_p_broadcast_params()->size() > 0)
   if (p_receive_node->get_p_broadcast_params()->contains(tag))
   {
     BroadcastParam broadcast_param = p_receive_node->get_p_broadcast_params()->at(tag);

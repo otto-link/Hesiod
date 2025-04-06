@@ -23,136 +23,18 @@ namespace hesiod
 MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(parent)
 {
   this->setWindowTitle(tr("Hesiod"));
-  // this->setWindowIcon(QIcon("data/hesiod_icon.png"));
   this->restore_state();
 
-  // --- menu bar
+  this->setup_graph_manager();
+  this->setup_central_widget();
 
-  QMenu *file_menu = menuBar()->addMenu("&File");
-
-  auto *new_action = new QAction("New", this);
-  new_action->setShortcut(tr("Ctrl+N"));
-  file_menu->addAction(new_action);
-
-  file_menu->addSeparator();
-
-  auto *load = new QAction("Open", this);
-  load->setShortcut(tr("Ctrl+O"));
-  file_menu->addAction(load);
-
-  auto *save = new QAction("Save", this);
-  save->setShortcut(tr("Ctrl+S"));
-  file_menu->addAction(save);
-
-  auto *save_as = new QAction("Save As", this);
-  save_as->setShortcut(tr("Ctrl+Shift+S"));
-  file_menu->addAction(save_as);
-
-  file_menu->addSeparator();
-
-  auto *quit = new QAction("Quit", this);
-  quit->setShortcut(tr("Ctrl+Q"));
-  file_menu->addAction(quit);
-
-  QMenu *view_menu = menuBar()->addMenu("&View");
-
-  auto *show_layout_manager = new QAction("Graph layout manager", this);
-  show_layout_manager->setCheckable(true);
-  show_layout_manager->setChecked(true);
-  view_menu->addAction(show_layout_manager);
-
-  QMenu *help = menuBar()->addMenu("&Help");
-
-  auto *about = new QAction("&About", this);
-  help->addAction(about);
-
-  // --- widgets
-
-  QWidget    *central_widget = new QWidget(this);
-  QTabWidget *tab_widget = new QTabWidget(central_widget);
-
-  // boot graph manager
-  bool headless = false;
-  this->graph_manager = std::make_unique<hesiod::GraphManager>(headless);
-  this->graph_manager->set_tab_widget(tab_widget);
-  // this->graph_manager->load_from_file("data/default.hsd");
-
-  {
-    auto config = std::make_shared<hesiod::ModelConfig>();
-    auto graph = std::make_shared<hesiod::GraphEditor>("", config);
-    this->graph_manager->add_graph_editor(graph, "new graph");
-  }
-
-  {
-    auto config = std::make_shared<hesiod::ModelConfig>();
-    auto graph = std::make_shared<hesiod::GraphEditor>("", config);
-    this->graph_manager->add_graph_editor(graph, "new graph 2");
-  }
-
-  // main central widget layout
-  QHBoxLayout *main_layout = new QHBoxLayout(central_widget);
-  main_layout->addWidget(tab_widget);
-  central_widget->setLayout(main_layout);
-
-  this->setCentralWidget(central_widget);
-
+  // interface GraphManager with its GUI components
+  this->graph_manager->set_tab_widget(this->tab_widget);
   this->graph_manager_widget = new GraphManagerWidget(this->graph_manager.get(), nullptr);
   this->graph_manager_widget->show();
 
-  // --- connections
-
-  this->connect(about, &QAction::triggered, this, &MainWindow::show_about);
-
-  this->connect(new_action, &QAction::triggered, this, &MainWindow::on_new);
-
-  this->connect(load, &QAction::triggered, this, &MainWindow::on_load);
-
-  this->connect(show_layout_manager,
-                &QAction::triggered,
-                this,
-                [this, show_layout_manager]()
-                {
-                  bool state = this->graph_manager_widget->isVisible();
-                  this->graph_manager_widget->setVisible(!state);
-                  show_layout_manager->setChecked(!state);
-                });
-
-  this->connect(this->graph_manager_widget,
-                &GraphManagerWidget::window_closed,
-                [show_layout_manager]() { show_layout_manager->setChecked(false); });
-
-  this->connect(quit, &QAction::triggered, this, &MainWindow::on_quit);
-
-  // save / save as
-  {
-    auto lambda_save_as = [this]()
-    {
-      std::filesystem::path path = this->project_path.parent_path();
-
-      QString new_fname = QFileDialog::getSaveFileName(this,
-                                                       "Save as...",
-                                                       path.string().c_str(),
-                                                       "Hesiod files (*.hsd)");
-
-      if (!new_fname.isNull() && !new_fname.isEmpty())
-      {
-        this->set_project_path(new_fname.toStdString());
-        this->save_to_file(new_fname.toStdString());
-      }
-    };
-
-    this->connect(save,
-                  &QAction::triggered,
-                  [this, lambda_save_as]()
-                  {
-                    if (this->project_path.empty())
-                      lambda_save_as();
-                    else
-                      this->save_to_file(this->project_path.string());
-                  });
-
-    this->connect(save_as, &QAction::triggered, lambda_save_as);
-  }
+  // after widgets and graph manager
+  this->setup_menu_bar();
 
   this->connect(p_app, &QApplication::aboutToQuit, [&]() { this->save_state(); });
 }
@@ -161,13 +43,8 @@ MainWindow::~MainWindow() { this->save_state(); }
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-  if (true) // userReallyWantsToQuit())
-  {
-    this->save_state();
-    event->accept();
-  }
-  else
-    event->ignore();
+  this->save_state();
+  event->accept();
 }
 
 std::string MainWindow::get_project_name() const
@@ -242,27 +119,39 @@ void MainWindow::restore_state()
 
 void MainWindow::save_state()
 {
-  QSettings settings("olink", "hesiod");
+  QSettings settings(HSD_SETTINGS_ORG, HSD_SETTINGS_APP);
   settings.setValue("MainWindow/state", this->saveState());
   settings.setValue("MainWindow/geometry", this->saveGeometry());
 }
 
-void MainWindow::save_to_file(const std::string &fname) const
+bool MainWindow::save_to_file(const std::string &fname) const
 {
   LOG->trace("MainWindow::save_to_file: {}", fname);
 
-  // model
-  this->graph_manager->save_to_file(fname);
+  try
+  {
+    // model
+    this->graph_manager->save_to_file(fname);
 
-  // append GUI infos to the current graph data
-  nlohmann::json json = json_from_file(fname);
+    // append GUI infos to the current graph data
+    nlohmann::json json = json_from_file(fname);
 
-  json["Hesiod version"] = "v" + std::to_string(HESIOD_VERSION_MAJOR) + "." +
-                           std::to_string(HESIOD_VERSION_MINOR) + "." +
-                           std::to_string(HESIOD_VERSION_PATCH);
+    json["Hesiod version"] = "v" + std::to_string(HESIOD_VERSION_MAJOR) + "." +
+                             std::to_string(HESIOD_VERSION_MINOR) + "." +
+                             std::to_string(HESIOD_VERSION_PATCH);
 
-  json["GUI"]["graph_manager_widget"] = this->graph_manager_widget->json_to();
-  json_to_file(json, fname);
+    json["GUI"]["graph_manager_widget"] = this->graph_manager_widget->json_to();
+    json_to_file(json, fname);
+
+    return true;
+  }
+  catch (const std::exception &e)
+  {
+    LOG->critical("MainWindow::save_to_file: failed to save file {}, what: {}",
+                  fname,
+                  e.what());
+    return false;
+  }
 }
 
 void MainWindow::set_project_path(const std::string &new_project_path)
@@ -281,9 +170,136 @@ void MainWindow::set_project_path(const std::filesystem::path &new_project_path)
   this->set_title(title.c_str());
 }
 
+void MainWindow::setup_central_widget()
+{
+  QWidget *central_widget = new QWidget(this);
+  this->tab_widget = new QTabWidget(central_widget);
+
+  QHBoxLayout *main_layout = new QHBoxLayout(central_widget);
+  main_layout->addWidget(this->tab_widget);
+  central_widget->setLayout(main_layout);
+
+  this->setCentralWidget(central_widget);
+}
+
+void MainWindow::setup_graph_manager()
+{
+  bool headless = false;
+  this->graph_manager = std::make_unique<hesiod::GraphManager>(headless);
+  // this->graph_manager->load_from_file(HSD_DEFAULT_STARTUP_FILE);
+
+  {
+    auto config = std::make_shared<hesiod::ModelConfig>();
+    auto graph = std::make_shared<hesiod::GraphEditor>("", config);
+    this->graph_manager->add_graph_editor(graph, "new graph");
+  }
+
+  {
+    auto config = std::make_shared<hesiod::ModelConfig>();
+    auto graph = std::make_shared<hesiod::GraphEditor>("", config);
+    this->graph_manager->add_graph_editor(graph, "new graph 2");
+  }
+}
+
+void MainWindow::setup_menu_bar()
+{
+  QMenu *file_menu = menuBar()->addMenu("&File");
+
+  auto *new_action = new QAction("New", this);
+  new_action->setShortcut(tr("Ctrl+N"));
+  file_menu->addAction(new_action);
+
+  file_menu->addSeparator();
+
+  auto *load = new QAction("Open", this);
+  load->setShortcut(tr("Ctrl+O"));
+  file_menu->addAction(load);
+
+  auto *save = new QAction("Save", this);
+  save->setShortcut(tr("Ctrl+S"));
+  file_menu->addAction(save);
+
+  auto *save_as = new QAction("Save As", this);
+  save_as->setShortcut(tr("Ctrl+Shift+S"));
+  file_menu->addAction(save_as);
+
+  file_menu->addSeparator();
+
+  auto *quit = new QAction("Quit", this);
+  quit->setShortcut(tr("Ctrl+Q"));
+  file_menu->addAction(quit);
+
+  QMenu *view_menu = menuBar()->addMenu("&View");
+
+  auto *show_layout_manager = new QAction("Graph layout manager", this);
+  show_layout_manager->setCheckable(true);
+  show_layout_manager->setChecked(true);
+  view_menu->addAction(show_layout_manager);
+
+  QMenu *help = menuBar()->addMenu("&Help");
+
+  auto *about = new QAction("&About", this);
+  help->addAction(about);
+
+  // --- connections
+
+  this->connect(about, &QAction::triggered, this, &MainWindow::show_about);
+
+  this->connect(new_action, &QAction::triggered, this, &MainWindow::on_new);
+
+  this->connect(load, &QAction::triggered, this, &MainWindow::on_load);
+
+  this->connect(show_layout_manager,
+                &QAction::triggered,
+                this,
+                [this, show_layout_manager]()
+                {
+                  bool state = this->graph_manager_widget->isVisible();
+                  this->graph_manager_widget->setVisible(!state);
+                  show_layout_manager->setChecked(!state);
+                });
+
+  this->connect(this->graph_manager_widget,
+                &GraphManagerWidget::window_closed,
+                [show_layout_manager]() { show_layout_manager->setChecked(false); });
+
+  // save / save as
+  {
+    auto lambda_save_as = [this]()
+    {
+      std::filesystem::path path = this->project_path.parent_path();
+
+      QString new_fname = QFileDialog::getSaveFileName(this,
+                                                       "Save as...",
+                                                       path.string().c_str(),
+                                                       "Hesiod files (*.hsd)");
+
+      if (!new_fname.isNull() && !new_fname.isEmpty())
+      {
+        this->set_project_path(new_fname.toStdString());
+        this->save_to_file(new_fname.toStdString());
+      }
+    };
+
+    this->connect(save,
+                  &QAction::triggered,
+                  [this, lambda_save_as]()
+                  {
+                    if (this->project_path.empty())
+                      lambda_save_as();
+                    else
+                      this->save_to_file(this->project_path.string());
+                  });
+
+    this->connect(save_as, &QAction::triggered, lambda_save_as);
+  }
+
+  this->connect(quit, &QAction::triggered, this, &MainWindow::on_quit);
+}
+
 void MainWindow::show_about()
 {
-  std::string msg = "Hesiov v";
+  std::string msg = "Hesiod v";
   msg += std::to_string(HESIOD_VERSION_MAJOR) + ".";
   msg += std::to_string(HESIOD_VERSION_MINOR) + ".";
   msg += std::to_string(HESIOD_VERSION_PATCH) + "\n";
