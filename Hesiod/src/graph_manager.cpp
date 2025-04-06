@@ -135,17 +135,6 @@ void GraphManager::json_from(nlohmann::json const &json)
   // clean-up current state
   this->clear();
 
-  // // check app version
-  // std::string version_file = json["Hesiod version"];
-  // std::string version = "v" + std::to_string(HESIOD_VERSION_MAJOR) + "." +
-  //                       std::to_string(HESIOD_VERSION_MINOR) + "." +
-  //                       std::to_string(HESIOD_VERSION_PATCH);
-  // if (version != version_file)
-  //   LOG->warn(
-  //       "Hesiod version for this json {} is different for this executable version {}",
-  //       version_file,
-  //       version);
-
   // keep deserializing
   this->headless = json["headless"];
   this->id_count = json["id_count"];

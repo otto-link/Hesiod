@@ -175,15 +175,9 @@ void GraphEditor::connect_node_for_broadcasting(BaseNode *p_node)
                 });
 }
 
-void GraphEditor::json_from(nlohmann::json const &json,
-                            bool                  override_config,
-                            bool                  clear_existing_content,
-                            const std::string    &prefix_id)
+void GraphEditor::json_from(nlohmann::json const &json, bool override_config)
 {
-  GraphNode::json_from(json["graph_node"],
-                       override_config,
-                       clear_existing_content,
-                       prefix_id);
+  GraphNode::json_from(json["graph_node"], override_config);
 
   // specific to Broadcast and Receive nodes
   for (auto &[id, p_node] : this->nodes)
@@ -201,7 +195,7 @@ void GraphEditor::json_from(nlohmann::json const &json,
     // to prevent nodes update at each link creation when the loading
     // the graph (very slooow)
     this->update_node_on_new_link = false;
-    this->viewer->json_from(json["graph_viewer"], clear_existing_content, prefix_id);
+    this->viewer->json_from(json["graph_viewer"]);
     this->update_node_on_new_link = true;
   }
 }
@@ -705,6 +699,11 @@ void GraphEditor::on_viewport_request()
 
   if (selected_ids.size())
     p_viewer->on_node_selected(selected_ids.back());
+}
+
+void GraphEditor::set_p_broadcast_params(BroadcastMap *new_p_broadcast_params)
+{
+  this->p_broadcast_params = new_p_broadcast_params;
 }
 
 void GraphEditor::setup_broadcast_receive_node(const std::string &node_id)

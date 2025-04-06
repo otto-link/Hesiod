@@ -20,19 +20,9 @@ GraphNode::GraphNode(const std::string &id, std::shared_ptr<ModelConfig> config)
   this->config->log_debug();
 }
 
-void GraphNode::json_from(nlohmann::json const &json,
-                          bool                  override_config,
-                          bool                  clear_existing_content,
-                          const std::string    &prefix_id)
+void GraphNode::json_from(nlohmann::json const &json, bool override_config)
 {
   LOG->trace("GraphNode::json_from, graph {}", this->get_id());
-
-  if (clear_existing_content)
-  {
-    this->clear();
-    this->set_id(json["id"]);
-    this->set_id_count(json["id_count"]);
-  }
 
   // if set to false, the actual state of the configuration is used
   // (can for instance be used when modifying the configuration of an
@@ -58,7 +48,7 @@ void GraphNode::json_from(nlohmann::json const &json,
     std::string                  node_type = json_node["label"];
     std::shared_ptr<gnode::Node> node = node_factory(node_type, this->config);
 
-    this->add_node(node, prefix_id + json_node["id"].get<std::string>());
+    this->add_node(node, json_node["id"].get<std::string>());
 
     // set its parameters
     dynamic_cast<BaseNode *>(node.get())->json_from(json_node);
@@ -66,9 +56,9 @@ void GraphNode::json_from(nlohmann::json const &json,
 
   // links
   for (auto &json_link : json["links"])
-    this->new_link(prefix_id + json_link["node_id_from"].get<std::string>(),
+    this->new_link(json_link["node_id_from"].get<std::string>(),
                    json_link["port_id_from"].get<std::string>(),
-                   prefix_id + json_link["node_id_to"].get<std::string>(),
+                   json_link["node_id_to"].get<std::string>(),
                    json_link["port_id_to"].get<std::string>());
 }
 
