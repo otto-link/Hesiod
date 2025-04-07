@@ -35,7 +35,7 @@ public:
               std::shared_ptr<ModelConfig> config,
               bool                         headless = false);
 
-  void clear();
+  void clear(); // DONE
 
   // --- Serialization ---
   void           json_from(nlohmann::json const &json, bool override_config = true);
@@ -49,7 +49,7 @@ signals:
   void request_update_receive_nodes_tag_list(); // GUI
 
   // --- User Actions Signals ---
-  void new_node_created(const std::string &graph_id, const std::string &id); // GUI
+  void new_node_created(const std::string &graph_id, const std::string &id); // DONE
   void node_deleted(const std::string &graph_id, const std::string &id);     // GUI
 
 public slots:
@@ -59,30 +59,35 @@ public slots:
   void on_connection_deleted(const std::string &id_out,
                              const std::string &port_id_out,
                              const std::string &id_in,
-                             const std::string &port_id_in);
+                             const std::string &port_id_in); // DONE
   void on_connection_finished(const std::string &id_out,
                               const std::string &port_id_out,
                               const std::string &id_in,
-                              const std::string &port_id_in);
-  void on_graph_clear_request();
-  void on_graph_new_request();
-  void on_graph_reload_request();
-  void on_graph_settings_request();
+                              const std::string &port_id_in); // DONE
+
+  void on_graph_clear_request();    // DONE
+  void on_graph_new_request();      // DONE
+  void on_graph_reload_request();   // DONE
+  void on_graph_settings_request(); // DONE
+
   void on_new_node_request(const std::string &node_type,
                            QPointF            scene_pos,
-                           std::string       *p_new_node_id = nullptr);
-  void on_node_deleted_request(const std::string &node_id);
-  void on_node_reload_request(const std::string &node_id);
-  void on_node_right_clicked(const std::string &node_id, QPointF scene_pos);
+                           std::string       *p_new_node_id = nullptr);            // DONE
+  void on_node_deleted_request(const std::string &node_id);                  // DONE
+  void on_node_reload_request(const std::string &node_id);                   // DONE
+  void on_node_right_clicked(const std::string &node_id, QPointF scene_pos); // DONE
+
   void on_nodes_copy_request(const std::vector<std::string> &id_list,
-                             const std::vector<QPointF>     &scene_pos_list);
+                             const std::vector<QPointF>     &scene_pos_list); // DONE
   void on_nodes_duplicate_request(const std::vector<std::string> &id_list,
-                                  const std::vector<QPointF>     &scene_pos_list);
-  void on_nodes_paste_request();
-  void on_viewport_request();
+                                  const std::vector<QPointF>     &scene_pos_list); // DONE
+  void on_nodes_paste_request();                                               // DONE
+
+  void on_viewport_request(); // DONE
 
   // --- Others... ---
-  void on_new_graphics_node_request(const std::string &node_id, QPointF scene_pos);
+  void on_new_graphics_node_request(const std::string &node_id,
+                                    QPointF            scene_pos); // DONE
 
 private:
   // --- Members ---

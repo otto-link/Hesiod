@@ -64,77 +64,78 @@ GraphEditor::GraphEditor(const std::string           &id,
   this->connect(this->viewer.get(),
                 &gngui::GraphViewer::connection_deleted,
                 this,
-                &GraphEditor::on_connection_deleted);
+                &GraphEditor::on_connection_deleted); // TODO DONE
 
   this->connect(this->viewer.get(),
                 &gngui::GraphViewer::connection_finished,
                 this,
-                &GraphEditor::on_connection_finished);
+                &GraphEditor::on_connection_finished); // TODO DONE
 
   this->connect(this->viewer.get(),
                 &gngui::GraphViewer::graph_clear_request,
                 this,
-                &GraphEditor::on_graph_clear_request);
+                &GraphEditor::on_graph_clear_request); // TODO DONE
 
   this->connect(this->viewer.get(),
                 &gngui::GraphViewer::graph_new_request,
                 this,
-                &GraphEditor::on_graph_new_request);
+                &GraphEditor::on_graph_new_request); // TODO DONE
 
   this->connect(this->viewer.get(),
                 &gngui::GraphViewer::graph_reload_request,
                 this,
-                &GraphEditor::on_graph_reload_request);
+                &GraphEditor::on_graph_reload_request); // TODO DONE
 
   this->connect(this->viewer.get(),
                 &gngui::GraphViewer::graph_settings_request,
                 this,
-                &GraphEditor::on_graph_settings_request);
+                &GraphEditor::on_graph_settings_request); // TODO DONE
 
   this->connect(this->viewer.get(),
                 &gngui::GraphViewer::new_graphics_node_request,
                 this,
-                &GraphEditor::on_new_graphics_node_request);
+                &GraphEditor::on_new_graphics_node_request); // TODO DONE
 
   this->connect(this->viewer.get(),
                 &gngui::GraphViewer::new_node_request,
-                [this](const std::string &node_type, QPointF scene_pos)
-                { this->on_new_node_request(node_type, scene_pos, nullptr); });
+                [this](const std::string &node_type, QPointF scene_pos) {
+                  this->on_new_node_request(node_type, scene_pos, nullptr);
+                }); // TODO DONE
 
   this->connect(this->viewer.get(),
                 &gngui::GraphViewer::node_deleted,
                 this,
-                &GraphEditor::on_node_deleted_request);
+                &GraphEditor::on_node_deleted_request); // TODO DONE
 
   this->connect(this->viewer.get(),
                 &gngui::GraphViewer::node_reload_request,
                 this,
-                &GraphEditor::on_node_reload_request);
+                &GraphEditor::on_node_reload_request); // TODO NONE
 
   this->connect(this->viewer.get(),
                 &gngui::GraphViewer::node_right_clicked,
                 this,
-                &GraphEditor::on_node_right_clicked);
+                &GraphEditor::on_node_right_clicked); // TODO DONE
 
   this->connect(this->viewer.get(),
                 &gngui::GraphViewer::nodes_copy_request,
                 this,
-                &GraphEditor::on_nodes_copy_request);
+                &GraphEditor::on_nodes_copy_request); // TODO DONE
 
   this->connect(this->viewer.get(),
                 &gngui::GraphViewer::nodes_duplicate_request,
                 this,
-                &GraphEditor::on_nodes_duplicate_request);
+                &GraphEditor::on_nodes_duplicate_request); // TODO DONE
 
   this->connect(this->viewer.get(),
                 &gngui::GraphViewer::nodes_paste_request,
                 this,
-                &GraphEditor::on_nodes_paste_request);
+                &GraphEditor::on_nodes_paste_request); // TODO DONE
 
   this->connect(this->viewer.get(),
                 &gngui::GraphViewer::viewport_request,
                 this,
-                &GraphEditor::on_viewport_request);
+                &GraphEditor::on_viewport_request); // TODO DONE partial
 
   // link w/ viewer
   // TODO keep after compute started ? QApplication::processEvents();
@@ -145,23 +146,23 @@ GraphEditor::GraphEditor(const std::string           &id,
                 &GraphNode::compute_started,
                 this->get_p_viewer(),
                 [this](const std::string & /* graph_id */, const std::string &node_id)
-                { this->get_p_viewer()->on_compute_started(node_id); });
+                { this->get_p_viewer()->on_compute_started(node_id); }); // TODO DONE
 
   this->connect(this,
                 &GraphNode::compute_finished,
                 this->get_p_viewer(),
                 [this](const std::string & /* graph_id */, const std::string &node_id)
-                { this->get_p_viewer()->on_compute_finished(node_id); });
+                { this->get_p_viewer()->on_compute_finished(node_id); }); // TODO DONE
 
   this->connect(this,
                 &GraphNode::update_started,
                 this->get_p_viewer(),
-                &gngui::GraphViewer::on_update_started);
+                &gngui::GraphViewer::on_update_started); // TODO DONE
 
   this->connect(this,
                 &GraphNode::update_finished,
                 this->get_p_viewer(),
-                &gngui::GraphViewer::on_update_finished);
+                &gngui::GraphViewer::on_update_finished); // TODO DONE
 
   // --- gngui::GraphViewer -> gngui::GraphViewer
   this->connect(this, // TODO move to GraphViewer

@@ -20,6 +20,9 @@
 #define HSD_DEFAULT_STARTUP_FILE "data/default.hsd"
 #define HSD_APP_ICON "data/hesiod_icon.png"
 
+// TODO DBG
+#include "hesiod/gui/widgets/graph_node_widget.hpp"
+
 namespace hesiod
 {
 
@@ -85,6 +88,10 @@ private:
   GraphManagerWidget *graph_manager_widget = nullptr; // ownership by MainWindow Qt object
   std::vector<GraphEditor *> graph_editors = {};
   QTabWidget                *tab_widget = nullptr;
+
+  // TODO DBG
+  std::unique_ptr<GraphNode>       gn;
+  std::unique_ptr<GraphNodeWidget> gnw;
 };
 
 } // namespace hesiod

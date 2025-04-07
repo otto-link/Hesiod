@@ -37,8 +37,22 @@ std::string GraphNode::add_node(const std::shared_ptr<gnode::Node> &node,
   // basic GNode adding...
   std::string node_id = gnode::Graph::add_node(node, id);
 
-  // "special" nodes treatment
-  BaseNode   *p_basenode = dynamic_cast<BaseNode *>(node.get());
+  // connections
+  BaseNode *p_basenode = dynamic_cast<BaseNode *>(node.get());
+
+  this->connect(p_basenode,
+                &BaseNode::compute_started,
+                this,
+                [this, node_id]()
+                { Q_EMIT this->compute_started(this->get_id(), node_id); });
+
+  this->connect(p_basenode,
+                &BaseNode::compute_finished,
+                this,
+                [this, node_id]()
+                { Q_EMIT this->compute_finished(this->get_id(), node_id); });
+
+  // "special" nodes treatmentxs
   std::string node_type = p_basenode->get_node_type();
 
   if (node_type == "Broadcast")

@@ -39,6 +39,12 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
   this->setup_menu_bar();
 
   this->connect(p_app, &QApplication::aboutToQuit, [&]() { this->save_state(); });
+
+  // TODO DBG
+  auto config = std::make_shared<hesiod::ModelConfig>();
+  gn = std::make_unique<GraphNode>("test", config);
+  gnw = std::make_unique<GraphNodeWidget>(gn.get());
+  gnw->show();
 }
 
 MainWindow::~MainWindow() { this->save_state(); }
