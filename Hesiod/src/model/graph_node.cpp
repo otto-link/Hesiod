@@ -7,6 +7,7 @@
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/broadcast_node.hpp"
 #include "hesiod/model/nodes/node_factory.hpp"
+#include "hesiod/model/nodes/receive_node.hpp"
 
 #include <iostream>
 
@@ -20,6 +21,35 @@ GraphNode::GraphNode(const std::string &id, std::shared_ptr<ModelConfig> config)
   this->config->log_debug();
 }
 
+std::string GraphNode::add_node(const std::string &node_type)
+{
+  std::shared_ptr<gnode::Node> node = node_factory(node_type, this->config);
+  node->compute();
+
+  std::string node_id = this->add_node(node);
+
+  return node_id;
+}
+
+std::string GraphNode::add_node(const std::shared_ptr<gnode::Node> &node,
+                                const std::string                  &id)
+{
+  // basic GNode adding...
+  std::string node_id = gnode::Graph::add_node(node, id);
+
+  // "special" nodes treatment
+  BaseNode   *p_basenode = dynamic_cast<BaseNode *>(node.get());
+  std::string node_type = p_basenode->get_node_type();
+
+  if (node_type == "Broadcast")
+    this->setup_new_broadcast_node(p_basenode);
+
+  if (node_type == "Receive")
+    this->setup_new_receive_node(p_basenode);
+
+  return node_id;
+}
+
 void GraphNode::json_from(nlohmann::json const &json, bool override_config)
 {
   LOG->trace("GraphNode::json_from, graph {}", this->get_id());
@@ -29,6 +59,9 @@ void GraphNode::json_from(nlohmann::json const &json, bool override_config)
   // existing graph)
   if (override_config)
     this->config->json_from(json["model_config"]);
+
+  this->set_id(json["id"]);
+  this->set_id_count(json["id_count"]);
 
   // hmap::Terrain
   auto vo = json["origin"].get<std::vector<float>>();
@@ -107,23 +140,124 @@ nlohmann::json GraphNode::json_to() const
   return json;
 }
 
-std::string GraphNode::new_node(const std::string &node_type)
+void GraphNode::on_broadcast_node_updated(const std::string &tag)
 {
-  std::shared_ptr<gnode::Node> node = node_factory(node_type, this->config);
-  node->compute();
+  LOG->trace("GraphEditor::on_broadcast_node_updated: tag: {}", tag);
 
-  std::string node_id = this->add_node(node);
-
-  // for the Broadcast nodes, generate their broascasting ID
-  gnode::Node *p_node = this->get_node_ref_by_id(node_id);
-
-  if (p_node->get_label() == "Broadcast")
+  // loop over the nodes and update those with Receive type
+  for (auto &[node_id, p_gnode] : this->nodes)
   {
-    BroadcastNode *p_broadcast_node = dynamic_cast<BroadcastNode *>(p_node);
-    p_broadcast_node->generate_broadcast_tag();
+    BaseNode *p_node = dynamic_cast<BaseNode *>(p_gnode.get());
+
+    if (p_node->get_label() == "Receive")
+    {
+      ReceiveNode *p_receive_node = dynamic_cast<ReceiveNode *>(p_node);
+
+      if (!p_receive_node)
+      {
+        LOG->critical("GraphEditor::on_broadcast_node_updated: could not properly recast "
+                      "the node as a receiver. Tag {}",
+                      tag);
+        throw std::runtime_error("could not properly recast the node as a receiver");
+      }
+      else
+      {
+        // only update Receive nodes with the proper tag
+        if (p_receive_node->get_current_tag() == tag)
+          this->update(node_id);
+      }
+    }
+  }
+}
+
+void GraphNode::remove_node(const std::string &id)
+{
+  // "special" nodes treatment
+  BaseNode   *p_basenode = this->get_node_ref_by_id<BaseNode>(id);
+  std::string node_type = p_basenode->get_node_type();
+
+  if (node_type == "Broadcast")
+  {
+    std::string tag = this->get_node_ref_by_id<BroadcastNode>(id)->get_broadcast_tag();
+
+    LOG->trace("GraphNode::remove_node: removing broadcast tag {}", tag);
+
+    Q_EMIT this->remove_broadcast_tag(tag);
   }
 
-  return node_id;
+  // basic GNode removing...
+  gnode::Graph::remove_node(id);
+}
+
+void GraphNode::set_p_broadcast_params(BroadcastMap *new_p_broadcast_params)
+{
+  this->p_broadcast_params = new_p_broadcast_params;
+}
+
+void GraphNode::setup_new_broadcast_node(BaseNode *p_node)
+{
+  LOG->trace("GraphNode::setup_new_broadcast_node");
+
+  BroadcastNode *p_broadcast_node = dynamic_cast<BroadcastNode *>(p_node);
+
+  if (!p_broadcast_node)
+  {
+    LOG->error("GraphNode::setup_new_broadcast_node: Invalid node type");
+    return;
+  }
+
+  // connect
+  this->connect(p_broadcast_node,
+                &BroadcastNode::broadcast_node_updated,
+                this,
+                [this](const std::string &graph_id, const std::string &tag)
+                {
+                  // pass through, re-emit the signals by the graph
+                  // editor (to be handled by the graph manager above)
+                  LOG->trace("graph_node broadcasting, tag: {}", tag);
+                  Q_EMIT this->broadcast_node_updated(graph_id, tag);
+                });
+
+  // broadcast infos: // store broadcast parameters (to be handled to the graph manage
+  // above). Use an output port to store the data, to ensure it is
+  // always available, full of zeros in worst case scenario
+  const std::string tag = this->get_node_ref_by_id<BroadcastNode>(p_node->get_id())
+                              ->get_broadcast_tag();
+  const hmap::Terrain   *t_source = dynamic_cast<hmap::Terrain *>(this);
+  const hmap::Heightmap *h_source = this->get_node_ref_by_id(p_node->get_id())
+                                        ->get_value_ref<hmap::Heightmap>("thru");
+
+  Q_EMIT this->new_broadcast_tag(tag, t_source, h_source);
+}
+
+void GraphNode::setup_new_receive_node(BaseNode *p_node)
+{
+  LOG->trace("GraphNode::setup_new_receive_node");
+
+  ReceiveNode *p_receive_node = dynamic_cast<ReceiveNode *>(p_node);
+
+  if (!p_receive_node)
+  {
+    LOG->error("GraphNode::setup_new_receive_node: Invalid node type");
+    return;
+  }
+
+  p_receive_node->set_p_broadcast_params(this->p_broadcast_params);
+  p_receive_node->set_p_target_terrain(dynamic_cast<hmap::Terrain *>(this));
+}
+
+void GraphNode::update()
+{
+  Q_EMIT this->update_started(this->get_id());
+  gnode::Graph::update();
+  Q_EMIT this->update_finished(this->get_id());
+}
+
+void GraphNode::update(std::string id)
+{
+  Q_EMIT this->update_started(this->get_id());
+  gnode::Graph::update(id);
+  Q_EMIT this->update_finished(this->get_id());
 }
 
 } // namespace hesiod

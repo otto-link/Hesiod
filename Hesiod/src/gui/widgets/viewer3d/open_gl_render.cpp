@@ -207,9 +207,10 @@ void OpenGLRender::mousePressEvent(QMouseEvent *event)
   }
 }
 
-void OpenGLRender::on_node_compute_finished(const std::string &id)
+void OpenGLRender::on_node_compute_finished(const std::string &graph_id,
+                                            const std::string &id)
 {
-  LOG->trace("OpenGLRender::on_node_compute_finished {}", id);
+  LOG->trace("OpenGLRender::on_node_compute_finished {}/{}", graph_id, id);
 
   if (this->p_node)
     if (id == this->p_node->get_id())

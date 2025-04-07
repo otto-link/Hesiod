@@ -46,21 +46,23 @@ std::string GraphManager::add_graph_editor(
   this->graph_order.push_back(graph_id);
 
   // connections for broadcasting data between graphs
+  // NOTE NOT GUI
   this->connect(p_graph_editor.get(),
-                &GraphEditor::broadcast_node_updated,
+                &GraphNode::broadcast_node_updated,
                 this,
                 &GraphManager::on_broadcast_node_updated);
 
   this->connect(p_graph_editor.get(),
-                &GraphEditor::new_broadcast_tag,
+                &GraphNode::new_broadcast_tag,
                 this,
                 &GraphManager::on_new_broadcast_tag);
 
   this->connect(p_graph_editor.get(),
-                &GraphEditor::remove_broadcast_tag,
+                &GraphNode::remove_broadcast_tag,
                 this,
                 &GraphManager::on_remove_broadcast_tag);
 
+  // NOTE GUI
   this->connect(p_graph_editor.get(),
                 &GraphEditor::request_update_receive_nodes_tag_list,
                 this,

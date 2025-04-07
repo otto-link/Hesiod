@@ -70,6 +70,7 @@ public:
   std::string get_id() const override { return gnode::Node::get_id(); }
   void        set_id(const std::string &new_id) override { gnode::Node::set_id(new_id); }
   std::string get_category() const override { return this->category; }
+  std::string get_node_type() const { return this->get_label(); }
 
   // --- Compute ---
   void compute() override { this->compute_fct(this); }

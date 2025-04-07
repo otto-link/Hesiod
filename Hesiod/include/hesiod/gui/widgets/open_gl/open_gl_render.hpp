@@ -46,7 +46,7 @@ public:
 
   bool get_wireframe_mode() { return this->wireframe_mode; }
 
-  void on_node_compute_finished(const std::string &id);
+  void on_node_compute_finished(const std::string &graph_id, const std::string &id);
 
   void set_azimuth(float new_azimuth);
 

@@ -33,7 +33,7 @@ public:
                 const std::string &new_port_id_color,
                 const std::string &new_port_id_normal_map);
 
-  void on_node_compute_finished(const std::string &id);
+  void on_node_compute_finished(const std::string &graph_id, const std::string &id);
 
 private:
   OpenGLRender *renderer;

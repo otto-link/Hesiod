@@ -26,7 +26,7 @@ Viewer3d::Viewer3d(GraphEditor *p_graph_editor, QWidget *parent, std::string lab
     this->render_widget = new OpenGLWidget();
 
     this->connect(this->p_graph_editor,
-                  &GraphEditor::node_compute_finished,
+                  &GraphEditor::compute_finished,
                   static_cast<OpenGLWidget *>(this->render_widget),
                   &OpenGLWidget::on_node_compute_finished);
 

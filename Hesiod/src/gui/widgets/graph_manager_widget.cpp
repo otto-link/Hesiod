@@ -147,7 +147,7 @@ void GraphManagerWidget::add_list_item(const std::string &id)
       { this->coord_frame_widget->get_frame_ref(id)->set_background_image(image); });
 
   this->connect(this->p_graph_manager->get_graphs().at(id).get(),
-                &GraphEditor::has_been_updated,
+                &GraphEditor::update_finished, // TODO NOPE
                 widget,
                 [widget](const std::string & /* graph_id */)
                 { widget->on_combobox_changed(); });

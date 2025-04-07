@@ -34,6 +34,9 @@ GraphEditor::GraphEditor(const std::string           &id,
                          bool                         headless)
     : GraphNode(id, config)
 {
+  // TODO DBG
+  this->p_graph_node = dynamic_cast<GraphNode *>(this);
+
   LOG->trace("GraphEditor::GraphEditor, graph id [{}]", this->get_id());
 
   if (headless)
@@ -132,60 +135,67 @@ GraphEditor::GraphEditor(const std::string           &id,
                 &gngui::GraphViewer::viewport_request,
                 this,
                 &GraphEditor::on_viewport_request);
+
+  // link w/ viewer
+  // TODO keep after compute started ? QApplication::processEvents();
+
+  // --- gnode::GraphNode -> gngui::GraphViewer
+
+  this->connect(this,
+                &GraphNode::compute_started,
+                this->get_p_viewer(),
+                [this](const std::string & /* graph_id */, const std::string &node_id)
+                { this->get_p_viewer()->on_compute_started(node_id); });
+
+  this->connect(this,
+                &GraphNode::compute_finished,
+                this->get_p_viewer(),
+                [this](const std::string & /* graph_id */, const std::string &node_id)
+                { this->get_p_viewer()->on_compute_finished(node_id); });
+
+  this->connect(this,
+                &GraphNode::update_started,
+                this->get_p_viewer(),
+                &gngui::GraphViewer::on_update_started);
+
+  this->connect(this,
+                &GraphNode::update_finished,
+                this->get_p_viewer(),
+                &gngui::GraphViewer::on_update_finished);
+
+  // --- gngui::GraphViewer -> gngui::GraphViewer
+  this->connect(this, // TODO move to GraphViewer
+                &GraphEditor::new_node_created,
+                this->get_p_viewer(),
+                [this](const std::string & /* graph_id */, const std::string &id)
+                {
+                  // TODO add screening by node type
+                  Q_EMIT this->request_update_receive_nodes_tag_list();
+                });
 }
 
 void GraphEditor::clear()
 {
-  this->graph_viewer_disable();
-
   // clear graph viewer
   if (this->viewer)
   {
+    this->viewer->setEnabled(false);
+
     for (auto &v : this->data_viewers)
       dynamic_cast<AbstractViewer *>(v.get())->clear();
 
     this->viewer->clear();
+
+    this->viewer->setEnabled(true);
   }
 
   // clear node data structure
   GraphNode::clear();
-
-  this->graph_viewer_enable();
-}
-
-void GraphEditor::connect_node_for_broadcasting(BaseNode *p_node)
-{
-  BroadcastNode *p_broadcast_node = dynamic_cast<BroadcastNode *>(p_node);
-
-  if (!p_broadcast_node)
-  {
-    LOG->error("GraphEditor::connect_node_for_broadcasting: Invalid node type");
-    return;
-  }
-
-  this->connect(p_broadcast_node,
-                &BroadcastNode::broadcast_node_updated,
-                this,
-                [this](const std::string &graph_id, const std::string &tag)
-                {
-                  // pass through, re-emit the signals by the graph
-                  // editor (to be handled by the graph manager above)
-                  LOG->trace("graph_editor broadcasting, tag: {}", tag);
-                  Q_EMIT this->broadcast_node_updated(graph_id, tag);
-                });
 }
 
 void GraphEditor::json_from(nlohmann::json const &json, bool override_config)
 {
   GraphNode::json_from(json["graph_node"], override_config);
-
-  // specific to Broadcast and Receive nodes
-  for (auto &[id, p_node] : this->nodes)
-    this->setup_broadcast_receive_node(id);
-
-  // signal node creation
-  for (auto &[id, p_node] : this->nodes)
-    Q_EMIT this->new_node_created(this->get_id(), id);
 
   if (this->viewer)
   {
@@ -194,9 +204,13 @@ void GraphEditor::json_from(nlohmann::json const &json, bool override_config)
 
     // to prevent nodes update at each link creation when the loading
     // the graph (very slooow)
-    this->update_node_on_new_link = false;
+    this->update_node_on_connection_finished = false;
     this->viewer->json_from(json["graph_viewer"]);
-    this->update_node_on_new_link = true;
+    this->update_node_on_connection_finished = true;
+
+    // signal node creation
+    for (auto &[id, p_node] : this->nodes)
+      Q_EMIT this->new_node_created(this->get_id(), id);
   }
 }
 
@@ -241,7 +255,9 @@ void GraphEditor::on_connection_finished(const std::string &id_out,
 
   this->new_link(id_out, port_id_out, id_in, port_id_in);
 
-  if (this->update_node_on_new_link)
+  // no update for instance during deserialization to avoid a full
+  // graph update at each link creation
+  if (this->update_node_on_connection_finished)
     this->update(id_in);
 }
 
@@ -314,34 +330,26 @@ void GraphEditor::on_graph_settings_request()
 void GraphEditor::on_new_graphics_node_request(const std::string &node_id,
                                                QPointF            scene_pos)
 {
-  // this one is also used for serialization, when the graph viewer
-  // requests the creation of a graphics node while the base node has
-  // aldready been created when the GraphNode has been deserialized
+  // GraphicsNodes are not generated by the GraphViewer instance, it
+  // is outsourced to the outter nodes manager (this class). This
+  // signal emits a request for the creation of a GraphicsNodes
+  // (only). This is different from GraphEditor::on_new_node_request
+  // which generates both the model and the GUI nodes...
+
+  // This one is actually used for serialization, when the graph
+  // viewer requests the creation of a graphics node while the base
+  // node has aldready been created when the GraphNode has been
+  // deserialized
+
+  LOG->trace("GraphEditor::on_new_graphics_node_request: {} {},{}",
+             node_id,
+             scene_pos.x(),
+             scene_pos.y());
 
   if (this->viewer)
   {
     BaseNode *p_node = this->get_node_ref_by_id<BaseNode>(node_id);
     this->viewer->add_node(p_node->get_proxy_ref(), scene_pos, node_id);
-
-    gngui::GraphicsNode *p_gx_node = this->viewer->get_graphics_node_by_id(node_id);
-
-    this->connect(p_node,
-                  &BaseNode::compute_started,
-                  [this, p_gx_node]()
-                  {
-                    p_gx_node->on_compute_started();
-                    QApplication::processEvents();
-                  });
-
-    this->connect(p_node,
-                  &BaseNode::compute_finished,
-                  p_gx_node,
-                  &gngui::GraphicsNode::on_compute_finished);
-
-    this->connect(p_node,
-                  &BaseNode::compute_finished,
-                  [this, p_node]()
-                  { Q_EMIT this->node_compute_finished(p_node->get_id()); });
   }
 }
 
@@ -353,10 +361,7 @@ void GraphEditor::on_new_node_request(const std::string &node_type,
     return;
 
   // add control node (compute)
-  std::string node_id = this->new_node(node_type);
-
-  // specific to Broadcast and Receive nodes
-  this->setup_broadcast_receive_node(node_id);
+  std::string node_id = this->add_node(node_type);
 
   // add corresponding graphics node (GUI)
   this->on_new_graphics_node_request(node_id, scene_pos);
@@ -368,53 +373,13 @@ void GraphEditor::on_new_node_request(const std::string &node_type,
   Q_EMIT this->new_node_created(this->get_id(), node_id);
 }
 
-void GraphEditor::on_broadcast_node_updated(const std::string &tag)
-{
-  LOG->trace("GraphEditor::on_broadcast_node_updated: tag: {}", tag);
-
-  // loop over the nodes and update those with Receive type
-  for (auto &[node_id, p_gnode] : this->nodes)
-  {
-    BaseNode *p_node = dynamic_cast<BaseNode *>(p_gnode.get());
-
-    if (p_node->get_label() == "Receive")
-    {
-      ReceiveNode *p_receive_node = dynamic_cast<ReceiveNode *>(p_node);
-
-      if (!p_receive_node)
-      {
-        LOG->critical("GraphEditor::on_broadcast_node_updated: could not properly recast "
-                      "the node as a receiver. Tag {}",
-                      tag);
-        throw std::runtime_error("could not properly recast the node as a receiver");
-      }
-      else
-      {
-        // only update Receive nodes with the proper tag
-        if (p_receive_node->get_current_tag() == tag)
-          this->update(node_id);
-      }
-    }
-  }
-}
-
 void GraphEditor::on_node_deleted_request(const std::string &node_id)
 {
   LOG->trace("GraphNode::on_node_deleted_request, node [{}]", node_id);
 
-  // for a broadcast node, make use its tag will be removed by the
-  // graph manager above from the available tags
-  if (this->get_node_ref_by_id(node_id)->get_label() == "Broadcast")
-  {
-    LOG->trace("Removing a Broadcast node...");
-
-    std::string tag = this->get_node_ref_by_id<BroadcastNode>(node_id)
-                          ->get_broadcast_tag();
-    Q_EMIT this->remove_broadcast_tag(tag);
-  }
-
   // actually remove the node
   this->remove_node(node_id);
+
   if (this->viewer)
     this->viewer->remove_node(node_id);
 
@@ -665,9 +630,6 @@ void GraphEditor::on_nodes_paste_request()
     // set the ID again because if has been overriden by the deserialization
     p_node->set_id(node_id);
 
-    // specific to Broadcast and Receive nodes
-    this->setup_broadcast_receive_node(node_id);
-
     // recompute
     this->update(node_id);
 
@@ -699,76 +661,6 @@ void GraphEditor::on_viewport_request()
 
   if (selected_ids.size())
     p_viewer->on_node_selected(selected_ids.back());
-}
-
-void GraphEditor::set_p_broadcast_params(BroadcastMap *new_p_broadcast_params)
-{
-  this->p_broadcast_params = new_p_broadcast_params;
-}
-
-void GraphEditor::setup_broadcast_receive_node(const std::string &node_id)
-{
-  std::string node_type = this->get_node_ref_by_id(node_id)->get_label();
-
-  if (node_type == "Broadcast")
-  {
-    this->connect_node_for_broadcasting(this->get_node_ref_by_id<BaseNode>(node_id));
-
-    // store broadcast parameters (to be handled to the graph manage
-    // above). Use an output port to store the data, to ensure it is
-    // always available, full of zeros in worst case scenario
-    const std::string tag = this->get_node_ref_by_id<BroadcastNode>(node_id)
-                                ->get_broadcast_tag();
-    const hmap::Terrain   *t_source = dynamic_cast<hmap::Terrain *>(this);
-    const hmap::Heightmap *h_source = this->get_node_ref_by_id(node_id)
-                                          ->get_value_ref<hmap::Heightmap>("thru");
-
-    Q_EMIT this->new_broadcast_tag(tag, t_source, h_source);
-  }
-  else if (node_type == "Receive")
-  {
-    ReceiveNode *p_receive_node = this->get_node_ref_by_id<ReceiveNode>(node_id);
-    p_receive_node->set_p_broadcast_params(this->p_broadcast_params);
-    p_receive_node->set_p_target_terrain(dynamic_cast<hmap::Terrain *>(this));
-
-    Q_EMIT this->request_update_receive_nodes_tag_list();
-  }
-}
-
-void GraphEditor::update()
-{
-  this->graph_viewer_disable();
-  GraphNode::update();
-  this->graph_viewer_enable();
-
-  Q_EMIT this->has_been_updated(this->get_id());
-}
-
-void GraphEditor::update(std::string id)
-{
-  this->graph_viewer_disable();
-  GraphNode::update(id);
-  this->graph_viewer_enable();
-
-  Q_EMIT this->has_been_updated(this->get_id());
-}
-
-void GraphEditor::graph_viewer_disable()
-{
-  if (this->viewer)
-  {
-    this->viewer->setDragMode(QGraphicsView::NoDrag);
-    this->viewer->setEnabled(false);
-  }
-}
-
-void GraphEditor::graph_viewer_enable()
-{
-  if (this->viewer)
-  {
-    this->viewer->setEnabled(true);
-    this->viewer->setDragMode(QGraphicsView::NoDrag);
-  }
 }
 
 } // namespace hesiod

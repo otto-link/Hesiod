@@ -26,11 +26,12 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
   this->setWindowTitle(tr("Hesiod"));
   this->restore_state();
 
-  this->setup_graph_manager();
   this->setup_central_widget();
+  this->setup_graph_manager();
 
   // interface GraphManager with its GUI components
   this->graph_manager->set_tab_widget(this->tab_widget);
+  this->graph_manager->update_tab_widget();
   this->graph_manager_widget = new GraphManagerWidget(this->graph_manager.get(), nullptr);
   this->graph_manager_widget->show();
 
