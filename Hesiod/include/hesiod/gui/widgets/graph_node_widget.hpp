@@ -32,8 +32,8 @@ public:
   void setup_connections();
 
   // --- Serialization ---
-  // void           json_from(nlohmann::json const &json, bool override_config = true);
-  // nlohmann::json json_to() const;
+  void           json_from(nlohmann::json const &json);
+  nlohmann::json json_to() const;
 
 signals:
   // --- User Actions Signals ---

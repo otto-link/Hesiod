@@ -61,6 +61,25 @@ void GraphNodeWidget::clear_graphic_scene()
   this->set_enabled(true);
 }
 
+void GraphNodeWidget::json_from(nlohmann::json const &json)
+{
+  LOG->trace("GraphNodeWidget::json_from");
+
+  this->clear_graphic_scene();
+
+  // to prevent nodes update at each link creation when the loading
+  // the graph (very slooow)
+  this->update_node_on_connection_finished = false;
+  GraphViewer::json_from(json);
+  this->update_node_on_connection_finished = true;
+}
+
+nlohmann::json GraphNodeWidget::json_to() const
+{
+  LOG->trace("GraphNodeWidget::json_to");
+  return GraphViewer::json_to();
+}
+
 void GraphNodeWidget::on_connection_deleted(const std::string &id_out,
                                             const std::string &port_id_out,
                                             const std::string &id_in,
