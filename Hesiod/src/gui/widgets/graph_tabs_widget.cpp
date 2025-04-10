@@ -3,7 +3,7 @@
  * this software. */
 #include <QHBoxLayout>
 
-#include "hesiod/gui/widgets/graph_editor_widget.hpp"
+#include "hesiod/gui/widgets/graph_tabs_widget.hpp"
 #include "hesiod/gui/widgets/graph_node_widget.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/graph_manager.hpp"
@@ -13,10 +13,10 @@
 namespace hesiod
 {
 
-GraphEditorWidget::GraphEditorWidget(GraphManager *p_graph_manager, QWidget *parent)
+GraphTabsWidget::GraphTabsWidget(GraphManager *p_graph_manager, QWidget *parent)
     : QWidget(parent), p_graph_manager(p_graph_manager)
 {
-  LOG->trace("GraphEditorWidget::GraphEditorWidget");
+  LOG->trace("GraphTabsWidget::GraphTabsWidget");
 
   QHBoxLayout *layout = new QHBoxLayout(this);
   this->setLayout(layout);
@@ -29,9 +29,9 @@ GraphEditorWidget::GraphEditorWidget(GraphManager *p_graph_manager, QWidget *par
   // connections
 }
 
-void GraphEditorWidget::clear()
+void GraphTabsWidget::clear()
 {
-  LOG->trace("GraphEditorWidget::clear");
+  LOG->trace("GraphTabsWidget::clear");
 
   // clear tabs
   while (this->tab_widget->count() > 0)
@@ -43,7 +43,7 @@ void GraphEditorWidget::clear()
   this->graph_node_widget_map.clear();
 }
 
-void GraphEditorWidget::json_from(nlohmann::json const &json)
+void GraphTabsWidget::json_from(nlohmann::json const &json)
 {
   this->update_tab_widget();
 
@@ -51,7 +51,7 @@ void GraphEditorWidget::json_from(nlohmann::json const &json)
     gnw->json_from(json["graph_node_widgets"][id]);
 }
 
-nlohmann::json GraphEditorWidget::json_to() const
+nlohmann::json GraphTabsWidget::json_to() const
 {
   nlohmann::json json;
 
@@ -61,15 +61,15 @@ nlohmann::json GraphEditorWidget::json_to() const
   return json;
 }
 
-void GraphEditorWidget::on_has_been_cleared(const std::string &graph_id)
+void GraphTabsWidget::on_has_been_cleared(const std::string &graph_id)
 {
   Q_EMIT this->has_been_cleared(graph_id);
 }
 
-void GraphEditorWidget::on_new_node_created(const std::string &graph_id,
+void GraphTabsWidget::on_new_node_created(const std::string &graph_id,
                                             const std::string &id)
 {
-  LOG->trace("GraphEditorWidget::on_new_node_created");
+  LOG->trace("GraphTabsWidget::on_new_node_created");
 
   // check if it's a Receive node to update its tag list
   if (this->p_graph_manager->get_graph_nodes()
@@ -83,13 +83,13 @@ void GraphEditorWidget::on_new_node_created(const std::string &graph_id,
   Q_EMIT this->new_node_created(graph_id, id);
 }
 
-void GraphEditorWidget::on_node_deleted(const std::string &graph_id,
+void GraphTabsWidget::on_node_deleted(const std::string &graph_id,
                                         const std::string &id)
 {
   Q_EMIT this->node_deleted(graph_id, id);
 }
 
-void GraphEditorWidget::set_selected_tab(const std::string &graph_id)
+void GraphTabsWidget::set_selected_tab(const std::string &graph_id)
 {
   for (int i = 0; i < this->tab_widget->count(); ++i)
   {
@@ -99,9 +99,9 @@ void GraphEditorWidget::set_selected_tab(const std::string &graph_id)
   }
 }
 
-void GraphEditorWidget::update_receive_nodes_tag_list()
+void GraphTabsWidget::update_receive_nodes_tag_list()
 {
-  LOG->trace("GraphEditorWidget::update_receive_nodes_tag_list");
+  LOG->trace("GraphTabsWidget::update_receive_nodes_tag_list");
 
   // update the tag list for all the Receive nodes of the graphs
   for (auto &[gid, graph] : this->p_graph_manager->get_graph_nodes())
@@ -118,9 +118,9 @@ void GraphEditorWidget::update_receive_nodes_tag_list()
       }
 }
 
-void GraphEditorWidget::update_tab_widget()
+void GraphTabsWidget::update_tab_widget()
 {
-  LOG->trace("GraphEditorWidget::update_tab_widget");
+  LOG->trace("GraphTabsWidget::update_tab_widget");
 
   if (!this->tab_widget)
     return;
@@ -172,17 +172,17 @@ void GraphEditorWidget::update_tab_widget()
       this->connect(this->graph_node_widget_map.at(id),
                     &GraphNodeWidget::has_been_cleared,
                     this,
-                    &GraphEditorWidget::on_has_been_cleared);
+                    &GraphTabsWidget::on_has_been_cleared);
 
       this->connect(this->graph_node_widget_map.at(id),
                     &GraphNodeWidget::new_node_created,
                     this,
-                    &GraphEditorWidget::on_new_node_created);
+                    &GraphTabsWidget::on_new_node_created);
 
       this->connect(this->graph_node_widget_map.at(id),
                     &GraphNodeWidget::node_deleted,
                     this,
-                    &GraphEditorWidget::on_node_deleted);
+                    &GraphTabsWidget::on_node_deleted);
     }
 
     // build layout

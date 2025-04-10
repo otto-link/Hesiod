@@ -2,7 +2,7 @@
    License. The full license is in the file LICENSE, distributed with this software. */
 
 /**
- * @file graph_editor_widget.hpp
+ * @file graph_tabs_widget.hpp
  * @author  Otto Link (otto.link.bv@gmail.com)
  * @brief
  *
@@ -23,22 +23,20 @@ class GraphManager; // forward
 class GraphNodeWidget;
 
 // =====================================
-// GraphEditorWidget
+// GraphTabsWidget
 // =====================================
-class GraphEditorWidget : public QWidget
+class GraphTabsWidget : public QWidget
 {
   Q_OBJECT
 
 public:
-  GraphEditorWidget(GraphManager *p_graph_manager, QWidget *parent = nullptr);
+  GraphTabsWidget(GraphManager *p_graph_manager, QWidget *parent = nullptr);
 
   void clear();
 
   // --- Serialization ---
   void           json_from(nlohmann::json const &json);
   nlohmann::json json_to() const;
-  // void           load_from_file(const std::string &fname);
-  // bool           save_to_file(const std::string &fname) const;
 
 signals:
   void has_been_cleared(const std::string &graph_id);

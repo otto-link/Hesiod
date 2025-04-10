@@ -15,7 +15,7 @@
 #include <QTabWidget>
 
 #include "hesiod/gui/main_window.hpp"
-#include "hesiod/gui/widgets/graph_editor_widget.hpp"
+#include "hesiod/gui/widgets/graph_tabs_widget.hpp"
 #include "hesiod/gui/widgets/graph_manager_widget.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/graph_manager.hpp"
@@ -37,49 +37,49 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
       this->graph_manager.get());
   this->graph_manager_widget->show();
 
-  this->graph_editor_widget = std::make_unique<GraphEditorWidget>(
+  this->graph_tabs_widget = std::make_unique<GraphTabsWidget>(
       this->graph_manager.get());
-  // this->graph_editor_widget->show();
+  // this->graph_tabs_widget->show();
 
   this->setup_central_widget();
 
   // --- connections
 
-  // GraphManagerWidget -> GraphEditorWidget
+  // GraphManagerWidget -> GraphTabsWidget
   this->connect(this->graph_manager_widget.get(),
                 &GraphManagerWidget::graph_removed,
-                this->graph_editor_widget.get(),
-                &GraphEditorWidget::update_tab_widget);
+                this->graph_tabs_widget.get(),
+                &GraphTabsWidget::update_tab_widget);
 
   this->connect(this->graph_manager_widget.get(),
                 &GraphManagerWidget::list_reordered,
-                this->graph_editor_widget.get(),
-                &GraphEditorWidget::update_tab_widget);
+                this->graph_tabs_widget.get(),
+                &GraphTabsWidget::update_tab_widget);
 
   this->connect(this->graph_manager_widget.get(),
                 &GraphManagerWidget::new_graph_added,
-                this->graph_editor_widget.get(),
-                &GraphEditorWidget::update_tab_widget);
+                this->graph_tabs_widget.get(),
+                &GraphTabsWidget::update_tab_widget);
 
   this->connect(this->graph_manager_widget.get(),
                 &GraphManagerWidget::selected_graph_changed,
-                this->graph_editor_widget.get(),
-                &GraphEditorWidget::set_selected_tab);
+                this->graph_tabs_widget.get(),
+                &GraphTabsWidget::set_selected_tab);
 
-  // GraphEditorWidget -> GraphManagerWidget
-  this->connect(this->graph_editor_widget.get(),
-                &GraphEditorWidget::has_been_cleared,
+  // GraphTabsWidget -> GraphManagerWidget
+  this->connect(this->graph_tabs_widget.get(),
+                &GraphTabsWidget::has_been_cleared,
                 this->graph_manager_widget.get(),
                 &GraphManagerWidget::update_combobox);
 
-  this->connect(this->graph_editor_widget.get(),
-                &GraphEditorWidget::new_node_created,
+  this->connect(this->graph_tabs_widget.get(),
+                &GraphTabsWidget::new_node_created,
                 this,
                 [this](const std::string &graph_id, const std::string & /* id */)
                 { this->graph_manager_widget->update_combobox(graph_id); });
 
-  this->connect(this->graph_editor_widget.get(),
-                &GraphEditorWidget::node_deleted,
+  this->connect(this->graph_tabs_widget.get(),
+                &GraphTabsWidget::node_deleted,
                 this,
                 [this](const std::string &graph_id, const std::string & /* id */)
                 { this->graph_manager_widget->update_combobox(graph_id); });
@@ -101,7 +101,7 @@ void MainWindow::clear_all()
 
   // GUI
   this->graph_manager_widget->clear();
-  this->graph_editor_widget->clear();
+  this->graph_tabs_widget->clear();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -142,7 +142,7 @@ void MainWindow::load_from_file(const std::string &fname)
 
   // GUI
   this->graph_manager_widget->json_from(json["graph_manager_widget"]);
-  this->graph_editor_widget->json_from(json["graph_editor_widget"]);
+  this->graph_tabs_widget->json_from(json["graph_tabs_widget"]);
 }
 
 void MainWindow::on_load()
@@ -224,7 +224,7 @@ bool MainWindow::save_to_file(const std::string &fname) const
 
     // GUI
     json["graph_manager_widget"] = this->graph_manager_widget->json_to();
-    json["graph_editor_widget"] = this->graph_editor_widget->json_to();
+    json["graph_tabs_widget"] = this->graph_tabs_widget->json_to();
 
     json_to_file(json, fname);
     return true;
@@ -264,7 +264,7 @@ void MainWindow::setup_central_widget()
   QWidget *central_widget = new QWidget(this);
 
   QHBoxLayout *main_layout = new QHBoxLayout(central_widget);
-  main_layout->addWidget(this->graph_editor_widget.get());
+  main_layout->addWidget(this->graph_tabs_widget.get());
   central_widget->setLayout(main_layout);
 
   this->setCentralWidget(central_widget);

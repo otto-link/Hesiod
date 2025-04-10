@@ -33,7 +33,7 @@ class Viewer3d : public AbstractViewer
 public:
   Viewer3d() = delete;
 
-  Viewer3d(GraphNodeWidget *p_graph_editor_widget,
+  Viewer3d(GraphNodeWidget *p_graph_tabs_widget,
            QWidget         *parent = nullptr,
            std::string      label = "");
 };
