@@ -15,8 +15,8 @@
 #include <QTabWidget>
 
 #include "hesiod/gui/main_window.hpp"
-#include "hesiod/gui/widgets/graph_tabs_widget.hpp"
 #include "hesiod/gui/widgets/graph_manager_widget.hpp"
+#include "hesiod/gui/widgets/graph_tabs_widget.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/graph_manager.hpp"
 #include "hesiod/model/utils.hpp"
@@ -37,8 +37,7 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
       this->graph_manager.get());
   this->graph_manager_widget->show();
 
-  this->graph_tabs_widget = std::make_unique<GraphTabsWidget>(
-      this->graph_manager.get());
+  this->graph_tabs_widget = std::make_unique<GraphTabsWidget>(this->graph_manager.get());
   // this->graph_tabs_widget->show();
 
   this->setup_central_widget();
@@ -86,6 +85,10 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
 
   // after widgets and graph manager
   this->setup_menu_bar();
+
+  // load default config
+  this->load_from_file(HSD_DEFAULT_STARTUP_FILE);
+  this->graph_tabs_widget->zoom_to_content();
 
   this->connect(p_app, &QApplication::aboutToQuit, [&]() { this->save_state(); });
 }

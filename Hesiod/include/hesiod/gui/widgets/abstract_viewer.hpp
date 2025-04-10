@@ -29,6 +29,9 @@ namespace hesiod
 
 class GraphNodeWidget; // forward
 
+// =====================================
+// AbstractViewer
+// =====================================
 class AbstractViewer : public QWidget
 {
   Q_OBJECT

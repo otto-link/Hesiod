@@ -50,17 +50,31 @@ void GraphNodeWidget::clear_all()
   Q_EMIT this->has_been_cleared(this->get_id());
 }
 
+void GraphNodeWidget::clear_data_viewers()
+{
+  for (auto &v : this->data_viewers)
+  {
+    AbstractViewer *p_viewer = dynamic_cast<AbstractViewer *>(v.get());
+    p_viewer->clear();
+  }
+
+  this->data_viewers.clear();
+}
+
 void GraphNodeWidget::clear_graphic_scene()
 {
-  // clear graph viewer
   this->set_enabled(false);
 
-  for (auto &v : this->data_viewers)
-    dynamic_cast<AbstractViewer *>(v.get())->clear();
-
+  this->clear_data_viewers();
   GraphViewer::clear();
 
   this->set_enabled(true);
+}
+
+void GraphNodeWidget::closeEvent(QCloseEvent *event)
+{
+  this->clear_data_viewers();
+  gngui::GraphViewer::closeEvent(event);
 }
 
 GraphNode *GraphNodeWidget::get_p_graph_node() { return this->p_graph_node; }
@@ -227,7 +241,6 @@ void GraphNodeWidget::on_node_deleted_request(const std::string &node_id)
   LOG->trace("GraphNodeWidget::on_node_deleted_request, node {}", node_id);
 
   this->p_graph_node->remove_node(node_id);
-  // this->remove_node(node_id);
 
   Q_EMIT this->node_deleted(this->get_id(), node_id);
 }
@@ -257,7 +270,6 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
 
     // create the widget holding all the attribute widgets (created
     // here, needed for connect below)
-
     bool        add_save_reset_state_buttons = false;
     std::string window_title = "";
 
@@ -484,28 +496,26 @@ void GraphNodeWidget::on_viewport_request()
 {
   LOG->trace("GraphNodeWidget::on_viewport_request");
 
-  LOG->critical("TODO, not implemented");
+  this->data_viewers.push_back(std::make_unique<Viewer3d>(this));
+  this->data_viewers.back()->show();
 
-  // this->data_viewers.push_back(std::make_unique<Viewer3d>(this));
-  // this->data_viewers.back()->show();
+  Viewer3d *p_viewer = dynamic_cast<Viewer3d *>(this->data_viewers.back().get());
 
-  // Viewer3d *p_viewer = dynamic_cast<Viewer3d *>(this->data_viewers.back().get());
+  // remove the widget from the widget list if it is closed
+  this->connect(p_viewer,
+                &Viewer3d::widget_close,
+                [this, p_viewer]()
+                {
+                  std::erase_if(this->data_viewers,
+                                [p_viewer](const std::unique_ptr<QWidget> &sptr)
+                                { return sptr.get() == p_viewer; });
+                });
 
-  // // remove the widget from the widget list if it is closed
-  // this->connect(p_viewer,
-  //               &Viewer3d::widget_close,
-  //               [this, p_viewer]()
-  //               {
-  //                 std::erase_if(this->data_viewers,
-  //                               [p_viewer](const std::unique_ptr<QWidget> &sptr)
-  //                               { return sptr.get() == p_viewer; });
-  //               });
+  // set data of the currently selected node, if any
+  std::vector<std::string> selected_ids = this->get_selected_node_ids();
 
-  // // set data of the currently selected node, if any
-  // std::vector<std::string> selected_ids = this->get_selected_node_ids();
-
-  // if (selected_ids.size())
-  //   p_viewer->on_node_selected(selected_ids.back());
+  if (selected_ids.size())
+    p_viewer->on_node_selected(selected_ids.back());
 }
 
 void GraphNodeWidget::setup_connections()
@@ -587,25 +597,6 @@ void GraphNodeWidget::setup_connections()
                 &gngui::GraphViewer::viewport_request,
                 this,
                 &GraphNodeWidget::on_viewport_request);
-
-  // computation: gnode::GraphNode -> gngui::GraphViewer
-  // this->connect(this->p_graph_node,
-  //               &GraphNode::compute_started,
-  //               this,
-  //               [this](const std::string & /* graph_id */, const std::string &node_id)
-  //               {
-  //                 this->on_compute_started(node_id);
-  //                 QApplication::processEvents();
-  //               });
-
-  // this->connect(this->p_graph_node,
-  //               &GraphNode::compute_finished,
-  //               this,
-  //               [this](const std::string & /* graph_id */, const std::string &node_id)
-  //               {
-  //                 QApplication::processEvents();
-  //                 this->on_compute_finished(node_id);
-  //               });
 
   this->connect(this->p_graph_node,
                 &GraphNode::update_started,

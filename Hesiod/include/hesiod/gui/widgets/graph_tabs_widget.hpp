@@ -52,6 +52,7 @@ public slots:
   void set_selected_tab(const std::string &graph_id);
   void update_receive_nodes_tag_list();
   void update_tab_widget();
+  void zoom_to_content();
 
 private:
   // --- Members ---

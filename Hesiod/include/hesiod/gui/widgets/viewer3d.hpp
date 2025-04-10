@@ -28,6 +28,9 @@ namespace hesiod
 
 class GraphNodeWidget; // forward
 
+// =====================================
+// Viewer3d
+// =====================================
 class Viewer3d : public AbstractViewer
 {
 public:

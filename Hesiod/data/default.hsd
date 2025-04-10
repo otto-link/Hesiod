@@ -1,273 +1,295 @@
 {
-    "GraphManager": {
-        "GraphEditors": {
-            "0": {
-                "graph_node": {
-                    "id": "0",
-                    "id_count": 4,
-                    "links": [],
-                    "model_config": {
-                        "hmap_transform_mode_cpu": 0,
-                        "hmap_transform_mode_gpu": 2,
-                        "overlap": 0.5,
-                        "shape.x": 1024,
-                        "shape.y": 1024,
-                        "tiling.x": 4,
-                        "tiling.y": 4
-                    },
-                    "nodes": [
-                        {
-                            "id": "0",
-                            "label": "Receive"
-                        }
-                    ],
-                    "origin": [
-                        0.0,
-                        0.0
-                    ],
-                    "rotation_angle": 0.0,
-                    "size": [
-                        1.0,
-                        1.0
-                    ]
+    "Hesiod version": "v0.0.0",
+    "graph_manager": {
+        "graph_nodes": {
+            "graph": {
+                "id": "graph",
+                "id_count": 2,
+                "links": [
+                    {
+                        "node_id_from": "0",
+                        "node_id_to": "1",
+                        "port_id_from": "output",
+                        "port_id_to": "input"
+                    }
+                ],
+                "model_config": {
+                    "hmap_transform_mode_cpu": 0,
+                    "hmap_transform_mode_gpu": 2,
+                    "overlap": 0.5,
+                    "shape.x": 1024,
+                    "shape.y": 1024,
+                    "tiling.x": 4,
+                    "tiling.y": 4
                 },
-                "graph_viewer": {
-                    "current_link_type": 2,
-                    "groups": [],
-                    "id": "",
-                    "links": [],
-                    "nodes": [
-                        {
-                            "caption": "Receive",
-                            "id": "0",
-                            "is_widget_visible": true,
-                            "scene_position.x": -121.0,
-                            "scene_position.y": -375.0
-                        }
-                    ]
-                },
-                "headless": false
-            },
-            "new graph": {
-                "graph_node": {
-                    "id": "new graph",
-                    "id_count": 5,
-                    "links": [
-                        {
-                            "node_id_from": "1",
-                            "node_id_to": "4",
-                            "port_id_from": "output",
-                            "port_id_to": "input"
-                        }
-                    ],
-                    "model_config": {
-                        "hmap_transform_mode_cpu": 0,
-                        "hmap_transform_mode_gpu": 2,
-                        "overlap": 0.5,
-                        "shape.x": 1024,
-                        "shape.y": 1024,
-                        "tiling.x": 4,
-                        "tiling.y": 4
-                    },
-                    "nodes": [
-                        {
-                            "amplitude": {
-                                "label": "amplitude",
-                                "type": 6,
-                                "type_string": "Float",
-                                "value": 0.05000000074505806,
-                                "vmax": 0.20000000298023224,
-                                "vmin": 0.0010000000474974513
-                            },
-                            "angle": {
-                                "label": "angle",
-                                "type": 6,
-                                "type_string": "Float",
-                                "value": 0.0,
-                                "vmax": 180.0,
-                                "vmin": -180.0
-                            },
-                            "angle_spread_ratio": {
-                                "label": "angle_spread_ratio",
-                                "type": 6,
-                                "type_string": "Float",
-                                "value": 1.0,
-                                "vmax": 1.0,
-                                "vmin": 0.0
-                            },
-                            "branch_strength": {
-                                "label": "branch_strength",
-                                "type": 6,
-                                "type_string": "Float",
-                                "value": 2.0,
-                                "vmax": 8.0,
-                                "vmin": 0.0
-                            },
-                            "id": "1",
-                            "inverse": {
-                                "label": "inverse",
-                                "label_false": "",
-                                "label_true": "",
-                                "type": 0,
-                                "type_string": "Bool",
-                                "value": false
-                            },
-                            "kw": {
-                                "label": "kw",
-                                "link_xy": true,
-                                "type": 17,
-                                "type_string": "Wavenumber",
-                                "value": [
-                                    2.0,
-                                    2.0
-                                ],
-                                "vmax": 3.4028234663852886e+38,
-                                "vmin": 0.0
-                            },
-                            "kw_multiplier": {
-                                "label": "kw_multiplier",
-                                "link_xy": true,
-                                "type": 17,
-                                "type_string": "Wavenumber",
-                                "value": [
-                                    8.0,
-                                    8.0
-                                ],
-                                "vmax": 32.0,
-                                "vmin": 0.0
-                            },
-                            "label": "Gavoronoise",
-                            "lacunarity": {
-                                "label": "lacunarity",
-                                "type": 6,
-                                "type_string": "Float",
-                                "value": 2.0,
-                                "vmax": 4.0,
-                                "vmin": 0.009999999776482582
-                            },
-                            "octaves": {
-                                "label": "octaves",
-                                "type": 10,
-                                "type_string": "Integer",
-                                "value": 8,
-                                "vmax": 32,
-                                "vmin": 0
-                            },
-                            "persistence": {
-                                "label": "persistence",
-                                "type": 6,
-                                "type_string": "Float",
-                                "value": 0.4000000059604645,
-                                "vmax": 1.0,
-                                "vmin": 0.0
-                            },
-                            "remap": {
-                                "is_active": true,
-                                "label": "remap",
-                                "type": 11,
-                                "type_string": "Value range",
-                                "value": [
-                                    0.0,
-                                    1.0
-                                ],
-                                "vmax": 2.0,
-                                "vmin": -1.0
-                            },
-                            "seed": {
-                                "label": "seed",
-                                "type": 12,
-                                "type_string": "Random seed number",
-                                "value": 0
-                            },
-                            "slope_strength": {
-                                "label": "slope_strength",
-                                "type": 6,
-                                "type_string": "Float",
-                                "value": 0.5,
-                                "vmax": 8.0,
-                                "vmin": 0.0
-                            },
-                            "z_cut_max": {
-                                "label": "z_cut_max",
-                                "type": 6,
-                                "type_string": "Float",
-                                "value": 1.0,
-                                "vmax": 2.0,
-                                "vmin": -1.0
-                            },
-                            "z_cut_min": {
-                                "label": "z_cut_min",
-                                "type": 6,
-                                "type_string": "Float",
-                                "value": 0.20000000298023224,
-                                "vmax": 2.0,
-                                "vmin": -1.0
-                            }
+                "nodes": [
+                    {
+                        "amplitude": {
+                            "label": "amplitude",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.05000000074505806,
+                            "vmax": 0.20000000298023224,
+                            "vmin": 0.0010000000474974513
                         },
-                        {
-                            "broadcast_tag": "new graph/Broadcast/4",
-                            "id": "4",
-                            "label": "Broadcast",
-                            "tag": {
-                                "label": "tag",
-                                "type": 13,
-                                "type_string": "String",
-                                "value": "TAG"
-                            }
-                        }
-                    ],
-                    "origin": [
-                        0.0,
-                        0.0
-                    ],
-                    "rotation_angle": 0.0,
-                    "size": [
-                        1.0,
-                        1.0
-                    ]
-                },
-                "graph_viewer": {
-                    "current_link_type": 2,
-                    "groups": [],
-                    "id": "",
-                    "links": [
-                        {
-                            "link_type": 2,
-                            "node_in_id": "4",
-                            "node_out_id": "1",
-                            "port_in_id": "input",
-                            "port_out_id": "output"
-                        }
-                    ],
-                    "nodes": [
-                        {
-                            "caption": "Broadcast",
-                            "id": "4",
-                            "is_widget_visible": true,
-                            "scene_position.x": -1084.9334497875354,
-                            "scene_position.y": -263.4727356944811
+                        "angle": {
+                            "label": "angle",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.0,
+                            "vmax": 180.0,
+                            "vmin": -180.0
                         },
-                        {
-                            "caption": "Gavoronoise",
-                            "id": "1",
-                            "is_widget_visible": true,
-                            "scene_position.x": -1290.0,
-                            "scene_position.y": -242.0
+                        "angle_spread_ratio": {
+                            "label": "angle_spread_ratio",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        },
+                        "branch_strength": {
+                            "label": "branch_strength",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 2.0,
+                            "vmax": 8.0,
+                            "vmin": 0.0
+                        },
+                        "id": "0",
+                        "inverse": {
+                            "label": "inverse",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "kw": {
+                            "label": "kw",
+                            "link_xy": true,
+                            "type": 17,
+                            "type_string": "Wavenumber",
+                            "value": [
+                                2.0,
+                                2.0
+                            ],
+                            "vmax": 3.4028234663852886e+38,
+                            "vmin": 0.0
+                        },
+                        "kw_multiplier": {
+                            "label": "kw_multiplier",
+                            "link_xy": true,
+                            "type": 17,
+                            "type_string": "Wavenumber",
+                            "value": [
+                                8.0,
+                                8.0
+                            ],
+                            "vmax": 32.0,
+                            "vmin": 0.0
+                        },
+                        "label": "Gavoronoise",
+                        "lacunarity": {
+                            "label": "lacunarity",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 2.0,
+                            "vmax": 4.0,
+                            "vmin": 0.009999999776482582
+                        },
+                        "octaves": {
+                            "label": "octaves",
+                            "type": 10,
+                            "type_string": "Integer",
+                            "value": 8,
+                            "vmax": 32,
+                            "vmin": 0
+                        },
+                        "persistence": {
+                            "label": "persistence",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.4000000059604645,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        },
+                        "remap": {
+                            "is_active": true,
+                            "label": "remap",
+                            "type": 11,
+                            "type_string": "Value range",
+                            "value": [
+                                0.0,
+                                1.0
+                            ],
+                            "vmax": 2.0,
+                            "vmin": -1.0
+                        },
+                        "seed": {
+                            "label": "seed",
+                            "type": 12,
+                            "type_string": "Random seed number",
+                            "value": 0
+                        },
+                        "slope_strength": {
+                            "label": "slope_strength",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.5,
+                            "vmax": 8.0,
+                            "vmin": 0.0
+                        },
+                        "z_cut_max": {
+                            "label": "z_cut_max",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 2.0,
+                            "vmin": -1.0
+                        },
+                        "z_cut_min": {
+                            "label": "z_cut_min",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.20000000298023224,
+                            "vmax": 2.0,
+                            "vmin": -1.0
                         }
-                    ]
-                },
-                "headless": false
+                    },
+                    {
+                        "GPU": {
+                            "label": "GPU",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": true
+                        },
+                        "c_erosion": {
+                            "label": "c_erosion",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.10000000149011612,
+                            "vmax": 1.0,
+                            "vmin": 0.009999999776482582
+                        },
+                        "deposition_radius": {
+                            "label": "deposition_radius",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.10000000149011612,
+                            "vmax": 0.20000000298023224,
+                            "vmin": 0.0
+                        },
+                        "deposition_scale_ratio": {
+                            "label": "deposition_scale_ratio",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        },
+                        "gradient_power": {
+                            "label": "gradient_power",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.800000011920929,
+                            "vmax": 2.0,
+                            "vmin": 0.10000000149011612
+                        },
+                        "gradient_prefilter_radius": {
+                            "label": "gradient_prefilter_radius",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.10000000149011612,
+                            "vmax": 0.20000000298023224,
+                            "vmin": 0.0
+                        },
+                        "gradient_scaling_ratio": {
+                            "label": "gradient_scaling_ratio",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        },
+                        "id": "1",
+                        "label": "HydraulicStreamLog",
+                        "saturation_ratio": {
+                            "label": "saturation_ratio",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 1.0,
+                            "vmin": 0.009999999776482582
+                        },
+                        "talus_ref": {
+                            "label": "talus_ref",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.10000000149011612,
+                            "vmax": 10.0,
+                            "vmin": 0.009999999776482582
+                        }
+                    }
+                ],
+                "origin": [
+                    0.0,
+                    0.0
+                ],
+                "rotation_angle": 0.0,
+                "size": [
+                    1.0,
+                    1.0
+                ]
             }
         },
-        "broadcast_tags": [
-            "new graph/Broadcast/4"
-        ],
         "graph_order": [
-            "new graph",
-            "0"
+            "graph"
         ],
-        "headless": false,
-        "id_count": 1
+        "id_count": 0
     },
-    "Hesiod version": "v0.0.0"
+    "graph_manager_widget": {
+        "frames": {
+            "graph": {
+                "current_bg_tag": "NO BACKGROUND"
+            }
+        }
+    },
+    "graph_tabs_widget": {
+        "graph_node_widgets": {
+            "graph": {
+                "current_link_type": 2,
+                "groups": [],
+                "id": "graph",
+                "links": [
+                    {
+                        "link_type": 2,
+                        "node_in_id": "1",
+                        "node_out_id": "0",
+                        "port_in_id": "input",
+                        "port_out_id": "output"
+                    }
+                ],
+                "nodes": [
+                    {
+                        "caption": "HydraulicStreamLog",
+                        "id": "1",
+                        "is_widget_visible": true,
+                        "scene_position.x": 10.0,
+                        "scene_position.y": -305.0
+                    },
+                    {
+                        "caption": "Gavoronoise",
+                        "id": "0",
+                        "is_widget_visible": true,
+                        "scene_position.x": -239.0,
+                        "scene_position.y": -348.0
+                    }
+                ]
+            }
+        }
+    },
+    "saved_at": "2025-04-10 20:33:43"
 }

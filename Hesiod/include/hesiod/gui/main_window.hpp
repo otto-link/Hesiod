@@ -89,7 +89,7 @@ private:
   // --- Storage... ---
   std::unique_ptr<GraphManager>       graph_manager;
   std::unique_ptr<GraphManagerWidget> graph_manager_widget;
-  std::unique_ptr<GraphTabsWidget>  graph_tabs_widget;
+  std::unique_ptr<GraphTabsWidget>    graph_tabs_widget;
 };
 
 } // namespace hesiod

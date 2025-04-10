@@ -3,8 +3,8 @@
  * this software. */
 #include <QHBoxLayout>
 
-#include "hesiod/gui/widgets/graph_tabs_widget.hpp"
 #include "hesiod/gui/widgets/graph_node_widget.hpp"
+#include "hesiod/gui/widgets/graph_tabs_widget.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/graph_manager.hpp"
 #include "hesiod/model/graph_node.hpp"
@@ -67,7 +67,7 @@ void GraphTabsWidget::on_has_been_cleared(const std::string &graph_id)
 }
 
 void GraphTabsWidget::on_new_node_created(const std::string &graph_id,
-                                            const std::string &id)
+                                          const std::string &id)
 {
   LOG->trace("GraphTabsWidget::on_new_node_created");
 
@@ -83,8 +83,7 @@ void GraphTabsWidget::on_new_node_created(const std::string &graph_id,
   Q_EMIT this->new_node_created(graph_id, id);
 }
 
-void GraphTabsWidget::on_node_deleted(const std::string &graph_id,
-                                        const std::string &id)
+void GraphTabsWidget::on_node_deleted(const std::string &graph_id, const std::string &id)
 {
   Q_EMIT this->node_deleted(graph_id, id);
 }
@@ -146,7 +145,10 @@ void GraphTabsWidget::update_tab_widget()
   }
 
   for (auto &id : id_to_erase)
+  {
+    this->graph_node_widget_map.at(id)->close();
     this->graph_node_widget_map.erase(id);
+  }
 
   // repopulate tabs
   for (auto &id : this->p_graph_manager->get_graph_order())
@@ -195,6 +197,14 @@ void GraphTabsWidget::update_tab_widget()
     // select this tab if it was selected before
     if (id == current_tab_label.toStdString())
       this->tab_widget->setCurrentWidget(tab);
+  }
+}
+
+void GraphTabsWidget::zoom_to_content()
+{
+  for (auto &[id, gnw] : this->graph_node_widget_map)
+  {
+    gnw->zoom_to_content();
   }
 }
 

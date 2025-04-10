@@ -28,6 +28,7 @@ public:
   GraphNodeWidget(GraphNode *p_graph_node);
 
   void clear_all();
+  void clear_data_viewers();
   void clear_graphic_scene();
   void setup_connections();
 
@@ -44,6 +45,8 @@ signals:
   void node_deleted(const std::string &graph_id, const std::string &id);
 
 public slots:
+  void closeEvent(QCloseEvent *event) override;
+
   // --- User Actions ---
   void on_connection_deleted(const std::string &id_out,
                              const std::string &port_id_out,
