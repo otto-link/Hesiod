@@ -10,9 +10,9 @@ typedef unsigned int uint;
 #include "highmap/opencl/gpu_opencl.hpp"
 
 #include "hesiod/config.hpp"
-#include "hesiod/graph_editor.hpp"
 #include "hesiod/gui/main_window.hpp"
 #include "hesiod/logger.hpp"
+#include "hesiod/model/graph_manager.hpp"
 #include "hesiod/model/nodes/node_factory.hpp"
 
 #include "hesiod/gui/widgets/config_widget.hpp"
@@ -144,8 +144,9 @@ int main(int argc, char *argv[])
 
       // instanciate and compute the graph (but replace the config
       // from the file by the input config from the CLI)
-      bool                is_headless = true;
-      hesiod::GraphEditor ed = hesiod::GraphEditor("graph1", config, is_headless);
+      // bool                is_headless = true;
+      // hesiod::GraphEditor ed = hesiod::GraphEditor("graph1", config, is_headless); //
+      // TODO
 
       bool override_config = false;
       // ed.load_from_file(filename, override_config);

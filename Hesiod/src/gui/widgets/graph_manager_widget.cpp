@@ -6,14 +6,14 @@
 #include <QPushButton>
 #include <QSettings>
 
-#include "hesiod/graph_editor.hpp"
-#include "hesiod/graph_manager.hpp"
 #include "hesiod/gui/main_window.hpp"
 #include "hesiod/gui/widgets/coord_frame_widget.hpp"
 #include "hesiod/gui/widgets/graph_manager_widget.hpp"
 #include "hesiod/gui/widgets/model_config_widget.hpp"
 #include "hesiod/gui/widgets/string_input_dialog.hpp"
 #include "hesiod/logger.hpp"
+#include "hesiod/model/graph_manager.hpp"
+#include "hesiod/model/graph_node.hpp"
 
 #define MINIMUM_WIDTH 384
 
@@ -94,16 +94,6 @@ GraphManagerWidget::GraphManagerWidget(GraphManager *p_graph_manager, QWidget *p
                 this,
                 &GraphManagerWidget::on_new_graph_request);
 
-  this->connect(p_graph_manager,
-                &GraphManager::has_been_cleared,
-                this,
-                &GraphManagerWidget::reset);
-
-  this->connect(p_graph_manager,
-                &GraphManager::has_been_loaded_from_file,
-                this,
-                &GraphManagerWidget::reset);
-
   // frames canvas
   this->connect(this->coord_frame_widget,
                 &CoordFrameWidget::has_changed,
@@ -130,7 +120,7 @@ void GraphManagerWidget::add_list_item(const std::string &id)
 
   // create the custom widget to embed inside the item
   GraphQListWidget *widget = new GraphQListWidget(
-      this->p_graph_manager->get_graphs().at(id).get());
+      this->p_graph_manager->get_graph_nodes().at(id).get());
 
   item->setSizeHint(widget->sizeHint());
 
@@ -146,11 +136,19 @@ void GraphManagerWidget::add_list_item(const std::string &id)
       [this](const std::string &id, const QImage &image)
       { this->coord_frame_widget->get_frame_ref(id)->set_background_image(image); });
 
-  this->connect(this->p_graph_manager->get_graphs().at(id).get(),
-                &GraphEditor::update_finished, // TODO NOPE
+  this->connect(this->p_graph_manager->get_graph_nodes().at(id).get(),
+                &GraphNode::update_finished, // TODO NOPE
                 widget,
                 [widget](const std::string & /* graph_id */)
                 { widget->on_combobox_changed(); });
+}
+
+void GraphManagerWidget::clear()
+{
+  LOG->trace("GraphManagerWidget::clear");
+
+  this->coord_frame_widget->clear();
+  this->list_widget->clear();
 }
 
 void GraphManagerWidget::closeEvent(QCloseEvent *event)
@@ -168,6 +166,8 @@ void GraphManagerWidget::hideEvent(QHideEvent *event)
 
 void GraphManagerWidget::json_from(nlohmann::json const &json)
 {
+  this->reset();
+
   for (int i = 0; i < this->list_widget->count(); ++i)
   {
     QListWidgetItem *item = this->list_widget->item(i);
@@ -201,7 +201,7 @@ void GraphManagerWidget::on_apply_changes()
   LOG->trace("GraphManagerWidget::on_apply_changes");
 
   // retrieve coordinate frame parameters from the frames canvas
-  for (auto &[id, graph] : this->p_graph_manager->get_graphs())
+  for (auto &[id, graph] : this->p_graph_manager->get_graph_nodes())
   {
     LOG->trace("id: {}", id);
 
@@ -228,7 +228,7 @@ void GraphManagerWidget::on_apply_changes()
 
 void GraphManagerWidget::on_item_double_clicked(QListWidgetItem *item)
 {
-  this->p_graph_manager->set_selected_tab(item->text().toStdString());
+  Q_EMIT this->selected_graph_changed(item->text().toStdString());
 }
 
 void GraphManagerWidget::on_list_reordered(const QModelIndex &,
@@ -251,6 +251,8 @@ void GraphManagerWidget::on_list_reordered(const QModelIndex &,
   // update frames canvas
   this->coord_frame_widget->update_frames_z_depth();
   this->set_is_dirty(true);
+
+  Q_EMIT this->list_reordered();
 }
 
 void GraphManagerWidget::on_new_graph_request()
@@ -280,14 +282,16 @@ void GraphManagerWidget::on_new_graph_request()
   }
 
   // create new graph
-  auto graph = std::make_shared<hesiod::GraphEditor>(new_graph_id, config);
-  this->p_graph_manager->add_graph_editor(graph, new_graph_id);
+  auto graph = std::make_shared<hesiod::GraphNode>(new_graph_id, config);
+  this->p_graph_manager->add_graph_node(graph, new_graph_id);
 
   // add to list widget
   this->add_list_item(new_graph_id);
 
   // add to frames canvas
   this->coord_frame_widget->add_frame(new_graph_id);
+
+  Q_EMIT this->new_graph_added();
 }
 
 void GraphManagerWidget::reset()
@@ -348,16 +352,36 @@ void GraphManagerWidget::show_context_menu(const QPoint &pos)
   if (selected_action == delete_action)
   {
     delete this->list_widget->takeItem(this->list_widget->row(item));
-    this->p_graph_manager->remove_graph_editor(selected_id);
+    this->p_graph_manager->remove_graph_node(selected_id);
     this->coord_frame_widget->remove_frame(selected_id);
+
+    Q_EMIT this->graph_removed();
   }
   else if (selected_action == set_focus_action)
   {
-    this->p_graph_manager->set_selected_tab(item->text().toStdString());
+    Q_EMIT this->selected_graph_changed(item->text().toStdString());
   }
   else if (selected_action == new_action)
   {
     this->on_new_graph_request();
+  }
+}
+
+void GraphManagerWidget::update_combobox(const std::string &graph_id)
+{
+  LOG->trace("GraphManagerWidget::update_combobox: {}", graph_id);
+
+  // find corresponding item and update its combobox
+  for (int i = 0; i < this->list_widget->count(); ++i)
+  {
+    std::string item_id = this->list_widget->item(i)->text().toStdString();
+    if (item_id == graph_id)
+    {
+      QListWidgetItem *item = this->list_widget->item(i);
+      QWidget         *widget = this->list_widget->itemWidget(item);
+      if (auto gw_widget = dynamic_cast<GraphQListWidget *>(widget))
+        gw_widget->update_combobox();
+    }
   }
 }
 

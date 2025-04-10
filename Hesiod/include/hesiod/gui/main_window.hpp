@@ -27,9 +27,10 @@ namespace hesiod
 {
 
 // forward
-class GraphEditor;
-class GraphManager;
 class GraphManagerWidget;
+class GraphEditorWidget;
+
+class GraphManager;
 
 // =====================================
 // FrameItem
@@ -41,6 +42,8 @@ class MainWindow : public QMainWindow
 public:
   // --- Singleton pattern ---
   static MainWindow *instance(QApplication *p_app = nullptr, QWidget *p_parent = nullptr);
+
+  void clear_all(); // model + GUI
 
   // --- Accessors ---
   std::string get_project_name() const;
@@ -84,14 +87,9 @@ private:
   std::filesystem::path project_path = "";
 
   // --- Storage... ---
-  std::unique_ptr<hesiod::GraphManager> graph_manager;
-  GraphManagerWidget *graph_manager_widget = nullptr; // ownership by MainWindow Qt object
-  std::vector<GraphEditor *> graph_editors = {};
-  QTabWidget                *tab_widget = nullptr;
-
-  // TODO DBG
-  std::unique_ptr<GraphNode>       gn;
-  std::unique_ptr<GraphNodeWidget> gnw;
+  std::unique_ptr<GraphManager>       graph_manager;
+  std::unique_ptr<GraphManagerWidget> graph_manager_widget;
+  std::unique_ptr<GraphEditorWidget>  graph_editor_widget;
 };
 
 } // namespace hesiod

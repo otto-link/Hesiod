@@ -1,7 +1,10 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include <chrono>
+#include <iomanip>
 #include <iostream>
+#include <sstream>
 
 #include <QApplication>
 #include <QFileDialog>
@@ -11,11 +14,11 @@
 #include <QSettings>
 #include <QTabWidget>
 
-#include "hesiod/graph_editor.hpp"
-#include "hesiod/graph_manager.hpp"
 #include "hesiod/gui/main_window.hpp"
+#include "hesiod/gui/widgets/graph_editor_widget.hpp"
 #include "hesiod/gui/widgets/graph_manager_widget.hpp"
 #include "hesiod/logger.hpp"
+#include "hesiod/model/graph_manager.hpp"
 #include "hesiod/model/utils.hpp"
 
 namespace hesiod
@@ -26,28 +29,80 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
   this->setWindowTitle(tr("Hesiod"));
   this->restore_state();
 
-  this->setup_central_widget();
-  this->setup_graph_manager();
+  // model
+  this->graph_manager = std::make_unique<GraphManager>();
 
-  // interface GraphManager with its GUI components
-  this->graph_manager->set_tab_widget(this->tab_widget);
-  this->graph_manager->update_tab_widget();
-  this->graph_manager_widget = new GraphManagerWidget(this->graph_manager.get(), nullptr);
+  // GUI
+  this->graph_manager_widget = std::make_unique<GraphManagerWidget>(
+      this->graph_manager.get());
   this->graph_manager_widget->show();
+
+  this->graph_editor_widget = std::make_unique<GraphEditorWidget>(
+      this->graph_manager.get());
+  // this->graph_editor_widget->show();
+
+  this->setup_central_widget();
+
+  // --- connections
+
+  // GraphManagerWidget -> GraphEditorWidget
+  this->connect(this->graph_manager_widget.get(),
+                &GraphManagerWidget::graph_removed,
+                this->graph_editor_widget.get(),
+                &GraphEditorWidget::update_tab_widget);
+
+  this->connect(this->graph_manager_widget.get(),
+                &GraphManagerWidget::list_reordered,
+                this->graph_editor_widget.get(),
+                &GraphEditorWidget::update_tab_widget);
+
+  this->connect(this->graph_manager_widget.get(),
+                &GraphManagerWidget::new_graph_added,
+                this->graph_editor_widget.get(),
+                &GraphEditorWidget::update_tab_widget);
+
+  this->connect(this->graph_manager_widget.get(),
+                &GraphManagerWidget::selected_graph_changed,
+                this->graph_editor_widget.get(),
+                &GraphEditorWidget::set_selected_tab);
+
+  // GraphEditorWidget -> GraphManagerWidget
+  this->connect(this->graph_editor_widget.get(),
+                &GraphEditorWidget::has_been_cleared,
+                this->graph_manager_widget.get(),
+                &GraphManagerWidget::update_combobox);
+
+  this->connect(this->graph_editor_widget.get(),
+                &GraphEditorWidget::new_node_created,
+                this,
+                [this](const std::string &graph_id, const std::string & /* id */)
+                { this->graph_manager_widget->update_combobox(graph_id); });
+
+  this->connect(this->graph_editor_widget.get(),
+                &GraphEditorWidget::node_deleted,
+                this,
+                [this](const std::string &graph_id, const std::string & /* id */)
+                { this->graph_manager_widget->update_combobox(graph_id); });
 
   // after widgets and graph manager
   this->setup_menu_bar();
 
   this->connect(p_app, &QApplication::aboutToQuit, [&]() { this->save_state(); });
-
-  // TODO DBG
-  auto config = std::make_shared<hesiod::ModelConfig>();
-  gn = std::make_unique<GraphNode>("test", config);
-  gnw = std::make_unique<GraphNodeWidget>(gn.get());
-  gnw->show();
 }
 
 MainWindow::~MainWindow() { this->save_state(); }
+
+void MainWindow::clear_all()
+{
+  this->set_project_path(std::filesystem::path());
+
+  // model
+  this->graph_manager->clear();
+
+  // GUI
+  this->graph_manager_widget->clear();
+  this->graph_editor_widget->clear();
+}
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
@@ -77,12 +132,17 @@ void MainWindow::load_from_file(const std::string &fname)
 {
   LOG->trace("MainWindow::load_from_file: {}", fname);
 
+  nlohmann::json json = json_from_file(fname);
+
+  this->clear_all();
+
   // model
-  this->graph_manager->load_from_file(fname);
+  this->graph_manager->json_from(json["graph_manager"]);
+  this->graph_manager->update();
 
   // GUI
-  nlohmann::json json = json_from_file(fname);
-  this->graph_manager_widget->json_from(json["GUI"]["graph_manager_widget"]);
+  this->graph_manager_widget->json_from(json["graph_manager_widget"]);
+  this->graph_editor_widget->json_from(json["graph_editor_widget"]);
 }
 
 void MainWindow::on_load()
@@ -96,8 +156,8 @@ void MainWindow::on_load()
 
   if (!load_fname.isNull() && !load_fname.isEmpty())
   {
-    this->set_project_path(load_fname.toStdString());
     this->load_from_file(load_fname.toStdString());
+    this->set_project_path(load_fname.toStdString());
   }
 }
 
@@ -110,10 +170,7 @@ void MainWindow::on_new()
                                 QMessageBox::Yes | QMessageBox::No);
 
   if (reply == QMessageBox::Yes)
-  {
-    this->graph_manager->clear();
-    this->set_project_path(std::filesystem::path());
-  }
+    this->clear_all();
 }
 
 void MainWindow::on_quit()
@@ -155,11 +212,19 @@ bool MainWindow::save_to_file(const std::string &fname) const
                              std::to_string(HESIOD_VERSION_MINOR) + "." +
                              std::to_string(HESIOD_VERSION_PATCH);
 
+    // save current date and time
+    auto              now = std::chrono::system_clock::now();
+    std::time_t       now_c = std::chrono::system_clock::to_time_t(now);
+    std::stringstream time_stream;
+    time_stream << std::put_time(std::localtime(&now_c), "%Y-%m-%d %H:%M:%S");
+    json["saved_at"] = time_stream.str();
+
     // model
-    json["GraphManager"] = this->graph_manager->json_to();
+    json["graph_manager"] = this->graph_manager->json_to();
 
     // GUI
-    json["GUI"]["graph_manager_widget"] = this->graph_manager_widget->json_to();
+    json["graph_manager_widget"] = this->graph_manager_widget->json_to();
+    json["graph_editor_widget"] = this->graph_editor_widget->json_to();
 
     json_to_file(json, fname);
     return true;
@@ -197,10 +262,9 @@ void MainWindow::set_title(const std::string &new_title)
 void MainWindow::setup_central_widget()
 {
   QWidget *central_widget = new QWidget(this);
-  this->tab_widget = new QTabWidget(central_widget);
 
   QHBoxLayout *main_layout = new QHBoxLayout(central_widget);
-  main_layout->addWidget(this->tab_widget);
+  main_layout->addWidget(this->graph_editor_widget.get());
   central_widget->setLayout(main_layout);
 
   this->setCentralWidget(central_widget);
@@ -208,21 +272,7 @@ void MainWindow::setup_central_widget()
 
 void MainWindow::setup_graph_manager()
 {
-  bool headless = false;
-  this->graph_manager = std::make_unique<hesiod::GraphManager>(headless);
-  // this->graph_manager->load_from_file(HSD_DEFAULT_STARTUP_FILE);
-
-  {
-    auto config = std::make_shared<hesiod::ModelConfig>();
-    auto graph = std::make_shared<hesiod::GraphEditor>("", config);
-    this->graph_manager->add_graph_editor(graph, "new graph");
-  }
-
-  {
-    auto config = std::make_shared<hesiod::ModelConfig>();
-    auto graph = std::make_shared<hesiod::GraphEditor>("", config);
-    this->graph_manager->add_graph_editor(graph, "new graph 2");
-  }
+  // TODO default graph
 }
 
 void MainWindow::setup_menu_bar()
@@ -286,7 +336,7 @@ void MainWindow::setup_menu_bar()
                   show_layout_manager->setChecked(!state);
                 });
 
-  this->connect(this->graph_manager_widget,
+  this->connect(this->graph_manager_widget.get(),
                 &GraphManagerWidget::window_closed,
                 [show_layout_manager]() { show_layout_manager->setChecked(false); });
 
@@ -324,7 +374,7 @@ void MainWindow::setup_menu_bar()
   // --- graphs
   this->connect(new_graph,
                 &QAction::triggered,
-                this->graph_manager_widget,
+                this->graph_manager_widget.get(),
                 &GraphManagerWidget::on_new_graph_request);
 
   this->connect(quit, &QAction::triggered, this, &MainWindow::on_quit);

@@ -35,8 +35,11 @@ public:
   void           json_from(nlohmann::json const &json);
   nlohmann::json json_to() const;
 
+  GraphNode *get_p_graph_node();
+
 signals:
   // --- User Actions Signals ---
+  void has_been_cleared(const std::string &graph_id);
   void new_node_created(const std::string &graph_id, const std::string &id);
   void node_deleted(const std::string &graph_id, const std::string &id);
 

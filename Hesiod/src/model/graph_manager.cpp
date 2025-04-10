@@ -1,30 +1,25 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-#include <fstream>
-#include <iostream>
+#include "nlohmann/json.hpp"
 
-#include <QHBoxLayout>
-
-#include "hesiod/graph_manager.hpp"
-#include "hesiod/gui/main_window.hpp"
 #include "hesiod/logger.hpp"
-#include "hesiod/model/nodes/receive_node.hpp"
+#include "hesiod/model/graph_manager.hpp"
+#include "hesiod/model/graph_node.hpp"
 #include "hesiod/model/utils.hpp"
 
 namespace hesiod
 {
 
-bool GraphManager::is_graph_id_available(const std::string &id)
+GraphManager::GraphManager(const std::string &id) : id(id)
 {
-  return !this->graphs.contains(id);
+  LOG->trace("GraphManager::GraphManager: id: {}", id);
 }
 
-std::string GraphManager::add_graph_editor(
-    const std::shared_ptr<GraphEditor> &p_graph_editor,
-    const std::string                  &id)
+std::string GraphManager::add_graph_node(const std::shared_ptr<GraphNode> &p_graph_node,
+                                         const std::string                &id)
 {
-  LOG->trace("GraphManager::add_graph_editor: {}", id);
+  LOG->trace("GraphManager::add_graph_node: {}", id);
 
   std::string graph_id = id;
 
@@ -37,39 +32,35 @@ std::string GraphManager::add_graph_editor(
     throw std::runtime_error("Graph ID already used: " + graph_id);
 
   // add the graph to the map and store the ID within the graph (in case of)
-  this->graphs[graph_id] = p_graph_editor;
-  p_graph_editor->set_id(graph_id);
+  this->graph_nodes[graph_id] = p_graph_node;
+  p_graph_node->set_id(graph_id);
 
   // store a reference to the global storage of broadcasting data
-  p_graph_editor->set_p_broadcast_params(&broadcast_params);
+  p_graph_node->set_p_broadcast_params(&broadcast_params);
 
   this->graph_order.push_back(graph_id);
 
-  // connections for broadcasting data between graphs
-  // NOTE NOT GUI
-  this->connect(p_graph_editor.get(),
+  // connections for broadcasting data between graph_nodes
+  this->connect(p_graph_node.get(),
                 &GraphNode::broadcast_node_updated,
                 this,
                 &GraphManager::on_broadcast_node_updated);
 
-  this->connect(p_graph_editor.get(),
+  this->connect(p_graph_node.get(),
                 &GraphNode::new_broadcast_tag,
                 this,
                 &GraphManager::on_new_broadcast_tag);
 
-  this->connect(p_graph_editor.get(),
+  this->connect(p_graph_node.get(),
                 &GraphNode::remove_broadcast_tag,
                 this,
                 &GraphManager::on_remove_broadcast_tag);
 
-  // NOTE GUI
-  this->connect(p_graph_editor.get(),
-                &GraphEditor::request_update_receive_nodes_tag_list,
-                this,
-                &GraphManager::update_receive_nodes_tag_list);
-
-  // update GUI
-  this->update_tab_widget();
+  // // NOTE GUI
+  // this->connect(p_graph_node.get(),
+  //               &GraphNode::request_update_receive_nodes_tag_list,
+  //               this,
+  //               &GraphManager::update_receive_nodes_tag_list); // TODO add
 
   return graph_id;
 }
@@ -78,19 +69,25 @@ void GraphManager::clear()
 {
   LOG->trace("GraphManager::clear");
 
-  this->graphs.clear();
-  this->graph_order.clear();
-  this->update_tab_widget();
-  this->broadcast_params.clear();
+  for (auto &[id, graph] : this->graph_nodes)
+    graph->clear();
 
-  Q_EMIT this->has_been_cleared();
+  this->id_count = 0;
+  this->graph_nodes.clear();
+  this->graph_order.clear();
+  this->broadcast_params.clear();
 }
 
-void GraphManager::dump() const
+const BroadcastMap &GraphManager::get_broadcast_params()
 {
-  std::cout << "GraphManager::dump\n";
-  for (auto &id : graph_order)
-    std::cout << " - id: " << id << "\n";
+  return this->broadcast_params;
+}
+
+const GraphNodeMap &GraphManager::get_graph_nodes() { return this->graph_nodes; }
+
+const std::vector<std::string> &GraphManager::get_graph_order()
+{
+  return this->graph_order;
 }
 
 int GraphManager::get_graph_order_index(const std::string &id)
@@ -105,14 +102,16 @@ int GraphManager::get_graph_order_index(const std::string &id)
   return (int)std::distance(this->graph_order.begin(), itr);
 }
 
-GraphEditor *GraphManager::get_graph_ref_by_id(const std::string &id)
+GraphNode *GraphManager::get_graph_ref_by_id(const std::string &id)
 {
-  auto it = graphs.find(id);
-  if (it == graphs.end())
+  auto it = graph_nodes.find(id);
+  if (it == graph_nodes.end())
     return nullptr;
   else
     return it->second.get();
 }
+
+std::string GraphManager::get_id() const { return this->id; }
 
 bool GraphManager::is_graph_above(const std::string &graph_id,
                                   const std::string &ref_graph_id)
@@ -128,6 +127,11 @@ bool GraphManager::is_graph_above(const std::string &graph_id,
   return false;
 }
 
+bool GraphManager::is_graph_id_available(const std::string &id)
+{
+  return !this->graph_nodes.contains(id);
+}
+
 void GraphManager::json_from(nlohmann::json const &json)
 {
   LOG->trace("GraphManager::json_from");
@@ -138,7 +142,6 @@ void GraphManager::json_from(nlohmann::json const &json)
   this->clear();
 
   // keep deserializing
-  this->headless = json["headless"];
   this->id_count = json["id_count"];
 
   // graph order
@@ -149,47 +152,49 @@ void GraphManager::json_from(nlohmann::json const &json)
     LOG->trace("graph id: {}", id);
 
     auto config = std::make_shared<hesiod::ModelConfig>();
-    auto graph = std::make_shared<hesiod::GraphEditor>("", config);
+    auto graph = std::make_shared<hesiod::GraphNode>("", config);
 
-    // in this order, add the graph editor to the graph manager and
-    // then deserialize the graph editor because the Receive nodes, if
-    // any, need a reference to the broadcast_params of the
-    // GraphManager, which is provided to the graph editor when
-    // added...
-    this->add_graph_editor(graph, id);
-    graph->json_from(json["GraphEditors"][id]);
+    // in this order (add, then deserialize), add the graph node to
+    // the graph manager and then deserialize the graph node because
+    // the Receive nodes, if any, need a reference to the
+    // broadcast_params of the GraphManager, which is provided to the
+    // graph node when added...
+    this->add_graph_node(graph, id);
+    graph->json_from(json["graph_nodes"][id]);
   }
 }
 
 nlohmann::json GraphManager::json_to() const
 {
+  LOG->trace("GraphManager::json_to");
+
   nlohmann::json json;
 
-  json["headless"] = this->headless;
+  // NB - broadcast_params is not serialized since it is regenerated
+  // when re-creating the graph nodes
   json["id_count"] = this->id_count;
   json["graph_order"] = this->graph_order;
 
   // graphs
   nlohmann::json json_graphs;
-  for (auto &[id, graph] : this->graphs)
+  for (auto &[id, graph] : this->graph_nodes)
     json_graphs[id] = graph->json_to();
 
-  json["GraphEditors"] = json_graphs;
+  json["graph_nodes"] = json_graphs;
 
   return json;
 }
 
 void GraphManager::load_from_file(const std::string &fname)
 {
+  LOG->trace("GraphManager::load_from_file: fname {}", fname);
+
   nlohmann::json json = json_from_file(fname);
 
-  this->json_from(json["GraphManager"]);
+  this->json_from(json["graph_manager"]);
 
   // update graphs
-  for (auto &[id, graph] : this->graphs)
-    graph->update();
-
-  Q_EMIT this->has_been_loaded_from_file();
+  this->update();
 }
 
 void GraphManager::on_broadcast_node_updated(const std::string &graph_id,
@@ -197,7 +202,7 @@ void GraphManager::on_broadcast_node_updated(const std::string &graph_id,
 {
   LOG->trace("GraphManager::on_broadcast_node_updated: broadcasting {}", tag);
 
-  for (auto &[gid, graph] : this->graphs)
+  for (auto &[gid, graph] : this->graph_nodes)
     if (true) // gid != graph_id)
     {
       // prevent any broadcast from a top layer to a sublayer, this
@@ -223,19 +228,7 @@ void GraphManager::on_new_broadcast_tag(const std::string     &tag,
   LOG->trace("GraphManager::on_new_broadcast_tag: tag {}", tag);
 
   this->broadcast_params[tag] = BroadcastParam(t_source, h_source);
-  this->update_receive_nodes_tag_list();
-}
-
-void GraphManager::on_new_node_created(const std::string &graph_id, const std::string &id)
-{
-  LOG->trace("GraphManager::on_new_node_created: {}/{}", graph_id, id);
-  // TODO keep this?
-}
-
-void GraphManager::on_node_deleted(const std::string &graph_id, const std::string &id)
-{
-  LOG->trace("GraphManager::on_node_deleted: {}/{}", graph_id, id);
-  // TODO keep this?
+  Q_EMIT this->new_broadcast_tag(tag);
 }
 
 void GraphManager::on_remove_broadcast_tag(const std::string &tag)
@@ -243,12 +236,12 @@ void GraphManager::on_remove_broadcast_tag(const std::string &tag)
   LOG->trace("GraphManager::on_remove_broadcast_tag: tag {}", tag);
 
   this->broadcast_params.erase(tag);
-  this->update_receive_nodes_tag_list();
+  Q_EMIT this->remove_broadcast_tag(tag);
 }
 
-void GraphManager::remove_graph_editor(const std::string &id)
+void GraphManager::remove_graph_node(const std::string &id)
 {
-  LOG->trace("Removing graph editor: {}", id);
+  LOG->trace("GraphManager::remove_graph_node: id {}", id);
 
   if (this->is_graph_id_available(id))
     return;
@@ -257,88 +250,32 @@ void GraphManager::remove_graph_editor(const std::string &id)
       std::remove(this->graph_order.begin(), this->graph_order.end(), id),
       this->graph_order.end());
 
-  this->graphs.erase(id);
-
-  this->update_tab_widget();
+  this->graph_nodes.erase(id);
 }
 
 void GraphManager::save_to_file(const std::string &fname) const
 {
+  LOG->trace("GraphManager::save_to_file: fname {}", fname);
+
   // fill-in json with graph data
   nlohmann::json json;
-  json["GraphManager"] = this->json_to();
+  json["graph_manager"] = this->json_to();
   json_to_file(json, fname);
 }
 
 void GraphManager::set_graph_order(const std::vector<std::string> &new_graph_order)
 {
   this->graph_order = new_graph_order;
-  this->update_tab_widget();
 }
 
-void GraphManager::set_selected_tab(const std::string &id)
+void GraphManager::set_id(const std::string &new_id) { this->id = new_id; }
+
+void GraphManager::update()
 {
-  if (!this->tab_widget)
-    return;
+  LOG->trace("GraphManager::update()");
 
-  for (int i = 0; i < this->tab_widget->count(); ++i)
-  {
-    QString tab_label = tab_widget->tabText(i);
-    if (tab_label.toStdString() == id)
-      this->tab_widget->setCurrentIndex(i);
-  }
-}
-
-void GraphManager::update_receive_nodes_tag_list()
-{
-  LOG->trace("GraphManager::update_receive_nodes_tag_list");
-
-  // update the tag list for all the Receive nodes of the graphs
-  for (auto &[gid, graph] : this->graphs)
-    for (auto &[nid, node] : graph->get_nodes())
-      if (node->get_label() == "Receive")
-      {
-        ReceiveNode *p_rnode = graph->get_node_ref_by_id<ReceiveNode>(nid);
-
-        std::vector<std::string> tags = {};
-        for (auto &[tag, _] : this->broadcast_params)
-          tags.push_back(tag);
-
-        p_rnode->update_tag_list(tags);
-      }
-}
-
-void GraphManager::update_tab_widget()
-{
-  LOG->trace("GraphManager::update_tab_widget");
-
-  if (!this->tab_widget)
-    return;
-
-  // TODO optimize this
-
-  // backup currently selected tab to set it back afterwards
-  QString current_tab_label = this->tab_widget->tabText(this->tab_widget->currentIndex());
-
-  // remove everything
-  while (this->tab_widget->count() > 0)
-    this->tab_widget->removeTab(0);
-
-  // repopulate tabs
-  for (auto &id : this->graph_order)
-  {
-    LOG->trace("updating tab for graph: {}", id);
-
-    QWidget     *tab = new QWidget();
-    QHBoxLayout *layout = new QHBoxLayout();
-    layout->addWidget(this->graphs.at(id)->get_p_viewer());
-    tab->setLayout(layout);
-    this->tab_widget->addTab(tab, id.c_str());
-
-    // select this tab if it was selected before
-    if (id == current_tab_label.toStdString())
-      this->tab_widget->setCurrentWidget(tab);
-  }
+  for (auto &graph_id : this->graph_order)
+    this->graph_nodes.at(graph_id)->update();
 }
 
 } // namespace hesiod

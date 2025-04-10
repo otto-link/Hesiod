@@ -2,7 +2,7 @@
    License. The full license is in the file LICENSE, distributed with this software. */
 
 /**
- * @file viewer3d.hpp
+ * @file graph_manager_widget.hpp
  * @author  Otto Link (otto.link.bv@gmail.com)
  * @brief
  *
@@ -26,9 +26,9 @@ namespace hesiod
 {
 
 // forward
-class GraphEditor;
+class GraphNode;
+class GraphManager; // TODO remove
 class GraphManager;
-class GraphManagerWidget;
 
 // =====================================
 // GraphQListWidget
@@ -38,7 +38,7 @@ class GraphQListWidget : public QWidget
   Q_OBJECT
 
 public:
-  GraphQListWidget(GraphEditor *p_graph_editor, QWidget *parent = nullptr);
+  GraphQListWidget(GraphNode *p_graph_node, QWidget *parent = nullptr);
 
   // --- Serialization ---
   void           json_from(nlohmann::json const &json);
@@ -56,9 +56,9 @@ public slots:
 
 private:
   // --- Members ---
-  GraphEditor *p_graph_editor;
-  QComboBox   *combobox;
-  std::string  current_bg_tag;
+  GraphNode  *p_graph_node;
+  QComboBox  *combobox;
+  std::string current_bg_tag;
 };
 
 // =====================================
@@ -71,6 +71,8 @@ class GraphManagerWidget : public QWidget
 public:
   GraphManagerWidget(GraphManager *p_graph_manager, QWidget *parent = nullptr);
 
+  void clear();
+
   // --- Serialization ---
   void           json_from(nlohmann::json const &json);
   nlohmann::json json_to() const;
@@ -80,6 +82,10 @@ public:
   void save_window_state() const;
 
 signals:
+  void graph_removed();
+  void list_reordered();
+  void new_graph_added();
+  void selected_graph_changed(const std::string &graph_id);
   void window_closed();
 
 public slots:
@@ -88,6 +94,9 @@ public slots:
   void on_item_double_clicked(QListWidgetItem *item);
   void on_list_reordered(const QModelIndex &, int, int, const QModelIndex &, int);
   void on_new_graph_request();
+
+  // --- Graph Actions ---
+  void update_combobox(const std::string &graph_id);
 
 private slots:
   // --- Qt Events ---

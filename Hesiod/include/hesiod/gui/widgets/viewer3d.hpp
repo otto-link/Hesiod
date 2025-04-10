@@ -19,7 +19,6 @@
 
 #include "nlohmann/json.hpp"
 
-#include "hesiod/graph_editor.hpp"
 #include "hesiod/gui/widgets/abstract_viewer.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
@@ -27,14 +26,16 @@
 namespace hesiod
 {
 
+class GraphNodeWidget; // forward
+
 class Viewer3d : public AbstractViewer
 {
 public:
   Viewer3d() = delete;
 
-  Viewer3d(GraphEditor *p_graph_editor,
-           QWidget     *parent = nullptr,
-           std::string  label = "");
+  Viewer3d(GraphNodeWidget *p_graph_editor_widget,
+           QWidget         *parent = nullptr,
+           std::string      label = "");
 };
 
 } // namespace hesiod

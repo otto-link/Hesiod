@@ -33,7 +33,7 @@ class GraphNode : public QObject, public gnode::Graph, public hmap::Terrain
 
 public:
   GraphNode() = delete;
-  GraphNode(const std::string &id, std::shared_ptr<ModelConfig> config);
+  GraphNode(const std::string &id, const std::shared_ptr<ModelConfig> &config);
 
   // --- Serialization ---
   void           json_from(nlohmann::json const &json, bool override_config = true);

@@ -108,6 +108,8 @@ class CoordFrameWidget : public QGraphicsView
 public:
   explicit CoordFrameWidget(GraphManager *p_graph_manager, QWidget *parent = nullptr);
 
+  void clear();
+
   // --- Frame management ---
   void       add_frame(const std::string &id);
   FrameItem *get_frame_ref(const std::string &id) { return frames.at(id); }

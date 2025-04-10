@@ -1,7 +1,6 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-
 #include "hesiod/model/graph_node.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
@@ -14,7 +13,7 @@
 namespace hesiod
 {
 
-GraphNode::GraphNode(const std::string &id, std::shared_ptr<ModelConfig> config)
+GraphNode::GraphNode(const std::string &id, const std::shared_ptr<ModelConfig> &config)
     : gnode::Graph(id), hmap::Terrain(), config(config)
 {
   LOG->trace("GraphNode::GraphNode");
@@ -23,6 +22,19 @@ GraphNode::GraphNode(const std::string &id, std::shared_ptr<ModelConfig> config)
 
 std::string GraphNode::add_node(const std::string &node_type)
 {
+  LOG->trace("GraphNode::add_node: node_type = {}", node_type);
+
+  // this->config.reset();
+  // this->config = std::make_shared<hesiod::ModelConfig>();
+
+  if (this->config)
+  {
+    LOG->trace("CONFIG OK");
+    this->config->log_debug();
+  }
+  else
+    LOG->trace("CONFIG NOT OK");
+
   std::shared_ptr<gnode::Node> node = node_factory(node_type, this->config);
   node->compute();
 

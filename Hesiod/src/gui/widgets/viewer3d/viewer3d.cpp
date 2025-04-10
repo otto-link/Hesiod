@@ -8,15 +8,19 @@
 
 #include "highmap/heightmap.hpp"
 
+#include "hesiod/gui/widgets/graph_node_widget.hpp"
 #include "hesiod/gui/widgets/open_gl/open_gl_widget.hpp"
 #include "hesiod/gui/widgets/viewer3d.hpp"
 #include "hesiod/logger.hpp"
+#include "hesiod/model/graph_node.hpp"
 
 namespace hesiod
 {
 
-Viewer3d::Viewer3d(GraphEditor *p_graph_editor, QWidget *parent, std::string label)
-    : AbstractViewer(p_graph_editor, parent, label)
+Viewer3d::Viewer3d(GraphNodeWidget *p_graph_node_widget,
+                   QWidget         *parent,
+                   std::string      label)
+    : AbstractViewer(p_graph_node_widget, parent, label)
 {
   QGridLayout *layout = dynamic_cast<QGridLayout *>(this->layout());
   int          row = layout->rowCount();
@@ -25,8 +29,8 @@ Viewer3d::Viewer3d(GraphEditor *p_graph_editor, QWidget *parent, std::string lab
   {
     this->render_widget = new OpenGLWidget();
 
-    this->connect(this->p_graph_editor,
-                  &GraphEditor::compute_finished,
+    this->connect(this->p_graph_node_widget->get_p_graph_node(),
+                  &GraphNode::compute_finished,
                   static_cast<OpenGLWidget *>(this->render_widget),
                   &OpenGLWidget::on_node_compute_finished);
 

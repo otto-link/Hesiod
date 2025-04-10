@@ -46,6 +46,8 @@ void GraphNodeWidget::clear_all()
 {
   this->clear_graphic_scene();
   this->p_graph_node->clear();
+
+  Q_EMIT this->has_been_cleared(this->get_id());
 }
 
 void GraphNodeWidget::clear_graphic_scene()
@@ -60,6 +62,8 @@ void GraphNodeWidget::clear_graphic_scene()
 
   this->set_enabled(true);
 }
+
+GraphNode *GraphNodeWidget::get_p_graph_node() { return this->p_graph_node; }
 
 void GraphNodeWidget::json_from(nlohmann::json const &json)
 {
@@ -223,7 +227,7 @@ void GraphNodeWidget::on_node_deleted_request(const std::string &node_id)
   LOG->trace("GraphNodeWidget::on_node_deleted_request, node {}", node_id);
 
   this->p_graph_node->remove_node(node_id);
-  this->remove_node(node_id);
+  // this->remove_node(node_id);
 
   Q_EMIT this->node_deleted(this->get_id(), node_id);
 }
@@ -585,20 +589,23 @@ void GraphNodeWidget::setup_connections()
                 &GraphNodeWidget::on_viewport_request);
 
   // computation: gnode::GraphNode -> gngui::GraphViewer
-  this->connect(this->p_graph_node,
-                &GraphNode::compute_started,
-                this,
-                [this](const std::string & /* graph_id */, const std::string &node_id)
-                {
-                  this->on_compute_started(node_id);
-                  QApplication::processEvents();
-                });
+  // this->connect(this->p_graph_node,
+  //               &GraphNode::compute_started,
+  //               this,
+  //               [this](const std::string & /* graph_id */, const std::string &node_id)
+  //               {
+  //                 this->on_compute_started(node_id);
+  //                 QApplication::processEvents();
+  //               });
 
-  this->connect(this->p_graph_node,
-                &GraphNode::compute_finished,
-                this,
-                [this](const std::string & /* graph_id */, const std::string &node_id)
-                { this->on_compute_finished(node_id); });
+  // this->connect(this->p_graph_node,
+  //               &GraphNode::compute_finished,
+  //               this,
+  //               [this](const std::string & /* graph_id */, const std::string &node_id)
+  //               {
+  //                 QApplication::processEvents();
+  //                 this->on_compute_finished(node_id);
+  //               });
 
   this->connect(this->p_graph_node,
                 &GraphNode::update_started,

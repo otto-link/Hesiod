@@ -17,7 +17,7 @@ StringInputDialog::StringInputDialog(const std::string              &window_titl
   setWindowTitle(window_title.c_str());
 
   QVBoxLayout *layout = new QVBoxLayout(this);
-  input_line = new QLineEdit(this);
+  input_line = new QLineEdit("graph", this);
   error_label = new QLabel(this);
   error_label->setStyleSheet("color: red;"); // errors in red
   error_label->hide();

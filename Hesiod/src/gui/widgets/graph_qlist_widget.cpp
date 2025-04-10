@@ -5,39 +5,28 @@
 
 #include "highmap/colorize.hpp"
 
-#include "hesiod/graph_editor.hpp"
 #include "hesiod/gui/widgets/graph_manager_widget.hpp"
+#include "hesiod/model/graph_node.hpp"
 #include "hesiod/model/utils.hpp"
 
 namespace hesiod
 {
 
-GraphQListWidget::GraphQListWidget(GraphEditor *p_graph_editor, QWidget *parent)
-    : QWidget(parent), p_graph_editor(p_graph_editor)
+GraphQListWidget::GraphQListWidget(GraphNode *p_graph_node, QWidget *parent)
+    : QWidget(parent), p_graph_node(p_graph_node)
 {
   LOG->trace("GraphQListWidget::GraphQListWidget");
 
   QGridLayout *layout = new QGridLayout(this);
   this->setLayout(layout);
 
-  QLabel *label = new QLabel(p_graph_editor->get_id().c_str());
+  QLabel *label = new QLabel(p_graph_node->get_id().c_str());
   layout->addWidget(label, 0, 0);
 
   this->combobox = new QComboBox(this);
   this->current_bg_tag = "NO BACKGROUND";
   this->update_combobox();
   layout->addWidget(this->combobox, 0, 1);
-
-  // connections
-  this->connect(p_graph_editor,
-                &GraphEditor::new_node_created,
-                this,
-                &GraphQListWidget::update_combobox);
-
-  this->connect(p_graph_editor,
-                &GraphEditor::node_deleted,
-                this,
-                &GraphQListWidget::update_combobox);
 
   this->connect(this->combobox,
                 QOverload<int>::of(&QComboBox::currentIndexChanged),
@@ -71,7 +60,7 @@ void GraphQListWidget::on_combobox_changed()
   // this excludes the "NO BACKGROUND" tag
   if (tag_elements.size() != 3)
   {
-    Q_EMIT this->bg_image_updated(this->p_graph_editor->get_id(), QImage());
+    Q_EMIT this->bg_image_updated(this->p_graph_node->get_id(), QImage());
     return;
   }
 
@@ -87,7 +76,7 @@ void GraphQListWidget::on_combobox_changed()
   // generate background image
   QImage image;
 
-  hmap::Heightmap *p_h = this->p_graph_editor->get_node_ref_by_id(node_id)
+  hmap::Heightmap *p_h = this->p_graph_node->get_node_ref_by_id(node_id)
                              ->get_value_ref<hmap::Heightmap>(port_id);
 
   if (p_h)
@@ -107,7 +96,7 @@ void GraphQListWidget::on_combobox_changed()
     image = QImage();
   }
 
-  Q_EMIT this->bg_image_updated(this->p_graph_editor->get_id(), image);
+  Q_EMIT this->bg_image_updated(this->p_graph_node->get_id(), image);
 }
 
 void GraphQListWidget::update_combobox()
@@ -124,7 +113,7 @@ void GraphQListWidget::update_combobox()
   // list of possible data available to show on the canvas as Pixmap
   bool is_current_tag_in_combo = false;
 
-  for (auto &[id, node] : this->p_graph_editor->get_nodes())
+  for (auto &[id, node] : this->p_graph_node->get_nodes())
     for (auto &port : node->get_ports())
     {
       LOG->trace("GraphQListWidget::update_combobox: {}/{}",

@@ -2,10 +2,12 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include <QGraphicsRectItem>
+#include <QMouseEvent>
 
-#include "hesiod/graph_manager.hpp"
 #include "hesiod/gui/widgets/coord_frame_widget.hpp"
 #include "hesiod/logger.hpp"
+#include "hesiod/model/graph_manager.hpp"
+#include "hesiod/model/graph_node.hpp"
 
 #define MAX_SIZE 40000
 
@@ -41,8 +43,7 @@ CoordFrameWidget::CoordFrameWidget(GraphManager *p_graph_manager, QWidget *paren
 
 void CoordFrameWidget::add_frame(const std::string &id)
 {
-  std::map<std::string, std::shared_ptr<GraphEditor>> graphs = this->p_graph_manager
-                                                                   ->get_graphs();
+  GraphNodeMap graphs = this->p_graph_manager->get_graph_nodes();
 
   hmap::Vec2<float> origin = graphs.at(id)->get_origin();
   hmap::Vec2<float> size = graphs.at(id)->get_size();
@@ -63,6 +64,17 @@ void CoordFrameWidget::add_frame(const std::string &id)
                 &FrameItem::has_changed,
                 this,
                 [this](const std::string & /* id */) { Q_EMIT this->has_changed(); });
+}
+
+void CoordFrameWidget::clear()
+{
+  std::vector<std::string> id_list = {};
+
+  for (auto &[id, _] : this->frames)
+    id_list.push_back(id);
+
+  for (auto &id : id_list)
+    this->remove_frame(id);
 }
 
 void CoordFrameWidget::mousePressEvent(QMouseEvent *event)

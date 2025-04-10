@@ -3,7 +3,6 @@
  * this software. */
 #include "attributes.hpp"
 
-#include "hesiod/graph_editor.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/broadcast_node.hpp"
