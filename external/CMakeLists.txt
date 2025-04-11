@@ -1,6 +1,7 @@
 project(external)
 
 include(args.cmake)
+include(qt-toast.cmake)
 
 # GNode
 set(GNODE_ENABLE_DOCS OFF)

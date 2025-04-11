@@ -14,6 +14,8 @@
 #include <QSettings>
 #include <QTabWidget>
 
+#include "Toast.h"
+
 #include "hesiod/gui/main_window.hpp"
 #include "hesiod/gui/widgets/graph_manager_widget.hpp"
 #include "hesiod/gui/widgets/graph_tabs_widget.hpp"
@@ -396,6 +398,40 @@ void MainWindow::show_about()
   QMessageBox msg_box;
   msg_box.setText(msg.c_str());
   msg_box.exec();
+}
+
+// functions
+
+void notify(const std::string &title, const std::string &text)
+{
+  Toast::setPosition(ToastPosition::BOTTOM_RIGHT);
+
+  Toast *toast = new Toast(MainWindow::instance());
+  toast->setDuration(6000);
+  toast->setTitle(title.c_str());
+  toast->setText(text.c_str());
+
+  toast->setBackgroundColor(QColor("#3C3C3C"));
+  toast->setTitleColor(QColor("#DFE1E2"));
+  toast->setTextColor(QColor("#5B5B5B"));
+  toast->setDurationBarColor(QColor("#5B5B5B"));
+  toast->setIconSeparatorColor(QColor("#4772b3"));
+  toast->setCloseButtonIconColor(QColor("#DFE1E2"));
+  toast->setMinimumWidth(350);
+  toast->setMaximumWidth(350);
+  toast->setBorderRadius(8);
+
+  toast->setShowIcon(false);
+  // toast->setIconColor(QColor("#5B5B5B"));
+  // toast->setIcon(QPixmap(HSD_APP_ICON));
+  // toast->applyPreset(ToastPreset::ERROR); // Apply style preset
+
+  QFont font = MainWindow::instance()->font();
+  toast->setTextFont(font);
+  font.setWeight(QFont::Bold);
+  toast->setTitleFont(font);
+
+  toast->show();
 }
 
 } // namespace hesiod

@@ -92,4 +92,10 @@ private:
   std::unique_ptr<GraphTabsWidget>    graph_tabs_widget;
 };
 
+// =====================================
+// Functions
+// =====================================
+
+void notify(const std::string &title, const std::string &text);
+
 } // namespace hesiod
