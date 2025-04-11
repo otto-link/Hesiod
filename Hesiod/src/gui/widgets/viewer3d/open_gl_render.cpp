@@ -326,6 +326,12 @@ void OpenGLRender::resizeEvent(QResizeEvent *event)
   this->repaint();
 }
 
+void OpenGLRender::resizeGL(int w, int h)
+{
+  this->glViewport(0, 0, w, h);
+  this->repaint();
+}
+
 void OpenGLRender::set_data(BaseNode          *new_p_node,
                             const std::string &new_port_id_elev,
                             const std::string &new_port_id_color,
@@ -505,10 +511,24 @@ void OpenGLRender::set_data(BaseNode          *new_p_node,
   this->repaint();
 }
 
+void OpenGLRender::set_data_again()
+{
+  this->set_data(this->p_node,
+                 this->port_id_elev,
+                 this->port_id_color,
+                 this->port_id_normal_map);
+}
+
 void OpenGLRender::set_azimuth(float new_azimuth)
 {
   this->azimuth = new_azimuth;
   this->update();
+}
+
+void OpenGLRender::set_h_scale(float new_h_scale)
+{
+  this->h_scale = new_h_scale;
+  this->repaint();
 }
 
 void OpenGLRender::set_max_approx_error(float new_max_approx_error)

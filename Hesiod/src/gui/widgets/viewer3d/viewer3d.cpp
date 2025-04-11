@@ -22,6 +22,9 @@ Viewer3d::Viewer3d(GraphNodeWidget *p_graph_node_widget,
                    std::string      label)
     : AbstractViewer(p_graph_node_widget, parent, label)
 {
+  const std::string title = "Hesiod - Viewer3D [" + p_graph_node_widget->get_id() + "]";
+  this->setWindowTitle(title.c_str());
+
   QGridLayout *layout = dynamic_cast<QGridLayout *>(this->layout());
   int          row = layout->rowCount();
 

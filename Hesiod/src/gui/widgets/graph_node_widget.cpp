@@ -178,6 +178,15 @@ void GraphNodeWidget::on_graph_settings_request()
     // deserialize but do not deserialize config, keep current one
     this->p_graph_node->json_from(json);
     this->p_graph_node->update();
+
+    // update the this proxy node reference in the graphics node
+    for (auto &[id, _] : this->p_graph_node->get_nodes())
+    {
+      gngui::NodeProxy *p_proxy = this->p_graph_node->get_node_ref_by_id<BaseNode>(id)
+                                      ->get_proxy_ref();
+
+      this->get_graphics_node_by_id(id)->set_p_node_proxy(p_proxy);
+    }
   }
 
   // deactivate drag to fix some event issue between the dialog box and the graphics view

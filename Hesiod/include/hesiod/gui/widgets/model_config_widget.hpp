@@ -22,13 +22,15 @@
 namespace hesiod
 {
 
+// =====================================
+// ModelConfigWidget
+// =====================================
 class ModelConfigWidget : public QDialog
 {
   Q_OBJECT
 
 public:
   ModelConfigWidget() = default;
-
   ModelConfigWidget(ModelConfig *p_model_config, QWidget *parent = nullptr);
 
 private:

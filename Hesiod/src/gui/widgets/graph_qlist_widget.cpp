@@ -80,14 +80,17 @@ void GraphQListWidget::on_combobox_changed()
 
   if (p_h)
   {
-    hmap::Array          array = p_h->to_array();
+    // TODO hardcoded
+    hmap::Vec2<int> shape_img(512, 512);
+
+    hmap::Array          array = p_h->to_array(shape_img);
     std::vector<uint8_t> img = hmap::colorize(array,
                                               array.min(),
                                               array.max(),
                                               hmap::Cmap::TURBO,
                                               true)
                                    .to_img_8bit();
-    image = QImage(img.data(), p_h->shape.x, p_h->shape.y, QImage::Format_RGB888);
+    image = QImage(img.data(), shape_img.x, shape_img.y, QImage::Format_RGB888);
   }
   else
   {

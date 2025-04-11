@@ -30,14 +30,13 @@ static std::map<std::string, PreviewType> preview_type_map = {
     // {"Slope/elev. heatmap", PreviewType::SLOPE_ELEVATION_HEATMAP},
 };
 
-/**
- * @brief Preview class, generic node preview widget (can be used for inputs and outputs).
- */
+// =====================================
+// DataPreview
+// =====================================
 class DataPreview : public QLabel
 {
 public:
   DataPreview() = default;
-
   DataPreview(gngui::NodeProxy *p_proxy_node);
 
 public Q_SLOTS:
