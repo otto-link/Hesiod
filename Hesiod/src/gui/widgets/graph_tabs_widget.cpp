@@ -24,6 +24,7 @@ GraphTabsWidget::GraphTabsWidget(GraphManager *p_graph_manager, QWidget *parent)
   // syles (GNodeGUI)
   GN_STYLE->viewer.add_new_icon = false;
   GN_STYLE->viewer.add_load_save_icons = false;
+  GN_STYLE->viewer.add_group = false;
   GN_STYLE->node.color_port_data = data_color_map;
   GN_STYLE->node.color_category = category_color_map;
 
