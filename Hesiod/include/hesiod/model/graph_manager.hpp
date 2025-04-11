@@ -30,6 +30,7 @@ namespace hesiod
 // - TODO keybindings to switch between editors
 
 class GraphNode; // forward
+class ModelConfig;
 
 // =====================================
 // GraphManager
@@ -65,10 +66,10 @@ public:
   void update();
 
   // --- Serialization ---
-  void           json_from(nlohmann::json const &json);
+  void           json_from(nlohmann::json const &json, ModelConfig *p_config = nullptr);
   nlohmann::json json_to() const;
-  void           load_from_file(const std::string &fname);
-  void           save_to_file(const std::string &fname) const;
+  void load_from_file(const std::string &fname, ModelConfig *p_config = nullptr);
+  void save_to_file(const std::string &fname) const;
 
 private slots:
   // --- Intergraph interactions ---

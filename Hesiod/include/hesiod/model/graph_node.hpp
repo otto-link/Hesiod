@@ -36,7 +36,7 @@ public:
   GraphNode(const std::string &id, const std::shared_ptr<ModelConfig> &config);
 
   // --- Serialization ---
-  void           json_from(nlohmann::json const &json, bool override_config = true);
+  void json_from(nlohmann::json const &json, ModelConfig *p_input_config = nullptr);
   nlohmann::json json_to() const;
 
   // --- Config. ---

@@ -4,10 +4,10 @@
         "graph_nodes": {
             "graph": {
                 "id": "graph",
-                "id_count": 2,
+                "id_count": 3,
                 "links": [
                     {
-                        "node_id_from": "0",
+                        "node_id_from": "2",
                         "node_id_to": "1",
                         "port_id_from": "output",
                         "port_id_to": "input"
@@ -23,140 +23,6 @@
                     "tiling.y": 4
                 },
                 "nodes": [
-                    {
-                        "amplitude": {
-                            "label": "amplitude",
-                            "type": 6,
-                            "type_string": "Float",
-                            "value": 0.05000000074505806,
-                            "vmax": 0.20000000298023224,
-                            "vmin": 0.0010000000474974513
-                        },
-                        "angle": {
-                            "label": "angle",
-                            "type": 6,
-                            "type_string": "Float",
-                            "value": 0.0,
-                            "vmax": 180.0,
-                            "vmin": -180.0
-                        },
-                        "angle_spread_ratio": {
-                            "label": "angle_spread_ratio",
-                            "type": 6,
-                            "type_string": "Float",
-                            "value": 1.0,
-                            "vmax": 1.0,
-                            "vmin": 0.0
-                        },
-                        "branch_strength": {
-                            "label": "branch_strength",
-                            "type": 6,
-                            "type_string": "Float",
-                            "value": 2.0,
-                            "vmax": 8.0,
-                            "vmin": 0.0
-                        },
-                        "id": "0",
-                        "inverse": {
-                            "label": "inverse",
-                            "label_false": "",
-                            "label_true": "",
-                            "type": 0,
-                            "type_string": "Bool",
-                            "value": false
-                        },
-                        "kw": {
-                            "label": "kw",
-                            "link_xy": true,
-                            "type": 17,
-                            "type_string": "Wavenumber",
-                            "value": [
-                                2.0,
-                                2.0
-                            ],
-                            "vmax": 3.4028234663852886e+38,
-                            "vmin": 0.0
-                        },
-                        "kw_multiplier": {
-                            "label": "kw_multiplier",
-                            "link_xy": true,
-                            "type": 17,
-                            "type_string": "Wavenumber",
-                            "value": [
-                                8.0,
-                                8.0
-                            ],
-                            "vmax": 32.0,
-                            "vmin": 0.0
-                        },
-                        "label": "Gavoronoise",
-                        "lacunarity": {
-                            "label": "lacunarity",
-                            "type": 6,
-                            "type_string": "Float",
-                            "value": 2.0,
-                            "vmax": 4.0,
-                            "vmin": 0.009999999776482582
-                        },
-                        "octaves": {
-                            "label": "octaves",
-                            "type": 10,
-                            "type_string": "Integer",
-                            "value": 8,
-                            "vmax": 32,
-                            "vmin": 0
-                        },
-                        "persistence": {
-                            "label": "persistence",
-                            "type": 6,
-                            "type_string": "Float",
-                            "value": 0.4000000059604645,
-                            "vmax": 1.0,
-                            "vmin": 0.0
-                        },
-                        "remap": {
-                            "is_active": true,
-                            "label": "remap",
-                            "type": 11,
-                            "type_string": "Value range",
-                            "value": [
-                                0.0,
-                                1.0
-                            ],
-                            "vmax": 2.0,
-                            "vmin": -1.0
-                        },
-                        "seed": {
-                            "label": "seed",
-                            "type": 12,
-                            "type_string": "Random seed number",
-                            "value": 0
-                        },
-                        "slope_strength": {
-                            "label": "slope_strength",
-                            "type": 6,
-                            "type_string": "Float",
-                            "value": 0.5,
-                            "vmax": 8.0,
-                            "vmin": 0.0
-                        },
-                        "z_cut_max": {
-                            "label": "z_cut_max",
-                            "type": 6,
-                            "type_string": "Float",
-                            "value": 1.0,
-                            "vmax": 2.0,
-                            "vmin": -1.0
-                        },
-                        "z_cut_min": {
-                            "label": "z_cut_min",
-                            "type": 6,
-                            "type_string": "Float",
-                            "value": 0.20000000298023224,
-                            "vmax": 2.0,
-                            "vmin": -1.0
-                        }
-                    },
                     {
                         "GPU": {
                             "label": "GPU",
@@ -232,6 +98,96 @@
                             "vmax": 10.0,
                             "vmin": 0.009999999776482582
                         }
+                    },
+                    {
+                        "angle": {
+                            "label": "angle",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.0,
+                            "vmax": 180.0,
+                            "vmin": -180.0
+                        },
+                        "angle_spread_ratio": {
+                            "label": "angle_spread_ratio",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        },
+                        "id": "2",
+                        "inverse": {
+                            "label": "inverse",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "kw": {
+                            "label": "kw",
+                            "link_xy": true,
+                            "type": 17,
+                            "type_string": "Wavenumber",
+                            "value": [
+                                2.0,
+                                2.0
+                            ],
+                            "vmax": 3.4028234663852886e+38,
+                            "vmin": 0.0
+                        },
+                        "label": "GaborWaveFbm",
+                        "lacunarity": {
+                            "label": "lacunarity",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 2.0,
+                            "vmax": 4.0,
+                            "vmin": 0.009999999776482582
+                        },
+                        "octaves": {
+                            "label": "octaves",
+                            "type": 10,
+                            "type_string": "Integer",
+                            "value": 8,
+                            "vmax": 32,
+                            "vmin": 0
+                        },
+                        "persistence": {
+                            "label": "persistence",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.5,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        },
+                        "remap": {
+                            "is_active": true,
+                            "label": "remap",
+                            "type": 11,
+                            "type_string": "Value range",
+                            "value": [
+                                0.0,
+                                1.0
+                            ],
+                            "vmax": 2.0,
+                            "vmin": -1.0
+                        },
+                        "seed": {
+                            "label": "seed",
+                            "type": 12,
+                            "type_string": "Random seed number",
+                            "value": 0
+                        },
+                        "weight": {
+                            "label": "weight",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.699999988079071,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        }
                     }
                 ],
                 "origin": [
@@ -253,7 +209,7 @@
     "graph_manager_widget": {
         "frames": {
             "graph": {
-                "current_bg_tag": "NO BACKGROUND"
+                "current_bg_tag": "GaborWaveFbm/2/output"
             }
         }
     },
@@ -267,7 +223,7 @@
                     {
                         "link_type": 2,
                         "node_in_id": "1",
-                        "node_out_id": "0",
+                        "node_out_id": "2",
                         "port_in_id": "input",
                         "port_out_id": "output"
                     }
@@ -277,19 +233,19 @@
                         "caption": "HydraulicStreamLog",
                         "id": "1",
                         "is_widget_visible": true,
-                        "scene_position.x": 10.0,
+                        "scene_position.x": -36.88470458984375,
                         "scene_position.y": -305.0
                     },
                     {
-                        "caption": "Gavoronoise",
-                        "id": "0",
+                        "caption": "GaborWaveFbm",
+                        "id": "2",
                         "is_widget_visible": true,
-                        "scene_position.x": -239.0,
-                        "scene_position.y": -348.0
+                        "scene_position.x": -337.3182678222656,
+                        "scene_position.y": -305.33758544921875
                     }
                 ]
             }
         }
     },
-    "saved_at": "2025-04-10 20:33:43"
+    "saved_at": "2025-04-11 10:33:14"
 }

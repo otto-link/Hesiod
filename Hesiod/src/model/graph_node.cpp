@@ -17,7 +17,6 @@ GraphNode::GraphNode(const std::string &id, const std::shared_ptr<ModelConfig> &
     : gnode::Graph(id), hmap::Terrain(), config(config)
 {
   LOG->trace("GraphNode::GraphNode");
-  this->config->log_debug();
 }
 
 std::string GraphNode::add_node(const std::string &node_type)
@@ -76,14 +75,19 @@ std::string GraphNode::add_node(const std::shared_ptr<gnode::Node> &node,
   return node_id;
 }
 
-void GraphNode::json_from(nlohmann::json const &json, bool override_config)
+void GraphNode::json_from(nlohmann::json const &json, ModelConfig *p_input_config)
 {
   LOG->trace("GraphNode::json_from, graph {}", this->get_id());
 
-  // if set to false, the actual state of the configuration is used
-  // (can for instance be used when modifying the configuration of an
-  // existing graph)
-  if (override_config)
+  // override the current config if one is provided
+  if (p_input_config)
+  {
+    this->config = std::make_shared<ModelConfig>(*p_input_config);
+
+    LOG->trace("GraphNode::json_from: ModelConfig override");
+    this->config->log_debug();
+  }
+  else
     this->config->json_from(json["model_config"]);
 
   this->set_id(json["id"]);

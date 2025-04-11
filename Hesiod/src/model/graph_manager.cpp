@@ -6,6 +6,7 @@
 #include "hesiod/logger.hpp"
 #include "hesiod/model/graph_manager.hpp"
 #include "hesiod/model/graph_node.hpp"
+#include "hesiod/model/model_config.hpp"
 #include "hesiod/model/utils.hpp"
 
 namespace hesiod
@@ -132,11 +133,9 @@ bool GraphManager::is_graph_id_available(const std::string &id)
   return !this->graph_nodes.contains(id);
 }
 
-void GraphManager::json_from(nlohmann::json const &json)
+void GraphManager::json_from(nlohmann::json const &json, ModelConfig *p_config)
 {
   LOG->trace("GraphManager::json_from");
-
-  // TODO fix config change in batch mode
 
   // clean-up current state
   this->clear();
@@ -151,6 +150,8 @@ void GraphManager::json_from(nlohmann::json const &json)
   {
     LOG->trace("graph id: {}", id);
 
+    // dummy default config that will be overriden after by the
+    // GraphNode instances during their 'json_from' deserialization
     auto config = std::make_shared<hesiod::ModelConfig>();
     auto graph = std::make_shared<hesiod::GraphNode>("", config);
 
@@ -160,7 +161,7 @@ void GraphManager::json_from(nlohmann::json const &json)
     // broadcast_params of the GraphManager, which is provided to the
     // graph node when added...
     this->add_graph_node(graph, id);
-    graph->json_from(json["graph_nodes"][id]);
+    graph->json_from(json["graph_nodes"][id], p_config);
   }
 }
 
@@ -185,13 +186,12 @@ nlohmann::json GraphManager::json_to() const
   return json;
 }
 
-void GraphManager::load_from_file(const std::string &fname)
+void GraphManager::load_from_file(const std::string &fname, ModelConfig *p_config)
 {
   LOG->trace("GraphManager::load_from_file: fname {}", fname);
 
   nlohmann::json json = json_from_file(fname);
-
-  this->json_from(json["graph_manager"]);
+  this->json_from(json["graph_manager"], p_config);
 
   // update graphs
   this->update();
@@ -208,16 +208,7 @@ void GraphManager::on_broadcast_node_updated(const std::string &graph_id,
       // prevent any broadcast from a top layer to a sublayer, this
       // could lead to endless loop in case of cross-broadcast
       if (this->is_graph_above(gid, graph_id))
-      {
         graph->on_broadcast_node_updated(tag);
-      }
-      else
-      {
-        LOG->warn("GraphManager::on_broadcast_node_updated: broacast prevented, graph "
-                  "[{}] is below graph [{}], check graph order",
-                  gid,
-                  graph_id);
-      }
     }
 }
 

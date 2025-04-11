@@ -184,8 +184,7 @@ void GraphNodeWidget::on_graph_settings_request()
     this->p_graph_node->clear();
 
     // deserialize but do not deserialize config, keep current one
-    bool override_config = false;
-    this->p_graph_node->json_from(json, override_config);
+    this->p_graph_node->json_from(json);
     this->p_graph_node->update();
   }
 

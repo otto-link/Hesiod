@@ -14,8 +14,9 @@ typedef unsigned int uint;
 #include "hesiod/logger.hpp"
 #include "hesiod/model/graph_manager.hpp"
 #include "hesiod/model/nodes/node_factory.hpp"
+#include "hesiod/model/utils.hpp"
 
-#include "hesiod/gui/widgets/config_widget.hpp"
+#include "hesiod/cli/batch_mode.hpp"
 
 // in this order, required by args.hxx
 std::istream &operator>>(std::istream &is, hmap::Vec2<int> &vec2)
@@ -43,13 +44,6 @@ int main(int argc, char *argv[])
   hesiod::CmapManager::get_instance();
 
   QApplication app(argc, argv); // even if headless (for QObject)
-
-  // // DBG
-  // {
-  //   CFG->dump();
-  //   auto cw = new hesiod::ConfigWidget();
-  //   cw->show();
-  // }
 
   // --- parse command line arguments
 
@@ -98,59 +92,11 @@ int main(int argc, char *argv[])
 
     if (batch)
     {
-      std::string graph_id = "graph_1"; // only one for now
-
-      std::string filename = args::get(batch);
-
-      LOG->info("executing Hesiod in batch mode");
-
-      hmap::Vec2<int> shape = shape_arg == true ? args::get(shape_arg)
-                                                : hmap::Vec2<int>(0, 0);
-      hmap::Vec2<int> tiling = tiling_arg == true ? args::get(tiling_arg)
-                                                  : hmap::Vec2<int>(0, 0);
-      float           overlap = overlap_arg == true ? args::get(overlap_arg) : -1.f;
-
-      LOG->trace("file: {}", filename);
-      LOG->trace("cli shape: {{{}, {}}}", shape.x, shape.y);
-      LOG->trace("cli tiling: {{{}, {}}}", tiling.x, tiling.y);
-      LOG->trace("cli overlap: {}", overlap);
-
-      // load json
-      nlohmann::json json;
-      std::ifstream  file(filename);
-
-      if (file.is_open())
-      {
-        file >> json;
-        file.close();
-      }
-      else
-      {
-        LOG->critical("Could not open file {} to load JSON", filename);
-        return 1;
-      }
-
-      // load config from json
-      auto config = std::make_shared<hesiod::ModelConfig>();
-      config->json_from(json["graph_node"]["model_config"]);
-
-      // adjust config based on command line inputs
-      if (shape != hmap::Vec2<int>(0, 0))
-        config->shape = shape;
-      if (tiling != hmap::Vec2<int>(0, 0))
-        config->tiling = tiling;
-      if (overlap >= 0.f)
-        config->overlap = overlap;
-
-      // instanciate and compute the graph (but replace the config
-      // from the file by the input config from the CLI)
-      // bool                is_headless = true;
-      // hesiod::GraphEditor ed = hesiod::GraphEditor("graph1", config, is_headless); //
-      // TODO
-
-      bool override_config = false;
-      // ed.load_from_file(filename, override_config);
-
+      hesiod::cli::run_batch_mode(
+          args::get(batch),
+          shape_arg ? args::get(shape_arg) : hmap::Vec2<int>(0, 0),
+          tiling_arg ? args::get(tiling_arg) : hmap::Vec2<int>(0, 0),
+          overlap_arg ? args::get(overlap_arg) : -1.f);
       return 0;
     }
 
