@@ -16,6 +16,8 @@
 #include <string>
 #include <vector>
 
+#define HSD_COLORMAP_FILE "data/cmap.json"
+
 namespace hesiod
 {
 
