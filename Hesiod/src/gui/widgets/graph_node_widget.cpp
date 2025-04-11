@@ -8,8 +8,6 @@
 #include <QVBoxLayout>
 #include <QWidgetAction>
 
-#include "gnodegui/style.hpp"
-
 #include "attributes/widgets/abstract_widget.hpp"
 #include "attributes/widgets/attributes_widget.hpp"
 
@@ -29,12 +27,6 @@ GraphNodeWidget::GraphNodeWidget(GraphNode *p_graph_node)
     : GraphViewer(p_graph_node->get_id()), p_graph_node(p_graph_node)
 {
   LOG->trace("GraphNodeWidget::GraphNodeWidget: id: {}", this->get_id());
-
-  // syles (GNodeGUI)
-  GN_STYLE->viewer.add_new_icon = false;
-  GN_STYLE->viewer.add_load_save_icons = false;
-  GN_STYLE->node.color_port_data = data_color_map;
-  GN_STYLE->node.color_category = category_color_map;
 
   // populate node catalog
   this->set_node_inventory(get_node_inventory());
