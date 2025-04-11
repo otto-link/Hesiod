@@ -2,12 +2,14 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include <QGridLayout>
+#include <QLabel>
 
 #include "highmap/colorize.hpp"
 
 #include "hesiod/gui/widgets/graph_manager_widget.hpp"
+#include "hesiod/logger.hpp"
+#include "hesiod/model/broadcast_param.hpp"
 #include "hesiod/model/graph_node.hpp"
-#include "hesiod/model/utils.hpp"
 
 namespace hesiod
 {
@@ -55,17 +57,14 @@ void GraphQListWidget::on_combobox_changed()
   this->current_bg_tag = this->combobox->currentText().toStdString();
 
   // retrieve node ID from tag
-  std::vector<std::string> tag_elements = split_string(current_bg_tag, '/');
+  std::string graph_id, node_id, port_id;
+  bool ret = get_ids_from_broadcast_tag(this->current_bg_tag, graph_id, node_id, port_id);
 
-  // this excludes the "NO BACKGROUND" tag
-  if (tag_elements.size() != 3)
+  if (!ret)
   {
     Q_EMIT this->bg_image_updated(this->p_graph_node->get_id(), QImage());
     return;
   }
-
-  std::string node_id = tag_elements[1];
-  std::string port_id = tag_elements[2];
 
   LOG->trace("GraphQListWidget::on_combobox_changed: node_id={}, port_id={}",
              node_id,
@@ -108,7 +107,7 @@ void GraphQListWidget::update_combobox()
   this->combobox->clear();
   this->combobox->addItem("NO BACKGROUND");
 
-  LOG->trace("GraphQListWidget::update_combobox, tag: {}", this->current_bg_tag);
+  LOG->trace("GraphQListWidget::update_combobox, tag: {}", tag_bckp);
 
   // list of possible data available to show on the canvas as Pixmap
   bool is_current_tag_in_combo = false;

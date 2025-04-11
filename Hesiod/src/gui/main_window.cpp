@@ -40,7 +40,6 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
   this->graph_manager_widget->show();
 
   this->graph_tabs_widget = std::make_unique<GraphTabsWidget>(this->graph_manager.get());
-  // this->graph_tabs_widget->show();
 
   this->setup_central_widget();
 

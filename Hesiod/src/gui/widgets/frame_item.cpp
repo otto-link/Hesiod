@@ -145,7 +145,13 @@ void FrameItem::paint(QPainter                       *painter,
   painter->drawRect(this->rotation_rect);
   painter->drawRect(this->resize_rect);
 
-  // QGraphicsRectItem::paint(painter, option, widget);
+  // text
+  painter->scale(1.f, -1.f);
+  QRect inv_rect(0.f,
+                 -this->rect().height(),
+                 this->rect().width(),
+                 this->rect().height());
+  painter->drawText(inv_rect, Qt::AlignLeft | Qt::AlignBottom, this->id.c_str());
 }
 
 void FrameItem::set_angle(float new_angle)
