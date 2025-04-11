@@ -2,7 +2,6 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include "hesiod/cli/batch_mode.hpp"
-#include "hesiod/config.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/graph_manager.hpp"
 #include "hesiod/model/nodes/node_factory.hpp"

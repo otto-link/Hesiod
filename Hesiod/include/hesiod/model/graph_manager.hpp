@@ -21,11 +21,6 @@
 namespace hesiod
 {
 
-// - TODO add global default config widget
-// - TODO multiple node deletion only calls one connect
-// - TODO add setting to allow broadcast within the same graph
-// - TODO keybindings to switch between editors
-
 class GraphNode; // forward
 class ModelConfig;
 
