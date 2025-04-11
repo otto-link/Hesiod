@@ -22,11 +22,8 @@ namespace hesiod
 {
 
 // - TODO add global default config widget
-// - TODO handle batch mode
-// - TODO import 1 graph
 // - TODO multiple node deletion only calls one connect
 // - TODO add setting to allow broadcast within the same graph
-// - TODO clean-up load/save with MainWindow
 // - TODO keybindings to switch between editors
 
 class GraphNode; // forward
