@@ -11,6 +11,7 @@
 #include <QMessageBox>
 #include <QSettings>
 #include <QTabWidget>
+#include <QTimer>
 
 #include "Toast.h"
 
@@ -92,14 +93,24 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
                 [this](const std::string &graph_id, const std::string & /* id */)
                 { this->graph_manager_widget->update_combobox(graph_id); });
 
+  // MainWindow -> MainWindow
+  this->autosave_timer = new QTimer(this);
+  this->autosave_timer->setSingleShot(true); // restarts on project change
+  this->autosave_timer->start(30 * 1000);    // TODO hardcoded (30 s)
+
+  this->connect(this->autosave_timer, &QTimer::timeout, this, &MainWindow::on_autosave);
+
+  // QApp -> MainWindow
+  this->connect(p_app, &QApplication::aboutToQuit, [&]() { this->save_state(); });
+
+  // --- finish setup
+
   // after widgets and graph manager
   this->setup_menu_bar();
 
   // load default config
   this->load_from_file(HSD_DEFAULT_STARTUP_FILE);
   this->graph_tabs_widget->zoom_to_content();
-
-  this->connect(p_app, &QApplication::aboutToQuit, [&]() { this->save_state(); });
 
   // here, at the end
   this->set_is_dirty(false);
@@ -160,10 +171,20 @@ void MainWindow::load_from_file(const std::string &fname)
   this->graph_tabs_widget->json_from(json["graph_tabs_widget"]);
 }
 
+void MainWindow::on_autosave()
+{
+  std::filesystem::path fname = this->project_path.empty() ? "./no_name.hsd"
+                                                           : this->project_path;
+
+  fname = insert_before_extension(fname, "_autosave");
+  this->save_to_file(fname.string());
+}
+
 void MainWindow::on_has_changed()
 {
   LOG->trace("MainWindow::on_has_changed");
   this->set_is_dirty(true);
+  this->autosave_timer->start();
 }
 
 void MainWindow::on_load()
@@ -460,7 +481,7 @@ void notify(const std::string &title, const std::string &text)
   toast->setText(text.c_str());
 
   // TODO hardcoded colors and parameters
-  
+
   toast->setBackgroundColor(QColor("#3C3C3C"));
   toast->setTitleColor(QColor("#EFF1F2"));
   toast->setTextColor(QColor("#DFE1E2"));

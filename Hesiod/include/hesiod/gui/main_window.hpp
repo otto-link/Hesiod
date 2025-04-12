@@ -66,6 +66,7 @@ private slots:
   void closeEvent(QCloseEvent *event) override;
 
   // --- User Actions ---
+  void on_autosave();
   void on_has_changed(); // whole project
   void on_load();
   void on_new();
@@ -98,6 +99,7 @@ private:
   // --- Members ---
   std::filesystem::path project_path = "";
   bool                  is_dirty = false;
+  QTimer               *autosave_timer; // own by this
 };
 
 // =====================================
