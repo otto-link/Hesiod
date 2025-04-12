@@ -70,6 +70,9 @@ private slots:
   void on_load();
   void on_new();
   void on_quit();
+  void on_save();
+  void on_save_as();
+  void on_save_copy();
   void show_about();
 
 private:

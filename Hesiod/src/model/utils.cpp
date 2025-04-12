@@ -12,6 +12,16 @@
 namespace hesiod
 {
 
+std::filesystem::path insert_before_extension(const std::filesystem::path &original_path,
+                                              const std::string           &insert_str)
+{
+  std::filesystem::path dir = original_path.parent_path();
+  std::string           stem = original_path.stem().string();
+  std::string           ext = original_path.extension().string();
+  std::filesystem::path new_name = stem + insert_str + ext;
+  return dir / new_name;
+}
+
 nlohmann::json json_from_file(const std::string &fname)
 {
   nlohmann::json json;

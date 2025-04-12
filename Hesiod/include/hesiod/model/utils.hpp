@@ -13,12 +13,16 @@
  */
 
 #pragma once
+#include <filesystem>
 #include <string>
 
 #include "nlohmann/json.hpp"
 
 namespace hesiod
 {
+
+std::filesystem::path insert_before_extension(const std::filesystem::path &original_path,
+                                              const std::string           &insert_str);
 
 nlohmann::json json_from_file(const std::string &fname);
 void           json_to_file(const nlohmann::json &json, const std::string &fname);

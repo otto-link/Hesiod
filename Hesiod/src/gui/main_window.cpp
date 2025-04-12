@@ -206,6 +206,51 @@ void MainWindow::on_quit()
     QApplication::quit();
 }
 
+void MainWindow::on_save()
+{
+  if (this->project_path.empty())
+    this->on_save_as();
+  else
+  {
+    this->save_to_file(this->project_path.string());
+    this->set_is_dirty(false);
+  }
+}
+
+void MainWindow::on_save_as()
+{
+  std::filesystem::path path = this->project_path.parent_path();
+
+  QString new_fname = QFileDialog::getSaveFileName(this,
+                                                   "Save as...",
+                                                   path.string().c_str(),
+                                                   "Hesiod files (*.hsd)");
+
+  if (!new_fname.isNull() && !new_fname.isEmpty())
+  {
+    this->set_project_path(new_fname.toStdString());
+    this->save_to_file(new_fname.toStdString());
+    this->set_is_dirty(false);
+  }
+}
+
+void MainWindow::on_save_copy()
+{
+  if (this->project_path.empty())
+    this->on_save_as();
+  else
+  {
+    std::filesystem::path fname = insert_before_extension(this->project_path,
+                                                          "_" + time_stamp());
+    this->save_to_file(fname.string());
+    this->set_is_dirty(false);
+
+    notify("Save a copy",
+           std::format("A copy of the current project has been saved as: {}",
+                       fname.filename().string()));
+  }
+}
+
 void MainWindow::restore_state()
 {
   QSettings settings(HSD_SETTINGS_ORG, HSD_SETTINGS_APP);
@@ -314,6 +359,10 @@ void MainWindow::setup_menu_bar()
   save_as->setShortcut(tr("Ctrl+Shift+S"));
   file_menu->addAction(save_as);
 
+  auto *save_copy = new QAction("Save a copy", this);
+  save_copy->setShortcut(tr("Ctrl+Alt+S"));
+  file_menu->addAction(save_copy);
+
   file_menu->addSeparator();
 
   auto *quit = new QAction("Quit", this);
@@ -358,39 +407,11 @@ void MainWindow::setup_menu_bar()
                 [show_layout_manager]() { show_layout_manager->setChecked(false); });
 
   // save / save as
-  {
-    auto lambda_save_as = [this]()
-    {
-      std::filesystem::path path = this->project_path.parent_path();
+  this->connect(save, &QAction::triggered, this, &MainWindow::on_save);
 
-      QString new_fname = QFileDialog::getSaveFileName(this,
-                                                       "Save as...",
-                                                       path.string().c_str(),
-                                                       "Hesiod files (*.hsd)");
+  this->connect(save_as, &QAction::triggered, this, &MainWindow::on_save_as);
 
-      if (!new_fname.isNull() && !new_fname.isEmpty())
-      {
-        this->set_project_path(new_fname.toStdString());
-        this->save_to_file(new_fname.toStdString());
-        this->set_is_dirty(false);
-      }
-    };
-
-    this->connect(save,
-                  &QAction::triggered,
-                  [this, lambda_save_as]()
-                  {
-                    if (this->project_path.empty())
-                      lambda_save_as();
-                    else
-                    {
-                      this->save_to_file(this->project_path.string());
-                      this->set_is_dirty(false);
-                    }
-                  });
-
-    this->connect(save_as, &QAction::triggered, lambda_save_as);
-  }
+  this->connect(save_copy, &QAction::triggered, this, &MainWindow::on_save_copy);
 
   // --- graphs
   this->connect(new_graph,
@@ -438,9 +459,11 @@ void notify(const std::string &title, const std::string &text)
   toast->setTitle(title.c_str());
   toast->setText(text.c_str());
 
+  // TODO hardcoded colors and parameters
+  
   toast->setBackgroundColor(QColor("#3C3C3C"));
-  toast->setTitleColor(QColor("#DFE1E2"));
-  toast->setTextColor(QColor("#5B5B5B"));
+  toast->setTitleColor(QColor("#EFF1F2"));
+  toast->setTextColor(QColor("#DFE1E2"));
   toast->setDurationBarColor(QColor("#5B5B5B"));
   toast->setIconSeparatorColor(QColor("#4772b3"));
   toast->setCloseButtonIconColor(QColor("#DFE1E2"));
