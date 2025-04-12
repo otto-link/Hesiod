@@ -40,6 +40,7 @@ public:
 
 signals:
   void has_been_cleared(const std::string &graph_id);
+  void has_changed();
   void new_node_created(const std::string &graph_id, const std::string &id);
   void node_deleted(const std::string &graph_id, const std::string &id);
 

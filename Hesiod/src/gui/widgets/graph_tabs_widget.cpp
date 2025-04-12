@@ -74,6 +74,7 @@ nlohmann::json GraphTabsWidget::json_to() const
 void GraphTabsWidget::on_has_been_cleared(const std::string &graph_id)
 {
   Q_EMIT this->has_been_cleared(graph_id);
+  Q_EMIT this->has_changed();
 }
 
 void GraphTabsWidget::on_new_node_created(const std::string &graph_id,
@@ -91,11 +92,13 @@ void GraphTabsWidget::on_new_node_created(const std::string &graph_id,
   }
 
   Q_EMIT this->new_node_created(graph_id, id);
+  Q_EMIT this->has_changed();
 }
 
 void GraphTabsWidget::on_node_deleted(const std::string &graph_id, const std::string &id)
 {
   Q_EMIT this->node_deleted(graph_id, id);
+  Q_EMIT this->has_changed();
 }
 
 void GraphTabsWidget::set_selected_tab(const std::string &graph_id)

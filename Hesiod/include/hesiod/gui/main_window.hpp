@@ -47,6 +47,7 @@ public:
 
   // --- Accessors ---
   std::string get_project_name() const;
+  void        set_is_dirty(bool new_is_dirty);
   void        set_project_path(const std::string &new_project_path);
   void        set_project_path(const std::filesystem::path &new_project_path);
   void        set_title(const std::string &new_title);
@@ -65,6 +66,7 @@ private slots:
   void closeEvent(QCloseEvent *event) override;
 
   // --- User Actions ---
+  void on_has_changed(); // whole project
   void on_load();
   void on_new();
   void on_quit();
@@ -83,13 +85,16 @@ private:
   void setup_central_widget();
   void setup_graph_manager();
   void setup_menu_bar();
-
-  std::filesystem::path project_path = "";
+  void update_window_title();
 
   // --- Storage... ---
   std::unique_ptr<GraphManager>       graph_manager;
   std::unique_ptr<GraphManagerWidget> graph_manager_widget;
   std::unique_ptr<GraphTabsWidget>    graph_tabs_widget;
+
+  // --- Members ---
+  std::filesystem::path project_path = "";
+  bool                  is_dirty = false;
 };
 
 // =====================================

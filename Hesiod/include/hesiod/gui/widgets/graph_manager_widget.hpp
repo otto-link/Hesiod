@@ -46,6 +46,7 @@ public:
 
 signals:
   void bg_image_updated(const std::string &graph_id, const QImage &image);
+  void has_changed();
 
 public slots:
   // --- User Actions ---
@@ -83,6 +84,7 @@ public:
 
 signals:
   void graph_removed();
+  void has_changed();
   void list_reordered();
   void new_graph_added();
   void selected_graph_changed(const std::string &graph_id);

@@ -28,7 +28,6 @@ namespace hesiod
 
 MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(parent)
 {
-  this->setWindowTitle(tr("Hesiod"));
   this->restore_state();
 
   // model
@@ -44,6 +43,17 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
   this->setup_central_widget();
 
   // --- connections
+
+  // widgets -> MainWindow
+  this->connect(this->graph_manager_widget.get(),
+                &GraphManagerWidget::has_changed,
+                this,
+                &MainWindow::on_has_changed);
+
+  this->connect(this->graph_tabs_widget.get(),
+                &GraphTabsWidget::has_changed,
+                this,
+                &MainWindow::on_has_changed);
 
   // GraphManagerWidget -> GraphTabsWidget
   this->connect(this->graph_manager_widget.get(),
@@ -92,6 +102,9 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
   this->graph_tabs_widget->zoom_to_content();
 
   this->connect(p_app, &QApplication::aboutToQuit, [&]() { this->save_state(); });
+
+  // here, at the end
+  this->set_is_dirty(false);
 }
 
 MainWindow::~MainWindow() { this->save_state(); }
@@ -147,6 +160,12 @@ void MainWindow::load_from_file(const std::string &fname)
   // GUI
   this->graph_manager_widget->json_from(json["graph_manager_widget"]);
   this->graph_tabs_widget->json_from(json["graph_tabs_widget"]);
+}
+
+void MainWindow::on_has_changed()
+{
+  LOG->trace("MainWindow::on_has_changed");
+  this->set_is_dirty(true);
 }
 
 void MainWindow::on_load()
@@ -242,6 +261,12 @@ bool MainWindow::save_to_file(const std::string &fname) const
   }
 }
 
+void MainWindow::set_is_dirty(bool new_is_dirty)
+{
+  this->is_dirty = new_is_dirty;
+  this->update_window_title();
+}
+
 void MainWindow::set_project_path(const std::string &new_project_path)
 {
   this->set_project_path(std::filesystem::path(new_project_path));
@@ -250,12 +275,7 @@ void MainWindow::set_project_path(const std::string &new_project_path)
 void MainWindow::set_project_path(const std::filesystem::path &new_project_path)
 {
   this->project_path = new_project_path;
-
-  std::string title = "Hesiod";
-  if (!this->project_path.empty())
-    title += " - " + this->get_project_name();
-
-  this->set_title(title.c_str());
+  this->update_window_title();
 }
 
 void MainWindow::set_title(const std::string &new_title)
@@ -359,6 +379,7 @@ void MainWindow::setup_menu_bar()
       {
         this->set_project_path(new_fname.toStdString());
         this->save_to_file(new_fname.toStdString());
+        this->set_is_dirty(false);
       }
     };
 
@@ -369,7 +390,10 @@ void MainWindow::setup_menu_bar()
                     if (this->project_path.empty())
                       lambda_save_as();
                     else
+                    {
                       this->save_to_file(this->project_path.string());
+                      this->set_is_dirty(false);
+                    }
                   });
 
     this->connect(save_as, &QAction::triggered, lambda_save_as);
@@ -397,6 +421,17 @@ void MainWindow::show_about()
   QMessageBox msg_box;
   msg_box.setText(msg.c_str());
   msg_box.exec();
+}
+
+void MainWindow::update_window_title()
+{
+  std::string title = "Hesiod";
+  if (!this->project_path.empty())
+    title += " - " + this->get_project_name();
+
+  title += this->is_dirty ? "*" : "";
+
+  this->set_title(title.c_str());
 }
 
 // functions

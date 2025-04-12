@@ -136,6 +136,11 @@ void GraphManagerWidget::add_list_item(const std::string &id)
       [this](const std::string &id, const QImage &image)
       { this->coord_frame_widget->get_frame_ref(id)->set_background_image(image); });
 
+  this->connect(widget,
+                &GraphQListWidget::has_changed,
+                this,
+                [this]() { Q_EMIT this->has_changed(); });
+
   this->connect(this->p_graph_manager->get_graph_nodes().at(id).get(),
                 &GraphNode::update_finished, // TODO NOPE
                 widget,
@@ -224,6 +229,8 @@ void GraphManagerWidget::on_apply_changes()
 
   // clean state
   this->set_is_dirty(false);
+
+  Q_EMIT this->has_changed();
 }
 
 void GraphManagerWidget::on_item_double_clicked(QListWidgetItem *item)
