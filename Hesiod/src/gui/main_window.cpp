@@ -1,8 +1,6 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-#include <chrono>
-#include <iomanip>
 #include <iostream>
 #include <sstream>
 
@@ -235,12 +233,7 @@ bool MainWindow::save_to_file(const std::string &fname) const
                              std::to_string(HESIOD_VERSION_MINOR) + "." +
                              std::to_string(HESIOD_VERSION_PATCH);
 
-    // save current date and time
-    auto              now = std::chrono::system_clock::now();
-    std::time_t       now_c = std::chrono::system_clock::to_time_t(now);
-    std::stringstream time_stream;
-    time_stream << std::put_time(std::localtime(&now_c), "%Y-%m-%d %H:%M:%S");
-    json["saved_at"] = time_stream.str();
+    json["saved_at"] = time_stamp();
 
     // model
     json["graph_manager"] = this->graph_manager->json_to();

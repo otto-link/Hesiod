@@ -1,7 +1,9 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include <chrono>
 #include <fstream>
+#include <iomanip>
 
 #include "highmap/filters.hpp"
 #include "highmap/heightmap.hpp"
@@ -131,6 +133,15 @@ std::vector<std::string> split_string(const std::string &string, char delimiter)
     result.push_back(word);
 
   return result;
+}
+
+std::string time_stamp()
+{
+  auto              now = std::chrono::system_clock::now();
+  std::time_t       now_c = std::chrono::system_clock::to_time_t(now);
+  std::stringstream time_stream;
+  time_stream << std::put_time(std::localtime(&now_c), "%Y-%m-%d %H:%M:%S");
+  return time_stream.str();
 }
 
 } // namespace hesiod

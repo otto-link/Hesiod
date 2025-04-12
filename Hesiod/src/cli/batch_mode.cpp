@@ -5,7 +5,7 @@
 #include "hesiod/logger.hpp"
 #include "hesiod/model/graph_manager.hpp"
 #include "hesiod/model/nodes/node_factory.hpp"
-#include "hesiod/model/utils.hpp"
+#include "hesiod/model/nodes/post_process.hpp"
 
 namespace hesiod::cli
 {

@@ -13,31 +13,18 @@
  */
 
 #pragma once
+#include <string>
 
-#include "highmap/heightmap.hpp"
-
-#include "hesiod/model/nodes/base_node.hpp"
+#include "nlohmann/json.hpp"
 
 namespace hesiod
 {
 
 nlohmann::json json_from_file(const std::string &fname);
-
-void json_to_file(const nlohmann::json &json, const std::string &fname);
-
-void post_apply_enveloppe(BaseNode *p_node, hmap::Heightmap &h, hmap::Heightmap *p_env);
-
-void post_process_heightmap(BaseNode         *p_node,
-                            hmap::Heightmap  &h,
-                            bool              inverse,
-                            bool              smoothing,
-                            float             smoothing_radius,
-                            bool              saturate,
-                            hmap::Vec2<float> saturate_range,
-                            float             saturate_k,
-                            bool              remap,
-                            hmap::Vec2<float> remap_range);
+void           json_to_file(const nlohmann::json &json, const std::string &fname);
 
 std::vector<std::string> split_string(const std::string &string, char delimiter);
+
+std::string time_stamp();
 
 } // namespace hesiod
