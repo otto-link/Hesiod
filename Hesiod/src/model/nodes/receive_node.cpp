@@ -29,16 +29,16 @@ BroadcastMap *ReceiveNode::get_p_broadcast_params()
   return this->p_broadcast_params;
 }
 
-hmap::Terrain *ReceiveNode::get_p_target_terrain() { return this->p_target_terrain; }
+hmap::CoordFrame *ReceiveNode::get_p_coord_frame() { return this->p_coord_frame; }
 
 void ReceiveNode::set_p_broadcast_params(BroadcastMap *new_p_broadcast_params)
 {
   this->p_broadcast_params = new_p_broadcast_params;
 }
 
-void ReceiveNode::set_p_target_terrain(hmap::Terrain *new_p_target_terrain)
+void ReceiveNode::set_p_coord_frame(hmap::CoordFrame *new_p_coord_frame)
 {
-  this->p_target_terrain = new_p_target_terrain;
+  this->p_coord_frame = new_p_coord_frame;
 }
 
 void ReceiveNode::update_tag_list(const std::vector<std::string> &new_tags)

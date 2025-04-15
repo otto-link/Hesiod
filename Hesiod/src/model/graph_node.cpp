@@ -14,7 +14,7 @@ namespace hesiod
 {
 
 GraphNode::GraphNode(const std::string &id, const std::shared_ptr<ModelConfig> &config)
-    : gnode::Graph(id), hmap::Terrain(), config(config)
+    : gnode::Graph(id), hmap::CoordFrame(), config(config)
 {
   LOG->trace("GraphNode::GraphNode");
 }
@@ -93,7 +93,7 @@ void GraphNode::json_from(nlohmann::json const &json, ModelConfig *p_input_confi
   this->set_id(json["id"]);
   this->set_id_count(json["id_count"]);
 
-  // hmap::Terrain
+  // hmap::CoordFrame
   auto vo = json["origin"].get<std::vector<float>>();
   auto vs = json["size"].get<std::vector<float>>();
 
@@ -134,7 +134,7 @@ nlohmann::json GraphNode::json_to() const
   json["id_count"] = this->get_id_count();
   json["model_config"] = this->config->json_to();
 
-  // hmap::Terrain
+  // hmap::CoordFrame
   json["origin"] = {this->get_origin().x, this->get_origin().y};
   json["size"] = {this->get_size().x, this->get_size().y};
   json["rotation_angle"] = this->get_rotation_angle();
@@ -253,8 +253,8 @@ void GraphNode::setup_new_broadcast_node(BaseNode *p_node)
   // always available, full of zeros in worst case scenario
   const std::string tag = this->get_node_ref_by_id<BroadcastNode>(p_node->get_id())
                               ->get_broadcast_tag();
-  const hmap::Terrain   *t_source = dynamic_cast<hmap::Terrain *>(this);
-  const hmap::Heightmap *h_source = this->get_node_ref_by_id(p_node->get_id())
+  const hmap::CoordFrame *t_source = dynamic_cast<hmap::CoordFrame *>(this);
+  const hmap::Heightmap  *h_source = this->get_node_ref_by_id(p_node->get_id())
                                         ->get_value_ref<hmap::Heightmap>("thru");
 
   Q_EMIT this->new_broadcast_tag(tag, t_source, h_source);
@@ -273,7 +273,7 @@ void GraphNode::setup_new_receive_node(BaseNode *p_node)
   }
 
   p_receive_node->set_p_broadcast_params(this->p_broadcast_params);
-  p_receive_node->set_p_target_terrain(dynamic_cast<hmap::Terrain *>(this));
+  p_receive_node->set_p_coord_frame(dynamic_cast<hmap::CoordFrame *>(this));
 }
 
 void GraphNode::update()

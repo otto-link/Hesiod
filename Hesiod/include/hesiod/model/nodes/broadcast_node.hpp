@@ -9,8 +9,6 @@
  * @copyright Copyright (c) 2025
  */
 #pragma once
-#include "highmap/terrain/terrain.hpp"
-
 #include "hesiod/model/nodes/base_node.hpp"
 
 namespace hesiod

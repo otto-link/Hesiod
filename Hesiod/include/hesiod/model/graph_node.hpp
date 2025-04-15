@@ -14,7 +14,7 @@
 #include "nlohmann/json.hpp"
 
 #include "gnode/graph.hpp"
-#include "highmap/terrain/terrain.hpp"
+#include "highmap/coord_frame.hpp"
 
 #include "hesiod/model/broadcast_param.hpp"
 #include "hesiod/model/model_config.hpp"
@@ -27,7 +27,7 @@ class BaseNode; // forward
 // =====================================
 // GraphNode
 // =====================================
-class GraphNode : public QObject, public gnode::Graph, public hmap::Terrain
+class GraphNode : public QObject, public gnode::Graph, public hmap::CoordFrame
 {
   Q_OBJECT
 
@@ -65,9 +65,9 @@ signals:
   void update_finished(const std::string &graph_id);
 
   void broadcast_node_updated(const std::string &graph_id, const std::string &tag);
-  void new_broadcast_tag(const std::string     &tag,
-                         const hmap::Terrain   *t_source,
-                         const hmap::Heightmap *h_source);
+  void new_broadcast_tag(const std::string      &tag,
+                         const hmap::CoordFrame *t_source,
+                         const hmap::Heightmap  *h_source);
   void remove_broadcast_tag(const std::string &tag);
 
 private:

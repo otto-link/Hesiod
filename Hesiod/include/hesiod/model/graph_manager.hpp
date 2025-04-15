@@ -66,9 +66,9 @@ public:
 private slots:
   // --- Intergraph interactions ---
   void on_broadcast_node_updated(const std::string &graph_id, const std::string &tag);
-  void on_new_broadcast_tag(const std::string     &tag,
-                            const hmap::Terrain   *t_source,
-                            const hmap::Heightmap *h_source);
+  void on_new_broadcast_tag(const std::string      &tag,
+                            const hmap::CoordFrame *t_source,
+                            const hmap::Heightmap  *h_source);
   void on_remove_broadcast_tag(const std::string &tag);
 
 signals:

@@ -212,9 +212,9 @@ void GraphManager::on_broadcast_node_updated(const std::string &graph_id,
     }
 }
 
-void GraphManager::on_new_broadcast_tag(const std::string     &tag,
-                                        const hmap::Terrain   *t_source,
-                                        const hmap::Heightmap *h_source)
+void GraphManager::on_new_broadcast_tag(const std::string      &tag,
+                                        const hmap::CoordFrame *t_source,
+                                        const hmap::Heightmap  *h_source)
 {
   LOG->trace("GraphManager::on_new_broadcast_tag: tag {}", tag);
 

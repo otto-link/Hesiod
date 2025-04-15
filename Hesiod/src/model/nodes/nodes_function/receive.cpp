@@ -3,6 +3,8 @@
  * this software. */
 #include "attributes.hpp"
 
+#include "highmap/interpolate_array.hpp"
+
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
@@ -66,14 +68,18 @@ void compute_receive_node(BaseNode *p_node)
     BroadcastParam broadcast_param = p_receive_node->get_p_broadcast_params()->at(tag);
 
     // retrieve various pointers for this broadcast
-    const hmap::Terrain   *t_source = broadcast_param.t_source;
-    const hmap::Heightmap *p_h = broadcast_param.p_h;
-    hmap::Terrain         *t_target = p_receive_node->get_p_target_terrain();
+    const hmap::CoordFrame *t_source = broadcast_param.t_source;
+    const hmap::Heightmap  *p_h = broadcast_param.p_h;
+    hmap::CoordFrame       *t_target = p_receive_node->get_p_coord_frame();
 
     if (t_source && p_h && t_target)
-      hmap::interpolate_terrain_heightmap(*t_source, *p_h, *t_target, *p_out);
+    {
+      hmap::interpolate_heightmap(*p_h, *p_out, *t_source, *t_target);
+    }
     else
+    {
       LOG->warn("broadcast inputs not available (nullptr)");
+    }
   }
   else
   {

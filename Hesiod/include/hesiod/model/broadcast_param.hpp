@@ -12,7 +12,7 @@
 #include <map>
 #include <string>
 
-#include "highmap/terrain/terrain.hpp"
+#include "highmap/coord_frame.hpp"
 
 namespace hesiod
 {
@@ -22,8 +22,8 @@ namespace hesiod
 // =====================================
 struct BroadcastParam
 {
-  const hmap::Terrain   *t_source = nullptr;
-  const hmap::Heightmap *p_h = nullptr;
+  const hmap::CoordFrame *t_source = nullptr;
+  const hmap::Heightmap  *p_h = nullptr;
 };
 
 using BroadcastMap = std::map<std::string, BroadcastParam>;
