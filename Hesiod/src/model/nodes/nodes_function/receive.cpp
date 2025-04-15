@@ -71,25 +71,9 @@ void compute_receive_node(BaseNode *p_node)
     hmap::Terrain         *t_target = p_receive_node->get_p_target_terrain();
 
     if (t_source && p_h && t_target)
-    {
-      hmap::Vec2<float> size_s = t_source->get_size();
-      hmap::Vec2<float> size_t = t_target->get_size();
-
-      hmap::Vec4<float> bbox_s = {0.f, size_s.x, 0.f, size_s.y};
-      hmap::Vec4<float> bbox_t = {0.f, size_t.x, 0.f, size_t.y};
-
-      // work on a copy of the incoming heightmap
-      hmap::Heightmap h_src = *p_h;
-
-      h_src.set_bbox(bbox_s);
-      p_out->set_bbox(bbox_t);
-
-      hmap::interpolate_terrain_heightmap(*t_source, h_src, *t_target, *p_out);
-    }
+      hmap::interpolate_terrain_heightmap(*t_source, *p_h, *t_target, *p_out);
     else
-    {
       LOG->warn("broadcast inputs not available (nullptr)");
-    }
   }
   else
   {
