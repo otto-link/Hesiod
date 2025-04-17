@@ -44,4 +44,9 @@ QWidget *BaseNode::get_qwidget_ref()
   return (QWidget *)this->data_preview;
 }
 
+std::string BaseNode::get_tool_tip_text()
+{
+  return this->get_caption() + "/" + this->get_id();
+}
+
 } // namespace hesiod

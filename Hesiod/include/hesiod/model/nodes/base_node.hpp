@@ -93,6 +93,7 @@ public:
   std::string      get_port_caption(int port_index) const override;
   gngui::PortType  get_port_type(int port_index) const override;
   virtual QWidget *get_qwidget_ref() override;
+  std::string      get_tool_tip_text() override;
 
   // --- Editor Connection ---
   GraphEditor *get_p_graph_node() const;
