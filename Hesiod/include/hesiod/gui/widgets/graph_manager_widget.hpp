@@ -40,6 +40,10 @@ class GraphQListWidget : public QWidget
 public:
   GraphQListWidget(GraphNode *p_graph_node, QWidget *parent = nullptr);
 
+  // --- Accessors ---
+  std::string get_current_bg_tag() const;
+  GraphNode  *get_p_graph_node();
+
   // --- Serialization ---
   void           json_from(nlohmann::json const &json);
   nlohmann::json json_to() const;
@@ -93,6 +97,7 @@ signals:
 public slots:
   // --- User Actions ---
   void on_apply_changes();
+  void on_export();
   void on_item_double_clicked(QListWidgetItem *item);
   void on_list_reordered(const QModelIndex &, int, int, const QModelIndex &, int);
   void on_new_graph_request();

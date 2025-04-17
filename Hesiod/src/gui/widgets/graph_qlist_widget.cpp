@@ -36,6 +36,10 @@ GraphQListWidget::GraphQListWidget(GraphNode *p_graph_node, QWidget *parent)
                 &GraphQListWidget::on_combobox_changed);
 }
 
+std::string GraphQListWidget::get_current_bg_tag() const { return this->current_bg_tag; }
+
+GraphNode *GraphQListWidget::get_p_graph_node() { return this->p_graph_node; }
+
 void GraphQListWidget::json_from(nlohmann::json const &json)
 {
   this->current_bg_tag = json["current_bg_tag"].get<std::string>();

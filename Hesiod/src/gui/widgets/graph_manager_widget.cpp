@@ -6,6 +6,10 @@
 #include <QPushButton>
 #include <QSettings>
 
+#include "highmap/coord_frame.hpp"
+#include "highmap/heightmap.hpp"
+#include "highmap/interpolate_array.hpp"
+
 #include "hesiod/gui/main_window.hpp"
 #include "hesiod/gui/widgets/coord_frame_widget.hpp"
 #include "hesiod/gui/widgets/graph_manager_widget.hpp"
@@ -50,7 +54,7 @@ GraphManagerWidget::GraphManagerWidget(GraphManager *p_graph_manager, QWidget *p
   for (auto &id : this->p_graph_manager->get_graph_order())
     this->add_list_item(id);
 
-  layout->addWidget(this->list_widget, row++, 1, 1, 3);
+  layout->addWidget(this->list_widget, row++, 1, 1, 4);
 
   // buttons
   QPushButton *new_button = new QPushButton("New");
@@ -59,9 +63,12 @@ GraphManagerWidget::GraphManagerWidget(GraphManager *p_graph_manager, QWidget *p
   QPushButton *zoom_button = new QPushButton("Zoom");
   layout->addWidget(zoom_button, row, 2);
 
+  QPushButton *export_button = new QPushButton("Export");
+  layout->addWidget(export_button, row, 3);
+
   this->apply_button = new QPushButton("Apply");
   this->apply_button->setStyleSheet("QPushButton:enabled {background-color: red;}");
-  layout->addWidget(apply_button, row, 3);
+  layout->addWidget(apply_button, row, 4);
 
   row++;
 
@@ -93,6 +100,11 @@ GraphManagerWidget::GraphManagerWidget(GraphManager *p_graph_manager, QWidget *p
                 &QPushButton::pressed,
                 this,
                 &GraphManagerWidget::on_new_graph_request);
+
+  this->connect(export_button,
+                &QPushButton::pressed,
+                this,
+                &GraphManagerWidget::on_export);
 
   // frames canvas
   this->connect(this->coord_frame_widget,
@@ -231,6 +243,92 @@ void GraphManagerWidget::on_apply_changes()
   this->set_is_dirty(false);
 
   Q_EMIT this->has_changed();
+}
+
+void GraphManagerWidget::on_export()
+{
+  // TODO move to GraphManager, also keep track of bg_tag in GraphManager
+  LOG->trace("GraphManagerWidget::on_export");
+
+  // compute global bounding box
+  hmap::Vec4<float> bbox_global(std::numeric_limits<float>::max(),
+                                std::numeric_limits<float>::lowest(),
+                                std::numeric_limits<float>::max(),
+                                std::numeric_limits<float>::lowest());
+
+  for (auto &id : this->p_graph_manager->get_graph_order())
+  {
+    hmap::Vec4<float>
+        bbox = this->p_graph_manager->get_graph_nodes().at(id)->compute_bounding_box();
+
+    bbox_global = hmap::Vec4<float>(std::min(bbox_global.a, bbox.a),
+                                    std::max(bbox_global.b, bbox.b),
+                                    std::min(bbox_global.c, bbox.c),
+                                    std::max(bbox_global.d, bbox.d));
+  }
+
+  LOG->trace("bbox_global: ({}, {}, {}, {})",
+             bbox_global.a,
+             bbox_global.b,
+             bbox_global.c,
+             bbox_global.d);
+
+  // target heightmap
+  hmap::Vec2<int> shape(1024, 1024); // TODO GUI
+  hmap::Vec2<int> tiling(1, 1);      // TODO GUI
+  float           overlap = 0.f;     // TODO GUI
+
+  hmap::Heightmap h_export(shape, tiling, overlap);
+
+  // retrieve for each graph the selected tag and the corresponding data
+  std::vector<const hmap::Heightmap *>  h_sources;
+  std::vector<const hmap::CoordFrame *> t_sources;
+
+  for (int i = 0; i < this->list_widget->count(); ++i)
+  {
+    QListWidgetItem *item = this->list_widget->item(i);
+    QWidget         *widget = this->list_widget->itemWidget(item);
+    if (auto gw_widget = dynamic_cast<GraphQListWidget *>(widget))
+    {
+      std::string tag = gw_widget->get_current_bg_tag();
+
+      // retrieve node ID from tag
+      std::string graph_id, node_id, port_id;
+      bool        ret = get_ids_from_broadcast_tag(tag, graph_id, node_id, port_id);
+
+      if (ret)
+      {
+        LOG->trace("adding layer: {}", tag);
+
+        hmap::Heightmap *p_h = gw_widget->get_p_graph_node()
+                                   ->get_node_ref_by_id(node_id)
+                                   ->get_value_ref<hmap::Heightmap>(port_id);
+
+        hmap::CoordFrame *p_t = dynamic_cast<hmap::CoordFrame *>(
+            gw_widget->get_p_graph_node());
+
+        h_sources.push_back(p_h);
+        t_sources.push_back(p_t);
+      }
+      else
+      {
+        LOG->trace("skipping layer: {}", tag);
+      }
+    }
+  }
+
+  // flatten
+  LOG->trace("exporting...");
+
+  hmap::Vec2<float> origin(bbox_global.a, bbox_global.c);
+  hmap::Vec2<float> size(bbox_global.b - bbox_global.a, bbox_global.d - bbox_global.c);
+  float             rotation_angle = 0.f;
+  hmap::CoordFrame  frame_export(origin, size, rotation_angle);
+
+  hmap::flatten_heightmap(h_sources, h_export, t_sources, frame_export);
+
+  // TODO export
+  h_export.to_array().to_png("export.png", hmap::Cmap::TERRAIN, true);
 }
 
 void GraphManagerWidget::on_item_double_clicked(QListWidgetItem *item)
