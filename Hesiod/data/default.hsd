@@ -3,6 +3,7 @@
     "graph_manager": {
         "graph_nodes": {
             "graph": {
+                "export_tag": "GaborWaveFbm/2/output",
                 "id": "graph",
                 "id_count": 3,
                 "links": [
@@ -216,6 +217,7 @@
     "graph_tabs_widget": {
         "graph_node_widgets": {
             "graph": {
+                "comments": [],
                 "current_link_type": 2,
                 "groups": [],
                 "id": "graph",
@@ -230,22 +232,22 @@
                 ],
                 "nodes": [
                     {
-                        "caption": "HydraulicStreamLog",
-                        "id": "1",
-                        "is_widget_visible": true,
-                        "scene_position.x": -36.88470458984375,
-                        "scene_position.y": -305.0
-                    },
-                    {
                         "caption": "GaborWaveFbm",
                         "id": "2",
                         "is_widget_visible": true,
                         "scene_position.x": -337.3182678222656,
                         "scene_position.y": -305.33758544921875
+                    },
+                    {
+                        "caption": "HydraulicStreamLog",
+                        "id": "1",
+                        "is_widget_visible": true,
+                        "scene_position.x": -36.88470458984375,
+                        "scene_position.y": -305.0
                     }
                 ]
             }
         }
     },
-    "saved_at": "2025-04-11 10:33:14"
+    "saved_at": "2025-04-18_14:00:54"
 }

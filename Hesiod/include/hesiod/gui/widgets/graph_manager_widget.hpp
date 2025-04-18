@@ -63,7 +63,7 @@ private:
   // --- Members ---
   GraphNode  *p_graph_node;
   QComboBox  *combobox;
-  std::string current_bg_tag;
+  std::string current_bg_tag; // == export_tag of GraphNode
 };
 
 // =====================================

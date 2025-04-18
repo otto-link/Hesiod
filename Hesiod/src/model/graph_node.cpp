@@ -75,6 +75,8 @@ std::string GraphNode::add_node(const std::shared_ptr<gnode::Node> &node,
   return node_id;
 }
 
+std::string GraphNode::get_export_tag() const { return this->export_tag; }
+
 void GraphNode::json_from(nlohmann::json const &json, ModelConfig *p_input_config)
 {
   LOG->trace("GraphNode::json_from, graph {}", this->get_id());
@@ -92,6 +94,7 @@ void GraphNode::json_from(nlohmann::json const &json, ModelConfig *p_input_confi
 
   this->set_id(json["id"]);
   this->set_id_count(json["id_count"]);
+  this->set_export_tag(json["export_tag"]);
 
   // hmap::CoordFrame
   auto vo = json["origin"].get<std::vector<float>>();
@@ -133,6 +136,7 @@ nlohmann::json GraphNode::json_to() const
   json["id"] = this->get_id();
   json["id_count"] = this->get_id_count();
   json["model_config"] = this->config->json_to();
+  json["export_tag"] = this->export_tag;
 
   // hmap::CoordFrame
   json["origin"] = {this->get_origin().x, this->get_origin().y};
@@ -217,6 +221,11 @@ void GraphNode::remove_node(const std::string &id)
 
   // basic GNode removing...
   gnode::Graph::remove_node(id);
+}
+
+void GraphNode::set_export_tag(const std::string &new_export_tag)
+{
+  this->export_tag = new_export_tag;
 }
 
 void GraphNode::set_p_broadcast_params(BroadcastMap *new_p_broadcast_params)

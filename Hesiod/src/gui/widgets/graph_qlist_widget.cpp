@@ -26,7 +26,7 @@ GraphQListWidget::GraphQListWidget(GraphNode *p_graph_node, QWidget *parent)
   layout->addWidget(label, 0, 0);
 
   this->combobox = new QComboBox(this);
-  this->current_bg_tag = "NO BACKGROUND";
+  this->current_bg_tag = this->p_graph_node->get_export_tag();
   this->update_combobox();
   layout->addWidget(this->combobox, 0, 1);
 
@@ -44,6 +44,7 @@ void GraphQListWidget::json_from(nlohmann::json const &json)
 {
   this->current_bg_tag = json["current_bg_tag"].get<std::string>();
   this->combobox->setCurrentText(this->current_bg_tag.c_str());
+  this->on_combobox_changed();
 }
 
 nlohmann::json GraphQListWidget::json_to() const
@@ -103,6 +104,9 @@ void GraphQListWidget::on_combobox_changed()
     image = QImage();
   }
 
+  // update GraphNode instance accordingly
+  this->p_graph_node->set_export_tag(this->current_bg_tag);
+
   Q_EMIT this->bg_image_updated(this->p_graph_node->get_id(), image);
   Q_EMIT this->has_changed();
 }
@@ -114,7 +118,7 @@ void GraphQListWidget::update_combobox()
   const std::string tag_bckp = this->current_bg_tag;
 
   this->combobox->clear();
-  this->combobox->addItem("NO BACKGROUND");
+  this->combobox->addItem("NONE");
 
   LOG->trace("GraphQListWidget::update_combobox, tag: {}", tag_bckp);
 
