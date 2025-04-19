@@ -124,6 +124,10 @@ void run_batch_mode(const std::string     &filename,
 
   GraphManager graph_manager;
   graph_manager.load_from_file(filename, p_input_config);
+
+  // flatten & export if there is a configuration defined
+  if (!graph_manager.get_export_param().export_path.empty())
+    graph_manager.export_flatten();
 }
 
 void run_node_inventory()

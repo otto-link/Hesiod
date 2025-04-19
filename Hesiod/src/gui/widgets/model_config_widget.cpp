@@ -7,25 +7,20 @@
 
 #include "highmap/opencl/gpu_opencl.hpp"
 
+#include "hesiod/gui/gui_utils.hpp"
 #include "hesiod/gui/widgets/model_config_widget.hpp"
 #include "hesiod/logger.hpp"
 
 namespace hesiod
 {
 
-int float_to_slider_pos(float v, float min, float max, int slider_steps)
-{
-  return (int)((v - min) / (max - min) * (float)slider_steps);
-}
-
-float slider_pos_to_float(int pos, float min, float max, int slider_steps)
-{
-  return min + (float)pos / (float)slider_steps * (max - min);
-}
-
-ModelConfigWidget::ModelConfigWidget(ModelConfig *p_model_config, QWidget *parent)
+ModelConfigWidget::ModelConfigWidget(ModelConfig *p_model_config,
+                                     bool         show_opencl_config,
+                                     QWidget     *parent)
     : QDialog(parent), p_model_config(p_model_config)
 {
+  this->setWindowTitle("Hesiod - Model configuration");
+
   QGridLayout *layout = new QGridLayout(this);
 
   int row = 0;
@@ -130,111 +125,114 @@ ModelConfigWidget::ModelConfigWidget(ModelConfig *p_model_config, QWidget *paren
 
   // --- OpenCL configuration
 
-  QLabel *label_opencl = new QLabel("Hardware acceleration (OpenCL)");
-  layout->addWidget(label_opencl, row, 0, 1, 3);
-  row++;
-
-  // get available devices
-  std::map<size_t, std::string> cl_device_map = clwrapper::DeviceManager::get_instance()
-                                                    .get_available_devices();
-  size_t current_device = clwrapper::DeviceManager::get_instance().get_device_id();
-
-  // setup combobox / device
+  if (show_opencl_config)
   {
-    QComboBox *combobox = new QComboBox();
-
-    QStringList items;
-    for (auto &[id, name] : cl_device_map)
-      combobox->addItem(name.c_str());
-
-    combobox->setCurrentText(cl_device_map.at(current_device).c_str());
-
-    connect(combobox,
-            QOverload<int>::of(&QComboBox::currentIndexChanged),
-            [cl_device_map, combobox]()
-            {
-              size_t choice_index = static_cast<size_t>(combobox->currentIndex());
-
-              LOG->trace("{}", choice_index);
-              LOG->trace("{}, {}", choice_index, cl_device_map.at(choice_index));
-
-              if (clwrapper::DeviceManager::get_instance().set_device(choice_index))
-                clwrapper::KernelManager::get_instance().build_program();
-              else
-                LOG->error("device selection failed");
-            });
-
-    layout->addWidget(combobox, row, 0, 1, 3);
-  }
-  row++;
-
-  // transform modes
-  {
-    QLabel *label = new QLabel("Node calculation mode");
-    layout->addWidget(label, row, 0, 1, 3);
+    QLabel *label_opencl = new QLabel("Hardware acceleration (OpenCL)");
+    layout->addWidget(label_opencl, row, 0, 1, 3);
     row++;
-  }
 
-  {
-    QLabel *label = new QLabel("CPU");
-    layout->addWidget(label, row, 0);
+    // get available devices
+    std::map<size_t, std::string> cl_device_map = clwrapper::DeviceManager::get_instance()
+                                                      .get_available_devices();
+    size_t current_device = clwrapper::DeviceManager::get_instance().get_device_id();
 
-    QComboBox *combobox = new QComboBox();
-
-    QStringList items;
-    for (auto &[name, id] : hmap::transform_mode_as_string)
+    // setup combobox / device
     {
-      combobox->addItem(name.c_str());
-      if (id == (int)this->p_model_config->hmap_transform_mode_cpu)
-        combobox->setCurrentText(name.c_str());
+      QComboBox *combobox = new QComboBox();
+
+      QStringList items;
+      for (auto &[id, name] : cl_device_map)
+        combobox->addItem(name.c_str());
+
+      combobox->setCurrentText(cl_device_map.at(current_device).c_str());
+
+      connect(combobox,
+              QOverload<int>::of(&QComboBox::currentIndexChanged),
+              [cl_device_map, combobox]()
+              {
+                size_t choice_index = static_cast<size_t>(combobox->currentIndex());
+
+                LOG->trace("{}", choice_index);
+                LOG->trace("{}, {}", choice_index, cl_device_map.at(choice_index));
+
+                if (clwrapper::DeviceManager::get_instance().set_device(choice_index))
+                  clwrapper::KernelManager::get_instance().build_program();
+                else
+                  LOG->error("device selection failed");
+              });
+
+      layout->addWidget(combobox, row, 0, 1, 3);
+    }
+    row++;
+
+    // transform modes
+    {
+      QLabel *label = new QLabel("Node calculation mode");
+      layout->addWidget(label, row, 0, 1, 3);
+      row++;
     }
 
-    connect(combobox,
-            QOverload<int>::of(&QComboBox::currentIndexChanged),
-            [this, combobox]()
-            {
-              std::string current_choice = combobox->currentText().toStdString();
-
-              LOG->trace("{}", current_choice);
-              this->p_model_config
-                  ->hmap_transform_mode_cpu = static_cast<hmap::TransformMode>(
-                  hmap::transform_mode_as_string.at(current_choice));
-            });
-
-    layout->addWidget(combobox, row, 1, 1, 3);
-
-    row++;
-  }
-
-  {
-    QLabel *label = new QLabel("GPU");
-    layout->addWidget(label, row, 0);
-
-    QComboBox *combobox = new QComboBox();
-
-    QStringList items;
-    for (auto &[name, id] : hmap::transform_mode_as_string)
     {
-      combobox->addItem(name.c_str());
-      if (id == (int)this->p_model_config->hmap_transform_mode_gpu)
-        combobox->setCurrentText(name.c_str());
+      QLabel *label = new QLabel("CPU");
+      layout->addWidget(label, row, 0);
+
+      QComboBox *combobox = new QComboBox();
+
+      QStringList items;
+      for (auto &[name, id] : hmap::transform_mode_as_string)
+      {
+        combobox->addItem(name.c_str());
+        if (id == (int)this->p_model_config->hmap_transform_mode_cpu)
+          combobox->setCurrentText(name.c_str());
+      }
+
+      connect(combobox,
+              QOverload<int>::of(&QComboBox::currentIndexChanged),
+              [this, combobox]()
+              {
+                std::string current_choice = combobox->currentText().toStdString();
+
+                LOG->trace("{}", current_choice);
+                this->p_model_config
+                    ->hmap_transform_mode_cpu = static_cast<hmap::TransformMode>(
+                    hmap::transform_mode_as_string.at(current_choice));
+              });
+
+      layout->addWidget(combobox, row, 1, 1, 3);
+
+      row++;
     }
 
-    connect(combobox,
-            QOverload<int>::of(&QComboBox::currentIndexChanged),
-            [this, combobox]()
-            {
-              std::string current_choice = combobox->currentText().toStdString();
+    {
+      QLabel *label = new QLabel("GPU");
+      layout->addWidget(label, row, 0);
 
-              LOG->trace("{}", current_choice);
-              this->p_model_config
-                  ->hmap_transform_mode_gpu = static_cast<hmap::TransformMode>(
-                  hmap::transform_mode_as_string.at(current_choice));
-            });
+      QComboBox *combobox = new QComboBox();
 
-    layout->addWidget(combobox, row, 1, 1, 3);
+      QStringList items;
+      for (auto &[name, id] : hmap::transform_mode_as_string)
+      {
+        combobox->addItem(name.c_str());
+        if (id == (int)this->p_model_config->hmap_transform_mode_gpu)
+          combobox->setCurrentText(name.c_str());
+      }
 
-    row++;
+      connect(combobox,
+              QOverload<int>::of(&QComboBox::currentIndexChanged),
+              [this, combobox]()
+              {
+                std::string current_choice = combobox->currentText().toStdString();
+
+                LOG->trace("{}", current_choice);
+                this->p_model_config
+                    ->hmap_transform_mode_gpu = static_cast<hmap::TransformMode>(
+                    hmap::transform_mode_as_string.at(current_choice));
+              });
+
+      layout->addWidget(combobox, row, 1, 1, 3);
+
+      row++;
+    }
   }
 
   // --- buttons

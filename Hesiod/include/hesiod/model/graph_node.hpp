@@ -53,9 +53,7 @@ public:
   void         update(std::string id) override;
 
   // --- Inter-graph Broadcasting ---
-  std::string   get_export_tag() const;
   BroadcastMap *get_p_broadcast_params() { return this->p_broadcast_params; }
-  void          set_export_tag(const std::string &new_export_tag);
   void          set_p_broadcast_params(BroadcastMap *new_p_broadcast_params);
   void          on_broadcast_node_updated(const std::string &tag);
 
@@ -80,7 +78,6 @@ private:
   // --- Members ---
   std::shared_ptr<ModelConfig> config;
   BroadcastMap                *p_broadcast_params = nullptr; // own by GraphManager
-  std::string                  export_tag = "NONE";
 };
 
 } // namespace hesiod

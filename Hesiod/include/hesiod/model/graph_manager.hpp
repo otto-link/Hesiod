@@ -14,6 +14,7 @@
 #include "nlohmann/json.hpp"
 
 #include "hesiod/model/broadcast_param.hpp"
+#include "hesiod/model/export_param.hpp"
 
 #include <filesystem> // must be here,
                       // https://bugreports.qt.io/browse/QTBUG-73263
@@ -40,18 +41,21 @@ public:
 
   // --- Accessors ---
   const BroadcastMap             &get_broadcast_params();
+  ExportParam                     get_export_param() const;
   const GraphNodeMap             &get_graph_nodes();
   const std::vector<std::string> &get_graph_order();
   int                             get_graph_order_index(const std::string &id);
   GraphNode                      *get_graph_ref_by_id(const std::string &id);
   std::string                     get_id() const;
 
+  void set_export_param(const ExportParam &new_export_param);
   void set_graph_order(const std::vector<std::string> &new_graph_order);
   void set_id(const std::string &new_id);
 
   // --- GraphNode management ---
   std::string add_graph_node(const std::shared_ptr<GraphNode> &p_graph_node,
                              const std::string                &id = "");
+  void        export_flatten();
   bool is_graph_above(const std::string &graph_id, const std::string &ref_graph_id);
   bool is_graph_id_available(const std::string &id);
   void remove_graph_node(const std::string &id);
@@ -82,6 +86,7 @@ private:
   int                      id_count = 0;
   std::vector<std::string> graph_order;
   BroadcastMap             broadcast_params;
+  ExportParam              export_param;
 };
 
 } // namespace hesiod

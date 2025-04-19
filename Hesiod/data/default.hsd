@@ -1,9 +1,17 @@
 {
     "Hesiod version": "v0.0.0",
     "graph_manager": {
+        "export_param": {
+            "export_path": "",
+            "ids": [],
+            "overlap": 0.5,
+            "shape.x": 1024,
+            "shape.y": 1024,
+            "tiling.x": 4,
+            "tiling.y": 4
+        },
         "graph_nodes": {
             "graph": {
-                "export_tag": "GaborWaveFbm/2/output",
                 "id": "graph",
                 "id_count": 3,
                 "links": [
@@ -232,22 +240,22 @@
                 ],
                 "nodes": [
                     {
-                        "caption": "GaborWaveFbm",
-                        "id": "2",
-                        "is_widget_visible": true,
-                        "scene_position.x": -337.3182678222656,
-                        "scene_position.y": -305.33758544921875
-                    },
-                    {
                         "caption": "HydraulicStreamLog",
                         "id": "1",
                         "is_widget_visible": true,
                         "scene_position.x": -36.88470458984375,
                         "scene_position.y": -305.0
+                    },
+                    {
+                        "caption": "GaborWaveFbm",
+                        "id": "2",
+                        "is_widget_visible": true,
+                        "scene_position.x": -337.3182678222656,
+                        "scene_position.y": -305.33758544921875
                     }
                 ]
             }
         }
     },
-    "saved_at": "2025-04-18_14:00:54"
+    "saved_at": "2025-04-19_18:41:57"
 }

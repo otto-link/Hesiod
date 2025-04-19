@@ -1,15 +1,12 @@
-/* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General Public
+/* Copyright (c) 2025 Otto Link. Distributed under the terms of the GNU General Public
    License. The full license is in the file LICENSE, distributed with this software. */
 
 /**
- * @file viewer3d.hpp
+ * @file export_param_widget.hpp
  * @author  Otto Link (otto.link.bv@gmail.com)
  * @brief
- * @version 0.1
- * @date 2023-04-29
  *
- * @copyright Copyright (c) 2023
- *
+ * @copyright Copyright (c) 2025
  */
 #pragma once
 #include <QDialog>
@@ -17,26 +14,24 @@
 #include <QSlider>
 #include <QWidget>
 
-#include "hesiod/model/model_config.hpp"
+#include "hesiod/model/export_param.hpp"
 
 namespace hesiod
 {
 
 // =====================================
-// ModelConfigWidget
+// ExportParamWidget
 // =====================================
-class ModelConfigWidget : public QDialog
+class ExportParamWidget : public QDialog
 {
   Q_OBJECT
 
 public:
-  ModelConfigWidget() = default;
-  ModelConfigWidget(ModelConfig *p_model_config,
-                    bool         show_opencl_config = true,
-                    QWidget     *parent = nullptr);
+  ExportParamWidget() = default;
+  ExportParamWidget(ExportParam *p_export_param, QWidget *parent = nullptr);
 
 private:
-  ModelConfig *p_model_config;
+  ExportParam *p_export_param;
 
   QSlider *slider_shape;
   QLabel  *label_shape;

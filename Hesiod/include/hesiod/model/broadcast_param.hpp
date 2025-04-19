@@ -2,7 +2,7 @@
    License. The full license is in the file LICENSE, distributed with this software. */
 
 /**
- * @file graph_manager.hpp
+ * @file broadcast_param.hpp
  * @author  Otto Link (otto.link.bv@gmail.com)
  * @brief
  *
@@ -33,7 +33,7 @@ using BroadcastMap = std::map<std::string, BroadcastParam>;
 // =====================================
 
 bool get_ids_from_broadcast_tag(const std::string &tag,
-                                std::string       &graph_id,
+                                std::string       &node_type,
                                 std::string       &node_id,
                                 std::string       &port_id);
 

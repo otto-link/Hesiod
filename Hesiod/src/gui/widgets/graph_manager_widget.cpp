@@ -6,16 +6,14 @@
 #include <QPushButton>
 #include <QSettings>
 
-#include "highmap/coord_frame.hpp"
-#include "highmap/heightmap.hpp"
-#include "highmap/interpolate_array.hpp"
-
 #include "hesiod/gui/main_window.hpp"
 #include "hesiod/gui/widgets/coord_frame_widget.hpp"
+#include "hesiod/gui/widgets/export_param_widget.hpp"
 #include "hesiod/gui/widgets/graph_manager_widget.hpp"
 #include "hesiod/gui/widgets/model_config_widget.hpp"
 #include "hesiod/gui/widgets/string_input_dialog.hpp"
 #include "hesiod/logger.hpp"
+#include "hesiod/model/export_param.hpp"
 #include "hesiod/model/graph_manager.hpp"
 #include "hesiod/model/graph_node.hpp"
 
@@ -63,7 +61,7 @@ GraphManagerWidget::GraphManagerWidget(GraphManager *p_graph_manager, QWidget *p
   QPushButton *zoom_button = new QPushButton("Zoom");
   layout->addWidget(zoom_button, row, 2);
 
-  QPushButton *export_button = new QPushButton("Export");
+  QPushButton *export_button = new QPushButton("Flatten/export");
   layout->addWidget(export_button, row, 3);
 
   this->apply_button = new QPushButton("Apply");
@@ -247,42 +245,23 @@ void GraphManagerWidget::on_apply_changes()
 
 void GraphManagerWidget::on_export()
 {
-  // TODO move to GraphManager, also keep track of bg_tag in GraphManager
+  // TODO move to GraphManager
   LOG->trace("GraphManagerWidget::on_export");
 
-  // compute global bounding box
-  hmap::Vec4<float> bbox_global(std::numeric_limits<float>::max(),
-                                std::numeric_limits<float>::lowest(),
-                                std::numeric_limits<float>::max(),
-                                std::numeric_limits<float>::lowest());
+  // define the export parameters using the GUI
+  ExportParam export_param = this->p_graph_manager->get_export_param();
 
-  for (auto &id : this->p_graph_manager->get_graph_order())
-  {
-    hmap::Vec4<float>
-        bbox = this->p_graph_manager->get_graph_nodes().at(id)->compute_bounding_box();
+  if (export_param.export_path.empty())
+    export_param.export_path = "export.png";
 
-    bbox_global = hmap::Vec4<float>(std::min(bbox_global.a, bbox.a),
-                                    std::max(bbox_global.b, bbox.b),
-                                    std::min(bbox_global.c, bbox.c),
-                                    std::max(bbox_global.d, bbox.d));
-  }
+  ExportParamWidget param_editor(&export_param);
+  int               ret = param_editor.exec();
 
-  LOG->trace("bbox_global: ({}, {}, {}, {})",
-             bbox_global.a,
-             bbox_global.b,
-             bbox_global.c,
-             bbox_global.d);
+  if (!ret)
+    return;
 
-  // target heightmap
-  hmap::Vec2<int> shape(1024, 1024); // TODO GUI
-  hmap::Vec2<int> tiling(1, 1);      // TODO GUI
-  float           overlap = 0.f;     // TODO GUI
-
-  hmap::Heightmap h_export(shape, tiling, overlap);
-
-  // retrieve for each graph the selected tag and the corresponding data
-  std::vector<const hmap::Heightmap *>  h_sources;
-  std::vector<const hmap::CoordFrame *> t_sources;
+  // retrieve export ids from the current tags in the GUI
+  std::vector<std::tuple<std::string, std::string, std::string>> export_ids = {};
 
   for (int i = 0; i < this->list_widget->count(); ++i)
   {
@@ -293,22 +272,13 @@ void GraphManagerWidget::on_export()
       std::string tag = gw_widget->get_current_bg_tag();
 
       // retrieve node ID from tag
-      std::string graph_id, node_id, port_id;
-      bool        ret = get_ids_from_broadcast_tag(tag, graph_id, node_id, port_id);
+      std::string node_type, node_id, port_id;
+      bool        ret = get_ids_from_broadcast_tag(tag, node_type, node_id, port_id);
 
       if (ret)
       {
         LOG->trace("adding layer: {}", tag);
-
-        hmap::Heightmap *p_h = gw_widget->get_p_graph_node()
-                                   ->get_node_ref_by_id(node_id)
-                                   ->get_value_ref<hmap::Heightmap>(port_id);
-
-        hmap::CoordFrame *p_t = dynamic_cast<hmap::CoordFrame *>(
-            gw_widget->get_p_graph_node());
-
-        h_sources.push_back(p_h);
-        t_sources.push_back(p_t);
+        export_ids.push_back({gw_widget->get_p_graph_node()->get_id(), node_id, port_id});
       }
       else
       {
@@ -317,18 +287,14 @@ void GraphManagerWidget::on_export()
     }
   }
 
-  // flatten
-  LOG->trace("exporting...");
+  export_param.ids = export_ids;
 
-  hmap::Vec2<float> origin(bbox_global.a, bbox_global.c);
-  hmap::Vec2<float> size(bbox_global.b - bbox_global.a, bbox_global.d - bbox_global.c);
-  float             rotation_angle = 0.f;
-  hmap::CoordFrame  frame_export(origin, size, rotation_angle);
+  this->p_graph_manager->set_export_param(export_param);
+  this->p_graph_manager->export_flatten();
 
-  hmap::flatten_heightmap(h_sources, h_export, t_sources, frame_export);
-
-  // TODO export
-  h_export.to_array().to_png("export.png", hmap::Cmap::TERRAIN, true);
+  notify("Export/flatten",
+         std::format("Flattening and export terminated, saved to file: {}",
+                     export_param.export_path.filename().string()));
 }
 
 void GraphManagerWidget::on_item_double_clicked(QListWidgetItem *item)

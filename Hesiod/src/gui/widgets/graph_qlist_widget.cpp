@@ -26,7 +26,7 @@ GraphQListWidget::GraphQListWidget(GraphNode *p_graph_node, QWidget *parent)
   layout->addWidget(label, 0, 0);
 
   this->combobox = new QComboBox(this);
-  this->current_bg_tag = this->p_graph_node->get_export_tag();
+  this->current_bg_tag = "NONE";
   this->update_combobox();
   layout->addWidget(this->combobox, 0, 1);
 
@@ -103,9 +103,6 @@ void GraphQListWidget::on_combobox_changed()
     // null image
     image = QImage();
   }
-
-  // update GraphNode instance accordingly
-  this->p_graph_node->set_export_tag(this->current_bg_tag);
 
   Q_EMIT this->bg_image_updated(this->p_graph_node->get_id(), image);
   Q_EMIT this->has_changed();

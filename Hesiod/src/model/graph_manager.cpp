@@ -3,6 +3,10 @@
  * this software. */
 #include "nlohmann/json.hpp"
 
+#include "highmap/coord_frame.hpp"
+#include "highmap/heightmap.hpp"
+#include "highmap/interpolate_array.hpp"
+
 #include "hesiod/logger.hpp"
 #include "hesiod/model/graph_manager.hpp"
 #include "hesiod/model/graph_node.hpp"
@@ -57,12 +61,6 @@ std::string GraphManager::add_graph_node(const std::shared_ptr<GraphNode> &p_gra
                 this,
                 &GraphManager::on_remove_broadcast_tag);
 
-  // // NOTE GUI
-  // this->connect(p_graph_node.get(),
-  //               &GraphNode::request_update_receive_nodes_tag_list,
-  //               this,
-  //               &GraphManager::update_receive_nodes_tag_list); // TODO add
-
   return graph_id;
 }
 
@@ -79,10 +77,70 @@ void GraphManager::clear()
   this->broadcast_params.clear();
 }
 
+void GraphManager::export_flatten()
+{
+  LOG->trace("GraphManager::export_flatten");
+
+  // target heightmap
+  hmap::Heightmap h_export(export_param.shape, export_param.tiling, export_param.overlap);
+
+  // compute global bounding box
+  hmap::Vec4<float> bbox_global(std::numeric_limits<float>::max(),
+                                std::numeric_limits<float>::lowest(),
+                                std::numeric_limits<float>::max(),
+                                std::numeric_limits<float>::lowest());
+
+  for (auto &id : this->get_graph_order())
+  {
+    hmap::Vec4<float> bbox = this->get_graph_nodes().at(id)->compute_bounding_box();
+
+    bbox_global = hmap::Vec4<float>(std::min(bbox_global.a, bbox.a),
+                                    std::max(bbox_global.b, bbox.b),
+                                    std::min(bbox_global.c, bbox.c),
+                                    std::max(bbox_global.d, bbox.d));
+  }
+
+  // retrieve for each graph the selected tag and the corresponding data
+  std::vector<const hmap::Heightmap *>  h_sources;
+  std::vector<const hmap::CoordFrame *> t_sources;
+
+  for (auto ids : this->export_param.ids)
+  {
+    std::string graph_id = std::get<0>(ids);
+    std::string node_id = std::get<1>(ids);
+    std::string port_id = std::get<2>(ids);
+
+    hmap::Heightmap *p_h = this->graph_nodes.at(graph_id)
+                               ->get_node_ref_by_id(node_id)
+                               ->get_value_ref<hmap::Heightmap>(port_id);
+
+    hmap::CoordFrame *p_t = dynamic_cast<hmap::CoordFrame *>(
+        this->graph_nodes.at(graph_id).get());
+
+    h_sources.push_back(p_h);
+    t_sources.push_back(p_t);
+  }
+
+  hmap::Vec2<float> origin(bbox_global.a, bbox_global.c);
+  hmap::Vec2<float> size(bbox_global.b - bbox_global.a, bbox_global.d - bbox_global.c);
+  float             rotation_angle = 0.f;
+  hmap::CoordFrame  frame_export(origin, size, rotation_angle);
+
+  hmap::flatten_heightmap(h_sources, h_export, t_sources, frame_export);
+
+  // TODO export
+  h_export.to_array().to_png(export_param.export_path.string(),
+                             hmap::Cmap::TERRAIN,
+                             true);
+  // to_png_grayscale
+}
+
 const BroadcastMap &GraphManager::get_broadcast_params()
 {
   return this->broadcast_params;
 }
+
+ExportParam GraphManager::get_export_param() const { return this->export_param; }
 
 const GraphNodeMap &GraphManager::get_graph_nodes() { return this->graph_nodes; }
 
@@ -142,6 +200,7 @@ void GraphManager::json_from(nlohmann::json const &json, ModelConfig *p_config)
 
   // keep deserializing
   this->id_count = json["id_count"];
+  this->export_param.json_from(json["export_param"]);
 
   // graph order
   std::vector<std::string> gid_order = json["graph_order"];
@@ -175,6 +234,7 @@ nlohmann::json GraphManager::json_to() const
   // when re-creating the graph nodes
   json["id_count"] = this->id_count;
   json["graph_order"] = this->graph_order;
+  json["export_param"] = this->export_param.json_to();
 
   // graphs
   nlohmann::json json_graphs;
@@ -252,6 +312,11 @@ void GraphManager::save_to_file(const std::string &fname) const
   nlohmann::json json;
   json["graph_manager"] = this->json_to();
   json_to_file(json, fname);
+}
+
+void GraphManager::set_export_param(const ExportParam &new_export_param)
+{
+  this->export_param = new_export_param;
 }
 
 void GraphManager::set_graph_order(const std::vector<std::string> &new_graph_order)
