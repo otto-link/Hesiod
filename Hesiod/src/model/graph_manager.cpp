@@ -22,28 +22,28 @@ GraphManager::GraphManager(const std::string &id) : id(id)
 }
 
 std::string GraphManager::add_graph_node(const std::shared_ptr<GraphNode> &p_graph_node,
-                                         const std::string                &id)
+                                         const std::string                &graph_id)
 {
-  LOG->trace("GraphManager::add_graph_node: {}", id);
+  LOG->trace("GraphManager::add_graph_node: {}", graph_id);
 
-  std::string graph_id = id;
+  std::string new_graph_id = graph_id;
 
   // use node pointer as ID if none is provided
-  if (id.empty())
-    graph_id = std::to_string(this->id_count++);
+  if (graph_id.empty())
+    new_graph_id = std::to_string(this->id_count++);
 
   // check if the ID is available
-  if (!this->is_graph_id_available(graph_id))
-    throw std::runtime_error("Graph ID already used: " + graph_id);
+  if (!this->is_graph_id_available(new_graph_id))
+    throw std::runtime_error("Graph ID already used: " + new_graph_id);
 
   // add the graph to the map and store the ID within the graph (in case of)
-  this->graph_nodes[graph_id] = p_graph_node;
-  p_graph_node->set_id(graph_id);
+  this->graph_nodes[new_graph_id] = p_graph_node;
+  p_graph_node->set_id(new_graph_id);
 
   // store a reference to the global storage of broadcasting data
   p_graph_node->set_p_broadcast_params(&broadcast_params);
 
-  this->graph_order.push_back(graph_id);
+  this->graph_order.push_back(new_graph_id);
 
   // connections for broadcasting data between graph_nodes
   this->connect(p_graph_node.get(),
@@ -61,14 +61,14 @@ std::string GraphManager::add_graph_node(const std::shared_ptr<GraphNode> &p_gra
                 this,
                 &GraphManager::on_remove_broadcast_tag);
 
-  return graph_id;
+  return new_graph_id;
 }
 
 void GraphManager::clear()
 {
   LOG->trace("GraphManager::clear");
 
-  for (auto &[id, graph] : this->graph_nodes)
+  for (auto &[_, graph] : this->graph_nodes)
     graph->clear();
 
   this->id_count = 0;
@@ -90,9 +90,9 @@ void GraphManager::export_flatten()
                                 std::numeric_limits<float>::max(),
                                 std::numeric_limits<float>::lowest());
 
-  for (auto &id : this->get_graph_order())
+  for (auto &graph_id : this->get_graph_order())
   {
-    hmap::Vec4<float> bbox = this->get_graph_nodes().at(id)->compute_bounding_box();
+    hmap::Vec4<float> bbox = this->get_graph_nodes().at(graph_id)->compute_bounding_box();
 
     bbox_global = hmap::Vec4<float>(std::min(bbox_global.a, bbox.a),
                                     std::max(bbox_global.b, bbox.b),
@@ -149,21 +149,22 @@ const std::vector<std::string> &GraphManager::get_graph_order()
   return this->graph_order;
 }
 
-int GraphManager::get_graph_order_index(const std::string &id)
+int GraphManager::get_graph_order_index(const std::string &graph_id)
 {
-  if (this->is_graph_id_available(id))
+  if (this->is_graph_id_available(graph_id))
   {
-    LOG->critical("GraphManager::get_graph_order_index, graph ID not known: {}", id);
-    throw std::runtime_error("Graph ID not known: " + id);
+    LOG->critical("GraphManager::get_graph_order_index, graph ID not known: {}",
+                  graph_id);
+    throw std::runtime_error("Graph ID not known: " + graph_id);
   }
 
-  auto itr = std::find(this->graph_order.begin(), this->graph_order.end(), id);
+  auto itr = std::find(this->graph_order.begin(), this->graph_order.end(), graph_id);
   return (int)std::distance(this->graph_order.begin(), itr);
 }
 
-GraphNode *GraphManager::get_graph_ref_by_id(const std::string &id)
+GraphNode *GraphManager::get_graph_ref_by_id(const std::string &graph_id)
 {
-  auto it = graph_nodes.find(id);
+  auto it = graph_nodes.find(graph_id);
   if (it == graph_nodes.end())
     return nullptr;
   else
@@ -175,20 +176,20 @@ std::string GraphManager::get_id() const { return this->id; }
 bool GraphManager::is_graph_above(const std::string &graph_id,
                                   const std::string &ref_graph_id)
 {
-  for (auto &id : this->graph_order)
+  for (auto &gid : this->graph_order)
   {
-    if (id == graph_id)
+    if (gid == graph_id)
       return false;
-    else if (id == ref_graph_id)
+    else if (gid == ref_graph_id)
       return true;
   }
 
   return false;
 }
 
-bool GraphManager::is_graph_id_available(const std::string &id)
+bool GraphManager::is_graph_id_available(const std::string &graph_id)
 {
-  return !this->graph_nodes.contains(id);
+  return !this->graph_nodes.contains(graph_id);
 }
 
 void GraphManager::json_from(nlohmann::json const &json, ModelConfig *p_config)
@@ -205,9 +206,9 @@ void GraphManager::json_from(nlohmann::json const &json, ModelConfig *p_config)
   // graph order
   std::vector<std::string> gid_order = json["graph_order"];
 
-  for (auto &id : gid_order)
+  for (auto &graph_id : gid_order)
   {
-    LOG->trace("graph id: {}", id);
+    LOG->trace("graph graph_id: {}", graph_id);
 
     // dummy default config that will be overriden after by the
     // GraphNode instances during their 'json_from' deserialization
@@ -219,8 +220,8 @@ void GraphManager::json_from(nlohmann::json const &json, ModelConfig *p_config)
     // the Receive nodes, if any, need a reference to the
     // broadcast_params of the GraphManager, which is provided to the
     // graph node when added...
-    this->add_graph_node(graph, id);
-    graph->json_from(json["graph_nodes"][id], p_config);
+    this->add_graph_node(graph, graph_id);
+    graph->json_from(json["graph_nodes"][graph_id], p_config);
   }
 }
 
@@ -238,8 +239,8 @@ nlohmann::json GraphManager::json_to() const
 
   // graphs
   nlohmann::json json_graphs;
-  for (auto &[id, graph] : this->graph_nodes)
-    json_graphs[id] = graph->json_to();
+  for (auto &[graph_id, graph] : this->graph_nodes)
+    json_graphs[graph_id] = graph->json_to();
 
   json["graph_nodes"] = json_graphs;
 
@@ -290,18 +291,18 @@ void GraphManager::on_remove_broadcast_tag(const std::string &tag)
   Q_EMIT this->remove_broadcast_tag(tag);
 }
 
-void GraphManager::remove_graph_node(const std::string &id)
+void GraphManager::remove_graph_node(const std::string &graph_id)
 {
-  LOG->trace("GraphManager::remove_graph_node: id {}", id);
+  LOG->trace("GraphManager::remove_graph_node: graph_id {}", graph_id);
 
-  if (this->is_graph_id_available(id))
+  if (this->is_graph_id_available(graph_id))
     return;
 
   this->graph_order.erase(
-      std::remove(this->graph_order.begin(), this->graph_order.end(), id),
+      std::remove(this->graph_order.begin(), this->graph_order.end(), graph_id),
       this->graph_order.end());
 
-  this->graph_nodes.erase(id);
+  this->graph_nodes.erase(graph_id);
 }
 
 void GraphManager::save_to_file(const std::string &fname) const

@@ -44,8 +44,8 @@ public:
   ExportParam                     get_export_param() const;
   const GraphNodeMap             &get_graph_nodes();
   const std::vector<std::string> &get_graph_order();
-  int                             get_graph_order_index(const std::string &id);
-  GraphNode                      *get_graph_ref_by_id(const std::string &id);
+  int                             get_graph_order_index(const std::string &graph_id);
+  GraphNode                      *get_graph_ref_by_id(const std::string &graph_id);
   std::string                     get_id() const;
 
   void set_export_param(const ExportParam &new_export_param);
@@ -54,11 +54,11 @@ public:
 
   // --- GraphNode management ---
   std::string add_graph_node(const std::shared_ptr<GraphNode> &p_graph_node,
-                             const std::string                &id = "");
+                             const std::string                &graph_id = "");
   void        export_flatten();
   bool is_graph_above(const std::string &graph_id, const std::string &ref_graph_id);
-  bool is_graph_id_available(const std::string &id);
-  void remove_graph_node(const std::string &id);
+  bool is_graph_id_available(const std::string &graph_id);
+  void remove_graph_node(const std::string &graph_id);
   void update();
 
   // --- Serialization ---
