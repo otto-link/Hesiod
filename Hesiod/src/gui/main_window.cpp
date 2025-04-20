@@ -141,7 +141,7 @@ std::string MainWindow::get_project_name() const
   if (this->project_path.empty())
     return std::string();
   else
-    return this->project_path.filename();
+    return this->project_path.filename().string();
 }
 
 MainWindow *MainWindow::instance(QApplication *p_app, QWidget *p_parent)
