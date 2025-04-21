@@ -128,11 +128,14 @@ void GraphManager::export_flatten()
 
   hmap::flatten_heightmap(h_sources, h_export, t_sources, frame_export);
 
-  // TODO export
-  h_export.to_array().to_png(export_param.export_path.string(),
-                             hmap::Cmap::TERRAIN,
-                             true);
-  // to_png_grayscale
+  // raw heightmap
+  const std::string fname = export_param.export_path.string();
+  h_export.to_array().to_png_grayscale(fname, CV_16U);
+
+  // will hillshading
+  const std::filesystem::path fname_hs = insert_before_extension(export_param.export_path,
+                                                                 "_preview");
+  h_export.to_array().to_png(fname_hs, hmap::Cmap::TERRAIN, true);
 }
 
 const BroadcastMap &GraphManager::get_broadcast_params()
