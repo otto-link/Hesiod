@@ -62,7 +62,8 @@ public:
   void update();
 
   // --- Serialization ---
-  void           json_from(nlohmann::json const &json, ModelConfig *p_config = nullptr);
+  void           json_from(nlohmann::json const &json, ModelConfig *p_config);
+  void           json_from(nlohmann::json const &json);
   nlohmann::json json_to() const;
   void load_from_file(const std::string &fname, ModelConfig *p_config = nullptr);
   void save_to_file(const std::string &fname) const;

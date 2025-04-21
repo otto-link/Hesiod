@@ -192,6 +192,11 @@ bool GraphManager::is_graph_id_available(const std::string &graph_id)
   return !this->graph_nodes.contains(graph_id);
 }
 
+void GraphManager::json_from(nlohmann::json const &json)
+{
+  this->json_from(json, nullptr);
+}
+
 void GraphManager::json_from(nlohmann::json const &json, ModelConfig *p_config)
 {
   LOG->trace("GraphManager::json_from");
