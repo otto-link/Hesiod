@@ -135,7 +135,7 @@ void GraphManager::export_flatten()
   // will hillshading
   const std::filesystem::path fname_hs = insert_before_extension(export_param.export_path,
                                                                  "_preview");
-  h_export.to_array().to_png(fname_hs, hmap::Cmap::TERRAIN, true);
+  h_export.to_array().to_png(fname_hs.string(), hmap::Cmap::TERRAIN, true);
 }
 
 const BroadcastMap &GraphManager::get_broadcast_params()
