@@ -1,10 +1,9 @@
-/* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
- * Public License. The full license is in the file LICENSE, distributed with
- * this software. */
+/* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General Public
+   License. The full license is in the file LICENSE, distributed with this software. */
 
 /**
  * @file viewer3d.hpp
- * @author Otto Link (otto.link.bv@gmail.com)
+ * @author  Otto Link (otto.link.bv@gmail.com)
  * @brief
  * @version 0.1
  * @date 2023-04-29
@@ -23,14 +22,18 @@
 namespace hesiod
 {
 
+// =====================================
+// ModelConfigWidget
+// =====================================
 class ModelConfigWidget : public QDialog
 {
   Q_OBJECT
 
 public:
   ModelConfigWidget() = default;
-
-  ModelConfigWidget(ModelConfig *p_model_config, QWidget *parent = nullptr);
+  ModelConfigWidget(ModelConfig *p_model_config,
+                    bool         show_opencl_config = true,
+                    QWidget     *parent = nullptr);
 
 private:
   ModelConfig *p_model_config;

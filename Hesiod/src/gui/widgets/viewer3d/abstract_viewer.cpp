@@ -9,30 +9,32 @@
 #include "highmap/heightmap.hpp"
 
 #include "hesiod/gui/widgets/abstract_viewer.hpp"
+#include "hesiod/gui/widgets/graph_node_widget.hpp"
 #include "hesiod/gui/widgets/open_gl/open_gl_widget.hpp"
 #include "hesiod/logger.hpp"
+#include "hesiod/model/graph_node.hpp"
 
 namespace hesiod
 {
 
-AbstractViewer::AbstractViewer(GraphEditor *p_graph_editor,
-                               QWidget     *parent,
-                               std::string  label)
-    : QWidget(parent), p_graph_editor(p_graph_editor), label(label)
+AbstractViewer::AbstractViewer(GraphNodeWidget *p_graph_node_widget,
+                               QWidget         *parent,
+                               std::string      label)
+    : QWidget(parent), p_graph_node_widget(p_graph_node_widget), label(label)
 {
   this->setMinimumSize(DEFAULT_VIEWER_WIDTH, DEFAULT_VIEWER_WIDTH);
 
-  this->connect(p_graph_editor->get_p_viewer(),
+  this->connect(p_graph_node_widget,
                 &gngui::GraphViewer::node_deleted,
                 this,
                 &AbstractViewer::on_node_deleted);
 
-  this->connect(p_graph_editor->get_p_viewer(),
+  this->connect(p_graph_node_widget,
                 &gngui::GraphViewer::node_deselected,
                 this,
                 &AbstractViewer::on_node_deselected);
 
-  this->connect(p_graph_editor->get_p_viewer(),
+  this->connect(p_graph_node_widget,
                 &gngui::GraphViewer::node_selected,
                 this,
                 &AbstractViewer::on_node_selected);
@@ -131,7 +133,8 @@ void AbstractViewer::emit_view_param_changed()
   LOG->trace("AbstractViewer::emit_view_param_changed: {}", this->current_node_id);
 
   Q_EMIT this->view_param_changed(
-      this->p_graph_editor->get_node_ref_by_id<BaseNode>(this->current_node_id),
+      this->p_graph_node_widget->get_p_graph_node()->get_node_ref_by_id<BaseNode>(
+          this->current_node_id),
       this->current_view_param.port_id_elev,
       this->current_view_param.port_id_color,
       this->current_view_param.port_id_normal_map);
@@ -224,7 +227,8 @@ void AbstractViewer::on_node_selected(const std::string &id)
   else
   {
     // make an initial of the ports that can be used for the 3D viewer
-    BaseNode *p_node = this->p_graph_editor->get_node_ref_by_id<BaseNode>(id);
+    BaseNode *p_node = this->p_graph_node_widget->get_p_graph_node()
+                           ->get_node_ref_by_id<BaseNode>(id);
 
     // for the elevation, use first output or first input if there are no output
     {
@@ -285,8 +289,8 @@ void AbstractViewer::update_view_param_widgets()
 {
   LOG->trace("AbstractViewer::update_view_param_widgets");
 
-  BaseNode *p_node = this->p_graph_editor->get_node_ref_by_id<BaseNode>(
-      this->current_node_id);
+  BaseNode *p_node = this->p_graph_node_widget->get_p_graph_node()
+                         ->get_node_ref_by_id<BaseNode>(this->current_node_id);
 
   // used to avoid interfering with the combo events and the data when
   // programmatically modifying the combo

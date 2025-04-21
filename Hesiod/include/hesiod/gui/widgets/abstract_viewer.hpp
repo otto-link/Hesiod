@@ -1,10 +1,9 @@
-/* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
- * Public License. The full license is in the file LICENSE, distributed with
- * this software. */
+/* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General Public
+   License. The full license is in the file LICENSE, distributed with this software. */
 
 /**
  * @file abstract_viewer.hpp
- * @author Otto Link (otto.link.bv@gmail.com)
+ * @author  Otto Link (otto.link.bv@gmail.com)
  * @brief
  * @version 0.1
  * @date 2023-04-29
@@ -20,7 +19,6 @@
 
 #include "nlohmann/json.hpp"
 
-#include "hesiod/graph_editor.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 
@@ -29,26 +27,29 @@
 namespace hesiod
 {
 
+class GraphNodeWidget; // forward
+
+// =====================================
+// AbstractViewer
+// =====================================
 class AbstractViewer : public QWidget
 {
   Q_OBJECT
 
 public:
   AbstractViewer() = delete;
-
-  AbstractViewer(GraphEditor *p_graph_editor,
-                 QWidget     *parent = nullptr,
-                 std::string  label = "");
+  AbstractViewer(GraphNodeWidget *p_graph_node_widget,
+                 QWidget         *parent = nullptr,
+                 std::string      label = "");
 
   void clear();
 
-  void json_from(nlohmann::json const &json);
-
+  // --- Serialization ---
+  void           json_from(nlohmann::json const &json);
   nlohmann::json json_to() const;
 
 Q_SIGNALS:
   void widget_close();
-
   void view_param_changed(BaseNode          *p_node,
                           const std::string &port_id_elev,
                           const std::string &port_id_color,
@@ -56,17 +57,16 @@ Q_SIGNALS:
 
 public Q_SLOTS:
   void on_node_deleted(const std::string &id);
-
   void on_node_deselected(const std::string &id);
-
   void on_node_selected(const std::string &id);
 
 protected:
   void closeEvent(QCloseEvent *event) override;
 
 protected:
-  GraphEditor *p_graph_editor;
-  std::string  label;
+  // --- Members ---
+  GraphNodeWidget *p_graph_node_widget;
+  std::string      label;
 
   struct NodeViewParam
   {
@@ -91,7 +91,8 @@ protected:
   QComboBox   *combo_color;
   QComboBox   *combo_normal_map;
 
-  // used to avoid interfering with the combo and the data when programmatically modifying
+  // used to avoid interfering with the combo and the data when programmatically
+  // modifying
   // the combo
   bool freeze_combo_change_event = false;
 

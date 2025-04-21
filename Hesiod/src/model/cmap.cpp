@@ -29,7 +29,7 @@ void CmapManager::update_colormap_data(bool append)
   }
 
   // load data from json file
-  std::string fname = "data/cmap.json"; // TODO fix, hardcoded
+  std::string fname = HSD_COLORMAP_FILE;
 
   nlohmann::json json;
   std::ifstream  file(fname);
@@ -42,7 +42,7 @@ void CmapManager::update_colormap_data(bool append)
 
     for (auto &[key, val] : json.items())
     {
-      LOG->trace("loading colormap: {}", key);
+      // LOG->trace("loading colormap: {}", key);
 
       CmapData cdata;
       cdata.id = key;

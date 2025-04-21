@@ -1,10 +1,9 @@
-/* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
- * Public License. The full license is in the file LICENSE, distributed with
- * this software. */
+/* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General Public
+   License. The full license is in the file LICENSE, distributed with this software. */
 
 /**
  * @file open_gl_render.hpp
- * @author Otto Link (otto.link.bv@gmail.com)
+ * @author  Otto Link (otto.link.bv@gmail.com)
  * @brief
  * @version 0.1
  * @date 2023-04-29
@@ -34,86 +33,58 @@ typedef unsigned int uint;
 namespace hesiod
 {
 
+// =====================================
+// OpenGLRender
+// =====================================
 class OpenGLRender : public QOpenGLWidget, protected QOpenGLFunctions
 {
 public:
   OpenGLRender(QWidget *parent = nullptr, ShaderType shader_type = ShaderType::TEXTURE);
 
+  // --- Accessors ---
   float get_h_scale() { return this->h_scale; }
-
-  bool get_use_approx_mesh() { return this->use_approx_mesh; }
-
-  bool get_show_normal_map() { return this->show_normal_map; }
-
-  bool get_wireframe_mode() { return this->wireframe_mode; }
-
-  void on_node_compute_finished(const std::string &id);
+  bool  get_use_approx_mesh() { return this->use_approx_mesh; }
+  bool  get_show_normal_map() { return this->show_normal_map; }
+  bool  get_wireframe_mode() { return this->wireframe_mode; }
 
   void set_azimuth(float new_azimuth);
+  void set_h_scale(float new_h_scale);
+  void set_max_approx_error(float new_max_approx_error);
+  void set_shader_type(const ShaderType &new_shader_type);
+  void set_shadow_saturation(float new_shadow_saturation);
+  void set_shadow_strength(float new_shadow_strength);
+  void set_shadow_gamma(float new_shadow_gamma);
+  void set_show_heightmap(bool new_show_heightmap);
+  void set_show_normal_map(bool new_show_normal_map);
+  void set_show_terrain_cmap(bool new_show_terrain_cmap);
+  void set_use_approx_mesh(bool new_use_approx_mesh);
+  void set_wireframe_mode(bool new_wireframe_mode);
+  void set_zenith(float new_zenith);
 
+  // --- Data management ---
+  void on_node_compute_finished(const std::string &graph_id, const std::string &id);
   virtual void set_data(BaseNode          *new_p_node,
                         const std::string &new_port_id_elev,
                         const std::string &new_port_id_color,
                         const std::string &new_port_id_normal_map);
 
-  void set_h_scale(float new_h_scale)
-  {
-    this->h_scale = new_h_scale;
-    this->repaint();
-  }
-
-  void set_max_approx_error(float new_max_approx_error);
-
-  void set_shader_type(const ShaderType &new_shader_type);
-
-  void set_shadow_saturation(float new_shadow_saturation);
-
-  void set_shadow_strength(float new_shadow_strength);
-
-  void set_shadow_gamma(float new_shadow_gamma);
-
-  void set_show_heightmap(bool new_show_heightmap);
-
-  void set_show_normal_map(bool new_show_normal_map);
-
-  void set_show_terrain_cmap(bool new_show_terrain_cmap);
-
-  void set_use_approx_mesh(bool new_use_approx_mesh);
-
-  void set_wireframe_mode(bool new_wireframe_mode);
-
-  void set_zenith(float new_zenith);
-
-  void setup_shader();
-
 protected:
+  // --- Qt override ---
   void initializeGL() override;
-
   void mousePressEvent(QMouseEvent *event) override;
-
   void mouseMoveEvent(QMouseEvent *event) override;
-
   void paintGL() override;
-
   void resizeEvent(QResizeEvent *event) override;
-
-  void resizeGL(int w, int h) override
-  {
-    this->glViewport(0, 0, w, h);
-    this->repaint();
-  }
-
-  void set_data_again()
-  {
-    this->set_data(this->p_node,
-                   this->port_id_elev,
-                   this->port_id_color,
-                   this->port_id_normal_map);
-  }
-
+  void resizeGL(int w, int h) override;
   void wheelEvent(QWheelEvent *event) override;
 
+  void set_data_again(); // see public set_data()
+
 protected:
+  void bind_gl_buffers();
+  void setup_shader();
+
+  // --- Members ---
   BaseNode   *p_node;
   std::string port_id_elev;
   std::string port_id_color;
@@ -139,7 +110,8 @@ protected:
   hmap::Vec2<int>       texture_hmap_shape = hmap::Vec2<int>(0, 0);
   hmap::Vec2<int>       texture_normal_shape = hmap::Vec2<int>(0, 0);
 
-  // states whether the texture diffuse has been defined and is to be used in the shader
+  // states whether the texture diffuse has been defined and is to be used in the
+  // shader
   bool use_texture_diffuse;
   bool use_texture_normal;
 
@@ -176,11 +148,9 @@ protected:
 
   QPointF mouse_pos_bckp;
   float   alpha_x_bckp, alpha_y_bckp, delta_x_bckp, delta_y_bckp;
-
-  void bind_gl_buffers();
 };
 
-// helpers
+// --- Helpers ---
 
 void generate_basemesh(hmap::Vec2<int>       shape,
                        std::vector<GLfloat> &vertices,

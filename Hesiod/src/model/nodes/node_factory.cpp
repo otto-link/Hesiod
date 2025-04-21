@@ -6,6 +6,11 @@
 
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/node_factory.hpp"
+#include "hesiod/model/utils.hpp"
+
+// specific nodes
+#include "hesiod/model/nodes/broadcast_node.hpp"
+#include "hesiod/model/nodes/receive_node.hpp"
 
 #define SETUP_NODE(NodeType, node_type)                                                  \
   case str2int(#NodeType):                                                               \
@@ -21,18 +26,6 @@ constexpr unsigned int str2int(const char *str, int h = 0)
 {
   // https://stackoverflow.com/questions/16388510
   return !str[h] ? 5381 : (str2int(str, h + 1) * 33) ^ str[h];
-}
-
-std::vector<std::string> split_string(const std::string &string, char delimiter)
-{
-  std::vector<std::string> result;
-  std::stringstream        ss(string);
-  std::string              word;
-
-  while (std::getline(ss, word, delimiter))
-    result.push_back(word);
-
-  return result;
 }
 
 void dump_node_inventory(const std::string &fname)
@@ -117,6 +110,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"BlendPoissonBf", "Operator/Blend"},
       {"Border", "Operator/Morphology"},
       {"Brush", "Primitive/Authoring"},
+      {"Broadcast", "Routing"},
       {"Bump", "Primitive/Function"},
       {"Caldera", "Primitive/Geological"},
       {"Clamp", "Filter/Range"},
@@ -197,6 +191,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"MixTexture", "Texture"},
       {"Mixer", "Operator/Blend"},
       {"MorphologicalGradient", "Operator/Morphology"},
+      {"MorphologicalTopHat", "Operator/Morphology"},
       {"MountainRangeRadial", "Primitive/Geological"},
       {"Noise", "Primitive/Coherent"},
       {"NoiseFbm", "Primitive/Coherent"},
@@ -234,6 +229,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"RecastCliffDirectional", "Filter/Recast"},
       {"RecastCracks", "Filter/Recast"},
       {"RecastSag", "Filter/Recast"},
+      {"Receive", "Routing"},
       {"Recurve", "Filter/Recurve"},
       {"RecurveKura", "Filter/Recurve"},
       {"RecurveS", "Filter/Recurve"},
@@ -291,6 +287,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"ThermalRidge", "Erosion/Thermal"},
       {"ThermalSchott", "WIP"}, // "Erosion/Thermal"
       {"ThermalScree", "Erosion/Thermal"},
+      {"Thru", "Routing"},
       {"Translate", "Operator/Transform"},
       {"Unsphericity", "Features/Landform"},
       {"ValleyWidth", "Features/Landform"},
@@ -315,6 +312,25 @@ std::map<std::string, std::string> get_node_inventory()
 std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type,
                                           std::shared_ptr<ModelConfig> config)
 {
+  // --- specialized nodes
+
+  if (node_type == "Broadcast")
+  {
+    auto sptr = std::make_shared<hesiod::BroadcastNode>(node_type, config);
+    setup_broadcast_node(sptr.get());
+    sptr->set_compute_fct(&compute_broadcast_node);
+    return sptr;
+  }
+  else if (node_type == "Receive")
+  {
+    auto sptr = std::make_shared<hesiod::ReceiveNode>(node_type, config);
+    setup_receive_node(sptr.get());
+    sptr->set_compute_fct(&compute_receive_node);
+    return sptr;
+  }
+
+  // --- generic nodes
+
   auto sptr = std::make_shared<hesiod::BaseNode>(node_type, config);
 
   switch (str2int(node_type.c_str()))
@@ -407,6 +423,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(MixNormalMap, mix_normal_map);
     SETUP_NODE(MixTexture, mix_texture);
     SETUP_NODE(MorphologicalGradient, morphological_gradient);
+    SETUP_NODE(MorphologicalTopHat, morphological_top_hat);
     SETUP_NODE(MountainRangeRadial, mountain_range_radial);
     SETUP_NODE(Noise, noise);
     SETUP_NODE(NoiseFbm, noise_fbm);
@@ -502,6 +519,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(ThermalRidge, thermal_ridge);
     SETUP_NODE(ThermalSchott, thermal_schott);
     SETUP_NODE(ThermalScree, thermal_scree);
+    SETUP_NODE(Thru, thru);
     SETUP_NODE(Unsphericity, unsphericity);
     SETUP_NODE(ValleyWidth, valley_width);
     SETUP_NODE(Voronoise, voronoise);

@@ -207,9 +207,10 @@ void OpenGLRender::mousePressEvent(QMouseEvent *event)
   }
 }
 
-void OpenGLRender::on_node_compute_finished(const std::string &id)
+void OpenGLRender::on_node_compute_finished(const std::string &graph_id,
+                                            const std::string &id)
 {
-  LOG->trace("OpenGLRender::on_node_compute_finished {}", id);
+  LOG->trace("OpenGLRender::on_node_compute_finished {}/{}", graph_id, id);
 
   if (this->p_node)
     if (id == this->p_node->get_id())
@@ -322,6 +323,12 @@ void OpenGLRender::resizeEvent(QResizeEvent *event)
   QOpenGLWidget::resizeEvent(event);
 
   this->bind_gl_buffers();
+  this->repaint();
+}
+
+void OpenGLRender::resizeGL(int w, int h)
+{
+  this->glViewport(0, 0, w, h);
   this->repaint();
 }
 
@@ -504,10 +511,24 @@ void OpenGLRender::set_data(BaseNode          *new_p_node,
   this->repaint();
 }
 
+void OpenGLRender::set_data_again()
+{
+  this->set_data(this->p_node,
+                 this->port_id_elev,
+                 this->port_id_color,
+                 this->port_id_normal_map);
+}
+
 void OpenGLRender::set_azimuth(float new_azimuth)
 {
   this->azimuth = new_azimuth;
   this->update();
+}
+
+void OpenGLRender::set_h_scale(float new_h_scale)
+{
+  this->h_scale = new_h_scale;
+  this->repaint();
 }
 
 void OpenGLRender::set_max_approx_error(float new_max_approx_error)

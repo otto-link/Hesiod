@@ -1,10 +1,9 @@
-/* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
- * Public License. The full license is in the file LICENSE, distributed with
- * this software. */
+/* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General Public
+   License. The full license is in the file LICENSE, distributed with this software. */
 
 /**
  * @file utils.hpp
- * @author Otto Link (otto.link.bv@gmail.com)
+ * @author  Otto Link (otto.link.bv@gmail.com)
  * @brief
  * @version 0.1
  * @date 2023-04-29
@@ -14,25 +13,22 @@
  */
 
 #pragma once
+#include <filesystem>
+#include <string>
 
-#include "highmap/heightmap.hpp"
-
-#include "hesiod/model/nodes/base_node.hpp"
+#include "nlohmann/json.hpp"
 
 namespace hesiod
 {
 
-void post_apply_enveloppe(BaseNode *p_node, hmap::Heightmap &h, hmap::Heightmap *p_env);
+std::filesystem::path insert_before_extension(const std::filesystem::path &original_path,
+                                              const std::string           &insert_str);
 
-void post_process_heightmap(BaseNode         *p_node,
-                            hmap::Heightmap  &h,
-                            bool              inverse,
-                            bool              smoothing,
-                            float             smoothing_radius,
-                            bool              saturate,
-                            hmap::Vec2<float> saturate_range,
-                            float             saturate_k,
-                            bool              remap,
-                            hmap::Vec2<float> remap_range);
+nlohmann::json json_from_file(const std::string &fname);
+void           json_to_file(const nlohmann::json &json, const std::string &fname);
+
+std::vector<std::string> split_string(const std::string &string, char delimiter);
+
+std::string time_stamp();
 
 } // namespace hesiod

@@ -1,10 +1,9 @@
-/* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
- * Public License. The full license is in the file LICENSE, distributed with
- * this software. */
+/* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General Public
+   License. The full license is in the file LICENSE, distributed with this software. */
 
 /**
  * @file open_gl_render.hpp
- * @author Otto Link (otto.link.bv@gmail.com)
+ * @author  Otto Link (otto.link.bv@gmail.com)
  * @brief
  * @version 0.1
  * @date 2023-04-29
@@ -34,7 +33,7 @@ public:
                 const std::string &new_port_id_color,
                 const std::string &new_port_id_normal_map);
 
-  void on_node_compute_finished(const std::string &id);
+  void on_node_compute_finished(const std::string &graph_id, const std::string &id);
 
 private:
   OpenGLRender *renderer;

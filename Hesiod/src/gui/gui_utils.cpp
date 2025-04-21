@@ -58,11 +58,21 @@ void clear_layout(QLayout *layout)
   }
 }
 
+int float_to_slider_pos(float v, float min, float max, int slider_steps)
+{
+  return (int)((v - min) / (max - min) * (float)slider_steps);
+}
+
 void resize_font(QWidget *widget, int relative_size_modification)
 {
   QFont font = widget->font();
   font.setPointSize(font.pointSize() + relative_size_modification);
   widget->setFont(font);
+}
+
+float slider_pos_to_float(int pos, float min, float max, int slider_steps)
+{
+  return min + (float)pos / (float)slider_steps * (max - min);
 }
 
 } // namespace hesiod

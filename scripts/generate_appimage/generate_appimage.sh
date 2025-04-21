@@ -16,7 +16,7 @@ chmod 0744 ${2}/linuxdeploy-plugin-qt-x86_64.AppImage
 # cp -rv ${3}/build/bin/data ${1}/AppDir/.
 # cp -rv ${3}/build/bin/data ${1}/AppDir/usr/bin/.
 
-# ./linuxdeploy-x86_64.AppImage --appdir AppDir --executable ${3}/build/bin/hesiod --plugin qt --output appimage -d ${1}/hesiod.desktop -i ${1}/icon_hesiod.png
+./linuxdeploy-x86_64.AppImage --appdir AppDir --executable ${3}/build/bin/hesiod --plugin qt --output appimage -d ${1}/hesiod.desktop -i ${1}/icon_hesiod.png
 
 HASH=`git rev-parse HEAD`
 HASH=${HASH:0:7}

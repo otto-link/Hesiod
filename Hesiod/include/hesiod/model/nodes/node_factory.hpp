@@ -1,10 +1,9 @@
-/* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
- * Public License. The full license is in the file LICENSE, distributed with
- * this software. */
+/* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General Public
+   License. The full license is in the file LICENSE, distributed with this software. */
 
 /**
  * @file node_factory.hpp
- * @author Otto Link (otto.link.bv@gmail.com)
+ * @author  Otto Link (otto.link.bv@gmail.com)
  * @brief
  * @version 0.1
  * @date 2023-04-29
@@ -46,23 +45,23 @@ std::map<std::string, std::string> get_node_inventory();
 /**
  * @brief Factory function to create nodes based on the provided node type.
  *
- * This function creates and returns a shared pointer to a node of the specified type.
- * The node is created based on the string name of the node type (e.g., "Noise", "Remap").
- * If the node type is not recognized, the function throws an `std::invalid_argument`
+ * This function creates and returns a shared pointer to a node of the specified type. The
+ * node is created based on the string name of the node type (e.g.,
+ * "Noise", "Remap"). If the node type is not recognized, the function throws an
+ * `std::invalid_argument`
  * exception.
  *
- * @param node_type A string representing the type of node to create. This string is
- * hashed and compared against known node types.
- * @param config A shared pointer to a `ModelConfig` object, which provides configuration
- * parameters for the node being created.
+ * @param  node_type A string representing the type of node to create. This string is
+ *                   hashed and compared against known node types.
+ * @param  config    A shared pointer to a `ModelConfig` object, which provides
+ *                   configuration parameters for the node being created.
  *
- * @return A `std::shared_ptr<gnode::Node>` pointing to the newly created node.
+ * @return           A `std::shared_ptr<gnode::Node>` pointing to the newly created node.
  *
- * @throws std::invalid_argument if the `node_type` is not recognized.
+ * @throws std::invalid_argumentifthe`node_type`isnotrecognized.
  *
  * Example usage:
- * @code
- * auto noise_node = node_factory("Noise", config);
+ * @code auto noise_node = node_factory("Noise", config);
  * auto remap_node = node_factory("Remap", config);
  * @endcode
  */
@@ -77,6 +76,7 @@ DECLARE_NODE(accumulation_curvature)
 DECLARE_NODE(blend)
 DECLARE_NODE(blend_poisson_bf)
 DECLARE_NODE(border)
+DECLARE_NODE(broadcast)
 DECLARE_NODE(brush)
 DECLARE_NODE(bump)
 DECLARE_NODE(caldera)
@@ -158,6 +158,7 @@ DECLARE_NODE(mix_normal_map)
 DECLARE_NODE(mix_texture)
 DECLARE_NODE(mixer)
 DECLARE_NODE(morphological_gradient)
+DECLARE_NODE(morphological_top_hat)
 DECLARE_NODE(mountain_range_radial)
 DECLARE_NODE(noise)
 DECLARE_NODE(noise_fbm)
@@ -195,6 +196,7 @@ DECLARE_NODE(recast_cliff)
 DECLARE_NODE(recast_cliff_directional)
 DECLARE_NODE(recast_cracks)
 DECLARE_NODE(recast_sag)
+DECLARE_NODE(receive)
 DECLARE_NODE(recurve)
 DECLARE_NODE(recurve_kura)
 DECLARE_NODE(recurve_s)
@@ -252,6 +254,7 @@ DECLARE_NODE(thermal_rib)
 DECLARE_NODE(thermal_ridge)
 DECLARE_NODE(thermal_schott)
 DECLARE_NODE(thermal_scree)
+DECLARE_NODE(thru)
 DECLARE_NODE(translate)
 DECLARE_NODE(unsphericity)
 DECLARE_NODE(valley_width)

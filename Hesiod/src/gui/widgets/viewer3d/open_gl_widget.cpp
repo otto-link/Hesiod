@@ -219,12 +219,13 @@ OpenGLWidget::OpenGLWidget(QWidget *parent) : QWidget(parent)
     layout->setColumnStretch(i, 1);
 }
 
-void OpenGLWidget::on_node_compute_finished(const std::string &id)
+void OpenGLWidget::on_node_compute_finished(const std::string &graph_id,
+                                            const std::string &id)
 {
-  LOG->trace("OpenGLWidget::on_node_compute_finished {}", id);
+  LOG->trace("OpenGLWidget::on_node_compute_finished {}/{}", graph_id, id);
 
   // just a pass through...
-  this->renderer->on_node_compute_finished(id);
+  this->renderer->on_node_compute_finished(graph_id, id);
 }
 
 void OpenGLWidget::set_data(BaseNode          *new_p_node,
