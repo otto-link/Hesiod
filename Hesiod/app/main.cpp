@@ -7,6 +7,7 @@ typedef unsigned int uint;
 #include "highmap/opencl/gpu_opencl.hpp"
 
 #include "hesiod/cli/batch_mode.hpp"
+#include "hesiod/config.hpp"
 #include "hesiod/gui/main_window.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/cmap.hpp"
@@ -46,6 +47,9 @@ int main(int argc, char *argv[])
 
   hesiod::MainWindow *main_window = hesiod::MainWindow::instance(&app);
   main_window->show();
+
+  if (HSD_CONFIG->window.open_viewport_at_startup)
+    main_window->show_viewport();
 
   return app.exec();
 }

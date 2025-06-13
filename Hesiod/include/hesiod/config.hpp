@@ -25,6 +25,7 @@ public:
   struct Window
   {
     bool open_graph_manager_at_startup = false;
+    bool open_viewport_at_startup = true;
   } window;
 
 private:

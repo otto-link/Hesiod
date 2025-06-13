@@ -461,6 +461,12 @@ void MainWindow::show_about()
   msg_box.exec();
 }
 
+void MainWindow::show_viewport()
+{
+  LOG->trace("MainWindow::show_viewport");
+  this->graph_tabs_widget->show_viewport();
+}
+
 void MainWindow::update_window_title()
 {
   std::string title = "Hesiod";

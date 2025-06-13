@@ -51,6 +51,7 @@ public slots:
   void on_node_deleted(const std::string &graph_id, const std::string &id);
 
   void set_selected_tab(const std::string &graph_id);
+  void show_viewport();
   void update_receive_nodes_tag_list();
   void update_tab_widget();
   void zoom_to_content();
