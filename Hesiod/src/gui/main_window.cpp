@@ -15,6 +15,7 @@
 
 #include "Toast.h"
 
+#include "hesiod/config.hpp"
 #include "hesiod/gui/main_window.hpp"
 #include "hesiod/gui/widgets/graph_manager_widget.hpp"
 #include "hesiod/gui/widgets/graph_tabs_widget.hpp"
@@ -35,7 +36,9 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
   // GUI
   this->graph_manager_widget = std::make_unique<GraphManagerWidget>(
       this->graph_manager.get());
-  this->graph_manager_widget->show();
+
+  if (HSD_CONFIG->window.open_graph_manager_at_startup)
+    this->graph_manager_widget->show();
 
   this->graph_tabs_widget = std::make_unique<GraphTabsWidget>(this->graph_manager.get());
 
@@ -399,7 +402,7 @@ void MainWindow::setup_menu_bar()
 
   auto *show_layout_manager = new QAction("Graph layout manager", this);
   show_layout_manager->setCheckable(true);
-  show_layout_manager->setChecked(true);
+  show_layout_manager->setChecked(this->graph_manager_widget->isVisible());
   view_menu->addAction(show_layout_manager);
 
   QMenu *help = menuBar()->addMenu("&Help");
