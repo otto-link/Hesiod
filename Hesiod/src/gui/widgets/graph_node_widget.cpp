@@ -172,8 +172,8 @@ void GraphNodeWidget::on_graph_settings_request()
     // backup graphics node reference (to avoid dangling pointer issues in the
     // final loop... because when clearing the model graph, it also destroys the
     // proxy node which is used by the graphics node to keep track of the node id)
-    std::map<std::string, gngui::GraphicsNode*> gfx_node_ref_map = {};
-    
+    std::map<std::string, gngui::GraphicsNode *> gfx_node_ref_map = {};
+
     for (auto &[id, _] : this->p_graph_node->get_nodes())
     {
       gfx_node_ref_map[id] = this->get_graphics_node_by_id(id);
