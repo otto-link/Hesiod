@@ -314,10 +314,10 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
       bckp_button->setText("Backup\nstate");
       bckp_button->setIcon(bckp_button->style()->standardIcon(QStyle::SP_DriveHDIcon));
 
-      QToolButton *reset_button = new QToolButton;
-      reset_button->setText("Revert\nstate");
-      reset_button->setIcon(
-          reset_button->style()->standardIcon(QStyle::SP_DialogCloseButton));
+      QToolButton *revert_button = new QToolButton;
+      revert_button->setText("Revert\nstate");
+      revert_button->setIcon(
+          revert_button->style()->standardIcon(QStyle::SP_DialogCloseButton));
 
       QToolButton *load_button = new QToolButton;
       load_button->setText("Load\npreset");
@@ -329,6 +329,11 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
       save_button->setIcon(
           save_button->style()->standardIcon(QStyle::SP_DialogSaveButton));
 
+      QToolButton *reset_button = new QToolButton;
+      reset_button->setText("Reset\nsettings");
+      reset_button->setIcon(
+          reset_button->style()->standardIcon(QStyle::SP_MediaSkipBackward));
+
       QToolButton *help_button = new QToolButton;
       help_button->setText("Help!");
       help_button->setIcon(
@@ -336,9 +341,10 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
 
       for (auto p : {update_button,
                      bckp_button,
-                     reset_button,
+                     revert_button,
                      load_button,
                      save_button,
+                     reset_button,
                      help_button})
       {
         p->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
@@ -362,7 +368,7 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
                     &QPushButton::pressed,
                     [attributes_widget]() { attributes_widget->on_save_state(); });
 
-      this->connect(reset_button,
+      this->connect(revert_button,
                     &QPushButton::pressed,
                     [attributes_widget]()
                     { attributes_widget->on_restore_save_state(); });
@@ -374,6 +380,11 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
       this->connect(save_button,
                     &QPushButton::pressed,
                     [attributes_widget]() { attributes_widget->on_save_preset(); });
+
+      this->connect(reset_button,
+                    &QPushButton::pressed,
+                    [attributes_widget]()
+                    { attributes_widget->on_restore_initial_state(); });
 
       this->connect(help_button,
                     &QPushButton::pressed,
