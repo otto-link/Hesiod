@@ -14,7 +14,7 @@ NODE_MARKDOWN_PATH = "docs/node_reference/"
 def generate_snapshots():
     """Generate node snapshots using the Hesiod executable."""
     print("Generating snapshots...")
-    os.system(f"cd {BUILD_PATH} ; bin/./hesiod --snapshot")
+    # os.system(f"cd {BUILD_PATH} ; bin/./hesiod --snapshot")
 
 def load_node_data():
     """Load node documentation data from a JSON file."""
@@ -68,6 +68,7 @@ def generate_node_markdown(data):
     md_file.new_header(level=1, title="Nodes")
     
     for node_type, node_info in data.items():
+        print(node_info['label'])
         md_file.new_header(level=2, title=node_type)
         md_file.new_paragraph(node_info["description"])
         
@@ -112,6 +113,10 @@ def generate_parameters_table(md_file, node_info):
     """Generate markdown table for node parameters."""
     table = ["Name", "Type", "Description"]
     parameters = node_info.get("parameters", {})
+
+    if parameters is None:
+        return
+    
     entries = [[p["label"], p["type"], p["description"]] for p in parameters.values()]
     
     if entries:

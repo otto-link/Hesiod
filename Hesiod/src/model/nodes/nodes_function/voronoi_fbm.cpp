@@ -42,7 +42,6 @@ void setup_voronoi_fbm_node(BaseNode *p_node)
   ADD_ATTR(FloatAttribute, "lacunarity", 2.f, 0.01f, 4.f);
   ADD_ATTR(BoolAttribute, "inverse", false);
   ADD_ATTR(RangeAttribute, "remap");
-  ADD_ATTR(BoolAttribute, "GPU", HSD_DEFAULT_GPU_MODE);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"return_type",
@@ -57,9 +56,7 @@ void setup_voronoi_fbm_node(BaseNode *p_node)
                                 "lacunarity",
                                 "_SEPARATOR_",
                                 "inverse",
-                                "remap",
-                                "_SEPARATOR_",
-                                "GPU"});
+                                "remap"});
 }
 
 void compute_voronoi_fbm_node(BaseNode *p_node)

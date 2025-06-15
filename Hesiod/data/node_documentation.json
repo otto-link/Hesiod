@@ -275,6 +275,33 @@
             }
         }
     },
+    "Broadcast": {
+        "category": "Routing",
+        "description": "Makes the input heightmap available to other graph nodes using a shared tag.",
+        "label": "Broadcast",
+        "parameters": {
+            "tag": {
+                "description": "Identifier used to reference this heightmap in other graph nodes.",
+                "key": "tag",
+                "label": "tag",
+                "type": "String"
+            }
+        },
+        "ports": {
+            "input": {
+                "caption": "input",
+                "data_type": "Heightmap",
+                "description": "Heightmap data to be shared with other graph nodes.",
+                "type": "input"
+            },
+            "thru": {
+                "caption": "thru",
+                "data_type": "Heightmap",
+                "description": "Pass-through of the input heightmap, unchanged.",
+                "type": "output"
+            }
+        }
+    },
     "Brush": {
         "category": "Primitive/Authoring",
         "description": "A manual brush tool for directly painting heightmaps, allowing interactive terrain editing.",
@@ -600,6 +627,7 @@
         "category": "Geometry/Cloud",
         "description": "CloudMerge merges two clouds into a single one.",
         "label": "CloudMerge",
+        "parameters": null,
         "ports": {
             "cloud": {
                 "caption": "cloud",
@@ -730,6 +758,7 @@
         "category": "Geometry/Cloud",
         "description": "CloudToArrayInterp generates a smooth and continuous 2D elevation map from a set of scattered points using Delaunay linear interpolation.",
         "label": "CloudToArrayInterp",
+        "parameters": null,
         "ports": {
             "cloud": {
                 "caption": "cloud",
@@ -1289,6 +1318,7 @@
         "category": "WIP",
         "description": "The Detrend operator is used to adjust the elevation using a very basic (uncorrect) detrending operator.",
         "label": "Detrend",
+        "parameters": null,
         "ports": {
             "input": {
                 "caption": "input",
@@ -2679,6 +2709,7 @@
         "category": "Converter",
         "description": "HeightmapToRGBA converts a series of heightmaps into an RGBA splatmap.",
         "label": "HeightmapToRGBA",
+        "parameters": null,
         "ports": {
             "A": {
                 "caption": "A",
@@ -3535,6 +3566,7 @@
         "category": "Math/Base",
         "description": "Inverse flips the sign of every values.",
         "label": "Inverse",
+        "parameters": null,
         "ports": {
             "input": {
                 "caption": "input",
@@ -4148,6 +4180,7 @@
         "category": "Operator/Blend",
         "description": "The Mixer operator takes several input heightmaps and blend them according to a mixing parameter expected in [0, 1].",
         "label": "Mixer",
+        "parameters": null,
         "ports": {
             "input 1": {
                 "caption": "input 1",
@@ -5793,6 +5826,7 @@
         "category": "Geometry/Path",
         "description": "PathToCloud convert a Path to a set of points (Cloud).",
         "label": "PathToCloud",
+        "parameters": null,
         "ports": {
             "cloud": {
                 "caption": "cloud",
@@ -5908,6 +5942,7 @@
         "category": "Debug",
         "description": "TODO",
         "label": "Preview",
+        "parameters": null,
         "ports": {
             "elevation": {
                 "caption": "elevation",
@@ -6418,13 +6453,34 @@
             }
         }
     },
+    "Receive": {
+        "category": "Routing",
+        "description": "Retrieves a heightmap broadcasted by another node using the specified tag.",
+        "label": "Receive",
+        "parameters": {
+            "tag": {
+                "description": "Tag identifying the broadcasted heightmap to receive.",
+                "key": "tag",
+                "label": "tag",
+                "type": "Choice"
+            }
+        },
+        "ports": {
+            "output": {
+                "caption": "output",
+                "data_type": "Heightmap",
+                "description": "The heightmap retrieved from the broadcast source.",
+                "type": "output"
+            }
+        }
+    },
     "Recurve": {
         "category": "Filter/Recurve",
-        "description": "TODO",
+        "description": "Applies a corrective curve to the heightmap values using a user-defined set of control points.",
         "label": "Recurve",
         "parameters": {
             "values": {
-                "description": "TODO",
+                "description": "List of control points defining the curve to remap height values (X = input, Y = output).",
                 "key": "values",
                 "label": "values",
                 "type": "Vector of floats"
@@ -6434,7 +6490,7 @@
             "input": {
                 "caption": "input",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Heightmap to be modified using the corrective curve.",
                 "type": "input"
             },
             "mask": {
@@ -6446,7 +6502,7 @@
             "output": {
                 "caption": "output",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Resulting heightmap after the curve has been applied.",
                 "type": "output"
             }
         }
@@ -6494,6 +6550,7 @@
         "category": "Filter/Recurve",
         "description": "RecurveS applied a curve adjustment filter using a smooth S-shape curve.",
         "label": "RecurveS",
+        "parameters": null,
         "ports": {
             "input": {
                 "caption": "input",
@@ -6612,6 +6669,7 @@
         "category": "Math/Base",
         "description": "TODO",
         "label": "Reverse",
+        "parameters": null,
         "ports": {
             "input": {
                 "caption": "input",
@@ -9357,6 +9415,26 @@
             }
         }
     },
+    "Thru": {
+        "category": "Routing",
+        "description": "Passes the input heightmap directly to the output without modification.",
+        "label": "Thru",
+        "parameters": null,
+        "ports": {
+            "input": {
+                "caption": "input",
+                "data_type": "Heightmap",
+                "description": "Input heightmap to be routed unchanged.",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "Heightmap",
+                "description": "Output identical to the input heightmap.",
+                "type": "output"
+            }
+        }
+    },
     "Translate": {
         "category": "Operator/Transform",
         "description": "Translates an heightmap by a specified amount along the x and y axes. This function shifts the contents of the input array by `dx` and `dy` units along the x and y axes, respectively. It supports both periodic boundary conditions, where the array wraps around, and non-periodic conditions.",
@@ -9500,6 +9578,192 @@
                 "caption": "output",
                 "data_type": "Heightmap",
                 "description": "Valley width heightmap.",
+                "type": "output"
+            }
+        }
+    },
+    "Voronoi": {
+        "category": "Primitive/Coherent",
+        "description": "Generates a Voronoi heightmap based on spatial cell distances, with optional jitter, warping, and control inputs.",
+        "label": "Voronoi",
+        "parameters": {
+            "inverse": {
+                "description": "Toggle inversion of the output values.",
+                "key": "inverse",
+                "label": "inverse",
+                "type": "Bool"
+            },
+            "jitter.x": {
+                "description": "Amount of random jitter along the X-axis applied to Voronoi seed positions.",
+                "key": "jitter.x",
+                "label": "jitter.x",
+                "type": "Float"
+            },
+            "jitter.y": {
+                "description": "Amount of random jitter along the Y-axis applied to Voronoi seed positions.",
+                "key": "jitter.y",
+                "label": "jitter.y",
+                "type": "Float"
+            },
+            "kw": {
+                "description": "Wavenumber controlling the spatial frequency (cell size) of the Voronoi pattern.",
+                "key": "kw",
+                "label": "kw",
+                "type": "Wavenumber"
+            },
+            "remap": {
+                "description": "Remaps the output values to a specified target range.",
+                "key": "remap",
+                "label": "remap",
+                "type": "Value range"
+            },
+            "return_type": {
+                "description": "Determines the output type.",
+                "key": "return_type",
+                "label": "return_type",
+                "type": "Enumeration"
+            },
+            "seed": {
+                "description": "Seed value for the random generator affecting jitter and cell layout.",
+                "key": "seed",
+                "label": "seed",
+                "type": "Random seed number"
+            }
+        },
+        "ports": {
+            "control": {
+                "caption": "control",
+                "data_type": "Heightmap",
+                "description": "Optional input to guide Voronoi jittering.",
+                "type": "input"
+            },
+            "dx": {
+                "caption": "dx",
+                "data_type": "Heightmap",
+                "description": "X-axis displacement map for directional warping of the Voronoi pattern.",
+                "type": "input"
+            },
+            "dy": {
+                "caption": "dy",
+                "data_type": "Heightmap",
+                "description": "Y-axis displacement map for directional warping of the Voronoi pattern.",
+                "type": "input"
+            },
+            "envelope": {
+                "caption": "envelope",
+                "data_type": "Heightmap",
+                "description": "Heightmap used to modulate the visibility or strength of the Voronoi pattern.",
+                "type": "input"
+            },
+            "out": {
+                "caption": "out",
+                "data_type": "Heightmap",
+                "description": "Resulting heightmap generated by the Voronoi algorithm.",
+                "type": "output"
+            }
+        }
+    },
+    "VoronoiFbm": {
+        "category": "Primitive/Coherent",
+        "description": "Generates a fractal Voronoi pattern using fBm (fractal Brownian motion) based on distance fields and multiple noise layers.",
+        "label": "VoronoiFbm",
+        "parameters": {
+            "inverse": {
+                "description": "Toggle inversion of the output values.",
+                "key": "inverse",
+                "label": "inverse",
+                "type": "Bool"
+            },
+            "jitter.x": {
+                "description": "Amount of random jitter applied to seed points along the X-axis.",
+                "key": "jitter.x",
+                "label": "jitter.x",
+                "type": "Float"
+            },
+            "jitter.y": {
+                "description": "Amount of random jitter applied to seed points along the Y-axis.",
+                "key": "jitter.y",
+                "label": "jitter.y",
+                "type": "Float"
+            },
+            "kw": {
+                "description": "Base wavenumber that controls the frequency of the initial Voronoi pattern.",
+                "key": "kw",
+                "label": "kw",
+                "type": "Wavenumber"
+            },
+            "lacunarity": {
+                "description": "Frequency multiplier between successive octaves in the fBm process.",
+                "key": "lacunarity",
+                "label": "lacunarity",
+                "type": "Float"
+            },
+            "octaves": {
+                "description": "Number of fBm layers to combine for added detail and complexity.",
+                "key": "octaves",
+                "label": "octaves",
+                "type": "Integer"
+            },
+            "persistence": {
+                "description": "Amplitude scaling factor applied to each successive octave.",
+                "key": "persistence",
+                "label": "persistence",
+                "type": "Float"
+            },
+            "remap": {
+                "description": "Remaps the output values to a defined value range.",
+                "key": "remap",
+                "label": "remap",
+                "type": "Value range"
+            },
+            "return_type": {
+                "description": "Defines the type of Voronoi information returned.",
+                "key": "return_type",
+                "label": "return_type",
+                "type": "Enumeration"
+            },
+            "seed": {
+                "description": "Seed for random generation, affecting jitter and point distribution.",
+                "key": "seed",
+                "label": "seed",
+                "type": "Random seed number"
+            },
+            "weight": {
+                "description": "Weight multiplier applied to the final fBm result for scaling the output.",
+                "key": "weight",
+                "label": "weight",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "control": {
+                "caption": "control",
+                "data_type": "Heightmap",
+                "description": "Optional input to guide Voronoi jittering.",
+                "type": "input"
+            },
+            "dx": {
+                "caption": "dx",
+                "data_type": "Heightmap",
+                "description": "Displacement map along X-axis to warp the input coordinates.",
+                "type": "input"
+            },
+            "dy": {
+                "caption": "dy",
+                "data_type": "Heightmap",
+                "description": "Displacement map along Y-axis to warp the input coordinates.",
+                "type": "input"
+            },
+            "envelope": {
+                "caption": "envelope",
+                "data_type": "Heightmap",
+                "description": "Optional modulation map to attenuate or mask the fBm pattern locally.",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "Heightmap",
+                "description": "Final heightmap result generated by the fBm Voronoi algorithm.",
                 "type": "output"
             }
         }
