@@ -4,7 +4,7 @@
 
 Hesiod is an open-source application designed for generating procedural terrains using a node-based interface. This tool allows user to create detailed and realistic landscapes by connecting nodes that control various terrain elements such as elevation, erosion, filters to develop complex terrain models.
 
-> [!WARNING]  
+> [!WARNING]
 > As an actively developed open-source project, Hesiod is continuously evolving, with new features being added and existing ones improved. This ongoing development may lead to instabilities, as updates and changes are integrated. Please use the issue and discussion [threads](https://github.com/otto-link/Hesiod/issues) to help us make this software better.
 
 ## Download and installation
@@ -20,7 +20,11 @@ Batch mode execution allows headless computation of the graph nodes and modifica
 bin/./hesiod --batch graph_made_with_the_gui.hsd --shape=1024,1024 --tiling=1,1 --overlap=0
 ```
 
-## For developpers 
+## For users
+
+A stub of user manual in under construction [here](user_manual/index.md).
+
+## For developpers
 
 As an open-source tool, hosted on [github.com/otto-link/Hesiod](https://github.com/otto-link/Hesiod), Hesiod greatly encourages contributions. Developers and enthusiasts are welcome to improve existing features, add new capabilities, or fix bugs, enhancing the tool's functionality and broadening its application scope.
 
