@@ -13,6 +13,7 @@
 #include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/node_factory.hpp"
+#include "hesiod/model/utils.hpp"
 
 namespace hesiod
 {
@@ -155,11 +156,67 @@ std::string BaseNode::get_documentation_html() const
   }
   catch (const std::exception &e)
   {
-    LOG->error("Error generating documentation HTML: {}", e.what());
+    LOG->error(
+        "BaseNode::get_documentation_html: Error generating documentation HTML: {}",
+        e.what());
     html = "<p>Error generating documentation</p>";
   }
 
   return html;
+}
+
+std::string BaseNode::get_documentation_short() const
+{
+  std::string str;
+  size_t      width = 64;
+
+  try
+  {
+    str += std::format("NODE TYPE: {}", this->get_label());
+    str += "\n\n";
+
+    // category
+    if (this->documentation.contains("category"))
+    {
+      str += std::format("CATEGORIES: {}",
+                         this->documentation["category"].get<std::string>());
+      str += "\n\n";
+    }
+
+    // description
+    std::string description = this->documentation.value("description",
+                                                        "No description available");
+    description = insert_char_every_nth(description, width, "\n");
+    str += "DESCRIPTION:\n" + description;
+    str += "\n\n";
+
+    // ports
+    if (this->documentation.contains("ports") && this->documentation["ports"].is_object())
+    {
+      str += "PORTS:\n";
+
+      for (const auto &[key, port] : this->documentation["ports"].items())
+      {
+        std::string port_description = port.value("description", "No description");
+        port_description = insert_char_every_nth(port_description, width, "\n");
+
+        str += std::format("- {} / {} / {}\n{}\n",
+                           port.value("caption", key),
+                           port.value("type", "Unknown"),
+                           port.value("data_type", "Unknown"),
+                           port_description);
+      }
+    }
+  }
+  catch (const std::exception &e)
+  {
+    LOG->error(
+        "BaseNode::get_documentation_short: Error generating documentation HTML: {}",
+        e.what());
+    str = "Error generating documentation";
+  }
+
+  return str;
 }
 
 GraphEditor *BaseNode::get_p_graph_node() const

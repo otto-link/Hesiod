@@ -22,6 +22,28 @@ std::filesystem::path insert_before_extension(const std::filesystem::path &origi
   return dir / new_name;
 }
 
+std::string insert_char_every_nth(const std::string &input,
+                                  std::size_t        n,
+                                  const std::string &chr)
+{
+  if (n == 0)
+    return input; // avoid division by zero
+
+  std::string result;
+  result.reserve(input.size() + input.size() / n * chr.size());
+
+  for (std::size_t i = 0; i < input.size(); ++i)
+  {
+    result += input[i];
+    if ((i + 1) % n == 0)
+    {
+      result += chr;
+    }
+  }
+
+  return result;
+}
+
 nlohmann::json json_from_file(const std::string &fname)
 {
   nlohmann::json json;

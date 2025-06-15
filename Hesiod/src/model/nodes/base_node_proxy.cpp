@@ -46,7 +46,12 @@ QWidget *BaseNode::get_qwidget_ref()
 
 std::string BaseNode::get_tool_tip_text()
 {
-  return this->get_caption() + "/" + this->get_id();
+  std::string str = "ID: " + this->get_caption() + "/" + this->get_id();
+  str += "\n\n";
+
+  str += this->get_documentation_short();
+
+  return str;
 }
 
 } // namespace hesiod
