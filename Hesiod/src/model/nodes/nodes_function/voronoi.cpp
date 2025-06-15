@@ -35,8 +35,8 @@ void setup_voronoi_node(BaseNode *p_node)
            "F1: distance to the closest point");
   ADD_ATTR(WaveNbAttribute, "kw");
   ADD_ATTR(SeedAttribute, "seed");
-  ADD_ATTR(FloatAttribute, "jitter.x", 0.5f, 0.f, 1.f);
-  ADD_ATTR(FloatAttribute, "jitter.y", 0.5f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "jitter.x", 1.f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "jitter.y", 1.f, 0.f, 1.f);
   ADD_ATTR(BoolAttribute, "inverse", false);
   ADD_ATTR(RangeAttribute, "remap");
 
