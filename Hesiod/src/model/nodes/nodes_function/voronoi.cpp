@@ -32,11 +32,13 @@ void setup_voronoi_node(BaseNode *p_node)
   ADD_ATTR(EnumAttribute,
            "return_type",
            voronoi_return_type_map,
-           "F1: distance to the closest point");
+           "F1: squared distance to the closest point");
   ADD_ATTR(WaveNbAttribute, "kw");
   ADD_ATTR(SeedAttribute, "seed");
   ADD_ATTR(FloatAttribute, "jitter.x", 1.f, 0.f, 1.f);
   ADD_ATTR(FloatAttribute, "jitter.y", 1.f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "k_smoothing", 0.f, 0.f, 1.f);
+  ADD_ATTR(BoolAttribute, "sqrt_output", false);
   ADD_ATTR(BoolAttribute, "inverse", false);
   ADD_ATTR(RangeAttribute, "remap");
 
@@ -47,6 +49,8 @@ void setup_voronoi_node(BaseNode *p_node)
                                 "seed",
                                 "jitter.x",
                                 "jitter.y",
+                                "k_smoothing",
+                                "sqrt_output",
                                 "_SEPARATOR_",
                                 "inverse",
                                 "remap"});
@@ -86,6 +90,7 @@ void compute_voronoi_node(BaseNode *p_node)
                                      GET("kw", WaveNbAttribute),
                                      GET("seed", SeedAttribute),
                                      jitter,
+                                     GET("k_smoothing", FloatAttribute),
                                      rtype,
                                      pa_ctrl,
                                      pa_dx,
@@ -93,6 +98,19 @@ void compute_voronoi_node(BaseNode *p_node)
                                      bbox);
       },
       p_node->get_config_ref()->hmap_transform_mode_gpu);
+
+  // apply square root
+  p_out->remap();
+
+  if (GET("sqrt_output", BoolAttribute))
+    hmap::transform(
+        {p_out},
+        [](std::vector<hmap::Array *> p_arrays)
+        {
+          hmap::Array *pa_out = p_arrays[0];
+          *pa_out = hmap::sqrt(*pa_out);
+        },
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
 
   // post-process
   post_apply_enveloppe(p_node, *p_out, p_env);
