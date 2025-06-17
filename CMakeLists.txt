@@ -27,32 +27,10 @@ else()
   )
 endif()
 
-# * compile defitions
-
-# Get latest Git tag
-execute_process(
-  COMMAND git describe --tags --abbrev=0
-  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-  OUTPUT_VARIABLE HESIOD_GIT_TAG
-  OUTPUT_STRIP_TRAILING_WHITESPACE)
-
-# Get current commit short SHA
-execute_process(
-  COMMAND git rev-parse --short HEAD
-  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-  OUTPUT_VARIABLE HESIOD_GIT_SHA
-  OUTPUT_STRIP_TRAILING_WHITESPACE)
-
-# Optionally print for debug
-message(STATUS "Git tag: ${HESIOD_GIT_TAG}")
-message(STATUS "Git SHA: ${HESIOD_GIT_SHA}")
-
 add_compile_definitions(
   HESIOD_VERSION_MAJOR=${hesiod-root_VERSION_MAJOR}
   HESIOD_VERSION_MINOR=${hesiod-root_VERSION_MINOR}
-  HESIOD_VERSION_PATCH=${hesiod-root_VERSION_PATCH}
-  HESIOD_GIT_TAG="${HESIOD_GIT_TAG}"
-  HESIOD_GIT_SHA="${HESIOD_GIT_SHA}")
+  HESIOD_VERSION_PATCH=${hesiod-root_VERSION_PATCH})
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
