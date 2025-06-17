@@ -454,7 +454,10 @@ void MainWindow::show_about()
   msg += std::to_string(HESIOD_VERSION_PATCH) + "\n";
   msg += "A desktop application for node-based "
          "procedural terrain "
-         "generation.\nhttps://github.com/otto-link/Hesiod";
+         "generation.\nhttps://github.com/otto-link/Hesiod\n";
+  msg += "\n";
+  msg += "tag: " + std::string(HESIOD_GIT_TAG) + "\n";
+  msg += "SHA: " + std::string(HESIOD_GIT_SHA) + "\n";
 
   QMessageBox msg_box;
   msg_box.setText(msg.c_str());

@@ -19,6 +19,8 @@ int main(int argc, char *argv[])
             HESIOD_VERSION_MINOR,
             HESIOD_VERSION_PATCH);
 
+  LOG->info("tag: {}, SHA: {}", HESIOD_GIT_TAG, HESIOD_GIT_SHA);
+
   // start OpenCL
   hmap::gpu::init_opencl();
 
