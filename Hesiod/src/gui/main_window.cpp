@@ -99,7 +99,7 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
   // MainWindow -> MainWindow
   this->autosave_timer = new QTimer(this);
   this->autosave_timer->setSingleShot(true); // restarts on project change
-  this->autosave_timer->start(30 * 1000);    // TODO hardcoded (30 s)
+  this->autosave_timer->start(HSD_CONFIG->window.autosave_timer);
 
   this->connect(this->autosave_timer, &QTimer::timeout, this, &MainWindow::on_autosave);
 

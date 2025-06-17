@@ -9,6 +9,7 @@
  * @copyright Copyright (c) 2025
  */
 #pragma once
+#include <chrono>
 #include <memory>
 
 #define HSD_CONFIG hesiod::Config::get_config()
@@ -24,8 +25,9 @@ public:
 
   struct Window
   {
-    bool open_graph_manager_at_startup = false;
-    bool open_viewport_at_startup = true;
+    bool                      open_graph_manager_at_startup = false;
+    bool                      open_viewport_at_startup = true;
+    std::chrono::milliseconds autosave_timer{60000}; // 60 seconds
   } window;
 
 private:
