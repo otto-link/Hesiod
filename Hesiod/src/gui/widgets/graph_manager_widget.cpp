@@ -143,7 +143,7 @@ void GraphManagerWidget::add_list_item(const std::string &id)
       widget,
       &GraphQListWidget::bg_image_updated,
       this,
-      [this](const std::string &id, const QImage &image)
+      [this](const std::string &id, QImage image)
       { this->coord_frame_widget->get_frame_ref(id)->set_background_image(image); });
 
   this->connect(widget,

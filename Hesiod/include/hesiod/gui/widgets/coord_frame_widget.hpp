@@ -50,7 +50,7 @@ public:
   void set_z_depth(int new_z_depth);
 
   // --- Appearance ---
-  void set_background_image(const QImage &new_image);
+  void set_background_image(QImage new_image);
 
   // --- Interaction state setters ---
   void set_is_resized(bool resized);
