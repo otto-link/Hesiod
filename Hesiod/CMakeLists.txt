@@ -44,3 +44,10 @@ target_link_libraries(
           Qt6::OpenGL
           Qt6::Widgets
           Qt6::OpenGLWidgets)
+
+# --- some checking
+
+message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
+message(STATUS "Global flags: ${CMAKE_CXX_FLAGS}")
+message(STATUS "Debug flags: ${CMAKE_CXX_FLAGS_DEBUG}")
+message(STATUS "Release flags: ${CMAKE_CXX_FLAGS_RELEASE}")

@@ -12,12 +12,22 @@ typedef unsigned int uint;
 #include "hesiod/logger.hpp"
 #include "hesiod/model/cmap.hpp"
 
+#if defined(DEBUG_BUILD)
+#define HSD_RMODE "Debug"
+#elif defined(RELEASE_BUILD)
+#define HSD_RMODE "Release"
+#else
+#define HSD_RMODE "!!! UNDEFINED !!!"
+#endif
+
 int main(int argc, char *argv[])
 {
   LOG->info("Welcome to Hesiod v{}.{}.{}!",
             HESIOD_VERSION_MAJOR,
             HESIOD_VERSION_MINOR,
             HESIOD_VERSION_PATCH);
+
+  LOG->info("Release mode: {}", std::string(HSD_RMODE));
 
   // start OpenCL
   hmap::gpu::init_opencl();
@@ -26,6 +36,7 @@ int main(int argc, char *argv[])
   hesiod::CmapManager::get_instance();
 
   // start QApplication even if headless (for QObject)
+  qputenv("QT_LOGGING_RULES", HESIOD_QPUTENV_QT_LOGGING_RULES);
   QApplication app(argc, argv);
 
   // ----------------------------------- batch CLI mode
