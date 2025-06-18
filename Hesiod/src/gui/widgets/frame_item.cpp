@@ -170,24 +170,16 @@ void FrameItem::set_background_image(QImage new_image)
     return;
   }
 
+  LOG->debug("FrameItem::set_background_image: B1");
   QImage safe_image = new_image.convertToFormat(QImage::Format_ARGB32);
 
-  // QPixmap is a GPU-side resource and is not thread-safe, make
-  // sure QPixmap::fromImage() must be called from the GUI (main)
-  // thread
-  QMetaObject::invokeMethod(
-      this,
-      [this, safe_image]()
-      {
-        LOG->debug("FrameItem::set_background_image: C1");
-        this->pixmap = QPixmap::fromImage(safe_image);
-        LOG->debug("FrameItem::set_background_image: C2");
-        this->pixmap = this->pixmap.transformed(QTransform().scale(1.f, -1.f));
-        LOG->debug("FrameItem::set_background_image: C3");
-        this->update();
-        LOG->debug("FrameItem::set_background_image: C4");
-      },
-      Qt::QueuedConnection);
+  LOG->debug("FrameItem::set_background_image: C1");
+  this->pixmap = QPixmap::fromImage(safe_image);
+  LOG->debug("FrameItem::set_background_image: C2");
+  this->pixmap = this->pixmap.transformed(QTransform().scale(1.f, -1.f));
+  LOG->debug("FrameItem::set_background_image: C3");
+  this->update();
+  LOG->debug("FrameItem::set_background_image: C4");
 };
 
 void FrameItem::set_geometry(QPointF new_origin, QPointF new_size, float new_angle)

@@ -79,7 +79,8 @@ void GraphQListWidget::on_combobox_changed()
   // TODO allow other data types (see data_preview)
 
   // generate background image
-  QImage image;
+  QImage               image;
+  std::vector<uint8_t> img = {};
 
   hmap::Heightmap *p_h = this->p_graph_node->get_node_ref_by_id(node_id)
                              ->get_value_ref<hmap::Heightmap>(port_id);
@@ -89,13 +90,9 @@ void GraphQListWidget::on_combobox_changed()
     // TODO hardcoded
     hmap::Vec2<int> shape_img(512, 512);
 
-    hmap::Array          array = p_h->to_array(shape_img);
-    std::vector<uint8_t> img = hmap::colorize(array,
-                                              array.min(),
-                                              array.max(),
-                                              hmap::Cmap::TURBO,
-                                              true)
-                                   .to_img_8bit();
+    hmap::Array array = p_h->to_array(shape_img);
+    img = hmap::colorize(array, array.min(), array.max(), hmap::Cmap::TURBO, true)
+              .to_img_8bit();
     image = QImage(img.data(), shape_img.x, shape_img.y, QImage::Format_RGB888);
   }
   else
