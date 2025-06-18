@@ -9240,11 +9240,11 @@
     },
     "ThermalRidge": {
         "category": "Erosion/Thermal",
-        "description": "TODO",
+        "description": "Applies a thermal erosion effect that simulates the collapse of unstable slopes by moving material from steep areas to lower regions, generating ridged features.",
         "label": "ThermalRidge",
         "parameters": {
             "iterations": {
-                "description": "TODO",
+                "description": "Number of thermal erosion iterations to apply. More iterations result in more pronounced erosion and smoothing of steep slopes.",
                 "key": "iterations",
                 "label": "iterations",
                 "type": "Integer"
@@ -9256,13 +9256,13 @@
                 "type": "Value range"
             },
             "scale_talus_with_elevation": {
-                "description": "Scales the talus amplitude based on heightmap elevation, reducing it at lower elevations and maintaining the nominal value at higher elevations.",
+                "description": "Scales the talus threshold based on elevation, reducing it at lower heights and preserving it at higher altitudes, to simulate realistic slope behavior.",
                 "key": "scale_talus_with_elevation",
                 "label": "scale_talus_with_elevation",
                 "type": "Bool"
             },
             "talus_global": {
-                "description": "TODO",
+                "description": "Global talus angle threshold controlling the maximum slope before material starts to move. Higher values result in steeper terrain preservation.",
                 "key": "talus_global",
                 "label": "talus_global",
                 "type": "Float"
@@ -9272,13 +9272,13 @@
             "deposition": {
                 "caption": "deposition",
                 "data_type": "Heightmap",
-                "description": "Deposition map (in [0, 1]).",
+                "description": "Heightmap showing the amount of material deposited during erosion, scaled in the range [0, 1].",
                 "type": "output"
             },
             "input": {
                 "caption": "input",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "The input heightmap to which thermal erosion will be applied.",
                 "type": "input"
             },
             "mask": {
@@ -9290,7 +9290,7 @@
             "output": {
                 "caption": "output",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "The resulting heightmap after thermal ridge erosion has been applied.",
                 "type": "output"
             }
         }
