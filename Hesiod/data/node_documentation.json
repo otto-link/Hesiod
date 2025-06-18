@@ -2856,12 +2856,6 @@
         "description": "HydraulicParticle is a particle-based hydraulic erosion operator that simulates the erosion and sediment transport processes that occur due to the flow of water over a terrain represented by the input heightmap. This type of operator models erosion by tracking the movement of virtual particles (or sediment particles) as they are transported by water flow and interact with the terrain.",
         "label": "HydraulicParticle",
         "parameters": {
-            "GPU": {
-                "description": "Toogle GPU acceleration on or off.",
-                "key": "GPU",
-                "label": "GPU",
-                "type": "Bool"
-            },
             "c_capacity": {
                 "description": "Particle capacity.",
                 "key": "c_capacity",
@@ -8679,29 +8673,29 @@
     },
     "Terrace": {
         "category": "Filter/Recurve",
-        "description": "TODO",
+        "description": "Applies a terracing effect to the input heightmap by quantizing elevation levels into discrete steps, optionally modulated by noise.",
         "label": "Terrace",
         "parameters": {
             "gain": {
-                "description": "TODO",
+                "description": "Controls the amplification of the terrace steps; higher values create steeper transitions between levels.",
                 "key": "gain",
                 "label": "gain",
                 "type": "Float"
             },
             "nlevels": {
-                "description": "TODO",
+                "description": "Number of discrete elevation steps (terraces) to apply to the input heightmap.",
                 "key": "nlevels",
                 "label": "nlevels",
                 "type": "Integer"
             },
             "noise_ratio": {
-                "description": "TODO",
+                "description": "Ratio between deterministic and noisy placement of terrace levels; 0 uses only uniform levels, 1 uses full noise-based variation.",
                 "key": "noise_ratio",
                 "label": "noise_ratio",
                 "type": "Float"
             },
             "seed": {
-                "description": "TODO",
+                "description": "Random seed used for generating noise when noise_ratio > 0.",
                 "key": "seed",
                 "label": "seed",
                 "type": "Random seed number"
@@ -8711,7 +8705,7 @@
             "input": {
                 "caption": "input",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "The input heightmap to be transformed with terrace steps.",
                 "type": "input"
             },
             "mask": {
@@ -8723,13 +8717,13 @@
             "noise": {
                 "caption": "noise",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Optional noise map used to perturb the position of the terrace levels for a more natural look.",
                 "type": "input"
             },
             "output": {
                 "caption": "output",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Resulting heightmap after applying the terracing effect.",
                 "type": "output"
             }
         }
@@ -9605,6 +9599,12 @@
                 "label": "jitter.y",
                 "type": "Float"
             },
+            "k_smoothing": {
+                "description": "No description",
+                "key": "k_smoothing",
+                "label": "k_smoothing",
+                "type": "Float"
+            },
             "kw": {
                 "description": "Wavenumber controlling the spatial frequency (cell size) of the Voronoi pattern.",
                 "key": "kw",
@@ -9628,6 +9628,12 @@
                 "key": "seed",
                 "label": "seed",
                 "type": "Random seed number"
+            },
+            "sqrt_output": {
+                "description": "No description",
+                "key": "sqrt_output",
+                "label": "sqrt_output",
+                "type": "Bool"
             }
         },
         "ports": {
@@ -9686,6 +9692,12 @@
                 "label": "jitter.y",
                 "type": "Float"
             },
+            "k_smoothing": {
+                "description": "No description",
+                "key": "k_smoothing",
+                "label": "k_smoothing",
+                "type": "Float"
+            },
             "kw": {
                 "description": "Base wavenumber that controls the frequency of the initial Voronoi pattern.",
                 "key": "kw",
@@ -9727,6 +9739,12 @@
                 "key": "seed",
                 "label": "seed",
                 "type": "Random seed number"
+            },
+            "sqrt_output": {
+                "description": "No description",
+                "key": "sqrt_output",
+                "label": "sqrt_output",
+                "type": "Bool"
             },
             "weight": {
                 "description": "Weight multiplier applied to the final fBm result for scaling the output.",

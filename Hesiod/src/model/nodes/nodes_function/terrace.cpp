@@ -56,21 +56,24 @@ void compute_terrace_node(BaseNode *p_node)
     float hmax = p_out->max();
 
     hmap::transform(
-        *p_out,
-        p_noise,
-        p_mask,
-        [p_node, hmin, hmax](hmap::Array &x, hmap::Array *p_noise, hmap::Array *p_mask)
+        {p_out, p_noise, p_mask},
+        [p_node, hmin, hmax](std::vector<hmap::Array *> p_arrays)
         {
-          hmap::terrace(x,
+          hmap::Array *pa_out = p_arrays[0];
+          hmap::Array *pa_noise = p_arrays[1];
+          hmap::Array *pa_mask = p_arrays[2];
+
+          hmap::terrace(*pa_out,
                         GET("seed", SeedAttribute),
                         GET("nlevels", IntAttribute),
-                        p_mask,
+                        pa_mask,
                         GET("gain", FloatAttribute),
                         GET("noise_ratio", FloatAttribute),
-                        p_noise,
+                        pa_noise,
                         hmin,
                         hmax);
-        });
+        },
+        p_node->get_config_ref()->hmap_transform_mode_gpu);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());
