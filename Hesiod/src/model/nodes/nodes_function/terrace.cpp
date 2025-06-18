@@ -27,7 +27,7 @@ void setup_terrace_node(BaseNode *p_node)
 
   // attribute(s)
   ADD_ATTR(IntAttribute, "nlevels", 4, 1, 32);
-  ADD_ATTR(FloatAttribute, "gain", 2.f, 0.01f, 10.f);
+  ADD_ATTR(FloatAttribute, "gain", 0.8f, 0.f, 1.f);
   ADD_ATTR(FloatAttribute, "noise_ratio", 0.1f, 0.f, 0.5f);
   ADD_ATTR(SeedAttribute, "seed");
 
