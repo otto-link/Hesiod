@@ -59,7 +59,7 @@ void compute_texture_quilting_expand_node(BaseNode *p_node)
 {
   Q_EMIT p_node->compute_started(p_node->get_id());
 
-  LOG->trace("computing node {}", p_node->get_label());
+  LOG->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
   hmap::HeightmapRGBA *p_texture_guide = p_node->get_value_ref<hmap::HeightmapRGBA>(
       "texture (guide)");

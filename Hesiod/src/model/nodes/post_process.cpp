@@ -6,13 +6,21 @@
 #include "highmap/opencl/gpu_opencl.hpp"
 #include "highmap/range.hpp"
 
+#include "attributes.hpp"
+
 #include "hesiod/model/nodes/base_node.hpp"
+
+using namespace attr;
 
 namespace hesiod
 {
 
 void post_apply_enveloppe(BaseNode *p_node, hmap::Heightmap &h, hmap::Heightmap *p_env)
 {
+  LOG->trace("post_apply_enveloppe: [{}]/[{}]",
+             p_node->get_node_type(),
+             p_node->get_id());
+
   if (p_env)
   {
     float hmin = h.min();
@@ -82,6 +90,83 @@ void post_process_heightmap(BaseNode         *p_node,
 
   if (remap)
     h.remap(remap_range.x, remap_range.y);
+}
+
+void post_process_heightmap(BaseNode *p_node, hmap::Heightmap &h)
+{
+  LOG->trace("post_process_heightmap: [{}]/[{}]",
+             p_node->get_node_type(),
+             p_node->get_id());
+
+  // inverse
+  if (GET("post_inverse", BoolAttribute))
+    h.inverse();
+
+  // saturate
+  if (GET_MEMBER("post_saturate", RangeAttribute, is_active))
+  {
+    hmap::Vec2<float> saturate_range = GET("post_saturate", RangeAttribute);
+    float             saturate_k = GET("post_saturate_k_smooth", FloatAttribute);
+
+    float hmin = h.min();
+    float hmax = h.max();
+
+    // node parameters are assumed normalized and thus in [0, 1],
+    // they need to be rescaled
+    float smin_n = hmin + saturate_range.x * (hmax - hmin);
+    float smax_n = hmax - (1.f - saturate_range.y) * (hmax - hmin);
+    float k_n = std::max(1e-6f, saturate_k * (hmax - hmin));
+
+    hmap::transform(h,
+                    [&smin_n, &smax_n, &k_n](hmap::Array &array)
+                    { hmap::clamp_smooth(array, smin_n, smax_n, k_n); });
+
+    // keep original amplitude
+    h.remap(hmin, hmax);
+  }
+
+  // smoothing
+  const int ir = (int)(GET("post_smoothing_radius", FloatAttribute) * h.shape.x);
+
+  if (ir)
+  {
+    hmap::transform(
+        {&h},
+        [&ir](std::vector<hmap::Array *> p_arrays)
+        {
+          hmap::Array *pa_out = p_arrays[0];
+          return hmap::gpu::smooth_cpulse(*pa_out, ir);
+        },
+        p_node->get_config_ref()->hmap_transform_mode_gpu);
+
+    h.smooth_overlap_buffers();
+  }
+
+  // remap
+  if (GET_MEMBER("post_remap", RangeAttribute, is_active))
+    h.remap(GET("post_remap", RangeAttribute)[0], GET("post_remap", RangeAttribute)[1]);
+}
+
+void setup_post_process_heightmap_attributes(BaseNode *p_node)
+{
+  LOG->trace("setup_post_process_heightmap_attributes: [{}]/[{}]",
+             p_node->get_node_type(),
+             p_node->get_id());
+
+  ADD_ATTR(BoolAttribute, "post_inverse", false);
+  ADD_ATTR(RangeAttribute, "post_saturate", false);
+  ADD_ATTR(FloatAttribute, "post_saturate_k_smooth", 0.1f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "post_smoothing_radius", 0.f, 0.f, 0.05f);
+  ADD_ATTR(RangeAttribute, "post_remap");
+
+  std::vector<std::string> *p_keys = p_node->get_attr_ordered_key_ref();
+
+  p_keys->push_back("_SEPARATOR_TEXT_Post-processing");
+  p_keys->push_back("post_inverse");
+  p_keys->push_back("post_saturate");
+  p_keys->push_back("post_saturate_k_smooth");
+  p_keys->push_back("post_smoothing_radius");
+  p_keys->push_back("post_remap");
 }
 
 } // namespace hesiod

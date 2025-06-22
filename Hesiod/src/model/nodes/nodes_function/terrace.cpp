@@ -34,14 +34,14 @@ void setup_terrace_node(BaseNode *p_node)
   // attribute(s) order
   p_node->set_attr_ordered_key({"nlevels", "gain", "noise_ratio", "seed"});
 
-  setup_mask_attributes(p_node);
+  setup_pre_process_mask_attributes(p_node);
 }
 
 void compute_terrace_node(BaseNode *p_node)
 {
   Q_EMIT p_node->compute_started(p_node->get_id());
 
-  LOG->trace("computing node {}", p_node->get_label());
+  LOG->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
   hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
 

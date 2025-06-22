@@ -27,7 +27,7 @@ void compute_cloud_merge_node(BaseNode *p_node)
 {
   Q_EMIT p_node->compute_started(p_node->get_id());
 
-  LOG->trace("computing node {}", p_node->get_label());
+  LOG->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
   hmap::Cloud *p_in1 = p_node->get_value_ref<hmap::Cloud>("cloud1");
   hmap::Cloud *p_in2 = p_node->get_value_ref<hmap::Cloud>("cloud2");

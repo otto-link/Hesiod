@@ -49,7 +49,7 @@ void compute_colorize_cmap_node(BaseNode *p_node)
 {
   Q_EMIT p_node->compute_started(p_node->get_id());
 
-  LOG->trace("computing node {}", p_node->get_label());
+  LOG->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
   hmap::Heightmap *p_level = p_node->get_value_ref<hmap::Heightmap>("level");
 
@@ -68,7 +68,7 @@ void compute_colorize_cmap_node(BaseNode *p_node)
     float cmin = 0.f;
     float cmax = 1.f;
 
-    if (GET_ATTR("saturate_input", RangeAttribute, is_active))
+    if (GET_MEMBER("saturate_input", RangeAttribute, is_active))
     {
       float hmin = p_level->min();
       float hmax = p_level->max();
@@ -102,7 +102,7 @@ void compute_colorize_cmap_node(BaseNode *p_node)
       if (GET("reverse_alpha", BoolAttribute))
         alpha_copy.inverse();
 
-      if (GET_ATTR("saturate_alpha", RangeAttribute, is_active))
+      if (GET_MEMBER("saturate_alpha", RangeAttribute, is_active))
       {
         hmap::Vec2<float> arange = GET("saturate_alpha", RangeAttribute);
         hmap::transform(alpha_copy,

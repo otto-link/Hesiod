@@ -41,7 +41,7 @@ void compute_blend_node(BaseNode *p_node)
 {
   Q_EMIT p_node->compute_started(p_node->get_id());
 
-  LOG->trace("computing node {}", p_node->get_label());
+  LOG->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
   hmap::Heightmap *p_in1 = p_node->get_value_ref<hmap::Heightmap>("input 1");
   hmap::Heightmap *p_in2 = p_node->get_value_ref<hmap::Heightmap>("input 2");
@@ -134,7 +134,7 @@ void compute_blend_node(BaseNode *p_node)
                            false, // saturate
                            {0.f, 0.f},
                            0.f,
-                           GET_ATTR("remap", RangeAttribute, is_active),
+                           GET_MEMBER("remap", RangeAttribute, is_active),
                            GET("remap", RangeAttribute));
   }
 
