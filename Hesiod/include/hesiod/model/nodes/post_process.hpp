@@ -34,4 +34,12 @@ void post_process_heightmap(BaseNode         *p_node,
                             bool              remap,
                             hmap::Vec2<float> remap_range);
 
+// --- mask preprocessing
+
+std::shared_ptr<hmap::Heightmap> pre_process_mask(BaseNode         *p_node,
+                                                  hmap::Heightmap *&p_mask,
+                                                  hmap::Heightmap  &h);
+
+void setup_mask_attributes(BaseNode *p_node);
+
 } // namespace hesiod

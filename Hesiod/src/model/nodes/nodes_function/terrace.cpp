@@ -33,6 +33,8 @@ void setup_terrace_node(BaseNode *p_node)
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"nlevels", "gain", "noise_ratio", "seed"});
+
+  setup_mask_attributes(p_node);
 }
 
 void compute_terrace_node(BaseNode *p_node)
@@ -48,6 +50,9 @@ void compute_terrace_node(BaseNode *p_node)
     hmap::Heightmap *p_noise = p_node->get_value_ref<hmap::Heightmap>("noise");
     hmap::Heightmap *p_mask = p_node->get_value_ref<hmap::Heightmap>("mask");
     hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
+
+    // prepare mask
+    std::shared_ptr<hmap::Heightmap> sp_mask = pre_process_mask(p_node, p_mask, *p_in);
 
     // copy the input heightmap
     *p_out = *p_in;
