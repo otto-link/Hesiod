@@ -2071,12 +2071,6 @@
                 "label": "angle_spread_ratio",
                 "type": "Float"
             },
-            "inverse": {
-                "description": "Invert the output values.",
-                "key": "inverse",
-                "label": "inverse",
-                "type": "Bool"
-            },
             "kw": {
                 "description": "Defines the wavenumber, which controls the frequency of the Gabor wavelets in the noise function.",
                 "key": "kw",
@@ -2101,11 +2095,35 @@
                 "label": "persistence",
                 "type": "Float"
             },
-            "remap": {
-                "description": "Remap the output values to a specified range, defaulting to [0, 1].",
-                "key": "remap",
-                "label": "remap",
+            "post_inverse": {
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
+                "key": "post_inverse",
+                "label": "post_inverse",
+                "type": "Bool"
+            },
+            "post_remap": {
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
+                "key": "post_remap",
+                "label": "post_remap",
                 "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "Applies a smooth saturation to the output values, constraining them within a given range using a smoothstep-like function for soft clamping.",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
+            "post_saturate_k_smooth": {
+                "description": "Controls the softness of the saturation edges. Higher values produce a gentler transition; lower values result in sharper clamping.",
+                "key": "post_saturate_k_smooth",
+                "label": "post_saturate_k_smooth",
+                "type": "Float"
+            },
+            "post_smoothing_radius": {
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
             },
             "seed": {
                 "description": "Sets the random seed for noise generation, ensuring reproducibility.",
@@ -4438,12 +4456,6 @@
                 "label": "GPU",
                 "type": "Bool"
             },
-            "inverse": {
-                "description": "Toggle inversion of the output values.",
-                "key": "inverse",
-                "label": "inverse",
-                "type": "Bool"
-            },
             "kw": {
                 "description": "Noise wavenumbers (kx, ky) for each directions.",
                 "key": "kw",
@@ -4456,11 +4468,35 @@
                 "label": "noise_type",
                 "type": "Enumeration"
             },
-            "remap": {
-                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap",
-                "label": "remap",
+            "post_inverse": {
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
+                "key": "post_inverse",
+                "label": "post_inverse",
+                "type": "Bool"
+            },
+            "post_remap": {
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
+                "key": "post_remap",
+                "label": "post_remap",
                 "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "Applies a smooth saturation to the output values, constraining them within a given range using a smoothstep-like function for soft clamping.",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
+            "post_saturate_k_smooth": {
+                "description": "Controls the softness of the saturation edges. Higher values produce a gentler transition; lower values result in sharper clamping.",
+                "key": "post_saturate_k_smooth",
+                "label": "post_saturate_k_smooth",
+                "type": "Float"
+            },
+            "post_smoothing_radius": {
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
             },
             "seed": {
                 "description": "Random seed number.",
@@ -4507,12 +4543,6 @@
                 "label": "GPU",
                 "type": "Bool"
             },
-            "inverse": {
-                "description": "Toggle inversion of the output values.",
-                "key": "inverse",
-                "label": "inverse",
-                "type": "Bool"
-            },
             "kw": {
                 "description": "Noise wavenumbers (kx, ky) for each directions.",
                 "key": "kw",
@@ -4543,11 +4573,35 @@
                 "label": "persistence",
                 "type": "Float"
             },
-            "remap": {
-                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap",
-                "label": "remap",
+            "post_inverse": {
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
+                "key": "post_inverse",
+                "label": "post_inverse",
+                "type": "Bool"
+            },
+            "post_remap": {
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
+                "key": "post_remap",
+                "label": "post_remap",
                 "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "Applies a smooth saturation to the output values, constraining them within a given range using a smoothstep-like function for soft clamping.",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
+            "post_saturate_k_smooth": {
+                "description": "Controls the softness of the saturation edges. Higher values produce a gentler transition; lower values result in sharper clamping.",
+                "key": "post_saturate_k_smooth",
+                "label": "post_saturate_k_smooth",
+                "type": "Float"
+            },
+            "post_smoothing_radius": {
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
             },
             "seed": {
                 "description": "Random seed number.",
@@ -8681,6 +8735,36 @@
                 "key": "gain",
                 "label": "gain",
                 "type": "Float"
+            },
+            "mask_activate": {
+                "description": "No description",
+                "key": "mask_activate",
+                "label": "mask_activate",
+                "type": "Bool"
+            },
+            "mask_gain": {
+                "description": "No description",
+                "key": "mask_gain",
+                "label": "mask_gain",
+                "type": "Float"
+            },
+            "mask_inverse": {
+                "description": "No description",
+                "key": "mask_inverse",
+                "label": "mask_inverse",
+                "type": "Bool"
+            },
+            "mask_radius": {
+                "description": "No description",
+                "key": "mask_radius",
+                "label": "mask_radius",
+                "type": "Float"
+            },
+            "mask_type": {
+                "description": "No description",
+                "key": "mask_type",
+                "label": "mask_type",
+                "type": "Choice"
             },
             "nlevels": {
                 "description": "Number of discrete elevation steps (terraces) to apply to the input heightmap.",
