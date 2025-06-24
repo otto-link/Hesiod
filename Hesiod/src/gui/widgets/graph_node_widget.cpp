@@ -415,6 +415,19 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
     {
       retrieved_layout->setSpacing(0);
       retrieved_layout->setContentsMargins(0, 0, 0, 0);
+
+      for (int i = 0; i < retrieved_layout->count(); ++i)
+      {
+        QWidget *child = retrieved_layout->itemAt(i)->widget();
+        if (!child)
+          continue;
+
+        if (auto *inner_layout = child->layout())
+        {
+          inner_layout->setContentsMargins(32, 4, 32, 4);
+          inner_layout->setSpacing(4);
+        }
+      }
     }
 
     QWidgetAction *widget_action = new QWidgetAction(menu);

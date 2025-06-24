@@ -45,7 +45,7 @@ void setup_hydraulic_stream_log_node(BaseNode *p_node)
                                 "gradient_power",
                                 "gradient_scaling_ratio",
                                 "gradient_prefilter_radius",
-                                "_SEPARATOR_",
+                                "_TEXT_Some text",
                                 "saturation_ratio",
                                 "talus_ref",
                                 "_SEPARATOR_",
