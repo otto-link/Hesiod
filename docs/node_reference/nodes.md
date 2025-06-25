@@ -1382,12 +1382,14 @@ Primitive/Coherent
 | :--- | :--- | :--- |
 |angle|Float|Controls the base orientation of the Gabor wavelets, influencing the dominant direction of the noise pattern.|
 |angle_spread_ratio|Float|Determines how much the local angle of the Gabor kernel can vary. A low value results in straighter structures, while a high value introduces more directional variation.|
-|inverse|Bool|Invert the output values.|
 |kw|Wavenumber|Defines the wavenumber, which controls the frequency of the Gabor wavelets in the noise function.|
 |lacunarity|Float|Controls the frequency scaling between successive octaves of the fractal noise. Higher values create larger gaps between frequencies.|
 |octaves|Integer|Specifies the number of noise layers (octaves) used in the fractal Brownian motion. More octaves add finer details.|
 |persistence|Float|Controls how much each successive octave contributes to the final noise pattern. Higher values result in more prominent fine details.|
-|remap|Value range|Remap the output values to a specified range, defaulting to [0, 1].|
+|post_gain|Float|Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.|
+|post_inverse|Bool|Inverts the output values after processing, flipping low and high values across the midrange.|
+|post_remap|Value range|Linearly remaps the output values to a specified target range (default is [0, 1]).|
+|post_smoothing_radius|Float|Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.|
 |seed|Random seed number|Sets the random seed for noise generation, ensuring reproducibility.|
 |weight|Float|Adjusts the intensity of the noise contribution at each point.|
 
@@ -1885,7 +1887,6 @@ Erosion/Hydraulic
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|GPU|Bool|Toogle GPU acceleration on or off.|
 |c_capacity|Float|Particle capacity.|
 |c_deposition|Float|Particle deposition coefficient.|
 |c_erosion|Float|Particle erosion cofficient.|
@@ -2775,10 +2776,12 @@ Primitive/Coherent
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |GPU|Bool|Toogle GPU acceleration on or off.|
-|inverse|Bool|Toggle inversion of the output values.|
 |kw|Wavenumber|Noise wavenumbers (kx, ky) for each directions.|
 |noise_type|Enumeration|Base primitive noise. Available values: OpenSimplex2, OpenSimplex2S, Perlin, Perlin (billow), Perlin (half), Value, Value (cubic), Value (delaunay), Value (linear), Worley, Worley (doube), Worley (value).|
-|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|post_gain|Float|Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.|
+|post_inverse|Bool|Inverts the output values after processing, flipping low and high values across the midrange.|
+|post_remap|Value range|Linearly remaps the output values to a specified target range (default is [0, 1]).|
+|post_smoothing_radius|Float|Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.|
 |seed|Random seed number|Random seed number.|
 
 ## NoiseFbm
@@ -2811,13 +2814,15 @@ Primitive/Coherent
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |GPU|Bool|Toogle GPU acceleration on or off.|
-|inverse|Bool|Toggle inversion of the output values.|
 |kw|Wavenumber|Noise wavenumbers (kx, ky) for each directions.|
 |lacunarity|Float|Wavenumber ratio between each octaves.|
 |noise_type|Enumeration|Base primitive noise. Available values: OpenSimplex2, OpenSimplex2S, Perlin, Perlin (billow), Perlin (half), Value, Value (cubic), Worley, Worley (doube), Worley (value).|
 |octaves|Integer|Number of octaves.|
 |persistence|Float|Octave persistence.|
-|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|post_gain|Float|Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.|
+|post_inverse|Bool|Inverts the output values after processing, flipping low and high values across the midrange.|
+|post_remap|Value range|Linearly remaps the output values to a specified target range (default is [0, 1]).|
+|post_smoothing_radius|Float|Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.|
 |seed|Random seed number|Random seed number.|
 |weight|Float|Octave weighting.|
 
@@ -5349,7 +5354,7 @@ Erosion/Stratify
 ## Terrace
 
 
-TODO
+Applies a terracing effect to the input heightmap by quantizing elevation levels into discrete steps, optionally modulated by noise.
 
 ![img](../images/nodes/Terrace.png)
 ### Category
@@ -5360,24 +5365,29 @@ Filter/Recurve
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|Heightmap|TODO|
+|input|Heightmap|The input heightmap to be transformed with terrace steps.|
 |mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
-|noise|Heightmap|TODO|
+|noise|Heightmap|Optional noise map used to perturb the position of the terrace levels for a more natural look.|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|TODO|
+|output|Heightmap|Resulting heightmap after applying the terracing effect.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|gain|Float|TODO|
-|nlevels|Integer|TODO|
-|noise_ratio|Float|TODO|
-|seed|Random seed number|TODO|
+|gain|Float|Controls the amplification of the terrace steps; higher values create steeper transitions between levels.|
+|mask_activate|Bool|Enables or disables the internal mask. If the node's 'mask' input is connected, this setting is bypassed and the input mask is used instead.|
+|mask_gain|Float|Controls the intensity or influence of the internal mask. Bypassed if the 'mask' input is connected.|
+|mask_inverse|Bool|Inverts the internal mask, applying the operator where the mask is low. Ignored if a 'mask' input is provided.|
+|mask_radius|Float|Defines the smoothing radius for the internal mask. A value of 0 disables smoothing. This is bypassed if the 'mask' input is used.|
+|mask_type|Choice|Specifies how the internal mask is computed: 'Elevation' uses height, 'Gradient Norm' uses slope, and 'Elevation mid-range' selects the middle portion of the height range. This parameter is ignored when a 'mask' input is connected.|
+|nlevels|Integer|Number of discrete elevation steps (terraces) to apply to the input heightmap.|
+|noise_ratio|Float|Ratio between deterministic and noisy placement of terrace levels; 0 uses only uniform levels, 1 uses full noise-based variation.|
+|seed|Random seed number|Random seed used for generating noise when noise_ratio > 0.|
 
 ## TextureQuiltingExpand
 
@@ -5650,7 +5660,7 @@ WIP
 ## ThermalRidge
 
 
-TODO
+Applies a thermal erosion effect that simulates the collapse of unstable slopes by moving material from steep areas to lower regions, generating ridged features.
 
 ![img](../images/nodes/ThermalRidge.png)
 ### Category
@@ -5661,24 +5671,24 @@ Erosion/Thermal
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|Heightmap|TODO|
+|input|Heightmap|The input heightmap to which thermal erosion will be applied.|
 |mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
 
 ### Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|deposition|Heightmap|Deposition map (in [0, 1]).|
-|output|Heightmap|TODO|
+|deposition|Heightmap|Heightmap showing the amount of material deposited during erosion, scaled in the range [0, 1].|
+|output|Heightmap|The resulting heightmap after thermal ridge erosion has been applied.|
 
 ### Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|iterations|Integer|TODO|
+|iterations|Integer|Number of thermal erosion iterations to apply. More iterations result in more pronounced erosion and smoothing of steep slopes.|
 |remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
-|scale_talus_with_elevation|Bool|Scales the talus amplitude based on heightmap elevation, reducing it at lower elevations and maintaining the nominal value at higher elevations.|
-|talus_global|Float|TODO|
+|scale_talus_with_elevation|Bool|Scales the talus threshold based on elevation, reducing it at lower heights and preserving it at higher altitudes, to simulate realistic slope behavior.|
+|talus_global|Float|Global talus angle threshold controlling the maximum slope before material starts to move. Higher values result in steeper terrain preservation.|
 
 ## ThermalSchott
 
@@ -5895,10 +5905,12 @@ Primitive/Coherent
 |inverse|Bool|Toggle inversion of the output values.|
 |jitter.x|Float|Amount of random jitter along the X-axis applied to Voronoi seed positions.|
 |jitter.y|Float|Amount of random jitter along the Y-axis applied to Voronoi seed positions.|
+|k_smoothing|Float|No description|
 |kw|Wavenumber|Wavenumber controlling the spatial frequency (cell size) of the Voronoi pattern.|
 |remap|Value range|Remaps the output values to a specified target range.|
 |return_type|Enumeration|Determines the output type.|
 |seed|Random seed number|Seed value for the random generator affecting jitter and cell layout.|
+|sqrt_output|Bool|No description|
 
 ## VoronoiFbm
 
@@ -5932,6 +5944,7 @@ Primitive/Coherent
 |inverse|Bool|Toggle inversion of the output values.|
 |jitter.x|Float|Amount of random jitter applied to seed points along the X-axis.|
 |jitter.y|Float|Amount of random jitter applied to seed points along the Y-axis.|
+|k_smoothing|Float|No description|
 |kw|Wavenumber|Base wavenumber that controls the frequency of the initial Voronoi pattern.|
 |lacunarity|Float|Frequency multiplier between successive octaves in the fBm process.|
 |octaves|Integer|Number of fBm layers to combine for added detail and complexity.|
@@ -5939,6 +5952,7 @@ Primitive/Coherent
 |remap|Value range|Remaps the output values to a defined value range.|
 |return_type|Enumeration|Defines the type of Voronoi information returned.|
 |seed|Random seed number|Seed for random generation, affecting jitter and point distribution.|
+|sqrt_output|Bool|No description|
 |weight|Float|Weight multiplier applied to the final fBm result for scaling the output.|
 
 ## Voronoise
