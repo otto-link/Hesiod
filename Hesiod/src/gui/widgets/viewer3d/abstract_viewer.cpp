@@ -116,6 +116,7 @@ AbstractViewer::AbstractViewer(GraphNodeWidget *p_graph_node_widget,
 
 void AbstractViewer::clear()
 {
+  this->button_pin_current_node->setChecked(false);
   this->current_node_id = "";
   this->current_view_param = NodeViewParam();
   this->update_view_param_widgets();

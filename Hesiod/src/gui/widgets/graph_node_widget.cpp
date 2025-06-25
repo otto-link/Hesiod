@@ -167,6 +167,12 @@ void GraphNodeWidget::on_graph_settings_request()
 
   if (ret)
   {
+    // reset viewport to avoid any issues
+    for (auto &sp_widget : this->data_viewers)
+      if (auto *p_viewer = dynamic_cast<AbstractViewer *>(sp_widget.get()))
+        p_viewer->clear();
+
+    // set new config
     *this->p_graph_node->get_config_ref() = new_model_config;
 
     // backup graphics node reference (to avoid dangling pointer issues in the
