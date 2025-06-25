@@ -103,26 +103,24 @@ void post_process_heightmap(BaseNode *p_node, hmap::Heightmap &h)
     h.inverse();
 
   // saturate
-  if (GET_MEMBER("post_saturate", RangeAttribute, is_active))
-  {
-    hmap::Vec2<float> saturate_range = GET("post_saturate", RangeAttribute);
-    float             saturate_k = GET("post_saturate_k_smooth", FloatAttribute);
+  float post_gain = GET("post_gain", FloatAttribute);
 
+  if (post_gain != 1.f)
+  {
     float hmin = h.min();
     float hmax = h.max();
+    h.remap(0.f, 1.f, hmin, hmax);
 
-    // node parameters are assumed normalized and thus in [0, 1],
-    // they need to be rescaled
-    float smin_n = hmin + saturate_range.x * (hmax - hmin);
-    float smax_n = hmax - (1.f - saturate_range.y) * (hmax - hmin);
-    float k_n = std::max(1e-6f, saturate_k * (hmax - hmin));
+    hmap::transform(
+        {&h},
+        [post_gain](std::vector<hmap::Array *> p_arrays)
+        {
+          hmap::Array *pa = p_arrays[0];
+          hmap::gain(*pa, post_gain);
+        },
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
 
-    hmap::transform(h,
-                    [&smin_n, &smax_n, &k_n](hmap::Array &array)
-                    { hmap::clamp_smooth(array, smin_n, smax_n, k_n); });
-
-    // keep original amplitude
-    h.remap(hmin, hmax);
+    h.remap(hmin, hmax, 0.f, 1.f);
   }
 
   // smoothing
@@ -154,8 +152,7 @@ void setup_post_process_heightmap_attributes(BaseNode *p_node)
              p_node->get_id());
 
   ADD_ATTR(BoolAttribute, "post_inverse", false);
-  ADD_ATTR(RangeAttribute, "post_saturate", false);
-  ADD_ATTR(FloatAttribute, "post_saturate_k_smooth", 0.1f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "post_gain", 1.f, 0.01f, 10.f);
   ADD_ATTR(FloatAttribute, "post_smoothing_radius", 0.f, 0.f, 0.05f);
   ADD_ATTR(RangeAttribute, "post_remap");
 
@@ -164,8 +161,7 @@ void setup_post_process_heightmap_attributes(BaseNode *p_node)
   p_keys->push_back("_SEPARATOR_");
   p_keys->push_back("_SEPARATOR_TEXT_Post-processing");
   p_keys->push_back("post_inverse");
-  p_keys->push_back("post_saturate");
-  p_keys->push_back("post_saturate_k_smooth");
+  p_keys->push_back("post_gain");
   p_keys->push_back("post_smoothing_radius");
   p_keys->push_back("post_remap");
 }

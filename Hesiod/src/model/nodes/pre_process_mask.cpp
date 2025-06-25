@@ -122,6 +122,7 @@ void setup_pre_process_mask_attributes(BaseNode *p_node)
 
   std::vector<std::string> *p_keys = p_node->get_attr_ordered_key_ref();
 
+  p_keys->push_back("_SEPARATOR_");
   p_keys->push_back("_SEPARATOR_TEXT_Mask Parameters");
   p_keys->push_back("mask_activate");
   p_keys->push_back("mask_type");
