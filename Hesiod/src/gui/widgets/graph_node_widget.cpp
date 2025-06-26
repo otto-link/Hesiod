@@ -167,10 +167,21 @@ void GraphNodeWidget::on_graph_settings_request()
 
   if (ret)
   {
-    // reset viewport to avoid any issues
+    // reset viewport to avoid any issues but save their state to set
+    // it back afterwards
+    std::vector<nlohmann::json> json_states = {};
+
     for (auto &sp_widget : this->data_viewers)
       if (auto *p_viewer = dynamic_cast<AbstractViewer *>(sp_widget.get()))
+      {
+        json_states.push_back(p_viewer->json_to());
         p_viewer->clear();
+      }
+
+    // backup selected node
+    const std::string selected_id = this->get_selected_node_ids().empty()
+                                        ? ""
+                                        : this->get_selected_node_ids().back();
 
     // set new config
     *this->p_graph_node->get_config_ref() = new_model_config;
@@ -201,7 +212,16 @@ void GraphNodeWidget::on_graph_settings_request()
       gngui::NodeProxy *p_proxy = this->p_graph_node->get_node_ref_by_id<BaseNode>(id)
                                       ->get_proxy_ref();
       gfx_node_ref_map.at(id)->set_p_node_proxy(p_proxy);
+      gfx_node_ref_map.at(id)->setSelected(false);
     }
+
+    // set back viewport states
+    size_t k = 0;
+    for (auto &sp_widget : this->data_viewers)
+      if (auto *p_viewer = dynamic_cast<AbstractViewer *>(sp_widget.get()))
+        p_viewer->json_from(json_states[k++]);
+
+    // TODO set the selection back
   }
 
   // deactivate drag to fix some event issue between the dialog box and the graphics view
