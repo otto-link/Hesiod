@@ -26,7 +26,7 @@ void setup_export_heightmap_node(BaseNode *p_node)
   // attribute(s)
   ADD_ATTR(FilenameAttribute, "fname", std::filesystem::path("hmap.png"), "*", true);
   ADD_ATTR(EnumAttribute, "format", heightmap_export_format_map, "png (8 bit)");
-  ADD_ATTR(BoolAttribute, "auto_export", true);
+  ADD_ATTR(BoolAttribute, "auto_export", false);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"fname", "format", "auto_export"});

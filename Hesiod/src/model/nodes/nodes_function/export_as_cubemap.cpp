@@ -33,7 +33,7 @@ void setup_export_as_cubemap_node(BaseNode *p_node)
   ADD_ATTR(FloatAttribute, "overlap", 0.25f, 0.1f, 5.f);
   ADD_ATTR(IntAttribute, "ir", 16, 1, INT_MAX);
   ADD_ATTR(BoolAttribute, "splitted", false);
-  ADD_ATTR(BoolAttribute, "auto_export", true);
+  ADD_ATTR(BoolAttribute, "auto_export", false);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"fname",

@@ -29,7 +29,7 @@ void setup_export_texture_node(BaseNode *p_node)
            "PNG (*.png)",
            true);
   ADD_ATTR(BoolAttribute, "16 bit", false);
-  ADD_ATTR(BoolAttribute, "auto_export", true);
+  ADD_ATTR(BoolAttribute, "auto_export", false);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"fname", "16 bit", "auto_export"});

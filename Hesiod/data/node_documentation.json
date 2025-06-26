@@ -1571,7 +1571,7 @@
         "label": "ExportAsCubemap",
         "parameters": {
             "auto_export": {
-                "description": "TODO",
+                "description": "Controls whether the output file is automatically written when the node is updated. Default is false. When set to true, the file is saved automatically on updates. If false, use the 'Force Reload' button on the node to manually trigger the export.",
                 "key": "auto_export",
                 "label": "auto_export",
                 "type": "Bool"
@@ -1622,7 +1622,7 @@
         "label": "ExportAsset",
         "parameters": {
             "auto_export": {
-                "description": "Automatically exports the asset when the node is updated.",
+                "description": "Controls whether the output file is automatically written when the node is updated. Default is false. When set to true, the file is saved automatically on updates. If false, use the 'Force Reload' button on the node to manually trigger the export.",
                 "key": "auto_export",
                 "label": "auto_export",
                 "type": "Bool"
@@ -1697,7 +1697,7 @@
         "label": "ExportCloud",
         "parameters": {
             "auto_export": {
-                "description": "Decides whether the export is automatically performed when the node is updated.",
+                "description": "Controls whether the output file is automatically written when the node is updated. Default is false. When set to true, the file is saved automatically on updates. If false, use the 'Force Reload' button on the node to manually trigger the export.",
                 "key": "auto_export",
                 "label": "auto_export",
                 "type": "Bool"
@@ -1724,7 +1724,7 @@
         "label": "ExportHeightmap",
         "parameters": {
             "auto_export": {
-                "description": "Decides whether the export is automatically performed when the node is updated.",
+                "description": "Controls whether the output file is automatically written when the node is updated. Default is false. When set to true, the file is saved automatically on updates. If false, use the 'Force Reload' button on the node to manually trigger the export.",
                 "key": "auto_export",
                 "label": "auto_export",
                 "type": "Bool"
@@ -1763,7 +1763,7 @@
                 "type": "Bool"
             },
             "auto_export": {
-                "description": "Decides whether the export is automatically performed when the node is updated.",
+                "description": "Controls whether the output file is automatically written when the node is updated. Default is false. When set to true, the file is saved automatically on updates. If false, use the 'Force Reload' button on the node to manually trigger the export.",
                 "key": "auto_export",
                 "label": "auto_export",
                 "type": "Bool"
@@ -1790,7 +1790,7 @@
         "label": "ExportPath",
         "parameters": {
             "auto_export": {
-                "description": "Decides whether the export is automatically performed when the node is updated.",
+                "description": "Controls whether the output file is automatically written when the node is updated. Default is false. When set to true, the file is saved automatically on updates. If false, use the 'Force Reload' button on the node to manually trigger the export.",
                 "key": "auto_export",
                 "label": "auto_export",
                 "type": "Bool"
@@ -1823,7 +1823,7 @@
                 "type": "Bool"
             },
             "auto_export": {
-                "description": "Decides whether the export is automatically performed when the node is updated.",
+                "description": "Controls whether the output file is automatically written when the node is updated. Default is false. When set to true, the file is saved automatically on updates. If false, use the 'Force Reload' button on the node to manually trigger the export.",
                 "key": "auto_export",
                 "label": "auto_export",
                 "type": "Bool"

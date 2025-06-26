@@ -28,7 +28,7 @@ void setup_export_asset_node(BaseNode *p_node)
 
   // attribute(s)
   ADD_ATTR(FilenameAttribute, "fname", std::filesystem::path("export"), "*", true);
-  ADD_ATTR(BoolAttribute, "auto_export", true);
+  ADD_ATTR(BoolAttribute, "auto_export", false);
 
   {
     // generate enumerate mappings

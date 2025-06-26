@@ -1065,7 +1065,7 @@ WIP
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|auto_export|Bool|TODO|
+|auto_export|Bool|Controls whether the output file is automatically written when the node is updated. Default is false. When set to true, the file is saved automatically on updates. If false, use the 'Force Reload' button on the node to manually trigger the export.|
 |cubemap_resolution|Integer|TODO|
 |fname|Filename|TODO|
 |ir|Integer|TODO|
@@ -1094,7 +1094,7 @@ IO/Files
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|auto_export|Bool|Automatically exports the asset when the node is updated.|
+|auto_export|Bool|Controls whether the output file is automatically written when the node is updated. Default is false. When set to true, the file is saved automatically on updates. If false, use the 'Force Reload' button on the node to manually trigger the export.|
 |blending_method|Enumeration|Defines the method used to blend the normal map for small details.|
 |detail_scaling|Float|Scaling factor applied to the detail normal map.|
 |elevation_scaling|Float|Factor used to scale elevation values.|
@@ -1123,7 +1123,7 @@ IO/Files
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|auto_export|Bool|Decides whether the export is automatically performed when the node is updated.|
+|auto_export|Bool|Controls whether the output file is automatically written when the node is updated. Default is false. When set to true, the file is saved automatically on updates. If false, use the 'Force Reload' button on the node to manually trigger the export.|
 |fname|Filename|Export file name.|
 
 ## ExportHeightmap
@@ -1146,7 +1146,7 @@ IO/Files
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|auto_export|Bool|Decides whether the export is automatically performed when the node is updated.|
+|auto_export|Bool|Controls whether the output file is automatically written when the node is updated. Default is false. When set to true, the file is saved automatically on updates. If false, use the 'Force Reload' button on the node to manually trigger the export.|
 |fname|Filename|Export file name.|
 |format|Enumeration|Export format. Available values: png (16 bit), png (8 bit), raw (16 bit, Unity).|
 
@@ -1171,7 +1171,7 @@ IO/Files
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |16bit|Bool|Whether the output file is a 16bit PNG file (instead of 8bit).|
-|auto_export|Bool|Decides whether the export is automatically performed when the node is updated.|
+|auto_export|Bool|Controls whether the output file is automatically written when the node is updated. Default is false. When set to true, the file is saved automatically on updates. If false, use the 'Force Reload' button on the node to manually trigger the export.|
 |fname|Filename|Export file name.|
 
 ## ExportPath
@@ -1194,7 +1194,7 @@ IO/Files
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|auto_export|Bool|Decides whether the export is automatically performed when the node is updated.|
+|auto_export|Bool|Controls whether the output file is automatically written when the node is updated. Default is false. When set to true, the file is saved automatically on updates. If false, use the 'Force Reload' button on the node to manually trigger the export.|
 |fname|Filename|Export file name.|
 
 ## ExportTexture
@@ -1218,7 +1218,7 @@ IO/Files
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |16 bit|Bool|Decides whether the output is an 8 bit or a 16 bit PNG file.|
-|auto_export|Bool|Decides whether the export is automatically performed when the node is updated.|
+|auto_export|Bool|Controls whether the output file is automatically written when the node is updated. Default is false. When set to true, the file is saved automatically on updates. If false, use the 'Force Reload' button on the node to manually trigger the export.|
 |fname|Filename|Export file name.|
 
 ## Falloff
