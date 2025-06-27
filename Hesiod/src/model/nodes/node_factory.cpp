@@ -321,6 +321,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"ThermalSchott", "WIP"}, // "Erosion/Thermal"
       {"ThermalScree", "Erosion/Thermal"},
       {"Thru", "Routing"},
+      {"Toggle", "Routing"},
       {"Translate", "Operator/Transform"},
       {"Unsphericity", "Features/Landform"},
       {"ValleyWidth", "Features/Landform"},
@@ -555,6 +556,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(ThermalSchott, thermal_schott);
     SETUP_NODE(ThermalScree, thermal_scree);
     SETUP_NODE(Thru, thru);
+    SETUP_NODE(Toggle, toggle);
     SETUP_NODE(Unsphericity, unsphericity);
     SETUP_NODE(ValleyWidth, valley_width);
     SETUP_NODE(Voronoi, voronoi);

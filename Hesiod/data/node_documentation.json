@@ -9489,6 +9489,39 @@
             }
         }
     },
+    "Toggle": {
+        "category": "Routing",
+        "description": "A routing utility node that outputs either input A or input B based on the value of the 'toggle' parameter. Useful for manually switching between two sources to compare their effect on the final result.",
+        "label": "Toggle",
+        "parameters": {
+            "toggle": {
+                "description": "Determines which input is routed to the output.",
+                "key": "toggle",
+                "label": "toggle",
+                "type": "Bool"
+            }
+        },
+        "ports": {
+            "input A": {
+                "caption": "input A",
+                "data_type": "Heightmap",
+                "description": "First heightmap input. Used when the 'toggle' parameter is true (A).",
+                "type": "input"
+            },
+            "input B": {
+                "caption": "input B",
+                "data_type": "Heightmap",
+                "description": "Second heightmap input. Used when the 'toggle' parameter is false (B).",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "Heightmap",
+                "description": "Selected input passed through: either input A or input B depending on the 'toggle' state.",
+                "type": "output"
+            }
+        }
+    },
     "Translate": {
         "category": "Operator/Transform",
         "description": "Translates an heightmap by a specified amount along the x and y axes. This function shifts the contents of the input array by `dx` and `dy` units along the x and y axes, respectively. It supports both periodic boundary conditions, where the array wraps around, and non-periodic conditions.",

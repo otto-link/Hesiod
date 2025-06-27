@@ -194,6 +194,7 @@ nav:
     - 'node_reference/nodes/ThermalSchott.md'
     - 'node_reference/nodes/ThermalScree.md'
     - 'node_reference/nodes/Thru.md'
+    - 'node_reference/nodes/Toggle.md'
     - 'node_reference/nodes/Translate.md'
     - 'node_reference/nodes/Unsphericity.md'
     - 'node_reference/nodes/ValleyWidth.md'
