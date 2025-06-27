@@ -148,14 +148,13 @@ nav:
     - 'index.md'
   - 'Node Reference':
     - 'node_reference/categories.md'
-    - 'All nodes'
 ###LIST###
 """
 
     nlist = '';
     
     for node_type in data.keys():
-        nlist += "      - 'node_reference/nodes/{}.md'\n".format(node_type)
+        nlist += "    - 'node_reference/nodes/{}.md'\n".format(node_type)
         print(node_type)
 
     STUB = STUB.replace('###LIST###', nlist);
