@@ -224,7 +224,6 @@ void GraphNodeWidget::on_graph_settings_request()
     // TODO set the selection back
   }
 
-  // deactivate drag to fix some event issue between the dialog box and the graphics view
   this->set_enabled(true);
 }
 
