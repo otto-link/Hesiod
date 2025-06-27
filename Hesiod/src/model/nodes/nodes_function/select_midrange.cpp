@@ -29,13 +29,8 @@ void setup_select_midrange_node(BaseNode *p_node)
   ADD_ATTR(FloatAttribute, "smoothing_radius", 0.05f, 0.f, 0.2f);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"gain",
-                                "sigma",
-                                "radius",
-                                "_SEPARATOR_",
-                                "inverse",
-                                "smoothing",
-                                "smoothing_radius"});
+  p_node->set_attr_ordered_key(
+      {"gain", "_SEPARATOR_", "inverse", "smoothing", "smoothing_radius"});
 }
 
 void compute_select_midrange_node(BaseNode *p_node)

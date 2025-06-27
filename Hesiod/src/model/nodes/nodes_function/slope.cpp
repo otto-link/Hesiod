@@ -33,7 +33,7 @@ void setup_slope_node(BaseNode *p_node)
 
   // attribute(s) order
   p_node->set_attr_ordered_key(
-      {"angle", "talus_global", "center", "_SEPARATOR_", "inverse", "remap", "remap"});
+      {"angle", "talus_global", "center", "_SEPARATOR_", "inverse", "remap"});
 }
 
 void compute_slope_node(BaseNode *p_node)

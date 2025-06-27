@@ -29,6 +29,8 @@ int main(int argc, char *argv[])
 
   LOG->info("Release mode: {}", std::string(HSD_RMODE));
 
+  // ----------------------------------- initialization
+
   // start OpenCL
   hmap::gpu::init_opencl();
 
@@ -38,6 +40,12 @@ int main(int argc, char *argv[])
   // start QApplication even if headless (for QObject)
   qputenv("QT_LOGGING_RULES", HESIOD_QPUTENV_QT_LOGGING_RULES);
   QApplication app(argc, argv);
+
+  // style
+  const std::string style_sheet =
+#include "darkstyle.css"
+      ;
+  app.setStyleSheet(style_sheet.c_str());
 
   // ----------------------------------- batch CLI mode
 
@@ -49,11 +57,6 @@ int main(int argc, char *argv[])
 
   // ----------------------------------- Main GUI
 
-  const std::string style_sheet =
-#include "darkstyle.css"
-      ;
-
-  app.setStyleSheet(style_sheet.c_str());
   app.setWindowIcon(QIcon(HSD_APP_ICON));
 
   hesiod::MainWindow *main_window = hesiod::MainWindow::instance(&app);
