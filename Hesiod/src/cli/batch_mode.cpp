@@ -133,10 +133,10 @@ void run_batch_mode(const std::string     &filename,
 void run_node_inventory()
 {
   LOG->info("executing Hesiod in node inventory mode");
-  // hesiod::dump_node_inventory("node_inventory");
+  hesiod::dump_node_inventory("node_inventory");
 
-  // auto config = std::make_shared<hesiod::ModelConfig>();
-  // hesiod::dump_node_documentation_stub("node_documentation_stub.json", config);
+  auto config = std::make_shared<hesiod::ModelConfig>();
+  hesiod::dump_node_documentation_stub("node_documentation_stub.json", config);
 
   hesiod::dump_node_settings_screenshots();
 }

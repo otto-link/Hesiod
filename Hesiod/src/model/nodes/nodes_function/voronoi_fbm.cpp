@@ -42,8 +42,6 @@ void setup_voronoi_fbm_node(BaseNode *p_node)
   ADD_ATTR(FloatAttribute, "weight", 0.7f, 0.f, 1.f);
   ADD_ATTR(FloatAttribute, "persistence", 0.5f, 0.f, 1.f);
   ADD_ATTR(FloatAttribute, "lacunarity", 2.f, 0.01f, 4.f);
-  ADD_ATTR(BoolAttribute, "inverse", false);
-  ADD_ATTR(RangeAttribute, "remap");
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"return_type",
@@ -57,10 +55,9 @@ void setup_voronoi_fbm_node(BaseNode *p_node)
                                 "octaves",
                                 "weight",
                                 "persistence",
-                                "lacunarity",
-                                "_SEPARATOR_",
-                                "inverse",
-                                "remap"});
+                                "lacunarity"});
+
+  setup_post_process_heightmap_attributes(p_node);
 }
 
 void compute_voronoi_fbm_node(BaseNode *p_node)
@@ -125,17 +122,7 @@ void compute_voronoi_fbm_node(BaseNode *p_node)
 
   // post-process
   post_apply_enveloppe(p_node, *p_out, p_env);
-
-  post_process_heightmap(p_node,
-                         *p_out,
-                         GET("inverse", BoolAttribute),
-                         false, // smooth
-                         0,
-                         false, // saturate
-                         {0.f, 0.f},
-                         0.f,
-                         GET_MEMBER("remap", RangeAttribute, is_active),
-                         GET("remap", RangeAttribute));
+  post_process_heightmap(p_node, *p_out);
 
   Q_EMIT p_node->compute_finished(p_node->get_id());
 }

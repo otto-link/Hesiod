@@ -33,12 +33,14 @@ Primitive/Coherent
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|inverse|Bool|Toggle inversion of the output values.|
 |jitter.x|Float|Amount of random jitter along the X-axis applied to Voronoi seed positions.|
 |jitter.y|Float|Amount of random jitter along the Y-axis applied to Voronoi seed positions.|
 |k_smoothing|Float|No description|
 |kw|Wavenumber|Wavenumber controlling the spatial frequency (cell size) of the Voronoi pattern.|
-|remap|Value range|Remaps the output values to a specified target range.|
+|post_gain|Float|Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.|
+|post_inverse|Bool|Inverts the output values after processing, flipping low and high values across the midrange.|
+|post_remap|Value range|Linearly remaps the output values to a specified target range (default is [0, 1]).|
+|post_smoothing_radius|Float|Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.|
 |return_type|Enumeration|Determines the output type.|
 |seed|Random seed number|Seed value for the random generator affecting jitter and cell layout.|
 |sqrt_output|Bool|No description|

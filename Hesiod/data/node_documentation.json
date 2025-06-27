@@ -9641,12 +9641,6 @@
         "description": "Generates a Voronoi heightmap based on spatial cell distances, with optional jitter, warping, and control inputs.",
         "label": "Voronoi",
         "parameters": {
-            "inverse": {
-                "description": "Toggle inversion of the output values.",
-                "key": "inverse",
-                "label": "inverse",
-                "type": "Bool"
-            },
             "jitter.x": {
                 "description": "Amount of random jitter along the X-axis applied to Voronoi seed positions.",
                 "key": "jitter.x",
@@ -9671,11 +9665,29 @@
                 "label": "kw",
                 "type": "Wavenumber"
             },
-            "remap": {
-                "description": "Remaps the output values to a specified target range.",
-                "key": "remap",
-                "label": "remap",
+            "post_gain": {
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
+                "key": "post_inverse",
+                "label": "post_inverse",
+                "type": "Bool"
+            },
+            "post_remap": {
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
+                "key": "post_remap",
+                "label": "post_remap",
                 "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
             },
             "return_type": {
                 "description": "Determines the output type.",
@@ -9734,12 +9746,6 @@
         "description": "Generates a fractal Voronoi pattern using fBm (fractal Brownian motion) based on distance fields and multiple noise layers.",
         "label": "VoronoiFbm",
         "parameters": {
-            "inverse": {
-                "description": "Toggle inversion of the output values.",
-                "key": "inverse",
-                "label": "inverse",
-                "type": "Bool"
-            },
             "jitter.x": {
                 "description": "Amount of random jitter applied to seed points along the X-axis.",
                 "key": "jitter.x",
@@ -9782,11 +9788,29 @@
                 "label": "persistence",
                 "type": "Float"
             },
-            "remap": {
-                "description": "Remaps the output values to a defined value range.",
-                "key": "remap",
-                "label": "remap",
+            "post_gain": {
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
+                "key": "post_inverse",
+                "label": "post_inverse",
+                "type": "Bool"
+            },
+            "post_remap": {
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
+                "key": "post_remap",
+                "label": "post_remap",
                 "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
             },
             "return_type": {
                 "description": "Defines the type of Voronoi information returned.",

@@ -194,6 +194,7 @@ static std::map<std::string, int> voronoi_return_type_map = {
     {"F1 / F2: squared", hmap::VoronoiReturnType::F1DF2_SQUARED},
     {"F2 - F1: squared", hmap::VoronoiReturnType::F2MF1_SQUARED},
     {"Edge distance squared", hmap::VoronoiReturnType::EDGE_DISTANCE_SQUARED},
-    {"Cell value", hmap::VoronoiReturnType::CONSTANT}};
+    {"Cell value", hmap::VoronoiReturnType::CONSTANT},
+    {"Cell value * (F2 - F1)", hmap::VoronoiReturnType::CONSTANT_F2MF1_SQUARED}};
 
 } // namespace hesiod

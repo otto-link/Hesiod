@@ -39,8 +39,6 @@ void setup_voronoi_node(BaseNode *p_node)
   ADD_ATTR(FloatAttribute, "jitter.y", 1.f, 0.f, 1.f);
   ADD_ATTR(FloatAttribute, "k_smoothing", 0.f, 0.f, 1.f);
   ADD_ATTR(BoolAttribute, "sqrt_output", false);
-  ADD_ATTR(BoolAttribute, "inverse", false);
-  ADD_ATTR(RangeAttribute, "remap");
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"return_type",
@@ -50,10 +48,9 @@ void setup_voronoi_node(BaseNode *p_node)
                                 "jitter.x",
                                 "jitter.y",
                                 "k_smoothing",
-                                "sqrt_output",
-                                "_SEPARATOR_",
-                                "inverse",
-                                "remap"});
+                                "sqrt_output"});
+
+  setup_post_process_heightmap_attributes(p_node);
 }
 
 void compute_voronoi_node(BaseNode *p_node)
@@ -114,17 +111,7 @@ void compute_voronoi_node(BaseNode *p_node)
 
   // post-process
   post_apply_enveloppe(p_node, *p_out, p_env);
-
-  post_process_heightmap(p_node,
-                         *p_out,
-                         GET("inverse", BoolAttribute),
-                         false, // smooth
-                         0,
-                         false, // saturate
-                         {0.f, 0.f},
-                         0.f,
-                         GET_MEMBER("remap", RangeAttribute, is_active),
-                         GET("remap", RangeAttribute));
+  post_process_heightmap(p_node, *p_out);
 
   Q_EMIT p_node->compute_finished(p_node->get_id());
 }
