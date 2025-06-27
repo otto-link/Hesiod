@@ -76,40 +76,34 @@
         "description": "Computes the accumulation curvature of a heightmap, indicating how terrain shape influences water flow. Positive values suggest converging flow (e.g., channels or valleys), while negative values indicate diverging flow (e.g., ridges or hilltops).",
         "label": "AccumulationCurvature",
         "parameters": {
-            "GPU": {
-                "description": "Toggle GPU acceleration on or off.",
-                "key": "GPU",
-                "label": "GPU",
+            "post_gain": {
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
+                "key": "post_inverse",
+                "label": "post_inverse",
                 "type": "Bool"
             },
-            "inverse": {
-                "description": "Invert the output values.",
-                "key": "inverse",
-                "label": "inverse",
-                "type": "Bool"
+            "post_remap": {
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
             },
             "radius": {
                 "description": "Defines the filter radius relative to the domain size, controlling the scale of curvature analysis.",
                 "key": "radius",
                 "label": "radius",
-                "type": "Float"
-            },
-            "remap": {
-                "description": "Remap the output values to a specified range, defaulting to [0, 1].",
-                "key": "remap",
-                "label": "remap",
-                "type": "Bool"
-            },
-            "smoothing": {
-                "description": "Enable or disable smoothing to reduce noise in the curvature computation.",
-                "key": "smoothing",
-                "label": "smoothing",
-                "type": "Bool"
-            },
-            "smoothing_radius": {
-                "description": "Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.",
-                "key": "smoothing_radius",
-                "label": "smoothing_radius",
                 "type": "Float"
             }
         },

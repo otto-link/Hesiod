@@ -91,12 +91,11 @@ Features/Landform
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|GPU|Bool|Toggle GPU acceleration on or off.|
-|inverse|Bool|Invert the output values.|
+|post_gain|Float|Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.|
+|post_inverse|Bool|Inverts the output values after processing, flipping low and high values across the midrange.|
+|post_remap|Value range|Linearly remaps the output values to a specified target range (default is [0, 1]).|
+|post_smoothing_radius|Float|Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.|
 |radius|Float|Defines the filter radius relative to the domain size, controlling the scale of curvature analysis.|
-|remap|Bool|Remap the output values to a specified range, defaulting to [0, 1].|
-|smoothing|Bool|Enable or disable smoothing to reduce noise in the curvature computation.|
-|smoothing_radius|Float|Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.|
 
 ## Blend
 

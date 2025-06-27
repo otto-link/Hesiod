@@ -24,22 +24,12 @@ void setup_accumulation_curvature_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(FloatAttribute, "radius", 0.f, 0.f, 0.2f);
-  ADD_ATTR(BoolAttribute, "remap", true);
-  ADD_ATTR(BoolAttribute, "inverse", false);
-  ADD_ATTR(BoolAttribute, "smoothing", false);
-  ADD_ATTR(FloatAttribute, "smoothing_radius", 0.05f, 0.f, 0.2f);
-  ADD_ATTR(BoolAttribute, "GPU", HSD_DEFAULT_GPU_MODE);
+  ADD_ATTR(FloatAttribute, "radius", 0.02f, 0.f, 0.2f);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"radius",
-                                "_SEPARATOR_",
-                                "remap",
-                                "inverse",
-                                "smoothing",
-                                "smoothing_radius",
-                                "_SEPARATOR_",
-                                "GPU"});
+  p_node->set_attr_ordered_key({"radius"});
+
+  setup_post_process_heightmap_attributes(p_node);
 }
 
 void compute_accumulation_curvature_node(BaseNode *p_node)
@@ -54,49 +44,23 @@ void compute_accumulation_curvature_node(BaseNode *p_node)
   {
     hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
-    // zero radius accepted
-    int ir = std::max(0, (int)(GET("radius", FloatAttribute) * p_out->shape.x));
+    int ir = std::max(1, (int)(GET("radius", FloatAttribute) * p_out->shape.x));
 
-    if (GET("GPU", BoolAttribute))
-    {
-      hmap::transform(
-          {p_out, p_in},
-          [&ir](std::vector<hmap::Array *> p_arrays)
-          {
-            hmap::Array *pa_out = p_arrays[0];
-            hmap::Array *pa_in = p_arrays[1];
+    hmap::transform(
+        {p_out, p_in},
+        [&ir](std::vector<hmap::Array *> p_arrays)
+        {
+          hmap::Array *pa_out = p_arrays[0];
+          hmap::Array *pa_in = p_arrays[1];
 
-            *pa_out = hmap::gpu::accumulation_curvature(*pa_in, ir);
-          },
-          p_node->get_config_ref()->hmap_transform_mode_gpu);
-    }
-    else
-    {
-      hmap::transform(
-          {p_out, p_in},
-          [&ir](std::vector<hmap::Array *> p_arrays)
-          {
-            hmap::Array *pa_out = p_arrays[0];
-            hmap::Array *pa_in = p_arrays[1];
-
-            *pa_out = hmap::accumulation_curvature(*pa_in, ir);
-          },
-          p_node->get_config_ref()->hmap_transform_mode_cpu);
-    }
+          *pa_out = hmap::gpu::accumulation_curvature(*pa_in, ir);
+        },
+        p_node->get_config_ref()->hmap_transform_mode_gpu);
 
     p_out->smooth_overlap_buffers();
 
     // post-process
-    post_process_heightmap(p_node,
-                           *p_out,
-                           GET("inverse", BoolAttribute),
-                           GET("smoothing", BoolAttribute),
-                           GET("smoothing_radius", FloatAttribute),
-                           false, // saturate
-                           {0.f, 0.f},
-                           0.f,
-                           GET("remap", BoolAttribute),
-                           {0.f, 1.f});
+    post_process_heightmap(p_node, *p_out);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());
