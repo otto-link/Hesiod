@@ -76,40 +76,34 @@
         "description": "Computes the accumulation curvature of a heightmap, indicating how terrain shape influences water flow. Positive values suggest converging flow (e.g., channels or valleys), while negative values indicate diverging flow (e.g., ridges or hilltops).",
         "label": "AccumulationCurvature",
         "parameters": {
-            "GPU": {
-                "description": "Toggle GPU acceleration on or off.",
-                "key": "GPU",
-                "label": "GPU",
+            "post_gain": {
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
+                "key": "post_inverse",
+                "label": "post_inverse",
                 "type": "Bool"
             },
-            "inverse": {
-                "description": "Invert the output values.",
-                "key": "inverse",
-                "label": "inverse",
-                "type": "Bool"
+            "post_remap": {
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
             },
             "radius": {
                 "description": "Defines the filter radius relative to the domain size, controlling the scale of curvature analysis.",
                 "key": "radius",
                 "label": "radius",
-                "type": "Float"
-            },
-            "remap": {
-                "description": "Remap the output values to a specified range, defaulting to [0, 1].",
-                "key": "remap",
-                "label": "remap",
-                "type": "Bool"
-            },
-            "smoothing": {
-                "description": "Enable or disable smoothing to reduce noise in the curvature computation.",
-                "key": "smoothing",
-                "label": "smoothing",
-                "type": "Bool"
-            },
-            "smoothing_radius": {
-                "description": "Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.",
-                "key": "smoothing_radius",
-                "label": "smoothing_radius",
                 "type": "Float"
             }
         },
@@ -271,6 +265,33 @@
                 "caption": "output",
                 "data_type": "Heightmap",
                 "description": "Resulting heightmap after computing the morphological border.",
+                "type": "output"
+            }
+        }
+    },
+    "Broadcast": {
+        "category": "Routing",
+        "description": "Makes the input heightmap available to other graph nodes using a shared tag.",
+        "label": "Broadcast",
+        "parameters": {
+            "tag": {
+                "description": "Identifier used to reference this heightmap in other graph nodes.",
+                "key": "tag",
+                "label": "tag",
+                "type": "String"
+            }
+        },
+        "ports": {
+            "input": {
+                "caption": "input",
+                "data_type": "Heightmap",
+                "description": "Heightmap data to be shared with other graph nodes.",
+                "type": "input"
+            },
+            "thru": {
+                "caption": "thru",
+                "data_type": "Heightmap",
+                "description": "Pass-through of the input heightmap, unchanged.",
                 "type": "output"
             }
         }
@@ -600,6 +621,7 @@
         "category": "Geometry/Cloud",
         "description": "CloudMerge merges two clouds into a single one.",
         "label": "CloudMerge",
+        "parameters": null,
         "ports": {
             "cloud": {
                 "caption": "cloud",
@@ -730,6 +752,7 @@
         "category": "Geometry/Cloud",
         "description": "CloudToArrayInterp generates a smooth and continuous 2D elevation map from a set of scattered points using Delaunay linear interpolation.",
         "label": "CloudToArrayInterp",
+        "parameters": null,
         "ports": {
             "cloud": {
                 "caption": "cloud",
@@ -1289,6 +1312,7 @@
         "category": "WIP",
         "description": "The Detrend operator is used to adjust the elevation using a very basic (uncorrect) detrending operator.",
         "label": "Detrend",
+        "parameters": null,
         "ports": {
             "input": {
                 "caption": "input",
@@ -1541,7 +1565,7 @@
         "label": "ExportAsCubemap",
         "parameters": {
             "auto_export": {
-                "description": "TODO",
+                "description": "Controls whether the output file is automatically written when the node is updated. Default is false. When set to true, the file is saved automatically on updates. If false, use the 'Force Reload' button on the node to manually trigger the export.",
                 "key": "auto_export",
                 "label": "auto_export",
                 "type": "Bool"
@@ -1592,7 +1616,7 @@
         "label": "ExportAsset",
         "parameters": {
             "auto_export": {
-                "description": "Automatically exports the asset when the node is updated.",
+                "description": "Controls whether the output file is automatically written when the node is updated. Default is false. When set to true, the file is saved automatically on updates. If false, use the 'Force Reload' button on the node to manually trigger the export.",
                 "key": "auto_export",
                 "label": "auto_export",
                 "type": "Bool"
@@ -1667,7 +1691,7 @@
         "label": "ExportCloud",
         "parameters": {
             "auto_export": {
-                "description": "Decides whether the export is automatically performed when the node is updated.",
+                "description": "Controls whether the output file is automatically written when the node is updated. Default is false. When set to true, the file is saved automatically on updates. If false, use the 'Force Reload' button on the node to manually trigger the export.",
                 "key": "auto_export",
                 "label": "auto_export",
                 "type": "Bool"
@@ -1694,7 +1718,7 @@
         "label": "ExportHeightmap",
         "parameters": {
             "auto_export": {
-                "description": "Decides whether the export is automatically performed when the node is updated.",
+                "description": "Controls whether the output file is automatically written when the node is updated. Default is false. When set to true, the file is saved automatically on updates. If false, use the 'Force Reload' button on the node to manually trigger the export.",
                 "key": "auto_export",
                 "label": "auto_export",
                 "type": "Bool"
@@ -1733,7 +1757,7 @@
                 "type": "Bool"
             },
             "auto_export": {
-                "description": "Decides whether the export is automatically performed when the node is updated.",
+                "description": "Controls whether the output file is automatically written when the node is updated. Default is false. When set to true, the file is saved automatically on updates. If false, use the 'Force Reload' button on the node to manually trigger the export.",
                 "key": "auto_export",
                 "label": "auto_export",
                 "type": "Bool"
@@ -1760,7 +1784,7 @@
         "label": "ExportPath",
         "parameters": {
             "auto_export": {
-                "description": "Decides whether the export is automatically performed when the node is updated.",
+                "description": "Controls whether the output file is automatically written when the node is updated. Default is false. When set to true, the file is saved automatically on updates. If false, use the 'Force Reload' button on the node to manually trigger the export.",
                 "key": "auto_export",
                 "label": "auto_export",
                 "type": "Bool"
@@ -1793,7 +1817,7 @@
                 "type": "Bool"
             },
             "auto_export": {
-                "description": "Decides whether the export is automatically performed when the node is updated.",
+                "description": "Controls whether the output file is automatically written when the node is updated. Default is false. When set to true, the file is saved automatically on updates. If false, use the 'Force Reload' button on the node to manually trigger the export.",
                 "key": "auto_export",
                 "label": "auto_export",
                 "type": "Bool"
@@ -2041,12 +2065,6 @@
                 "label": "angle_spread_ratio",
                 "type": "Float"
             },
-            "inverse": {
-                "description": "Invert the output values.",
-                "key": "inverse",
-                "label": "inverse",
-                "type": "Bool"
-            },
             "kw": {
                 "description": "Defines the wavenumber, which controls the frequency of the Gabor wavelets in the noise function.",
                 "key": "kw",
@@ -2071,11 +2089,29 @@
                 "label": "persistence",
                 "type": "Float"
             },
-            "remap": {
-                "description": "Remap the output values to a specified range, defaulting to [0, 1].",
-                "key": "remap",
-                "label": "remap",
+            "post_gain": {
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
+                "key": "post_inverse",
+                "label": "post_inverse",
+                "type": "Bool"
+            },
+            "post_remap": {
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
+                "key": "post_remap",
+                "label": "post_remap",
                 "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
             },
             "seed": {
                 "description": "Sets the random seed for noise generation, ensuring reproducibility.",
@@ -2679,6 +2715,7 @@
         "category": "Converter",
         "description": "HeightmapToRGBA converts a series of heightmaps into an RGBA splatmap.",
         "label": "HeightmapToRGBA",
+        "parameters": null,
         "ports": {
             "A": {
                 "caption": "A",
@@ -2825,12 +2862,6 @@
         "description": "HydraulicParticle is a particle-based hydraulic erosion operator that simulates the erosion and sediment transport processes that occur due to the flow of water over a terrain represented by the input heightmap. This type of operator models erosion by tracking the movement of virtual particles (or sediment particles) as they are transported by water flow and interact with the terrain.",
         "label": "HydraulicParticle",
         "parameters": {
-            "GPU": {
-                "description": "Toogle GPU acceleration on or off.",
-                "key": "GPU",
-                "label": "GPU",
-                "type": "Bool"
-            },
             "c_capacity": {
                 "description": "Particle capacity.",
                 "key": "c_capacity",
@@ -3535,6 +3566,7 @@
         "category": "Math/Base",
         "description": "Inverse flips the sign of every values.",
         "label": "Inverse",
+        "parameters": null,
         "ports": {
             "input": {
                 "caption": "input",
@@ -4148,6 +4180,7 @@
         "category": "Operator/Blend",
         "description": "The Mixer operator takes several input heightmaps and blend them according to a mixing parameter expected in [0, 1].",
         "label": "Mixer",
+        "parameters": null,
         "ports": {
             "input 1": {
                 "caption": "input 1",
@@ -4411,12 +4444,6 @@
                 "label": "GPU",
                 "type": "Bool"
             },
-            "inverse": {
-                "description": "Toggle inversion of the output values.",
-                "key": "inverse",
-                "label": "inverse",
-                "type": "Bool"
-            },
             "kw": {
                 "description": "Noise wavenumbers (kx, ky) for each directions.",
                 "key": "kw",
@@ -4429,11 +4456,29 @@
                 "label": "noise_type",
                 "type": "Enumeration"
             },
-            "remap": {
-                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap",
-                "label": "remap",
+            "post_gain": {
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
+                "key": "post_inverse",
+                "label": "post_inverse",
+                "type": "Bool"
+            },
+            "post_remap": {
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
+                "key": "post_remap",
+                "label": "post_remap",
                 "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
             },
             "seed": {
                 "description": "Random seed number.",
@@ -4480,12 +4525,6 @@
                 "label": "GPU",
                 "type": "Bool"
             },
-            "inverse": {
-                "description": "Toggle inversion of the output values.",
-                "key": "inverse",
-                "label": "inverse",
-                "type": "Bool"
-            },
             "kw": {
                 "description": "Noise wavenumbers (kx, ky) for each directions.",
                 "key": "kw",
@@ -4516,11 +4555,29 @@
                 "label": "persistence",
                 "type": "Float"
             },
-            "remap": {
-                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap",
-                "label": "remap",
+            "post_gain": {
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
+                "key": "post_inverse",
+                "label": "post_inverse",
+                "type": "Bool"
+            },
+            "post_remap": {
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
+                "key": "post_remap",
+                "label": "post_remap",
                 "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
             },
             "seed": {
                 "description": "Random seed number.",
@@ -5793,6 +5850,7 @@
         "category": "Geometry/Path",
         "description": "PathToCloud convert a Path to a set of points (Cloud).",
         "label": "PathToCloud",
+        "parameters": null,
         "ports": {
             "cloud": {
                 "caption": "cloud",
@@ -5908,6 +5966,7 @@
         "category": "Debug",
         "description": "TODO",
         "label": "Preview",
+        "parameters": null,
         "ports": {
             "elevation": {
                 "caption": "elevation",
@@ -6418,13 +6477,34 @@
             }
         }
     },
+    "Receive": {
+        "category": "Routing",
+        "description": "Retrieves a heightmap broadcasted by another node using the specified tag.",
+        "label": "Receive",
+        "parameters": {
+            "tag": {
+                "description": "Tag identifying the broadcasted heightmap to receive.",
+                "key": "tag",
+                "label": "tag",
+                "type": "Choice"
+            }
+        },
+        "ports": {
+            "output": {
+                "caption": "output",
+                "data_type": "Heightmap",
+                "description": "The heightmap retrieved from the broadcast source.",
+                "type": "output"
+            }
+        }
+    },
     "Recurve": {
         "category": "Filter/Recurve",
-        "description": "TODO",
+        "description": "Applies a corrective curve to the heightmap values using a user-defined set of control points.",
         "label": "Recurve",
         "parameters": {
             "values": {
-                "description": "TODO",
+                "description": "List of control points defining the curve to remap height values (X = input, Y = output).",
                 "key": "values",
                 "label": "values",
                 "type": "Vector of floats"
@@ -6434,7 +6514,7 @@
             "input": {
                 "caption": "input",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Heightmap to be modified using the corrective curve.",
                 "type": "input"
             },
             "mask": {
@@ -6446,7 +6526,7 @@
             "output": {
                 "caption": "output",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Resulting heightmap after the curve has been applied.",
                 "type": "output"
             }
         }
@@ -6494,6 +6574,7 @@
         "category": "Filter/Recurve",
         "description": "RecurveS applied a curve adjustment filter using a smooth S-shape curve.",
         "label": "RecurveS",
+        "parameters": null,
         "ports": {
             "input": {
                 "caption": "input",
@@ -6612,6 +6693,7 @@
         "category": "Math/Base",
         "description": "TODO",
         "label": "Reverse",
+        "parameters": null,
         "ports": {
             "input": {
                 "caption": "input",
@@ -8621,29 +8703,59 @@
     },
     "Terrace": {
         "category": "Filter/Recurve",
-        "description": "TODO",
+        "description": "Applies a terracing effect to the input heightmap by quantizing elevation levels into discrete steps, optionally modulated by noise.",
         "label": "Terrace",
         "parameters": {
             "gain": {
-                "description": "TODO",
+                "description": "Controls the amplification of the terrace steps; higher values create steeper transitions between levels.",
                 "key": "gain",
                 "label": "gain",
                 "type": "Float"
             },
+            "mask_activate": {
+                "description": "Enables or disables the internal mask. If the node's 'mask' input is connected, this setting is bypassed and the input mask is used instead.",
+                "key": "mask_activate",
+                "label": "mask_activate",
+                "type": "Bool"
+            },
+            "mask_gain": {
+                "description": "Controls the intensity or influence of the internal mask. Bypassed if the 'mask' input is connected.",
+                "key": "mask_gain",
+                "label": "mask_gain",
+                "type": "Float"
+            },
+            "mask_inverse": {
+                "description": "Inverts the internal mask, applying the operator where the mask is low. Ignored if a 'mask' input is provided.",
+                "key": "mask_inverse",
+                "label": "mask_inverse",
+                "type": "Bool"
+            },
+            "mask_radius": {
+                "description": "Defines the smoothing radius for the internal mask. A value of 0 disables smoothing. This is bypassed if the 'mask' input is used.",
+                "key": "mask_radius",
+                "label": "mask_radius",
+                "type": "Float"
+            },
+            "mask_type": {
+                "description": "Specifies how the internal mask is computed: 'Elevation' uses height, 'Gradient Norm' uses slope, and 'Elevation mid-range' selects the middle portion of the height range. This parameter is ignored when a 'mask' input is connected.",
+                "key": "mask_type",
+                "label": "mask_type",
+                "type": "Choice"
+            },
             "nlevels": {
-                "description": "TODO",
+                "description": "Number of discrete elevation steps (terraces) to apply to the input heightmap.",
                 "key": "nlevels",
                 "label": "nlevels",
                 "type": "Integer"
             },
             "noise_ratio": {
-                "description": "TODO",
+                "description": "Ratio between deterministic and noisy placement of terrace levels; 0 uses only uniform levels, 1 uses full noise-based variation.",
                 "key": "noise_ratio",
                 "label": "noise_ratio",
                 "type": "Float"
             },
             "seed": {
-                "description": "TODO",
+                "description": "Random seed used for generating noise when noise_ratio > 0.",
                 "key": "seed",
                 "label": "seed",
                 "type": "Random seed number"
@@ -8653,7 +8765,7 @@
             "input": {
                 "caption": "input",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "The input heightmap to be transformed with terrace steps.",
                 "type": "input"
             },
             "mask": {
@@ -8665,13 +8777,13 @@
             "noise": {
                 "caption": "noise",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Optional noise map used to perturb the position of the terrace levels for a more natural look.",
                 "type": "input"
             },
             "output": {
                 "caption": "output",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Resulting heightmap after applying the terracing effect.",
                 "type": "output"
             }
         }
@@ -9188,11 +9300,11 @@
     },
     "ThermalRidge": {
         "category": "Erosion/Thermal",
-        "description": "TODO",
+        "description": "Applies a thermal erosion effect that simulates the collapse of unstable slopes by moving material from steep areas to lower regions, generating ridged features.",
         "label": "ThermalRidge",
         "parameters": {
             "iterations": {
-                "description": "TODO",
+                "description": "Number of thermal erosion iterations to apply. More iterations result in more pronounced erosion and smoothing of steep slopes.",
                 "key": "iterations",
                 "label": "iterations",
                 "type": "Integer"
@@ -9204,13 +9316,13 @@
                 "type": "Value range"
             },
             "scale_talus_with_elevation": {
-                "description": "Scales the talus amplitude based on heightmap elevation, reducing it at lower elevations and maintaining the nominal value at higher elevations.",
+                "description": "Scales the talus threshold based on elevation, reducing it at lower heights and preserving it at higher altitudes, to simulate realistic slope behavior.",
                 "key": "scale_talus_with_elevation",
                 "label": "scale_talus_with_elevation",
                 "type": "Bool"
             },
             "talus_global": {
-                "description": "TODO",
+                "description": "Global talus angle threshold controlling the maximum slope before material starts to move. Higher values result in steeper terrain preservation.",
                 "key": "talus_global",
                 "label": "talus_global",
                 "type": "Float"
@@ -9220,13 +9332,13 @@
             "deposition": {
                 "caption": "deposition",
                 "data_type": "Heightmap",
-                "description": "Deposition map (in [0, 1]).",
+                "description": "Heightmap showing the amount of material deposited during erosion, scaled in the range [0, 1].",
                 "type": "output"
             },
             "input": {
                 "caption": "input",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "The input heightmap to which thermal erosion will be applied.",
                 "type": "input"
             },
             "mask": {
@@ -9238,7 +9350,7 @@
             "output": {
                 "caption": "output",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "The resulting heightmap after thermal ridge erosion has been applied.",
                 "type": "output"
             }
         }
@@ -9354,6 +9466,59 @@
                 "data_type": "Heightmap",
                 "description": "TODO",
                 "type": "input"
+            }
+        }
+    },
+    "Thru": {
+        "category": "Routing",
+        "description": "Passes the input heightmap directly to the output without modification.",
+        "label": "Thru",
+        "parameters": null,
+        "ports": {
+            "input": {
+                "caption": "input",
+                "data_type": "Heightmap",
+                "description": "Input heightmap to be routed unchanged.",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "Heightmap",
+                "description": "Output identical to the input heightmap.",
+                "type": "output"
+            }
+        }
+    },
+    "Toggle": {
+        "category": "Routing",
+        "description": "A routing utility node that outputs either input A or input B based on the value of the 'toggle' parameter. Useful for manually switching between two sources to compare their effect on the final result.",
+        "label": "Toggle",
+        "parameters": {
+            "toggle": {
+                "description": "Determines which input is routed to the output.",
+                "key": "toggle",
+                "label": "toggle",
+                "type": "Bool"
+            }
+        },
+        "ports": {
+            "input A": {
+                "caption": "input A",
+                "data_type": "Heightmap",
+                "description": "First heightmap input. Used when the 'toggle' parameter is true (A).",
+                "type": "input"
+            },
+            "input B": {
+                "caption": "input B",
+                "data_type": "Heightmap",
+                "description": "Second heightmap input. Used when the 'toggle' parameter is false (B).",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "Heightmap",
+                "description": "Selected input passed through: either input A or input B depending on the 'toggle' state.",
+                "type": "output"
             }
         }
     },
@@ -9500,6 +9665,240 @@
                 "caption": "output",
                 "data_type": "Heightmap",
                 "description": "Valley width heightmap.",
+                "type": "output"
+            }
+        }
+    },
+    "Voronoi": {
+        "category": "Primitive/Coherent",
+        "description": "Generates a Voronoi heightmap based on spatial cell distances, with optional jitter, warping, and control inputs.",
+        "label": "Voronoi",
+        "parameters": {
+            "jitter.x": {
+                "description": "Amount of random jitter along the X-axis applied to Voronoi seed positions.",
+                "key": "jitter.x",
+                "label": "jitter.x",
+                "type": "Float"
+            },
+            "jitter.y": {
+                "description": "Amount of random jitter along the Y-axis applied to Voronoi seed positions.",
+                "key": "jitter.y",
+                "label": "jitter.y",
+                "type": "Float"
+            },
+            "k_smoothing": {
+                "description": "No description",
+                "key": "k_smoothing",
+                "label": "k_smoothing",
+                "type": "Float"
+            },
+            "kw": {
+                "description": "Wavenumber controlling the spatial frequency (cell size) of the Voronoi pattern.",
+                "key": "kw",
+                "label": "kw",
+                "type": "Wavenumber"
+            },
+            "post_gain": {
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
+                "key": "post_inverse",
+                "label": "post_inverse",
+                "type": "Bool"
+            },
+            "post_remap": {
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
+            },
+            "return_type": {
+                "description": "Determines the output type.",
+                "key": "return_type",
+                "label": "return_type",
+                "type": "Enumeration"
+            },
+            "seed": {
+                "description": "Seed value for the random generator affecting jitter and cell layout.",
+                "key": "seed",
+                "label": "seed",
+                "type": "Random seed number"
+            },
+            "sqrt_output": {
+                "description": "No description",
+                "key": "sqrt_output",
+                "label": "sqrt_output",
+                "type": "Bool"
+            }
+        },
+        "ports": {
+            "control": {
+                "caption": "control",
+                "data_type": "Heightmap",
+                "description": "Optional input to guide Voronoi jittering.",
+                "type": "input"
+            },
+            "dx": {
+                "caption": "dx",
+                "data_type": "Heightmap",
+                "description": "X-axis displacement map for directional warping of the Voronoi pattern.",
+                "type": "input"
+            },
+            "dy": {
+                "caption": "dy",
+                "data_type": "Heightmap",
+                "description": "Y-axis displacement map for directional warping of the Voronoi pattern.",
+                "type": "input"
+            },
+            "envelope": {
+                "caption": "envelope",
+                "data_type": "Heightmap",
+                "description": "Heightmap used to modulate the visibility or strength of the Voronoi pattern.",
+                "type": "input"
+            },
+            "out": {
+                "caption": "out",
+                "data_type": "Heightmap",
+                "description": "Resulting heightmap generated by the Voronoi algorithm.",
+                "type": "output"
+            }
+        }
+    },
+    "VoronoiFbm": {
+        "category": "Primitive/Coherent",
+        "description": "Generates a fractal Voronoi pattern using fBm (fractal Brownian motion) based on distance fields and multiple noise layers.",
+        "label": "VoronoiFbm",
+        "parameters": {
+            "jitter.x": {
+                "description": "Amount of random jitter applied to seed points along the X-axis.",
+                "key": "jitter.x",
+                "label": "jitter.x",
+                "type": "Float"
+            },
+            "jitter.y": {
+                "description": "Amount of random jitter applied to seed points along the Y-axis.",
+                "key": "jitter.y",
+                "label": "jitter.y",
+                "type": "Float"
+            },
+            "k_smoothing": {
+                "description": "No description",
+                "key": "k_smoothing",
+                "label": "k_smoothing",
+                "type": "Float"
+            },
+            "kw": {
+                "description": "Base wavenumber that controls the frequency of the initial Voronoi pattern.",
+                "key": "kw",
+                "label": "kw",
+                "type": "Wavenumber"
+            },
+            "lacunarity": {
+                "description": "Frequency multiplier between successive octaves in the fBm process.",
+                "key": "lacunarity",
+                "label": "lacunarity",
+                "type": "Float"
+            },
+            "octaves": {
+                "description": "Number of fBm layers to combine for added detail and complexity.",
+                "key": "octaves",
+                "label": "octaves",
+                "type": "Integer"
+            },
+            "persistence": {
+                "description": "Amplitude scaling factor applied to each successive octave.",
+                "key": "persistence",
+                "label": "persistence",
+                "type": "Float"
+            },
+            "post_gain": {
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
+                "key": "post_inverse",
+                "label": "post_inverse",
+                "type": "Bool"
+            },
+            "post_remap": {
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
+            },
+            "return_type": {
+                "description": "Defines the type of Voronoi information returned.",
+                "key": "return_type",
+                "label": "return_type",
+                "type": "Enumeration"
+            },
+            "seed": {
+                "description": "Seed for random generation, affecting jitter and point distribution.",
+                "key": "seed",
+                "label": "seed",
+                "type": "Random seed number"
+            },
+            "sqrt_output": {
+                "description": "No description",
+                "key": "sqrt_output",
+                "label": "sqrt_output",
+                "type": "Bool"
+            },
+            "weight": {
+                "description": "Weight multiplier applied to the final fBm result for scaling the output.",
+                "key": "weight",
+                "label": "weight",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "control": {
+                "caption": "control",
+                "data_type": "Heightmap",
+                "description": "Optional input to guide Voronoi jittering.",
+                "type": "input"
+            },
+            "dx": {
+                "caption": "dx",
+                "data_type": "Heightmap",
+                "description": "Displacement map along X-axis to warp the input coordinates.",
+                "type": "input"
+            },
+            "dy": {
+                "caption": "dy",
+                "data_type": "Heightmap",
+                "description": "Displacement map along Y-axis to warp the input coordinates.",
+                "type": "input"
+            },
+            "envelope": {
+                "caption": "envelope",
+                "data_type": "Heightmap",
+                "description": "Optional modulation map to attenuate or mask the fBm pattern locally.",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "Heightmap",
+                "description": "Final heightmap result generated by the fBm Voronoi algorithm.",
                 "type": "output"
             }
         }

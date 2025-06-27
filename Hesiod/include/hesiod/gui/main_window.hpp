@@ -44,6 +44,7 @@ public:
   static MainWindow *instance(QApplication *p_app = nullptr, QWidget *p_parent = nullptr);
 
   void clear_all(); // model + GUI
+  void show_viewport();
 
   // --- Accessors ---
   std::string get_project_name() const;

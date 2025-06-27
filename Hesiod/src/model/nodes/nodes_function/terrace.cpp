@@ -27,19 +27,21 @@ void setup_terrace_node(BaseNode *p_node)
 
   // attribute(s)
   ADD_ATTR(IntAttribute, "nlevels", 4, 1, 32);
-  ADD_ATTR(FloatAttribute, "gain", 2.f, 0.01f, 10.f);
+  ADD_ATTR(FloatAttribute, "gain", 0.8f, 0.f, 1.f);
   ADD_ATTR(FloatAttribute, "noise_ratio", 0.1f, 0.f, 0.5f);
   ADD_ATTR(SeedAttribute, "seed");
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"nlevels", "gain", "noise_ratio", "seed"});
+
+  setup_pre_process_mask_attributes(p_node);
 }
 
 void compute_terrace_node(BaseNode *p_node)
 {
   Q_EMIT p_node->compute_started(p_node->get_id());
 
-  LOG->trace("computing node {}", p_node->get_label());
+  LOG->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
   hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
 
@@ -49,6 +51,9 @@ void compute_terrace_node(BaseNode *p_node)
     hmap::Heightmap *p_mask = p_node->get_value_ref<hmap::Heightmap>("mask");
     hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
+    // prepare mask
+    std::shared_ptr<hmap::Heightmap> sp_mask = pre_process_mask(p_node, p_mask, *p_in);
+
     // copy the input heightmap
     *p_out = *p_in;
 
@@ -56,21 +61,24 @@ void compute_terrace_node(BaseNode *p_node)
     float hmax = p_out->max();
 
     hmap::transform(
-        *p_out,
-        p_noise,
-        p_mask,
-        [p_node, hmin, hmax](hmap::Array &x, hmap::Array *p_noise, hmap::Array *p_mask)
+        {p_out, p_noise, p_mask},
+        [p_node, hmin, hmax](std::vector<hmap::Array *> p_arrays)
         {
-          hmap::terrace(x,
+          hmap::Array *pa_out = p_arrays[0];
+          hmap::Array *pa_noise = p_arrays[1];
+          hmap::Array *pa_mask = p_arrays[2];
+
+          hmap::terrace(*pa_out,
                         GET("seed", SeedAttribute),
                         GET("nlevels", IntAttribute),
-                        p_mask,
+                        pa_mask,
                         GET("gain", FloatAttribute),
                         GET("noise_ratio", FloatAttribute),
-                        p_noise,
+                        pa_noise,
                         hmin,
                         hmax);
-        });
+        },
+        p_node->get_config_ref()->hmap_transform_mode_gpu);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

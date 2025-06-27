@@ -29,7 +29,7 @@ void setup_export_path_node(BaseNode *p_node)
            std::filesystem::path("path.csv"),
            "CSV (*.csv)",
            true);
-  ADD_ATTR(BoolAttribute, "auto_export", true);
+  ADD_ATTR(BoolAttribute, "auto_export", false);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"fname", "auto_export"});
@@ -39,7 +39,7 @@ void compute_export_path_node(BaseNode *p_node)
 {
   Q_EMIT p_node->compute_started(p_node->get_id());
 
-  LOG->trace("computing node {}", p_node->get_label());
+  LOG->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
   hmap::Path *p_in = p_node->get_value_ref<hmap::Path>("input");
 

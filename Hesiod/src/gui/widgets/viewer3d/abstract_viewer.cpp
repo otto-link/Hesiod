@@ -116,6 +116,7 @@ AbstractViewer::AbstractViewer(GraphNodeWidget *p_graph_node_widget,
 
 void AbstractViewer::clear()
 {
+  this->button_pin_current_node->setChecked(false);
   this->current_node_id = "";
   this->current_view_param = NodeViewParam();
   this->update_view_param_widgets();
@@ -132,39 +133,60 @@ void AbstractViewer::emit_view_param_changed()
 {
   LOG->trace("AbstractViewer::emit_view_param_changed: {}", this->current_node_id);
 
-  Q_EMIT this->view_param_changed(
-      this->p_graph_node_widget->get_p_graph_node()->get_node_ref_by_id<BaseNode>(
-          this->current_node_id),
-      this->current_view_param.port_id_elev,
-      this->current_view_param.port_id_color,
-      this->current_view_param.port_id_normal_map);
+  BaseNode *p_node = this->p_graph_node_widget->get_p_graph_node()
+                         ->get_node_ref_by_id<BaseNode>(this->current_node_id);
+
+  Q_EMIT this->view_param_changed(p_node,
+                                  this->current_view_param.port_id_elev,
+                                  this->current_view_param.port_id_color,
+                                  this->current_view_param.port_id_normal_map);
 }
 
 void AbstractViewer::json_from(nlohmann::json const &json)
 {
-  this->label = json["label"];
-  this->current_node_id = json["current_node_id"];
+  LOG->trace("AbstractViewer::json_from");
 
-  // TODO rebuild map
+  this->label = json["label"];
+
+  this->current_node_id = json["current_node_id"];
+  this->current_view_param.port_id_elev = json["port_id_elev"];
+  this->current_view_param.port_id_color = json["port_id_color"];
+  this->current_view_param.port_id_normal_map = json["port_id_normal_map"];
+
+  this->button_pin_current_node->setChecked(json["button_pin_current_node_is_checked"]);
+
   this->node_view_param_map.clear();
 
-  for (auto &[key, sub_json] : json["node_view_param_map"].items())
+  if (json.contains("node_view_param_map"))
   {
-    NodeViewParam param;
-    param.port_id_elev = sub_json["port_id_elev"];
-    param.port_id_color = sub_json["port_id_color"];
-    param.port_id_normal_map = sub_json["port_id_normal_map"];
+    for (auto &[key, sub_json] : json["node_view_param_map"].items())
+    {
+      NodeViewParam param;
+      param.port_id_elev = sub_json["port_id_elev"];
+      param.port_id_color = sub_json["port_id_color"];
+      param.port_id_normal_map = sub_json["port_id_normal_map"];
 
-    this->node_view_param_map[key] = param;
+      this->node_view_param_map[key] = param;
+    }
   }
+  this->emit_view_param_changed();
 }
 
 nlohmann::json AbstractViewer::json_to() const
 {
+  LOG->trace("AbstractViewer::json_to");
+
   nlohmann::json json;
 
   json["label"] = this->label;
+
   json["current_node_id"] = this->current_node_id;
+  json["port_id_elev"] = this->current_view_param.port_id_elev;
+  json["port_id_color"] = this->current_view_param.port_id_color;
+  json["port_id_normal_map"] = this->current_view_param.port_id_normal_map;
+
+  json["button_pin_current_node_is_checked"] = (bool)this->button_pin_current_node
+                                                   ->isChecked();
 
   for (auto &[key, param] : this->node_view_param_map)
   {
@@ -176,7 +198,7 @@ nlohmann::json AbstractViewer::json_to() const
     json["node_view_param_map"][key] = json_param;
   }
 
-  // LOG->trace("{}", json.dump(4));
+  LOG->trace("{}", json.dump(4));
 
   return json;
 }

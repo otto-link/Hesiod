@@ -53,6 +53,10 @@ void clear_layout(QLayout *layout);
  */
 void resize_font(QWidget *widget, int relative_size_modification);
 
+void render_widget_screenshot(QWidget           *widget,
+                              const std::string &fname,
+                              const QSize       &size = QSize());
+
 int   float_to_slider_pos(float v, float min, float max, int slider_steps);
 float slider_pos_to_float(int pos, float min, float max, int slider_steps);
 

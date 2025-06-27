@@ -7,9 +7,18 @@ typedef unsigned int uint;
 #include "highmap/opencl/gpu_opencl.hpp"
 
 #include "hesiod/cli/batch_mode.hpp"
+#include "hesiod/config.hpp"
 #include "hesiod/gui/main_window.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/cmap.hpp"
+
+#if defined(DEBUG_BUILD)
+#define HSD_RMODE "Debug"
+#elif defined(RELEASE_BUILD)
+#define HSD_RMODE "Release"
+#else
+#define HSD_RMODE "!!! UNDEFINED !!!"
+#endif
 
 int main(int argc, char *argv[])
 {
@@ -18,6 +27,10 @@ int main(int argc, char *argv[])
             HESIOD_VERSION_MINOR,
             HESIOD_VERSION_PATCH);
 
+  LOG->info("Release mode: {}", std::string(HSD_RMODE));
+
+  // ----------------------------------- initialization
+
   // start OpenCL
   hmap::gpu::init_opencl();
 
@@ -25,7 +38,14 @@ int main(int argc, char *argv[])
   hesiod::CmapManager::get_instance();
 
   // start QApplication even if headless (for QObject)
+  qputenv("QT_LOGGING_RULES", HESIOD_QPUTENV_QT_LOGGING_RULES);
   QApplication app(argc, argv);
+
+  // style
+  const std::string style_sheet =
+#include "darkstyle.css"
+      ;
+  app.setStyleSheet(style_sheet.c_str());
 
   // ----------------------------------- batch CLI mode
 
@@ -37,15 +57,13 @@ int main(int argc, char *argv[])
 
   // ----------------------------------- Main GUI
 
-  const std::string style_sheet =
-#include "darkstyle.css"
-      ;
-
-  app.setStyleSheet(style_sheet.c_str());
   app.setWindowIcon(QIcon(HSD_APP_ICON));
 
   hesiod::MainWindow *main_window = hesiod::MainWindow::instance(&app);
   main_window->show();
+
+  if (HSD_CONFIG->window.open_viewport_at_startup)
+    main_window->show_viewport();
 
   return app.exec();
 }

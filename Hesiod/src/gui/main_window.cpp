@@ -15,6 +15,7 @@
 
 #include "Toast.h"
 
+#include "hesiod/config.hpp"
 #include "hesiod/gui/main_window.hpp"
 #include "hesiod/gui/widgets/graph_manager_widget.hpp"
 #include "hesiod/gui/widgets/graph_tabs_widget.hpp"
@@ -35,7 +36,9 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
   // GUI
   this->graph_manager_widget = std::make_unique<GraphManagerWidget>(
       this->graph_manager.get());
-  this->graph_manager_widget->show();
+
+  if (HSD_CONFIG->window.open_graph_manager_at_startup)
+    this->graph_manager_widget->show();
 
   this->graph_tabs_widget = std::make_unique<GraphTabsWidget>(this->graph_manager.get());
 
@@ -96,7 +99,7 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
   // MainWindow -> MainWindow
   this->autosave_timer = new QTimer(this);
   this->autosave_timer->setSingleShot(true); // restarts on project change
-  this->autosave_timer->start(30 * 1000);    // TODO hardcoded (30 s)
+  this->autosave_timer->start(HSD_CONFIG->window.autosave_timer);
 
   this->connect(this->autosave_timer, &QTimer::timeout, this, &MainWindow::on_autosave);
 
@@ -399,7 +402,7 @@ void MainWindow::setup_menu_bar()
 
   auto *show_layout_manager = new QAction("Graph layout manager", this);
   show_layout_manager->setCheckable(true);
-  show_layout_manager->setChecked(true);
+  show_layout_manager->setChecked(this->graph_manager_widget->isVisible());
   view_menu->addAction(show_layout_manager);
 
   QMenu *help = menuBar()->addMenu("&Help");
@@ -456,6 +459,12 @@ void MainWindow::show_about()
   QMessageBox msg_box;
   msg_box.setText(msg.c_str());
   msg_box.exec();
+}
+
+void MainWindow::show_viewport()
+{
+  LOG->trace("MainWindow::show_viewport");
+  this->graph_tabs_widget->show_viewport();
 }
 
 void MainWindow::update_window_title()

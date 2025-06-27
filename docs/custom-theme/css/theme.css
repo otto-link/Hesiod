@@ -251,6 +251,11 @@ textarea {
     resize: vertical
 }
 
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
 table {
     border-collapse: collapse;
     border-spacing: 0

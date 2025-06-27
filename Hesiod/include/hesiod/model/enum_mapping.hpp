@@ -186,4 +186,15 @@ static std::map<std::string, int> stamping_blend_method_map = {
     {"multiply", hmap::StampingBlendMethod::MULTIPLY},
     {"substract", hmap::StampingBlendMethod::SUBSTRACT}};
 
+static std::map<std::string, int> voronoi_return_type_map = {
+    {"F1: squared distance to the closest point", hmap::VoronoiReturnType::F1_SQUARED},
+    {"F2: squared distance to the second closest point",
+     hmap::VoronoiReturnType::F2_SQUARED},
+    {"F1 * F2: squared", hmap::VoronoiReturnType::F1TF2_SQUARED},
+    {"F1 / F2: squared", hmap::VoronoiReturnType::F1DF2_SQUARED},
+    {"F2 - F1: squared", hmap::VoronoiReturnType::F2MF1_SQUARED},
+    {"Edge distance squared", hmap::VoronoiReturnType::EDGE_DISTANCE_SQUARED},
+    {"Cell value", hmap::VoronoiReturnType::CONSTANT},
+    {"Cell value * (F2 - F1)", hmap::VoronoiReturnType::CONSTANT_F2MF1_SQUARED}};
+
 } // namespace hesiod

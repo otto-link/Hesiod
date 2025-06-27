@@ -45,7 +45,7 @@ void setup_hydraulic_stream_log_node(BaseNode *p_node)
                                 "gradient_power",
                                 "gradient_scaling_ratio",
                                 "gradient_prefilter_radius",
-                                "_SEPARATOR_",
+                                "_TEXT_Some text",
                                 "saturation_ratio",
                                 "talus_ref",
                                 "_SEPARATOR_",
@@ -56,7 +56,7 @@ void compute_hydraulic_stream_log_node(BaseNode *p_node)
 {
   Q_EMIT p_node->compute_started(p_node->get_id());
 
-  LOG->trace("computing node {}", p_node->get_label());
+  LOG->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
   hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
 

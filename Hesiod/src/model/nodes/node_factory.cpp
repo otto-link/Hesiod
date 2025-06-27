@@ -4,9 +4,13 @@
 #include <fstream>
 #include <stdexcept>
 
+#include "attributes/widgets/attributes_widget.hpp"
+
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/node_factory.hpp"
 #include "hesiod/model/utils.hpp"
+
+#include "hesiod/gui/gui_utils.hpp"
 
 // specific nodes
 #include "hesiod/model/nodes/broadcast_node.hpp"
@@ -30,6 +34,8 @@ constexpr unsigned int str2int(const char *str, int h = 0)
 
 void dump_node_inventory(const std::string &fname)
 {
+  LOG->trace("dump_node_inventory");
+
   std::map<std::string, std::string> ni = hesiod::get_node_inventory();
 
   // --- export to mermaid also
@@ -84,6 +90,8 @@ void dump_node_inventory(const std::string &fname)
 void dump_node_documentation_stub(const std::string           &fname,
                                   std::shared_ptr<ModelConfig> config)
 {
+  LOG->trace("dump_node_documentation_stub");
+
   std::map<std::string, std::string> ni = hesiod::get_node_inventory();
 
   nlohmann::json json;
@@ -98,6 +106,31 @@ void dump_node_documentation_stub(const std::string           &fname,
   f.open(fname, std::ios::out);
   f << json.dump(4) << "\n";
   f.close();
+}
+
+void dump_node_settings_screenshots()
+{
+  LOG->trace("dump_node_settings_screenshots");
+
+  // use default, not important
+  auto config = std::make_shared<hesiod::ModelConfig>();
+
+  std::map<std::string, std::string> ni = hesiod::get_node_inventory();
+
+  nlohmann::json json;
+  for (auto [name, category] : ni)
+  {
+    std::shared_ptr<gnode::Node> p_node = node_factory(name, config);
+    hesiod::BaseNode *p_base_node = dynamic_cast<hesiod::BaseNode *>(p_node.get());
+
+    attr::AttributesWidget *attributes_widget = new attr::AttributesWidget(
+        p_base_node->get_attr_ref(),
+        p_base_node->get_attr_ordered_key_ref());
+
+    render_widget_screenshot(attributes_widget,
+                             p_base_node->get_label() + "_settings.png",
+                             QSize(2048, 2048));
+  }
 }
 
 std::map<std::string, std::string> get_node_inventory()
@@ -288,9 +321,12 @@ std::map<std::string, std::string> get_node_inventory()
       {"ThermalSchott", "WIP"}, // "Erosion/Thermal"
       {"ThermalScree", "Erosion/Thermal"},
       {"Thru", "Routing"},
+      {"Toggle", "Routing"},
       {"Translate", "Operator/Transform"},
       {"Unsphericity", "Features/Landform"},
       {"ValleyWidth", "Features/Landform"},
+      {"Voronoi", "Primitive/Coherent"},
+      {"VoronoiFbm", "Primitive/Coherent"},
       {"Voronoise", "Primitive/Coherent"},
       {"Warp", "Operator/Transform"},
       {"WarpDownslope", "WIP"}, // Operator/Transform
@@ -520,8 +556,11 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(ThermalSchott, thermal_schott);
     SETUP_NODE(ThermalScree, thermal_scree);
     SETUP_NODE(Thru, thru);
+    SETUP_NODE(Toggle, toggle);
     SETUP_NODE(Unsphericity, unsphericity);
     SETUP_NODE(ValleyWidth, valley_width);
+    SETUP_NODE(Voronoi, voronoi);
+    SETUP_NODE(VoronoiFbm, voronoi_fbm);
     SETUP_NODE(Voronoise, voronoise);
     SETUP_NODE(Warp, warp);
     SETUP_NODE(WarpDownslope, warp_downslope);

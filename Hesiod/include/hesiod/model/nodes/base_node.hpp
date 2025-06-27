@@ -25,7 +25,7 @@
 // clang-format off
 #define ADD_ATTR(aclass, key, ...) p_node->add_attr<aclass>(key, key, ## __VA_ARGS__)
 #define GET(key, aclass) p_node->get_attr_ref()->at(key)->get_ref<attr::aclass>()->get_value()
-#define GET_ATTR(key, aclass, what) p_node->get_attr_ref()->at(key)->get_ref<attr::aclass>()->get_ ## what()
+#define GET_MEMBER(key, aclass, what) p_node->get_attr_ref()->at(key)->get_ref<attr::aclass>()->get_ ## what()
 #define GET_REF(key, aclass) p_node->get_attr_ref()->at(key)->get_ref<attr::aclass>()
 #define CONFIG p_node->get_config_ref()->shape, p_node->get_config_ref()->tiling, p_node->get_config_ref()->overlap
 // clang-format on
@@ -84,6 +84,7 @@ public:
   // --- Documentation ---
   nlohmann::json get_documentation() const { return this->documentation; }
   std::string    get_documentation_html() const;
+  std::string    get_documentation_short() const;
 
   // --- NodeProxy Interface (for GUI) ---
   std::string      get_caption() const override;

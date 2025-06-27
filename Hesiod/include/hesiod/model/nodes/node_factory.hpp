@@ -31,6 +31,8 @@ void dump_node_inventory(const std::string &fname);
 void dump_node_documentation_stub(const std::string           &fname,
                                   std::shared_ptr<ModelConfig> config);
 
+void dump_node_settings_screenshots();
+
 /**
  * @brief Retrieves a map of node inventory.
  *
@@ -255,9 +257,12 @@ DECLARE_NODE(thermal_ridge)
 DECLARE_NODE(thermal_schott)
 DECLARE_NODE(thermal_scree)
 DECLARE_NODE(thru)
+DECLARE_NODE(toggle)
 DECLARE_NODE(translate)
 DECLARE_NODE(unsphericity)
 DECLARE_NODE(valley_width)
+DECLARE_NODE(voronoi)
+DECLARE_NODE(voronoi_fbm)
 DECLARE_NODE(voronoise)
 DECLARE_NODE(warp)
 DECLARE_NODE(warp_downslope)

@@ -37,8 +37,6 @@ void setup_gabor_wave_fbm_node(BaseNode *p_node)
   ADD_ATTR(FloatAttribute, "weight", 0.7f, 0.f, 1.f);
   ADD_ATTR(FloatAttribute, "persistence", 0.5f, 0.f, 1.f);
   ADD_ATTR(FloatAttribute, "lacunarity", 2.f, 0.01f, 4.f);
-  ADD_ATTR(BoolAttribute, "inverse", false);
-  ADD_ATTR(RangeAttribute, "remap");
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"kw",
@@ -48,17 +46,16 @@ void setup_gabor_wave_fbm_node(BaseNode *p_node)
                                 "octaves",
                                 "weight",
                                 "persistence",
-                                "lacunarity",
-                                "_SEPARATOR_",
-                                "inverse",
-                                "remap"});
+                                "lacunarity"});
+
+  setup_post_process_heightmap_attributes(p_node);
 }
 
 void compute_gabor_wave_fbm_node(BaseNode *p_node)
 {
   Q_EMIT p_node->compute_started(p_node->get_id());
 
-  LOG->trace("computing node {}", p_node->get_label());
+  LOG->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
   hmap::Heightmap *p_dx = p_node->get_value_ref<hmap::Heightmap>("dx");
   hmap::Heightmap *p_dy = p_node->get_value_ref<hmap::Heightmap>("dy");
@@ -100,31 +97,9 @@ void compute_gabor_wave_fbm_node(BaseNode *p_node)
       },
       p_node->get_config_ref()->hmap_transform_mode_gpu);
 
-  // add envelope
-  if (p_env)
-  {
-    float hmin = p_out->min();
-    hmap::transform(*p_out,
-                    *p_env,
-                    [&hmin](hmap::Array &a, hmap::Array &b)
-                    {
-                      a -= hmin;
-                      a *= b;
-                    });
-  }
-
   // post-process
-  post_process_heightmap(p_node,
-                         *p_out,
-
-                         GET("inverse", BoolAttribute),
-                         false, // smooth
-                         0,
-                         false, // saturate
-                         {0.f, 0.f},
-                         0.f,
-                         GET_ATTR("remap", RangeAttribute, is_active),
-                         GET("remap", RangeAttribute));
+  post_apply_enveloppe(p_node, *p_out, p_env);
+  post_process_heightmap(p_node, *p_out);
 
   Q_EMIT p_node->compute_finished(p_node->get_id());
 }

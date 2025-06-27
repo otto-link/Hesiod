@@ -38,7 +38,7 @@ void compute_heightmap_to_mask_node(BaseNode *p_node)
 {
   Q_EMIT p_node->compute_started(p_node->get_id());
 
-  LOG->trace("computing node {}", p_node->get_label());
+  LOG->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
   hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
 
@@ -58,7 +58,7 @@ void compute_heightmap_to_mask_node(BaseNode *p_node)
                            GET("inverse", BoolAttribute),
                            GET("smoothing", BoolAttribute),
                            GET("smoothing_radius", FloatAttribute),
-                           GET_ATTR("saturate_range", RangeAttribute, is_active),
+                           GET_MEMBER("saturate_range", RangeAttribute, is_active),
                            GET("saturate_range", RangeAttribute),
                            GET("saturate_k", FloatAttribute),
                            false, // remap

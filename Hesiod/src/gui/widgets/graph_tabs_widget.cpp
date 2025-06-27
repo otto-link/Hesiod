@@ -35,8 +35,6 @@ GraphTabsWidget::GraphTabsWidget(GraphManager *p_graph_manager, QWidget *parent)
   layout->addWidget(this->tab_widget);
 
   this->update_tab_widget();
-
-  // connections
 }
 
 void GraphTabsWidget::clear()
@@ -108,6 +106,17 @@ void GraphTabsWidget::set_selected_tab(const std::string &graph_id)
     QString tab_label = tab_widget->tabText(i);
     if (tab_label.toStdString() == graph_id)
       this->tab_widget->setCurrentIndex(i);
+  }
+}
+
+void GraphTabsWidget::show_viewport()
+{
+  LOG->trace("GraphTabsWidget::show_viewport");
+
+  if (!this->graph_node_widget_map.empty())
+  {
+    this->graph_node_widget_map.begin()->second->on_viewport_request();
+    LOG->trace("HERE");
   }
 }
 

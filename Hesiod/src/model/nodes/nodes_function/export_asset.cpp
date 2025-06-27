@@ -28,7 +28,7 @@ void setup_export_asset_node(BaseNode *p_node)
 
   // attribute(s)
   ADD_ATTR(FilenameAttribute, "fname", std::filesystem::path("export"), "*", true);
-  ADD_ATTR(BoolAttribute, "auto_export", true);
+  ADD_ATTR(BoolAttribute, "auto_export", false);
 
   {
     // generate enumerate mappings
@@ -69,7 +69,7 @@ void compute_export_asset_node(BaseNode *p_node)
 {
   Q_EMIT p_node->compute_started(p_node->get_id());
 
-  LOG->trace("computing node {}", p_node->get_label());
+  LOG->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
   hmap::Heightmap *p_elev = p_node->get_value_ref<hmap::Heightmap>("elevation");
 

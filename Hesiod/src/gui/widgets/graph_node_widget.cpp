@@ -167,7 +167,34 @@ void GraphNodeWidget::on_graph_settings_request()
 
   if (ret)
   {
+    // reset viewport to avoid any issues but save their state to set
+    // it back afterwards
+    std::vector<nlohmann::json> json_states = {};
+
+    for (auto &sp_widget : this->data_viewers)
+      if (auto *p_viewer = dynamic_cast<AbstractViewer *>(sp_widget.get()))
+      {
+        json_states.push_back(p_viewer->json_to());
+        p_viewer->clear();
+      }
+
+    // backup selected node
+    const std::string selected_id = this->get_selected_node_ids().empty()
+                                        ? ""
+                                        : this->get_selected_node_ids().back();
+
+    // set new config
     *this->p_graph_node->get_config_ref() = new_model_config;
+
+    // backup graphics node reference (to avoid dangling pointer issues in the
+    // final loop... because when clearing the model graph, it also destroys the
+    // proxy node which is used by the graphics node to keep track of the node id)
+    std::map<std::string, gngui::GraphicsNode *> gfx_node_ref_map = {};
+
+    for (auto &[id, _] : this->p_graph_node->get_nodes())
+    {
+      gfx_node_ref_map[id] = this->get_graphics_node_by_id(id);
+    }
 
     // serialize only the model graph node (not the GUI)
     nlohmann::json json = this->p_graph_node->json_to();
@@ -184,12 +211,19 @@ void GraphNodeWidget::on_graph_settings_request()
     {
       gngui::NodeProxy *p_proxy = this->p_graph_node->get_node_ref_by_id<BaseNode>(id)
                                       ->get_proxy_ref();
-
-      this->get_graphics_node_by_id(id)->set_p_node_proxy(p_proxy);
+      gfx_node_ref_map.at(id)->set_p_node_proxy(p_proxy);
+      gfx_node_ref_map.at(id)->setSelected(false);
     }
+
+    // set back viewport states
+    size_t k = 0;
+    for (auto &sp_widget : this->data_viewers)
+      if (auto *p_viewer = dynamic_cast<AbstractViewer *>(sp_widget.get()))
+        p_viewer->json_from(json_states[k++]);
+
+    // TODO set the selection back
   }
 
-  // deactivate drag to fix some event issue between the dialog box and the graphics view
   this->set_enabled(true);
 }
 
@@ -305,10 +339,10 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
       bckp_button->setText("Backup\nstate");
       bckp_button->setIcon(bckp_button->style()->standardIcon(QStyle::SP_DriveHDIcon));
 
-      QToolButton *reset_button = new QToolButton;
-      reset_button->setText("Revert\nstate");
-      reset_button->setIcon(
-          reset_button->style()->standardIcon(QStyle::SP_DialogCloseButton));
+      QToolButton *revert_button = new QToolButton;
+      revert_button->setText("Revert\nstate");
+      revert_button->setIcon(
+          revert_button->style()->standardIcon(QStyle::SP_DialogCloseButton));
 
       QToolButton *load_button = new QToolButton;
       load_button->setText("Load\npreset");
@@ -320,6 +354,11 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
       save_button->setIcon(
           save_button->style()->standardIcon(QStyle::SP_DialogSaveButton));
 
+      QToolButton *reset_button = new QToolButton;
+      reset_button->setText("Reset\nsettings");
+      reset_button->setIcon(
+          reset_button->style()->standardIcon(QStyle::SP_MediaSkipBackward));
+
       QToolButton *help_button = new QToolButton;
       help_button->setText("Help!");
       help_button->setIcon(
@@ -327,9 +366,10 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
 
       for (auto p : {update_button,
                      bckp_button,
-                     reset_button,
+                     revert_button,
                      load_button,
                      save_button,
+                     reset_button,
                      help_button})
       {
         p->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
@@ -353,7 +393,7 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
                     &QPushButton::pressed,
                     [attributes_widget]() { attributes_widget->on_save_state(); });
 
-      this->connect(reset_button,
+      this->connect(revert_button,
                     &QPushButton::pressed,
                     [attributes_widget]()
                     { attributes_widget->on_restore_save_state(); });
@@ -365,6 +405,11 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
       this->connect(save_button,
                     &QPushButton::pressed,
                     [attributes_widget]() { attributes_widget->on_save_preset(); });
+
+      this->connect(reset_button,
+                    &QPushButton::pressed,
+                    [attributes_widget]()
+                    { attributes_widget->on_restore_initial_state(); });
 
       this->connect(help_button,
                     &QPushButton::pressed,
@@ -395,6 +440,19 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
     {
       retrieved_layout->setSpacing(0);
       retrieved_layout->setContentsMargins(0, 0, 0, 0);
+
+      for (int i = 0; i < retrieved_layout->count(); ++i)
+      {
+        QWidget *child = retrieved_layout->itemAt(i)->widget();
+        if (!child)
+          continue;
+
+        if (auto *inner_layout = child->layout())
+        {
+          inner_layout->setContentsMargins(32, 4, 32, 4);
+          inner_layout->setSpacing(4);
+        }
+      }
     }
 
     QWidgetAction *widget_action = new QWidgetAction(menu);

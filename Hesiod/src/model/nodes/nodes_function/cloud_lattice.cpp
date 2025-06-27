@@ -39,7 +39,7 @@ void compute_cloud_lattice_node(BaseNode *p_node)
 {
   Q_EMIT p_node->compute_started(p_node->get_id());
 
-  LOG->trace("computing node {}", p_node->get_label());
+  LOG->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
   hmap::Cloud *p_out = p_node->get_value_ref<hmap::Cloud>("cloud");
 
@@ -57,7 +57,7 @@ void compute_cloud_lattice_node(BaseNode *p_node)
 
   *p_out = hmap::Cloud(x, y, v);
 
-  if (GET_ATTR("remap", RangeAttribute, is_active))
+  if (GET_MEMBER("remap", RangeAttribute, is_active))
     p_out->remap_values(GET("remap", RangeAttribute)[0], GET("remap", RangeAttribute)[1]);
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

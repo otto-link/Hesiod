@@ -38,7 +38,7 @@ void compute_abs_smooth_node(BaseNode *p_node)
 {
   Q_EMIT p_node->compute_started(p_node->get_id());
 
-  LOG->trace("computing node {}", p_node->get_label());
+  LOG->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
   hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
 
@@ -68,7 +68,7 @@ void compute_abs_smooth_node(BaseNode *p_node)
                            false, // saturate
                            {0.f, 0.f},
                            0.f,
-                           GET_ATTR("remap", RangeAttribute, is_active),
+                           GET_MEMBER("remap", RangeAttribute, is_active),
                            GET("remap", RangeAttribute));
   }
 

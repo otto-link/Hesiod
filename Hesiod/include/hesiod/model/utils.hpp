@@ -27,6 +27,9 @@ std::filesystem::path insert_before_extension(const std::filesystem::path &origi
 nlohmann::json json_from_file(const std::string &fname);
 void           json_to_file(const nlohmann::json &json, const std::string &fname);
 
+std::string              insert_char_every_nth(const std::string &input,
+                                               std::size_t        n,
+                                               const std::string &chr);
 std::vector<std::string> split_string(const std::string &string, char delimiter);
 
 std::string time_stamp();

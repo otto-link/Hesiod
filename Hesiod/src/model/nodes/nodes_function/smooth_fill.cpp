@@ -38,7 +38,7 @@ void setup_smooth_fill_node(BaseNode *p_node)
 
 void compute_smooth_fill_node(BaseNode *p_node)
 {
-  LOG->trace("computing node {}", p_node->get_label());
+  LOG->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
   Q_EMIT p_node->compute_started(p_node->get_id());
 

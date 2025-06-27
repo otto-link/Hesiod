@@ -160,21 +160,26 @@ void FrameItem::set_angle(float new_angle)
   this->update_item_geometry();
 }
 
-void FrameItem::set_background_image(const QImage &new_image)
+void FrameItem::set_background_image(QImage new_image)
 {
   LOG->trace("FrameItem::set_background_image: frame {}", this->id);
 
-  if (new_image.isNull())
+  if (new_image.isNull() || new_image.bits() == nullptr)
   {
     this->pixmap = QPixmap();
-  }
-  else
-  {
-    this->pixmap = QPixmap::fromImage(new_image);
-    this->pixmap = this->pixmap.transformed(QTransform().scale(1.f, -1.f));
+    return;
   }
 
+  LOG->debug("FrameItem::set_background_image: B1");
+  QImage safe_image = new_image.convertToFormat(QImage::Format_ARGB32);
+
+  LOG->debug("FrameItem::set_background_image: C1");
+  this->pixmap = QPixmap::fromImage(safe_image);
+  LOG->debug("FrameItem::set_background_image: C2");
+  this->pixmap = this->pixmap.transformed(QTransform().scale(1.f, -1.f));
+  LOG->debug("FrameItem::set_background_image: C3");
   this->update();
+  LOG->debug("FrameItem::set_background_image: C4");
 };
 
 void FrameItem::set_geometry(QPointF new_origin, QPointF new_size, float new_angle)

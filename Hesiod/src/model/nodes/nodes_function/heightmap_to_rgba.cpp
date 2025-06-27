@@ -29,7 +29,7 @@ void compute_heightmap_to_rgba_node(BaseNode *p_node)
 {
   Q_EMIT p_node->compute_started(p_node->get_id());
 
-  LOG->trace("computing node {}", p_node->get_label());
+  LOG->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
   hmap::Heightmap *p_r = p_node->get_value_ref<hmap::Heightmap>("R");
   hmap::Heightmap *p_g = p_node->get_value_ref<hmap::Heightmap>("G");

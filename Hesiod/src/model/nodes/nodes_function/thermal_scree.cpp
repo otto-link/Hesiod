@@ -30,7 +30,7 @@ void setup_thermal_scree_node(BaseNode *p_node)
   // attribute(s)
   ADD_ATTR(FloatAttribute, "talus_global", 2.f, 0.f, FLT_MAX);
   ADD_ATTR(FloatAttribute, "zmax", 0.5f, -1.f, 2.f);
-  ADD_ATTR(IntAttribute, "iterations", 500, 1, FLT_MAX);
+  ADD_ATTR(IntAttribute, "iterations", 500, 1, INT_MAX);
   ADD_ATTR(BoolAttribute, "talus_constraint", true);
   ADD_ATTR(BoolAttribute, "scale_talus_with_elevation", true);
 
@@ -46,7 +46,7 @@ void compute_thermal_scree_node(BaseNode *p_node)
 {
   Q_EMIT p_node->compute_started(p_node->get_id());
 
-  LOG->trace("computing node {}", p_node->get_label());
+  LOG->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
   hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
 

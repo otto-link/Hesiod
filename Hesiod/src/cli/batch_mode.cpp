@@ -137,6 +137,8 @@ void run_node_inventory()
 
   auto config = std::make_shared<hesiod::ModelConfig>();
   hesiod::dump_node_documentation_stub("node_documentation_stub.json", config);
+
+  hesiod::dump_node_settings_screenshots();
 }
 
 void run_snapshot_generation()

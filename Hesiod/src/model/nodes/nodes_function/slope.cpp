@@ -33,14 +33,14 @@ void setup_slope_node(BaseNode *p_node)
 
   // attribute(s) order
   p_node->set_attr_ordered_key(
-      {"angle", "talus_global", "center", "_SEPARATOR_", "inverse", "remap", "remap"});
+      {"angle", "talus_global", "center", "_SEPARATOR_", "inverse", "remap"});
 }
 
 void compute_slope_node(BaseNode *p_node)
 {
   Q_EMIT p_node->compute_started(p_node->get_id());
 
-  LOG->trace("computing node {}", p_node->get_label());
+  LOG->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
   // base noise function
   hmap::Heightmap *p_dx = p_node->get_value_ref<hmap::Heightmap>("dx");
@@ -79,7 +79,7 @@ void compute_slope_node(BaseNode *p_node)
                          false, // saturate
                          {0.f, 0.f},
                          0.f,
-                         GET_ATTR("remap", RangeAttribute, is_active),
+                         GET_MEMBER("remap", RangeAttribute, is_active),
                          GET("remap", RangeAttribute));
 
   Q_EMIT p_node->compute_finished(p_node->get_id());
