@@ -45,6 +45,8 @@ std::string GraphNode::add_node(const std::string &node_type)
 std::string GraphNode::add_node(const std::shared_ptr<gnode::Node> &node,
                                 const std::string                  &id)
 {
+  LOG->trace("GraphNode::add_node: id = {}", id);
+
   // basic GNode adding...
   std::string node_id = gnode::Graph::add_node(node, id);
 
@@ -202,6 +204,8 @@ void GraphNode::on_broadcast_node_updated(const std::string &tag)
 
 void GraphNode::remove_node(const std::string &id)
 {
+  LOG->trace("GraphNode::remove_node: id = {}", id);
+
   // "special" nodes treatment
   BaseNode   *p_basenode = this->get_node_ref_by_id<BaseNode>(id);
   std::string node_type = p_basenode->get_node_type();
@@ -221,6 +225,9 @@ void GraphNode::remove_node(const std::string &id)
 
 void GraphNode::set_p_broadcast_params(BroadcastMap *new_p_broadcast_params)
 {
+  LOG->trace("GraphNode::set_p_broadcast_params: ptr = {}",
+             new_p_broadcast_params ? "OK" : "nullptr");
+
   this->p_broadcast_params = new_p_broadcast_params;
 }
 
@@ -278,6 +285,8 @@ void GraphNode::setup_new_receive_node(BaseNode *p_node)
 
 void GraphNode::update()
 {
+  LOG->trace("GraphNode::update");
+
   Q_EMIT this->update_started(this->get_id());
   gnode::Graph::update();
   Q_EMIT this->update_finished(this->get_id());
@@ -285,6 +294,8 @@ void GraphNode::update()
 
 void GraphNode::update(std::string id)
 {
+  LOG->trace("GraphNode::update: id = {}", id);
+
   Q_EMIT this->update_started(this->get_id());
   gnode::Graph::update(id);
   Q_EMIT this->update_finished(this->get_id());
