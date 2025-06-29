@@ -3525,11 +3525,29 @@
                 "label": "fname",
                 "type": "Filename"
             },
-            "remap": {
-                "description": "Remap imported heightmap elevation to [0, 1].",
-                "key": "remap",
-                "label": "remap",
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
                 "type": "Bool"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
             }
         },
         "ports": {
@@ -8103,11 +8121,35 @@
         "description": "Smoothing using a cubic pulse kernel can be considered somewhat similar to Gaussian smoothing. This technique is used to reduce noise and smooth data. The cubic pulse kernel has a cubic decrease in influence with distance within a finite interval. It is zero beyond a certain radius, providing a compact support that affects only nearby points.",
         "label": "SmoothCpulse",
         "parameters": {
-            "GPU": {
-                "description": "Toogle GPU acceleration on or off.",
-                "key": "GPU",
-                "label": "GPU",
+            "mask_activate": {
+                "description": "Enables or disables the internal mask. If the node's 'mask' input is connected, this setting is bypassed and the input mask is used instead.",
+                "key": "mask_activate",
+                "label": "mask_activate",
                 "type": "Bool"
+            },
+            "mask_gain": {
+                "description": "Controls the intensity or influence of the internal mask. Bypassed if the 'mask' input is connected.",
+                "key": "mask_gain",
+                "label": "mask_gain",
+                "type": "Float"
+            },
+            "mask_inverse": {
+                "description": "Inverts the internal mask, applying the operator where the mask is low. Ignored if a 'mask' input is provided.",
+                "key": "mask_inverse",
+                "label": "mask_inverse",
+                "type": "Bool"
+            },
+            "mask_radius": {
+                "description": "Defines the smoothing radius for the internal mask. A value of 0 disables smoothing. This is bypassed if the 'mask' input is used.",
+                "key": "mask_radius",
+                "label": "mask_radius",
+                "type": "Float"
+            },
+            "mask_type": {
+                "description": "Specifies how the internal mask is computed: 'Elevation' uses height, 'Gradient Norm' uses slope, and 'Elevation mid-range' selects the middle portion of the height range. This parameter is ignored when a 'mask' input is connected.",
+                "key": "mask_type",
+                "label": "mask_type",
+                "type": "Choice"
             },
             "radius": {
                 "description": "Filter radius with respect to the domain size.",
@@ -8142,17 +8184,41 @@
         "description": "SmoothFill is a smoothing technique that takes the maximum between the input and the filtered field to simulate a sediment deposition effect.",
         "label": "SmoothFill",
         "parameters": {
-            "GPU": {
-                "description": "Toogle GPU acceleration on or off.",
-                "key": "GPU",
-                "label": "GPU",
-                "type": "Bool"
-            },
             "k": {
                 "description": "Smoothing intensity of the maximum operator.",
                 "key": "k",
                 "label": "k",
                 "type": "Float"
+            },
+            "mask_activate": {
+                "description": "Enables or disables the internal mask. If the node's 'mask' input is connected, this setting is bypassed and the input mask is used instead.",
+                "key": "mask_activate",
+                "label": "mask_activate",
+                "type": "Bool"
+            },
+            "mask_gain": {
+                "description": "Controls the intensity or influence of the internal mask. Bypassed if the 'mask' input is connected.",
+                "key": "mask_gain",
+                "label": "mask_gain",
+                "type": "Float"
+            },
+            "mask_inverse": {
+                "description": "Inverts the internal mask, applying the operator where the mask is low. Ignored if a 'mask' input is provided.",
+                "key": "mask_inverse",
+                "label": "mask_inverse",
+                "type": "Bool"
+            },
+            "mask_radius": {
+                "description": "Defines the smoothing radius for the internal mask. A value of 0 disables smoothing. This is bypassed if the 'mask' input is used.",
+                "key": "mask_radius",
+                "label": "mask_radius",
+                "type": "Float"
+            },
+            "mask_type": {
+                "description": "Specifies how the internal mask is computed: 'Elevation' uses height, 'Gradient Norm' uses slope, and 'Elevation mid-range' selects the middle portion of the height range. This parameter is ignored when a 'mask' input is connected.",
+                "key": "mask_type",
+                "label": "mask_type",
+                "type": "Choice"
             },
             "normalized_map": {
                 "description": "Decides if the deposition map is normalized.",
@@ -8199,11 +8265,35 @@
         "description": "SmoothFillHoles is a smoothing technique that restricts smoothing effect to convex regions.",
         "label": "SmoothFillHoles",
         "parameters": {
-            "GPU": {
-                "description": "Toogle GPU acceleration on or off.",
-                "key": "GPU",
-                "label": "GPU",
+            "mask_activate": {
+                "description": "Enables or disables the internal mask. If the node's 'mask' input is connected, this setting is bypassed and the input mask is used instead.",
+                "key": "mask_activate",
+                "label": "mask_activate",
                 "type": "Bool"
+            },
+            "mask_gain": {
+                "description": "Controls the intensity or influence of the internal mask. Bypassed if the 'mask' input is connected.",
+                "key": "mask_gain",
+                "label": "mask_gain",
+                "type": "Float"
+            },
+            "mask_inverse": {
+                "description": "Inverts the internal mask, applying the operator where the mask is low. Ignored if a 'mask' input is provided.",
+                "key": "mask_inverse",
+                "label": "mask_inverse",
+                "type": "Bool"
+            },
+            "mask_radius": {
+                "description": "Defines the smoothing radius for the internal mask. A value of 0 disables smoothing. This is bypassed if the 'mask' input is used.",
+                "key": "mask_radius",
+                "label": "mask_radius",
+                "type": "Float"
+            },
+            "mask_type": {
+                "description": "Specifies how the internal mask is computed: 'Elevation' uses height, 'Gradient Norm' uses slope, and 'Elevation mid-range' selects the middle portion of the height range. This parameter is ignored when a 'mask' input is connected.",
+                "key": "mask_type",
+                "label": "mask_type",
+                "type": "Choice"
             },
             "radius": {
                 "description": "Filter radius with respect to the domain size.",
@@ -8238,11 +8328,35 @@
         "description": "SmoothFillSmearPeaks is a smoothing technique that restricts smoothing effect to concave regions.",
         "label": "SmoothFillSmearPeaks",
         "parameters": {
-            "GPU": {
-                "description": "Toogle GPU acceleration on or off.",
-                "key": "GPU",
-                "label": "GPU",
+            "mask_activate": {
+                "description": "Enables or disables the internal mask. If the node's 'mask' input is connected, this setting is bypassed and the input mask is used instead.",
+                "key": "mask_activate",
+                "label": "mask_activate",
                 "type": "Bool"
+            },
+            "mask_gain": {
+                "description": "Controls the intensity or influence of the internal mask. Bypassed if the 'mask' input is connected.",
+                "key": "mask_gain",
+                "label": "mask_gain",
+                "type": "Float"
+            },
+            "mask_inverse": {
+                "description": "Inverts the internal mask, applying the operator where the mask is low. Ignored if a 'mask' input is provided.",
+                "key": "mask_inverse",
+                "label": "mask_inverse",
+                "type": "Bool"
+            },
+            "mask_radius": {
+                "description": "Defines the smoothing radius for the internal mask. A value of 0 disables smoothing. This is bypassed if the 'mask' input is used.",
+                "key": "mask_radius",
+                "label": "mask_radius",
+                "type": "Float"
+            },
+            "mask_type": {
+                "description": "Specifies how the internal mask is computed: 'Elevation' uses height, 'Gradient Norm' uses slope, and 'Elevation mid-range' selects the middle portion of the height range. This parameter is ignored when a 'mask' input is connected.",
+                "key": "mask_type",
+                "label": "mask_type",
+                "type": "Choice"
             },
             "radius": {
                 "description": "Filter radius with respect to the domain size.",
