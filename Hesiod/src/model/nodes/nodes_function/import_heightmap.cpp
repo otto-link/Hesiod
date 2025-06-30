@@ -43,7 +43,7 @@ void compute_import_heightmap_node(BaseNode *p_node)
 
   hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
-  const std::string fname = GET("fname", FilenameAttribute);
+  const std::string fname = GET("fname", FilenameAttribute).string();
   std::ifstream     f(fname.c_str());
 
   if (f.good())
