@@ -73,7 +73,7 @@ void compute_export_asset_node(BaseNode *p_node)
 
   hmap::Heightmap *p_elev = p_node->get_value_ref<hmap::Heightmap>("elevation");
 
-  if (p_elev)
+  if (p_elev && GET("auto_export", BoolAttribute))
   {
     hmap::HeightmapRGBA *p_color = p_node->get_value_ref<hmap::HeightmapRGBA>("texture");
     hmap::HeightmapRGBA *p_nmap = p_node->get_value_ref<hmap::HeightmapRGBA>(

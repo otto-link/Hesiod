@@ -434,7 +434,7 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
     // --- add attributes
 
     // change the attribute widget layout spacing a posteriori
-    QVBoxLayout *retrieved_layout = qobject_cast<QVBoxLayout *>(
+    QGridLayout *retrieved_layout = qobject_cast<QGridLayout *>(
         attributes_widget->layout());
     if (retrieved_layout)
     {
