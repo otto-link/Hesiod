@@ -10,6 +10,7 @@
 #include "hesiod/logger.hpp"
 #include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
+#include "hesiod/model/utils.hpp"
 
 using namespace attr;
 
@@ -42,21 +43,30 @@ void compute_export_heightmap_node(BaseNode *p_node)
 
   if (p_in && GET("auto_export", BoolAttribute))
   {
-    std::string fname = GET("fname", FilenameAttribute).string();
+    std::filesystem::path fname = GET("fname", FilenameAttribute);
 
     switch (GET("format", EnumAttribute))
     {
     case ExportFormat::PNG8BIT:
+    {
+      fname = ensure_extension(fname, ".png").string();
       p_in->to_array().to_png_grayscale(fname, CV_8U);
-      break;
+    }
+    break;
 
     case ExportFormat::PNG16BIT:
+    {
+      fname = ensure_extension(fname, ".png").string();
       p_in->to_array().to_png_grayscale(fname, CV_16U);
-      break;
+    }
+    break;
 
     case ExportFormat::RAW16BIT:
+    {
+      fname = ensure_extension(fname, ".raw").string();
       p_in->to_array().to_raw_16bit(fname);
-      break;
+    }
+    break;
     }
   }
 

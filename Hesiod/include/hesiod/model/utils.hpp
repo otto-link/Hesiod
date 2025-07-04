@@ -21,6 +21,9 @@
 namespace hesiod
 {
 
+std::filesystem::path ensure_extension(std::filesystem::path fname,
+                                       const std::string    &extension);
+
 std::filesystem::path insert_before_extension(const std::filesystem::path &original_path,
                                               const std::string           &insert_str);
 

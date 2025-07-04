@@ -10,6 +10,7 @@
 #include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
+#include "hesiod/model/utils.hpp"
 
 using namespace attr;
 
@@ -56,7 +57,9 @@ void compute_export_as_cubemap_node(BaseNode *p_node)
   if (p_in && GET("auto_export", BoolAttribute))
   {
     hmap::Array z = p_in->to_array();
-    std::string fname = GET("fname", FilenameAttribute).string();
+
+    std::filesystem::path fname = GET("fname", FilenameAttribute);
+    fname = ensure_extension(fname, ".png").string();
 
     hmap::export_as_cubemap(fname,
                             z,

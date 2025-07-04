@@ -10,6 +10,7 @@
 #include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
+#include "hesiod/model/utils.hpp"
 
 using namespace attr;
 
@@ -46,7 +47,8 @@ void compute_export_normal_map_node(BaseNode *p_node)
 
   if (p_in && GET("auto_export", BoolAttribute))
   {
-    std::string fname = GET("fname", FilenameAttribute).string();
+    std::filesystem::path fname = GET("fname", FilenameAttribute);
+    fname = ensure_extension(fname, ".png").string();
 
     if (GET("16bit", BoolAttribute))
       hmap::export_normal_map_png(fname, p_in->to_array(), CV_16U);

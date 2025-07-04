@@ -10,6 +10,7 @@
 #include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
+#include "hesiod/model/utils.hpp"
 
 using namespace attr;
 
@@ -44,7 +45,12 @@ void compute_export_path_node(BaseNode *p_node)
   hmap::Path *p_in = p_node->get_value_ref<hmap::Path>("input");
 
   if (p_in && GET("auto_export", BoolAttribute))
-    p_in->to_csv(GET("fname", FilenameAttribute).string());
+  {
+    std::filesystem::path fname = GET("fname", FilenameAttribute);
+    fname = ensure_extension(fname, ".csv").string();
+
+    p_in->to_csv(fname);
+  }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());
 }
