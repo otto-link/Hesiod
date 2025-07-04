@@ -28,7 +28,7 @@ void setup_basalt_field_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "out", CONFIG);
 
   // attribute(s)
-  std::vector<float> kw = {4.f, 4.f};
+  std::vector<float> kw = {5.f, 5.f};
 
   ADD_ATTR(WaveNbAttribute, "kw", kw, 0.f, FLT_MAX, true);
   ADD_ATTR(SeedAttribute, "seed");
@@ -36,22 +36,23 @@ void setup_basalt_field_node(BaseNode *p_node)
   ADD_ATTR(FloatAttribute, "warp_kw", 4.f, 0.f, FLT_MAX);
 
   ADD_ATTR(FloatAttribute, "large_scale_warp_amp", 0.2f, 0.f, 1.f);
-  ADD_ATTR(FloatAttribute, "large_scale_gain", 6., 0.f, 10.f);
-  ADD_ATTR(FloatAttribute, "large_scale_amp", 0.2f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "large_scale_gain", 8., 0.f, 10.f);
+  ADD_ATTR(FloatAttribute, "large_scale_amp", 0.15f, 0.f, 1.f);
 
-  ADD_ATTR(FloatAttribute, "medium_scale_kw_ratio", 4.f, 0.f, FLT_MAX);
-  ADD_ATTR(FloatAttribute, "medium_scale_warp_amp", 1.f, 0.f, FLT_MAX);
-  ADD_ATTR(FloatAttribute, "medium_scale_gain", 4.f, 0.f, 10.f);
-  ADD_ATTR(FloatAttribute, "medium_scale_amp", 0.05f, 0.f, 0.2f);
+  ADD_ATTR(FloatAttribute, "medium_scale_kw_ratio", 3.f, 0.f, FLT_MAX);
+  ADD_ATTR(FloatAttribute, "medium_scale_warp_amp", 0.1f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "medium_scale_gain", 8.f, 0.f, 10.f);
+  ADD_ATTR(FloatAttribute, "medium_scale_amp", 0.12f, 0.f, 0.2f);
 
-  ADD_ATTR(FloatAttribute, "small_scale_kw_ratio", 16.f, 0.f, FLT_MAX);
-  ADD_ATTR(FloatAttribute, "small_scale_overlay_amp", 0.001f, 0.f, 0.01f);
+  ADD_ATTR(FloatAttribute, "small_scale_kw_ratio", 5.f, 0.f, FLT_MAX);
+  ADD_ATTR(FloatAttribute, "small_scale_amp", 0.1f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "small_scale_overlay_amp", 0.005f, 0.f, 0.01f);
 
-  ADD_ATTR(FloatAttribute, "rugosity_kw_ratio", 1.f, 0.f, FLT_MAX);
+  ADD_ATTR(FloatAttribute, "rugosity_kw_ratio", 1.5f, 0.f, FLT_MAX);
   ADD_ATTR(FloatAttribute, "rugosity_amp", 1.f, 0.f, 2.f);
 
   ADD_ATTR(BoolAttribute, "flatten_activate", true);
-  ADD_ATTR(FloatAttribute, "flatten_kw_ratio", 1.f, 0.f, FLT_MAX);
+  ADD_ATTR(FloatAttribute, "flatten_kw_ratio", 0.5f, 0.f, FLT_MAX);
   ADD_ATTR(FloatAttribute, "flatten_amp", 0.f, 0.f, 1.f);
 
   // attribute(s) order
@@ -69,6 +70,7 @@ void setup_basalt_field_node(BaseNode *p_node)
                                 "medium_scale_amp",
                                 "_TEXT_Small-Scale Parameters",
                                 "small_scale_kw_ratio",
+                                "small_scale_amp",
                                 "small_scale_overlay_amp",
                                 "_TEXT_Rugosity",
                                 "rugosity_kw_ratio",
@@ -118,6 +120,7 @@ void compute_basalt_field_node(BaseNode *p_node)
                                           GET("medium_scale_gain", FloatAttribute),
                                           GET("medium_scale_amp", FloatAttribute),
                                           GET("small_scale_kw_ratio", FloatAttribute),
+                                          GET("small_scale_amp", FloatAttribute),
                                           GET("small_scale_overlay_amp", FloatAttribute),
                                           GET("rugosity_kw_ratio", FloatAttribute),
                                           GET("rugosity_amp", FloatAttribute),
