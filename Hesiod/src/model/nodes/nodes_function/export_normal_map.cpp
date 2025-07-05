@@ -52,12 +52,12 @@ void compute_export_normal_map_node(BaseNode *p_node)
   if (p_in && GET("auto_export", BoolAttribute))
   {
     std::filesystem::path fname = GET("fname", FilenameAttribute);
-    fname = ensure_extension(fname, ".png").string();
+    fname = ensure_extension(fname, ".png");
 
     if (GET("16bit", BoolAttribute))
-      hmap::export_normal_map_png(fname, p_in->to_array(), CV_16U);
+      hmap::export_normal_map_png(fname.string(), p_in->to_array(), CV_16U);
     else
-      hmap::export_normal_map_png(fname, p_in->to_array(), CV_8U);
+      hmap::export_normal_map_png(fname.string(), p_in->to_array(), CV_8U);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

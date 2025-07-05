@@ -63,9 +63,9 @@ void compute_export_as_cubemap_node(BaseNode *p_node)
     hmap::Array z = p_in->to_array();
 
     std::filesystem::path fname = GET("fname", FilenameAttribute);
-    fname = ensure_extension(fname, ".png").string();
+    fname = ensure_extension(fname, ".png");
 
-    hmap::export_as_cubemap(fname,
+    hmap::export_as_cubemap(fname.string(),
                             z,
                             GET("cubemap_resolution", IntAttribute),
                             GET("overlap", FloatAttribute),

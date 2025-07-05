@@ -51,9 +51,9 @@ void compute_export_cloud_node(BaseNode *p_node)
   if (p_in && GET("auto_export", BoolAttribute))
   {
     std::filesystem::path fname = GET("fname", FilenameAttribute);
-    fname = ensure_extension(fname, ".csv").string();
+    fname = ensure_extension(fname, ".csv");
 
-    p_in->to_csv(fname);
+    p_in->to_csv(fname.string());
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

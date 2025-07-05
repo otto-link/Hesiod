@@ -53,22 +53,22 @@ void compute_export_heightmap_node(BaseNode *p_node)
     {
     case ExportFormat::PNG8BIT:
     {
-      fname = ensure_extension(fname, ".png").string();
-      p_in->to_array().to_png_grayscale(fname, CV_8U);
+      fname = ensure_extension(fname, ".png");
+      p_in->to_array().to_png_grayscale(fname.string(), CV_8U);
     }
     break;
 
     case ExportFormat::PNG16BIT:
     {
-      fname = ensure_extension(fname, ".png").string();
-      p_in->to_array().to_png_grayscale(fname, CV_16U);
+      fname = ensure_extension(fname, ".png");
+      p_in->to_array().to_png_grayscale(fname.string(), CV_16U);
     }
     break;
 
     case ExportFormat::RAW16BIT:
     {
-      fname = ensure_extension(fname, ".raw").string();
-      p_in->to_array().to_raw_16bit(fname);
+      fname = ensure_extension(fname, ".raw");
+      p_in->to_array().to_raw_16bit(fname.string());
     }
     break;
     }
