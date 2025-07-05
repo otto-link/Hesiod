@@ -10,6 +10,7 @@
 
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
+#include "hesiod/model/nodes/node_factory.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
 
 using namespace attr;
@@ -63,6 +64,9 @@ void setup_export_asset_node(BaseNode *p_node)
                                 "_SEPARATOR_",
                                 "blending_method",
                                 "detail_scaling"});
+
+  // specialized GUI
+  add_export_button(p_node);
 }
 
 void compute_export_asset_node(BaseNode *p_node)

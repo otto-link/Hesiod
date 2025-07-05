@@ -41,7 +41,11 @@ QWidget *BaseNode::get_qwidget_ref()
   if (!this->data_preview)
     this->data_preview = new DataPreview(this);
 
-  return (QWidget *)this->data_preview;
+  // eventually owned by gngui::GraphicsNode
+  if (this->qwidget_fct)
+    return this->qwidget_fct(this);
+  else
+    return (QWidget *)this->data_preview;
 }
 
 std::string BaseNode::get_tool_tip_text()

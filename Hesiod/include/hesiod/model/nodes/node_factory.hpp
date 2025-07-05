@@ -70,6 +70,9 @@ std::map<std::string, std::string> get_node_inventory();
 std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type,
                                           std::shared_ptr<ModelConfig> config);
 
+// specialized GUI
+void add_export_button(BaseNode *p_node);
+
 // nodes functions
 
 DECLARE_NODE(abs)
