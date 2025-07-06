@@ -13,6 +13,7 @@
 
 #include "hesiod/gui/gui_utils.hpp"
 #include "hesiod/gui/style.hpp"
+#include "hesiod/gui/widgets/custom_qmenu.hpp"
 #include "hesiod/gui/widgets/graph_node_widget.hpp"
 #include "hesiod/gui/widgets/model_config_widget.hpp"
 #include "hesiod/gui/widgets/viewer3d.hpp"
@@ -300,7 +301,7 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
   if (item_pos.y() < p_gx_node->get_geometry_ref()->widget_pos.y())
   {
 
-    QMenu *menu = new QMenu();
+    CustomQMenu *menu = new CustomQMenu();
 
     // create the widget holding all the attribute widgets (created
     // here, needed for connect below)
