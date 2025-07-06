@@ -75,6 +75,7 @@ public:
   // --- Compute ---
   void compute() override { this->compute_fct(this); }
   void set_compute_fct(std::function<void(BaseNode *p_node)> new_compute_fct);
+  void set_qwidget_fct(std::function<QWidget *(BaseNode *p_node)> new_qwidget_fct);
 
   // --- Serialization ---
   virtual void           json_from(nlohmann::json const &json);
@@ -88,6 +89,7 @@ public:
 
   // --- NodeProxy Interface (for GUI) ---
   std::string      get_caption() const override;
+  DataPreview     *get_data_preview_ref();
   void            *get_data_ref(int port_index) override;
   std::string      get_data_type(int port_index) const override;
   int              get_nports() const override;
@@ -107,13 +109,14 @@ private:
   // --- Members ---
   std::map<std::string, std::unique_ptr<attr::AbstractAttribute>> attr = {};
 
-  std::vector<std::string>              attr_ordered_key = {};
-  std::string                           category;
-  std::shared_ptr<ModelConfig>          config;
-  GraphEditor                          *p_graph_node; // belonging graph node
-  nlohmann::json                        documentation;
-  std::function<void(BaseNode *p_node)> compute_fct = 0;
-  DataPreview *data_preview = nullptr; // // owned by gngui::GraphicsNode
+  std::vector<std::string>                   attr_ordered_key = {};
+  std::string                                category;
+  std::shared_ptr<ModelConfig>               config;
+  GraphEditor                               *p_graph_node; // belonging graph node
+  nlohmann::json                             documentation;
+  std::function<void(BaseNode *p_node)>      compute_fct = 0;
+  std::function<QWidget *(BaseNode *p_node)> qwidget_fct = 0;
+  DataPreview *data_preview = nullptr; // owned by gngui::GraphicsNode
 };
 
 } // namespace hesiod

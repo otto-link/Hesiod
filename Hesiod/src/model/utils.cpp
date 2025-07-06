@@ -12,6 +12,22 @@
 namespace hesiod
 {
 
+std::filesystem::path ensure_extension(std::filesystem::path fname,
+                                       const std::string    &extension)
+{
+  std::string ext = extension;
+
+  // ensure extension starts with a dot
+  if (!ext.empty() && ext.front() != '.')
+    ext = "." + ext;
+
+  // if the extension is missing or different, replace it
+  if (!fname.has_extension() || fname.extension() != ext)
+    fname.replace_extension(ext);
+
+  return fname;
+}
+
 std::filesystem::path insert_before_extension(const std::filesystem::path &original_path,
                                               const std::string           &insert_str)
 {

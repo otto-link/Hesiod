@@ -10,6 +10,8 @@
 #include "hesiod/logger.hpp"
 #include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
+#include "hesiod/model/nodes/node_factory.hpp"
+#include "hesiod/model/utils.hpp"
 
 using namespace attr;
 
@@ -30,6 +32,9 @@ void setup_export_heightmap_node(BaseNode *p_node)
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"fname", "format", "auto_export"});
+
+  // specialized GUI
+  add_export_button(p_node);
 }
 
 void compute_export_heightmap_node(BaseNode *p_node)
@@ -42,21 +47,30 @@ void compute_export_heightmap_node(BaseNode *p_node)
 
   if (p_in && GET("auto_export", BoolAttribute))
   {
-    std::string fname = GET("fname", FilenameAttribute).string();
+    std::filesystem::path fname = GET("fname", FilenameAttribute);
 
     switch (GET("format", EnumAttribute))
     {
     case ExportFormat::PNG8BIT:
-      p_in->to_array().to_png_grayscale(fname, CV_8U);
-      break;
+    {
+      fname = ensure_extension(fname, ".png");
+      p_in->to_array().to_png_grayscale(fname.string(), CV_8U);
+    }
+    break;
 
     case ExportFormat::PNG16BIT:
-      p_in->to_array().to_png_grayscale(fname, CV_16U);
-      break;
+    {
+      fname = ensure_extension(fname, ".png");
+      p_in->to_array().to_png_grayscale(fname.string(), CV_16U);
+    }
+    break;
 
     case ExportFormat::RAW16BIT:
-      p_in->to_array().to_raw_16bit(fname);
-      break;
+    {
+      fname = ensure_extension(fname, ".raw");
+      p_in->to_array().to_raw_16bit(fname.string());
+    }
+    break;
     }
   }
 

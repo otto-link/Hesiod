@@ -9,7 +9,9 @@
 #include "hesiod/logger.hpp"
 #include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
+#include "hesiod/model/nodes/node_factory.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
+#include "hesiod/model/utils.hpp"
 
 using namespace attr;
 
@@ -34,6 +36,9 @@ void setup_export_normal_map_node(BaseNode *p_node)
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"fname", "16bit", "auto_export"});
+
+  // specialized GUI
+  add_export_button(p_node);
 }
 
 void compute_export_normal_map_node(BaseNode *p_node)
@@ -46,12 +51,13 @@ void compute_export_normal_map_node(BaseNode *p_node)
 
   if (p_in && GET("auto_export", BoolAttribute))
   {
-    std::string fname = GET("fname", FilenameAttribute).string();
+    std::filesystem::path fname = GET("fname", FilenameAttribute);
+    fname = ensure_extension(fname, ".png");
 
     if (GET("16bit", BoolAttribute))
-      hmap::export_normal_map_png(fname, p_in->to_array(), CV_16U);
+      hmap::export_normal_map_png(fname.string(), p_in->to_array(), CV_16U);
     else
-      hmap::export_normal_map_png(fname, p_in->to_array(), CV_8U);
+      hmap::export_normal_map_png(fname.string(), p_in->to_array(), CV_8U);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

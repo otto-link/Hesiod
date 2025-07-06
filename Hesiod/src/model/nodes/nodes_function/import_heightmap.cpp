@@ -28,10 +28,11 @@ void setup_import_heightmap_node(BaseNode *p_node)
            "Image files (*.bmp *.dib *.jpeg *.jpg *.png *.pbm "
            "*.pgm *.ppm *.pxm *.pnm *.tiff *.tif *.hdr *.pic)",
            false);
-  ADD_ATTR(BoolAttribute, "remap", true);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"fname", "remap"});
+  p_node->set_attr_ordered_key({"fname"});
+
+  setup_post_process_heightmap_attributes(p_node);
 }
 
 void compute_import_heightmap_node(BaseNode *p_node)
@@ -42,16 +43,20 @@ void compute_import_heightmap_node(BaseNode *p_node)
 
   hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
-  std::ifstream f(GET("fname", FilenameAttribute).c_str());
+  const std::string fname = GET("fname", FilenameAttribute).string();
+  std::ifstream     f(fname.c_str());
 
   if (f.good())
   {
     hmap::Array z = hmap::Array(GET("fname", FilenameAttribute).string());
-
     p_out->from_array_interp_bicubic(z);
 
-    if (GET("remap", BoolAttribute))
-      p_out->remap();
+    // post-process
+    post_process_heightmap(p_node, *p_out);
+  }
+  else
+  {
+    LOG->error("compute_import_heightmap_node: could not load image file {}", fname);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

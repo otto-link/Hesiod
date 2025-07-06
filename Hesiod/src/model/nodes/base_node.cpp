@@ -98,6 +98,8 @@ std::vector<std::string> *BaseNode::get_attr_ordered_key_ref()
   return &this->attr_ordered_key;
 };
 
+DataPreview *BaseNode::get_data_preview_ref() { return this->data_preview; }
+
 std::string BaseNode::get_documentation_html() const
 {
   std::string html;
@@ -333,6 +335,11 @@ void BaseNode::set_attr_ordered_key(const std::vector<std::string> &new_attr_ord
 void BaseNode::set_compute_fct(std::function<void(BaseNode *p_node)> new_compute_fct)
 {
   this->compute_fct = std::move(new_compute_fct);
+}
+
+void BaseNode::set_qwidget_fct(std::function<QWidget *(BaseNode *p_node)> new_qwidget_fct)
+{
+  this->qwidget_fct = std::move(new_qwidget_fct);
 }
 
 } // namespace hesiod

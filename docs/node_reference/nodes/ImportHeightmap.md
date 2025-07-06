@@ -25,7 +25,10 @@ IO/Files
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |fname|Filename|Filename of the image file to import.|
-|remap|Bool|Remap imported heightmap elevation to [0, 1].|
+|post_gain|Float|No description|
+|post_inverse|Bool|No description|
+|post_remap|Value range|No description|
+|post_smoothing_radius|Float|No description|
 
 # Example
 

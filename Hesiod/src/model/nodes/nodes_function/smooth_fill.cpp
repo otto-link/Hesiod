@@ -30,10 +30,11 @@ void setup_smooth_fill_node(BaseNode *p_node)
   ADD_ATTR(FloatAttribute, "radius", 0.05f, 0.001f, 0.2f);
   ADD_ATTR(FloatAttribute, "k", 0.01f, 0.01f, 1.f);
   ADD_ATTR(BoolAttribute, "normalized_map", true);
-  ADD_ATTR(BoolAttribute, "GPU", HSD_DEFAULT_GPU_MODE);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"radius", "k", "normalized_map", "_SEPARATOR_", "GPU"});
+  p_node->set_attr_ordered_key({"radius", "k", "normalized_map"});
+
+  setup_pre_process_mask_attributes(p_node);
 }
 
 void compute_smooth_fill_node(BaseNode *p_node)
@@ -51,47 +52,29 @@ void compute_smooth_fill_node(BaseNode *p_node)
     hmap::Heightmap *p_deposition_map = p_node->get_value_ref<hmap::Heightmap>(
         "deposition");
 
+    // prepare mask
+    std::shared_ptr<hmap::Heightmap> sp_mask = pre_process_mask(p_node, p_mask, *p_in);
+
     // copy the input heightmap
     *p_out = *p_in;
 
     int ir = std::max(1, (int)(GET("radius", FloatAttribute) * p_out->shape.x));
 
-    if (GET("GPU", BoolAttribute))
-    {
-      hmap::transform(
-          {p_out, p_mask, p_deposition_map},
-          [p_node, &ir](std::vector<hmap::Array *> p_arrays)
-          {
-            hmap::Array *pa_out = p_arrays[0];
-            hmap::Array *pa_mask = p_arrays[1];
-            hmap::Array *pa_deposition = p_arrays[2];
+    hmap::transform(
+        {p_out, p_mask, p_deposition_map},
+        [p_node, &ir](std::vector<hmap::Array *> p_arrays)
+        {
+          hmap::Array *pa_out = p_arrays[0];
+          hmap::Array *pa_mask = p_arrays[1];
+          hmap::Array *pa_deposition = p_arrays[2];
 
-            hmap::gpu::smooth_fill(*pa_out,
-                                   ir,
-                                   pa_mask,
-                                   GET("k", FloatAttribute),
-                                   pa_deposition);
-          },
-          p_node->get_config_ref()->hmap_transform_mode_gpu);
-    }
-    else
-    {
-      hmap::transform(
-          {p_out, p_mask, p_deposition_map},
-          [p_node, &ir](std::vector<hmap::Array *> p_arrays)
-          {
-            hmap::Array *pa_out = p_arrays[0];
-            hmap::Array *pa_mask = p_arrays[1];
-            hmap::Array *pa_deposition = p_arrays[2];
-
-            hmap::smooth_fill(*pa_out,
-                              ir,
-                              pa_mask,
-                              GET("k", FloatAttribute),
-                              pa_deposition);
-          },
-          p_node->get_config_ref()->hmap_transform_mode_cpu);
-    }
+          hmap::gpu::smooth_fill(*pa_out,
+                                 ir,
+                                 pa_mask,
+                                 GET("k", FloatAttribute),
+                                 pa_deposition);
+        },
+        p_node->get_config_ref()->hmap_transform_mode_gpu);
 
     p_out->smooth_overlap_buffers();
     p_deposition_map->smooth_overlap_buffers();

@@ -4,6 +4,7 @@
 #include <QApplication>
 #include <QMenu>
 #include <QMessageBox>
+#include <QScreen>
 #include <QToolButton>
 #include <QVBoxLayout>
 #include <QWidgetAction>
@@ -13,6 +14,7 @@
 
 #include "hesiod/gui/gui_utils.hpp"
 #include "hesiod/gui/style.hpp"
+#include "hesiod/gui/widgets/custom_qmenu.hpp"
 #include "hesiod/gui/widgets/graph_node_widget.hpp"
 #include "hesiod/gui/widgets/model_config_widget.hpp"
 #include "hesiod/gui/widgets/viewer3d.hpp"
@@ -300,7 +302,7 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
   if (item_pos.y() < p_gx_node->get_geometry_ref()->widget_pos.y())
   {
 
-    QMenu *menu = new QMenu();
+    CustomQMenu *menu = new CustomQMenu();
 
     // create the widget holding all the attribute widgets (created
     // here, needed for connect below)
@@ -455,8 +457,25 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
       }
     }
 
+    // fit attribute settings within a scroll area
+    QScrollArea *scroll_area = new QScrollArea(this);
+    scroll_area->setWidget(attributes_widget);
+    scroll_area->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    // garantee full visibility but within the screen space...
+    int max_height = attributes_widget->sizeHint().height();
+
+    QScreen *screen = this->screen();
+    if (screen)
+    {
+      QSize resolution = screen->size();
+      max_height = std::min(max_height, static_cast<int>(0.8f * resolution.height()));
+    }
+    scroll_area->setMinimumHeight(max_height);
+
+    // eventually add action
     QWidgetAction *widget_action = new QWidgetAction(menu);
-    widget_action->setDefaultWidget(attributes_widget);
+    widget_action->setDefaultWidget(scroll_area); // attributes_widget);
     menu->addAction(widget_action);
 
     connect(attributes_widget,

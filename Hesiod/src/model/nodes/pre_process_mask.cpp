@@ -76,6 +76,7 @@ std::shared_ptr<hmap::Heightmap> pre_process_mask(BaseNode         *p_node,
 
   // filter
   if (ir > 0)
+  {
     hmap::transform(
         {p_mask},
         [&ir](std::vector<hmap::Array *> p_arrays)
@@ -85,13 +86,16 @@ std::shared_ptr<hmap::Heightmap> pre_process_mask(BaseNode         *p_node,
         },
         p_node->get_config_ref()->hmap_transform_mode_gpu);
 
-  p_mask->smooth_overlap_buffers();
+    p_mask->smooth_overlap_buffers();
+    p_mask->remap();
+  }
 
   // --- apply gain to the mask
 
   float mask_gain = GET("mask_gain", FloatAttribute);
 
   if (mask_gain != 1.f)
+  {
     hmap::transform(
         {p_mask},
         [mask_gain](std::vector<hmap::Array *> p_arrays)
@@ -100,6 +104,7 @@ std::shared_ptr<hmap::Heightmap> pre_process_mask(BaseNode         *p_node,
           hmap::gain(*pa, mask_gain);
         },
         p_node->get_config_ref()->hmap_transform_mode_cpu);
+  }
 
   if (GET("mask_inverse", BoolAttribute))
     p_mask->inverse();
@@ -117,7 +122,7 @@ void setup_pre_process_mask_attributes(BaseNode *p_node)
   ADD_ATTR(ChoiceAttribute, "mask_type", choices);
 
   ADD_ATTR(BoolAttribute, "mask_inverse", false);
-  ADD_ATTR(FloatAttribute, "mask_radius", 0.01f, 0.f, 0.05f);
+  ADD_ATTR(FloatAttribute, "mask_radius", 0.01f, 0.f, 0.2f);
   ADD_ATTR(FloatAttribute, "mask_gain", 1.f, 0.f, 10.f);
 
   std::vector<std::string> *p_keys = p_node->get_attr_ordered_key_ref();

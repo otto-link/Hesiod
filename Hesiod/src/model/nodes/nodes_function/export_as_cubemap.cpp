@@ -9,7 +9,9 @@
 #include "hesiod/logger.hpp"
 #include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
+#include "hesiod/model/nodes/node_factory.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
+#include "hesiod/model/utils.hpp"
 
 using namespace attr;
 
@@ -43,6 +45,9 @@ void setup_export_as_cubemap_node(BaseNode *p_node)
                                 "splitted",
                                 "_SEPARATOR_",
                                 "auto_export"});
+
+  // specialized GUI
+  add_export_button(p_node);
 }
 
 void compute_export_as_cubemap_node(BaseNode *p_node)
@@ -56,9 +61,11 @@ void compute_export_as_cubemap_node(BaseNode *p_node)
   if (p_in && GET("auto_export", BoolAttribute))
   {
     hmap::Array z = p_in->to_array();
-    std::string fname = GET("fname", FilenameAttribute).string();
 
-    hmap::export_as_cubemap(fname,
+    std::filesystem::path fname = GET("fname", FilenameAttribute);
+    fname = ensure_extension(fname, ".png");
+
+    hmap::export_as_cubemap(fname.string(),
                             z,
                             GET("cubemap_resolution", IntAttribute),
                             GET("overlap", FloatAttribute),
