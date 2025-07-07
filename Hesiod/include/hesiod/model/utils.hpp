@@ -13,6 +13,7 @@
  */
 
 #pragma once
+#include <algorithm>
 #include <filesystem>
 #include <string>
 
@@ -20,6 +21,11 @@
 
 namespace hesiod
 {
+
+template <typename T> bool contains(const std::vector<T> &vec, const T &item)
+{
+  return std::find(vec.begin(), vec.end(), item) != vec.end();
+}
 
 std::filesystem::path ensure_extension(std::filesystem::path fname,
                                        const std::string    &extension);
