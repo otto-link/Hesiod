@@ -122,6 +122,171 @@
             }
         }
     },
+    "BasaltField": {
+        "category": "Primitive/Geological",
+        "description": "No description available",
+        "label": "BasaltField",
+        "parameters": {
+            "flatten_activate": {
+                "description": "No description",
+                "key": "flatten_activate",
+                "label": "flatten_activate",
+                "type": "Bool"
+            },
+            "flatten_amp": {
+                "description": "No description",
+                "key": "flatten_amp",
+                "label": "flatten_amp",
+                "type": "Float"
+            },
+            "flatten_kw_ratio": {
+                "description": "No description",
+                "key": "flatten_kw_ratio",
+                "label": "flatten_kw_ratio",
+                "type": "Float"
+            },
+            "kw": {
+                "description": "No description",
+                "key": "kw",
+                "label": "kw",
+                "type": "Wavenumber"
+            },
+            "large_scale_amp": {
+                "description": "No description",
+                "key": "large_scale_amp",
+                "label": "large_scale_amp",
+                "type": "Float"
+            },
+            "large_scale_gain": {
+                "description": "No description",
+                "key": "large_scale_gain",
+                "label": "large_scale_gain",
+                "type": "Float"
+            },
+            "large_scale_warp_amp": {
+                "description": "No description",
+                "key": "large_scale_warp_amp",
+                "label": "large_scale_warp_amp",
+                "type": "Float"
+            },
+            "medium_scale_amp": {
+                "description": "No description",
+                "key": "medium_scale_amp",
+                "label": "medium_scale_amp",
+                "type": "Float"
+            },
+            "medium_scale_gain": {
+                "description": "No description",
+                "key": "medium_scale_gain",
+                "label": "medium_scale_gain",
+                "type": "Float"
+            },
+            "medium_scale_kw_ratio": {
+                "description": "No description",
+                "key": "medium_scale_kw_ratio",
+                "label": "medium_scale_kw_ratio",
+                "type": "Float"
+            },
+            "medium_scale_warp_amp": {
+                "description": "No description",
+                "key": "medium_scale_warp_amp",
+                "label": "medium_scale_warp_amp",
+                "type": "Float"
+            },
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
+                "type": "Bool"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
+            },
+            "rugosity_amp": {
+                "description": "No description",
+                "key": "rugosity_amp",
+                "label": "rugosity_amp",
+                "type": "Float"
+            },
+            "rugosity_kw_ratio": {
+                "description": "No description",
+                "key": "rugosity_kw_ratio",
+                "label": "rugosity_kw_ratio",
+                "type": "Float"
+            },
+            "seed": {
+                "description": "No description",
+                "key": "seed",
+                "label": "seed",
+                "type": "Random seed number"
+            },
+            "small_scale_amp": {
+                "description": "No description",
+                "key": "small_scale_amp",
+                "label": "small_scale_amp",
+                "type": "Float"
+            },
+            "small_scale_kw_ratio": {
+                "description": "No description",
+                "key": "small_scale_kw_ratio",
+                "label": "small_scale_kw_ratio",
+                "type": "Float"
+            },
+            "small_scale_overlay_amp": {
+                "description": "No description",
+                "key": "small_scale_overlay_amp",
+                "label": "small_scale_overlay_amp",
+                "type": "Float"
+            },
+            "warp_kw": {
+                "description": "No description",
+                "key": "warp_kw",
+                "label": "warp_kw",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "dx": {
+                "caption": "dx",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "dy": {
+                "caption": "dy",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "envelope": {
+                "caption": "envelope",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "out": {
+                "caption": "out",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "output"
+            }
+        }
+    },
     "Blend": {
         "category": "Operator/Blend",
         "description": "The Blend operator takes two input heightmaps.",
@@ -1158,6 +1323,20 @@
             }
         }
     },
+    "Debug": {
+        "category": "Debug",
+        "description": "No description available",
+        "label": "Debug",
+        "parameters": null,
+        "ports": {
+            "input": {
+                "caption": "input",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            }
+        }
+    },
     "Dendry": {
         "category": "Primitive/Coherent",
         "description": "Dendry is a procedural model for dendritic patterns generation.",
@@ -1429,22 +1608,34 @@
         "description": "Generates a distance map where each pixel's value represents the shortest distance to the nearest non-zero value in the input heightmap.",
         "label": "DistanceTransform",
         "parameters": {
-            "remap": {
-                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap",
-                "label": "remap",
+            "post_gain": {
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
+                "key": "post_inverse",
+                "label": "post_inverse",
                 "type": "Bool"
+            },
+            "post_remap": {
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
             },
             "reverse_input": {
                 "description": "Invert the input values before processing.",
                 "key": "reverse_input",
                 "label": "reverse_input",
-                "type": "Bool"
-            },
-            "reverse_output": {
-                "description": "Invert the output values after processing.",
-                "key": "reverse_output",
-                "label": "reverse_output",
                 "type": "Bool"
             },
             "threshold": {

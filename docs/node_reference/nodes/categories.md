@@ -7,7 +7,7 @@ Node Categories
 |Primary|Secondary|Nodes|
 | :--- | :--- | :--- |
 |Converter||HeightmapToKernel, HeightmapToMask, HeightmapToRGBA|
-|Debug||Preview|
+|Debug||Debug, Preview|
 |Erosion|Hydraulic|HydraulicParticle, HydraulicStreamLog|
 |Erosion|Stratify|Stratify, StratifyMultiscale, StratifyOblique|
 |Erosion|Thermal|Thermal, ThermalAutoBedrock, ThermalInflate, ThermalRidge, ThermalScree|
@@ -33,7 +33,7 @@ Node Categories
 |Primitive|Authoring|Brush, Ridgelines|
 |Primitive|Coherent|Dendry, GaborWaveFbm, Gavoronoise, Noise, NoiseFbm, NoiseIq, NoiseJordan, NoiseParberry, NoisePingpong, NoiseRidged, NoiseSwiss, Stamping, Voronoi, VoronoiFbm, Voronoise|
 |Primitive|Function|Bump, GaussianPulse, Paraboloid, Rift, Slope, Step, WaveDune, WaveSine, WaveSquare, WaveTriangular|
-|Primitive|Geological|Caldera, Crater, MountainRangeRadial|
+|Primitive|Geological|BasaltField, Caldera, Crater, MountainRangeRadial|
 |Primitive|Kernel|KernelGabor, KernelPrim|
 |Primitive|Random|White, WhiteDensityMap, WhiteSparse|
 |Routing||Broadcast, Receive, Thru, Toggle|
