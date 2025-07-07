@@ -34,6 +34,7 @@ public:
 
   // --- Serialization ---
   void           json_from(nlohmann::json const &json);
+  void           json_import(nlohmann::json json, QPointF scene_pos);
   nlohmann::json json_to() const;
 
   GraphNode *get_p_graph_node();
@@ -85,5 +86,10 @@ private:
   bool                                  update_node_on_connection_finished = true;
   nlohmann::json                        json_copy_buffer;
 };
+
+// --- helpers
+
+// for json of GraphViewer::json_from
+void replace_node_ids(nlohmann::json &json, uint *p_id_count);
 
 } // namespace hesiod

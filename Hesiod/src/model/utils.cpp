@@ -116,4 +116,27 @@ std::string time_stamp()
   return time_stream.str();
 }
 
+uint to_uint_safe(const std::string &str)
+{
+  try
+  {
+    size_t        pos;
+    unsigned long val = std::stoul(str, &pos);
+    if (pos != str.size())
+    {
+      throw std::invalid_argument("Trailing characters");
+    }
+    if (val > std::numeric_limits<unsigned int>::max())
+    {
+      throw std::out_of_range("Value too large for unsigned int");
+    }
+    return static_cast<unsigned int>(val);
+  }
+  catch (const std::exception &e)
+  {
+    LOG->error("Conversion error: {}", e.what());
+    return 0; // or throw / handle differently
+  }
+}
+
 } // namespace hesiod

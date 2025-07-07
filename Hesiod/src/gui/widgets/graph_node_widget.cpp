@@ -21,6 +21,7 @@
 #include "hesiod/logger.hpp"
 #include "hesiod/model/graph_node.hpp"
 #include "hesiod/model/nodes/node_factory.hpp"
+#include "hesiod/model/utils.hpp"
 
 namespace hesiod
 {
@@ -84,6 +85,52 @@ void GraphNodeWidget::json_from(nlohmann::json const &json)
   this->update_node_on_connection_finished = false;
   GraphViewer::json_from(json);
   this->update_node_on_connection_finished = true;
+}
+
+void GraphNodeWidget::json_import(nlohmann::json json, QPointF scene_pos)
+{
+  // import used when copy/pasting only
+  LOG->trace("GraphNodeWidget::json_import");
+
+  // storage of id correspondance storage between original node and it copied version
+  std::map<std::string, std::string> copy_id_map = {};
+
+  // nodes
+  for (auto &json_node : json["nodes"])
+  {
+    QPointF pos = scene_pos;
+    QPointF delta = QPointF(json_node["scene_position.x"], json_node["scene_position.y"]);
+
+    // create both model and graphic nodes
+    std::string node_id = this->on_new_node_request(json_node["caption"], pos + delta);
+
+    // use this new node id and backup it for links
+    copy_id_map[json_node["id"].get<std::string>()] = node_id;
+    json_node["id"] = node_id;
+
+    // setup attributes
+    BaseNode *p_node = this->p_graph_node->get_node_ref_by_id<BaseNode>(node_id);
+    p_node->json_from(json_node["settings"]);
+    p_node->set_id(node_id);
+
+    this->p_graph_node->update(node_id);
+  }
+
+  // links
+  if (!json["links"].is_null())
+    for (auto &json_link : json["links"])
+    {
+      std::string node_id_from = json_link["node_id_from"].get<std::string>();
+      std::string node_id_to = json_link["node_id_to"].get<std::string>();
+
+      node_id_from = copy_id_map.at(node_id_from);
+      node_id_to = copy_id_map.at(node_id_to);
+
+      this->add_link(node_id_from,
+                     json_link["port_id_from"],
+                     node_id_to,
+                     json_link["port_id_to"]);
+    }
 }
 
 nlohmann::json GraphNodeWidget::json_to() const
@@ -512,15 +559,51 @@ void GraphNodeWidget::on_nodes_copy_request(const std::vector<std::string> &id_l
   QPoint  mouse_view_pos = this->mapFromGlobal(QCursor::pos());
   QPointF mouse_scene_pos = this->mapToScene(mouse_view_pos);
 
+  // dump to a json with a structure that can be read by
+  // GraphViewer::json_from
+
+  json_copy_buffer["nodes"] = nlohmann::json::array();
+
   for (size_t k = 0; k < id_list.size(); k++)
   {
-    BaseNode *p_node = this->p_graph_node->get_node_ref_by_id<BaseNode>(id_list[k]);
+    nlohmann::json json_node;
 
+    gngui::GraphicsNode *p_gnode = this->get_graphics_node_by_id(id_list[k]);
+    json_node = p_gnode->json_to();
+
+    // override absolute positions with relative positions
     QPointF delta = scene_pos_list[k] - mouse_scene_pos;
+    json_node["scene_position.x"] = delta.x();
+    json_node["scene_position.y"] = delta.y();
 
-    this->json_copy_buffer[p_node->get_id()] = p_node->json_to();
-    this->json_copy_buffer[p_node->get_id()]["delta.x"] = delta.x();
-    this->json_copy_buffer[p_node->get_id()]["delta.y"] = delta.y();
+    // add attribute settings to set them back when pasting (not
+    // required by GraphViewer::json_from)
+    BaseNode *p_node = this->p_graph_node->get_node_ref_by_id<BaseNode>(id_list[k]);
+    json_node["settings"] = p_node->json_to();
+
+    this->json_copy_buffer["nodes"].push_back(json_node);
+  }
+
+  // backup links between copied nodes
+  json_copy_buffer["links"] = nlohmann::json::array();
+
+  for (auto &link : this->p_graph_node->get_links())
+  {
+    // only keep a link if both nodes are in copy buffer
+    if (contains(id_list, link.from) && contains(id_list, link.to))
+    {
+      nlohmann::json json_link;
+
+      gnode::Node *p_from = this->p_graph_node->get_node_ref_by_id(link.from);
+      gnode::Node *p_to = this->p_graph_node->get_node_ref_by_id(link.to);
+
+      json_link["node_id_from"] = link.from;
+      json_link["node_id_to"] = link.to;
+      json_link["port_id_from"] = p_from->get_port_label(link.port_from);
+      json_link["port_id_to"] = p_to->get_port_label(link.port_to);
+
+      json_copy_buffer["links"].push_back(json_link);
+    }
   }
 }
 
@@ -543,30 +626,15 @@ void GraphNodeWidget::on_nodes_paste_request()
 {
   LOG->trace("GraphNodeWidget::on_nodes_paste_request");
 
-  // add new nodes using the copy buffer data
+  if (!this->json_copy_buffer.is_object())
+    return;
+
   QPoint  mouse_view_pos = this->mapFromGlobal(QCursor::pos());
   QPointF mouse_scene_pos = this->mapToScene(mouse_view_pos);
 
-  for (auto &[_, json] : this->json_copy_buffer.items())
-  {
-    std::string node_type = json["label"];
-    QPointF     delta = QPointF(json["delta.x"], json["delta.y"]);
+  // replace_node_ids(this->json_copy_buffer, this->p_graph_node->get_id_count_ref());
 
-    // create the node (node_id is output)
-    std::string node_id = this->on_new_node_request(node_type, mouse_scene_pos + delta);
-
-    // retrieve the node state
-    BaseNode *p_node = this->p_graph_node->get_node_ref_by_id<BaseNode>(node_id);
-    p_node->json_from(json);
-
-    // set the ID again because if has been overriden by the deserialization
-    p_node->set_id(node_id);
-
-    // recompute
-    this->p_graph_node->update(node_id);
-
-    Q_EMIT this->new_node_created(this->get_id(), node_id);
-  }
+  this->json_import(this->json_copy_buffer, mouse_scene_pos);
 }
 
 void GraphNodeWidget::on_viewport_request()
@@ -684,6 +752,36 @@ void GraphNodeWidget::setup_connections()
                 &GraphNode::update_finished,
                 this,
                 &gngui::GraphViewer::on_update_finished);
+}
+
+// --- HELPERS
+
+void replace_node_ids(nlohmann::json &json, uint *p_id_count)
+{
+  // NOTE - for json of GraphViewer::json_from
+
+  LOG->trace("replace_node_ids: incoming id_count: {}", *p_id_count);
+
+  // storage of id correspondance storage between original node and it copied version
+  std::map<std::string, std::string> copy_id_map = {};
+
+  // nodes
+  for (auto &json_node : json["nodes"])
+  {
+    *p_id_count += 1;
+    const std::string str_id_count = std::to_string(*p_id_count);
+
+    // replace node id
+    std::string node_id = json_node["id"].get<std::string>();
+    json_node["id"] = str_id_count;
+
+    // backup for links
+    copy_id_map[node_id] = str_id_count;
+  }
+
+  // links
+
+  LOG->trace("replace_node_ids: new id_count: {}", *p_id_count);
 }
 
 } // namespace hesiod
