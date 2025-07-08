@@ -154,6 +154,56 @@ void GraphNodeWidget::on_connection_deleted(const std::string &id_out,
   this->p_graph_node->update(id_in);
 }
 
+void GraphNodeWidget::on_connection_dropped(const std::string &node_id,
+                                            const std::string &port_id,
+                                            QPointF            scene_pos)
+{
+  LOG->trace("GraphNodeWidget::on_connection_dropped: {}/{}", node_id, port_id);
+
+  QPoint view_pos = this->mapFromScene(scene_pos);
+  QPoint global_pos = this->viewport()->mapToGlobal(view_pos);
+
+  bool ret = this->execute_new_node_context_menu(global_pos);
+
+  // if a node has indeed being created, arbitrarily connect the first
+  // output with the same type has the output from which the link has
+  // been emitted
+  if (ret)
+  {
+    LOG->trace("GraphNodeWidget::on_connection_dropped: auto-connecting nodes");
+
+    const std::string node_to = this->last_node_created_id;
+
+    BaseNode *p_node_from = this->p_graph_node->get_node_ref_by_id<BaseNode>(node_id);
+    BaseNode *p_node_to = this->p_graph_node->get_node_ref_by_id<BaseNode>(node_to);
+
+    if (p_node_to)
+    {
+      int         from_port_index = p_node_from->get_port_index(port_id);
+      std::string from_type = p_node_from->get_data_type(from_port_index);
+
+      LOG->trace("GraphNodeWidget::on_connection_dropped: from_type: {}", from_type);
+
+      // connect to the first input that has the same type, if any
+      for (int k = 0; k < p_node_to->get_nports(); ++k)
+      {
+        std::string to_type = p_node_to->get_data_type(k);
+
+        if (to_type == from_type)
+        {
+          std::string port_to_id = p_node_to->get_port_label(k);
+          this->add_link(node_id, port_id, node_to, port_to_id);
+          break;
+        }
+      }
+    }
+    else
+    {
+      LOG->trace("GraphNodeWidget::on_connection_dropped: p_node_to is nullptr");
+    }
+  }
+}
+
 void GraphNodeWidget::on_connection_finished(const std::string &id_out,
                                              const std::string &port_id_out,
                                              const std::string &id_in,
@@ -315,6 +365,8 @@ std::string GraphNodeWidget::on_new_node_request(const std::string &node_type,
   this->on_new_graphics_node_request(node_id, scene_pos);
 
   Q_EMIT this->new_node_created(this->get_id(), node_id);
+
+  this->last_node_created_id = node_id;
 
   return node_id;
 }
@@ -693,6 +745,11 @@ void GraphNodeWidget::setup_connections()
                 &GraphNodeWidget::on_connection_deleted);
 
   this->connect(this,
+                &gngui::GraphViewer::connection_dropped,
+                this,
+                &GraphNodeWidget::on_connection_dropped);
+
+  this->connect(this,
                 &gngui::GraphViewer::connection_finished,
                 this,
                 &GraphNodeWidget::on_connection_finished);
@@ -752,36 +809,6 @@ void GraphNodeWidget::setup_connections()
                 &GraphNode::update_finished,
                 this,
                 &gngui::GraphViewer::on_update_finished);
-}
-
-// --- HELPERS
-
-void replace_node_ids(nlohmann::json &json, uint *p_id_count)
-{
-  // NOTE - for json of GraphViewer::json_from
-
-  LOG->trace("replace_node_ids: incoming id_count: {}", *p_id_count);
-
-  // storage of id correspondance storage between original node and it copied version
-  std::map<std::string, std::string> copy_id_map = {};
-
-  // nodes
-  for (auto &json_node : json["nodes"])
-  {
-    *p_id_count += 1;
-    const std::string str_id_count = std::to_string(*p_id_count);
-
-    // replace node id
-    std::string node_id = json_node["id"].get<std::string>();
-    json_node["id"] = str_id_count;
-
-    // backup for links
-    copy_id_map[node_id] = str_id_count;
-  }
-
-  // links
-
-  LOG->trace("replace_node_ids: new id_count: {}", *p_id_count);
 }
 
 } // namespace hesiod

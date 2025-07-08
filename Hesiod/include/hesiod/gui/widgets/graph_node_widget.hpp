@@ -53,6 +53,9 @@ public slots:
                              const std::string &port_id_out,
                              const std::string &id_in,
                              const std::string &port_id_in);
+  void on_connection_dropped(const std::string &node_id,
+                             const std::string &port_id,
+                             QPointF            scene_pos);
   void on_connection_finished(const std::string &id_out,
                               const std::string &port_id_out,
                               const std::string &id_in,
@@ -85,11 +88,7 @@ private:
   std::vector<std::unique_ptr<QWidget>> data_viewers;
   bool                                  update_node_on_connection_finished = true;
   nlohmann::json                        json_copy_buffer;
+  std::string                           last_node_created_id = "";
 };
-
-// --- helpers
-
-// for json of GraphViewer::json_from
-void replace_node_ids(nlohmann::json &json, uint *p_id_count);
 
 } // namespace hesiod
