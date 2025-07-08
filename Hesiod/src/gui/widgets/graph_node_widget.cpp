@@ -168,7 +168,7 @@ void GraphNodeWidget::on_connection_deleted(const std::string &id_out,
 
 void GraphNodeWidget::on_connection_dropped(const std::string &node_id,
                                             const std::string &port_id,
-                                            QPointF            scene_pos)
+                                            QPointF /*scene_pos*/)
 {
   LOG->trace("GraphNodeWidget::on_connection_dropped: {}/{}", node_id, port_id);
 
