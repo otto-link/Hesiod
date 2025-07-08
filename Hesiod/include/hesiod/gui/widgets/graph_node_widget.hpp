@@ -34,7 +34,7 @@ public:
 
   // --- Serialization ---
   void           json_from(nlohmann::json const &json);
-  void           json_import(nlohmann::json json, QPointF scene_pos);
+  nlohmann::json json_import(nlohmann::json const &json, QPointF scene_pos);
   nlohmann::json json_to() const;
 
   GraphNode *get_p_graph_node();

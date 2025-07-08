@@ -87,38 +87,43 @@ void GraphNodeWidget::json_from(nlohmann::json const &json)
   this->update_node_on_connection_finished = true;
 }
 
-void GraphNodeWidget::json_import(nlohmann::json json, QPointF scene_pos)
+nlohmann::json GraphNodeWidget::json_import(nlohmann::json const &json, QPointF scene_pos)
 {
   // import used when copy/pasting only
   LOG->trace("GraphNodeWidget::json_import");
+
+  // work on a copy of the json to modify the node IDs and return it
+  nlohmann::json json_copy = json;
 
   // storage of id correspondance storage between original node and it copied version
   std::map<std::string, std::string> copy_id_map = {};
 
   // nodes
-  for (auto &json_node : json["nodes"])
-  {
-    QPointF pos = scene_pos;
-    QPointF delta = QPointF(json_node["scene_position.x"], json_node["scene_position.y"]);
+  if (!json_copy["nodes"].is_null())
+    for (auto &json_node : json_copy["nodes"])
+    {
+      QPointF pos = scene_pos;
+      QPointF delta = QPointF(json_node["scene_position.x"],
+                              json_node["scene_position.y"]);
 
-    // create both model and graphic nodes
-    std::string node_id = this->on_new_node_request(json_node["caption"], pos + delta);
+      // create both model and graphic nodes
+      std::string node_id = this->on_new_node_request(json_node["caption"], pos + delta);
 
-    // use this new node id and backup it for links
-    copy_id_map[json_node["id"].get<std::string>()] = node_id;
-    json_node["id"] = node_id;
+      // use this new node id and backup it for links
+      copy_id_map[json_node["id"].get<std::string>()] = node_id;
+      json_node["id"] = node_id;
 
-    // setup attributes
-    BaseNode *p_node = this->p_graph_node->get_node_ref_by_id<BaseNode>(node_id);
-    p_node->json_from(json_node["settings"]);
-    p_node->set_id(node_id);
+      // setup attributes
+      BaseNode *p_node = this->p_graph_node->get_node_ref_by_id<BaseNode>(node_id);
+      p_node->json_from(json_node["settings"]);
+      p_node->set_id(node_id);
 
-    this->p_graph_node->update(node_id);
-  }
+      this->p_graph_node->update(node_id);
+    }
 
   // links
-  if (!json["links"].is_null())
-    for (auto &json_link : json["links"])
+  if (!json_copy["links"].is_null())
+    for (auto &json_link : json_copy["links"])
     {
       std::string node_id_from = json_link["node_id_from"].get<std::string>();
       std::string node_id_to = json_link["node_id_to"].get<std::string>();
@@ -131,6 +136,8 @@ void GraphNodeWidget::json_import(nlohmann::json json, QPointF scene_pos)
                      node_id_to,
                      json_link["port_id_to"]);
     }
+
+  return json_copy;
 }
 
 nlohmann::json GraphNodeWidget::json_to() const
@@ -620,8 +627,8 @@ void GraphNodeWidget::on_nodes_copy_request(const std::vector<std::string> &id_l
   {
     nlohmann::json json_node;
 
-    gngui::GraphicsNode *p_gnode = this->get_graphics_node_by_id(id_list[k]);
-    json_node = p_gnode->json_to();
+    gngui::GraphicsNode *p_gfx_node = this->get_graphics_node_by_id(id_list[k]);
+    json_node = p_gfx_node->json_to();
 
     // override absolute positions with relative positions
     QPointF delta = scene_pos_list[k] - mouse_scene_pos;
@@ -684,9 +691,18 @@ void GraphNodeWidget::on_nodes_paste_request()
   QPoint  mouse_view_pos = this->mapFromGlobal(QCursor::pos());
   QPointF mouse_scene_pos = this->mapToScene(mouse_view_pos);
 
-  // replace_node_ids(this->json_copy_buffer, this->p_graph_node->get_id_count_ref());
+  // returned json contains modified node IDs
+  nlohmann::json json_mod = this->json_import(this->json_copy_buffer, mouse_scene_pos);
 
-  this->json_import(this->json_copy_buffer, mouse_scene_pos);
+  // set selection on copied nodes
+  this->deselect_all();
+
+  for (auto &json_node : json_mod["nodes"])
+  {
+    const std::string    node_id = json_node["id"].get<std::string>();
+    gngui::GraphicsNode *p_gfx_node = this->get_graphics_node_by_id(node_id);
+    p_gfx_node->setSelected(true);
+  }
 }
 
 void GraphNodeWidget::on_viewport_request()
