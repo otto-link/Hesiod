@@ -31,6 +31,6 @@ std::vector<std::string> split_string(const std::string &string, char delimiter)
 
 std::string time_stamp();
 
-uint to_uint_safe(const std::string &str);
+unsigned int to_uint_safe(const std::string &str);
 
 } // namespace hesiod

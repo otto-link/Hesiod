@@ -115,8 +115,7 @@ std::string time_stamp()
   time_stream << std::put_time(std::localtime(&now_c), "%Y-%m-%d_%H:%M:%S");
   return time_stream.str();
 }
-
-uint to_uint_safe(const std::string &str)
+unsigned int to_uint_safe(const std::string &str)
 {
   try
   {
