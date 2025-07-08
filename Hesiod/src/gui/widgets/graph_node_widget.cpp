@@ -2,9 +2,11 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include <QApplication>
+#include <QFileDialog>
 #include <QMenu>
 #include <QMessageBox>
 #include <QScreen>
+#include <QTimer>
 #include <QToolButton>
 #include <QVBoxLayout>
 #include <QWidgetAction>
@@ -17,6 +19,7 @@
 #include "hesiod/gui/widgets/custom_qmenu.hpp"
 #include "hesiod/gui/widgets/graph_node_widget.hpp"
 #include "hesiod/gui/widgets/model_config_widget.hpp"
+#include "hesiod/gui/widgets/select_string_dialog.hpp"
 #include "hesiod/gui/widgets/viewer3d.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/graph_node.hpp"
@@ -95,11 +98,12 @@ nlohmann::json GraphNodeWidget::json_import(nlohmann::json const &json, QPointF 
   // work on a copy of the json to modify the node IDs and return it
   nlohmann::json json_copy = json;
 
-  // storage of id correspondance storage between original node and it copied version
-  std::map<std::string, std::string> copy_id_map = {};
-
   // nodes
   if (!json_copy["nodes"].is_null())
+  {
+    // storage of id correspondance storage between original node and it copied version
+    std::map<std::string, std::string> copy_id_map = {};
+
     for (auto &json_node : json_copy["nodes"])
     {
       QPointF pos = scene_pos;
@@ -121,21 +125,22 @@ nlohmann::json GraphNodeWidget::json_import(nlohmann::json const &json, QPointF 
       this->p_graph_node->update(node_id);
     }
 
-  // links
-  if (!json_copy["links"].is_null())
-    for (auto &json_link : json_copy["links"])
-    {
-      std::string node_id_from = json_link["node_id_from"].get<std::string>();
-      std::string node_id_to = json_link["node_id_to"].get<std::string>();
+    // links
+    if (!json_copy["links"].is_null())
+      for (auto &json_link : json_copy["links"])
+      {
+        std::string node_id_from = json_link["node_out_id"].get<std::string>();
+        std::string node_id_to = json_link["node_in_id"].get<std::string>();
 
-      node_id_from = copy_id_map.at(node_id_from);
-      node_id_to = copy_id_map.at(node_id_to);
+        node_id_from = copy_id_map.at(node_id_from);
+        node_id_to = copy_id_map.at(node_id_to);
 
-      this->add_link(node_id_from,
-                     json_link["port_id_from"],
-                     node_id_to,
-                     json_link["port_id_to"]);
-    }
+        this->add_link(node_id_from,
+                       json_link["port_out_id"],
+                       node_id_to,
+                       json_link["port_in_id"]);
+      }
+  }
 
   return json_copy;
 }
@@ -244,6 +249,95 @@ void GraphNodeWidget::on_graph_clear_request()
     this->clear_all();
 }
 
+void GraphNodeWidget::on_graph_import_request()
+{
+  LOG->trace("GraphNodeWidget::on_graph_import_request");
+
+  std::filesystem::path path = ""; // TODO set path
+
+  this->set_enabled(false);
+  QString load_fname = QFileDialog::getOpenFileName(this,
+                                                    "Load...",
+                                                    path.string().c_str(),
+                                                    "Hesiod files (*.hsd)");
+  this->set_enabled(true);
+
+  if (!load_fname.isNull() && !load_fname.isEmpty())
+  {
+    std::string    fname = load_fname.toStdString();
+    nlohmann::json json = json_from_file(fname);
+
+    // retrieve the number of graph
+    size_t n_graph = json["graph_manager"]["graph_nodes"].size();
+
+    std::vector<std::string> graph_id_list = {};
+    for (auto [key, _] : json["graph_manager"]["graph_nodes"].items())
+      graph_id_list.push_back(key);
+
+    if (n_graph < 1)
+    {
+      LOG->warn("GraphNodeWidget::on_graph_import_request: no graph to import");
+      return;
+    }
+
+    std::string import_graph_id;
+
+    if (n_graph == 1)
+    {
+      import_graph_id = graph_id_list.back();
+    }
+    else
+    {
+      SelectStringDialog dialog(graph_id_list, "Select the graph layer to import:");
+
+      if (dialog.exec() != QDialog::Accepted)
+      {
+        LOG->trace("GraphNodeWidget::on_graph_import_request: aborted");
+        return;
+      }
+
+      import_graph_id = dialog.selected_value();
+    }
+
+    LOG->trace("GraphNodeWidget::on_graph_import_request: importing {} from file {}",
+               import_graph_id,
+               fname);
+
+    // build a json file that can be imported, see GraphNodeWidget::json_import
+    nlohmann::json json_imp;
+    json_imp = json["graph_tabs_widget"]["graph_node_widgets"][import_graph_id];
+
+    // add node settings
+    for (auto &json_node : json_imp["nodes"])
+    {
+      const std::string node_id = json_node["id"];
+
+      // retrieve in the model section the corresponding node and
+      // its parameters
+      for (auto &json_node_model :
+           json["graph_manager"]["graph_nodes"][import_graph_id]["nodes"])
+      {
+        if (json_node_model["id"] == node_id)
+          json_node["settings"] = json_node_model;
+      }
+    }
+
+    nlohmann::json json_mod = this->json_import(json_imp);
+
+    // set selection on copied nodes
+    this->deselect_all();
+
+    for (auto &json_node : json_mod["nodes"])
+    {
+      const std::string    node_id = json_node["id"].get<std::string>();
+      gngui::GraphicsNode *p_gfx_node = this->get_graphics_node_by_id(node_id);
+
+      // Qt mystery, this needs to be delayed to be effective
+      QTimer::singleShot(0, this, [p_gfx_node]() { p_gfx_node->setSelected(true); });
+    }
+  }
+}
+
 void GraphNodeWidget::on_graph_new_request()
 {
   LOG->trace("GraphNodeWidget::on_graph_new_request");
@@ -327,7 +421,9 @@ void GraphNodeWidget::on_graph_settings_request()
       if (auto *p_viewer = dynamic_cast<AbstractViewer *>(sp_widget.get()))
         p_viewer->json_from(json_states[k++]);
 
-    // TODO set the selection back
+    // set selection back, Qt mystery, this needs to be delayed to be effective
+    gngui::GraphicsNode *p_gfx_node = this->get_graphics_node_by_id(selected_id);
+    QTimer::singleShot(0, this, [p_gfx_node]() { p_gfx_node->setSelected(true); });
   }
 
   this->set_enabled(true);
@@ -644,7 +740,7 @@ void GraphNodeWidget::on_nodes_copy_request(const std::vector<std::string> &id_l
   }
 
   // backup links between copied nodes
-  json_copy_buffer["links"] = nlohmann::json::array();
+  this->json_copy_buffer["links"] = nlohmann::json::array();
 
   for (auto &link : this->p_graph_node->get_links())
   {
@@ -656,12 +752,12 @@ void GraphNodeWidget::on_nodes_copy_request(const std::vector<std::string> &id_l
       gnode::Node *p_from = this->p_graph_node->get_node_ref_by_id(link.from);
       gnode::Node *p_to = this->p_graph_node->get_node_ref_by_id(link.to);
 
-      json_link["node_id_from"] = link.from;
-      json_link["node_id_to"] = link.to;
-      json_link["port_id_from"] = p_from->get_port_label(link.port_from);
-      json_link["port_id_to"] = p_to->get_port_label(link.port_to);
+      json_link["node_out_id"] = link.from;
+      json_link["node_in_id"] = link.to;
+      json_link["port_out_id"] = p_from->get_port_label(link.port_from);
+      json_link["port_in_id"] = p_to->get_port_label(link.port_to);
 
-      json_copy_buffer["links"].push_back(json_link);
+      this->json_copy_buffer["links"].push_back(json_link);
     }
   }
 }
@@ -738,6 +834,11 @@ void GraphNodeWidget::setup_connections()
                 &gngui::GraphViewer::graph_clear_request,
                 this,
                 &GraphNodeWidget::on_graph_clear_request);
+
+  this->connect(this,
+                &gngui::GraphViewer::graph_import_request,
+                this,
+                &GraphNodeWidget::on_graph_import_request);
 
   this->connect(this,
                 &gngui::GraphViewer::graph_new_request,

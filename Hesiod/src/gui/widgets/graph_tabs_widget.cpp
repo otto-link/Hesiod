@@ -114,10 +114,7 @@ void GraphTabsWidget::show_viewport()
   LOG->trace("GraphTabsWidget::show_viewport");
 
   if (!this->graph_node_widget_map.empty())
-  {
     this->graph_node_widget_map.begin()->second->on_viewport_request();
-    LOG->trace("HERE");
-  }
 }
 
 void GraphTabsWidget::update_receive_nodes_tag_list()

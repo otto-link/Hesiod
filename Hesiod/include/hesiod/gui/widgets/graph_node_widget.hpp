@@ -34,7 +34,8 @@ public:
 
   // --- Serialization ---
   void           json_from(nlohmann::json const &json);
-  nlohmann::json json_import(nlohmann::json const &json, QPointF scene_pos);
+  nlohmann::json json_import(nlohmann::json const &json,
+                             QPointF               scene_pos = QPointF(0.f, 0.f));
   nlohmann::json json_to() const;
 
   GraphNode *get_p_graph_node();
@@ -62,6 +63,7 @@ public slots:
                               const std::string &port_id_in);
 
   void on_graph_clear_request();
+  void on_graph_import_request();
   void on_graph_new_request();
   void on_graph_reload_request();
   void on_graph_settings_request();
