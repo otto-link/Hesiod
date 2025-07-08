@@ -172,10 +172,7 @@ void GraphNodeWidget::on_connection_dropped(const std::string &node_id,
 {
   LOG->trace("GraphNodeWidget::on_connection_dropped: {}/{}", node_id, port_id);
 
-  QPoint view_pos = this->mapFromScene(scene_pos);
-  QPoint global_pos = this->viewport()->mapToGlobal(view_pos);
-
-  bool ret = this->execute_new_node_context_menu(global_pos);
+  bool ret = this->execute_new_node_context_menu();
 
   // if a node has indeed being created, arbitrarily connect the first
   // output with the same type has the output from which the link has
