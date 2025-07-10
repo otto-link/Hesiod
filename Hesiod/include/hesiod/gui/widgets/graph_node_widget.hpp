@@ -39,9 +39,11 @@ public:
   nlohmann::json json_to() const;
 
   GraphNode *get_p_graph_node();
+  void       set_json_copy_buffer(nlohmann::json const &new_json_copy_buffer);
 
 signals:
   // --- User Actions Signals ---
+  void copy_buffer_has_changed(const nlohmann::json &new_json);
   void has_been_cleared(const std::string &graph_id);
   void new_node_created(const std::string &graph_id, const std::string &id);
   void node_deleted(const std::string &graph_id, const std::string &id);

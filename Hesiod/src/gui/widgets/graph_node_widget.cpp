@@ -757,6 +757,8 @@ void GraphNodeWidget::on_nodes_copy_request(const std::vector<std::string> &id_l
       this->json_copy_buffer["links"].push_back(json_link);
     }
   }
+
+  Q_EMIT this->copy_buffer_has_changed(this->json_copy_buffer);
 }
 
 void GraphNodeWidget::on_nodes_duplicate_request(
@@ -822,6 +824,11 @@ void GraphNodeWidget::on_viewport_request()
 
   if (selected_ids.size())
     p_viewer->on_node_selected(selected_ids.back());
+}
+
+void GraphNodeWidget::set_json_copy_buffer(nlohmann::json const &new_json_copy_buffer)
+{
+  this->json_copy_buffer = new_json_copy_buffer;
 }
 
 void GraphNodeWidget::setup_connections()

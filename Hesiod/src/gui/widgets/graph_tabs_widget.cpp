@@ -69,6 +69,15 @@ nlohmann::json GraphTabsWidget::json_to() const
   return json;
 }
 
+void GraphTabsWidget::on_copy_buffer_has_changed(const nlohmann::json &new_json)
+{
+  LOG->trace("GraphTabsWidget::on_copy_buffer_has_changed");
+
+  // redispatch the copy buffer to all the graphs
+  for (auto &[_, gnw] : this->graph_node_widget_map)
+    gnw->set_json_copy_buffer(new_json);
+}
+
 void GraphTabsWidget::on_has_been_cleared(const std::string &graph_id)
 {
   Q_EMIT this->has_been_cleared(graph_id);
@@ -204,6 +213,11 @@ void GraphTabsWidget::update_tab_widget()
                     &GraphNodeWidget::node_deleted,
                     this,
                     &GraphTabsWidget::on_node_deleted);
+
+      this->connect(this->graph_node_widget_map.at(id),
+                    &GraphNodeWidget::copy_buffer_has_changed,
+                    this,
+                    &GraphTabsWidget::on_copy_buffer_has_changed);
     }
 
     // build layout
