@@ -26,7 +26,13 @@ void setup_warp_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(BoolAttribute, "GPU", HSD_DEFAULT_GPU_MODE);
+  ADD_ATTR(FloatAttribute, "scaling.x", 1.f, -2.f, 2.f);
+  ADD_ATTR(FloatAttribute, "scaling.y", 1.f, -2.f, 2.f);
+
+  // attribute(s) order
+  p_node->set_attr_ordered_key({"scaling.x", "scaling.y"});
+
+  setup_post_process_heightmap_attributes(p_node, true);
 }
 
 void compute_warp_node(BaseNode *p_node)
@@ -45,34 +51,23 @@ void compute_warp_node(BaseNode *p_node)
 
     *p_out = *p_in;
 
-    if (GET("GPU", BoolAttribute))
-    {
-      hmap::transform(
-          {p_out, p_dx, p_dy},
-          [](std::vector<hmap::Array *> p_arrays)
-          {
-            hmap::Array *pa_out = p_arrays[0];
-            hmap::Array *pa_dx = p_arrays[1];
-            hmap::Array *pa_dy = p_arrays[2];
+    float sx = GET("scaling.x", FloatAttribute);
+    float sy = GET("scaling.y", FloatAttribute);
 
-            hmap::gpu::warp(*pa_out, pa_dx, pa_dy);
-          },
-          p_node->get_config_ref()->hmap_transform_mode_gpu);
-    }
-    else
-    {
-      hmap::transform(
-          {p_out, p_dx, p_dy},
-          [](std::vector<hmap::Array *> p_arrays)
-          {
-            hmap::Array *pa_out = p_arrays[0];
-            hmap::Array *pa_dx = p_arrays[1];
-            hmap::Array *pa_dy = p_arrays[2];
+    hmap::transform(
+        {p_out, p_dx, p_dy},
+        [sx, sy](std::vector<hmap::Array *> p_arrays)
+        {
+          hmap::Array *pa_out = p_arrays[0];
+          hmap::Array dx = p_arrays[1] ? sx * (*p_arrays[1]) : hmap::Array(pa_out->shape);
+          hmap::Array dy = p_arrays[2] ? sy * (*p_arrays[2]) : hmap::Array(pa_out->shape);
 
-            hmap::warp(*pa_out, pa_dx, pa_dy);
-          },
-          p_node->get_config_ref()->hmap_transform_mode_cpu);
-    }
+          hmap::gpu::warp(*pa_out, &dx, &dy);
+        },
+        p_node->get_config_ref()->hmap_transform_mode_gpu);
+
+    // post-process
+    post_process_heightmap(p_node, *p_out, p_in);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());
