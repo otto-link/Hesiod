@@ -50,7 +50,7 @@ public:
                         const std::string                  &id = "") override;
   virtual void remove_node(const std::string &id) override;
   void         update() override;
-  void         update(std::string id) override;
+  void         update(const std::string &node_id) override;
 
   // --- Inter-graph Broadcasting ---
   BroadcastMap *get_p_broadcast_params() { return this->p_broadcast_params; }

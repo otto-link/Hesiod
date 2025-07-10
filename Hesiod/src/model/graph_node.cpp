@@ -292,12 +292,12 @@ void GraphNode::update()
   Q_EMIT this->update_finished(this->get_id());
 }
 
-void GraphNode::update(std::string id)
+void GraphNode::update(const std::string &node_id)
 {
-  LOG->trace("GraphNode::update: id = {}", id);
+  LOG->trace("GraphNode::update: id = {}", node_id);
 
   Q_EMIT this->update_started(this->get_id());
-  gnode::Graph::update(id);
+  gnode::Graph::update(node_id);
   Q_EMIT this->update_finished(this->get_id());
 }
 
