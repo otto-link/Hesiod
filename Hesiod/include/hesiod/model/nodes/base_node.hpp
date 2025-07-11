@@ -114,8 +114,8 @@ private:
   std::shared_ptr<ModelConfig>               config;
   GraphEditor                               *p_graph_node; // belonging graph node
   nlohmann::json                             documentation;
-  std::function<void(BaseNode *p_node)>      compute_fct = 0;
-  std::function<QWidget *(BaseNode *p_node)> qwidget_fct = 0;
+  std::function<void(BaseNode *p_node)>      compute_fct = nullptr;
+  std::function<QWidget *(BaseNode *p_node)> qwidget_fct = nullptr;
   DataPreview *data_preview = nullptr; // owned by gngui::GraphicsNode
 };
 

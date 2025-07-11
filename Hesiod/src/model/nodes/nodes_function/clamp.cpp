@@ -35,6 +35,8 @@ void setup_clamp_node(BaseNode *p_node)
   // attribute(s) order
   p_node->set_attr_ordered_key(
       {"clamp", "smooth_min", "k_min", "smooth_max", "k_max", "remap"});
+
+  setup_post_process_heightmap_attributes(p_node, true);
 }
 
 void compute_clamp_node(BaseNode *p_node)
@@ -114,6 +116,9 @@ void compute_clamp_node(BaseNode *p_node)
 
     if (GET("remap", BoolAttribute))
       p_out->remap();
+
+    // post-process
+    post_process_heightmap(p_node, *p_out, p_in);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

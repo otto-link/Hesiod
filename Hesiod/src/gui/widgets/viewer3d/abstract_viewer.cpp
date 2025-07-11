@@ -185,8 +185,7 @@ nlohmann::json AbstractViewer::json_to() const
   json["port_id_color"] = this->current_view_param.port_id_color;
   json["port_id_normal_map"] = this->current_view_param.port_id_normal_map;
 
-  json["button_pin_current_node_is_checked"] = (bool)this->button_pin_current_node
-                                                   ->isChecked();
+  json["button_pin_current_node_is_checked"] = this->button_pin_current_node->isChecked();
 
   for (auto &[key, param] : this->node_view_param_map)
   {

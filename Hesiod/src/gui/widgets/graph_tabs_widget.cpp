@@ -90,16 +90,23 @@ void GraphTabsWidget::on_new_node_created(const std::string &graph_id,
   LOG->trace("GraphTabsWidget::on_new_node_created");
 
   // check if it's a Receive node to update its tag list
-  if (this->p_graph_manager->get_graph_nodes()
-          .at(graph_id)
-          ->get_node_ref_by_id<BaseNode>(id)
-          ->get_node_type() == "Receive")
-  {
-    this->update_receive_nodes_tag_list();
-  }
+  BaseNode *p_node = this->p_graph_manager->get_graph_nodes()
+                         .at(graph_id)
+                         ->get_node_ref_by_id<BaseNode>(id);
 
-  Q_EMIT this->new_node_created(graph_id, id);
-  Q_EMIT this->has_changed();
+  if (p_node)
+  {
+    if (p_node->get_node_type() == "Receive")
+      this->update_receive_nodes_tag_list();
+
+    Q_EMIT this->new_node_created(graph_id, id);
+    Q_EMIT this->has_changed();
+  }
+  else
+  {
+    LOG->critical(
+        "GraphTabsWidget::on_new_node_created: the node just created is nullptr");
+  }
 }
 
 void GraphTabsWidget::on_node_deleted(const std::string &graph_id, const std::string &id)
