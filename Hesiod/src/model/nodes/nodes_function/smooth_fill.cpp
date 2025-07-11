@@ -35,6 +35,7 @@ void setup_smooth_fill_node(BaseNode *p_node)
   p_node->set_attr_ordered_key({"radius", "k", "normalized_map"});
 
   setup_pre_process_mask_attributes(p_node);
+  setup_post_process_heightmap_attributes(p_node, true);
 }
 
 void compute_smooth_fill_node(BaseNode *p_node)
@@ -81,6 +82,9 @@ void compute_smooth_fill_node(BaseNode *p_node)
 
     if (GET("normalized_map", BoolAttribute))
       p_deposition_map->remap();
+
+    // post-process
+    post_process_heightmap(p_node, *p_out, p_in);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());
