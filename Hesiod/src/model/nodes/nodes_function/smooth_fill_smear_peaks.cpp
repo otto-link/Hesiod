@@ -30,6 +30,7 @@ void setup_smooth_fill_smear_peaks_node(BaseNode *p_node)
   p_node->set_attr_ordered_key({"radius"});
 
   setup_pre_process_mask_attributes(p_node);
+  setup_post_process_heightmap_attributes(p_node, true);
 }
 
 void compute_smooth_fill_smear_peaks_node(BaseNode *p_node)
@@ -65,6 +66,9 @@ void compute_smooth_fill_smear_peaks_node(BaseNode *p_node)
         p_node->get_config_ref()->hmap_transform_mode_gpu);
 
     p_out->smooth_overlap_buffers();
+
+    // post-process
+    post_process_heightmap(p_node, *p_out, p_in);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());
