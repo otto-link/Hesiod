@@ -50,80 +50,11 @@ void compute_blend_node(BaseNode *p_node)
   {
     hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
-    std::function<void(hmap::Array &, hmap::Array &, hmap::Array &)> lambda;
-
     float k = GET("k", FloatAttribute);
     int   ir = std::max(1, (int)(GET("radius", FloatAttribute) * p_out->shape.x));
     int   method = GET("blending_method", EnumAttribute);
 
-    switch (method)
-    {
-    case BlendingMethod::ADD:
-      lambda = [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2) { m = a1 + a2; };
-      break;
-
-    case BlendingMethod::EXCLUSION_BLEND:
-      lambda = [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
-      { m = hmap::blend_exclusion(a1, a2); };
-      break;
-
-    case BlendingMethod::GRADIENTS:
-      lambda = [&ir](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
-      { m = hmap::blend_gradients(a1, a2, ir); };
-      break;
-
-    case BlendingMethod::MAXIMUM:
-      lambda = [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
-      { m = hmap::maximum(a1, a2); };
-      break;
-
-    case BlendingMethod::MAXIMUM_SMOOTH:
-      lambda = [&k](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
-      { m = hmap::maximum_smooth(a1, a2, k); };
-      break;
-
-    case BlendingMethod::MINIMUM:
-      lambda = [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
-      { m = hmap::minimum(a1, a2); };
-      break;
-
-    case BlendingMethod::MINIMUM_SMOOTH:
-      lambda = [&k](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
-      { m = hmap::minimum_smooth(a1, a2, k); };
-      break;
-
-    case BlendingMethod::MULTIPLY:
-      lambda = [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2) { m = a1 * a2; };
-      break;
-
-    case BlendingMethod::MULTIPLY_ADD:
-      lambda = [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2) { m = a1 + a1 * a2; };
-      break;
-
-    case BlendingMethod::NEGATE:
-      lambda = [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
-      { m = hmap::blend_negate(a1, a2); };
-      break;
-
-    case BlendingMethod::OVERLAY:
-      lambda = [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
-      { m = hmap::blend_overlay(a1, a2); };
-      break;
-
-    case BlendingMethod::SOFT:
-      lambda = [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
-      { m = hmap::blend_soft(a1, a2); };
-      break;
-
-    case BlendingMethod::SUBSTRACT:
-      lambda = [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2) { m = a1 - a2; };
-      break;
-    }
-
-    hmap::transform(*p_out, *p_in1, *p_in2, lambda);
-
-    if (method == BlendingMethod::GRADIENTS)
-      p_out->smooth_overlap_buffers();
+    blend_heightmaps(*p_out, *p_in1, *p_in2, static_cast<BlendingMethod>(method), k, ir);
 
     // post-process
     post_process_heightmap(p_node,

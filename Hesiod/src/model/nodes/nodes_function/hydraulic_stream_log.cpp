@@ -50,6 +50,8 @@ void setup_hydraulic_stream_log_node(BaseNode *p_node)
                                 "talus_ref",
                                 "_SEPARATOR_",
                                 "GPU"});
+
+  setup_post_process_heightmap_attributes(p_node, true);
 }
 
 void compute_hydraulic_stream_log_node(BaseNode *p_node)
@@ -150,6 +152,9 @@ void compute_hydraulic_stream_log_node(BaseNode *p_node)
 
     p_flow_map->smooth_overlap_buffers();
     p_flow_map->remap();
+
+    // post-process
+    post_process_heightmap(p_node, *p_out, p_in);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

@@ -9,7 +9,9 @@
 
 #include "attributes.hpp"
 
+#include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
+#include "hesiod/model/nodes/post_process.hpp"
 
 using namespace attr;
 
@@ -102,6 +104,13 @@ void post_process_heightmap(BaseNode *p_node, hmap::Heightmap &h, hmap::Heightma
   // mix
   if (p_in)
   {
+    // mix
+    float k = 0.1f; // TODO hardcoded?
+    int   ir = 0;
+    int   method = GET("post_mix_method", EnumAttribute);
+    blend_heightmaps(h, *p_in, h, static_cast<BlendingMethod>(method), k, ir);
+
+    // lerp between input and output
     float t = GET("post_mix", FloatAttribute);
 
     hmap::transform(
@@ -169,13 +178,16 @@ void setup_post_process_heightmap_attributes(BaseNode *p_node, bool add_mix)
              p_node->get_node_type(),
              p_node->get_id());
 
+  if (add_mix)
+  {
+    ADD_ATTR(EnumAttribute, "post_mix_method", blending_method_map, "replace");
+    ADD_ATTR(FloatAttribute, "post_mix", 1.f, 0.f, 1.f);
+  }
+
   ADD_ATTR(BoolAttribute, "post_inverse", false);
   ADD_ATTR(FloatAttribute, "post_gain", 1.f, 0.01f, 10.f);
   ADD_ATTR(FloatAttribute, "post_smoothing_radius", 0.f, 0.f, 0.05f);
   ADD_ATTR(RangeAttribute, "post_remap");
-
-  if (add_mix)
-    ADD_ATTR(FloatAttribute, "post_mix", 1.f, 0.f, 1.f);
 
   std::vector<std::string> *p_keys = p_node->get_attr_ordered_key_ref();
 
@@ -183,7 +195,10 @@ void setup_post_process_heightmap_attributes(BaseNode *p_node, bool add_mix)
   p_keys->push_back("_SEPARATOR_TEXT_Post-processing");
 
   if (add_mix)
+  {
+    p_keys->push_back("post_mix_method");
     p_keys->push_back("post_mix");
+  }
 
   p_keys->push_back("post_inverse");
   p_keys->push_back("post_gain");

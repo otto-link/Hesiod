@@ -26,6 +26,7 @@ enum BlendingMethod : int
   MULTIPLY_ADD,
   NEGATE,
   OVERLAY,
+  REPLACE,
   SOFT,
   SUBSTRACT,
 };
@@ -59,6 +60,7 @@ static std::map<std::string, int> blending_method_map = {
     {"multiply_add", BlendingMethod::MULTIPLY_ADD},
     {"negate", BlendingMethod::NEGATE},
     {"overlay", BlendingMethod::OVERLAY},
+    {"replace", BlendingMethod::REPLACE},
     {"soft", BlendingMethod::SOFT},
     {"substract", BlendingMethod::SUBSTRACT}};
 
