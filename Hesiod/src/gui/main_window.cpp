@@ -238,6 +238,8 @@ void MainWindow::on_save()
   {
     this->save_to_file(this->project_path.string());
     this->set_is_dirty(false);
+
+    notify("Save", std::format("Saved file: {}", this->project_path.string()));
   }
 }
 
