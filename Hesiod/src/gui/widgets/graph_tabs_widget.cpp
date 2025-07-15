@@ -8,6 +8,7 @@
 #include "hesiod/gui/style.hpp"
 #include "hesiod/gui/widgets/graph_node_widget.hpp"
 #include "hesiod/gui/widgets/graph_tabs_widget.hpp"
+#include "hesiod/gui/widgets/node_settings_widget.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/graph_manager.hpp"
 #include "hesiod/model/graph_node.hpp"
@@ -113,6 +114,12 @@ void GraphTabsWidget::on_node_deleted(const std::string &graph_id, const std::st
 {
   Q_EMIT this->node_deleted(graph_id, id);
   Q_EMIT this->has_changed();
+}
+
+void GraphTabsWidget::set_show_node_settings_widget(bool new_state)
+{
+  this->show_node_settings_widget = new_state;
+  this->update_tab_widget();
 }
 
 void GraphTabsWidget::set_selected_tab(const std::string &graph_id)
@@ -231,6 +238,17 @@ void GraphTabsWidget::update_tab_widget()
     QWidget     *tab = new QWidget();
     QHBoxLayout *layout = new QHBoxLayout();
     layout->addWidget(this->graph_node_widget_map.at(id));
+
+    if (this->show_node_settings_widget)
+    {
+      // re-generate the node settings widget
+      NodeSettingsWidget *node_settings_widget = new NodeSettingsWidget(
+          this->graph_node_widget_map.at(id),
+          this);
+
+      layout->addWidget(node_settings_widget);
+    }
+
     tab->setLayout(layout);
     this->tab_widget->addTab(tab, id.c_str());
 

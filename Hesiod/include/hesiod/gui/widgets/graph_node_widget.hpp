@@ -1,13 +1,5 @@
 /* Copyright (c) 2025 Otto Link. Distributed under the terms of the GNU General Public
    License. The full license is in the file LICENSE, distributed with this software. */
-
-/**
- * @file graph_node_widget.hpp
- * @author  Otto Link (otto.link.bv@gmail.com)
- * @brief
- *
- * @copyright Copyright (c) 2025
- */
 #pragma once
 #include "gnodegui/graph_viewer.hpp"
 
@@ -47,6 +39,7 @@ signals:
   void has_been_cleared(const std::string &graph_id);
   void new_node_created(const std::string &graph_id, const std::string &id);
   void node_deleted(const std::string &graph_id, const std::string &id);
+  void node_settings_have_changed(const std::string &graph_id, const std::string &id);
 
 public slots:
   void closeEvent(QCloseEvent *event) override;

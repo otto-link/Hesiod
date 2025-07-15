@@ -33,6 +33,7 @@ public:
   GraphTabsWidget(GraphManager *p_graph_manager, QWidget *parent = nullptr);
 
   void clear();
+  void set_show_node_settings_widget(bool new_state);
 
   // --- Serialization ---
   void           json_from(nlohmann::json const &json);
@@ -62,6 +63,7 @@ private:
   GraphManager                            *p_graph_manager; // own by MainWindow
   QTabWidget                              *tab_widget;      // own by this
   std::map<std::string, GraphNodeWidget *> graph_node_widget_map;
+  bool                                     show_node_settings_widget;
 };
 
 } // namespace hesiod

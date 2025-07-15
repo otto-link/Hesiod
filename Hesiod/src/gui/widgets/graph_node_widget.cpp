@@ -677,21 +677,25 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
     widget_action->setDefaultWidget(scroll_area); // attributes_widget);
     menu->addAction(widget_action);
 
-    connect(attributes_widget,
-            &attr::AttributesWidget::value_changed,
-            [this, p_node]()
-            {
-              std::string node_id = p_node->get_id();
-              this->p_graph_node->update(node_id);
-            });
+    this->connect(attributes_widget,
+                  &attr::AttributesWidget::value_changed,
+                  [this, p_node]()
+                  {
+                    std::string node_id = p_node->get_id();
+                    this->p_graph_node->update(node_id);
 
-    connect(attributes_widget,
-            &attr::AttributesWidget::update_button_released,
-            [this, p_node]()
-            {
-              std::string node_id = p_node->get_id();
-              this->p_graph_node->update(node_id);
-            });
+                    Q_EMIT this->node_settings_have_changed(this->get_id(), node_id);
+                  });
+
+    this->connect(attributes_widget,
+                  &attr::AttributesWidget::update_button_released,
+                  [this, p_node]()
+                  {
+                    std::string node_id = p_node->get_id();
+                    this->p_graph_node->update(node_id);
+
+                    Q_EMIT this->node_settings_have_changed(this->get_id(), node_id);
+                  });
 
     // --- show menu
 

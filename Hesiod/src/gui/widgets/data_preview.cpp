@@ -105,6 +105,8 @@ void DataPreview::contextMenuEvent(QContextMenuEvent *event)
   }
 }
 
+const QImage &DataPreview::get_preview_image() const { return this->preview_image; }
+
 void DataPreview::update_image()
 {
   // Retrieve port informations
@@ -213,9 +215,10 @@ void DataPreview::update_image()
     }
   }
 
-  this->preview_image = QImage(img.data(), shape_preview.x, shape_preview.y, img_format);
+  QImage tmp_image = QImage(img.data(), shape_preview.x, shape_preview.y, img_format);
+  this->preview_image = tmp_image.copy();
 
-  QPixmap pixmap = QPixmap::fromImage(preview_image);
+  QPixmap pixmap = QPixmap::fromImage(this->preview_image);
 
   // add a border
   QPainter painter(&pixmap);
