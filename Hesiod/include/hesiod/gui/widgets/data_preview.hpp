@@ -39,6 +39,8 @@ public:
   DataPreview() = default;
   DataPreview(gngui::NodeProxy *p_proxy_node);
 
+  const QImage &get_preview_image() const;
+
 public Q_SLOTS:
   void update_image();
 

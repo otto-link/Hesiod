@@ -16,10 +16,18 @@
 
 #include "highmap/heightmap.hpp"
 
+#include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 
 namespace hesiod
 {
+
+void blend_heightmaps(hmap::Heightmap &h_out,
+                      hmap::Heightmap &h1,
+                      hmap::Heightmap &h2,
+                      BlendingMethod   method,
+                      float            k = 0.f,
+                      int              ir = 0);
 
 void post_apply_enveloppe(BaseNode *p_node, hmap::Heightmap &h, hmap::Heightmap *p_env);
 
@@ -34,9 +42,11 @@ void post_process_heightmap(BaseNode         *p_node,
                             bool              remap,
                             hmap::Vec2<float> remap_range);
 
-void post_process_heightmap(BaseNode *p_node, hmap::Heightmap &h);
+void post_process_heightmap(BaseNode        *p_node,
+                            hmap::Heightmap &h,
+                            hmap::Heightmap *p_in = nullptr);
 
-void setup_post_process_heightmap_attributes(BaseNode *p_node);
+void setup_post_process_heightmap_attributes(BaseNode *p_node, bool add_mix = false);
 
 // --- mask preprocessing
 

@@ -59,7 +59,15 @@ else()
   )
 
   # Add per-configuration flags
-  set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -DLOG_LEVEL=3")
+  set(CMAKE_CXX_FLAGS_DEBUG
+      "${CMAKE_CXX_FLAGS_DEBUG} -g -DLOG_LEVEL=3 -fno-omit-frame-pointer \
+    -Wpedantic -Wno-psabi -Wno-unused-parameter \
+    -Wcast-align -Wcast-qual  \
+    -Wnull-dereference -Wnon-virtual-dtor -Woverloaded-virtual \
+    -Wzero-as-null-pointer-constant -Wduplicated-cond \
+    -Wduplicated-branches -Wlogical-op -Wuseless-cast \
+    ")
+  # -Wshadow -Wsign-conversion -Wconversion -Wold-style-cast
   set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -DLOG_LEVEL=3")
 endif()
 

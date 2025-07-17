@@ -84,6 +84,7 @@ void setup_basalt_field_node(BaseNode *p_node)
 
   // disable post-processing remap by default
   GET_REF("post_remap", RangeAttribute)->set_is_active(false);
+  GET_REF("post_remap", RangeAttribute)->save_initial_state();
 }
 
 void compute_basalt_field_node(BaseNode *p_node)

@@ -13,7 +13,7 @@ void CustomQMenu::mousePressEvent(QMouseEvent *event)
     // close the menu when right-clicked, so it behaves the same on
     // both Linux and Windows
     this->close();
-    // event->accept();
+    event->accept();
   }
   else
   {

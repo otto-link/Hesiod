@@ -14,7 +14,7 @@
 
 #include "nlohmann/json.hpp"
 
-// TODO - rename as GraphTabsWidget
+#include "hesiod/gui/widgets/node_settings_widget.hpp"
 
 namespace hesiod
 {
@@ -33,6 +33,7 @@ public:
   GraphTabsWidget(GraphManager *p_graph_manager, QWidget *parent = nullptr);
 
   void clear();
+  void set_show_node_settings_widget(bool new_state);
 
   // --- Serialization ---
   void           json_from(nlohmann::json const &json);
@@ -46,6 +47,7 @@ signals:
 
 public slots:
   // --- From GraphNodeWidget signals ---
+  void on_copy_buffer_has_changed(const nlohmann::json &new_json);
   void on_has_been_cleared(const std::string &graph_id);
   void on_new_node_created(const std::string &graph_id, const std::string &id);
   void on_node_deleted(const std::string &graph_id, const std::string &id);
@@ -58,9 +60,11 @@ public slots:
 
 private:
   // --- Members ---
-  GraphManager                            *p_graph_manager; // own by MainWindow
-  QTabWidget                              *tab_widget;      // own by this
-  std::map<std::string, GraphNodeWidget *> graph_node_widget_map;
+  GraphManager                               *p_graph_manager; // own by MainWindow
+  QTabWidget                                 *tab_widget;      // own by this
+  std::map<std::string, GraphNodeWidget *>    graph_node_widget_map;
+  std::map<std::string, NodeSettingsWidget *> node_settings_widget_map;
+  bool                                        show_node_settings_widget;
 };
 
 } // namespace hesiod

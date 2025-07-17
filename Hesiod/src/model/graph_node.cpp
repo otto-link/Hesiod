@@ -181,24 +181,26 @@ void GraphNode::on_broadcast_node_updated(const std::string &tag)
   {
     BaseNode *p_node = dynamic_cast<BaseNode *>(p_gnode.get());
 
-    if (p_node->get_label() == "Receive")
-    {
-      ReceiveNode *p_receive_node = dynamic_cast<ReceiveNode *>(p_node);
+    if (p_node)
+      if (p_node->get_label() == "Receive")
+      {
+        ReceiveNode *p_receive_node = dynamic_cast<ReceiveNode *>(p_node);
 
-      if (!p_receive_node)
-      {
-        LOG->critical("GraphEditor::on_broadcast_node_updated: could not properly recast "
-                      "the node as a receiver. Tag {}",
-                      tag);
-        throw std::runtime_error("could not properly recast the node as a receiver");
+        if (!p_receive_node)
+        {
+          LOG->critical(
+              "GraphEditor::on_broadcast_node_updated: could not properly recast "
+              "the node as a receiver. Tag {}",
+              tag);
+          throw std::runtime_error("could not properly recast the node as a receiver");
+        }
+        else
+        {
+          // only update Receive nodes with the proper tag
+          if (p_receive_node->get_current_tag() == tag)
+            this->update(node_id);
+        }
       }
-      else
-      {
-        // only update Receive nodes with the proper tag
-        if (p_receive_node->get_current_tag() == tag)
-          this->update(node_id);
-      }
-    }
   }
 }
 
@@ -207,16 +209,20 @@ void GraphNode::remove_node(const std::string &id)
   LOG->trace("GraphNode::remove_node: id = {}", id);
 
   // "special" nodes treatment
-  BaseNode   *p_basenode = this->get_node_ref_by_id<BaseNode>(id);
-  std::string node_type = p_basenode->get_node_type();
+  BaseNode *p_basenode = this->get_node_ref_by_id<BaseNode>(id);
 
-  if (node_type == "Broadcast")
+  if (p_basenode)
   {
-    std::string tag = this->get_node_ref_by_id<BroadcastNode>(id)->get_broadcast_tag();
+    std::string node_type = p_basenode->get_node_type();
 
-    LOG->trace("GraphNode::remove_node: removing broadcast tag {}", tag);
+    if (node_type == "Broadcast")
+    {
+      std::string tag = this->get_node_ref_by_id<BroadcastNode>(id)->get_broadcast_tag();
 
-    Q_EMIT this->remove_broadcast_tag(tag);
+      LOG->trace("GraphNode::remove_node: removing broadcast tag {}", tag);
+
+      Q_EMIT this->remove_broadcast_tag(tag);
+    }
   }
 
   // basic GNode removing...
@@ -292,12 +298,12 @@ void GraphNode::update()
   Q_EMIT this->update_finished(this->get_id());
 }
 
-void GraphNode::update(std::string id)
+void GraphNode::update(const std::string &node_id)
 {
-  LOG->trace("GraphNode::update: id = {}", id);
+  LOG->trace("GraphNode::update: id = {}", node_id);
 
   Q_EMIT this->update_started(this->get_id());
-  gnode::Graph::update(id);
+  gnode::Graph::update(node_id);
   Q_EMIT this->update_finished(this->get_id());
 }
 

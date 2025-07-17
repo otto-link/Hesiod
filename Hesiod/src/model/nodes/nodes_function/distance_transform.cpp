@@ -31,16 +31,11 @@ void setup_distance_transform_node(BaseNode *p_node)
            "Approx. (fast)");
   ADD_ATTR(BoolAttribute, "reverse_input", false);
   ADD_ATTR(FloatAttribute, "threshold", 0.5f, -1.f, 2.f);
-  ADD_ATTR(BoolAttribute, "reverse_output", false);
-  ADD_ATTR(BoolAttribute, "remap", true);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"transform_type",
-                                "reverse_input",
-                                "reverse_output",
-                                "threshold",
-                                "_SEPARATOR_",
-                                "remap"});
+  p_node->set_attr_ordered_key({"transform_type", "reverse_input", "threshold"});
+
+  setup_post_process_heightmap_attributes(p_node);
 }
 
 void compute_distance_transform_node(BaseNode *p_node)
@@ -88,16 +83,7 @@ void compute_distance_transform_node(BaseNode *p_node)
         hmap::TransformMode::SINGLE_ARRAY); // mandatory
 
     // post-process
-    post_process_heightmap(p_node,
-                           *p_out,
-                           GET("reverse_output", BoolAttribute),
-                           false, // smooth
-                           0,
-                           false, // saturate
-                           {0.f, 0.f},
-                           0.f,
-                           GET("remap", BoolAttribute),
-                           {0.f, 1.f});
+    post_process_heightmap(p_node, *p_out);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

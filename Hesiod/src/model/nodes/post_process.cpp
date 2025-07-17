@@ -3,12 +3,15 @@
  * this software. */
 #include "highmap/filters.hpp"
 #include "highmap/heightmap.hpp"
+#include "highmap/math.hpp"
 #include "highmap/opencl/gpu_opencl.hpp"
 #include "highmap/range.hpp"
 
 #include "attributes.hpp"
 
+#include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
+#include "hesiod/model/nodes/post_process.hpp"
 
 using namespace attr;
 
@@ -92,11 +95,35 @@ void post_process_heightmap(BaseNode         *p_node,
     h.remap(remap_range.x, remap_range.y);
 }
 
-void post_process_heightmap(BaseNode *p_node, hmap::Heightmap &h)
+void post_process_heightmap(BaseNode *p_node, hmap::Heightmap &h, hmap::Heightmap *p_in)
 {
   LOG->trace("post_process_heightmap: [{}]/[{}]",
              p_node->get_node_type(),
              p_node->get_id());
+
+  // mix
+  if (p_in)
+  {
+    // mix
+    float k = 0.1f; // TODO hardcoded?
+    int   ir = 0;
+    int   method = GET("post_mix_method", EnumAttribute);
+    blend_heightmaps(h, *p_in, h, static_cast<BlendingMethod>(method), k, ir);
+
+    // lerp between input and output
+    float t = GET("post_mix", FloatAttribute);
+
+    hmap::transform(
+        {&h, p_in},
+        [t](std::vector<hmap::Array *> p_arrays)
+        {
+          hmap::Array *pa_out = p_arrays[0];
+          hmap::Array *pa_in = p_arrays[1];
+
+          *pa_out = hmap::lerp(*pa_in, *pa_out, t);
+        },
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
+  }
 
   // inverse
   if (GET("post_inverse", BoolAttribute))
@@ -145,11 +172,17 @@ void post_process_heightmap(BaseNode *p_node, hmap::Heightmap &h)
     h.remap(GET("post_remap", RangeAttribute)[0], GET("post_remap", RangeAttribute)[1]);
 }
 
-void setup_post_process_heightmap_attributes(BaseNode *p_node)
+void setup_post_process_heightmap_attributes(BaseNode *p_node, bool add_mix)
 {
   LOG->trace("setup_post_process_heightmap_attributes: [{}]/[{}]",
              p_node->get_node_type(),
              p_node->get_id());
+
+  if (add_mix)
+  {
+    ADD_ATTR(EnumAttribute, "post_mix_method", blending_method_map, "replace");
+    ADD_ATTR(FloatAttribute, "post_mix", 1.f, 0.f, 1.f);
+  }
 
   ADD_ATTR(BoolAttribute, "post_inverse", false);
   ADD_ATTR(FloatAttribute, "post_gain", 1.f, 0.01f, 10.f);
@@ -160,6 +193,13 @@ void setup_post_process_heightmap_attributes(BaseNode *p_node)
 
   p_keys->push_back("_SEPARATOR_");
   p_keys->push_back("_SEPARATOR_TEXT_Post-processing");
+
+  if (add_mix)
+  {
+    p_keys->push_back("post_mix_method");
+    p_keys->push_back("post_mix");
+  }
+
   p_keys->push_back("post_inverse");
   p_keys->push_back("post_gain");
   p_keys->push_back("post_smoothing_radius");

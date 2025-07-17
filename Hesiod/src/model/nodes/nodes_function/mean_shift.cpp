@@ -34,6 +34,8 @@ void setup_mean_shift_node(BaseNode *p_node)
   // attribute(s) order
   p_node->set_attr_ordered_key(
       {"radius", "talus_global", "iterations", "talus_weighted", "_SEPARATOR_", "GPU"});
+
+  setup_post_process_heightmap_attributes(p_node, true);
 }
 
 void compute_mean_shift_node(BaseNode *p_node)
@@ -87,6 +89,9 @@ void compute_mean_shift_node(BaseNode *p_node)
     }
 
     p_out->smooth_overlap_buffers();
+
+    // post-process
+    post_process_heightmap(p_node, *p_out, p_in);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

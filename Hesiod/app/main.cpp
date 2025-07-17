@@ -6,6 +6,8 @@ typedef unsigned int uint;
 
 #include "highmap/opencl/gpu_opencl.hpp"
 
+#include "gnodegui/style.hpp"
+
 #include "hesiod/cli/batch_mode.hpp"
 #include "hesiod/config.hpp"
 #include "hesiod/gui/main_window.hpp"
@@ -46,6 +48,9 @@ int main(int argc, char *argv[])
 #include "darkstyle.css"
       ;
   app.setStyleSheet(style_sheet.c_str());
+
+  // graph viewer style
+  GN_STYLE->viewer.color_bg = QColor(30, 30, 30, 255);
 
   // ----------------------------------- batch CLI mode
 

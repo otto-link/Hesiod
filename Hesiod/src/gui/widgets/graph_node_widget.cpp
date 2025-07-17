@@ -2,9 +2,11 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include <QApplication>
+#include <QFileDialog>
 #include <QMenu>
 #include <QMessageBox>
 #include <QScreen>
+#include <QTimer>
 #include <QToolButton>
 #include <QVBoxLayout>
 #include <QWidgetAction>
@@ -17,10 +19,12 @@
 #include "hesiod/gui/widgets/custom_qmenu.hpp"
 #include "hesiod/gui/widgets/graph_node_widget.hpp"
 #include "hesiod/gui/widgets/model_config_widget.hpp"
+#include "hesiod/gui/widgets/select_string_dialog.hpp"
 #include "hesiod/gui/widgets/viewer3d.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/graph_node.hpp"
 #include "hesiod/model/nodes/node_factory.hpp"
+#include "hesiod/model/utils.hpp"
 
 namespace hesiod
 {
@@ -86,6 +90,61 @@ void GraphNodeWidget::json_from(nlohmann::json const &json)
   this->update_node_on_connection_finished = true;
 }
 
+nlohmann::json GraphNodeWidget::json_import(nlohmann::json const &json, QPointF scene_pos)
+{
+  // import used when copy/pasting only
+  LOG->trace("GraphNodeWidget::json_import");
+
+  // work on a copy of the json to modify the node IDs and return it
+  nlohmann::json json_copy = json;
+
+  // nodes
+  if (!json_copy["nodes"].is_null())
+  {
+    // storage of id correspondance storage between original node and it copied version
+    std::map<std::string, std::string> copy_id_map = {};
+
+    for (auto &json_node : json_copy["nodes"])
+    {
+      QPointF pos = scene_pos;
+      QPointF delta = QPointF(json_node["scene_position.x"],
+                              json_node["scene_position.y"]);
+
+      // create both model and graphic nodes
+      std::string node_id = this->on_new_node_request(json_node["caption"], pos + delta);
+
+      // use this new node id and backup it for links
+      copy_id_map[json_node["id"].get<std::string>()] = node_id;
+      json_node["id"] = node_id;
+
+      // setup attributes
+      BaseNode *p_node = this->p_graph_node->get_node_ref_by_id<BaseNode>(node_id);
+      p_node->json_from(json_node["settings"]);
+      p_node->set_id(node_id);
+
+      this->p_graph_node->update(node_id);
+    }
+
+    // links
+    if (!json_copy["links"].is_null())
+      for (auto &json_link : json_copy["links"])
+      {
+        std::string node_id_from = json_link["node_out_id"].get<std::string>();
+        std::string node_id_to = json_link["node_in_id"].get<std::string>();
+
+        node_id_from = copy_id_map.at(node_id_from);
+        node_id_to = copy_id_map.at(node_id_to);
+
+        this->add_link(node_id_from,
+                       json_link["port_out_id"],
+                       node_id_to,
+                       json_link["port_in_id"]);
+      }
+  }
+
+  return json_copy;
+}
+
 nlohmann::json GraphNodeWidget::json_to() const
 {
   LOG->trace("GraphNodeWidget::json_to");
@@ -105,6 +164,53 @@ void GraphNodeWidget::on_connection_deleted(const std::string &id_out,
 
   this->p_graph_node->remove_link(id_out, port_id_out, id_in, port_id_in);
   this->p_graph_node->update(id_in);
+}
+
+void GraphNodeWidget::on_connection_dropped(const std::string &node_id,
+                                            const std::string &port_id,
+                                            QPointF /*scene_pos*/)
+{
+  LOG->trace("GraphNodeWidget::on_connection_dropped: {}/{}", node_id, port_id);
+
+  bool ret = this->execute_new_node_context_menu();
+
+  // if a node has indeed being created, arbitrarily connect the first
+  // output with the same type has the output from which the link has
+  // been emitted
+  if (ret)
+  {
+    LOG->trace("GraphNodeWidget::on_connection_dropped: auto-connecting nodes");
+
+    const std::string node_to = this->last_node_created_id;
+
+    BaseNode *p_node_from = this->p_graph_node->get_node_ref_by_id<BaseNode>(node_id);
+    BaseNode *p_node_to = this->p_graph_node->get_node_ref_by_id<BaseNode>(node_to);
+
+    if (p_node_to)
+    {
+      int         from_port_index = p_node_from->get_port_index(port_id);
+      std::string from_type = p_node_from->get_data_type(from_port_index);
+
+      LOG->trace("GraphNodeWidget::on_connection_dropped: from_type: {}", from_type);
+
+      // connect to the first input that has the same type, if any
+      for (int k = 0; k < p_node_to->get_nports(); ++k)
+      {
+        std::string to_type = p_node_to->get_data_type(k);
+
+        if (to_type == from_type)
+        {
+          std::string port_to_id = p_node_to->get_port_label(k);
+          this->add_link(node_id, port_id, node_to, port_to_id);
+          break;
+        }
+      }
+    }
+    else
+    {
+      LOG->trace("GraphNodeWidget::on_connection_dropped: p_node_to is nullptr");
+    }
+  }
 }
 
 void GraphNodeWidget::on_connection_finished(const std::string &id_out,
@@ -138,6 +244,95 @@ void GraphNodeWidget::on_graph_clear_request()
 
   if (reply == QMessageBox::Yes)
     this->clear_all();
+}
+
+void GraphNodeWidget::on_graph_import_request()
+{
+  LOG->trace("GraphNodeWidget::on_graph_import_request");
+
+  std::filesystem::path path = ""; // TODO set path
+
+  this->set_enabled(false);
+  QString load_fname = QFileDialog::getOpenFileName(this,
+                                                    "Load...",
+                                                    path.string().c_str(),
+                                                    "Hesiod files (*.hsd)");
+  this->set_enabled(true);
+
+  if (!load_fname.isNull() && !load_fname.isEmpty())
+  {
+    std::string    fname = load_fname.toStdString();
+    nlohmann::json json = json_from_file(fname);
+
+    // retrieve the number of graph
+    size_t n_graph = json["graph_manager"]["graph_nodes"].size();
+
+    std::vector<std::string> graph_id_list = {};
+    for (auto [key, _] : json["graph_manager"]["graph_nodes"].items())
+      graph_id_list.push_back(key);
+
+    if (n_graph < 1)
+    {
+      LOG->warn("GraphNodeWidget::on_graph_import_request: no graph to import");
+      return;
+    }
+
+    std::string import_graph_id;
+
+    if (n_graph == 1)
+    {
+      import_graph_id = graph_id_list.back();
+    }
+    else
+    {
+      SelectStringDialog dialog(graph_id_list, "Select the graph layer to import:");
+
+      if (dialog.exec() != QDialog::Accepted)
+      {
+        LOG->trace("GraphNodeWidget::on_graph_import_request: aborted");
+        return;
+      }
+
+      import_graph_id = dialog.selected_value();
+    }
+
+    LOG->trace("GraphNodeWidget::on_graph_import_request: importing {} from file {}",
+               import_graph_id,
+               fname);
+
+    // build a json file that can be imported, see GraphNodeWidget::json_import
+    nlohmann::json json_imp;
+    json_imp = json["graph_tabs_widget"]["graph_node_widgets"][import_graph_id];
+
+    // add node settings
+    for (auto &json_node : json_imp["nodes"])
+    {
+      const std::string node_id = json_node["id"];
+
+      // retrieve in the model section the corresponding node and
+      // its parameters
+      for (auto &json_node_model :
+           json["graph_manager"]["graph_nodes"][import_graph_id]["nodes"])
+      {
+        if (json_node_model["id"] == node_id)
+          json_node["settings"] = json_node_model;
+      }
+    }
+
+    nlohmann::json json_mod = this->json_import(json_imp);
+
+    // set selection on copied nodes
+    this->deselect_all();
+
+    for (auto &json_node : json_mod["nodes"])
+    {
+      const std::string    node_id = json_node["id"].get<std::string>();
+      gngui::GraphicsNode *p_gfx_node = this->get_graphics_node_by_id(node_id);
+
+      // Qt mystery, this needs to be delayed to be effective
+      QTimer::singleShot(0, this, [p_gfx_node]() { p_gfx_node->setSelected(true); });
+    }
+  }
 }
 
 void GraphNodeWidget::on_graph_new_request()
@@ -223,7 +418,9 @@ void GraphNodeWidget::on_graph_settings_request()
       if (auto *p_viewer = dynamic_cast<AbstractViewer *>(sp_widget.get()))
         p_viewer->json_from(json_states[k++]);
 
-    // TODO set the selection back
+    // set selection back, Qt mystery, this needs to be delayed to be effective
+    gngui::GraphicsNode *p_gfx_node = this->get_graphics_node_by_id(selected_id);
+    QTimer::singleShot(0, this, [p_gfx_node]() { p_gfx_node->setSelected(true); });
   }
 
   this->set_enabled(true);
@@ -268,6 +465,8 @@ std::string GraphNodeWidget::on_new_node_request(const std::string &node_type,
   this->on_new_graphics_node_request(node_id, scene_pos);
 
   Q_EMIT this->new_node_created(this->get_id(), node_id);
+
+  this->last_node_created_id = node_id;
 
   return node_id;
 }
@@ -478,21 +677,25 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
     widget_action->setDefaultWidget(scroll_area); // attributes_widget);
     menu->addAction(widget_action);
 
-    connect(attributes_widget,
-            &attr::AttributesWidget::value_changed,
-            [this, p_node]()
-            {
-              std::string node_id = p_node->get_id();
-              this->p_graph_node->update(node_id);
-            });
+    this->connect(attributes_widget,
+                  &attr::AttributesWidget::value_changed,
+                  [this, p_node]()
+                  {
+                    std::string node_id = p_node->get_id();
+                    this->p_graph_node->update(node_id);
 
-    connect(attributes_widget,
-            &attr::AttributesWidget::update_button_released,
-            [this, p_node]()
-            {
-              std::string node_id = p_node->get_id();
-              this->p_graph_node->update(node_id);
-            });
+                    Q_EMIT this->node_settings_have_changed(this->get_id(), node_id);
+                  });
+
+    this->connect(attributes_widget,
+                  &attr::AttributesWidget::update_button_released,
+                  [this, p_node]()
+                  {
+                    std::string node_id = p_node->get_id();
+                    this->p_graph_node->update(node_id);
+
+                    Q_EMIT this->node_settings_have_changed(this->get_id(), node_id);
+                  });
 
     // --- show menu
 
@@ -512,16 +715,54 @@ void GraphNodeWidget::on_nodes_copy_request(const std::vector<std::string> &id_l
   QPoint  mouse_view_pos = this->mapFromGlobal(QCursor::pos());
   QPointF mouse_scene_pos = this->mapToScene(mouse_view_pos);
 
+  // dump to a json with a structure that can be read by
+  // GraphViewer::json_from
+
+  json_copy_buffer["nodes"] = nlohmann::json::array();
+
   for (size_t k = 0; k < id_list.size(); k++)
   {
-    BaseNode *p_node = this->p_graph_node->get_node_ref_by_id<BaseNode>(id_list[k]);
+    nlohmann::json json_node;
 
+    gngui::GraphicsNode *p_gfx_node = this->get_graphics_node_by_id(id_list[k]);
+    json_node = p_gfx_node->json_to();
+
+    // override absolute positions with relative positions
     QPointF delta = scene_pos_list[k] - mouse_scene_pos;
+    json_node["scene_position.x"] = delta.x();
+    json_node["scene_position.y"] = delta.y();
 
-    this->json_copy_buffer[p_node->get_id()] = p_node->json_to();
-    this->json_copy_buffer[p_node->get_id()]["delta.x"] = delta.x();
-    this->json_copy_buffer[p_node->get_id()]["delta.y"] = delta.y();
+    // add attribute settings to set them back when pasting (not
+    // required by GraphViewer::json_from)
+    BaseNode *p_node = this->p_graph_node->get_node_ref_by_id<BaseNode>(id_list[k]);
+    json_node["settings"] = p_node->json_to();
+
+    this->json_copy_buffer["nodes"].push_back(json_node);
   }
+
+  // backup links between copied nodes
+  this->json_copy_buffer["links"] = nlohmann::json::array();
+
+  for (auto &link : this->p_graph_node->get_links())
+  {
+    // only keep a link if both nodes are in copy buffer
+    if (contains(id_list, link.from) && contains(id_list, link.to))
+    {
+      nlohmann::json json_link;
+
+      gnode::Node *p_from = this->p_graph_node->get_node_ref_by_id(link.from);
+      gnode::Node *p_to = this->p_graph_node->get_node_ref_by_id(link.to);
+
+      json_link["node_out_id"] = link.from;
+      json_link["node_in_id"] = link.to;
+      json_link["port_out_id"] = p_from->get_port_label(link.port_from);
+      json_link["port_in_id"] = p_to->get_port_label(link.port_to);
+
+      this->json_copy_buffer["links"].push_back(json_link);
+    }
+  }
+
+  Q_EMIT this->copy_buffer_has_changed(this->json_copy_buffer);
 }
 
 void GraphNodeWidget::on_nodes_duplicate_request(
@@ -543,29 +784,23 @@ void GraphNodeWidget::on_nodes_paste_request()
 {
   LOG->trace("GraphNodeWidget::on_nodes_paste_request");
 
-  // add new nodes using the copy buffer data
+  if (!this->json_copy_buffer.is_object())
+    return;
+
   QPoint  mouse_view_pos = this->mapFromGlobal(QCursor::pos());
   QPointF mouse_scene_pos = this->mapToScene(mouse_view_pos);
 
-  for (auto &[_, json] : this->json_copy_buffer.items())
+  // returned json contains modified node IDs
+  nlohmann::json json_mod = this->json_import(this->json_copy_buffer, mouse_scene_pos);
+
+  // set selection on copied nodes
+  this->deselect_all();
+
+  for (auto &json_node : json_mod["nodes"])
   {
-    std::string node_type = json["label"];
-    QPointF     delta = QPointF(json["delta.x"], json["delta.y"]);
-
-    // create the node (node_id is output)
-    std::string node_id = this->on_new_node_request(node_type, mouse_scene_pos + delta);
-
-    // retrieve the node state
-    BaseNode *p_node = this->p_graph_node->get_node_ref_by_id<BaseNode>(node_id);
-    p_node->json_from(json);
-
-    // set the ID again because if has been overriden by the deserialization
-    p_node->set_id(node_id);
-
-    // recompute
-    this->p_graph_node->update(node_id);
-
-    Q_EMIT this->new_node_created(this->get_id(), node_id);
+    const std::string    node_id = json_node["id"].get<std::string>();
+    gngui::GraphicsNode *p_gfx_node = this->get_graphics_node_by_id(node_id);
+    p_gfx_node->setSelected(true);
   }
 }
 
@@ -595,6 +830,11 @@ void GraphNodeWidget::on_viewport_request()
     p_viewer->on_node_selected(selected_ids.back());
 }
 
+void GraphNodeWidget::set_json_copy_buffer(nlohmann::json const &new_json_copy_buffer)
+{
+  this->json_copy_buffer = new_json_copy_buffer;
+}
+
 void GraphNodeWidget::setup_connections()
 {
   // global actions
@@ -602,6 +842,11 @@ void GraphNodeWidget::setup_connections()
                 &gngui::GraphViewer::graph_clear_request,
                 this,
                 &GraphNodeWidget::on_graph_clear_request);
+
+  this->connect(this,
+                &gngui::GraphViewer::graph_import_request,
+                this,
+                &GraphNodeWidget::on_graph_import_request);
 
   this->connect(this,
                 &gngui::GraphViewer::graph_new_request,
@@ -623,6 +868,11 @@ void GraphNodeWidget::setup_connections()
                 &gngui::GraphViewer::connection_deleted,
                 this,
                 &GraphNodeWidget::on_connection_deleted);
+
+  this->connect(this,
+                &gngui::GraphViewer::connection_dropped,
+                this,
+                &GraphNodeWidget::on_connection_dropped);
 
   this->connect(this,
                 &gngui::GraphViewer::connection_finished,

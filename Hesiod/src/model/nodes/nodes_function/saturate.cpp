@@ -25,6 +25,11 @@ void setup_saturate_node(BaseNode *p_node)
   // attribute(s)
   ADD_ATTR(RangeAttribute, "range");
   ADD_ATTR(FloatAttribute, "k_smoothing", 0.1f, 0.01, 1.f);
+
+  // attribute(s) order
+  p_node->set_attr_ordered_key({"range", "k_smoothing"});
+
+  setup_post_process_heightmap_attributes(p_node, true);
 }
 
 void compute_saturate_node(BaseNode *p_node)
@@ -59,6 +64,9 @@ void compute_saturate_node(BaseNode *p_node)
                          GET("k_smoothing", FloatAttribute));
         },
         p_node->get_config_ref()->hmap_transform_mode_cpu);
+
+    // post-process
+    post_process_heightmap(p_node, *p_out, p_in);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

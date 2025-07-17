@@ -8,6 +8,7 @@
 #include "hesiod/gui/style.hpp"
 #include "hesiod/gui/widgets/graph_node_widget.hpp"
 #include "hesiod/gui/widgets/graph_tabs_widget.hpp"
+#include "hesiod/gui/widgets/node_settings_widget.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/graph_manager.hpp"
 #include "hesiod/model/graph_node.hpp"
@@ -69,6 +70,15 @@ nlohmann::json GraphTabsWidget::json_to() const
   return json;
 }
 
+void GraphTabsWidget::on_copy_buffer_has_changed(const nlohmann::json &new_json)
+{
+  LOG->trace("GraphTabsWidget::on_copy_buffer_has_changed");
+
+  // redispatch the copy buffer to all the graphs
+  for (auto &[_, gnw] : this->graph_node_widget_map)
+    gnw->set_json_copy_buffer(new_json);
+}
+
 void GraphTabsWidget::on_has_been_cleared(const std::string &graph_id)
 {
   Q_EMIT this->has_been_cleared(graph_id);
@@ -81,22 +91,35 @@ void GraphTabsWidget::on_new_node_created(const std::string &graph_id,
   LOG->trace("GraphTabsWidget::on_new_node_created");
 
   // check if it's a Receive node to update its tag list
-  if (this->p_graph_manager->get_graph_nodes()
-          .at(graph_id)
-          ->get_node_ref_by_id<BaseNode>(id)
-          ->get_node_type() == "Receive")
-  {
-    this->update_receive_nodes_tag_list();
-  }
+  BaseNode *p_node = this->p_graph_manager->get_graph_nodes()
+                         .at(graph_id)
+                         ->get_node_ref_by_id<BaseNode>(id);
 
-  Q_EMIT this->new_node_created(graph_id, id);
-  Q_EMIT this->has_changed();
+  if (p_node)
+  {
+    if (p_node->get_node_type() == "Receive")
+      this->update_receive_nodes_tag_list();
+
+    Q_EMIT this->new_node_created(graph_id, id);
+    Q_EMIT this->has_changed();
+  }
+  else
+  {
+    LOG->critical(
+        "GraphTabsWidget::on_new_node_created: the node just created is nullptr");
+  }
 }
 
 void GraphTabsWidget::on_node_deleted(const std::string &graph_id, const std::string &id)
 {
   Q_EMIT this->node_deleted(graph_id, id);
   Q_EMIT this->has_changed();
+}
+
+void GraphTabsWidget::set_show_node_settings_widget(bool new_state)
+{
+  this->show_node_settings_widget = new_state;
+  this->update_tab_widget();
 }
 
 void GraphTabsWidget::set_selected_tab(const std::string &graph_id)
@@ -114,10 +137,7 @@ void GraphTabsWidget::show_viewport()
   LOG->trace("GraphTabsWidget::show_viewport");
 
   if (!this->graph_node_widget_map.empty())
-  {
     this->graph_node_widget_map.begin()->second->on_viewport_request();
-    LOG->trace("HERE");
-  }
 }
 
 void GraphTabsWidget::update_receive_nodes_tag_list()
@@ -207,12 +227,31 @@ void GraphTabsWidget::update_tab_widget()
                     &GraphNodeWidget::node_deleted,
                     this,
                     &GraphTabsWidget::on_node_deleted);
+
+      this->connect(this->graph_node_widget_map.at(id),
+                    &GraphNodeWidget::copy_buffer_has_changed,
+                    this,
+                    &GraphTabsWidget::on_copy_buffer_has_changed);
     }
 
     // build layout
     QWidget     *tab = new QWidget();
     QHBoxLayout *layout = new QHBoxLayout();
     layout->addWidget(this->graph_node_widget_map.at(id));
+
+    if (this->show_node_settings_widget)
+    {
+      auto &widget = this->node_settings_widget_map
+                         .try_emplace(
+                             id,
+                             new NodeSettingsWidget(this->graph_node_widget_map.at(id),
+                                                    this))
+                         .first->second;
+
+      layout->addWidget(widget);
+      widget->update_content();
+    }
+
     tab->setLayout(layout);
     this->tab_widget->addTab(tab, id.c_str());
 

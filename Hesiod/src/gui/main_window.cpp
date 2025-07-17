@@ -157,6 +157,23 @@ MainWindow *MainWindow::instance(QApplication *p_app, QWidget *p_parent)
   return instance;
 }
 
+void MainWindow::json_from(nlohmann::json const &json)
+{
+  LOG->trace("MainWindow::json_from");
+
+  this->show_node_settings_pan = json["show_node_settings_pan"];
+}
+
+nlohmann::json MainWindow::json_to() const
+{
+  LOG->trace("MainWindow::json_to");
+
+  nlohmann::json json;
+  json["show_node_settings_pan"] = this->show_node_settings_pan;
+
+  return json;
+}
+
 void MainWindow::load_from_file(const std::string &fname)
 {
   LOG->trace("MainWindow::load_from_file: {}", fname);
@@ -238,6 +255,8 @@ void MainWindow::on_save()
   {
     this->save_to_file(this->project_path.string());
     this->set_is_dirty(false);
+
+    notify("Save", std::format("Saved file: {}", this->project_path.string()));
   }
 }
 
@@ -277,16 +296,30 @@ void MainWindow::on_save_copy()
 
 void MainWindow::restore_state()
 {
+  LOG->trace("MainWindow::restore_state");
+
+  // Qt part
   QSettings settings(HSD_SETTINGS_ORG, HSD_SETTINGS_APP);
   this->restoreState(settings.value("MainWindow/state").toByteArray());
   this->restoreGeometry(settings.value("MainWindow/geometry").toByteArray());
+
+  // all the rest...
+  nlohmann::json json = json_from_file(HSD_SETTINGS_JSON);
+  if (!json.is_null())
+    this->json_from(json);
 }
 
 void MainWindow::save_state()
 {
+  LOG->trace("MainWindow::save_state");
+
+  // Qt
   QSettings settings(HSD_SETTINGS_ORG, HSD_SETTINGS_APP);
   settings.setValue("MainWindow/state", this->saveState());
   settings.setValue("MainWindow/geometry", this->saveGeometry());
+
+  // all the rest...
+  json_to_file(this->json_to(), HSD_SETTINGS_JSON);
 }
 
 bool MainWindow::save_to_file(const std::string &fname) const
@@ -405,6 +438,14 @@ void MainWindow::setup_menu_bar()
   show_layout_manager->setChecked(this->graph_manager_widget->isVisible());
   view_menu->addAction(show_layout_manager);
 
+  view_menu->addSeparator();
+
+  auto *show_node_settings_pan_action = new QAction("Show node settings pan", this);
+  show_node_settings_pan_action->setCheckable(true);
+  show_node_settings_pan_action->setChecked(this->show_node_settings_pan);
+  this->graph_tabs_widget->set_show_node_settings_widget(this->show_node_settings_pan);
+  view_menu->addAction(show_node_settings_pan_action);
+
   QMenu *help = menuBar()->addMenu("&Help");
 
   auto *about = new QAction("&About", this);
@@ -415,6 +456,17 @@ void MainWindow::setup_menu_bar()
   this->connect(new_action, &QAction::triggered, this, &MainWindow::on_new);
   this->connect(load, &QAction::triggered, this, &MainWindow::on_load);
   this->connect(about, &QAction::triggered, this, &MainWindow::show_about);
+
+  this->connect(show_node_settings_pan_action,
+                &QAction::triggered,
+                this,
+                [this, show_node_settings_pan_action]()
+                {
+                  this->show_node_settings_pan = !this->show_node_settings_pan;
+                  show_node_settings_pan_action->setChecked(this->show_node_settings_pan);
+                  this->graph_tabs_widget->set_show_node_settings_widget(
+                      this->show_node_settings_pan);
+                });
 
   this->connect(show_layout_manager,
                 &QAction::triggered,
@@ -443,6 +495,7 @@ void MainWindow::setup_menu_bar()
                 this->graph_manager_widget.get(),
                 &GraphManagerWidget::on_new_graph_request);
 
+  // quit
   this->connect(quit, &QAction::triggered, this, &MainWindow::on_quit);
 }
 

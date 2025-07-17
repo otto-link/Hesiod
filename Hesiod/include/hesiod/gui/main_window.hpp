@@ -15,8 +15,11 @@
 
 #include <QMainWindow>
 
+#include "nlohmann/json.hpp"
+
 #define HSD_SETTINGS_ORG "olink"
 #define HSD_SETTINGS_APP "hesiod"
+#define HSD_SETTINGS_JSON "hesiod_settings.json"
 #define HSD_DEFAULT_STARTUP_FILE "data/default.hsd"
 #define HSD_APP_ICON "data/hesiod_icon.png"
 
@@ -56,6 +59,10 @@ public:
   // --- Serialization on file ---
   void load_from_file(const std::string &fname);
   bool save_to_file(const std::string &fname) const;
+
+  // --- Serialization (global settings) ---
+  void           json_from(nlohmann::json const &json);
+  nlohmann::json json_to() const;
 
 protected:
   // --- State Management ---
@@ -101,6 +108,7 @@ private:
   std::filesystem::path project_path = "";
   bool                  is_dirty = false;
   QTimer               *autosave_timer; // own by this
+  bool                  show_node_settings_pan = true;
 };
 
 // =====================================

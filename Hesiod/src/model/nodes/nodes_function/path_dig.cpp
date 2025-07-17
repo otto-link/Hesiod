@@ -21,7 +21,7 @@ void setup_path_dig_node(BaseNode *p_node)
   // port(s)
   p_node->add_port<hmap::Path>(gnode::PortType::IN, "path");
   p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
   ADD_ATTR(FloatAttribute, "width", 0.001f, 0.f, 0.1f);

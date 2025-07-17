@@ -284,8 +284,7 @@ void OpenGLRender::paintGL()
             "projection",
             QMatrix4x4(glm::value_ptr(projection_matrix)).transposed());
 
-        this->shader.setUniformValue("mesh_size",
-                                     (float)(0.5f / this->texture_hmap_shape.x));
+        this->shader.setUniformValue("mesh_size", 0.5f / this->texture_hmap_shape.x);
         this->shader.setUniformValue("zmin", this->zmin);
         this->shader.setUniformValue("zmax", this->zmax);
         this->shader.setUniformValue("use_texture_diffuse", this->use_texture_diffuse);
@@ -310,7 +309,7 @@ void OpenGLRender::paintGL()
       // --- eventually render the surface
 
       this->qvao.bind();
-      glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, 0);
+      glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, nullptr);
       this->qvao.release();
 
       this->shader.release();
