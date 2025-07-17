@@ -23,15 +23,17 @@ public:
   NodeSettingsWidget(GraphNodeWidget *p_graph_node_widget, QWidget *parent = nullptr);
 
   void initialize_layout();
+  void setup_connections();
 
 public slots:
-  void on_node_selection_has_changed();
+  void update_content();
 
 private:
   // --- Members ---
-  GraphNodeWidget *p_graph_node_widget; // own by GraphManagerWidget
-  QVBoxLayout     *layout;
-  QGridLayout     *scroll_layout;
+  GraphNodeWidget         *p_graph_node_widget; // own by GraphManagerWidget
+  QVBoxLayout             *layout;
+  QGridLayout             *scroll_layout;
+  std::vector<std::string> pinned_node_ids = {};
 };
 
 } // namespace hesiod

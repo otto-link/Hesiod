@@ -241,12 +241,15 @@ void GraphTabsWidget::update_tab_widget()
 
     if (this->show_node_settings_widget)
     {
-      // re-generate the node settings widget
-      NodeSettingsWidget *node_settings_widget = new NodeSettingsWidget(
-          this->graph_node_widget_map.at(id),
-          this);
+      auto &widget = this->node_settings_widget_map
+                         .try_emplace(
+                             id,
+                             new NodeSettingsWidget(this->graph_node_widget_map.at(id),
+                                                    this))
+                         .first->second;
 
-      layout->addWidget(node_settings_widget);
+      layout->addWidget(widget);
+      widget->update_content();
     }
 
     tab->setLayout(layout);

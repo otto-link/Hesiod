@@ -14,7 +14,7 @@
 
 #include "nlohmann/json.hpp"
 
-// TODO - rename as GraphTabsWidget
+#include "hesiod/gui/widgets/node_settings_widget.hpp"
 
 namespace hesiod
 {
@@ -60,10 +60,11 @@ public slots:
 
 private:
   // --- Members ---
-  GraphManager                            *p_graph_manager; // own by MainWindow
-  QTabWidget                              *tab_widget;      // own by this
-  std::map<std::string, GraphNodeWidget *> graph_node_widget_map;
-  bool                                     show_node_settings_widget;
+  GraphManager                               *p_graph_manager; // own by MainWindow
+  QTabWidget                                 *tab_widget;      // own by this
+  std::map<std::string, GraphNodeWidget *>    graph_node_widget_map;
+  std::map<std::string, NodeSettingsWidget *> node_settings_widget_map;
+  bool                                        show_node_settings_widget;
 };
 
 } // namespace hesiod

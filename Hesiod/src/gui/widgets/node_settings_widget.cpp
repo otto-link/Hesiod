@@ -4,6 +4,7 @@
 #include <stdexcept>
 
 #include <QLabel>
+#include <QPushButton>
 
 #include "attributes/widgets/abstract_widget.hpp"
 #include "attributes/widgets/attributes_widget.hpp"
@@ -13,6 +14,7 @@
 #include "hesiod/logger.hpp"
 #include "hesiod/model/graph_node.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
+#include "hesiod/model/utils.hpp"
 
 namespace hesiod
 {
@@ -32,24 +34,8 @@ NodeSettingsWidget::NodeSettingsWidget(GraphNodeWidget *p_graph_node_widget,
   }
 
   this->initialize_layout();
-
-  // TODO add pinned nodes option
-
-  // TODO move to setup_connections
-  this->connect(p_graph_node_widget,
-                &gngui::GraphViewer::selection_has_changed,
-                this,
-                &NodeSettingsWidget::on_node_selection_has_changed);
-
-  this->connect(p_graph_node_widget,
-                &GraphNodeWidget::node_settings_have_changed,
-                [this]() { this->on_node_selection_has_changed(); });
-
-  this->connect(p_graph_node_widget->get_p_graph_node(),
-                &GraphNode::update_finished,
-                [this]() { this->on_node_selection_has_changed(); });
-
-  this->on_node_selection_has_changed();
+  this->setup_connections();
+  this->update_content();
 }
 
 void NodeSettingsWidget::initialize_layout()
@@ -77,13 +63,31 @@ void NodeSettingsWidget::initialize_layout()
   this->setLayout(this->layout);
 }
 
-void NodeSettingsWidget::on_node_selection_has_changed()
+void NodeSettingsWidget::setup_connections()
 {
-  LOG->trace("NodeSettingsWidget::on_node_selection_has_changed");
+  LOG->trace("NodeSettingsWidget::setup_connections");
+
+  this->connect(p_graph_node_widget,
+                &gngui::GraphViewer::selection_has_changed,
+                this,
+                &NodeSettingsWidget::update_content);
+
+  this->connect(p_graph_node_widget,
+                &GraphNodeWidget::node_settings_have_changed,
+                [this]() { this->update_content(); });
+
+  this->connect(p_graph_node_widget->get_p_graph_node(),
+                &GraphNode::update_finished,
+                [this]() { this->update_content(); });
+}
+
+void NodeSettingsWidget::update_content()
+{
+  LOG->trace("NodeSettingsWidget::update_content");
 
   if (!this->p_graph_node_widget)
   {
-    LOG->error("NodeSettingsWidget::on_node_selection_has_changed: p_graph_node_widget "
+    LOG->error("NodeSettingsWidget::update_content: p_graph_node_widget "
                "is nullptr");
     return;
   }
@@ -94,19 +98,20 @@ void NodeSettingsWidget::on_node_selection_has_changed()
 
   std::vector<std::string> selected_ids = this->p_graph_node_widget
                                               ->get_selected_node_ids();
+  std::vector<std::string> all_ids = merge_unique(this->pinned_node_ids, selected_ids);
 
   // label
   QLabel *label = new QLabel("Node settings", this);
   this->scroll_layout->addWidget(label, row++, 0);
 
-  for (auto &node_id : selected_ids)
+  for (auto &node_id : all_ids)
   {
     BaseNode *p_node = this->p_graph_node_widget->get_p_graph_node()
                            ->get_node_ref_by_id<BaseNode>(node_id);
 
     if (!p_node)
     {
-      LOG->trace("NodeSettingsWidget::on_node_selection_has_changed: reference to node "
+      LOG->trace("NodeSettingsWidget::update_content: reference to node "
                  "{} is nullptr",
                  node_id);
       continue;
@@ -162,6 +167,22 @@ void NodeSettingsWidget::on_node_selection_has_changed()
         this->scroll_layout->addWidget(label_preview, row++, 0, Qt::AlignLeft);
       }
     }
+
+    // pinned checkbox
+    QPushButton *button_pin = new QPushButton("Pin this node");
+    button_pin->setCheckable(true);
+    button_pin->setChecked(contains(this->pinned_node_ids, node_id));
+    this->scroll_layout->addWidget(button_pin, row++, 0);
+
+    this->connect(button_pin,
+                  &QPushButton::toggled,
+                  [this, button_pin, node_id]()
+                  {
+                    if (button_pin->isChecked())
+                      this->pinned_node_ids.push_back(node_id);
+                    else
+                      remove_all_occurrences(this->pinned_node_ids, node_id);
+                  });
 
     // settings
     bool        add_save_reset_state_buttons = false;

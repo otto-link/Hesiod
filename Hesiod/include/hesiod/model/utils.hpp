@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <filesystem>
 #include <string>
+#include <unordered_set>
 
 #include "nlohmann/json.hpp"
 
@@ -13,6 +14,32 @@ namespace hesiod
 template <typename T> bool contains(const std::vector<T> &vec, const T &item)
 {
   return std::find(vec.begin(), vec.end(), item) != vec.end();
+}
+
+template <typename T>
+std::vector<T> merge_unique(const std::vector<T> &a, const std::vector<T> &b)
+{
+  std::unordered_set<T> seen;
+  std::vector<T>        result;
+
+  for (const auto &item : a)
+  {
+    if (seen.insert(item).second)
+      result.push_back(item);
+  }
+
+  for (const auto &item : b)
+  {
+    if (seen.insert(item).second)
+      result.push_back(item);
+  }
+
+  return result;
+}
+
+template <typename T> void remove_all_occurrences(std::vector<T> &vec, const T &value)
+{
+  vec.erase(std::remove(vec.begin(), vec.end(), value), vec.end());
 }
 
 std::filesystem::path ensure_extension(std::filesystem::path fname,
