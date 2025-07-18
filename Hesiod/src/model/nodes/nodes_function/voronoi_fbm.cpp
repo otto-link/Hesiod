@@ -37,7 +37,7 @@ void setup_voronoi_fbm_node(BaseNode *p_node)
   ADD_ATTR(FloatAttribute, "jitter.x", 1.f, 0.f, 1.f);
   ADD_ATTR(FloatAttribute, "jitter.y", 1.f, 0.f, 1.f);
   ADD_ATTR(FloatAttribute, "k_smoothing", 0.5f, 0.f, 1.f);
-  ADD_ATTR(FloatAttribute, "exp_sigma", 0.f, 0.f, 0.2f);
+  ADD_ATTR(FloatAttribute, "exp_sigma", 0.1f, 0.f, 0.3f);
   ADD_ATTR(BoolAttribute, "sqrt_output", false);
   ADD_ATTR(IntAttribute, "octaves", 8, 0, 32);
   ADD_ATTR(FloatAttribute, "weight", 0.7f, 0.f, 1.f);
