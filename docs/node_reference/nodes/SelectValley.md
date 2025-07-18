@@ -31,11 +31,12 @@ Mask/Selector
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |GPU|Bool|Enables or disables GPU acceleration for faster processing.|
-|inverse|Bool|Inverts the selection, highlighting ridges instead of valleys.|
+|post_gain|Float|No description|
+|post_inverse|Bool|No description|
+|post_remap|Value range|No description|
+|post_smoothing_radius|Float|No description|
 |radius|Float|Defines the search radius for valley detection, controlling how localized or broad the selection is.|
 |ridge_select|Bool|If enabled, selects ridges instead of valleys.|
-|smoothing|Bool|Applies smoothing to reduce noise in curvature calculations, resulting in a cleaner selection.|
-|smoothing_radius|Float|Defines the radius for the smoothing operation, determining how much curvature values are averaged over neighboring pixels.|
 
 # Example
 

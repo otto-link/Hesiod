@@ -7553,11 +7553,29 @@
                 "label": "angle",
                 "type": "Float"
             },
-            "inverse": {
-                "description": "Toggle inversion of the output values.",
-                "key": "inverse",
-                "label": "inverse",
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
                 "type": "Bool"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
             },
             "radius": {
                 "description": "Pre-filter radius.",
@@ -7569,18 +7587,6 @@
                 "description": "Selection half-width.",
                 "key": "sigma",
                 "label": "sigma",
-                "type": "Float"
-            },
-            "smoothing": {
-                "description": "Enable or disable smoothing to reduce noise in the curvature computation.",
-                "key": "smoothing",
-                "label": "smoothing",
-                "type": "Bool"
-            },
-            "smoothing_radius": {
-                "description": "Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.",
-                "key": "smoothing_radius",
-                "label": "smoothing_radius",
                 "type": "Float"
             }
         },
@@ -7604,28 +7610,34 @@
         "description": "SelectBlobLog performs 'blob' detection using oa Laplacian of Gaussian (log) method. Blobs are areas in an image that are either brighter or darker than the surrounding areas.",
         "label": "SelectBlobLog",
         "parameters": {
-            "inverse": {
-                "description": "Toggle inversion of the output values.",
-                "key": "inverse",
-                "label": "inverse",
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
                 "type": "Bool"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
             },
             "radius": {
                 "description": "Detection radius with respect to the domain size.",
                 "key": "radius",
                 "label": "radius",
-                "type": "Float"
-            },
-            "smoothing": {
-                "description": "Enable or disable smoothing to reduce noise in the curvature computation.",
-                "key": "smoothing",
-                "label": "smoothing",
-                "type": "Bool"
-            },
-            "smoothing_radius": {
-                "description": "Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.",
-                "key": "smoothing_radius",
-                "label": "smoothing_radius",
                 "type": "Float"
             }
         },
@@ -7655,28 +7667,34 @@
                 "label": "concave",
                 "type": "Bool"
             },
-            "inverse": {
-                "description": "Toggle inversion of the output values.",
-                "key": "inverse",
-                "label": "inverse",
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
                 "type": "Bool"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
             },
             "radius": {
                 "description": "Detection radius with respect to the domain size.",
                 "key": "radius",
                 "label": "radius",
-                "type": "Float"
-            },
-            "smoothing": {
-                "description": "Enable or disable smoothing to reduce noise in the curvature computation.",
-                "key": "smoothing",
-                "label": "smoothing",
-                "type": "Bool"
-            },
-            "smoothing_radius": {
-                "description": "Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.",
-                "key": "smoothing_radius",
-                "label": "smoothing_radius",
                 "type": "Float"
             }
         },
@@ -7700,22 +7718,28 @@
         "description": "SelectGt is a thresholding operator. It transforms an input heightmap into a binary heightmap, where each pixel is assigned either a value of 0 or 1, depending on whether its intensity value surpasses a specified threshold value.",
         "label": "SelectGt",
         "parameters": {
-            "inverse": {
-                "description": "Toggle inversion of the output values.",
-                "key": "inverse",
-                "label": "inverse",
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
                 "type": "Bool"
             },
-            "smoothing": {
-                "description": "Enable or disable smoothing to reduce noise in the curvature computation.",
-                "key": "smoothing",
-                "label": "smoothing",
-                "type": "Bool"
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
             },
-            "smoothing_radius": {
-                "description": "Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.",
-                "key": "smoothing_radius",
-                "label": "smoothing_radius",
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
                 "type": "Float"
             },
             "value": {
@@ -7745,22 +7769,28 @@
         "description": "SelectInterval is a thresholding operator. It transforms an input heightmap into a binary heightmap, where each pixel is assigned either a value of 0 or 1, depending on whether its intensity value is within an interval of values.",
         "label": "SelectInterval",
         "parameters": {
-            "inverse": {
-                "description": "Toggle inversion of the output values.",
-                "key": "inverse",
-                "label": "inverse",
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
                 "type": "Bool"
             },
-            "smoothing": {
-                "description": "Enable or disable smoothing to reduce noise in the curvature computation.",
-                "key": "smoothing",
-                "label": "smoothing",
-                "type": "Bool"
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
             },
-            "smoothing_radius": {
-                "description": "Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.",
-                "key": "smoothing_radius",
-                "label": "smoothing_radius",
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
                 "type": "Float"
             },
             "value1": {
@@ -7802,22 +7832,28 @@
                 "label": "center",
                 "type": "Vec2Float"
             },
-            "inverse": {
-                "description": "Toggle inversion of the output values.",
-                "key": "inverse",
-                "label": "inverse",
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
                 "type": "Bool"
             },
-            "smoothing": {
-                "description": "Enable or disable smoothing to reduce noise in the curvature computation.",
-                "key": "smoothing",
-                "label": "smoothing",
-                "type": "Bool"
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
             },
-            "smoothing_radius": {
-                "description": "Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.",
-                "key": "smoothing_radius",
-                "label": "smoothing_radius",
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
                 "type": "Float"
             }
         },
@@ -7847,22 +7883,28 @@
                 "label": "gain",
                 "type": "Float"
             },
-            "inverse": {
-                "description": "Toggle inversion of the output values.",
-                "key": "inverse",
-                "label": "inverse",
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
                 "type": "Bool"
             },
-            "smoothing": {
-                "description": "Enable or disable smoothing to reduce noise in the curvature computation.",
-                "key": "smoothing",
-                "label": "smoothing",
-                "type": "Bool"
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
             },
-            "smoothing_radius": {
-                "description": "Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.",
-                "key": "smoothing_radius",
-                "label": "smoothing_radius",
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
                 "type": "Float"
             }
         },
@@ -7890,6 +7932,30 @@
                 "description": "TODO",
                 "key": "overlap",
                 "label": "overlap",
+                "type": "Float"
+            },
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
+                "type": "Bool"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
                 "type": "Float"
             },
             "ratio1": {
@@ -7937,34 +8003,34 @@
         "description": "SelectPulse is a thresholding operator. It selects values within a specified range defined by the shape of a Gaussian pulse.",
         "label": "SelectPulse",
         "parameters": {
-            "inverse": {
-                "description": "Toggle inversion of the output values.",
-                "key": "inverse",
-                "label": "inverse",
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
                 "type": "Bool"
             },
-            "remap": {
-                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap",
-                "label": "remap",
-                "type": "Bool"
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
             },
             "sigma": {
                 "description": "Selection half-width.",
                 "key": "sigma",
                 "label": "sigma",
-                "type": "Float"
-            },
-            "smoothing": {
-                "description": "Enable or disable smoothing to reduce noise in the curvature computation.",
-                "key": "smoothing",
-                "label": "smoothing",
-                "type": "Bool"
-            },
-            "smoothing_radius": {
-                "description": "Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.",
-                "key": "smoothing_radius",
-                "label": "smoothing_radius",
                 "type": "Float"
             },
             "value": {
@@ -8000,28 +8066,28 @@
                 "label": "clipping_ratio",
                 "type": "Float"
             },
-            "inverse": {
-                "description": "Toggle inversion of the output values.",
-                "key": "inverse",
-                "label": "inverse",
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
                 "type": "Bool"
             },
-            "remap": {
-                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap",
-                "label": "remap",
-                "type": "Bool"
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
             },
-            "smoothing": {
-                "description": "Enable or disable smoothing to reduce noise in the curvature computation.",
-                "key": "smoothing",
-                "label": "smoothing",
-                "type": "Bool"
-            },
-            "smoothing_radius": {
-                "description": "Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.",
-                "key": "smoothing_radius",
-                "label": "smoothing_radius",
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
                 "type": "Float"
             },
             "talus_ref": {
@@ -8057,34 +8123,34 @@
                 "label": "GPU",
                 "type": "Bool"
             },
-            "inverse": {
-                "description": "Toggle inversion of the output values.",
-                "key": "inverse",
-                "label": "inverse",
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
                 "type": "Bool"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
             },
             "radius": {
                 "description": "TODO",
                 "key": "radius",
                 "label": "radius",
-                "type": "Float"
-            },
-            "saturate": {
-                "description": "A process that modifies the amplitude of elevations by first clamping them to a given interval and then scaling them so that the restricted interval matches the original input range. This enhances contrast in elevation variations while maintaining overall structure.",
-                "key": "saturate",
-                "label": "saturate",
-                "type": "Value range"
-            },
-            "smoothing": {
-                "description": "Enable or disable smoothing to reduce noise in the curvature computation.",
-                "key": "smoothing",
-                "label": "smoothing",
-                "type": "Bool"
-            },
-            "smoothing_radius": {
-                "description": "Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.",
-                "key": "smoothing_radius",
-                "label": "smoothing_radius",
                 "type": "Float"
             }
         },
@@ -8108,22 +8174,28 @@
         "description": "SelectTransitions returns a mask filled with 1 at the blending transition between two heightmaps, and 0 elsewhere.",
         "label": "SelectTransitions",
         "parameters": {
-            "inverse": {
-                "description": "Toggle inversion of the output values.",
-                "key": "inverse",
-                "label": "inverse",
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
                 "type": "Bool"
             },
-            "smoothing": {
-                "description": "Enable or disable smoothing to reduce noise in the curvature computation.",
-                "key": "smoothing",
-                "label": "smoothing",
-                "type": "Bool"
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
             },
-            "smoothing_radius": {
-                "description": "Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.",
-                "key": "smoothing_radius",
-                "label": "smoothing_radius",
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
                 "type": "Float"
             }
         },
@@ -8165,11 +8237,29 @@
                 "label": "GPU",
                 "type": "Bool"
             },
-            "inverse": {
-                "description": "Inverts the selection, highlighting ridges instead of valleys.",
-                "key": "inverse",
-                "label": "inverse",
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
                 "type": "Bool"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
             },
             "radius": {
                 "description": "Defines the search radius for valley detection, controlling how localized or broad the selection is.",
@@ -8182,18 +8272,6 @@
                 "key": "ridge_select",
                 "label": "ridge_select",
                 "type": "Bool"
-            },
-            "smoothing": {
-                "description": "Applies smoothing to reduce noise in curvature calculations, resulting in a cleaner selection.",
-                "key": "smoothing",
-                "label": "smoothing",
-                "type": "Bool"
-            },
-            "smoothing_radius": {
-                "description": "Defines the radius for the smoothing operation, determining how much curvature values are averaged over neighboring pixels.",
-                "key": "smoothing_radius",
-                "label": "smoothing_radius",
-                "type": "Float"
             }
         },
         "ports": {
