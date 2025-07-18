@@ -24,13 +24,11 @@ void setup_select_inward_outward_node(BaseNode *p_node)
 
   // attribute(s)
   ADD_ATTR(Vec2FloatAttribute, "center");
-  ADD_ATTR(BoolAttribute, "inverse", false);
-  ADD_ATTR(BoolAttribute, "smoothing", false);
-  ADD_ATTR(FloatAttribute, "smoothing_radius", 0.05f, 0.f, 0.2f);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key(
-      {"center", "_SEPARATOR_", "inverse", "smoothing", "smoothing_radius"});
+  p_node->set_attr_ordered_key({"center"});
+
+  setup_post_process_heightmap_attributes(p_node);
 }
 
 void compute_select_inward_outward_node(BaseNode *p_node)
@@ -58,16 +56,7 @@ void compute_select_inward_outward_node(BaseNode *p_node)
     p_out->smooth_overlap_buffers();
 
     // post-process
-    post_process_heightmap(p_node,
-                           *p_out,
-                           GET("inverse", BoolAttribute),
-                           GET("smoothing", BoolAttribute),
-                           GET("smoothing_radius", FloatAttribute),
-                           false, // saturate
-                           {0.f, 0.f},
-                           0.f,
-                           true, // force remap
-                           {0.f, 1.f});
+    post_process_heightmap(p_node, *p_out);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

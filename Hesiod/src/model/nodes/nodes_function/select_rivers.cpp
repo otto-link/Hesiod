@@ -25,19 +25,11 @@ void setup_select_rivers_node(BaseNode *p_node)
   // attribute(s)
   ADD_ATTR(FloatAttribute, "talus_ref", 0.1f, 0.01f, 10.f);
   ADD_ATTR(FloatAttribute, "clipping_ratio", 50.f, 0.1f, 100.f);
-  ADD_ATTR(BoolAttribute, "inverse", false);
-  ADD_ATTR(BoolAttribute, "smoothing", false);
-  ADD_ATTR(FloatAttribute, "smoothing_radius", 0.05f, 0.f, 0.2f);
-  ADD_ATTR(BoolAttribute, "remap", true);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"talus_ref",
-                                "clipping_ratio",
-                                "_SEPARATOR_",
-                                "inverse",
-                                "smoothing",
-                                "smoothing_radius",
-                                "remap"});
+  p_node->set_attr_ordered_key({"talus_ref", "clipping_ratio"});
+
+  setup_post_process_heightmap_attributes(p_node);
 }
 
 void compute_select_rivers_node(BaseNode *p_node)
@@ -62,16 +54,7 @@ void compute_select_rivers_node(BaseNode *p_node)
     p_out->from_array_interp(z_array);
 
     // post-process
-    post_process_heightmap(p_node,
-                           *p_out,
-                           GET("inverse", BoolAttribute),
-                           GET("smoothing", BoolAttribute),
-                           GET("smoothing_radius", FloatAttribute),
-                           false, // saturate
-                           {0.f, 0.f},
-                           0.f,
-                           GET("remap", BoolAttribute),
-                           {0.f, 1.f});
+    post_process_heightmap(p_node, *p_out);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());
