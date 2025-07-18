@@ -32,7 +32,14 @@ Operator/Transform
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|GPU|Bool|Toogle GPU acceleration on or off.|
+|post_gain|Float|No description|
+|post_inverse|Bool|No description|
+|post_mix|Float|No description|
+|post_mix_method|Enumeration|No description|
+|post_remap|Value range|No description|
+|post_smoothing_radius|Float|No description|
+|scaling.x|Float|No description|
+|scaling.y|Float|No description|
 
 # Example
 
