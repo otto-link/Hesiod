@@ -2514,6 +2514,42 @@
         "description": "Apply a Gaussian function to every values.",
         "label": "GaussianDecay",
         "parameters": {
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
+                "type": "Bool"
+            },
+            "post_mix": {
+                "description": "No description",
+                "key": "post_mix",
+                "label": "post_mix",
+                "type": "Float"
+            },
+            "post_mix_method": {
+                "description": "No description",
+                "key": "post_mix_method",
+                "label": "post_mix_method",
+                "type": "Enumeration"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
+            },
             "sigma": {
                 "description": "Gaussian half-width, represents the distance from the peak of the Gaussian curve to the points where the amplitude drops to half of its maximum value.",
                 "key": "sigma",
@@ -10279,6 +10315,12 @@
         "description": "Generates a Voronoi heightmap based on spatial cell distances, with optional jitter, warping, and control inputs.",
         "label": "Voronoi",
         "parameters": {
+            "exp_sigma": {
+                "description": "No description",
+                "key": "exp_sigma",
+                "label": "exp_sigma",
+                "type": "Float"
+            },
             "jitter.x": {
                 "description": "Amount of random jitter along the X-axis applied to Voronoi seed positions.",
                 "key": "jitter.x",
@@ -10384,6 +10426,12 @@
         "description": "Generates a fractal Voronoi pattern using fBm (fractal Brownian motion) based on distance fields and multiple noise layers.",
         "label": "VoronoiFbm",
         "parameters": {
+            "exp_sigma": {
+                "description": "No description",
+                "key": "exp_sigma",
+                "label": "exp_sigma",
+                "type": "Float"
+            },
             "jitter.x": {
                 "description": "Amount of random jitter applied to seed points along the X-axis.",
                 "key": "jitter.x",

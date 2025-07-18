@@ -33,6 +33,7 @@ Primitive/Coherent
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|exp_sigma|Float|No description|
 |jitter.x|Float|Amount of random jitter along the X-axis applied to Voronoi seed positions.|
 |jitter.y|Float|Amount of random jitter along the Y-axis applied to Voronoi seed positions.|
 |k_smoothing|Float|No description|
