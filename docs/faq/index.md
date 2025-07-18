@@ -26,7 +26,7 @@ A: The source code is released under the **GNU General Public License v3.0 (GPL-
 
 As for what you create **with** the app (e.g., terrain, heightmaps, meshes), you’re free to use those **without any restriction**, including in **personal or commercial projects** — no crediting required (though it's always appreciated!).
 
-The only exception: **you’re not allowed to sell the app itself**, or distribute/sell generated **assets or presets** as standalone commercial products.
+**You’re not allowed to sell the app itself**, or distribute/sell generated **assets or presets** as standalone commercial products.
 
 ---
 
