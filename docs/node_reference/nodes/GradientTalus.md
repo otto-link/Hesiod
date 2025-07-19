@@ -30,7 +30,10 @@ Math/Gradient
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|post_gain|Float|No description|
+|post_inverse|Bool|No description|
+|post_remap|Value range|No description|
+|post_smoothing_radius|Float|No description|
 
 # Example
 
