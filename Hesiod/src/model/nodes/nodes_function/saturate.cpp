@@ -2,6 +2,7 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include "highmap/filters.hpp"
+#include "highmap/operator.hpp"
 
 #include "attributes.hpp"
 
@@ -23,11 +24,57 @@ void setup_saturate_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(RangeAttribute, "range");
   ADD_ATTR(FloatAttribute, "k_smoothing", 0.1f, 0.01, 1.f);
+  ADD_ATTR(RangeAttribute, "range");
+
+  // link histogram
+  {
+    // function to compute the histogram
+    auto lambda = [p_node]()
+    {
+      LOG->debug("in histogram function");
+
+      std::pair<std::vector<float>, std::vector<float>> hist;
+
+      hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
+
+      if (p_in)
+      {
+        float vmin = p_in->min();
+        float vmax = p_in->max();
+
+        if (vmin != vmax)
+        {
+          int   nbins = p_in->shape.x;
+          float a = 1.f / (vmax - vmin) * (float)(nbins - 1);
+          float b = -vmin / (vmax - vmin) * (float)(nbins - 1);
+
+          // TODO distribute
+          hmap::Array array = p_in->to_array();
+
+          // values
+          bool endpoint = false;
+          hist.first = hmap::linspace(vmin, vmax, nbins, endpoint);
+
+          // cumul
+          hist.second.resize(nbins);
+
+          for (int j = 0; j < array.shape.y; j++)
+            for (int i = 0; i < array.shape.x; i++)
+              hist.second[(int)(a * array(i, j) + b)] += 1;
+        }
+      }
+
+      return hist;
+    };
+
+    // assign function to attr
+    GET_REF("range", RangeAttribute)->set_histogram_fct(lambda);
+    GET_REF("range", RangeAttribute)->set_autorange(true);
+  }
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"range", "k_smoothing"});
+  p_node->set_attr_ordered_key({"k_smoothing", "range"});
 
   setup_post_process_heightmap_attributes(p_node, true);
 }
