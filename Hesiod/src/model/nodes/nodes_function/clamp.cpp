@@ -32,6 +32,9 @@ void setup_clamp_node(BaseNode *p_node)
   ADD_ATTR(FloatAttribute, "k_max", 0.05f, 0.01f, 1.f);
   ADD_ATTR(BoolAttribute, "remap", false);
 
+  // link histogram for RangeAttribute
+  setup_histogram_for_range_attribute(p_node, "clamp", "input");
+
   // attribute(s) order
   p_node->set_attr_ordered_key(
       {"clamp", "smooth_min", "k_min", "smooth_max", "k_max", "remap"});

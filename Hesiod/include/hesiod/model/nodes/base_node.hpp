@@ -119,4 +119,10 @@ private:
   DataPreview *data_preview = nullptr; // owned by gngui::GraphicsNode
 };
 
+// helpers
+
+void setup_histogram_for_range_attribute(BaseNode          *p_node,
+                                         const std::string &attribute_key,
+                                         const std::string &port_id);
+
 } // namespace hesiod
