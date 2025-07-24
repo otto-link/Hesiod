@@ -634,28 +634,6 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
 
     // --- add attributes
 
-    // change the attribute widget layout spacing a posteriori
-    QVBoxLayout *retrieved_layout = qobject_cast<QVBoxLayout *>(
-        attributes_widget->layout());
-    if (retrieved_layout)
-    {
-      retrieved_layout->setSpacing(0);
-      retrieved_layout->setContentsMargins(0, 0, 0, 0);
-
-      for (int i = 0; i < retrieved_layout->count(); ++i)
-      {
-        QWidget *child = retrieved_layout->itemAt(i)->widget();
-        if (!child)
-          continue;
-
-        if (auto *inner_layout = child->layout())
-        {
-          inner_layout->setContentsMargins(32, 4, 32, 4);
-          inner_layout->setSpacing(4);
-        }
-      }
-    }
-
     // fit attribute settings within a scroll area
     QScrollArea *scroll_area = new QScrollArea(this);
     scroll_area->setWidget(attributes_widget);
