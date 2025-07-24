@@ -72,10 +72,8 @@ void NodeSettingsWidget::setup_connections()
                 this,
                 &NodeSettingsWidget::update_content);
 
-  this->connect(p_graph_node_widget,
-                &GraphNodeWidget::node_settings_have_changed,
-                [this]() { this->update_content(); });
-
+  // this covers also the case where the node settings has been
+  // changed elsewhere (in the context-menu settings for instance)
   this->connect(p_graph_node_widget->get_p_graph_node(),
                 &GraphNode::update_finished,
                 [this]() { this->update_content(); });

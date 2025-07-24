@@ -514,6 +514,13 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
         window_title,
         add_save_reset_state_buttons);
 
+    QLayout *retrieved_layout = qobject_cast<QLayout *>(attributes_widget->layout());
+    if (retrieved_layout)
+    {
+      retrieved_layout->setSpacing(6);
+      retrieved_layout->setContentsMargins(8, 0, 8, 0);
+    }
+
     // --- add label
 
     {
@@ -661,8 +668,6 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
                   {
                     std::string node_id = p_node->get_id();
                     this->p_graph_node->update(node_id);
-
-                    Q_EMIT this->node_settings_have_changed(this->get_id(), node_id);
                   });
 
     this->connect(attributes_widget,
@@ -671,8 +676,6 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
                   {
                     std::string node_id = p_node->get_id();
                     this->p_graph_node->update(node_id);
-
-                    Q_EMIT this->node_settings_have_changed(this->get_id(), node_id);
                   });
 
     // --- show menu
