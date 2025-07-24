@@ -1,6 +1,8 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include <QVBoxLayout>
+
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 
@@ -38,14 +40,25 @@ gngui::PortType BaseNode::get_port_type(int port_index) const
 
 QWidget *BaseNode::get_qwidget_ref()
 {
-  if (!this->data_preview)
-    this->data_preview = new DataPreview(this);
+  QWidget *widget = new QWidget(this);
 
-  // eventually owned by gngui::GraphicsNode
+  QVBoxLayout *layout = new QVBoxLayout(this);
+  layout->setSpacing(0);
+  layout->setContentsMargins(0, 0, 0, 0);
+  widget->setLayout(layout);
+
+  // add the data preview by default
+  if (!this->data_preview)
+  {
+    this->data_preview = new DataPreview(this);
+    layout->addWidget(this->data_preview);
+  }
+
+  // add specific content if any
   if (this->qwidget_fct)
-    return this->qwidget_fct(this);
-  else
-    return (QWidget *)this->data_preview;
+    layout->addWidget(this->qwidget_fct(this));
+
+  return widget;
 }
 
 std::string BaseNode::get_tool_tip_text()

@@ -20,18 +20,7 @@ void add_export_button(BaseNode *p_node)
 
   auto lambda = [](BaseNode *p_node)
   {
-    QWidget *widget = new QWidget(p_node);
-
-    QVBoxLayout *layout = new QVBoxLayout(p_node);
-    layout->setSpacing(0);
-    layout->setContentsMargins(0, 0, 0, 0);
-
-    widget->setLayout(layout);
-
-    layout->addWidget(p_node->get_data_preview_ref());
-
     QPushButton *button = new QPushButton("Export!", p_node);
-    layout->addWidget(button);
 
     p_node->connect(button,
                     &QPushButton::pressed,
@@ -48,7 +37,7 @@ void add_export_button(BaseNode *p_node)
                       GET_REF("auto_export", BoolAttribute)->set_value(auto_export);
                     });
 
-    return widget;
+    return (QWidget *)button;
   };
 
   p_node->set_qwidget_fct(lambda);
