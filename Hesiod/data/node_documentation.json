@@ -10757,6 +10757,111 @@
             }
         }
     },
+    "Vororand": {
+        "category": "Primitive/Coherent",
+        "description": "No description available",
+        "label": "Vororand",
+        "parameters": {
+            "density": {
+                "description": "No description",
+                "key": "density",
+                "label": "density",
+                "type": "Float"
+            },
+            "exp_sigma": {
+                "description": "No description",
+                "key": "exp_sigma",
+                "label": "exp_sigma",
+                "type": "Float"
+            },
+            "k_smoothing": {
+                "description": "No description",
+                "key": "k_smoothing",
+                "label": "k_smoothing",
+                "type": "Float"
+            },
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
+                "type": "Bool"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
+            },
+            "return_type": {
+                "description": "No description",
+                "key": "return_type",
+                "label": "return_type",
+                "type": "Enumeration"
+            },
+            "seed": {
+                "description": "No description",
+                "key": "seed",
+                "label": "seed",
+                "type": "Random seed number"
+            },
+            "sqrt_output": {
+                "description": "No description",
+                "key": "sqrt_output",
+                "label": "sqrt_output",
+                "type": "Bool"
+            },
+            "variability": {
+                "description": "No description",
+                "key": "variability",
+                "label": "variability",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "cloud": {
+                "caption": "cloud",
+                "data_type": "Cloud",
+                "description": "No description",
+                "type": "input"
+            },
+            "dx": {
+                "caption": "dx",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "dy": {
+                "caption": "dy",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "envelope": {
+                "caption": "envelope",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "out": {
+                "caption": "out",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "output"
+            }
+        }
+    },
     "Warp": {
         "category": "Operator/Transform",
         "description": "The Warp node transforms a base heightmap by warping/pushing pixels as defined by the input displacements.",

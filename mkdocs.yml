@@ -203,6 +203,7 @@ nav:
     - 'node_reference/nodes/Voronoi.md'
     - 'node_reference/nodes/VoronoiFbm.md'
     - 'node_reference/nodes/Voronoise.md'
+    - 'node_reference/nodes/Vororand.md'
     - 'node_reference/nodes/Warp.md'
     - 'node_reference/nodes/WarpDownslope.md'
     - 'node_reference/nodes/WaveDune.md'

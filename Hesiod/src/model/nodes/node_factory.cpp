@@ -330,6 +330,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Voronoi", "Primitive/Coherent"},
       {"VoronoiFbm", "Primitive/Coherent"},
       {"Voronoise", "Primitive/Coherent"},
+      {"Vororand", "Primitive/Coherent"},
       {"Warp", "Operator/Transform"},
       {"WarpDownslope", "WIP"}, // Operator/Transform
       {"WaveDune", "Primitive/Function"},
@@ -566,6 +567,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(Voronoi, voronoi);
     SETUP_NODE(VoronoiFbm, voronoi_fbm);
     SETUP_NODE(Voronoise, voronoise);
+    SETUP_NODE(Vororand, vororand);
     SETUP_NODE(Warp, warp);
     SETUP_NODE(WarpDownslope, warp_downslope);
     SETUP_NODE(WaveDune, wave_dune);
