@@ -200,6 +200,8 @@ nav:
     - 'node_reference/nodes/Translate.md'
     - 'node_reference/nodes/Unsphericity.md'
     - 'node_reference/nodes/ValleyWidth.md'
+    - 'node_reference/nodes/Vorolines.md'
+    - 'node_reference/nodes/VorolinesFbm.md'
     - 'node_reference/nodes/Voronoi.md'
     - 'node_reference/nodes/VoronoiFbm.md'
     - 'node_reference/nodes/Voronoise.md'
