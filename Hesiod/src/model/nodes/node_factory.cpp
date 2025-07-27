@@ -327,6 +327,8 @@ std::map<std::string, std::string> get_node_inventory()
       {"Translate", "Operator/Transform"},
       {"Unsphericity", "Features/Landform"},
       {"ValleyWidth", "Features/Landform"},
+      {"Vorolines", "Primitive/Coherent"},
+      {"VorolinesFbm", "Primitive/Coherent"},
       {"Voronoi", "Primitive/Coherent"},
       {"VoronoiFbm", "Primitive/Coherent"},
       {"Voronoise", "Primitive/Coherent"},
@@ -564,6 +566,8 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(Toggle, toggle);
     SETUP_NODE(Unsphericity, unsphericity);
     SETUP_NODE(ValleyWidth, valley_width);
+    SETUP_NODE(Vorolines, vorolines);
+    SETUP_NODE(VorolinesFbm, vorolines_fbm);
     SETUP_NODE(Voronoi, voronoi);
     SETUP_NODE(VoronoiFbm, voronoi_fbm);
     SETUP_NODE(Voronoise, voronoise);
