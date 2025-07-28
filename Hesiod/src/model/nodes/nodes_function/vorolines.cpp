@@ -38,7 +38,7 @@ void setup_vorolines_node(BaseNode *p_node)
   ADD_ATTR(FloatAttribute, "exp_sigma", 0.1f, 0.f, 0.1f);
   ADD_ATTR(FloatAttribute, "angle", 0.f, 0.f, 180.f);
   ADD_ATTR(FloatAttribute, "angle_span", 90.f, 0.f, 180.f);
-  ADD_ATTR(BoolAttribute, "sqrt_output", true);
+  ADD_ATTR(BoolAttribute, "sqrt_output", false);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"return_type",
