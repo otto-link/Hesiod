@@ -9,6 +9,7 @@
 
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
+#include "hesiod/model/nodes/base_node_gui.hpp"
 
 using namespace attr;
 
@@ -20,10 +21,13 @@ void setup_cloud_node(BaseNode *p_node)
   LOG->trace("setup node {}", p_node->get_label());
 
   // port(s)
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "background");
   p_node->add_port<hmap::Cloud>(gnode::PortType::OUT, "cloud");
 
   // attribute(s)
   ADD_ATTR(CloudAttribute, "cloud");
+
+  setup_background_image_for_cloud_attribute(p_node, "cloud", "background");
 }
 
 void compute_cloud_node(BaseNode *p_node)
