@@ -24,16 +24,16 @@ void setup_expand_shrink_node(BaseNode *p_node)
   // port(s)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
+  p_node->add_port<hmap::Array>(gnode::PortType::IN, "kernel");
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
   ADD_ATTR(EnumAttribute, "kernel", kernel_type_map, "cubic_pulse");
   ADD_ATTR(FloatAttribute, "radius", 0.05f, 0.01f, 0.2f);
   ADD_ATTR(BoolAttribute, "shrink", "shrink", "expand", false);
-  ADD_ATTR(BoolAttribute, "GPU", HSD_DEFAULT_GPU_MODE);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"kernel", "radius", "shrink", "_SEPARATOR_", "GPU"});
+  p_node->set_attr_ordered_key({"kernel", "radius", "shrink"});
 
   setup_pre_process_mask_attributes(p_node);
   setup_post_process_heightmap_attributes(p_node, true);
@@ -58,63 +58,50 @@ void compute_expand_shrink_node(BaseNode *p_node)
     // copy the input heightmap
     *p_out = *p_in;
 
-    int ir = std::max(1, (int)(GET("radius", FloatAttribute) * p_out->shape.x));
+    // kernel definition - use input kernel by default, if not switch
+    // to built-in kernels
+    hmap::Array  kernel_array;
+    hmap::Array *p_kernel = p_node->get_value_ref<hmap::Array>("kernel");
 
-    // kernel definition
-    hmap::Array     kernel_array;
-    hmap::Vec2<int> kernel_shape = {2 * ir + 1, 2 * ir + 1};
+    if (p_kernel)
+    {
+      kernel_array = *p_kernel;
+    }
+    else
+    {
+      int ir = std::max(1, (int)(GET("radius", FloatAttribute) * p_out->shape.x));
+      hmap::Vec2<int> kernel_shape = {2 * ir + 1, 2 * ir + 1};
 
-    kernel_array = hmap::get_kernel(kernel_shape,
-                                    (hmap::KernelType)GET("kernel", EnumAttribute));
+      kernel_array = hmap::get_kernel(kernel_shape,
+                                      (hmap::KernelType)GET("kernel", EnumAttribute));
+    }
 
     // core operator
     std::function<void(hmap::Array &, hmap::Array *)> lambda;
 
-    if (GET("GPU", BoolAttribute))
+    if (GET("shrink", BoolAttribute))
     {
-      if (GET("shrink", BoolAttribute))
-        hmap::transform(
-            {p_out, p_mask},
-            [&kernel_array](std::vector<hmap::Array *> p_arrays)
-            {
-              hmap::Array *pa_out = p_arrays[0];
-              hmap::Array *pa_mask = p_arrays[1];
-              hmap::gpu::shrink(*pa_out, kernel_array, pa_mask);
-            },
-            p_node->get_config_ref()->hmap_transform_mode_gpu);
-      else
-        hmap::transform(
-            {p_out, p_mask},
-            [&kernel_array](std::vector<hmap::Array *> p_arrays)
-            {
-              hmap::Array *pa_out = p_arrays[0];
-              hmap::Array *pa_mask = p_arrays[1];
-              hmap::gpu::expand(*pa_out, kernel_array, pa_mask);
-            },
-            p_node->get_config_ref()->hmap_transform_mode_gpu);
+      hmap::transform(
+          {p_out, p_mask},
+          [&kernel_array](std::vector<hmap::Array *> p_arrays)
+          {
+            hmap::Array *pa_out = p_arrays[0];
+            hmap::Array *pa_mask = p_arrays[1];
+            hmap::gpu::shrink(*pa_out, kernel_array, pa_mask);
+          },
+          p_node->get_config_ref()->hmap_transform_mode_gpu);
     }
     else
     {
-      if (GET("shrink", BoolAttribute))
-        hmap::transform(
-            {p_out, p_mask},
-            [&kernel_array](std::vector<hmap::Array *> p_arrays)
-            {
-              hmap::Array *pa_out = p_arrays[0];
-              hmap::Array *pa_mask = p_arrays[1];
-              hmap::shrink(*pa_out, kernel_array, pa_mask);
-            },
-            p_node->get_config_ref()->hmap_transform_mode_cpu);
-      else
-        hmap::transform(
-            {p_out, p_mask},
-            [&kernel_array](std::vector<hmap::Array *> p_arrays)
-            {
-              hmap::Array *pa_out = p_arrays[0];
-              hmap::Array *pa_mask = p_arrays[1];
-              hmap::expand(*pa_out, kernel_array, pa_mask);
-            },
-            p_node->get_config_ref()->hmap_transform_mode_cpu);
+      hmap::transform(
+          {p_out, p_mask},
+          [&kernel_array](std::vector<hmap::Array *> p_arrays)
+          {
+            hmap::Array *pa_out = p_arrays[0];
+            hmap::Array *pa_mask = p_arrays[1];
+            hmap::gpu::expand(*pa_out, kernel_array, pa_mask);
+          },
+          p_node->get_config_ref()->hmap_transform_mode_gpu);
     }
 
     p_out->smooth_overlap_buffers();

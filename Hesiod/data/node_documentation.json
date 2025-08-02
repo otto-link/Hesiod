@@ -1758,12 +1758,6 @@
         "description": "ExpandShrink is a maximum/minimum filter with a weighted kernel. It can be used to enhance or extract features while preserving the essential structure of the heightmap.",
         "label": "ExpandShrink",
         "parameters": {
-            "GPU": {
-                "description": "Toogle GPU acceleration on or off.",
-                "key": "GPU",
-                "label": "GPU",
-                "type": "Bool"
-            },
             "kernel": {
                 "description": "Weighting kernel. Available values: biweight, cone, cone_smooth, cubic_pulse, disk, lorentzian, smooth_cosine, square, tricube.",
                 "key": "kernel",
@@ -1854,6 +1848,12 @@
                 "caption": "input",
                 "data_type": "Heightmap",
                 "description": "Input heightmap.",
+                "type": "input"
+            },
+            "kernel": {
+                "caption": "kernel",
+                "data_type": "Array",
+                "description": "No description",
                 "type": "input"
             },
             "mask": {

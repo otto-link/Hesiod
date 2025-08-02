@@ -19,6 +19,7 @@ Filter/Recast
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |input|Heightmap|Input heightmap.|
+|kernel|Array|No description|
 |mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
 
 # Outputs
@@ -31,7 +32,6 @@ Filter/Recast
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|GPU|Bool|Toogle GPU acceleration on or off.|
 |kernel|Enumeration|Weighting kernel. Available values: biweight, cone, cone_smooth, cubic_pulse, disk, lorentzian, smooth_cosine, square, tricube.|
 |mask_activate|Bool|No description|
 |mask_gain|Float|No description|
