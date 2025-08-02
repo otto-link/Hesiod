@@ -170,6 +170,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Detrend", "WIP"},                     // Filter/Recurve
       {"DiffusionLimitedAggregation", "WIP"}, // Primitive/Coherent
       {"Dilation", "Operator/Morphology"},
+      {"DirectionalBlur", "WIP"}, // Filter/Smoothing
       {"DistanceTransform", "Operator/Morphology"},
       {"Erosion", "Operator/Morphology"},
       {"ExpandShrink", "Filter/Recast"},
@@ -413,6 +414,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(Detrend, detrend);
     SETUP_NODE(DiffusionLimitedAggregation, diffusion_limited_aggregation);
     SETUP_NODE(Dilation, dilation);
+    SETUP_NODE(DirectionalBlur, directional_blur);
     SETUP_NODE(DistanceTransform, distance_transform);
     SETUP_NODE(Erosion, erosion);
     SETUP_NODE(ExpandShrink, expand_shrink);

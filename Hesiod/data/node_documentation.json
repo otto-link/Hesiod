@@ -1223,17 +1223,47 @@
         "description": "ConvolveSVD performs convolution using a Singular Value Decomposition (SVD) of the kernel to accelerate the process.",
         "label": "ConvolveSVD",
         "parameters": {
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
+                "type": "Bool"
+            },
+            "post_mix": {
+                "description": "No description",
+                "key": "post_mix",
+                "label": "post_mix",
+                "type": "Float"
+            },
+            "post_mix_method": {
+                "description": "No description",
+                "key": "post_mix_method",
+                "label": "post_mix_method",
+                "type": "Enumeration"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
+            },
             "rank": {
                 "description": "Rank of the singular value decomposition.",
                 "key": "rank",
                 "label": "rank",
                 "type": "Integer"
-            },
-            "remap": {
-                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap",
-                "label": "remap",
-                "type": "Value range"
             }
         },
         "ports": {
@@ -1653,6 +1683,87 @@
                 "caption": "output",
                 "data_type": "Heightmap",
                 "description": "Dilated heightmap.",
+                "type": "output"
+            }
+        }
+    },
+    "DirectionalBlur": {
+        "category": "WIP",
+        "description": "No description available",
+        "label": "DirectionalBlur",
+        "parameters": {
+            "angle": {
+                "description": "No description",
+                "key": "angle",
+                "label": "angle",
+                "type": "Float"
+            },
+            "intensity": {
+                "description": "No description",
+                "key": "intensity",
+                "label": "intensity",
+                "type": "Float"
+            },
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
+                "type": "Bool"
+            },
+            "post_mix": {
+                "description": "No description",
+                "key": "post_mix",
+                "label": "post_mix",
+                "type": "Float"
+            },
+            "post_mix_method": {
+                "description": "No description",
+                "key": "post_mix_method",
+                "label": "post_mix_method",
+                "type": "Enumeration"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
+            },
+            "radius": {
+                "description": "No description",
+                "key": "radius",
+                "label": "radius",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "angle": {
+                "caption": "angle",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "input": {
+                "caption": "input",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "Heightmap",
+                "description": "No description",
                 "type": "output"
             }
         }
@@ -4037,6 +4148,39 @@
             }
         }
     },
+    "KernelDiskSmooth": {
+        "category": "Primitive/Kernel",
+        "description": "No description available",
+        "label": "KernelDiskSmooth",
+        "parameters": {
+            "normalize": {
+                "description": "No description",
+                "key": "normalize",
+                "label": "normalize",
+                "type": "Bool"
+            },
+            "r_cutoff": {
+                "description": "No description",
+                "key": "r_cutoff",
+                "label": "r_cutoff",
+                "type": "Float"
+            },
+            "radius": {
+                "description": "No description",
+                "key": "radius",
+                "label": "radius",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "kernel": {
+                "caption": "kernel",
+                "data_type": "Array",
+                "description": "No description",
+                "type": "output"
+            }
+        }
+    },
     "KernelGabor": {
         "category": "Primitive/Kernel",
         "description": "KernelGabor generates a Gabor kernel.",
@@ -4462,17 +4606,41 @@
         "description": "TODO",
         "label": "MeanShift",
         "parameters": {
-            "GPU": {
-                "description": "Toogle GPU acceleration on or off.",
-                "key": "GPU",
-                "label": "GPU",
-                "type": "Bool"
-            },
             "iterations": {
                 "description": "TODO",
                 "key": "iterations",
                 "label": "iterations",
                 "type": "Integer"
+            },
+            "mask_activate": {
+                "description": "No description",
+                "key": "mask_activate",
+                "label": "mask_activate",
+                "type": "Bool"
+            },
+            "mask_gain": {
+                "description": "No description",
+                "key": "mask_gain",
+                "label": "mask_gain",
+                "type": "Float"
+            },
+            "mask_inverse": {
+                "description": "No description",
+                "key": "mask_inverse",
+                "label": "mask_inverse",
+                "type": "Bool"
+            },
+            "mask_radius": {
+                "description": "No description",
+                "key": "mask_radius",
+                "label": "mask_radius",
+                "type": "Float"
+            },
+            "mask_type": {
+                "description": "No description",
+                "key": "mask_type",
+                "label": "mask_type",
+                "type": "Choice"
             },
             "post_gain": {
                 "description": "No description",
@@ -4534,6 +4702,12 @@
                 "caption": "input",
                 "data_type": "Heightmap",
                 "description": "TODO",
+                "type": "input"
+            },
+            "mask": {
+                "caption": "mask",
+                "data_type": "Heightmap",
+                "description": "No description",
                 "type": "input"
             },
             "output": {

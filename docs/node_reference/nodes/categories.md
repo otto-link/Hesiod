@@ -34,8 +34,8 @@ Node Categories
 |Primitive|Coherent|Dendry, GaborWaveFbm, Gavoronoise, Noise, NoiseFbm, NoiseIq, NoiseJordan, NoiseParberry, NoisePingpong, NoiseRidged, NoiseSwiss, Stamping, Vorolines, VorolinesFbm, Voronoi, VoronoiFbm, Voronoise, Vororand|
 |Primitive|Function|Bump, GaussianPulse, Paraboloid, Rift, Slope, Step, WaveDune, WaveSine, WaveSquare, WaveTriangular|
 |Primitive|Geological|BasaltField, Caldera, Crater, MountainRangeRadial|
-|Primitive|Kernel|KernelGabor, KernelPrim|
+|Primitive|Kernel|KernelDiskSmooth, KernelGabor, KernelPrim|
 |Primitive|Random|White, WhiteDensityMap, WhiteSparse|
 |Routing||Broadcast, Receive, Thru, Toggle|
 |Texture||ColorizeCmap, ColorizeGradient, ColorizeSolid, MixNormalMap, MixTexture, SetAlpha, TextureQuiltingExpand, TextureQuiltingShuffle, TextureUvChecker|
-|WIP||Detrend, DiffusionLimitedAggregation, ExportAsCubemap, FillTalus, FlowStream, HydraulicBlur, HydraulicMusgrave, HydraulicProcedural, HydraulicSchott, HydraulicStream, HydraulicStreamUpscaleAmplification, HydraulicVpipes, Kuwahara, MeanShift, MedianPseudo, ReverseMidpoint, SedimentDeposition, ThermalFlatten, ThermalRib, ThermalSchott, WarpDownslope, Wrinkle|
+|WIP||Detrend, DiffusionLimitedAggregation, DirectionalBlur, ExportAsCubemap, FillTalus, FlowStream, HydraulicBlur, HydraulicMusgrave, HydraulicProcedural, HydraulicSchott, HydraulicStream, HydraulicStreamUpscaleAmplification, HydraulicVpipes, Kuwahara, MeanShift, MedianPseudo, ReverseMidpoint, SedimentDeposition, ThermalFlatten, ThermalRib, ThermalSchott, WarpDownslope, Wrinkle|
