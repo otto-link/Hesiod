@@ -178,6 +178,7 @@ nav:
     - 'node_reference/nodes/SmoothFillSmearPeaks.md'
     - 'node_reference/nodes/Smoothstep.md'
     - 'node_reference/nodes/Stamping.md'
+    - 'node_reference/nodes/StdLocal.md'
     - 'node_reference/nodes/SteepenConvective.md'
     - 'node_reference/nodes/Step.md'
     - 'node_reference/nodes/Stratify.md'

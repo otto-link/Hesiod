@@ -305,6 +305,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"SmoothFillSmearPeaks", "Filter/Smoothing"},
       {"Smoothstep", "Math/Base"},
       {"Stamping", "Primitive/Coherent"},
+      {"StdLocal", "Features"},
       {"SteepenConvective", "Filter/Recast"},
       {"Step", "Primitive/Function"},
       {"Stratify", "Erosion/Stratify"},
@@ -545,6 +546,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(SmoothFillSmearPeaks, smooth_fill_smear_peaks);
     SETUP_NODE(Smoothstep, smoothstep);
     SETUP_NODE(Stamping, stamping);
+    SETUP_NODE(StdLocal, std_local);
     SETUP_NODE(SteepenConvective, steepen_convective);
     SETUP_NODE(Step, step);
     SETUP_NODE(Stratify, stratify);
