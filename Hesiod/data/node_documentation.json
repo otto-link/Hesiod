@@ -1770,6 +1770,72 @@
                 "label": "kernel",
                 "type": "Enumeration"
             },
+            "mask_activate": {
+                "description": "No description",
+                "key": "mask_activate",
+                "label": "mask_activate",
+                "type": "Bool"
+            },
+            "mask_gain": {
+                "description": "No description",
+                "key": "mask_gain",
+                "label": "mask_gain",
+                "type": "Float"
+            },
+            "mask_inverse": {
+                "description": "No description",
+                "key": "mask_inverse",
+                "label": "mask_inverse",
+                "type": "Bool"
+            },
+            "mask_radius": {
+                "description": "No description",
+                "key": "mask_radius",
+                "label": "mask_radius",
+                "type": "Float"
+            },
+            "mask_type": {
+                "description": "No description",
+                "key": "mask_type",
+                "label": "mask_type",
+                "type": "Choice"
+            },
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
+                "type": "Bool"
+            },
+            "post_mix": {
+                "description": "No description",
+                "key": "post_mix",
+                "label": "post_mix",
+                "type": "Float"
+            },
+            "post_mix_method": {
+                "description": "No description",
+                "key": "post_mix_method",
+                "label": "post_mix_method",
+                "type": "Enumeration"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
+            },
             "radius": {
                 "description": "Filter radius with respect to the domain size.",
                 "key": "radius",

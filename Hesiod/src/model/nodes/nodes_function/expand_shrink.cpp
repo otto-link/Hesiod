@@ -34,6 +34,9 @@ void setup_expand_shrink_node(BaseNode *p_node)
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"kernel", "radius", "shrink", "_SEPARATOR_", "GPU"});
+
+  setup_pre_process_mask_attributes(p_node);
+  setup_post_process_heightmap_attributes(p_node, true);
 }
 
 void compute_expand_shrink_node(BaseNode *p_node)
@@ -48,6 +51,9 @@ void compute_expand_shrink_node(BaseNode *p_node)
   {
     hmap::Heightmap *p_mask = p_node->get_value_ref<hmap::Heightmap>("mask");
     hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
+
+    // prepare mask
+    std::shared_ptr<hmap::Heightmap> sp_mask = pre_process_mask(p_node, p_mask, *p_in);
 
     // copy the input heightmap
     *p_out = *p_in;
@@ -112,6 +118,9 @@ void compute_expand_shrink_node(BaseNode *p_node)
     }
 
     p_out->smooth_overlap_buffers();
+
+    // post-process
+    post_process_heightmap(p_node, *p_out, p_in);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());
