@@ -146,6 +146,7 @@ DECLARE_NODE(hydraulic_vpipes);
 DECLARE_NODE(import_heightmap)
 DECLARE_NODE(import_texture)
 DECLARE_NODE(inverse)
+DECLARE_NODE(kernel_disk_smooth)
 DECLARE_NODE(kernel_gabor)
 DECLARE_NODE(kernel_prim)
 DECLARE_NODE(kmeans_clustering2)

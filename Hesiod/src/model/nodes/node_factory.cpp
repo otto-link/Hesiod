@@ -210,6 +210,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"ImportHeightmap", "IO/Files"},
       {"ImportTexture", "IO/Files"},
       {"Inverse", "Math/Base"},
+      {"KernelDiskSmooth", "Primitive/Kernel"},
       {"KernelGabor", "Primitive/Kernel"},
       {"KernelPrim", "Primitive/Kernel"},
       {"KmeansClustering2", "Features/Clustering"},
@@ -453,6 +454,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(ImportHeightmap, import_heightmap);
     SETUP_NODE(ImportTexture, import_texture);
     SETUP_NODE(Inverse, inverse);
+    SETUP_NODE(KernelDiskSmooth, kernel_disk_smooth);
     SETUP_NODE(KernelGabor, kernel_gabor);
     SETUP_NODE(KernelPrim, kernel_prim);
     SETUP_NODE(KmeansClustering2, kmeans_clustering2);
