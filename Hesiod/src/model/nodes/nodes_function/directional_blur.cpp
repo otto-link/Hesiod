@@ -27,7 +27,7 @@ void setup_directional_blur_node(BaseNode *p_node)
   // attribute(s)
   ADD_ATTR(FloatAttribute, "radius", 0.05f, 0.f, 0.2f);
   ADD_ATTR(FloatAttribute, "angle", 0.f, -180.f, 180.f);
-  ADD_ATTR(FloatAttribute, "intensity", 1.f, -0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "intensity", 1.f, 0.f, 1.f);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"radius", "angle", "intensity"});
@@ -63,7 +63,11 @@ void compute_directional_blur_node(BaseNode *p_node)
             angle_deg += (*pa_angle) * 180.f / M_PI;
 
           *pa_out = *pa_in;
-          hmap::directional_blur(*pa_out, ir, angle_deg, GET("radius", FloatAttribute));
+
+          hmap::directional_blur(*pa_out,
+                                 ir,
+                                 angle_deg,
+                                 GET("intensity", FloatAttribute));
         },
         p_node->get_config_ref()->hmap_transform_mode_cpu);
 
