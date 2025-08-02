@@ -216,6 +216,7 @@ nav:
     - 'node_reference/nodes/WhiteDensityMap.md'
     - 'node_reference/nodes/WhiteSparse.md'
     - 'node_reference/nodes/Wrinkle.md'
+    - 'node_reference/nodes/ZScore.md'
     - 'node_reference/nodes/ZeroedEdges.md'
     - 'node_reference/nodes/Zoom.md'
 

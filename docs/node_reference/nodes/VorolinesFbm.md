@@ -3,7 +3,7 @@ VorolinesFbm Node
 =================
 
 
-No description available
+This function generates a Voronoi-like pattern based on the distance from each pixel to a set of randomly oriented lines. Each line is defined by a random point and a direction sampled from a uniform distribution around a given angle. Generates a fractal Voronoi pattern using fBm (fractal Brownian motion) based on distance fields and multiple noise layers.
 
 
 

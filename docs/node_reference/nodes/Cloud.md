@@ -14,6 +14,12 @@ Set of points.
 
 
 Geometry/Cloud
+# Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|background|Heightmap|No description|
+
 # Outputs
 
 |Name|Type|Description|

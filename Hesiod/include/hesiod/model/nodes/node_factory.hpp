@@ -281,5 +281,6 @@ DECLARE_NODE(white_sparse)
 DECLARE_NODE(wrinkle)
 DECLARE_NODE(zeroed_edges)
 DECLARE_NODE(zoom)
+DECLARE_NODE(z_score)
 
 } // namespace hesiod
