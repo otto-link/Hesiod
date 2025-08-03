@@ -31,9 +31,10 @@ void setup_expand_shrink_node(BaseNode *p_node)
   ADD_ATTR(EnumAttribute, "kernel", kernel_type_map, "cubic_pulse");
   ADD_ATTR(FloatAttribute, "radius", 0.05f, 0.01f, 0.2f);
   ADD_ATTR(BoolAttribute, "shrink", "shrink", "expand", false);
+  ADD_ATTR(IntAttribute, "iterations", 1, 1, 10);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"kernel", "radius", "shrink"});
+  p_node->set_attr_ordered_key({"kernel", "radius", "shrink", "iterations"});
 
   setup_pre_process_mask_attributes(p_node);
   setup_post_process_heightmap_attributes(p_node, true);
@@ -83,11 +84,14 @@ void compute_expand_shrink_node(BaseNode *p_node)
     {
       hmap::transform(
           {p_out, p_mask},
-          [&kernel_array](std::vector<hmap::Array *> p_arrays)
+          [p_node, &kernel_array](std::vector<hmap::Array *> p_arrays)
           {
             hmap::Array *pa_out = p_arrays[0];
             hmap::Array *pa_mask = p_arrays[1];
-            hmap::gpu::shrink(*pa_out, kernel_array, pa_mask);
+            hmap::gpu::shrink(*pa_out,
+                              kernel_array,
+                              pa_mask,
+                              GET("iterations", IntAttribute));
           },
           p_node->get_config_ref()->hmap_transform_mode_gpu);
     }
@@ -95,11 +99,14 @@ void compute_expand_shrink_node(BaseNode *p_node)
     {
       hmap::transform(
           {p_out, p_mask},
-          [&kernel_array](std::vector<hmap::Array *> p_arrays)
+          [p_node, &kernel_array](std::vector<hmap::Array *> p_arrays)
           {
             hmap::Array *pa_out = p_arrays[0];
             hmap::Array *pa_mask = p_arrays[1];
-            hmap::gpu::expand(*pa_out, kernel_array, pa_mask);
+            hmap::gpu::expand(*pa_out,
+                              kernel_array,
+                              pa_mask,
+                              GET("iterations", IntAttribute));
           },
           p_node->get_config_ref()->hmap_transform_mode_gpu);
     }
