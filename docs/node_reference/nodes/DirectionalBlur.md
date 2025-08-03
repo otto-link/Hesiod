@@ -40,6 +40,8 @@ WIP
 |post_remap|Value range|No description|
 |post_smoothing_radius|Float|No description|
 |radius|Float|No description|
+|spread|Float|No description|
+|stretch|Float|No description|
 
 # Example
 

@@ -1745,6 +1745,18 @@
                 "key": "radius",
                 "label": "radius",
                 "type": "Float"
+            },
+            "spread": {
+                "description": "No description",
+                "key": "spread",
+                "label": "spread",
+                "type": "Float"
+            },
+            "stretch": {
+                "description": "No description",
+                "key": "stretch",
+                "label": "stretch",
+                "type": "Float"
             }
         },
         "ports": {
