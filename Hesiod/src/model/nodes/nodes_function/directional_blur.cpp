@@ -28,9 +28,11 @@ void setup_directional_blur_node(BaseNode *p_node)
   ADD_ATTR(FloatAttribute, "radius", 0.05f, 0.f, 0.2f);
   ADD_ATTR(FloatAttribute, "angle", 0.f, -180.f, 180.f);
   ADD_ATTR(FloatAttribute, "intensity", 1.f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "spread", 1.f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "stretch", 1.f, 0.f, 4.f);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"radius", "angle", "intensity"});
+  p_node->set_attr_ordered_key({"radius", "angle", "intensity", "spread", "stretch"});
 
   setup_post_process_heightmap_attributes(p_node, true);
 }
@@ -67,7 +69,9 @@ void compute_directional_blur_node(BaseNode *p_node)
           hmap::directional_blur(*pa_out,
                                  ir,
                                  angle_deg,
-                                 GET("intensity", FloatAttribute));
+                                 GET("intensity", FloatAttribute),
+                                 GET("stretch", FloatAttribute),
+                                 GET("spread", FloatAttribute));
         },
         p_node->get_config_ref()->hmap_transform_mode_cpu);
 
