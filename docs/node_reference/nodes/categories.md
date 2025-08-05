@@ -32,7 +32,7 @@ Node Categories
 |Operator|Transform|Translate, Warp, Zoom|
 |Primitive|Authoring|Brush, Ridgelines|
 |Primitive|Coherent|Dendry, GaborWaveFbm, Gavoronoise, Noise, NoiseFbm, NoiseIq, NoiseJordan, NoiseParberry, NoisePingpong, NoiseRidged, NoiseSwiss, Stamping, Vorolines, VorolinesFbm, Voronoi, VoronoiFbm, Voronoise, Vororand|
-|Primitive|Function|Bump, GaussianPulse, Paraboloid, Rift, Slope, Step, WaveDune, WaveSine, WaveSquare, WaveTriangular|
+|Primitive|Function|Bump, Constant, GaussianPulse, Paraboloid, Rift, Slope, Step, WaveDune, WaveSine, WaveSquare, WaveTriangular|
 |Primitive|Geological|BasaltField, Caldera, Crater, MountainRangeRadial|
 |Primitive|Kernel|KernelDiskSmooth, KernelGabor, KernelPrim|
 |Primitive|Random|White, WhiteDensityMap, WhiteSparse|

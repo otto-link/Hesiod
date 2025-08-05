@@ -25,8 +25,10 @@ Primitive/Authoring
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |Heightmap|Array|The heightmap data representing the painted terrain.|
-|inverse|Bool|Invert the drawn values, swapping elevations between high and low.|
-|remap|Value range|Remap the brush output to a specified range, defaulting to [0, 1].|
+|post_gain|Float|No description|
+|post_inverse|Bool|No description|
+|post_remap|Value range|No description|
+|post_smoothing_radius|Float|No description|
 
 # Example
 

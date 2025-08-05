@@ -34,6 +34,7 @@ nav:
     - 'node_reference/nodes/ColorizeGradient.md'
     - 'node_reference/nodes/ColorizeSolid.md'
     - 'node_reference/nodes/CombineMask.md'
+    - 'node_reference/nodes/Constant.md'
     - 'node_reference/nodes/ConvolveSVD.md'
     - 'node_reference/nodes/Cos.md'
     - 'node_reference/nodes/Crater.md'

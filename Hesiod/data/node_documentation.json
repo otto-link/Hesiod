@@ -472,17 +472,29 @@
                 "label": "Heightmap",
                 "type": "Array"
             },
-            "inverse": {
-                "description": "Invert the drawn values, swapping elevations between high and low.",
-                "key": "inverse",
-                "label": "inverse",
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
                 "type": "Bool"
             },
-            "remap": {
-                "description": "Remap the brush output to a specified range, defaulting to [0, 1].",
-                "key": "remap",
-                "label": "remap",
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
                 "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
             }
         },
         "ports": {
@@ -1218,6 +1230,27 @@
             }
         }
     },
+    "Constant": {
+        "category": "Primitive/Function",
+        "description": "No description available",
+        "label": "Constant",
+        "parameters": {
+            "value": {
+                "description": "No description",
+                "key": "value",
+                "label": "value",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "output": {
+                "caption": "output",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "output"
+            }
+        }
+    },
     "ConvolveSVD": {
         "category": "Math/Convolution",
         "description": "ConvolveSVD performs convolution using a Singular Value Decomposition (SVD) of the kernel to accelerate the process.",
@@ -1881,6 +1914,12 @@
         "description": "ExpandShrink is a maximum/minimum filter with a weighted kernel. It can be used to enhance or extract features while preserving the essential structure of the heightmap.",
         "label": "ExpandShrink",
         "parameters": {
+            "iterations": {
+                "description": "No description",
+                "key": "iterations",
+                "label": "iterations",
+                "type": "Integer"
+            },
             "kernel": {
                 "description": "Weighting kernel. Available values: biweight, cone, cone_smooth, cubic_pulse, disk, lorentzian, smooth_cosine, square, tricube.",
                 "key": "kernel",
