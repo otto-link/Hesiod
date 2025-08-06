@@ -280,6 +280,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"ReverseMidpoint", "WIP"}, // Primitive/Authoring
       {"Ridgelines", "Primitive/Authoring"},
       {"Rift", "Primitive/Function"},
+      {"Rotate", "Operator/Transform"},
       {"Ruggedness", "Features"},
       {"Rugosity", "Features"},
       {"Saturate", "Filter/Recurve"},
@@ -527,6 +528,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(ReverseMidpoint, reverse_midpoint);
     SETUP_NODE(Ridgelines, ridgelines);
     SETUP_NODE(Rift, rift);
+    SETUP_NODE(Rotate, rotate);
     SETUP_NODE(Ruggedness, ruggedness);
     SETUP_NODE(Rugosity, rugosity);
     SETUP_NODE(Saturate, saturate);
