@@ -175,6 +175,7 @@ nav:
     - 'node_reference/nodes/ShapeIndex.md'
     - 'node_reference/nodes/SharpenCone.md'
     - 'node_reference/nodes/ShiftElevation.md'
+    - 'node_reference/nodes/Skeleton.md'
     - 'node_reference/nodes/Slope.md'
     - 'node_reference/nodes/SmoothCpulse.md'
     - 'node_reference/nodes/SmoothFill.md'

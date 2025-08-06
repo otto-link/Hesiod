@@ -26,7 +26,7 @@ Node Categories
 |Math|Convolution|ConvolveSVD|
 |Math|Gradient|Gradient, GradientAngle, GradientNorm, GradientTalus|
 |Operator|Blend|Blend, BlendPoissonBf, Mixer|
-|Operator|Morphology|Border, Closing, Dilation, DistanceTransform, Erosion, MakeBinary, MorphologicalGradient, MorphologicalTopHat, Opening|
+|Operator|Morphology|Border, Closing, Dilation, DistanceTransform, Erosion, MakeBinary, MorphologicalGradient, MorphologicalTopHat, Opening, Skeleton|
 |Operator|Resynthesis|QuiltingBlend, QuiltingExpand, QuiltingShuffle|
 |Operator|Tiling|MakePeriodic, MakePeriodicStitching|
 |Operator|Transform|Translate, Warp, Zoom|

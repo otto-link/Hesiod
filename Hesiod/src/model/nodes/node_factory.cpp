@@ -302,6 +302,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"ShapeIndex", "Filter/Smoothing"},
       {"SharpenCone", "Filter/Smoothing"},
       {"ShiftElevation", "Filter/Range"},
+      {"Skeleton", "Operator/Morphology"},
       {"Slope", "Primitive/Function"},
       {"SmoothCpulse", "Filter/Smoothing"},
       {"SmoothFill", "Filter/Smoothing"},
@@ -547,6 +548,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(ShapeIndex, shape_index);
     SETUP_NODE(SharpenCone, sharpen_cone);
     SETUP_NODE(ShiftElevation, shift_elevation);
+    SETUP_NODE(Skeleton, skeleton);
     SETUP_NODE(Slope, slope);
     SETUP_NODE(SmoothCpulse, smooth_cpulse);
     SETUP_NODE(SmoothFill, smooth_fill);

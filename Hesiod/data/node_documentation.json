@@ -8928,6 +8928,33 @@
             }
         }
     },
+    "Skeleton": {
+        "category": "Operator/Morphology",
+        "description": "No description available",
+        "label": "Skeleton",
+        "parameters": {
+            "threshold": {
+                "description": "No description",
+                "key": "threshold",
+                "label": "threshold",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "input": {
+                "caption": "input",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "output"
+            }
+        }
+    },
     "Slope": {
         "category": "Primitive/Function",
         "description": "Slope is function used to represent continuous terrain slope.",
