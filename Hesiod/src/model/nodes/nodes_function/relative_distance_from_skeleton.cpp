@@ -14,7 +14,7 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_skeleton_node(BaseNode *p_node)
+void setup_relative_distance_from_skeleton_node(BaseNode *p_node)
 {
   LOG->trace("setup node {}", p_node->get_label());
 
@@ -23,10 +23,16 @@ void setup_skeleton_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
+  ADD_ATTR(FloatAttribute, "search_radius", 0.2f, 0.f, 0.5f);
   ADD_ATTR(FloatAttribute, "threshold", 0.f, -1.f, 1.f);
+
+  // attribute(s) order
+  p_node->set_attr_ordered_key({"search_radius", "threshold"});
+
+  setup_post_process_heightmap_attributes(p_node);
 }
 
-void compute_skeleton_node(BaseNode *p_node)
+void compute_relative_distance_from_skeleton_node(BaseNode *p_node)
 {
   Q_EMIT p_node->compute_started(p_node->get_id());
 
@@ -38,9 +44,11 @@ void compute_skeleton_node(BaseNode *p_node)
   {
     hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
+    int ir = std::max(1, (int)(GET("search_radius", FloatAttribute) * p_out->shape.x));
+
     hmap::transform(
         {p_out, p_in},
-        [p_node](std::vector<hmap::Array *> p_arrays)
+        [p_node, ir](std::vector<hmap::Array *> p_arrays)
         {
           hmap::Array *pa_out = p_arrays[0];
           hmap::Array *pa_in = p_arrays[1];
@@ -49,13 +57,19 @@ void compute_skeleton_node(BaseNode *p_node)
 
           float threshold = GET("threshold", FloatAttribute);
           if (threshold)
+          {
             hmap::make_binary(*pa_out, threshold);
+            *pa_out -= threshold;
+          }
 
-          *pa_out = hmap::gpu::skeleton(*pa_out);
+          *pa_out = hmap::gpu::relative_distance_from_skeleton(*pa_out, ir);
         },
         p_node->get_config_ref()->hmap_transform_mode_gpu);
 
     p_out->smooth_overlap_buffers();
+
+    // post-process
+    post_process_heightmap(p_node, *p_out);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

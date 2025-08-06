@@ -7375,6 +7375,63 @@
             }
         }
     },
+    "RelativeDistanceFromSkeleton": {
+        "category": "Operator/Morphology",
+        "description": "No description available",
+        "label": "RelativeDistanceFromSkeleton",
+        "parameters": {
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
+                "type": "Bool"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
+            },
+            "search_radius": {
+                "description": "No description",
+                "key": "search_radius",
+                "label": "search_radius",
+                "type": "Float"
+            },
+            "threshold": {
+                "description": "No description",
+                "key": "threshold",
+                "label": "threshold",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "input": {
+                "caption": "input",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "output"
+            }
+        }
+    },
     "RelativeElevation": {
         "category": "Features/Landform",
         "description": "RelativeElevation identifies heightmap relative elevation based on the surrounding heightmap values.",

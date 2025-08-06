@@ -145,6 +145,7 @@ nav:
     - 'node_reference/nodes/Recurve.md'
     - 'node_reference/nodes/RecurveKura.md'
     - 'node_reference/nodes/RecurveS.md'
+    - 'node_reference/nodes/RelativeDistanceFromSkeleton.md'
     - 'node_reference/nodes/RelativeElevation.md'
     - 'node_reference/nodes/Remap.md'
     - 'node_reference/nodes/Rescale.md'

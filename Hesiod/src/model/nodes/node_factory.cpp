@@ -272,6 +272,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Recurve", "Filter/Recurve"},
       {"RecurveKura", "Filter/Recurve"},
       {"RecurveS", "Filter/Recurve"},
+      {"RelativeDistanceFromSkeleton", "Operator/Morphology"},
       {"RelativeElevation", "Features/Landform"},
       {"Remap", "Filter/Range"},
       {"Rescale", "Filter/Range"},
@@ -518,6 +519,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(Recurve, recurve);
     SETUP_NODE(RecurveKura, recurve_kura);
     SETUP_NODE(RecurveS, recurve_s);
+    SETUP_NODE(RelativeDistanceFromSkeleton, relative_distance_from_skeleton);
     SETUP_NODE(RelativeElevation, relative_elevation);
     SETUP_NODE(Remap, remap);
     SETUP_NODE(Rescale, rescale);
