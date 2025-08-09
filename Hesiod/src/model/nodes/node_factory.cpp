@@ -158,6 +158,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"CloudRemapValues", "Geometry/Cloud"},
       {"CloudSDF", "Geometry/Cloud"},
       {"CloudSetValuesFromBorderDistance", "Geometry/Cloud"},
+      {"CloudSetValuesFromHeightmap", "Geometry/Cloud"},
       {"CloudSetValuesFromMinDistance", "Geometry/Cloud"},
       {"CloudToArrayInterp", "Geometry/Cloud"},
       {"CloudToPath", "Geometry/Cloud"},
@@ -410,6 +411,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(CloudRemapValues, cloud_remap_values);
     SETUP_NODE(CloudSDF, cloud_sdf);
     SETUP_NODE(CloudSetValuesFromBorderDistance, cloud_set_values_from_border_distance);
+    SETUP_NODE(CloudSetValuesFromHeightmap, cloud_set_values_from_heightmap);
     SETUP_NODE(CloudSetValuesFromMinDistance, cloud_set_values_from_min_distance);
     SETUP_NODE(CloudToArrayInterp, cloud_to_array_interp);
     SETUP_NODE(CloudToPath, cloud_to_path);

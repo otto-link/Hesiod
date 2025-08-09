@@ -1089,6 +1089,32 @@
             }
         }
     },
+    "CloudSetValuesFromHeightmap": {
+        "category": "Geometry/Cloud",
+        "description": "No description available",
+        "label": "CloudSetValuesFromHeightmap",
+        "parameters": null,
+        "ports": {
+            "cloud": {
+                "caption": "cloud",
+                "data_type": "Cloud",
+                "description": "No description",
+                "type": "input"
+            },
+            "heightmap": {
+                "caption": "heightmap",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "out": {
+                "caption": "out",
+                "data_type": "Cloud",
+                "description": "No description",
+                "type": "output"
+            }
+        }
+    },
     "CloudSetValuesFromMinDistance": {
         "category": "Geometry/Cloud",
         "description": "No description available",

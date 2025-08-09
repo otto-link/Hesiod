@@ -22,8 +22,8 @@ void setup_cloud_random_distance_node(BaseNode *p_node)
   p_node->add_port<hmap::Cloud>(gnode::PortType::OUT, "cloud");
 
   // attribute(s)
-  ADD_ATTR(FloatAttribute, "distance_min", 0.05f, 0.001f, 0.1f);
-  ADD_ATTR(FloatAttribute, "distance_max", 0.1f, 0.001f, 0.1f);
+  ADD_ATTR(FloatAttribute, "distance_min", 0.05f, 0.001f, 0.2f);
+  ADD_ATTR(FloatAttribute, "distance_max", 0.1f, 0.001f, 1.f);
   ADD_ATTR(SeedAttribute, "seed");
   ADD_ATTR(RangeAttribute, "remap");
 
