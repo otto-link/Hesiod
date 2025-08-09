@@ -30,6 +30,7 @@ nav:
     - 'node_reference/nodes/CloudRandomDistance.md'
     - 'node_reference/nodes/CloudRemapValues.md'
     - 'node_reference/nodes/CloudSDF.md'
+    - 'node_reference/nodes/CloudSetValuesFromBorderDistance.md'
     - 'node_reference/nodes/CloudToArrayInterp.md'
     - 'node_reference/nodes/CloudToPath.md'
     - 'node_reference/nodes/ColorizeCmap.md'

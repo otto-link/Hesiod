@@ -1069,6 +1069,26 @@
             }
         }
     },
+    "CloudSetValuesFromBorderDistance": {
+        "category": "Geometry/Cloud",
+        "description": "No description available",
+        "label": "CloudSetValuesFromBorderDistance",
+        "parameters": null,
+        "ports": {
+            "cloud": {
+                "caption": "cloud",
+                "data_type": "Cloud",
+                "description": "No description",
+                "type": "input"
+            },
+            "out": {
+                "caption": "out",
+                "data_type": "Cloud",
+                "description": "No description",
+                "type": "output"
+            }
+        }
+    },
     "CloudToArrayInterp": {
         "category": "Geometry/Cloud",
         "description": "CloudToArrayInterp generates a smooth and continuous 2D elevation map from a set of scattered points using Delaunay linear interpolation.",
