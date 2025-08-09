@@ -24,6 +24,7 @@ Geometry/Cloud
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|method|Enumeration|No description|
 |npoints|Integer|Number of points.|
 |remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 |seed|Random seed number|Random seed number.|

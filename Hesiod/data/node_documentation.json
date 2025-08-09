@@ -796,17 +796,17 @@
         "description": "Generate a grid lattice set of points.",
         "label": "CloudLattice",
         "parameters": {
-            "delta": {
-                "description": "Point spacing in x and y directions.",
-                "key": "delta",
-                "label": "delta",
-                "type": "Wavenumber"
-            },
             "jitter_ratio": {
                 "description": "Point jittering (noise) in x and y directions.",
                 "key": "jitter_ratio",
                 "label": "jitter_ratio",
                 "type": "Wavenumber"
+            },
+            "npoints": {
+                "description": "No description",
+                "key": "npoints",
+                "label": "npoints",
+                "type": "Integer"
             },
             "remap": {
                 "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
@@ -867,6 +867,12 @@
         "description": "Random set of points.",
         "label": "CloudRandom",
         "parameters": {
+            "method": {
+                "description": "No description",
+                "key": "method",
+                "label": "method",
+                "type": "Enumeration"
+            },
             "npoints": {
                 "description": "Number of points.",
                 "key": "npoints",
@@ -892,6 +898,45 @@
                 "data_type": "Cloud",
                 "description": "Set of points (x, y) and elevations z.",
                 "type": "output"
+            }
+        }
+    },
+    "CloudRandomDensity": {
+        "category": "Geometry/Cloud",
+        "description": "No description available",
+        "label": "CloudRandomDensity",
+        "parameters": {
+            "npoints": {
+                "description": "No description",
+                "key": "npoints",
+                "label": "npoints",
+                "type": "Integer"
+            },
+            "remap": {
+                "description": "No description",
+                "key": "remap",
+                "label": "remap",
+                "type": "Value range"
+            },
+            "seed": {
+                "description": "No description",
+                "key": "seed",
+                "label": "seed",
+                "type": "Random seed number"
+            }
+        },
+        "ports": {
+            "cloud": {
+                "caption": "cloud",
+                "data_type": "Cloud",
+                "description": "No description",
+                "type": "output"
+            },
+            "density": {
+                "caption": "density",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
             }
         }
     },
@@ -7718,6 +7763,39 @@
                 "caption": "output",
                 "data_type": "Heightmap",
                 "description": "Rift heightmap.",
+                "type": "output"
+            }
+        }
+    },
+    "Rotate": {
+        "category": "Operator/Transform",
+        "description": "No description available",
+        "label": "Rotate",
+        "parameters": {
+            "angle": {
+                "description": "No description",
+                "key": "angle",
+                "label": "angle",
+                "type": "Float"
+            },
+            "zoom_in": {
+                "description": "No description",
+                "key": "zoom_in",
+                "label": "zoom_in",
+                "type": "Bool"
+            }
+        },
+        "ports": {
+            "input": {
+                "caption": "input",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "Heightmap",
+                "description": "No description",
                 "type": "output"
             }
         }

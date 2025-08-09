@@ -17,7 +17,7 @@ Node Categories
 |Filter|Recast|ExpandShrink, Fold, NormalDisplacement, RecastCanyon, RecastCliff, RecastCliffDirectional, RecastCracks, RecastSag, SteepenConvective|
 |Filter|Recurve|Gain, GammaCorrection, GammaCorrectionLocal, Plateau, Recurve, RecurveKura, RecurveS, Saturate, Terrace|
 |Filter|Smoothing|Laplace, Median3x3, ShapeIndex, SharpenCone, SmoothCpulse, SmoothFill, SmoothFillHoles, SmoothFillSmearPeaks|
-|Geometry|Cloud|Cloud, CloudLattice, CloudMerge, CloudRandom, CloudRemapValues, CloudSDF, CloudToArrayInterp, CloudToPath|
+|Geometry|Cloud|Cloud, CloudLattice, CloudMerge, CloudRandom, CloudRandomDensity, CloudRemapValues, CloudSDF, CloudToArrayInterp, CloudToPath|
 |Geometry|Path|Path, PathBezier, PathBezierRound, PathBspline, PathDecasteljau, PathDig, PathFind, PathFractalize, PathMeanderize, PathResample, PathSDF, PathSmooth, PathToCloud, PathToHeightmap|
 |IO|Files|ExportAsset, ExportCloud, ExportHeightmap, ExportNormalMap, ExportPath, ExportTexture, ImportHeightmap, ImportTexture|
 |Mask|Selector|SelectAngle, SelectBlobLog, SelectCavities, SelectGt, SelectInterval, SelectInwardOutward, SelectMidrange, SelectMultiband3, SelectPulse, SelectRivers, SelectSlope, SelectTransitions, SelectValley|
@@ -29,7 +29,7 @@ Node Categories
 |Operator|Morphology|Border, Closing, Dilation, DistanceTransform, Erosion, MakeBinary, MorphologicalGradient, MorphologicalTopHat, Opening, RelativeDistanceFromSkeleton, Skeleton|
 |Operator|Resynthesis|QuiltingBlend, QuiltingExpand, QuiltingShuffle|
 |Operator|Tiling|MakePeriodic, MakePeriodicStitching|
-|Operator|Transform|Translate, Warp, Zoom|
+|Operator|Transform|Rotate, Translate, Warp, Zoom|
 |Primitive|Authoring|Brush, Ridgelines|
 |Primitive|Coherent|Dendry, GaborWaveFbm, Gavoronoise, Noise, NoiseFbm, NoiseIq, NoiseJordan, NoiseParberry, NoisePingpong, NoiseRidged, NoiseSwiss, Stamping, Vorolines, VorolinesFbm, Voronoi, VoronoiFbm, Voronoise, Vororand|
 |Primitive|Function|Bump, Constant, GaussianPulse, Paraboloid, Rift, Slope, Step, WaveDune, WaveSine, WaveSquare, WaveTriangular|

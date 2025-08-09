@@ -153,6 +153,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"CloudMerge", "Geometry/Cloud"},
       {"CloudLattice", "Geometry/Cloud"},
       {"CloudRandom", "Geometry/Cloud"},
+      {"CloudRandomDensity", "Geometry/Cloud"},
       {"CloudRemapValues", "Geometry/Cloud"},
       {"CloudSDF", "Geometry/Cloud"},
       {"CloudToArrayInterp", "Geometry/Cloud"},
@@ -401,6 +402,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(CloudMerge, cloud_merge);
     SETUP_NODE(CloudLattice, cloud_lattice);
     SETUP_NODE(CloudRandom, cloud_random);
+    SETUP_NODE(CloudRandomDensity, cloud_random_density);
     SETUP_NODE(CloudRemapValues, cloud_remap_values);
     SETUP_NODE(CloudSDF, cloud_sdf);
     SETUP_NODE(CloudToArrayInterp, cloud_to_array_interp);
