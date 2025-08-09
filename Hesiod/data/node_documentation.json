@@ -940,6 +940,51 @@
             }
         }
     },
+    "CloudRandomDistance": {
+        "category": "Geometry/Cloud",
+        "description": "No description available",
+        "label": "CloudRandomDistance",
+        "parameters": {
+            "distance_max": {
+                "description": "No description",
+                "key": "distance_max",
+                "label": "distance_max",
+                "type": "Float"
+            },
+            "distance_min": {
+                "description": "No description",
+                "key": "distance_min",
+                "label": "distance_min",
+                "type": "Float"
+            },
+            "remap": {
+                "description": "No description",
+                "key": "remap",
+                "label": "remap",
+                "type": "Value range"
+            },
+            "seed": {
+                "description": "No description",
+                "key": "seed",
+                "label": "seed",
+                "type": "Random seed number"
+            }
+        },
+        "ports": {
+            "cloud": {
+                "caption": "cloud",
+                "data_type": "Cloud",
+                "description": "No description",
+                "type": "output"
+            },
+            "density": {
+                "caption": "density",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            }
+        }
+    },
     "CloudRemapValues": {
         "category": "Geometry/Cloud",
         "description": "CloudRemapValues remap the range of the cloud point values.",

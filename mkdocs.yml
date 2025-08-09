@@ -27,6 +27,7 @@ nav:
     - 'node_reference/nodes/CloudMerge.md'
     - 'node_reference/nodes/CloudRandom.md'
     - 'node_reference/nodes/CloudRandomDensity.md'
+    - 'node_reference/nodes/CloudRandomDistance.md'
     - 'node_reference/nodes/CloudRemapValues.md'
     - 'node_reference/nodes/CloudSDF.md'
     - 'node_reference/nodes/CloudToArrayInterp.md'
