@@ -7701,6 +7701,93 @@
             }
         }
     },
+    "ReverseAboveThreshold": {
+        "category": "Filter/Recurve",
+        "description": "No description available",
+        "label": "ReverseAboveThreshold",
+        "parameters": {
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
+                "type": "Bool"
+            },
+            "post_mix": {
+                "description": "No description",
+                "key": "post_mix",
+                "label": "post_mix",
+                "type": "Float"
+            },
+            "post_mix_method": {
+                "description": "No description",
+                "key": "post_mix_method",
+                "label": "post_mix_method",
+                "type": "Enumeration"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
+            },
+            "scaling": {
+                "description": "No description",
+                "key": "scaling",
+                "label": "scaling",
+                "type": "Float"
+            },
+            "threshold_value": {
+                "description": "No description",
+                "key": "threshold_value",
+                "label": "threshold_value",
+                "type": "Float"
+            },
+            "transition_extent": {
+                "description": "No description",
+                "key": "transition_extent",
+                "label": "transition_extent",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "input": {
+                "caption": "input",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "mask": {
+                "caption": "mask",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "output"
+            },
+            "threshold": {
+                "caption": "threshold",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            }
+        }
+    },
     "ReverseMidpoint": {
         "category": "WIP",
         "description": "ReverseMidpoint generates an heightmap. It uses a polyline as a base, then recursively interpolate and displace midpoints to generate a terrain.",

@@ -155,6 +155,7 @@ nav:
     - 'node_reference/nodes/Remap.md'
     - 'node_reference/nodes/Rescale.md'
     - 'node_reference/nodes/Reverse.md'
+    - 'node_reference/nodes/ReverseAboveThreshold.md'
     - 'node_reference/nodes/ReverseMidpoint.md'
     - 'node_reference/nodes/Ridgelines.md'
     - 'node_reference/nodes/Rift.md'

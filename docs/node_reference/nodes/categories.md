@@ -15,7 +15,7 @@ Node Categories
 |Features|Landform|AccumulationCurvature, RelativeElevation, Unsphericity, ValleyWidth|
 |Filter|Range|Clamp, Remap, Rescale, ShiftElevation|
 |Filter|Recast|ExpandShrink, Fold, NormalDisplacement, RecastCanyon, RecastCliff, RecastCliffDirectional, RecastCracks, RecastSag, SteepenConvective|
-|Filter|Recurve|Gain, GammaCorrection, GammaCorrectionLocal, Plateau, Recurve, RecurveKura, RecurveS, Saturate, Terrace|
+|Filter|Recurve|Gain, GammaCorrection, GammaCorrectionLocal, Plateau, Recurve, RecurveKura, RecurveS, ReverseAboveThreshold, Saturate, Terrace|
 |Filter|Smoothing|Laplace, Median3x3, ShapeIndex, SharpenCone, SmoothCpulse, SmoothFill, SmoothFillHoles, SmoothFillSmearPeaks|
 |Geometry|Cloud|Cloud, CloudLattice, CloudMerge, CloudRandom, CloudRandomDensity, CloudRandomDistance, CloudRemapValues, CloudSDF, CloudSetValuesFromBorderDistance, CloudSetValuesFromHeightmap, CloudSetValuesFromMinDistance, CloudToArrayInterp, CloudToPath|
 |Geometry|Path|Path, PathBezier, PathBezierRound, PathBspline, PathDecasteljau, PathDig, PathFind, PathFractalize, PathMeanderize, PathResample, PathSDF, PathSmooth, PathToCloud, PathToHeightmap|
