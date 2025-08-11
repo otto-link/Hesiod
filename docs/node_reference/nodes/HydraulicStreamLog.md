@@ -41,6 +41,12 @@ Erosion/Hydraulic
 |gradient_power|Float|TODO|
 |gradient_prefilter_radius|Float|TODO|
 |gradient_scaling_ratio|Float|TODO|
+|post_gain|Float|No description|
+|post_inverse|Bool|No description|
+|post_mix|Float|No description|
+|post_mix_method|Enumeration|No description|
+|post_remap|Value range|No description|
+|post_smoothing_radius|Float|No description|
 |saturation_ratio|Float|Flow accumulation clipping ratio.|
 |talus_ref|Float|Reference talus, with small values of talus_ref  leading to thinner flow streams.|
 

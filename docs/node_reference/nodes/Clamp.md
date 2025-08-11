@@ -33,6 +33,12 @@ Filter/Range
 |clamp|Value range|Clamping range.|
 |k_max|Float|Upper bound smoothing intensity.|
 |k_min|Float|Lower bound smoothing intensity.|
+|post_gain|Float|No description|
+|post_inverse|Bool|No description|
+|post_mix|Float|No description|
+|post_mix_method|Enumeration|No description|
+|post_remap|Value range|No description|
+|post_smoothing_radius|Float|No description|
 |remap|Bool|Remap the operator's output to a specified range, defaulting to [0, 1].|
 |smooth_max|Bool|Activate smooth clamping for the upper bound.|
 |smooth_min|Bool|Activate smooth clamping for the lower bound.|

@@ -24,7 +24,7 @@ void setup_cloud_lattice_node(BaseNode *p_node)
   // attribute(s)
   std::vector<float> default_value = {0.1f, 0.1f};
 
-  ADD_ATTR(WaveNbAttribute, "delta", default_value, 0.f, 0.2f, true);
+  ADD_ATTR(IntAttribute, "npoints", 50, 1, INT_MAX);
   ADD_ATTR(WaveNbAttribute, "stagger_ratio", default_value, 0.f, 1.f, true);
   ADD_ATTR(WaveNbAttribute, "jitter_ratio", default_value, 0.f, 1.f, true);
   ADD_ATTR(SeedAttribute, "seed");
@@ -32,7 +32,7 @@ void setup_cloud_lattice_node(BaseNode *p_node)
 
   // attribute(s) order
   p_node->set_attr_ordered_key(
-      {"delta", "stagger_ratio", "jitter_ratio", "seed", "_SEPARATOR_", "remap"});
+      {"npoints", "stagger_ratio", "jitter_ratio", "seed", "_SEPARATOR_", "remap"});
 }
 
 void compute_cloud_lattice_node(BaseNode *p_node)
@@ -43,19 +43,10 @@ void compute_cloud_lattice_node(BaseNode *p_node)
 
   hmap::Cloud *p_out = p_node->get_value_ref<hmap::Cloud>("cloud");
 
-  std::vector<float> x, y, v;
-  hmap::Vec4<float>  bbox = {0.f, 1.f, 0.f, 1.f};
-
-  hmap::random_grid(x,
-                    y,
-                    v,
-                    GET("seed", SeedAttribute),
-                    GET("delta", WaveNbAttribute),
-                    GET("stagger_ratio", WaveNbAttribute),
-                    GET("jitter_ratio", WaveNbAttribute),
-                    bbox);
-
-  *p_out = hmap::Cloud(x, y, v);
+  *p_out = hmap::random_cloud_jittered(GET("npoints", IntAttribute),
+                                       GET("jitter_ratio", WaveNbAttribute),
+                                       GET("stagger_ratio", WaveNbAttribute),
+                                       GET("seed", SeedAttribute));
 
   if (GET_MEMBER("remap", RangeAttribute, is_active))
     p_out->remap_values(GET("remap", RangeAttribute)[0], GET("remap", RangeAttribute)[1]);

@@ -62,3 +62,7 @@ Basic workflow generally follows the following steps:
 **Batch Export with Headless Computation**
 
   - Hesiod supports batch export, allowing users to compute the graph nodes on a finer resolution without the need for manual intervention.
+
+## FAQ
+
+Frequently Asked Questions are found [here](faq/index.md).

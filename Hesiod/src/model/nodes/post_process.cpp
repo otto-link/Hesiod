@@ -191,7 +191,6 @@ void setup_post_process_heightmap_attributes(BaseNode *p_node, bool add_mix)
 
   std::vector<std::string> *p_keys = p_node->get_attr_ordered_key_ref();
 
-  p_keys->push_back("_SEPARATOR_");
   p_keys->push_back("_SEPARATOR_TEXT_Post-processing");
 
   if (add_mix)

@@ -22,6 +22,7 @@ void setup_mean_shift_node(BaseNode *p_node)
 
   // port(s)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
@@ -29,12 +30,12 @@ void setup_mean_shift_node(BaseNode *p_node)
   ADD_ATTR(FloatAttribute, "talus_global", 16.f, 0.f, FLT_MAX);
   ADD_ATTR(IntAttribute, "iterations", 4, 1, 10);
   ADD_ATTR(BoolAttribute, "talus_weighted", true);
-  ADD_ATTR(BoolAttribute, "GPU", HSD_DEFAULT_GPU_MODE);
 
   // attribute(s) order
   p_node->set_attr_ordered_key(
-      {"radius", "talus_global", "iterations", "talus_weighted", "_SEPARATOR_", "GPU"});
+      {"radius", "talus_global", "iterations", "talus_weighted"});
 
+  setup_pre_process_mask_attributes(p_node);
   setup_post_process_heightmap_attributes(p_node, true);
 }
 
@@ -48,45 +49,31 @@ void compute_mean_shift_node(BaseNode *p_node)
 
   if (p_in)
   {
+    hmap::Heightmap *p_mask = p_node->get_value_ref<hmap::Heightmap>("mask");
     hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
+
+    // prepare mask
+    std::shared_ptr<hmap::Heightmap> sp_mask = pre_process_mask(p_node, p_mask, *p_in);
 
     int   ir = std::max(1, (int)(GET("radius", FloatAttribute) * p_out->shape.x));
     float talus = GET("talus_global", FloatAttribute) / (float)p_out->shape.x;
 
-    if (GET("GPU", BoolAttribute))
-    {
-      hmap::transform(
-          {p_out, p_in},
-          [p_node, ir, talus](std::vector<hmap::Array *> p_arrays)
-          {
-            hmap::Array *pa_out = p_arrays[0];
-            hmap::Array *pa_in = p_arrays[1];
+    hmap::transform(
+        {p_out, p_in, p_mask},
+        [p_node, ir, talus](std::vector<hmap::Array *> p_arrays)
+        {
+          hmap::Array *pa_out = p_arrays[0];
+          hmap::Array *pa_in = p_arrays[1];
+          hmap::Array *pa_mask = p_arrays[2];
 
-            *pa_out = hmap::gpu::mean_shift(*pa_in,
-                                            ir,
-                                            talus,
-                                            GET("iterations", IntAttribute),
-                                            GET("talus_weighted", BoolAttribute));
-          },
-          p_node->get_config_ref()->hmap_transform_mode_gpu);
-    }
-    else
-    {
-      hmap::transform(
-          {p_out, p_in},
-          [p_node, ir, talus](std::vector<hmap::Array *> p_arrays)
-          {
-            hmap::Array *pa_out = p_arrays[0];
-            hmap::Array *pa_in = p_arrays[1];
-
-            *pa_out = hmap::mean_shift(*pa_in,
-                                       ir,
-                                       talus,
-                                       GET("iterations", IntAttribute),
-                                       GET("talus_weighted", BoolAttribute));
-          },
-          p_node->get_config_ref()->hmap_transform_mode_cpu);
-    }
+          *pa_out = hmap::gpu::mean_shift(*pa_in,
+                                          ir,
+                                          talus,
+                                          pa_mask,
+                                          GET("iterations", IntAttribute),
+                                          GET("talus_weighted", BoolAttribute));
+        },
+        p_node->get_config_ref()->hmap_transform_mode_gpu);
 
     p_out->smooth_overlap_buffers();
 

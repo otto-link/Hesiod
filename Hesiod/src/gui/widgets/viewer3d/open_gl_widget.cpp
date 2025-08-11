@@ -5,7 +5,7 @@
 #include <QGridLayout>
 #include <QPushButton>
 
-#include "doubleslider.hpp" // from external/Attributes
+#include "qsx/slider_float.hpp" // from external/Attributes
 
 #include "hesiod/gui/widgets/open_gl/open_gl_widget.hpp"
 #include "hesiod/logger.hpp"
@@ -26,16 +26,21 @@ OpenGLWidget::OpenGLWidget(QWidget *parent) : QWidget(parent)
 
   // h scale
   {
-    auto slider = new ValueSliders::DoubleSlider("Elevation scale", 0.4f, 0.f, 1.f);
+    auto *slider = new qsx::SliderFloat("Elevation scale",
+                                        0.4f,
+                                        0.f,
+                                        1.f,
+                                        false, // +/- buttons
+                                        "{:.3f}");
     layout->addWidget(slider, row, col++);
 
-    this->renderer->set_h_scale(slider->getVal());
+    this->renderer->set_h_scale(slider->get_value());
 
     this->connect(slider,
-                  &ValueSliders::DoubleSlider::valueChanged,
+                  &qsx::SliderFloat::value_changed,
                   [slider, this]()
                   {
-                    float v = slider->getVal();
+                    float v = slider->get_value();
                     this->renderer->set_h_scale(v);
                   });
   }
@@ -115,16 +120,21 @@ OpenGLWidget::OpenGLWidget(QWidget *parent) : QWidget(parent)
 
   // approx. error
   {
-    auto slider = new ValueSliders::DoubleSlider("Max. error", 5e-3f, 1e-5f, 1e-1f);
+    auto *slider = new qsx::SliderFloat("Max. error",
+                                        5e-3f,
+                                        1e-5f,
+                                        1e-1f,
+                                        false, // +/- buttons
+                                        "{:.4f}");
     layout->addWidget(slider, row, col++);
 
-    this->renderer->set_max_approx_error(slider->getVal());
+    this->renderer->set_max_approx_error(slider->get_value());
 
     this->connect(slider,
-                  &ValueSliders::DoubleSlider::valueChanged,
+                  &qsx::SliderFloat::value_changed,
                   [slider, this]()
                   {
-                    float v = slider->getVal();
+                    float v = slider->get_value();
                     this->renderer->set_max_approx_error(v);
                   });
   }
@@ -136,80 +146,105 @@ OpenGLWidget::OpenGLWidget(QWidget *parent) : QWidget(parent)
 
   // zenith
   {
-    auto slider = new ValueSliders::DoubleSlider("Light zenith", 0.f, 0.f, 90.f);
+    auto *slider = new qsx::SliderFloat("Light zenith",
+                                        0.f,
+                                        0.f,
+                                        90.f,
+                                        false, // +/- buttons
+                                        "{:.3f}");
     layout->addWidget(slider, row, col++);
 
-    this->renderer->set_zenith(slider->getVal());
+    this->renderer->set_zenith(slider->get_value());
 
     this->connect(slider,
-                  &ValueSliders::DoubleSlider::valueChanged,
+                  &qsx::SliderFloat::value_changed,
                   [slider, this]()
                   {
-                    float v = slider->getVal();
+                    float v = slider->get_value();
                     this->renderer->set_zenith(v);
                   });
   }
 
   // azimuth
   {
-    auto slider = new ValueSliders::DoubleSlider("Light azimuth", 0.f, -180.f, 180.f);
+    auto *slider = new qsx::SliderFloat("Light azimuth",
+                                        0.f,
+                                        -180.f,
+                                        180.f,
+                                        false, // +/- buttons
+                                        "{:.3f}");
     layout->addWidget(slider, row, col++);
 
-    this->renderer->set_azimuth(slider->getVal());
+    this->renderer->set_azimuth(slider->get_value());
 
     this->connect(slider,
-                  &ValueSliders::DoubleSlider::valueChanged,
+                  &qsx::SliderFloat::value_changed,
                   [slider, this]()
                   {
-                    float v = slider->getVal();
+                    float v = slider->get_value();
                     this->renderer->set_azimuth(v);
                   });
   }
 
   // saturation
   {
-    auto slider = new ValueSliders::DoubleSlider("Shadow saturation", 0.f, -1.f, 1.f);
+    auto *slider = new qsx::SliderFloat("Shadow saturation",
+                                        0.f,
+                                        -1.f,
+                                        1.f,
+                                        false, // +/- buttons
+                                        "{:.3f}");
     layout->addWidget(slider, row, col++);
 
-    this->renderer->set_shadow_saturation(slider->getVal());
+    this->renderer->set_shadow_saturation(slider->get_value());
 
     this->connect(slider,
-                  &ValueSliders::DoubleSlider::valueChanged,
+                  &qsx::SliderFloat::value_changed,
                   [slider, this]()
                   {
-                    float v = slider->getVal();
+                    float v = slider->get_value();
                     this->renderer->set_shadow_saturation(v);
                   });
   }
 
   // strength
   {
-    auto slider = new ValueSliders::DoubleSlider("Shadow strength", 1.f, 0.f, 1.f);
+    auto *slider = new qsx::SliderFloat("Shadow strength",
+                                        1.f,
+                                        0.f,
+                                        1.f,
+                                        false, // +/- buttons
+                                        "{:.3f}");
     layout->addWidget(slider, row, col++);
 
-    this->renderer->set_shadow_strength(slider->getVal());
+    this->renderer->set_shadow_strength(slider->get_value());
 
     this->connect(slider,
-                  &ValueSliders::DoubleSlider::valueChanged,
+                  &qsx::SliderFloat::value_changed,
                   [slider, this]()
                   {
-                    float v = slider->getVal();
+                    float v = slider->get_value();
                     this->renderer->set_shadow_strength(v);
                   });
   }
 
   // gamma
   {
-    auto slider = new ValueSliders::DoubleSlider("Shadow gamma", 0.7f, 0.1f, 2.f);
+    auto *slider = new qsx::SliderFloat("Shadow gamma",
+                                        0.7f,
+                                        0.1f,
+                                        2.f,
+                                        false, // +/- buttons
+                                        "{:.3f}");
     layout->addWidget(slider, row, col++);
 
-    this->renderer->set_shadow_gamma(slider->getVal());
+    this->renderer->set_shadow_gamma(slider->get_value());
 
     this->connect(slider,
-                  &ValueSliders::DoubleSlider::valueChanged,
+                  &qsx::SliderFloat::value_changed,
                   [slider, this]()
                   {
-                    float v = slider->getVal();
+                    float v = slider->get_value();
                     this->renderer->set_shadow_gamma(v);
                   });
   }

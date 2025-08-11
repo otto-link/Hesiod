@@ -2,11 +2,13 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include "highmap/filters.hpp"
+#include "highmap/operator.hpp"
 
 #include "attributes.hpp"
 
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
+#include "hesiod/model/nodes/base_node_gui.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
 
 using namespace attr;
@@ -23,11 +25,14 @@ void setup_saturate_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(RangeAttribute, "range");
   ADD_ATTR(FloatAttribute, "k_smoothing", 0.1f, 0.01, 1.f);
+  ADD_ATTR(RangeAttribute, "range");
+
+  // link histogram for RangeAttribute
+  setup_histogram_for_range_attribute(p_node, "range", "input");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"range", "k_smoothing"});
+  p_node->set_attr_ordered_key({"k_smoothing", "range"});
 
   setup_post_process_heightmap_attributes(p_node, true);
 }

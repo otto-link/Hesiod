@@ -25,10 +25,11 @@ void setup_convolve_svd_node(BaseNode *p_node)
 
   // attribute(s)
   ADD_ATTR(IntAttribute, "rank", 4, 1, 8);
-  ADD_ATTR(RangeAttribute, "remap");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"rank", "_SEPARATOR_", "remap"});
+  p_node->set_attr_ordered_key({"rank"});
+
+  setup_post_process_heightmap_attributes(p_node, true);
 }
 
 void compute_convolve_svd_node(BaseNode *p_node)
@@ -53,16 +54,7 @@ void compute_convolve_svd_node(BaseNode *p_node)
     p_out->smooth_overlap_buffers();
 
     // post-process
-    post_process_heightmap(p_node,
-                           *p_out,
-                           false, // inverse
-                           false, // smooth
-                           0,
-                           false, // saturate
-                           {0.f, 0.f},
-                           0.f,
-                           GET_MEMBER("remap", RangeAttribute, is_active),
-                           GET("remap", RangeAttribute));
+    post_process_heightmap(p_node, *p_out);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

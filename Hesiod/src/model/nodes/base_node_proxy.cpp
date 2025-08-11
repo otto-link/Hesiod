@@ -1,6 +1,12 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include <QVBoxLayout>
+
+#include "gnode/graph.hpp"
+
+#include "attributes/widgets/attributes_widget.hpp"
+
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 
@@ -38,14 +44,59 @@ gngui::PortType BaseNode::get_port_type(int port_index) const
 
 QWidget *BaseNode::get_qwidget_ref()
 {
-  if (!this->data_preview)
-    this->data_preview = new DataPreview(this);
+  QWidget *widget = new QWidget(this);
 
-  // eventually owned by gngui::GraphicsNode
+  QVBoxLayout *layout = new QVBoxLayout(this);
+  layout->setSpacing(0);
+  layout->setContentsMargins(0, 0, 0, 0);
+  widget->setLayout(layout);
+
+  // add the data preview by default
+  if (!this->data_preview)
+  {
+    this->data_preview = new DataPreview(this);
+    layout->addWidget(this->data_preview);
+  }
+
+  // add specific content if any
   if (this->qwidget_fct)
-    return this->qwidget_fct(this);
-  else
-    return (QWidget *)this->data_preview;
+    layout->addWidget(this->qwidget_fct(this));
+
+  // add node settings widget
+  if (false)
+  {
+    QLabel *label = new QLabel("Settings");
+    layout->addWidget(label);
+
+    bool        add_save_reset_state_buttons = false;
+    std::string window_title = "";
+
+    attr::AttributesWidget *attributes_widget = new attr::AttributesWidget(
+        this->get_attr_ref(),
+        this->get_attr_ordered_key_ref(),
+        window_title,
+        add_save_reset_state_buttons);
+
+    QLayout *retrieved_layout = qobject_cast<QLayout *>(attributes_widget->layout());
+    if (retrieved_layout)
+    {
+      retrieved_layout->setSpacing(6);
+      retrieved_layout->setContentsMargins(8, 0, 8, 0);
+    }
+
+    layout->addWidget(attributes_widget);
+
+    // connection(s)
+    this->connect(attributes_widget,
+                  &attr::AttributesWidget::value_changed,
+                  [this]()
+                  {
+                    gnode::Graph *p_graph = this->get_p_graph();
+                    p_graph->update(this->get_id());
+                  });
+  }
+
+  return widget;
 }
 
 std::string BaseNode::get_tool_tip_text()

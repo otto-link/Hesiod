@@ -33,6 +33,10 @@ Mask/Selector
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |overlap|Float|TODO|
+|post_gain|Float|No description|
+|post_inverse|Bool|No description|
+|post_remap|Value range|No description|
+|post_smoothing_radius|Float|No description|
 |ratio1|Float|TODO|
 |ratio2|Float|TODO|
 

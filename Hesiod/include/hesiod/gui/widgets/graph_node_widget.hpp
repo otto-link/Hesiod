@@ -39,7 +39,6 @@ signals:
   void has_been_cleared(const std::string &graph_id);
   void new_node_created(const std::string &graph_id, const std::string &id);
   void node_deleted(const std::string &graph_id, const std::string &id);
-  void node_settings_have_changed(const std::string &graph_id, const std::string &id);
 
 public slots:
   void closeEvent(QCloseEvent *event) override;

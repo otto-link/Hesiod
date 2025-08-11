@@ -9,6 +9,7 @@
 
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
+#include "hesiod/model/nodes/base_node_gui.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
 
 using namespace attr;
@@ -31,6 +32,9 @@ void setup_clamp_node(BaseNode *p_node)
   ADD_ATTR(BoolAttribute, "smooth_max", false);
   ADD_ATTR(FloatAttribute, "k_max", 0.05f, 0.01f, 1.f);
   ADD_ATTR(BoolAttribute, "remap", false);
+
+  // link histogram for RangeAttribute
+  setup_histogram_for_range_attribute(p_node, "clamp", "input");
 
   // attribute(s) order
   p_node->set_attr_ordered_key(

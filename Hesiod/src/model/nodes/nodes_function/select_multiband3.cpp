@@ -31,6 +31,8 @@ void setup_select_multiband3_node(BaseNode *p_node)
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"ratio1", "ratio2", "overlap"});
+
+  setup_post_process_heightmap_attributes(p_node);
 }
 
 void compute_select_multiband3_node(BaseNode *p_node)
@@ -69,6 +71,11 @@ void compute_select_multiband3_node(BaseNode *p_node)
                                               vmin,
                                               vmax);
                     });
+
+    // post-process
+    post_process_heightmap(p_node, *p_low);
+    post_process_heightmap(p_node, *p_mid);
+    post_process_heightmap(p_node, *p_high);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

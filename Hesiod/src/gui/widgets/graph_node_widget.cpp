@@ -514,6 +514,13 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
         window_title,
         add_save_reset_state_buttons);
 
+    QLayout *retrieved_layout = qobject_cast<QLayout *>(attributes_widget->layout());
+    if (retrieved_layout)
+    {
+      retrieved_layout->setSpacing(6);
+      retrieved_layout->setContentsMargins(8, 0, 8, 0);
+    }
+
     // --- add label
 
     {
@@ -524,7 +531,9 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
       menu->addAction(widget_action);
     }
 
-    // --- fake ToolBar
+    menu->addSeparator();
+
+    // --- fake ToolBar (no text)
 
     {
       QWidget     *toolbar = new QWidget;
@@ -532,36 +541,36 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
       layout->setContentsMargins(0, 0, 0, 0);
 
       QToolButton *update_button = new QToolButton;
-      update_button->setText("Force\nupdate");
+      update_button->setToolTip("Force update");
       update_button->setIcon(
           update_button->style()->standardIcon(QStyle::SP_BrowserReload));
 
       QToolButton *bckp_button = new QToolButton;
-      bckp_button->setText("Backup\nstate");
+      bckp_button->setToolTip("Backup state");
       bckp_button->setIcon(bckp_button->style()->standardIcon(QStyle::SP_DriveHDIcon));
 
       QToolButton *revert_button = new QToolButton;
-      revert_button->setText("Revert\nstate");
+      revert_button->setToolTip("Revert state");
       revert_button->setIcon(
           revert_button->style()->standardIcon(QStyle::SP_DialogCloseButton));
 
       QToolButton *load_button = new QToolButton;
-      load_button->setText("Load\npreset");
+      load_button->setToolTip("Load preset");
       load_button->setIcon(
           load_button->style()->standardIcon(QStyle::SP_DialogOpenButton));
 
       QToolButton *save_button = new QToolButton;
-      save_button->setText("Save\npreset");
+      save_button->setToolTip("Save preset");
       save_button->setIcon(
           save_button->style()->standardIcon(QStyle::SP_DialogSaveButton));
 
       QToolButton *reset_button = new QToolButton;
-      reset_button->setText("Reset\nsettings");
+      reset_button->setToolTip("Reset settings");
       reset_button->setIcon(
           reset_button->style()->standardIcon(QStyle::SP_MediaSkipBackward));
 
       QToolButton *help_button = new QToolButton;
-      help_button->setText("Help!");
+      help_button->setToolTip("Help!");
       help_button->setIcon(
           help_button->style()->standardIcon(QStyle::SP_DialogHelpButton));
 
@@ -573,9 +582,6 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
                      reset_button,
                      help_button})
       {
-        p->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-        resize_font(p, -1);
-        p->setFixedSize(48, 64);
         layout->addWidget(p);
       }
 
@@ -634,28 +640,6 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
 
     // --- add attributes
 
-    // change the attribute widget layout spacing a posteriori
-    QVBoxLayout *retrieved_layout = qobject_cast<QVBoxLayout *>(
-        attributes_widget->layout());
-    if (retrieved_layout)
-    {
-      retrieved_layout->setSpacing(0);
-      retrieved_layout->setContentsMargins(0, 0, 0, 0);
-
-      for (int i = 0; i < retrieved_layout->count(); ++i)
-      {
-        QWidget *child = retrieved_layout->itemAt(i)->widget();
-        if (!child)
-          continue;
-
-        if (auto *inner_layout = child->layout())
-        {
-          inner_layout->setContentsMargins(32, 4, 32, 4);
-          inner_layout->setSpacing(4);
-        }
-      }
-    }
-
     // fit attribute settings within a scroll area
     QScrollArea *scroll_area = new QScrollArea(this);
     scroll_area->setWidget(attributes_widget);
@@ -683,8 +667,6 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
                   {
                     std::string node_id = p_node->get_id();
                     this->p_graph_node->update(node_id);
-
-                    Q_EMIT this->node_settings_have_changed(this->get_id(), node_id);
                   });
 
     this->connect(attributes_widget,
@@ -693,8 +675,6 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
                   {
                     std::string node_id = p_node->get_id();
                     this->p_graph_node->update(node_id);
-
-                    Q_EMIT this->node_settings_have_changed(this->get_id(), node_id);
                   });
 
     // --- show menu

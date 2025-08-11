@@ -31,11 +31,12 @@ Mask/Selector
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |angle|Float|Selection center value.|
-|inverse|Bool|Toggle inversion of the output values.|
+|post_gain|Float|No description|
+|post_inverse|Bool|No description|
+|post_remap|Value range|No description|
+|post_smoothing_radius|Float|No description|
 |radius|Float|Pre-filter radius.|
 |sigma|Float|Selection half-width.|
-|smoothing|Bool|Enable or disable smoothing to reduce noise in the curvature computation.|
-|smoothing_radius|Float|Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.|
 
 # Example
 

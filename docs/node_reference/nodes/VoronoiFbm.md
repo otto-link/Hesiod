@@ -33,6 +33,7 @@ Primitive/Coherent
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|exp_sigma|Float|No description|
 |jitter.x|Float|Amount of random jitter applied to seed points along the X-axis.|
 |jitter.y|Float|Amount of random jitter applied to seed points along the Y-axis.|
 |k_smoothing|Float|No description|

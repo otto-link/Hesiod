@@ -153,14 +153,20 @@ std::map<std::string, std::string> get_node_inventory()
       {"CloudMerge", "Geometry/Cloud"},
       {"CloudLattice", "Geometry/Cloud"},
       {"CloudRandom", "Geometry/Cloud"},
+      {"CloudRandomDensity", "Geometry/Cloud"},
+      {"CloudRandomDistance", "Geometry/Cloud"},
       {"CloudRemapValues", "Geometry/Cloud"},
       {"CloudSDF", "Geometry/Cloud"},
+      {"CloudSetValuesFromBorderDistance", "Geometry/Cloud"},
+      {"CloudSetValuesFromHeightmap", "Geometry/Cloud"},
+      {"CloudSetValuesFromMinDistance", "Geometry/Cloud"},
       {"CloudToArrayInterp", "Geometry/Cloud"},
       {"CloudToPath", "Geometry/Cloud"},
       {"ColorizeCmap", "Texture"},
       {"ColorizeGradient", "Texture"},
       {"ColorizeSolid", "Texture"},
       {"CombineMask", "Mask"},
+      {"Constant", "Primitive/Function"},
       {"ConvolveSVD", "Math/Convolution"},
       {"Cos", "Math/Base"},
       {"Crater", "Primitive/Geological"},
@@ -170,6 +176,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Detrend", "WIP"},                     // Filter/Recurve
       {"DiffusionLimitedAggregation", "WIP"}, // Primitive/Coherent
       {"Dilation", "Operator/Morphology"},
+      {"DirectionalBlur", "WIP"}, // Filter/Smoothing
       {"DistanceTransform", "Operator/Morphology"},
       {"Erosion", "Operator/Morphology"},
       {"ExpandShrink", "Filter/Recast"},
@@ -210,6 +217,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"ImportHeightmap", "IO/Files"},
       {"ImportTexture", "IO/Files"},
       {"Inverse", "Math/Base"},
+      {"KernelDiskSmooth", "Primitive/Kernel"},
       {"KernelGabor", "Primitive/Kernel"},
       {"KernelPrim", "Primitive/Kernel"},
       {"KmeansClustering2", "Features/Clustering"},
@@ -222,6 +230,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"MakePeriodicStitching", "Operator/Tiling"},
       {"MeanShift", "WIP"},
       {"Median3x3", "Filter/Smoothing"},
+      {"MedianPseudo", "WIP"},
       {"MixNormalMap", "Texture"},
       {"MixTexture", "Texture"},
       {"Mixer", "Operator/Blend"},
@@ -268,6 +277,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Recurve", "Filter/Recurve"},
       {"RecurveKura", "Filter/Recurve"},
       {"RecurveS", "Filter/Recurve"},
+      {"RelativeDistanceFromSkeleton", "Operator/Morphology"},
       {"RelativeElevation", "Features/Landform"},
       {"Remap", "Filter/Range"},
       {"Rescale", "Filter/Range"},
@@ -275,6 +285,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"ReverseMidpoint", "WIP"}, // Primitive/Authoring
       {"Ridgelines", "Primitive/Authoring"},
       {"Rift", "Primitive/Function"},
+      {"Rotate", "Operator/Transform"},
       {"Ruggedness", "Features"},
       {"Rugosity", "Features"},
       {"Saturate", "Filter/Recurve"},
@@ -298,6 +309,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"ShapeIndex", "Filter/Smoothing"},
       {"SharpenCone", "Filter/Smoothing"},
       {"ShiftElevation", "Filter/Range"},
+      {"Skeleton", "Operator/Morphology"},
       {"Slope", "Primitive/Function"},
       {"SmoothCpulse", "Filter/Smoothing"},
       {"SmoothFill", "Filter/Smoothing"},
@@ -305,6 +317,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"SmoothFillSmearPeaks", "Filter/Smoothing"},
       {"Smoothstep", "Math/Base"},
       {"Stamping", "Primitive/Coherent"},
+      {"StdLocal", "Features"},
       {"SteepenConvective", "Filter/Recast"},
       {"Step", "Primitive/Function"},
       {"Stratify", "Erosion/Stratify"},
@@ -327,9 +340,12 @@ std::map<std::string, std::string> get_node_inventory()
       {"Translate", "Operator/Transform"},
       {"Unsphericity", "Features/Landform"},
       {"ValleyWidth", "Features/Landform"},
+      {"Vorolines", "Primitive/Coherent"},
+      {"VorolinesFbm", "Primitive/Coherent"},
       {"Voronoi", "Primitive/Coherent"},
       {"VoronoiFbm", "Primitive/Coherent"},
       {"Voronoise", "Primitive/Coherent"},
+      {"Vororand", "Primitive/Coherent"},
       {"Warp", "Operator/Transform"},
       {"WarpDownslope", "WIP"}, // Operator/Transform
       {"WaveDune", "Primitive/Function"},
@@ -342,6 +358,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Wrinkle", "WIP"}, // Filter/Recast
       {"ZeroedEdges", "Math/Boundaries"},
       {"Zoom", "Operator/Transform"},
+      {"ZScore", "Features"},
   };
 
   return node_inventory;
@@ -389,14 +406,20 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(CloudMerge, cloud_merge);
     SETUP_NODE(CloudLattice, cloud_lattice);
     SETUP_NODE(CloudRandom, cloud_random);
+    SETUP_NODE(CloudRandomDensity, cloud_random_density);
+    SETUP_NODE(CloudRandomDistance, cloud_random_distance);
     SETUP_NODE(CloudRemapValues, cloud_remap_values);
     SETUP_NODE(CloudSDF, cloud_sdf);
+    SETUP_NODE(CloudSetValuesFromBorderDistance, cloud_set_values_from_border_distance);
+    SETUP_NODE(CloudSetValuesFromHeightmap, cloud_set_values_from_heightmap);
+    SETUP_NODE(CloudSetValuesFromMinDistance, cloud_set_values_from_min_distance);
     SETUP_NODE(CloudToArrayInterp, cloud_to_array_interp);
     SETUP_NODE(CloudToPath, cloud_to_path);
     SETUP_NODE(ColorizeCmap, colorize_cmap);
     SETUP_NODE(ColorizeGradient, colorize_gradient);
     SETUP_NODE(ColorizeSolid, colorize_solid);
     SETUP_NODE(CombineMask, combine_mask);
+    SETUP_NODE(Constant, constant);
     SETUP_NODE(Cos, cos);
     SETUP_NODE(ConvolveSVD, convolve_svd);
     SETUP_NODE(Crater, crater);
@@ -406,6 +429,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(Detrend, detrend);
     SETUP_NODE(DiffusionLimitedAggregation, diffusion_limited_aggregation);
     SETUP_NODE(Dilation, dilation);
+    SETUP_NODE(DirectionalBlur, directional_blur);
     SETUP_NODE(DistanceTransform, distance_transform);
     SETUP_NODE(Erosion, erosion);
     SETUP_NODE(ExpandShrink, expand_shrink);
@@ -447,6 +471,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(ImportHeightmap, import_heightmap);
     SETUP_NODE(ImportTexture, import_texture);
     SETUP_NODE(Inverse, inverse);
+    SETUP_NODE(KernelDiskSmooth, kernel_disk_smooth);
     SETUP_NODE(KernelGabor, kernel_gabor);
     SETUP_NODE(KernelPrim, kernel_prim);
     SETUP_NODE(KmeansClustering2, kmeans_clustering2);
@@ -459,6 +484,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(MakePeriodicStitching, make_periodic_stitching);
     SETUP_NODE(MeanShift, mean_shift);
     SETUP_NODE(Median3x3, median3x3);
+    SETUP_NODE(MedianPseudo, median_pseudo);
     SETUP_NODE(Mixer, mixer);
     SETUP_NODE(MixNormalMap, mix_normal_map);
     SETUP_NODE(MixTexture, mix_texture);
@@ -504,6 +530,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(Recurve, recurve);
     SETUP_NODE(RecurveKura, recurve_kura);
     SETUP_NODE(RecurveS, recurve_s);
+    SETUP_NODE(RelativeDistanceFromSkeleton, relative_distance_from_skeleton);
     SETUP_NODE(RelativeElevation, relative_elevation);
     SETUP_NODE(Remap, remap);
     SETUP_NODE(Rescale, rescale);
@@ -511,6 +538,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(ReverseMidpoint, reverse_midpoint);
     SETUP_NODE(Ridgelines, ridgelines);
     SETUP_NODE(Rift, rift);
+    SETUP_NODE(Rotate, rotate);
     SETUP_NODE(Ruggedness, ruggedness);
     SETUP_NODE(Rugosity, rugosity);
     SETUP_NODE(Saturate, saturate);
@@ -534,6 +562,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(ShapeIndex, shape_index);
     SETUP_NODE(SharpenCone, sharpen_cone);
     SETUP_NODE(ShiftElevation, shift_elevation);
+    SETUP_NODE(Skeleton, skeleton);
     SETUP_NODE(Slope, slope);
     SETUP_NODE(SmoothCpulse, smooth_cpulse);
     SETUP_NODE(SmoothFill, smooth_fill);
@@ -541,6 +570,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(SmoothFillSmearPeaks, smooth_fill_smear_peaks);
     SETUP_NODE(Smoothstep, smoothstep);
     SETUP_NODE(Stamping, stamping);
+    SETUP_NODE(StdLocal, std_local);
     SETUP_NODE(SteepenConvective, steepen_convective);
     SETUP_NODE(Step, step);
     SETUP_NODE(Stratify, stratify);
@@ -563,9 +593,12 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(Toggle, toggle);
     SETUP_NODE(Unsphericity, unsphericity);
     SETUP_NODE(ValleyWidth, valley_width);
+    SETUP_NODE(Vorolines, vorolines);
+    SETUP_NODE(VorolinesFbm, vorolines_fbm);
     SETUP_NODE(Voronoi, voronoi);
     SETUP_NODE(VoronoiFbm, voronoi_fbm);
     SETUP_NODE(Voronoise, voronoise);
+    SETUP_NODE(Vororand, vororand);
     SETUP_NODE(Warp, warp);
     SETUP_NODE(WarpDownslope, warp_downslope);
     SETUP_NODE(WaveDune, wave_dune);
@@ -578,6 +611,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(Wrinkle, wrinkle);
     SETUP_NODE(ZeroedEdges, zeroed_edges);
     SETUP_NODE(Zoom, zoom);
+    SETUP_NODE(ZScore, z_score);
   default:
     throw std::invalid_argument("Unknown node type in node_factory: " + node_type);
   }

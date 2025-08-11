@@ -186,10 +186,8 @@ void DataPreview::update_image()
 
       if (cloud.get_npoints() > 0)
       {
-        hmap::Array       array = hmap::Array(shape_preview);
-        hmap::Vec4<float> bbox = hmap::Vec4<float>(0.f, 1.f, 0.f, 1.f);
-        cloud.remap_values(0.1f, 1.f);
-        cloud.to_array(array, bbox);
+        hmap::Array array = hmap::Array(shape_preview);
+        cloud.to_array(array);
 
         img = hmap::colorize(array, array.min(), array.max(), hmap::Cmap::MAGMA, false)
                   .to_img_8bit();

@@ -48,7 +48,7 @@ void setup_hydraulic_stream_log_node(BaseNode *p_node)
                                 "_TEXT_Some text",
                                 "saturation_ratio",
                                 "talus_ref",
-                                "_SEPARATOR_",
+                                // "_SEPARATOR_",
                                 "GPU"});
 
   setup_post_process_heightmap_attributes(p_node, true);

@@ -31,6 +31,12 @@ Filter/Recurve
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |k_smoothing|Float|Smoothing intensity.|
+|post_gain|Float|No description|
+|post_inverse|Bool|No description|
+|post_mix|Float|No description|
+|post_mix_method|Enumeration|No description|
+|post_remap|Value range|No description|
+|post_smoothing_radius|Float|No description|
 |range|Value range|Saturation range: define the minimum and maximum values of the saturation process.|
 
 # Example

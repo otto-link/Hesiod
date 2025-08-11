@@ -32,8 +32,10 @@ Geometry/Cloud
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|inverse|Bool|Toggle inversion of the output values.|
-|remap|Bool|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|post_gain|Float|No description|
+|post_inverse|Bool|No description|
+|post_remap|Value range|No description|
+|post_smoothing_radius|Float|No description|
 
 # Example
 

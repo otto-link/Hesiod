@@ -36,6 +36,12 @@ Filter/Smoothing
 |mask_inverse|Bool|Inverts the internal mask, applying the operator where the mask is low. Ignored if a 'mask' input is provided.|
 |mask_radius|Float|Defines the smoothing radius for the internal mask. A value of 0 disables smoothing. This is bypassed if the 'mask' input is used.|
 |mask_type|Choice|Specifies how the internal mask is computed: 'Elevation' uses height, 'Gradient Norm' uses slope, and 'Elevation mid-range' selects the middle portion of the height range. This parameter is ignored when a 'mask' input is connected.|
+|post_gain|Float|No description|
+|post_inverse|Bool|No description|
+|post_mix|Float|No description|
+|post_mix_method|Enumeration|No description|
+|post_remap|Value range|No description|
+|post_smoothing_radius|Float|No description|
 |radius|Float|Filter radius with respect to the domain size.|
 
 # Example

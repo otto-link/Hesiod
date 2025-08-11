@@ -25,8 +25,7 @@ void setup_gradient_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "dx", CONFIG);
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "dy", CONFIG);
 
-  // attribute(s)
-  ADD_ATTR(RangeAttribute, "remap");
+  setup_post_process_heightmap_attributes(p_node);
 }
 
 void compute_gradient_node(BaseNode *p_node)
@@ -68,27 +67,8 @@ void compute_gradient_node(BaseNode *p_node)
     p_dy->smooth_overlap_buffers();
 
     // post-process
-    post_process_heightmap(p_node,
-                           *p_dx,
-                           false, // inverse
-                           false, // smooth
-                           0,
-                           false, // saturate
-                           {0.f, 0.f},
-                           0.f,
-                           GET_MEMBER("remap", RangeAttribute, is_active),
-                           GET("remap", RangeAttribute));
-
-    post_process_heightmap(p_node,
-                           *p_dy,
-                           false, // inverse
-                           false, // smooth
-                           0,
-                           false, // saturate
-                           {0.f, 0.f},
-                           0.f,
-                           GET_MEMBER("remap", RangeAttribute, is_active),
-                           GET("remap", RangeAttribute));
+    post_process_heightmap(p_node, *p_dx);
+    post_process_heightmap(p_node, *p_dy);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

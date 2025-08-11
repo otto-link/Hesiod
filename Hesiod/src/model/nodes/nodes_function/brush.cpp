@@ -1,7 +1,6 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-
 #include "highmap/heightmap.hpp"
 
 #include "attributes.hpp"
@@ -24,11 +23,11 @@ void setup_brush_node(BaseNode *p_node)
 
   // attribute(s)
   p_node->add_attr<ArrayAttribute>("hmap", "Heightmap", hmap::Vec2<int>(512, 512));
-  ADD_ATTR(BoolAttribute, "inverse", false);
-  ADD_ATTR(RangeAttribute, "remap");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"hmap", "inverse", "remap"});
+  p_node->set_attr_ordered_key({"hmap"});
+
+  setup_post_process_heightmap_attributes(p_node);
 }
 
 void compute_brush_node(BaseNode *p_node)
@@ -44,16 +43,7 @@ void compute_brush_node(BaseNode *p_node)
   p_out->from_array_interp(array);
 
   // post-process
-  post_process_heightmap(p_node,
-                         *p_out,
-                         GET("inverse", BoolAttribute),
-                         false, // smooth
-                         0,
-                         false, // saturate
-                         {0.f, 0.f},
-                         0.f,
-                         GET_MEMBER("remap", RangeAttribute, is_active),
-                         GET("remap", RangeAttribute));
+  post_process_heightmap(p_node, *p_out);
 
   Q_EMIT p_node->compute_finished(p_node->get_id());
 }

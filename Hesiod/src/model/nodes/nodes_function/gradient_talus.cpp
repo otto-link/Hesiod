@@ -22,8 +22,7 @@ void setup_gradient_talus_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
-  // attribute(s)
-  ADD_ATTR(RangeAttribute, "remap");
+  setup_post_process_heightmap_attributes(p_node);
 }
 
 void compute_gradient_talus_node(BaseNode *p_node)
@@ -52,16 +51,7 @@ void compute_gradient_talus_node(BaseNode *p_node)
     p_out->smooth_overlap_buffers();
 
     // post-process
-    post_process_heightmap(p_node,
-                           *p_out,
-                           false, // inverse
-                           false, // smooth
-                           0,
-                           false, // saturate
-                           {0.f, 0.f},
-                           0.f,
-                           GET_MEMBER("remap", RangeAttribute, is_active),
-                           GET("remap", RangeAttribute));
+    post_process_heightmap(p_node, *p_out);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());
