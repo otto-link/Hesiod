@@ -136,6 +136,8 @@ nav:
     - 'node_reference/nodes/PathToCloud.md'
     - 'node_reference/nodes/PathToHeightmap.md'
     - 'node_reference/nodes/Plateau.md'
+    - 'node_reference/nodes/PolygonField.md'
+    - 'node_reference/nodes/PolygonFieldFbm.md'
     - 'node_reference/nodes/Preview.md'
     - 'node_reference/nodes/QuiltingBlend.md'
     - 'node_reference/nodes/QuiltingExpand.md'

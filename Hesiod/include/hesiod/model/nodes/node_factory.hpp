@@ -199,6 +199,8 @@ DECLARE_NODE(path_smooth);
 DECLARE_NODE(path_to_cloud)
 DECLARE_NODE(path_to_heightmap)
 DECLARE_NODE(plateau)
+DECLARE_NODE(polygon_field)
+DECLARE_NODE(polygon_field_fbm)
 DECLARE_NODE(preview)
 DECLARE_NODE(quilting_blend)
 DECLARE_NODE(quilting_expand)
