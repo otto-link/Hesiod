@@ -146,6 +146,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Brush", "Primitive/Authoring"},
       {"Broadcast", "Routing"},
       {"Bump", "Primitive/Function"},
+      {"BumpLorentzian", "Primitive/Function"},
       {"Caldera", "Primitive/Geological"},
       {"Clamp", "Filter/Range"},
       {"Closing", "Operator/Morphology"},
@@ -402,6 +403,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(Border, border);
     SETUP_NODE(Brush, brush);
     SETUP_NODE(Bump, bump);
+    SETUP_NODE(BumpLorentzian, bump_lorentzian);
     SETUP_NODE(Caldera, caldera);
     SETUP_NODE(Clamp, clamp);
     SETUP_NODE(Closing, closing);

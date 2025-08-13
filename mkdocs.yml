@@ -19,6 +19,7 @@ nav:
     - 'node_reference/nodes/Broadcast.md'
     - 'node_reference/nodes/Brush.md'
     - 'node_reference/nodes/Bump.md'
+    - 'node_reference/nodes/BumpLorentzian.md'
     - 'node_reference/nodes/Caldera.md'
     - 'node_reference/nodes/Clamp.md'
     - 'node_reference/nodes/Closing.md'
