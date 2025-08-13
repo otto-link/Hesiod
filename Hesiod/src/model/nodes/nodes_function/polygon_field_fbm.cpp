@@ -47,8 +47,7 @@ void setup_polygon_field_fbm_node(BaseNode *p_node)
   ADD_ATTR(FloatAttribute, "lacunarity", 2.f, 0.01f, 4.f);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"polygon_fieldtype",
-                                "kw",
+  p_node->set_attr_ordered_key({"kw",
                                 "seed",
                                 "rmin",
                                 "rmax",

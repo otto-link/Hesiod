@@ -44,8 +44,7 @@ void setup_polygon_field_node(BaseNode *p_node)
   ADD_ATTR(FloatAttribute, "jitter.y", 1.f, 0.f, 1.f);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"polygon_fieldtype",
-                                "kw",
+  p_node->set_attr_ordered_key({"kw",
                                 "seed",
                                 "rmin",
                                 "rmax",
