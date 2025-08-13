@@ -21,6 +21,7 @@ Primitive/Function
 |control|Heightmap|Control parameter, acts as a multiplier for the weight parameter.|
 |dx|Heightmap|Displacement with respect to the domain size (x-direction).|
 |dy|Heightmap|Displacement with respect to the domain size (y-direction).|
+|envelope|Heightmap|No description|
 
 # Outputs
 
@@ -34,8 +35,10 @@ Primitive/Function
 | :--- | :--- | :--- |
 |center|Vec2Float|Reference center within the heightmap.|
 |gain|Float|Shape control parameter.|
-|inverse|Bool|Toggle inversion of the output values.|
-|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|post_gain|Float|No description|
+|post_inverse|Bool|No description|
+|post_remap|Value range|No description|
+|post_smoothing_radius|Float|No description|
 
 # Example
 
