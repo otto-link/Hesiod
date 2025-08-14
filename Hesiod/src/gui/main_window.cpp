@@ -327,14 +327,15 @@ bool MainWindow::save_to_file(const std::string &fname) const
 {
   LOG->trace("MainWindow::save_to_file: {}", fname);
 
+  const std::string fname_ext = ensure_extension(fname, ".hsd").string();
+
   try
   {
     // If the file exists, create a backup before overwriting
-    if (std::filesystem::exists(fname))
+    if (std::filesystem::exists(fname_ext))
     {
-      std::filesystem::path original_path(fname);
-      std::filesystem::path backup_path = original_path;
-      backup_path += ".bak";
+      std::filesystem::path original_path(fname_ext);
+      std::filesystem::path backup_path = insert_before_extension(original_path, ".bak");
 
       try
       {
@@ -345,7 +346,7 @@ bool MainWindow::save_to_file(const std::string &fname) const
       }
       catch (const std::exception &e)
       {
-        LOG->warn("Failed to create backup for {}: {}", fname, e.what());
+        LOG->warn("Failed to create backup for {}: {}", fname_ext, e.what());
       }
     }
 
@@ -365,13 +366,13 @@ bool MainWindow::save_to_file(const std::string &fname) const
     json["graph_manager_widget"] = this->graph_manager_widget->json_to();
     json["graph_tabs_widget"] = this->graph_tabs_widget->json_to();
 
-    json_to_file(json, fname);
+    json_to_file(json, fname_ext);
     return true;
   }
   catch (const std::exception &e)
   {
     LOG->critical("MainWindow::save_to_file: failed to save file {}, what: {}",
-                  fname,
+                  fname_ext,
                   e.what());
     return false;
   }
