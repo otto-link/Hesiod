@@ -1,6 +1,7 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include <filesystem>
 #include <iostream>
 #include <sstream>
 
@@ -328,6 +329,26 @@ bool MainWindow::save_to_file(const std::string &fname) const
 
   try
   {
+    // If the file exists, create a backup before overwriting
+    if (std::filesystem::exists(fname))
+    {
+      std::filesystem::path original_path(fname);
+      std::filesystem::path backup_path = original_path;
+      backup_path += ".bak";
+
+      try
+      {
+        std::filesystem::copy_file(original_path,
+                                   backup_path,
+                                   std::filesystem::copy_options::overwrite_existing);
+        LOG->trace("Backup created: {}", backup_path.string());
+      }
+      catch (const std::exception &e)
+      {
+        LOG->warn("Failed to create backup for {}: {}", fname, e.what());
+      }
+    }
+
     nlohmann::json json;
 
     // general infos
