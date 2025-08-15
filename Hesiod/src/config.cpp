@@ -15,9 +15,11 @@ void Config::json_from(nlohmann::json const &json)
 {
   LOG->trace("Config::json_from");
 
-  this->window.open_graph_manager_at_startup = json["open_graph_manager_at_startup"];
-  this->window.open_viewport_at_startup = json["open_viewport_at_startup"];
-  this->window.autosave_timer = std::chrono::milliseconds(json["autosave_timer"]);
+  this->window
+      .open_graph_manager_at_startup = json["window.open_graph_manager_at_startup"];
+  this->window.open_viewport_at_startup = json["window.open_viewport_at_startup"];
+  this->window.autosave_timer = std::chrono::milliseconds(json["window.autosave_timer"]);
+  this->window.save_backup_file = json["window.save_backup_file"];
 }
 
 nlohmann::json Config::json_to() const
@@ -26,10 +28,11 @@ nlohmann::json Config::json_to() const
 
   nlohmann::json json;
 
-  json["open_graph_manager_at_startup"] = this->window.open_graph_manager_at_startup;
-  json["open_viewport_at_startup"] = this->window.open_viewport_at_startup;
-  json["autosave_timer"] = static_cast<int>(this->window.autosave_timer.count());
-
+  json["window.open_graph_manager_at_startup"] = this->window
+                                                     .open_graph_manager_at_startup;
+  json["window.open_viewport_at_startup"] = this->window.open_viewport_at_startup;
+  json["window.autosave_timer"] = static_cast<int>(this->window.autosave_timer.count());
+  json["window.save_backup_file"] = this->window.save_backup_file;
   return json;
 }
 

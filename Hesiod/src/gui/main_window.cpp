@@ -332,7 +332,7 @@ bool MainWindow::save_to_file(const std::string &fname) const
   try
   {
     // If the file exists, create a backup before overwriting
-    if (std::filesystem::exists(fname_ext))
+    if (std::filesystem::exists(fname_ext) && HSD_CONFIG->window.save_backup_file)
     {
       std::filesystem::path original_path(fname_ext);
       std::filesystem::path backup_path = insert_before_extension(original_path, ".bak");
