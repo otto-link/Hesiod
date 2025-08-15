@@ -30,6 +30,16 @@ Operator/Blend
 | :--- | :--- | :--- |
 |output|Heightmap|Output heightmap.|
 
+# Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|gain_factor|Float|No description|
+|post_gain|Float|No description|
+|post_inverse|Bool|No description|
+|post_remap|Value range|No description|
+|post_smoothing_radius|Float|No description|
+
 # Example
 
 
