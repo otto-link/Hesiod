@@ -12,6 +12,8 @@
 #include <chrono>
 #include <memory>
 
+#include "nlohmann/json.hpp"
+
 #define HSD_CONFIG hesiod::Config::get_config()
 
 namespace hesiod
@@ -23,6 +25,13 @@ public:
   Config() = default;
   static std::shared_ptr<Config> &get_config();
 
+  // --- Serialization ---
+  void           json_from(nlohmann::json const &json);
+  nlohmann::json json_to() const;
+  void           load_from_file(const std::string &fname);
+  void           save_to_file(const std::string &fname) const;
+
+  // --- Data
   struct Window
   {
     bool                      open_graph_manager_at_startup = false;
