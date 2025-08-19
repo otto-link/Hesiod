@@ -890,6 +890,27 @@
             }
         }
     },
+    "CloudFromCsv": {
+        "category": "Geometry/Cloud",
+        "description": "No description available",
+        "label": "CloudFromCsv",
+        "parameters": {
+            "fname": {
+                "description": "No description",
+                "key": "fname",
+                "label": "fname",
+                "type": "Filename"
+            }
+        },
+        "ports": {
+            "cloud": {
+                "caption": "cloud",
+                "data_type": "Cloud",
+                "description": "No description",
+                "type": "output"
+            }
+        }
+    },
     "CloudLattice": {
         "category": "Geometry/Cloud",
         "description": "Generate a grid lattice set of points.",
@@ -6745,6 +6766,27 @@
                 "caption": "output",
                 "data_type": "Path",
                 "description": "Output path.",
+                "type": "output"
+            }
+        }
+    },
+    "PathFromCsv": {
+        "category": "Geometry/Path",
+        "description": "No description available",
+        "label": "PathFromCsv",
+        "parameters": {
+            "fname": {
+                "description": "No description",
+                "key": "fname",
+                "label": "fname",
+                "type": "Filename"
+            }
+        },
+        "ports": {
+            "path": {
+                "caption": "path",
+                "data_type": "Path",
+                "description": "No description",
                 "type": "output"
             }
         }

@@ -17,8 +17,8 @@ Node Categories
 |Filter|Recast|ExpandShrink, Fold, NormalDisplacement, RecastCanyon, RecastCliff, RecastCliffDirectional, RecastCracks, RecastSag, SteepenConvective|
 |Filter|Recurve|Gain, GammaCorrection, GammaCorrectionLocal, Plateau, Recurve, RecurveKura, RecurveS, ReverseAboveThreshold, Saturate, Terrace|
 |Filter|Smoothing|Laplace, Median3x3, ShapeIndex, SharpenCone, SmoothCpulse, SmoothFill, SmoothFillHoles, SmoothFillSmearPeaks|
-|Geometry|Cloud|Cloud, CloudLattice, CloudMerge, CloudRandom, CloudRandomDensity, CloudRandomDistance, CloudRemapValues, CloudSDF, CloudSetValuesFromBorderDistance, CloudSetValuesFromHeightmap, CloudSetValuesFromMinDistance, CloudToArrayInterp, CloudToPath|
-|Geometry|Path|Path, PathBezier, PathBezierRound, PathBspline, PathDecasteljau, PathDig, PathFind, PathFractalize, PathMeanderize, PathResample, PathSDF, PathSmooth, PathToCloud, PathToHeightmap|
+|Geometry|Cloud|Cloud, CloudFromCsv, CloudLattice, CloudMerge, CloudRandom, CloudRandomDensity, CloudRandomDistance, CloudRemapValues, CloudSDF, CloudSetValuesFromBorderDistance, CloudSetValuesFromHeightmap, CloudSetValuesFromMinDistance, CloudToArrayInterp, CloudToPath|
+|Geometry|Path|Path, PathBezier, PathBezierRound, PathBspline, PathDecasteljau, PathDig, PathFind, PathFractalize, PathFromCsv, PathMeanderize, PathResample, PathSDF, PathSmooth, PathToCloud, PathToHeightmap|
 |IO|Files|ExportAsset, ExportCloud, ExportHeightmap, ExportNormalMap, ExportPath, ExportTexture, ImportHeightmap, ImportTexture|
 |Mask|Selector|SelectAngle, SelectBlobLog, SelectCavities, SelectGt, SelectInterval, SelectInwardOutward, SelectMidrange, SelectMultiband3, SelectPulse, SelectRivers, SelectSlope, SelectTransitions, SelectValley|
 |Math|Base|Abs, AbsSmooth, Cos, GaussianDecay, Inverse, Lerp, Reverse, Smoothstep|

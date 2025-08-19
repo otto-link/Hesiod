@@ -151,6 +151,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Clamp", "Filter/Range"},
       {"Closing", "Operator/Morphology"},
       {"Cloud", "Geometry/Cloud"},
+      {"CloudFromCsv", "Geometry/Cloud"},
       {"CloudMerge", "Geometry/Cloud"},
       {"CloudLattice", "Geometry/Cloud"},
       {"CloudRandom", "Geometry/Cloud"},
@@ -257,6 +258,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"PathDig", "Geometry/Path"},
       {"PathFind", "Geometry/Path"},
       {"PathFractalize", "Geometry/Path"},
+      {"PathFromCsv", "Geometry/Path"},
       {"PathMeanderize", "Geometry/Path"},
       {"PathResample", "Geometry/Path"},
       {"PathSDF", "Geometry/Path"},
@@ -408,6 +410,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(Clamp, clamp);
     SETUP_NODE(Closing, closing);
     SETUP_NODE(Cloud, cloud);
+    SETUP_NODE(CloudFromCsv, cloud_from_csv);
     SETUP_NODE(CloudMerge, cloud_merge);
     SETUP_NODE(CloudLattice, cloud_lattice);
     SETUP_NODE(CloudRandom, cloud_random);
@@ -515,6 +518,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(PathDig, path_dig);
     SETUP_NODE(PathFind, path_find);
     SETUP_NODE(PathFractalize, path_fractalize);
+    SETUP_NODE(PathFromCsv, path_from_csv);
     SETUP_NODE(PathMeanderize, path_meanderize);
     SETUP_NODE(PathResample, path_resample);
     SETUP_NODE(PathSDF, path_sdf);

@@ -87,6 +87,7 @@ DECLARE_NODE(caldera)
 DECLARE_NODE(clamp)
 DECLARE_NODE(closing)
 DECLARE_NODE(cloud)
+DECLARE_NODE(cloud_from_csv)
 DECLARE_NODE(cloud_lattice)
 DECLARE_NODE(cloud_merge)
 DECLARE_NODE(cloud_random)
@@ -193,6 +194,7 @@ DECLARE_NODE(path_decasteljau);
 DECLARE_NODE(path_dig);
 DECLARE_NODE(path_find);
 DECLARE_NODE(path_fractalize);
+DECLARE_NODE(path_from_csv)
 DECLARE_NODE(path_meanderize);
 DECLARE_NODE(path_resample);
 DECLARE_NODE(path_sdf);
