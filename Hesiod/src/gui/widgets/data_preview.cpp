@@ -134,12 +134,25 @@ void DataPreview::update_image()
       if (data_type == typeid(hmap::Heightmap).name())
       {
         hmap::Heightmap *p_h = static_cast<hmap::Heightmap *>(blind_data_ptr);
-        array = p_h->to_array(shape_preview);
+
+        if (p_h)
+          array = p_h->to_array(shape_preview);
+        else
+          LOG->critical("DataPreview::update_image: hmap::Heightmap is nullptr");
       }
       else
       {
-        array = *static_cast<hmap::Array *>(blind_data_ptr);
-        array = array.resample_to_shape_nearest(shape_preview);
+        hmap::Array *p_a = static_cast<hmap::Array *>(blind_data_ptr);
+
+        if (p_a)
+        {
+          array = *p_a;
+          array = array.resample_to_shape_nearest(shape_preview);
+        }
+        else
+        {
+          LOG->critical("DataPreview::update_image: hmap::Array is nullptr");
+        }
       }
 
       // build preview
@@ -176,45 +189,80 @@ void DataPreview::update_image()
     {
       hmap::HeightmapRGBA *p_h = static_cast<hmap::HeightmapRGBA *>(blind_data_ptr);
 
-      img = p_h->to_img_8bit(shape_preview);
-      img_format = QImage::Format_RGBA8888;
+      if (p_h)
+      {
+        img = p_h->to_img_8bit(shape_preview);
+        img_format = QImage::Format_RGBA8888;
+      }
+      else
+      {
+        LOG->critical("DataPreview::update_image: hmap::HeightmapRGBA is nullptr");
+      }
     }
     //
     else if (data_type == typeid(hmap::Cloud).name())
     {
-      hmap::Cloud cloud = *static_cast<hmap::Cloud *>(blind_data_ptr);
+      hmap::Cloud *p_cloud = static_cast<hmap::Cloud *>(blind_data_ptr);
 
-      if (cloud.get_npoints() > 0)
+      if (p_cloud)
       {
-        hmap::Array array = hmap::Array(shape_preview);
-        cloud.to_array(array);
+        hmap::Cloud cloud = *p_cloud;
 
-        img = hmap::colorize(array, array.min(), array.max(), hmap::Cmap::MAGMA, false)
-                  .to_img_8bit();
-        img_format = QImage::Format_RGB888;
+        if (cloud.get_npoints() > 0)
+        {
+          hmap::Array array = hmap::Array(shape_preview);
+          cloud.to_array(array);
+
+          img = hmap::colorize(array, array.min(), array.max(), hmap::Cmap::MAGMA, false)
+                    .to_img_8bit();
+          img_format = QImage::Format_RGB888;
+        }
+      }
+      else
+      {
+        LOG->critical("DataPreview::update_image: hmap::Cloud is nullptr");
       }
     }
     //
     else if (data_type == typeid(hmap::Path).name())
     {
-      hmap::Path path = *static_cast<hmap::Path *>(blind_data_ptr);
+      hmap::Path *p_path = static_cast<hmap::Path *>(blind_data_ptr);
 
-      if (path.get_npoints() > 0)
+      if (p_path)
       {
-        hmap::Array       array = hmap::Array(shape_preview);
-        hmap::Vec4<float> bbox = hmap::Vec4<float>(0.f, 1.f, 0.f, 1.f);
-        path.remap_values(0.1f, 1.f);
-        path.to_array(array, bbox);
+        hmap::Path path = *p_path;
 
-        img = hmap::colorize(array, array.min(), array.max(), hmap::Cmap::MAGMA, false)
-                  .to_img_8bit();
-        img_format = QImage::Format_RGB888;
+        if (path.get_npoints() > 0)
+        {
+          hmap::Array       array = hmap::Array(shape_preview);
+          hmap::Vec4<float> bbox = hmap::Vec4<float>(0.f, 1.f, 0.f, 1.f);
+          path.remap_values(0.1f, 1.f);
+          path.to_array(array, bbox);
+
+          img = hmap::colorize(array, array.min(), array.max(), hmap::Cmap::MAGMA, false)
+                    .to_img_8bit();
+          img_format = QImage::Format_RGB888;
+        }
+      }
+      else
+      {
+        LOG->critical("DataPreview::update_image: hmap::Path is nullptr");
       }
     }
   }
 
-  QImage tmp_image = QImage(img.data(), shape_preview.x, shape_preview.y, img_format);
-  this->preview_image = tmp_image.copy();
+  QImage tmp_image;
+
+  if (!img.empty())
+  {
+    tmp_image = QImage(img.data(), shape_preview.x, shape_preview.y, img_format).copy();
+  }
+  else
+  {
+    tmp_image = QImage(shape_preview.x, shape_preview.y, img_format);
+    tmp_image.fill(Qt::transparent);
+  }
+  this->preview_image = tmp_image;
 
   QPixmap pixmap = QPixmap::fromImage(this->preview_image);
 
