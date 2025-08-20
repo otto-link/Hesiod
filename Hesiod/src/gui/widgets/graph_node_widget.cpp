@@ -330,7 +330,13 @@ void GraphNodeWidget::on_graph_import_request()
       gngui::GraphicsNode *p_gfx_node = this->get_graphics_node_by_id(node_id);
 
       // Qt mystery, this needs to be delayed to be effective
-      QTimer::singleShot(0, this, [p_gfx_node]() { p_gfx_node->setSelected(true); });
+      QTimer::singleShot(0,
+                         this,
+                         [p_gfx_node]()
+                         {
+                           if (p_gfx_node)
+                             p_gfx_node->setSelected(true);
+                         });
     }
   }
 }
@@ -420,7 +426,13 @@ void GraphNodeWidget::on_graph_settings_request()
 
     // set selection back, Qt mystery, this needs to be delayed to be effective
     gngui::GraphicsNode *p_gfx_node = this->get_graphics_node_by_id(selected_id);
-    QTimer::singleShot(0, this, [p_gfx_node]() { p_gfx_node->setSelected(true); });
+    QTimer::singleShot(0,
+                       this,
+                       [p_gfx_node]()
+                       {
+                         if (p_gfx_node)
+                           p_gfx_node->setSelected(true);
+                       });
   }
 
   this->set_enabled(true);
@@ -780,7 +792,8 @@ void GraphNodeWidget::on_nodes_paste_request()
   {
     const std::string    node_id = json_node["id"].get<std::string>();
     gngui::GraphicsNode *p_gfx_node = this->get_graphics_node_by_id(node_id);
-    p_gfx_node->setSelected(true);
+    if (p_gfx_node)
+      p_gfx_node->setSelected(true);
   }
 }
 

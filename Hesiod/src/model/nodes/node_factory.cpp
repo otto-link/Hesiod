@@ -157,6 +157,8 @@ std::map<std::string, std::string> get_node_inventory()
       {"CloudRandom", "Geometry/Cloud"},
       {"CloudRandomDensity", "Geometry/Cloud"},
       {"CloudRandomDistance", "Geometry/Cloud"},
+      {"CloudRandomPowerLaw", "Geometry/Cloud"},
+      {"CloudRandomWeibull", "Geometry/Cloud"},
       {"CloudRemapValues", "Geometry/Cloud"},
       {"CloudSDF", "Geometry/Cloud"},
       {"CloudSetValuesFromBorderDistance", "Geometry/Cloud"},
@@ -416,6 +418,8 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(CloudRandom, cloud_random);
     SETUP_NODE(CloudRandomDensity, cloud_random_density);
     SETUP_NODE(CloudRandomDistance, cloud_random_distance);
+    SETUP_NODE(CloudRandomPowerLaw, cloud_random_power_law);
+    SETUP_NODE(CloudRandomWeibull, cloud_random_weibull);
     SETUP_NODE(CloudRemapValues, cloud_remap_values);
     SETUP_NODE(CloudSDF, cloud_sdf);
     SETUP_NODE(CloudSetValuesFromBorderDistance, cloud_set_values_from_border_distance);

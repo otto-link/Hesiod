@@ -1105,6 +1105,96 @@
             }
         }
     },
+    "CloudRandomPowerLaw": {
+        "category": "Geometry/Cloud",
+        "description": "No description available",
+        "label": "CloudRandomPowerLaw",
+        "parameters": {
+            "alpha": {
+                "description": "No description",
+                "key": "alpha",
+                "label": "alpha",
+                "type": "Float"
+            },
+            "distance_max": {
+                "description": "No description",
+                "key": "distance_max",
+                "label": "distance_max",
+                "type": "Float"
+            },
+            "distance_min": {
+                "description": "No description",
+                "key": "distance_min",
+                "label": "distance_min",
+                "type": "Float"
+            },
+            "remap": {
+                "description": "No description",
+                "key": "remap",
+                "label": "remap",
+                "type": "Value range"
+            },
+            "seed": {
+                "description": "No description",
+                "key": "seed",
+                "label": "seed",
+                "type": "Random seed number"
+            }
+        },
+        "ports": {
+            "cloud": {
+                "caption": "cloud",
+                "data_type": "Cloud",
+                "description": "No description",
+                "type": "output"
+            }
+        }
+    },
+    "CloudRandomWeibull": {
+        "category": "Geometry/Cloud",
+        "description": "No description available",
+        "label": "CloudRandomWeibull",
+        "parameters": {
+            "distance_min": {
+                "description": "No description",
+                "key": "distance_min",
+                "label": "distance_min",
+                "type": "Float"
+            },
+            "k": {
+                "description": "No description",
+                "key": "k",
+                "label": "k",
+                "type": "Float"
+            },
+            "lambda": {
+                "description": "No description",
+                "key": "lambda",
+                "label": "lambda",
+                "type": "Float"
+            },
+            "remap": {
+                "description": "No description",
+                "key": "remap",
+                "label": "remap",
+                "type": "Value range"
+            },
+            "seed": {
+                "description": "No description",
+                "key": "seed",
+                "label": "seed",
+                "type": "Random seed number"
+            }
+        },
+        "ports": {
+            "cloud": {
+                "caption": "cloud",
+                "data_type": "Cloud",
+                "description": "No description",
+                "type": "output"
+            }
+        }
+    },
     "CloudRemapValues": {
         "category": "Geometry/Cloud",
         "description": "CloudRemapValues remap the range of the cloud point values.",
