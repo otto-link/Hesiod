@@ -108,7 +108,7 @@ private:
   std::filesystem::path project_path = "";
   bool                  is_dirty = false;
   QTimer               *autosave_timer; // own by this
-  bool                  show_node_settings_pan = true;
+  bool                  show_node_settings_pan = false;
 };
 
 // =====================================

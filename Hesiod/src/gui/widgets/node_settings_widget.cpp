@@ -146,19 +146,19 @@ void NodeSettingsWidget::update_content()
 
     // preview
     DataPreview *p_data_preview = p_node->get_data_preview_ref();
+
     if (p_data_preview)
     {
-      QImage preview_image = p_data_preview->get_preview_image();
+      QPixmap preview_pixmap = p_data_preview->get_preview_pixmap();
 
-      if (!preview_image.isNull())
+      if (!preview_pixmap.isNull())
       {
         const int width = 48;
         QLabel   *label_preview = new QLabel(this);
-        QPixmap   pixmap = QPixmap::fromImage(preview_image);
-        QPixmap   scaled_pixmap = pixmap.scaled(width,
-                                              width,
-                                              Qt::KeepAspectRatio,
-                                              Qt::SmoothTransformation);
+        QPixmap   scaled_pixmap = preview_pixmap.scaled(width,
+                                                      width,
+                                                      Qt::KeepAspectRatio,
+                                                      Qt::SmoothTransformation);
         label_preview->setPixmap(scaled_pixmap);
         label_preview->setScaledContents(true);
         label_preview->setFixedSize(width, width);

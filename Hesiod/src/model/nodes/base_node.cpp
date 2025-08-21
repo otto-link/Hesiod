@@ -84,7 +84,7 @@ BaseNode::BaseNode(const std::string &label, std::shared_ptr<ModelConfig> config
                 [this]()
                 {
                   if (this->data_preview)
-                    this->data_preview->update_image();
+                    this->data_preview->update_preview();
                 });
 }
 

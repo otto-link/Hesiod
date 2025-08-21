@@ -14,6 +14,8 @@
 
 #include "nlohmann/json.hpp"
 
+#include "highmap/algebra.hpp"
+
 #define HSD_CONFIG hesiod::Config::get_config()
 
 namespace hesiod
@@ -39,6 +41,11 @@ public:
     std::chrono::milliseconds autosave_timer{60000}; // 60 seconds
     bool                      save_backup_file = true;
   } window;
+
+  struct Nodes
+  {
+    hmap::Vec2<int> shape_preview = hmap::Vec2<int>(128, 128);
+  } nodes;
 
 private:
   Config(const Config &) = delete;
