@@ -146,7 +146,7 @@
                 "type": "Float"
             },
             "kw": {
-                "description": "No description",
+                "description": "Noise wavenumbers (kx, ky) for each directions.",
                 "key": "kw",
                 "label": "kw",
                 "type": "Wavenumber"
@@ -194,25 +194,25 @@
                 "type": "Float"
             },
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -230,7 +230,7 @@
                 "type": "Float"
             },
             "seed": {
-                "description": "No description",
+                "description": "Random seed number.",
                 "key": "seed",
                 "label": "seed",
                 "type": "Random seed number"
@@ -264,25 +264,25 @@
             "dx": {
                 "caption": "dx",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Displacement with respect to the domain size (x-direction).",
                 "type": "input"
             },
             "dy": {
                 "caption": "dy",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Displacement with respect to the domain size (y-direction).",
                 "type": "input"
             },
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Output noise amplitude envelope.",
                 "type": "input"
             },
             "out": {
                 "caption": "out",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "The generated heightmap from brush strokes.",
                 "type": "output"
             }
         }
@@ -473,25 +473,25 @@
                 "type": "Array"
             },
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -524,25 +524,25 @@
                 "type": "Float"
             },
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -570,7 +570,7 @@
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Output noise amplitude envelope.",
                 "type": "input"
             },
             "output": {
@@ -587,37 +587,37 @@
         "label": "BumpLorentzian",
         "parameters": {
             "center": {
-                "description": "No description",
+                "description": "Reference center within the heightmap.",
                 "key": "center",
                 "label": "center",
                 "type": "Vec2Float"
             },
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
             },
             "radius": {
-                "description": "No description",
+                "description": "Filter radius with respect to the domain size.",
                 "key": "radius",
                 "label": "radius",
                 "type": "Float"
@@ -633,31 +633,31 @@
             "control": {
                 "caption": "control",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Control parameter, acts as a multiplier for the weight parameter.",
                 "type": "input"
             },
             "dx": {
                 "caption": "dx",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Displacement with respect to the domain size (x-direction).",
                 "type": "input"
             },
             "dy": {
                 "caption": "dy",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Displacement with respect to the domain size (y-direction).",
                 "type": "input"
             },
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Output noise amplitude envelope.",
                 "type": "input"
             },
             "output": {
                 "caption": "output",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Filtered heightmap.",
                 "type": "output"
             }
         }
@@ -761,37 +761,37 @@
                 "type": "Float"
             },
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_mix": {
-                "description": "No description",
+                "description": "Mixing factor for blending input and output values. A value of 0 uses only the input, 1 uses only the output, and intermediate values perform a linear interpolation.",
                 "key": "post_mix",
                 "label": "post_mix",
                 "type": "Float"
             },
             "post_mix_method": {
-                "description": "No description",
+                "description": "Method used to combine input and output values. Options include linear interpolation (default), min, max, smooth min, smooth max, add, and subtract.",
                 "key": "post_mix_method",
                 "label": "post_mix_method",
                 "type": "Enumeration"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -879,7 +879,7 @@
             "background": {
                 "caption": "background",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Input heightmap.",
                 "type": "input"
             },
             "cloud": {
@@ -896,7 +896,7 @@
         "label": "CloudFromCsv",
         "parameters": {
             "fname": {
-                "description": "No description",
+                "description": "Export file name.",
                 "key": "fname",
                 "label": "fname",
                 "type": "Filename"
@@ -906,7 +906,7 @@
             "cloud": {
                 "caption": "cloud",
                 "data_type": "Cloud",
-                "description": "No description",
+                "description": "Set of points (x, y) and elevations z.",
                 "type": "output"
             }
         }
@@ -923,7 +923,7 @@
                 "type": "Wavenumber"
             },
             "npoints": {
-                "description": "No description",
+                "description": "Number of points.",
                 "key": "npoints",
                 "label": "npoints",
                 "type": "Integer"
@@ -1027,19 +1027,19 @@
         "label": "CloudRandomDensity",
         "parameters": {
             "npoints": {
-                "description": "No description",
+                "description": "Number of points.",
                 "key": "npoints",
                 "label": "npoints",
                 "type": "Integer"
             },
             "remap": {
-                "description": "No description",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap",
                 "label": "remap",
                 "type": "Value range"
             },
             "seed": {
-                "description": "No description",
+                "description": "Random seed number.",
                 "key": "seed",
                 "label": "seed",
                 "type": "Random seed number"
@@ -1049,13 +1049,13 @@
             "cloud": {
                 "caption": "cloud",
                 "data_type": "Cloud",
-                "description": "No description",
+                "description": "Set of points (x, y) and elevations z.",
                 "type": "output"
             },
             "density": {
                 "caption": "density",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Output noise amplitude envelope.",
                 "type": "input"
             }
         }
@@ -1078,7 +1078,7 @@
                 "type": "Float"
             },
             "remap": {
-                "description": "No description",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap",
                 "label": "remap",
                 "type": "Value range"
@@ -1094,13 +1094,13 @@
             "cloud": {
                 "caption": "cloud",
                 "data_type": "Cloud",
-                "description": "No description",
+                "description": "Set of points (x, y) and elevations z.",
                 "type": "output"
             },
             "density": {
                 "caption": "density",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Output noise amplitude envelope.",
                 "type": "input"
             }
         }
@@ -1129,13 +1129,13 @@
                 "type": "Float"
             },
             "remap": {
-                "description": "No description",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap",
                 "label": "remap",
                 "type": "Value range"
             },
             "seed": {
-                "description": "No description",
+                "description": "Random seed number.",
                 "key": "seed",
                 "label": "seed",
                 "type": "Random seed number"
@@ -1145,7 +1145,7 @@
             "cloud": {
                 "caption": "cloud",
                 "data_type": "Cloud",
-                "description": "No description",
+                "description": "Set of points (x, y) and elevations z.",
                 "type": "output"
             }
         }
@@ -1162,7 +1162,7 @@
                 "type": "Float"
             },
             "k": {
-                "description": "No description",
+                "description": "Smoothing intensity (if any).",
                 "key": "k",
                 "label": "k",
                 "type": "Float"
@@ -1174,13 +1174,13 @@
                 "type": "Float"
             },
             "remap": {
-                "description": "No description",
+                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
                 "key": "remap",
                 "label": "remap",
                 "type": "Value range"
             },
             "seed": {
-                "description": "No description",
+                "description": "Random seed number.",
                 "key": "seed",
                 "label": "seed",
                 "type": "Random seed number"
@@ -1190,7 +1190,7 @@
             "cloud": {
                 "caption": "cloud",
                 "data_type": "Cloud",
-                "description": "No description",
+                "description": "Set of points (x, y) and elevations z.",
                 "type": "output"
             }
         }
@@ -1228,25 +1228,25 @@
         "label": "CloudSDF",
         "parameters": {
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -1288,7 +1288,7 @@
             "cloud": {
                 "caption": "cloud",
                 "data_type": "Cloud",
-                "description": "No description",
+                "description": "Set of points (x, y) and elevations z.",
                 "type": "input"
             },
             "out": {
@@ -1308,7 +1308,7 @@
             "cloud": {
                 "caption": "cloud",
                 "data_type": "Cloud",
-                "description": "No description",
+                "description": "Set of points (x, y) and elevations z.",
                 "type": "input"
             },
             "heightmap": {
@@ -1320,7 +1320,7 @@
             "out": {
                 "caption": "out",
                 "data_type": "Cloud",
-                "description": "No description",
+                "description": "Set of points (x, y) and elevations z.",
                 "type": "output"
             }
         }
@@ -1623,37 +1623,37 @@
         "label": "ConvolveSVD",
         "parameters": {
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_mix": {
-                "description": "No description",
+                "description": "Mixing factor for blending input and output values. A value of 0 uses only the input, 1 uses only the output, and intermediate values perform a linear interpolation.",
                 "key": "post_mix",
                 "label": "post_mix",
                 "type": "Float"
             },
             "post_mix_method": {
-                "description": "No description",
+                "description": "Method used to combine input and output values. Options include linear interpolation (default), min, max, smooth min, smooth max, add, and subtract.",
                 "key": "post_mix_method",
                 "label": "post_mix_method",
                 "type": "Enumeration"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -2104,37 +2104,37 @@
                 "type": "Float"
             },
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_mix": {
-                "description": "No description",
+                "description": "Mixing factor for blending input and output values. A value of 0 uses only the input, 1 uses only the output, and intermediate values perform a linear interpolation.",
                 "key": "post_mix",
                 "label": "post_mix",
                 "type": "Float"
             },
             "post_mix_method": {
-                "description": "No description",
+                "description": "Method used to combine input and output values. Options include linear interpolation (default), min, max, smooth min, smooth max, add, and subtract.",
                 "key": "post_mix_method",
                 "label": "post_mix_method",
                 "type": "Enumeration"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -2323,37 +2323,37 @@
                 "type": "Choice"
             },
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_mix": {
-                "description": "No description",
+                "description": "Mixing factor for blending input and output values. A value of 0 uses only the input, 1 uses only the output, and intermediate values perform a linear interpolation.",
                 "key": "post_mix",
                 "label": "post_mix",
                 "type": "Float"
             },
             "post_mix_method": {
-                "description": "No description",
+                "description": "Method used to combine input and output values. Options include linear interpolation (default), min, max, smooth min, smooth max, add, and subtract.",
                 "key": "post_mix_method",
                 "label": "post_mix_method",
                 "type": "Enumeration"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -3127,37 +3127,37 @@
         "label": "GaussianDecay",
         "parameters": {
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_mix": {
-                "description": "No description",
+                "description": "Mixing factor for blending input and output values. A value of 0 uses only the input, 1 uses only the output, and intermediate values perform a linear interpolation.",
                 "key": "post_mix",
                 "label": "post_mix",
                 "type": "Float"
             },
             "post_mix_method": {
-                "description": "No description",
+                "description": "Method used to combine input and output values. Options include linear interpolation (default), min, max, smooth min, smooth max, add, and subtract.",
                 "key": "post_mix_method",
                 "label": "post_mix_method",
                 "type": "Enumeration"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -3382,25 +3382,25 @@
         "label": "Gradient",
         "parameters": {
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -3460,25 +3460,25 @@
         "label": "GradientNorm",
         "parameters": {
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -3505,25 +3505,25 @@
         "label": "GradientTalus",
         "parameters": {
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -4236,37 +4236,37 @@
                 "type": "Float"
             },
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_mix": {
-                "description": "No description",
+                "description": "Mixing factor for blending input and output values. A value of 0 uses only the input, 1 uses only the output, and intermediate values perform a linear interpolation.",
                 "key": "post_mix",
                 "label": "post_mix",
                 "type": "Float"
             },
             "post_mix_method": {
-                "description": "No description",
+                "description": "Method used to combine input and output values. Options include linear interpolation (default), min, max, smooth min, smooth max, add, and subtract.",
                 "key": "post_mix_method",
                 "label": "post_mix_method",
                 "type": "Enumeration"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -4353,7 +4353,7 @@
                 "type": "Float"
             },
             "talus_ref": {
-                "description": "TODO",
+                "description": "Reference talus, with small values of talus_ref leading to thinner flow streams.",
                 "key": "talus_ref",
                 "label": "talus_ref",
                 "type": "Float"
@@ -4491,25 +4491,25 @@
                 "type": "Filename"
             },
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -5060,37 +5060,37 @@
                 "type": "Choice"
             },
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_mix": {
-                "description": "No description",
+                "description": "Mixing factor for blending input and output values. A value of 0 uses only the input, 1 uses only the output, and intermediate values perform a linear interpolation.",
                 "key": "post_mix",
                 "label": "post_mix",
                 "type": "Float"
             },
             "post_mix_method": {
-                "description": "No description",
+                "description": "Method used to combine input and output values. Options include linear interpolation (default), min, max, smooth min, smooth max, add, and subtract.",
                 "key": "post_mix_method",
                 "label": "post_mix_method",
                 "type": "Enumeration"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -5174,25 +5174,25 @@
         "label": "MedianPseudo",
         "parameters": {
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -5321,25 +5321,25 @@
                 "type": "Float"
             },
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -5396,25 +5396,25 @@
                 "type": "Bool"
             },
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -7213,25 +7213,25 @@
                 "type": "Integer"
             },
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -7249,7 +7249,7 @@
                 "type": "Float"
             },
             "seed": {
-                "description": "No description",
+                "description": "Random seed number.",
                 "key": "seed",
                 "label": "seed",
                 "type": "Random seed number"
@@ -7277,13 +7277,13 @@
             "dx": {
                 "caption": "dx",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Displacement with respect to the domain size (x-direction).",
                 "type": "input"
             },
             "dy": {
                 "caption": "dy",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Displacement with respect to the domain size (y-direction).",
                 "type": "input"
             },
             "envelope": {
@@ -7378,25 +7378,25 @@
                 "type": "Float"
             },
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -7414,7 +7414,7 @@
                 "type": "Float"
             },
             "seed": {
-                "description": "No description",
+                "description": "Random seed number.",
                 "key": "seed",
                 "label": "seed",
                 "type": "Random seed number"
@@ -7442,13 +7442,13 @@
             "dx": {
                 "caption": "dx",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Displacement with respect to the domain size (x-direction).",
                 "type": "input"
             },
             "dy": {
                 "caption": "dy",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Displacement with respect to the domain size (y-direction).",
                 "type": "input"
             },
             "envelope": {
@@ -8111,25 +8111,25 @@
         "label": "RelativeDistanceFromSkeleton",
         "parameters": {
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -8281,37 +8281,37 @@
         "label": "ReverseAboveThreshold",
         "parameters": {
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_mix": {
-                "description": "No description",
+                "description": "Mixing factor for blending input and output values. A value of 0 uses only the input, 1 uses only the output, and intermediate values perform a linear interpolation.",
                 "key": "post_mix",
                 "label": "post_mix",
                 "type": "Float"
             },
             "post_mix_method": {
-                "description": "No description",
+                "description": "Method used to combine input and output values. Options include linear interpolation (default), min, max, smooth min, smooth max, add, and subtract.",
                 "key": "post_mix_method",
                 "label": "post_mix_method",
                 "type": "Enumeration"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -8704,37 +8704,37 @@
                 "type": "Float"
             },
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_mix": {
-                "description": "No description",
+                "description": "Mixing factor for blending input and output values. A value of 0 uses only the input, 1 uses only the output, and intermediate values perform a linear interpolation.",
                 "key": "post_mix",
                 "label": "post_mix",
                 "type": "Float"
             },
             "post_mix_method": {
-                "description": "No description",
+                "description": "Method used to combine input and output values. Options include linear interpolation (default), min, max, smooth min, smooth max, add, and subtract.",
                 "key": "post_mix_method",
                 "label": "post_mix_method",
                 "type": "Enumeration"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -8875,25 +8875,25 @@
                 "type": "Float"
             },
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -8932,25 +8932,25 @@
         "label": "SelectBlobLog",
         "parameters": {
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -8989,25 +8989,25 @@
                 "type": "Bool"
             },
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -9040,25 +9040,25 @@
         "label": "SelectGt",
         "parameters": {
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -9091,25 +9091,25 @@
         "label": "SelectInterval",
         "parameters": {
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -9154,25 +9154,25 @@
                 "type": "Vec2Float"
             },
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -9205,25 +9205,25 @@
                 "type": "Float"
             },
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -9256,25 +9256,25 @@
                 "type": "Float"
             },
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -9325,25 +9325,25 @@
         "label": "SelectPulse",
         "parameters": {
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -9388,31 +9388,31 @@
                 "type": "Float"
             },
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
             },
             "talus_ref": {
-                "description": "TODO",
+                "description": "Reference talus, with small values of talus_ref leading to thinner flow streams.",
                 "key": "talus_ref",
                 "label": "talus_ref",
                 "type": "Float"
@@ -9445,25 +9445,25 @@
                 "type": "Bool"
             },
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -9496,25 +9496,25 @@
         "label": "SelectTransitions",
         "parameters": {
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -9559,25 +9559,25 @@
                 "type": "Bool"
             },
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -9961,37 +9961,37 @@
                 "type": "Choice"
             },
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_mix": {
-                "description": "No description",
+                "description": "Mixing factor for blending input and output values. A value of 0 uses only the input, 1 uses only the output, and intermediate values perform a linear interpolation.",
                 "key": "post_mix",
                 "label": "post_mix",
                 "type": "Float"
             },
             "post_mix_method": {
-                "description": "No description",
+                "description": "Method used to combine input and output values. Options include linear interpolation (default), min, max, smooth min, smooth max, add, and subtract.",
                 "key": "post_mix_method",
                 "label": "post_mix_method",
                 "type": "Enumeration"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -10072,37 +10072,37 @@
                 "type": "Bool"
             },
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_mix": {
-                "description": "No description",
+                "description": "Mixing factor for blending input and output values. A value of 0 uses only the input, 1 uses only the output, and intermediate values perform a linear interpolation.",
                 "key": "post_mix",
                 "label": "post_mix",
                 "type": "Float"
             },
             "post_mix_method": {
-                "description": "No description",
+                "description": "Method used to combine input and output values. Options include linear interpolation (default), min, max, smooth min, smooth max, add, and subtract.",
                 "key": "post_mix_method",
                 "label": "post_mix_method",
                 "type": "Enumeration"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -10177,37 +10177,37 @@
                 "type": "Choice"
             },
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_mix": {
-                "description": "No description",
+                "description": "Mixing factor for blending input and output values. A value of 0 uses only the input, 1 uses only the output, and intermediate values perform a linear interpolation.",
                 "key": "post_mix",
                 "label": "post_mix",
                 "type": "Float"
             },
             "post_mix_method": {
-                "description": "No description",
+                "description": "Method used to combine input and output values. Options include linear interpolation (default), min, max, smooth min, smooth max, add, and subtract.",
                 "key": "post_mix_method",
                 "label": "post_mix_method",
                 "type": "Enumeration"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -10276,37 +10276,37 @@
                 "type": "Choice"
             },
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_mix": {
-                "description": "No description",
+                "description": "Mixing factor for blending input and output values. A value of 0 uses only the input, 1 uses only the output, and intermediate values perform a linear interpolation.",
                 "key": "post_mix",
                 "label": "post_mix",
                 "type": "Float"
             },
             "post_mix_method": {
-                "description": "No description",
+                "description": "Method used to combine input and output values. Options include linear interpolation (default), min, max, smooth min, smooth max, add, and subtract.",
                 "key": "post_mix_method",
                 "label": "post_mix_method",
                 "type": "Enumeration"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -10459,25 +10459,25 @@
         "label": "StdLocal",
         "parameters": {
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -11830,25 +11830,25 @@
                 "type": "Float"
             },
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -11860,7 +11860,7 @@
                 "type": "Enumeration"
             },
             "seed": {
-                "description": "No description",
+                "description": "Random seed number.",
                 "key": "seed",
                 "label": "seed",
                 "type": "Random seed number"
@@ -11876,13 +11876,13 @@
             "dx": {
                 "caption": "dx",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Displacement with respect to the domain size (x-direction).",
                 "type": "input"
             },
             "dy": {
                 "caption": "dy",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Displacement with respect to the domain size (y-direction).",
                 "type": "input"
             },
             "envelope": {
@@ -11953,25 +11953,25 @@
                 "type": "Float"
             },
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -11983,7 +11983,7 @@
                 "type": "Enumeration"
             },
             "seed": {
-                "description": "No description",
+                "description": "Random seed number.",
                 "key": "seed",
                 "label": "seed",
                 "type": "Random seed number"
@@ -12005,13 +12005,13 @@
             "dx": {
                 "caption": "dx",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Displacement with respect to the domain size (x-direction).",
                 "type": "input"
             },
             "dy": {
                 "caption": "dy",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Displacement with respect to the domain size (y-direction).",
                 "type": "input"
             },
             "envelope": {
@@ -12367,25 +12367,25 @@
                 "type": "Float"
             },
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -12397,7 +12397,7 @@
                 "type": "Enumeration"
             },
             "seed": {
-                "description": "No description",
+                "description": "Random seed number.",
                 "key": "seed",
                 "label": "seed",
                 "type": "Random seed number"
@@ -12425,13 +12425,13 @@
             "dx": {
                 "caption": "dx",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Displacement with respect to the domain size (x-direction).",
                 "type": "input"
             },
             "dy": {
                 "caption": "dy",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Displacement with respect to the domain size (y-direction).",
                 "type": "input"
             },
             "envelope": {
@@ -12454,37 +12454,37 @@
         "label": "Warp",
         "parameters": {
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_mix": {
-                "description": "No description",
+                "description": "Mixing factor for blending input and output values. A value of 0 uses only the input, 1 uses only the output, and intermediate values perform a linear interpolation.",
                 "key": "post_mix",
                 "label": "post_mix",
                 "type": "Float"
             },
             "post_mix_method": {
-                "description": "No description",
+                "description": "Method used to combine input and output values. Options include linear interpolation (default), min, max, smooth min, smooth max, add, and subtract.",
                 "key": "post_mix_method",
                 "label": "post_mix_method",
                 "type": "Enumeration"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -13006,25 +13006,25 @@
         "label": "ZScore",
         "parameters": {
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
