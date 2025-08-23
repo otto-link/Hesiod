@@ -31,5 +31,4 @@ Primitive/Kernel
 # Example
 
 
-![img](../../images/nodes/KernelDiskSmooth.png)
-
+No example available.

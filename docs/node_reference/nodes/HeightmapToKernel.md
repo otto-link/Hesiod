@@ -38,5 +38,4 @@ Converter
 # Example
 
 
-![img](../../images/nodes/HeightmapToKernel.png)
-
+No example available.

@@ -38,5 +38,4 @@ WIP
 # Example
 
 
-![img](../../images/nodes/HydraulicBlur.png)
-
+No example available.

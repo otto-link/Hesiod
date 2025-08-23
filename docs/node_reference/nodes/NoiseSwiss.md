@@ -47,5 +47,4 @@ Primitive/Coherent
 # Example
 
 
-![img](../../images/nodes/NoiseSwiss.png)
-
+No example available.

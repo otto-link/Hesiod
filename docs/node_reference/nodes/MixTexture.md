@@ -39,5 +39,4 @@ Texture
 # Example
 
 
-![img](../../images/nodes/MixTexture.png)
-
+No example available.

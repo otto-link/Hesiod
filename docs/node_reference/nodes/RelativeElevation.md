@@ -36,5 +36,4 @@ Features/Landform
 # Example
 
 
-![img](../../images/nodes/RelativeElevation.png)
-
+No example available.

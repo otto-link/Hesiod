@@ -36,5 +36,4 @@ Operator/Morphology
 # Example
 
 
-![img](../../images/nodes/Opening.png)
-
+No example available.

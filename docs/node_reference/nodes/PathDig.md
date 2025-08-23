@@ -40,5 +40,4 @@ Geometry/Path
 # Example
 
 
-![img](../../images/nodes/PathDig.png)
-
+No example available.

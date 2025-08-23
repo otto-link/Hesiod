@@ -37,5 +37,4 @@ Primitive/Random
 # Example
 
 
-![img](../../images/nodes/White.png)
-
+No example available.

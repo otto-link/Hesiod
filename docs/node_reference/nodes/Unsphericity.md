@@ -40,5 +40,4 @@ Features/Landform
 # Example
 
 
-![img](../../images/nodes/Unsphericity.png)
-
+No example available.

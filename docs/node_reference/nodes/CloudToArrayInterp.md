@@ -31,5 +31,4 @@ Geometry/Cloud
 # Example
 
 
-![img](../../images/nodes/CloudToArrayInterp.png)
-
+No example available.

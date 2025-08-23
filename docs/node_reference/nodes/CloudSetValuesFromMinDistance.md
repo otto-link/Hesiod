@@ -29,5 +29,4 @@ Geometry/Cloud
 # Example
 
 
-![img](../../images/nodes/CloudSetValuesFromMinDistance.png)
-
+No example available.

@@ -31,5 +31,4 @@ IO/Files
 # Example
 
 
-![img](../../images/nodes/ExportNormalMap.png)
-
+No example available.

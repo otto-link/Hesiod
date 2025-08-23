@@ -36,5 +36,4 @@ Routing
 # Example
 
 
-![img](../../images/nodes/Toggle.png)
-
+No example available.

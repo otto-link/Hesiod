@@ -39,5 +39,4 @@ Geometry/Path
 # Example
 
 
-![img](../../images/nodes/PathFractalize.png)
-
+No example available.

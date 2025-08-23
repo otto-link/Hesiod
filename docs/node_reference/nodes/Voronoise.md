@@ -42,5 +42,4 @@ Primitive/Coherent
 # Example
 
 
-![img](../../images/nodes/Voronoise.png)
-
+No example available.

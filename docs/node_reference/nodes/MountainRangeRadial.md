@@ -50,5 +50,4 @@ Primitive/Geological
 # Example
 
 
-![img](../../images/nodes/MountainRangeRadial.png)
-
+No example available.

@@ -38,5 +38,4 @@ Primitive/Random
 # Example
 
 
-![img](../../images/nodes/WhiteDensityMap.png)
-
+No example available.

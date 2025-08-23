@@ -18,17 +18,16 @@ Geometry/Cloud
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|cloud|Cloud|No description|
+|cloud|Cloud|Set of points (x, y) and elevations z.|
 |heightmap|Heightmap|No description|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|out|Cloud|No description|
+|out|Cloud|Set of points (x, y) and elevations z.|
 
 # Example
 
 
-![img](../../images/nodes/CloudSetValuesFromHeightmap.png)
-
+No example available.

@@ -40,5 +40,4 @@ Erosion/Thermal
 # Example
 
 
-![img](../../images/nodes/Thermal.png)
-
+No example available.

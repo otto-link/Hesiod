@@ -10,6 +10,7 @@ BUILD_PATH = "build"
 HSD_DATA_PATH = "Hesiod/data"
 NODE_SNAPSHOT_PATH = "docs/images/nodes/"
 NODE_MARKDOWN_PATH = "docs/node_reference/nodes"
+NODE_EXAMPLES_PATH = "docs/examples"
 
 def generate_snapshots():
     """Generate node snapshots using the Hesiod executable."""
@@ -61,6 +62,7 @@ def generate_categories_markdown(data):
 def generate_node_markdown(data):
     """Generate markdown documentation for all nodes."""
     img_relative_path = os.path.relpath(NODE_SNAPSHOT_PATH, NODE_MARKDOWN_PATH)
+    hsd_relative_path = os.path.relpath(NODE_SNAPSHOT_PATH, NODE_EXAMPLES_PATH)
     
     for node_type, node_info in data.items():
         print(node_info['label'])
@@ -89,10 +91,17 @@ def generate_node_markdown(data):
         # Handle node snapshot images
         md_file.new_header(level=1, title="Example")
         
-        img_fname = node_type + ".png"
-        img_path_rel = os.path.join(img_relative_path, img_fname)
-        md_file.new_paragraph(Image.Image.new_inline_image(text="img", path=img_path_rel))
-        md_file.new_paragraph()
+        img_fname = node_type + "_hsd_example.png"
+
+        if (os.path.isfile(os.path.join(NODE_SNAPSHOT_PATH, img_fname))):
+            img_path_rel = os.path.join(img_relative_path, img_fname)
+            md_file.new_paragraph(Image.Image.new_inline_image(text="img", path=img_path_rel))
+
+            hsd_fname = node_type + '.hsd'
+            md_file.new_paragraph('[{}]({})'.format(hsd_fname, os.path.join(hsd_relative_path, hsd_fname)));
+            md_file.new_paragraph()
+        else:
+            md_file.new_paragraph('No example available.');
 
         # add manual-input existing content
         fname = os.path.join(NODE_MARKDOWN_PATH, node_type + '.in.md')

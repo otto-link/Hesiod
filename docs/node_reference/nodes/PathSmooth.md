@@ -37,5 +37,4 @@ Geometry/Path
 # Example
 
 
-![img](../../images/nodes/PathSmooth.png)
-
+No example available.

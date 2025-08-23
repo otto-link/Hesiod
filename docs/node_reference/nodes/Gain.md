@@ -36,5 +36,4 @@ Filter/Recurve
 # Example
 
 
-![img](../../images/nodes/Gain.png)
-
+No example available.

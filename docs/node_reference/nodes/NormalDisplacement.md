@@ -40,5 +40,4 @@ Filter/Recast
 # Example
 
 
-![img](../../images/nodes/NormalDisplacement.png)
-
+No example available.

@@ -39,5 +39,4 @@ Features
 # Example
 
 
-![img](../../images/nodes/Ruggedness.png)
-
+No example available.

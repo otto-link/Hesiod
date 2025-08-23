@@ -52,5 +52,4 @@ Texture
 # Example
 
 
-![img](../../images/nodes/TextureQuiltingExpand.png)
-
+No example available.

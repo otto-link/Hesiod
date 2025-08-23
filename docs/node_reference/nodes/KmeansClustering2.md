@@ -42,5 +42,4 @@ Features/Clustering
 # Example
 
 
-![img](../../images/nodes/KmeansClustering2.png)
-
+No example available.

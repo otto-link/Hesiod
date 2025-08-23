@@ -26,5 +26,4 @@ Debug
 # Example
 
 
-![img](../../images/nodes/Preview.png)
-
+No example available.

@@ -37,5 +37,4 @@ WIP
 # Example
 
 
-![img](../../images/nodes/Kuwahara.png)
-
+No example available.

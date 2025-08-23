@@ -39,5 +39,4 @@ Operator/Transform
 # Example
 
 
-![img](../../images/nodes/Translate.png)
-
+No example available.

@@ -36,5 +36,4 @@ Operator/Morphology
 # Example
 
 
-![img](../../images/nodes/Dilation.png)
-
+No example available.

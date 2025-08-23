@@ -30,5 +30,4 @@ IO/Files
 # Example
 
 
-![img](../../images/nodes/ExportCloud.png)
-
+No example available.

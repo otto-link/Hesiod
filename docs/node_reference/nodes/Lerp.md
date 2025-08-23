@@ -37,5 +37,4 @@ Math/Base
 # Example
 
 
-![img](../../images/nodes/Lerp.png)
-
+No example available.

@@ -40,5 +40,4 @@ Math/Boundaries
 # Example
 
 
-![img](../../images/nodes/SetBorders.png)
-
+No example available.

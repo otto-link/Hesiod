@@ -20,8 +20,8 @@ Primitive/Coherent
 | :--- | :--- | :--- |
 |density|Heightmap|No description|
 |dr|Heightmap|No description|
-|dx|Heightmap|No description|
-|dy|Heightmap|No description|
+|dx|Heightmap|Displacement with respect to the domain size (x-direction).|
+|dy|Heightmap|Displacement with respect to the domain size (y-direction).|
 |envelope|Heightmap|No description|
 |size|Heightmap|No description|
 
@@ -46,17 +46,19 @@ Primitive/Coherent
 |n_vertices_min|Integer|No description|
 |octaves|Integer|No description|
 |persistence|Float|No description|
-|post_gain|Float|No description|
-|post_inverse|Bool|No description|
-|post_remap|Value range|No description|
-|post_smoothing_radius|Float|No description|
+|post_gain|Float|Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.|
+|post_inverse|Bool|Inverts the output values after processing, flipping low and high values across the midrange.|
+|post_remap|Value range|Linearly remaps the output values to a specified target range (default is [0, 1]).|
+|post_smoothing_radius|Float|Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.|
 |rmax|Float|No description|
 |rmin|Float|No description|
-|seed|Random seed number|No description|
+|seed|Random seed number|Random seed number.|
 |shift|Float|No description|
 
 # Example
 
 
-![img](../../images/nodes/PolygonFieldFbm.png)
+![img](../../images/nodes/PolygonFieldFbm_hsd_example.png)
+
+[PolygonFieldFbm.hsd](../images/nodes/PolygonFieldFbm.hsd)
 

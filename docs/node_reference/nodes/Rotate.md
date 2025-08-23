@@ -36,5 +36,4 @@ Operator/Transform
 # Example
 
 
-![img](../../images/nodes/Rotate.png)
-
+No example available.

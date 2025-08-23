@@ -36,5 +36,4 @@ Filter/Recast
 # Example
 
 
-![img](../../images/nodes/Fold.png)
-
+No example available.

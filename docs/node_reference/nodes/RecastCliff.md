@@ -39,5 +39,4 @@ Filter/Recast
 # Example
 
 
-![img](../../images/nodes/RecastCliff.png)
-
+No example available.

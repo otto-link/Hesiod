@@ -18,24 +18,23 @@ Geometry/Cloud
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|density|Heightmap|No description|
+|density|Heightmap|Output noise amplitude envelope.|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|cloud|Cloud|No description|
+|cloud|Cloud|Set of points (x, y) and elevations z.|
 
 # Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|npoints|Integer|No description|
-|remap|Value range|No description|
-|seed|Random seed number|No description|
+|npoints|Integer|Number of points.|
+|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|seed|Random seed number|Random seed number.|
 
 # Example
 
 
-![img](../../images/nodes/CloudRandomDensity.png)
-
+No example available.

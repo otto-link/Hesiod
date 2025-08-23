@@ -46,5 +46,4 @@ WIP
 # Example
 
 
-![img](../../images/nodes/HydraulicVpipes.png)
-
+No example available.

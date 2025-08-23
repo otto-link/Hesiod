@@ -37,5 +37,4 @@ Filter/Recast
 # Example
 
 
-![img](../../images/nodes/RecastCracks.png)
-
+No example available.

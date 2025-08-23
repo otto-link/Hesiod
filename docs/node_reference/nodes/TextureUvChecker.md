@@ -29,5 +29,4 @@ Texture
 # Example
 
 
-![img](../../images/nodes/TextureUvChecker.png)
-
+No example available.

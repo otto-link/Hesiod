@@ -29,5 +29,4 @@ IO/Files
 # Example
 
 
-![img](../../images/nodes/ImportTexture.png)
-
+No example available.

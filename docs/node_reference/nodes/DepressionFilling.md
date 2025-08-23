@@ -38,5 +38,4 @@ Erosion
 # Example
 
 
-![img](../../images/nodes/DepressionFilling.png)
-
+No example available.

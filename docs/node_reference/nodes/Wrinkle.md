@@ -43,5 +43,4 @@ WIP
 # Example
 
 
-![img](../../images/nodes/Wrinkle.png)
-
+No example available.

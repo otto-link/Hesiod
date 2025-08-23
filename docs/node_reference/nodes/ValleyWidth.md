@@ -37,5 +37,4 @@ Features/Landform
 # Example
 
 
-![img](../../images/nodes/ValleyWidth.png)
-
+No example available.

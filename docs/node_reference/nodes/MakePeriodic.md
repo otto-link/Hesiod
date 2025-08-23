@@ -35,5 +35,4 @@ Operator/Tiling
 # Example
 
 
-![img](../../images/nodes/MakePeriodic.png)
-
+No example available.

@@ -30,5 +30,4 @@ Texture
 # Example
 
 
-![img](../../images/nodes/ColorizeSolid.png)
-
+No example available.

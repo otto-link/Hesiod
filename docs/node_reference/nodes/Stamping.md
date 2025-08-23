@@ -45,5 +45,4 @@ Primitive/Coherent
 # Example
 
 
-![img](../../images/nodes/Stamping.png)
-
+No example available.

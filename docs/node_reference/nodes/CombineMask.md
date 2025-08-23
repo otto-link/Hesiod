@@ -36,5 +36,4 @@ Mask
 # Example
 
 
-![img](../../images/nodes/CombineMask.png)
-
+No example available.

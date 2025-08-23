@@ -39,5 +39,4 @@ Geometry/Path
 # Example
 
 
-![img](../../images/nodes/PathMeanderize.png)
-
+No example available.

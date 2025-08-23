@@ -47,5 +47,4 @@ Primitive/Coherent
 # Example
 
 
-![img](../../images/nodes/NoiseIq.png)
-
+No example available.

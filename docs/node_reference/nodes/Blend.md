@@ -40,5 +40,4 @@ Operator/Blend
 # Example
 
 
-![img](../../images/nodes/Blend.png)
-
+No example available.

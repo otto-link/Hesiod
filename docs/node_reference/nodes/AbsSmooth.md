@@ -38,9 +38,7 @@ Math/Base
 # Example
 
 
-![img](../../images/nodes/AbsSmooth.png)
-
-  
+No example available.  
 # Note
 
 Automatically included.

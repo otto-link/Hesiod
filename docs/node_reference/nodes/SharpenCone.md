@@ -37,5 +37,4 @@ Filter/Smoothing
 # Example
 
 
-![img](../../images/nodes/SharpenCone.png)
-
+No example available.

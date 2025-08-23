@@ -30,5 +30,4 @@ Geometry/Cloud
 # Example
 
 
-![img](../../images/nodes/CloudMerge.png)
-
+No example available.

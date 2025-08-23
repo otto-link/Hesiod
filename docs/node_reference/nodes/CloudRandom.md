@@ -32,5 +32,7 @@ Geometry/Cloud
 # Example
 
 
-![img](../../images/nodes/CloudRandom.png)
+![img](../../images/nodes/CloudRandom_hsd_example.png)
+
+[CloudRandom.hsd](../images/nodes/CloudRandom.hsd)
 

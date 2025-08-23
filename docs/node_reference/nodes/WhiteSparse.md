@@ -38,5 +38,4 @@ Primitive/Random
 # Example
 
 
-![img](../../images/nodes/WhiteSparse.png)
-
+No example available.

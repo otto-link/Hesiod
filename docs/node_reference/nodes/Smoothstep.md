@@ -35,5 +35,4 @@ Math/Base
 # Example
 
 
-![img](../../images/nodes/Smoothstep.png)
-
+No example available.

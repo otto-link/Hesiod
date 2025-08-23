@@ -29,5 +29,4 @@ Routing
 # Example
 
 
-![img](../../images/nodes/Receive.png)
-
+No example available.

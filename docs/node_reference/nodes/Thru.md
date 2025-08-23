@@ -35,5 +35,7 @@ Routing
 # Example
 
 
-![img](../../images/nodes/Thru.png)
+![img](../../images/nodes/Thru_hsd_example.png)
+
+[Thru.hsd](../images/nodes/Thru.hsd)
 

@@ -25,7 +25,7 @@ Geometry/Cloud
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |jitter_ratio|Wavenumber|Point jittering (noise) in x and y directions.|
-|npoints|Integer|No description|
+|npoints|Integer|Number of points.|
 |remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 |seed|Random seed number|Random seed number|
 |stagger_ratio|Wavenumber|Point offset in x and y directions for every two lines or columns.|
@@ -33,5 +33,4 @@ Geometry/Cloud
 # Example
 
 
-![img](../../images/nodes/CloudLattice.png)
-
+No example available.

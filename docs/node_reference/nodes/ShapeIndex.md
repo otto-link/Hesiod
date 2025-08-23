@@ -39,5 +39,4 @@ Filter/Smoothing
 # Example
 
 
-![img](../../images/nodes/ShapeIndex.png)
-
+No example available.

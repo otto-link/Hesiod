@@ -38,5 +38,4 @@ WIP
 # Example
 
 
-![img](../../images/nodes/WarpDownslope.png)
-
+No example available.

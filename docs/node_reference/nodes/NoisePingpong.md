@@ -46,5 +46,4 @@ Primitive/Coherent
 # Example
 
 
-![img](../../images/nodes/NoisePingpong.png)
-
+No example available.

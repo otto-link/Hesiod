@@ -40,5 +40,4 @@ Erosion/Thermal
 # Example
 
 
-![img](../../images/nodes/ThermalAutoBedrock.png)
-
+No example available.

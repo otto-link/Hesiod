@@ -47,5 +47,4 @@ WIP
 # Example
 
 
-![img](../../images/nodes/HydraulicSchott.png)
-
+No example available.

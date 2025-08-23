@@ -18,7 +18,7 @@ Geometry/Cloud
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|cloud|Cloud|No description|
+|cloud|Cloud|Set of points (x, y) and elevations z.|
 
 # Outputs
 
@@ -29,5 +29,4 @@ Geometry/Cloud
 # Example
 
 
-![img](../../images/nodes/CloudSetValuesFromBorderDistance.png)
-
+No example available.

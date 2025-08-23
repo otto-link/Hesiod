@@ -18,16 +18,15 @@ Geometry/Cloud
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|cloud|Cloud|No description|
+|cloud|Cloud|Set of points (x, y) and elevations z.|
 
 # Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|fname|Filename|No description|
+|fname|Filename|Export file name.|
 
 # Example
 
 
-![img](../../images/nodes/CloudFromCsv.png)
-
+No example available.

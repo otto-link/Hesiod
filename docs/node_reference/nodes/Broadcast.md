@@ -35,5 +35,4 @@ Routing
 # Example
 
 
-![img](../../images/nodes/Broadcast.png)
-
+No example available.

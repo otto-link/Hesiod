@@ -35,5 +35,4 @@ Geometry/Cloud
 # Example
 
 
-![img](../../images/nodes/CloudRemapValues.png)
-
+No example available.

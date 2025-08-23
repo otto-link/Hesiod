@@ -35,5 +35,4 @@ Filter/Range
 # Example
 
 
-![img](../../images/nodes/ShiftElevation.png)
-
+No example available.

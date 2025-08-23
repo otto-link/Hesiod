@@ -29,5 +29,4 @@ Geometry/Path
 # Example
 
 
-![img](../../images/nodes/PathFromCsv.png)
-
+No example available.

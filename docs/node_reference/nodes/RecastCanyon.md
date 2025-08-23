@@ -38,5 +38,4 @@ Filter/Recast
 # Example
 
 
-![img](../../images/nodes/RecastCanyon.png)
-
+No example available.

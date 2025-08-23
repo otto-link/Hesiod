@@ -38,5 +38,4 @@ Geometry/Path
 # Example
 
 
-![img](../../images/nodes/PathSDF.png)
-
+No example available.

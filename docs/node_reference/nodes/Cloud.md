@@ -18,7 +18,7 @@ Geometry/Cloud
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|background|Heightmap|No description|
+|background|Heightmap|Input heightmap.|
 
 # Outputs
 
@@ -35,5 +35,4 @@ Geometry/Cloud
 # Example
 
 
-![img](../../images/nodes/Cloud.png)
-
+No example available.

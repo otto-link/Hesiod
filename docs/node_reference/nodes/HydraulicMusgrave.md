@@ -41,5 +41,4 @@ WIP
 # Example
 
 
-![img](../../images/nodes/HydraulicMusgrave.png)
-
+No example available.

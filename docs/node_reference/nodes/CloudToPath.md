@@ -36,5 +36,4 @@ Geometry/Cloud
 # Example
 
 
-![img](../../images/nodes/CloudToPath.png)
-
+No example available.

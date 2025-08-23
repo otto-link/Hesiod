@@ -35,11 +35,10 @@ WIP
 |clipping_ratio|Float|TODO|
 |persistence|Float|TODO|
 |radius|Float|TODO|
-|talus_ref|Float|TODO|
+|talus_ref|Float|Reference talus, with small values of talus_ref leading to thinner flow streams.|
 |upscaling_levels|Integer|TODO|
 
 # Example
 
 
-![img](../../images/nodes/HydraulicStreamUpscaleAmplification.png)
-
+No example available.

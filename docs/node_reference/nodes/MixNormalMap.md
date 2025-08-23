@@ -37,5 +37,4 @@ Texture
 # Example
 
 
-![img](../../images/nodes/MixNormalMap.png)
-
+No example available.

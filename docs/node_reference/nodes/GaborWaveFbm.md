@@ -50,5 +50,4 @@ Primitive/Coherent
 # Example
 
 
-![img](../../images/nodes/GaborWaveFbm.png)
-
+No example available.

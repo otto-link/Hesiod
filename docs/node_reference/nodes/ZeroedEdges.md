@@ -38,5 +38,7 @@ Math/Boundaries
 # Example
 
 
-![img](../../images/nodes/ZeroedEdges.png)
+![img](../../images/nodes/ZeroedEdges_hsd_example.png)
+
+[ZeroedEdges.hsd](../images/nodes/ZeroedEdges.hsd)
 
