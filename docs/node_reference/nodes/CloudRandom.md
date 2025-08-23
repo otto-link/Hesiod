@@ -34,5 +34,5 @@ Geometry/Cloud
 
 ![img](../../images/nodes/CloudRandom_hsd_example.png)
 
-[CloudRandom.hsd](../../examples/CloudRandom.hsd)
+Corresponding Hesiod file: [CloudRandom.hsd](../../examples/CloudRandom.hsd)
 

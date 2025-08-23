@@ -40,5 +40,5 @@ Math/Boundaries
 
 ![img](../../images/nodes/ZeroedEdges_hsd_example.png)
 
-[ZeroedEdges.hsd](../../examples/ZeroedEdges.hsd)
+Corresponding Hesiod file: [ZeroedEdges.hsd](../../examples/ZeroedEdges.hsd)
 

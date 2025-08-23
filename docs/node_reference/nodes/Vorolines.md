@@ -50,5 +50,5 @@ Primitive/Coherent
 
 ![img](../../images/nodes/Vorolines_hsd_example.png)
 
-[Vorolines.hsd](../../examples/Vorolines.hsd)
+Corresponding Hesiod file: [Vorolines.hsd](../../examples/Vorolines.hsd)
 

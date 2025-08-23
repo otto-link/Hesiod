@@ -45,5 +45,5 @@ Primitive/Function
 
 ![img](../../images/nodes/Bump_hsd_example.png)
 
-[Bump.hsd](../../examples/Bump.hsd)
+Corresponding Hesiod file: [Bump.hsd](../../examples/Bump.hsd)
 

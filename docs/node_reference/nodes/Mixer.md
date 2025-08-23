@@ -45,5 +45,5 @@ Operator/Blend
 
 ![img](../../images/nodes/Mixer_hsd_example.png)
 
-[Mixer.hsd](../../examples/Mixer.hsd)
+Corresponding Hesiod file: [Mixer.hsd](../../examples/Mixer.hsd)
 

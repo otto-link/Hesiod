@@ -42,5 +42,5 @@ Operator/Morphology
 
 ![img](../../images/nodes/MorphologicalGradient_hsd_example.png)
 
-[MorphologicalGradient.hsd](../../examples/MorphologicalGradient.hsd)
+Corresponding Hesiod file: [MorphologicalGradient.hsd](../../examples/MorphologicalGradient.hsd)
 

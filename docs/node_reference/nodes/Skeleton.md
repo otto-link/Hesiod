@@ -37,5 +37,5 @@ Operator/Morphology
 
 ![img](../../images/nodes/Skeleton_hsd_example.png)
 
-[Skeleton.hsd](../../examples/Skeleton.hsd)
+Corresponding Hesiod file: [Skeleton.hsd](../../examples/Skeleton.hsd)
 

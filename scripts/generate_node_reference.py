@@ -98,7 +98,7 @@ def generate_node_markdown(data):
             md_file.new_paragraph(Image.Image.new_inline_image(text="img", path=img_path_rel))
 
             hsd_fname = node_type + '.hsd'
-            md_file.new_paragraph('[{}]({})'.format(hsd_fname, os.path.join(hsd_relative_path, hsd_fname)));
+            md_file.new_paragraph('Corresponding Hesiod file: [{}]({})'.format(hsd_fname, os.path.join(hsd_relative_path, hsd_fname)));
             md_file.new_paragraph()
         else:
             md_file.new_paragraph('No example available.');

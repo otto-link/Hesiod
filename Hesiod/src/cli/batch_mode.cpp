@@ -177,7 +177,10 @@ void run_snapshot_generation()
 
       QWidget *widget = dynamic_cast<QWidget *>(main_window->graph_tabs_widget_ref());
 
-      render_widget_screenshot(widget, node_type + "_hsd_example.png", size, post_render_callback);
+      render_widget_screenshot(widget,
+                               node_type + "_hsd_example.png",
+                               size,
+                               post_render_callback);
     }
   }
 }

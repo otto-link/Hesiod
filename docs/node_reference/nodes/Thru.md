@@ -37,5 +37,5 @@ Routing
 
 ![img](../../images/nodes/Thru_hsd_example.png)
 
-[Thru.hsd](../../examples/Thru.hsd)
+Corresponding Hesiod file: [Thru.hsd](../../examples/Thru.hsd)
 

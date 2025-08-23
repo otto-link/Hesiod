@@ -60,5 +60,5 @@ Primitive/Coherent
 
 ![img](../../images/nodes/PolygonFieldFbm_hsd_example.png)
 
-[PolygonFieldFbm.hsd](../../examples/PolygonFieldFbm.hsd)
+Corresponding Hesiod file: [PolygonFieldFbm.hsd](../../examples/PolygonFieldFbm.hsd)
 
