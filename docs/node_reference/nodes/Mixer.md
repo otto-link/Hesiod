@@ -45,5 +45,8 @@ Operator/Blend
 
 ![img](../../images/nodes/Mixer_hsd_example.png)
 
-Corresponding Hesiod file: [Mixer.hsd](../../examples/Mixer.hsd)
+Corresponding Hesiod file: [Mixer.hsd](../../examples/Mixer.hsd). 
+
+> **Note:** Example files are kept up-to-date with the latest version of [Hesiod](https://github.com/otto-link/Hesiod).
+> If you find an error, please [open an issue](https://github.com/otto-link/Hesiod/issues).
 
