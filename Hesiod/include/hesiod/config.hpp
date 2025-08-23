@@ -18,6 +18,8 @@
 
 #define HSD_CONFIG hesiod::Config::get_config()
 
+#define HSD_NODE_DOCUMENTATION_JSON_PATH "data/node_documentation.json"
+
 namespace hesiod
 {
 

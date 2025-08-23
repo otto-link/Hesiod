@@ -50,11 +50,12 @@ public:
   void show_viewport();
 
   // --- Accessors ---
-  std::string get_project_name() const;
-  void        set_is_dirty(bool new_is_dirty);
-  void        set_project_path(const std::string &new_project_path);
-  void        set_project_path(const std::filesystem::path &new_project_path);
-  void        set_title(const std::string &new_title);
+  GraphTabsWidget *graph_tabs_widget_ref();
+  std::string      get_project_name() const;
+  void             set_is_dirty(bool new_is_dirty);
+  void             set_project_path(const std::string &new_project_path);
+  void             set_project_path(const std::filesystem::path &new_project_path);
+  void             set_title(const std::string &new_title);
 
   // --- Serialization on file ---
   void load_from_file(const std::string &fname);

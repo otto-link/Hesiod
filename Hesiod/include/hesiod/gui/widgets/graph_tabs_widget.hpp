@@ -39,6 +39,8 @@ public:
   void           json_from(nlohmann::json const &json);
   nlohmann::json json_to() const;
 
+  QSize sizeHint() const override;
+
 signals:
   void has_been_cleared(const std::string &graph_id);
   void has_changed();

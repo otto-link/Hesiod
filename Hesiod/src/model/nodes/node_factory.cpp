@@ -129,7 +129,7 @@ void dump_node_settings_screenshots()
 
     render_widget_screenshot(attributes_widget,
                              p_base_node->get_label() + "_settings.png",
-                             QSize(2048, 2048));
+                             QSize());
   }
 }
 

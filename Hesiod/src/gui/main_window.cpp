@@ -140,6 +140,11 @@ void MainWindow::closeEvent(QCloseEvent *event)
   event->accept();
 }
 
+GraphTabsWidget *MainWindow::graph_tabs_widget_ref()
+{
+  return this->graph_tabs_widget.get();
+}
+
 std::string MainWindow::get_project_name() const
 {
   if (this->project_path.empty())
