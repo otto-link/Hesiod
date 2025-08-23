@@ -45,5 +45,5 @@ Primitive/Function
 
 ![img](../../images/nodes/Bump_hsd_example.png)
 
-[Bump.hsd](../images/nodes/Bump.hsd)
+[Bump.hsd](../../examples/Bump.hsd)
 

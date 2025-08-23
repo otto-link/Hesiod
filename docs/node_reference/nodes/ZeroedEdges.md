@@ -40,5 +40,5 @@ Math/Boundaries
 
 ![img](../../images/nodes/ZeroedEdges_hsd_example.png)
 
-[ZeroedEdges.hsd](../images/nodes/ZeroedEdges.hsd)
+[ZeroedEdges.hsd](../../examples/ZeroedEdges.hsd)
 

@@ -37,5 +37,5 @@ Operator/Morphology
 
 ![img](../../images/nodes/Skeleton_hsd_example.png)
 
-[Skeleton.hsd](../images/nodes/Skeleton.hsd)
+[Skeleton.hsd](../../examples/Skeleton.hsd)
 

@@ -42,5 +42,5 @@ Operator/Morphology
 
 ![img](../../images/nodes/MorphologicalGradient_hsd_example.png)
 
-[MorphologicalGradient.hsd](../images/nodes/MorphologicalGradient.hsd)
+[MorphologicalGradient.hsd](../../examples/MorphologicalGradient.hsd)
 

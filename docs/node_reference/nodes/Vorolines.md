@@ -50,5 +50,5 @@ Primitive/Coherent
 
 ![img](../../images/nodes/Vorolines_hsd_example.png)
 
-[Vorolines.hsd](../images/nodes/Vorolines.hsd)
+[Vorolines.hsd](../../examples/Vorolines.hsd)
 

@@ -60,5 +60,5 @@ Primitive/Coherent
 
 ![img](../../images/nodes/PolygonFieldFbm_hsd_example.png)
 
-[PolygonFieldFbm.hsd](../images/nodes/PolygonFieldFbm.hsd)
+[PolygonFieldFbm.hsd](../../examples/PolygonFieldFbm.hsd)
 

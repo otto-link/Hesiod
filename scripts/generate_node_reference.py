@@ -62,7 +62,7 @@ def generate_categories_markdown(data):
 def generate_node_markdown(data):
     """Generate markdown documentation for all nodes."""
     img_relative_path = os.path.relpath(NODE_SNAPSHOT_PATH, NODE_MARKDOWN_PATH)
-    hsd_relative_path = os.path.relpath(NODE_SNAPSHOT_PATH, NODE_EXAMPLES_PATH)
+    hsd_relative_path = os.path.relpath(NODE_EXAMPLES_PATH, NODE_MARKDOWN_PATH)
     
     for node_type, node_info in data.items():
         print(node_info['label'])

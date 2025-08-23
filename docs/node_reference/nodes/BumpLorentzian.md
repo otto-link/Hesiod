@@ -46,5 +46,5 @@ Primitive/Function
 
 ![img](../../images/nodes/BumpLorentzian_hsd_example.png)
 
-[BumpLorentzian.hsd](../images/nodes/BumpLorentzian.hsd)
+[BumpLorentzian.hsd](../../examples/BumpLorentzian.hsd)
 
