@@ -984,11 +984,11 @@
     },
     "CloudRandom": {
         "category": "Geometry/Cloud",
-        "description": "Random set of points.",
+        "description": "Random point set: Generates a specified number of uniformly distributed random points, each with a value in [0, 1], using one of several methods: fully random (pure randomness, may cause clustering), Halton sequence (quasi-random, evenly distributed), Hammersley sequence (optimized, well-spaced for fixed point counts), or Latin hypercube sampling (stratified, uniform coverage).",
         "label": "CloudRandom",
         "parameters": {
             "method": {
-                "description": "No description",
+                "description": "Generation method.",
                 "key": "method",
                 "label": "method",
                 "type": "Enumeration"
@@ -1023,7 +1023,7 @@
     },
     "CloudRandomDensity": {
         "category": "Geometry/Cloud",
-        "description": "No description available",
+        "description": "No description",
         "label": "CloudRandomDensity",
         "parameters": {
             "npoints": {
