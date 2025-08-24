@@ -40,5 +40,4 @@ WIP
 # Example
 
 
-![img](../../images/nodes/HydraulicStream.png)
-
+No example available.

@@ -37,5 +37,4 @@ Operator/Morphology
 # Example
 
 
-![img](../../images/nodes/Border.png)
-
+No example available.

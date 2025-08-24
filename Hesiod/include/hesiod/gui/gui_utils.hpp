@@ -1,20 +1,8 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General Public
    License. The full license is in the file LICENSE, distributed with this software. */
-
-/**
- * @file gui_utils.hpp
- * @author  Otto Link (otto.link.bv@gmail.com)
- * @brief Defines utility functions for handling GUI elements, such as layout clearing and
- * font resizing for widgets in the Hesiod framework.
- *
- * @version 0.1
- * @date 2023-04-29
- *
- * @copyright Copyright (c) 2023 Otto Link Distributed under the terms of the GNU General
- * Public License.
- */
-
 #pragma once
+#include <functional>
+
 #include <QLayout>
 #include <QWidget>
 
@@ -53,9 +41,10 @@ void clear_layout(QLayout *layout);
  */
 void resize_font(QWidget *widget, int relative_size_modification);
 
-void render_widget_screenshot(QWidget           *widget,
-                              const std::string &fname,
-                              const QSize       &size = QSize());
+void render_widget_screenshot(QWidget              *widget,
+                              const std::string    &fname,
+                              const QSize          &size = QSize(),
+                              std::function<void()> post_render_callback = nullptr);
 
 int   float_to_slider_pos(float v, float min, float max, int slider_steps);
 float slider_pos_to_float(int pos, float min, float max, int slider_steps);

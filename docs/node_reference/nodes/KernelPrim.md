@@ -31,5 +31,4 @@ Primitive/Kernel
 # Example
 
 
-![img](../../images/nodes/KernelPrim.png)
-
+No example available.

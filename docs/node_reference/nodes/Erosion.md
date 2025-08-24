@@ -36,5 +36,4 @@ Operator/Morphology
 # Example
 
 
-![img](../../images/nodes/Erosion.png)
-
+No example available.

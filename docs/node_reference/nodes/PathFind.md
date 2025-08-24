@@ -39,5 +39,4 @@ Geometry/Path
 # Example
 
 
-![img](../../images/nodes/PathFind.png)
-
+No example available.

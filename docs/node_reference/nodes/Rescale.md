@@ -36,5 +36,4 @@ Filter/Range
 # Example
 
 
-![img](../../images/nodes/Rescale.png)
-
+No example available.

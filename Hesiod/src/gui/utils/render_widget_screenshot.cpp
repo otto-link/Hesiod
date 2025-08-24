@@ -15,24 +15,30 @@
 namespace hesiod
 {
 
-void render_widget_screenshot(QWidget           *widget,
-                              const std::string &fname,
-                              const QSize       &size)
+void render_widget_screenshot(QWidget              *widget,
+                              const std::string    &fname,
+                              const QSize          &size,
+                              std::function<void()> post_render_callback)
 {
   LOG->trace("render_widget_screenshot: fname {}", fname);
 
-  // let the layout settle
-  widget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
-  widget->adjustSize();
-  widget->updateGeometry();
+  // If a target size is provided, fix the widget to that size
+  if (size.isValid())
+  {
+    widget->setFixedSize(size);
+  }
+  else
+  {
+    // Let layout decide but ensure geometry is updated
+    widget->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum);
+    widget->adjustSize();
+  }
 
-  // get the final size of the widget after layout
-  QSize actual_size = widget->sizeHint();
-  if (!actual_size.isValid())
-    actual_size = widget->size();
+  // ensure all pending events/layout updates are processed
+  QApplication::processEvents();
 
   // create a QPixmap or QImage for off-screen rendering
-  QSize  render_size = size.isValid() ? size : actual_size;
+  QSize  render_size = size.isValid() ? size : widget->size();
   QImage image(render_size, QImage::Format_ARGB32_Premultiplied);
   image.fill(Qt::transparent);
 
@@ -40,12 +46,20 @@ void render_widget_screenshot(QWidget           *widget,
   widget->render(&painter);
   painter.end();
 
-  // crop to tight actual widget contents
-  QRect  crop_rect(QPoint(0, 0), widget->sizeHint().boundedTo(render_size));
-  QImage cropped = image.copy(crop_rect);
+  // can be used to setup some size-dependent stuff...
+  if (post_render_callback)
+    post_render_callback();
 
-  // save the cropped image
-  cropped.save(QString::fromStdString(fname));
+  if (size.isValid())
+  {
+    image.save(QString::fromStdString(fname));
+  }
+  else
+  {
+    QRect  crop_rect(QPoint(0, 0), widget->sizeHint().boundedTo(render_size));
+    QImage cropped = image.copy(crop_rect);
+    cropped.save(QString::fromStdString(fname));
+  }
 }
 
 } // namespace hesiod

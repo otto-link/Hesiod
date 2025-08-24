@@ -32,5 +32,4 @@ Converter
 # Example
 
 
-![img](../../images/nodes/HeightmapToRGBA.png)
-
+No example available.

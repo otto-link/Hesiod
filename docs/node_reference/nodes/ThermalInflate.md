@@ -38,5 +38,4 @@ Erosion/Thermal
 # Example
 
 
-![img](../../images/nodes/ThermalInflate.png)
-
+No example available.

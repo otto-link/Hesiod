@@ -37,5 +37,4 @@ Filter/Smoothing
 # Example
 
 
-![img](../../images/nodes/Laplace.png)
-
+No example available.

@@ -45,5 +45,4 @@ Filter/Recurve
 # Example
 
 
-![img](../../images/nodes/Terrace.png)
-
+No example available.

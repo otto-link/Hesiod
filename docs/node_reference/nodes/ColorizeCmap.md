@@ -42,5 +42,4 @@ Texture
 # Example
 
 
-![img](../../images/nodes/ColorizeCmap.png)
-
+No example available.

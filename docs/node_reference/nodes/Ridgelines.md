@@ -40,5 +40,4 @@ Primitive/Authoring
 # Example
 
 
-![img](../../images/nodes/Ridgelines.png)
-
+No example available.

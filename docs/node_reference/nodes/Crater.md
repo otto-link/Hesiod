@@ -43,5 +43,4 @@ Primitive/Geological
 # Example
 
 
-![img](../../images/nodes/Crater.png)
-
+No example available.

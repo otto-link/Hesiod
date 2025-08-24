@@ -1,7 +1,6 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General Public
    License. The full license is in the file LICENSE, distributed with this software. */
 #pragma once
-
 #include <QContextMenuEvent>
 #include <QLabel>
 
@@ -39,10 +38,10 @@ public:
   DataPreview() = default;
   DataPreview(gngui::NodeProxy *p_proxy_node);
 
-  const QImage &get_preview_image() const;
+  const QPixmap &get_preview_pixmap() const;
 
 public Q_SLOTS:
-  void update_image();
+  void update_preview();
 
 protected:
   void contextMenuEvent(QContextMenuEvent *event) override;
@@ -51,7 +50,7 @@ private:
   gngui::NodeProxy *p_proxy_node;
   int               preview_port_index;
   PreviewType       preview_type = PreviewType::GRAYSCALE;
-  QImage            preview_image;
+  QPixmap           preview_pixmap;
 };
 
 } // namespace hesiod

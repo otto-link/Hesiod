@@ -41,5 +41,4 @@ WIP
 # Example
 
 
-![img](../../images/nodes/SedimentDeposition.png)
-
+No example available.

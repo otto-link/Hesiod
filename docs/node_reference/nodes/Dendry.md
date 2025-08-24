@@ -48,5 +48,4 @@ Primitive/Coherent
 # Example
 
 
-![img](../../images/nodes/Dendry.png)
-
+No example available.

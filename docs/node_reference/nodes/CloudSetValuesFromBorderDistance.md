@@ -18,7 +18,7 @@ Geometry/Cloud
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|cloud|Cloud|No description|
+|cloud|Cloud|Set of points (x, y) and elevations z.|
 
 # Outputs
 
@@ -29,5 +29,10 @@ Geometry/Cloud
 # Example
 
 
-![img](../../images/nodes/CloudSetValuesFromBorderDistance.png)
+![img](../../images/nodes/CloudSetValuesFromBorderDistance_hsd_example.png)
+
+Corresponding Hesiod file: [CloudSetValuesFromBorderDistance.hsd](../../examples/CloudSetValuesFromBorderDistance.hsd). 
+
+> **Note:** Example files are kept up-to-date with the latest version of [Hesiod](https://github.com/otto-link/Hesiod).
+> If you find an error, please [open an issue](https://github.com/otto-link/Hesiod/issues).
 

@@ -41,5 +41,4 @@ Operator/Morphology
 # Example
 
 
-![img](../../images/nodes/DistanceTransform.png)
-
+No example available.

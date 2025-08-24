@@ -43,5 +43,4 @@ Primitive/Function
 # Example
 
 
-![img](../../images/nodes/Rift.png)
-
+No example available.

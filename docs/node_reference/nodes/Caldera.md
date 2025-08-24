@@ -43,5 +43,4 @@ Primitive/Geological
 # Example
 
 
-![img](../../images/nodes/Caldera.png)
-
+No example available.

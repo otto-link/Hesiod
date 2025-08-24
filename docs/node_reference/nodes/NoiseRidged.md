@@ -47,5 +47,4 @@ Primitive/Coherent
 # Example
 
 
-![img](../../images/nodes/NoiseRidged.png)
-
+No example available.

@@ -49,5 +49,4 @@ Primitive/Coherent
 # Example
 
 
-![img](../../images/nodes/Voronoi.png)
-
+No example available.

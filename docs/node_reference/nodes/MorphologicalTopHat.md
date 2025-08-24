@@ -39,5 +39,4 @@ Operator/Morphology
 # Example
 
 
-![img](../../images/nodes/MorphologicalTopHat.png)
-
+No example available.

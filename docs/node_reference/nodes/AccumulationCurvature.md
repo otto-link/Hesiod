@@ -39,5 +39,4 @@ Features/Landform
 # Example
 
 
-![img](../../images/nodes/AccumulationCurvature.png)
-
+No example available.

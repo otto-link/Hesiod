@@ -39,5 +39,4 @@ Converter
 # Example
 
 
-![img](../../images/nodes/HeightmapToMask.png)
-
+No example available.

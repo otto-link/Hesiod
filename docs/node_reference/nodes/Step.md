@@ -41,5 +41,4 @@ Primitive/Function
 # Example
 
 
-![img](../../images/nodes/Step.png)
-
+No example available.

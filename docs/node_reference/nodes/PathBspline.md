@@ -35,5 +35,4 @@ Geometry/Path
 # Example
 
 
-![img](../../images/nodes/PathBspline.png)
-
+No example available.

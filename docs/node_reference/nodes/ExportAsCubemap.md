@@ -34,5 +34,4 @@ WIP
 # Example
 
 
-![img](../../images/nodes/ExportAsCubemap.png)
-
+No example available.

@@ -40,5 +40,4 @@ Operator/Transform
 # Example
 
 
-![img](../../images/nodes/Zoom.png)
-
+No example available.

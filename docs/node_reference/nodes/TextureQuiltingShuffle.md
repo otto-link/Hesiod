@@ -51,5 +51,4 @@ Texture
 # Example
 
 
-![img](../../images/nodes/TextureQuiltingShuffle.png)
-
+No example available.

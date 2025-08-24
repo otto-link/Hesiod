@@ -38,5 +38,4 @@ Math/Boundaries
 # Example
 
 
-![img](../../images/nodes/Falloff.png)
-
+No example available.

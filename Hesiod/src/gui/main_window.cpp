@@ -1,6 +1,7 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include <filesystem>
 #include <iostream>
 #include <sstream>
 
@@ -137,6 +138,11 @@ void MainWindow::closeEvent(QCloseEvent *event)
 {
   this->save_state();
   event->accept();
+}
+
+GraphTabsWidget *MainWindow::graph_tabs_widget_ref()
+{
+  return this->graph_tabs_widget.get();
 }
 
 std::string MainWindow::get_project_name() const
@@ -326,8 +332,29 @@ bool MainWindow::save_to_file(const std::string &fname) const
 {
   LOG->trace("MainWindow::save_to_file: {}", fname);
 
+  const std::string fname_ext = ensure_extension(fname, ".hsd").string();
+
   try
   {
+    // If the file exists, create a backup before overwriting
+    if (std::filesystem::exists(fname_ext) && HSD_CONFIG->window.save_backup_file)
+    {
+      std::filesystem::path original_path(fname_ext);
+      std::filesystem::path backup_path = insert_before_extension(original_path, ".bak");
+
+      try
+      {
+        std::filesystem::copy_file(original_path,
+                                   backup_path,
+                                   std::filesystem::copy_options::overwrite_existing);
+        LOG->trace("Backup created: {}", backup_path.string());
+      }
+      catch (const std::exception &e)
+      {
+        LOG->warn("Failed to create backup for {}: {}", fname_ext, e.what());
+      }
+    }
+
     nlohmann::json json;
 
     // general infos
@@ -344,13 +371,13 @@ bool MainWindow::save_to_file(const std::string &fname) const
     json["graph_manager_widget"] = this->graph_manager_widget->json_to();
     json["graph_tabs_widget"] = this->graph_tabs_widget->json_to();
 
-    json_to_file(json, fname);
+    json_to_file(json, fname_ext);
     return true;
   }
   catch (const std::exception &e)
   {
     LOG->critical("MainWindow::save_to_file: failed to save file {}, what: {}",
-                  fname,
+                  fname_ext,
                   e.what());
     return false;
   }

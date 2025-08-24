@@ -18,8 +18,8 @@ Primitive/Coherent
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|dx|Heightmap|No description|
-|dy|Heightmap|No description|
+|dx|Heightmap|Displacement with respect to the domain size (x-direction).|
+|dy|Heightmap|Displacement with respect to the domain size (y-direction).|
 |envelope|Heightmap|No description|
 
 # Outputs
@@ -40,17 +40,16 @@ Primitive/Coherent
 |lacunarity|Float|No description|
 |octaves|Integer|No description|
 |persistence|Float|No description|
-|post_gain|Float|No description|
-|post_inverse|Bool|No description|
-|post_remap|Value range|No description|
-|post_smoothing_radius|Float|No description|
+|post_gain|Float|Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.|
+|post_inverse|Bool|Inverts the output values after processing, flipping low and high values across the midrange.|
+|post_remap|Value range|Linearly remaps the output values to a specified target range (default is [0, 1]).|
+|post_smoothing_radius|Float|Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.|
 |return_type|Enumeration|No description|
-|seed|Random seed number|No description|
+|seed|Random seed number|Random seed number.|
 |sqrt_output|Bool|No description|
 |weight|Float|No description|
 
 # Example
 
 
-![img](../../images/nodes/VorolinesFbm.png)
-
+No example available.

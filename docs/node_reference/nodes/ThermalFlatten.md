@@ -38,5 +38,4 @@ WIP
 # Example
 
 
-![img](../../images/nodes/ThermalFlatten.png)
-
+No example available.

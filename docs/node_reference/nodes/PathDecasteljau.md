@@ -35,5 +35,4 @@ Geometry/Path
 # Example
 
 
-![img](../../images/nodes/PathDecasteljau.png)
-
+No example available.

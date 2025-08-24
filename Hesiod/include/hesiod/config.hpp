@@ -12,7 +12,13 @@
 #include <chrono>
 #include <memory>
 
+#include "nlohmann/json.hpp"
+
+#include "highmap/algebra.hpp"
+
 #define HSD_CONFIG hesiod::Config::get_config()
+
+#define HSD_NODE_DOCUMENTATION_JSON_PATH "data/node_documentation.json"
 
 namespace hesiod
 {
@@ -23,12 +29,25 @@ public:
   Config() = default;
   static std::shared_ptr<Config> &get_config();
 
+  // --- Serialization ---
+  void           json_from(nlohmann::json const &json);
+  nlohmann::json json_to() const;
+  void           load_from_file(const std::string &fname);
+  void           save_to_file(const std::string &fname) const;
+
+  // --- Data
   struct Window
   {
     bool                      open_graph_manager_at_startup = false;
     bool                      open_viewport_at_startup = true;
     std::chrono::milliseconds autosave_timer{60000}; // 60 seconds
+    bool                      save_backup_file = true;
   } window;
+
+  struct Nodes
+  {
+    hmap::Vec2<int> shape_preview = hmap::Vec2<int>(128, 128);
+  } nodes;
 
 private:
   Config(const Config &) = delete;

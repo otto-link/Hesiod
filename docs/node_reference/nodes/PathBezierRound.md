@@ -36,5 +36,4 @@ Geometry/Path
 # Example
 
 
-![img](../../images/nodes/PathBezierRound.png)
-
+No example available.

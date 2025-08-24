@@ -53,5 +53,4 @@ Primitive/Coherent
 # Example
 
 
-![img](../../images/nodes/Gavoronoise.png)
-
+No example available.

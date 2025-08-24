@@ -50,5 +50,4 @@ WIP
 # Example
 
 
-![img](../../images/nodes/HydraulicProcedural.png)
-
+No example available.

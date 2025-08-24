@@ -44,5 +44,4 @@ Primitive/Coherent
 # Example
 
 
-![img](../../images/nodes/Noise.png)
-
+No example available.

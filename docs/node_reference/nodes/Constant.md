@@ -29,5 +29,4 @@ Primitive/Function
 # Example
 
 
-![img](../../images/nodes/Constant.png)
-
+No example available.

@@ -35,5 +35,4 @@ Math/Base
 # Example
 
 
-![img](../../images/nodes/Abs.png)
-
+No example available.

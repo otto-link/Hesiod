@@ -37,5 +37,4 @@ Filter/Recast
 # Example
 
 
-![img](../../images/nodes/RecastSag.png)
-
+No example available.

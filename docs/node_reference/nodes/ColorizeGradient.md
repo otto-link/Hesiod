@@ -40,5 +40,4 @@ Texture
 # Example
 
 
-![img](../../images/nodes/ColorizeGradient.png)
-
+No example available.

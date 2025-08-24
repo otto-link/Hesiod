@@ -35,5 +35,4 @@ Filter/Range
 # Example
 
 
-![img](../../images/nodes/Remap.png)
-
+No example available.

@@ -36,5 +36,4 @@ WIP
 # Example
 
 
-![img](../../images/nodes/ThermalRib.png)
-
+No example available.

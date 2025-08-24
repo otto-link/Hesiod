@@ -140,6 +140,8 @@ void GraphTabsWidget::show_viewport()
     this->graph_node_widget_map.begin()->second->on_viewport_request();
 }
 
+QSize GraphTabsWidget::sizeHint() const { return QSize(1024, 1024); }
+
 void GraphTabsWidget::update_receive_nodes_tag_list()
 {
   LOG->trace("GraphTabsWidget::update_receive_nodes_tag_list");

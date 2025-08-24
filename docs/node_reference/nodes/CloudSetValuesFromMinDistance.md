@@ -29,5 +29,10 @@ Geometry/Cloud
 # Example
 
 
-![img](../../images/nodes/CloudSetValuesFromMinDistance.png)
+![img](../../images/nodes/CloudSetValuesFromMinDistance_hsd_example.png)
+
+Corresponding Hesiod file: [CloudSetValuesFromMinDistance.hsd](../../examples/CloudSetValuesFromMinDistance.hsd). 
+
+> **Note:** Example files are kept up-to-date with the latest version of [Hesiod](https://github.com/otto-link/Hesiod).
+> If you find an error, please [open an issue](https://github.com/otto-link/Hesiod/issues).
 

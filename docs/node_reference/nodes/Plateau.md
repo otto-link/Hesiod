@@ -38,5 +38,4 @@ Filter/Recurve
 # Example
 
 
-![img](../../images/nodes/Plateau.png)
-
+No example available.

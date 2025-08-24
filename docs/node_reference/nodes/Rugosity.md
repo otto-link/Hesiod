@@ -42,5 +42,4 @@ Features
 # Example
 
 
-![img](../../images/nodes/Rugosity.png)
-
+No example available.

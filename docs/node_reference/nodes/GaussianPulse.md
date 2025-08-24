@@ -40,5 +40,4 @@ Primitive/Function
 # Example
 
 
-![img](../../images/nodes/GaussianPulse.png)
-
+No example available.

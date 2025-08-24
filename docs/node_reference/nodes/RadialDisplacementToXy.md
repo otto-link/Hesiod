@@ -37,5 +37,4 @@ Math
 # Example
 
 
-![img](../../images/nodes/RadialDisplacementToXy.png)
-
+No example available.

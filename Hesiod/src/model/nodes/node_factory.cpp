@@ -129,7 +129,7 @@ void dump_node_settings_screenshots()
 
     render_widget_screenshot(attributes_widget,
                              p_base_node->get_label() + "_settings.png",
-                             QSize(2048, 2048));
+                             QSize());
   }
 }
 
@@ -146,15 +146,19 @@ std::map<std::string, std::string> get_node_inventory()
       {"Brush", "Primitive/Authoring"},
       {"Broadcast", "Routing"},
       {"Bump", "Primitive/Function"},
+      {"BumpLorentzian", "Primitive/Function"},
       {"Caldera", "Primitive/Geological"},
       {"Clamp", "Filter/Range"},
       {"Closing", "Operator/Morphology"},
       {"Cloud", "Geometry/Cloud"},
+      {"CloudFromCsv", "Geometry/Cloud"},
       {"CloudMerge", "Geometry/Cloud"},
       {"CloudLattice", "Geometry/Cloud"},
       {"CloudRandom", "Geometry/Cloud"},
       {"CloudRandomDensity", "Geometry/Cloud"},
       {"CloudRandomDistance", "Geometry/Cloud"},
+      {"CloudRandomPowerLaw", "Geometry/Cloud"},
+      {"CloudRandomWeibull", "Geometry/Cloud"},
       {"CloudRemapValues", "Geometry/Cloud"},
       {"CloudSDF", "Geometry/Cloud"},
       {"CloudSetValuesFromBorderDistance", "Geometry/Cloud"},
@@ -256,6 +260,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"PathDig", "Geometry/Path"},
       {"PathFind", "Geometry/Path"},
       {"PathFractalize", "Geometry/Path"},
+      {"PathFromCsv", "Geometry/Path"},
       {"PathMeanderize", "Geometry/Path"},
       {"PathResample", "Geometry/Path"},
       {"PathSDF", "Geometry/Path"},
@@ -263,6 +268,8 @@ std::map<std::string, std::string> get_node_inventory()
       {"PathToCloud", "Geometry/Path"},
       {"PathToHeightmap", "Geometry/Path"},
       {"Plateau", "Filter/Recurve"},
+      {"PolygonField", "Primitive/Coherent"},
+      {"PolygonFieldFbm", "Primitive/Coherent"},
       {"Preview", "Debug"},
       {"QuiltingBlend", "Operator/Resynthesis"},
       {"QuiltingExpand", "Operator/Resynthesis"},
@@ -282,6 +289,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Remap", "Filter/Range"},
       {"Rescale", "Filter/Range"},
       {"Reverse", "Math/Base"},
+      {"ReverseAboveThreshold", "Filter/Recurve"},
       {"ReverseMidpoint", "WIP"}, // Primitive/Authoring
       {"Ridgelines", "Primitive/Authoring"},
       {"Rift", "Primitive/Function"},
@@ -320,6 +328,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"StdLocal", "Features"},
       {"SteepenConvective", "Filter/Recast"},
       {"Step", "Primitive/Function"},
+      {"Strata", "Erosion/Stratify"},
       {"Stratify", "Erosion/Stratify"},
       {"StratifyOblique", "Erosion/Stratify"},
       {"StratifyMultiscale", "Erosion/Stratify"},
@@ -399,15 +408,19 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(Border, border);
     SETUP_NODE(Brush, brush);
     SETUP_NODE(Bump, bump);
+    SETUP_NODE(BumpLorentzian, bump_lorentzian);
     SETUP_NODE(Caldera, caldera);
     SETUP_NODE(Clamp, clamp);
     SETUP_NODE(Closing, closing);
     SETUP_NODE(Cloud, cloud);
+    SETUP_NODE(CloudFromCsv, cloud_from_csv);
     SETUP_NODE(CloudMerge, cloud_merge);
     SETUP_NODE(CloudLattice, cloud_lattice);
     SETUP_NODE(CloudRandom, cloud_random);
     SETUP_NODE(CloudRandomDensity, cloud_random_density);
     SETUP_NODE(CloudRandomDistance, cloud_random_distance);
+    SETUP_NODE(CloudRandomPowerLaw, cloud_random_power_law);
+    SETUP_NODE(CloudRandomWeibull, cloud_random_weibull);
     SETUP_NODE(CloudRemapValues, cloud_remap_values);
     SETUP_NODE(CloudSDF, cloud_sdf);
     SETUP_NODE(CloudSetValuesFromBorderDistance, cloud_set_values_from_border_distance);
@@ -510,6 +523,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(PathDig, path_dig);
     SETUP_NODE(PathFind, path_find);
     SETUP_NODE(PathFractalize, path_fractalize);
+    SETUP_NODE(PathFromCsv, path_from_csv);
     SETUP_NODE(PathMeanderize, path_meanderize);
     SETUP_NODE(PathResample, path_resample);
     SETUP_NODE(PathSDF, path_sdf);
@@ -517,6 +531,8 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(PathToCloud, path_to_cloud);
     SETUP_NODE(PathToHeightmap, path_to_heightmap);
     SETUP_NODE(Plateau, plateau);
+    SETUP_NODE(PolygonField, polygon_field);
+    SETUP_NODE(PolygonFieldFbm, polygon_field_fbm);
     SETUP_NODE(Preview, preview);
     SETUP_NODE(QuiltingBlend, quilting_blend);
     SETUP_NODE(QuiltingExpand, quilting_expand);
@@ -535,6 +551,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(Remap, remap);
     SETUP_NODE(Rescale, rescale);
     SETUP_NODE(Reverse, reverse);
+    SETUP_NODE(ReverseAboveThreshold, reverse_above_theshold);
     SETUP_NODE(ReverseMidpoint, reverse_midpoint);
     SETUP_NODE(Ridgelines, ridgelines);
     SETUP_NODE(Rift, rift);
@@ -573,6 +590,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(StdLocal, std_local);
     SETUP_NODE(SteepenConvective, steepen_convective);
     SETUP_NODE(Step, step);
+    SETUP_NODE(Strata, strata);
     SETUP_NODE(Stratify, stratify);
     SETUP_NODE(StratifyOblique, stratify_oblique);
     SETUP_NODE(StratifyMultiscale, stratify_multiscale);

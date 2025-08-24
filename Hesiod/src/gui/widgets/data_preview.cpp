@@ -1,6 +1,7 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include <stdexcept>
 #include <typeinfo>
 
 #include <QMenu>
@@ -14,6 +15,7 @@
 #include "highmap/heightmap.hpp"
 #include "highmap/tensor.hpp"
 
+#include "hesiod/config.hpp"
 #include "hesiod/gui/widgets/data_preview.hpp"
 #include "hesiod/logger.hpp"
 
@@ -27,9 +29,8 @@ DataPreview::DataPreview(gngui::NodeProxy *p_proxy_node)
              p_proxy_node->get_caption(),
              p_proxy_node->get_id());
 
-  int width = (int)(GN_STYLE->node.width + 2.f * GN_STYLE->node.padding -
-                    2.f * GN_STYLE->node.padding_widget_width);
-  this->resize(width, width);
+  this->setFixedSize(
+      QSize(HSD_CONFIG->nodes.shape_preview.x, HSD_CONFIG->nodes.shape_preview.y));
 
   this->setAlignment(Qt::AlignLeft | Qt::AlignTop);
   this->setFrameStyle(QFrame::NoFrame);
@@ -44,7 +45,7 @@ DataPreview::DataPreview(gngui::NodeProxy *p_proxy_node)
       break;
     }
 
-  this->update_image();
+  this->update_preview();
 }
 
 void DataPreview::contextMenuEvent(QContextMenuEvent *event)
@@ -90,7 +91,7 @@ void DataPreview::contextMenuEvent(QContextMenuEvent *event)
       if (key == action_label)
       {
         this->preview_type = preview_type_map.at(key);
-        this->update_image();
+        this->update_preview();
         return;
       }
 
@@ -99,24 +100,24 @@ void DataPreview::contextMenuEvent(QContextMenuEvent *event)
       if (this->p_proxy_node->get_port_caption(k) == action_label)
       {
         this->preview_port_index = k;
-        this->update_image();
+        this->update_preview();
         return;
       }
   }
 }
 
-const QImage &DataPreview::get_preview_image() const { return this->preview_image; }
+const QPixmap &DataPreview::get_preview_pixmap() const { return this->preview_pixmap; }
 
-void DataPreview::update_image()
+void DataPreview::update_preview()
 {
   // Retrieve port informations
   void       *blind_data_ptr = this->p_proxy_node->get_data_ref(this->preview_port_index);
   std::string data_type = this->p_proxy_node->get_data_type(this->preview_port_index);
 
-  hmap::Vec2<int> shape_preview = hmap::Vec2<int>(128, 128);
+  hmap::Vec2<int> shape_preview = HSD_CONFIG->nodes.shape_preview;
   this->resize(shape_preview.x, shape_preview.y);
 
-  LOG->trace("DataPreview::update_image, data_type: {}", data_type);
+  LOG->trace("DataPreview::update_preview, data_type: {}", data_type);
 
   // Preview image (transparent by default if no data or no rendering
   // for the requested data type)
@@ -134,12 +135,25 @@ void DataPreview::update_image()
       if (data_type == typeid(hmap::Heightmap).name())
       {
         hmap::Heightmap *p_h = static_cast<hmap::Heightmap *>(blind_data_ptr);
-        array = p_h->to_array(shape_preview);
+
+        if (p_h)
+          array = p_h->to_array(shape_preview);
+        else
+          LOG->error("DataPreview::update_preview: hmap::Heightmap is nullptr");
       }
       else
       {
-        array = *static_cast<hmap::Array *>(blind_data_ptr);
-        array = array.resample_to_shape_nearest(shape_preview);
+        hmap::Array *p_a = static_cast<hmap::Array *>(blind_data_ptr);
+
+        if (p_a)
+        {
+          array = *p_a;
+          array = array.resample_to_shape_nearest(shape_preview);
+        }
+        else
+        {
+          LOG->error("DataPreview::update_preview: hmap::Array is nullptr");
+        }
       }
 
       // build preview
@@ -176,57 +190,122 @@ void DataPreview::update_image()
     {
       hmap::HeightmapRGBA *p_h = static_cast<hmap::HeightmapRGBA *>(blind_data_ptr);
 
-      img = p_h->to_img_8bit(shape_preview);
-      img_format = QImage::Format_RGBA8888;
+      if (p_h)
+      {
+        img = p_h->to_img_8bit(shape_preview);
+        img_format = QImage::Format_RGBA8888;
+      }
+      else
+      {
+        LOG->error("DataPreview::update_preview: hmap::HeightmapRGBA is nullptr");
+      }
     }
     //
     else if (data_type == typeid(hmap::Cloud).name())
     {
-      hmap::Cloud cloud = *static_cast<hmap::Cloud *>(blind_data_ptr);
+      hmap::Cloud *p_cloud = static_cast<hmap::Cloud *>(blind_data_ptr);
 
-      if (cloud.get_npoints() > 0)
+      if (p_cloud)
       {
-        hmap::Array array = hmap::Array(shape_preview);
-        cloud.to_array(array);
+        hmap::Cloud cloud = *p_cloud;
 
-        img = hmap::colorize(array, array.min(), array.max(), hmap::Cmap::MAGMA, false)
-                  .to_img_8bit();
-        img_format = QImage::Format_RGB888;
+        if (cloud.get_npoints() > 0)
+        {
+          hmap::Array array = hmap::Array(shape_preview);
+          cloud.to_array(array);
+
+          img = hmap::colorize(array, array.min(), array.max(), hmap::Cmap::MAGMA, false)
+                    .to_img_8bit();
+          img_format = QImage::Format_RGB888;
+        }
+      }
+      else
+      {
+        LOG->error("DataPreview::update_preview: hmap::Cloud is nullptr");
       }
     }
     //
     else if (data_type == typeid(hmap::Path).name())
     {
-      hmap::Path path = *static_cast<hmap::Path *>(blind_data_ptr);
+      hmap::Path *p_path = static_cast<hmap::Path *>(blind_data_ptr);
 
-      if (path.get_npoints() > 0)
+      if (p_path)
       {
-        hmap::Array       array = hmap::Array(shape_preview);
-        hmap::Vec4<float> bbox = hmap::Vec4<float>(0.f, 1.f, 0.f, 1.f);
-        path.remap_values(0.1f, 1.f);
-        path.to_array(array, bbox);
+        hmap::Path path = *p_path;
 
-        img = hmap::colorize(array, array.min(), array.max(), hmap::Cmap::MAGMA, false)
-                  .to_img_8bit();
-        img_format = QImage::Format_RGB888;
+        if (path.get_npoints() > 0)
+        {
+          hmap::Array       array = hmap::Array(shape_preview);
+          hmap::Vec4<float> bbox = hmap::Vec4<float>(0.f, 1.f, 0.f, 1.f);
+          path.remap_values(0.1f, 1.f);
+          path.to_array(array, bbox);
+
+          img = hmap::colorize(array, array.min(), array.max(), hmap::Cmap::MAGMA, false)
+                    .to_img_8bit();
+          img_format = QImage::Format_RGB888;
+        }
+      }
+      else
+      {
+        LOG->error("DataPreview::update_preview: hmap::Path is nullptr");
       }
     }
   }
 
-  QImage tmp_image = QImage(img.data(), shape_preview.x, shape_preview.y, img_format);
-  this->preview_image = tmp_image.copy();
+  // temporary image
+  QImage image;
 
-  QPixmap pixmap = QPixmap::fromImage(this->preview_image);
+  if (!img.empty())
+  {
+    // check size
+    size_t nchannels = 1;
+
+    switch (img_format)
+    {
+    case QImage::Format_Grayscale8:
+      nchannels = 1;
+      break;
+    case QImage::Format_RGB888:
+      nchannels = 3;
+      break;
+    case QImage::Format_RGBA8888:
+      nchannels = 4;
+      break;
+    default:
+      LOG->critical("DataPreview::update_preview: unknown image format");
+      throw std::runtime_error("Unknown image format");
+    }
+
+    if (img.size() != shape_preview.x * shape_preview.y * nchannels)
+    {
+      LOG->critical("DataPreview::update_preview: image data does not fit the QImage "
+                    "preview format");
+      throw std::runtime_error("Wrong image data");
+    }
+
+    // eventually generate the image
+    image = QImage(img.data(), shape_preview.x, shape_preview.y, img_format);
+  }
+  else
+  {
+    image = QImage(shape_preview.x, shape_preview.y, img_format);
+    image.fill(Qt::transparent);
+  }
+
+  this->preview_pixmap = QPixmap::fromImage(image);
 
   // add a border
-  QPainter painter(&pixmap);
+  QPainter painter(&this->preview_pixmap);
   QPen     pen(QColor(0, 0, 0));
   pen.setWidth(1);
   painter.setPen(pen);
-  painter.drawRect(0, 0, pixmap.width() - 1, pixmap.height() - 1);
+  painter.drawRect(0,
+                   0,
+                   this->preview_pixmap.width() - 1,
+                   this->preview_pixmap.height() - 1);
   painter.end();
 
-  this->setPixmap(pixmap);
+  this->setPixmap(this->preview_pixmap);
   this->update();
 }
 

@@ -40,5 +40,4 @@ Primitive/Function
 # Example
 
 
-![img](../../images/nodes/WaveTriangular.png)
-
+No example available.

@@ -37,5 +37,4 @@ Filter/Recurve
 # Example
 
 
-![img](../../images/nodes/RecurveKura.png)
-
+No example available.

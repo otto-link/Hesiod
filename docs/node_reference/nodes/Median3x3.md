@@ -36,5 +36,4 @@ Filter/Smoothing
 # Example
 
 
-![img](../../images/nodes/Median3x3.png)
-
+No example available.

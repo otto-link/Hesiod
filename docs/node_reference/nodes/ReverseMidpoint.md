@@ -38,5 +38,4 @@ WIP
 # Example
 
 
-![img](../../images/nodes/ReverseMidpoint.png)
-
+No example available.

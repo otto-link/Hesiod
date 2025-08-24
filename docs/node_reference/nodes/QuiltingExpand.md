@@ -42,5 +42,4 @@ Operator/Resynthesis
 # Example
 
 
-![img](../../images/nodes/QuiltingExpand.png)
-
+No example available.

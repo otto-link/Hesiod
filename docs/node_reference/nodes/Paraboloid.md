@@ -45,5 +45,4 @@ Primitive/Function
 # Example
 
 
-![img](../../images/nodes/Paraboloid.png)
-
+No example available.

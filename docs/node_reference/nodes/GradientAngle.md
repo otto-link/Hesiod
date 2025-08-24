@@ -35,5 +35,4 @@ Math/Gradient
 # Example
 
 
-![img](../../images/nodes/GradientAngle.png)
-
+No example available.

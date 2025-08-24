@@ -32,5 +32,4 @@ Primitive/Kernel
 # Example
 
 
-![img](../../images/nodes/KernelGabor.png)
-
+No example available.

@@ -25,6 +25,14 @@ void setup_mixer_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input 4");
   p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "t");
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+
+  // attribute(s)
+  ADD_ATTR(FloatAttribute, "gain_factor", 1.f, 0.001f, 10.f);
+
+  // attribute(s) order
+  p_node->set_attr_ordered_key({"gain_factor"});
+
+  setup_post_process_heightmap_attributes(p_node);
 }
 
 void compute_mixer_node(BaseNode *p_node)
@@ -50,7 +58,7 @@ void compute_mixer_node(BaseNode *p_node)
 
     hmap::transform(
         {p_out, p_in1, p_in2, p_in3, p_in4, p_t},
-        [](std::vector<hmap::Array *> p_arrays)
+        [p_node](std::vector<hmap::Array *> p_arrays)
         {
           hmap::Array *pa_out = p_arrays.front();
           hmap::Array *pa_t = p_arrays.back();
@@ -61,7 +69,7 @@ void compute_mixer_node(BaseNode *p_node)
             if (p_arrays[k])
               arrays.push_back(p_arrays[k]);
 
-          *pa_out = hmap::mixer(*pa_t, arrays);
+          *pa_out = hmap::mixer(*pa_t, arrays, GET("gain_factor", FloatAttribute));
         },
         p_node->get_config_ref()->hmap_transform_mode_cpu);
   }

@@ -52,5 +52,4 @@ Erosion/Hydraulic
 # Example
 
 
-![img](../../images/nodes/HydraulicParticle.png)
-
+No example available.

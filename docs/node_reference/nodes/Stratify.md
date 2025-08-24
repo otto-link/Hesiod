@@ -41,5 +41,4 @@ Erosion/Stratify
 # Example
 
 
-![img](../../images/nodes/Stratify.png)
-
+No example available.

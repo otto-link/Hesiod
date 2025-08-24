@@ -41,5 +41,4 @@ Primitive/Function
 # Example
 
 
-![img](../../images/nodes/WaveDune.png)
-
+No example available.

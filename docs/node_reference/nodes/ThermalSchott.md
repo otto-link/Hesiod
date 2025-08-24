@@ -38,5 +38,4 @@ WIP
 # Example
 
 
-![img](../../images/nodes/ThermalSchott.png)
-
+No example available.

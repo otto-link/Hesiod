@@ -29,5 +29,4 @@ Math/Base
 # Example
 
 
-![img](../../images/nodes/Reverse.png)
-
+No example available.

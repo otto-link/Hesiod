@@ -39,5 +39,4 @@ Geometry/Path
 # Example
 
 
-![img](../../images/nodes/PathToHeightmap.png)
-
+No example available.

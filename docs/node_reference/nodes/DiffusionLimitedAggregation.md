@@ -36,5 +36,4 @@ WIP
 # Example
 
 
-![img](../../images/nodes/DiffusionLimitedAggregation.png)
-
+No example available.

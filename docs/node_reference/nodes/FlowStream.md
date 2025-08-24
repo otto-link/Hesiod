@@ -46,5 +46,4 @@ WIP
 # Example
 
 
-![img](../../images/nodes/FlowStream.png)
-
+No example available.

@@ -40,5 +40,4 @@ Filter/Recast
 # Example
 
 
-![img](../../images/nodes/RecastCliffDirectional.png)
-
+No example available.

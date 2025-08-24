@@ -37,5 +37,4 @@ Mask
 # Example
 
 
-![img](../../images/nodes/ScanMask.png)
-
+No example available.

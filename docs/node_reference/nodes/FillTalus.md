@@ -37,5 +37,4 @@ WIP
 # Example
 
 
-![img](../../images/nodes/FillTalus.png)
-
+No example available.

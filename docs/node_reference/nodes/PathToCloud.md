@@ -29,5 +29,4 @@ Geometry/Path
 # Example
 
 
-![img](../../images/nodes/PathToCloud.png)
-
+No example available.

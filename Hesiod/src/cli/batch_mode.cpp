@@ -1,7 +1,12 @@
 /* Copyright (c) 2025 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include <filesystem>
+
 #include "hesiod/cli/batch_mode.hpp"
+#include "hesiod/gui/gui_utils.hpp"
+#include "hesiod/gui/main_window.hpp"
+#include "hesiod/gui/widgets/graph_tabs_widget.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/graph_manager.hpp"
 #include "hesiod/model/nodes/node_factory.hpp"
@@ -144,7 +149,40 @@ void run_node_inventory()
 void run_snapshot_generation()
 {
   LOG->info("executing Hesiod in snapshot generation mode");
-  LOG->critical("TODO");
+
+  std::map<std::string, std::string> inventory = get_node_inventory();
+
+  // TODO hardcoded
+  const std::string ex_path = "data/examples/";
+  const QSize       size = QSize(512, 512);
+
+  hesiod::MainWindow *main_window = hesiod::MainWindow::instance();
+
+  for (auto &[node_type, _] : inventory)
+  {
+    // LOG->trace("node type: {}", node_type);
+
+    const std::string fname = ex_path + node_type + ".hsd";
+
+    if (std::filesystem::exists(fname))
+    {
+      LOG->trace("- default file exists: {}", fname);
+
+      main_window->clear_all();
+      main_window->load_from_file(fname);
+      main_window->graph_tabs_widget_ref()->zoom_to_content();
+
+      // TODO refit again, not working...
+      auto post_render_callback = [&]() { return; };
+
+      QWidget *widget = dynamic_cast<QWidget *>(main_window->graph_tabs_widget_ref());
+
+      render_widget_screenshot(widget,
+                               node_type + "_hsd_example.png",
+                               size,
+                               post_render_callback);
+    }
+  }
 }
 
 } // namespace hesiod::cli

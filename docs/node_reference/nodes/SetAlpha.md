@@ -39,5 +39,4 @@ Texture
 # Example
 
 
-![img](../../images/nodes/SetAlpha.png)
-
+No example available.

@@ -29,5 +29,4 @@ WIP
 # Example
 
 
-![img](../../images/nodes/Detrend.png)
-
+No example available.

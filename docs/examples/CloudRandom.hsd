@@ -1,0 +1,508 @@
+{
+    "Hesiod version": "v0.4.0",
+    "graph_manager": {
+        "export_param": {
+            "export_path": "",
+            "ids": [],
+            "overlap": 0.5,
+            "shape.x": 1024,
+            "shape.y": 1024,
+            "tiling.x": 4,
+            "tiling.y": 4
+        },
+        "graph_nodes": {
+            "graph": {
+                "id": "graph",
+                "id_count": 40,
+                "links": [
+                    {
+                        "node_id_from": "35",
+                        "node_id_to": "34",
+                        "port_id_from": "output",
+                        "port_id_to": "density"
+                    },
+                    {
+                        "node_id_from": "34",
+                        "node_id_to": "36",
+                        "port_id_from": "cloud",
+                        "port_id_to": "cloud"
+                    },
+                    {
+                        "node_id_from": "33",
+                        "node_id_to": "37",
+                        "port_id_from": "cloud",
+                        "port_id_to": "cloud"
+                    },
+                    {
+                        "node_id_from": "32",
+                        "node_id_to": "38",
+                        "port_id_from": "cloud",
+                        "port_id_to": "cloud"
+                    },
+                    {
+                        "node_id_from": "39",
+                        "node_id_to": "38",
+                        "port_id_from": "out",
+                        "port_id_to": "heightmap"
+                    }
+                ],
+                "model_config": {
+                    "hmap_transform_mode_cpu": 0,
+                    "hmap_transform_mode_gpu": 2,
+                    "overlap": 0.5,
+                    "shape.x": 512,
+                    "shape.y": 512,
+                    "tiling.x": 4,
+                    "tiling.y": 4
+                },
+                "nodes": [
+                    {
+                        "id": "32",
+                        "jitter_ratio": {
+                            "label": "jitter_ratio",
+                            "link_xy": true,
+                            "type": 17,
+                            "type_string": "Wavenumber",
+                            "value": [
+                                0.10000000149011612,
+                                0.10000000149011612
+                            ],
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        },
+                        "label": "CloudLattice",
+                        "npoints": {
+                            "label": "npoints",
+                            "type": 10,
+                            "type_string": "Integer",
+                            "value": 233,
+                            "vmax": 2147483647,
+                            "vmin": 1
+                        },
+                        "remap": {
+                            "is_active": true,
+                            "label": "remap",
+                            "type": 11,
+                            "type_string": "Value range",
+                            "value": [
+                                0.0,
+                                1.0
+                            ],
+                            "vmax": 2.0,
+                            "vmin": -1.0
+                        },
+                        "seed": {
+                            "label": "seed",
+                            "type": 12,
+                            "type_string": "Random seed number",
+                            "value": 0
+                        },
+                        "stagger_ratio": {
+                            "label": "stagger_ratio",
+                            "link_xy": true,
+                            "type": 17,
+                            "type_string": "Wavenumber",
+                            "value": [
+                                0.10000000149011612,
+                                0.10000000149011612
+                            ],
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        }
+                    },
+                    {
+                        "id": "33",
+                        "label": "CloudRandom",
+                        "method": {
+                            "choice": "Halton sequence",
+                            "label": "method",
+                            "type": 4,
+                            "type_string": "Enumeration",
+                            "value": 1
+                        },
+                        "npoints": {
+                            "label": "npoints",
+                            "type": 10,
+                            "type_string": "Integer",
+                            "value": 249,
+                            "vmax": 2147483647,
+                            "vmin": 1
+                        },
+                        "remap": {
+                            "is_active": true,
+                            "label": "remap",
+                            "type": 11,
+                            "type_string": "Value range",
+                            "value": [
+                                0.0,
+                                1.0
+                            ],
+                            "vmax": 2.0,
+                            "vmin": -1.0
+                        },
+                        "seed": {
+                            "label": "seed",
+                            "type": 12,
+                            "type_string": "Random seed number",
+                            "value": 0
+                        }
+                    },
+                    {
+                        "distance_max": {
+                            "label": "distance_max",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.05118011683225632,
+                            "vmax": 1.0,
+                            "vmin": 0.0010000000474974513
+                        },
+                        "distance_min": {
+                            "label": "distance_min",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.007138463202863932,
+                            "vmax": 0.20000000298023224,
+                            "vmin": 0.0010000000474974513
+                        },
+                        "id": "34",
+                        "label": "CloudRandomDistance",
+                        "remap": {
+                            "is_active": true,
+                            "label": "remap",
+                            "type": 11,
+                            "type_string": "Value range",
+                            "value": [
+                                0.0,
+                                1.0
+                            ],
+                            "vmax": 2.0,
+                            "vmin": -1.0
+                        },
+                        "seed": {
+                            "label": "seed",
+                            "type": 12,
+                            "type_string": "Random seed number",
+                            "value": 0
+                        }
+                    },
+                    {
+                        "GPU": {
+                            "label": "GPU",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": true
+                        },
+                        "id": "35",
+                        "kw": {
+                            "label": "kw",
+                            "link_xy": true,
+                            "type": 17,
+                            "type_string": "Wavenumber",
+                            "value": [
+                                3.499999761581421,
+                                3.499999761581421
+                            ],
+                            "vmax": 3.4028234663852886e+38,
+                            "vmin": 0.0
+                        },
+                        "label": "NoiseFbm",
+                        "lacunarity": {
+                            "label": "lacunarity",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 2.0,
+                            "vmax": 4.0,
+                            "vmin": 0.009999999776482582
+                        },
+                        "noise_type": {
+                            "choice": "OpenSimplex2",
+                            "label": "noise_type",
+                            "type": 4,
+                            "type_string": "Enumeration",
+                            "value": 4
+                        },
+                        "octaves": {
+                            "label": "octaves",
+                            "type": 10,
+                            "type_string": "Integer",
+                            "value": 8,
+                            "vmax": 32,
+                            "vmin": 0
+                        },
+                        "persistence": {
+                            "label": "persistence",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.5,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        },
+                        "post_gain": {
+                            "label": "post_gain",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 2.252871513366699,
+                            "vmax": 10.0,
+                            "vmin": 0.009999999776482582
+                        },
+                        "post_inverse": {
+                            "label": "post_inverse",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "post_remap": {
+                            "is_active": true,
+                            "label": "post_remap",
+                            "type": 11,
+                            "type_string": "Value range",
+                            "value": [
+                                0.0,
+                                1.0
+                            ],
+                            "vmax": 2.0,
+                            "vmin": -1.0
+                        },
+                        "post_smoothing_radius": {
+                            "label": "post_smoothing_radius",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.0,
+                            "vmax": 0.05000000074505806,
+                            "vmin": 0.0
+                        },
+                        "seed": {
+                            "label": "seed",
+                            "type": 12,
+                            "type_string": "Random seed number",
+                            "value": 0
+                        },
+                        "weight": {
+                            "label": "weight",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.699999988079071,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        }
+                    },
+                    {
+                        "id": "36",
+                        "label": "CloudSetValuesFromMinDistance"
+                    },
+                    {
+                        "id": "37",
+                        "label": "CloudSetValuesFromBorderDistance"
+                    },
+                    {
+                        "id": "38",
+                        "label": "CloudSetValuesFromHeightmap"
+                    },
+                    {
+                        "GPU": {
+                            "label": "GPU",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": true
+                        },
+                        "id": "39",
+                        "kw": {
+                            "label": "kw",
+                            "link_xy": true,
+                            "type": 17,
+                            "type_string": "Wavenumber",
+                            "value": [
+                                2.0,
+                                2.0
+                            ],
+                            "vmax": 3.4028234663852886e+38,
+                            "vmin": 0.0
+                        },
+                        "label": "Noise",
+                        "noise_type": {
+                            "choice": "OpenSimplex2",
+                            "label": "noise_type",
+                            "type": 4,
+                            "type_string": "Enumeration",
+                            "value": 4
+                        },
+                        "post_gain": {
+                            "label": "post_gain",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 10.0,
+                            "vmin": 0.009999999776482582
+                        },
+                        "post_inverse": {
+                            "label": "post_inverse",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "post_remap": {
+                            "is_active": true,
+                            "label": "post_remap",
+                            "type": 11,
+                            "type_string": "Value range",
+                            "value": [
+                                0.0,
+                                1.0
+                            ],
+                            "vmax": 2.0,
+                            "vmin": -1.0
+                        },
+                        "post_smoothing_radius": {
+                            "label": "post_smoothing_radius",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.0,
+                            "vmax": 0.05000000074505806,
+                            "vmin": 0.0
+                        },
+                        "seed": {
+                            "label": "seed",
+                            "type": 12,
+                            "type_string": "Random seed number",
+                            "value": 0
+                        }
+                    }
+                ],
+                "origin": [
+                    0.0,
+                    0.0
+                ],
+                "rotation_angle": 0.0,
+                "size": [
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "graph_order": [
+            "graph"
+        ],
+        "id_count": 0
+    },
+    "graph_manager_widget": {
+        "frames": {
+            "graph": {
+                "current_bg_tag": "NONE"
+            }
+        }
+    },
+    "graph_tabs_widget": {
+        "graph_node_widgets": {
+            "graph": {
+                "comments": [],
+                "current_link_type": 2,
+                "groups": [],
+                "id": "graph",
+                "links": [
+                    {
+                        "link_type": 2,
+                        "node_in_id": "38",
+                        "node_out_id": "39",
+                        "port_in_id": "heightmap",
+                        "port_out_id": "out"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "38",
+                        "node_out_id": "32",
+                        "port_in_id": "cloud",
+                        "port_out_id": "cloud"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "37",
+                        "node_out_id": "33",
+                        "port_in_id": "cloud",
+                        "port_out_id": "cloud"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "36",
+                        "node_out_id": "34",
+                        "port_in_id": "cloud",
+                        "port_out_id": "cloud"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "34",
+                        "node_out_id": "35",
+                        "port_in_id": "density",
+                        "port_out_id": "output"
+                    }
+                ],
+                "nodes": [
+                    {
+                        "caption": "Noise",
+                        "id": "39",
+                        "is_widget_visible": true,
+                        "scene_position.x": -405.0598311697595,
+                        "scene_position.y": -466.62540097170074
+                    },
+                    {
+                        "caption": "CloudSetValuesFromHeightmap",
+                        "id": "38",
+                        "is_widget_visible": true,
+                        "scene_position.x": -35.859975702242764,
+                        "scene_position.y": -484.4254015947672
+                    },
+                    {
+                        "caption": "CloudSetValuesFromBorderDistance",
+                        "id": "37",
+                        "is_widget_visible": true,
+                        "scene_position.x": -39.859974541939266,
+                        "scene_position.y": -154.8255313357657
+                    },
+                    {
+                        "caption": "CloudSetValuesFromMinDistance",
+                        "id": "36",
+                        "is_widget_visible": true,
+                        "scene_position.x": -40.04902438242499,
+                        "scene_position.y": 113.60412936098027
+                    },
+                    {
+                        "caption": "NoiseFbm",
+                        "id": "35",
+                        "is_widget_visible": true,
+                        "scene_position.x": -519.843311420751,
+                        "scene_position.y": 2.037499935507711
+                    },
+                    {
+                        "caption": "CloudRandomDistance",
+                        "id": "34",
+                        "is_widget_visible": true,
+                        "scene_position.x": -316.51003464559165,
+                        "scene_position.y": 74.53747976927355
+                    },
+                    {
+                        "caption": "CloudRandom",
+                        "id": "33",
+                        "is_widget_visible": true,
+                        "scene_position.x": -316.6873632711662,
+                        "scene_position.y": -161.33113470869932
+                    },
+                    {
+                        "caption": "CloudLattice",
+                        "id": "32",
+                        "is_widget_visible": true,
+                        "scene_position.x": -234.05538237345178,
+                        "scene_position.y": -548.1436059166894
+                    }
+                ]
+            }
+        }
+    },
+    "saved_at": "2025-08-11_13:00:09"
+}

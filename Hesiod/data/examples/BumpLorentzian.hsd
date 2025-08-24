@@ -1,0 +1,336 @@
+{
+    "Hesiod version": "v0.4.0",
+    "graph_manager": {
+        "export_param": {
+            "export_path": "",
+            "ids": [],
+            "overlap": 0.5,
+            "shape.x": 1024,
+            "shape.y": 1024,
+            "tiling.x": 4,
+            "tiling.y": 4
+        },
+        "graph_nodes": {
+            "graph": {
+                "id": "graph",
+                "id_count": 14,
+                "links": [
+                    {
+                        "node_id_from": "3",
+                        "node_id_to": "5",
+                        "port_id_from": "output",
+                        "port_id_to": "input 1"
+                    },
+                    {
+                        "node_id_from": "4",
+                        "node_id_to": "5",
+                        "port_id_from": "out",
+                        "port_id_to": "input 2"
+                    }
+                ],
+                "model_config": {
+                    "hmap_transform_mode_cpu": 0,
+                    "hmap_transform_mode_gpu": 2,
+                    "overlap": 0.5,
+                    "shape.x": 1024,
+                    "shape.y": 1024,
+                    "tiling.x": 4,
+                    "tiling.y": 4
+                },
+                "nodes": [
+                    {
+                        "center": {
+                            "label": "center",
+                            "type": 16,
+                            "type_string": "Vec2Float",
+                            "value": [
+                                0.5,
+                                0.5
+                            ],
+                            "xmax": 1.0,
+                            "xmin": 0.0,
+                            "ymax": 1.0,
+                            "ymin": 0.0
+                        },
+                        "id": "3",
+                        "label": "BumpLorentzian",
+                        "post_gain": {
+                            "label": "post_gain",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 10.0,
+                            "vmin": 0.009999999776482582
+                        },
+                        "post_inverse": {
+                            "label": "post_inverse",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "post_remap": {
+                            "is_active": true,
+                            "label": "post_remap",
+                            "type": 11,
+                            "type_string": "Value range",
+                            "value": [
+                                0.0,
+                                1.0
+                            ],
+                            "vmax": 2.0,
+                            "vmin": -1.0
+                        },
+                        "post_smoothing_radius": {
+                            "label": "post_smoothing_radius",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.0,
+                            "vmax": 0.05000000074505806,
+                            "vmin": 0.0
+                        },
+                        "radius": {
+                            "label": "radius",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.7071999907493591,
+                            "vmax": 3.4028234663852886e+38,
+                            "vmin": 0.7071999907493591
+                        },
+                        "width_factor": {
+                            "label": "width_factor",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.1832067370414734,
+                            "vmax": 2.0,
+                            "vmin": 0.009999999776482582
+                        }
+                    },
+                    {
+                        "exp_sigma": {
+                            "label": "exp_sigma",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.10099010169506073,
+                            "vmax": 0.30000001192092896,
+                            "vmin": 0.0
+                        },
+                        "id": "4",
+                        "jitter.x": {
+                            "label": "jitter.x",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        },
+                        "jitter.y": {
+                            "label": "jitter.y",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        },
+                        "k_smoothing": {
+                            "label": "k_smoothing",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.18151815235614777,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        },
+                        "kw": {
+                            "label": "kw",
+                            "link_xy": true,
+                            "type": 17,
+                            "type_string": "Wavenumber",
+                            "value": [
+                                13.390000343322754,
+                                13.390000343322754
+                            ],
+                            "vmax": 3.4028234663852886e+38,
+                            "vmin": 0.0
+                        },
+                        "label": "Voronoi",
+                        "post_gain": {
+                            "label": "post_gain",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 10.0,
+                            "vmin": 0.009999999776482582
+                        },
+                        "post_inverse": {
+                            "label": "post_inverse",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "post_remap": {
+                            "is_active": true,
+                            "label": "post_remap",
+                            "type": 11,
+                            "type_string": "Value range",
+                            "value": [
+                                0.0,
+                                1.0
+                            ],
+                            "vmax": 2.0,
+                            "vmin": -1.0
+                        },
+                        "post_smoothing_radius": {
+                            "label": "post_smoothing_radius",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.0,
+                            "vmax": 0.05000000074505806,
+                            "vmin": 0.0
+                        },
+                        "return_type": {
+                            "choice": "Cell value * (F2 - F1)",
+                            "label": "return_type",
+                            "type": 4,
+                            "type_string": "Enumeration",
+                            "value": 8
+                        },
+                        "seed": {
+                            "label": "seed",
+                            "type": 12,
+                            "type_string": "Random seed number",
+                            "value": 0
+                        },
+                        "sqrt_output": {
+                            "label": "sqrt_output",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        }
+                    },
+                    {
+                        "blending_method": {
+                            "choice": "multiply_add",
+                            "label": "blending_method",
+                            "type": 4,
+                            "type_string": "Enumeration",
+                            "value": 8
+                        },
+                        "id": "5",
+                        "inverse": {
+                            "label": "inverse",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "k": {
+                            "label": "k",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.10000000149011612,
+                            "vmax": 1.0,
+                            "vmin": 0.009999999776482582
+                        },
+                        "label": "Blend",
+                        "radius": {
+                            "label": "radius",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.05000000074505806,
+                            "vmax": 0.20000000298023224,
+                            "vmin": 0.0
+                        },
+                        "remap": {
+                            "is_active": true,
+                            "label": "remap",
+                            "type": 11,
+                            "type_string": "Value range",
+                            "value": [
+                                0.0,
+                                1.0
+                            ],
+                            "vmax": 2.0,
+                            "vmin": -1.0
+                        }
+                    }
+                ],
+                "origin": [
+                    0.0,
+                    0.0
+                ],
+                "rotation_angle": 0.0,
+                "size": [
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "graph_order": [
+            "graph"
+        ],
+        "id_count": 0
+    },
+    "graph_manager_widget": {
+        "frames": {
+            "graph": {
+                "current_bg_tag": "NONE"
+            }
+        }
+    },
+    "graph_tabs_widget": {
+        "graph_node_widgets": {
+            "graph": {
+                "comments": [],
+                "current_link_type": 2,
+                "groups": [],
+                "id": "graph",
+                "links": [
+                    {
+                        "link_type": 2,
+                        "node_in_id": "5",
+                        "node_out_id": "3",
+                        "port_in_id": "input 1",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "5",
+                        "node_out_id": "4",
+                        "port_in_id": "input 2",
+                        "port_out_id": "out"
+                    }
+                ],
+                "nodes": [
+                    {
+                        "caption": "BumpLorentzian",
+                        "id": "3",
+                        "is_widget_visible": true,
+                        "scene_position.x": -262.9300537109375,
+                        "scene_position.y": -449.2447509765625
+                    },
+                    {
+                        "caption": "Voronoi",
+                        "id": "4",
+                        "is_widget_visible": true,
+                        "scene_position.x": -263.8398473103837,
+                        "scene_position.y": -132.65873885154704
+                    },
+                    {
+                        "caption": "Blend",
+                        "id": "5",
+                        "is_widget_visible": true,
+                        "scene_position.x": 14.16922893524196,
+                        "scene_position.y": -272.09930275281283
+                    }
+                ]
+            }
+        }
+    },
+    "saved_at": "2025-08-23_14:51:03"
+}

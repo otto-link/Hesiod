@@ -26,8 +26,19 @@ Routing
 | :--- | :--- | :--- |
 |output|Heightmap|Output identical to the input heightmap.|
 
+# Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|block_update|Bool|No description|
+
 # Example
 
 
-![img](../../images/nodes/Thru.png)
+![img](../../images/nodes/Thru_hsd_example.png)
+
+Corresponding Hesiod file: [Thru.hsd](../../examples/Thru.hsd). 
+
+> **Note:** Example files are kept up-to-date with the latest version of [Hesiod](https://github.com/otto-link/Hesiod).
+> If you find an error, please [open an issue](https://github.com/otto-link/Hesiod/issues).
 

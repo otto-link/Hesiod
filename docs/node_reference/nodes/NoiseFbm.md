@@ -49,5 +49,4 @@ Primitive/Coherent
 # Example
 
 
-![img](../../images/nodes/NoiseFbm.png)
-
+No example available.

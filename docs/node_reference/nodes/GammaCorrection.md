@@ -36,5 +36,4 @@ Filter/Recurve
 # Example
 
 
-![img](../../images/nodes/GammaCorrection.png)
-
+No example available.

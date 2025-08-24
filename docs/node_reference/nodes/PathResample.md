@@ -35,5 +35,4 @@ Geometry/Path
 # Example
 
 
-![img](../../images/nodes/PathResample.png)
-
+No example available.

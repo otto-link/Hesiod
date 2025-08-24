@@ -39,5 +39,4 @@ Filter/Recast
 # Example
 
 
-![img](../../images/nodes/SteepenConvective.png)
-
+No example available.

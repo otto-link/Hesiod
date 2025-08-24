@@ -41,5 +41,4 @@ Primitive/Function
 # Example
 
 
-![img](../../images/nodes/Slope.png)
-
+No example available.

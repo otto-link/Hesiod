@@ -35,5 +35,4 @@ Operator/Morphology
 # Example
 
 
-![img](../../images/nodes/MakeBinary.png)
-
+No example available.
