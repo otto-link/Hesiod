@@ -328,6 +328,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"StdLocal", "Features"},
       {"SteepenConvective", "Filter/Recast"},
       {"Step", "Primitive/Function"},
+      {"Strata", "Erosion/Stratify"},
       {"Stratify", "Erosion/Stratify"},
       {"StratifyOblique", "Erosion/Stratify"},
       {"StratifyMultiscale", "Erosion/Stratify"},
@@ -589,6 +590,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(StdLocal, std_local);
     SETUP_NODE(SteepenConvective, steepen_convective);
     SETUP_NODE(Step, step);
+    SETUP_NODE(Strata, strata);
     SETUP_NODE(Stratify, stratify);
     SETUP_NODE(StratifyOblique, stratify_oblique);
     SETUP_NODE(StratifyMultiscale, stratify_multiscale);

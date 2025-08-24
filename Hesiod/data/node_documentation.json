@@ -10618,6 +10618,207 @@
             }
         }
     },
+    "Strata": {
+        "category": "Erosion/Stratify",
+        "description": "No description available",
+        "label": "Strata",
+        "parameters": {
+            "angle": {
+                "description": "No description",
+                "key": "angle",
+                "label": "angle",
+                "type": "Float"
+            },
+            "apply_mask": {
+                "description": "No description",
+                "key": "apply_mask",
+                "label": "apply_mask",
+                "type": "Bool"
+            },
+            "gamma": {
+                "description": "No description",
+                "key": "gamma",
+                "label": "gamma",
+                "type": "Float"
+            },
+            "gamma_noise_ratio": {
+                "description": "No description",
+                "key": "gamma_noise_ratio",
+                "label": "gamma_noise_ratio",
+                "type": "Float"
+            },
+            "kz": {
+                "description": "No description",
+                "key": "kz",
+                "label": "kz",
+                "type": "Float"
+            },
+            "lacunarity": {
+                "description": "No description",
+                "key": "lacunarity",
+                "label": "lacunarity",
+                "type": "Float"
+            },
+            "linear_gamma": {
+                "description": "No description",
+                "key": "linear_gamma",
+                "label": "linear_gamma",
+                "type": "Bool"
+            },
+            "mask_activate": {
+                "description": "No description",
+                "key": "mask_activate",
+                "label": "mask_activate",
+                "type": "Bool"
+            },
+            "mask_gain": {
+                "description": "No description",
+                "key": "mask_gain",
+                "label": "mask_gain",
+                "type": "Float"
+            },
+            "mask_gamma": {
+                "description": "No description",
+                "key": "mask_gamma",
+                "label": "mask_gamma",
+                "type": "Float"
+            },
+            "mask_inverse": {
+                "description": "No description",
+                "key": "mask_inverse",
+                "label": "mask_inverse",
+                "type": "Bool"
+            },
+            "mask_radius": {
+                "description": "No description",
+                "key": "mask_radius",
+                "label": "mask_radius",
+                "type": "Float"
+            },
+            "mask_type": {
+                "description": "No description",
+                "key": "mask_type",
+                "label": "mask_type",
+                "type": "Choice"
+            },
+            "noise_amp": {
+                "description": "No description",
+                "key": "noise_amp",
+                "label": "noise_amp",
+                "type": "Float"
+            },
+            "noise_kw": {
+                "description": "No description",
+                "key": "noise_kw",
+                "label": "noise_kw",
+                "type": "Wavenumber"
+            },
+            "octaves": {
+                "description": "No description",
+                "key": "octaves",
+                "label": "octaves",
+                "type": "Integer"
+            },
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
+                "type": "Bool"
+            },
+            "post_mix": {
+                "description": "No description",
+                "key": "post_mix",
+                "label": "post_mix",
+                "type": "Float"
+            },
+            "post_mix_method": {
+                "description": "No description",
+                "key": "post_mix_method",
+                "label": "post_mix_method",
+                "type": "Enumeration"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
+            },
+            "ridge_angle_shift": {
+                "description": "No description",
+                "key": "ridge_angle_shift",
+                "label": "ridge_angle_shift",
+                "type": "Float"
+            },
+            "ridge_clamp_vmin": {
+                "description": "No description",
+                "key": "ridge_clamp_vmin",
+                "label": "ridge_clamp_vmin",
+                "type": "Float"
+            },
+            "ridge_noise_amp": {
+                "description": "No description",
+                "key": "ridge_noise_amp",
+                "label": "ridge_noise_amp",
+                "type": "Float"
+            },
+            "ridge_noise_kw": {
+                "description": "No description",
+                "key": "ridge_noise_kw",
+                "label": "ridge_noise_kw",
+                "type": "Wavenumber"
+            },
+            "ridge_remap_vmin": {
+                "description": "No description",
+                "key": "ridge_remap_vmin",
+                "label": "ridge_remap_vmin",
+                "type": "Float"
+            },
+            "seed": {
+                "description": "No description",
+                "key": "seed",
+                "label": "seed",
+                "type": "Random seed number"
+            },
+            "slope": {
+                "description": "No description",
+                "key": "slope",
+                "label": "slope",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "input": {
+                "caption": "input",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "mask": {
+                "caption": "mask",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "output"
+            }
+        }
+    },
     "Stratify": {
         "category": "Erosion/Stratify",
         "description": "Stratify adds horizontal stratifications to the input heightmap.",

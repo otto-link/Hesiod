@@ -201,6 +201,7 @@ nav:
     - 'node_reference/nodes/StdLocal.md'
     - 'node_reference/nodes/SteepenConvective.md'
     - 'node_reference/nodes/Step.md'
+    - 'node_reference/nodes/Strata.md'
     - 'node_reference/nodes/Stratify.md'
     - 'node_reference/nodes/StratifyMultiscale.md'
     - 'node_reference/nodes/StratifyOblique.md'

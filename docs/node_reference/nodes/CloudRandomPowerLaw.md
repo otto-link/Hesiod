@@ -27,7 +27,7 @@ Geometry/Cloud
 |alpha|Float|No description|
 |distance_max|Float|No description|
 |distance_min|Float|No description|
-|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|remap|Value range|Remap the point values to a specified range, defaulting to [0, 1].|
 |seed|Random seed number|Random seed number.|
 
 # Example

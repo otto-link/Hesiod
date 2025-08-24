@@ -9,7 +9,7 @@ Node Categories
 |Converter||HeightmapToKernel, HeightmapToMask, HeightmapToRGBA|
 |Debug||Debug, Preview|
 |Erosion|Hydraulic|HydraulicParticle, HydraulicStreamLog|
-|Erosion|Stratify|Stratify, StratifyMultiscale, StratifyOblique|
+|Erosion|Stratify|Strata, Stratify, StratifyMultiscale, StratifyOblique|
 |Erosion|Thermal|Thermal, ThermalAutoBedrock, ThermalInflate, ThermalRidge, ThermalScree|
 |Features|Clustering|KmeansClustering2, KmeansClustering3|
 |Features|Landform|AccumulationCurvature, RelativeElevation, Unsphericity, ValleyWidth|

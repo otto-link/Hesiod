@@ -3,7 +3,7 @@ CloudRandomDensity Node
 =======================
 
 
-No description available
+CloudRandomDensity: Generates random points based on a 2D density field in [0, 1], where the value at each location represents its density, using a fully random distribution; each point is also assigned a random value in [0, 1].
 
 
 
@@ -31,7 +31,7 @@ Geometry/Cloud
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |npoints|Integer|Number of points.|
-|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|remap|Value range|Remap the point values output to a specified range, defaulting to [0, 1].|
 |seed|Random seed number|Random seed number.|
 
 # Example

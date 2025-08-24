@@ -3,7 +3,7 @@ CloudRandom Node
 ================
 
 
-Random set of points.
+Random point set: Generates a specified number of uniformly distributed random points, each with a value in [0, 1], using one of several methods: fully random (pure randomness, may cause clustering), Halton sequence (quasi-random, evenly distributed), Hammersley sequence (optimized, well-spaced for fixed point counts), or Latin hypercube sampling (stratified, uniform coverage).
 
 
 
@@ -24,9 +24,9 @@ Geometry/Cloud
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|method|Enumeration|No description|
+|method|Enumeration|Generation method.|
 |npoints|Integer|Number of points.|
-|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|remap|Value range|Remap the point values to a specified range, defaulting to [0, 1].|
 |seed|Random seed number|Random seed number.|
 
 # Example
