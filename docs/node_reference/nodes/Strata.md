@@ -32,7 +32,8 @@ Erosion/Stratify
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |angle|Float|No description|
-|apply_mask|Bool|No description|
+|apply_elevation_mask|Bool|No description|
+|apply_ridge_mask|Bool|No description|
 |gamma|Float|No description|
 |gamma_noise_ratio|Float|No description|
 |kz|Float|No description|

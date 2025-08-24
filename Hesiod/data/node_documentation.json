@@ -10629,10 +10629,16 @@
                 "label": "angle",
                 "type": "Float"
             },
-            "apply_mask": {
+            "apply_elevation_mask": {
                 "description": "No description",
-                "key": "apply_mask",
-                "label": "apply_mask",
+                "key": "apply_elevation_mask",
+                "label": "apply_elevation_mask",
+                "type": "Bool"
+            },
+            "apply_ridge_mask": {
+                "description": "No description",
+                "key": "apply_ridge_mask",
+                "label": "apply_ridge_mask",
                 "type": "Bool"
             },
             "gamma": {
