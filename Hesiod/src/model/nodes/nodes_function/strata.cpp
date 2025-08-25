@@ -8,6 +8,7 @@
 
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
+#include "hesiod/model/nodes/base_node_gui.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
 
 using namespace attr;
@@ -80,6 +81,8 @@ void setup_strata_node(BaseNode *p_node)
 
   setup_pre_process_mask_attributes(p_node);
   setup_post_process_heightmap_attributes(p_node, true);
+
+  add_wip_warning_label(p_node);
 }
 
 void compute_strata_node(BaseNode *p_node)
