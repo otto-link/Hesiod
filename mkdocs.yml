@@ -166,6 +166,7 @@ nav:
     - 'node_reference/nodes/ReverseMidpoint.md'
     - 'node_reference/nodes/Ridgelines.md'
     - 'node_reference/nodes/Rift.md'
+    - 'node_reference/nodes/Rifts.md'
     - 'node_reference/nodes/Rotate.md'
     - 'node_reference/nodes/Ruggedness.md'
     - 'node_reference/nodes/Rugosity.md'

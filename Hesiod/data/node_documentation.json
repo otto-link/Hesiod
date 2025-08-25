@@ -8539,6 +8539,201 @@
             }
         }
     },
+    "Rifts": {
+        "category": "Erosion/Hydraulic",
+        "description": "No description available",
+        "label": "Rifts",
+        "parameters": {
+            "amplitude": {
+                "description": "No description",
+                "key": "amplitude",
+                "label": "amplitude",
+                "type": "Float"
+            },
+            "angle": {
+                "description": "No description",
+                "key": "angle",
+                "label": "angle",
+                "type": "Float"
+            },
+            "apply_mask": {
+                "description": "No description",
+                "key": "apply_mask",
+                "label": "apply_mask",
+                "type": "Bool"
+            },
+            "center": {
+                "description": "No description",
+                "key": "center",
+                "label": "center",
+                "type": "Vec2Float"
+            },
+            "clamp_vmin": {
+                "description": "No description",
+                "key": "clamp_vmin",
+                "label": "clamp_vmin",
+                "type": "Float"
+            },
+            "elevation_noise_amp": {
+                "description": "No description",
+                "key": "elevation_noise_amp",
+                "label": "elevation_noise_amp",
+                "type": "Float"
+            },
+            "elevation_noise_shift": {
+                "description": "No description",
+                "key": "elevation_noise_shift",
+                "label": "elevation_noise_shift",
+                "type": "Float"
+            },
+            "k_smooth_bottom": {
+                "description": "No description",
+                "key": "k_smooth_bottom",
+                "label": "k_smooth_bottom",
+                "type": "Float"
+            },
+            "k_smooth_top": {
+                "description": "No description",
+                "key": "k_smooth_top",
+                "label": "k_smooth_top",
+                "type": "Float"
+            },
+            "kw": {
+                "description": "No description",
+                "key": "kw",
+                "label": "kw",
+                "type": "Wavenumber"
+            },
+            "mask_activate": {
+                "description": "No description",
+                "key": "mask_activate",
+                "label": "mask_activate",
+                "type": "Bool"
+            },
+            "mask_gain": {
+                "description": "No description",
+                "key": "mask_gain",
+                "label": "mask_gain",
+                "type": "Float"
+            },
+            "mask_gamma": {
+                "description": "No description",
+                "key": "mask_gamma",
+                "label": "mask_gamma",
+                "type": "Float"
+            },
+            "mask_inverse": {
+                "description": "No description",
+                "key": "mask_inverse",
+                "label": "mask_inverse",
+                "type": "Bool"
+            },
+            "mask_radius": {
+                "description": "No description",
+                "key": "mask_radius",
+                "label": "mask_radius",
+                "type": "Float"
+            },
+            "mask_type": {
+                "description": "No description",
+                "key": "mask_type",
+                "label": "mask_type",
+                "type": "Choice"
+            },
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
+                "type": "Bool"
+            },
+            "post_mix": {
+                "description": "No description",
+                "key": "post_mix",
+                "label": "post_mix",
+                "type": "Float"
+            },
+            "post_mix_method": {
+                "description": "No description",
+                "key": "post_mix_method",
+                "label": "post_mix_method",
+                "type": "Enumeration"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
+            },
+            "radial_spread_amp": {
+                "description": "No description",
+                "key": "radial_spread_amp",
+                "label": "radial_spread_amp",
+                "type": "Float"
+            },
+            "remap_vmin": {
+                "description": "No description",
+                "key": "remap_vmin",
+                "label": "remap_vmin",
+                "type": "Float"
+            },
+            "reverse_mask": {
+                "description": "No description",
+                "key": "reverse_mask",
+                "label": "reverse_mask",
+                "type": "Bool"
+            },
+            "seed": {
+                "description": "No description",
+                "key": "seed",
+                "label": "seed",
+                "type": "Random seed number"
+            }
+        },
+        "ports": {
+            "dx": {
+                "caption": "dx",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "dy": {
+                "caption": "dy",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "input": {
+                "caption": "input",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "mask": {
+                "caption": "mask",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "output"
+            }
+        }
+    },
     "Rotate": {
         "category": "Operator/Transform",
         "description": "No description available",
