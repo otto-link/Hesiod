@@ -65,8 +65,14 @@ Erosion/Hydraulic
 
 ![img](../../images/nodes/Rifts_hsd_example.png)
 
-Corresponding Hesiod file: [Rifts.hsd](../../examples/Rifts.hsd). 
+Corresponding Hesiod file: [Rifts.hsd](../../examples/Rifts.hsd). Use [Ctrl+I] in the node editor to import a hsd file within your current project. 
 
 > **Note:** Example files are kept up-to-date with the latest version of [Hesiod](https://github.com/otto-link/Hesiod).
 > If you find an error, please [open an issue](https://github.com/otto-link/Hesiod/issues).
 
+  
+# Screenshots
+
+Before/after:
+
+![img](../../images/nodes/Rifts_wiki0.png)
