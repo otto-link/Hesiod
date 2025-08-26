@@ -1,0 +1,325 @@
+{
+    "Hesiod version": "v0.4.0",
+    "graph_manager": {
+        "export_param": {
+            "export_path": "",
+            "ids": [],
+            "overlap": 0.5,
+            "shape.x": 1024,
+            "shape.y": 1024,
+            "tiling.x": 4,
+            "tiling.y": 4
+        },
+        "graph_nodes": {
+            "graph": {
+                "id": "graph",
+                "id_count": 9,
+                "links": [
+                    {
+                        "node_id_from": "3",
+                        "node_id_to": "5",
+                        "port_id_from": "cloud",
+                        "port_id_to": "cloud"
+                    },
+                    {
+                        "node_id_from": "5",
+                        "node_id_to": "6",
+                        "port_id_from": "path",
+                        "port_id_to": "input"
+                    },
+                    {
+                        "node_id_from": "5",
+                        "node_id_to": "7",
+                        "port_id_from": "path",
+                        "port_id_to": "input"
+                    },
+                    {
+                        "node_id_from": "5",
+                        "node_id_to": "8",
+                        "port_id_from": "path",
+                        "port_id_to": "input"
+                    }
+                ],
+                "model_config": {
+                    "hmap_transform_mode_cpu": 0,
+                    "hmap_transform_mode_gpu": 2,
+                    "overlap": 0.5,
+                    "shape.x": 1024,
+                    "shape.y": 1024,
+                    "tiling.x": 4,
+                    "tiling.y": 4
+                },
+                "nodes": [
+                    {
+                        "cloud": {
+                            "label": "cloud",
+                            "type": 8,
+                            "type_string": "Cloud",
+                            "values": [
+                                1.0,
+                                0.949999988079071,
+                                0.8999999761581421
+                            ],
+                            "x": [
+                                0.19921875,
+                                0.734375,
+                                0.70703125
+                            ],
+                            "y": [
+                                0.81640625,
+                                0.70703125,
+                                0.26953125
+                            ]
+                        },
+                        "id": "3",
+                        "label": "Cloud"
+                    },
+                    {
+                        "closed": {
+                            "label": "closed",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "id": "5",
+                        "label": "CloudToPath",
+                        "reorder_nns": {
+                            "label": "reorder_nns",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        }
+                    },
+                    {
+                        "id": "6",
+                        "iterations": {
+                            "label": "iterations",
+                            "type": 10,
+                            "type_string": "Integer",
+                            "value": 4,
+                            "vmax": 10,
+                            "vmin": 1
+                        },
+                        "label": "PathFractalize",
+                        "orientation": {
+                            "label": "orientation",
+                            "type": 10,
+                            "type_string": "Integer",
+                            "value": 0,
+                            "vmax": 1,
+                            "vmin": 0
+                        },
+                        "persistence": {
+                            "label": "persistence",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 4.0,
+                            "vmin": 0.009999999776482582
+                        },
+                        "seed": {
+                            "label": "seed",
+                            "type": 12,
+                            "type_string": "Random seed number",
+                            "value": 0
+                        },
+                        "sigma": {
+                            "label": "sigma",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.1277512013912201,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        }
+                    },
+                    {
+                        "id": "7",
+                        "iterations": {
+                            "label": "iterations",
+                            "type": 10,
+                            "type_string": "Integer",
+                            "value": 4,
+                            "vmax": 10,
+                            "vmin": 1
+                        },
+                        "label": "PathFractalize",
+                        "orientation": {
+                            "label": "orientation",
+                            "type": 10,
+                            "type_string": "Integer",
+                            "value": 0,
+                            "vmax": 1,
+                            "vmin": 0
+                        },
+                        "persistence": {
+                            "label": "persistence",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 4.0,
+                            "vmin": 0.009999999776482582
+                        },
+                        "seed": {
+                            "label": "seed",
+                            "type": 12,
+                            "type_string": "Random seed number",
+                            "value": 1
+                        },
+                        "sigma": {
+                            "label": "sigma",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.1277512013912201,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        }
+                    },
+                    {
+                        "id": "8",
+                        "iterations": {
+                            "label": "iterations",
+                            "type": 10,
+                            "type_string": "Integer",
+                            "value": 4,
+                            "vmax": 10,
+                            "vmin": 1
+                        },
+                        "label": "PathFractalize",
+                        "orientation": {
+                            "label": "orientation",
+                            "type": 10,
+                            "type_string": "Integer",
+                            "value": 0,
+                            "vmax": 1,
+                            "vmin": 0
+                        },
+                        "persistence": {
+                            "label": "persistence",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 4.0,
+                            "vmin": 0.009999999776482582
+                        },
+                        "seed": {
+                            "label": "seed",
+                            "type": 12,
+                            "type_string": "Random seed number",
+                            "value": 2
+                        },
+                        "sigma": {
+                            "label": "sigma",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.15645933151245117,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        }
+                    }
+                ],
+                "origin": [
+                    0.0,
+                    0.0
+                ],
+                "rotation_angle": 0.0,
+                "size": [
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "graph_order": [
+            "graph"
+        ],
+        "id_count": 0
+    },
+    "graph_manager_widget": {
+        "frames": {
+            "graph": {
+                "current_bg_tag": "NONE"
+            }
+        }
+    },
+    "graph_tabs_widget": {
+        "graph_node_widgets": {
+            "graph": {
+                "comments": [],
+                "current_link_type": 2,
+                "groups": [],
+                "id": "graph",
+                "links": [
+                    {
+                        "link_type": 2,
+                        "node_in_id": "8",
+                        "node_out_id": "5",
+                        "port_in_id": "input",
+                        "port_out_id": "path"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "7",
+                        "node_out_id": "5",
+                        "port_in_id": "input",
+                        "port_out_id": "path"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "6",
+                        "node_out_id": "5",
+                        "port_in_id": "input",
+                        "port_out_id": "path"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "5",
+                        "node_out_id": "3",
+                        "port_in_id": "cloud",
+                        "port_out_id": "cloud"
+                    }
+                ],
+                "nodes": [
+                    {
+                        "caption": "PathFractalize",
+                        "id": "8",
+                        "is_widget_visible": true,
+                        "scene_position.x": -626.8910839176203,
+                        "scene_position.y": -190.95998023267288
+                    },
+                    {
+                        "caption": "PathFractalize",
+                        "id": "7",
+                        "is_widget_visible": true,
+                        "scene_position.x": -457.047758357938,
+                        "scene_position.y": -269.1415251288712
+                    },
+                    {
+                        "caption": "PathFractalize",
+                        "id": "6",
+                        "is_widget_visible": true,
+                        "scene_position.x": -587.0549719037763,
+                        "scene_position.y": -529.5631985422428
+                    },
+                    {
+                        "caption": "CloudToPath",
+                        "id": "5",
+                        "is_widget_visible": true,
+                        "scene_position.x": -790.0799194855766,
+                        "scene_position.y": -406.5606826226683
+                    },
+                    {
+                        "caption": "Cloud",
+                        "id": "3",
+                        "is_widget_visible": true,
+                        "scene_position.x": -975.685303603675,
+                        "scene_position.y": -401.06992449683173
+                    }
+                ]
+            }
+        }
+    },
+    "saved_at": "2025-08-26_23:17:21"
+}

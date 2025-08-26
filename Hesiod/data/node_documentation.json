@@ -3437,6 +3437,12 @@
                 "key": "remap",
                 "label": "remap",
                 "type": "Value range"
+            },
+            "unwrap_angle": {
+                "description": "No description",
+                "key": "unwrap_angle",
+                "label": "unwrap_angle",
+                "type": "Bool"
             }
         },
         "ports": {
