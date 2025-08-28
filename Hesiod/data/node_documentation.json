@@ -1345,6 +1345,51 @@
             }
         }
     },
+    "CloudShuffle": {
+        "category": "Geometry/Cloud",
+        "description": "No description available",
+        "label": "CloudShuffle",
+        "parameters": {
+            "dv": {
+                "description": "No description",
+                "key": "dv",
+                "label": "dv",
+                "type": "Float"
+            },
+            "dx": {
+                "description": "No description",
+                "key": "dx",
+                "label": "dx",
+                "type": "Float"
+            },
+            "dy": {
+                "description": "No description",
+                "key": "dy",
+                "label": "dy",
+                "type": "Float"
+            },
+            "seed": {
+                "description": "No description",
+                "key": "seed",
+                "label": "seed",
+                "type": "Random seed number"
+            }
+        },
+        "ports": {
+            "input": {
+                "caption": "input",
+                "data_type": "Cloud",
+                "description": "No description",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "Cloud",
+                "description": "No description",
+                "type": "output"
+            }
+        }
+    },
     "CloudToArrayInterp": {
         "category": "Geometry/Cloud",
         "description": "CloudToArrayInterp generates a smooth and continuous 2D elevation map from a set of scattered points using Delaunay linear interpolation.",
@@ -7006,6 +7051,51 @@
                 "caption": "sdf",
                 "data_type": "Heightmap",
                 "description": "Signed distance as an heightmap.",
+                "type": "output"
+            }
+        }
+    },
+    "PathShuffle": {
+        "category": "Geometry/Path",
+        "description": "No description available",
+        "label": "PathShuffle",
+        "parameters": {
+            "dv": {
+                "description": "No description",
+                "key": "dv",
+                "label": "dv",
+                "type": "Float"
+            },
+            "dx": {
+                "description": "No description",
+                "key": "dx",
+                "label": "dx",
+                "type": "Float"
+            },
+            "dy": {
+                "description": "No description",
+                "key": "dy",
+                "label": "dy",
+                "type": "Float"
+            },
+            "seed": {
+                "description": "No description",
+                "key": "seed",
+                "label": "seed",
+                "type": "Random seed number"
+            }
+        },
+        "ports": {
+            "input": {
+                "caption": "input",
+                "data_type": "Path",
+                "description": "No description",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "Path",
+                "description": "No description",
                 "type": "output"
             }
         }

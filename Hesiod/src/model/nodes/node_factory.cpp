@@ -164,6 +164,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"CloudSetValuesFromBorderDistance", "Geometry/Cloud"},
       {"CloudSetValuesFromHeightmap", "Geometry/Cloud"},
       {"CloudSetValuesFromMinDistance", "Geometry/Cloud"},
+      {"CloudShuffle", "Geometry/Cloud"},
       {"CloudToArrayInterp", "Geometry/Cloud"},
       {"CloudToPath", "Geometry/Cloud"},
       {"ColorizeCmap", "Texture"},
@@ -346,6 +347,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"PathMeanderize", "Geometry/Path"},
       {"PathResample", "Geometry/Path"},
       {"PathSDF", "Geometry/Path"},
+      {"PathShuffle", "Geometry/Path"},
       {"PathSmooth", "Geometry/Path"},
       {"PathToCloud", "Geometry/Path"},
       {"PathToHeightmap", "Geometry/Path"},
@@ -509,6 +511,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(CloudSetValuesFromBorderDistance, cloud_set_values_from_border_distance);
     SETUP_NODE(CloudSetValuesFromHeightmap, cloud_set_values_from_heightmap);
     SETUP_NODE(CloudSetValuesFromMinDistance, cloud_set_values_from_min_distance);
+    SETUP_NODE(CloudShuffle, cloud_shuffle);
     SETUP_NODE(CloudToArrayInterp, cloud_to_array_interp);
     SETUP_NODE(CloudToPath, cloud_to_path);
     SETUP_NODE(ColorizeCmap, colorize_cmap);
@@ -610,6 +613,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(PathMeanderize, path_meanderize);
     SETUP_NODE(PathResample, path_resample);
     SETUP_NODE(PathSDF, path_sdf);
+    SETUP_NODE(PathShuffle, path_shuffle);
     SETUP_NODE(PathSmooth, path_smooth);
     SETUP_NODE(PathToCloud, path_to_cloud);
     SETUP_NODE(PathToHeightmap, path_to_heightmap);
