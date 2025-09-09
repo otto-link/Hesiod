@@ -3,6 +3,7 @@
 #pragma once
 #include <functional>
 
+#include <QGridLayout>
 #include <QLayout>
 #include <QWidget>
 
@@ -26,6 +27,9 @@ public:
  * @param layout Reference to the layout that will be cleared.
  */
 void clear_layout(QLayout *layout);
+
+int get_column_count(QGridLayout *layout);
+int get_row_count(QGridLayout *layout);
 
 /**
  * @brief Resize the font of a widget.

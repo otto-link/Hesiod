@@ -44,6 +44,12 @@ public:
     bool                      save_backup_file = true;
   } window;
 
+  struct Viewer
+  {
+    int width = 512;
+    int height = 512;
+  } viewer;
+
   struct Nodes
   {
     hmap::Vec2<int> shape_preview = hmap::Vec2<int>(128, 128);

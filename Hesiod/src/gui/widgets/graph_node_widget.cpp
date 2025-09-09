@@ -1,6 +1,8 @@
 /* Copyright (c) 2025 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include <exception>
+
 #include <QApplication>
 #include <QFileDialog>
 #include <QMenu>
@@ -21,6 +23,7 @@
 #include "hesiod/gui/widgets/model_config_widget.hpp"
 #include "hesiod/gui/widgets/select_string_dialog.hpp"
 #include "hesiod/gui/widgets/viewer3d.hpp"
+#include "hesiod/gui/widgets/viewers/viewer.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/graph_node.hpp"
 #include "hesiod/model/nodes/node_factory.hpp"
@@ -75,7 +78,17 @@ void GraphNodeWidget::closeEvent(QCloseEvent *event)
   gngui::GraphViewer::closeEvent(event);
 }
 
-GraphNode *GraphNodeWidget::get_p_graph_node() { return this->p_graph_node; }
+GraphNode *GraphNodeWidget::get_p_graph_node()
+{
+  if (!this->p_graph_node)
+  {
+    LOG->critical("GraphNodeWidget::get_p_graph_node: model graph_node reference is a "
+                  "dangling ptr");
+    throw std::runtime_error("dangling ptr");
+  }
+
+  return this->p_graph_node;
+}
 
 void GraphNodeWidget::json_from(nlohmann::json const &json)
 {
@@ -801,7 +814,10 @@ void GraphNodeWidget::on_viewport_request()
 {
   LOG->trace("GraphNodeWidget::on_viewport_request");
 
-  this->data_viewers.push_back(std::make_unique<Viewer3d>(this));
+  // this->data_viewers.push_back(std::make_unique<Viewer3d>(this));
+  // this->data_viewers.back()->show();
+
+  this->data_viewers.push_back(std::make_unique<Viewer>(this));
   this->data_viewers.back()->show();
 
   Viewer3d *p_viewer = dynamic_cast<Viewer3d *>(this->data_viewers.back().get());

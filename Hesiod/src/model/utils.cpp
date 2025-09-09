@@ -79,14 +79,44 @@ nlohmann::json json_from_file(const std::string &fname)
   return json;
 }
 
-void json_to_file(const nlohmann::json &json, const std::string &fname)
+void json_to_file(const nlohmann::json &json,
+                  const std::string    &fname,
+                  bool                  merge_with_existing_content)
 {
-  std::ofstream file(fname);
+  nlohmann::json final_json = json;
 
-  if (file.is_open())
+  if (merge_with_existing_content)
   {
-    file << json.dump(4);
-    file.close();
+    std::ifstream infile(fname);
+    if (infile.is_open())
+    {
+      try
+      {
+        nlohmann::json existing;
+        infile >> existing;
+        infile.close();
+
+        // Merge new JSON into existing JSON
+        existing.merge_patch(json);
+        final_json = existing;
+
+        LOG->trace("json_to_file: merged JSON with existing content in {}", fname);
+      }
+      catch (const std::exception &e)
+      {
+        LOG->warn("json_to_file: Could not parse existing JSON in {} ({}). Overwriting "
+                  "instead.",
+                  fname,
+                  e.what());
+      }
+    }
+  }
+
+  std::ofstream outfile(fname);
+  if (outfile.is_open())
+  {
+    outfile << final_json.dump(4);
+    outfile.close();
     LOG->trace("json_to_file: JSON successfully written to {}", fname);
   }
   else

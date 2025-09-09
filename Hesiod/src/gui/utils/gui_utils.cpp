@@ -63,6 +63,40 @@ int float_to_slider_pos(float v, float min, float max, int slider_steps)
   return (int)((v - min) / (max - min) * (float)slider_steps);
 }
 
+int get_column_count(QGridLayout *layout)
+{
+  int max_col = -1;
+
+  for (int i = 0; i < layout->count(); ++i)
+  {
+    int row, col, row_span, col_span;
+    layout->getItemPosition(i, &row, &col, &row_span, &col_span);
+
+    int last_col = col + col_span - 1;
+    if (last_col > max_col)
+      max_col = last_col;
+  }
+
+  return max_col + 1; // +1 because columns are 0-based
+}
+
+int get_row_count(QGridLayout *layout)
+{
+  int max_row = -1;
+
+  for (int i = 0; i < layout->count(); ++i)
+  {
+    int row, col, row_span, col_span;
+    layout->getItemPosition(i, &row, &col, &row_span, &col_span);
+
+    int last_row = row + row_span - 1;
+    if (last_row > max_row)
+      max_row = last_row;
+  }
+
+  return max_row + 1; // +1 because rows are 0-based
+}
+
 void resize_font(QWidget *widget, int relative_size_modification)
 {
   QFont font = widget->font();
