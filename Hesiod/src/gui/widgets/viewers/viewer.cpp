@@ -111,7 +111,7 @@ void Viewer::on_node_deselected(const std::string &new_id)
   // clear everything
   this->clear();
 
-  // LOG->trace("\n{}", this->json_to().dump(4));
+  LOG->trace("\n{}", this->json_to().dump(4));
 }
 
 void Viewer::on_node_selected(const std::string &new_id)

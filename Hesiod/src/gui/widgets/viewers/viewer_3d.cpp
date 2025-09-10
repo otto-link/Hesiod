@@ -19,6 +19,8 @@ Viewer3D::Viewer3D(GraphNodeWidget *p_graph_node_widget_, QWidget *parent)
 {
   LOG->trace("Viewer3D::Viewer3D");
 
+  this->view_param = this->get_default_view_param();
+
   this->setup_layout();
   this->update_combos();
   this->setup_connections();
@@ -29,7 +31,7 @@ void Viewer3D::clear()
   LOG->trace("Viewer3D::clear");
 
   this->current_node_id = "";
-  this->view_param = Viewer3DNodeParam();
+  this->view_param = this->get_default_view_param();
   this->terrain_renderer->clear();
 
   // prevent render update triggered by the combo update
@@ -44,6 +46,22 @@ void Viewer3D::clear()
   this->update_renderer();
 
   this->update();
+}
+
+ViewerNodeParam Viewer3D::get_default_view_param() const
+{
+  ViewerNodeParam wp;
+
+  // defines combo box fields for th UI
+  wp.port_ids = {{"elevation", ""},
+                 {"color", ""},
+                 {"normal_map", ""},
+                 {"cloud", ""},
+                 {"path", ""},
+                 {"trees", ""},
+                 {"rocks", ""}};
+
+  return wp;
 }
 
 void Viewer3D::json_from(nlohmann::json const &json)
