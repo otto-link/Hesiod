@@ -32,11 +32,16 @@ void Viewer3D::clear()
   this->view_param = Viewer3DNodeParam();
   this->terrain_renderer->clear();
 
+  // prevent render update triggered by the combo update
+  this->prevent_renderer_update = true;
   for (auto &[_, combo] : this->combo_map)
   {
     combo->clear();
     combo->setCurrentIndex(-1);
   }
+  this->prevent_renderer_update = false;
+
+  this->update_renderer();
 
   this->update();
 }
@@ -64,8 +69,6 @@ nlohmann::json Viewer3D::json_to() const
 void Viewer3D::on_current_node_id_changed(const std::string &new_id)
 {
   LOG->trace("Viewer3D::on_current_node_id_changed: {}", new_id);
-
-  LOG->trace("{}", this->json_to().dump(4));
 
   if (new_id == "")
   {
@@ -103,10 +106,7 @@ void Viewer3D::setup_connections()
                 [this](const std::string &graph_id, const std::string &id)
                 {
                   if (id == this->current_node_id)
-                  {
-                    // TODO update
-                    LOG->debug("Viewer3D::setup_connections: need update");
-                  }
+                    this->update_renderer();
                 });
 
   for (auto &[name, combo] : this->combo_map)
@@ -118,8 +118,8 @@ void Viewer3D::setup_connections()
                     std::string port_id = combo->currentText().toStdString();
                     this->view_param.port_ids[name] = port_id;
 
-                    // TODO update
-                    LOG->debug("Viewer3D::setup_connections: need update");
+                    if (!this->prevent_renderer_update)
+                      this->update_renderer();
                   });
   }
 }
@@ -190,7 +190,11 @@ void Viewer3D::update_combos()
     }
   }
 
-  // update combobox content
+  // update combobox content (prevent render update triggered by the
+  // value change to avoid a series of unecessary updates of the
+  // renderer)
+  this->prevent_renderer_update = true;
+
   for (auto &[_, combo] : this->combo_map)
   {
     for (auto &option : combo_options)
@@ -200,9 +204,18 @@ void Viewer3D::update_combos()
 
   // set value
   for (auto &[name, value] : view_param.port_ids)
-  {
     this->combo_map[name]->setCurrentText(value.c_str());
-  }
+
+  this->prevent_renderer_update = false;
+
+  // manually update renderer
+  this->update_renderer();
+}
+
+void Viewer3D::update_renderer()
+{
+  // TODO update
+  LOG->debug("Viewer3D::setup_connections: need update");
 }
 
 } // namespace hesiod

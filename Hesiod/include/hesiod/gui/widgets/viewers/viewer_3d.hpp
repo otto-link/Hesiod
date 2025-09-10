@@ -47,6 +47,7 @@ public:
   void setup_connections();
   void setup_layout();
   void update_combos();
+  void update_renderer();
 
   // --- Serialization ---
   void           json_from(nlohmann::json const &json);
@@ -62,6 +63,7 @@ private:
   std::map<std::string, Viewer3DNodeParam> view_param_map; // storage per node id
   qtr::RenderWidget                       *terrain_renderer;
   std::map<std::string, QComboBox *>       combo_map;
+  bool                                     prevent_renderer_update = false;
 };
 
 } // namespace hesiod
