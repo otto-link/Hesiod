@@ -22,8 +22,7 @@
 #include "hesiod/gui/widgets/graph_node_widget.hpp"
 #include "hesiod/gui/widgets/model_config_widget.hpp"
 #include "hesiod/gui/widgets/select_string_dialog.hpp"
-#include "hesiod/gui/widgets/viewer3d.hpp"
-#include "hesiod/gui/widgets/viewers/viewer.hpp"
+#include "hesiod/gui/widgets/viewers/viewer_3d.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/graph_node.hpp"
 #include "hesiod/model/nodes/node_factory.hpp"
@@ -55,8 +54,8 @@ void GraphNodeWidget::clear_data_viewers()
 {
   for (auto &v : this->data_viewers)
   {
-    AbstractViewer *p_viewer = dynamic_cast<AbstractViewer *>(v.get());
-    p_viewer->clear();
+    if (Viewer *p_viewer = dynamic_cast<Viewer *>(v.get()))
+      p_viewer->clear();
   }
 
   this->data_viewers.clear();
@@ -388,7 +387,7 @@ void GraphNodeWidget::on_graph_settings_request()
     std::vector<nlohmann::json> json_states = {};
 
     for (auto &sp_widget : this->data_viewers)
-      if (auto *p_viewer = dynamic_cast<AbstractViewer *>(sp_widget.get()))
+      if (auto *p_viewer = dynamic_cast<Viewer *>(sp_widget.get()))
       {
         json_states.push_back(p_viewer->json_to());
         p_viewer->clear();
@@ -434,7 +433,7 @@ void GraphNodeWidget::on_graph_settings_request()
     // set back viewport states
     size_t k = 0;
     for (auto &sp_widget : this->data_viewers)
-      if (auto *p_viewer = dynamic_cast<AbstractViewer *>(sp_widget.get()))
+      if (auto *p_viewer = dynamic_cast<Viewer *>(sp_widget.get()))
         p_viewer->json_from(json_states[k++]);
 
     // set selection back, Qt mystery, this needs to be delayed to be effective
@@ -817,14 +816,14 @@ void GraphNodeWidget::on_viewport_request()
   // this->data_viewers.push_back(std::make_unique<Viewer3d>(this));
   // this->data_viewers.back()->show();
 
-  this->data_viewers.push_back(std::make_unique<Viewer>(this));
+  this->data_viewers.push_back(std::make_unique<Viewer3D>(this));
   this->data_viewers.back()->show();
 
-  Viewer3d *p_viewer = dynamic_cast<Viewer3d *>(this->data_viewers.back().get());
+  Viewer *p_viewer = dynamic_cast<Viewer *>(this->data_viewers.back().get());
 
   // remove the widget from the widget list if it is closed
   this->connect(p_viewer,
-                &Viewer3d::widget_close,
+                &Viewer::widget_close,
                 [this, p_viewer]()
                 {
                   std::erase_if(this->data_viewers,

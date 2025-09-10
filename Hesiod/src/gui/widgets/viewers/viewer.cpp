@@ -10,7 +10,6 @@
 #include "hesiod/gui/widgets/viewers/viewer_3d.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/graph_node.hpp"
-#include "hesiod/model/nodes/base_node.hpp"
 
 namespace hesiod
 {
@@ -26,15 +25,12 @@ Viewer::Viewer(GraphNodeWidget   *p_graph_node_widget_,
 
   this->setMinimumSize(HSD_CONFIG->viewer.width, HSD_CONFIG->viewer.height);
   this->setWindowTitle(this->label.c_str());
-  this->setup_layout();
-  this->update_widgets();
-  this->setup_connections();
-  this->set_viewer_type(this->viewer_type);
 }
 
 void Viewer::clear()
 {
   this->set_current_node_id("");
+  this->view_param = this->get_default_view_param();
   this->is_node_pinned = false;
 
   this->update_widgets();
@@ -46,6 +42,13 @@ void Viewer::closeEvent(QCloseEvent *event)
   Q_EMIT this->clear();
   Q_EMIT this->widget_close();
   QWidget::closeEvent(event);
+}
+
+ViewerNodeParam Viewer::get_default_view_param() const
+{
+  LOG->critical("Viewer::get_default_view_param: using abstract class method, this "
+                "should not be happening");
+  return ViewerNodeParam();
 }
 
 void Viewer::json_from(nlohmann::json const &json)
@@ -63,8 +66,8 @@ void Viewer::json_from(nlohmann::json const &json)
   this->set_current_node_id(json["current_node_id"]);
   this->is_node_pinned = json["is_node_pinned"];
 
-  // for (auto &[key, param] : this->node_view_param_map)
-  //   param.json_from(json["node_view_param_map"][key]);
+  for (auto &[key, param] : this->view_param_map)
+    param.json_from(json["view_param_map"][key]);
 
   this->update_widgets();
 }
@@ -86,8 +89,8 @@ nlohmann::json Viewer::json_to() const
   json["current_node_id"] = this->current_node_id;
   json["is_node_pinned"] = this->is_node_pinned;
 
-  // for (auto &[key, param] : this->node_view_param_map)
-  //   json["node_view_param_map"][key] = param.json_to();
+  for (auto &[key, param] : this->view_param_map)
+    json["view_param_map"][key] = param.json_to();
 
   return json;
 }
@@ -110,8 +113,6 @@ void Viewer::on_node_deselected(const std::string &new_id)
 
   // clear everything
   this->clear();
-
-  LOG->trace("\n{}", this->json_to().dump(4));
 }
 
 void Viewer::on_node_selected(const std::string &new_id)
@@ -123,102 +124,87 @@ void Viewer::on_node_selected(const std::string &new_id)
     return;
 
   this->set_current_node_id(new_id);
-  this->update_widgets();
+}
+
+BaseNode *Viewer::safe_get_node()
+{
+  GraphNodeWidget *p_gw = this->p_graph_node_widget;
+  if (!p_gw)
+  {
+    LOG->error("Viewer::safe_get_node: corresponding graph viewer is dangling ptr");
+    return nullptr;
+  }
+
+  BaseNode *p_node = p_gw->get_p_graph_node()->get_node_ref_by_id<BaseNode>(
+      this->current_node_id);
+  if (!p_node)
+  {
+    LOG->error("Viewer::safe_get_node: corresponding graph node is dangling ptr");
+    return nullptr;
+  }
+
+  return p_node;
 }
 
 void Viewer::set_current_node_id(const std::string &new_id)
 {
   LOG->trace("Viewer::set_current_node_id: {}", new_id);
 
-  this->current_node_id = new_id;
+  // store current view state
+  if (this->current_node_id != "")
+    this->view_param_map[this->current_node_id] = this->view_param;
 
-  if (this->current_node_id == "")
+  if (new_id == "" && this->current_node_id != "")
   {
-    this->setWindowTitle(this->label.c_str());
+    this->current_node_id = "";
+    this->clear();
   }
   else
   {
-    // safe getter
-    GraphNodeWidget *p_gw = this->p_graph_node_widget;
-    if (!p_gw)
-    {
-      LOG->error(
-          "Viewer::set_current_node_id: corresponding graph viewer is dangling ptr");
-      this->clear();
-      return;
-    }
+    this->current_node_id = new_id;
 
-    BaseNode *p_node = p_gw->get_p_graph_node()->get_node_ref_by_id<BaseNode>(
-        this->current_node_id);
-    if (!p_node)
+    // get from storage or start anew
+    if (this->view_param_map.contains(new_id))
     {
-      LOG->error("Viewer::set_current_node_id: corresponding graph node is dangling ptr");
-      this->clear();
-      return;
+      this->view_param = this->view_param_map.at(new_id);
     }
-
-    // update title
-    std::string new_title = this->label + " - " + p_node->get_caption() + "(" +
-                            p_node->get_id() + ")";
-    this->setWindowTitle(new_title.c_str());
+    else if (this->current_node_id != "")
+    {
+      // wild guess a default view setup...
+      wild_guess_view_param(this->view_param, viewer_type, *this->safe_get_node());
+    }
   }
 
+  this->update_widgets();
   Q_EMIT this->current_node_id_changed(this->current_node_id);
 }
 
-void Viewer::set_viewer_type(const ViewerType &new_viewer_type)
-{
-  LOG->trace("Viewer::set_viewer_type: type = {}",
-             viewer_type_as_string.at(new_viewer_type));
-
-  this->viewer_type = new_viewer_type;
-  this->setup_layout();
-  this->setup_connections(true);
-  int row_count = get_row_count(dynamic_cast<QGridLayout *>(this->layout()));
-  int col_count = get_column_count(dynamic_cast<QGridLayout *>(this->layout()));
-
-  switch (this->viewer_type)
-  {
-  case ViewerType::VIEWER3D:
-  {
-    LOG->trace("Viewer::set_viewer_type: initializing 3D viewer widget...");
-
-    Viewer3D *viewer = new Viewer3D(this->p_graph_node_widget, this);
-
-    this->connect(this,
-                  &Viewer::current_node_id_changed,
-                  viewer,
-                  &Viewer3D::on_current_node_id_changed);
-
-    auto *grid = dynamic_cast<QGridLayout *>(this->layout());
-    grid->addWidget(dynamic_cast<QWidget *>(viewer), row_count, 0, 1, col_count);
-  }
-  break;
-  }
-}
-
-void Viewer::setup_connections(bool only_widgets)
+void Viewer::setup_connections()
 {
   LOG->trace("Viewer::setup_connections");
 
-  // if the layout is reinitialize, only connect the new widgets
-  if (only_widgets)
-  {
-    this->connect(this->p_graph_node_widget,
-                  &gngui::GraphViewer::node_deleted,
-                  this,
-                  &Viewer::on_node_deleted);
+  this->connect(this->p_graph_node_widget,
+                &gngui::GraphViewer::node_deleted,
+                this,
+                &Viewer::on_node_deleted);
 
-    this->connect(this->p_graph_node_widget,
-                  &gngui::GraphViewer::node_deselected,
-                  this,
-                  &Viewer::on_node_deselected);
+  this->connect(this->p_graph_node_widget,
+                &gngui::GraphViewer::node_deselected,
+                this,
+                &Viewer::on_node_deselected);
 
-    this->connect(this->p_graph_node_widget,
-                  &gngui::GraphViewer::node_selected,
-                  this,
-                  &Viewer::on_node_selected);
-  }
+  this->connect(this->p_graph_node_widget,
+                &gngui::GraphViewer::node_selected,
+                this,
+                &Viewer::on_node_selected);
+
+  this->connect(this->p_graph_node_widget->get_p_graph_node(),
+                &GraphNode::compute_finished,
+                [this](const std::string &graph_id, const std::string &id)
+                {
+                  if (id == this->current_node_id)
+                    this->update_renderer();
+                });
 
   this->connect(this->button_pin_current_node,
                 &QPushButton::clicked,
@@ -239,42 +225,129 @@ void Viewer::setup_connections(bool only_widgets)
 
                   this->update_widgets();
                 });
+
+  for (auto &[name, combo] : this->combo_map)
+  {
+    this->connect(combo,
+                  QOverload<int>::of(&QComboBox::currentIndexChanged),
+                  [this, combo, name]()
+                  {
+                    if (!this->prevent_combo_connections)
+                    {
+                      std::string port_id = combo->currentText().toStdString();
+                      this->view_param.port_ids[name] = port_id;
+                      this->update_renderer();
+                    }
+                  });
+  }
 }
 
 void Viewer::setup_layout()
 {
   LOG->trace("Viewer::setup_layout");
 
-  // remove and delete existing layout if any
-  if (QLayout *old_layout = this->layout())
-  {
-    QLayoutItem *item;
-    while ((item = old_layout->takeAt(0)) != nullptr)
-    {
-      // detach widget (optional, prevents double free)
-      if (QWidget *w = item->widget())
-        w->setParent(nullptr);
-      delete item;
-    }
-    delete old_layout;
-  }
-
   // create and assign new layout
   QGridLayout *layout = new QGridLayout(this);
-  layout->setContentsMargins(0, 0, 0, 0);
+  layout->setContentsMargins(2, 0, 2, 0);
   this->setLayout(layout);
 
   this->button_pin_current_node = new QPushButton("Pin current node");
   this->button_pin_current_node->setCheckable(true);
 
   layout->addWidget(this->button_pin_current_node, 0, 0);
+
+  int col = 0;
+  int row = 1;
+
+  for (auto &[name, _] : view_param.port_ids)
+  {
+    QLabel    *label = new QLabel(name.c_str());
+    QComboBox *combo = new QComboBox();
+
+    layout->addWidget(label, row, col);
+    layout->addWidget(combo, row + 1, col);
+    col++;
+
+    this->combo_map[name] = combo;
+  }
+}
+
+void Viewer::update_renderer()
+{
+  LOG->critical("Viewer::update_renderer: using abstract class method, this should not "
+                "be happening");
 }
 
 void Viewer::update_widgets()
 {
   LOG->trace("Viewer::update_widgets");
 
-  this->button_pin_current_node->setChecked(this->is_node_pinned);
+  // --- update pinned node button
+
+  if (this->is_node_pinned != this->button_pin_current_node->isChecked())
+    this->button_pin_current_node->setChecked(this->is_node_pinned);
+
+  // --- update title
+
+  if (this->current_node_id.empty())
+  {
+    this->setWindowTitle(this->label.c_str());
+  }
+  else if (BaseNode *p_node = this->safe_get_node())
+  {
+    std::string new_title = this->label + " - " + p_node->get_caption() + "(" +
+                            p_node->get_id() + ")";
+    this->setWindowTitle(new_title.c_str());
+  }
+
+  // --- update combo content
+
+  // retriece possible values, corresponding to the node port IDs
+  std::vector<std::string> combo_options = {};
+
+  if (!this->current_node_id.empty())
+  {
+    if (BaseNode *p_node = this->safe_get_node())
+    {
+      combo_options.reserve(p_node->get_nports());
+      for (int k = 0; k < p_node->get_nports(); ++k)
+        combo_options.push_back(p_node->get_port_caption(k));
+    }
+  }
+
+  // update combobox content (prevent render update triggered by the
+  // value change to avoid a series of unecessary updates of the
+  // renderer and override of the view_param values through combo cpnnections)
+  this->prevent_combo_connections = true;
+
+  for (auto &[_, combo] : this->combo_map)
+  {
+    combo->clear();
+
+    for (auto &option : combo_options)
+      combo->addItem(option.c_str());
+
+    combo->addItem("");
+    combo->setCurrentIndex(-1);
+  }
+
+  // set values
+  for (auto &[name, value] : this->view_param.port_ids)
+  {
+    if (auto it = this->combo_map.find(name); it != this->combo_map.end())
+    {
+      QComboBox *combo = it->second;
+      int        idx = combo->findText(QString::fromStdString(value));
+
+      if (idx >= 0)
+        combo->setCurrentIndex(idx);
+    }
+  }
+
+  this->prevent_combo_connections = false;
+
+  // manually update renderer
+  this->update_renderer();
 }
 
 } // namespace hesiod
