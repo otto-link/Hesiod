@@ -28,6 +28,10 @@ public:
            const std::string &label_ = "Viewer",
            QWidget           *parent = nullptr);
 
+  // --- Serialization ---
+  void           json_from(nlohmann::json const &json) override;
+  nlohmann::json json_to() const override;
+
   void clear() override;
   void setup_layout() override;
 

@@ -100,6 +100,27 @@ void GraphNodeWidget::json_from(nlohmann::json const &json)
   this->update_node_on_connection_finished = false;
   GraphViewer::json_from(json);
   this->update_node_on_connection_finished = true;
+
+  // viewers
+  if (json.contains("viewers") && json["viewers"].is_array())
+  {
+    for (const auto &viewer_json : json["viewers"])
+    {
+      ViewerType viewer_type = viewer_json["viewer_type"].get<ViewerType>();
+      ;
+
+      LOG->trace("GraphNodeWidget::json_from: viewer_type: {}",
+                 viewer_type_as_string.at(viewer_type));
+
+      // TODO add viewer-type specific handling
+      this->on_viewport_request();
+
+      if (auto *p_viewer = dynamic_cast<Viewer3D *>(this->data_viewers.back().get()))
+        p_viewer->json_from(viewer_json);
+      else
+        LOG->error("GraphNodeWidget::json_from: could not retrieve viewer reference");
+    }
+  }
 }
 
 nlohmann::json GraphNodeWidget::json_import(nlohmann::json const &json, QPointF scene_pos)
@@ -160,7 +181,16 @@ nlohmann::json GraphNodeWidget::json_import(nlohmann::json const &json, QPointF 
 nlohmann::json GraphNodeWidget::json_to() const
 {
   LOG->trace("GraphNodeWidget::json_to");
-  return GraphViewer::json_to();
+  nlohmann::json json = GraphViewer::json_to();
+
+  // add the viewports
+  for (auto &sp_widget : this->data_viewers)
+    if (auto *p_viewer = dynamic_cast<Viewer *>(sp_widget.get()))
+    {
+      json["viewers"].push_back(p_viewer->json_to());
+    }
+
+  return json;
 }
 
 void GraphNodeWidget::on_connection_deleted(const std::string &id_out,
@@ -812,9 +842,6 @@ void GraphNodeWidget::on_nodes_paste_request()
 void GraphNodeWidget::on_viewport_request()
 {
   LOG->trace("GraphNodeWidget::on_viewport_request");
-
-  // this->data_viewers.push_back(std::make_unique<Viewer3d>(this));
-  // this->data_viewers.back()->show();
 
   this->data_viewers.push_back(std::make_unique<Viewer3D>(this));
   this->data_viewers.back()->show();

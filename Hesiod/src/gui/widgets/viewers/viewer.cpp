@@ -53,6 +53,8 @@ ViewerNodeParam Viewer::get_default_view_param() const
 
 void Viewer::json_from(nlohmann::json const &json)
 {
+  LOG->trace("Viewer::json_from");
+
   // widget geometry
   int x = json["x"];
   int y = json["y"];
@@ -74,6 +76,8 @@ void Viewer::json_from(nlohmann::json const &json)
 
 nlohmann::json Viewer::json_to() const
 {
+  LOG->trace("Viewer::json_to");
+
   nlohmann::json json;
 
   // widget geometry

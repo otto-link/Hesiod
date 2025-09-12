@@ -44,8 +44,8 @@ public:
   void         update_widgets();
 
   // --- Serialization ---
-  void           json_from(nlohmann::json const &json);
-  nlohmann::json json_to() const;
+  virtual void           json_from(nlohmann::json const &json);
+  virtual nlohmann::json json_to() const;
 
 Q_SIGNALS:
   void clear_view_request();

@@ -73,6 +73,24 @@ ViewerNodeParam Viewer3D::get_default_view_param() const
   return wp;
 }
 
+void Viewer3D::json_from(nlohmann::json const &json)
+{
+  LOG->trace("Viewer3D::json_from");
+
+  Viewer::json_from(json);
+  p_renderer->json_from(json["renderer"]);
+}
+
+nlohmann::json Viewer3D::json_to() const
+{
+  LOG->trace("Viewer3D::json_to");
+
+  nlohmann::json json = Viewer::json_to();
+  json["renderer"] = p_renderer->json_to();
+  
+  return json;
+}
+
 void Viewer3D::setup_layout()
 {
   LOG->trace("Viewer3D::setup_layout");
