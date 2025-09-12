@@ -14,7 +14,7 @@ std::vector<uint8_t> generate_selector_image(hmap::Array &array)
   std::vector<uint8_t> img(4 * array.shape.x * array.shape.y);
 
   int k = 0;
-  for (int j = array.shape.y - 1; j > -1; j--)
+  for (int j = 0; j < array.shape.y; ++j)
     for (int i = 0; i < array.shape.x; i++)
     {
       img[k++] = (uint8_t)(255.f);

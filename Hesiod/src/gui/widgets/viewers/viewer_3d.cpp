@@ -119,6 +119,8 @@ void Viewer3D::update_renderer()
 
   // --- route/send data to renderer
 
+  bool flip_y = false;
+
   // elevation
   if (!helper_try_set_from_port<hmap::Heightmap>(
           *p_node,
@@ -148,9 +150,9 @@ void Viewer3D::update_renderer()
             *p_node,
             this->view_param.port_ids.at("color"),
             typeid(hmap::HeightmapRGBA),
-            [this](const hmap::HeightmapRGBA &rgba)
+            [this, flip_y](const hmap::HeightmapRGBA &rgba)
             {
-              auto img = rgba.to_img_8bit(rgba.shape);
+              auto img = rgba.to_img_8bit(rgba.shape, flip_y);
               this->p_renderer->set_texture_albedo(img, rgba.shape.x);
             })))
   {
@@ -162,9 +164,9 @@ void Viewer3D::update_renderer()
           *p_node,
           this->view_param.port_ids.at("normal_map"),
           typeid(hmap::HeightmapRGBA),
-          [this](const hmap::HeightmapRGBA &rgba)
+          [this, flip_y](const hmap::HeightmapRGBA &rgba)
           {
-            auto img = rgba.to_img_8bit(rgba.shape);
+            auto img = rgba.to_img_8bit(rgba.shape, flip_y);
             this->p_renderer->set_texture_normal(img, rgba.shape.x);
           }))
   {
