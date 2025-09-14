@@ -17,41 +17,64 @@ StringInputDialog::StringInputDialog(const std::string              &window_titl
   setWindowTitle(window_title.c_str());
 
   QVBoxLayout *layout = new QVBoxLayout(this);
-  input_line = new QLineEdit("graph", this);
-  error_label = new QLabel(this);
-  error_label->setStyleSheet("color: red;"); // errors in red
-  error_label->hide();
+
+  this->input_line = new QLineEdit("graph", this);
+  this->input_line->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+
+  this->error_label = new QLabel(this);
+  this->error_label->setStyleSheet("color: red;"); // errors in red
+  this->error_label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+  this->error_label->hide();
 
   QDialogButtonBox *button_box = new QDialogButtonBox(QDialogButtonBox::Ok |
-                                                      QDialogButtonBox::Cancel);
+                                                          QDialogButtonBox::Cancel,
+                                                      this);
 
-  layout->addWidget(input_line);
-  layout->addWidget(error_label);
+  layout->addWidget(this->input_line);
+  layout->addWidget(this->error_label);
   layout->addWidget(button_box);
 
-  connect(button_box,
-          &QDialogButtonBox::accepted,
-          this,
-          &StringInputDialog::validate_input);
-  connect(button_box, &QDialogButtonBox::rejected, this, &QDialog::reject);
+  // automatically hide error label when the user types
+  this->connect(this->input_line,
+                &QLineEdit::textChanged,
+                [this](const QString &)
+                {
+                  if (this->error_label && this->error_label->isVisible())
+                    this->error_label->hide();
+                });
+
+  this->connect(button_box,
+                &QDialogButtonBox::accepted,
+                this,
+                &StringInputDialog::validate_input);
+  this->connect(button_box, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
   for (const auto &s : invalid_strings)
     invalid_strings_qset.insert(QString::fromStdString(s));
+
+  // set a reasonable fixed width for compact appearance
+  this->setMinimumWidth(300);
+  this->setMaximumWidth(600);
 }
 
 void StringInputDialog::validate_input()
 {
+  if (!this->input_line || !this->error_label)
+  {
+    LOG->error("StringInputDialog::validate_input: internal widgets are nullptr");
+    return;
+  }
+
   QString text = this->input_line->text().trimmed();
 
-  if (this->invalid_strings_qset.contains(text))
+  if (invalid_strings_qset.contains(text))
   {
-    error_label->setText("This choice is not allowed. Choose a different one.");
-    error_label->show();
+    this->error_label->setText("This choice is not allowed. Choose a different one.");
+    this->error_label->show();
   }
   else
   {
-    // close dialog only if input is valid
-    this->accept();
+    this->accept(); // input is valid
   }
 }
 
