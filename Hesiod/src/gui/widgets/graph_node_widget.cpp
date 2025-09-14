@@ -38,7 +38,6 @@ GraphNodeWidget::GraphNodeWidget(GraphNode *p_graph_node)
 
   // populate node catalog
   this->set_node_inventory(get_node_inventory());
-
   this->setup_connections();
 }
 
@@ -52,22 +51,19 @@ void GraphNodeWidget::clear_all()
 
 void GraphNodeWidget::clear_data_viewers()
 {
-  for (auto &v : this->data_viewers)
+  for (auto &viewer : this->data_viewers)
   {
-    if (Viewer *p_viewer = dynamic_cast<Viewer *>(v.get()))
+    if (Viewer *p_viewer = dynamic_cast<Viewer *>(viewer.get()))
       p_viewer->clear();
   }
-
   this->data_viewers.clear();
 }
 
 void GraphNodeWidget::clear_graphic_scene()
 {
   this->set_enabled(false);
-
   this->clear_data_viewers();
   GraphViewer::clear();
-
   this->set_enabled(true);
 }
 
@@ -92,7 +88,6 @@ GraphNode *GraphNodeWidget::get_p_graph_node()
 void GraphNodeWidget::json_from(nlohmann::json const &json)
 {
   LOG->trace("GraphNodeWidget::json_from");
-
   this->clear_graphic_scene();
 
   // to prevent nodes update at each link creation when the loading
@@ -107,7 +102,6 @@ void GraphNodeWidget::json_from(nlohmann::json const &json)
     for (const auto &viewer_json : json["viewers"])
     {
       ViewerType viewer_type = viewer_json["viewer_type"].get<ViewerType>();
-      ;
 
       LOG->trace("GraphNodeWidget::json_from: viewer_type: {}",
                  viewer_type_as_string.at(viewer_type));
