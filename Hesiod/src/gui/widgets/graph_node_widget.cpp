@@ -412,17 +412,6 @@ void GraphNodeWidget::on_graph_settings_request()
 
   if (ret)
   {
-    // reset viewport to avoid any issues but save their state to set
-    // it back afterwards
-    std::vector<nlohmann::json> json_states = {};
-
-    for (auto &sp_widget : this->data_viewers)
-      if (auto *p_viewer = dynamic_cast<Viewer *>(sp_widget.get()))
-      {
-        json_states.push_back(p_viewer->json_to());
-        p_viewer->clear();
-      }
-
     // backup selected node
     const std::string selected_id = this->get_selected_node_ids().empty()
                                         ? ""
@@ -459,12 +448,6 @@ void GraphNodeWidget::on_graph_settings_request()
       gfx_node_ref_map.at(id)->set_p_node_proxy(p_proxy);
       gfx_node_ref_map.at(id)->setSelected(false);
     }
-
-    // set back viewport states
-    size_t k = 0;
-    for (auto &sp_widget : this->data_viewers)
-      if (auto *p_viewer = dynamic_cast<Viewer *>(sp_widget.get()))
-        p_viewer->json_from(json_states[k++]);
 
     // set selection back, Qt mystery, this needs to be delayed to be effective
     gngui::GraphicsNode *p_gfx_node = this->get_graphics_node_by_id(selected_id);

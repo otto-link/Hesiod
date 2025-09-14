@@ -87,7 +87,7 @@ nlohmann::json Viewer3D::json_to() const
 
   nlohmann::json json = Viewer::json_to();
   json["renderer"] = p_renderer->json_to();
-  
+
   return json;
 }
 

@@ -3691,6 +3691,26 @@
             }
         }
     },
+    "HeightmapToNormalMap": {
+        "category": "Converter",
+        "description": "No description available",
+        "label": "HeightmapToNormalMap",
+        "parameters": null,
+        "ports": {
+            "input": {
+                "caption": "input",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "normal map": {
+                "caption": "normal map",
+                "data_type": "HeightmapRGBA",
+                "description": "No description",
+                "type": "output"
+            }
+        }
+    },
     "HeightmapToRGBA": {
         "category": "Converter",
         "description": "HeightmapToRGBA converts a series of heightmaps into an RGBA splatmap.",
@@ -7573,6 +7593,12 @@
         "label": "Preview",
         "parameters": null,
         "ports": {
+            "cloud": {
+                "caption": "cloud",
+                "data_type": "Cloud",
+                "description": "No description",
+                "type": "input"
+            },
             "elevation": {
                 "caption": "elevation",
                 "data_type": "Heightmap",
@@ -7583,6 +7609,12 @@
                 "caption": "normal map",
                 "data_type": "HeightmapRGBA",
                 "description": "TODO",
+                "type": "input"
+            },
+            "path": {
+                "caption": "path",
+                "data_type": "Path",
+                "description": "No description",
                 "type": "input"
             },
             "scalar": {

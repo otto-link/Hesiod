@@ -6,7 +6,7 @@ Node Categories
 
 |Primary|Secondary|Nodes|
 | :--- | :--- | :--- |
-|Converter||HeightmapToKernel, HeightmapToMask, HeightmapToRGBA|
+|Converter||HeightmapToKernel, HeightmapToMask, HeightmapToNormalMap, HeightmapToRGBA|
 |Debug||Debug, Preview|
 |Erosion|Hydraulic|HydraulicParticle, HydraulicStreamLog, Rifts|
 |Erosion|Stratify|Strata, Stratify, StratifyMultiscale, StratifyOblique|

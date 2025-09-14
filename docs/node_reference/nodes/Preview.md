@@ -18,8 +18,10 @@ Debug
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|cloud|Cloud|No description|
 |elevation|Heightmap|TODO|
 |normal map|HeightmapRGBA|TODO|
+|path|Path|No description|
 |scalar|Heightmap|TODO|
 |texture|HeightmapRGBA|TODO|
 
