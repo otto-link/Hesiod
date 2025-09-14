@@ -946,6 +946,17 @@ void GraphNodeWidget::setup_connections()
                 &GraphNode::update_finished,
                 this,
                 &gngui::GraphViewer::on_update_finished);
+
+  // w/ itself
+  this->connect(this->p_graph_node,
+                &GraphNode::update_started,
+                this,
+                []() { QApplication::setOverrideCursor(Qt::WaitCursor); });
+
+  this->connect(this->p_graph_node,
+                &GraphNode::update_finished,
+                this,
+                []() { QApplication::restoreOverrideCursor(); });
 }
 
 } // namespace hesiod
