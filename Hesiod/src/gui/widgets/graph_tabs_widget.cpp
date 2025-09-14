@@ -237,29 +237,28 @@ void GraphTabsWidget::update_tab_widget()
     }
 
     // build layout
-    QWidget     *tab = new QWidget();
-    QHBoxLayout *layout = new QHBoxLayout();
-    layout->addWidget(this->graph_node_widget_map.at(id));
+    QWidget *tab = new QWidget();
+    auto    *layout = new QHBoxLayout(tab);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(0);
+
+    auto *graph_widget = this->graph_node_widget_map.at(id);
+    layout->addWidget(graph_widget, 3); // give most space
 
     if (this->show_node_settings_widget)
     {
-      auto &widget = this->node_settings_widget_map
-                         .try_emplace(
-                             id,
-                             new NodeSettingsWidget(this->graph_node_widget_map.at(id),
-                                                    this))
-                         .first->second;
+      auto &settings_widget = this->node_settings_widget_map
+                                  .try_emplace(id,
+                                               new NodeSettingsWidget(graph_widget, tab))
+                                  .first->second;
 
-      layout->addWidget(widget);
-      widget->update_content();
+      settings_widget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Expanding);
+      layout->addWidget(settings_widget, 1); // reserve some stretch
+      settings_widget->update_content();
     }
 
     tab->setLayout(layout);
-    this->tab_widget->addTab(tab, id.c_str());
-
-    // select this tab if it was selected before
-    if (id == current_tab_label.toStdString())
-      this->tab_widget->setCurrentWidget(tab);
+    this->tab_widget->addTab(tab, QString::fromStdString(id));
   }
 }
 
