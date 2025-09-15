@@ -17,7 +17,7 @@ class GraphNodeWidget : public gngui::GraphViewer
 
 public:
   // --- Constructor and Setup ---
-  GraphNodeWidget(GraphNode *p_graph_node);
+  GraphNodeWidget(GraphNode *p_graph_node, QWidget *parent = nullptr);
 
   void clear_all();
   void clear_data_viewers();

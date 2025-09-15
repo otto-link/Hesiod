@@ -31,8 +31,8 @@
 namespace hesiod
 {
 
-GraphNodeWidget::GraphNodeWidget(GraphNode *p_graph_node)
-    : GraphViewer(p_graph_node->get_id()), p_graph_node(p_graph_node)
+GraphNodeWidget::GraphNodeWidget(GraphNode *p_graph_node, QWidget *parent)
+    : GraphViewer(p_graph_node->get_id(), parent), p_graph_node(p_graph_node)
 {
   LOG->trace("GraphNodeWidget::GraphNodeWidget: id: {}", this->get_id());
 
@@ -115,6 +115,11 @@ void GraphNodeWidget::json_from(nlohmann::json const &json)
         LOG->error("GraphNodeWidget::json_from: could not retrieve viewer reference");
     }
   }
+
+  // Qt mystery, this needs to be delayed to be effective
+  QTimer::singleShot(0, this, [this]() { this->zoom_to_content(); });
+
+  // this->zoom_to_content();
 }
 
 nlohmann::json GraphNodeWidget::json_import(nlohmann::json const &json, QPointF scene_pos)

@@ -248,7 +248,7 @@ void GraphTabsWidget::update_tab_widget()
       }
 
       // set 'this' as parent so the widget is owned by the widget tree.
-      this->graph_node_widget_map[id] = new GraphNodeWidget(p_graph_node);
+      this->graph_node_widget_map[id] = new GraphNodeWidget(p_graph_node, this);
 
       // connections / model
       this->connect(p_graph_node,
