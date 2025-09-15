@@ -5,6 +5,8 @@
 #include "highmap/geometry/path.hpp"
 #include "highmap/range.hpp"
 
+#include "qtr/render_widget.hpp"
+
 #include "hesiod/gui/gui_utils.hpp"
 #include "hesiod/gui/widgets/graph_node_widget.hpp"
 #include "hesiod/gui/widgets/viewers/render_helpers.hpp"
@@ -162,7 +164,7 @@ void Viewer3D::update_renderer()
             {
               auto arr = h.to_array();
               auto img = generate_selector_image(arr);
-              this->p_renderer->set_texture_albedo(img, h.shape.x);
+              this->p_renderer->set_texture(QTR_TEX_ALBEDO, img, h.shape.x);
             }) ||
         helper_try_set_from_port<hmap::HeightmapRGBA>(
             *p_node,
@@ -171,10 +173,10 @@ void Viewer3D::update_renderer()
             [this, flip_y](const hmap::HeightmapRGBA &rgba)
             {
               auto img = rgba.to_img_8bit(rgba.shape, flip_y);
-              this->p_renderer->set_texture_albedo(img, rgba.shape.x);
+              this->p_renderer->set_texture(QTR_TEX_ALBEDO, img, rgba.shape.x);
             })))
   {
-    this->p_renderer->reset_texture_albedo();
+    this->p_renderer->reset_texture(QTR_TEX_ALBEDO);
   }
 
   // normal map
@@ -185,10 +187,10 @@ void Viewer3D::update_renderer()
           [this, flip_y](const hmap::HeightmapRGBA &rgba)
           {
             auto img = rgba.to_img_8bit(rgba.shape, flip_y);
-            this->p_renderer->set_texture_normal(img, rgba.shape.x);
+            this->p_renderer->set_texture(QTR_TEX_NORMAL, img, rgba.shape.x);
           }))
   {
-    this->p_renderer->reset_texture_normal();
+    this->p_renderer->reset_texture(QTR_TEX_NORMAL);
   }
 
   // points
