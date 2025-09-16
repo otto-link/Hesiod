@@ -24,6 +24,7 @@ Debug
 |path|Path|No description|
 |scalar|Heightmap|TODO|
 |texture|HeightmapRGBA|TODO|
+|water_depth|Heightmap|No description|
 
 # Example
 

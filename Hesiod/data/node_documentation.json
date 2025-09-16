@@ -2806,6 +2806,33 @@
             }
         }
     },
+    "FloodingUniformLevel": {
+        "category": "Hydrology",
+        "description": "No description available",
+        "label": "FloodingUniformLevel",
+        "parameters": {
+            "elevation": {
+                "description": "No description",
+                "key": "elevation",
+                "label": "elevation",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "input": {
+                "caption": "input",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "water_depth": {
+                "caption": "water_depth",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "output"
+            }
+        }
+    },
     "FlowStream": {
         "category": "WIP",
         "description": "TODO",
@@ -7627,6 +7654,12 @@
                 "caption": "texture",
                 "data_type": "HeightmapRGBA",
                 "description": "TODO",
+                "type": "input"
+            },
+            "water_depth": {
+                "caption": "water_depth",
+                "data_type": "Heightmap",
+                "description": "No description",
                 "type": "input"
             }
         }

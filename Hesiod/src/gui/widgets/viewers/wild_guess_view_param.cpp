@@ -68,6 +68,13 @@ void wild_guess_view_param(ViewerNodeParam &view_param,
       value = helper_get_preferred_port_inout(node, typeid(hmap::Heightmap));
     }
 
+    if (key == "water_depth")
+    {
+      value = helper_get_preferred_port_label(node,
+                                              typeid(hmap::Heightmap),
+                                              "water_depth");
+    }
+
     if (key == "color")
     {
       value = helper_get_preferred_port_label(node,

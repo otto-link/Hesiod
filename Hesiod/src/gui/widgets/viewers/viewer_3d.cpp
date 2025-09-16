@@ -3,6 +3,7 @@
  * this software. */
 #include "highmap/geometry/cloud.hpp"
 #include "highmap/geometry/path.hpp"
+#include "highmap/morphology.hpp"
 #include "highmap/range.hpp"
 
 #include "qtr/render_widget.hpp"
@@ -17,6 +18,7 @@
 namespace hesiod
 {
 
+// 1 port
 template <typename T, typename F>
 bool helper_try_set_from_port(const BaseNode       &node,
                               const std::string    &port_name,
@@ -30,12 +32,42 @@ bool helper_try_set_from_port(const BaseNode       &node,
   if (node.get_data_type(pid) != type.name())
     return false;
 
-  if (auto *ptr = node.get_value_ref<T>(pid))
-  {
-    fn(*ptr);
-    return true;
-  }
-  return false;
+  T *ptr = node.get_value_ref<T>(pid);
+
+  if (!ptr)
+    return false;
+
+  fn(*ptr);
+  return true;
+}
+
+// 2 ports
+template <typename T, typename F>
+bool helper_try_set_from_port(const BaseNode       &node,
+                              const std::string    &port_name1,
+                              const std::string    &port_name2,
+                              const std::type_info &type,
+                              F                   &&fn)
+{
+  if (port_name1.empty() || port_name2.empty())
+    return false;
+
+  int pid1 = node.get_port_index(port_name1);
+  if (node.get_data_type(pid1) != type.name())
+    return false;
+
+  int pid2 = node.get_port_index(port_name2);
+  if (node.get_data_type(pid2) != type.name())
+    return false;
+
+  T *ptr1 = node.get_value_ref<T>(pid1);
+  T *ptr2 = node.get_value_ref<T>(pid2);
+
+  if (!ptr1 || !ptr2)
+    return false;
+
+  fn(*ptr1, *ptr2);
+  return true;
 }
 
 Viewer3D::Viewer3D(GraphNodeWidget   *p_graph_node_widget_,
@@ -64,6 +96,7 @@ ViewerNodeParam Viewer3D::get_default_view_param() const
 
   wp.port_ids = {
       {"elevation", ""},
+      {"water_depth", ""},
       {"color", ""},
       {"normal_map", ""},
       {"points", ""},
@@ -153,6 +186,56 @@ void Viewer3D::update_renderer()
           }))
   {
     this->p_renderer->reset_heightmap_geometry();
+  }
+
+  // water
+  if (!helper_try_set_from_port<hmap::Heightmap>(
+          *p_node,
+          this->view_param.port_ids.at("elevation"),
+          this->view_param.port_ids.at("water_depth"),
+          typeid(hmap::Heightmap),
+          [this](const hmap::Heightmap &h, const hmap::Heightmap &w)
+          {
+            // TODO do this somewhere else?
+            auto ah = h.to_array(); // elevation
+            auto aw = w.to_array(); // water depth
+
+            ah += aw;
+
+            // extend the water depth by one-cell to avoid truncated
+            // cells at the interface water/ground
+            float hmin = ah.min();
+
+            for (int j = 0; j < h.shape.y; ++j)
+              for (int i = 0; i < h.shape.x; ++i)
+              {
+                if (aw(i, j) <= 0.f)
+                  ah(i, j) = 0.f;
+                else
+                  ah(i, j) += hmin;
+              }
+
+            ah = hmap::dilation_expand_border_only(ah, 1);
+
+            // remove non-water cells
+            float cut_value = -1e3f;
+
+            for (int j = 0; j < h.shape.y; ++j)
+              for (int i = 0; i < h.shape.x; ++i)
+              {
+                if (ah(i, j) <= 0.f)
+                  ah(i, j) = cut_value;
+                else
+                  ah(i, j) -= hmin;
+              }
+
+            this->p_renderer->set_water_geometry(ah.vector,
+                                                 h.shape.x,
+                                                 h.shape.y,
+                                                 cut_value);
+          }))
+  {
+    this->p_renderer->reset_water_geometry();
   }
 
   // color

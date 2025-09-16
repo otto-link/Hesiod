@@ -1,0 +1,389 @@
+{
+    "Hesiod version": "v0.4.0",
+    "graph_manager": {
+        "export_param": {
+            "export_path": "",
+            "ids": [],
+            "overlap": 0.5,
+            "shape.x": 1024,
+            "shape.y": 1024,
+            "tiling.x": 4,
+            "tiling.y": 4
+        },
+        "graph_nodes": {
+            "graph": {
+                "id": "graph",
+                "id_count": 5,
+                "links": [
+                    {
+                        "node_id_from": "2",
+                        "node_id_to": "3",
+                        "port_id_from": "output",
+                        "port_id_to": "input"
+                    },
+                    {
+                        "node_id_from": "3",
+                        "node_id_to": "4",
+                        "port_id_from": "water_depth",
+                        "port_id_to": "water_depth"
+                    },
+                    {
+                        "node_id_from": "2",
+                        "node_id_to": "4",
+                        "port_id_from": "output",
+                        "port_id_to": "elevation"
+                    }
+                ],
+                "model_config": {
+                    "hmap_transform_mode_cpu": 0,
+                    "hmap_transform_mode_gpu": 2,
+                    "overlap": 0.5,
+                    "shape.x": 1024,
+                    "shape.y": 1024,
+                    "tiling.x": 4,
+                    "tiling.y": 4
+                },
+                "nodes": [
+                    {
+                        "angle": {
+                            "label": "angle",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.0,
+                            "vmax": 180.0,
+                            "vmin": -180.0
+                        },
+                        "angle_spread_ratio": {
+                            "label": "angle_spread_ratio",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        },
+                        "id": "2",
+                        "kw": {
+                            "label": "kw",
+                            "link_xy": true,
+                            "type": 17,
+                            "type_string": "Wavenumber",
+                            "value": [
+                                2.0,
+                                2.0
+                            ],
+                            "vmax": 3.4028234663852886e+38,
+                            "vmin": 0.0
+                        },
+                        "label": "GaborWaveFbm",
+                        "lacunarity": {
+                            "label": "lacunarity",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 2.0,
+                            "vmax": 4.0,
+                            "vmin": 0.009999999776482582
+                        },
+                        "octaves": {
+                            "label": "octaves",
+                            "type": 10,
+                            "type_string": "Integer",
+                            "value": 8,
+                            "vmax": 32,
+                            "vmin": 0
+                        },
+                        "persistence": {
+                            "label": "persistence",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.5,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        },
+                        "post_gain": {
+                            "label": "post_gain",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 10.0,
+                            "vmin": 0.009999999776482582
+                        },
+                        "post_inverse": {
+                            "label": "post_inverse",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "post_remap": {
+                            "is_active": true,
+                            "label": "post_remap",
+                            "type": 11,
+                            "type_string": "Value range",
+                            "value": [
+                                0.0,
+                                1.0
+                            ],
+                            "vmax": 2.0,
+                            "vmin": -1.0
+                        },
+                        "post_smoothing_radius": {
+                            "label": "post_smoothing_radius",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.0,
+                            "vmax": 0.05000000074505806,
+                            "vmin": 0.0
+                        },
+                        "seed": {
+                            "label": "seed",
+                            "type": 12,
+                            "type_string": "Random seed number",
+                            "value": 0
+                        },
+                        "weight": {
+                            "label": "weight",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.699999988079071,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        }
+                    },
+                    {
+                        "elevation": {
+                            "label": "elevation",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.44615381956100464,
+                            "vmax": 2.0,
+                            "vmin": -1.0
+                        },
+                        "id": "3",
+                        "label": "FloodingUniformLevel"
+                    },
+                    {
+                        "id": "4",
+                        "label": "Preview"
+                    }
+                ],
+                "origin": [
+                    0.0,
+                    0.0
+                ],
+                "rotation_angle": 0.0,
+                "size": [
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "graph_order": [
+            "graph"
+        ],
+        "id_count": 0
+    },
+    "graph_manager_widget": {
+        "frames": {
+            "graph": {
+                "current_bg_tag": "GaborWaveFbm/2/output"
+            }
+        }
+    },
+    "graph_tabs_widget": {
+        "graph_node_widgets": {
+            "graph": {
+                "comments": [],
+                "current_link_type": 2,
+                "groups": [],
+                "id": "graph",
+                "links": [
+                    {
+                        "link_type": 2,
+                        "node_in_id": "4",
+                        "node_out_id": "2",
+                        "port_in_id": "elevation",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "4",
+                        "node_out_id": "3",
+                        "port_in_id": "water_depth",
+                        "port_out_id": "water_depth"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "3",
+                        "node_out_id": "2",
+                        "port_in_id": "input",
+                        "port_out_id": "output"
+                    }
+                ],
+                "nodes": [
+                    {
+                        "caption": "Preview",
+                        "id": "4",
+                        "is_widget_visible": true,
+                        "scene_position.x": 118.55601225731647,
+                        "scene_position.y": -227.40167317036799
+                    },
+                    {
+                        "caption": "FloodingUniformLevel",
+                        "id": "3",
+                        "is_widget_visible": true,
+                        "scene_position.x": -95.6199145842829,
+                        "scene_position.y": -120.50886412819902
+                    },
+                    {
+                        "caption": "GaborWaveFbm",
+                        "id": "2",
+                        "is_widget_visible": true,
+                        "scene_position.x": -335.09305743661275,
+                        "scene_position.y": -303.66867765997915
+                    }
+                ],
+                "viewers": [
+                    {
+                        "current_node_id": "4",
+                        "height": 1057,
+                        "is_node_pinned": false,
+                        "label": "3D Renderer",
+                        "renderer": {
+                            "add_ambiant_occlusion": false,
+                            "add_atmospheric_scattering": false,
+                            "add_fog": false,
+                            "add_water_foam": true,
+                            "add_water_waves": true,
+                            "alpha_x": 0.665555477142334,
+                            "alpha_y": -26.841108322143555,
+                            "ambiant_occlusion_radius": 3,
+                            "ambiant_occlusion_strength": 5.0,
+                            "angle_spread_ratio": 0.0,
+                            "animate_waves": false,
+                            "apply_tonemap": false,
+                            "auto_rotate_light": false,
+                            "bypass_shadow_map": false,
+                            "bypass_texture_albedo": false,
+                            "camera": {
+                                "far_plane": 100.0,
+                                "fov": 0.7850000262260437,
+                                "near_plane": 0.10000000149011612,
+                                "position": {
+                                    "x": -2.335395336151123,
+                                    "y": 1.7298954725265503,
+                                    "z": -0.46075183153152466
+                                },
+                                "target": {
+                                    "x": 0.018668359145522118,
+                                    "y": -0.13577783107757568,
+                                    "z": -0.1348428875207901
+                                },
+                                "up": {
+                                    "x": 0.0,
+                                    "y": 1.0,
+                                    "z": 0.0
+                                }
+                            },
+                            "color_deep_water": {
+                                "x": 0.0,
+                                "y": 0.15000000596046448,
+                                "z": 0.3499999940395355
+                            },
+                            "color_shallow_water": {
+                                "x": 0.25,
+                                "y": 0.8500000238418579,
+                                "z": 0.800000011920929
+                            },
+                            "distance": 3.0213522911071777,
+                            "foam_color": {
+                                "x": 1.0,
+                                "y": 1.0,
+                                "z": 1.0
+                            },
+                            "foam_depth": 0.004999999888241291,
+                            "fog_color": {
+                                "x": 1.0,
+                                "y": 1.0,
+                                "z": 1.0
+                            },
+                            "fog_density": 50.0,
+                            "fog_height": 0.10000000149011612,
+                            "fog_scattering_ratio": 0.699999988079071,
+                            "fog_strength": 0.5,
+                            "gamma_correction": 2.0,
+                            "height": 966,
+                            "hmap_h": 0.4000000059604645,
+                            "hmap_h0": 0.0,
+                            "hmap_w": 2.0,
+                            "light": {
+                                "position": {
+                                    "x": -6.122223854064941,
+                                    "y": 4.997701168060303,
+                                    "z": 6.127100467681885
+                                },
+                                "target": {
+                                    "x": 0.0,
+                                    "y": 0.0,
+                                    "z": 0.0
+                                }
+                            },
+                            "light_distance": 10.0,
+                            "light_phi": -0.7850000262260437,
+                            "light_theta": 0.5233333706855774,
+                            "mie_color": {
+                                "x": 1.0,
+                                "y": 0.800000011920929,
+                                "z": 0.699999988079071
+                            },
+                            "normal_map_scaling": 1.0,
+                            "normal_visualization": false,
+                            "pan_offset": {
+                                "x": -0.13612902164459229,
+                                "y": -0.13577783107757568
+                            },
+                            "rayleigh_color": {
+                                "x": 0.4000000059604645,
+                                "y": 0.6000000238418579,
+                                "z": 1.0
+                            },
+                            "render_hmap": true,
+                            "render_path": true,
+                            "render_plane": true,
+                            "render_points": true,
+                            "render_rocks": true,
+                            "render_trees": true,
+                            "render_water": true,
+                            "scale_h": 1.0,
+                            "scattering_density": 0.10000000149011612,
+                            "shadow_strength": 0.8999999761581421,
+                            "target": {
+                                "x": 0.0,
+                                "y": 0.0,
+                                "z": 0.0
+                            },
+                            "title": "",
+                            "water_color_depth": 0.014999999664723873,
+                            "water_elevation": 0.10000000149011612,
+                            "water_spec_strength": 0.5,
+                            "waves_alpha": 0.5233333706855774,
+                            "waves_amplitude": 0.004999999888241291,
+                            "waves_kw": 256.0,
+                            "waves_normal_amplitude": 0.019999999552965164,
+                            "waves_speed": 0.20000000298023224,
+                            "width": 1916,
+                            "wireframe_mode": false,
+                            "x": 2,
+                            "y": 91
+                        },
+                        "viewer_type": 0,
+                        "width": 1920,
+                        "x": 1920,
+                        "y": 24
+                    }
+                ]
+            }
+        }
+    },
+    "saved_at": "2025-09-16_21:19:10"
+}
