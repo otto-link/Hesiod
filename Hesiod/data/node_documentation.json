@@ -2806,6 +2806,57 @@
             }
         }
     },
+    "FloodingFromBoundaries": {
+        "category": "Hydrology",
+        "description": "No description available",
+        "label": "FloodingFromBoundaries",
+        "parameters": {
+            "elevation": {
+                "description": "No description",
+                "key": "elevation",
+                "label": "elevation",
+                "type": "Float"
+            },
+            "from_east": {
+                "description": "No description",
+                "key": "from_east",
+                "label": "from_east",
+                "type": "Bool"
+            },
+            "from_north": {
+                "description": "No description",
+                "key": "from_north",
+                "label": "from_north",
+                "type": "Bool"
+            },
+            "from_south": {
+                "description": "No description",
+                "key": "from_south",
+                "label": "from_south",
+                "type": "Bool"
+            },
+            "from_west": {
+                "description": "No description",
+                "key": "from_west",
+                "label": "from_west",
+                "type": "Bool"
+            }
+        },
+        "ports": {
+            "input": {
+                "caption": "input",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "water_depth": {
+                "caption": "water_depth",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "output"
+            }
+        }
+    },
     "FloodingUniformLevel": {
         "category": "Hydrology",
         "description": "No description available",
