@@ -32,7 +32,7 @@ namespace hesiod
 {
 
 GraphNodeWidget::GraphNodeWidget(GraphNode *p_graph_node, QWidget *parent)
-    : GraphViewer(p_graph_node->get_id(), parent), p_graph_node(p_graph_node)
+    : GraphViewer(p_graph_node->get_id()), p_graph_node(p_graph_node)
 {
   LOG->trace("GraphNodeWidget::GraphNodeWidget: id: {}", this->get_id());
 
