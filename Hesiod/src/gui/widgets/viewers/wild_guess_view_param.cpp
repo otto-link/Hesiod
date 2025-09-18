@@ -14,7 +14,8 @@ namespace hesiod
 {
 
 std::string helper_get_preferred_port_inout(const BaseNode       &node,
-                                            const std::type_info &type)
+                                            const std::type_info &type,
+                                            const std::string    &exclude_name)
 {
   std::string value;
   int         in_candidate = -1;
@@ -23,9 +24,11 @@ std::string helper_get_preferred_port_inout(const BaseNode       &node,
   {
     if (node.get_data_type(k) == type.name())
     {
-      if (node.get_port_type(k) == gngui::PortType::OUT)
+      const std::string port_label = node.get_port_label(k);
+
+      if (node.get_port_type(k) == gngui::PortType::OUT && port_label != exclude_name)
       {
-        value = node.get_port_label(k);
+        value = port_label;
         break; // OUT has priority
       }
       else if (in_candidate == -1 && node.get_port_type(k) == gngui::PortType::IN)
@@ -65,7 +68,9 @@ void wild_guess_view_param(ViewerNodeParam &view_param,
   {
     if (key == "elevation")
     {
-      value = helper_get_preferred_port_inout(node, typeid(hmap::Heightmap));
+      value = helper_get_preferred_port_inout(node,
+                                              typeid(hmap::Heightmap),
+                                              "water_depth");
     }
 
     if (key == "water_depth")
@@ -91,12 +96,12 @@ void wild_guess_view_param(ViewerNodeParam &view_param,
 
     if (key == "points")
     {
-      value = helper_get_preferred_port_inout(node, typeid(hmap::Cloud));
+      value = helper_get_preferred_port_inout(node, typeid(hmap::Cloud), "");
     }
 
     if (key == "path")
     {
-      value = helper_get_preferred_port_inout(node, typeid(hmap::Path));
+      value = helper_get_preferred_port_inout(node, typeid(hmap::Path), "");
     }
   }
 }

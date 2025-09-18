@@ -2857,6 +2857,39 @@
             }
         }
     },
+    "FloodingFromPoint": {
+        "category": "Hydrology",
+        "description": "No description available",
+        "label": "FloodingFromPoint",
+        "parameters": {
+            "depth_min": {
+                "description": "No description",
+                "key": "depth_min",
+                "label": "depth_min",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "cloud": {
+                "caption": "cloud",
+                "data_type": "Cloud",
+                "description": "No description",
+                "type": "input"
+            },
+            "elevation": {
+                "caption": "elevation",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "water_depth": {
+                "caption": "water_depth",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "output"
+            }
+        }
+    },
     "FloodingUniformLevel": {
         "category": "Hydrology",
         "description": "No description available",

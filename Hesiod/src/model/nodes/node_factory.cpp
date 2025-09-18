@@ -195,6 +195,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Falloff", "Math/Boundaries"},
       {"FillTalus", "WIP"}, // Operator/Transform
       {"FloodingFromBoundaries", "Hydrology"},
+      {"FloodingFromPoint", "Hydrology"},
       {"FloodingUniformLevel", "Hydrology"},
       {"FlowStream", "WIP"}, // Hydrology
       {"Fold", "Filter/Recast"},
@@ -545,6 +546,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(Falloff, falloff);
     SETUP_NODE(FillTalus, fill_talus);
     SETUP_NODE(FloodingFromBoundaries, flooding_from_boundaries);
+    SETUP_NODE(FloodingFromPoint, flooding_from_point);
     SETUP_NODE(FloodingUniformLevel, flooding_uniform_level);
     SETUP_NODE(FlowStream, flow_stream);
     SETUP_NODE(Fold, fold);

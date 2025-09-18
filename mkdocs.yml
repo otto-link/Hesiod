@@ -68,6 +68,7 @@ nav:
     - 'node_reference/nodes/Falloff.md'
     - 'node_reference/nodes/FillTalus.md'
     - 'node_reference/nodes/FloodingFromBoundaries.md'
+    - 'node_reference/nodes/FloodingFromPoint.md'
     - 'node_reference/nodes/FloodingUniformLevel.md'
     - 'node_reference/nodes/FlowStream.md'
     - 'node_reference/nodes/Fold.md'
