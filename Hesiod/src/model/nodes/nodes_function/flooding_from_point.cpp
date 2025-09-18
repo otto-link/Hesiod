@@ -65,11 +65,7 @@ void compute_flooding_from_point_node(BaseNode *p_node)
               i.push_back(ip);
               j.push_back(jp);
             }
-
-            LOG->debug("{} {} {} {} {} {}", p.x, p.y, ip, jp, shape.x, shape.y);
           }
-
-          LOG->debug("{} {} {}", i.size(), bbox.a, bbox.b);
 
           *pa_out = hmap::flooding_from_point(*pa_in,
                                               i,
