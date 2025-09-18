@@ -2890,6 +2890,39 @@
             }
         }
     },
+    "FloodingLakeSystem": {
+        "category": "Hydrology",
+        "description": "No description available",
+        "label": "FloodingLakeSystem",
+        "parameters": {
+            "epsilon": {
+                "description": "No description",
+                "key": "epsilon",
+                "label": "epsilon",
+                "type": "Float"
+            },
+            "iterations": {
+                "description": "No description",
+                "key": "iterations",
+                "label": "iterations",
+                "type": "Integer"
+            }
+        },
+        "ports": {
+            "elevation": {
+                "caption": "elevation",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "water_depth": {
+                "caption": "water_depth",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "output"
+            }
+        }
+    },
     "FloodingUniformLevel": {
         "category": "Hydrology",
         "description": "No description available",
