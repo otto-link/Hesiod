@@ -238,6 +238,7 @@ nav:
     - 'node_reference/nodes/Vororand.md'
     - 'node_reference/nodes/Warp.md'
     - 'node_reference/nodes/WarpDownslope.md'
+    - 'node_reference/nodes/WaterDepthDryOut.md'
     - 'node_reference/nodes/WaveDune.md'
     - 'node_reference/nodes/WaveSine.md'
     - 'node_reference/nodes/WaveSquare.md'

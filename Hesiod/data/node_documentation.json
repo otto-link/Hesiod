@@ -13254,6 +13254,39 @@
             }
         }
     },
+    "WaterDepthDryOut": {
+        "category": "Hydrology",
+        "description": "No description available",
+        "label": "WaterDepthDryOut",
+        "parameters": {
+            "dry_out_ratio": {
+                "description": "No description",
+                "key": "dry_out_ratio",
+                "label": "dry_out_ratio",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "elevation": {
+                "caption": "elevation",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "mask": {
+                "caption": "mask",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "water_depth": {
+                "caption": "water_depth",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "output"
+            }
+        }
+    },
     "WaveDune": {
         "category": "Primitive/Function",
         "description": "WaveDune mimics using a periodic function the formation and spatial distribution of transverse sand dunes on a terrain.",
