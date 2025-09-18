@@ -32,7 +32,7 @@ namespace hesiod
 {
 
 GraphNodeWidget::GraphNodeWidget(GraphNode *p_graph_node, QWidget *parent)
-  : GraphViewer(p_graph_node->get_id(), parent), p_graph_node(p_graph_node)
+    : GraphViewer(p_graph_node->get_id(), parent), p_graph_node(p_graph_node)
 {
   LOG->trace("GraphNodeWidget::GraphNodeWidget: id: {}", this->get_id());
 
@@ -514,6 +514,27 @@ void GraphNodeWidget::on_node_deleted_request(const std::string &node_id)
   this->p_graph_node->remove_node(node_id);
 
   Q_EMIT this->node_deleted(this->get_id(), node_id);
+}
+
+void GraphNodeWidget::on_node_pinned(const std::string &node_id, bool state)
+{
+  LOG->trace("GraphNodeWidget::on_node_pinned, node {}", node_id);
+
+  this->unpin_nodes();
+
+  if (!node_id.empty())
+  {
+    // TODO make a dedicated GraphViewer method
+    BaseNode *p_node = this->p_graph_node->get_node_ref_by_id<BaseNode>(node_id);
+    if (!p_node)
+      return;
+
+    gngui::GraphicsNode *p_gx_node = this->get_graphics_node_by_id(node_id);
+    if (!p_gx_node)
+      return;
+
+    p_gx_node->set_is_node_pinned(state);
+  }
 }
 
 void GraphNodeWidget::on_node_reload_request(const std::string &node_id)

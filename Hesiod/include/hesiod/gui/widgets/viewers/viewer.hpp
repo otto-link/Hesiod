@@ -50,6 +50,7 @@ public:
 Q_SIGNALS:
   void clear_view_request();
   void current_node_id_changed(const std::string &new_id);
+  void node_pinned(const std::string &node_id, bool state);
   void widget_close();
 
 public Q_SLOTS:

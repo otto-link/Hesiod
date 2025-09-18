@@ -73,6 +73,7 @@ public slots:
                                   const std::vector<QPointF>     &scene_pos_list);
   void on_nodes_paste_request();
 
+  void on_node_pinned(const std::string &node_id, bool state);
   void on_viewport_request();
 
   // --- Others... ---

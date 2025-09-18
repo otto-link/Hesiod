@@ -202,6 +202,11 @@ void Viewer::setup_connections()
                 this,
                 &Viewer::on_node_selected);
 
+  this->connect(this,
+                &Viewer::node_pinned,
+                this->p_graph_node_widget,
+                &GraphNodeWidget::on_node_pinned);
+
   this->connect(this->p_graph_node_widget->get_p_graph_node(),
                 &GraphNode::compute_finished,
                 [this](const std::string &graph_id, const std::string &id)
@@ -228,6 +233,8 @@ void Viewer::setup_connections()
                   }
 
                   this->update_widgets();
+
+                  Q_EMIT this->node_pinned(this->current_node_id, this->is_node_pinned);
                 });
 
   for (auto &[name, combo] : this->combo_map)
