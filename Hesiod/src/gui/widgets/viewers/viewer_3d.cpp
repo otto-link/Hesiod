@@ -29,6 +29,9 @@ bool helper_try_set_from_port(const BaseNode       &node,
     return false;
 
   int pid = node.get_port_index(port_name);
+
+  if (pid < 0)
+    return false;
   if (node.get_data_type(pid) != type.name())
     return false;
 
@@ -53,10 +56,14 @@ bool helper_try_set_from_port(const BaseNode       &node,
     return false;
 
   int pid1 = node.get_port_index(port_name1);
+  if (pid1 < 0)
+    return false;
   if (node.get_data_type(pid1) != type.name())
     return false;
 
   int pid2 = node.get_port_index(port_name2);
+  if (pid2 < 0)
+    return false;
   if (node.get_data_type(pid2) != type.name())
     return false;
 
@@ -113,7 +120,8 @@ void Viewer3D::json_from(nlohmann::json const &json)
   LOG->trace("Viewer3D::json_from");
 
   Viewer::json_from(json);
-  p_renderer->json_from(json["renderer"]);
+  if (p_renderer)
+    p_renderer->json_from(json["renderer"]);
 }
 
 nlohmann::json Viewer3D::json_to() const
@@ -121,7 +129,8 @@ nlohmann::json Viewer3D::json_to() const
   LOG->trace("Viewer3D::json_to");
 
   nlohmann::json json = Viewer::json_to();
-  json["renderer"] = p_renderer->json_to();
+  if (p_renderer)
+    json["renderer"] = p_renderer->json_to();
 
   return json;
 }
@@ -152,7 +161,6 @@ void Viewer3D::update_renderer()
   if (!this->p_renderer)
   {
     LOG->error("Viewer3D::update_renderer: renderer reference is a dangling ptr");
-    this->p_renderer->clear();
     return;
   }
 
@@ -182,7 +190,8 @@ void Viewer3D::update_renderer()
           [this](const hmap::Heightmap &h)
           {
             auto arr = h.to_array();
-            this->p_renderer->set_heightmap_geometry(arr.vector, h.shape.x, h.shape.y);
+            if (this->p_renderer)
+              this->p_renderer->set_heightmap_geometry(arr.vector, h.shape.x, h.shape.y);
           }))
   {
     this->p_renderer->reset_heightmap_geometry();
@@ -229,10 +238,11 @@ void Viewer3D::update_renderer()
                   ah(i, j) -= hmin;
               }
 
-            this->p_renderer->set_water_geometry(ah.vector,
-                                                 h.shape.x,
-                                                 h.shape.y,
-                                                 cut_value);
+            if (this->p_renderer)
+              this->p_renderer->set_water_geometry(ah.vector,
+                                                   h.shape.x,
+                                                   h.shape.y,
+                                                   cut_value);
           }))
   {
     this->p_renderer->reset_water_geometry();
@@ -247,7 +257,9 @@ void Viewer3D::update_renderer()
             {
               auto arr = h.to_array();
               auto img = generate_selector_image(arr);
-              this->p_renderer->set_texture(QTR_TEX_ALBEDO, img, h.shape.x);
+
+              if (this->p_renderer)
+                this->p_renderer->set_texture(QTR_TEX_ALBEDO, img, h.shape.x);
             }) ||
         helper_try_set_from_port<hmap::HeightmapRGBA>(
             *p_node,
@@ -256,7 +268,9 @@ void Viewer3D::update_renderer()
             [this, flip_y](const hmap::HeightmapRGBA &rgba)
             {
               auto img = rgba.to_img_8bit(rgba.shape, flip_y);
-              this->p_renderer->set_texture(QTR_TEX_ALBEDO, img, rgba.shape.x);
+
+              if (this->p_renderer)
+                this->p_renderer->set_texture(QTR_TEX_ALBEDO, img, rgba.shape.x);
             })))
   {
     this->p_renderer->reset_texture(QTR_TEX_ALBEDO);
@@ -270,7 +284,9 @@ void Viewer3D::update_renderer()
           [this, flip_y](const hmap::HeightmapRGBA &rgba)
           {
             auto img = rgba.to_img_8bit(rgba.shape, flip_y);
-            this->p_renderer->set_texture(QTR_TEX_NORMAL, img, rgba.shape.x);
+
+            if (this->p_renderer)
+              this->p_renderer->set_texture(QTR_TEX_NORMAL, img, rgba.shape.x);
           }))
   {
     this->p_renderer->reset_texture(QTR_TEX_NORMAL);
@@ -282,7 +298,10 @@ void Viewer3D::update_renderer()
           this->view_param.port_ids.at("points"),
           typeid(hmap::Cloud),
           [this](const hmap::Cloud &c)
-          { this->p_renderer->set_points(c.get_x(), c.get_y(), c.get_values()); }))
+          {
+            if (this->p_renderer)
+              this->p_renderer->set_points(c.get_x(), c.get_y(), c.get_values());
+          }))
   {
     this->p_renderer->reset_points();
   }
@@ -293,7 +312,10 @@ void Viewer3D::update_renderer()
           this->view_param.port_ids.at("path"),
           typeid(hmap::Path),
           [this](const hmap::Path &c)
-          { this->p_renderer->set_path(c.get_x(), c.get_y(), c.get_values()); }))
+          {
+            if (this->p_renderer)
+              this->p_renderer->set_path(c.get_x(), c.get_y(), c.get_values());
+          }))
   {
     this->p_renderer->reset_path();
   }
