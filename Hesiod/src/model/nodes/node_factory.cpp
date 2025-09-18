@@ -276,6 +276,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Plateau", "Filter/Recurve"},
       {"PolygonField", "Primitive/Coherent"},
       {"PolygonFieldFbm", "Primitive/Coherent"},
+      {"PostProcess", "Filter"},
       {"Preview", "Debug"},
       {"QuiltingBlend", "Operator/Resynthesis"},
       {"QuiltingExpand", "Operator/Resynthesis"},
@@ -631,6 +632,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(Plateau, plateau);
     SETUP_NODE(PolygonField, polygon_field);
     SETUP_NODE(PolygonFieldFbm, polygon_field_fbm);
+    SETUP_NODE(PostProcess, post_process);
     SETUP_NODE(Preview, preview);
     SETUP_NODE(QuiltingBlend, quilting_blend);
     SETUP_NODE(QuiltingExpand, quilting_expand);
