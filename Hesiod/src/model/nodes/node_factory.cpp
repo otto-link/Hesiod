@@ -256,6 +256,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"NoiseRidged", "Primitive/Coherent"},
       {"NoiseSwiss", "Primitive/Coherent"},
       {"NormalDisplacement", "Filter/Recast"},
+      {"NormalMapToHeightmap", "Converter"},
       {"Opening", "Operator/Morphology"},
       {"Paraboloid", "Primitive/Function"},
       {"Path", "Geometry/Path"},
@@ -611,6 +612,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(NoiseRidged, noise_ridged);
     SETUP_NODE(NoiseSwiss, noise_swiss);
     SETUP_NODE(NormalDisplacement, normal_displacement);
+    SETUP_NODE(NormalMapToHeightmap, normal_map_to_heightmap);
     SETUP_NODE(Opening, opening);
     SETUP_NODE(Paraboloid, paraboloid);
     SETUP_NODE(Path, path);

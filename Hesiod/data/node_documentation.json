@@ -6655,6 +6655,63 @@
             }
         }
     },
+    "NormalMapToHeightmap": {
+        "category": "Converter",
+        "description": "No description available",
+        "label": "NormalMapToHeightmap",
+        "parameters": {
+            "iterations": {
+                "description": "No description",
+                "key": "iterations",
+                "label": "iterations",
+                "type": "Integer"
+            },
+            "omega": {
+                "description": "No description",
+                "key": "omega",
+                "label": "omega",
+                "type": "Float"
+            },
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
+                "type": "Bool"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "normal map": {
+                "caption": "normal map",
+                "data_type": "HeightmapRGBA",
+                "description": "No description",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "output"
+            }
+        }
+    },
     "Opening": {
         "category": "Operator/Morphology",
         "description": "Opening is a combination of erosion followed by dilation. It is primarily used for removing noise while preserving the shape and size of objects. Use Cases: Noise removal: Opening is effective in removing small, isolated noise regions while keeping the main objects intact. Smoothing object boundaries: Opening can help smooth the boundaries of objects in an image while preserving their overall shape.",
@@ -7728,6 +7785,51 @@
                 "data_type": "Heightmap",
                 "description": "No description",
                 "type": "input"
+            }
+        }
+    },
+    "PostProcess": {
+        "category": "Filter",
+        "description": "No description available",
+        "label": "PostProcess",
+        "parameters": {
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
+                "type": "Bool"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "in": {
+                "caption": "in",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "out": {
+                "caption": "out",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "output"
             }
         }
     },
