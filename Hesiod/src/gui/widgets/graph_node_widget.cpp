@@ -50,9 +50,6 @@ void GraphNodeWidget::automatic_node_layout()
 
   std::vector<gnode::Point> points = this->p_graph_node->compute_graph_layout_sugiyama();
 
-  for (auto &p : points)
-    LOG->trace("{} {}", p.x, p.y);
-
   QPointF delta = QPointF(256, 256);
   QRectF  bbox = this->get_bounding_box();
   QPointF origin = bbox.topLeft(); // QPointF(bbox.left(), bbox.center().y());
