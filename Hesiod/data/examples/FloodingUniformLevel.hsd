@@ -13,7 +13,7 @@
         "graph_nodes": {
             "graph": {
                 "id": "graph",
-                "id_count": 5,
+                "id_count": 6,
                 "links": [
                     {
                         "node_id_from": "2",
@@ -22,16 +22,22 @@
                         "port_id_to": "input"
                     },
                     {
-                        "node_id_from": "3",
-                        "node_id_to": "4",
-                        "port_id_from": "water_depth",
-                        "port_id_to": "water_depth"
-                    },
-                    {
                         "node_id_from": "2",
                         "node_id_to": "4",
                         "port_id_from": "output",
                         "port_id_to": "elevation"
+                    },
+                    {
+                        "node_id_from": "2",
+                        "node_id_to": "5",
+                        "port_id_from": "output",
+                        "port_id_to": "input"
+                    },
+                    {
+                        "node_id_from": "5",
+                        "node_id_to": "4",
+                        "port_id_from": "water_depth",
+                        "port_id_to": "water_depth"
                     }
                 ],
                 "model_config": {
@@ -165,6 +171,50 @@
                     {
                         "id": "4",
                         "label": "Preview"
+                    },
+                    {
+                        "elevation": {
+                            "label": "elevation",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.5692307949066162,
+                            "vmax": 2.0,
+                            "vmin": -1.0
+                        },
+                        "from_east": {
+                            "label": "from_east",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "from_north": {
+                            "label": "from_north",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "from_south": {
+                            "label": "from_south",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "from_west": {
+                            "label": "from_west",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": true
+                        },
+                        "id": "5",
+                        "label": "FloodingFromBoundaries"
                     }
                 ],
                 "origin": [
@@ -201,16 +251,16 @@
                     {
                         "link_type": 2,
                         "node_in_id": "4",
-                        "node_out_id": "2",
-                        "port_in_id": "elevation",
-                        "port_out_id": "output"
+                        "node_out_id": "5",
+                        "port_in_id": "water_depth",
+                        "port_out_id": "water_depth"
                     },
                     {
                         "link_type": 2,
-                        "node_in_id": "4",
-                        "node_out_id": "3",
-                        "port_in_id": "water_depth",
-                        "port_out_id": "water_depth"
+                        "node_in_id": "5",
+                        "node_out_id": "2",
+                        "port_in_id": "input",
+                        "port_out_id": "output"
                     },
                     {
                         "link_type": 2,
@@ -218,29 +268,43 @@
                         "node_out_id": "2",
                         "port_in_id": "input",
                         "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "4",
+                        "node_out_id": "2",
+                        "port_in_id": "elevation",
+                        "port_out_id": "output"
                     }
                 ],
                 "nodes": [
+                    {
+                        "caption": "FloodingFromBoundaries",
+                        "id": "5",
+                        "is_widget_visible": true,
+                        "scene_position.x": -187.17874495265448,
+                        "scene_position.y": -400.2517826853204
+                    },
+                    {
+                        "caption": "GaborWaveFbm",
+                        "id": "2",
+                        "is_widget_visible": true,
+                        "scene_position.x": -492.67832492639695,
+                        "scene_position.y": -316.24590558169905
+                    },
+                    {
+                        "caption": "FloodingUniformLevel",
+                        "id": "3",
+                        "is_widget_visible": true,
+                        "scene_position.x": -204.37594426033118,
+                        "scene_position.y": -119.0291902550555
+                    },
                     {
                         "caption": "Preview",
                         "id": "4",
                         "is_widget_visible": true,
                         "scene_position.x": 118.55601225731647,
                         "scene_position.y": -227.40167317036799
-                    },
-                    {
-                        "caption": "FloodingUniformLevel",
-                        "id": "3",
-                        "is_widget_visible": true,
-                        "scene_position.x": -95.6199145842829,
-                        "scene_position.y": -120.50886412819902
-                    },
-                    {
-                        "caption": "GaborWaveFbm",
-                        "id": "2",
-                        "is_widget_visible": true,
-                        "scene_position.x": -335.09305743661275,
-                        "scene_position.y": -303.66867765997915
                     }
                 ],
                 "viewers": [
@@ -255,8 +319,8 @@
                             "add_fog": false,
                             "add_water_foam": true,
                             "add_water_waves": true,
-                            "alpha_x": 0.665555477142334,
-                            "alpha_y": -26.841108322143555,
+                            "alpha_x": 1.24555504322052,
+                            "alpha_y": -28.626102447509766,
                             "ambiant_occlusion_radius": 3,
                             "ambiant_occlusion_strength": 5.0,
                             "angle_spread_ratio": 0.0,
@@ -270,14 +334,14 @@
                                 "fov": 0.7850000262260437,
                                 "near_plane": 0.10000000149011612,
                                 "position": {
-                                    "x": -2.335395336151123,
-                                    "y": 1.7298954725265503,
-                                    "z": -0.46075183153152466
+                                    "x": 0.5705490112304688,
+                                    "y": 3.674813747406006,
+                                    "z": -1.1594029664993286
                                 },
                                 "target": {
-                                    "x": 0.018668359145522118,
+                                    "x": 0.12779313325881958,
                                     "y": -0.13577783107757568,
-                                    "z": -0.1348428875207901
+                                    "z": 0.04690442606806755
                                 },
                                 "up": {
                                     "x": 0.0,
@@ -295,7 +359,7 @@
                                 "y": 0.8500000238418579,
                                 "z": 0.800000011920929
                             },
-                            "distance": 3.0213522911071777,
+                            "distance": 4.021420001983643,
                             "foam_color": {
                                 "x": 1.0,
                                 "y": 1.0,
@@ -376,6 +440,40 @@
                             "x": 2,
                             "y": 91
                         },
+                        "view_param_map": {
+                            "2": {
+                                "color": "",
+                                "elevation": "output",
+                                "normal_map": "",
+                                "path": "",
+                                "points": "",
+                                "water_depth": ""
+                            },
+                            "3": {
+                                "color": "",
+                                "elevation": "water_depth",
+                                "normal_map": "",
+                                "path": "",
+                                "points": "",
+                                "water_depth": "water_depth"
+                            },
+                            "4": {
+                                "color": "texture",
+                                "elevation": "elevation",
+                                "normal_map": "normal map",
+                                "path": "path",
+                                "points": "cloud",
+                                "water_depth": "water_depth"
+                            },
+                            "5": {
+                                "color": "",
+                                "elevation": "water_depth",
+                                "normal_map": "",
+                                "path": "",
+                                "points": "",
+                                "water_depth": "water_depth"
+                            }
+                        },
                         "viewer_type": 0,
                         "width": 1920,
                         "x": 1920,
@@ -385,5 +483,5 @@
             }
         }
     },
-    "saved_at": "2025-09-16_21:19:10"
+    "saved_at": "2025-09-16_22:44:59"
 }

@@ -19,6 +19,7 @@ public:
   // --- Constructor and Setup ---
   GraphNodeWidget(GraphNode *p_graph_node, QWidget *parent = nullptr);
 
+  void automatic_node_layout();
   void clear_all();
   void clear_data_viewers();
   void clear_graphic_scene();

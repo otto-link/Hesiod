@@ -41,6 +41,46 @@ GraphNodeWidget::GraphNodeWidget(GraphNode *p_graph_node, QWidget *parent)
   this->setup_connections();
 }
 
+void GraphNodeWidget::automatic_node_layout()
+{
+  LOG->trace("GraphNodeWidget::automatic_node_layout");
+
+  if (!this->p_graph_node)
+    return;
+
+  std::vector<gnode::Point> points = this->p_graph_node->compute_graph_layout_sugiyama();
+
+  for (auto &p : points)
+    LOG->trace("{} {}", p.x, p.y);
+
+  QPointF delta = QPointF(256, 256);
+  QRectF  bbox = this->get_bounding_box();
+  QPointF origin = bbox.topLeft(); // QPointF(bbox.left(), bbox.center().y());
+
+  size_t k = 0;
+
+  for (auto &[nid, _] : this->p_graph_node->get_nodes())
+  {
+    if (k > points.size() - 1)
+    {
+      LOG->error("GraphNodeWidget::automatic_node_layout: computed layout is incoherent "
+                 "with current graphics node layout");
+      return;
+    }
+
+    QPointF scene_pos = origin +
+                        QPointF(points[k].x * delta.x(), points[k].y * delta.y());
+    k++;
+
+    gngui::GraphicsNode *p_gfx_node = this->get_graphics_node_by_id(nid);
+
+    if (p_gfx_node)
+      p_gfx_node->setPos(scene_pos);
+  }
+
+  QTimer::singleShot(0, this, [this]() { this->zoom_to_content(); });
+}
+
 void GraphNodeWidget::clear_all()
 {
   this->clear_graphic_scene();
@@ -118,8 +158,6 @@ void GraphNodeWidget::json_from(nlohmann::json const &json)
 
   // Qt mystery, this needs to be delayed to be effective
   QTimer::singleShot(0, this, [this]() { this->zoom_to_content(); });
-
-  // this->zoom_to_content();
 }
 
 nlohmann::json GraphNodeWidget::json_import(nlohmann::json const &json, QPointF scene_pos)
@@ -876,6 +914,11 @@ void GraphNodeWidget::set_json_copy_buffer(nlohmann::json const &new_json_copy_b
 void GraphNodeWidget::setup_connections()
 {
   // global actions
+  this->connect(this,
+                &gngui::GraphViewer::graph_automatic_node_layout_request,
+                this,
+                &GraphNodeWidget::automatic_node_layout);
+
   this->connect(this,
                 &gngui::GraphViewer::graph_clear_request,
                 this,
