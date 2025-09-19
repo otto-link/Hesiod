@@ -56,6 +56,7 @@ Q_SIGNALS:
 public Q_SLOTS:
   void on_node_deleted(const std::string &new_id);
   void on_node_deselected(const std::string &new_id);
+  void on_node_pinned_changed();
   void on_node_selected(const std::string &new_id);
 
 protected:

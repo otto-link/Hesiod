@@ -119,6 +119,49 @@ void Viewer::on_node_deselected(const std::string &new_id)
   this->clear();
 }
 
+void Viewer::on_node_pinned_changed()
+{
+  LOG->trace("Viewer::on_node_pinned_changed");
+
+  if (this->current_node_id.empty())
+  {
+    // if there is no selection, don't bother
+    // changing the pin button
+    this->is_node_pinned = false;
+  }
+  else
+  {
+    // if the button is switch from pinned to unpinned,
+    // reset the view param (and update view param and
+    // both cases)
+    if (this->is_node_pinned)
+    {
+      this->clear();
+      this->is_node_pinned = false;
+
+      // at this point, if a node a selected, use it now for the
+      // viewport
+      GraphNodeWidget *p_gnw = this->p_graph_node_widget;
+
+      if (p_gnw)
+      {
+        const std::vector<std::string> selected_ids = p_gnw->get_selected_node_ids();
+
+        if (selected_ids.size())
+          this->on_node_selected(selected_ids.back());
+      }
+    }
+    else
+    {
+      this->is_node_pinned = true;
+    }
+  }
+
+  this->update_widgets();
+
+  Q_EMIT this->node_pinned(this->current_node_id, this->is_node_pinned);
+}
+
 void Viewer::on_node_selected(const std::string &new_id)
 {
   LOG->trace("Viewer::on_node_selected {}", new_id);
@@ -217,25 +260,8 @@ void Viewer::setup_connections()
 
   this->connect(this->button_pin_current_node,
                 &QPushButton::clicked,
-                [this]()
-                {
-                  // if the button is switch from pinned to unpinned,
-                  // reset the view param (and update view param and
-                  // both cases)
-                  if (this->is_node_pinned)
-                  {
-                    this->clear();
-                    this->is_node_pinned = false;
-                  }
-                  else
-                  {
-                    this->is_node_pinned = true;
-                  }
-
-                  this->update_widgets();
-
-                  Q_EMIT this->node_pinned(this->current_node_id, this->is_node_pinned);
-                });
+                this,
+                &Viewer::on_node_pinned_changed);
 
   for (auto &[name, combo] : this->combo_map)
   {
