@@ -7,6 +7,7 @@
 #include "hesiod/model/nodes/broadcast_node.hpp"
 #include "hesiod/model/nodes/node_factory.hpp"
 #include "hesiod/model/nodes/receive_node.hpp"
+#include "hesiod/model/utils.hpp"
 
 #include <iostream>
 
@@ -90,41 +91,88 @@ void GraphNode::json_from(nlohmann::json const &json, ModelConfig *p_input_confi
     this->config->log_debug();
   }
   else
-    this->config->json_from(json["model_config"]);
+  {
+    if (json.contains("model_config"))
+    {
+      this->config->json_from(json["model_config"]);
+    }
+    else
+    {
+      Logger::log()->error("Missing key \"model_config\" in json");
+    }
+  }
 
-  this->set_id(json["id"]);
-  this->set_id_count(json["id_count"]);
+  std::string id = "";
+  uint        id_count = 0;
+
+  json_safe_get(json, "id", &id);
+  json_safe_get(json, "id_count", &id_count);
+
+  this->set_id(id);
+  this->set_id_count(id_count);
 
   // hmap::CoordFrame
-  auto vo = json["origin"].get<std::vector<float>>();
-  auto vs = json["size"].get<std::vector<float>>();
+  std::vector<float> vo = {};
+  std::vector<float> vs = {};
+
+  json_safe_get(json, "origin", &vo);
+  json_safe_get(json, "size", &vs);
 
   this->set_origin(hmap::Vec2<float>(vo[0], vo[1]));
   this->set_size(hmap::Vec2<float>(vs[0], vs[1]));
-  this->set_rotation_angle(json["rotation_angle"]);
+
+  float rotation_angle = 0.f;
+  json_safe_get(json, "rotation_angle", &rotation_angle);
+
+  this->set_rotation_angle(rotation_angle);
 
   // populate nodes
-  for (auto &json_node : json["nodes"])
+  if (json.contains("nodes"))
   {
-    LOG->trace("GraphNode::json_from, node type: {}",
-               json_node["label"].get<std::string>());
+    for (auto &json_node : json["nodes"])
+    {
+      std::string node_type = "";
 
-    // instanciate the node
-    std::string                  node_type = json_node["label"];
-    std::shared_ptr<gnode::Node> node = node_factory(node_type, this->config);
+      json_safe_get(json_node, "label", &node_type);
 
-    this->add_node(node, json_node["id"].get<std::string>());
+      LOG->trace("GraphNode::json_from, node type: {}", node_type);
 
-    // set its parameters
-    dynamic_cast<BaseNode *>(node.get())->json_from(json_node);
+      // instanciate the node
+      std::shared_ptr<gnode::Node> node = node_factory(node_type, this->config);
+
+      std::string id = "";
+      json_safe_get(json_node, "id", &id);
+
+      this->add_node(node, id);
+
+      // set its parameters
+      dynamic_cast<BaseNode *>(node.get())->json_from(json_node);
+    }
+  }
+  else
+  {
+    Logger::log()->error("Missing key \"nodes\" in json");
   }
 
   // links
-  for (auto &json_link : json["links"])
-    this->new_link(json_link["node_id_from"].get<std::string>(),
-                   json_link["port_id_from"].get<std::string>(),
-                   json_link["node_id_to"].get<std::string>(),
-                   json_link["port_id_to"].get<std::string>());
+  if (json.contains("links"))
+  {
+    for (auto &json_link : json["links"])
+    {
+      std::string node_id_from = "", port_id_from = "", node_id_to = "", port_id_to = "";
+
+      json_safe_get(json_link, "node_id_from", &node_id_from);
+      json_safe_get(json_link, "port_id_from", &port_id_from);
+      json_safe_get(json_link, "node_id_to", &node_id_to);
+      json_safe_get(json_link, "port_id_to", &port_id_to);
+
+      this->new_link(node_id_from, port_id_from, node_id_to, port_id_to);
+    }
+  }
+  else
+  {
+    Logger::log()->error("Missing key \"links\" in json");
+  }
 }
 
 nlohmann::json GraphNode::json_to() const

@@ -46,7 +46,8 @@ void compute_recast_sag_node(BaseNode *p_node)
 
     hmap::transform(*p_out,
                     p_mask,
-                    [p_node](hmap::Array &z, hmap::Array *p_mask) {
+                    [p_node](hmap::Array &z, hmap::Array *p_mask)
+                    {
                       hmap::recast_sag(z,
                                        GET("vref", FloatAttribute),
                                        GET("k", FloatAttribute),

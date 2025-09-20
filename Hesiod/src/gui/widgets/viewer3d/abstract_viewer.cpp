@@ -6,6 +6,7 @@
 #include <QComboBox>
 #include <QGridLayout>
 
+#include "hesiod/model/utils.hpp"
 #include "highmap/heightmap.hpp"
 
 #include "hesiod/gui/widgets/abstract_viewer.hpp"
@@ -146,12 +147,12 @@ void AbstractViewer::json_from(nlohmann::json const &json)
 {
   LOG->trace("AbstractViewer::json_from");
 
-  this->label = json["label"];
+  json_safe_get(json, "label", &label);
 
-  this->current_node_id = json["current_node_id"];
-  this->current_view_param.port_id_elev = json["port_id_elev"];
-  this->current_view_param.port_id_color = json["port_id_color"];
-  this->current_view_param.port_id_normal_map = json["port_id_normal_map"];
+  json_safe_get(json, "current_node_id", &current_node_id);
+  json_safe_get(json, "port_id_elev", &this->current_view_param.port_id_elev);
+  json_safe_get(json, "port_id_color", &this->current_view_param.port_id_color);
+  json_safe_get(json, "port_id_normal_map", &this->current_view_param.port_id_normal_map);
 
   this->button_pin_current_node->setChecked(json["button_pin_current_node_is_checked"]);
 
@@ -162,12 +163,17 @@ void AbstractViewer::json_from(nlohmann::json const &json)
     for (auto &[key, sub_json] : json["node_view_param_map"].items())
     {
       NodeViewParam param;
-      param.port_id_elev = sub_json["port_id_elev"];
-      param.port_id_color = sub_json["port_id_color"];
-      param.port_id_normal_map = sub_json["port_id_normal_map"];
+
+      json_safe_get(sub_json, "port_id_elev", &param.port_id_elev);
+      json_safe_get(sub_json, "port_id_color", &param.port_id_color);
+      json_safe_get(sub_json, "port_id_normal_map", &param.port_id_normal_map);
 
       this->node_view_param_map[key] = param;
     }
+  }
+  else
+  {
+    Logger::log()->error("Missing \"node_view_param_map\" in sub_json");
   }
   this->emit_view_param_changed();
 }

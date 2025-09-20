@@ -15,11 +15,19 @@ void Config::json_from(nlohmann::json const &json)
 {
   LOG->trace("Config::json_from");
 
-  this->window
-      .open_graph_manager_at_startup = json["window.open_graph_manager_at_startup"];
-  this->window.open_viewport_at_startup = json["window.open_viewport_at_startup"];
-  this->window.autosave_timer = std::chrono::milliseconds(json["window.autosave_timer"]);
-  this->window.save_backup_file = json["window.save_backup_file"];
+  json_safe_get(json,
+                "window.open_graph_manager_at_startup",
+                &this->window.open_graph_manager_at_startup);
+
+  int64_t autosave_timer_value = 0;
+  json_safe_get(json, "window.autosave_timer", &autosave_timer_value);
+
+  this->window.autosave_timer = std::chrono::milliseconds(autosave_timer_value);
+
+  json_safe_get(json,
+                "window.open_viewport_at_startup",
+                &this->window.open_viewport_at_startup);
+  json_safe_get(json, "window.save_backup_file", &this->window.save_backup_file);
 }
 
 nlohmann::json Config::json_to() const

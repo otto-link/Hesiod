@@ -4,6 +4,7 @@
 #include <QGridLayout>
 #include <QLabel>
 
+#include "hesiod/model/utils.hpp"
 #include "highmap/colorize.hpp"
 
 #include "hesiod/gui/widgets/graph_manager_widget.hpp"
@@ -42,7 +43,7 @@ GraphNode *GraphQListWidget::get_p_graph_node() { return this->p_graph_node; }
 
 void GraphQListWidget::json_from(nlohmann::json const &json)
 {
-  this->current_bg_tag = json["current_bg_tag"].get<std::string>();
+  json_safe_get(json, "current_bg_tag", &this->current_bg_tag);
   this->combobox->setCurrentText(this->current_bg_tag.c_str());
   this->on_combobox_changed();
 }

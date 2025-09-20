@@ -1,5 +1,6 @@
 .cache/
 .vs/
+.zed/
 bin/
 build/
 launch.json

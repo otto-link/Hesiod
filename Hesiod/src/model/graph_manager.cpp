@@ -208,28 +208,43 @@ void GraphManager::json_from(nlohmann::json const &json, ModelConfig *p_config)
   this->clear();
 
   // keep deserializing
-  this->id_count = json["id_count"];
+  json_safe_get(json, "id_count", &this->id_count);
   this->export_param.json_from(json["export_param"]);
 
   // graph order
-  std::vector<std::string> gid_order = json["graph_order"];
-
-  for (auto &graph_id : gid_order)
+  if (json.contains("graph_order"))
   {
-    LOG->trace("graph graph_id: {}", graph_id);
+    std::vector<std::string> gid_order = json["graph_order"];
 
-    // dummy default config that will be overriden after by the
-    // GraphNode instances during their 'json_from' deserialization
-    auto config = std::make_shared<hesiod::ModelConfig>();
-    auto graph = std::make_shared<hesiod::GraphNode>("", config);
+    for (auto &graph_id : gid_order)
+    {
+      LOG->trace("graph graph_id: {}", graph_id);
 
-    // in this order (add, then deserialize), add the graph node to
-    // the graph manager and then deserialize the graph node because
-    // the Receive nodes, if any, need a reference to the
-    // broadcast_params of the GraphManager, which is provided to the
-    // graph node when added...
-    this->add_graph_node(graph, graph_id);
-    graph->json_from(json["graph_nodes"][graph_id], p_config);
+      // dummy default config that will be overriden after by the
+      // GraphNode instances during their 'json_from' deserialization
+      auto config = std::make_shared<hesiod::ModelConfig>();
+      auto graph = std::make_shared<hesiod::GraphNode>("", config);
+
+      // in this order (add, then deserialize), add the graph node to
+      // the graph manager and then deserialize the graph node because
+      // the Receive nodes, if any, need a reference to the
+      // broadcast_params of the GraphManager, which is provided to the
+      // graph node when added...
+      this->add_graph_node(graph, graph_id);
+
+      if (json.contains("graph_nodes") && json["graph_nodes"].contains(graph_id))
+      {
+        graph->json_from(json["graph_nodes"][graph_id], p_config);
+      }
+      else
+      {
+        Logger::log()->error("Missing key \"graph_nodes\" or \"{}\"", graph_id);
+      }
+    }
+  }
+  else
+  {
+    Logger::log()->error("Missing key \"graph_order\" in json");
   }
 }
 

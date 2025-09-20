@@ -56,8 +56,24 @@ void GraphTabsWidget::json_from(nlohmann::json const &json)
 {
   this->update_tab_widget();
 
-  for (auto &[id, gnw] : this->graph_node_widget_map)
-    gnw->json_from(json["graph_node_widgets"][id]);
+  if (json.contains("graph_node_widgets"))
+  {
+    for (auto &[id, gnw] : this->graph_node_widget_map)
+    {
+      if (json["graph_node_widgets"].contains(id))
+      {
+        gnw->json_from(json["graph_node_widgets"][id]);
+      }
+      else
+      {
+        Logger::log()->error("Missing graph node widgets json element by key \"{}\"", id);
+      }
+    }
+  }
+  else
+  {
+    Logger::log()->error("Missing graph_node_widgets in json");
+  }
 }
 
 nlohmann::json GraphTabsWidget::json_to() const

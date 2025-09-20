@@ -5,6 +5,7 @@
 
 #include "hesiod/logger.hpp"
 #include "hesiod/model/export_param.hpp"
+#include "hesiod/model/utils.hpp"
 
 namespace hesiod
 {
@@ -17,13 +18,15 @@ void ExportParam::dump()
 
 void ExportParam::json_from(nlohmann::json const &json)
 {
-  this->shape.x = json["shape.x"];
-  this->shape.y = json["shape.y"];
-  this->tiling.x = json["tiling.x"];
-  this->tiling.y = json["tiling.y"];
-  this->overlap = json["overlap"];
-  this->export_path = json["export_path"].get<std::filesystem::path>();
-  this->ids = json["ids"];
+  json_safe_get(json, "shape.x", &this->shape.x);
+  json_safe_get(json, "shape.y", &this->shape.y);
+  json_safe_get(json, "tiling.x", &this->tiling.x);
+  json_safe_get(json, "tiling.y", &this->tiling.y);
+
+  json_safe_get(json, "overlap", &this->overlap);
+  json_safe_get(json, "export_path", &this->export_path);
+
+  json_safe_get(json, "ids", &this->ids);
 }
 
 nlohmann::json ExportParam::json_to() const
