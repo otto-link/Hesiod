@@ -25,11 +25,12 @@ void setup_normal_map_to_heightmap_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
+  ADD_ATTR(BoolAttribute, "poisson_solver", false);
   ADD_ATTR(IntAttribute, "iterations", 500, 1, INT_MAX);
   ADD_ATTR(FloatAttribute, "omega", 1.5f, 1e-3f, 2.f);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"iterations", "omega"});
+  p_node->set_attr_ordered_key({"poisson_solver", "iterations", "omega"});
 
   setup_post_process_heightmap_attributes(p_node);
 
@@ -53,9 +54,19 @@ void compute_normal_map_to_heightmap_node(BaseNode *p_node)
     ts.set_slice(1, p_nmap->rgba[1].to_array());
     ts.set_slice(2, p_nmap->rgba[2].to_array());
 
-    hmap::Array z = hmap::normal_map_to_heightmap_poisson(ts,
-                                                          GET("iterations", IntAttribute),
-                                                          GET("omega", FloatAttribute));
+    hmap::Array z;
+
+    if (GET("poisson_solver", BoolAttribute))
+    {
+      z = hmap::normal_map_to_heightmap_poisson(ts,
+                                                GET("iterations", IntAttribute),
+                                                GET("omega", FloatAttribute));
+    }
+    else
+    {
+      z = hmap::normal_map_to_heightmap(ts);
+    }
+
     hmap::remap(z);
 
     p_out->from_array_interp(z);

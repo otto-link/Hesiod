@@ -6672,6 +6672,12 @@
                 "label": "omega",
                 "type": "Float"
             },
+            "poisson_solver": {
+                "description": "No description",
+                "key": "poisson_solver",
+                "label": "poisson_solver",
+                "type": "Bool"
+            },
             "post_gain": {
                 "description": "No description",
                 "key": "post_gain",

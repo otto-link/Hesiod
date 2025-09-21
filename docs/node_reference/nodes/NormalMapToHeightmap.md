@@ -32,6 +32,7 @@ Converter
 | :--- | :--- | :--- |
 |iterations|Integer|No description|
 |omega|Float|No description|
+|poisson_solver|Bool|No description|
 |post_gain|Float|No description|
 |post_inverse|Bool|No description|
 |post_remap|Value range|No description|
