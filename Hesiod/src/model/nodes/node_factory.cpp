@@ -438,6 +438,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"ThermalScree", "Erosion/Thermal"},
       {"Thru", "Routing"},
       {"Toggle", "Routing"},
+      {"Transfer", "Operator/Blend"},
       {"Translate", "Operator/Transform"},
       {"Unsphericity", "Features/Landform"},
       {"ValleyWidth", "Features/Landform"},
@@ -701,6 +702,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(TextureQuiltingExpand, texture_quilting_expand);
     SETUP_NODE(TextureQuiltingShuffle, texture_quilting_shuffle);
     SETUP_NODE(TextureUvChecker, texture_uv_checker);
+    SETUP_NODE(Transfer, transfer);
     SETUP_NODE(Translate, translate);
     SETUP_NODE(Thermal, thermal);
     SETUP_NODE(ThermalAutoBedrock, thermal_auto_bedrock);

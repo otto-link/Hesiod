@@ -164,7 +164,7 @@ void DataPreview::update_preview()
       }
       else if (this->preview_type == PreviewType::MAGMA)
       {
-        img = hmap::colorize(array, array.min(), array.max(), hmap::Cmap::MAGMA, false)
+        img = hmap::colorize(array, array.min(), array.max(), hmap::Cmap::MAGMA, true)
                   .to_img_8bit();
         img_format = QImage::Format_RGB888;
       }

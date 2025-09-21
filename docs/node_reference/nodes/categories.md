@@ -26,7 +26,7 @@ Node Categories
 |Math|Boundaries|Falloff, SetBorders, ZeroedEdges|
 |Math|Convolution|ConvolveSVD|
 |Math|Gradient|Gradient, GradientAngle, GradientNorm, GradientTalus|
-|Operator|Blend|Blend, BlendPoissonBf, Mixer|
+|Operator|Blend|Blend, BlendPoissonBf, Mixer, Transfer|
 |Operator|Morphology|Border, Closing, Dilation, DistanceTransform, Erosion, MakeBinary, MorphologicalGradient, MorphologicalTopHat, Opening, RelativeDistanceFromSkeleton, Skeleton|
 |Operator|Resynthesis|QuiltingBlend, QuiltingExpand, QuiltingShuffle|
 |Operator|Tiling|MakePeriodic, MakePeriodicStitching|
