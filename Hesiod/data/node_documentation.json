@@ -2338,31 +2338,31 @@
                 "type": "Enumeration"
             },
             "mask_activate": {
-                "description": "No description",
+                "description": "Enables or disables the internal mask. If the node's 'mask' input is connected, this setting is bypassed and the input mask is used instead.",
                 "key": "mask_activate",
                 "label": "mask_activate",
                 "type": "Bool"
             },
             "mask_gain": {
-                "description": "No description",
+                "description": "Controls the intensity or influence of the internal mask. Bypassed if the 'mask' input is connected.",
                 "key": "mask_gain",
                 "label": "mask_gain",
                 "type": "Float"
             },
             "mask_inverse": {
-                "description": "No description",
+                "description": "Inverts the internal mask, applying the operator where the mask is low. Ignored if a 'mask' input is provided.",
                 "key": "mask_inverse",
                 "label": "mask_inverse",
                 "type": "Bool"
             },
             "mask_radius": {
-                "description": "No description",
+                "description": "Defines the smoothing radius for the internal mask. A value of 0 disables smoothing. This is bypassed if the 'mask' input is used.",
                 "key": "mask_radius",
                 "label": "mask_radius",
                 "type": "Float"
             },
             "mask_type": {
-                "description": "No description",
+                "description": "Specifies how the internal mask is computed: 'Elevation' uses height, 'Gradient Norm' uses slope, and 'Elevation mid-range' selects the middle portion of the height range. This parameter is ignored when a 'mask' input is connected.",
                 "key": "mask_type",
                 "label": "mask_type",
                 "type": "Choice"
@@ -5245,31 +5245,31 @@
                 "type": "Integer"
             },
             "mask_activate": {
-                "description": "No description",
+                "description": "Enables or disables the internal mask. If the node's 'mask' input is connected, this setting is bypassed and the input mask is used instead.",
                 "key": "mask_activate",
                 "label": "mask_activate",
                 "type": "Bool"
             },
             "mask_gain": {
-                "description": "No description",
+                "description": "Controls the intensity or influence of the internal mask. Bypassed if the 'mask' input is connected.",
                 "key": "mask_gain",
                 "label": "mask_gain",
                 "type": "Float"
             },
             "mask_inverse": {
-                "description": "No description",
+                "description": "Inverts the internal mask, applying the operator where the mask is low. Ignored if a 'mask' input is provided.",
                 "key": "mask_inverse",
                 "label": "mask_inverse",
                 "type": "Bool"
             },
             "mask_radius": {
-                "description": "No description",
+                "description": "Defines the smoothing radius for the internal mask. A value of 0 disables smoothing. This is bypassed if the 'mask' input is used.",
                 "key": "mask_radius",
                 "label": "mask_radius",
                 "type": "Float"
             },
             "mask_type": {
-                "description": "No description",
+                "description": "Specifies how the internal mask is computed: 'Elevation' uses height, 'Gradient Norm' uses slope, and 'Elevation mid-range' selects the middle portion of the height range. This parameter is ignored when a 'mask' input is connected.",
                 "key": "mask_type",
                 "label": "mask_type",
                 "type": "Choice"
@@ -12437,77 +12437,77 @@
     },
     "Transfer": {
         "category": "Operator/Blend",
-        "description": "No description available",
+        "description": "Blends the high-frequency details of a source heightmap into a target heightmap. A high-pass filter is applied to the source, then its details are scaled and merged with the target, optionally after prefiltering the target for smoother integration.",
         "label": "Transfer",
         "parameters": {
             "amplitude": {
-                "description": "No description",
+                "description": "Scales the strength of the high-frequency content taken from the source before it is added to the target.",
                 "key": "amplitude",
                 "label": "amplitude",
                 "type": "Float"
             },
             "mask_activate": {
-                "description": "No description",
+                "description": "Enables or disables the internal mask. If the node's 'mask' input is connected, this setting is bypassed and the input mask is used instead.",
                 "key": "mask_activate",
                 "label": "mask_activate",
                 "type": "Bool"
             },
             "mask_gain": {
-                "description": "No description",
+                "description": "Controls the intensity or influence of the internal mask. Bypassed if the 'mask' input is connected.",
                 "key": "mask_gain",
                 "label": "mask_gain",
                 "type": "Float"
             },
             "mask_inverse": {
-                "description": "No description",
+                "description": "Inverts the internal mask, applying the operator where the mask is low. Ignored if a 'mask' input is provided.",
                 "key": "mask_inverse",
                 "label": "mask_inverse",
                 "type": "Bool"
             },
             "mask_radius": {
-                "description": "No description",
+                "description": "Defines the smoothing radius for the internal mask. A value of 0 disables smoothing. This is bypassed if the 'mask' input is used.",
                 "key": "mask_radius",
                 "label": "mask_radius",
                 "type": "Float"
             },
             "mask_type": {
-                "description": "No description",
+                "description": "Specifies how the internal mask is computed: 'Elevation' uses height, 'Gradient Norm' uses slope, and 'Elevation mid-range' selects the middle portion of the height range. This parameter is ignored when a 'mask' input is connected.",
                 "key": "mask_type",
                 "label": "mask_type",
                 "type": "Choice"
             },
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
             },
             "radius": {
-                "description": "No description",
+                "description": "Radius of the smoothing filter used to separate low and high frequencies when extracting details from the source.",
                 "key": "radius",
                 "label": "radius",
                 "type": "Float"
             },
             "target_prefiltering": {
-                "description": "No description",
+                "description": "If enabled, the target is smoothed before the source details are added, resulting in a softer blend between base and transferred features.",
                 "key": "target_prefiltering",
                 "label": "target_prefiltering",
                 "type": "Bool"
@@ -12517,19 +12517,19 @@
             "output": {
                 "caption": "output",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Resulting heightmap that combines the target’s base shape with the source’s high-frequency details.",
                 "type": "output"
             },
             "source": {
                 "caption": "source",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Heightmap providing the high-frequency details to transfer.",
                 "type": "input"
             },
             "target": {
                 "caption": "target",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Heightmap that serves as the base for blending the source details.",
                 "type": "input"
             }
         }
