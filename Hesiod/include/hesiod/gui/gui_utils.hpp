@@ -10,14 +10,6 @@
 namespace hesiod
 {
 
-class DocumentationPopup : public QWidget
-{
-public:
-  DocumentationPopup(const std::string &title,
-                     const std::string &html_source,
-                     QWidget           *parent = nullptr);
-};
-
 /**
  * @brief Clear all items from a given layout.
  *

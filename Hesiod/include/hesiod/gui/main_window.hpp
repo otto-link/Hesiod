@@ -22,6 +22,7 @@
 #define HSD_SETTINGS_JSON "hesiod_settings.json"
 #define HSD_DEFAULT_STARTUP_FILE "data/default.hsd"
 #define HSD_APP_ICON "data/hesiod_icon.png"
+#define HSD_QUICK_HELP_HTML "data/quick_start.html"
 
 // TODO DBG
 #include "hesiod/gui/widgets/graph_node_widget.hpp"
@@ -84,6 +85,7 @@ private slots:
   void on_save_as();
   void on_save_copy();
   void show_about();
+  void show_quick_help();
 
 private:
   // --- Singleton pattern (private constructor to prevent copy) ---

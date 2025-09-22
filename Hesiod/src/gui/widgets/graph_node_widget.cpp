@@ -19,6 +19,7 @@
 #include "hesiod/gui/gui_utils.hpp"
 #include "hesiod/gui/style.hpp"
 #include "hesiod/gui/widgets/custom_qmenu.hpp"
+#include "hesiod/gui/widgets/documentation_popup.hpp"
 #include "hesiod/gui/widgets/graph_node_widget.hpp"
 #include "hesiod/gui/widgets/model_config_widget.hpp"
 #include "hesiod/gui/widgets/select_string_dialog.hpp"

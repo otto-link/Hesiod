@@ -11,29 +11,6 @@
 namespace hesiod
 {
 
-DocumentationPopup::DocumentationPopup(const std::string &title,
-                                       const std::string &html_source,
-                                       QWidget           *parent)
-    : QWidget(parent)
-{
-  this->setWindowTitle(title.c_str());
-  this->setMinimumSize(512, 768);
-
-  QVBoxLayout *layout = new QVBoxLayout(this);
-
-  // Create a QTextBrowser
-  QTextBrowser *text_browser = new QTextBrowser(this);
-  text_browser->setHtml(html_source.c_str());
-
-  QPushButton *close_button = new QPushButton("Close", this);
-
-  layout->addWidget(text_browser);
-  layout->addWidget(close_button);
-  this->setLayout(layout);
-
-  connect(close_button, &QPushButton::clicked, this, &QWidget::close);
-}
-
 // https://stackoverflow.com/questions/4857188
 
 void clear_layout(QLayout *layout)
