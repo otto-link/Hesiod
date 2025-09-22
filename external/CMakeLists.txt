@@ -23,6 +23,9 @@ add_subdirectory(HighMap)
 set(ATTRIBUTES_ENABLE_TESTS OFF)
 add_subdirectory(Attributes)
 
+# QTerrainRenderer
+add_subdirectory(QTerrainRenderer)
+
 # add it ony if it has not being added before by any other dependency
 if(NOT TARGET nlohmann_json)
     add_subdirectory(json)

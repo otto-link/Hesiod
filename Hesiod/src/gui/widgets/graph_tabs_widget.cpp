@@ -22,7 +22,7 @@ GraphTabsWidget::GraphTabsWidget(GraphManager *p_graph_manager, QWidget *parent)
 {
   LOG->trace("GraphTabsWidget::GraphTabsWidget");
 
-  // syles (GNodeGUI)
+  // styles (GNodeGUI)
   GN_STYLE->viewer.add_new_icon = false;
   GN_STYLE->viewer.add_load_save_icons = false;
   GN_STYLE->viewer.add_group = false;
@@ -47,9 +47,23 @@ void GraphTabsWidget::clear()
     this->tab_widget->removeTab(0);
 
   for (auto &[id, gnw] : this->graph_node_widget_map)
-    gnw->clear_graphic_scene();
+  {
+    if (gnw)
+    {
+      gnw->clear_graphic_scene();
+      gnw->close();
+    }
+  }
 
   this->graph_node_widget_map.clear();
+
+  // also clear settings widgets map (close widgets first)
+  for (auto &[id, sw] : this->node_settings_widget_map)
+  {
+    if (sw)
+      sw->close();
+  }
+  this->node_settings_widget_map.clear();
 }
 
 void GraphTabsWidget::json_from(nlohmann::json const &json)
@@ -57,7 +71,10 @@ void GraphTabsWidget::json_from(nlohmann::json const &json)
   this->update_tab_widget();
 
   for (auto &[id, gnw] : this->graph_node_widget_map)
-    gnw->json_from(json["graph_node_widgets"][id]);
+  {
+    if (gnw)
+      gnw->json_from(json["graph_node_widgets"][id]);
+  }
 }
 
 nlohmann::json GraphTabsWidget::json_to() const
@@ -65,7 +82,8 @@ nlohmann::json GraphTabsWidget::json_to() const
   nlohmann::json json;
 
   for (auto &[id, gnw] : this->graph_node_widget_map)
-    json["graph_node_widgets"][id] = gnw->json_to();
+    if (gnw)
+      json["graph_node_widgets"][id] = gnw->json_to();
 
   return json;
 }
@@ -76,7 +94,8 @@ void GraphTabsWidget::on_copy_buffer_has_changed(const nlohmann::json &new_json)
 
   // redispatch the copy buffer to all the graphs
   for (auto &[_, gnw] : this->graph_node_widget_map)
-    gnw->set_json_copy_buffer(new_json);
+    if (gnw)
+      gnw->set_json_copy_buffer(new_json);
 }
 
 void GraphTabsWidget::on_has_been_cleared(const std::string &graph_id)
@@ -91,10 +110,14 @@ void GraphTabsWidget::on_new_node_created(const std::string &graph_id,
   LOG->trace("GraphTabsWidget::on_new_node_created");
 
   // check if it's a Receive node to update its tag list
-  BaseNode *p_node = this->p_graph_manager->get_graph_nodes()
-                         .at(graph_id)
-                         ->get_node_ref_by_id<BaseNode>(id);
+  auto it_graph = this->p_graph_manager->get_graph_nodes().find(graph_id);
+  if (it_graph == this->p_graph_manager->get_graph_nodes().end())
+  {
+    LOG->critical("GraphTabsWidget::on_new_node_created: graph {} not found", graph_id);
+    return;
+  }
 
+  BaseNode *p_node = it_graph->second->get_node_ref_by_id<BaseNode>(id);
   if (p_node)
   {
     if (p_node->get_node_type() == "Receive")
@@ -136,7 +159,7 @@ void GraphTabsWidget::show_viewport()
 {
   LOG->trace("GraphTabsWidget::show_viewport");
 
-  if (!this->graph_node_widget_map.empty())
+  if (!this->graph_node_widget_map.empty() && this->graph_node_widget_map.begin()->second)
     this->graph_node_widget_map.begin()->second->on_viewport_request();
 }
 
@@ -157,7 +180,8 @@ void GraphTabsWidget::update_receive_nodes_tag_list()
         for (auto &[tag, _] : this->p_graph_manager->get_broadcast_params())
           tags.push_back(tag);
 
-        p_rnode->update_tag_list(tags);
+        if (p_rnode)
+          p_rnode->update_tag_list(tags);
       }
 }
 
@@ -168,10 +192,10 @@ void GraphTabsWidget::update_tab_widget()
   if (!this->tab_widget)
     return;
 
-  // TODO optimize this?
-
   // backup currently selected tab to set it back afterwards
-  QString current_tab_label = this->tab_widget->tabText(this->tab_widget->currentIndex());
+  QString current_tab_label;
+  if (this->tab_widget->count() > 0 && this->tab_widget->currentIndex() >= 0)
+    current_tab_label = this->tab_widget->tabText(this->tab_widget->currentIndex());
 
   // remove everything
   while (this->tab_widget->count() > 0)
@@ -190,8 +214,21 @@ void GraphTabsWidget::update_tab_widget()
 
   for (auto &id : id_to_erase)
   {
-    this->graph_node_widget_map.at(id)->close();
-    this->graph_node_widget_map.erase(id);
+    if (auto it = this->graph_node_widget_map.find(id);
+        it != this->graph_node_widget_map.end())
+    {
+      if (it->second)
+        it->second->close();
+      this->graph_node_widget_map.erase(it);
+    }
+
+    if (auto it2 = this->node_settings_widget_map.find(id);
+        it2 != this->node_settings_widget_map.end())
+    {
+      if (it2->second)
+        it2->second->close();
+      this->node_settings_widget_map.erase(it2);
+    }
   }
 
   // repopulate tabs
@@ -203,7 +240,15 @@ void GraphTabsWidget::update_tab_widget()
     if (!this->graph_node_widget_map.contains(id))
     {
       GraphNode *p_graph_node = this->p_graph_manager->get_graph_ref_by_id(id);
-      this->graph_node_widget_map[id] = new GraphNodeWidget(p_graph_node);
+      if (!p_graph_node)
+      {
+        LOG->error("GraphTabsWidget::update_tab_widget: graph '{}' not found, skipping",
+                   id);
+        continue;
+      }
+
+      // set 'this' as parent so the widget is owned by the widget tree.
+      this->graph_node_widget_map[id] = new GraphNodeWidget(p_graph_node, this);
 
       // connections / model
       this->connect(p_graph_node,
@@ -237,28 +282,57 @@ void GraphTabsWidget::update_tab_widget()
     }
 
     // build layout
-    QWidget     *tab = new QWidget();
-    QHBoxLayout *layout = new QHBoxLayout();
-    layout->addWidget(this->graph_node_widget_map.at(id));
+    QWidget *tab = new QWidget();
+    auto    *layout = new QHBoxLayout(tab);
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(0);
+
+    auto *graph_widget = this->graph_node_widget_map.at(id);
+    if (!graph_widget)
+    {
+      LOG->error("GraphTabsWidget::update_tab_widget: graph widget for '{}' is nullptr",
+                 id);
+      continue;
+    }
+
+    // Give main area most of the space
+    layout->addWidget(graph_widget, 3);
 
     if (this->show_node_settings_widget)
     {
-      auto &widget = this->node_settings_widget_map
-                         .try_emplace(
-                             id,
-                             new NodeSettingsWidget(this->graph_node_widget_map.at(id),
-                                                    this))
-                         .first->second;
+      // either reuse or create the settings widget. parent it to the tab so that when
+      // the tab is destroyed the widget is as well (but keep pointer in the map).
+      NodeSettingsWidget *settings_widget = nullptr;
 
-      layout->addWidget(widget);
-      widget->update_content();
+      auto it = this->node_settings_widget_map.find(id);
+      if (it == this->node_settings_widget_map.end() || it->second == nullptr)
+      {
+        settings_widget = new NodeSettingsWidget(graph_widget, tab);
+        this->node_settings_widget_map[id] = settings_widget;
+      }
+      else
+      {
+        settings_widget = it->second;
+        // ensure parent is the current tab (in case it was created with different parent)
+        if (settings_widget->parentWidget() != tab)
+          settings_widget->setParent(tab);
+      }
+
+      // Make settings compact vertically and constrain width
+      settings_widget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Maximum);
+      settings_widget->setMinimumWidth(250);
+      settings_widget->setMaximumWidth(400);
+
+      // Add without stretch so it keeps its preferred width
+      layout->addWidget(settings_widget, 0);
+      settings_widget->update_content();
     }
 
     tab->setLayout(layout);
-    this->tab_widget->addTab(tab, id.c_str());
+    this->tab_widget->addTab(tab, QString::fromStdString(id));
 
-    // select this tab if it was selected before
-    if (id == current_tab_label.toStdString())
+    // restore selection if this tab was selected previously
+    if (!current_tab_label.isEmpty() && current_tab_label.toStdString() == id)
       this->tab_widget->setCurrentWidget(tab);
   }
 }
@@ -267,7 +341,8 @@ void GraphTabsWidget::zoom_to_content()
 {
   for (auto &[id, gnw] : this->graph_node_widget_map)
   {
-    gnw->zoom_to_content();
+    if (gnw)
+      gnw->zoom_to_content();
   }
 }
 

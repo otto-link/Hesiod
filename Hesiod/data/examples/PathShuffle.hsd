@@ -1,0 +1,314 @@
+{
+    "Hesiod version": "v0.4.0",
+    "graph_manager": {
+        "export_param": {
+            "export_path": "",
+            "ids": [],
+            "overlap": 0.5,
+            "shape.x": 1024,
+            "shape.y": 1024,
+            "tiling.x": 4,
+            "tiling.y": 4
+        },
+        "graph_nodes": {
+            "graph": {
+                "id": "graph",
+                "id_count": 10,
+                "links": [
+                    {
+                        "node_id_from": "3",
+                        "node_id_to": "6",
+                        "port_id_from": "cloud",
+                        "port_id_to": "cloud"
+                    },
+                    {
+                        "node_id_from": "6",
+                        "node_id_to": "7",
+                        "port_id_from": "path",
+                        "port_id_to": "input"
+                    },
+                    {
+                        "node_id_from": "6",
+                        "node_id_to": "8",
+                        "port_id_from": "path",
+                        "port_id_to": "input"
+                    },
+                    {
+                        "node_id_from": "6",
+                        "node_id_to": "9",
+                        "port_id_from": "path",
+                        "port_id_to": "input"
+                    }
+                ],
+                "model_config": {
+                    "hmap_transform_mode_cpu": 0,
+                    "hmap_transform_mode_gpu": 2,
+                    "overlap": 0.5,
+                    "shape.x": 1024,
+                    "shape.y": 1024,
+                    "tiling.x": 4,
+                    "tiling.y": 4
+                },
+                "nodes": [
+                    {
+                        "id": "3",
+                        "label": "CloudRandom",
+                        "method": {
+                            "choice": "Latin Hypercube Sampling",
+                            "label": "method",
+                            "type": 4,
+                            "type_string": "Enumeration",
+                            "value": 3
+                        },
+                        "npoints": {
+                            "label": "npoints",
+                            "type": 10,
+                            "type_string": "Integer",
+                            "value": 5,
+                            "vmax": 2147483647,
+                            "vmin": 1
+                        },
+                        "remap": {
+                            "is_active": true,
+                            "label": "remap",
+                            "type": 11,
+                            "type_string": "Value range",
+                            "value": [
+                                0.0,
+                                1.0
+                            ],
+                            "vmax": 2.0,
+                            "vmin": -1.0
+                        },
+                        "seed": {
+                            "label": "seed",
+                            "type": 12,
+                            "type_string": "Random seed number",
+                            "value": 0
+                        }
+                    },
+                    {
+                        "closed": {
+                            "label": "closed",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "id": "6",
+                        "label": "CloudToPath",
+                        "reorder_nns": {
+                            "label": "reorder_nns",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        }
+                    },
+                    {
+                        "dv": {
+                            "label": "dv",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.1520467847585678,
+                            "vmax": 0.5,
+                            "vmin": -0.5
+                        },
+                        "dx": {
+                            "label": "dx",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.13450291752815247,
+                            "vmax": 0.5,
+                            "vmin": -0.5
+                        },
+                        "dy": {
+                            "label": "dy",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.15789473056793213,
+                            "vmax": 0.5,
+                            "vmin": -0.5
+                        },
+                        "id": "7",
+                        "label": "PathShuffle",
+                        "seed": {
+                            "label": "seed",
+                            "type": 12,
+                            "type_string": "Random seed number",
+                            "value": 0
+                        }
+                    },
+                    {
+                        "dv": {
+                            "label": "dv",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.1520467847585678,
+                            "vmax": 0.5,
+                            "vmin": -0.5
+                        },
+                        "dx": {
+                            "label": "dx",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.1111111044883728,
+                            "vmax": 0.5,
+                            "vmin": -0.5
+                        },
+                        "dy": {
+                            "label": "dy",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.11695905774831772,
+                            "vmax": 0.5,
+                            "vmin": -0.5
+                        },
+                        "id": "8",
+                        "label": "PathShuffle",
+                        "seed": {
+                            "label": "seed",
+                            "type": 12,
+                            "type_string": "Random seed number",
+                            "value": 1
+                        }
+                    },
+                    {
+                        "dv": {
+                            "label": "dv",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.1520467847585678,
+                            "vmax": 0.5,
+                            "vmin": -0.5
+                        },
+                        "dx": {
+                            "label": "dx",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.1111111044883728,
+                            "vmax": 0.5,
+                            "vmin": -0.5
+                        },
+                        "dy": {
+                            "label": "dy",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.11695905774831772,
+                            "vmax": 0.5,
+                            "vmin": -0.5
+                        },
+                        "id": "9",
+                        "label": "PathShuffle",
+                        "seed": {
+                            "label": "seed",
+                            "type": 12,
+                            "type_string": "Random seed number",
+                            "value": 2
+                        }
+                    }
+                ],
+                "origin": [
+                    0.0,
+                    0.0
+                ],
+                "rotation_angle": 0.0,
+                "size": [
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "graph_order": [
+            "graph"
+        ],
+        "id_count": 0
+    },
+    "graph_manager_widget": {
+        "frames": {
+            "graph": {
+                "current_bg_tag": "NONE"
+            }
+        }
+    },
+    "graph_tabs_widget": {
+        "graph_node_widgets": {
+            "graph": {
+                "comments": [],
+                "current_link_type": 2,
+                "groups": [],
+                "id": "graph",
+                "links": [
+                    {
+                        "link_type": 2,
+                        "node_in_id": "9",
+                        "node_out_id": "6",
+                        "port_in_id": "input",
+                        "port_out_id": "path"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "8",
+                        "node_out_id": "6",
+                        "port_in_id": "input",
+                        "port_out_id": "path"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "7",
+                        "node_out_id": "6",
+                        "port_in_id": "input",
+                        "port_out_id": "path"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "6",
+                        "node_out_id": "3",
+                        "port_in_id": "cloud",
+                        "port_out_id": "cloud"
+                    }
+                ],
+                "nodes": [
+                    {
+                        "caption": "PathShuffle",
+                        "id": "9",
+                        "is_widget_visible": true,
+                        "scene_position.x": -993.3133015772473,
+                        "scene_position.y": 69.10038557388413
+                    },
+                    {
+                        "caption": "PathShuffle",
+                        "id": "8",
+                        "is_widget_visible": true,
+                        "scene_position.x": -804.1419941628849,
+                        "scene_position.y": -2.9171039341444356
+                    },
+                    {
+                        "caption": "PathShuffle",
+                        "id": "7",
+                        "is_widget_visible": true,
+                        "scene_position.x": -791.5633399289134,
+                        "scene_position.y": -243.69157565736882
+                    },
+                    {
+                        "caption": "CloudToPath",
+                        "id": "6",
+                        "is_widget_visible": true,
+                        "scene_position.x": -1177.6874397826266,
+                        "scene_position.y": -204.65836143863552
+                    },
+                    {
+                        "caption": "CloudRandom",
+                        "id": "3",
+                        "is_widget_visible": true,
+                        "scene_position.x": -1387.4929769836403,
+                        "scene_position.y": -230.4265695862131
+                    }
+                ]
+            }
+        }
+    },
+    "saved_at": "2025-08-28_18:38:44"
+}

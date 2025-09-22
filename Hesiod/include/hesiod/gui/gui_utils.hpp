@@ -3,19 +3,12 @@
 #pragma once
 #include <functional>
 
+#include <QGridLayout>
 #include <QLayout>
 #include <QWidget>
 
 namespace hesiod
 {
-
-class DocumentationPopup : public QWidget
-{
-public:
-  DocumentationPopup(const std::string &title,
-                     const std::string &html_source,
-                     QWidget           *parent = nullptr);
-};
 
 /**
  * @brief Clear all items from a given layout.
@@ -26,6 +19,9 @@ public:
  * @param layout Reference to the layout that will be cleared.
  */
 void clear_layout(QLayout *layout);
+
+int get_column_count(QGridLayout *layout);
+int get_row_count(QGridLayout *layout);
 
 /**
  * @brief Resize the font of a widget.

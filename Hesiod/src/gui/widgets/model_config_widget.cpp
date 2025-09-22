@@ -26,75 +26,73 @@ ModelConfigWidget::ModelConfigWidget(ModelConfig *p_model_config,
   int row = 0;
 
   // --- shape
-
-  QLabel *label_shape_text = new QLabel("shape");
+  QLabel *label_shape_text = new QLabel("shape", this);
   layout->addWidget(label_shape_text, row, 0);
 
-  this->slider_shape = new QSlider(Qt::Horizontal);
+  this->slider_shape = new QSlider(Qt::Horizontal, this);
   this->slider_shape->setRange(8, 12); // 256 -> 4096
   this->slider_shape->setSingleStep(1);
   this->slider_shape->setPageStep(1);
-  int pos = (int)std::log2(this->p_model_config->shape.x);
+  int pos = static_cast<int>(std::log2(this->p_model_config->shape.x));
   this->slider_shape->setValue(pos);
   layout->addWidget(this->slider_shape, row, 1);
 
-  this->label_shape = new QLabel(QString().asprintf("%dx%d",
-                                                    this->p_model_config->shape.x,
-                                                    this->p_model_config->shape.y));
+  this->label_shape = new QLabel(QString("%1x%2")
+                                     .arg(this->p_model_config->shape.x)
+                                     .arg(this->p_model_config->shape.y),
+                                 this);
   layout->addWidget(this->label_shape, row, 2);
 
-  connect(this->slider_shape,
-          &QSlider::valueChanged,
-          [this]()
-          {
-            int pos = this->slider_shape->value();
-            this->p_model_config->set_shape(
-                hmap::Vec2<int>(std::pow(2, pos), std::pow(2, pos)));
-            this->label_shape->setText(QString().asprintf("%dx%d",
-                                                          this->p_model_config->shape.x,
-                                                          this->p_model_config->shape.y));
-          });
+  this->connect(this->slider_shape,
+                &QSlider::valueChanged,
+                [this]()
+                {
+                  int pos = this->slider_shape->value();
+                  this->p_model_config->set_shape(
+                      hmap::Vec2<int>(std::pow(2, pos), std::pow(2, pos)));
+                  this->label_shape->setText(QString("%1x%2")
+                                                 .arg(this->p_model_config->shape.x)
+                                                 .arg(this->p_model_config->shape.y));
+                });
 
   row++;
 
   // --- tiling
-
-  QLabel *label_tiling_text = new QLabel("tiling");
+  QLabel *label_tiling_text = new QLabel("tiling", this);
   layout->addWidget(label_tiling_text, row, 0);
 
-  this->slider_tiling = new QSlider(Qt::Horizontal);
+  this->slider_tiling = new QSlider(Qt::Horizontal, this);
   this->slider_tiling->setRange(1, 8);
   this->slider_tiling->setSingleStep(1);
   this->slider_tiling->setPageStep(1);
   this->slider_tiling->setValue(this->p_model_config->tiling.x);
   layout->addWidget(this->slider_tiling, row, 1);
 
-  this->label_tiling = new QLabel(QString().asprintf("%dx%d",
-                                                     this->p_model_config->tiling.x,
-                                                     this->p_model_config->tiling.y));
+  this->label_tiling = new QLabel(QString("%1x%2")
+                                      .arg(this->p_model_config->tiling.x)
+                                      .arg(this->p_model_config->tiling.y),
+                                  this);
   layout->addWidget(this->label_tiling, row, 2);
 
-  connect(this->slider_tiling,
-          &QSlider::valueChanged,
-          [this]()
-          {
-            int pos = this->slider_tiling->value();
-            this->p_model_config->tiling.x = pos;
-            this->p_model_config->tiling.y = pos;
-            this->label_tiling->setText(
-                QString().asprintf("%dx%d",
-                                   this->p_model_config->tiling.x,
-                                   this->p_model_config->tiling.y));
-          });
+  this->connect(this->slider_tiling,
+                &QSlider::valueChanged,
+                [this]()
+                {
+                  int pos = this->slider_tiling->value();
+                  this->p_model_config->tiling.x = pos;
+                  this->p_model_config->tiling.y = pos;
+                  this->label_tiling->setText(QString("%1x%2")
+                                                  .arg(this->p_model_config->tiling.x)
+                                                  .arg(this->p_model_config->tiling.y));
+                });
 
   row++;
 
   // --- overlap
-
-  QLabel *label_overlap_text = new QLabel("overlap");
+  QLabel *label_overlap_text = new QLabel("overlap", this);
   layout->addWidget(label_overlap_text, row, 0);
 
-  this->slider_overlap = new QSlider(Qt::Horizontal);
+  this->slider_overlap = new QSlider(Qt::Horizontal, this);
   this->slider_overlap->setRange(0, this->steps);
   this->slider_overlap->setSingleStep(1);
   this->slider_overlap->setPageStep(1);
@@ -105,147 +103,99 @@ ModelConfigWidget::ModelConfigWidget(ModelConfig *p_model_config,
   this->slider_overlap->setValue(pos);
   layout->addWidget(this->slider_overlap, row, 1);
 
-  this->label_overlap = new QLabel(
-      QString().asprintf("%.2f", this->p_model_config->overlap));
+  this->label_overlap = new QLabel(QString::number(this->p_model_config->overlap, 'f', 2),
+                                   this);
   layout->addWidget(this->label_overlap, row, 2);
 
-  connect(this->slider_overlap,
-          &QSlider::valueChanged,
-          [this]()
-          {
-            float v = slider_pos_to_float(this->slider_overlap->value(),
-                                          this->vmin,
-                                          this->vmax,
-                                          this->steps);
-            this->label_overlap->setText(QString().asprintf("%.2f", v));
-            this->p_model_config->overlap = v;
-          });
+  this->connect(this->slider_overlap,
+                &QSlider::valueChanged,
+                [this]()
+                {
+                  float v = slider_pos_to_float(this->slider_overlap->value(),
+                                                this->vmin,
+                                                this->vmax,
+                                                this->steps);
+                  this->label_overlap->setText(QString::number(v, 'f', 2));
+                  this->p_model_config->overlap = v;
+                });
 
   row++;
 
   // --- OpenCL configuration
-
   if (show_opencl_config)
   {
-    QLabel *label_opencl = new QLabel("Hardware acceleration (OpenCL)");
+    QLabel *label_opencl = new QLabel("Hardware acceleration (OpenCL)", this);
     layout->addWidget(label_opencl, row, 0, 1, 3);
     row++;
 
-    // get available devices
-    std::map<size_t, std::string> cl_device_map = clwrapper::DeviceManager::get_instance()
-                                                      .get_available_devices();
+    auto cl_device_map = clwrapper::DeviceManager::get_instance().get_available_devices();
     size_t current_device = clwrapper::DeviceManager::get_instance().get_device_id();
 
-    // setup combobox / device
-    {
-      QComboBox *combobox = new QComboBox();
+    QComboBox *device_combobox = new QComboBox(this);
+    for (auto &[id, name] : cl_device_map)
+      device_combobox->addItem(QString::fromStdString(name));
+    device_combobox->setCurrentText(
+        QString::fromStdString(cl_device_map.at(current_device)));
 
-      QStringList items;
-      for (auto &[id, name] : cl_device_map)
-        combobox->addItem(name.c_str());
+    this->connect(device_combobox,
+                  QOverload<int>::of(&QComboBox::currentIndexChanged),
+                  [device_combobox, cl_device_map]()
+                  {
+                    size_t choice_index = static_cast<size_t>(
+                        device_combobox->currentIndex());
+                    LOG->trace("Selected OpenCL device index: {}", choice_index);
+                    if (clwrapper::DeviceManager::get_instance().set_device(choice_index))
+                      clwrapper::KernelManager::get_instance().build_program();
+                    else
+                      LOG->error("OpenCL device selection failed");
+                  });
 
-      combobox->setCurrentText(cl_device_map.at(current_device).c_str());
-
-      connect(combobox,
-              QOverload<int>::of(&QComboBox::currentIndexChanged),
-              [cl_device_map, combobox]()
-              {
-                size_t choice_index = static_cast<size_t>(combobox->currentIndex());
-
-                LOG->trace("{}", choice_index);
-                LOG->trace("{}, {}", choice_index, cl_device_map.at(choice_index));
-
-                if (clwrapper::DeviceManager::get_instance().set_device(choice_index))
-                  clwrapper::KernelManager::get_instance().build_program();
-                else
-                  LOG->error("device selection failed");
-              });
-
-      layout->addWidget(combobox, row, 0, 1, 3);
-    }
+    layout->addWidget(device_combobox, row, 0, 1, 3);
     row++;
 
     // transform modes
+    auto add_transform_combobox =
+        [this, layout, &row](const std::string &label_text, hmap::TransformMode &mode)
     {
-      QLabel *label = new QLabel("Node calculation mode");
-      layout->addWidget(label, row, 0, 1, 3);
-      row++;
-    }
-
-    {
-      QLabel *label = new QLabel("CPU");
+      QLabel *label = new QLabel(label_text.c_str(), this);
       layout->addWidget(label, row, 0);
 
-      QComboBox *combobox = new QComboBox();
-
-      QStringList items;
+      QComboBox *combobox = new QComboBox(this);
       for (auto &[name, id] : hmap::transform_mode_as_string)
       {
-        combobox->addItem(name.c_str());
-        if (id == (int)this->p_model_config->hmap_transform_mode_cpu)
-          combobox->setCurrentText(name.c_str());
+        combobox->addItem(QString::fromStdString(name));
+        if (id == static_cast<int>(mode))
+          combobox->setCurrentText(QString::fromStdString(name));
       }
 
-      connect(combobox,
-              QOverload<int>::of(&QComboBox::currentIndexChanged),
-              [this, combobox]()
-              {
-                std::string current_choice = combobox->currentText().toStdString();
-
-                LOG->trace("{}", current_choice);
-                this->p_model_config
-                    ->hmap_transform_mode_cpu = static_cast<hmap::TransformMode>(
-                    hmap::transform_mode_as_string.at(current_choice));
-              });
+      this->connect(combobox,
+                    QOverload<int>::of(&QComboBox::currentIndexChanged),
+                    [this, combobox, &mode]()
+                    {
+                      std::string current_choice = combobox->currentText().toStdString();
+                      LOG->trace("Selected transform mode: {}", current_choice);
+                      mode = static_cast<hmap::TransformMode>(
+                          hmap::transform_mode_as_string.at(current_choice));
+                    });
 
       layout->addWidget(combobox, row, 1, 1, 3);
-
       row++;
-    }
+    };
 
-    {
-      QLabel *label = new QLabel("GPU");
-      layout->addWidget(label, row, 0);
-
-      QComboBox *combobox = new QComboBox();
-
-      QStringList items;
-      for (auto &[name, id] : hmap::transform_mode_as_string)
-      {
-        combobox->addItem(name.c_str());
-        if (id == (int)this->p_model_config->hmap_transform_mode_gpu)
-          combobox->setCurrentText(name.c_str());
-      }
-
-      connect(combobox,
-              QOverload<int>::of(&QComboBox::currentIndexChanged),
-              [this, combobox]()
-              {
-                std::string current_choice = combobox->currentText().toStdString();
-
-                LOG->trace("{}", current_choice);
-                this->p_model_config
-                    ->hmap_transform_mode_gpu = static_cast<hmap::TransformMode>(
-                    hmap::transform_mode_as_string.at(current_choice));
-              });
-
-      layout->addWidget(combobox, row, 1, 1, 3);
-
-      row++;
-    }
+    add_transform_combobox("CPU", this->p_model_config->hmap_transform_mode_cpu);
+    add_transform_combobox("GPU", this->p_model_config->hmap_transform_mode_gpu);
   }
 
   // --- buttons
-
   QDialogButtonBox *button_box = new QDialogButtonBox(QDialogButtonBox::Ok |
-                                                      QDialogButtonBox::Cancel);
-
+                                                          QDialogButtonBox::Cancel,
+                                                      this);
   layout->addWidget(button_box, row, 0, 1, 3);
 
-  this->setLayout(layout);
+  this->connect(button_box, &QDialogButtonBox::accepted, this, &QDialog::accept);
+  this->connect(button_box, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
-  connect(button_box, &QDialogButtonBox::accepted, this, &QDialog::accept);
-  connect(button_box, &QDialogButtonBox::rejected, this, &QDialog::reject);
+  this->setLayout(layout);
 }
 
 } // namespace hesiod

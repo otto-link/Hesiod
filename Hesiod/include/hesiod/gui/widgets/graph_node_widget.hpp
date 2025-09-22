@@ -17,8 +17,9 @@ class GraphNodeWidget : public gngui::GraphViewer
 
 public:
   // --- Constructor and Setup ---
-  GraphNodeWidget(GraphNode *p_graph_node);
+  GraphNodeWidget(GraphNode *p_graph_node, QWidget *parent = nullptr);
 
+  void automatic_node_layout();
   void clear_all();
   void clear_data_viewers();
   void clear_graphic_scene();
@@ -73,6 +74,7 @@ public slots:
                                   const std::vector<QPointF>     &scene_pos_list);
   void on_nodes_paste_request();
 
+  void on_node_pinned(const std::string &node_id, bool state);
   void on_viewport_request();
 
   // --- Others... ---

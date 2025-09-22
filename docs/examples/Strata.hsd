@@ -184,8 +184,16 @@
                             "vmax": 180.0,
                             "vmin": -180.0
                         },
-                        "apply_mask": {
-                            "label": "apply_mask",
+                        "apply_elevation_mask": {
+                            "label": "apply_elevation_mask",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": true
+                        },
+                        "apply_ridge_mask": {
+                            "label": "apply_ridge_mask",
                             "label_false": "",
                             "label_true": "",
                             "type": 0,
@@ -475,26 +483,26 @@
                         "caption": "Strata",
                         "id": "4",
                         "is_widget_visible": true,
-                        "scene_position.x": 22.28811542000875,
-                        "scene_position.y": -310.11817844623477
+                        "scene_position.x": 22.288114547729492,
+                        "scene_position.y": -310.1181640625
                     },
                     {
                         "caption": "ZeroedEdges",
                         "id": "3",
                         "is_widget_visible": true,
-                        "scene_position.x": -197.11048968740943,
-                        "scene_position.y": -315.34195475831615
+                        "scene_position.x": -197.11048889160156,
+                        "scene_position.y": -315.3419494628906
                     },
                     {
                         "caption": "GaborWaveFbm",
                         "id": "2",
                         "is_widget_visible": true,
-                        "scene_position.x": -453.28610195047236,
-                        "scene_position.y": -381.60471960560693
+                        "scene_position.x": -452.2861022949219,
+                        "scene_position.y": -381.6047058105469
                     }
                 ]
             }
         }
     },
-    "saved_at": "2025-08-24_22:25:20"
+    "saved_at": "2025-08-25_18:25:05"
 }
