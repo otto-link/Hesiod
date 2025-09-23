@@ -167,7 +167,7 @@ void MainWindow::json_from(nlohmann::json const &json)
 {
   LOG->trace("MainWindow::json_from");
 
-  json_safe_get(json, "show_node_settings_pan", &this->show_node_settings_pan);
+  json_safe_get(json, "show_node_settings_pan", this->show_node_settings_pan);
 }
 
 nlohmann::json MainWindow::json_to() const

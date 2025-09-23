@@ -43,7 +43,7 @@ GraphNode *GraphQListWidget::get_p_graph_node() { return this->p_graph_node; }
 
 void GraphQListWidget::json_from(nlohmann::json const &json)
 {
-  json_safe_get(json, "current_bg_tag", &this->current_bg_tag);
+  json_safe_get(json, "current_bg_tag", this->current_bg_tag);
   this->combobox->setCurrentText(this->current_bg_tag.c_str());
   this->on_combobox_changed();
 }

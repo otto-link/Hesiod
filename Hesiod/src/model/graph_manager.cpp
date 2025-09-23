@@ -208,7 +208,7 @@ void GraphManager::json_from(nlohmann::json const &json, ModelConfig *p_config)
   this->clear();
 
   // keep deserializing
-  json_safe_get(json, "id_count", &this->id_count);
+  json_safe_get(json, "id_count", this->id_count);
   this->export_param.json_from(json["export_param"]);
 
   // graph order

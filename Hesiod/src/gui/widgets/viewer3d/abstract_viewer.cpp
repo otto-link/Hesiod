@@ -147,12 +147,12 @@ void AbstractViewer::json_from(nlohmann::json const &json)
 {
   LOG->trace("AbstractViewer::json_from");
 
-  json_safe_get(json, "label", &label);
+  json_safe_get(json, "label", label);
 
-  json_safe_get(json, "current_node_id", &current_node_id);
-  json_safe_get(json, "port_id_elev", &this->current_view_param.port_id_elev);
-  json_safe_get(json, "port_id_color", &this->current_view_param.port_id_color);
-  json_safe_get(json, "port_id_normal_map", &this->current_view_param.port_id_normal_map);
+  json_safe_get(json, "current_node_id", current_node_id);
+  json_safe_get(json, "port_id_elev", this->current_view_param.port_id_elev);
+  json_safe_get(json, "port_id_color", this->current_view_param.port_id_color);
+  json_safe_get(json, "port_id_normal_map", this->current_view_param.port_id_normal_map);
 
   this->button_pin_current_node->setChecked(json["button_pin_current_node_is_checked"]);
 
@@ -164,9 +164,9 @@ void AbstractViewer::json_from(nlohmann::json const &json)
     {
       NodeViewParam param;
 
-      json_safe_get(sub_json, "port_id_elev", &param.port_id_elev);
-      json_safe_get(sub_json, "port_id_color", &param.port_id_color);
-      json_safe_get(sub_json, "port_id_normal_map", &param.port_id_normal_map);
+      json_safe_get(sub_json, "port_id_elev", param.port_id_elev);
+      json_safe_get(sub_json, "port_id_color", param.port_id_color);
+      json_safe_get(sub_json, "port_id_normal_map", param.port_id_normal_map);
 
       this->node_view_param_map[key] = param;
     }

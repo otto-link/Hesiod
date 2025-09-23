@@ -105,8 +105,8 @@ void GraphNode::json_from(nlohmann::json const &json, ModelConfig *p_input_confi
   std::string id = "";
   uint        id_count = 0;
 
-  json_safe_get(json, "id", &id);
-  json_safe_get(json, "id_count", &id_count);
+  json_safe_get(json, "id", id);
+  json_safe_get(json, "id_count", id_count);
 
   this->set_id(id);
   this->set_id_count(id_count);
@@ -115,14 +115,14 @@ void GraphNode::json_from(nlohmann::json const &json, ModelConfig *p_input_confi
   std::vector<float> vo = {};
   std::vector<float> vs = {};
 
-  json_safe_get(json, "origin", &vo);
-  json_safe_get(json, "size", &vs);
+  json_safe_get(json, "origin", vo);
+  json_safe_get(json, "size", vs);
 
   this->set_origin(hmap::Vec2<float>(vo[0], vo[1]));
   this->set_size(hmap::Vec2<float>(vs[0], vs[1]));
 
   float rotation_angle = 0.f;
-  json_safe_get(json, "rotation_angle", &rotation_angle);
+  json_safe_get(json, "rotation_angle", rotation_angle);
 
   this->set_rotation_angle(rotation_angle);
 
@@ -133,7 +133,7 @@ void GraphNode::json_from(nlohmann::json const &json, ModelConfig *p_input_confi
     {
       std::string node_type = "";
 
-      json_safe_get(json_node, "label", &node_type);
+      json_safe_get(json_node, "label", node_type);
 
       LOG->trace("GraphNode::json_from, node type: {}", node_type);
 
@@ -141,7 +141,7 @@ void GraphNode::json_from(nlohmann::json const &json, ModelConfig *p_input_confi
       std::shared_ptr<gnode::Node> node = node_factory(node_type, this->config);
 
       std::string id = "";
-      json_safe_get(json_node, "id", &id);
+      json_safe_get(json_node, "id", id);
 
       this->add_node(node, id);
 
@@ -161,10 +161,10 @@ void GraphNode::json_from(nlohmann::json const &json, ModelConfig *p_input_confi
     {
       std::string node_id_from = "", port_id_from = "", node_id_to = "", port_id_to = "";
 
-      json_safe_get(json_link, "node_id_from", &node_id_from);
-      json_safe_get(json_link, "port_id_from", &port_id_from);
-      json_safe_get(json_link, "node_id_to", &node_id_to);
-      json_safe_get(json_link, "port_id_to", &port_id_to);
+      json_safe_get(json_link, "node_id_from", node_id_from);
+      json_safe_get(json_link, "port_id_from", port_id_from);
+      json_safe_get(json_link, "node_id_to", node_id_to);
+      json_safe_get(json_link, "port_id_to", port_id_to);
 
       this->new_link(node_id_from, port_id_from, node_id_to, port_id_to);
     }

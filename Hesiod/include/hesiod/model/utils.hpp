@@ -63,11 +63,11 @@ std::string time_stamp();
 unsigned int to_uint_safe(const std::string &str);
 
 template <typename T>
-inline void json_safe_get(const nlohmann::json &j, const char *key, T *value)
+inline void json_safe_get(const nlohmann::json &j, const char *key, T &value)
 {
   if (j.contains(key))
   {
-    *value = j.at(key).get<T>();
+    value = j.at(key).get<T>();
   }
   else
   {
