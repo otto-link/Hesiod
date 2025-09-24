@@ -6,9 +6,9 @@ Node Categories
 
 |Primary|Secondary|Nodes|
 | :--- | :--- | :--- |
-|Converter||HeightmapToKernel, HeightmapToMask, HeightmapToRGBA|
+|Converter||HeightmapToKernel, HeightmapToMask, HeightmapToNormalMap, HeightmapToRGBA, NormalMapToHeightmap|
 |Debug||Debug, Preview|
-|Erosion|Hydraulic|HydraulicParticle, HydraulicStreamLog|
+|Erosion|Hydraulic|HydraulicParticle, HydraulicStreamLog, Rifts|
 |Erosion|Stratify|Strata, Stratify, StratifyMultiscale, StratifyOblique|
 |Erosion|Thermal|Thermal, ThermalAutoBedrock, ThermalInflate, ThermalRidge, ThermalScree|
 |Features|Clustering|KmeansClustering2, KmeansClustering3|
@@ -17,15 +17,16 @@ Node Categories
 |Filter|Recast|ExpandShrink, Fold, NormalDisplacement, RecastCanyon, RecastCliff, RecastCliffDirectional, RecastCracks, RecastSag, SteepenConvective|
 |Filter|Recurve|Gain, GammaCorrection, GammaCorrectionLocal, Plateau, Recurve, RecurveKura, RecurveS, ReverseAboveThreshold, Saturate, Terrace|
 |Filter|Smoothing|Laplace, Median3x3, ShapeIndex, SharpenCone, SmoothCpulse, SmoothFill, SmoothFillHoles, SmoothFillSmearPeaks|
-|Geometry|Cloud|Cloud, CloudFromCsv, CloudLattice, CloudMerge, CloudRandom, CloudRandomDensity, CloudRandomDistance, CloudRandomPowerLaw, CloudRandomWeibull, CloudRemapValues, CloudSDF, CloudSetValuesFromBorderDistance, CloudSetValuesFromHeightmap, CloudSetValuesFromMinDistance, CloudToArrayInterp, CloudToPath|
-|Geometry|Path|Path, PathBezier, PathBezierRound, PathBspline, PathDecasteljau, PathDig, PathFind, PathFractalize, PathFromCsv, PathMeanderize, PathResample, PathSDF, PathSmooth, PathToCloud, PathToHeightmap|
+|Geometry|Cloud|Cloud, CloudFromCsv, CloudLattice, CloudMerge, CloudRandom, CloudRandomDensity, CloudRandomDistance, CloudRandomPowerLaw, CloudRandomWeibull, CloudRemapValues, CloudSDF, CloudSetValuesFromBorderDistance, CloudSetValuesFromHeightmap, CloudSetValuesFromMinDistance, CloudShuffle, CloudToArrayInterp, CloudToPath|
+|Geometry|Path|Path, PathBezier, PathBezierRound, PathBspline, PathDecasteljau, PathDig, PathFind, PathFractalize, PathFromCsv, PathMeanderize, PathResample, PathSDF, PathShuffle, PathSmooth, PathToCloud, PathToHeightmap|
+|Hydrology||FloodingFromBoundaries, FloodingFromPoint, FloodingLakeSystem, FloodingUniformLevel, WaterDepthDryOut|
 |IO|Files|ExportAsset, ExportCloud, ExportHeightmap, ExportNormalMap, ExportPath, ExportTexture, ImportHeightmap, ImportTexture|
 |Mask|Selector|SelectAngle, SelectBlobLog, SelectCavities, SelectGt, SelectInterval, SelectInwardOutward, SelectMidrange, SelectMultiband3, SelectPulse, SelectRivers, SelectSlope, SelectTransitions, SelectValley|
 |Math|Base|Abs, AbsSmooth, Cos, GaussianDecay, Inverse, Lerp, Reverse, Smoothstep|
 |Math|Boundaries|Falloff, SetBorders, ZeroedEdges|
 |Math|Convolution|ConvolveSVD|
 |Math|Gradient|Gradient, GradientAngle, GradientNorm, GradientTalus|
-|Operator|Blend|Blend, BlendPoissonBf, Mixer|
+|Operator|Blend|Blend, BlendPoissonBf, Mixer, Transfer|
 |Operator|Morphology|Border, Closing, Dilation, DistanceTransform, Erosion, MakeBinary, MorphologicalGradient, MorphologicalTopHat, Opening, RelativeDistanceFromSkeleton, Skeleton|
 |Operator|Resynthesis|QuiltingBlend, QuiltingExpand, QuiltingShuffle|
 |Operator|Tiling|MakePeriodic, MakePeriodicStitching|

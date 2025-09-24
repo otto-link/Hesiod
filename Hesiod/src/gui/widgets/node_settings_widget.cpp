@@ -4,6 +4,7 @@
 #include <stdexcept>
 
 #include <QLabel>
+#include <QPointer>
 #include <QPushButton>
 
 #include "attributes/widgets/abstract_widget.hpp"
@@ -47,17 +48,26 @@ void NodeSettingsWidget::initialize_layout()
   QScrollArea *scroll_area = new QScrollArea(this);
   QWidget     *scroll_widget = new QWidget(scroll_area);
 
+  // central layout that hosts all settings rows
   this->scroll_layout = new QGridLayout(scroll_widget);
   this->scroll_layout->setAlignment(Qt::AlignTop);
-  this->scroll_layout->setSizeConstraint(QLayout::SetMinAndMaxSize);
 
-  scroll_widget->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Minimum);
+  // Allow default constraint so Qt can compute sensible min/max sizes
+  this->scroll_layout->setSizeConstraint(QLayout::SetDefaultConstraint);
+  this->scroll_layout->setContentsMargins(8, 0, 8, 0);
+  this->scroll_layout->setSpacing(0);
+
+  // Make the scroll widget expand vertically so the scroll area will show scrollbars
+  scroll_widget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
   scroll_widget->setLayout(this->scroll_layout);
 
   scroll_area->setWidgetResizable(true);
   scroll_area->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   scroll_area->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
   scroll_area->setWidget(scroll_widget);
+
+  // make sure the single column stretches to occupy the width
+  this->scroll_layout->setColumnStretch(0, 1);
 
   this->layout->addWidget(scroll_area);
   this->setLayout(this->layout);
@@ -67,16 +77,44 @@ void NodeSettingsWidget::setup_connections()
 {
   LOG->trace("NodeSettingsWidget::setup_connections");
 
-  this->connect(p_graph_node_widget,
+  // Defensive local QPointer wrappers so we don't call through dangling raw pointers
+  QPointer<GraphNodeWidget> graph_widget_ptr(this->p_graph_node_widget);
+
+  if (!graph_widget_ptr)
+  {
+    LOG->error("NodeSettingsWidget::setup_connections: p_graph_node_widget is nullptr");
+    return;
+  }
+
+  // connect selection changes -> update UI
+  this->connect(graph_widget_ptr,
                 &gngui::GraphViewer::selection_has_changed,
                 this,
                 &NodeSettingsWidget::update_content);
 
-  // this covers also the case where the node settings has been
-  // changed elsewhere (in the context-menu settings for instance)
-  this->connect(p_graph_node_widget->get_p_graph_node(),
-                &GraphNode::update_finished,
-                [this]() { this->update_content(); });
+  // connect to the underlying graph node update signal, if available
+  if (auto p_graph = graph_widget_ptr->get_p_graph_node())
+  {
+    // use QPointer to ensure safety if the graph node is deleted elsewhere
+    QPointer<GraphNode> graph_ptr(p_graph);
+    this->connect(
+        graph_ptr,
+        &GraphNode::update_finished,
+        this,
+        [this, graph_ptr]()
+        {
+          if (!graph_ptr)
+          {
+            LOG->warn("NodeSettingsWidget: graph node destroyed before update callback");
+            return;
+          }
+          this->update_content();
+        });
+  }
+  else
+  {
+    LOG->warn("NodeSettingsWidget::setup_connections: underlying GraphNode is nullptr");
+  }
 }
 
 void NodeSettingsWidget::update_content()
@@ -85,66 +123,90 @@ void NodeSettingsWidget::update_content()
 
   if (!this->p_graph_node_widget)
   {
-    LOG->error("NodeSettingsWidget::update_content: p_graph_node_widget "
-               "is nullptr");
+    LOG->error("NodeSettingsWidget::update_content: p_graph_node_widget is nullptr");
     return;
   }
 
   // empty and delete items of current layout
+  if (!this->scroll_layout)
+  {
+    LOG->error("NodeSettingsWidget::update_content: scroll_layout is nullptr");
+    return;
+  }
+
   clear_layout(this->scroll_layout);
   int row = 0;
+
+  // guard access to the underlying graph
+  auto p_graph = this->p_graph_node_widget->get_p_graph_node();
+  if (!p_graph)
+  {
+    LOG->warn("NodeSettingsWidget::update_content: get_p_graph_node returned nullptr");
+    return;
+  }
 
   std::vector<std::string> selected_ids = this->p_graph_node_widget
                                               ->get_selected_node_ids();
   std::vector<std::string> all_ids = merge_unique(this->pinned_node_ids, selected_ids);
 
-  // label
-  QLabel *label = new QLabel("Node settings", this);
-  this->scroll_layout->addWidget(label, row++, 0);
+  // header label
+  QLabel *title_label = new QLabel("Node settings", /*parent=*/this->parentWidget());
+  title_label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+  this->scroll_layout->addWidget(title_label, row++, 0);
 
   for (auto &node_id : all_ids)
   {
-    BaseNode *p_node = this->p_graph_node_widget->get_p_graph_node()
-                           ->get_node_ref_by_id<BaseNode>(node_id);
+    // Defensive retrieval of node reference
+    BaseNode *p_node = nullptr;
+    try
+    {
+      p_node = p_graph->get_node_ref_by_id<BaseNode>(node_id);
+    }
+    catch (const std::exception &e)
+    {
+      LOG->error(
+          "NodeSettingsWidget::update_content: exception while getting node {}: {}",
+          node_id,
+          e.what());
+      continue;
+    }
 
     if (!p_node)
     {
-      LOG->trace("NodeSettingsWidget::update_content: reference to node "
-                 "{} is nullptr",
+      LOG->trace("NodeSettingsWidget::update_content: reference to node {} is nullptr",
                  node_id);
       continue;
     }
 
-    {
-      const std::string txt = p_node->get_caption() + " (" + node_id + ")";
+    // separator (with parent so Qt will manage its lifetime)
+    const QString txt = QString::fromStdString(p_node->get_caption() + " (" + node_id +
+                                               ")");
+    QWidget      *separator_widget = new QWidget(/*parent=*/this);
+    QHBoxLayout  *sep_layout = new QHBoxLayout(separator_widget);
+    sep_layout->setSpacing(0);
+    sep_layout->setContentsMargins(0, 0, 0, 0);
 
-      // TODO move to gui_utils.hpp
-      QWidget     *separator_widget = new QWidget;
-      QHBoxLayout *sep_layout = new QHBoxLayout(separator_widget);
-      sep_layout->setSpacing(0);
-      sep_layout->setContentsMargins(0, 0, 0, 0);
+    QFrame *left_line = new QFrame(separator_widget);
+    left_line->setFrameShape(QFrame::HLine);
+    left_line->setFrameShadow(QFrame::Sunken);
 
-      QFrame *leftLine = new QFrame;
-      leftLine->setFrameShape(QFrame::HLine);
-      leftLine->setFrameShadow(QFrame::Sunken);
+    QLabel *sep_label = new QLabel(txt, separator_widget);
+    sep_label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
 
-      QLabel *label = new QLabel(txt.c_str());
+    QFrame *right_line = new QFrame(separator_widget);
+    right_line->setFrameShape(QFrame::HLine);
+    right_line->setFrameShadow(QFrame::Sunken);
 
-      QFrame *rightLine = new QFrame;
-      rightLine->setFrameShape(QFrame::HLine);
-      rightLine->setFrameShadow(QFrame::Sunken);
+    sep_layout->addWidget(left_line);
+    sep_layout->addWidget(sep_label);
+    sep_layout->addWidget(right_line);
 
-      sep_layout->addWidget(leftLine);
-      sep_layout->addWidget(label);
-      sep_layout->addWidget(rightLine);
+    sep_layout->setStretch(0, 1);
+    sep_layout->setStretch(2, 6);
 
-      sep_layout->setStretch(0, 1);
-      sep_layout->setStretch(2, 6);
+    this->scroll_layout->addWidget(separator_widget, row++, 0);
 
-      this->scroll_layout->addWidget(separator_widget, row++, 0);
-    }
-
-    // preview
+    // preview (use scroll_widget as parent so lifetime is tied to the container)
     DataPreview *p_data_preview = p_node->get_data_preview_ref();
 
     if (p_data_preview)
@@ -154,7 +216,7 @@ void NodeSettingsWidget::update_content()
       if (!preview_pixmap.isNull())
       {
         const int width = 48;
-        QLabel   *label_preview = new QLabel(this);
+        QLabel   *label_preview = new QLabel(/*parent=*/this);
         QPixmap   scaled_pixmap = preview_pixmap.scaled(width,
                                                       width,
                                                       Qt::KeepAspectRatio,
@@ -162,65 +224,95 @@ void NodeSettingsWidget::update_content()
         label_preview->setPixmap(scaled_pixmap);
         label_preview->setScaledContents(true);
         label_preview->setFixedSize(width, width);
+        label_preview->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         this->scroll_layout->addWidget(label_preview, row++, 0, Qt::AlignLeft);
       }
     }
 
-    // pinned checkbox
-    QPushButton *button_pin = new QPushButton("Pin this node");
+    // pinned checkbox button
+    QPushButton *button_pin = new QPushButton("Pin this node", this);
     button_pin->setCheckable(true);
     button_pin->setChecked(contains(this->pinned_node_ids, node_id));
     this->scroll_layout->addWidget(button_pin, row++, 0);
 
-    this->connect(button_pin,
-                  &QPushButton::toggled,
-                  [this, button_pin, node_id]()
-                  {
-                    if (button_pin->isChecked())
-                      this->pinned_node_ids.push_back(node_id);
-                    else
-                      remove_all_occurrences(this->pinned_node_ids, node_id);
-                  });
+    // Use QPointer in the lambda to defend against deletion
+    QPointer<QPushButton> bp(button_pin);
+    this->connect(
+        button_pin,
+        &QPushButton::toggled,
+        this,
+        [this, bp, node_id]()
+        {
+          if (!bp)
+          {
+            LOG->warn("NodeSettingsWidget: pin button destroyed before toggle handler");
+            return;
+          }
 
-    // settings
+          if (bp->isChecked())
+          {
+            if (!contains(this->pinned_node_ids, node_id))
+              this->pinned_node_ids.push_back(node_id);
+          }
+          else
+          {
+            remove_all_occurrences(this->pinned_node_ids, node_id);
+          }
+
+          LOG->trace("NodeSettingsWidget: pinned nodes now count={}",
+                     this->pinned_node_ids.size());
+        });
+
+    // settings: build the AttributesWidget in a guarded way
     bool        add_save_reset_state_buttons = false;
     std::string window_title = "";
 
-    attr::AttributesWidget *attributes_widget = new attr::AttributesWidget(
-        p_node->get_attr_ref(),
-        p_node->get_attr_ordered_key_ref(),
-        window_title,
-        add_save_reset_state_buttons);
-
-    // attributes_widget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Maximum);
-    attributes_widget->setSizePolicy(QSizePolicy::Preferred,
-                                     QSizePolicy::MinimumExpanding);
-
-    // change the attribute widget layout spacing a posteriori
-
-    // TODO factorize
-    QVBoxLayout *retrieved_layout = qobject_cast<QVBoxLayout *>(
-        attributes_widget->layout());
-    if (retrieved_layout)
+    attr::AttributesWidget *attributes_widget = nullptr;
+    try
     {
-      retrieved_layout->setSpacing(0);
-      retrieved_layout->setContentsMargins(0, 0, 0, 0);
-
-      for (int i = 0; i < retrieved_layout->count(); ++i)
-      {
-        QWidget *child = retrieved_layout->itemAt(i)->widget();
-        if (!child)
-          continue;
-
-        if (auto *inner_layout = child->layout())
-        {
-          inner_layout->setContentsMargins(32, 2, 64, 2);
-          inner_layout->setSpacing(4);
-        }
-      }
+      attributes_widget = new attr::AttributesWidget(p_node->get_attr_ref(),
+                                                     p_node->get_attr_ordered_key_ref(),
+                                                     window_title,
+                                                     add_save_reset_state_buttons);
+    }
+    catch (const std::exception &e)
+    {
+      LOG->error("NodeSettingsWidget::update_content: failed to create AttributesWidget "
+                 "for {}: {}",
+                 node_id,
+                 e.what());
     }
 
-    this->scroll_layout->addWidget(attributes_widget, row++, 0);
+    if (attributes_widget)
+    {
+      attributes_widget->setParent(this);
+      attributes_widget->setSizePolicy(QSizePolicy::Preferred,
+                                       QSizePolicy::MinimumExpanding);
+
+      // change the attribute widget layout spacing a posteriori
+      QVBoxLayout *retrieved_layout = qobject_cast<QVBoxLayout *>(
+          attributes_widget->layout());
+      if (retrieved_layout)
+      {
+        retrieved_layout->setSpacing(0);
+        retrieved_layout->setContentsMargins(0, 0, 0, 0);
+
+        for (int i = 0; i < retrieved_layout->count(); ++i)
+        {
+          QWidget *child = retrieved_layout->itemAt(i)->widget();
+          if (!child)
+            continue;
+
+          if (auto *inner_layout = child->layout())
+          {
+            inner_layout->setContentsMargins(32, 2, 64, 2);
+            inner_layout->setSpacing(4);
+          }
+        }
+      }
+
+      this->scroll_layout->addWidget(attributes_widget, row++, 0);
+    }
   }
 }
 

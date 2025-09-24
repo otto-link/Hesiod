@@ -23,7 +23,12 @@ void setup_gradient_angle_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
+  ADD_ATTR(BoolAttribute, "unwrap_angle", true);
   ADD_ATTR(RangeAttribute, "remap", std::vector<float>({-1.f, 1.f}), -1.f, 1.f, false);
+
+  // attribute(s) order
+  p_node->set_attr_ordered_key(
+      {"_TEXT_Base paramaters", "unwrap_angle", "_TEXT_Post-processing", "remap"});
 }
 
 void compute_gradient_angle_node(BaseNode *p_node)
@@ -50,6 +55,20 @@ void compute_gradient_angle_node(BaseNode *p_node)
         p_node->get_config_ref()->hmap_transform_mode_cpu);
 
     p_out->smooth_overlap_buffers();
+
+    // remove phase jumps if requested
+    if (GET("unwrap_angle", BoolAttribute))
+    {
+      // on a single array, not tiled (so far)
+      hmap::transform(
+          {p_out},
+          [](std::vector<hmap::Array *> p_arrays)
+          {
+            hmap::Array *pa_out = p_arrays[0];
+            *pa_out = hmap::unwrap_phase(*pa_out);
+          },
+          hmap::TransformMode::SINGLE_ARRAY);
+    }
 
     // post-process
     post_process_heightmap(p_node,

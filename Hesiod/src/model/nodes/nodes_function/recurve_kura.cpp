@@ -51,8 +51,7 @@ void compute_recurve_kura_node(BaseNode *p_node)
 
     hmap::transform(*p_out,
                     p_mask,
-                    [p_node](hmap::Array &x, hmap::Array *p_mask)
-                    {
+                    [p_node](hmap::Array &x, hmap::Array *p_mask) {
                       hmap::recurve_kura(x,
                                          GET("a", FloatAttribute),
                                          GET("b", FloatAttribute),

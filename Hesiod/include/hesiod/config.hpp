@@ -39,10 +39,16 @@ public:
   struct Window
   {
     bool                      open_graph_manager_at_startup = false;
-    bool                      open_viewport_at_startup = true;
+    bool                      open_viewport_at_startup = false;
     std::chrono::milliseconds autosave_timer{60000}; // 60 seconds
     bool                      save_backup_file = true;
   } window;
+
+  struct Viewer
+  {
+    int width = 512;
+    int height = 512;
+  } viewer;
 
   struct Nodes
   {

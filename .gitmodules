@@ -19,3 +19,6 @@
 [submodule "external/qt-toast"]
 	path = external/qt-toast
 	url = git@github.com:niklashenning/qt-toast.git
+[submodule "external/QTerrainRenderer"]
+	path = external/QTerrainRenderer
+	url = git@github.com:otto-link/QTerrainRenderer.git

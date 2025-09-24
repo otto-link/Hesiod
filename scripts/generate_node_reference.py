@@ -98,7 +98,7 @@ def generate_node_markdown(data):
             md_file.new_paragraph(Image.Image.new_inline_image(text="img", path=img_path_rel))
 
             hsd_fname = node_type + '.hsd'
-            md_file.new_paragraph('Corresponding Hesiod file: [{}]({}). \n\n> **Note:** Example files are kept up-to-date with the latest version of [Hesiod](https://github.com/otto-link/Hesiod).\n> If you find an error, please [open an issue](https://github.com/otto-link/Hesiod/issues).'.format(hsd_fname, os.path.join(hsd_relative_path, hsd_fname)));
+            md_file.new_paragraph('Corresponding Hesiod file: [{}]({}). Use [Ctrl+I] in the node editor to import a hsd file within your current project. \n\n> **Note:** Example files are kept up-to-date with the latest version of [Hesiod](https://github.com/otto-link/Hesiod).\n> If you find an error, please [open an issue](https://github.com/otto-link/Hesiod/issues).'.format(hsd_fname, os.path.join(hsd_relative_path, hsd_fname)));
             md_file.new_paragraph()
         else:
             md_file.new_paragraph('No example available.');

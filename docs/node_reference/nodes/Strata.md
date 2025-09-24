@@ -32,7 +32,8 @@ Erosion/Stratify
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |angle|Float|No description|
-|apply_mask|Bool|No description|
+|apply_elevation_mask|Bool|No description|
+|apply_ridge_mask|Bool|No description|
 |gamma|Float|No description|
 |gamma_noise_ratio|Float|No description|
 |kz|Float|No description|
@@ -66,7 +67,7 @@ Erosion/Stratify
 
 ![img](../../images/nodes/Strata_hsd_example.png)
 
-Corresponding Hesiod file: [Strata.hsd](../../examples/Strata.hsd). 
+Corresponding Hesiod file: [Strata.hsd](../../examples/Strata.hsd). Use [Ctrl+I] in the node editor to import a hsd file within your current project. 
 
 > **Note:** Example files are kept up-to-date with the latest version of [Hesiod](https://github.com/otto-link/Hesiod).
 > If you find an error, please [open an issue](https://github.com/otto-link/Hesiod/issues).

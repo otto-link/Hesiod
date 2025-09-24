@@ -49,8 +49,7 @@ void compute_select_midrange_node(BaseNode *p_node)
     hmap::transform(
         *p_out,
         *p_in,
-        [p_node, vmin, vmax](hmap::Array &array)
-        {
+        [p_node, vmin, vmax](hmap::Array &array) {
           return hmap::select_midrange(array, GET("gain", FloatAttribute), vmin, vmax);
         });
 

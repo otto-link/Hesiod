@@ -19,9 +19,12 @@ void setup_preview_node(BaseNode *p_node)
 
   // port(s)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "elevation");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "water_depth");
   p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "scalar");
   p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture");
   p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "normal map");
+  p_node->add_port<hmap::Cloud>(gnode::PortType::IN, "cloud");
+  p_node->add_port<hmap::Path>(gnode::PortType::IN, "path");
 }
 
 void compute_preview_node(BaseNode *p_node)

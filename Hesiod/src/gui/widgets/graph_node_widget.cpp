@@ -1,6 +1,8 @@
 /* Copyright (c) 2025 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include <exception>
+
 #include <QApplication>
 #include <QFileDialog>
 #include <QMenu>
@@ -17,10 +19,11 @@
 #include "hesiod/gui/gui_utils.hpp"
 #include "hesiod/gui/style.hpp"
 #include "hesiod/gui/widgets/custom_qmenu.hpp"
+#include "hesiod/gui/widgets/documentation_popup.hpp"
 #include "hesiod/gui/widgets/graph_node_widget.hpp"
 #include "hesiod/gui/widgets/model_config_widget.hpp"
 #include "hesiod/gui/widgets/select_string_dialog.hpp"
-#include "hesiod/gui/widgets/viewer3d.hpp"
+#include "hesiod/gui/widgets/viewers/viewer_3d.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/graph_node.hpp"
 #include "hesiod/model/nodes/node_factory.hpp"
@@ -29,15 +32,51 @@
 namespace hesiod
 {
 
-GraphNodeWidget::GraphNodeWidget(GraphNode *p_graph_node)
-    : GraphViewer(p_graph_node->get_id()), p_graph_node(p_graph_node)
+GraphNodeWidget::GraphNodeWidget(GraphNode *p_graph_node, QWidget *parent)
+    : GraphViewer(p_graph_node->get_id(), parent), p_graph_node(p_graph_node)
 {
   LOG->trace("GraphNodeWidget::GraphNodeWidget: id: {}", this->get_id());
 
   // populate node catalog
   this->set_node_inventory(get_node_inventory());
-
   this->setup_connections();
+}
+
+void GraphNodeWidget::automatic_node_layout()
+{
+  LOG->trace("GraphNodeWidget::automatic_node_layout");
+
+  if (!this->p_graph_node)
+    return;
+
+  std::vector<gnode::Point> points = this->p_graph_node->compute_graph_layout_sugiyama();
+
+  QPointF delta = QPointF(256, 256);
+  QRectF  bbox = this->get_bounding_box();
+  QPointF origin = bbox.topLeft(); // QPointF(bbox.left(), bbox.center().y());
+
+  size_t k = 0;
+
+  for (auto &[nid, _] : this->p_graph_node->get_nodes())
+  {
+    if (k > points.size() - 1)
+    {
+      LOG->error("GraphNodeWidget::automatic_node_layout: computed layout is incoherent "
+                 "with current graphics node layout");
+      return;
+    }
+
+    QPointF scene_pos = origin +
+                        QPointF(points[k].x * delta.x(), points[k].y * delta.y());
+    k++;
+
+    gngui::GraphicsNode *p_gfx_node = this->get_graphics_node_by_id(nid);
+
+    if (p_gfx_node)
+      p_gfx_node->setPos(scene_pos);
+  }
+
+  QTimer::singleShot(0, this, [this]() { this->zoom_to_content(); });
 }
 
 void GraphNodeWidget::clear_all()
@@ -50,22 +89,19 @@ void GraphNodeWidget::clear_all()
 
 void GraphNodeWidget::clear_data_viewers()
 {
-  for (auto &v : this->data_viewers)
+  for (auto &viewer : this->data_viewers)
   {
-    AbstractViewer *p_viewer = dynamic_cast<AbstractViewer *>(v.get());
-    p_viewer->clear();
+    if (Viewer *p_viewer = dynamic_cast<Viewer *>(viewer.get()))
+      p_viewer->clear();
   }
-
   this->data_viewers.clear();
 }
 
 void GraphNodeWidget::clear_graphic_scene()
 {
   this->set_enabled(false);
-
   this->clear_data_viewers();
   GraphViewer::clear();
-
   this->set_enabled(true);
 }
 
@@ -75,12 +111,21 @@ void GraphNodeWidget::closeEvent(QCloseEvent *event)
   gngui::GraphViewer::closeEvent(event);
 }
 
-GraphNode *GraphNodeWidget::get_p_graph_node() { return this->p_graph_node; }
+GraphNode *GraphNodeWidget::get_p_graph_node()
+{
+  if (!this->p_graph_node)
+  {
+    LOG->critical("GraphNodeWidget::get_p_graph_node: model graph_node reference is a "
+                  "dangling ptr");
+    throw std::runtime_error("dangling ptr");
+  }
+
+  return this->p_graph_node;
+}
 
 void GraphNodeWidget::json_from(nlohmann::json const &json)
 {
   LOG->trace("GraphNodeWidget::json_from");
-
   this->clear_graphic_scene();
 
   // to prevent nodes update at each link creation when the loading
@@ -88,6 +133,29 @@ void GraphNodeWidget::json_from(nlohmann::json const &json)
   this->update_node_on_connection_finished = false;
   GraphViewer::json_from(json);
   this->update_node_on_connection_finished = true;
+
+  // viewers
+  if (json.contains("viewers") && json["viewers"].is_array())
+  {
+    for (const auto &viewer_json : json["viewers"])
+    {
+      ViewerType viewer_type = viewer_json["viewer_type"].get<ViewerType>();
+
+      LOG->trace("GraphNodeWidget::json_from: viewer_type: {}",
+                 viewer_type_as_string.at(viewer_type));
+
+      // TODO add viewer-type specific handling
+      this->on_viewport_request();
+
+      if (auto *p_viewer = dynamic_cast<Viewer3D *>(this->data_viewers.back().get()))
+        p_viewer->json_from(viewer_json);
+      else
+        LOG->error("GraphNodeWidget::json_from: could not retrieve viewer reference");
+    }
+  }
+
+  // Qt mystery, this needs to be delayed to be effective
+  QTimer::singleShot(0, this, [this]() { this->zoom_to_content(); });
 }
 
 nlohmann::json GraphNodeWidget::json_import(nlohmann::json const &json, QPointF scene_pos)
@@ -148,7 +216,16 @@ nlohmann::json GraphNodeWidget::json_import(nlohmann::json const &json, QPointF 
 nlohmann::json GraphNodeWidget::json_to() const
 {
   LOG->trace("GraphNodeWidget::json_to");
-  return GraphViewer::json_to();
+  nlohmann::json json = GraphViewer::json_to();
+
+  // add the viewports
+  for (auto &sp_widget : this->data_viewers)
+    if (auto *p_viewer = dynamic_cast<Viewer *>(sp_widget.get()))
+    {
+      json["viewers"].push_back(p_viewer->json_to());
+    }
+
+  return json;
 }
 
 void GraphNodeWidget::on_connection_deleted(const std::string &id_out,
@@ -370,17 +447,6 @@ void GraphNodeWidget::on_graph_settings_request()
 
   if (ret)
   {
-    // reset viewport to avoid any issues but save their state to set
-    // it back afterwards
-    std::vector<nlohmann::json> json_states = {};
-
-    for (auto &sp_widget : this->data_viewers)
-      if (auto *p_viewer = dynamic_cast<AbstractViewer *>(sp_widget.get()))
-      {
-        json_states.push_back(p_viewer->json_to());
-        p_viewer->clear();
-      }
-
     // backup selected node
     const std::string selected_id = this->get_selected_node_ids().empty()
                                         ? ""
@@ -417,12 +483,6 @@ void GraphNodeWidget::on_graph_settings_request()
       gfx_node_ref_map.at(id)->set_p_node_proxy(p_proxy);
       gfx_node_ref_map.at(id)->setSelected(false);
     }
-
-    // set back viewport states
-    size_t k = 0;
-    for (auto &sp_widget : this->data_viewers)
-      if (auto *p_viewer = dynamic_cast<AbstractViewer *>(sp_widget.get()))
-        p_viewer->json_from(json_states[k++]);
 
     // set selection back, Qt mystery, this needs to be delayed to be effective
     gngui::GraphicsNode *p_gfx_node = this->get_graphics_node_by_id(selected_id);
@@ -490,6 +550,27 @@ void GraphNodeWidget::on_node_deleted_request(const std::string &node_id)
   this->p_graph_node->remove_node(node_id);
 
   Q_EMIT this->node_deleted(this->get_id(), node_id);
+}
+
+void GraphNodeWidget::on_node_pinned(const std::string &node_id, bool state)
+{
+  LOG->trace("GraphNodeWidget::on_node_pinned, node {}", node_id);
+
+  this->unpin_nodes();
+
+  if (!node_id.empty())
+  {
+    // TODO make a dedicated GraphViewer method
+    BaseNode *p_node = this->p_graph_node->get_node_ref_by_id<BaseNode>(node_id);
+    if (!p_node)
+      return;
+
+    gngui::GraphicsNode *p_gx_node = this->get_graphics_node_by_id(node_id);
+    if (!p_gx_node)
+      return;
+
+    p_gx_node->set_is_node_pinned(state);
+  }
 }
 
 void GraphNodeWidget::on_node_reload_request(const std::string &node_id)
@@ -801,14 +882,14 @@ void GraphNodeWidget::on_viewport_request()
 {
   LOG->trace("GraphNodeWidget::on_viewport_request");
 
-  this->data_viewers.push_back(std::make_unique<Viewer3d>(this));
+  this->data_viewers.push_back(std::make_unique<Viewer3D>(this));
   this->data_viewers.back()->show();
 
-  Viewer3d *p_viewer = dynamic_cast<Viewer3d *>(this->data_viewers.back().get());
+  Viewer *p_viewer = dynamic_cast<Viewer *>(this->data_viewers.back().get());
 
   // remove the widget from the widget list if it is closed
   this->connect(p_viewer,
-                &Viewer3d::widget_close,
+                &Viewer::widget_close,
                 [this, p_viewer]()
                 {
                   std::erase_if(this->data_viewers,
@@ -831,6 +912,11 @@ void GraphNodeWidget::set_json_copy_buffer(nlohmann::json const &new_json_copy_b
 void GraphNodeWidget::setup_connections()
 {
   // global actions
+  this->connect(this,
+                &gngui::GraphViewer::graph_automatic_node_layout_request,
+                this,
+                &GraphNodeWidget::automatic_node_layout);
+
   this->connect(this,
                 &gngui::GraphViewer::graph_clear_request,
                 this,
@@ -927,6 +1013,17 @@ void GraphNodeWidget::setup_connections()
                 &GraphNode::update_finished,
                 this,
                 &gngui::GraphViewer::on_update_finished);
+
+  // w/ itself
+  this->connect(this->p_graph_node,
+                &GraphNode::update_started,
+                this,
+                []() { QApplication::setOverrideCursor(Qt::WaitCursor); });
+
+  this->connect(this->p_graph_node,
+                &GraphNode::update_finished,
+                this,
+                []() { QApplication::restoreOverrideCursor(); });
 }
 
 } // namespace hesiod

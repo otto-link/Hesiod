@@ -31,6 +31,7 @@ Math/Gradient
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|unwrap_angle|Bool|No description|
 
 # Example
 

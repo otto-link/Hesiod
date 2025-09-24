@@ -39,4 +39,10 @@ Geometry/Path
 # Example
 
 
-No example available.
+![img](../../images/nodes/PathFractalize_hsd_example.png)
+
+Corresponding Hesiod file: [PathFractalize.hsd](../../examples/PathFractalize.hsd). Use [Ctrl+I] in the node editor to import a hsd file within your current project. 
+
+> **Note:** Example files are kept up-to-date with the latest version of [Hesiod](https://github.com/otto-link/Hesiod).
+> If you find an error, please [open an issue](https://github.com/otto-link/Hesiod/issues).
+

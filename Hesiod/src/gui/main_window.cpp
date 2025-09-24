@@ -2,6 +2,7 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include <filesystem>
+#include <fstream>
 #include <iostream>
 #include <sstream>
 
@@ -17,7 +18,9 @@
 #include "Toast.h"
 
 #include "hesiod/config.hpp"
+#include "hesiod/gui/gui_utils.hpp"
 #include "hesiod/gui/main_window.hpp"
+#include "hesiod/gui/widgets/documentation_popup.hpp"
 #include "hesiod/gui/widgets/graph_manager_widget.hpp"
 #include "hesiod/gui/widgets/graph_tabs_widget.hpp"
 #include "hesiod/logger.hpp"
@@ -475,6 +478,11 @@ void MainWindow::setup_menu_bar()
 
   QMenu *help = menuBar()->addMenu("&Help");
 
+  auto *quick_help = new QAction("Quick help", this);
+  help->addAction(quick_help);
+
+  help->addSeparator();
+
   auto *about = new QAction("&About", this);
   help->addAction(about);
 
@@ -482,6 +490,7 @@ void MainWindow::setup_menu_bar()
 
   this->connect(new_action, &QAction::triggered, this, &MainWindow::on_new);
   this->connect(load, &QAction::triggered, this, &MainWindow::on_load);
+  this->connect(quick_help, &QAction::triggered, this, &MainWindow::show_quick_help);
   this->connect(about, &QAction::triggered, this, &MainWindow::show_about);
 
   this->connect(show_node_settings_pan_action,
@@ -539,6 +548,27 @@ void MainWindow::show_about()
   QMessageBox msg_box;
   msg_box.setText(msg.c_str());
   msg_box.exec();
+}
+
+void MainWindow::show_quick_help()
+{
+  LOG->trace("MainWindow::show_quick_help");
+
+  std::string html_source = "";
+
+  std::ifstream file(HSD_QUICK_HELP_HTML);
+  if (file.is_open())
+  {
+    std::ostringstream buffer;
+    buffer << file.rdbuf(); // read the entire file into the buffer
+    html_source = buffer.str();
+    file.close();
+  }
+
+  DocumentationPopup *popup = new DocumentationPopup("Hesiod Quick Help", html_source);
+
+  popup->setAttribute(Qt::WA_DeleteOnClose);
+  popup->show();
 }
 
 void MainWindow::show_viewport()

@@ -8,6 +8,7 @@
 
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
+#include "hesiod/model/nodes/base_node_gui.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
 
 using namespace attr;
@@ -48,7 +49,8 @@ void setup_strata_node(BaseNode *p_node)
   ADD_ATTR(FloatAttribute, "ridge_noise_amp", 0.4f, 0.f, 1.f);
   ADD_ATTR(FloatAttribute, "ridge_clamp_vmin", 0.5f, 0.f, 1.f);
   ADD_ATTR(FloatAttribute, "ridge_remap_vmin", 0.6f, 0.f, 1.f);
-  ADD_ATTR(BoolAttribute, "apply_mask", true);
+  ADD_ATTR(BoolAttribute, "apply_elevation_mask", true);
+  ADD_ATTR(BoolAttribute, "apply_ridge_mask", true);
   ADD_ATTR(FloatAttribute, "mask_gamma", 1.f, 0.01f, 4.f);
 
   // attribute(s) order
@@ -72,12 +74,15 @@ void setup_strata_node(BaseNode *p_node)
                                 "ridge_noise_amp",
                                 "ridge_clamp_vmin",
                                 "ridge_remap_vmin",
-                                "_TEXT_Elevation mask",
-                                "apply_mask",
+                                "_TEXT_Masking",
+                                "apply_elevation_mask",
+                                "apply_ridge_mask",
                                 "mask_gamma"});
 
   setup_pre_process_mask_attributes(p_node);
   setup_post_process_heightmap_attributes(p_node, true);
+
+  add_wip_warning_label(p_node);
 }
 
 void compute_strata_node(BaseNode *p_node)
@@ -130,7 +135,8 @@ void compute_strata_node(BaseNode *p_node)
                             GET("ridge_noise_amp", FloatAttribute),
                             GET("ridge_clamp_vmin", FloatAttribute),
                             GET("ridge_remap_vmin", FloatAttribute),
-                            GET("apply_mask", BoolAttribute),
+                            GET("apply_elevation_mask", BoolAttribute),
+                            GET("apply_ridge_mask", BoolAttribute),
                             GET("mask_gamma", FloatAttribute),
                             pa_mask,
                             bbox);
