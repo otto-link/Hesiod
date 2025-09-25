@@ -79,7 +79,19 @@ R""(
     {
 	background-color: #4772b3;
     }
- 
+
+    QTableView::indicator
+    {
+    	width: 14px;
+	height: 14px;
+	border: 1px solid #DFE1E2;
+    }
+    
+    QTableView::indicator:checked
+    {
+	background-color: #DFE1E2;
+    }
+    
     /* QComboBox */
     
     QComboBox

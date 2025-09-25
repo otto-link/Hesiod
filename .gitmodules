@@ -22,3 +22,6 @@
 [submodule "external/QTerrainRenderer"]
 	path = external/QTerrainRenderer
 	url = git@github.com:otto-link/QTerrainRenderer.git
+[submodule "external/QTextureDownloader"]
+	path = external/QTextureDownloader
+	url = git@github.com:otto-link/QTextureDownloader.git

@@ -34,6 +34,8 @@ public:
   GraphNode *get_p_graph_node();
   void       set_json_copy_buffer(nlohmann::json const &new_json_copy_buffer);
 
+  void add_import_texture_nodes(const std::vector<std::string> &texture_paths);
+
 signals:
   // --- User Actions Signals ---
   void copy_buffer_has_changed(const nlohmann::json &new_json);

@@ -66,6 +66,28 @@ void GraphTabsWidget::clear()
   this->node_settings_widget_map.clear();
 }
 
+std::string GraphTabsWidget::get_selected_graph_id() const
+{
+  QString selected_tab_text = this->tab_widget->tabText(this->tab_widget->currentIndex());
+  return selected_tab_text.toStdString();
+}
+
+void GraphTabsWidget::on_textures_request(const std::vector<std::string> &texture_paths)
+{
+  Logger::log()->trace("GraphTabsWidget::on_textures_request");
+
+  if (texture_paths.empty())
+    return;
+
+  std::string graph_id = this->get_selected_graph_id();
+
+  GraphNodeWidget *gnw = this->graph_node_widget_map.at(graph_id);
+  if (gnw)
+    gnw->add_import_texture_nodes(texture_paths);
+  else
+    Logger::log()->error("GraphTabsWidget::on_textures_request: dangling ptr");
+}
+
 void GraphTabsWidget::json_from(nlohmann::json const &json)
 {
   this->update_tab_widget();

@@ -17,6 +17,8 @@
 
 #include "nlohmann/json.hpp"
 
+#include "qtd/texture_downloader.hpp"
+
 #define HSD_SETTINGS_ORG "olink"
 #define HSD_SETTINGS_APP "hesiod"
 #define HSD_SETTINGS_JSON "hesiod_settings.json"
@@ -24,16 +26,12 @@
 #define HSD_APP_ICON "data/hesiod_icon.png"
 #define HSD_QUICK_HELP_HTML "data/quick_start.html"
 
-// TODO DBG
-#include "hesiod/gui/widgets/graph_node_widget.hpp"
-
 namespace hesiod
 {
 
 // forward
 class GraphManagerWidget;
 class GraphTabsWidget;
-
 class GraphManager;
 
 // =====================================
@@ -108,10 +106,11 @@ private:
   std::unique_ptr<GraphTabsWidget>    graph_tabs_widget;
 
   // --- Members ---
-  std::filesystem::path project_path = "";
-  bool                  is_dirty = false;
-  QTimer               *autosave_timer; // own by this
-  bool                  show_node_settings_pan = false;
+  std::filesystem::path  project_path = "";
+  bool                   is_dirty = false;
+  QTimer                *autosave_timer; // own by this
+  bool                   show_node_settings_pan = false;
+  qtd::TextureDownloader texture_downloader;
 };
 
 // =====================================
