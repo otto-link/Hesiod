@@ -39,6 +39,8 @@ public:
   void           json_from(nlohmann::json const &json);
   nlohmann::json json_to() const;
 
+  std::string get_selected_graph_id() const;
+
   QSize sizeHint() const override;
 
 signals:
@@ -53,6 +55,7 @@ public slots:
   void on_has_been_cleared(const std::string &graph_id);
   void on_new_node_created(const std::string &graph_id, const std::string &id);
   void on_node_deleted(const std::string &graph_id, const std::string &id);
+  void on_textures_request(const std::vector<std::string> &texture_paths);
 
   void set_selected_tab(const std::string &graph_id);
   void show_viewport();

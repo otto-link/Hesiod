@@ -15,6 +15,7 @@
 
 #include "attributes/widgets/abstract_widget.hpp"
 #include "attributes/widgets/attributes_widget.hpp"
+#include "attributes/widgets/filename_widget.hpp"
 
 #include "hesiod/gui/gui_utils.hpp"
 #include "hesiod/gui/style.hpp"
@@ -40,6 +41,46 @@ GraphNodeWidget::GraphNodeWidget(GraphNode *p_graph_node, QWidget *parent)
   // populate node catalog
   this->set_node_inventory(get_node_inventory());
   this->setup_connections();
+}
+
+void GraphNodeWidget::add_import_texture_nodes(
+    const std::vector<std::string> &texture_paths)
+{
+  QRectF  bbox = this->get_bounding_box();
+  QPointF delta = QPointF(128.f, 256.f);
+
+  float dy = 0.f;
+  for (auto &fname : texture_paths)
+  {
+    Logger::log()->trace("GraphNodeWidget::add_import_texture_nodes: {}", fname);
+
+    // create both model and graphic nodes
+    std::string node_id = this->on_new_node_request("ImportTexture",
+                                                    bbox.topRight() +
+                                                        QPointF(delta.x(), dy));
+
+    // setup attributes
+    BaseNode *p_node = this->p_graph_node->get_node_ref_by_id<BaseNode>(node_id);
+    if (p_node)
+    {
+      // p_node->json_from(json_node["settings"]);
+      // p_node->set_id(node_id);
+      auto *p_attr = p_node->get_attr_ref()
+                         ->at("fname")
+                         ->get_ref<attr::FilenameAttribute>();
+      p_attr->set_value(fname);
+
+      p_node->compute();
+    }
+    else
+    {
+      Logger::log()->error(
+          "GraphNodeWidget::add_import_texture_nodes: dangling ptr for node_id {}",
+          node_id);
+    }
+
+    dy += delta.y();
+  }
 }
 
 void GraphNodeWidget::automatic_node_layout()

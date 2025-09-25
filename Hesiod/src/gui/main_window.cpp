@@ -100,6 +100,15 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
                 [this](const std::string &graph_id, const std::string & /* id */)
                 { this->graph_manager_widget->update_combobox(graph_id); });
 
+  // qtd::TextureDownloader -> GraphTabsWidget
+
+  this->connect(&this->texture_downloader,
+                &qtd::TextureDownloader::textures_retrieved,
+                this->graph_tabs_widget.get(),
+                &GraphTabsWidget::on_textures_request);
+
+  // TODO connect "get"
+
   // MainWindow -> MainWindow
   this->autosave_timer = new QTimer(this);
   this->autosave_timer->setSingleShot(true); // restarts on project change
@@ -470,6 +479,13 @@ void MainWindow::setup_menu_bar()
 
   view_menu->addSeparator();
 
+  auto *show_texture_downloader = new QAction("Texture downloader", this);
+  show_texture_downloader->setCheckable(true);
+  show_texture_downloader->setChecked(this->texture_downloader.isVisible());
+  view_menu->addAction(show_texture_downloader);
+
+  view_menu->addSeparator();
+
   auto *show_node_settings_pan_action = new QAction("Show node settings pan", this);
   show_node_settings_pan_action->setCheckable(true);
   show_node_settings_pan_action->setChecked(this->show_node_settings_pan);
@@ -518,11 +534,24 @@ void MainWindow::setup_menu_bar()
                 &GraphManagerWidget::window_closed,
                 [show_layout_manager]() { show_layout_manager->setChecked(false); });
 
+  this->connect(show_texture_downloader,
+                &QAction::triggered,
+                this,
+                [this, show_texture_downloader]()
+                {
+                  bool state = this->texture_downloader.isVisible();
+                  this->texture_downloader.setVisible(!state);
+                  show_texture_downloader->setChecked(!state);
+                });
+
+  this->connect(&this->texture_downloader,
+                &qtd::TextureDownloader::window_closed,
+                [show_texture_downloader]()
+                { show_texture_downloader->setChecked(false); });
+
   // save / save as
   this->connect(save, &QAction::triggered, this, &MainWindow::on_save);
-
   this->connect(save_as, &QAction::triggered, this, &MainWindow::on_save_as);
-
   this->connect(save_copy, &QAction::triggered, this, &MainWindow::on_save_copy);
 
   // --- graphs
