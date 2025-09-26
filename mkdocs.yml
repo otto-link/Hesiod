@@ -218,6 +218,8 @@ nav:
     - 'node_reference/nodes/Terrace.md'
     - 'node_reference/nodes/TextureQuiltingExpand.md'
     - 'node_reference/nodes/TextureQuiltingShuffle.md'
+    - 'node_reference/nodes/TextureSplitChannels.md'
+    - 'node_reference/nodes/TextureToHeightmap.md'
     - 'node_reference/nodes/TextureUvChecker.md'
     - 'node_reference/nodes/Thermal.md'
     - 'node_reference/nodes/ThermalAutoBedrock.md'
