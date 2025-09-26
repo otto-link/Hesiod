@@ -96,11 +96,11 @@ void run_batch_mode(const std::string     &filename,
                     const hmap::Vec2<int> &tiling,
                     float                  overlap)
 {
-  LOG->info("executing Hesiod in batch mode");
-  LOG->trace("file: {}", filename);
-  LOG->trace("cli shape: {{{}, {}}}", shape.x, shape.y);
-  LOG->trace("cli tiling: {{{}, {}}}", tiling.x, tiling.y);
-  LOG->trace("cli overlap: {}", overlap);
+  Logger::log()->info("executing Hesiod in batch mode");
+  Logger::log()->trace("file: {}", filename);
+  Logger::log()->trace("cli shape: {{{}, {}}}", shape.x, shape.y);
+  Logger::log()->trace("cli tiling: {{{}, {}}}", tiling.x, tiling.y);
+  Logger::log()->trace("cli overlap: {}", overlap);
 
   // define actual computation configuration based on CLI inputs. If
   // nothing is provided, use the configs from the input file but if
@@ -119,10 +119,10 @@ void run_batch_mode(const std::string     &filename,
                           : ((config->tiling.x == 1 && config->tiling.y == 1) ? 0.f
                                                                               : 0.5f);
 
-    LOG->info("graph configurations will be overriden:");
-    LOG->info("compute shape: {{{}, {}}}", config->shape.x, config->shape.y);
-    LOG->info("compute tiling: {{{}, {}}}", config->tiling.x, config->tiling.y);
-    LOG->info("compute overlap: {}", config->overlap);
+    Logger::log()->info("graph configurations will be overriden:");
+    Logger::log()->info("compute shape: {{{}, {}}}", config->shape.x, config->shape.y);
+    Logger::log()->info("compute tiling: {{{}, {}}}", config->tiling.x, config->tiling.y);
+    Logger::log()->info("compute overlap: {}", config->overlap);
 
     p_input_config = config.get();
   }
@@ -137,7 +137,7 @@ void run_batch_mode(const std::string     &filename,
 
 void run_node_inventory()
 {
-  LOG->info("executing Hesiod in node inventory mode");
+  Logger::log()->info("executing Hesiod in node inventory mode");
   hesiod::dump_node_inventory("node_inventory");
 
   auto config = std::make_shared<hesiod::ModelConfig>();
@@ -148,7 +148,7 @@ void run_node_inventory()
 
 void run_snapshot_generation()
 {
-  LOG->info("executing Hesiod in snapshot generation mode");
+  Logger::log()->info("executing Hesiod in snapshot generation mode");
 
   std::map<std::string, std::string> inventory = get_node_inventory();
 
@@ -160,13 +160,13 @@ void run_snapshot_generation()
 
   for (auto &[node_type, _] : inventory)
   {
-    // LOG->trace("node type: {}", node_type);
+    // Logger::log()->trace("node type: {}", node_type);
 
     const std::string fname = ex_path + node_type + ".hsd";
 
     if (std::filesystem::exists(fname))
     {
-      LOG->trace("- default file exists: {}", fname);
+      Logger::log()->trace("- default file exists: {}", fname);
 
       main_window->clear_all();
       main_window->load_from_file(fname);

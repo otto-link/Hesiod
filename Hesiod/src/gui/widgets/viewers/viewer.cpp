@@ -21,7 +21,7 @@ Viewer::Viewer(GraphNodeWidget   *p_graph_node_widget_,
     : QWidget(parent), p_graph_node_widget(p_graph_node_widget_),
       viewer_type(viewer_type_), label(label_)
 {
-  LOG->trace("Viewer::Viewer");
+  Logger::log()->trace("Viewer::Viewer");
 
   this->setMinimumSize(HSD_CONFIG->viewer.width, HSD_CONFIG->viewer.height);
   this->setWindowTitle(this->label.c_str());
@@ -46,14 +46,15 @@ void Viewer::closeEvent(QCloseEvent *event)
 
 ViewerNodeParam Viewer::get_default_view_param() const
 {
-  LOG->critical("Viewer::get_default_view_param: using abstract class method, this "
-                "should not be happening");
+  Logger::log()->critical(
+      "Viewer::get_default_view_param: using abstract class method, this "
+      "should not be happening");
   return ViewerNodeParam();
 }
 
 void Viewer::json_from(nlohmann::json const &json)
 {
-  LOG->trace("Viewer::json_from");
+  Logger::log()->trace("Viewer::json_from");
 
   // widget geometry
   int x = json["x"];
@@ -76,7 +77,7 @@ void Viewer::json_from(nlohmann::json const &json)
 
 nlohmann::json Viewer::json_to() const
 {
-  LOG->trace("Viewer::json_to");
+  Logger::log()->trace("Viewer::json_to");
 
   nlohmann::json json;
 
@@ -101,7 +102,7 @@ nlohmann::json Viewer::json_to() const
 
 void Viewer::on_node_deleted(const std::string &new_id)
 {
-  LOG->trace("Viewer::on_node_deleted {}", new_id);
+  Logger::log()->trace("Viewer::on_node_deleted {}", new_id);
 
   if (new_id == this->current_node_id)
     this->clear();
@@ -109,7 +110,7 @@ void Viewer::on_node_deleted(const std::string &new_id)
 
 void Viewer::on_node_deselected(const std::string &new_id)
 {
-  LOG->trace("Viewer::on_node_deselected {}", new_id);
+  Logger::log()->trace("Viewer::on_node_deselected {}", new_id);
 
   // prevent any setup change if the current node is pinned
   if (this->is_node_pinned)
@@ -121,7 +122,7 @@ void Viewer::on_node_deselected(const std::string &new_id)
 
 void Viewer::on_node_pinned_changed()
 {
-  LOG->trace("Viewer::on_node_pinned_changed");
+  Logger::log()->trace("Viewer::on_node_pinned_changed");
 
   if (this->current_node_id.empty())
   {
@@ -164,7 +165,7 @@ void Viewer::on_node_pinned_changed()
 
 void Viewer::on_node_selected(const std::string &new_id)
 {
-  LOG->trace("Viewer::on_node_selected {}", new_id);
+  Logger::log()->trace("Viewer::on_node_selected {}", new_id);
 
   // prevent any setup change if the current node is pinned
   if (this->is_node_pinned)
@@ -178,7 +179,8 @@ BaseNode *Viewer::safe_get_node()
   GraphNodeWidget *p_gw = this->p_graph_node_widget;
   if (!p_gw)
   {
-    LOG->error("Viewer::safe_get_node: corresponding graph viewer is dangling ptr");
+    Logger::log()->error(
+        "Viewer::safe_get_node: corresponding graph viewer is dangling ptr");
     return nullptr;
   }
 
@@ -186,7 +188,8 @@ BaseNode *Viewer::safe_get_node()
       this->current_node_id);
   if (!p_node)
   {
-    LOG->error("Viewer::safe_get_node: corresponding graph node is dangling ptr");
+    Logger::log()->error(
+        "Viewer::safe_get_node: corresponding graph node is dangling ptr");
     return nullptr;
   }
 
@@ -195,7 +198,7 @@ BaseNode *Viewer::safe_get_node()
 
 void Viewer::set_current_node_id(const std::string &new_id)
 {
-  LOG->trace("Viewer::set_current_node_id: {}", new_id);
+  Logger::log()->trace("Viewer::set_current_node_id: {}", new_id);
 
   // store current view state
   if (this->current_node_id != "")
@@ -228,7 +231,7 @@ void Viewer::set_current_node_id(const std::string &new_id)
 
 void Viewer::setup_connections()
 {
-  LOG->trace("Viewer::setup_connections");
+  Logger::log()->trace("Viewer::setup_connections");
 
   this->connect(this->p_graph_node_widget,
                 &gngui::GraphViewer::node_deleted,
@@ -252,7 +255,7 @@ void Viewer::setup_connections()
 
   this->connect(this->p_graph_node_widget->get_p_graph_node(),
                 &GraphNode::compute_finished,
-                [this](const std::string &graph_id, const std::string &id)
+                [this](const std::string & /* graph_id */, const std::string &id)
                 {
                   if (id == this->current_node_id)
                     this->update_renderer();
@@ -281,7 +284,7 @@ void Viewer::setup_connections()
 
 void Viewer::setup_layout()
 {
-  LOG->trace("Viewer::setup_layout");
+  Logger::log()->trace("Viewer::setup_layout");
 
   // create and assign new layout
   QGridLayout *layout = new QGridLayout(this);
@@ -311,13 +314,14 @@ void Viewer::setup_layout()
 
 void Viewer::update_renderer()
 {
-  LOG->critical("Viewer::update_renderer: using abstract class method, this should not "
-                "be happening");
+  Logger::log()->critical(
+      "Viewer::update_renderer: using abstract class method, this should not "
+      "be happening");
 }
 
 void Viewer::update_widgets()
 {
-  LOG->trace("Viewer::update_widgets");
+  Logger::log()->trace("Viewer::update_widgets");
 
   // --- update pinned node button
 

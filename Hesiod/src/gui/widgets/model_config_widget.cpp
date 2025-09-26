@@ -137,18 +137,18 @@ ModelConfigWidget::ModelConfigWidget(ModelConfig *p_model_config,
     device_combobox->setCurrentText(
         QString::fromStdString(cl_device_map.at(current_device)));
 
-    this->connect(device_combobox,
-                  QOverload<int>::of(&QComboBox::currentIndexChanged),
-                  [device_combobox, cl_device_map]()
-                  {
-                    size_t choice_index = static_cast<size_t>(
-                        device_combobox->currentIndex());
-                    LOG->trace("Selected OpenCL device index: {}", choice_index);
-                    if (clwrapper::DeviceManager::get_instance().set_device(choice_index))
-                      clwrapper::KernelManager::get_instance().build_program();
-                    else
-                      LOG->error("OpenCL device selection failed");
-                  });
+    this->connect(
+        device_combobox,
+        QOverload<int>::of(&QComboBox::currentIndexChanged),
+        [device_combobox, cl_device_map]()
+        {
+          size_t choice_index = static_cast<size_t>(device_combobox->currentIndex());
+          Logger::log()->trace("Selected OpenCL device index: {}", choice_index);
+          if (clwrapper::DeviceManager::get_instance().set_device(choice_index))
+            clwrapper::KernelManager::get_instance().build_program();
+          else
+            Logger::log()->error("OpenCL device selection failed");
+        });
 
     layout->addWidget(device_combobox, row, 0, 1, 3);
     row++;
@@ -173,7 +173,7 @@ ModelConfigWidget::ModelConfigWidget(ModelConfig *p_model_config,
                     [this, combobox, &mode]()
                     {
                       std::string current_choice = combobox->currentText().toStdString();
-                      LOG->trace("Selected transform mode: {}", current_choice);
+                      Logger::log()->trace("Selected transform mode: {}", current_choice);
                       mode = static_cast<hmap::TransformMode>(
                           hmap::transform_mode_as_string.at(current_choice));
                     });

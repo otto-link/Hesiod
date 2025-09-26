@@ -16,7 +16,7 @@ namespace hesiod
 
 void setup_debug_node(BaseNode *p_node)
 {
-  LOG->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", p_node->get_label());
 
   // port(s)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
@@ -76,7 +76,7 @@ void compute_debug_node(BaseNode *p_node)
 {
   Q_EMIT p_node->compute_started(p_node->get_id());
 
-  LOG->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
   // nothing here  on purpose
 

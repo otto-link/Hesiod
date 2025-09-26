@@ -18,7 +18,7 @@ namespace hesiod
 
 void setup_path_from_csv_node(BaseNode *p_node)
 {
-  LOG->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", p_node->get_label());
 
   // port(s)
   p_node->add_port<hmap::Path>(gnode::PortType::OUT, "path");
@@ -38,7 +38,7 @@ void compute_path_from_csv_node(BaseNode *p_node)
 {
   Q_EMIT p_node->compute_started(p_node->get_id());
 
-  LOG->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
   hmap::Path *p_out = p_node->get_value_ref<hmap::Path>("path");
 
@@ -52,11 +52,12 @@ void compute_path_from_csv_node(BaseNode *p_node)
     if (ret)
       *p_out = path_tmp;
     else
-      LOG->error("compute_path_from_csv_node: could not parse CSV file {}", fname);
+      Logger::log()->error("compute_path_from_csv_node: could not parse CSV file {}",
+                           fname);
   }
   else
   {
-    LOG->error("compute_path_from_csv_node: could not load CSV file {}", fname);
+    Logger::log()->error("compute_path_from_csv_node: could not load CSV file {}", fname);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

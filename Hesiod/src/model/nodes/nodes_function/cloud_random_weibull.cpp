@@ -15,7 +15,7 @@ namespace hesiod
 
 void setup_cloud_random_weibull_node(BaseNode *p_node)
 {
-  LOG->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", p_node->get_label());
 
   // port(s)
   p_node->add_port<hmap::Cloud>(gnode::PortType::OUT, "cloud");
@@ -36,7 +36,7 @@ void compute_cloud_random_weibull_node(BaseNode *p_node)
 {
   Q_EMIT p_node->compute_started(p_node->get_id());
 
-  LOG->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
   hmap::Cloud *p_out = p_node->get_value_ref<hmap::Cloud>("cloud");
 

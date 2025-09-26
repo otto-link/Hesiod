@@ -6,8 +6,6 @@
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/spdlog.h>
 
-#define LOG hesiod::Logger::log()
-
 namespace hesiod
 {
 

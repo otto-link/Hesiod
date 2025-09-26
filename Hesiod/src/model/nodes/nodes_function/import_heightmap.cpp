@@ -16,7 +16,7 @@ namespace hesiod
 
 void setup_import_heightmap_node(BaseNode *p_node)
 {
-  LOG->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", p_node->get_label());
 
   // port(s)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
@@ -39,7 +39,7 @@ void compute_import_heightmap_node(BaseNode *p_node)
 {
   Q_EMIT p_node->compute_started(p_node->get_id());
 
-  LOG->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
   hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
@@ -56,7 +56,8 @@ void compute_import_heightmap_node(BaseNode *p_node)
   }
   else
   {
-    LOG->error("compute_import_heightmap_node: could not load image file {}", fname);
+    Logger::log()->error("compute_import_heightmap_node: could not load image file {}",
+                         fname);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

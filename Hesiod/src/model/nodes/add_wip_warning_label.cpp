@@ -17,7 +17,7 @@ namespace hesiod
 
 void add_wip_warning_label(BaseNode *p_node)
 {
-  LOG->trace("add_wip_warning_label: node {}", p_node->get_label());
+  Logger::log()->trace("add_wip_warning_label: node {}", p_node->get_label());
 
   auto lambda = [](BaseNode *p_node)
   {

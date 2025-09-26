@@ -24,13 +24,13 @@ NodeSettingsWidget::NodeSettingsWidget(GraphNodeWidget *p_graph_node_widget,
                                        QWidget         *parent)
     : QWidget(parent), p_graph_node_widget(p_graph_node_widget)
 {
-  LOG->trace("NodeSettingsWidget::NodeSettingsWidget");
+  Logger::log()->trace("NodeSettingsWidget::NodeSettingsWidget");
 
   if (!p_graph_node_widget)
   {
     const std::string
         msg = "NodeSettingsWidget::NodeSettingsWidget: p_graph_node_widget is nullptr";
-    LOG->critical(msg);
+    Logger::log()->critical(msg);
     throw std::invalid_argument(msg);
   }
 
@@ -41,7 +41,7 @@ NodeSettingsWidget::NodeSettingsWidget(GraphNodeWidget *p_graph_node_widget,
 
 void NodeSettingsWidget::initialize_layout()
 {
-  LOG->trace("NodeSettingsWidget::initialize_layout");
+  Logger::log()->trace("NodeSettingsWidget::initialize_layout");
 
   this->layout = new QVBoxLayout(this);
 
@@ -75,14 +75,15 @@ void NodeSettingsWidget::initialize_layout()
 
 void NodeSettingsWidget::setup_connections()
 {
-  LOG->trace("NodeSettingsWidget::setup_connections");
+  Logger::log()->trace("NodeSettingsWidget::setup_connections");
 
   // Defensive local QPointer wrappers so we don't call through dangling raw pointers
   QPointer<GraphNodeWidget> graph_widget_ptr(this->p_graph_node_widget);
 
   if (!graph_widget_ptr)
   {
-    LOG->error("NodeSettingsWidget::setup_connections: p_graph_node_widget is nullptr");
+    Logger::log()->error(
+        "NodeSettingsWidget::setup_connections: p_graph_node_widget is nullptr");
     return;
   }
 
@@ -105,7 +106,8 @@ void NodeSettingsWidget::setup_connections()
         {
           if (!graph_ptr)
           {
-            LOG->warn("NodeSettingsWidget: graph node destroyed before update callback");
+            Logger::log()->warn(
+                "NodeSettingsWidget: graph node destroyed before update callback");
             return;
           }
           this->update_content();
@@ -113,24 +115,26 @@ void NodeSettingsWidget::setup_connections()
   }
   else
   {
-    LOG->warn("NodeSettingsWidget::setup_connections: underlying GraphNode is nullptr");
+    Logger::log()->warn(
+        "NodeSettingsWidget::setup_connections: underlying GraphNode is nullptr");
   }
 }
 
 void NodeSettingsWidget::update_content()
 {
-  LOG->trace("NodeSettingsWidget::update_content");
+  Logger::log()->trace("NodeSettingsWidget::update_content");
 
   if (!this->p_graph_node_widget)
   {
-    LOG->error("NodeSettingsWidget::update_content: p_graph_node_widget is nullptr");
+    Logger::log()->error(
+        "NodeSettingsWidget::update_content: p_graph_node_widget is nullptr");
     return;
   }
 
   // empty and delete items of current layout
   if (!this->scroll_layout)
   {
-    LOG->error("NodeSettingsWidget::update_content: scroll_layout is nullptr");
+    Logger::log()->error("NodeSettingsWidget::update_content: scroll_layout is nullptr");
     return;
   }
 
@@ -141,7 +145,8 @@ void NodeSettingsWidget::update_content()
   auto p_graph = this->p_graph_node_widget->get_p_graph_node();
   if (!p_graph)
   {
-    LOG->warn("NodeSettingsWidget::update_content: get_p_graph_node returned nullptr");
+    Logger::log()->warn(
+        "NodeSettingsWidget::update_content: get_p_graph_node returned nullptr");
     return;
   }
 
@@ -164,7 +169,7 @@ void NodeSettingsWidget::update_content()
     }
     catch (const std::exception &e)
     {
-      LOG->error(
+      Logger::log()->error(
           "NodeSettingsWidget::update_content: exception while getting node {}: {}",
           node_id,
           e.what());
@@ -173,8 +178,9 @@ void NodeSettingsWidget::update_content()
 
     if (!p_node)
     {
-      LOG->trace("NodeSettingsWidget::update_content: reference to node {} is nullptr",
-                 node_id);
+      Logger::log()->trace(
+          "NodeSettingsWidget::update_content: reference to node {} is nullptr",
+          node_id);
       continue;
     }
 
@@ -245,7 +251,8 @@ void NodeSettingsWidget::update_content()
         {
           if (!bp)
           {
-            LOG->warn("NodeSettingsWidget: pin button destroyed before toggle handler");
+            Logger::log()->warn(
+                "NodeSettingsWidget: pin button destroyed before toggle handler");
             return;
           }
 
@@ -259,8 +266,8 @@ void NodeSettingsWidget::update_content()
             remove_all_occurrences(this->pinned_node_ids, node_id);
           }
 
-          LOG->trace("NodeSettingsWidget: pinned nodes now count={}",
-                     this->pinned_node_ids.size());
+          Logger::log()->trace("NodeSettingsWidget: pinned nodes now count={}",
+                               this->pinned_node_ids.size());
         });
 
     // settings: build the AttributesWidget in a guarded way
@@ -277,10 +284,11 @@ void NodeSettingsWidget::update_content()
     }
     catch (const std::exception &e)
     {
-      LOG->error("NodeSettingsWidget::update_content: failed to create AttributesWidget "
-                 "for {}: {}",
-                 node_id,
-                 e.what());
+      Logger::log()->error(
+          "NodeSettingsWidget::update_content: failed to create AttributesWidget "
+          "for {}: {}",
+          node_id,
+          e.what());
     }
 
     if (attributes_widget)

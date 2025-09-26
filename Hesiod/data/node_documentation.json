@@ -13647,17 +13647,17 @@
                 "description": "No description",
                 "type": "input"
             },
-            "mask": {
-                "caption": "mask",
-                "data_type": "Heightmap",
-                "description": "No description",
-                "type": "input"
-            },
             "water_depth": {
                 "caption": "water_depth",
                 "data_type": "Heightmap",
                 "description": "No description",
                 "type": "output"
+            },
+            "water_mask": {
+                "caption": "water_mask",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
             }
         }
     },

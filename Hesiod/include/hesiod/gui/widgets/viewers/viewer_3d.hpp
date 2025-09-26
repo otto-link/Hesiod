@@ -24,9 +24,7 @@ class Viewer3D : public Viewer
 
 public:
   Viewer3D() = delete;
-  Viewer3D(GraphNodeWidget   *p_graph_node_widget_,
-           const std::string &label_ = "Viewer",
-           QWidget           *parent = nullptr);
+  Viewer3D(GraphNodeWidget *p_graph_node_widget_, QWidget *parent = nullptr);
 
   // --- Serialization ---
   void           json_from(nlohmann::json const &json) override;

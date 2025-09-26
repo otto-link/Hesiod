@@ -19,7 +19,7 @@ namespace hesiod
 
 void setup_mix_normal_map_node(BaseNode *p_node)
 {
-  LOG->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", p_node->get_label());
 
   // port(s)
   p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "normal map base");
@@ -38,7 +38,7 @@ void compute_mix_normal_map_node(BaseNode *p_node)
 {
   Q_EMIT p_node->compute_started(p_node->get_id());
 
-  LOG->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
   hmap::HeightmapRGBA *p_in1 = p_node->get_value_ref<hmap::HeightmapRGBA>(
       "normal map base");

@@ -23,7 +23,8 @@ BroadcastMap *ReceiveNode::get_p_broadcast_params()
 {
   if (!this->p_broadcast_params)
   {
-    LOG->warn("ReceiveNode::get_p_broadcast_params: p_broadcast_param is nullptr");
+    Logger::log()->warn(
+        "ReceiveNode::get_p_broadcast_params: p_broadcast_param is nullptr");
   }
 
   return this->p_broadcast_params;
@@ -56,7 +57,8 @@ void ReceiveNode::update_tag_list(const std::vector<std::string> &new_tags)
   // if the currently selected tag is not available anymore, set a dummy value
   std::string current_tag = p_attr->get_value();
 
-  LOG->trace("ReceiveNode::update_tag_list: current tag value: {}", current_tag);
+  Logger::log()->trace("ReceiveNode::update_tag_list: current tag value: {}",
+                       current_tag);
 
   if (std::find(new_tags_mod.begin(), new_tags_mod.end(), current_tag) ==
       new_tags_mod.end())

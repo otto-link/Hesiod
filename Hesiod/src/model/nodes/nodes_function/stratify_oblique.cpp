@@ -17,7 +17,7 @@ namespace hesiod
 
 void setup_stratify_oblique_node(BaseNode *p_node)
 {
-  LOG->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", p_node->get_label());
 
   // port(s)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");

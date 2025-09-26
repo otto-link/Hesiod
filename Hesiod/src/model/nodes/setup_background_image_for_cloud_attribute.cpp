@@ -18,7 +18,8 @@ void setup_background_image_for_cloud_attribute(BaseNode          *p_node,
                                                 const std::string &attribute_key,
                                                 const std::string &port_id)
 {
-  LOG->trace("setup_background_image_for_cloud_attribute: node {}", p_node->get_label());
+  Logger::log()->trace("setup_background_image_for_cloud_attribute: node {}",
+                       p_node->get_label());
 
   auto lambda = [p_node, port_id]()
   {

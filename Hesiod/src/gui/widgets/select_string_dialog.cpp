@@ -58,7 +58,7 @@ std::string SelectStringDialog::selected_value() const
 {
   if (!this->combo_box)
   {
-    LOG->error("SelectStringDialog::selected_value: combo_box is nullptr");
+    Logger::log()->error("SelectStringDialog::selected_value: combo_box is nullptr");
     return {};
   }
 

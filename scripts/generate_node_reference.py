@@ -65,7 +65,7 @@ def generate_node_markdown(data):
     hsd_relative_path = os.path.relpath(NODE_EXAMPLES_PATH, NODE_MARKDOWN_PATH)
     
     for node_type, node_info in data.items():
-        print(node_info['label'])
+        # print(node_info['label'])
 
         md_file = MdUtils(file_name=os.path.join(NODE_MARKDOWN_PATH,
                                                  node_info['label']),
@@ -164,7 +164,7 @@ nav:
     
     for node_type in data.keys():
         nlist += "    - 'node_reference/nodes/{}.md'\n".format(node_type)
-        print(node_type)
+        # print(node_type)
 
     STUB = STUB.replace('###LIST###', nlist);
         

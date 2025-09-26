@@ -25,9 +25,9 @@ namespace hesiod
 DataPreview::DataPreview(gngui::NodeProxy *p_proxy_node)
     : QLabel(), p_proxy_node(p_proxy_node)
 {
-  LOG->trace("DataPreview::DataPreview, node {}({})",
-             p_proxy_node->get_caption(),
-             p_proxy_node->get_id());
+  Logger::log()->trace("DataPreview::DataPreview, node {}({})",
+                       p_proxy_node->get_caption(),
+                       p_proxy_node->get_id());
 
   this->setFixedSize(
       QSize(HSD_CONFIG->nodes.shape_preview.x, HSD_CONFIG->nodes.shape_preview.y));
@@ -117,7 +117,7 @@ void DataPreview::update_preview()
   hmap::Vec2<int> shape_preview = HSD_CONFIG->nodes.shape_preview;
   this->resize(shape_preview.x, shape_preview.y);
 
-  LOG->trace("DataPreview::update_preview, data_type: {}", data_type);
+  Logger::log()->trace("DataPreview::update_preview, data_type: {}", data_type);
 
   // Preview image (transparent by default if no data or no rendering
   // for the requested data type)
@@ -139,7 +139,7 @@ void DataPreview::update_preview()
         if (p_h)
           array = p_h->to_array(shape_preview);
         else
-          LOG->error("DataPreview::update_preview: hmap::Heightmap is nullptr");
+          Logger::log()->error("DataPreview::update_preview: hmap::Heightmap is nullptr");
       }
       else
       {
@@ -152,7 +152,7 @@ void DataPreview::update_preview()
         }
         else
         {
-          LOG->error("DataPreview::update_preview: hmap::Array is nullptr");
+          Logger::log()->error("DataPreview::update_preview: hmap::Array is nullptr");
         }
       }
 
@@ -197,7 +197,8 @@ void DataPreview::update_preview()
       }
       else
       {
-        LOG->error("DataPreview::update_preview: hmap::HeightmapRGBA is nullptr");
+        Logger::log()->error(
+            "DataPreview::update_preview: hmap::HeightmapRGBA is nullptr");
       }
     }
     //
@@ -221,7 +222,7 @@ void DataPreview::update_preview()
       }
       else
       {
-        LOG->error("DataPreview::update_preview: hmap::Cloud is nullptr");
+        Logger::log()->error("DataPreview::update_preview: hmap::Cloud is nullptr");
       }
     }
     //
@@ -247,7 +248,7 @@ void DataPreview::update_preview()
       }
       else
       {
-        LOG->error("DataPreview::update_preview: hmap::Path is nullptr");
+        Logger::log()->error("DataPreview::update_preview: hmap::Path is nullptr");
       }
     }
   }
@@ -272,14 +273,15 @@ void DataPreview::update_preview()
       nchannels = 4;
       break;
     default:
-      LOG->critical("DataPreview::update_preview: unknown image format");
+      Logger::log()->critical("DataPreview::update_preview: unknown image format");
       throw std::runtime_error("Unknown image format");
     }
 
     if (img.size() != shape_preview.x * shape_preview.y * nchannels)
     {
-      LOG->critical("DataPreview::update_preview: image data does not fit the QImage "
-                    "preview format");
+      Logger::log()->critical(
+          "DataPreview::update_preview: image data does not fit the QImage "
+          "preview format");
       throw std::runtime_error("Wrong image data");
     }
 

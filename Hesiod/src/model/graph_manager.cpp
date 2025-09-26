@@ -18,13 +18,13 @@ namespace hesiod
 
 GraphManager::GraphManager(const std::string &id) : id(id)
 {
-  LOG->trace("GraphManager::GraphManager: id: {}", id);
+  Logger::log()->trace("GraphManager::GraphManager: id: {}", id);
 }
 
 std::string GraphManager::add_graph_node(const std::shared_ptr<GraphNode> &p_graph_node,
                                          const std::string                &graph_id)
 {
-  LOG->trace("GraphManager::add_graph_node: {}", graph_id);
+  Logger::log()->trace("GraphManager::add_graph_node: {}", graph_id);
 
   std::string new_graph_id = graph_id;
 
@@ -66,7 +66,7 @@ std::string GraphManager::add_graph_node(const std::shared_ptr<GraphNode> &p_gra
 
 void GraphManager::clear()
 {
-  LOG->trace("GraphManager::clear");
+  Logger::log()->trace("GraphManager::clear");
 
   for (auto &[_, graph] : this->graph_nodes)
     graph->clear();
@@ -79,7 +79,7 @@ void GraphManager::clear()
 
 void GraphManager::export_flatten()
 {
-  LOG->trace("GraphManager::export_flatten");
+  Logger::log()->trace("GraphManager::export_flatten");
 
   // target heightmap
   hmap::Heightmap h_export(export_param.shape, export_param.tiling, export_param.overlap);
@@ -156,8 +156,8 @@ int GraphManager::get_graph_order_index(const std::string &graph_id)
 {
   if (this->is_graph_id_available(graph_id))
   {
-    LOG->critical("GraphManager::get_graph_order_index, graph ID not known: {}",
-                  graph_id);
+    Logger::log()->critical("GraphManager::get_graph_order_index, graph ID not known: {}",
+                            graph_id);
     throw std::runtime_error("Graph ID not known: " + graph_id);
   }
 
@@ -202,7 +202,7 @@ void GraphManager::json_from(nlohmann::json const &json)
 
 void GraphManager::json_from(nlohmann::json const &json, ModelConfig *p_config)
 {
-  LOG->trace("GraphManager::json_from");
+  Logger::log()->trace("GraphManager::json_from");
 
   // clean-up current state
   this->clear();
@@ -218,7 +218,7 @@ void GraphManager::json_from(nlohmann::json const &json, ModelConfig *p_config)
 
     for (auto &graph_id : gid_order)
     {
-      LOG->trace("graph graph_id: {}", graph_id);
+      Logger::log()->trace("graph graph_id: {}", graph_id);
 
       // dummy default config that will be overriden after by the
       // GraphNode instances during their 'json_from' deserialization
@@ -250,7 +250,7 @@ void GraphManager::json_from(nlohmann::json const &json, ModelConfig *p_config)
 
 nlohmann::json GraphManager::json_to() const
 {
-  LOG->trace("GraphManager::json_to");
+  Logger::log()->trace("GraphManager::json_to");
 
   nlohmann::json json;
 
@@ -272,7 +272,7 @@ nlohmann::json GraphManager::json_to() const
 
 void GraphManager::load_from_file(const std::string &fname, ModelConfig *p_config)
 {
-  LOG->trace("GraphManager::load_from_file: fname {}", fname);
+  Logger::log()->trace("GraphManager::load_from_file: fname {}", fname);
 
   nlohmann::json json = json_from_file(fname);
   this->json_from(json["graph_manager"], p_config);
@@ -284,7 +284,7 @@ void GraphManager::load_from_file(const std::string &fname, ModelConfig *p_confi
 void GraphManager::on_broadcast_node_updated(const std::string &graph_id,
                                              const std::string &tag)
 {
-  LOG->trace("GraphManager::on_broadcast_node_updated: broadcasting {}", tag);
+  Logger::log()->trace("GraphManager::on_broadcast_node_updated: broadcasting {}", tag);
 
   for (auto &[gid, graph] : this->graph_nodes)
     if (true) // gid != graph_id)
@@ -300,7 +300,7 @@ void GraphManager::on_new_broadcast_tag(const std::string      &tag,
                                         const hmap::CoordFrame *t_source,
                                         const hmap::Heightmap  *h_source)
 {
-  LOG->trace("GraphManager::on_new_broadcast_tag: tag {}", tag);
+  Logger::log()->trace("GraphManager::on_new_broadcast_tag: tag {}", tag);
 
   this->broadcast_params[tag] = BroadcastParam(t_source, h_source);
   Q_EMIT this->new_broadcast_tag(tag);
@@ -308,7 +308,7 @@ void GraphManager::on_new_broadcast_tag(const std::string      &tag,
 
 void GraphManager::on_remove_broadcast_tag(const std::string &tag)
 {
-  LOG->trace("GraphManager::on_remove_broadcast_tag: tag {}", tag);
+  Logger::log()->trace("GraphManager::on_remove_broadcast_tag: tag {}", tag);
 
   this->broadcast_params.erase(tag);
   Q_EMIT this->remove_broadcast_tag(tag);
@@ -316,7 +316,7 @@ void GraphManager::on_remove_broadcast_tag(const std::string &tag)
 
 void GraphManager::remove_graph_node(const std::string &graph_id)
 {
-  LOG->trace("GraphManager::remove_graph_node: graph_id {}", graph_id);
+  Logger::log()->trace("GraphManager::remove_graph_node: graph_id {}", graph_id);
 
   if (this->is_graph_id_available(graph_id))
     return;
@@ -330,7 +330,7 @@ void GraphManager::remove_graph_node(const std::string &graph_id)
 
 void GraphManager::save_to_file(const std::string &fname) const
 {
-  LOG->trace("GraphManager::save_to_file: fname {}", fname);
+  Logger::log()->trace("GraphManager::save_to_file: fname {}", fname);
 
   // fill-in json with graph data
   nlohmann::json json;
@@ -352,7 +352,7 @@ void GraphManager::set_id(const std::string &new_id) { this->id = new_id; }
 
 void GraphManager::update()
 {
-  LOG->trace("GraphManager::update()");
+  Logger::log()->trace("GraphManager::update()");
 
   for (auto &graph_id : this->graph_order)
     this->graph_nodes.at(graph_id)->update();

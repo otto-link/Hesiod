@@ -20,7 +20,7 @@ namespace hesiod
 GraphTabsWidget::GraphTabsWidget(GraphManager *p_graph_manager, QWidget *parent)
     : QWidget(parent), p_graph_manager(p_graph_manager)
 {
-  LOG->trace("GraphTabsWidget::GraphTabsWidget");
+  Logger::log()->trace("GraphTabsWidget::GraphTabsWidget");
 
   // styles (GNodeGUI)
   GN_STYLE->viewer.add_new_icon = false;
@@ -40,7 +40,7 @@ GraphTabsWidget::GraphTabsWidget(GraphManager *p_graph_manager, QWidget *parent)
 
 void GraphTabsWidget::clear()
 {
-  LOG->trace("GraphTabsWidget::clear");
+  Logger::log()->trace("GraphTabsWidget::clear");
 
   // clear tabs
   while (this->tab_widget->count() > 0)
@@ -126,7 +126,7 @@ nlohmann::json GraphTabsWidget::json_to() const
 
 void GraphTabsWidget::on_copy_buffer_has_changed(const nlohmann::json &new_json)
 {
-  LOG->trace("GraphTabsWidget::on_copy_buffer_has_changed");
+  Logger::log()->trace("GraphTabsWidget::on_copy_buffer_has_changed");
 
   // redispatch the copy buffer to all the graphs
   for (auto &[_, gnw] : this->graph_node_widget_map)
@@ -143,13 +143,14 @@ void GraphTabsWidget::on_has_been_cleared(const std::string &graph_id)
 void GraphTabsWidget::on_new_node_created(const std::string &graph_id,
                                           const std::string &id)
 {
-  LOG->trace("GraphTabsWidget::on_new_node_created");
+  Logger::log()->trace("GraphTabsWidget::on_new_node_created");
 
   // check if it's a Receive node to update its tag list
   auto it_graph = this->p_graph_manager->get_graph_nodes().find(graph_id);
   if (it_graph == this->p_graph_manager->get_graph_nodes().end())
   {
-    LOG->critical("GraphTabsWidget::on_new_node_created: graph {} not found", graph_id);
+    Logger::log()->critical("GraphTabsWidget::on_new_node_created: graph {} not found",
+                            graph_id);
     return;
   }
 
@@ -164,7 +165,7 @@ void GraphTabsWidget::on_new_node_created(const std::string &graph_id,
   }
   else
   {
-    LOG->critical(
+    Logger::log()->critical(
         "GraphTabsWidget::on_new_node_created: the node just created is nullptr");
   }
 }
@@ -193,7 +194,7 @@ void GraphTabsWidget::set_selected_tab(const std::string &graph_id)
 
 void GraphTabsWidget::show_viewport()
 {
-  LOG->trace("GraphTabsWidget::show_viewport");
+  Logger::log()->trace("GraphTabsWidget::show_viewport");
 
   if (!this->graph_node_widget_map.empty() && this->graph_node_widget_map.begin()->second)
     this->graph_node_widget_map.begin()->second->on_viewport_request();
@@ -203,7 +204,7 @@ QSize GraphTabsWidget::sizeHint() const { return QSize(1024, 1024); }
 
 void GraphTabsWidget::update_receive_nodes_tag_list()
 {
-  LOG->trace("GraphTabsWidget::update_receive_nodes_tag_list");
+  Logger::log()->trace("GraphTabsWidget::update_receive_nodes_tag_list");
 
   // update the tag list for all the Receive nodes of the graphs
   for (auto &[gid, graph] : this->p_graph_manager->get_graph_nodes())
@@ -223,7 +224,7 @@ void GraphTabsWidget::update_receive_nodes_tag_list()
 
 void GraphTabsWidget::update_tab_widget()
 {
-  LOG->trace("GraphTabsWidget::update_tab_widget");
+  Logger::log()->trace("GraphTabsWidget::update_tab_widget");
 
   if (!this->tab_widget)
     return;
@@ -270,7 +271,7 @@ void GraphTabsWidget::update_tab_widget()
   // repopulate tabs
   for (auto &id : this->p_graph_manager->get_graph_order())
   {
-    LOG->trace("updating tab for graph: {}", id);
+    Logger::log()->trace("updating tab for graph: {}", id);
 
     // generate a graph editor if not already available
     if (!this->graph_node_widget_map.contains(id))
@@ -278,8 +279,9 @@ void GraphTabsWidget::update_tab_widget()
       GraphNode *p_graph_node = this->p_graph_manager->get_graph_ref_by_id(id);
       if (!p_graph_node)
       {
-        LOG->error("GraphTabsWidget::update_tab_widget: graph '{}' not found, skipping",
-                   id);
+        Logger::log()->error(
+            "GraphTabsWidget::update_tab_widget: graph '{}' not found, skipping",
+            id);
         continue;
       }
 
@@ -326,8 +328,9 @@ void GraphTabsWidget::update_tab_widget()
     auto *graph_widget = this->graph_node_widget_map.at(id);
     if (!graph_widget)
     {
-      LOG->error("GraphTabsWidget::update_tab_widget: graph widget for '{}' is nullptr",
-                 id);
+      Logger::log()->error(
+          "GraphTabsWidget::update_tab_widget: graph widget for '{}' is nullptr",
+          id);
       continue;
     }
 
