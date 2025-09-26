@@ -13,7 +13,7 @@ std::shared_ptr<Config> Config::instance = nullptr;
 
 void Config::json_from(nlohmann::json const &json)
 {
-  LOG->trace("Config::json_from");
+  Logger::log()->trace("Config::json_from");
 
   json_safe_get(json,
                 "window.open_graph_manager_at_startup",
@@ -32,7 +32,7 @@ void Config::json_from(nlohmann::json const &json)
 
 nlohmann::json Config::json_to() const
 {
-  LOG->trace("Config::json_to");
+  Logger::log()->trace("Config::json_to");
 
   nlohmann::json json;
 
@@ -46,14 +46,14 @@ nlohmann::json Config::json_to() const
 
 void Config::load_from_file(const std::string &fname)
 {
-  LOG->trace("Config::load_from_file: {}", fname);
+  Logger::log()->trace("Config::load_from_file: {}", fname);
   nlohmann::json json = json_from_file(fname);
   this->json_from(json);
 }
 
 void Config::save_to_file(const std::string &fname) const
 {
-  LOG->trace("Config::save_to_file: {}", fname);
+  Logger::log()->trace("Config::save_to_file: {}", fname);
   nlohmann::json json = this->json_to();
   json_to_file(json, fname);
 }

@@ -13,37 +13,37 @@
         "graph_nodes": {
             "graph": {
                 "id": "graph",
-                "id_count": 7,
+                "id_count": 6,
                 "links": [
                     {
                         "node_id_from": "2",
-                        "node_id_to": "5",
+                        "node_id_to": "1",
+                        "port_id_from": "output",
+                        "port_id_to": "input"
+                    },
+                    {
+                        "node_id_from": "1",
+                        "node_id_to": "3",
                         "port_id_from": "output",
                         "port_id_to": "elevation"
+                    },
+                    {
+                        "node_id_from": "1",
+                        "node_id_to": "4",
+                        "port_id_from": "output",
+                        "port_id_to": "input"
+                    },
+                    {
+                        "node_id_from": "4",
+                        "node_id_to": "5",
+                        "port_id_from": "water_depth",
+                        "port_id_to": "depth"
                     },
                     {
                         "node_id_from": "5",
-                        "node_id_to": "6",
-                        "port_id_from": "water_depth",
-                        "port_id_to": "elevation"
-                    },
-                    {
-                        "node_id_from": "6",
                         "node_id_to": "3",
                         "port_id_from": "water_depth",
                         "port_id_to": "water_depth"
-                    },
-                    {
-                        "node_id_from": "2",
-                        "node_id_to": "3",
-                        "port_id_from": "output",
-                        "port_id_to": "elevation"
-                    },
-                    {
-                        "node_id_from": "2",
-                        "node_id_to": "6",
-                        "port_id_from": "output",
-                        "port_id_to": "mask"
                     }
                 ],
                 "model_config": {
@@ -56,6 +56,133 @@
                     "tiling.y": 4
                 },
                 "nodes": [
+                    {
+                        "GPU": {
+                            "label": "GPU",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": true
+                        },
+                        "c_erosion": {
+                            "label": "c_erosion",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.10000000149011612,
+                            "vmax": 1.0,
+                            "vmin": 0.009999999776482582
+                        },
+                        "deposition_radius": {
+                            "label": "deposition_radius",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.10000000149011612,
+                            "vmax": 0.20000000298023224,
+                            "vmin": 0.0
+                        },
+                        "deposition_scale_ratio": {
+                            "label": "deposition_scale_ratio",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        },
+                        "gradient_power": {
+                            "label": "gradient_power",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.800000011920929,
+                            "vmax": 2.0,
+                            "vmin": 0.10000000149011612
+                        },
+                        "gradient_prefilter_radius": {
+                            "label": "gradient_prefilter_radius",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.10000000149011612,
+                            "vmax": 0.20000000298023224,
+                            "vmin": 0.0
+                        },
+                        "gradient_scaling_ratio": {
+                            "label": "gradient_scaling_ratio",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        },
+                        "id": "1",
+                        "label": "HydraulicStreamLog",
+                        "post_gain": {
+                            "label": "post_gain",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 10.0,
+                            "vmin": 0.009999999776482582
+                        },
+                        "post_inverse": {
+                            "label": "post_inverse",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "post_mix": {
+                            "label": "post_mix",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        },
+                        "post_mix_method": {
+                            "choice": "replace",
+                            "label": "post_mix_method",
+                            "type": 4,
+                            "type_string": "Enumeration",
+                            "value": 11
+                        },
+                        "post_remap": {
+                            "is_active": true,
+                            "label": "post_remap",
+                            "type": 11,
+                            "type_string": "Value range",
+                            "value": [
+                                0.0,
+                                1.0
+                            ],
+                            "vmax": 2.0,
+                            "vmin": -1.0
+                        },
+                        "post_smoothing_radius": {
+                            "label": "post_smoothing_radius",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.0,
+                            "vmax": 0.05000000074505806,
+                            "vmin": 0.0
+                        },
+                        "saturation_ratio": {
+                            "label": "saturation_ratio",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 1.0,
+                            "vmin": 0.009999999776482582
+                        },
+                        "talus_ref": {
+                            "label": "talus_ref",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.10000000149011612,
+                            "vmax": 10.0,
+                            "vmin": 0.009999999776482582
+                        }
+                    },
                     {
                         "angle": {
                             "label": "angle",
@@ -167,35 +294,27 @@
                         "label": "Preview"
                     },
                     {
-                        "epsilon": {
-                            "label": "epsilon",
+                        "elevation": {
+                            "label": "elevation",
                             "type": 6,
                             "type_string": "Float",
-                            "value": 0.10000000149011612,
-                            "vmax": 0.10000000149011612,
-                            "vmin": 0.0010000000474974513
+                            "value": 0.20000000298023224,
+                            "vmax": 2.0,
+                            "vmin": -1.0
                         },
-                        "id": "5",
-                        "iterations": {
-                            "label": "iterations",
-                            "type": 10,
-                            "type_string": "Integer",
-                            "value": 500,
-                            "vmax": 2147483647,
-                            "vmin": 1
-                        },
-                        "label": "FloodingLakeSystem"
+                        "id": "4",
+                        "label": "FloodingUniformLevel"
                     },
                     {
                         "dry_out_ratio": {
                             "label": "dry_out_ratio",
                             "type": 6,
                             "type_string": "Float",
-                            "value": 1.0,
-                            "vmax": 1.0,
+                            "value": 0.3821100890636444,
+                            "vmax": 0.5,
                             "vmin": 0.0
                         },
-                        "id": "6",
+                        "id": "5",
                         "label": "WaterDepthDryOut"
                     }
                 ],
@@ -232,61 +351,68 @@
                 "links": [
                     {
                         "link_type": 2,
-                        "node_in_id": "6",
-                        "node_out_id": "2",
-                        "port_in_id": "mask",
-                        "port_out_id": "output"
-                    },
-                    {
-                        "link_type": 2,
                         "node_in_id": "3",
-                        "node_out_id": "2",
-                        "port_in_id": "elevation",
-                        "port_out_id": "output"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "3",
-                        "node_out_id": "6",
+                        "node_out_id": "5",
                         "port_in_id": "water_depth",
                         "port_out_id": "water_depth"
                     },
                     {
                         "link_type": 2,
-                        "node_in_id": "6",
-                        "node_out_id": "5",
-                        "port_in_id": "elevation",
+                        "node_in_id": "5",
+                        "node_out_id": "4",
+                        "port_in_id": "depth",
                         "port_out_id": "water_depth"
                     },
                     {
                         "link_type": 2,
-                        "node_in_id": "5",
-                        "node_out_id": "2",
+                        "node_in_id": "4",
+                        "node_out_id": "1",
+                        "port_in_id": "input",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "3",
+                        "node_out_id": "1",
                         "port_in_id": "elevation",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "1",
+                        "node_out_id": "2",
+                        "port_in_id": "input",
                         "port_out_id": "output"
                     }
                 ],
                 "nodes": [
                     {
                         "caption": "WaterDepthDryOut",
-                        "id": "6",
-                        "is_widget_visible": true,
-                        "scene_position.x": 24.017513423596256,
-                        "scene_position.y": -175.08644265558547
-                    },
-                    {
-                        "caption": "FloodingLakeSystem",
                         "id": "5",
                         "is_widget_visible": true,
-                        "scene_position.x": -195.57103070653721,
-                        "scene_position.y": -92.22608697297169
+                        "scene_position.x": 178.12703539544006,
+                        "scene_position.y": -187.3694759112412
+                    },
+                    {
+                        "caption": "FloodingUniformLevel",
+                        "id": "4",
+                        "is_widget_visible": true,
+                        "scene_position.x": 18.397569072157495,
+                        "scene_position.y": -79.94055208350701
                     },
                     {
                         "caption": "Preview",
                         "id": "3",
                         "is_widget_visible": true,
-                        "scene_position.x": 270.1703796386719,
-                        "scene_position.y": -318.4334716796875
+                        "scene_position.x": 399.5645468598878,
+                        "scene_position.y": -301.62903437823087
+                    },
+                    {
+                        "caption": "HydraulicStreamLog",
+                        "id": "1",
+                        "is_widget_visible": true,
+                        "scene_position.x": -198.21316528320313,
+                        "scene_position.y": -292.2330017089844
                     },
                     {
                         "caption": "GaborWaveFbm",
@@ -298,7 +424,7 @@
                 ],
                 "viewers": [
                     {
-                        "current_node_id": "3",
+                        "current_node_id": "4",
                         "height": 720,
                         "is_node_pinned": false,
                         "label": "3D Renderer",
@@ -308,8 +434,8 @@
                             "add_fog": false,
                             "add_water_foam": true,
                             "add_water_waves": true,
-                            "alpha_x": 0.8855557441711426,
-                            "alpha_y": -2.7961111068725586,
+                            "alpha_x": 0.6105555891990662,
+                            "alpha_y": -0.4361111521720886,
                             "ambiant_occlusion_radius": 3,
                             "ambiant_occlusion_strength": 5.0,
                             "angle_spread_ratio": 0.0,
@@ -323,14 +449,14 @@
                                 "fov": 0.7850000262260437,
                                 "near_plane": 0.10000000149011612,
                                 "position": {
-                                    "x": -0.3313743472099304,
-                                    "y": 2.1557018756866455,
-                                    "z": -1.8420393466949463
+                                    "x": -1.7304972410202026,
+                                    "y": 2.8666138648986816,
+                                    "z": 3.7132070064544678
                                 },
                                 "target": {
-                                    "x": 0.2935760021209717,
-                                    "y": -0.10206000506877899,
-                                    "z": -0.10566280782222748
+                                    "x": 0.0,
+                                    "y": 0.0,
+                                    "z": 0.0
                                 },
                                 "up": {
                                     "x": 0.0,
@@ -348,7 +474,7 @@
                                 "y": 0.8500000238418579,
                                 "z": 0.800000011920929
                             },
-                            "distance": 2.9159998893737793,
+                            "distance": 5.0,
                             "foam_color": {
                                 "x": 1.0,
                                 "y": 1.0,
@@ -392,8 +518,8 @@
                             "normal_map_scaling": 1.0,
                             "normal_visualization": false,
                             "pan_offset": {
-                                "x": -0.3120120167732239,
-                                "y": -0.10206000506877899
+                                "x": 0.0,
+                                "y": 0.0
                             },
                             "rayleigh_color": {
                                 "x": 0.4000000059604645,
@@ -416,6 +542,15 @@
                                 "z": 0.0
                             },
                             "title": "",
+                            "viewer2d_settings.cmap": 3,
+                            "viewer2d_settings.hillshading": true,
+                            "viewer2d_settings.offset": {
+                                "x": 0.0,
+                                "y": 0.0
+                            },
+                            "viewer2d_settings.sun_azimuth": 1.5700000524520874,
+                            "viewer2d_settings.sun_zenith": 1.0466667413711548,
+                            "viewer2d_settings.zoom": 0.8999999761581421,
                             "water_color_depth": 0.014999999664723873,
                             "water_spec_strength": 0.5,
                             "waves_alpha": 0.5233333706855774,
@@ -429,22 +564,6 @@
                             "y": 91
                         },
                         "view_param_map": {
-                            "1": {
-                                "color": "",
-                                "elevation": "output",
-                                "normal_map": "",
-                                "path": "",
-                                "points": "",
-                                "water_depth": ""
-                            },
-                            "2": {
-                                "color": "",
-                                "elevation": "output",
-                                "normal_map": "",
-                                "path": "",
-                                "points": "",
-                                "water_depth": ""
-                            },
                             "3": {
                                 "color": "texture",
                                 "elevation": "elevation",
@@ -463,15 +582,7 @@
                             },
                             "5": {
                                 "color": "",
-                                "elevation": "elevation",
-                                "normal_map": "",
-                                "path": "",
-                                "points": "",
-                                "water_depth": "water_depth"
-                            },
-                            "6": {
-                                "color": "",
-                                "elevation": "elevation",
+                                "elevation": "depth",
                                 "normal_map": "",
                                 "path": "",
                                 "points": "",
@@ -487,5 +598,5 @@
             }
         }
     },
-    "saved_at": "2025-09-18_20:48:20"
+    "saved_at": "2025-09-26_16:17:10"
 }

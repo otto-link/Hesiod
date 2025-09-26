@@ -40,7 +40,7 @@ std::string map_type_name(const std::string &typeid_name)
 BaseNode::BaseNode(const std::string &label, std::shared_ptr<ModelConfig> config)
     : gnode::Node(label), config(config)
 {
-  LOG->trace("BaseNode::BaseNode, label: {}", label);
+  Logger::log()->trace("BaseNode::BaseNode, label: {}", label);
 
   this->category = get_node_inventory().at(label);
 
@@ -55,16 +55,16 @@ BaseNode::BaseNode(const std::string &label, std::shared_ptr<ModelConfig> config
 
     if (!file.is_open())
     {
-      LOG->error("Could not open documentation file: {}", doc_path);
+      Logger::log()->error("Could not open documentation file: {}", doc_path);
       throw std::runtime_error("Documentation file not found");
     }
 
     file >> json;
-    LOG->trace("JSON successfully loaded from {}", doc_path);
+    Logger::log()->trace("JSON successfully loaded from {}", doc_path);
   }
   catch (const std::exception &e)
   {
-    LOG->error("Error loading documentation: {}", e.what());
+    Logger::log()->error("Error loading documentation: {}", e.what());
     json = nlohmann::json::object(); // Create empty JSON to prevent crashes
   }
 
@@ -75,7 +75,7 @@ BaseNode::BaseNode(const std::string &label, std::shared_ptr<ModelConfig> config
   }
   else
   {
-    LOG->warn("Missing documentation for node: {}", label);
+    Logger::log()->warn("Missing documentation for node: {}", label);
     this->documentation = nlohmann::json::object();
   }
 
@@ -159,7 +159,7 @@ std::string BaseNode::get_documentation_html() const
   }
   catch (const std::exception &e)
   {
-    LOG->error(
+    Logger::log()->error(
         "BaseNode::get_documentation_html: Error generating documentation HTML: {}",
         e.what());
     html = "<p>Error generating documentation</p>";
@@ -213,7 +213,7 @@ std::string BaseNode::get_documentation_short() const
   }
   catch (const std::exception &e)
   {
-    LOG->error(
+    Logger::log()->error(
         "BaseNode::get_documentation_short: Error generating documentation HTML: {}",
         e.what());
     str = "Error generating documentation";
@@ -226,7 +226,7 @@ GraphEditor *BaseNode::get_p_graph_node() const
 {
   if (!this->p_graph_node)
   {
-    LOG->warn("BaseNode::get_p_graph_node: p_graph_node is nullptr");
+    Logger::log()->warn("BaseNode::get_p_graph_node: p_graph_node is nullptr");
   }
 
   return this->p_graph_node;
@@ -243,12 +243,12 @@ void BaseNode::json_from(nlohmann::json const &json)
       if (json.contains(key))
         attr->json_from(json[key]);
       else
-        LOG->warn("Missing JSON key for attribute: {}, using default", key);
+        Logger::log()->warn("Missing JSON key for attribute: {}, using default", key);
     }
   }
   catch (const nlohmann::json::exception &e)
   {
-    LOG->error("BaseNode::json_from: JSON parsing error: {}", e.what());
+    Logger::log()->error("BaseNode::json_from: JSON parsing error: {}", e.what());
   }
 }
 
@@ -267,7 +267,8 @@ nlohmann::json BaseNode::json_to() const
   }
   catch (const std::exception &e)
   {
-    LOG->error("BaseNode::json_to: Error serializing node to JSON: {}", e.what());
+    Logger::log()->error("BaseNode::json_to: Error serializing node to JSON: {}",
+                         e.what());
   }
   return json;
 }
@@ -320,7 +321,7 @@ nlohmann::json BaseNode::node_parameters_to_json() const
   }
   catch (const std::exception &e)
   {
-    LOG->error(
+    Logger::log()->error(
         " BaseNode::node_parameters_to_json: Error generating node parameters JSON: {}",
         e.what());
   }

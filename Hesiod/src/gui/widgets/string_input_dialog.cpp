@@ -61,7 +61,8 @@ void StringInputDialog::validate_input()
 {
   if (!this->input_line || !this->error_label)
   {
-    LOG->error("StringInputDialog::validate_input: internal widgets are nullptr");
+    Logger::log()->error(
+        "StringInputDialog::validate_input: internal widgets are nullptr");
     return;
   }
 

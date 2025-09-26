@@ -177,14 +177,14 @@ MainWindow *MainWindow::instance(QApplication *p_app, QWidget *p_parent)
 
 void MainWindow::json_from(nlohmann::json const &json)
 {
-  LOG->trace("MainWindow::json_from");
+  Logger::log()->trace("MainWindow::json_from");
 
   json_safe_get(json, "show_node_settings_pan", this->show_node_settings_pan);
 }
 
 nlohmann::json MainWindow::json_to() const
 {
-  LOG->trace("MainWindow::json_to");
+  Logger::log()->trace("MainWindow::json_to");
 
   nlohmann::json json;
   json["show_node_settings_pan"] = this->show_node_settings_pan;
@@ -194,7 +194,7 @@ nlohmann::json MainWindow::json_to() const
 
 void MainWindow::load_from_file(const std::string &fname)
 {
-  LOG->trace("MainWindow::load_from_file: {}", fname);
+  Logger::log()->trace("MainWindow::load_from_file: {}", fname);
 
   nlohmann::json json = json_from_file(fname);
 
@@ -220,7 +220,7 @@ void MainWindow::on_autosave()
 
 void MainWindow::on_has_changed()
 {
-  LOG->trace("MainWindow::on_has_changed");
+  Logger::log()->trace("MainWindow::on_has_changed");
   this->set_is_dirty(true);
   this->autosave_timer->start();
 }
@@ -314,7 +314,7 @@ void MainWindow::on_save_copy()
 
 void MainWindow::restore_state()
 {
-  LOG->trace("MainWindow::restore_state");
+  Logger::log()->trace("MainWindow::restore_state");
 
   // Qt part
   QSettings settings(HSD_SETTINGS_ORG, HSD_SETTINGS_APP);
@@ -329,7 +329,7 @@ void MainWindow::restore_state()
 
 void MainWindow::save_state()
 {
-  LOG->trace("MainWindow::save_state");
+  Logger::log()->trace("MainWindow::save_state");
 
   // Qt
   QSettings settings(HSD_SETTINGS_ORG, HSD_SETTINGS_APP);
@@ -342,7 +342,7 @@ void MainWindow::save_state()
 
 bool MainWindow::save_to_file(const std::string &fname) const
 {
-  LOG->trace("MainWindow::save_to_file: {}", fname);
+  Logger::log()->trace("MainWindow::save_to_file: {}", fname);
 
   const std::string fname_ext = ensure_extension(fname, ".hsd").string();
 
@@ -359,11 +359,11 @@ bool MainWindow::save_to_file(const std::string &fname) const
         std::filesystem::copy_file(original_path,
                                    backup_path,
                                    std::filesystem::copy_options::overwrite_existing);
-        LOG->trace("Backup created: {}", backup_path.string());
+        Logger::log()->trace("Backup created: {}", backup_path.string());
       }
       catch (const std::exception &e)
       {
-        LOG->warn("Failed to create backup for {}: {}", fname_ext, e.what());
+        Logger::log()->warn("Failed to create backup for {}: {}", fname_ext, e.what());
       }
     }
 
@@ -388,9 +388,9 @@ bool MainWindow::save_to_file(const std::string &fname) const
   }
   catch (const std::exception &e)
   {
-    LOG->critical("MainWindow::save_to_file: failed to save file {}, what: {}",
-                  fname_ext,
-                  e.what());
+    Logger::log()->critical("MainWindow::save_to_file: failed to save file {}, what: {}",
+                            fname_ext,
+                            e.what());
     return false;
   }
 }
@@ -581,7 +581,7 @@ void MainWindow::show_about()
 
 void MainWindow::show_quick_help()
 {
-  LOG->trace("MainWindow::show_quick_help");
+  Logger::log()->trace("MainWindow::show_quick_help");
 
   std::string html_source = "";
 
@@ -602,7 +602,7 @@ void MainWindow::show_quick_help()
 
 void MainWindow::show_viewport()
 {
-  LOG->trace("MainWindow::show_viewport");
+  Logger::log()->trace("MainWindow::show_viewport");
   this->graph_tabs_widget->show_viewport();
 }
 

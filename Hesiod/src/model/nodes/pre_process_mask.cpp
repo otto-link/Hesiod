@@ -71,7 +71,7 @@ std::shared_ptr<hmap::Heightmap> pre_process_mask(BaseNode         *p_node,
   }
   else
   {
-    LOG->error("pre_process_mask: unknown mask type: {}", mask_type);
+    Logger::log()->error("pre_process_mask: unknown mask type: {}", mask_type);
   }
 
   // filter

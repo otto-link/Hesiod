@@ -34,7 +34,7 @@ constexpr unsigned int str2int(const char *str, int h = 0)
 
 void dump_node_inventory(const std::string &fname)
 {
-  LOG->trace("dump_node_inventory");
+  Logger::log()->trace("dump_node_inventory");
 
   std::map<std::string, std::string> ni = hesiod::get_node_inventory();
 
@@ -90,7 +90,7 @@ void dump_node_inventory(const std::string &fname)
 void dump_node_documentation_stub(const std::string           &fname,
                                   std::shared_ptr<ModelConfig> config)
 {
-  LOG->trace("dump_node_documentation_stub");
+  Logger::log()->trace("dump_node_documentation_stub");
 
   std::map<std::string, std::string> ni = hesiod::get_node_inventory();
 
@@ -110,7 +110,7 @@ void dump_node_documentation_stub(const std::string           &fname,
 
 void dump_node_settings_screenshots()
 {
-  LOG->trace("dump_node_settings_screenshots");
+  Logger::log()->trace("dump_node_settings_screenshots");
 
   // use default, not important
   auto config = std::make_shared<hesiod::ModelConfig>();

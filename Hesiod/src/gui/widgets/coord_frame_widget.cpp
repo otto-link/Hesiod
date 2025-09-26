@@ -17,7 +17,7 @@ namespace hesiod
 CoordFrameWidget::CoordFrameWidget(GraphManager *p_graph_manager, QWidget *parent)
     : QGraphicsView(parent), p_graph_manager(p_graph_manager)
 {
-  LOG->trace("CoordFrameWidget::CoordFrameWidget");
+  Logger::log()->trace("CoordFrameWidget::CoordFrameWidget");
 
   // build layout
   this->setRenderHint(QPainter::Antialiasing);
@@ -120,7 +120,7 @@ void CoordFrameWidget::remove_frame(const std::string &id)
 
 void CoordFrameWidget::reset()
 {
-  LOG->trace("CoordFrameWidget::reset");
+  Logger::log()->trace("CoordFrameWidget::reset");
 
   // store keys because the map is altered by remove_frame
   std::vector<std::string> keys = {};
@@ -133,7 +133,7 @@ void CoordFrameWidget::reset()
   // re-populate scene
   for (auto &id : this->p_graph_manager->get_graph_order())
   {
-    LOG->trace("CoordFrameWidget::CoordFrameWidget: adding graph: {}", id);
+    Logger::log()->trace("CoordFrameWidget::CoordFrameWidget: adding graph: {}", id);
     this->add_frame(id);
   }
 }
@@ -145,9 +145,10 @@ void CoordFrameWidget::update_frames_z_depth()
     const std::string id = p_graph_manager->get_graph_order()[k];
     this->frames.at(id)->set_z_depth((int)k);
 
-    LOG->trace("CoordFrameWidget::update_frames_z_depth updated graph: {}, depth {}",
-               id,
-               k);
+    Logger::log()->trace(
+        "CoordFrameWidget::update_frames_z_depth updated graph: {}, depth {}",
+        id,
+        k);
   }
 }
 

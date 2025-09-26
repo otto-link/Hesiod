@@ -24,12 +24,12 @@ typedef unsigned int uint;
 
 int main(int argc, char *argv[])
 {
-  LOG->info("Welcome to Hesiod v{}.{}.{}!",
-            HESIOD_VERSION_MAJOR,
-            HESIOD_VERSION_MINOR,
-            HESIOD_VERSION_PATCH);
+  hesiod::Logger::log()->info("Welcome to Hesiod v{}.{}.{}!",
+                              HESIOD_VERSION_MAJOR,
+                              HESIOD_VERSION_MINOR,
+                              HESIOD_VERSION_PATCH);
 
-  LOG->info("Release mode: {}", std::string(HSD_RMODE));
+  hesiod::Logger::log()->info("Release mode: {}", std::string(HSD_RMODE));
 
   // ----------------------------------- initialization
 

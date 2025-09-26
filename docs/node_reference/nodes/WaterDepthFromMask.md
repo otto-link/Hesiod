@@ -19,7 +19,7 @@ Hydrology
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |elevation|Heightmap|No description|
-|mask|Heightmap|No description|
+|water_mask|Heightmap|No description|
 
 # Outputs
 

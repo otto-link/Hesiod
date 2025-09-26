@@ -17,7 +17,7 @@ namespace hesiod
 
 void setup_receive_node(BaseNode *p_node)
 {
-  LOG->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", p_node->get_label());
 
   // port(s)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
@@ -34,7 +34,7 @@ void compute_receive_node(BaseNode *p_node)
 {
   Q_EMIT p_node->compute_started(p_node->get_id());
 
-  LOG->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
   hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
   std::string      tag = GET("tag", ChoiceAttribute);
@@ -44,7 +44,7 @@ void compute_receive_node(BaseNode *p_node)
 
   if (!p_receive_node)
   {
-    LOG->error("compute_receive_node: Failed to cast to ReceiveNode");
+    Logger::log()->error("compute_receive_node: Failed to cast to ReceiveNode");
     return;
   }
 
@@ -52,14 +52,14 @@ void compute_receive_node(BaseNode *p_node)
   {
     // at node construction, node may be computed without the graph
     // infos being set
-    LOG->trace("compute_receive_node: p_broadcast_params {}",
-               p_receive_node->get_p_broadcast_params() ? "ok" : "NOK");
+    Logger::log()->trace("compute_receive_node: p_broadcast_params {}",
+                         p_receive_node->get_p_broadcast_params() ? "ok" : "NOK");
     return;
   }
 
   if (p_receive_node->get_p_broadcast_params()->empty())
   {
-    LOG->trace("compute_receive_node: empty map");
+    Logger::log()->trace("compute_receive_node: empty map");
     return;
   }
 
@@ -78,12 +78,12 @@ void compute_receive_node(BaseNode *p_node)
     }
     else
     {
-      LOG->warn("broadcast inputs not available (nullptr)");
+      Logger::log()->warn("broadcast inputs not available (nullptr)");
     }
   }
   else
   {
-    LOG->trace("tag {} not available in broadcast_param", tag);
+    Logger::log()->trace("tag {} not available in broadcast_param", tag);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

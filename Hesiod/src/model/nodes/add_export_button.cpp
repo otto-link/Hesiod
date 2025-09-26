@@ -16,7 +16,7 @@ namespace hesiod
 
 void add_export_button(BaseNode *p_node)
 {
-  LOG->trace("add_export_button: node {}", p_node->get_label());
+  Logger::log()->trace("add_export_button: node {}", p_node->get_label());
 
   auto lambda = [](BaseNode *p_node)
   {

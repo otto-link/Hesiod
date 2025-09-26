@@ -12,7 +12,7 @@ namespace hesiod
 
 void ExportParam::dump()
 {
-  LOG->trace("ExportParam::dump");
+  Logger::log()->trace("ExportParam::dump");
   std::cout << this->json_to().dump(4) << "\n";
 }
 

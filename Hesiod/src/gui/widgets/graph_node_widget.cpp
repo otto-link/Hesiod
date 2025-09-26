@@ -36,7 +36,7 @@ namespace hesiod
 GraphNodeWidget::GraphNodeWidget(GraphNode *p_graph_node, QWidget *parent)
     : GraphViewer(p_graph_node->get_id(), parent), p_graph_node(p_graph_node)
 {
-  LOG->trace("GraphNodeWidget::GraphNodeWidget: id: {}", this->get_id());
+  Logger::log()->trace("GraphNodeWidget::GraphNodeWidget: id: {}", this->get_id());
 
   // populate node catalog
   this->set_node_inventory(get_node_inventory());
@@ -85,7 +85,7 @@ void GraphNodeWidget::add_import_texture_nodes(
 
 void GraphNodeWidget::automatic_node_layout()
 {
-  LOG->trace("GraphNodeWidget::automatic_node_layout");
+  Logger::log()->trace("GraphNodeWidget::automatic_node_layout");
 
   if (!this->p_graph_node)
     return;
@@ -102,8 +102,9 @@ void GraphNodeWidget::automatic_node_layout()
   {
     if (k > points.size() - 1)
     {
-      LOG->error("GraphNodeWidget::automatic_node_layout: computed layout is incoherent "
-                 "with current graphics node layout");
+      Logger::log()->error(
+          "GraphNodeWidget::automatic_node_layout: computed layout is incoherent "
+          "with current graphics node layout");
       return;
     }
 
@@ -156,8 +157,9 @@ GraphNode *GraphNodeWidget::get_p_graph_node()
 {
   if (!this->p_graph_node)
   {
-    LOG->critical("GraphNodeWidget::get_p_graph_node: model graph_node reference is a "
-                  "dangling ptr");
+    Logger::log()->critical(
+        "GraphNodeWidget::get_p_graph_node: model graph_node reference is a "
+        "dangling ptr");
     throw std::runtime_error("dangling ptr");
   }
 
@@ -166,7 +168,7 @@ GraphNode *GraphNodeWidget::get_p_graph_node()
 
 void GraphNodeWidget::json_from(nlohmann::json const &json)
 {
-  LOG->trace("GraphNodeWidget::json_from");
+  Logger::log()->trace("GraphNodeWidget::json_from");
   this->clear_graphic_scene();
 
   // to prevent nodes update at each link creation when the loading
@@ -182,8 +184,8 @@ void GraphNodeWidget::json_from(nlohmann::json const &json)
     {
       ViewerType viewer_type = viewer_json["viewer_type"].get<ViewerType>();
 
-      LOG->trace("GraphNodeWidget::json_from: viewer_type: {}",
-                 viewer_type_as_string.at(viewer_type));
+      Logger::log()->trace("GraphNodeWidget::json_from: viewer_type: {}",
+                           viewer_type_as_string.at(viewer_type));
 
       // TODO add viewer-type specific handling
       this->on_viewport_request();
@@ -191,7 +193,8 @@ void GraphNodeWidget::json_from(nlohmann::json const &json)
       if (auto *p_viewer = dynamic_cast<Viewer3D *>(this->data_viewers.back().get()))
         p_viewer->json_from(viewer_json);
       else
-        LOG->error("GraphNodeWidget::json_from: could not retrieve viewer reference");
+        Logger::log()->error(
+            "GraphNodeWidget::json_from: could not retrieve viewer reference");
     }
   }
 
@@ -202,7 +205,7 @@ void GraphNodeWidget::json_from(nlohmann::json const &json)
 nlohmann::json GraphNodeWidget::json_import(nlohmann::json const &json, QPointF scene_pos)
 {
   // import used when copy/pasting only
-  LOG->trace("GraphNodeWidget::json_import");
+  Logger::log()->trace("GraphNodeWidget::json_import");
 
   // work on a copy of the json to modify the node IDs and return it
   nlohmann::json json_copy = json;
@@ -256,7 +259,7 @@ nlohmann::json GraphNodeWidget::json_import(nlohmann::json const &json, QPointF 
 
 nlohmann::json GraphNodeWidget::json_to() const
 {
-  LOG->trace("GraphNodeWidget::json_to");
+  Logger::log()->trace("GraphNodeWidget::json_to");
   nlohmann::json json = GraphViewer::json_to();
 
   // add the viewports
@@ -274,11 +277,11 @@ void GraphNodeWidget::on_connection_deleted(const std::string &id_out,
                                             const std::string &id_in,
                                             const std::string &port_id_in)
 {
-  LOG->trace("GraphNodeWidget::on_connection_deleted, {}/{} -> {}/{}",
-             id_out,
-             port_id_out,
-             id_in,
-             port_id_in);
+  Logger::log()->trace("GraphNodeWidget::on_connection_deleted, {}/{} -> {}/{}",
+                       id_out,
+                       port_id_out,
+                       id_in,
+                       port_id_in);
 
   this->p_graph_node->remove_link(id_out, port_id_out, id_in, port_id_in);
   this->p_graph_node->update(id_in);
@@ -288,7 +291,7 @@ void GraphNodeWidget::on_connection_dropped(const std::string &node_id,
                                             const std::string &port_id,
                                             QPointF /*scene_pos*/)
 {
-  LOG->trace("GraphNodeWidget::on_connection_dropped: {}/{}", node_id, port_id);
+  Logger::log()->trace("GraphNodeWidget::on_connection_dropped: {}/{}", node_id, port_id);
 
   bool ret = this->execute_new_node_context_menu();
 
@@ -297,7 +300,7 @@ void GraphNodeWidget::on_connection_dropped(const std::string &node_id,
   // been emitted
   if (ret)
   {
-    LOG->trace("GraphNodeWidget::on_connection_dropped: auto-connecting nodes");
+    Logger::log()->trace("GraphNodeWidget::on_connection_dropped: auto-connecting nodes");
 
     const std::string node_to = this->last_node_created_id;
 
@@ -309,7 +312,8 @@ void GraphNodeWidget::on_connection_dropped(const std::string &node_id,
       int         from_port_index = p_node_from->get_port_index(port_id);
       std::string from_type = p_node_from->get_data_type(from_port_index);
 
-      LOG->trace("GraphNodeWidget::on_connection_dropped: from_type: {}", from_type);
+      Logger::log()->trace("GraphNodeWidget::on_connection_dropped: from_type: {}",
+                           from_type);
 
       // connect to the first input that has the same type, if any
       for (int k = 0; k < p_node_to->get_nports(); ++k)
@@ -326,7 +330,8 @@ void GraphNodeWidget::on_connection_dropped(const std::string &node_id,
     }
     else
     {
-      LOG->trace("GraphNodeWidget::on_connection_dropped: p_node_to is nullptr");
+      Logger::log()->trace(
+          "GraphNodeWidget::on_connection_dropped: p_node_to is nullptr");
     }
   }
 }
@@ -336,11 +341,11 @@ void GraphNodeWidget::on_connection_finished(const std::string &id_out,
                                              const std::string &id_in,
                                              const std::string &port_id_in)
 {
-  LOG->trace("GraphNodeWidget::on_connection_finished, {}/{} -> {}/{}",
-             id_out,
-             port_id_out,
-             id_in,
-             port_id_in);
+  Logger::log()->trace("GraphNodeWidget::on_connection_finished, {}/{} -> {}/{}",
+                       id_out,
+                       port_id_out,
+                       id_in,
+                       port_id_in);
 
   this->p_graph_node->new_link(id_out, port_id_out, id_in, port_id_in);
 
@@ -352,7 +357,7 @@ void GraphNodeWidget::on_connection_finished(const std::string &id_out,
 
 void GraphNodeWidget::on_graph_clear_request()
 {
-  LOG->trace("GraphNodeWidget::on_graph_clear_request");
+  Logger::log()->trace("GraphNodeWidget::on_graph_clear_request");
 
   QMessageBox::StandardButton reply = QMessageBox::question(
       nullptr,
@@ -366,7 +371,7 @@ void GraphNodeWidget::on_graph_clear_request()
 
 void GraphNodeWidget::on_graph_import_request()
 {
-  LOG->trace("GraphNodeWidget::on_graph_import_request");
+  Logger::log()->trace("GraphNodeWidget::on_graph_import_request");
 
   std::filesystem::path path = ""; // TODO set path
 
@@ -391,7 +396,7 @@ void GraphNodeWidget::on_graph_import_request()
 
     if (n_graph < 1)
     {
-      LOG->warn("GraphNodeWidget::on_graph_import_request: no graph to import");
+      Logger::log()->warn("GraphNodeWidget::on_graph_import_request: no graph to import");
       return;
     }
 
@@ -407,16 +412,17 @@ void GraphNodeWidget::on_graph_import_request()
 
       if (dialog.exec() != QDialog::Accepted)
       {
-        LOG->trace("GraphNodeWidget::on_graph_import_request: aborted");
+        Logger::log()->trace("GraphNodeWidget::on_graph_import_request: aborted");
         return;
       }
 
       import_graph_id = dialog.selected_value();
     }
 
-    LOG->trace("GraphNodeWidget::on_graph_import_request: importing {} from file {}",
-               import_graph_id,
-               fname);
+    Logger::log()->trace(
+        "GraphNodeWidget::on_graph_import_request: importing {} from file {}",
+        import_graph_id,
+        fname);
 
     // build a json file that can be imported, see GraphNodeWidget::json_import
     nlohmann::json json_imp;
@@ -461,20 +467,20 @@ void GraphNodeWidget::on_graph_import_request()
 
 void GraphNodeWidget::on_graph_new_request()
 {
-  LOG->trace("GraphNodeWidget::on_graph_new_request");
+  Logger::log()->trace("GraphNodeWidget::on_graph_new_request");
   this->clear_all();
 }
 
 void GraphNodeWidget::on_graph_reload_request()
 {
-  LOG->trace("GraphNodeWidget::on_graph_reload_request");
+  Logger::log()->trace("GraphNodeWidget::on_graph_reload_request");
 
   this->p_graph_node->update();
 }
 
 void GraphNodeWidget::on_graph_settings_request()
 {
-  LOG->trace("GraphNodeWidget::on_graph_settings_request");
+  Logger::log()->trace("GraphNodeWidget::on_graph_settings_request");
 
   // disabled editor
   this->set_enabled(false);
@@ -554,10 +560,10 @@ void GraphNodeWidget::on_new_graphics_node_request(const std::string &node_id,
   // node has aldready been created when the GraphNode has been
   // deserialized
 
-  LOG->trace("GraphNodeWidget::on_new_graphics_node_request: {} {},{}",
-             node_id,
-             scene_pos.x(),
-             scene_pos.y());
+  Logger::log()->trace("GraphNodeWidget::on_new_graphics_node_request: {} {},{}",
+                       node_id,
+                       scene_pos.x(),
+                       scene_pos.y());
 
   BaseNode *p_node = this->p_graph_node->get_node_ref_by_id<BaseNode>(node_id);
   this->add_node(p_node->get_proxy_ref(), scene_pos, node_id);
@@ -566,7 +572,7 @@ void GraphNodeWidget::on_new_graphics_node_request(const std::string &node_id,
 std::string GraphNodeWidget::on_new_node_request(const std::string &node_type,
                                                  QPointF            scene_pos)
 {
-  LOG->trace("GraphNodeWidget::on_new_node_request: node_type {}", node_type);
+  Logger::log()->trace("GraphNodeWidget::on_new_node_request: node_type {}", node_type);
 
   if (node_type == "")
     return "";
@@ -586,7 +592,7 @@ std::string GraphNodeWidget::on_new_node_request(const std::string &node_type,
 
 void GraphNodeWidget::on_node_deleted_request(const std::string &node_id)
 {
-  LOG->trace("GraphNodeWidget::on_node_deleted_request, node {}", node_id);
+  Logger::log()->trace("GraphNodeWidget::on_node_deleted_request, node {}", node_id);
 
   this->p_graph_node->remove_node(node_id);
 
@@ -595,7 +601,7 @@ void GraphNodeWidget::on_node_deleted_request(const std::string &node_id)
 
 void GraphNodeWidget::on_node_pinned(const std::string &node_id, bool state)
 {
-  LOG->trace("GraphNodeWidget::on_node_pinned, node {}", node_id);
+  Logger::log()->trace("GraphNodeWidget::on_node_pinned, node {}", node_id);
 
   this->unpin_nodes();
 
@@ -616,14 +622,14 @@ void GraphNodeWidget::on_node_pinned(const std::string &node_id, bool state)
 
 void GraphNodeWidget::on_node_reload_request(const std::string &node_id)
 {
-  LOG->trace("GraphNodeWidget::on_node_reload_request, node [{}]", node_id);
+  Logger::log()->trace("GraphNodeWidget::on_node_reload_request, node [{}]", node_id);
 
   this->p_graph_node->update(node_id);
 }
 
 void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF scene_pos)
 {
-  LOG->trace("GraphNodeWidget::on_node_right_clicked: id {}", node_id);
+  Logger::log()->trace("GraphNodeWidget::on_node_right_clicked: id {}", node_id);
 
   BaseNode            *p_node = this->p_graph_node->get_node_ref_by_id<BaseNode>(node_id);
   gngui::GraphicsNode *p_gx_node = this->get_graphics_node_by_id(node_id);
@@ -820,7 +826,7 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
 void GraphNodeWidget::on_nodes_copy_request(const std::vector<std::string> &id_list,
                                             const std::vector<QPointF> &scene_pos_list)
 {
-  LOG->trace("GraphNodeWidget::on_nodes_copy_request");
+  Logger::log()->trace("GraphNodeWidget::on_nodes_copy_request");
 
   // dump the nodes data into the copy buffer (for the node positions,
   // save the node position relative to the mouse cursor)
@@ -883,7 +889,7 @@ void GraphNodeWidget::on_nodes_duplicate_request(
     const std::vector<std::string> &id_list,
     const std::vector<QPointF>     &scene_pos_list)
 {
-  LOG->trace("GraphNodeWidget::on_nodes_duplicate_request");
+  Logger::log()->trace("GraphNodeWidget::on_nodes_duplicate_request");
 
   std::vector<QPointF> scene_pos_shifted = {};
 
@@ -896,7 +902,7 @@ void GraphNodeWidget::on_nodes_duplicate_request(
 
 void GraphNodeWidget::on_nodes_paste_request()
 {
-  LOG->trace("GraphNodeWidget::on_nodes_paste_request");
+  Logger::log()->trace("GraphNodeWidget::on_nodes_paste_request");
 
   if (!this->json_copy_buffer.is_object())
     return;
@@ -921,7 +927,7 @@ void GraphNodeWidget::on_nodes_paste_request()
 
 void GraphNodeWidget::on_viewport_request()
 {
-  LOG->trace("GraphNodeWidget::on_viewport_request");
+  Logger::log()->trace("GraphNodeWidget::on_viewport_request");
 
   this->data_viewers.push_back(std::make_unique<Viewer3D>(this));
   this->data_viewers.back()->show();

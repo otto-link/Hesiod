@@ -162,7 +162,7 @@ void FrameItem::set_angle(float new_angle)
 
 void FrameItem::set_background_image(QImage new_image)
 {
-  LOG->trace("FrameItem::set_background_image: frame {}", this->id);
+  Logger::log()->trace("FrameItem::set_background_image: frame {}", this->id);
 
   if (new_image.isNull() || new_image.bits() == nullptr)
   {

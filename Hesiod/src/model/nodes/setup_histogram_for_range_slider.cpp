@@ -17,7 +17,7 @@ void setup_histogram_for_range_attribute(BaseNode          *p_node,
                                          const std::string &attribute_key,
                                          const std::string &port_id)
 {
-  LOG->trace("setup_histogram_for_range_slider: node {}", p_node->get_label());
+  Logger::log()->trace("setup_histogram_for_range_slider: node {}", p_node->get_label());
 
   // function to compute the histogram
   auto lambda = [p_node, port_id]()

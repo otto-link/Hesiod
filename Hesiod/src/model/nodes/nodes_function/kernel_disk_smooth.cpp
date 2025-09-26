@@ -16,7 +16,7 @@ namespace hesiod
 
 void setup_kernel_disk_smooth_node(BaseNode *p_node)
 {
-  LOG->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", p_node->get_label());
 
   // port(s)
   p_node->add_port<hmap::Array>(gnode::PortType::OUT,
@@ -36,7 +36,7 @@ void compute_kernel_disk_smooth_node(BaseNode *p_node)
 {
   Q_EMIT p_node->compute_started(p_node->get_id());
 
-  LOG->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
   hmap::Array *p_out = p_node->get_value_ref<hmap::Array>("kernel");
 

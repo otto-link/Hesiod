@@ -77,12 +77,10 @@ bool helper_try_set_from_port(const BaseNode       &node,
   return true;
 }
 
-Viewer3D::Viewer3D(GraphNodeWidget   *p_graph_node_widget_,
-                   const std::string &label_,
-                   QWidget           *parent)
+Viewer3D::Viewer3D(GraphNodeWidget *p_graph_node_widget_, QWidget *parent)
     : Viewer(p_graph_node_widget_, ViewerType::VIEWER3D, "3D Renderer", parent)
 {
-  LOG->trace("Viewer3D::Viewer3D");
+  Logger::log()->trace("Viewer3D::Viewer3D");
 
   this->view_param = this->get_default_view_param();
   this->setup_layout();
@@ -117,7 +115,7 @@ ViewerNodeParam Viewer3D::get_default_view_param() const
 
 void Viewer3D::json_from(nlohmann::json const &json)
 {
-  LOG->trace("Viewer3D::json_from");
+  Logger::log()->trace("Viewer3D::json_from");
 
   Viewer::json_from(json);
   if (p_renderer)
@@ -126,7 +124,7 @@ void Viewer3D::json_from(nlohmann::json const &json)
 
 nlohmann::json Viewer3D::json_to() const
 {
-  LOG->trace("Viewer3D::json_to");
+  Logger::log()->trace("Viewer3D::json_to");
 
   nlohmann::json json = Viewer::json_to();
   if (p_renderer)
@@ -137,7 +135,7 @@ nlohmann::json Viewer3D::json_to() const
 
 void Viewer3D::setup_layout()
 {
-  LOG->trace("Viewer3D::setup_layout");
+  Logger::log()->trace("Viewer3D::setup_layout");
 
   Viewer::setup_layout();
 
@@ -154,13 +152,14 @@ void Viewer3D::setup_layout()
 
 void Viewer3D::update_renderer()
 {
-  LOG->trace("Viewer3D::update_renderer");
+  Logger::log()->trace("Viewer3D::update_renderer");
 
   // --- early exit cases
 
   if (!this->p_renderer)
   {
-    LOG->error("Viewer3D::update_renderer: renderer reference is a dangling ptr");
+    Logger::log()->error(
+        "Viewer3D::update_renderer: renderer reference is a dangling ptr");
     return;
   }
 

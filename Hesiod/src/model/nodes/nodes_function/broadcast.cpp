@@ -15,7 +15,7 @@ namespace hesiod
 
 void setup_broadcast_node(BaseNode *p_node)
 {
-  LOG->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", p_node->get_label());
 
   // port(s)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
@@ -31,7 +31,7 @@ void compute_broadcast_node(BaseNode *p_node)
 {
   Q_EMIT p_node->compute_started(p_node->get_id());
 
-  LOG->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
   hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
 
@@ -46,11 +46,11 @@ void compute_broadcast_node(BaseNode *p_node)
     std::string graph_id = p_node->get_graph_id();
     std::string node_id = p_node->get_id();
 
-    LOG->trace("compute_broadcast_node: broadcasting graph: {}, node: {}",
-               graph_id,
-               node_id);
+    Logger::log()->trace("compute_broadcast_node: broadcasting graph: {}, node: {}",
+                         graph_id,
+                         node_id);
 
-    LOG->trace("broadcast_tag: {}", broadcast_tag);
+    Logger::log()->trace("broadcast_tag: {}", broadcast_tag);
 
     // this goes to the graph editor
     Q_EMIT p_broadcast_node->broadcast_node_updated(graph_id, broadcast_tag);

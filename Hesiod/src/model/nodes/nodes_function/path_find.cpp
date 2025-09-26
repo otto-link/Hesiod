@@ -16,7 +16,7 @@ namespace hesiod
 
 void setup_path_find_node(BaseNode *p_node)
 {
-  LOG->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", p_node->get_label());
 
   // port(s)
   p_node->add_port<hmap::Path>(gnode::PortType::IN, "waypoints");
@@ -37,7 +37,7 @@ void compute_path_find_node(BaseNode *p_node)
 {
   Q_EMIT p_node->compute_started(p_node->get_id());
 
-  LOG->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
   hmap::Path      *p_waypoints = p_node->get_value_ref<hmap::Path>("waypoints");
   hmap::Heightmap *p_hmap = p_node->get_value_ref<hmap::Heightmap>("heightmap");
@@ -60,7 +60,7 @@ void compute_path_find_node(BaseNode *p_node)
       shape_wrk.x = std::max(2, shape_wrk.x);
       shape_wrk.y = std::max(2, shape_wrk.y);
 
-      LOG->trace("working shape: ({}, {})", shape_wrk.x, shape_wrk.y);
+      Logger::log()->trace("working shape: ({}, {})", shape_wrk.x, shape_wrk.y);
 
       // work on a single array (as a temporary solution?)
       hmap::Array z = p_hmap->to_array();

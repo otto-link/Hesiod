@@ -16,7 +16,7 @@ namespace hesiod
 
 CmapManager::CmapManager()
 {
-  LOG->info("initializing colormaps manager");
+  Logger::log()->info("initializing colormaps manager");
   this->update_colormap_data();
 }
 
@@ -38,11 +38,11 @@ void CmapManager::update_colormap_data(bool append)
   {
     file >> json;
     file.close();
-    LOG->trace("JSON successfully loaded from {}", fname);
+    Logger::log()->trace("JSON successfully loaded from {}", fname);
 
     for (auto &[key, val] : json.items())
     {
-      // LOG->trace("loading colormap: {}", key);
+      // Logger::log()->trace("loading colormap: {}", key);
 
       CmapData cdata;
       cdata.id = key;
@@ -55,7 +55,7 @@ void CmapManager::update_colormap_data(bool append)
     }
   }
   else
-    LOG->error("Could not open file {} to load JSON", fname);
+    Logger::log()->error("Could not open file {} to load JSON", fname);
 }
 
 std::vector<std::vector<float>> CmapManager::get_colormap_data(int cmap_id)

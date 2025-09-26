@@ -17,7 +17,7 @@ namespace hesiod
 
 void setup_smooth_fill_node(BaseNode *p_node)
 {
-  LOG->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", p_node->get_label());
 
   // port(s)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
@@ -40,7 +40,7 @@ void setup_smooth_fill_node(BaseNode *p_node)
 
 void compute_smooth_fill_node(BaseNode *p_node)
 {
-  LOG->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
   Q_EMIT p_node->compute_started(p_node->get_id());
 

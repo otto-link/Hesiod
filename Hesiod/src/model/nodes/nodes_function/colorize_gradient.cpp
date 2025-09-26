@@ -19,7 +19,7 @@ namespace hesiod
 
 void setup_colorize_gradient_node(BaseNode *p_node)
 {
-  LOG->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", p_node->get_label());
 
   // port(s)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "level");
@@ -42,7 +42,7 @@ void compute_colorize_gradient_node(BaseNode *p_node)
 {
   Q_EMIT p_node->compute_started(p_node->get_id());
 
-  LOG->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
   hmap::Heightmap *p_level = p_node->get_value_ref<hmap::Heightmap>("level");
 
@@ -59,7 +59,7 @@ void compute_colorize_gradient_node(BaseNode *p_node)
     for (auto &data : gradient)
       colormap_colors.push_back({data[1], data[2], data[3]});
 
-    LOG->trace("ncolors: {}", colormap_colors.size());
+    Logger::log()->trace("ncolors: {}", colormap_colors.size());
 
     // reverse alpha
     hmap::Heightmap  alpha_copy;

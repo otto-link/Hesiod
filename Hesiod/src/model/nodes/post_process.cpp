@@ -20,9 +20,9 @@ namespace hesiod
 
 void post_apply_enveloppe(BaseNode *p_node, hmap::Heightmap &h, hmap::Heightmap *p_env)
 {
-  LOG->trace("post_apply_enveloppe: [{}]/[{}]",
-             p_node->get_node_type(),
-             p_node->get_id());
+  Logger::log()->trace("post_apply_enveloppe: [{}]/[{}]",
+                       p_node->get_node_type(),
+                       p_node->get_id());
 
   if (p_env)
   {
@@ -97,9 +97,9 @@ void post_process_heightmap(BaseNode         *p_node,
 
 void post_process_heightmap(BaseNode *p_node, hmap::Heightmap &h, hmap::Heightmap *p_in)
 {
-  LOG->trace("post_process_heightmap: [{}]/[{}]",
-             p_node->get_node_type(),
-             p_node->get_id());
+  Logger::log()->trace("post_process_heightmap: [{}]/[{}]",
+                       p_node->get_node_type(),
+                       p_node->get_id());
 
   // mix
   if (p_in)
@@ -174,9 +174,9 @@ void post_process_heightmap(BaseNode *p_node, hmap::Heightmap &h, hmap::Heightma
 
 void setup_post_process_heightmap_attributes(BaseNode *p_node, bool add_mix)
 {
-  LOG->trace("setup_post_process_heightmap_attributes: [{}]/[{}]",
-             p_node->get_node_type(),
-             p_node->get_id());
+  Logger::log()->trace("setup_post_process_heightmap_attributes: [{}]/[{}]",
+                       p_node->get_node_type(),
+                       p_node->get_id());
 
   if (add_mix)
   {

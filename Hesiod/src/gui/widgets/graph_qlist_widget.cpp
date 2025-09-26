@@ -18,7 +18,7 @@ namespace hesiod
 GraphQListWidget::GraphQListWidget(GraphNode *p_graph_node, QWidget *parent)
     : QWidget(parent), p_graph_node(p_graph_node)
 {
-  LOG->trace("GraphQListWidget::GraphQListWidget");
+  Logger::log()->trace("GraphQListWidget::GraphQListWidget");
 
   QGridLayout *layout = new QGridLayout(this);
   this->setLayout(layout);
@@ -57,8 +57,8 @@ nlohmann::json GraphQListWidget::json_to() const
 
 void GraphQListWidget::on_combobox_changed()
 {
-  LOG->trace("GraphQListWidget::on_combobox_changed: current tag: {}",
-             this->current_bg_tag);
+  Logger::log()->trace("GraphQListWidget::on_combobox_changed: current tag: {}",
+                       this->current_bg_tag);
 
   this->current_bg_tag = this->combobox->currentText().toStdString();
 
@@ -73,9 +73,9 @@ void GraphQListWidget::on_combobox_changed()
     return;
   }
 
-  LOG->trace("GraphQListWidget::on_combobox_changed: node_id={}, port_id={}",
-             node_id,
-             port_id);
+  Logger::log()->trace("GraphQListWidget::on_combobox_changed: node_id={}, port_id={}",
+                       node_id,
+                       port_id);
 
   // TODO allow other data types (see data_preview)
 
@@ -115,7 +115,7 @@ void GraphQListWidget::update_combobox()
   this->combobox->clear();
   this->combobox->addItem("NONE");
 
-  LOG->trace("GraphQListWidget::update_combobox, tag: {}", tag_bckp);
+  Logger::log()->trace("GraphQListWidget::update_combobox, tag: {}", tag_bckp);
 
   // list of possible data available to show on the canvas as Pixmap
   bool is_current_tag_in_combo = false;
@@ -123,9 +123,9 @@ void GraphQListWidget::update_combobox()
   for (auto &[id, node] : this->p_graph_node->get_nodes())
     for (auto &port : node->get_ports())
     {
-      LOG->trace("GraphQListWidget::update_combobox: {}/{}",
-                 node->get_label(),
-                 port->get_label());
+      Logger::log()->trace("GraphQListWidget::update_combobox: {}/{}",
+                           node->get_label(),
+                           port->get_label());
 
       // TODO allow other data types
 
