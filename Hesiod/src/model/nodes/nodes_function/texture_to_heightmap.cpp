@@ -25,7 +25,7 @@ void setup_texture_to_heightmap_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "elevation", CONFIG);
 
   // attribute(s)
- 
+
   // attribute(s) order
   setup_post_process_heightmap_attributes(p_node);
 }

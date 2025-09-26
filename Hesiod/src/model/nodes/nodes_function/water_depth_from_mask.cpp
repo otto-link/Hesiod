@@ -1,0 +1,75 @@
+/* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
+ * Public License. The full license is in the file LICENSE, distributed with
+ * this software. */
+#include "highmap/hydrology.hpp"
+
+#include "attributes.hpp"
+
+#include "hesiod/logger.hpp"
+#include "hesiod/model/nodes/base_node.hpp"
+#include "hesiod/model/nodes/base_node_gui.hpp"
+#include "hesiod/model/nodes/post_process.hpp"
+
+using namespace attr;
+
+namespace hesiod
+{
+
+void setup_water_depth_from_mask_node(BaseNode *p_node)
+{
+  LOG->trace("setup node {}", p_node->get_label());
+
+  // port(s)
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "elevation");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "water_depth", CONFIG);
+
+  // attribute(s)
+  ADD_ATTR(FloatAttribute, "mask_threshold", 0.1f, 0.f, 0.5f);
+  ADD_ATTR(FloatAttribute, "tolerance", 1e-3f, 0.f, 0.01f, "{:.4f}");
+  ADD_ATTR(IntAttribute, "iterations", 500, 1, INT_MAX);
+  ADD_ATTR(FloatAttribute, "omega", 1.8f, 1e-3f, 2.f);
+
+  // attribute(s) order
+  p_node->set_attr_ordered_key({"mask_threshold", "tolerance", "iterations", "omega"});
+
+  add_wip_warning_label(p_node);
+}
+
+void compute_water_depth_from_mask_node(BaseNode *p_node)
+{
+  Q_EMIT p_node->compute_started(p_node->get_id());
+
+  LOG->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+
+  hmap::Heightmap *p_z = p_node->get_value_ref<hmap::Heightmap>("elevation");
+  hmap::Heightmap *p_mask = p_node->get_value_ref<hmap::Heightmap>("mask");
+
+  if (p_z && p_mask)
+  {
+    hmap::Heightmap *p_depth = p_node->get_value_ref<hmap::Heightmap>("water_depth");
+
+    hmap::transform(
+        {p_depth, p_z, p_mask},
+        [p_node](std::vector<hmap::Array *> p_arrays)
+        {
+          hmap::Array *pa_depth = p_arrays[0];
+          hmap::Array *pa_z = p_arrays[1];
+          hmap::Array *pa_mask = p_arrays[2];
+
+          *pa_depth = hmap::water_depth_from_mask(*pa_z,
+                                                  *pa_mask,
+                                                  GET("mask_threshold", FloatAttribute),
+                                                  GET("iterations", IntAttribute),
+                                                  GET("tolerance", FloatAttribute),
+                                                  GET("omega", FloatAttribute));
+        },
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
+
+    p_depth->smooth_overlap_buffers();
+  }
+
+  Q_EMIT p_node->compute_finished(p_node->get_id());
+}
+
+} // namespace hesiod

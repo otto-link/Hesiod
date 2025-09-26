@@ -1,5 +1,5 @@
 
-WaterDepthDryOut Node
+MergeWaterDepths Node
 =====================
 
 
@@ -7,7 +7,7 @@ No description available
 
 
 
-![img](../../images/nodes/WaterDepthDryOut_settings.png)
+![img](../../images/nodes/MergeWaterDepths_settings.png)
 
 
 # Category
@@ -18,8 +18,8 @@ Hydrology
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|depth|Heightmap|No description|
-|mask|Heightmap|No description|
+|depth1|Heightmap|No description|
+|depth2|Heightmap|No description|
 
 # Outputs
 
@@ -31,14 +31,14 @@ Hydrology
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|dry_out_ratio|Float|No description|
+|k_smooth|Float|No description|
 
 # Example
 
 
-![img](../../images/nodes/WaterDepthDryOut_hsd_example.png)
+![img](../../images/nodes/MergeWaterDepths_hsd_example.png)
 
-Corresponding Hesiod file: [WaterDepthDryOut.hsd](../../examples/WaterDepthDryOut.hsd). Use [Ctrl+I] in the node editor to import a hsd file within your current project. 
+Corresponding Hesiod file: [MergeWaterDepths.hsd](../../examples/MergeWaterDepths.hsd). Use [Ctrl+I] in the node editor to import a hsd file within your current project. 
 
 > **Note:** Example files are kept up-to-date with the latest version of [Hesiod](https://github.com/otto-link/Hesiod).
 > If you find an error, please [open an issue](https://github.com/otto-link/Hesiod/issues).
