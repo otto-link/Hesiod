@@ -11946,6 +11946,89 @@
             }
         }
     },
+    "TextureSplitChannels": {
+        "category": "Texture",
+        "description": "No description available",
+        "label": "TextureSplitChannels",
+        "parameters": null,
+        "ports": {
+            "A": {
+                "caption": "A",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "output"
+            },
+            "B": {
+                "caption": "B",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "output"
+            },
+            "G": {
+                "caption": "G",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "output"
+            },
+            "R": {
+                "caption": "R",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "output"
+            },
+            "texture": {
+                "caption": "texture",
+                "data_type": "HeightmapRGBA",
+                "description": "No description",
+                "type": "input"
+            }
+        }
+    },
+    "TextureToHeightmap": {
+        "category": "Texture",
+        "description": "No description available",
+        "label": "TextureToHeightmap",
+        "parameters": {
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
+                "type": "Bool"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "elevation": {
+                "caption": "elevation",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "output"
+            },
+            "texture": {
+                "caption": "texture",
+                "data_type": "HeightmapRGBA",
+                "description": "No description",
+                "type": "input"
+            }
+        }
+    },
     "TextureUvChecker": {
         "category": "Texture",
         "description": "TODO",
