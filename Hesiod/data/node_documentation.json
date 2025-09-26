@@ -5434,6 +5434,39 @@
             }
         }
     },
+    "MergeWaterDepths": {
+        "category": "Hydrology",
+        "description": "No description available",
+        "label": "MergeWaterDepths",
+        "parameters": {
+            "k_smooth": {
+                "description": "No description",
+                "key": "k_smooth",
+                "label": "k_smooth",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "depth1": {
+                "caption": "depth1",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "depth2": {
+                "caption": "depth2",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "water_depth": {
+                "caption": "water_depth",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "output"
+            }
+        }
+    },
     "MixNormalMap": {
         "category": "Texture",
         "description": "TODO",
@@ -13553,6 +13586,57 @@
                 "description": "No description",
                 "key": "dry_out_ratio",
                 "label": "dry_out_ratio",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "depth": {
+                "caption": "depth",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "mask": {
+                "caption": "mask",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "water_depth": {
+                "caption": "water_depth",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "output"
+            }
+        }
+    },
+    "WaterDepthFromMask": {
+        "category": "Hydrology",
+        "description": "No description available",
+        "label": "WaterDepthFromMask",
+        "parameters": {
+            "iterations": {
+                "description": "No description",
+                "key": "iterations",
+                "label": "iterations",
+                "type": "Integer"
+            },
+            "mask_threshold": {
+                "description": "No description",
+                "key": "mask_threshold",
+                "label": "mask_threshold",
+                "type": "Float"
+            },
+            "omega": {
+                "description": "No description",
+                "key": "omega",
+                "label": "omega",
+                "type": "Float"
+            },
+            "tolerance": {
+                "description": "No description",
+                "key": "tolerance",
+                "label": "tolerance",
                 "type": "Float"
             }
         },

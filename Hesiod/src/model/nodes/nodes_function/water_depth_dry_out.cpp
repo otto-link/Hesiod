@@ -19,12 +19,12 @@ void setup_water_depth_dry_out_node(BaseNode *p_node)
   LOG->trace("setup node {}", p_node->get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "elevation");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "depth");
   p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "water_depth", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(FloatAttribute, "dry_out_ratio", 0.5f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "dry_out_ratio", 0.1f, 0.f, 0.5f, "{:.4f}");
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"dry_out_ratio"});
@@ -36,7 +36,7 @@ void compute_water_depth_dry_out_node(BaseNode *p_node)
 
   LOG->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
-  hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("elevation");
+  hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("depth");
 
   if (p_in)
   {
