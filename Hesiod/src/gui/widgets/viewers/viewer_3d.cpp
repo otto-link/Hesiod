@@ -237,6 +237,7 @@ void Viewer3D::update_renderer()
                   ah(i, j) -= hmin;
               }
 
+            // send to renderer
             if (this->p_renderer)
               this->p_renderer->set_water_geometry(ah.vector,
                                                    h.shape.x,
