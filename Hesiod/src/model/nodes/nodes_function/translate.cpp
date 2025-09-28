@@ -25,12 +25,11 @@ void setup_translate_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(FloatAttribute, "dx", 0.1f, -1.f, 1.f);
-  ADD_ATTR(FloatAttribute, "dy", 0.1f, -1.f, 1.f);
+  ADD_ATTR(Vec2FloatAttribute, "center");
   ADD_ATTR(BoolAttribute, "periodic", false);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"dx", "dy", "periodic"});
+  p_node->set_attr_ordered_key({"center", "periodic"});
 }
 
 void compute_translate_node(BaseNode *p_node)
@@ -66,9 +65,11 @@ void compute_translate_node(BaseNode *p_node)
       p_dy_array = &dy_array;
     }
 
+    hmap::Vec2<float> center = GET("center", Vec2FloatAttribute);
+
     z_array = hmap::translate(z_array,
-                              GET("dx", FloatAttribute),
-                              GET("dy", FloatAttribute),
+                              center.x - 0.5f,
+                              center.y - 0.5f,
                               GET("periodic", BoolAttribute),
                               p_dx_array,
                               p_dy_array);
