@@ -23,16 +23,17 @@ void setup_gaussian_pulse_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "dx");
   p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
   p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "control");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "envelope");
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
   ADD_ATTR(FloatAttribute, "radius", 0.1f, 0.f, 1.f);
   ADD_ATTR(Vec2FloatAttribute, "center");
-  ADD_ATTR(BoolAttribute, "inverse", false);
-  ADD_ATTR(RangeAttribute, "remap");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"radius", "center", "_SEPARATOR_", "inverse", "remap"});
+  p_node->set_attr_ordered_key({"radius", "center"});
+
+  setup_post_process_heightmap_attributes(p_node);
 }
 
 void compute_gaussian_pulse_node(BaseNode *p_node)
@@ -45,6 +46,7 @@ void compute_gaussian_pulse_node(BaseNode *p_node)
   hmap::Heightmap *p_dx = p_node->get_value_ref<hmap::Heightmap>("dx");
   hmap::Heightmap *p_dy = p_node->get_value_ref<hmap::Heightmap>("dy");
   hmap::Heightmap *p_ctrl = p_node->get_value_ref<hmap::Heightmap>("control");
+  hmap::Heightmap *p_env = p_node->get_value_ref<hmap::Heightmap>("envelope");
   hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
   hmap::fill(*p_out,
@@ -68,16 +70,8 @@ void compute_gaussian_pulse_node(BaseNode *p_node)
              });
 
   // post-process
-  post_process_heightmap(p_node,
-                         *p_out,
-                         GET("inverse", BoolAttribute),
-                         false, // smooth
-                         0,
-                         false, // saturate
-                         {0.f, 0.f},
-                         0.f,
-                         GET_MEMBER("remap", RangeAttribute, is_active),
-                         GET("remap", RangeAttribute));
+  post_apply_enveloppe(p_node, *p_out, p_env);
+  post_process_heightmap(p_node, *p_out);
 
   Q_EMIT p_node->compute_finished(p_node->get_id());
 }
