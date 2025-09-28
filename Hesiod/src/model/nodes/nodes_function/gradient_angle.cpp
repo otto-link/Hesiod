@@ -23,12 +23,11 @@ void setup_gradient_angle_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(BoolAttribute, "unwrap_angle", true);
+  ADD_ATTR(FloatAttribute, "smoothing_radius", 0.f, 0.f, 0.2f);
   ADD_ATTR(RangeAttribute, "remap", std::vector<float>({-1.f, 1.f}), -1.f, 1.f, false);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key(
-      {"_TEXT_Base paramaters", "unwrap_angle", "_TEXT_Post-processing", "remap"});
+  p_node->set_attr_ordered_key({"_TEXT_Post-processing", "smoothing_radius", "remap"});
 }
 
 void compute_gradient_angle_node(BaseNode *p_node)
@@ -43,32 +42,23 @@ void compute_gradient_angle_node(BaseNode *p_node)
   {
     hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
+    int ir = (int)(GET("smoothing_radius", FloatAttribute) * p_out->shape.x);
+
     hmap::transform(
         {p_out, p_in},
-        [](std::vector<hmap::Array *> p_arrays)
+        [ir](std::vector<hmap::Array *> p_arrays)
         {
           hmap::Array *pa_out = p_arrays[0];
           hmap::Array *pa_in = p_arrays[1];
 
-          *pa_out = hmap::gradient_angle(*pa_in);
+          if (ir > 0)
+            *pa_out = hmap::gradient_angle_circular_smoothing(*pa_in, ir);
+          else
+            *pa_out = hmap::gradient_angle(*pa_in);
         },
         p_node->get_config_ref()->hmap_transform_mode_cpu);
 
     p_out->smooth_overlap_buffers();
-
-    // remove phase jumps if requested
-    if (GET("unwrap_angle", BoolAttribute))
-    {
-      // on a single array, not tiled (so far)
-      hmap::transform(
-          {p_out},
-          [](std::vector<hmap::Array *> p_arrays)
-          {
-            hmap::Array *pa_out = p_arrays[0];
-            *pa_out = hmap::unwrap_phase(*pa_out);
-          },
-          hmap::TransformMode::SINGLE_ARRAY);
-    }
 
     // post-process
     post_process_heightmap(p_node,
