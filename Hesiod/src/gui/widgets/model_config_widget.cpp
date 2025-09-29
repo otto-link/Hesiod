@@ -62,10 +62,18 @@ ModelConfigWidget::ModelConfigWidget(ModelConfig *p_model_config,
   layout->addWidget(label_tiling_text, row, 0);
 
   this->slider_tiling = new QSlider(Qt::Horizontal, this);
-  this->slider_tiling->setRange(1, 8);
+
+  // slider works on exponents instead of actual values
+  int min_exp = 1; // 2^1 = 2
+  int max_exp = 4; // 2^4 = 16
+  this->slider_tiling->setRange(min_exp, max_exp);
   this->slider_tiling->setSingleStep(1);
   this->slider_tiling->setPageStep(1);
-  this->slider_tiling->setValue(this->p_model_config->tiling.x);
+
+  // initialize slider to current tiling.x (must be power of two)
+  int current_exp = std::log2(this->p_model_config->tiling.x);
+  this->slider_tiling->setValue(current_exp);
+
   layout->addWidget(this->slider_tiling, row, 1);
 
   this->label_tiling = new QLabel(QString("%1x%2")
@@ -76,11 +84,11 @@ ModelConfigWidget::ModelConfigWidget(ModelConfig *p_model_config,
 
   this->connect(this->slider_tiling,
                 &QSlider::valueChanged,
-                [this]()
+                [this](int exp)
                 {
-                  int pos = this->slider_tiling->value();
-                  this->p_model_config->tiling.x = pos;
-                  this->p_model_config->tiling.y = pos;
+                  int val = 1 << exp; // 2^exp
+                  this->p_model_config->tiling.x = val;
+                  this->p_model_config->tiling.y = val;
                   this->label_tiling->setText(QString("%1x%2")
                                                   .arg(this->p_model_config->tiling.x)
                                                   .arg(this->p_model_config->tiling.y));
