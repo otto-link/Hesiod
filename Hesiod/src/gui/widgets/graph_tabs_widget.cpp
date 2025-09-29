@@ -359,8 +359,7 @@ void GraphTabsWidget::update_tab_widget()
 
       // Make settings compact vertically and constrain width
       settings_widget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Maximum);
-      settings_widget->setMinimumWidth(250);
-      settings_widget->setMaximumWidth(400);
+      settings_widget->setMinimumWidth(300);
 
       // Add without stretch so it keeps its preferred width
       layout->addWidget(settings_widget, 0);

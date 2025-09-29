@@ -33,7 +33,9 @@ private:
   GraphNodeWidget         *p_graph_node_widget; // own by GraphManagerWidget
   QVBoxLayout             *layout;
   QGridLayout             *scroll_layout;
+  QScrollArea             *scroll_area;
   std::vector<std::string> pinned_node_ids = {};
+  bool                     first_pass = true;
 };
 
 } // namespace hesiod
