@@ -6,6 +6,7 @@
 #include <QLabel>
 #include <QPointer>
 #include <QPushButton>
+#include <QScrollBar>
 
 #include "attributes/widgets/abstract_widget.hpp"
 #include "attributes/widgets/attributes_widget.hpp"
@@ -33,10 +34,6 @@ NodeSettingsWidget::NodeSettingsWidget(GraphNodeWidget *p_graph_node_widget,
     Logger::log()->critical(msg);
     throw std::invalid_argument(msg);
   }
-
-  this->initialize_layout();
-  this->setup_connections();
-  this->update_content();
 }
 
 void NodeSettingsWidget::initialize_layout()
@@ -45,8 +42,8 @@ void NodeSettingsWidget::initialize_layout()
 
   this->layout = new QVBoxLayout(this);
 
-  QScrollArea *scroll_area = new QScrollArea(this);
-  QWidget     *scroll_widget = new QWidget(scroll_area);
+  this->scroll_area = new QScrollArea(this);
+  QWidget *scroll_widget = new QWidget(this->scroll_area);
 
   // central layout that hosts all settings rows
   this->scroll_layout = new QGridLayout(scroll_widget);
@@ -61,15 +58,15 @@ void NodeSettingsWidget::initialize_layout()
   scroll_widget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
   scroll_widget->setLayout(this->scroll_layout);
 
-  scroll_area->setWidgetResizable(true);
-  scroll_area->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  scroll_area->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-  scroll_area->setWidget(scroll_widget);
+  this->scroll_area->setWidgetResizable(true);
+  this->scroll_area->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+  this->scroll_area->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+  this->scroll_area->setWidget(scroll_widget);
 
   // make sure the single column stretches to occupy the width
   this->scroll_layout->setColumnStretch(0, 1);
 
-  this->layout->addWidget(scroll_area);
+  this->layout->addWidget(this->scroll_area);
   this->setLayout(this->layout);
 }
 
@@ -124,6 +121,16 @@ void NodeSettingsWidget::update_content()
 {
   Logger::log()->trace("NodeSettingsWidget::update_content");
 
+  // create widget content here (not in the constructor) to ensure the
+  // the parent widget is setup
+  if (this->first_pass)
+  {
+    this->initialize_layout();
+    this->setup_connections();
+    this->first_pass = false;
+  }
+
+  // some guard access
   if (!this->p_graph_node_widget)
   {
     Logger::log()->error(
@@ -131,17 +138,12 @@ void NodeSettingsWidget::update_content()
     return;
   }
 
-  // empty and delete items of current layout
   if (!this->scroll_layout)
   {
     Logger::log()->error("NodeSettingsWidget::update_content: scroll_layout is nullptr");
     return;
   }
 
-  clear_layout(this->scroll_layout);
-  int row = 0;
-
-  // guard access to the underlying graph
   auto p_graph = this->p_graph_node_widget->get_p_graph_node();
   if (!p_graph)
   {
@@ -149,6 +151,17 @@ void NodeSettingsWidget::update_content()
         "NodeSettingsWidget::update_content: get_p_graph_node returned nullptr");
     return;
   }
+
+  // for scroll_area size
+  QWidget *parent = this->parentWidget();
+  if (parent)
+    this->scroll_area->setMinimumHeight((int)(0.9f * parent->size().height()));
+  else
+    this->scroll_area->setMinimumHeight(512);
+
+  // empty and delete items of current layout
+  clear_layout(this->scroll_layout);
+  int row = 0;
 
   std::vector<std::string> selected_ids = this->p_graph_node_widget
                                               ->get_selected_node_ids();
@@ -293,9 +306,7 @@ void NodeSettingsWidget::update_content()
 
     if (attributes_widget)
     {
-      attributes_widget->setParent(this);
-      attributes_widget->setSizePolicy(QSizePolicy::Preferred,
-                                       QSizePolicy::MinimumExpanding);
+      attributes_widget->setParent(this->scroll_area);
 
       // change the attribute widget layout spacing a posteriori
       QVBoxLayout *retrieved_layout = qobject_cast<QVBoxLayout *>(
@@ -313,7 +324,7 @@ void NodeSettingsWidget::update_content()
 
           if (auto *inner_layout = child->layout())
           {
-            inner_layout->setContentsMargins(32, 2, 64, 2);
+            inner_layout->setContentsMargins(0, 2, 0, 2);
             inner_layout->setSpacing(4);
           }
         }
