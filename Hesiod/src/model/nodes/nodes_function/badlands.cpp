@@ -31,6 +31,7 @@ void setup_badlands_node(BaseNode *p_node)
   ADD_ATTR(FloatAttribute, "elevation", 0.4f, 0.f, 1.f);
   ADD_ATTR(WaveNbAttribute, "kw");
   ADD_ATTR(SeedAttribute, "seed");
+  ADD_ATTR(IntAttribute, "octaves", 8, 0, 32);
   ADD_ATTR(FloatAttribute, "rugosity", 0.2f, 0.f, 1.f);
   ADD_ATTR(FloatAttribute, "angle", 30.f, -180.f, 180.f);
   ADD_ATTR(FloatAttribute, "k_smoothing", 0.1f, 0.f, 1.f);
@@ -40,6 +41,7 @@ void setup_badlands_node(BaseNode *p_node)
   p_node->set_attr_ordered_key({"elevation",
                                 "kw",
                                 "seed",
+                                "octaves",
                                 "_SEPARATOR_",
                                 "rugosity",
                                 "angle",
@@ -78,6 +80,7 @@ void compute_badlands_node(BaseNode *p_node)
         *pa_out = hmap::gpu::badlands(shape,
                                       GET("kw", WaveNbAttribute),
                                       GET("seed", SeedAttribute),
+                                      GET("octaves", IntAttribute),
                                       GET("rugosity", FloatAttribute),
                                       GET("angle", FloatAttribute),
                                       GET("k_smoothing", FloatAttribute),

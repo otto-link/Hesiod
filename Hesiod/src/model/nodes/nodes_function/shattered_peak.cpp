@@ -32,6 +32,7 @@ void setup_shattered_peak_node(BaseNode *p_node)
   ADD_ATTR(FloatAttribute, "elevation", 0.7f, 0.f, 1.f);
   ADD_ATTR(FloatAttribute, "scale", 1.f, 0.01f, FLT_MAX);
   ADD_ATTR(SeedAttribute, "seed");
+  ADD_ATTR(IntAttribute, "octaves", 8, 0, 32);
   ADD_ATTR(FloatAttribute, "peak_kw", 4.f, 0.01f, FLT_MAX);
   ADD_ATTR(FloatAttribute, "rugosity", 0.f, 0.f, 1.f);
   ADD_ATTR(FloatAttribute, "angle", 45.f, -180.f, 180.f, "{:.0f}°");
@@ -46,6 +47,7 @@ void setup_shattered_peak_node(BaseNode *p_node)
   p_node->set_attr_ordered_key({"elevation",
                                 "scale",
                                 "seed",
+                                "octaves",
                                 "peak_kw",
                                 "_SEPARATOR_",
                                 "rugosity",
@@ -92,6 +94,7 @@ void compute_shattered_peak_node(BaseNode *p_node)
         *pa_out = hmap::gpu::shattered_peak(shape,
                                             GET("seed", SeedAttribute),
                                             GET("scale", FloatAttribute),
+                                            GET("octaves", IntAttribute),
                                             GET("peak_kw", FloatAttribute),
                                             GET("rugosity", FloatAttribute),
                                             GET("angle", FloatAttribute),

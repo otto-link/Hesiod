@@ -32,6 +32,7 @@ void setup_mountain_inselberg_node(BaseNode *p_node)
   ADD_ATTR(FloatAttribute, "elevation", 0.7f, 0.f, 1.f);
   ADD_ATTR(FloatAttribute, "scale", 0.75f, 0.01f, FLT_MAX);
   ADD_ATTR(SeedAttribute, "seed");
+  ADD_ATTR(IntAttribute, "octaves", 8, 0, 32);
   ADD_ATTR(FloatAttribute, "rugosity", 0.2f, 0.f, 1.f);
   ADD_ATTR(FloatAttribute, "angle", 45.f, -180.f, 180.f);
   ADD_ATTR(FloatAttribute, "k_smoothing", 0.1f, 0.f, 1.f);
@@ -46,6 +47,7 @@ void setup_mountain_inselberg_node(BaseNode *p_node)
   p_node->set_attr_ordered_key({"elevation",
                                 "scale",
                                 "seed",
+                                "octaves",
                                 "_SEPARATOR_",
                                 "rugosity",
                                 "angle",
@@ -92,6 +94,7 @@ void compute_mountain_inselberg_node(BaseNode *p_node)
         *pa_out = hmap::gpu::mountain_inselberg(shape,
                                                 GET("seed", SeedAttribute),
                                                 GET("scale", FloatAttribute),
+                                                GET("octaves", IntAttribute),
                                                 GET("rugosity", FloatAttribute),
                                                 GET("angle", FloatAttribute),
                                                 GET("gamma", FloatAttribute),
