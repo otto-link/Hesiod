@@ -20,6 +20,8 @@ void setup_inverse_node(BaseNode *p_node)
   // port(s)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+
+  setup_post_process_heightmap_attributes(p_node);
 }
 
 void compute_inverse_node(BaseNode *p_node)
@@ -38,6 +40,9 @@ void compute_inverse_node(BaseNode *p_node)
     *p_out = *p_in;
 
     hmap::transform(*p_out, [](hmap::Array &x) { x *= -1.f; });
+
+    // post-process
+    post_process_heightmap(p_node, *p_out);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());
