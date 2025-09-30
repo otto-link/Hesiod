@@ -37,6 +37,7 @@ Primitive/Geological
 |elevation|Float|No description|
 |k_smoothing|Float|No description|
 |kw|Wavenumber|No description|
+|octaves|Integer|No description|
 |post_gain|Float|No description|
 |post_inverse|Bool|No description|
 |post_remap|Value range|No description|
