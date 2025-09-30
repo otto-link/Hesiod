@@ -157,6 +157,12 @@
                 "label": "kw",
                 "type": "Wavenumber"
             },
+            "octaves": {
+                "description": "No description",
+                "key": "octaves",
+                "label": "octaves",
+                "type": "Integer"
+            },
             "post_gain": {
                 "description": "No description",
                 "key": "post_gain",
@@ -6001,6 +6007,12 @@
                 "label": "k_smoothing",
                 "type": "Float"
             },
+            "octaves": {
+                "description": "No description",
+                "key": "octaves",
+                "label": "octaves",
+                "type": "Integer"
+            },
             "post_gain": {
                 "description": "No description",
                 "key": "post_gain",
@@ -10773,6 +10785,141 @@
                 "caption": "output",
                 "data_type": "Heightmap",
                 "description": "Filtered heightmap.",
+                "type": "output"
+            }
+        }
+    },
+    "ShatteredPeak": {
+        "category": "Primitive/Geological",
+        "description": "No description available",
+        "label": "ShatteredPeak",
+        "parameters": {
+            "add_deposition": {
+                "description": "No description",
+                "key": "add_deposition",
+                "label": "add_deposition",
+                "type": "Bool"
+            },
+            "angle": {
+                "description": "No description",
+                "key": "angle",
+                "label": "angle",
+                "type": "Float"
+            },
+            "base_noise_amp": {
+                "description": "No description",
+                "key": "base_noise_amp",
+                "label": "base_noise_amp",
+                "type": "Float"
+            },
+            "bulk_amp": {
+                "description": "No description",
+                "key": "bulk_amp",
+                "label": "bulk_amp",
+                "type": "Float"
+            },
+            "center": {
+                "description": "No description",
+                "key": "center",
+                "label": "center",
+                "type": "Vec2Float"
+            },
+            "elevation": {
+                "description": "No description",
+                "key": "elevation",
+                "label": "elevation",
+                "type": "Float"
+            },
+            "gamma": {
+                "description": "No description",
+                "key": "gamma",
+                "label": "gamma",
+                "type": "Float"
+            },
+            "k_smoothing": {
+                "description": "No description",
+                "key": "k_smoothing",
+                "label": "k_smoothing",
+                "type": "Float"
+            },
+            "octaves": {
+                "description": "No description",
+                "key": "octaves",
+                "label": "octaves",
+                "type": "Integer"
+            },
+            "peak_kw": {
+                "description": "No description",
+                "key": "peak_kw",
+                "label": "peak_kw",
+                "type": "Float"
+            },
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
+                "type": "Bool"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
+            },
+            "rugosity": {
+                "description": "No description",
+                "key": "rugosity",
+                "label": "rugosity",
+                "type": "Float"
+            },
+            "scale": {
+                "description": "No description",
+                "key": "scale",
+                "label": "scale",
+                "type": "Float"
+            },
+            "seed": {
+                "description": "No description",
+                "key": "seed",
+                "label": "seed",
+                "type": "Random seed number"
+            }
+        },
+        "ports": {
+            "dx": {
+                "caption": "dx",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "dy": {
+                "caption": "dy",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "envelope": {
+                "caption": "envelope",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "out": {
+                "caption": "out",
+                "data_type": "Heightmap",
+                "description": "No description",
                 "type": "output"
             }
         }

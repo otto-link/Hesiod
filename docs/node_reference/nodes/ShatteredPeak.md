@@ -1,13 +1,13 @@
 
-MountainInselberg Node
-======================
+ShatteredPeak Node
+==================
 
 
 No description available
 
 
 
-![img](../../images/nodes/MountainInselberg_settings.png)
+![img](../../images/nodes/ShatteredPeak_settings.png)
 
 
 # Category
@@ -41,11 +41,11 @@ Primitive/Geological
 |gamma|Float|No description|
 |k_smoothing|Float|No description|
 |octaves|Integer|No description|
+|peak_kw|Float|No description|
 |post_gain|Float|No description|
 |post_inverse|Bool|No description|
 |post_remap|Value range|No description|
 |post_smoothing_radius|Float|No description|
-|round_shape|Bool|No description|
 |rugosity|Float|No description|
 |scale|Float|No description|
 |seed|Random seed number|No description|
@@ -53,16 +53,4 @@ Primitive/Geological
 # Example
 
 
-![img](../../images/nodes/MountainInselberg_hsd_example.png)
-
-Corresponding Hesiod file: [MountainInselberg.hsd](../../examples/MountainInselberg.hsd). Use [Ctrl+I] in the node editor to import a hsd file within your current project. 
-
-> **Note:** Example files are kept up-to-date with the latest version of [Hesiod](https://github.com/otto-link/Hesiod).
-> If you find an error, please [open an issue](https://github.com/otto-link/Hesiod/issues).
-
-  
-# Screenshots
-
-![img](../../images/nodes/MountainInselberg_wiki0.png)
-
-![img](../../images/nodes/MountainInselberg_wiki1.png)
+No example available.
