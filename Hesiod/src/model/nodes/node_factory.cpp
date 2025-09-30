@@ -139,6 +139,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Abs", "Math/Base"},
       {"AbsSmooth", "Math/Base"},
       {"AccumulationCurvature", "Features/Landform"},
+      {"Badlands", "Primitive/Geological"},
       {"BasaltField", "Primitive/Geological"},
       {"Blend", "Operator/Blend"},
       {"BlendPoissonBf", "Operator/Blend"},
@@ -500,6 +501,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(Abs, abs);
     SETUP_NODE(AbsSmooth, abs_smooth);
     SETUP_NODE(AccumulationCurvature, accumulation_curvature);
+    SETUP_NODE(Badlands, badlands);
     SETUP_NODE(BasaltField, basalt_field);
     SETUP_NODE(Blend, blend);
     SETUP_NODE(BlendPoissonBf, blend_poisson_bf);

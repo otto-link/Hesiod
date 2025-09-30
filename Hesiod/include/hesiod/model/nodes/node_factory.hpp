@@ -75,6 +75,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
 DECLARE_NODE(abs)
 DECLARE_NODE(abs_smooth)
 DECLARE_NODE(accumulation_curvature)
+DECLARE_NODE(badlands)
 DECLARE_NODE(basalt_field)
 DECLARE_NODE(blend)
 DECLARE_NODE(blend_poisson_bf)

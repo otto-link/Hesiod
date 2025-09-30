@@ -32,8 +32,7 @@ Operator/Transform
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|dx|Float|The translation distance along the x-axis. Positive values shift the array to the right.|
-|dy|Float|The translation distance along the y-axis. Positive values shift the array downward.|
+|center|Vec2Float|No description|
 |periodic|Bool|If set to `true`, the translation is periodic, meaning that elements that move out of one side of the array reappear on the opposite side.|
 
 # Example
