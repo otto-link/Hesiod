@@ -121,6 +121,7 @@ nav:
     - 'node_reference/nodes/Mixer.md'
     - 'node_reference/nodes/MorphologicalGradient.md'
     - 'node_reference/nodes/MorphologicalTopHat.md'
+    - 'node_reference/nodes/MountainInselberg.md'
     - 'node_reference/nodes/MountainRangeRadial.md'
     - 'node_reference/nodes/Noise.md'
     - 'node_reference/nodes/NoiseFbm.md'
