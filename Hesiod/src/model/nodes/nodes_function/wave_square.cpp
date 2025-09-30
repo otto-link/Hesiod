@@ -20,18 +20,18 @@ void setup_wave_square_node(BaseNode *p_node)
 
   // port(s)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "dr");
+  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "envelope");
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
   ADD_ATTR(FloatAttribute, "kw", 2.f, 0.01f, FLT_MAX);
   ADD_ATTR(FloatAttribute, "angle", 0.f, 0.f, 180.f);
   ADD_ATTR(FloatAttribute, "phase_shift", 0.f, -1.f, 1.f);
-  ADD_ATTR(BoolAttribute, "inverse", false);
-  ADD_ATTR(RangeAttribute, "remap");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key(
-      {"kw", "angle", "phase_shift", "_SEPARATOR_", "inverse", "remap"});
+  p_node->set_attr_ordered_key({"kw", "angle", "phase_shift"});
+
+  setup_post_process_heightmap_attributes(p_node);
 }
 
 void compute_wave_square_node(BaseNode *p_node)
@@ -42,6 +42,7 @@ void compute_wave_square_node(BaseNode *p_node)
 
   // base noise function
   hmap::Heightmap *p_dr = p_node->get_value_ref<hmap::Heightmap>("dr");
+  hmap::Heightmap *p_env = p_node->get_value_ref<hmap::Heightmap>("envelope");
   hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
   hmap::transform(
@@ -65,17 +66,8 @@ void compute_wave_square_node(BaseNode *p_node)
       p_node->get_config_ref()->hmap_transform_mode_cpu);
 
   // post-process
-  post_process_heightmap(p_node,
-                         *p_out,
-
-                         GET("inverse", BoolAttribute),
-                         false, // smooth
-                         0,
-                         false, // saturate
-                         {0.f, 0.f},
-                         0.f,
-                         GET_MEMBER("remap", RangeAttribute, is_active),
-                         GET("remap", RangeAttribute));
+  post_apply_enveloppe(p_node, *p_out, p_env);
+  post_process_heightmap(p_node, *p_out);
 
   Q_EMIT p_node->compute_finished(p_node->get_id());
 }
