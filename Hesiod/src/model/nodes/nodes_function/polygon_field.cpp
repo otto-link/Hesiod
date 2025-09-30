@@ -55,11 +55,7 @@ void setup_polygon_field_node(BaseNode *p_node)
                                 "n_vertices_max",
                                 "density",
                                 "jitter.x",
-                                "jitter.y",
-                                "_SEPARATOR_",
-                                "octaves",
-                                "persistence",
-                                "lacunarity"});
+                                "jitter.y"});
 
   setup_post_process_heightmap_attributes(p_node);
 }

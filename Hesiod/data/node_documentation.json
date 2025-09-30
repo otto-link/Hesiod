@@ -122,6 +122,105 @@
             }
         }
     },
+    "Badlands": {
+        "category": "Primitive/Geological",
+        "description": "No description available",
+        "label": "Badlands",
+        "parameters": {
+            "angle": {
+                "description": "No description",
+                "key": "angle",
+                "label": "angle",
+                "type": "Float"
+            },
+            "base_noise_amp": {
+                "description": "No description",
+                "key": "base_noise_amp",
+                "label": "base_noise_amp",
+                "type": "Float"
+            },
+            "elevation": {
+                "description": "No description",
+                "key": "elevation",
+                "label": "elevation",
+                "type": "Float"
+            },
+            "k_smoothing": {
+                "description": "No description",
+                "key": "k_smoothing",
+                "label": "k_smoothing",
+                "type": "Float"
+            },
+            "kw": {
+                "description": "No description",
+                "key": "kw",
+                "label": "kw",
+                "type": "Wavenumber"
+            },
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
+                "type": "Bool"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
+            },
+            "rugosity": {
+                "description": "No description",
+                "key": "rugosity",
+                "label": "rugosity",
+                "type": "Float"
+            },
+            "seed": {
+                "description": "No description",
+                "key": "seed",
+                "label": "seed",
+                "type": "Random seed number"
+            }
+        },
+        "ports": {
+            "dx": {
+                "caption": "dx",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "dy": {
+                "caption": "dy",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "envelope": {
+                "caption": "envelope",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "out": {
+                "caption": "out",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "output"
+            }
+        }
+    },
     "BasaltField": {
         "category": "Primitive/Geological",
         "description": "No description available",
@@ -3236,6 +3335,72 @@
                 "key": "gamma",
                 "label": "gamma",
                 "type": "Float"
+            },
+            "mask_activate": {
+                "description": "No description",
+                "key": "mask_activate",
+                "label": "mask_activate",
+                "type": "Bool"
+            },
+            "mask_gain": {
+                "description": "No description",
+                "key": "mask_gain",
+                "label": "mask_gain",
+                "type": "Float"
+            },
+            "mask_inverse": {
+                "description": "No description",
+                "key": "mask_inverse",
+                "label": "mask_inverse",
+                "type": "Bool"
+            },
+            "mask_radius": {
+                "description": "No description",
+                "key": "mask_radius",
+                "label": "mask_radius",
+                "type": "Float"
+            },
+            "mask_type": {
+                "description": "No description",
+                "key": "mask_type",
+                "label": "mask_type",
+                "type": "Choice"
+            },
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
+                "type": "Bool"
+            },
+            "post_mix": {
+                "description": "No description",
+                "key": "post_mix",
+                "label": "post_mix",
+                "type": "Float"
+            },
+            "post_mix_method": {
+                "description": "No description",
+                "key": "post_mix_method",
+                "label": "post_mix_method",
+                "type": "Enumeration"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
             }
         },
         "ports": {
@@ -3384,23 +3549,35 @@
                 "label": "center",
                 "type": "Vec2Float"
             },
-            "inverse": {
-                "description": "Toggle inversion of the output values.",
-                "key": "inverse",
-                "label": "inverse",
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
                 "type": "Bool"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
             },
             "radius": {
                 "description": "Pulse half-width.",
                 "key": "radius",
                 "label": "radius",
                 "type": "Float"
-            },
-            "remap": {
-                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap",
-                "label": "remap",
-                "type": "Value range"
             }
         },
         "ports": {
@@ -3420,6 +3597,12 @@
                 "caption": "dy",
                 "data_type": "Heightmap",
                 "description": "Displacement with respect to the domain size (y-direction).",
+                "type": "input"
+            },
+            "envelope": {
+                "caption": "envelope",
+                "data_type": "Heightmap",
+                "description": "No description",
                 "type": "input"
             },
             "output": {
@@ -3627,11 +3810,11 @@
                 "label": "remap",
                 "type": "Value range"
             },
-            "unwrap_angle": {
+            "smoothing_radius": {
                 "description": "No description",
-                "key": "unwrap_angle",
-                "label": "unwrap_angle",
-                "type": "Bool"
+                "key": "smoothing_radius",
+                "label": "smoothing_radius",
+                "type": "Float"
             }
         },
         "ports": {
@@ -4764,7 +4947,32 @@
         "category": "Math/Base",
         "description": "Inverse flips the sign of every values.",
         "label": "Inverse",
-        "parameters": null,
+        "parameters": {
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
+                "type": "Bool"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
+            }
+        },
         "ports": {
             "input": {
                 "caption": "input",
@@ -8900,17 +9108,29 @@
                 "label": "center",
                 "type": "Vec2Float"
             },
-            "inverse": {
-                "description": "Toggle inversion of the output values.",
-                "key": "inverse",
-                "label": "inverse",
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
                 "type": "Bool"
             },
-            "remap": {
-                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap",
-                "label": "remap",
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
                 "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
             },
             "sharp_bottom": {
                 "description": "Decide whether the rift bottom is sharp or not.",
@@ -8948,6 +9168,12 @@
                 "caption": "dy",
                 "data_type": "Heightmap",
                 "description": "Displacement with respect to the domain size (y-direction).",
+                "type": "input"
+            },
+            "envelope": {
+                "caption": "envelope",
+                "data_type": "Heightmap",
+                "description": "No description",
                 "type": "input"
             },
             "output": {
@@ -12655,17 +12881,11 @@
         "description": "Translates an heightmap by a specified amount along the x and y axes. This function shifts the contents of the input array by `dx` and `dy` units along the x and y axes, respectively. It supports both periodic boundary conditions, where the array wraps around, and non-periodic conditions.",
         "label": "Translate",
         "parameters": {
-            "dx": {
-                "description": "The translation distance along the x-axis. Positive values shift the array to the right.",
-                "key": "dx",
-                "label": "dx",
-                "type": "Float"
-            },
-            "dy": {
-                "description": "The translation distance along the y-axis. Positive values shift the array downward.",
-                "key": "dy",
-                "label": "dy",
-                "type": "Float"
+            "center": {
+                "description": "No description",
+                "key": "center",
+                "label": "center",
+                "type": "Vec2Float"
             },
             "periodic": {
                 "description": "If set to `true`, the translation is periodic, meaning that elements that move out of one side of the array reappear on the opposite side.",
@@ -13672,12 +13892,6 @@
                 "label": "angle",
                 "type": "Float"
             },
-            "inverse": {
-                "description": "Toggle inversion of the output values.",
-                "key": "inverse",
-                "label": "inverse",
-                "type": "Bool"
-            },
             "kw": {
                 "description": "Noise wavenumbers (kx, ky) for each directions.",
                 "key": "kw",
@@ -13690,11 +13904,29 @@
                 "label": "phase_shift",
                 "type": "Float"
             },
-            "remap": {
-                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap",
-                "label": "remap",
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
+                "type": "Bool"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
                 "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
             },
             "xbottom": {
                 "description": "Relative position of the dune bottom, in [0, 1].",
@@ -13716,6 +13948,12 @@
                 "description": "Displacement with respect to the domain size (normal direction).",
                 "type": "input"
             },
+            "envelope": {
+                "caption": "envelope",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
             "output": {
                 "caption": "output",
                 "data_type": "Heightmap",
@@ -13735,12 +13973,6 @@
                 "label": "angle",
                 "type": "Float"
             },
-            "inverse": {
-                "description": "Toggle inversion of the output values.",
-                "key": "inverse",
-                "label": "inverse",
-                "type": "Bool"
-            },
             "kw": {
                 "description": "Noise wavenumbers (kx, ky) for each directions.",
                 "key": "kw",
@@ -13753,11 +13985,29 @@
                 "label": "phase_shift",
                 "type": "Float"
             },
-            "remap": {
-                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap",
-                "label": "remap",
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
+                "type": "Bool"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
                 "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
             }
         },
         "ports": {
@@ -13765,6 +14015,12 @@
                 "caption": "dr",
                 "data_type": "Heightmap",
                 "description": "Displacement with respect to the domain size (normal direction).",
+                "type": "input"
+            },
+            "envelope": {
+                "caption": "envelope",
+                "data_type": "Heightmap",
+                "description": "No description",
                 "type": "input"
             },
             "output": {
@@ -13786,12 +14042,6 @@
                 "label": "angle",
                 "type": "Float"
             },
-            "inverse": {
-                "description": "Toggle inversion of the output values.",
-                "key": "inverse",
-                "label": "inverse",
-                "type": "Bool"
-            },
             "kw": {
                 "description": "Noise wavenumbers (kx, ky) for each directions.",
                 "key": "kw",
@@ -13804,11 +14054,29 @@
                 "label": "phase_shift",
                 "type": "Float"
             },
-            "remap": {
-                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap",
-                "label": "remap",
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
+                "type": "Bool"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
                 "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
             }
         },
         "ports": {
@@ -13816,6 +14084,12 @@
                 "caption": "dr",
                 "data_type": "Heightmap",
                 "description": "Displacement with respect to the domain size (normal direction).",
+                "type": "input"
+            },
+            "envelope": {
+                "caption": "envelope",
+                "data_type": "Heightmap",
+                "description": "No description",
                 "type": "input"
             },
             "output": {
@@ -13837,12 +14111,6 @@
                 "label": "angle",
                 "type": "Float"
             },
-            "inverse": {
-                "description": "Toggle inversion of the output values.",
-                "key": "inverse",
-                "label": "inverse",
-                "type": "Bool"
-            },
             "kw": {
                 "description": "Noise wavenumbers (kx, ky) for each directions.",
                 "key": "kw",
@@ -13855,11 +14123,29 @@
                 "label": "phase_shift",
                 "type": "Float"
             },
-            "remap": {
-                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap",
-                "label": "remap",
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
+                "type": "Bool"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
                 "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
             },
             "slant_ratio": {
                 "description": "Decides on wave asymmetry, expected in [0, 1].",
@@ -13873,6 +14159,12 @@
                 "caption": "dr",
                 "data_type": "Heightmap",
                 "description": "Displacement with respect to the domain size (normal direction).",
+                "type": "input"
+            },
+            "envelope": {
+                "caption": "envelope",
+                "data_type": "Heightmap",
+                "description": "No description",
                 "type": "input"
             },
             "output": {

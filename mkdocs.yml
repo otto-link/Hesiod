@@ -12,6 +12,7 @@ nav:
     - 'node_reference/nodes/Abs.md'
     - 'node_reference/nodes/AbsSmooth.md'
     - 'node_reference/nodes/AccumulationCurvature.md'
+    - 'node_reference/nodes/Badlands.md'
     - 'node_reference/nodes/BasaltField.md'
     - 'node_reference/nodes/Blend.md'
     - 'node_reference/nodes/BlendPoissonBf.md'

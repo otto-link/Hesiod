@@ -26,6 +26,15 @@ Math/Base
 | :--- | :--- | :--- |
 |output|Heightmap|Binary heightmap.|
 
+# Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|post_gain|Float|No description|
+|post_inverse|Bool|No description|
+|post_remap|Value range|No description|
+|post_smoothing_radius|Float|No description|
+
 # Example
 
 
