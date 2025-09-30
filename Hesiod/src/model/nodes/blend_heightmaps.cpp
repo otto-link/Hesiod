@@ -79,7 +79,7 @@ void blend_heightmaps(hmap::Heightmap &h_out,
     break;
 
   case BlendingMethod::REPLACE:
-    lambda = [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2) { m = a2; };
+    lambda = [](hmap::Array &m, hmap::Array & /* a1 */, hmap::Array &a2) { m = a2; };
     break;
 
   case BlendingMethod::SUBSTRACT:

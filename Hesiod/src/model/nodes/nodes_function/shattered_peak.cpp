@@ -18,7 +18,7 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_mountain_inselberg_node(BaseNode *p_node)
+void setup_shattered_peak_node(BaseNode *p_node)
 {
   Logger::log()->trace("setup node {}", p_node->get_label());
 
@@ -30,28 +30,28 @@ void setup_mountain_inselberg_node(BaseNode *p_node)
 
   // attribute(s)
   ADD_ATTR(FloatAttribute, "elevation", 0.7f, 0.f, 1.f);
-  ADD_ATTR(FloatAttribute, "scale", 0.75f, 0.01f, FLT_MAX);
+  ADD_ATTR(FloatAttribute, "scale", 1.f, 0.01f, FLT_MAX);
   ADD_ATTR(SeedAttribute, "seed");
-  ADD_ATTR(FloatAttribute, "rugosity", 0.2f, 0.f, 1.f);
-  ADD_ATTR(FloatAttribute, "angle", 45.f, -180.f, 180.f);
-  ADD_ATTR(FloatAttribute, "k_smoothing", 0.1f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "peak_kw", 4.f, 0.01f, FLT_MAX);
+  ADD_ATTR(FloatAttribute, "rugosity", 0.f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "angle", 45.f, -180.f, 180.f, "{:.0f}°");
   ADD_ATTR(FloatAttribute, "gamma", 1.f, 0.01f, 4.f);
-  ADD_ATTR(BoolAttribute, "round_shape", false);
   ADD_ATTR(BoolAttribute, "add_deposition", true);
-  ADD_ATTR(FloatAttribute, "base_noise_amp", 0.25f, 0.f, 1.f);
-  ADD_ATTR(FloatAttribute, "bulk_amp", 0.2f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "bulk_amp", 0.25f, 0.f, 2.f);
+  ADD_ATTR(FloatAttribute, "base_noise_amp", 0.15f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "k_smoothing", 0.1f, 0.f, 1.f);
   ADD_ATTR(Vec2FloatAttribute, "center");
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"elevation",
                                 "scale",
                                 "seed",
+                                "peak_kw",
                                 "_SEPARATOR_",
                                 "rugosity",
                                 "angle",
                                 "k_smoothing",
                                 "gamma",
-                                "round_shape",
                                 "add_deposition",
                                 "_SEPARATOR_",
                                 "base_noise_amp",
@@ -67,13 +67,13 @@ void setup_mountain_inselberg_node(BaseNode *p_node)
   add_wip_warning_label(p_node);
 }
 
-void compute_mountain_inselberg_node(BaseNode *p_node)
+void compute_shattered_peak_node(BaseNode *p_node)
 {
   Q_EMIT p_node->compute_started(p_node->get_id());
 
   Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
-  // base mountain_inselberg function
+  // base shattered_peak function
   hmap::Heightmap *p_dx = p_node->get_value_ref<hmap::Heightmap>("dx");
   hmap::Heightmap *p_dy = p_node->get_value_ref<hmap::Heightmap>("dy");
   hmap::Heightmap *p_env = p_node->get_value_ref<hmap::Heightmap>("envelope");
@@ -89,21 +89,21 @@ void compute_mountain_inselberg_node(BaseNode *p_node)
         hmap::Array *pa_dx = p_arrays[1];
         hmap::Array *pa_dy = p_arrays[2];
 
-        *pa_out = hmap::gpu::mountain_inselberg(shape,
-                                                GET("seed", SeedAttribute),
-                                                GET("scale", FloatAttribute),
-                                                GET("rugosity", FloatAttribute),
-                                                GET("angle", FloatAttribute),
-                                                GET("gamma", FloatAttribute),
-                                                GET("round_shape", BoolAttribute),
-                                                GET("add_deposition", BoolAttribute),
-                                                GET("bulk_amp", FloatAttribute),
-                                                GET("base_noise_amp", FloatAttribute),
-                                                GET("k_smoothing", FloatAttribute),
-                                                GET("center", Vec2FloatAttribute),
-                                                pa_dx,
-                                                pa_dy,
-                                                bbox);
+        *pa_out = hmap::gpu::shattered_peak(shape,
+                                            GET("seed", SeedAttribute),
+                                            GET("scale", FloatAttribute),
+                                            GET("peak_kw", FloatAttribute),
+                                            GET("rugosity", FloatAttribute),
+                                            GET("angle", FloatAttribute),
+                                            GET("gamma", FloatAttribute),
+                                            GET("add_deposition", BoolAttribute),
+                                            GET("bulk_amp", FloatAttribute),
+                                            GET("base_noise_amp", FloatAttribute),
+                                            GET("k_smoothing", FloatAttribute),
+                                            GET("center", Vec2FloatAttribute),
+                                            pa_dx,
+                                            pa_dy,
+                                            bbox);
       },
       p_node->get_config_ref()->hmap_transform_mode_gpu);
 
