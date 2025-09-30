@@ -10,6 +10,7 @@
 
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
+#include "hesiod/model/nodes/post_process.hpp"
 
 using namespace attr;
 
@@ -27,6 +28,9 @@ void setup_gamma_correction_node(BaseNode *p_node)
 
   // attribute(s)
   ADD_ATTR(FloatAttribute, "gamma", 2.f, 0.01f, 10.f);
+
+  setup_pre_process_mask_attributes(p_node);
+  setup_post_process_heightmap_attributes(p_node, true);
 }
 
 void compute_gamma_correction_node(BaseNode *p_node)
@@ -41,6 +45,9 @@ void compute_gamma_correction_node(BaseNode *p_node)
   {
     hmap::Heightmap *p_mask = p_node->get_value_ref<hmap::Heightmap>("mask");
     hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
+
+    // prepare mask
+    std::shared_ptr<hmap::Heightmap> sp_mask = pre_process_mask(p_node, p_mask, *p_in);
 
     float hmin = p_in->min();
     float hmax = p_in->max();
@@ -60,6 +67,9 @@ void compute_gamma_correction_node(BaseNode *p_node)
           hmap::remap(*pa_out, hmin, hmax, 0.f, 1.f);
         },
         p_node->get_config_ref()->hmap_transform_mode_cpu);
+
+    // post-process
+    post_process_heightmap(p_node, *p_out, p_in);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

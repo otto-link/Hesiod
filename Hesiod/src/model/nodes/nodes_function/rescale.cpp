@@ -23,7 +23,7 @@ void setup_rescale_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(FloatAttribute, "scaling", 1.f, 0.0001f, 1.f, "{:.4f}");
+  ADD_ATTR(FloatAttribute, "scaling", 1.f, 0.0001f, FLT_MAX, "{:.4f}");
   ADD_ATTR(BoolAttribute, "centered", false);
 
   // attribute(s) order
