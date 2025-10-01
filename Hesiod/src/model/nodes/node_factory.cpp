@@ -334,6 +334,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"MorphologicalTopHat", "Operator/Morphology"},
       {"MountainInselberg", "Primitive/Geological"},
       {"MountainRangeRadial", "Primitive/Geological"},
+      {"MountainTibesti", "Primitive/Geological"},
       {"Noise", "Primitive/Coherent"},
       {"NoiseFbm", "Primitive/Coherent"},
       {"NoiseIq", "Primitive/Coherent"},
@@ -614,6 +615,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(MorphologicalTopHat, morphological_top_hat);
     SETUP_NODE(MountainInselberg, mountain_inselberg);
     SETUP_NODE(MountainRangeRadial, mountain_range_radial);
+    SETUP_NODE(MountainTibesti, mountain_tibesti);
     SETUP_NODE(Noise, noise);
     SETUP_NODE(NoiseFbm, noise_fbm);
     SETUP_NODE(NoiseIq, noise_iq);
