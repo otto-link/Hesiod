@@ -3,7 +3,7 @@ BasaltField Node
 ================
 
 
-No description available
+Generates a synthetic procedural terrain inspired by basaltic landforms. Credit: Ian Fontova.
 
 
 
