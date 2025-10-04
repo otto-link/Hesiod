@@ -391,6 +391,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Rift", "Primitive/Function"},
       {"Rifts", "Erosion/Hydraulic"},
       {"Rotate", "Operator/Transform"},
+      {"RotateDisplacement", "Math"},
       {"Ruggedness", "Features"},
       {"Rugosity", "Features"},
       {"Saturate", "Filter/Recurve"},
@@ -674,6 +675,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(Rift, rift);
     SETUP_NODE(Rifts, rifts);
     SETUP_NODE(Rotate, rotate);
+    SETUP_NODE(RotateDisplacement, rotate_displacement);
     SETUP_NODE(Ruggedness, ruggedness);
     SETUP_NODE(Rugosity, rugosity);
     SETUP_NODE(Saturate, saturate);
