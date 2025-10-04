@@ -1792,6 +1792,12 @@
                 "key": "slope",
                 "label": "slope",
                 "type": "Float"
+            },
+            "smooth_profile": {
+                "description": "No description",
+                "key": "smooth_profile",
+                "label": "smooth_profile",
+                "type": "Bool"
             }
         },
         "ports": {

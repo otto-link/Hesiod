@@ -29,10 +29,11 @@ void setup_cone_node(BaseNode *p_node)
   // attribute(s)
   ADD_ATTR(FloatAttribute, "slope", 4.f, 0.01f, FLT_MAX);
   ADD_ATTR(FloatAttribute, "apex_elevation", 1.f, 0.f, FLT_MAX);
+  ADD_ATTR(BoolAttribute, "smooth_profile", false);
   ADD_ATTR(Vec2FloatAttribute, "center");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"slope", "apex_elevation", "center"});
+  p_node->set_attr_ordered_key({"slope", "apex_elevation", "smooth_profile", "center"});
 
   setup_post_process_heightmap_attributes(p_node);
 
@@ -67,6 +68,7 @@ void compute_cone_node(BaseNode *p_node)
         *pa_out = hmap::cone(shape,
                              GET("slope", FloatAttribute),
                              GET("apex_elevation", FloatAttribute),
+                             GET("smooth_profile", BoolAttribute),
                              GET("center", Vec2FloatAttribute),
                              pa_dx,
                              pa_dy,
