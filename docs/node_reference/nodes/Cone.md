@@ -39,6 +39,7 @@ Primitive/Function
 |post_remap|Value range|No description|
 |post_smoothing_radius|Float|No description|
 |slope|Float|No description|
+|smooth_profile|Bool|No description|
 
 # Example
 
