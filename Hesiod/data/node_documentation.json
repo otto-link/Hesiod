@@ -9763,6 +9763,39 @@
             }
         }
     },
+    "RotateDisplacement": {
+        "category": "Math",
+        "description": "No description available",
+        "label": "RotateDisplacement",
+        "parameters": {
+            "angle": {
+                "description": "No description",
+                "key": "angle",
+                "label": "angle",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "delta": {
+                "caption": "delta",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "dx": {
+                "caption": "dx",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "output"
+            },
+            "dy": {
+                "caption": "dy",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "output"
+            }
+        }
+    },
     "Ruggedness": {
         "category": "Features",
         "description": "Measures the terrain roughness by computing the square root of the sum of squared elevation differences within a specified radius. Indicates how rough or smooth the terrain is by analyzing how much the elevation changes between neighboring areas. Higher values mean a more rugged, uneven surface, while lower values indicate a flatter, smoother landscape.",
