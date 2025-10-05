@@ -6364,7 +6364,7 @@
     },
     "MountainStump": {
         "category": "Primitive/Geological",
-        "description": "No description available",
+        "description": "Generates a mountain-like heightmap with a flattened (stump-shaped) peak. Credit: Ian Fontova.",
         "label": "MountainStump",
         "parameters": {
             "add_deposition": {
