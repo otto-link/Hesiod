@@ -56,16 +56,16 @@ void compute_colorize_gradient_node(BaseNode *p_node)
     hmap::HeightmapRGBA *p_out = p_node->get_value_ref<hmap::HeightmapRGBA>("texture");
 
     // define colormap based on color gradient
-    std::vector<attr::Stop> gradient = GET("gradient", ColorGradientAttribute);
-    std::vector<float> positions = {};
+    std::vector<attr::Stop>         gradient = GET("gradient", ColorGradientAttribute);
+    std::vector<float>              positions = {};
     std::vector<std::vector<float>> colormap_colors = {};
 
     for (auto &data : gradient)
-      {
-	positions.push_back(data.position);
-	colormap_colors.push_back({data.color[0], data.color[1], data.color[2]});
-      }
-    
+    {
+      positions.push_back(data.position);
+      colormap_colors.push_back({data.color[0], data.color[1], data.color[2]});
+    }
+
     // reverse alpha
     hmap::Heightmap  alpha_copy;
     hmap::Heightmap *p_alpha_copy = nullptr;
@@ -97,7 +97,7 @@ void compute_colorize_gradient_node(BaseNode *p_node)
     p_out->colorize(*p_level,
                     cmin,
                     cmax,
-		    positions,
+                    positions,
                     colormap_colors,
                     p_alpha_copy,
                     GET("reverse_colormap", BoolAttribute),
