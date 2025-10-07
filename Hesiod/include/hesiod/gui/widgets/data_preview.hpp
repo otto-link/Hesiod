@@ -16,7 +16,6 @@ enum PreviewType : int
   GRAYSCALE,
   MAGMA,
   TERRAIN,
-  PSD,
   SLOPE_ELEVATION_HEATMAP,
   HISTOGRAM,
 };
