@@ -8,7 +8,7 @@
 #include "attributes.hpp"
 
 #include "hesiod/logger.hpp"
-#include "hesiod/model/cmap.hpp"
+#include "hesiod/model/color_gradient.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
 
@@ -38,7 +38,8 @@ void setup_colorize_gradient_node(BaseNode *p_node)
       {"gradient", "reverse_colormap", "reverse_alpha", "clamp_alpha"});
 
   // add presets
-  // GET_REF("gradient", ColorGradientAttribute)->set_presets();
+  GET_REF("gradient", ColorGradientAttribute)
+      ->set_presets(ColorGradientManager::get_instance().get_as_attr_presets());
 }
 
 void compute_colorize_gradient_node(BaseNode *p_node)
