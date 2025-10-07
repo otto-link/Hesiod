@@ -177,7 +177,8 @@ void DataPreview::update_preview()
     // ---- RGBA ----
     else if (data_type == typeid(hmap::HeightmapRGBA).name())
     {
-      const hmap::HeightmapRGBA *p_h = static_cast<const hmap::HeightmapRGBA *>(blind_ptr);
+      const hmap::HeightmapRGBA *p_h = static_cast<const hmap::HeightmapRGBA *>(
+          blind_ptr);
       if (p_h)
       {
         img = p_h->to_img_8bit(shape);
@@ -206,9 +207,9 @@ void DataPreview::update_preview()
       const hmap::Path *p_path = static_cast<const hmap::Path *>(blind_ptr);
       if (p_path && p_path->get_npoints() > 0)
       {
-        hmap::Array array(shape);
+        hmap::Array       array(shape);
         hmap::Vec4<float> bbox(0.f, 1.f, 0.f, 1.f);
-        hmap::Path path = *p_path;
+        hmap::Path        path = *p_path;
         path.remap_values(0.1f, 1.f);
         path.to_array(array, bbox);
         img = build_colored_array(array, hmap::Cmap::MAGMA, false);
@@ -224,12 +225,14 @@ void DataPreview::update_preview()
 
   if (!img.empty())
   {
-    size_t nchannels = (img_format == QImage::Format_Grayscale8) ? 1 :
-                       (img_format == QImage::Format_RGB888) ? 3 : 4;
+    size_t nchannels = (img_format == QImage::Format_Grayscale8) ? 1
+                       : (img_format == QImage::Format_RGB888)   ? 3
+                                                                 : 4;
 
     if (img.size() != static_cast<size_t>(shape.x * shape.y * nchannels))
     {
-      Logger::log()->critical("DataPreview::update_preview: inconsistent image buffer size");
+      Logger::log()->critical(
+          "DataPreview::update_preview: inconsistent image buffer size");
       throw std::runtime_error("DataPreview::update_preview: inconsistent buffer size");
     }
 
