@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.12)
-project(hesiod-root VERSION 0.4.0)
+project(hesiod-root VERSION 0.4.1)
 
 add_compile_definitions(
   HESIOD_VERSION_MAJOR=${hesiod-root_VERSION_MAJOR}

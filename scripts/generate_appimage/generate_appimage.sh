@@ -27,4 +27,4 @@ cp hesiod-x86_64.AppImage ${3}/build/bin/hesiod.AppImage
 
 # add the data folder and create a zip
 cd ${3}/build/bin/
-zip hesiod.AppImage.zip hesiod.AppImage data
+zip -r hesiod.AppImage.zip hesiod.AppImage data
