@@ -13,6 +13,7 @@ typedef unsigned int uint;
 #include "hesiod/gui/main_window.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/cmap.hpp"
+#include "hesiod/model/color_gradient.hpp"
 
 #if defined(DEBUG_BUILD)
 #define HSD_RMODE "Debug"
@@ -38,6 +39,7 @@ int main(int argc, char *argv[])
 
   // for colormaps loading
   hesiod::CmapManager::get_instance();
+  hesiod::ColorGradientManager::get_instance();
 
   // start QApplication even if headless (for QObject)
   qputenv("QT_LOGGING_RULES", HESIOD_QPUTENV_QT_LOGGING_RULES);

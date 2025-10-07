@@ -1,0 +1,99 @@
+{
+  "gradients": [
+    {
+      "name": "Snow",
+      "stops": [
+        { "position": 0.0, "color": [200, 220, 255, 255] },
+        { "position": 1.0, "color": [255, 255, 255, 255] }
+      ]
+    },
+    {
+      "name": "Sand",
+      "stops": [
+        { "position": 0.0, "color": [194, 178, 128, 255] },
+        { "position": 0.5, "color": [210, 180, 140, 255] },
+        { "position": 1.0, "color": [240, 230, 180, 255] }
+      ]
+    },
+    {
+      "name": "Grass",
+      "stops": [
+        { "position": 0.0, "color": [30, 70, 30, 255] },
+        { "position": 0.5, "color": [60, 120, 40, 255] },
+        { "position": 1.0, "color": [170, 200, 90, 255] }
+      ]
+    },
+    {
+      "name": "Forest",
+      "stops": [
+        { "position": 0.0, "color": [40, 30, 10, 255] },
+        { "position": 0.5, "color": [30, 70, 30, 255] },
+        { "position": 1.0, "color": [80, 140, 60, 255] }
+      ]
+    },
+    {
+      "name": "Rock",
+      "stops": [
+        { "position": 0.0, "color": [60, 50, 40, 255] },
+        { "position": 0.5, "color": [100, 90, 80, 255] },
+        { "position": 1.0, "color": [180, 170, 160, 255] }
+      ]
+    },
+    {
+      "name": "Highlands",
+      "stops": [
+        { "position": 0.0, "color": [90, 70, 50, 255] },
+        { "position": 0.7, "color": [160, 160, 160, 255] },
+        { "position": 1.0, "color": [255, 255, 255, 255] }
+      ]
+    },
+    {
+      "name": "Beach",
+      "stops": [
+        { "position": 0.0, "color": [20, 60, 100, 255] },
+        { "position": 0.5, "color": [80, 140, 200, 255] },
+        { "position": 1.0, "color": [240, 220, 180, 255] }
+      ]
+    },
+    {
+      "name": "Water",
+      "stops": [
+        { "position": 0.0, "color": [10, 30, 80, 255] },
+        { "position": 0.5, "color": [20, 90, 140, 255] },
+        { "position": 1.0, "color": [100, 200, 220, 255] }
+      ]
+    },
+    {
+      "name": "Dirt",
+      "stops": [
+        { "position": 0.0, "color": [50, 30, 20, 255] },
+        { "position": 0.5, "color": [100, 60, 30, 255] },
+        { "position": 1.0, "color": [170, 120, 70, 255] }
+      ]
+    },
+    {
+      "name": "Volcanic",
+      "stops": [
+        { "position": 0.0, "color": [10, 10, 10, 255] },
+        { "position": 0.5, "color": [70, 30, 20, 255] },
+        { "position": 1.0, "color": [200, 60, 30, 255] }
+      ]
+    },
+    {
+      "name": "Glacier",
+      "stops": [
+        { "position": 0.0, "color": [0, 60, 100, 255] },
+        { "position": 0.5, "color": [100, 180, 220, 255] },
+        { "position": 1.0, "color": [255, 255, 255, 255] }
+      ]
+    },
+    {
+      "name": "Sunset",
+      "stops": [
+        { "position": 0.0, "color": [100, 40, 20, 255] },
+        { "position": 0.5, "color": [220, 120, 60, 255] },
+        { "position": 1.0, "color": [250, 220, 180, 255] }
+      ]
+    }
+  ]
+}

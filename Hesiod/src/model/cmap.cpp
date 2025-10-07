@@ -16,7 +16,7 @@ namespace hesiod
 
 CmapManager::CmapManager()
 {
-  Logger::log()->info("initializing colormaps manager");
+  Logger::log()->info("CmapManager::CmapManager: initializing...");
   this->update_colormap_data();
 }
 
