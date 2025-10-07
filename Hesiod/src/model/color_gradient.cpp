@@ -86,7 +86,7 @@ void ColorGradientManager::update_data(bool append)
       grad.positions.push_back(stop_json["position"].get<float>());
 
       const auto &color_array = stop_json["color"];
-      if (!color_array.is_array() || color_array.size() < 3)
+      if (!color_array.is_array() || color_array.size() < 4)
       {
         Logger::log()->error("ColorGradientManager::update_data: invalid color in {}",
                              grad.name);
