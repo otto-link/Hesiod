@@ -36,6 +36,9 @@ void setup_colorize_gradient_node(BaseNode *p_node)
   // attribute(s) order
   p_node->set_attr_ordered_key(
       {"gradient", "reverse_colormap", "reverse_alpha", "clamp_alpha"});
+
+  // add presets
+  // GET_REF("gradient", ColorGradientAttribute)->set_presets();
 }
 
 void compute_colorize_gradient_node(BaseNode *p_node)
@@ -54,13 +57,15 @@ void compute_colorize_gradient_node(BaseNode *p_node)
 
     // define colormap based on color gradient
     std::vector<attr::Stop> gradient = GET("gradient", ColorGradientAttribute);
+    std::vector<float> positions = {};
     std::vector<std::vector<float>> colormap_colors = {};
 
     for (auto &data : gradient)
-      colormap_colors.push_back({data.color[0], data.color[1], data.color[2]});
-
-    Logger::log()->trace("ncolors: {}", colormap_colors.size());
-
+      {
+	positions.push_back(data.position);
+	colormap_colors.push_back({data.color[0], data.color[1], data.color[2]});
+      }
+    
     // reverse alpha
     hmap::Heightmap  alpha_copy;
     hmap::Heightmap *p_alpha_copy = nullptr;
@@ -92,6 +97,7 @@ void compute_colorize_gradient_node(BaseNode *p_node)
     p_out->colorize(*p_level,
                     cmin,
                     cmax,
+		    positions,
                     colormap_colors,
                     p_alpha_copy,
                     GET("reverse_colormap", BoolAttribute),
