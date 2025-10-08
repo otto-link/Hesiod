@@ -41,6 +41,7 @@ nav:
     - 'node_reference/nodes/CloudShuffle.md'
     - 'node_reference/nodes/CloudToArrayInterp.md'
     - 'node_reference/nodes/CloudToPath.md'
+    - 'node_reference/nodes/CoastalErosionDiffusion.md'
     - 'node_reference/nodes/ColorizeCmap.md'
     - 'node_reference/nodes/ColorizeGradient.md'
     - 'node_reference/nodes/ColorizeSolid.md'

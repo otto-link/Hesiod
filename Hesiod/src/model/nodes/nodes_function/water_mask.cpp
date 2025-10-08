@@ -29,8 +29,6 @@ void setup_water_mask_node(BaseNode *p_node)
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"additional_depth"});
-
-  setup_post_process_heightmap_attributes(p_node);
 }
 
 void compute_water_mask_node(BaseNode *p_node)
@@ -60,7 +58,7 @@ void compute_water_mask_node(BaseNode *p_node)
         },
         p_node->get_config_ref()->hmap_transform_mode_cpu);
 
-    p_depth->smooth_overlap_buffers();
+    p_mask->smooth_overlap_buffers();
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());
