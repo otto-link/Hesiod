@@ -77,19 +77,35 @@ Start the main executable:
 bin/./hesiod
 ```
 
-## Development roadmap
+## Dependencies and moudle structures
 
-See https://github.com/otto-link/HighMap.
-
-## Error: Failed to initialize_window OpenGL loader!
-
-Try to install the package `glfw` or `glfw-devel`!
-
-## Dependencies
-
-- https://github.com/otto-link/HighMap / A C++ library to generate two-dimensional terrain heightmaps for software rendering or video games.
-- https://github.com/otto-link/GNode / A generic node-based data structure for node graph programming in C++.
-- https://github.com/otto-link/GNodeGUI / a C++ graphical node editor library aimed at providing an interface for building and manipulating nodes in a graphical context.
-- https://github.com/otto-link/Attributes / A C++ library that provides a collection of standard attributes, each paired with a corresponding Qt widget for editing their values.
-
-- https://github.com/mgaillard/Noise / Dendry: A Procedural Model for Dendritic Patterns
+```mermaid
+---
+config:
+  layout: dagre
+title: Hesiod modules
+---
+flowchart TD
+ subgraph subGraph0["Node Editor"]
+        GNode["GNode"]
+        GNodeGUI["GNodeGUI"]
+  end
+ subgraph subGraph1["Core Algorithms"]
+        CLWrapper["CLWrapper"]
+        HighMap["HighMap"]
+        PointSampler["PointSampler"]
+        CLErrorLookup["CLErrorLookup"]
+        OpenCL["OpenCL"]
+        FastNoiseLite["FastNoiseLite"]
+  end
+    Hesiod["Hesiod"] --> HighMap & GNode & GNodeGUI & Attributes["Attributes"] & QTerrainRenderer["QTerrainRenderer"] & QTextureDownloader["QTextureDownloader"]
+    HighMap --> CLWrapper & PointSampler & FastNoiseLite
+    CLWrapper --> CLErrorLookup & OpenCL
+    Attributes --> QSliderX["QSliderX"]
+    QTerrainRenderer --> OpenGL["OpenGL"] & ImGui["ImGui"]
+     OpenCL:::non_hesiod
+     FastNoiseLite:::non_hesiod
+     OpenGL:::non_hesiod
+     ImGui:::non_hesiod
+    classDef non_hesiod fill:#f4f4f4,stroke:#999,color:#555,font-size:12px
+```
