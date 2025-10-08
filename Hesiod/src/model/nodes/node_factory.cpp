@@ -463,6 +463,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"WarpDownslope", "WIP"}, // Operator/Transform
       {"WaterDepthDryOut", "Hydrology"},
       {"WaterDepthFromMask", "Hydrology"},
+      {"WaterMask", "Hydrology"},
       {"WaveDune", "Primitive/Function"},
       {"WaveSine", "Primitive/Function"},
       {"WaveSquare", "Primitive/Function"},
@@ -749,6 +750,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(WarpDownslope, warp_downslope);
     SETUP_NODE(WaterDepthDryOut, water_depth_dry_out);
     SETUP_NODE(WaterDepthFromMask, water_depth_from_mask);
+    SETUP_NODE(WaterMask, water_mask);
     SETUP_NODE(WaveDune, wave_dune);
     SETUP_NODE(WaveSine, wave_sine);
     SETUP_NODE(WaveSquare, wave_square);

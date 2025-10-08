@@ -3,7 +3,7 @@ MountainStump Node
 ==================
 
 
-No description available
+Generates a mountain-like heightmap with a flattened (stump-shaped) peak. Credit: Ian Fontova.
 
 
 
