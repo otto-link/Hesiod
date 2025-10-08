@@ -9,7 +9,7 @@ namespace hesiod
 
 void ViewerNodeParam::json_from(nlohmann::json const &json)
 {
-  for (auto &[key, value] : port_ids)
+  for (auto &[key, value] : this->port_ids)
   {
     if (json.contains(key))
       value = json.at(key).get<std::string>();
@@ -19,7 +19,7 @@ void ViewerNodeParam::json_from(nlohmann::json const &json)
 nlohmann::json ViewerNodeParam::json_to() const
 {
   nlohmann::json j;
-  for (auto const &[key, value] : port_ids)
+  for (auto const &[key, value] : this->port_ids)
     j[key] = value;
   return j;
 }

@@ -69,8 +69,16 @@ void Viewer::json_from(nlohmann::json const &json)
   this->set_current_node_id(json["current_node_id"]);
   this->is_node_pinned = json["is_node_pinned"];
 
-  for (auto &[key, param] : this->view_param_map)
-    param.json_from(json["view_param_map"][key]);
+  this->view_param_map.clear();
+  if (json.contains("view_param_map"))
+  {
+    for (const auto &[key, value] : json["view_param_map"].items())
+    {
+      ViewerNodeParam param = this->get_default_view_param();
+      param.json_from(value);
+      this->view_param_map[key] = param;
+    }
+  }
 
   this->update_widgets();
 }
