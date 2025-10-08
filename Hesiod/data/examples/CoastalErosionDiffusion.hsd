@@ -13,7 +13,7 @@
         "graph_nodes": {
             "graph": {
                 "id": "graph",
-                "id_count": 10,
+                "id_count": 16,
                 "links": [
                     {
                         "node_id_from": "5",
@@ -82,9 +82,15 @@
                         "port_id_to": "alpha"
                     },
                     {
+                        "node_id_from": "10",
+                        "node_id_to": "9",
+                        "port_id_from": "output",
+                        "port_id_to": "noise"
+                    },
+                    {
                         "node_id_from": "6",
                         "node_id_to": "7",
-                        "port_id_from": "elevation",
+                        "port_id_from": "water_mask",
                         "port_id_to": "level"
                     }
                 ],
@@ -99,6 +105,111 @@
                 },
                 "nodes": [
                     {
+                        "GPU": {
+                            "label": "GPU",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": true
+                        },
+                        "id": "10",
+                        "kw": {
+                            "label": "kw",
+                            "link_xy": true,
+                            "type": 17,
+                            "type_string": "Wavenumber",
+                            "value": [
+                                10.109999656677246,
+                                10.109999656677246
+                            ],
+                            "vmax": 3.4028234663852886e+38,
+                            "vmin": 0.0
+                        },
+                        "label": "NoiseFbm",
+                        "lacunarity": {
+                            "label": "lacunarity",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 2.0,
+                            "vmax": 4.0,
+                            "vmin": 0.009999999776482582
+                        },
+                        "noise_type": {
+                            "choice": "OpenSimplex2",
+                            "label": "noise_type",
+                            "type": 4,
+                            "type_string": "Enumeration",
+                            "value": 4
+                        },
+                        "octaves": {
+                            "label": "octaves",
+                            "type": 10,
+                            "type_string": "Integer",
+                            "value": 8,
+                            "vmax": 32,
+                            "vmin": 0
+                        },
+                        "persistence": {
+                            "label": "persistence",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.5,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        },
+                        "post_gain": {
+                            "label": "post_gain",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 10.0,
+                            "vmin": 0.009999999776482582
+                        },
+                        "post_inverse": {
+                            "label": "post_inverse",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "post_remap": {
+                            "is_active": true,
+                            "label": "post_remap",
+                            "type": 11,
+                            "type_string": "Value range",
+                            "value": [
+                                0.0,
+                                0.14851486682891846
+                            ],
+                            "vmax": 2.0,
+                            "vmin": -1.0
+                        },
+                        "post_smoothing_radius": {
+                            "label": "post_smoothing_radius",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.0,
+                            "vmax": 0.05000000074505806,
+                            "vmin": 0.0
+                        },
+                        "seed": {
+                            "label": "seed",
+                            "type": 12,
+                            "type_string": "Random seed number",
+                            "value": 0
+                        },
+                        "weight": {
+                            "label": "weight",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.0,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        }
+                    },
+                    {
                         "id": "3",
                         "label": "Preview"
                     },
@@ -107,7 +218,7 @@
                             "label": "elevation",
                             "type": 6,
                             "type_string": "Float",
-                            "value": 0.013846153393387794,
+                            "value": 0.015384604223072529,
                             "vmax": 2.0,
                             "vmin": -1.0
                         },
@@ -266,9 +377,17 @@
                             "label": "additional_depth",
                             "type": 6,
                             "type_string": "Float",
-                            "value": 0.05000000074505806,
+                            "value": 0.009414222091436386,
                             "vmax": 0.20000000298023224,
                             "vmin": 0.0
+                        },
+                        "distributed": {
+                            "label": "distributed",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": true
                         },
                         "id": "6",
                         "iterations": {
@@ -462,7 +581,7 @@
                         "node_in_id": "7",
                         "node_out_id": "6",
                         "port_in_id": "level",
-                        "port_out_id": "elevation"
+                        "port_out_id": "water_mask"
                     },
                     {
                         "link_type": 2,
@@ -540,6 +659,13 @@
                         "node_out_id": "5",
                         "port_in_id": "elevation_in",
                         "port_out_id": "out"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "9",
+                        "node_out_id": "10",
+                        "port_in_id": "noise",
+                        "port_out_id": "output"
                     }
                 ],
                 "nodes": [
@@ -547,55 +673,62 @@
                         "caption": "ColorizeGradient",
                         "id": "9",
                         "is_widget_visible": true,
-                        "scene_position.x": 316.5142088345717,
-                        "scene_position.y": 51.228250716093385
+                        "scene_position.x": 316.51422119140625,
+                        "scene_position.y": 51.22825241088867
                     },
                     {
                         "caption": "MixTexture",
                         "id": "8",
                         "is_widget_visible": true,
-                        "scene_position.x": 541.0387216744964,
-                        "scene_position.y": -30.529721757254492
+                        "scene_position.x": 541.0386962890625,
+                        "scene_position.y": -30.529722213745117
                     },
                     {
                         "caption": "ColorizeGradient",
                         "id": "7",
                         "is_widget_visible": true,
-                        "scene_position.x": 335.0315041775656,
-                        "scene_position.y": -233.82067468967688
+                        "scene_position.x": 335.8604736328125,
+                        "scene_position.y": -233.8206787109375
                     },
                     {
                         "caption": "CoastalErosionDiffusion",
                         "id": "6",
                         "is_widget_visible": true,
-                        "scene_position.x": -34.26609318157202,
-                        "scene_position.y": -320.14071036096755
+                        "scene_position.x": -28.946922302246094,
+                        "scene_position.y": -314.8215637207031
                     },
                     {
                         "caption": "MountainInselberg",
                         "id": "5",
                         "is_widget_visible": true,
-                        "scene_position.x": -552.5808385981113,
-                        "scene_position.y": -365.1620668131108
+                        "scene_position.x": -552.580810546875,
+                        "scene_position.y": -365.1620788574219
                     },
                     {
                         "caption": "FloodingUniformLevel",
                         "id": "4",
                         "is_widget_visible": true,
-                        "scene_position.x": -287.59962947953886,
-                        "scene_position.y": -198.1501724357672
+                        "scene_position.x": -287.5996398925781,
+                        "scene_position.y": -198.15017700195313
                     },
                     {
                         "caption": "Preview",
                         "id": "3",
                         "is_widget_visible": true,
-                        "scene_position.x": 723.0717431336888,
-                        "scene_position.y": -399.9214063994348
+                        "scene_position.x": 732.46484375,
+                        "scene_position.y": -401.1869812011719
+                    },
+                    {
+                        "caption": "NoiseFbm",
+                        "id": "10",
+                        "is_widget_visible": true,
+                        "scene_position.x": -11.811985969543457,
+                        "scene_position.y": 91.3320083618164
                     }
                 ],
                 "viewers": [
                     {
-                        "current_node_id": "4",
+                        "current_node_id": "3",
                         "height": 1057,
                         "is_node_pinned": false,
                         "label": "3D Renderer",
@@ -605,8 +738,8 @@
                             "add_fog": false,
                             "add_water_foam": true,
                             "add_water_waves": true,
-                            "alpha_x": 0.7105554938316345,
-                            "alpha_y": 22.408889770507813,
+                            "alpha_x": 0.6250893473625183,
+                            "alpha_y": 65.8338623046875,
                             "ambiant_occlusion_radius": 3,
                             "ambiant_occlusion_strength": 5.0,
                             "angle_spread_ratio": 0.0,
@@ -618,17 +751,17 @@
                             "bypass_texture_albedo": false,
                             "camera": {
                                 "far_plane": 100.0,
-                                "fov": 0.7850000262260437,
+                                "fov": 0.7853982448577881,
                                 "near_plane": 0.10000000149011612,
                                 "position": {
-                                    "x": -0.32787054777145386,
-                                    "y": 0.8171180486679077,
-                                    "z": -1.1433428525924683
+                                    "x": 0.4574636220932007,
+                                    "y": 0.7129647731781006,
+                                    "z": -1.3231879472732544
                                 },
                                 "target": {
-                                    "x": 0.15005673468112946,
-                                    "y": -0.19657966494560242,
-                                    "z": -0.0666050836443901
+                                    "x": 0.2663029432296753,
+                                    "y": -0.278516948223114,
+                                    "z": 0.037414781749248505
                                 },
                                 "up": {
                                     "x": 0.0,
@@ -646,7 +779,7 @@
                                 "y": 0.8500000238418579,
                                 "z": 0.800000011920929
                             },
-                            "distance": 1.5541434288024902,
+                            "distance": 1.694348931312561,
                             "foam_color": {
                                 "x": 1.0,
                                 "y": 1.0,
@@ -669,9 +802,9 @@
                             "hmap_w": 2.0,
                             "light": {
                                 "position": {
-                                    "x": -6.122223854064941,
-                                    "y": 4.997701168060303,
-                                    "z": 6.127100467681885
+                                    "x": -6.121285438537598,
+                                    "y": 5.000000476837158,
+                                    "z": 6.126161575317383
                                 },
                                 "target": {
                                     "x": 0.0,
@@ -681,7 +814,7 @@
                             },
                             "light_distance": 10.0,
                             "light_phi": -0.7850000262260437,
-                            "light_theta": 0.5233333706855774,
+                            "light_theta": 0.523598849773407,
                             "mie_color": {
                                 "x": 1.0,
                                 "y": 0.800000011920929,
@@ -690,8 +823,8 @@
                             "normal_map_scaling": 1.0,
                             "normal_visualization": false,
                             "pan_offset": {
-                                "x": -0.16417448222637177,
-                                "y": -0.19657966494560242
+                                "x": -0.2689184248447418,
+                                "y": -0.278516948223114
                             },
                             "rayleigh_color": {
                                 "x": 0.4000000059604645,
@@ -724,7 +857,7 @@
                             "viewer2d_settings.sun_azimuth": 1.5700000524520874,
                             "viewer2d_settings.sun_zenith": 1.0466667413711548,
                             "viewer2d_settings.zoom": 0.8999999761581421,
-                            "water_color_depth": 0.014999999664723873,
+                            "water_color_depth": 0.00800000037997961,
                             "water_spec_strength": 0.5,
                             "waves_alpha": 0.5233333706855774,
                             "waves_amplitude": 0.004999999888241291,
@@ -736,88 +869,14 @@
                             "x": 2,
                             "y": 91
                         },
-                        "view_param_map": {
-                            "1": {
-                                "color": "",
-                                "elevation": "output",
-                                "normal_map": "",
-                                "path": "",
-                                "points": "",
-                                "water_depth": ""
-                            },
-                            "2": {
-                                "color": "",
-                                "elevation": "output",
-                                "normal_map": "",
-                                "path": "",
-                                "points": "",
-                                "water_depth": ""
-                            },
-                            "3": {
-                                "color": "texture",
-                                "elevation": "elevation",
-                                "normal_map": "normal map",
-                                "path": "path",
-                                "points": "cloud",
-                                "water_depth": "water_depth"
-                            },
-                            "4": {
-                                "color": "",
-                                "elevation": "input",
-                                "normal_map": "",
-                                "path": "",
-                                "points": "",
-                                "water_depth": "water_depth"
-                            },
-                            "5": {
-                                "color": "",
-                                "elevation": "out",
-                                "normal_map": "",
-                                "path": "",
-                                "points": "",
-                                "water_depth": ""
-                            },
-                            "6": {
-                                "color": "",
-                                "elevation": "elevation",
-                                "normal_map": "",
-                                "path": "",
-                                "points": "",
-                                "water_depth": "water_depth"
-                            },
-                            "7": {
-                                "color": "texture",
-                                "elevation": "level",
-                                "normal_map": "",
-                                "path": "",
-                                "points": "",
-                                "water_depth": ""
-                            },
-                            "8": {
-                                "color": "texture",
-                                "elevation": "",
-                                "normal_map": "",
-                                "path": "",
-                                "points": "",
-                                "water_depth": ""
-                            },
-                            "9": {
-                                "color": "texture",
-                                "elevation": "level",
-                                "normal_map": "",
-                                "path": "",
-                                "points": "",
-                                "water_depth": ""
-                            }
-                        },
                         "viewer_type": 0,
                         "width": 1920,
                         "x": 1920,
-                        "y": 23
+                        "y": 24
                     }
                 ]
             }
         }
     },
-    "saved_at": "2025-10-08_19:44:40"
+    "saved_at": "2025-10-08_22:15:30"
 }
