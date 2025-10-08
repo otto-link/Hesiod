@@ -29,9 +29,11 @@ void setup_coastal_erosion_diffusion_node(BaseNode *p_node)
   // attribute(s)
   ADD_ATTR(FloatAttribute, "additional_depth", 0.05f, 0.f, 0.2f);
   ADD_ATTR(IntAttribute, "iterations", 10, 0, INT_MAX);
+  ADD_ATTR(BoolAttribute, "distributed", true);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"additional_depth", "iterations"});
+  p_node->set_attr_ordered_key(
+      {"additional_depth", "iterations", "_SEPARATOR_", "distributed"});
 }
 
 void compute_coastal_erosion_diffusion_node(BaseNode *p_node)
@@ -48,6 +50,11 @@ void compute_coastal_erosion_diffusion_node(BaseNode *p_node)
     hmap::Heightmap *p_z_out = p_node->get_value_ref<hmap::Heightmap>("elevation");
     hmap::Heightmap *p_depth_out = p_node->get_value_ref<hmap::Heightmap>("water_depth");
     hmap::Heightmap *p_mask = p_node->get_value_ref<hmap::Heightmap>("water_mask");
+
+    hmap::TransformMode transform_mode = GET("distributed", BoolAttribute)
+                                             ? p_node->get_config_ref()
+                                                   ->hmap_transform_mode_cpu
+                                             : hmap::TransformMode::SINGLE_ARRAY;
 
     hmap::transform(
         {p_depth, p_z, p_depth_out, p_z_out, p_mask},
@@ -68,7 +75,7 @@ void compute_coastal_erosion_diffusion_node(BaseNode *p_node)
                                           GET("iterations", IntAttribute),
                                           pa_mask);
         },
-        p_node->get_config_ref()->hmap_transform_mode_cpu);
+        transform_mode);
 
     p_z_out->smooth_overlap_buffers();
     p_depth_out->smooth_overlap_buffers();

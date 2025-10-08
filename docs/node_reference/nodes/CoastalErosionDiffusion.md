@@ -34,6 +34,7 @@ Erosion/Water
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |additional_depth|Float|No description|
+|distributed|Bool|No description|
 |iterations|Integer|No description|
 
 # Example

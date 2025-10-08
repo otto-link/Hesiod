@@ -1571,6 +1571,12 @@
                 "label": "additional_depth",
                 "type": "Float"
             },
+            "distributed": {
+                "description": "No description",
+                "key": "distributed",
+                "label": "distributed",
+                "type": "Bool"
+            },
             "iterations": {
                 "description": "No description",
                 "key": "iterations",
