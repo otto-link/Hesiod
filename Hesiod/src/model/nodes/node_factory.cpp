@@ -168,6 +168,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"CloudShuffle", "Geometry/Cloud"},
       {"CloudToArrayInterp", "Geometry/Cloud"},
       {"CloudToPath", "Geometry/Cloud"},
+      {"CoastalErosionDiffusion", "Erosion/Water"},
       {"ColorizeCmap", "Texture"},
       {"ColorizeGradient", "Texture"},
       {"ColorizeSolid", "Texture"},
@@ -537,6 +538,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(CloudShuffle, cloud_shuffle);
     SETUP_NODE(CloudToArrayInterp, cloud_to_array_interp);
     SETUP_NODE(CloudToPath, cloud_to_path);
+    SETUP_NODE(CoastalErosionDiffusion, coastal_erosion_diffusion);
     SETUP_NODE(ColorizeCmap, colorize_cmap);
     SETUP_NODE(ColorizeGradient, colorize_gradient);
     SETUP_NODE(ColorizeSolid, colorize_solid);

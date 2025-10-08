@@ -11,6 +11,7 @@ Node Categories
 |Erosion|Hydraulic|HydraulicParticle, HydraulicStreamLog, Rifts|
 |Erosion|Stratify|Strata, Stratify, StratifyMultiscale, StratifyOblique|
 |Erosion|Thermal|Thermal, ThermalAutoBedrock, ThermalInflate, ThermalRidge, ThermalScree|
+|Erosion|Water|CoastalErosionDiffusion|
 |Features|Clustering|KmeansClustering2, KmeansClustering3|
 |Features|Landform|AccumulationCurvature, RelativeElevation, Unsphericity, ValleyWidth|
 |Filter|Range|Clamp, Remap, Rescale, ShiftElevation|

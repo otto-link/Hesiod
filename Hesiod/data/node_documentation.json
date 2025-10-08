@@ -1560,6 +1560,57 @@
             }
         }
     },
+    "CoastalErosionDiffusion": {
+        "category": "Erosion/Water",
+        "description": "No description available",
+        "label": "CoastalErosionDiffusion",
+        "parameters": {
+            "additional_depth": {
+                "description": "No description",
+                "key": "additional_depth",
+                "label": "additional_depth",
+                "type": "Float"
+            },
+            "iterations": {
+                "description": "No description",
+                "key": "iterations",
+                "label": "iterations",
+                "type": "Integer"
+            }
+        },
+        "ports": {
+            "elevation": {
+                "caption": "elevation",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "output"
+            },
+            "elevation_in": {
+                "caption": "elevation_in",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "water_depth": {
+                "caption": "water_depth",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "output"
+            },
+            "water_depth_in": {
+                "caption": "water_depth_in",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "water_mask": {
+                "caption": "water_mask",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "output"
+            }
+        }
+    },
     "ColorizeCmap": {
         "category": "Texture",
         "description": "ColorizeCmap generates a texture based on colormaps to assign colors to data values.",
@@ -14643,30 +14694,6 @@
                 "description": "No description",
                 "key": "additional_depth",
                 "label": "additional_depth",
-                "type": "Float"
-            },
-            "post_gain": {
-                "description": "No description",
-                "key": "post_gain",
-                "label": "post_gain",
-                "type": "Float"
-            },
-            "post_inverse": {
-                "description": "No description",
-                "key": "post_inverse",
-                "label": "post_inverse",
-                "type": "Bool"
-            },
-            "post_remap": {
-                "description": "No description",
-                "key": "post_remap",
-                "label": "post_remap",
-                "type": "Value range"
-            },
-            "post_smoothing_radius": {
-                "description": "No description",
-                "key": "post_smoothing_radius",
-                "label": "post_smoothing_radius",
                 "type": "Float"
             }
         },
