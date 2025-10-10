@@ -12,7 +12,7 @@ namespace hesiod
 
 void override_export_nodes_settings(const std::string           &fname,
                                     const std::filesystem::path &export_path,
-                                    uint                         random_seeds_increment)
+                                    unsigned int                 random_seeds_increment)
 {
   Logger::log()->trace("override_export_nodes_settings: fname = {}, export_path = {}",
                        fname,
@@ -55,7 +55,7 @@ void override_export_nodes_settings(const std::string           &fname,
       {
         if (j.contains("seed") && j["seed"].contains("value"))
         {
-          uint v = j["seed"]["value"];
+          unsigned int v = j["seed"]["value"];
           j["seed"]["value"] = v + random_seeds_increment;
         }
       }
