@@ -17,14 +17,17 @@
 
 #include "Toast.h"
 
+#include "hesiod/cli/batch_mode.hpp"
 #include "hesiod/config.hpp"
 #include "hesiod/gui/gui_utils.hpp"
 #include "hesiod/gui/main_window.hpp"
+#include "hesiod/gui/widgets/bake_and_export_settings_dialog.hpp"
 #include "hesiod/gui/widgets/documentation_popup.hpp"
 #include "hesiod/gui/widgets/graph_manager_widget.hpp"
 #include "hesiod/gui/widgets/graph_tabs_widget.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/graph_manager.hpp"
+#include "hesiod/model/graph_node.hpp"
 #include "hesiod/model/utils.hpp"
 
 namespace hesiod
@@ -218,6 +221,104 @@ void MainWindow::on_autosave()
   this->save_to_file(fname.string());
 }
 
+void MainWindow::on_export_batch()
+{
+  Logger::log()->trace("MainWindow::on_export_batch");
+
+  // --- retrieve export parameters from user
+
+  BakeAndExportSettingsDialog dialog(8192 * 4,
+                                     this->current_bake_resolution,
+                                     this->current_bake_nvariants,
+                                     this->current_bake_force_distributed);
+
+  if (dialog.exec() != QDialog::Accepted)
+    return;
+
+  int  size = dialog.get_size();
+  int  nvariants = dialog.get_nvariants();
+  bool force_distributed = dialog.get_force_distributed();
+
+  this->current_bake_resolution = size;
+  this->current_bake_nvariants = nvariants;
+  this->current_bake_force_distributed = force_distributed;
+
+  Logger::log()->trace("MainWindow::on_export_batch: size = {}, nvariants = {}");
+
+  // --- setup export repertory
+
+  for (int k = 0; k < nvariants + 1; ++k)
+  {
+    // build export path based on project name, if available
+    std::filesystem::path export_path = this->project_path.filename();
+    if (export_path.empty())
+      export_path = "export";
+    else
+      export_path += "_export";
+
+    export_path = this->project_path.empty()
+                      ? export_path
+                      : this->project_path.parent_path() / export_path;
+
+    if (k > 0)
+      export_path /= "variants_" + std::to_string(k);
+
+    Logger::log()->info("MainWindow::on_export_batch: export path: {}",
+                        export_path.string());
+
+    // create it
+    if (!std::filesystem::exists(export_path))
+    {
+      Logger::log()->trace("MainWindow::on_export_batch: creating export repertory {}",
+                           export_path.string());
+      std::filesystem::create_directories(export_path);
+    }
+
+    // --- save an hesiod file and tweak it
+
+    // save graph node to a temporary file
+    std::filesystem::path fname = export_path / "hesiod_bake.hsd";
+    bool                  ret = this->save_to_file(fname.string(), /*save_backup*/ false);
+
+    if (!ret)
+    {
+      Logger::log()->error(
+          "MainWindow::on_export_batch: error while saving hsd temporary file: {}",
+          fname.string());
+      notify("Bake & Export", "Error while saving temporary hsd file!");
+    }
+
+    // force auto_export for export nodes and overwrite export paths
+    override_export_nodes_settings(fname.string(), export_path, static_cast<uint>(k));
+
+    // --- run
+
+    // retrieve config of the first graph (we only need the CPU and GPU compute modes)
+    auto         graph_nodes = this->graph_manager->get_graph_nodes();
+    auto         it = graph_nodes.begin();
+    ModelConfig *p_config = it != graph_nodes.end() ? it->second->get_config_ref()
+                                                    : nullptr;
+
+    if (!p_config)
+      return;
+
+    ModelConfig bake_config = *p_config;
+
+    if (force_distributed)
+    {
+      bake_config.hmap_transform_mode_cpu = hmap::TransformMode::DISTRIBUTED;
+      bake_config.hmap_transform_mode_gpu = hmap::TransformMode::DISTRIBUTED;
+    }
+
+    // run batch node
+    hesiod::cli::run_batch_mode(fname.string(),
+                                hmap::Vec2<int>(size, size),
+                                bake_config.tiling,
+                                bake_config.overlap,
+                                &bake_config);
+  }
+}
+
 void MainWindow::on_has_changed()
 {
   Logger::log()->trace("MainWindow::on_has_changed");
@@ -340,7 +441,7 @@ void MainWindow::save_state()
   json_to_file(this->json_to(), HSD_SETTINGS_JSON);
 }
 
-bool MainWindow::save_to_file(const std::string &fname) const
+bool MainWindow::save_to_file(const std::string &fname, bool save_backup_file) const
 {
   Logger::log()->trace("MainWindow::save_to_file: {}", fname);
 
@@ -348,22 +449,26 @@ bool MainWindow::save_to_file(const std::string &fname) const
 
   try
   {
-    // If the file exists, create a backup before overwriting
-    if (std::filesystem::exists(fname_ext) && HSD_CONFIG->window.save_backup_file)
+    if (save_backup_file)
     {
-      std::filesystem::path original_path(fname_ext);
-      std::filesystem::path backup_path = insert_before_extension(original_path, ".bak");
+      // If the file exists, create a backup before overwriting
+      if (std::filesystem::exists(fname_ext) && HSD_CONFIG->window.save_backup_file)
+      {
+        std::filesystem::path original_path(fname_ext);
+        std::filesystem::path backup_path = insert_before_extension(original_path,
+                                                                    ".bak");
 
-      try
-      {
-        std::filesystem::copy_file(original_path,
-                                   backup_path,
-                                   std::filesystem::copy_options::overwrite_existing);
-        Logger::log()->trace("Backup created: {}", backup_path.string());
-      }
-      catch (const std::exception &e)
-      {
-        Logger::log()->warn("Failed to create backup for {}: {}", fname_ext, e.what());
+        try
+        {
+          std::filesystem::copy_file(original_path,
+                                     backup_path,
+                                     std::filesystem::copy_options::overwrite_existing);
+          Logger::log()->trace("Backup created: {}", backup_path.string());
+        }
+        catch (const std::exception &e)
+        {
+          Logger::log()->warn("Failed to create backup for {}: {}", fname_ext, e.what());
+        }
       }
     }
 
@@ -461,6 +566,12 @@ void MainWindow::setup_menu_bar()
 
   file_menu->addSeparator();
 
+  auto *export_batch = new QAction("Bake & Export (High Resolution)", this);
+  export_batch->setShortcut(tr("Alt+E"));
+  file_menu->addAction(export_batch);
+
+  file_menu->addSeparator();
+
   auto *quit = new QAction("Quit", this);
   quit->setShortcut(tr("Ctrl+Q"));
   file_menu->addAction(quit);
@@ -553,6 +664,7 @@ void MainWindow::setup_menu_bar()
   this->connect(save, &QAction::triggered, this, &MainWindow::on_save);
   this->connect(save_as, &QAction::triggered, this, &MainWindow::on_save_as);
   this->connect(save_copy, &QAction::triggered, this, &MainWindow::on_save_copy);
+  this->connect(export_batch, &QAction::triggered, this, &MainWindow::on_export_batch);
 
   // --- graphs
   this->connect(new_graph,

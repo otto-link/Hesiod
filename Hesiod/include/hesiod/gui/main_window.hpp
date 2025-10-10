@@ -58,7 +58,7 @@ public:
 
   // --- Serialization on file ---
   void load_from_file(const std::string &fname);
-  bool save_to_file(const std::string &fname) const;
+  bool save_to_file(const std::string &fname, bool save_backup_file = true) const;
 
   // --- Serialization (global settings) ---
   void           json_from(nlohmann::json const &json);
@@ -75,6 +75,7 @@ private slots:
 
   // --- User Actions ---
   void on_autosave();
+  void on_export_batch();
   void on_has_changed(); // whole project
   void on_load();
   void on_new();
@@ -111,6 +112,9 @@ private:
   QTimer                *autosave_timer; // own by this
   bool                   show_node_settings_pan = false;
   qtd::TextureDownloader texture_downloader;
+  int                    current_bake_resolution = 1024;
+  int                    current_bake_nvariants = 0;
+  bool                   current_bake_force_distributed = true;
 };
 
 // =====================================
@@ -118,5 +122,9 @@ private:
 // =====================================
 
 void notify(const std::string &title, const std::string &text);
+
+void override_export_nodes_settings(const std::string           &fname,
+                                    const std::filesystem::path &export_path,
+                                    uint random_seeds_increment = 0);
 
 } // namespace hesiod
