@@ -11,6 +11,7 @@
 #include <QHBoxLayout>
 #include <QMenuBar>
 #include <QMessageBox>
+#include <QProgressDialog>
 #include <QSettings>
 #include <QTabWidget>
 #include <QTimer>
@@ -247,8 +248,18 @@ void MainWindow::on_export_batch()
 
   // --- setup export repertory
 
+  // block UI
+  QProgressDialog progress(tr("Baking and exporting..."), QString(), 0, 0, this);
+  progress.setWindowModality(Qt::ApplicationModal);
+  progress.setCancelButton(nullptr);
+  progress.setMinimumDuration(0); // show immediately
+  progress.show();
+  QCoreApplication::processEvents();
+
   for (int k = 0; k < nvariants + 1; ++k)
   {
+    QCoreApplication::processEvents(); // render progress dialog
+
     // build export path based on project name, if available
     std::filesystem::path export_path = this->project_path.filename();
     if (export_path.empty())
@@ -299,24 +310,27 @@ void MainWindow::on_export_batch()
     ModelConfig *p_config = it != graph_nodes.end() ? it->second->get_config_ref()
                                                     : nullptr;
 
-    if (!p_config)
-      return;
-
-    ModelConfig bake_config = *p_config;
-
-    if (force_distributed)
+    if (p_config)
     {
-      bake_config.hmap_transform_mode_cpu = hmap::TransformMode::DISTRIBUTED;
-      bake_config.hmap_transform_mode_gpu = hmap::TransformMode::DISTRIBUTED;
-    }
+      ModelConfig bake_config = *p_config;
 
-    // run batch node
-    hesiod::cli::run_batch_mode(fname.string(),
-                                hmap::Vec2<int>(size, size),
-                                bake_config.tiling,
-                                bake_config.overlap,
-                                &bake_config);
+      if (force_distributed)
+      {
+        bake_config.hmap_transform_mode_cpu = hmap::TransformMode::DISTRIBUTED;
+        bake_config.hmap_transform_mode_gpu = hmap::TransformMode::DISTRIBUTED;
+      }
+
+      // run batch node
+      hesiod::cli::run_batch_mode(fname.string(),
+                                  hmap::Vec2<int>(size, size),
+                                  bake_config.tiling,
+                                  bake_config.overlap,
+                                  &bake_config);
+    }
   }
+
+  // unblock UI
+  progress.close();
 }
 
 void MainWindow::on_has_changed()
