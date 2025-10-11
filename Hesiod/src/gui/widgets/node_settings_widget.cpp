@@ -121,6 +121,12 @@ void NodeSettingsWidget::update_content()
 {
   Logger::log()->trace("NodeSettingsWidget::update_content");
 
+  if (this->prevent_content_update)
+  {
+    Logger::log()->trace("NodeSettingsWidget::update_content: prevented");
+    return;
+  }
+
   // create widget content here (not in the constructor) to ensure the
   // the parent widget is setup
   if (this->first_pass)
@@ -331,6 +337,25 @@ void NodeSettingsWidget::update_content()
       }
 
       this->scroll_layout->addWidget(attributes_widget, row++, 0);
+
+      this->connect(
+          attributes_widget,
+          &attr::AttributesWidget::value_changed,
+          [this, p_node]()
+          {
+            std::string node_id = p_node->get_id();
+
+            if (this->p_graph_node_widget)
+              if (GraphNode *p_graph = this->p_graph_node_widget->get_p_graph_node())
+              {
+                // block update of the widget if the modification
+                // comes from within (settings change can also comes
+                // from the node settings context menu)
+                this->prevent_content_update = true;
+                p_graph->update(node_id);
+                this->prevent_content_update = false;
+              }
+          });
     }
   }
 }

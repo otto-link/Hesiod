@@ -36,6 +36,7 @@ private:
   QScrollArea             *scroll_area;
   std::vector<std::string> pinned_node_ids = {};
   bool                     first_pass = true;
+  bool                     prevent_content_update = false;
 };
 
 } // namespace hesiod
