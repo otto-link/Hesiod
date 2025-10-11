@@ -344,4 +344,32 @@ void BaseNode::set_qwidget_fct(std::function<QWidget *(BaseNode *p_node)> new_qw
   this->qwidget_fct = std::move(new_qwidget_fct);
 }
 
+void BaseNode::update_attributes_tool_tip()
+{
+  Logger::log()->trace("BaseNode::update_attributes_tool_tip");
+
+  size_t width = 64;
+
+  for (auto &[key, sp_attr] : this->attr)
+    if (sp_attr)
+    {
+      std::string label = sp_attr->get_label();
+
+      if (this->documentation.contains("parameters") &&
+          this->documentation["parameters"].contains(key))
+      {
+        std::string description = label + ":\n";
+
+        if (this->documentation["parameters"][key].contains("description"))
+        {
+          std::string base_desc = this->documentation["parameters"][key]["description"];
+          base_desc = insert_char_every_nth(base_desc, width, "\n");
+          description += base_desc;
+        }
+
+        sp_attr->set_description(description);
+      }
+    }
+}
+
 } // namespace hesiod

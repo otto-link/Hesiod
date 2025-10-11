@@ -16,10 +16,13 @@
 #include "hesiod/model/nodes/broadcast_node.hpp"
 #include "hesiod/model/nodes/receive_node.hpp"
 
+// setup node, create ports, attributes, define compute function,
+// define attributes tooltips...
 #define SETUP_NODE(NodeType, node_type)                                                  \
   case str2int(#NodeType):                                                               \
     setup_##node_type##_node(sptr.get());                                                \
     sptr->set_compute_fct(&compute_##node_type##_node);                                  \
+    sptr->update_attributes_tool_tip();                                                  \
     break;
 
 namespace hesiod

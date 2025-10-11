@@ -86,6 +86,7 @@ public:
   nlohmann::json get_documentation() const { return this->documentation; }
   std::string    get_documentation_html() const;
   std::string    get_documentation_short() const;
+  void           update_attributes_tool_tip();
 
   // --- NodeProxy Interface (for GUI) ---
   std::string      get_caption() const override;
