@@ -595,6 +595,12 @@ void MainWindow::setup_menu_bar()
   auto *new_graph = new QAction("New graph", this);
   graph_menu->addAction(new_graph);
 
+  graph_menu->addSeparator();
+
+  auto *reseed = new QAction("Reseed random generators", this);
+  reseed->setShortcut(tr("Alt+R"));
+  graph_menu->addAction(reseed);
+
   QMenu *view_menu = menuBar()->addMenu("&View");
 
   auto *show_layout_manager = new QAction("Graph layout manager", this);
@@ -685,6 +691,11 @@ void MainWindow::setup_menu_bar()
                 &QAction::triggered,
                 this->graph_manager_widget.get(),
                 &GraphManagerWidget::on_new_graph_request);
+
+  this->connect(reseed,
+                &QAction::triggered,
+                this->graph_manager_widget.get(),
+                &GraphManagerWidget::on_reseed);
 
   // quit
   this->connect(quit, &QAction::triggered, this, &MainWindow::on_quit);

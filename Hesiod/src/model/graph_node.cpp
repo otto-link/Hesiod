@@ -277,6 +277,20 @@ void GraphNode::remove_node(const std::string &id)
   gnode::Graph::remove_node(id);
 }
 
+void GraphNode::reseed()
+{
+  Logger::log()->trace("GraphNode::reseed: {}", this->get_id());
+
+  // loop over nodes and increment seed number if any
+  for (auto &[key, p_node] : this->nodes)
+  {
+    if (p_node)
+      dynamic_cast<BaseNode *>(p_node.get())->reseed();
+  }
+
+  this->update();
+}
+
 void GraphNode::set_p_broadcast_params(BroadcastMap *new_p_broadcast_params)
 {
   Logger::log()->trace("GraphNode::set_p_broadcast_params: ptr = {}",

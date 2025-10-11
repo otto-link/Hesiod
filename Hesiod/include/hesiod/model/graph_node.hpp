@@ -49,6 +49,9 @@ public:
   void          set_p_broadcast_params(BroadcastMap *new_p_broadcast_params);
   void          on_broadcast_node_updated(const std::string &tag);
 
+  // --- Others... ---
+  void reseed();
+
 signals:
   // --- Signals ---
   void compute_started(const std::string &graph_id, const std::string &node_id);

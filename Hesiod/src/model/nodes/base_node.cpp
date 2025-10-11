@@ -9,6 +9,8 @@
 #include "highmap/geometry/path.hpp"
 #include "highmap/heightmap.hpp"
 
+#include "attributes/seed_attribute.hpp"
+
 #include "hesiod/config.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/enum_mapping.hpp"
@@ -327,6 +329,20 @@ nlohmann::json BaseNode::node_parameters_to_json() const
   }
 
   return json;
+}
+
+void BaseNode::reseed()
+{
+  for (const auto &[key, attr] : this->attr)
+    if (attr && attr->get_type() == attr::AttributeType::SEED)
+      if (auto p_seed = attr->get_ref<attr::SeedAttribute>())
+      {
+        Logger::log()->trace("BaseNode::reseed: reseeding node {}_{}",
+                             this->get_label(),
+                             this->get_id());
+
+        p_seed->set_value(p_seed->get_value() + 1);
+      }
 }
 
 void BaseNode::set_attr_ordered_key(const std::vector<std::string> &new_attr_ordered_key)

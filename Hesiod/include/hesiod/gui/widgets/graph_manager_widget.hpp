@@ -101,6 +101,7 @@ public slots:
   void on_item_double_clicked(QListWidgetItem *item);
   void on_list_reordered(const QModelIndex &, int, int, const QModelIndex &, int);
   void on_new_graph_request();
+  void on_reseed();
 
   // --- Graph Actions ---
   void update_combobox(const std::string &graph_id);
