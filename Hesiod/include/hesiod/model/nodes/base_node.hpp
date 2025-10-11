@@ -63,7 +63,7 @@ public:
   std::map<std::string, std::unique_ptr<attr::AbstractAttribute>> *get_attr_ref();
   void set_attr_ordered_key(const std::vector<std::string> &new_attr_ordered_key);
 
-  void reseed();
+  void reseed(bool backward);
 
   // --- Configuration ---
   ModelConfig *get_config_ref() { return this->config.get(); }

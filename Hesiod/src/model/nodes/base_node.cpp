@@ -331,7 +331,7 @@ nlohmann::json BaseNode::node_parameters_to_json() const
   return json;
 }
 
-void BaseNode::reseed()
+void BaseNode::reseed(bool backward)
 {
   for (const auto &[key, attr] : this->attr)
     if (attr && attr->get_type() == attr::AttributeType::SEED)
@@ -341,7 +341,8 @@ void BaseNode::reseed()
                              this->get_label(),
                              this->get_id());
 
-        p_seed->set_value(p_seed->get_value() + 1);
+        unsigned int increment = backward ? -1 : 1;
+        p_seed->set_value(p_seed->get_value() + increment);
       }
 }
 

@@ -277,7 +277,7 @@ void GraphNode::remove_node(const std::string &id)
   gnode::Graph::remove_node(id);
 }
 
-void GraphNode::reseed()
+void GraphNode::reseed(bool backward)
 {
   Logger::log()->trace("GraphNode::reseed: {}", this->get_id());
 
@@ -285,7 +285,7 @@ void GraphNode::reseed()
   for (auto &[key, p_node] : this->nodes)
   {
     if (p_node)
-      dynamic_cast<BaseNode *>(p_node.get())->reseed();
+      dynamic_cast<BaseNode *>(p_node.get())->reseed(backward);
   }
 
   this->update();

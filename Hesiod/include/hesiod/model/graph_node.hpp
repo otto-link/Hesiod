@@ -50,7 +50,7 @@ public:
   void          on_broadcast_node_updated(const std::string &tag);
 
   // --- Others... ---
-  void reseed();
+  void reseed(bool backward);
 
 signals:
   // --- Signals ---

@@ -601,6 +601,10 @@ void MainWindow::setup_menu_bar()
   reseed->setShortcut(tr("Alt+R"));
   graph_menu->addAction(reseed);
 
+  auto *reseed_back = new QAction("Reseed random generators (revert)", this);
+  reseed_back->setShortcut(tr("Alt+Shift+R"));
+  graph_menu->addAction(reseed_back);
+
   QMenu *view_menu = menuBar()->addMenu("&View");
 
   auto *show_layout_manager = new QAction("Graph layout manager", this);
@@ -696,6 +700,14 @@ void MainWindow::setup_menu_bar()
                 &QAction::triggered,
                 this->graph_manager_widget.get(),
                 &GraphManagerWidget::on_reseed);
+
+  this->connect(reseed_back,
+                &QAction::triggered,
+                [this]()
+                {
+                  // backward
+                  this->graph_manager_widget.get()->on_reseed(true);
+                });
 
   // quit
   this->connect(quit, &QAction::triggered, this, &MainWindow::on_quit);

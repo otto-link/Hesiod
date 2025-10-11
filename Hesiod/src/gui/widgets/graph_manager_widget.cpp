@@ -365,12 +365,12 @@ void GraphManagerWidget::on_new_graph_request()
   Q_EMIT this->new_graph_added();
 }
 
-void GraphManagerWidget::on_reseed()
+void GraphManagerWidget::on_reseed(bool backward)
 {
   if (!this->p_graph_manager)
     return;
 
-  this->p_graph_manager->reseed();
+  this->p_graph_manager->reseed(backward);
 }
 
 void GraphManagerWidget::reset()
