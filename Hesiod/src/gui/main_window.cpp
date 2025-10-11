@@ -580,7 +580,7 @@ void MainWindow::setup_menu_bar()
 
   file_menu->addSeparator();
 
-  auto *export_batch = new QAction("Bake & Export (High Resolution)", this);
+  auto *export_batch = new QAction("Bake and Export (High Resolution)", this);
   export_batch->setShortcut(tr("Alt+E"));
   file_menu->addAction(export_batch);
 
