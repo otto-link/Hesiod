@@ -634,6 +634,9 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
   BaseNode            *p_node = this->p_graph_node->get_node_ref_by_id<BaseNode>(node_id);
   gngui::GraphicsNode *p_gx_node = this->get_graphics_node_by_id(node_id);
 
+  if (!p_node || !p_gx_node)
+    return;
+
   QPointF item_pos = scene_pos - p_gx_node->scenePos();
 
   // if the click is above the widget, let the widget context menu
