@@ -594,11 +594,13 @@ void MainWindow::setup_menu_bar()
 
   graph_menu->addSeparator();
 
-  auto *reseed = new QAction("Reseed random generators", this);
+  const std::string reseed_tooltip = "";
+
+  auto *reseed = new QAction("Advance random seeds", this);
   reseed->setShortcut(tr("Alt+R"));
   graph_menu->addAction(reseed);
 
-  auto *reseed_back = new QAction("Reseed random generators (revert)", this);
+  auto *reseed_back = new QAction("Reverse random seeds", this);
   reseed_back->setShortcut(tr("Alt+Shift+R"));
   graph_menu->addAction(reseed_back);
 

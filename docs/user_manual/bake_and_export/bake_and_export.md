@@ -43,33 +43,11 @@ The export structure is organized as follows:
 - All exported files are saved directly in the **`my_graph_export`** directory.
 
 #### **Variants**
+
 - Variants are stored in subdirectories named **`variants.n`** (for example, `variants.1`, `variants.2`, etc.) inside **`my_graph_export`**.
 - The directory structure inside each variant folder mirrors that of the main export.
 - Each variant contains a full export generated with a different seed value.
 
-## Export Directory Structure
-
-When you perform a bake and export operation, the exported files are organized automatically according to the project name:
-
-If your project file is named my_graph.hsd, a directory named my_graph_export is created.
-
-This directory contains all exported files.
-
-Files are replaced if necessary, but existing files that are not part of the current export are kept.
-
-### Main Export
-
-Inside my_graph_export, a file named hesiod_bake.hsd is created.
-
-In this export graph, all nodes marked for export have their auto_export property set to true, ensuring that output files are generated automatically during graph computation.
-
-Each exported file name is adjusted and prefixed with the node’s label and ID to distinguish outputs from different nodes.
-
-All exported files are saved directly in the my_graph_export directory.
-
-### Variants
-
-Variants are stored in subdirectories named variants.n (for example, variants.1, variants.2, etc.) inside my_graph_export. The directory structure inside each variant folder mirrors that of the main export. Each variant contains a full export generated with a different seed value.
 
 ## What are Variants?
 
