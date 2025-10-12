@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <random>
 
+#include "hesiod/gui/widgets/bake_and_export_settings_dialog.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/utils.hpp"
 
@@ -12,7 +13,8 @@ namespace hesiod
 
 void override_export_nodes_settings(const std::string           &fname,
                                     const std::filesystem::path &export_path,
-                                    unsigned int                 random_seeds_increment)
+                                    unsigned int                 random_seeds_increment,
+                                    const BakeSettings          &bake_settings)
 {
   Logger::log()->trace("override_export_nodes_settings: fname = {}, export_path = {}",
                        fname,
@@ -32,20 +34,27 @@ void override_export_nodes_settings(const std::string           &fname,
       if (node_label.find("Export") != std::string::npos)
       {
         // force node auto export
-        if (j.contains("auto_export"))
-          j["auto_export"]["value"] = true;
+        if (bake_settings.force_auto_export)
+        {
+          if (j.contains("auto_export"))
+            j["auto_export"]["value"] = true;
+        }
 
         // change export name
         if (j.contains("fname") && j["fname"].contains("value"))
         {
-          std::filesystem::path
-              basename = j["fname"]["value"].get<std::filesystem::path>().filename();
+          std::filesystem::path basename = std::filesystem::path(
+                                               j["fname"]["value"].get<std::string>())
+                                               .filename();
 
           std::string label = j.value("label", "");
           std::string id = j.value("id", "");
 
-          std::string           new_name = label + "_" + id + "_" + basename.string();
-          std::filesystem::path new_path = export_path / new_name;
+          std::string new_name = label + "_" + id + "_" + basename.string();
+
+          std::filesystem::path new_path = bake_settings.rename_export_files
+                                               ? export_path / new_name
+                                               : export_path / basename;
 
           j["fname"]["value"] = new_path.string();
         }

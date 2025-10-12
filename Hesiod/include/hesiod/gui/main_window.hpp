@@ -19,6 +19,8 @@
 
 #include "qtd/texture_downloader.hpp"
 
+#include "hesiod/gui/widgets/bake_and_export_settings_dialog.hpp"
+
 #define HSD_SETTINGS_ORG "olink"
 #define HSD_SETTINGS_APP "hesiod"
 #define HSD_SETTINGS_JSON "hesiod_settings.json"
@@ -112,9 +114,7 @@ private:
   QTimer                *autosave_timer; // own by this
   bool                   show_node_settings_pan = false;
   qtd::TextureDownloader texture_downloader;
-  int                    current_bake_resolution = 1024;
-  int                    current_bake_nvariants = 0;
-  bool                   current_bake_force_distributed = true;
+  BakeSettings           bake_settings;
 };
 
 // =====================================
@@ -125,6 +125,7 @@ void notify(const std::string &title, const std::string &text);
 
 void override_export_nodes_settings(const std::string           &fname,
                                     const std::filesystem::path &export_path,
-                                    uint random_seeds_increment = 0);
+                                    uint                         random_seeds_increment,
+                                    const BakeSettings          &bake_settings);
 
 } // namespace hesiod

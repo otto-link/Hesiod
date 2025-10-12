@@ -14,16 +14,23 @@
 namespace hesiod
 {
 
+struct BakeSettings
+{
+  int  resolution = 1024;
+  int  nvariants = 0;
+  bool force_distributed = true;
+  bool force_auto_export = true;
+  bool rename_export_files = true;
+};
+
 class BakeAndExportSettingsDialog : public QDialog
 {
   Q_OBJECT
 
 public:
-  explicit BakeAndExportSettingsDialog(int      max_size = 4096,
-                                       int      default_resolution = 512,
-                                       int      default_nvariants = 0,
-                                       bool     default_force_distributed = true,
-                                       QWidget *parent = nullptr)
+  explicit BakeAndExportSettingsDialog(int                 max_size,
+                                       const BakeSettings &initial_value,
+                                       QWidget            *parent = nullptr)
       : QDialog(parent)
   {
     this->setWindowTitle("Bake and export settings");
@@ -34,6 +41,11 @@ public:
     this->slider_nvariants = new QSpinBox(this);
     this->checkbox_force_distributed = new QCheckBox("Force distributed computation",
                                                      this);
+    this->checkbox_force_auto_export = new QCheckBox("Force auto export for export nodes",
+                                                     this);
+    this->checkbox_rename_export_files = new QCheckBox("Add prefix export filenames",
+                                                       this);
+
     this->buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel,
                                          this);
 
@@ -43,13 +55,13 @@ public:
       this->resolution_combo->addItem(QString("%1 x %1").arg(size), size);
     }
     this->resolution_combo->setCurrentIndex(
-        this->resolution_combo->findData(default_resolution));
+        this->resolution_combo->findData(initial_value.resolution));
 
     // Setup slider + spinbox
     this->slider->setRange(0, 50);
     this->slider_nvariants->setRange(0, 50);
-    this->slider_nvariants->setValue(default_nvariants);
-    this->slider->setValue(default_nvariants);
+    this->slider_nvariants->setValue(initial_value.nvariants);
+    this->slider->setValue(initial_value.nvariants);
 
     QObject::connect(this->slider,
                      &QSlider::valueChanged,
@@ -61,7 +73,9 @@ public:
                      &QSlider::setValue);
 
     // Checkbox default state (input parameter)
-    this->checkbox_force_distributed->setChecked(default_force_distributed);
+    this->checkbox_force_distributed->setChecked(initial_value.force_distributed);
+    this->checkbox_force_auto_export->setChecked(initial_value.force_auto_export);
+    this->checkbox_rename_export_files->setChecked(initial_value.rename_export_files);
 
     // Layout
     auto *form_layout = new QFormLayout;
@@ -76,11 +90,22 @@ public:
     auto *main_layout = new QVBoxLayout;
     main_layout->addLayout(form_layout);
     main_layout->addWidget(this->checkbox_force_distributed);
+    main_layout->addWidget(this->checkbox_force_auto_export);
+    main_layout->addWidget(this->checkbox_rename_export_files);
     main_layout->addWidget(this->buttons);
     this->setLayout(main_layout);
 
     QObject::connect(this->buttons, &QDialogButtonBox::accepted, this, &QDialog::accept);
     QObject::connect(this->buttons, &QDialogButtonBox::rejected, this, &QDialog::reject);
+  }
+
+  BakeSettings get_bake_settings() const
+  {
+    return BakeSettings(this->resolution_combo->currentData().toInt(),
+                        this->slider_nvariants->value(),
+                        this->checkbox_force_distributed->isChecked(),
+                        this->checkbox_force_auto_export->isChecked(),
+                        this->checkbox_rename_export_files->isChecked());
   }
 
   int  get_size() const { return this->resolution_combo->currentData().toInt(); }
@@ -95,6 +120,8 @@ private:
   QSlider          *slider;
   QSpinBox         *slider_nvariants;
   QCheckBox        *checkbox_force_distributed;
+  QCheckBox        *checkbox_force_auto_export;
+  QCheckBox        *checkbox_rename_export_files;
   QDialogButtonBox *buttons;
 };
 

@@ -228,23 +228,16 @@ void MainWindow::on_export_batch()
 
   // --- retrieve export parameters from user
 
-  BakeAndExportSettingsDialog dialog(8192 * 4,
-                                     this->current_bake_resolution,
-                                     this->current_bake_nvariants,
-                                     this->current_bake_force_distributed);
+  BakeAndExportSettingsDialog dialog(8192 * 4, this->bake_settings);
 
   if (dialog.exec() != QDialog::Accepted)
     return;
 
-  int  size = dialog.get_size();
-  int  nvariants = dialog.get_nvariants();
-  bool force_distributed = dialog.get_force_distributed();
+  this->bake_settings = dialog.get_bake_settings();
 
-  this->current_bake_resolution = size;
-  this->current_bake_nvariants = nvariants;
-  this->current_bake_force_distributed = force_distributed;
-
-  Logger::log()->trace("MainWindow::on_export_batch: size = {}, nvariants = {}");
+  Logger::log()->trace("MainWindow::on_export_batch: size = {}, nvariants = {}",
+                       this->bake_settings.resolution,
+                       this->bake_settings.nvariants);
 
   // --- setup export repertory
 
@@ -256,7 +249,7 @@ void MainWindow::on_export_batch()
   progress.show();
   QCoreApplication::processEvents();
 
-  for (int k = 0; k < nvariants + 1; ++k)
+  for (int k = 0; k < this->bake_settings.nvariants + 1; ++k)
   {
     QCoreApplication::processEvents(); // render progress dialog
 
@@ -300,7 +293,10 @@ void MainWindow::on_export_batch()
     }
 
     // force auto_export for export nodes and overwrite export paths
-    override_export_nodes_settings(fname.string(), export_path, static_cast<uint>(k));
+    override_export_nodes_settings(fname.string(),
+                                   export_path,
+                                   static_cast<uint>(k),
+                                   bake_settings);
 
     // --- run
 
@@ -314,18 +310,19 @@ void MainWindow::on_export_batch()
     {
       ModelConfig bake_config = *p_config;
 
-      if (force_distributed)
+      if (this->bake_settings.force_distributed)
       {
         bake_config.hmap_transform_mode_cpu = hmap::TransformMode::DISTRIBUTED;
         bake_config.hmap_transform_mode_gpu = hmap::TransformMode::DISTRIBUTED;
       }
 
       // run batch node
-      hesiod::cli::run_batch_mode(fname.string(),
-                                  hmap::Vec2<int>(size, size),
-                                  bake_config.tiling,
-                                  bake_config.overlap,
-                                  &bake_config);
+      hesiod::cli::run_batch_mode(
+          fname.string(),
+          hmap::Vec2<int>(this->bake_settings.resolution, this->bake_settings.resolution),
+          bake_config.tiling,
+          bake_config.overlap,
+          &bake_config);
     }
   }
 
