@@ -722,6 +722,10 @@ void MainWindow::show_about()
 
   QMessageBox msg_box;
   msg_box.setText(msg.c_str());
+  QPixmap icon(HSD_APP_ICON);
+  msg_box.setIconPixmap(
+      icon.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+
   msg_box.exec();
 }
 
