@@ -594,8 +594,6 @@ void MainWindow::setup_menu_bar()
 
   graph_menu->addSeparator();
 
-  const std::string reseed_tooltip = "";
-
   auto *reseed = new QAction("Advance random seeds", this);
   reseed->setShortcut(tr("Alt+R"));
   graph_menu->addAction(reseed);
