@@ -26,8 +26,8 @@ void setup_transfer_node(BaseNode *p_node)
 
   // attribute(s)
   ADD_ATTR(FloatAttribute, "radius", 0.05f, 0.f, 0.2f);
-  ADD_ATTR(FloatAttribute, "amplitude", -1.f, -2.f, 4.f);
-  ADD_ATTR(BoolAttribute, "target_prefiltering", true);
+  ADD_ATTR(FloatAttribute, "amplitude", 0.5f, -2.f, 4.f);
+  ADD_ATTR(BoolAttribute, "target_prefiltering", false);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"radius", "amplitude", "target_prefiltering"});
