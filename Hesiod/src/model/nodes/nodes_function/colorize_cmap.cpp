@@ -8,6 +8,7 @@
 #include "hesiod/logger.hpp"
 #include "hesiod/model/cmap.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
+#include "hesiod/model/nodes/base_node_gui.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
 
 using namespace attr;
@@ -43,6 +44,8 @@ void setup_colorize_cmap_node(BaseNode *p_node)
                                 "_SEPARATOR_",
                                 "saturate_input",
                                 "saturate_alpha"});
+
+  add_deprecated_warning_label(p_node);
 }
 
 void compute_colorize_cmap_node(BaseNode *p_node)
