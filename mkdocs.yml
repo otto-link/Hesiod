@@ -92,6 +92,7 @@ nav:
     - 'node_reference/nodes/HeightmapToMask.md'
     - 'node_reference/nodes/HeightmapToNormalMap.md'
     - 'node_reference/nodes/HeightmapToRGBA.md'
+    - 'node_reference/nodes/HemisphereFieldFbm.md'
     - 'node_reference/nodes/HydraulicBlur.md'
     - 'node_reference/nodes/HydraulicMusgrave.md'
     - 'node_reference/nodes/HydraulicParticle.md'

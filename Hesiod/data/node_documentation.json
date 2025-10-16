@@ -4295,6 +4295,153 @@
             }
         }
     },
+    "HemisphereFieldFbm": {
+        "category": "Primitive/Coherent",
+        "description": "No description available",
+        "label": "HemisphereFieldFbm",
+        "parameters": {
+            "amplitude_random_ratio": {
+                "description": "No description",
+                "key": "amplitude_random_ratio",
+                "label": "amplitude_random_ratio",
+                "type": "Float"
+            },
+            "density": {
+                "description": "No description",
+                "key": "density",
+                "label": "density",
+                "type": "Float"
+            },
+            "jitter.x": {
+                "description": "No description",
+                "key": "jitter.x",
+                "label": "jitter.x",
+                "type": "Float"
+            },
+            "jitter.y": {
+                "description": "No description",
+                "key": "jitter.y",
+                "label": "jitter.y",
+                "type": "Float"
+            },
+            "kw": {
+                "description": "No description",
+                "key": "kw",
+                "label": "kw",
+                "type": "Wavenumber"
+            },
+            "lacunarity": {
+                "description": "No description",
+                "key": "lacunarity",
+                "label": "lacunarity",
+                "type": "Float"
+            },
+            "octaves": {
+                "description": "No description",
+                "key": "octaves",
+                "label": "octaves",
+                "type": "Integer"
+            },
+            "persistence": {
+                "description": "No description",
+                "key": "persistence",
+                "label": "persistence",
+                "type": "Float"
+            },
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
+                "type": "Bool"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
+            },
+            "rmax": {
+                "description": "No description",
+                "key": "rmax",
+                "label": "rmax",
+                "type": "Float"
+            },
+            "rmin": {
+                "description": "No description",
+                "key": "rmin",
+                "label": "rmin",
+                "type": "Float"
+            },
+            "seed": {
+                "description": "No description",
+                "key": "seed",
+                "label": "seed",
+                "type": "Random seed number"
+            },
+            "shift": {
+                "description": "No description",
+                "key": "shift",
+                "label": "shift",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "density": {
+                "caption": "density",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "dr": {
+                "caption": "dr",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "dx": {
+                "caption": "dx",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "dy": {
+                "caption": "dy",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "envelope": {
+                "caption": "envelope",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "output"
+            },
+            "size": {
+                "caption": "size",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            }
+        }
+    },
     "HydraulicBlur": {
         "category": "WIP",
         "description": "Hydraulic Blur applied a cell-based hydraulic erosion using a nonlinear diffusion model.",

@@ -222,6 +222,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"HeightmapToMask", "Converter"},
       {"HeightmapToNormalMap", "Converter"},
       {"HeightmapToRGBA", "Converter"},
+      {"HemisphereFieldFbm", "Primitive/Coherent"},
       {"HydraulicBlur", "WIP"},     // "Erosion/Hydraulic"
       {"HydraulicMusgrave", "WIP"}, // "Erosion/Hydraulic"
       {"HydraulicParticle", "Erosion/Hydraulic"},
@@ -510,6 +511,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(HeightmapToMask, heightmap_to_mask);
     SETUP_NODE(HeightmapToNormalMap, heightmap_to_normal_map);
     SETUP_NODE(HeightmapToRGBA, heightmap_to_rgba);
+    SETUP_NODE(HemisphereFieldFbm, hemisphere_field_fbm);
     SETUP_NODE(HydraulicBlur, hydraulic_blur);
     SETUP_NODE(HydraulicMusgrave, hydraulic_musgrave);
     SETUP_NODE(HydraulicParticle, hydraulic_particle);
