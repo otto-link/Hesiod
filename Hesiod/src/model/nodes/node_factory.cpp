@@ -357,6 +357,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"StratifyOblique", "Erosion/Stratify"},
       {"StratifyMultiscale", "Erosion/Stratify"},
       {"Terrace", "Filter/Recurve"},
+      {"TextureAdvectionParticle", "Texture"},
       {"TextureAdvectionWarp", "WIP"}, // "Texture"},
       {"TextureQuiltingExpand", "Texture"},
       {"TextureQuiltingShuffle", "Texture"},
@@ -647,6 +648,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(StratifyOblique, stratify_oblique);
     SETUP_NODE(StratifyMultiscale, stratify_multiscale);
     SETUP_NODE(Terrace, terrace);
+    SETUP_NODE(TextureAdvectionParticle, texture_advection_particle);
     SETUP_NODE(TextureAdvectionWarp, texture_advection_warp);
     SETUP_NODE(TextureQuiltingExpand, texture_quilting_expand);
     SETUP_NODE(TextureQuiltingShuffle, texture_quilting_shuffle);
