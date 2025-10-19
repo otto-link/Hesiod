@@ -66,7 +66,6 @@ void Viewer::json_from(nlohmann::json const &json)
   // data
   this->label = json["label"];
   this->viewer_type = json["viewer_type"];
-  this->set_current_node_id(json["current_node_id"]);
   this->is_node_pinned = json["is_node_pinned"];
 
   this->view_param_map.clear();
@@ -81,6 +80,10 @@ void Viewer::json_from(nlohmann::json const &json)
   }
 
   this->update_widgets();
+
+  // only set the node selection at the very end, once everything is
+  // settled
+  this->set_current_node_id(json["current_node_id"]);
 }
 
 nlohmann::json Viewer::json_to() const
