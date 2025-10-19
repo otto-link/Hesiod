@@ -39,5 +39,5 @@ Node Categories
 |Primitive|Kernel|KernelDiskSmooth, KernelGabor, KernelPrim|
 |Primitive|Random|White, WhiteDensityMap, WhiteSparse|
 |Routing||Broadcast, Receive, Thru, Toggle|
-|Texture||ColorizeCmap, ColorizeGradient, ColorizeSolid, MixNormalMap, MixTexture, SetAlpha, TextureQuiltingExpand, TextureQuiltingShuffle, TextureSplitChannels, TextureToHeightmap, TextureUvChecker|
-|WIP||Detrend, DiffusionLimitedAggregation, DirectionalBlur, ExportAsCubemap, FillTalus, FlowStream, HydraulicBlur, HydraulicMusgrave, HydraulicProcedural, HydraulicSchott, HydraulicStream, HydraulicStreamUpscaleAmplification, HydraulicVpipes, Kuwahara, MeanShift, MedianPseudo, ReverseMidpoint, SedimentDeposition, ThermalFlatten, ThermalRib, ThermalSchott, WarpDownslope, Wrinkle|
+|Texture||ColorizeCmap, ColorizeGradient, ColorizeSolid, MixNormalMap, MixTexture, SetAlpha, TextureAdvectionParticle, TextureQuiltingExpand, TextureQuiltingShuffle, TextureSplitChannels, TextureToHeightmap, TextureUvChecker|
+|WIP||Detrend, DiffusionLimitedAggregation, DirectionalBlur, ExportAsCubemap, FillTalus, FlowStream, HydraulicBlur, HydraulicMusgrave, HydraulicProcedural, HydraulicSchott, HydraulicStream, HydraulicStreamUpscaleAmplification, HydraulicVpipes, Kuwahara, MeanShift, MedianPseudo, ReverseMidpoint, SedimentDeposition, TextureAdvectionWarp, ThermalFlatten, ThermalRib, ThermalSchott, WarpDownslope, Wrinkle|

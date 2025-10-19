@@ -182,6 +182,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"ConvolveSVD", "Math/Convolution"},
       {"Cos", "Math/Base"},
       {"Crater", "Primitive/Geological"},
+      {"CurvatureMean", "Features"},
       {"Debug", "Debug"},
       {"Dendry", "Primitive/Coherent"},
       {"DepressionFilling", "Erosion"},
@@ -473,6 +474,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(Cos, cos);
     SETUP_NODE(ConvolveSVD, convolve_svd);
     SETUP_NODE(Crater, crater);
+    SETUP_NODE(CurvatureMean, curvature_mean);
     SETUP_NODE(Debug, debug);
     SETUP_NODE(Dendry, dendry);
     SETUP_NODE(DepressionFilling, depression_filling);

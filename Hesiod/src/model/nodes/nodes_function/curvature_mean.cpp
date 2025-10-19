@@ -2,8 +2,8 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include "highmap/curvature.hpp"
-#include "highmap/range.hpp"
 #include "highmap/opencl/gpu_opencl.hpp"
+#include "highmap/range.hpp"
 
 #include "attributes.hpp"
 
@@ -16,7 +16,7 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_accumulation_curvature_node(BaseNode *p_node)
+void setup_curvature_mean_node(BaseNode *p_node)
 {
   Logger::log()->trace("setup node {}", p_node->get_label());
 
@@ -25,17 +25,17 @@ void setup_accumulation_curvature_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(FloatAttribute, "radius", 0.02f, 0.f, 0.2f);
+  ADD_ATTR(BoolAttribute, "positive", "positive", "negative", true);
   ADD_ATTR(BoolAttribute, "clamp_max", false);
-  ADD_ATTR(FloatAttribute, "vc_max",0.05f, 0.f, 0.2f);
+  ADD_ATTR(FloatAttribute, "vc_max", 1.f, 0.f, 10.f);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"radius", "clamp_max", "vc_max"});
+  p_node->set_attr_ordered_key({"positive", "clamp_max", "vc_max"});
 
   setup_post_process_heightmap_attributes(p_node);
 }
 
-void compute_accumulation_curvature_node(BaseNode *p_node)
+void compute_curvature_mean_node(BaseNode *p_node)
 {
   Q_EMIT p_node->compute_started(p_node->get_id());
 
@@ -47,24 +47,28 @@ void compute_accumulation_curvature_node(BaseNode *p_node)
   {
     hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
-    int ir = std::max(1, (int)(GET("radius", FloatAttribute) * p_out->shape.x));
     int nx = p_out->shape.x; // for gradient scaling
 
     hmap::transform(
         {p_out, p_in},
-        [p_node, ir, nx](std::vector<hmap::Array *> p_arrays)
+        [p_node, nx](std::vector<hmap::Array *> p_arrays)
         {
           hmap::Array *pa_out = p_arrays[0];
           hmap::Array *pa_in = p_arrays[1];
 
-	  // nx^2 is gradient scaling...
-          *pa_out = nx * nx * hmap::gpu::accumulation_curvature(*pa_in, ir);
+          *pa_out = hmap::curvature_mean(*pa_in);
+          *pa_out *= nx;
+	  
+          // positive or negative curvature
+          if (!GET("positive", BoolAttribute))
+            *pa_out *= -1.f;
+          hmap::clamp_min(*pa_out, 0.f);
 
           // truncate high values if requested
           if (GET("clamp_max", BoolAttribute))
             hmap::clamp_max(*pa_out, GET("vc_max", FloatAttribute));
         },
-        p_node->get_config_ref()->hmap_transform_mode_gpu);
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
 
     p_out->smooth_overlap_buffers();
 

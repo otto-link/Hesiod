@@ -28,23 +28,11 @@ void setup_rugosity_node(BaseNode *p_node)
   ADD_ATTR(FloatAttribute, "radius", 0.1f, 0.f, 0.5f);
   ADD_ATTR(BoolAttribute, "clamp_max", false);
   ADD_ATTR(FloatAttribute, "vc_max", 1.f, 0.f, 10.f);
-  ADD_ATTR(BoolAttribute, "inverse", false);
-  ADD_ATTR(BoolAttribute, "smoothing", false);
-  ADD_ATTR(FloatAttribute, "smoothing_radius", 0.05f, 0.f, 0.2f);
-  ADD_ATTR(RangeAttribute, "saturate", false);
-  ADD_ATTR(BoolAttribute, "GPU", HSD_DEFAULT_GPU_MODE);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"radius",
-                                "clamp_max",
-                                "vc_max",
-                                "_SEPARATOR_",
-                                "inverse",
-                                "smoothing",
-                                "smoothing_radius",
-                                "saturate",
-                                "_SEPARATOR_",
-                                "GPU"});
+  p_node->set_attr_ordered_key({"radius", "clamp_max", "vc_max"});
+
+  setup_post_process_heightmap_attributes(p_node);
 }
 
 void compute_rugosity_node(BaseNode *p_node)
@@ -61,32 +49,16 @@ void compute_rugosity_node(BaseNode *p_node)
 
     int ir = std::max(1, (int)(GET("radius", FloatAttribute) * p_out->shape.x));
 
-    if (GET("GPU", BoolAttribute))
-    {
-      hmap::transform(
-          {p_out, p_in},
-          [ir](std::vector<hmap::Array *> p_arrays)
-          {
-            hmap::Array *pa_out = p_arrays[0];
-            hmap::Array *pa_in = p_arrays[1];
+    hmap::transform(
+        {p_out, p_in},
+        [ir](std::vector<hmap::Array *> p_arrays)
+        {
+          hmap::Array *pa_out = p_arrays[0];
+          hmap::Array *pa_in = p_arrays[1];
 
-            *pa_out = hmap::gpu::rugosity(*pa_in, ir);
-          },
-          p_node->get_config_ref()->hmap_transform_mode_gpu);
-    }
-    else
-    {
-      hmap::transform(
-          {p_out, p_in},
-          [ir](std::vector<hmap::Array *> p_arrays)
-          {
-            hmap::Array *pa_out = p_arrays[0];
-            hmap::Array *pa_in = p_arrays[1];
-
-            *pa_out = hmap::rugosity(*pa_in, ir);
-          },
-          p_node->get_config_ref()->hmap_transform_mode_cpu);
-    }
+          *pa_out = hmap::gpu::rugosity(*pa_in, ir);
+        },
+        p_node->get_config_ref()->hmap_transform_mode_gpu);
 
     if (GET("clamp_max", BoolAttribute))
       hmap::transform(*p_out,
@@ -96,16 +68,7 @@ void compute_rugosity_node(BaseNode *p_node)
     p_out->smooth_overlap_buffers();
 
     // post-process
-    post_process_heightmap(p_node,
-                           *p_out,
-                           GET("inverse", BoolAttribute),
-                           GET("smoothing", BoolAttribute),
-                           GET("smoothing_radius", FloatAttribute),
-                           GET_MEMBER("saturate", RangeAttribute, is_active),
-                           GET("saturate", RangeAttribute),
-                           0.f,
-                           true, // remap
-                           {0.f, 1.f});
+    post_process_heightmap(p_node, *p_out);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

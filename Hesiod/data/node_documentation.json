@@ -76,6 +76,12 @@
         "description": "Computes the accumulation curvature of a heightmap, indicating how terrain shape influences water flow. Positive values suggest converging flow (e.g., channels or valleys), while negative values indicate diverging flow (e.g., ridges or hilltops).",
         "label": "AccumulationCurvature",
         "parameters": {
+            "clamp_max": {
+                "description": "No description",
+                "key": "clamp_max",
+                "label": "clamp_max",
+                "type": "Bool"
+            },
             "post_gain": {
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
@@ -104,6 +110,12 @@
                 "description": "Defines the filter radius relative to the domain size, controlling the scale of curvature analysis.",
                 "key": "radius",
                 "label": "radius",
+                "type": "Float"
+            },
+            "vc_max": {
+                "description": "No description",
+                "key": "vc_max",
+                "label": "vc_max",
                 "type": "Float"
             }
         },
@@ -2165,6 +2177,69 @@
                 "caption": "output",
                 "data_type": "Heightmap",
                 "description": "Crater heightmap.",
+                "type": "output"
+            }
+        }
+    },
+    "CurvatureMean": {
+        "category": "Features",
+        "description": "No description available",
+        "label": "CurvatureMean",
+        "parameters": {
+            "clamp_max": {
+                "description": "No description",
+                "key": "clamp_max",
+                "label": "clamp_max",
+                "type": "Bool"
+            },
+            "positive": {
+                "description": "No description",
+                "key": "positive",
+                "label": "positive",
+                "type": "Bool"
+            },
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
+                "type": "Bool"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
+            },
+            "vc_max": {
+                "description": "No description",
+                "key": "vc_max",
+                "label": "vc_max",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "input": {
+                "caption": "input",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "Heightmap",
+                "description": "No description",
                 "type": "output"
             }
         }
@@ -10272,46 +10347,40 @@
         "description": "Rugosity identifies heightmap rugosity, i.e. the roughness or irregularity of the surface.",
         "label": "Rugosity",
         "parameters": {
-            "GPU": {
-                "description": "Toogle GPU acceleration on or off.",
-                "key": "GPU",
-                "label": "GPU",
-                "type": "Bool"
-            },
             "clamp_max": {
                 "description": "Decides whether the rugosity values are clamped.",
                 "key": "clamp_max",
                 "label": "clamp_max",
                 "type": "Bool"
             },
-            "inverse": {
-                "description": "Toggle inversion of the output values.",
-                "key": "inverse",
-                "label": "inverse",
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
                 "type": "Bool"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
             },
             "radius": {
                 "description": "Filter radius with respect to the domain size.",
                 "key": "radius",
                 "label": "radius",
-                "type": "Float"
-            },
-            "saturate": {
-                "description": "A process that modifies the amplitude of elevations by first clamping them to a given interval and then scaling them so that the restricted interval matches the original input range. This enhances contrast in elevation variations while maintaining overall structure.",
-                "key": "saturate",
-                "label": "saturate",
-                "type": "Value range"
-            },
-            "smoothing": {
-                "description": "Enable or disable smoothing to reduce noise in the curvature computation.",
-                "key": "smoothing",
-                "label": "smoothing",
-                "type": "Bool"
-            },
-            "smoothing_radius": {
-                "description": "Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.",
-                "key": "smoothing_radius",
-                "label": "smoothing_radius",
                 "type": "Float"
             },
             "vc_max": {
@@ -12907,6 +12976,204 @@
                 "data_type": "Heightmap",
                 "description": "Resulting heightmap after applying the terracing effect.",
                 "type": "output"
+            }
+        }
+    },
+    "TextureAdvectionParticle": {
+        "category": "Texture",
+        "description": "No description available",
+        "label": "TextureAdvectionParticle",
+        "parameters": {
+            "advection_length": {
+                "description": "No description",
+                "key": "advection_length",
+                "label": "advection_length",
+                "type": "Float"
+            },
+            "inertia": {
+                "description": "No description",
+                "key": "inertia",
+                "label": "inertia",
+                "type": "Float"
+            },
+            "iterations": {
+                "description": "No description",
+                "key": "iterations",
+                "label": "iterations",
+                "type": "Integer"
+            },
+            "mask_activate": {
+                "description": "No description",
+                "key": "mask_activate",
+                "label": "mask_activate",
+                "type": "Bool"
+            },
+            "mask_gain": {
+                "description": "No description",
+                "key": "mask_gain",
+                "label": "mask_gain",
+                "type": "Float"
+            },
+            "mask_inverse": {
+                "description": "No description",
+                "key": "mask_inverse",
+                "label": "mask_inverse",
+                "type": "Bool"
+            },
+            "mask_radius": {
+                "description": "No description",
+                "key": "mask_radius",
+                "label": "mask_radius",
+                "type": "Float"
+            },
+            "mask_type": {
+                "description": "No description",
+                "key": "mask_type",
+                "label": "mask_type",
+                "type": "Choice"
+            },
+            "particle_density": {
+                "description": "No description",
+                "key": "particle_density",
+                "label": "particle_density",
+                "type": "Float"
+            },
+            "post_filtering": {
+                "description": "No description",
+                "key": "post_filtering",
+                "label": "post_filtering",
+                "type": "Bool"
+            },
+            "post_filtering_sigma": {
+                "description": "No description",
+                "key": "post_filtering_sigma",
+                "label": "post_filtering_sigma",
+                "type": "Float"
+            },
+            "reverse": {
+                "description": "No description",
+                "key": "reverse",
+                "label": "reverse",
+                "type": "Bool"
+            },
+            "seed": {
+                "description": "No description",
+                "key": "seed",
+                "label": "seed",
+                "type": "Random seed number"
+            },
+            "value_persistence": {
+                "description": "No description",
+                "key": "value_persistence",
+                "label": "value_persistence",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "advection_mask": {
+                "caption": "advection_mask",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "elevation": {
+                "caption": "elevation",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "mask": {
+                "caption": "mask",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "HeightmapRGBA",
+                "description": "No description",
+                "type": "output"
+            },
+            "texture": {
+                "caption": "texture",
+                "data_type": "HeightmapRGBA",
+                "description": "No description",
+                "type": "input"
+            }
+        }
+    },
+    "TextureAdvectionWarp": {
+        "category": "WIP",
+        "description": "No description available",
+        "label": "TextureAdvectionWarp",
+        "parameters": {
+            "advection_length": {
+                "description": "No description",
+                "key": "advection_length",
+                "label": "advection_length",
+                "type": "Float"
+            },
+            "mask_activate": {
+                "description": "No description",
+                "key": "mask_activate",
+                "label": "mask_activate",
+                "type": "Bool"
+            },
+            "mask_gain": {
+                "description": "No description",
+                "key": "mask_gain",
+                "label": "mask_gain",
+                "type": "Float"
+            },
+            "mask_inverse": {
+                "description": "No description",
+                "key": "mask_inverse",
+                "label": "mask_inverse",
+                "type": "Bool"
+            },
+            "mask_radius": {
+                "description": "No description",
+                "key": "mask_radius",
+                "label": "mask_radius",
+                "type": "Float"
+            },
+            "mask_type": {
+                "description": "No description",
+                "key": "mask_type",
+                "label": "mask_type",
+                "type": "Choice"
+            },
+            "value_persistence": {
+                "description": "No description",
+                "key": "value_persistence",
+                "label": "value_persistence",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "elevation": {
+                "caption": "elevation",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "mask": {
+                "caption": "mask",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "HeightmapRGBA",
+                "description": "No description",
+                "type": "output"
+            },
+            "texture": {
+                "caption": "texture",
+                "data_type": "HeightmapRGBA",
+                "description": "No description",
+                "type": "input"
             }
         }
     },
