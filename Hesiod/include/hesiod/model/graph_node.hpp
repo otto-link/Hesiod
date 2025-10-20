@@ -1,13 +1,5 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General Public
    License. The full license is in the file LICENSE, distributed with this software. */
-
-/**
- * @file graph_node.hpp
- * @author  Otto Link (otto.link.bv@gmail.com)
- * @brief
- *
- * @copyright Copyright (c) 2023
- */
 #pragma once
 #include <QObject>
 
@@ -56,6 +48,9 @@ public:
   BroadcastMap *get_p_broadcast_params() { return this->p_broadcast_params; }
   void          set_p_broadcast_params(BroadcastMap *new_p_broadcast_params);
   void          on_broadcast_node_updated(const std::string &tag);
+
+  // --- Others... ---
+  void reseed(bool backward);
 
 signals:
   // --- Signals ---

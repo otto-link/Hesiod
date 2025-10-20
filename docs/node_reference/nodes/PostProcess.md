@@ -33,6 +33,7 @@ Filter
 |post_gain|Float|No description|
 |post_inverse|Bool|No description|
 |post_remap|Value range|No description|
+|post_saturate|Value range|No description|
 |post_smoothing_radius|Float|No description|
 
 # Example

@@ -94,7 +94,8 @@ int parse_args(args::ArgumentParser &parser, int argc, char *argv[])
 void run_batch_mode(const std::string     &filename,
                     const hmap::Vec2<int> &shape,
                     const hmap::Vec2<int> &tiling,
-                    float                  overlap)
+                    float                  overlap,
+                    const ModelConfig     *p_input_model_config)
 {
   Logger::log()->info("executing Hesiod in batch mode");
   Logger::log()->trace("file: {}", filename);
@@ -106,29 +107,31 @@ void run_batch_mode(const std::string     &filename,
   // nothing is provided, use the configs from the input file but if
   // an input config is provided, this config is used for all the
   // graph nodes.
-  hesiod::ModelConfig *p_input_config = nullptr;
+  hesiod::ModelConfig config;
 
-  auto config = std::make_shared<hesiod::ModelConfig>();
+  // override some parameters on request
+  if (p_input_model_config)
+  {
+    config.hmap_transform_mode_cpu = p_input_model_config->hmap_transform_mode_cpu;
+    config.hmap_transform_mode_gpu = p_input_model_config->hmap_transform_mode_gpu;
+  }
 
   if (shape.x || shape.y || tiling.x || tiling.y || overlap >= 0.f)
   {
-    config->shape = (shape.x && shape.y) ? shape : hmap::Vec2<int>(1024, 1024);
-    config->tiling = (tiling.x && tiling.y) ? tiling : hmap::Vec2<int>(1, 1);
-    config->overlap = overlap >= 0.f
-                          ? overlap
-                          : ((config->tiling.x == 1 && config->tiling.y == 1) ? 0.f
-                                                                              : 0.5f);
+    config.shape = (shape.x && shape.y) ? shape : hmap::Vec2<int>(1024, 1024);
+    config.tiling = (tiling.x && tiling.y) ? tiling : hmap::Vec2<int>(1, 1);
+    config.overlap = overlap >= 0.f
+                         ? overlap
+                         : ((config.tiling.x == 1 && config.tiling.y == 1) ? 0.f : 0.5f);
 
     Logger::log()->info("graph configurations will be overriden:");
-    Logger::log()->info("compute shape: {{{}, {}}}", config->shape.x, config->shape.y);
-    Logger::log()->info("compute tiling: {{{}, {}}}", config->tiling.x, config->tiling.y);
-    Logger::log()->info("compute overlap: {}", config->overlap);
-
-    p_input_config = config.get();
+    Logger::log()->info("compute shape: {{{}, {}}}", config.shape.x, config.shape.y);
+    Logger::log()->info("compute tiling: {{{}, {}}}", config.tiling.x, config.tiling.y);
+    Logger::log()->info("compute overlap: {}", config.overlap);
   }
 
   GraphManager graph_manager;
-  graph_manager.load_from_file(filename, p_input_config);
+  graph_manager.load_from_file(filename, &config);
 
   // flatten & export if there is a configuration defined
   if (!graph_manager.get_export_param().export_path.empty())

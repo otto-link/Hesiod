@@ -328,6 +328,15 @@ void GraphManager::remove_graph_node(const std::string &graph_id)
   this->graph_nodes.erase(graph_id);
 }
 
+void GraphManager::reseed(bool backward)
+{
+  Logger::log()->trace("GraphManager::reseed");
+
+  for (auto &[_, graph] : this->graph_nodes)
+    if (graph)
+      graph->reseed(backward);
+}
+
 void GraphManager::save_to_file(const std::string &fname) const
 {
   Logger::log()->trace("GraphManager::save_to_file: fname {}", fname);

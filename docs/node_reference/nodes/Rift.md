@@ -38,6 +38,7 @@ Primitive/Function
 |post_gain|Float|No description|
 |post_inverse|Bool|No description|
 |post_remap|Value range|No description|
+|post_saturate|Value range|No description|
 |post_smoothing_radius|Float|No description|
 |sharp_bottom|Bool|Decide whether the rift bottom is sharp or not.|
 |slope|Float|Rift slope.|

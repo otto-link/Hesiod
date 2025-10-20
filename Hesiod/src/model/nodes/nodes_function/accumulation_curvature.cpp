@@ -3,6 +3,7 @@
  * this software. */
 #include "highmap/curvature.hpp"
 #include "highmap/opencl/gpu_opencl.hpp"
+#include "highmap/range.hpp"
 
 #include "attributes.hpp"
 
@@ -25,9 +26,11 @@ void setup_accumulation_curvature_node(BaseNode *p_node)
 
   // attribute(s)
   ADD_ATTR(FloatAttribute, "radius", 0.02f, 0.f, 0.2f);
+  ADD_ATTR(BoolAttribute, "clamp_max", false);
+  ADD_ATTR(FloatAttribute, "vc_max", 0.05f, 0.f, 0.2f);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"radius"});
+  p_node->set_attr_ordered_key({"radius", "clamp_max", "vc_max"});
 
   setup_post_process_heightmap_attributes(p_node);
 }
@@ -45,15 +48,21 @@ void compute_accumulation_curvature_node(BaseNode *p_node)
     hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
     int ir = std::max(1, (int)(GET("radius", FloatAttribute) * p_out->shape.x));
+    int nx = p_out->shape.x; // for gradient scaling
 
     hmap::transform(
         {p_out, p_in},
-        [&ir](std::vector<hmap::Array *> p_arrays)
+        [p_node, ir, nx](std::vector<hmap::Array *> p_arrays)
         {
           hmap::Array *pa_out = p_arrays[0];
           hmap::Array *pa_in = p_arrays[1];
 
-          *pa_out = hmap::gpu::accumulation_curvature(*pa_in, ir);
+          // nx^2 is gradient scaling...
+          *pa_out = nx * nx * hmap::gpu::accumulation_curvature(*pa_in, ir);
+
+          // truncate high values if requested
+          if (GET("clamp_max", BoolAttribute))
+            hmap::clamp_max(*pa_out, GET("vc_max", FloatAttribute));
         },
         p_node->get_config_ref()->hmap_transform_mode_gpu);
 

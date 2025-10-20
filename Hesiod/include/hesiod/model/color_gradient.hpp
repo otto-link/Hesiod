@@ -8,6 +8,10 @@
 #include "attributes/color_gradient_attribute.hpp"
 
 #define HSD_COLOR_GRADIENT_FILE "data/color_gradient.json"
+<<<<<<< HEAD
+=======
+#define HSD_COLOR_GRADIENTS_PATH "data/color_gradients"
+>>>>>>> dev
 
 namespace hesiod
 {

@@ -13,6 +13,7 @@
         "graph_nodes": {
             "graph": {
                 "id": "graph",
+<<<<<<< HEAD
                 "id_count": 16,
                 "links": [
                     {
@@ -28,6 +29,11 @@
                         "port_id_to": "input"
                     },
                     {
+=======
+                "id_count": 25,
+                "links": [
+                    {
+>>>>>>> dev
                         "node_id_from": "4",
                         "node_id_to": "6",
                         "port_id_from": "water_depth",
@@ -70,12 +76,15 @@
                         "port_id_to": "texture2"
                     },
                     {
+<<<<<<< HEAD
                         "node_id_from": "8",
                         "node_id_to": "3",
                         "port_id_from": "texture",
                         "port_id_to": "texture"
                     },
                     {
+=======
+>>>>>>> dev
                         "node_id_from": "6",
                         "node_id_to": "9",
                         "port_id_from": "water_mask",
@@ -92,6 +101,69 @@
                         "node_id_to": "7",
                         "port_id_from": "water_mask",
                         "port_id_to": "level"
+<<<<<<< HEAD
+=======
+                    },
+                    {
+                        "node_id_from": "10",
+                        "node_id_to": "7",
+                        "port_id_from": "output",
+                        "port_id_to": "noise"
+                    },
+                    {
+                        "node_id_from": "8",
+                        "node_id_to": "19",
+                        "port_id_from": "texture",
+                        "port_id_to": "texture1"
+                    },
+                    {
+                        "node_id_from": "17",
+                        "node_id_to": "19",
+                        "port_id_from": "texture",
+                        "port_id_to": "texture2"
+                    },
+                    {
+                        "node_id_from": "19",
+                        "node_id_to": "3",
+                        "port_id_from": "texture",
+                        "port_id_to": "texture"
+                    },
+                    {
+                        "node_id_from": "6",
+                        "node_id_to": "20",
+                        "port_id_from": "elevation",
+                        "port_id_to": "input"
+                    },
+                    {
+                        "node_id_from": "20",
+                        "node_id_to": "17",
+                        "port_id_from": "output",
+                        "port_id_to": "level"
+                    },
+                    {
+                        "node_id_from": "20",
+                        "node_id_to": "17",
+                        "port_id_from": "output",
+                        "port_id_to": "alpha"
+                    },
+                    {
+                        "node_id_from": "22",
+                        "node_id_to": "4",
+                        "port_id_from": "output",
+                        "port_id_to": "input"
+                    },
+                    {
+                        "node_id_from": "22",
+                        "node_id_to": "6",
+                        "port_id_from": "output",
+                        "port_id_to": "elevation_in"
+                    },
+                    {
+                        "node_id_from": "5",
+                        "node_id_to": "22",
+                        "port_id_from": "out",
+                        "port_id_to": "input"
+>>>>>>> dev
                     }
                 ],
                 "model_config": {
@@ -210,6 +282,134 @@
                         }
                     },
                     {
+<<<<<<< HEAD
+=======
+                        "clamp_alpha": {
+                            "label": "clamp_alpha",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": true
+                        },
+                        "gradient": {
+                            "label": "gradient",
+                            "type": 3,
+                            "type_string": "Color gradient",
+                            "value": [
+                                {
+                                    "color": [
+                                        0.3921568691730499,
+                                        0.3529411852359772,
+                                        0.3137255012989044,
+                                        1.0
+                                    ],
+                                    "position": 0.0
+                                },
+                                {
+                                    "color": [
+                                        0.7058823704719543,
+                                        0.6666666865348816,
+                                        0.6274510025978088,
+                                        1.0
+                                    ],
+                                    "position": 0.5805084705352783
+                                }
+                            ]
+                        },
+                        "id": "17",
+                        "label": "ColorizeGradient",
+                        "reverse_alpha": {
+                            "label": "reverse_alpha",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "reverse_colormap": {
+                            "label": "reverse_colormap",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        }
+                    },
+                    {
+                        "id": "19",
+                        "label": "MixTexture",
+                        "reset_output_alpha": {
+                            "label": "reset_output_alpha",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": true
+                        },
+                        "use_sqrt_avg": {
+                            "label": "use_sqrt_avg",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": true
+                        }
+                    },
+                    {
+                        "id": "20",
+                        "label": "GradientNorm",
+                        "post_gain": {
+                            "label": "post_gain",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 2.13810133934021,
+                            "vmax": 10.0,
+                            "vmin": 0.009999999776482582
+                        },
+                        "post_inverse": {
+                            "label": "post_inverse",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "post_remap": {
+                            "is_active": true,
+                            "label": "post_remap",
+                            "type": 11,
+                            "type_string": "Value range",
+                            "value": [
+                                0.0,
+                                1.0
+                            ],
+                            "vmax": 2.0,
+                            "vmin": -1.0
+                        },
+                        "post_smoothing_radius": {
+                            "label": "post_smoothing_radius",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.0,
+                            "vmax": 0.05000000074505806,
+                            "vmin": 0.0
+                        }
+                    },
+                    {
+                        "block_update": {
+                            "label": "block_update",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "id": "22",
+                        "label": "Thru"
+                    },
+                    {
+>>>>>>> dev
                         "id": "3",
                         "label": "Preview"
                     },
@@ -369,7 +569,11 @@
                             "label": "seed",
                             "type": 12,
                             "type_string": "Random seed number",
+<<<<<<< HEAD
                             "value": 0
+=======
+                            "value": 3
+>>>>>>> dev
                         }
                     },
                     {
@@ -498,6 +702,7 @@
                             "value": [
                                 {
                                     "color": [
+<<<<<<< HEAD
                                         0.03921568766236305,
                                         0.03921568766236305,
                                         0.03921568766236305,
@@ -510,15 +715,35 @@
                                         0.27450981736183167,
                                         0.11764705926179886,
                                         0.0784313753247261,
+=======
+                                        0.1568627506494522,
+                                        0.11764705926179886,
+                                        0.03921568766236305,
+                                        1.0
+                                    ],
+                                    "position": 0.13983051478862762
+                                },
+                                {
+                                    "color": [
+                                        0.11764705926179886,
+                                        0.27450981736183167,
+                                        0.11764705926179886,
+>>>>>>> dev
                                         1.0
                                     ],
                                     "position": 0.5
                                 },
                                 {
                                     "color": [
+<<<<<<< HEAD
                                         0.7843137383460999,
                                         0.23529411852359772,
                                         0.11764705926179886,
+=======
+                                        0.3137255012989044,
+                                        0.5490196347236633,
+                                        0.23529411852359772,
+>>>>>>> dev
                                         1.0
                                     ],
                                     "position": 1.0
@@ -592,6 +817,7 @@
                     },
                     {
                         "link_type": 2,
+<<<<<<< HEAD
                         "node_in_id": "3",
                         "node_out_id": "8",
                         "port_in_id": "texture",
@@ -599,6 +825,8 @@
                     },
                     {
                         "link_type": 2,
+=======
+>>>>>>> dev
                         "node_in_id": "8",
                         "node_out_id": "9",
                         "port_in_id": "texture2",
@@ -648,6 +876,7 @@
                     },
                     {
                         "link_type": 2,
+<<<<<<< HEAD
                         "node_in_id": "4",
                         "node_out_id": "5",
                         "port_in_id": "input",
@@ -662,10 +891,85 @@
                     },
                     {
                         "link_type": 2,
+=======
+>>>>>>> dev
                         "node_in_id": "9",
                         "node_out_id": "10",
                         "port_in_id": "noise",
                         "port_out_id": "output"
+<<<<<<< HEAD
+=======
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "7",
+                        "node_out_id": "10",
+                        "port_in_id": "noise",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "19",
+                        "node_out_id": "8",
+                        "port_in_id": "texture1",
+                        "port_out_id": "texture"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "19",
+                        "node_out_id": "17",
+                        "port_in_id": "texture2",
+                        "port_out_id": "texture"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "3",
+                        "node_out_id": "19",
+                        "port_in_id": "texture",
+                        "port_out_id": "texture"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "20",
+                        "node_out_id": "6",
+                        "port_in_id": "input",
+                        "port_out_id": "elevation"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "17",
+                        "node_out_id": "20",
+                        "port_in_id": "level",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "17",
+                        "node_out_id": "20",
+                        "port_in_id": "alpha",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "4",
+                        "node_out_id": "22",
+                        "port_in_id": "input",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "6",
+                        "node_out_id": "22",
+                        "port_in_id": "elevation_in",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "22",
+                        "node_out_id": "5",
+                        "port_in_id": "input",
+                        "port_out_id": "out"
+>>>>>>> dev
                     }
                 ],
                 "nodes": [
@@ -673,57 +977,125 @@
                         "caption": "ColorizeGradient",
                         "id": "9",
                         "is_widget_visible": true,
+<<<<<<< HEAD
                         "scene_position.x": 316.51422119140625,
                         "scene_position.y": 51.22825241088867
+=======
+                        "scene_position.x": 214.919189453125,
+                        "scene_position.y": -401.6869812011719
+>>>>>>> dev
                     },
                     {
                         "caption": "MixTexture",
                         "id": "8",
                         "is_widget_visible": true,
+<<<<<<< HEAD
                         "scene_position.x": 541.0386962890625,
                         "scene_position.y": -30.529722213745117
+=======
+                        "scene_position.x": 470.919189453125,
+                        "scene_position.y": -17.686981201171875
+>>>>>>> dev
                     },
                     {
                         "caption": "ColorizeGradient",
                         "id": "7",
                         "is_widget_visible": true,
+<<<<<<< HEAD
                         "scene_position.x": 335.8604736328125,
                         "scene_position.y": -233.8206787109375
+=======
+                        "scene_position.x": 214.919189453125,
+                        "scene_position.y": -17.686981201171875
+>>>>>>> dev
                     },
                     {
                         "caption": "CoastalErosionDiffusion",
                         "id": "6",
                         "is_widget_visible": true,
+<<<<<<< HEAD
                         "scene_position.x": -28.946922302246094,
                         "scene_position.y": -314.8215637207031
+=======
+                        "scene_position.x": -41.080810546875,
+                        "scene_position.y": -17.686981201171875
+>>>>>>> dev
                     },
                     {
                         "caption": "MountainInselberg",
                         "id": "5",
                         "is_widget_visible": true,
+<<<<<<< HEAD
                         "scene_position.x": -552.580810546875,
                         "scene_position.y": -365.1620788574219
+=======
+                        "scene_position.x": -762.5408325195313,
+                        "scene_position.y": 97.46637725830078
+>>>>>>> dev
                     },
                     {
                         "caption": "FloodingUniformLevel",
                         "id": "4",
                         "is_widget_visible": true,
+<<<<<<< HEAD
                         "scene_position.x": -287.5996398925781,
                         "scene_position.y": -198.15017700195313
+=======
+                        "scene_position.x": -297.080810546875,
+                        "scene_position.y": -17.686981201171875
+>>>>>>> dev
                     },
                     {
                         "caption": "Preview",
                         "id": "3",
                         "is_widget_visible": true,
+<<<<<<< HEAD
                         "scene_position.x": 732.46484375,
                         "scene_position.y": -401.1869812011719
+=======
+                        "scene_position.x": 902.885986328125,
+                        "scene_position.y": -204.829345703125
+>>>>>>> dev
                     },
                     {
                         "caption": "NoiseFbm",
                         "id": "10",
                         "is_widget_visible": true,
+<<<<<<< HEAD
                         "scene_position.x": -11.811985969543457,
                         "scene_position.y": 91.3320083618164
+=======
+                        "scene_position.x": -41.080810546875,
+                        "scene_position.y": -401.6869812011719
+                    },
+                    {
+                        "caption": "ColorizeGradient",
+                        "id": "17",
+                        "is_widget_visible": true,
+                        "scene_position.x": 470.919189453125,
+                        "scene_position.y": 366.3130187988281
+                    },
+                    {
+                        "caption": "MixTexture",
+                        "id": "19",
+                        "is_widget_visible": true,
+                        "scene_position.x": 726.919189453125,
+                        "scene_position.y": 174.31301879882813
+                    },
+                    {
+                        "caption": "GradientNorm",
+                        "id": "20",
+                        "is_widget_visible": true,
+                        "scene_position.x": 214.919189453125,
+                        "scene_position.y": 366.3130187988281
+                    },
+                    {
+                        "caption": "Thru",
+                        "id": "22",
+                        "is_widget_visible": true,
+                        "scene_position.x": -486.43438720703125,
+                        "scene_position.y": 155.8155517578125
+>>>>>>> dev
                     }
                 ],
                 "viewers": [
@@ -734,12 +1106,21 @@
                         "label": "3D Renderer",
                         "renderer": {
                             "add_ambiant_occlusion": false,
+<<<<<<< HEAD
                             "add_atmospheric_scattering": false,
                             "add_fog": false,
                             "add_water_foam": true,
                             "add_water_waves": true,
                             "alpha_x": 0.6250893473625183,
                             "alpha_y": 65.8338623046875,
+=======
+                            "add_atmospheric_scattering": true,
+                            "add_fog": false,
+                            "add_water_foam": true,
+                            "add_water_waves": true,
+                            "alpha_x": 0.3500892221927643,
+                            "alpha_y": 91.16380310058594,
+>>>>>>> dev
                             "ambiant_occlusion_radius": 3,
                             "ambiant_occlusion_strength": 5.0,
                             "angle_spread_ratio": 0.0,
@@ -754,6 +1135,7 @@
                                 "fov": 0.7853982448577881,
                                 "near_plane": 0.10000000149011612,
                                 "position": {
+<<<<<<< HEAD
                                     "x": 0.4574636220932007,
                                     "y": 0.7129647731781006,
                                     "z": -1.3231879472732544
@@ -762,6 +1144,16 @@
                                     "x": 0.2663029432296753,
                                     "y": -0.278516948223114,
                                     "z": 0.037414781749248505
+=======
+                                    "x": -0.04844103008508682,
+                                    "y": 0.519898533821106,
+                                    "z": -1.4693065881729126
+                                },
+                                "target": {
+                                    "x": 0.03618815541267395,
+                                    "y": -0.016717033460736275,
+                                    "z": -0.002087332308292389
+>>>>>>> dev
                                 },
                                 "up": {
                                     "x": 0.0,
@@ -779,7 +1171,11 @@
                                 "y": 0.8500000238418579,
                                 "z": 0.800000011920929
                             },
+<<<<<<< HEAD
                             "distance": 1.694348931312561,
+=======
+                            "distance": 1.5645607709884644,
+>>>>>>> dev
                             "foam_color": {
                                 "x": 1.0,
                                 "y": 1.0,
@@ -823,8 +1219,13 @@
                             "normal_map_scaling": 1.0,
                             "normal_visualization": false,
                             "pan_offset": {
+<<<<<<< HEAD
                                 "x": -0.2689184248447418,
                                 "y": -0.278516948223114
+=======
+                                "x": -0.036248303949832916,
+                                "y": -0.016717033460736275
+>>>>>>> dev
                             },
                             "rayleigh_color": {
                                 "x": 0.4000000059604645,
@@ -869,6 +1270,115 @@
                             "x": 2,
                             "y": 91
                         },
+<<<<<<< HEAD
+=======
+                        "view_param_map": {
+                            "17": {
+                                "color": "texture",
+                                "elevation": "level",
+                                "normal_map": "",
+                                "path": "",
+                                "points": "",
+                                "water_depth": ""
+                            },
+                            "18": {
+                                "color": "",
+                                "elevation": "output",
+                                "normal_map": "",
+                                "path": "",
+                                "points": "",
+                                "water_depth": ""
+                            },
+                            "19": {
+                                "color": "texture",
+                                "elevation": "",
+                                "normal_map": "",
+                                "path": "",
+                                "points": "",
+                                "water_depth": ""
+                            },
+                            "20": {
+                                "color": "",
+                                "elevation": "output",
+                                "normal_map": "",
+                                "path": "",
+                                "points": "",
+                                "water_depth": ""
+                            },
+                            "21": {
+                                "color": "",
+                                "elevation": "out",
+                                "normal_map": "",
+                                "path": "",
+                                "points": "",
+                                "water_depth": ""
+                            },
+                            "22": {
+                                "color": "",
+                                "elevation": "output",
+                                "normal_map": "",
+                                "path": "",
+                                "points": "",
+                                "water_depth": ""
+                            },
+                            "23": {
+                                "color": "",
+                                "elevation": "out",
+                                "normal_map": "",
+                                "path": "",
+                                "points": "",
+                                "water_depth": ""
+                            },
+                            "24": {
+                                "color": "",
+                                "elevation": "out",
+                                "normal_map": "",
+                                "path": "",
+                                "points": "",
+                                "water_depth": ""
+                            },
+                            "3": {
+                                "color": "texture",
+                                "elevation": "elevation",
+                                "normal_map": "normal map",
+                                "path": "path",
+                                "points": "cloud",
+                                "water_depth": "water_depth"
+                            },
+                            "5": {
+                                "color": "",
+                                "elevation": "out",
+                                "normal_map": "",
+                                "path": "",
+                                "points": "",
+                                "water_depth": ""
+                            },
+                            "6": {
+                                "color": "water_mask",
+                                "elevation": "elevation",
+                                "normal_map": "",
+                                "path": "",
+                                "points": "",
+                                "water_depth": "water_depth"
+                            },
+                            "7": {
+                                "color": "",
+                                "elevation": "",
+                                "normal_map": "",
+                                "path": "",
+                                "points": "",
+                                "water_depth": ""
+                            },
+                            "8": {
+                                "color": "texture",
+                                "elevation": "",
+                                "normal_map": "",
+                                "path": "",
+                                "points": "",
+                                "water_depth": ""
+                            }
+                        },
+>>>>>>> dev
                         "viewer_type": 0,
                         "width": 1920,
                         "x": 1920,
@@ -878,5 +1388,9 @@
             }
         }
     },
+<<<<<<< HEAD
     "saved_at": "2025-10-08_22:15:30"
+=======
+    "saved_at": "2025-10-10_20:54:10"
+>>>>>>> dev
 }

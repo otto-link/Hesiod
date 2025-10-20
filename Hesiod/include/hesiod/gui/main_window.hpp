@@ -19,6 +19,8 @@
 
 #include "qtd/texture_downloader.hpp"
 
+#include "hesiod/gui/widgets/bake_and_export_settings_dialog.hpp"
+
 #define HSD_SETTINGS_ORG "olink"
 #define HSD_SETTINGS_APP "hesiod"
 #define HSD_SETTINGS_JSON "hesiod_settings.json"
@@ -58,7 +60,7 @@ public:
 
   // --- Serialization on file ---
   void load_from_file(const std::string &fname);
-  bool save_to_file(const std::string &fname) const;
+  bool save_to_file(const std::string &fname, bool save_backup_file = true) const;
 
   // --- Serialization (global settings) ---
   void           json_from(nlohmann::json const &json);
@@ -75,6 +77,7 @@ private slots:
 
   // --- User Actions ---
   void on_autosave();
+  void on_export_batch();
   void on_has_changed(); // whole project
   void on_load();
   void on_new();
@@ -111,6 +114,7 @@ private:
   QTimer                *autosave_timer; // own by this
   bool                   show_node_settings_pan = false;
   qtd::TextureDownloader texture_downloader;
+  BakeSettings           bake_settings;
 };
 
 // =====================================
@@ -118,5 +122,10 @@ private:
 // =====================================
 
 void notify(const std::string &title, const std::string &text);
+
+void override_export_nodes_settings(const std::string           &fname,
+                                    const std::filesystem::path &export_path,
+                                    uint                         random_seeds_increment,
+                                    const BakeSettings          &bake_settings);
 
 } // namespace hesiod

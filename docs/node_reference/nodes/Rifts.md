@@ -54,6 +54,7 @@ Erosion/Hydraulic
 |post_mix|Float|No description|
 |post_mix_method|Enumeration|No description|
 |post_remap|Value range|No description|
+|post_saturate|Value range|No description|
 |post_smoothing_radius|Float|No description|
 |radial_spread_amp|Float|No description|
 |remap_vmin|Float|No description|

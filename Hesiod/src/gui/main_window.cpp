@@ -11,20 +11,24 @@
 #include <QHBoxLayout>
 #include <QMenuBar>
 #include <QMessageBox>
+#include <QProgressDialog>
 #include <QSettings>
 #include <QTabWidget>
 #include <QTimer>
 
 #include "Toast.h"
 
+#include "hesiod/cli/batch_mode.hpp"
 #include "hesiod/config.hpp"
 #include "hesiod/gui/gui_utils.hpp"
 #include "hesiod/gui/main_window.hpp"
+#include "hesiod/gui/widgets/bake_and_export_settings_dialog.hpp"
 #include "hesiod/gui/widgets/documentation_popup.hpp"
 #include "hesiod/gui/widgets/graph_manager_widget.hpp"
 #include "hesiod/gui/widgets/graph_tabs_widget.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/graph_manager.hpp"
+#include "hesiod/model/graph_node.hpp"
 #include "hesiod/model/utils.hpp"
 
 namespace hesiod
@@ -218,6 +222,114 @@ void MainWindow::on_autosave()
   this->save_to_file(fname.string());
 }
 
+void MainWindow::on_export_batch()
+{
+  Logger::log()->trace("MainWindow::on_export_batch");
+
+  // --- retrieve export parameters from user
+
+  BakeAndExportSettingsDialog dialog(8192 * 4, this->bake_settings);
+
+  if (dialog.exec() != QDialog::Accepted)
+    return;
+
+  this->bake_settings = dialog.get_bake_settings();
+
+  Logger::log()->trace("MainWindow::on_export_batch: size = {}, nvariants = {}",
+                       this->bake_settings.resolution,
+                       this->bake_settings.nvariants);
+
+  // --- setup export repertory
+
+  // block UI
+  QProgressDialog progress(tr("Baking and exporting..."), QString(), 0, 0, this);
+  progress.setWindowModality(Qt::ApplicationModal);
+  progress.setCancelButton(nullptr);
+  progress.setMinimumDuration(0); // show immediately
+  progress.show();
+  QCoreApplication::processEvents();
+
+  for (int k = 0; k < this->bake_settings.nvariants + 1; ++k)
+  {
+    QCoreApplication::processEvents(); // render progress dialog
+
+    // build export path based on project name, if available
+    std::filesystem::path export_path = this->project_path.filename();
+    if (export_path.empty())
+      export_path = "export";
+    else
+      export_path += "_export";
+
+    export_path = this->project_path.empty()
+                      ? export_path
+                      : this->project_path.parent_path() / export_path;
+
+    if (k > 0)
+      export_path /= "variants_" + std::to_string(k);
+
+    Logger::log()->info("MainWindow::on_export_batch: export path: {}",
+                        export_path.string());
+
+    // create it
+    if (!std::filesystem::exists(export_path))
+    {
+      Logger::log()->trace("MainWindow::on_export_batch: creating export repertory {}",
+                           export_path.string());
+      std::filesystem::create_directories(export_path);
+    }
+
+    // --- save an hesiod file and tweak it
+
+    // save graph node to a temporary file
+    std::filesystem::path fname = export_path / "hesiod_bake.hsd";
+    bool                  ret = this->save_to_file(fname.string(), /*save_backup*/ false);
+
+    if (!ret)
+    {
+      Logger::log()->error(
+          "MainWindow::on_export_batch: error while saving hsd temporary file: {}",
+          fname.string());
+      notify("Bake & Export", "Error while saving temporary hsd file!");
+    }
+
+    // force auto_export for export nodes and overwrite export paths
+    override_export_nodes_settings(fname.string(),
+                                   export_path,
+                                   static_cast<uint>(k),
+                                   bake_settings);
+
+    // --- run
+
+    // retrieve config of the first graph (we only need the CPU and GPU compute modes)
+    auto         graph_nodes = this->graph_manager->get_graph_nodes();
+    auto         it = graph_nodes.begin();
+    ModelConfig *p_config = it != graph_nodes.end() ? it->second->get_config_ref()
+                                                    : nullptr;
+
+    if (p_config)
+    {
+      ModelConfig bake_config = *p_config;
+
+      if (this->bake_settings.force_distributed)
+      {
+        bake_config.hmap_transform_mode_cpu = hmap::TransformMode::DISTRIBUTED;
+        bake_config.hmap_transform_mode_gpu = hmap::TransformMode::DISTRIBUTED;
+      }
+
+      // run batch node
+      hesiod::cli::run_batch_mode(
+          fname.string(),
+          hmap::Vec2<int>(this->bake_settings.resolution, this->bake_settings.resolution),
+          bake_config.tiling,
+          bake_config.overlap,
+          &bake_config);
+    }
+  }
+
+  // unblock UI
+  progress.close();
+}
+
 void MainWindow::on_has_changed()
 {
   Logger::log()->trace("MainWindow::on_has_changed");
@@ -340,7 +452,7 @@ void MainWindow::save_state()
   json_to_file(this->json_to(), HSD_SETTINGS_JSON);
 }
 
-bool MainWindow::save_to_file(const std::string &fname) const
+bool MainWindow::save_to_file(const std::string &fname, bool save_backup_file) const
 {
   Logger::log()->trace("MainWindow::save_to_file: {}", fname);
 
@@ -348,22 +460,26 @@ bool MainWindow::save_to_file(const std::string &fname) const
 
   try
   {
-    // If the file exists, create a backup before overwriting
-    if (std::filesystem::exists(fname_ext) && HSD_CONFIG->window.save_backup_file)
+    if (save_backup_file)
     {
-      std::filesystem::path original_path(fname_ext);
-      std::filesystem::path backup_path = insert_before_extension(original_path, ".bak");
+      // If the file exists, create a backup before overwriting
+      if (std::filesystem::exists(fname_ext) && HSD_CONFIG->window.save_backup_file)
+      {
+        std::filesystem::path original_path(fname_ext);
+        std::filesystem::path backup_path = insert_before_extension(original_path,
+                                                                    ".bak");
 
-      try
-      {
-        std::filesystem::copy_file(original_path,
-                                   backup_path,
-                                   std::filesystem::copy_options::overwrite_existing);
-        Logger::log()->trace("Backup created: {}", backup_path.string());
-      }
-      catch (const std::exception &e)
-      {
-        Logger::log()->warn("Failed to create backup for {}: {}", fname_ext, e.what());
+        try
+        {
+          std::filesystem::copy_file(original_path,
+                                     backup_path,
+                                     std::filesystem::copy_options::overwrite_existing);
+          Logger::log()->trace("Backup created: {}", backup_path.string());
+        }
+        catch (const std::exception &e)
+        {
+          Logger::log()->warn("Failed to create backup for {}: {}", fname_ext, e.what());
+        }
       }
     }
 
@@ -461,6 +577,12 @@ void MainWindow::setup_menu_bar()
 
   file_menu->addSeparator();
 
+  auto *export_batch = new QAction("Bake and Export (High Resolution)", this);
+  export_batch->setShortcut(tr("Alt+E"));
+  file_menu->addAction(export_batch);
+
+  file_menu->addSeparator();
+
   auto *quit = new QAction("Quit", this);
   quit->setShortcut(tr("Ctrl+Q"));
   file_menu->addAction(quit);
@@ -469,6 +591,16 @@ void MainWindow::setup_menu_bar()
 
   auto *new_graph = new QAction("New graph", this);
   graph_menu->addAction(new_graph);
+
+  graph_menu->addSeparator();
+
+  auto *reseed = new QAction("Advance random seeds", this);
+  reseed->setShortcut(tr("Alt+R"));
+  graph_menu->addAction(reseed);
+
+  auto *reseed_back = new QAction("Reverse random seeds", this);
+  reseed_back->setShortcut(tr("Alt+Shift+R"));
+  graph_menu->addAction(reseed_back);
 
   QMenu *view_menu = menuBar()->addMenu("&View");
 
@@ -553,12 +685,26 @@ void MainWindow::setup_menu_bar()
   this->connect(save, &QAction::triggered, this, &MainWindow::on_save);
   this->connect(save_as, &QAction::triggered, this, &MainWindow::on_save_as);
   this->connect(save_copy, &QAction::triggered, this, &MainWindow::on_save_copy);
+  this->connect(export_batch, &QAction::triggered, this, &MainWindow::on_export_batch);
 
   // --- graphs
   this->connect(new_graph,
                 &QAction::triggered,
                 this->graph_manager_widget.get(),
                 &GraphManagerWidget::on_new_graph_request);
+
+  this->connect(reseed,
+                &QAction::triggered,
+                this->graph_manager_widget.get(),
+                &GraphManagerWidget::on_reseed);
+
+  this->connect(reseed_back,
+                &QAction::triggered,
+                [this]()
+                {
+                  // backward
+                  this->graph_manager_widget.get()->on_reseed(true);
+                });
 
   // quit
   this->connect(quit, &QAction::triggered, this, &MainWindow::on_quit);
@@ -576,6 +722,10 @@ void MainWindow::show_about()
 
   QMessageBox msg_box;
   msg_box.setText(msg.c_str());
+  QPixmap icon(HSD_APP_ICON);
+  msg_box.setIconPixmap(
+      icon.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+
   msg_box.exec();
 }
 
