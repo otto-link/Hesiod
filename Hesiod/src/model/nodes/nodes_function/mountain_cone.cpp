@@ -39,7 +39,7 @@ void setup_mountain_cone_node(BaseNode *p_node)
   ADD_ATTR(FloatAttribute, "angle", 45.f, -180.f, 180.f);
   ADD_ATTR(FloatAttribute, "k_smoothing", 0.f, 0.f, 1.f);
   ADD_ATTR(FloatAttribute, "gamma", 0.5f, 0.01f, 4.f);
-  ADD_ATTR(FloatAttribute, "cone_alpha", 1.f, 0.01f, 4.f);
+  ADD_ATTR(FloatAttribute, "cone_alpha", 1.2f, 0.01f, 4.f);
   ADD_ATTR(FloatAttribute, "base_noise_amp", 0.05f, 0.f, 1.f);
   ADD_ATTR(Vec2FloatAttribute, "center");
 
