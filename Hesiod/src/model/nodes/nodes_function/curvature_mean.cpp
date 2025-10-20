@@ -58,7 +58,7 @@ void compute_curvature_mean_node(BaseNode *p_node)
 
           *pa_out = hmap::curvature_mean(*pa_in);
           *pa_out *= nx;
-	  
+
           // positive or negative curvature
           if (!GET("positive", BoolAttribute))
             *pa_out *= -1.f;

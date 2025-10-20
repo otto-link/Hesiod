@@ -2,8 +2,8 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include "highmap/curvature.hpp"
-#include "highmap/range.hpp"
 #include "highmap/opencl/gpu_opencl.hpp"
+#include "highmap/range.hpp"
 
 #include "attributes.hpp"
 
@@ -27,7 +27,7 @@ void setup_accumulation_curvature_node(BaseNode *p_node)
   // attribute(s)
   ADD_ATTR(FloatAttribute, "radius", 0.02f, 0.f, 0.2f);
   ADD_ATTR(BoolAttribute, "clamp_max", false);
-  ADD_ATTR(FloatAttribute, "vc_max",0.05f, 0.f, 0.2f);
+  ADD_ATTR(FloatAttribute, "vc_max", 0.05f, 0.f, 0.2f);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"radius", "clamp_max", "vc_max"});
@@ -57,7 +57,7 @@ void compute_accumulation_curvature_node(BaseNode *p_node)
           hmap::Array *pa_out = p_arrays[0];
           hmap::Array *pa_in = p_arrays[1];
 
-	  // nx^2 is gradient scaling...
+          // nx^2 is gradient scaling...
           *pa_out = nx * nx * hmap::gpu::accumulation_curvature(*pa_in, ir);
 
           // truncate high values if requested

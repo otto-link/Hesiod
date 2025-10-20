@@ -44,21 +44,24 @@ void setup_mountain_stump_node(BaseNode *p_node)
   ADD_ATTR(Vec2FloatAttribute, "center");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"elevation",
+  p_node->set_attr_ordered_key({"_TEXT_Base Terrain Shape",
+                                "elevation",
                                 "scale",
                                 "ridge_amp",
                                 "seed",
                                 "octaves",
                                 "peak_kw",
-                                "_SEPARATOR_",
+                                "center",
+                                //
+                                "_TEXT_Surface Detail & Structure",
                                 "rugosity",
                                 "angle",
                                 "k_smoothing",
                                 "gamma",
                                 "add_deposition",
-                                "_SEPARATOR_",
-                                "base_noise_amp",
-                                "center"});
+                                //
+                                "_TEXT_Noise & Modulation",
+                                "base_noise_amp"});
 
   setup_post_process_heightmap_attributes(p_node);
 
