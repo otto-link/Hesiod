@@ -170,6 +170,30 @@ void post_process_heightmap(BaseNode *p_node, hmap::Heightmap &h, hmap::Heightma
   // remap
   if (GET_MEMBER("post_remap", RangeAttribute, is_active))
     h.remap(GET("post_remap", RangeAttribute)[0], GET("post_remap", RangeAttribute)[1]);
+
+  // saturate
+  if (GET_MEMBER("post_saturate", RangeAttribute, is_active))
+  {
+    float hmin = h.min();
+    float hmax = h.max();
+
+    hmap::transform(
+        {&h},
+        [p_node, &hmin, &hmax](std::vector<hmap::Array *> p_arrays)
+        {
+          hmap::Array *pa_out = p_arrays[0];
+
+          float k = 0.1f; // TODO hardcoded?
+
+          hmap::saturate(*pa_out,
+                         GET("post_saturate", RangeAttribute)[0],
+                         GET("post_saturate", RangeAttribute)[1],
+                         hmin,
+                         hmax,
+                         k);
+        },
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
+  }
 }
 
 void setup_post_process_heightmap_attributes(BaseNode *p_node, bool add_mix)
@@ -188,6 +212,7 @@ void setup_post_process_heightmap_attributes(BaseNode *p_node, bool add_mix)
   ADD_ATTR(FloatAttribute, "post_gain", 1.f, 0.01f, 10.f);
   ADD_ATTR(FloatAttribute, "post_smoothing_radius", 0.f, 0.f, 0.05f);
   ADD_ATTR(RangeAttribute, "post_remap");
+  ADD_ATTR(RangeAttribute, "post_saturate", false);
 
   std::vector<std::string> *p_keys = p_node->get_attr_ordered_key_ref();
 
@@ -203,6 +228,7 @@ void setup_post_process_heightmap_attributes(BaseNode *p_node, bool add_mix)
   p_keys->push_back("post_gain");
   p_keys->push_back("post_smoothing_radius");
   p_keys->push_back("post_remap");
+  p_keys->push_back("post_saturate");
 }
 
 } // namespace hesiod
