@@ -100,6 +100,12 @@
                 "label": "post_remap",
                 "type": "Value range"
             },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
             "post_smoothing_radius": {
                 "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
@@ -191,6 +197,12 @@
                 "description": "No description",
                 "key": "post_remap",
                 "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
@@ -326,6 +338,12 @@
                 "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
@@ -607,6 +625,12 @@
                 "label": "post_remap",
                 "type": "Value range"
             },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
             "post_smoothing_radius": {
                 "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
@@ -656,6 +680,12 @@
                 "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
@@ -725,6 +755,12 @@
                 "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
@@ -905,6 +941,12 @@
                 "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
@@ -1360,6 +1402,12 @@
                 "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
@@ -1850,6 +1898,12 @@
                 "label": "post_remap",
                 "type": "Value range"
             },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
             "post_smoothing_radius": {
                 "description": "No description",
                 "key": "post_smoothing_radius",
@@ -1929,6 +1983,12 @@
                 "description": "No description",
                 "key": "post_remap",
                 "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
@@ -2025,6 +2085,12 @@
                 "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
@@ -2214,6 +2280,12 @@
                 "description": "No description",
                 "key": "post_remap",
                 "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
@@ -2571,6 +2643,12 @@
                 "label": "post_remap",
                 "type": "Value range"
             },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
             "post_smoothing_radius": {
                 "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
@@ -2638,6 +2716,12 @@
                 "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
@@ -2788,6 +2872,12 @@
                 "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
@@ -3528,6 +3618,12 @@
                 "label": "post_remap",
                 "type": "Value range"
             },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
             "post_smoothing_radius": {
                 "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
@@ -3690,6 +3786,12 @@
                 "label": "post_remap",
                 "type": "Value range"
             },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
             "post_smoothing_radius": {
                 "description": "No description",
                 "key": "post_smoothing_radius",
@@ -3804,6 +3906,12 @@
                 "label": "post_remap",
                 "type": "Value range"
             },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
             "post_smoothing_radius": {
                 "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
@@ -3859,6 +3967,12 @@
                 "description": "No description",
                 "key": "post_remap",
                 "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
@@ -4065,6 +4179,12 @@
                 "label": "post_remap",
                 "type": "Value range"
             },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
             "post_smoothing_radius": {
                 "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
@@ -4149,6 +4269,12 @@
                 "label": "post_remap",
                 "type": "Value range"
             },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
             "post_smoothing_radius": {
                 "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
@@ -4192,6 +4318,12 @@
                 "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
@@ -4439,6 +4571,12 @@
                 "description": "No description",
                 "key": "post_remap",
                 "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
@@ -5104,6 +5242,12 @@
                 "label": "post_remap",
                 "type": "Value range"
             },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
             "post_smoothing_radius": {
                 "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
@@ -5347,6 +5491,12 @@
                 "label": "post_remap",
                 "type": "Value range"
             },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
             "post_smoothing_radius": {
                 "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
@@ -5405,6 +5555,12 @@
                 "description": "No description",
                 "key": "post_remap",
                 "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
@@ -5953,6 +6109,12 @@
                 "label": "post_remap",
                 "type": "Value range"
             },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
             "post_smoothing_radius": {
                 "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
@@ -6053,6 +6215,12 @@
                 "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
@@ -6235,6 +6403,12 @@
                 "label": "post_remap",
                 "type": "Value range"
             },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
             "post_smoothing_radius": {
                 "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
@@ -6308,6 +6482,12 @@
                 "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
@@ -6466,6 +6646,12 @@
                 "label": "post_remap",
                 "type": "Value range"
             },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
             "post_smoothing_radius": {
                 "description": "No description",
                 "key": "post_smoothing_radius",
@@ -6599,6 +6785,12 @@
                 "description": "No description",
                 "key": "post_remap",
                 "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
@@ -6853,6 +7045,12 @@
                 "label": "post_remap",
                 "type": "Value range"
             },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
             "post_smoothing_radius": {
                 "description": "No description",
                 "key": "post_smoothing_radius",
@@ -6994,6 +7192,12 @@
                 "label": "post_remap",
                 "type": "Value range"
             },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
             "post_smoothing_radius": {
                 "description": "No description",
                 "key": "post_smoothing_radius",
@@ -7085,6 +7289,12 @@
                 "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
@@ -7184,6 +7394,12 @@
                 "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
@@ -7916,6 +8132,12 @@
                 "description": "No description",
                 "key": "post_remap",
                 "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
@@ -8775,6 +8997,12 @@
                 "label": "post_remap",
                 "type": "Value range"
             },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
             "post_smoothing_radius": {
                 "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
@@ -8940,6 +9168,12 @@
                 "label": "post_remap",
                 "type": "Value range"
             },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
             "post_smoothing_radius": {
                 "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
@@ -9037,6 +9271,12 @@
                 "description": "No description",
                 "key": "post_remap",
                 "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
@@ -9736,6 +9976,12 @@
                 "label": "post_remap",
                 "type": "Value range"
             },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
             "post_smoothing_radius": {
                 "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
@@ -9916,6 +10162,12 @@
                 "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
@@ -10107,6 +10359,12 @@
                 "label": "post_remap",
                 "type": "Value range"
             },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
             "post_smoothing_radius": {
                 "description": "No description",
                 "key": "post_smoothing_radius",
@@ -10294,6 +10552,12 @@
                 "description": "No description",
                 "key": "post_remap",
                 "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
@@ -10506,6 +10770,12 @@
                 "label": "post_remap",
                 "type": "Value range"
             },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
             "post_smoothing_radius": {
                 "description": "No description",
                 "key": "post_smoothing_radius",
@@ -10579,6 +10849,12 @@
                 "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
@@ -10740,6 +11016,12 @@
                 "label": "post_remap",
                 "type": "Value range"
             },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
             "post_smoothing_radius": {
                 "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
@@ -10795,6 +11077,12 @@
                 "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
@@ -10854,6 +11142,12 @@
                 "label": "post_remap",
                 "type": "Value range"
             },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
             "post_smoothing_radius": {
                 "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
@@ -10905,6 +11199,12 @@
                 "label": "post_remap",
                 "type": "Value range"
             },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
             "post_smoothing_radius": {
                 "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
@@ -10954,6 +11254,12 @@
                 "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
@@ -11019,6 +11325,12 @@
                 "label": "post_remap",
                 "type": "Value range"
             },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
             "post_smoothing_radius": {
                 "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
@@ -11070,6 +11382,12 @@
                 "label": "post_remap",
                 "type": "Value range"
             },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
             "post_smoothing_radius": {
                 "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
@@ -11119,6 +11437,12 @@
                 "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
@@ -11190,6 +11514,12 @@
                 "label": "post_remap",
                 "type": "Value range"
             },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
             "post_smoothing_radius": {
                 "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
@@ -11253,6 +11583,12 @@
                 "label": "post_remap",
                 "type": "Value range"
             },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
             "post_smoothing_radius": {
                 "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
@@ -11310,6 +11646,12 @@
                 "label": "post_remap",
                 "type": "Value range"
             },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
             "post_smoothing_radius": {
                 "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
@@ -11359,6 +11701,12 @@
                 "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
@@ -11422,6 +11770,12 @@
                 "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
@@ -11739,6 +12093,12 @@
                 "label": "post_remap",
                 "type": "Value range"
             },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
             "post_smoothing_radius": {
                 "description": "No description",
                 "key": "post_smoothing_radius",
@@ -11973,6 +12333,12 @@
                 "label": "post_remap",
                 "type": "Value range"
             },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
             "post_smoothing_radius": {
                 "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
@@ -12084,6 +12450,12 @@
                 "label": "post_remap",
                 "type": "Value range"
             },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
             "post_smoothing_radius": {
                 "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
@@ -12189,6 +12561,12 @@
                 "label": "post_remap",
                 "type": "Value range"
             },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
             "post_smoothing_radius": {
                 "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
@@ -12286,6 +12664,12 @@
                 "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
@@ -12459,6 +12843,12 @@
                 "label": "post_remap",
                 "type": "Value range"
             },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
             "post_smoothing_radius": {
                 "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
@@ -12571,6 +12961,12 @@
                 "description": "No description",
                 "key": "post_remap",
                 "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
@@ -12754,6 +13150,12 @@
                 "description": "No description",
                 "key": "post_remap",
                 "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
@@ -13625,6 +14027,12 @@
                 "label": "post_remap",
                 "type": "Value range"
             },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
             "post_smoothing_radius": {
                 "description": "No description",
                 "key": "post_smoothing_radius",
@@ -14195,6 +14603,12 @@
                 "label": "post_remap",
                 "type": "Value range"
             },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
             "post_smoothing_radius": {
                 "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
@@ -14429,6 +14843,12 @@
                 "label": "post_remap",
                 "type": "Value range"
             },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
             "post_smoothing_radius": {
                 "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
@@ -14552,6 +14972,12 @@
                 "label": "post_remap",
                 "type": "Value range"
             },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
             "post_smoothing_radius": {
                 "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
@@ -14661,6 +15087,12 @@
                 "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
@@ -14790,6 +15222,12 @@
                 "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
@@ -14966,6 +15404,12 @@
                 "label": "post_remap",
                 "type": "Value range"
             },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
             "post_smoothing_radius": {
                 "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
@@ -15063,6 +15507,12 @@
                 "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
@@ -15314,6 +15764,12 @@
                 "label": "post_remap",
                 "type": "Value range"
             },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
             "post_smoothing_radius": {
                 "description": "No description",
                 "key": "post_smoothing_radius",
@@ -15395,6 +15851,12 @@
                 "label": "post_remap",
                 "type": "Value range"
             },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
             "post_smoothing_radius": {
                 "description": "No description",
                 "key": "post_smoothing_radius",
@@ -15464,6 +15926,12 @@
                 "label": "post_remap",
                 "type": "Value range"
             },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
             "post_smoothing_radius": {
                 "description": "No description",
                 "key": "post_smoothing_radius",
@@ -15531,6 +15999,12 @@
                 "description": "No description",
                 "key": "post_remap",
                 "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
@@ -15792,6 +16266,12 @@
                 "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
                 "type": "Value range"
             },
             "post_smoothing_radius": {

@@ -42,6 +42,7 @@ Filter/Recurve
 |post_mix|Float|No description|
 |post_mix_method|Enumeration|No description|
 |post_remap|Value range|No description|
+|post_saturate|Value range|No description|
 |post_smoothing_radius|Float|No description|
 
 # Example
