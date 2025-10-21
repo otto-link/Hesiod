@@ -2258,12 +2258,6 @@
                 "label": "clamp_max",
                 "type": "Bool"
             },
-            "positive": {
-                "description": "No description",
-                "key": "positive",
-                "label": "positive",
-                "type": "Bool"
-            },
             "post_gain": {
                 "description": "No description",
                 "key": "post_gain",
@@ -2293,6 +2287,12 @@
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
+            },
+            "values_kept": {
+                "description": "No description",
+                "key": "values_kept",
+                "label": "values_kept",
+                "type": "Choice"
             },
             "vc_max": {
                 "description": "No description",

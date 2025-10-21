@@ -31,12 +31,12 @@ Features
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |clamp_max|Bool|No description|
-|positive|Bool|No description|
 |post_gain|Float|No description|
 |post_inverse|Bool|No description|
 |post_remap|Value range|No description|
 |post_saturate|Value range|No description|
 |post_smoothing_radius|Float|No description|
+|values_kept|Choice|No description|
 |vc_max|Float|No description|
 
 # Example
