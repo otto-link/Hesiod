@@ -76,7 +76,7 @@ void compute_curvature_mean_node(BaseNode *p_node)
 
           // clamp output range
           const float vc_max = GET("vc_max", FloatAttribute);
-	  
+
           if (GET("clamp_max", BoolAttribute) && !keep_both)
             hmap::clamp_max(*pa_out, vc_max);
           else

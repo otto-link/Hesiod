@@ -25,10 +25,9 @@ void setup_morphological_gradient_node(BaseNode *p_node)
 
   // attribute(s)
   ADD_ATTR(FloatAttribute, "radius", 0.01f, 0.f, 0.05f);
-  ADD_ATTR(BoolAttribute, "GPU", HSD_DEFAULT_GPU_MODE);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"radius", "_SEPARATOR_", "GPU"});
+  p_node->set_attr_ordered_key({"radius"});
 
   setup_post_process_heightmap_attributes(p_node);
 }
@@ -47,32 +46,16 @@ void compute_morphological_gradient_node(BaseNode *p_node)
 
     int ir = std::max(1, (int)(GET("radius", FloatAttribute) * p_out->shape.x));
 
-    if (GET("GPU", BoolAttribute))
-    {
-      hmap::transform(
-          {p_out, p_in},
-          [ir](std::vector<hmap::Array *> p_arrays)
-          {
-            hmap::Array *pa_out = p_arrays[0];
-            hmap::Array *pa_in = p_arrays[1];
+    hmap::transform(
+        {p_out, p_in},
+        [ir](std::vector<hmap::Array *> p_arrays)
+        {
+          hmap::Array *pa_out = p_arrays[0];
+          hmap::Array *pa_in = p_arrays[1];
 
-            *pa_out = hmap::gpu::morphological_gradient(*pa_in, ir);
-          },
-          p_node->get_config_ref()->hmap_transform_mode_gpu);
-    }
-    else
-    {
-      hmap::transform(
-          {p_out, p_in},
-          [ir](std::vector<hmap::Array *> p_arrays)
-          {
-            hmap::Array *pa_out = p_arrays[0];
-            hmap::Array *pa_in = p_arrays[1];
-
-            *pa_out = hmap::morphological_gradient(*pa_in, ir);
-          },
-          p_node->get_config_ref()->hmap_transform_mode_cpu);
-    }
+          *pa_out = hmap::gpu::morphological_gradient(*pa_in, ir);
+        },
+        p_node->get_config_ref()->hmap_transform_mode_gpu);
 
     p_out->smooth_overlap_buffers();
 
