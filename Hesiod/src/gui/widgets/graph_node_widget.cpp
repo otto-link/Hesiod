@@ -153,6 +153,11 @@ void GraphNodeWidget::closeEvent(QCloseEvent *event)
   gngui::GraphViewer::closeEvent(event);
 }
 
+bool GraphNodeWidget::get_is_selecting_with_rubber_band() const
+{
+  return this->is_selecting_with_rubber_band;
+}
+
 GraphNode *GraphNodeWidget::get_p_graph_node()
 {
   if (!this->p_graph_node)
@@ -829,6 +834,8 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
                     this->p_graph_node->update(node_id);
                   });
 
+    add_qmenu_spacer(dynamic_cast<QMenu *>(menu), 8);
+
     // --- show menu
 
     menu->popup(QCursor::pos());
@@ -1000,6 +1007,14 @@ void GraphNodeWidget::setup_connections()
                 &gngui::GraphViewer::graph_settings_request,
                 this,
                 &GraphNodeWidget::on_graph_settings_request);
+
+  this->connect(this,
+                &gngui::GraphViewer::rubber_band_selection_started,
+                [this]() { this->is_selecting_with_rubber_band = true; });
+
+  this->connect(this,
+                &gngui::GraphViewer::rubber_band_selection_finished,
+                [this]() { this->is_selecting_with_rubber_band = false; });
 
   // node actions
   this->connect(this,

@@ -72,9 +72,8 @@ void compute_select_slope_node(BaseNode *p_node)
           },
           p_node->get_config_ref()->hmap_transform_mode_cpu);
 
-    p_out->smooth_overlap_buffers();
-
     // post-process
+    p_out->smooth_overlap_buffers();
     post_process_heightmap(p_node, *p_out);
   }
 
