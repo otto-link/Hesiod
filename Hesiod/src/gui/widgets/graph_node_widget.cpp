@@ -646,6 +646,13 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
 
     CustomQMenu *menu = new CustomQMenu();
 
+    menu->setStyleSheet(R"(
+    QMenu::separator {
+        height: 1px;
+        margin: 6px 0px;
+    }
+  )");
+
     // create the widget holding all the attribute widgets (created
     // here, needed for connect below)
     bool        add_save_reset_state_buttons = false;
@@ -660,21 +667,9 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
     QLayout *retrieved_layout = qobject_cast<QLayout *>(attributes_widget->layout());
     if (retrieved_layout)
     {
-      retrieved_layout->setSpacing(6);
-      retrieved_layout->setContentsMargins(8, 0, 8, 0);
+      retrieved_layout->setSpacing(8);
+      retrieved_layout->setContentsMargins(16, 0, 16, 0);
     }
-
-    // --- add label
-
-    {
-      QLabel *label = new QLabel(p_node->get_caption().c_str());
-      resize_font(label, 2);
-      QWidgetAction *widget_action = new QWidgetAction(menu);
-      widget_action->setDefaultWidget(label);
-      menu->addAction(widget_action);
-    }
-
-    menu->addSeparator();
 
     // --- fake ToolBar (no text)
 
@@ -780,6 +775,20 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
       // add the simulated menu bar to the context menu
       menu->addAction(widget_action);
     }
+
+    add_qmenu_spacer(dynamic_cast<QMenu *>(menu), 8);
+
+    // --- add label
+
+    {
+      QLabel *label = new QLabel(p_node->get_caption().c_str());
+      resize_font(label, 2);
+      QWidgetAction *widget_action = new QWidgetAction(menu);
+      widget_action->setDefaultWidget(label);
+      menu->addAction(widget_action);
+    }
+
+    menu->addSeparator();
 
     // --- add attributes
 

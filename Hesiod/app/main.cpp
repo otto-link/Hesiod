@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
   QApplication app(argc, argv);
 
   // --- styles
-  
+
   const std::string style_sheet =
 #include "darkstyle.css"
       ;

@@ -10,6 +10,8 @@
 namespace hesiod
 {
 
+void add_qmenu_spacer(QMenu *menu, int height = 8);
+
 /**
  * @brief Clear all items from a given layout.
  *

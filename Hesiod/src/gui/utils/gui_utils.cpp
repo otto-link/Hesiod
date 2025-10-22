@@ -1,20 +1,35 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include <QLabel>
 #include <QLayout>
+#include <QMenu>
 #include <QPushButton>
 #include <QTextBrowser>
 #include <QWidget>
+#include <QWidgetAction>
 
 #include "hesiod/gui/gui_utils.hpp"
+#include "hesiod/logger.hpp"
 
 namespace hesiod
 {
 
-// https://stackoverflow.com/questions/4857188
+void add_qmenu_spacer(QMenu *menu, int height)
+{
+  if (!menu)
+    return;
+
+  QWidgetAction *spacer = new QWidgetAction(menu);
+  QLabel        *empty = new QLabel(menu);
+  empty->setFixedHeight(height);
+  spacer->setDefaultWidget(empty);
+  menu->addAction(spacer);
+}
 
 void clear_layout(QLayout *layout)
 {
+  // https://stackoverflow.com/questions/4857188
   if (layout == nullptr)
     return;
 
