@@ -10015,11 +10015,35 @@
         "description": "RelativeElevation identifies heightmap relative elevation based on the surrounding heightmap values.",
         "label": "RelativeElevation",
         "parameters": {
-            "GPU": {
-                "description": "Toogle GPU acceleration on or off.",
-                "key": "GPU",
-                "label": "GPU",
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
                 "type": "Bool"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
             },
             "radius": {
                 "description": "Filter radius with respect to the domain size.",
@@ -10689,34 +10713,40 @@
         "description": "Measures the terrain roughness by computing the square root of the sum of squared elevation differences within a specified radius. Indicates how rough or smooth the terrain is by analyzing how much the elevation changes between neighboring areas. Higher values mean a more rugged, uneven surface, while lower values indicate a flatter, smoother landscape.",
         "label": "Ruggedness",
         "parameters": {
-            "GPU": {
-                "description": "Toogle GPU acceleration on or off.",
-                "key": "GPU",
-                "label": "GPU",
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
                 "type": "Bool"
             },
-            "inverse": {
-                "description": "Toggle inversion of the output values.",
-                "key": "inverse",
-                "label": "inverse",
-                "type": "Bool"
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
             },
             "radius": {
                 "description": "Defines the neighborhood radius used for computing ruggedness. Larger values consider a wider area, capturing broader terrain variations.",
                 "key": "radius",
                 "label": "radius",
-                "type": "Float"
-            },
-            "smoothing": {
-                "description": "Enable or disable smoothing to reduce noise in the curvature computation.",
-                "key": "smoothing",
-                "label": "smoothing",
-                "type": "Bool"
-            },
-            "smoothing_radius": {
-                "description": "Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.",
-                "key": "smoothing_radius",
-                "label": "smoothing_radius",
                 "type": "Float"
             }
         },

@@ -30,11 +30,12 @@ Features
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|GPU|Bool|Toogle GPU acceleration on or off.|
-|inverse|Bool|Toggle inversion of the output values.|
+|post_gain|Float|No description|
+|post_inverse|Bool|No description|
+|post_remap|Value range|No description|
+|post_saturate|Value range|No description|
+|post_smoothing_radius|Float|No description|
 |radius|Float|Defines the neighborhood radius used for computing ruggedness. Larger values consider a wider area, capturing broader terrain variations.|
-|smoothing|Bool|Enable or disable smoothing to reduce noise in the curvature computation.|
-|smoothing_radius|Float|Specifies the radius for smoothing, determining how much the curvature is averaged over neighboring pixels.|
 
 # Example
 
