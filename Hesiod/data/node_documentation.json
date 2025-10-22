@@ -6460,12 +6460,6 @@
         "description": "MorphologicalGradient calculates the difference between dilation and erosion of an image, resulting in the outline of objects. Use Cases: Edge detection, boundary extraction.",
         "label": "MorphologicalGradient",
         "parameters": {
-            "GPU": {
-                "description": "Toogle GPU acceleration on or off.",
-                "key": "GPU",
-                "label": "GPU",
-                "type": "Bool"
-            },
             "post_gain": {
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
@@ -11622,12 +11616,6 @@
         "description": "TODO",
         "label": "SelectSlope",
         "parameters": {
-            "GPU": {
-                "description": "Toogle GPU acceleration on or off.",
-                "key": "GPU",
-                "label": "GPU",
-                "type": "Bool"
-            },
             "post_gain": {
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
@@ -11676,6 +11664,99 @@
                 "caption": "output",
                 "data_type": "Heightmap",
                 "description": "TODO",
+                "type": "output"
+            }
+        }
+    },
+    "SelectSoilWeathered": {
+        "category": "Mask/ForTexturing",
+        "description": "No description available",
+        "label": "SelectSoilWeathered",
+        "parameters": {
+            "curvature_clamp_mode": {
+                "description": "No description",
+                "key": "curvature_clamp_mode",
+                "label": "curvature_clamp_mode",
+                "type": "Enumeration"
+            },
+            "curvature_clamping": {
+                "description": "No description",
+                "key": "curvature_clamping",
+                "label": "curvature_clamping",
+                "type": "Float"
+            },
+            "curvature_weight": {
+                "description": "No description",
+                "key": "curvature_weight",
+                "label": "curvature_weight",
+                "type": "Float"
+            },
+            "gradient_gain": {
+                "description": "No description",
+                "key": "gradient_gain",
+                "label": "gradient_gain",
+                "type": "Float"
+            },
+            "gradient_weight": {
+                "description": "No description",
+                "key": "gradient_weight",
+                "label": "gradient_weight",
+                "type": "Float"
+            },
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
+                "type": "Bool"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
+            },
+            "radius_curvature": {
+                "description": "No description",
+                "key": "radius_curvature",
+                "label": "radius_curvature",
+                "type": "Float"
+            },
+            "radius_gradient": {
+                "description": "No description",
+                "key": "radius_gradient",
+                "label": "radius_gradient",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "input": {
+                "caption": "input",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "Heightmap",
+                "description": "No description",
                 "type": "output"
             }
         }

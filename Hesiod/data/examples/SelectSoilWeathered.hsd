@@ -1,0 +1,876 @@
+{
+    "Hesiod version": "v0.4.1",
+    "graph_manager": {
+        "export_param": {
+            "export_path": "",
+            "ids": [],
+            "overlap": 0.5,
+            "shape.x": 1024,
+            "shape.y": 1024,
+            "tiling.x": 4,
+            "tiling.y": 4
+        },
+        "graph_nodes": {
+            "graph": {
+                "id": "graph",
+                "id_count": 17,
+                "links": [
+                    {
+                        "node_id_from": "7",
+                        "node_id_to": "3",
+                        "port_id_from": "out",
+                        "port_id_to": "elevation"
+                    },
+                    {
+                        "node_id_from": "6",
+                        "node_id_to": "3",
+                        "port_id_from": "texture",
+                        "port_id_to": "texture"
+                    },
+                    {
+                        "node_id_from": "7",
+                        "node_id_to": "16",
+                        "port_id_from": "out",
+                        "port_id_to": "input"
+                    },
+                    {
+                        "node_id_from": "16",
+                        "node_id_to": "6",
+                        "port_id_from": "output",
+                        "port_id_to": "level"
+                    }
+                ],
+                "model_config": {
+                    "hmap_transform_mode_cpu": 0,
+                    "hmap_transform_mode_gpu": 2,
+                    "overlap": 0.5,
+                    "shape.x": 1024,
+                    "shape.y": 1024,
+                    "tiling.x": 4,
+                    "tiling.y": 4
+                },
+                "nodes": [
+                    {
+                        "curvature_clamp_mode": {
+                            "choice": "Keep positive & clamp",
+                            "label": "curvature_clamp_mode",
+                            "type": 4,
+                            "type_string": "Enumeration",
+                            "value": 0
+                        },
+                        "curvature_clamping": {
+                            "label": "curvature_clamping",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 3.4028234663852886e+38,
+                            "vmin": 0.0
+                        },
+                        "curvature_weight": {
+                            "label": "curvature_weight",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 1.0,
+                            "vmin": -1.0
+                        },
+                        "gradient_gain": {
+                            "label": "gradient_gain",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 10.0,
+                            "vmin": 0.009999999776482582
+                        },
+                        "gradient_weight": {
+                            "label": "gradient_weight",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.20000000298023224,
+                            "vmax": 1.0,
+                            "vmin": -1.0
+                        },
+                        "id": "16",
+                        "label": "SelectSoilWeathered",
+                        "post_gain": {
+                            "label": "post_gain",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 10.0,
+                            "vmin": 0.009999999776482582
+                        },
+                        "post_inverse": {
+                            "label": "post_inverse",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "post_remap": {
+                            "is_active": true,
+                            "label": "post_remap",
+                            "type": 11,
+                            "type_string": "Value range",
+                            "value": [
+                                0.0,
+                                1.0
+                            ],
+                            "vmax": 2.0,
+                            "vmin": -1.0
+                        },
+                        "post_saturate": {
+                            "is_active": false,
+                            "label": "post_saturate",
+                            "type": 11,
+                            "type_string": "Value range",
+                            "value": [
+                                0.0,
+                                1.0
+                            ],
+                            "vmax": 2.0,
+                            "vmin": -1.0
+                        },
+                        "post_smoothing_radius": {
+                            "label": "post_smoothing_radius",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.0,
+                            "vmax": 0.05000000074505806,
+                            "vmin": 0.0
+                        },
+                        "radius_curvature": {
+                            "label": "radius_curvature",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.0,
+                            "vmax": 0.10000000149011612,
+                            "vmin": 0.0
+                        },
+                        "radius_gradient": {
+                            "label": "radius_gradient",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.004999999888241291,
+                            "vmax": 0.10000000149011612,
+                            "vmin": 0.0
+                        }
+                    },
+                    {
+                        "id": "3",
+                        "label": "Preview"
+                    },
+                    {
+                        "clamp_alpha": {
+                            "label": "clamp_alpha",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": true
+                        },
+                        "gradient": {
+                            "label": "gradient",
+                            "type": 3,
+                            "type_string": "Color gradient",
+                            "value": [
+                                {
+                                    "color": [
+                                        0.01568627543747425,
+                                        0.019607843831181526,
+                                        0.05098039284348488,
+                                        1.0
+                                    ],
+                                    "position": 0.0
+                                },
+                                {
+                                    "color": [
+                                        0.07058823853731155,
+                                        0.08235294371843338,
+                                        0.13333334028720856,
+                                        1.0
+                                    ],
+                                    "position": 0.06666667014360428
+                                },
+                                {
+                                    "color": [
+                                        0.1411764770746231,
+                                        0.1568627506494522,
+                                        0.21960784494876862,
+                                        1.0
+                                    ],
+                                    "position": 0.13333334028720856
+                                },
+                                {
+                                    "color": [
+                                        0.22745098173618317,
+                                        0.24313725531101227,
+                                        0.3137255012989044,
+                                        1.0
+                                    ],
+                                    "position": 0.20000000298023224
+                                },
+                                {
+                                    "color": [
+                                        0.2980392277240753,
+                                        0.3137255012989044,
+                                        0.3921568691730499,
+                                        1.0
+                                    ],
+                                    "position": 0.2666666805744171
+                                },
+                                {
+                                    "color": [
+                                        0.3607843220233917,
+                                        0.3803921639919281,
+                                        0.4588235318660736,
+                                        1.0
+                                    ],
+                                    "position": 0.3333333432674408
+                                },
+                                {
+                                    "color": [
+                                        0.42352941632270813,
+                                        0.4431372582912445,
+                                        0.5254902243614197,
+                                        1.0
+                                    ],
+                                    "position": 0.4000000059604645
+                                },
+                                {
+                                    "color": [
+                                        0.48627451062202454,
+                                        0.5058823823928833,
+                                        0.5960784554481506,
+                                        1.0
+                                    ],
+                                    "position": 0.46666666865348816
+                                },
+                                {
+                                    "color": [
+                                        0.5607843399047852,
+                                        0.5803921818733215,
+                                        0.6627451181411743,
+                                        1.0
+                                    ],
+                                    "position": 0.5333333611488342
+                                },
+                                {
+                                    "color": [
+                                        0.615686297416687,
+                                        0.6352941393852234,
+                                        0.7058823704719543,
+                                        1.0
+                                    ],
+                                    "position": 0.6000000238418579
+                                },
+                                {
+                                    "color": [
+                                        0.6313725709915161,
+                                        0.6509804129600525,
+                                        0.7372549176216125,
+                                        1.0
+                                    ],
+                                    "position": 0.6666666865348816
+                                },
+                                {
+                                    "color": [
+                                        0.658823549747467,
+                                        0.6823529601097107,
+                                        0.7764706015586853,
+                                        1.0
+                                    ],
+                                    "position": 0.7333333492279053
+                                },
+                                {
+                                    "color": [
+                                        0.7019608020782471,
+                                        0.7215686440467834,
+                                        0.800000011920929,
+                                        1.0
+                                    ],
+                                    "position": 0.800000011920929
+                                },
+                                {
+                                    "color": [
+                                        0.7490196228027344,
+                                        0.7647058963775635,
+                                        0.8196078538894653,
+                                        1.0
+                                    ],
+                                    "position": 0.8666666746139526
+                                },
+                                {
+                                    "color": [
+                                        0.7647058963775635,
+                                        0.7882353067398071,
+                                        0.8745098114013672,
+                                        1.0
+                                    ],
+                                    "position": 0.9333333373069763
+                                },
+                                {
+                                    "color": [
+                                        0.843137264251709,
+                                        0.8549019694328308,
+                                        0.9176470637321472,
+                                        1.0
+                                    ],
+                                    "position": 1.0
+                                }
+                            ]
+                        },
+                        "id": "6",
+                        "label": "ColorizeGradient",
+                        "reverse_alpha": {
+                            "label": "reverse_alpha",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "reverse_colormap": {
+                            "label": "reverse_colormap",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        }
+                    },
+                    {
+                        "add_deposition": {
+                            "label": "add_deposition",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": true
+                        },
+                        "angle": {
+                            "label": "angle",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 45.0,
+                            "vmax": 180.0,
+                            "vmin": -180.0
+                        },
+                        "base_noise_amp": {
+                            "label": "base_noise_amp",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.25,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        },
+                        "bulk_amp": {
+                            "label": "bulk_amp",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.20000000298023224,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        },
+                        "center": {
+                            "label": "center",
+                            "type": 16,
+                            "type_string": "Vec2Float",
+                            "value": [
+                                0.5,
+                                0.5
+                            ],
+                            "xmax": 1.0,
+                            "xmin": 0.0,
+                            "ymax": 1.0,
+                            "ymin": 0.0
+                        },
+                        "elevation": {
+                            "label": "elevation",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.699999988079071,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        },
+                        "gamma": {
+                            "label": "gamma",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 4.0,
+                            "vmin": 0.009999999776482582
+                        },
+                        "id": "7",
+                        "k_smoothing": {
+                            "label": "k_smoothing",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.10000000149011612,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        },
+                        "label": "MountainInselberg",
+                        "octaves": {
+                            "label": "octaves",
+                            "type": 10,
+                            "type_string": "Integer",
+                            "value": 8,
+                            "vmax": 32,
+                            "vmin": 0
+                        },
+                        "post_gain": {
+                            "label": "post_gain",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 10.0,
+                            "vmin": 0.009999999776482582
+                        },
+                        "post_inverse": {
+                            "label": "post_inverse",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "post_remap": {
+                            "is_active": false,
+                            "label": "post_remap",
+                            "type": 11,
+                            "type_string": "Value range",
+                            "value": [
+                                0.0,
+                                1.0
+                            ],
+                            "vmax": 2.0,
+                            "vmin": -1.0
+                        },
+                        "post_saturate": {
+                            "is_active": false,
+                            "label": "post_saturate",
+                            "type": 11,
+                            "type_string": "Value range",
+                            "value": [
+                                0.0,
+                                1.0
+                            ],
+                            "vmax": 2.0,
+                            "vmin": -1.0
+                        },
+                        "post_smoothing_radius": {
+                            "label": "post_smoothing_radius",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.0,
+                            "vmax": 0.05000000074505806,
+                            "vmin": 0.0
+                        },
+                        "round_shape": {
+                            "label": "round_shape",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "rugosity": {
+                            "label": "rugosity",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.20000000298023224,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        },
+                        "scale": {
+                            "label": "scale",
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.75,
+                            "vmax": 3.4028234663852886e+38,
+                            "vmin": 0.009999999776482582
+                        },
+                        "seed": {
+                            "label": "seed",
+                            "type": 12,
+                            "type_string": "Random seed number",
+                            "value": 1794
+                        }
+                    }
+                ],
+                "origin": [
+                    0.0,
+                    0.0
+                ],
+                "rotation_angle": 0.0,
+                "size": [
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "graph_order": [
+            "graph"
+        ],
+        "id_count": 0
+    },
+    "graph_manager_widget": {
+        "frames": {
+            "graph": {
+                "current_bg_tag": "NONE"
+            }
+        }
+    },
+    "graph_tabs_widget": {
+        "graph_node_widgets": {
+            "graph": {
+                "comments": [],
+                "current_link_type": 2,
+                "groups": [],
+                "id": "graph",
+                "links": [
+                    {
+                        "link_type": 2,
+                        "node_in_id": "6",
+                        "node_out_id": "16",
+                        "port_in_id": "level",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "16",
+                        "node_out_id": "7",
+                        "port_in_id": "input",
+                        "port_out_id": "out"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "3",
+                        "node_out_id": "7",
+                        "port_in_id": "elevation",
+                        "port_out_id": "out"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "3",
+                        "node_out_id": "6",
+                        "port_in_id": "texture",
+                        "port_out_id": "texture"
+                    }
+                ],
+                "nodes": [
+                    {
+                        "caption": "SelectSoilWeathered",
+                        "id": "16",
+                        "is_widget_visible": true,
+                        "scene_position.x": -26.922161102294922,
+                        "scene_position.y": -173.03843688964844
+                    },
+                    {
+                        "caption": "MountainInselberg",
+                        "id": "7",
+                        "is_widget_visible": true,
+                        "scene_position.x": -372.2182922363281,
+                        "scene_position.y": -296.59832763671875
+                    },
+                    {
+                        "caption": "ColorizeGradient",
+                        "id": "6",
+                        "is_widget_visible": true,
+                        "scene_position.x": 212.5761260986328,
+                        "scene_position.y": -217.61746215820313
+                    },
+                    {
+                        "caption": "Preview",
+                        "id": "3",
+                        "is_widget_visible": true,
+                        "scene_position.x": 467.3160095214844,
+                        "scene_position.y": -349.9031066894531
+                    }
+                ],
+                "viewers": [
+                    {
+                        "current_node_id": "3",
+                        "height": 1057,
+                        "is_node_pinned": false,
+                        "label": "3D Renderer",
+                        "renderer": {
+                            "add_ambiant_occlusion": false,
+                            "add_atmospheric_scattering": false,
+                            "add_fog": false,
+                            "add_water_foam": true,
+                            "add_water_waves": true,
+                            "alpha_x": 0.5600889325141907,
+                            "alpha_y": -254.2312774658203,
+                            "ambiant_occlusion_radius": 3,
+                            "ambiant_occlusion_strength": 5.0,
+                            "angle_spread_ratio": 0.0,
+                            "animate_waves": false,
+                            "apply_tonemap": false,
+                            "auto_rotate_camera": false,
+                            "auto_rotate_light": false,
+                            "bypass_shadow_map": false,
+                            "bypass_texture_albedo": false,
+                            "camera": {
+                                "far_plane": 100.0,
+                                "fov": 0.7850000262260437,
+                                "near_plane": 0.10000000149011612,
+                                "position": {
+                                    "x": -0.2722499966621399,
+                                    "y": 0.9602165222167969,
+                                    "z": -1.7777191400527954
+                                },
+                                "target": {
+                                    "x": 0.14971761405467987,
+                                    "y": -0.16339588165283203,
+                                    "z": -0.03627798706293106
+                                },
+                                "up": {
+                                    "x": 0.0,
+                                    "y": 1.0,
+                                    "z": 0.0
+                                }
+                            },
+                            "color_deep_water": {
+                                "x": 0.0,
+                                "y": 0.15000000596046448,
+                                "z": 0.3499999940395355
+                            },
+                            "color_shallow_water": {
+                                "x": 0.25,
+                                "y": 0.8500000238418579,
+                                "z": 0.800000011920929
+                            },
+                            "distance": 2.1149890422821045,
+                            "foam_color": {
+                                "x": 1.0,
+                                "y": 1.0,
+                                "z": 1.0
+                            },
+                            "foam_depth": 0.004999999888241291,
+                            "fog_color": {
+                                "x": 1.0,
+                                "y": 1.0,
+                                "z": 1.0
+                            },
+                            "fog_density": 50.0,
+                            "fog_height": 0.10000000149011612,
+                            "fog_scattering_ratio": 0.699999988079071,
+                            "fog_strength": 0.5,
+                            "gamma_correction": 2.0,
+                            "height": 966,
+                            "hmap_h": 0.4000000059604645,
+                            "hmap_h0": 0.0,
+                            "hmap_w": 2.0,
+                            "light": {
+                                "position": {
+                                    "x": -4.820535659790039,
+                                    "y": 7.31353759765625,
+                                    "z": 4.824375629425049
+                                },
+                                "target": {
+                                    "x": 0.0,
+                                    "y": 0.0,
+                                    "z": 0.0
+                                }
+                            },
+                            "light_distance": 10.0,
+                            "light_phi": -0.7850000262260437,
+                            "light_theta": 0.820304811000824,
+                            "mie_color": {
+                                "x": 1.0,
+                                "y": 0.800000011920929,
+                                "z": 0.699999988079071
+                            },
+                            "normal_map_scaling": 1.0,
+                            "normal_visualization": false,
+                            "pan_offset": {
+                                "x": -0.15405017137527466,
+                                "y": -0.16339588165283203
+                            },
+                            "rayleigh_color": {
+                                "x": 0.4000000059604645,
+                                "y": 0.6000000238418579,
+                                "z": 1.0
+                            },
+                            "render_hmap": true,
+                            "render_path": true,
+                            "render_plane": true,
+                            "render_points": true,
+                            "render_rocks": true,
+                            "render_trees": true,
+                            "render_type": 1,
+                            "render_water": true,
+                            "scale_h": 1.0,
+                            "scattering_density": 0.10000000149011612,
+                            "shadow_strength": 0.8999999761581421,
+                            "target": {
+                                "x": 0.0,
+                                "y": 0.0,
+                                "z": 0.0
+                            },
+                            "title": "",
+                            "viewer2d_settings.cmap": 3,
+                            "viewer2d_settings.hillshading": true,
+                            "viewer2d_settings.offset": {
+                                "x": 0.0,
+                                "y": 0.0
+                            },
+                            "viewer2d_settings.sun_azimuth": 1.5700000524520874,
+                            "viewer2d_settings.sun_zenith": 1.0466667413711548,
+                            "viewer2d_settings.zoom": 0.8999999761581421,
+                            "water_color_depth": 0.014999999664723873,
+                            "water_spec_strength": 0.5,
+                            "waves_alpha": 0.5233333706855774,
+                            "waves_amplitude": 0.004999999888241291,
+                            "waves_kw": 256.0,
+                            "waves_normal_amplitude": 0.019999999552965164,
+                            "waves_speed": 0.20000000298023224,
+                            "width": 1916,
+                            "wireframe_mode": false,
+                            "x": 2,
+                            "y": 91
+                        },
+                        "view_param_map": {
+                            "1": {
+                                "color": "",
+                                "elevation": "output",
+                                "normal_map": "",
+                                "path": "",
+                                "points": "",
+                                "water_depth": ""
+                            },
+                            "10": {
+                                "color": "",
+                                "elevation": "output",
+                                "normal_map": "",
+                                "path": "",
+                                "points": "",
+                                "water_depth": ""
+                            },
+                            "11": {
+                                "color": "texture",
+                                "elevation": "elevation",
+                                "normal_map": "normal map",
+                                "path": "path",
+                                "points": "cloud",
+                                "water_depth": "water_depth"
+                            },
+                            "12": {
+                                "color": "",
+                                "elevation": "output",
+                                "normal_map": "",
+                                "path": "",
+                                "points": "",
+                                "water_depth": ""
+                            },
+                            "13": {
+                                "color": "",
+                                "elevation": "output",
+                                "normal_map": "",
+                                "path": "",
+                                "points": "",
+                                "water_depth": ""
+                            },
+                            "14": {
+                                "color": "texture",
+                                "elevation": "elevation",
+                                "normal_map": "",
+                                "path": "",
+                                "points": "",
+                                "water_depth": ""
+                            },
+                            "15": {
+                                "color": "",
+                                "elevation": "output",
+                                "normal_map": "",
+                                "path": "",
+                                "points": "",
+                                "water_depth": ""
+                            },
+                            "16": {
+                                "color": "",
+                                "elevation": "output",
+                                "normal_map": "",
+                                "path": "",
+                                "points": "",
+                                "water_depth": ""
+                            },
+                            "2": {
+                                "color": "",
+                                "elevation": "output",
+                                "normal_map": "",
+                                "path": "",
+                                "points": "",
+                                "water_depth": ""
+                            },
+                            "3": {
+                                "color": "texture",
+                                "elevation": "elevation",
+                                "normal_map": "normal map",
+                                "path": "path",
+                                "points": "cloud",
+                                "water_depth": "water_depth"
+                            },
+                            "4": {
+                                "color": "",
+                                "elevation": "input",
+                                "normal_map": "",
+                                "path": "",
+                                "points": "",
+                                "water_depth": "water_depth"
+                            },
+                            "5": {
+                                "color": "",
+                                "elevation": "output",
+                                "normal_map": "",
+                                "path": "",
+                                "points": "",
+                                "water_depth": ""
+                            },
+                            "6": {
+                                "color": "texture",
+                                "elevation": "level",
+                                "normal_map": "",
+                                "path": "",
+                                "points": "",
+                                "water_depth": ""
+                            },
+                            "7": {
+                                "color": "",
+                                "elevation": "out",
+                                "normal_map": "",
+                                "path": "",
+                                "points": "",
+                                "water_depth": ""
+                            },
+                            "8": {
+                                "color": "",
+                                "elevation": "output",
+                                "normal_map": "",
+                                "path": "",
+                                "points": "",
+                                "water_depth": ""
+                            },
+                            "9": {
+                                "color": "texture",
+                                "elevation": "level",
+                                "normal_map": "",
+                                "path": "",
+                                "points": "",
+                                "water_depth": ""
+                            }
+                        },
+                        "viewer_type": 0,
+                        "width": 1920,
+                        "x": 1920,
+                        "y": 24
+                    }
+                ]
+            }
+        }
+    },
+    "saved_at": "2025-10-22_11:39:45"
+}

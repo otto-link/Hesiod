@@ -205,6 +205,7 @@ nav:
     - 'node_reference/nodes/SelectPulse.md'
     - 'node_reference/nodes/SelectRivers.md'
     - 'node_reference/nodes/SelectSlope.md'
+    - 'node_reference/nodes/SelectSoilWeathered.md'
     - 'node_reference/nodes/SelectTransitions.md'
     - 'node_reference/nodes/SelectValley.md'
     - 'node_reference/nodes/SetAlpha.md'

@@ -8,6 +8,8 @@ typedef unsigned int uint;
 
 #include "gnodegui/style.hpp"
 
+#include "qsx/config.hpp"
+
 #include "hesiod/cli/batch_mode.hpp"
 #include "hesiod/config.hpp"
 #include "hesiod/gui/main_window.hpp"
@@ -45,14 +47,18 @@ int main(int argc, char *argv[])
   qputenv("QT_LOGGING_RULES", HESIOD_QPUTENV_QT_LOGGING_RULES);
   QApplication app(argc, argv);
 
-  // style
+  // --- styles
+  
   const std::string style_sheet =
 #include "darkstyle.css"
       ;
   app.setStyleSheet(style_sheet.c_str());
 
   // graph viewer style
-  GN_STYLE->viewer.color_bg = QColor(30, 30, 30, 255);
+  gngui::Style::get_style()->viewer.color_bg = QColor(30, 30, 30, 255);
+
+  // QSliderX style
+  qsx::Config::get_config()->global.color_bg = QColor("#4B4B4B");
 
   // ----------------------------------- batch CLI mode
 

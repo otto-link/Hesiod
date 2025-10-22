@@ -101,6 +101,7 @@ R""(
 	padding: 4px;
 	selection-background-color: #5B5B5B;
 	color: #DFE1E2;
+	background-color: #4B4B4B; 
     }
 
     /* .QFrame */
@@ -172,12 +173,17 @@ R""(
     QPushButton,
     QToolButton
     {
-	background-color: #2B2B2B;
+	background-color: #4B4B4B;
 	color: #DFE1E2;
 	border-radius: 4px;
 	padding: 4px;
 	outline: none;
 	border: 1px solid #5B5B5B;
+    }
+
+    QToolButton
+    {
+	background-color: #2B2B2B;
     }
 
     QPushButton:checked,

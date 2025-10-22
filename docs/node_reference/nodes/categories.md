@@ -22,6 +22,7 @@ Node Categories
 |Geometry|Path|Path, PathBezier, PathBezierRound, PathBspline, PathDecasteljau, PathDig, PathFind, PathFractalize, PathFromCsv, PathMeanderize, PathResample, PathSDF, PathShuffle, PathSmooth, PathToCloud, PathToHeightmap|
 |Hydrology||FloodingFromBoundaries, FloodingFromPoint, FloodingLakeSystem, FloodingUniformLevel, MergeWaterDepths, WaterDepthDryOut, WaterDepthFromMask, WaterMask|
 |IO|Files|ExportAsset, ExportCloud, ExportHeightmap, ExportNormalMap, ExportPath, ExportTexture, ImportHeightmap, ImportTexture|
+|Mask|ForTexturing|SelectSoilWeathered|
 |Mask|Selector|SelectAngle, SelectBlobLog, SelectCavities, SelectGt, SelectInterval, SelectInwardOutward, SelectMidrange, SelectMultiband3, SelectPulse, SelectRivers, SelectSlope, SelectTransitions, SelectValley|
 |Math|Base|Abs, AbsSmooth, Cos, GaussianDecay, Inverse, Lerp, Reverse, Smoothstep|
 |Math|Boundaries|Falloff, SetBorders, ZeroedEdges|
