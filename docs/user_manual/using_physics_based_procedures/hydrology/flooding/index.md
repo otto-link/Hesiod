@@ -15,6 +15,8 @@ when below the terrain).
 
 **Use case:** Simulating global or large-scale flood scenarios, even inland.
 
+![img](flooding_uniform.jpg)
+
 ## FloodingFromBoundaries
 
 Simulates flooding that starts from the terrain boundaries. This function:
@@ -26,6 +28,8 @@ Simulates flooding that starts from the terrain boundaries. This function:
 
 **Use case:** Estimating inundation zones from sea-level rise or open-boundary reservoirs.
 
+![img](flooding_border.jpg)
+
 ## FloodingFromPoint
 
 Floods the terrain from one or more **seed points**, simulating water spreading outward
@@ -34,6 +38,8 @@ level based on local elevation gradients.
 
 **Use case:** Modeling localized flooding events such as rainfall accumulation or
 spring-fed basins.
+
+![img](flooding_point.jpg)
 
 ## FloodingLakeSystem
 
@@ -45,6 +51,8 @@ The algorithm:
 - Produces a continuous **water depth map** for each lake.
 
 **Use case:** Deriving lake systems.
+
+![img](flooding_lakes.jpg)
 
 ## WaterDepthDryOut
 
