@@ -61,7 +61,7 @@ public:
   {
     QColor bg_primary{"#2B2B2B"};
     QColor bg_secondary{"#4B4B4B"};
-    QColor text_primary{"#DFE1E2"};
+    QColor text_primary{"#F4F4F5"};
     QColor text_disabled{"#3C3C3C"};
     QColor accent{"#4772B3"};
     QColor border{"#5B5B5B"};
