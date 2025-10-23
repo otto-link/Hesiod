@@ -1,0 +1,266 @@
+R""(
+/* ============================================================================
+   Qt Dark Theme Stylesheet
+   Uses named color placeholders for easy theme customization.
+   Replace placeholders like COLOR_BG_PRIMARY with actual values at runtime.
+   ============================================================================ */
+
+/* Global Reset */
+* {
+    padding: 0px;
+    margin: 0px;
+    border: 0px;
+    border-style: none;
+    border-image: none;
+    outline: 0;
+    background-color: COLOR_BG_PRIMARY;
+}
+
+/* Disabled elements */
+QPushButton::disabled,
+QProgressBar::disabled,
+QProgressBar::chunk::disabled {
+    color: COLOR_TEXT_DISABLED;
+    background-color: COLOR_TEXT_DISABLED;
+}
+
+/* QMainWindow -------------------------------------------------------------- */
+QRadioButton {
+    color: COLOR_TEXT_PRIMARY;
+}
+
+/* QTabWidget --------------------------------------------------------------- */
+QTabWidget::pane {
+    color: COLOR_TEXT_PRIMARY;
+    border: 1px solid COLOR_BORDER;
+    top: -1px;
+    background: COLOR_BG_PRIMARY;
+}
+
+QTabBar::tab {
+    color: COLOR_TEXT_PRIMARY;
+    background: COLOR_BG_PRIMARY;
+    border: 1px solid COLOR_BORDER;
+    padding: 5px 20px;
+}
+
+QTabBar::tab:selected {
+    background: COLOR_ACCENT;
+    margin-bottom: -1px;
+}
+
+/* QAbstractSpinBox --------------------------------------------------------- */
+QAbstractSpinBox {
+    background-color: COLOR_BG_PRIMARY;
+    border: 1px solid COLOR_BORDER;
+    color: COLOR_TEXT_PRIMARY;
+    padding: 4px;
+    border-radius: 4px;
+}
+
+/* QCheckBox --------------------------------------------------------------- */
+QCheckBox {
+    background-color: COLOR_BG_PRIMARY;
+    color: COLOR_TEXT_PRIMARY;
+    spacing: 4px;
+    padding: 4px;
+}
+
+QCheckBox::indicator {
+    width: 14px;
+    height: 14px;
+    border: 1px solid COLOR_ACCENT;
+}
+
+QCheckBox::indicator:checked {
+    background-color: COLOR_ACCENT;
+}
+
+/* QTableView checkbox indicators */
+QTableView::indicator {
+    width: 14px;
+    height: 14px;
+    border: 1px solid COLOR_TEXT_PRIMARY;
+}
+
+QTableView::indicator:checked {
+    background-color: COLOR_TEXT_PRIMARY;
+}
+
+/* QComboBox --------------------------------------------------------------- */
+QComboBox {
+    border: 1px solid COLOR_BORDER;
+    border-radius: 4px;
+    padding: 4px;
+    color: COLOR_TEXT_PRIMARY;
+    background-color: COLOR_BG_SECONDARY;
+    selection-background-color: COLOR_BORDER;
+}
+
+/* QFrame ------------------------------------------------------------------ */
+.QFrame {
+    background-color: COLOR_BORDER;
+    border: 0px;
+}
+
+/* QLabel ------------------------------------------------------------------ */
+QLabel {
+    background-color: COLOR_BG_PRIMARY;
+    border: 0px;
+    padding: 0px;
+    margin: 0px;
+    color: COLOR_TEXT_PRIMARY;
+}
+
+/* QLineEdit --------------------------------------------------------------- */
+QLineEdit {
+    background-color: COLOR_BG_PRIMARY;
+    padding: 4px;
+    border-style: solid;
+    border: 1px solid COLOR_BORDER;
+    border-radius: 4px;
+    color: COLOR_TEXT_PRIMARY;
+}
+
+/* QMenu ------------------------------------------------------------------- */
+QMenuBar {
+    background-color: COLOR_BG_PRIMARY;
+    padding: 2px;
+    border: 0px solid COLOR_BORDER;
+    color: COLOR_TEXT_PRIMARY;
+    selection-background-color: COLOR_PRESSED;
+}
+
+QMenu {
+    border: 0px solid COLOR_BORDER;
+    color: COLOR_TEXT_PRIMARY;
+    margin: 1px;
+    border-radius: 4px;
+    background-color: COLOR_BG_PRIMARY;
+    selection-background-color: COLOR_PRESSED;
+}
+
+QMenu::separator {
+    height: 1px;
+    background-color: COLOR_SEPARATOR;
+    color: COLOR_SEPARATOR;
+}
+
+/* QPushButton / QToolButton ----------------------------------------------- */
+QPushButton,
+QToolButton {
+    background-color: COLOR_BG_SECONDARY;
+    color: COLOR_TEXT_PRIMARY;
+    border-radius: 4px;
+    padding: 4px;
+    outline: none;
+    border: 1px solid COLOR_BORDER;
+}
+
+QToolButton {
+    background-color: COLOR_BG_PRIMARY;
+}
+
+QPushButton:checked,
+QToolButton:checked {
+    background-color: COLOR_ACCENT;
+}
+
+QPushButton:hover,
+QToolButton:hover {
+    background-color: COLOR_HOVER;
+}
+
+QPushButton:pressed,
+QToolButton:pressed {
+    background-color: COLOR_PRESSED;
+}
+
+/* QTreeView / QListView / QTableView / QColumnView ------------------------ */
+QTreeView,
+QListView,
+QTableView,
+QColumnView {
+    background-color: COLOR_BG_PRIMARY;
+    border: 1px solid COLOR_BORDER;
+    color: COLOR_TEXT_PRIMARY;
+    gridline-color: COLOR_BORDER;
+    border-radius: 4px;
+}
+
+QTreeView::item:!selected:hover,
+QListView::item:!selected:hover,
+QTableView::item:!selected:hover,
+QColumnView::item:!selected:hover {
+    outline: 0;
+    color: COLOR_TEXT_PRIMARY;
+    background-color: COLOR_BORDER;
+}
+
+QTreeView::item:selected:active,
+QListView::item:selected:active,
+QTableView::item:selected:active,
+QColumnView::item:selected:active {
+    background-color: COLOR_PRESSED;
+}
+
+QHeaderView {
+    color: COLOR_TEXT_PRIMARY;
+    background-color: COLOR_BG_PRIMARY;
+}
+
+/* QSlider ----------------------------------------------------------------- */
+QSlider::groove:horizontal {
+    background: COLOR_BORDER;
+    height: 24px;
+    border-radius: 4px;
+}
+
+QSlider::handle:horizontal {
+    background-color: COLOR_PRESSED;
+    width: 24px;
+    height: 24px;
+    border-radius: 8px;
+}
+
+QSlider::groove:vertical {
+    background: COLOR_BORDER;
+    width: 24px;
+    border-radius: 4px;
+}
+
+QSlider::handle:vertical {
+    background-color: COLOR_PRESSED;
+    width: 24px;
+    height: 24px;
+    border-radius: 8px;
+}
+
+/* QTextEdit --------------------------------------------------------------- */
+QTextEdit,
+QPlainTextEdit {
+    background-color: COLOR_BORDER;
+    color: COLOR_TEXT_PRIMARY;
+    border-radius: 4px;
+    border: 1px solid COLOR_BORDER;
+}
+
+/* QToolTip ---------------------------------------------------------------- */
+QToolTip {
+    color: COLOR_TEXT_PRIMARY;
+    background-color: COLOR_BORDER;
+}
+
+/* QProgressBar ------------------------------------------------------------ */
+QProgressBar {
+    border: 1px solid COLOR_BORDER;
+    border-radius: 4px;
+    text-align: center;
+    color: COLOR_TEXT_PRIMARY;
+}
+
+QProgressBar::chunk {
+    background-color: COLOR_ACCENT;
+    width: 20px;
+}
+)"" 
