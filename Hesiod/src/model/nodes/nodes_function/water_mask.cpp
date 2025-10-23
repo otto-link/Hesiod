@@ -52,9 +52,16 @@ void compute_water_mask_node(BaseNode *p_node)
           hmap::Array *pa_z = p_arrays[1];
           hmap::Array *pa_mask = p_arrays[2];
 
-          *pa_mask = hmap::water_mask(*pa_depth,
-                                      *pa_z,
-                                      GET("additional_depth", FloatAttribute));
+          float added_depth = GET("additional_depth", FloatAttribute);
+
+          if (added_depth)
+          {
+            *pa_mask = hmap::water_mask(*pa_depth, *pa_z, added_depth);
+          }
+          else
+          {
+            *pa_mask = hmap::water_mask(*pa_depth);
+          }
         },
         p_node->get_config_ref()->hmap_transform_mode_cpu);
 
