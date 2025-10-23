@@ -3,6 +3,7 @@
  * this software. */
 #include <QGraphicsSceneMouseEvent>
 
+#include "hesiod/config.hpp"
 #include "hesiod/gui/widgets/coord_frame_widget.hpp"
 #include "hesiod/logger.hpp"
 
@@ -120,7 +121,7 @@ void FrameItem::paint(QPainter                       *painter,
   QRect base_rect(0.f, 0.f, COORD_SCALE * this->size.x(), COORD_SCALE * this->size.y());
 
   // colors
-  QColor color_bg(102, 102, 102, 127);
+  QColor color_bg(HSD_CONFIG->colors.bg_primary);
   QColor color_border(0, 0, 0, 255);
   QColor color_hovered(255, 255, 255, 255);
 

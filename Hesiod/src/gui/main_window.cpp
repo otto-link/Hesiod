@@ -778,22 +778,15 @@ void notify(const std::string &title, const std::string &text)
   toast->setTitle(title.c_str());
   toast->setText(text.c_str());
 
-  // TODO hardcoded colors and parameters
-
-  toast->setBackgroundColor(QColor("#3C3C3C"));
-  toast->setTitleColor(QColor("#EFF1F2"));
-  toast->setTextColor(QColor("#DFE1E2"));
-  toast->setDurationBarColor(QColor("#5B5B5B"));
-  toast->setIconSeparatorColor(QColor("#4772b3"));
-  toast->setCloseButtonIconColor(QColor("#DFE1E2"));
+  toast->setBackgroundColor(HSD_CONFIG->colors.bg_secondary);
+  toast->setTitleColor(HSD_CONFIG->colors.text_primary);
+  toast->setTextColor(HSD_CONFIG->colors.text_primary);
+  toast->setDurationBarColor(HSD_CONFIG->colors.border);
+  toast->setIconSeparatorColor(HSD_CONFIG->colors.accent);
+  toast->setCloseButtonIconColor(HSD_CONFIG->colors.text_primary);
   toast->setMinimumWidth(350);
   toast->setMaximumWidth(350);
   toast->setBorderRadius(8);
-
-  toast->setShowIcon(false);
-  // toast->setIconColor(QColor("#5B5B5B"));
-  // toast->setIcon(QPixmap(HSD_APP_ICON));
-  // toast->applyPreset(ToastPreset::ERROR); // Apply style preset
 
   QFont font = MainWindow::instance()->font();
   toast->setTextFont(font);

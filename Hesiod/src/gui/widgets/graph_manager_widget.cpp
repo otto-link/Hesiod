@@ -6,6 +6,7 @@
 #include <QPushButton>
 #include <QSettings>
 
+#include "hesiod/config.hpp"
 #include "hesiod/gui/main_window.hpp"
 #include "hesiod/gui/widgets/coord_frame_widget.hpp"
 #include "hesiod/gui/widgets/export_param_widget.hpp"
@@ -16,6 +17,7 @@
 #include "hesiod/model/export_param.hpp"
 #include "hesiod/model/graph_manager.hpp"
 #include "hesiod/model/graph_node.hpp"
+#include "hesiod/model/utils.hpp"
 
 #define MINIMUM_WIDTH 384
 
@@ -41,8 +43,12 @@ GraphManagerWidget::GraphManagerWidget(GraphManager *p_graph_manager, QWidget *p
 
   // right pan
   this->list_widget = new QListWidget(this);
-  this->list_widget->setStyleSheet(
-      "QListWidget::item { border: 1px solid #5B5B5B; color: transparent; }");
+
+  std::string
+      style_sheet = "QListWidget::item { border: 1px solid COLOR; color: transparent; }";
+  replace_all(style_sheet, "COLOR", HSD_CONFIG->colors.border.name().toStdString());
+  this->list_widget->setStyleSheet(style_sheet.c_str());
+
   this->list_widget->setViewMode(QListView::ListMode);
   this->list_widget->setDragDropMode(QAbstractItemView::InternalMove);
   this->list_widget->setContextMenuPolicy(Qt::CustomContextMenu);
