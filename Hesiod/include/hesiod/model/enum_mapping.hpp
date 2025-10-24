@@ -11,40 +11,10 @@
 #include "highmap/primitives.hpp"
 #include "highmap/range.hpp"
 
+#include "hesiod/model/nodes/base_node.hpp"
+
 namespace hesiod
 {
-
-enum BlendingMethod : int
-{
-  ADD,
-  EXCLUSION_BLEND,
-  GRADIENTS,
-  MAXIMUM,
-  MAXIMUM_SMOOTH,
-  MINIMUM,
-  MINIMUM_SMOOTH,
-  MULTIPLY,
-  MULTIPLY_ADD,
-  NEGATE,
-  OVERLAY,
-  REPLACE,
-  SOFT,
-  SUBSTRACT,
-};
-
-enum ExportFormat : int
-{
-  PNG8BIT,
-  PNG16BIT,
-  RAW16BIT,
-};
-
-enum MaskCombineMethod : int
-{
-  UNION,
-  INTERSECTION,
-  EXCLUSION,
-};
 
 /**
  * @brief Plain text / enumerate mapping for the blending methods.

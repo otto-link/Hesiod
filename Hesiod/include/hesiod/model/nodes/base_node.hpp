@@ -122,4 +122,39 @@ private:
   DataPreview *data_preview = nullptr; // owned by gngui::GraphicsNode
 };
 
+// =====================================
+// Node-related enums
+// =====================================
+enum BlendingMethod : int
+{
+  ADD,
+  EXCLUSION_BLEND,
+  GRADIENTS,
+  MAXIMUM,
+  MAXIMUM_SMOOTH,
+  MINIMUM,
+  MINIMUM_SMOOTH,
+  MULTIPLY,
+  MULTIPLY_ADD,
+  NEGATE,
+  OVERLAY,
+  REPLACE,
+  SOFT,
+  SUBSTRACT,
+};
+
+enum ExportFormat : int
+{
+  PNG8BIT,
+  PNG16BIT,
+  RAW16BIT,
+};
+
+enum MaskCombineMethod : int
+{
+  UNION,
+  INTERSECTION,
+  EXCLUSION,
+};
+
 } // namespace hesiod
