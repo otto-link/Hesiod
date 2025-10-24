@@ -12,6 +12,8 @@
 #include <chrono>
 #include <memory>
 
+#include <QColor>
+
 #include "nlohmann/json.hpp"
 
 #include "highmap/algebra.hpp"
@@ -54,6 +56,19 @@ public:
   {
     hmap::Vec2<int> shape_preview = hmap::Vec2<int>(128, 128);
   } nodes;
+
+  struct Colors
+  {
+    QColor bg_primary{"#2B2B2B"};
+    QColor bg_secondary{"#4B4B4B"};
+    QColor text_primary{"#F4F4F5"};
+    QColor text_disabled{"#3C3C3C"};
+    QColor accent{"#4772B3"};
+    QColor border{"#5B5B5B"};
+    QColor hover{"#8B8B8B"};
+    QColor pressed{"#ABABAB"};
+    QColor separator{"#ABABAB"};
+  } colors;
 
 private:
   Config(const Config &) = delete;

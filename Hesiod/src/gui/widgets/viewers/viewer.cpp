@@ -182,6 +182,12 @@ void Viewer::on_node_selected(const std::string &new_id)
   if (this->is_node_pinned)
     return;
 
+  // do not update selection if the rubber band selection tool is used
+  // to avoid multiple useless viewport updates
+  GraphNodeWidget *p_gnw = this->p_graph_node_widget;
+  if (p_gnw && p_gnw->get_is_selecting_with_rubber_band())
+    return;
+
   this->set_current_node_id(new_id);
 }
 

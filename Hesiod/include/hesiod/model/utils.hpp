@@ -13,6 +13,8 @@
 namespace hesiod
 {
 
+// --- Vectors
+
 template <typename T> bool contains(const std::vector<T> &vec, const T &item)
 {
   return std::find(vec.begin(), vec.end(), item) != vec.end();
@@ -44,25 +46,20 @@ template <typename T> void remove_all_occurrences(std::vector<T> &vec, const T &
   vec.erase(std::remove(vec.begin(), vec.end(), value), vec.end());
 }
 
+// --- Filenames
+
 std::filesystem::path ensure_extension(std::filesystem::path fname,
                                        const std::string    &extension);
 
 std::filesystem::path insert_before_extension(const std::filesystem::path &original_path,
                                               const std::string           &insert_str);
 
+// --- json
+
 nlohmann::json json_from_file(const std::string &fname);
 void           json_to_file(const nlohmann::json &json,
                             const std::string    &fname,
                             bool                  merge_with_existing_content = false);
-
-std::string              insert_char_every_nth(const std::string &input,
-                                               std::size_t        n,
-                                               const std::string &chr);
-std::vector<std::string> split_string(const std::string &string, char delimiter);
-
-std::string time_stamp();
-
-unsigned int to_uint_safe(const std::string &str);
 
 template <typename T>
 inline void json_safe_get(const nlohmann::json &j, const char *key, T &value)
@@ -76,5 +73,16 @@ inline void json_safe_get(const nlohmann::json &j, const char *key, T &value)
     Logger::log()->error("Required json key \"{}\" not found.", key);
   }
 }
+
+// --- Strings
+
+std::string insert_char_every_nth(const std::string &input,
+                                  std::size_t        n,
+                                  const std::string &chr);
+
+void replace_all(std::string &str, const std::string &from, const std::string &to);
+std::vector<std::string> split_string(const std::string &string, char delimiter);
+std::string              time_stamp();
+unsigned int             to_uint_safe(const std::string &str);
 
 } // namespace hesiod

@@ -9,6 +9,7 @@
 #include "highmap/math.hpp"
 #include "highmap/morphology.hpp"
 #include "highmap/primitives.hpp"
+#include "highmap/range.hpp"
 
 namespace hesiod
 {
@@ -199,5 +200,11 @@ static std::map<std::string, int> voronoi_return_type_map = {
     {"Edge distance squared", hmap::VoronoiReturnType::EDGE_DISTANCE_SQUARED},
     {"Cell value", hmap::VoronoiReturnType::CONSTANT},
     {"Cell value * (F2 - F1)", hmap::VoronoiReturnType::CONSTANT_F2MF1_SQUARED}};
+
+static std::map<std::string, int> clamping_mode_map = {
+    {"Keep positive & clamp", hmap::ClampMode::POSITIVE_ONLY},
+    {"Keep negative & clamp", hmap::ClampMode::NEGATIVE_ONLY},
+    {"Clamp both", hmap::ClampMode::BOTH},
+    {"No clamping", hmap::ClampMode::NONE}};
 
 } // namespace hesiod

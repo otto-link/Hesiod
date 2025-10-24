@@ -13,6 +13,7 @@
 #pragma once
 #include <string>
 
+#include <QApplication>
 #include <QColor>
 
 #include "highmap/array.hpp"
@@ -52,5 +53,7 @@ static std::map<std::string, QColor> category_color_map = {
     {"Texture", QColor(0, 0, 0, 255)},
     {"WIP", QColor(255, 255, 255, 255)},
 };
+
+void apply_global_style(QApplication &app);
 
 } // namespace hesiod

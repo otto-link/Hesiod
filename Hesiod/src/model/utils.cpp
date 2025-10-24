@@ -127,6 +127,19 @@ void json_to_file(const nlohmann::json &json,
   }
 }
 
+void replace_all(std::string &str, const std::string &from, const std::string &to)
+{
+  if (from.empty())
+    return; // avoid infinite loop
+
+  size_t start_pos = 0;
+  while ((start_pos = str.find(from, start_pos)) != std::string::npos)
+  {
+    str.replace(start_pos, from.length(), to);
+    start_pos += to.length(); // advance past the replacement
+  }
+}
+
 std::vector<std::string> split_string(const std::string &string, char delimiter)
 {
   std::vector<std::string> result;

@@ -6,11 +6,10 @@ typedef unsigned int uint;
 
 #include "highmap/opencl/gpu_opencl.hpp"
 
-#include "gnodegui/style.hpp"
-
 #include "hesiod/cli/batch_mode.hpp"
 #include "hesiod/config.hpp"
 #include "hesiod/gui/main_window.hpp"
+#include "hesiod/gui/style.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/cmap.hpp"
 #include "hesiod/model/color_gradient.hpp"
@@ -45,14 +44,9 @@ int main(int argc, char *argv[])
   qputenv("QT_LOGGING_RULES", HESIOD_QPUTENV_QT_LOGGING_RULES);
   QApplication app(argc, argv);
 
-  // style
-  const std::string style_sheet =
-#include "darkstyle.css"
-      ;
-  app.setStyleSheet(style_sheet.c_str());
+  // --- styles
 
-  // graph viewer style
-  GN_STYLE->viewer.color_bg = QColor(30, 30, 30, 255);
+  hesiod::apply_global_style(app);
 
   // ----------------------------------- batch CLI mode
 

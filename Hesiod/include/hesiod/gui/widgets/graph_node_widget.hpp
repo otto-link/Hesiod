@@ -31,6 +31,7 @@ public:
                              QPointF               scene_pos = QPointF(0.f, 0.f));
   nlohmann::json json_to() const;
 
+  bool       get_is_selecting_with_rubber_band() const;
   GraphNode *get_p_graph_node();
   void       set_json_copy_buffer(nlohmann::json const &new_json_copy_buffer);
 
@@ -89,6 +90,7 @@ private:
   bool                                  update_node_on_connection_finished = true;
   nlohmann::json                        json_copy_buffer;
   std::string                           last_node_created_id = "";
+  bool                                  is_selecting_with_rubber_band = false;
 };
 
 } // namespace hesiod

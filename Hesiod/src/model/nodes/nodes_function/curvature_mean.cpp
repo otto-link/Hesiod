@@ -25,12 +25,14 @@ void setup_curvature_mean_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(BoolAttribute, "positive", "positive", "negative", true);
+  std::vector<std::string> choices = {"positive", "negative", "both"};
+  ADD_ATTR(ChoiceAttribute, "values_kept", choices);
+
   ADD_ATTR(BoolAttribute, "clamp_max", false);
-  ADD_ATTR(FloatAttribute, "vc_max", 1.f, 0.f, 10.f);
+  ADD_ATTR(FloatAttribute, "vc_max", 1.f, 0.f, FLT_MAX, "{:.4f}");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"positive", "clamp_max", "vc_max"});
+  p_node->set_attr_ordered_key({"values_kept", "clamp_max", "vc_max"});
 
   setup_post_process_heightmap_attributes(p_node);
 }
@@ -56,17 +58,29 @@ void compute_curvature_mean_node(BaseNode *p_node)
           hmap::Array *pa_out = p_arrays[0];
           hmap::Array *pa_in = p_arrays[1];
 
-          *pa_out = hmap::curvature_mean(*pa_in);
-          *pa_out *= nx;
+          // compute mean curvature and scale it
+          *pa_out = hmap::curvature_mean(*pa_in) * nx;
 
-          // positive or negative curvature
-          if (!GET("positive", BoolAttribute))
-            *pa_out *= -1.f;
-          hmap::clamp_min(*pa_out, 0.f);
+          // determine curvature sign handling
+          const std::string choice = GET("values_kept", ChoiceAttribute);
+          const bool        keep_both = (choice == "both");
 
-          // truncate high values if requested
-          if (GET("clamp_max", BoolAttribute))
-            hmap::clamp_max(*pa_out, GET("vc_max", FloatAttribute));
+          // if only one curvature sign is kept
+          if (!keep_both)
+          {
+            if (choice == "negative")
+              *pa_out *= -1.f;
+
+            hmap::clamp_min(*pa_out, 0.f);
+          }
+
+          // clamp output range
+          const float vc_max = GET("vc_max", FloatAttribute);
+
+          if (GET("clamp_max", BoolAttribute) && !keep_both)
+            hmap::clamp_max(*pa_out, vc_max);
+          else
+            hmap::clamp(*pa_out, -vc_max, vc_max);
         },
         p_node->get_config_ref()->hmap_transform_mode_cpu);
 

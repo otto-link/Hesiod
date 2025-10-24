@@ -30,7 +30,6 @@ Operator/Morphology
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|GPU|Bool|Toogle GPU acceleration on or off.|
 |post_gain|Float|Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.|
 |post_inverse|Bool|Inverts the output values after processing, flipping low and high values across the midrange.|
 |post_remap|Value range|Linearly remaps the output values to a specified target range (default is [0, 1]).|

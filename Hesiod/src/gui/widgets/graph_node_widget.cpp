@@ -153,6 +153,11 @@ void GraphNodeWidget::closeEvent(QCloseEvent *event)
   gngui::GraphViewer::closeEvent(event);
 }
 
+bool GraphNodeWidget::get_is_selecting_with_rubber_band() const
+{
+  return this->is_selecting_with_rubber_band;
+}
+
 GraphNode *GraphNodeWidget::get_p_graph_node()
 {
   if (!this->p_graph_node)
@@ -646,6 +651,13 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
 
     CustomQMenu *menu = new CustomQMenu();
 
+    menu->setStyleSheet(R"(
+    QMenu::separator {
+        height: 1px;
+        margin: 6px 0px;
+    }
+  )");
+
     // create the widget holding all the attribute widgets (created
     // here, needed for connect below)
     bool        add_save_reset_state_buttons = false;
@@ -660,21 +672,9 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
     QLayout *retrieved_layout = qobject_cast<QLayout *>(attributes_widget->layout());
     if (retrieved_layout)
     {
-      retrieved_layout->setSpacing(6);
-      retrieved_layout->setContentsMargins(8, 0, 8, 0);
+      retrieved_layout->setSpacing(8);
+      retrieved_layout->setContentsMargins(16, 0, 16, 0);
     }
-
-    // --- add label
-
-    {
-      QLabel *label = new QLabel(p_node->get_caption().c_str());
-      resize_font(label, 2);
-      QWidgetAction *widget_action = new QWidgetAction(menu);
-      widget_action->setDefaultWidget(label);
-      menu->addAction(widget_action);
-    }
-
-    menu->addSeparator();
 
     // --- fake ToolBar (no text)
 
@@ -781,6 +781,20 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
       menu->addAction(widget_action);
     }
 
+    add_qmenu_spacer(dynamic_cast<QMenu *>(menu), 8);
+
+    // --- add label
+
+    {
+      QLabel *label = new QLabel(p_node->get_caption().c_str());
+      resize_font(label, 2);
+      QWidgetAction *widget_action = new QWidgetAction(menu);
+      widget_action->setDefaultWidget(label);
+      menu->addAction(widget_action);
+    }
+
+    menu->addSeparator();
+
     // --- add attributes
 
     // fit attribute settings within a scroll area
@@ -819,6 +833,8 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
                     std::string node_id = p_node->get_id();
                     this->p_graph_node->update(node_id);
                   });
+
+    add_qmenu_spacer(dynamic_cast<QMenu *>(menu), 8);
 
     // --- show menu
 
@@ -991,6 +1007,14 @@ void GraphNodeWidget::setup_connections()
                 &gngui::GraphViewer::graph_settings_request,
                 this,
                 &GraphNodeWidget::on_graph_settings_request);
+
+  this->connect(this,
+                &gngui::GraphViewer::rubber_band_selection_started,
+                [this]() { this->is_selecting_with_rubber_band = true; });
+
+  this->connect(this,
+                &gngui::GraphViewer::rubber_band_selection_finished,
+                [this]() { this->is_selecting_with_rubber_band = false; });
 
   // node actions
   this->connect(this,
