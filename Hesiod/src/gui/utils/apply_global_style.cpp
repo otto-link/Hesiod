@@ -6,7 +6,6 @@
 #include "qsx/config.hpp"
 
 #include "hesiod/app/hesiod_application.hpp"
-#include "hesiod/gui/style.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/utils.hpp"
 

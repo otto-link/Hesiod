@@ -4,23 +4,21 @@
 #include <QApplication>
 
 #include "hesiod/app/app_settings.hpp"
+#include "hesiod/app/style_settings.hpp"
 
 namespace hesiod
 {
 
-class AppContext
+struct AppContext
 {
-public:
   AppContext() = default;
 
-  // --- Data
-  AppSettings app_settings;
-
-private:
   void           json_from(nlohmann::json const &json);
   nlohmann::json json_to() const;
 
-  const std::string ctx_file_path = "hesiod_config.json";
+  // --- Data
+  AppSettings   app_settings;
+  StyleSettings style_settings;
 };
 
 } // namespace hesiod

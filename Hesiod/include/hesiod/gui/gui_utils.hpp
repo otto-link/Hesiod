@@ -3,6 +3,7 @@
 #pragma once
 #include <functional>
 
+#include <QApplication>
 #include <QGridLayout>
 #include <QLayout>
 #include <QWidget>
@@ -11,6 +12,8 @@ namespace hesiod
 {
 
 void add_qmenu_spacer(QMenu *menu, int height = 8);
+
+void apply_global_style(QApplication &app);
 
 /**
  * @brief Clear all items from a given layout.

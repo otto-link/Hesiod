@@ -35,10 +35,7 @@ void HesiodApplication::load_settings()
   std::string    fname = get_config_file_path_auto("hesiod");
   nlohmann::json json = json_from_file(fname);
 
-  if (json.contains("app_settings"))
-    this->get_context().app_settings.json_from(json["app_settings"]);
-  else
-    Logger::log()->error("HesiodApplication::load_settings: no app_settings entry");
+  this->context.json_from(json);
 }
 
 void HesiodApplication::save_settings() const
@@ -46,12 +43,10 @@ void HesiodApplication::save_settings() const
   Logger::log()->trace("HesiodApplication::save_settings");
 
   // put everything into a json and dump it
-  std::string    fname = get_config_file_path_auto("hesiod");
-  bool           merge_with_existing_content = true;
-  nlohmann::json json;
+  nlohmann::json json = this->context.json_to();
 
-  json["app_settings"] = this->get_context().app_settings.json_to();
-
+  std::string fname = get_config_file_path_auto("hesiod");
+  bool        merge_with_existing_content = true;
   json_to_file(json, fname, merge_with_existing_content);
 }
 
