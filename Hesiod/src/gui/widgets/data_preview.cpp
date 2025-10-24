@@ -4,20 +4,20 @@
 #include <stdexcept>
 #include <typeinfo>
 
+#include <QCoreApplication>
 #include <QMenu>
 #include <QPainter>
 
 #include "gnodegui/style.hpp"
 
+#include "hesiod/app/hesiod_application.hpp"
+#include "hesiod/gui/widgets/data_preview.hpp"
+#include "hesiod/logger.hpp"
 #include "highmap/colorize.hpp"
 #include "highmap/geometry/cloud.hpp"
 #include "highmap/geometry/path.hpp"
 #include "highmap/heightmap.hpp"
 #include "highmap/tensor.hpp"
-
-#include "hesiod/config.hpp"
-#include "hesiod/gui/widgets/data_preview.hpp"
-#include "hesiod/logger.hpp"
 
 namespace hesiod
 {
@@ -32,7 +32,9 @@ DataPreview::DataPreview(gngui::NodeProxy *p_proxy_node)
                        this->p_proxy_node->get_caption(),
                        this->p_proxy_node->get_id());
 
-  const auto shape = HSD_CONFIG->nodes.shape_preview;
+  AppContext &ctx = HSD_CONTEXT;
+  const auto  shape = hmap::Vec2<int>(ctx.app_settings.node_editor.preview_h,
+                                     ctx.app_settings.node_editor.preview_w);
 
   this->setFixedSize(QSize(shape.x, shape.y));
   this->setAlignment(Qt::AlignLeft | Qt::AlignTop);
@@ -109,7 +111,10 @@ void DataPreview::update_preview()
 
   void             *blind_ptr = p_proxy_node->get_data_ref(preview_port_index);
   const std::string data_type = p_proxy_node->get_data_type(preview_port_index);
-  const auto        shape = HSD_CONFIG->nodes.shape_preview;
+
+  AppContext &ctx = HSD_CONTEXT;
+  const auto  shape = hmap::Vec2<int>(ctx.app_settings.node_editor.preview_h,
+                                     ctx.app_settings.node_editor.preview_w);
   this->resize(shape.x, shape.y);
 
   Logger::log()->trace("DataPreview::update_preview, data_type: {}", data_type);

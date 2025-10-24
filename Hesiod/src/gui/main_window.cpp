@@ -18,8 +18,8 @@
 
 #include "Toast.h"
 
+#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/cli/batch_mode.hpp"
-#include "hesiod/config.hpp"
 #include "hesiod/gui/gui_utils.hpp"
 #include "hesiod/gui/main_window.hpp"
 #include "hesiod/gui/widgets/bake_and_export_settings_dialog.hpp"
@@ -38,6 +38,8 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
 {
   this->restore_state();
 
+  AppContext &ctx = HSD_CONTEXT;
+
   // model
   this->graph_manager = std::make_unique<GraphManager>();
 
@@ -45,7 +47,7 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
   this->graph_manager_widget = std::make_unique<GraphManagerWidget>(
       this->graph_manager.get());
 
-  if (HSD_CONFIG->window.open_graph_manager_at_startup)
+  if (ctx.app_settings.window.open_graph_manager_at_startup)
     this->graph_manager_widget->show();
 
   this->graph_tabs_widget = std::make_unique<GraphTabsWidget>(this->graph_manager.get());
@@ -116,7 +118,7 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
   // MainWindow -> MainWindow
   this->autosave_timer = new QTimer(this);
   this->autosave_timer->setSingleShot(true); // restarts on project change
-  this->autosave_timer->start(HSD_CONFIG->window.autosave_timer);
+  this->autosave_timer->start(ctx.app_settings.window.autosave_timer);
 
   this->connect(this->autosave_timer, &QTimer::timeout, this, &MainWindow::on_autosave);
 
@@ -463,7 +465,9 @@ bool MainWindow::save_to_file(const std::string &fname, bool save_backup_file) c
     if (save_backup_file)
     {
       // If the file exists, create a backup before overwriting
-      if (std::filesystem::exists(fname_ext) && HSD_CONFIG->window.save_backup_file)
+      AppContext &ctx = HSD_CONTEXT;
+
+      if (std::filesystem::exists(fname_ext) && ctx.app_settings.window.save_backup_file)
       {
         std::filesystem::path original_path(fname_ext);
         std::filesystem::path backup_path = insert_before_extension(original_path,
@@ -778,12 +782,14 @@ void notify(const std::string &title, const std::string &text)
   toast->setTitle(title.c_str());
   toast->setText(text.c_str());
 
-  toast->setBackgroundColor(HSD_CONFIG->colors.bg_secondary);
-  toast->setTitleColor(HSD_CONFIG->colors.text_primary);
-  toast->setTextColor(HSD_CONFIG->colors.text_primary);
-  toast->setDurationBarColor(HSD_CONFIG->colors.border);
-  toast->setIconSeparatorColor(HSD_CONFIG->colors.accent);
-  toast->setCloseButtonIconColor(HSD_CONFIG->colors.text_primary);
+  AppContext &ctx = HSD_CONTEXT;
+
+  toast->setBackgroundColor(ctx.app_settings.colors.bg_secondary);
+  toast->setTitleColor(ctx.app_settings.colors.text_primary);
+  toast->setTextColor(ctx.app_settings.colors.text_primary);
+  toast->setDurationBarColor(ctx.app_settings.colors.border);
+  toast->setIconSeparatorColor(ctx.app_settings.colors.accent);
+  toast->setCloseButtonIconColor(ctx.app_settings.colors.text_primary);
   toast->setMinimumWidth(350);
   toast->setMaximumWidth(350);
   toast->setBorderRadius(8);

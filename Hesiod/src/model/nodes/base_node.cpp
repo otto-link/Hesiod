@@ -11,7 +11,7 @@
 
 #include "attributes/seed_attribute.hpp"
 
-#include "hesiod/config.hpp"
+#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
@@ -47,7 +47,9 @@ BaseNode::BaseNode(const std::string &label, std::shared_ptr<ModelConfig> config
   this->category = get_node_inventory().at(label);
 
   // initialize documentation
-  const std::string doc_path = HSD_NODE_DOCUMENTATION_JSON_PATH;
+  AppContext &ctx = HSD_CONTEXT;
+
+  const std::string doc_path = ctx.app_settings.node_editor.doc_path;
   nlohmann::json    json;
 
   // loading data

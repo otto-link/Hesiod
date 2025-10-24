@@ -6,6 +6,8 @@
 #include <string>
 #include <unordered_set>
 
+#include <QColor>
+
 #include "hesiod/logger.hpp"
 #include "nlohmann/json.hpp"
 #include "nlohmann/json_fwd.hpp"
@@ -62,11 +64,27 @@ void           json_to_file(const nlohmann::json &json,
                             bool                  merge_with_existing_content = false);
 
 template <typename T>
-inline void json_safe_get(const nlohmann::json &j, const char *key, T &value)
+inline void json_safe_get(const nlohmann::json &j, const std::string &key, T &value)
 {
   if (j.contains(key))
   {
     value = j.at(key).get<T>();
+  }
+  else
+  {
+    Logger::log()->error("Required json key \"{}\" not found.", key);
+  }
+}
+
+inline void json_safe_get(const nlohmann::json &j, const std::string &key, QColor &value)
+{
+  if (j.contains(key))
+  {
+    QString str = j.at(key).get<std::string>().c_str();
+    if (QColor::isValidColor(str))
+      value = QColor(str);
+    else
+      Logger::log()->error("Invalid QColor for key \"{}\"", key);
   }
   else
   {

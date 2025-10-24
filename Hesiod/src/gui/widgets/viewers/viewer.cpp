@@ -3,7 +3,7 @@
  * this software. */
 #include <QGridLayout>
 
-#include "hesiod/config.hpp"
+#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/gui/gui_utils.hpp"
 #include "hesiod/gui/widgets/graph_node_widget.hpp"
 #include "hesiod/gui/widgets/viewers/viewer.hpp"
@@ -23,7 +23,9 @@ Viewer::Viewer(GraphNodeWidget   *p_graph_node_widget_,
 {
   Logger::log()->trace("Viewer::Viewer");
 
-  this->setMinimumSize(HSD_CONFIG->viewer.width, HSD_CONFIG->viewer.height);
+  AppContext &ctx = HSD_CONTEXT;
+
+  this->setMinimumSize(ctx.app_settings.viewer.width, ctx.app_settings.viewer.height);
   this->setWindowTitle(this->label.c_str());
 }
 

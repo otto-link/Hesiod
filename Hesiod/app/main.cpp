@@ -2,12 +2,10 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 typedef unsigned int uint;
-#include <QApplication>
-
 #include "highmap/opencl/gpu_opencl.hpp"
 
+#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/cli/batch_mode.hpp"
-#include "hesiod/config.hpp"
 #include "hesiod/gui/main_window.hpp"
 #include "hesiod/gui/style.hpp"
 #include "hesiod/logger.hpp"
@@ -42,11 +40,11 @@ int main(int argc, char *argv[])
 
   // start QApplication even if headless (for QObject)
   qputenv("QT_LOGGING_RULES", HESIOD_QPUTENV_QT_LOGGING_RULES);
-  QApplication app(argc, argv);
+  hesiod::HesiodApplication app(argc, argv);
 
   // --- styles
 
-  hesiod::apply_global_style(app);
+  hesiod::apply_global_style(app.get_qapp());
 
   // ----------------------------------- batch CLI mode
 
@@ -63,7 +61,9 @@ int main(int argc, char *argv[])
   hesiod::MainWindow *main_window = hesiod::MainWindow::instance(&app);
   main_window->show();
 
-  if (HSD_CONFIG->window.open_viewport_at_startup)
+  hesiod::AppContext &ctx = HSD_CONTEXT;
+
+  if (ctx.app_settings.window.open_viewport_at_startup)
     main_window->show_viewport();
 
   return app.exec();

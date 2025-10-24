@@ -6,7 +6,7 @@
 #include <QPushButton>
 #include <QSettings>
 
-#include "hesiod/config.hpp"
+#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/gui/main_window.hpp"
 #include "hesiod/gui/widgets/coord_frame_widget.hpp"
 #include "hesiod/gui/widgets/export_param_widget.hpp"
@@ -44,9 +44,11 @@ GraphManagerWidget::GraphManagerWidget(GraphManager *p_graph_manager, QWidget *p
   // right pan
   this->list_widget = new QListWidget(this);
 
+  AppContext &ctx = HSD_CONTEXT;
+
   std::string
       style_sheet = "QListWidget::item { border: 1px solid COLOR; color: transparent; }";
-  replace_all(style_sheet, "COLOR", HSD_CONFIG->colors.border.name().toStdString());
+  replace_all(style_sheet, "COLOR", ctx.app_settings.colors.border.name().toStdString());
   this->list_widget->setStyleSheet(style_sheet.c_str());
 
   this->list_widget->setViewMode(QListView::ListMode);
