@@ -27,8 +27,6 @@ void compute_path_to_cloud_node(BaseNode *p_node)
 
   Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
-  AppContext &ctx = HSD_CTX;
-
   hmap::Path *p_in = p_node->get_value_ref<hmap::Path>("path");
 
   if (p_in)

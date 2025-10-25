@@ -40,8 +40,6 @@ void compute_path_find_node(BaseNode *p_node)
 
   Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
-  AppContext &ctx = HSD_CTX;
-
   hmap::Path      *p_waypoints = p_node->get_value_ref<hmap::Path>("waypoints");
   hmap::Heightmap *p_hmap = p_node->get_value_ref<hmap::Heightmap>("heightmap");
 
