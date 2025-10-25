@@ -24,17 +24,6 @@ std::string GraphNode::add_node(const std::string &node_type)
 {
   Logger::log()->trace("GraphNode::add_node: node_type = {}", node_type);
 
-  // this->config.reset();
-  // this->config = std::make_shared<hesiod::ModelConfig>();
-
-  if (this->config)
-  {
-    Logger::log()->trace("CONFIG OK");
-    this->config->log_debug();
-  }
-  else
-    Logger::log()->trace("CONFIG NOT OK");
-
   std::shared_ptr<gnode::Node> node = node_factory(node_type, this->config);
   node->compute();
 
