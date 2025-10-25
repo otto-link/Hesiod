@@ -94,8 +94,7 @@ int parse_args(args::ArgumentParser &parser, int argc, char *argv[])
 void run_batch_mode(const std::string     &filename,
                     const hmap::Vec2<int> &shape,
                     const hmap::Vec2<int> &tiling,
-                    float                  overlap,
-                    const GraphConfig     *p_input_model_config)
+                    float                  overlap)
 {
   Logger::log()->info("executing Hesiod in batch mode");
   Logger::log()->trace("file: {}", filename);
@@ -110,12 +109,6 @@ void run_batch_mode(const std::string     &filename,
   hesiod::GraphConfig config;
 
   // override some parameters on request
-  if (p_input_model_config)
-  {
-    config.hmap_transform_mode_cpu = p_input_model_config->hmap_transform_mode_cpu;
-    config.hmap_transform_mode_gpu = p_input_model_config->hmap_transform_mode_gpu;
-  }
-
   if (shape.x || shape.y || tiling.x || tiling.y || overlap >= 0.f)
   {
     config.shape = (shape.x && shape.y) ? shape : hmap::Vec2<int>(1024, 1024);

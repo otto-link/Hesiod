@@ -7,6 +7,7 @@
 
 #include "attributes.hpp"
 
+#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/base_node_gui.hpp"
@@ -45,6 +46,8 @@ void compute_texture_advection_warp_node(BaseNode *p_node)
 
   Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
+  AppContext &ctx = HSD_CTX;
+
   hmap::Heightmap     *p_z = p_node->get_value_ref<hmap::Heightmap>("elevation");
   hmap::HeightmapRGBA *p_tex = p_node->get_value_ref<hmap::HeightmapRGBA>("texture");
 
@@ -57,10 +60,10 @@ void compute_texture_advection_warp_node(BaseNode *p_node)
     std::shared_ptr<hmap::Heightmap> sp_mask = pre_process_mask(p_node, p_mask, *p_z);
 
     // apply advection separetely to each RGBA channels
-    auto lambda = [p_node](hmap::Heightmap *p_z,
-                           hmap::Heightmap *p_field,
-                           hmap::Heightmap *p_mask,
-                           hmap::Heightmap *p_field_out)
+    auto lambda = [ctx, p_node](hmap::Heightmap *p_z,
+                                hmap::Heightmap *p_field,
+                                hmap::Heightmap *p_mask,
+                                hmap::Heightmap *p_field_out)
     {
       hmap::transform(
           {p_field_out, p_z, p_field, p_mask},
@@ -78,7 +81,7 @@ void compute_texture_advection_warp_node(BaseNode *p_node)
                 GET("value_persistence", FloatAttribute),
                 pa_mask);
           },
-          p_node->get_config_ref()->hmap_transform_mode_gpu);
+          ctx.app_settings.node_editor.hmap_transform_mode_gpu);
     };
 
     for (int nch = 0; nch < 4; nch++)

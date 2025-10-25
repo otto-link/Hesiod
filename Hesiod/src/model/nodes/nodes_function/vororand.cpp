@@ -58,6 +58,8 @@ void compute_vororand_node(BaseNode *p_node)
 
   Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
+  AppContext &ctx = HSD_CTX;
+
   // base noise function
   hmap::Heightmap *p_dx = p_node->get_value_ref<hmap::Heightmap>("dx");
   hmap::Heightmap *p_dy = p_node->get_value_ref<hmap::Heightmap>("dy");
@@ -108,7 +110,7 @@ void compute_vororand_node(BaseNode *p_node)
                                         bbox);
         }
       },
-      p_node->get_config_ref()->hmap_transform_mode_gpu);
+      ctx.app_settings.node_editor.hmap_transform_mode_gpu);
 
   // apply square root
   p_out->remap();
@@ -121,7 +123,7 @@ void compute_vororand_node(BaseNode *p_node)
           hmap::Array *pa_out = p_arrays[0];
           *pa_out = hmap::sqrt(*pa_out);
         },
-        p_node->get_config_ref()->hmap_transform_mode_cpu);
+        ctx.app_settings.node_editor.hmap_transform_mode_cpu);
 
   // post-process
   post_apply_enveloppe(p_node, *p_out, p_env);

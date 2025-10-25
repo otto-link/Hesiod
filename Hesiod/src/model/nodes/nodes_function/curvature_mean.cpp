@@ -7,6 +7,7 @@
 
 #include "attributes.hpp"
 
+#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
@@ -42,6 +43,8 @@ void compute_curvature_mean_node(BaseNode *p_node)
   Q_EMIT p_node->compute_started(p_node->get_id());
 
   Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+
+  AppContext &ctx = HSD_CTX;
 
   hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
 
@@ -82,7 +85,7 @@ void compute_curvature_mean_node(BaseNode *p_node)
           else
             hmap::clamp(*pa_out, -vc_max, vc_max);
         },
-        p_node->get_config_ref()->hmap_transform_mode_cpu);
+        ctx.app_settings.node_editor.hmap_transform_mode_cpu);
 
     p_out->smooth_overlap_buffers();
 

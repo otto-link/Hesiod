@@ -7,6 +7,7 @@
 
 #include "attributes.hpp"
 
+#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/base_node_gui.hpp"
@@ -77,6 +78,8 @@ void compute_shattered_peak_node(BaseNode *p_node)
 
   Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
+  AppContext &ctx = HSD_CTX;
+
   // base shattered_peak function
   hmap::Heightmap *p_dx = p_node->get_value_ref<hmap::Heightmap>("dx");
   hmap::Heightmap *p_dy = p_node->get_value_ref<hmap::Heightmap>("dy");
@@ -110,7 +113,7 @@ void compute_shattered_peak_node(BaseNode *p_node)
                                             pa_dy,
                                             bbox);
       },
-      p_node->get_config_ref()->hmap_transform_mode_gpu);
+      ctx.app_settings.node_editor.hmap_transform_mode_gpu);
 
   p_out->remap(0.f, GET("elevation", FloatAttribute));
 

@@ -56,6 +56,8 @@ void compute_noise_fbm_node(BaseNode *p_node)
 
   Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
+  AppContext &ctx = HSD_CTX;
+
   // base noise function
   hmap::Heightmap *p_dx = p_node->get_value_ref<hmap::Heightmap>("dx");
   hmap::Heightmap *p_dy = p_node->get_value_ref<hmap::Heightmap>("dy");
@@ -91,7 +93,7 @@ void compute_noise_fbm_node(BaseNode *p_node)
               nullptr,
               bbox);
         },
-        p_node->get_config_ref()->hmap_transform_mode_gpu);
+        ctx.app_settings.node_editor.hmap_transform_mode_gpu);
   }
   else
   {
@@ -120,7 +122,7 @@ void compute_noise_fbm_node(BaseNode *p_node)
                                     nullptr,
                                     bbox);
         },
-        p_node->get_config_ref()->hmap_transform_mode_cpu);
+        ctx.app_settings.node_editor.hmap_transform_mode_cpu);
   }
 
   // post-process

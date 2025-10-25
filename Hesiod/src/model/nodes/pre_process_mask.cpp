@@ -9,6 +9,7 @@
 
 #include "attributes.hpp"
 
+#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 
 using namespace attr;
@@ -31,6 +32,8 @@ std::shared_ptr<hmap::Heightmap> pre_process_mask(BaseNode         *p_node,
 
   // --- mask definition
 
+  AppContext &ctx = HSD_CTX;
+
   const std::string mask_type = GET("mask_type", ChoiceAttribute);
   const int         ir = (int)(GET("mask_radius", FloatAttribute) * p_mask->shape.x);
 
@@ -52,7 +55,7 @@ std::shared_ptr<hmap::Heightmap> pre_process_mask(BaseNode         *p_node,
           hmap::Array *pa_out = p_arrays[0];
           *pa_out *= (1.f - *pa_out);
         },
-        p_node->get_config_ref()->hmap_transform_mode_cpu);
+        ctx.app_settings.node_editor.hmap_transform_mode_cpu);
   }
   else if (mask_type == "Gradient norm")
   {
@@ -65,7 +68,7 @@ std::shared_ptr<hmap::Heightmap> pre_process_mask(BaseNode         *p_node,
 
           *pa_out = hmap::gradient_norm(*pa_in);
         },
-        p_node->get_config_ref()->hmap_transform_mode_cpu);
+        ctx.app_settings.node_editor.hmap_transform_mode_cpu);
 
     p_mask->remap();
   }
@@ -84,7 +87,7 @@ std::shared_ptr<hmap::Heightmap> pre_process_mask(BaseNode         *p_node,
           hmap::Array *pa_out = p_arrays[0];
           hmap::gpu::smooth_cpulse(*pa_out, ir);
         },
-        p_node->get_config_ref()->hmap_transform_mode_gpu);
+        ctx.app_settings.node_editor.hmap_transform_mode_gpu);
 
     p_mask->smooth_overlap_buffers();
     p_mask->remap();
@@ -103,7 +106,7 @@ std::shared_ptr<hmap::Heightmap> pre_process_mask(BaseNode         *p_node,
           hmap::Array *pa = p_arrays[0];
           hmap::gain(*pa, mask_gain);
         },
-        p_node->get_config_ref()->hmap_transform_mode_cpu);
+        ctx.app_settings.node_editor.hmap_transform_mode_cpu);
   }
 
   if (GET("mask_inverse", BoolAttribute))

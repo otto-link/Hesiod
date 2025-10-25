@@ -7,6 +7,7 @@
 
 #include "attributes.hpp"
 
+#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/base_node_gui.hpp"
@@ -39,6 +40,8 @@ void compute_path_from_csv_node(BaseNode *p_node)
   Q_EMIT p_node->compute_started(p_node->get_id());
 
   Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+
+  AppContext &ctx = HSD_CTX;
 
   hmap::Path *p_out = p_node->get_value_ref<hmap::Path>("path");
 

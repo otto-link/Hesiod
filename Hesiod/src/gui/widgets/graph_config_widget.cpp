@@ -160,38 +160,6 @@ GraphConfigWidget::GraphConfigWidget(GraphConfig *p_model_config,
 
     layout->addWidget(device_combobox, row, 0, 1, 3);
     row++;
-
-    // transform modes
-    auto add_transform_combobox =
-        [this, layout, &row](const std::string &label_text, hmap::TransformMode &mode)
-    {
-      QLabel *label = new QLabel(label_text.c_str(), this);
-      layout->addWidget(label, row, 0);
-
-      QComboBox *combobox = new QComboBox(this);
-      for (auto &[name, id] : hmap::transform_mode_as_string)
-      {
-        combobox->addItem(QString::fromStdString(name));
-        if (id == static_cast<int>(mode))
-          combobox->setCurrentText(QString::fromStdString(name));
-      }
-
-      this->connect(combobox,
-                    QOverload<int>::of(&QComboBox::currentIndexChanged),
-                    [this, combobox, &mode]()
-                    {
-                      std::string current_choice = combobox->currentText().toStdString();
-                      Logger::log()->trace("Selected transform mode: {}", current_choice);
-                      mode = static_cast<hmap::TransformMode>(
-                          hmap::transform_mode_as_string.at(current_choice));
-                    });
-
-      layout->addWidget(combobox, row, 1, 1, 3);
-      row++;
-    };
-
-    add_transform_combobox("CPU", this->p_model_config->hmap_transform_mode_cpu);
-    add_transform_combobox("GPU", this->p_model_config->hmap_transform_mode_gpu);
   }
 
   // --- buttons

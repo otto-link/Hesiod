@@ -1,9 +1,9 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include "hesiod/model/graph_config.hpp"
 #include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/logger.hpp"
-#include "hesiod/model/graph_config.hpp"
 
 namespace hesiod
 {
@@ -19,9 +19,6 @@ GraphConfig::GraphConfig()
   this->tiling = {ctx.app_settings.node_editor.default_tiling,
                   ctx.app_settings.node_editor.default_tiling};
   this->overlap = ctx.app_settings.node_editor.default_overlap;
-
-  this->hmap_transform_mode_cpu = ctx.app_settings.node_editor.hmap_transform_mode_cpu;
-  this->hmap_transform_mode_gpu = ctx.app_settings.node_editor.hmap_transform_mode_gpu;
 }
 
 void GraphConfig::log_debug() const
@@ -38,8 +35,6 @@ void GraphConfig::json_from(nlohmann::json const &json)
   this->tiling.x = json["tiling.x"];
   this->tiling.y = json["tiling.y"];
   this->overlap = json["overlap"];
-  this->hmap_transform_mode_cpu = json["hmap_transform_mode_cpu"];
-  this->hmap_transform_mode_gpu = json["hmap_transform_mode_gpu"];
 }
 
 nlohmann::json GraphConfig::json_to() const
@@ -50,8 +45,6 @@ nlohmann::json GraphConfig::json_to() const
   json["tiling.x"] = this->tiling.x;
   json["tiling.y"] = this->tiling.y;
   json["overlap"] = this->overlap;
-  json["hmap_transform_mode_cpu"] = this->hmap_transform_mode_cpu;
-  json["hmap_transform_mode_gpu"] = this->hmap_transform_mode_gpu;
   return json;
 }
 

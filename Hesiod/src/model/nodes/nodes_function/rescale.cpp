@@ -5,6 +5,7 @@
 
 #include "attributes.hpp"
 
+#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
@@ -36,6 +37,8 @@ void compute_rescale_node(BaseNode *p_node)
 
   Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
+  AppContext &ctx = HSD_CTX;
+
   hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
 
   if (p_in)
@@ -58,7 +61,7 @@ void compute_rescale_node(BaseNode *p_node)
 
           hmap::rescale(*pa_out, GET("scaling", FloatAttribute), vref);
         },
-        p_node->get_config_ref()->hmap_transform_mode_cpu);
+        ctx.app_settings.node_editor.hmap_transform_mode_cpu);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

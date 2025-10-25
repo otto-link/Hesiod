@@ -7,6 +7,7 @@
 
 #include "attributes.hpp"
 
+#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/cmap.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
@@ -41,6 +42,8 @@ void compute_mix_texture_node(BaseNode *p_node)
   Q_EMIT p_node->compute_started(p_node->get_id());
 
   Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+
+  AppContext &ctx = HSD_CTX;
 
   hmap::HeightmapRGBA *p_in1 = p_node->get_value_ref<hmap::HeightmapRGBA>("texture1");
   hmap::HeightmapRGBA *p_in2 = p_node->get_value_ref<hmap::HeightmapRGBA>("texture2");

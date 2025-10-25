@@ -6,6 +6,7 @@
 
 #include "attributes.hpp"
 
+#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
@@ -38,6 +39,8 @@ void compute_relative_elevation_node(BaseNode *p_node)
 
   Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
+  AppContext &ctx = HSD_CTX;
+
   hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
 
   if (p_in)
@@ -56,7 +59,7 @@ void compute_relative_elevation_node(BaseNode *p_node)
           hmap::Array *pa_out = p_arrays[0];
           *pa_out = hmap::gpu::relative_elevation(*pa_out, ir);
         },
-        p_node->get_config_ref()->hmap_transform_mode_gpu);
+        ctx.app_settings.node_editor.hmap_transform_mode_gpu);
 
     // post-process
     p_out->smooth_overlap_buffers();

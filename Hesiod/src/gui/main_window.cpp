@@ -302,7 +302,7 @@ void MainWindow::on_export_batch()
 
     // --- run
 
-    // retrieve config of the first graph (we only need the CPU and GPU compute modes)
+    // retrieve config of the first graph
     auto         graph_nodes = this->graph_manager->get_graph_nodes();
     auto         it = graph_nodes.begin();
     GraphConfig *p_config = it != graph_nodes.end() ? it->second->get_config_ref()
@@ -312,10 +312,18 @@ void MainWindow::on_export_batch()
     {
       GraphConfig bake_config = *p_config;
 
+      AppContext &ctx = HSD_CTX;
+
+      auto gpu_mode_bckp = ctx.app_settings.node_editor.hmap_transform_mode_gpu;
+      auto cpu_mode_bckp = ctx.app_settings.node_editor.hmap_transform_mode_cpu;
+
       if (this->bake_settings.force_distributed)
       {
-        bake_config.hmap_transform_mode_cpu = hmap::TransformMode::DISTRIBUTED;
-        bake_config.hmap_transform_mode_gpu = hmap::TransformMode::DISTRIBUTED;
+        // force it
+        ctx.app_settings.node_editor
+            .hmap_transform_mode_gpu = hmap::TransformMode::DISTRIBUTED;
+        ctx.app_settings.node_editor
+            .hmap_transform_mode_cpu = hmap::TransformMode::DISTRIBUTED;
       }
 
       // run batch node
@@ -323,8 +331,11 @@ void MainWindow::on_export_batch()
           fname.string(),
           hmap::Vec2<int>(this->bake_settings.resolution, this->bake_settings.resolution),
           bake_config.tiling,
-          bake_config.overlap,
-          &bake_config);
+          bake_config.overlap);
+
+      // set transform modes back
+      ctx.app_settings.node_editor.hmap_transform_mode_gpu = gpu_mode_bckp;
+      ctx.app_settings.node_editor.hmap_transform_mode_cpu = cpu_mode_bckp;
     }
   }
 
