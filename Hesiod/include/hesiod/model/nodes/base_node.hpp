@@ -45,7 +45,7 @@ class BaseNode : public QWidget, public gnode::Node, public gngui::NodeProxy
 public:
   // --- Constructors ---
   BaseNode() = default;
-  BaseNode(const std::string &label, std::shared_ptr<ModelConfig> config);
+  BaseNode(const std::string &label, const std::shared_ptr<ModelConfig> &config);
 
   // --- Attribute Management ---
   template <typename T, typename... Args>
