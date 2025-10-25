@@ -22,6 +22,15 @@ void AppSettings::json_from(nlohmann::json const &json)
   json_safe_get(json, "colors.pressed", colors.pressed);
   json_safe_get(json, "colors.separator", colors.separator);
 
+  json_safe_get(json,
+                "node_editor.hmap_transform_mode_cpu",
+                node_editor.hmap_transform_mode_cpu);
+  json_safe_get(json,
+                "node_editor.hmap_transform_mode_gpu",
+                node_editor.hmap_transform_mode_gpu);
+  json_safe_get(json, "node_editor.default_resolution", node_editor.default_resolution);
+  json_safe_get(json, "node_editor.default_tiling", node_editor.default_tiling);
+  json_safe_get(json, "node_editor.default_overlap", node_editor.default_overlap);
   json_safe_get(json, "node_editor.preview_w", node_editor.preview_w);
   json_safe_get(json, "node_editor.preview_h", node_editor.preview_h);
   json_safe_get<std::string>(json, "node_editor.doc_path", node_editor.doc_path);
@@ -68,6 +77,11 @@ nlohmann::json AppSettings::json_to() const
   json["colors.pressed"] = colors.pressed.name().toStdString();
   json["colors.separator"] = colors.separator.name().toStdString();
 
+  json["node_editor.hmap_transform_mode_cpu"] = node_editor.hmap_transform_mode_cpu;
+  json["node_editor.hmap_transform_mode_gpu"] = node_editor.hmap_transform_mode_gpu;
+  json["node_editor.default_resolution"] = node_editor.default_resolution;
+  json["node_editor.default_tiling"] = node_editor.default_tiling;
+  json["node_editor.default_overlap"] = node_editor.default_overlap;
   json["node_editor.preview_w"] = node_editor.preview_w;
   json["node_editor.preview_h"] = node_editor.preview_h;
   json["node_editor.doc_path"] = node_editor.doc_path;

@@ -1,12 +1,28 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-
 #include "hesiod/model/model_config.hpp"
+#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/logger.hpp"
 
 namespace hesiod
 {
+
+ModelConfig::ModelConfig()
+{
+  Logger::log()->trace("ModelConfig::ModelConfig");
+
+  AppContext &ctx = HSD_CTX;
+
+  this->shape = {ctx.app_settings.node_editor.default_resolution,
+                 ctx.app_settings.node_editor.default_resolution};
+  this->tiling = {ctx.app_settings.node_editor.default_tiling,
+                  ctx.app_settings.node_editor.default_tiling};
+  this->overlap = ctx.app_settings.node_editor.default_overlap;
+
+  this->hmap_transform_mode_cpu = ctx.app_settings.node_editor.hmap_transform_mode_cpu;
+  this->hmap_transform_mode_gpu = ctx.app_settings.node_editor.hmap_transform_mode_gpu;
+}
 
 void ModelConfig::log_debug() const
 {
