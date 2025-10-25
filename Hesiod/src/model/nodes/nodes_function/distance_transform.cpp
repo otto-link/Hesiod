@@ -6,8 +6,8 @@
 
 #include "attributes.hpp"
 
+#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/logger.hpp"
-#include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
 
@@ -27,7 +27,7 @@ void setup_distance_transform_node(BaseNode *p_node)
   // attribute(s)
   ADD_ATTR(EnumAttribute,
            "transform_type",
-           distance_transform_type_map,
+           HSD_CTX.enum_mappings.distance_transform_type_map,
            "Approx. (fast)");
   ADD_ATTR(BoolAttribute, "reverse_input", false);
   ADD_ATTR(FloatAttribute, "threshold", 0.5f, -1.f, 2.f);

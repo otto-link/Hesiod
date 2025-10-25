@@ -5,8 +5,8 @@
 
 #include "attributes.hpp"
 
+#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/logger.hpp"
-#include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
 
@@ -25,7 +25,7 @@ void setup_kernel_prim_node(BaseNode *p_node)
                                 p_node->get_config_ref()->shape);
 
   // attribute(s)
-  ADD_ATTR(EnumAttribute, "kernel", kernel_type_map, "cubic_pulse");
+  ADD_ATTR(EnumAttribute, "kernel", HSD_CTX.enum_mappings.kernel_type_map, "cubic_pulse");
   ADD_ATTR(FloatAttribute, "radius", 0.1f, 0.001f, 0.2f);
   ADD_ATTR(BoolAttribute, "normalize", false);
 

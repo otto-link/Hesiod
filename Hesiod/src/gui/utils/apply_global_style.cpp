@@ -20,7 +20,7 @@ void apply_global_style(QApplication &app)
 #include "hesiod/gui/darkstyle.css"
       ;
 
-  AppContext &ctx = HSD_CONTEXT;
+  AppContext &ctx = HSD_CTX;
 
   std::map<std::string, QColor> place_holders = {
       {"COLOR_BG_PRIMARY", ctx.app_settings.colors.bg_primary},

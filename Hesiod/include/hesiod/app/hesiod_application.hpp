@@ -11,7 +11,7 @@
 
 #include "hesiod/app/app_context.hpp"
 
-#define HSD_CONTEXT                                                                      \
+#define HSD_CTX                                                                          \
   static_cast<hesiod::HesiodApplication *>(QCoreApplication::instance())->get_context()
 
 namespace hesiod

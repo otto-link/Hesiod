@@ -7,8 +7,8 @@
 
 #include "attributes.hpp"
 
+#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/logger.hpp"
-#include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
 
@@ -30,7 +30,7 @@ void setup_vorolines_fbm_node(BaseNode *p_node)
   // attribute(s)
   ADD_ATTR(EnumAttribute,
            "return_type",
-           voronoi_return_type_map,
+           HSD_CTX.enum_mappings.voronoi_return_type_map,
            "F1: squared distance to the closest point");
   ADD_ATTR(FloatAttribute, "density", 8.f, 0.f, 100.f);
   ADD_ATTR(SeedAttribute, "seed");

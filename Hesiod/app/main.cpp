@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
   hesiod::MainWindow *main_window = hesiod::MainWindow::instance(&app);
   main_window->show();
 
-  hesiod::AppContext &ctx = HSD_CONTEXT;
+  hesiod::AppContext &ctx = HSD_CTX;
 
   if (ctx.app_settings.window.open_viewport_at_startup)
     main_window->show_viewport();

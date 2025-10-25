@@ -4,6 +4,7 @@
 #include <QApplication>
 
 #include "hesiod/app/app_settings.hpp"
+#include "hesiod/app/enum_mappings.hpp"
 #include "hesiod/app/style_settings.hpp"
 
 namespace hesiod
@@ -19,6 +20,9 @@ struct AppContext
   // --- Data
   AppSettings   app_settings;
   StyleSettings style_settings;
+
+  // immutables
+  const EnumMappings enum_mappings;
 };
 
 } // namespace hesiod

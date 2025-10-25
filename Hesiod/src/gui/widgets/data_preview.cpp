@@ -32,7 +32,7 @@ DataPreview::DataPreview(gngui::NodeProxy *p_proxy_node)
                        this->p_proxy_node->get_caption(),
                        this->p_proxy_node->get_id());
 
-  AppContext &ctx = HSD_CONTEXT;
+  AppContext &ctx = HSD_CTX;
   const auto  shape = hmap::Vec2<int>(ctx.app_settings.node_editor.preview_h,
                                      ctx.app_settings.node_editor.preview_w);
 
@@ -112,7 +112,7 @@ void DataPreview::update_preview()
   void             *blind_ptr = p_proxy_node->get_data_ref(preview_port_index);
   const std::string data_type = p_proxy_node->get_data_type(preview_port_index);
 
-  AppContext &ctx = HSD_CONTEXT;
+  AppContext &ctx = HSD_CTX;
   const auto  shape = hmap::Vec2<int>(ctx.app_settings.node_editor.preview_h,
                                      ctx.app_settings.node_editor.preview_w);
   this->resize(shape.x, shape.y);

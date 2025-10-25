@@ -5,8 +5,8 @@
 
 #include "attributes.hpp"
 
+#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/logger.hpp"
-#include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
 
@@ -29,7 +29,10 @@ void setup_hydraulic_procedural_node(BaseNode *p_node)
   ADD_ATTR(SeedAttribute, "seed");
   ADD_ATTR(FloatAttribute, "ridge_wavelength", 0.1f, 0.01f, 0.2f);
   ADD_ATTR(FloatAttribute, "ridge_scaling", 0.3f, 0.01f, 1.f);
-  ADD_ATTR(EnumAttribute, "erosion_profile", erosion_profile_map, "Triangle smooth");
+  ADD_ATTR(EnumAttribute,
+           "erosion_profile",
+           HSD_CTX.enum_mappings.erosion_profile_map,
+           "Triangle smooth");
   ADD_ATTR(FloatAttribute, "delta", 0.2f, 0.f, 1.f);
   ADD_ATTR(FloatAttribute, "noise_ratio", 0.2f, 0.f, 1.f);
   ADD_ATTR(FloatAttribute, "density_factor", 1.f, 0.1f, 10.f);

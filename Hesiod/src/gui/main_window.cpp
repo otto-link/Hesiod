@@ -38,7 +38,7 @@ MainWindow::MainWindow(QApplication *p_app, QWidget *parent) : QMainWindow(paren
 {
   this->restore_state();
 
-  AppContext &ctx = HSD_CONTEXT;
+  AppContext &ctx = HSD_CTX;
 
   // model
   this->graph_manager = std::make_unique<GraphManager>();
@@ -465,7 +465,7 @@ bool MainWindow::save_to_file(const std::string &fname, bool save_backup_file) c
     if (save_backup_file)
     {
       // If the file exists, create a backup before overwriting
-      AppContext &ctx = HSD_CONTEXT;
+      AppContext &ctx = HSD_CTX;
 
       if (std::filesystem::exists(fname_ext) && ctx.app_settings.window.save_backup_file)
       {
@@ -782,7 +782,7 @@ void notify(const std::string &title, const std::string &text)
   toast->setTitle(title.c_str());
   toast->setText(text.c_str());
 
-  AppContext &ctx = HSD_CONTEXT;
+  AppContext &ctx = HSD_CTX;
 
   toast->setBackgroundColor(ctx.app_settings.colors.bg_secondary);
   toast->setTitleColor(ctx.app_settings.colors.text_primary);

@@ -22,7 +22,7 @@ GraphTabsWidget::GraphTabsWidget(GraphManager *p_graph_manager, QWidget *parent)
 {
   Logger::log()->trace("GraphTabsWidget::GraphTabsWidget");
 
-  AppContext &ctx = HSD_CONTEXT;
+  AppContext &ctx = HSD_CTX;
 
   // styles (GNodeGUI)
   GN_STYLE->viewer.add_new_icon = false;

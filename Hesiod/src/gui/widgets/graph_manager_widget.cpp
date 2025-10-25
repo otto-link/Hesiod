@@ -44,7 +44,7 @@ GraphManagerWidget::GraphManagerWidget(GraphManager *p_graph_manager, QWidget *p
   // right pan
   this->list_widget = new QListWidget(this);
 
-  AppContext &ctx = HSD_CONTEXT;
+  AppContext &ctx = HSD_CTX;
 
   std::string
       style_sheet = "QListWidget::item { border: 1px solid COLOR; color: transparent; }";

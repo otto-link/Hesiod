@@ -5,8 +5,8 @@
 
 #include "attributes.hpp"
 
+#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/logger.hpp"
-#include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
 
@@ -25,7 +25,10 @@ void setup_combine_mask_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(EnumAttribute, "method", mask_combine_method_map, "intersection");
+  ADD_ATTR(EnumAttribute,
+           "method",
+           HSD_CTX.enum_mappings.mask_combine_method_map,
+           "intersection");
 }
 
 void compute_combine_mask_node(BaseNode *p_node)

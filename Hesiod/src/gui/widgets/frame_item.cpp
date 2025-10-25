@@ -121,7 +121,7 @@ void FrameItem::paint(QPainter                       *painter,
   QRect base_rect(0.f, 0.f, COORD_SCALE * this->size.x(), COORD_SCALE * this->size.y());
 
   // colors
-  AppContext &ctx = HSD_CONTEXT;
+  AppContext &ctx = HSD_CTX;
 
   QColor color_bg(ctx.app_settings.colors.bg_primary);
   QColor color_border(0, 0, 0, 255);

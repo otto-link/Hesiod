@@ -23,7 +23,7 @@ Viewer::Viewer(GraphNodeWidget   *p_graph_node_widget_,
 {
   Logger::log()->trace("Viewer::Viewer");
 
-  AppContext &ctx = HSD_CONTEXT;
+  AppContext &ctx = HSD_CTX;
 
   this->setMinimumSize(ctx.app_settings.viewer.width, ctx.app_settings.viewer.height);
   this->setWindowTitle(this->label.c_str());
