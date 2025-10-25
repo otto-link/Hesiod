@@ -17,6 +17,7 @@
 #include "attributes/widgets/attributes_widget.hpp"
 #include "attributes/widgets/filename_widget.hpp"
 
+#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/gui/gui_utils.hpp"
 #include "hesiod/gui/widgets/custom_qmenu.hpp"
 #include "hesiod/gui/widgets/documentation_popup.hpp"
@@ -45,8 +46,12 @@ GraphNodeWidget::GraphNodeWidget(GraphNode *p_graph_node, QWidget *parent)
 void GraphNodeWidget::add_import_texture_nodes(
     const std::vector<std::string> &texture_paths)
 {
-  QRectF  bbox = this->get_bounding_box();
-  QPointF delta = QPointF(128.f, 256.f);
+  QRectF bbox = this->get_bounding_box();
+
+  AppContext &ctx = HSD_CTX;
+  QPointF     delta = QPointF(
+      ctx.app_settings.node_editor.position_delta_when_duplicating_node,
+      ctx.app_settings.node_editor.position_delta_when_duplicating_node);
 
   float dy = 0.f;
   for (auto &fname : texture_paths)
@@ -91,9 +96,11 @@ void GraphNodeWidget::automatic_node_layout()
 
   std::vector<gnode::Point> points = this->p_graph_node->compute_graph_layout_sugiyama();
 
-  QPointF delta = QPointF(256.f, 384.f);
-  QRectF  bbox = this->get_bounding_box();
-  QPointF origin = bbox.topLeft(); // QPointF(bbox.left(), bbox.center().y());
+  AppContext &ctx = HSD_CTX;
+  QPointF     delta = QPointF(ctx.app_settings.node_editor.auto_layout_dx,
+                          ctx.app_settings.node_editor.auto_layout_dy);
+  QRectF      bbox = this->get_bounding_box();
+  QPointF     origin = bbox.topLeft();
 
   size_t k = 0;
 
@@ -911,8 +918,13 @@ void GraphNodeWidget::on_nodes_duplicate_request(
 
   std::vector<QPointF> scene_pos_shifted = {};
 
+  AppContext &ctx = HSD_CTX;
+  QPointF     delta = QPointF(
+      ctx.app_settings.node_editor.position_delta_when_duplicating_node,
+      ctx.app_settings.node_editor.position_delta_when_duplicating_node);
+
   for (auto &p : scene_pos_list)
-    scene_pos_shifted.push_back(p + QPointF(200.f, 200.f));
+    scene_pos_shifted.push_back(p + delta);
 
   this->on_nodes_copy_request(id_list, scene_pos_shifted);
   this->on_nodes_paste_request();
@@ -925,8 +937,7 @@ void GraphNodeWidget::on_nodes_paste_request()
   if (!this->json_copy_buffer.is_object())
     return;
 
-  QPoint  mouse_view_pos = this->mapFromGlobal(QCursor::pos());
-  QPointF mouse_scene_pos = this->mapToScene(mouse_view_pos);
+  QPointF mouse_scene_pos = this->get_mouse_scene_pos();
 
   // returned json contains modified node IDs
   nlohmann::json json_mod = this->json_import(this->json_copy_buffer, mouse_scene_pos);

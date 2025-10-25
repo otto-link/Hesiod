@@ -25,6 +25,11 @@ void AppSettings::json_from(nlohmann::json const &json)
   json_safe_get(json, "node_editor.preview_w", node_editor.preview_w);
   json_safe_get(json, "node_editor.preview_h", node_editor.preview_h);
   json_safe_get<std::string>(json, "node_editor.doc_path", node_editor.doc_path);
+  json_safe_get(json,
+                "node_editor.position_delta_when_duplicating_node",
+                node_editor.position_delta_when_duplicating_node);
+  json_safe_get(json, "node_editor.auto_layout_dx", node_editor.auto_layout_dx);
+  json_safe_get(json, "node_editor.auto_layout_dy", node_editor.auto_layout_dy);
 
   json_safe_get(json, "viewer.width", viewer.width);
   json_safe_get(json, "viewer.height", viewer.height);
@@ -66,6 +71,10 @@ nlohmann::json AppSettings::json_to() const
   json["node_editor.preview_w"] = node_editor.preview_w;
   json["node_editor.preview_h"] = node_editor.preview_h;
   json["node_editor.doc_path"] = node_editor.doc_path;
+  json["node_editor.position_delta_when_duplicating_node"] =
+      node_editor.position_delta_when_duplicating_node;
+  json["node_editor.auto_layout_dx"] = node_editor.auto_layout_dx;
+  json["node_editor.auto_layout_dy"] = node_editor.auto_layout_dy;
 
   json["viewer.width"] = viewer.width;
   json["viewer.height"] = viewer.height;
