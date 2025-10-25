@@ -14,7 +14,7 @@ static std::istream &operator>>(std::istream &is, hmap::Vec2<int> &vec2)
 }
 #include <args.hxx>
 
-#include "hesiod/model/model_config.hpp"
+#include "hesiod/model/graph_config.hpp"
 
 namespace hesiod::cli
 {
@@ -25,7 +25,7 @@ void run_batch_mode(const std::string     &filename,
                     const hmap::Vec2<int> &shape,
                     const hmap::Vec2<int> &tiling,
                     float                  overlap,
-                    const ModelConfig     *p_input_model_config = nullptr);
+                    const GraphConfig     *p_input_model_config = nullptr);
 void run_node_inventory();
 void run_snapshot_generation();
 

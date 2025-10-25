@@ -38,7 +38,7 @@ std::string map_type_name(const std::string &typeid_name)
 
 // --- class definition
 
-BaseNode::BaseNode(const std::string &label, const std::shared_ptr<ModelConfig> &config)
+BaseNode::BaseNode(const std::string &label, const std::shared_ptr<GraphConfig> &config)
     : gnode::Node(label), config(config)
 {
   Logger::log()->trace("BaseNode::BaseNode, label: {}", label);

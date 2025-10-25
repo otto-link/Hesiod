@@ -8,13 +8,13 @@
 #include "highmap/opencl/gpu_opencl.hpp"
 
 #include "hesiod/gui/gui_utils.hpp"
-#include "hesiod/gui/widgets/model_config_widget.hpp"
+#include "hesiod/gui/widgets/graph_config_widget.hpp"
 #include "hesiod/logger.hpp"
 
 namespace hesiod
 {
 
-ModelConfigWidget::ModelConfigWidget(ModelConfig *p_model_config,
+GraphConfigWidget::GraphConfigWidget(GraphConfig *p_model_config,
                                      bool         show_opencl_config,
                                      QWidget     *parent)
     : QDialog(parent), p_model_config(p_model_config)

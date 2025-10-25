@@ -10,9 +10,11 @@
 namespace hesiod
 {
 
-struct ModelConfig
+struct GraphConfig
 {
-  ModelConfig();
+  // holds the data configuration shared by the graph and its nodes, here is to share for
+  // instance the heightmap resolution
+  GraphConfig();
 
   void           json_from(nlohmann::json const &json);
   nlohmann::json json_to() const;

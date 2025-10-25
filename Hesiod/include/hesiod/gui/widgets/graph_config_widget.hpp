@@ -17,26 +17,26 @@
 #include <QSlider>
 #include <QWidget>
 
-#include "hesiod/model/model_config.hpp"
+#include "hesiod/model/graph_config.hpp"
 
 namespace hesiod
 {
 
 // =====================================
-// ModelConfigWidget
+// GraphConfigWidget
 // =====================================
-class ModelConfigWidget : public QDialog
+class GraphConfigWidget : public QDialog
 {
   Q_OBJECT
 
 public:
-  ModelConfigWidget() = default;
-  ModelConfigWidget(ModelConfig *p_model_config,
+  GraphConfigWidget() = default;
+  GraphConfigWidget(GraphConfig *p_model_config,
                     bool         show_opencl_config = true,
                     QWidget     *parent = nullptr);
 
 private:
-  ModelConfig *p_model_config;
+  GraphConfig *p_model_config;
 
   QSlider *slider_shape;
   QLabel  *label_shape;

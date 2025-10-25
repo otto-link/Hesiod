@@ -22,7 +22,7 @@
 #include "hesiod/gui/widgets/custom_qmenu.hpp"
 #include "hesiod/gui/widgets/documentation_popup.hpp"
 #include "hesiod/gui/widgets/graph_node_widget.hpp"
-#include "hesiod/gui/widgets/model_config_widget.hpp"
+#include "hesiod/gui/widgets/graph_config_widget.hpp"
 #include "hesiod/gui/widgets/select_string_dialog.hpp"
 #include "hesiod/gui/widgets/viewers/viewer_3d.hpp"
 #include "hesiod/logger.hpp"
@@ -498,8 +498,8 @@ void GraphNodeWidget::on_graph_settings_request()
 
   // work on a copy of the model configuration before
   // apllying modifications
-  ModelConfig       new_model_config = *this->p_graph_node->get_config_ref();
-  ModelConfigWidget model_config_editor(&new_model_config);
+  GraphConfig       new_model_config = *this->p_graph_node->get_config_ref();
+  GraphConfigWidget model_config_editor(&new_model_config);
 
   int ret = model_config_editor.exec();
 

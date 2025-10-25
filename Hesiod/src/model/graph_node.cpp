@@ -14,7 +14,7 @@
 namespace hesiod
 {
 
-GraphNode::GraphNode(const std::string &id, const std::shared_ptr<ModelConfig> &config)
+GraphNode::GraphNode(const std::string &id, const std::shared_ptr<GraphConfig> &config)
     : gnode::Graph(id), hmap::CoordFrame(), config(config)
 {
   Logger::log()->trace("GraphNode::GraphNode");
@@ -67,16 +67,16 @@ std::string GraphNode::add_node(const std::shared_ptr<gnode::Node> &node,
   return node_id;
 }
 
-void GraphNode::json_from(nlohmann::json const &json, ModelConfig *p_input_config)
+void GraphNode::json_from(nlohmann::json const &json, GraphConfig *p_input_config)
 {
   Logger::log()->trace("GraphNode::json_from, graph {}", this->get_id());
 
   // override the current config if one is provided
   if (p_input_config)
   {
-    this->config = std::make_shared<ModelConfig>(*p_input_config);
+    this->config = std::make_shared<GraphConfig>(*p_input_config);
 
-    Logger::log()->trace("GraphNode::json_from: ModelConfig override");
+    Logger::log()->trace("GraphNode::json_from: GraphConfig override");
     this->config->log_debug();
   }
   else

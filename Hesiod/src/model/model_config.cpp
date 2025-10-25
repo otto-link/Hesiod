@@ -1,16 +1,16 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-#include "hesiod/model/model_config.hpp"
 #include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/logger.hpp"
+#include "hesiod/model/graph_config.hpp"
 
 namespace hesiod
 {
 
-ModelConfig::ModelConfig()
+GraphConfig::GraphConfig()
 {
-  Logger::log()->trace("ModelConfig::ModelConfig");
+  Logger::log()->trace("GraphConfig::GraphConfig");
 
   AppContext &ctx = HSD_CTX;
 
@@ -24,14 +24,14 @@ ModelConfig::ModelConfig()
   this->hmap_transform_mode_gpu = ctx.app_settings.node_editor.hmap_transform_mode_gpu;
 }
 
-void ModelConfig::log_debug() const
+void GraphConfig::log_debug() const
 {
   Logger::log()->trace("shape: {{{}, {}}}", shape.x, shape.y);
   Logger::log()->trace("tiling: {{{}, {}}}", tiling.x, tiling.y);
   Logger::log()->trace("overlap: {}", overlap);
 }
 
-void ModelConfig::json_from(nlohmann::json const &json)
+void GraphConfig::json_from(nlohmann::json const &json)
 {
   this->shape.x = json["shape.x"];
   this->shape.y = json["shape.y"];
@@ -42,7 +42,7 @@ void ModelConfig::json_from(nlohmann::json const &json)
   this->hmap_transform_mode_gpu = json["hmap_transform_mode_gpu"];
 }
 
-nlohmann::json ModelConfig::json_to() const
+nlohmann::json GraphConfig::json_to() const
 {
   nlohmann::json json;
   json["shape.x"] = this->shape.x;

@@ -10,7 +10,7 @@ namespace hesiod
 {
 
 BroadcastNode::BroadcastNode(const std::string           &label,
-                             std::shared_ptr<ModelConfig> config)
+                             std::shared_ptr<GraphConfig> config)
     : BaseNode(label, config)
 {
 }

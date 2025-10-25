@@ -16,7 +16,7 @@
 
 #include "gnode/node.hpp"
 
-#include "hesiod/model/model_config.hpp"
+#include "hesiod/model/graph_config.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 
 #define DECLARE_NODE(node_type)                                                          \
@@ -29,7 +29,7 @@ namespace hesiod
 void dump_node_inventory(const std::string &fname);
 
 void dump_node_documentation_stub(const std::string           &fname,
-                                  std::shared_ptr<ModelConfig> config);
+                                  std::shared_ptr<GraphConfig> config);
 
 void dump_node_settings_screenshots();
 
@@ -55,7 +55,7 @@ std::map<std::string, std::string> get_node_inventory();
  *
  * @param  node_type A string representing the type of node to create. This string is
  *                   hashed and compared against known node types.
- * @param  config    A shared pointer to a `ModelConfig` object, which provides
+ * @param  config    A shared pointer to a `GraphConfig` object, which provides
  *                   configuration parameters for the node being created.
  *
  * @return           A `std::shared_ptr<gnode::Node>` pointing to the newly created node.
@@ -68,7 +68,7 @@ std::map<std::string, std::string> get_node_inventory();
  * @endcode
  */
 std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type,
-                                          std::shared_ptr<ModelConfig> config);
+                                          std::shared_ptr<GraphConfig> config);
 
 // nodes functions
 

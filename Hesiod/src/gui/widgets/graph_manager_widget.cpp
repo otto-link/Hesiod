@@ -11,7 +11,7 @@
 #include "hesiod/gui/widgets/coord_frame_widget.hpp"
 #include "hesiod/gui/widgets/export_param_widget.hpp"
 #include "hesiod/gui/widgets/graph_manager_widget.hpp"
-#include "hesiod/gui/widgets/model_config_widget.hpp"
+#include "hesiod/gui/widgets/graph_config_widget.hpp"
 #include "hesiod/gui/widgets/string_input_dialog.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/export_param.hpp"
@@ -351,8 +351,8 @@ void GraphManagerWidget::on_new_graph_request()
   }
 
   // get config from user
-  auto              config = std::make_shared<hesiod::ModelConfig>();
-  ModelConfigWidget config_editor(config.get());
+  auto              config = std::make_shared<hesiod::GraphConfig>();
+  GraphConfigWidget config_editor(config.get());
 
   {
     int ret = config_editor.exec();

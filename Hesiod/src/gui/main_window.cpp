@@ -305,12 +305,12 @@ void MainWindow::on_export_batch()
     // retrieve config of the first graph (we only need the CPU and GPU compute modes)
     auto         graph_nodes = this->graph_manager->get_graph_nodes();
     auto         it = graph_nodes.begin();
-    ModelConfig *p_config = it != graph_nodes.end() ? it->second->get_config_ref()
+    GraphConfig *p_config = it != graph_nodes.end() ? it->second->get_config_ref()
                                                     : nullptr;
 
     if (p_config)
     {
-      ModelConfig bake_config = *p_config;
+      GraphConfig bake_config = *p_config;
 
       if (this->bake_settings.force_distributed)
       {

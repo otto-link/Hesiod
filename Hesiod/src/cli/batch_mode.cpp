@@ -95,7 +95,7 @@ void run_batch_mode(const std::string     &filename,
                     const hmap::Vec2<int> &shape,
                     const hmap::Vec2<int> &tiling,
                     float                  overlap,
-                    const ModelConfig     *p_input_model_config)
+                    const GraphConfig     *p_input_model_config)
 {
   Logger::log()->info("executing Hesiod in batch mode");
   Logger::log()->trace("file: {}", filename);
@@ -107,7 +107,7 @@ void run_batch_mode(const std::string     &filename,
   // nothing is provided, use the configs from the input file but if
   // an input config is provided, this config is used for all the
   // graph nodes.
-  hesiod::ModelConfig config;
+  hesiod::GraphConfig config;
 
   // override some parameters on request
   if (p_input_model_config)
@@ -143,7 +143,7 @@ void run_node_inventory()
   Logger::log()->info("executing Hesiod in node inventory mode");
   hesiod::dump_node_inventory("node_inventory");
 
-  auto config = std::make_shared<hesiod::ModelConfig>();
+  auto config = std::make_shared<hesiod::GraphConfig>();
   hesiod::dump_node_documentation_stub("node_documentation_stub.json", config);
 
   hesiod::dump_node_settings_screenshots();

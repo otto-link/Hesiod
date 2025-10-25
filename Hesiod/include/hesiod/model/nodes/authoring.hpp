@@ -21,7 +21,7 @@ namespace hesiod
 
 struct Brush : public BaseNode
 {
-  Brush(std::shared_ptr<ModelConfig> config);
+  Brush(std::shared_ptr<GraphConfig> config);
 
   void compute() override;
 };
