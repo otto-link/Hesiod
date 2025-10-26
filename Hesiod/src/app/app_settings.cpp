@@ -1,6 +1,8 @@
 /* Copyright (c) 2025 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include "highmap/opencl/gpu_opencl.hpp"
+
 #include "hesiod/app/app_settings.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/utils.hpp"
@@ -21,6 +23,30 @@ void AppSettings::json_from(nlohmann::json const &json)
   json_safe_get(json, "colors.hover", colors.hover);
   json_safe_get(json, "colors.pressed", colors.pressed);
   json_safe_get(json, "colors.separator", colors.separator);
+
+  // OpenCL device
+  {
+    json_safe_get(json, "node_editor.gpu_device_name", node_editor.gpu_device_name);
+
+    // if it's empty, let the one choosed by default by the OpenCL
+    // wrapper
+    if (!node_editor.gpu_device_name.empty())
+    {
+      auto cl_device_map = clwrapper::DeviceManager::get_instance()
+                               .get_available_devices();
+
+      for (auto &[device_id, device_name] : cl_device_map)
+      {
+        if (device_name == node_editor.gpu_device_name)
+        {
+          if (clwrapper::DeviceManager::get_instance().set_device(device_id))
+            clwrapper::KernelManager::get_instance().build_program();
+          else
+            Logger::log()->error("OpenCL device selection failed");
+        }
+      }
+    }
+  }
 
   json_safe_get(json,
                 "node_editor.hmap_transform_mode_cpu",
@@ -77,6 +103,7 @@ nlohmann::json AppSettings::json_to() const
   json["colors.pressed"] = colors.pressed.name().toStdString();
   json["colors.separator"] = colors.separator.name().toStdString();
 
+  json["node_editor.gpu_device_name"] = node_editor.gpu_device_name;
   json["node_editor.hmap_transform_mode_cpu"] = node_editor.hmap_transform_mode_cpu;
   json["node_editor.hmap_transform_mode_gpu"] = node_editor.hmap_transform_mode_gpu;
   json["node_editor.default_resolution"] = node_editor.default_resolution;

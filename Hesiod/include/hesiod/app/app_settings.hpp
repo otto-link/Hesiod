@@ -34,6 +34,7 @@ struct AppSettings
 
   struct NodeEditor
   {
+    std::string         gpu_device_name = ""; // let CLWrapper decides
     hmap::TransformMode hmap_transform_mode_cpu = hmap::TransformMode::DISTRIBUTED;
     hmap::TransformMode hmap_transform_mode_gpu = hmap::TransformMode::SINGLE_ARRAY;
     int                 default_resolution = 1024;

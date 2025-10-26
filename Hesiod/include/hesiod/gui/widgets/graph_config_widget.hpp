@@ -32,7 +32,6 @@ class GraphConfigWidget : public QDialog
 public:
   GraphConfigWidget() = default;
   GraphConfigWidget(GraphConfig *p_model_config,
-                    bool         show_opencl_config = true,
                     QWidget     *parent = nullptr);
 
 private:

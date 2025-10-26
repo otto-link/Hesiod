@@ -18,8 +18,12 @@ struct AppContext
   nlohmann::json json_to() const;
 
   // --- Data
+
+  // global settings
   AppSettings   app_settings;
   StyleSettings style_settings;
+
+  // project-dependent settings
 
   // immutables
   const EnumMappings enum_mappings;
