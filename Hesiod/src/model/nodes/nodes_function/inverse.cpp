@@ -39,10 +39,16 @@ void compute_inverse_node(BaseNode *p_node)
   {
     hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
-    // copy the input heightmap
-    *p_out = *p_in;
+    hmap::transform(
+        {p_out, p_in},
+        [](std::vector<hmap::Array *> p_arrays)
+        {
+          hmap::Array *pa_out = p_arrays[0];
+          hmap::Array *pa_in = p_arrays[1];
 
-    hmap::transform(*p_out, [](hmap::Array &x) { x *= -1.f; });
+          *pa_out = -*pa_in;
+        },
+        ctx.app_settings.node_editor.hmap_transform_mode_cpu);
 
     // post-process
     post_process_heightmap(p_node, *p_out);
