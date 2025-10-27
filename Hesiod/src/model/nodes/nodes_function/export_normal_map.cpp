@@ -6,7 +6,6 @@
 
 #include "attributes.hpp"
 
-#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/base_node_gui.hpp"

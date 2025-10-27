@@ -6,11 +6,11 @@ typedef unsigned int uint;
 
 #include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/cli/batch_mode.hpp"
-#include "hesiod/gui/gui_utils.hpp"
-#include "hesiod/gui/main_window.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/cmap.hpp"
 #include "hesiod/model/color_gradient.hpp"
+
+#include "hesiod/gui/project_ui.hpp"
 
 #if defined(DEBUG_BUILD)
 #define HSD_RMODE "Debug"
@@ -42,10 +42,6 @@ int main(int argc, char *argv[])
   qputenv("QT_LOGGING_RULES", HESIOD_QPUTENV_QT_LOGGING_RULES);
   hesiod::HesiodApplication app(argc, argv);
 
-  // --- styles
-
-  hesiod::apply_global_style(app.get_qapp());
-
   // ----------------------------------- batch CLI mode
 
   args::ArgumentParser parser("Hesiod.");
@@ -54,17 +50,7 @@ int main(int argc, char *argv[])
   if (ret >= 0)
     return ret;
 
-  // ----------------------------------- Main GUI
-
-  app.setWindowIcon(QIcon(HSD_APP_ICON));
-
-  hesiod::MainWindow *main_window = hesiod::MainWindow::instance(&app);
-  main_window->show();
-
-  hesiod::AppContext &ctx = HSD_CTX;
-
-  if (ctx.app_settings.window.open_viewport_at_startup)
-    main_window->show_viewport();
+  app.show();
 
   return app.exec();
 }

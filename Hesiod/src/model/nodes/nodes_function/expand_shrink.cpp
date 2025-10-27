@@ -7,7 +7,7 @@
 
 #include "attributes.hpp"
 
-#include "hesiod/app/hesiod_application.hpp"
+#include "hesiod/app/enum_mappings.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
@@ -28,7 +28,7 @@ void setup_expand_shrink_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(EnumAttribute, "kernel", HSD_CTX.enum_mappings.kernel_type_map, "cubic_pulse");
+  ADD_ATTR(EnumAttribute, "kernel", enum_mappings.kernel_type_map, "cubic_pulse");
   ADD_ATTR(FloatAttribute, "radius", 0.05f, 0.01f, 0.2f);
   ADD_ATTR(BoolAttribute, "shrink", "shrink", "expand", false);
   ADD_ATTR(IntAttribute, "iterations", 1, 1, 10);
@@ -46,7 +46,7 @@ void compute_expand_shrink_node(BaseNode *p_node)
 
   Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
-  AppContext &ctx = HSD_CTX;
+  // AppContext &ctx = HSD_CTX;
 
   hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
 
@@ -95,7 +95,7 @@ void compute_expand_shrink_node(BaseNode *p_node)
                               pa_mask,
                               GET("iterations", IntAttribute));
           },
-          ctx.app_settings.node_editor.hmap_transform_mode_gpu);
+          HSD_GPU_MODE);
     }
     else
     {
@@ -110,7 +110,7 @@ void compute_expand_shrink_node(BaseNode *p_node)
                               pa_mask,
                               GET("iterations", IntAttribute));
           },
-          ctx.app_settings.node_editor.hmap_transform_mode_gpu);
+          HSD_GPU_MODE);
     }
 
     p_out->smooth_overlap_buffers();

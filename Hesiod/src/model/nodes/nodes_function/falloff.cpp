@@ -5,7 +5,7 @@
 
 #include "attributes.hpp"
 
-#include "hesiod/app/hesiod_application.hpp"
+#include "hesiod/app/enum_mappings.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
@@ -28,7 +28,7 @@ void setup_falloff_node(BaseNode *p_node)
   ADD_ATTR(FloatAttribute, "strength", 1.f, 0.f, 4.f);
   ADD_ATTR(EnumAttribute,
            "distance_function",
-           HSD_CTX.enum_mappings.distance_function_map,
+           enum_mappings.distance_function_map,
            "Euclidian");
   ADD_ATTR(RangeAttribute, "remap");
 

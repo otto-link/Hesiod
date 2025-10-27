@@ -7,7 +7,6 @@
 
 #include "attributes.hpp"
 
-#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
@@ -40,7 +39,7 @@ void compute_select_slope_node(BaseNode *p_node)
 
   Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
-  AppContext &ctx = HSD_CTX;
+  // AppContext &ctx = HSD_CTX;
 
   hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
 
@@ -61,7 +60,7 @@ void compute_select_slope_node(BaseNode *p_node)
 
             *pa_out = hmap::gpu::morphological_gradient(*pa_in, ir);
           },
-          ctx.app_settings.node_editor.hmap_transform_mode_gpu);
+          HSD_GPU_MODE);
     }
     else
       hmap::transform(
@@ -73,7 +72,7 @@ void compute_select_slope_node(BaseNode *p_node)
 
             *pa_out = hmap::gradient_norm(*pa_in);
           },
-          ctx.app_settings.node_editor.hmap_transform_mode_cpu);
+          HSD_CPU_MODE);
 
     // post-process
     p_out->smooth_overlap_buffers();

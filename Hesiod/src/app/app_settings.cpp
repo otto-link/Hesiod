@@ -24,6 +24,14 @@ void AppSettings::json_from(nlohmann::json const &json)
   json_safe_get(json, "colors.pressed", colors.pressed);
   json_safe_get(json, "colors.separator", colors.separator);
 
+  json_safe_get(json, "global.icon_path", global.icon_path);
+  json_safe_get(json,
+                "global.default_startup_project_file",
+                global.default_startup_project_file);
+  json_safe_get(json,
+                "global.enable_texture_downloader",
+                global.enable_texture_downloader);
+
   // OpenCL device
   {
     json_safe_get(json, "node_editor.gpu_device_name", node_editor.gpu_device_name);
@@ -65,12 +73,30 @@ void AppSettings::json_from(nlohmann::json const &json)
                 node_editor.position_delta_when_duplicating_node);
   json_safe_get(json, "node_editor.auto_layout_dx", node_editor.auto_layout_dx);
   json_safe_get(json, "node_editor.auto_layout_dy", node_editor.auto_layout_dy);
+  json_safe_get(json,
+                "node_editor.show_node_settings_pan",
+                node_editor.show_node_settings_pan);
 
   json_safe_get(json, "viewer.width", viewer.width);
   json_safe_get(json, "viewer.height", viewer.height);
 
   // window
   {
+    json_safe_get(json, "window.x", window.x);
+    json_safe_get(json, "window.y", window.y);
+    json_safe_get(json, "window.w", window.w);
+    json_safe_get(json, "window.h", window.h);
+    json_safe_get(json,
+                  "window.show_graph_manager_widget",
+                  window.show_graph_manager_widget);
+    json_safe_get(json,
+                  "window.show_texture_downloader_widget",
+                  window.show_texture_downloader_widget);
+    json_safe_get(json, "window.gm_x", window.gm_x);
+    json_safe_get(json, "window.gm_y", window.gm_y);
+    json_safe_get(json, "window.gm_w", window.gm_w);
+    json_safe_get(json, "window.gm_h", window.gm_h);
+
     json_safe_get(json,
                   "window.open_graph_manager_at_startup",
                   window.open_graph_manager_at_startup);
@@ -78,7 +104,7 @@ void AppSettings::json_from(nlohmann::json const &json)
     int64_t autosave_timer_value = 0;
     json_safe_get(json, "window.autosave_timer", autosave_timer_value);
 
-    this->window.autosave_timer = std::chrono::milliseconds(autosave_timer_value);
+    window.autosave_timer = std::chrono::milliseconds(autosave_timer_value);
 
     json_safe_get(json,
                   "window.open_viewport_at_startup",
@@ -103,6 +129,10 @@ nlohmann::json AppSettings::json_to() const
   json["colors.pressed"] = colors.pressed.name().toStdString();
   json["colors.separator"] = colors.separator.name().toStdString();
 
+  json["global.icon_path"] = global.icon_path;
+  json["global.default_startup_project_file"] = global.default_startup_project_file;
+  json["global.enable_texture_downloader"] = global.enable_texture_downloader;
+
   json["node_editor.gpu_device_name"] = node_editor.gpu_device_name;
   json["node_editor.hmap_transform_mode_cpu"] = node_editor.hmap_transform_mode_cpu;
   json["node_editor.hmap_transform_mode_gpu"] = node_editor.hmap_transform_mode_gpu;
@@ -116,10 +146,21 @@ nlohmann::json AppSettings::json_to() const
       node_editor.position_delta_when_duplicating_node;
   json["node_editor.auto_layout_dx"] = node_editor.auto_layout_dx;
   json["node_editor.auto_layout_dy"] = node_editor.auto_layout_dy;
+  json["node_editor.show_node_settings_pan"] = node_editor.show_node_settings_pan;
 
   json["viewer.width"] = viewer.width;
   json["viewer.height"] = viewer.height;
 
+  json["window.x"] = window.x;
+  json["window.y"] = window.y;
+  json["window.w"] = window.w;
+  json["window.h"] = window.h;
+  json["window.gm_x"] = window.gm_x;
+  json["window.gm_y"] = window.gm_y;
+  json["window.gm_w"] = window.gm_w;
+  json["window.gm_h"] = window.gm_h;
+  json["window.show_graph_manager_widget"] = window.show_graph_manager_widget;
+  json["window.show_texture_downloader_widget"] = window.show_texture_downloader_widget;
   json["window.open_graph_manager_at_startup"] = window.open_graph_manager_at_startup;
   json["window.open_viewport_at_startup"] = window.open_viewport_at_startup;
   json["window.autosave_timer"] = static_cast<int>(window.autosave_timer.count());

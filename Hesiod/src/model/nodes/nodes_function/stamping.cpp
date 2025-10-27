@@ -5,7 +5,7 @@
 
 #include "attributes.hpp"
 
-#include "hesiod/app/hesiod_application.hpp"
+#include "hesiod/app/enum_mappings.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
@@ -30,7 +30,7 @@ void setup_stamping_node(BaseNode *p_node)
   ADD_ATTR(BoolAttribute, "kernel_scale_amplitude", true);
   ADD_ATTR(EnumAttribute,
            "blend_method",
-           HSD_CTX.enum_mappings.stamping_blend_method_map,
+           enum_mappings.stamping_blend_method_map,
            "maximum");
   ADD_ATTR(SeedAttribute, "seed");
   ADD_ATTR(FloatAttribute, "k_smoothing", 0.1f, 0.01f, 1.f);
@@ -59,7 +59,7 @@ void compute_stamping_node(BaseNode *p_node)
 
   Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
-  AppContext &ctx = HSD_CTX;
+  // AppContext &ctx = HSD_CTX;
 
   hmap::Cloud *p_cloud = p_node->get_value_ref<hmap::Cloud>("cloud");
   hmap::Array *p_kernel = p_node->get_value_ref<hmap::Array>("kernel");

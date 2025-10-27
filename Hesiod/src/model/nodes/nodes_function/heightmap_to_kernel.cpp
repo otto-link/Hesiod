@@ -5,7 +5,7 @@
 
 #include "attributes.hpp"
 
-#include "hesiod/app/hesiod_application.hpp"
+#include "hesiod/app/enum_mappings.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
@@ -31,7 +31,7 @@ void setup_heightmap_to_kernel_node(BaseNode *p_node)
   ADD_ATTR(BoolAttribute, "envelope", false);
   ADD_ATTR(EnumAttribute,
            "envelope_kernel",
-           HSD_CTX.enum_mappings.kernel_type_map,
+           enum_mappings.kernel_type_map,
            "cubic_pulse");
 
   // attribute(s) order

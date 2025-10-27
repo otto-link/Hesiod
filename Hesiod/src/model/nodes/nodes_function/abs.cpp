@@ -7,7 +7,6 @@
 
 #include "attributes.hpp"
 
-#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
@@ -35,7 +34,7 @@ void compute_abs_node(BaseNode *p_node)
 
   Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
-  AppContext &ctx = HSD_CTX;
+  // AppContext &ctx = HSD_CTX;
 
   hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
 
@@ -52,7 +51,7 @@ void compute_abs_node(BaseNode *p_node)
 
           *pa_out = hmap::abs(*pa_in - GET("vshift", FloatAttribute));
         },
-        ctx.app_settings.node_editor.hmap_transform_mode_cpu);
+        HSD_CPU_MODE);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

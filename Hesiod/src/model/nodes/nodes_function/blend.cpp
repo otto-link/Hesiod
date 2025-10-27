@@ -6,7 +6,7 @@
 
 #include "attributes.hpp"
 
-#include "hesiod/app/hesiod_application.hpp"
+#include "hesiod/app/enum_mappings.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
@@ -28,7 +28,7 @@ void setup_blend_node(BaseNode *p_node)
   // attribute(s)
   ADD_ATTR(EnumAttribute,
            "blending_method",
-           HSD_CTX.enum_mappings.blending_method_map,
+           enum_mappings.blending_method_map,
            "minimum_smooth");
   ADD_ATTR(FloatAttribute, "k", 0.1f, 0.01f, 1.f);
   ADD_ATTR(FloatAttribute, "radius", 0.05f, 0.f, 0.2f);

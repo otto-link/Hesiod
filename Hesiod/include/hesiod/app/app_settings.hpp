@@ -32,6 +32,14 @@ struct AppSettings
     QColor separator{"#ABABAB"};
   } colors;
 
+  struct Global
+  {
+    std::string icon_path = "data/hesiod_icon.png";
+    std::string default_startup_project_file = "data/default.hsd";
+    std::string quick_start_html_file = "data/quick_start.html";
+    bool        enable_texture_downloader = true;
+  } global;
+
   struct NodeEditor
   {
     std::string         gpu_device_name = ""; // let CLWrapper decides
@@ -46,6 +54,7 @@ struct AppSettings
     float               position_delta_when_duplicating_node = 200.f;
     float               auto_layout_dx = 256.f;
     float               auto_layout_dy = 384.f;
+    bool                show_node_settings_pan = false;
   } node_editor;
 
   struct Viewer
@@ -54,8 +63,21 @@ struct AppSettings
     int height = 512;
   } viewer;
 
-  struct Window
+  struct Window // main window
   {
+    int  x = 0;
+    int  y = 0;
+    int  w = 1024;
+    int  h = 1024;
+    bool show_graph_manager_widget = false;
+    bool show_texture_downloader_widget = false;
+
+    int gm_x = 0; // graph manager geometry
+    int gm_y = 0;
+    int gm_w = 1024;
+    int gm_h = 1024;
+
+    // TODO remove
     bool                      open_graph_manager_at_startup = false;
     bool                      open_viewport_at_startup = false;
     std::chrono::milliseconds autosave_timer{60000}; // 60 seconds

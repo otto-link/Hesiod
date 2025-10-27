@@ -6,7 +6,6 @@
 
 #include "attributes.hpp"
 
-#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/base_node_gui.hpp"
@@ -37,7 +36,7 @@ void compute_texture_to_heightmap_node(BaseNode *p_node)
 
   Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
-  AppContext &ctx = HSD_CTX;
+  // AppContext &ctx = HSD_CTX;
 
   hmap::HeightmapRGBA *p_tex = p_node->get_value_ref<hmap::HeightmapRGBA>("texture");
 

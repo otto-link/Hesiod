@@ -7,7 +7,7 @@
 
 #include "attributes.hpp"
 
-#include "hesiod/app/hesiod_application.hpp"
+#include "hesiod/app/enum_mappings.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
@@ -33,7 +33,7 @@ void setup_select_soil_weathered_node(BaseNode *p_node)
   ADD_ATTR(FloatAttribute, "gradient_weight", 0.2f, -1.f, 1.f);
   ADD_ATTR(EnumAttribute,
            "curvature_clamp_mode",
-           HSD_CTX.enum_mappings.clamping_mode_map,
+           enum_mappings.clamping_mode_map,
            "Keep positive & clamp");
   ADD_ATTR(FloatAttribute, "curvature_clamping", 1.f, 0.f, FLT_MAX, "{:.4f}");
 
@@ -61,7 +61,7 @@ void compute_select_soil_weathered_node(BaseNode *p_node)
 
   Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
-  AppContext &ctx = HSD_CTX;
+  // AppContext &ctx = HSD_CTX;
 
   hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
 
@@ -86,7 +86,7 @@ void compute_select_soil_weathered_node(BaseNode *p_node)
 
           *pa_out = hmap::gpu::morphological_gradient(*pa_in, ir_grad);
         },
-        ctx.app_settings.node_editor.hmap_transform_mode_gpu);
+        HSD_GPU_MODE);
 
     grad_norm.remap();
 
@@ -99,7 +99,7 @@ void compute_select_soil_weathered_node(BaseNode *p_node)
 
           hmap::gain(*pa_out, GET("gradient_gain", FloatAttribute));
         },
-        ctx.app_settings.node_editor.hmap_transform_mode_cpu);
+        HSD_CPU_MODE);
 
     // --- compute mask
 
@@ -124,7 +124,7 @@ void compute_select_soil_weathered_node(BaseNode *p_node)
               GET("gradient_weight", FloatAttribute),
               (float)nx);
         },
-        ctx.app_settings.node_editor.hmap_transform_mode_gpu);
+        HSD_GPU_MODE);
 
     // post-process
     p_out->smooth_overlap_buffers();

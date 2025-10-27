@@ -2,20 +2,32 @@
    License. The full license is in the file LICENSE, distributed with this software. */
 #pragma once
 #include <QApplication>
+#include <QDir>
+#include <QFileInfo>
 
 #include "hesiod/app/app_settings.hpp"
 #include "hesiod/app/enum_mappings.hpp"
 #include "hesiod/app/style_settings.hpp"
+#include "hesiod/project/project.hpp"
 
 namespace hesiod
 {
 
-struct AppContext
+class AppContext
 {
+public:
   AppContext() = default;
 
-  void           json_from(nlohmann::json const &json);
-  nlohmann::json json_to() const;
+  // --- Settings management
+  void           settings_json_from(nlohmann::json const &json);
+  nlohmann::json settings_json_to() const;
+  void           load_settings();
+  void           save_settings() const;
+
+  // --- Project management
+  void new_project();
+  void load_project_model(const std::string &fname);
+  void save_project_model(const std::string &fname) const;
 
   // --- Data
 
@@ -23,10 +35,13 @@ struct AppContext
   AppSettings   app_settings;
   StyleSettings style_settings;
 
-  // project-dependent settings
-
-  // immutables
-  const EnumMappings enum_mappings;
+  // project
+  std::unique_ptr<Project> current_project;
 };
+
+// helpers
+
+std::string get_config_file_path(const QString &app_name, bool portable_mode);
+std::string get_config_file_path_auto(const QString &app_name);
 
 } // namespace hesiod

@@ -7,7 +7,6 @@
 
 #include "attributes.hpp"
 
-#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
@@ -35,7 +34,7 @@ void compute_gradient_node(BaseNode *p_node)
 
   Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
-  AppContext &ctx = HSD_CTX;
+  // AppContext &ctx = HSD_CTX;
 
   hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
 
@@ -53,7 +52,7 @@ void compute_gradient_node(BaseNode *p_node)
 
           hmap::gradient_x(*pa_in, *pa_dx);
         },
-        ctx.app_settings.node_editor.hmap_transform_mode_cpu);
+        HSD_CPU_MODE);
 
     hmap::transform(
         {p_dy, p_in},
@@ -64,7 +63,7 @@ void compute_gradient_node(BaseNode *p_node)
 
           hmap::gradient_y(*pa_in, *pa_dy);
         },
-        ctx.app_settings.node_editor.hmap_transform_mode_cpu);
+        HSD_CPU_MODE);
 
     p_dx->smooth_overlap_buffers();
     p_dy->smooth_overlap_buffers();

@@ -5,7 +5,6 @@
 
 #include "attributes.hpp"
 
-#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/base_node_gui.hpp"
@@ -43,7 +42,7 @@ void compute_water_depth_from_mask_node(BaseNode *p_node)
 
   Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
-  AppContext &ctx = HSD_CTX;
+  // AppContext &ctx = HSD_CTX;
 
   hmap::Heightmap *p_z = p_node->get_value_ref<hmap::Heightmap>("elevation");
   hmap::Heightmap *p_mask = p_node->get_value_ref<hmap::Heightmap>("water_mask");
@@ -67,7 +66,7 @@ void compute_water_depth_from_mask_node(BaseNode *p_node)
                                                   GET("tolerance", FloatAttribute),
                                                   GET("omega", FloatAttribute));
         },
-        ctx.app_settings.node_editor.hmap_transform_mode_cpu);
+        HSD_CPU_MODE);
 
     p_depth->smooth_overlap_buffers();
   }

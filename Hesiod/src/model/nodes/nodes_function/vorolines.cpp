@@ -7,7 +7,7 @@
 
 #include "attributes.hpp"
 
-#include "hesiod/app/hesiod_application.hpp"
+#include "hesiod/app/enum_mappings.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
@@ -30,7 +30,7 @@ void setup_vorolines_node(BaseNode *p_node)
   // attribute(s)
   ADD_ATTR(EnumAttribute,
            "return_type",
-           HSD_CTX.enum_mappings.voronoi_return_type_map,
+           enum_mappings.voronoi_return_type_map,
            "F1: squared distance to the closest point");
   ADD_ATTR(FloatAttribute, "density", 8.f, 0.f, 100.f);
   ADD_ATTR(SeedAttribute, "seed");
@@ -59,7 +59,7 @@ void compute_vorolines_node(BaseNode *p_node)
 
   Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
-  AppContext &ctx = HSD_CTX;
+  // AppContext &ctx = HSD_CTX;
 
   // base noise function
   hmap::Heightmap *p_dx = p_node->get_value_ref<hmap::Heightmap>("dx");
@@ -92,7 +92,7 @@ void compute_vorolines_node(BaseNode *p_node)
                                        pa_dy,
                                        bbox);
       },
-      ctx.app_settings.node_editor.hmap_transform_mode_gpu);
+      HSD_GPU_MODE);
 
   // apply square root
   p_out->remap();
@@ -105,7 +105,7 @@ void compute_vorolines_node(BaseNode *p_node)
           hmap::Array *pa_out = p_arrays[0];
           *pa_out = hmap::sqrt(*pa_out);
         },
-        ctx.app_settings.node_editor.hmap_transform_mode_cpu);
+        HSD_CPU_MODE);
 
   // post-process
   post_apply_enveloppe(p_node, *p_out, p_env);

@@ -5,7 +5,7 @@
 
 #include "attributes.hpp"
 
-#include "hesiod/app/hesiod_application.hpp"
+#include "hesiod/app/enum_mappings.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
@@ -27,7 +27,7 @@ void setup_combine_mask_node(BaseNode *p_node)
   // attribute(s)
   ADD_ATTR(EnumAttribute,
            "method",
-           HSD_CTX.enum_mappings.mask_combine_method_map,
+           enum_mappings.mask_combine_method_map,
            "intersection");
 }
 

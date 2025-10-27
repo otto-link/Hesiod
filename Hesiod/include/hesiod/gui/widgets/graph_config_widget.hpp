@@ -31,8 +31,7 @@ class GraphConfigWidget : public QDialog
 
 public:
   GraphConfigWidget() = default;
-  GraphConfigWidget(GraphConfig *p_model_config,
-                    QWidget     *parent = nullptr);
+  GraphConfigWidget(GraphConfig *p_model_config, QWidget *parent = nullptr);
 
 private:
   GraphConfig *p_model_config;

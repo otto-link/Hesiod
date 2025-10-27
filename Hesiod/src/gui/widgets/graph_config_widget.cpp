@@ -12,8 +12,7 @@
 namespace hesiod
 {
 
-GraphConfigWidget::GraphConfigWidget(GraphConfig *p_model_config,
-                                     QWidget     *parent)
+GraphConfigWidget::GraphConfigWidget(GraphConfig *p_model_config, QWidget *parent)
     : QDialog(parent), p_model_config(p_model_config)
 {
   this->setWindowTitle("Hesiod - Model configuration");

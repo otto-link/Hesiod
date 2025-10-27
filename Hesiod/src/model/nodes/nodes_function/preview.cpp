@@ -4,7 +4,6 @@
 
 #include "attributes.hpp"
 
-#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
@@ -32,7 +31,7 @@ void compute_preview_node(BaseNode *p_node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
-  AppContext &ctx = HSD_CTX;
+  // AppContext &ctx = HSD_CTX;
 
   Q_EMIT p_node->compute_started(p_node->get_id()); // empty on purpose
   Q_EMIT p_node->compute_finished(p_node->get_id());

@@ -16,7 +16,7 @@
 namespace hesiod
 {
 
-struct EnumMappings
+static struct EnumMappings
 {
 
   const std::map<std::string, int> blending_method_map = {
@@ -141,6 +141,6 @@ struct EnumMappings
       {"Keep negative & clamp", hmap::ClampMode::NEGATIVE_ONLY},
       {"Clamp both", hmap::ClampMode::BOTH},
       {"No clamping", hmap::ClampMode::NONE}};
-};
+} enum_mappings;
 
 } // namespace hesiod

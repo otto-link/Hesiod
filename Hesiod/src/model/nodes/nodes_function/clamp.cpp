@@ -7,7 +7,6 @@
 
 #include "attributes.hpp"
 
-#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/base_node_gui.hpp"
@@ -50,7 +49,7 @@ void compute_clamp_node(BaseNode *p_node)
 
   Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
-  AppContext &ctx = HSD_CTX;
+  // AppContext &ctx = HSD_CTX;
 
   hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
 
@@ -78,7 +77,7 @@ void compute_clamp_node(BaseNode *p_node)
             hmap::Array *pa_out = p_arrays[0];
             hmap::clamp(*pa_out, crange.x, crange.y);
           },
-          ctx.app_settings.node_editor.hmap_transform_mode_cpu);
+          HSD_CPU_MODE);
     }
     else
     {
@@ -90,7 +89,7 @@ void compute_clamp_node(BaseNode *p_node)
               hmap::Array *pa_out = p_arrays[0];
               hmap::clamp_min_smooth(*pa_out, crange.x, k_min);
             },
-            ctx.app_settings.node_editor.hmap_transform_mode_cpu);
+            HSD_CPU_MODE);
       else
         hmap::transform(
             {p_out},
@@ -99,7 +98,7 @@ void compute_clamp_node(BaseNode *p_node)
               hmap::Array *pa_out = p_arrays[0];
               hmap::clamp_min(*pa_out, crange.x);
             },
-            ctx.app_settings.node_editor.hmap_transform_mode_cpu);
+            HSD_CPU_MODE);
 
       if (smooth_max)
         hmap::transform(
@@ -109,7 +108,7 @@ void compute_clamp_node(BaseNode *p_node)
               hmap::Array *pa_out = p_arrays[0];
               hmap::clamp_max_smooth(*pa_out, crange.y, k_max);
             },
-            ctx.app_settings.node_editor.hmap_transform_mode_cpu);
+            HSD_CPU_MODE);
       else
         hmap::transform(
             {p_out},
@@ -118,7 +117,7 @@ void compute_clamp_node(BaseNode *p_node)
               hmap::Array *pa_out = p_arrays[0];
               hmap::clamp_max(*pa_out, crange.y);
             },
-            ctx.app_settings.node_editor.hmap_transform_mode_cpu);
+            HSD_CPU_MODE);
     }
 
     if (GET("remap", BoolAttribute))

@@ -5,7 +5,7 @@
 
 #include "attributes.hpp"
 
-#include "hesiod/app/hesiod_application.hpp"
+#include "hesiod/app/enum_mappings.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
@@ -31,7 +31,7 @@ void setup_hydraulic_procedural_node(BaseNode *p_node)
   ADD_ATTR(FloatAttribute, "ridge_scaling", 0.3f, 0.01f, 1.f);
   ADD_ATTR(EnumAttribute,
            "erosion_profile",
-           HSD_CTX.enum_mappings.erosion_profile_map,
+           enum_mappings.erosion_profile_map,
            "Triangle smooth");
   ADD_ATTR(FloatAttribute, "delta", 0.2f, 0.f, 1.f);
   ADD_ATTR(FloatAttribute, "noise_ratio", 0.2f, 0.f, 1.f);
@@ -69,7 +69,7 @@ void compute_hydraulic_procedural_node(BaseNode *p_node)
 
   Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
-  AppContext &ctx = HSD_CTX;
+  // AppContext &ctx = HSD_CTX;
 
   hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
 
@@ -120,7 +120,7 @@ void compute_hydraulic_procedural_node(BaseNode *p_node)
               hmin,
               hmax);
         },
-        ctx.app_settings.node_editor.hmap_transform_mode_cpu);
+        HSD_CPU_MODE);
 
     p_out->smooth_overlap_buffers();
   }

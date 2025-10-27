@@ -11,7 +11,6 @@
 
 #include "attributes/seed_attribute.hpp"
 
-#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/node_factory.hpp"
@@ -46,9 +45,8 @@ BaseNode::BaseNode(const std::string &label, const std::shared_ptr<GraphConfig> 
   this->category = get_node_inventory().at(label);
 
   // initialize documentation
-  AppContext &ctx = HSD_CTX;
-
-  const std::string doc_path = ctx.app_settings.node_editor.doc_path;
+  // const std::string doc_path = HSD_CTX.app_settings.node_editor.doc_path;
+  const std::string doc_path = "data/node_documentation.json"; // TODO fix
   nlohmann::json    json;
 
   // loading data

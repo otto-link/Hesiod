@@ -7,7 +7,6 @@
 #include <QSettings>
 
 #include "hesiod/app/hesiod_application.hpp"
-#include "hesiod/gui/main_window.hpp"
 #include "hesiod/gui/widgets/coord_frame_widget.hpp"
 #include "hesiod/gui/widgets/export_param_widget.hpp"
 #include "hesiod/gui/widgets/graph_config_widget.hpp"
@@ -299,10 +298,6 @@ void GraphManagerWidget::on_export()
 
   this->p_graph_manager->set_export_param(export_param);
   this->p_graph_manager->export_flatten();
-
-  notify("Export/flatten",
-         std::format("Flattening and export terminated, saved to file: {}",
-                     export_param.export_path.filename().string()));
 }
 
 void GraphManagerWidget::on_item_double_clicked(QListWidgetItem *item)
@@ -393,14 +388,23 @@ void GraphManagerWidget::reset()
 
 void GraphManagerWidget::restore_window_state()
 {
-  QSettings settings(HSD_SETTINGS_ORG, HSD_SETTINGS_APP);
-  this->restoreGeometry(settings.value("GraphManagerWidget/geometry").toByteArray());
+  AppContext &ctx = HSD_CTX;
+  
+  this->setGeometry(ctx.app_settings.window.gm_x,
+                    ctx.app_settings.window.gm_y,
+                    ctx.app_settings.window.gm_w,
+                    ctx.app_settings.window.gm_h);
 }
 
 void GraphManagerWidget::save_window_state() const
 {
-  QSettings settings(HSD_SETTINGS_ORG, HSD_SETTINGS_APP);
-  settings.setValue("GraphManagerWidget/geometry", this->saveGeometry());
+  AppContext &ctx = HSD_CTX;
+  
+  QRect geom = this->geometry();
+  ctx.app_settings.window.gm_x = geom.x();
+  ctx.app_settings.window.gm_y = geom.y();
+  ctx.app_settings.window.gm_w = geom.width();
+  ctx.app_settings.window.gm_h = geom.height();
 }
 
 void GraphManagerWidget::set_is_dirty(bool new_is_dirty)

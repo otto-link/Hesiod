@@ -2,11 +2,11 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include "highmap/colorize.hpp"
+#include "highmap/heightmap.hpp"
 #include "highmap/operator.hpp"
 
 #include "attributes.hpp"
 
-#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 

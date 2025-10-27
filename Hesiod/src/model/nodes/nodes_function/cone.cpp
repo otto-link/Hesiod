@@ -7,7 +7,6 @@
 
 #include "attributes.hpp"
 
-#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
@@ -50,7 +49,7 @@ void compute_cone_node(BaseNode *p_node)
 
   Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
-  AppContext &ctx = HSD_CTX;
+  // AppContext &ctx = HSD_CTX;
 
   // base noise function
   hmap::Heightmap *p_dx = p_node->get_value_ref<hmap::Heightmap>("dx");
@@ -77,7 +76,7 @@ void compute_cone_node(BaseNode *p_node)
                              pa_dy,
                              bbox);
       },
-      ctx.app_settings.node_editor.hmap_transform_mode_cpu);
+      HSD_CPU_MODE);
 
   // post-process
   post_apply_enveloppe(p_node, *p_out, p_env);
