@@ -91,6 +91,7 @@ private:
   nlohmann::json                        json_copy_buffer;
   std::string                           last_node_created_id = "";
   bool                                  is_selecting_with_rubber_band = false;
+  std::filesystem::path                 last_import_path;
 };
 
 } // namespace hesiod

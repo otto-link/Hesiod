@@ -384,7 +384,10 @@ void GraphNodeWidget::on_graph_import_request()
 {
   Logger::log()->trace("GraphNodeWidget::on_graph_import_request");
 
-  std::filesystem::path path = ""; // TODO set path
+  // define import path for dialog fiel
+  std::filesystem::path path = this->last_import_path.empty()
+                                   ? HSD_CTX.project_model->get_path()
+                                   : this->last_import_path;
 
   this->set_enabled(false);
   QString load_fname = QFileDialog::getOpenFileName(this,
@@ -473,6 +476,8 @@ void GraphNodeWidget::on_graph_import_request()
                              p_gfx_node->setSelected(true);
                          });
     }
+
+    this->last_import_path = std::filesystem::path(fname).parent_path();
   }
 }
 
