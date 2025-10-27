@@ -25,7 +25,11 @@ void ProjectModel::cleanup()
   this->graph_manager.reset();
   this->path = std::filesystem::path();
   this->name = std::string();
+  this->bake_config = BakeConfig();
+  this->is_dirty = false;
 }
+
+BakeConfig ProjectModel::get_bake_config() const { return this->bake_config; }
 
 GraphManager *ProjectModel::get_graph_manager_ref() { return this->graph_manager.get(); }
 
@@ -45,15 +49,20 @@ void ProjectModel::json_from(nlohmann::json const &json)
 {
   Logger::log()->trace("ProjectModel::json_from");
 
-  if (!json.contains("graph_manager"))
-  {
-    Logger::log()->error(
-        "ProjectModel::json_from: could not parse json for graph_manager");
-    return;
-  }
+  // bake
+  if (json.contains("bake_config"))
+    this->bake_config.json_from(json["bake_config"]);
+  else
+    Logger::log()->error("ProjectModel::json_from: could not parse bake_config json");
 
-  this->graph_manager->json_from(json["graph_manager"]);
-  this->graph_manager->update();
+  // graphs
+  if (json.contains("graph_manager"))
+  {
+    this->graph_manager->json_from(json["graph_manager"]);
+    this->graph_manager->update();
+  }
+  else
+    Logger::log()->error("ProjectModel::json_from: could not parse graph_manager json");
 }
 
 nlohmann::json ProjectModel::json_to() const
@@ -61,13 +70,17 @@ nlohmann::json ProjectModel::json_to() const
   Logger::log()->trace("ProjectModel::json_to");
 
   nlohmann::json json;
-
+  json["bake_config"] = this->bake_config.json_to();
   json["graph_manager"] = this->graph_manager->json_to();
-
   return json;
 }
 
 void ProjectModel::on_has_changed() { this->set_is_dirty(true); }
+
+void ProjectModel::set_bake_config(const BakeConfig &new_bake_config)
+{
+  this->bake_config = new_bake_config;
+}
 
 void ProjectModel::set_is_dirty(bool new_state)
 {

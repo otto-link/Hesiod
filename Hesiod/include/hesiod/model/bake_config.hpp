@@ -2,6 +2,8 @@
  * License. The full license is in the file LICENSE, distributed with this software. */
 #pragma once
 
+#include "nlohmann/json.hpp"
+
 namespace hesiod
 {
 
@@ -15,6 +17,9 @@ struct BakeConfig
   bool force_distributed = true;
   bool force_auto_export = true;
   bool rename_export_files = true;
+
+  void           json_from(nlohmann::json const &json);
+  nlohmann::json json_to() const;
 };
 
 } // namespace hesiod

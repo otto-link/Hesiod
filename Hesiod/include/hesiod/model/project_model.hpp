@@ -8,6 +8,8 @@
 
 #include "nlohmann/json.hpp"
 
+#include "hesiod/model/bake_config.hpp"
+
 namespace hesiod
 {
 
@@ -29,10 +31,12 @@ public:
   void cleanup();
   void initialize();
 
+  BakeConfig            get_bake_config() const;
   GraphManager         *get_graph_manager_ref();
   bool                  get_is_dirty() const;
   std::string           get_name() const;
   std::filesystem::path get_path() const;
+  void                  set_bake_config(const BakeConfig &new_bake_config);
   void                  set_is_dirty(bool new_state);
   void                  set_path(const std::filesystem::path &new_path);
   void                  set_path(const std::string &new_path);
@@ -49,6 +53,7 @@ private:
   // --- Members
   std::string                   name;
   std::filesystem::path         path;
+  BakeConfig                    bake_config;
   std::unique_ptr<GraphManager> graph_manager;
   bool                          is_dirty = false;
 };

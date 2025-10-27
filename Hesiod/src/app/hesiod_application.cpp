@@ -129,10 +129,10 @@ void HesiodApplication::on_export_batch()
 
   // --- retrieve export parameters from user
 
-  // TODO use project settings to initialize
-  BakeConfig bake_settings;
+  BakeConfig bake_settings = this->context.project_model->get_bake_config();
 
-  BakeConfigDialog dialog(8192 * 4, bake_settings);
+  BakeConfigDialog dialog(this->context.app_settings.node_editor.max_bake_resolution,
+                          bake_settings);
 
   if (dialog.exec() != QDialog::Accepted)
     return;
@@ -227,6 +227,9 @@ void HesiodApplication::on_export_batch()
           &bake_config);
     }
   }
+
+  // save config
+  this->context.project_model->set_bake_config(bake_settings);
 
   // unblock UI
   progress.close();
