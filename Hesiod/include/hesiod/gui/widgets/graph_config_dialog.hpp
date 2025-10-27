@@ -1,16 +1,5 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General Public
    License. The full license is in the file LICENSE, distributed with this software. */
-
-/**
- * @file viewer3d.hpp
- * @author  Otto Link (otto.link.bv@gmail.com)
- * @brief
- * @version 0.1
- * @date 2023-04-29
- *
- * @copyright Copyright (c) 2023
- *
- */
 #pragma once
 #include <QDialog>
 #include <QLabel>
@@ -23,15 +12,15 @@ namespace hesiod
 {
 
 // =====================================
-// GraphConfigWidget
+// GraphConfigDialog
 // =====================================
-class GraphConfigWidget : public QDialog
+class GraphConfigDialog : public QDialog
 {
   Q_OBJECT
 
 public:
-  GraphConfigWidget() = default;
-  GraphConfigWidget(GraphConfig *p_model_config, QWidget *parent = nullptr);
+  GraphConfigDialog() = default;
+  GraphConfigDialog(GraphConfig *p_model_config, QWidget *parent = nullptr);
 
 private:
   GraphConfig *p_model_config;

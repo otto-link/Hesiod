@@ -6,13 +6,13 @@
 #include <QGridLayout>
 
 #include "hesiod/gui/gui_utils.hpp"
-#include "hesiod/gui/widgets/graph_config_widget.hpp"
+#include "hesiod/gui/widgets/graph_config_dialog.hpp"
 #include "hesiod/logger.hpp"
 
 namespace hesiod
 {
 
-GraphConfigWidget::GraphConfigWidget(GraphConfig *p_model_config, QWidget *parent)
+GraphConfigDialog::GraphConfigDialog(GraphConfig *p_model_config, QWidget *parent)
     : QDialog(parent), p_model_config(p_model_config)
 {
   this->setWindowTitle("Hesiod - Model configuration");
