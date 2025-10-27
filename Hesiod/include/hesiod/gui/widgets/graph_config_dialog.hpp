@@ -1,42 +1,29 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General Public
    License. The full license is in the file LICENSE, distributed with this software. */
-
-/**
- * @file viewer3d.hpp
- * @author  Otto Link (otto.link.bv@gmail.com)
- * @brief
- * @version 0.1
- * @date 2023-04-29
- *
- * @copyright Copyright (c) 2023
- *
- */
 #pragma once
 #include <QDialog>
 #include <QLabel>
 #include <QSlider>
 #include <QWidget>
 
-#include "hesiod/model/model_config.hpp"
+#include "hesiod/model/graph_config.hpp"
 
 namespace hesiod
 {
 
 // =====================================
-// ModelConfigWidget
+// GraphConfigDialog
 // =====================================
-class ModelConfigWidget : public QDialog
+class GraphConfigDialog : public QDialog
 {
   Q_OBJECT
 
 public:
-  ModelConfigWidget() = default;
-  ModelConfigWidget(ModelConfig *p_model_config,
-                    bool         show_opencl_config = true,
-                    QWidget     *parent = nullptr);
+  GraphConfigDialog() = default;
+  GraphConfigDialog(GraphConfig *p_model_config, QWidget *parent = nullptr);
 
 private:
-  ModelConfig *p_model_config;
+  GraphConfig *p_model_config;
 
   QSlider *slider_shape;
   QLabel  *label_shape;

@@ -5,8 +5,8 @@
 
 #include "attributes.hpp"
 
+#include "hesiod/app/enum_mappings.hpp"
 #include "hesiod/logger.hpp"
-#include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
 
@@ -26,7 +26,10 @@ void setup_zeroed_edges_node(BaseNode *p_node)
 
   // attribute(s)
   ADD_ATTR(FloatAttribute, "sigma", 2.f, 1.f, 4.f);
-  ADD_ATTR(EnumAttribute, "distance_function", distance_function_map, "Euclidian");
+  ADD_ATTR(EnumAttribute,
+           "distance_function",
+           enum_mappings.distance_function_map,
+           "Euclidian");
   ADD_ATTR(RangeAttribute, "remap");
 
   // attribute(s) order
@@ -38,6 +41,8 @@ void compute_zeroed_edges_node(BaseNode *p_node)
   Q_EMIT p_node->compute_started(p_node->get_id());
 
   Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+
+  // AppContext &ctx = HSD_CTX;
 
   hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
 

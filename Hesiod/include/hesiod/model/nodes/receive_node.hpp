@@ -25,7 +25,7 @@ struct BroadcastParam; // forward
 class ReceiveNode : public BaseNode
 {
 public:
-  ReceiveNode(const std::string &label, std::shared_ptr<ModelConfig> config);
+  ReceiveNode(const std::string &label, std::shared_ptr<GraphConfig> config);
 
   BroadcastMap     *get_p_broadcast_params();
   std::string       get_current_tag() const;

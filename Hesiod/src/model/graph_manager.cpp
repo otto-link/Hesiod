@@ -8,9 +8,9 @@
 #include "highmap/interpolate_array.hpp"
 
 #include "hesiod/logger.hpp"
+#include "hesiod/model/graph_config.hpp"
 #include "hesiod/model/graph_manager.hpp"
 #include "hesiod/model/graph_node.hpp"
-#include "hesiod/model/model_config.hpp"
 #include "hesiod/model/utils.hpp"
 
 namespace hesiod
@@ -200,7 +200,7 @@ void GraphManager::json_from(nlohmann::json const &json)
   this->json_from(json, nullptr);
 }
 
-void GraphManager::json_from(nlohmann::json const &json, ModelConfig *p_config)
+void GraphManager::json_from(nlohmann::json const &json, GraphConfig *p_config)
 {
   Logger::log()->trace("GraphManager::json_from");
 
@@ -222,7 +222,7 @@ void GraphManager::json_from(nlohmann::json const &json, ModelConfig *p_config)
 
       // dummy default config that will be overriden after by the
       // GraphNode instances during their 'json_from' deserialization
-      auto config = std::make_shared<hesiod::ModelConfig>();
+      auto config = std::make_shared<hesiod::GraphConfig>();
       auto graph = std::make_shared<hesiod::GraphNode>("", config);
 
       // in this order (add, then deserialize), add the graph node to
@@ -270,7 +270,7 @@ nlohmann::json GraphManager::json_to() const
   return json;
 }
 
-void GraphManager::load_from_file(const std::string &fname, ModelConfig *p_config)
+void GraphManager::load_from_file(const std::string &fname, GraphConfig *p_config)
 {
   Logger::log()->trace("GraphManager::load_from_file: fname {}", fname);
 

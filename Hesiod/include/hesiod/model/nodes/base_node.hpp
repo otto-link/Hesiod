@@ -20,7 +20,7 @@
 #include "attributes/abstract_attribute.hpp"
 
 #include "hesiod/gui/widgets/data_preview.hpp"
-#include "hesiod/model/model_config.hpp"
+#include "hesiod/model/graph_config.hpp"
 
 // clang-format off
 #define ADD_ATTR(aclass, key, ...) p_node->add_attr<aclass>(key, key, ## __VA_ARGS__)
@@ -45,7 +45,7 @@ class BaseNode : public QWidget, public gnode::Node, public gngui::NodeProxy
 public:
   // --- Constructors ---
   BaseNode() = default;
-  BaseNode(const std::string &label, std::shared_ptr<ModelConfig> config);
+  BaseNode(const std::string &label, const std::shared_ptr<GraphConfig> &config);
 
   // --- Attribute Management ---
   template <typename T, typename... Args>
@@ -66,7 +66,7 @@ public:
   void reseed(bool backward);
 
   // --- Configuration ---
-  ModelConfig *get_config_ref() { return this->config.get(); }
+  GraphConfig *get_config_ref() { return this->config.get(); }
 
   // --- Identification ---
   std::string get_id() const override { return gnode::Node::get_id(); }
@@ -114,12 +114,47 @@ private:
 
   std::vector<std::string>                   attr_ordered_key = {};
   std::string                                category;
-  std::shared_ptr<ModelConfig>               config;
+  std::shared_ptr<GraphConfig>               config;
   GraphEditor                               *p_graph_node; // belonging graph node
   nlohmann::json                             documentation;
   std::function<void(BaseNode *p_node)>      compute_fct = nullptr;
   std::function<QWidget *(BaseNode *p_node)> qwidget_fct = nullptr;
   DataPreview *data_preview = nullptr; // owned by gngui::GraphicsNode
+};
+
+// =====================================
+// Node-related enums
+// =====================================
+enum BlendingMethod : int
+{
+  ADD,
+  EXCLUSION_BLEND,
+  GRADIENTS,
+  MAXIMUM,
+  MAXIMUM_SMOOTH,
+  MINIMUM,
+  MINIMUM_SMOOTH,
+  MULTIPLY,
+  MULTIPLY_ADD,
+  NEGATE,
+  OVERLAY,
+  REPLACE,
+  SOFT,
+  SUBSTRACT,
+};
+
+enum ExportFormat : int
+{
+  PNG8BIT,
+  PNG16BIT,
+  RAW16BIT,
+};
+
+enum MaskCombineMethod : int
+{
+  UNION,
+  INTERSECTION,
+  EXCLUSION,
 };
 
 } // namespace hesiod

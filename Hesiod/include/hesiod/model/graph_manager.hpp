@@ -23,7 +23,7 @@ namespace hesiod
 {
 
 class GraphNode; // forward
-class ModelConfig;
+class GraphConfig;
 
 // =====================================
 // GraphManager
@@ -63,10 +63,10 @@ public:
   void update();
 
   // --- Serialization ---
-  void           json_from(nlohmann::json const &json, ModelConfig *p_config);
+  void           json_from(nlohmann::json const &json, GraphConfig *p_config);
   void           json_from(nlohmann::json const &json);
   nlohmann::json json_to() const;
-  void load_from_file(const std::string &fname, ModelConfig *p_config = nullptr);
+  void load_from_file(const std::string &fname, GraphConfig *p_config = nullptr);
   void save_to_file(const std::string &fname) const;
 
 private slots:

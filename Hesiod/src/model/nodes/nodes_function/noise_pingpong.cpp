@@ -5,8 +5,8 @@
 
 #include "attributes.hpp"
 
+#include "hesiod/app/enum_mappings.hpp"
 #include "hesiod/logger.hpp"
-#include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
 
@@ -27,7 +27,7 @@ void setup_noise_pingpong_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(EnumAttribute, "noise_type", noise_type_map_fbm);
+  ADD_ATTR(EnumAttribute, "noise_type", enum_mappings.noise_type_map_fbm);
   ADD_ATTR(WaveNbAttribute, "kw");
   ADD_ATTR(SeedAttribute, "seed");
   ADD_ATTR(IntAttribute, "octaves", 8, 0, 32);
@@ -56,6 +56,8 @@ void compute_noise_pingpong_node(BaseNode *p_node)
   Q_EMIT p_node->compute_started(p_node->get_id());
 
   Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+
+  // AppContext &ctx = HSD_CTX;
 
   // base noise function
   hmap::Heightmap *p_dx = p_node->get_value_ref<hmap::Heightmap>("dx");

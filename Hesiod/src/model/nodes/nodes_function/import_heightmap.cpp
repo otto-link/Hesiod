@@ -41,6 +41,8 @@ void compute_import_heightmap_node(BaseNode *p_node)
 
   Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
+  // AppContext &ctx = HSD_CTX;
+
   hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
   const std::string fname = GET("fname", FilenameAttribute).string();

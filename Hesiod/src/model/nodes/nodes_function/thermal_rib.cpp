@@ -33,6 +33,8 @@ void compute_thermal_rib_node(BaseNode *p_node)
 
   Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
+  // AppContext &ctx = HSD_CTX;
+
   hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
 
   if (p_in)

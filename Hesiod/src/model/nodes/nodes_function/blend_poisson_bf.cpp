@@ -39,6 +39,8 @@ void compute_blend_poisson_bf_node(BaseNode *p_node)
 
   Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
+  // AppContext &ctx = HSD_CTX;
+
   hmap::Heightmap *p_in1 = p_node->get_value_ref<hmap::Heightmap>("input 1");
   hmap::Heightmap *p_in2 = p_node->get_value_ref<hmap::Heightmap>("input 2");
 

@@ -3,9 +3,10 @@
  * this software. */
 #include <filesystem>
 
+#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/cli/batch_mode.hpp"
 #include "hesiod/gui/gui_utils.hpp"
-#include "hesiod/gui/main_window.hpp"
+#include "hesiod/gui/project_ui.hpp"
 #include "hesiod/gui/widgets/graph_tabs_widget.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/graph_manager.hpp"
@@ -95,7 +96,7 @@ void run_batch_mode(const std::string     &filename,
                     const hmap::Vec2<int> &shape,
                     const hmap::Vec2<int> &tiling,
                     float                  overlap,
-                    const ModelConfig     *p_input_model_config)
+                    const GraphConfig     *p_input_model_config)
 {
   Logger::log()->info("executing Hesiod in batch mode");
   Logger::log()->trace("file: {}", filename);
@@ -107,7 +108,7 @@ void run_batch_mode(const std::string     &filename,
   // nothing is provided, use the configs from the input file but if
   // an input config is provided, this config is used for all the
   // graph nodes.
-  hesiod::ModelConfig config;
+  hesiod::GraphConfig config;
 
   // override some parameters on request
   if (p_input_model_config)
@@ -143,7 +144,7 @@ void run_node_inventory()
   Logger::log()->info("executing Hesiod in node inventory mode");
   hesiod::dump_node_inventory("node_inventory");
 
-  auto config = std::make_shared<hesiod::ModelConfig>();
+  auto config = std::make_shared<hesiod::GraphConfig>();
   hesiod::dump_node_documentation_stub("node_documentation_stub.json", config);
 
   hesiod::dump_node_settings_screenshots();
@@ -159,7 +160,7 @@ void run_snapshot_generation()
   const std::string ex_path = "data/examples/";
   const QSize       size = QSize(512, 512);
 
-  hesiod::MainWindow *main_window = hesiod::MainWindow::instance();
+  auto *app = static_cast<hesiod::HesiodApplication *>(QCoreApplication::instance());
 
   for (auto &[node_type, _] : inventory)
   {
@@ -171,19 +172,24 @@ void run_snapshot_generation()
     {
       Logger::log()->trace("- default file exists: {}", fname);
 
-      main_window->clear_all();
-      main_window->load_from_file(fname);
-      main_window->graph_tabs_widget_ref()->zoom_to_content();
+      app->load_project_model_and_ui(fname);
 
-      // TODO refit again, not working...
-      auto post_render_callback = [&]() { return; };
+      GraphTabsWidget *p_gm = app->get_project_ui_ref()->get_graph_tabs_widget_ref();
 
-      QWidget *widget = dynamic_cast<QWidget *>(main_window->graph_tabs_widget_ref());
+      if (p_gm)
+      {
+        p_gm->zoom_to_content();
 
-      render_widget_screenshot(widget,
-                               node_type + "_hsd_example.png",
-                               size,
-                               post_render_callback);
+        // TODO refit again, not working...
+        auto post_render_callback = [&]() { return; };
+
+        QWidget *widget = dynamic_cast<QWidget *>(p_gm);
+
+        render_widget_screenshot(widget,
+                                 node_type + "_hsd_example.png",
+                                 size,
+                                 post_render_callback);
+      }
     }
   }
 }

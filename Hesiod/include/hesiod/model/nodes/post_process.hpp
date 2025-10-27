@@ -16,7 +16,6 @@
 
 #include "highmap/heightmap.hpp"
 
-#include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 
 namespace hesiod

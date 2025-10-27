@@ -9,7 +9,7 @@
 
 #include "attributes.hpp"
 
-#include "hesiod/model/enum_mapping.hpp"
+#include "hesiod/app/enum_mappings.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
 
@@ -204,7 +204,10 @@ void setup_post_process_heightmap_attributes(BaseNode *p_node, bool add_mix)
 
   if (add_mix)
   {
-    ADD_ATTR(EnumAttribute, "post_mix_method", blending_method_map, "replace");
+    ADD_ATTR(EnumAttribute,
+             "post_mix_method",
+             enum_mappings.blending_method_map,
+             "replace");
     ADD_ATTR(FloatAttribute, "post_mix", 1.f, 0.f, 1.f);
   }
 

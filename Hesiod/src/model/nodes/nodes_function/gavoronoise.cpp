@@ -7,7 +7,6 @@
 #include "attributes.hpp"
 
 #include "hesiod/logger.hpp"
-#include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
 
@@ -69,6 +68,8 @@ void compute_gavoronoise_node(BaseNode *p_node)
   Q_EMIT p_node->compute_started(p_node->get_id());
 
   Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+
+  // AppContext &ctx = HSD_CTX;
 
   hmap::Heightmap *p_dx = p_node->get_value_ref<hmap::Heightmap>("dx");
   hmap::Heightmap *p_dy = p_node->get_value_ref<hmap::Heightmap>("dy");

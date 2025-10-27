@@ -7,8 +7,8 @@
 
 #include "attributes.hpp"
 
+#include "hesiod/app/enum_mappings.hpp"
 #include "hesiod/logger.hpp"
-#include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/base_node_gui.hpp"
 #include "hesiod/model/nodes/node_factory.hpp"
@@ -28,7 +28,10 @@ void setup_export_heightmap_node(BaseNode *p_node)
 
   // attribute(s)
   ADD_ATTR(FilenameAttribute, "fname", std::filesystem::path("hmap.png"), "*", true);
-  ADD_ATTR(EnumAttribute, "format", heightmap_export_format_map, "png (8 bit)");
+  ADD_ATTR(EnumAttribute,
+           "format",
+           enum_mappings.heightmap_export_format_map,
+           "png (8 bit)");
   ADD_ATTR(BoolAttribute, "auto_export", false);
 
   // attribute(s) order

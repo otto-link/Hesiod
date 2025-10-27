@@ -43,6 +43,8 @@ void compute_normal_map_to_heightmap_node(BaseNode *p_node)
 
   Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
+  // AppContext &ctx = HSD_CTX;
+
   hmap::HeightmapRGBA *p_nmap = p_node->get_value_ref<hmap::HeightmapRGBA>("normal map");
 
   if (p_nmap)

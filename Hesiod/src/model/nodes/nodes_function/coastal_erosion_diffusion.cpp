@@ -1,7 +1,7 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-#include "highmap/hydrology.hpp"
+#include "highmap/erosion.hpp"
 
 #include "attributes.hpp"
 
@@ -46,6 +46,8 @@ void compute_coastal_erosion_diffusion_node(BaseNode *p_node)
   Q_EMIT p_node->compute_started(p_node->get_id());
 
   Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+
+  // AppContext &ctx = HSD_CTX;
 
   hmap::Heightmap *p_z = p_node->get_value_ref<hmap::Heightmap>("elevation_in");
   hmap::Heightmap *p_depth = p_node->get_value_ref<hmap::Heightmap>("water_depth_in");

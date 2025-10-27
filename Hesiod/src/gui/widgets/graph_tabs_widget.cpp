@@ -5,7 +5,7 @@
 
 #include "gnodegui/style.hpp"
 
-#include "hesiod/gui/style.hpp"
+#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/gui/widgets/graph_node_widget.hpp"
 #include "hesiod/gui/widgets/graph_tabs_widget.hpp"
 #include "hesiod/gui/widgets/node_settings_widget.hpp"
@@ -22,12 +22,14 @@ GraphTabsWidget::GraphTabsWidget(GraphManager *p_graph_manager, QWidget *parent)
 {
   Logger::log()->trace("GraphTabsWidget::GraphTabsWidget");
 
+  AppContext &ctx = HSD_CTX;
+
   // styles (GNodeGUI)
   GN_STYLE->viewer.add_new_icon = false;
   GN_STYLE->viewer.add_load_save_icons = false;
   GN_STYLE->viewer.add_group = false;
-  GN_STYLE->node.color_port_data = data_color_map;
-  GN_STYLE->node.color_category = category_color_map;
+  GN_STYLE->node.color_port_data = ctx.style_settings.data_color_map;
+  GN_STYLE->node.color_category = ctx.style_settings.category_color_map;
 
   QHBoxLayout *layout = new QHBoxLayout(this);
   this->setLayout(layout);

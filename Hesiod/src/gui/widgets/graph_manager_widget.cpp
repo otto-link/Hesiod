@@ -6,12 +6,11 @@
 #include <QPushButton>
 #include <QSettings>
 
-#include "hesiod/config.hpp"
-#include "hesiod/gui/main_window.hpp"
+#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/gui/widgets/coord_frame_widget.hpp"
 #include "hesiod/gui/widgets/export_param_widget.hpp"
+#include "hesiod/gui/widgets/graph_config_dialog.hpp"
 #include "hesiod/gui/widgets/graph_manager_widget.hpp"
-#include "hesiod/gui/widgets/model_config_widget.hpp"
 #include "hesiod/gui/widgets/string_input_dialog.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/export_param.hpp"
@@ -44,9 +43,11 @@ GraphManagerWidget::GraphManagerWidget(GraphManager *p_graph_manager, QWidget *p
   // right pan
   this->list_widget = new QListWidget(this);
 
+  AppContext &ctx = HSD_CTX;
+
   std::string
       style_sheet = "QListWidget::item { border: 1px solid COLOR; color: transparent; }";
-  replace_all(style_sheet, "COLOR", HSD_CONFIG->colors.border.name().toStdString());
+  replace_all(style_sheet, "COLOR", ctx.app_settings.colors.border.name().toStdString());
   this->list_widget->setStyleSheet(style_sheet.c_str());
 
   this->list_widget->setViewMode(QListView::ListMode);
@@ -297,10 +298,6 @@ void GraphManagerWidget::on_export()
 
   this->p_graph_manager->set_export_param(export_param);
   this->p_graph_manager->export_flatten();
-
-  notify("Export/flatten",
-         std::format("Flattening and export terminated, saved to file: {}",
-                     export_param.export_path.filename().string()));
 }
 
 void GraphManagerWidget::on_item_double_clicked(QListWidgetItem *item)
@@ -349,8 +346,8 @@ void GraphManagerWidget::on_new_graph_request()
   }
 
   // get config from user
-  auto              config = std::make_shared<hesiod::ModelConfig>();
-  ModelConfigWidget config_editor(config.get());
+  auto              config = std::make_shared<hesiod::GraphConfig>();
+  GraphConfigDialog config_editor(config.get());
 
   {
     int ret = config_editor.exec();
@@ -391,14 +388,23 @@ void GraphManagerWidget::reset()
 
 void GraphManagerWidget::restore_window_state()
 {
-  QSettings settings(HSD_SETTINGS_ORG, HSD_SETTINGS_APP);
-  this->restoreGeometry(settings.value("GraphManagerWidget/geometry").toByteArray());
+  AppContext &ctx = HSD_CTX;
+
+  this->setGeometry(ctx.app_settings.window.gm_x,
+                    ctx.app_settings.window.gm_y,
+                    ctx.app_settings.window.gm_w,
+                    ctx.app_settings.window.gm_h);
 }
 
 void GraphManagerWidget::save_window_state() const
 {
-  QSettings settings(HSD_SETTINGS_ORG, HSD_SETTINGS_APP);
-  settings.setValue("GraphManagerWidget/geometry", this->saveGeometry());
+  AppContext &ctx = HSD_CTX;
+
+  QRect geom = this->geometry();
+  ctx.app_settings.window.gm_x = geom.x();
+  ctx.app_settings.window.gm_y = geom.y();
+  ctx.app_settings.window.gm_w = geom.width();
+  ctx.app_settings.window.gm_h = geom.height();
 }
 
 void GraphManagerWidget::set_is_dirty(bool new_is_dirty)

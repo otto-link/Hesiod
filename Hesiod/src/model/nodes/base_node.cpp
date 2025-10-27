@@ -11,9 +11,7 @@
 
 #include "attributes/seed_attribute.hpp"
 
-#include "hesiod/config.hpp"
 #include "hesiod/logger.hpp"
-#include "hesiod/model/enum_mapping.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/node_factory.hpp"
 #include "hesiod/model/utils.hpp"
@@ -39,7 +37,7 @@ std::string map_type_name(const std::string &typeid_name)
 
 // --- class definition
 
-BaseNode::BaseNode(const std::string &label, std::shared_ptr<ModelConfig> config)
+BaseNode::BaseNode(const std::string &label, const std::shared_ptr<GraphConfig> &config)
     : gnode::Node(label), config(config)
 {
   Logger::log()->trace("BaseNode::BaseNode, label: {}", label);
@@ -47,7 +45,8 @@ BaseNode::BaseNode(const std::string &label, std::shared_ptr<ModelConfig> config
   this->category = get_node_inventory().at(label);
 
   // initialize documentation
-  const std::string doc_path = HSD_NODE_DOCUMENTATION_JSON_PATH;
+  // const std::string doc_path = HSD_CTX.app_settings.node_editor.doc_path;
+  const std::string doc_path = "data/node_documentation.json"; // TODO fix
   nlohmann::json    json;
 
   // loading data

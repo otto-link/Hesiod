@@ -5,18 +5,14 @@
 #include <QDialogButtonBox>
 #include <QGridLayout>
 
-#include "highmap/opencl/gpu_opencl.hpp"
-
 #include "hesiod/gui/gui_utils.hpp"
-#include "hesiod/gui/widgets/model_config_widget.hpp"
+#include "hesiod/gui/widgets/graph_config_dialog.hpp"
 #include "hesiod/logger.hpp"
 
 namespace hesiod
 {
 
-ModelConfigWidget::ModelConfigWidget(ModelConfig *p_model_config,
-                                     bool         show_opencl_config,
-                                     QWidget     *parent)
+GraphConfigDialog::GraphConfigDialog(GraphConfig *p_model_config, QWidget *parent)
     : QDialog(parent), p_model_config(p_model_config)
 {
   this->setWindowTitle("Hesiod - Model configuration");
@@ -129,70 +125,37 @@ ModelConfigWidget::ModelConfigWidget(ModelConfig *p_model_config,
 
   row++;
 
-  // --- OpenCL configuration
-  if (show_opencl_config)
+  // --- transform modes
+  auto add_transform_combobox =
+      [this, layout, &row](const std::string &label_text, hmap::TransformMode &mode)
   {
-    QLabel *label_opencl = new QLabel("Hardware acceleration (OpenCL)", this);
-    layout->addWidget(label_opencl, row, 0, 1, 3);
-    row++;
+    QLabel *label = new QLabel(label_text.c_str(), this);
+    layout->addWidget(label, row, 0);
 
-    auto cl_device_map = clwrapper::DeviceManager::get_instance().get_available_devices();
-    size_t current_device = clwrapper::DeviceManager::get_instance().get_device_id();
-
-    QComboBox *device_combobox = new QComboBox(this);
-    for (auto &[id, name] : cl_device_map)
-      device_combobox->addItem(QString::fromStdString(name));
-    device_combobox->setCurrentText(
-        QString::fromStdString(cl_device_map.at(current_device)));
-
-    this->connect(
-        device_combobox,
-        QOverload<int>::of(&QComboBox::currentIndexChanged),
-        [device_combobox, cl_device_map]()
-        {
-          size_t choice_index = static_cast<size_t>(device_combobox->currentIndex());
-          Logger::log()->trace("Selected OpenCL device index: {}", choice_index);
-          if (clwrapper::DeviceManager::get_instance().set_device(choice_index))
-            clwrapper::KernelManager::get_instance().build_program();
-          else
-            Logger::log()->error("OpenCL device selection failed");
-        });
-
-    layout->addWidget(device_combobox, row, 0, 1, 3);
-    row++;
-
-    // transform modes
-    auto add_transform_combobox =
-        [this, layout, &row](const std::string &label_text, hmap::TransformMode &mode)
+    QComboBox *combobox = new QComboBox(this);
+    for (auto &[name, id] : hmap::transform_mode_as_string)
     {
-      QLabel *label = new QLabel(label_text.c_str(), this);
-      layout->addWidget(label, row, 0);
+      combobox->addItem(QString::fromStdString(name));
+      if (id == static_cast<int>(mode))
+        combobox->setCurrentText(QString::fromStdString(name));
+    }
 
-      QComboBox *combobox = new QComboBox(this);
-      for (auto &[name, id] : hmap::transform_mode_as_string)
-      {
-        combobox->addItem(QString::fromStdString(name));
-        if (id == static_cast<int>(mode))
-          combobox->setCurrentText(QString::fromStdString(name));
-      }
+    this->connect(combobox,
+                  QOverload<int>::of(&QComboBox::currentIndexChanged),
+                  [this, combobox, &mode]()
+                  {
+                    std::string current_choice = combobox->currentText().toStdString();
+                    Logger::log()->trace("Selected transform mode: {}", current_choice);
+                    mode = static_cast<hmap::TransformMode>(
+                        hmap::transform_mode_as_string.at(current_choice));
+                  });
 
-      this->connect(combobox,
-                    QOverload<int>::of(&QComboBox::currentIndexChanged),
-                    [this, combobox, &mode]()
-                    {
-                      std::string current_choice = combobox->currentText().toStdString();
-                      Logger::log()->trace("Selected transform mode: {}", current_choice);
-                      mode = static_cast<hmap::TransformMode>(
-                          hmap::transform_mode_as_string.at(current_choice));
-                    });
+    layout->addWidget(combobox, row, 1, 1, 3);
+    row++;
+  };
 
-      layout->addWidget(combobox, row, 1, 1, 3);
-      row++;
-    };
-
-    add_transform_combobox("CPU", this->p_model_config->hmap_transform_mode_cpu);
-    add_transform_combobox("GPU", this->p_model_config->hmap_transform_mode_gpu);
-  }
+  add_transform_combobox("CPU", this->p_model_config->hmap_transform_mode_cpu);
+  add_transform_combobox("GPU", this->p_model_config->hmap_transform_mode_gpu);
 
   // --- buttons
   QDialogButtonBox *button_box = new QDialogButtonBox(QDialogButtonBox::Ok |
