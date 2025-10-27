@@ -389,7 +389,7 @@ void GraphManagerWidget::reset()
 void GraphManagerWidget::restore_window_state()
 {
   AppContext &ctx = HSD_CTX;
-  
+
   this->setGeometry(ctx.app_settings.window.gm_x,
                     ctx.app_settings.window.gm_y,
                     ctx.app_settings.window.gm_w,
@@ -399,7 +399,7 @@ void GraphManagerWidget::restore_window_state()
 void GraphManagerWidget::save_window_state() const
 {
   AppContext &ctx = HSD_CTX;
-  
+
   QRect geom = this->geometry();
   ctx.app_settings.window.gm_x = geom.x();
   ctx.app_settings.window.gm_y = geom.y();

@@ -32,12 +32,15 @@ public:
   HesiodApplication(int &argc, char **argv);
   ~HesiodApplication();
 
+  void load_project_model_and_ui(const std::string &fname = "");
+  void save_project_model_and_ui(const std::string &fname);
   void show();
 
   // --- Context
   QApplication     &get_qapp();
   AppContext       &get_context();
   const AppContext &get_context() const;
+  ProjectUI        *get_project_ui_ref();
 
 private slots:
   // --- User actions
@@ -56,8 +59,6 @@ private slots:
 
 private:
   void cleanup();
-  void load_project_model_and_ui(const std::string &fname = "");
-  void save_project_model_and_ui(const std::string &fname);
   void setup_menu_bar();
 
   // --- Members

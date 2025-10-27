@@ -67,6 +67,8 @@ AppContext &HesiodApplication::get_context() { return this->context; }
 
 const AppContext &HesiodApplication::get_context() const { return this->context; }
 
+ProjectUI *HesiodApplication::get_project_ui_ref() { return this->project_ui.get(); }
+
 QApplication &HesiodApplication::get_qapp() { return *static_cast<QApplication *>(this); }
 
 void HesiodApplication::load_project_model_and_ui(const std::string &fname)
