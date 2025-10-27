@@ -4,7 +4,7 @@
 #include <filesystem>
 #include <random>
 
-#include "hesiod/gui/widgets/bake_and_export_settings_dialog.hpp"
+#include "hesiod/gui/widgets/bake_config_dialog.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/utils.hpp"
 
@@ -14,7 +14,7 @@ namespace hesiod
 void override_export_nodes_settings(const std::string           &fname,
                                     const std::filesystem::path &export_path,
                                     unsigned int                 random_seeds_increment,
-                                    const BakeSettings          &bake_settings)
+                                    const BakeConfig            &bake_settings)
 {
   Logger::log()->trace("override_export_nodes_settings: fname = {}, export_path = {}",
                        fname,

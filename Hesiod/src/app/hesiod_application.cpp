@@ -14,7 +14,7 @@
 #include "hesiod/cli/batch_mode.hpp"
 #include "hesiod/gui/gui_utils.hpp"
 #include "hesiod/gui/project_ui.hpp"
-#include "hesiod/gui/widgets/bake_and_export_settings_dialog.hpp"
+#include "hesiod/gui/widgets/bake_config_dialog.hpp"
 #include "hesiod/gui/widgets/documentation_popup.hpp"
 #include "hesiod/gui/widgets/graph_manager_widget.hpp"
 #include "hesiod/gui/widgets/graph_tabs_widget.hpp"
@@ -130,9 +130,9 @@ void HesiodApplication::on_export_batch()
   // --- retrieve export parameters from user
 
   // TODO use project settings to initialize
-  BakeSettings bake_settings;
+  BakeConfig bake_settings;
 
-  BakeAndExportSettingsDialog dialog(8192 * 4, bake_settings);
+  BakeConfigDialog dialog(8192 * 4, bake_settings);
 
   if (dialog.exec() != QDialog::Accepted)
     return;

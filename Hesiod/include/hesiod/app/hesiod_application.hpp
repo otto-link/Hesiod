@@ -11,7 +11,7 @@
 #include "nlohmann/json.hpp"
 
 #include "hesiod/app/app_context.hpp"
-#include "hesiod/gui/widgets/bake_and_export_settings_dialog.hpp"
+#include "hesiod/gui/widgets/bake_config_dialog.hpp"
 
 #define HSD_CTX                                                                          \
   static_cast<hesiod::HesiodApplication *>(QCoreApplication::instance())->get_context()
@@ -73,6 +73,6 @@ private:
 void override_export_nodes_settings(const std::string           &fname,
                                     const std::filesystem::path &export_path,
                                     uint                         random_seeds_increment,
-                                    const BakeSettings          &bake_settings);
+                                    const BakeConfig            &bake_settings);
 
 } // namespace hesiod
