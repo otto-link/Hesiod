@@ -8,7 +8,7 @@
 #include "hesiod/app/app_settings.hpp"
 #include "hesiod/app/enum_mappings.hpp"
 #include "hesiod/app/style_settings.hpp"
-#include "hesiod/project/project.hpp"
+#include "hesiod/model/project_model.hpp"
 
 namespace hesiod
 {
@@ -36,7 +36,7 @@ public:
   StyleSettings style_settings;
 
   // project
-  std::unique_ptr<Project> current_project;
+  std::unique_ptr<ProjectModel> project_model;
 };
 
 // helpers

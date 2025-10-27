@@ -5,21 +5,21 @@
 
 #include "hesiod/logger.hpp"
 #include "hesiod/model/graph_manager.hpp"
+#include "hesiod/model/project_model.hpp"
 #include "hesiod/model/utils.hpp"
-#include "hesiod/project/project.hpp"
 
 namespace hesiod
 {
 
-Project::Project(QObject *parent) : QObject(parent)
+ProjectModel::ProjectModel(QObject *parent) : QObject(parent)
 {
-  Logger::log()->trace("Project::Project");
+  Logger::log()->trace("ProjectModel::ProjectModel");
   this->initialize();
 }
 
-void Project::cleanup()
+void ProjectModel::cleanup()
 {
-  Logger::log()->trace("Project::cleanup");
+  Logger::log()->trace("ProjectModel::cleanup");
 
   QCoreApplication::processEvents();
   this->graph_manager.reset();
@@ -27,27 +27,28 @@ void Project::cleanup()
   this->name = std::string();
 }
 
-GraphManager *Project::get_graph_manager_ref() { return this->graph_manager.get(); }
+GraphManager *ProjectModel::get_graph_manager_ref() { return this->graph_manager.get(); }
 
-bool Project::get_is_dirty() const { return this->is_dirty; }
+bool ProjectModel::get_is_dirty() const { return this->is_dirty; }
 
-std::string Project::get_name() const { return this->name; }
+std::string ProjectModel::get_name() const { return this->name; }
 
-std::filesystem::path Project::get_path() const { return this->path; }
+std::filesystem::path ProjectModel::get_path() const { return this->path; }
 
-void Project::initialize()
+void ProjectModel::initialize()
 {
-  Logger::log()->trace("Project::initialize");
+  Logger::log()->trace("ProjectModel::initialize");
   this->graph_manager = std::make_unique<GraphManager>();
 }
 
-void Project::json_from(nlohmann::json const &json)
+void ProjectModel::json_from(nlohmann::json const &json)
 {
-  Logger::log()->trace("Project::json_from");
+  Logger::log()->trace("ProjectModel::json_from");
 
   if (!json.contains("graph_manager"))
   {
-    Logger::log()->error("Project::json_from: could not parse json for graph_manager");
+    Logger::log()->error(
+        "ProjectModel::json_from: could not parse json for graph_manager");
     return;
   }
 
@@ -55,9 +56,9 @@ void Project::json_from(nlohmann::json const &json)
   this->graph_manager->update();
 }
 
-nlohmann::json Project::json_to() const
+nlohmann::json ProjectModel::json_to() const
 {
-  Logger::log()->trace("Project::json_to");
+  Logger::log()->trace("ProjectModel::json_to");
 
   nlohmann::json json;
 
@@ -66,9 +67,9 @@ nlohmann::json Project::json_to() const
   return json;
 }
 
-void Project::on_has_changed() { this->set_is_dirty(true); }
+void ProjectModel::on_has_changed() { this->set_is_dirty(true); }
 
-void Project::set_is_dirty(bool new_state)
+void ProjectModel::set_is_dirty(bool new_state)
 {
   if (new_state != this->is_dirty)
   {
@@ -77,7 +78,7 @@ void Project::set_is_dirty(bool new_state)
   }
 }
 
-void Project::set_path(const std::filesystem::path &new_path)
+void ProjectModel::set_path(const std::filesystem::path &new_path)
 {
   this->path = new_path;
   this->name = this->path.stem().string();
@@ -85,12 +86,12 @@ void Project::set_path(const std::filesystem::path &new_path)
   Q_EMIT this->project_name_changed();
 }
 
-void Project::set_path(const std::string &new_path)
+void ProjectModel::set_path(const std::string &new_path)
 {
   this->set_path(std::filesystem::path(new_path));
 }
 
-void Project::set_name(const std::string &new_name)
+void ProjectModel::set_name(const std::string &new_name)
 {
   this->name = new_name;
   this->path = this->path.parent_path() / this->name / ".hsd";

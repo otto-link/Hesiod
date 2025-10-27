@@ -9,8 +9,8 @@
 #include "hesiod/gui/widgets/graph_manager_widget.hpp"
 #include "hesiod/gui/widgets/graph_tabs_widget.hpp"
 #include "hesiod/logger.hpp"
+#include "hesiod/model/project_model.hpp"
 #include "hesiod/model/utils.hpp"
-#include "hesiod/project/project.hpp"
 
 namespace hesiod
 {
@@ -72,18 +72,18 @@ void ProjectUI::load_ui_state(const std::string &fname)
   this->graph_tabs_widget->json_from(json["graph_tabs_widget"]);
 }
 
-void ProjectUI::initialize(Project *project)
+void ProjectUI::initialize(ProjectModel *project)
 {
-  Logger::log()->trace("Project::initialize");
+  Logger::log()->trace("ProjectUI::initialize");
 
   // safeguards...
   if (!project)
-    Logger::log()->error("Project::initialize: project ptr is NULL");
+    Logger::log()->error("ProjectUI::initialize: project ptr is NULL");
 
   GraphManager *p_graph_manager = project->get_graph_manager_ref();
 
   if (!p_graph_manager)
-    Logger::log()->error("Project::initialize: project graph_manager ptr is NULL");
+    Logger::log()->error("ProjectUI::initialize: project graph_manager ptr is NULL");
 
   // initialize UI components (only tabs assign to the current parent
   // widget, so that the graph manager and the texture downloader will

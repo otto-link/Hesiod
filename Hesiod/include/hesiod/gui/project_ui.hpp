@@ -31,7 +31,7 @@ public:
   void save_ui_state(const std::string &fname) const;
 
   void cleanup();
-  void initialize(Project *project);
+  void initialize(ProjectModel *project);
   void setup_connections();
 
   QWidget                *get_widget();

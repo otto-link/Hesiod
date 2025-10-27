@@ -59,8 +59,8 @@ void HesiodApplication::cleanup()
   if (this->project_ui)
     this->project_ui->cleanup();
 
-  if (this->context.current_project)
-    this->context.current_project->cleanup();
+  if (this->context.project_model)
+    this->context.project_model->cleanup();
 }
 
 AppContext &HesiodApplication::get_context() { return this->context; }
@@ -86,7 +86,7 @@ void HesiodApplication::load_project_model_and_ui(const std::string &fname)
 
   // UI
   this->project_ui = std::make_unique<ProjectUI>();
-  this->project_ui->initialize(this->context.current_project.get());
+  this->project_ui->initialize(this->context.project_model.get());
   this->project_ui->load_ui_state(actual_fname);
 
   this->main_window->setCentralWidget(this->project_ui->get_widget());
@@ -100,27 +100,27 @@ void HesiodApplication::load_project_model_and_ui(const std::string &fname)
   // ProjectUI -> Project
   this->connect(this->project_ui->get_graph_manager_widget_ref(),
                 &GraphManagerWidget::has_changed,
-                this->context.current_project.get(),
-                &Project::on_has_changed);
+                this->context.project_model.get(),
+                &ProjectModel::on_has_changed);
 
   this->connect(this->project_ui->get_graph_tabs_widget_ref(),
                 &GraphTabsWidget::has_changed,
-                this->context.current_project.get(),
-                &Project::on_has_changed);
+                this->context.project_model.get(),
+                &ProjectModel::on_has_changed);
 
   // Project -> HesiodApplication
-  this->connect(this->context.current_project.get(),
-                &Project::project_name_changed,
+  this->connect(this->context.project_model.get(),
+                &ProjectModel::project_name_changed,
                 this,
                 &HesiodApplication::on_project_name_changed);
 
-  this->connect(this->context.current_project.get(),
-                &Project::is_dirty_changed,
+  this->connect(this->context.project_model.get(),
+                &ProjectModel::is_dirty_changed,
                 this,
                 &HesiodApplication::on_project_name_changed);
 
   // rename whether fname is empty or not
-  this->context.current_project->set_path(fname);
+  this->context.project_model->set_path(fname);
 }
 
 void HesiodApplication::on_export_batch()
@@ -161,7 +161,7 @@ void HesiodApplication::on_export_batch()
   {
     QCoreApplication::processEvents(); // render progress dialog
 
-    const std::filesystem::path project_path = this->context.current_project->get_path();
+    const std::filesystem::path project_path = this->context.project_model->get_path();
 
     // build export path based on project name, if available
     std::filesystem::path export_path = project_path.filename();
@@ -202,7 +202,7 @@ void HesiodApplication::on_export_batch()
     // --- run
 
     // retrieve config of the first graph
-    auto graph_nodes = this->context.current_project->get_graph_manager_ref()
+    auto graph_nodes = this->context.project_model->get_graph_manager_ref()
                            ->get_graph_nodes();
     auto         it = graph_nodes.begin();
     GraphConfig *p_config = it != graph_nodes.end() ? it->second->get_config_ref()
@@ -249,7 +249,7 @@ void HesiodApplication::on_load()
 {
   Logger::log()->trace("HesiodApplication::on_load");
 
-  std::filesystem::path path = this->context.current_project->get_path();
+  std::filesystem::path path = this->context.project_model->get_path();
 
   QString load_fname = QFileDialog::getOpenFileName(this->main_window.get(),
                                                     "Load...",
@@ -279,10 +279,10 @@ void HesiodApplication::on_new()
 
 void HesiodApplication::on_project_name_changed()
 {
-  std::string title = this->context.current_project->get_name() + " [" +
-                      this->context.current_project->get_path().string() + "]";
+  std::string title = this->context.project_model->get_name() + " [" +
+                      this->context.project_model->get_path().string() + "]";
 
-  if (this->context.current_project->get_is_dirty())
+  if (this->context.project_model->get_is_dirty())
     title += "*";
 
   this->main_window->setWindowTitle(title.c_str());
@@ -317,14 +317,14 @@ void HesiodApplication::on_save()
 {
   Logger::log()->trace("HesiodApplication::on_save");
 
-  std::filesystem::path path = this->context.current_project->get_path();
+  std::filesystem::path path = this->context.project_model->get_path();
 
   if (path.empty())
     this->on_save_as();
   else
   {
     this->save_project_model_and_ui(path.string());
-    this->context.current_project->set_path(path);
+    this->context.project_model->set_path(path);
   }
 }
 
@@ -332,7 +332,7 @@ void HesiodApplication::on_save_as()
 {
   Logger::log()->trace("HesiodApplication::on_save_as");
 
-  std::filesystem::path path = this->context.current_project->get_path();
+  std::filesystem::path path = this->context.project_model->get_path();
 
   QString new_fname = QFileDialog::getSaveFileName(this->main_window.get(),
                                                    "Save as...",
@@ -342,7 +342,7 @@ void HesiodApplication::on_save_as()
   if (!new_fname.isNull() && !new_fname.isEmpty())
   {
     this->save_project_model_and_ui(new_fname.toStdString());
-    this->context.current_project->set_path(new_fname.toStdString());
+    this->context.project_model->set_path(new_fname.toStdString());
   }
 }
 
@@ -350,7 +350,7 @@ void HesiodApplication::on_save_copy()
 {
   Logger::log()->trace("HesiodApplication::on_save_copy");
 
-  std::filesystem::path path = this->context.current_project->get_path();
+  std::filesystem::path path = this->context.project_model->get_path();
 
   Logger::log()->trace("{}", path.string());
 
@@ -368,7 +368,7 @@ void HesiodApplication::save_project_model_and_ui(const std::string &fname)
   Logger::log()->trace("HesiodApplication::save_project_model_and_ui: {}", fname);
 
   this->context.save_project_model(fname);
-  this->context.current_project->set_is_dirty(false);
+  this->context.project_model->set_is_dirty(false);
 
   this->project_ui->save_ui_state(fname);
 

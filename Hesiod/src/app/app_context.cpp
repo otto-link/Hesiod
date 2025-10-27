@@ -53,7 +53,7 @@ void AppContext::load_project_model(const std::string &fname)
   this->new_project();
 
   nlohmann::json json = json_from_file(fname);
-  this->current_project->json_from(json);
+  this->project_model->json_from(json);
 }
 
 void AppContext::load_settings()
@@ -69,14 +69,14 @@ void AppContext::load_settings()
 void AppContext::new_project()
 {
   Logger::log()->trace("AppContext::new_project");
-  this->current_project = std::make_unique<Project>();
+  this->project_model = std::make_unique<ProjectModel>();
 }
 
 void AppContext::save_project_model(const std::string &fname) const
 {
   Logger::log()->trace("AppContext::save_project_model: {}", fname);
 
-  nlohmann::json json = this->current_project->json_to();
+  nlohmann::json json = this->project_model->json_to();
   json_to_file(json, fname, /* merge_with_existing_content */ true);
 }
 

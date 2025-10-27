@@ -15,13 +15,13 @@ namespace hesiod
 class GraphManager;
 
 // =====================================
-// Project
+// ProjectModel
 // =====================================
-class Project : public QObject
+class ProjectModel : public QObject
 {
   Q_OBJECT
 public:
-  explicit Project(QObject *parent = nullptr);
+  explicit ProjectModel(QObject *parent = nullptr);
 
   void           json_from(nlohmann::json const &json);
   nlohmann::json json_to() const;
