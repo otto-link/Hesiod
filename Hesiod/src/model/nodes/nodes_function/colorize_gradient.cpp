@@ -34,11 +34,7 @@ void setup_colorize_gradient_node(BaseNode *p_node)
 
   // attribute(s) order
   p_node->set_attr_ordered_key(
-<<<<<<< HEAD
-      {"gradient", "reverse_colormap", "reverse_alpha", "clamp_alpha"});
-=======
       {"gradient", "_SEPARATOR_", "reverse_colormap", "reverse_alpha", "clamp_alpha"});
->>>>>>> dev
 
   // add presets
   GET_REF("gradient", ColorGradientAttribute)

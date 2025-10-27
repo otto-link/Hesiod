@@ -34,11 +34,8 @@ void setup_coastal_erosion_diffusion_node(BaseNode *p_node)
   // attribute(s) order
   p_node->set_attr_ordered_key(
       {"additional_depth", "iterations", "_SEPARATOR_", "distributed"});
-<<<<<<< HEAD
-=======
 
   add_wip_warning_label(p_node);
->>>>>>> dev
 }
 
 void compute_coastal_erosion_diffusion_node(BaseNode *p_node)

@@ -45,65 +45,6 @@ void ColorGradientManager::update_data(bool append)
   if (!append)
     this->gradient_data.clear();
 
-<<<<<<< HEAD
-  nlohmann::json json = json_from_file(HSD_COLOR_GRADIENT_FILE);
-
-  if (json.empty())
-  {
-    Logger::log()->error(
-        "ColorGradientManager::update_data: json parsing error, empty json");
-    return;
-  }
-
-  if (!json.contains("gradients"))
-  {
-    Logger::log()->error(
-        "ColorGradientManager::update_data: json parsing error, no 'gradients' key");
-    return;
-  }
-
-  for (const auto &grad_json : json["gradients"])
-  {
-    if (!grad_json.contains("name") || !grad_json.contains("stops"))
-    {
-      Logger::log()->error(
-          "ColorGradientManager::update_data: missing fields in gradient");
-      continue;
-    }
-
-    ColorGradientData grad;
-    grad.name = grad_json["name"].get<std::string>();
-    Logger::log()->trace("- {}", grad.name);
-
-    for (const auto &stop_json : grad_json["stops"])
-    {
-      if (!stop_json.contains("position") || !stop_json.contains("color"))
-      {
-        Logger::log()->error("ColorGradientManager::update_data: invalid stop in {}",
-                             grad.name);
-        continue;
-      }
-
-      grad.positions.push_back(stop_json["position"].get<float>());
-
-      const auto &color_array = stop_json["color"];
-      if (!color_array.is_array() || color_array.size() < 4)
-      {
-        Logger::log()->error("ColorGradientManager::update_data: invalid color in {}",
-                             grad.name);
-        continue;
-      }
-
-      std::array<float, 4> cf;
-      for (size_t k = 0; k < 4; ++k)
-        cf[k] = color_array[k].get<float>() / 255.f;
-
-      grad.colors.push_back(std::move(cf));
-    }
-
-    this->gradient_data.push_back(std::move(grad));
-  }
-=======
   // list files
   const std::string path = HSD_COLOR_GRADIENTS_PATH;
   const std::string extension = ".json";
@@ -164,23 +105,6 @@ void ColorGradientManager::update_data(bool append)
     Logger::log()->error("ColorGradientManager::update_data: folder error: {}", e.what());
     return;
   }
-
-  // nlohmann::json json = json_from_file(HSD_COLOR_GRADIENT_FILE);
-
-  // if (json.empty())
-  // {
-  //   Logger::log()->error(
-  //       "ColorGradientManager::update_data: json parsing error, empty json");
-  //   return;
-  // }
-
-  // if (!json.contains("value"))
-  // {
-  //   Logger::log()->error(
-  //       "ColorGradientManager::update_data: json parsing error, no 'value' key");
-  //   return;
-  // }
->>>>>>> dev
 }
 
 } // namespace hesiod
