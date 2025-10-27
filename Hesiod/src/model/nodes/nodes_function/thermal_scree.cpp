@@ -99,7 +99,7 @@ void compute_thermal_scree_node(BaseNode *p_node)
                                    GET("talus_constraint", BoolAttribute),
                                    pa_deposition_map);
         },
-        HSD_GPU_MODE);
+        p_node->get_config_ref()->hmap_transform_mode_gpu);
 
     p_out->smooth_overlap_buffers();
 

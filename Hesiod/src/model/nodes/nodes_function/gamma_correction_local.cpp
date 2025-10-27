@@ -72,7 +72,7 @@ void compute_gamma_correction_local_node(BaseNode *p_node)
                                               pa_mask,
                                               GET("k", FloatAttribute));
           },
-          HSD_GPU_MODE);
+          p_node->get_config_ref()->hmap_transform_mode_gpu);
     }
     else
     {
@@ -89,7 +89,7 @@ void compute_gamma_correction_local_node(BaseNode *p_node)
                                          pa_mask,
                                          GET("k", FloatAttribute));
           },
-          HSD_CPU_MODE);
+          p_node->get_config_ref()->hmap_transform_mode_cpu);
     }
 
     p_out->remap(hmin, hmax, 0.f, 1.f);

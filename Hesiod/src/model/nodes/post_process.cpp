@@ -38,7 +38,7 @@ void post_apply_enveloppe(BaseNode *p_node, hmap::Heightmap &h, hmap::Heightmap 
           *pa_out -= hmin;
           *pa_out *= *pa_env;
         },
-        HSD_CPU_MODE);
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
   }
 }
 
@@ -67,7 +67,7 @@ void post_process_heightmap(BaseNode         *p_node,
           hmap::Array *pa_out = p_arrays[0];
           return hmap::gpu::smooth_cpulse(*pa_out, ir);
         },
-        HSD_GPU_MODE);
+        p_node->get_config_ref()->hmap_transform_mode_gpu);
 
     h.smooth_overlap_buffers();
   }
@@ -122,7 +122,7 @@ void post_process_heightmap(BaseNode *p_node, hmap::Heightmap &h, hmap::Heightma
 
           *pa_out = hmap::lerp(*pa_in, *pa_out, t);
         },
-        HSD_CPU_MODE);
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
   }
 
   // inverse
@@ -145,7 +145,7 @@ void post_process_heightmap(BaseNode *p_node, hmap::Heightmap &h, hmap::Heightma
           hmap::Array *pa = p_arrays[0];
           hmap::gain(*pa, post_gain);
         },
-        HSD_CPU_MODE);
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
 
     h.remap(hmin, hmax, 0.f, 1.f);
   }
@@ -162,7 +162,7 @@ void post_process_heightmap(BaseNode *p_node, hmap::Heightmap &h, hmap::Heightma
           hmap::Array *pa_out = p_arrays[0];
           return hmap::gpu::smooth_cpulse(*pa_out, ir);
         },
-        HSD_GPU_MODE);
+        p_node->get_config_ref()->hmap_transform_mode_gpu);
 
     h.smooth_overlap_buffers();
   }
@@ -192,7 +192,7 @@ void post_process_heightmap(BaseNode *p_node, hmap::Heightmap &h, hmap::Heightma
                          hmax,
                          k);
         },
-        HSD_CPU_MODE);
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
   }
 }
 

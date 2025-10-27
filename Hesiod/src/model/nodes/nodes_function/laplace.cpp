@@ -62,7 +62,7 @@ void compute_laplace_node(BaseNode *p_node)
                         GET("sigma", FloatAttribute),
                         GET("iterations", IntAttribute));
         },
-        HSD_CPU_MODE);
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
 
     p_out->smooth_overlap_buffers();
   }

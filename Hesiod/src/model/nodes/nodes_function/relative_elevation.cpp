@@ -58,7 +58,7 @@ void compute_relative_elevation_node(BaseNode *p_node)
           hmap::Array *pa_out = p_arrays[0];
           *pa_out = hmap::gpu::relative_elevation(*pa_out, ir);
         },
-        HSD_GPU_MODE);
+        p_node->get_config_ref()->hmap_transform_mode_gpu);
 
     // post-process
     p_out->smooth_overlap_buffers();

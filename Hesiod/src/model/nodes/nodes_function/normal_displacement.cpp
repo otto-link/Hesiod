@@ -73,7 +73,7 @@ void compute_normal_displacement_node(BaseNode *p_node)
                                              ir,
                                              GET("reverse", BoolAttribute));
             },
-            HSD_GPU_MODE);
+            p_node->get_config_ref()->hmap_transform_mode_gpu);
       }
       else
       {
@@ -90,7 +90,7 @@ void compute_normal_displacement_node(BaseNode *p_node)
                                         ir,
                                         GET("reverse", BoolAttribute));
             },
-            HSD_CPU_MODE);
+            p_node->get_config_ref()->hmap_transform_mode_cpu);
       }
       p_out->smooth_overlap_buffers();
     }

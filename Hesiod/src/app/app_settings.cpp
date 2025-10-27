@@ -56,12 +56,6 @@ void AppSettings::json_from(nlohmann::json const &json)
     }
   }
 
-  json_safe_get(json,
-                "node_editor.hmap_transform_mode_cpu",
-                node_editor.hmap_transform_mode_cpu);
-  json_safe_get(json,
-                "node_editor.hmap_transform_mode_gpu",
-                node_editor.hmap_transform_mode_gpu);
   json_safe_get(json, "node_editor.default_resolution", node_editor.default_resolution);
   json_safe_get(json, "node_editor.default_tiling", node_editor.default_tiling);
   json_safe_get(json, "node_editor.default_overlap", node_editor.default_overlap);
@@ -134,8 +128,6 @@ nlohmann::json AppSettings::json_to() const
   json["global.enable_texture_downloader"] = global.enable_texture_downloader;
 
   json["node_editor.gpu_device_name"] = node_editor.gpu_device_name;
-  json["node_editor.hmap_transform_mode_cpu"] = node_editor.hmap_transform_mode_cpu;
-  json["node_editor.hmap_transform_mode_gpu"] = node_editor.hmap_transform_mode_gpu;
   json["node_editor.default_resolution"] = node_editor.default_resolution;
   json["node_editor.default_tiling"] = node_editor.default_tiling;
   json["node_editor.default_overlap"] = node_editor.default_overlap;

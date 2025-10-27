@@ -59,7 +59,7 @@ void compute_abs_smooth_node(BaseNode *p_node)
                                      GET("mu", FloatAttribute),
                                      GET("vshift", FloatAttribute));
         },
-        HSD_CPU_MODE);
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
 
     // post-process
     post_process_heightmap(p_node,

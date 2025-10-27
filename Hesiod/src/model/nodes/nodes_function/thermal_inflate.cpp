@@ -76,7 +76,7 @@ void compute_thermal_inflate_node(BaseNode *p_node)
                                      *pa_talus_map,
                                      GET("iterations", IntAttribute));
         },
-        HSD_GPU_MODE);
+        p_node->get_config_ref()->hmap_transform_mode_gpu);
 
     p_out->smooth_overlap_buffers();
   }

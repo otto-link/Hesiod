@@ -57,7 +57,7 @@ void compute_morphological_gradient_node(BaseNode *p_node)
 
           *pa_out = hmap::gpu::morphological_gradient(*pa_in, ir);
         },
-        HSD_GPU_MODE);
+        p_node->get_config_ref()->hmap_transform_mode_gpu);
 
     p_out->smooth_overlap_buffers();
 

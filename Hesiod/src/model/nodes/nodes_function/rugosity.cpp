@@ -60,7 +60,7 @@ void compute_rugosity_node(BaseNode *p_node)
 
           *pa_out = hmap::gpu::rugosity(*pa_in, ir);
         },
-        HSD_GPU_MODE);
+        p_node->get_config_ref()->hmap_transform_mode_gpu);
 
     if (GET("clamp_max", BoolAttribute))
       hmap::transform(*p_out,

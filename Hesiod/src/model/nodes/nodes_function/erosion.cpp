@@ -58,7 +58,7 @@ void compute_erosion_node(BaseNode *p_node)
 
             *pa_out = hmap::gpu::erosion(*pa_in, ir);
           },
-          HSD_GPU_MODE);
+          p_node->get_config_ref()->hmap_transform_mode_gpu);
     }
     else
     {
@@ -71,7 +71,7 @@ void compute_erosion_node(BaseNode *p_node)
 
             *pa_out = hmap::erosion(*pa_in, ir);
           },
-          HSD_CPU_MODE);
+          p_node->get_config_ref()->hmap_transform_mode_cpu);
     }
 
     p_out->smooth_overlap_buffers();

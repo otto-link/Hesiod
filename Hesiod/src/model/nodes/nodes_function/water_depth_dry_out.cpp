@@ -62,7 +62,7 @@ void compute_water_depth_dry_out_node(BaseNode *p_node)
                                     pa_mask,
                                     depth_max);
         },
-        HSD_CPU_MODE);
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

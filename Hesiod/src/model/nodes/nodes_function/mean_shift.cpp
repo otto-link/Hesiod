@@ -75,7 +75,7 @@ void compute_mean_shift_node(BaseNode *p_node)
                                           GET("iterations", IntAttribute),
                                           GET("talus_weighted", BoolAttribute));
         },
-        HSD_GPU_MODE);
+        p_node->get_config_ref()->hmap_transform_mode_gpu);
 
     p_out->smooth_overlap_buffers();
 

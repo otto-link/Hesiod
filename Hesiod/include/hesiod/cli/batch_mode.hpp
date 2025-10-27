@@ -24,7 +24,8 @@ int parse_args(args::ArgumentParser &parser, int argc, char *argv[]);
 void run_batch_mode(const std::string     &filename,
                     const hmap::Vec2<int> &shape,
                     const hmap::Vec2<int> &tiling,
-                    float                  overlap);
+                    float                  overlap,
+                    const GraphConfig     *p_input_model_config = nullptr);
 void run_node_inventory();
 void run_snapshot_generation();
 

@@ -120,7 +120,7 @@ void compute_hydraulic_procedural_node(BaseNode *p_node)
               hmin,
               hmax);
         },
-        HSD_CPU_MODE);
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
 
     p_out->smooth_overlap_buffers();
   }

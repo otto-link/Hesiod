@@ -92,7 +92,7 @@ void compute_vorolines_node(BaseNode *p_node)
                                        pa_dy,
                                        bbox);
       },
-      HSD_GPU_MODE);
+      p_node->get_config_ref()->hmap_transform_mode_gpu);
 
   // apply square root
   p_out->remap();
@@ -105,7 +105,7 @@ void compute_vorolines_node(BaseNode *p_node)
           hmap::Array *pa_out = p_arrays[0];
           *pa_out = hmap::sqrt(*pa_out);
         },
-        HSD_CPU_MODE);
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
 
   // post-process
   post_apply_enveloppe(p_node, *p_out, p_env);

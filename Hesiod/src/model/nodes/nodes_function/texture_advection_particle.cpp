@@ -119,7 +119,7 @@ void compute_texture_advection_particle_node(BaseNode *p_node)
                 pa_advection_mask,
                 pa_mask);
           },
-          HSD_GPU_MODE);
+          p_node->get_config_ref()->hmap_transform_mode_gpu);
     };
 
     for (int nch = 0; nch < 4; nch++)

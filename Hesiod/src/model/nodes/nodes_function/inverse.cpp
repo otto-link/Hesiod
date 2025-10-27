@@ -47,7 +47,7 @@ void compute_inverse_node(BaseNode *p_node)
 
           *pa_out = -*pa_in;
         },
-        HSD_CPU_MODE);
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
 
     // post-process
     post_process_heightmap(p_node, *p_out);

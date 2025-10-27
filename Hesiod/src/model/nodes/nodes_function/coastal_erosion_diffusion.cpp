@@ -56,7 +56,8 @@ void compute_coastal_erosion_diffusion_node(BaseNode *p_node)
     hmap::Heightmap *p_mask = p_node->get_value_ref<hmap::Heightmap>("water_mask");
 
     hmap::TransformMode transform_mode = GET("distributed", BoolAttribute)
-                                             ? HSD_CPU_MODE
+                                             ? p_node->get_config_ref()
+                                                   ->hmap_transform_mode_cpu
                                              : hmap::TransformMode::SINGLE_ARRAY;
 
     hmap::transform(

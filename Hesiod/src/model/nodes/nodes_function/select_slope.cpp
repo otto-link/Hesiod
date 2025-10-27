@@ -60,7 +60,7 @@ void compute_select_slope_node(BaseNode *p_node)
 
             *pa_out = hmap::gpu::morphological_gradient(*pa_in, ir);
           },
-          HSD_GPU_MODE);
+          p_node->get_config_ref()->hmap_transform_mode_gpu);
     }
     else
       hmap::transform(
@@ -72,7 +72,7 @@ void compute_select_slope_node(BaseNode *p_node)
 
             *pa_out = hmap::gradient_norm(*pa_in);
           },
-          HSD_CPU_MODE);
+          p_node->get_config_ref()->hmap_transform_mode_cpu);
 
     // post-process
     p_out->smooth_overlap_buffers();

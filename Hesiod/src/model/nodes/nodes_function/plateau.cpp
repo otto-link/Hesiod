@@ -64,7 +64,7 @@ void compute_plateau_node(BaseNode *p_node)
 
             hmap::gpu::plateau(*pa_out, pa_mask, ir, GET("factor", FloatAttribute));
           },
-          HSD_GPU_MODE);
+          p_node->get_config_ref()->hmap_transform_mode_gpu);
     }
     else
     {
@@ -77,7 +77,7 @@ void compute_plateau_node(BaseNode *p_node)
 
             hmap::plateau(*pa_out, pa_mask, ir, GET("factor", FloatAttribute));
           },
-          HSD_CPU_MODE);
+          p_node->get_config_ref()->hmap_transform_mode_cpu);
     }
 
     p_out->smooth_overlap_buffers();

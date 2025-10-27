@@ -66,7 +66,7 @@ void compute_warp_node(BaseNode *p_node)
 
           hmap::gpu::warp(*pa_out, &dx, &dy);
         },
-        HSD_GPU_MODE);
+        p_node->get_config_ref()->hmap_transform_mode_gpu);
 
     // post-process
     post_process_heightmap(p_node, *p_out, p_in);

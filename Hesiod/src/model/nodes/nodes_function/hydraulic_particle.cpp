@@ -126,7 +126,7 @@ void compute_hydraulic_particle_node(BaseNode *p_node)
                                           GET("evap_rate", FloatAttribute),
                                           GET("post_filtering", BoolAttribute));
           },
-          HSD_GPU_MODE);
+          p_node->get_config_ref()->hmap_transform_mode_gpu);
     }
     else
     {
@@ -245,7 +245,7 @@ void compute_hydraulic_particle_node(BaseNode *p_node)
             hmap::gpu::smooth_cpulse(mask, 2);
             hmap::gpu::smooth_cpulse(*pa_out, 32, &mask);
           },
-          HSD_GPU_MODE);
+          p_node->get_config_ref()->hmap_transform_mode_gpu);
     }
   }
 

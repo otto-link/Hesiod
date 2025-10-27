@@ -66,7 +66,7 @@ void compute_accumulation_curvature_node(BaseNode *p_node)
           if (GET("clamp_max", BoolAttribute))
             hmap::clamp_max(*pa_out, GET("vc_max", FloatAttribute));
         },
-        HSD_GPU_MODE);
+        p_node->get_config_ref()->hmap_transform_mode_gpu);
 
     p_out->smooth_overlap_buffers();
 

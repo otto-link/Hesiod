@@ -80,7 +80,7 @@ void compute_terrace_node(BaseNode *p_node)
                         hmin,
                         hmax);
         },
-        HSD_GPU_MODE);
+        p_node->get_config_ref()->hmap_transform_mode_gpu);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

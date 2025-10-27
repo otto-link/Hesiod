@@ -69,7 +69,7 @@ void compute_recurve_node(BaseNode *p_node)
             hmap::recurve(*pa_out, t, GET("values", VecFloatAttribute), pa_mask);
             hmap::remap(*pa_out, hmin, hmax, 0.f, 1.f);
           },
-          HSD_CPU_MODE);
+          p_node->get_config_ref()->hmap_transform_mode_cpu);
     }
     else
     {

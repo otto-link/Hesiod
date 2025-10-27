@@ -55,7 +55,7 @@ void compute_rotate_displacement_node(BaseNode *p_node)
 
           hmap::rotate_displacement(*pa_in, GET("angle", FloatAttribute), *pa_dx, *pa_dy);
         },
-        HSD_CPU_MODE);
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

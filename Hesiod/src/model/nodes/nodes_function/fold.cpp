@@ -60,7 +60,7 @@ void compute_fold_node(BaseNode *p_node)
                      GET("iterations", IntAttribute),
                      GET("k", FloatAttribute));
         },
-        HSD_CPU_MODE);
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
 
     p_out->remap(hmin, hmax);
   }

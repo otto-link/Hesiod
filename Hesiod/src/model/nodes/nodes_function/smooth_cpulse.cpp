@@ -66,7 +66,7 @@ void compute_smooth_cpulse_node(BaseNode *p_node)
 
           hmap::gpu::smooth_cpulse(*pa_out, ir, pa_mask);
         },
-        HSD_GPU_MODE);
+        p_node->get_config_ref()->hmap_transform_mode_gpu);
 
     p_out->smooth_overlap_buffers();
 

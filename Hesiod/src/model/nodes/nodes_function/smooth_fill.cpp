@@ -77,7 +77,7 @@ void compute_smooth_fill_node(BaseNode *p_node)
                                  GET("k", FloatAttribute),
                                  pa_deposition);
         },
-        HSD_GPU_MODE);
+        p_node->get_config_ref()->hmap_transform_mode_gpu);
 
     p_out->smooth_overlap_buffers();
     p_deposition_map->smooth_overlap_buffers();

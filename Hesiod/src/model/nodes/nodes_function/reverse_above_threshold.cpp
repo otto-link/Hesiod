@@ -82,7 +82,7 @@ void compute_reverse_above_theshold_node(BaseNode *p_node)
                                          GET("transition_extent", FloatAttribute));
           }
         },
-        HSD_CPU_MODE);
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
 
     // post-process
     post_process_heightmap(p_node, *p_out, p_in);

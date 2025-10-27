@@ -56,7 +56,7 @@ void compute_valley_width_node(BaseNode *p_node)
 
           *pa_out = hmap::valley_width(*pa_in, ir, GET("ridge_select", BoolAttribute));
         },
-        HSD_CPU_MODE);
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
 
     p_out->smooth_overlap_buffers();
 

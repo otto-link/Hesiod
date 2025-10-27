@@ -72,7 +72,7 @@ void compute_zeroed_edges_node(BaseNode *p_node)
               pa_dr,
               bbox);
         },
-        HSD_CPU_MODE);
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
 
     // post-process
     post_process_heightmap(p_node,

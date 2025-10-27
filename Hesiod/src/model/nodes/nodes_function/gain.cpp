@@ -59,7 +59,7 @@ void compute_gain_node(BaseNode *p_node)
 
           hmap::gain(*pa_out, GET("gain", FloatAttribute), pa_mask);
         },
-        HSD_CPU_MODE);
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
 
     p_out->remap(hmin, hmax, 0.f, 1.f);
   }

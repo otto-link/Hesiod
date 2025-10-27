@@ -57,7 +57,7 @@ void compute_merge_water_depths_node(BaseNode *p_node)
                                                *pa_in2,
                                                GET("k_smooth", FloatAttribute));
         },
-        HSD_CPU_MODE);
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
 
     p_depth->smooth_overlap_buffers();
   }

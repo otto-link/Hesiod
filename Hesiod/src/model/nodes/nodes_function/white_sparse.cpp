@@ -58,7 +58,7 @@ void compute_white_sparse_node(BaseNode *p_node)
 
         *pa_out = hmap::white_sparse(shape, 0.f, 1.f, density_per_tile, (uint)seed++);
       },
-      HSD_CPU_MODE);
+      p_node->get_config_ref()->hmap_transform_mode_cpu);
 
   // add envelope
   if (p_env)
@@ -74,7 +74,7 @@ void compute_white_sparse_node(BaseNode *p_node)
           *pa_a -= hmin;
           *pa_a *= *pa_b;
         },
-        HSD_CPU_MODE);
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
   }
 
   // post-process

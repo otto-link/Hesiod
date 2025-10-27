@@ -75,7 +75,7 @@ void compute_directional_blur_node(BaseNode *p_node)
                                  GET("stretch", FloatAttribute),
                                  GET("spread", FloatAttribute));
         },
-        HSD_CPU_MODE);
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
 
     p_out->smooth_overlap_buffers();
 

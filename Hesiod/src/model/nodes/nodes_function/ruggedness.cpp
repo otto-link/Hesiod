@@ -58,7 +58,7 @@ void compute_ruggedness_node(BaseNode *p_node)
 
           *pa_out = hmap::gpu::ruggedness(*pa_in, ir);
         },
-        HSD_GPU_MODE);
+        p_node->get_config_ref()->hmap_transform_mode_gpu);
 
     // post-process
     p_out->smooth_overlap_buffers();

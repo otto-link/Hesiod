@@ -58,7 +58,7 @@ void compute_gradient_angle_node(BaseNode *p_node)
           else
             *pa_out = hmap::gradient_angle(*pa_in);
         },
-        HSD_CPU_MODE);
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
 
     p_out->smooth_overlap_buffers();
 

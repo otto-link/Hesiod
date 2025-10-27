@@ -76,7 +76,7 @@ void compute_cone_node(BaseNode *p_node)
                              pa_dy,
                              bbox);
       },
-      HSD_CPU_MODE);
+      p_node->get_config_ref()->hmap_transform_mode_cpu);
 
   // post-process
   post_apply_enveloppe(p_node, *p_out, p_env);

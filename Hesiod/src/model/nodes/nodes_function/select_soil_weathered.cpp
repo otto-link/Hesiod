@@ -86,7 +86,7 @@ void compute_select_soil_weathered_node(BaseNode *p_node)
 
           *pa_out = hmap::gpu::morphological_gradient(*pa_in, ir_grad);
         },
-        HSD_GPU_MODE);
+        p_node->get_config_ref()->hmap_transform_mode_gpu);
 
     grad_norm.remap();
 
@@ -99,7 +99,7 @@ void compute_select_soil_weathered_node(BaseNode *p_node)
 
           hmap::gain(*pa_out, GET("gradient_gain", FloatAttribute));
         },
-        HSD_CPU_MODE);
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
 
     // --- compute mask
 
@@ -124,7 +124,7 @@ void compute_select_soil_weathered_node(BaseNode *p_node)
               GET("gradient_weight", FloatAttribute),
               (float)nx);
         },
-        HSD_GPU_MODE);
+        p_node->get_config_ref()->hmap_transform_mode_gpu);
 
     // post-process
     p_out->smooth_overlap_buffers();

@@ -59,7 +59,7 @@ void compute_white_density_map_node(BaseNode *p_node)
 
           *pa_out = hmap::white_density_map(*pa_density, (uint)seed++);
         },
-        HSD_CPU_MODE);
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
 
     // add envelope
     if (p_env)
@@ -75,7 +75,7 @@ void compute_white_density_map_node(BaseNode *p_node)
             *pa_a -= hmin;
             *pa_a *= *pa_b;
           },
-          HSD_CPU_MODE);
+          p_node->get_config_ref()->hmap_transform_mode_cpu);
     }
 
     // post-process

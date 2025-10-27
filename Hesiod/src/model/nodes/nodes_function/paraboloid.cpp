@@ -85,7 +85,7 @@ void compute_paraboloid_node(BaseNode *p_node)
                                    GET("center", Vec2FloatAttribute),
                                    bbox);
       },
-      HSD_CPU_MODE);
+      p_node->get_config_ref()->hmap_transform_mode_cpu);
 
   // post-process
   post_apply_enveloppe(p_node, *p_out, p_env);

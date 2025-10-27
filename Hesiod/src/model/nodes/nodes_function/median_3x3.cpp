@@ -56,7 +56,7 @@ void compute_median3x3_node(BaseNode *p_node)
 
             hmap::gpu::median_3x3(*pa_in, pa_mask);
           },
-          HSD_GPU_MODE);
+          p_node->get_config_ref()->hmap_transform_mode_gpu);
     }
     else
     {
@@ -72,7 +72,7 @@ void compute_median3x3_node(BaseNode *p_node)
 
             hmap::median_3x3(*pa_in, pa_mask);
           },
-          HSD_GPU_MODE);
+          p_node->get_config_ref()->hmap_transform_mode_gpu);
     }
 
     p_out->smooth_overlap_buffers();

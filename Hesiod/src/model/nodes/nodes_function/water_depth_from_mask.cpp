@@ -66,7 +66,7 @@ void compute_water_depth_from_mask_node(BaseNode *p_node)
                                                   GET("tolerance", FloatAttribute),
                                                   GET("omega", FloatAttribute));
         },
-        HSD_CPU_MODE);
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
 
     p_depth->smooth_overlap_buffers();
   }

@@ -212,20 +212,10 @@ void HesiodApplication::on_export_batch()
     {
       GraphConfig bake_config = *p_config;
 
-      AppContext &ctx = HSD_CTX;
-
-      auto gpu_mode_bckp = ctx.app_settings.node_editor.hmap_transform_mode_gpu;
-      auto cpu_mode_bckp = ctx.app_settings.node_editor.hmap_transform_mode_cpu;
-
-      // TODO fix CPU/GPU modes
-
       if (bake_settings.force_distributed)
       {
-        // force it
-        ctx.app_settings.node_editor
-            .hmap_transform_mode_gpu = hmap::TransformMode::DISTRIBUTED;
-        ctx.app_settings.node_editor
-            .hmap_transform_mode_cpu = hmap::TransformMode::DISTRIBUTED;
+        bake_config.hmap_transform_mode_cpu = hmap::TransformMode::DISTRIBUTED;
+        bake_config.hmap_transform_mode_gpu = hmap::TransformMode::DISTRIBUTED;
       }
 
       // run batch node
@@ -233,11 +223,8 @@ void HesiodApplication::on_export_batch()
           fname.string(),
           hmap::Vec2<int>(bake_settings.resolution, bake_settings.resolution),
           bake_config.tiling,
-          bake_config.overlap);
-
-      // set transform modes back
-      ctx.app_settings.node_editor.hmap_transform_mode_gpu = gpu_mode_bckp;
-      ctx.app_settings.node_editor.hmap_transform_mode_cpu = cpu_mode_bckp;
+          bake_config.overlap,
+          &bake_config);
     }
   }
 

@@ -52,7 +52,7 @@ void compute_gradient_node(BaseNode *p_node)
 
           hmap::gradient_x(*pa_in, *pa_dx);
         },
-        HSD_CPU_MODE);
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
 
     hmap::transform(
         {p_dy, p_in},
@@ -63,7 +63,7 @@ void compute_gradient_node(BaseNode *p_node)
 
           hmap::gradient_y(*pa_in, *pa_dy);
         },
-        HSD_CPU_MODE);
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
 
     p_dx->smooth_overlap_buffers();
     p_dy->smooth_overlap_buffers();

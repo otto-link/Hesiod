@@ -56,7 +56,7 @@ void compute_lerp_node(BaseNode *p_node)
 
             *pa_out = hmap::lerp(*pa_a, *pa_b, *pa_t);
           },
-          HSD_CPU_MODE);
+          p_node->get_config_ref()->hmap_transform_mode_cpu);
     else
       hmap::transform(
           {p_out, p_a, p_b},
@@ -68,7 +68,7 @@ void compute_lerp_node(BaseNode *p_node)
 
             *pa_out = hmap::lerp(*pa_a, *pa_b, GET("t", FloatAttribute));
           },
-          HSD_CPU_MODE);
+          p_node->get_config_ref()->hmap_transform_mode_cpu);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

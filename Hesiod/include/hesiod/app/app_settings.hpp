@@ -5,8 +5,6 @@
 
 #include "nlohmann/json.hpp"
 
-#include "highmap/heightmap.hpp"
-
 namespace hesiod
 {
 
@@ -42,19 +40,17 @@ struct AppSettings
 
   struct NodeEditor
   {
-    std::string         gpu_device_name = ""; // let CLWrapper decides
-    hmap::TransformMode hmap_transform_mode_cpu = hmap::TransformMode::DISTRIBUTED;
-    hmap::TransformMode hmap_transform_mode_gpu = hmap::TransformMode::SINGLE_ARRAY;
-    int                 default_resolution = 1024;
-    int                 default_tiling = 4;
-    float               default_overlap = 0.5f;
-    int                 preview_w = 128;
-    int                 preview_h = 128;
-    std::string         doc_path = "data/node_documentation.json";
-    float               position_delta_when_duplicating_node = 200.f;
-    float               auto_layout_dx = 256.f;
-    float               auto_layout_dy = 384.f;
-    bool                show_node_settings_pan = false;
+    std::string gpu_device_name = ""; // let CLWrapper decides
+    int         default_resolution = 1024;
+    int         default_tiling = 4;
+    float       default_overlap = 0.5f;
+    int         preview_w = 128;
+    int         preview_h = 128;
+    std::string doc_path = "data/node_documentation.json";
+    float       position_delta_when_duplicating_node = 200.f;
+    float       auto_layout_dx = 256.f;
+    float       auto_layout_dy = 384.f;
+    bool        show_node_settings_pan = false;
   } node_editor;
 
   struct Viewer

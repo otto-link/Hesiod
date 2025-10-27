@@ -80,7 +80,7 @@ void compute_texture_advection_warp_node(BaseNode *p_node)
                 GET("value_persistence", FloatAttribute),
                 pa_mask);
           },
-          HSD_GPU_MODE);
+          p_node->get_config_ref()->hmap_transform_mode_gpu);
     };
 
     for (int nch = 0; nch < 4; nch++)

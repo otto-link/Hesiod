@@ -70,7 +70,7 @@ void compute_voronoise_node(BaseNode *p_node)
                                        pa_dy,
                                        bbox);
       },
-      HSD_GPU_MODE);
+      p_node->get_config_ref()->hmap_transform_mode_gpu);
 
   // add envelope
   if (p_env)

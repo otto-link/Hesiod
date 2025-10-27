@@ -93,7 +93,7 @@ void compute_noise_fbm_node(BaseNode *p_node)
               nullptr,
               bbox);
         },
-        HSD_GPU_MODE);
+        p_node->get_config_ref()->hmap_transform_mode_gpu);
   }
   else
   {
@@ -122,7 +122,7 @@ void compute_noise_fbm_node(BaseNode *p_node)
                                     nullptr,
                                     bbox);
         },
-        HSD_CPU_MODE);
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
   }
 
   // post-process

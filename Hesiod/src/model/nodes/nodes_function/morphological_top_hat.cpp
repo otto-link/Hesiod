@@ -65,7 +65,7 @@ void compute_morphological_top_hat_node(BaseNode *p_node)
             else
               *pa_out = hmap::gpu::morphological_black_hat(*pa_in, ir);
           },
-          HSD_GPU_MODE);
+          p_node->get_config_ref()->hmap_transform_mode_gpu);
     }
     else
     {
@@ -81,7 +81,7 @@ void compute_morphological_top_hat_node(BaseNode *p_node)
             else
               *pa_out = hmap::morphological_black_hat(*pa_in, ir);
           },
-          HSD_CPU_MODE);
+          p_node->get_config_ref()->hmap_transform_mode_cpu);
     }
 
     p_out->smooth_overlap_buffers();

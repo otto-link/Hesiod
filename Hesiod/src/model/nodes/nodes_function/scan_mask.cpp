@@ -53,7 +53,7 @@ void compute_scan_mask_node(BaseNode *p_node)
                                     GET("brightness", FloatAttribute),
                                     GET("contrast", FloatAttribute));
         },
-        HSD_CPU_MODE);
+        p_node->get_config_ref()->hmap_transform_mode_cpu);
 
     if (GET("remap", BoolAttribute))
       p_out->remap();

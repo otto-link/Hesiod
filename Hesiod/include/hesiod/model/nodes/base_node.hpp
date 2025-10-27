@@ -30,9 +30,6 @@
 #define CONFIG p_node->get_config_ref()->shape, p_node->get_config_ref()->tiling, p_node->get_config_ref()->overlap
 // clang-format on
 
-#define HSD_CPU_MODE hmap::TransformMode::DISTRIBUTED
-#define HSD_GPU_MODE hmap::TransformMode::SINGLE_ARRAY
-
 namespace hesiod
 {
 

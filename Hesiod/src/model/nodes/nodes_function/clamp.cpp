@@ -77,7 +77,7 @@ void compute_clamp_node(BaseNode *p_node)
             hmap::Array *pa_out = p_arrays[0];
             hmap::clamp(*pa_out, crange.x, crange.y);
           },
-          HSD_CPU_MODE);
+          p_node->get_config_ref()->hmap_transform_mode_cpu);
     }
     else
     {
@@ -89,7 +89,7 @@ void compute_clamp_node(BaseNode *p_node)
               hmap::Array *pa_out = p_arrays[0];
               hmap::clamp_min_smooth(*pa_out, crange.x, k_min);
             },
-            HSD_CPU_MODE);
+            p_node->get_config_ref()->hmap_transform_mode_cpu);
       else
         hmap::transform(
             {p_out},
@@ -98,7 +98,7 @@ void compute_clamp_node(BaseNode *p_node)
               hmap::Array *pa_out = p_arrays[0];
               hmap::clamp_min(*pa_out, crange.x);
             },
-            HSD_CPU_MODE);
+            p_node->get_config_ref()->hmap_transform_mode_cpu);
 
       if (smooth_max)
         hmap::transform(
@@ -108,7 +108,7 @@ void compute_clamp_node(BaseNode *p_node)
               hmap::Array *pa_out = p_arrays[0];
               hmap::clamp_max_smooth(*pa_out, crange.y, k_max);
             },
-            HSD_CPU_MODE);
+            p_node->get_config_ref()->hmap_transform_mode_cpu);
       else
         hmap::transform(
             {p_out},
@@ -117,7 +117,7 @@ void compute_clamp_node(BaseNode *p_node)
               hmap::Array *pa_out = p_arrays[0];
               hmap::clamp_max(*pa_out, crange.y);
             },
-            HSD_CPU_MODE);
+            p_node->get_config_ref()->hmap_transform_mode_cpu);
     }
 
     if (GET("remap", BoolAttribute))

@@ -5,6 +5,7 @@
 #include "nlohmann/json.hpp"
 
 #include "highmap/algebra.hpp"
+#include "highmap/heightmap.hpp"
 
 namespace hesiod
 {
@@ -22,9 +23,11 @@ struct GraphConfig
   void set_shape(const hmap::Vec2<int> &new_shape) { this->shape = new_shape; }
 
   // --- Members
-  hmap::Vec2<int> shape;
-  hmap::Vec2<int> tiling;
-  float           overlap;
+  hmap::Vec2<int>     shape;
+  hmap::Vec2<int>     tiling;
+  float               overlap;
+  hmap::TransformMode hmap_transform_mode_cpu = hmap::TransformMode::DISTRIBUTED;
+  hmap::TransformMode hmap_transform_mode_gpu = hmap::TransformMode::SINGLE_ARRAY;
 };
 
 } // namespace hesiod
