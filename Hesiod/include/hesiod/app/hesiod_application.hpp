@@ -35,6 +35,7 @@ public:
 
   void load_project_model_and_ui(const std::string &fname = "");
   void save_project_model_and_ui(const std::string &fname);
+  void save_backup(const std::string &fname);
   void show();
 
   // --- Context
@@ -62,11 +63,11 @@ private:
   void cleanup();
   void setup_menu_bar();
 
-  // --- Members
+  // --- Members (respect order for deletion)
   AppContext                   context;
-  std::unique_ptr<ProjectUI>   project_ui;
-  std::unique_ptr<QMainWindow> main_window;
   QProgressBar                *progress_bar; // owned by main_window
+  std::unique_ptr<QMainWindow> main_window;
+  std::unique_ptr<ProjectUI>   project_ui;
 };
 
 } // namespace hesiod

@@ -80,16 +80,18 @@ void AppSettings::json_from(nlohmann::json const &json)
     json_safe_get(json, "window.y", window.y);
     json_safe_get(json, "window.w", window.w);
     json_safe_get(json, "window.h", window.h);
+    json_safe_get(json, "window.progress_bar_width", window.progress_bar_width);
+    json_safe_get(json, "window.gm_x", window.gm_x);
+    json_safe_get(json, "window.gm_y", window.gm_y);
+    json_safe_get(json, "window.gm_w", window.gm_w);
+    json_safe_get(json, "window.gm_h", window.gm_h);
+
     json_safe_get(json,
                   "window.show_graph_manager_widget",
                   window.show_graph_manager_widget);
     json_safe_get(json,
                   "window.show_texture_downloader_widget",
                   window.show_texture_downloader_widget);
-    json_safe_get(json, "window.gm_x", window.gm_x);
-    json_safe_get(json, "window.gm_y", window.gm_y);
-    json_safe_get(json, "window.gm_w", window.gm_w);
-    json_safe_get(json, "window.gm_h", window.gm_h);
 
     json_safe_get(json,
                   "window.open_graph_manager_at_startup",
@@ -147,6 +149,7 @@ nlohmann::json AppSettings::json_to() const
   json["window.y"] = window.y;
   json["window.w"] = window.w;
   json["window.h"] = window.h;
+  json["window.progress_bar_width"] = window.progress_bar_width;
   json["window.gm_x"] = window.gm_x;
   json["window.gm_y"] = window.gm_y;
   json["window.gm_w"] = window.gm_w;

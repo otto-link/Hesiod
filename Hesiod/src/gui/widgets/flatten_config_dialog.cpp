@@ -6,17 +6,17 @@
 #include <QGridLayout>
 #include <QPushButton>
 
-#include "hesiod/gui/widgets/export_param_widget.hpp"
+#include "hesiod/gui/widgets/flatten_config_dialog.hpp"
 #include "hesiod/gui/widgets/gui_utils.hpp"
 #include "hesiod/logger.hpp"
 
 namespace hesiod
 {
 
-ExportParamWidget::ExportParamWidget(ExportParam *p_export_param, QWidget *parent)
+FlattenConfigDialog::FlattenConfigDialog(FlattenConfig *p_export_param, QWidget *parent)
     : QDialog(parent), p_export_param(p_export_param)
 {
-  this->setWindowTitle("Hesiod - Export parameter configuration");
+  this->setWindowTitle("Hesiod - Graph flatten configuration");
 
   QGridLayout *layout = new QGridLayout(this);
 

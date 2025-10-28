@@ -1,13 +1,5 @@
 /* Copyright (c) 2025 Otto Link. Distributed under the terms of the GNU General Public
    License. The full license is in the file LICENSE, distributed with this software. */
-
-/**
- * @file export_param.hpp
- * @author  Otto Link (otto.link.bv@gmail.com)
- * @brief
- *
- * @copyright Copyright (c) 2025
- */
 #pragma once
 #include <filesystem>
 
@@ -18,11 +10,11 @@ namespace hesiod
 {
 
 // =====================================
-// ExportParam
+// FlattenConfig
 // =====================================
-struct ExportParam
+struct FlattenConfig
 {
-  ExportParam() = default;
+  FlattenConfig() = default;
 
   // --- Serialization ---
   void           json_from(nlohmann::json const &json);

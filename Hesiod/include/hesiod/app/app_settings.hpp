@@ -62,17 +62,19 @@ struct AppSettings
 
   struct Window // main window
   {
-    int  x = 0;
-    int  y = 0;
-    int  w = 1024;
-    int  h = 1024;
-    bool show_graph_manager_widget = false;
-    bool show_texture_downloader_widget = false;
+    int x = 0;
+    int y = 0;
+    int w = 1024;
+    int h = 1024;
+    int progress_bar_width = 200;
 
     int gm_x = 0; // graph manager geometry
     int gm_y = 0;
     int gm_w = 1024;
     int gm_h = 1024;
+
+    bool show_graph_manager_widget = false;
+    bool show_texture_downloader_widget = false;
 
     // TODO remove
     bool                      open_graph_manager_at_startup = false;

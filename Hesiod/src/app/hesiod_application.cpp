@@ -49,7 +49,8 @@ HesiodApplication::HesiodApplication(int &argc, char **argv) : QApplication(argc
     this->progress_bar->setRange(0, 100);
     this->progress_bar->setValue(0);
     this->progress_bar->setTextVisible(false);
-    this->progress_bar->setFixedWidth(200); // TODO app settings
+    this->progress_bar->setFixedWidth(
+        this->context.app_settings.window.progress_bar_width);
     this->main_window->statusBar()->addPermanentWidget(this->progress_bar);
   }
 
@@ -380,9 +381,42 @@ void HesiodApplication::on_save_copy()
   }
 }
 
+void HesiodApplication::save_backup(const std::string &fname)
+{
+  Logger::log()->trace("HesiodApplication::save_backup: {}", fname);
+
+  // if the file exists, create a backup
+  const std::string fname_ext = ensure_extension(fname, ".hsd").string();
+
+  if (std::filesystem::exists(fname_ext))
+  {
+    std::filesystem::path original_path(fname_ext);
+    std::filesystem::path backup_path = insert_before_extension(original_path, ".bak");
+
+    try
+    {
+      std::filesystem::copy_file(original_path,
+                                 backup_path,
+                                 std::filesystem::copy_options::overwrite_existing);
+      Logger::log()->trace("HesiodApplication::save_backup: backup created: {}",
+                           backup_path.string());
+    }
+    catch (const std::exception &e)
+    {
+      Logger::log()->error(
+          "HesiodApplication::save_backup: failed to create backup for {}: {}",
+          fname_ext,
+          e.what());
+    }
+  }
+}
+
 void HesiodApplication::save_project_model_and_ui(const std::string &fname)
 {
   Logger::log()->trace("HesiodApplication::save_project_model_and_ui: {}", fname);
+
+  if (this->context.app_settings.window.save_backup_file)
+    this->save_backup(fname);
 
   this->context.save_project_model(fname);
   this->context.project_model->set_is_dirty(false);

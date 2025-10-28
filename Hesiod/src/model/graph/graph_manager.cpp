@@ -149,7 +149,7 @@ const BroadcastMap &GraphManager::get_broadcast_params()
   return this->broadcast_params;
 }
 
-ExportParam GraphManager::get_export_param() const { return this->export_param; }
+FlattenConfig GraphManager::get_export_param() const { return this->export_param; }
 
 const GraphNodeMap &GraphManager::get_graph_nodes() { return this->graph_nodes; }
 
@@ -361,7 +361,7 @@ void GraphManager::save_to_file(const std::string &fname) const
   json_to_file(json, fname);
 }
 
-void GraphManager::set_export_param(const ExportParam &new_export_param)
+void GraphManager::set_export_param(const FlattenConfig &new_export_param)
 {
   this->export_param = new_export_param;
 }
