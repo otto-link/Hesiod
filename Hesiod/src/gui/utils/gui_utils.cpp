@@ -9,7 +9,7 @@
 #include <QWidget>
 #include <QWidgetAction>
 
-#include "hesiod/gui/gui_utils.hpp"
+#include "hesiod/gui/widgets/gui_utils.hpp"
 #include "hesiod/logger.hpp"
 
 namespace hesiod

@@ -8,7 +8,7 @@
 
 #include "qtr/render_widget.hpp"
 
-#include "hesiod/gui/gui_utils.hpp"
+#include "hesiod/gui/widgets/gui_utils.hpp"
 #include "hesiod/gui/widgets/graph_node_widget.hpp"
 #include "hesiod/gui/widgets/viewers/render_helpers.hpp"
 #include "hesiod/gui/widgets/viewers/viewer_3d.hpp"

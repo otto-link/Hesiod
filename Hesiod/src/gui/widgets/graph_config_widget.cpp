@@ -5,7 +5,7 @@
 #include <QDialogButtonBox>
 #include <QGridLayout>
 
-#include "hesiod/gui/gui_utils.hpp"
+#include "hesiod/gui/widgets/gui_utils.hpp"
 #include "hesiod/gui/widgets/graph_config_dialog.hpp"
 #include "hesiod/logger.hpp"
 
