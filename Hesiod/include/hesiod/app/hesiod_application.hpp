@@ -69,12 +69,4 @@ private:
   QProgressBar                *progress_bar; // owned by main_window
 };
 
-// =====================================
-// Functions
-// =====================================
-void override_export_nodes_settings(const std::string           &fname,
-                                    const std::filesystem::path &export_path,
-                                    uint                         random_seeds_increment,
-                                    const BakeConfig            &bake_settings);
-
 } // namespace hesiod
