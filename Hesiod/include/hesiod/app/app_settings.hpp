@@ -75,12 +75,7 @@ struct AppSettings
 
     bool show_graph_manager_widget = false;
     bool show_texture_downloader_widget = false;
-
-    // TODO remove
-    bool                      open_graph_manager_at_startup = false;
-    bool                      open_viewport_at_startup = false;
-    std::chrono::milliseconds autosave_timer{60000}; // 60 seconds
-    bool                      save_backup_file = true;
+    bool save_backup_file = true;
   } window;
 };
 

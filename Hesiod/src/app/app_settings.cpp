@@ -85,26 +85,6 @@ void AppSettings::json_from(nlohmann::json const &json)
     json_safe_get(json, "window.gm_y", window.gm_y);
     json_safe_get(json, "window.gm_w", window.gm_w);
     json_safe_get(json, "window.gm_h", window.gm_h);
-
-    json_safe_get(json,
-                  "window.show_graph_manager_widget",
-                  window.show_graph_manager_widget);
-    json_safe_get(json,
-                  "window.show_texture_downloader_widget",
-                  window.show_texture_downloader_widget);
-
-    json_safe_get(json,
-                  "window.open_graph_manager_at_startup",
-                  window.open_graph_manager_at_startup);
-
-    int64_t autosave_timer_value = 0;
-    json_safe_get(json, "window.autosave_timer", autosave_timer_value);
-
-    window.autosave_timer = std::chrono::milliseconds(autosave_timer_value);
-
-    json_safe_get(json,
-                  "window.open_viewport_at_startup",
-                  window.open_viewport_at_startup);
     json_safe_get(json, "window.save_backup_file", window.save_backup_file);
   }
 }
@@ -156,9 +136,6 @@ nlohmann::json AppSettings::json_to() const
   json["window.gm_h"] = window.gm_h;
   json["window.show_graph_manager_widget"] = window.show_graph_manager_widget;
   json["window.show_texture_downloader_widget"] = window.show_texture_downloader_widget;
-  json["window.open_graph_manager_at_startup"] = window.open_graph_manager_at_startup;
-  json["window.open_viewport_at_startup"] = window.open_viewport_at_startup;
-  json["window.autosave_timer"] = static_cast<int>(window.autosave_timer.count());
   json["window.save_backup_file"] = window.save_backup_file;
 
   return json;
