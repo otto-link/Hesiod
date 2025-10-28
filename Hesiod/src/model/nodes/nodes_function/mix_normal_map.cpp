@@ -8,7 +8,7 @@
 #include "attributes.hpp"
 
 #include "hesiod/logger.hpp"
-#include "hesiod/model/cmap.hpp"
+#include "hesiod/model/constants/cmap.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
 

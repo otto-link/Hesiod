@@ -7,8 +7,8 @@ typedef unsigned int uint;
 #include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/cli/batch_mode.hpp"
 #include "hesiod/logger.hpp"
-#include "hesiod/model/cmap.hpp"
-#include "hesiod/model/color_gradient.hpp"
+#include "hesiod/model/constants/cmap.hpp"
+#include "hesiod/model/constants/color_gradient.hpp"
 
 #include "hesiod/gui/project_ui.hpp"
 

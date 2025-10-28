@@ -7,7 +7,7 @@
 #include "attributes.hpp"
 
 #include "hesiod/logger.hpp"
-#include "hesiod/model/color_gradient.hpp"
+#include "hesiod/model/constants/color_gradient.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
 
