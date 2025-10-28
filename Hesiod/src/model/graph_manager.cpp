@@ -61,6 +61,12 @@ std::string GraphManager::add_graph_node(const std::shared_ptr<GraphNode> &p_gra
                 this,
                 &GraphManager::on_remove_broadcast_tag);
 
+  // gather update progress signals
+  this->connect(p_graph_node.get(),
+                &GraphNode::update_progress,
+                this,
+                &GraphManager::on_update_progress);
+  
   return new_graph_id;
 }
 
@@ -314,6 +320,14 @@ void GraphManager::on_remove_broadcast_tag(const std::string &tag)
   Q_EMIT this->remove_broadcast_tag(tag);
 }
 
+  void GraphManager::on_update_progress(const std::string &/* graph_id */,
+					const std::string &/* node_id */,
+					float              progress)
+{
+  Logger::log()->trace("GraphManager::on_update_progress");
+  Q_EMIT update_progress(progress);
+}
+  
 void GraphManager::remove_graph_node(const std::string &graph_id)
 {
   Logger::log()->trace("GraphManager::remove_graph_node: graph_id {}", graph_id);

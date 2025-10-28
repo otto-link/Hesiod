@@ -76,11 +76,16 @@ private slots:
                             const hmap::CoordFrame *t_source,
                             const hmap::Heightmap  *h_source);
   void on_remove_broadcast_tag(const std::string &tag);
+  void on_update_progress(const std::string &graph_id,
+                          const std::string &node_id,
+                          float              progress);
+
 
 signals:
   // --- To GUI ---
   void new_broadcast_tag(const std::string &tag);
   void remove_broadcast_tag(const std::string &tag);
+  void update_progress(float progress);
 
 private:
   std::string              id;

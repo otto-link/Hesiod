@@ -7,6 +7,7 @@
 #include <QCoreApplication>
 #include <QMainWindow>
 #include <QStandardPaths>
+#include <QProgressBar>
 
 #include "nlohmann/json.hpp"
 
@@ -63,8 +64,9 @@ private:
 
   // --- Members
   AppContext                   context;
-  std::unique_ptr<QMainWindow> main_window;
   std::unique_ptr<ProjectUI>   project_ui;
+  std::unique_ptr<QMainWindow> main_window;
+  QProgressBar * progress_bar; // owned by main_window
 };
 
 // =====================================

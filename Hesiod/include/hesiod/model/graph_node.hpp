@@ -58,6 +58,9 @@ signals:
   void compute_finished(const std::string &graph_id, const std::string &node_id);
   void update_started(const std::string &graph_id);
   void update_finished(const std::string &graph_id);
+  void update_progress(const std::string &graph_id,
+                       const std::string &node_id,
+                       float              progress);
 
   void broadcast_node_updated(const std::string &graph_id, const std::string &tag);
   void new_broadcast_tag(const std::string      &tag,

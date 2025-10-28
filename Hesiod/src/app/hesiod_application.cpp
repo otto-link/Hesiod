@@ -9,6 +9,7 @@
 #include <QMenuBar>
 #include <QMessageBox>
 #include <QProgressDialog>
+#include <QStatusBar>
 
 #include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/cli/batch_mode.hpp"
@@ -43,6 +44,15 @@ HesiodApplication::HesiodApplication(int &argc, char **argv) : QApplication(argc
                                  this->context.app_settings.window.w,
                                  this->context.app_settings.window.h);
 
+  {
+    this->progress_bar = new QProgressBar(this->main_window.get());
+    this->progress_bar->setRange(0, 100);
+    this->progress_bar->setValue(0);
+    this->progress_bar->setTextVisible(false);
+    this->progress_bar->setFixedWidth(200); // TODO app settings
+    this->main_window->statusBar()->addPermanentWidget(this->progress_bar);
+  }
+  
   // (after MainWindow creation)
   this->load_project_model_and_ui();
 
@@ -119,6 +129,24 @@ void HesiodApplication::load_project_model_and_ui(const std::string &fname)
                 this,
                 &HesiodApplication::on_project_name_changed);
 
+  // GraphNode model -> MainWindow
+  this->connect(this->context.project_model->get_graph_manager_ref(),
+                &GraphManager::update_progress,
+                this->progress_bar,
+		[this](float progress)
+		{
+		  if (progress == 0.f || progress == 100.f)
+		    {
+		      this->progress_bar->setValue(0);
+		      this->progress_bar->setTextVisible(false);
+		      return;
+		    }
+
+		  this->progress_bar->setTextVisible(true);
+		  this->progress_bar->setValue(static_cast<int>(progress));
+		}
+		);
+  
   // rename whether fname is empty or not
   this->context.project_model->set_path(fname);
 }

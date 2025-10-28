@@ -18,6 +18,32 @@ GraphNode::GraphNode(const std::string &id, const std::shared_ptr<GraphConfig> &
     : gnode::Graph(id), hmap::CoordFrame(), config(config)
 {
   Logger::log()->trace("GraphNode::GraphNode");
+
+  // setup graph update callback
+  auto lambda = [this](const std::string              &current_id,
+                       const std::vector<std::string> &sorted_ids,
+                       bool                            before_update)
+  {
+    Logger::log()->debug("nid: {}", current_id);
+
+    // this should not happen...
+    if (sorted_ids.empty())
+      return;
+
+    // compute progress
+    int idx = find_index(sorted_ids, current_id);
+    int nids = static_cast<int>(sorted_ids.size());
+
+    // in percentage
+    float r = static_cast<float>(idx);
+    if (!before_update)
+      r += 0.5f;
+    float progress = 100.f * r / (static_cast<float>(nids) - 0.5f);
+
+    Q_EMIT update_progress(this->get_id(), current_id, progress);
+  };
+
+  this->set_update_callback(lambda);
 }
 
 std::string GraphNode::add_node(const std::string &node_type)
