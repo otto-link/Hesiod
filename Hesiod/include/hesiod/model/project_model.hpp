@@ -8,7 +8,7 @@
 
 #include "nlohmann/json.hpp"
 
-#include "hesiod/model/bake_config.hpp"
+#include "hesiod/model/graph/bake_config.hpp"
 
 namespace hesiod
 {

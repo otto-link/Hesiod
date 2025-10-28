@@ -18,7 +18,7 @@
 #include "nlohmann/json.hpp"
 
 #include "hesiod/gui/widgets/coord_frame_widget.hpp"
-#include "hesiod/model/broadcast_param.hpp"
+#include "hesiod/model/graph/broadcast_param.hpp"
 
 #define LIST_ITEM_HEIGHT 64
 

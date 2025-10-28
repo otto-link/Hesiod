@@ -20,7 +20,7 @@
 #include "attributes/abstract_attribute.hpp"
 
 #include "hesiod/gui/widgets/data_preview.hpp"
-#include "hesiod/model/graph_config.hpp"
+#include "hesiod/model/graph/graph_config.hpp"
 
 // clang-format off
 #define ADD_ATTR(aclass, key, ...) p_node->add_attr<aclass>(key, key, ## __VA_ARGS__)

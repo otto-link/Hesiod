@@ -6,8 +6,8 @@
 #include <QGridLayout>
 #include <QPushButton>
 
-#include "hesiod/gui/widgets/gui_utils.hpp"
 #include "hesiod/gui/widgets/export_param_widget.hpp"
+#include "hesiod/gui/widgets/gui_utils.hpp"
 #include "hesiod/logger.hpp"
 
 namespace hesiod

@@ -16,7 +16,7 @@
 
 #include "gnode/node.hpp"
 
-#include "hesiod/model/graph_config.hpp"
+#include "hesiod/model/graph/graph_config.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 
 #define DECLARE_NODE(node_type)                                                          \

@@ -8,8 +8,8 @@
 #include "gnode/graph.hpp"
 #include "highmap/coord_frame.hpp"
 
-#include "hesiod/model/broadcast_param.hpp"
-#include "hesiod/model/graph_config.hpp"
+#include "hesiod/model/graph/broadcast_param.hpp"
+#include "hesiod/model/graph/graph_config.hpp"
 
 namespace hesiod
 {

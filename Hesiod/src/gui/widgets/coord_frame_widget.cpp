@@ -6,8 +6,8 @@
 
 #include "hesiod/gui/widgets/coord_frame_widget.hpp"
 #include "hesiod/logger.hpp"
-#include "hesiod/model/graph_manager.hpp"
-#include "hesiod/model/graph_node.hpp"
+#include "hesiod/model/graph/graph_manager.hpp"
+#include "hesiod/model/graph/graph_node.hpp"
 
 #define MAX_SIZE 40000
 

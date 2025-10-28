@@ -4,7 +4,7 @@
 #include <iostream>
 
 #include "hesiod/logger.hpp"
-#include "hesiod/model/export_param.hpp"
+#include "hesiod/model/graph/export_param.hpp"
 #include "hesiod/model/utils.hpp"
 
 namespace hesiod

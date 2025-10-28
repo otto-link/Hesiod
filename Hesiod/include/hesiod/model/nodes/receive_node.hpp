@@ -11,7 +11,7 @@
 #pragma once
 #include "highmap/coord_frame.hpp"
 
-#include "hesiod/model/broadcast_param.hpp"
+#include "hesiod/model/graph/broadcast_param.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 
 namespace hesiod

@@ -13,8 +13,8 @@
 
 #include "nlohmann/json.hpp"
 
-#include "hesiod/model/broadcast_param.hpp"
-#include "hesiod/model/export_param.hpp"
+#include "hesiod/model/graph/broadcast_param.hpp"
+#include "hesiod/model/graph/export_param.hpp"
 
 #include <filesystem> // must be here,
                       // https://bugreports.qt.io/browse/QTBUG-73263
@@ -79,7 +79,6 @@ private slots:
   void on_update_progress(const std::string &graph_id,
                           const std::string &node_id,
                           float              progress);
-
 
 signals:
   // --- To GUI ---

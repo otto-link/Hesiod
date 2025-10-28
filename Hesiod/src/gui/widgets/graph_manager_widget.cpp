@@ -13,9 +13,9 @@
 #include "hesiod/gui/widgets/graph_manager_widget.hpp"
 #include "hesiod/gui/widgets/string_input_dialog.hpp"
 #include "hesiod/logger.hpp"
-#include "hesiod/model/export_param.hpp"
-#include "hesiod/model/graph_manager.hpp"
-#include "hesiod/model/graph_node.hpp"
+#include "hesiod/model/graph/export_param.hpp"
+#include "hesiod/model/graph/graph_manager.hpp"
+#include "hesiod/model/graph/graph_node.hpp"
 #include "hesiod/model/utils.hpp"
 
 #define MINIMUM_WIDTH 384

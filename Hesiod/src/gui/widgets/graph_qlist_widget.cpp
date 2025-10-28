@@ -9,8 +9,8 @@
 
 #include "hesiod/gui/widgets/graph_manager_widget.hpp"
 #include "hesiod/logger.hpp"
-#include "hesiod/model/broadcast_param.hpp"
-#include "hesiod/model/graph_node.hpp"
+#include "hesiod/model/graph/broadcast_param.hpp"
+#include "hesiod/model/graph/graph_node.hpp"
 
 namespace hesiod
 {

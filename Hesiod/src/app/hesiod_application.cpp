@@ -13,15 +13,15 @@
 
 #include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/cli/batch_mode.hpp"
-#include "hesiod/gui/widgets/gui_utils.hpp"
 #include "hesiod/gui/project_ui.hpp"
 #include "hesiod/gui/widgets/bake_config_dialog.hpp"
 #include "hesiod/gui/widgets/documentation_popup.hpp"
 #include "hesiod/gui/widgets/graph_manager_widget.hpp"
 #include "hesiod/gui/widgets/graph_tabs_widget.hpp"
+#include "hesiod/gui/widgets/gui_utils.hpp"
 #include "hesiod/logger.hpp"
-#include "hesiod/model/graph_manager.hpp"
-#include "hesiod/model/graph_node.hpp"
+#include "hesiod/model/graph/graph_manager.hpp"
+#include "hesiod/model/graph/graph_node.hpp"
 #include "hesiod/model/utils.hpp"
 
 namespace hesiod
@@ -52,7 +52,7 @@ HesiodApplication::HesiodApplication(int &argc, char **argv) : QApplication(argc
     this->progress_bar->setFixedWidth(200); // TODO app settings
     this->main_window->statusBar()->addPermanentWidget(this->progress_bar);
   }
-  
+
   // (after MainWindow creation)
   this->load_project_model_and_ui();
 
@@ -133,20 +133,19 @@ void HesiodApplication::load_project_model_and_ui(const std::string &fname)
   this->connect(this->context.project_model->get_graph_manager_ref(),
                 &GraphManager::update_progress,
                 this->progress_bar,
-		[this](float progress)
-		{
-		  if (progress == 0.f || progress == 100.f)
-		    {
-		      this->progress_bar->setValue(0);
-		      this->progress_bar->setTextVisible(false);
-		      return;
-		    }
+                [this](float progress)
+                {
+                  if (progress == 0.f || progress == 100.f)
+                  {
+                    this->progress_bar->setValue(0);
+                    this->progress_bar->setTextVisible(false);
+                    return;
+                  }
 
-		  this->progress_bar->setTextVisible(true);
-		  this->progress_bar->setValue(static_cast<int>(progress));
-		}
-		);
-  
+                  this->progress_bar->setTextVisible(true);
+                  this->progress_bar->setValue(static_cast<int>(progress));
+                });
+
   // rename whether fname is empty or not
   this->context.project_model->set_path(fname);
 }

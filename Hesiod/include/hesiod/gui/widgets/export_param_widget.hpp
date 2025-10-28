@@ -14,7 +14,7 @@
 #include <QSlider>
 #include <QWidget>
 
-#include "hesiod/model/export_param.hpp"
+#include "hesiod/model/graph/export_param.hpp"
 
 namespace hesiod
 {

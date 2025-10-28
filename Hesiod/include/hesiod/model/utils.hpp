@@ -22,10 +22,11 @@ template <typename T> bool contains(const std::vector<T> &vec, const T &item)
   return std::find(vec.begin(), vec.end(), item) != vec.end();
 }
 
-template<typename T, typename U>
-int find_index(const std::vector<T>& vec, const U& value) {
-    auto it = std::find(vec.begin(), vec.end(), value);
-    return (it != vec.end()) ? std::distance(vec.begin(), it) : -1;
+template <typename T, typename U>
+int find_index(const std::vector<T> &vec, const U &value)
+{
+  auto it = std::find(vec.begin(), vec.end(), value);
+  return (it != vec.end()) ? std::distance(vec.begin(), it) : -1;
 }
 
 template <typename T>

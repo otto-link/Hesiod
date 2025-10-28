@@ -14,7 +14,7 @@
 #include "hesiod/gui/widgets/gui_utils.hpp"
 #include "hesiod/gui/widgets/node_settings_widget.hpp"
 #include "hesiod/logger.hpp"
-#include "hesiod/model/graph_node.hpp"
+#include "hesiod/model/graph/graph_node.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/utils.hpp"
 

@@ -18,15 +18,15 @@
 #include "attributes/widgets/filename_widget.hpp"
 
 #include "hesiod/app/hesiod_application.hpp"
-#include "hesiod/gui/widgets/gui_utils.hpp"
 #include "hesiod/gui/widgets/custom_qmenu.hpp"
 #include "hesiod/gui/widgets/documentation_popup.hpp"
 #include "hesiod/gui/widgets/graph_config_dialog.hpp"
 #include "hesiod/gui/widgets/graph_node_widget.hpp"
+#include "hesiod/gui/widgets/gui_utils.hpp"
 #include "hesiod/gui/widgets/select_string_dialog.hpp"
 #include "hesiod/gui/widgets/viewers/viewer_3d.hpp"
 #include "hesiod/logger.hpp"
-#include "hesiod/model/graph_node.hpp"
+#include "hesiod/model/graph/graph_node.hpp"
 #include "hesiod/model/nodes/node_factory.hpp"
 #include "hesiod/model/utils.hpp"
 
