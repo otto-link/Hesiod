@@ -29,6 +29,13 @@ QRadioButton {
     color: COLOR_TEXT_PRIMARY;
 }
 
+QStatusBar {
+    background-color: COLOR_BG_PRIMARY;
+    color: COLOR_HOVER;
+    /* border-top: 1px solid COLOR_TEXT_DISABLED; */
+    padding: 4px 8px;
+}
+
 /* QTabWidget --------------------------------------------------------------- */
 QTabWidget::pane {
     color: COLOR_TEXT_PRIMARY;

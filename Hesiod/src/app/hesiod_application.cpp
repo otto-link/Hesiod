@@ -1,6 +1,7 @@
 /* Copyright (c) 2025 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include <format>
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -59,6 +60,8 @@ HesiodApplication::HesiodApplication(int &argc, char **argv) : QApplication(argc
 
   // others
   this->setup_menu_bar();
+
+  this->notify("Ready", 0);
 }
 
 HesiodApplication::~HesiodApplication() = default;
@@ -85,6 +88,8 @@ QApplication &HesiodApplication::get_qapp() { return *static_cast<QApplication *
 void HesiodApplication::load_project_model_and_ui(const std::string &fname)
 {
   Logger::log()->trace("HesiodApplication::load_project_model_and_ui: fname [{}]", fname);
+
+  this->notify(std::format("Loading project... {}", fname));
 
   const std::string actual_fname = fname.empty() ? this->context.app_settings.global
                                                        .default_startup_project_file
@@ -149,6 +154,13 @@ void HesiodApplication::load_project_model_and_ui(const std::string &fname)
 
   // rename whether fname is empty or not
   this->context.project_model->set_path(fname);
+
+  this->notify("Project loaded successfully.");
+}
+
+void HesiodApplication::notify(const std::string &msg, int timeout)
+{
+  this->main_window->statusBar()->showMessage(msg.c_str(), timeout);
 }
 
 void HesiodApplication::on_export_batch()
@@ -415,6 +427,8 @@ void HesiodApplication::save_project_model_and_ui(const std::string &fname)
 {
   Logger::log()->trace("HesiodApplication::save_project_model_and_ui: {}", fname);
 
+  this->notify(std::format("Saving changes..."));
+
   if (this->context.app_settings.window.save_backup_file)
     this->save_backup(fname);
 
@@ -431,6 +445,8 @@ void HesiodApplication::save_project_model_and_ui(const std::string &fname)
 
   json["saved_at"] = time_stamp();
   json_to_file(json, fname, /* merge_with_existing_content */ true);
+
+  this->notify(std::format("Project saved successfully."));
 }
 
 void HesiodApplication::setup_menu_bar()
