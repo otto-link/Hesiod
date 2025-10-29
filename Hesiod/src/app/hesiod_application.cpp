@@ -52,7 +52,29 @@ HesiodApplication::HesiodApplication(int &argc, char **argv) : QApplication(argc
     this->progress_bar->setTextVisible(false);
     this->progress_bar->setFixedWidth(
         this->context.app_settings.window.progress_bar_width);
-    this->main_window->statusBar()->addPermanentWidget(this->progress_bar);
+
+    const std::string sheet = std::format(
+        R"(
+        QProgressBar {{
+            border: 0px;
+            border-radius: 0px;
+            background-color: {};
+            height: 8px;
+            padding: 0px;
+            font-size: 9px;
+        }}
+        QProgressBar::chunk {{
+            background-color: {};
+            border-radius: 0px;
+            margin: 0px;
+        }}
+    )",
+        this->context.app_settings.colors.bg_primary.name().toStdString(),
+        this->context.app_settings.colors.bg_secondary.name().toStdString());
+
+    this->progress_bar->setStyleSheet(sheet.c_str());
+
+    this->main_window->statusBar()->addPermanentWidget(this->progress_bar, 0);
   }
 
   // (after MainWindow creation)
@@ -61,7 +83,7 @@ HesiodApplication::HesiodApplication(int &argc, char **argv) : QApplication(argc
   // others
   this->setup_menu_bar();
 
-  this->notify("Ready", 0);
+  this->notify("Ready");
 }
 
 HesiodApplication::~HesiodApplication() = default;
@@ -191,6 +213,8 @@ void HesiodApplication::on_export_batch()
 
   // --- setup export repertory
 
+  this->notify("Baking and exporting...");
+
   // block UI
   QProgressDialog progress(tr("Baking and exporting..."),
                            QString(),
@@ -205,6 +229,11 @@ void HesiodApplication::on_export_batch()
 
   for (int k = 0; k < bake_settings.nvariants + 1; ++k)
   {
+    const std::string msg = std::format("Baking variants {}/{}...",
+                                        k,
+                                        bake_settings.nvariants + 1);
+    this->notify(msg);
+
     QCoreApplication::processEvents(); // render progress dialog
 
     const std::filesystem::path project_path = this->context.project_model->get_path();
@@ -279,6 +308,8 @@ void HesiodApplication::on_export_batch()
 
   // unblock UI
   progress.close();
+
+  this->notify("Baking and exporting terminated.");
 }
 
 void HesiodApplication::on_load()
