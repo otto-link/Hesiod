@@ -39,7 +39,6 @@ target_link_libraries(
           gnode
           gnodegui
           attributes
-          qt-toast
           Qt6::Core
           Qt6::OpenGL
           Qt6::Widgets
