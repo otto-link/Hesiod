@@ -188,6 +188,7 @@ void HesiodApplication::load_project_model_and_ui(const std::string &fname)
 
 void HesiodApplication::notify(const std::string &msg, int timeout)
 {
+  Logger::log()->trace("HesiodApplication::notify: {}", msg);
   this->main_window->statusBar()->showMessage(msg.c_str(), timeout);
 }
 

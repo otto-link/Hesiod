@@ -24,8 +24,6 @@ GraphNode::GraphNode(const std::string &id, const std::shared_ptr<GraphConfig> &
                        const std::vector<std::string> &sorted_ids,
                        bool                            before_update)
   {
-    Logger::log()->debug("nid: {}", current_id);
-
     // this should not happen...
     if (sorted_ids.empty())
       return;
@@ -103,7 +101,6 @@ void GraphNode::json_from(nlohmann::json const &json, GraphConfig *p_input_confi
     this->config = std::make_shared<GraphConfig>(*p_input_config);
 
     Logger::log()->trace("GraphNode::json_from: GraphConfig override");
-    this->config->log_debug();
   }
   else
   {
