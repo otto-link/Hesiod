@@ -62,7 +62,7 @@ void MainWindow::setup_connections_with_project()
                          "model ref is dangling ptr");
     return;
   }
-  
+
   // GraphNode model -> MainWindow
   this->connect(ctx.project_model->get_graph_manager_ref(),
                 &GraphManager::update_progress,

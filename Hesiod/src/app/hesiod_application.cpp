@@ -421,7 +421,7 @@ void HesiodApplication::save_project_model_and_ui(const std::string &fname)
   json["saved_at"] = time_stamp();
   json_to_file(json, fname, /* merge_with_existing_content */ true);
 
-  this->notify(std::format("Project saved successfully."));
+  this->notify(std::format("Project saved successfully, {}.", fname));
 }
 
 void HesiodApplication::setup_menu_bar()

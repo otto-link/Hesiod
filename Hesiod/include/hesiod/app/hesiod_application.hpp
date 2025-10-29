@@ -38,7 +38,7 @@ public:
   void save_backup(const std::string &fname);
   void show();
 
-  void notify(const std::string &msg = "", int timeout = 0);
+  void notify(const std::string &msg = "", int timeout = 5000);
 
   // --- Context
   QApplication     &get_qapp();

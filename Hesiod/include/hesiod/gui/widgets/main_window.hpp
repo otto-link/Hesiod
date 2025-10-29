@@ -14,7 +14,7 @@ class MainWindow : public QMainWindow
 public:
   MainWindow(QWidget *parent = nullptr);
 
-  void notify(const std::string &msg = "", int timeout = 0);
+  void notify(const std::string &msg = "", int timeout = 5000);
 
   void restore_geometry();
   void save_geometry() const;
