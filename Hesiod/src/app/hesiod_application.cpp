@@ -39,43 +39,7 @@ HesiodApplication::HesiodApplication(int &argc, char **argv) : QApplication(argc
   apply_global_style(this->get_qapp());
 
   // main window
-  this->main_window = std::make_unique<QMainWindow>();
-  this->main_window->setGeometry(this->context.app_settings.window.x,
-                                 this->context.app_settings.window.y,
-                                 this->context.app_settings.window.w,
-                                 this->context.app_settings.window.h);
-
-  {
-    this->progress_bar = new QProgressBar(this->main_window.get());
-    this->progress_bar->setRange(0, 100);
-    this->progress_bar->setValue(0);
-    this->progress_bar->setTextVisible(false);
-    this->progress_bar->setFixedWidth(
-        this->context.app_settings.window.progress_bar_width);
-
-    const std::string sheet = std::format(
-        R"(
-        QProgressBar {{
-            border: 0px;
-            border-radius: 0px;
-            background-color: {};
-            height: 8px;
-            padding: 0px;
-            font-size: 9px;
-        }}
-        QProgressBar::chunk {{
-            background-color: {};
-            border-radius: 0px;
-            margin: 0px;
-        }}
-    )",
-        this->context.app_settings.colors.bg_primary.name().toStdString(),
-        this->context.app_settings.colors.bg_secondary.name().toStdString());
-
-    this->progress_bar->setStyleSheet(sheet.c_str());
-
-    this->main_window->statusBar()->addPermanentWidget(this->progress_bar, 0);
-  }
+  this->main_window = std::make_unique<MainWindow>();
 
   // (after MainWindow creation)
   this->load_project_model_and_ui();
@@ -157,28 +121,8 @@ void HesiodApplication::load_project_model_and_ui(const std::string &fname)
                 this,
                 &HesiodApplication::on_project_name_changed);
 
-  // GraphNode model -> MainWindow
-  this->connect(this->context.project_model->get_graph_manager_ref(),
-                &GraphManager::update_progress,
-                this->progress_bar,
-                [this](float progress)
-                {
-                  if (progress == 0.f || progress == 100.f)
-                  {
-                    this->progress_bar->setValue(0);
-                    this->progress_bar->setTextVisible(false);
-
-                    const std::string message = (progress == 0.f)
-                                                    ? "Updating graph..."
-                                                    : "Graph updated successfully.";
-
-                    this->notify(message);
-                    return;
-                  }
-
-                  this->progress_bar->setTextVisible(true);
-                  this->progress_bar->setValue(static_cast<int>(progress));
-                });
+  // Project model and UI -> MainWindow
+  this->main_window->setup_connections_with_project();
 
   // rename whether fname is empty or not
   this->context.project_model->set_path(fname);
@@ -189,7 +133,7 @@ void HesiodApplication::load_project_model_and_ui(const std::string &fname)
 void HesiodApplication::notify(const std::string &msg, int timeout)
 {
   Logger::log()->trace("HesiodApplication::notify: {}", msg);
-  this->main_window->statusBar()->showMessage(msg.c_str(), timeout);
+  this->main_window->notify(msg, timeout);
 }
 
 void HesiodApplication::on_export_batch()
@@ -369,14 +313,7 @@ void HesiodApplication::on_quit()
   if (reply == QMessageBox::Yes)
   {
     QApplication::quit();
-
-    // save main window geometry
-    QRect geom = this->main_window->geometry();
-    this->context.app_settings.window.x = geom.x();
-    this->context.app_settings.window.y = geom.y();
-    this->context.app_settings.window.w = geom.width();
-    this->context.app_settings.window.h = geom.height();
-
+    this->main_window->save_geometry();
     this->context.save_settings();
   }
 }

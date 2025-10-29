@@ -5,7 +5,6 @@
 
 #include <QApplication>
 #include <QCoreApplication>
-#include <QMainWindow>
 #include <QProgressBar>
 #include <QStandardPaths>
 
@@ -13,6 +12,7 @@
 
 #include "hesiod/app/app_context.hpp"
 #include "hesiod/gui/widgets/bake_config_dialog.hpp"
+#include "hesiod/gui/widgets/main_window.hpp"
 
 #define HSD_CTX                                                                          \
   static_cast<hesiod::HesiodApplication *>(QCoreApplication::instance())->get_context()
@@ -66,10 +66,9 @@ private:
   void setup_menu_bar();
 
   // --- Members (respect order for deletion)
-  AppContext                   context;
-  QProgressBar                *progress_bar; // owned by main_window
-  std::unique_ptr<QMainWindow> main_window;
-  std::unique_ptr<ProjectUI>   project_ui;
+  AppContext                  context;
+  std::unique_ptr<MainWindow> main_window;
+  std::unique_ptr<ProjectUI>  project_ui;
 };
 
 } // namespace hesiod
