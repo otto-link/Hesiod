@@ -107,7 +107,7 @@ void MainWindow::setup_progress_bar()
             background-color: {};
             height: 8px;
             padding: 0px;
-            font-size: 9px;
+            font-size: 10px;
         }}
         QProgressBar::chunk {{
             background-color: {};
