@@ -2,7 +2,9 @@
    License. The full license is in the file LICENSE, distributed with this software. */
 #pragma once
 #include <algorithm>
+#include <cmath>
 #include <filesystem>
+#include <sstream>
 #include <string>
 #include <unordered_set>
 
@@ -109,5 +111,12 @@ void replace_all(std::string &str, const std::string &from, const std::string &t
 std::vector<std::string> split_string(const std::string &string, char delimiter);
 std::string              time_stamp();
 unsigned int             to_uint_safe(const std::string &str);
+
+std::string ascii_progress_bar(float fraction,
+                               int   width = 40,
+                               bool  show_percentage = true,
+                               char  fill = '=',
+                               char  head = '>',
+                               char  empty = ' ');
 
 } // namespace hesiod

@@ -145,6 +145,12 @@ void HesiodApplication::load_project_model_and_ui(const std::string &fname)
                   {
                     this->progress_bar->setValue(0);
                     this->progress_bar->setTextVisible(false);
+
+                    const std::string message = (progress == 0.f)
+                                                    ? "Updating graph..."
+                                                    : "Graph updated successfully.";
+
+                    this->notify(message);
                     return;
                   }
 

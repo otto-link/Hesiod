@@ -12,6 +12,50 @@
 namespace hesiod
 {
 
+std::string ascii_progress_bar(float fraction,
+                               int   width,
+                               bool  show_percentage,
+                               char  fill,
+                               char  head,
+                               char  empty)
+{
+  if (width < 4)
+    width = 4; // minimum sensible width
+
+  fraction = std::clamp(fraction, 0.f, 1.f);
+
+  // number of filled characters (floor)
+  int filled = static_cast<int>(std::floor(fraction * width));
+
+  // Build the bar
+  std::ostringstream ss;
+  ss << '[';
+
+  // filled part
+  for (int i = 0; i < filled; ++i)
+    ss << fill;
+
+  // head (if not fully filled and we have space for it)
+  if (filled < width)
+  {
+    // show head only if there's at least one empty slot
+    ss << head;
+    // remaining empties
+    for (int i = filled + 1; i < width; ++i)
+      ss << empty;
+  }
+
+  ss << ']';
+
+  if (show_percentage)
+  {
+    int percent = static_cast<int>(std::round(fraction * 100.0));
+    ss << ' ' << percent << '%';
+  }
+
+  return ss.str();
+}
+
 std::filesystem::path ensure_extension(std::filesystem::path fname,
                                        const std::string    &extension)
 {
