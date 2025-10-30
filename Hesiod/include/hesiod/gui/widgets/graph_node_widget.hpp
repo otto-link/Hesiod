@@ -51,7 +51,8 @@ public slots:
   void on_connection_deleted(const std::string &id_out,
                              const std::string &port_id_out,
                              const std::string &id_in,
-                             const std::string &port_id_in);
+                             const std::string &port_id_in,
+                             bool               prevent_graph_update);
   void on_connection_dropped(const std::string &node_id,
                              const std::string &port_id,
                              QPointF            scene_pos);

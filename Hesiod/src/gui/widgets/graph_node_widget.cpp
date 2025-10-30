@@ -286,7 +286,8 @@ nlohmann::json GraphNodeWidget::json_to() const
 void GraphNodeWidget::on_connection_deleted(const std::string &id_out,
                                             const std::string &port_id_out,
                                             const std::string &id_in,
-                                            const std::string &port_id_in)
+                                            const std::string &port_id_in,
+                                            bool               prevent_graph_update)
 {
   Logger::log()->trace("GraphNodeWidget::on_connection_deleted, {}/{} -> {}/{}",
                        id_out,
@@ -295,7 +296,9 @@ void GraphNodeWidget::on_connection_deleted(const std::string &id_out,
                        port_id_in);
 
   this->p_graph_node->remove_link(id_out, port_id_out, id_in, port_id_in);
-  this->p_graph_node->update(id_in);
+
+  if (!prevent_graph_update)
+    this->p_graph_node->update(id_in);
 }
 
 void GraphNodeWidget::on_connection_dropped(const std::string &node_id,
