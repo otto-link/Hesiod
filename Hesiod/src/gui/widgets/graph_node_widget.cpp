@@ -295,6 +295,9 @@ void GraphNodeWidget::on_connection_deleted(const std::string &id_out,
                        id_in,
                        port_id_in);
 
+  // see GraphNodeWidget::on_node_deleted
+  QCoreApplication::processEvents();
+
   this->p_graph_node->remove_link(id_out, port_id_out, id_in, port_id_in);
 
   if (!prevent_graph_update)
@@ -612,6 +615,10 @@ std::string GraphNodeWidget::on_new_node_request(const std::string &node_type,
 void GraphNodeWidget::on_node_deleted_request(const std::string &node_id)
 {
   Logger::log()->trace("GraphNodeWidget::on_node_deleted_request, node {}", node_id);
+
+  // make sure the Graphics node is destroyed before the Model node to
+  // avoid lifetime issues (concerns NodeProxy)
+  QCoreApplication::processEvents();
 
   this->p_graph_node->remove_node(node_id);
 

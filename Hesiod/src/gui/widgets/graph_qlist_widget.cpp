@@ -123,10 +123,6 @@ void GraphQListWidget::update_combobox()
   for (auto &[id, node] : this->p_graph_node->get_nodes())
     for (auto &port : node->get_ports())
     {
-      Logger::log()->trace("GraphQListWidget::update_combobox: {}/{}",
-                           node->get_label(),
-                           port->get_label());
-
       // TODO allow other data types
 
       // only allow heighmap (for now)
