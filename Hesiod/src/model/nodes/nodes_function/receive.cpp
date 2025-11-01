@@ -28,6 +28,9 @@ void setup_receive_node(BaseNode *p_node)
   // automatically by the graph manager
   std::vector<std::string> choices = {"NO TAG AVAILABLE"};
   ADD_ATTR(ChoiceAttribute, "tag", choices, choices.front());
+
+  // adjust corresponding widget
+  GET_REF("tag", ChoiceAttribute)->set_use_combo_list(true);
 }
 
 void compute_receive_node(BaseNode *p_node)
