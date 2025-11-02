@@ -54,7 +54,8 @@ void compute_texture_uv_checker_node(BaseNode *p_node)
   if (f.good())
   {
     // load rgba data
-    hmap::Tensor tensor4(fname);
+    bool         flip_j = true;
+    hmap::Tensor tensor4(fname, flip_j);
     tensor4 = tensor4.resample_to_shape_xy(p_node->get_config_ref()->shape);
 
     hmap::Heightmap r(CONFIG);

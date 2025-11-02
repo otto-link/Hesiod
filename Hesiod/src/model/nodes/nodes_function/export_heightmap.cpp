@@ -31,7 +31,7 @@ void setup_export_heightmap_node(BaseNode *p_node)
   ADD_ATTR(EnumAttribute,
            "format",
            enum_mappings.heightmap_export_format_map,
-           "png (8 bit)");
+           "png (16 bit)");
   ADD_ATTR(BoolAttribute, "auto_export", false);
 
   // attribute(s) order

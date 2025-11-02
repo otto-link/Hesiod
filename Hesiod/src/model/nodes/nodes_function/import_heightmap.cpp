@@ -28,9 +28,10 @@ void setup_import_heightmap_node(BaseNode *p_node)
            "Image files (*.bmp *.dib *.jpeg *.jpg *.png *.pbm "
            "*.pgm *.ppm *.pxm *.pnm *.tiff *.tif *.hdr *.pic)",
            false);
+  ADD_ATTR(BoolAttribute, "flip_y", true);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"fname"});
+  p_node->set_attr_ordered_key({"fname", "flip_y"});
 
   setup_post_process_heightmap_attributes(p_node);
 }
@@ -50,7 +51,8 @@ void compute_import_heightmap_node(BaseNode *p_node)
 
   if (f.good())
   {
-    hmap::Array z = hmap::Array(GET("fname", FilenameAttribute).string());
+    hmap::Array z = hmap::Array(GET("fname", FilenameAttribute).string(),
+                                GET("flip_y", BoolAttribute));
     p_out->from_array_interp_bicubic(z);
 
     // post-process
