@@ -96,7 +96,6 @@ private:
   std::string                           last_node_created_id = "";
   bool                                  is_selecting_with_rubber_band = false;
   std::filesystem::path                 last_import_path;
-  std::map<std::string, attr::AttributesWidget *> node_attributes_widget_map;
 };
 
 } // namespace hesiod

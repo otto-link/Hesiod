@@ -173,12 +173,7 @@ attr::AttributesWidget *GraphNodeWidget::get_node_attributes_widget(
   if (!p_node)
     return nullptr;
 
-  // retrieve existing instance if any
-  if (this->node_attributes_widget_map.contains(node_id) &&
-      this->node_attributes_widget_map.at(node_id))
-    return this->node_attributes_widget_map.at(node_id);
-
-  // or generate a widget
+  // generate a fresh widget
   bool        add_save_reset_state_buttons = false;
   std::string window_title = "";
 
@@ -225,8 +220,6 @@ attr::AttributesWidget *GraphNodeWidget::get_node_attributes_widget(
                   std::string node_id = p_node->get_id();
                   this->p_graph_node->update(node_id);
                 });
-
-  this->node_attributes_widget_map[node_id] = attributes_widget;
 
   return attributes_widget;
 }
@@ -743,6 +736,9 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
 
     attr::AttributesWidget *attributes_widget = this->get_node_attributes_widget(node_id);
 
+    if (!attributes_widget)
+      return;
+
     // --- fake ToolBar (no text)
 
     {
@@ -871,7 +867,7 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
 
     // eventually add action
     QWidgetAction *widget_action = new QWidgetAction(menu);
-    widget_action->setDefaultWidget(scroll_area); // attributes_widget);
+    widget_action->setDefaultWidget(scroll_area);
     menu->addAction(widget_action);
 
     add_qmenu_spacer(dynamic_cast<QMenu *>(menu), 8);

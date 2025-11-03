@@ -181,19 +181,7 @@ void NodeSettingsWidget::update_content()
   for (auto &node_id : all_ids)
   {
     // Defensive retrieval of node reference
-    BaseNode *p_node = nullptr;
-    try
-    {
-      p_node = p_graph->get_node_ref_by_id<BaseNode>(node_id);
-    }
-    catch (const std::exception &e)
-    {
-      Logger::log()->error(
-          "NodeSettingsWidget::update_content: exception while getting node {}: {}",
-          node_id,
-          e.what());
-      continue;
-    }
+    BaseNode *p_node = p_graph->get_node_ref_by_id<BaseNode>(node_id);
 
     if (!p_node)
     {
@@ -289,74 +277,14 @@ void NodeSettingsWidget::update_content()
                                this->pinned_node_ids.size());
         });
 
-    // settings: build the AttributesWidget in a guarded way
-    bool        add_save_reset_state_buttons = false;
-    std::string window_title = "";
+    // attr widget
+    attr::AttributesWidget *attributes_widget = this->p_graph_node_widget
+                                                    ->get_node_attributes_widget(node_id);
 
-    attr::AttributesWidget *attributes_widget = nullptr;
-    try
-    {
-      attributes_widget = new attr::AttributesWidget(p_node->get_attr_ref(),
-                                                     p_node->get_attr_ordered_key_ref(),
-                                                     window_title,
-                                                     add_save_reset_state_buttons);
-    }
-    catch (const std::exception &e)
-    {
-      Logger::log()->error(
-          "NodeSettingsWidget::update_content: failed to create AttributesWidget "
-          "for {}: {}",
-          node_id,
-          e.what());
-    }
+    if (!attributes_widget)
+      continue;
 
-    if (attributes_widget)
-    {
-      attributes_widget->setParent(this->scroll_area);
-
-      // change the attribute widget layout spacing a posteriori
-      QVBoxLayout *retrieved_layout = qobject_cast<QVBoxLayout *>(
-          attributes_widget->layout());
-      if (retrieved_layout)
-      {
-        retrieved_layout->setSpacing(0);
-        retrieved_layout->setContentsMargins(0, 0, 0, 0);
-
-        for (int i = 0; i < retrieved_layout->count(); ++i)
-        {
-          QWidget *child = retrieved_layout->itemAt(i)->widget();
-          if (!child)
-            continue;
-
-          if (auto *inner_layout = child->layout())
-          {
-            inner_layout->setContentsMargins(0, 2, 0, 2);
-            inner_layout->setSpacing(4);
-          }
-        }
-      }
-
-      this->scroll_layout->addWidget(attributes_widget, row++, 0);
-
-      this->connect(
-          attributes_widget,
-          &attr::AttributesWidget::value_changed,
-          [this, p_node]()
-          {
-            std::string node_id = p_node->get_id();
-
-            if (this->p_graph_node_widget)
-              if (GraphNode *p_graph = this->p_graph_node_widget->get_p_graph_node())
-              {
-                // block update of the widget if the modification
-                // comes from within (settings change can also comes
-                // from the node settings context menu)
-                this->prevent_content_update = true;
-                p_graph->update(node_id);
-                this->prevent_content_update = false;
-              }
-          });
-    }
+    this->scroll_layout->addWidget(attributes_widget, row++, 0);
   }
 }
 
