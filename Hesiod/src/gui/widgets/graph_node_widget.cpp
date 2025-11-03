@@ -164,6 +164,73 @@ bool GraphNodeWidget::get_is_selecting_with_rubber_band() const
   return this->is_selecting_with_rubber_band;
 }
 
+attr::AttributesWidget *GraphNodeWidget::get_node_attributes_widget(
+    const std::string &node_id)
+{
+  Logger::log()->trace("GraphNodeWidget::get_node_attributes_widget: id {}", node_id);
+
+  BaseNode *p_node = this->p_graph_node->get_node_ref_by_id<BaseNode>(node_id);
+  if (!p_node)
+    return nullptr;
+
+  // retrieve existing instance if any
+  if (this->node_attributes_widget_map.contains(node_id) &&
+      this->node_attributes_widget_map.at(node_id))
+    return this->node_attributes_widget_map.at(node_id);
+
+  // or generate a widget
+  bool        add_save_reset_state_buttons = false;
+  std::string window_title = "";
+
+  attr::AttributesWidget *attributes_widget = new attr::AttributesWidget(
+      p_node->get_attr_ref(),
+      p_node->get_attr_ordered_key_ref(),
+      window_title,
+      add_save_reset_state_buttons,
+      this);
+
+  // change the attribute widget layout spacing a posteriori
+  QLayout *retrieved_layout = qobject_cast<QLayout *>(attributes_widget->layout());
+  if (retrieved_layout)
+  {
+    retrieved_layout->setSpacing(4);
+    retrieved_layout->setContentsMargins(4, 0, 4, 0);
+
+    for (int i = 0; i < retrieved_layout->count(); ++i)
+    {
+      QWidget *child = retrieved_layout->itemAt(i)->widget();
+      if (!child)
+        continue;
+
+      if (auto *inner_layout = child->layout())
+      {
+        inner_layout->setSpacing(4);
+        inner_layout->setContentsMargins(4, 0, 4, 0);
+      }
+    }
+  }
+
+  this->connect(attributes_widget,
+                &attr::AttributesWidget::value_changed,
+                [this, p_node]()
+                {
+                  std::string node_id = p_node->get_id();
+                  this->p_graph_node->update(node_id);
+                });
+
+  this->connect(attributes_widget,
+                &attr::AttributesWidget::update_button_released,
+                [this, p_node]()
+                {
+                  std::string node_id = p_node->get_id();
+                  this->p_graph_node->update(node_id);
+                });
+
+  this->node_attributes_widget_map[node_id] = attributes_widget;
+
+  return attributes_widget;
+}
+
 GraphNode *GraphNodeWidget::get_p_graph_node()
 {
   if (!this->p_graph_node)
@@ -674,55 +741,7 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
 
     CustomQMenu *menu = new CustomQMenu();
 
-    // create the widget holding all the attribute widgets (created
-    // here, needed for connect below)
-    bool        add_save_reset_state_buttons = false;
-    std::string window_title = "";
-
-    attr::AttributesWidget *attributes_widget = new attr::AttributesWidget(
-        p_node->get_attr_ref(),
-        p_node->get_attr_ordered_key_ref(),
-        window_title,
-        add_save_reset_state_buttons);
-
-    // change the attribute widget layout spacing a posteriori
-    QLayout *retrieved_layout = qobject_cast<QLayout *>(attributes_widget->layout());
-    if (retrieved_layout)
-    {
-      // retrieved_layout->setSpacing(0);
-      // retrieved_layout->setContentsMargins(0, 0, 0, 0);
-      retrieved_layout->setSpacing(4);
-      retrieved_layout->setContentsMargins(4, 0, 4, 0);
-
-      for (int i = 0; i < retrieved_layout->count(); ++i)
-      {
-        QWidget *child = retrieved_layout->itemAt(i)->widget();
-        if (!child)
-          continue;
-
-        if (auto *inner_layout = child->layout())
-        {
-          inner_layout->setSpacing(4);
-          inner_layout->setContentsMargins(4, 0, 4, 0);
-        }
-      }
-    }
-
-    this->connect(attributes_widget,
-                  &attr::AttributesWidget::value_changed,
-                  [this, p_node]()
-                  {
-                    std::string node_id = p_node->get_id();
-                    this->p_graph_node->update(node_id);
-                  });
-
-    this->connect(attributes_widget,
-                  &attr::AttributesWidget::update_button_released,
-                  [this, p_node]()
-                  {
-                    std::string node_id = p_node->get_id();
-                    this->p_graph_node->update(node_id);
-                  });
+    attr::AttributesWidget *attributes_widget = this->get_node_attributes_widget(node_id);
 
     // --- fake ToolBar (no text)
 

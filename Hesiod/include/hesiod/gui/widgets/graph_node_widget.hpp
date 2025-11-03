@@ -3,6 +3,8 @@
 #pragma once
 #include "gnodegui/graph_viewer.hpp"
 
+#include "attributes/widgets/attributes_widget.hpp"
+
 namespace hesiod
 {
 
@@ -31,9 +33,10 @@ public:
                              QPointF               scene_pos = QPointF(0.f, 0.f));
   nlohmann::json json_to() const;
 
-  bool       get_is_selecting_with_rubber_band() const;
-  GraphNode *get_p_graph_node();
-  void       set_json_copy_buffer(nlohmann::json const &new_json_copy_buffer);
+  bool                    get_is_selecting_with_rubber_band() const;
+  attr::AttributesWidget *get_node_attributes_widget(const std::string &node_id);
+  GraphNode              *get_p_graph_node();
+  void set_json_copy_buffer(nlohmann::json const &new_json_copy_buffer);
 
   void add_import_texture_nodes(const std::vector<std::string> &texture_paths);
 
@@ -93,6 +96,7 @@ private:
   std::string                           last_node_created_id = "";
   bool                                  is_selecting_with_rubber_band = false;
   std::filesystem::path                 last_import_path;
+  std::map<std::string, attr::AttributesWidget *> node_attributes_widget_map;
 };
 
 } // namespace hesiod
