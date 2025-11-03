@@ -690,11 +690,34 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
         window_title,
         add_save_reset_state_buttons);
 
+    // QLayout *retrieved_layout = qobject_cast<QLayout *>(attributes_widget->layout());
+    // if (retrieved_layout)
+    // {
+    //   retrieved_layout->setSpacing(8);
+    //   retrieved_layout->setContentsMargins(16, 0, 16, 0);
+    // }
+
+    // change the attribute widget layout spacing a posteriori
     QLayout *retrieved_layout = qobject_cast<QLayout *>(attributes_widget->layout());
     if (retrieved_layout)
     {
-      retrieved_layout->setSpacing(8);
-      retrieved_layout->setContentsMargins(16, 0, 16, 0);
+      // retrieved_layout->setSpacing(0);
+      // retrieved_layout->setContentsMargins(0, 0, 0, 0);
+      retrieved_layout->setSpacing(4);
+      retrieved_layout->setContentsMargins(4, 0, 4, 0);
+
+      for (int i = 0; i < retrieved_layout->count(); ++i)
+      {
+        QWidget *child = retrieved_layout->itemAt(i)->widget();
+        if (!child)
+          continue;
+
+        if (auto *inner_layout = child->layout())
+        {
+          inner_layout->setSpacing(4);
+          inner_layout->setContentsMargins(4, 0, 4, 0);
+        }
+      }
     }
 
     // --- fake ToolBar (no text)
@@ -806,15 +829,15 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
 
     // --- add label
 
-    {
-      QLabel *label = new QLabel(p_node->get_caption().c_str());
-      resize_font(label, 2);
-      QWidgetAction *widget_action = new QWidgetAction(menu);
-      widget_action->setDefaultWidget(label);
-      menu->addAction(widget_action);
-    }
+    // {
+    //   QLabel *label = new QLabel(p_node->get_caption().c_str());
+    //   resize_font(label, 2);
+    //   QWidgetAction *widget_action = new QWidgetAction(menu);
+    //   widget_action->setDefaultWidget(label);
+    //   menu->addAction(widget_action);
+    // }
 
-    menu->addSeparator();
+    // // menu->addSeparator();
 
     // --- add attributes
 
@@ -830,7 +853,7 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
     if (screen)
     {
       QSize resolution = screen->size();
-      max_height = std::min(max_height, static_cast<int>(0.8f * resolution.height()));
+      max_height = std::min(max_height, static_cast<int>(0.9f * resolution.height()));
     }
     scroll_area->setMinimumHeight(max_height);
 

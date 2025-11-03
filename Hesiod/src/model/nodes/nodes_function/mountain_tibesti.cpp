@@ -45,13 +45,15 @@ void setup_mountain_tibesti_node(BaseNode *p_node)
   ADD_ATTR(Vec2FloatAttribute, "center");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"_TEXT_Base Terrain Shape",
+  p_node->set_attr_ordered_key({"_GROUPBOX_BEGIN_Main parameters",
+                                "_TEXT_Base Terrain Shape",
                                 "elevation",
                                 "scale",
                                 "seed",
                                 "octaves",
                                 "peak_kw",
                                 "bulk_amp",
+                                "_TEXT_Position",
                                 "center",
                                 //
                                 "_TEXT_Surface Detail & Structure",
@@ -62,7 +64,8 @@ void setup_mountain_tibesti_node(BaseNode *p_node)
                                 "add_deposition",
                                 //
                                 "_TEXT_Noise & Modulation",
-                                "base_noise_amp"});
+                                "base_noise_amp",
+                                "_GROUPBOX_END_"});
 
   setup_post_process_heightmap_attributes(p_node);
 

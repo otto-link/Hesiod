@@ -111,6 +111,7 @@ void replace_all(std::string &str, const std::string &from, const std::string &t
 std::vector<std::string> split_string(const std::string &string, char delimiter);
 std::string              time_stamp();
 unsigned int             to_uint_safe(const std::string &str);
+std::string              wrap_text(const std::string &text, std::size_t max_len);
 
 std::string ascii_progress_bar(float fraction,
                                int   width = 40,

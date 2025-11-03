@@ -19,6 +19,7 @@ void AppSettings::json_from(nlohmann::json const &json)
   json_safe_get(json, "colors.text_primary", colors.text_primary);
   json_safe_get(json, "colors.text_disabled", colors.text_disabled);
   json_safe_get(json, "colors.accent", colors.accent);
+  json_safe_get(json, "colors.accent_bw", colors.accent_bw);
   json_safe_get(json, "colors.border", colors.border);
   json_safe_get(json, "colors.hover", colors.hover);
   json_safe_get(json, "colors.pressed", colors.pressed);
@@ -100,6 +101,7 @@ nlohmann::json AppSettings::json_to() const
   json["colors.text_primary"] = colors.text_primary.name().toStdString();
   json["colors.text_disabled"] = colors.text_disabled.name().toStdString();
   json["colors.accent"] = colors.accent.name().toStdString();
+  json["colors.accent_bw"] = colors.accent_bw.name().toStdString();
   json["colors.border"] = colors.border.name().toStdString();
   json["colors.hover"] = colors.hover.name().toStdString();
   json["colors.pressed"] = colors.pressed.name().toStdString();

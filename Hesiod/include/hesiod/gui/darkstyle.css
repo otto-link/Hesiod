@@ -65,6 +65,23 @@ QAbstractSpinBox {
     border-radius: 4px;
 }
 
+/* QGroupBox --------------------------------------------------------------- */
+QGroupBox  {
+    border: 1px solid COLOR_BORDER;
+    margin-top: 30px;
+    margin-bottom: 4px;
+    font-size: 14px;
+    border-radius: 6px;
+    padding: 4px 8px;
+}
+
+QGroupBox::title  {
+    subcontrol-origin: margin;
+    subcontrol-position: top left;
+    color: COLOR_BW_ACCENT;
+    font-weight: bold;
+}
+
 /* QCheckBox --------------------------------------------------------------- */
 QCheckBox {
     background-color: COLOR_BG_PRIMARY;

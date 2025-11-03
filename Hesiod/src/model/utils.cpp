@@ -227,4 +227,35 @@ unsigned int to_uint_safe(const std::string &str)
   }
 }
 
+std::string wrap_text(const std::string &text, std::size_t max_len)
+{
+  std::ostringstream out;
+  std::istringstream iss(text);
+
+  std::string word;
+  std::string current;
+
+  while (iss >> word)
+  {
+    if (current.empty())
+    {
+      current = word;
+    }
+    else if (current.size() + 1 + word.size() <= max_len)
+    {
+      current += " " + word;
+    }
+    else
+    {
+      out << current << "\n"; // write completed line
+      current = word;
+    }
+  }
+
+  if (!current.empty())
+    out << current;
+
+  return out.str();
+}
+
 } // namespace hesiod

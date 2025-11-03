@@ -190,7 +190,7 @@ std::string BaseNode::get_documentation_short() const
     // description
     std::string description = this->documentation.value("description",
                                                         "No description available");
-    description = insert_char_every_nth(description, width, "\n");
+    description = wrap_text(description, width);
     str += "DESCRIPTION:\n" + description;
     str += "\n\n";
 
@@ -202,7 +202,7 @@ std::string BaseNode::get_documentation_short() const
       for (const auto &[key, port] : this->documentation["ports"].items())
       {
         std::string port_description = port.value("description", "No description");
-        port_description = insert_char_every_nth(port_description, width, "\n");
+        port_description = wrap_text(port_description, width);
 
         str += std::format("- {} / {} / {}\n{}\n",
                            port.value("caption", key),
@@ -379,7 +379,7 @@ void BaseNode::update_attributes_tool_tip()
         if (this->documentation["parameters"][key].contains("description"))
         {
           std::string base_desc = this->documentation["parameters"][key]["description"];
-          base_desc = insert_char_every_nth(base_desc, width, "\n");
+          base_desc = wrap_text(base_desc, width);
           description += base_desc;
         }
 

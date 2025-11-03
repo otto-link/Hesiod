@@ -24,6 +24,7 @@ struct AppSettings
     QColor text_primary{"#F4F4F5"};
     QColor text_disabled{"#3C3C3C"};
     QColor accent{"#4772B3"};
+    QColor accent_bw{"#4772B3"};
     QColor border{"#5B5B5B"};
     QColor hover{"#8B8B8B"};
     QColor pressed{"#ABABAB"};
