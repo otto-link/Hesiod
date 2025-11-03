@@ -15,75 +15,82 @@ void blend_heightmaps(hmap::Heightmap &h_out,
                       hmap::Heightmap &h2,
                       BlendingMethod   method,
                       float            k,
-                      int              ir)
+                      int              ir,
+                      float            w1,
+                      float            w2)
 {
   std::function<void(hmap::Array &, hmap::Array &, hmap::Array &)> lambda;
 
   switch (method)
   {
   case BlendingMethod::ADD:
-    lambda = [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2) { m = a1 + a2; };
+    lambda = [w1, w2](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
+    { m = w1 * a1 + w2 * a2; };
     break;
 
   case BlendingMethod::EXCLUSION_BLEND:
-    lambda = [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
-    { m = hmap::blend_exclusion(a1, a2); };
+    lambda = [w1, w2](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
+    { m = hmap::blend_exclusion(w1 * a1, w2 * a2); };
     break;
 
   case BlendingMethod::GRADIENTS:
-    lambda = [&ir](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
-    { m = hmap::blend_gradients(a1, a2, ir); };
+    lambda = [ir, w1, w2](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
+    { m = hmap::blend_gradients(w1 * a1, w2 * a2, ir); };
     break;
 
   case BlendingMethod::MAXIMUM:
-    lambda = [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
-    { m = hmap::maximum(a1, a2); };
+    lambda = [w1, w2](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
+    { m = hmap::maximum(w1 * a1, w2 * a2); };
     break;
 
   case BlendingMethod::MAXIMUM_SMOOTH:
-    lambda = [&k](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
-    { m = hmap::maximum_smooth(a1, a2, k); };
+    lambda = [k, w1, w2](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
+    { m = hmap::maximum_smooth(w1 * a1, w2 * a2, k); };
     break;
 
   case BlendingMethod::MINIMUM:
-    lambda = [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
-    { m = hmap::minimum(a1, a2); };
+    lambda = [w1, w2](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
+    { m = hmap::minimum(w1 * a1, w2 * a2); };
     break;
 
   case BlendingMethod::MINIMUM_SMOOTH:
-    lambda = [&k](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
-    { m = hmap::minimum_smooth(a1, a2, k); };
+    lambda = [k, w1, w2](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
+    { m = hmap::minimum_smooth(w1 * a1, w2 * a2, k); };
     break;
 
   case BlendingMethod::MULTIPLY:
-    lambda = [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2) { m = a1 * a2; };
+    lambda = [w1, w2](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
+    { m = w1 * a1 * w2 * a2; };
     break;
 
   case BlendingMethod::MULTIPLY_ADD:
-    lambda = [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2) { m = a1 + a1 * a2; };
+    lambda = [w1, w2](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
+    { m = w1 * a1 + w1 * a1 * w2 * a2; };
     break;
 
   case BlendingMethod::NEGATE:
-    lambda = [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
-    { m = hmap::blend_negate(a1, a2); };
+    lambda = [w1, w2](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
+    { m = hmap::blend_negate(w1 * a1, w2 * a2); };
     break;
 
   case BlendingMethod::OVERLAY:
-    lambda = [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
-    { m = hmap::blend_overlay(a1, a2); };
+    lambda = [w1, w2](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
+    { m = hmap::blend_overlay(w1 * a1, w2 * a2); };
     break;
 
   case BlendingMethod::SOFT:
-    lambda = [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
-    { m = hmap::blend_soft(a1, a2); };
+    lambda = [w1, w2](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
+    { m = hmap::blend_soft(w1 * a1, w2 * a2); };
     break;
 
   case BlendingMethod::REPLACE:
-    lambda = [](hmap::Array &m, hmap::Array & /* a1 */, hmap::Array &a2) { m = a2; };
+    lambda = [w1, w2](hmap::Array &m, hmap::Array & /* a1 */, hmap::Array &a2)
+    { m = w2 * a2; };
     break;
 
   case BlendingMethod::SUBSTRACT:
-    lambda = [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2) { m = a1 - a2; };
+    lambda = [w1, w2](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
+    { m = w1 * a1 - w2 * a2; };
     break;
   }
 

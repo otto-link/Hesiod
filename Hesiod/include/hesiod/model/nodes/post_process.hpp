@@ -26,7 +26,9 @@ void blend_heightmaps(hmap::Heightmap &h_out,
                       hmap::Heightmap &h2,
                       BlendingMethod   method,
                       float            k = 0.f,
-                      int              ir = 0);
+                      int              ir = 0,
+                      float            w1 = 1.f,
+                      float            w2 = 1.f);
 
 void post_apply_enveloppe(BaseNode *p_node, hmap::Heightmap &h, hmap::Heightmap *p_env);
 

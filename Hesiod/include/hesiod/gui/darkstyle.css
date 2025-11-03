@@ -76,6 +76,7 @@ QGroupBox  {
 }
 
 QGroupBox::title  {
+    margin-top: 4px;
     subcontrol-origin: margin;
     subcontrol-position: top left;
     color: COLOR_BW_ACCENT;
