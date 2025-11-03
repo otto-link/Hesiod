@@ -38,14 +38,19 @@ void setup_gabor_wave_fbm_node(BaseNode *p_node)
   ADD_ATTR(FloatAttribute, "lacunarity", 2.f, 0.01f, 4.f);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"kw",
-                                "seed",
+  p_node->set_attr_ordered_key({"_GROUPBOX_BEGIN_Main parameters",
+                                "_TEXT_Frequency",
+                                "kw",
+                                "_TEXT_Orientation",
                                 "angle",
                                 "angle_spread_ratio",
+                                "_TEXT_FBM layers",
+                                "seed",
                                 "octaves",
                                 "weight",
                                 "persistence",
-                                "lacunarity"});
+                                "lacunarity",
+                                "_GROUPBOX_END_"});
 
   setup_post_process_heightmap_attributes(p_node);
 }
