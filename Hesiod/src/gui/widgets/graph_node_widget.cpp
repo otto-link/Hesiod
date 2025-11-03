@@ -665,19 +665,14 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
 
   QPointF item_pos = scene_pos - p_gx_node->scenePos();
 
+  // --- create attribute widget
+
   // if the click is above the widget, let the widget context menu
   // take the event
   if (item_pos.y() < p_gx_node->get_geometry_ref()->widget_pos.y())
   {
 
     CustomQMenu *menu = new CustomQMenu();
-
-    menu->setStyleSheet(R"(
-    QMenu::separator {
-        height: 1px;
-        margin: 6px 0px;
-    }
-  )");
 
     // create the widget holding all the attribute widgets (created
     // here, needed for connect below)
@@ -712,6 +707,22 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
         }
       }
     }
+
+    this->connect(attributes_widget,
+                  &attr::AttributesWidget::value_changed,
+                  [this, p_node]()
+                  {
+                    std::string node_id = p_node->get_id();
+                    this->p_graph_node->update(node_id);
+                  });
+
+    this->connect(attributes_widget,
+                  &attr::AttributesWidget::update_button_released,
+                  [this, p_node]()
+                  {
+                    std::string node_id = p_node->get_id();
+                    this->p_graph_node->update(node_id);
+                  });
 
     // --- fake ToolBar (no text)
 
@@ -837,27 +848,12 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
       max_height = std::min(max_height, static_cast<int>(0.9f * resolution.height()));
     }
     scroll_area->setMinimumHeight(max_height);
+    scroll_area->setMinimumWidth(attributes_widget->width() + 16);
 
     // eventually add action
     QWidgetAction *widget_action = new QWidgetAction(menu);
     widget_action->setDefaultWidget(scroll_area); // attributes_widget);
     menu->addAction(widget_action);
-
-    this->connect(attributes_widget,
-                  &attr::AttributesWidget::value_changed,
-                  [this, p_node]()
-                  {
-                    std::string node_id = p_node->get_id();
-                    this->p_graph_node->update(node_id);
-                  });
-
-    this->connect(attributes_widget,
-                  &attr::AttributesWidget::update_button_released,
-                  [this, p_node]()
-                  {
-                    std::string node_id = p_node->get_id();
-                    this->p_graph_node->update(node_id);
-                  });
 
     add_qmenu_spacer(dynamic_cast<QMenu *>(menu), 8);
 
