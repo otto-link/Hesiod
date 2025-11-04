@@ -11,6 +11,7 @@
 #include "attributes/widgets/abstract_widget.hpp"
 #include "attributes/widgets/attributes_widget.hpp"
 
+#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/gui/widgets/gui_utils.hpp"
 #include "hesiod/gui/widgets/node_settings_widget.hpp"
 #include "hesiod/logger.hpp"
@@ -158,6 +159,16 @@ void NodeSettingsWidget::update_content()
     return;
   }
 
+  // style
+  QString style = QString("QScrollArea {"
+                          "   border: 1px solid %1;"
+                          "   border-radius: 6px;"
+                          "   padding: 6px;"
+                          "}")
+                      .arg(HSD_CTX.app_settings.colors.border.name());
+
+  this->scroll_area->setStyleSheet(style);
+
   // for scroll_area size
   this->scroll_area->setMinimumWidth(332);
 
@@ -219,7 +230,7 @@ void NodeSettingsWidget::update_content()
     sep_layout->setStretch(0, 1);
     sep_layout->setStretch(2, 6);
 
-    this->scroll_layout->addWidget(separator_widget, row++, 0);
+    this->scroll_layout->addWidget(separator_widget, row++, 0, 1, 2);
 
     // preview (use scroll_widget as parent so lifetime is tied to the container)
     DataPreview *p_data_preview = p_node->get_data_preview_ref();
@@ -240,7 +251,7 @@ void NodeSettingsWidget::update_content()
         label_preview->setScaledContents(true);
         label_preview->setFixedSize(width, width);
         label_preview->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        this->scroll_layout->addWidget(label_preview, row++, 0, Qt::AlignLeft);
+        this->scroll_layout->addWidget(label_preview, row, 0, Qt::AlignLeft);
       }
     }
 
@@ -248,7 +259,9 @@ void NodeSettingsWidget::update_content()
     QPushButton *button_pin = new QPushButton("Pin this node", this);
     button_pin->setCheckable(true);
     button_pin->setChecked(contains(this->pinned_node_ids, node_id));
-    this->scroll_layout->addWidget(button_pin, row++, 0);
+    this->scroll_layout->addWidget(button_pin, row++, 1);
+
+    this->scroll_layout->addWidget(new QLabel(), row++, 0);
 
     // Use QPointer in the lambda to defend against deletion
     QPointer<QPushButton> bp(button_pin);
@@ -306,7 +319,8 @@ void NodeSettingsWidget::update_content()
     if (!attr_widget)
       continue;
 
-    this->scroll_layout->addWidget(attr_widget, row++, 0);
+    this->scroll_layout->addWidget(attr_widget, row++, 0, 1, 2);
+    this->scroll_layout->addWidget(new QLabel(), row++, 0);
   }
 }
 
