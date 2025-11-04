@@ -46,7 +46,7 @@ Erosion/Hydraulic
 |post_mix|Float|Mixing factor for blending input and output values. A value of 0 uses only the input, 1 uses only the output, and intermediate values perform a linear interpolation.|
 |post_mix_method|Enumeration|Method used to combine input and output values. Options include linear interpolation (default), min, max, smooth min, smooth max, add, and subtract.|
 |post_remap|Value range|Linearly remaps the output values to a specified target range (default is [0, 1]).|
-|post_saturate|Value range|No description|
+|post_saturate|Value range|Modifies the amplitude of elevations by first clamping them to a given interval and then scaling them so that the restricted interval matches the original input range. This enhances contrast in elevation variations while maintaining overall structure.|
 |post_smoothing_radius|Float|Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.|
 |saturation_ratio|Float|Flow accumulation clipping ratio.|
 |talus_ref|Float|Reference talus, with small values of talus_ref  leading to thinner flow streams.|

@@ -31,6 +31,7 @@ void setup_cone_complex_node(BaseNode *p_node)
   // attribute(s)
   ADD_ATTR(FloatAttribute, "radius", 0.5f, 0.01f, FLT_MAX);
   ADD_ATTR(FloatAttribute, "alpha", 1.2f, 0.01f, 4.f);
+  ADD_ATTR(BoolAttribute, "smooth_profile", true);
   ADD_ATTR(FloatAttribute, "valley_amp", 0.2f, 0.f, 2.f);
   ADD_ATTR(IntAttribute, "valley_nb", 5, 0, 32);
   ADD_ATTR(FloatAttribute, "valley_decay_ratio", 0.5f, 0.f, 1.f);
@@ -53,6 +54,7 @@ void setup_cone_complex_node(BaseNode *p_node)
                                 "_TEXT_Shape & Size",
                                 "radius",
                                 "alpha",
+				"smooth_profile",
                                 //
                                 "_TEXT_Position",
                                 "center",
@@ -108,6 +110,7 @@ void compute_cone_complex_node(BaseNode *p_node)
             shape,
             GET("alpha", FloatAttribute),
             GET("radius", FloatAttribute),
+	    GET("smooth_profile", BoolAttribute),
             GET("valley_amp", FloatAttribute),
             GET("valley_nb", IntAttribute),
             GET("valley_decay_ratio", FloatAttribute),
