@@ -159,6 +159,8 @@ void NodeSettingsWidget::update_content()
   }
 
   // for scroll_area size
+  this->scroll_area->setMinimumWidth(332);
+
   QWidget *parent = this->parentWidget();
   if (parent)
     this->scroll_area->setMinimumHeight((int)(0.9f * parent->size().height()));

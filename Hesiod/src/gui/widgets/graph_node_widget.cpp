@@ -766,8 +766,8 @@ void GraphNodeWidget::on_node_deleted_request(const std::string &node_id)
 {
   Logger::log()->trace("GraphNodeWidget::on_node_deleted_request, node {}", node_id);
 
-  // make sure the Graphics node is destroyed before the Model node to
-  // avoid lifetime issues (concerns NodeProxy)
+  // make sure the Graphics node is destroyed before the Model node is
+  // destroyed to avoid lifetime issues (concerns NodeProxy)
   QCoreApplication::processEvents();
 
   this->p_graph_node->remove_node(node_id);
