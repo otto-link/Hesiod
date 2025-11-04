@@ -11998,6 +11998,93 @@
             }
         }
     },
+    "SelectSoilFlow": {
+        "category": "Mask/ForTexturing",
+        "description": "No description available",
+        "label": "SelectSoilFlow",
+        "parameters": {
+            "clipping_ratio": {
+                "description": "No description",
+                "key": "clipping_ratio",
+                "label": "clipping_ratio",
+                "type": "Float"
+            },
+            "flow_gamma": {
+                "description": "No description",
+                "key": "flow_gamma",
+                "label": "flow_gamma",
+                "type": "Float"
+            },
+            "flow_weight": {
+                "description": "No description",
+                "key": "flow_weight",
+                "label": "flow_weight",
+                "type": "Float"
+            },
+            "gradient_weight": {
+                "description": "No description",
+                "key": "gradient_weight",
+                "label": "gradient_weight",
+                "type": "Float"
+            },
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
+                "type": "Bool"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
+            },
+            "radius_gradient": {
+                "description": "No description",
+                "key": "radius_gradient",
+                "label": "radius_gradient",
+                "type": "Float"
+            },
+            "talus_ref": {
+                "description": "No description",
+                "key": "talus_ref",
+                "label": "talus_ref",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "input": {
+                "caption": "input",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "output"
+            }
+        }
+    },
     "SelectSoilWeathered": {
         "category": "Mask/ForTexturing",
         "description": "No description available",
