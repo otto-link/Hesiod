@@ -278,13 +278,33 @@ void NodeSettingsWidget::update_content()
         });
 
     // attr widget
-    attr::AttributesWidget *attributes_widget = this->p_graph_node_widget
-                                                    ->get_node_attributes_widget(node_id);
+    attr::AttributesWidget *attr_widget = this->p_graph_node_widget
+                                              ->create_node_attributes_widget(this,
+                                                                              node_id);
 
-    if (!attributes_widget)
+    this->connect(
+        attr_widget,
+        &attr::AttributesWidget::value_changed,
+        [this, p_node]()
+        {
+          std::string node_id = p_node->get_id();
+
+          if (this->p_graph_node_widget)
+            if (GraphNode *p_graph = this->p_graph_node_widget->get_p_graph_node())
+            {
+              // block update of the widget if the modification
+              // comes from within (settings change can also comes
+              // from the node settings context menu)
+              this->prevent_content_update = true;
+              p_graph->update(node_id);
+              this->prevent_content_update = false;
+            }
+        });
+
+    if (!attr_widget)
       continue;
 
-    this->scroll_layout->addWidget(attributes_widget, row++, 0);
+    this->scroll_layout->addWidget(attr_widget, row++, 0);
   }
 }
 
