@@ -234,7 +234,7 @@ nlohmann::json GraphNode::json_to() const
 
 void GraphNode::on_broadcast_node_updated(const std::string &tag)
 {
-  Logger::log()->trace("GraphEditor::on_broadcast_node_updated: tag: {}", tag);
+  Logger::log()->trace("GraphNode::on_broadcast_node_updated: tag: {}", tag);
 
   // loop over the nodes and update those with Receive type
   for (auto &[node_id, p_gnode] : this->nodes)
@@ -249,7 +249,7 @@ void GraphNode::on_broadcast_node_updated(const std::string &tag)
         if (!p_receive_node)
         {
           Logger::log()->critical(
-              "GraphEditor::on_broadcast_node_updated: could not properly recast "
+              "GraphNode::on_broadcast_node_updated: could not properly recast "
               "the node as a receiver. Tag {}",
               tag);
           throw std::runtime_error("could not properly recast the node as a receiver");
@@ -271,19 +271,26 @@ void GraphNode::remove_node(const std::string &id)
   // "special" nodes treatment
   BaseNode *p_basenode = this->get_node_ref_by_id<BaseNode>(id);
 
-  if (p_basenode)
+  if (!p_basenode)
   {
-    std::string node_type = p_basenode->get_node_type();
-
-    if (node_type == "Broadcast")
-    {
-      std::string tag = this->get_node_ref_by_id<BroadcastNode>(id)->get_broadcast_tag();
-
-      Logger::log()->trace("GraphNode::remove_node: removing broadcast tag {}", tag);
-
-      Q_EMIT this->remove_broadcast_tag(tag);
-    }
+    Logger::log()->error("GraphNode::remove_node: p_basenode is nullptr");
+    return;
   }
+
+  std::string node_type = p_basenode->get_node_type();
+
+  if (node_type == "Broadcast")
+  {
+    std::string tag = this->get_node_ref_by_id<BroadcastNode>(id)->get_broadcast_tag();
+
+    Logger::log()->trace("GraphNode::remove_node: removing broadcast tag {}", tag);
+
+    Q_EMIT this->remove_broadcast_tag(tag);
+  }
+
+  // Qt-related
+  p_basenode->disconnect();
+  p_basenode->deleteLater();
 
   // basic GNode removing...
   gnode::Graph::remove_node(id);

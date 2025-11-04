@@ -450,6 +450,9 @@ void GraphNodeWidget::on_connection_deleted(const std::string &id_out,
 
   this->p_graph_node->remove_link(id_out, port_id_out, id_in, port_id_in);
 
+  // see GraphNodeWidget::on_node_deleted
+  QCoreApplication::processEvents();
+
   if (!prevent_graph_update)
     this->p_graph_node->update(id_in);
 }
@@ -771,6 +774,9 @@ void GraphNodeWidget::on_node_deleted_request(const std::string &node_id)
   QCoreApplication::processEvents();
 
   this->p_graph_node->remove_node(node_id);
+
+  // the model node are also QObjects, make sure they are deleted
+  QCoreApplication::processEvents();
 
   Q_EMIT this->node_deleted(this->get_id(), node_id);
 }

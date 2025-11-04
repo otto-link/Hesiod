@@ -54,7 +54,7 @@ void setup_cone_complex_node(BaseNode *p_node)
                                 "_TEXT_Shape & Size",
                                 "radius",
                                 "alpha",
-				"smooth_profile",
+                                "smooth_profile",
                                 //
                                 "_TEXT_Position",
                                 "center",
@@ -110,7 +110,7 @@ void compute_cone_complex_node(BaseNode *p_node)
             shape,
             GET("alpha", FloatAttribute),
             GET("radius", FloatAttribute),
-	    GET("smooth_profile", BoolAttribute),
+            GET("smooth_profile", BoolAttribute),
             GET("valley_amp", FloatAttribute),
             GET("valley_nb", IntAttribute),
             GET("valley_decay_ratio", FloatAttribute),

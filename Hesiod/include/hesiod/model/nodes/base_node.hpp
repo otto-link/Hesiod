@@ -33,7 +33,7 @@
 namespace hesiod
 {
 
-class GraphEditor; // forward
+class GraphNode; // forward
 
 // =====================================
 // BaseNode
@@ -102,7 +102,7 @@ public:
   std::string      get_tool_tip_text() override;
 
   // --- Editor Connection ---
-  GraphEditor *get_p_graph_node() const;
+  GraphNode *get_p_graph_node() const;
 
 signals:
   void compute_finished(const std::string &id);
@@ -115,7 +115,7 @@ private:
   std::vector<std::string>                   attr_ordered_key = {};
   std::string                                category;
   std::shared_ptr<GraphConfig>               config;
-  GraphEditor                               *p_graph_node; // belonging graph node
+  GraphNode                                 *p_graph_node; // belonging graph node
   nlohmann::json                             documentation;
   std::function<void(BaseNode *p_node)>      compute_fct = nullptr;
   std::function<QWidget *(BaseNode *p_node)> qwidget_fct = nullptr;

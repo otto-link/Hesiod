@@ -223,7 +223,7 @@ std::string BaseNode::get_documentation_short() const
   return str;
 }
 
-GraphEditor *BaseNode::get_p_graph_node() const
+GraphNode *BaseNode::get_p_graph_node() const
 {
   if (!this->p_graph_node)
   {
