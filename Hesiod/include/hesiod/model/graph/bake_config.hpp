@@ -27,7 +27,7 @@ struct BakeConfig
 // =====================================
 void override_export_nodes_settings(const std::string           &fname,
                                     const std::filesystem::path &export_path,
-                                    uint                         random_seeds_increment,
+                                    unsigned int                 random_seeds_increment,
                                     const BakeConfig            &bake_settings);
 
 } // namespace hesiod
