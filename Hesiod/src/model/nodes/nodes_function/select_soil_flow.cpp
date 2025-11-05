@@ -37,7 +37,7 @@ void setup_select_soil_flow_node(BaseNode *p_node)
   p_node->set_attr_ordered_key({"_GROUPBOX_BEGIN_Main parameters",
                                 "_TEXT_Weights & Blending",
                                 "gradient_weight",
-				"flow_weight",
+                                "flow_weight",
                                 //
                                 "_TEXT_Slope",
                                 "radius_gradient",
@@ -84,7 +84,7 @@ void compute_select_soil_flow_node(BaseNode *p_node)
                                                 ir,
                                                 GET("gradient_weight", FloatAttribute),
                                                 (float)nx,
-						GET("flow_weight", FloatAttribute),
+                                                GET("flow_weight", FloatAttribute),
                                                 talus,
                                                 GET("clipping_ratio", FloatAttribute),
                                                 GET("flow_gamma", FloatAttribute),

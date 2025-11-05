@@ -181,6 +181,12 @@ void GraphTabsWidget::on_node_deleted(const std::string &graph_id, const std::st
 void GraphTabsWidget::set_show_node_settings_widget(bool new_state)
 {
   this->show_node_settings_widget = new_state;
+
+  // pass info to each node settings widget
+  for (auto &[_, nsw] : this->node_settings_widget_map)
+    if (nsw)
+      nsw->set_is_shown(new_state);
+
   this->update_tab_widget();
 }
 

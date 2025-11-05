@@ -71,6 +71,8 @@ void NodeSettingsWidget::initialize_layout()
   this->setLayout(this->layout);
 }
 
+void NodeSettingsWidget::set_is_shown(bool new_state) { this->is_shown = new_state; }
+
 void NodeSettingsWidget::setup_connections()
 {
   Logger::log()->trace("NodeSettingsWidget::setup_connections");
@@ -121,6 +123,9 @@ void NodeSettingsWidget::setup_connections()
 void NodeSettingsWidget::update_content()
 {
   Logger::log()->trace("NodeSettingsWidget::update_content");
+
+  if (!this->is_shown)
+    return;
 
   if (this->prevent_content_update)
   {

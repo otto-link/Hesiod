@@ -290,7 +290,6 @@ void GraphNode::remove_node(const std::string &id)
 
   // Qt-related
   p_basenode->disconnect();
-  p_basenode->deleteLater();
 
   // basic GNode removing...
   gnode::Graph::remove_node(id);

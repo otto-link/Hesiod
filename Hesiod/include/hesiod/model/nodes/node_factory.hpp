@@ -26,6 +26,23 @@
 namespace hesiod
 {
 
+// create a shared pointer with a custom deleter, used to handle ownership issue between
+// Qt and the gnode::Graph
+template <typename T, typename... Args> std::shared_ptr<T> make_qt_shared(Args &&...args)
+{
+  static_assert(std::is_base_of_v<QObject, T>);
+  T *obj = new T(std::forward<Args>(args)...);
+  return std::shared_ptr<T>(obj,
+                            [](T *o)
+                            {
+                              if (o)
+                              {
+                                o->disconnect();
+                                o->deleteLater();
+                              }
+                            });
+}
+
 void dump_node_inventory(const std::string &fname);
 
 void dump_node_documentation_stub(const std::string           &fname,

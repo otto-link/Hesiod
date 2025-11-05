@@ -445,6 +445,8 @@ void GraphNodeWidget::on_connection_deleted(const std::string &id_out,
                        id_in,
                        port_id_in);
 
+  this->set_enabled(false);
+
   // see GraphNodeWidget::on_node_deleted
   QCoreApplication::processEvents();
 
@@ -455,6 +457,8 @@ void GraphNodeWidget::on_connection_deleted(const std::string &id_out,
 
   if (!prevent_graph_update)
     this->p_graph_node->update(id_in);
+
+  this->set_enabled(true);
 }
 
 void GraphNodeWidget::on_connection_dropped(const std::string &node_id,
@@ -769,6 +773,8 @@ void GraphNodeWidget::on_node_deleted_request(const std::string &node_id)
 {
   Logger::log()->trace("GraphNodeWidget::on_node_deleted_request, node {}", node_id);
 
+  this->set_enabled(false);
+
   // make sure the Graphics node is destroyed before the Model node is
   // destroyed to avoid lifetime issues (concerns NodeProxy)
   QCoreApplication::processEvents();
@@ -779,6 +785,8 @@ void GraphNodeWidget::on_node_deleted_request(const std::string &node_id)
   QCoreApplication::processEvents();
 
   Q_EMIT this->node_deleted(this->get_id(), node_id);
+
+  this->set_enabled(true);
 }
 
 void GraphNodeWidget::on_node_pinned(const std::string &node_id, bool state)

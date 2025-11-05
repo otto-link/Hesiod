@@ -418,14 +418,14 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
 
   if (node_type == "Broadcast")
   {
-    auto sptr = std::make_shared<hesiod::BroadcastNode>(node_type, config);
+    auto sptr = make_qt_shared<hesiod::BroadcastNode>(node_type, config);
     setup_broadcast_node(sptr.get());
     sptr->set_compute_fct(&compute_broadcast_node);
     return sptr;
   }
   else if (node_type == "Receive")
   {
-    auto sptr = std::make_shared<hesiod::ReceiveNode>(node_type, config);
+    auto sptr = make_qt_shared<hesiod::ReceiveNode>(node_type, config);
     setup_receive_node(sptr.get());
     sptr->set_compute_fct(&compute_receive_node);
     return sptr;
@@ -433,7 +433,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
 
   // --- generic nodes
 
-  auto sptr = std::make_shared<hesiod::BaseNode>(node_type, config);
+  auto sptr = make_qt_shared<hesiod::BaseNode>(node_type, config);
 
   switch (str2int(node_type.c_str()))
   {
