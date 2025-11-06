@@ -36,7 +36,7 @@ void setup_texture_advection_warp_node(BaseNode *p_node)
 
   setup_pre_process_mask_attributes(p_node);
 
-  add_wip_warning_label(p_node);
+  add_deprecated_warning_label(p_node, "Use StrataTextureAdvectionParticle node.");
 }
 
 void compute_texture_advection_warp_node(BaseNode *p_node)

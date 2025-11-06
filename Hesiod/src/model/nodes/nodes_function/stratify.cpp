@@ -8,6 +8,7 @@
 
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
+#include "hesiod/model/nodes/base_node_gui.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
 
 using namespace attr;
@@ -35,6 +36,8 @@ void setup_stratify_node(BaseNode *p_node)
   // attribute(s) order
   p_node->set_attr_ordered_key(
       {"seed", "n_strata", "strata_noise", "gamma", "gamma_noise"});
+
+  add_deprecated_warning_label(p_node, "Use Strata node.");
 }
 
 void compute_stratify_node(BaseNode *p_node)

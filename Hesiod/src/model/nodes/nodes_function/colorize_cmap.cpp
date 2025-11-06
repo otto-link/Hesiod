@@ -45,7 +45,7 @@ void setup_colorize_cmap_node(BaseNode *p_node)
                                 "saturate_input",
                                 "saturate_alpha"});
 
-  add_deprecated_warning_label(p_node);
+  add_deprecated_warning_label(p_node, "Use ColorGradient node.");
 }
 
 void compute_colorize_cmap_node(BaseNode *p_node)
