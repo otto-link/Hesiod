@@ -4,3 +4,5 @@
 bin/
 build/
 launch.json
+.idea/
+.vscode/
