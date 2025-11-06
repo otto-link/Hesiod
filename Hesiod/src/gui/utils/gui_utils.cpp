@@ -9,7 +9,7 @@
 #include <QWidget>
 #include <QWidgetAction>
 
-#include "hesiod/gui/gui_utils.hpp"
+#include "hesiod/gui/widgets/gui_utils.hpp"
 #include "hesiod/logger.hpp"
 
 namespace hesiod
@@ -29,23 +29,26 @@ void add_qmenu_spacer(QMenu *menu, int height)
 
 void clear_layout(QLayout *layout)
 {
-  // https://stackoverflow.com/questions/4857188
-  if (layout == nullptr)
+  if (!layout)
     return;
 
   QLayoutItem *item;
-
   while ((item = layout->takeAt(0)))
   {
-    if (item->layout())
+    if (QLayout *childLayout = item->layout())
     {
-      clear_layout(item->layout());
-      delete item->layout();
+      clear_layout(childLayout);
+      childLayout->deleteLater();
     }
-    if (item->widget())
+
+    if (QWidget *w = item->widget())
     {
-      delete item->widget();
+      w->hide();
+      w->setParent(nullptr);
+      w->deleteLater();
     }
+
+    // QLayoutItem is not a QObject => safe to delete immediately
     delete item;
   }
 }

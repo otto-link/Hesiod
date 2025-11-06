@@ -28,6 +28,7 @@ void apply_global_style(QApplication &app)
       {"COLOR_TEXT_PRIMARY", ctx.app_settings.colors.text_primary},
       {"COLOR_TEXT_DISABLED", ctx.app_settings.colors.text_disabled},
       {"COLOR_ACCENT", ctx.app_settings.colors.accent},
+      {"COLOR_BW_ACCENT", ctx.app_settings.colors.accent_bw},
       {"COLOR_BORDER", ctx.app_settings.colors.border},
       {"COLOR_HOVER", ctx.app_settings.colors.hover},
       {"COLOR_PRESSED", ctx.app_settings.colors.pressed},

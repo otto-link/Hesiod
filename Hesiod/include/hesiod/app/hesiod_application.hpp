@@ -5,13 +5,14 @@
 
 #include <QApplication>
 #include <QCoreApplication>
-#include <QMainWindow>
+#include <QProgressBar>
 #include <QStandardPaths>
 
 #include "nlohmann/json.hpp"
 
 #include "hesiod/app/app_context.hpp"
 #include "hesiod/gui/widgets/bake_config_dialog.hpp"
+#include "hesiod/gui/widgets/main_window.hpp"
 
 #define HSD_CTX                                                                          \
   static_cast<hesiod::HesiodApplication *>(QCoreApplication::instance())->get_context()
@@ -34,7 +35,10 @@ public:
 
   void load_project_model_and_ui(const std::string &fname = "");
   void save_project_model_and_ui(const std::string &fname);
+  void save_backup(const std::string &fname);
   void show();
+
+  void notify(const std::string &msg = "", int timeout = 5000);
 
   // --- Context
   QApplication     &get_qapp();
@@ -61,18 +65,10 @@ private:
   void cleanup();
   void setup_menu_bar();
 
-  // --- Members
-  AppContext                   context;
-  std::unique_ptr<QMainWindow> main_window;
-  std::unique_ptr<ProjectUI>   project_ui;
+  // --- Members (respect order for deletion)
+  AppContext                  context;
+  std::unique_ptr<MainWindow> main_window;
+  std::unique_ptr<ProjectUI>  project_ui;
 };
-
-// =====================================
-// Functions
-// =====================================
-void override_export_nodes_settings(const std::string           &fname,
-                                    const std::filesystem::path &export_path,
-                                    uint                         random_seeds_increment,
-                                    const BakeConfig            &bake_settings);
 
 } // namespace hesiod

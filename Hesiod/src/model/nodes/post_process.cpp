@@ -219,7 +219,7 @@ void setup_post_process_heightmap_attributes(BaseNode *p_node, bool add_mix)
 
   std::vector<std::string> *p_keys = p_node->get_attr_ordered_key_ref();
 
-  p_keys->push_back("_SEPARATOR_TEXT_Post-processing");
+  p_keys->push_back("_GROUPBOX_BEGIN_Post-processing");
 
   if (add_mix)
   {
@@ -232,6 +232,7 @@ void setup_post_process_heightmap_attributes(BaseNode *p_node, bool add_mix)
   p_keys->push_back("post_smoothing_radius");
   p_keys->push_back("post_remap");
   p_keys->push_back("post_saturate");
+  p_keys->push_back("_GROUPBOX_END_");
 }
 
 } // namespace hesiod

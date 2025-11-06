@@ -1,7 +1,7 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-#include "hesiod/model/graph_node.hpp"
+#include "hesiod/model/graph/graph_node.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/broadcast_node.hpp"
@@ -18,6 +18,30 @@ GraphNode::GraphNode(const std::string &id, const std::shared_ptr<GraphConfig> &
     : gnode::Graph(id), hmap::CoordFrame(), config(config)
 {
   Logger::log()->trace("GraphNode::GraphNode");
+
+  // setup graph update callback
+  auto lambda = [this](const std::string              &current_id,
+                       const std::vector<std::string> &sorted_ids,
+                       bool                            before_update)
+  {
+    // this should not happen...
+    if (sorted_ids.empty())
+      return;
+
+    // compute progress
+    int idx = find_index(sorted_ids, current_id);
+    int nids = static_cast<int>(sorted_ids.size());
+
+    // in percentage
+    float r = static_cast<float>(idx);
+    if (!before_update)
+      r += 0.5f;
+    float progress = 100.f * r / (static_cast<float>(nids) - 0.5f);
+
+    Q_EMIT update_progress(this->get_id(), current_id, progress);
+  };
+
+  this->set_update_callback(lambda);
 }
 
 std::string GraphNode::add_node(const std::string &node_type)
@@ -77,7 +101,6 @@ void GraphNode::json_from(nlohmann::json const &json, GraphConfig *p_input_confi
     this->config = std::make_shared<GraphConfig>(*p_input_config);
 
     Logger::log()->trace("GraphNode::json_from: GraphConfig override");
-    this->config->log_debug();
   }
   else
   {
@@ -211,7 +234,7 @@ nlohmann::json GraphNode::json_to() const
 
 void GraphNode::on_broadcast_node_updated(const std::string &tag)
 {
-  Logger::log()->trace("GraphEditor::on_broadcast_node_updated: tag: {}", tag);
+  Logger::log()->trace("GraphNode::on_broadcast_node_updated: tag: {}", tag);
 
   // loop over the nodes and update those with Receive type
   for (auto &[node_id, p_gnode] : this->nodes)
@@ -226,7 +249,7 @@ void GraphNode::on_broadcast_node_updated(const std::string &tag)
         if (!p_receive_node)
         {
           Logger::log()->critical(
-              "GraphEditor::on_broadcast_node_updated: could not properly recast "
+              "GraphNode::on_broadcast_node_updated: could not properly recast "
               "the node as a receiver. Tag {}",
               tag);
           throw std::runtime_error("could not properly recast the node as a receiver");
@@ -248,19 +271,25 @@ void GraphNode::remove_node(const std::string &id)
   // "special" nodes treatment
   BaseNode *p_basenode = this->get_node_ref_by_id<BaseNode>(id);
 
-  if (p_basenode)
+  if (!p_basenode)
   {
-    std::string node_type = p_basenode->get_node_type();
-
-    if (node_type == "Broadcast")
-    {
-      std::string tag = this->get_node_ref_by_id<BroadcastNode>(id)->get_broadcast_tag();
-
-      Logger::log()->trace("GraphNode::remove_node: removing broadcast tag {}", tag);
-
-      Q_EMIT this->remove_broadcast_tag(tag);
-    }
+    Logger::log()->error("GraphNode::remove_node: p_basenode is nullptr");
+    return;
   }
+
+  std::string node_type = p_basenode->get_node_type();
+
+  if (node_type == "Broadcast")
+  {
+    std::string tag = this->get_node_ref_by_id<BroadcastNode>(id)->get_broadcast_tag();
+
+    Logger::log()->trace("GraphNode::remove_node: removing broadcast tag {}", tag);
+
+    Q_EMIT this->remove_broadcast_tag(tag);
+  }
+
+  // Qt-related
+  p_basenode->disconnect();
 
   // basic GNode removing...
   gnode::Graph::remove_node(id);

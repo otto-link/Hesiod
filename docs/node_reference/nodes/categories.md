@@ -22,20 +22,20 @@ Node Categories
 |Geometry|Path|Path, PathBezier, PathBezierRound, PathBspline, PathDecasteljau, PathDig, PathFind, PathFractalize, PathFromCsv, PathMeanderize, PathResample, PathSDF, PathShuffle, PathSmooth, PathToCloud, PathToHeightmap|
 |Hydrology||FloodingFromBoundaries, FloodingFromPoint, FloodingLakeSystem, FloodingUniformLevel, MergeWaterDepths, WaterDepthDryOut, WaterDepthFromMask, WaterMask|
 |IO|Files|ExportAsset, ExportCloud, ExportHeightmap, ExportNormalMap, ExportPath, ExportTexture, ImportHeightmap, ImportTexture|
-|Mask|ForTexturing|SelectSoilWeathered|
+|Mask|ForTexturing|SelectSoilFlow, SelectSoilWeathered|
 |Mask|Selector|SelectAngle, SelectBlobLog, SelectCavities, SelectGt, SelectInterval, SelectInwardOutward, SelectMidrange, SelectMultiband3, SelectPulse, SelectRivers, SelectSlope, SelectTransitions, SelectValley|
 |Math|Base|Abs, AbsSmooth, Cos, GaussianDecay, Inverse, Lerp, Reverse, Smoothstep|
 |Math|Boundaries|Falloff, SetBorders, ZeroedEdges|
 |Math|Convolution|ConvolveSVD|
 |Math|Gradient|Gradient, GradientAngle, GradientNorm, GradientTalus|
-|Operator|Blend|Blend, BlendPoissonBf, Mixer, Transfer|
+|Operator|Blend|Blend, Blend3, BlendPoissonBf, Mixer, Transfer|
 |Operator|Morphology|Border, Closing, Dilation, DistanceTransform, Erosion, MakeBinary, MorphologicalGradient, MorphologicalTopHat, Opening, RelativeDistanceFromSkeleton, Skeleton|
 |Operator|Resynthesis|QuiltingBlend, QuiltingExpand, QuiltingShuffle|
 |Operator|Tiling|MakePeriodic, MakePeriodicStitching|
 |Operator|Transform|Rotate, Translate, Warp, Zoom|
 |Primitive|Authoring|Brush, Ridgelines|
 |Primitive|Coherent|Dendry, GaborWaveFbm, Gavoronoise, HemisphereFieldFbm, Noise, NoiseFbm, NoiseIq, NoiseJordan, NoiseParberry, NoisePingpong, NoiseRidged, NoiseSwiss, PolygonField, PolygonFieldFbm, Stamping, Vorolines, VorolinesFbm, Voronoi, VoronoiFbm, Voronoise, Vororand|
-|Primitive|Function|Bump, BumpLorentzian, Cone, ConeSigmoid, Constant, GaussianPulse, Paraboloid, Rift, Slope, Step, WaveDune, WaveSine, WaveSquare, WaveTriangular|
+|Primitive|Function|Bump, BumpLorentzian, Cone, ConeComplex, ConeSigmoid, Constant, GaussianPulse, Paraboloid, Rift, Slope, Step, WaveDune, WaveSine, WaveSquare, WaveTriangular|
 |Primitive|Geological|Badlands, BasaltField, Caldera, Crater, MountainCone, MountainInselberg, MountainRangeRadial, MountainStump, MountainTibesti, ShatteredPeak|
 |Primitive|Kernel|KernelDiskSmooth, KernelGabor, KernelPrim|
 |Primitive|Random|White, WhiteDensityMap, WhiteSparse|

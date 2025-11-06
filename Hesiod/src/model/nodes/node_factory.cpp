@@ -10,7 +10,7 @@
 #include "hesiod/model/nodes/node_factory.hpp"
 #include "hesiod/model/utils.hpp"
 
-#include "hesiod/gui/gui_utils.hpp"
+#include "hesiod/gui/widgets/gui_utils.hpp"
 
 // specific nodes
 #include "hesiod/model/nodes/broadcast_node.hpp"
@@ -145,6 +145,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Badlands", "Primitive/Geological"},
       {"BasaltField", "Primitive/Geological"},
       {"Blend", "Operator/Blend"},
+      {"Blend3", "Operator/Blend"},
       {"BlendPoissonBf", "Operator/Blend"},
       {"Border", "Operator/Morphology"},
       {"Brush", "Primitive/Authoring"},
@@ -177,6 +178,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"ColorizeSolid", "Texture"},
       {"CombineMask", "Mask"},
       {"Cone", "Primitive/Function"},
+      {"ConeComplex", "Primitive/Function"},
       {"ConeSigmoid", "Primitive/Function"},
       {"Constant", "Primitive/Function"},
       {"ConvolveSVD", "Math/Convolution"},
@@ -335,6 +337,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"SelectPulse", "Mask/Selector"},
       {"SelectRivers", "Mask/Selector"},
       {"SelectSlope", "Mask/Selector"},
+      {"SelectSoilFlow", "Mask/ForTexturing"},
       {"SelectSoilWeathered", "Mask/ForTexturing"},
       {"SelectTransitions", "Mask/Selector"},
       {"SelectValley", "Mask/Selector"},
@@ -415,14 +418,14 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
 
   if (node_type == "Broadcast")
   {
-    auto sptr = std::make_shared<hesiod::BroadcastNode>(node_type, config);
+    auto sptr = make_qt_shared<hesiod::BroadcastNode>(node_type, config);
     setup_broadcast_node(sptr.get());
     sptr->set_compute_fct(&compute_broadcast_node);
     return sptr;
   }
   else if (node_type == "Receive")
   {
-    auto sptr = std::make_shared<hesiod::ReceiveNode>(node_type, config);
+    auto sptr = make_qt_shared<hesiod::ReceiveNode>(node_type, config);
     setup_receive_node(sptr.get());
     sptr->set_compute_fct(&compute_receive_node);
     return sptr;
@@ -430,7 +433,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
 
   // --- generic nodes
 
-  auto sptr = std::make_shared<hesiod::BaseNode>(node_type, config);
+  auto sptr = make_qt_shared<hesiod::BaseNode>(node_type, config);
 
   switch (str2int(node_type.c_str()))
   {
@@ -440,6 +443,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(Badlands, badlands);
     SETUP_NODE(BasaltField, basalt_field);
     SETUP_NODE(Blend, blend);
+    SETUP_NODE(Blend3, blend3);
     SETUP_NODE(BlendPoissonBf, blend_poisson_bf);
     SETUP_NODE(Border, border);
     SETUP_NODE(Brush, brush);
@@ -471,6 +475,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(ColorizeSolid, colorize_solid);
     SETUP_NODE(CombineMask, combine_mask);
     SETUP_NODE(Cone, cone);
+    SETUP_NODE(ConeComplex, cone_complex);
     SETUP_NODE(ConeSigmoid, cone_sigmoid);
     SETUP_NODE(Constant, constant);
     SETUP_NODE(Cos, cos);
@@ -629,6 +634,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(SelectPulse, select_pulse);
     SETUP_NODE(SelectRivers, select_rivers);
     SETUP_NODE(SelectSlope, select_slope);
+    SETUP_NODE(SelectSoilFlow, select_soil_flow);
     SETUP_NODE(SelectSoilWeathered, select_soil_weathered);
     SETUP_NODE(SelectTransitions, select_transitions);
     SETUP_NODE(SelectValley, select_valley);

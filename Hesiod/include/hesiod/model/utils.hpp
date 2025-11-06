@@ -2,7 +2,9 @@
    License. The full license is in the file LICENSE, distributed with this software. */
 #pragma once
 #include <algorithm>
+#include <cmath>
 #include <filesystem>
+#include <sstream>
 #include <string>
 #include <unordered_set>
 
@@ -20,6 +22,13 @@ namespace hesiod
 template <typename T> bool contains(const std::vector<T> &vec, const T &item)
 {
   return std::find(vec.begin(), vec.end(), item) != vec.end();
+}
+
+template <typename T, typename U>
+int find_index(const std::vector<T> &vec, const U &value)
+{
+  auto it = std::find(vec.begin(), vec.end(), value);
+  return (it != vec.end()) ? std::distance(vec.begin(), it) : -1;
 }
 
 template <typename T>
@@ -102,5 +111,13 @@ void replace_all(std::string &str, const std::string &from, const std::string &t
 std::vector<std::string> split_string(const std::string &string, char delimiter);
 std::string              time_stamp();
 unsigned int             to_uint_safe(const std::string &str);
+std::string              wrap_text(const std::string &text, std::size_t max_len);
+
+std::string ascii_progress_bar(float fraction,
+                               int   width = 40,
+                               bool  show_percentage = true,
+                               char  fill = '=',
+                               char  head = '>',
+                               char  empty = ' ');
 
 } // namespace hesiod

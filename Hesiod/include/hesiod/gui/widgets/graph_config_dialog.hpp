@@ -6,7 +6,7 @@
 #include <QSlider>
 #include <QWidget>
 
-#include "hesiod/model/graph_config.hpp"
+#include "hesiod/model/graph/graph_config.hpp"
 
 namespace hesiod
 {

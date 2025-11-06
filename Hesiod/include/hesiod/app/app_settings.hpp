@@ -24,6 +24,7 @@ struct AppSettings
     QColor text_primary{"#F4F4F5"};
     QColor text_disabled{"#3C3C3C"};
     QColor accent{"#4772B3"};
+    QColor accent_bw{"#4772B3"};
     QColor border{"#5B5B5B"};
     QColor hover{"#8B8B8B"};
     QColor pressed{"#ABABAB"};
@@ -62,23 +63,20 @@ struct AppSettings
 
   struct Window // main window
   {
-    int  x = 0;
-    int  y = 0;
-    int  w = 1024;
-    int  h = 1024;
-    bool show_graph_manager_widget = false;
-    bool show_texture_downloader_widget = false;
+    int x = 0;
+    int y = 0;
+    int w = 1024;
+    int h = 1024;
+    int progress_bar_width = 200;
 
     int gm_x = 0; // graph manager geometry
     int gm_y = 0;
     int gm_w = 1024;
     int gm_h = 1024;
 
-    // TODO remove
-    bool                      open_graph_manager_at_startup = false;
-    bool                      open_viewport_at_startup = false;
-    std::chrono::milliseconds autosave_timer{60000}; // 60 seconds
-    bool                      save_backup_file = true;
+    bool show_graph_manager_widget = false;
+    bool show_texture_downloader_widget = false;
+    bool save_backup_file = true;
   } window;
 };
 

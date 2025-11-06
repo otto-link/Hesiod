@@ -30,6 +30,10 @@ void setup_import_texture_node(BaseNode *p_node)
            "Image files (*.bmp *.dib *.jpeg *.jpg *.png *.pbm "
            "*.pgm *.ppm *.pxm *.pnm *.tiff *.tif *.hdr *.pic)",
            false);
+  ADD_ATTR(BoolAttribute, "flip_y", true);
+
+  // attribute(s) order
+  p_node->set_attr_ordered_key({"fname", "flip_y"});
 }
 
 void compute_import_texture_node(BaseNode *p_node)
@@ -49,7 +53,7 @@ void compute_import_texture_node(BaseNode *p_node)
   if (f.good())
   {
     // load rgba data
-    hmap::Tensor tensor4(fname);
+    hmap::Tensor tensor4(fname, GET("flip_y", BoolAttribute));
     tensor4 = tensor4.resample_to_shape_xy(p_node->get_config_ref()->shape);
 
     hmap::Heightmap r(CONFIG);

@@ -43,24 +43,28 @@ void setup_mountain_cone_node(BaseNode *p_node)
   ADD_ATTR(Vec2FloatAttribute, "center");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"_TEXT_Base Terrain Shape",
+  p_node->set_attr_ordered_key({"_GROUPBOX_BEGIN_Main parameters",
+                                "_TEXT_Base Terrain Shape",
                                 "elevation",
                                 "scale",
                                 "cone_alpha",
-                                "ridge_amp",
-                                "seed",
-                                "octaves",
-                                "peak_kw",
+                                //
+                                "_TEXT_Position",
                                 "center",
                                 //
                                 "_TEXT_Surface Detail & Structure",
-                                "rugosity",
+                                "ridge_amp",
                                 "angle",
+                                "seed",
+                                "peak_kw",
+                                "rugosity",
                                 "k_smoothing",
                                 "gamma",
+                                "octaves",
                                 //
                                 "_TEXT_Noise & Modulation",
-                                "base_noise_amp"});
+                                "base_noise_amp",
+                                "_GROUPBOX_END_"});
 
   setup_post_process_heightmap_attributes(p_node);
 

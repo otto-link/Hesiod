@@ -22,4 +22,12 @@ struct BakeConfig
   nlohmann::json json_to() const;
 };
 
+// =====================================
+// Functions
+// =====================================
+void override_export_nodes_settings(const std::string           &fname,
+                                    const std::filesystem::path &export_path,
+                                    unsigned int                 random_seeds_increment,
+                                    const BakeConfig            &bake_settings);
+
 } // namespace hesiod

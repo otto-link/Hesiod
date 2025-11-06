@@ -9,8 +9,8 @@
 
 #include "hesiod/gui/widgets/graph_manager_widget.hpp"
 #include "hesiod/logger.hpp"
-#include "hesiod/model/broadcast_param.hpp"
-#include "hesiod/model/graph_node.hpp"
+#include "hesiod/model/graph/broadcast_param.hpp"
+#include "hesiod/model/graph/graph_node.hpp"
 
 namespace hesiod
 {
@@ -123,10 +123,6 @@ void GraphQListWidget::update_combobox()
   for (auto &[id, node] : this->p_graph_node->get_nodes())
     for (auto &port : node->get_ports())
     {
-      Logger::log()->trace("GraphQListWidget::update_combobox: {}/{}",
-                           node->get_label(),
-                           port->get_label());
-
       // TODO allow other data types
 
       // only allow heighmap (for now)

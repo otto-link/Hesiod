@@ -22,6 +22,8 @@ public:
   // --- Constructor and Setup ---
   NodeSettingsWidget(GraphNodeWidget *p_graph_node_widget, QWidget *parent = nullptr);
 
+  void set_is_shown(bool new_state);
+
   void initialize_layout();
   void setup_connections();
 
@@ -37,6 +39,7 @@ private:
   std::vector<std::string> pinned_node_ids = {};
   bool                     first_pass = true;
   bool                     prevent_content_update = false;
+  bool                     is_shown = false;
 };
 
 } // namespace hesiod

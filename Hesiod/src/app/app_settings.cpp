@@ -19,6 +19,7 @@ void AppSettings::json_from(nlohmann::json const &json)
   json_safe_get(json, "colors.text_primary", colors.text_primary);
   json_safe_get(json, "colors.text_disabled", colors.text_disabled);
   json_safe_get(json, "colors.accent", colors.accent);
+  json_safe_get(json, "colors.accent_bw", colors.accent_bw);
   json_safe_get(json, "colors.border", colors.border);
   json_safe_get(json, "colors.hover", colors.hover);
   json_safe_get(json, "colors.pressed", colors.pressed);
@@ -80,29 +81,11 @@ void AppSettings::json_from(nlohmann::json const &json)
     json_safe_get(json, "window.y", window.y);
     json_safe_get(json, "window.w", window.w);
     json_safe_get(json, "window.h", window.h);
-    json_safe_get(json,
-                  "window.show_graph_manager_widget",
-                  window.show_graph_manager_widget);
-    json_safe_get(json,
-                  "window.show_texture_downloader_widget",
-                  window.show_texture_downloader_widget);
+    json_safe_get(json, "window.progress_bar_width", window.progress_bar_width);
     json_safe_get(json, "window.gm_x", window.gm_x);
     json_safe_get(json, "window.gm_y", window.gm_y);
     json_safe_get(json, "window.gm_w", window.gm_w);
     json_safe_get(json, "window.gm_h", window.gm_h);
-
-    json_safe_get(json,
-                  "window.open_graph_manager_at_startup",
-                  window.open_graph_manager_at_startup);
-
-    int64_t autosave_timer_value = 0;
-    json_safe_get(json, "window.autosave_timer", autosave_timer_value);
-
-    window.autosave_timer = std::chrono::milliseconds(autosave_timer_value);
-
-    json_safe_get(json,
-                  "window.open_viewport_at_startup",
-                  window.open_viewport_at_startup);
     json_safe_get(json, "window.save_backup_file", window.save_backup_file);
   }
 }
@@ -118,6 +101,7 @@ nlohmann::json AppSettings::json_to() const
   json["colors.text_primary"] = colors.text_primary.name().toStdString();
   json["colors.text_disabled"] = colors.text_disabled.name().toStdString();
   json["colors.accent"] = colors.accent.name().toStdString();
+  json["colors.accent_bw"] = colors.accent_bw.name().toStdString();
   json["colors.border"] = colors.border.name().toStdString();
   json["colors.hover"] = colors.hover.name().toStdString();
   json["colors.pressed"] = colors.pressed.name().toStdString();
@@ -147,15 +131,13 @@ nlohmann::json AppSettings::json_to() const
   json["window.y"] = window.y;
   json["window.w"] = window.w;
   json["window.h"] = window.h;
+  json["window.progress_bar_width"] = window.progress_bar_width;
   json["window.gm_x"] = window.gm_x;
   json["window.gm_y"] = window.gm_y;
   json["window.gm_w"] = window.gm_w;
   json["window.gm_h"] = window.gm_h;
   json["window.show_graph_manager_widget"] = window.show_graph_manager_widget;
   json["window.show_texture_downloader_widget"] = window.show_texture_downloader_widget;
-  json["window.open_graph_manager_at_startup"] = window.open_graph_manager_at_startup;
-  json["window.open_viewport_at_startup"] = window.open_viewport_at_startup;
-  json["window.autosave_timer"] = static_cast<int>(window.autosave_timer.count());
   json["window.save_backup_file"] = window.save_backup_file;
 
   return json;

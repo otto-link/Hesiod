@@ -11,10 +11,11 @@
 #include "attributes/widgets/abstract_widget.hpp"
 #include "attributes/widgets/attributes_widget.hpp"
 
-#include "hesiod/gui/gui_utils.hpp"
+#include "hesiod/app/hesiod_application.hpp"
+#include "hesiod/gui/widgets/gui_utils.hpp"
 #include "hesiod/gui/widgets/node_settings_widget.hpp"
 #include "hesiod/logger.hpp"
-#include "hesiod/model/graph_node.hpp"
+#include "hesiod/model/graph/graph_node.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/utils.hpp"
 
@@ -70,6 +71,8 @@ void NodeSettingsWidget::initialize_layout()
   this->setLayout(this->layout);
 }
 
+void NodeSettingsWidget::set_is_shown(bool new_state) { this->is_shown = new_state; }
+
 void NodeSettingsWidget::setup_connections()
 {
   Logger::log()->trace("NodeSettingsWidget::setup_connections");
@@ -121,6 +124,9 @@ void NodeSettingsWidget::update_content()
 {
   Logger::log()->trace("NodeSettingsWidget::update_content");
 
+  if (!this->is_shown)
+    return;
+
   if (this->prevent_content_update)
   {
     Logger::log()->trace("NodeSettingsWidget::update_content: prevented");
@@ -158,7 +164,19 @@ void NodeSettingsWidget::update_content()
     return;
   }
 
+  // style
+  QString style = QString("QScrollArea {"
+                          "   border: 1px solid %1;"
+                          "   border-radius: 6px;"
+                          "   padding: 6px;"
+                          "}")
+                      .arg(HSD_CTX.app_settings.colors.border.name());
+
+  this->scroll_area->setStyleSheet(style);
+
   // for scroll_area size
+  this->scroll_area->setMinimumWidth(332);
+
   QWidget *parent = this->parentWidget();
   if (parent)
     this->scroll_area->setMinimumHeight((int)(0.9f * parent->size().height()));
@@ -181,19 +199,7 @@ void NodeSettingsWidget::update_content()
   for (auto &node_id : all_ids)
   {
     // Defensive retrieval of node reference
-    BaseNode *p_node = nullptr;
-    try
-    {
-      p_node = p_graph->get_node_ref_by_id<BaseNode>(node_id);
-    }
-    catch (const std::exception &e)
-    {
-      Logger::log()->error(
-          "NodeSettingsWidget::update_content: exception while getting node {}: {}",
-          node_id,
-          e.what());
-      continue;
-    }
+    BaseNode *p_node = p_graph->get_node_ref_by_id<BaseNode>(node_id);
 
     if (!p_node)
     {
@@ -229,7 +235,7 @@ void NodeSettingsWidget::update_content()
     sep_layout->setStretch(0, 1);
     sep_layout->setStretch(2, 6);
 
-    this->scroll_layout->addWidget(separator_widget, row++, 0);
+    this->scroll_layout->addWidget(separator_widget, row++, 0, 1, 2);
 
     // preview (use scroll_widget as parent so lifetime is tied to the container)
     DataPreview *p_data_preview = p_node->get_data_preview_ref();
@@ -250,7 +256,7 @@ void NodeSettingsWidget::update_content()
         label_preview->setScaledContents(true);
         label_preview->setFixedSize(width, width);
         label_preview->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        this->scroll_layout->addWidget(label_preview, row++, 0, Qt::AlignLeft);
+        this->scroll_layout->addWidget(label_preview, row, 0, Qt::AlignLeft);
       }
     }
 
@@ -258,7 +264,9 @@ void NodeSettingsWidget::update_content()
     QPushButton *button_pin = new QPushButton("Pin this node", this);
     button_pin->setCheckable(true);
     button_pin->setChecked(contains(this->pinned_node_ids, node_id));
-    this->scroll_layout->addWidget(button_pin, row++, 0);
+    this->scroll_layout->addWidget(button_pin, row++, 1);
+
+    this->scroll_layout->addWidget(new QLabel(), row++, 0);
 
     // Use QPointer in the lambda to defend against deletion
     QPointer<QPushButton> bp(button_pin);
@@ -289,74 +297,35 @@ void NodeSettingsWidget::update_content()
                                this->pinned_node_ids.size());
         });
 
-    // settings: build the AttributesWidget in a guarded way
-    bool        add_save_reset_state_buttons = false;
-    std::string window_title = "";
+    // attr widget
+    attr::AttributesWidget *attr_widget = this->p_graph_node_widget
+                                              ->create_node_attributes_widget(this,
+                                                                              node_id);
 
-    attr::AttributesWidget *attributes_widget = nullptr;
-    try
-    {
-      attributes_widget = new attr::AttributesWidget(p_node->get_attr_ref(),
-                                                     p_node->get_attr_ordered_key_ref(),
-                                                     window_title,
-                                                     add_save_reset_state_buttons);
-    }
-    catch (const std::exception &e)
-    {
-      Logger::log()->error(
-          "NodeSettingsWidget::update_content: failed to create AttributesWidget "
-          "for {}: {}",
-          node_id,
-          e.what());
-    }
-
-    if (attributes_widget)
-    {
-      attributes_widget->setParent(this->scroll_area);
-
-      // change the attribute widget layout spacing a posteriori
-      QVBoxLayout *retrieved_layout = qobject_cast<QVBoxLayout *>(
-          attributes_widget->layout());
-      if (retrieved_layout)
-      {
-        retrieved_layout->setSpacing(0);
-        retrieved_layout->setContentsMargins(0, 0, 0, 0);
-
-        for (int i = 0; i < retrieved_layout->count(); ++i)
+    this->connect(
+        attr_widget,
+        &attr::AttributesWidget::value_changed,
+        [this, p_node]()
         {
-          QWidget *child = retrieved_layout->itemAt(i)->widget();
-          if (!child)
-            continue;
+          std::string node_id = p_node->get_id();
 
-          if (auto *inner_layout = child->layout())
-          {
-            inner_layout->setContentsMargins(0, 2, 0, 2);
-            inner_layout->setSpacing(4);
-          }
-        }
-      }
+          if (this->p_graph_node_widget)
+            if (GraphNode *p_graph = this->p_graph_node_widget->get_p_graph_node())
+            {
+              // block update of the widget if the modification
+              // comes from within (settings change can also comes
+              // from the node settings context menu)
+              this->prevent_content_update = true;
+              p_graph->update(node_id);
+              this->prevent_content_update = false;
+            }
+        });
 
-      this->scroll_layout->addWidget(attributes_widget, row++, 0);
+    if (!attr_widget)
+      continue;
 
-      this->connect(
-          attributes_widget,
-          &attr::AttributesWidget::value_changed,
-          [this, p_node]()
-          {
-            std::string node_id = p_node->get_id();
-
-            if (this->p_graph_node_widget)
-              if (GraphNode *p_graph = this->p_graph_node_widget->get_p_graph_node())
-              {
-                // block update of the widget if the modification
-                // comes from within (settings change can also comes
-                // from the node settings context menu)
-                this->prevent_content_update = true;
-                p_graph->update(node_id);
-                this->prevent_content_update = false;
-              }
-          });
-    }
+    this->scroll_layout->addWidget(attr_widget, row++, 0, 1, 2);
+    this->scroll_layout->addWidget(new QLabel(), row++, 0);
   }
 }
 

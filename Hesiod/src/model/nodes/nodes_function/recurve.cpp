@@ -9,6 +9,7 @@
 
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
+#include "hesiod/model/nodes/base_node_gui.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
 
 using namespace attr;
@@ -29,6 +30,8 @@ void setup_recurve_node(BaseNode *p_node)
   std::vector<float> default_values = {0.f, 0.25f, 0.5f, 0.75f, 1.f};
 
   ADD_ATTR(VecFloatAttribute, "values", default_values, 0.f, 1.f);
+
+  add_wip_warning_label(p_node);
 }
 
 void compute_recurve_node(BaseNode *p_node)

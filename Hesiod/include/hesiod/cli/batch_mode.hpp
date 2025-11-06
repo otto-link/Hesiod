@@ -14,7 +14,7 @@ static std::istream &operator>>(std::istream &is, hmap::Vec2<int> &vec2)
 }
 #include <args.hxx>
 
-#include "hesiod/model/graph_config.hpp"
+#include "hesiod/model/graph/graph_config.hpp"
 
 namespace hesiod::cli
 {

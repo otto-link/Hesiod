@@ -7,7 +7,7 @@
 
 #include "hesiod/app/app_context.hpp"
 #include "hesiod/logger.hpp"
-#include "hesiod/model/graph_manager.hpp"
+#include "hesiod/model/graph/graph_manager.hpp"
 #include "hesiod/model/utils.hpp"
 
 namespace hesiod

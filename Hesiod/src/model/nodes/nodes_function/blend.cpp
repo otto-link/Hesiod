@@ -32,12 +32,29 @@ void setup_blend_node(BaseNode *p_node)
            "minimum_smooth");
   ADD_ATTR(FloatAttribute, "k", 0.1f, 0.01f, 1.f);
   ADD_ATTR(FloatAttribute, "radius", 0.05f, 0.f, 0.2f);
+  ADD_ATTR(FloatAttribute, "input1_weight", 1.f, 0.f, 1.f);
+  ADD_ATTR(FloatAttribute, "input2_weight", 1.f, 0.f, 1.f);
+  ADD_ATTR(BoolAttribute, "swap_inputs", false);
   ADD_ATTR(BoolAttribute, "inverse", false);
   ADD_ATTR(RangeAttribute, "remap");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key(
-      {"blending_method", "k", "radius", "_SEPARATOR_", "inverse", "remap"});
+  p_node->set_attr_ordered_key({"_GROUPBOX_BEGIN_Main parameters",
+                                "blending_method",
+                                "k",
+                                "radius",
+                                "_GROUPBOX_END_",
+                                //
+                                "_GROUPBOX_BEGIN_Inputs",
+                                "input1_weight",
+                                "input2_weight",
+                                "swap_inputs",
+                                "_GROUPBOX_END_",
+                                //
+                                "_GROUPBOX_BEGIN_Post-processing",
+                                "inverse",
+                                "remap",
+                                "_GROUPBOX_END_"});
 }
 
 void compute_blend_node(BaseNode *p_node)
@@ -51,13 +68,25 @@ void compute_blend_node(BaseNode *p_node)
 
   if (p_in1 && p_in2)
   {
+    // adjust inputs
+    if (GET("swap_inputs", BoolAttribute))
+      std::swap(p_in1, p_in2);
+
+    // compute output
     hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
 
     float k = GET("k", FloatAttribute);
     int   ir = std::max(1, (int)(GET("radius", FloatAttribute) * p_out->shape.x));
     int   method = GET("blending_method", EnumAttribute);
 
-    blend_heightmaps(*p_out, *p_in1, *p_in2, static_cast<BlendingMethod>(method), k, ir);
+    blend_heightmaps(*p_out,
+                     *p_in1,
+                     *p_in2,
+                     static_cast<BlendingMethod>(method),
+                     k,
+                     ir,
+                     GET("input1_weight", FloatAttribute),
+                     GET("input2_weight", FloatAttribute));
 
     // post-process
     post_process_heightmap(p_node,

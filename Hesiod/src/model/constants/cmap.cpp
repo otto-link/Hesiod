@@ -9,7 +9,7 @@
 #include "nlohmann/json.hpp"
 
 #include "hesiod/logger.hpp"
-#include "hesiod/model/cmap.hpp"
+#include "hesiod/model/constants/cmap.hpp"
 
 namespace hesiod
 {

@@ -4,7 +4,7 @@
 #include <QCoreApplication>
 
 #include "hesiod/logger.hpp"
-#include "hesiod/model/graph_manager.hpp"
+#include "hesiod/model/graph/graph_manager.hpp"
 #include "hesiod/model/project_model.hpp"
 #include "hesiod/model/utils.hpp"
 

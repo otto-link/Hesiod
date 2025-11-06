@@ -2,7 +2,7 @@
    License. The full license is in the file LICENSE, distributed with this software. */
 
 /**
- * @file export_param_widget.hpp
+ * @file flatten_config_widget.hpp
  * @author  Otto Link (otto.link.bv@gmail.com)
  * @brief
  *
@@ -14,24 +14,24 @@
 #include <QSlider>
 #include <QWidget>
 
-#include "hesiod/model/export_param.hpp"
+#include "hesiod/model/graph/flatten_config.hpp"
 
 namespace hesiod
 {
 
 // =====================================
-// ExportParamWidget
+// FlattenConfigDialog
 // =====================================
-class ExportParamWidget : public QDialog
+class FlattenConfigDialog : public QDialog
 {
   Q_OBJECT
 
 public:
-  ExportParamWidget() = default;
-  ExportParamWidget(ExportParam *p_export_param, QWidget *parent = nullptr);
+  FlattenConfigDialog() = default;
+  FlattenConfigDialog(FlattenConfig *p_export_param, QWidget *parent = nullptr);
 
 private:
-  ExportParam *p_export_param;
+  FlattenConfig *p_export_param;
 
   QSlider *slider_shape;
   QLabel  *label_shape;

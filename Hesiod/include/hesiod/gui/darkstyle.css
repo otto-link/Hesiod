@@ -29,6 +29,13 @@ QRadioButton {
     color: COLOR_TEXT_PRIMARY;
 }
 
+QStatusBar {
+    background-color: COLOR_BG_PRIMARY;
+    color: COLOR_HOVER;
+    /* border-top: 1px solid COLOR_TEXT_DISABLED; */
+    padding: 4px 8px;
+}
+
 /* QTabWidget --------------------------------------------------------------- */
 QTabWidget::pane {
     color: COLOR_TEXT_PRIMARY;
@@ -56,6 +63,24 @@ QAbstractSpinBox {
     color: COLOR_TEXT_PRIMARY;
     padding: 4px;
     border-radius: 4px;
+}
+
+/* QGroupBox --------------------------------------------------------------- */
+QGroupBox  {
+    border: 1px solid COLOR_BORDER;
+    margin-top: 30px;
+    margin-bottom: 4px;
+    font-size: 14px;
+    border-radius: 6px;
+    padding: 4px 8px;
+}
+
+QGroupBox::title  {
+    margin-top: 4px;
+    subcontrol-origin: margin;
+    subcontrol-position: top left;
+    color: COLOR_BW_ACCENT;
+    font-weight: bold;
 }
 
 /* QCheckBox --------------------------------------------------------------- */

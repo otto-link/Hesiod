@@ -13,8 +13,8 @@
 
 #include "nlohmann/json.hpp"
 
-#include "hesiod/model/broadcast_param.hpp"
-#include "hesiod/model/export_param.hpp"
+#include "hesiod/model/graph/broadcast_param.hpp"
+#include "hesiod/model/graph/flatten_config.hpp"
 
 #include <filesystem> // must be here,
                       // https://bugreports.qt.io/browse/QTBUG-73263
@@ -41,14 +41,14 @@ public:
 
   // --- Accessors ---
   const BroadcastMap             &get_broadcast_params();
-  ExportParam                     get_export_param() const;
+  FlattenConfig                   get_export_param() const;
   const GraphNodeMap             &get_graph_nodes();
   const std::vector<std::string> &get_graph_order();
   int                             get_graph_order_index(const std::string &graph_id);
   GraphNode                      *get_graph_ref_by_id(const std::string &graph_id);
   std::string                     get_id() const;
 
-  void set_export_param(const ExportParam &new_export_param);
+  void set_export_param(const FlattenConfig &new_export_param);
   void set_graph_order(const std::vector<std::string> &new_graph_order);
   void set_id(const std::string &new_id);
 
@@ -76,11 +76,15 @@ private slots:
                             const hmap::CoordFrame *t_source,
                             const hmap::Heightmap  *h_source);
   void on_remove_broadcast_tag(const std::string &tag);
+  void on_update_progress(const std::string &graph_id,
+                          const std::string &node_id,
+                          float              progress);
 
 signals:
   // --- To GUI ---
   void new_broadcast_tag(const std::string &tag);
   void remove_broadcast_tag(const std::string &tag);
+  void update_progress(float progress);
 
 private:
   std::string              id;
@@ -88,7 +92,7 @@ private:
   int                      id_count = 0;
   std::vector<std::string> graph_order;
   BroadcastMap             broadcast_params;
-  ExportParam              export_param;
+  FlattenConfig            export_param;
 };
 
 } // namespace hesiod

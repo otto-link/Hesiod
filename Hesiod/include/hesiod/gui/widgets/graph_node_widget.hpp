@@ -1,7 +1,13 @@
 /* Copyright (c) 2025 Otto Link. Distributed under the terms of the GNU General Public
    License. The full license is in the file LICENSE, distributed with this software. */
 #pragma once
+#include <QScrollArea>
+
 #include "gnodegui/graph_viewer.hpp"
+
+#include "attributes/widgets/attributes_widget.hpp"
+
+#include "hesiod/model/nodes/base_node.hpp"
 
 namespace hesiod
 {
@@ -37,6 +43,9 @@ public:
 
   void add_import_texture_nodes(const std::vector<std::string> &texture_paths);
 
+  attr::AttributesWidget *create_node_attributes_widget(QWidget           *parent,
+                                                        const std::string &node_id);
+
 signals:
   // --- User Actions Signals ---
   void copy_buffer_has_changed(const nlohmann::json &new_json);
@@ -51,7 +60,8 @@ public slots:
   void on_connection_deleted(const std::string &id_out,
                              const std::string &port_id_out,
                              const std::string &id_in,
-                             const std::string &port_id_in);
+                             const std::string &port_id_in,
+                             bool               prevent_graph_update);
   void on_connection_dropped(const std::string &node_id,
                              const std::string &port_id,
                              QPointF            scene_pos);
@@ -84,6 +94,12 @@ public slots:
   void on_new_graphics_node_request(const std::string &node_id, QPointF scene_pos);
 
 private:
+  QScrollArea *create_attributes_scroll(QWidget                *parent,
+                                        attr::AttributesWidget *attr_widget);
+  QWidget     *create_toolbar_widget(QWidget                *parent,
+                                     BaseNode               *p_node,
+                                     attr::AttributesWidget *attr_widget);
+
   // --- Members ---
   GraphNode                            *p_graph_node; // own by GraphManager
   std::vector<std::unique_ptr<QWidget>> data_viewers;

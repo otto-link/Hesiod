@@ -8,14 +8,14 @@
 
 #include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/gui/widgets/coord_frame_widget.hpp"
-#include "hesiod/gui/widgets/export_param_widget.hpp"
+#include "hesiod/gui/widgets/flatten_config_dialog.hpp"
 #include "hesiod/gui/widgets/graph_config_dialog.hpp"
 #include "hesiod/gui/widgets/graph_manager_widget.hpp"
 #include "hesiod/gui/widgets/string_input_dialog.hpp"
 #include "hesiod/logger.hpp"
-#include "hesiod/model/export_param.hpp"
-#include "hesiod/model/graph_manager.hpp"
-#include "hesiod/model/graph_node.hpp"
+#include "hesiod/model/graph/flatten_config.hpp"
+#include "hesiod/model/graph/graph_manager.hpp"
+#include "hesiod/model/graph/graph_node.hpp"
 #include "hesiod/model/utils.hpp"
 
 #define MINIMUM_WIDTH 384
@@ -256,13 +256,13 @@ void GraphManagerWidget::on_export()
   Logger::log()->trace("GraphManagerWidget::on_export");
 
   // define the export parameters using the GUI
-  ExportParam export_param = this->p_graph_manager->get_export_param();
+  FlattenConfig export_param = this->p_graph_manager->get_export_param();
 
   if (export_param.export_path.empty())
     export_param.export_path = "export.png";
 
-  ExportParamWidget param_editor(&export_param);
-  int               ret = param_editor.exec();
+  FlattenConfigDialog param_editor(&export_param);
+  int                 ret = param_editor.exec();
 
   if (!ret)
     return;

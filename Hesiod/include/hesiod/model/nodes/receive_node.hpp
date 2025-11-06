@@ -11,7 +11,7 @@
 #pragma once
 #include "highmap/coord_frame.hpp"
 
-#include "hesiod/model/broadcast_param.hpp"
+#include "hesiod/model/graph/broadcast_param.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 
 namespace hesiod
@@ -37,7 +37,7 @@ public:
 
 private:
   BroadcastMap     *p_broadcast_params = nullptr; // own by GraphManager
-  hmap::CoordFrame *p_coord_frame = nullptr;      // own by GraphEditor
+  hmap::CoordFrame *p_coord_frame = nullptr;      // own by GraphNode
 };
 
 } // namespace hesiod

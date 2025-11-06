@@ -8,9 +8,9 @@
 #include "highmap/interpolate_array.hpp"
 
 #include "hesiod/logger.hpp"
-#include "hesiod/model/graph_config.hpp"
-#include "hesiod/model/graph_manager.hpp"
-#include "hesiod/model/graph_node.hpp"
+#include "hesiod/model/graph/graph_config.hpp"
+#include "hesiod/model/graph/graph_manager.hpp"
+#include "hesiod/model/graph/graph_node.hpp"
 #include "hesiod/model/utils.hpp"
 
 namespace hesiod
@@ -60,6 +60,12 @@ std::string GraphManager::add_graph_node(const std::shared_ptr<GraphNode> &p_gra
                 &GraphNode::remove_broadcast_tag,
                 this,
                 &GraphManager::on_remove_broadcast_tag);
+
+  // gather update progress signals
+  this->connect(p_graph_node.get(),
+                &GraphNode::update_progress,
+                this,
+                &GraphManager::on_update_progress);
 
   return new_graph_id;
 }
@@ -143,7 +149,7 @@ const BroadcastMap &GraphManager::get_broadcast_params()
   return this->broadcast_params;
 }
 
-ExportParam GraphManager::get_export_param() const { return this->export_param; }
+FlattenConfig GraphManager::get_export_param() const { return this->export_param; }
 
 const GraphNodeMap &GraphManager::get_graph_nodes() { return this->graph_nodes; }
 
@@ -314,6 +320,14 @@ void GraphManager::on_remove_broadcast_tag(const std::string &tag)
   Q_EMIT this->remove_broadcast_tag(tag);
 }
 
+void GraphManager::on_update_progress(const std::string & /* graph_id */,
+                                      const std::string & /* node_id */,
+                                      float progress)
+{
+  Logger::log()->trace("GraphManager::on_update_progress");
+  Q_EMIT update_progress(progress);
+}
+
 void GraphManager::remove_graph_node(const std::string &graph_id)
 {
   Logger::log()->trace("GraphManager::remove_graph_node: graph_id {}", graph_id);
@@ -347,7 +361,7 @@ void GraphManager::save_to_file(const std::string &fname) const
   json_to_file(json, fname);
 }
 
-void GraphManager::set_export_param(const ExportParam &new_export_param)
+void GraphManager::set_export_param(const FlattenConfig &new_export_param)
 {
   this->export_param = new_export_param;
 }

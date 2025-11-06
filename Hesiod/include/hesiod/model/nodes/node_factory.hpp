@@ -16,7 +16,7 @@
 
 #include "gnode/node.hpp"
 
-#include "hesiod/model/graph_config.hpp"
+#include "hesiod/model/graph/graph_config.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 
 #define DECLARE_NODE(node_type)                                                          \
@@ -25,6 +25,23 @@
 
 namespace hesiod
 {
+
+// create a shared pointer with a custom deleter, used to handle ownership issue between
+// Qt and the gnode::Graph
+template <typename T, typename... Args> std::shared_ptr<T> make_qt_shared(Args &&...args)
+{
+  static_assert(std::is_base_of_v<QObject, T>);
+  T *obj = new T(std::forward<Args>(args)...);
+  return std::shared_ptr<T>(obj,
+                            [](T *o)
+                            {
+                              if (o)
+                              {
+                                o->disconnect();
+                                o->deleteLater();
+                              }
+                            });
+}
 
 void dump_node_inventory(const std::string &fname);
 
@@ -78,6 +95,7 @@ DECLARE_NODE(accumulation_curvature)
 DECLARE_NODE(badlands)
 DECLARE_NODE(basalt_field)
 DECLARE_NODE(blend)
+DECLARE_NODE(blend3)
 DECLARE_NODE(blend_poisson_bf)
 DECLARE_NODE(border)
 DECLARE_NODE(broadcast)
@@ -110,6 +128,7 @@ DECLARE_NODE(colorize_gradient)
 DECLARE_NODE(colorize_solid)
 DECLARE_NODE(combine_mask)
 DECLARE_NODE(cone)
+DECLARE_NODE(cone_complex)
 DECLARE_NODE(cone_sigmoid)
 DECLARE_NODE(constant)
 DECLARE_NODE(convolve_svd)
@@ -268,6 +287,7 @@ DECLARE_NODE(select_multiband3)
 DECLARE_NODE(select_pulse)
 DECLARE_NODE(select_rivers)
 DECLARE_NODE(select_slope)
+DECLARE_NODE(select_soil_flow)
 DECLARE_NODE(select_soil_weathered)
 DECLARE_NODE(select_transitions)
 DECLARE_NODE(select_valley)

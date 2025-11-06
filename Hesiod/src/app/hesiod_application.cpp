@@ -1,6 +1,7 @@
 /* Copyright (c) 2025 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include <format>
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -9,18 +10,19 @@
 #include <QMenuBar>
 #include <QMessageBox>
 #include <QProgressDialog>
+#include <QStatusBar>
 
 #include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/cli/batch_mode.hpp"
-#include "hesiod/gui/gui_utils.hpp"
 #include "hesiod/gui/project_ui.hpp"
 #include "hesiod/gui/widgets/bake_config_dialog.hpp"
 #include "hesiod/gui/widgets/documentation_popup.hpp"
 #include "hesiod/gui/widgets/graph_manager_widget.hpp"
 #include "hesiod/gui/widgets/graph_tabs_widget.hpp"
+#include "hesiod/gui/widgets/gui_utils.hpp"
 #include "hesiod/logger.hpp"
-#include "hesiod/model/graph_manager.hpp"
-#include "hesiod/model/graph_node.hpp"
+#include "hesiod/model/graph/graph_manager.hpp"
+#include "hesiod/model/graph/graph_node.hpp"
 #include "hesiod/model/utils.hpp"
 
 namespace hesiod
@@ -37,17 +39,15 @@ HesiodApplication::HesiodApplication(int &argc, char **argv) : QApplication(argc
   apply_global_style(this->get_qapp());
 
   // main window
-  this->main_window = std::make_unique<QMainWindow>();
-  this->main_window->setGeometry(this->context.app_settings.window.x,
-                                 this->context.app_settings.window.y,
-                                 this->context.app_settings.window.w,
-                                 this->context.app_settings.window.h);
+  this->main_window = std::make_unique<MainWindow>();
 
   // (after MainWindow creation)
   this->load_project_model_and_ui();
 
   // others
   this->setup_menu_bar();
+
+  this->notify("Ready");
 }
 
 HesiodApplication::~HesiodApplication() = default;
@@ -74,6 +74,8 @@ QApplication &HesiodApplication::get_qapp() { return *static_cast<QApplication *
 void HesiodApplication::load_project_model_and_ui(const std::string &fname)
 {
   Logger::log()->trace("HesiodApplication::load_project_model_and_ui: fname [{}]", fname);
+
+  this->notify(std::format("Loading project... {}", fname));
 
   const std::string actual_fname = fname.empty() ? this->context.app_settings.global
                                                        .default_startup_project_file
@@ -119,8 +121,19 @@ void HesiodApplication::load_project_model_and_ui(const std::string &fname)
                 this,
                 &HesiodApplication::on_project_name_changed);
 
+  // Project model and UI -> MainWindow
+  this->main_window->setup_connections_with_project();
+
   // rename whether fname is empty or not
   this->context.project_model->set_path(fname);
+
+  this->notify("Project loaded successfully.");
+}
+
+void HesiodApplication::notify(const std::string &msg, int timeout)
+{
+  Logger::log()->trace("HesiodApplication::notify: {}", msg);
+  this->main_window->notify(msg, timeout);
 }
 
 void HesiodApplication::on_export_batch()
@@ -145,6 +158,8 @@ void HesiodApplication::on_export_batch()
 
   // --- setup export repertory
 
+  this->notify("Baking and exporting...");
+
   // block UI
   QProgressDialog progress(tr("Baking and exporting..."),
                            QString(),
@@ -159,6 +174,11 @@ void HesiodApplication::on_export_batch()
 
   for (int k = 0; k < bake_settings.nvariants + 1; ++k)
   {
+    const std::string msg = std::format("Baking variants {}/{}...",
+                                        k,
+                                        bake_settings.nvariants + 1);
+    this->notify(msg);
+
     QCoreApplication::processEvents(); // render progress dialog
 
     const std::filesystem::path project_path = this->context.project_model->get_path();
@@ -233,6 +253,8 @@ void HesiodApplication::on_export_batch()
 
   // unblock UI
   progress.close();
+
+  this->notify("Baking and exporting terminated.");
 }
 
 void HesiodApplication::on_load()
@@ -291,14 +313,7 @@ void HesiodApplication::on_quit()
   if (reply == QMessageBox::Yes)
   {
     QApplication::quit();
-
-    // save main window geometry
-    QRect geom = this->main_window->geometry();
-    this->context.app_settings.window.x = geom.x();
-    this->context.app_settings.window.y = geom.y();
-    this->context.app_settings.window.w = geom.width();
-    this->context.app_settings.window.h = geom.height();
-
+    this->main_window->save_geometry();
     this->context.save_settings();
   }
 }
@@ -353,9 +368,44 @@ void HesiodApplication::on_save_copy()
   }
 }
 
+void HesiodApplication::save_backup(const std::string &fname)
+{
+  Logger::log()->trace("HesiodApplication::save_backup: {}", fname);
+
+  // if the file exists, create a backup
+  const std::string fname_ext = ensure_extension(fname, ".hsd").string();
+
+  if (std::filesystem::exists(fname_ext))
+  {
+    std::filesystem::path original_path(fname_ext);
+    std::filesystem::path backup_path = insert_before_extension(original_path, ".bak");
+
+    try
+    {
+      std::filesystem::copy_file(original_path,
+                                 backup_path,
+                                 std::filesystem::copy_options::overwrite_existing);
+      Logger::log()->trace("HesiodApplication::save_backup: backup created: {}",
+                           backup_path.string());
+    }
+    catch (const std::exception &e)
+    {
+      Logger::log()->error(
+          "HesiodApplication::save_backup: failed to create backup for {}: {}",
+          fname_ext,
+          e.what());
+    }
+  }
+}
+
 void HesiodApplication::save_project_model_and_ui(const std::string &fname)
 {
   Logger::log()->trace("HesiodApplication::save_project_model_and_ui: {}", fname);
+
+  this->notify(std::format("Saving changes..."));
+
+  if (this->context.app_settings.window.save_backup_file)
+    this->save_backup(fname);
 
   this->context.save_project_model(fname);
   this->context.project_model->set_is_dirty(false);
@@ -370,6 +420,8 @@ void HesiodApplication::save_project_model_and_ui(const std::string &fname)
 
   json["saved_at"] = time_stamp();
   json_to_file(json, fname, /* merge_with_existing_content */ true);
+
+  this->notify(std::format("Project saved successfully, {}.", fname));
 }
 
 void HesiodApplication::setup_menu_bar()
