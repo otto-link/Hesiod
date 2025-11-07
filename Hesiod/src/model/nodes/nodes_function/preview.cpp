@@ -31,8 +31,6 @@ void compute_preview_node(BaseNode *p_node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
-  // AppContext &ctx = HSD_CTX;
-
   Q_EMIT p_node->compute_started(p_node->get_id()); // empty on purpose
   Q_EMIT p_node->compute_finished(p_node->get_id());
 }

@@ -88,6 +88,12 @@ static struct EnumMappings
       {"intersection", MaskCombineMethod::INTERSECTION},
       {"exclusion", MaskCombineMethod::EXCLUSION}};
 
+  const std::map<std::string, int> primitive_type_map = {
+      {"Biquad Pulse", hmap::PrimitiveType::PRIM_BIQUAD_PULSE},
+      {"Cone Smooth", hmap::PrimitiveType::PRIM_CONE_SMOOTH},
+      {"Cubic Pulse", hmap::PrimitiveType::PRIM_CUBIC_PULSE},
+      {"Smooth Cosine", hmap::PrimitiveType::PRIM_SMOOTH_COSINE}};
+
   const std::map<std::string, int> noise_type_map = {
       {"Perlin", hmap::NoiseType::PERLIN},
       {"Perlin (billow)", hmap::NoiseType::PERLIN_BILLOW},

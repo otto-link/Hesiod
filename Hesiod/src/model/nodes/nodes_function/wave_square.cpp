@@ -40,8 +40,6 @@ void compute_wave_square_node(BaseNode *p_node)
 
   Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
-  // AppContext &ctx = HSD_CTX;
-
   // base noise function
   hmap::Heightmap *p_dr = p_node->get_value_ref<hmap::Heightmap>("dr");
   hmap::Heightmap *p_env = p_node->get_value_ref<hmap::Heightmap>("envelope");

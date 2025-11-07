@@ -150,6 +150,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Border", "Operator/Morphology"},
       {"Brush", "Primitive/Authoring"},
       {"Broadcast", "Routing"},
+      {"Bulkify", "Filter/Recurve"},
       {"Bump", "Primitive/Function"},
       {"BumpLorentzian", "Primitive/Function"},
       {"Caldera", "Primitive/Geological"},
@@ -447,6 +448,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(BlendPoissonBf, blend_poisson_bf);
     SETUP_NODE(Border, border);
     SETUP_NODE(Brush, brush);
+    SETUP_NODE(Bulkify, bulkify);
     SETUP_NODE(Bump, bump);
     SETUP_NODE(BumpLorentzian, bump_lorentzian);
     SETUP_NODE(Caldera, caldera);

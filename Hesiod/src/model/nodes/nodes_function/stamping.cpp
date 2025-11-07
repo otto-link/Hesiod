@@ -59,8 +59,6 @@ void compute_stamping_node(BaseNode *p_node)
 
   Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
-  // AppContext &ctx = HSD_CTX;
-
   hmap::Cloud *p_cloud = p_node->get_value_ref<hmap::Cloud>("cloud");
   hmap::Array *p_kernel = p_node->get_value_ref<hmap::Array>("kernel");
 

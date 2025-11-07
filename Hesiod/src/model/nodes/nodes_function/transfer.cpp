@@ -42,8 +42,6 @@ void compute_transfer_node(BaseNode *p_node)
 
   Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
-  // AppContext &ctx = HSD_CTX;
-
   hmap::Heightmap *p_s = p_node->get_value_ref<hmap::Heightmap>("source");
   hmap::Heightmap *p_t = p_node->get_value_ref<hmap::Heightmap>("target");
 
