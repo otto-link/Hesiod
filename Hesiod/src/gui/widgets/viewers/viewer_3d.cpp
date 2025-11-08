@@ -179,7 +179,7 @@ void Viewer3D::update_renderer()
 
   // --- route/send data to renderer
 
-  bool flip_y = true;
+  bool flip_y = false;
 
   // elevation
   if (!helper_try_set_from_port<hmap::Heightmap>(
