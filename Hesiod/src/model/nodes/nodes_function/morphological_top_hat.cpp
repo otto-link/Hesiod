@@ -56,7 +56,9 @@ void compute_morphological_top_hat_node(BaseNode *p_node)
           hmap::Array *pa_in = p_arrays[1];
 
           if (GET("top_hat", BoolAttribute))
+          {
             *pa_out = hmap::gpu::morphological_top_hat(*pa_in, ir);
+          }
           else
             *pa_out = hmap::gpu::morphological_black_hat(*pa_in, ir);
         },
