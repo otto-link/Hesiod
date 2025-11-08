@@ -5,6 +5,8 @@
 #include <fstream>
 #include <unordered_map>
 
+#include <QCoreApplication>
+
 #include "highmap/geometry/cloud.hpp"
 #include "highmap/geometry/path.hpp"
 #include "highmap/heightmap.hpp"
@@ -88,6 +90,14 @@ BaseNode::BaseNode(const std::string &label, const std::shared_ptr<GraphConfig> 
                   if (this->data_preview)
                     this->data_preview->update_preview();
                 });
+}
+
+BaseNode::~BaseNode()
+{
+  Logger::log()->debug("BaseNode::~BaseNode");
+  this->disconnect();
+  QCoreApplication::processEvents(QEventLoop::AllEvents);
+  Logger::log()->debug("BaseNode::~BaseNode: out");
 }
 
 std::map<std::string, std::unique_ptr<attr::AbstractAttribute>> *BaseNode::get_attr_ref()

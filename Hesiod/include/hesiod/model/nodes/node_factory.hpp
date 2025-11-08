@@ -1,19 +1,6 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General Public
    License. The full license is in the file LICENSE, distributed with this software. */
-
-/**
- * @file node_factory.hpp
- * @author  Otto Link (otto.link.bv@gmail.com)
- * @brief
- * @version 0.1
- * @date 2023-04-29
- *
- * @copyright Copyright (c) 2023
- *
- */
-
 #pragma once
-
 #include "gnode/node.hpp"
 
 #include "hesiod/model/graph/graph_config.hpp"
@@ -35,11 +22,11 @@ template <typename T, typename... Args> std::shared_ptr<T> make_qt_shared(Args &
   return std::shared_ptr<T>(obj,
                             [](T *o)
                             {
-                              if (o)
-                              {
-                                o->disconnect();
-                                o->deleteLater();
-                              }
+                              if (!o)
+                                return;
+
+                              o->disconnect();
+                              o->deleteLater();
                             });
 }
 
