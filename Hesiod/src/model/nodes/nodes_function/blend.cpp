@@ -26,10 +26,11 @@ void setup_blend_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(EnumAttribute,
-           "blending_method",
-           enum_mappings.blending_method_map,
-           "minimum_smooth");
+  p_node->add_attr<EnumAttribute>("blending_method",
+                                  "Method:",
+                                  enum_mappings.blending_method_map,
+                                  "minimum_smooth");
+
   ADD_ATTR(FloatAttribute, "k", 0.1f, 0.01f, 1.f);
   ADD_ATTR(FloatAttribute, "radius", 0.05f, 0.f, 0.2f);
   ADD_ATTR(FloatAttribute, "input1_weight", 1.f, 0.f, 1.f);
