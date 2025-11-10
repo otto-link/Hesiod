@@ -13,7 +13,7 @@ Stratify adds horizontal stratifications to the input heightmap.
 # Category
 
 
-Erosion/Stratify
+WIP
 # Inputs
 
 |Name|Type|Description|

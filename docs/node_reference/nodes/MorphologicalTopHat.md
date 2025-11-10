@@ -30,10 +30,12 @@ Operator/Morphology
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|GPU|Bool|Toogle GPU acceleration on or off.|
-|inverse|Bool|Toggle inversion of the output values.|
+|post_gain|Float|No description|
+|post_inverse|Bool|No description|
+|post_remap|Value range|No description|
+|post_saturate|Value range|No description|
+|post_smoothing_radius|Float|No description|
 |radius|Float|Filter radius with respect to the domain size.|
-|remap|Value range|Remaps the operator's output values to a specified range, defaulting to [0, 1].|
 |top_hat|Bool|Toggle between top hat (ridge detection) and black hat (valley detection) morphological operator.|
 
 # Example

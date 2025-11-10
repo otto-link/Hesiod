@@ -13,7 +13,7 @@ StratifyOblique adds oblique stratifications to the input heightmap.
 # Category
 
 
-Erosion/Stratify
+WIP
 # Inputs
 
 |Name|Type|Description|
