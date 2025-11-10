@@ -3,6 +3,7 @@
 #pragma once
 
 #include "highmap/authoring.hpp"
+#include "highmap/boundary.hpp"
 #include "highmap/colormaps.hpp"
 #include "highmap/erosion.hpp"
 #include "highmap/kernels.hpp"
@@ -88,12 +89,6 @@ static struct EnumMappings
       {"intersection", MaskCombineMethod::INTERSECTION},
       {"exclusion", MaskCombineMethod::EXCLUSION}};
 
-  const std::map<std::string, int> primitive_type_map = {
-      {"Biquad Pulse", hmap::PrimitiveType::PRIM_BIQUAD_PULSE},
-      {"Cone Smooth", hmap::PrimitiveType::PRIM_CONE_SMOOTH},
-      {"Cubic Pulse", hmap::PrimitiveType::PRIM_CUBIC_PULSE},
-      {"Smooth Cosine", hmap::PrimitiveType::PRIM_SMOOTH_COSINE}};
-
   const std::map<std::string, int> noise_type_map = {
       {"Perlin", hmap::NoiseType::PERLIN},
       {"Perlin (billow)", hmap::NoiseType::PERLIN_BILLOW},
@@ -120,6 +115,17 @@ static struct EnumMappings
       {"Worley", hmap::NoiseType::WORLEY},
       {"Worley (doube)", hmap::NoiseType::WORLEY_DOUBLE},
       {"Worley (value)", hmap::NoiseType::WORLEY_VALUE}};
+
+  const std::map<std::string, int> periodicity_type_map = {
+      {"X-only", hmap::PeriodicityType::PERIODICITY_X},
+      {"Y-only", hmap::PeriodicityType::PERIODICITY_Y},
+      {"X and Y", hmap::PeriodicityType::PERIODICITY_XY}};
+
+  const std::map<std::string, int> primitive_type_map = {
+      {"Biquad Pulse", hmap::PrimitiveType::PRIM_BIQUAD_PULSE},
+      {"Cone Smooth", hmap::PrimitiveType::PRIM_CONE_SMOOTH},
+      {"Cubic Pulse", hmap::PrimitiveType::PRIM_CUBIC_PULSE},
+      {"Smooth Cosine", hmap::PrimitiveType::PRIM_SMOOTH_COSINE}};
 
   const std::map<std::string, int> stamping_blend_method_map = {
       {"add", hmap::StampingBlendMethod::ADD},

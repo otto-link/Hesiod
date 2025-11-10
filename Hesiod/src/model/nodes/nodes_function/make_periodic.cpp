@@ -5,6 +5,7 @@
 
 #include "attributes.hpp"
 
+#include "hesiod/app/enum_mappings.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
@@ -24,6 +25,13 @@ void setup_make_periodic_node(BaseNode *p_node)
 
   // attribute(s)
   ADD_ATTR(FloatAttribute, "overlap", 0.25f, 0.05f, 0.5f);
+  ADD_ATTR(EnumAttribute,
+           "periodicity_type",
+           enum_mappings.periodicity_type_map,
+           "X and Y");
+
+  // attribute(s) order
+  p_node->set_attr_ordered_key({"overlap", "periodicity_type"});
 }
 
 void compute_make_periodic_node(BaseNode *p_node)
@@ -42,14 +50,17 @@ void compute_make_periodic_node(BaseNode *p_node)
 
     hmap::transform(
         {p_out, p_in},
-        [nbuffer](std::vector<hmap::Array *> p_arrays)
+        [p_node, nbuffer](std::vector<hmap::Array *> p_arrays)
         {
           hmap::Array *pa_out = p_arrays[0];
           hmap::Array *pa_in = p_arrays[1];
 
           *pa_out = *pa_in;
 
-          hmap::make_periodic(*pa_out, nbuffer);
+          hmap::make_periodic(
+              *pa_out,
+              nbuffer,
+              (hmap::PeriodicityType)GET("periodicity_type", EnumAttribute));
         },
         hmap::TransformMode::SINGLE_ARRAY);
   }
