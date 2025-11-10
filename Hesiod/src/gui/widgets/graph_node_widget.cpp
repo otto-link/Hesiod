@@ -1042,7 +1042,7 @@ void GraphNodeWidget::setup_connections()
                 &gngui::GraphViewer::rubber_band_selection_finished,
                 [this]() { this->is_selecting_with_rubber_band = false; });
 
-  // node actions
+  // GraphViewer -> GraphNodeWidget
   this->connect(this,
                 &gngui::GraphViewer::connection_deleted,
                 this,
