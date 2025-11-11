@@ -22,6 +22,7 @@ struct AppSettings
     QColor bg_primary{"#2B2B2B"};
     QColor bg_secondary{"#4B4B4B"};
     QColor text_primary{"#F4F4F5"};
+    QColor text_secondary{"#A4A4A5"};
     QColor text_disabled{"#3C3C3C"};
     QColor accent{"#4772B3"};
     QColor accent_bw{"#4772B3"};
@@ -36,8 +37,13 @@ struct AppSettings
     std::string icon_path = "data/hesiod_icon.png";
     std::string default_startup_project_file = "data/default.hsd";
     std::string quick_start_html_file = "data/quick_start.html";
-    bool        enable_texture_downloader = true;
   } global;
+
+  struct Interface
+  {
+    bool enable_texture_downloader = true;
+    bool enable_tool_tips = true;
+  } interface;
 
   struct NodeEditor
   {

@@ -94,7 +94,7 @@ void ProjectUI::initialize(ProjectModel *project)
   this->graph_tabs_widget->set_show_node_settings_widget(
       HSD_CTX.app_settings.node_editor.show_node_settings_pan);
 
-  if (HSD_CTX.app_settings.global.enable_texture_downloader)
+  if (HSD_CTX.app_settings.interface.enable_texture_downloader)
     this->texture_downloader = std::make_unique<qtd::TextureDownloader>();
 
   // connections

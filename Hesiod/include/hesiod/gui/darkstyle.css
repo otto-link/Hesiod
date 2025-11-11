@@ -273,7 +273,8 @@ QPlainTextEdit {
 /* QToolTip ---------------------------------------------------------------- */
 QToolTip {
     color: COLOR_TEXT_PRIMARY;
-    background-color: COLOR_BORDER;
+    background-color: COLOR_BG_PRIMARY;
+    padding: 4px;
 }
 
 /* QProgressBar ------------------------------------------------------------ */

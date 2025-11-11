@@ -20,6 +20,7 @@
 #include "hesiod/gui/widgets/graph_manager_widget.hpp"
 #include "hesiod/gui/widgets/graph_tabs_widget.hpp"
 #include "hesiod/gui/widgets/gui_utils.hpp"
+#include "hesiod/gui/widgets/tool_tip_blocker.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/graph/graph_manager.hpp"
 #include "hesiod/model/graph/graph_node.hpp"
@@ -46,6 +47,7 @@ HesiodApplication::HesiodApplication(int &argc, char **argv) : QApplication(argc
 
   // others
   this->setup_menu_bar();
+  this->installEventFilter(new ToolTipBlocker);
 
   this->notify("Ready");
 }

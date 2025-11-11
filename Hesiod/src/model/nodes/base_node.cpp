@@ -13,6 +13,7 @@
 
 #include "attributes/seed_attribute.hpp"
 
+#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/node_factory.hpp"
@@ -384,7 +385,14 @@ void BaseNode::update_attributes_tool_tip()
       if (this->documentation.contains("parameters") &&
           this->documentation["parameters"].contains(key))
       {
-        std::string description = label + ":\n";
+        std::string description = "<div><font size=\"+1\"><b>" +
+                                  remove_trailing_char(label, ':') + "</font></b><br>";
+
+        description += "<font color='COLOR_TEXT_SECONDARY'>";
+
+        replace_all(description,
+                    "COLOR_TEXT_SECONDARY",
+                    HSD_CTX.app_settings.colors.text_secondary.name().toStdString());
 
         if (this->documentation["parameters"][key].contains("description"))
         {
@@ -392,6 +400,8 @@ void BaseNode::update_attributes_tool_tip()
           base_desc = wrap_text(base_desc, width);
           description += base_desc;
         }
+
+        description += "</div>";
 
         sp_attr->set_description(description);
       }

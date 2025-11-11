@@ -30,8 +30,8 @@ void AppSettings::json_from(nlohmann::json const &json)
                 "global.default_startup_project_file",
                 global.default_startup_project_file);
   json_safe_get(json,
-                "global.enable_texture_downloader",
-                global.enable_texture_downloader);
+                "interface.enable_texture_downloader",
+                interface.enable_texture_downloader);
 
   // OpenCL device
   {
@@ -109,7 +109,7 @@ nlohmann::json AppSettings::json_to() const
 
   json["global.icon_path"] = global.icon_path;
   json["global.default_startup_project_file"] = global.default_startup_project_file;
-  json["global.enable_texture_downloader"] = global.enable_texture_downloader;
+  json["interface.enable_texture_downloader"] = interface.enable_texture_downloader;
 
   json["node_editor.gpu_device_name"] = node_editor.gpu_device_name;
   json["node_editor.default_resolution"] = node_editor.default_resolution;

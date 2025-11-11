@@ -171,6 +171,16 @@ void json_to_file(const nlohmann::json &json,
   }
 }
 
+std::string remove_trailing_char(const std::string &input, char ch)
+{
+  size_t end = input.size();
+
+  while (end > 0 && input[end - 1] == ch)
+    --end;
+
+  return input.substr(0, end);
+}
+
 void replace_all(std::string &str, const std::string &from, const std::string &to)
 {
   if (from.empty())
