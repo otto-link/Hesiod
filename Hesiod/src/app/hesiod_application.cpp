@@ -45,6 +45,9 @@ HesiodApplication::HesiodApplication(int &argc, char **argv) : QApplication(argc
   // (after MainWindow creation)
   this->load_project_model_and_ui();
 
+  // initialize app settings widget
+  this->app_settings_window = new AppSettingsWindow(this->main_window.get());
+
   // others
   this->setup_menu_bar();
   this->installEventFilter(new ToolTipBlocker);
@@ -136,6 +139,26 @@ void HesiodApplication::notify(const std::string &msg, int timeout)
 {
   Logger::log()->trace("HesiodApplication::notify: {}", msg);
   this->main_window->notify(msg, timeout);
+}
+
+void HesiodApplication::on_application_settings_action()
+{
+  Logger::log()->trace("HesiodApplication::on_application_settings_action");
+
+  if (this->app_settings_window)
+  {
+    // open in a dialog
+    QDialog dialog(this->main_window.get());
+    dialog.setWindowTitle("Application Settings");
+
+    QVBoxLayout *layout = new QVBoxLayout(&dialog);
+    layout->addWidget(this->app_settings_window);
+
+    dialog.exec();
+  }
+  else
+    Logger::log()->error("HesiodApplication::on_application_settings_action: app "
+                         "settings widget is nullptr");
 }
 
 void HesiodApplication::on_export_batch()
@@ -406,7 +429,7 @@ void HesiodApplication::save_project_model_and_ui(const std::string &fname)
 
   this->notify(std::format("Saving changes..."));
 
-  if (this->context.app_settings.window.save_backup_file)
+  if (this->context.app_settings.global.save_backup_file)
     this->save_backup(fname);
 
   this->context.save_project_model(fname);
@@ -460,6 +483,11 @@ void HesiodApplication::setup_menu_bar()
   auto *export_batch = new QAction("Bake and Export (High Resolution)", this);
   export_batch->setShortcut(tr("Alt+E"));
   file_menu->addAction(export_batch);
+
+  file_menu->addSeparator();
+
+  auto *settings_action = new QAction("Application settings", this);
+  file_menu->addAction(settings_action);
 
   file_menu->addSeparator();
 
@@ -527,6 +555,10 @@ void HesiodApplication::setup_menu_bar()
   this->connect(save, &QAction::triggered, this, &HesiodApplication::on_save);
   this->connect(save_as, &QAction::triggered, this, &HesiodApplication::on_save_as);
   this->connect(save_copy, &QAction::triggered, this, &HesiodApplication::on_save_copy);
+  this->connect(settings_action,
+                &QAction::triggered,
+                this,
+                &HesiodApplication::on_application_settings_action);
   this->connect(export_batch,
                 &QAction::triggered,
                 this,

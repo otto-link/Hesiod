@@ -94,11 +94,11 @@ QCheckBox {
 QCheckBox::indicator {
     width: 14px;
     height: 14px;
-    border: 1px solid COLOR_ACCENT;
+    border: 1px solid COLOR_TEXT_PRIMARY;
 }
 
 QCheckBox::indicator:checked {
-    background-color: COLOR_ACCENT;
+    background-color: COLOR_TEXT_PRIMARY;
 }
 
 /* QTableView checkbox indicators */

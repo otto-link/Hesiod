@@ -29,6 +29,7 @@ void AppSettings::json_from(nlohmann::json const &json)
   json_safe_get(json,
                 "global.default_startup_project_file",
                 global.default_startup_project_file);
+  json_safe_get(json, "global.save_backup_file", global.save_backup_file);
 
   json_safe_get(json,
                 "interface.enable_data_preview_in_node_body",
@@ -94,7 +95,6 @@ void AppSettings::json_from(nlohmann::json const &json)
     json_safe_get(json, "window.gm_y", window.gm_y);
     json_safe_get(json, "window.gm_w", window.gm_w);
     json_safe_get(json, "window.gm_h", window.gm_h);
-    json_safe_get(json, "window.save_backup_file", window.save_backup_file);
   }
 }
 
@@ -117,6 +117,7 @@ nlohmann::json AppSettings::json_to() const
 
   json["global.icon_path"] = global.icon_path;
   json["global.default_startup_project_file"] = global.default_startup_project_file;
+  json["global.save_backup_file"] = global.save_backup_file;
 
   json["interface.enable_data_preview_in_node_body"] =
       interface.enable_data_preview_in_node_body;
@@ -152,7 +153,6 @@ nlohmann::json AppSettings::json_to() const
   json["window.gm_h"] = window.gm_h;
   json["window.show_graph_manager_widget"] = window.show_graph_manager_widget;
   json["window.show_texture_downloader_widget"] = window.show_texture_downloader_widget;
-  json["window.save_backup_file"] = window.save_backup_file;
 
   return json;
 }

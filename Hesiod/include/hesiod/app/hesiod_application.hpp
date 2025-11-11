@@ -11,6 +11,7 @@
 #include "nlohmann/json.hpp"
 
 #include "hesiod/app/app_context.hpp"
+#include "hesiod/gui/widgets/app_settings_window.hpp"
 #include "hesiod/gui/widgets/bake_config_dialog.hpp"
 #include "hesiod/gui/widgets/main_window.hpp"
 
@@ -48,6 +49,7 @@ public:
 
 private slots:
   // --- User actions
+  void on_application_settings_action();
   void on_export_batch();
   void on_load();
   void on_new();
@@ -69,6 +71,7 @@ private:
   AppContext                  context;
   std::unique_ptr<MainWindow> main_window;
   std::unique_ptr<ProjectUI>  project_ui;
+  AppSettingsWindow          *app_settings_window; // owned by MainWindow
 };
 
 } // namespace hesiod
