@@ -1114,7 +1114,7 @@ void GraphNodeWidget::setup_connections()
                 this,
                 &gngui::GraphViewer::on_update_finished);
 
-  // w/ itself
+  // GraphNode -> QApplication
   this->connect(this->p_graph_node,
                 &GraphNode::update_started,
                 this,
@@ -1124,6 +1124,23 @@ void GraphNodeWidget::setup_connections()
                 &GraphNode::update_finished,
                 this,
                 []() { QApplication::restoreOverrideCursor(); });
+
+  // GraphNode -> GraphNodeWidget
+  this->connect(this->p_graph_node,
+                &GraphNode::compute_finished,
+                this,
+                [this](const std::string & /* graph_id */, const std::string &node_id)
+                {
+                  if (HSD_CTX.app_settings.interface.enable_node_settings_in_node_body)
+                  {
+                    // force update of the graphics node to update the node settings
+                    // content
+                    gngui::GraphicsNode *p_gfx_node = this->get_graphics_node_by_id(
+                        node_id);
+                    if (p_gfx_node)
+                      p_gfx_node->update_proxy_widget();
+                  }
+                });
 }
 
 } // namespace hesiod

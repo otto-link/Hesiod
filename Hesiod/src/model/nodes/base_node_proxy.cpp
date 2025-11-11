@@ -53,9 +53,10 @@ QWidget *BaseNode::get_qwidget_ref()
   widget->setLayout(layout);
 
   // add the data preview by default
-  if (!this->data_preview)
+  if (HSD_CTX.app_settings.interface.enable_data_preview_in_node_body)
   {
-    this->data_preview = new DataPreview(this);
+    if (!this->data_preview)
+      this->data_preview = new DataPreview(this);
     layout->addWidget(this->data_preview);
   }
 
@@ -64,9 +65,9 @@ QWidget *BaseNode::get_qwidget_ref()
     layout->addWidget(this->qwidget_fct(this));
 
   // add node settings widget
-  if (false)
+  if (HSD_CTX.app_settings.interface.enable_node_settings_in_node_body)
   {
-    QLabel *label = new QLabel("Settings");
+    QLabel *label = new QLabel();
     layout->addWidget(label);
 
     bool        add_save_reset_state_buttons = false;
