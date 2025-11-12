@@ -430,7 +430,7 @@
             "blending_method": {
                 "description": "Blending method. Available values: add, exclusion, gradients, maximum, maximum_smooth, minimum, minimum_smooth, multiply, multiply_add, negate, overlay, soft, substract.",
                 "key": "blending_method",
-                "label": "blending_method",
+                "label": "Method:",
                 "type": "Enumeration"
             },
             "input1_weight": {
@@ -1838,6 +1838,38 @@
                 "caption": "path",
                 "data_type": "Path",
                 "description": "Output path.",
+                "type": "output"
+            }
+        }
+    },
+    "CloudToVectors": {
+        "category": "Geometry/Cloud",
+        "description": "No description available",
+        "label": "CloudToVectors",
+        "parameters": null,
+        "ports": {
+            "cloud": {
+                "caption": "cloud",
+                "data_type": "Cloud",
+                "description": "No description",
+                "type": "input"
+            },
+            "v": {
+                "caption": "v",
+                "data_type": "vector<float>",
+                "description": "No description",
+                "type": "output"
+            },
+            "x": {
+                "caption": "x",
+                "data_type": "vector<float>",
+                "description": "No description",
+                "type": "output"
+            },
+            "y": {
+                "caption": "y",
+                "data_type": "vector<float>",
+                "description": "No description",
                 "type": "output"
             }
         }
@@ -3456,6 +3488,69 @@
                 "caption": "input",
                 "data_type": "Cloud",
                 "description": "Input heightmap.",
+                "type": "input"
+            }
+        }
+    },
+    "ExportCloudToPly": {
+        "category": "IO/Files",
+        "description": "No description available",
+        "label": "ExportCloudToPly",
+        "parameters": {
+            "auto_export": {
+                "description": "No description",
+                "key": "auto_export",
+                "label": "auto_export",
+                "type": "Bool"
+            },
+            "fname": {
+                "description": "No description",
+                "key": "fname",
+                "label": "fname",
+                "type": "Filename"
+            },
+            "label1": {
+                "description": "No description",
+                "key": "label1",
+                "label": "",
+                "type": "String"
+            },
+            "label2": {
+                "description": "No description",
+                "key": "label2",
+                "label": "",
+                "type": "String"
+            },
+            "label3": {
+                "description": "No description",
+                "key": "label3",
+                "label": "",
+                "type": "String"
+            }
+        },
+        "ports": {
+            "cloud": {
+                "caption": "cloud",
+                "data_type": "Cloud",
+                "description": "No description",
+                "type": "input"
+            },
+            "point_data1": {
+                "caption": "point_data1",
+                "data_type": "vector<float>",
+                "description": "No description",
+                "type": "input"
+            },
+            "point_data2": {
+                "caption": "point_data2",
+                "data_type": "vector<float>",
+                "description": "No description",
+                "type": "input"
+            },
+            "point_data3": {
+                "caption": "point_data3",
+                "data_type": "vector<float>",
+                "description": "No description",
                 "type": "input"
             }
         }

@@ -31,7 +31,7 @@ Operator/Blend
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|blending_method|Enumeration|Blending method. Available values: add, exclusion, gradients, maximum, maximum_smooth, minimum, minimum_smooth, multiply, multiply_add, negate, overlay, soft, substract.|
+|Method:|Enumeration|Blending method. Available values: add, exclusion, gradients, maximum, maximum_smooth, minimum, minimum_smooth, multiply, multiply_add, negate, overlay, soft, substract.|
 |input1_weight|Float|No description|
 |input2_weight|Float|No description|
 |inverse|Bool|Toggle inversion of the output values.|
