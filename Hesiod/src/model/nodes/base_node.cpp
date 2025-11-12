@@ -32,6 +32,7 @@ std::string map_type_name(const std::string &typeid_name)
       {typeid(hmap::Heightmap).name(), "Heightmap"},
       {typeid(hmap::HeightmapRGBA).name(), "HeightmapRGBA"},
       {typeid(hmap::Path).name(), "Path"},
+      {typeid(std::vector<float>).name(), "vector<float>"},
       {typeid(std::vector<hmap::Heightmap>).name(), "vector<Heightmap>"}};
 
   auto it = type_name_map.find(typeid_name);

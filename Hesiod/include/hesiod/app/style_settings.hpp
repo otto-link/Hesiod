@@ -32,6 +32,7 @@ struct StyleSettings
       {typeid(std::vector<hmap::Heightmap>).name(), QColor(255, 85, 85, 255)},
       {typeid(hmap::HeightmapRGBA).name(), QColor(189, 147, 249, 255)},
       {typeid(hmap::Path).name(), QColor(255, 184, 108, 255)},
+      {typeid(std::vector<float>).name(), QColor(98, 114, 164, 255)},
   };
 
   std::map<std::string, QColor> category_color_map = {
