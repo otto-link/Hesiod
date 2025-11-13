@@ -23,8 +23,8 @@ void setup_flooding_lake_system_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "water_depth", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(IntAttribute, "iterations", 500, 1, INT_MAX);
-  ADD_ATTR(FloatAttribute, "epsilon", 1e-1, 1e-3, 1e-1);
+  ADD_ATTR(IntAttribute, "iterations", 1000, 1, INT_MAX);
+  ADD_ATTR(FloatAttribute, "epsilon", 1e-1, 1e-5, 1e-1, "{:.3e}", true);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"iterations", "epsilon"});

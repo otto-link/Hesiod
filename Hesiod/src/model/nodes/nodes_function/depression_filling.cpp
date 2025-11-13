@@ -25,7 +25,7 @@ void setup_depression_filling_node(BaseNode *p_node)
 
   // attribute(s)
   ADD_ATTR(IntAttribute, "iterations", 1000, 1, INT_MAX);
-  ADD_ATTR(FloatAttribute, "epsilon", 1e-4, 1e-5, 1e-1);
+  ADD_ATTR(FloatAttribute, "epsilon", 1e-4, 1e-5, 1e-1, "{:.3e}", true);
   ADD_ATTR(BoolAttribute, "remap fill map", true);
 
   // attribute(s) order
@@ -45,15 +45,22 @@ void compute_depression_filling_node(BaseNode *p_node)
     hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
     hmap::Heightmap *p_fill_map = p_node->get_value_ref<hmap::Heightmap>("fill map");
 
-    // work on a single array (as a temporary solution?)
-    hmap::Array z_array = p_in->to_array();
-
     float epsilon_normalized = GET("epsilon", FloatAttribute) / (float)p_in->shape.x;
 
-    hmap::depression_filling(z_array,
-                             GET("iterations", IntAttribute),
-                             epsilon_normalized);
-    p_out->from_array_interp(z_array);
+    hmap::transform(
+        {p_out, p_in},
+        [p_node, epsilon_normalized](std::vector<hmap::Array *> p_arrays)
+        {
+          hmap::Array *pa_out = p_arrays[0];
+          hmap::Array *pa_in = p_arrays[1];
+
+          *pa_out = *pa_in;
+
+          hmap::depression_filling(*pa_out,
+                                   GET("iterations", IntAttribute),
+                                   epsilon_normalized);
+        },
+        hmap::TransformMode::SINGLE_ARRAY); // forced, not tileable
 
     hmap::transform(*p_fill_map,
                     *p_in,
