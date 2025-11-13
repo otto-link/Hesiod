@@ -16,13 +16,17 @@ using namespace attr;
 namespace hesiod
 {
 
-void add_deprecated_warning_label(BaseNode *p_node)
+void add_deprecated_warning_label(BaseNode *p_node, const std::string &msg = "")
 {
   Logger::log()->trace("add_deprecated_warning_label: node {}", p_node->get_label());
 
-  auto lambda = [](BaseNode *p_node)
+  auto lambda = [msg](BaseNode *p_node)
   {
-    QLabel *label = new QLabel("!!! Deprecated !!!\nUse ColorizeGradient node", p_node);
+    if (!p_node)
+      return (QWidget *)nullptr;
+
+    std::string str = "!!! Deprecated !!!\n" + msg;
+    QLabel     *label = new QLabel(str.c_str(), p_node);
     label->setStyleSheet("color: #ff5555;");
     resize_font(label, -2);
     return (QWidget *)label;

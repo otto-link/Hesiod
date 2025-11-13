@@ -69,8 +69,6 @@ void compute_gavoronoise_node(BaseNode *p_node)
 
   Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
-  // AppContext &ctx = HSD_CTX;
-
   hmap::Heightmap *p_dx = p_node->get_value_ref<hmap::Heightmap>("dx");
   hmap::Heightmap *p_dy = p_node->get_value_ref<hmap::Heightmap>("dy");
   hmap::Heightmap *p_ctrl = p_node->get_value_ref<hmap::Heightmap>("control");

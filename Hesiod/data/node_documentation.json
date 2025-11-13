@@ -430,7 +430,7 @@
             "blending_method": {
                 "description": "Blending method. Available values: add, exclusion, gradients, maximum, maximum_smooth, minimum, minimum_smooth, multiply, multiply_add, negate, overlay, soft, substract.",
                 "key": "blending_method",
-                "label": "blending_method",
+                "label": "Method:",
                 "type": "Enumeration"
             },
             "input1_weight": {
@@ -772,6 +772,99 @@
                 "caption": "out",
                 "data_type": "Heightmap",
                 "description": "The generated heightmap from brush strokes.",
+                "type": "output"
+            }
+        }
+    },
+    "Bulkify": {
+        "category": "Filter/Recurve",
+        "description": "No description available",
+        "label": "Bulkify",
+        "parameters": {
+            "amplitude": {
+                "description": "No description",
+                "key": "amplitude",
+                "label": "amplitude",
+                "type": "Float"
+            },
+            "bulk_type": {
+                "description": "No description",
+                "key": "bulk_type",
+                "label": "bulk_type",
+                "type": "Enumeration"
+            },
+            "center": {
+                "description": "No description",
+                "key": "center",
+                "label": "center",
+                "type": "Vec2Float"
+            },
+            "post_gain": {
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
+                "key": "post_inverse",
+                "label": "post_inverse",
+                "type": "Bool"
+            },
+            "post_mix": {
+                "description": "Mixing factor for blending input and output values. A value of 0 uses only the input, 1 uses only the output, and intermediate values perform a linear interpolation.",
+                "key": "post_mix",
+                "label": "post_mix",
+                "type": "Float"
+            },
+            "post_mix_method": {
+                "description": "Method used to combine input and output values. Options include linear interpolation (default), min, max, smooth min, smooth max, add, and subtract.",
+                "key": "post_mix_method",
+                "label": "post_mix_method",
+                "type": "Enumeration"
+            },
+            "post_remap": {
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "Modifies the amplitude of elevations by first clamping them to a given interval and then scaling them so that the restricted interval matches the original input range. This enhances contrast in elevation variations while maintaining overall structure.",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "dx": {
+                "caption": "dx",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "dy": {
+                "caption": "dy",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "input": {
+                "caption": "input",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "Heightmap",
+                "description": "No description",
                 "type": "output"
             }
         }
@@ -1749,6 +1842,38 @@
             }
         }
     },
+    "CloudToVectors": {
+        "category": "Geometry/Cloud",
+        "description": "No description available",
+        "label": "CloudToVectors",
+        "parameters": null,
+        "ports": {
+            "cloud": {
+                "caption": "cloud",
+                "data_type": "Cloud",
+                "description": "No description",
+                "type": "input"
+            },
+            "v": {
+                "caption": "v",
+                "data_type": "vector<float>",
+                "description": "No description",
+                "type": "output"
+            },
+            "x": {
+                "caption": "x",
+                "data_type": "vector<float>",
+                "description": "No description",
+                "type": "output"
+            },
+            "y": {
+                "caption": "y",
+                "data_type": "vector<float>",
+                "description": "No description",
+                "type": "output"
+            }
+        }
+    },
     "CoastalErosionDiffusion": {
         "category": "Erosion/Water",
         "description": "No description available",
@@ -1789,7 +1914,7 @@
             "water_depth": {
                 "caption": "water_depth",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Output water depth map representing flooded areas.",
                 "type": "output"
             },
             "water_depth_in": {
@@ -3367,6 +3492,105 @@
             }
         }
     },
+    "ExportCloudToPly": {
+        "category": "IO/Files",
+        "description": "No description available",
+        "label": "ExportCloudToPly",
+        "parameters": {
+            "auto_export": {
+                "description": "No description",
+                "key": "auto_export",
+                "label": "auto_export",
+                "type": "Bool"
+            },
+            "fname": {
+                "description": "No description",
+                "key": "fname",
+                "label": "fname",
+                "type": "Filename"
+            },
+            "label1": {
+                "description": "No description",
+                "key": "label1",
+                "label": "",
+                "type": "String"
+            },
+            "label2": {
+                "description": "No description",
+                "key": "label2",
+                "label": "",
+                "type": "String"
+            },
+            "label3": {
+                "description": "No description",
+                "key": "label3",
+                "label": "",
+                "type": "String"
+            },
+            "xmax": {
+                "description": "No description",
+                "key": "xmax",
+                "label": "xmax",
+                "type": "Float"
+            },
+            "xmin": {
+                "description": "No description",
+                "key": "xmin",
+                "label": "xmin",
+                "type": "Float"
+            },
+            "ymax": {
+                "description": "No description",
+                "key": "ymax",
+                "label": "ymax",
+                "type": "Float"
+            },
+            "ymin": {
+                "description": "No description",
+                "key": "ymin",
+                "label": "ymin",
+                "type": "Float"
+            },
+            "zmax": {
+                "description": "No description",
+                "key": "zmax",
+                "label": "zmax",
+                "type": "Float"
+            },
+            "zmin": {
+                "description": "No description",
+                "key": "zmin",
+                "label": "zmin",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "cloud": {
+                "caption": "cloud",
+                "data_type": "Cloud",
+                "description": "No description",
+                "type": "input"
+            },
+            "point_data1": {
+                "caption": "point_data1",
+                "data_type": "vector<float>",
+                "description": "No description",
+                "type": "input"
+            },
+            "point_data2": {
+                "caption": "point_data2",
+                "data_type": "vector<float>",
+                "description": "No description",
+                "type": "input"
+            },
+            "point_data3": {
+                "caption": "point_data3",
+                "data_type": "vector<float>",
+                "description": "No description",
+                "type": "input"
+            }
+        }
+    },
     "ExportHeightmap": {
         "category": "IO/Files",
         "description": "ExportHeightmap is an operator for exporting a heightmap in various file formats.",
@@ -3456,6 +3680,117 @@
                 "caption": "input",
                 "data_type": "Path",
                 "description": "Input heightmap.",
+                "type": "input"
+            }
+        }
+    },
+    "ExportPointsToPly": {
+        "category": "IO/Files",
+        "description": "No description available",
+        "label": "ExportPointsToPly",
+        "parameters": {
+            "auto_export": {
+                "description": "No description",
+                "key": "auto_export",
+                "label": "auto_export",
+                "type": "Bool"
+            },
+            "fname": {
+                "description": "No description",
+                "key": "fname",
+                "label": "fname",
+                "type": "Filename"
+            },
+            "label1": {
+                "description": "No description",
+                "key": "label1",
+                "label": "",
+                "type": "String"
+            },
+            "label2": {
+                "description": "No description",
+                "key": "label2",
+                "label": "",
+                "type": "String"
+            },
+            "label3": {
+                "description": "No description",
+                "key": "label3",
+                "label": "",
+                "type": "String"
+            },
+            "xmax": {
+                "description": "No description",
+                "key": "xmax",
+                "label": "xmax",
+                "type": "Float"
+            },
+            "xmin": {
+                "description": "No description",
+                "key": "xmin",
+                "label": "xmin",
+                "type": "Float"
+            },
+            "ymax": {
+                "description": "No description",
+                "key": "ymax",
+                "label": "ymax",
+                "type": "Float"
+            },
+            "ymin": {
+                "description": "No description",
+                "key": "ymin",
+                "label": "ymin",
+                "type": "Float"
+            },
+            "zmax": {
+                "description": "No description",
+                "key": "zmax",
+                "label": "zmax",
+                "type": "Float"
+            },
+            "zmin": {
+                "description": "No description",
+                "key": "zmin",
+                "label": "zmin",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "point_data1": {
+                "caption": "point_data1",
+                "data_type": "vector<float>",
+                "description": "No description",
+                "type": "input"
+            },
+            "point_data2": {
+                "caption": "point_data2",
+                "data_type": "vector<float>",
+                "description": "No description",
+                "type": "input"
+            },
+            "point_data3": {
+                "caption": "point_data3",
+                "data_type": "vector<float>",
+                "description": "No description",
+                "type": "input"
+            },
+            "x": {
+                "caption": "x",
+                "data_type": "vector<float>",
+                "description": "No description",
+                "type": "input"
+            },
+            "y": {
+                "caption": "y",
+                "data_type": "vector<float>",
+                "description": "No description",
+                "type": "input"
+            },
+            "z": {
+                "caption": "z",
+                "data_type": "vector<float>",
+                "description": "No description",
                 "type": "input"
             }
         }
@@ -3623,7 +3958,7 @@
             "water_depth": {
                 "caption": "water_depth",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Output water depth map representing flooded areas.",
                 "type": "output"
             }
         }
@@ -3656,40 +3991,46 @@
             "water_depth": {
                 "caption": "water_depth",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Output water depth map representing flooded areas.",
                 "type": "output"
             }
         }
     },
     "FloodingLakeSystem": {
         "category": "Hydrology",
-        "description": "No description available",
+        "description": "Simulates lake formation on a terrain by filling topographic depressions. The algorithm analyzes the terrain elevation model, detects enclosed basins, and incrementally floods them to estimate lake water depths and extents. It applies a depression-filling method to determine the resulting water surface elevation.",
         "label": "FloodingLakeSystem",
         "parameters": {
             "epsilon": {
-                "description": "No description",
+                "description": "Convergence tolerance for the depression-filling process. Smaller values yield higher precision but may increase computation time.",
                 "key": "epsilon",
                 "label": "epsilon",
                 "type": "Float"
             },
             "iterations": {
-                "description": "No description",
+                "description": "Maximum number of iterations allowed during the depression-filling algorithm before convergence is assumed.",
                 "key": "iterations",
                 "label": "iterations",
                 "type": "Integer"
+            },
+            "mininal_radius": {
+                "description": "Minimum radius (in normalized terrain units) used to define the smallest valid lake surface. Water bodies smaller than this threshold are discarded.",
+                "key": "mininal_radius",
+                "label": "mininal_radius",
+                "type": "Float"
             }
         },
         "ports": {
             "elevation": {
                 "caption": "elevation",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Terrain elevation.",
                 "type": "input"
             },
             "water_depth": {
                 "caption": "water_depth",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Output water depth map representing flooded areas.",
                 "type": "output"
             }
         }
@@ -3716,7 +4057,7 @@
             "water_depth": {
                 "caption": "water_depth",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Output water depth map representing flooded areas.",
                 "type": "output"
             }
         }
@@ -6294,6 +6635,12 @@
                 "key": "overlap",
                 "label": "overlap",
                 "type": "Float"
+            },
+            "periodicity_type": {
+                "description": "Describes the periodicity mode applied along map axes. The domain repeats along the X axis, the Y axis, or both.",
+                "key": "periodicity_type",
+                "label": "periodicity_type",
+                "type": "Enumeration"
             }
         },
         "ports": {
@@ -6579,7 +6926,7 @@
             "water_depth": {
                 "caption": "water_depth",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Output water depth map representing flooded areas.",
                 "type": "output"
             }
         }
@@ -6817,29 +7164,41 @@
         "description": "Applies a morphological operator to detect ridges (top hat) or valleys (black hat) in a Digital Elevation Model (DEM).",
         "label": "MorphologicalTopHat",
         "parameters": {
-            "GPU": {
-                "description": "Toogle GPU acceleration on or off.",
-                "key": "GPU",
-                "label": "GPU",
+            "post_gain": {
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
+                "key": "post_inverse",
+                "label": "post_inverse",
                 "type": "Bool"
             },
-            "inverse": {
-                "description": "Toggle inversion of the output values.",
-                "key": "inverse",
-                "label": "inverse",
-                "type": "Bool"
+            "post_remap": {
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "Modifies the amplitude of elevations by first clamping them to a given interval and then scaling them so that the restricted interval matches the original input range. This enhances contrast in elevation variations while maintaining overall structure.",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
             },
             "radius": {
                 "description": "Filter radius with respect to the domain size.",
                 "key": "radius",
                 "label": "radius",
                 "type": "Float"
-            },
-            "remap": {
-                "description": "Remaps the operator's output values to a specified range, defaulting to [0, 1].",
-                "key": "remap",
-                "label": "remap",
-                "type": "Value range"
             },
             "top_hat": {
                 "description": "Toggle between top hat (ridge detection) and black hat (valley detection) morphological operator.",
@@ -9640,7 +9999,7 @@
             "water_depth": {
                 "caption": "water_depth",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Output water depth map representing flooded areas.",
                 "type": "input"
             }
         }
@@ -12028,31 +12387,31 @@
                 "type": "Float"
             },
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_saturate": {
-                "description": "No description",
+                "description": "Modifies the amplitude of elevations by first clamping them to a given interval and then scaling them so that the restricted interval matches the original input range. This enhances contrast in elevation variations while maintaining overall structure.",
                 "key": "post_saturate",
                 "label": "post_saturate",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -13727,7 +14086,7 @@
         }
     },
     "Stratify": {
-        "category": "Erosion/Stratify",
+        "category": "WIP",
         "description": "Stratify adds horizontal stratifications to the input heightmap.",
         "label": "Stratify",
         "parameters": {
@@ -13790,7 +14149,7 @@
         }
     },
     "StratifyMultiscale": {
-        "category": "Erosion/Stratify",
+        "category": "WIP",
         "description": "TODO",
         "label": "StratifyMultiscale",
         "parameters": {
@@ -13853,7 +14212,7 @@
         }
     },
     "StratifyOblique": {
-        "category": "Erosion/Stratify",
+        "category": "WIP",
         "description": "StratifyOblique adds oblique stratifications to the input heightmap.",
         "label": "StratifyOblique",
         "parameters": {
@@ -16132,7 +16491,7 @@
             "water_depth": {
                 "caption": "water_depth",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Output water depth map representing flooded areas.",
                 "type": "output"
             }
         }
@@ -16177,7 +16536,7 @@
             "water_depth": {
                 "caption": "water_depth",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Output water depth map representing flooded areas.",
                 "type": "output"
             },
             "water_mask": {
@@ -16216,7 +16575,7 @@
             "water_depth": {
                 "caption": "water_depth",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Output water depth map representing flooded areas.",
                 "type": "input"
             }
         }

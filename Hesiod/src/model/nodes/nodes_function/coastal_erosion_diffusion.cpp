@@ -44,8 +44,6 @@ void compute_coastal_erosion_diffusion_node(BaseNode *p_node)
 
   Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
-  // AppContext &ctx = HSD_CTX;
-
   hmap::Heightmap *p_z = p_node->get_value_ref<hmap::Heightmap>("elevation_in");
   hmap::Heightmap *p_depth = p_node->get_value_ref<hmap::Heightmap>("water_depth_in");
 

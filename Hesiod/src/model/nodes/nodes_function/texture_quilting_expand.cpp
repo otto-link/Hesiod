@@ -61,8 +61,6 @@ void compute_texture_quilting_expand_node(BaseNode *p_node)
 
   Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
-  // AppContext &ctx = HSD_CTX;
-
   hmap::HeightmapRGBA *p_texture_guide = p_node->get_value_ref<hmap::HeightmapRGBA>(
       "texture (guide)");
   hmap::Heightmap *p_hmap_guide = p_node->get_value_ref<hmap::Heightmap>(

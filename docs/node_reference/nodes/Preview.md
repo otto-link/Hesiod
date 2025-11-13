@@ -24,7 +24,7 @@ Debug
 |path|Path|No description|
 |scalar|Heightmap|TODO|
 |texture|HeightmapRGBA|TODO|
-|water_depth|Heightmap|No description|
+|water_depth|Heightmap|Output water depth map representing flooded areas.|
 
 # Example
 

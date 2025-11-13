@@ -26,6 +26,7 @@ void apply_global_style(QApplication &app)
       {"COLOR_BG_PRIMARY", ctx.app_settings.colors.bg_primary},
       {"COLOR_BG_SECONDARY", ctx.app_settings.colors.bg_secondary},
       {"COLOR_TEXT_PRIMARY", ctx.app_settings.colors.text_primary},
+      {"COLOR_TEXT_SECONDARY", ctx.app_settings.colors.text_secondary},
       {"COLOR_TEXT_DISABLED", ctx.app_settings.colors.text_disabled},
       {"COLOR_ACCENT", ctx.app_settings.colors.accent},
       {"COLOR_BW_ACCENT", ctx.app_settings.colors.accent_bw},

@@ -688,7 +688,18 @@ void GraphNodeWidget::on_graph_settings_request()
 
     for (auto &[id, _] : this->p_graph_node->get_nodes())
     {
-      gfx_node_ref_map[id] = this->get_graphics_node_by_id(id);
+      gngui::GraphicsNode *p_gfx = this->get_graphics_node_by_id(id);
+      if (p_gfx)
+      {
+        gfx_node_ref_map[id] = this->get_graphics_node_by_id(id);
+      }
+      else
+      {
+        Logger::log()->critical(
+            "GraphNodeWidget::on_graph_settings_request: GraphicsNode "
+            "ref is nullptr for id {}",
+            id);
+      }
     }
 
     // serialize only the model graph node (not the GUI)
@@ -706,8 +717,17 @@ void GraphNodeWidget::on_graph_settings_request()
     {
       gngui::NodeProxy *p_proxy = this->p_graph_node->get_node_ref_by_id<BaseNode>(id)
                                       ->get_proxy_ref();
-      gfx_node_ref_map.at(id)->set_p_node_proxy(p_proxy);
-      gfx_node_ref_map.at(id)->setSelected(false);
+
+      if (gfx_node_ref_map.contains(id))
+      {
+        gfx_node_ref_map.at(id)->set_p_node_proxy(p_proxy);
+        gfx_node_ref_map.at(id)->setSelected(false);
+      }
+      else
+      {
+        Logger::log()->critical(
+            "GraphNodeWidget::on_graph_settings_request: GraphicsNode ptr not in map");
+      }
     }
 
     // set selection back, Qt mystery, this needs to be delayed to be effective
@@ -974,6 +994,17 @@ void GraphNodeWidget::on_viewport_request()
 {
   Logger::log()->trace("GraphNodeWidget::on_viewport_request");
 
+  for (auto &[id, _] : this->p_graph_node->get_nodes())
+  {
+    gngui::GraphicsNode *p_gfx = this->get_graphics_node_by_id(id);
+    if (!p_gfx)
+    {
+      Logger::log()->critical("GraphNodeWidget::on_graph_settings_request: GraphicsNode "
+                              "ref is nullptr for id {}",
+                              id);
+    }
+  }
+
   this->data_viewers.push_back(std::make_unique<Viewer3D>(this));
   this->data_viewers.back()->show();
 
@@ -1114,7 +1145,7 @@ void GraphNodeWidget::setup_connections()
                 this,
                 &gngui::GraphViewer::on_update_finished);
 
-  // w/ itself
+  // GraphNode -> QApplication
   this->connect(this->p_graph_node,
                 &GraphNode::update_started,
                 this,
@@ -1124,6 +1155,23 @@ void GraphNodeWidget::setup_connections()
                 &GraphNode::update_finished,
                 this,
                 []() { QApplication::restoreOverrideCursor(); });
+
+  // GraphNode -> GraphNodeWidget
+  this->connect(this->p_graph_node,
+                &GraphNode::compute_finished,
+                this,
+                [this](const std::string & /* graph_id */, const std::string &node_id)
+                {
+                  if (HSD_CTX.app_settings.interface.enable_node_settings_in_node_body)
+                  {
+                    // force update of the graphics node to update the node settings
+                    // content
+                    gngui::GraphicsNode *p_gfx_node = this->get_graphics_node_by_id(
+                        node_id);
+                    if (p_gfx_node)
+                      p_gfx_node->update_proxy_widget();
+                  }
+                });
 }
 
 } // namespace hesiod

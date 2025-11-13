@@ -36,7 +36,7 @@ void setup_texture_advection_warp_node(BaseNode *p_node)
 
   setup_pre_process_mask_attributes(p_node);
 
-  add_wip_warning_label(p_node);
+  add_deprecated_warning_label(p_node, "Use StrataTextureAdvectionParticle node.");
 }
 
 void compute_texture_advection_warp_node(BaseNode *p_node)
@@ -44,8 +44,6 @@ void compute_texture_advection_warp_node(BaseNode *p_node)
   Q_EMIT p_node->compute_started(p_node->get_id());
 
   Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
-
-  // AppContext &ctx = HSD_CTX;
 
   hmap::Heightmap     *p_z = p_node->get_value_ref<hmap::Heightmap>("elevation");
   hmap::HeightmapRGBA *p_tex = p_node->get_value_ref<hmap::HeightmapRGBA>("texture");

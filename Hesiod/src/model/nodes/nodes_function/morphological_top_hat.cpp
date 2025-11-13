@@ -25,14 +25,13 @@ void setup_morphological_top_hat_node(BaseNode *p_node)
 
   // attribute(s)
   ADD_ATTR(FloatAttribute, "radius", 0.01f, 0.f, 0.05f);
-  ADD_ATTR(BoolAttribute, "inverse", false);
-  ADD_ATTR(RangeAttribute, "remap");
   ADD_ATTR(BoolAttribute, "top_hat", "top_hat", "black_hat", true);
-  ADD_ATTR(BoolAttribute, "GPU", HSD_DEFAULT_GPU_MODE);
 
   // attribute(s) order
   p_node->set_attr_ordered_key(
-      {"radius", "top_hat", "_SEPARATOR_", "inverse", "remap", "_SEPARATOR_", "GPU"});
+      {"_GROUPBOX_BEGIN_Main parameters", "radius", "top_hat", "_GROUPBOX_END_"});
+
+  setup_post_process_heightmap_attributes(p_node);
 }
 
 void compute_morphological_top_hat_node(BaseNode *p_node)
@@ -40,8 +39,6 @@ void compute_morphological_top_hat_node(BaseNode *p_node)
   Q_EMIT p_node->compute_started(p_node->get_id());
 
   Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
-
-  // AppContext &ctx = HSD_CTX;
 
   hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
 
@@ -51,52 +48,25 @@ void compute_morphological_top_hat_node(BaseNode *p_node)
 
     int ir = std::max(1, (int)(GET("radius", FloatAttribute) * p_out->shape.x));
 
-    if (GET("GPU", BoolAttribute))
-    {
-      hmap::transform(
-          {p_out, p_in},
-          [p_node, ir](std::vector<hmap::Array *> p_arrays)
+    hmap::transform(
+        {p_out, p_in},
+        [p_node, ir](std::vector<hmap::Array *> p_arrays)
+        {
+          hmap::Array *pa_out = p_arrays[0];
+          hmap::Array *pa_in = p_arrays[1];
+
+          if (GET("top_hat", BoolAttribute))
           {
-            hmap::Array *pa_out = p_arrays[0];
-            hmap::Array *pa_in = p_arrays[1];
-
-            if (GET("top_hat", BoolAttribute))
-              *pa_out = hmap::gpu::morphological_top_hat(*pa_in, ir);
-            else
-              *pa_out = hmap::gpu::morphological_black_hat(*pa_in, ir);
-          },
-          p_node->get_config_ref()->hmap_transform_mode_gpu);
-    }
-    else
-    {
-      hmap::transform(
-          {p_out, p_in},
-          [p_node, ir](std::vector<hmap::Array *> p_arrays)
-          {
-            hmap::Array *pa_out = p_arrays[0];
-            hmap::Array *pa_in = p_arrays[1];
-
-            if (GET("top_hat", BoolAttribute))
-              *pa_out = hmap::morphological_top_hat(*pa_in, ir);
-            else
-              *pa_out = hmap::morphological_black_hat(*pa_in, ir);
-          },
-          p_node->get_config_ref()->hmap_transform_mode_cpu);
-    }
-
-    p_out->smooth_overlap_buffers();
+            *pa_out = hmap::gpu::morphological_top_hat(*pa_in, ir);
+          }
+          else
+            *pa_out = hmap::gpu::morphological_black_hat(*pa_in, ir);
+        },
+        p_node->get_config_ref()->hmap_transform_mode_gpu);
 
     // post-process
-    post_process_heightmap(p_node,
-                           *p_out,
-                           GET("inverse", BoolAttribute),
-                           false, // smooth
-                           0,
-                           false, // saturate
-                           {0.f, 0.f},
-                           0.f,
-                           GET_MEMBER("remap", RangeAttribute, is_active),
-                           GET("remap", RangeAttribute));
+    p_out->smooth_overlap_buffers();
+    post_process_heightmap(p_node, *p_out);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

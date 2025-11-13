@@ -1,19 +1,6 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General Public
    License. The full license is in the file LICENSE, distributed with this software. */
-
-/**
- * @file node_factory.hpp
- * @author  Otto Link (otto.link.bv@gmail.com)
- * @brief
- * @version 0.1
- * @date 2023-04-29
- *
- * @copyright Copyright (c) 2023
- *
- */
-
 #pragma once
-
 #include "gnode/node.hpp"
 
 #include "hesiod/model/graph/graph_config.hpp"
@@ -35,11 +22,11 @@ template <typename T, typename... Args> std::shared_ptr<T> make_qt_shared(Args &
   return std::shared_ptr<T>(obj,
                             [](T *o)
                             {
-                              if (o)
-                              {
-                                o->disconnect();
-                                o->deleteLater();
-                              }
+                              if (!o)
+                                return;
+
+                              o->disconnect();
+                              o->deleteLater();
                             });
 }
 
@@ -100,6 +87,7 @@ DECLARE_NODE(blend_poisson_bf)
 DECLARE_NODE(border)
 DECLARE_NODE(broadcast)
 DECLARE_NODE(brush)
+DECLARE_NODE(bulkify)
 DECLARE_NODE(bump)
 DECLARE_NODE(bump_lorentzian)
 DECLARE_NODE(caldera)
@@ -122,6 +110,7 @@ DECLARE_NODE(cloud_set_values_from_min_distance)
 DECLARE_NODE(cloud_shuffle)
 DECLARE_NODE(cloud_to_array_interp)
 DECLARE_NODE(cloud_to_path)
+DECLARE_NODE(cloud_to_vectors)
 DECLARE_NODE(coastal_erosion_diffusion)
 DECLARE_NODE(colorize_cmap)
 DECLARE_NODE(colorize_gradient)
@@ -148,9 +137,11 @@ DECLARE_NODE(expand_shrink)
 DECLARE_NODE(export_as_cubemap)
 DECLARE_NODE(export_asset)
 DECLARE_NODE(export_cloud)
+DECLARE_NODE(export_cloud_to_ply)
 DECLARE_NODE(export_heightmap)
 DECLARE_NODE(export_normal_map)
 DECLARE_NODE(export_path)
+DECLARE_NODE(export_points_to_ply)
 DECLARE_NODE(export_texture)
 DECLARE_NODE(falloff)
 DECLARE_NODE(fill_talus)

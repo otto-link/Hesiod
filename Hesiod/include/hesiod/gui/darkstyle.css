@@ -94,11 +94,11 @@ QCheckBox {
 QCheckBox::indicator {
     width: 14px;
     height: 14px;
-    border: 1px solid COLOR_ACCENT;
+    border: 1px solid COLOR_TEXT_PRIMARY;
 }
 
 QCheckBox::indicator:checked {
-    background-color: COLOR_ACCENT;
+    background-color: COLOR_TEXT_PRIMARY;
 }
 
 /* QTableView checkbox indicators */
@@ -139,7 +139,7 @@ QLabel {
 
 /* QLineEdit --------------------------------------------------------------- */
 QLineEdit {
-    background-color: COLOR_BG_PRIMARY;
+    background-color: COLOR_BG_SECONDARY;
     padding: 4px;
     border-style: solid;
     border: 1px solid COLOR_BORDER;
@@ -273,7 +273,9 @@ QPlainTextEdit {
 /* QToolTip ---------------------------------------------------------------- */
 QToolTip {
     color: COLOR_TEXT_PRIMARY;
-    background-color: COLOR_BORDER;
+    background-color: COLOR_BG_PRIMARY;
+    padding: 4px;
+    border: 1px solid COLOR_BG_SECONDARY;
 }
 
 /* QProgressBar ------------------------------------------------------------ */

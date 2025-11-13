@@ -31,6 +31,7 @@ Operator/Tiling
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |overlap|Float|The ratio of overlap at the boundaries. A higher value creates a smoother transition but may reduce the usable area of the heightmap.|
+|periodicity_type|Enumeration|Describes the periodicity mode applied along map axes. The domain repeats along the X axis, the Y axis, or both.|
 
 # Example
 

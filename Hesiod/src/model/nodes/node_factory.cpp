@@ -150,6 +150,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Border", "Operator/Morphology"},
       {"Brush", "Primitive/Authoring"},
       {"Broadcast", "Routing"},
+      {"Bulkify", "Filter/Recurve"},
       {"Bump", "Primitive/Function"},
       {"BumpLorentzian", "Primitive/Function"},
       {"Caldera", "Primitive/Geological"},
@@ -172,6 +173,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"CloudShuffle", "Geometry/Cloud"},
       {"CloudToArrayInterp", "Geometry/Cloud"},
       {"CloudToPath", "Geometry/Cloud"},
+      {"CloudToVectors", "Geometry/Cloud"},
       {"CoastalErosionDiffusion", "Erosion/Water"},
       {"ColorizeCmap", "Texture"},
       {"ColorizeGradient", "Texture"},
@@ -198,9 +200,11 @@ std::map<std::string, std::string> get_node_inventory()
       {"ExportAsset", "IO/Files"},
       {"ExportAsCubemap", "WIP"}, // "IO/Files"},
       {"ExportCloud", "IO/Files"},
+      {"ExportCloudToPly", "IO/Files"},
       {"ExportHeightmap", "IO/Files"},
       {"ExportNormalMap", "IO/Files"},
       {"ExportPath", "IO/Files"},
+      {"ExportPointsToPly", "IO/Files"},
       {"ExportTexture", "IO/Files"},
       {"Falloff", "Math/Boundaries"},
       {"FillTalus", "WIP"}, // Operator/Transform
@@ -359,9 +363,9 @@ std::map<std::string, std::string> get_node_inventory()
       {"SteepenConvective", "Filter/Recast"},
       {"Step", "Primitive/Function"},
       {"Strata", "Erosion/Stratify"},
-      {"Stratify", "Erosion/Stratify"},
-      {"StratifyOblique", "Erosion/Stratify"},
-      {"StratifyMultiscale", "Erosion/Stratify"},
+      {"Stratify", "WIP"},           // "Erosion/Stratify"},
+      {"StratifyOblique", "WIP"},    // "Erosion/Stratify"},
+      {"StratifyMultiscale", "WIP"}, // "Erosion/Stratify"},
       {"Terrace", "Filter/Recurve"},
       {"TextureAdvectionParticle", "Texture"},
       {"TextureAdvectionWarp", "WIP"}, // "Texture"},
@@ -447,6 +451,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(BlendPoissonBf, blend_poisson_bf);
     SETUP_NODE(Border, border);
     SETUP_NODE(Brush, brush);
+    SETUP_NODE(Bulkify, bulkify);
     SETUP_NODE(Bump, bump);
     SETUP_NODE(BumpLorentzian, bump_lorentzian);
     SETUP_NODE(Caldera, caldera);
@@ -469,6 +474,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(CloudShuffle, cloud_shuffle);
     SETUP_NODE(CloudToArrayInterp, cloud_to_array_interp);
     SETUP_NODE(CloudToPath, cloud_to_path);
+    SETUP_NODE(CloudToVectors, cloud_to_vectors);
     SETUP_NODE(CoastalErosionDiffusion, coastal_erosion_diffusion);
     SETUP_NODE(ColorizeCmap, colorize_cmap);
     SETUP_NODE(ColorizeGradient, colorize_gradient);
@@ -495,9 +501,11 @@ std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type
     SETUP_NODE(ExportAsset, export_asset);
     SETUP_NODE(ExportAsCubemap, export_as_cubemap);
     SETUP_NODE(ExportCloud, export_cloud);
+    SETUP_NODE(ExportCloudToPly, export_cloud_to_ply);
     SETUP_NODE(ExportHeightmap, export_heightmap);
     SETUP_NODE(ExportNormalMap, export_normal_map);
     SETUP_NODE(ExportPath, export_path);
+    SETUP_NODE(ExportPointsToPly, export_points_to_ply);
     SETUP_NODE(ExportTexture, export_texture);
     SETUP_NODE(Falloff, falloff);
     SETUP_NODE(FillTalus, fill_talus);

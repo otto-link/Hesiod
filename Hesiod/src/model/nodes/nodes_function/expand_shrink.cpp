@@ -34,7 +34,12 @@ void setup_expand_shrink_node(BaseNode *p_node)
   ADD_ATTR(IntAttribute, "iterations", 1, 1, 10);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"kernel", "radius", "shrink", "iterations"});
+  p_node->set_attr_ordered_key({"_GROUPBOX_BEGIN_Main parameters",
+                                "kernel",
+                                "radius",
+                                "shrink",
+                                "iterations",
+                                "_GROUPBOX_END_"});
 
   setup_pre_process_mask_attributes(p_node);
   setup_post_process_heightmap_attributes(p_node, true);
@@ -45,8 +50,6 @@ void compute_expand_shrink_node(BaseNode *p_node)
   Q_EMIT p_node->compute_started(p_node->get_id());
 
   Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
-
-  // AppContext &ctx = HSD_CTX;
 
   hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
 

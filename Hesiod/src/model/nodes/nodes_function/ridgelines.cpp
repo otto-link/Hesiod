@@ -37,8 +37,6 @@ void compute_ridgelines_node(BaseNode *p_node)
 
   Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
 
-  // AppContext &ctx = HSD_CTX;
-
   hmap::Path *p_path = p_node->get_value_ref<hmap::Path>("path");
 
   if (p_path)

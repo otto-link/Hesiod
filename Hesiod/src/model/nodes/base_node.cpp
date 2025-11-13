@@ -5,12 +5,15 @@
 #include <fstream>
 #include <unordered_map>
 
+#include <QCoreApplication>
+
 #include "highmap/geometry/cloud.hpp"
 #include "highmap/geometry/path.hpp"
 #include "highmap/heightmap.hpp"
 
 #include "attributes/seed_attribute.hpp"
 
+#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/node_factory.hpp"
@@ -29,6 +32,7 @@ std::string map_type_name(const std::string &typeid_name)
       {typeid(hmap::Heightmap).name(), "Heightmap"},
       {typeid(hmap::HeightmapRGBA).name(), "HeightmapRGBA"},
       {typeid(hmap::Path).name(), "Path"},
+      {typeid(std::vector<float>).name(), "vector<float>"},
       {typeid(std::vector<hmap::Heightmap>).name(), "vector<Heightmap>"}};
 
   auto it = type_name_map.find(typeid_name);
@@ -88,6 +92,14 @@ BaseNode::BaseNode(const std::string &label, const std::shared_ptr<GraphConfig> 
                   if (this->data_preview)
                     this->data_preview->update_preview();
                 });
+}
+
+BaseNode::~BaseNode()
+{
+  Logger::log()->debug("BaseNode::~BaseNode");
+  this->disconnect();
+  QCoreApplication::processEvents(QEventLoop::AllEvents);
+  Logger::log()->debug("BaseNode::~BaseNode: out");
 }
 
 std::map<std::string, std::unique_ptr<attr::AbstractAttribute>> *BaseNode::get_attr_ref()
@@ -374,7 +386,14 @@ void BaseNode::update_attributes_tool_tip()
       if (this->documentation.contains("parameters") &&
           this->documentation["parameters"].contains(key))
       {
-        std::string description = label + ":\n";
+        std::string description = "<div><font size=\"+1\"><b>" +
+                                  remove_trailing_char(label, ':') + "</font></b><br>";
+
+        description += "<font color='COLOR_TEXT_SECONDARY'>";
+
+        replace_all(description,
+                    "COLOR_TEXT_SECONDARY",
+                    HSD_CTX.app_settings.colors.text_secondary.name().toStdString());
 
         if (this->documentation["parameters"][key].contains("description"))
         {
@@ -382,6 +401,8 @@ void BaseNode::update_attributes_tool_tip()
           base_desc = wrap_text(base_desc, width);
           description += base_desc;
         }
+
+        description += "</div>";
 
         sp_attr->set_description(description);
       }

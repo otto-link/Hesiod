@@ -46,6 +46,7 @@ public:
   // --- Constructors ---
   BaseNode() = default;
   BaseNode(const std::string &label, const std::shared_ptr<GraphConfig> &config);
+  ~BaseNode();
 
   // --- Attribute Management ---
   template <typename T, typename... Args>
