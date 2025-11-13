@@ -25,10 +25,10 @@ void setup_water_depth_from_mask_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "water_depth", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(FloatAttribute, "mask_threshold", 0.1f, 0.f, 0.5f);
-  ADD_ATTR(FloatAttribute, "tolerance", 1e-3f, 0.f, 0.01f, "{:.4f}");
+  ADD_ATTR(FloatAttribute, "mask_threshold", 0.01f, 0.f, 0.1f, "{:.3f}");
+  ADD_ATTR(FloatAttribute, "tolerance", 1e-5f, 1e-6f, 1e-2f, "{:.3e}", true);
   ADD_ATTR(IntAttribute, "iterations", 500, 1, INT_MAX);
-  ADD_ATTR(FloatAttribute, "omega", 1.8f, 1e-3f, 2.f);
+  ADD_ATTR(FloatAttribute, "omega", 1.8f, 1e-3f, 1.9f);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"mask_threshold", "tolerance", "iterations", "omega"});
