@@ -800,43 +800,43 @@
                 "type": "Vec2Float"
             },
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_mix": {
-                "description": "No description",
+                "description": "Mixing factor for blending input and output values. A value of 0 uses only the input, 1 uses only the output, and intermediate values perform a linear interpolation.",
                 "key": "post_mix",
                 "label": "post_mix",
                 "type": "Float"
             },
             "post_mix_method": {
-                "description": "No description",
+                "description": "Method used to combine input and output values. Options include linear interpolation (default), min, max, smooth min, smooth max, add, and subtract.",
                 "key": "post_mix_method",
                 "label": "post_mix_method",
                 "type": "Enumeration"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_saturate": {
-                "description": "No description",
+                "description": "Modifies the amplitude of elevations by first clamping them to a given interval and then scaling them so that the restricted interval matches the original input range. This enhances contrast in elevation variations while maintaining overall structure.",
                 "key": "post_saturate",
                 "label": "post_saturate",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -1914,7 +1914,7 @@
             "water_depth": {
                 "caption": "water_depth",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Output water depth map representing flooded areas.",
                 "type": "output"
             },
             "water_depth_in": {
@@ -3958,7 +3958,7 @@
             "water_depth": {
                 "caption": "water_depth",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Output water depth map representing flooded areas.",
                 "type": "output"
             }
         }
@@ -3991,40 +3991,46 @@
             "water_depth": {
                 "caption": "water_depth",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Output water depth map representing flooded areas.",
                 "type": "output"
             }
         }
     },
     "FloodingLakeSystem": {
         "category": "Hydrology",
-        "description": "No description available",
+        "description": "Simulates lake formation on a terrain by filling topographic depressions. The algorithm analyzes the terrain elevation model, detects enclosed basins, and incrementally floods them to estimate lake water depths and extents. It applies a depression-filling method to determine the resulting water surface elevation.",
         "label": "FloodingLakeSystem",
         "parameters": {
             "epsilon": {
-                "description": "No description",
+                "description": "Convergence tolerance for the depression-filling process. Smaller values yield higher precision but may increase computation time.",
                 "key": "epsilon",
                 "label": "epsilon",
                 "type": "Float"
             },
             "iterations": {
-                "description": "No description",
+                "description": "Maximum number of iterations allowed during the depression-filling algorithm before convergence is assumed.",
                 "key": "iterations",
                 "label": "iterations",
                 "type": "Integer"
+            },
+            "mininal_radius": {
+                "description": "Minimum radius (in normalized terrain units) used to define the smallest valid lake surface. Water bodies smaller than this threshold are discarded.",
+                "key": "mininal_radius",
+                "label": "mininal_radius",
+                "type": "Float"
             }
         },
         "ports": {
             "elevation": {
                 "caption": "elevation",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Terrain elevation.",
                 "type": "input"
             },
             "water_depth": {
                 "caption": "water_depth",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Output water depth map representing flooded areas.",
                 "type": "output"
             }
         }
@@ -4051,7 +4057,7 @@
             "water_depth": {
                 "caption": "water_depth",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Output water depth map representing flooded areas.",
                 "type": "output"
             }
         }
@@ -6920,7 +6926,7 @@
             "water_depth": {
                 "caption": "water_depth",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Output water depth map representing flooded areas.",
                 "type": "output"
             }
         }
@@ -7159,31 +7165,31 @@
         "label": "MorphologicalTopHat",
         "parameters": {
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_saturate": {
-                "description": "No description",
+                "description": "Modifies the amplitude of elevations by first clamping them to a given interval and then scaling them so that the restricted interval matches the original input range. This enhances contrast in elevation variations while maintaining overall structure.",
                 "key": "post_saturate",
                 "label": "post_saturate",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -9993,7 +9999,7 @@
             "water_depth": {
                 "caption": "water_depth",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Output water depth map representing flooded areas.",
                 "type": "input"
             }
         }
@@ -12381,31 +12387,31 @@
                 "type": "Float"
             },
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_saturate": {
-                "description": "No description",
+                "description": "Modifies the amplitude of elevations by first clamping them to a given interval and then scaling them so that the restricted interval matches the original input range. This enhances contrast in elevation variations while maintaining overall structure.",
                 "key": "post_saturate",
                 "label": "post_saturate",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"
@@ -16485,7 +16491,7 @@
             "water_depth": {
                 "caption": "water_depth",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Output water depth map representing flooded areas.",
                 "type": "output"
             }
         }
@@ -16530,7 +16536,7 @@
             "water_depth": {
                 "caption": "water_depth",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Output water depth map representing flooded areas.",
                 "type": "output"
             },
             "water_mask": {
@@ -16569,7 +16575,7 @@
             "water_depth": {
                 "caption": "water_depth",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Output water depth map representing flooded areas.",
                 "type": "input"
             }
         }

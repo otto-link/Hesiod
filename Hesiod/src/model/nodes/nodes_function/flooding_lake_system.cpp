@@ -25,9 +25,17 @@ void setup_flooding_lake_system_node(BaseNode *p_node)
   // attribute(s)
   ADD_ATTR(IntAttribute, "iterations", 1000, 1, INT_MAX);
   ADD_ATTR(FloatAttribute, "epsilon", 1e-1, 1e-5, 1e-1, "{:.3e}", true);
+  ADD_ATTR(FloatAttribute, "mininal_radius", 0.05f, 0.f, 0.5f);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"iterations", "epsilon"});
+  p_node->set_attr_ordered_key({"_GROUPBOX_BEGIN_Main parameters",
+                                "iterations",
+                                "epsilon",
+                                "_GROUPBOX_END_",
+                                //
+                                "_GROUPBOX_BEGIN_Exclusion filter",
+                                "mininal_radius",
+                                "_GROUPBOX_END_"});
 }
 
 void compute_flooding_lake_system_node(BaseNode *p_node)
@@ -43,17 +51,21 @@ void compute_flooding_lake_system_node(BaseNode *p_node)
     hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("water_depth");
 
     float epsilon_normalized = GET("epsilon", FloatAttribute) / (float)p_in->shape.x;
+    int   ir = GET("mininal_radius", FloatAttribute) * (float)p_in->shape.x;
+    float surface_threshold = M_PI * ir * ir;
 
     hmap::transform(
         {p_out, p_in},
-        [p_node, epsilon_normalized](std::vector<hmap::Array *> p_arrays)
+        [p_node, epsilon_normalized, surface_threshold](
+            std::vector<hmap::Array *> p_arrays)
         {
           hmap::Array *pa_out = p_arrays[0];
           hmap::Array *pa_in = p_arrays[1];
 
           *pa_out = hmap::flooding_lake_system(*pa_in,
                                                GET("iterations", IntAttribute),
-                                               epsilon_normalized);
+                                               epsilon_normalized,
+                                               surface_threshold);
         },
         hmap::TransformMode::SINGLE_ARRAY); // forced, not tileable
   }

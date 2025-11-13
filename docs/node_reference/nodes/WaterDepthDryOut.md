@@ -25,7 +25,7 @@ Hydrology
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|water_depth|Heightmap|No description|
+|water_depth|Heightmap|Output water depth map representing flooded areas.|
 
 # Parameters
 

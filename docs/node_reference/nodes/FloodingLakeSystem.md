@@ -3,7 +3,7 @@ FloodingLakeSystem Node
 =======================
 
 
-No description available
+Simulates lake formation on a terrain by filling topographic depressions. The algorithm analyzes the terrain elevation model, detects enclosed basins, and incrementally floods them to estimate lake water depths and extents. It applies a depression-filling method to determine the resulting water surface elevation.
 
 
 
@@ -18,20 +18,21 @@ Hydrology
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|elevation|Heightmap|No description|
+|elevation|Heightmap|Terrain elevation.|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|water_depth|Heightmap|No description|
+|water_depth|Heightmap|Output water depth map representing flooded areas.|
 
 # Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|epsilon|Float|No description|
-|iterations|Integer|No description|
+|epsilon|Float|Convergence tolerance for the depression-filling process. Smaller values yield higher precision but may increase computation time.|
+|iterations|Integer|Maximum number of iterations allowed during the depression-filling algorithm before convergence is assumed.|
+|mininal_radius|Float|Minimum radius (in normalized terrain units) used to define the smallest valid lake surface. Water bodies smaller than this threshold are discarded.|
 
 # Example
 

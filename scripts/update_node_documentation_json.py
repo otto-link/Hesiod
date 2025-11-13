@@ -13,6 +13,10 @@ STD_PARAM =  {
     "post_smoothing_radius": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing."
 }
 
+STD_PORTS = {
+    "water_depth": "Output water depth map representing flooded areas."
+}
+
 def load_node_data():
     """Load node documentation data from a JSON file."""
     fname = os.path.join(HSD_DATA_PATH, "node_documentation.json")
@@ -29,9 +33,14 @@ if __name__ == "__main__":
         # make sure "standard" descriptions are set
         if v["parameters"] is not None:
             for kp, vp in v["parameters"].items():
-                print(kp)
                 if kp in STD_PARAM.keys():
                     data[k]["parameters"][kp]["description"] = STD_PARAM[kp]
 
+        if v["ports"] is not None:
+            for kp, vp in v["ports"].items():
+                if kp in STD_PORTS.keys():
+                    data[k]["ports"][kp]["description"] = STD_PORTS[kp]
+                    print(kp)
+                    
     with open(os.path.join(HSD_DATA_PATH, "node_documentation.json"), 'w') as f:
         json.dump(data, f)

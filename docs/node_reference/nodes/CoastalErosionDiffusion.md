@@ -26,7 +26,7 @@ Erosion/Water
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |elevation|Heightmap|No description|
-|water_depth|Heightmap|No description|
+|water_depth|Heightmap|Output water depth map representing flooded areas.|
 |water_mask|Heightmap|No description|
 
 # Parameters

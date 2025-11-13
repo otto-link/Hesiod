@@ -20,7 +20,7 @@
         "graph_nodes": {
             "graph": {
                 "id": "graph",
-                "id_count": 12,
+                "id_count": 13,
                 "links": [
                     {
                         "node_id_from": "5",
@@ -35,26 +35,26 @@
                         "port_id_to": "heightmap"
                     },
                     {
-                        "node_id_from": "6",
-                        "node_id_to": "7",
-                        "port_id_from": "out",
-                        "port_id_to": "cloud"
-                    },
-                    {
                         "node_id_from": "5",
-                        "node_id_to": "8",
+                        "node_id_to": "7",
                         "port_id_from": "cloud",
                         "port_id_to": "cloud"
                     },
                     {
-                        "node_id_from": "8",
+                        "node_id_from": "6",
+                        "node_id_to": "8",
+                        "port_id_from": "out",
+                        "port_id_to": "cloud"
+                    },
+                    {
+                        "node_id_from": "7",
                         "node_id_to": "9",
                         "port_id_from": "out",
                         "port_id_to": "cloud"
                     },
                     {
                         "node_id_from": "9",
-                        "node_id_to": "7",
+                        "node_id_to": "8",
                         "port_id_from": "v",
                         "port_id_to": "point_data1"
                     },
@@ -65,28 +65,28 @@
                         "port_id_to": "cloud"
                     },
                     {
+                        "node_id_from": "9",
+                        "node_id_to": "12",
+                        "port_id_from": "v",
+                        "port_id_to": "point_data1"
+                    },
+                    {
                         "node_id_from": "10",
-                        "node_id_to": "11",
+                        "node_id_to": "12",
                         "port_id_from": "x",
                         "port_id_to": "x"
                     },
                     {
                         "node_id_from": "10",
-                        "node_id_to": "11",
+                        "node_id_to": "12",
                         "port_id_from": "y",
                         "port_id_to": "y"
                     },
                     {
                         "node_id_from": "10",
-                        "node_id_to": "11",
+                        "node_id_to": "12",
                         "port_id_from": "v",
                         "port_id_to": "z"
-                    },
-                    {
-                        "node_id_from": "9",
-                        "node_id_to": "11",
-                        "port_id_from": "v",
-                        "port_id_to": "point_data1"
                     }
                 ],
                 "model_config": {
@@ -97,156 +97,6 @@
                     "tiling.y": 4
                 },
                 "nodes": [
-                    {
-                        "GPU": {
-                            "label": "GPU",
-                            "label_false": "",
-                            "label_true": "",
-                            "type": 0,
-                            "type_string": "Bool",
-                            "value": true
-                        },
-                        "c_erosion": {
-                            "label": "c_erosion",
-                            "log_scale": false,
-                            "type": 6,
-                            "type_string": "Float",
-                            "value": 0.10000000149011612,
-                            "vmax": 1.0,
-                            "vmin": 0.009999999776482582
-                        },
-                        "deposition_radius": {
-                            "label": "deposition_radius",
-                            "log_scale": false,
-                            "type": 6,
-                            "type_string": "Float",
-                            "value": 0.10000000149011612,
-                            "vmax": 0.20000000298023224,
-                            "vmin": 0.0
-                        },
-                        "deposition_scale_ratio": {
-                            "label": "deposition_scale_ratio",
-                            "log_scale": false,
-                            "type": 6,
-                            "type_string": "Float",
-                            "value": 1.0,
-                            "vmax": 1.0,
-                            "vmin": 0.0
-                        },
-                        "gradient_power": {
-                            "label": "gradient_power",
-                            "log_scale": false,
-                            "type": 6,
-                            "type_string": "Float",
-                            "value": 0.800000011920929,
-                            "vmax": 2.0,
-                            "vmin": 0.10000000149011612
-                        },
-                        "gradient_prefilter_radius": {
-                            "label": "gradient_prefilter_radius",
-                            "log_scale": false,
-                            "type": 6,
-                            "type_string": "Float",
-                            "value": 0.10000000149011612,
-                            "vmax": 0.20000000298023224,
-                            "vmin": 0.0
-                        },
-                        "gradient_scaling_ratio": {
-                            "label": "gradient_scaling_ratio",
-                            "log_scale": false,
-                            "type": 6,
-                            "type_string": "Float",
-                            "value": 1.0,
-                            "vmax": 1.0,
-                            "vmin": 0.0
-                        },
-                        "id": "1",
-                        "label": "HydraulicStreamLog",
-                        "post_gain": {
-                            "label": "post_gain",
-                            "log_scale": false,
-                            "type": 6,
-                            "type_string": "Float",
-                            "value": 1.0,
-                            "vmax": 10.0,
-                            "vmin": 0.009999999776482582
-                        },
-                        "post_inverse": {
-                            "label": "post_inverse",
-                            "label_false": "",
-                            "label_true": "",
-                            "type": 0,
-                            "type_string": "Bool",
-                            "value": false
-                        },
-                        "post_mix": {
-                            "label": "post_mix",
-                            "log_scale": false,
-                            "type": 6,
-                            "type_string": "Float",
-                            "value": 1.0,
-                            "vmax": 1.0,
-                            "vmin": 0.0
-                        },
-                        "post_mix_method": {
-                            "choice": "replace",
-                            "label": "post_mix_method",
-                            "type": 4,
-                            "type_string": "Enumeration",
-                            "value": 11
-                        },
-                        "post_remap": {
-                            "is_active": true,
-                            "label": "post_remap",
-                            "type": 11,
-                            "type_string": "Value range",
-                            "value": [
-                                0.0,
-                                1.0
-                            ],
-                            "vmax": 2.0,
-                            "vmin": -1.0
-                        },
-                        "post_saturate": {
-                            "is_active": false,
-                            "label": "post_saturate",
-                            "type": 11,
-                            "type_string": "Value range",
-                            "value": [
-                                0.0,
-                                1.0
-                            ],
-                            "vmax": 2.0,
-                            "vmin": -1.0
-                        },
-                        "post_smoothing_radius": {
-                            "label": "post_smoothing_radius",
-                            "log_scale": false,
-                            "type": 6,
-                            "type_string": "Float",
-                            "value": 0.0,
-                            "vmax": 0.05000000074505806,
-                            "vmin": 0.0
-                        },
-                        "saturation_ratio": {
-                            "label": "saturation_ratio",
-                            "log_scale": false,
-                            "type": 6,
-                            "type_string": "Float",
-                            "value": 1.0,
-                            "vmax": 1.0,
-                            "vmin": 0.009999999776482582
-                        },
-                        "talus_ref": {
-                            "label": "talus_ref",
-                            "log_scale": false,
-                            "type": 6,
-                            "type_string": "Float",
-                            "value": 0.10000000149011612,
-                            "vmax": 10.0,
-                            "vmin": 0.009999999776482582
-                        }
-                    },
                     {
                         "id": "10",
                         "label": "CloudToVectors"
@@ -268,7 +118,7 @@
                             "type_string": "Filename",
                             "value": "points.ply"
                         },
-                        "id": "11",
+                        "id": "12",
                         "label": "ExportPointsToPly",
                         "label1": {
                             "label": "",
@@ -472,23 +322,6 @@
                         }
                     },
                     {
-                        "id": "3",
-                        "label": "Preview"
-                    },
-                    {
-                        "elevation": {
-                            "label": "elevation",
-                            "log_scale": false,
-                            "type": 6,
-                            "type_string": "Float",
-                            "value": 0.20000000298023224,
-                            "vmax": 2.0,
-                            "vmin": -1.0
-                        },
-                        "id": "4",
-                        "label": "FloodingUniformLevel"
-                    },
-                    {
                         "id": "5",
                         "label": "CloudRandom",
                         "method": {
@@ -502,7 +335,7 @@
                             "label": "npoints",
                             "type": 10,
                             "type_string": "Integer",
-                            "value": 270,
+                            "value": 256,
                             "vmax": 2147483647,
                             "vmin": 1
                         },
@@ -530,6 +363,10 @@
                         "label": "CloudSetValuesFromHeightmap"
                     },
                     {
+                        "id": "7",
+                        "label": "CloudSetValuesFromMinDistance"
+                    },
+                    {
                         "auto_export": {
                             "label": "auto_export",
                             "label_false": "",
@@ -546,7 +383,7 @@
                             "type_string": "Filename",
                             "value": "points.ply"
                         },
-                        "id": "7",
+                        "id": "8",
                         "label": "ExportCloudToPly",
                         "label1": {
                             "label": "",
@@ -625,10 +462,6 @@
                         }
                     },
                     {
-                        "id": "8",
-                        "label": "CloudSetValuesFromMinDistance"
-                    },
-                    {
                         "id": "9",
                         "label": "CloudToVectors"
                     }
@@ -659,50 +492,49 @@
     "graph_tabs_widget": {
         "graph_node_widgets": {
             "graph": {
-                "comments": [
-                    {
-                        "comment_text": "In this graph ExportPointsToPly and ExportCloudToPly actually output the same file, but ExportPointsToPly.",
-                        "position": [
-                            749.0499877929688,
-                            -622.7999877929688
-                        ]
-                    },
-                    {
-                        "comment_text": "Extract the value carried by each point of the Cloud.",
-                        "position": [
-                            330.5228271484375,
-                            301.0895080566406
-                        ]
-                    },
-                    {
-                        "comment_text": "The value carried by each point is set to be the distance to its nearest neighbor.",
-                        "position": [
-                            30.37688446044922,
-                            281.8931884765625
-                        ]
-                    },
-                    {
-                        "comment_text": "The value carried by each point is set to be the distance to the elevation of the input heightmap.",
-                        "position": [
-                            108.35445404052734,
-                            -147.8178253173828
-                        ]
-                    },
-                    {
-                        "comment_text": "Cloud data (x, y, values) are used as (x, y, z) and additional data can be provided (here the distance to the nearest neighbor).",
-                        "position": [
-                            726.794677734375,
-                            367.6194763183594
-                        ]
-                    }
-                ],
+                "comments": [],
                 "current_link_type": 2,
                 "groups": [],
                 "id": "graph",
                 "links": [
                     {
                         "link_type": 2,
-                        "node_in_id": "7",
+                        "node_in_id": "12",
+                        "node_out_id": "10",
+                        "port_in_id": "z",
+                        "port_out_id": "v"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "12",
+                        "node_out_id": "10",
+                        "port_in_id": "y",
+                        "port_out_id": "y"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "12",
+                        "node_out_id": "10",
+                        "port_in_id": "x",
+                        "port_out_id": "x"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "12",
+                        "node_out_id": "9",
+                        "port_in_id": "point_data1",
+                        "port_out_id": "v"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "10",
+                        "node_out_id": "6",
+                        "port_in_id": "cloud",
+                        "port_out_id": "out"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "8",
                         "node_out_id": "9",
                         "port_in_id": "point_data1",
                         "port_out_id": "v"
@@ -710,23 +542,23 @@
                     {
                         "link_type": 2,
                         "node_in_id": "9",
-                        "node_out_id": "8",
+                        "node_out_id": "7",
                         "port_in_id": "cloud",
                         "port_out_id": "out"
                     },
                     {
                         "link_type": 2,
                         "node_in_id": "8",
-                        "node_out_id": "5",
+                        "node_out_id": "6",
                         "port_in_id": "cloud",
-                        "port_out_id": "cloud"
+                        "port_out_id": "out"
                     },
                     {
                         "link_type": 2,
                         "node_in_id": "7",
-                        "node_out_id": "6",
+                        "node_out_id": "5",
                         "port_in_id": "cloud",
-                        "port_out_id": "out"
+                        "port_out_id": "cloud"
                     },
                     {
                         "link_type": 2,
@@ -741,104 +573,69 @@
                         "node_out_id": "5",
                         "port_in_id": "cloud",
                         "port_out_id": "cloud"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "10",
-                        "node_out_id": "6",
-                        "port_in_id": "cloud",
-                        "port_out_id": "out"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "11",
-                        "node_out_id": "10",
-                        "port_in_id": "x",
-                        "port_out_id": "x"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "11",
-                        "node_out_id": "10",
-                        "port_in_id": "y",
-                        "port_out_id": "y"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "11",
-                        "node_out_id": "10",
-                        "port_in_id": "z",
-                        "port_out_id": "v"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "11",
-                        "node_out_id": "9",
-                        "port_in_id": "point_data1",
-                        "port_out_id": "v"
                     }
                 ],
                 "nodes": [
                     {
-                        "caption": "CloudToVectors",
-                        "id": "9",
+                        "caption": "ExportPointsToPly",
+                        "id": "12",
                         "is_widget_visible": true,
-                        "scene_position.x": 312.332763671875,
-                        "scene_position.y": -24.75225257873535
-                    },
-                    {
-                        "caption": "CloudSetValuesFromMinDistance",
-                        "id": "8",
-                        "is_widget_visible": true,
-                        "scene_position.x": 77.30518341064453,
-                        "scene_position.y": 17.09726333618164
-                    },
-                    {
-                        "caption": "ExportCloudToPly",
-                        "id": "7",
-                        "is_widget_visible": true,
-                        "scene_position.x": 719.7957763671875,
-                        "scene_position.y": 28.551189422607422
-                    },
-                    {
-                        "caption": "CloudSetValuesFromHeightmap",
-                        "id": "6",
-                        "is_widget_visible": true,
-                        "scene_position.x": 106.39700317382813,
-                        "scene_position.y": -428.2317810058594
-                    },
-                    {
-                        "caption": "CloudRandom",
-                        "id": "5",
-                        "is_widget_visible": true,
-                        "scene_position.x": -317.1086120605469,
-                        "scene_position.y": -497.4773254394531
-                    },
-                    {
-                        "caption": "GaborWaveFbm",
-                        "id": "2",
-                        "is_widget_visible": true,
-                        "scene_position.x": -323.94677734375,
-                        "scene_position.y": -137.90158081054688
+                        "scene_position.x": 457.7472612165154,
+                        "scene_position.y": -488.22027390220217
                     },
                     {
                         "caption": "CloudToVectors",
                         "id": "10",
                         "is_widget_visible": true,
-                        "scene_position.x": 453.39251708984375,
-                        "scene_position.y": -545.1901245117188
+                        "scene_position.x": 214.5836702552295,
+                        "scene_position.y": -508.28784299003894
                     },
                     {
-                        "caption": "ExportPointsToPly",
-                        "id": "11",
+                        "caption": "CloudToVectors",
+                        "id": "9",
                         "is_widget_visible": true,
-                        "scene_position.x": 740.239013671875,
-                        "scene_position.y": -549.85009765625
+                        "scene_position.x": 147.83559282217644,
+                        "scene_position.y": 2.3890773670117653
+                    },
+                    {
+                        "caption": "ExportCloudToPly",
+                        "id": "8",
+                        "is_widget_visible": true,
+                        "scene_position.x": 406.263563861104,
+                        "scene_position.y": -42.028230155303916
+                    },
+                    {
+                        "caption": "CloudSetValuesFromMinDistance",
+                        "id": "7",
+                        "is_widget_visible": true,
+                        "scene_position.x": -69.70825821007938,
+                        "scene_position.y": -17.80060787040445
+                    },
+                    {
+                        "caption": "CloudSetValuesFromHeightmap",
+                        "id": "6",
+                        "is_widget_visible": true,
+                        "scene_position.x": -3.2505458880596905,
+                        "scene_position.y": -344.2005114266529
+                    },
+                    {
+                        "caption": "CloudRandom",
+                        "id": "5",
+                        "is_widget_visible": true,
+                        "scene_position.x": -236.27315744754637,
+                        "scene_position.y": -416.5468818025225
+                    },
+                    {
+                        "caption": "GaborWaveFbm",
+                        "id": "2",
+                        "is_widget_visible": true,
+                        "scene_position.x": -417.4021911621094,
+                        "scene_position.y": -303.0163269042969
                     }
                 ],
                 "viewers": [
                     {
-                        "current_node_id": "5",
+                        "current_node_id": "10",
                         "height": 720,
                         "is_node_pinned": false,
                         "label": "3D Renderer",
@@ -980,6 +777,14 @@
                             "y": 91
                         },
                         "view_param_map": {
+                            "1": {
+                                "color": "",
+                                "elevation": "output",
+                                "normal_map": "",
+                                "path": "",
+                                "points": "",
+                                "water_depth": ""
+                            },
                             "10": {
                                 "color": "",
                                 "elevation": "",
@@ -989,6 +794,14 @@
                                 "water_depth": ""
                             },
                             "11": {
+                                "color": "",
+                                "elevation": "",
+                                "normal_map": "",
+                                "path": "",
+                                "points": "cloud",
+                                "water_depth": ""
+                            },
+                            "12": {
                                 "color": "",
                                 "elevation": "",
                                 "normal_map": "",
@@ -1041,7 +854,7 @@
                                 "elevation": "",
                                 "normal_map": "",
                                 "path": "",
-                                "points": "cloud",
+                                "points": "out",
                                 "water_depth": ""
                             },
                             "8": {
@@ -1049,7 +862,7 @@
                                 "elevation": "",
                                 "normal_map": "",
                                 "path": "",
-                                "points": "out",
+                                "points": "cloud",
                                 "water_depth": ""
                             },
                             "9": {
@@ -1070,5 +883,5 @@
             }
         }
     },
-    "saved_at": "2025-11-13_09:56:23"
+    "saved_at": "2025-11-13_15:52:52"
 }
