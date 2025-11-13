@@ -74,6 +74,7 @@ nav:
     - 'node_reference/nodes/ExportHeightmap.md'
     - 'node_reference/nodes/ExportNormalMap.md'
     - 'node_reference/nodes/ExportPath.md'
+    - 'node_reference/nodes/ExportPointsToPly.md'
     - 'node_reference/nodes/ExportTexture.md'
     - 'node_reference/nodes/Falloff.md'
     - 'node_reference/nodes/FillTalus.md'
