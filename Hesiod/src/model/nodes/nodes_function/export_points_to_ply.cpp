@@ -3,6 +3,7 @@
  * this software. */
 #include "highmap/export.hpp"
 #include "highmap/geometry/cloud.hpp"
+#include "highmap/operator.hpp"
 
 #include "attributes.hpp"
 
@@ -37,19 +38,37 @@ void setup_export_points_to_ply_node(BaseNode *p_node)
            "Stanford PLY (*.ply)",
            true);
   ADD_ATTR(BoolAttribute, "auto_export", false);
+
   p_node->add_attr<StringAttribute>("label1", "", "data1");
   p_node->add_attr<StringAttribute>("label2", "", "data2");
   p_node->add_attr<StringAttribute>("label3", "", "data3");
+
+  ADD_ATTR(FloatAttribute, "xmin", 0.f, -FLT_MAX, FLT_MAX);
+  ADD_ATTR(FloatAttribute, "xmax", 1.f, -FLT_MAX, FLT_MAX);
+  ADD_ATTR(FloatAttribute, "ymin", 0.f, -FLT_MAX, FLT_MAX);
+  ADD_ATTR(FloatAttribute, "ymax", 1.f, -FLT_MAX, FLT_MAX);
+  ADD_ATTR(FloatAttribute, "zmin", 0.f, -FLT_MAX, FLT_MAX);
+  ADD_ATTR(FloatAttribute, "zmax", 1.f, -FLT_MAX, FLT_MAX);
 
   // attribute(s) order
   p_node->set_attr_ordered_key({"_GROUPBOX_BEGIN_Main parameters",
                                 "fname",
                                 "auto_export",
                                 "_GROUPBOX_END_",
+                                //
                                 "_GROUPBOX_BEGIN_Custom data labels",
                                 "label1",
                                 "label2",
                                 "label3",
+                                "_GROUPBOX_END_",
+                                //
+                                "_GROUPBOX_BEGIN_Rescaling",
+                                "xmin",
+                                "xmax",
+                                "ymin",
+                                "ymax",
+                                "zmin",
+                                "zmax",
                                 "_GROUPBOX_END_"});
 
   // specialized GUI
@@ -90,7 +109,17 @@ void compute_export_points_to_ply_node(BaseNode *p_node)
 
     // --- export
 
-    hmap::export_points_to_ply(fname.string(), *p_x, *p_y, *p_z, custom_fields);
+    auto xr = hmap::rescaled_vector(*p_x,
+                                    GET("xmin", FloatAttribute),
+                                    GET("xmax", FloatAttribute));
+    auto yr = hmap::rescaled_vector(*p_y,
+                                    GET("ymin", FloatAttribute),
+                                    GET("ymax", FloatAttribute));
+    auto zr = hmap::rescaled_vector(*p_z,
+                                    GET("zmin", FloatAttribute),
+                                    GET("zmax", FloatAttribute));
+
+    hmap::export_points_to_ply(fname.string(), xr, yr, zr, custom_fields);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

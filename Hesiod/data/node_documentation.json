@@ -3526,6 +3526,42 @@
                 "key": "label3",
                 "label": "",
                 "type": "String"
+            },
+            "xmax": {
+                "description": "No description",
+                "key": "xmax",
+                "label": "xmax",
+                "type": "Float"
+            },
+            "xmin": {
+                "description": "No description",
+                "key": "xmin",
+                "label": "xmin",
+                "type": "Float"
+            },
+            "ymax": {
+                "description": "No description",
+                "key": "ymax",
+                "label": "ymax",
+                "type": "Float"
+            },
+            "ymin": {
+                "description": "No description",
+                "key": "ymin",
+                "label": "ymin",
+                "type": "Float"
+            },
+            "zmax": {
+                "description": "No description",
+                "key": "zmax",
+                "label": "zmax",
+                "type": "Float"
+            },
+            "zmin": {
+                "description": "No description",
+                "key": "zmin",
+                "label": "zmin",
+                "type": "Float"
             }
         },
         "ports": {
@@ -3682,6 +3718,42 @@
                 "key": "label3",
                 "label": "",
                 "type": "String"
+            },
+            "xmax": {
+                "description": "No description",
+                "key": "xmax",
+                "label": "xmax",
+                "type": "Float"
+            },
+            "xmin": {
+                "description": "No description",
+                "key": "xmin",
+                "label": "xmin",
+                "type": "Float"
+            },
+            "ymax": {
+                "description": "No description",
+                "key": "ymax",
+                "label": "ymax",
+                "type": "Float"
+            },
+            "ymin": {
+                "description": "No description",
+                "key": "ymin",
+                "label": "ymin",
+                "type": "Float"
+            },
+            "zmax": {
+                "description": "No description",
+                "key": "zmax",
+                "label": "zmax",
+                "type": "Float"
+            },
+            "zmin": {
+                "description": "No description",
+                "key": "zmin",
+                "label": "zmin",
+                "type": "Float"
             }
         },
         "ports": {

@@ -139,7 +139,7 @@ QLabel {
 
 /* QLineEdit --------------------------------------------------------------- */
 QLineEdit {
-    background-color: COLOR_BG_PRIMARY;
+    background-color: COLOR_BG_SECONDARY;
     padding: 4px;
     border-style: solid;
     border: 1px solid COLOR_BORDER;

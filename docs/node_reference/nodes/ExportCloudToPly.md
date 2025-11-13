@@ -32,6 +32,12 @@ IO/Files
 ||String|No description|
 ||String|No description|
 ||String|No description|
+|xmax|Float|No description|
+|xmin|Float|No description|
+|ymax|Float|No description|
+|ymin|Float|No description|
+|zmax|Float|No description|
+|zmin|Float|No description|
 
 # Example
 

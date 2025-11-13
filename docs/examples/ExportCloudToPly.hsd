@@ -290,6 +290,60 @@
                             "type": 13,
                             "type_string": "String",
                             "value": "data3"
+                        },
+                        "xmax": {
+                            "label": "xmax",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 3.4028234663852886e+38,
+                            "vmin": -3.4028234663852886e+38
+                        },
+                        "xmin": {
+                            "label": "xmin",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.0,
+                            "vmax": 3.4028234663852886e+38,
+                            "vmin": -3.4028234663852886e+38
+                        },
+                        "ymax": {
+                            "label": "ymax",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 3.4028234663852886e+38,
+                            "vmin": -3.4028234663852886e+38
+                        },
+                        "ymin": {
+                            "label": "ymin",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.0,
+                            "vmax": 3.4028234663852886e+38,
+                            "vmin": -3.4028234663852886e+38
+                        },
+                        "zmax": {
+                            "label": "zmax",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 3.4028234663852886e+38,
+                            "vmin": -3.4028234663852886e+38
+                        },
+                        "zmin": {
+                            "label": "zmin",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.0,
+                            "vmax": 3.4028234663852886e+38,
+                            "vmin": -3.4028234663852886e+38
                         }
                     },
                     {
@@ -514,6 +568,60 @@
                             "type": 13,
                             "type_string": "String",
                             "value": "data3"
+                        },
+                        "xmax": {
+                            "label": "xmax",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 3.4028234663852886e+38,
+                            "vmin": -3.4028234663852886e+38
+                        },
+                        "xmin": {
+                            "label": "xmin",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.0,
+                            "vmax": 3.4028234663852886e+38,
+                            "vmin": -3.4028234663852886e+38
+                        },
+                        "ymax": {
+                            "label": "ymax",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 3.4028234663852886e+38,
+                            "vmin": -3.4028234663852886e+38
+                        },
+                        "ymin": {
+                            "label": "ymin",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.0,
+                            "vmax": 3.4028234663852886e+38,
+                            "vmin": -3.4028234663852886e+38
+                        },
+                        "zmax": {
+                            "label": "zmax",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 3.4028234663852886e+38,
+                            "vmin": -3.4028234663852886e+38
+                        },
+                        "zmin": {
+                            "label": "zmin",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.0,
+                            "vmax": 3.4028234663852886e+38,
+                            "vmin": -3.4028234663852886e+38
                         }
                     },
                     {
@@ -553,38 +661,38 @@
             "graph": {
                 "comments": [
                     {
-                        "comment_text": "Cloud data (x, y, values) are used as (x, y, z) and additional data can be provided (here the distance to the nearest neighbor).",
+                        "comment_text": "In this graph ExportPointsToPly and ExportCloudToPly actually output the same file, but ExportPointsToPly.",
                         "position": [
-                            726.7946693828487,
-                            367.6194890907816
-                        ]
-                    },
-                    {
-                        "comment_text": "The value carried by each point is set to be the distance to the elevation of the input heightmap.",
-                        "position": [
-                            108.35445291919388,
-                            -147.8178265112019
-                        ]
-                    },
-                    {
-                        "comment_text": "The value carried by each point is set to be the distance to its nearest neighbor.",
-                        "position": [
-                            30.37688443469156,
-                            281.8932010922107
+                            749.0499877929688,
+                            -622.7999877929688
                         ]
                     },
                     {
                         "comment_text": "Extract the value carried by each point of the Cloud.",
                         "position": [
-                            330.5228131389021,
-                            301.0895028487765
+                            330.5228271484375,
+                            301.0895080566406
                         ]
                     },
                     {
-                        "comment_text": "In this graph ExportPointsToPly and ExportCloudToPly actually output the same file, but ExportPointsToPly.",
+                        "comment_text": "The value carried by each point is set to be the distance to its nearest neighbor.",
                         "position": [
-                            749.0499913442378,
-                            -622.8000029968816
+                            30.37688446044922,
+                            281.8931884765625
+                        ]
+                    },
+                    {
+                        "comment_text": "The value carried by each point is set to be the distance to the elevation of the input heightmap.",
+                        "position": [
+                            108.35445404052734,
+                            -147.8178253173828
+                        ]
+                    },
+                    {
+                        "comment_text": "Cloud data (x, y, values) are used as (x, y, z) and additional data can be provided (here the distance to the nearest neighbor).",
+                        "position": [
+                            726.794677734375,
+                            367.6194763183594
                         ]
                     }
                 ],
@@ -594,57 +702,15 @@
                 "links": [
                     {
                         "link_type": 2,
-                        "node_in_id": "11",
+                        "node_in_id": "7",
                         "node_out_id": "9",
                         "port_in_id": "point_data1",
                         "port_out_id": "v"
                     },
                     {
                         "link_type": 2,
-                        "node_in_id": "11",
-                        "node_out_id": "10",
-                        "port_in_id": "z",
-                        "port_out_id": "v"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "11",
-                        "node_out_id": "10",
-                        "port_in_id": "y",
-                        "port_out_id": "y"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "11",
-                        "node_out_id": "10",
-                        "port_in_id": "x",
-                        "port_out_id": "x"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "10",
-                        "node_out_id": "6",
-                        "port_in_id": "cloud",
-                        "port_out_id": "out"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "6",
-                        "node_out_id": "5",
-                        "port_in_id": "cloud",
-                        "port_out_id": "cloud"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "6",
-                        "node_out_id": "2",
-                        "port_in_id": "heightmap",
-                        "port_out_id": "output"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "7",
-                        "node_out_id": "6",
+                        "node_in_id": "9",
+                        "node_out_id": "8",
                         "port_in_id": "cloud",
                         "port_out_id": "out"
                     },
@@ -657,14 +723,56 @@
                     },
                     {
                         "link_type": 2,
-                        "node_in_id": "9",
-                        "node_out_id": "8",
+                        "node_in_id": "7",
+                        "node_out_id": "6",
                         "port_in_id": "cloud",
                         "port_out_id": "out"
                     },
                     {
                         "link_type": 2,
-                        "node_in_id": "7",
+                        "node_in_id": "6",
+                        "node_out_id": "2",
+                        "port_in_id": "heightmap",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "6",
+                        "node_out_id": "5",
+                        "port_in_id": "cloud",
+                        "port_out_id": "cloud"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "10",
+                        "node_out_id": "6",
+                        "port_in_id": "cloud",
+                        "port_out_id": "out"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "11",
+                        "node_out_id": "10",
+                        "port_in_id": "x",
+                        "port_out_id": "x"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "11",
+                        "node_out_id": "10",
+                        "port_in_id": "y",
+                        "port_out_id": "y"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "11",
+                        "node_out_id": "10",
+                        "port_in_id": "z",
+                        "port_out_id": "v"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "11",
                         "node_out_id": "9",
                         "port_in_id": "point_data1",
                         "port_out_id": "v"
@@ -672,46 +780,11 @@
                 ],
                 "nodes": [
                     {
-                        "caption": "ExportPointsToPly",
-                        "id": "11",
-                        "is_widget_visible": true,
-                        "scene_position.x": 740.2390004760886,
-                        "scene_position.y": -549.8500777742156
-                    },
-                    {
                         "caption": "CloudToVectors",
-                        "id": "10",
+                        "id": "9",
                         "is_widget_visible": true,
-                        "scene_position.x": 453.3925211109677,
-                        "scene_position.y": -545.1901135729248
-                    },
-                    {
-                        "caption": "GaborWaveFbm",
-                        "id": "2",
-                        "is_widget_visible": true,
-                        "scene_position.x": -323.9467819002278,
-                        "scene_position.y": -137.90158099837987
-                    },
-                    {
-                        "caption": "CloudRandom",
-                        "id": "5",
-                        "is_widget_visible": true,
-                        "scene_position.x": -317.1086165881273,
-                        "scene_position.y": -497.4773405971013
-                    },
-                    {
-                        "caption": "CloudSetValuesFromHeightmap",
-                        "id": "6",
-                        "is_widget_visible": true,
-                        "scene_position.x": 106.39700038387141,
-                        "scene_position.y": -428.23176599465154
-                    },
-                    {
-                        "caption": "ExportCloudToPly",
-                        "id": "7",
-                        "is_widget_visible": true,
-                        "scene_position.x": 719.7957664045998,
-                        "scene_position.y": 28.55118887071029
+                        "scene_position.x": 312.332763671875,
+                        "scene_position.y": -24.75225257873535
                     },
                     {
                         "caption": "CloudSetValuesFromMinDistance",
@@ -721,11 +794,46 @@
                         "scene_position.y": 17.09726333618164
                     },
                     {
-                        "caption": "CloudToVectors",
-                        "id": "9",
+                        "caption": "ExportCloudToPly",
+                        "id": "7",
                         "is_widget_visible": true,
-                        "scene_position.x": 312.33276076788974,
-                        "scene_position.y": -24.752252880416506
+                        "scene_position.x": 719.7957763671875,
+                        "scene_position.y": 28.551189422607422
+                    },
+                    {
+                        "caption": "CloudSetValuesFromHeightmap",
+                        "id": "6",
+                        "is_widget_visible": true,
+                        "scene_position.x": 106.39700317382813,
+                        "scene_position.y": -428.2317810058594
+                    },
+                    {
+                        "caption": "CloudRandom",
+                        "id": "5",
+                        "is_widget_visible": true,
+                        "scene_position.x": -317.1086120605469,
+                        "scene_position.y": -497.4773254394531
+                    },
+                    {
+                        "caption": "GaborWaveFbm",
+                        "id": "2",
+                        "is_widget_visible": true,
+                        "scene_position.x": -323.94677734375,
+                        "scene_position.y": -137.90158081054688
+                    },
+                    {
+                        "caption": "CloudToVectors",
+                        "id": "10",
+                        "is_widget_visible": true,
+                        "scene_position.x": 453.39251708984375,
+                        "scene_position.y": -545.1901245117188
+                    },
+                    {
+                        "caption": "ExportPointsToPly",
+                        "id": "11",
+                        "is_widget_visible": true,
+                        "scene_position.x": 740.239013671875,
+                        "scene_position.y": -549.85009765625
                     }
                 ],
                 "viewers": [
@@ -962,5 +1070,5 @@
             }
         }
     },
-    "saved_at": "2025-11-13_09:12:03"
+    "saved_at": "2025-11-13_09:56:12"
 }
