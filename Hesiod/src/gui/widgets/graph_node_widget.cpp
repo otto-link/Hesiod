@@ -688,7 +688,18 @@ void GraphNodeWidget::on_graph_settings_request()
 
     for (auto &[id, _] : this->p_graph_node->get_nodes())
     {
-      gfx_node_ref_map[id] = this->get_graphics_node_by_id(id);
+      gngui::GraphicsNode *p_gfx = this->get_graphics_node_by_id(id);
+      if (p_gfx)
+      {
+        gfx_node_ref_map[id] = this->get_graphics_node_by_id(id);
+      }
+      else
+      {
+        Logger::log()->critical(
+            "GraphNodeWidget::on_graph_settings_request: GraphicsNode "
+            "ref is nullptr for id {}",
+            id);
+      }
     }
 
     // serialize only the model graph node (not the GUI)
@@ -706,8 +717,17 @@ void GraphNodeWidget::on_graph_settings_request()
     {
       gngui::NodeProxy *p_proxy = this->p_graph_node->get_node_ref_by_id<BaseNode>(id)
                                       ->get_proxy_ref();
-      gfx_node_ref_map.at(id)->set_p_node_proxy(p_proxy);
-      gfx_node_ref_map.at(id)->setSelected(false);
+
+      if (gfx_node_ref_map.contains(id))
+      {
+        gfx_node_ref_map.at(id)->set_p_node_proxy(p_proxy);
+        gfx_node_ref_map.at(id)->setSelected(false);
+      }
+      else
+      {
+        Logger::log()->critical(
+            "GraphNodeWidget::on_graph_settings_request: GraphicsNode ptr not in map");
+      }
     }
 
     // set selection back, Qt mystery, this needs to be delayed to be effective
@@ -973,6 +993,17 @@ void GraphNodeWidget::on_nodes_paste_request()
 void GraphNodeWidget::on_viewport_request()
 {
   Logger::log()->trace("GraphNodeWidget::on_viewport_request");
+
+  for (auto &[id, _] : this->p_graph_node->get_nodes())
+  {
+    gngui::GraphicsNode *p_gfx = this->get_graphics_node_by_id(id);
+    if (!p_gfx)
+    {
+      Logger::log()->critical("GraphNodeWidget::on_graph_settings_request: GraphicsNode "
+                              "ref is nullptr for id {}",
+                              id);
+    }
+  }
 
   this->data_viewers.push_back(std::make_unique<Viewer3D>(this));
   this->data_viewers.back()->show();

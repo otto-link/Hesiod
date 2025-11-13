@@ -26,6 +26,8 @@
 #include "hesiod/model/graph/graph_node.hpp"
 #include "hesiod/model/utils.hpp"
 
+namespace fs = std::filesystem;
+
 namespace hesiod
 {
 
@@ -206,10 +208,10 @@ void HesiodApplication::on_export_batch()
 
     QCoreApplication::processEvents(); // render progress dialog
 
-    const std::filesystem::path project_path = this->context.project_model->get_path();
+    const fs::path project_path = this->context.project_model->get_path();
 
     // build export path based on project name, if available
-    std::filesystem::path export_path = project_path.filename();
+    fs::path export_path = project_path.filename();
     if (export_path.empty())
       export_path = "export";
     else
@@ -225,17 +227,17 @@ void HesiodApplication::on_export_batch()
                         export_path.string());
 
     // create it
-    if (!std::filesystem::exists(export_path))
+    if (!fs::exists(export_path))
     {
       Logger::log()->trace("MainWindow::on_export_batch: creating export repertory {}",
                            export_path.string());
-      std::filesystem::create_directories(export_path);
+      fs::create_directories(export_path);
     }
 
     // --- save an hesiod file and tweak it
 
     // save graph node to a temporary file
-    std::filesystem::path fname = export_path / "hesiod_bake.hsd";
+    fs::path fname = export_path / "hesiod_bake.hsd";
     this->save_project_model_and_ui(fname.string());
 
     // force auto_export for export nodes and overwrite export paths
@@ -286,7 +288,7 @@ void HesiodApplication::on_load()
 {
   Logger::log()->trace("HesiodApplication::on_load");
 
-  std::filesystem::path path = this->context.project_model->get_path();
+  fs::path path = this->context.project_model->get_path();
 
   QString load_fname = QFileDialog::getOpenFileName(this->main_window.get(),
                                                     "Load...",
@@ -347,7 +349,7 @@ void HesiodApplication::on_save()
 {
   Logger::log()->trace("HesiodApplication::on_save");
 
-  std::filesystem::path path = this->context.project_model->get_path();
+  fs::path path = this->context.project_model->get_path();
 
   if (path.empty())
     this->on_save_as();
@@ -362,7 +364,7 @@ void HesiodApplication::on_save_as()
 {
   Logger::log()->trace("HesiodApplication::on_save_as");
 
-  std::filesystem::path path = this->context.project_model->get_path();
+  fs::path path = this->context.project_model->get_path();
 
   QString new_fname = QFileDialog::getSaveFileName(this->main_window.get(),
                                                    "Save as...",
@@ -380,7 +382,7 @@ void HesiodApplication::on_save_copy()
 {
   Logger::log()->trace("HesiodApplication::on_save_copy");
 
-  std::filesystem::path path = this->context.project_model->get_path();
+  fs::path path = this->context.project_model->get_path();
 
   Logger::log()->trace("{}", path.string());
 
@@ -388,7 +390,7 @@ void HesiodApplication::on_save_copy()
     this->on_save_as();
   else
   {
-    std::filesystem::path fname = insert_before_extension(path, "_" + time_stamp());
+    fs::path fname = insert_before_extension(path, "_" + time_stamp());
     this->save_project_model_and_ui(fname.string());
   }
 }
@@ -400,16 +402,14 @@ void HesiodApplication::save_backup(const std::string &fname)
   // if the file exists, create a backup
   const std::string fname_ext = ensure_extension(fname, ".hsd").string();
 
-  if (std::filesystem::exists(fname_ext))
+  if (fs::exists(fname_ext))
   {
-    std::filesystem::path original_path(fname_ext);
-    std::filesystem::path backup_path = insert_before_extension(original_path, ".bak");
+    fs::path original_path(fname_ext);
+    fs::path backup_path = insert_before_extension(original_path, ".bak");
 
     try
     {
-      std::filesystem::copy_file(original_path,
-                                 backup_path,
-                                 std::filesystem::copy_options::overwrite_existing);
+      fs::copy_file(original_path, backup_path, fs::copy_options::overwrite_existing);
       Logger::log()->trace("HesiodApplication::save_backup: backup created: {}",
                            backup_path.string());
     }
@@ -432,9 +432,40 @@ void HesiodApplication::save_project_model_and_ui(const std::string &fname)
   if (this->context.app_settings.global.save_backup_file)
     this->save_backup(fname);
 
+  // create a copy before saving
+  fs::path file_path(fname);
+
+  if (fs::exists(file_path))
+  {
+    try
+    {
+      // create a temp folder if it doesn't exist
+      fs::path temp_dir = fs::temp_directory_path() / "hesiod_temp";
+      fs::create_directories(temp_dir);
+
+      // copy file to temp folder with same filename
+      fs::path backup_path = temp_dir / file_path.filename();
+      fs::copy_file(file_path, backup_path, fs::copy_options::overwrite_existing);
+
+      Logger::log()->trace("HesiodApplication::save_project_model_and_ui: backup of "
+                           "existing file saved to temporary folder: {}",
+                           backup_path.string());
+
+      // now delete the existing file
+      fs::remove(file_path);
+    }
+    catch (const std::exception &e)
+    {
+      Logger::log()->error("HesiodApplication::save_project_model_and_ui: Error handling "
+                           "existing file '{}': {}",
+                           fname,
+                           e.what());
+    }
+  }
+
+  // proceed with saving
   this->context.save_project_model(fname);
   this->context.project_model->set_is_dirty(false);
-
   this->project_ui->save_ui_state(fname);
 
   // add some global info
