@@ -273,6 +273,7 @@ nav:
     - 'node_reference/nodes/WaveSine.md'
     - 'node_reference/nodes/WaveSquare.md'
     - 'node_reference/nodes/WaveTriangular.md'
+    - 'node_reference/nodes/WaveletNoise.md'
     - 'node_reference/nodes/White.md'
     - 'node_reference/nodes/WhiteDensityMap.md'
     - 'node_reference/nodes/WhiteSparse.md'

@@ -14,6 +14,12 @@ A manual brush tool for directly painting heightmaps, allowing interactive terra
 
 
 Primitive/Authoring
+# Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|background|Heightmap|No description|
+
 # Outputs
 
 |Name|Type|Description|

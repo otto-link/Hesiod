@@ -30,10 +30,17 @@ void setup_distance_transform_node(BaseNode *p_node)
            enum_mappings.distance_transform_type_map,
            "Approx. (fast)");
   ADD_ATTR(BoolAttribute, "reverse_input", false);
-  ADD_ATTR(FloatAttribute, "threshold", 0.5f, -1.f, 2.f);
+  ADD_ATTR(FloatAttribute, "threshold", 0.f, -1.f, 2.f);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"transform_type", "reverse_input", "threshold"});
+  p_node->set_attr_ordered_key({"_GROUPBOX_BEGIN_Main parameters",
+                                "transform_type",
+                                "_GROUPBOX_END_",
+                                //
+                                "_GROUPBOX_BEGIN_Input preprocessing",
+                                "reverse_input",
+                                "threshold",
+                                "_GROUPBOX_END_"});
 
   setup_post_process_heightmap_attributes(p_node);
 }
@@ -70,6 +77,9 @@ void compute_distance_transform_node(BaseNode *p_node)
           {
           case hmap::DistanceTransformType::DT_EXACT:
             *pa_out = hmap::distance_transform(*pa_out);
+            break;
+          case hmap::DistanceTransformType::DT_JFA:
+            *pa_out = hmap::gpu::distance_transform_jfa(*pa_out);
             break;
           case hmap::DistanceTransformType::DT_MANHATTAN:
             *pa_out = hmap::distance_transform_manhattan(*pa_out);

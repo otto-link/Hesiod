@@ -768,6 +768,12 @@
             }
         },
         "ports": {
+            "background": {
+                "caption": "background",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
             "out": {
                 "caption": "out",
                 "data_type": "Heightmap",
@@ -16894,6 +16900,129 @@
                 "caption": "output",
                 "data_type": "Heightmap",
                 "description": "WaveTriangular heightmap.",
+                "type": "output"
+            }
+        }
+    },
+    "WaveletNoise": {
+        "category": "Primitive/Coherent",
+        "description": "No description available",
+        "label": "WaveletNoise",
+        "parameters": {
+            "density": {
+                "description": "No description",
+                "key": "density",
+                "label": "density",
+                "type": "Float"
+            },
+            "kw": {
+                "description": "No description",
+                "key": "kw",
+                "label": "kw",
+                "type": "Wavenumber"
+            },
+            "kw_multiplier": {
+                "description": "No description",
+                "key": "kw_multiplier",
+                "label": "kw_multiplier",
+                "type": "Float"
+            },
+            "lacunarity": {
+                "description": "No description",
+                "key": "lacunarity",
+                "label": "lacunarity",
+                "type": "Float"
+            },
+            "octaves": {
+                "description": "No description",
+                "key": "octaves",
+                "label": "octaves",
+                "type": "Integer"
+            },
+            "persistence": {
+                "description": "No description",
+                "key": "persistence",
+                "label": "persistence",
+                "type": "Float"
+            },
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "post_inverse",
+                "type": "Bool"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
+                "type": "Float"
+            },
+            "seed": {
+                "description": "No description",
+                "key": "seed",
+                "label": "seed",
+                "type": "Random seed number"
+            },
+            "vorticity": {
+                "description": "No description",
+                "key": "vorticity",
+                "label": "vorticity",
+                "type": "Float"
+            },
+            "weight": {
+                "description": "No description",
+                "key": "weight",
+                "label": "weight",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "control": {
+                "caption": "control",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "dx": {
+                "caption": "dx",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "dy": {
+                "caption": "dy",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "envelope": {
+                "caption": "envelope",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "Heightmap",
+                "description": "No description",
                 "type": "output"
             }
         }

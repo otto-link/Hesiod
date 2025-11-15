@@ -1,0 +1,555 @@
+{
+    "Hesiod version": "v0.4.1",
+    "bake_config": {
+        "force_auto_export": true,
+        "force_distributed": true,
+        "nvariants": 0,
+        "rename_export_files": true,
+        "resolution": 1024
+    },
+    "graph_manager": {
+        "export_param": {
+            "export_path": "",
+            "ids": [],
+            "overlap": 0.5,
+            "shape.x": 1024,
+            "shape.y": 1024,
+            "tiling.x": 4,
+            "tiling.y": 4
+        },
+        "graph_nodes": {
+            "graph": {
+                "id": "graph",
+                "id_count": 7,
+                "links": [
+                    {
+                        "node_id_from": "6",
+                        "node_id_to": "5",
+                        "port_id_from": "output",
+                        "port_id_to": "control"
+                    }
+                ],
+                "model_config": {
+                    "overlap": 0.5,
+                    "shape.x": 1024,
+                    "shape.y": 1024,
+                    "tiling.x": 4,
+                    "tiling.y": 4
+                },
+                "nodes": [
+                    {
+                        "density": {
+                            "label": "density",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        },
+                        "id": "5",
+                        "kw": {
+                            "label": "kw",
+                            "link_xy": true,
+                            "type": 17,
+                            "type_string": "Wavenumber",
+                            "value": [
+                                2.0,
+                                2.0
+                            ],
+                            "vmax": 3.4028234663852886e+38,
+                            "vmin": 0.0
+                        },
+                        "kw_multiplier": {
+                            "label": "kw_multiplier",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 2.669999361038208,
+                            "vmax": 3.4028234663852886e+38,
+                            "vmin": 0.0
+                        },
+                        "label": "WaveletNoise",
+                        "lacunarity": {
+                            "label": "lacunarity",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 2.0,
+                            "vmax": 4.0,
+                            "vmin": 0.009999999776482582
+                        },
+                        "octaves": {
+                            "label": "octaves",
+                            "type": 10,
+                            "type_string": "Integer",
+                            "value": 8,
+                            "vmax": 32,
+                            "vmin": 0
+                        },
+                        "persistence": {
+                            "label": "persistence",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.5,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        },
+                        "post_gain": {
+                            "label": "post_gain",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 10.0,
+                            "vmin": 0.009999999776482582
+                        },
+                        "post_inverse": {
+                            "label": "post_inverse",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "post_remap": {
+                            "is_active": true,
+                            "label": "post_remap",
+                            "type": 11,
+                            "type_string": "Value range",
+                            "value": [
+                                0.0,
+                                1.0
+                            ],
+                            "vmax": 2.0,
+                            "vmin": -1.0
+                        },
+                        "post_saturate": {
+                            "is_active": false,
+                            "label": "post_saturate",
+                            "type": 11,
+                            "type_string": "Value range",
+                            "value": [
+                                0.0,
+                                1.0
+                            ],
+                            "vmax": 2.0,
+                            "vmin": -1.0
+                        },
+                        "post_smoothing_radius": {
+                            "label": "post_smoothing_radius",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.0,
+                            "vmax": 0.05000000074505806,
+                            "vmin": 0.0
+                        },
+                        "seed": {
+                            "label": "seed",
+                            "type": 12,
+                            "type_string": "Random seed number",
+                            "value": 0
+                        },
+                        "vorticity": {
+                            "label": "vorticity",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.0,
+                            "vmax": 10.0,
+                            "vmin": 0.0
+                        },
+                        "weight": {
+                            "label": "weight",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.699999988079071,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        }
+                    },
+                    {
+                        "GPU": {
+                            "label": "GPU",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": true
+                        },
+                        "id": "6",
+                        "kw": {
+                            "label": "kw",
+                            "link_xy": true,
+                            "type": 17,
+                            "type_string": "Wavenumber",
+                            "value": [
+                                2.0,
+                                2.0
+                            ],
+                            "vmax": 3.4028234663852886e+38,
+                            "vmin": 0.0
+                        },
+                        "label": "NoiseFbm",
+                        "lacunarity": {
+                            "label": "lacunarity",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 2.0,
+                            "vmax": 4.0,
+                            "vmin": 0.009999999776482582
+                        },
+                        "noise_type": {
+                            "choice": "OpenSimplex2",
+                            "label": "noise_type",
+                            "type": 4,
+                            "type_string": "Enumeration",
+                            "value": 4
+                        },
+                        "octaves": {
+                            "label": "octaves",
+                            "type": 10,
+                            "type_string": "Integer",
+                            "value": 8,
+                            "vmax": 32,
+                            "vmin": 0
+                        },
+                        "persistence": {
+                            "label": "persistence",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.5,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        },
+                        "post_gain": {
+                            "label": "post_gain",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 10.0,
+                            "vmin": 0.009999999776482582
+                        },
+                        "post_inverse": {
+                            "label": "post_inverse",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "post_remap": {
+                            "is_active": true,
+                            "label": "post_remap",
+                            "type": 11,
+                            "type_string": "Value range",
+                            "value": [
+                                0.0,
+                                0.3020833730697632
+                            ],
+                            "vmax": 2.0,
+                            "vmin": -1.0
+                        },
+                        "post_saturate": {
+                            "is_active": false,
+                            "label": "post_saturate",
+                            "type": 11,
+                            "type_string": "Value range",
+                            "value": [
+                                0.0,
+                                1.0
+                            ],
+                            "vmax": 2.0,
+                            "vmin": -1.0
+                        },
+                        "post_smoothing_radius": {
+                            "label": "post_smoothing_radius",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.0,
+                            "vmax": 0.05000000074505806,
+                            "vmin": 0.0
+                        },
+                        "seed": {
+                            "label": "seed",
+                            "type": 12,
+                            "type_string": "Random seed number",
+                            "value": 0
+                        },
+                        "weight": {
+                            "label": "weight",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.699999988079071,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        }
+                    }
+                ],
+                "origin": [
+                    0.0,
+                    0.0
+                ],
+                "rotation_angle": 0.0,
+                "size": [
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "graph_order": [
+            "graph"
+        ],
+        "id_count": 0
+    },
+    "graph_manager_widget": {
+        "frames": {
+            "graph": {
+                "current_bg_tag": "NONE"
+            }
+        }
+    },
+    "graph_tabs_widget": {
+        "graph_node_widgets": {
+            "graph": {
+                "comments": [],
+                "current_link_type": 2,
+                "groups": [],
+                "id": "graph",
+                "links": [
+                    {
+                        "link_type": 2,
+                        "node_in_id": "5",
+                        "node_out_id": "6",
+                        "port_in_id": "control",
+                        "port_out_id": "output"
+                    }
+                ],
+                "nodes": [
+                    {
+                        "caption": "NoiseFbm",
+                        "id": "6",
+                        "is_widget_visible": true,
+                        "scene_position.x": -231.87178703079772,
+                        "scene_position.y": -588.2063458462519
+                    },
+                    {
+                        "caption": "WaveletNoise",
+                        "id": "5",
+                        "is_widget_visible": true,
+                        "scene_position.x": 54.41794212655404,
+                        "scene_position.y": -473.2866683343517
+                    }
+                ],
+                "viewers": [
+                    {
+                        "current_node_id": "",
+                        "height": 1057,
+                        "is_node_pinned": false,
+                        "label": "3D Renderer",
+                        "renderer": {
+                            "add_ambiant_occlusion": false,
+                            "add_atmospheric_scattering": false,
+                            "add_fog": false,
+                            "add_water_foam": true,
+                            "add_water_waves": true,
+                            "alpha_x": 1.3600883483886719,
+                            "alpha_y": -15.661110877990723,
+                            "ambiant_occlusion_radius": 3,
+                            "ambiant_occlusion_strength": 5.0,
+                            "angle_spread_ratio": 0.0,
+                            "animate_waves": false,
+                            "apply_tonemap": false,
+                            "auto_rotate_camera": false,
+                            "auto_rotate_light": false,
+                            "bypass_shadow_map": false,
+                            "bypass_texture_albedo": false,
+                            "camera": {
+                                "far_plane": 100.0,
+                                "fov": 0.7850000262260437,
+                                "near_plane": 0.10000000149011612,
+                                "position": {
+                                    "x": -0.029155977070331573,
+                                    "y": 2.9105770587921143,
+                                    "z": -0.6218389272689819
+                                },
+                                "target": {
+                                    "x": 0.0,
+                                    "y": 0.0,
+                                    "z": 0.0
+                                },
+                                "up": {
+                                    "x": 0.0,
+                                    "y": 1.0,
+                                    "z": 0.0
+                                }
+                            },
+                            "color_deep_water": {
+                                "x": 0.0,
+                                "y": 0.15000000596046448,
+                                "z": 0.3499999940395355
+                            },
+                            "color_shallow_water": {
+                                "x": 0.25,
+                                "y": 0.8500000238418579,
+                                "z": 0.800000011920929
+                            },
+                            "distance": 2.9764058589935303,
+                            "foam_color": {
+                                "x": 1.0,
+                                "y": 1.0,
+                                "z": 1.0
+                            },
+                            "foam_depth": 0.004999999888241291,
+                            "fog_color": {
+                                "x": 1.0,
+                                "y": 1.0,
+                                "z": 1.0
+                            },
+                            "fog_density": 50.0,
+                            "fog_height": 0.10000000149011612,
+                            "fog_scattering_ratio": 0.699999988079071,
+                            "fog_strength": 0.5,
+                            "gamma_correction": 2.0,
+                            "height": 966,
+                            "hmap_h": 0.4000000059604645,
+                            "hmap_h0": 0.0,
+                            "hmap_w": 2.0,
+                            "light": {
+                                "position": {
+                                    "x": -6.122223854064941,
+                                    "y": 4.997701168060303,
+                                    "z": 6.127100467681885
+                                },
+                                "target": {
+                                    "x": 0.0,
+                                    "y": 0.0,
+                                    "z": 0.0
+                                }
+                            },
+                            "light_distance": 10.0,
+                            "light_phi": -0.7850000262260437,
+                            "light_theta": 0.5233333706855774,
+                            "mie_color": {
+                                "x": 1.0,
+                                "y": 0.800000011920929,
+                                "z": 0.699999988079071
+                            },
+                            "normal_map_scaling": 1.0,
+                            "normal_visualization": true,
+                            "pan_offset": {
+                                "x": 0.0,
+                                "y": 0.0
+                            },
+                            "rayleigh_color": {
+                                "x": 0.4000000059604645,
+                                "y": 0.6000000238418579,
+                                "z": 1.0
+                            },
+                            "render_hmap": true,
+                            "render_path": true,
+                            "render_plane": true,
+                            "render_points": true,
+                            "render_rocks": true,
+                            "render_trees": true,
+                            "render_type": 1,
+                            "render_water": true,
+                            "scale_h": 1.0,
+                            "scattering_density": 0.10000000149011612,
+                            "shadow_strength": 0.8999999761581421,
+                            "target": {
+                                "x": 0.0,
+                                "y": 0.0,
+                                "z": 0.0
+                            },
+                            "title": "",
+                            "viewer2d_settings.cmap": 3,
+                            "viewer2d_settings.hillshading": true,
+                            "viewer2d_settings.offset": {
+                                "x": 0.0,
+                                "y": 0.0
+                            },
+                            "viewer2d_settings.sun_azimuth": 1.5700000524520874,
+                            "viewer2d_settings.sun_zenith": 1.0466667413711548,
+                            "viewer2d_settings.zoom": 0.8999999761581421,
+                            "water_color_depth": 0.014999999664723873,
+                            "water_spec_strength": 0.5,
+                            "waves_alpha": 0.5233333706855774,
+                            "waves_amplitude": 0.004999999888241291,
+                            "waves_kw": 256.0,
+                            "waves_normal_amplitude": 0.019999999552965164,
+                            "waves_speed": 0.20000000298023224,
+                            "width": 1916,
+                            "wireframe_mode": false,
+                            "x": 2,
+                            "y": 91
+                        },
+                        "view_param_map": {
+                            "1": {
+                                "color": "",
+                                "elevation": "output",
+                                "normal_map": "",
+                                "path": "",
+                                "points": "",
+                                "water_depth": ""
+                            },
+                            "2": {
+                                "color": "",
+                                "elevation": "output",
+                                "normal_map": "",
+                                "path": "",
+                                "points": "",
+                                "water_depth": ""
+                            },
+                            "3": {
+                                "color": "texture",
+                                "elevation": "elevation",
+                                "normal_map": "normal map",
+                                "path": "path",
+                                "points": "cloud",
+                                "water_depth": "water_depth"
+                            },
+                            "4": {
+                                "color": "",
+                                "elevation": "input",
+                                "normal_map": "",
+                                "path": "",
+                                "points": "",
+                                "water_depth": "water_depth"
+                            },
+                            "5": {
+                                "color": "",
+                                "elevation": "output",
+                                "normal_map": "",
+                                "path": "",
+                                "points": "",
+                                "water_depth": ""
+                            },
+                            "6": {
+                                "color": "",
+                                "elevation": "output",
+                                "normal_map": "",
+                                "path": "",
+                                "points": "",
+                                "water_depth": ""
+                            }
+                        },
+                        "viewer_type": 0,
+                        "width": 1920,
+                        "x": 1920,
+                        "y": 23
+                    }
+                ]
+            }
+        }
+    },
+    "saved_at": "2025-11-15_14:30:08"
+}

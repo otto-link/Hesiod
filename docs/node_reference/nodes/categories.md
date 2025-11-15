@@ -34,7 +34,7 @@ Node Categories
 |Operator|Tiling|MakePeriodic, MakePeriodicStitching|
 |Operator|Transform|Rotate, Translate, Warp, Zoom|
 |Primitive|Authoring|Brush, Ridgelines|
-|Primitive|Coherent|Dendry, GaborWaveFbm, Gavoronoise, HemisphereFieldFbm, Noise, NoiseFbm, NoiseIq, NoiseJordan, NoiseParberry, NoisePingpong, NoiseRidged, NoiseSwiss, PolygonField, PolygonFieldFbm, Stamping, Vorolines, VorolinesFbm, Voronoi, VoronoiFbm, Voronoise, Vororand|
+|Primitive|Coherent|Dendry, GaborWaveFbm, Gavoronoise, HemisphereFieldFbm, Noise, NoiseFbm, NoiseIq, NoiseJordan, NoiseParberry, NoisePingpong, NoiseRidged, NoiseSwiss, PolygonField, PolygonFieldFbm, Stamping, Vorolines, VorolinesFbm, Voronoi, VoronoiFbm, Voronoise, Vororand, WaveletNoise|
 |Primitive|Function|Bump, BumpLorentzian, Cone, ConeComplex, ConeSigmoid, Constant, GaussianPulse, Paraboloid, Rift, Slope, Step, WaveDune, WaveSine, WaveSquare, WaveTriangular|
 |Primitive|Geological|Badlands, BasaltField, Caldera, Crater, MountainCone, MountainInselberg, MountainRangeRadial, MountainStump, MountainTibesti, ShatteredPeak|
 |Primitive|Kernel|KernelDiskSmooth, KernelGabor, KernelPrim|

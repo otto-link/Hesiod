@@ -56,6 +56,7 @@ static struct EnumMappings
       {"Exact", hmap::DistanceTransformType::DT_EXACT},
       {"Approx. (fast)", hmap::DistanceTransformType::DT_APPROX},
       {"Manhattan (fast)", hmap::DistanceTransformType::DT_MANHATTAN},
+      {"Jump flooding (GPU)", hmap::DistanceTransformType::DT_JFA},
   };
 
   const std::map<std::string, int> erosion_profile_map = {
