@@ -34,7 +34,7 @@ void setup_expand_shrink_node(BaseNode *p_node)
   ADD_ATTR(IntAttribute, "iterations", 1, 1, 10);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"_GROUPBOX_BEGIN_Main parameters",
+  p_node->set_attr_ordered_key({"_GROUPBOX_BEGIN_Main Parameters",
                                 "kernel",
                                 "radius",
                                 "shrink",

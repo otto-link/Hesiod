@@ -50,7 +50,7 @@ void setup_blend3_node(BaseNode *p_node)
   ADD_ATTR(RangeAttribute, "remap");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"_GROUPBOX_BEGIN_Main parameters",
+  p_node->set_attr_ordered_key({"_GROUPBOX_BEGIN_Main Parameters",
                                 "_TEXT_Blending 1 & 2",
                                 "blending_method1",
                                 "k1",

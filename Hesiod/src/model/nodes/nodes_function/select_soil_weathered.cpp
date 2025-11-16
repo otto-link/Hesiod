@@ -38,7 +38,7 @@ void setup_select_soil_weathered_node(BaseNode *p_node)
   ADD_ATTR(FloatAttribute, "curvature_clamping", 1.f, 0.f, FLT_MAX, "{:.4f}");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"_GROUPBOX_BEGIN_Main parameters",
+  p_node->set_attr_ordered_key({"_GROUPBOX_BEGIN_Main Parameters",
                                 "_TEXT_Weights",
                                 "curvature_weight",
                                 "gradient_weight",

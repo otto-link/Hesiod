@@ -34,7 +34,7 @@ void setup_select_soil_flow_node(BaseNode *p_node)
   ADD_ATTR(FloatAttribute, "flow_gamma", 1.f, 0.01f, 4.f);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"_GROUPBOX_BEGIN_Main parameters",
+  p_node->set_attr_ordered_key({"_GROUPBOX_BEGIN_Main Parameters",
                                 "_TEXT_Weights & Blending",
                                 "gradient_weight",
                                 "flow_weight",

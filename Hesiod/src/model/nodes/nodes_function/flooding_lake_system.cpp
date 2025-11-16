@@ -28,7 +28,7 @@ void setup_flooding_lake_system_node(BaseNode *p_node)
   ADD_ATTR(FloatAttribute, "mininal_radius", 0.05f, 0.f, 0.5f);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"_GROUPBOX_BEGIN_Main parameters",
+  p_node->set_attr_ordered_key({"_GROUPBOX_BEGIN_Main Parameters",
                                 "iterations",
                                 "epsilon",
                                 "_GROUPBOX_END_",

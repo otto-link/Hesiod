@@ -29,7 +29,7 @@ void setup_morphological_top_hat_node(BaseNode *p_node)
 
   // attribute(s) order
   p_node->set_attr_ordered_key(
-      {"_GROUPBOX_BEGIN_Main parameters", "radius", "top_hat", "_GROUPBOX_END_"});
+      {"_GROUPBOX_BEGIN_Main Parameters", "radius", "top_hat", "_GROUPBOX_END_"});
 
   setup_post_process_heightmap_attributes(p_node);
 }

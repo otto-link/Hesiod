@@ -43,7 +43,7 @@ void setup_mountain_stump_node(BaseNode *p_node)
   ADD_ATTR(Vec2FloatAttribute, "center");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"_GROUPBOX_BEGIN_Main parameters",
+  p_node->set_attr_ordered_key({"_GROUPBOX_BEGIN_Main Parameters",
                                 "_TEXT_Base Terrain Shape",
                                 "elevation",
                                 "scale",

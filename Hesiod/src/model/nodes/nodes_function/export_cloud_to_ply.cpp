@@ -48,7 +48,7 @@ void setup_export_cloud_to_ply_node(BaseNode *p_node)
   ADD_ATTR(FloatAttribute, "zmax", 1.f, -FLT_MAX, FLT_MAX);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"_GROUPBOX_BEGIN_Main parameters",
+  p_node->set_attr_ordered_key({"_GROUPBOX_BEGIN_Main Parameters",
                                 "fname",
                                 "auto_export",
                                 "_GROUPBOX_END_",

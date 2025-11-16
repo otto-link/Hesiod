@@ -204,22 +204,22 @@ void setup_post_process_heightmap_attributes(BaseNode *p_node, bool add_mix)
 
   if (add_mix)
   {
-    ADD_ATTR(EnumAttribute,
-             "post_mix_method",
-             enum_mappings.blending_method_map,
-             "replace");
-    ADD_ATTR(FloatAttribute, "post_mix", 1.f, 0.f, 1.f);
+    p_node->add_attr<EnumAttribute>("post_mix_method",
+                                    "Mix Method",
+                                    enum_mappings.blending_method_map,
+                                    "replace");
+    p_node->add_attr<FloatAttribute>("post_mix", "Mix Factor", 1.f, 0.f, 1.f);
   }
 
-  ADD_ATTR(BoolAttribute, "post_inverse", false);
-  ADD_ATTR(FloatAttribute, "post_gain", 1.f, 0.01f, 10.f);
-  ADD_ATTR(FloatAttribute, "post_smoothing_radius", 0.f, 0.f, 0.05f);
-  ADD_ATTR(RangeAttribute, "post_remap");
-  ADD_ATTR(RangeAttribute, "post_saturate", false);
-
+  p_node->add_attr<BoolAttribute>("post_inverse", "Invert Output", false);
+  p_node->add_attr<FloatAttribute>("post_gain", "Gain", 1.f, 0.01f, 10.f);
+  p_node->add_attr<FloatAttribute>("post_smoothing_radius", "Smoothing Radius", 0.f, 0.f, 0.05f);
+  p_node->add_attr<RangeAttribute>("post_remap", "Remap Range");
+  p_node->add_attr<RangeAttribute>("post_saturate", "Saturation Range", false);
+  
   std::vector<std::string> *p_keys = p_node->get_attr_ordered_key_ref();
 
-  p_keys->push_back("_GROUPBOX_BEGIN_Post-processing");
+  p_keys->push_back("_GROUPBOX_BEGIN_Post-Processing");
 
   if (add_mix)
   {

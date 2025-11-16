@@ -38,7 +38,7 @@ void setup_gabor_wave_fbm_node(BaseNode *p_node)
   ADD_ATTR(FloatAttribute, "lacunarity", 2.f, 0.01f, 4.f);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"_GROUPBOX_BEGIN_Main parameters",
+  p_node->set_attr_ordered_key({"_GROUPBOX_BEGIN_Main Parameters",
                                 "_TEXT_Frequency",
                                 "kw",
                                 "_TEXT_Orientation",

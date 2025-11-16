@@ -25,11 +25,15 @@ void setup_water_mask_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "mask", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(FloatAttribute, "additional_depth", 0.f, 0.f, 0.2f);
+  p_node->add_attr<FloatAttribute>("additional_depth",
+                                   "Additional Water Depth",
+                                   0.f,
+                                   0.f,
+                                   0.2f);
 
   // attribute(s) order
   p_node->set_attr_ordered_key(
-      {"_GROUPBOX_BEGIN_Main parameters", "additional_depth", "_GROUPBOX_END_"});
+      {"_GROUPBOX_BEGIN_Main Parameters", "additional_depth", "_GROUPBOX_END_"});
 
   setup_post_process_heightmap_attributes(p_node);
 }

@@ -33,7 +33,7 @@ void setup_distance_transform_node(BaseNode *p_node)
   ADD_ATTR(FloatAttribute, "threshold", 0.f, -1.f, 2.f);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"_GROUPBOX_BEGIN_Main parameters",
+  p_node->set_attr_ordered_key({"_GROUPBOX_BEGIN_Main Parameters",
                                 "transform_type",
                                 "_GROUPBOX_END_",
                                 //
