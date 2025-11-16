@@ -213,10 +213,14 @@ void setup_post_process_heightmap_attributes(BaseNode *p_node, bool add_mix)
 
   p_node->add_attr<BoolAttribute>("post_inverse", "Invert Output", false);
   p_node->add_attr<FloatAttribute>("post_gain", "Gain", 1.f, 0.01f, 10.f);
-  p_node->add_attr<FloatAttribute>("post_smoothing_radius", "Smoothing Radius", 0.f, 0.f, 0.05f);
+  p_node->add_attr<FloatAttribute>("post_smoothing_radius",
+                                   "Smoothing Radius",
+                                   0.f,
+                                   0.f,
+                                   0.05f);
   p_node->add_attr<RangeAttribute>("post_remap", "Remap Range");
   p_node->add_attr<RangeAttribute>("post_saturate", "Saturation Range", false);
-  
+
   std::vector<std::string> *p_keys = p_node->get_attr_ordered_key_ref();
 
   p_keys->push_back("_GROUPBOX_BEGIN_Post-Processing");

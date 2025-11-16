@@ -23,6 +23,7 @@
 #include "hesiod/gui/widgets/graph_config_dialog.hpp"
 #include "hesiod/gui/widgets/graph_node_widget.hpp"
 #include "hesiod/gui/widgets/gui_utils.hpp"
+#include "hesiod/gui/widgets/node_info_dialog.hpp"
 #include "hesiod/gui/widgets/select_string_dialog.hpp"
 #include "hesiod/gui/widgets/viewers/viewer_3d.hpp"
 #include "hesiod/logger.hpp"
@@ -260,16 +261,23 @@ QWidget *GraphNodeWidget::create_toolbar_widget(QWidget                *parent,
     return btn;
   };
 
-  auto *update_btn = make_button(QStyle::SP_BrowserReload, "Force update");
-  auto *bckp_btn = make_button(QStyle::SP_DriveHDIcon, "Backup state");
-  auto *revert_btn = make_button(QStyle::SP_DialogCloseButton, "Revert state");
-  auto *load_btn = make_button(QStyle::SP_DialogOpenButton, "Load preset");
-  auto *save_btn = make_button(QStyle::SP_DialogSaveButton, "Save preset");
-  auto *reset_btn = make_button(QStyle::SP_MediaSkipBackward, "Reset settings");
+  auto *update_btn = make_button(QStyle::SP_BrowserReload, "Force Update");
+  auto *info_btn = make_button(QStyle::SP_FileDialogContentsView, "Node Information");
+  auto *bckp_btn = make_button(QStyle::SP_DriveHDIcon, "Backup State");
+  auto *revert_btn = make_button(QStyle::SP_DialogCloseButton, "Revert State");
+  auto *load_btn = make_button(QStyle::SP_DialogOpenButton, "Load Preset");
+  auto *save_btn = make_button(QStyle::SP_DialogSaveButton, "Save Preset");
+  auto *reset_btn = make_button(QStyle::SP_MediaSkipBackward, "Reset Settings");
   auto *help_btn = make_button(QStyle::SP_DialogHelpButton, "Help!");
 
-  for (auto *btn :
-       {update_btn, bckp_btn, revert_btn, load_btn, save_btn, reset_btn, help_btn})
+  for (auto *btn : {update_btn,
+                    info_btn,
+                    bckp_btn,
+                    revert_btn,
+                    load_btn,
+                    save_btn,
+                    reset_btn,
+                    help_btn})
     layout->addWidget(btn);
 
   layout->addStretch();
@@ -279,6 +287,14 @@ QWidget *GraphNodeWidget::create_toolbar_widget(QWidget                *parent,
   this->connect(update_btn,
                 &QToolButton::pressed,
                 [this, p_node]() { p_graph_node->update(p_node->get_id()); });
+
+  this->connect(info_btn,
+                &QToolButton::pressed,
+                [this, p_node]()
+                {
+                  if (p_node)
+                    this->on_node_info(p_node->get_id());
+                });
 
   this->connect(bckp_btn,
                 &QToolButton::pressed,
@@ -807,6 +823,25 @@ void GraphNodeWidget::on_node_deleted_request(const std::string &node_id)
   Q_EMIT this->node_deleted(this->get_id(), node_id);
 
   this->set_enabled(true);
+}
+
+void GraphNodeWidget::on_node_info(const std::string &node_id)
+{
+  Logger::log()->trace("GraphNodeWidget::on_node_info, node {}", node_id);
+
+  if (!node_id.empty())
+  {
+    BaseNode *p_node = this->p_graph_node->get_node_ref_by_id<BaseNode>(node_id);
+    if (!p_node)
+      return;
+
+    gngui::GraphicsNode *p_gx_node = this->get_graphics_node_by_id(node_id);
+    if (!p_gx_node)
+      return;
+
+    NodeInfoDialog dialog(p_node, p_gx_node);
+    dialog.exec();
+  }
 }
 
 void GraphNodeWidget::on_node_pinned(const std::string &node_id, bool state)

@@ -14,7 +14,7 @@ namespace hesiod
 
 AppSettingsWindow::AppSettingsWindow(QWidget *parent) : QWidget(parent)
 {
-  Logger::log()->error("AppSettingsWindow::AppSettingsWindow");
+  Logger::log()->trace("AppSettingsWindow::AppSettingsWindow");
 
   this->setWindowTitle("Hesiod - Application settings");
 

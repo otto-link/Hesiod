@@ -251,6 +251,9 @@ void BaseNode::json_from(nlohmann::json const &json)
   {
     this->set_id(json.value("id", this->get_id()));
 
+    if (json.contains("comment"))
+      this->set_comment(json["comment"]);
+
     for (auto &[key, attr] : this->attr)
     {
       if (json.contains(key))
@@ -277,6 +280,7 @@ nlohmann::json BaseNode::json_to() const
     }
     json["id"] = this->get_id();
     json["label"] = this->get_label();
+    json["comment"] = this->get_comment();
   }
   catch (const std::exception &e)
   {
@@ -360,6 +364,11 @@ void BaseNode::reseed(bool backward)
 void BaseNode::set_attr_ordered_key(const std::vector<std::string> &new_attr_ordered_key)
 {
   this->attr_ordered_key = new_attr_ordered_key;
+}
+
+void BaseNode::set_comment(const std::string &new_comment)
+{
+  this->comment = new_comment;
 }
 
 void BaseNode::set_compute_fct(std::function<void(BaseNode *p_node)> new_compute_fct)

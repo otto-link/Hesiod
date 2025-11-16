@@ -16,6 +16,8 @@ namespace hesiod
 
 std::string BaseNode::get_caption() const { return this->get_label(); }
 
+std::string BaseNode::get_comment() const { return this->comment; }
+
 void *BaseNode::get_data_ref(int port_index)
 {
   return this->get_value_ref_void(port_index);

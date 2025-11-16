@@ -73,6 +73,7 @@ public:
   std::string get_id() const override { return gnode::Node::get_id(); }
   void        set_id(const std::string &new_id) override { gnode::Node::set_id(new_id); }
   std::string get_category() const override { return this->category; }
+  void        set_comment(const std::string &new_comment);
   std::string get_node_type() const { return this->get_label(); }
 
   // --- Compute ---
@@ -93,6 +94,7 @@ public:
 
   // --- NodeProxy Interface (for GUI) ---
   std::string      get_caption() const override;
+  std::string      get_comment() const override;
   DataPreview     *get_data_preview_ref();
   void            *get_data_ref(int port_index) override;
   std::string      get_data_type(int port_index) const override;
@@ -115,6 +117,7 @@ private:
 
   std::vector<std::string>                   attr_ordered_key = {};
   std::string                                category;
+  std::string                                comment;
   std::shared_ptr<GraphConfig>               config;
   GraphNode                                 *p_graph_node; // belonging graph node
   nlohmann::json                             documentation;

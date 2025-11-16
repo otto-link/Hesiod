@@ -16,6 +16,8 @@ namespace hesiod
 FlattenConfigDialog::FlattenConfigDialog(FlattenConfig *p_export_param, QWidget *parent)
     : QDialog(parent), p_export_param(p_export_param)
 {
+  Logger::log()->trace("FlattenConfigDialog::FlattenConfigDialog");
+
   this->setWindowTitle("Hesiod - Graph flatten configuration");
 
   QGridLayout *layout = new QGridLayout(this);
