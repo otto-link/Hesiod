@@ -16555,13 +16555,43 @@
     },
     "WaterMask": {
         "category": "Hydrology",
-        "description": "No description available",
+        "description": "Computes a gradient-based water mask using an extended water-depth model. This produces a smooth mask indicating regions that become flooded when water depth is artificially increased by a specified amount. It can also be used to generate a transition mask between water and ground, useful for effects such as texturing a sand beach.",
         "label": "WaterMask",
         "parameters": {
             "additional_depth": {
-                "description": "No description",
+                "description": "Amount of additional water depth used to simulate how water would further spread over the terrain.",
                 "key": "additional_depth",
                 "label": "additional_depth",
+                "type": "Float"
+            },
+            "post_gain": {
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
+                "key": "post_gain",
+                "label": "post_gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
+                "key": "post_inverse",
+                "label": "post_inverse",
+                "type": "Bool"
+            },
+            "post_remap": {
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
+                "key": "post_remap",
+                "label": "post_remap",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "Modifies the amplitude of elevations by first clamping them to a given interval and then scaling them so that the restricted interval matches the original input range. This enhances contrast in elevation variations while maintaining overall structure.",
+                "key": "post_saturate",
+                "label": "post_saturate",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
+                "key": "post_smoothing_radius",
+                "label": "post_smoothing_radius",
                 "type": "Float"
             }
         },
@@ -16569,19 +16599,19 @@
             "elevation": {
                 "caption": "elevation",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Elevation map corresponding to the water depth grid.",
                 "type": "input"
             },
             "mask": {
                 "caption": "mask",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Output normalized water-extension mask, ranging from 0 to 1.",
                 "type": "output"
             },
             "water_depth": {
                 "caption": "water_depth",
                 "data_type": "Heightmap",
-                "description": "Output water depth map representing flooded areas.",
+                "description": "Input water depth map used to compute the extension of flooded zones.",
                 "type": "input"
             }
         }
@@ -16946,31 +16976,31 @@
                 "type": "Float"
             },
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "post_gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "post_inverse",
                 "type": "Bool"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "post_remap",
                 "type": "Value range"
             },
             "post_saturate": {
-                "description": "No description",
+                "description": "Modifies the amplitude of elevations by first clamping them to a given interval and then scaling them so that the restricted interval matches the original input range. This enhances contrast in elevation variations while maintaining overall structure.",
                 "key": "post_saturate",
                 "label": "post_saturate",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "post_smoothing_radius",
                 "type": "Float"

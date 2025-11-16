@@ -3,7 +3,7 @@ WaterMask Node
 ==============
 
 
-No description available
+Computes a gradient-based water mask using an extended water-depth model. This produces a smooth mask indicating regions that become flooded when water depth is artificially increased by a specified amount. It can also be used to generate a transition mask between water and ground, useful for effects such as texturing a sand beach.
 
 
 
@@ -18,20 +18,25 @@ Hydrology
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|elevation|Heightmap|No description|
-|water_depth|Heightmap|Output water depth map representing flooded areas.|
+|elevation|Heightmap|Elevation map corresponding to the water depth grid.|
+|water_depth|Heightmap|Input water depth map used to compute the extension of flooded zones.|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|mask|Heightmap|No description|
+|mask|Heightmap|Output normalized water-extension mask, ranging from 0 to 1.|
 
 # Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|additional_depth|Float|No description|
+|additional_depth|Float|Amount of additional water depth used to simulate how water would further spread over the terrain.|
+|post_gain|Float|Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.|
+|post_inverse|Bool|Inverts the output values after processing, flipping low and high values across the midrange.|
+|post_remap|Value range|Linearly remaps the output values to a specified target range (default is [0, 1]).|
+|post_saturate|Value range|Modifies the amplitude of elevations by first clamping them to a given interval and then scaling them so that the restricted interval matches the original input range. This enhances contrast in elevation variations while maintaining overall structure.|
+|post_smoothing_radius|Float|Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.|
 
 # Example
 
