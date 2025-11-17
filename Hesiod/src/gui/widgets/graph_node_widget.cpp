@@ -831,16 +831,8 @@ void GraphNodeWidget::on_node_info(const std::string &node_id)
 
   if (!node_id.empty())
   {
-    BaseNode *p_node = this->p_graph_node->get_node_ref_by_id<BaseNode>(node_id);
-    if (!p_node)
-      return;
-
-    gngui::GraphicsNode *p_gx_node = this->get_graphics_node_by_id(node_id);
-    if (!p_gx_node)
-      return;
-
-    NodeInfoDialog dialog(p_node, p_gx_node);
-    dialog.exec();
+    NodeInfoDialog *dialog = new NodeInfoDialog(this, node_id, this);
+    dialog->show();
   }
 }
 

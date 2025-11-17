@@ -35,6 +35,9 @@ namespace hesiod
 
 class GraphNode; // forward
 
+// helper
+std::string map_type_name(const std::string &typeid_name);
+
 // =====================================
 // BaseNode
 // =====================================

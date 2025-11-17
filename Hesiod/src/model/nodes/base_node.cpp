@@ -309,7 +309,8 @@ nlohmann::json BaseNode::node_parameters_to_json() const
       nlohmann::json    port_info;
       const std::string caption = this->get_port_caption(k);
 
-      port_info["type"] = (get_port_type(k) == gngui::PortType::IN) ? "input" : "output";
+      port_info["type"] = (this->get_port_type(k) == gngui::PortType::IN) ? "input"
+                                                                          : "output";
       port_info["caption"] = caption;
       port_info["data_type"] = map_type_name(this->get_data_type(k));
 

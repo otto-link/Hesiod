@@ -4,6 +4,7 @@
 #include <chrono>
 #include <fstream>
 #include <iomanip>
+#include <sstream>
 
 #include "nlohmann/json.hpp"
 
@@ -169,6 +170,16 @@ void json_to_file(const nlohmann::json &json,
   {
     Logger::log()->error("json_to_file: Could not open file {} to save JSON", fname);
   }
+}
+
+std::string ptr_as_string(void *ptr)
+{
+  if (!ptr)
+    return "0x0";
+
+  std::ostringstream oss;
+  oss << ptr;
+  return oss.str();
 }
 
 std::string remove_trailing_char(const std::string &input, char ch)

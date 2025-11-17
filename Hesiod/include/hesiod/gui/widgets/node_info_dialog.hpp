@@ -2,14 +2,21 @@
    License. The full license is in the file LICENSE, distributed with this software. */
 #pragma once
 #include <QDialog>
+#include <QGridLayout>
+#include <QPlainTextEdit>
+#include <QVBoxLayout>
 #include <QWidget>
 
-#include "gnodegui/graphics_node.hpp"
-
-#include "hesiod/model/nodes/base_node.hpp"
+#include "hesiod/gui/widgets/graph_node_widget.hpp"
 
 namespace hesiod
 {
+
+struct NodePointers
+{
+  BaseNode            *node = nullptr;
+  gngui::GraphicsNode *gfx = nullptr;
+};
 
 // =====================================
 // NodeInfoDialog
@@ -20,11 +27,28 @@ class NodeInfoDialog : public QDialog
 
 public:
   NodeInfoDialog() = default;
-  NodeInfoDialog(BaseNode            *p_node,
-                 gngui::GraphicsNode *p_gfx_node,
-                 QWidget             *parent = nullptr);
+  NodeInfoDialog(GraphNodeWidget   *p_graph_node_widget,
+                 const std::string &node_id,
+                 QWidget           *parent = nullptr);
+
+  void update_content();
 
 private:
+  void setup_connections();
+  void setup_layout();
+  void update_ports_content();
+
+  NodePointers get_node_pointers() const;
+  void         on_comment_text_changed();
+
+  // members
+  GraphNodeWidget *p_graph_node_widget;
+  std::string      node_id;
+
+  // UI
+  QVBoxLayout    *layout;
+  QGridLayout    *grid_ports;
+  QPlainTextEdit *editor;
 };
 
 } // namespace hesiod

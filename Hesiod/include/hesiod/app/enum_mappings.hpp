@@ -36,6 +36,12 @@ static struct EnumMappings
       {"soft", BlendingMethod::SOFT},
       {"substract", BlendingMethod::SUBSTRACT}};
 
+  const std::map<std::string, int> clamping_mode_map = {
+      {"Keep positive & clamp", hmap::ClampMode::POSITIVE_ONLY},
+      {"Keep negative & clamp", hmap::ClampMode::NEGATIVE_ONLY},
+      {"Clamp both", hmap::ClampMode::BOTH},
+      {"No clamping", hmap::ClampMode::NONE}};
+
   const std::map<std::string, int> cmap_map = {
       {"bone", hmap::Cmap::BONE},
       {"gray", hmap::Cmap::GRAY},
@@ -148,12 +154,6 @@ static struct EnumMappings
       {"Edge distance squared", hmap::VoronoiReturnType::EDGE_DISTANCE_SQUARED},
       {"Cell value", hmap::VoronoiReturnType::CONSTANT},
       {"Cell value * (F2 - F1)", hmap::VoronoiReturnType::CONSTANT_F2MF1_SQUARED}};
-
-  const std::map<std::string, int> clamping_mode_map = {
-      {"Keep positive & clamp", hmap::ClampMode::POSITIVE_ONLY},
-      {"Keep negative & clamp", hmap::ClampMode::NEGATIVE_ONLY},
-      {"Clamp both", hmap::ClampMode::BOTH},
-      {"No clamping", hmap::ClampMode::NONE}};
 } enum_mappings;
 
 } // namespace hesiod
