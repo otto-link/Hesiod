@@ -94,6 +94,8 @@ void NodeInfoDialog::setup_connections()
                     this->deleteLater();
                 });
 
+  // update when the graph node is modified (the node itself of the
+  // links)
   this->connect(
       this->p_graph_node_widget->get_p_graph_node(),
       &GraphNode::compute_finished,
@@ -103,6 +105,31 @@ void NodeInfoDialog::setup_connections()
         if (updated_node_id == this->node_id)
           this->update_content();
       });
+
+  this->connect(this->p_graph_node_widget,
+                &gngui::GraphViewer::connection_deleted,
+                this,
+                [this](const std::string &id_out,
+                       const std::string &,
+                       const std::string &,
+                       const std::string &,
+                       bool)
+                {
+                  if (id_out == this->node_id)
+                    this->update_content();
+                });
+
+  this->connect(this->p_graph_node_widget,
+                &gngui::GraphViewer::connection_finished,
+                this,
+                [this](const std::string &id_out,
+                       const std::string &,
+                       const std::string &,
+                       const std::string &)
+                {
+                  if (id_out == this->node_id)
+                    this->update_content();
+                });
 }
 
 void NodeInfoDialog::setup_layout()
@@ -206,13 +233,14 @@ void NodeInfoDialog::update_ports_content()
   {
     Row new_row;
     new_row.caption = ptrs.node->get_port_caption(k);
-    new_row.is_connected = ptrs.node->get_value_ref_void(
-                               ptrs.node->get_port_index(new_row.caption)) != nullptr;
+    new_row.is_connected = ptrs.node->is_port_connected(k);
 
-    std::string str_in = std::format("→[{}] ", new_row.is_connected ? "✓" : " ");
+    std::string str_ct = new_row.is_connected ? "✓" : " ";
+    std::string str_in = std::format("→[{}] ", str_ct);
+    std::string str_out = std::format(" [{}]→", str_ct);
 
     new_row.type = (ptrs.node->get_port_type(k) == gngui::PortType::IN) ? str_in
-                                                                        : " [●]→";
+                                                                        : str_out;
     new_row.data_type = map_type_name(ptrs.node->get_data_type(k));
 
     // data info
