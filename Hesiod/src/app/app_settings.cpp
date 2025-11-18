@@ -14,6 +14,7 @@ void AppSettings::json_from(nlohmann::json const &json)
 {
   Logger::log()->trace("AppSettings::json_from");
 
+  json_safe_get(json, "colors.bg_deep", colors.bg_deep);
   json_safe_get(json, "colors.bg_primary", colors.bg_primary);
   json_safe_get(json, "colors.bg_secondary", colors.bg_secondary);
   json_safe_get(json, "colors.text_primary", colors.text_primary);
@@ -104,6 +105,7 @@ nlohmann::json AppSettings::json_to() const
 
   nlohmann::json json;
 
+  json["colors.bg_deep"] = colors.bg_deep.name().toStdString();
   json["colors.bg_primary"] = colors.bg_primary.name().toStdString();
   json["colors.bg_secondary"] = colors.bg_secondary.name().toStdString();
   json["colors.text_primary"] = colors.text_primary.name().toStdString();

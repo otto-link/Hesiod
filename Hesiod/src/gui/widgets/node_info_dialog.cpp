@@ -12,6 +12,7 @@
 #include "highmap/geometry/path.hpp"
 #include "highmap/heightmap.hpp"
 
+#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/gui/widgets/gui_utils.hpp"
 #include "hesiod/gui/widgets/node_info_dialog.hpp"
 #include "hesiod/logger.hpp"
@@ -135,9 +136,14 @@ void NodeInfoDialog::setup_layout()
     QLabel *label = new QLabel("Ports");
     layout->addWidget(label);
 
-    this->grid_ports = new QGridLayout();
+    QWidget    *container = new QWidget(this);
+    std::string style = std::format(
+        "background-color: {};",
+        HSD_CTX.app_settings.colors.bg_deep.name().toStdString());
+    container->setStyleSheet(style.c_str());
+    this->grid_ports = new QGridLayout(container);
 
-    layout->addLayout(this->grid_ports);
+    layout->addWidget(container);
   }
 
   // --- comment

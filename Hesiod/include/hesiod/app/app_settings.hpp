@@ -19,6 +19,7 @@ struct AppSettings
   // --- Data
   struct Colors
   {
+    QColor bg_deep{"#191919"};
     QColor bg_primary{"#2B2B2B"};
     QColor bg_secondary{"#4B4B4B"};
     QColor text_primary{"#F4F4F5"};

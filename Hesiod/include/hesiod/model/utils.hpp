@@ -107,6 +107,7 @@ std::string insert_char_every_nth(const std::string &input,
                                   std::size_t        n,
                                   const std::string &chr);
 
+std::string ptr_as_string(void *ptr);
 std::string remove_trailing_char(const std::string &input, char ch);
 void        replace_all(std::string &str, const std::string &from, const std::string &to);
 std::vector<std::string> split_string(const std::string &string, char delimiter);

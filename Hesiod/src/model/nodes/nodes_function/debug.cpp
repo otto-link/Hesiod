@@ -1,8 +1,6 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-#include <sstream>
-
 #include <QLabel>
 
 #include "highmap/heightmap.hpp"
@@ -40,15 +38,11 @@ void setup_debug_node(BaseNode *p_node)
 
                       if (p_in)
                       {
-                        std::ostringstream oss;
-                        oss << p_in;
-                        std::string ptr_as_str = oss.str();
-
                         float min = p_in->min();
                         float max = p_in->max();
                         float avg = p_in->mean();
 
-                        msg += "- addr: " + ptr_as_str + "\n";
+                        msg += "- addr: " + ptr_as_string((void *)(p_in)) + "\n";
                         msg += "- min: " + std::to_string(min) + "\n";
                         msg += "- max: " + std::to_string(max) + "\n";
                         msg += "- avg: " + std::to_string(avg) + "\n";
