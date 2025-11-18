@@ -51,9 +51,12 @@ NodePointers NodeInfoDialog::get_node_pointers() const
   if (!this->p_graph_node_widget)
     return NodePointers();
 
-  return {this->p_graph_node_widget->get_p_graph_node()->get_node_ref_by_id<BaseNode>(
-              this->node_id),
-          this->p_graph_node_widget->get_graphics_node_by_id(this->node_id)};
+  BaseNode *node = this->p_graph_node_widget->get_p_graph_node()
+                       ->get_node_ref_by_id<BaseNode>(this->node_id);
+  gngui::GraphicsNode *gfx = this->p_graph_node_widget->get_graphics_node_by_id(
+      this->node_id);
+
+  return {node, gfx};
 }
 
 void NodeInfoDialog::on_comment_text_changed()
