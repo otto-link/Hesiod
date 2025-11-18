@@ -25,15 +25,19 @@ void setup_zeroed_edges_node(BaseNode *p_node)
   p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(FloatAttribute, "sigma", 2.f, 1.f, 4.f);
-  ADD_ATTR(EnumAttribute,
-           "distance_function",
-           enum_mappings.distance_function_map,
-           "Euclidian");
-  ADD_ATTR(RangeAttribute, "remap");
+  p_node->add_attr<FloatAttribute>("sigma", "Falloff Exponent", 2.f, 1.f, 4.f);
+  p_node->add_attr<EnumAttribute>("distance_function",
+                                  "Distance Function:",
+                                  enum_mappings.distance_function_map,
+                                  "Euclidian");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"sigma", "distance_function", "remap"});
+  p_node->set_attr_ordered_key({"_GROUPBOX_BEGIN_Main Parameters",
+                                "sigma",
+                                "distance_function",
+                                "_GROUPBOX_END_"});
+
+  setup_post_process_heightmap_attributes(p_node);
 }
 
 void compute_zeroed_edges_node(BaseNode *p_node)
@@ -73,16 +77,7 @@ void compute_zeroed_edges_node(BaseNode *p_node)
         p_node->get_config_ref()->hmap_transform_mode_cpu);
 
     // post-process
-    post_process_heightmap(p_node,
-                           *p_out,
-                           false, // inverse
-                           false, // smooth
-                           0,
-                           false, // saturate
-                           {0.f, 0.f},
-                           0.f,
-                           GET_MEMBER("remap", RangeAttribute, is_active),
-                           GET("remap", RangeAttribute));
+    post_process_heightmap(p_node, *p_out);
   }
 
   Q_EMIT p_node->compute_finished(p_node->get_id());

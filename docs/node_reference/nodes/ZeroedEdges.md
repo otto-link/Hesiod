@@ -31,9 +31,13 @@ Math/Boundaries
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|distance_function|Enumeration|Determines the method used for distance calculation. Options: Chebyshev, Euclidean, Euclidean/Chebyshev, Manhattan.|
-|remap|Value range|Specifies the output range for the operator. Defaults to [0, 1].|
-|sigma|Float|Controls the shape power law.|
+|Distance Function:|Enumeration|Determines the method used for distance calculation. Options: Chebyshev, Euclidean, Euclidean/Chebyshev, Manhattan.|
+|Gain|Float|No description|
+|Invert Output|Bool|No description|
+|Remap Range|Value range|No description|
+|Saturation Range|Value range|No description|
+|Smoothing Radius|Float|No description|
+|Falloff Exponent|Float|Controls the shape power law.|
 
 # Example
 

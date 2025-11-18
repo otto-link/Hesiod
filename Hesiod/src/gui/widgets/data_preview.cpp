@@ -226,6 +226,7 @@ void DataPreview::update_preview()
   }
 
   // ---- Build final QImage safely (copying data) ----
+  
   QImage image;
 
   if (!img.empty())
