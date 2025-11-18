@@ -1,6 +1,8 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General Public
    License. The full license is in the file LICENSE, distributed with this software. */
 #pragma once
+#include <memory>
+
 #include <QContextMenuEvent>
 #include <QLabel>
 
@@ -35,7 +37,7 @@ class DataPreview : public QLabel
 {
 public:
   DataPreview() = default;
-  DataPreview(gngui::NodeProxy *p_proxy_node);
+  DataPreview(std::weak_ptr<gngui::NodeProxy> wp_proxy_node);
 
   const QPixmap &get_preview_pixmap() const;
 
@@ -46,10 +48,10 @@ protected:
   void contextMenuEvent(QContextMenuEvent *event) override;
 
 private:
-  gngui::NodeProxy *p_proxy_node;
-  int               preview_port_index;
-  PreviewType       preview_type = PreviewType::GRAYSCALE;
-  QPixmap           preview_pixmap;
+  std::weak_ptr<gngui::NodeProxy> wp_proxy_node;
+  int                             preview_port_index;
+  PreviewType                     preview_type = PreviewType::GRAYSCALE;
+  QPixmap                         preview_pixmap;
 };
 
 } // namespace hesiod

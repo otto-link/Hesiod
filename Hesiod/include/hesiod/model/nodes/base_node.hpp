@@ -41,7 +41,10 @@ std::string map_type_name(const std::string &typeid_name);
 // =====================================
 // BaseNode
 // =====================================
-class BaseNode : public QWidget, public gnode::Node, public gngui::NodeProxy
+class BaseNode : public QWidget,
+                 public gnode::Node,
+                 public gngui::NodeProxy,
+                 public std::enable_shared_from_this<BaseNode>
 {
   Q_OBJECT
 

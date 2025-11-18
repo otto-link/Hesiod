@@ -22,15 +22,16 @@
 namespace hesiod
 {
 
-DataPreview::DataPreview(gngui::NodeProxy *p_proxy_node)
-    : QLabel(nullptr), p_proxy_node(p_proxy_node)
+DataPreview::DataPreview(std::weak_ptr<gngui::NodeProxy> wp_proxy_node)
+    : QLabel(nullptr), wp_proxy_node(wp_proxy_node)
 {
-  if (!this->p_proxy_node)
+  auto p_proxy = this->wp_proxy_node.lock();
+  if (!p_proxy)
     throw std::invalid_argument("DataPreview::DataPreview: p_proxy_node is nullptr");
 
   Logger::log()->trace("DataPreview::DataPreview, node {}({})",
-                       this->p_proxy_node->get_caption(),
-                       this->p_proxy_node->get_id());
+                       p_proxy->get_caption(),
+                       p_proxy->get_id());
 
   AppContext &ctx = HSD_CTX;
   const auto  shape = hmap::Vec2<int>(ctx.app_settings.node_editor.preview_h,
@@ -43,8 +44,8 @@ DataPreview::DataPreview(gngui::NodeProxy *p_proxy_node)
 
   // Select first output, or fallback to first port
   this->preview_port_index = 0;
-  for (int k = 0; k < this->p_proxy_node->get_nports(); ++k)
-    if (this->p_proxy_node->get_port_type(k) == gngui::PortType::OUT)
+  for (int k = 0; k < p_proxy->get_nports(); ++k)
+    if (p_proxy->get_port_type(k) == gngui::PortType::OUT)
     {
       this->preview_port_index = k;
       break;
@@ -55,6 +56,13 @@ DataPreview::DataPreview(gngui::NodeProxy *p_proxy_node)
 
 void DataPreview::contextMenuEvent(QContextMenuEvent *event)
 {
+  auto p_proxy = this->wp_proxy_node.lock();
+  if (!p_proxy)
+  {
+    Logger::log()->error("DataPreview::contextMenuEvent: p_proxy_node is nullptr");
+    return;
+  }
+
   QMenu context_menu(this);
   context_menu.addSection("Preview type");
 
@@ -67,9 +75,9 @@ void DataPreview::contextMenuEvent(QContextMenuEvent *event)
   }
 
   context_menu.addSection("Data");
-  for (int k = 0; k < p_proxy_node->get_nports(); ++k)
+  for (int k = 0; k < p_proxy->get_nports(); ++k)
   {
-    const std::string caption = p_proxy_node->get_port_caption(k);
+    const std::string caption = p_proxy->get_port_caption(k);
     QAction          *action = context_menu.addAction(QString::fromStdString(caption));
     action->setCheckable(true);
     if (k == preview_port_index)
@@ -89,8 +97,8 @@ void DataPreview::contextMenuEvent(QContextMenuEvent *event)
     }
 
     // Port selection
-    for (int k = 0; k < p_proxy_node->get_nports(); ++k)
-      if (p_proxy_node->get_port_caption(k) == label)
+    for (int k = 0; k < p_proxy->get_nports(); ++k)
+      if (p_proxy->get_port_caption(k) == label)
       {
         preview_port_index = k;
         update_preview();
@@ -103,14 +111,15 @@ const QPixmap &DataPreview::get_preview_pixmap() const { return this->preview_pi
 
 void DataPreview::update_preview()
 {
-  if (!p_proxy_node)
+  auto p_proxy = this->wp_proxy_node.lock();
+  if (!p_proxy)
   {
     Logger::log()->error("DataPreview::update_preview: p_proxy_node is nullptr");
     return;
   }
 
-  void             *blind_ptr = p_proxy_node->get_data_ref(preview_port_index);
-  const std::string data_type = p_proxy_node->get_data_type(preview_port_index);
+  void             *blind_ptr = p_proxy->get_data_ref(preview_port_index);
+  const std::string data_type = p_proxy->get_data_type(preview_port_index);
 
   AppContext &ctx = HSD_CTX;
   const auto  shape = hmap::Vec2<int>(ctx.app_settings.node_editor.preview_h,
@@ -226,7 +235,7 @@ void DataPreview::update_preview()
   }
 
   // ---- Build final QImage safely (copying data) ----
-  
+
   QImage image;
 
   if (!img.empty())

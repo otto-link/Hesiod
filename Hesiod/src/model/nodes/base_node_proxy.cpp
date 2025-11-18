@@ -58,7 +58,7 @@ QWidget *BaseNode::get_qwidget_ref()
   if (HSD_CTX.app_settings.interface.enable_data_preview_in_node_body)
   {
     if (!this->data_preview)
-      this->data_preview = new DataPreview(this);
+      this->data_preview = new DataPreview(this->shared_from_this());
     layout->addWidget(this->data_preview);
   }
 
