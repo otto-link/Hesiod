@@ -1,38 +1,49 @@
-project(hesiod)
+project(hesiod LANGUAGES CXX)
 
-include_directories(${OPENGL_INCLUDE_DIRS} ${GLEW_INCLUDE_DIRS}
-                    ${GLUT_INCLUDE_DIRS})
-
-# Qt6
+# ------------------------------
+# Qt6 setup
+# ------------------------------
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOMOC_VERBOSE ON)
 
-# --- sources GUI headers need to be added in add_executable, otherwise the moc
-# won't parse them
+# ------------------------------
+# Source files
+# ------------------------------
 file(GLOB_RECURSE HESIOD_GUI_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp)
-
 file(GLOB_RECURSE HESIOD_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
      ${CMAKE_CURRENT_SOURCE_DIR}/app/main.cpp)
 
-add_executable(${PROJECT_NAME} ${HESIOD_SOURCES} ${HESIOD_GUI_INCLUDES})
+# ------------------------------
+# Executable
+# ------------------------------
+add_executable(${PROJECT_NAME})
+target_sources(
+  ${PROJECT_NAME} PRIVATE ${HESIOD_SOURCES} ${HESIOD_GUI_INCLUDES} # needed for
+                                                                   # moc
+)
 
-set(HESIOD_INCLUDE PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include PRIVATE)
+# ------------------------------
+# Include directories
+# ------------------------------
+target_include_directories(
+  ${PROJECT_NAME}
+  PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_BINARY_DIR}/include
+          ${OPENGL_INCLUDE_DIRS} ${GLEW_INCLUDE_DIRS} ${GLUT_INCLUDE_DIRS})
 
+# ------------------------------
+# Compiler features
+# ------------------------------
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_20)
 
-target_include_directories(${PROJECT_NAME} PRIVATE ${HESIOD_INCLUDE}
-                                                   ${CMAKE_BINARY_DIR}/include)
-
-# data (two locations for convenience aka lazyness)
-file(COPY ${CMAKE_SOURCE_DIR}/Hesiod/data
-     DESTINATION ${EXECUTABLE_OUTPUT_PATH}/.)
-file(COPY ${CMAKE_SOURCE_DIR}/Hesiod/data
-     DESTINATION ${EXECUTABLE_OUTPUT_PATH}/../.)
-
+# ------------------------------
 # Link libraries
+# ------------------------------
 target_link_libraries(
   ${PROJECT_NAME}
-  PRIVATE args
+  PRIVATE hesiod_options
+          hesiod_platform
+          hesiod_qt_logging
+          args
           spdlog::spdlog
           nlohmann_json::nlohmann_json
           highmap
@@ -46,9 +57,24 @@ target_link_libraries(
           qterrain-renderer
           qtexture_downloader)
 
-# --- some checking
+# ------------------------------
+# Copy data folder for dev
+# ------------------------------
+set(HESIOD_DATA_DIR ${CMAKE_SOURCE_DIR}/Hesiod/data)
+add_custom_command(
+  TARGET ${PROJECT_NAME}
+  POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy_directory ${HESIOD_DATA_DIR}
+          $<TARGET_FILE_DIR:${PROJECT_NAME}>/data)
 
+# Optional second location (if you need parent folder for some legacy reason)
+add_custom_command(
+  TARGET ${PROJECT_NAME}
+  POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy_directory ${HESIOD_DATA_DIR}
+          $<TARGET_FILE_DIR:${PROJECT_NAME}>/../data)
+
+# ------------------------------
+# Build information messages
+# ------------------------------
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
-message(STATUS "Global flags: ${CMAKE_CXX_FLAGS}")
-message(STATUS "Debug flags: ${CMAKE_CXX_FLAGS_DEBUG}")
-message(STATUS "Release flags: ${CMAKE_CXX_FLAGS_RELEASE}")

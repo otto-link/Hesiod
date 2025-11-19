@@ -37,7 +37,7 @@ class DataPreview : public QLabel
 {
 public:
   DataPreview() = default;
-  DataPreview(std::weak_ptr<gngui::NodeProxy> wp_proxy_node);
+  DataPreview(std::weak_ptr<gngui::NodeProxy> wp_proxy_node, QWidget *parent = nullptr);
 
   const QPixmap &get_preview_pixmap() const;
 

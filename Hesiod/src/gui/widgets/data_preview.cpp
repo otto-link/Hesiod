@@ -22,8 +22,8 @@
 namespace hesiod
 {
 
-DataPreview::DataPreview(std::weak_ptr<gngui::NodeProxy> wp_proxy_node)
-    : QLabel(nullptr), wp_proxy_node(wp_proxy_node)
+DataPreview::DataPreview(std::weak_ptr<gngui::NodeProxy> wp_proxy_node, QWidget *parent)
+    : QLabel(parent), wp_proxy_node(wp_proxy_node)
 {
   auto p_proxy = this->wp_proxy_node.lock();
   if (!p_proxy)

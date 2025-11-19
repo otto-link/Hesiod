@@ -1,5 +1,6 @@
-project(external)
+project(external LANGUAGES CXX)
 
+# args
 include(args.cmake)
 
 # GNode
@@ -25,9 +26,5 @@ add_subdirectory(Attributes)
 # QTerrainRenderer
 add_subdirectory(QTerrainRenderer)
 
+# QTextureDownloader
 add_subdirectory(QTextureDownloader)
-
-# add it ony if it has not being added before by any other dependency
-if(NOT TARGET nlohmann_json)
-    add_subdirectory(json)
-endif()

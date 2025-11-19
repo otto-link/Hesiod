@@ -23,3 +23,6 @@ echo "- cmake-format"
 
 cmake-format -i CMakeLists.txt
 cmake-format -i Hesiod/CMakeLists.txt
+cmake-format -i cmake/HesiodCompilerOptions.cmake
+cmake-format -i cmake/HesiodPlatform.cmake
+cmake-format -i cmake/HesiodQtLoggingRules.cmake

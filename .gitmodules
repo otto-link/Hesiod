@@ -4,9 +4,6 @@
 [submodule "external/args"]
 	path = external/args
 	url = git@github.com:Taywee/args.git
-[submodule "external/json"]
-	path = external/json
-	url = git@github.com:nlohmann/json.git
 [submodule "external/GNodeGUI"]
 	path = external/GNodeGUI
 	url = git@github.com:otto-link/GNodeGUI.git
