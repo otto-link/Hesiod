@@ -3404,49 +3404,49 @@
             "auto_export": {
                 "description": "Controls whether the output file is automatically written when the node is updated. Default is false. When set to true, the file is saved automatically on updates. If false, use the 'Force Reload' button on the node to manually trigger the export.",
                 "key": "auto_export",
-                "label": "auto_export",
+                "label": "Automatic Export",
                 "type": "Bool"
             },
             "blending_method": {
                 "description": "Defines the method used to blend the normal map for small details.",
                 "key": "blending_method",
-                "label": "blending_method",
+                "label": "Blending Method",
                 "type": "Enumeration"
             },
             "detail_scaling": {
                 "description": "Scaling factor applied to the detail normal map.",
                 "key": "detail_scaling",
-                "label": "detail_scaling",
+                "label": "Detail Scale",
                 "type": "Float"
             },
             "elevation_scaling": {
                 "description": "Factor used to scale elevation values.",
                 "key": "elevation_scaling",
-                "label": "elevation_scaling",
+                "label": "Elevation Scale",
                 "type": "Float"
             },
             "export_format": {
                 "description": "Defines the file format for export. Available formats include Assimp Binary (*.assbin), Assxml Document (*.assxml), Autodesk 3DS (*.3ds), Autodesk FBX (ASCII/Binary) (*.fbx), COLLADA (*.dae), Extensible 3D (*.x3d), GL Transmission Format (GLB/GLTF v1 & v2), Stanford Polygon Library (*.ply), Step Files (*.stp), Stereolithography (*.stl), 3MF (*.3mf), and Wavefront OBJ (*.obj) with or without material files.",
                 "key": "export_format",
-                "label": "export_format",
+                "label": "Export Format",
                 "type": "Enumeration"
             },
             "fname": {
                 "description": "Specifies the name of the exported file.",
                 "key": "fname",
-                "label": "fname",
+                "label": "Export File",
                 "type": "Filename"
             },
             "max_error": {
                 "description": "Maximum allowable error when generating an optimized triangulated mesh.",
                 "key": "max_error",
-                "label": "max_error",
+                "label": "Max Error",
                 "type": "Float"
             },
             "mesh_type": {
                 "description": "Specifies the type of mesh geometry used. Options include 'triangles' and 'triangles (optimized)'.",
                 "key": "mesh_type",
-                "label": "mesh_type",
+                "label": "Mesh Type",
                 "type": "Enumeration"
             }
         },

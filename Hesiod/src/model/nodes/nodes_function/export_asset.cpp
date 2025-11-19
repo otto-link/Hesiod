@@ -30,12 +30,12 @@ void setup_export_asset_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FilenameAttribute>("fname",
-                                   "fname",
+                                   "Export File",
                                    std::filesystem::path("export"),
                                    "*",
                                    true);
 
-  node.add_attr<BoolAttribute>("auto_export", "auto_export", false);
+  node.add_attr<BoolAttribute>("auto_export", "Automatic Export", false);
 
   {
     // generate enumerate mappings
@@ -52,20 +52,20 @@ void setup_export_asset_node(BaseNode &node)
     std::string default_mesh_type = "triangles";
 
     node.add_attr<EnumAttribute>("export_format",
-                                 "export_format",
+                                 "Export Format",
                                  export_format_map,
                                  default_export_format);
     node.add_attr<EnumAttribute>("mesh_type",
-                                 "mesh_type",
+                                 "Mesh Type",
                                  export_mesh_map,
                                  default_mesh_type);
   }
 
-  node.add_attr<FloatAttribute>("max_error", "max_error", 5e-4f, 0.f, 0.01f);
-  node.add_attr<FloatAttribute>("elevation_scaling", "elevation_scaling", 0.2f, 0.f, 1.f);
-  node.add_attr<FloatAttribute>("detail_scaling", "detail_scaling", 1.f, 0.f, 4.f);
+  node.add_attr<FloatAttribute>("max_error", "Max Error", 5e-4f, 0.f, 0.01f);
+  node.add_attr<FloatAttribute>("elevation_scaling", "Elevation Scale", 0.2f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>("detail_scaling", "Detail Scale", 1.f, 0.f, 4.f);
   node.add_attr<EnumAttribute>("blending_method",
-                               "blending_method",
+                               "Blending Method",
                                hmap::normal_map_blending_method_as_string);
 
   // attribute(s) order
