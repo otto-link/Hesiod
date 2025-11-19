@@ -66,7 +66,7 @@ public:
   void reseed(bool backward);
 
   // --- Configuration ---
-  GraphConfig *get_config_ref() { return this->config.get(); }
+  GraphConfig *get_config_ref();
 
   // --- Runtime info ---
   NodeRuntimeInfo get_runtime_info() const;
@@ -74,11 +74,11 @@ public:
   void            update_runtime_info(NodeRuntimeStep step);
 
   // --- Identification ---
-  std::string get_id() const override { return gnode::Node::get_id(); }
-  void        set_id(const std::string &new_id) override { gnode::Node::set_id(new_id); }
-  std::string get_category() const override { return this->category; }
+  std::string get_id() const override;
+  void        set_id(const std::string &new_id) override;
+  std::string get_category() const override;
   void        set_comment(const std::string &new_comment);
-  std::string get_node_type() const { return this->get_label(); }
+  std::string get_node_type() const;
 
   // --- Compute ---
   void compute() override { this->compute_fct(this); }
@@ -91,7 +91,7 @@ public:
   nlohmann::json         node_parameters_to_json() const;
 
   // --- Documentation ---
-  nlohmann::json get_documentation() const { return this->documentation; }
+  nlohmann::json get_documentation() const;
   std::string    get_documentation_html() const;
   std::string    get_documentation_short() const;
   void           update_attributes_tool_tip();

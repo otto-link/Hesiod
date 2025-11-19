@@ -120,6 +120,10 @@ std::vector<std::string> *BaseNode::get_attr_ordered_key_ref()
   return &this->attr_ordered_key;
 };
 
+std::string BaseNode::get_category() const { return this->category; }
+
+GraphConfig *BaseNode::get_config_ref() { return this->config.get(); }
+
 DataPreview *BaseNode::get_data_preview_ref() { return this->data_preview; }
 
 std::string BaseNode::get_documentation_html() const
@@ -189,6 +193,8 @@ std::string BaseNode::get_documentation_html() const
   return html;
 }
 
+nlohmann::json BaseNode::get_documentation() const { return this->documentation; }
+
 std::string BaseNode::get_documentation_short() const
 {
   std::string str;
@@ -242,6 +248,8 @@ std::string BaseNode::get_documentation_short() const
 
   return str;
 }
+
+std::string BaseNode::get_id() const { return gnode::Node::get_id(); }
 
 float BaseNode::get_memory_usage() const
 {
@@ -299,7 +307,7 @@ float BaseNode::get_memory_usage() const
     return -1.f; // to signal not implemented types
 }
 
-NodeRuntimeInfo BaseNode::get_runtime_info() const { return this->runtime_info; }
+std::string BaseNode::get_node_type() const { return this->get_label(); }
 
 GraphNode *BaseNode::get_p_graph_node() const
 {
@@ -310,6 +318,8 @@ GraphNode *BaseNode::get_p_graph_node() const
 
   return this->p_graph_node;
 }
+
+NodeRuntimeInfo BaseNode::get_runtime_info() const { return this->runtime_info; }
 
 void BaseNode::json_from(nlohmann::json const &json)
 {
@@ -446,6 +456,8 @@ void BaseNode::set_compute_fct(std::function<void(BaseNode *p_node)> new_compute
 {
   this->compute_fct = std::move(new_compute_fct);
 }
+
+void BaseNode::set_id(const std::string &new_id) { gnode::Node::set_id(new_id); }
 
 void BaseNode::set_qwidget_fct(std::function<QWidget *(BaseNode *p_node)> new_qwidget_fct)
 {
