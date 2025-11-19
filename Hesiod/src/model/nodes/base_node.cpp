@@ -325,16 +325,6 @@ float BaseNode::get_memory_usage() const
 
 std::string BaseNode::get_node_type() const { return this->get_label(); }
 
-GraphNode *BaseNode::get_p_graph_node() const
-{
-  if (!this->p_graph_node)
-  {
-    Logger::log()->warn("BaseNode::get_p_graph_node: p_graph_node is nullptr");
-  }
-
-  return this->p_graph_node;
-}
-
 NodeRuntimeInfo BaseNode::get_runtime_info() const { return this->runtime_info; }
 
 void BaseNode::json_from(nlohmann::json const &json)

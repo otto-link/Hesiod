@@ -43,29 +43,6 @@ public:
   BaseNode(const std::string &label, std::weak_ptr<GraphConfig> config);
   ~BaseNode();
 
-  // --- Attribute Management ---
-  template <typename T, typename... Args>
-  void add_attr(const std::string &key, Args &&...args)
-  {
-    this->attr[key] = std::make_unique<T>(std::forward<Args>(args)...);
-  }
-
-  template <typename T> auto get_attr(const std::string &key) const -> decltype(auto)
-  {
-    return this->attr.at(key)->get_ref<T>()->get_value();
-  }
-
-  template <typename T> T *get_attr_ref(const std::string &key) const
-  {
-    return this->attr.at(key)->get_ref<T>();
-  }
-
-  std::vector<std::string> *get_attr_ordered_key_ref();
-  std::map<std::string, std::unique_ptr<attr::AbstractAttribute>> *get_attributes_ref();
-  void set_attr_ordered_key(const std::vector<std::string> &new_attr_ordered_key);
-
-  void reseed(bool backward);
-
   // --- Configuration ---
   std::shared_ptr<const GraphConfig> get_config_ref() const;
 
@@ -110,8 +87,32 @@ public:
   std::string      get_tool_tip_text() override;
 
   // --- Editor Connection ---
-  GraphNode *get_p_graph_node() const;
+  // GraphNode *get_graph_node_ref() const;
 
+  // --- Attribute Management ---
+  template <typename T, typename... Args>
+  void add_attr(const std::string &key, Args &&...args)
+  {
+    this->attr[key] = std::make_unique<T>(std::forward<Args>(args)...);
+  }
+
+  template <typename T> auto get_attr(const std::string &key) const -> decltype(auto)
+  {
+    return this->attr.at(key)->get_ref<T>()->get_value();
+  }
+
+  template <typename T> T *get_attr_ref(const std::string &key) const
+  {
+    return this->attr.at(key)->get_ref<T>();
+  }
+
+  std::vector<std::string> *get_attr_ordered_key_ref();
+  std::map<std::string, std::unique_ptr<attr::AbstractAttribute>> *get_attributes_ref();
+  void set_attr_ordered_key(const std::vector<std::string> &new_attr_ordered_key);
+
+  void reseed(bool backward);
+
+  // --- Signals ---
 signals:
   void compute_finished(const std::string &id);
   void compute_started(const std::string &id);
@@ -123,8 +124,7 @@ private:
   std::vector<std::string>                 attr_ordered_key = {};
   std::string                              category;
   std::string                              comment;
-  std::weak_ptr<GraphConfig>               config;       // owned by GraphNode
-  GraphNode                               *p_graph_node; // belonging graph node
+  std::weak_ptr<GraphConfig>               config; // owned by GraphNode
   nlohmann::json                           documentation;
   NodeRuntimeInfo                          runtime_info;
   std::function<void(BaseNode &node)>      compute_fct = nullptr;
