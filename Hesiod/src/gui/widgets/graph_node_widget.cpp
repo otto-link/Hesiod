@@ -683,7 +683,7 @@ void GraphNodeWidget::on_graph_settings_request()
   // work on a copy of the model configuration before
   // apllying modifications
   GraphConfig       new_model_config = *this->p_graph_node->get_config_ref();
-  GraphConfigDialog model_config_editor(&new_model_config);
+  GraphConfigDialog model_config_editor(new_model_config);
 
   int ret = model_config_editor.exec();
 

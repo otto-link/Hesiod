@@ -12,8 +12,8 @@
 namespace hesiod
 {
 
-GraphConfigDialog::GraphConfigDialog(GraphConfig *p_model_config, QWidget *parent)
-    : QDialog(parent), p_model_config(p_model_config)
+GraphConfigDialog::GraphConfigDialog(GraphConfig &config, QWidget *parent)
+    : QDialog(parent), config(config)
 {
   this->setWindowTitle("Hesiod - Model configuration");
 
@@ -29,27 +29,25 @@ GraphConfigDialog::GraphConfigDialog(GraphConfig *p_model_config, QWidget *paren
   this->slider_shape->setRange(8, 12); // 256 -> 4096
   this->slider_shape->setSingleStep(1);
   this->slider_shape->setPageStep(1);
-  int pos = static_cast<int>(std::log2(this->p_model_config->shape.x));
+  int pos = static_cast<int>(std::log2(this->config.shape.x));
   this->slider_shape->setValue(pos);
   layout->addWidget(this->slider_shape, row, 1);
 
-  this->label_shape = new QLabel(QString("%1x%2")
-                                     .arg(this->p_model_config->shape.x)
-                                     .arg(this->p_model_config->shape.y),
-                                 this);
+  this->label_shape = new QLabel(
+      QString("%1x%2").arg(this->config.shape.x).arg(this->config.shape.y),
+      this);
   layout->addWidget(this->label_shape, row, 2);
 
-  this->connect(this->slider_shape,
-                &QSlider::valueChanged,
-                [this]()
-                {
-                  int pos = this->slider_shape->value();
-                  this->p_model_config->set_shape(
-                      hmap::Vec2<int>(std::pow(2, pos), std::pow(2, pos)));
-                  this->label_shape->setText(QString("%1x%2")
-                                                 .arg(this->p_model_config->shape.x)
-                                                 .arg(this->p_model_config->shape.y));
-                });
+  this->connect(
+      this->slider_shape,
+      &QSlider::valueChanged,
+      [this]()
+      {
+        int pos = this->slider_shape->value();
+        this->config.set_shape(hmap::Vec2<int>(std::pow(2, pos), std::pow(2, pos)));
+        this->label_shape->setText(
+            QString("%1x%2").arg(this->config.shape.x).arg(this->config.shape.y));
+      });
 
   row++;
 
@@ -67,28 +65,27 @@ GraphConfigDialog::GraphConfigDialog(GraphConfig *p_model_config, QWidget *paren
   this->slider_tiling->setPageStep(1);
 
   // initialize slider to current tiling.x (must be power of two)
-  int current_exp = std::log2(this->p_model_config->tiling.x);
+  int current_exp = std::log2(this->config.tiling.x);
   this->slider_tiling->setValue(current_exp);
 
   layout->addWidget(this->slider_tiling, row, 1);
 
-  this->label_tiling = new QLabel(QString("%1x%2")
-                                      .arg(this->p_model_config->tiling.x)
-                                      .arg(this->p_model_config->tiling.y),
-                                  this);
+  this->label_tiling = new QLabel(
+      QString("%1x%2").arg(this->config.tiling.x).arg(this->config.tiling.y),
+      this);
   layout->addWidget(this->label_tiling, row, 2);
 
-  this->connect(this->slider_tiling,
-                &QSlider::valueChanged,
-                [this](int exp)
-                {
-                  int val = 1 << exp; // 2^exp
-                  this->p_model_config->tiling.x = val;
-                  this->p_model_config->tiling.y = val;
-                  this->label_tiling->setText(QString("%1x%2")
-                                                  .arg(this->p_model_config->tiling.x)
-                                                  .arg(this->p_model_config->tiling.y));
-                });
+  this->connect(
+      this->slider_tiling,
+      &QSlider::valueChanged,
+      [this](int exp)
+      {
+        int val = 1 << exp; // 2^exp
+        this->config.tiling.x = val;
+        this->config.tiling.y = val;
+        this->label_tiling->setText(
+            QString("%1x%2").arg(this->config.tiling.x).arg(this->config.tiling.y));
+      });
 
   row++;
 
@@ -100,15 +97,11 @@ GraphConfigDialog::GraphConfigDialog(GraphConfig *p_model_config, QWidget *paren
   this->slider_overlap->setRange(0, this->steps);
   this->slider_overlap->setSingleStep(1);
   this->slider_overlap->setPageStep(1);
-  pos = float_to_slider_pos(this->p_model_config->overlap,
-                            this->vmin,
-                            this->vmax,
-                            this->steps);
+  pos = float_to_slider_pos(this->config.overlap, this->vmin, this->vmax, this->steps);
   this->slider_overlap->setValue(pos);
   layout->addWidget(this->slider_overlap, row, 1);
 
-  this->label_overlap = new QLabel(QString::number(this->p_model_config->overlap, 'f', 2),
-                                   this);
+  this->label_overlap = new QLabel(QString::number(this->config.overlap, 'f', 2), this);
   layout->addWidget(this->label_overlap, row, 2);
 
   this->connect(this->slider_overlap,
@@ -120,7 +113,7 @@ GraphConfigDialog::GraphConfigDialog(GraphConfig *p_model_config, QWidget *paren
                                                 this->vmax,
                                                 this->steps);
                   this->label_overlap->setText(QString::number(v, 'f', 2));
-                  this->p_model_config->overlap = v;
+                  this->config.overlap = v;
                 });
 
   row++;
@@ -154,8 +147,8 @@ GraphConfigDialog::GraphConfigDialog(GraphConfig *p_model_config, QWidget *paren
     row++;
   };
 
-  add_transform_combobox("CPU", this->p_model_config->hmap_transform_mode_cpu);
-  add_transform_combobox("GPU", this->p_model_config->hmap_transform_mode_gpu);
+  add_transform_combobox("CPU", this->config.hmap_transform_mode_cpu);
+  add_transform_combobox("GPU", this->config.hmap_transform_mode_gpu);
 
   // --- buttons
   QDialogButtonBox *button_box = new QDialogButtonBox(QDialogButtonBox::Ok |

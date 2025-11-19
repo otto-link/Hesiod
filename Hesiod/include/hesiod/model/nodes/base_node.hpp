@@ -44,7 +44,7 @@ class BaseNode : public QWidget,
 public:
   // --- Constructors ---
   BaseNode() = default;
-  BaseNode(const std::string &label, const std::shared_ptr<GraphConfig> &config);
+  BaseNode(const std::string &label, std::weak_ptr<GraphConfig> config);
   ~BaseNode();
 
   // --- Attribute Management ---
@@ -66,7 +66,7 @@ public:
   void reseed(bool backward);
 
   // --- Configuration ---
-  GraphConfig *get_config_ref();
+  std::shared_ptr<const GraphConfig> get_config_ref() const;
 
   // --- Runtime info ---
   NodeRuntimeInfo get_runtime_info() const;
@@ -122,7 +122,7 @@ private:
   std::vector<std::string>                   attr_ordered_key = {};
   std::string                                category;
   std::string                                comment;
-  std::shared_ptr<GraphConfig>               config;
+  std::weak_ptr<GraphConfig>                 config;       // owned by GraphNode
   GraphNode                                 *p_graph_node; // belonging graph node
   nlohmann::json                             documentation;
   NodeRuntimeInfo                            runtime_info;

@@ -41,7 +41,7 @@ std::string map_type_name(const std::string &typeid_name)
 
 // --- class definition
 
-BaseNode::BaseNode(const std::string &label, const std::shared_ptr<GraphConfig> &config)
+BaseNode::BaseNode(const std::string &label, std::weak_ptr<GraphConfig> config)
     : gnode::Node(label), config(config)
 {
   Logger::log()->trace("BaseNode::BaseNode, label: {}", label);
@@ -122,7 +122,20 @@ std::vector<std::string> *BaseNode::get_attr_ordered_key_ref()
 
 std::string BaseNode::get_category() const { return this->category; }
 
-GraphConfig *BaseNode::get_config_ref() { return this->config.get(); }
+std::shared_ptr<const GraphConfig> BaseNode::get_config_ref() const
+{
+  auto ptr = config.lock();
+
+  if (!ptr)
+  {
+    Logger::log()->critical("BaseNode::get_category: Config ptr is nullptr, node: {}/{}",
+                            this->get_caption(),
+                            this->get_id());
+    throw std::runtime_error("Config ptr is nullptr.");
+  }
+
+  return ptr;
+}
 
 DataPreview *BaseNode::get_data_preview_ref() { return this->data_preview; }
 
@@ -254,7 +267,9 @@ std::string BaseNode::get_id() const { return gnode::Node::get_id(); }
 float BaseNode::get_memory_usage() const
 {
   // only count big float arrays
-  size_t unit = size_t(this->config->shape.x * this->config->shape.y) * sizeof(float);
+  size_t unit = size_t(this->get_config_ref()->shape.x *
+                       this->get_config_ref()->shape.y) *
+                sizeof(float);
   size_t count = 0;
 
   for (int k = 0; k < this->get_nports(); k++)

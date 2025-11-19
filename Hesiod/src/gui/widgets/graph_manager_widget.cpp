@@ -347,7 +347,7 @@ void GraphManagerWidget::on_new_graph_request()
 
   // get config from user
   auto              config = std::make_shared<hesiod::GraphConfig>();
-  GraphConfigDialog config_editor(config.get());
+  GraphConfigDialog config_editor(*config);
 
   {
     int ret = config_editor.exec();

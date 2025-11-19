@@ -1,6 +1,7 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General Public
    License. The full license is in the file LICENSE, distributed with this software. */
 #pragma once
+#include <memory>
 
 #include "nlohmann/json.hpp"
 
@@ -10,7 +11,7 @@
 namespace hesiod
 {
 
-struct GraphConfig
+struct GraphConfig : public std::enable_shared_from_this<GraphConfig>
 {
   // holds the data configuration shared by the graph and its nodes, here is to share for
   // instance the heightmap resolution

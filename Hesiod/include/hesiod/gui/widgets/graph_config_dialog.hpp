@@ -20,10 +20,10 @@ class GraphConfigDialog : public QDialog
 
 public:
   GraphConfigDialog() = default;
-  GraphConfigDialog(GraphConfig *p_model_config, QWidget *parent = nullptr);
+  GraphConfigDialog(GraphConfig &config, QWidget *parent = nullptr);
 
 private:
-  GraphConfig *p_model_config;
+  GraphConfig &config;
 
   QSlider *slider_shape;
   QLabel  *label_shape;

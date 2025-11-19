@@ -254,7 +254,16 @@ void NodeInfoDialog::update_info_content()
       {"Execution Count", std::to_string(info.eval_count)},
       {"Memory Usage", std::format("~{:.2f} MB", ptrs.node->get_memory_usage())},
       {"Address", ptr_as_string((void *)(ptrs.node))},
-  };
+      {"Config", ""},
+      {"- shape",
+       std::format("{}x{}",
+                   ptrs.node->get_config_ref()->shape.x,
+                   ptrs.node->get_config_ref()->shape.y)},
+      {"- tiling",
+       std::format("{}x{}",
+                   ptrs.node->get_config_ref()->tiling.x,
+                   ptrs.node->get_config_ref()->tiling.y)},
+      {"- overlap", std::format("{}", ptrs.node->get_config_ref()->overlap)}};
 
   // build layout
   QFont f("DejaVu Sans Mono", 9);
