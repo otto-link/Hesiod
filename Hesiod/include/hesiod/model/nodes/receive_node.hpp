@@ -37,7 +37,7 @@ public:
 
 private:
   BroadcastMap     *p_broadcast_params = nullptr; // owned by GraphManager
-  hmap::CoordFrame *p_coord_frame = nullptr;      // owned by GraphNode
+  hmap::CoordFrame *p_coord_frame = nullptr; // owned by GraphManger (part of GraphNode)
 };
 
 } // namespace hesiod
