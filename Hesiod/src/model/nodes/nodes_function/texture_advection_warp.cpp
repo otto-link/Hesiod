@@ -17,54 +17,54 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_texture_advection_warp_node(BaseNode *p_node)
+void setup_texture_advection_warp_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "elevation");
-  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "elevation");
+  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture");
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
+  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(FloatAttribute, "advection_length", 0.05f, 0.f, 0.2f);
-  ADD_ATTR(FloatAttribute, "value_persistence", 0.95f, 0.8f, 1.f);
+  ADD_ATTR(node, FloatAttribute, "advection_length", 0.05f, 0.f, 0.2f);
+  ADD_ATTR(node, FloatAttribute, "value_persistence", 0.95f, 0.8f, 1.f);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"advection_length", "value_persistence"});
+  node.set_attr_ordered_key({"advection_length", "value_persistence"});
 
-  setup_pre_process_mask_attributes(p_node);
+  setup_pre_process_mask_attributes(node);
 
-  add_deprecated_warning_label(p_node, "Use StrataTextureAdvectionParticle node.");
+  add_deprecated_warning_label(node, "Use StrataTextureAdvectionParticle node.");
 }
 
-void compute_texture_advection_warp_node(BaseNode *p_node)
+void compute_texture_advection_warp_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap     *p_z = p_node->get_value_ref<hmap::Heightmap>("elevation");
-  hmap::HeightmapRGBA *p_tex = p_node->get_value_ref<hmap::HeightmapRGBA>("texture");
+  hmap::Heightmap     *p_z = node.get_value_ref<hmap::Heightmap>("elevation");
+  hmap::HeightmapRGBA *p_tex = node.get_value_ref<hmap::HeightmapRGBA>("texture");
 
   if (p_z && p_tex)
   {
-    hmap::Heightmap     *p_mask = p_node->get_value_ref<hmap::Heightmap>("mask");
-    hmap::HeightmapRGBA *p_out = p_node->get_value_ref<hmap::HeightmapRGBA>("output");
+    hmap::Heightmap     *p_mask = node.get_value_ref<hmap::Heightmap>("mask");
+    hmap::HeightmapRGBA *p_out = node.get_value_ref<hmap::HeightmapRGBA>("output");
 
     // prepare mask
-    std::shared_ptr<hmap::Heightmap> sp_mask = pre_process_mask(p_node, p_mask, *p_z);
+    std::shared_ptr<hmap::Heightmap> sp_mask = pre_process_mask(node, p_mask, *p_z);
 
     // apply advection separetely to each RGBA channels
-    auto lambda = [p_node](hmap::Heightmap *p_z,
-                           hmap::Heightmap *p_field,
-                           hmap::Heightmap *p_mask,
-                           hmap::Heightmap *p_field_out)
+    auto lambda = [&node](hmap::Heightmap *p_z,
+                          hmap::Heightmap *p_field,
+                          hmap::Heightmap *p_mask,
+                          hmap::Heightmap *p_field_out)
     {
       hmap::transform(
           {p_field_out, p_z, p_field, p_mask},
-          [p_node](std::vector<hmap::Array *> p_arrays)
+          [&node](std::vector<hmap::Array *> p_arrays)
           {
             hmap::Array *pa_field_out = p_arrays[0];
             hmap::Array *pa_z = p_arrays[1];
@@ -74,11 +74,11 @@ void compute_texture_advection_warp_node(BaseNode *p_node)
             *pa_field_out = hmap::gpu::advection_warp(
                 *pa_z,
                 *pa_field,
-                GET("advection_length", FloatAttribute),
-                GET("value_persistence", FloatAttribute),
+                GET(node, "advection_length", FloatAttribute),
+                GET(node, "value_persistence", FloatAttribute),
                 pa_mask);
           },
-          p_node->get_config_ref()->hmap_transform_mode_gpu);
+          node.get_config_ref()->hmap_transform_mode_gpu);
     };
 
     for (int nch = 0; nch < 4; nch++)
@@ -88,7 +88,7 @@ void compute_texture_advection_warp_node(BaseNode *p_node)
     }
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

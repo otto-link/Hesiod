@@ -14,38 +14,38 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_merge_water_depths_node(BaseNode *p_node)
+void setup_merge_water_depths_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "depth1");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "depth2");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "water_depth", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "depth1");
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "depth2");
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "water_depth", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(FloatAttribute, "k_smooth", 0.f, 0.f, 0.1f, "{:.4f}");
+  ADD_ATTR(node, FloatAttribute, "k_smooth", 0.f, 0.f, 0.1f, "{:.4f}");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"k_smooth"});
+  node.set_attr_ordered_key({"k_smooth"});
 }
 
-void compute_merge_water_depths_node(BaseNode *p_node)
+void compute_merge_water_depths_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in1 = p_node->get_value_ref<hmap::Heightmap>("depth1");
-  hmap::Heightmap *p_in2 = p_node->get_value_ref<hmap::Heightmap>("depth2");
+  hmap::Heightmap *p_in1 = node.get_value_ref<hmap::Heightmap>("depth1");
+  hmap::Heightmap *p_in2 = node.get_value_ref<hmap::Heightmap>("depth2");
 
   if (p_in1 && p_in2)
   {
-    hmap::Heightmap *p_depth = p_node->get_value_ref<hmap::Heightmap>("water_depth");
+    hmap::Heightmap *p_depth = node.get_value_ref<hmap::Heightmap>("water_depth");
 
     hmap::transform(
         {p_depth, p_in1, p_in2},
-        [p_node](std::vector<hmap::Array *> p_arrays)
+        [&node](std::vector<hmap::Array *> p_arrays)
         {
           hmap::Array *pa_depth = p_arrays[0];
           hmap::Array *pa_in1 = p_arrays[1];
@@ -53,14 +53,14 @@ void compute_merge_water_depths_node(BaseNode *p_node)
 
           *pa_depth = hmap::merge_water_depths(*pa_in1,
                                                *pa_in2,
-                                               GET("k_smooth", FloatAttribute));
+                                               GET(node, "k_smooth", FloatAttribute));
         },
-        p_node->get_config_ref()->hmap_transform_mode_cpu);
+        node.get_config_ref()->hmap_transform_mode_cpu);
 
     p_depth->smooth_overlap_buffers();
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

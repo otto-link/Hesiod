@@ -14,56 +14,56 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_path_dig_node(BaseNode *p_node)
+void setup_path_dig_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Path>(gnode::PortType::IN, "path");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Path>(gnode::PortType::IN, "path");
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(FloatAttribute, "width", 0.001f, 0.f, 0.1f);
-  ADD_ATTR(FloatAttribute, "decay", 0.001f, 0.f, 0.1f);
-  ADD_ATTR(FloatAttribute, "flattening_radius", 0.001f, 0.f, 0.1f);
-  ADD_ATTR(FloatAttribute, "depth", 0.f, -0.2f, 0.2f);
-  ADD_ATTR(BoolAttribute, "force_downhill", false);
+  ADD_ATTR(node, FloatAttribute, "width", 0.001f, 0.f, 0.1f);
+  ADD_ATTR(node, FloatAttribute, "decay", 0.001f, 0.f, 0.1f);
+  ADD_ATTR(node, FloatAttribute, "flattening_radius", 0.001f, 0.f, 0.1f);
+  ADD_ATTR(node, FloatAttribute, "depth", 0.f, -0.2f, 0.2f);
+  ADD_ATTR(node, BoolAttribute, "force_downhill", false);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key(
+  node.set_attr_ordered_key(
       {"width", "decay", "flattening_radius", "depth", "force_downhill"});
 }
 
-void compute_path_dig_node(BaseNode *p_node)
+void compute_path_dig_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Path      *p_path = p_node->get_value_ref<hmap::Path>("path");
-  hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
+  hmap::Path      *p_path = node.get_value_ref<hmap::Path>("path");
+  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
 
   if (p_path && p_in)
     if (p_path->get_npoints() > 1)
     {
-      hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
+      hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
       *p_out = *p_in;
 
-      int ir_width = (int)(GET("width", FloatAttribute) * p_out->shape.x);
-      int ir_decay = (int)(GET("decay", FloatAttribute) * p_out->shape.x);
-      int ir_flattening_radius = (int)(GET("flattening_radius", FloatAttribute) *
+      int ir_width = (int)(GET(node, "width", FloatAttribute) * p_out->shape.x);
+      int ir_decay = (int)(GET(node, "decay", FloatAttribute) * p_out->shape.x);
+      int ir_flattening_radius = (int)(GET(node, "flattening_radius", FloatAttribute) *
                                        p_out->shape.x);
 
       ir_width = std::max(1, ir_width);
       ir_decay = std::max(1, ir_decay);
       ir_flattening_radius = std::max(1, ir_flattening_radius);
 
-      if (!GET("force_downhill", BoolAttribute))
+      if (!GET(node, "force_downhill", BoolAttribute))
       {
         hmap::transform(*p_out,
-                        [p_node, p_path, ir_width, ir_decay, ir_flattening_radius](
+                        [&node, p_path, ir_width, ir_decay, ir_flattening_radius](
                             hmap::Array      &z,
                             hmap::Vec4<float> bbox)
                         {
@@ -72,9 +72,9 @@ void compute_path_dig_node(BaseNode *p_node)
                                          ir_width,
                                          ir_decay,
                                          ir_flattening_radius,
-                                         GET("force_downhill", BoolAttribute),
+                                         GET(node, "force_downhill", BoolAttribute),
                                          bbox,
-                                         GET("depth", FloatAttribute));
+                                         GET(node, "depth", FloatAttribute));
                         });
       }
       else
@@ -87,9 +87,9 @@ void compute_path_dig_node(BaseNode *p_node)
                        ir_width,
                        ir_decay,
                        ir_flattening_radius,
-                       GET("force_downhill", BoolAttribute),
+                       GET(node, "force_downhill", BoolAttribute),
                        hmap::Vec4<float>(0.f, 1.f, 0.f, 1.f), // bbox
-                       GET("depth", FloatAttribute));
+                       GET(node, "depth", FloatAttribute));
 
         p_out->from_array_interp(z_array);
       }
@@ -97,7 +97,7 @@ void compute_path_dig_node(BaseNode *p_node)
       p_out->smooth_overlap_buffers();
     }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

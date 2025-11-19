@@ -16,23 +16,26 @@ using namespace attr;
 namespace hesiod
 {
 
-std::shared_ptr<hmap::Heightmap> pre_process_mask(BaseNode         *p_node,
+std::shared_ptr<hmap::Heightmap> pre_process_mask(BaseNode         &node,
                                                   hmap::Heightmap *&p_mask,
                                                   hmap::Heightmap  &h)
 {
   // do not modify any existing input mask and return a dummy shared
   // pointer that will not be used
-  if (p_mask || !GET("mask_activate", BoolAttribute))
+  if (p_mask || !GET(node, "mask_activate", BoolAttribute))
     return std::make_shared<hmap::Heightmap>();
 
   // create mask storage and assign to current mask pointer
-  std::shared_ptr<hmap::Heightmap> sp_mask = std::make_shared<hmap::Heightmap>(CONFIG);
+  std::shared_ptr<hmap::Heightmap> sp_mask = std::make_shared<hmap::Heightmap>(
+      node.get_config_ref()->shape,
+      node.get_config_ref()->tiling,
+      node.get_config_ref()->overlap);
   p_mask = sp_mask.get();
 
   // --- mask definition
 
-  const std::string mask_type = GET("mask_type", ChoiceAttribute);
-  const int         ir = (int)(GET("mask_radius", FloatAttribute) * p_mask->shape.x);
+  const std::string mask_type = GET(node, "mask_type", ChoiceAttribute);
+  const int ir = (int)(GET(node, "mask_radius", FloatAttribute) * p_mask->shape.x);
 
   if (mask_type == "Elevation")
   {
@@ -52,7 +55,7 @@ std::shared_ptr<hmap::Heightmap> pre_process_mask(BaseNode         *p_node,
           hmap::Array *pa_out = p_arrays[0];
           *pa_out *= (1.f - *pa_out);
         },
-        p_node->get_config_ref()->hmap_transform_mode_cpu);
+        node.get_config_ref()->hmap_transform_mode_cpu);
   }
   else if (mask_type == "Gradient norm")
   {
@@ -65,7 +68,7 @@ std::shared_ptr<hmap::Heightmap> pre_process_mask(BaseNode         *p_node,
 
           *pa_out = hmap::gradient_norm(*pa_in);
         },
-        p_node->get_config_ref()->hmap_transform_mode_cpu);
+        node.get_config_ref()->hmap_transform_mode_cpu);
 
     p_mask->remap();
   }
@@ -84,7 +87,7 @@ std::shared_ptr<hmap::Heightmap> pre_process_mask(BaseNode         *p_node,
           hmap::Array *pa_out = p_arrays[0];
           hmap::gpu::smooth_cpulse(*pa_out, ir);
         },
-        p_node->get_config_ref()->hmap_transform_mode_gpu);
+        node.get_config_ref()->hmap_transform_mode_gpu);
 
     p_mask->smooth_overlap_buffers();
     p_mask->remap();
@@ -92,7 +95,7 @@ std::shared_ptr<hmap::Heightmap> pre_process_mask(BaseNode         *p_node,
 
   // --- apply gain to the mask
 
-  float mask_gain = GET("mask_gain", FloatAttribute);
+  float mask_gain = GET(node, "mask_gain", FloatAttribute);
 
   if (mask_gain != 1.f)
   {
@@ -103,29 +106,29 @@ std::shared_ptr<hmap::Heightmap> pre_process_mask(BaseNode         *p_node,
           hmap::Array *pa = p_arrays[0];
           hmap::gain(*pa, mask_gain);
         },
-        p_node->get_config_ref()->hmap_transform_mode_cpu);
+        node.get_config_ref()->hmap_transform_mode_cpu);
   }
 
-  if (GET("mask_inverse", BoolAttribute))
+  if (GET(node, "mask_inverse", BoolAttribute))
     p_mask->inverse();
 
   return sp_mask;
 }
 
-void setup_pre_process_mask_attributes(BaseNode *p_node)
+void setup_pre_process_mask_attributes(BaseNode &node)
 {
-  ADD_ATTR(BoolAttribute, "mask_activate", false);
+  ADD_ATTR(node, BoolAttribute, "mask_activate", false);
 
   std::vector<std::string> choices = {"Elevation",
                                       "Elevation mid-range",
                                       "Gradient norm"};
-  ADD_ATTR(ChoiceAttribute, "mask_type", choices);
+  ADD_ATTR(node, ChoiceAttribute, "mask_type", choices);
 
-  ADD_ATTR(BoolAttribute, "mask_inverse", false);
-  ADD_ATTR(FloatAttribute, "mask_radius", 0.01f, 0.f, 0.2f);
-  ADD_ATTR(FloatAttribute, "mask_gain", 1.f, 0.f, 10.f);
+  ADD_ATTR(node, BoolAttribute, "mask_inverse", false);
+  ADD_ATTR(node, FloatAttribute, "mask_radius", 0.01f, 0.f, 0.2f);
+  ADD_ATTR(node, FloatAttribute, "mask_gain", 1.f, 0.f, 10.f);
 
-  std::vector<std::string> *p_keys = p_node->get_attr_ordered_key_ref();
+  std::vector<std::string> *p_keys = node.get_attr_ordered_key_ref();
 
   p_keys->push_back("_GROUPBOX_BEGIN_Mask Definition");
   p_keys->push_back("mask_activate");

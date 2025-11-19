@@ -14,54 +14,52 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_radial_displacement_to_xy_node(BaseNode *p_node)
+void setup_radial_displacement_to_xy_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "dr");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "dx", CONFIG);
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "dy", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dr");
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "dx", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "dy", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(FloatAttribute, "smoothing", 1.f, 0.f, 10.f);
-  ADD_ATTR(Vec2FloatAttribute, "center");
+  ADD_ATTR(node, FloatAttribute, "smoothing", 1.f, 0.f, 10.f);
+  ADD_ATTR(node, Vec2FloatAttribute, "center");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"smoothing", "center"});
+  node.set_attr_ordered_key({"smoothing", "center"});
 }
 
-void compute_radial_displacement_to_xy_node(BaseNode *p_node)
+void compute_radial_displacement_to_xy_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_dr = p_node->get_value_ref<hmap::Heightmap>("dr");
+  hmap::Heightmap *p_dr = node.get_value_ref<hmap::Heightmap>("dr");
 
   if (p_dr)
   {
-    hmap::Heightmap *p_dx = p_node->get_value_ref<hmap::Heightmap>("dx");
-    hmap::Heightmap *p_dy = p_node->get_value_ref<hmap::Heightmap>("dy");
+    hmap::Heightmap *p_dx = node.get_value_ref<hmap::Heightmap>("dx");
+    hmap::Heightmap *p_dy = node.get_value_ref<hmap::Heightmap>("dy");
 
-    hmap::transform(*p_dr,
-                    *p_dx,
-                    *p_dy,
-                    [p_node](hmap::Array      &dr,
-                             hmap::Array      &dx,
-                             hmap::Array      &dy,
-                             hmap::Vec4<float> bbox)
-                    {
-                      hmap::radial_displacement_to_xy(dr,
-                                                      dx,
-                                                      dy,
-                                                      GET("smoothing", FloatAttribute),
-                                                      GET("center", Vec2FloatAttribute),
-                                                      bbox);
-                    });
+    hmap::transform(
+        *p_dr,
+        *p_dx,
+        *p_dy,
+        [&node](hmap::Array &dr, hmap::Array &dx, hmap::Array &dy, hmap::Vec4<float> bbox)
+        {
+          hmap::radial_displacement_to_xy(dr,
+                                          dx,
+                                          dy,
+                                          GET(node, "smoothing", FloatAttribute),
+                                          GET(node, "center", Vec2FloatAttribute),
+                                          bbox);
+        });
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

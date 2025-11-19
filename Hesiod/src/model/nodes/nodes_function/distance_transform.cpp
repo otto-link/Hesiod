@@ -16,62 +16,63 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_distance_transform_node(BaseNode *p_node)
+void setup_distance_transform_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(EnumAttribute,
+  ADD_ATTR(node,
+           EnumAttribute,
            "transform_type",
            enum_mappings.distance_transform_type_map,
            "Approx. (fast)");
-  ADD_ATTR(BoolAttribute, "reverse_input", false);
-  ADD_ATTR(FloatAttribute, "threshold", 0.f, -1.f, 2.f);
+  ADD_ATTR(node, BoolAttribute, "reverse_input", false);
+  ADD_ATTR(node, FloatAttribute, "threshold", 0.f, -1.f, 2.f);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"_GROUPBOX_BEGIN_Main Parameters",
-                                "transform_type",
-                                "_GROUPBOX_END_",
-                                //
-                                "_GROUPBOX_BEGIN_Input preprocessing",
-                                "reverse_input",
-                                "threshold",
-                                "_GROUPBOX_END_"});
+  node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Main Parameters",
+                             "transform_type",
+                             "_GROUPBOX_END_",
+                             //
+                             "_GROUPBOX_BEGIN_Input preprocessing",
+                             "reverse_input",
+                             "threshold",
+                             "_GROUPBOX_END_"});
 
-  setup_post_process_heightmap_attributes(p_node);
+  setup_post_process_heightmap_attributes(node);
 }
 
-void compute_distance_transform_node(BaseNode *p_node)
+void compute_distance_transform_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
+  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
+    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
     hmap::transform(
         {p_out, p_in},
-        [p_node](std::vector<hmap::Array *> p_arrays)
+        [&node](std::vector<hmap::Array *> p_arrays)
         {
           hmap::Array *pa_out = p_arrays[0];
           hmap::Array *pa_in = p_arrays[1];
 
           *pa_out = *pa_in;
-          make_binary(*pa_out, GET("threshold", FloatAttribute));
+          make_binary(*pa_out, GET(node, "threshold", FloatAttribute));
 
-          if (GET("reverse_input", BoolAttribute))
+          if (GET(node, "reverse_input", BoolAttribute))
             *pa_out = 1.f - *pa_out;
 
           auto type = static_cast<hmap::DistanceTransformType>(
-              GET("transform_type", EnumAttribute));
+              GET(node, "transform_type", EnumAttribute));
 
           switch (type)
           {
@@ -93,10 +94,10 @@ void compute_distance_transform_node(BaseNode *p_node)
         hmap::TransformMode::SINGLE_ARRAY); // mandatory
 
     // post-process
-    post_process_heightmap(p_node, *p_out);
+    post_process_heightmap(node, *p_out);
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

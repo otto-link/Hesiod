@@ -14,40 +14,40 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_select_multiband3_node(BaseNode *p_node)
+void setup_select_multiband3_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "low", CONFIG);
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "mid", CONFIG);
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "high", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "low", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "mid", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "high", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(FloatAttribute, "ratio1", 0.2f, 0.f, 1.f);
-  ADD_ATTR(FloatAttribute, "ratio2", 0.5f, 0.f, 1.f);
-  ADD_ATTR(FloatAttribute, "overlap", 0.5f, 0.f, 1.f);
+  ADD_ATTR(node, FloatAttribute, "ratio1", 0.2f, 0.f, 1.f);
+  ADD_ATTR(node, FloatAttribute, "ratio2", 0.5f, 0.f, 1.f);
+  ADD_ATTR(node, FloatAttribute, "overlap", 0.5f, 0.f, 1.f);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"ratio1", "ratio2", "overlap"});
+  node.set_attr_ordered_key({"ratio1", "ratio2", "overlap"});
 
-  setup_post_process_heightmap_attributes(p_node);
+  setup_post_process_heightmap_attributes(node);
 }
 
-void compute_select_multiband3_node(BaseNode *p_node)
+void compute_select_multiband3_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
+  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_low = p_node->get_value_ref<hmap::Heightmap>("low");
-    hmap::Heightmap *p_mid = p_node->get_value_ref<hmap::Heightmap>("mid");
-    hmap::Heightmap *p_high = p_node->get_value_ref<hmap::Heightmap>("high");
+    hmap::Heightmap *p_low = node.get_value_ref<hmap::Heightmap>("low");
+    hmap::Heightmap *p_mid = node.get_value_ref<hmap::Heightmap>("mid");
+    hmap::Heightmap *p_high = node.get_value_ref<hmap::Heightmap>("high");
 
     float vmin = p_in->min();
     float vmax = p_in->max();
@@ -56,29 +56,29 @@ void compute_select_multiband3_node(BaseNode *p_node)
                     *p_low,
                     *p_mid,
                     *p_high,
-                    [p_node, vmin, vmax](hmap::Array &in,
-                                         hmap::Array &low,
-                                         hmap::Array &mid,
-                                         hmap::Array &high)
+                    [&node, vmin, vmax](hmap::Array &in,
+                                        hmap::Array &low,
+                                        hmap::Array &mid,
+                                        hmap::Array &high)
                     {
                       hmap::select_multiband3(in,
                                               low,
                                               mid,
                                               high,
-                                              GET("ratio1", FloatAttribute),
-                                              GET("ratio2", FloatAttribute),
-                                              GET("overlap", FloatAttribute),
+                                              GET(node, "ratio1", FloatAttribute),
+                                              GET(node, "ratio2", FloatAttribute),
+                                              GET(node, "overlap", FloatAttribute),
                                               vmin,
                                               vmax);
                     });
 
     // post-process
-    post_process_heightmap(p_node, *p_low);
-    post_process_heightmap(p_node, *p_mid);
-    post_process_heightmap(p_node, *p_high);
+    post_process_heightmap(node, *p_low);
+    post_process_heightmap(node, *p_mid);
+    post_process_heightmap(node, *p_high);
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

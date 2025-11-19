@@ -12,30 +12,30 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_constant_node(BaseNode *p_node)
+void setup_constant_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(FloatAttribute, "value", 0.f, -4.f, 4.f);
+  ADD_ATTR(node, FloatAttribute, "value", 0.f, -4.f, 4.f);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"value"});
+  node.set_attr_ordered_key({"value"});
 }
 
-void compute_constant_node(BaseNode *p_node)
+void compute_constant_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
-  *p_out = hmap::Heightmap(CONFIG, GET("value", FloatAttribute));
+  hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
+  *p_out = hmap::Heightmap(CONFIG, GET(node, "value", FloatAttribute));
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

@@ -13,26 +13,26 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_preview_node(BaseNode *p_node)
+void setup_preview_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "elevation");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "water_depth");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "scalar");
-  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture");
-  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "normal map");
-  p_node->add_port<hmap::Cloud>(gnode::PortType::IN, "cloud");
-  p_node->add_port<hmap::Path>(gnode::PortType::IN, "path");
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "elevation");
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "water_depth");
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "scalar");
+  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture");
+  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "normal map");
+  node.add_port<hmap::Cloud>(gnode::PortType::IN, "cloud");
+  node.add_port<hmap::Path>(gnode::PortType::IN, "path");
 }
 
-void compute_preview_node(BaseNode *p_node)
+void compute_preview_node(BaseNode &node)
 {
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  Q_EMIT p_node->compute_started(p_node->get_id()); // empty on purpose
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id()); // empty on purpose
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

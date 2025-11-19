@@ -13,34 +13,34 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_cloud_merge_node(BaseNode *p_node)
+void setup_cloud_merge_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Cloud>(gnode::PortType::IN, "cloud1");
-  p_node->add_port<hmap::Cloud>(gnode::PortType::IN, "cloud2");
-  p_node->add_port<hmap::Cloud>(gnode::PortType::OUT, "cloud");
+  node.add_port<hmap::Cloud>(gnode::PortType::IN, "cloud1");
+  node.add_port<hmap::Cloud>(gnode::PortType::IN, "cloud2");
+  node.add_port<hmap::Cloud>(gnode::PortType::OUT, "cloud");
 }
 
-void compute_cloud_merge_node(BaseNode *p_node)
+void compute_cloud_merge_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Cloud *p_in1 = p_node->get_value_ref<hmap::Cloud>("cloud1");
-  hmap::Cloud *p_in2 = p_node->get_value_ref<hmap::Cloud>("cloud2");
+  hmap::Cloud *p_in1 = node.get_value_ref<hmap::Cloud>("cloud1");
+  hmap::Cloud *p_in2 = node.get_value_ref<hmap::Cloud>("cloud2");
 
   if (p_in1 && p_in2)
   {
-    hmap::Cloud *p_out = p_node->get_value_ref<hmap::Cloud>("cloud");
+    hmap::Cloud *p_out = node.get_value_ref<hmap::Cloud>("cloud");
 
     // convert the input
     *p_out = hmap::merge_cloud(*p_in1, *p_in2);
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

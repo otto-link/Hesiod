@@ -16,30 +16,30 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_gradient_node(BaseNode *p_node)
+void setup_gradient_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "dx", CONFIG);
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "dy", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "dx", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "dy", CONFIG);
 
-  setup_post_process_heightmap_attributes(p_node);
+  setup_post_process_heightmap_attributes(node);
 }
 
-void compute_gradient_node(BaseNode *p_node)
+void compute_gradient_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
+  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_dx = p_node->get_value_ref<hmap::Heightmap>("dx");
-    hmap::Heightmap *p_dy = p_node->get_value_ref<hmap::Heightmap>("dy");
+    hmap::Heightmap *p_dx = node.get_value_ref<hmap::Heightmap>("dx");
+    hmap::Heightmap *p_dy = node.get_value_ref<hmap::Heightmap>("dy");
 
     hmap::transform(
         {p_dx, p_in},
@@ -50,7 +50,7 @@ void compute_gradient_node(BaseNode *p_node)
 
           hmap::gradient_x(*pa_in, *pa_dx);
         },
-        p_node->get_config_ref()->hmap_transform_mode_cpu);
+        node.get_config_ref()->hmap_transform_mode_cpu);
 
     hmap::transform(
         {p_dy, p_in},
@@ -61,17 +61,17 @@ void compute_gradient_node(BaseNode *p_node)
 
           hmap::gradient_y(*pa_in, *pa_dy);
         },
-        p_node->get_config_ref()->hmap_transform_mode_cpu);
+        node.get_config_ref()->hmap_transform_mode_cpu);
 
     p_dx->smooth_overlap_buffers();
     p_dy->smooth_overlap_buffers();
 
     // post-process
-    post_process_heightmap(p_node, *p_dx);
-    post_process_heightmap(p_node, *p_dy);
+    post_process_heightmap(node, *p_dx);
+    post_process_heightmap(node, *p_dy);
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

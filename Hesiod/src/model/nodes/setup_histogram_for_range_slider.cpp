@@ -14,18 +14,18 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_histogram_for_range_attribute(BaseNode          *p_node,
+void setup_histogram_for_range_attribute(BaseNode          &node,
                                          const std::string &attribute_key,
                                          const std::string &port_id)
 {
-  Logger::log()->trace("setup_histogram_for_range_slider: node {}", p_node->get_label());
+  Logger::log()->trace("setup_histogram_for_range_slider: node {}", node.get_label());
 
   // function to compute the histogram
-  auto lambda = [p_node, port_id]()
+  auto lambda = [&node, port_id]()
   {
     std::pair<std::vector<float>, std::vector<float>> hist;
 
-    hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>(port_id);
+    hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>(port_id);
 
     if (p_in)
     {
@@ -58,8 +58,8 @@ void setup_histogram_for_range_attribute(BaseNode          *p_node,
   };
 
   // assign function to attr
-  GET_REF(attribute_key, RangeAttribute)->set_histogram_fct(lambda);
-  GET_REF(attribute_key, RangeAttribute)->set_autorange(true);
+  GET_REF(node, attribute_key, RangeAttribute)->set_histogram_fct(lambda);
+  GET_REF(node, attribute_key, RangeAttribute)->set_autorange(true);
 }
 
 } // namespace hesiod

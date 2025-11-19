@@ -14,41 +14,41 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_path_to_heightmap_node(BaseNode *p_node)
+void setup_path_to_heightmap_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Path>(gnode::PortType::IN, "path");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "heightmap", CONFIG);
+  node.add_port<hmap::Path>(gnode::PortType::IN, "path");
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "heightmap", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(BoolAttribute, "filled", false);
-  ADD_ATTR(BoolAttribute, "remap", true);
-  ADD_ATTR(BoolAttribute, "inverse", false);
-  ADD_ATTR(BoolAttribute, "smoothing", false);
-  ADD_ATTR(FloatAttribute, "smoothing_radius", 0.05f, 0.f, 0.2f);
+  ADD_ATTR(node, BoolAttribute, "filled", false);
+  ADD_ATTR(node, BoolAttribute, "remap", true);
+  ADD_ATTR(node, BoolAttribute, "inverse", false);
+  ADD_ATTR(node, BoolAttribute, "smoothing", false);
+  ADD_ATTR(node, FloatAttribute, "smoothing_radius", 0.05f, 0.f, 0.2f);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key(
+  node.set_attr_ordered_key(
       {"filled", "_SEPARATOR_", "remap", "inverse", "smoothing", "smoothing_radius"});
 }
 
-void compute_path_to_heightmap_node(BaseNode *p_node)
+void compute_path_to_heightmap_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Path *p_path = p_node->get_value_ref<hmap::Path>("path");
+  hmap::Path *p_path = node.get_value_ref<hmap::Path>("path");
 
   if (p_path)
   {
-    hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("heightmap");
+    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("heightmap");
 
     if (p_path->get_npoints() > 1)
     {
-      if (!GET("filled", BoolAttribute))
+      if (!GET(node, "filled", BoolAttribute))
       {
         hmap::fill(*p_out,
                    [p_path](hmap::Vec2<int> shape, hmap::Vec4<float> bbox)
@@ -69,15 +69,15 @@ void compute_path_to_heightmap_node(BaseNode *p_node)
       }
 
       // post-process
-      post_process_heightmap(p_node,
+      post_process_heightmap(node,
                              *p_out,
-                             GET("inverse", BoolAttribute),
-                             GET("smoothing", BoolAttribute),
-                             GET("smoothing_radius", FloatAttribute),
+                             GET(node, "inverse", BoolAttribute),
+                             GET(node, "smoothing", BoolAttribute),
+                             GET(node, "smoothing_radius", FloatAttribute),
                              false, // saturate
                              {0.f, 0.f},
                              0.f,
-                             GET("remap", BoolAttribute),
+                             GET(node, "remap", BoolAttribute),
                              {0.f, 1.f});
     }
     else
@@ -85,7 +85,7 @@ void compute_path_to_heightmap_node(BaseNode *p_node)
       hmap::transform(*p_out, [](hmap::Array &x) { x = 0.f; });
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

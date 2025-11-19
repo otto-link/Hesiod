@@ -15,16 +15,16 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_background_image_for_cloud_attribute(BaseNode          *p_node,
+void setup_background_image_for_cloud_attribute(BaseNode          &node,
                                                 const std::string &attribute_key,
                                                 const std::string &port_id)
 {
   Logger::log()->trace("setup_background_image_for_cloud_attribute: node {}",
-                       p_node->get_label());
+                       node.get_label());
 
-  auto lambda = [p_node, port_id]()
+  auto lambda = [&node, port_id]()
   {
-    hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>(port_id);
+    hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>(port_id);
 
     if (!p_in)
       return QImage();
@@ -46,7 +46,7 @@ void setup_background_image_for_cloud_attribute(BaseNode          *p_node,
   };
 
   // assign function to attr
-  GET_REF(attribute_key, CloudAttribute)->set_background_image_fct(lambda);
+  GET_REF(node, attribute_key, CloudAttribute)->set_background_image_fct(lambda);
 }
 
 } // namespace hesiod

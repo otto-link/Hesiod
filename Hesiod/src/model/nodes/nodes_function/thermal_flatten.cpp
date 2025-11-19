@@ -15,58 +15,59 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_thermal_flatten_node(BaseNode *p_node)
+void setup_thermal_flatten_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(FloatAttribute, "talus_global", 1.f, 0.f, FLT_MAX);
-  ADD_ATTR(IntAttribute, "iterations", 100, 1, INT_MAX);
-  ADD_ATTR(BoolAttribute, "scale_talus_with_elevation", false);
-  ADD_ATTR(FloatAttribute, "post_filter_radius", 0.01f, 0.f, 0.1f);
+  ADD_ATTR(node, FloatAttribute, "talus_global", 1.f, 0.f, FLT_MAX);
+  ADD_ATTR(node, IntAttribute, "iterations", 100, 1, INT_MAX);
+  ADD_ATTR(node, BoolAttribute, "scale_talus_with_elevation", false);
+  ADD_ATTR(node, FloatAttribute, "post_filter_radius", 0.01f, 0.f, 0.1f);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key(
+  node.set_attr_ordered_key(
       {"talus_global", "iterations", "scale_talus_with_elevation", "post_filter_radius"});
 }
 
-void compute_thermal_flatten_node(BaseNode *p_node)
+void compute_thermal_flatten_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
+  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
+    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
     // copy the input heightmap
     *p_out = *p_in;
 
-    float talus = GET("talus_global", FloatAttribute) / (float)p_out->shape.x;
+    float talus = GET(node, "talus_global", FloatAttribute) / (float)p_out->shape.x;
 
     hmap::Heightmap talus_map = hmap::Heightmap(CONFIG, talus);
 
-    if (GET("scale_talus_with_elevation", BoolAttribute))
+    if (GET(node, "scale_talus_with_elevation", BoolAttribute))
     {
       talus_map = *p_in;
       talus_map.remap(talus / 100.f, talus);
     }
 
-    int ir = std::max(1,
-                      (int)(GET("post_filter_radius", FloatAttribute) * p_out->shape.x));
+    int ir = std::max(
+        1,
+        (int)(GET(node, "post_filter_radius", FloatAttribute) * p_out->shape.x));
 
     hmap::transform(
         {p_out, &talus_map},
-        [p_node, talus, ir](std::vector<hmap::Array *> p_arrays,
-                            hmap::Vec2<int>            shape,
-                            hmap::Vec4<float>)
+        [&node, talus, ir](std::vector<hmap::Array *> p_arrays,
+                           hmap::Vec2<int>            shape,
+                           hmap::Vec4<float>)
         {
           hmap::Array *pa_out = p_arrays[0];
           hmap::Array *pa_talus_map = p_arrays[1];
@@ -75,15 +76,15 @@ void compute_thermal_flatten_node(BaseNode *p_node)
           hmap::thermal_flatten(*pa_out,
                                 *pa_talus_map,
                                 bedrock,
-                                GET("iterations", IntAttribute),
+                                GET(node, "iterations", IntAttribute),
                                 ir);
         },
-        p_node->get_config_ref()->hmap_transform_mode_cpu);
+        node.get_config_ref()->hmap_transform_mode_cpu);
 
     p_out->smooth_overlap_buffers();
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

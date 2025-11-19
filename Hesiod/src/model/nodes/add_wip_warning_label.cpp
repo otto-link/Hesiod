@@ -16,19 +16,19 @@ using namespace attr;
 namespace hesiod
 {
 
-void add_wip_warning_label(BaseNode *p_node)
+void add_wip_warning_label(BaseNode &node)
 {
-  Logger::log()->trace("add_wip_warning_label: node {}", p_node->get_label());
+  Logger::log()->trace("add_wip_warning_label: node {}", node.get_label());
 
-  auto lambda = [](BaseNode *p_node)
+  auto lambda = [](BaseNode &node)
   {
-    QLabel *label = new QLabel("Work in progress\nNode subject to change", p_node);
+    QLabel *label = new QLabel("Work in progress\nNode subject to change", &node);
     label->setStyleSheet("color: #ffb86c;");
     resize_font(label, -2);
     return (QWidget *)label;
   };
 
-  p_node->set_qwidget_fct(lambda);
+  node.set_qwidget_fct(lambda);
 }
 
 } // namespace hesiod

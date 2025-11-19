@@ -15,37 +15,37 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_dilation_node(BaseNode *p_node)
+void setup_dilation_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(FloatAttribute, "radius", 0.01f, 0.f, 0.05f);
-  ADD_ATTR(BoolAttribute, "GPU", HSD_DEFAULT_GPU_MODE);
+  ADD_ATTR(node, FloatAttribute, "radius", 0.01f, 0.f, 0.05f);
+  ADD_ATTR(node, BoolAttribute, "GPU", HSD_DEFAULT_GPU_MODE);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"radius", "_SEPARATOR_", "GPU"});
+  node.set_attr_ordered_key({"radius", "_SEPARATOR_", "GPU"});
 }
 
-void compute_dilation_node(BaseNode *p_node)
+void compute_dilation_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
+  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
+    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
-    int ir = std::max(1, (int)(GET("radius", FloatAttribute) * p_out->shape.x));
+    int ir = std::max(1, (int)(GET(node, "radius", FloatAttribute) * p_out->shape.x));
 
-    if (GET("GPU", BoolAttribute))
+    if (GET(node, "GPU", BoolAttribute))
     {
       hmap::transform(*p_out,
                       *p_in,
@@ -63,7 +63,7 @@ void compute_dilation_node(BaseNode *p_node)
     p_out->smooth_overlap_buffers();
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

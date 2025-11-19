@@ -14,38 +14,38 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_mixer_node(BaseNode *p_node)
+void setup_mixer_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input 1");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input 2");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input 3");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input 4");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "t");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input 1");
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input 2");
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input 3");
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input 4");
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "t");
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(FloatAttribute, "gain_factor", 1.f, 0.001f, 10.f);
+  ADD_ATTR(node, FloatAttribute, "gain_factor", 1.f, 0.001f, 10.f);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"gain_factor"});
+  node.set_attr_ordered_key({"gain_factor"});
 
-  setup_post_process_heightmap_attributes(p_node);
+  setup_post_process_heightmap_attributes(node);
 }
 
-void compute_mixer_node(BaseNode *p_node)
+void compute_mixer_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in1 = p_node->get_value_ref<hmap::Heightmap>("input 1");
-  hmap::Heightmap *p_in2 = p_node->get_value_ref<hmap::Heightmap>("input 2");
-  hmap::Heightmap *p_in3 = p_node->get_value_ref<hmap::Heightmap>("input 3");
-  hmap::Heightmap *p_in4 = p_node->get_value_ref<hmap::Heightmap>("input 4");
-  hmap::Heightmap *p_t = p_node->get_value_ref<hmap::Heightmap>("t");
+  hmap::Heightmap *p_in1 = node.get_value_ref<hmap::Heightmap>("input 1");
+  hmap::Heightmap *p_in2 = node.get_value_ref<hmap::Heightmap>("input 2");
+  hmap::Heightmap *p_in3 = node.get_value_ref<hmap::Heightmap>("input 3");
+  hmap::Heightmap *p_in4 = node.get_value_ref<hmap::Heightmap>("input 4");
+  hmap::Heightmap *p_t = node.get_value_ref<hmap::Heightmap>("t");
 
   std::vector<hmap::Heightmap *> ptr_list = {};
   for (auto &ptr : {p_in1, p_in2, p_in3, p_in4})
@@ -54,11 +54,11 @@ void compute_mixer_node(BaseNode *p_node)
 
   if ((int)ptr_list.size() && p_t)
   {
-    hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
+    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
     hmap::transform(
         {p_out, p_in1, p_in2, p_in3, p_in4, p_t},
-        [p_node](std::vector<hmap::Array *> p_arrays)
+        [&node](std::vector<hmap::Array *> p_arrays)
         {
           hmap::Array *pa_out = p_arrays.front();
           hmap::Array *pa_t = p_arrays.back();
@@ -69,12 +69,12 @@ void compute_mixer_node(BaseNode *p_node)
             if (p_arrays[k])
               arrays.push_back(p_arrays[k]);
 
-          *pa_out = hmap::mixer(*pa_t, arrays, GET("gain_factor", FloatAttribute));
+          *pa_out = hmap::mixer(*pa_t, arrays, GET(node, "gain_factor", FloatAttribute));
         },
-        p_node->get_config_ref()->hmap_transform_mode_cpu);
+        node.get_config_ref()->hmap_transform_mode_cpu);
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

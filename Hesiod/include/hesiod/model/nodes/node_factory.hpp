@@ -7,8 +7,8 @@
 #include "hesiod/model/nodes/base_node.hpp"
 
 #define DECLARE_NODE(node_type)                                                          \
-  void setup_##node_type##_node(BaseNode *p_node);                                       \
-  void compute_##node_type##_node(BaseNode *p_node);
+  void setup_##node_type##_node(BaseNode &node);                                         \
+  void compute_##node_type##_node(BaseNode &node);
 
 namespace hesiod
 {
@@ -32,47 +32,17 @@ template <typename T, typename... Args> std::shared_ptr<T> make_qt_shared(Args &
 
 void dump_node_inventory(const std::string &fname);
 
-void dump_node_documentation_stub(const std::string           &fname,
-                                  std::shared_ptr<GraphConfig> config);
+void dump_node_documentation_stub(const std::string         &fname,
+                                  std::weak_ptr<GraphConfig> config);
 
 void dump_node_settings_screenshots();
 
-/**
- * @brief Retrieves a map of node inventory.
- *
- * This function returns a map where the key represents the node type and the value
- * represents the corresponding node category.
- *
- * @return std::map<std::string, std::string>
- * A map containing node identifiers as keys and node descriptions as values.
- */
+// Retrieves a map of node inventory.
 std::map<std::string, std::string> get_node_inventory();
 
-/**
- * @brief Factory function to create nodes based on the provided node type.
- *
- * This function creates and returns a shared pointer to a node of the specified type. The
- * node is created based on the string name of the node type (e.g.,
- * "Noise", "Remap"). If the node type is not recognized, the function throws an
- * `std::invalid_argument`
- * exception.
- *
- * @param  node_type A string representing the type of node to create. This string is
- *                   hashed and compared against known node types.
- * @param  config    A shared pointer to a `GraphConfig` object, which provides
- *                   configuration parameters for the node being created.
- *
- * @return           A `std::shared_ptr<gnode::Node>` pointing to the newly created node.
- *
- * @throws std::invalid_argumentifthe`node_type`isnotrecognized.
- *
- * Example usage:
- * @code auto noise_node = node_factory("Noise", config);
- * auto remap_node = node_factory("Remap", config);
- * @endcode
- */
-std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type,
-                                          std::shared_ptr<GraphConfig> config);
+// Factory function to create nodes based on the provided node type.
+std::shared_ptr<gnode::Node> node_factory(const std::string         &node_type,
+                                          std::weak_ptr<GraphConfig> config);
 
 // nodes functions
 

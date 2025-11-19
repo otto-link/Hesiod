@@ -14,49 +14,50 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_recast_sag_node(BaseNode *p_node)
+void setup_recast_sag_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(FloatAttribute, "vref", 0.5f, 0.f, 1.f);
-  ADD_ATTR(FloatAttribute, "k", 0.01f, 0.001f, 1.f);
+  ADD_ATTR(node, FloatAttribute, "vref", 0.5f, 0.f, 1.f);
+  ADD_ATTR(node, FloatAttribute, "k", 0.01f, 0.001f, 1.f);
 }
 
-void compute_recast_sag_node(BaseNode *p_node)
+void compute_recast_sag_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
+  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_mask = p_node->get_value_ref<hmap::Heightmap>("mask");
-    hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
+    hmap::Heightmap *p_mask = node.get_value_ref<hmap::Heightmap>("mask");
+    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
     // copy the input heightmap
     *p_out = *p_in;
 
     hmap::transform(*p_out,
                     p_mask,
-                    [p_node](hmap::Array &z, hmap::Array *p_mask) {
+                    [&node](hmap::Array &z, hmap::Array *p_mask)
+                    {
                       hmap::recast_sag(z,
-                                       GET("vref", FloatAttribute),
-                                       GET("k", FloatAttribute),
+                                       GET(node, "vref", FloatAttribute),
+                                       GET(node, "k", FloatAttribute),
                                        p_mask);
                     });
 
     p_out->smooth_overlap_buffers();
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

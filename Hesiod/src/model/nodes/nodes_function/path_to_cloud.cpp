@@ -11,32 +11,32 @@
 namespace hesiod
 {
 
-void setup_path_to_cloud_node(BaseNode *p_node)
+void setup_path_to_cloud_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Path>(gnode::PortType::IN, "path");
-  p_node->add_port<hmap::Cloud>(gnode::PortType::OUT, "cloud");
+  node.add_port<hmap::Path>(gnode::PortType::IN, "path");
+  node.add_port<hmap::Cloud>(gnode::PortType::OUT, "cloud");
 }
 
-void compute_path_to_cloud_node(BaseNode *p_node)
+void compute_path_to_cloud_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Path *p_in = p_node->get_value_ref<hmap::Path>("path");
+  hmap::Path *p_in = node.get_value_ref<hmap::Path>("path");
 
   if (p_in)
   {
-    hmap::Cloud *p_out = p_node->get_value_ref<hmap::Cloud>("cloud");
+    hmap::Cloud *p_out = node.get_value_ref<hmap::Cloud>("cloud");
 
     // copy the input heightmap
     *p_out = hmap::Cloud(p_in->points);
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

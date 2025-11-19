@@ -30,9 +30,9 @@ void blend_heightmaps(hmap::Heightmap &h_out,
                       float            w1 = 1.f,
                       float            w2 = 1.f);
 
-void post_apply_enveloppe(BaseNode *p_node, hmap::Heightmap &h, hmap::Heightmap *p_env);
+void post_apply_enveloppe(BaseNode &node, hmap::Heightmap &h, hmap::Heightmap *p_env);
 
-void post_process_heightmap(BaseNode         *p_node,
+void post_process_heightmap(BaseNode         &node,
                             hmap::Heightmap  &h,
                             bool              inverse,
                             bool              smoothing,
@@ -43,18 +43,18 @@ void post_process_heightmap(BaseNode         *p_node,
                             bool              remap,
                             hmap::Vec2<float> remap_range);
 
-void post_process_heightmap(BaseNode        *p_node,
+void post_process_heightmap(BaseNode        &node,
                             hmap::Heightmap &h,
                             hmap::Heightmap *p_in = nullptr);
 
-void setup_post_process_heightmap_attributes(BaseNode *p_node, bool add_mix = false);
+void setup_post_process_heightmap_attributes(BaseNode &node, bool add_mix = false);
 
 // --- mask preprocessing
 
-std::shared_ptr<hmap::Heightmap> pre_process_mask(BaseNode         *p_node,
+std::shared_ptr<hmap::Heightmap> pre_process_mask(BaseNode         &node,
                                                   hmap::Heightmap *&p_mask,
                                                   hmap::Heightmap  &h);
 
-void setup_pre_process_mask_attributes(BaseNode *p_node);
+void setup_pre_process_mask_attributes(BaseNode &node);
 
 } // namespace hesiod

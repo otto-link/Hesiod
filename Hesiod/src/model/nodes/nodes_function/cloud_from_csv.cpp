@@ -16,33 +16,34 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_cloud_from_csv_node(BaseNode *p_node)
+void setup_cloud_from_csv_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Cloud>(gnode::PortType::OUT, "cloud");
+  node.add_port<hmap::Cloud>(gnode::PortType::OUT, "cloud");
 
   // attribute(s)
-  ADD_ATTR(FilenameAttribute,
+  ADD_ATTR(node,
+           FilenameAttribute,
            "fname",
            std::filesystem::path(""),
            "CSV files (*.csv)",
            false);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"fname"});
+  node.set_attr_ordered_key({"fname"});
 }
 
-void compute_cloud_from_csv_node(BaseNode *p_node)
+void compute_cloud_from_csv_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Cloud *p_out = p_node->get_value_ref<hmap::Cloud>("cloud");
+  hmap::Cloud *p_out = node.get_value_ref<hmap::Cloud>("cloud");
 
-  const std::string fname = GET("fname", FilenameAttribute).string();
+  const std::string fname = GET(node, "fname", FilenameAttribute).string();
   std::ifstream     f(fname.c_str());
 
   if (f.good())
@@ -61,7 +62,7 @@ void compute_cloud_from_csv_node(BaseNode *p_node)
                          fname);
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

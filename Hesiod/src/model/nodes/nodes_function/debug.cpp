@@ -12,69 +12,69 @@
 namespace hesiod
 {
 
-void setup_debug_node(BaseNode *p_node)
+void setup_debug_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
 
   // no attribute(s)
 
   // specialized GUI
-  auto lambda = [](BaseNode *p_node)
+  auto lambda = [](BaseNode &node)
   {
-    QLabel *label = new QLabel("DEBUG", p_node);
+    QLabel *label = new QLabel("DEBUG", &node);
     label->setAlignment(Qt::AlignLeft);
 
-    p_node->connect(p_node,
-                    &BaseNode::compute_finished,
-                    [label, p_node]()
-                    {
-                      hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>(
-                          "input");
+    node.connect(&node,
+                 &BaseNode::compute_finished,
+                 [label, &node]()
+                 {
+                   hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
 
-                      std::string msg = "DEBUG\n";
+                   std::string msg = "DEBUG\n";
 
-                      if (p_in)
-                      {
-                        float min = p_in->min();
-                        float max = p_in->max();
-                        float avg = p_in->mean();
+                   if (p_in)
+                   {
+                     float min = p_in->min();
+                     float max = p_in->max();
+                     float avg = p_in->mean();
 
-                        msg += "- addr: " + ptr_as_string((void *)(p_in)) + "\n";
-                        msg += "- min: " + std::to_string(min) + "\n";
-                        msg += "- max: " + std::to_string(max) + "\n";
-                        msg += "- avg: " + std::to_string(avg) + "\n";
-                        msg += "- shape.x: " + std::to_string(p_in->shape.x) + "\n";
-                        msg += "- shape.y: " + std::to_string(p_in->shape.y) + "\n";
-                        msg += "- tiling.x: " + std::to_string(p_in->tiling.x) + "\n";
-                        msg += "- tiling.y: " + std::to_string(p_in->tiling.y) + "\n";
-                        msg += "- overlap: " + std::to_string(p_in->overlap) + "\n";
-                      }
-                      else
-                      {
-                        msg += "addr: nullptr\n";
-                      }
+                     msg += "- addr: " + ptr_as_string((void *)(p_in)) + "\n";
+                     msg += "- min: " + std::to_string(min) + "\n";
+                     msg += "- max: " + std::to_string(max) + "\n";
+                     msg += "- avg: " + std::to_string(avg) + "\n";
+                     msg += "- shape.x: " + std::to_string(p_in->shape.x) + "\n";
+                     msg += "- shape.y: " + std::to_string(p_in->shape.y) + "\n";
+                     msg += "- tiling.x: " + std::to_string(p_in->tiling.x) + "\n";
+                     msg += "- tiling.y: " + std::to_string(p_in->tiling.y) + "\n";
+                     msg += "- overlap: " + std::to_string(p_in->overlap) + "\n";
+                   }
+                   else
+                   {
+                     msg += "addr: nullptr\n";
+                   }
 
-                      label->setText(msg.c_str());
-                      label->adjustSize();
-                    });
+                   label->setText(msg.c_str());
+                   label->adjustSize();
+                 });
 
     return (QWidget *)label;
   };
-  p_node->set_qwidget_fct(lambda);
+
+  node.set_qwidget_fct(lambda);
 }
 
-void compute_debug_node(BaseNode *p_node)
+void compute_debug_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   // nothing here  on purpose
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

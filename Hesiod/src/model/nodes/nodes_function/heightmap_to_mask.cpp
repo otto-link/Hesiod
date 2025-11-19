@@ -14,37 +14,37 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_heightmap_to_mask_node(BaseNode *p_node)
+void setup_heightmap_to_mask_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "mask", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "mask", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(BoolAttribute, "inverse", false);
-  ADD_ATTR(BoolAttribute, "smoothing", false);
-  ADD_ATTR(FloatAttribute, "smoothing_radius", 0.05f, 0.f, 0.2f);
-  ADD_ATTR(RangeAttribute, "saturate_range");
-  ADD_ATTR(FloatAttribute, "saturate_k", 0.01f, 0.01f, 1.f);
+  ADD_ATTR(node, BoolAttribute, "inverse", false);
+  ADD_ATTR(node, BoolAttribute, "smoothing", false);
+  ADD_ATTR(node, FloatAttribute, "smoothing_radius", 0.05f, 0.f, 0.2f);
+  ADD_ATTR(node, RangeAttribute, "saturate_range");
+  ADD_ATTR(node, FloatAttribute, "saturate_k", 0.01f, 0.01f, 1.f);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key(
+  node.set_attr_ordered_key(
       {"inverse", "smoothing", "smoothing_radius", "saturate_range", "saturate_k"});
 }
 
-void compute_heightmap_to_mask_node(BaseNode *p_node)
+void compute_heightmap_to_mask_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
+  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_mask = p_node->get_value_ref<hmap::Heightmap>("mask");
+    hmap::Heightmap *p_mask = node.get_value_ref<hmap::Heightmap>("mask");
 
     // copy the input heightmap
     *p_mask = *p_in;
@@ -53,19 +53,19 @@ void compute_heightmap_to_mask_node(BaseNode *p_node)
     hmap::transform(*p_mask, [](hmap::Array &x) { hmap::clamp(x, 0.f, 1.f); });
 
     // post-process
-    post_process_heightmap(p_node,
+    post_process_heightmap(node,
                            *p_mask,
-                           GET("inverse", BoolAttribute),
-                           GET("smoothing", BoolAttribute),
-                           GET("smoothing_radius", FloatAttribute),
-                           GET_MEMBER("saturate_range", RangeAttribute, is_active),
-                           GET("saturate_range", RangeAttribute),
-                           GET("saturate_k", FloatAttribute),
+                           GET(node, "inverse", BoolAttribute),
+                           GET(node, "smoothing", BoolAttribute),
+                           GET(node, "smoothing_radius", FloatAttribute),
+                           GET_MEMBER(node, "saturate_range", RangeAttribute, is_active),
+                           GET(node, "saturate_range", RangeAttribute),
+                           GET(node, "saturate_k", FloatAttribute),
                            false, // remap
                            {0.f, 0.f});
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

@@ -20,7 +20,7 @@
 // define attributes tooltips...
 #define SETUP_NODE(NodeType, node_type)                                                  \
   case str2int(#NodeType):                                                               \
-    setup_##node_type##_node(sptr.get());                                                \
+    setup_##node_type##_node(*sptr);                                                     \
     sptr->set_compute_fct(&compute_##node_type##_node);                                  \
     sptr->update_attributes_tool_tip();                                                  \
     break;
@@ -90,8 +90,8 @@ void dump_node_inventory(const std::string &fname)
   f.close();
 }
 
-void dump_node_documentation_stub(const std::string           &fname,
-                                  std::shared_ptr<GraphConfig> config)
+void dump_node_documentation_stub(const std::string         &fname,
+                                  std::weak_ptr<GraphConfig> config)
 {
   Logger::log()->trace("dump_node_documentation_stub");
 
@@ -416,22 +416,22 @@ std::map<std::string, std::string> get_node_inventory()
   return node_inventory;
 } // namespace hesiod
 
-std::shared_ptr<gnode::Node> node_factory(const std::string           &node_type,
-                                          std::shared_ptr<GraphConfig> config)
+std::shared_ptr<gnode::Node> node_factory(const std::string         &node_type,
+                                          std::weak_ptr<GraphConfig> config)
 {
   // --- specialized nodes
 
   if (node_type == "Broadcast")
   {
     auto sptr = make_qt_shared<hesiod::BroadcastNode>(node_type, config);
-    setup_broadcast_node(sptr.get());
+    setup_broadcast_node(*sptr);
     sptr->set_compute_fct(&compute_broadcast_node);
     return sptr;
   }
   else if (node_type == "Receive")
   {
     auto sptr = make_qt_shared<hesiod::ReceiveNode>(node_type, config);
-    setup_receive_node(sptr.get());
+    setup_receive_node(*sptr);
     sptr->set_compute_fct(&compute_receive_node);
     return sptr;
   }

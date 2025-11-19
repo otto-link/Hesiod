@@ -14,62 +14,62 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_wave_square_node(BaseNode *p_node)
+void setup_wave_square_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "dr");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "envelope");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dr");
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "envelope");
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(FloatAttribute, "kw", 2.f, 0.01f, FLT_MAX);
-  ADD_ATTR(FloatAttribute, "angle", 0.f, 0.f, 180.f);
-  ADD_ATTR(FloatAttribute, "phase_shift", 0.f, -1.f, 1.f);
+  ADD_ATTR(node, FloatAttribute, "kw", 2.f, 0.01f, FLT_MAX);
+  ADD_ATTR(node, FloatAttribute, "angle", 0.f, 0.f, 180.f);
+  ADD_ATTR(node, FloatAttribute, "phase_shift", 0.f, -1.f, 1.f);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"kw", "angle", "phase_shift"});
+  node.set_attr_ordered_key({"kw", "angle", "phase_shift"});
 
-  setup_post_process_heightmap_attributes(p_node);
+  setup_post_process_heightmap_attributes(node);
 }
 
-void compute_wave_square_node(BaseNode *p_node)
+void compute_wave_square_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   // base noise function
-  hmap::Heightmap *p_dr = p_node->get_value_ref<hmap::Heightmap>("dr");
-  hmap::Heightmap *p_env = p_node->get_value_ref<hmap::Heightmap>("envelope");
-  hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
+  hmap::Heightmap *p_dr = node.get_value_ref<hmap::Heightmap>("dr");
+  hmap::Heightmap *p_env = node.get_value_ref<hmap::Heightmap>("envelope");
+  hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
   hmap::transform(
       {p_out, p_dr},
-      [p_node](std::vector<hmap::Array *> p_arrays,
-               hmap::Vec2<int>            shape,
-               hmap::Vec4<float>          bbox)
+      [&node](std::vector<hmap::Array *> p_arrays,
+              hmap::Vec2<int>            shape,
+              hmap::Vec4<float>          bbox)
       {
         hmap::Array *pa_out = p_arrays[0];
         hmap::Array *pa_dr = p_arrays[1];
 
         *pa_out = hmap::wave_square(shape,
-                                    GET("kw", FloatAttribute),
-                                    GET("angle", FloatAttribute),
-                                    GET("phase_shift", FloatAttribute),
+                                    GET(node, "kw", FloatAttribute),
+                                    GET(node, "angle", FloatAttribute),
+                                    GET(node, "phase_shift", FloatAttribute),
                                     pa_dr,
                                     nullptr,
                                     nullptr,
                                     bbox);
       },
-      p_node->get_config_ref()->hmap_transform_mode_cpu);
+      node.get_config_ref()->hmap_transform_mode_cpu);
 
   // post-process
-  post_apply_enveloppe(p_node, *p_out, p_env);
-  post_process_heightmap(p_node, *p_out);
+  post_apply_enveloppe(node, *p_out, p_env);
+  post_process_heightmap(node, *p_out);
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

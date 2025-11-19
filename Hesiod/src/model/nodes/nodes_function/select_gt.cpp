@@ -14,45 +14,45 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_select_gt_node(BaseNode *p_node)
+void setup_select_gt_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(FloatAttribute, "value", 0.5f, -1.f, 1.f);
+  ADD_ATTR(node, FloatAttribute, "value", 0.5f, -1.f, 1.f);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"value"});
+  node.set_attr_ordered_key({"value"});
 
-  setup_post_process_heightmap_attributes(p_node);
+  setup_post_process_heightmap_attributes(node);
 }
 
-void compute_select_gt_node(BaseNode *p_node)
+void compute_select_gt_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
+  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
+    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
     hmap::transform(*p_out,
                     *p_in,
-                    [p_node](hmap::Array &out, hmap::Array &in)
-                    { out = hmap::select_gt(in, GET("value", FloatAttribute)); });
+                    [&node](hmap::Array &out, hmap::Array &in)
+                    { out = hmap::select_gt(in, GET(node, "value", FloatAttribute)); });
 
     // post-process
-    post_process_heightmap(p_node, *p_out);
+    post_process_heightmap(node, *p_out);
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

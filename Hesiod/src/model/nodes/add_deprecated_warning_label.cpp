@@ -16,23 +16,20 @@ using namespace attr;
 namespace hesiod
 {
 
-void add_deprecated_warning_label(BaseNode *p_node, const std::string &msg = "")
+void add_deprecated_warning_label(BaseNode &node, const std::string &msg = "")
 {
-  Logger::log()->trace("add_deprecated_warning_label: node {}", p_node->get_label());
+  Logger::log()->trace("add_deprecated_warning_label: node {}", node.get_label());
 
-  auto lambda = [msg](BaseNode *p_node)
+  auto lambda = [msg](BaseNode &node)
   {
-    if (!p_node)
-      return (QWidget *)nullptr;
-
     std::string str = "!!! Deprecated !!!\n" + msg;
-    QLabel     *label = new QLabel(str.c_str(), p_node);
+    QLabel     *label = new QLabel(str.c_str(), &node);
     label->setStyleSheet("color: #ff5555;");
     resize_font(label, -2);
     return (QWidget *)label;
   };
 
-  p_node->set_qwidget_fct(lambda);
+  node.set_qwidget_fct(lambda);
 }
 
 } // namespace hesiod

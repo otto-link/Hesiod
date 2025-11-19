@@ -13,54 +13,55 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_cloud_random_distance_node(BaseNode *p_node)
+void setup_cloud_random_distance_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "density");
-  p_node->add_port<hmap::Cloud>(gnode::PortType::OUT, "cloud");
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "density");
+  node.add_port<hmap::Cloud>(gnode::PortType::OUT, "cloud");
 
   // attribute(s)
-  ADD_ATTR(FloatAttribute, "distance_min", 0.05f, 0.001f, 0.2f);
-  ADD_ATTR(FloatAttribute, "distance_max", 0.1f, 0.001f, 1.f);
-  ADD_ATTR(SeedAttribute, "seed");
-  ADD_ATTR(RangeAttribute, "remap");
+  ADD_ATTR(node, FloatAttribute, "distance_min", 0.05f, 0.001f, 0.2f);
+  ADD_ATTR(node, FloatAttribute, "distance_max", 0.1f, 0.001f, 1.f);
+  ADD_ATTR(node, SeedAttribute, "seed");
+  ADD_ATTR(node, RangeAttribute, "remap");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key(
+  node.set_attr_ordered_key(
       {"distance_min", "distance_max", "seed", "_SEPARATOR_", "remap"});
 }
 
-void compute_cloud_random_distance_node(BaseNode *p_node)
+void compute_cloud_random_distance_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_density = p_node->get_value_ref<hmap::Heightmap>("density");
-  hmap::Cloud     *p_out = p_node->get_value_ref<hmap::Cloud>("cloud");
+  hmap::Heightmap *p_density = node.get_value_ref<hmap::Heightmap>("density");
+  hmap::Cloud     *p_out = node.get_value_ref<hmap::Cloud>("cloud");
 
   if (p_density)
   {
     // TODO distribute
     hmap::Array density_array = p_density->to_array();
 
-    *p_out = hmap::random_cloud_distance(GET("distance_min", FloatAttribute),
-                                         GET("distance_max", FloatAttribute),
+    *p_out = hmap::random_cloud_distance(GET(node, "distance_min", FloatAttribute),
+                                         GET(node, "distance_max", FloatAttribute),
                                          density_array,
-                                         GET("seed", SeedAttribute));
+                                         GET(node, "seed", SeedAttribute));
   }
   else
   {
-    *p_out = hmap::random_cloud_distance(GET("distance_min", FloatAttribute),
-                                         GET("seed", SeedAttribute));
+    *p_out = hmap::random_cloud_distance(GET(node, "distance_min", FloatAttribute),
+                                         GET(node, "seed", SeedAttribute));
   }
 
-  if (GET_MEMBER("remap", RangeAttribute, is_active))
-    p_out->remap_values(GET("remap", RangeAttribute)[0], GET("remap", RangeAttribute)[1]);
+  if (GET_MEMBER(node, "remap", RangeAttribute, is_active))
+    p_out->remap_values(GET(node, "remap", RangeAttribute)[0],
+                        GET(node, "remap", RangeAttribute)[1]);
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

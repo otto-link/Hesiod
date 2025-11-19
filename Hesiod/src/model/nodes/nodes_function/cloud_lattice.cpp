@@ -14,44 +14,45 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_cloud_lattice_node(BaseNode *p_node)
+void setup_cloud_lattice_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Cloud>(gnode::PortType::OUT, "cloud");
+  node.add_port<hmap::Cloud>(gnode::PortType::OUT, "cloud");
 
   // attribute(s)
   std::vector<float> default_value = {0.1f, 0.1f};
 
-  ADD_ATTR(IntAttribute, "npoints", 50, 1, INT_MAX);
-  ADD_ATTR(WaveNbAttribute, "stagger_ratio", default_value, 0.f, 1.f, true);
-  ADD_ATTR(WaveNbAttribute, "jitter_ratio", default_value, 0.f, 1.f, true);
-  ADD_ATTR(SeedAttribute, "seed");
-  ADD_ATTR(RangeAttribute, "remap");
+  ADD_ATTR(node, IntAttribute, "npoints", 50, 1, INT_MAX);
+  ADD_ATTR(node, WaveNbAttribute, "stagger_ratio", default_value, 0.f, 1.f, true);
+  ADD_ATTR(node, WaveNbAttribute, "jitter_ratio", default_value, 0.f, 1.f, true);
+  ADD_ATTR(node, SeedAttribute, "seed");
+  ADD_ATTR(node, RangeAttribute, "remap");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key(
+  node.set_attr_ordered_key(
       {"npoints", "stagger_ratio", "jitter_ratio", "seed", "_SEPARATOR_", "remap"});
 }
 
-void compute_cloud_lattice_node(BaseNode *p_node)
+void compute_cloud_lattice_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Cloud *p_out = p_node->get_value_ref<hmap::Cloud>("cloud");
+  hmap::Cloud *p_out = node.get_value_ref<hmap::Cloud>("cloud");
 
-  *p_out = hmap::random_cloud_jittered(GET("npoints", IntAttribute),
-                                       GET("jitter_ratio", WaveNbAttribute),
-                                       GET("stagger_ratio", WaveNbAttribute),
-                                       GET("seed", SeedAttribute));
+  *p_out = hmap::random_cloud_jittered(GET(node, "npoints", IntAttribute),
+                                       GET(node, "jitter_ratio", WaveNbAttribute),
+                                       GET(node, "stagger_ratio", WaveNbAttribute),
+                                       GET(node, "seed", SeedAttribute));
 
-  if (GET_MEMBER("remap", RangeAttribute, is_active))
-    p_out->remap_values(GET("remap", RangeAttribute)[0], GET("remap", RangeAttribute)[1]);
+  if (GET_MEMBER(node, "remap", RangeAttribute, is_active))
+    p_out->remap_values(GET(node, "remap", RangeAttribute)[0],
+                        GET(node, "remap", RangeAttribute)[1]);
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

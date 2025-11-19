@@ -14,38 +14,38 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_path_find_node(BaseNode *p_node)
+void setup_path_find_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Path>(gnode::PortType::IN, "waypoints");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "heightmap");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "mask nogo");
-  p_node->add_port<hmap::Path>(gnode::PortType::OUT, "path");
+  node.add_port<hmap::Path>(gnode::PortType::IN, "waypoints");
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "heightmap");
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask nogo");
+  node.add_port<hmap::Path>(gnode::PortType::OUT, "path");
 
   // attribute(s)
-  ADD_ATTR(FloatAttribute, "elevation_ratio", 0.1f, 0.f, 0.9f);
-  ADD_ATTR(FloatAttribute, "distance_exponent", 1.f, 0.5f, 2.f);
-  ADD_ATTR(IntAttribute, "downsampling", 4, 1, 10);
+  ADD_ATTR(node, FloatAttribute, "elevation_ratio", 0.1f, 0.f, 0.9f);
+  ADD_ATTR(node, FloatAttribute, "distance_exponent", 1.f, 0.5f, 2.f);
+  ADD_ATTR(node, IntAttribute, "downsampling", 4, 1, 10);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"elevation_ratio", "distance_exponent", "downsampling"});
+  node.set_attr_ordered_key({"elevation_ratio", "distance_exponent", "downsampling"});
 }
 
-void compute_path_find_node(BaseNode *p_node)
+void compute_path_find_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Path      *p_waypoints = p_node->get_value_ref<hmap::Path>("waypoints");
-  hmap::Heightmap *p_hmap = p_node->get_value_ref<hmap::Heightmap>("heightmap");
+  hmap::Path      *p_waypoints = node.get_value_ref<hmap::Path>("waypoints");
+  hmap::Heightmap *p_hmap = node.get_value_ref<hmap::Heightmap>("heightmap");
 
   if (p_waypoints && p_hmap)
   {
-    hmap::Heightmap *p_mask = p_node->get_value_ref<hmap::Heightmap>("mask nogo");
-    hmap::Path      *p_out = p_node->get_value_ref<hmap::Path>("path");
+    hmap::Heightmap *p_mask = node.get_value_ref<hmap::Heightmap>("mask nogo");
+    hmap::Path      *p_out = node.get_value_ref<hmap::Path>("path");
 
     // copy the input heightmap
     *p_out = *p_waypoints;
@@ -53,7 +53,7 @@ void compute_path_find_node(BaseNode *p_node)
     if (p_out->get_npoints() > 1)
     {
       // working shape
-      float           ds = (float)GET("downsampling", IntAttribute);
+      float           ds = (float)GET(node, "downsampling", IntAttribute);
       hmap::Vec2<int> shape_wrk = hmap::Vec2<int>((int)(p_hmap->shape.x / ds),
                                                   (int)(p_hmap->shape.y / ds));
 
@@ -84,8 +84,8 @@ void compute_path_find_node(BaseNode *p_node)
       p_out->dijkstra(zw,
                       bbox,
                       edge_divisions,
-                      GET("elevation_ratio", FloatAttribute),
-                      GET("distance_exponent", FloatAttribute),
+                      GET(node, "elevation_ratio", FloatAttribute),
+                      GET(node, "distance_exponent", FloatAttribute),
                       p_mask_array);
 
       // set values based on the "fine" grid array
@@ -93,7 +93,7 @@ void compute_path_find_node(BaseNode *p_node)
     }
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

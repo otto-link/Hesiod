@@ -18,63 +18,63 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_thru_node(BaseNode *p_node)
+void setup_thru_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(BoolAttribute, "block_update", false);
+  ADD_ATTR(node, BoolAttribute, "block_update", false);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"block_update"});
+  node.set_attr_ordered_key({"block_update"});
 
   // specialized GUI
-  auto lambda = [](BaseNode *p_node)
+  auto lambda = [](BaseNode &node)
   {
-    bool state = GET("block_update", BoolAttribute);
+    bool state = GET(node, "block_update", BoolAttribute);
 
-    QPushButton *button = new QPushButton("BLOCK UPDATE", p_node);
+    QPushButton *button = new QPushButton("BLOCK UPDATE", &node);
     button->setCheckable(true);
     button->setChecked(state);
     button->setStyleSheet("QPushButton:checked { background-color: red; }");
 
-    p_node->connect(button,
-                    &QPushButton::pressed,
-                    [p_node, button]()
-                    {
-                      bool new_state = !GET("block_update", BoolAttribute);
-                      GET_REF("block_update", BoolAttribute)->set_value(new_state);
-                      button->setChecked(new_state);
-                      p_node->get_p_graph()->update(p_node->get_id());
-                    });
+    node.connect(button,
+                 &QPushButton::pressed,
+                 [&node, button]()
+                 {
+                   bool new_state = !GET(node, "block_update", BoolAttribute);
+                   GET_REF(node, "block_update", BoolAttribute)->set_value(new_state);
+                   button->setChecked(new_state);
+                   node.get_p_graph()->update(node.get_id());
+                 });
 
     return (QWidget *)button;
   };
 
-  p_node->set_qwidget_fct(lambda);
+  node.set_qwidget_fct(lambda);
 }
 
-void compute_thru_node(BaseNode *p_node)
+void compute_thru_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
+  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
 
-  if (p_in && !GET("block_update", BoolAttribute))
+  if (p_in && !GET(node, "block_update", BoolAttribute))
   {
-    hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
+    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
     // copy the input heightmap
     *p_out = *p_in;
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

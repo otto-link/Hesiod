@@ -13,32 +13,32 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_heightmap_to_rgba_node(BaseNode *p_node)
+void setup_heightmap_to_rgba_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "R");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "G");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "B");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "A");
-  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "RGBA", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "R");
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "G");
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "B");
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "A");
+  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "RGBA", CONFIG);
 }
 
-void compute_heightmap_to_rgba_node(BaseNode *p_node)
+void compute_heightmap_to_rgba_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_r = p_node->get_value_ref<hmap::Heightmap>("R");
-  hmap::Heightmap *p_g = p_node->get_value_ref<hmap::Heightmap>("G");
-  hmap::Heightmap *p_b = p_node->get_value_ref<hmap::Heightmap>("B");
-  hmap::Heightmap *p_a = p_node->get_value_ref<hmap::Heightmap>("A");
+  hmap::Heightmap *p_r = node.get_value_ref<hmap::Heightmap>("R");
+  hmap::Heightmap *p_g = node.get_value_ref<hmap::Heightmap>("G");
+  hmap::Heightmap *p_b = node.get_value_ref<hmap::Heightmap>("B");
+  hmap::Heightmap *p_a = node.get_value_ref<hmap::Heightmap>("A");
 
   if (p_r || p_g || p_b || p_a)
   {
-    hmap::HeightmapRGBA *p_out = p_node->get_value_ref<hmap::HeightmapRGBA>("RGBA");
+    hmap::HeightmapRGBA *p_out = node.get_value_ref<hmap::HeightmapRGBA>("RGBA");
 
     hmap::Vec2<int> shape;
     hmap::Vec2<int> tiling;
@@ -65,7 +65,7 @@ void compute_heightmap_to_rgba_node(BaseNode *p_node)
     *p_out = hmap::HeightmapRGBA(hr, hg, hb, ha);
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

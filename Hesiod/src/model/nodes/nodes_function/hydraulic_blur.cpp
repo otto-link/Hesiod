@@ -14,52 +14,52 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_hydraulic_blur_node(BaseNode *p_node)
+void setup_hydraulic_blur_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(FloatAttribute, "radius", 0.1f, 0.01f, 0.5f);
-  ADD_ATTR(FloatAttribute, "vmax", 0.5f, -1.f, 2.f);
-  ADD_ATTR(FloatAttribute, "k_smoothing", 0.1f, 0.f, 1.f);
-  ADD_ATTR(RangeAttribute, "remap");
+  ADD_ATTR(node, FloatAttribute, "radius", 0.1f, 0.01f, 0.5f);
+  ADD_ATTR(node, FloatAttribute, "vmax", 0.5f, -1.f, 2.f);
+  ADD_ATTR(node, FloatAttribute, "k_smoothing", 0.1f, 0.f, 1.f);
+  ADD_ATTR(node, RangeAttribute, "remap");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"radius", "vmax", "k_smoothing", "_SEPARATOR_", "remap"});
+  node.set_attr_ordered_key({"radius", "vmax", "k_smoothing", "_SEPARATOR_", "remap"});
 }
 
-void compute_hydraulic_blur_node(BaseNode *p_node)
+void compute_hydraulic_blur_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
+  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
+    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
     // copy the input heightmap
     *p_out = *p_in;
 
     hmap::transform(*p_out,
-                    [p_node](hmap::Array &out)
+                    [&node](hmap::Array &out)
                     {
                       hmap::hydraulic_blur(out,
-                                           GET("radius", FloatAttribute),
-                                           GET("vmax", FloatAttribute),
-                                           GET("k_smoothing", FloatAttribute));
+                                           GET(node, "radius", FloatAttribute),
+                                           GET(node, "vmax", FloatAttribute),
+                                           GET(node, "k_smoothing", FloatAttribute));
                     });
 
     p_out->smooth_overlap_buffers();
 
     // post-process
-    post_process_heightmap(p_node,
+    post_process_heightmap(node,
                            *p_out,
                            false, // inverse
                            false, // smooth
@@ -67,11 +67,11 @@ void compute_hydraulic_blur_node(BaseNode *p_node)
                            false, // saturate
                            {0.f, 0.f},
                            0.f,
-                           GET_MEMBER("remap", RangeAttribute, is_active),
-                           GET("remap", RangeAttribute));
+                           GET_MEMBER(node, "remap", RangeAttribute, is_active),
+                           GET(node, "remap", RangeAttribute));
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

@@ -16,11 +16,11 @@
 #include "hesiod/model/nodes/node_runtime_info.hpp"
 
 // clang-format off
-#define ADD_ATTR(aclass, key, ...) p_node->add_attr<aclass>(key, key, ## __VA_ARGS__)
-#define GET(key, aclass) p_node->get_attr_ref()->at(key)->get_ref<attr::aclass>()->get_value()
-#define GET_MEMBER(key, aclass, what) p_node->get_attr_ref()->at(key)->get_ref<attr::aclass>()->get_ ## what()
-#define GET_REF(key, aclass) p_node->get_attr_ref()->at(key)->get_ref<attr::aclass>()
-#define CONFIG p_node->get_config_ref()->shape, p_node->get_config_ref()->tiling, p_node->get_config_ref()->overlap
+#define ADD_ATTR(obj, aclass, key, ...) obj.add_attr<aclass>(key, key, ## __VA_ARGS__)
+#define GET(obj, key, aclass) obj.get_attr_ref()->at(key)->get_ref<attr::aclass>()->get_value()
+#define GET_MEMBER(obj, key, aclass, what) obj.get_attr_ref()->at(key)->get_ref<attr::aclass>()->get_ ## what()
+#define GET_REF(obj, key, aclass) obj.get_attr_ref()->at(key)->get_ref<attr::aclass>()
+#define CONFIG node.get_config_ref()->shape, node.get_config_ref()->tiling, node.get_config_ref()->overlap
 // clang-format on
 
 namespace hesiod
@@ -81,9 +81,9 @@ public:
   std::string get_node_type() const;
 
   // --- Compute ---
-  void compute() override { this->compute_fct(this); }
-  void set_compute_fct(std::function<void(BaseNode *p_node)> new_compute_fct);
-  void set_qwidget_fct(std::function<QWidget *(BaseNode *p_node)> new_qwidget_fct);
+  void compute() override { this->compute_fct(*this); }
+  void set_compute_fct(std::function<void(BaseNode &node)> new_compute_fct);
+  void set_qwidget_fct(std::function<QWidget *(BaseNode &node)> new_qwidget_fct);
 
   // --- Serialization ---
   virtual void           json_from(nlohmann::json const &json);
@@ -119,15 +119,15 @@ private:
   // --- Members ---
   std::map<std::string, std::unique_ptr<attr::AbstractAttribute>> attr = {};
 
-  std::vector<std::string>                   attr_ordered_key = {};
-  std::string                                category;
-  std::string                                comment;
-  std::weak_ptr<GraphConfig>                 config;       // owned by GraphNode
-  GraphNode                                 *p_graph_node; // belonging graph node
-  nlohmann::json                             documentation;
-  NodeRuntimeInfo                            runtime_info;
-  std::function<void(BaseNode *p_node)>      compute_fct = nullptr;
-  std::function<QWidget *(BaseNode *p_node)> qwidget_fct = nullptr;
+  std::vector<std::string>                 attr_ordered_key = {};
+  std::string                              category;
+  std::string                              comment;
+  std::weak_ptr<GraphConfig>               config;       // owned by GraphNode
+  GraphNode                               *p_graph_node; // belonging graph node
+  nlohmann::json                           documentation;
+  NodeRuntimeInfo                          runtime_info;
+  std::function<void(BaseNode &node)>      compute_fct = nullptr;
+  std::function<QWidget *(BaseNode &node)> qwidget_fct = nullptr;
   DataPreview *data_preview = nullptr; // owned by gngui::GraphicsNode
 };
 

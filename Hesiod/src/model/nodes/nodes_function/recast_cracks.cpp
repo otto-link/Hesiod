@@ -14,31 +14,31 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_recast_cracks_node(BaseNode *p_node)
+void setup_recast_cracks_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(FloatAttribute, "cut_min", 0.05f, 0.f, 1.f);
-  ADD_ATTR(FloatAttribute, "cut_max", 0.5f, 0.f, 1.f);
-  ADD_ATTR(FloatAttribute, "k_smoothing", 0.01f, 0.f, 1.f);
+  ADD_ATTR(node, FloatAttribute, "cut_min", 0.05f, 0.f, 1.f);
+  ADD_ATTR(node, FloatAttribute, "cut_max", 0.5f, 0.f, 1.f);
+  ADD_ATTR(node, FloatAttribute, "k_smoothing", 0.01f, 0.f, 1.f);
 }
 
-void compute_recast_cracks_node(BaseNode *p_node)
+void compute_recast_cracks_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
+  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
+    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
     // copy the input heightmap
     *p_out = *p_in;
@@ -48,23 +48,23 @@ void compute_recast_cracks_node(BaseNode *p_node)
 
     hmap::transform(
         {p_out},
-        [p_node, hmin, hmax](std::vector<hmap::Array *> p_arrays)
+        [&node, hmin, hmax](std::vector<hmap::Array *> p_arrays)
         {
           hmap::Array *pa_out = p_arrays[0];
 
           hmap::recast_cracks(*pa_out,
-                              GET("cut_min", FloatAttribute),
-                              GET("cut_max", FloatAttribute),
-                              GET("k_smoothing", FloatAttribute),
+                              GET(node, "cut_min", FloatAttribute),
+                              GET(node, "cut_max", FloatAttribute),
+                              GET(node, "k_smoothing", FloatAttribute),
                               hmin,
                               hmax);
         },
-        p_node->get_config_ref()->hmap_transform_mode_gpu);
+        node.get_config_ref()->hmap_transform_mode_gpu);
 
     p_out->smooth_overlap_buffers();
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

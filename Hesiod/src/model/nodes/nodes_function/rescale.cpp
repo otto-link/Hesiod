@@ -14,54 +14,54 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_rescale_node(BaseNode *p_node)
+void setup_rescale_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(FloatAttribute, "scaling", 1.f, 0.0001f, FLT_MAX, "{:.4f}");
-  ADD_ATTR(BoolAttribute, "centered", false);
+  ADD_ATTR(node, FloatAttribute, "scaling", 1.f, 0.0001f, FLT_MAX, "{:.4f}");
+  ADD_ATTR(node, BoolAttribute, "centered", false);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"scaling", "centered"});
+  node.set_attr_ordered_key({"scaling", "centered"});
 }
 
-void compute_rescale_node(BaseNode *p_node)
+void compute_rescale_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
+  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
+    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
     // copy the input heightmap
     *p_out = *p_in;
 
     float vref = 0.f;
 
-    if (GET("centered", BoolAttribute))
+    if (GET(node, "centered", BoolAttribute))
       vref = p_out->mean();
 
     hmap::transform(
         {p_out},
-        [p_node, vref](std::vector<hmap::Array *> p_arrays)
+        [&node, vref](std::vector<hmap::Array *> p_arrays)
         {
           hmap::Array *pa_out = p_arrays[0];
 
-          hmap::rescale(*pa_out, GET("scaling", FloatAttribute), vref);
+          hmap::rescale(*pa_out, GET(node, "scaling", FloatAttribute), vref);
         },
-        p_node->get_config_ref()->hmap_transform_mode_cpu);
+        node.get_config_ref()->hmap_transform_mode_cpu);
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

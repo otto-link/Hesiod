@@ -18,11 +18,11 @@ using namespace attr;
 namespace hesiod
 {
 
-void post_apply_enveloppe(BaseNode *p_node, hmap::Heightmap &h, hmap::Heightmap *p_env)
+void post_apply_enveloppe(BaseNode &node, hmap::Heightmap &h, hmap::Heightmap *p_env)
 {
   Logger::log()->trace("post_apply_enveloppe: [{}]/[{}]",
-                       p_node->get_node_type(),
-                       p_node->get_id());
+                       node.get_node_type(),
+                       node.get_id());
 
   if (p_env)
   {
@@ -38,11 +38,11 @@ void post_apply_enveloppe(BaseNode *p_node, hmap::Heightmap &h, hmap::Heightmap 
           *pa_out -= hmin;
           *pa_out *= *pa_env;
         },
-        p_node->get_config_ref()->hmap_transform_mode_cpu);
+        node.get_config_ref()->hmap_transform_mode_cpu);
   }
 }
 
-void post_process_heightmap(BaseNode         *p_node,
+void post_process_heightmap(BaseNode         &node,
                             hmap::Heightmap  &h,
                             bool              inverse,
                             bool              smoothing,
@@ -67,7 +67,7 @@ void post_process_heightmap(BaseNode         *p_node,
           hmap::Array *pa_out = p_arrays[0];
           return hmap::gpu::smooth_cpulse(*pa_out, ir);
         },
-        p_node->get_config_ref()->hmap_transform_mode_gpu);
+        node.get_config_ref()->hmap_transform_mode_gpu);
 
     h.smooth_overlap_buffers();
   }
@@ -95,11 +95,11 @@ void post_process_heightmap(BaseNode         *p_node,
     h.remap(remap_range.x, remap_range.y);
 }
 
-void post_process_heightmap(BaseNode *p_node, hmap::Heightmap &h, hmap::Heightmap *p_in)
+void post_process_heightmap(BaseNode &node, hmap::Heightmap &h, hmap::Heightmap *p_in)
 {
   Logger::log()->trace("post_process_heightmap: [{}]/[{}]",
-                       p_node->get_node_type(),
-                       p_node->get_id());
+                       node.get_node_type(),
+                       node.get_id());
 
   // mix
   if (p_in)
@@ -107,11 +107,11 @@ void post_process_heightmap(BaseNode *p_node, hmap::Heightmap &h, hmap::Heightma
     // mix
     float k = 0.1f; // TODO hardcoded?
     int   ir = 0;
-    int   method = GET("post_mix_method", EnumAttribute);
+    int   method = GET(node, "post_mix_method", EnumAttribute);
     blend_heightmaps(h, *p_in, h, static_cast<BlendingMethod>(method), k, ir);
 
     // lerp between input and output
-    float t = GET("post_mix", FloatAttribute);
+    float t = GET(node, "post_mix", FloatAttribute);
 
     hmap::transform(
         {&h, p_in},
@@ -122,15 +122,15 @@ void post_process_heightmap(BaseNode *p_node, hmap::Heightmap &h, hmap::Heightma
 
           *pa_out = hmap::lerp(*pa_in, *pa_out, t);
         },
-        p_node->get_config_ref()->hmap_transform_mode_cpu);
+        node.get_config_ref()->hmap_transform_mode_cpu);
   }
 
   // inverse
-  if (GET("post_inverse", BoolAttribute))
+  if (GET(node, "post_inverse", BoolAttribute))
     h.inverse();
 
   // saturate
-  float post_gain = GET("post_gain", FloatAttribute);
+  float post_gain = GET(node, "post_gain", FloatAttribute);
 
   if (post_gain != 1.f)
   {
@@ -145,13 +145,13 @@ void post_process_heightmap(BaseNode *p_node, hmap::Heightmap &h, hmap::Heightma
           hmap::Array *pa = p_arrays[0];
           hmap::gain(*pa, post_gain);
         },
-        p_node->get_config_ref()->hmap_transform_mode_cpu);
+        node.get_config_ref()->hmap_transform_mode_cpu);
 
     h.remap(hmin, hmax, 0.f, 1.f);
   }
 
   // smoothing
-  const int ir = (int)(GET("post_smoothing_radius", FloatAttribute) * h.shape.x);
+  const int ir = (int)(GET(node, "post_smoothing_radius", FloatAttribute) * h.shape.x);
 
   if (ir)
   {
@@ -162,66 +162,67 @@ void post_process_heightmap(BaseNode *p_node, hmap::Heightmap &h, hmap::Heightma
           hmap::Array *pa_out = p_arrays[0];
           return hmap::gpu::smooth_cpulse(*pa_out, ir);
         },
-        p_node->get_config_ref()->hmap_transform_mode_gpu);
+        node.get_config_ref()->hmap_transform_mode_gpu);
 
     h.smooth_overlap_buffers();
   }
 
   // remap
-  if (GET_MEMBER("post_remap", RangeAttribute, is_active))
-    h.remap(GET("post_remap", RangeAttribute)[0], GET("post_remap", RangeAttribute)[1]);
+  if (GET_MEMBER(node, "post_remap", RangeAttribute, is_active))
+    h.remap(GET(node, "post_remap", RangeAttribute)[0],
+            GET(node, "post_remap", RangeAttribute)[1]);
 
   // saturate
-  if (GET_MEMBER("post_saturate", RangeAttribute, is_active))
+  if (GET_MEMBER(node, "post_saturate", RangeAttribute, is_active))
   {
     float hmin = h.min();
     float hmax = h.max();
 
     hmap::transform(
         {&h},
-        [p_node, &hmin, &hmax](std::vector<hmap::Array *> p_arrays)
+        [&node, &hmin, &hmax](std::vector<hmap::Array *> p_arrays)
         {
           hmap::Array *pa_out = p_arrays[0];
 
           float k = 0.1f; // TODO hardcoded?
 
           hmap::saturate(*pa_out,
-                         GET("post_saturate", RangeAttribute)[0],
-                         GET("post_saturate", RangeAttribute)[1],
+                         GET(node, "post_saturate", RangeAttribute)[0],
+                         GET(node, "post_saturate", RangeAttribute)[1],
                          hmin,
                          hmax,
                          k);
         },
-        p_node->get_config_ref()->hmap_transform_mode_cpu);
+        node.get_config_ref()->hmap_transform_mode_cpu);
   }
 }
 
-void setup_post_process_heightmap_attributes(BaseNode *p_node, bool add_mix)
+void setup_post_process_heightmap_attributes(BaseNode &node, bool add_mix)
 {
   Logger::log()->trace("setup_post_process_heightmap_attributes: [{}]/[{}]",
-                       p_node->get_node_type(),
-                       p_node->get_id());
+                       node.get_node_type(),
+                       node.get_id());
 
   if (add_mix)
   {
-    p_node->add_attr<EnumAttribute>("post_mix_method",
-                                    "Mix Method",
-                                    enum_mappings.blending_method_map,
-                                    "replace");
-    p_node->add_attr<FloatAttribute>("post_mix", "Mix Factor", 1.f, 0.f, 1.f);
+    node.add_attr<EnumAttribute>("post_mix_method",
+                                 "Mix Method",
+                                 enum_mappings.blending_method_map,
+                                 "replace");
+    node.add_attr<FloatAttribute>("post_mix", "Mix Factor", 1.f, 0.f, 1.f);
   }
 
-  p_node->add_attr<BoolAttribute>("post_inverse", "Invert Output", false);
-  p_node->add_attr<FloatAttribute>("post_gain", "Gain", 1.f, 0.01f, 10.f);
-  p_node->add_attr<FloatAttribute>("post_smoothing_radius",
-                                   "Smoothing Radius",
-                                   0.f,
-                                   0.f,
-                                   0.05f);
-  p_node->add_attr<RangeAttribute>("post_remap", "Remap Range");
-  p_node->add_attr<RangeAttribute>("post_saturate", "Saturation Range", false);
+  node.add_attr<BoolAttribute>("post_inverse", "Invert Output", false);
+  node.add_attr<FloatAttribute>("post_gain", "Gain", 1.f, 0.01f, 10.f);
+  node.add_attr<FloatAttribute>("post_smoothing_radius",
+                                "Smoothing Radius",
+                                0.f,
+                                0.f,
+                                0.05f);
+  node.add_attr<RangeAttribute>("post_remap", "Remap Range");
+  node.add_attr<RangeAttribute>("post_saturate", "Saturation Range", false);
 
-  std::vector<std::string> *p_keys = p_node->get_attr_ordered_key_ref();
+  std::vector<std::string> *p_keys = node.get_attr_ordered_key_ref();
 
   p_keys->push_back("_GROUPBOX_BEGIN_Post-Processing");
 

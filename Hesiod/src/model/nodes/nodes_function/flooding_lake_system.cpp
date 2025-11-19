@@ -14,63 +14,64 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_flooding_lake_system_node(BaseNode *p_node)
+void setup_flooding_lake_system_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "elevation");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "water_depth", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "elevation");
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "water_depth", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(IntAttribute, "iterations", 1000, 1, INT_MAX);
-  ADD_ATTR(FloatAttribute, "epsilon", 1e-1, 1e-5, 1e-1, "{:.3e}", true);
-  ADD_ATTR(FloatAttribute, "mininal_radius", 0.05f, 0.f, 0.5f);
+  ADD_ATTR(node, IntAttribute, "iterations", 1000, 1, INT_MAX);
+  ADD_ATTR(node, FloatAttribute, "epsilon", 1e-1, 1e-5, 1e-1, "{:.3e}", true);
+  ADD_ATTR(node, FloatAttribute, "mininal_radius", 0.05f, 0.f, 0.5f);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"_GROUPBOX_BEGIN_Main Parameters",
-                                "iterations",
-                                "epsilon",
-                                "_GROUPBOX_END_",
-                                //
-                                "_GROUPBOX_BEGIN_Exclusion filter",
-                                "mininal_radius",
-                                "_GROUPBOX_END_"});
+  node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Main Parameters",
+                             "iterations",
+                             "epsilon",
+                             "_GROUPBOX_END_",
+                             //
+                             "_GROUPBOX_BEGIN_Exclusion filter",
+                             "mininal_radius",
+                             "_GROUPBOX_END_"});
 }
 
-void compute_flooding_lake_system_node(BaseNode *p_node)
+void compute_flooding_lake_system_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("elevation");
+  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("elevation");
 
   if (p_in)
   {
-    hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("water_depth");
+    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("water_depth");
 
-    float epsilon_normalized = GET("epsilon", FloatAttribute) / (float)p_in->shape.x;
-    int   ir = GET("mininal_radius", FloatAttribute) * (float)p_in->shape.x;
+    float epsilon_normalized = GET(node, "epsilon", FloatAttribute) /
+                               (float)p_in->shape.x;
+    int   ir = GET(node, "mininal_radius", FloatAttribute) * (float)p_in->shape.x;
     float surface_threshold = M_PI * ir * ir;
 
     hmap::transform(
         {p_out, p_in},
-        [p_node, epsilon_normalized, surface_threshold](
+        [&node, epsilon_normalized, surface_threshold](
             std::vector<hmap::Array *> p_arrays)
         {
           hmap::Array *pa_out = p_arrays[0];
           hmap::Array *pa_in = p_arrays[1];
 
           *pa_out = hmap::flooding_lake_system(*pa_in,
-                                               GET("iterations", IntAttribute),
+                                               GET(node, "iterations", IntAttribute),
                                                epsilon_normalized,
                                                surface_threshold);
         },
         hmap::TransformMode::SINGLE_ARRAY); // forced, not tileable
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

@@ -14,56 +14,56 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_select_angle_node(BaseNode *p_node)
+void setup_select_angle_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(FloatAttribute, "angle", 0.f, 0.f, 360.f);
-  ADD_ATTR(FloatAttribute, "sigma", 90.f, 0.f, 180.f);
-  ADD_ATTR(FloatAttribute, "radius", 0.f, 0.f, 0.2f);
+  ADD_ATTR(node, FloatAttribute, "angle", 0.f, 0.f, 360.f);
+  ADD_ATTR(node, FloatAttribute, "sigma", 90.f, 0.f, 180.f);
+  ADD_ATTR(node, FloatAttribute, "radius", 0.f, 0.f, 0.2f);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"angle", "sigma", "radius"});
+  node.set_attr_ordered_key({"angle", "sigma", "radius"});
 
-  setup_post_process_heightmap_attributes(p_node);
+  setup_post_process_heightmap_attributes(node);
 }
 
-void compute_select_angle_node(BaseNode *p_node)
+void compute_select_angle_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
+  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
+    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
-    int ir = (int)(GET("radius", FloatAttribute) * p_out->shape.x);
+    int ir = (int)(GET(node, "radius", FloatAttribute) * p_out->shape.x);
 
     hmap::transform(*p_out,
                     *p_in,
-                    [p_node, &ir](hmap::Array &array)
+                    [&node, &ir](hmap::Array &array)
                     {
                       return select_angle(array,
-                                          GET("angle", FloatAttribute),
-                                          GET("sigma", FloatAttribute),
+                                          GET(node, "angle", FloatAttribute),
+                                          GET(node, "sigma", FloatAttribute),
                                           ir);
                     });
 
     p_out->smooth_overlap_buffers();
 
     // post-process
-    post_process_heightmap(p_node, *p_out);
+    post_process_heightmap(node, *p_out);
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

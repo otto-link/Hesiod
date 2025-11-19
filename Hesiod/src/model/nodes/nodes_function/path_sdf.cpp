@@ -16,34 +16,34 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_path_sdf_node(BaseNode *p_node)
+void setup_path_sdf_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Path>(gnode::PortType::IN, "path");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "dx");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "sdf", CONFIG);
+  node.add_port<hmap::Path>(gnode::PortType::IN, "path");
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dx");
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "sdf", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(BoolAttribute, "remap", false);
-  ADD_ATTR(BoolAttribute, "inverse", false);
+  ADD_ATTR(node, BoolAttribute, "remap", false);
+  ADD_ATTR(node, BoolAttribute, "inverse", false);
 }
 
-void compute_path_sdf_node(BaseNode *p_node)
+void compute_path_sdf_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Path *p_path = p_node->get_value_ref<hmap::Path>("path");
+  hmap::Path *p_path = node.get_value_ref<hmap::Path>("path");
 
   if (p_path)
   {
-    hmap::Heightmap *p_dx = p_node->get_value_ref<hmap::Heightmap>("dx");
-    hmap::Heightmap *p_dy = p_node->get_value_ref<hmap::Heightmap>("dy");
-    hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("sdf");
+    hmap::Heightmap *p_dx = node.get_value_ref<hmap::Heightmap>("dx");
+    hmap::Heightmap *p_dy = node.get_value_ref<hmap::Heightmap>("dy");
+    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("sdf");
 
     if (p_path->get_npoints() > 1)
     {
@@ -61,15 +61,15 @@ void compute_path_sdf_node(BaseNode *p_node)
           });
 
       // post-process
-      post_process_heightmap(p_node,
+      post_process_heightmap(node,
                              *p_out,
-                             GET("inverse", BoolAttribute),
+                             GET(node, "inverse", BoolAttribute),
                              false, // smoothing,
                              0,
                              false, // saturate
                              {0.f, 0.f},
                              0.f,
-                             GET("remap", BoolAttribute),
+                             GET(node, "remap", BoolAttribute),
                              {0.f, 1.f});
     }
     else
@@ -77,7 +77,7 @@ void compute_path_sdf_node(BaseNode *p_node)
       hmap::transform(*p_out, [](hmap::Array x) { x = 0.f; });
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

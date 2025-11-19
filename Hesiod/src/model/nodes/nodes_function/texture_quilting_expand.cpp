@@ -14,81 +14,77 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_texture_quilting_expand_node(BaseNode *p_node)
+void setup_texture_quilting_expand_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture (guide)");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "heightmap (guide)");
-  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture", CONFIG);
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "heightmap", CONFIG);
+  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture (guide)");
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "heightmap (guide)");
+  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "heightmap", CONFIG);
 
-  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture A");
-  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture B");
-  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture C");
-  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture D");
+  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture A");
+  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture B");
+  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture C");
+  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture D");
 
-  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture A out", CONFIG);
-  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture B out", CONFIG);
-  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture C out", CONFIG);
-  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture D out", CONFIG);
+  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture A out", CONFIG);
+  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture B out", CONFIG);
+  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture C out", CONFIG);
+  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture D out", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(FloatAttribute, "expansion_ratio", 2.f, 1.f, FLT_MAX);
-  ADD_ATTR(FloatAttribute, "patch_width", 0.3f, 0.1f, 1.f);
-  ADD_ATTR(FloatAttribute, "overlap", 0.9f, 0.05f, 0.95f);
-  ADD_ATTR(SeedAttribute, "seed");
-  ADD_ATTR(BoolAttribute, "patch_flip", true);
-  ADD_ATTR(BoolAttribute, "patch_rotate", true);
-  ADD_ATTR(BoolAttribute, "patch_transpose", true);
-  ADD_ATTR(FloatAttribute, "filter_width_ratio", 0.5f, 0.f, 1.f);
+  ADD_ATTR(node, FloatAttribute, "expansion_ratio", 2.f, 1.f, FLT_MAX);
+  ADD_ATTR(node, FloatAttribute, "patch_width", 0.3f, 0.1f, 1.f);
+  ADD_ATTR(node, FloatAttribute, "overlap", 0.9f, 0.05f, 0.95f);
+  ADD_ATTR(node, SeedAttribute, "seed");
+  ADD_ATTR(node, BoolAttribute, "patch_flip", true);
+  ADD_ATTR(node, BoolAttribute, "patch_rotate", true);
+  ADD_ATTR(node, BoolAttribute, "patch_transpose", true);
+  ADD_ATTR(node, FloatAttribute, "filter_width_ratio", 0.5f, 0.f, 1.f);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"expansion_ratio",
-                                "patch_width",
-                                "overlap",
-                                "seed",
-                                "patch_flip",
-                                "patch_rotate",
-                                "patch_transpose",
-                                "filter_width_ratio"});
+  node.set_attr_ordered_key({"expansion_ratio",
+                             "patch_width",
+                             "overlap",
+                             "seed",
+                             "patch_flip",
+                             "patch_rotate",
+                             "patch_transpose",
+                             "filter_width_ratio"});
 }
 
-void compute_texture_quilting_expand_node(BaseNode *p_node)
+void compute_texture_quilting_expand_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::HeightmapRGBA *p_texture_guide = p_node->get_value_ref<hmap::HeightmapRGBA>(
+  hmap::HeightmapRGBA *p_texture_guide = node.get_value_ref<hmap::HeightmapRGBA>(
       "texture (guide)");
-  hmap::Heightmap *p_hmap_guide = p_node->get_value_ref<hmap::Heightmap>(
+  hmap::Heightmap *p_hmap_guide = node.get_value_ref<hmap::Heightmap>(
       "heightmap (guide)");
 
   if (p_texture_guide)
   {
 
-    hmap::Heightmap     *p_hmap_out = p_node->get_value_ref<hmap::Heightmap>("heightmap");
-    hmap::HeightmapRGBA *p_texture_out = p_node->get_value_ref<hmap::HeightmapRGBA>(
+    hmap::Heightmap     *p_hmap_out = node.get_value_ref<hmap::Heightmap>("heightmap");
+    hmap::HeightmapRGBA *p_texture_out = node.get_value_ref<hmap::HeightmapRGBA>(
         "texture");
 
-    hmap::HeightmapRGBA *p_tex_a = p_node->get_value_ref<hmap::HeightmapRGBA>(
-        "texture A");
-    hmap::HeightmapRGBA *p_tex_b = p_node->get_value_ref<hmap::HeightmapRGBA>(
-        "texture B");
-    hmap::HeightmapRGBA *p_tex_c = p_node->get_value_ref<hmap::HeightmapRGBA>(
-        "texture C");
-    hmap::HeightmapRGBA *p_tex_d = p_node->get_value_ref<hmap::HeightmapRGBA>(
-        "texture D");
+    hmap::HeightmapRGBA *p_tex_a = node.get_value_ref<hmap::HeightmapRGBA>("texture A");
+    hmap::HeightmapRGBA *p_tex_b = node.get_value_ref<hmap::HeightmapRGBA>("texture B");
+    hmap::HeightmapRGBA *p_tex_c = node.get_value_ref<hmap::HeightmapRGBA>("texture C");
+    hmap::HeightmapRGBA *p_tex_d = node.get_value_ref<hmap::HeightmapRGBA>("texture D");
 
-    hmap::HeightmapRGBA *p_tex_out_a = p_node->get_value_ref<hmap::HeightmapRGBA>(
+    hmap::HeightmapRGBA *p_tex_out_a = node.get_value_ref<hmap::HeightmapRGBA>(
         "texture A out");
-    hmap::HeightmapRGBA *p_tex_out_b = p_node->get_value_ref<hmap::HeightmapRGBA>(
+    hmap::HeightmapRGBA *p_tex_out_b = node.get_value_ref<hmap::HeightmapRGBA>(
         "texture B out");
-    hmap::HeightmapRGBA *p_tex_out_c = p_node->get_value_ref<hmap::HeightmapRGBA>(
+    hmap::HeightmapRGBA *p_tex_out_c = node.get_value_ref<hmap::HeightmapRGBA>(
         "texture C out");
-    hmap::HeightmapRGBA *p_tex_out_d = p_node->get_value_ref<hmap::HeightmapRGBA>(
+    hmap::HeightmapRGBA *p_tex_out_d = node.get_value_ref<hmap::HeightmapRGBA>(
         "texture D out");
 
     // for the guide array used to defined the quilting parameters,
@@ -124,25 +120,27 @@ void compute_texture_quilting_expand_node(BaseNode *p_node)
     for (auto &v : secondary_arrays_storage)
       secondary_arrays_ptr.push_back(&v);
 
-    // hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("heightmap");
+    // hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("heightmap");
 
-    int ir = std::max(1, (int)(GET("patch_width", FloatAttribute) * p_hmap_out->shape.x));
+    int ir = std::max(
+        1,
+        (int)(GET(node, "patch_width", FloatAttribute) * p_hmap_out->shape.x));
     hmap::Vec2<int> patch_base_shape = hmap::Vec2<int>(ir, ir);
 
     // --- work on a single array (i.e. not-tiled algo)
 
     hmap::Array out_array = hmap::quilting_expand(
         guide_array,
-        GET("expansion_ratio", FloatAttribute),
+        GET(node, "expansion_ratio", FloatAttribute),
         patch_base_shape,
-        GET("overlap", FloatAttribute),
-        GET("seed", SeedAttribute),
+        GET(node, "overlap", FloatAttribute),
+        GET(node, "seed", SeedAttribute),
         secondary_arrays_ptr,
         true, // keep_input_shape
-        GET("patch_flip", BoolAttribute),
-        GET("patch_rotate", BoolAttribute),
-        GET("patch_transpose", BoolAttribute),
-        GET("filter_width_ratio", FloatAttribute));
+        GET(node, "patch_flip", BoolAttribute),
+        GET(node, "patch_rotate", BoolAttribute),
+        GET(node, "patch_transpose", BoolAttribute),
+        GET(node, "filter_width_ratio", FloatAttribute));
 
     // rebuild outputs
     p_hmap_out->from_array_interp_nearest(out_array);
@@ -179,7 +177,7 @@ void compute_texture_quilting_expand_node(BaseNode *p_node)
       }
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

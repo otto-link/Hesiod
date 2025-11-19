@@ -467,14 +467,14 @@ void BaseNode::set_comment(const std::string &new_comment)
   this->comment = new_comment;
 }
 
-void BaseNode::set_compute_fct(std::function<void(BaseNode *p_node)> new_compute_fct)
+void BaseNode::set_compute_fct(std::function<void(BaseNode &node)> new_compute_fct)
 {
   this->compute_fct = std::move(new_compute_fct);
 }
 
 void BaseNode::set_id(const std::string &new_id) { gnode::Node::set_id(new_id); }
 
-void BaseNode::set_qwidget_fct(std::function<QWidget *(BaseNode *p_node)> new_qwidget_fct)
+void BaseNode::set_qwidget_fct(std::function<QWidget *(BaseNode &node)> new_qwidget_fct)
 {
   this->qwidget_fct = std::move(new_qwidget_fct);
 }

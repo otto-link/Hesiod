@@ -64,7 +64,7 @@ QWidget *BaseNode::get_qwidget_ref()
 
   // add specific content if any
   if (this->qwidget_fct)
-    layout->addWidget(this->qwidget_fct(this));
+    layout->addWidget(this->qwidget_fct(*this));
 
   // add node settings widget
   if (HSD_CTX.app_settings.interface.enable_node_settings_in_node_body)

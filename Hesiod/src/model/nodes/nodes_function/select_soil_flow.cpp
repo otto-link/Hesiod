@@ -17,85 +17,86 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_select_soil_flow_node(BaseNode *p_node)
+void setup_select_soil_flow_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(FloatAttribute, "radius_gradient", 0.f, 0.f, 0.1f);
-  ADD_ATTR(FloatAttribute, "gradient_weight", 1.f, 0.f, 1.f);
-  ADD_ATTR(FloatAttribute, "flow_weight", 0.01f, 0.f, 1.f);
-  ADD_ATTR(FloatAttribute, "talus_ref", 10.f, 0.01f, 32.f);
-  ADD_ATTR(FloatAttribute, "clipping_ratio", 50.f, 0.1f, 100.f);
-  ADD_ATTR(FloatAttribute, "flow_gamma", 1.f, 0.01f, 4.f);
+  ADD_ATTR(node, FloatAttribute, "radius_gradient", 0.f, 0.f, 0.1f);
+  ADD_ATTR(node, FloatAttribute, "gradient_weight", 1.f, 0.f, 1.f);
+  ADD_ATTR(node, FloatAttribute, "flow_weight", 0.01f, 0.f, 1.f);
+  ADD_ATTR(node, FloatAttribute, "talus_ref", 10.f, 0.01f, 32.f);
+  ADD_ATTR(node, FloatAttribute, "clipping_ratio", 50.f, 0.1f, 100.f);
+  ADD_ATTR(node, FloatAttribute, "flow_gamma", 1.f, 0.01f, 4.f);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"_GROUPBOX_BEGIN_Main Parameters",
-                                "_TEXT_Weights & Blending",
-                                "gradient_weight",
-                                "flow_weight",
-                                //
-                                "_TEXT_Slope",
-                                "radius_gradient",
-                                //
-                                "_TEXT_Rivers",
-                                "talus_ref",
-                                "clipping_ratio",
-                                "flow_gamma",
-                                "_GROUPBOX_END_"});
+  node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Main Parameters",
+                             "_TEXT_Weights & Blending",
+                             "gradient_weight",
+                             "flow_weight",
+                             //
+                             "_TEXT_Slope",
+                             "radius_gradient",
+                             //
+                             "_TEXT_Rivers",
+                             "talus_ref",
+                             "clipping_ratio",
+                             "flow_gamma",
+                             "_GROUPBOX_END_"});
 
-  setup_post_process_heightmap_attributes(p_node);
+  setup_post_process_heightmap_attributes(node);
 }
 
-void compute_select_soil_flow_node(BaseNode *p_node)
+void compute_select_soil_flow_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
+  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
+    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
     int   nx = p_out->shape.x; // for gradient scaling
-    int   ir = std::max(1, (int)(GET("radius_gradient", FloatAttribute) * nx));
-    float talus = GET("talus_ref", FloatAttribute) / nx;
+    int   ir = std::max(1, (int)(GET(node, "radius_gradient", FloatAttribute) * nx));
+    float talus = GET(node, "talus_ref", FloatAttribute) / nx;
 
     // --- compute mask
 
     hmap::transform(
         {p_out, p_in},
-        [p_node, nx, ir, talus](std::vector<hmap::Array *> p_arrays)
+        [&node, nx, ir, talus](std::vector<hmap::Array *> p_arrays)
         {
           hmap::Array *pa_out = p_arrays[0];
           hmap::Array *pa_in = p_arrays[1];
 
           float k_smooth = 0.01f; // little influence
 
-          *pa_out = hmap::gpu::select_soil_flow(*pa_in,
-                                                ir,
-                                                GET("gradient_weight", FloatAttribute),
-                                                (float)nx,
-                                                GET("flow_weight", FloatAttribute),
-                                                talus,
-                                                GET("clipping_ratio", FloatAttribute),
-                                                GET("flow_gamma", FloatAttribute),
-                                                k_smooth);
+          *pa_out = hmap::gpu::select_soil_flow(
+              *pa_in,
+              ir,
+              GET(node, "gradient_weight", FloatAttribute),
+              (float)nx,
+              GET(node, "flow_weight", FloatAttribute),
+              talus,
+              GET(node, "clipping_ratio", FloatAttribute),
+              GET(node, "flow_gamma", FloatAttribute),
+              k_smooth);
         },
-        p_node->get_config_ref()->hmap_transform_mode_gpu);
+        node.get_config_ref()->hmap_transform_mode_gpu);
 
     // post-process
     p_out->smooth_overlap_buffers();
-    post_process_heightmap(p_node, *p_out);
+    post_process_heightmap(node, *p_out);
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

@@ -14,45 +14,45 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_smooth_fill_smear_peaks_node(BaseNode *p_node)
+void setup_smooth_fill_smear_peaks_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(FloatAttribute, "radius", 0.05f, 0.001f, 0.2f);
+  ADD_ATTR(node, FloatAttribute, "radius", 0.05f, 0.001f, 0.2f);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"radius"});
+  node.set_attr_ordered_key({"radius"});
 
-  setup_pre_process_mask_attributes(p_node);
-  setup_post_process_heightmap_attributes(p_node, true);
+  setup_pre_process_mask_attributes(node);
+  setup_post_process_heightmap_attributes(node, true);
 }
 
-void compute_smooth_fill_smear_peaks_node(BaseNode *p_node)
+void compute_smooth_fill_smear_peaks_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
+  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_mask = p_node->get_value_ref<hmap::Heightmap>("mask");
-    hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
+    hmap::Heightmap *p_mask = node.get_value_ref<hmap::Heightmap>("mask");
+    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
     // prepare mask
-    std::shared_ptr<hmap::Heightmap> sp_mask = pre_process_mask(p_node, p_mask, *p_in);
+    std::shared_ptr<hmap::Heightmap> sp_mask = pre_process_mask(node, p_mask, *p_in);
 
     // copy the input heightmap
     *p_out = *p_in;
 
-    int ir = std::max(1, (int)(GET("radius", FloatAttribute) * p_out->shape.x));
+    int ir = std::max(1, (int)(GET(node, "radius", FloatAttribute) * p_out->shape.x));
 
     hmap::transform(
         {p_out, p_mask},
@@ -63,15 +63,15 @@ void compute_smooth_fill_smear_peaks_node(BaseNode *p_node)
 
           hmap::gpu::smooth_fill_smear_peaks(*pa_out, ir, pa_mask);
         },
-        p_node->get_config_ref()->hmap_transform_mode_gpu);
+        node.get_config_ref()->hmap_transform_mode_gpu);
 
     p_out->smooth_overlap_buffers();
 
     // post-process
-    post_process_heightmap(p_node, *p_out, p_in);
+    post_process_heightmap(node, *p_out, p_in);
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

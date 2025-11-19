@@ -15,28 +15,28 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_brush_node(BaseNode *p_node)
+void setup_brush_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "background");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "out", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "background");
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "out", CONFIG);
 
   // attribute(s)
-  p_node->add_attr<ArrayAttribute>("hmap", "Heightmap", hmap::Vec2<int>(512, 512));
+  node.add_attr<ArrayAttribute>("hmap", "Heightmap", hmap::Vec2<int>(512, 512));
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"hmap"});
+  node.set_attr_ordered_key({"hmap"});
 
-  setup_post_process_heightmap_attributes(p_node);
+  setup_post_process_heightmap_attributes(node);
 
   // set background image callback
   std::string port_id = "background";
 
-  auto lambda = [p_node, port_id]()
+  auto lambda = [&node, port_id]()
   {
-    hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>(port_id);
+    hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>(port_id);
 
     if (!p_in)
       return QImage();
@@ -58,25 +58,25 @@ void setup_brush_node(BaseNode *p_node)
   };
 
   // assign function to attr
-  GET_REF("hmap", ArrayAttribute)->set_background_image_fct(lambda);
+  GET_REF(node, "hmap", ArrayAttribute)->set_background_image_fct(lambda);
 }
 
-void compute_brush_node(BaseNode *p_node)
+void compute_brush_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   // base noise function
-  hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("out");
+  hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("out");
 
-  hmap::Array array = GET("hmap", ArrayAttribute);
+  hmap::Array array = GET(node, "hmap", ArrayAttribute);
   p_out->from_array_interp(array);
 
   // post-process
-  post_process_heightmap(p_node, *p_out);
+  post_process_heightmap(node, *p_out);
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

@@ -16,58 +16,58 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_dendry_node(BaseNode *p_node)
+void setup_dendry_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "dx");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "control");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "envelope");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "out", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dx");
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "control");
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "envelope");
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "out", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(IntAttribute, "subsampling", 4, 1, 8);
-  ADD_ATTR(WaveNbAttribute, "kw", std::vector<float>(2, 8.f), 0.f, FLT_MAX);
-  ADD_ATTR(SeedAttribute, "seed");
-  ADD_ATTR(FloatAttribute, "eps", 0.2f, 0.f, 1.f);
-  ADD_ATTR(IntAttribute, "resolution", 1, 1, 8);
-  ADD_ATTR(FloatAttribute, "displacement", 0.075f, 0.f, 0.2f);
-  ADD_ATTR(IntAttribute, "primitives_resolution_steps", 3, 1, 8);
-  ADD_ATTR(FloatAttribute, "slope_power", 1.f, 0.f, 2.f);
-  ADD_ATTR(FloatAttribute, "noise_amplitude_proportion", 0.01f, 0.f, 1.f);
-  ADD_ATTR(BoolAttribute, "inverse", false);
-  ADD_ATTR(RangeAttribute, "remap");
+  ADD_ATTR(node, IntAttribute, "subsampling", 4, 1, 8);
+  ADD_ATTR(node, WaveNbAttribute, "kw", std::vector<float>(2, 8.f), 0.f, FLT_MAX);
+  ADD_ATTR(node, SeedAttribute, "seed");
+  ADD_ATTR(node, FloatAttribute, "eps", 0.2f, 0.f, 1.f);
+  ADD_ATTR(node, IntAttribute, "resolution", 1, 1, 8);
+  ADD_ATTR(node, FloatAttribute, "displacement", 0.075f, 0.f, 0.2f);
+  ADD_ATTR(node, IntAttribute, "primitives_resolution_steps", 3, 1, 8);
+  ADD_ATTR(node, FloatAttribute, "slope_power", 1.f, 0.f, 2.f);
+  ADD_ATTR(node, FloatAttribute, "noise_amplitude_proportion", 0.01f, 0.f, 1.f);
+  ADD_ATTR(node, BoolAttribute, "inverse", false);
+  ADD_ATTR(node, RangeAttribute, "remap");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"subsampling",
-                                "_SEPARATOR_",
-                                "kw",
-                                "seed",
-                                "eps",
-                                "slope_power",
-                                "resolution",
-                                "displacement",
-                                "primitives_resolution_steps",
-                                "noise_amplitude_proportion",
-                                "_SEPARATOR_",
-                                "inverse",
-                                "remap"});
+  node.set_attr_ordered_key({"subsampling",
+                             "_SEPARATOR_",
+                             "kw",
+                             "seed",
+                             "eps",
+                             "slope_power",
+                             "resolution",
+                             "displacement",
+                             "primitives_resolution_steps",
+                             "noise_amplitude_proportion",
+                             "_SEPARATOR_",
+                             "inverse",
+                             "remap"});
 }
 
-void compute_dendry_node(BaseNode *p_node)
+void compute_dendry_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   // base noise function
-  hmap::Heightmap *p_dx = p_node->get_value_ref<hmap::Heightmap>("dx");
-  hmap::Heightmap *p_dy = p_node->get_value_ref<hmap::Heightmap>("dy");
-  hmap::Heightmap *p_ctrl = p_node->get_value_ref<hmap::Heightmap>("control");
-  hmap::Heightmap *p_env = p_node->get_value_ref<hmap::Heightmap>("envelope");
-  hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("out");
+  hmap::Heightmap *p_dx = node.get_value_ref<hmap::Heightmap>("dx");
+  hmap::Heightmap *p_dy = node.get_value_ref<hmap::Heightmap>("dy");
+  hmap::Heightmap *p_ctrl = node.get_value_ref<hmap::Heightmap>("control");
+  hmap::Heightmap *p_env = node.get_value_ref<hmap::Heightmap>("envelope");
+  hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("out");
 
   if (p_ctrl)
   {
@@ -77,28 +77,29 @@ void compute_dendry_node(BaseNode *p_node)
     hmap::fill(*p_out,
                p_dx,
                p_dy,
-               [p_node, &ctrl_array](hmap::Vec2<int>   shape,
-                                     hmap::Vec4<float> bbox,
-                                     hmap::Array      *p_noise_x,
-                                     hmap::Array      *p_noise_y)
+               [&node, &ctrl_array](hmap::Vec2<int>   shape,
+                                    hmap::Vec4<float> bbox,
+                                    hmap::Array      *p_noise_x,
+                                    hmap::Array      *p_noise_y)
                {
-                 return hmap::dendry(shape,
-                                     GET("kw", WaveNbAttribute),
-                                     GET("seed", SeedAttribute),
-                                     ctrl_array,
-                                     GET("eps", FloatAttribute),
-                                     GET("resolution", IntAttribute),
-                                     GET("displacement", FloatAttribute),
-                                     GET("primitives_resolution_steps", IntAttribute),
-                                     GET("slope_power", FloatAttribute),
-                                     GET("noise_amplitude_proportion", FloatAttribute),
-                                     true, // add noise
-                                     0.5f, // overlap
-                                     p_noise_x,
-                                     p_noise_y,
-                                     nullptr,
-                                     bbox,
-                                     GET("subsampling", IntAttribute));
+                 return hmap::dendry(
+                     shape,
+                     GET(node, "kw", WaveNbAttribute),
+                     GET(node, "seed", SeedAttribute),
+                     ctrl_array,
+                     GET(node, "eps", FloatAttribute),
+                     GET(node, "resolution", IntAttribute),
+                     GET(node, "displacement", FloatAttribute),
+                     GET(node, "primitives_resolution_steps", IntAttribute),
+                     GET(node, "slope_power", FloatAttribute),
+                     GET(node, "noise_amplitude_proportion", FloatAttribute),
+                     true, // add noise
+                     0.5f, // overlap
+                     p_noise_x,
+                     p_noise_y,
+                     nullptr,
+                     bbox,
+                     GET(node, "subsampling", IntAttribute));
                });
 
     p_out->smooth_overlap_buffers();
@@ -117,19 +118,19 @@ void compute_dendry_node(BaseNode *p_node)
     }
 
     // post-process
-    post_process_heightmap(p_node,
+    post_process_heightmap(node,
                            *p_out,
-                           GET("inverse", BoolAttribute),
+                           GET(node, "inverse", BoolAttribute),
                            false, // smooth
                            0,
                            false, // saturate
                            {0.f, 0.f},
                            0.f,
-                           GET_MEMBER("remap", RangeAttribute, is_active),
-                           GET("remap", RangeAttribute));
+                           GET_MEMBER(node, "remap", RangeAttribute, is_active),
+                           GET(node, "remap", RangeAttribute));
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

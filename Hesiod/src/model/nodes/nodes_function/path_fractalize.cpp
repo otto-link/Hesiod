@@ -14,50 +14,50 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_path_fractalize_node(BaseNode *p_node)
+void setup_path_fractalize_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Path>(gnode::PortType::IN, "input");
-  p_node->add_port<hmap::Path>(gnode::PortType::OUT, "output");
+  node.add_port<hmap::Path>(gnode::PortType::IN, "input");
+  node.add_port<hmap::Path>(gnode::PortType::OUT, "output");
 
   // attribute(s)
-  ADD_ATTR(IntAttribute, "iterations", 4, 1, 10);
-  ADD_ATTR(SeedAttribute, "seed");
-  ADD_ATTR(FloatAttribute, "sigma", 0.3f, 0.f, 1.f);
-  ADD_ATTR(IntAttribute, "orientation", 0, 0, 1);
-  ADD_ATTR(FloatAttribute, "persistence", 1.f, 0.01f, 4.f);
+  ADD_ATTR(node, IntAttribute, "iterations", 4, 1, 10);
+  ADD_ATTR(node, SeedAttribute, "seed");
+  ADD_ATTR(node, FloatAttribute, "sigma", 0.3f, 0.f, 1.f);
+  ADD_ATTR(node, IntAttribute, "orientation", 0, 0, 1);
+  ADD_ATTR(node, FloatAttribute, "persistence", 1.f, 0.01f, 4.f);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key(
+  node.set_attr_ordered_key(
       {"iterations", "seed", "sigma", "orientation", "persistence"});
 }
 
-void compute_path_fractalize_node(BaseNode *p_node)
+void compute_path_fractalize_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Path *p_in = p_node->get_value_ref<hmap::Path>("input");
+  hmap::Path *p_in = node.get_value_ref<hmap::Path>("input");
 
   if (p_in)
   {
-    hmap::Path *p_out = p_node->get_value_ref<hmap::Path>("output");
+    hmap::Path *p_out = node.get_value_ref<hmap::Path>("output");
 
     // copy the input heightmap
     *p_out = *p_in;
 
     if (p_in->get_npoints() > 1)
-      p_out->fractalize(GET("iterations", IntAttribute),
-                        GET("seed", SeedAttribute),
-                        GET("sigma", FloatAttribute),
-                        GET("orientation", IntAttribute),
-                        GET("persistence", FloatAttribute));
+      p_out->fractalize(GET(node, "iterations", IntAttribute),
+                        GET(node, "seed", SeedAttribute),
+                        GET(node, "sigma", FloatAttribute),
+                        GET(node, "orientation", IntAttribute),
+                        GET(node, "persistence", FloatAttribute));
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

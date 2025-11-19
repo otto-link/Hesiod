@@ -17,46 +17,48 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_mix_normal_map_node(BaseNode *p_node)
+void setup_mix_normal_map_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "normal map base");
-  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "normal map detail");
-  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "normal map", CONFIG);
+  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "normal map base");
+  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "normal map detail");
+  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "normal map", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(FloatAttribute, "detail_scaling", 1.f, 0.f, 4.f);
-  ADD_ATTR(EnumAttribute, "blending_method", hmap::normal_map_blending_method_as_string);
+  ADD_ATTR(node, FloatAttribute, "detail_scaling", 1.f, 0.f, 4.f);
+  ADD_ATTR(node,
+           EnumAttribute,
+           "blending_method",
+           hmap::normal_map_blending_method_as_string);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"detail_scaling", "blending_method"});
+  node.set_attr_ordered_key({"detail_scaling", "blending_method"});
 }
 
-void compute_mix_normal_map_node(BaseNode *p_node)
+void compute_mix_normal_map_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::HeightmapRGBA *p_in1 = p_node->get_value_ref<hmap::HeightmapRGBA>(
-      "normal map base");
-  hmap::HeightmapRGBA *p_in2 = p_node->get_value_ref<hmap::HeightmapRGBA>(
+  hmap::HeightmapRGBA *p_in1 = node.get_value_ref<hmap::HeightmapRGBA>("normal map base");
+  hmap::HeightmapRGBA *p_in2 = node.get_value_ref<hmap::HeightmapRGBA>(
       "normal map detail");
 
   if (p_in1 && p_in2)
   {
-    hmap::HeightmapRGBA *p_out = p_node->get_value_ref<hmap::HeightmapRGBA>("normal map");
+    hmap::HeightmapRGBA *p_out = node.get_value_ref<hmap::HeightmapRGBA>("normal map");
 
     *p_out = hmap::mix_normal_map_rgba(
         *p_in1,
         *p_in2,
-        GET("detail_scaling", FloatAttribute),
-        (hmap::NormalMapBlendingMethod)GET("blending_method", EnumAttribute));
+        GET(node, "detail_scaling", FloatAttribute),
+        (hmap::NormalMapBlendingMethod)GET(node, "blending_method", EnumAttribute));
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

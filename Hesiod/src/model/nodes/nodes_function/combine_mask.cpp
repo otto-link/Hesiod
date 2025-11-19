@@ -15,38 +15,39 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_combine_mask_node(BaseNode *p_node)
+void setup_combine_mask_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input 1");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input 2");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input 1");
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input 2");
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(EnumAttribute,
+  ADD_ATTR(node,
+           EnumAttribute,
            "method",
            enum_mappings.mask_combine_method_map,
            "intersection");
 }
 
-void compute_combine_mask_node(BaseNode *p_node)
+void compute_combine_mask_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in1 = p_node->get_value_ref<hmap::Heightmap>("input 1");
-  hmap::Heightmap *p_in2 = p_node->get_value_ref<hmap::Heightmap>("input 2");
+  hmap::Heightmap *p_in1 = node.get_value_ref<hmap::Heightmap>("input 1");
+  hmap::Heightmap *p_in2 = node.get_value_ref<hmap::Heightmap>("input 2");
 
   if (p_in1 && p_in2)
   {
-    hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
+    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
     std::function<void(hmap::Array &, hmap::Array &, hmap::Array &)> lambda;
 
-    int method = GET("method", EnumAttribute);
+    int method = GET(node, "method", EnumAttribute);
 
     switch (method)
     {
@@ -72,7 +73,7 @@ void compute_combine_mask_node(BaseNode *p_node)
     hmap::transform(*p_out, *p_in1, *p_in2, lambda);
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

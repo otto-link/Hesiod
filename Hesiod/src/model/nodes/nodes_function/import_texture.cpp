@@ -16,43 +16,44 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_import_texture_node(BaseNode *p_node)
+void setup_import_texture_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture", CONFIG);
+  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(FilenameAttribute,
+  ADD_ATTR(node,
+           FilenameAttribute,
            "fname",
            std::filesystem::path(""),
            "Image files (*.bmp *.dib *.jpeg *.jpg *.png *.pbm "
            "*.pgm *.ppm *.pxm *.pnm *.tiff *.tif *.hdr *.pic)",
            false);
-  ADD_ATTR(BoolAttribute, "flip_y", true);
+  ADD_ATTR(node, BoolAttribute, "flip_y", true);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"fname", "flip_y"});
+  node.set_attr_ordered_key({"fname", "flip_y"});
 }
 
-void compute_import_texture_node(BaseNode *p_node)
+void compute_import_texture_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::HeightmapRGBA *p_out = p_node->get_value_ref<hmap::HeightmapRGBA>("texture");
+  hmap::HeightmapRGBA *p_out = node.get_value_ref<hmap::HeightmapRGBA>("texture");
 
-  std::string fname = GET("fname", FilenameAttribute).string();
+  std::string fname = GET(node, "fname", FilenameAttribute).string();
 
   // if the file exists, keep going
   std::ifstream f(fname.c_str());
   if (f.good())
   {
     // load rgba data
-    hmap::Tensor tensor4(fname, GET("flip_y", BoolAttribute));
-    tensor4 = tensor4.resample_to_shape_xy(p_node->get_config_ref()->shape);
+    hmap::Tensor tensor4(fname, GET(node, "flip_y", BoolAttribute));
+    tensor4 = tensor4.resample_to_shape_xy(node.get_config_ref()->shape);
 
     hmap::Heightmap r(CONFIG);
     hmap::Heightmap g(CONFIG);
@@ -72,7 +73,7 @@ void compute_import_texture_node(BaseNode *p_node)
     *p_out = hmap::HeightmapRGBA(r, g, b, a);
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

@@ -14,33 +14,33 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_median3x3_node(BaseNode *p_node)
+void setup_median3x3_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(BoolAttribute, "GPU", HSD_DEFAULT_GPU_MODE);
+  ADD_ATTR(node, BoolAttribute, "GPU", HSD_DEFAULT_GPU_MODE);
 }
 
-void compute_median3x3_node(BaseNode *p_node)
+void compute_median3x3_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
+  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_mask = p_node->get_value_ref<hmap::Heightmap>("mask");
-    hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
+    hmap::Heightmap *p_mask = node.get_value_ref<hmap::Heightmap>("mask");
+    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
-    if (GET("GPU", BoolAttribute))
+    if (GET(node, "GPU", BoolAttribute))
     {
       hmap::transform(
           {p_out, p_in, p_mask},
@@ -54,7 +54,7 @@ void compute_median3x3_node(BaseNode *p_node)
 
             hmap::gpu::median_3x3(*pa_in, pa_mask);
           },
-          p_node->get_config_ref()->hmap_transform_mode_gpu);
+          node.get_config_ref()->hmap_transform_mode_gpu);
     }
     else
     {
@@ -70,13 +70,13 @@ void compute_median3x3_node(BaseNode *p_node)
 
             hmap::median_3x3(*pa_in, pa_mask);
           },
-          p_node->get_config_ref()->hmap_transform_mode_gpu);
+          node.get_config_ref()->hmap_transform_mode_gpu);
     }
 
     p_out->smooth_overlap_buffers();
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

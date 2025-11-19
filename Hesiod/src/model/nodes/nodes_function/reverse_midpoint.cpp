@@ -14,36 +14,35 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_reverse_midpoint_node(BaseNode *p_node)
+void setup_reverse_midpoint_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Path>(gnode::PortType::IN, "path");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "heightmap", CONFIG);
+  node.add_port<hmap::Path>(gnode::PortType::IN, "path");
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "heightmap", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(FloatAttribute, "noise_scale", 1.f, 0.01f, 2.f);
-  ADD_ATTR(SeedAttribute, "seed");
-  ADD_ATTR(BoolAttribute, "inverse", false);
-  ADD_ATTR(BoolAttribute, "remap", true);
+  ADD_ATTR(node, FloatAttribute, "noise_scale", 1.f, 0.01f, 2.f);
+  ADD_ATTR(node, SeedAttribute, "seed");
+  ADD_ATTR(node, BoolAttribute, "inverse", false);
+  ADD_ATTR(node, BoolAttribute, "remap", true);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key(
-      {"noise_scale", "seed", "_SEPARATOR_", "inverse", "remap"});
+  node.set_attr_ordered_key({"noise_scale", "seed", "_SEPARATOR_", "inverse", "remap"});
 }
 
-void compute_reverse_midpoint_node(BaseNode *p_node)
+void compute_reverse_midpoint_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Path *p_path = p_node->get_value_ref<hmap::Path>("path");
+  hmap::Path *p_path = node.get_value_ref<hmap::Path>("path");
 
   if (p_path)
   {
-    hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("heightmap");
+    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("heightmap");
 
     if (p_path->get_npoints() > 1)
     {
@@ -52,22 +51,22 @@ void compute_reverse_midpoint_node(BaseNode *p_node)
       p_path->to_array(path_array, bbox);
 
       hmap::Array z = hmap::reverse_midpoint(path_array,
-                                             GET("seed", SeedAttribute),
-                                             GET("noise_scale", FloatAttribute),
+                                             GET(node, "seed", SeedAttribute),
+                                             GET(node, "noise_scale", FloatAttribute),
                                              0.f); // threshold
 
       p_out->from_array_interp_nearest(z);
 
       // post-process
-      post_process_heightmap(p_node,
+      post_process_heightmap(node,
                              *p_out,
-                             GET("inverse", BoolAttribute),
+                             GET(node, "inverse", BoolAttribute),
                              false, // smooth
                              0,
                              false, // saturate
                              {0.f, 0.f},
                              0.f,
-                             GET("remap", BoolAttribute),
+                             GET(node, "remap", BoolAttribute),
                              {0.f, 1.f});
     }
     else
@@ -75,7 +74,7 @@ void compute_reverse_midpoint_node(BaseNode *p_node)
       hmap::transform(*p_out, [](hmap::Array &array) { array = 0.f; });
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

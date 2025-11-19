@@ -13,44 +13,44 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_cloud_to_path_node(BaseNode *p_node)
+void setup_cloud_to_path_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Cloud>(gnode::PortType::IN, "cloud");
-  p_node->add_port<hmap::Path>(gnode::PortType::OUT, "path");
+  node.add_port<hmap::Cloud>(gnode::PortType::IN, "cloud");
+  node.add_port<hmap::Path>(gnode::PortType::OUT, "path");
 
   // attribute(s)
-  ADD_ATTR(BoolAttribute, "closed", false);
-  ADD_ATTR(BoolAttribute, "reorder_nns", false);
+  ADD_ATTR(node, BoolAttribute, "closed", false);
+  ADD_ATTR(node, BoolAttribute, "reorder_nns", false);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"closed", "reorder_nns"});
+  node.set_attr_ordered_key({"closed", "reorder_nns"});
 }
 
-void compute_cloud_to_path_node(BaseNode *p_node)
+void compute_cloud_to_path_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Cloud *p_in = p_node->get_value_ref<hmap::Cloud>("cloud");
+  hmap::Cloud *p_in = node.get_value_ref<hmap::Cloud>("cloud");
 
   if (p_in)
   {
-    hmap::Path *p_out = p_node->get_value_ref<hmap::Path>("path");
+    hmap::Path *p_out = node.get_value_ref<hmap::Path>("path");
 
     // convert the input
     *p_out = hmap::Path(p_in->points);
 
-    p_out->closed = GET("closed", BoolAttribute);
+    p_out->closed = GET(node, "closed", BoolAttribute);
 
-    if (GET("reorder_nns", BoolAttribute))
+    if (GET(node, "reorder_nns", BoolAttribute))
       p_out->reorder_nns();
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

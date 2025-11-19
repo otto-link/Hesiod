@@ -14,39 +14,39 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_ridgelines_node(BaseNode *p_node)
+void setup_ridgelines_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Path>(gnode::PortType::IN, "path");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "dx");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "heightmap", CONFIG);
+  node.add_port<hmap::Path>(gnode::PortType::IN, "path");
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dx");
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "heightmap", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(FloatAttribute, "talus_global", 4.f, -FLT_MAX, FLT_MAX);
-  ADD_ATTR(FloatAttribute, "k_smoothing", 1.f, 0.01f, 2.f);
-  ADD_ATTR(FloatAttribute, "width", 0.1f, 0.f, 1.f);
-  ADD_ATTR(FloatAttribute, "vmin", 0.f, -1.f, 1.f);
+  ADD_ATTR(node, FloatAttribute, "talus_global", 4.f, -FLT_MAX, FLT_MAX);
+  ADD_ATTR(node, FloatAttribute, "k_smoothing", 1.f, 0.01f, 2.f);
+  ADD_ATTR(node, FloatAttribute, "width", 0.1f, 0.f, 1.f);
+  ADD_ATTR(node, FloatAttribute, "vmin", 0.f, -1.f, 1.f);
 }
 
-void compute_ridgelines_node(BaseNode *p_node)
+void compute_ridgelines_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Path *p_path = p_node->get_value_ref<hmap::Path>("path");
+  hmap::Path *p_path = node.get_value_ref<hmap::Path>("path");
 
   if (p_path)
   {
-    hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("heightmap");
+    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("heightmap");
 
     if (p_path->get_npoints() > 1)
     {
-      hmap::Heightmap *p_dx = p_node->get_value_ref<hmap::Heightmap>("dx");
-      hmap::Heightmap *p_dy = p_node->get_value_ref<hmap::Heightmap>("dy");
+      hmap::Heightmap *p_dx = node.get_value_ref<hmap::Heightmap>("dx");
+      hmap::Heightmap *p_dy = node.get_value_ref<hmap::Heightmap>("dy");
 
       std::vector<float> xs, ys, zs = {};
 
@@ -64,10 +64,10 @@ void compute_ridgelines_node(BaseNode *p_node)
       hmap::fill(*p_out,
                  p_dx,
                  p_dy,
-                 [p_node, p_path, xs, ys, zs](hmap::Vec2<int>   shape,
-                                              hmap::Vec4<float> bbox,
-                                              hmap::Array      *p_noise_x,
-                                              hmap::Array      *p_noise_y)
+                 [&node, p_path, xs, ys, zs](hmap::Vec2<int>   shape,
+                                             hmap::Vec4<float> bbox,
+                                             hmap::Array      *p_noise_x,
+                                             hmap::Array      *p_noise_y)
                  {
                    hmap::Array       array(shape);
                    hmap::Vec4<float> bbox_points = {0.f, 1.f, 0.f, 1.f};
@@ -76,10 +76,10 @@ void compute_ridgelines_node(BaseNode *p_node)
                                             xs,
                                             ys,
                                             zs,
-                                            GET("talus_global", FloatAttribute),
-                                            GET("k_smoothing", FloatAttribute),
-                                            GET("width", FloatAttribute),
-                                            GET("vmin", FloatAttribute),
+                                            GET(node, "talus_global", FloatAttribute),
+                                            GET(node, "k_smoothing", FloatAttribute),
+                                            GET(node, "width", FloatAttribute),
+                                            GET(node, "vmin", FloatAttribute),
                                             bbox_points,
                                             p_noise_x,
                                             p_noise_y,
@@ -93,7 +93,7 @@ void compute_ridgelines_node(BaseNode *p_node)
       hmap::transform(*p_out, [](hmap::Array &array) { array = 0.f; });
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

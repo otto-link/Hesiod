@@ -17,53 +17,53 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_clamp_node(BaseNode *p_node)
+void setup_clamp_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(RangeAttribute, "clamp");
-  ADD_ATTR(BoolAttribute, "smooth_min", false);
-  ADD_ATTR(FloatAttribute, "k_min", 0.05f, 0.01f, 1.f);
-  ADD_ATTR(BoolAttribute, "smooth_max", false);
-  ADD_ATTR(FloatAttribute, "k_max", 0.05f, 0.01f, 1.f);
-  ADD_ATTR(BoolAttribute, "remap", false);
+  ADD_ATTR(node, RangeAttribute, "clamp");
+  ADD_ATTR(node, BoolAttribute, "smooth_min", false);
+  ADD_ATTR(node, FloatAttribute, "k_min", 0.05f, 0.01f, 1.f);
+  ADD_ATTR(node, BoolAttribute, "smooth_max", false);
+  ADD_ATTR(node, FloatAttribute, "k_max", 0.05f, 0.01f, 1.f);
+  ADD_ATTR(node, BoolAttribute, "remap", false);
 
   // link histogram for RangeAttribute
-  setup_histogram_for_range_attribute(p_node, "clamp", "input");
+  setup_histogram_for_range_attribute(node, "clamp", "input");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key(
+  node.set_attr_ordered_key(
       {"clamp", "smooth_min", "k_min", "smooth_max", "k_max", "remap"});
 
-  setup_post_process_heightmap_attributes(p_node, true);
+  setup_post_process_heightmap_attributes(node, true);
 }
 
-void compute_clamp_node(BaseNode *p_node)
+void compute_clamp_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
+  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
+    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
     // copy the input heightmap
     *p_out = *p_in;
 
     // retrieve parameters
-    hmap::Vec2<float> crange = GET("clamp", RangeAttribute);
-    bool              smooth_min = GET("smooth_min", BoolAttribute);
-    bool              smooth_max = GET("smooth_max", BoolAttribute);
-    float             k_min = GET("k_min", FloatAttribute);
-    float             k_max = GET("k_max", FloatAttribute);
+    hmap::Vec2<float> crange = GET(node, "clamp", RangeAttribute);
+    bool              smooth_min = GET(node, "smooth_min", BoolAttribute);
+    bool              smooth_max = GET(node, "smooth_max", BoolAttribute);
+    float             k_min = GET(node, "k_min", FloatAttribute);
+    float             k_max = GET(node, "k_max", FloatAttribute);
 
     // compute
     if (!smooth_min && !smooth_max)
@@ -75,7 +75,7 @@ void compute_clamp_node(BaseNode *p_node)
             hmap::Array *pa_out = p_arrays[0];
             hmap::clamp(*pa_out, crange.x, crange.y);
           },
-          p_node->get_config_ref()->hmap_transform_mode_cpu);
+          node.get_config_ref()->hmap_transform_mode_cpu);
     }
     else
     {
@@ -87,7 +87,7 @@ void compute_clamp_node(BaseNode *p_node)
               hmap::Array *pa_out = p_arrays[0];
               hmap::clamp_min_smooth(*pa_out, crange.x, k_min);
             },
-            p_node->get_config_ref()->hmap_transform_mode_cpu);
+            node.get_config_ref()->hmap_transform_mode_cpu);
       else
         hmap::transform(
             {p_out},
@@ -96,7 +96,7 @@ void compute_clamp_node(BaseNode *p_node)
               hmap::Array *pa_out = p_arrays[0];
               hmap::clamp_min(*pa_out, crange.x);
             },
-            p_node->get_config_ref()->hmap_transform_mode_cpu);
+            node.get_config_ref()->hmap_transform_mode_cpu);
 
       if (smooth_max)
         hmap::transform(
@@ -106,7 +106,7 @@ void compute_clamp_node(BaseNode *p_node)
               hmap::Array *pa_out = p_arrays[0];
               hmap::clamp_max_smooth(*pa_out, crange.y, k_max);
             },
-            p_node->get_config_ref()->hmap_transform_mode_cpu);
+            node.get_config_ref()->hmap_transform_mode_cpu);
       else
         hmap::transform(
             {p_out},
@@ -115,17 +115,17 @@ void compute_clamp_node(BaseNode *p_node)
               hmap::Array *pa_out = p_arrays[0];
               hmap::clamp_max(*pa_out, crange.y);
             },
-            p_node->get_config_ref()->hmap_transform_mode_cpu);
+            node.get_config_ref()->hmap_transform_mode_cpu);
     }
 
-    if (GET("remap", BoolAttribute))
+    if (GET(node, "remap", BoolAttribute))
       p_out->remap();
 
     // post-process
-    post_process_heightmap(p_node, *p_out, p_in);
+    post_process_heightmap(node, *p_out, p_in);
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

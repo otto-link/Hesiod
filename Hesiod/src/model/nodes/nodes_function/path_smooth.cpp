@@ -14,45 +14,45 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_path_smooth_node(BaseNode *p_node)
+void setup_path_smooth_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Path>(gnode::PortType::IN, "input");
-  p_node->add_port<hmap::Path>(gnode::PortType::OUT, "output");
+  node.add_port<hmap::Path>(gnode::PortType::IN, "input");
+  node.add_port<hmap::Path>(gnode::PortType::OUT, "output");
 
   // attribute(s)
-  ADD_ATTR(IntAttribute, "navg", 1, 1, 10);
-  ADD_ATTR(FloatAttribute, "averaging_intensity", 1.f, 0.f, 1.f);
-  ADD_ATTR(FloatAttribute, "inertia", 0.f, 0.f, 1.f);
+  ADD_ATTR(node, IntAttribute, "navg", 1, 1, 10);
+  ADD_ATTR(node, FloatAttribute, "averaging_intensity", 1.f, 0.f, 1.f);
+  ADD_ATTR(node, FloatAttribute, "inertia", 0.f, 0.f, 1.f);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"navg", "averaging_intensity", "inertia"});
+  node.set_attr_ordered_key({"navg", "averaging_intensity", "inertia"});
 }
 
-void compute_path_smooth_node(BaseNode *p_node)
+void compute_path_smooth_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Path *p_in = p_node->get_value_ref<hmap::Path>("input");
+  hmap::Path *p_in = node.get_value_ref<hmap::Path>("input");
 
   if (p_in)
   {
-    hmap::Path *p_out = p_node->get_value_ref<hmap::Path>("output");
+    hmap::Path *p_out = node.get_value_ref<hmap::Path>("output");
 
     // copy the input heightmap
     *p_out = *p_in;
 
     if (p_in->get_npoints() > 1)
-      p_out->smooth(GET("navg", IntAttribute),
-                    GET("averaging_intensity", FloatAttribute),
-                    GET("inertia", FloatAttribute));
+      p_out->smooth(GET(node, "navg", IntAttribute),
+                    GET(node, "averaging_intensity", FloatAttribute),
+                    GET(node, "inertia", FloatAttribute));
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

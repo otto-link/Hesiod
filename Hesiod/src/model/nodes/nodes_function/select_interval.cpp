@@ -14,50 +14,50 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_select_interval_node(BaseNode *p_node)
+void setup_select_interval_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(FloatAttribute, "value1", 0.f, -0.5f, 1.5f);
-  ADD_ATTR(FloatAttribute, "value2", 0.5f, -0.5f, 1.5f);
+  ADD_ATTR(node, FloatAttribute, "value1", 0.f, -0.5f, 1.5f);
+  ADD_ATTR(node, FloatAttribute, "value2", 0.5f, -0.5f, 1.5f);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"value1", "value2"});
+  node.set_attr_ordered_key({"value1", "value2"});
 
-  setup_post_process_heightmap_attributes(p_node);
+  setup_post_process_heightmap_attributes(node);
 }
 
-void compute_select_interval_node(BaseNode *p_node)
+void compute_select_interval_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
+  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
+    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
     hmap::transform(*p_out,
                     *p_in,
-                    [p_node](hmap::Array &out, hmap::Array &in)
+                    [&node](hmap::Array &out, hmap::Array &in)
                     {
                       out = hmap::select_interval(in,
-                                                  GET("value1", FloatAttribute),
-                                                  GET("value2", FloatAttribute));
+                                                  GET(node, "value1", FloatAttribute),
+                                                  GET(node, "value2", FloatAttribute));
                     });
 
     // post-process
-    post_process_heightmap(p_node, *p_out);
+    post_process_heightmap(node, *p_out);
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

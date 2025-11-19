@@ -14,42 +14,42 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_blend_poisson_bf_node(BaseNode *p_node)
+void setup_blend_poisson_bf_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input 1");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input 2");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input 1");
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input 2");
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(IntAttribute, "iterations", 500, 1, INT_MAX);
-  ADD_ATTR(BoolAttribute, "inverse", false);
-  ADD_ATTR(RangeAttribute, "remap");
+  ADD_ATTR(node, IntAttribute, "iterations", 500, 1, INT_MAX);
+  ADD_ATTR(node, BoolAttribute, "inverse", false);
+  ADD_ATTR(node, RangeAttribute, "remap");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"iterations", "_SEPARATOR_", "inverse", "remap"});
+  node.set_attr_ordered_key({"iterations", "_SEPARATOR_", "inverse", "remap"});
 }
 
-void compute_blend_poisson_bf_node(BaseNode *p_node)
+void compute_blend_poisson_bf_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in1 = p_node->get_value_ref<hmap::Heightmap>("input 1");
-  hmap::Heightmap *p_in2 = p_node->get_value_ref<hmap::Heightmap>("input 2");
+  hmap::Heightmap *p_in1 = node.get_value_ref<hmap::Heightmap>("input 1");
+  hmap::Heightmap *p_in2 = node.get_value_ref<hmap::Heightmap>("input 2");
 
   if (p_in1 && p_in2)
   {
-    hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
-    hmap::Heightmap *p_mask = p_node->get_value_ref<hmap::Heightmap>("mask");
+    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
+    hmap::Heightmap *p_mask = node.get_value_ref<hmap::Heightmap>("mask");
 
     hmap::transform(
         {p_out, p_in1, p_in2, p_mask},
-        [p_node](std::vector<hmap::Array *> p_arrays)
+        [&node](std::vector<hmap::Array *> p_arrays)
         {
           hmap::Array *pa_out = p_arrays[0];
           hmap::Array *pa_in1 = p_arrays[1];
@@ -58,27 +58,27 @@ void compute_blend_poisson_bf_node(BaseNode *p_node)
 
           *pa_out = hmap::gpu::blend_poisson_bf(*pa_in1,
                                                 *pa_in2,
-                                                GET("iterations", IntAttribute),
+                                                GET(node, "iterations", IntAttribute),
                                                 pa_mask);
         },
-        p_node->get_config_ref()->hmap_transform_mode_gpu);
+        node.get_config_ref()->hmap_transform_mode_gpu);
 
     p_out->smooth_overlap_buffers();
 
     // post-process
-    post_process_heightmap(p_node,
+    post_process_heightmap(node,
                            *p_out,
-                           GET("inverse", BoolAttribute),
+                           GET(node, "inverse", BoolAttribute),
                            false, // smooth
                            0,
                            false, // saturate
                            {0.f, 0.f},
                            0.f,
-                           GET_MEMBER("remap", RangeAttribute, is_active),
-                           GET("remap", RangeAttribute));
+                           GET_MEMBER(node, "remap", RangeAttribute, is_active),
+                           GET(node, "remap", RangeAttribute));
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

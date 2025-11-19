@@ -16,36 +16,36 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_texture_split_channels_node(BaseNode *p_node)
+void setup_texture_split_channels_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "R", CONFIG);
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "G", CONFIG);
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "B", CONFIG);
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "A", CONFIG);
+  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture");
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "R", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "G", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "B", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "A", CONFIG);
 
   // attribute(s)
 
   // attribute(s) order
 }
 
-void compute_texture_split_channels_node(BaseNode *p_node)
+void compute_texture_split_channels_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::HeightmapRGBA *p_tex = p_node->get_value_ref<hmap::HeightmapRGBA>("texture");
+  hmap::HeightmapRGBA *p_tex = node.get_value_ref<hmap::HeightmapRGBA>("texture");
 
   if (p_tex)
   {
-    hmap::Heightmap *p_r = p_node->get_value_ref<hmap::Heightmap>("R");
-    hmap::Heightmap *p_g = p_node->get_value_ref<hmap::Heightmap>("G");
-    hmap::Heightmap *p_b = p_node->get_value_ref<hmap::Heightmap>("B");
-    hmap::Heightmap *p_a = p_node->get_value_ref<hmap::Heightmap>("A");
+    hmap::Heightmap *p_r = node.get_value_ref<hmap::Heightmap>("R");
+    hmap::Heightmap *p_g = node.get_value_ref<hmap::Heightmap>("G");
+    hmap::Heightmap *p_b = node.get_value_ref<hmap::Heightmap>("B");
+    hmap::Heightmap *p_a = node.get_value_ref<hmap::Heightmap>("A");
 
     *p_r = p_tex->rgba[0];
     *p_g = p_tex->rgba[1];
@@ -53,7 +53,7 @@ void compute_texture_split_channels_node(BaseNode *p_node)
     *p_a = p_tex->rgba[3];
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

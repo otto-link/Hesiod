@@ -13,36 +13,36 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_cloud_set_values_from_min_distance_node(BaseNode *p_node)
+void setup_cloud_set_values_from_min_distance_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Cloud>(gnode::PortType::IN, "cloud");
-  p_node->add_port<hmap::Cloud>(gnode::PortType::OUT, "out");
+  node.add_port<hmap::Cloud>(gnode::PortType::IN, "cloud");
+  node.add_port<hmap::Cloud>(gnode::PortType::OUT, "out");
 
   // attribute(s)
 
   // attribute(s) order
 }
 
-void compute_cloud_set_values_from_min_distance_node(BaseNode *p_node)
+void compute_cloud_set_values_from_min_distance_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Cloud *p_in = p_node->get_value_ref<hmap::Cloud>("cloud");
+  hmap::Cloud *p_in = node.get_value_ref<hmap::Cloud>("cloud");
 
   if (p_in)
   {
-    hmap::Cloud *p_out = p_node->get_value_ref<hmap::Cloud>("out");
+    hmap::Cloud *p_out = node.get_value_ref<hmap::Cloud>("out");
 
     *p_out = *p_in;
     p_out->set_values_from_min_distance();
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

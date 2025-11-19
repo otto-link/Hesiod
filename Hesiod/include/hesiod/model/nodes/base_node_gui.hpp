@@ -9,15 +9,15 @@ namespace hesiod
 class BaseNode; // forward
 
 // specialized GUI to add on the node face in the node editor
-void add_export_button(BaseNode *p_node);
-void add_deprecated_warning_label(BaseNode *p_node, const std::string &msg = "");
-void add_wip_warning_label(BaseNode *p_node);
+void add_export_button(BaseNode &node);
+void add_deprecated_warning_label(BaseNode &node, const std::string &msg = "");
+void add_wip_warning_label(BaseNode &node);
 
-void setup_background_image_for_cloud_attribute(BaseNode          *p_node,
+void setup_background_image_for_cloud_attribute(BaseNode          &node,
                                                 const std::string &attribute_key,
                                                 const std::string &port_id);
 
-void setup_histogram_for_range_attribute(BaseNode          *p_node,
+void setup_histogram_for_range_attribute(BaseNode          &node,
                                          const std::string &attribute_key,
                                          const std::string &port_id);
 

@@ -15,35 +15,35 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_receive_node(BaseNode *p_node)
+void setup_receive_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
 
   // nothing by default, this is going to be updated and populated
   // automatically by the graph manager
   std::vector<std::string> choices = {"NO TAG AVAILABLE"};
-  ADD_ATTR(ChoiceAttribute, "tag", choices, choices.front());
+  ADD_ATTR(node, ChoiceAttribute, "tag", choices, choices.front());
 
   // adjust corresponding widget
-  GET_REF("tag", ChoiceAttribute)->set_use_combo_list(true);
+  GET_REF(node, "tag", ChoiceAttribute)->set_use_combo_list(true);
 }
 
-void compute_receive_node(BaseNode *p_node)
+void compute_receive_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
-  std::string      tag = GET("tag", ChoiceAttribute);
+  hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
+  std::string      tag = GET(node, "tag", ChoiceAttribute);
 
   // cast to specialized node
-  ReceiveNode *p_receive_node = dynamic_cast<ReceiveNode *>(p_node);
+  ReceiveNode *p_receive_node = dynamic_cast<ReceiveNode *>(&node);
 
   if (!p_receive_node)
   {
@@ -89,7 +89,7 @@ void compute_receive_node(BaseNode *p_node)
     Logger::log()->trace("tag {} not available in broadcast_param", tag);
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

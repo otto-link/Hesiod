@@ -15,70 +15,70 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_hydraulic_stream_upscale_amplification_node(BaseNode *p_node)
+void setup_hydraulic_stream_upscale_amplification_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(FloatAttribute, "c_erosion", 0.01f, 0.001f, 0.1f);
-  ADD_ATTR(FloatAttribute, "talus_ref", 0.1f, 0.01f, 10.f);
-  ADD_ATTR(FloatAttribute, "radius", 0.f, 0.f, 0.05f);
-  ADD_ATTR(FloatAttribute, "clipping_ratio", 10.f, 0.1f, 100.f);
-  ADD_ATTR(IntAttribute, "upscaling_levels", 1, 0, 4);
-  ADD_ATTR(FloatAttribute, "persistence", 0.5f, 0.f, 1.f);
+  ADD_ATTR(node, FloatAttribute, "c_erosion", 0.01f, 0.001f, 0.1f);
+  ADD_ATTR(node, FloatAttribute, "talus_ref", 0.1f, 0.01f, 10.f);
+  ADD_ATTR(node, FloatAttribute, "radius", 0.f, 0.f, 0.05f);
+  ADD_ATTR(node, FloatAttribute, "clipping_ratio", 10.f, 0.1f, 100.f);
+  ADD_ATTR(node, IntAttribute, "upscaling_levels", 1, 0, 4);
+  ADD_ATTR(node, FloatAttribute, "persistence", 0.5f, 0.f, 1.f);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"c_erosion",
-                                "talus_ref",
-                                "radius",
-                                "clipping_ratio",
-                                "_SEPARATOR_",
-                                "upscaling_levels",
-                                "persistence"});
+  node.set_attr_ordered_key({"c_erosion",
+                             "talus_ref",
+                             "radius",
+                             "clipping_ratio",
+                             "_SEPARATOR_",
+                             "upscaling_levels",
+                             "persistence"});
 }
 
-void compute_hydraulic_stream_upscale_amplification_node(BaseNode *p_node)
+void compute_hydraulic_stream_upscale_amplification_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
+  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_mask = p_node->get_value_ref<hmap::Heightmap>("mask");
-    hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
+    hmap::Heightmap *p_mask = node.get_value_ref<hmap::Heightmap>("mask");
+    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
     // copy the input heightmap
     *p_out = *p_in;
 
-    int ir = (int)(GET("radius", FloatAttribute) * p_out->shape.x);
+    int ir = (int)(GET(node, "radius", FloatAttribute) * p_out->shape.x);
 
     hmap::transform(*p_out,
                     p_mask,
-                    [p_node, &ir](hmap::Array &h_out, hmap::Array *p_mask_array)
+                    [&node, &ir](hmap::Array &h_out, hmap::Array *p_mask_array)
                     {
                       hmap::hydraulic_stream_upscale_amplification(
                           h_out,
                           p_mask_array,
-                          GET("c_erosion", FloatAttribute),
-                          GET("talus_ref", FloatAttribute),
-                          GET("upscaling_levels", IntAttribute),
-                          GET("persistence", FloatAttribute),
+                          GET(node, "c_erosion", FloatAttribute),
+                          GET(node, "talus_ref", FloatAttribute),
+                          GET(node, "upscaling_levels", IntAttribute),
+                          GET(node, "persistence", FloatAttribute),
                           ir,
-                          GET("clipping_ratio", FloatAttribute));
+                          GET(node, "clipping_ratio", FloatAttribute));
                     });
 
     p_out->smooth_overlap_buffers();
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

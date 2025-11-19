@@ -15,47 +15,47 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_kmeans_clustering2_node(BaseNode *p_node)
+void setup_kmeans_clustering2_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "feature 1");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "feature 2");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
-  p_node->add_port<std::vector<hmap::Heightmap>>(gnode::PortType::OUT, "scoring");
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "feature 1");
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "feature 2");
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<std::vector<hmap::Heightmap>>(gnode::PortType::OUT, "scoring");
 
   // attribute(s)
-  ADD_ATTR(SeedAttribute, "seed");
-  ADD_ATTR(IntAttribute, "nclusters", 4, 1, 16);
-  ADD_ATTR(FloatAttribute, "weights.x", 1.f, 0.01f, 2.f);
-  ADD_ATTR(FloatAttribute, "weights.y", 1.f, 0.01f, 2.f);
-  ADD_ATTR(BoolAttribute, "normalize_inputs", true);
-  ADD_ATTR(BoolAttribute, "compute_scoring", true);
+  ADD_ATTR(node, SeedAttribute, "seed");
+  ADD_ATTR(node, IntAttribute, "nclusters", 4, 1, 16);
+  ADD_ATTR(node, FloatAttribute, "weights.x", 1.f, 0.01f, 2.f);
+  ADD_ATTR(node, FloatAttribute, "weights.y", 1.f, 0.01f, 2.f);
+  ADD_ATTR(node, BoolAttribute, "normalize_inputs", true);
+  ADD_ATTR(node, BoolAttribute, "compute_scoring", true);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"seed",
-                                "nclusters",
-                                "weights.x",
-                                "weights.y",
-                                "normalize_inputs",
-                                "_SEPARATOR_",
-                                "compute_scoring"});
+  node.set_attr_ordered_key({"seed",
+                             "nclusters",
+                             "weights.x",
+                             "weights.y",
+                             "normalize_inputs",
+                             "_SEPARATOR_",
+                             "compute_scoring"});
 }
 
-void compute_kmeans_clustering2_node(BaseNode *p_node)
+void compute_kmeans_clustering2_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   // base noise function
-  hmap::Heightmap *p_in1 = p_node->get_value_ref<hmap::Heightmap>("feature 1");
-  hmap::Heightmap *p_in2 = p_node->get_value_ref<hmap::Heightmap>("feature 2");
-  hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
+  hmap::Heightmap *p_in1 = node.get_value_ref<hmap::Heightmap>("feature 1");
+  hmap::Heightmap *p_in2 = node.get_value_ref<hmap::Heightmap>("feature 2");
+  hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
   std::vector<hmap::Heightmap>
-      *p_scoring = p_node->get_value_ref<std::vector<hmap::Heightmap>>("scoring");
+      *p_scoring = node.get_value_ref<std::vector<hmap::Heightmap>>("scoring");
 
   if (p_in1 && p_in2)
   {
@@ -69,38 +69,38 @@ void compute_kmeans_clustering2_node(BaseNode *p_node)
       hmap::Array a1 = p_in1->to_array(p_out->shape);
       hmap::Array a2 = p_in2->to_array(p_out->shape);
 
-      if (GET("normalize_inputs", BoolAttribute))
+      if (GET(node, "normalize_inputs", BoolAttribute))
       {
         hmap::remap(a1);
         hmap::remap(a2);
       }
 
-      hmap::Vec2<float> weights = {GET("weights.x", FloatAttribute),
-                                   GET("weights.y", FloatAttribute)};
+      hmap::Vec2<float> weights = {GET(node, "weights.x", FloatAttribute),
+                                   GET(node, "weights.y", FloatAttribute)};
 
-      if (GET("normalize_inputs", BoolAttribute))
+      if (GET(node, "normalize_inputs", BoolAttribute))
         labels = hmap::kmeans_clustering2(a1,
                                           a2,
-                                          GET("nclusters", IntAttribute),
+                                          GET(node, "nclusters", IntAttribute),
                                           &scoring_arrays,
                                           nullptr, // agg scoring
                                           weights,
-                                          GET("seed", SeedAttribute));
+                                          GET(node, "seed", SeedAttribute));
       else
         labels = hmap::kmeans_clustering2(a1,
                                           a2,
-                                          GET("nclusters", IntAttribute),
+                                          GET(node, "nclusters", IntAttribute),
                                           nullptr,
                                           nullptr, // agg scoring
                                           weights,
-                                          GET("seed", SeedAttribute));
+                                          GET(node, "seed", SeedAttribute));
     }
 
     p_out->from_array_interp_nearest(labels);
 
     // retrieve scoring data
     p_scoring->clear();
-    p_scoring->reserve(GET("nclusters", IntAttribute));
+    p_scoring->reserve(GET(node, "nclusters", IntAttribute));
 
     for (size_t k = 0; k < scoring_arrays.size(); k++)
     {
@@ -111,7 +111,7 @@ void compute_kmeans_clustering2_node(BaseNode *p_node)
     }
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

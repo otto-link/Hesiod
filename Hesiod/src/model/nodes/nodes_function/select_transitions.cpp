@@ -14,32 +14,32 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_select_transitions_node(BaseNode *p_node)
+void setup_select_transitions_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input 1");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input 2");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "blend");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input 1");
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input 2");
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "blend");
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
-  setup_post_process_heightmap_attributes(p_node);
+  setup_post_process_heightmap_attributes(node);
 }
 
-void compute_select_transitions_node(BaseNode *p_node)
+void compute_select_transitions_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in1 = p_node->get_value_ref<hmap::Heightmap>("input 1");
-  hmap::Heightmap *p_in2 = p_node->get_value_ref<hmap::Heightmap>("input 2");
-  hmap::Heightmap *p_blend = p_node->get_value_ref<hmap::Heightmap>("blend");
+  hmap::Heightmap *p_in1 = node.get_value_ref<hmap::Heightmap>("input 1");
+  hmap::Heightmap *p_in2 = node.get_value_ref<hmap::Heightmap>("input 2");
+  hmap::Heightmap *p_blend = node.get_value_ref<hmap::Heightmap>("blend");
 
   if (p_in1 && p_in2 && p_blend)
   {
-    hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
+    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
     hmap::transform(*p_out,
                     *p_in1,
@@ -49,10 +49,10 @@ void compute_select_transitions_node(BaseNode *p_node)
                     { m = hmap::select_transitions(a1, a2, a3); });
 
     // post-process
-    post_process_heightmap(p_node, *p_out);
+    post_process_heightmap(node, *p_out);
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

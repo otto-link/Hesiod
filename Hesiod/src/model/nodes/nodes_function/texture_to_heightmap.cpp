@@ -16,38 +16,38 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_texture_to_heightmap_node(BaseNode *p_node)
+void setup_texture_to_heightmap_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "elevation", CONFIG);
+  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture");
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "elevation", CONFIG);
 
   // attribute(s)
 
   // attribute(s) order
-  setup_post_process_heightmap_attributes(p_node);
+  setup_post_process_heightmap_attributes(node);
 }
 
-void compute_texture_to_heightmap_node(BaseNode *p_node)
+void compute_texture_to_heightmap_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::HeightmapRGBA *p_tex = p_node->get_value_ref<hmap::HeightmapRGBA>("texture");
+  hmap::HeightmapRGBA *p_tex = node.get_value_ref<hmap::HeightmapRGBA>("texture");
 
   if (p_tex)
   {
-    hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("elevation");
+    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("elevation");
     *p_out = p_tex->luminance();
 
     // post-process
-    post_process_heightmap(p_node, *p_out);
+    post_process_heightmap(node, *p_out);
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

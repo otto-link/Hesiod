@@ -14,38 +14,38 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_translate_node(BaseNode *p_node)
+void setup_translate_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "dx");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dx");
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(Vec2FloatAttribute, "center");
-  ADD_ATTR(BoolAttribute, "periodic", false);
+  ADD_ATTR(node, Vec2FloatAttribute, "center");
+  ADD_ATTR(node, BoolAttribute, "periodic", false);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"center", "periodic"});
+  node.set_attr_ordered_key({"center", "periodic"});
 }
 
-void compute_translate_node(BaseNode *p_node)
+void compute_translate_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   // base noise function
-  hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
+  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_dx = p_node->get_value_ref<hmap::Heightmap>("dx");
-    hmap::Heightmap *p_dy = p_node->get_value_ref<hmap::Heightmap>("dy");
-    hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
+    hmap::Heightmap *p_dx = node.get_value_ref<hmap::Heightmap>("dx");
+    hmap::Heightmap *p_dy = node.get_value_ref<hmap::Heightmap>("dy");
+    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
     // --- work on a single array (as a temporary solution?)
     hmap::Array z_array = p_in->to_array();
@@ -65,19 +65,19 @@ void compute_translate_node(BaseNode *p_node)
       p_dy_array = &dy_array;
     }
 
-    hmap::Vec2<float> center = GET("center", Vec2FloatAttribute);
+    hmap::Vec2<float> center = GET(node, "center", Vec2FloatAttribute);
 
     z_array = hmap::translate(z_array,
                               center.x - 0.5f,
                               center.y - 0.5f,
-                              GET("periodic", BoolAttribute),
+                              GET(node, "periodic", BoolAttribute),
                               p_dx_array,
                               p_dy_array);
 
     p_out->from_array_interp_nearest(z_array);
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

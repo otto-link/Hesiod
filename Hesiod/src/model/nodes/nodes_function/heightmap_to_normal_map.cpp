@@ -14,31 +14,30 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_heightmap_to_normal_map_node(BaseNode *p_node)
+void setup_heightmap_to_normal_map_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "normal map", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "normal map", CONFIG);
 
   // attribute(s)
 
   // attribute(s) order
 }
 
-void compute_heightmap_to_normal_map_node(BaseNode *p_node)
+void compute_heightmap_to_normal_map_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
+  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
 
   if (p_in)
   {
-    hmap::HeightmapRGBA *p_nmap = p_node->get_value_ref<hmap::HeightmapRGBA>(
-        "normal map");
+    hmap::HeightmapRGBA *p_nmap = node.get_value_ref<hmap::HeightmapRGBA>("normal map");
 
     hmap::Array  array = p_in->to_array();
     hmap::Tensor tn = hmap::normal_map(array);
@@ -56,7 +55,7 @@ void compute_heightmap_to_normal_map_node(BaseNode *p_node)
                                   hmap::Array(p_in->shape, 1.f));
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

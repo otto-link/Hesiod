@@ -14,45 +14,46 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_gaussian_decay_node(BaseNode *p_node)
+void setup_gaussian_decay_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(FloatAttribute, "sigma", 0.1f, 0.001f, 0.2f);
+  ADD_ATTR(node, FloatAttribute, "sigma", 0.1f, 0.001f, 0.2f);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"sigma"});
+  node.set_attr_ordered_key({"sigma"});
 
-  setup_post_process_heightmap_attributes(p_node, true);
+  setup_post_process_heightmap_attributes(node, true);
 }
 
-void compute_gaussian_decay_node(BaseNode *p_node)
+void compute_gaussian_decay_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
+  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
+    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
     hmap::transform(*p_out,
                     *p_in,
-                    [p_node](hmap::Array &out, hmap::Array &in)
-                    { out = hmap::gaussian_decay(in, GET("sigma", FloatAttribute)); });
+                    [&node](hmap::Array &out, hmap::Array &in) {
+                      out = hmap::gaussian_decay(in, GET(node, "sigma", FloatAttribute));
+                    });
 
     // post-process
-    post_process_heightmap(p_node, *p_out, p_in);
+    post_process_heightmap(node, *p_out, p_in);
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

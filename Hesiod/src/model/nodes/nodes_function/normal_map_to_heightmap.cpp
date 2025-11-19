@@ -16,38 +16,38 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_normal_map_to_heightmap_node(BaseNode *p_node)
+void setup_normal_map_to_heightmap_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "normal map");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "normal map");
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(BoolAttribute, "poisson_solver", false);
-  ADD_ATTR(IntAttribute, "iterations", 500, 1, INT_MAX);
-  ADD_ATTR(FloatAttribute, "omega", 1.5f, 1e-3f, 2.f);
+  ADD_ATTR(node, BoolAttribute, "poisson_solver", false);
+  ADD_ATTR(node, IntAttribute, "iterations", 500, 1, INT_MAX);
+  ADD_ATTR(node, FloatAttribute, "omega", 1.5f, 1e-3f, 2.f);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"poisson_solver", "iterations", "omega"});
+  node.set_attr_ordered_key({"poisson_solver", "iterations", "omega"});
 
-  setup_post_process_heightmap_attributes(p_node);
+  setup_post_process_heightmap_attributes(node);
 
-  add_wip_warning_label(p_node);
+  add_wip_warning_label(node);
 }
 
-void compute_normal_map_to_heightmap_node(BaseNode *p_node)
+void compute_normal_map_to_heightmap_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::HeightmapRGBA *p_nmap = p_node->get_value_ref<hmap::HeightmapRGBA>("normal map");
+  hmap::HeightmapRGBA *p_nmap = node.get_value_ref<hmap::HeightmapRGBA>("normal map");
 
   if (p_nmap)
   {
-    hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
+    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
     hmap::Tensor ts = hmap::Tensor(p_nmap->shape, 3);
     ts.set_slice(0, p_nmap->rgba[0].to_array());
@@ -56,11 +56,11 @@ void compute_normal_map_to_heightmap_node(BaseNode *p_node)
 
     hmap::Array z;
 
-    if (GET("poisson_solver", BoolAttribute))
+    if (GET(node, "poisson_solver", BoolAttribute))
     {
       z = hmap::normal_map_to_heightmap_poisson(ts,
-                                                GET("iterations", IntAttribute),
-                                                GET("omega", FloatAttribute));
+                                                GET(node, "iterations", IntAttribute),
+                                                GET(node, "omega", FloatAttribute));
     }
     else
     {
@@ -72,10 +72,10 @@ void compute_normal_map_to_heightmap_node(BaseNode *p_node)
     p_out->from_array_interp(z);
 
     // post-process
-    post_process_heightmap(p_node, *p_out);
+    post_process_heightmap(node, *p_out);
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

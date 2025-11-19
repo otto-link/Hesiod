@@ -16,35 +16,35 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_texture_uv_checker_node(BaseNode *p_node)
+void setup_texture_uv_checker_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture", CONFIG);
+  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture", CONFIG);
 
   // attribute(s)
   std::vector<std::string> choices = {"4x4", "8x8", "16x16"};
-  ADD_ATTR(ChoiceAttribute, "size", choices, "8x8");
+  ADD_ATTR(node, ChoiceAttribute, "size", choices, "8x8");
 }
 
-void compute_texture_uv_checker_node(BaseNode *p_node)
+void compute_texture_uv_checker_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::HeightmapRGBA *p_out = p_node->get_value_ref<hmap::HeightmapRGBA>("texture");
+  hmap::HeightmapRGBA *p_out = node.get_value_ref<hmap::HeightmapRGBA>("texture");
 
   // generated with https://uvchecker.vinzi.xyz/
 
   std::string fname;
 
-  if (GET("size", ChoiceAttribute) == "4x4")
+  if (GET(node, "size", ChoiceAttribute) == "4x4")
     fname = "data/uv_checker_2k_04x04.png";
-  else if (GET("size", ChoiceAttribute) == "8x8")
+  else if (GET(node, "size", ChoiceAttribute) == "8x8")
     fname = "data/uv_checker_2k_08x08.png";
-  else if (GET("size", ChoiceAttribute) == "16x16")
+  else if (GET(node, "size", ChoiceAttribute) == "16x16")
     fname = "data/uv_checker_2k_16x16.png";
 
   // if the file exists, keep going
@@ -54,7 +54,7 @@ void compute_texture_uv_checker_node(BaseNode *p_node)
     // load rgba data
     bool         flip_j = true;
     hmap::Tensor tensor4(fname, flip_j);
-    tensor4 = tensor4.resample_to_shape_xy(p_node->get_config_ref()->shape);
+    tensor4 = tensor4.resample_to_shape_xy(node.get_config_ref()->shape);
 
     hmap::Heightmap r(CONFIG);
     hmap::Heightmap g(CONFIG);
@@ -74,7 +74,7 @@ void compute_texture_uv_checker_node(BaseNode *p_node)
     *p_out = hmap::HeightmapRGBA(r, g, b, a);
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

@@ -15,33 +15,33 @@ using namespace attr;
 namespace hesiod
 {
 
-void add_export_button(BaseNode *p_node)
+void add_export_button(BaseNode &node)
 {
-  Logger::log()->trace("add_export_button: node {}", p_node->get_label());
+  Logger::log()->trace("add_export_button: node {}", node.get_label());
 
-  auto lambda = [](BaseNode *p_node)
+  auto lambda = [](BaseNode &node)
   {
-    QPushButton *button = new QPushButton("Export!", p_node);
+    QPushButton *button = new QPushButton("Export!", &node);
 
-    p_node->connect(button,
-                    &QPushButton::pressed,
-                    [p_node]()
-                    {
-                      // bypass 'auto_export' attribute
-                      bool auto_export = GET("auto_export", BoolAttribute);
+    node.connect(button,
+                 &QPushButton::pressed,
+                 [&node]()
+                 {
+                   // bypass 'auto_export' attribute
+                   bool auto_export = GET(node, "auto_export", BoolAttribute);
 
-                      if (!auto_export)
-                        GET_REF("auto_export", BoolAttribute)->set_value(true);
+                   if (!auto_export)
+                     GET_REF(node, "auto_export", BoolAttribute)->set_value(true);
 
-                      p_node->compute();
+                   node.compute();
 
-                      GET_REF("auto_export", BoolAttribute)->set_value(auto_export);
-                    });
+                   GET_REF(node, "auto_export", BoolAttribute)->set_value(auto_export);
+                 });
 
     return (QWidget *)button;
   };
 
-  p_node->set_qwidget_fct(lambda);
+  node.set_qwidget_fct(lambda);
 }
 
 } // namespace hesiod

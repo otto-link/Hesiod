@@ -14,33 +14,33 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_lerp_node(BaseNode *p_node)
+void setup_lerp_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "a");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "b");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "t");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "a");
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "b");
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "t");
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(FloatAttribute, "t", 0.5f, 0.f, 1.f);
+  ADD_ATTR(node, FloatAttribute, "t", 0.5f, 0.f, 1.f);
 }
 
-void compute_lerp_node(BaseNode *p_node)
+void compute_lerp_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_a = p_node->get_value_ref<hmap::Heightmap>("a");
-  hmap::Heightmap *p_b = p_node->get_value_ref<hmap::Heightmap>("b");
+  hmap::Heightmap *p_a = node.get_value_ref<hmap::Heightmap>("a");
+  hmap::Heightmap *p_b = node.get_value_ref<hmap::Heightmap>("b");
 
   if (p_a && p_b)
   {
-    hmap::Heightmap *p_t = p_node->get_value_ref<hmap::Heightmap>("t");
-    hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
+    hmap::Heightmap *p_t = node.get_value_ref<hmap::Heightmap>("t");
+    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
     if (p_t)
       hmap::transform(
@@ -54,22 +54,22 @@ void compute_lerp_node(BaseNode *p_node)
 
             *pa_out = hmap::lerp(*pa_a, *pa_b, *pa_t);
           },
-          p_node->get_config_ref()->hmap_transform_mode_cpu);
+          node.get_config_ref()->hmap_transform_mode_cpu);
     else
       hmap::transform(
           {p_out, p_a, p_b},
-          [p_node](std::vector<hmap::Array *> p_arrays)
+          [&node](std::vector<hmap::Array *> p_arrays)
           {
             hmap::Array *pa_out = p_arrays[0];
             hmap::Array *pa_a = p_arrays[1];
             hmap::Array *pa_b = p_arrays[2];
 
-            *pa_out = hmap::lerp(*pa_a, *pa_b, GET("t", FloatAttribute));
+            *pa_out = hmap::lerp(*pa_a, *pa_b, GET(node, "t", FloatAttribute));
           },
-          p_node->get_config_ref()->hmap_transform_mode_cpu);
+          node.get_config_ref()->hmap_transform_mode_cpu);
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

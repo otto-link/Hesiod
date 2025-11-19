@@ -17,42 +17,42 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_cloud_to_vectors_node(BaseNode *p_node)
+void setup_cloud_to_vectors_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Cloud>(gnode::PortType::IN, "cloud");
-  p_node->add_port<std::vector<float>>(gnode::PortType::OUT, "x");
-  p_node->add_port<std::vector<float>>(gnode::PortType::OUT, "y");
-  p_node->add_port<std::vector<float>>(gnode::PortType::OUT, "v");
+  node.add_port<hmap::Cloud>(gnode::PortType::IN, "cloud");
+  node.add_port<std::vector<float>>(gnode::PortType::OUT, "x");
+  node.add_port<std::vector<float>>(gnode::PortType::OUT, "y");
+  node.add_port<std::vector<float>>(gnode::PortType::OUT, "v");
 
   // attribute(s)
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({});
+  node.set_attr_ordered_key({});
 }
 
-void compute_cloud_to_vectors_node(BaseNode *p_node)
+void compute_cloud_to_vectors_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Cloud *p_in = p_node->get_value_ref<hmap::Cloud>("cloud");
+  hmap::Cloud *p_in = node.get_value_ref<hmap::Cloud>("cloud");
 
   if (p_in)
   {
-    auto p_x = p_node->get_value_ref<std::vector<float>>("x");
-    auto p_y = p_node->get_value_ref<std::vector<float>>("y");
-    auto p_v = p_node->get_value_ref<std::vector<float>>("v");
+    auto p_x = node.get_value_ref<std::vector<float>>("x");
+    auto p_y = node.get_value_ref<std::vector<float>>("y");
+    auto p_v = node.get_value_ref<std::vector<float>>("v");
 
     *p_x = p_in->get_x();
     *p_y = p_in->get_y();
     *p_v = p_in->get_values();
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

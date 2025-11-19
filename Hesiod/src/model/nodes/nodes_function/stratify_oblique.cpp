@@ -16,48 +16,48 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_stratify_oblique_node(BaseNode *p_node)
+void setup_stratify_oblique_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "noise");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "noise");
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
 
   // attribute(s)
-  ADD_ATTR(SeedAttribute, "seed");
-  ADD_ATTR(IntAttribute, "n_strata", 3, 1, 16);
-  ADD_ATTR(FloatAttribute, "strata_noise", 0.f, 0.f, 1.f);
-  ADD_ATTR(FloatAttribute, "gamma", 0.7f, 0.01f, 5.f);
-  ADD_ATTR(FloatAttribute, "gamma_noise", 0.f, 0.f, 1.f);
-  ADD_ATTR(FloatAttribute, "talus_global", 1.f, 0.f, FLT_MAX);
-  ADD_ATTR(FloatAttribute, "angle", 30.f, -180.f, 180.f);
+  ADD_ATTR(node, SeedAttribute, "seed");
+  ADD_ATTR(node, IntAttribute, "n_strata", 3, 1, 16);
+  ADD_ATTR(node, FloatAttribute, "strata_noise", 0.f, 0.f, 1.f);
+  ADD_ATTR(node, FloatAttribute, "gamma", 0.7f, 0.01f, 5.f);
+  ADD_ATTR(node, FloatAttribute, "gamma_noise", 0.f, 0.f, 1.f);
+  ADD_ATTR(node, FloatAttribute, "talus_global", 1.f, 0.f, FLT_MAX);
+  ADD_ATTR(node, FloatAttribute, "angle", 30.f, -180.f, 180.f);
 
   // attribute(s) order
-  p_node->set_attr_ordered_key({"seed",
-                                "n_strata",
-                                "strata_noise",
-                                "gamma",
-                                "gamma_noise",
-                                "talus_global",
-                                "angle"});
+  node.set_attr_ordered_key({"seed",
+                             "n_strata",
+                             "strata_noise",
+                             "gamma",
+                             "gamma_noise",
+                             "talus_global",
+                             "angle"});
 
-  add_deprecated_warning_label(p_node, "Use Strata node.");
+  add_deprecated_warning_label(node, "Use Strata node.");
 }
 
-void compute_stratify_oblique_node(BaseNode *p_node)
+void compute_stratify_oblique_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("input");
+  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_noise = p_node->get_value_ref<hmap::Heightmap>("noise");
-    hmap::Heightmap *p_mask = p_node->get_value_ref<hmap::Heightmap>("mask");
-    hmap::Heightmap *p_out = p_node->get_value_ref<hmap::Heightmap>("output");
+    hmap::Heightmap *p_noise = node.get_value_ref<hmap::Heightmap>("noise");
+    hmap::Heightmap *p_mask = node.get_value_ref<hmap::Heightmap>("mask");
+    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
     // copy the input heightmap
     *p_out = *p_in;
@@ -67,43 +67,43 @@ void compute_stratify_oblique_node(BaseNode *p_node)
 
     auto hs = hmap::linspace_jitted(zmin,
                                     zmax,
-                                    GET("n_strata", IntAttribute) + 1,
-                                    GET("strata_noise", FloatAttribute),
-                                    GET("seed", SeedAttribute));
+                                    GET(node, "n_strata", IntAttribute) + 1,
+                                    GET(node, "strata_noise", FloatAttribute),
+                                    GET(node, "seed", SeedAttribute));
 
     float gmin = std::max(0.01f,
-                          GET("gamma", FloatAttribute) *
-                              (1.f - GET("gamma_noise", FloatAttribute)));
-    float gmax = GET("gamma", FloatAttribute) *
-                 (1.f + GET("gamma_noise", FloatAttribute));
+                          GET(node, "gamma", FloatAttribute) *
+                              (1.f - GET(node, "gamma_noise", FloatAttribute)));
+    float gmax = GET(node, "gamma", FloatAttribute) *
+                 (1.f + GET(node, "gamma_noise", FloatAttribute));
 
     auto gs = hmap::random_vector(gmin,
                                   gmax,
-                                  GET("n_strata", IntAttribute),
-                                  GET("seed", SeedAttribute));
+                                  GET(node, "n_strata", IntAttribute),
+                                  GET(node, "seed", SeedAttribute));
 
-    float talus = GET("talus_global", FloatAttribute) / (float)p_out->shape.x;
+    float talus = GET(node, "talus_global", FloatAttribute) / (float)p_out->shape.x;
 
     hmap::transform(*p_out,
                     p_mask,
                     p_noise,
-                    [p_node, &hs, &gs, &talus](hmap::Array &h_out,
-                                               hmap::Array *p_mask_array,
-                                               hmap::Array *p_noise_array)
+                    [&node, &hs, &gs, &talus](hmap::Array &h_out,
+                                              hmap::Array *p_mask_array,
+                                              hmap::Array *p_noise_array)
                     {
                       hmap::stratify_oblique(h_out,
                                              p_mask_array,
                                              hs,
                                              gs,
                                              talus,
-                                             GET("angle", FloatAttribute),
+                                             GET(node, "angle", FloatAttribute),
                                              p_noise_array);
                     });
 
     p_out->smooth_overlap_buffers();
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

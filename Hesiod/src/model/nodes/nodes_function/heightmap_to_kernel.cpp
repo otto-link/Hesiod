@@ -15,64 +15,65 @@ using namespace attr;
 namespace hesiod
 {
 
-void setup_heightmap_to_kernel_node(BaseNode *p_node)
+void setup_heightmap_to_kernel_node(BaseNode &node)
 {
-  Logger::log()->trace("setup node {}", p_node->get_label());
+  Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  p_node->add_port<hmap::Heightmap>(gnode::PortType::IN, "heightmap");
-  p_node->add_port<hmap::Array>(gnode::PortType::OUT,
-                                "kernel",
-                                p_node->get_config_ref()->shape);
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "heightmap");
+  node.add_port<hmap::Array>(gnode::PortType::OUT,
+                             "kernel",
+                             node.get_config_ref()->shape);
 
   // attribute(s)
-  ADD_ATTR(FloatAttribute, "radius", 0.1f, 0.001f, 0.2f);
-  ADD_ATTR(BoolAttribute, "normalize", false);
-  ADD_ATTR(BoolAttribute, "envelope", false);
-  ADD_ATTR(EnumAttribute,
+  ADD_ATTR(node, FloatAttribute, "radius", 0.1f, 0.001f, 0.2f);
+  ADD_ATTR(node, BoolAttribute, "normalize", false);
+  ADD_ATTR(node, BoolAttribute, "envelope", false);
+  ADD_ATTR(node,
+           EnumAttribute,
            "envelope_kernel",
            enum_mappings.kernel_type_map,
            "cubic_pulse");
 
   // attribute(s) order
-  p_node->set_attr_ordered_key(
+  node.set_attr_ordered_key(
       {"radius", "normalize", "_SEPARATOR_", "envelope", "envelope_kernel"});
 }
 
-void compute_heightmap_to_kernel_node(BaseNode *p_node)
+void compute_heightmap_to_kernel_node(BaseNode &node)
 {
-  Q_EMIT p_node->compute_started(p_node->get_id());
+  Q_EMIT node.compute_started(node.get_id());
 
-  Logger::log()->trace("computing node [{}]/[{}]", p_node->get_label(), p_node->get_id());
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = p_node->get_value_ref<hmap::Heightmap>("heightmap");
+  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("heightmap");
 
   if (p_in)
   {
-    hmap::Array *p_out = p_node->get_value_ref<hmap::Array>("kernel");
+    hmap::Array *p_out = node.get_value_ref<hmap::Array>("kernel");
 
     int ir = std::max(
         1,
-        (int)(GET("radius", FloatAttribute) * p_node->get_config_ref()->shape.x));
+        (int)(GET(node, "radius", FloatAttribute) * node.get_config_ref()->shape.x));
     hmap::Vec2<int> kernel_shape = {2 * ir + 1, 2 * ir + 1};
 
     hmap::Array array = p_in->to_array();
     *p_out = array.resample_to_shape(kernel_shape);
 
-    if (GET("envelope", BoolAttribute))
+    if (GET(node, "envelope", BoolAttribute))
     {
       hmap::Array env = hmap::get_kernel(
           kernel_shape,
-          (hmap::KernelType)GET("envelope_kernel", EnumAttribute));
+          (hmap::KernelType)GET(node, "envelope_kernel", EnumAttribute));
 
       *p_out *= env;
     }
 
-    if (GET("normalize", BoolAttribute))
+    if (GET(node, "normalize", BoolAttribute))
       *p_out /= p_out->sum();
   }
 
-  Q_EMIT p_node->compute_finished(p_node->get_id());
+  Q_EMIT node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod
