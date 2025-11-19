@@ -23,7 +23,7 @@ void setup_path_decasteljau_node(BaseNode &node)
   node.add_port<hmap::Path>(gnode::PortType::OUT, "output");
 
   // attribute(s)
-  ADD_ATTR(node, IntAttribute, "edge_divisions", 10, 1, 32);
+  node.add_attr<IntAttribute>("edge_divisions", "edge_divisions", 10, 1, 32);
 }
 
 void compute_path_decasteljau_node(BaseNode &node)
@@ -42,7 +42,7 @@ void compute_path_decasteljau_node(BaseNode &node)
     *p_out = *p_in;
 
     if (p_in->get_npoints() > 1)
-      p_out->decasteljau(GET(node, "edge_divisions", IntAttribute));
+      p_out->decasteljau(node.get_attr<IntAttribute>("edge_divisions"));
   }
 
   Q_EMIT node.compute_finished(node.get_id());

@@ -26,13 +26,12 @@ void setup_export_cloud_node(BaseNode &node)
   node.add_port<hmap::Cloud>(gnode::PortType::IN, "input");
 
   // attribute(s)
-  ADD_ATTR(node,
-           FilenameAttribute,
-           "fname",
-           std::filesystem::path("cloud.csv"),
-           "CSV (*.csv)",
-           true);
-  ADD_ATTR(node, BoolAttribute, "auto_export", false);
+  node.add_attr<FilenameAttribute>("fname",
+                                   "fname",
+                                   std::filesystem::path("cloud.csv"),
+                                   "CSV (*.csv)",
+                                   true);
+  node.add_attr<BoolAttribute>("auto_export", "auto_export", false);
 
   // attribute(s) order
   node.set_attr_ordered_key({"fname", "auto_export"});
@@ -49,9 +48,9 @@ void compute_export_cloud_node(BaseNode &node)
 
   hmap::Cloud *p_in = node.get_value_ref<hmap::Cloud>("input");
 
-  if (p_in && GET(node, "auto_export", BoolAttribute))
+  if (p_in && node.get_attr<BoolAttribute>("auto_export"))
   {
-    std::filesystem::path fname = GET(node, "fname", FilenameAttribute);
+    std::filesystem::path fname = node.get_attr<FilenameAttribute>("fname");
     fname = ensure_extension(fname, ".csv");
 
     p_in->to_csv(fname.string());

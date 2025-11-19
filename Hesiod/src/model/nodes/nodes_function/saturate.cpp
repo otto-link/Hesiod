@@ -22,11 +22,12 @@ void setup_saturate_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "k_smoothing", 0.1f, 0.01, 1.f);
-  ADD_ATTR(node, RangeAttribute, "range");
+  node.add_attr<FloatAttribute>("k_smoothing", "k_smoothing", 0.1f, 0.01, 1.f);
+
+  node.add_attr<RangeAttribute>("range", "range");
 
   // link histogram for RangeAttribute
   setup_histogram_for_range_attribute(node, "range", "input");
@@ -62,11 +63,11 @@ void compute_saturate_node(BaseNode &node)
           *pa_out = *pa_in;
 
           hmap::saturate(*pa_out,
-                         GET(node, "range", RangeAttribute)[0],
-                         GET(node, "range", RangeAttribute)[1],
+                         node.get_attr<RangeAttribute>("range")[0],
+                         node.get_attr<RangeAttribute>("range")[1],
                          hmin,
                          hmax,
-                         GET(node, "k_smoothing", FloatAttribute));
+                         node.get_attr<FloatAttribute>("k_smoothing"));
         },
         node.get_config_ref()->hmap_transform_mode_cpu);
 

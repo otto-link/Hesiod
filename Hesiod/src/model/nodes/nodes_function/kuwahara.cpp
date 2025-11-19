@@ -21,11 +21,12 @@ void setup_kuwahara_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "radius", 0.05f, 0.f, 0.2f);
-  ADD_ATTR(node, FloatAttribute, "mix_ratio", 1.f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>("radius", "radius", 0.05f, 0.f, 0.2f);
+
+  node.add_attr<FloatAttribute>("mix_ratio", "mix_ratio", 1.f, 0.f, 1.f);
 }
 
 void compute_kuwahara_node(BaseNode &node)
@@ -44,13 +45,13 @@ void compute_kuwahara_node(BaseNode &node)
     // copy the input heightmap
     *p_out = *p_in;
 
-    int ir = std::max(1, (int)(GET(node, "radius", FloatAttribute) * p_out->shape.x));
+    int ir = std::max(1, (int)(node.get_attr<FloatAttribute>("radius") * p_out->shape.x));
 
     hmap::transform(
         *p_out,
         p_mask,
         [&node, &ir](hmap::Array &x, hmap::Array *p_mask)
-        { hmap::kuwahara(x, ir, p_mask, GET(node, "mix_ratio", FloatAttribute)); });
+        { hmap::kuwahara(x, ir, p_mask, node.get_attr<FloatAttribute>("mix_ratio")); });
 
     p_out->smooth_overlap_buffers();
   }

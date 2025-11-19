@@ -24,12 +24,11 @@ void setup_path_from_csv_node(BaseNode &node)
   node.add_port<hmap::Path>(gnode::PortType::OUT, "path");
 
   // attribute(s)
-  ADD_ATTR(node,
-           FilenameAttribute,
-           "fname",
-           std::filesystem::path(""),
-           "CSV files (*.csv)",
-           false);
+  node.add_attr<FilenameAttribute>("fname",
+                                   "fname",
+                                   std::filesystem::path(""),
+                                   "CSV files (*.csv)",
+                                   false);
 
   // attribute(s) order
   node.set_attr_ordered_key({"fname"});
@@ -43,7 +42,7 @@ void compute_path_from_csv_node(BaseNode &node)
 
   hmap::Path *p_out = node.get_value_ref<hmap::Path>("path");
 
-  const std::string fname = GET(node, "fname", FilenameAttribute).string();
+  const std::string fname = node.get_attr<FilenameAttribute>("fname").string();
   std::ifstream     f(fname.c_str());
 
   if (f.good())

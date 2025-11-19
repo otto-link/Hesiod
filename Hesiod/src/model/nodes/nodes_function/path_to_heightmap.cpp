@@ -20,14 +20,18 @@ void setup_path_to_heightmap_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Path>(gnode::PortType::IN, "path");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "heightmap", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "heightmap", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, BoolAttribute, "filled", false);
-  ADD_ATTR(node, BoolAttribute, "remap", true);
-  ADD_ATTR(node, BoolAttribute, "inverse", false);
-  ADD_ATTR(node, BoolAttribute, "smoothing", false);
-  ADD_ATTR(node, FloatAttribute, "smoothing_radius", 0.05f, 0.f, 0.2f);
+  node.add_attr<BoolAttribute>("filled", "filled", false);
+
+  node.add_attr<BoolAttribute>("remap", "remap", true);
+
+  node.add_attr<BoolAttribute>("inverse", "inverse", false);
+
+  node.add_attr<BoolAttribute>("smoothing", "smoothing", false);
+
+  node.add_attr<FloatAttribute>("smoothing_radius", "smoothing_radius", 0.05f, 0.f, 0.2f);
 
   // attribute(s) order
   node.set_attr_ordered_key(
@@ -48,7 +52,7 @@ void compute_path_to_heightmap_node(BaseNode &node)
 
     if (p_path->get_npoints() > 1)
     {
-      if (!GET(node, "filled", BoolAttribute))
+      if (!node.get_attr<BoolAttribute>("filled"))
       {
         hmap::fill(*p_out,
                    [p_path](hmap::Vec2<int> shape, hmap::Vec4<float> bbox)
@@ -71,13 +75,13 @@ void compute_path_to_heightmap_node(BaseNode &node)
       // post-process
       post_process_heightmap(node,
                              *p_out,
-                             GET(node, "inverse", BoolAttribute),
-                             GET(node, "smoothing", BoolAttribute),
-                             GET(node, "smoothing_radius", FloatAttribute),
+                             node.get_attr<BoolAttribute>("inverse"),
+                             node.get_attr<BoolAttribute>("smoothing"),
+                             node.get_attr<FloatAttribute>("smoothing_radius"),
                              false, // saturate
                              {0.f, 0.f},
                              0.f,
-                             GET(node, "remap", BoolAttribute),
+                             node.get_attr<BoolAttribute>("remap"),
                              {0.f, 1.f});
     }
     else

@@ -22,18 +22,26 @@ void setup_paraboloid_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dx");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "envelope");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "angle", 0.f, -180.f, 180.f);
-  ADD_ATTR(node, FloatAttribute, "a", 1.f, 0.01f, 5.f);
-  ADD_ATTR(node, FloatAttribute, "b", 1.f, 0.01f, 5.f);
-  ADD_ATTR(node, FloatAttribute, "v0", 0.f, -2.f, 2.f);
-  ADD_ATTR(node, BoolAttribute, "reverse_x", false);
-  ADD_ATTR(node, BoolAttribute, "reverse_y", false);
-  ADD_ATTR(node, Vec2FloatAttribute, "center");
-  ADD_ATTR(node, BoolAttribute, "inverse", false);
-  ADD_ATTR(node, RangeAttribute, "remap");
+  node.add_attr<FloatAttribute>("angle", "angle", 0.f, -180.f, 180.f);
+
+  node.add_attr<FloatAttribute>("a", "a", 1.f, 0.01f, 5.f);
+
+  node.add_attr<FloatAttribute>("b", "b", 1.f, 0.01f, 5.f);
+
+  node.add_attr<FloatAttribute>("v0", "v0", 0.f, -2.f, 2.f);
+
+  node.add_attr<BoolAttribute>("reverse_x", "reverse_x", false);
+
+  node.add_attr<BoolAttribute>("reverse_y", "reverse_y", false);
+
+  node.add_attr<Vec2FloatAttribute>("center", "center");
+
+  node.add_attr<BoolAttribute>("inverse", "inverse", false);
+
+  node.add_attr<RangeAttribute>("remap", "remap");
 
   // attribute(s) order
   node.set_attr_ordered_key({"angle",
@@ -71,16 +79,16 @@ void compute_paraboloid_node(BaseNode &node)
         hmap::Array *pa_dy = p_arrays[2];
 
         *pa_out = hmap::paraboloid(shape,
-                                   GET(node, "angle", FloatAttribute),
-                                   GET(node, "a", FloatAttribute),
-                                   GET(node, "b", FloatAttribute),
-                                   GET(node, "v0", FloatAttribute),
-                                   GET(node, "reverse_x", BoolAttribute),
-                                   GET(node, "reverse_y", BoolAttribute),
+                                   node.get_attr<FloatAttribute>("angle"),
+                                   node.get_attr<FloatAttribute>("a"),
+                                   node.get_attr<FloatAttribute>("b"),
+                                   node.get_attr<FloatAttribute>("v0"),
+                                   node.get_attr<BoolAttribute>("reverse_x"),
+                                   node.get_attr<BoolAttribute>("reverse_y"),
                                    pa_dx,
                                    pa_dy,
                                    nullptr,
-                                   GET(node, "center", Vec2FloatAttribute),
+                                   node.get_attr<Vec2FloatAttribute>("center"),
                                    bbox);
       },
       node.get_config_ref()->hmap_transform_mode_cpu);
@@ -90,14 +98,14 @@ void compute_paraboloid_node(BaseNode &node)
 
   post_process_heightmap(node,
                          *p_out,
-                         GET(node, "inverse", BoolAttribute),
+                         node.get_attr<BoolAttribute>("inverse"),
                          false, // smooth
                          0,
                          false, // saturate
                          {0.f, 0.f},
                          0.f,
-                         GET_MEMBER(node, "remap", RangeAttribute, is_active),
-                         GET(node, "remap", RangeAttribute));
+                         node.get_attr_ref<RangeAttribute>("remap")->get_is_active(),
+                         node.get_attr<RangeAttribute>("remap"));
 
   Q_EMIT node.compute_finished(node.get_id());
 }

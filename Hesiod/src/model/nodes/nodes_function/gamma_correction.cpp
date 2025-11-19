@@ -24,10 +24,10 @@ void setup_gamma_correction_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "gamma", 2.f, 0.01f, 10.f);
+  node.add_attr<FloatAttribute>("gamma", "gamma", 2.f, 0.01f, 10.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"gamma"});
@@ -66,7 +66,9 @@ void compute_gamma_correction_node(BaseNode &node)
           *pa_out = *pa_in;
 
           hmap::remap(*pa_out, 0.f, 1.f, hmin, hmax);
-          hmap::gamma_correction(*pa_out, GET(node, "gamma", FloatAttribute), pa_mask);
+          hmap::gamma_correction(*pa_out,
+                                 node.get_attr<FloatAttribute>("gamma"),
+                                 pa_mask);
           hmap::remap(*pa_out, hmin, hmax, 0.f, 1.f);
         },
         node.get_config_ref()->hmap_transform_mode_cpu);

@@ -21,10 +21,10 @@ void setup_morphological_gradient_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "radius", 0.01f, 0.f, 0.05f);
+  node.add_attr<FloatAttribute>("radius", "radius", 0.01f, 0.f, 0.05f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"radius"});
@@ -44,7 +44,7 @@ void compute_morphological_gradient_node(BaseNode &node)
   {
     hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
-    int ir = std::max(1, (int)(GET(node, "radius", FloatAttribute) * p_out->shape.x));
+    int ir = std::max(1, (int)(node.get_attr<FloatAttribute>("radius") * p_out->shape.x));
 
     hmap::transform(
         {p_out, p_in},

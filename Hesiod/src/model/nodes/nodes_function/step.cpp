@@ -23,12 +23,14 @@ void setup_step_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "control");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "envelope");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "angle", 0.f, -180.f, 180.f);
-  ADD_ATTR(node, FloatAttribute, "slope", 2.f, 0.01f, FLT_MAX);
-  ADD_ATTR(node, Vec2FloatAttribute, "center");
+  node.add_attr<FloatAttribute>("angle", "angle", 0.f, -180.f, 180.f);
+
+  node.add_attr<FloatAttribute>("slope", "slope", 2.f, 0.01f, FLT_MAX);
+
+  node.add_attr<Vec2FloatAttribute>("center", "center");
 
   // attribute(s) order
   node.set_attr_ordered_key({"angle", "slope", "center"});
@@ -60,13 +62,13 @@ void compute_step_node(BaseNode &node)
                      hmap::Array      *p_ctrl)
              {
                return hmap::step(shape,
-                                 GET(node, "angle", FloatAttribute),
-                                 GET(node, "slope", FloatAttribute),
+                                 node.get_attr<FloatAttribute>("angle"),
+                                 node.get_attr<FloatAttribute>("slope"),
                                  p_ctrl,
                                  p_noise_x,
                                  p_noise_y,
                                  nullptr,
-                                 GET(node, "center", Vec2FloatAttribute),
+                                 node.get_attr<Vec2FloatAttribute>("center"),
                                  bbox);
              });
 

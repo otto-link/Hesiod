@@ -22,10 +22,10 @@ void setup_abs_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "vshift", 0.5f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>("vshift", "vshift", 0.5f, 0.f, 1.f);
 }
 
 void compute_abs_node(BaseNode &node)
@@ -47,7 +47,7 @@ void compute_abs_node(BaseNode &node)
           hmap::Array *pa_out = p_arrays[0];
           hmap::Array *pa_in = p_arrays[1];
 
-          *pa_out = hmap::abs(*pa_in - GET(node, "vshift", FloatAttribute));
+          *pa_out = hmap::abs(*pa_in - node.get_attr<FloatAttribute>("vshift"));
         },
         node.get_config_ref()->hmap_transform_mode_cpu);
   }

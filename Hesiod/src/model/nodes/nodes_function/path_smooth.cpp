@@ -23,9 +23,15 @@ void setup_path_smooth_node(BaseNode &node)
   node.add_port<hmap::Path>(gnode::PortType::OUT, "output");
 
   // attribute(s)
-  ADD_ATTR(node, IntAttribute, "navg", 1, 1, 10);
-  ADD_ATTR(node, FloatAttribute, "averaging_intensity", 1.f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "inertia", 0.f, 0.f, 1.f);
+  node.add_attr<IntAttribute>("navg", "navg", 1, 1, 10);
+
+  node.add_attr<FloatAttribute>("averaging_intensity",
+                                "averaging_intensity",
+                                1.f,
+                                0.f,
+                                1.f);
+
+  node.add_attr<FloatAttribute>("inertia", "inertia", 0.f, 0.f, 1.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"navg", "averaging_intensity", "inertia"});
@@ -47,9 +53,9 @@ void compute_path_smooth_node(BaseNode &node)
     *p_out = *p_in;
 
     if (p_in->get_npoints() > 1)
-      p_out->smooth(GET(node, "navg", IntAttribute),
-                    GET(node, "averaging_intensity", FloatAttribute),
-                    GET(node, "inertia", FloatAttribute));
+      p_out->smooth(node.get_attr<IntAttribute>("navg"),
+                    node.get_attr<FloatAttribute>("averaging_intensity"),
+                    node.get_attr<FloatAttribute>("inertia"));
   }
 
   Q_EMIT node.compute_finished(node.get_id());

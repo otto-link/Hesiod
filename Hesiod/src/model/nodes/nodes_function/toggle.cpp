@@ -21,10 +21,10 @@ void setup_toggle_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input A");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input B");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, BoolAttribute, "toggle", "A", "B", true);
+  node.add_attr<BoolAttribute>("toggle", "toggle", "A", "B", true);
 
   // attribute(s) order
   node.set_attr_ordered_key({"toggle"});
@@ -44,7 +44,7 @@ void compute_toggle_node(BaseNode &node)
     hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
     // copy the either A or B input heightmap based on the toggle state
-    if (GET(node, "toggle", BoolAttribute))
+    if (node.get_attr<BoolAttribute>("toggle"))
       *p_out = *p_in_a;
     else
       *p_out = *p_in_b;

@@ -20,11 +20,12 @@ void setup_select_rivers_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "talus_ref", 0.1f, 0.01f, 10.f);
-  ADD_ATTR(node, FloatAttribute, "clipping_ratio", 50.f, 0.1f, 100.f);
+  node.add_attr<FloatAttribute>("talus_ref", "talus_ref", 0.1f, 0.01f, 10.f);
+
+  node.add_attr<FloatAttribute>("clipping_ratio", "clipping_ratio", 50.f, 0.1f, 100.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"talus_ref", "clipping_ratio"});
@@ -48,8 +49,8 @@ void compute_select_rivers_node(BaseNode &node)
     hmap::Array z_array = p_in->to_array();
 
     z_array = hmap::select_rivers(z_array,
-                                  GET(node, "talus_ref", FloatAttribute),
-                                  GET(node, "clipping_ratio", FloatAttribute));
+                                  node.get_attr<FloatAttribute>("talus_ref"),
+                                  node.get_attr<FloatAttribute>("clipping_ratio"));
 
     p_out->from_array_interp(z_array);
 

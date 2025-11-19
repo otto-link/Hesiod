@@ -24,13 +24,16 @@ void setup_cone_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dx");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "envelope");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "slope", 4.f, 0.01f, FLT_MAX);
-  ADD_ATTR(node, FloatAttribute, "apex_elevation", 1.f, 0.f, FLT_MAX);
-  ADD_ATTR(node, BoolAttribute, "smooth_profile", false);
-  ADD_ATTR(node, Vec2FloatAttribute, "center");
+  node.add_attr<FloatAttribute>("slope", "slope", 4.f, 0.01f, FLT_MAX);
+
+  node.add_attr<FloatAttribute>("apex_elevation", "apex_elevation", 1.f, 0.f, FLT_MAX);
+
+  node.add_attr<BoolAttribute>("smooth_profile", "smooth_profile", false);
+
+  node.add_attr<Vec2FloatAttribute>("center", "center");
 
   // attribute(s) order
   node.set_attr_ordered_key({"slope", "apex_elevation", "smooth_profile", "center"});
@@ -38,8 +41,8 @@ void setup_cone_node(BaseNode &node)
   setup_post_process_heightmap_attributes(node);
 
   // disable post-processing remap by default
-  GET_REF(node, "post_remap", RangeAttribute)->set_is_active(false);
-  GET_REF(node, "post_remap", RangeAttribute)->save_initial_state();
+  node.get_attr_ref<RangeAttribute>("post_remap")->set_is_active(false);
+  node.get_attr_ref<RangeAttribute>("post_remap")->save_initial_state();
 }
 
 void compute_cone_node(BaseNode &node)
@@ -66,10 +69,10 @@ void compute_cone_node(BaseNode &node)
         hmap::Array *pa_dy = p_arrays[2];
 
         *pa_out = hmap::cone(shape,
-                             GET(node, "slope", FloatAttribute),
-                             GET(node, "apex_elevation", FloatAttribute),
-                             GET(node, "smooth_profile", BoolAttribute),
-                             GET(node, "center", Vec2FloatAttribute),
+                             node.get_attr<FloatAttribute>("slope"),
+                             node.get_attr<FloatAttribute>("apex_elevation"),
+                             node.get_attr<BoolAttribute>("smooth_profile"),
+                             node.get_attr<Vec2FloatAttribute>("center"),
                              pa_dx,
                              pa_dy,
                              bbox);

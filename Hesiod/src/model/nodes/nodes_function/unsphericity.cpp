@@ -20,15 +20,20 @@ void setup_unsphericity_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "radius", 0.01f, 0.f, 0.2f);
-  ADD_ATTR(node, BoolAttribute, "remap", true);
-  ADD_ATTR(node, BoolAttribute, "inverse", false);
-  ADD_ATTR(node, BoolAttribute, "smoothing", false);
-  ADD_ATTR(node, FloatAttribute, "smoothing_radius", 0.05f, 0.f, 0.2f);
-  ADD_ATTR(node, BoolAttribute, "GPU", HSD_DEFAULT_GPU_MODE);
+  node.add_attr<FloatAttribute>("radius", "radius", 0.01f, 0.f, 0.2f);
+
+  node.add_attr<BoolAttribute>("remap", "remap", true);
+
+  node.add_attr<BoolAttribute>("inverse", "inverse", false);
+
+  node.add_attr<BoolAttribute>("smoothing", "smoothing", false);
+
+  node.add_attr<FloatAttribute>("smoothing_radius", "smoothing_radius", 0.05f, 0.f, 0.2f);
+
+  node.add_attr<BoolAttribute>("GPU", "GPU", HSD_DEFAULT_GPU_MODE);
 
   // attribute(s) order
   node.set_attr_ordered_key({"radius",
@@ -53,9 +58,9 @@ void compute_unsphericity_node(BaseNode &node)
     hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
     // zero radius accepted
-    int ir = std::max(0, (int)(GET(node, "radius", FloatAttribute) * p_out->shape.x));
+    int ir = std::max(0, (int)(node.get_attr<FloatAttribute>("radius") * p_out->shape.x));
 
-    if (GET(node, "GPU", BoolAttribute))
+    if (node.get_attr<BoolAttribute>("GPU"))
     {
       hmap::transform(
           {p_out, p_in},
@@ -87,13 +92,13 @@ void compute_unsphericity_node(BaseNode &node)
     // post-process
     post_process_heightmap(node,
                            *p_out,
-                           GET(node, "inverse", BoolAttribute),
-                           GET(node, "smoothing", BoolAttribute),
-                           GET(node, "smoothing_radius", FloatAttribute),
+                           node.get_attr<BoolAttribute>("inverse"),
+                           node.get_attr<BoolAttribute>("smoothing"),
+                           node.get_attr<FloatAttribute>("smoothing_radius"),
                            false, // saturate
                            {0.f, 0.f},
                            0.f,
-                           GET(node, "remap", BoolAttribute),
+                           node.get_attr<BoolAttribute>("remap"),
                            {0.f, 1.f});
   }
 

@@ -24,22 +24,42 @@ void setup_mountain_range_radial_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "control");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "envelope");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "angle", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "angle", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, WaveNbAttribute, "kw", std::vector<float>(2, 4.f), 0.f, FLT_MAX, true);
-  ADD_ATTR(node, SeedAttribute, "seed");
-  ADD_ATTR(node, FloatAttribute, "half_width", 0.2f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "angle_spread_ratio", 0.5f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "core_size_ratio", 0.2f, 0.01f, 2.f);
-  ADD_ATTR(node, Vec2FloatAttribute, "center");
-  ADD_ATTR(node, IntAttribute, "octaves", 8, 0, 32);
-  ADD_ATTR(node, FloatAttribute, "weight", 0.7f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "persistence", 0.5f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "lacunarity", 2.f, 0.01f, 4.f);
-  ADD_ATTR(node, BoolAttribute, "inverse", false);
-  ADD_ATTR(node, RangeAttribute, "remap");
+  node.add_attr<WaveNbAttribute>("kw",
+                                 "kw",
+                                 std::vector<float>(2, 4.f),
+                                 0.f,
+                                 FLT_MAX,
+                                 true);
+
+  node.add_attr<SeedAttribute>("seed", "seed");
+
+  node.add_attr<FloatAttribute>("half_width", "half_width", 0.2f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("angle_spread_ratio",
+                                "angle_spread_ratio",
+                                0.5f,
+                                0.f,
+                                1.f);
+
+  node.add_attr<FloatAttribute>("core_size_ratio", "core_size_ratio", 0.2f, 0.01f, 2.f);
+
+  node.add_attr<Vec2FloatAttribute>("center", "center");
+
+  node.add_attr<IntAttribute>("octaves", "octaves", 8, 0, 32);
+
+  node.add_attr<FloatAttribute>("weight", "weight", 0.7f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("persistence", "persistence", 0.5f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("lacunarity", "lacunarity", 2.f, 0.01f, 4.f);
+
+  node.add_attr<BoolAttribute>("inverse", "inverse", false);
+
+  node.add_attr<RangeAttribute>("remap", "remap");
 
   // attribute(s) order
   node.set_attr_ordered_key({"kw",
@@ -86,16 +106,16 @@ void compute_mountain_range_radial_node(BaseNode &node)
 
         *pa_out = hmap::gpu::mountain_range_radial(
             shape,
-            GET(node, "kw", WaveNbAttribute),
-            GET(node, "seed", SeedAttribute),
-            GET(node, "half_width", FloatAttribute),
-            GET(node, "angle_spread_ratio", FloatAttribute),
-            GET(node, "core_size_ratio", FloatAttribute),
-            GET(node, "center", Vec2FloatAttribute),
-            GET(node, "octaves", IntAttribute),
-            GET(node, "weight", FloatAttribute),
-            GET(node, "persistence", FloatAttribute),
-            GET(node, "lacunarity", FloatAttribute),
+            node.get_attr<WaveNbAttribute>("kw"),
+            node.get_attr<SeedAttribute>("seed"),
+            node.get_attr<FloatAttribute>("half_width"),
+            node.get_attr<FloatAttribute>("angle_spread_ratio"),
+            node.get_attr<FloatAttribute>("core_size_ratio"),
+            node.get_attr<Vec2FloatAttribute>("center"),
+            node.get_attr<IntAttribute>("octaves"),
+            node.get_attr<FloatAttribute>("weight"),
+            node.get_attr<FloatAttribute>("persistence"),
+            node.get_attr<FloatAttribute>("lacunarity"),
             pa_ctrl,
             pa_dx,
             pa_dy,
@@ -109,14 +129,14 @@ void compute_mountain_range_radial_node(BaseNode &node)
 
   post_process_heightmap(node,
                          *p_out,
-                         GET(node, "inverse", BoolAttribute),
+                         node.get_attr<BoolAttribute>("inverse"),
                          false, // smooth
                          0,
                          false, // saturate
                          {0.f, 0.f},
                          0.f,
-                         GET_MEMBER(node, "remap", RangeAttribute, is_active),
-                         GET(node, "remap", RangeAttribute));
+                         node.get_attr_ref<RangeAttribute>("remap")->get_is_active(),
+                         node.get_attr<RangeAttribute>("remap"));
 
   Q_EMIT node.compute_finished(node.get_id());
 }

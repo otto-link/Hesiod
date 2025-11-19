@@ -23,20 +23,29 @@ void setup_select_soil_weathered_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "radius_curvature", 0.f, 0.f, 0.1f);
-  ADD_ATTR(node, FloatAttribute, "radius_gradient", 0.005f, 0.f, 0.1f);
-  ADD_ATTR(node, FloatAttribute, "gradient_gain", 1.f, 0.01f, 10.f);
-  ADD_ATTR(node, FloatAttribute, "curvature_weight", 1.f, -1.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "gradient_weight", 0.2f, -1.f, 1.f);
-  ADD_ATTR(node,
-           EnumAttribute,
-           "curvature_clamp_mode",
-           enum_mappings.clamping_mode_map,
-           "Keep positive & clamp");
-  ADD_ATTR(node, FloatAttribute, "curvature_clamping", 1.f, 0.f, FLT_MAX, "{:.4f}");
+  node.add_attr<FloatAttribute>("radius_curvature", "radius_curvature", 0.f, 0.f, 0.1f);
+
+  node.add_attr<FloatAttribute>("radius_gradient", "radius_gradient", 0.005f, 0.f, 0.1f);
+
+  node.add_attr<FloatAttribute>("gradient_gain", "gradient_gain", 1.f, 0.01f, 10.f);
+
+  node.add_attr<FloatAttribute>("curvature_weight", "curvature_weight", 1.f, -1.f, 1.f);
+
+  node.add_attr<FloatAttribute>("gradient_weight", "gradient_weight", 0.2f, -1.f, 1.f);
+
+  node.add_attr<EnumAttribute>("curvature_clamp_mode",
+                               "curvature_clamp_mode",
+                               enum_mappings.clamping_mode_map,
+                               "Keep positive & clamp");
+  node.add_attr<FloatAttribute>("curvature_clamping",
+                                "curvature_clamping",
+                                1.f,
+                                0.f,
+                                FLT_MAX,
+                                "{:.4f}");
 
   // attribute(s) order
   node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Main Parameters",
@@ -70,12 +79,13 @@ void compute_select_soil_weathered_node(BaseNode &node)
     hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
     int nx = p_out->shape.x; // for gradient scaling
-    int ir_curv = (int)(GET(node, "radius_curvature", FloatAttribute) * nx);
-    int ir_grad = std::max(1, (int)(GET(node, "radius_gradient", FloatAttribute) * nx));
+    int ir_curv = (int)(node.get_attr<FloatAttribute>("radius_curvature") * nx);
+    int ir_grad = std::max(1,
+                           (int)(node.get_attr<FloatAttribute>("radius_gradient") * nx));
 
     // --- compute gradient norm
 
-    hmap::Heightmap grad_norm(CONFIG);
+    hmap::Heightmap grad_norm(CONFIG(node));
 
     hmap::transform(
         {&grad_norm, p_in},
@@ -97,7 +107,7 @@ void compute_select_soil_weathered_node(BaseNode &node)
         {
           hmap::Array *pa_out = p_arrays[0];
 
-          hmap::gain(*pa_out, GET(node, "gradient_gain", FloatAttribute));
+          hmap::gain(*pa_out, node.get_attr<FloatAttribute>("gradient_gain"));
         },
         node.get_config_ref()->hmap_transform_mode_cpu);
 
@@ -112,16 +122,16 @@ void compute_select_soil_weathered_node(BaseNode &node)
           hmap::Array *pa_grad_norm = p_arrays[2];
 
           auto mode = static_cast<hmap::ClampMode>(
-              GET(node, "curvature_clamp_mode", EnumAttribute));
+              node.get_attr<EnumAttribute>("curvature_clamp_mode"));
 
           *pa_out = hmap::gpu::select_soil_weathered(
               *pa_in,
               *pa_grad_norm,
               ir_curv,
               mode,
-              GET(node, "curvature_clamping", FloatAttribute),
-              GET(node, "curvature_weight", FloatAttribute),
-              GET(node, "gradient_weight", FloatAttribute),
+              node.get_attr<FloatAttribute>("curvature_clamping"),
+              node.get_attr<FloatAttribute>("curvature_weight"),
+              node.get_attr<FloatAttribute>("gradient_weight"),
               (float)nx);
         },
         node.get_config_ref()->hmap_transform_mode_gpu);

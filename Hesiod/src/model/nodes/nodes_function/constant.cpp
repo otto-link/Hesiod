@@ -17,10 +17,10 @@ void setup_constant_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "value", 0.f, -4.f, 4.f);
+  node.add_attr<FloatAttribute>("value", "value", 0.f, -4.f, 4.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"value"});
@@ -33,7 +33,7 @@ void compute_constant_node(BaseNode &node)
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
-  *p_out = hmap::Heightmap(CONFIG, GET(node, "value", FloatAttribute));
+  *p_out = hmap::Heightmap(CONFIG(node), node.get_attr<FloatAttribute>("value"));
 
   Q_EMIT node.compute_finished(node.get_id());
 }

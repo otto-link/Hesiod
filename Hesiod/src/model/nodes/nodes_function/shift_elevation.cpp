@@ -18,10 +18,10 @@ void setup_shift_elevation_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "shift", 0.f, -2.f, 2.f);
+  node.add_attr<FloatAttribute>("shift", "shift", 0.f, -2.f, 2.f);
 }
 
 void compute_shift_elevation_node(BaseNode &node)
@@ -43,7 +43,7 @@ void compute_shift_elevation_node(BaseNode &node)
           hmap::Array *pa_out = p_arrays[0];
           hmap::Array *pa_in = p_arrays[1];
 
-          *pa_out = *pa_in + GET(node, "shift", FloatAttribute);
+          *pa_out = *pa_in + node.get_attr<FloatAttribute>("shift");
         },
         node.get_config_ref()->hmap_transform_mode_cpu);
   }

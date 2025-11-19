@@ -21,11 +21,11 @@ void setup_smoothstep_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
   std::vector<std::string> choices = {"3rd", "5th", "7th"};
-  ADD_ATTR(node, ChoiceAttribute, "order", choices);
+  node.add_attr<ChoiceAttribute>("order", "order", choices);
 }
 
 void compute_smoothstep_node(BaseNode &node)
@@ -54,11 +54,11 @@ void compute_smoothstep_node(BaseNode &node)
 
           hmap::remap(*pa_out, 0.f, 1.f, hmin, hmax);
 
-          if (GET(node, "order", ChoiceAttribute) == "3rd")
+          if (node.get_attr<ChoiceAttribute>("order") == "3rd")
             *pa_out = hmap::smoothstep3(*pa_out);
-          else if (GET(node, "order", ChoiceAttribute) == "5th")
+          else if (node.get_attr<ChoiceAttribute>("order") == "5th")
             *pa_out = hmap::smoothstep5(*pa_out);
-          else if (GET(node, "order", ChoiceAttribute) == "7th")
+          else if (node.get_attr<ChoiceAttribute>("order") == "7th")
             *pa_out = hmap::smoothstep7(*pa_out);
 
           hmap::remap(*pa_out, hmin, hmax, 0.f, 1.f);

@@ -22,7 +22,7 @@ void setup_select_transitions_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input 1");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input 2");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "blend");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   setup_post_process_heightmap_attributes(node);
 }

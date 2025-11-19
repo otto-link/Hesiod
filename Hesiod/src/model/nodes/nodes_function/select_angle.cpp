@@ -20,12 +20,14 @@ void setup_select_angle_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "angle", 0.f, 0.f, 360.f);
-  ADD_ATTR(node, FloatAttribute, "sigma", 90.f, 0.f, 180.f);
-  ADD_ATTR(node, FloatAttribute, "radius", 0.f, 0.f, 0.2f);
+  node.add_attr<FloatAttribute>("angle", "angle", 0.f, 0.f, 360.f);
+
+  node.add_attr<FloatAttribute>("sigma", "sigma", 90.f, 0.f, 180.f);
+
+  node.add_attr<FloatAttribute>("radius", "radius", 0.f, 0.f, 0.2f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"angle", "sigma", "radius"});
@@ -45,15 +47,15 @@ void compute_select_angle_node(BaseNode &node)
   {
     hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
-    int ir = (int)(GET(node, "radius", FloatAttribute) * p_out->shape.x);
+    int ir = (int)(node.get_attr<FloatAttribute>("radius") * p_out->shape.x);
 
     hmap::transform(*p_out,
                     *p_in,
                     [&node, &ir](hmap::Array &array)
                     {
                       return select_angle(array,
-                                          GET(node, "angle", FloatAttribute),
-                                          GET(node, "sigma", FloatAttribute),
+                                          node.get_attr<FloatAttribute>("angle"),
+                                          node.get_attr<FloatAttribute>("sigma"),
                                           ir);
                     });
 

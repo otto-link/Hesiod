@@ -21,15 +21,15 @@ void setup_make_periodic_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "overlap", 0.25f, 0.05f, 0.5f);
-  ADD_ATTR(node,
-           EnumAttribute,
-           "periodicity_type",
-           enum_mappings.periodicity_type_map,
-           "X and Y");
+  node.add_attr<FloatAttribute>("overlap", "overlap", 0.25f, 0.05f, 0.5f);
+
+  node.add_attr<EnumAttribute>("periodicity_type",
+                               "periodicity_type",
+                               enum_mappings.periodicity_type_map,
+                               "X and Y");
 
   // attribute(s) order
   node.set_attr_ordered_key({"overlap", "periodicity_type"});
@@ -47,8 +47,9 @@ void compute_make_periodic_node(BaseNode &node)
   {
     hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
-    int nbuffer = std::max(1,
-                           (int)(GET(node, "overlap", FloatAttribute) * p_out->shape.x));
+    int nbuffer = std::max(
+        1,
+        (int)(node.get_attr<FloatAttribute>("overlap") * p_out->shape.x));
 
     hmap::transform(
         {p_out, p_in},
@@ -62,7 +63,7 @@ void compute_make_periodic_node(BaseNode &node)
           hmap::make_periodic(
               *pa_out,
               nbuffer,
-              (hmap::PeriodicityType)GET(node, "periodicity_type", EnumAttribute));
+              (hmap::PeriodicityType)node.get_attr<EnumAttribute>("periodicity_type"));
         },
         hmap::TransformMode::SINGLE_ARRAY);
   }

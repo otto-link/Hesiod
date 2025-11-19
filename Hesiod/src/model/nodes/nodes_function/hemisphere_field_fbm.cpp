@@ -26,21 +26,36 @@ void setup_hemisphere_field_fbm_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "density");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "size");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "envelope");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, WaveNbAttribute, "kw");
-  ADD_ATTR(node, SeedAttribute, "seed");
-  ADD_ATTR(node, FloatAttribute, "rmin", 0.05f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "rmax", 0.8f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "amplitude_random_ratio", 0.5f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "shift", 0.1f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "density", 0.1f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "jitter.x", 1.f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "jitter.y", 1.f, 0.f, 1.f);
-  ADD_ATTR(node, IntAttribute, "octaves", 8, 0, 32);
-  ADD_ATTR(node, FloatAttribute, "persistence", 0.5f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "lacunarity", 2.f, 0.01f, 4.f);
+  node.add_attr<WaveNbAttribute>("kw", "kw");
+
+  node.add_attr<SeedAttribute>("seed", "seed");
+
+  node.add_attr<FloatAttribute>("rmin", "rmin", 0.05f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("rmax", "rmax", 0.8f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("amplitude_random_ratio",
+                                "amplitude_random_ratio",
+                                0.5f,
+                                0.f,
+                                1.f);
+
+  node.add_attr<FloatAttribute>("shift", "shift", 0.1f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("density", "density", 0.1f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("jitter.x", "jitter.x", 1.f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("jitter.y", "jitter.y", 1.f, 0.f, 1.f);
+
+  node.add_attr<IntAttribute>("octaves", "octaves", 8, 0, 32);
+
+  node.add_attr<FloatAttribute>("persistence", "persistence", 0.5f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("lacunarity", "lacunarity", 2.f, 0.01f, 4.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"kw",
@@ -88,22 +103,22 @@ void compute_hemisphere_field_fbm_node(BaseNode &node)
         hmap::Array *pa_density = p_arrays[4];
         hmap::Array *pa_size = p_arrays[5];
 
-        hmap::Vec2<float> jitter(GET(node, "jitter.x", FloatAttribute),
-                                 GET(node, "jitter.y", FloatAttribute));
+        hmap::Vec2<float> jitter(node.get_attr<FloatAttribute>("jitter.x"),
+                                 node.get_attr<FloatAttribute>("jitter.y"));
 
         *pa_out = hmap::gpu::hemisphere_field_fbm(
             shape,
-            GET(node, "kw", WaveNbAttribute),
-            GET(node, "seed", SeedAttribute),
-            GET(node, "rmin", FloatAttribute),
-            GET(node, "rmax", FloatAttribute),
-            GET(node, "amplitude_random_ratio", FloatAttribute),
-            GET(node, "density", FloatAttribute),
+            node.get_attr<WaveNbAttribute>("kw"),
+            node.get_attr<SeedAttribute>("seed"),
+            node.get_attr<FloatAttribute>("rmin"),
+            node.get_attr<FloatAttribute>("rmax"),
+            node.get_attr<FloatAttribute>("amplitude_random_ratio"),
+            node.get_attr<FloatAttribute>("density"),
             jitter,
-            GET(node, "shift", FloatAttribute),
-            GET(node, "octaves", IntAttribute),
-            GET(node, "persistence", FloatAttribute),
-            GET(node, "lacunarity", FloatAttribute),
+            node.get_attr<FloatAttribute>("shift"),
+            node.get_attr<IntAttribute>("octaves"),
+            node.get_attr<FloatAttribute>("persistence"),
+            node.get_attr<FloatAttribute>("lacunarity"),
             pa_dx,
             pa_dy,
             pa_dr,

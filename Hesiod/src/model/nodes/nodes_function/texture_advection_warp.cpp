@@ -25,11 +25,16 @@ void setup_texture_advection_warp_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "elevation");
   node.add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "advection_length", 0.05f, 0.f, 0.2f);
-  ADD_ATTR(node, FloatAttribute, "value_persistence", 0.95f, 0.8f, 1.f);
+  node.add_attr<FloatAttribute>("advection_length", "advection_length", 0.05f, 0.f, 0.2f);
+
+  node.add_attr<FloatAttribute>("value_persistence",
+                                "value_persistence",
+                                0.95f,
+                                0.8f,
+                                1.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"advection_length", "value_persistence"});
@@ -74,8 +79,8 @@ void compute_texture_advection_warp_node(BaseNode &node)
             *pa_field_out = hmap::gpu::advection_warp(
                 *pa_z,
                 *pa_field,
-                GET(node, "advection_length", FloatAttribute),
-                GET(node, "value_persistence", FloatAttribute),
+                node.get_attr<FloatAttribute>("advection_length"),
+                node.get_attr<FloatAttribute>("value_persistence"),
                 pa_mask);
           },
           node.get_config_ref()->hmap_transform_mode_gpu);

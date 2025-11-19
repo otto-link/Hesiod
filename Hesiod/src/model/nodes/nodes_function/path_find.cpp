@@ -25,9 +25,11 @@ void setup_path_find_node(BaseNode &node)
   node.add_port<hmap::Path>(gnode::PortType::OUT, "path");
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "elevation_ratio", 0.1f, 0.f, 0.9f);
-  ADD_ATTR(node, FloatAttribute, "distance_exponent", 1.f, 0.5f, 2.f);
-  ADD_ATTR(node, IntAttribute, "downsampling", 4, 1, 10);
+  node.add_attr<FloatAttribute>("elevation_ratio", "elevation_ratio", 0.1f, 0.f, 0.9f);
+
+  node.add_attr<FloatAttribute>("distance_exponent", "distance_exponent", 1.f, 0.5f, 2.f);
+
+  node.add_attr<IntAttribute>("downsampling", "downsampling", 4, 1, 10);
 
   // attribute(s) order
   node.set_attr_ordered_key({"elevation_ratio", "distance_exponent", "downsampling"});
@@ -53,7 +55,7 @@ void compute_path_find_node(BaseNode &node)
     if (p_out->get_npoints() > 1)
     {
       // working shape
-      float           ds = (float)GET(node, "downsampling", IntAttribute);
+      float           ds = (float)node.get_attr<IntAttribute>("downsampling");
       hmap::Vec2<int> shape_wrk = hmap::Vec2<int>((int)(p_hmap->shape.x / ds),
                                                   (int)(p_hmap->shape.y / ds));
 
@@ -84,8 +86,8 @@ void compute_path_find_node(BaseNode &node)
       p_out->dijkstra(zw,
                       bbox,
                       edge_divisions,
-                      GET(node, "elevation_ratio", FloatAttribute),
-                      GET(node, "distance_exponent", FloatAttribute),
+                      node.get_attr<FloatAttribute>("elevation_ratio"),
+                      node.get_attr<FloatAttribute>("distance_exponent"),
                       p_mask_array);
 
       // set values based on the "fine" grid array

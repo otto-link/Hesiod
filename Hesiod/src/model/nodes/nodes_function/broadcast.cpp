@@ -19,12 +19,12 @@ void setup_broadcast_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "thru", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "thru", CONFIG(node));
 
   // attribute(s)
 
   bool read_only = true; // tag is indeed set automatically
-  ADD_ATTR(node, StringAttribute, "tag", "UNDEFINED", read_only);
+  node.add_attr<StringAttribute>("tag", "tag", "UNDEFINED", read_only);
 }
 
 void compute_broadcast_node(BaseNode &node)

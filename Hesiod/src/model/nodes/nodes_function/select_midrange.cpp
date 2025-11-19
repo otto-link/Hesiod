@@ -20,10 +20,10 @@ void setup_select_midrange_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "gain", 1.f, 0.01f, 10.f);
+  node.add_attr<FloatAttribute>("gain", "gain", 1.f, 0.01f, 10.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"gain"});
@@ -48,9 +48,10 @@ void compute_select_midrange_node(BaseNode &node)
 
     hmap::transform(*p_out,
                     *p_in,
-                    [&node, vmin, vmax](hmap::Array &array) {
+                    [&node, vmin, vmax](hmap::Array &array)
+                    {
                       return hmap::select_midrange(array,
-                                                   GET(node, "gain", FloatAttribute),
+                                                   node.get_attr<FloatAttribute>("gain"),
                                                    vmin,
                                                    vmax);
                     });

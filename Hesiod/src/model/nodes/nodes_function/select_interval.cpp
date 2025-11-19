@@ -20,11 +20,12 @@ void setup_select_interval_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "value1", 0.f, -0.5f, 1.5f);
-  ADD_ATTR(node, FloatAttribute, "value2", 0.5f, -0.5f, 1.5f);
+  node.add_attr<FloatAttribute>("value1", "value1", 0.f, -0.5f, 1.5f);
+
+  node.add_attr<FloatAttribute>("value2", "value2", 0.5f, -0.5f, 1.5f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"value1", "value2"});
@@ -48,9 +49,10 @@ void compute_select_interval_node(BaseNode &node)
                     *p_in,
                     [&node](hmap::Array &out, hmap::Array &in)
                     {
-                      out = hmap::select_interval(in,
-                                                  GET(node, "value1", FloatAttribute),
-                                                  GET(node, "value2", FloatAttribute));
+                      out = hmap::select_interval(
+                          in,
+                          node.get_attr<FloatAttribute>("value1"),
+                          node.get_attr<FloatAttribute>("value2"));
                     });
 
     // post-process

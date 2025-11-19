@@ -21,21 +21,45 @@ void setup_hydraulic_schott_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "flow_map", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "flow_map", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, IntAttribute, "iterations", 100, 1, INT_MAX);
-  ADD_ATTR(node, FloatAttribute, "c_erosion", 1.f, 0.f, 2.f);
-  ADD_ATTR(node, FloatAttribute, "c_deposition", 0.4f, 0.f, 2.f);
-  ADD_ATTR(node, FloatAttribute, "c_thermal", 0.1f, 0.f, 2.f);
-  ADD_ATTR(node, FloatAttribute, "talus_global", 1.5f, 0.f, 16.f);
-  ADD_ATTR(node, BoolAttribute, "scale_talus_with_elevation", false);
-  ADD_ATTR(node, FloatAttribute, "flow_acc_exponent", 0.8f, 0.01f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "flow_acc_exponent_depo", 0.8f, 0.01f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "flow_routing_exponent", 1.3f, 0.01f, 2.f);
-  ADD_ATTR(node, FloatAttribute, "thermal_weight", 0.f, 0.f, 5.f);
-  ADD_ATTR(node, FloatAttribute, "deposition_weight", 1.f, 0.f, 5.f);
+  node.add_attr<IntAttribute>("iterations", "iterations", 100, 1, INT_MAX);
+
+  node.add_attr<FloatAttribute>("c_erosion", "c_erosion", 1.f, 0.f, 2.f);
+
+  node.add_attr<FloatAttribute>("c_deposition", "c_deposition", 0.4f, 0.f, 2.f);
+
+  node.add_attr<FloatAttribute>("c_thermal", "c_thermal", 0.1f, 0.f, 2.f);
+
+  node.add_attr<FloatAttribute>("talus_global", "talus_global", 1.5f, 0.f, 16.f);
+
+  node.add_attr<BoolAttribute>("scale_talus_with_elevation",
+                               "scale_talus_with_elevation",
+                               false);
+
+  node.add_attr<FloatAttribute>("flow_acc_exponent",
+                                "flow_acc_exponent",
+                                0.8f,
+                                0.01f,
+                                1.f);
+
+  node.add_attr<FloatAttribute>("flow_acc_exponent_depo",
+                                "flow_acc_exponent_depo",
+                                0.8f,
+                                0.01f,
+                                1.f);
+
+  node.add_attr<FloatAttribute>("flow_routing_exponent",
+                                "flow_routing_exponent",
+                                1.3f,
+                                0.01f,
+                                2.f);
+
+  node.add_attr<FloatAttribute>("thermal_weight", "thermal_weight", 0.f, 0.f, 5.f);
+
+  node.add_attr<FloatAttribute>("deposition_weight", "deposition_weight", 1.f, 0.f, 5.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"iterations",
@@ -72,17 +96,17 @@ void compute_hydraulic_schott_node(BaseNode &node)
     *p_out = *p_in;
 
     // talus
-    float talus = GET(node, "talus_global", FloatAttribute) / (float)p_out->shape.x;
-    hmap::Heightmap talus_map = hmap::Heightmap(CONFIG, talus);
+    float talus = node.get_attr<FloatAttribute>("talus_global") / (float)p_out->shape.x;
+    hmap::Heightmap talus_map = hmap::Heightmap(CONFIG(node), talus);
 
-    if (GET(node, "scale_talus_with_elevation", BoolAttribute))
+    if (node.get_attr<BoolAttribute>("scale_talus_with_elevation"))
     {
       talus_map = *p_in;
       talus_map.remap(talus / 100.f, talus);
     }
 
     // use a flat flow map as input
-    hmap::Heightmap flow_map = hmap::Heightmap(CONFIG, 1.f);
+    hmap::Heightmap flow_map = hmap::Heightmap(CONFIG(node), 1.f);
 
     hmap::transform(
         {p_out, &talus_map, p_mask, &flow_map},
@@ -93,19 +117,20 @@ void compute_hydraulic_schott_node(BaseNode &node)
           hmap::Array *pa_mask = p_arrays[2];
           hmap::Array *pa_flow_map = p_arrays[3];
 
-          hmap::gpu::hydraulic_schott(*pa_out,
-                                      GET(node, "iterations", IntAttribute),
-                                      *pa_talus,
-                                      pa_mask,
-                                      GET(node, "c_erosion", FloatAttribute),
-                                      GET(node, "c_thermal", FloatAttribute),
-                                      GET(node, "c_deposition", FloatAttribute),
-                                      GET(node, "flow_acc_exponent", FloatAttribute),
-                                      GET(node, "flow_acc_exponent_depo", FloatAttribute),
-                                      GET(node, "flow_routing_exponent", FloatAttribute),
-                                      GET(node, "thermal_weight", FloatAttribute),
-                                      GET(node, "deposition_weight", FloatAttribute),
-                                      pa_flow_map);
+          hmap::gpu::hydraulic_schott(
+              *pa_out,
+              node.get_attr<IntAttribute>("iterations"),
+              *pa_talus,
+              pa_mask,
+              node.get_attr<FloatAttribute>("c_erosion"),
+              node.get_attr<FloatAttribute>("c_thermal"),
+              node.get_attr<FloatAttribute>("c_deposition"),
+              node.get_attr<FloatAttribute>("flow_acc_exponent"),
+              node.get_attr<FloatAttribute>("flow_acc_exponent_depo"),
+              node.get_attr<FloatAttribute>("flow_routing_exponent"),
+              node.get_attr<FloatAttribute>("thermal_weight"),
+              node.get_attr<FloatAttribute>("deposition_weight"),
+              pa_flow_map);
         },
         hmap::TransformMode::SINGLE_ARRAY);
 

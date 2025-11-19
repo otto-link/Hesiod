@@ -16,11 +16,7 @@
 #include "hesiod/model/nodes/node_runtime_info.hpp"
 
 // clang-format off
-#define ADD_ATTR(obj, aclass, key, ...) obj.add_attr<aclass>(key, key, ## __VA_ARGS__)
-#define GET(obj, key, aclass) obj.get_attr_ref()->at(key)->get_ref<attr::aclass>()->get_value()
-#define GET_MEMBER(obj, key, aclass, what) obj.get_attr_ref()->at(key)->get_ref<attr::aclass>()->get_ ## what()
-#define GET_REF(obj, key, aclass) obj.get_attr_ref()->at(key)->get_ref<attr::aclass>()
-#define CONFIG node.get_config_ref()->shape, node.get_config_ref()->tiling, node.get_config_ref()->overlap
+#define CONFIG(obj) obj.get_config_ref()->shape, obj.get_config_ref()->tiling, obj.get_config_ref()->overlap
 // clang-format on
 
 namespace hesiod
@@ -59,8 +55,13 @@ public:
     return this->attr.at(key)->get_ref<T>()->get_value();
   }
 
+  template <typename T> T *get_attr_ref(const std::string &key) const
+  {
+    return this->attr.at(key)->get_ref<T>();
+  }
+
   std::vector<std::string> *get_attr_ordered_key_ref();
-  std::map<std::string, std::unique_ptr<attr::AbstractAttribute>> *get_attr_ref();
+  std::map<std::string, std::unique_ptr<attr::AbstractAttribute>> *get_attributes_ref();
   void set_attr_ordered_key(const std::vector<std::string> &new_attr_ordered_key);
 
   void reseed(bool backward);

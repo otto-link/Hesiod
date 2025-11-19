@@ -20,17 +20,28 @@ void setup_diffusion_limited_aggregation_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, SeedAttribute, "seed");
-  ADD_ATTR(node, FloatAttribute, "scale", 0.01f, 0.005f, 0.1f);
-  ADD_ATTR(node, FloatAttribute, "seeding_radius", 0.4f, 0.1f, 0.5f);
-  ADD_ATTR(node, FloatAttribute, "seeding_outer_radius_ratio", 0.2f, 0.01f, 0.5f);
-  ADD_ATTR(node, FloatAttribute, "slope", 8.f, 0.1f, FLT_MAX);
-  ADD_ATTR(node, FloatAttribute, "noise_ratio", 0.2f, 0.f, 1.f);
-  ADD_ATTR(node, BoolAttribute, "inverse", false);
-  ADD_ATTR(node, RangeAttribute, "remap");
+  node.add_attr<SeedAttribute>("seed", "seed");
+
+  node.add_attr<FloatAttribute>("scale", "scale", 0.01f, 0.005f, 0.1f);
+
+  node.add_attr<FloatAttribute>("seeding_radius", "seeding_radius", 0.4f, 0.1f, 0.5f);
+
+  node.add_attr<FloatAttribute>("seeding_outer_radius_ratio",
+                                "seeding_outer_radius_ratio",
+                                0.2f,
+                                0.01f,
+                                0.5f);
+
+  node.add_attr<FloatAttribute>("slope", "slope", 8.f, 0.1f, FLT_MAX);
+
+  node.add_attr<FloatAttribute>("noise_ratio", "noise_ratio", 0.2f, 0.f, 1.f);
+
+  node.add_attr<BoolAttribute>("inverse", "inverse", false);
+
+  node.add_attr<RangeAttribute>("remap", "remap");
 
   // attribute(s) order
   node.set_attr_ordered_key({"seed",
@@ -54,26 +65,26 @@ void compute_diffusion_limited_aggregation_node(BaseNode &node)
 
   hmap::Array array = hmap::diffusion_limited_aggregation(
       node.get_config_ref()->shape,
-      GET(node, "scale", FloatAttribute),
-      GET(node, "seed", SeedAttribute),
-      GET(node, "seeding_radius", FloatAttribute),
-      GET(node, "seeding_outer_radius_ratio", FloatAttribute),
-      GET(node, "slope", FloatAttribute),
-      GET(node, "noise_ratio", FloatAttribute));
+      node.get_attr<FloatAttribute>("scale"),
+      node.get_attr<SeedAttribute>("seed"),
+      node.get_attr<FloatAttribute>("seeding_radius"),
+      node.get_attr<FloatAttribute>("seeding_outer_radius_ratio"),
+      node.get_attr<FloatAttribute>("slope"),
+      node.get_attr<FloatAttribute>("noise_ratio"));
 
   p_out->from_array_interp_nearest(array);
 
   // post-process
   post_process_heightmap(node,
                          *p_out,
-                         GET(node, "inverse", BoolAttribute),
+                         node.get_attr<BoolAttribute>("inverse"),
                          false, // smooth
                          0,
                          false, // saturate
                          {0.f, 0.f},
                          0.f,
-                         GET_MEMBER(node, "remap", RangeAttribute, is_active),
-                         GET(node, "remap", RangeAttribute));
+                         node.get_attr_ref<RangeAttribute>("remap")->get_is_active(),
+                         node.get_attr<RangeAttribute>("remap"));
 
   Q_EMIT node.compute_finished(node.get_id());
 }

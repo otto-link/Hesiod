@@ -23,13 +23,16 @@ void setup_mean_shift_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "radius", 0.05f, 0.01f, 0.2f);
-  ADD_ATTR(node, FloatAttribute, "talus_global", 16.f, 0.f, FLT_MAX);
-  ADD_ATTR(node, IntAttribute, "iterations", 4, 1, 10);
-  ADD_ATTR(node, BoolAttribute, "talus_weighted", true);
+  node.add_attr<FloatAttribute>("radius", "radius", 0.05f, 0.01f, 0.2f);
+
+  node.add_attr<FloatAttribute>("talus_global", "talus_global", 16.f, 0.f, FLT_MAX);
+
+  node.add_attr<IntAttribute>("iterations", "iterations", 4, 1, 10);
+
+  node.add_attr<BoolAttribute>("talus_weighted", "talus_weighted", true);
 
   // attribute(s) order
   node.set_attr_ordered_key({"radius", "talus_global", "iterations", "talus_weighted"});
@@ -54,8 +57,8 @@ void compute_mean_shift_node(BaseNode &node)
     // prepare mask
     std::shared_ptr<hmap::Heightmap> sp_mask = pre_process_mask(node, p_mask, *p_in);
 
-    int   ir = std::max(1, (int)(GET(node, "radius", FloatAttribute) * p_out->shape.x));
-    float talus = GET(node, "talus_global", FloatAttribute) / (float)p_out->shape.x;
+    int ir = std::max(1, (int)(node.get_attr<FloatAttribute>("radius") * p_out->shape.x));
+    float talus = node.get_attr<FloatAttribute>("talus_global") / (float)p_out->shape.x;
 
     hmap::transform(
         {p_out, p_in, p_mask},
@@ -69,8 +72,8 @@ void compute_mean_shift_node(BaseNode &node)
                                           ir,
                                           talus,
                                           pa_mask,
-                                          GET(node, "iterations", IntAttribute),
-                                          GET(node, "talus_weighted", BoolAttribute));
+                                          node.get_attr<IntAttribute>("iterations"),
+                                          node.get_attr<BoolAttribute>("talus_weighted"));
         },
         node.get_config_ref()->hmap_transform_mode_gpu);
 

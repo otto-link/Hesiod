@@ -22,12 +22,14 @@ void setup_rugosity_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "radius", 0.1f, 0.f, 0.5f);
-  ADD_ATTR(node, BoolAttribute, "clamp_max", false);
-  ADD_ATTR(node, FloatAttribute, "vc_max", 1.f, 0.f, 10.f);
+  node.add_attr<FloatAttribute>("radius", "radius", 0.1f, 0.f, 0.5f);
+
+  node.add_attr<BoolAttribute>("clamp_max", "clamp_max", false);
+
+  node.add_attr<FloatAttribute>("vc_max", "vc_max", 1.f, 0.f, 10.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"radius", "clamp_max", "vc_max"});
@@ -47,7 +49,7 @@ void compute_rugosity_node(BaseNode &node)
   {
     hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
-    int ir = std::max(1, (int)(GET(node, "radius", FloatAttribute) * p_out->shape.x));
+    int ir = std::max(1, (int)(node.get_attr<FloatAttribute>("radius") * p_out->shape.x));
 
     hmap::transform(
         {p_out, p_in},
@@ -60,10 +62,10 @@ void compute_rugosity_node(BaseNode &node)
         },
         node.get_config_ref()->hmap_transform_mode_gpu);
 
-    if (GET(node, "clamp_max", BoolAttribute))
+    if (node.get_attr<BoolAttribute>("clamp_max"))
       hmap::transform(*p_out,
                       [&node](hmap::Array &x)
-                      { hmap::clamp_max(x, GET(node, "vc_max", FloatAttribute)); });
+                      { hmap::clamp_max(x, node.get_attr<FloatAttribute>("vc_max")); });
 
     p_out->smooth_overlap_buffers();
 

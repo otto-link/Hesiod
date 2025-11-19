@@ -20,11 +20,11 @@ void setup_rotate_displacement_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "delta");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "dx", CONFIG);
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "dy", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "dx", CONFIG(node));
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "dy", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "angle", 0.f, -180.f, 180.f);
+  node.add_attr<FloatAttribute>("angle", "angle", 0.f, -180.f, 180.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"angle"});
@@ -52,7 +52,7 @@ void compute_rotate_displacement_node(BaseNode &node)
           hmap::Array *pa_dy = p_arrays[2];
 
           hmap::rotate_displacement(*pa_in,
-                                    GET(node, "angle", FloatAttribute),
+                                    node.get_attr<FloatAttribute>("angle"),
                                     *pa_dx,
                                     *pa_dy);
         },

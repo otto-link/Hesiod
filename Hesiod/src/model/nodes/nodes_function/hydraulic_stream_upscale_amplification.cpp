@@ -22,15 +22,20 @@ void setup_hydraulic_stream_upscale_amplification_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "c_erosion", 0.01f, 0.001f, 0.1f);
-  ADD_ATTR(node, FloatAttribute, "talus_ref", 0.1f, 0.01f, 10.f);
-  ADD_ATTR(node, FloatAttribute, "radius", 0.f, 0.f, 0.05f);
-  ADD_ATTR(node, FloatAttribute, "clipping_ratio", 10.f, 0.1f, 100.f);
-  ADD_ATTR(node, IntAttribute, "upscaling_levels", 1, 0, 4);
-  ADD_ATTR(node, FloatAttribute, "persistence", 0.5f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>("c_erosion", "c_erosion", 0.01f, 0.001f, 0.1f);
+
+  node.add_attr<FloatAttribute>("talus_ref", "talus_ref", 0.1f, 0.01f, 10.f);
+
+  node.add_attr<FloatAttribute>("radius", "radius", 0.f, 0.f, 0.05f);
+
+  node.add_attr<FloatAttribute>("clipping_ratio", "clipping_ratio", 10.f, 0.1f, 100.f);
+
+  node.add_attr<IntAttribute>("upscaling_levels", "upscaling_levels", 1, 0, 4);
+
+  node.add_attr<FloatAttribute>("persistence", "persistence", 0.5f, 0.f, 1.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"c_erosion",
@@ -58,7 +63,7 @@ void compute_hydraulic_stream_upscale_amplification_node(BaseNode &node)
     // copy the input heightmap
     *p_out = *p_in;
 
-    int ir = (int)(GET(node, "radius", FloatAttribute) * p_out->shape.x);
+    int ir = (int)(node.get_attr<FloatAttribute>("radius") * p_out->shape.x);
 
     hmap::transform(*p_out,
                     p_mask,
@@ -67,12 +72,12 @@ void compute_hydraulic_stream_upscale_amplification_node(BaseNode &node)
                       hmap::hydraulic_stream_upscale_amplification(
                           h_out,
                           p_mask_array,
-                          GET(node, "c_erosion", FloatAttribute),
-                          GET(node, "talus_ref", FloatAttribute),
-                          GET(node, "upscaling_levels", IntAttribute),
-                          GET(node, "persistence", FloatAttribute),
+                          node.get_attr<FloatAttribute>("c_erosion"),
+                          node.get_attr<FloatAttribute>("talus_ref"),
+                          node.get_attr<IntAttribute>("upscaling_levels"),
+                          node.get_attr<FloatAttribute>("persistence"),
                           ir,
-                          GET(node, "clipping_ratio", FloatAttribute));
+                          node.get_attr<FloatAttribute>("clipping_ratio"));
                     });
 
     p_out->smooth_overlap_buffers();

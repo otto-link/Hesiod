@@ -25,13 +25,19 @@ void setup_expand_shrink_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
   node.add_port<hmap::Array>(gnode::PortType::IN, "kernel");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, EnumAttribute, "kernel", enum_mappings.kernel_type_map, "cubic_pulse");
-  ADD_ATTR(node, FloatAttribute, "radius", 0.05f, 0.01f, 0.2f);
-  ADD_ATTR(node, BoolAttribute, "shrink", "shrink", "expand", false);
-  ADD_ATTR(node, IntAttribute, "iterations", 1, 1, 10);
+  node.add_attr<EnumAttribute>("kernel",
+                               "kernel",
+                               enum_mappings.kernel_type_map,
+                               "cubic_pulse");
+
+  node.add_attr<FloatAttribute>("radius", "radius", 0.05f, 0.01f, 0.2f);
+
+  node.add_attr<BoolAttribute>("shrink", "shrink", "shrink", "expand", false);
+
+  node.add_attr<IntAttribute>("iterations", "iterations", 1, 1, 10);
 
   // attribute(s) order
   node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Main Parameters",
@@ -75,18 +81,19 @@ void compute_expand_shrink_node(BaseNode &node)
     }
     else
     {
-      int ir = std::max(1, (int)(GET(node, "radius", FloatAttribute) * p_out->shape.x));
+      int             ir = std::max(1,
+                        (int)(node.get_attr<FloatAttribute>("radius") * p_out->shape.x));
       hmap::Vec2<int> kernel_shape = {2 * ir + 1, 2 * ir + 1};
 
       kernel_array = hmap::get_kernel(
           kernel_shape,
-          (hmap::KernelType)GET(node, "kernel", EnumAttribute));
+          (hmap::KernelType)node.get_attr<EnumAttribute>("kernel"));
     }
 
     // core operator
     std::function<void(hmap::Array &, hmap::Array *)> lambda;
 
-    if (GET(node, "shrink", BoolAttribute))
+    if (node.get_attr<BoolAttribute>("shrink"))
     {
       hmap::transform(
           {p_out, p_mask},
@@ -97,7 +104,7 @@ void compute_expand_shrink_node(BaseNode &node)
             hmap::gpu::shrink(*pa_out,
                               kernel_array,
                               pa_mask,
-                              GET(node, "iterations", IntAttribute));
+                              node.get_attr<IntAttribute>("iterations"));
           },
           node.get_config_ref()->hmap_transform_mode_gpu);
     }
@@ -112,7 +119,7 @@ void compute_expand_shrink_node(BaseNode &node)
             hmap::gpu::expand(*pa_out,
                               kernel_array,
                               pa_mask,
-                              GET(node, "iterations", IntAttribute));
+                              node.get_attr<IntAttribute>("iterations"));
           },
           node.get_config_ref()->hmap_transform_mode_gpu);
     }

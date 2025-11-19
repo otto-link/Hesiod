@@ -26,14 +26,14 @@ void setup_export_normal_map_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
 
   // attribute(s)
-  ADD_ATTR(node,
-           FilenameAttribute,
-           "fname",
-           std::filesystem::path("nmap.png"),
-           "PNG (*.png)",
-           true);
-  ADD_ATTR(node, BoolAttribute, "16bit", false);
-  ADD_ATTR(node, BoolAttribute, "auto_export", false);
+  node.add_attr<FilenameAttribute>("fname",
+                                   "fname",
+                                   std::filesystem::path("nmap.png"),
+                                   "PNG (*.png)",
+                                   true);
+  node.add_attr<BoolAttribute>("16bit", "16bit", false);
+
+  node.add_attr<BoolAttribute>("auto_export", "auto_export", false);
 
   // attribute(s) order
   node.set_attr_ordered_key({"fname", "16bit", "auto_export"});
@@ -50,12 +50,12 @@ void compute_export_normal_map_node(BaseNode &node)
 
   hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
 
-  if (p_in && GET(node, "auto_export", BoolAttribute))
+  if (p_in && node.get_attr<BoolAttribute>("auto_export"))
   {
-    std::filesystem::path fname = GET(node, "fname", FilenameAttribute);
+    std::filesystem::path fname = node.get_attr<FilenameAttribute>("fname");
     fname = ensure_extension(fname, ".png");
 
-    if (GET(node, "16bit", BoolAttribute))
+    if (node.get_attr<BoolAttribute>("16bit"))
       hmap::export_normal_map_png(fname.string(), p_in->to_array(), CV_16U);
     else
       hmap::export_normal_map_png(fname.string(), p_in->to_array(), CV_8U);

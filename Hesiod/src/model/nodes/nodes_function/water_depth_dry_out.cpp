@@ -21,10 +21,15 @@ void setup_water_depth_dry_out_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "depth");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "water_depth", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "water_depth", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "dry_out_ratio", 0.1f, 0.f, 0.5f, "{:.4f}");
+  node.add_attr<FloatAttribute>("dry_out_ratio",
+                                "dry_out_ratio",
+                                0.1f,
+                                0.f,
+                                0.5f,
+                                "{:.4f}");
 
   // attribute(s) order
   node.set_attr_ordered_key({"dry_out_ratio"});
@@ -56,7 +61,7 @@ void compute_water_depth_dry_out_node(BaseNode &node)
           hmap::Array *pa_mask = p_arrays[1];
 
           hmap::water_depth_dry_out(*pa_out,
-                                    GET(node, "dry_out_ratio", FloatAttribute),
+                                    node.get_attr<FloatAttribute>("dry_out_ratio"),
                                     pa_mask,
                                     depth_max);
         },

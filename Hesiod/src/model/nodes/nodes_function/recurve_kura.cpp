@@ -21,11 +21,12 @@ void setup_recurve_kura_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "a", 2.f, 0.01f, 4.f);
-  ADD_ATTR(node, FloatAttribute, "b", 2.f, 0.01f, 4.f);
+  node.add_attr<FloatAttribute>("a", "a", 2.f, 0.01f, 4.f);
+
+  node.add_attr<FloatAttribute>("b", "b", 2.f, 0.01f, 4.f);
 }
 
 void compute_recurve_kura_node(BaseNode &node)
@@ -54,8 +55,8 @@ void compute_recurve_kura_node(BaseNode &node)
                     [&node](hmap::Array &x, hmap::Array *p_mask)
                     {
                       hmap::recurve_kura(x,
-                                         GET(node, "a", FloatAttribute),
-                                         GET(node, "b", FloatAttribute),
+                                         node.get_attr<FloatAttribute>("a"),
+                                         node.get_attr<FloatAttribute>("b"),
                                          p_mask);
                     });
 

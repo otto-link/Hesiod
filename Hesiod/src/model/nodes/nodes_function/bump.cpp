@@ -25,11 +25,12 @@ void setup_bump_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "control");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "envelope");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "gain", 1.f, 0.01f, 10.f);
-  ADD_ATTR(node, Vec2FloatAttribute, "center");
+  node.add_attr<FloatAttribute>("gain", "gain", 1.f, 0.01f, 10.f);
+
+  node.add_attr<Vec2FloatAttribute>("center", "center");
 
   // attribute(s) order
   node.set_attr_ordered_key({"gain", "center"});
@@ -63,12 +64,12 @@ void compute_bump_node(BaseNode &node)
         hmap::Array *pa_dy = p_arrays[3];
 
         *pa_out = hmap::bump(shape,
-                             GET(node, "gain", FloatAttribute),
+                             node.get_attr<FloatAttribute>("gain"),
                              pa_ctrl,
                              pa_dx,
                              pa_dy,
                              nullptr,
-                             GET(node, "center", Vec2FloatAttribute),
+                             node.get_attr<Vec2FloatAttribute>("center"),
                              bbox);
       },
       node.get_config_ref()->hmap_transform_mode_cpu);

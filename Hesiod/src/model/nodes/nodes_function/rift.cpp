@@ -25,14 +25,18 @@ void setup_rift_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "control");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "envelope");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "angle", 0.f, -180.f, 180.f);
-  ADD_ATTR(node, FloatAttribute, "slope", 8.f, 0.01f, FLT_MAX);
-  ADD_ATTR(node, FloatAttribute, "width", 0.1f, 0.f, 1.f);
-  ADD_ATTR(node, BoolAttribute, "sharp_bottom", false);
-  ADD_ATTR(node, Vec2FloatAttribute, "center");
+  node.add_attr<FloatAttribute>("angle", "angle", 0.f, -180.f, 180.f);
+
+  node.add_attr<FloatAttribute>("slope", "slope", 8.f, 0.01f, FLT_MAX);
+
+  node.add_attr<FloatAttribute>("width", "width", 0.1f, 0.f, 1.f);
+
+  node.add_attr<BoolAttribute>("sharp_bottom", "sharp_bottom", false);
+
+  node.add_attr<Vec2FloatAttribute>("center", "center");
 
   // attribute(s) order
   node.set_attr_ordered_key({"angle", "slope", "width", "sharp_bottom", "center"});
@@ -64,15 +68,15 @@ void compute_rift_node(BaseNode &node)
                      hmap::Array      *p_ctrl)
              {
                return hmap::rift(shape,
-                                 GET(node, "angle", FloatAttribute),
-                                 GET(node, "slope", FloatAttribute),
-                                 GET(node, "width", FloatAttribute),
-                                 GET(node, "sharp_bottom", BoolAttribute),
+                                 node.get_attr<FloatAttribute>("angle"),
+                                 node.get_attr<FloatAttribute>("slope"),
+                                 node.get_attr<FloatAttribute>("width"),
+                                 node.get_attr<BoolAttribute>("sharp_bottom"),
                                  p_ctrl,
                                  p_noise_x,
                                  p_noise_y,
                                  nullptr,
-                                 GET(node, "center", Vec2FloatAttribute),
+                                 node.get_attr<Vec2FloatAttribute>("center"),
                                  bbox);
              });
 

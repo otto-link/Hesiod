@@ -21,13 +21,16 @@ void setup_steepen_convective_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "angle", 0.f, -180.f, 180.f);
-  ADD_ATTR(node, IntAttribute, "iterations", 1, 1, 10);
-  ADD_ATTR(node, FloatAttribute, "radius", 0.1f, 0.f, 0.5f);
-  ADD_ATTR(node, FloatAttribute, "dt", 0.1f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>("angle", "angle", 0.f, -180.f, 180.f);
+
+  node.add_attr<IntAttribute>("iterations", "iterations", 1, 1, 10);
+
+  node.add_attr<FloatAttribute>("radius", "radius", 0.1f, 0.f, 0.5f);
+
+  node.add_attr<FloatAttribute>("dt", "dt", 0.1f, 0.f, 1.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"angle", "iterations", "radius", "dt"});
@@ -49,18 +52,18 @@ void compute_steepen_convective_node(BaseNode &node)
     // copy the input heightmap
     *p_out = *p_in;
 
-    int ir = std::max(1, (int)(GET(node, "radius", FloatAttribute) * p_out->shape.x));
+    int ir = std::max(1, (int)(node.get_attr<FloatAttribute>("radius") * p_out->shape.x));
 
     hmap::transform(*p_out,
                     p_mask,
                     [&node, &ir](hmap::Array &x, hmap::Array *p_mask)
                     {
                       hmap::steepen_convective(x,
-                                               GET(node, "angle", FloatAttribute),
+                                               node.get_attr<FloatAttribute>("angle"),
                                                p_mask,
-                                               GET(node, "iterations", IntAttribute),
+                                               node.get_attr<IntAttribute>("iterations"),
                                                ir,
-                                               GET(node, "dt", FloatAttribute));
+                                               node.get_attr<FloatAttribute>("dt"));
                     });
 
     p_out->smooth_overlap_buffers();

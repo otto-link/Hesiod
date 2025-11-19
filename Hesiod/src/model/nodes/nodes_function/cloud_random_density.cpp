@@ -22,9 +22,11 @@ void setup_cloud_random_density_node(BaseNode &node)
   node.add_port<hmap::Cloud>(gnode::PortType::OUT, "cloud");
 
   // attribute(s)
-  ADD_ATTR(node, IntAttribute, "npoints", 50, 1, INT_MAX);
-  ADD_ATTR(node, SeedAttribute, "seed");
-  ADD_ATTR(node, RangeAttribute, "remap");
+  node.add_attr<IntAttribute>("npoints", "npoints", 50, 1, INT_MAX);
+
+  node.add_attr<SeedAttribute>("seed", "seed");
+
+  node.add_attr<RangeAttribute>("remap", "remap");
 
   // attribute(s) order
   node.set_attr_ordered_key({"npoints", "seed", "_SEPARATOR_", "remap"});
@@ -45,13 +47,13 @@ void compute_cloud_random_density_node(BaseNode &node)
     // TODO distribute
     hmap::Array density_array = p_density->to_array();
 
-    *p_out = hmap::random_cloud_density(GET(node, "npoints", IntAttribute),
+    *p_out = hmap::random_cloud_density(node.get_attr<IntAttribute>("npoints"),
                                         density_array,
-                                        GET(node, "seed", SeedAttribute));
+                                        node.get_attr<SeedAttribute>("seed"));
 
-    if (GET_MEMBER(node, "remap", RangeAttribute, is_active))
-      p_out->remap_values(GET(node, "remap", RangeAttribute)[0],
-                          GET(node, "remap", RangeAttribute)[1]);
+    if (node.get_attr_ref<RangeAttribute>("remap")->get_is_active())
+      p_out->remap_values(node.get_attr<RangeAttribute>("remap")[0],
+                          node.get_attr<RangeAttribute>("remap")[1]);
   }
 
   Q_EMIT node.compute_finished(node.get_id());

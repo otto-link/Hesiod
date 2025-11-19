@@ -25,13 +25,16 @@ void setup_noise_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dx");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "envelope");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "out", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "out", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, EnumAttribute, "noise_type", enum_mappings.noise_type_map);
-  ADD_ATTR(node, WaveNbAttribute, "kw");
-  ADD_ATTR(node, SeedAttribute, "seed");
-  ADD_ATTR(node, BoolAttribute, "GPU", HSD_DEFAULT_GPU_MODE);
+  node.add_attr<EnumAttribute>("noise_type", "noise_type", enum_mappings.noise_type_map);
+
+  node.add_attr<WaveNbAttribute>("kw", "kw");
+
+  node.add_attr<SeedAttribute>("seed", "seed");
+
+  node.add_attr<BoolAttribute>("GPU", "GPU", HSD_DEFAULT_GPU_MODE);
 
   // attribute(s) order
   node.set_attr_ordered_key(
@@ -52,7 +55,7 @@ void compute_noise_node(BaseNode &node)
   hmap::Heightmap *p_env = node.get_value_ref<hmap::Heightmap>("envelope");
   hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("out");
 
-  if (GET(node, "GPU", BoolAttribute))
+  if (node.get_attr<BoolAttribute>("GPU"))
   {
     hmap::transform(
         {p_out, p_dx, p_dy},
@@ -65,10 +68,10 @@ void compute_noise_node(BaseNode &node)
           hmap::Array *pa_dy = p_arrays[2];
 
           *pa_out = hmap::gpu::noise(
-              (hmap::NoiseType)GET(node, "noise_type", EnumAttribute),
+              (hmap::NoiseType)node.get_attr<EnumAttribute>("noise_type"),
               shape,
-              GET(node, "kw", WaveNbAttribute),
-              GET(node, "seed", SeedAttribute),
+              node.get_attr<WaveNbAttribute>("kw"),
+              node.get_attr<SeedAttribute>("seed"),
               pa_dx,
               pa_dy,
               nullptr,
@@ -88,14 +91,15 @@ void compute_noise_node(BaseNode &node)
           hmap::Array *pa_dx = p_arrays[1];
           hmap::Array *pa_dy = p_arrays[2];
 
-          *pa_out = hmap::noise((hmap::NoiseType)GET(node, "noise_type", EnumAttribute),
-                                shape,
-                                GET(node, "kw", WaveNbAttribute),
-                                GET(node, "seed", SeedAttribute),
-                                pa_dx,
-                                pa_dy,
-                                nullptr,
-                                bbox);
+          *pa_out = hmap::noise(
+              (hmap::NoiseType)node.get_attr<EnumAttribute>("noise_type"),
+              shape,
+              node.get_attr<WaveNbAttribute>("kw"),
+              node.get_attr<SeedAttribute>("seed"),
+              pa_dx,
+              pa_dy,
+              nullptr,
+              bbox);
         },
         node.get_config_ref()->hmap_transform_mode_cpu);
   }

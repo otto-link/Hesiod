@@ -26,24 +26,38 @@ void setup_polygon_field_fbm_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "density");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "size");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "envelope");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, WaveNbAttribute, "kw");
-  ADD_ATTR(node, SeedAttribute, "seed");
-  ADD_ATTR(node, FloatAttribute, "rmin", 0.05f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "rmax", 0.8f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "clamping_dist", 0.1f, 0.f, FLT_MAX);
-  ADD_ATTR(node, FloatAttribute, "clamping_k", 0.01f, 0.f, 0.2f);
-  ADD_ATTR(node, FloatAttribute, "shift", 0.1f, 0.f, 1.f);
-  ADD_ATTR(node, IntAttribute, "n_vertices_min", 3, 3, 64);
-  ADD_ATTR(node, IntAttribute, "n_vertices_max", 8, 3, 64);
-  ADD_ATTR(node, FloatAttribute, "density", 0.1f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "jitter.x", 1.f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "jitter.y", 1.f, 0.f, 1.f);
-  ADD_ATTR(node, IntAttribute, "octaves", 8, 0, 32);
-  ADD_ATTR(node, FloatAttribute, "persistence", 0.5f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "lacunarity", 2.f, 0.01f, 4.f);
+  node.add_attr<WaveNbAttribute>("kw", "kw");
+
+  node.add_attr<SeedAttribute>("seed", "seed");
+
+  node.add_attr<FloatAttribute>("rmin", "rmin", 0.05f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("rmax", "rmax", 0.8f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("clamping_dist", "clamping_dist", 0.1f, 0.f, FLT_MAX);
+
+  node.add_attr<FloatAttribute>("clamping_k", "clamping_k", 0.01f, 0.f, 0.2f);
+
+  node.add_attr<FloatAttribute>("shift", "shift", 0.1f, 0.f, 1.f);
+
+  node.add_attr<IntAttribute>("n_vertices_min", "n_vertices_min", 3, 3, 64);
+
+  node.add_attr<IntAttribute>("n_vertices_max", "n_vertices_max", 8, 3, 64);
+
+  node.add_attr<FloatAttribute>("density", "density", 0.1f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("jitter.x", "jitter.x", 1.f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("jitter.y", "jitter.y", 1.f, 0.f, 1.f);
+
+  node.add_attr<IntAttribute>("octaves", "octaves", 8, 0, 32);
+
+  node.add_attr<FloatAttribute>("persistence", "persistence", 0.5f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("lacunarity", "lacunarity", 2.f, 0.01f, 4.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"kw",
@@ -94,30 +108,31 @@ void compute_polygon_field_fbm_node(BaseNode &node)
         hmap::Array *pa_density = p_arrays[4];
         hmap::Array *pa_size = p_arrays[5];
 
-        hmap::Vec2<float> jitter(GET(node, "jitter.x", FloatAttribute),
-                                 GET(node, "jitter.y", FloatAttribute));
+        hmap::Vec2<float> jitter(node.get_attr<FloatAttribute>("jitter.x"),
+                                 node.get_attr<FloatAttribute>("jitter.y"));
 
-        *pa_out = hmap::gpu::polygon_field_fbm(shape,
-                                               GET(node, "kw", WaveNbAttribute),
-                                               GET(node, "seed", SeedAttribute),
-                                               GET(node, "rmin", FloatAttribute),
-                                               GET(node, "rmax", FloatAttribute),
-                                               GET(node, "clamping_dist", FloatAttribute),
-                                               GET(node, "clamping_k", FloatAttribute),
-                                               GET(node, "n_vertices_min", IntAttribute),
-                                               GET(node, "n_vertices_max", IntAttribute),
-                                               GET(node, "density", FloatAttribute),
-                                               jitter,
-                                               GET(node, "shift", FloatAttribute),
-                                               GET(node, "octaves", IntAttribute),
-                                               GET(node, "persistence", FloatAttribute),
-                                               GET(node, "lacunarity", FloatAttribute),
-                                               pa_dx,
-                                               pa_dy,
-                                               pa_dr,
-                                               pa_density,
-                                               pa_size,
-                                               bbox);
+        *pa_out = hmap::gpu::polygon_field_fbm(
+            shape,
+            node.get_attr<WaveNbAttribute>("kw"),
+            node.get_attr<SeedAttribute>("seed"),
+            node.get_attr<FloatAttribute>("rmin"),
+            node.get_attr<FloatAttribute>("rmax"),
+            node.get_attr<FloatAttribute>("clamping_dist"),
+            node.get_attr<FloatAttribute>("clamping_k"),
+            node.get_attr<IntAttribute>("n_vertices_min"),
+            node.get_attr<IntAttribute>("n_vertices_max"),
+            node.get_attr<FloatAttribute>("density"),
+            jitter,
+            node.get_attr<FloatAttribute>("shift"),
+            node.get_attr<IntAttribute>("octaves"),
+            node.get_attr<FloatAttribute>("persistence"),
+            node.get_attr<FloatAttribute>("lacunarity"),
+            pa_dx,
+            pa_dy,
+            pa_dr,
+            pa_density,
+            pa_size,
+            bbox);
       },
       node.get_config_ref()->hmap_transform_mode_gpu);
 

@@ -22,12 +22,14 @@ void setup_plateau_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "radius", 0.05f, 0.01f, 0.5f);
-  ADD_ATTR(node, FloatAttribute, "factor", 4.f, 0.01f, 10.f);
-  ADD_ATTR(node, BoolAttribute, "GPU", HSD_DEFAULT_GPU_MODE);
+  node.add_attr<FloatAttribute>("radius", "radius", 0.05f, 0.01f, 0.5f);
+
+  node.add_attr<FloatAttribute>("factor", "factor", 4.f, 0.01f, 10.f);
+
+  node.add_attr<BoolAttribute>("GPU", "GPU", HSD_DEFAULT_GPU_MODE);
 
   // attribute(s) order
   node.set_attr_ordered_key({"radius", "factor", "_SEPARATOR_", "GPU"});
@@ -49,9 +51,9 @@ void compute_plateau_node(BaseNode &node)
     // copy the input heightmap
     *p_out = *p_in;
 
-    int ir = std::max(1, (int)(GET(node, "radius", FloatAttribute) * p_out->shape.x));
+    int ir = std::max(1, (int)(node.get_attr<FloatAttribute>("radius") * p_out->shape.x));
 
-    if (GET(node, "GPU", BoolAttribute))
+    if (node.get_attr<BoolAttribute>("GPU"))
     {
       hmap::transform(
           {p_out, p_mask},
@@ -60,7 +62,10 @@ void compute_plateau_node(BaseNode &node)
             hmap::Array *pa_out = p_arrays[0];
             hmap::Array *pa_mask = p_arrays[1];
 
-            hmap::gpu::plateau(*pa_out, pa_mask, ir, GET(node, "factor", FloatAttribute));
+            hmap::gpu::plateau(*pa_out,
+                               pa_mask,
+                               ir,
+                               node.get_attr<FloatAttribute>("factor"));
           },
           node.get_config_ref()->hmap_transform_mode_gpu);
     }
@@ -73,7 +78,7 @@ void compute_plateau_node(BaseNode &node)
             hmap::Array *pa_out = p_arrays[0];
             hmap::Array *pa_mask = p_arrays[1];
 
-            hmap::plateau(*pa_out, pa_mask, ir, GET(node, "factor", FloatAttribute));
+            hmap::plateau(*pa_out, pa_mask, ir, node.get_attr<FloatAttribute>("factor"));
           },
           node.get_config_ref()->hmap_transform_mode_cpu);
     }

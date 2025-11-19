@@ -24,15 +24,21 @@ void setup_thermal_scree_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "zmax");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "deposition", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "deposition", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "talus_global", 2.f, 0.f, FLT_MAX);
-  ADD_ATTR(node, FloatAttribute, "zmax", 0.5f, -1.f, 2.f);
-  ADD_ATTR(node, IntAttribute, "iterations", 500, 1, INT_MAX);
-  ADD_ATTR(node, BoolAttribute, "talus_constraint", true);
-  ADD_ATTR(node, BoolAttribute, "scale_talus_with_elevation", true);
+  node.add_attr<FloatAttribute>("talus_global", "talus_global", 2.f, 0.f, FLT_MAX);
+
+  node.add_attr<FloatAttribute>("zmax", "zmax", 0.5f, -1.f, 2.f);
+
+  node.add_attr<IntAttribute>("iterations", "iterations", 500, 1, INT_MAX);
+
+  node.add_attr<BoolAttribute>("talus_constraint", "talus_constraint", true);
+
+  node.add_attr<BoolAttribute>("scale_talus_with_elevation",
+                               "scale_talus_with_elevation",
+                               true);
 
   // attribute(s) order
   node.set_attr_ordered_key({"talus_global",
@@ -60,11 +66,11 @@ void compute_thermal_scree_node(BaseNode &node)
     // copy the input heightmap
     *p_out = *p_in;
 
-    float talus = GET(node, "talus_global", FloatAttribute) / (float)p_out->shape.x;
+    float talus = node.get_attr<FloatAttribute>("talus_global") / (float)p_out->shape.x;
 
-    hmap::Heightmap talus_map = hmap::Heightmap(CONFIG, talus);
+    hmap::Heightmap talus_map = hmap::Heightmap(CONFIG(node), talus);
 
-    if (GET(node, "scale_talus_with_elevation", BoolAttribute))
+    if (node.get_attr<BoolAttribute>("scale_talus_with_elevation"))
     {
       talus_map = *p_in;
       talus_map.remap(talus / 10.f, talus);
@@ -74,7 +80,7 @@ void compute_thermal_scree_node(BaseNode &node)
 
     if (!p_zmax)
     {
-      zmax = hmap::Heightmap(CONFIG, GET(node, "zmax", FloatAttribute));
+      zmax = hmap::Heightmap(CONFIG(node), node.get_attr<FloatAttribute>("zmax"));
       p_zmax = &zmax;
     }
 
@@ -92,8 +98,8 @@ void compute_thermal_scree_node(BaseNode &node)
                                    pa_mask,
                                    *pa_talus_map,
                                    *pa_zmax,
-                                   GET(node, "iterations", IntAttribute),
-                                   GET(node, "talus_constraint", BoolAttribute),
+                                   node.get_attr<IntAttribute>("iterations"),
+                                   node.get_attr<BoolAttribute>("talus_constraint"),
                                    pa_deposition_map);
         },
         node.get_config_ref()->hmap_transform_mode_gpu);

@@ -20,14 +20,18 @@ void setup_heightmap_to_mask_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "mask", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "mask", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, BoolAttribute, "inverse", false);
-  ADD_ATTR(node, BoolAttribute, "smoothing", false);
-  ADD_ATTR(node, FloatAttribute, "smoothing_radius", 0.05f, 0.f, 0.2f);
-  ADD_ATTR(node, RangeAttribute, "saturate_range");
-  ADD_ATTR(node, FloatAttribute, "saturate_k", 0.01f, 0.01f, 1.f);
+  node.add_attr<BoolAttribute>("inverse", "inverse", false);
+
+  node.add_attr<BoolAttribute>("smoothing", "smoothing", false);
+
+  node.add_attr<FloatAttribute>("smoothing_radius", "smoothing_radius", 0.05f, 0.f, 0.2f);
+
+  node.add_attr<RangeAttribute>("saturate_range", "saturate_range");
+
+  node.add_attr<FloatAttribute>("saturate_k", "saturate_k", 0.01f, 0.01f, 1.f);
 
   // attribute(s) order
   node.set_attr_ordered_key(
@@ -53,16 +57,17 @@ void compute_heightmap_to_mask_node(BaseNode &node)
     hmap::transform(*p_mask, [](hmap::Array &x) { hmap::clamp(x, 0.f, 1.f); });
 
     // post-process
-    post_process_heightmap(node,
-                           *p_mask,
-                           GET(node, "inverse", BoolAttribute),
-                           GET(node, "smoothing", BoolAttribute),
-                           GET(node, "smoothing_radius", FloatAttribute),
-                           GET_MEMBER(node, "saturate_range", RangeAttribute, is_active),
-                           GET(node, "saturate_range", RangeAttribute),
-                           GET(node, "saturate_k", FloatAttribute),
-                           false, // remap
-                           {0.f, 0.f});
+    post_process_heightmap(
+        node,
+        *p_mask,
+        node.get_attr<BoolAttribute>("inverse"),
+        node.get_attr<BoolAttribute>("smoothing"),
+        node.get_attr<FloatAttribute>("smoothing_radius"),
+        node.get_attr_ref<RangeAttribute>("saturate_range")->get_is_active(),
+        node.get_attr<RangeAttribute>("saturate_range"),
+        node.get_attr<FloatAttribute>("saturate_k"),
+        false, // remap
+        {0.f, 0.f});
   }
 
   Q_EMIT node.compute_finished(node.get_id());

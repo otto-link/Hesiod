@@ -21,13 +21,16 @@ void setup_cos_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "frequency", 1.f, 0.f, FLT_MAX);
-  ADD_ATTR(node, FloatAttribute, "phase_shift", 0.f, 0.f, 6.28f);
-  ADD_ATTR(node, BoolAttribute, "inverse", false);
-  ADD_ATTR(node, RangeAttribute, "remap");
+  node.add_attr<FloatAttribute>("frequency", "frequency", 1.f, 0.f, FLT_MAX);
+
+  node.add_attr<FloatAttribute>("phase_shift", "phase_shift", 0.f, 0.f, 6.28f);
+
+  node.add_attr<BoolAttribute>("inverse", "inverse", false);
+
+  node.add_attr<RangeAttribute>("remap", "remap");
 
   // attribute(s) order
   node.set_attr_ordered_key(
@@ -52,22 +55,23 @@ void compute_cos_node(BaseNode &node)
                       hmap::Array *pa_out = p_arrays[0];
                       hmap::Array *pa_in = p_arrays[1];
 
-                      *pa_out = hmap::cos(
-                          6.283185f * GET(node, "frequency", FloatAttribute) * (*pa_in) +
-                          GET(node, "phase_shift", FloatAttribute));
+                      *pa_out = hmap::cos(6.283185f *
+                                              node.get_attr<FloatAttribute>("frequency") *
+                                              (*pa_in) +
+                                          node.get_attr<FloatAttribute>("phase_shift"));
                     });
 
     // post-process
     post_process_heightmap(node,
                            *p_out,
-                           GET(node, "inverse", BoolAttribute),
+                           node.get_attr<BoolAttribute>("inverse"),
                            false, // smooth
                            0,
                            false, // saturate
                            {0.f, 0.f},
                            0.f,
-                           GET_MEMBER(node, "remap", RangeAttribute, is_active),
-                           GET(node, "remap", RangeAttribute));
+                           node.get_attr_ref<RangeAttribute>("remap")->get_is_active(),
+                           node.get_attr<RangeAttribute>("remap"));
   }
 
   Q_EMIT node.compute_finished(node.get_id());

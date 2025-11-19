@@ -22,12 +22,16 @@ void setup_thermal_schott_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "talus_global", 1.f, 0.f, FLT_MAX);
-  ADD_ATTR(node, IntAttribute, "iterations", 10, 1, INT_MAX);
-  ADD_ATTR(node, BoolAttribute, "scale_talus_with_elevation", false);
+  node.add_attr<FloatAttribute>("talus_global", "talus_global", 1.f, 0.f, FLT_MAX);
+
+  node.add_attr<IntAttribute>("iterations", "iterations", 10, 1, INT_MAX);
+
+  node.add_attr<BoolAttribute>("scale_talus_with_elevation",
+                               "scale_talus_with_elevation",
+                               false);
 
   // attribute(s) order
   node.set_attr_ordered_key({"talus_global", "iterations", "scale_talus_with_elevation"});
@@ -49,12 +53,12 @@ void compute_thermal_schott_node(BaseNode &node)
     // copy the input heightmap
     *p_out = *p_in;
 
-    float talus = GET(node, "talus_global", FloatAttribute) / (float)p_out->shape.x;
+    float talus = node.get_attr<FloatAttribute>("talus_global") / (float)p_out->shape.x;
     float intensity = 0.05f * talus;
 
-    hmap::Heightmap talus_map = hmap::Heightmap(CONFIG, talus);
+    hmap::Heightmap talus_map = hmap::Heightmap(CONFIG(node), talus);
 
-    if (GET(node, "scale_talus_with_elevation", BoolAttribute))
+    if (node.get_attr<BoolAttribute>("scale_talus_with_elevation"))
     {
       talus_map = *p_in;
       talus_map.remap(talus / 100.f, talus);
@@ -70,7 +74,7 @@ void compute_thermal_schott_node(BaseNode &node)
                       hmap::thermal_schott(h_out,
                                            *p_talus_array,
                                            p_mask_array,
-                                           GET(node, "iterations", IntAttribute),
+                                           node.get_attr<IntAttribute>("iterations"),
                                            intensity);
                     });
 

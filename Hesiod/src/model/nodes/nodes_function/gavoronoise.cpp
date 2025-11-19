@@ -25,30 +25,46 @@ void setup_gavoronoise_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "control");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "envelope");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "angle");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, WaveNbAttribute, "kw");
-  ADD_ATTR(node, SeedAttribute, "seed");
-  ADD_ATTR(node, FloatAttribute, "amplitude", 0.05f, 0.001f, 0.2f);
-  ADD_ATTR(node,
-           WaveNbAttribute,
-           "kw_multiplier",
-           std::vector<float>(2, 8.f),
-           0.f,
-           32.f,
-           true);
-  ADD_ATTR(node, FloatAttribute, "angle", 0.f, -180.f, 180.f);
-  ADD_ATTR(node, FloatAttribute, "angle_spread_ratio", 1.f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "slope_strength", 0.5f, 0.f, 8.f);
-  ADD_ATTR(node, FloatAttribute, "branch_strength", 2.f, 0.f, 8.f);
-  ADD_ATTR(node, FloatAttribute, "z_cut_min", 0.2f, -1.f, 2.f);
-  ADD_ATTR(node, FloatAttribute, "z_cut_max", 1.f, -1.f, 2.f);
-  ADD_ATTR(node, IntAttribute, "octaves", 8, 0, 32);
-  ADD_ATTR(node, FloatAttribute, "persistence", 0.4f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "lacunarity", 2.f, 0.01f, 4.f);
-  ADD_ATTR(node, BoolAttribute, "inverse", false);
-  ADD_ATTR(node, RangeAttribute, "remap");
+  node.add_attr<WaveNbAttribute>("kw", "kw");
+
+  node.add_attr<SeedAttribute>("seed", "seed");
+
+  node.add_attr<FloatAttribute>("amplitude", "amplitude", 0.05f, 0.001f, 0.2f);
+
+  node.add_attr<WaveNbAttribute>("kw_multiplier",
+                                 "kw_multiplier",
+                                 std::vector<float>(2, 8.f),
+                                 0.f,
+                                 32.f,
+                                 true);
+  node.add_attr<FloatAttribute>("angle", "angle", 0.f, -180.f, 180.f);
+
+  node.add_attr<FloatAttribute>("angle_spread_ratio",
+                                "angle_spread_ratio",
+                                1.f,
+                                0.f,
+                                1.f);
+
+  node.add_attr<FloatAttribute>("slope_strength", "slope_strength", 0.5f, 0.f, 8.f);
+
+  node.add_attr<FloatAttribute>("branch_strength", "branch_strength", 2.f, 0.f, 8.f);
+
+  node.add_attr<FloatAttribute>("z_cut_min", "z_cut_min", 0.2f, -1.f, 2.f);
+
+  node.add_attr<FloatAttribute>("z_cut_max", "z_cut_max", 1.f, -1.f, 2.f);
+
+  node.add_attr<IntAttribute>("octaves", "octaves", 8, 0, 32);
+
+  node.add_attr<FloatAttribute>("persistence", "persistence", 0.4f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("lacunarity", "lacunarity", 2.f, 0.01f, 4.f);
+
+  node.add_attr<BoolAttribute>("inverse", "inverse", false);
+
+  node.add_attr<RangeAttribute>("remap", "remap");
 
   // attribute(s) order
   node.set_attr_ordered_key({"kw",
@@ -94,29 +110,30 @@ void compute_gavoronoise_node(BaseNode &node)
         hmap::Array *pa_dy = p_arrays[3];
         hmap::Array *pa_angle = p_arrays[4];
 
-        hmap::Array angle_deg(shape, GET(node, "angle", FloatAttribute));
+        hmap::Array angle_deg(shape, node.get_attr<FloatAttribute>("angle"));
 
         if (pa_angle)
           angle_deg += (*pa_angle) * 180.f / M_PI;
 
-        *pa_out = hmap::gpu::gavoronoise(shape,
-                                         GET(node, "kw", WaveNbAttribute),
-                                         GET(node, "seed", SeedAttribute),
-                                         angle_deg,
-                                         GET(node, "amplitude", FloatAttribute),
-                                         GET(node, "angle_spread_ratio", FloatAttribute),
-                                         GET(node, "kw_multiplier", WaveNbAttribute),
-                                         GET(node, "slope_strength", FloatAttribute),
-                                         GET(node, "branch_strength", FloatAttribute),
-                                         GET(node, "z_cut_min", FloatAttribute),
-                                         GET(node, "z_cut_max", FloatAttribute),
-                                         GET(node, "octaves", IntAttribute),
-                                         GET(node, "persistence", FloatAttribute),
-                                         GET(node, "lacunarity", FloatAttribute),
-                                         pa_ctrl,
-                                         pa_dx,
-                                         pa_dy,
-                                         bbox);
+        *pa_out = hmap::gpu::gavoronoise(
+            shape,
+            node.get_attr<WaveNbAttribute>("kw"),
+            node.get_attr<SeedAttribute>("seed"),
+            angle_deg,
+            node.get_attr<FloatAttribute>("amplitude"),
+            node.get_attr<FloatAttribute>("angle_spread_ratio"),
+            node.get_attr<WaveNbAttribute>("kw_multiplier"),
+            node.get_attr<FloatAttribute>("slope_strength"),
+            node.get_attr<FloatAttribute>("branch_strength"),
+            node.get_attr<FloatAttribute>("z_cut_min"),
+            node.get_attr<FloatAttribute>("z_cut_max"),
+            node.get_attr<IntAttribute>("octaves"),
+            node.get_attr<FloatAttribute>("persistence"),
+            node.get_attr<FloatAttribute>("lacunarity"),
+            pa_ctrl,
+            pa_dx,
+            pa_dy,
+            bbox);
       },
       node.get_config_ref()->hmap_transform_mode_gpu);
 
@@ -137,14 +154,14 @@ void compute_gavoronoise_node(BaseNode &node)
   post_process_heightmap(node,
                          *p_out,
 
-                         GET(node, "inverse", BoolAttribute),
+                         node.get_attr<BoolAttribute>("inverse"),
                          false, // smooth
                          0,
                          false, // saturate
                          {0.f, 0.f},
                          0.f,
-                         GET_MEMBER(node, "remap", RangeAttribute, is_active),
-                         GET(node, "remap", RangeAttribute));
+                         node.get_attr_ref<RangeAttribute>("remap")->get_is_active(),
+                         node.get_attr<RangeAttribute>("remap"));
 
   Q_EMIT node.compute_finished(node.get_id());
 }

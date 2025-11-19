@@ -21,14 +21,18 @@ void setup_wave_dune_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dr");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "envelope");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "kw", 2.f, 0.01f, FLT_MAX);
-  ADD_ATTR(node, FloatAttribute, "angle", 0.f, -180.f, 180.f);
-  ADD_ATTR(node, FloatAttribute, "xtop", 0.7f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "xbottom", 0.9f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "phase_shift", 0.f, -180.f, 180.f);
+  node.add_attr<FloatAttribute>("kw", "kw", 2.f, 0.01f, FLT_MAX);
+
+  node.add_attr<FloatAttribute>("angle", "angle", 0.f, -180.f, 180.f);
+
+  node.add_attr<FloatAttribute>("xtop", "xtop", 0.7f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("xbottom", "xbottom", 0.9f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("phase_shift", "phase_shift", 0.f, -180.f, 180.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"kw", "angle", "xtop", "xbottom", "phase_shift"});
@@ -57,11 +61,11 @@ void compute_wave_dune_node(BaseNode &node)
         hmap::Array *pa_dr = p_arrays[1];
 
         *pa_out = hmap::wave_dune(shape,
-                                  GET(node, "kw", FloatAttribute),
-                                  GET(node, "angle", FloatAttribute),
-                                  GET(node, "xtop", FloatAttribute),
-                                  GET(node, "xbottom", FloatAttribute),
-                                  GET(node, "phase_shift", FloatAttribute),
+                                  node.get_attr<FloatAttribute>("kw"),
+                                  node.get_attr<FloatAttribute>("angle"),
+                                  node.get_attr<FloatAttribute>("xtop"),
+                                  node.get_attr<FloatAttribute>("xbottom"),
+                                  node.get_attr<FloatAttribute>("phase_shift"),
                                   pa_dr,
                                   nullptr,
                                   nullptr,

@@ -21,7 +21,7 @@ void setup_cloud_sdf_node(BaseNode &node)
   node.add_port<hmap::Cloud>(gnode::PortType::IN, "cloud");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dx");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "sdf", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "sdf", CONFIG(node));
 
   setup_post_process_heightmap_attributes(node);
 }

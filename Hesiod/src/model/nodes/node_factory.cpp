@@ -127,7 +127,7 @@ void dump_node_settings_screenshots()
     hesiod::BaseNode *p_base_node = dynamic_cast<hesiod::BaseNode *>(p_node.get());
 
     attr::AttributesWidget *attributes_widget = new attr::AttributesWidget(
-        p_base_node->get_attr_ref(),
+        p_base_node->get_attributes_ref(),
         p_base_node->get_attr_ordered_key_ref());
 
     render_widget_screenshot(attributes_widget,

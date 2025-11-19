@@ -21,17 +21,32 @@ void setup_wrinkle_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "wrinkle_amplitude", 0.03f, 0.f, 0.2f);
-  ADD_ATTR(node, FloatAttribute, "wrinkle_angle", 0.f, -180.f, 180.f);
-  ADD_ATTR(node, FloatAttribute, "displacement_amplitude", 0.5f, 0.f, 2.f);
-  ADD_ATTR(node, FloatAttribute, "radius", 0.f, 0.f, 0.2f);
-  ADD_ATTR(node, FloatAttribute, "kw", 2.f, 0.f, FLT_MAX);
-  ADD_ATTR(node, SeedAttribute, "seed");
-  ADD_ATTR(node, IntAttribute, "octaves", 8, 0, 32);
-  ADD_ATTR(node, FloatAttribute, "weight", 1.f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>("wrinkle_amplitude",
+                                "wrinkle_amplitude",
+                                0.03f,
+                                0.f,
+                                0.2f);
+
+  node.add_attr<FloatAttribute>("wrinkle_angle", "wrinkle_angle", 0.f, -180.f, 180.f);
+
+  node.add_attr<FloatAttribute>("displacement_amplitude",
+                                "displacement_amplitude",
+                                0.5f,
+                                0.f,
+                                2.f);
+
+  node.add_attr<FloatAttribute>("radius", "radius", 0.f, 0.f, 0.2f);
+
+  node.add_attr<FloatAttribute>("kw", "kw", 2.f, 0.f, FLT_MAX);
+
+  node.add_attr<SeedAttribute>("seed", "seed");
+
+  node.add_attr<IntAttribute>("octaves", "octaves", 8, 0, 32);
+
+  node.add_attr<FloatAttribute>("weight", "weight", 1.f, 0.f, 1.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"wrinkle_amplitude",
@@ -60,7 +75,7 @@ void compute_wrinkle_node(BaseNode &node)
     // copy the input heightmap
     *p_out = *p_in;
 
-    int ir = std::max(1, (int)(GET(node, "radius", FloatAttribute) * p_out->shape.x));
+    int ir = std::max(1, (int)(node.get_attr<FloatAttribute>("radius") * p_out->shape.x));
 
     hmap::transform(
         *p_out,
@@ -68,15 +83,15 @@ void compute_wrinkle_node(BaseNode &node)
         [&node, &ir](hmap::Array &x, hmap::Vec4<float> bbox, hmap::Array *p_mask)
         {
           hmap::wrinkle(x,
-                        GET(node, "wrinkle_amplitude", FloatAttribute),
+                        node.get_attr<FloatAttribute>("wrinkle_amplitude"),
                         p_mask,
-                        GET(node, "wrinkle_angle", FloatAttribute),
-                        GET(node, "displacement_amplitude", FloatAttribute),
+                        node.get_attr<FloatAttribute>("wrinkle_angle"),
+                        node.get_attr<FloatAttribute>("displacement_amplitude"),
                         ir,
-                        GET(node, "kw", FloatAttribute),
-                        GET(node, "seed", SeedAttribute),
-                        GET(node, "octaves", IntAttribute),
-                        GET(node, "weight", FloatAttribute),
+                        node.get_attr<FloatAttribute>("kw"),
+                        node.get_attr<SeedAttribute>("seed"),
+                        node.get_attr<IntAttribute>("octaves"),
+                        node.get_attr<FloatAttribute>("weight"),
                         bbox);
         });
 

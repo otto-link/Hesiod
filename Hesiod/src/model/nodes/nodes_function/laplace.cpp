@@ -22,11 +22,12 @@ void setup_laplace_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "sigma", 0.125f, 0.f, 0.125f);
-  ADD_ATTR(node, IntAttribute, "iterations", 1, 1, 10);
+  node.add_attr<FloatAttribute>("sigma", "sigma", 0.125f, 0.f, 0.125f);
+
+  node.add_attr<IntAttribute>("iterations", "iterations", 1, 1, 10);
 
   // attribute(s) order
   node.set_attr_ordered_key({"sigma", "iterations"});
@@ -57,8 +58,8 @@ void compute_laplace_node(BaseNode &node)
 
           hmap::laplace(*pa_out,
                         pa_mask,
-                        GET(node, "sigma", FloatAttribute),
-                        GET(node, "iterations", IntAttribute));
+                        node.get_attr<FloatAttribute>("sigma"),
+                        node.get_attr<IntAttribute>("iterations"));
         },
         node.get_config_ref()->hmap_transform_mode_cpu);
 

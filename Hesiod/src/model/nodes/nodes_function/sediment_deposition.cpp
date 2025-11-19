@@ -22,15 +22,25 @@ void setup_sediment_deposition_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "deposition", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "deposition", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "talus_global", 0.2f, 0.f, FLT_MAX);
-  ADD_ATTR(node, FloatAttribute, "max_deposition", 0.001f, 0.f, 0.1f);
-  ADD_ATTR(node, IntAttribute, "iterations", 1, 1, 20);
-  ADD_ATTR(node, IntAttribute, "thermal_subiterations", 50, 1, INT_MAX);
-  ADD_ATTR(node, BoolAttribute, "scale_talus_with_elevation", true);
+  node.add_attr<FloatAttribute>("talus_global", "talus_global", 0.2f, 0.f, FLT_MAX);
+
+  node.add_attr<FloatAttribute>("max_deposition", "max_deposition", 0.001f, 0.f, 0.1f);
+
+  node.add_attr<IntAttribute>("iterations", "iterations", 1, 1, 20);
+
+  node.add_attr<IntAttribute>("thermal_subiterations",
+                              "thermal_subiterations",
+                              50,
+                              1,
+                              INT_MAX);
+
+  node.add_attr<BoolAttribute>("scale_talus_with_elevation",
+                               "scale_talus_with_elevation",
+                               true);
 
   // attribute(s) order
   node.set_attr_ordered_key({"talus_global",
@@ -57,11 +67,11 @@ void compute_sediment_deposition_node(BaseNode &node)
     // copy the input heightmap
     *p_out = *p_in;
 
-    float talus = GET(node, "talus_global", FloatAttribute) / (float)p_out->shape.x;
+    float talus = node.get_attr<FloatAttribute>("talus_global") / (float)p_out->shape.x;
 
-    hmap::Heightmap talus_map = hmap::Heightmap(CONFIG, talus);
+    hmap::Heightmap talus_map = hmap::Heightmap(CONFIG(node), talus);
 
-    if (GET(node, "scale_talus_with_elevation", BoolAttribute))
+    if (node.get_attr<BoolAttribute>("scale_talus_with_elevation"))
     {
       talus_map = *p_in;
       talus_map.remap(talus / 100.f, talus);
@@ -81,9 +91,9 @@ void compute_sediment_deposition_node(BaseNode &node)
                           p_mask_array,
                           *p_talus_array,
                           p_deposition_array,
-                          GET(node, "max_deposition", FloatAttribute),
-                          GET(node, "iterations", IntAttribute),
-                          GET(node, "thermal_subiterations", IntAttribute));
+                          node.get_attr<FloatAttribute>("max_deposition"),
+                          node.get_attr<IntAttribute>("iterations"),
+                          node.get_attr<IntAttribute>("thermal_subiterations"));
                     });
 
     p_out->smooth_overlap_buffers();

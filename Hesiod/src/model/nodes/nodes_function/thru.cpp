@@ -24,10 +24,10 @@ void setup_thru_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, BoolAttribute, "block_update", false);
+  node.add_attr<BoolAttribute>("block_update", "block_update", false);
 
   // attribute(s) order
   node.set_attr_ordered_key({"block_update"});
@@ -35,7 +35,7 @@ void setup_thru_node(BaseNode &node)
   // specialized GUI
   auto lambda = [](BaseNode &node)
   {
-    bool state = GET(node, "block_update", BoolAttribute);
+    bool state = node.get_attr<BoolAttribute>("block_update");
 
     QPushButton *button = new QPushButton("BLOCK UPDATE", &node);
     button->setCheckable(true);
@@ -46,8 +46,8 @@ void setup_thru_node(BaseNode &node)
                  &QPushButton::pressed,
                  [&node, button]()
                  {
-                   bool new_state = !GET(node, "block_update", BoolAttribute);
-                   GET_REF(node, "block_update", BoolAttribute)->set_value(new_state);
+                   bool new_state = !node.get_attr<BoolAttribute>("block_update");
+                   node.get_attr_ref<BoolAttribute>("block_update")->set_value(new_state);
                    button->setChecked(new_state);
                    node.get_p_graph()->update(node.get_id());
                  });
@@ -66,7 +66,7 @@ void compute_thru_node(BaseNode &node)
 
   hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
 
-  if (p_in && !GET(node, "block_update", BoolAttribute))
+  if (p_in && !node.get_attr<BoolAttribute>("block_update"))
   {
     hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 

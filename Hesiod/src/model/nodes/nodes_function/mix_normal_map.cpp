@@ -24,14 +24,14 @@ void setup_mix_normal_map_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "normal map base");
   node.add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "normal map detail");
-  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "normal map", CONFIG);
+  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "normal map", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "detail_scaling", 1.f, 0.f, 4.f);
-  ADD_ATTR(node,
-           EnumAttribute,
-           "blending_method",
-           hmap::normal_map_blending_method_as_string);
+  node.add_attr<FloatAttribute>("detail_scaling", "detail_scaling", 1.f, 0.f, 4.f);
+
+  node.add_attr<EnumAttribute>("blending_method",
+                               "blending_method",
+                               hmap::normal_map_blending_method_as_string);
 
   // attribute(s) order
   node.set_attr_ordered_key({"detail_scaling", "blending_method"});
@@ -54,8 +54,8 @@ void compute_mix_normal_map_node(BaseNode &node)
     *p_out = hmap::mix_normal_map_rgba(
         *p_in1,
         *p_in2,
-        GET(node, "detail_scaling", FloatAttribute),
-        (hmap::NormalMapBlendingMethod)GET(node, "blending_method", EnumAttribute));
+        node.get_attr<FloatAttribute>("detail_scaling"),
+        (hmap::NormalMapBlendingMethod)node.get_attr<EnumAttribute>("blending_method"));
   }
 
   Q_EMIT node.compute_finished(node.get_id());

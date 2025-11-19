@@ -44,7 +44,7 @@ void ReceiveNode::set_p_coord_frame(hmap::CoordFrame *new_p_coord_frame)
 
 void ReceiveNode::update_tag_list(const std::vector<std::string> &new_tags)
 {
-  auto p_attr = this->get_attr_ref()->at("tag")->get_ref<attr::ChoiceAttribute>();
+  auto p_attr = this->get_attributes_ref()->at("tag")->get_ref<attr::ChoiceAttribute>();
 
   // add option to select nothing
   std::vector<std::string> new_tags_mod = new_tags;

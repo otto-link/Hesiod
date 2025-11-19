@@ -24,18 +24,26 @@ void setup_wavelet_noise_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "control");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "envelope");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, WaveNbAttribute, "kw");
-  ADD_ATTR(node, SeedAttribute, "seed");
-  ADD_ATTR(node, FloatAttribute, "kw_multiplier", 2.f, 0.f, FLT_MAX);
-  ADD_ATTR(node, FloatAttribute, "vorticity", 0.f, 0.f, 10.f);
-  ADD_ATTR(node, FloatAttribute, "density", 1.f, 0.f, 1.f);
-  ADD_ATTR(node, IntAttribute, "octaves", 8, 0, 32);
-  ADD_ATTR(node, FloatAttribute, "weight", 0.7f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "persistence", 0.5f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "lacunarity", 2.f, 0.01f, 4.f);
+  node.add_attr<WaveNbAttribute>("kw", "kw");
+
+  node.add_attr<SeedAttribute>("seed", "seed");
+
+  node.add_attr<FloatAttribute>("kw_multiplier", "kw_multiplier", 2.f, 0.f, FLT_MAX);
+
+  node.add_attr<FloatAttribute>("vorticity", "vorticity", 0.f, 0.f, 10.f);
+
+  node.add_attr<FloatAttribute>("density", "density", 1.f, 0.f, 1.f);
+
+  node.add_attr<IntAttribute>("octaves", "octaves", 8, 0, 32);
+
+  node.add_attr<FloatAttribute>("weight", "weight", 0.7f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("persistence", "persistence", 0.5f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("lacunarity", "lacunarity", 2.f, 0.01f, 4.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Frequency and Structure",
@@ -84,15 +92,15 @@ void compute_wavelet_noise_node(BaseNode &node)
         hmap::Array *pa_dy = p_arrays[3];
 
         *pa_out = hmap::gpu::wavelet_noise(shape,
-                                           GET(node, "kw", WaveNbAttribute),
-                                           GET(node, "seed", SeedAttribute),
-                                           GET(node, "kw_multiplier", FloatAttribute),
-                                           GET(node, "vorticity", FloatAttribute),
-                                           GET(node, "density", FloatAttribute),
-                                           GET(node, "octaves", IntAttribute),
-                                           GET(node, "weight", FloatAttribute),
-                                           GET(node, "persistence", FloatAttribute),
-                                           GET(node, "lacunarity", FloatAttribute),
+                                           node.get_attr<WaveNbAttribute>("kw"),
+                                           node.get_attr<SeedAttribute>("seed"),
+                                           node.get_attr<FloatAttribute>("kw_multiplier"),
+                                           node.get_attr<FloatAttribute>("vorticity"),
+                                           node.get_attr<FloatAttribute>("density"),
+                                           node.get_attr<IntAttribute>("octaves"),
+                                           node.get_attr<FloatAttribute>("weight"),
+                                           node.get_attr<FloatAttribute>("persistence"),
+                                           node.get_attr<FloatAttribute>("lacunarity"),
                                            pa_ctrl,
                                            pa_dx,
                                            pa_dy,

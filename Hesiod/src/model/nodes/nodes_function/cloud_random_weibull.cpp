@@ -21,11 +21,15 @@ void setup_cloud_random_weibull_node(BaseNode &node)
   node.add_port<hmap::Cloud>(gnode::PortType::OUT, "cloud");
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "distance_min", 0.01f, 0.001f, 0.2f);
-  ADD_ATTR(node, FloatAttribute, "lambda", 0.1f, 0.001f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "k", 1.5f, 0.01f, 4.f);
-  ADD_ATTR(node, SeedAttribute, "seed");
-  ADD_ATTR(node, RangeAttribute, "remap");
+  node.add_attr<FloatAttribute>("distance_min", "distance_min", 0.01f, 0.001f, 0.2f);
+
+  node.add_attr<FloatAttribute>("lambda", "lambda", 0.1f, 0.001f, 1.f);
+
+  node.add_attr<FloatAttribute>("k", "k", 1.5f, 0.01f, 4.f);
+
+  node.add_attr<SeedAttribute>("seed", "seed");
+
+  node.add_attr<RangeAttribute>("remap", "remap");
 
   // attribute(s) order
   node.set_attr_ordered_key(
@@ -40,14 +44,15 @@ void compute_cloud_random_weibull_node(BaseNode &node)
 
   hmap::Cloud *p_out = node.get_value_ref<hmap::Cloud>("cloud");
 
-  *p_out = hmap::random_cloud_distance_weibull(GET(node, "distance_min", FloatAttribute),
-                                               GET(node, "lambda", FloatAttribute),
-                                               GET(node, "k", FloatAttribute),
-                                               GET(node, "seed", SeedAttribute));
+  *p_out = hmap::random_cloud_distance_weibull(
+      node.get_attr<FloatAttribute>("distance_min"),
+      node.get_attr<FloatAttribute>("lambda"),
+      node.get_attr<FloatAttribute>("k"),
+      node.get_attr<SeedAttribute>("seed"));
 
-  if (GET_MEMBER(node, "remap", RangeAttribute, is_active))
-    p_out->remap_values(GET(node, "remap", RangeAttribute)[0],
-                        GET(node, "remap", RangeAttribute)[1]);
+  if (node.get_attr_ref<RangeAttribute>("remap")->get_is_active())
+    p_out->remap_values(node.get_attr<RangeAttribute>("remap")[0],
+                        node.get_attr<RangeAttribute>("remap")[1]);
 
   Q_EMIT node.compute_finished(node.get_id());
 }

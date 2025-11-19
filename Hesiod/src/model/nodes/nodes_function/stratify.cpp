@@ -24,14 +24,18 @@ void setup_stratify_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "noise");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, SeedAttribute, "seed");
-  ADD_ATTR(node, IntAttribute, "n_strata", 3, 1, 16);
-  ADD_ATTR(node, FloatAttribute, "strata_noise", 0.f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "gamma", 0.7f, 0.1f, 2.f);
-  ADD_ATTR(node, FloatAttribute, "gamma_noise", 0.f, 0.f, 1.f);
+  node.add_attr<SeedAttribute>("seed", "seed");
+
+  node.add_attr<IntAttribute>("n_strata", "n_strata", 3, 1, 16);
+
+  node.add_attr<FloatAttribute>("strata_noise", "strata_noise", 0.f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("gamma", "gamma", 0.7f, 0.1f, 2.f);
+
+  node.add_attr<FloatAttribute>("gamma_noise", "gamma_noise", 0.f, 0.f, 1.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"seed", "n_strata", "strata_noise", "gamma", "gamma_noise"});
@@ -61,20 +65,20 @@ void compute_stratify_node(BaseNode &node)
 
     auto hs = hmap::linspace_jitted(zmin,
                                     zmax,
-                                    GET(node, "n_strata", IntAttribute) + 1,
-                                    GET(node, "strata_noise", FloatAttribute),
-                                    GET(node, "seed", SeedAttribute));
+                                    node.get_attr<IntAttribute>("n_strata") + 1,
+                                    node.get_attr<FloatAttribute>("strata_noise"),
+                                    node.get_attr<SeedAttribute>("seed"));
 
     float gmin = std::max(0.01f,
-                          GET(node, "gamma", FloatAttribute) *
-                              (1.f - GET(node, "gamma_noise", FloatAttribute)));
-    float gmax = GET(node, "gamma", FloatAttribute) *
-                 (1.f + GET(node, "gamma_noise", FloatAttribute));
+                          node.get_attr<FloatAttribute>("gamma") *
+                              (1.f - node.get_attr<FloatAttribute>("gamma_noise")));
+    float gmax = node.get_attr<FloatAttribute>("gamma") *
+                 (1.f + node.get_attr<FloatAttribute>("gamma_noise"));
 
     auto gs = hmap::random_vector(gmin,
                                   gmax,
-                                  GET(node, "n_strata", IntAttribute),
-                                  GET(node, "seed", SeedAttribute));
+                                  node.get_attr<IntAttribute>("n_strata"),
+                                  node.get_attr<SeedAttribute>("seed"));
 
     hmap::transform(
         {p_out, p_mask, p_noise},

@@ -23,15 +23,20 @@ void setup_voronoise_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dx");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "envelope");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, WaveNbAttribute, "kw");
-  ADD_ATTR(node, SeedAttribute, "seed");
-  ADD_ATTR(node, FloatAttribute, "u", 0.5f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "v", 0.5f, 0.f, 1.f);
-  ADD_ATTR(node, BoolAttribute, "inverse", false);
-  ADD_ATTR(node, RangeAttribute, "remap");
+  node.add_attr<WaveNbAttribute>("kw", "kw");
+
+  node.add_attr<SeedAttribute>("seed", "seed");
+
+  node.add_attr<FloatAttribute>("u", "u", 0.5f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("v", "v", 0.5f, 0.f, 1.f);
+
+  node.add_attr<BoolAttribute>("inverse", "inverse", false);
+
+  node.add_attr<RangeAttribute>("remap", "remap");
 
   // attribute(s) order
   node.set_attr_ordered_key({"kw", "seed", "u", "v", "_SEPARATOR_", "inverse", "remap"});
@@ -59,10 +64,10 @@ void compute_voronoise_node(BaseNode &node)
         hmap::Array *pa_dy = p_arrays[2];
 
         *pa_out = hmap::gpu::voronoise(shape,
-                                       GET(node, "kw", WaveNbAttribute),
-                                       GET(node, "u", FloatAttribute),
-                                       GET(node, "v", FloatAttribute),
-                                       GET(node, "seed", SeedAttribute),
+                                       node.get_attr<WaveNbAttribute>("kw"),
+                                       node.get_attr<FloatAttribute>("u"),
+                                       node.get_attr<FloatAttribute>("v"),
+                                       node.get_attr<SeedAttribute>("seed"),
                                        pa_dx,
                                        pa_dy,
                                        bbox);
@@ -86,14 +91,14 @@ void compute_voronoise_node(BaseNode &node)
   post_process_heightmap(node,
                          *p_out,
 
-                         GET(node, "inverse", BoolAttribute),
+                         node.get_attr<BoolAttribute>("inverse"),
                          false, // smooth
                          0,
                          false, // saturate
                          {0.f, 0.f},
                          0.f,
-                         GET_MEMBER(node, "remap", RangeAttribute, is_active),
-                         GET(node, "remap", RangeAttribute));
+                         node.get_attr_ref<RangeAttribute>("remap")->get_is_active(),
+                         node.get_attr<RangeAttribute>("remap"));
 
   Q_EMIT node.compute_finished(node.get_id());
 }

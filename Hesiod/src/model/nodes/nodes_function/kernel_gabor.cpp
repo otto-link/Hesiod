@@ -24,10 +24,13 @@ void setup_kernel_gabor_node(BaseNode &node)
                              node.get_config_ref()->shape);
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "radius", 0.1f, 0.001f, 0.2f);
-  ADD_ATTR(node, BoolAttribute, "normalize", false);
-  ADD_ATTR(node, FloatAttribute, "kw", 2.f, 0.01f, FLT_MAX);
-  ADD_ATTR(node, FloatAttribute, "angle", 0.f, -180.f, 180.f);
+  node.add_attr<FloatAttribute>("radius", "radius", 0.1f, 0.001f, 0.2f);
+
+  node.add_attr<BoolAttribute>("normalize", "normalize", false);
+
+  node.add_attr<FloatAttribute>("kw", "kw", 2.f, 0.01f, FLT_MAX);
+
+  node.add_attr<FloatAttribute>("angle", "angle", 0.f, -180.f, 180.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"radius", "normalize", "_SEPARATOR_", "kw", "angle"});
@@ -43,16 +46,16 @@ void compute_kernel_gabor_node(BaseNode &node)
 
   int ir = std::max(
       1,
-      (int)(GET(node, "radius", FloatAttribute) * node.get_config_ref()->shape.x));
+      (int)(node.get_attr<FloatAttribute>("radius") * node.get_config_ref()->shape.x));
 
   // kernel definition
   hmap::Vec2<int> kernel_shape = {2 * ir + 1, 2 * ir + 1};
 
   *p_out = hmap::gabor(kernel_shape,
-                       GET(node, "kw", FloatAttribute),
-                       GET(node, "angle", FloatAttribute));
+                       node.get_attr<FloatAttribute>("kw"),
+                       node.get_attr<FloatAttribute>("angle"));
 
-  if (GET(node, "normalize", BoolAttribute))
+  if (node.get_attr<BoolAttribute>("normalize"))
     *p_out /= p_out->sum();
 
   Q_EMIT node.compute_finished(node.get_id());

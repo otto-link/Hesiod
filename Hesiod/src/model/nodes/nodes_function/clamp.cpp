@@ -23,15 +23,20 @@ void setup_clamp_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, RangeAttribute, "clamp");
-  ADD_ATTR(node, BoolAttribute, "smooth_min", false);
-  ADD_ATTR(node, FloatAttribute, "k_min", 0.05f, 0.01f, 1.f);
-  ADD_ATTR(node, BoolAttribute, "smooth_max", false);
-  ADD_ATTR(node, FloatAttribute, "k_max", 0.05f, 0.01f, 1.f);
-  ADD_ATTR(node, BoolAttribute, "remap", false);
+  node.add_attr<RangeAttribute>("clamp", "clamp");
+
+  node.add_attr<BoolAttribute>("smooth_min", "smooth_min", false);
+
+  node.add_attr<FloatAttribute>("k_min", "k_min", 0.05f, 0.01f, 1.f);
+
+  node.add_attr<BoolAttribute>("smooth_max", "smooth_max", false);
+
+  node.add_attr<FloatAttribute>("k_max", "k_max", 0.05f, 0.01f, 1.f);
+
+  node.add_attr<BoolAttribute>("remap", "remap", false);
 
   // link histogram for RangeAttribute
   setup_histogram_for_range_attribute(node, "clamp", "input");
@@ -59,11 +64,11 @@ void compute_clamp_node(BaseNode &node)
     *p_out = *p_in;
 
     // retrieve parameters
-    hmap::Vec2<float> crange = GET(node, "clamp", RangeAttribute);
-    bool              smooth_min = GET(node, "smooth_min", BoolAttribute);
-    bool              smooth_max = GET(node, "smooth_max", BoolAttribute);
-    float             k_min = GET(node, "k_min", FloatAttribute);
-    float             k_max = GET(node, "k_max", FloatAttribute);
+    hmap::Vec2<float> crange = node.get_attr<RangeAttribute>("clamp");
+    bool              smooth_min = node.get_attr<BoolAttribute>("smooth_min");
+    bool              smooth_max = node.get_attr<BoolAttribute>("smooth_max");
+    float             k_min = node.get_attr<FloatAttribute>("k_min");
+    float             k_max = node.get_attr<FloatAttribute>("k_max");
 
     // compute
     if (!smooth_min && !smooth_max)
@@ -118,7 +123,7 @@ void compute_clamp_node(BaseNode &node)
             node.get_config_ref()->hmap_transform_mode_cpu);
     }
 
-    if (GET(node, "remap", BoolAttribute))
+    if (node.get_attr<BoolAttribute>("remap"))
       p_out->remap();
 
     // post-process

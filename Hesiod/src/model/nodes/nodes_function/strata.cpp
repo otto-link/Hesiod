@@ -24,35 +24,59 @@ void setup_strata_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
   std::vector<float> kw_default;
 
-  ADD_ATTR(node, FloatAttribute, "angle", 0.f, -180.f, 180.f);
-  ADD_ATTR(node, FloatAttribute, "slope", 2.f, 0.01f, 10.f);
-  ADD_ATTR(node, FloatAttribute, "kz", 1.f, 0.f, FLT_MAX);
-  ADD_ATTR(node, FloatAttribute, "gamma", 0.5f, 0.01f, 2.f);
-  ADD_ATTR(node, SeedAttribute, "seed");
-  ADD_ATTR(node, BoolAttribute, "linear_gamma", true);
-  ADD_ATTR(node, IntAttribute, "octaves", 6, 0, 32);
-  ADD_ATTR(node, FloatAttribute, "lacunarity", 2.f, 0.01f, 4.f);
-  ADD_ATTR(node, FloatAttribute, "gamma_noise_ratio", 0.5f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "noise_amp", 0.4f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>("angle", "angle", 0.f, -180.f, 180.f);
+
+  node.add_attr<FloatAttribute>("slope", "slope", 2.f, 0.01f, 10.f);
+
+  node.add_attr<FloatAttribute>("kz", "kz", 1.f, 0.f, FLT_MAX);
+
+  node.add_attr<FloatAttribute>("gamma", "gamma", 0.5f, 0.01f, 2.f);
+
+  node.add_attr<SeedAttribute>("seed", "seed");
+
+  node.add_attr<BoolAttribute>("linear_gamma", "linear_gamma", true);
+
+  node.add_attr<IntAttribute>("octaves", "octaves", 6, 0, 32);
+
+  node.add_attr<FloatAttribute>("lacunarity", "lacunarity", 2.f, 0.01f, 4.f);
+
+  node.add_attr<FloatAttribute>("gamma_noise_ratio", "gamma_noise_ratio", 0.5f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("noise_amp", "noise_amp", 0.4f, 0.f, 1.f);
 
   kw_default = {4.f, 4.f};
-  ADD_ATTR(node, WaveNbAttribute, "noise_kw", kw_default, 0.f, 32.f, true);
+  node.add_attr<WaveNbAttribute>("noise_kw", "noise_kw", kw_default, 0.f, 32.f, true);
 
   kw_default = {4.f, 1.5f};
-  ADD_ATTR(node, WaveNbAttribute, "ridge_noise_kw", kw_default, 0.f, 32.f, false);
+  node.add_attr<WaveNbAttribute>("ridge_noise_kw",
+                                 "ridge_noise_kw",
+                                 kw_default,
+                                 0.f,
+                                 32.f,
+                                 false);
 
-  ADD_ATTR(node, FloatAttribute, "ridge_angle_shift", 45.f, -180.f, 180.f);
-  ADD_ATTR(node, FloatAttribute, "ridge_noise_amp", 0.4f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "ridge_clamp_vmin", 0.5f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "ridge_remap_vmin", 0.6f, 0.f, 1.f);
-  ADD_ATTR(node, BoolAttribute, "apply_elevation_mask", true);
-  ADD_ATTR(node, BoolAttribute, "apply_ridge_mask", true);
-  ADD_ATTR(node, FloatAttribute, "mask_gamma", 1.f, 0.01f, 4.f);
+  node.add_attr<FloatAttribute>("ridge_angle_shift",
+                                "ridge_angle_shift",
+                                45.f,
+                                -180.f,
+                                180.f);
+
+  node.add_attr<FloatAttribute>("ridge_noise_amp", "ridge_noise_amp", 0.4f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("ridge_clamp_vmin", "ridge_clamp_vmin", 0.5f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("ridge_remap_vmin", "ridge_remap_vmin", 0.6f, 0.f, 1.f);
+
+  node.add_attr<BoolAttribute>("apply_elevation_mask", "apply_elevation_mask", true);
+
+  node.add_attr<BoolAttribute>("apply_ridge_mask", "apply_ridge_mask", true);
+
+  node.add_attr<FloatAttribute>("mask_gamma", "mask_gamma", 1.f, 0.01f, 4.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"_TEXT_Base paramaters",
@@ -120,25 +144,25 @@ void compute_strata_node(BaseNode &node)
           hmap::Array *pa_mask = p_arrays[1];
 
           hmap::gpu::strata(*pa_out,
-                            GET(node, "angle", FloatAttribute),
-                            GET(node, "slope", FloatAttribute),
-                            GET(node, "gamma", FloatAttribute),
-                            GET(node, "seed", SeedAttribute),
-                            GET(node, "linear_gamma", BoolAttribute),
-                            GET(node, "kz", FloatAttribute),
-                            GET(node, "octaves", IntAttribute),
-                            GET(node, "lacunarity", FloatAttribute),
-                            GET(node, "gamma_noise_ratio", FloatAttribute),
-                            GET(node, "noise_amp", FloatAttribute),
-                            GET(node, "noise_kw", WaveNbAttribute),
-                            GET(node, "ridge_noise_kw", WaveNbAttribute),
-                            GET(node, "ridge_angle_shift", FloatAttribute),
-                            GET(node, "ridge_noise_amp", FloatAttribute),
-                            GET(node, "ridge_clamp_vmin", FloatAttribute),
-                            GET(node, "ridge_remap_vmin", FloatAttribute),
-                            GET(node, "apply_elevation_mask", BoolAttribute),
-                            GET(node, "apply_ridge_mask", BoolAttribute),
-                            GET(node, "mask_gamma", FloatAttribute),
+                            node.get_attr<FloatAttribute>("angle"),
+                            node.get_attr<FloatAttribute>("slope"),
+                            node.get_attr<FloatAttribute>("gamma"),
+                            node.get_attr<SeedAttribute>("seed"),
+                            node.get_attr<BoolAttribute>("linear_gamma"),
+                            node.get_attr<FloatAttribute>("kz"),
+                            node.get_attr<IntAttribute>("octaves"),
+                            node.get_attr<FloatAttribute>("lacunarity"),
+                            node.get_attr<FloatAttribute>("gamma_noise_ratio"),
+                            node.get_attr<FloatAttribute>("noise_amp"),
+                            node.get_attr<WaveNbAttribute>("noise_kw"),
+                            node.get_attr<WaveNbAttribute>("ridge_noise_kw"),
+                            node.get_attr<FloatAttribute>("ridge_angle_shift"),
+                            node.get_attr<FloatAttribute>("ridge_noise_amp"),
+                            node.get_attr<FloatAttribute>("ridge_clamp_vmin"),
+                            node.get_attr<FloatAttribute>("ridge_remap_vmin"),
+                            node.get_attr<BoolAttribute>("apply_elevation_mask"),
+                            node.get_attr<BoolAttribute>("apply_ridge_mask"),
+                            node.get_attr<FloatAttribute>("mask_gamma"),
                             pa_mask,
                             bbox);
         },

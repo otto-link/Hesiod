@@ -21,10 +21,10 @@ void setup_merge_water_depths_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "depth1");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "depth2");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "water_depth", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "water_depth", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "k_smooth", 0.f, 0.f, 0.1f, "{:.4f}");
+  node.add_attr<FloatAttribute>("k_smooth", "k_smooth", 0.f, 0.f, 0.1f, "{:.4f}");
 
   // attribute(s) order
   node.set_attr_ordered_key({"k_smooth"});
@@ -53,7 +53,7 @@ void compute_merge_water_depths_node(BaseNode &node)
 
           *pa_depth = hmap::merge_water_depths(*pa_in1,
                                                *pa_in2,
-                                               GET(node, "k_smooth", FloatAttribute));
+                                               node.get_attr<FloatAttribute>("k_smooth"));
         },
         node.get_config_ref()->hmap_transform_mode_cpu);
 

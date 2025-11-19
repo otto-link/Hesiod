@@ -20,14 +20,16 @@ void setup_select_multiband3_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "low", CONFIG);
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "mid", CONFIG);
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "high", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "low", CONFIG(node));
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "mid", CONFIG(node));
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "high", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "ratio1", 0.2f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "ratio2", 0.5f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "overlap", 0.5f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>("ratio1", "ratio1", 0.2f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("ratio2", "ratio2", 0.5f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("overlap", "overlap", 0.5f, 0.f, 1.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"ratio1", "ratio2", "overlap"});
@@ -65,9 +67,9 @@ void compute_select_multiband3_node(BaseNode &node)
                                               low,
                                               mid,
                                               high,
-                                              GET(node, "ratio1", FloatAttribute),
-                                              GET(node, "ratio2", FloatAttribute),
-                                              GET(node, "overlap", FloatAttribute),
+                                              node.get_attr<FloatAttribute>("ratio1"),
+                                              node.get_attr<FloatAttribute>("ratio2"),
+                                              node.get_attr<FloatAttribute>("overlap"),
                                               vmin,
                                               vmax);
                     });

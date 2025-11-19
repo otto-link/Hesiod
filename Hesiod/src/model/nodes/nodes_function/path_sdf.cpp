@@ -24,11 +24,12 @@ void setup_path_sdf_node(BaseNode &node)
   node.add_port<hmap::Path>(gnode::PortType::IN, "path");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dx");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "sdf", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "sdf", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, BoolAttribute, "remap", false);
-  ADD_ATTR(node, BoolAttribute, "inverse", false);
+  node.add_attr<BoolAttribute>("remap", "remap", false);
+
+  node.add_attr<BoolAttribute>("inverse", "inverse", false);
 }
 
 void compute_path_sdf_node(BaseNode &node)
@@ -63,13 +64,13 @@ void compute_path_sdf_node(BaseNode &node)
       // post-process
       post_process_heightmap(node,
                              *p_out,
-                             GET(node, "inverse", BoolAttribute),
+                             node.get_attr<BoolAttribute>("inverse"),
                              false, // smoothing,
                              0,
                              false, // saturate
                              {0.f, 0.f},
                              0.f,
-                             GET(node, "remap", BoolAttribute),
+                             node.get_attr<BoolAttribute>("remap"),
                              {0.f, 1.f});
     }
     else

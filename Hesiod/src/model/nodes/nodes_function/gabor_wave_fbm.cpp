@@ -25,17 +25,28 @@ void setup_gabor_wave_fbm_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "control");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "envelope");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "angle");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, WaveNbAttribute, "kw");
-  ADD_ATTR(node, SeedAttribute, "seed");
-  ADD_ATTR(node, FloatAttribute, "angle", 0.f, -180.f, 180.f);
-  ADD_ATTR(node, FloatAttribute, "angle_spread_ratio", 1.f, 0.f, 1.f);
-  ADD_ATTR(node, IntAttribute, "octaves", 8, 0, 32);
-  ADD_ATTR(node, FloatAttribute, "weight", 0.7f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "persistence", 0.5f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "lacunarity", 2.f, 0.01f, 4.f);
+  node.add_attr<WaveNbAttribute>("kw", "kw");
+
+  node.add_attr<SeedAttribute>("seed", "seed");
+
+  node.add_attr<FloatAttribute>("angle", "angle", 0.f, -180.f, 180.f);
+
+  node.add_attr<FloatAttribute>("angle_spread_ratio",
+                                "angle_spread_ratio",
+                                1.f,
+                                0.f,
+                                1.f);
+
+  node.add_attr<IntAttribute>("octaves", "octaves", 8, 0, 32);
+
+  node.add_attr<FloatAttribute>("weight", "weight", 0.7f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("persistence", "persistence", 0.5f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("lacunarity", "lacunarity", 2.f, 0.01f, 4.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Main Parameters",
@@ -80,21 +91,21 @@ void compute_gabor_wave_fbm_node(BaseNode &node)
         hmap::Array *pa_dy = p_arrays[3];
         hmap::Array *pa_angle = p_arrays[4];
 
-        hmap::Array angle_deg(shape, GET(node, "angle", FloatAttribute));
+        hmap::Array angle_deg(shape, node.get_attr<FloatAttribute>("angle"));
 
         if (pa_angle)
           angle_deg += (*pa_angle) * 180.f / M_PI;
 
         *pa_out = hmap::gpu::gabor_wave_fbm(
             shape,
-            GET(node, "kw", WaveNbAttribute),
-            GET(node, "seed", SeedAttribute),
+            node.get_attr<WaveNbAttribute>("kw"),
+            node.get_attr<SeedAttribute>("seed"),
             angle_deg,
-            GET(node, "angle_spread_ratio", FloatAttribute),
-            GET(node, "octaves", IntAttribute),
-            GET(node, "weight", FloatAttribute),
-            GET(node, "persistence", FloatAttribute),
-            GET(node, "lacunarity", FloatAttribute),
+            node.get_attr<FloatAttribute>("angle_spread_ratio"),
+            node.get_attr<IntAttribute>("octaves"),
+            node.get_attr<FloatAttribute>("weight"),
+            node.get_attr<FloatAttribute>("persistence"),
+            node.get_attr<FloatAttribute>("lacunarity"),
             pa_ctrl,
             pa_dx,
             pa_dy,

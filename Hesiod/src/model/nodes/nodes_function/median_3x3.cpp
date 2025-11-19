@@ -21,10 +21,10 @@ void setup_median3x3_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, BoolAttribute, "GPU", HSD_DEFAULT_GPU_MODE);
+  node.add_attr<BoolAttribute>("GPU", "GPU", HSD_DEFAULT_GPU_MODE);
 }
 
 void compute_median3x3_node(BaseNode &node)
@@ -40,7 +40,7 @@ void compute_median3x3_node(BaseNode &node)
     hmap::Heightmap *p_mask = node.get_value_ref<hmap::Heightmap>("mask");
     hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
-    if (GET(node, "GPU", BoolAttribute))
+    if (node.get_attr<BoolAttribute>("GPU"))
     {
       hmap::transform(
           {p_out, p_in, p_mask},

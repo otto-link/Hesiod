@@ -22,7 +22,7 @@ void setup_texture_to_heightmap_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "elevation", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "elevation", CONFIG(node));
 
   // attribute(s)
 

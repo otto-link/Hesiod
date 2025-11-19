@@ -24,12 +24,14 @@ void setup_cone_sigmoid_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dx");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "envelope");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "radius", 0.5f, 0.01f, FLT_MAX);
-  ADD_ATTR(node, FloatAttribute, "alpha", 1.f, 0.01f, 4.f);
-  ADD_ATTR(node, Vec2FloatAttribute, "center");
+  node.add_attr<FloatAttribute>("radius", "radius", 0.5f, 0.01f, FLT_MAX);
+
+  node.add_attr<FloatAttribute>("alpha", "alpha", 1.f, 0.01f, 4.f);
+
+  node.add_attr<Vec2FloatAttribute>("center", "center");
 
   // attribute(s) order
   node.set_attr_ordered_key({"radius", "alpha", "center"});
@@ -61,9 +63,9 @@ void compute_cone_sigmoid_node(BaseNode &node)
         hmap::Array *pa_dy = p_arrays[2];
 
         *pa_out = hmap::cone_sigmoid(shape,
-                                     GET(node, "alpha", FloatAttribute),
-                                     GET(node, "radius", FloatAttribute),
-                                     GET(node, "center", Vec2FloatAttribute),
+                                     node.get_attr<FloatAttribute>("alpha"),
+                                     node.get_attr<FloatAttribute>("radius"),
+                                     node.get_attr<Vec2FloatAttribute>("center"),
                                      pa_dx,
                                      pa_dy,
                                      bbox);

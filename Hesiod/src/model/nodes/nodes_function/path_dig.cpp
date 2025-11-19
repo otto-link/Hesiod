@@ -21,14 +21,22 @@ void setup_path_dig_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Path>(gnode::PortType::IN, "path");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "width", 0.001f, 0.f, 0.1f);
-  ADD_ATTR(node, FloatAttribute, "decay", 0.001f, 0.f, 0.1f);
-  ADD_ATTR(node, FloatAttribute, "flattening_radius", 0.001f, 0.f, 0.1f);
-  ADD_ATTR(node, FloatAttribute, "depth", 0.f, -0.2f, 0.2f);
-  ADD_ATTR(node, BoolAttribute, "force_downhill", false);
+  node.add_attr<FloatAttribute>("width", "width", 0.001f, 0.f, 0.1f);
+
+  node.add_attr<FloatAttribute>("decay", "decay", 0.001f, 0.f, 0.1f);
+
+  node.add_attr<FloatAttribute>("flattening_radius",
+                                "flattening_radius",
+                                0.001f,
+                                0.f,
+                                0.1f);
+
+  node.add_attr<FloatAttribute>("depth", "depth", 0.f, -0.2f, 0.2f);
+
+  node.add_attr<BoolAttribute>("force_downhill", "force_downhill", false);
 
   // attribute(s) order
   node.set_attr_ordered_key(
@@ -51,16 +59,17 @@ void compute_path_dig_node(BaseNode &node)
 
       *p_out = *p_in;
 
-      int ir_width = (int)(GET(node, "width", FloatAttribute) * p_out->shape.x);
-      int ir_decay = (int)(GET(node, "decay", FloatAttribute) * p_out->shape.x);
-      int ir_flattening_radius = (int)(GET(node, "flattening_radius", FloatAttribute) *
+      int ir_width = (int)(node.get_attr<FloatAttribute>("width") * p_out->shape.x);
+      int ir_decay = (int)(node.get_attr<FloatAttribute>("decay") * p_out->shape.x);
+      int ir_flattening_radius = (int)(node.get_attr<FloatAttribute>(
+                                           "flattening_radius") *
                                        p_out->shape.x);
 
       ir_width = std::max(1, ir_width);
       ir_decay = std::max(1, ir_decay);
       ir_flattening_radius = std::max(1, ir_flattening_radius);
 
-      if (!GET(node, "force_downhill", BoolAttribute))
+      if (!node.get_attr<BoolAttribute>("force_downhill"))
       {
         hmap::transform(*p_out,
                         [&node, p_path, ir_width, ir_decay, ir_flattening_radius](
@@ -72,9 +81,9 @@ void compute_path_dig_node(BaseNode &node)
                                          ir_width,
                                          ir_decay,
                                          ir_flattening_radius,
-                                         GET(node, "force_downhill", BoolAttribute),
+                                         node.get_attr<BoolAttribute>("force_downhill"),
                                          bbox,
-                                         GET(node, "depth", FloatAttribute));
+                                         node.get_attr<FloatAttribute>("depth"));
                         });
       }
       else
@@ -87,9 +96,9 @@ void compute_path_dig_node(BaseNode &node)
                        ir_width,
                        ir_decay,
                        ir_flattening_radius,
-                       GET(node, "force_downhill", BoolAttribute),
+                       node.get_attr<BoolAttribute>("force_downhill"),
                        hmap::Vec4<float>(0.f, 1.f, 0.f, 1.f), // bbox
-                       GET(node, "depth", FloatAttribute));
+                       node.get_attr<FloatAttribute>("depth"));
 
         p_out->from_array_interp(z_array);
       }

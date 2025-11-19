@@ -23,15 +23,20 @@ void setup_select_soil_flow_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "radius_gradient", 0.f, 0.f, 0.1f);
-  ADD_ATTR(node, FloatAttribute, "gradient_weight", 1.f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "flow_weight", 0.01f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "talus_ref", 10.f, 0.01f, 32.f);
-  ADD_ATTR(node, FloatAttribute, "clipping_ratio", 50.f, 0.1f, 100.f);
-  ADD_ATTR(node, FloatAttribute, "flow_gamma", 1.f, 0.01f, 4.f);
+  node.add_attr<FloatAttribute>("radius_gradient", "radius_gradient", 0.f, 0.f, 0.1f);
+
+  node.add_attr<FloatAttribute>("gradient_weight", "gradient_weight", 1.f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("flow_weight", "flow_weight", 0.01f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("talus_ref", "talus_ref", 10.f, 0.01f, 32.f);
+
+  node.add_attr<FloatAttribute>("clipping_ratio", "clipping_ratio", 50.f, 0.1f, 100.f);
+
+  node.add_attr<FloatAttribute>("flow_gamma", "flow_gamma", 1.f, 0.01f, 4.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Main Parameters",
@@ -64,8 +69,8 @@ void compute_select_soil_flow_node(BaseNode &node)
     hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
     int   nx = p_out->shape.x; // for gradient scaling
-    int   ir = std::max(1, (int)(GET(node, "radius_gradient", FloatAttribute) * nx));
-    float talus = GET(node, "talus_ref", FloatAttribute) / nx;
+    int   ir = std::max(1, (int)(node.get_attr<FloatAttribute>("radius_gradient") * nx));
+    float talus = node.get_attr<FloatAttribute>("talus_ref") / nx;
 
     // --- compute mask
 
@@ -81,12 +86,12 @@ void compute_select_soil_flow_node(BaseNode &node)
           *pa_out = hmap::gpu::select_soil_flow(
               *pa_in,
               ir,
-              GET(node, "gradient_weight", FloatAttribute),
+              node.get_attr<FloatAttribute>("gradient_weight"),
               (float)nx,
-              GET(node, "flow_weight", FloatAttribute),
+              node.get_attr<FloatAttribute>("flow_weight"),
               talus,
-              GET(node, "clipping_ratio", FloatAttribute),
-              GET(node, "flow_gamma", FloatAttribute),
+              node.get_attr<FloatAttribute>("clipping_ratio"),
+              node.get_attr<FloatAttribute>("flow_gamma"),
               k_smooth);
         },
         node.get_config_ref()->hmap_transform_mode_gpu);

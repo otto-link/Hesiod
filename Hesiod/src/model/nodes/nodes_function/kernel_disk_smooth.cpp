@@ -24,9 +24,11 @@ void setup_kernel_disk_smooth_node(BaseNode &node)
                              node.get_config_ref()->shape);
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "radius", 0.1f, 0.001f, 0.2f);
-  ADD_ATTR(node, BoolAttribute, "normalize", false);
-  ADD_ATTR(node, FloatAttribute, "r_cutoff", 0.9f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>("radius", "radius", 0.1f, 0.001f, 0.2f);
+
+  node.add_attr<BoolAttribute>("normalize", "normalize", false);
+
+  node.add_attr<FloatAttribute>("r_cutoff", "r_cutoff", 0.9f, 0.f, 1.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"radius", "normalize", "_SEPARATOR_", "r_cutoff"});
@@ -42,14 +44,14 @@ void compute_kernel_disk_smooth_node(BaseNode &node)
 
   int ir = std::max(
       1,
-      (int)(GET(node, "radius", FloatAttribute) * node.get_config_ref()->shape.x));
+      (int)(node.get_attr<FloatAttribute>("radius") * node.get_config_ref()->shape.x));
 
   // kernel definition
   hmap::Vec2<int> kernel_shape = {2 * ir + 1, 2 * ir + 1};
 
-  *p_out = hmap::disk_smooth(kernel_shape, GET(node, "r_cutoff", FloatAttribute));
+  *p_out = hmap::disk_smooth(kernel_shape, node.get_attr<FloatAttribute>("r_cutoff"));
 
-  if (GET(node, "normalize", BoolAttribute))
+  if (node.get_attr<BoolAttribute>("normalize"))
     *p_out /= p_out->sum();
 
   Q_EMIT node.compute_finished(node.get_id());

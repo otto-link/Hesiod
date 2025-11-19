@@ -21,13 +21,22 @@ void setup_thermal_flatten_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "talus_global", 1.f, 0.f, FLT_MAX);
-  ADD_ATTR(node, IntAttribute, "iterations", 100, 1, INT_MAX);
-  ADD_ATTR(node, BoolAttribute, "scale_talus_with_elevation", false);
-  ADD_ATTR(node, FloatAttribute, "post_filter_radius", 0.01f, 0.f, 0.1f);
+  node.add_attr<FloatAttribute>("talus_global", "talus_global", 1.f, 0.f, FLT_MAX);
+
+  node.add_attr<IntAttribute>("iterations", "iterations", 100, 1, INT_MAX);
+
+  node.add_attr<BoolAttribute>("scale_talus_with_elevation",
+                               "scale_talus_with_elevation",
+                               false);
+
+  node.add_attr<FloatAttribute>("post_filter_radius",
+                                "post_filter_radius",
+                                0.01f,
+                                0.f,
+                                0.1f);
 
   // attribute(s) order
   node.set_attr_ordered_key(
@@ -49,11 +58,11 @@ void compute_thermal_flatten_node(BaseNode &node)
     // copy the input heightmap
     *p_out = *p_in;
 
-    float talus = GET(node, "talus_global", FloatAttribute) / (float)p_out->shape.x;
+    float talus = node.get_attr<FloatAttribute>("talus_global") / (float)p_out->shape.x;
 
-    hmap::Heightmap talus_map = hmap::Heightmap(CONFIG, talus);
+    hmap::Heightmap talus_map = hmap::Heightmap(CONFIG(node), talus);
 
-    if (GET(node, "scale_talus_with_elevation", BoolAttribute))
+    if (node.get_attr<BoolAttribute>("scale_talus_with_elevation"))
     {
       talus_map = *p_in;
       talus_map.remap(talus / 100.f, talus);
@@ -61,7 +70,7 @@ void compute_thermal_flatten_node(BaseNode &node)
 
     int ir = std::max(
         1,
-        (int)(GET(node, "post_filter_radius", FloatAttribute) * p_out->shape.x));
+        (int)(node.get_attr<FloatAttribute>("post_filter_radius") * p_out->shape.x));
 
     hmap::transform(
         {p_out, &talus_map},
@@ -76,7 +85,7 @@ void compute_thermal_flatten_node(BaseNode &node)
           hmap::thermal_flatten(*pa_out,
                                 *pa_talus_map,
                                 bedrock,
-                                GET(node, "iterations", IntAttribute),
+                                node.get_attr<IntAttribute>("iterations"),
                                 ir);
         },
         node.get_config_ref()->hmap_transform_mode_cpu);

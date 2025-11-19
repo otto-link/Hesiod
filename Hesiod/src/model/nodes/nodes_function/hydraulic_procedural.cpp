@@ -22,28 +22,47 @@ void setup_hydraulic_procedural_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "ridge_mask", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "ridge_mask", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, SeedAttribute, "seed");
-  ADD_ATTR(node, FloatAttribute, "ridge_wavelength", 0.1f, 0.01f, 0.2f);
-  ADD_ATTR(node, FloatAttribute, "ridge_scaling", 0.3f, 0.01f, 1.f);
-  ADD_ATTR(node,
-           EnumAttribute,
-           "erosion_profile",
-           enum_mappings.erosion_profile_map,
-           "Triangle smooth");
-  ADD_ATTR(node, FloatAttribute, "delta", 0.2f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "noise_ratio", 0.2f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "density_factor", 1.f, 0.1f, 10.f);
-  ADD_ATTR(node, FloatAttribute, "kernel_width_ratio", 2.f, 0.1f, 8.f);
-  ADD_ATTR(node, FloatAttribute, "phase_smoothing", 2.f, 0.f, 10.f);
-  ADD_ATTR(node, FloatAttribute, "phase_noise_amp", 0.f, 0.f, 6.f);
-  ADD_ATTR(node, BoolAttribute, "reverse_phase", false);
-  ADD_ATTR(node, BoolAttribute, "rotate90", false);
-  ADD_ATTR(node, BoolAttribute, "use_default_mask", true);
-  ADD_ATTR(node, FloatAttribute, "slope_mask", 6.f, 0.f, 32.f);
+  node.add_attr<SeedAttribute>("seed", "seed");
+
+  node.add_attr<FloatAttribute>("ridge_wavelength",
+                                "ridge_wavelength",
+                                0.1f,
+                                0.01f,
+                                0.2f);
+
+  node.add_attr<FloatAttribute>("ridge_scaling", "ridge_scaling", 0.3f, 0.01f, 1.f);
+
+  node.add_attr<EnumAttribute>("erosion_profile",
+                               "erosion_profile",
+                               enum_mappings.erosion_profile_map,
+                               "Triangle smooth");
+  node.add_attr<FloatAttribute>("delta", "delta", 0.2f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("noise_ratio", "noise_ratio", 0.2f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("density_factor", "density_factor", 1.f, 0.1f, 10.f);
+
+  node.add_attr<FloatAttribute>("kernel_width_ratio",
+                                "kernel_width_ratio",
+                                2.f,
+                                0.1f,
+                                8.f);
+
+  node.add_attr<FloatAttribute>("phase_smoothing", "phase_smoothing", 2.f, 0.f, 10.f);
+
+  node.add_attr<FloatAttribute>("phase_noise_amp", "phase_noise_amp", 0.f, 0.f, 6.f);
+
+  node.add_attr<BoolAttribute>("reverse_phase", "reverse_phase", false);
+
+  node.add_attr<BoolAttribute>("rotate90", "rotate90", false);
+
+  node.add_attr<BoolAttribute>("use_default_mask", "use_default_mask", true);
+
+  node.add_attr<FloatAttribute>("slope_mask", "slope_mask", 6.f, 0.f, 32.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"seed",
@@ -84,8 +103,9 @@ void compute_hydraulic_procedural_node(BaseNode &node)
     float hmin = p_in->min();
     float hmax = p_in->max();
 
-    float talus_mask = GET(node, "slope_mask", FloatAttribute) / (float)p_out->shape.x;
-    float global_wavelength = GET(node, "ridge_wavelength", FloatAttribute) *
+    float talus_mask = node.get_attr<FloatAttribute>("slope_mask") /
+                       (float)p_out->shape.x;
+    float global_wavelength = node.get_attr<FloatAttribute>("ridge_wavelength") *
                               (float)p_out->tiling.x;
 
     hmap::transform(
@@ -99,20 +119,20 @@ void compute_hydraulic_procedural_node(BaseNode &node)
 
           hmap::hydraulic_procedural(
               *pa_out,
-              GET(node, "seed", SeedAttribute),
+              node.get_attr<SeedAttribute>("seed"),
               global_wavelength,
-              GET(node, "ridge_scaling", FloatAttribute),
-              (hmap::ErosionProfile)GET(node, "erosion_profile", EnumAttribute),
-              GET(node, "delta", FloatAttribute),
-              GET(node, "noise_ratio", FloatAttribute),
+              node.get_attr<FloatAttribute>("ridge_scaling"),
+              (hmap::ErosionProfile)node.get_attr<EnumAttribute>("erosion_profile"),
+              node.get_attr<FloatAttribute>("delta"),
+              node.get_attr<FloatAttribute>("noise_ratio"),
               -1, // prefilter_ir,
-              GET(node, "density_factor", FloatAttribute),
-              GET(node, "kernel_width_ratio", FloatAttribute),
-              GET(node, "phase_smoothing", FloatAttribute),
-              GET(node, "phase_noise_amp", FloatAttribute),
-              GET(node, "reverse_phase", BoolAttribute),
-              GET(node, "rotate90", BoolAttribute),
-              GET(node, "use_default_mask", BoolAttribute),
+              node.get_attr<FloatAttribute>("density_factor"),
+              node.get_attr<FloatAttribute>("kernel_width_ratio"),
+              node.get_attr<FloatAttribute>("phase_smoothing"),
+              node.get_attr<FloatAttribute>("phase_noise_amp"),
+              node.get_attr<BoolAttribute>("reverse_phase"),
+              node.get_attr<BoolAttribute>("rotate90"),
+              node.get_attr<BoolAttribute>("use_default_mask"),
               talus_mask,
               pa_mask,
               pa_ridge_mask,

@@ -58,8 +58,8 @@ void setup_histogram_for_range_attribute(BaseNode          &node,
   };
 
   // assign function to attr
-  GET_REF(node, attribute_key, RangeAttribute)->set_histogram_fct(lambda);
-  GET_REF(node, attribute_key, RangeAttribute)->set_autorange(true);
+  node.get_attr_ref<RangeAttribute>(attribute_key)->set_histogram_fct(lambda);
+  node.get_attr_ref<RangeAttribute>(attribute_key)->set_autorange(true);
 }
 
 } // namespace hesiod

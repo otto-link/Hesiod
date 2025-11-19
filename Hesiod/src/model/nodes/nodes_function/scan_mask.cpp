@@ -20,12 +20,14 @@ void setup_scan_mask_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "contrast", 0.5f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "brightness", 0.5f, 0.f, 1.f);
-  ADD_ATTR(node, BoolAttribute, "remap", false);
+  node.add_attr<FloatAttribute>("contrast", "contrast", 0.5f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("brightness", "brightness", 0.5f, 0.f, 1.f);
+
+  node.add_attr<BoolAttribute>("remap", "remap", false);
 }
 
 void compute_scan_mask_node(BaseNode &node)
@@ -48,12 +50,12 @@ void compute_scan_mask_node(BaseNode &node)
           hmap::Array *pa_in = p_arrays[1];
 
           *pa_out = hmap::scan_mask(*pa_in,
-                                    GET(node, "brightness", FloatAttribute),
-                                    GET(node, "contrast", FloatAttribute));
+                                    node.get_attr<FloatAttribute>("brightness"),
+                                    node.get_attr<FloatAttribute>("contrast"));
         },
         node.get_config_ref()->hmap_transform_mode_cpu);
 
-    if (GET(node, "remap", BoolAttribute))
+    if (node.get_attr<BoolAttribute>("remap"))
       p_out->remap();
   }
 

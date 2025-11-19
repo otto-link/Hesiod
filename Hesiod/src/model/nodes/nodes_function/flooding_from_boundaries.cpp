@@ -20,14 +20,18 @@ void setup_flooding_from_boundaries_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "water_depth", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "water_depth", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "elevation", 0.2f, -1.f, 2.f);
-  ADD_ATTR(node, BoolAttribute, "from_east", true);
-  ADD_ATTR(node, BoolAttribute, "from_west", true);
-  ADD_ATTR(node, BoolAttribute, "from_north", true);
-  ADD_ATTR(node, BoolAttribute, "from_south", true);
+  node.add_attr<FloatAttribute>("elevation", "elevation", 0.2f, -1.f, 2.f);
+
+  node.add_attr<BoolAttribute>("from_east", "from_east", true);
+
+  node.add_attr<BoolAttribute>("from_west", "from_west", true);
+
+  node.add_attr<BoolAttribute>("from_north", "from_north", true);
+
+  node.add_attr<BoolAttribute>("from_south", "from_south", true);
 
   // attribute(s) order
   node.set_attr_ordered_key(
@@ -55,11 +59,11 @@ void compute_flooding_from_boundaries_node(BaseNode &node)
 
           *pa_out = hmap::flooding_from_boundaries(
               *pa_in,
-              GET(node, "elevation", FloatAttribute),
-              GET(node, "from_east", BoolAttribute),
-              GET(node, "from_west", BoolAttribute),
-              GET(node, "from_north", BoolAttribute),
-              GET(node, "from_south", BoolAttribute));
+              node.get_attr<FloatAttribute>("elevation"),
+              node.get_attr<BoolAttribute>("from_east"),
+              node.get_attr<BoolAttribute>("from_west"),
+              node.get_attr<BoolAttribute>("from_north"),
+              node.get_attr<BoolAttribute>("from_south"));
         },
         hmap::TransformMode::SINGLE_ARRAY); // forced, not tileable
   }

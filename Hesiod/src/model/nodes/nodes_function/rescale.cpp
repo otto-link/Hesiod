@@ -20,11 +20,12 @@ void setup_rescale_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "scaling", 1.f, 0.0001f, FLT_MAX, "{:.4f}");
-  ADD_ATTR(node, BoolAttribute, "centered", false);
+  node.add_attr<FloatAttribute>("scaling", "scaling", 1.f, 0.0001f, FLT_MAX, "{:.4f}");
+
+  node.add_attr<BoolAttribute>("centered", "centered", false);
 
   // attribute(s) order
   node.set_attr_ordered_key({"scaling", "centered"});
@@ -47,7 +48,7 @@ void compute_rescale_node(BaseNode &node)
 
     float vref = 0.f;
 
-    if (GET(node, "centered", BoolAttribute))
+    if (node.get_attr<BoolAttribute>("centered"))
       vref = p_out->mean();
 
     hmap::transform(
@@ -56,7 +57,7 @@ void compute_rescale_node(BaseNode &node)
         {
           hmap::Array *pa_out = p_arrays[0];
 
-          hmap::rescale(*pa_out, GET(node, "scaling", FloatAttribute), vref);
+          hmap::rescale(*pa_out, node.get_attr<FloatAttribute>("scaling"), vref);
         },
         node.get_config_ref()->hmap_transform_mode_cpu);
   }

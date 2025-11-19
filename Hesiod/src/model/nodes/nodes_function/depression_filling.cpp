@@ -20,13 +20,15 @@ void setup_depression_filling_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "fill map", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "fill map", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, IntAttribute, "iterations", 1000, 1, INT_MAX);
-  ADD_ATTR(node, FloatAttribute, "epsilon", 1e-4, 1e-5, 1e-1, "{:.3e}", true);
-  ADD_ATTR(node, BoolAttribute, "remap fill map", true);
+  node.add_attr<IntAttribute>("iterations", "iterations", 1000, 1, INT_MAX);
+
+  node.add_attr<FloatAttribute>("epsilon", "epsilon", 1e-4, 1e-5, 1e-1, "{:.3e}", true);
+
+  node.add_attr<BoolAttribute>("remap fill map", "remap fill map", true);
 
   // attribute(s) order
   node.set_attr_ordered_key({"iterations", "epsilon", "remap fill map"});
@@ -45,7 +47,7 @@ void compute_depression_filling_node(BaseNode &node)
     hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
     hmap::Heightmap *p_fill_map = node.get_value_ref<hmap::Heightmap>("fill map");
 
-    float epsilon_normalized = GET(node, "epsilon", FloatAttribute) /
+    float epsilon_normalized = node.get_attr<FloatAttribute>("epsilon") /
                                (float)p_in->shape.x;
 
     hmap::transform(
@@ -58,7 +60,7 @@ void compute_depression_filling_node(BaseNode &node)
           *pa_out = *pa_in;
 
           hmap::depression_filling(*pa_out,
-                                   GET(node, "iterations", IntAttribute),
+                                   node.get_attr<IntAttribute>("iterations"),
                                    epsilon_normalized);
         },
         hmap::TransformMode::SINGLE_ARRAY); // forced, not tileable
@@ -69,7 +71,7 @@ void compute_depression_filling_node(BaseNode &node)
                     [&node](hmap::Array &out, hmap::Array &in1, hmap::Array &in2)
                     { out = in2 - in1; });
 
-    if (GET(node, "remap fill map", BoolAttribute))
+    if (node.get_attr<BoolAttribute>("remap fill map"))
       p_fill_map->remap();
   }
 

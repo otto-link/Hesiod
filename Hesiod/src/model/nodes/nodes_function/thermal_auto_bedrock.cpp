@@ -23,14 +23,19 @@ void setup_thermal_auto_bedrock_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "deposition", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "deposition", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "talus_global", 2.f, 0.f, FLT_MAX);
-  ADD_ATTR(node, IntAttribute, "iterations", 100, 1, INT_MAX);
-  ADD_ATTR(node, BoolAttribute, "scale_talus_with_elevation", true);
-  ADD_ATTR(node, BoolAttribute, "GPU", HSD_DEFAULT_GPU_MODE);
+  node.add_attr<FloatAttribute>("talus_global", "talus_global", 2.f, 0.f, FLT_MAX);
+
+  node.add_attr<IntAttribute>("iterations", "iterations", 100, 1, INT_MAX);
+
+  node.add_attr<BoolAttribute>("scale_talus_with_elevation",
+                               "scale_talus_with_elevation",
+                               true);
+
+  node.add_attr<BoolAttribute>("GPU", "GPU", HSD_DEFAULT_GPU_MODE);
 
   // attribute(s) order
   node.set_attr_ordered_key(
@@ -54,17 +59,17 @@ void compute_thermal_auto_bedrock_node(BaseNode &node)
     // copy the input heightmap
     *p_out = *p_in;
 
-    float talus = GET(node, "talus_global", FloatAttribute) / (float)p_out->shape.x;
+    float talus = node.get_attr<FloatAttribute>("talus_global") / (float)p_out->shape.x;
 
-    hmap::Heightmap talus_map = hmap::Heightmap(CONFIG, talus);
+    hmap::Heightmap talus_map = hmap::Heightmap(CONFIG(node), talus);
 
-    if (GET(node, "scale_talus_with_elevation", BoolAttribute))
+    if (node.get_attr<BoolAttribute>("scale_talus_with_elevation"))
     {
       talus_map = *p_in;
       talus_map.remap(talus / 100.f, talus);
     }
 
-    if (GET(node, "GPU", BoolAttribute))
+    if (node.get_attr<BoolAttribute>("GPU"))
     {
       hmap::transform(
           {p_out, p_mask, &talus_map, p_deposition_map},
@@ -78,7 +83,7 @@ void compute_thermal_auto_bedrock_node(BaseNode &node)
             hmap::gpu::thermal_auto_bedrock(*pa_out,
                                             pa_mask,
                                             *pa_talus_map,
-                                            GET(node, "iterations", IntAttribute),
+                                            node.get_attr<IntAttribute>("iterations"),
                                             pa_deposition_map);
           },
           node.get_config_ref()->hmap_transform_mode_gpu);
@@ -97,7 +102,7 @@ void compute_thermal_auto_bedrock_node(BaseNode &node)
             hmap::gpu::thermal_auto_bedrock(*pa_out,
                                             pa_mask,
                                             *pa_talus_map,
-                                            GET(node, "iterations", IntAttribute),
+                                            node.get_attr<IntAttribute>("iterations"),
                                             pa_deposition_map);
           },
           node.get_config_ref()->hmap_transform_mode_cpu);

@@ -22,7 +22,7 @@ void setup_zeroed_edges_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dr");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("sigma", "Falloff Exponent", 2.f, 1.f, 4.f);
@@ -53,7 +53,7 @@ void compute_zeroed_edges_node(BaseNode &node)
     hmap::Heightmap *p_dr = node.get_value_ref<hmap::Heightmap>("dr");
     hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
-    float sigma = GET(node, "sigma", FloatAttribute);
+    float sigma = node.get_attr<FloatAttribute>("sigma");
 
     hmap::transform(
         {p_out, p_in, p_dr},
@@ -70,7 +70,7 @@ void compute_zeroed_edges_node(BaseNode &node)
           hmap::zeroed_edges(
               *pa_out,
               sigma,
-              (hmap::DistanceFunction)GET(node, "distance_function", EnumAttribute),
+              (hmap::DistanceFunction)node.get_attr<EnumAttribute>("distance_function"),
               pa_dr,
               bbox);
         },

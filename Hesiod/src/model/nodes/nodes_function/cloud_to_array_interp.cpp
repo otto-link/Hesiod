@@ -21,7 +21,7 @@ void setup_cloud_to_array_interp_node(BaseNode &node)
   node.add_port<hmap::Cloud>(gnode::PortType::IN, "cloud");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dx");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "heightmap", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "heightmap", CONFIG(node));
 }
 
 void compute_cloud_to_array_interp_node(BaseNode &node)

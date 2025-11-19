@@ -22,13 +22,16 @@ void setup_zoom_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dx");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "zoom_factor", 2.f, 1.f, 10.f);
-  ADD_ATTR(node, BoolAttribute, "periodic", false);
-  ADD_ATTR(node, Vec2FloatAttribute, "center");
-  ADD_ATTR(node, BoolAttribute, "remap", false);
+  node.add_attr<FloatAttribute>("zoom_factor", "zoom_factor", 2.f, 1.f, 10.f);
+
+  node.add_attr<BoolAttribute>("periodic", "periodic", false);
+
+  node.add_attr<Vec2FloatAttribute>("center", "center");
+
+  node.add_attr<BoolAttribute>("remap", "remap", false);
 
   // attribute(s) order
   node.set_attr_ordered_key({"zoom_factor", "periodic", "center", "remap"});
@@ -68,15 +71,15 @@ void compute_zoom_node(BaseNode &node)
     }
 
     z_array = hmap::zoom(z_array,
-                         GET(node, "zoom_factor", FloatAttribute),
-                         GET(node, "periodic", BoolAttribute),
-                         GET(node, "center", Vec2FloatAttribute),
+                         node.get_attr<FloatAttribute>("zoom_factor"),
+                         node.get_attr<BoolAttribute>("periodic"),
+                         node.get_attr<Vec2FloatAttribute>("center"),
                          p_dx_array,
                          p_dy_array);
 
     p_out->from_array_interp_nearest(z_array);
 
-    if (GET(node, "remap", BoolAttribute))
+    if (node.get_attr<BoolAttribute>("remap"))
       p_out->remap();
   }
 

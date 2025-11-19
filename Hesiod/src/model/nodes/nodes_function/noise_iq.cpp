@@ -26,19 +26,30 @@ void setup_noise_iq_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "control");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "envelope");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, EnumAttribute, "noise_type", enum_mappings.noise_type_map_fbm);
-  ADD_ATTR(node, WaveNbAttribute, "kw");
-  ADD_ATTR(node, SeedAttribute, "seed");
-  ADD_ATTR(node, IntAttribute, "octaves", 8, 0, 32);
-  ADD_ATTR(node, FloatAttribute, "weight", 0.7f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "persistence", 0.5f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "lacunarity", 2.f, 0.01f, 4.f);
-  ADD_ATTR(node, FloatAttribute, "gradient_scale", 0.05f, 0.01f, 0.1f);
-  ADD_ATTR(node, BoolAttribute, "inverse", false);
-  ADD_ATTR(node, RangeAttribute, "remap");
+  node.add_attr<EnumAttribute>("noise_type",
+                               "noise_type",
+                               enum_mappings.noise_type_map_fbm);
+
+  node.add_attr<WaveNbAttribute>("kw", "kw");
+
+  node.add_attr<SeedAttribute>("seed", "seed");
+
+  node.add_attr<IntAttribute>("octaves", "octaves", 8, 0, 32);
+
+  node.add_attr<FloatAttribute>("weight", "weight", 0.7f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("persistence", "persistence", 0.5f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("lacunarity", "lacunarity", 2.f, 0.01f, 4.f);
+
+  node.add_attr<FloatAttribute>("gradient_scale", "gradient_scale", 0.05f, 0.01f, 0.1f);
+
+  node.add_attr<BoolAttribute>("inverse", "inverse", false);
+
+  node.add_attr<RangeAttribute>("remap", "remap");
 
   // attribute(s) order
   node.set_attr_ordered_key({"noise_type",
@@ -80,20 +91,21 @@ void compute_noise_iq_node(BaseNode &node)
         hmap::Array *pa_dy = p_arrays[2];
         hmap::Array *pa_ctrl = p_arrays[3];
 
-        *pa_out = hmap::noise_iq((hmap::NoiseType)GET(node, "noise_type", EnumAttribute),
-                                 shape,
-                                 GET(node, "kw", WaveNbAttribute),
-                                 GET(node, "seed", SeedAttribute),
-                                 GET(node, "octaves", IntAttribute),
-                                 GET(node, "weight", FloatAttribute),
-                                 GET(node, "persistence", FloatAttribute),
-                                 GET(node, "lacunarity", FloatAttribute),
-                                 GET(node, "gradient_scale", FloatAttribute),
-                                 pa_ctrl,
-                                 pa_dx,
-                                 pa_dy,
-                                 nullptr,
-                                 bbox);
+        *pa_out = hmap::noise_iq(
+            (hmap::NoiseType)node.get_attr<EnumAttribute>("noise_type"),
+            shape,
+            node.get_attr<WaveNbAttribute>("kw"),
+            node.get_attr<SeedAttribute>("seed"),
+            node.get_attr<IntAttribute>("octaves"),
+            node.get_attr<FloatAttribute>("weight"),
+            node.get_attr<FloatAttribute>("persistence"),
+            node.get_attr<FloatAttribute>("lacunarity"),
+            node.get_attr<FloatAttribute>("gradient_scale"),
+            pa_ctrl,
+            pa_dx,
+            pa_dy,
+            nullptr,
+            bbox);
       },
       node.get_config_ref()->hmap_transform_mode_cpu);
 
@@ -102,14 +114,14 @@ void compute_noise_iq_node(BaseNode &node)
 
   post_process_heightmap(node,
                          *p_out,
-                         GET(node, "inverse", BoolAttribute),
+                         node.get_attr<BoolAttribute>("inverse"),
                          false, // smooth
                          0,
                          false, // saturate
                          {0.f, 0.f},
                          0.f,
-                         GET_MEMBER(node, "remap", RangeAttribute, is_active),
-                         GET(node, "remap", RangeAttribute));
+                         node.get_attr_ref<RangeAttribute>("remap")->get_is_active(),
+                         node.get_attr<RangeAttribute>("remap"));
 
   Q_EMIT node.compute_finished(node.get_id());
 }

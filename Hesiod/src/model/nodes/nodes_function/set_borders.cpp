@@ -20,15 +20,20 @@ void setup_set_borders_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "radius", 0.4f, 0.f, 0.5f);
-  ADD_ATTR(node, BoolAttribute, "unique_border_value", false);
-  ADD_ATTR(node, FloatAttribute, "value_west", -0.5f, -FLT_MAX, FLT_MAX);
-  ADD_ATTR(node, FloatAttribute, "value_east", 0.5f, -FLT_MAX, FLT_MAX);
-  ADD_ATTR(node, FloatAttribute, "value_north", 0.5f, -FLT_MAX, FLT_MAX);
-  ADD_ATTR(node, FloatAttribute, "value_south", -0.5f, -FLT_MAX, FLT_MAX);
+  node.add_attr<FloatAttribute>("radius", "radius", 0.4f, 0.f, 0.5f);
+
+  node.add_attr<BoolAttribute>("unique_border_value", "unique_border_value", false);
+
+  node.add_attr<FloatAttribute>("value_west", "value_west", -0.5f, -FLT_MAX, FLT_MAX);
+
+  node.add_attr<FloatAttribute>("value_east", "value_east", 0.5f, -FLT_MAX, FLT_MAX);
+
+  node.add_attr<FloatAttribute>("value_north", "value_north", 0.5f, -FLT_MAX, FLT_MAX);
+
+  node.add_attr<FloatAttribute>("value_south", "value_south", -0.5f, -FLT_MAX, FLT_MAX);
 
   // attribute(s) order
   node.set_attr_ordered_key({"radius",
@@ -52,21 +57,21 @@ void compute_set_borders_node(BaseNode &node)
   {
     hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
-    int ir = std::max(1, (int)(GET(node, "radius", FloatAttribute) * p_in->shape.x));
+    int ir = std::max(1, (int)(node.get_attr<FloatAttribute>("radius") * p_in->shape.x));
     hmap::Vec4<int> buffer_sizes(ir, ir, ir, ir);
 
     hmap::Vec4<float> border_values;
 
-    if (GET(node, "unique_border_value", BoolAttribute))
-      border_values = {GET(node, "value_west", FloatAttribute),
-                       GET(node, "value_west", FloatAttribute),
-                       GET(node, "value_west", FloatAttribute),
-                       GET(node, "value_west", FloatAttribute)};
+    if (node.get_attr<BoolAttribute>("unique_border_value"))
+      border_values = {node.get_attr<FloatAttribute>("value_west"),
+                       node.get_attr<FloatAttribute>("value_west"),
+                       node.get_attr<FloatAttribute>("value_west"),
+                       node.get_attr<FloatAttribute>("value_west")};
     else
-      border_values = {GET(node, "value_west", FloatAttribute),
-                       GET(node, "value_east", FloatAttribute),
-                       GET(node, "value_north", FloatAttribute),
-                       GET(node, "value_south", FloatAttribute)};
+      border_values = {node.get_attr<FloatAttribute>("value_west"),
+                       node.get_attr<FloatAttribute>("value_east"),
+                       node.get_attr<FloatAttribute>("value_north"),
+                       node.get_attr<FloatAttribute>("value_south")};
 
     hmap::transform(
         {p_out, p_in},

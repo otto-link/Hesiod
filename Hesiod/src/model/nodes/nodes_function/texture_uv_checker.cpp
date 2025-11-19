@@ -21,11 +21,11 @@ void setup_texture_uv_checker_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture", CONFIG);
+  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture", CONFIG(node));
 
   // attribute(s)
   std::vector<std::string> choices = {"4x4", "8x8", "16x16"};
-  ADD_ATTR(node, ChoiceAttribute, "size", choices, "8x8");
+  node.add_attr<ChoiceAttribute>("size", "size", choices, "8x8");
 }
 
 void compute_texture_uv_checker_node(BaseNode &node)
@@ -40,11 +40,11 @@ void compute_texture_uv_checker_node(BaseNode &node)
 
   std::string fname;
 
-  if (GET(node, "size", ChoiceAttribute) == "4x4")
+  if (node.get_attr<ChoiceAttribute>("size") == "4x4")
     fname = "data/uv_checker_2k_04x04.png";
-  else if (GET(node, "size", ChoiceAttribute) == "8x8")
+  else if (node.get_attr<ChoiceAttribute>("size") == "8x8")
     fname = "data/uv_checker_2k_08x08.png";
-  else if (GET(node, "size", ChoiceAttribute) == "16x16")
+  else if (node.get_attr<ChoiceAttribute>("size") == "16x16")
     fname = "data/uv_checker_2k_16x16.png";
 
   // if the file exists, keep going
@@ -56,10 +56,10 @@ void compute_texture_uv_checker_node(BaseNode &node)
     hmap::Tensor tensor4(fname, flip_j);
     tensor4 = tensor4.resample_to_shape_xy(node.get_config_ref()->shape);
 
-    hmap::Heightmap r(CONFIG);
-    hmap::Heightmap g(CONFIG);
-    hmap::Heightmap b(CONFIG);
-    hmap::Heightmap a(CONFIG);
+    hmap::Heightmap r(CONFIG(node));
+    hmap::Heightmap g(CONFIG(node));
+    hmap::Heightmap b(CONFIG(node));
+    hmap::Heightmap a(CONFIG(node));
 
     hmap::Array ra = tensor4.get_slice(0);
     hmap::Array ga = tensor4.get_slice(1);

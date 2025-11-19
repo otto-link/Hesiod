@@ -23,7 +23,7 @@ void setup_path_node(BaseNode &node)
   node.add_port<hmap::Path>(gnode::PortType::OUT, "path");
 
   // attribute(s)
-  ADD_ATTR(node, PathAttribute, "path");
+  node.add_attr<PathAttribute>("path", "path");
 }
 
 void compute_path_node(BaseNode &node)
@@ -33,7 +33,7 @@ void compute_path_node(BaseNode &node)
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   hmap::Path *p_out = node.get_value_ref<hmap::Path>("path");
-  *p_out = GET(node, "path", PathAttribute);
+  *p_out = node.get_attr<PathAttribute>("path");
 
   Q_EMIT node.compute_finished(node.get_id());
 }

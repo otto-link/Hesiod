@@ -21,11 +21,12 @@ void setup_rotate_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "angle", 0.f, -180.f, 180.f);
-  ADD_ATTR(node, BoolAttribute, "zoom_in", true);
+  node.add_attr<FloatAttribute>("angle", "angle", 0.f, -180.f, 180.f);
+
+  node.add_attr<BoolAttribute>("zoom_in", "zoom_in", true);
 
   // attribute(s) order
   node.set_attr_ordered_key({"angle", "zoom_in"});
@@ -52,8 +53,8 @@ void compute_rotate_node(BaseNode &node)
 
           *pa_out = *pa_in;
           hmap::gpu::rotate(*pa_out,
-                            GET(node, "angle", FloatAttribute),
-                            GET(node, "zoom_in", BoolAttribute));
+                            node.get_attr<FloatAttribute>("angle"),
+                            node.get_attr<BoolAttribute>("zoom_in"));
         },
         hmap::TransformMode::SINGLE_ARRAY); // mandatory
   }

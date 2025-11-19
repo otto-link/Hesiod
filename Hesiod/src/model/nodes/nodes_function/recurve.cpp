@@ -24,12 +24,12 @@ void setup_recurve_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
   std::vector<float> default_values = {0.f, 0.25f, 0.5f, 0.75f, 1.f};
 
-  ADD_ATTR(node, VecFloatAttribute, "values", default_values, 0.f, 1.f);
+  node.add_attr<VecFloatAttribute>("values", "values", default_values, 0.f, 1.f);
 
   add_wip_warning_label(node);
 }
@@ -47,7 +47,7 @@ void compute_recurve_node(BaseNode &node)
     hmap::Heightmap *p_mask = node.get_value_ref<hmap::Heightmap>("mask");
     hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
-    if (GET(node, "values", VecFloatAttribute).size() >= 3)
+    if (node.get_attr<VecFloatAttribute>("values").size() >= 3)
     {
       float hmin = p_in->min();
       float hmax = p_in->max();
@@ -55,7 +55,7 @@ void compute_recurve_node(BaseNode &node)
       std::vector<float> t = hmap::linspace(
           0.f,
           1.f,
-          GET(node, "values", VecFloatAttribute).size());
+          node.get_attr<VecFloatAttribute>("values").size());
 
       hmap::transform(
           {p_out, p_in, p_mask},
@@ -68,7 +68,10 @@ void compute_recurve_node(BaseNode &node)
             *pa_out = *pa_in;
 
             hmap::remap(*pa_out, 0.f, 1.f, hmin, hmax);
-            hmap::recurve(*pa_out, t, GET(node, "values", VecFloatAttribute), pa_mask);
+            hmap::recurve(*pa_out,
+                          t,
+                          node.get_attr<VecFloatAttribute>("values"),
+                          pa_mask);
             hmap::remap(*pa_out, hmin, hmax, 0.f, 1.f);
           },
           node.get_config_ref()->hmap_transform_mode_cpu);

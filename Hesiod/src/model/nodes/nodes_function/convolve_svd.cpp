@@ -21,10 +21,10 @@ void setup_convolve_svd_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   node.add_port<hmap::Array>(gnode::PortType::IN, "kernel");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, IntAttribute, "rank", 4, 1, 8);
+  node.add_attr<IntAttribute>("rank", "rank", 4, 1, 8);
 
   // attribute(s) order
   node.set_attr_ordered_key({"rank"});
@@ -48,8 +48,9 @@ void compute_convolve_svd_node(BaseNode &node)
     hmap::transform(
         *p_out,
         *p_in,
-        [&node, p_kernel](hmap::Array &out, hmap::Array &in)
-        { out = hmap::convolve2d_svd(in, *p_kernel, GET(node, "rank", IntAttribute)); });
+        [&node, p_kernel](hmap::Array &out, hmap::Array &in) {
+          out = hmap::convolve2d_svd(in, *p_kernel, node.get_attr<IntAttribute>("rank"));
+        });
 
     p_out->smooth_overlap_buffers();
 

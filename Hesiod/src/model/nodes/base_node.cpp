@@ -110,7 +110,8 @@ BaseNode::~BaseNode()
   Logger::log()->debug("BaseNode::~BaseNode: out");
 }
 
-std::map<std::string, std::unique_ptr<attr::AbstractAttribute>> *BaseNode::get_attr_ref()
+std::map<std::string, std::unique_ptr<attr::AbstractAttribute>> *BaseNode::
+    get_attributes_ref()
 {
   return &this->attr;
 };

@@ -20,13 +20,16 @@ void setup_reverse_midpoint_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Path>(gnode::PortType::IN, "path");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "heightmap", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "heightmap", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "noise_scale", 1.f, 0.01f, 2.f);
-  ADD_ATTR(node, SeedAttribute, "seed");
-  ADD_ATTR(node, BoolAttribute, "inverse", false);
-  ADD_ATTR(node, BoolAttribute, "remap", true);
+  node.add_attr<FloatAttribute>("noise_scale", "noise_scale", 1.f, 0.01f, 2.f);
+
+  node.add_attr<SeedAttribute>("seed", "seed");
+
+  node.add_attr<BoolAttribute>("inverse", "inverse", false);
+
+  node.add_attr<BoolAttribute>("remap", "remap", true);
 
   // attribute(s) order
   node.set_attr_ordered_key({"noise_scale", "seed", "_SEPARATOR_", "inverse", "remap"});
@@ -51,8 +54,8 @@ void compute_reverse_midpoint_node(BaseNode &node)
       p_path->to_array(path_array, bbox);
 
       hmap::Array z = hmap::reverse_midpoint(path_array,
-                                             GET(node, "seed", SeedAttribute),
-                                             GET(node, "noise_scale", FloatAttribute),
+                                             node.get_attr<SeedAttribute>("seed"),
+                                             node.get_attr<FloatAttribute>("noise_scale"),
                                              0.f); // threshold
 
       p_out->from_array_interp_nearest(z);
@@ -60,13 +63,13 @@ void compute_reverse_midpoint_node(BaseNode &node)
       // post-process
       post_process_heightmap(node,
                              *p_out,
-                             GET(node, "inverse", BoolAttribute),
+                             node.get_attr<BoolAttribute>("inverse"),
                              false, // smooth
                              0,
                              false, // saturate
                              {0.f, 0.f},
                              0.f,
-                             GET(node, "remap", BoolAttribute),
+                             node.get_attr<BoolAttribute>("remap"),
                              {0.f, 1.f});
     }
     else

@@ -20,10 +20,10 @@ void setup_make_periodic_stitching_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "overlap", 0.5f, 0.05f, 0.95f);
+  node.add_attr<FloatAttribute>("overlap", "overlap", 0.5f, 0.05f, 0.95f);
 }
 
 void compute_make_periodic_stitching_node(BaseNode &node)
@@ -45,8 +45,9 @@ void compute_make_periodic_stitching_node(BaseNode &node)
           hmap::Array *pa_out = p_arrays[0];
           hmap::Array *pa_in = p_arrays[1];
 
-          *pa_out = hmap::make_periodic_stitching(*pa_in,
-                                                  GET(node, "overlap", FloatAttribute));
+          *pa_out = hmap::make_periodic_stitching(
+              *pa_in,
+              node.get_attr<FloatAttribute>("overlap"));
         },
         hmap::TransformMode::SINGLE_ARRAY);
   }

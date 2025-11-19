@@ -24,12 +24,11 @@ void setup_cloud_from_csv_node(BaseNode &node)
   node.add_port<hmap::Cloud>(gnode::PortType::OUT, "cloud");
 
   // attribute(s)
-  ADD_ATTR(node,
-           FilenameAttribute,
-           "fname",
-           std::filesystem::path(""),
-           "CSV files (*.csv)",
-           false);
+  node.add_attr<FilenameAttribute>("fname",
+                                   "fname",
+                                   std::filesystem::path(""),
+                                   "CSV files (*.csv)",
+                                   false);
 
   // attribute(s) order
   node.set_attr_ordered_key({"fname"});
@@ -43,7 +42,7 @@ void compute_cloud_from_csv_node(BaseNode &node)
 
   hmap::Cloud *p_out = node.get_value_ref<hmap::Cloud>("cloud");
 
-  const std::string fname = GET(node, "fname", FilenameAttribute).string();
+  const std::string fname = node.get_attr<FilenameAttribute>("fname").string();
   std::ifstream     f(fname.c_str());
 
   if (f.good())

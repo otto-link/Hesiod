@@ -20,7 +20,7 @@ void setup_heightmap_to_normal_map_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "normal map", CONFIG);
+  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "normal map", CONFIG(node));
 
   // attribute(s)
 

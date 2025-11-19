@@ -20,12 +20,14 @@ void setup_fill_talus_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "slope", 4.f, 0.1f, FLT_MAX);
-  ADD_ATTR(node, FloatAttribute, "noise_ratio", 0.2f, 0.f, 1.f);
-  ADD_ATTR(node, SeedAttribute, "seed");
+  node.add_attr<FloatAttribute>("slope", "slope", 4.f, 0.1f, FLT_MAX);
+
+  node.add_attr<FloatAttribute>("noise_ratio", "noise_ratio", 0.2f, 0.f, 1.f);
+
+  node.add_attr<SeedAttribute>("seed", "seed");
 
   // attribute(s) order
   node.set_attr_ordered_key({"slope", "noise_ratio", "seed"});
@@ -43,7 +45,7 @@ void compute_fill_talus_node(BaseNode &node)
   {
     hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
-    float talus = GET(node, "slope", FloatAttribute) / (float)p_out->shape.x;
+    float talus = node.get_attr<FloatAttribute>("slope") / (float)p_out->shape.x;
 
     // copy the input heightmap
     *p_out = *p_in;
@@ -53,8 +55,8 @@ void compute_fill_talus_node(BaseNode &node)
                     {
                       hmap::fill_talus(x,
                                        talus,
-                                       GET(node, "seed", SeedAttribute),
-                                       GET(node, "noise_ratio", FloatAttribute));
+                                       node.get_attr<SeedAttribute>("seed"),
+                                       node.get_attr<FloatAttribute>("noise_ratio"));
                     });
 
     p_out->smooth_overlap_buffers();

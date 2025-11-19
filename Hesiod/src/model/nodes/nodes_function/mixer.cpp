@@ -24,10 +24,10 @@ void setup_mixer_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input 3");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input 4");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "t");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "gain_factor", 1.f, 0.001f, 10.f);
+  node.add_attr<FloatAttribute>("gain_factor", "gain_factor", 1.f, 0.001f, 10.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"gain_factor"});
@@ -69,7 +69,9 @@ void compute_mixer_node(BaseNode &node)
             if (p_arrays[k])
               arrays.push_back(p_arrays[k]);
 
-          *pa_out = hmap::mixer(*pa_t, arrays, GET(node, "gain_factor", FloatAttribute));
+          *pa_out = hmap::mixer(*pa_t,
+                                arrays,
+                                node.get_attr<FloatAttribute>("gain_factor"));
         },
         node.get_config_ref()->hmap_transform_mode_cpu);
   }

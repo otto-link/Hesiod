@@ -22,10 +22,10 @@ void setup_texture_split_channels_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "R", CONFIG);
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "G", CONFIG);
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "B", CONFIG);
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "A", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "R", CONFIG(node));
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "G", CONFIG(node));
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "B", CONFIG(node));
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "A", CONFIG(node));
 
   // attribute(s)
 

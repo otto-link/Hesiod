@@ -21,10 +21,10 @@ void setup_remap_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, RangeAttribute, "remap");
+  node.add_attr<RangeAttribute>("remap", "remap");
 }
 
 void compute_remap_node(BaseNode &node)
@@ -40,8 +40,8 @@ void compute_remap_node(BaseNode &node)
     hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
     *p_out = *p_in;
-    p_out->remap(GET(node, "remap", RangeAttribute)[0],
-                 GET(node, "remap", RangeAttribute)[1]);
+    p_out->remap(node.get_attr<RangeAttribute>("remap")[0],
+                 node.get_attr<RangeAttribute>("remap")[1]);
   }
 
   Q_EMIT node.compute_finished(node.get_id());

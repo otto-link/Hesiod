@@ -20,10 +20,10 @@ void setup_select_inward_outward_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, Vec2FloatAttribute, "center");
+  node.add_attr<Vec2FloatAttribute>("center", "center");
 
   // attribute(s) order
   node.set_attr_ordered_key({"center"});
@@ -49,7 +49,7 @@ void compute_select_inward_outward_node(BaseNode &node)
                     {
                       out = hmap::select_inward_outward_slope(
                           in,
-                          GET(node, "center", Vec2FloatAttribute),
+                          node.get_attr<Vec2FloatAttribute>("center"),
                           bbox);
                     });
 

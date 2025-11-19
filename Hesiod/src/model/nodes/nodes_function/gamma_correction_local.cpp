@@ -21,13 +21,16 @@ void setup_gamma_correction_local_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "radius", 0.05f, 0.01f, 0.2f);
-  ADD_ATTR(node, FloatAttribute, "gamma", 2.f, 0.01f, 10.f);
-  ADD_ATTR(node, FloatAttribute, "k", 0.1f, 0.f, 0.5f);
-  ADD_ATTR(node, BoolAttribute, "GPU", HSD_DEFAULT_GPU_MODE);
+  node.add_attr<FloatAttribute>("radius", "radius", 0.05f, 0.01f, 0.2f);
+
+  node.add_attr<FloatAttribute>("gamma", "gamma", 2.f, 0.01f, 10.f);
+
+  node.add_attr<FloatAttribute>("k", "k", 0.1f, 0.f, 0.5f);
+
+  node.add_attr<BoolAttribute>("GPU", "GPU", HSD_DEFAULT_GPU_MODE);
 
   // attribute(s) order
   node.set_attr_ordered_key({"radius", "gamma", "k", "_SEPARATOR_", "GPU"});
@@ -49,13 +52,13 @@ void compute_gamma_correction_local_node(BaseNode &node)
     // copy the input heightmap
     *p_out = *p_in;
 
-    int ir = std::max(1, (int)(GET(node, "radius", FloatAttribute) * p_out->shape.x));
+    int ir = std::max(1, (int)(node.get_attr<FloatAttribute>("radius") * p_out->shape.x));
 
     float hmin = p_out->min();
     float hmax = p_out->max();
     p_out->remap(0.f, 1.f, hmin, hmax);
 
-    if (GET(node, "GPU", BoolAttribute))
+    if (node.get_attr<BoolAttribute>("GPU"))
     {
       hmap::transform(
           {p_out, p_mask},
@@ -65,10 +68,10 @@ void compute_gamma_correction_local_node(BaseNode &node)
             hmap::Array *pa_mask = p_arrays[1];
 
             hmap::gpu::gamma_correction_local(*pa_out,
-                                              GET(node, "gamma", FloatAttribute),
+                                              node.get_attr<FloatAttribute>("gamma"),
                                               ir,
                                               pa_mask,
-                                              GET(node, "k", FloatAttribute));
+                                              node.get_attr<FloatAttribute>("k"));
           },
           node.get_config_ref()->hmap_transform_mode_gpu);
     }
@@ -82,10 +85,10 @@ void compute_gamma_correction_local_node(BaseNode &node)
             hmap::Array *pa_mask = p_arrays[1];
 
             hmap::gamma_correction_local(*pa_out,
-                                         GET(node, "gamma", FloatAttribute),
+                                         node.get_attr<FloatAttribute>("gamma"),
                                          ir,
                                          pa_mask,
-                                         GET(node, "k", FloatAttribute));
+                                         node.get_attr<FloatAttribute>("k"));
           },
           node.get_config_ref()->hmap_transform_mode_cpu);
     }

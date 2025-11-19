@@ -24,35 +24,74 @@ void setup_basalt_field_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dx");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "envelope");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "out", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "out", CONFIG(node));
 
   // attribute(s)
   std::vector<float> kw = {5.f, 5.f};
 
-  ADD_ATTR(node, WaveNbAttribute, "kw", kw, 0.f, FLT_MAX, true);
-  ADD_ATTR(node, SeedAttribute, "seed");
+  node.add_attr<WaveNbAttribute>("kw", "kw", kw, 0.f, FLT_MAX, true);
 
-  ADD_ATTR(node, FloatAttribute, "warp_kw", 4.f, 0.f, FLT_MAX);
+  node.add_attr<SeedAttribute>("seed", "seed");
 
-  ADD_ATTR(node, FloatAttribute, "large_scale_warp_amp", 0.2f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "large_scale_gain", 8., 0.f, 10.f);
-  ADD_ATTR(node, FloatAttribute, "large_scale_amp", 0.15f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>("warp_kw", "warp_kw", 4.f, 0.f, FLT_MAX);
 
-  ADD_ATTR(node, FloatAttribute, "medium_scale_kw_ratio", 3.f, 0.f, FLT_MAX);
-  ADD_ATTR(node, FloatAttribute, "medium_scale_warp_amp", 0.1f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "medium_scale_gain", 8.f, 0.f, 10.f);
-  ADD_ATTR(node, FloatAttribute, "medium_scale_amp", 0.12f, 0.f, 0.2f);
+  node.add_attr<FloatAttribute>("large_scale_warp_amp",
+                                "large_scale_warp_amp",
+                                0.2f,
+                                0.f,
+                                1.f);
 
-  ADD_ATTR(node, FloatAttribute, "small_scale_kw_ratio", 5.f, 0.f, FLT_MAX);
-  ADD_ATTR(node, FloatAttribute, "small_scale_amp", 0.1f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "small_scale_overlay_amp", 0.005f, 0.f, 0.01f);
+  node.add_attr<FloatAttribute>("large_scale_gain", "large_scale_gain", 8., 0.f, 10.f);
 
-  ADD_ATTR(node, FloatAttribute, "rugosity_kw_ratio", 1.5f, 0.f, FLT_MAX);
-  ADD_ATTR(node, FloatAttribute, "rugosity_amp", 1.f, 0.f, 2.f);
+  node.add_attr<FloatAttribute>("large_scale_amp", "large_scale_amp", 0.15f, 0.f, 1.f);
 
-  ADD_ATTR(node, BoolAttribute, "flatten_activate", true);
-  ADD_ATTR(node, FloatAttribute, "flatten_kw_ratio", 0.5f, 0.f, FLT_MAX);
-  ADD_ATTR(node, FloatAttribute, "flatten_amp", 0.f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>("medium_scale_kw_ratio",
+                                "medium_scale_kw_ratio",
+                                3.f,
+                                0.f,
+                                FLT_MAX);
+
+  node.add_attr<FloatAttribute>("medium_scale_warp_amp",
+                                "medium_scale_warp_amp",
+                                0.1f,
+                                0.f,
+                                1.f);
+
+  node.add_attr<FloatAttribute>("medium_scale_gain", "medium_scale_gain", 8.f, 0.f, 10.f);
+
+  node.add_attr<FloatAttribute>("medium_scale_amp", "medium_scale_amp", 0.12f, 0.f, 0.2f);
+
+  node.add_attr<FloatAttribute>("small_scale_kw_ratio",
+                                "small_scale_kw_ratio",
+                                5.f,
+                                0.f,
+                                FLT_MAX);
+
+  node.add_attr<FloatAttribute>("small_scale_amp", "small_scale_amp", 0.1f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("small_scale_overlay_amp",
+                                "small_scale_overlay_amp",
+                                0.005f,
+                                0.f,
+                                0.01f);
+
+  node.add_attr<FloatAttribute>("rugosity_kw_ratio",
+                                "rugosity_kw_ratio",
+                                1.5f,
+                                0.f,
+                                FLT_MAX);
+
+  node.add_attr<FloatAttribute>("rugosity_amp", "rugosity_amp", 1.f, 0.f, 2.f);
+
+  node.add_attr<BoolAttribute>("flatten_activate", "flatten_activate", true);
+
+  node.add_attr<FloatAttribute>("flatten_kw_ratio",
+                                "flatten_kw_ratio",
+                                0.5f,
+                                0.f,
+                                FLT_MAX);
+
+  node.add_attr<FloatAttribute>("flatten_amp", "flatten_amp", 0.f, 0.f, 1.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"kw",
@@ -82,8 +121,8 @@ void setup_basalt_field_node(BaseNode &node)
   setup_post_process_heightmap_attributes(node);
 
   // disable post-processing remap by default
-  GET_REF(node, "post_remap", RangeAttribute)->set_is_active(false);
-  GET_REF(node, "post_remap", RangeAttribute)->save_initial_state();
+  node.get_attr_ref<RangeAttribute>("post_remap")->set_is_active(false);
+  node.get_attr_ref<RangeAttribute>("post_remap")->save_initial_state();
 }
 
 void compute_basalt_field_node(BaseNode &node)
@@ -110,24 +149,24 @@ void compute_basalt_field_node(BaseNode &node)
 
         *pa_out = hmap::gpu::basalt_field(
             shape,
-            GET(node, "kw", WaveNbAttribute),
-            GET(node, "seed", SeedAttribute),
-            GET(node, "warp_kw", FloatAttribute),
-            GET(node, "large_scale_warp_amp", FloatAttribute),
-            GET(node, "large_scale_gain", FloatAttribute),
-            GET(node, "large_scale_amp", FloatAttribute),
-            GET(node, "medium_scale_kw_ratio", FloatAttribute),
-            GET(node, "medium_scale_warp_amp", FloatAttribute),
-            GET(node, "medium_scale_gain", FloatAttribute),
-            GET(node, "medium_scale_amp", FloatAttribute),
-            GET(node, "small_scale_kw_ratio", FloatAttribute),
-            GET(node, "small_scale_amp", FloatAttribute),
-            GET(node, "small_scale_overlay_amp", FloatAttribute),
-            GET(node, "rugosity_kw_ratio", FloatAttribute),
-            GET(node, "rugosity_amp", FloatAttribute),
-            GET(node, "flatten_activate", BoolAttribute),
-            GET(node, "flatten_kw_ratio", FloatAttribute),
-            GET(node, "flatten_amp", FloatAttribute),
+            node.get_attr<WaveNbAttribute>("kw"),
+            node.get_attr<SeedAttribute>("seed"),
+            node.get_attr<FloatAttribute>("warp_kw"),
+            node.get_attr<FloatAttribute>("large_scale_warp_amp"),
+            node.get_attr<FloatAttribute>("large_scale_gain"),
+            node.get_attr<FloatAttribute>("large_scale_amp"),
+            node.get_attr<FloatAttribute>("medium_scale_kw_ratio"),
+            node.get_attr<FloatAttribute>("medium_scale_warp_amp"),
+            node.get_attr<FloatAttribute>("medium_scale_gain"),
+            node.get_attr<FloatAttribute>("medium_scale_amp"),
+            node.get_attr<FloatAttribute>("small_scale_kw_ratio"),
+            node.get_attr<FloatAttribute>("small_scale_amp"),
+            node.get_attr<FloatAttribute>("small_scale_overlay_amp"),
+            node.get_attr<FloatAttribute>("rugosity_kw_ratio"),
+            node.get_attr<FloatAttribute>("rugosity_amp"),
+            node.get_attr<BoolAttribute>("flatten_activate"),
+            node.get_attr<FloatAttribute>("flatten_kw_ratio"),
+            node.get_attr<FloatAttribute>("flatten_amp"),
             pa_dx,
             pa_dy,
             bbox);

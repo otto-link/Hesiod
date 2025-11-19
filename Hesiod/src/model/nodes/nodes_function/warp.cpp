@@ -23,11 +23,12 @@ void setup_warp_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dx");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "scaling.x", 1.f, -2.f, 2.f);
-  ADD_ATTR(node, FloatAttribute, "scaling.y", 1.f, -2.f, 2.f);
+  node.add_attr<FloatAttribute>("scaling.x", "scaling.x", 1.f, -2.f, 2.f);
+
+  node.add_attr<FloatAttribute>("scaling.y", "scaling.y", 1.f, -2.f, 2.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"scaling.x", "scaling.y"});
@@ -51,8 +52,8 @@ void compute_warp_node(BaseNode &node)
 
     *p_out = *p_in;
 
-    float sx = GET(node, "scaling.x", FloatAttribute);
-    float sy = GET(node, "scaling.y", FloatAttribute);
+    float sx = node.get_attr<FloatAttribute>("scaling.x");
+    float sy = node.get_attr<FloatAttribute>("scaling.y");
 
     hmap::transform(
         {p_out, p_dx, p_dy},

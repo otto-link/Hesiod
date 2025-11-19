@@ -46,7 +46,7 @@ void setup_background_image_for_cloud_attribute(BaseNode          &node,
   };
 
   // assign function to attr
-  GET_REF(node, attribute_key, CloudAttribute)->set_background_image_fct(lambda);
+  node.get_attr_ref<CloudAttribute>(attribute_key)->set_background_image_fct(lambda);
 }
 
 } // namespace hesiod

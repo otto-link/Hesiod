@@ -23,21 +23,20 @@ void setup_blend_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input 1");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input 2");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
   node.add_attr<EnumAttribute>("blending_method",
                                "Method:",
                                enum_mappings.blending_method_map,
                                "minimum_smooth");
-
-  ADD_ATTR(node, FloatAttribute, "k", 0.1f, 0.01f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "radius", 0.05f, 0.f, 0.2f);
-  ADD_ATTR(node, FloatAttribute, "input1_weight", 1.f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "input2_weight", 1.f, 0.f, 1.f);
-  ADD_ATTR(node, BoolAttribute, "swap_inputs", false);
-  ADD_ATTR(node, BoolAttribute, "inverse", false);
-  ADD_ATTR(node, RangeAttribute, "remap");
+  node.add_attr<FloatAttribute>("k", "k", 0.1f, 0.01f, 1.f);
+  node.add_attr<FloatAttribute>("radius", "radius", 0.05f, 0.f, 0.2f);
+  node.add_attr<FloatAttribute>("input1_weight", "input1_weight", 1.f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>("input2_weight", "input2_weight", 1.f, 0.f, 1.f);
+  node.add_attr<BoolAttribute>("swap_inputs", "swap_inputs", false);
+  node.add_attr<BoolAttribute>("inverse", "inverse", false);
+  node.add_attr<RangeAttribute>("remap", "remap");
 
   // attribute(s) order
   node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Main Parameters",
@@ -70,15 +69,15 @@ void compute_blend_node(BaseNode &node)
   if (p_in1 && p_in2)
   {
     // adjust inputs
-    if (GET(node, "swap_inputs", BoolAttribute))
+    if (node.get_attr<BoolAttribute>("swap_inputs"))
       std::swap(p_in1, p_in2);
 
     // compute output
     hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
-    float k = GET(node, "k", FloatAttribute);
-    int   ir = std::max(1, (int)(GET(node, "radius", FloatAttribute) * p_out->shape.x));
-    int   method = GET(node, "blending_method", EnumAttribute);
+    float k = node.get_attr<FloatAttribute>("k");
+    int ir = std::max(1, (int)(node.get_attr<FloatAttribute>("radius") * p_out->shape.x));
+    int method = node.get_attr<EnumAttribute>("blending_method");
 
     blend_heightmaps(*p_out,
                      *p_in1,
@@ -86,20 +85,20 @@ void compute_blend_node(BaseNode &node)
                      static_cast<BlendingMethod>(method),
                      k,
                      ir,
-                     GET(node, "input1_weight", FloatAttribute),
-                     GET(node, "input2_weight", FloatAttribute));
+                     node.get_attr<FloatAttribute>("input1_weight"),
+                     node.get_attr<FloatAttribute>("input2_weight"));
 
     // post-process
     post_process_heightmap(node,
                            *p_out,
-                           GET(node, "inverse", BoolAttribute),
+                           node.get_attr<BoolAttribute>("inverse"),
                            false, // smooth
                            0,
                            false, // saturate
                            {0.f, 0.f},
                            0.f,
-                           GET_MEMBER(node, "remap", RangeAttribute, is_active),
-                           GET(node, "remap", RangeAttribute));
+                           node.get_attr_ref<RangeAttribute>("remap")->get_is_active(),
+                           node.get_attr<RangeAttribute>("remap"));
   }
 
   Q_EMIT node.compute_finished(node.get_id());

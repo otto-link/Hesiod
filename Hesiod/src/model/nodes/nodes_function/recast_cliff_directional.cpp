@@ -21,14 +21,18 @@ void setup_recast_cliff_directional_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "angle", 45.f, -180.f, 180.f);
-  ADD_ATTR(node, FloatAttribute, "talus_global", 1.f, 0.f, 5.f);
-  ADD_ATTR(node, FloatAttribute, "radius", 0.1f, 0.01f, 0.5f);
-  ADD_ATTR(node, FloatAttribute, "amplitude", 0.1f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "gain", 2.f, 0.01f, 10.f);
+  node.add_attr<FloatAttribute>("angle", "angle", 45.f, -180.f, 180.f);
+
+  node.add_attr<FloatAttribute>("talus_global", "talus_global", 1.f, 0.f, 5.f);
+
+  node.add_attr<FloatAttribute>("radius", "radius", 0.1f, 0.01f, 0.5f);
+
+  node.add_attr<FloatAttribute>("amplitude", "amplitude", 0.1f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("gain", "gain", 2.f, 0.01f, 10.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"angle", "talus_global", "radius", "amplitude", "gain"});
@@ -50,8 +54,8 @@ void compute_recast_cliff_directional_node(BaseNode &node)
     // copy the input heightmap
     *p_out = *p_in;
 
-    float talus = GET(node, "talus_global", FloatAttribute) / (float)p_out->shape.x;
-    int   ir = std::max(1, (int)(GET(node, "radius", FloatAttribute) * p_out->shape.x));
+    float talus = node.get_attr<FloatAttribute>("talus_global") / (float)p_out->shape.x;
+    int ir = std::max(1, (int)(node.get_attr<FloatAttribute>("radius") * p_out->shape.x));
 
     hmap::transform(*p_out,
                     p_mask,
@@ -61,10 +65,10 @@ void compute_recast_cliff_directional_node(BaseNode &node)
                           z,
                           talus,
                           ir,
-                          GET(node, "amplitude", FloatAttribute),
-                          GET(node, "angle", FloatAttribute),
+                          node.get_attr<FloatAttribute>("amplitude"),
+                          node.get_attr<FloatAttribute>("angle"),
                           p_mask,
-                          GET(node, "gain", FloatAttribute));
+                          node.get_attr<FloatAttribute>("gain"));
                     });
 
     p_out->smooth_overlap_buffers();

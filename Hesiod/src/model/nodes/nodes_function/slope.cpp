@@ -22,14 +22,18 @@ void setup_slope_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dx");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "control");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "angle", 0.f, -180.f, 180.f);
-  ADD_ATTR(node, FloatAttribute, "talus_global", 2.f, 0.01f, FLT_MAX);
-  ADD_ATTR(node, Vec2FloatAttribute, "center");
-  ADD_ATTR(node, BoolAttribute, "inverse", false);
-  ADD_ATTR(node, RangeAttribute, "remap");
+  node.add_attr<FloatAttribute>("angle", "angle", 0.f, -180.f, 180.f);
+
+  node.add_attr<FloatAttribute>("talus_global", "talus_global", 2.f, 0.01f, FLT_MAX);
+
+  node.add_attr<Vec2FloatAttribute>("center", "center");
+
+  node.add_attr<BoolAttribute>("inverse", "inverse", false);
+
+  node.add_attr<RangeAttribute>("remap", "remap");
 
   // attribute(s) order
   node.set_attr_ordered_key(
@@ -59,13 +63,13 @@ void compute_slope_node(BaseNode &node)
                      hmap::Array      *p_ctrl)
              {
                return hmap::slope(shape,
-                                  GET(node, "angle", FloatAttribute),
-                                  GET(node, "talus_global", FloatAttribute),
+                                  node.get_attr<FloatAttribute>("angle"),
+                                  node.get_attr<FloatAttribute>("talus_global"),
                                   p_ctrl,
                                   p_noise_x,
                                   p_noise_y,
                                   nullptr,
-                                  GET(node, "center", Vec2FloatAttribute),
+                                  node.get_attr<Vec2FloatAttribute>("center"),
                                   bbox);
              });
 
@@ -73,14 +77,14 @@ void compute_slope_node(BaseNode &node)
   post_process_heightmap(node,
                          *p_out,
 
-                         GET(node, "inverse", BoolAttribute),
+                         node.get_attr<BoolAttribute>("inverse"),
                          false, // smooth
                          0,
                          false, // saturate
                          {0.f, 0.f},
                          0.f,
-                         GET_MEMBER(node, "remap", RangeAttribute, is_active),
-                         GET(node, "remap", RangeAttribute));
+                         node.get_attr_ref<RangeAttribute>("remap")->get_is_active(),
+                         node.get_attr<RangeAttribute>("remap"));
 
   Q_EMIT node.compute_finished(node.get_id());
 }

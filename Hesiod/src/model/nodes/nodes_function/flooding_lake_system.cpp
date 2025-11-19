@@ -20,12 +20,14 @@ void setup_flooding_lake_system_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "elevation");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "water_depth", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "water_depth", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, IntAttribute, "iterations", 1000, 1, INT_MAX);
-  ADD_ATTR(node, FloatAttribute, "epsilon", 1e-1, 1e-5, 1e-1, "{:.3e}", true);
-  ADD_ATTR(node, FloatAttribute, "mininal_radius", 0.05f, 0.f, 0.5f);
+  node.add_attr<IntAttribute>("iterations", "iterations", 1000, 1, INT_MAX);
+
+  node.add_attr<FloatAttribute>("epsilon", "epsilon", 1e-1, 1e-5, 1e-1, "{:.3e}", true);
+
+  node.add_attr<FloatAttribute>("mininal_radius", "mininal_radius", 0.05f, 0.f, 0.5f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Main Parameters",
@@ -50,9 +52,9 @@ void compute_flooding_lake_system_node(BaseNode &node)
   {
     hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("water_depth");
 
-    float epsilon_normalized = GET(node, "epsilon", FloatAttribute) /
+    float epsilon_normalized = node.get_attr<FloatAttribute>("epsilon") /
                                (float)p_in->shape.x;
-    int   ir = GET(node, "mininal_radius", FloatAttribute) * (float)p_in->shape.x;
+    int   ir = node.get_attr<FloatAttribute>("mininal_radius") * (float)p_in->shape.x;
     float surface_threshold = M_PI * ir * ir;
 
     hmap::transform(
@@ -64,7 +66,7 @@ void compute_flooding_lake_system_node(BaseNode &node)
           hmap::Array *pa_in = p_arrays[1];
 
           *pa_out = hmap::flooding_lake_system(*pa_in,
-                                               GET(node, "iterations", IntAttribute),
+                                               node.get_attr<IntAttribute>("iterations"),
                                                epsilon_normalized,
                                                surface_threshold);
         },

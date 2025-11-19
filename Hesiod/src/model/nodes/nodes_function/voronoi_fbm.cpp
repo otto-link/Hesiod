@@ -25,25 +25,34 @@ void setup_voronoi_fbm_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "control");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "envelope");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node,
-           EnumAttribute,
-           "return_type",
-           enum_mappings.voronoi_return_type_map,
-           "F1: squared distance to the closest point");
-  ADD_ATTR(node, WaveNbAttribute, "kw");
-  ADD_ATTR(node, SeedAttribute, "seed");
-  ADD_ATTR(node, FloatAttribute, "jitter.x", 1.f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "jitter.y", 1.f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "k_smoothing", 0.5f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "exp_sigma", 0.1f, 0.f, 0.3f);
-  ADD_ATTR(node, BoolAttribute, "sqrt_output", false);
-  ADD_ATTR(node, IntAttribute, "octaves", 8, 0, 32);
-  ADD_ATTR(node, FloatAttribute, "weight", 0.7f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "persistence", 0.5f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "lacunarity", 2.f, 0.01f, 4.f);
+  node.add_attr<EnumAttribute>("return_type",
+                               "return_type",
+                               enum_mappings.voronoi_return_type_map,
+                               "F1: squared distance to the closest point");
+  node.add_attr<WaveNbAttribute>("kw", "kw");
+
+  node.add_attr<SeedAttribute>("seed", "seed");
+
+  node.add_attr<FloatAttribute>("jitter.x", "jitter.x", 1.f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("jitter.y", "jitter.y", 1.f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("k_smoothing", "k_smoothing", 0.5f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("exp_sigma", "exp_sigma", 0.1f, 0.f, 0.3f);
+
+  node.add_attr<BoolAttribute>("sqrt_output", "sqrt_output", false);
+
+  node.add_attr<IntAttribute>("octaves", "octaves", 8, 0, 32);
+
+  node.add_attr<FloatAttribute>("weight", "weight", 0.7f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("persistence", "persistence", 0.5f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("lacunarity", "lacunarity", 2.f, 0.01f, 4.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"return_type",
@@ -87,24 +96,23 @@ void compute_voronoi_fbm_node(BaseNode &node)
         hmap::Array *pa_dx = p_arrays[2];
         hmap::Array *pa_dy = p_arrays[3];
 
-        hmap::VoronoiReturnType rtype = (hmap::VoronoiReturnType)GET(node,
-                                                                     "return_type",
-                                                                     EnumAttribute);
+        hmap::VoronoiReturnType rtype = (hmap::VoronoiReturnType)
+                                            node.get_attr<EnumAttribute>("return_type");
 
-        hmap::Vec2<float> jitter(GET(node, "jitter.x", FloatAttribute),
-                                 GET(node, "jitter.y", FloatAttribute));
+        hmap::Vec2<float> jitter(node.get_attr<FloatAttribute>("jitter.x"),
+                                 node.get_attr<FloatAttribute>("jitter.y"));
 
         *pa_out = hmap::gpu::voronoi_fbm(shape,
-                                         GET(node, "kw", WaveNbAttribute),
-                                         GET(node, "seed", SeedAttribute),
+                                         node.get_attr<WaveNbAttribute>("kw"),
+                                         node.get_attr<SeedAttribute>("seed"),
                                          jitter,
-                                         GET(node, "k_smoothing", FloatAttribute),
-                                         GET(node, "exp_sigma", FloatAttribute),
+                                         node.get_attr<FloatAttribute>("k_smoothing"),
+                                         node.get_attr<FloatAttribute>("exp_sigma"),
                                          rtype,
-                                         GET(node, "octaves", IntAttribute),
-                                         GET(node, "weight", FloatAttribute),
-                                         GET(node, "persistence", FloatAttribute),
-                                         GET(node, "lacunarity", FloatAttribute),
+                                         node.get_attr<IntAttribute>("octaves"),
+                                         node.get_attr<FloatAttribute>("weight"),
+                                         node.get_attr<FloatAttribute>("persistence"),
+                                         node.get_attr<FloatAttribute>("lacunarity"),
                                          pa_ctrl,
                                          pa_dx,
                                          pa_dy,
@@ -115,7 +123,7 @@ void compute_voronoi_fbm_node(BaseNode &node)
   // apply square root
   p_out->remap();
 
-  if (GET(node, "sqrt_output", BoolAttribute))
+  if (node.get_attr<BoolAttribute>("sqrt_output"))
     hmap::transform(
         {p_out},
         [](std::vector<hmap::Array *> p_arrays)

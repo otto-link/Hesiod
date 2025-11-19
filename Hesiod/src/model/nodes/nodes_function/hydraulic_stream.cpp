@@ -21,14 +21,17 @@ void setup_hydraulic_stream_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "erosion", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "erosion", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "c_erosion", 0.05f, 0.01f, 0.1f);
-  ADD_ATTR(node, FloatAttribute, "talus_ref", 0.1f, 0.01f, 10.f);
-  ADD_ATTR(node, FloatAttribute, "radius", 0.f, 0.f, 0.05f);
-  ADD_ATTR(node, FloatAttribute, "clipping_ratio", 10.f, 0.1f, 100.f);
+  node.add_attr<FloatAttribute>("c_erosion", "c_erosion", 0.05f, 0.01f, 0.1f);
+
+  node.add_attr<FloatAttribute>("talus_ref", "talus_ref", 0.1f, 0.01f, 10.f);
+
+  node.add_attr<FloatAttribute>("radius", "radius", 0.f, 0.f, 0.05f);
+
+  node.add_attr<FloatAttribute>("clipping_ratio", "clipping_ratio", 10.f, 0.1f, 100.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"c_erosion", "talus_ref", "radius", "clipping_ratio"});
@@ -51,7 +54,7 @@ void compute_hydraulic_stream_node(BaseNode &node)
     // copy the input heightmap
     *p_out = *p_in;
 
-    int ir = (int)(GET(node, "radius", FloatAttribute) * p_out->shape.x);
+    int ir = (int)(node.get_attr<FloatAttribute>("radius") * p_out->shape.x);
 
     hmap::transform(
         {p_out, p_mask, p_erosion_map},
@@ -63,13 +66,13 @@ void compute_hydraulic_stream_node(BaseNode &node)
 
           hmap::hydraulic_stream(*pa_out,
                                  pa_mask,
-                                 GET(node, "c_erosion", FloatAttribute),
-                                 GET(node, "talus_ref", FloatAttribute),
+                                 node.get_attr<FloatAttribute>("c_erosion"),
+                                 node.get_attr<FloatAttribute>("talus_ref"),
                                  nullptr,
                                  nullptr,
                                  pa_erosion_map,
                                  ir,
-                                 GET(node, "clipping_ratio", FloatAttribute));
+                                 node.get_attr<FloatAttribute>("clipping_ratio"));
         },
         node.get_config_ref()->hmap_transform_mode_cpu);
 

@@ -23,8 +23,9 @@ void setup_path_bezier_round_node(BaseNode &node)
   node.add_port<hmap::Path>(gnode::PortType::OUT, "output");
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "curvature_ratio", 0.3f, 0.f, 1.f);
-  ADD_ATTR(node, IntAttribute, "edge_divisions", 10, 1, 32);
+  node.add_attr<FloatAttribute>("curvature_ratio", "curvature_ratio", 0.3f, 0.f, 1.f);
+
+  node.add_attr<IntAttribute>("edge_divisions", "edge_divisions", 10, 1, 32);
 
   // attribute(s) order
   node.set_attr_ordered_key({"curvature_ratio", "edge_divisions"});
@@ -46,8 +47,8 @@ void compute_path_bezier_round_node(BaseNode &node)
     *p_out = *p_in;
 
     if (p_in->get_npoints() > 1)
-      p_out->bezier_round(GET(node, "curvature_ratio", FloatAttribute),
-                          GET(node, "edge_divisions", IntAttribute));
+      p_out->bezier_round(node.get_attr<FloatAttribute>("curvature_ratio"),
+                          node.get_attr<IntAttribute>("edge_divisions"));
   }
 
   Q_EMIT node.compute_finished(node.get_id());

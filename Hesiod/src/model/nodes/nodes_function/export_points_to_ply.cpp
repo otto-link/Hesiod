@@ -32,24 +32,28 @@ void setup_export_points_to_ply_node(BaseNode &node)
   node.add_port<std::vector<float>>(gnode::PortType::IN, "point_data3");
 
   // attribute(s)
-  ADD_ATTR(node,
-           FilenameAttribute,
-           "fname",
-           std::filesystem::path("points.ply"),
-           "Stanford PLY (*.ply)",
-           true);
-  ADD_ATTR(node, BoolAttribute, "auto_export", false);
+  node.add_attr<FilenameAttribute>("fname",
+                                   "fname",
+                                   std::filesystem::path("points.ply"),
+                                   "Stanford PLY (*.ply)",
+                                   true);
+  node.add_attr<BoolAttribute>("auto_export", "auto_export", false);
 
   node.add_attr<StringAttribute>("label1", "", "data1");
   node.add_attr<StringAttribute>("label2", "", "data2");
   node.add_attr<StringAttribute>("label3", "", "data3");
 
-  ADD_ATTR(node, FloatAttribute, "xmin", 0.f, -FLT_MAX, FLT_MAX);
-  ADD_ATTR(node, FloatAttribute, "xmax", 1.f, -FLT_MAX, FLT_MAX);
-  ADD_ATTR(node, FloatAttribute, "ymin", 0.f, -FLT_MAX, FLT_MAX);
-  ADD_ATTR(node, FloatAttribute, "ymax", 1.f, -FLT_MAX, FLT_MAX);
-  ADD_ATTR(node, FloatAttribute, "zmin", 0.f, -FLT_MAX, FLT_MAX);
-  ADD_ATTR(node, FloatAttribute, "zmax", 1.f, -FLT_MAX, FLT_MAX);
+  node.add_attr<FloatAttribute>("xmin", "xmin", 0.f, -FLT_MAX, FLT_MAX);
+
+  node.add_attr<FloatAttribute>("xmax", "xmax", 1.f, -FLT_MAX, FLT_MAX);
+
+  node.add_attr<FloatAttribute>("ymin", "ymin", 0.f, -FLT_MAX, FLT_MAX);
+
+  node.add_attr<FloatAttribute>("ymax", "ymax", 1.f, -FLT_MAX, FLT_MAX);
+
+  node.add_attr<FloatAttribute>("zmin", "zmin", 0.f, -FLT_MAX, FLT_MAX);
+
+  node.add_attr<FloatAttribute>("zmax", "zmax", 1.f, -FLT_MAX, FLT_MAX);
 
   // attribute(s) order
   node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Main Parameters",
@@ -86,9 +90,9 @@ void compute_export_points_to_ply_node(BaseNode &node)
   auto p_y = node.get_value_ref<std::vector<float>>("y");
   auto p_z = node.get_value_ref<std::vector<float>>("z");
 
-  if (p_x && p_y && p_z && GET(node, "auto_export", BoolAttribute))
+  if (p_x && p_y && p_z && node.get_attr<BoolAttribute>("auto_export"))
   {
-    std::filesystem::path fname = GET(node, "fname", FilenameAttribute);
+    std::filesystem::path fname = node.get_attr<FilenameAttribute>("fname");
     fname = ensure_extension(fname, ".ply");
 
     // --- create custom fields
@@ -105,20 +109,20 @@ void compute_export_points_to_ply_node(BaseNode &node)
     for (size_t k = 0; k < labels.size(); ++k)
     {
       if (data_ptrs[k])
-        custom_fields[GET(node, labels[k], StringAttribute)] = *data_ptrs[k];
+        custom_fields[node.get_attr<StringAttribute>(labels[k])] = *data_ptrs[k];
     }
 
     // --- export
 
     auto xr = hmap::rescaled_vector(*p_x,
-                                    GET(node, "xmin", FloatAttribute),
-                                    GET(node, "xmax", FloatAttribute));
+                                    node.get_attr<FloatAttribute>("xmin"),
+                                    node.get_attr<FloatAttribute>("xmax"));
     auto yr = hmap::rescaled_vector(*p_y,
-                                    GET(node, "ymin", FloatAttribute),
-                                    GET(node, "ymax", FloatAttribute));
+                                    node.get_attr<FloatAttribute>("ymin"),
+                                    node.get_attr<FloatAttribute>("ymax"));
     auto zr = hmap::rescaled_vector(*p_z,
-                                    GET(node, "zmin", FloatAttribute),
-                                    GET(node, "zmax", FloatAttribute));
+                                    node.get_attr<FloatAttribute>("zmin"),
+                                    node.get_attr<FloatAttribute>("zmax"));
 
     hmap::export_points_to_ply(fname.string(), xr, yr, zr, custom_fields);
   }

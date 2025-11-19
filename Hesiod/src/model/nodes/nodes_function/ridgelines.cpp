@@ -22,13 +22,16 @@ void setup_ridgelines_node(BaseNode &node)
   node.add_port<hmap::Path>(gnode::PortType::IN, "path");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dx");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "heightmap", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "heightmap", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "talus_global", 4.f, -FLT_MAX, FLT_MAX);
-  ADD_ATTR(node, FloatAttribute, "k_smoothing", 1.f, 0.01f, 2.f);
-  ADD_ATTR(node, FloatAttribute, "width", 0.1f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "vmin", 0.f, -1.f, 1.f);
+  node.add_attr<FloatAttribute>("talus_global", "talus_global", 4.f, -FLT_MAX, FLT_MAX);
+
+  node.add_attr<FloatAttribute>("k_smoothing", "k_smoothing", 1.f, 0.01f, 2.f);
+
+  node.add_attr<FloatAttribute>("width", "width", 0.1f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("vmin", "vmin", 0.f, -1.f, 1.f);
 }
 
 void compute_ridgelines_node(BaseNode &node)
@@ -76,10 +79,10 @@ void compute_ridgelines_node(BaseNode &node)
                                             xs,
                                             ys,
                                             zs,
-                                            GET(node, "talus_global", FloatAttribute),
-                                            GET(node, "k_smoothing", FloatAttribute),
-                                            GET(node, "width", FloatAttribute),
-                                            GET(node, "vmin", FloatAttribute),
+                                            node.get_attr<FloatAttribute>("talus_global"),
+                                            node.get_attr<FloatAttribute>("k_smoothing"),
+                                            node.get_attr<FloatAttribute>("width"),
+                                            node.get_attr<FloatAttribute>("vmin"),
                                             bbox_points,
                                             p_noise_x,
                                             p_noise_y,

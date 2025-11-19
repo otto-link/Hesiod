@@ -23,7 +23,7 @@ void setup_path_resample_node(BaseNode &node)
   node.add_port<hmap::Path>(gnode::PortType::OUT, "output");
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "delta", 0.01f, 0.001f, 0.2f);
+  node.add_attr<FloatAttribute>("delta", "delta", 0.01f, 0.001f, 0.2f);
 }
 
 void compute_path_resample_node(BaseNode &node)
@@ -41,7 +41,7 @@ void compute_path_resample_node(BaseNode &node)
     *p_out = *p_in;
 
     if (p_in->get_npoints() > 1)
-      p_out->resample(GET(node, "delta", FloatAttribute));
+      p_out->resample(node.get_attr<FloatAttribute>("delta"));
   }
 
   Q_EMIT node.compute_finished(node.get_id());

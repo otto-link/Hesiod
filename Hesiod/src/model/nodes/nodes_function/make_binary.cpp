@@ -20,10 +20,10 @@ void setup_make_binary_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "threshold", 0.5f, -1.f, 1.f);
+  node.add_attr<FloatAttribute>("threshold", "threshold", 0.5f, -1.f, 1.f);
 }
 
 void compute_make_binary_node(BaseNode &node)
@@ -47,7 +47,7 @@ void compute_make_binary_node(BaseNode &node)
 
           *pa_out = *pa_in;
 
-          hmap::make_binary(*pa_out, GET(node, "threshold", FloatAttribute));
+          hmap::make_binary(*pa_out, node.get_attr<FloatAttribute>("threshold"));
         },
         node.get_config_ref()->hmap_transform_mode_cpu);
   }

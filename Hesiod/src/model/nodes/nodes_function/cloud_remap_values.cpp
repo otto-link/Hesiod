@@ -22,7 +22,7 @@ void setup_cloud_remap_values_node(BaseNode &node)
   node.add_port<hmap::Cloud>(gnode::PortType::OUT, "output");
 
   // attribute(s)
-  ADD_ATTR(node, RangeAttribute, "remap");
+  node.add_attr<RangeAttribute>("remap", "remap");
 }
 
 void compute_cloud_remap_values_node(BaseNode &node)
@@ -39,8 +39,8 @@ void compute_cloud_remap_values_node(BaseNode &node)
 
     // copy and remap the input
     *p_out = *p_in;
-    p_out->remap_values(GET(node, "remap", RangeAttribute)[0],
-                        GET(node, "remap", RangeAttribute)[1]);
+    p_out->remap_values(node.get_attr<RangeAttribute>("remap")[0],
+                        node.get_attr<RangeAttribute>("remap")[1]);
   }
 
   Q_EMIT node.compute_finished(node.get_id());

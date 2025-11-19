@@ -24,16 +24,22 @@ void setup_stratify_oblique_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "noise");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, SeedAttribute, "seed");
-  ADD_ATTR(node, IntAttribute, "n_strata", 3, 1, 16);
-  ADD_ATTR(node, FloatAttribute, "strata_noise", 0.f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "gamma", 0.7f, 0.01f, 5.f);
-  ADD_ATTR(node, FloatAttribute, "gamma_noise", 0.f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "talus_global", 1.f, 0.f, FLT_MAX);
-  ADD_ATTR(node, FloatAttribute, "angle", 30.f, -180.f, 180.f);
+  node.add_attr<SeedAttribute>("seed", "seed");
+
+  node.add_attr<IntAttribute>("n_strata", "n_strata", 3, 1, 16);
+
+  node.add_attr<FloatAttribute>("strata_noise", "strata_noise", 0.f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("gamma", "gamma", 0.7f, 0.01f, 5.f);
+
+  node.add_attr<FloatAttribute>("gamma_noise", "gamma_noise", 0.f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("talus_global", "talus_global", 1.f, 0.f, FLT_MAX);
+
+  node.add_attr<FloatAttribute>("angle", "angle", 30.f, -180.f, 180.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"seed",
@@ -67,22 +73,22 @@ void compute_stratify_oblique_node(BaseNode &node)
 
     auto hs = hmap::linspace_jitted(zmin,
                                     zmax,
-                                    GET(node, "n_strata", IntAttribute) + 1,
-                                    GET(node, "strata_noise", FloatAttribute),
-                                    GET(node, "seed", SeedAttribute));
+                                    node.get_attr<IntAttribute>("n_strata") + 1,
+                                    node.get_attr<FloatAttribute>("strata_noise"),
+                                    node.get_attr<SeedAttribute>("seed"));
 
     float gmin = std::max(0.01f,
-                          GET(node, "gamma", FloatAttribute) *
-                              (1.f - GET(node, "gamma_noise", FloatAttribute)));
-    float gmax = GET(node, "gamma", FloatAttribute) *
-                 (1.f + GET(node, "gamma_noise", FloatAttribute));
+                          node.get_attr<FloatAttribute>("gamma") *
+                              (1.f - node.get_attr<FloatAttribute>("gamma_noise")));
+    float gmax = node.get_attr<FloatAttribute>("gamma") *
+                 (1.f + node.get_attr<FloatAttribute>("gamma_noise"));
 
     auto gs = hmap::random_vector(gmin,
                                   gmax,
-                                  GET(node, "n_strata", IntAttribute),
-                                  GET(node, "seed", SeedAttribute));
+                                  node.get_attr<IntAttribute>("n_strata"),
+                                  node.get_attr<SeedAttribute>("seed"));
 
-    float talus = GET(node, "talus_global", FloatAttribute) / (float)p_out->shape.x;
+    float talus = node.get_attr<FloatAttribute>("talus_global") / (float)p_out->shape.x;
 
     hmap::transform(*p_out,
                     p_mask,
@@ -96,7 +102,7 @@ void compute_stratify_oblique_node(BaseNode &node)
                                              hs,
                                              gs,
                                              talus,
-                                             GET(node, "angle", FloatAttribute),
+                                             node.get_attr<FloatAttribute>("angle"),
                                              p_noise_array);
                     });
 

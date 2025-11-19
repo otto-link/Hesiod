@@ -21,10 +21,10 @@ void setup_select_blob_log_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "radius", 0.05f, 0.001f, 0.2f);
+  node.add_attr<FloatAttribute>("radius", "radius", 0.05f, 0.001f, 0.2f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"radius"});
@@ -44,7 +44,7 @@ void compute_select_blob_log_node(BaseNode &node)
   {
     hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
-    int ir = hmap::convert_length_to_pixel(GET(node, "radius", FloatAttribute),
+    int ir = hmap::convert_length_to_pixel(node.get_attr<FloatAttribute>("radius"),
                                            p_out->shape.x);
 
     hmap::transform(*p_out,

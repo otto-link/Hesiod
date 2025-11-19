@@ -20,13 +20,16 @@ void setup_white_sparse_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "envelope");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, SeedAttribute, "seed");
-  ADD_ATTR(node, FloatAttribute, "density", 0.1f, 0.f, 1.f);
-  ADD_ATTR(node, BoolAttribute, "inverse", false);
-  ADD_ATTR(node, RangeAttribute, "remap");
+  node.add_attr<SeedAttribute>("seed", "seed");
+
+  node.add_attr<FloatAttribute>("density", "density", 0.1f, 0.f, 1.f);
+
+  node.add_attr<BoolAttribute>("inverse", "inverse", false);
+
+  node.add_attr<RangeAttribute>("remap", "remap");
 
   // attribute(s) order
   node.set_attr_ordered_key({"seed", "density", "_SEPARATOR_", "inverse", "remap"});
@@ -42,8 +45,8 @@ void compute_white_sparse_node(BaseNode &node)
   hmap::Heightmap *p_env = node.get_value_ref<hmap::Heightmap>("envelope");
   hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
-  int   seed = GET(node, "seed", SeedAttribute);
-  float density = GET(node, "density", FloatAttribute);
+  int   seed = node.get_attr<SeedAttribute>("seed");
+  float density = node.get_attr<FloatAttribute>("density");
   float density_per_tile = density / (float)p_out->get_ntiles();
 
   hmap::transform(
@@ -79,14 +82,14 @@ void compute_white_sparse_node(BaseNode &node)
   post_process_heightmap(node,
                          *p_out,
 
-                         GET(node, "inverse", BoolAttribute),
+                         node.get_attr<BoolAttribute>("inverse"),
                          false, // smooth
                          0,
                          false, // saturate
                          {0.f, 0.f},
                          0.f,
-                         GET_MEMBER(node, "remap", RangeAttribute, is_active),
-                         GET(node, "remap", RangeAttribute));
+                         node.get_attr_ref<RangeAttribute>("remap")->get_is_active(),
+                         node.get_attr<RangeAttribute>("remap"));
 
   Q_EMIT node.compute_finished(node.get_id());
 }

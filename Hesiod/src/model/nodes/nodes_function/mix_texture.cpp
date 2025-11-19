@@ -26,11 +26,12 @@ void setup_mix_texture_node(BaseNode &node)
   node.add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture2");
   node.add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture3");
   node.add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture4");
-  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture", CONFIG);
+  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, BoolAttribute, "use_sqrt_avg", true);
-  ADD_ATTR(node, BoolAttribute, "reset_output_alpha", true);
+  node.add_attr<BoolAttribute>("use_sqrt_avg", "use_sqrt_avg", true);
+
+  node.add_attr<BoolAttribute>("reset_output_alpha", "reset_output_alpha", true);
 
   // attribute(s) order
   node.set_attr_ordered_key({"use_sqrt_avg", "reset_output_alpha"});
@@ -56,9 +57,9 @@ void compute_mix_texture_node(BaseNode &node)
 
   if ((int)ptr_list.size())
   {
-    *p_out = mix_heightmap_rgba(ptr_list, GET(node, "use_sqrt_avg", BoolAttribute));
+    *p_out = mix_heightmap_rgba(ptr_list, node.get_attr<BoolAttribute>("use_sqrt_avg"));
 
-    if (GET(node, "reset_output_alpha", BoolAttribute))
+    if (node.get_attr<BoolAttribute>("reset_output_alpha"))
       p_out->set_alpha(1.f);
   }
 

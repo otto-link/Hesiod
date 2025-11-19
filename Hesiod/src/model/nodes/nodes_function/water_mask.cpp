@@ -22,7 +22,7 @@ void setup_water_mask_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "elevation");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "water_depth");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "mask", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "mask", CONFIG(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("additional_depth",
@@ -59,7 +59,7 @@ void compute_water_mask_node(BaseNode &node)
           hmap::Array *pa_z = p_arrays[1];
           hmap::Array *pa_mask = p_arrays[2];
 
-          float added_depth = GET(node, "additional_depth", FloatAttribute);
+          float added_depth = node.get_attr<FloatAttribute>("additional_depth");
 
           if (added_depth)
           {

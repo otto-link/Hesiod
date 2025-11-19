@@ -22,14 +22,18 @@ void setup_normal_displacement_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "radius", 0.05f, 0.f, 0.2f);
-  ADD_ATTR(node, FloatAttribute, "amount", 5.f, 0.f, 20.f);
-  ADD_ATTR(node, BoolAttribute, "reverse", false);
-  ADD_ATTR(node, IntAttribute, "iterations", 3, 1, 10);
-  ADD_ATTR(node, BoolAttribute, "GPU", HSD_DEFAULT_GPU_MODE);
+  node.add_attr<FloatAttribute>("radius", "radius", 0.05f, 0.f, 0.2f);
+
+  node.add_attr<FloatAttribute>("amount", "amount", 5.f, 0.f, 20.f);
+
+  node.add_attr<BoolAttribute>("reverse", "reverse", false);
+
+  node.add_attr<IntAttribute>("iterations", "iterations", 3, 1, 10);
+
+  node.add_attr<BoolAttribute>("GPU", "GPU", HSD_DEFAULT_GPU_MODE);
 
   // attribute(s) order
   node.set_attr_ordered_key(
@@ -52,11 +56,11 @@ void compute_normal_displacement_node(BaseNode &node)
     // copy the input heightmap
     *p_out = *p_in;
 
-    int ir = std::max(0, (int)(GET(node, "radius", FloatAttribute) * p_in->shape.x));
+    int ir = std::max(0, (int)(node.get_attr<FloatAttribute>("radius") * p_in->shape.x));
 
-    for (int it = 0; it < GET(node, "iterations", IntAttribute); it++)
+    for (int it = 0; it < node.get_attr<IntAttribute>("iterations"); it++)
     {
-      if (GET(node, "GPU", BoolAttribute))
+      if (node.get_attr<BoolAttribute>("GPU"))
       {
         hmap::transform(
             {p_out, p_mask},
@@ -67,9 +71,9 @@ void compute_normal_displacement_node(BaseNode &node)
 
               hmap::gpu::normal_displacement(*pa_out,
                                              pa_mask,
-                                             GET(node, "amount", FloatAttribute),
+                                             node.get_attr<FloatAttribute>("amount"),
                                              ir,
-                                             GET(node, "reverse", BoolAttribute));
+                                             node.get_attr<BoolAttribute>("reverse"));
             },
             node.get_config_ref()->hmap_transform_mode_gpu);
       }
@@ -84,9 +88,9 @@ void compute_normal_displacement_node(BaseNode &node)
 
               hmap::normal_displacement(*pa_out,
                                         pa_mask,
-                                        GET(node, "amount", FloatAttribute),
+                                        node.get_attr<FloatAttribute>("amount"),
                                         ir,
-                                        GET(node, "reverse", BoolAttribute));
+                                        node.get_attr<BoolAttribute>("reverse"));
             },
             node.get_config_ref()->hmap_transform_mode_cpu);
       }

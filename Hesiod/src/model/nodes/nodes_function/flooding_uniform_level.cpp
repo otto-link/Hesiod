@@ -20,10 +20,10 @@ void setup_flooding_uniform_level_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "water_depth", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "water_depth", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "elevation", 0.2f, -1.f, 2.f);
+  node.add_attr<FloatAttribute>("elevation", "elevation", 0.2f, -1.f, 2.f);
 }
 
 void compute_flooding_uniform_level_node(BaseNode &node)
@@ -45,8 +45,9 @@ void compute_flooding_uniform_level_node(BaseNode &node)
           hmap::Array *pa_out = p_arrays[0];
           hmap::Array *pa_in = p_arrays[1];
 
-          *pa_out = hmap::flooding_uniform_level(*pa_in,
-                                                 GET(node, "elevation", FloatAttribute));
+          *pa_out = hmap::flooding_uniform_level(
+              *pa_in,
+              node.get_attr<FloatAttribute>("elevation"));
         },
         node.get_config_ref()->hmap_transform_mode_cpu);
   }

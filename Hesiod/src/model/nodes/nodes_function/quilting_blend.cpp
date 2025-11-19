@@ -23,16 +23,26 @@ void setup_quilting_blend_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input 2");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input 3");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input 4");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "patch_width", 0.3f, 0.1f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "overlap", 0.9f, 0.05f, 0.95f);
-  ADD_ATTR(node, SeedAttribute, "seed");
-  ADD_ATTR(node, BoolAttribute, "patch_flip", true);
-  ADD_ATTR(node, BoolAttribute, "patch_rotate", true);
-  ADD_ATTR(node, BoolAttribute, "patch_transpose", true);
-  ADD_ATTR(node, FloatAttribute, "filter_width_ratio", 0.5f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>("patch_width", "patch_width", 0.3f, 0.1f, 1.f);
+
+  node.add_attr<FloatAttribute>("overlap", "overlap", 0.9f, 0.05f, 0.95f);
+
+  node.add_attr<SeedAttribute>("seed", "seed");
+
+  node.add_attr<BoolAttribute>("patch_flip", "patch_flip", true);
+
+  node.add_attr<BoolAttribute>("patch_rotate", "patch_rotate", true);
+
+  node.add_attr<BoolAttribute>("patch_transpose", "patch_transpose", true);
+
+  node.add_attr<FloatAttribute>("filter_width_ratio",
+                                "filter_width_ratio",
+                                0.5f,
+                                0.f,
+                                1.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"patch_width",
@@ -64,8 +74,9 @@ void compute_quilting_blend_node(BaseNode &node)
   {
     hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
-    int             ir = std::max(1,
-                      (int)(GET(node, "patch_width", FloatAttribute) * p_out->shape.x));
+    int ir = std::max(
+        1,
+        (int)(node.get_attr<FloatAttribute>("patch_width") * p_out->shape.x));
     hmap::Vec2<int> patch_base_shape = hmap::Vec2<int>(ir, ir);
 
     // --- work on a single array (i.e. not-tiled algo)
@@ -83,12 +94,12 @@ void compute_quilting_blend_node(BaseNode &node)
     hmap::Array out_array = hmap::quilting_blend(
         p_arrays,
         patch_base_shape,
-        GET(node, "overlap", FloatAttribute),
-        GET(node, "seed", SeedAttribute),
-        GET(node, "patch_flip", BoolAttribute),
-        GET(node, "patch_rotate", BoolAttribute),
-        GET(node, "patch_transpose", BoolAttribute),
-        GET(node, "filter_width_ratio", FloatAttribute));
+        node.get_attr<FloatAttribute>("overlap"),
+        node.get_attr<SeedAttribute>("seed"),
+        node.get_attr<BoolAttribute>("patch_flip"),
+        node.get_attr<BoolAttribute>("patch_rotate"),
+        node.get_attr<BoolAttribute>("patch_transpose"),
+        node.get_attr<FloatAttribute>("filter_width_ratio"));
 
     p_out->from_array_interp_nearest(out_array);
   }

@@ -24,11 +24,25 @@ void setup_cloud_lattice_node(BaseNode &node)
   // attribute(s)
   std::vector<float> default_value = {0.1f, 0.1f};
 
-  ADD_ATTR(node, IntAttribute, "npoints", 50, 1, INT_MAX);
-  ADD_ATTR(node, WaveNbAttribute, "stagger_ratio", default_value, 0.f, 1.f, true);
-  ADD_ATTR(node, WaveNbAttribute, "jitter_ratio", default_value, 0.f, 1.f, true);
-  ADD_ATTR(node, SeedAttribute, "seed");
-  ADD_ATTR(node, RangeAttribute, "remap");
+  node.add_attr<IntAttribute>("npoints", "npoints", 50, 1, INT_MAX);
+
+  node.add_attr<WaveNbAttribute>("stagger_ratio",
+                                 "stagger_ratio",
+                                 default_value,
+                                 0.f,
+                                 1.f,
+                                 true);
+
+  node.add_attr<WaveNbAttribute>("jitter_ratio",
+                                 "jitter_ratio",
+                                 default_value,
+                                 0.f,
+                                 1.f,
+                                 true);
+
+  node.add_attr<SeedAttribute>("seed", "seed");
+
+  node.add_attr<RangeAttribute>("remap", "remap");
 
   // attribute(s) order
   node.set_attr_ordered_key(
@@ -43,14 +57,14 @@ void compute_cloud_lattice_node(BaseNode &node)
 
   hmap::Cloud *p_out = node.get_value_ref<hmap::Cloud>("cloud");
 
-  *p_out = hmap::random_cloud_jittered(GET(node, "npoints", IntAttribute),
-                                       GET(node, "jitter_ratio", WaveNbAttribute),
-                                       GET(node, "stagger_ratio", WaveNbAttribute),
-                                       GET(node, "seed", SeedAttribute));
+  *p_out = hmap::random_cloud_jittered(node.get_attr<IntAttribute>("npoints"),
+                                       node.get_attr<WaveNbAttribute>("jitter_ratio"),
+                                       node.get_attr<WaveNbAttribute>("stagger_ratio"),
+                                       node.get_attr<SeedAttribute>("seed"));
 
-  if (GET_MEMBER(node, "remap", RangeAttribute, is_active))
-    p_out->remap_values(GET(node, "remap", RangeAttribute)[0],
-                        GET(node, "remap", RangeAttribute)[1]);
+  if (node.get_attr_ref<RangeAttribute>("remap")->get_is_active())
+    p_out->remap_values(node.get_attr<RangeAttribute>("remap")[0],
+                        node.get_attr<RangeAttribute>("remap")[1]);
 
   Q_EMIT node.compute_finished(node.get_id());
 }

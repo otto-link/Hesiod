@@ -21,11 +21,12 @@ void setup_recast_sag_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "vref", 0.5f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "k", 0.01f, 0.001f, 1.f);
+  node.add_attr<FloatAttribute>("vref", "vref", 0.5f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("k", "k", 0.01f, 0.001f, 1.f);
 }
 
 void compute_recast_sag_node(BaseNode &node)
@@ -49,8 +50,8 @@ void compute_recast_sag_node(BaseNode &node)
                     [&node](hmap::Array &z, hmap::Array *p_mask)
                     {
                       hmap::recast_sag(z,
-                                       GET(node, "vref", FloatAttribute),
-                                       GET(node, "k", FloatAttribute),
+                                       node.get_attr<FloatAttribute>("vref"),
+                                       node.get_attr<FloatAttribute>("k"),
                                        p_mask);
                     });
 

@@ -22,14 +22,16 @@ void setup_coastal_erosion_diffusion_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "elevation_in");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "water_depth_in");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "elevation", CONFIG);
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "water_depth", CONFIG);
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "water_mask", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "elevation", CONFIG(node));
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "water_depth", CONFIG(node));
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "water_mask", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "additional_depth", 0.05f, 0.f, 0.2f);
-  ADD_ATTR(node, IntAttribute, "iterations", 10, 0, INT_MAX);
-  ADD_ATTR(node, BoolAttribute, "distributed", true);
+  node.add_attr<FloatAttribute>("additional_depth", "additional_depth", 0.05f, 0.f, 0.2f);
+
+  node.add_attr<IntAttribute>("iterations", "iterations", 10, 0, INT_MAX);
+
+  node.add_attr<BoolAttribute>("distributed", "distributed", true);
 
   // attribute(s) order
   node.set_attr_ordered_key(
@@ -53,7 +55,8 @@ void compute_coastal_erosion_diffusion_node(BaseNode &node)
     hmap::Heightmap *p_depth_out = node.get_value_ref<hmap::Heightmap>("water_depth");
     hmap::Heightmap *p_mask = node.get_value_ref<hmap::Heightmap>("water_mask");
 
-    hmap::TransformMode transform_mode = GET(node, "distributed", BoolAttribute)
+    hmap::TransformMode transform_mode = node.get_attr<BoolAttribute>("distributed")
+
                                              ? node.get_config_ref()
                                                    ->hmap_transform_mode_cpu
                                              : hmap::TransformMode::SINGLE_ARRAY;
@@ -71,11 +74,12 @@ void compute_coastal_erosion_diffusion_node(BaseNode &node)
           *pa_z_out = *pa_z;
           *pa_depth_out = *pa_depth;
 
-          hmap::coastal_erosion_diffusion(*pa_z_out,
-                                          *pa_depth_out,
-                                          GET(node, "additional_depth", FloatAttribute),
-                                          GET(node, "iterations", IntAttribute),
-                                          pa_mask);
+          hmap::coastal_erosion_diffusion(
+              *pa_z_out,
+              *pa_depth_out,
+              node.get_attr<FloatAttribute>("additional_depth"),
+              node.get_attr<IntAttribute>("iterations"),
+              pa_mask);
         },
         transform_mode);
 

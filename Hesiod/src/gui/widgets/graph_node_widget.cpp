@@ -70,7 +70,7 @@ void GraphNodeWidget::add_import_texture_nodes(
     {
       // p_node->json_from(json_node["settings"]);
       // p_node->set_id(node_id);
-      auto *p_attr = p_node->get_attr_ref()
+      auto *p_attr = p_node->get_attributes_ref()
                          ->at("fname")
                          ->get_ref<attr::FilenameAttribute>();
       p_attr->set_value(fname);
@@ -197,7 +197,7 @@ attr::AttributesWidget *GraphNodeWidget::create_node_attributes_widget(
   std::string window_title = "";
 
   attr::AttributesWidget *attributes_widget = new attr::AttributesWidget(
-      p_node->get_attr_ref(),
+      p_node->get_attributes_ref(),
       p_node->get_attr_ordered_key_ref(),
       window_title,
       add_save_reset_state_buttons,

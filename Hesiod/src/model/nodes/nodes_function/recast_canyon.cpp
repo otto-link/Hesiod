@@ -22,11 +22,12 @@ void setup_recast_canyon_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "noise");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "vcut", 0.5f, -1.f, 2.f);
-  ADD_ATTR(node, FloatAttribute, "gamma", 4.f, 0.01f, 10.f);
+  node.add_attr<FloatAttribute>("vcut", "vcut", 0.5f, -1.f, 2.f);
+
+  node.add_attr<FloatAttribute>("gamma", "gamma", 4.f, 0.01f, 10.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"vcut", "gamma"});
@@ -55,9 +56,9 @@ void compute_recast_canyon_node(BaseNode &node)
                     [&node](hmap::Array &z, hmap::Array *p_noise, hmap::Array *p_mask)
                     {
                       hmap::recast_canyon(z,
-                                          GET(node, "vcut", FloatAttribute),
+                                          node.get_attr<FloatAttribute>("vcut"),
                                           p_mask,
-                                          GET(node, "gamma", FloatAttribute),
+                                          node.get_attr<FloatAttribute>("gamma"),
                                           p_noise);
                     });
   }

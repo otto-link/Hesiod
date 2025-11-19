@@ -22,10 +22,13 @@ void setup_cloud_random_distance_node(BaseNode &node)
   node.add_port<hmap::Cloud>(gnode::PortType::OUT, "cloud");
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "distance_min", 0.05f, 0.001f, 0.2f);
-  ADD_ATTR(node, FloatAttribute, "distance_max", 0.1f, 0.001f, 1.f);
-  ADD_ATTR(node, SeedAttribute, "seed");
-  ADD_ATTR(node, RangeAttribute, "remap");
+  node.add_attr<FloatAttribute>("distance_min", "distance_min", 0.05f, 0.001f, 0.2f);
+
+  node.add_attr<FloatAttribute>("distance_max", "distance_max", 0.1f, 0.001f, 1.f);
+
+  node.add_attr<SeedAttribute>("seed", "seed");
+
+  node.add_attr<RangeAttribute>("remap", "remap");
 
   // attribute(s) order
   node.set_attr_ordered_key(
@@ -46,20 +49,20 @@ void compute_cloud_random_distance_node(BaseNode &node)
     // TODO distribute
     hmap::Array density_array = p_density->to_array();
 
-    *p_out = hmap::random_cloud_distance(GET(node, "distance_min", FloatAttribute),
-                                         GET(node, "distance_max", FloatAttribute),
+    *p_out = hmap::random_cloud_distance(node.get_attr<FloatAttribute>("distance_min"),
+                                         node.get_attr<FloatAttribute>("distance_max"),
                                          density_array,
-                                         GET(node, "seed", SeedAttribute));
+                                         node.get_attr<SeedAttribute>("seed"));
   }
   else
   {
-    *p_out = hmap::random_cloud_distance(GET(node, "distance_min", FloatAttribute),
-                                         GET(node, "seed", SeedAttribute));
+    *p_out = hmap::random_cloud_distance(node.get_attr<FloatAttribute>("distance_min"),
+                                         node.get_attr<SeedAttribute>("seed"));
   }
 
-  if (GET_MEMBER(node, "remap", RangeAttribute, is_active))
-    p_out->remap_values(GET(node, "remap", RangeAttribute)[0],
-                        GET(node, "remap", RangeAttribute)[1]);
+  if (node.get_attr_ref<RangeAttribute>("remap")->get_is_active())
+    p_out->remap_values(node.get_attr<RangeAttribute>("remap")[0],
+                        node.get_attr<RangeAttribute>("remap")[1]);
 
   Q_EMIT node.compute_finished(node.get_id());
 }

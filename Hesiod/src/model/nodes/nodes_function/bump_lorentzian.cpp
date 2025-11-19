@@ -25,12 +25,14 @@ void setup_bump_lorentzian_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "control");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "envelope");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "width_factor", 0.2f, 0.01f, 2.f);
-  ADD_ATTR(node, FloatAttribute, "radius", 0.7072f, 0.01f, FLT_MAX);
-  ADD_ATTR(node, Vec2FloatAttribute, "center");
+  node.add_attr<FloatAttribute>("width_factor", "width_factor", 0.2f, 0.01f, 2.f);
+
+  node.add_attr<FloatAttribute>("radius", "radius", 0.7072f, 0.01f, FLT_MAX);
+
+  node.add_attr<Vec2FloatAttribute>("center", "center");
 
   // attribute(s) order
   node.set_attr_ordered_key({"width_factor", "radius", "center"});
@@ -64,12 +66,12 @@ void compute_bump_lorentzian_node(BaseNode &node)
         hmap::Array *pa_dy = p_arrays[3];
 
         *pa_out = hmap::bump_lorentzian(shape,
-                                        GET(node, "width_factor", FloatAttribute),
-                                        GET(node, "radius", FloatAttribute),
+                                        node.get_attr<FloatAttribute>("width_factor"),
+                                        node.get_attr<FloatAttribute>("radius"),
                                         pa_ctrl,
                                         pa_dx,
                                         pa_dy,
-                                        GET(node, "center", Vec2FloatAttribute),
+                                        node.get_attr<Vec2FloatAttribute>("center"),
                                         bbox);
       },
       node.get_config_ref()->hmap_transform_mode_cpu);

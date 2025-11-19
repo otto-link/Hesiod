@@ -25,7 +25,7 @@ void setup_cloud_node(BaseNode &node)
   node.add_port<hmap::Cloud>(gnode::PortType::OUT, "cloud");
 
   // attribute(s)
-  ADD_ATTR(node, CloudAttribute, "cloud");
+  node.add_attr<CloudAttribute>("cloud", "cloud");
 
   setup_background_image_for_cloud_attribute(node, "cloud", "background");
 }
@@ -37,7 +37,7 @@ void compute_cloud_node(BaseNode &node)
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   hmap::Cloud *p_out = node.get_value_ref<hmap::Cloud>("cloud");
-  *p_out = GET(node, "cloud", CloudAttribute);
+  *p_out = node.get_attr<CloudAttribute>("cloud");
 
   Q_EMIT node.compute_finished(node.get_id());
 }

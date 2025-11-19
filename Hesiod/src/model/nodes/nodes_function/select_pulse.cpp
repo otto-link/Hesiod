@@ -20,11 +20,12 @@ void setup_select_pulse_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "value", 0.5f, -1.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "sigma", 0.1f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>("value", "value", 0.5f, -1.f, 1.f);
+
+  node.add_attr<FloatAttribute>("sigma", "sigma", 0.1f, 0.f, 1.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"value", "sigma"});
@@ -49,8 +50,8 @@ void compute_select_pulse_node(BaseNode &node)
                     [&node](hmap::Array &array)
                     {
                       return select_pulse(array,
-                                          GET(node, "value", FloatAttribute),
-                                          GET(node, "sigma", FloatAttribute));
+                                          node.get_attr<FloatAttribute>("value"),
+                                          node.get_attr<FloatAttribute>("sigma"));
                     });
 
     // post-process

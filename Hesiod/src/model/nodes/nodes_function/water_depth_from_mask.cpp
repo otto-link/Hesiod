@@ -22,13 +22,27 @@ void setup_water_depth_from_mask_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "elevation");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "water_mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "water_depth", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "water_depth", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "mask_threshold", 0.01f, 0.f, 0.1f, "{:.3f}");
-  ADD_ATTR(node, FloatAttribute, "tolerance", 1e-5f, 1e-6f, 1e-2f, "{:.3e}", true);
-  ADD_ATTR(node, IntAttribute, "iterations", 500, 1, INT_MAX);
-  ADD_ATTR(node, FloatAttribute, "omega", 1.8f, 1e-3f, 1.9f);
+  node.add_attr<FloatAttribute>("mask_threshold",
+                                "mask_threshold",
+                                0.01f,
+                                0.f,
+                                0.1f,
+                                "{:.3f}");
+
+  node.add_attr<FloatAttribute>("tolerance",
+                                "tolerance",
+                                1e-5f,
+                                1e-6f,
+                                1e-2f,
+                                "{:.3e}",
+                                true);
+
+  node.add_attr<IntAttribute>("iterations", "iterations", 500, 1, INT_MAX);
+
+  node.add_attr<FloatAttribute>("omega", "omega", 1.8f, 1e-3f, 1.9f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"mask_threshold", "tolerance", "iterations", "omega"});
@@ -60,10 +74,10 @@ void compute_water_depth_from_mask_node(BaseNode &node)
           *pa_depth = hmap::water_depth_from_mask(
               *pa_z,
               *pa_mask,
-              GET(node, "mask_threshold", FloatAttribute),
-              GET(node, "iterations", IntAttribute),
-              GET(node, "tolerance", FloatAttribute),
-              GET(node, "omega", FloatAttribute));
+              node.get_attr<FloatAttribute>("mask_threshold"),
+              node.get_attr<IntAttribute>("iterations"),
+              node.get_attr<FloatAttribute>("tolerance"),
+              node.get_attr<FloatAttribute>("omega"));
         },
         node.get_config_ref()->hmap_transform_mode_cpu);
 

@@ -22,14 +22,15 @@ void setup_curvature_mean_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
   std::vector<std::string> choices = {"positive", "negative", "both"};
-  ADD_ATTR(node, ChoiceAttribute, "values_kept", choices);
+  node.add_attr<ChoiceAttribute>("values_kept", "values_kept", choices);
 
-  ADD_ATTR(node, BoolAttribute, "clamp_max", false);
-  ADD_ATTR(node, FloatAttribute, "vc_max", 1.f, 0.f, FLT_MAX, "{:.4f}");
+  node.add_attr<BoolAttribute>("clamp_max", "clamp_max", false);
+
+  node.add_attr<FloatAttribute>("vc_max", "vc_max", 1.f, 0.f, FLT_MAX, "{:.4f}");
 
   // attribute(s) order
   node.set_attr_ordered_key({"values_kept", "clamp_max", "vc_max"});
@@ -62,7 +63,7 @@ void compute_curvature_mean_node(BaseNode &node)
           *pa_out = hmap::curvature_mean(*pa_in) * nx;
 
           // determine curvature sign handling
-          const std::string choice = GET(node, "values_kept", ChoiceAttribute);
+          const std::string choice = node.get_attr<ChoiceAttribute>("values_kept");
           const bool        keep_both = (choice == "both");
 
           // if only one curvature sign is kept
@@ -75,9 +76,9 @@ void compute_curvature_mean_node(BaseNode &node)
           }
 
           // clamp output range
-          const float vc_max = GET(node, "vc_max", FloatAttribute);
+          const float vc_max = node.get_attr<FloatAttribute>("vc_max");
 
-          if (GET(node, "clamp_max", BoolAttribute) && !keep_both)
+          if (node.get_attr<BoolAttribute>("clamp_max") && !keep_both)
             hmap::clamp_max(*pa_out, vc_max);
           else
             hmap::clamp(*pa_out, -vc_max, vc_max);

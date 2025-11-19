@@ -27,18 +27,16 @@ void setup_export_heightmap_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
 
   // attribute(s)
-  ADD_ATTR(node,
-           FilenameAttribute,
-           "fname",
-           std::filesystem::path("hmap.png"),
-           "*",
-           true);
-  ADD_ATTR(node,
-           EnumAttribute,
-           "format",
-           enum_mappings.heightmap_export_format_map,
-           "png (16 bit)");
-  ADD_ATTR(node, BoolAttribute, "auto_export", false);
+  node.add_attr<FilenameAttribute>("fname",
+                                   "fname",
+                                   std::filesystem::path("hmap.png"),
+                                   "*",
+                                   true);
+  node.add_attr<EnumAttribute>("format",
+                               "format",
+                               enum_mappings.heightmap_export_format_map,
+                               "png (16 bit)");
+  node.add_attr<BoolAttribute>("auto_export", "auto_export", false);
 
   // attribute(s) order
   node.set_attr_ordered_key({"fname", "format", "auto_export"});
@@ -55,11 +53,11 @@ void compute_export_heightmap_node(BaseNode &node)
 
   hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
 
-  if (p_in && GET(node, "auto_export", BoolAttribute))
+  if (p_in && node.get_attr<BoolAttribute>("auto_export"))
   {
-    std::filesystem::path fname = GET(node, "fname", FilenameAttribute);
+    std::filesystem::path fname = node.get_attr<FilenameAttribute>("fname");
 
-    switch (GET(node, "format", EnumAttribute))
+    switch (node.get_attr<EnumAttribute>("format"))
     {
     case ExportFormat::PNG8BIT:
     {

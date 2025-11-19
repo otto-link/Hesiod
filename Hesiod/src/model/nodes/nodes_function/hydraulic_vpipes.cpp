@@ -23,18 +23,24 @@ void setup_hydraulic_vpipes_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "bedrock");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "moisture");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "erosion", CONFIG);
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "deposition", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "erosion", CONFIG(node));
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "deposition", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, IntAttribute, "iterations", 50, 1, INT_MAX);
-  ADD_ATTR(node, FloatAttribute, "water_height", 0.01f, 0.01f, 0.5f);
-  ADD_ATTR(node, FloatAttribute, "c_capacity", 0.1f, 0.01f, 0.5f);
-  ADD_ATTR(node, FloatAttribute, "c_erosion", 0.01f, 0.f, 0.5f);
-  ADD_ATTR(node, FloatAttribute, "c_deposition", 0.01f, 0.f, 0.5f);
-  ADD_ATTR(node, FloatAttribute, "rain_rate", 0.f, 0.f, 0.1f);
-  ADD_ATTR(node, FloatAttribute, "evap_rate", 0.01f, 0.01f, 0.1f);
+  node.add_attr<IntAttribute>("iterations", "iterations", 50, 1, INT_MAX);
+
+  node.add_attr<FloatAttribute>("water_height", "water_height", 0.01f, 0.01f, 0.5f);
+
+  node.add_attr<FloatAttribute>("c_capacity", "c_capacity", 0.1f, 0.01f, 0.5f);
+
+  node.add_attr<FloatAttribute>("c_erosion", "c_erosion", 0.01f, 0.f, 0.5f);
+
+  node.add_attr<FloatAttribute>("c_deposition", "c_deposition", 0.01f, 0.f, 0.5f);
+
+  node.add_attr<FloatAttribute>("rain_rate", "rain_rate", 0.f, 0.f, 0.1f);
+
+  node.add_attr<FloatAttribute>("evap_rate", "evap_rate", 0.01f, 0.01f, 0.1f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"iterations",
@@ -82,17 +88,17 @@ void compute_hydraulic_vpipes_node(BaseNode &node)
                     {
                       hydraulic_vpipes(h_out,
                                        p_mask_array,
-                                       GET(node, "iterations", IntAttribute),
+                                       node.get_attr<IntAttribute>("iterations"),
                                        p_bedrock_array,
                                        p_moisture_map_array,
                                        p_erosion_map_array,
                                        p_deposition_map_array,
-                                       GET(node, "water_height", FloatAttribute),
-                                       GET(node, "c_capacity", FloatAttribute),
-                                       GET(node, "c_erosion", FloatAttribute),
-                                       GET(node, "c_deposition", FloatAttribute),
-                                       GET(node, "rain_rate", FloatAttribute),
-                                       GET(node, "evap_rate", FloatAttribute));
+                                       node.get_attr<FloatAttribute>("water_height"),
+                                       node.get_attr<FloatAttribute>("c_capacity"),
+                                       node.get_attr<FloatAttribute>("c_erosion"),
+                                       node.get_attr<FloatAttribute>("c_deposition"),
+                                       node.get_attr<FloatAttribute>("rain_rate"),
+                                       node.get_attr<FloatAttribute>("evap_rate"));
                     });
 
     p_out->smooth_overlap_buffers();

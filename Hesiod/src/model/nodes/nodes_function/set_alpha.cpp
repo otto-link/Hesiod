@@ -23,12 +23,14 @@ void setup_set_alpha_node(BaseNode &node)
   node.add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture in");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "alpha");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "noise");
-  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture out", CONFIG);
+  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture out", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "alpha", 1.f, 0.f, 1.f);
-  ADD_ATTR(node, BoolAttribute, "reverse", false);
-  ADD_ATTR(node, BoolAttribute, "clamp", true);
+  node.add_attr<FloatAttribute>("alpha", "alpha", 1.f, 0.f, 1.f);
+
+  node.add_attr<BoolAttribute>("reverse", "reverse", false);
+
+  node.add_attr<BoolAttribute>("clamp", "clamp", true);
 
   // attribute(s) order
   node.set_attr_ordered_key({"alpha", "reverse", "clamp"});
@@ -59,19 +61,19 @@ void compute_set_alpha_node(BaseNode &node)
                         *p_noise,
                         [](hmap::Array &x, hmap::Array &y) { x += y; });
 
-      if (GET(node, "clamp", BoolAttribute))
+      if (node.get_attr<BoolAttribute>("clamp"))
         hmap::transform(alpha_copy, [](hmap::Array &x) { hmap::clamp(x, 0.f, 1.f); });
 
-      if (GET(node, "reverse", BoolAttribute))
+      if (node.get_attr<BoolAttribute>("reverse"))
         alpha_copy.inverse();
 
       p_out->set_alpha(alpha_copy);
     }
     else
     {
-      float alpha = GET(node, "alpha", FloatAttribute);
+      float alpha = node.get_attr<FloatAttribute>("alpha");
 
-      if (GET(node, "reverse", BoolAttribute))
+      if (node.get_attr<BoolAttribute>("reverse"))
         alpha = 1.f - alpha;
 
       p_out->set_alpha(alpha);

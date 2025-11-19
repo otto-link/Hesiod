@@ -22,16 +22,16 @@ void setup_distance_transform_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node,
-           EnumAttribute,
-           "transform_type",
-           enum_mappings.distance_transform_type_map,
-           "Approx. (fast)");
-  ADD_ATTR(node, BoolAttribute, "reverse_input", false);
-  ADD_ATTR(node, FloatAttribute, "threshold", 0.f, -1.f, 2.f);
+  node.add_attr<EnumAttribute>("transform_type",
+                               "transform_type",
+                               enum_mappings.distance_transform_type_map,
+                               "Approx. (fast)");
+  node.add_attr<BoolAttribute>("reverse_input", "reverse_input", false);
+
+  node.add_attr<FloatAttribute>("threshold", "threshold", 0.f, -1.f, 2.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Main Parameters",
@@ -66,13 +66,13 @@ void compute_distance_transform_node(BaseNode &node)
           hmap::Array *pa_in = p_arrays[1];
 
           *pa_out = *pa_in;
-          make_binary(*pa_out, GET(node, "threshold", FloatAttribute));
+          make_binary(*pa_out, node.get_attr<FloatAttribute>("threshold"));
 
-          if (GET(node, "reverse_input", BoolAttribute))
+          if (node.get_attr<BoolAttribute>("reverse_input"))
             *pa_out = 1.f - *pa_out;
 
           auto type = static_cast<hmap::DistanceTransformType>(
-              GET(node, "transform_type", EnumAttribute));
+              node.get_attr<EnumAttribute>("transform_type"));
 
           switch (type)
           {

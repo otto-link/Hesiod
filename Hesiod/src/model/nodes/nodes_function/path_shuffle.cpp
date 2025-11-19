@@ -23,10 +23,13 @@ void setup_path_shuffle_node(BaseNode &node)
   node.add_port<hmap::Path>(gnode::PortType::OUT, "output");
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "dx", 0.f, -0.5f, 0.5f);
-  ADD_ATTR(node, FloatAttribute, "dy", 0.f, -0.5f, 0.5f);
-  ADD_ATTR(node, FloatAttribute, "dv", 0.f, -0.5f, 0.5f);
-  ADD_ATTR(node, SeedAttribute, "seed");
+  node.add_attr<FloatAttribute>("dx", "dx", 0.f, -0.5f, 0.5f);
+
+  node.add_attr<FloatAttribute>("dy", "dy", 0.f, -0.5f, 0.5f);
+
+  node.add_attr<FloatAttribute>("dv", "dv", 0.f, -0.5f, 0.5f);
+
+  node.add_attr<SeedAttribute>("seed", "seed");
 
   // attribute(s) order
   node.set_attr_ordered_key({"dx", "dy", "dv", "seed"});
@@ -48,10 +51,10 @@ void compute_path_shuffle_node(BaseNode &node)
     *p_out = *p_in;
 
     if (p_in->get_npoints() > 0)
-      p_out->shuffle(GET(node, "dx", FloatAttribute),
-                     GET(node, "dy", FloatAttribute),
-                     GET(node, "seed", SeedAttribute),
-                     GET(node, "dv", FloatAttribute));
+      p_out->shuffle(node.get_attr<FloatAttribute>("dx"),
+                     node.get_attr<FloatAttribute>("dy"),
+                     node.get_attr<SeedAttribute>("seed"),
+                     node.get_attr<FloatAttribute>("dv"));
   }
 
   Q_EMIT node.compute_finished(node.get_id());

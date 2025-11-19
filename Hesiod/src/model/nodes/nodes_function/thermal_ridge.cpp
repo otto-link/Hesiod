@@ -23,14 +23,19 @@ void setup_thermal_ridge_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "deposition", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "deposition", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "talus_global", 2.f, 0.f, FLT_MAX);
-  ADD_ATTR(node, IntAttribute, "iterations", 500, 1, INT_MAX);
-  ADD_ATTR(node, BoolAttribute, "scale_talus_with_elevation", false);
-  ADD_ATTR(node, RangeAttribute, "remap", false);
+  node.add_attr<FloatAttribute>("talus_global", "talus_global", 2.f, 0.f, FLT_MAX);
+
+  node.add_attr<IntAttribute>("iterations", "iterations", 500, 1, INT_MAX);
+
+  node.add_attr<BoolAttribute>("scale_talus_with_elevation",
+                               "scale_talus_with_elevation",
+                               false);
+
+  node.add_attr<RangeAttribute>("remap", "remap", false);
 
   // attribute(s) order
   node.set_attr_ordered_key({"talus_global",
@@ -57,11 +62,11 @@ void compute_thermal_ridge_node(BaseNode &node)
     // copy the input heightmap
     *p_out = *p_in;
 
-    float talus = GET(node, "talus_global", FloatAttribute) / (float)p_out->shape.x;
+    float talus = node.get_attr<FloatAttribute>("talus_global") / (float)p_out->shape.x;
 
-    hmap::Heightmap talus_map = hmap::Heightmap(CONFIG, talus);
+    hmap::Heightmap talus_map = hmap::Heightmap(CONFIG(node), talus);
 
-    if (GET(node, "scale_talus_with_elevation", BoolAttribute))
+    if (node.get_attr<BoolAttribute>("scale_talus_with_elevation"))
     {
       talus_map = *p_in;
       talus_map.remap(talus / 10.f, talus);
@@ -79,7 +84,7 @@ void compute_thermal_ridge_node(BaseNode &node)
           hmap::gpu::thermal_ridge(*pa_out,
                                    pa_mask,
                                    *pa_talus_map,
-                                   GET(node, "iterations", IntAttribute),
+                                   node.get_attr<IntAttribute>("iterations"),
                                    pa_deposition_map);
         },
         node.get_config_ref()->hmap_transform_mode_gpu);
@@ -98,8 +103,8 @@ void compute_thermal_ridge_node(BaseNode &node)
                            false, // saturate
                            {0.f, 0.f},
                            0.f,
-                           GET_MEMBER(node, "remap", RangeAttribute, is_active),
-                           GET(node, "remap", RangeAttribute));
+                           node.get_attr_ref<RangeAttribute>("remap")->get_is_active(),
+                           node.get_attr<RangeAttribute>("remap"));
   }
 
   Q_EMIT node.compute_finished(node.get_id());

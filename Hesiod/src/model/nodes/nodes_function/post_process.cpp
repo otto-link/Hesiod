@@ -22,7 +22,7 @@ void setup_post_process_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "in");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "out", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "out", CONFIG(node));
 
   // attribute(s)
 

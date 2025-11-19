@@ -23,13 +23,16 @@ void setup_terrace_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "noise");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, IntAttribute, "nlevels", 4, 1, 32);
-  ADD_ATTR(node, FloatAttribute, "gain", 0.8f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "noise_ratio", 0.1f, 0.f, 0.5f);
-  ADD_ATTR(node, SeedAttribute, "seed");
+  node.add_attr<IntAttribute>("nlevels", "nlevels", 4, 1, 32);
+
+  node.add_attr<FloatAttribute>("gain", "gain", 0.8f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("noise_ratio", "noise_ratio", 0.1f, 0.f, 0.5f);
+
+  node.add_attr<SeedAttribute>("seed", "seed");
 
   // attribute(s) order
   node.set_attr_ordered_key({"nlevels", "gain", "noise_ratio", "seed"});
@@ -69,11 +72,11 @@ void compute_terrace_node(BaseNode &node)
           hmap::Array *pa_mask = p_arrays[2];
 
           hmap::terrace(*pa_out,
-                        GET(node, "seed", SeedAttribute),
-                        GET(node, "nlevels", IntAttribute),
+                        node.get_attr<SeedAttribute>("seed"),
+                        node.get_attr<IntAttribute>("nlevels"),
                         pa_mask,
-                        GET(node, "gain", FloatAttribute),
-                        GET(node, "noise_ratio", FloatAttribute),
+                        node.get_attr<FloatAttribute>("gain"),
+                        node.get_attr<FloatAttribute>("noise_ratio"),
                         pa_noise,
                         hmin,
                         hmax);

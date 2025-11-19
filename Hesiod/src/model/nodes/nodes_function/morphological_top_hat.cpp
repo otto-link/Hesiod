@@ -21,11 +21,12 @@ void setup_morphological_top_hat_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "radius", 0.01f, 0.f, 0.05f);
-  ADD_ATTR(node, BoolAttribute, "top_hat", "top_hat", "black_hat", true);
+  node.add_attr<FloatAttribute>("radius", "radius", 0.01f, 0.f, 0.05f);
+
+  node.add_attr<BoolAttribute>("top_hat", "top_hat", "top_hat", "black_hat", true);
 
   // attribute(s) order
   node.set_attr_ordered_key(
@@ -46,7 +47,7 @@ void compute_morphological_top_hat_node(BaseNode &node)
   {
     hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
-    int ir = std::max(1, (int)(GET(node, "radius", FloatAttribute) * p_out->shape.x));
+    int ir = std::max(1, (int)(node.get_attr<FloatAttribute>("radius") * p_out->shape.x));
 
     hmap::transform(
         {p_out, p_in},
@@ -55,7 +56,7 @@ void compute_morphological_top_hat_node(BaseNode &node)
           hmap::Array *pa_out = p_arrays[0];
           hmap::Array *pa_in = p_arrays[1];
 
-          if (GET(node, "top_hat", BoolAttribute))
+          if (node.get_attr<BoolAttribute>("top_hat"))
           {
             *pa_out = hmap::gpu::morphological_top_hat(*pa_in, ir);
           }

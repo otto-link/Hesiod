@@ -21,7 +21,7 @@ void BroadcastNode::generate_broadcast_tag()
 
   // set the attribute value accordingly so that the tag is visible in the GUI for the
   // user
-  this->get_attr_ref()->at("tag")->get_ref<attr::StringAttribute>()->set_value(
+  this->get_attributes_ref()->at("tag")->get_ref<attr::StringAttribute>()->set_value(
       this->broadcast_tag);
 }
 

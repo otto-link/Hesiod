@@ -107,11 +107,11 @@ void post_process_heightmap(BaseNode &node, hmap::Heightmap &h, hmap::Heightmap 
     // mix
     float k = 0.1f; // TODO hardcoded?
     int   ir = 0;
-    int   method = GET(node, "post_mix_method", EnumAttribute);
+    int   method = node.get_attr<EnumAttribute>("post_mix_method");
     blend_heightmaps(h, *p_in, h, static_cast<BlendingMethod>(method), k, ir);
 
     // lerp between input and output
-    float t = GET(node, "post_mix", FloatAttribute);
+    float t = node.get_attr<FloatAttribute>("post_mix");
 
     hmap::transform(
         {&h, p_in},
@@ -126,11 +126,11 @@ void post_process_heightmap(BaseNode &node, hmap::Heightmap &h, hmap::Heightmap 
   }
 
   // inverse
-  if (GET(node, "post_inverse", BoolAttribute))
+  if (node.get_attr<BoolAttribute>("post_inverse"))
     h.inverse();
 
   // saturate
-  float post_gain = GET(node, "post_gain", FloatAttribute);
+  float post_gain = node.get_attr<FloatAttribute>("post_gain");
 
   if (post_gain != 1.f)
   {
@@ -151,7 +151,8 @@ void post_process_heightmap(BaseNode &node, hmap::Heightmap &h, hmap::Heightmap 
   }
 
   // smoothing
-  const int ir = (int)(GET(node, "post_smoothing_radius", FloatAttribute) * h.shape.x);
+  const int ir = (int)(node.get_attr<FloatAttribute>("post_smoothing_radius") *
+                       h.shape.x);
 
   if (ir)
   {
@@ -168,12 +169,12 @@ void post_process_heightmap(BaseNode &node, hmap::Heightmap &h, hmap::Heightmap 
   }
 
   // remap
-  if (GET_MEMBER(node, "post_remap", RangeAttribute, is_active))
-    h.remap(GET(node, "post_remap", RangeAttribute)[0],
-            GET(node, "post_remap", RangeAttribute)[1]);
+  if (node.get_attr_ref<RangeAttribute>("post_remap")->get_is_active())
+    h.remap(node.get_attr<RangeAttribute>("post_remap")[0],
+            node.get_attr<RangeAttribute>("post_remap")[1]);
 
   // saturate
-  if (GET_MEMBER(node, "post_saturate", RangeAttribute, is_active))
+  if (node.get_attr_ref<RangeAttribute>("post_saturate")->get_is_active())
   {
     float hmin = h.min();
     float hmax = h.max();
@@ -187,8 +188,8 @@ void post_process_heightmap(BaseNode &node, hmap::Heightmap &h, hmap::Heightmap 
           float k = 0.1f; // TODO hardcoded?
 
           hmap::saturate(*pa_out,
-                         GET(node, "post_saturate", RangeAttribute)[0],
-                         GET(node, "post_saturate", RangeAttribute)[1],
+                         node.get_attr<RangeAttribute>("post_saturate")[0],
+                         node.get_attr<RangeAttribute>("post_saturate")[1],
                          hmin,
                          hmax,
                          k);

@@ -22,20 +22,33 @@ void setup_flow_stream_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   node.add_port<hmap::Cloud>(gnode::PortType::IN, "sources");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "river_mask", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "river_mask", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "elevation_ratio", 0.5f, 0.f, 0.95f);
-  ADD_ATTR(node, FloatAttribute, "distance_exponent", 2.f, 0.1f, 4.f);
-  ADD_ATTR(node, FloatAttribute, "upward_penalization", 100.f, 1.f, FLT_MAX);
-  ADD_ATTR(node, FloatAttribute, "riverbank_slope", 1.f, 0.f, 16.f);
-  ADD_ATTR(node, FloatAttribute, "river_radius", 0.001f, 0.001f, 0.1f);
-  ADD_ATTR(node, FloatAttribute, "depth", 0.01f, 0.f, 0.2f);
-  ADD_ATTR(node, FloatAttribute, "merging_radius", 0.001f, 0.f, 0.1f);
-  ADD_ATTR(node, FloatAttribute, "riverbed_slope", 0.01f, 0.f, 0.1f);
-  ADD_ATTR(node, FloatAttribute, "noise_ratio", 0.9f, 0.f, 1.f);
-  ADD_ATTR(node, SeedAttribute, "seed");
+  node.add_attr<FloatAttribute>("elevation_ratio", "elevation_ratio", 0.5f, 0.f, 0.95f);
+
+  node.add_attr<FloatAttribute>("distance_exponent", "distance_exponent", 2.f, 0.1f, 4.f);
+
+  node.add_attr<FloatAttribute>("upward_penalization",
+                                "upward_penalization",
+                                100.f,
+                                1.f,
+                                FLT_MAX);
+
+  node.add_attr<FloatAttribute>("riverbank_slope", "riverbank_slope", 1.f, 0.f, 16.f);
+
+  node.add_attr<FloatAttribute>("river_radius", "river_radius", 0.001f, 0.001f, 0.1f);
+
+  node.add_attr<FloatAttribute>("depth", "depth", 0.01f, 0.f, 0.2f);
+
+  node.add_attr<FloatAttribute>("merging_radius", "merging_radius", 0.001f, 0.f, 0.1f);
+
+  node.add_attr<FloatAttribute>("riverbed_slope", "riverbed_slope", 0.01f, 0.f, 0.1f);
+
+  node.add_attr<FloatAttribute>("noise_ratio", "noise_ratio", 0.9f, 0.f, 1.f);
+
+  node.add_attr<SeedAttribute>("seed", "seed");
 
   // attribute(s) order
   node.set_attr_ordered_key({"elevation_ratio",
@@ -89,29 +102,31 @@ void compute_flow_stream_node(BaseNode &node)
             hmap::Path path = hmap::flow_stream(
                 *pa_out,
                 ij_start,
-                GET(node, "elevation_ratio", FloatAttribute),
-                GET(node, "distance_exponent", FloatAttribute),
-                GET(node, "upward_penalization", FloatAttribute));
+                node.get_attr<FloatAttribute>("elevation_ratio"),
+                node.get_attr<FloatAttribute>("distance_exponent"),
+                node.get_attr<FloatAttribute>("upward_penalization"));
 
             path_list.push_back(path);
           }
 
           // dig the rivers
-          int merging_ir = int(GET(node, "merging_radius", FloatAttribute) *
+          int merging_ir = int(node.get_attr<FloatAttribute>("merging_radius") *
                                (shape.x - 1.f));
           merging_ir = std::max(1, merging_ir);
 
-          int river_ir = int(GET(node, "river_radius", FloatAttribute) * (shape.x - 1.f));
+          int river_ir = int(node.get_attr<FloatAttribute>("river_radius") *
+                             (shape.x - 1.f));
 
           hmap::dig_river(*pa_out,
                           path_list,
-                          GET(node, "riverbank_slope", FloatAttribute) / (shape.x - 1.f),
+                          node.get_attr<FloatAttribute>("riverbank_slope") /
+                              (shape.x - 1.f),
                           river_ir,
                           merging_ir,
-                          GET(node, "depth", FloatAttribute),
-                          GET(node, "riverbed_slope", FloatAttribute),
-                          GET(node, "noise_ratio", FloatAttribute),
-                          GET(node, "seed", SeedAttribute),
+                          node.get_attr<FloatAttribute>("depth"),
+                          node.get_attr<FloatAttribute>("riverbed_slope"),
+                          node.get_attr<FloatAttribute>("noise_ratio"),
+                          node.get_attr<SeedAttribute>("seed"),
                           pa_mask);
         },
         hmap::TransformMode::SINGLE_ARRAY);

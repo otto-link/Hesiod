@@ -22,16 +22,21 @@ void setup_kmeans_clustering2_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "feature 1");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "feature 2");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
   node.add_port<std::vector<hmap::Heightmap>>(gnode::PortType::OUT, "scoring");
 
   // attribute(s)
-  ADD_ATTR(node, SeedAttribute, "seed");
-  ADD_ATTR(node, IntAttribute, "nclusters", 4, 1, 16);
-  ADD_ATTR(node, FloatAttribute, "weights.x", 1.f, 0.01f, 2.f);
-  ADD_ATTR(node, FloatAttribute, "weights.y", 1.f, 0.01f, 2.f);
-  ADD_ATTR(node, BoolAttribute, "normalize_inputs", true);
-  ADD_ATTR(node, BoolAttribute, "compute_scoring", true);
+  node.add_attr<SeedAttribute>("seed", "seed");
+
+  node.add_attr<IntAttribute>("nclusters", "nclusters", 4, 1, 16);
+
+  node.add_attr<FloatAttribute>("weights.x", "weights.x", 1.f, 0.01f, 2.f);
+
+  node.add_attr<FloatAttribute>("weights.y", "weights.y", 1.f, 0.01f, 2.f);
+
+  node.add_attr<BoolAttribute>("normalize_inputs", "normalize_inputs", true);
+
+  node.add_attr<BoolAttribute>("compute_scoring", "compute_scoring", true);
 
   // attribute(s) order
   node.set_attr_ordered_key({"seed",
@@ -69,43 +74,43 @@ void compute_kmeans_clustering2_node(BaseNode &node)
       hmap::Array a1 = p_in1->to_array(p_out->shape);
       hmap::Array a2 = p_in2->to_array(p_out->shape);
 
-      if (GET(node, "normalize_inputs", BoolAttribute))
+      if (node.get_attr<BoolAttribute>("normalize_inputs"))
       {
         hmap::remap(a1);
         hmap::remap(a2);
       }
 
-      hmap::Vec2<float> weights = {GET(node, "weights.x", FloatAttribute),
-                                   GET(node, "weights.y", FloatAttribute)};
+      hmap::Vec2<float> weights = {node.get_attr<FloatAttribute>("weights.x"),
+                                   node.get_attr<FloatAttribute>("weights.y")};
 
-      if (GET(node, "normalize_inputs", BoolAttribute))
+      if (node.get_attr<BoolAttribute>("normalize_inputs"))
         labels = hmap::kmeans_clustering2(a1,
                                           a2,
-                                          GET(node, "nclusters", IntAttribute),
+                                          node.get_attr<IntAttribute>("nclusters"),
                                           &scoring_arrays,
                                           nullptr, // agg scoring
                                           weights,
-                                          GET(node, "seed", SeedAttribute));
+                                          node.get_attr<SeedAttribute>("seed"));
       else
         labels = hmap::kmeans_clustering2(a1,
                                           a2,
-                                          GET(node, "nclusters", IntAttribute),
+                                          node.get_attr<IntAttribute>("nclusters"),
                                           nullptr,
                                           nullptr, // agg scoring
                                           weights,
-                                          GET(node, "seed", SeedAttribute));
+                                          node.get_attr<SeedAttribute>("seed"));
     }
 
     p_out->from_array_interp_nearest(labels);
 
     // retrieve scoring data
     p_scoring->clear();
-    p_scoring->reserve(GET(node, "nclusters", IntAttribute));
+    p_scoring->reserve(node.get_attr<IntAttribute>("nclusters"));
 
     for (size_t k = 0; k < scoring_arrays.size(); k++)
     {
       hmap::Heightmap h;
-      h.set_sto(CONFIG);
+      h.set_sto(CONFIG(node));
       h.from_array_interp_nearest(scoring_arrays[k]);
       p_scoring->push_back(h);
     }

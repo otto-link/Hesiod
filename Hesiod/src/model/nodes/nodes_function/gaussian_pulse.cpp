@@ -24,11 +24,12 @@ void setup_gaussian_pulse_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "control");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "envelope");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "radius", 0.1f, 0.f, 1.f);
-  ADD_ATTR(node, Vec2FloatAttribute, "center");
+  node.add_attr<FloatAttribute>("radius", "radius", 0.1f, 0.f, 1.f);
+
+  node.add_attr<Vec2FloatAttribute>("center", "center");
 
   // attribute(s) order
   node.set_attr_ordered_key({"radius", "center"});
@@ -60,12 +61,12 @@ void compute_gaussian_pulse_node(BaseNode &node)
                      hmap::Array      *p_ctrl)
              {
                return hmap::gaussian_pulse(shape,
-                                           GET(node, "radius", FloatAttribute),
+                                           node.get_attr<FloatAttribute>("radius"),
                                            p_ctrl,
                                            p_noise_x,
                                            p_noise_y,
                                            nullptr,
-                                           GET(node, "center", Vec2FloatAttribute),
+                                           node.get_attr<Vec2FloatAttribute>("center"),
                                            bbox);
              });
 

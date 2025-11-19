@@ -20,17 +20,17 @@ void setup_receive_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
 
   // nothing by default, this is going to be updated and populated
   // automatically by the graph manager
   std::vector<std::string> choices = {"NO TAG AVAILABLE"};
-  ADD_ATTR(node, ChoiceAttribute, "tag", choices, choices.front());
+  node.add_attr<ChoiceAttribute>("tag", "tag", choices, choices.front());
 
   // adjust corresponding widget
-  GET_REF(node, "tag", ChoiceAttribute)->set_use_combo_list(true);
+  node.get_attr_ref<ChoiceAttribute>("tag")->set_use_combo_list(true);
 }
 
 void compute_receive_node(BaseNode &node)
@@ -40,7 +40,7 @@ void compute_receive_node(BaseNode &node)
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
-  std::string      tag = GET(node, "tag", ChoiceAttribute);
+  std::string      tag = node.get_attr<ChoiceAttribute>("tag");
 
   // cast to specialized node
   ReceiveNode *p_receive_node = dynamic_cast<ReceiveNode *>(&node);

@@ -22,10 +22,10 @@ void setup_lerp_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "a");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "b");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "t");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "t", 0.5f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>("t", "t", 0.5f, 0.f, 1.f);
 }
 
 void compute_lerp_node(BaseNode &node)
@@ -64,7 +64,7 @@ void compute_lerp_node(BaseNode &node)
             hmap::Array *pa_a = p_arrays[1];
             hmap::Array *pa_b = p_arrays[2];
 
-            *pa_out = hmap::lerp(*pa_a, *pa_b, GET(node, "t", FloatAttribute));
+            *pa_out = hmap::lerp(*pa_a, *pa_b, node.get_attr<FloatAttribute>("t"));
           },
           node.get_config_ref()->hmap_transform_mode_cpu);
   }

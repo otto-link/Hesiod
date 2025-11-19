@@ -22,7 +22,7 @@ std::shared_ptr<hmap::Heightmap> pre_process_mask(BaseNode         &node,
 {
   // do not modify any existing input mask and return a dummy shared
   // pointer that will not be used
-  if (p_mask || !GET(node, "mask_activate", BoolAttribute))
+  if (p_mask || !node.get_attr<BoolAttribute>("mask_activate"))
     return std::make_shared<hmap::Heightmap>();
 
   // create mask storage and assign to current mask pointer
@@ -34,8 +34,8 @@ std::shared_ptr<hmap::Heightmap> pre_process_mask(BaseNode         &node,
 
   // --- mask definition
 
-  const std::string mask_type = GET(node, "mask_type", ChoiceAttribute);
-  const int ir = (int)(GET(node, "mask_radius", FloatAttribute) * p_mask->shape.x);
+  const std::string mask_type = node.get_attr<ChoiceAttribute>("mask_type");
+  const int ir = (int)(node.get_attr<FloatAttribute>("mask_radius") * p_mask->shape.x);
 
   if (mask_type == "Elevation")
   {
@@ -95,7 +95,7 @@ std::shared_ptr<hmap::Heightmap> pre_process_mask(BaseNode         &node,
 
   // --- apply gain to the mask
 
-  float mask_gain = GET(node, "mask_gain", FloatAttribute);
+  float mask_gain = node.get_attr<FloatAttribute>("mask_gain");
 
   if (mask_gain != 1.f)
   {
@@ -109,7 +109,7 @@ std::shared_ptr<hmap::Heightmap> pre_process_mask(BaseNode         &node,
         node.get_config_ref()->hmap_transform_mode_cpu);
   }
 
-  if (GET(node, "mask_inverse", BoolAttribute))
+  if (node.get_attr<BoolAttribute>("mask_inverse"))
     p_mask->inverse();
 
   return sp_mask;
@@ -117,16 +117,18 @@ std::shared_ptr<hmap::Heightmap> pre_process_mask(BaseNode         &node,
 
 void setup_pre_process_mask_attributes(BaseNode &node)
 {
-  ADD_ATTR(node, BoolAttribute, "mask_activate", false);
+  node.add_attr<BoolAttribute>("mask_activate", "mask_activate", false);
 
   std::vector<std::string> choices = {"Elevation",
                                       "Elevation mid-range",
                                       "Gradient norm"};
-  ADD_ATTR(node, ChoiceAttribute, "mask_type", choices);
+  node.add_attr<ChoiceAttribute>("mask_type", "mask_type", choices);
 
-  ADD_ATTR(node, BoolAttribute, "mask_inverse", false);
-  ADD_ATTR(node, FloatAttribute, "mask_radius", 0.01f, 0.f, 0.2f);
-  ADD_ATTR(node, FloatAttribute, "mask_gain", 1.f, 0.f, 10.f);
+  node.add_attr<BoolAttribute>("mask_inverse", "mask_inverse", false);
+
+  node.add_attr<FloatAttribute>("mask_radius", "mask_radius", 0.01f, 0.f, 0.2f);
+
+  node.add_attr<FloatAttribute>("mask_gain", "mask_gain", 1.f, 0.f, 10.f);
 
   std::vector<std::string> *p_keys = node.get_attr_ordered_key_ref();
 

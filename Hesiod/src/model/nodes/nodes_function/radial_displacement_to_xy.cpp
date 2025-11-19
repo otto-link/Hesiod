@@ -20,12 +20,13 @@ void setup_radial_displacement_to_xy_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dr");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "dx", CONFIG);
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "dy", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "dx", CONFIG(node));
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "dy", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "smoothing", 1.f, 0.f, 10.f);
-  ADD_ATTR(node, Vec2FloatAttribute, "center");
+  node.add_attr<FloatAttribute>("smoothing", "smoothing", 1.f, 0.f, 10.f);
+
+  node.add_attr<Vec2FloatAttribute>("center", "center");
 
   // attribute(s) order
   node.set_attr_ordered_key({"smoothing", "center"});
@@ -53,8 +54,8 @@ void compute_radial_displacement_to_xy_node(BaseNode &node)
           hmap::radial_displacement_to_xy(dr,
                                           dx,
                                           dy,
-                                          GET(node, "smoothing", FloatAttribute),
-                                          GET(node, "center", Vec2FloatAttribute),
+                                          node.get_attr<FloatAttribute>("smoothing"),
+                                          node.get_attr<Vec2FloatAttribute>("center"),
                                           bbox);
         });
   }

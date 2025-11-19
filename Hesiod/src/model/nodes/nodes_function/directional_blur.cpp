@@ -22,14 +22,18 @@ void setup_directional_blur_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "angle");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "radius", 0.05f, 0.f, 0.2f);
-  ADD_ATTR(node, FloatAttribute, "angle", 0.f, -180.f, 180.f);
-  ADD_ATTR(node, FloatAttribute, "intensity", 1.f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "spread", 1.f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "stretch", 1.f, 0.f, 4.f);
+  node.add_attr<FloatAttribute>("radius", "radius", 0.05f, 0.f, 0.2f);
+
+  node.add_attr<FloatAttribute>("angle", "angle", 0.f, -180.f, 180.f);
+
+  node.add_attr<FloatAttribute>("intensity", "intensity", 1.f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("spread", "spread", 1.f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("stretch", "stretch", 1.f, 0.f, 4.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"radius", "angle", "intensity", "spread", "stretch"});
@@ -50,7 +54,7 @@ void compute_directional_blur_node(BaseNode &node)
     hmap::Heightmap *p_angle = node.get_value_ref<hmap::Heightmap>("angle");
     hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
-    int ir = std::max(1, (int)(GET(node, "radius", FloatAttribute) * p_out->shape.x));
+    int ir = std::max(1, (int)(node.get_attr<FloatAttribute>("radius") * p_out->shape.x));
 
     hmap::transform(
         {p_out, p_in, p_angle},
@@ -60,7 +64,7 @@ void compute_directional_blur_node(BaseNode &node)
           hmap::Array *pa_in = p_arrays[1];
           hmap::Array *pa_angle = p_arrays[2];
 
-          hmap::Array angle_deg(pa_in->shape, GET(node, "angle", FloatAttribute));
+          hmap::Array angle_deg(pa_in->shape, node.get_attr<FloatAttribute>("angle"));
           if (pa_angle)
             angle_deg += (*pa_angle) * 180.f / M_PI;
 
@@ -69,9 +73,9 @@ void compute_directional_blur_node(BaseNode &node)
           hmap::directional_blur(*pa_out,
                                  ir,
                                  angle_deg,
-                                 GET(node, "intensity", FloatAttribute),
-                                 GET(node, "stretch", FloatAttribute),
-                                 GET(node, "spread", FloatAttribute));
+                                 node.get_attr<FloatAttribute>("intensity"),
+                                 node.get_attr<FloatAttribute>("stretch"),
+                                 node.get_attr<FloatAttribute>("spread"));
         },
         node.get_config_ref()->hmap_transform_mode_cpu);
 

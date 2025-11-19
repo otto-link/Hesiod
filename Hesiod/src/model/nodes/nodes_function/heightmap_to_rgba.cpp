@@ -22,7 +22,7 @@ void setup_heightmap_to_rgba_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "G");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "B");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "A");
-  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "RGBA", CONFIG);
+  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "RGBA", CONFIG(node));
 }
 
 void compute_heightmap_to_rgba_node(BaseNode &node)

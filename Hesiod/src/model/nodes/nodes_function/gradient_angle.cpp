@@ -20,17 +20,16 @@ void setup_gradient_angle_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "smoothing_radius", 0.f, 0.f, 0.2f);
-  ADD_ATTR(node,
-           RangeAttribute,
-           "remap",
-           std::vector<float>({-1.f, 1.f}),
-           -1.f,
-           1.f,
-           false);
+  node.add_attr<FloatAttribute>("smoothing_radius", "smoothing_radius", 0.f, 0.f, 0.2f);
+  node.add_attr<RangeAttribute>("remap",
+                                "remap",
+                                std::vector<float>({-1.f, 1.f}),
+                                -1.f,
+                                1.f,
+                                false);
 
   // attribute(s) order
   node.set_attr_ordered_key({"_TEXT_Post-processing", "smoothing_radius", "remap"});
@@ -48,7 +47,7 @@ void compute_gradient_angle_node(BaseNode &node)
   {
     hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
-    int ir = (int)(GET(node, "smoothing_radius", FloatAttribute) * p_out->shape.x);
+    int ir = (int)(node.get_attr<FloatAttribute>("smoothing_radius") * p_out->shape.x);
 
     hmap::transform(
         {p_out, p_in},
@@ -75,8 +74,8 @@ void compute_gradient_angle_node(BaseNode &node)
                            false, // saturate
                            {0.f, 0.f},
                            0.f,
-                           GET_MEMBER(node, "remap", RangeAttribute, is_active),
-                           GET(node, "remap", RangeAttribute));
+                           node.get_attr_ref<RangeAttribute>("remap")->get_is_active(),
+                           node.get_attr<RangeAttribute>("remap"));
   }
 
   Q_EMIT node.compute_finished(node.get_id());

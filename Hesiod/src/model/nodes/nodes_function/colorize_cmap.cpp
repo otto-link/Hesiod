@@ -24,18 +24,22 @@ void setup_colorize_cmap_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "level");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "alpha");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "noise");
-  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture", CONFIG);
+  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node,
-           EnumAttribute,
-           "colormap",
-           hesiod::CmapManager::get_instance().get_colormap_name_mapping());
-  ADD_ATTR(node, BoolAttribute, "reverse_colormap", false);
-  ADD_ATTR(node, BoolAttribute, "reverse_alpha", false);
-  ADD_ATTR(node, BoolAttribute, "clamp_alpha", true);
-  ADD_ATTR(node, RangeAttribute, "saturate_input", false);
-  ADD_ATTR(node, RangeAttribute, "saturate_alpha", false);
+  node.add_attr<EnumAttribute>(
+      "colormap",
+      "colormap",
+      hesiod::CmapManager::get_instance().get_colormap_name_mapping());
+  node.add_attr<BoolAttribute>("reverse_colormap", "reverse_colormap", false);
+
+  node.add_attr<BoolAttribute>("reverse_alpha", "reverse_alpha", false);
+
+  node.add_attr<BoolAttribute>("clamp_alpha", "clamp_alpha", true);
+
+  node.add_attr<RangeAttribute>("saturate_input", "saturate_input", false);
+
+  node.add_attr<RangeAttribute>("saturate_alpha", "saturate_alpha", false);
 
   // attribute(s) order
   node.set_attr_ordered_key({"colormap",
@@ -66,18 +70,18 @@ void compute_colorize_cmap_node(BaseNode &node)
 
     std::vector<std::vector<float>>
         colormap_colors = hesiod::CmapManager::get_instance().get_colormap_data(
-            GET(node, "colormap", EnumAttribute));
+            node.get_attr<EnumAttribute>("colormap"));
 
     // input saturation (clamping and then remapping to [0, 1])
     float cmin = 0.f;
     float cmax = 1.f;
 
-    if (GET_MEMBER(node, "saturate_input", RangeAttribute, is_active))
+    if (node.get_attr_ref<RangeAttribute>("saturate_input")->get_is_active())
     {
       float hmin = p_level->min();
       float hmax = p_level->max();
 
-      hmap::Vec2<float> crange = GET(node, "saturate_input", RangeAttribute);
+      hmap::Vec2<float> crange = node.get_attr<RangeAttribute>("saturate_input");
 
       cmin = (1.f - crange.x) * hmin + crange.x * hmax;
       cmax = (1.f - crange.y) * hmin + crange.y * hmax;
@@ -100,15 +104,15 @@ void compute_colorize_cmap_node(BaseNode &node)
       alpha_copy = *p_alpha;
       p_alpha_copy = &alpha_copy;
 
-      if (GET(node, "clamp_alpha", BoolAttribute))
+      if (node.get_attr<BoolAttribute>("clamp_alpha"))
         hmap::transform(alpha_copy, [](hmap::Array &x) { hmap::clamp(x, 0.f, 1.f); });
 
-      if (GET(node, "reverse_alpha", BoolAttribute))
+      if (node.get_attr<BoolAttribute>("reverse_alpha"))
         alpha_copy.inverse();
 
-      if (GET_MEMBER(node, "saturate_alpha", RangeAttribute, is_active))
+      if (node.get_attr_ref<RangeAttribute>("saturate_alpha")->get_is_active())
       {
-        hmap::Vec2<float> arange = GET(node, "saturate_alpha", RangeAttribute);
+        hmap::Vec2<float> arange = node.get_attr<RangeAttribute>("saturate_alpha");
         hmap::transform(alpha_copy,
                         [&arange](hmap::Array &x)
                         { hmap::clamp(x, arange.x, arange.y); });
@@ -122,7 +126,7 @@ void compute_colorize_cmap_node(BaseNode &node)
                     cmax,
                     colormap_colors,
                     p_alpha_copy,
-                    GET(node, "reverse_colormap", BoolAttribute),
+                    node.get_attr<BoolAttribute>("reverse_colormap"),
                     p_noise);
   }
 

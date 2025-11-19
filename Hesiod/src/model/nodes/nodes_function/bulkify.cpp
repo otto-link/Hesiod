@@ -23,12 +23,16 @@ void setup_bulkify_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dx");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "amplitude", 1.f, -1.f, 4.f);
-  ADD_ATTR(node, EnumAttribute, "bulk_type", enum_mappings.primitive_type_map);
-  ADD_ATTR(node, Vec2FloatAttribute, "center");
+  node.add_attr<FloatAttribute>("amplitude", "amplitude", 1.f, -1.f, 4.f);
+
+  node.add_attr<EnumAttribute>("bulk_type",
+                               "bulk_type",
+                               enum_mappings.primitive_type_map);
+
+  node.add_attr<Vec2FloatAttribute>("center", "center");
 
   // attribute(s) order
   node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Main Parameters",
@@ -69,11 +73,11 @@ void compute_bulkify_node(BaseNode &node)
 
           *pa_out = hmap::bulkify(
               *pa_in,
-              (hmap::PrimitiveType)GET(node, "bulk_type", EnumAttribute),
-              GET(node, "amplitude", FloatAttribute),
+              (hmap::PrimitiveType)node.get_attr<EnumAttribute>("bulk_type"),
+              node.get_attr<FloatAttribute>("amplitude"),
               pa_dx,
               pa_dy,
-              GET(node, "center", Vec2FloatAttribute),
+              node.get_attr<Vec2FloatAttribute>("center"),
               bbox);
         },
         node.get_config_ref()->hmap_transform_mode_cpu);

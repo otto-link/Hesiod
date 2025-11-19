@@ -23,11 +23,15 @@ void setup_path_fractalize_node(BaseNode &node)
   node.add_port<hmap::Path>(gnode::PortType::OUT, "output");
 
   // attribute(s)
-  ADD_ATTR(node, IntAttribute, "iterations", 4, 1, 10);
-  ADD_ATTR(node, SeedAttribute, "seed");
-  ADD_ATTR(node, FloatAttribute, "sigma", 0.3f, 0.f, 1.f);
-  ADD_ATTR(node, IntAttribute, "orientation", 0, 0, 1);
-  ADD_ATTR(node, FloatAttribute, "persistence", 1.f, 0.01f, 4.f);
+  node.add_attr<IntAttribute>("iterations", "iterations", 4, 1, 10);
+
+  node.add_attr<SeedAttribute>("seed", "seed");
+
+  node.add_attr<FloatAttribute>("sigma", "sigma", 0.3f, 0.f, 1.f);
+
+  node.add_attr<IntAttribute>("orientation", "orientation", 0, 0, 1);
+
+  node.add_attr<FloatAttribute>("persistence", "persistence", 1.f, 0.01f, 4.f);
 
   // attribute(s) order
   node.set_attr_ordered_key(
@@ -50,11 +54,11 @@ void compute_path_fractalize_node(BaseNode &node)
     *p_out = *p_in;
 
     if (p_in->get_npoints() > 1)
-      p_out->fractalize(GET(node, "iterations", IntAttribute),
-                        GET(node, "seed", SeedAttribute),
-                        GET(node, "sigma", FloatAttribute),
-                        GET(node, "orientation", IntAttribute),
-                        GET(node, "persistence", FloatAttribute));
+      p_out->fractalize(node.get_attr<IntAttribute>("iterations"),
+                        node.get_attr<SeedAttribute>("seed"),
+                        node.get_attr<FloatAttribute>("sigma"),
+                        node.get_attr<IntAttribute>("orientation"),
+                        node.get_attr<FloatAttribute>("persistence"));
   }
 
   Q_EMIT node.compute_finished(node.get_id());

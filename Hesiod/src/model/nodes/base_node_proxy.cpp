@@ -76,7 +76,7 @@ QWidget *BaseNode::get_qwidget_ref()
     std::string window_title = "";
 
     attr::AttributesWidget *attributes_widget = new attr::AttributesWidget(
-        this->get_attr_ref(),
+        this->get_attributes_ref(),
         this->get_attr_ordered_key_ref(),
         window_title,
         add_save_reset_state_buttons);

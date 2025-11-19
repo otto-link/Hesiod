@@ -20,10 +20,10 @@ void setup_select_gt_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "value", 0.5f, -1.f, 1.f);
+  node.add_attr<FloatAttribute>("value", "value", 0.5f, -1.f, 1.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"value"});
@@ -45,8 +45,9 @@ void compute_select_gt_node(BaseNode &node)
 
     hmap::transform(*p_out,
                     *p_in,
-                    [&node](hmap::Array &out, hmap::Array &in)
-                    { out = hmap::select_gt(in, GET(node, "value", FloatAttribute)); });
+                    [&node](hmap::Array &out, hmap::Array &in) {
+                      out = hmap::select_gt(in, node.get_attr<FloatAttribute>("value"));
+                    });
 
     // post-process
     post_process_heightmap(node, *p_out);

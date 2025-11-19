@@ -23,20 +23,21 @@ void add_export_button(BaseNode &node)
   {
     QPushButton *button = new QPushButton("Export!", &node);
 
-    node.connect(button,
-                 &QPushButton::pressed,
-                 [&node]()
-                 {
-                   // bypass 'auto_export' attribute
-                   bool auto_export = GET(node, "auto_export", BoolAttribute);
+    node.connect(
+        button,
+        &QPushButton::pressed,
+        [&node]()
+        {
+          // bypass 'auto_export' attribute
+          bool auto_export = node.get_attr<BoolAttribute>("auto_export");
 
-                   if (!auto_export)
-                     GET_REF(node, "auto_export", BoolAttribute)->set_value(true);
+          if (!auto_export)
+            node.get_attr_ref<BoolAttribute>("auto_export")->set_value(true);
 
-                   node.compute();
+          node.compute();
 
-                   GET_REF(node, "auto_export", BoolAttribute)->set_value(auto_export);
-                 });
+          node.get_attr_ref<BoolAttribute>("auto_export")->set_value(auto_export);
+        });
 
     return (QWidget *)button;
   };

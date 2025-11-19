@@ -21,10 +21,10 @@ void setup_thermal_rib_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "bedrock");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, IntAttribute, "iterations", 10, 1, INT_MAX);
+  node.add_attr<IntAttribute>("iterations", "iterations", 10, 1, INT_MAX);
 }
 
 void compute_thermal_rib_node(BaseNode &node)
@@ -45,9 +45,10 @@ void compute_thermal_rib_node(BaseNode &node)
 
     hmap::transform(*p_out,
                     p_bedrock,
-                    [&node](hmap::Array &h_out, hmap::Array *p_bedrock_array) {
+                    [&node](hmap::Array &h_out, hmap::Array *p_bedrock_array)
+                    {
                       hmap::thermal_rib(h_out,
-                                        GET(node, "iterations", IntAttribute),
+                                        node.get_attr<IntAttribute>("iterations"),
                                         p_bedrock_array);
                     });
 

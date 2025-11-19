@@ -26,28 +26,62 @@ void setup_cone_complex_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "control");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "envelope");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "radius", 0.5f, 0.01f, FLT_MAX);
-  ADD_ATTR(node, FloatAttribute, "alpha", 1.2f, 0.01f, 4.f);
-  ADD_ATTR(node, BoolAttribute, "smooth_profile", true);
-  ADD_ATTR(node, FloatAttribute, "valley_amp", 0.2f, 0.f, 2.f);
-  ADD_ATTR(node, IntAttribute, "valley_nb", 5, 0, 32);
-  ADD_ATTR(node, FloatAttribute, "valley_decay_ratio", 0.5f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "valley_angle0", 0.f, -180.f, 180.f, "{:.1f}°");
-  ADD_ATTR(node,
-           EnumAttribute,
-           "erosion_profile",
-           enum_mappings.erosion_profile_map,
-           "Triangle Grenier");
-  ADD_ATTR(node, FloatAttribute, "erosion_delta", 0.01f, 0.f, 0.2f);
-  ADD_ATTR(node, FloatAttribute, "radial_waviness_amp", 0.05f, 0.f, 0.5f);
-  ADD_ATTR(node, FloatAttribute, "radial_waviness_kw", 2.f, 0.f, 16.f);
-  ADD_ATTR(node, FloatAttribute, "bias_angle", 30.f, -180.f, 180.f, "{:.1f}°");
-  ADD_ATTR(node, FloatAttribute, "bias_amp", 0.1f, 0.f, 2.f);
-  ADD_ATTR(node, FloatAttribute, "bias_exponent", 1.f, 0.01f, 4.f);
-  ADD_ATTR(node, Vec2FloatAttribute, "center");
+  node.add_attr<FloatAttribute>("radius", "radius", 0.5f, 0.01f, FLT_MAX);
+
+  node.add_attr<FloatAttribute>("alpha", "alpha", 1.2f, 0.01f, 4.f);
+
+  node.add_attr<BoolAttribute>("smooth_profile", "smooth_profile", true);
+
+  node.add_attr<FloatAttribute>("valley_amp", "valley_amp", 0.2f, 0.f, 2.f);
+
+  node.add_attr<IntAttribute>("valley_nb", "valley_nb", 5, 0, 32);
+
+  node.add_attr<FloatAttribute>("valley_decay_ratio",
+                                "valley_decay_ratio",
+                                0.5f,
+                                0.f,
+                                1.f);
+
+  node.add_attr<FloatAttribute>("valley_angle0",
+                                "valley_angle0",
+                                0.f,
+                                -180.f,
+                                180.f,
+                                "{:.1f}°");
+
+  node.add_attr<EnumAttribute>("erosion_profile",
+                               "erosion_profile",
+                               enum_mappings.erosion_profile_map,
+                               "Triangle Grenier");
+  node.add_attr<FloatAttribute>("erosion_delta", "erosion_delta", 0.01f, 0.f, 0.2f);
+
+  node.add_attr<FloatAttribute>("radial_waviness_amp",
+                                "radial_waviness_amp",
+                                0.05f,
+                                0.f,
+                                0.5f);
+
+  node.add_attr<FloatAttribute>("radial_waviness_kw",
+                                "radial_waviness_kw",
+                                2.f,
+                                0.f,
+                                16.f);
+
+  node.add_attr<FloatAttribute>("bias_angle",
+                                "bias_angle",
+                                30.f,
+                                -180.f,
+                                180.f,
+                                "{:.1f}°");
+
+  node.add_attr<FloatAttribute>("bias_amp", "bias_amp", 0.1f, 0.f, 2.f);
+
+  node.add_attr<FloatAttribute>("bias_exponent", "bias_exponent", 1.f, 0.01f, 4.f);
+
+  node.add_attr<Vec2FloatAttribute>("center", "center");
 
   // attribute(s) order
   node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Main Parameters",
@@ -107,21 +141,21 @@ void compute_cone_complex_node(BaseNode &node)
 
         *pa_out = hmap::cone_complex(
             shape,
-            GET(node, "alpha", FloatAttribute),
-            GET(node, "radius", FloatAttribute),
-            GET(node, "smooth_profile", BoolAttribute),
-            GET(node, "valley_amp", FloatAttribute),
-            GET(node, "valley_nb", IntAttribute),
-            GET(node, "valley_decay_ratio", FloatAttribute),
-            GET(node, "valley_angle0", FloatAttribute),
-            (hmap::ErosionProfile)GET(node, "erosion_profile", EnumAttribute),
-            GET(node, "erosion_delta", FloatAttribute),
-            GET(node, "radial_waviness_amp", FloatAttribute),
-            GET(node, "radial_waviness_kw", FloatAttribute),
-            GET(node, "bias_angle", FloatAttribute),
-            GET(node, "bias_amp", FloatAttribute),
-            GET(node, "bias_exponent", FloatAttribute),
-            GET(node, "center", Vec2FloatAttribute),
+            node.get_attr<FloatAttribute>("alpha"),
+            node.get_attr<FloatAttribute>("radius"),
+            node.get_attr<BoolAttribute>("smooth_profile"),
+            node.get_attr<FloatAttribute>("valley_amp"),
+            node.get_attr<IntAttribute>("valley_nb"),
+            node.get_attr<FloatAttribute>("valley_decay_ratio"),
+            node.get_attr<FloatAttribute>("valley_angle0"),
+            (hmap::ErosionProfile)node.get_attr<EnumAttribute>("erosion_profile"),
+            node.get_attr<FloatAttribute>("erosion_delta"),
+            node.get_attr<FloatAttribute>("radial_waviness_amp"),
+            node.get_attr<FloatAttribute>("radial_waviness_kw"),
+            node.get_attr<FloatAttribute>("bias_angle"),
+            node.get_attr<FloatAttribute>("bias_amp"),
+            node.get_attr<FloatAttribute>("bias_exponent"),
+            node.get_attr<Vec2FloatAttribute>("center"),
             pa_ctrl,
             pa_dx,
             pa_dy,

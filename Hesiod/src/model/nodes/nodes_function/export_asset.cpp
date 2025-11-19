@@ -29,8 +29,13 @@ void setup_export_asset_node(BaseNode &node)
   node.add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "normal map details");
 
   // attribute(s)
-  ADD_ATTR(node, FilenameAttribute, "fname", std::filesystem::path("export"), "*", true);
-  ADD_ATTR(node, BoolAttribute, "auto_export", false);
+  node.add_attr<FilenameAttribute>("fname",
+                                   "fname",
+                                   std::filesystem::path("export"),
+                                   "*",
+                                   true);
+
+  node.add_attr<BoolAttribute>("auto_export", "auto_export", false);
 
   {
     // generate enumerate mappings
@@ -46,21 +51,22 @@ void setup_export_asset_node(BaseNode &node)
     std::string default_export_format = "GL Transmission Format v. 2 (binary) - *.glb";
     std::string default_mesh_type = "triangles";
 
-    ADD_ATTR(node,
-             EnumAttribute,
-             "export_format",
-             export_format_map,
-             default_export_format);
-    ADD_ATTR(node, EnumAttribute, "mesh_type", export_mesh_map, default_mesh_type);
+    node.add_attr<EnumAttribute>("export_format",
+                                 "export_format",
+                                 export_format_map,
+                                 default_export_format);
+    node.add_attr<EnumAttribute>("mesh_type",
+                                 "mesh_type",
+                                 export_mesh_map,
+                                 default_mesh_type);
   }
 
-  ADD_ATTR(node, FloatAttribute, "max_error", 5e-4f, 0.f, 0.01f);
-  ADD_ATTR(node, FloatAttribute, "elevation_scaling", 0.2f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "detail_scaling", 1.f, 0.f, 4.f);
-  ADD_ATTR(node,
-           EnumAttribute,
-           "blending_method",
-           hmap::normal_map_blending_method_as_string);
+  node.add_attr<FloatAttribute>("max_error", "max_error", 5e-4f, 0.f, 0.01f);
+  node.add_attr<FloatAttribute>("elevation_scaling", "elevation_scaling", 0.2f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>("detail_scaling", "detail_scaling", 1.f, 0.f, 4.f);
+  node.add_attr<EnumAttribute>("blending_method",
+                               "blending_method",
+                               hmap::normal_map_blending_method_as_string);
 
   // attribute(s) order
   node.set_attr_ordered_key({"auto_export",
@@ -85,14 +91,14 @@ void compute_export_asset_node(BaseNode &node)
 
   hmap::Heightmap *p_elev = node.get_value_ref<hmap::Heightmap>("elevation");
 
-  if (p_elev && GET(node, "auto_export", BoolAttribute))
+  if (p_elev && node.get_attr<BoolAttribute>("auto_export"))
   {
     hmap::HeightmapRGBA *p_color = node.get_value_ref<hmap::HeightmapRGBA>("texture");
     hmap::HeightmapRGBA *p_nmap = node.get_value_ref<hmap::HeightmapRGBA>(
         "normal map details");
 
     hmap::Array array = p_elev->to_array();
-    std::string fname = GET(node, "fname", FilenameAttribute).string();
+    std::string fname = node.get_attr<FilenameAttribute>("fname").string();
 
     // --- if available export RGBA to an image file
 
@@ -124,22 +130,23 @@ void compute_export_asset_node(BaseNode &node)
       normal_map = hmap::mix_normal_map_rgba(
           normal_map,
           *p_nmap,
-          GET(node, "detail_scaling", FloatAttribute),
-          (hmap::NormalMapBlendingMethod)GET(node, "blending_method", EnumAttribute));
+          node.get_attr<FloatAttribute>("detail_scaling"),
+          (hmap::NormalMapBlendingMethod)node.get_attr<EnumAttribute>("blending_method"));
     }
 
     normal_map.to_png(nmap_fname, CV_16U);
 
     // --- export
 
-    hmap::export_asset(fname,
-                       array,
-                       (hmap::MeshType)GET(node, "mesh_type", EnumAttribute),
-                       (hmap::AssetExportFormat)GET(node, "export_format", EnumAttribute),
-                       GET(node, "elevation_scaling", FloatAttribute),
-                       texture_fname,
-                       nmap_fname,
-                       GET(node, "max_error", FloatAttribute));
+    hmap::export_asset(
+        fname,
+        array,
+        (hmap::MeshType)node.get_attr<EnumAttribute>("mesh_type"),
+        (hmap::AssetExportFormat)node.get_attr<EnumAttribute>("export_format"),
+        node.get_attr<FloatAttribute>("elevation_scaling"),
+        texture_fname,
+        nmap_fname,
+        node.get_attr<FloatAttribute>("max_error"));
   }
 
   // not output, do not propagate

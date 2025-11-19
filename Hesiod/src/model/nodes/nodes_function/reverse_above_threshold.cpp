@@ -25,12 +25,18 @@ void setup_reverse_above_theshold_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "threshold");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "threshold_value", 0.5f, -FLT_MAX, FLT_MAX);
-  ADD_ATTR(node, FloatAttribute, "scaling", 0.5f, 0.f, 2.f);
-  ADD_ATTR(node, FloatAttribute, "transition_extent", 0.1f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>("threshold_value",
+                                "threshold_value",
+                                0.5f,
+                                -FLT_MAX,
+                                FLT_MAX);
+
+  node.add_attr<FloatAttribute>("scaling", "scaling", 0.5f, 0.f, 2.f);
+
+  node.add_attr<FloatAttribute>("transition_extent", "transition_extent", 0.1f, 0.f, 1.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"threshold_value", "scaling", "transition_extent"});
@@ -65,19 +71,21 @@ void compute_reverse_above_theshold_node(BaseNode &node)
 
           if (pa_th)
           {
-            hmap::reverse_above_theshold(*pa_out,
-                                         *pa_th,
-                                         pa_mask,
-                                         GET(node, "scaling", FloatAttribute),
-                                         GET(node, "transition_extent", FloatAttribute));
+            hmap::reverse_above_theshold(
+                *pa_out,
+                *pa_th,
+                pa_mask,
+                node.get_attr<FloatAttribute>("scaling"),
+                node.get_attr<FloatAttribute>("transition_extent"));
           }
           else
           {
-            hmap::reverse_above_theshold(*pa_out,
-                                         GET(node, "threshold_value", FloatAttribute),
-                                         pa_mask,
-                                         GET(node, "scaling", FloatAttribute),
-                                         GET(node, "transition_extent", FloatAttribute));
+            hmap::reverse_above_theshold(
+                *pa_out,
+                node.get_attr<FloatAttribute>("threshold_value"),
+                pa_mask,
+                node.get_attr<FloatAttribute>("scaling"),
+                node.get_attr<FloatAttribute>("transition_extent"));
           }
         },
         node.get_config_ref()->hmap_transform_mode_cpu);

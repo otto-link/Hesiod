@@ -22,10 +22,10 @@ void setup_smooth_fill_holes_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "radius", 0.05f, 0.001f, 0.2f);
+  node.add_attr<FloatAttribute>("radius", "radius", 0.05f, 0.001f, 0.2f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"radius"});
@@ -53,7 +53,7 @@ void compute_smooth_fill_holes_node(BaseNode &node)
     // copy the input heightmap
     *p_out = *p_in;
 
-    int ir = std::max(1, (int)(GET(node, "radius", FloatAttribute) * p_out->shape.x));
+    int ir = std::max(1, (int)(node.get_attr<FloatAttribute>("radius") * p_out->shape.x));
 
     hmap::transform(
         {p_out, p_mask},

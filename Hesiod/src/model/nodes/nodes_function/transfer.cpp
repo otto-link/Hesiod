@@ -22,12 +22,14 @@ void setup_transfer_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "source");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "target");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "radius", 0.05f, 0.f, 0.2f);
-  ADD_ATTR(node, FloatAttribute, "amplitude", 0.5f, -2.f, 4.f);
-  ADD_ATTR(node, BoolAttribute, "target_prefiltering", false);
+  node.add_attr<FloatAttribute>("radius", "radius", 0.05f, 0.f, 0.2f);
+
+  node.add_attr<FloatAttribute>("amplitude", "amplitude", 0.5f, -2.f, 4.f);
+
+  node.add_attr<BoolAttribute>("target_prefiltering", "target_prefiltering", false);
 
   // attribute(s) order
   node.set_attr_ordered_key({"radius", "amplitude", "target_prefiltering"});
@@ -49,7 +51,7 @@ void compute_transfer_node(BaseNode &node)
   {
     hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
-    int ir = std::max(1, (int)(GET(node, "radius", FloatAttribute) * p_out->shape.x));
+    int ir = std::max(1, (int)(node.get_attr<FloatAttribute>("radius") * p_out->shape.x));
 
     hmap::transform(
         {p_out, p_s, p_t},
@@ -59,11 +61,12 @@ void compute_transfer_node(BaseNode &node)
           hmap::Array *pa_s = p_arrays[1];
           hmap::Array *pa_t = p_arrays[2];
 
-          *pa_out = hmap::gpu::transfer(*pa_s,
-                                        *pa_t,
-                                        ir,
-                                        GET(node, "amplitude", FloatAttribute),
-                                        GET(node, "target_prefiltering", BoolAttribute));
+          *pa_out = hmap::gpu::transfer(
+              *pa_s,
+              *pa_t,
+              ir,
+              node.get_attr<FloatAttribute>("amplitude"),
+              node.get_attr<BoolAttribute>("target_prefiltering"));
         },
         node.get_config_ref()->hmap_transform_mode_gpu);
 

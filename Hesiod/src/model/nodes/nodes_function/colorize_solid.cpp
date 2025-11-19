@@ -18,11 +18,12 @@ void setup_colorize_solid_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture", CONFIG);
+  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, ColorAttribute, "color", 0.5f, 0.5f, 0.5f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "alpha", 1.f, 0.f, 1.f);
+  node.add_attr<ColorAttribute>("color", "color", 0.5f, 0.5f, 0.5f, 1.f);
+
+  node.add_attr<FloatAttribute>("alpha", "alpha", 1.f, 0.f, 1.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"color", "alpha"});
@@ -35,12 +36,12 @@ void compute_colorize_solid_node(BaseNode &node)
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   hmap::HeightmapRGBA *p_out = node.get_value_ref<hmap::HeightmapRGBA>("texture");
-  std::vector<float>   col3 = GET(node, "color", ColorAttribute);
+  std::vector<float>   col3 = node.get_attr<ColorAttribute>("color");
 
   for (int k = 0; k < 4; k++)
   {
-    float color = k < 3 ? col3[k] : GET(node, "alpha", FloatAttribute);
-    p_out->rgba[k] = hmap::Heightmap(CONFIG, color);
+    float color = k < 3 ? col3[k] : node.get_attr<FloatAttribute>("alpha");
+    p_out->rgba[k] = hmap::Heightmap(CONFIG(node), color);
   }
 
   Q_EMIT node.compute_finished(node.get_id());

@@ -21,11 +21,12 @@ void setup_fold_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "k", 0.1f, 0.f, 0.2f);
-  ADD_ATTR(node, IntAttribute, "iterations", 3, 1, 10);
+  node.add_attr<FloatAttribute>("k", "k", 0.1f, 0.f, 0.2f);
+
+  node.add_attr<IntAttribute>("iterations", "iterations", 3, 1, 10);
 }
 
 void compute_fold_node(BaseNode &node)
@@ -55,8 +56,8 @@ void compute_fold_node(BaseNode &node)
           hmap::fold(*pa_out,
                      hmin,
                      hmax,
-                     GET(node, "iterations", IntAttribute),
-                     GET(node, "k", FloatAttribute));
+                     node.get_attr<IntAttribute>("iterations"),
+                     node.get_attr<FloatAttribute>("k"));
         },
         node.get_config_ref()->hmap_transform_mode_cpu);
 

@@ -20,10 +20,10 @@ void setup_gaussian_decay_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "sigma", 0.1f, 0.001f, 0.2f);
+  node.add_attr<FloatAttribute>("sigma", "sigma", 0.1f, 0.001f, 0.2f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"sigma"});
@@ -43,11 +43,11 @@ void compute_gaussian_decay_node(BaseNode &node)
   {
     hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
-    hmap::transform(*p_out,
-                    *p_in,
-                    [&node](hmap::Array &out, hmap::Array &in) {
-                      out = hmap::gaussian_decay(in, GET(node, "sigma", FloatAttribute));
-                    });
+    hmap::transform(
+        *p_out,
+        *p_in,
+        [&node](hmap::Array &out, hmap::Array &in)
+        { out = hmap::gaussian_decay(in, node.get_attr<FloatAttribute>("sigma")); });
 
     // post-process
     post_process_heightmap(node, *p_out, p_in);

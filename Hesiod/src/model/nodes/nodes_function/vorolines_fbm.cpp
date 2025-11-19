@@ -25,25 +25,34 @@ void setup_vorolines_fbm_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dx");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "envelope");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "out", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "out", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node,
-           EnumAttribute,
-           "return_type",
-           enum_mappings.voronoi_return_type_map,
-           "F1: squared distance to the closest point");
-  ADD_ATTR(node, FloatAttribute, "density", 8.f, 0.f, 100.f);
-  ADD_ATTR(node, SeedAttribute, "seed");
-  ADD_ATTR(node, FloatAttribute, "k_smoothing", 0.f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "exp_sigma", 0.1f, 0.f, 0.1f);
-  ADD_ATTR(node, FloatAttribute, "angle", 0.f, 0.f, 180.f);
-  ADD_ATTR(node, FloatAttribute, "angle_span", 90.f, 0.f, 180.f);
-  ADD_ATTR(node, BoolAttribute, "sqrt_output", true);
-  ADD_ATTR(node, IntAttribute, "octaves", 8, 0, 32);
-  ADD_ATTR(node, FloatAttribute, "weight", 0.7f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "persistence", 0.5f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "lacunarity", 2.f, 0.01f, 4.f);
+  node.add_attr<EnumAttribute>("return_type",
+                               "return_type",
+                               enum_mappings.voronoi_return_type_map,
+                               "F1: squared distance to the closest point");
+  node.add_attr<FloatAttribute>("density", "density", 8.f, 0.f, 100.f);
+
+  node.add_attr<SeedAttribute>("seed", "seed");
+
+  node.add_attr<FloatAttribute>("k_smoothing", "k_smoothing", 0.f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("exp_sigma", "exp_sigma", 0.1f, 0.f, 0.1f);
+
+  node.add_attr<FloatAttribute>("angle", "angle", 0.f, 0.f, 180.f);
+
+  node.add_attr<FloatAttribute>("angle_span", "angle_span", 90.f, 0.f, 180.f);
+
+  node.add_attr<BoolAttribute>("sqrt_output", "sqrt_output", true);
+
+  node.add_attr<IntAttribute>("octaves", "octaves", 8, 0, 32);
+
+  node.add_attr<FloatAttribute>("weight", "weight", 0.7f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("persistence", "persistence", 0.5f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("lacunarity", "lacunarity", 2.f, 0.01f, 4.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"return_type",
@@ -84,23 +93,22 @@ void compute_vorolines_fbm_node(BaseNode &node)
         hmap::Array *pa_dx = p_arrays[1];
         hmap::Array *pa_dy = p_arrays[2];
 
-        hmap::VoronoiReturnType rtype = (hmap::VoronoiReturnType)GET(node,
-                                                                     "return_type",
-                                                                     EnumAttribute);
+        hmap::VoronoiReturnType rtype = (hmap::VoronoiReturnType)
+                                            node.get_attr<EnumAttribute>("return_type");
 
         *pa_out = hmap::gpu::vorolines_fbm(
             shape,
-            GET(node, "density", FloatAttribute),
-            GET(node, "seed", SeedAttribute),
-            GET(node, "k_smoothing", FloatAttribute),
-            GET(node, "exp_sigma", FloatAttribute),
-            M_PI / 180.f * GET(node, "angle", FloatAttribute),
-            M_PI / 180.f * GET(node, "angle_span", FloatAttribute),
+            node.get_attr<FloatAttribute>("density"),
+            node.get_attr<SeedAttribute>("seed"),
+            node.get_attr<FloatAttribute>("k_smoothing"),
+            node.get_attr<FloatAttribute>("exp_sigma"),
+            M_PI / 180.f * node.get_attr<FloatAttribute>("angle"),
+            M_PI / 180.f * node.get_attr<FloatAttribute>("angle_span"),
             rtype,
-            GET(node, "octaves", IntAttribute),
-            GET(node, "weight", FloatAttribute),
-            GET(node, "persistence", FloatAttribute),
-            GET(node, "lacunarity", FloatAttribute),
+            node.get_attr<IntAttribute>("octaves"),
+            node.get_attr<FloatAttribute>("weight"),
+            node.get_attr<FloatAttribute>("persistence"),
+            node.get_attr<FloatAttribute>("lacunarity"),
             pa_dx,
             pa_dy,
             bbox);
@@ -110,7 +118,7 @@ void compute_vorolines_fbm_node(BaseNode &node)
   // apply square root
   p_out->remap();
 
-  if (GET(node, "sqrt_output", BoolAttribute))
+  if (node.get_attr<BoolAttribute>("sqrt_output"))
     hmap::transform(
         {p_out},
         [](std::vector<hmap::Array *> p_arrays)

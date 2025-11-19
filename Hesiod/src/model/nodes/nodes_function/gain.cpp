@@ -22,10 +22,10 @@ void setup_gain_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "gain", 2.f, 0.01f, 10.f);
+  node.add_attr<FloatAttribute>("gain", "gain", 2.f, 0.01f, 10.f);
 }
 
 void compute_gain_node(BaseNode &node)
@@ -55,7 +55,7 @@ void compute_gain_node(BaseNode &node)
           hmap::Array *pa_out = p_arrays[0];
           hmap::Array *pa_mask = p_arrays[1];
 
-          hmap::gain(*pa_out, GET(node, "gain", FloatAttribute), pa_mask);
+          hmap::gain(*pa_out, node.get_attr<FloatAttribute>("gain"), pa_mask);
         },
         node.get_config_ref()->hmap_transform_mode_cpu);
 

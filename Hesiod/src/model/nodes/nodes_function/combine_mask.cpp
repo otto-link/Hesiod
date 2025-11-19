@@ -22,14 +22,13 @@ void setup_combine_mask_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input 1");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input 2");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node,
-           EnumAttribute,
-           "method",
-           enum_mappings.mask_combine_method_map,
-           "intersection");
+  node.add_attr<EnumAttribute>("method",
+                               "method",
+                               enum_mappings.mask_combine_method_map,
+                               "intersection");
 }
 
 void compute_combine_mask_node(BaseNode &node)
@@ -47,7 +46,7 @@ void compute_combine_mask_node(BaseNode &node)
 
     std::function<void(hmap::Array &, hmap::Array &, hmap::Array &)> lambda;
 
-    int method = GET(node, "method", EnumAttribute);
+    int method = node.get_attr<EnumAttribute>("method");
 
     switch (method)
     {

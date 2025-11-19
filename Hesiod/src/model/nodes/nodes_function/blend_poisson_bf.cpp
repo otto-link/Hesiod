@@ -22,12 +22,14 @@ void setup_blend_poisson_bf_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input 1");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input 2");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, IntAttribute, "iterations", 500, 1, INT_MAX);
-  ADD_ATTR(node, BoolAttribute, "inverse", false);
-  ADD_ATTR(node, RangeAttribute, "remap");
+  node.add_attr<IntAttribute>("iterations", "iterations", 500, 1, INT_MAX);
+
+  node.add_attr<BoolAttribute>("inverse", "inverse", false);
+
+  node.add_attr<RangeAttribute>("remap", "remap");
 
   // attribute(s) order
   node.set_attr_ordered_key({"iterations", "_SEPARATOR_", "inverse", "remap"});
@@ -58,7 +60,7 @@ void compute_blend_poisson_bf_node(BaseNode &node)
 
           *pa_out = hmap::gpu::blend_poisson_bf(*pa_in1,
                                                 *pa_in2,
-                                                GET(node, "iterations", IntAttribute),
+                                                node.get_attr<IntAttribute>("iterations"),
                                                 pa_mask);
         },
         node.get_config_ref()->hmap_transform_mode_gpu);
@@ -68,14 +70,14 @@ void compute_blend_poisson_bf_node(BaseNode &node)
     // post-process
     post_process_heightmap(node,
                            *p_out,
-                           GET(node, "inverse", BoolAttribute),
+                           node.get_attr<BoolAttribute>("inverse"),
                            false, // smooth
                            0,
                            false, // saturate
                            {0.f, 0.f},
                            0.f,
-                           GET_MEMBER(node, "remap", RangeAttribute, is_active),
-                           GET(node, "remap", RangeAttribute));
+                           node.get_attr_ref<RangeAttribute>("remap")->get_is_active(),
+                           node.get_attr<RangeAttribute>("remap"));
   }
 
   Q_EMIT node.compute_finished(node.get_id());

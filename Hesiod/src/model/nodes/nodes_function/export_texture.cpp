@@ -26,14 +26,14 @@ void setup_export_texture_node(BaseNode &node)
   node.add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture");
 
   // attribute(s)
-  ADD_ATTR(node,
-           FilenameAttribute,
-           "fname",
-           std::filesystem::path("texture.png"),
-           "PNG (*.png)",
-           true);
-  ADD_ATTR(node, BoolAttribute, "16 bit", false);
-  ADD_ATTR(node, BoolAttribute, "auto_export", false);
+  node.add_attr<FilenameAttribute>("fname",
+                                   "fname",
+                                   std::filesystem::path("texture.png"),
+                                   "PNG (*.png)",
+                                   true);
+  node.add_attr<BoolAttribute>("16 bit", "16 bit", false);
+
+  node.add_attr<BoolAttribute>("auto_export", "auto_export", false);
 
   // attribute(s) order
   node.set_attr_ordered_key({"fname", "16 bit", "auto_export"});
@@ -50,12 +50,12 @@ void compute_export_texture_node(BaseNode &node)
 
   hmap::HeightmapRGBA *p_in = node.get_value_ref<hmap::HeightmapRGBA>("texture");
 
-  if (p_in && GET(node, "auto_export", BoolAttribute))
+  if (p_in && node.get_attr<BoolAttribute>("auto_export"))
   {
-    std::filesystem::path fname = GET(node, "fname", FilenameAttribute);
+    std::filesystem::path fname = node.get_attr<FilenameAttribute>("fname");
     fname = ensure_extension(fname, ".png");
 
-    if (GET(node, "16 bit", BoolAttribute))
+    if (node.get_attr<BoolAttribute>("16 bit"))
       p_in->to_png(fname.string(), CV_16U);
     else
       p_in->to_png(fname.string(), CV_8U);

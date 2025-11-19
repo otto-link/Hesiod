@@ -27,18 +27,34 @@ void setup_texture_advection_particle_node(BaseNode &node)
   node.add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "advection_mask");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, SeedAttribute, "seed");
-  ADD_ATTR(node, FloatAttribute, "particle_density", 0.5f, 0.f, 1.f);
-  ADD_ATTR(node, IntAttribute, "iterations", 1, 1, 100);
-  ADD_ATTR(node, FloatAttribute, "advection_length", 0.1f, 0.f, 0.2f);
-  ADD_ATTR(node, FloatAttribute, "value_persistence", 0.99f, 0.8f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "inertia", 0.f, 0.f, 1.f);
-  ADD_ATTR(node, BoolAttribute, "reverse", false);
-  ADD_ATTR(node, BoolAttribute, "post_filtering", false);
-  ADD_ATTR(node, FloatAttribute, "post_filtering_sigma", 0.07f, 0.f, 0.125f);
+  node.add_attr<SeedAttribute>("seed", "seed");
+
+  node.add_attr<FloatAttribute>("particle_density", "particle_density", 0.5f, 0.f, 1.f);
+
+  node.add_attr<IntAttribute>("iterations", "iterations", 1, 1, 100);
+
+  node.add_attr<FloatAttribute>("advection_length", "advection_length", 0.1f, 0.f, 0.2f);
+
+  node.add_attr<FloatAttribute>("value_persistence",
+                                "value_persistence",
+                                0.99f,
+                                0.8f,
+                                1.f);
+
+  node.add_attr<FloatAttribute>("inertia", "inertia", 0.f, 0.f, 1.f);
+
+  node.add_attr<BoolAttribute>("reverse", "reverse", false);
+
+  node.add_attr<BoolAttribute>("post_filtering", "post_filtering", false);
+
+  node.add_attr<FloatAttribute>("post_filtering_sigma",
+                                "post_filtering_sigma",
+                                0.07f,
+                                0.f,
+                                0.125f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"_SEPARATOR_TEXT_Base Parameters",
@@ -82,7 +98,7 @@ void compute_texture_advection_particle_node(BaseNode &node)
     std::shared_ptr<hmap::Heightmap> sp_mask = pre_process_mask(node, p_mask, *p_z);
 
     // number of particles based on the input particle density
-    int nparticles = (int)(GET(node, "particle_density", FloatAttribute) *
+    int nparticles = (int)(node.get_attr<FloatAttribute>("particle_density") *
                            p_out->shape.x * p_out->shape.y);
 
     // apply advection separetely to each RGBA channels
@@ -105,15 +121,15 @@ void compute_texture_advection_particle_node(BaseNode &node)
             *pa_field_out = hmap::gpu::advection_particle(
                 *pa_z,
                 *pa_field,
-                GET(node, "iterations", IntAttribute),
+                node.get_attr<IntAttribute>("iterations"),
                 nparticles,
-                GET(node, "seed", SeedAttribute),
-                GET(node, "reverse", BoolAttribute),
-                GET(node, "post_filtering", BoolAttribute),
-                GET(node, "post_filtering_sigma", FloatAttribute),
-                GET(node, "advection_length", FloatAttribute),
-                GET(node, "value_persistence", FloatAttribute),
-                GET(node, "inertia", FloatAttribute),
+                node.get_attr<SeedAttribute>("seed"),
+                node.get_attr<BoolAttribute>("reverse"),
+                node.get_attr<BoolAttribute>("post_filtering"),
+                node.get_attr<FloatAttribute>("post_filtering_sigma"),
+                node.get_attr<FloatAttribute>("advection_length"),
+                node.get_attr<FloatAttribute>("value_persistence"),
+                node.get_attr<FloatAttribute>("inertia"),
                 pa_advection_mask,
                 pa_mask);
           },

@@ -22,8 +22,9 @@ void setup_cloud_to_path_node(BaseNode &node)
   node.add_port<hmap::Path>(gnode::PortType::OUT, "path");
 
   // attribute(s)
-  ADD_ATTR(node, BoolAttribute, "closed", false);
-  ADD_ATTR(node, BoolAttribute, "reorder_nns", false);
+  node.add_attr<BoolAttribute>("closed", "closed", false);
+
+  node.add_attr<BoolAttribute>("reorder_nns", "reorder_nns", false);
 
   // attribute(s) order
   node.set_attr_ordered_key({"closed", "reorder_nns"});
@@ -44,9 +45,9 @@ void compute_cloud_to_path_node(BaseNode &node)
     // convert the input
     *p_out = hmap::Path(p_in->points);
 
-    p_out->closed = GET(node, "closed", BoolAttribute);
+    p_out->closed = node.get_attr<BoolAttribute>("closed");
 
-    if (GET(node, "reorder_nns", BoolAttribute))
+    if (node.get_attr<BoolAttribute>("reorder_nns"))
       p_out->reorder_nns();
   }
 

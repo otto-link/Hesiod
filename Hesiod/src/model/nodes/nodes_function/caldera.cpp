@@ -22,18 +22,26 @@ void setup_caldera_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dr");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "radius", 0.25f, 0.01f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "sigma_inner", 0.05f, 0.f, 0.3f);
-  ADD_ATTR(node, FloatAttribute, "sigma_outer", 0.1f, 0.f, 0.3f);
-  ADD_ATTR(node, FloatAttribute, "noise_r_amp", 0.1f, 0.f, 0.3f);
-  ADD_ATTR(node, FloatAttribute, "z_bottom", 0.5f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "noise_ratio_z", 0.1f, 0.f, 1.f);
-  ADD_ATTR(node, Vec2FloatAttribute, "center");
-  ADD_ATTR(node, BoolAttribute, "inverse", false);
-  ADD_ATTR(node, RangeAttribute, "remap");
+  node.add_attr<FloatAttribute>("radius", "radius", 0.25f, 0.01f, 1.f);
+
+  node.add_attr<FloatAttribute>("sigma_inner", "sigma_inner", 0.05f, 0.f, 0.3f);
+
+  node.add_attr<FloatAttribute>("sigma_outer", "sigma_outer", 0.1f, 0.f, 0.3f);
+
+  node.add_attr<FloatAttribute>("noise_r_amp", "noise_r_amp", 0.1f, 0.f, 0.3f);
+
+  node.add_attr<FloatAttribute>("z_bottom", "z_bottom", 0.5f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("noise_ratio_z", "noise_ratio_z", 0.1f, 0.f, 1.f);
+
+  node.add_attr<Vec2FloatAttribute>("center", "center");
+
+  node.add_attr<BoolAttribute>("inverse", "inverse", false);
+
+  node.add_attr<RangeAttribute>("remap", "remap");
 
   // attribute(s) order
   node.set_attr_ordered_key({"radius",
@@ -59,15 +67,15 @@ void compute_caldera_node(BaseNode &node)
   hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
   float radius_pixel = std::max(1.f,
-                                GET(node, "radius", FloatAttribute) * p_out->shape.x);
+                                node.get_attr<FloatAttribute>("radius") * p_out->shape.x);
   float sigma_inner_pixel = std::max(1.f,
-                                     GET(node, "sigma_inner", FloatAttribute) *
+                                     node.get_attr<FloatAttribute>("sigma_inner") *
                                          p_out->shape.x);
   float sigma_outer_pixel = std::max(1.f,
-                                     GET(node, "sigma_outer", FloatAttribute) *
+                                     node.get_attr<FloatAttribute>("sigma_outer") *
                                          p_out->shape.x);
   float noise_r_amp_pixel = std::max(1.f,
-                                     GET(node, "noise_r_amp", FloatAttribute) *
+                                     node.get_attr<FloatAttribute>("noise_r_amp") *
                                          p_out->shape.x);
 
   hmap::fill(
@@ -82,25 +90,25 @@ void compute_caldera_node(BaseNode &node)
                              radius_pixel,
                              sigma_inner_pixel,
                              sigma_outer_pixel,
-                             GET(node, "z_bottom", FloatAttribute),
+                             node.get_attr<FloatAttribute>("z_bottom"),
                              p_noise,
                              noise_r_amp_pixel,
-                             GET(node, "noise_ratio_z", FloatAttribute),
-                             GET(node, "center", Vec2FloatAttribute),
+                             node.get_attr<FloatAttribute>("noise_ratio_z"),
+                             node.get_attr<Vec2FloatAttribute>("center"),
                              bbox);
       });
 
   // post-process
   post_process_heightmap(node,
                          *p_out,
-                         GET(node, "inverse", BoolAttribute),
+                         node.get_attr<BoolAttribute>("inverse"),
                          false, // smooth
                          0,
                          false, // saturate
                          {0.f, 0.f},
                          0.f,
-                         GET_MEMBER(node, "remap", RangeAttribute, is_active),
-                         GET(node, "remap", RangeAttribute));
+                         node.get_attr_ref<RangeAttribute>("remap")->get_is_active(),
+                         node.get_attr<RangeAttribute>("remap"));
 
   Q_EMIT node.compute_finished(node.get_id());
 }

@@ -21,10 +21,10 @@ void setup_flooding_from_point_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "elevation");
   node.add_port<hmap::Cloud>(gnode::PortType::IN, "cloud");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "water_depth", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "water_depth", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "depth_min", 0.01f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>("depth_min", "depth_min", 0.01f, 0.f, 1.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"depth_min"});
@@ -70,7 +70,7 @@ void compute_flooding_from_point_node(BaseNode &node)
           *pa_out = hmap::flooding_from_point(*pa_in,
                                               i,
                                               j,
-                                              GET(node, "depth_min", FloatAttribute));
+                                              node.get_attr<FloatAttribute>("depth_min"));
         },
         hmap::TransformMode::SINGLE_ARRAY); // forced, not tileable
   }

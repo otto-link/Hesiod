@@ -24,20 +24,23 @@ void setup_colorize_gradient_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "level");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "alpha");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "noise");
-  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture", CONFIG);
+  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, ColorGradientAttribute, "gradient");
-  ADD_ATTR(node, BoolAttribute, "reverse_colormap", false);
-  ADD_ATTR(node, BoolAttribute, "reverse_alpha", false);
-  ADD_ATTR(node, BoolAttribute, "clamp_alpha", true);
+  node.add_attr<ColorGradientAttribute>("gradient", "gradient");
+
+  node.add_attr<BoolAttribute>("reverse_colormap", "reverse_colormap", false);
+
+  node.add_attr<BoolAttribute>("reverse_alpha", "reverse_alpha", false);
+
+  node.add_attr<BoolAttribute>("clamp_alpha", "clamp_alpha", true);
 
   // attribute(s) order
   node.set_attr_ordered_key(
       {"gradient", "_SEPARATOR_", "reverse_colormap", "reverse_alpha", "clamp_alpha"});
 
   // add presets
-  GET_REF(node, "gradient", ColorGradientAttribute)
+  node.get_attr_ref<ColorGradientAttribute>("gradient")
       ->set_presets(ColorGradientManager::get_instance().get_as_attr_presets());
 }
 
@@ -56,7 +59,7 @@ void compute_colorize_gradient_node(BaseNode &node)
     hmap::HeightmapRGBA *p_out = node.get_value_ref<hmap::HeightmapRGBA>("texture");
 
     // define colormap based on color gradient
-    std::vector<attr::Stop> gradient = GET(node, "gradient", ColorGradientAttribute);
+    std::vector<attr::Stop> gradient = node.get_attr<ColorGradientAttribute>("gradient");
     std::vector<float>      positions = {};
     std::vector<std::vector<float>> colormap_colors = {};
 
@@ -77,10 +80,10 @@ void compute_colorize_gradient_node(BaseNode &node)
       alpha_copy = *p_alpha;
       p_alpha_copy = &alpha_copy;
 
-      if (GET(node, "clamp_alpha", BoolAttribute))
+      if (node.get_attr<BoolAttribute>("clamp_alpha"))
         hmap::transform(alpha_copy, [](hmap::Array &x) { hmap::clamp(x, 0.f, 1.f); });
 
-      if (GET(node, "reverse_alpha", BoolAttribute))
+      if (node.get_attr<BoolAttribute>("reverse_alpha"))
         alpha_copy.inverse();
     }
 
@@ -100,7 +103,7 @@ void compute_colorize_gradient_node(BaseNode &node)
                     positions,
                     colormap_colors,
                     p_alpha_copy,
-                    GET(node, "reverse_colormap", BoolAttribute),
+                    node.get_attr<BoolAttribute>("reverse_colormap"),
                     p_noise);
   }
 

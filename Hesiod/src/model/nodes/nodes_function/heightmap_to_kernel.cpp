@@ -26,14 +26,16 @@ void setup_heightmap_to_kernel_node(BaseNode &node)
                              node.get_config_ref()->shape);
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "radius", 0.1f, 0.001f, 0.2f);
-  ADD_ATTR(node, BoolAttribute, "normalize", false);
-  ADD_ATTR(node, BoolAttribute, "envelope", false);
-  ADD_ATTR(node,
-           EnumAttribute,
-           "envelope_kernel",
-           enum_mappings.kernel_type_map,
-           "cubic_pulse");
+  node.add_attr<FloatAttribute>("radius", "radius", 0.1f, 0.001f, 0.2f);
+
+  node.add_attr<BoolAttribute>("normalize", "normalize", false);
+
+  node.add_attr<BoolAttribute>("envelope", "envelope", false);
+
+  node.add_attr<EnumAttribute>("envelope_kernel",
+                               "envelope_kernel",
+                               enum_mappings.kernel_type_map,
+                               "cubic_pulse");
 
   // attribute(s) order
   node.set_attr_ordered_key(
@@ -54,22 +56,22 @@ void compute_heightmap_to_kernel_node(BaseNode &node)
 
     int ir = std::max(
         1,
-        (int)(GET(node, "radius", FloatAttribute) * node.get_config_ref()->shape.x));
+        (int)(node.get_attr<FloatAttribute>("radius") * node.get_config_ref()->shape.x));
     hmap::Vec2<int> kernel_shape = {2 * ir + 1, 2 * ir + 1};
 
     hmap::Array array = p_in->to_array();
     *p_out = array.resample_to_shape(kernel_shape);
 
-    if (GET(node, "envelope", BoolAttribute))
+    if (node.get_attr<BoolAttribute>("envelope"))
     {
       hmap::Array env = hmap::get_kernel(
           kernel_shape,
-          (hmap::KernelType)GET(node, "envelope_kernel", EnumAttribute));
+          (hmap::KernelType)node.get_attr<EnumAttribute>("envelope_kernel"));
 
       *p_out *= env;
     }
 
-    if (GET(node, "normalize", BoolAttribute))
+    if (node.get_attr<BoolAttribute>("normalize"))
       *p_out /= p_out->sum();
   }
 

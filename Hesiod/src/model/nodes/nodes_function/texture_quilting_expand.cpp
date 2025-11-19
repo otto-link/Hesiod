@@ -21,28 +21,39 @@ void setup_texture_quilting_expand_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture (guide)");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "heightmap (guide)");
-  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture", CONFIG);
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "heightmap", CONFIG);
+  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture", CONFIG(node));
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "heightmap", CONFIG(node));
 
   node.add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture A");
   node.add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture B");
   node.add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture C");
   node.add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture D");
 
-  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture A out", CONFIG);
-  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture B out", CONFIG);
-  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture C out", CONFIG);
-  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture D out", CONFIG);
+  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture A out", CONFIG(node));
+  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture B out", CONFIG(node));
+  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture C out", CONFIG(node));
+  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture D out", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "expansion_ratio", 2.f, 1.f, FLT_MAX);
-  ADD_ATTR(node, FloatAttribute, "patch_width", 0.3f, 0.1f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "overlap", 0.9f, 0.05f, 0.95f);
-  ADD_ATTR(node, SeedAttribute, "seed");
-  ADD_ATTR(node, BoolAttribute, "patch_flip", true);
-  ADD_ATTR(node, BoolAttribute, "patch_rotate", true);
-  ADD_ATTR(node, BoolAttribute, "patch_transpose", true);
-  ADD_ATTR(node, FloatAttribute, "filter_width_ratio", 0.5f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>("expansion_ratio", "expansion_ratio", 2.f, 1.f, FLT_MAX);
+
+  node.add_attr<FloatAttribute>("patch_width", "patch_width", 0.3f, 0.1f, 1.f);
+
+  node.add_attr<FloatAttribute>("overlap", "overlap", 0.9f, 0.05f, 0.95f);
+
+  node.add_attr<SeedAttribute>("seed", "seed");
+
+  node.add_attr<BoolAttribute>("patch_flip", "patch_flip", true);
+
+  node.add_attr<BoolAttribute>("patch_rotate", "patch_rotate", true);
+
+  node.add_attr<BoolAttribute>("patch_transpose", "patch_transpose", true);
+
+  node.add_attr<FloatAttribute>("filter_width_ratio",
+                                "filter_width_ratio",
+                                0.5f,
+                                0.f,
+                                1.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"expansion_ratio",
@@ -124,23 +135,23 @@ void compute_texture_quilting_expand_node(BaseNode &node)
 
     int ir = std::max(
         1,
-        (int)(GET(node, "patch_width", FloatAttribute) * p_hmap_out->shape.x));
+        (int)(node.get_attr<FloatAttribute>("patch_width") * p_hmap_out->shape.x));
     hmap::Vec2<int> patch_base_shape = hmap::Vec2<int>(ir, ir);
 
     // --- work on a single array (i.e. not-tiled algo)
 
     hmap::Array out_array = hmap::quilting_expand(
         guide_array,
-        GET(node, "expansion_ratio", FloatAttribute),
+        node.get_attr<FloatAttribute>("expansion_ratio"),
         patch_base_shape,
-        GET(node, "overlap", FloatAttribute),
-        GET(node, "seed", SeedAttribute),
+        node.get_attr<FloatAttribute>("overlap"),
+        node.get_attr<SeedAttribute>("seed"),
         secondary_arrays_ptr,
         true, // keep_input_shape
-        GET(node, "patch_flip", BoolAttribute),
-        GET(node, "patch_rotate", BoolAttribute),
-        GET(node, "patch_transpose", BoolAttribute),
-        GET(node, "filter_width_ratio", FloatAttribute));
+        node.get_attr<BoolAttribute>("patch_flip"),
+        node.get_attr<BoolAttribute>("patch_rotate"),
+        node.get_attr<BoolAttribute>("patch_transpose"),
+        node.get_attr<FloatAttribute>("filter_width_ratio"));
 
     // rebuild outputs
     p_hmap_out->from_array_interp_nearest(out_array);
@@ -164,7 +175,8 @@ void compute_texture_quilting_expand_node(BaseNode &node)
       if (pt_in_vec[k])
       {
         // rebuild the texture from Heightmap
-        hmap::Heightmap r(CONFIG), g(CONFIG), b(CONFIG), a(CONFIG);
+        hmap::Heightmap r(CONFIG(node)), g(CONFIG(node)), b(CONFIG(node)),
+            a(CONFIG(node));
 
         r.from_array_interp_nearest(*secondary_arrays_ptr[current_idx]);
         g.from_array_interp_nearest(*secondary_arrays_ptr[current_idx + 1]);

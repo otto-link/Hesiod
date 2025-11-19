@@ -22,21 +22,45 @@ void setup_hydraulic_stream_log_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "erosion", CONFIG);
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "deposition", CONFIG);
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "flow_map", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "erosion", CONFIG(node));
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "deposition", CONFIG(node));
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "flow_map", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "c_erosion", 0.1f, 0.01f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "talus_ref", 0.1f, 0.01f, 10.f);
-  ADD_ATTR(node, FloatAttribute, "deposition_radius", 0.1f, 0.f, 0.2f);
-  ADD_ATTR(node, FloatAttribute, "deposition_scale_ratio", 1.f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "gradient_power", 0.8f, 0.1f, 2.f);
-  ADD_ATTR(node, FloatAttribute, "gradient_scaling_ratio", 1.f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "gradient_prefilter_radius", 0.1f, 0.f, 0.2f);
-  ADD_ATTR(node, FloatAttribute, "saturation_ratio", 1.f, 0.01f, 1.f);
-  ADD_ATTR(node, BoolAttribute, "GPU", HSD_DEFAULT_GPU_MODE);
+  node.add_attr<FloatAttribute>("c_erosion", "c_erosion", 0.1f, 0.01f, 1.f);
+
+  node.add_attr<FloatAttribute>("talus_ref", "talus_ref", 0.1f, 0.01f, 10.f);
+
+  node.add_attr<FloatAttribute>("deposition_radius",
+                                "deposition_radius",
+                                0.1f,
+                                0.f,
+                                0.2f);
+
+  node.add_attr<FloatAttribute>("deposition_scale_ratio",
+                                "deposition_scale_ratio",
+                                1.f,
+                                0.f,
+                                1.f);
+
+  node.add_attr<FloatAttribute>("gradient_power", "gradient_power", 0.8f, 0.1f, 2.f);
+
+  node.add_attr<FloatAttribute>("gradient_scaling_ratio",
+                                "gradient_scaling_ratio",
+                                1.f,
+                                0.f,
+                                1.f);
+
+  node.add_attr<FloatAttribute>("gradient_prefilter_radius",
+                                "gradient_prefilter_radius",
+                                0.1f,
+                                0.f,
+                                0.2f);
+
+  node.add_attr<FloatAttribute>("saturation_ratio", "saturation_ratio", 1.f, 0.01f, 1.f);
+
+  node.add_attr<BoolAttribute>("GPU", "GPU", HSD_DEFAULT_GPU_MODE);
 
   // attribute(s) order
   node.set_attr_ordered_key({"c_erosion",
@@ -73,15 +97,15 @@ void compute_hydraulic_stream_log_node(BaseNode &node)
     // copy the input heightmap
     *p_out = *p_in;
 
-    int deposition_ir = (int)(GET(node, "deposition_radius", FloatAttribute) *
+    int deposition_ir = (int)(node.get_attr<FloatAttribute>("deposition_radius") *
                               p_out->shape.x);
-    int gradient_ir = (int)(GET(node, "gradient_prefilter_radius", FloatAttribute) *
+    int gradient_ir = (int)(node.get_attr<FloatAttribute>("gradient_prefilter_radius") *
                             p_out->shape.x);
 
     deposition_ir = std::max(1, deposition_ir);
     gradient_ir = std::max(1, gradient_ir);
 
-    if (GET(node, "GPU", BoolAttribute))
+    if (node.get_attr<BoolAttribute>("GPU"))
     {
       hmap::transform(
           {p_out, p_mask, p_erosion_map, p_deposition_map, p_flow_map},
@@ -95,15 +119,15 @@ void compute_hydraulic_stream_log_node(BaseNode &node)
 
             hmap::gpu::hydraulic_stream_log(
                 *pa_out,
-                GET(node, "c_erosion", FloatAttribute),
-                GET(node, "talus_ref", FloatAttribute),
+                node.get_attr<FloatAttribute>("c_erosion"),
+                node.get_attr<FloatAttribute>("talus_ref"),
                 pa_mask,
                 deposition_ir,
-                GET(node, "deposition_scale_ratio", FloatAttribute),
-                GET(node, "gradient_power", FloatAttribute),
-                GET(node, "gradient_scaling_ratio", FloatAttribute),
+                node.get_attr<FloatAttribute>("deposition_scale_ratio"),
+                node.get_attr<FloatAttribute>("gradient_power"),
+                node.get_attr<FloatAttribute>("gradient_scaling_ratio"),
                 gradient_ir,
-                GET(node, "saturation_ratio", FloatAttribute),
+                node.get_attr<FloatAttribute>("saturation_ratio"),
                 nullptr,
                 nullptr,
                 pa_erosion_map,
@@ -126,15 +150,15 @@ void compute_hydraulic_stream_log_node(BaseNode &node)
 
             hmap::hydraulic_stream_log(
                 *pa_out,
-                GET(node, "c_erosion", FloatAttribute),
-                GET(node, "talus_ref", FloatAttribute),
+                node.get_attr<FloatAttribute>("c_erosion"),
+                node.get_attr<FloatAttribute>("talus_ref"),
                 pa_mask,
                 deposition_ir,
-                GET(node, "deposition_scale_ratio", FloatAttribute),
-                GET(node, "gradient_power", FloatAttribute),
-                GET(node, "gradient_scaling_ratio", FloatAttribute),
+                node.get_attr<FloatAttribute>("deposition_scale_ratio"),
+                node.get_attr<FloatAttribute>("gradient_power"),
+                node.get_attr<FloatAttribute>("gradient_scaling_ratio"),
                 gradient_ir,
-                GET(node, "saturation_ratio", FloatAttribute),
+                node.get_attr<FloatAttribute>("saturation_ratio"),
                 nullptr,
                 nullptr,
                 pa_erosion_map,

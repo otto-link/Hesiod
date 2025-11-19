@@ -21,11 +21,12 @@ void setup_relative_distance_from_skeleton_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "search_radius", 0.2f, 0.f, 0.5f);
-  ADD_ATTR(node, FloatAttribute, "threshold", 0.f, -1.f, 1.f);
+  node.add_attr<FloatAttribute>("search_radius", "search_radius", 0.2f, 0.f, 0.5f);
+
+  node.add_attr<FloatAttribute>("threshold", "threshold", 0.f, -1.f, 1.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"search_radius", "threshold"});
@@ -45,8 +46,9 @@ void compute_relative_distance_from_skeleton_node(BaseNode &node)
   {
     hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
-    int ir = std::max(1,
-                      (int)(GET(node, "search_radius", FloatAttribute) * p_out->shape.x));
+    int ir = std::max(
+        1,
+        (int)(node.get_attr<FloatAttribute>("search_radius") * p_out->shape.x));
 
     hmap::transform(
         {p_out, p_in},
@@ -57,7 +59,7 @@ void compute_relative_distance_from_skeleton_node(BaseNode &node)
 
           *pa_out = *pa_in;
 
-          float threshold = GET(node, "threshold", FloatAttribute);
+          float threshold = node.get_attr<FloatAttribute>("threshold");
           if (threshold)
           {
             hmap::make_binary(*pa_out, threshold);

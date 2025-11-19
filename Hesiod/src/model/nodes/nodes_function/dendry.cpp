@@ -25,20 +25,38 @@ void setup_dendry_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "control");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "envelope");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "out", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "out", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, IntAttribute, "subsampling", 4, 1, 8);
-  ADD_ATTR(node, WaveNbAttribute, "kw", std::vector<float>(2, 8.f), 0.f, FLT_MAX);
-  ADD_ATTR(node, SeedAttribute, "seed");
-  ADD_ATTR(node, FloatAttribute, "eps", 0.2f, 0.f, 1.f);
-  ADD_ATTR(node, IntAttribute, "resolution", 1, 1, 8);
-  ADD_ATTR(node, FloatAttribute, "displacement", 0.075f, 0.f, 0.2f);
-  ADD_ATTR(node, IntAttribute, "primitives_resolution_steps", 3, 1, 8);
-  ADD_ATTR(node, FloatAttribute, "slope_power", 1.f, 0.f, 2.f);
-  ADD_ATTR(node, FloatAttribute, "noise_amplitude_proportion", 0.01f, 0.f, 1.f);
-  ADD_ATTR(node, BoolAttribute, "inverse", false);
-  ADD_ATTR(node, RangeAttribute, "remap");
+  node.add_attr<IntAttribute>("subsampling", "subsampling", 4, 1, 8);
+
+  node.add_attr<WaveNbAttribute>("kw", "kw", std::vector<float>(2, 8.f), 0.f, FLT_MAX);
+
+  node.add_attr<SeedAttribute>("seed", "seed");
+
+  node.add_attr<FloatAttribute>("eps", "eps", 0.2f, 0.f, 1.f);
+
+  node.add_attr<IntAttribute>("resolution", "resolution", 1, 1, 8);
+
+  node.add_attr<FloatAttribute>("displacement", "displacement", 0.075f, 0.f, 0.2f);
+
+  node.add_attr<IntAttribute>("primitives_resolution_steps",
+                              "primitives_resolution_steps",
+                              3,
+                              1,
+                              8);
+
+  node.add_attr<FloatAttribute>("slope_power", "slope_power", 1.f, 0.f, 2.f);
+
+  node.add_attr<FloatAttribute>("noise_amplitude_proportion",
+                                "noise_amplitude_proportion",
+                                0.01f,
+                                0.f,
+                                1.f);
+
+  node.add_attr<BoolAttribute>("inverse", "inverse", false);
+
+  node.add_attr<RangeAttribute>("remap", "remap");
 
   // attribute(s) order
   node.set_attr_ordered_key({"subsampling",
@@ -84,22 +102,22 @@ void compute_dendry_node(BaseNode &node)
                {
                  return hmap::dendry(
                      shape,
-                     GET(node, "kw", WaveNbAttribute),
-                     GET(node, "seed", SeedAttribute),
+                     node.get_attr<WaveNbAttribute>("kw"),
+                     node.get_attr<SeedAttribute>("seed"),
                      ctrl_array,
-                     GET(node, "eps", FloatAttribute),
-                     GET(node, "resolution", IntAttribute),
-                     GET(node, "displacement", FloatAttribute),
-                     GET(node, "primitives_resolution_steps", IntAttribute),
-                     GET(node, "slope_power", FloatAttribute),
-                     GET(node, "noise_amplitude_proportion", FloatAttribute),
+                     node.get_attr<FloatAttribute>("eps"),
+                     node.get_attr<IntAttribute>("resolution"),
+                     node.get_attr<FloatAttribute>("displacement"),
+                     node.get_attr<IntAttribute>("primitives_resolution_steps"),
+                     node.get_attr<FloatAttribute>("slope_power"),
+                     node.get_attr<FloatAttribute>("noise_amplitude_proportion"),
                      true, // add noise
                      0.5f, // overlap
                      p_noise_x,
                      p_noise_y,
                      nullptr,
                      bbox,
-                     GET(node, "subsampling", IntAttribute));
+                     node.get_attr<IntAttribute>("subsampling"));
                });
 
     p_out->smooth_overlap_buffers();
@@ -120,14 +138,14 @@ void compute_dendry_node(BaseNode &node)
     // post-process
     post_process_heightmap(node,
                            *p_out,
-                           GET(node, "inverse", BoolAttribute),
+                           node.get_attr<BoolAttribute>("inverse"),
                            false, // smooth
                            0,
                            false, // saturate
                            {0.f, 0.f},
                            0.f,
-                           GET_MEMBER(node, "remap", RangeAttribute, is_active),
-                           GET(node, "remap", RangeAttribute));
+                           node.get_attr_ref<RangeAttribute>("remap")->get_is_active(),
+                           node.get_attr<RangeAttribute>("remap"));
   }
 
   Q_EMIT node.compute_finished(node.get_id());

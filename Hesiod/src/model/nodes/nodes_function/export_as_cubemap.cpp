@@ -26,17 +26,24 @@ void setup_export_as_cubemap_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
 
   // attribute(s)
-  ADD_ATTR(node,
-           FilenameAttribute,
-           "fname",
-           std::filesystem::path("cubemap.png"),
-           "PNG (*.png)",
-           true);
-  ADD_ATTR(node, IntAttribute, "cubemap_resolution", 64, 32, INT_MAX);
-  ADD_ATTR(node, FloatAttribute, "overlap", 0.25f, 0.1f, 5.f);
-  ADD_ATTR(node, IntAttribute, "ir", 16, 1, INT_MAX);
-  ADD_ATTR(node, BoolAttribute, "splitted", false);
-  ADD_ATTR(node, BoolAttribute, "auto_export", false);
+  node.add_attr<FilenameAttribute>("fname",
+                                   "fname",
+                                   std::filesystem::path("cubemap.png"),
+                                   "PNG (*.png)",
+                                   true);
+  node.add_attr<IntAttribute>("cubemap_resolution",
+                              "cubemap_resolution",
+                              64,
+                              32,
+                              INT_MAX);
+
+  node.add_attr<FloatAttribute>("overlap", "overlap", 0.25f, 0.1f, 5.f);
+
+  node.add_attr<IntAttribute>("ir", "ir", 16, 1, INT_MAX);
+
+  node.add_attr<BoolAttribute>("splitted", "splitted", false);
+
+  node.add_attr<BoolAttribute>("auto_export", "auto_export", false);
 
   // attribute(s) order
   node.set_attr_ordered_key({"fname",
@@ -59,20 +66,20 @@ void compute_export_as_cubemap_node(BaseNode &node)
 
   hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
 
-  if (p_in && GET(node, "auto_export", BoolAttribute))
+  if (p_in && node.get_attr<BoolAttribute>("auto_export"))
   {
     hmap::Array z = p_in->to_array();
 
-    std::filesystem::path fname = GET(node, "fname", FilenameAttribute);
+    std::filesystem::path fname = node.get_attr<FilenameAttribute>("fname");
     fname = ensure_extension(fname, ".png");
 
     hmap::export_as_cubemap(fname.string(),
                             z,
-                            GET(node, "cubemap_resolution", IntAttribute),
-                            GET(node, "overlap", FloatAttribute),
-                            GET(node, "ir", IntAttribute),
+                            node.get_attr<IntAttribute>("cubemap_resolution"),
+                            node.get_attr<FloatAttribute>("overlap"),
+                            node.get_attr<IntAttribute>("ir"),
                             hmap::Cmap::GRAY,
-                            GET(node, "splitted", BoolAttribute),
+                            node.get_attr<BoolAttribute>("splitted"),
                             nullptr);
   }
 

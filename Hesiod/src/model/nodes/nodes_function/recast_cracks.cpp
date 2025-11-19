@@ -20,12 +20,14 @@ void setup_recast_cracks_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG);
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  ADD_ATTR(node, FloatAttribute, "cut_min", 0.05f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "cut_max", 0.5f, 0.f, 1.f);
-  ADD_ATTR(node, FloatAttribute, "k_smoothing", 0.01f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>("cut_min", "cut_min", 0.05f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("cut_max", "cut_max", 0.5f, 0.f, 1.f);
+
+  node.add_attr<FloatAttribute>("k_smoothing", "k_smoothing", 0.01f, 0.f, 1.f);
 }
 
 void compute_recast_cracks_node(BaseNode &node)
@@ -53,9 +55,9 @@ void compute_recast_cracks_node(BaseNode &node)
           hmap::Array *pa_out = p_arrays[0];
 
           hmap::recast_cracks(*pa_out,
-                              GET(node, "cut_min", FloatAttribute),
-                              GET(node, "cut_max", FloatAttribute),
-                              GET(node, "k_smoothing", FloatAttribute),
+                              node.get_attr<FloatAttribute>("cut_min"),
+                              node.get_attr<FloatAttribute>("cut_max"),
+                              node.get_attr<FloatAttribute>("k_smoothing"),
                               hmin,
                               hmax);
         },
