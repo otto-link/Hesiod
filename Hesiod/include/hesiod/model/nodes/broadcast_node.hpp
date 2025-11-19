@@ -22,7 +22,7 @@ class BroadcastNode : public BaseNode
   Q_OBJECT
 
 public:
-  BroadcastNode(const std::string &label, std::shared_ptr<GraphConfig> config);
+  BroadcastNode(const std::string &label, std::weak_ptr<GraphConfig> config);
 
   void        generate_broadcast_tag();
   std::string get_broadcast_tag();

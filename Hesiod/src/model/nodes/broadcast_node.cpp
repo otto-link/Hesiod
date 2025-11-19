@@ -9,8 +9,7 @@
 namespace hesiod
 {
 
-BroadcastNode::BroadcastNode(const std::string           &label,
-                             std::shared_ptr<GraphConfig> config)
+BroadcastNode::BroadcastNode(const std::string &label, std::weak_ptr<GraphConfig> config)
     : BaseNode(label, config)
 {
 }

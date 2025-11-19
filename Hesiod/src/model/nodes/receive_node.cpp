@@ -9,7 +9,7 @@
 namespace hesiod
 {
 
-ReceiveNode::ReceiveNode(const std::string &label, std::shared_ptr<GraphConfig> config)
+ReceiveNode::ReceiveNode(const std::string &label, std::weak_ptr<GraphConfig> config)
     : BaseNode(label, config)
 {
 }

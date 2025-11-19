@@ -25,7 +25,7 @@ struct BroadcastParam; // forward
 class ReceiveNode : public BaseNode
 {
 public:
-  ReceiveNode(const std::string &label, std::shared_ptr<GraphConfig> config);
+  ReceiveNode(const std::string &label, std::weak_ptr<GraphConfig> config);
 
   BroadcastMap     *get_p_broadcast_params();
   std::string       get_current_tag() const;
@@ -36,8 +36,8 @@ public:
   void update_tag_list(const std::vector<std::string> &new_tags);
 
 private:
-  BroadcastMap     *p_broadcast_params = nullptr; // own by GraphManager
-  hmap::CoordFrame *p_coord_frame = nullptr;      // own by GraphNode
+  BroadcastMap     *p_broadcast_params = nullptr; // owned by GraphManager
+  hmap::CoordFrame *p_coord_frame = nullptr;      // owned by GraphNode
 };
 
 } // namespace hesiod
