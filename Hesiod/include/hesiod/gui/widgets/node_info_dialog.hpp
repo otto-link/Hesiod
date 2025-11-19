@@ -36,6 +36,7 @@ public:
 private:
   void setup_connections();
   void setup_layout();
+  void update_info_content();
   void update_ports_content();
 
   NodePointers get_node_pointers() const;
@@ -48,6 +49,7 @@ private:
   // UI
   QVBoxLayout    *layout;
   QGridLayout    *grid_ports;
+  QGridLayout    *grid_info;
   QPlainTextEdit *editor;
 };
 

@@ -17,6 +17,7 @@
 #include "hesiod/gui/widgets/node_info_dialog.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/graph/graph_node.hpp"
+#include "hesiod/model/utils.hpp"
 
 namespace hesiod
 {
@@ -160,6 +161,19 @@ void NodeInfoDialog::setup_layout()
     this->layout->addWidget(label);
   }
 
+  // --- infos
+
+  {
+    QWidget    *container = new QWidget(this);
+    std::string style = std::format(
+        "background-color: {};",
+        HSD_CTX.app_settings.colors.bg_deep.name().toStdString());
+    container->setStyleSheet(style.c_str());
+    this->grid_info = new QGridLayout(container);
+
+    layout->addWidget(container);
+  }
+
   // --- ports
 
   {
@@ -207,6 +221,57 @@ void NodeInfoDialog::update_content()
 {
   Logger::log()->trace("NodeInfoDialog::update_content");
   this->update_ports_content();
+  this->update_info_content();
+}
+
+void NodeInfoDialog::update_info_content()
+{
+  Logger::log()->trace("NodeInfoDialog::update_info_content");
+
+  auto ptrs = this->get_node_pointers();
+  if (!ptrs.node || !ptrs.gfx || !this->editor)
+    return;
+
+  // empty and delete items of current layout
+  clear_layout(this->grid_info);
+
+  // fill-in data to display
+  struct Row
+  {
+    std::string caption;
+    std::string info;
+  };
+
+  NodeRuntimeInfo info = ptrs.node->get_runtime_info();
+
+  std::vector<Row> rows = {
+      {"Type", ptrs.node->get_caption()},
+      {"Category", ptrs.node->get_category()},
+      {"ID", ptrs.node->get_id()},
+      {"Created", timestamp(info.time_creation)},
+      {"Last Update", timestamp(info.time_last_update)},
+      {"Update Time", std::format("{:.1f} ms", info.update_time)},
+      {"Execution Count", std::to_string(info.eval_count)},
+      {"Memory Usage", std::format("~{:.2f} MB", ptrs.node->get_memory_usage())},
+      {"Address", ptr_as_string((void *)(ptrs.node))},
+  };
+
+  // build layout
+  QFont f("DejaVu Sans Mono", 9);
+
+  int row_idx = 0;
+  for (const Row &r : rows)
+  {
+    int col_idx = 0;
+    for (const auto &s : {r.caption, r.info})
+    {
+      QLabel *label = new QLabel(s.c_str());
+      label->setFont(f);
+      this->grid_info->addWidget(label, row_idx, col_idx);
+      col_idx++;
+    }
+    row_idx++;
+  }
 }
 
 void NodeInfoDialog::update_ports_content()
@@ -253,13 +318,13 @@ void NodeInfoDialog::update_ports_content()
 
       if (ptrs.node->get_data_type(k) == typeid(hmap::Heightmap).name())
       {
-        hmap::Heightmap *p_h = ptrs.node->get_value_ref<hmap::Heightmap>(new_row.caption);
+        auto *p_h = ptrs.node->get_value_ref<hmap::Heightmap>(new_row.caption);
         if (p_h)
           new_row.data_info = std::format("[{:.3e}, {:.3e}]", p_h->min(), p_h->max());
       }
       else if (ptrs.node->get_data_type(k) == typeid(hmap::Cloud).name())
       {
-        hmap::Cloud *p_c = ptrs.node->get_value_ref<hmap::Cloud>(new_row.caption);
+        auto *p_c = ptrs.node->get_value_ref<hmap::Cloud>(new_row.caption);
         if (p_c)
           new_row.data_info = std::format("[{:.3e}, {:.3e}], count: {}",
                                           p_c->get_values_min(),
@@ -268,7 +333,7 @@ void NodeInfoDialog::update_ports_content()
       }
       else if (ptrs.node->get_data_type(k) == typeid(hmap::Path).name())
       {
-        hmap::Path *p_c = ptrs.node->get_value_ref<hmap::Path>(new_row.caption);
+        auto *p_c = ptrs.node->get_value_ref<hmap::Path>(new_row.caption);
         if (p_c)
           new_row.data_info = std::format("[{:.3e}, {:.3e}], count: {}",
                                           p_c->get_values_min(),

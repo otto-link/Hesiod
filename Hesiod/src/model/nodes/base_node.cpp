@@ -47,6 +47,7 @@ BaseNode::BaseNode(const std::string &label, const std::shared_ptr<GraphConfig> 
   Logger::log()->trace("BaseNode::BaseNode, label: {}", label);
 
   this->category = get_node_inventory().at(label);
+  this->update_runtime_info(NodeRuntimeStep::NRS_INIT);
 
   // initialize documentation
   // const std::string doc_path = HSD_CTX.app_settings.node_editor.doc_path;
@@ -86,11 +87,18 @@ BaseNode::BaseNode(const std::string &label, const std::shared_ptr<GraphConfig> 
 
   // connections
   this->connect(this,
+                &BaseNode::compute_started,
+                [this]()
+                { this->update_runtime_info(NodeRuntimeStep::NRS_UPDATE_START); });
+
+  this->connect(this,
                 &BaseNode::compute_finished,
                 [this]()
                 {
                   if (this->data_preview)
                     this->data_preview->update_preview();
+
+                  this->update_runtime_info(NodeRuntimeStep::NRS_UPDATE_END);
                 });
 }
 
@@ -235,6 +243,64 @@ std::string BaseNode::get_documentation_short() const
   return str;
 }
 
+float BaseNode::get_memory_usage() const
+{
+  // only count big float arrays
+  size_t unit = size_t(this->config->shape.x * this->config->shape.y) * sizeof(float);
+  size_t count = 0;
+
+  for (int k = 0; k < this->get_nports(); k++)
+  {
+    // only outputs carry data
+    if (this->get_port_type(k) == gngui::PortType::IN)
+      continue;
+
+    if (this->get_data_type(k) == typeid(hmap::Heightmap).name())
+    {
+      count += unit;
+    }
+    else if (this->get_data_type(k) == typeid(hmap::HeightmapRGBA).name())
+    {
+      count += 4.f * unit;
+    }
+    else if (this->get_data_type(k) == typeid(hmap::Array).name())
+    {
+      count += unit;
+    }
+    else if (this->get_data_type(k) == typeid(std::vector<float>).name())
+    {
+      auto *p_d = this->get_value_ref<std::vector<float>>(k);
+      if (p_d)
+        count += sizeof(float) * p_d->size();
+    }
+    else if (this->get_data_type(k) == typeid(std::vector<hmap::Heightmap>).name())
+    {
+      auto *p_d = this->get_value_ref<std::vector<hmap::Heightmap>>(k);
+      if (p_d)
+        count += unit * p_d->size();
+    }
+    else if (this->get_data_type(k) == typeid(hmap::Cloud).name())
+    {
+      auto *p_d = this->get_value_ref<hmap::Cloud>(k);
+      if (p_d)
+        count += sizeof(float) * 3 * p_d->get_npoints();
+    }
+    else if (this->get_data_type(k) == typeid(hmap::Path).name())
+    {
+      auto *p_d = this->get_value_ref<hmap::Path>(k);
+      if (p_d)
+        count += sizeof(float) * 3 * p_d->get_npoints();
+    }
+  }
+
+  if (count > 0.)
+    return (float)(count) / 1048576.f; // in MB
+  else
+    return -1.f; // to signal not implemented types
+}
+
+NodeRuntimeInfo BaseNode::get_runtime_info() const { return this->runtime_info; }
+
 GraphNode *BaseNode::get_p_graph_node() const
 {
   if (!this->p_graph_node)
@@ -253,6 +319,9 @@ void BaseNode::json_from(nlohmann::json const &json)
 
     if (json.contains("comment"))
       this->set_comment(json["comment"]);
+
+    if (json.contains("runtime_info"))
+      this->runtime_info.json_from(json["runtime_info"]);
 
     for (auto &[key, attr] : this->attr)
     {
@@ -281,6 +350,7 @@ nlohmann::json BaseNode::json_to() const
     json["id"] = this->get_id();
     json["label"] = this->get_label();
     json["comment"] = this->get_comment();
+    json["runtime_info"] = this->runtime_info.json_to();
   }
   catch (const std::exception &e)
   {
@@ -417,6 +487,44 @@ void BaseNode::update_attributes_tool_tip()
         sp_attr->set_description(description);
       }
     }
+}
+
+void BaseNode::update_runtime_info(NodeRuntimeStep step)
+{
+  // TODO move this method to NodeRuntimeInfo class?
+
+  switch (step)
+  {
+  case NodeRuntimeStep::NRS_INIT:
+  {
+    this->runtime_info.time_creation = std::chrono::system_clock::now();
+  }
+  break;
+
+  case NodeRuntimeStep::NRS_UPDATE_START:
+  {
+    this->runtime_info.timer_t0 = std::chrono::system_clock::now();
+  }
+  break;
+
+  case NodeRuntimeStep::NRS_UPDATE_END:
+  {
+    this->runtime_info.time_last_update = std::chrono::system_clock::now();
+    this->runtime_info.eval_count++;
+
+    // elapsed
+    auto t1 = std::chrono::high_resolution_clock::now();
+    this->runtime_info
+        .update_time = (float)std::chrono::duration_cast<std::chrono::nanoseconds>(
+                           t1 - this->runtime_info.timer_t0)
+                           .count() *
+                       1e-6f;
+  }
+  break;
+
+  default:
+    return;
+  }
 }
 
 } // namespace hesiod

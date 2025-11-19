@@ -217,14 +217,24 @@ std::vector<std::string> split_string(const std::string &string, char delimiter)
   return result;
 }
 
-std::string time_stamp()
+std::string timestamp(std::chrono::high_resolution_clock::time_point tp)
 {
-  auto              now = std::chrono::system_clock::now();
-  std::time_t       now_c = std::chrono::system_clock::to_time_t(now);
-  std::stringstream time_stream;
-  time_stream << std::put_time(std::localtime(&now_c), "%Y-%m-%d_%H:%M:%S");
-  return time_stream.str();
+  std::time_t t = std::chrono::system_clock::to_time_t(tp);
+
+  std::tm buf{};
+#if defined(_WIN32)
+  localtime_s(&buf, &t); // Windows
+#else
+  localtime_r(&t, &buf); // Linux / POSIX
+#endif
+
+  std::stringstream ss;
+  ss << std::put_time(&buf, "%Y-%m-%d_%H-%M-%S");
+  return ss.str();
 }
+
+std::string timestamp() { return timestamp(std::chrono::system_clock::now()); }
+
 unsigned int to_uint_safe(const std::string &str)
 {
   try

@@ -1,15 +1,7 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General Public
    License. The full license is in the file LICENSE, distributed with this software. */
-
-/**
- * @file base_node.hpp
- * @author  Otto Link (otto.link.bv@gmail.com)
- * @brief
- *
- * @copyright Copyright (c) 2023
- */
-
 #pragma once
+#include <chrono>
 #include <functional>
 
 #include <QObject>
@@ -21,6 +13,7 @@
 
 #include "hesiod/gui/widgets/data_preview.hpp"
 #include "hesiod/model/graph/graph_config.hpp"
+#include "hesiod/model/nodes/node_runtime_info.hpp"
 
 // clang-format off
 #define ADD_ATTR(aclass, key, ...) p_node->add_attr<aclass>(key, key, ## __VA_ARGS__)
@@ -75,6 +68,11 @@ public:
   // --- Configuration ---
   GraphConfig *get_config_ref() { return this->config.get(); }
 
+  // --- Runtime info ---
+  NodeRuntimeInfo get_runtime_info() const;
+  float           get_memory_usage() const;
+  void            update_runtime_info(NodeRuntimeStep step);
+
   // --- Identification ---
   std::string get_id() const override { return gnode::Node::get_id(); }
   void        set_id(const std::string &new_id) override { gnode::Node::set_id(new_id); }
@@ -127,6 +125,7 @@ private:
   std::shared_ptr<GraphConfig>               config;
   GraphNode                                 *p_graph_node; // belonging graph node
   nlohmann::json                             documentation;
+  NodeRuntimeInfo                            runtime_info;
   std::function<void(BaseNode *p_node)>      compute_fct = nullptr;
   std::function<QWidget *(BaseNode *p_node)> qwidget_fct = nullptr;
   DataPreview *data_preview = nullptr; // owned by gngui::GraphicsNode

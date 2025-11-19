@@ -390,7 +390,7 @@ void HesiodApplication::on_save_copy()
     this->on_save_as();
   else
   {
-    fs::path fname = insert_before_extension(path, "_" + time_stamp());
+    fs::path fname = insert_before_extension(path, "_" + timestamp());
     this->save_project_model_and_ui(fname.string());
   }
 }
@@ -474,7 +474,7 @@ void HesiodApplication::save_project_model_and_ui(const std::string &fname)
                            std::to_string(HESIOD_VERSION_MINOR) + "." +
                            std::to_string(HESIOD_VERSION_PATCH);
 
-  json["saved_at"] = time_stamp();
+  json["saved_at"] = timestamp();
   json_to_file(json, fname, /* merge_with_existing_content */ true);
 
   this->notify(std::format("Project saved successfully, {}.", fname));
