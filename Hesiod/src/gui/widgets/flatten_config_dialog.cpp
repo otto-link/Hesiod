@@ -13,8 +13,8 @@
 namespace hesiod
 {
 
-FlattenConfigDialog::FlattenConfigDialog(FlattenConfig *p_export_param, QWidget *parent)
-    : QDialog(parent), p_export_param(p_export_param)
+FlattenConfigDialog::FlattenConfigDialog(FlattenConfig &export_param, QWidget *parent)
+    : QDialog(parent), export_param(export_param)
 {
   Logger::log()->trace("FlattenConfigDialog::FlattenConfigDialog");
 
@@ -29,8 +29,7 @@ FlattenConfigDialog::FlattenConfigDialog(FlattenConfig *p_export_param, QWidget 
   QLabel *label_fname = new QLabel("filename");
   layout->addWidget(label_fname, row, 0);
 
-  QPushButton *button = new QPushButton(
-      this->p_export_param->export_path.string().c_str());
+  QPushButton *button = new QPushButton(this->export_param.export_path.string().c_str());
   layout->addWidget(button, row, 1, 1, 2);
   row++;
 
@@ -39,18 +38,18 @@ FlattenConfigDialog::FlattenConfigDialog(FlattenConfig *p_export_param, QWidget 
       &QPushButton::released,
       [this]()
       {
-        std::filesystem::path path = this->p_export_param->export_path.parent_path();
+        std::filesystem::path path = this->export_param.export_path.parent_path();
 
         QString fname;
 
         fname = QFileDialog::getSaveFileName(
             this,
-            this->p_export_param->export_path.filename().string().c_str(),
+            this->export_param.export_path.filename().string().c_str(),
             path.string().c_str(),
             "*.png");
 
         if (!fname.isNull() && !fname.isEmpty())
-          this->p_export_param->export_path = fname.toStdString();
+          this->export_param.export_path = fname.toStdString();
       });
 
   // --- shape
@@ -62,13 +61,13 @@ FlattenConfigDialog::FlattenConfigDialog(FlattenConfig *p_export_param, QWidget 
   this->slider_shape->setRange(8, 12); // 256 -> 4096
   this->slider_shape->setSingleStep(1);
   this->slider_shape->setPageStep(1);
-  int pos = (int)std::log2(this->p_export_param->shape.x);
+  int pos = (int)std::log2(this->export_param.shape.x);
   this->slider_shape->setValue(pos);
   layout->addWidget(this->slider_shape, row, 1);
 
   this->label_shape = new QLabel(QString().asprintf("%dx%d",
-                                                    this->p_export_param->shape.x,
-                                                    this->p_export_param->shape.y));
+                                                    this->export_param.shape.x,
+                                                    this->export_param.shape.y));
   layout->addWidget(this->label_shape, row, 2);
 
   connect(this->slider_shape,
@@ -76,11 +75,11 @@ FlattenConfigDialog::FlattenConfigDialog(FlattenConfig *p_export_param, QWidget 
           [this]()
           {
             int pos = this->slider_shape->value();
-            this->p_export_param->shape = hmap::Vec2<int>(std::pow(2, pos),
-                                                          std::pow(2, pos));
+            this->export_param.shape = hmap::Vec2<int>(std::pow(2, pos),
+                                                       std::pow(2, pos));
             this->label_shape->setText(QString().asprintf("%dx%d",
-                                                          this->p_export_param->shape.x,
-                                                          this->p_export_param->shape.y));
+                                                          this->export_param.shape.x,
+                                                          this->export_param.shape.y));
           });
 
   row++;
@@ -94,12 +93,12 @@ FlattenConfigDialog::FlattenConfigDialog(FlattenConfig *p_export_param, QWidget 
   this->slider_tiling->setRange(1, 8);
   this->slider_tiling->setSingleStep(1);
   this->slider_tiling->setPageStep(1);
-  this->slider_tiling->setValue(this->p_export_param->tiling.x);
+  this->slider_tiling->setValue(this->export_param.tiling.x);
   layout->addWidget(this->slider_tiling, row, 1);
 
   this->label_tiling = new QLabel(QString().asprintf("%dx%d",
-                                                     this->p_export_param->tiling.x,
-                                                     this->p_export_param->tiling.y));
+                                                     this->export_param.tiling.x,
+                                                     this->export_param.tiling.y));
   layout->addWidget(this->label_tiling, row, 2);
 
   connect(this->slider_tiling,
@@ -107,12 +106,11 @@ FlattenConfigDialog::FlattenConfigDialog(FlattenConfig *p_export_param, QWidget 
           [this]()
           {
             int pos = this->slider_tiling->value();
-            this->p_export_param->tiling.x = pos;
-            this->p_export_param->tiling.y = pos;
-            this->label_tiling->setText(
-                QString().asprintf("%dx%d",
-                                   this->p_export_param->tiling.x,
-                                   this->p_export_param->tiling.y));
+            this->export_param.tiling.x = pos;
+            this->export_param.tiling.y = pos;
+            this->label_tiling->setText(QString().asprintf("%dx%d",
+                                                           this->export_param.tiling.x,
+                                                           this->export_param.tiling.y));
           });
 
   row++;
@@ -126,7 +124,7 @@ FlattenConfigDialog::FlattenConfigDialog(FlattenConfig *p_export_param, QWidget 
   this->slider_overlap->setRange(0, this->steps);
   this->slider_overlap->setSingleStep(1);
   this->slider_overlap->setPageStep(1);
-  pos = float_to_slider_pos(this->p_export_param->overlap,
+  pos = float_to_slider_pos(this->export_param.overlap,
                             this->vmin,
                             this->vmax,
                             this->steps);
@@ -134,7 +132,7 @@ FlattenConfigDialog::FlattenConfigDialog(FlattenConfig *p_export_param, QWidget 
   layout->addWidget(this->slider_overlap, row, 1);
 
   this->label_overlap = new QLabel(
-      QString().asprintf("%.2f", this->p_export_param->overlap));
+      QString().asprintf("%.2f", this->export_param.overlap));
   layout->addWidget(this->label_overlap, row, 2);
 
   connect(this->slider_overlap,
@@ -146,7 +144,7 @@ FlattenConfigDialog::FlattenConfigDialog(FlattenConfig *p_export_param, QWidget 
                                           this->vmax,
                                           this->steps);
             this->label_overlap->setText(QString().asprintf("%.2f", v));
-            this->p_export_param->overlap = v;
+            this->export_param.overlap = v;
           });
 
   row++;

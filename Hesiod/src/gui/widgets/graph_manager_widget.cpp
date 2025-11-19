@@ -261,7 +261,7 @@ void GraphManagerWidget::on_export()
   if (export_param.export_path.empty())
     export_param.export_path = "export.png";
 
-  FlattenConfigDialog param_editor(&export_param);
+  FlattenConfigDialog param_editor(export_param);
   int                 ret = param_editor.exec();
 
   if (!ret)

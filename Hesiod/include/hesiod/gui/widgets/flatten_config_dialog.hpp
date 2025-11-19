@@ -20,10 +20,10 @@ class FlattenConfigDialog : public QDialog
 
 public:
   FlattenConfigDialog() = default;
-  FlattenConfigDialog(FlattenConfig *p_export_param, QWidget *parent = nullptr);
+  FlattenConfigDialog(FlattenConfig &export_param, QWidget *parent = nullptr);
 
 private:
-  FlattenConfig *p_export_param;
+  FlattenConfig &export_param;
 
   QSlider *slider_shape;
   QLabel  *label_shape;
