@@ -4,14 +4,11 @@
 #include <chrono>
 #include <functional>
 
-#include <QObject>
-
 #include "gnode/node.hpp"
 #include "gnodegui/node_proxy.hpp"
 
 #include "attributes/abstract_attribute.hpp"
 
-#include "hesiod/gui/widgets/data_preview.hpp"
 #include "hesiod/model/graph/graph_config.hpp"
 #include "hesiod/model/nodes/node_runtime_info.hpp"
 
@@ -30,18 +27,14 @@ std::string map_type_name(const std::string &typeid_name);
 // =====================================
 // BaseNode
 // =====================================
-class BaseNode : public QWidget,
-                 public gnode::Node,
-                 public gngui::NodeProxy,
-                 public std::enable_shared_from_this<BaseNode>
+class BaseNode : public gnode::Node, public std::enable_shared_from_this<BaseNode>
 {
-  Q_OBJECT
-
 public:
   // --- Constructors ---
   BaseNode() = default;
   BaseNode(const std::string &label, std::weak_ptr<GraphConfig> config);
-  ~BaseNode();
+
+  std::shared_ptr<BaseNode> get_shared();
 
   // --- Configuration ---
   std::shared_ptr<const GraphConfig> get_config_ref() const;
@@ -52,16 +45,15 @@ public:
   void            update_runtime_info(NodeRuntimeStep step);
 
   // --- Identification ---
-  std::string get_id() const override;
-  void        set_id(const std::string &new_id) override;
-  std::string get_category() const override;
+  std::string get_id() const;
+  void        set_id(const std::string &new_id);
+  std::string get_category() const;
   void        set_comment(const std::string &new_comment);
   std::string get_node_type() const;
 
   // --- Compute ---
-  void compute() override { this->compute_fct(*this); }
+  void compute() override;
   void set_compute_fct(std::function<void(BaseNode &node)> new_compute_fct);
-  void set_qwidget_fct(std::function<QWidget *(BaseNode &node)> new_qwidget_fct);
 
   // --- Serialization ---
   virtual void           json_from(nlohmann::json const &json);
@@ -75,19 +67,14 @@ public:
   void           update_attributes_tool_tip();
 
   // --- NodeProxy Interface (for GUI) ---
-  std::string      get_caption() const override;
-  std::string      get_comment() const override;
-  DataPreview     *get_data_preview_ref();
-  void            *get_data_ref(int port_index) override;
-  std::string      get_data_type(int port_index) const override;
-  int              get_nports() const override;
-  std::string      get_port_caption(int port_index) const override;
-  gngui::PortType  get_port_type(int port_index) const override;
-  virtual QWidget *get_qwidget_ref() override;
-  std::string      get_tool_tip_text() override;
-
-  // --- Editor Connection ---
-  // GraphNode *get_graph_node_ref() const;
+  std::string     get_caption() const;
+  std::string     get_comment() const;
+  void           *get_data_ref(int port_index);
+  std::string     get_data_type(int port_index) const;
+  int             get_nports() const;
+  std::string     get_port_caption(int port_index) const;
+  gngui::PortType get_port_type(int port_index) const;
+  std::string     get_tool_tip_text();
 
   // --- Attribute Management ---
   template <typename T, typename... Args>
@@ -112,24 +99,21 @@ public:
 
   void reseed(bool backward);
 
-  // --- Signals ---
-signals:
-  void compute_finished(const std::string &id);
-  void compute_started(const std::string &id);
+  // --- Callbacks - "signals" equivalent
+  std::function<void(const std::string &id)> compute_finished;
+  std::function<void(const std::string &id)> compute_started;
 
 private:
   // --- Members ---
   std::map<std::string, std::unique_ptr<attr::AbstractAttribute>> attr = {};
 
-  std::vector<std::string>                 attr_ordered_key = {};
-  std::string                              category;
-  std::string                              comment;
-  std::weak_ptr<GraphConfig>               config; // owned by GraphNode
-  nlohmann::json                           documentation;
-  NodeRuntimeInfo                          runtime_info;
-  std::function<void(BaseNode &node)>      compute_fct = nullptr;
-  std::function<QWidget *(BaseNode &node)> qwidget_fct = nullptr;
-  DataPreview *data_preview = nullptr; // owned by gngui::GraphicsNode
+  std::vector<std::string>            attr_ordered_key = {};
+  std::string                         category;
+  std::string                         comment;
+  std::weak_ptr<GraphConfig>          config; // owned by GraphNode
+  nlohmann::json                      documentation;
+  NodeRuntimeInfo                     runtime_info;
+  std::function<void(BaseNode &node)> compute_fct = nullptr;
 };
 
 // =====================================

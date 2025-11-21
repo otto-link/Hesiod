@@ -20,15 +20,15 @@ void add_wip_warning_label(BaseNode &node)
 {
   Logger::log()->trace("add_wip_warning_label: node {}", node.get_label());
 
-  auto lambda = [](BaseNode &node)
-  {
-    QLabel *label = new QLabel("Work in progress\nNode subject to change", &node);
-    label->setStyleSheet("color: #ffb86c;");
-    resize_font(label, -2);
-    return (QWidget *)label;
-  };
+  // auto lambda = [](BaseNode &node)
+  // {
+  //   QLabel *label = new QLabel("Work in progress\nNode subject to change", &node);
+  //   label->setStyleSheet("color: #ffb86c;");
+  //   resize_font(label, -2);
+  //   return (QWidget *)label;
+  // };
 
-  node.set_qwidget_fct(lambda);
+  // node.set_qwidget_fct(lambda);
 }
 
 } // namespace hesiod

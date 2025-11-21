@@ -20,16 +20,16 @@ void add_deprecated_warning_label(BaseNode &node, const std::string &msg = "")
 {
   Logger::log()->trace("add_deprecated_warning_label: node {}", node.get_label());
 
-  auto lambda = [msg](BaseNode &node)
-  {
-    std::string str = "!!! Deprecated !!!\n" + msg;
-    QLabel     *label = new QLabel(str.c_str(), &node);
-    label->setStyleSheet("color: #ff5555;");
-    resize_font(label, -2);
-    return (QWidget *)label;
-  };
+  // auto lambda = [msg](BaseNode &node)
+  // {
+  //   std::string str = "!!! Deprecated !!!\n" + msg;
+  //   QLabel     *label = new QLabel(str.c_str(), &node);
+  //   label->setStyleSheet("color: #ff5555;");
+  //   resize_font(label, -2);
+  //   return (QWidget *)label;
+  // };
 
-  node.set_qwidget_fct(lambda);
+  // node.set_qwidget_fct(lambda);
 }
 
 } // namespace hesiod

@@ -24,6 +24,7 @@
 #include "hesiod/gui/widgets/graph_node_widget.hpp"
 #include "hesiod/gui/widgets/gui_utils.hpp"
 #include "hesiod/gui/widgets/node_info_dialog.hpp"
+#include "hesiod/gui/widgets/node_widget.hpp"
 #include "hesiod/gui/widgets/select_string_dialog.hpp"
 #include "hesiod/gui/widgets/viewers/viewer_3d.hpp"
 #include "hesiod/logger.hpp"
@@ -376,7 +377,13 @@ void GraphNodeWidget::json_from(nlohmann::json const &json)
   }
 
   // Qt mystery, this needs to be delayed to be effective
-  QTimer::singleShot(0, this, [this]() { this->zoom_to_content(); });
+  QTimer::singleShot(0,
+                     this,
+                     [this]()
+                     {
+                       this->update();
+                       this->zoom_to_content();
+                     });
 }
 
 nlohmann::json GraphNodeWidget::json_import(nlohmann::json const &json, QPointF scene_pos)
@@ -731,20 +738,24 @@ void GraphNodeWidget::on_graph_settings_request()
     // update the this proxy node reference in the graphics node
     for (auto &[id, _] : this->p_graph_node->get_nodes())
     {
-      gngui::NodeProxy *p_proxy = this->p_graph_node->get_node_ref_by_id<BaseNode>(id)
-                                      ->get_proxy_ref();
+      // TODO ARCH
 
-      if (gfx_node_ref_map.contains(id))
-      {
-        gfx_node_ref_map.at(id)->set_p_node_proxy(p_proxy);
-        gfx_node_ref_map.at(id)->setSelected(false);
-      }
-      else
-      {
-        Logger::log()->critical(
-            "GraphNodeWidget::on_graph_settings_request: GraphicsNode ptr not in map");
-      }
+      // gngui::NodeProxy *p_proxy = this->p_graph_node->get_node_ref_by_id<BaseNode>(id)
+      //                                 ->get_proxy_ref();
+
+      // if (gfx_node_ref_map.contains(id))
+      // {
+      //   gfx_node_ref_map.at(id)->set_p_node_proxy(p_proxy);
+      //   gfx_node_ref_map.at(id)->setSelected(false);
+      // }
+      // else
+      // {
+      //   Logger::log()->critical(
+      //       "GraphNodeWidget::on_graph_settings_request: GraphicsNode ptr not in map");
+      // }
     }
+
+    this->set_enabled(true);
 
     // set selection back, Qt mystery, this needs to be delayed to be effective
     gngui::GraphicsNode *p_gfx_node = this->get_graphics_node_by_id(selected_id);
@@ -756,8 +767,6 @@ void GraphNodeWidget::on_graph_settings_request()
                            p_gfx_node->setSelected(true);
                        });
   }
-
-  this->set_enabled(true);
 }
 
 void GraphNodeWidget::on_new_graphics_node_request(const std::string &node_id,
@@ -781,7 +790,11 @@ void GraphNodeWidget::on_new_graphics_node_request(const std::string &node_id,
                        scene_pos.y());
 
   BaseNode *p_node = this->p_graph_node->get_node_ref_by_id<BaseNode>(node_id);
-  this->add_node(p_node->get_proxy_ref(), scene_pos, node_id);
+  auto     *p_proxy = new gngui::TypedNodeProxy<BaseNode>(p_node->get_shared());
+  auto     *widget = new NodeWidget(p_node->get_shared(), this);
+
+  this->add_node(p_proxy, scene_pos, node_id);
+  this->get_graphics_node_by_id(node_id)->set_widget(widget);
 }
 
 std::string GraphNodeWidget::on_new_node_request(const std::string &node_type,
@@ -813,12 +826,14 @@ void GraphNodeWidget::on_node_deleted_request(const std::string &node_id)
 
   // make sure the Graphics node is destroyed before the Model node is
   // destroyed to avoid lifetime issues (concerns NodeProxy)
-  QCoreApplication::processEvents();
+
+  // QCoreApplication::processEvents();
 
   this->p_graph_node->remove_node(node_id);
 
   // the model node are also QObjects, make sure they are deleted
-  QCoreApplication::processEvents();
+
+  // QCoreApplication::processEvents();
 
   Q_EMIT this->node_deleted(this->get_id(), node_id);
 
@@ -879,7 +894,7 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
   // only show custom menu if clicked inside the top area of the node,
   // outside the embedded widget
   QPointF item_pos = scene_pos - p_gx_node->scenePos();
-  if (item_pos.y() >= p_gx_node->get_geometry_ref()->widget_pos.y())
+  if (item_pos.y() >= p_gx_node->get_geometry().widget_pos.y())
     return;
 
   // settings widget
@@ -1196,9 +1211,21 @@ void GraphNodeWidget::setup_connections()
                     gngui::GraphicsNode *p_gfx_node = this->get_graphics_node_by_id(
                         node_id);
                     if (p_gfx_node)
-                      p_gfx_node->update_proxy_widget();
+                      p_gfx_node->update();
                   }
                 });
+
+  this->connect(this->p_graph_node,
+                &GraphNode::compute_started,
+                this,
+                [this](const std::string &graph_id, const std::string &node_id)
+                { Q_EMIT this->compute_started(graph_id, node_id); });
+
+  this->connect(this->p_graph_node,
+                &GraphNode::compute_finished,
+                this,
+                [this](const std::string &graph_id, const std::string &node_id)
+                { Q_EMIT this->compute_finished(graph_id, node_id); });
 }
 
 } // namespace hesiod

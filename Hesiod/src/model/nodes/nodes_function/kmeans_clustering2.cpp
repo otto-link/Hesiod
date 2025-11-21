@@ -50,7 +50,8 @@ void setup_kmeans_clustering2_node(BaseNode &node)
 
 void compute_kmeans_clustering2_node(BaseNode &node)
 {
-  Q_EMIT node.compute_started(node.get_id());
+  if (node.compute_started)
+    node.compute_finished(node.get_id());
 
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
@@ -116,7 +117,8 @@ void compute_kmeans_clustering2_node(BaseNode &node)
     }
   }
 
-  Q_EMIT node.compute_finished(node.get_id());
+  if (node.compute_finished)
+    node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

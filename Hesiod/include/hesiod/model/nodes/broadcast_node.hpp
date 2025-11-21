@@ -19,8 +19,6 @@ namespace hesiod
 // =====================================
 class BroadcastNode : public BaseNode
 {
-  Q_OBJECT
-
 public:
   BroadcastNode(const std::string &label, std::weak_ptr<GraphConfig> config);
 
@@ -30,7 +28,7 @@ public:
   void           json_from(nlohmann::json const &json) override;
   nlohmann::json json_to() const override;
 
-Q_SIGNALS:
+  // Q_SIGNALS:
   void broadcast_node_updated(const std::string &graph_id, const std::string &tag);
 
 private:

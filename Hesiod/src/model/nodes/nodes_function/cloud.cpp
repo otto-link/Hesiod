@@ -32,14 +32,16 @@ void setup_cloud_node(BaseNode &node)
 
 void compute_cloud_node(BaseNode &node)
 {
-  Q_EMIT node.compute_started(node.get_id());
+  if (node.compute_started)
+    node.compute_finished(node.get_id());
 
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   hmap::Cloud *p_out = node.get_value_ref<hmap::Cloud>("cloud");
   *p_out = node.get_attr<CloudAttribute>("cloud");
 
-  Q_EMIT node.compute_finished(node.get_id());
+  if (node.compute_finished)
+    node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

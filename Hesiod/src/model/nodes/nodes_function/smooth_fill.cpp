@@ -44,7 +44,8 @@ void compute_smooth_fill_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  Q_EMIT node.compute_started(node.get_id());
+  if (node.compute_started)
+    node.compute_finished(node.get_id());
 
   hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
 
@@ -88,7 +89,8 @@ void compute_smooth_fill_node(BaseNode &node)
     post_process_heightmap(node, *p_out, p_in);
   }
 
-  Q_EMIT node.compute_finished(node.get_id());
+  if (node.compute_finished)
+    node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

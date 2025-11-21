@@ -19,30 +19,30 @@ void add_export_button(BaseNode &node)
 {
   Logger::log()->trace("add_export_button: node {}", node.get_label());
 
-  auto lambda = [](BaseNode &node)
-  {
-    QPushButton *button = new QPushButton("Export!", &node);
+  // auto lambda = [](BaseNode &node)
+  // {
+  //   QPushButton *button = new QPushButton("Export!", &node);
 
-    node.connect(
-        button,
-        &QPushButton::pressed,
-        [&node]()
-        {
-          // bypass 'auto_export' attribute
-          bool auto_export = node.get_attr<BoolAttribute>("auto_export");
+  //   node.connect(
+  //       button,
+  //       &QPushButton::pressed,
+  //       [&node]()
+  //       {
+  //         // bypass 'auto_export' attribute
+  //         bool auto_export = node.get_attr<BoolAttribute>("auto_export");
 
-          if (!auto_export)
-            node.get_attr_ref<BoolAttribute>("auto_export")->set_value(true);
+  //         if (!auto_export)
+  //           node.get_attr_ref<BoolAttribute>("auto_export")->set_value(true);
 
-          node.compute();
+  //         node.compute();
 
-          node.get_attr_ref<BoolAttribute>("auto_export")->set_value(auto_export);
-        });
+  //         node.get_attr_ref<BoolAttribute>("auto_export")->set_value(auto_export);
+  //       });
 
-    return (QWidget *)button;
-  };
+  //   return (QWidget *)button;
+  // };
 
-  node.set_qwidget_fct(lambda);
+  // node.set_qwidget_fct(lambda);
 }
 
 } // namespace hesiod

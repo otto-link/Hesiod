@@ -48,7 +48,8 @@ void setup_bulkify_node(BaseNode &node)
 
 void compute_bulkify_node(BaseNode &node)
 {
-  Q_EMIT node.compute_started(node.get_id());
+  if (node.compute_started)
+    node.compute_finished(node.get_id());
 
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
@@ -85,7 +86,8 @@ void compute_bulkify_node(BaseNode &node)
     p_out->remap(p_in->min(), p_in->max());
   }
 
-  Q_EMIT node.compute_finished(node.get_id());
+  if (node.compute_finished)
+    node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

@@ -18,6 +18,9 @@ add_compile_definitions(
 # ------------------------------
 option(HESIOD_ENABLE_GENERATE_APP_IMAGE "Enable AppImage generation" ON)
 
+option(HESIOD_MINIMAL_NODE_SET
+       "Use a minimal set of nodes (ADVANCED DEV ONLY!!!)" OFF)
+
 # Option to enable LTO and unused-function detection
 option(HESIOD_ENABLE_LTO "Enable LTO and unused-function detection" OFF)
 option(HESIOD_UNUSED_FUNCTIONS "Detect unused static functions" OFF)

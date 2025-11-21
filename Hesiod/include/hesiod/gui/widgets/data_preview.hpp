@@ -6,9 +6,8 @@
 #include <QContextMenuEvent>
 #include <QLabel>
 
-#include "gnodegui/node_proxy.hpp"
-
 #include "hesiod/logger.hpp"
+#include "hesiod/model/nodes/base_node.hpp"
 
 namespace hesiod
 {
@@ -37,21 +36,22 @@ class DataPreview : public QLabel
 {
 public:
   DataPreview() = default;
-  DataPreview(std::weak_ptr<gngui::NodeProxy> wp_proxy_node, QWidget *parent = nullptr);
+  DataPreview(std::weak_ptr<BaseNode> model, QWidget *parent = nullptr);
 
   const QPixmap &get_preview_pixmap() const;
 
-public Q_SLOTS:
+public slots:
+  void clear_preview();
   void update_preview();
 
 protected:
   void contextMenuEvent(QContextMenuEvent *event) override;
 
 private:
-  std::weak_ptr<gngui::NodeProxy> wp_proxy_node;
-  int                             preview_port_index;
-  PreviewType                     preview_type = PreviewType::GRAYSCALE;
-  QPixmap                         preview_pixmap;
+  std::weak_ptr<BaseNode> model;
+  int                     preview_port_index;
+  PreviewType             preview_type = PreviewType::GRAYSCALE;
+  QPixmap                 preview_pixmap;
 };
 
 } // namespace hesiod

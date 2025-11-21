@@ -13,23 +13,6 @@
 namespace hesiod
 {
 
-// create a shared pointer with a custom deleter, used to handle ownership issue between
-// Qt and the gnode::Graph
-template <typename T, typename... Args> std::shared_ptr<T> make_qt_shared(Args &&...args)
-{
-  static_assert(std::is_base_of_v<QObject, T>);
-  T *obj = new T(std::forward<Args>(args)...);
-  return std::shared_ptr<T>(obj,
-                            [](T *o)
-                            {
-                              if (!o)
-                                return;
-
-                              o->disconnect();
-                              o->deleteLater();
-                            });
-}
-
 void dump_node_inventory(const std::string &fname);
 
 void dump_node_documentation_stub(const std::string         &fname,
@@ -46,6 +29,14 @@ std::shared_ptr<gnode::Node> node_factory(const std::string         &node_type,
 
 // nodes functions
 
+DECLARE_NODE(flooding_uniform_level)
+DECLARE_NODE(gabor_wave_fbm)
+DECLARE_NODE(gain)
+DECLARE_NODE(hydraulic_stream_log)
+DECLARE_NODE(noise)
+DECLARE_NODE(preview)
+
+#ifndef HESIOD_MINIMAL_NODE_SET
 DECLARE_NODE(abs)
 DECLARE_NODE(abs_smooth)
 DECLARE_NODE(accumulation_curvature)
@@ -118,11 +109,8 @@ DECLARE_NODE(fill_talus)
 DECLARE_NODE(flooding_from_boundaries)
 DECLARE_NODE(flooding_from_point)
 DECLARE_NODE(flooding_lake_system)
-DECLARE_NODE(flooding_uniform_level)
 DECLARE_NODE(flow_stream)
 DECLARE_NODE(fold)
-DECLARE_NODE(gabor_wave_fbm)
-DECLARE_NODE(gain)
 DECLARE_NODE(gamma_correction)
 DECLARE_NODE(gamma_correction_local)
 DECLARE_NODE(gaussian_decay)
@@ -143,7 +131,6 @@ DECLARE_NODE(hydraulic_musgrave)
 DECLARE_NODE(hydraulic_particle)
 DECLARE_NODE(hydraulic_procedural)
 DECLARE_NODE(hydraulic_stream)
-DECLARE_NODE(hydraulic_stream_log)
 DECLARE_NODE(hydraulic_stream_upscale_amplification)
 DECLARE_NODE(hydraulic_vpipes)
 DECLARE_NODE(import_heightmap)
@@ -174,7 +161,6 @@ DECLARE_NODE(mountain_inselberg)
 DECLARE_NODE(mountain_range_radial)
 DECLARE_NODE(mountain_stump)
 DECLARE_NODE(mountain_tibesti)
-DECLARE_NODE(noise)
 DECLARE_NODE(noise_fbm)
 DECLARE_NODE(noise_iq)
 DECLARE_NODE(noise_jordan)
@@ -206,7 +192,6 @@ DECLARE_NODE(plateau)
 DECLARE_NODE(polygon_field)
 DECLARE_NODE(polygon_field_fbm)
 DECLARE_NODE(post_process)
-DECLARE_NODE(preview)
 DECLARE_NODE(quilting_blend)
 DECLARE_NODE(quilting_expand)
 DECLARE_NODE(quilting_shuffle)
@@ -318,5 +303,6 @@ DECLARE_NODE(wrinkle)
 DECLARE_NODE(zeroed_edges)
 DECLARE_NODE(zoom)
 DECLARE_NODE(z_score)
+#endif
 
 } // namespace hesiod

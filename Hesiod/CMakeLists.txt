@@ -13,14 +13,36 @@ file(GLOB_RECURSE HESIOD_GUI_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/include/*.hpp)
 file(GLOB_RECURSE HESIOD_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp
      ${CMAKE_CURRENT_SOURCE_DIR}/app/main.cpp)
 
+if(HESIOD_MINIMAL_NODE_SET)
+  # option for a minimal set of nodes for quick compile time when tempering with
+  # node architecture
+  set(NODES_FCT_DIR
+      "${CMAKE_CURRENT_SOURCE_DIR}/src/model/nodes/nodes_function")
+
+  file(GLOB ALL_NODE_SOURCES "${NODES_FCT_DIR}/*.cpp")
+  set(MINIMAL_NODE_SET_SOURCES
+      "${NODES_FCT_DIR}/flooding_uniform_level.cpp"
+      "${NODES_FCT_DIR}/gabor_wave_fbm.cpp"
+      "${NODES_FCT_DIR}/gain.cpp"
+      "${NODES_FCT_DIR}/hydraulic_stream_log.cpp"
+      "${NODES_FCT_DIR}/noise.cpp"
+      "${NODES_FCT_DIR}/preview.cpp")
+
+  set(COMPLENTARY_NODE_SOURCES ${ALL_NODE_SOURCES})
+  foreach(f ${MINIMAL_NODE_SET_SOURCES})
+    list(REMOVE_ITEM COMPLENTARY_NODE_SOURCES ${f})
+  endforeach()
+
+  foreach(f ${COMPLENTARY_NODE_SOURCES})
+    list(REMOVE_ITEM HESIOD_SOURCES ${f})
+  endforeach()
+endif()
+
 # ------------------------------
 # Executable
 # ------------------------------
 add_executable(${PROJECT_NAME})
-target_sources(
-  ${PROJECT_NAME} PRIVATE ${HESIOD_SOURCES} ${HESIOD_GUI_INCLUDES} # needed for
-                                                                   # moc
-)
+target_sources(${PROJECT_NAME} PRIVATE ${HESIOD_SOURCES} ${HESIOD_GUI_INCLUDES})
 
 # ------------------------------
 # Include directories
@@ -77,4 +99,9 @@ add_custom_command(
 # ------------------------------
 # Build information messages
 # ------------------------------
-message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
+message(
+  STATUS
+    "Build
+    type:
+    ${CMAKE_BUILD_TYPE}
+    ")

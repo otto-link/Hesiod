@@ -29,7 +29,8 @@ void setup_broadcast_node(BaseNode &node)
 
 void compute_broadcast_node(BaseNode &node)
 {
-  Q_EMIT node.compute_started(node.get_id());
+  if (node.compute_started)
+    node.compute_finished(node.get_id());
 
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
@@ -45,7 +46,8 @@ void compute_broadcast_node(BaseNode &node)
     if (!p_broadcast_node)
     {
       Logger::log()->error("compute_receive_node: Failed to cast to BroadcastNode");
-      Q_EMIT node.compute_finished(node.get_id());
+      if (node.compute_finished)
+        node.compute_finished(node.get_id());
       return;
     }
 
@@ -64,7 +66,8 @@ void compute_broadcast_node(BaseNode &node)
     Q_EMIT p_broadcast_node->broadcast_node_updated(graph_id, broadcast_tag);
   }
 
-  Q_EMIT node.compute_finished(node.get_id());
+  if (node.compute_finished)
+    node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

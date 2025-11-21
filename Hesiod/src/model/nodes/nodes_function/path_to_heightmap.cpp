@@ -40,7 +40,8 @@ void setup_path_to_heightmap_node(BaseNode &node)
 
 void compute_path_to_heightmap_node(BaseNode &node)
 {
-  Q_EMIT node.compute_started(node.get_id());
+  if (node.compute_started)
+    node.compute_finished(node.get_id());
 
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
@@ -89,7 +90,8 @@ void compute_path_to_heightmap_node(BaseNode &node)
       hmap::transform(*p_out, [](hmap::Array &x) { x = 0.f; });
   }
 
-  Q_EMIT node.compute_finished(node.get_id());
+  if (node.compute_finished)
+    node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

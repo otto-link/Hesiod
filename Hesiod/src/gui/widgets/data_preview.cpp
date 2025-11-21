@@ -8,30 +8,29 @@
 #include <QMenu>
 #include <QPainter>
 
-#include "gnodegui/style.hpp"
-
-#include "hesiod/app/hesiod_application.hpp"
-#include "hesiod/gui/widgets/data_preview.hpp"
-#include "hesiod/logger.hpp"
 #include "highmap/colorize.hpp"
 #include "highmap/geometry/cloud.hpp"
 #include "highmap/geometry/path.hpp"
 #include "highmap/heightmap.hpp"
 #include "highmap/tensor.hpp"
 
+#include "hesiod/app/hesiod_application.hpp"
+#include "hesiod/gui/widgets/data_preview.hpp"
+#include "hesiod/logger.hpp"
+
 namespace hesiod
 {
 
-DataPreview::DataPreview(std::weak_ptr<gngui::NodeProxy> wp_proxy_node, QWidget *parent)
-    : QLabel(parent), wp_proxy_node(wp_proxy_node)
+DataPreview::DataPreview(std::weak_ptr<BaseNode> model, QWidget *parent)
+    : QLabel(parent), model(model)
 {
-  auto p_proxy = this->wp_proxy_node.lock();
-  if (!p_proxy)
-    throw std::invalid_argument("DataPreview::DataPreview: p_proxy_node is nullptr");
+  auto p_model = this->model.lock();
+  if (!p_model)
+    throw std::invalid_argument("DataPreview::DataPreview: p_model_node is nullptr");
 
   Logger::log()->trace("DataPreview::DataPreview, node {}({})",
-                       p_proxy->get_caption(),
-                       p_proxy->get_id());
+                       p_model->get_caption(),
+                       p_model->get_id());
 
   AppContext &ctx = HSD_CTX;
   const auto  shape = hmap::Vec2<int>(ctx.app_settings.node_editor.preview_h,
@@ -44,8 +43,8 @@ DataPreview::DataPreview(std::weak_ptr<gngui::NodeProxy> wp_proxy_node, QWidget 
 
   // Select first output, or fallback to first port
   this->preview_port_index = 0;
-  for (int k = 0; k < p_proxy->get_nports(); ++k)
-    if (p_proxy->get_port_type(k) == gngui::PortType::OUT)
+  for (int k = 0; k < p_model->get_nports(); ++k)
+    if (p_model->get_port_type(k) == gngui::PortType::OUT)
     {
       this->preview_port_index = k;
       break;
@@ -54,12 +53,27 @@ DataPreview::DataPreview(std::weak_ptr<gngui::NodeProxy> wp_proxy_node, QWidget 
   this->update_preview();
 }
 
+void DataPreview::clear_preview()
+{
+  AppContext &ctx = HSD_CTX;
+  const auto  shape = hmap::Vec2<int>(ctx.app_settings.node_editor.preview_h,
+                                     ctx.app_settings.node_editor.preview_w);
+  this->resize(shape.x, shape.y);
+
+  QImage image = QImage(shape.x, shape.y, QImage::Format_Grayscale8);
+  image.fill(Qt::transparent);
+
+  this->preview_pixmap = QPixmap::fromImage(image);
+  this->setPixmap(this->preview_pixmap);
+  this->update();
+}
+
 void DataPreview::contextMenuEvent(QContextMenuEvent *event)
 {
-  auto p_proxy = this->wp_proxy_node.lock();
-  if (!p_proxy)
+  auto p_model = this->model.lock();
+  if (!p_model)
   {
-    Logger::log()->error("DataPreview::contextMenuEvent: p_proxy_node is nullptr");
+    Logger::log()->error("DataPreview::contextMenuEvent: p_model_node is nullptr");
     return;
   }
 
@@ -75,9 +89,9 @@ void DataPreview::contextMenuEvent(QContextMenuEvent *event)
   }
 
   context_menu.addSection("Data");
-  for (int k = 0; k < p_proxy->get_nports(); ++k)
+  for (int k = 0; k < p_model->get_nports(); ++k)
   {
-    const std::string caption = p_proxy->get_port_caption(k);
+    const std::string caption = p_model->get_port_caption(k);
     QAction          *action = context_menu.addAction(QString::fromStdString(caption));
     action->setCheckable(true);
     if (k == preview_port_index)
@@ -97,8 +111,8 @@ void DataPreview::contextMenuEvent(QContextMenuEvent *event)
     }
 
     // Port selection
-    for (int k = 0; k < p_proxy->get_nports(); ++k)
-      if (p_proxy->get_port_caption(k) == label)
+    for (int k = 0; k < p_model->get_nports(); ++k)
+      if (p_model->get_port_caption(k) == label)
       {
         preview_port_index = k;
         update_preview();
@@ -111,15 +125,15 @@ const QPixmap &DataPreview::get_preview_pixmap() const { return this->preview_pi
 
 void DataPreview::update_preview()
 {
-  auto p_proxy = this->wp_proxy_node.lock();
-  if (!p_proxy)
+  auto p_model = this->model.lock();
+  if (!p_model)
   {
-    Logger::log()->error("DataPreview::update_preview: p_proxy_node is nullptr");
+    Logger::log()->error("DataPreview::update_preview: p_model_node is nullptr");
     return;
   }
 
-  void             *blind_ptr = p_proxy->get_data_ref(preview_port_index);
-  const std::string data_type = p_proxy->get_data_type(preview_port_index);
+  void             *blind_ptr = p_model->get_data_ref(preview_port_index);
+  const std::string data_type = p_model->get_data_type(preview_port_index);
 
   AppContext &ctx = HSD_CTX;
   const auto  shape = hmap::Vec2<int>(ctx.app_settings.node_editor.preview_h,

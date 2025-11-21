@@ -67,17 +67,11 @@ std::string GraphNode::add_node(const std::shared_ptr<gnode::Node> &node,
   // connections
   BaseNode *p_basenode = dynamic_cast<BaseNode *>(node.get());
 
-  this->connect(p_basenode,
-                &BaseNode::compute_started,
-                this,
-                [this, node_id]()
-                { Q_EMIT this->compute_started(this->get_id(), node_id); });
+  p_basenode->compute_started = [this](const std::string &node_id)
+  { Q_EMIT this->compute_started(this->get_id(), node_id); };
 
-  this->connect(p_basenode,
-                &BaseNode::compute_finished,
-                this,
-                [this, node_id]()
-                { Q_EMIT this->compute_finished(this->get_id(), node_id); });
+  p_basenode->compute_finished = [this](const std::string &node_id)
+  { Q_EMIT this->compute_finished(this->get_id(), node_id); };
 
   // "special" nodes treatmentxs
   std::string node_type = p_basenode->get_node_type();
@@ -288,9 +282,6 @@ void GraphNode::remove_node(const std::string &id)
     Q_EMIT this->remove_broadcast_tag(tag);
   }
 
-  // Qt-related
-  p_basenode->disconnect();
-
   // basic GNode removing...
   gnode::Graph::remove_node(id);
 }
@@ -329,17 +320,19 @@ void GraphNode::setup_new_broadcast_node(BaseNode *p_node)
     return;
   }
 
+  // TODO ARCHI
+
   // connect
-  this->connect(p_broadcast_node,
-                &BroadcastNode::broadcast_node_updated,
-                this,
-                [this](const std::string &graph_id, const std::string &tag)
-                {
-                  // pass through, re-emit the signals by the graph
-                  // editor (to be handled by the graph manager above)
-                  Logger::log()->trace("graph_node broadcasting, tag: {}", tag);
-                  Q_EMIT this->broadcast_node_updated(graph_id, tag);
-                });
+  // this->connect(p_broadcast_node,
+  //               &BroadcastNode::broadcast_node_updated,
+  //               this,
+  //               [this](const std::string &graph_id, const std::string &tag)
+  //               {
+  //                 // pass through, re-emit the signals by the graph
+  //                 // editor (to be handled by the graph manager above)
+  //                 Logger::log()->trace("graph_node broadcasting, tag: {}", tag);
+  //                 Q_EMIT this->broadcast_node_updated(graph_id, tag);
+  //               });
 
   // broadcast infos: // store broadcast parameters (to be handled to the graph manage
   // above). Use an output port to store the data, to ensure it is

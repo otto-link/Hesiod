@@ -31,8 +31,10 @@ void compute_preview_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  Q_EMIT node.compute_started(node.get_id()); // empty on purpose
-  Q_EMIT node.compute_finished(node.get_id());
+  if (node.compute_started)
+    node.compute_finished(node.get_id()); // empty on purpose
+  if (node.compute_finished)
+    node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

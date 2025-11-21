@@ -10,9 +10,10 @@
 
 #include <QColor>
 
-#include "hesiod/logger.hpp"
 #include "nlohmann/json.hpp"
 #include "nlohmann/json_fwd.hpp"
+
+#include "hesiod/logger.hpp"
 
 namespace hesiod
 {

@@ -63,6 +63,7 @@ struct AppSettings
     float       auto_layout_dy = 384.f;
     bool        show_node_settings_pan = false;
     int         max_bake_resolution = 8192 * 4;
+    bool        disable_during_update = false;
   } node_editor;
 
   struct Viewer

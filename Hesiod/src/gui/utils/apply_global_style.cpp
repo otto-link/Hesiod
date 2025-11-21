@@ -45,6 +45,8 @@ void apply_global_style(QApplication &app)
     gngui::Style *p_style = gngui::Style::get_style().get();
 
     p_style->viewer.color_bg = ctx.app_settings.colors.bg_primary;
+    p_style->viewer.disable_during_update = ctx.app_settings.node_editor
+                                                .disable_during_update;
   }
 
   // QSliderX style

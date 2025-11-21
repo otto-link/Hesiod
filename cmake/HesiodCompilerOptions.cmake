@@ -46,6 +46,9 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
                         -Wl,--print-gc-sections)
   endif()
 
+  if(HESIOD_MINIMAL_NODE_SET)
+    target_compile_definitions(hesiod_options INTERFACE HESIOD_MINIMAL_NODE_SET)
+  endif()
 endif()
 
 # MSVC options

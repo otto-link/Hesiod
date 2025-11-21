@@ -237,28 +237,30 @@ void NodeSettingsWidget::update_content()
 
     this->scroll_layout->addWidget(separator_widget, row++, 0, 1, 2);
 
-    // preview (use scroll_widget as parent so lifetime is tied to the container)
-    DataPreview *p_data_preview = p_node->get_data_preview_ref();
+    // TODO ARCH
 
-    if (p_data_preview)
-    {
-      QPixmap preview_pixmap = p_data_preview->get_preview_pixmap();
+    // // preview (use scroll_widget as parent so lifetime is tied to the container)
+    // DataPreview *p_data_preview = p_node->get_data_preview_ref();
 
-      if (!preview_pixmap.isNull())
-      {
-        const int width = 48;
-        QLabel   *label_preview = new QLabel(/*parent=*/this);
-        QPixmap   scaled_pixmap = preview_pixmap.scaled(width,
-                                                      width,
-                                                      Qt::KeepAspectRatio,
-                                                      Qt::SmoothTransformation);
-        label_preview->setPixmap(scaled_pixmap);
-        label_preview->setScaledContents(true);
-        label_preview->setFixedSize(width, width);
-        label_preview->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        this->scroll_layout->addWidget(label_preview, row, 0, Qt::AlignLeft);
-      }
-    }
+    // if (p_data_preview)
+    // {
+    //   QPixmap preview_pixmap = p_data_preview->get_preview_pixmap();
+
+    //   if (!preview_pixmap.isNull())
+    //   {
+    //     const int width = 48;
+    //     QLabel   *label_preview = new QLabel(/*parent=*/this);
+    //     QPixmap   scaled_pixmap = preview_pixmap.scaled(width,
+    //                                                   width,
+    //                                                   Qt::KeepAspectRatio,
+    //                                                   Qt::SmoothTransformation);
+    //     label_preview->setPixmap(scaled_pixmap);
+    //     label_preview->setScaledContents(true);
+    //     label_preview->setFixedSize(width, width);
+    //     label_preview->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    //     this->scroll_layout->addWidget(label_preview, row, 0, Qt::AlignLeft);
+    //   }
+    // }
 
     // pinned checkbox button
     QPushButton *button_pin = new QPushButton("Pin this node", this);

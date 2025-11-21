@@ -80,7 +80,8 @@ void setup_mountain_range_radial_node(BaseNode &node)
 
 void compute_mountain_range_radial_node(BaseNode &node)
 {
-  Q_EMIT node.compute_started(node.get_id());
+  if (node.compute_started)
+    node.compute_finished(node.get_id());
 
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
@@ -138,7 +139,8 @@ void compute_mountain_range_radial_node(BaseNode &node)
                          node.get_attr_ref<RangeAttribute>("remap")->get_is_active(),
                          node.get_attr<RangeAttribute>("remap"));
 
-  Q_EMIT node.compute_finished(node.get_id());
+  if (node.compute_finished)
+    node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

@@ -84,30 +84,13 @@ BaseNode::BaseNode(const std::string &label, std::weak_ptr<GraphConfig> config)
     Logger::log()->warn("Missing documentation for node: {}", label);
     this->documentation = nlohmann::json::object();
   }
-
-  // connections
-  this->connect(this,
-                &BaseNode::compute_started,
-                [this]()
-                { this->update_runtime_info(NodeRuntimeStep::NRS_UPDATE_START); });
-
-  this->connect(this,
-                &BaseNode::compute_finished,
-                [this]()
-                {
-                  if (this->data_preview)
-                    this->data_preview->update_preview();
-
-                  this->update_runtime_info(NodeRuntimeStep::NRS_UPDATE_END);
-                });
 }
 
-BaseNode::~BaseNode()
+void BaseNode::compute()
 {
-  Logger::log()->debug("BaseNode::~BaseNode");
-  this->disconnect();
-  QCoreApplication::processEvents(QEventLoop::AllEvents);
-  Logger::log()->debug("BaseNode::~BaseNode: out");
+  this->update_runtime_info(NodeRuntimeStep::NRS_UPDATE_START);
+  this->compute_fct(*this);
+  this->update_runtime_info(NodeRuntimeStep::NRS_UPDATE_END);
 }
 
 std::map<std::string, std::unique_ptr<attr::AbstractAttribute>> *BaseNode::
@@ -138,7 +121,7 @@ std::shared_ptr<const GraphConfig> BaseNode::get_config_ref() const
   return ptr;
 }
 
-DataPreview *BaseNode::get_data_preview_ref() { return this->data_preview; }
+// DataPreview *BaseNode::get_data_preview_ref() { return this->data_preview; }
 
 std::string BaseNode::get_documentation_html() const
 {
@@ -327,6 +310,8 @@ std::string BaseNode::get_node_type() const { return this->get_label(); }
 
 NodeRuntimeInfo BaseNode::get_runtime_info() const { return this->runtime_info; }
 
+std::shared_ptr<BaseNode> BaseNode::get_shared() { return shared_from_this(); }
+
 void BaseNode::json_from(nlohmann::json const &json)
 {
   try
@@ -464,11 +449,6 @@ void BaseNode::set_compute_fct(std::function<void(BaseNode &node)> new_compute_f
 }
 
 void BaseNode::set_id(const std::string &new_id) { gnode::Node::set_id(new_id); }
-
-void BaseNode::set_qwidget_fct(std::function<QWidget *(BaseNode &node)> new_qwidget_fct)
-{
-  this->qwidget_fct = std::move(new_qwidget_fct);
-}
 
 void BaseNode::update_attributes_tool_tip()
 {

@@ -68,7 +68,6 @@ void NodeInfoDialog::on_comment_text_changed()
     return;
 
   ptrs.node->set_comment(this->editor->toPlainText().toStdString());
-  ptrs.gfx->update_proxy_widget();
 }
 
 void NodeInfoDialog::setup_connections()
