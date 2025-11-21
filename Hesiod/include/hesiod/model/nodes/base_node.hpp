@@ -38,6 +38,7 @@ public:
 
   // --- Configuration ---
   std::shared_ptr<const GraphConfig> get_config_ref() const;
+  void                               propagate_config_change();
 
   // --- Runtime info ---
   NodeRuntimeInfo get_runtime_info() const;
@@ -66,7 +67,7 @@ public:
   std::string    get_documentation_short() const;
   void           update_attributes_tool_tip();
 
-  // --- NodeProxy Interface (for GUI) ---
+  // --- Proxy (most of it) ---
   std::string     get_caption() const;
   std::string     get_comment() const;
   void           *get_data_ref(int port_index);

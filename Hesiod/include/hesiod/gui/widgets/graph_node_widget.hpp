@@ -103,6 +103,9 @@ private:
                                      BaseNode               *p_node,
                                      attr::AttributesWidget *attr_widget);
 
+  void backup_selected_ids();
+  void reselect_backup_ids();
+
   // --- Members ---
   GraphNode                            *p_graph_node; // own by GraphManager
   std::vector<std::unique_ptr<QWidget>> data_viewers;
@@ -111,6 +114,7 @@ private:
   std::string                           last_node_created_id = "";
   bool                                  is_selecting_with_rubber_band = false;
   std::filesystem::path                 last_import_path;
+  std::vector<std::string>              selected_ids;
 };
 
 } // namespace hesiod

@@ -418,6 +418,54 @@ nlohmann::json BaseNode::node_parameters_to_json() const
   return json;
 }
 
+void BaseNode::propagate_config_change()
+{
+  Logger::log()->trace("BaseNode::propagate_config_change: node {}/{}",
+                       this->get_caption(),
+                       this->get_id());
+
+  // go through the data and modify is needed (only outputs hold data)
+  for (int k = 0; k < this->get_nports(); k++)
+    if (this->get_port_type(k) == gngui::PortType::OUT)
+    {
+      const std::string type = this->get_data_type(k);
+
+      if (type == typeid(hmap::Heightmap).name())
+      {
+        auto *p_v = this->get_value_ref<hmap::Heightmap>(k);
+        if (p_v)
+          *p_v = hmap::Heightmap(this->get_config_ref()->shape,
+                                 this->get_config_ref()->tiling,
+                                 this->get_config_ref()->overlap);
+      }
+      else if (type == typeid(hmap::HeightmapRGBA).name())
+      {
+        auto *p_v = this->get_value_ref<hmap::HeightmapRGBA>(k);
+        if (p_v)
+          *p_v = hmap::HeightmapRGBA(this->get_config_ref()->shape,
+                                     this->get_config_ref()->tiling,
+                                     this->get_config_ref()->overlap);
+      }
+      else if (type == typeid(hmap::Array).name())
+      {
+        auto *p_v = this->get_value_ref<hmap::Array>(k);
+        if (p_v)
+          *p_v = hmap::Array(this->get_config_ref()->shape);
+      }
+      else if (type == typeid(std::vector<hmap::Heightmap>).name())
+      {
+        auto *p_v = this->get_value_ref<std::vector<hmap::Heightmap>>(k);
+        if (p_v)
+        {
+          for (auto &h : *p_v)
+            h = hmap::Heightmap(this->get_config_ref()->shape,
+                                this->get_config_ref()->tiling,
+                                this->get_config_ref()->overlap);
+        }
+      }
+    }
+}
+
 void BaseNode::reseed(bool backward)
 {
   for (const auto &[key, attr] : this->attr)

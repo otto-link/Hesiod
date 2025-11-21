@@ -33,6 +33,7 @@ public:
 
   // --- Config. ---
   GraphConfig *get_config_ref() { return this->config.get(); }
+  void         change_config_values(const GraphConfig &new_config);
 
   // --- Node Factory (create nodes from their type) ---
   std::string add_node(const std::string &node_type);

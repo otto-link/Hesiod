@@ -85,6 +85,19 @@ std::string GraphNode::add_node(const std::shared_ptr<gnode::Node> &node,
   return node_id;
 }
 
+void GraphNode::change_config_values(const GraphConfig &new_config)
+{
+  Logger::log()->trace("GraphNode::change_config_values");
+
+  *this->config = new_config;
+
+  for (auto &[id, p_node] : this->get_nodes())
+    if (BaseNode *p_basenode = dynamic_cast<BaseNode *>(p_node.get()))
+      p_basenode->propagate_config_change();
+
+  this->update();
+}
+
 void GraphNode::json_from(nlohmann::json const &json, GraphConfig *p_input_config)
 {
   Logger::log()->trace("GraphNode::json_from, graph {}", this->get_id());
