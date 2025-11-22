@@ -9,12 +9,10 @@
 #include "nlohmann/json.hpp"
 
 #include "hesiod/model/graph/bake_config.hpp"
+#include "hesiod/model/graph/graph_manager.hpp"
 
 namespace hesiod
 {
-
-// forward
-class GraphManager;
 
 // =====================================
 // ProjectModel
@@ -54,7 +52,7 @@ private:
   std::string                   name;
   std::filesystem::path         path;
   BakeConfig                    bake_config;
-  std::unique_ptr<GraphManager> graph_manager;
+  std::shared_ptr<GraphManager> graph_manager;
   bool                          is_dirty = false;
 };
 

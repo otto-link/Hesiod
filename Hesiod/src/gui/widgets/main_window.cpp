@@ -64,27 +64,23 @@ void MainWindow::setup_connections_with_project()
   }
 
   // GraphNode model -> MainWindow
-  this->connect(ctx.project_model->get_graph_manager_ref(),
-                &GraphManager::update_progress,
-                this->progress_bar,
-                [this](float progress)
-                {
-                  if (progress == 0.f || progress == 100.f)
-                  {
-                    this->progress_bar->setValue(0);
-                    this->progress_bar->setTextVisible(false);
+  ctx.project_model->get_graph_manager_ref()->update_progress = [this](float progress)
+  {
+    if (progress == 0.f || progress == 100.f)
+    {
+      this->progress_bar->setValue(0);
+      this->progress_bar->setTextVisible(false);
 
-                    const std::string message = (progress == 0.f)
-                                                    ? "Updating graph..."
+      const std::string message = (progress == 0.f) ? "Updating graph..."
                                                     : "Graph updated successfully.";
 
-                    this->notify(message);
-                    return;
-                  }
+      this->notify(message);
+      return;
+    }
 
-                  this->progress_bar->setTextVisible(true);
-                  this->progress_bar->setValue(static_cast<int>(progress));
-                });
+    this->progress_bar->setTextVisible(true);
+    this->progress_bar->setValue(static_cast<int>(progress));
+  };
 }
 
 void MainWindow::setup_progress_bar()

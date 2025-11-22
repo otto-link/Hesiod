@@ -297,13 +297,11 @@ void GraphTabsWidget::update_tab_widget()
       this->graph_node_widget_map[id] = new GraphNodeWidget(p_graph_node, this);
 
       // connections / model
-      this->connect(this->p_graph_manager,
-                    &GraphManager::new_broadcast_tag,
-                    [this]() { this->update_receive_nodes_tag_list(); });
+      this->p_graph_manager->new_broadcast_tag = [this](const std::string &)
+      { this->update_receive_nodes_tag_list(); };
 
-      this->connect(this->p_graph_manager,
-                    &GraphManager::remove_broadcast_tag,
-                    [this]() { this->update_receive_nodes_tag_list(); });
+      this->p_graph_manager->remove_broadcast_tag = [this](const std::string &)
+      { this->update_receive_nodes_tag_list(); };
 
       // connections / GUI
       this->connect(this->graph_node_widget_map.at(id),

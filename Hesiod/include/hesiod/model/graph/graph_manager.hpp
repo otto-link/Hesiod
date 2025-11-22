@@ -1,16 +1,6 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General Public
    License. The full license is in the file LICENSE, distributed with this software. */
-
-/**
- * @file graph_manager.hpp
- * @author  Otto Link (otto.link.bv@gmail.com)
- * @brief
- *
- * @copyright Copyright (c) 2025
- */
 #pragma once
-#include <QObject>
-
 #include "nlohmann/json.hpp"
 
 #include "hesiod/model/graph/broadcast_param.hpp"
@@ -30,12 +20,10 @@ class GraphConfig;
 // =====================================
 using GraphNodeMap = std::map<std::string, std::shared_ptr<GraphNode>>;
 
-class GraphManager : public QObject
+class GraphManager
 {
-  Q_OBJECT
-
 public:
-  GraphManager(const std::string &id = "");
+  explicit GraphManager(const std::string &id = "");
 
   void clear();
 
@@ -69,7 +57,12 @@ public:
   void load_from_file(const std::string &fname, GraphConfig *p_config = nullptr);
   void save_to_file(const std::string &fname) const;
 
-private slots:
+  // --- Callbacks ---
+  std::function<void(const std::string &tag)> new_broadcast_tag;
+  std::function<void(const std::string &tag)> remove_broadcast_tag;
+  std::function<void(float progress)>         update_progress;
+
+private:
   // --- Intergraph interactions ---
   void on_broadcast_node_updated(const std::string &graph_id, const std::string &tag);
   void on_new_broadcast_tag(const std::string      &tag,
@@ -78,13 +71,6 @@ private slots:
   void on_remove_broadcast_tag(const std::string &tag);
   void on_update_progress(const std::string &node_id, float progress);
 
-signals:
-  // --- To GUI ---
-  void new_broadcast_tag(const std::string &tag);
-  void remove_broadcast_tag(const std::string &tag);
-  void update_progress(float progress);
-
-private:
   std::string              id;
   GraphNodeMap             graph_nodes;
   int                      id_count = 0;

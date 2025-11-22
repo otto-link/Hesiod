@@ -307,7 +307,9 @@ void GraphManager::on_new_broadcast_tag(const std::string      &tag,
   Logger::log()->trace("GraphManager::on_new_broadcast_tag: tag {}", tag);
 
   this->broadcast_params[tag] = BroadcastParam(t_source, h_source);
-  Q_EMIT this->new_broadcast_tag(tag);
+
+  if (this->new_broadcast_tag)
+    this->new_broadcast_tag(tag);
 }
 
 void GraphManager::on_remove_broadcast_tag(const std::string &tag)
@@ -315,13 +317,15 @@ void GraphManager::on_remove_broadcast_tag(const std::string &tag)
   Logger::log()->trace("GraphManager::on_remove_broadcast_tag: tag {}", tag);
 
   this->broadcast_params.erase(tag);
-  Q_EMIT this->remove_broadcast_tag(tag);
+
+  if (this->remove_broadcast_tag)
+    this->remove_broadcast_tag(tag);
 }
 
 void GraphManager::on_update_progress(const std::string & /* node_id */, float progress)
 {
-  Logger::log()->trace("GraphManager::on_update_progress");
-  Q_EMIT update_progress(progress);
+  if (this->update_progress)
+    this->update_progress(progress);
 }
 
 void GraphManager::remove_graph_node(const std::string &graph_id)
