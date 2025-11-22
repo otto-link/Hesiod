@@ -310,7 +310,18 @@ std::string BaseNode::get_node_type() const { return this->get_label(); }
 
 NodeRuntimeInfo BaseNode::get_runtime_info() const { return this->runtime_info; }
 
-std::shared_ptr<BaseNode> BaseNode::get_shared() { return shared_from_this(); }
+std::shared_ptr<BaseNode> BaseNode::get_shared()
+{
+  try
+  {
+    return shared_from_this();
+  }
+  catch (...)
+  {
+    Logger::log()->critical("BaseNode::get_shared: object is not managed by shared_ptr");
+    return nullptr;
+  }
+}
 
 void BaseNode::json_from(nlohmann::json const &json)
 {
@@ -476,7 +487,7 @@ void BaseNode::reseed(bool backward)
                              this->get_label(),
                              this->get_id());
 
-        unsigned int increment = backward ? -1 : 1;
+        int increment = backward ? -1 : 1;
         p_seed->set_value(p_seed->get_value() + increment);
       }
 }
