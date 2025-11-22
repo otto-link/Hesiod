@@ -42,7 +42,7 @@ HesiodApplication::HesiodApplication(int &argc, char **argv) : QApplication(argc
   apply_global_style(this->get_qapp());
 
   // main window
-  this->main_window = std::make_unique<MainWindow>();
+  this->main_window = new MainWindow();
 
   // (after MainWindow creation)
   this->load_project_model_and_ui();
@@ -71,7 +71,7 @@ AppContext &HesiodApplication::get_context() { return this->context; }
 
 const AppContext &HesiodApplication::get_context() const { return this->context; }
 
-ProjectUI *HesiodApplication::get_project_ui_ref() { return this->project_ui.get(); }
+ProjectUI *HesiodApplication::get_project_ui_ref() { return this->project_ui; }
 
 QApplication &HesiodApplication::get_qapp() { return *static_cast<QApplication *>(this); }
 
@@ -91,7 +91,7 @@ void HesiodApplication::load_project_model_and_ui(const std::string &fname)
   this->context.load_project_model(actual_fname);
 
   // UI
-  this->project_ui = std::make_unique<ProjectUI>();
+  this->project_ui = new ProjectUI();
   this->project_ui->initialize(this->context.project_model.get());
   this->project_ui->load_ui_state(actual_fname);
 
@@ -139,10 +139,10 @@ void HesiodApplication::on_application_settings_action()
   Logger::log()->trace("HesiodApplication::on_application_settings_action");
 
   // initialize app settings widget
-  AppSettingsWindow *settings_window = new AppSettingsWindow(this->main_window.get());
+  AppSettingsWindow *settings_window = new AppSettingsWindow(this->main_window);
 
   // open in a dialog
-  QDialog dialog(this->main_window.get());
+  QDialog dialog(this->main_window);
   dialog.setWindowTitle("Application Settings");
 
   QVBoxLayout *layout = new QVBoxLayout(&dialog);
@@ -186,7 +186,7 @@ void HesiodApplication::on_export_batch()
                            QString(),
                            0,
                            0,
-                           this->main_window.get());
+                           this->main_window);
   progress.setWindowModality(Qt::ApplicationModal);
   progress.setCancelButton(nullptr);
   progress.setMinimumDuration(0); // show immediately
@@ -284,7 +284,7 @@ void HesiodApplication::on_load()
 
   fs::path path = this->context.project_model->get_path();
 
-  QString load_fname = QFileDialog::getOpenFileName(this->main_window.get(),
+  QString load_fname = QFileDialog::getOpenFileName(this->main_window,
                                                     "Load...",
                                                     path.string().c_str(),
                                                     "Hesiod files (*.hsd)");
@@ -360,7 +360,7 @@ void HesiodApplication::on_save_as()
 
   fs::path path = this->context.project_model->get_path();
 
-  QString new_fname = QFileDialog::getSaveFileName(this->main_window.get(),
+  QString new_fname = QFileDialog::getSaveFileName(this->main_window,
                                                    "Save as...",
                                                    path.string().c_str(),
                                                    "Hesiod files (*.hsd)");

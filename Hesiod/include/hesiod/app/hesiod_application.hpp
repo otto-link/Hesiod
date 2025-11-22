@@ -68,10 +68,10 @@ private:
   void setup_menu_bar();
 
   // --- Members (respect order for deletion)
-  AppContext                  context;
-  std::unique_ptr<MainWindow> main_window;
-  std::unique_ptr<ProjectUI>  project_ui;
-  AppSettingsWindow          *app_settings_window; // owned by MainWindow
+  AppContext         context;
+  MainWindow        *main_window;
+  ProjectUI         *project_ui;
+  AppSettingsWindow *app_settings_window; // owned by MainWindow
 };
 
 } // namespace hesiod

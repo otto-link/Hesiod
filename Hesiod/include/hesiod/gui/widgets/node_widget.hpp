@@ -15,7 +15,7 @@ class DataPreview; // forward decl.
 class GraphNodeWidget;
 
 // =====================================
-// NodeInfoDialog
+// NodeWidget
 // =====================================
 
 // generic widget embedded within the GraphicsNode

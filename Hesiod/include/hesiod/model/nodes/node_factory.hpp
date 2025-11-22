@@ -31,6 +31,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string         &node_type,
 
 // minimal set of dev / debug
 DECLARE_NODE(broadcast)
+DECLARE_NODE(export_heightmap)
 DECLARE_NODE(flooding_uniform_level)
 DECLARE_NODE(gabor_wave_fbm)
 DECLARE_NODE(gain)
@@ -101,7 +102,6 @@ DECLARE_NODE(export_as_cubemap)
 DECLARE_NODE(export_asset)
 DECLARE_NODE(export_cloud)
 DECLARE_NODE(export_cloud_to_ply)
-DECLARE_NODE(export_heightmap)
 DECLARE_NODE(export_normal_map)
 DECLARE_NODE(export_path)
 DECLARE_NODE(export_points_to_ply)

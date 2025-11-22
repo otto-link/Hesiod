@@ -26,6 +26,7 @@ if(HESIOD_MINIMAL_NODE_SET)
       "${NODES_FCT_DIR}/gabor_wave_fbm.cpp"
       "${NODES_FCT_DIR}/gain.cpp"
       "${NODES_FCT_DIR}/hydraulic_stream_log.cpp"
+      "${NODES_FCT_DIR}/export_heightmap.cpp"
       "${NODES_FCT_DIR}/noise.cpp"
       "${NODES_FCT_DIR}/preview.cpp"
       "${NODES_FCT_DIR}/receive.cpp")

@@ -442,6 +442,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string         &node_type,
 
   switch (str2int(node_type.c_str()))
   {
+    SETUP_NODE(ExportHeightmap, export_heightmap);
     SETUP_NODE(FloodingUniformLevel, flooding_uniform_level);
     SETUP_NODE(GaborWaveFbm, gabor_wave_fbm);
     SETUP_NODE(Gain, gain);
@@ -511,7 +512,6 @@ std::shared_ptr<gnode::Node> node_factory(const std::string         &node_type,
     SETUP_NODE(ExportAsCubemap, export_as_cubemap);
     SETUP_NODE(ExportCloud, export_cloud);
     SETUP_NODE(ExportCloudToPly, export_cloud_to_ply);
-    SETUP_NODE(ExportHeightmap, export_heightmap);
     SETUP_NODE(ExportNormalMap, export_normal_map);
     SETUP_NODE(ExportPath, export_path);
     SETUP_NODE(ExportPointsToPly, export_points_to_ply);
