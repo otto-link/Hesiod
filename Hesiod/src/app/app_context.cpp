@@ -17,6 +17,8 @@ void AppContext::settings_json_from(nlohmann::json const &json)
 {
   Logger::log()->trace("AppContext::settings_json_from");
 
+  // --- settings
+
   if (json.contains("app_settings"))
     this->app_settings.json_from(json["app_settings"]);
   else
@@ -37,6 +39,33 @@ nlohmann::json AppContext::settings_json_to() const
   json["app_settings"] = this->app_settings.json_to();
   json["style_settings"] = this->style_settings.json_to();
   return json;
+}
+
+void AppContext::load_node_documentation()
+{
+  Logger::log()->trace("AppContext::load_node_documentation");
+
+  const std::string doc_path = this->app_settings.global.node_documentation_path;
+
+  // loading data
+  try
+  {
+    std::ifstream file(doc_path);
+
+    if (!file.is_open())
+    {
+      Logger::log()->error("Could not open documentation file: {}", doc_path);
+      throw std::runtime_error("Documentation file not found");
+    }
+
+    file >> this->node_documentation;
+    Logger::log()->trace("JSON successfully loaded from {}", doc_path);
+  }
+  catch (const std::exception &e)
+  {
+    Logger::log()->error("Error loading documentation: {}", e.what());
+    this->node_documentation = nlohmann::json::object();
+  }
 }
 
 void AppContext::load_project_model(const std::string &fname)

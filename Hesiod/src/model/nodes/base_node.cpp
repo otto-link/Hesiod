@@ -50,29 +50,7 @@ BaseNode::BaseNode(const std::string &label, std::weak_ptr<GraphConfig> config)
   this->update_runtime_info(NodeRuntimeStep::NRS_INIT);
 
   // initialize documentation
-  // const std::string doc_path = HSD_CTX.app_settings.node_editor.doc_path;
-  const std::string doc_path = "data/node_documentation.json"; // TODO fix
-  nlohmann::json    json;
-
-  // loading data
-  try
-  {
-    std::ifstream file(doc_path);
-
-    if (!file.is_open())
-    {
-      Logger::log()->error("Could not open documentation file: {}", doc_path);
-      throw std::runtime_error("Documentation file not found");
-    }
-
-    file >> json;
-    Logger::log()->trace("JSON successfully loaded from {}", doc_path);
-  }
-  catch (const std::exception &e)
-  {
-    Logger::log()->error("Error loading documentation: {}", e.what());
-    json = nlohmann::json::object(); // Create empty JSON to prevent crashes
-  }
+  const nlohmann::json &json = HSD_CTX.node_documentation;
 
   // safely load documentation
   if (json.contains(label) && json[label].is_object())

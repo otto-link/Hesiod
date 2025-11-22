@@ -5,6 +5,8 @@
 #include <QDir>
 #include <QFileInfo>
 
+#include "nlohmann/json.hpp"
+
 #include "hesiod/app/app_settings.hpp"
 #include "hesiod/app/enum_mappings.hpp"
 #include "hesiod/app/style_settings.hpp"
@@ -30,10 +32,12 @@ public:
   void save_project_model(const std::string &fname) const;
 
   // --- Data
+  void load_node_documentation();
 
   // global settings
-  AppSettings   app_settings;
-  StyleSettings style_settings;
+  AppSettings    app_settings;
+  StyleSettings  style_settings;
+  nlohmann::json node_documentation;
 
   // project
   std::unique_ptr<ProjectModel> project_model;
