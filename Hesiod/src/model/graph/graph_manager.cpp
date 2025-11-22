@@ -7,6 +7,7 @@
 #include "highmap/heightmap.hpp"
 #include "highmap/interpolate_array.hpp"
 
+#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/graph/graph_config.hpp"
 #include "hesiod/model/graph/graph_manager.hpp"
@@ -38,34 +39,32 @@ std::string GraphManager::add_graph_node(const std::shared_ptr<GraphNode> &p_gra
 
   // add the graph to the map and store the ID within the graph (in case of)
   this->graph_nodes[new_graph_id] = p_graph_node;
-  p_graph_node->set_id(new_graph_id);
-
-  // store a reference to the global storage of broadcasting data
-  p_graph_node->set_p_broadcast_params(&broadcast_params);
-
   this->graph_order.push_back(new_graph_id);
 
-  // connections for broadcasting data between graph_nodes
-  this->connect(p_graph_node.get(),
-                &GraphNode::broadcast_node_updated,
-                this,
-                &GraphManager::on_broadcast_node_updated);
+  // setup new graph node
+  {
+    p_graph_node->set_id(new_graph_id);
 
-  this->connect(p_graph_node.get(),
-                &GraphNode::new_broadcast_tag,
-                this,
-                &GraphManager::on_new_broadcast_tag);
+    // store a reference to the global storage of broadcasting data
+    p_graph_node->set_p_broadcast_params(&broadcast_params);
 
-  this->connect(p_graph_node.get(),
-                &GraphNode::remove_broadcast_tag,
-                this,
-                &GraphManager::on_remove_broadcast_tag);
+    // connections for broadcasting data between graph_nodes
+    p_graph_node->broadcast_node_updated =
+        [this](const std::string &graph_id, const std::string &tag)
+    { this->on_broadcast_node_updated(graph_id, tag); };
 
-  // gather update progress signals
-  this->connect(p_graph_node.get(),
-                &GraphNode::update_progress,
-                this,
-                &GraphManager::on_update_progress);
+    p_graph_node->new_broadcast_tag = [this](const std::string      &tag,
+                                             const hmap::CoordFrame *t_source,
+                                             const hmap::Heightmap  *h_source)
+    { this->on_new_broadcast_tag(tag, t_source, h_source); };
+
+    p_graph_node->remove_broadcast_tag = [this](const std::string &tag)
+    { this->on_remove_broadcast_tag(tag); };
+
+    // gather update progress signals
+    p_graph_node->update_progress = [this](const std::string &node_id, float progress)
+    { this->on_update_progress(node_id, progress); };
+  }
 
   return new_graph_id;
 }
@@ -188,7 +187,7 @@ bool GraphManager::is_graph_above(const std::string &graph_id,
   for (auto &gid : this->graph_order)
   {
     if (gid == graph_id)
-      return false;
+      return HSD_CTX.app_settings.model.allow_broadcast_receive_within_same_graph;
     else if (gid == ref_graph_id)
       return true;
   }
@@ -293,13 +292,12 @@ void GraphManager::on_broadcast_node_updated(const std::string &graph_id,
   Logger::log()->trace("GraphManager::on_broadcast_node_updated: broadcasting {}", tag);
 
   for (auto &[gid, graph] : this->graph_nodes)
-    if (true) // gid != graph_id)
-    {
-      // prevent any broadcast from a top layer to a sublayer, this
-      // could lead to endless loop in case of cross-broadcast
-      if (this->is_graph_above(gid, graph_id))
-        graph->on_broadcast_node_updated(tag);
-    }
+  {
+    // prevent any broadcast from a top layer to a sublayer, this
+    // could lead to endless loop in case of cross-broadcast
+    if (this->is_graph_above(gid, graph_id))
+      graph->on_broadcast_node_updated(tag);
+  }
 }
 
 void GraphManager::on_new_broadcast_tag(const std::string      &tag,
@@ -320,9 +318,7 @@ void GraphManager::on_remove_broadcast_tag(const std::string &tag)
   Q_EMIT this->remove_broadcast_tag(tag);
 }
 
-void GraphManager::on_update_progress(const std::string & /* graph_id */,
-                                      const std::string & /* node_id */,
-                                      float progress)
+void GraphManager::on_update_progress(const std::string & /* node_id */, float progress)
 {
   Logger::log()->trace("GraphManager::on_update_progress");
   Q_EMIT update_progress(progress);

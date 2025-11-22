@@ -35,7 +35,7 @@ void NodeWidget::setup_connections()
   this->connect(p_gnw,
                 &GraphNodeWidget::compute_started,
                 this,
-                [this](const std::string &, const std::string &id)
+                [this](const std::string &id)
                 {
                   if (auto m = this->model.lock())
                   {
@@ -47,7 +47,7 @@ void NodeWidget::setup_connections()
   this->connect(p_gnw,
                 &GraphNodeWidget::compute_finished,
                 this,
-                [this](const std::string &, const std::string &id)
+                [this](const std::string &id)
                 {
                   if (auto m = this->model.lock())
                   {

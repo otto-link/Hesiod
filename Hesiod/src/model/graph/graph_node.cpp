@@ -38,7 +38,8 @@ GraphNode::GraphNode(const std::string &id, const std::shared_ptr<GraphConfig> &
       r += 0.5f;
     float progress = 100.f * r / (static_cast<float>(nids) - 0.5f);
 
-    Q_EMIT update_progress(this->get_id(), current_id, progress);
+    if (this->update_progress)
+      this->update_progress(current_id, progress);
   };
 
   this->set_update_callback(lambda);
@@ -68,10 +69,16 @@ std::string GraphNode::add_node(const std::shared_ptr<gnode::Node> &node,
   BaseNode *p_basenode = dynamic_cast<BaseNode *>(node.get());
 
   p_basenode->compute_started = [this](const std::string &node_id)
-  { Q_EMIT this->compute_started(this->get_id(), node_id); };
+  {
+    if (this->compute_started)
+      this->compute_started(node_id);
+  };
 
   p_basenode->compute_finished = [this](const std::string &node_id)
-  { Q_EMIT this->compute_finished(this->get_id(), node_id); };
+  {
+    if (this->compute_finished)
+      this->compute_finished(node_id);
+  };
 
   // "special" nodes treatmentxs
   std::string node_type = p_basenode->get_node_type();
@@ -292,7 +299,8 @@ void GraphNode::remove_node(const std::string &id)
 
     Logger::log()->trace("GraphNode::remove_node: removing broadcast tag {}", tag);
 
-    Q_EMIT this->remove_broadcast_tag(tag);
+    if (this->remove_broadcast_tag)
+      this->remove_broadcast_tag(tag);
   }
 
   // basic GNode removing...
@@ -333,19 +341,17 @@ void GraphNode::setup_new_broadcast_node(BaseNode *p_node)
     return;
   }
 
-  // TODO ARCHI
-
   // connect
-  // this->connect(p_broadcast_node,
-  //               &BroadcastNode::broadcast_node_updated,
-  //               this,
-  //               [this](const std::string &graph_id, const std::string &tag)
-  //               {
-  //                 // pass through, re-emit the signals by the graph
-  //                 // editor (to be handled by the graph manager above)
-  //                 Logger::log()->trace("graph_node broadcasting, tag: {}", tag);
-  //                 Q_EMIT this->broadcast_node_updated(graph_id, tag);
-  //               });
+  p_broadcast_node->broadcast_node_updated =
+      [this](const std::string &graph_id, const std::string &tag)
+  {
+    // pass through, re-emit the signals by the graph
+    // editor (to be handled by the graph manager above)
+    Logger::log()->trace("graph_node broadcasting, tag: {}", tag);
+
+    if (this->broadcast_node_updated)
+      this->broadcast_node_updated(graph_id, tag);
+  };
 
   // broadcast infos: // store broadcast parameters (to be handled to the graph manage
   // above). Use an output port to store the data, to ensure it is
@@ -356,7 +362,8 @@ void GraphNode::setup_new_broadcast_node(BaseNode *p_node)
   const hmap::Heightmap  *h_source = this->get_node_ref_by_id(p_node->get_id())
                                         ->get_value_ref<hmap::Heightmap>("thru");
 
-  Q_EMIT this->new_broadcast_tag(tag, t_source, h_source);
+  if (this->new_broadcast_tag)
+    this->new_broadcast_tag(tag, t_source, h_source);
 }
 
 void GraphNode::setup_new_receive_node(BaseNode *p_node)
@@ -379,18 +386,26 @@ void GraphNode::update()
 {
   Logger::log()->trace("GraphNode::update");
 
-  Q_EMIT this->update_started(this->get_id());
+  if (this->update_started)
+    this->update_started();
+
   gnode::Graph::update();
-  Q_EMIT this->update_finished(this->get_id());
+
+  if (this->update_finished)
+    this->update_finished();
 }
 
 void GraphNode::update(const std::string &node_id)
 {
   Logger::log()->trace("GraphNode::update: id = {}", node_id);
 
-  Q_EMIT this->update_started(this->get_id());
+  if (this->update_started)
+    this->update_started();
+
   gnode::Graph::update(node_id);
-  Q_EMIT this->update_finished(this->get_id());
+
+  if (this->update_finished)
+    this->update_finished();
 }
 
 } // namespace hesiod

@@ -17,6 +17,11 @@ struct AppSettings
   nlohmann::json json_to() const;
 
   // --- Data
+  struct Model
+  {
+    bool allow_broadcast_receive_within_same_graph = true;
+  } model;
+
   struct Colors
   {
     QColor bg_deep{"#191919"};
@@ -64,6 +69,7 @@ struct AppSettings
     bool        show_node_settings_pan = false;
     int         max_bake_resolution = 8192 * 4;
     bool        disable_during_update = false;
+    bool        enable_node_groups = true;
   } node_editor;
 
   struct Viewer

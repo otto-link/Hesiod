@@ -136,8 +136,10 @@ void GraphNodeWidget::backup_selected_ids()
 
 void GraphNodeWidget::clear_all()
 {
-  this->clear_graphic_scene();
-  this->p_graph_node->clear();
+  // TODO FIX ARCHI
+
+  // this->clear_graphic_scene();
+  // this->p_graph_node->clear();
 
   Q_EMIT this->has_been_cleared(this->get_id());
 }
@@ -1133,32 +1135,22 @@ void GraphNodeWidget::setup_connections()
                 this,
                 &GraphNodeWidget::on_viewport_request);
 
-  this->connect(this->p_graph_node,
-                &GraphNode::update_started,
-                this,
-                &gngui::GraphViewer::on_update_started);
-
-  this->connect(this->p_graph_node,
-                &GraphNode::update_finished,
-                this,
-                &gngui::GraphViewer::on_update_finished);
-
-  // GraphNode -> QApplication
-  this->connect(this->p_graph_node,
-                &GraphNode::update_started,
+  // GraphNodeWidget -> QApplication
+  this->connect(this,
+                &GraphNodeWidget::update_started,
                 this,
                 []() { QApplication::setOverrideCursor(Qt::WaitCursor); });
 
-  this->connect(this->p_graph_node,
-                &GraphNode::update_finished,
+  this->connect(this,
+                &GraphNodeWidget::update_finished,
                 this,
                 []() { QApplication::restoreOverrideCursor(); });
 
-  // GraphNode -> GraphNodeWidget
-  this->connect(this->p_graph_node,
-                &GraphNode::compute_finished,
+  // GraphNodeWidget -> GFX node
+  this->connect(this,
+                &GraphNodeWidget::compute_finished,
                 this,
-                [this](const std::string & /* graph_id */, const std::string &node_id)
+                [this](const std::string &node_id)
                 {
                   if (HSD_CTX.app_settings.interface.enable_node_settings_in_node_body)
                   {
@@ -1171,17 +1163,16 @@ void GraphNodeWidget::setup_connections()
                   }
                 });
 
-  this->connect(this->p_graph_node,
-                &GraphNode::compute_started,
-                this,
-                [this](const std::string &graph_id, const std::string &node_id)
-                { Q_EMIT this->compute_started(graph_id, node_id); });
+  // GraphNode
+  this->p_graph_node->update_started = [this]() { Q_EMIT this->on_update_started(); };
 
-  this->connect(this->p_graph_node,
-                &GraphNode::compute_finished,
-                this,
-                [this](const std::string &graph_id, const std::string &node_id)
-                { Q_EMIT this->compute_finished(graph_id, node_id); });
+  this->p_graph_node->update_finished = [this]() { Q_EMIT this->on_update_finished(); };
+
+  this->p_graph_node->compute_started = [this](const std::string &node_id)
+  { Q_EMIT this->compute_started(node_id); };
+
+  this->p_graph_node->compute_finished = [this](const std::string &node_id)
+  { Q_EMIT this->compute_finished(node_id); };
 }
 
 } // namespace hesiod

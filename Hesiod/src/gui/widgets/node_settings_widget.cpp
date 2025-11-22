@@ -87,37 +87,39 @@ void NodeSettingsWidget::setup_connections()
     return;
   }
 
-  // connect selection changes -> update UI
-  this->connect(graph_widget_ptr,
-                &gngui::GraphViewer::selection_has_changed,
-                this,
-                &NodeSettingsWidget::update_content);
+  // TODO FIX ARCHI
 
-  // connect to the underlying graph node update signal, if available
-  if (auto p_graph = graph_widget_ptr->get_p_graph_node())
-  {
-    // use QPointer to ensure safety if the graph node is deleted elsewhere
-    QPointer<GraphNode> graph_ptr(p_graph);
-    this->connect(
-        graph_ptr,
-        &GraphNode::update_finished,
-        this,
-        [this, graph_ptr]()
-        {
-          if (!graph_ptr)
-          {
-            Logger::log()->warn(
-                "NodeSettingsWidget: graph node destroyed before update callback");
-            return;
-          }
-          this->update_content();
-        });
-  }
-  else
-  {
-    Logger::log()->warn(
-        "NodeSettingsWidget::setup_connections: underlying GraphNode is nullptr");
-  }
+  // // connect selection changes -> update UI
+  // this->connect(graph_widget_ptr,
+  //               &gngui::GraphViewer::selection_has_changed,
+  //               this,
+  //               &NodeSettingsWidget::update_content);
+
+  // // connect to the underlying graph node update signal, if available
+  // if (auto p_graph = graph_widget_ptr->get_p_graph_node())
+  // {
+  //   // use QPointer to ensure safety if the graph node is deleted elsewhere
+  //   QPointer<GraphNode> graph_ptr(p_graph);
+  //   this->connect(
+  //       graph_ptr,
+  //       &GraphNode::update_finished,
+  //       this,
+  //       [this, graph_ptr]()
+  //       {
+  //         if (!graph_ptr)
+  //         {
+  //           Logger::log()->warn(
+  //               "NodeSettingsWidget: graph node destroyed before update callback");
+  //           return;
+  //         }
+  //         this->update_content();
+  //       });
+  // }
+  // else
+  // {
+  //   Logger::log()->warn(
+  //       "NodeSettingsWidget::setup_connections: underlying GraphNode is nullptr");
+  // }
 }
 
 void NodeSettingsWidget::update_content()

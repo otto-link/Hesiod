@@ -14,6 +14,10 @@ void AppSettings::json_from(nlohmann::json const &json)
 {
   Logger::log()->trace("AppSettings::json_from");
 
+  json_safe_get(json,
+                "model.allow_broadcast_receive_within_same_graph",
+                model.allow_broadcast_receive_within_same_graph);
+
   json_safe_get(json, "colors.bg_deep", colors.bg_deep);
   json_safe_get(json, "colors.bg_primary", colors.bg_primary);
   json_safe_get(json, "colors.bg_secondary", colors.bg_secondary);
@@ -84,6 +88,7 @@ void AppSettings::json_from(nlohmann::json const &json)
   json_safe_get(json,
                 "node_editor.disable_during_update",
                 node_editor.disable_during_update);
+  json_safe_get(json, "node_editor.enable_node_groups", node_editor.enable_node_groups);
 
   json_safe_get(json, "viewer.width", viewer.width);
   json_safe_get(json, "viewer.height", viewer.height);
@@ -107,6 +112,9 @@ nlohmann::json AppSettings::json_to() const
   Logger::log()->trace("AppSettings::json_to");
 
   nlohmann::json json;
+
+  json["model.allow_broadcast_receive_within_same_graph"] =
+      model.allow_broadcast_receive_within_same_graph;
 
   json["colors.bg_deep"] = colors.bg_deep.name().toStdString();
   json["colors.bg_primary"] = colors.bg_primary.name().toStdString();
@@ -144,6 +152,7 @@ nlohmann::json AppSettings::json_to() const
   json["node_editor.auto_layout_dy"] = node_editor.auto_layout_dy;
   json["node_editor.show_node_settings_pan"] = node_editor.show_node_settings_pan;
   json["node_editor.disable_during_update"] = node_editor.disable_during_update;
+  json["node_editor.enable_node_groups"] = node_editor.enable_node_groups;
 
   json["viewer.width"] = viewer.width;
   json["viewer.height"] = viewer.height;

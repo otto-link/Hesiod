@@ -252,6 +252,7 @@ void Viewer::setup_connections()
 {
   Logger::log()->trace("Viewer::setup_connections");
 
+  // user actions w/ UI
   this->connect(this->p_graph_node_widget,
                 &gngui::GraphViewer::node_deleted,
                 this,
@@ -272,14 +273,6 @@ void Viewer::setup_connections()
                 this->p_graph_node_widget,
                 &GraphNodeWidget::on_node_pinned);
 
-  this->connect(this->p_graph_node_widget->get_p_graph_node(),
-                &GraphNode::compute_finished,
-                [this](const std::string & /* graph_id */, const std::string &id)
-                {
-                  if (id == this->current_node_id)
-                    this->update_renderer();
-                });
-
   this->connect(this->button_pin_current_node,
                 &QPushButton::clicked,
                 this,
@@ -299,6 +292,15 @@ void Viewer::setup_connections()
                     }
                   });
   }
+
+  // graph update
+  this->connect(this->p_graph_node_widget,
+                &GraphNodeWidget::compute_finished,
+                [this](const std::string &id)
+                {
+                  if (id == this->current_node_id)
+                    this->update_renderer();
+                });
 }
 
 void Viewer::setup_layout()

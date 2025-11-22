@@ -27,7 +27,7 @@ GraphTabsWidget::GraphTabsWidget(GraphManager *p_graph_manager, QWidget *parent)
   // styles (GNodeGUI)
   GN_STYLE->viewer.add_new_icon = false;
   GN_STYLE->viewer.add_load_save_icons = false;
-  GN_STYLE->viewer.add_group = false;
+  GN_STYLE->viewer.add_group = ctx.app_settings.node_editor.enable_node_groups;
   GN_STYLE->node.color_port_data = ctx.style_settings.data_color_map;
   GN_STYLE->node.color_category = ctx.style_settings.category_color_map;
 
@@ -297,12 +297,12 @@ void GraphTabsWidget::update_tab_widget()
       this->graph_node_widget_map[id] = new GraphNodeWidget(p_graph_node, this);
 
       // connections / model
-      this->connect(p_graph_node,
-                    &GraphNode::new_broadcast_tag,
+      this->connect(this->p_graph_manager,
+                    &GraphManager::new_broadcast_tag,
                     [this]() { this->update_receive_nodes_tag_list(); });
 
-      this->connect(p_graph_node,
-                    &GraphNode::remove_broadcast_tag,
+      this->connect(this->p_graph_manager,
+                    &GraphManager::remove_broadcast_tag,
                     [this]() { this->update_receive_nodes_tag_list(); });
 
       // connections / GUI

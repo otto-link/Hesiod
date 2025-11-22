@@ -63,7 +63,8 @@ void compute_broadcast_node(BaseNode &node)
     Logger::log()->trace("broadcast_tag: {}", broadcast_tag);
 
     // this goes to the graph editor
-    Q_EMIT p_broadcast_node->broadcast_node_updated(graph_id, broadcast_tag);
+    if (p_broadcast_node->broadcast_node_updated)
+      p_broadcast_node->broadcast_node_updated(graph_id, broadcast_tag);
   }
 
   if (node.compute_finished)

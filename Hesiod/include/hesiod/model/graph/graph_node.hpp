@@ -1,7 +1,7 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General Public
    License. The full license is in the file LICENSE, distributed with this software. */
 #pragma once
-#include <QObject>
+#include <functional>
 
 #include "nlohmann/json.hpp"
 
@@ -19,10 +19,8 @@ class BaseNode; // forward
 // =====================================
 // GraphNode
 // =====================================
-class GraphNode : public QObject, public gnode::Graph, public hmap::CoordFrame
+class GraphNode : public gnode::Graph, public hmap::CoordFrame
 {
-  Q_OBJECT
-
 public:
   GraphNode() = delete;
   GraphNode(const std::string &id, const std::shared_ptr<GraphConfig> &config);
@@ -53,21 +51,23 @@ public:
   // --- Others... ---
   void reseed(bool backward);
 
-signals:
-  // --- Signals ---
-  void compute_started(const std::string &graph_id, const std::string &node_id);
-  void compute_finished(const std::string &graph_id, const std::string &node_id);
-  void update_started(const std::string &graph_id);
-  void update_finished(const std::string &graph_id);
-  void update_progress(const std::string &graph_id,
-                       const std::string &node_id,
-                       float              progress);
+  // --- Compute Callbacks
+  std::function<void(const std::string &node_id)> compute_started;
+  std::function<void(const std::string &node_id)> compute_finished;
 
-  void broadcast_node_updated(const std::string &graph_id, const std::string &tag);
-  void new_broadcast_tag(const std::string      &tag,
-                         const hmap::CoordFrame *t_source,
-                         const hmap::Heightmap  *h_source);
-  void remove_broadcast_tag(const std::string &tag);
+  // --- Update Callbacks
+  std::function<void()>                                           update_started;
+  std::function<void()>                                           update_finished;
+  std::function<void(const std::string &node_id, float progress)> update_progress;
+
+  // --- Broadcast Callbacks
+  std::function<void(const std::string &graph_id, const std::string &tag)>
+                                              broadcast_node_updated;
+  std::function<void(const std::string &tag)> remove_broadcast_tag;
+  std::function<void(const std::string      &tag,
+                     const hmap::CoordFrame *t_source,
+                     const hmap::Heightmap  *h_source)>
+      new_broadcast_tag;
 
 private:
   // --- Helpers ---

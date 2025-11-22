@@ -29,12 +29,15 @@ std::shared_ptr<gnode::Node> node_factory(const std::string         &node_type,
 
 // nodes functions
 
+// minimal set of dev / debug
+DECLARE_NODE(broadcast)
 DECLARE_NODE(flooding_uniform_level)
 DECLARE_NODE(gabor_wave_fbm)
 DECLARE_NODE(gain)
 DECLARE_NODE(hydraulic_stream_log)
 DECLARE_NODE(noise)
 DECLARE_NODE(preview)
+DECLARE_NODE(receive)
 
 #ifndef HESIOD_MINIMAL_NODE_SET
 DECLARE_NODE(abs)
@@ -46,7 +49,6 @@ DECLARE_NODE(blend)
 DECLARE_NODE(blend3)
 DECLARE_NODE(blend_poisson_bf)
 DECLARE_NODE(border)
-DECLARE_NODE(broadcast)
 DECLARE_NODE(brush)
 DECLARE_NODE(bulkify)
 DECLARE_NODE(bump)
@@ -201,7 +203,6 @@ DECLARE_NODE(recast_cliff)
 DECLARE_NODE(recast_cliff_directional)
 DECLARE_NODE(recast_cracks)
 DECLARE_NODE(recast_sag)
-DECLARE_NODE(receive)
 DECLARE_NODE(recurve)
 DECLARE_NODE(recurve_kura)
 DECLARE_NODE(recurve_s)

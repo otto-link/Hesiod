@@ -47,13 +47,20 @@ public:
                                                         const std::string &node_id);
 
 signals:
+  // TODO REMOVE GRAPH_ID
+
   // --- User Actions Signals ---
-  void compute_started(const std::string &graph_id, const std::string &node_id);
-  void compute_finished(const std::string &graph_id, const std::string &node_id);
   void copy_buffer_has_changed(const nlohmann::json &new_json);
   void has_been_cleared(const std::string &graph_id);
   void new_node_created(const std::string &graph_id, const std::string &id);
   void node_deleted(const std::string &graph_id, const std::string &id);
+
+  // --- Graph update ---
+  void compute_started(const std::string &node_id);
+  void compute_finished(const std::string &node_id);
+  void update_started();
+  void update_finished();
+  void update_progress(const std::string &node_id, float progress);
 
 public slots:
   void closeEvent(QCloseEvent *event) override;

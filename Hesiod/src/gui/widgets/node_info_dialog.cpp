@@ -99,15 +99,14 @@ void NodeInfoDialog::setup_connections()
 
   // update when the graph node is modified (the node itself of the
   // links)
-  this->connect(
-      this->p_graph_node_widget->get_p_graph_node(),
-      &GraphNode::compute_finished,
-      this,
-      [this](const std::string & /* graph_id */, const std::string &updated_node_id)
-      {
-        if (updated_node_id == this->node_id)
-          this->update_content();
-      });
+  this->connect(this->p_graph_node_widget,
+                &GraphNodeWidget::compute_finished,
+                this,
+                [this](const std::string &updated_node_id)
+                {
+                  if (updated_node_id == this->node_id)
+                    this->update_content();
+                });
 
   this->connect(this->p_graph_node_widget,
                 &gngui::GraphViewer::connection_deleted,

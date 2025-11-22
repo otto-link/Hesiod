@@ -21,12 +21,14 @@ if(HESIOD_MINIMAL_NODE_SET)
 
   file(GLOB ALL_NODE_SOURCES "${NODES_FCT_DIR}/*.cpp")
   set(MINIMAL_NODE_SET_SOURCES
+      "${NODES_FCT_DIR}/broadcast.cpp"
       "${NODES_FCT_DIR}/flooding_uniform_level.cpp"
       "${NODES_FCT_DIR}/gabor_wave_fbm.cpp"
       "${NODES_FCT_DIR}/gain.cpp"
       "${NODES_FCT_DIR}/hydraulic_stream_log.cpp"
       "${NODES_FCT_DIR}/noise.cpp"
-      "${NODES_FCT_DIR}/preview.cpp")
+      "${NODES_FCT_DIR}/preview.cpp"
+      "${NODES_FCT_DIR}/receive.cpp")
 
   set(COMPLENTARY_NODE_SOURCES ${ALL_NODE_SOURCES})
   foreach(f ${MINIMAL_NODE_SET_SOURCES})
