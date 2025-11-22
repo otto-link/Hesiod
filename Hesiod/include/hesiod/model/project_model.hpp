@@ -2,9 +2,8 @@
    License. The full license is in the file LICENSE, distributed with this software. */
 #pragma once
 #include <filesystem>
+#include <functional>
 #include <string>
-
-#include <QObject>
 
 #include "nlohmann/json.hpp"
 
@@ -17,11 +16,10 @@ namespace hesiod
 // =====================================
 // ProjectModel
 // =====================================
-class ProjectModel : public QObject
+class ProjectModel
 {
-  Q_OBJECT
 public:
-  explicit ProjectModel(QObject *parent = nullptr);
+  explicit ProjectModel();
 
   void           json_from(nlohmann::json const &json);
   nlohmann::json json_to() const;
@@ -40,11 +38,10 @@ public:
   void                  set_path(const std::string &new_path);
   void                  set_name(const std::string &new_name);
 
-signals:
-  void project_name_changed();
-  void is_dirty_changed();
+  // --- Callbacks
+  std::function<void()> project_name_changed;
+  std::function<void()> is_dirty_changed;
 
-public slots:
   void on_has_changed();
 
 private:

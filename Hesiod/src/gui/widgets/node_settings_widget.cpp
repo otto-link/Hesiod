@@ -12,6 +12,7 @@
 #include "attributes/widgets/attributes_widget.hpp"
 
 #include "hesiod/app/hesiod_application.hpp"
+#include "hesiod/gui/widgets/data_preview.hpp"
 #include "hesiod/gui/widgets/gui_utils.hpp"
 #include "hesiod/gui/widgets/node_settings_widget.hpp"
 #include "hesiod/logger.hpp"
@@ -77,49 +78,23 @@ void NodeSettingsWidget::setup_connections()
 {
   Logger::log()->trace("NodeSettingsWidget::setup_connections");
 
-  // Defensive local QPointer wrappers so we don't call through dangling raw pointers
-  QPointer<GraphNodeWidget> graph_widget_ptr(this->p_graph_node_widget);
-
-  if (!graph_widget_ptr)
+  if (!this->p_graph_node_widget)
   {
     Logger::log()->error(
         "NodeSettingsWidget::setup_connections: p_graph_node_widget is nullptr");
     return;
   }
 
-  // TODO FIX ARCHI
+  // connect selection changes -> update UI
+  this->connect(p_graph_node_widget,
+                &gngui::GraphViewer::selection_has_changed,
+                this,
+                &NodeSettingsWidget::update_content);
 
-  // // connect selection changes -> update UI
-  // this->connect(graph_widget_ptr,
-  //               &gngui::GraphViewer::selection_has_changed,
-  //               this,
-  //               &NodeSettingsWidget::update_content);
-
-  // // connect to the underlying graph node update signal, if available
-  // if (auto p_graph = graph_widget_ptr->get_p_graph_node())
-  // {
-  //   // use QPointer to ensure safety if the graph node is deleted elsewhere
-  //   QPointer<GraphNode> graph_ptr(p_graph);
-  //   this->connect(
-  //       graph_ptr,
-  //       &GraphNode::update_finished,
-  //       this,
-  //       [this, graph_ptr]()
-  //       {
-  //         if (!graph_ptr)
-  //         {
-  //           Logger::log()->warn(
-  //               "NodeSettingsWidget: graph node destroyed before update callback");
-  //           return;
-  //         }
-  //         this->update_content();
-  //       });
-  // }
-  // else
-  // {
-  //   Logger::log()->warn(
-  //       "NodeSettingsWidget::setup_connections: underlying GraphNode is nullptr");
-  // }
+  this->connect(p_graph_node_widget,
+                &GraphNodeWidget::update_finished,
+                this,
+                &NodeSettingsWidget::update_content);
 }
 
 void NodeSettingsWidget::update_content()
@@ -239,30 +214,26 @@ void NodeSettingsWidget::update_content()
 
     this->scroll_layout->addWidget(separator_widget, row++, 0, 1, 2);
 
-    // TODO ARCH
+    // data thumbnail
+    {
+      const int    width = 48;
+      QLabel      *label_preview = new QLabel(/*parent=*/this);
+      DataPreview *p_data_preview = new DataPreview(p_node->get_shared());
+      QPixmap      preview_pixmap = p_data_preview->get_preview_pixmap();
 
-    // // preview (use scroll_widget as parent so lifetime is tied to the container)
-    // DataPreview *p_data_preview = p_node->get_data_preview_ref();
-
-    // if (p_data_preview)
-    // {
-    //   QPixmap preview_pixmap = p_data_preview->get_preview_pixmap();
-
-    //   if (!preview_pixmap.isNull())
-    //   {
-    //     const int width = 48;
-    //     QLabel   *label_preview = new QLabel(/*parent=*/this);
-    //     QPixmap   scaled_pixmap = preview_pixmap.scaled(width,
-    //                                                   width,
-    //                                                   Qt::KeepAspectRatio,
-    //                                                   Qt::SmoothTransformation);
-    //     label_preview->setPixmap(scaled_pixmap);
-    //     label_preview->setScaledContents(true);
-    //     label_preview->setFixedSize(width, width);
-    //     label_preview->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    //     this->scroll_layout->addWidget(label_preview, row, 0, Qt::AlignLeft);
-    //   }
-    // }
+      if (!preview_pixmap.isNull())
+      {
+        QPixmap scaled_pixmap = preview_pixmap.scaled(width,
+                                                      width,
+                                                      Qt::KeepAspectRatio,
+                                                      Qt::SmoothTransformation);
+        label_preview->setPixmap(scaled_pixmap);
+        label_preview->setScaledContents(true);
+        label_preview->setFixedSize(width, width);
+        label_preview->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+        this->scroll_layout->addWidget(label_preview, row, 0, Qt::AlignLeft);
+      }
+    }
 
     // pinned checkbox button
     QPushButton *button_pin = new QPushButton("Pin this node", this);

@@ -6,6 +6,7 @@
 #include <QLabel>
 #include <QPlainTextEdit>
 #include <QStyle>
+#include <QTimer>
 #include <QVBoxLayout>
 
 #include "highmap/geometry/cloud.hpp"
@@ -22,9 +23,9 @@
 namespace hesiod
 {
 
-NodeInfoDialog::NodeInfoDialog(GraphNodeWidget   *p_graph_node_widget,
-                               const std::string &node_id,
-                               QWidget           *parent)
+NodeInfoDialog::NodeInfoDialog(QPointer<GraphNodeWidget> p_graph_node_widget,
+                               const std::string        &node_id,
+                               QWidget                  *parent)
     : QDialog(parent), p_graph_node_widget(p_graph_node_widget), node_id(node_id)
 {
   Logger::log()->trace("NodeInfoDialog::NodeInfoDialog");
@@ -88,14 +89,17 @@ void NodeInfoDialog::setup_connections()
                   this->deleteLater();
                 });
 
-  this->connect(this->p_graph_node_widget,
-                &gngui::GraphViewer::node_deleted,
-                this,
-                [this](const std::string &deleted_node_id)
-                {
-                  if (deleted_node_id == this->node_id)
-                    this->deleteLater();
-                });
+  this->connect(
+      this->p_graph_node_widget,
+      &gngui::GraphViewer::node_deleted,
+      this,
+      [weak = QPointer<NodeInfoDialog>(this)](const std::string &deleted_node_id)
+      {
+        if (!weak)
+          return;
+        if (deleted_node_id == weak->node_id)
+          weak->deleteLater();
+      });
 
   // update when the graph node is modified (the node itself of the
   // links)
@@ -150,6 +154,7 @@ void NodeInfoDialog::setup_layout()
   // --- layout
 
   this->layout = new QVBoxLayout(this);
+  this->setLayout(this->layout);
 
   // --- main label
 
@@ -241,6 +246,7 @@ void NodeInfoDialog::update_info_content()
   };
 
   NodeRuntimeInfo info = ptrs.node->get_runtime_info();
+  auto            cfg = ptrs.node->get_config_ref();
 
   std::vector<Row> rows = {
       {"Type", ptrs.node->get_caption()},
@@ -251,17 +257,11 @@ void NodeInfoDialog::update_info_content()
       {"Update Time", std::format("{:.1f} ms", info.update_time)},
       {"Execution Count", std::to_string(info.eval_count)},
       {"Memory Usage", std::format("~{:.2f} MB", ptrs.node->get_memory_usage())},
-      {"Address", ptr_as_string((void *)(ptrs.node))},
+      {"Address", ptr_as_string(static_cast<void *>(ptrs.node))},
       {"Config", ""},
-      {"- shape",
-       std::format("{}x{}",
-                   ptrs.node->get_config_ref()->shape.x,
-                   ptrs.node->get_config_ref()->shape.y)},
-      {"- tiling",
-       std::format("{}x{}",
-                   ptrs.node->get_config_ref()->tiling.x,
-                   ptrs.node->get_config_ref()->tiling.y)},
-      {"- overlap", std::format("{}", ptrs.node->get_config_ref()->overlap)}};
+      {"- shape", std::format("{}x{}", cfg->shape.x, cfg->shape.y)},
+      {"- tiling", std::format("{}x{}", cfg->tiling.x, cfg->tiling.y)},
+      {"- overlap", std::format("{}", cfg->overlap)}};
 
   // build layout
   QFont f("DejaVu Sans Mono", 9);

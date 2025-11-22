@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QGridLayout>
 #include <QPlainTextEdit>
+#include <QPointer>
 #include <QVBoxLayout>
 #include <QWidget>
 
@@ -27,9 +28,9 @@ class NodeInfoDialog : public QDialog
 
 public:
   NodeInfoDialog() = default;
-  NodeInfoDialog(GraphNodeWidget   *p_graph_node_widget,
-                 const std::string &node_id,
-                 QWidget           *parent = nullptr);
+  NodeInfoDialog(QPointer<GraphNodeWidget> p_graph_node_widget,
+                 const std::string        &node_id,
+                 QWidget                  *parent = nullptr);
 
   void update_content();
 
@@ -43,8 +44,8 @@ private:
   void         on_comment_text_changed();
 
   // members
-  GraphNodeWidget *p_graph_node_widget;
-  std::string      node_id;
+  QPointer<GraphNodeWidget> p_graph_node_widget;
+  std::string               node_id;
 
   // UI
   QVBoxLayout    *layout;

@@ -11,7 +11,7 @@
 namespace hesiod
 {
 
-ProjectModel::ProjectModel(QObject *parent) : QObject(parent)
+ProjectModel::ProjectModel()
 {
   Logger::log()->trace("ProjectModel::ProjectModel");
   this->initialize();
@@ -87,7 +87,9 @@ void ProjectModel::set_is_dirty(bool new_state)
   if (new_state != this->is_dirty)
   {
     this->is_dirty = new_state;
-    Q_EMIT is_dirty_changed();
+
+    if (this->is_dirty_changed)
+      this->is_dirty_changed();
   }
 }
 
@@ -96,7 +98,8 @@ void ProjectModel::set_path(const std::filesystem::path &new_path)
   this->path = new_path;
   this->name = this->path.stem().string();
 
-  Q_EMIT this->project_name_changed();
+  if (this->project_name_changed)
+    this->project_name_changed();
 }
 
 void ProjectModel::set_path(const std::string &new_path)
@@ -109,7 +112,8 @@ void ProjectModel::set_name(const std::string &new_name)
   this->name = new_name;
   this->path = this->path.parent_path() / this->name / ".hsd";
 
-  Q_EMIT this->project_name_changed();
+  if (this->project_name_changed)
+    this->project_name_changed();
 }
 
 } // namespace hesiod

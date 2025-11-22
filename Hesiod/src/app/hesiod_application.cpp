@@ -109,24 +109,18 @@ void HesiodApplication::load_project_model_and_ui(const std::string &fname)
   // ProjectUI -> Project
   this->connect(this->project_ui->get_graph_manager_widget_ref(),
                 &GraphManagerWidget::has_changed,
-                this->context.project_model.get(),
-                &ProjectModel::on_has_changed);
+                [this]() { this->context.project_model->on_has_changed(); });
 
   this->connect(this->project_ui->get_graph_tabs_widget_ref(),
                 &GraphTabsWidget::has_changed,
-                this->context.project_model.get(),
-                &ProjectModel::on_has_changed);
+                [this]() { this->context.project_model->on_has_changed(); });
 
   // Project -> HesiodApplication
-  this->connect(this->context.project_model.get(),
-                &ProjectModel::project_name_changed,
-                this,
-                &HesiodApplication::on_project_name_changed);
+  this->context.project_model->project_name_changed = [this]()
+  { this->on_project_name_changed(); };
 
-  this->connect(this->context.project_model.get(),
-                &ProjectModel::is_dirty_changed,
-                this,
-                &HesiodApplication::on_project_name_changed);
+  this->context.project_model->is_dirty_changed = [this]()
+  { this->on_project_name_changed(); };
 
   // Project model and UI -> MainWindow
   this->main_window->setup_connections_with_project();

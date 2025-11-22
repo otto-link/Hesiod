@@ -136,10 +136,7 @@ void GraphNodeWidget::backup_selected_ids()
 
 void GraphNodeWidget::clear_all()
 {
-  // TODO FIX ARCHI
-
-  // this->clear_graphic_scene();
-  // this->p_graph_node->clear();
+  this->clear_graphic_scene();
 
   Q_EMIT this->has_been_cleared(this->get_id());
 }
@@ -1164,9 +1161,9 @@ void GraphNodeWidget::setup_connections()
                 });
 
   // GraphNode
-  this->p_graph_node->update_started = [this]() { Q_EMIT this->on_update_started(); };
+  this->p_graph_node->update_started = [this]() { Q_EMIT this->update_started(); };
 
-  this->p_graph_node->update_finished = [this]() { Q_EMIT this->on_update_finished(); };
+  this->p_graph_node->update_finished = [this]() { Q_EMIT this->update_finished(); };
 
   this->p_graph_node->compute_started = [this](const std::string &node_id)
   { Q_EMIT this->compute_started(node_id); };
