@@ -20,6 +20,8 @@ class AppContext
 public:
   AppContext() = default;
 
+  void initialize();
+
   // --- Settings management
   void           settings_json_from(nlohmann::json const &json);
   nlohmann::json settings_json_to() const;

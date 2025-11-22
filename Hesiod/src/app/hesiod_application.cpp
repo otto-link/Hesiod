@@ -35,8 +35,7 @@ HesiodApplication::HesiodApplication(int &argc, char **argv) : QApplication(argc
 {
   Logger::log()->trace("HesiodApplication::HesiodApplication");
 
-  this->context.load_settings();
-  this->context.load_node_documentation();
+  this->context.initialize();
 
   // apply style
   this->setWindowIcon(QIcon(this->context.app_settings.global.icon_path.c_str()));
