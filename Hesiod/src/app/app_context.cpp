@@ -17,8 +17,8 @@ void AppContext::initialize()
 {
   Logger::log()->trace("AppContext::initialize");
 
-  this->context.load_settings();
-  this->context.load_node_documentation();
+  this->load_settings();
+  this->load_node_documentation();
 }
 
 void AppContext::settings_json_from(nlohmann::json const &json)

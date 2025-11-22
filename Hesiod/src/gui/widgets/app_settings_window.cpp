@@ -2,6 +2,7 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include <QFormLayout>
+#include <QPushButton>
 
 #include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/gui/widgets/app_settings_window.hpp"

@@ -47,9 +47,6 @@ HesiodApplication::HesiodApplication(int &argc, char **argv) : QApplication(argc
   // (after MainWindow creation)
   this->load_project_model_and_ui();
 
-  // initialize app settings widget
-  this->app_settings_window = new AppSettingsWindow(this->main_window.get());
-
   // others
   this->setup_menu_bar();
   this->installEventFilter(new ToolTipBlocker);
@@ -141,20 +138,23 @@ void HesiodApplication::on_application_settings_action()
 {
   Logger::log()->trace("HesiodApplication::on_application_settings_action");
 
-  if (this->app_settings_window)
-  {
-    // open in a dialog
-    QDialog dialog(this->main_window.get());
-    dialog.setWindowTitle("Application Settings");
+  // initialize app settings widget
+  AppSettingsWindow *settings_window = new AppSettingsWindow(this->main_window.get());
 
-    QVBoxLayout *layout = new QVBoxLayout(&dialog);
-    layout->addWidget(this->app_settings_window);
+  // open in a dialog
+  QDialog dialog(this->main_window.get());
+  dialog.setWindowTitle("Application Settings");
 
-    dialog.exec();
-  }
-  else
-    Logger::log()->error("HesiodApplication::on_application_settings_action: app "
-                         "settings widget is nullptr");
+  QVBoxLayout *layout = new QVBoxLayout(&dialog);
+  layout->addWidget(settings_window);
+
+  QDialogButtonBox *button_box = new QDialogButtonBox(QDialogButtonBox::Ok);
+  button_box->button(QDialogButtonBox::Ok)->setDefault(true);
+  this->connect(button_box, &QDialogButtonBox::accepted, &dialog, &QDialog::accept);
+  layout->addWidget(button_box);
+
+  dialog.setModal(true);
+  dialog.exec();
 }
 
 void HesiodApplication::on_export_batch()
