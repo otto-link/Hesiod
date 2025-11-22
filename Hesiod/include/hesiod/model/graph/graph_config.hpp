@@ -11,7 +11,7 @@
 namespace hesiod
 {
 
-struct GraphConfig : public std::enable_shared_from_this<GraphConfig>
+struct GraphConfig
 {
   // holds the data configuration shared by the graph and its nodes, here is to share for
   // instance the heightmap resolution

@@ -36,8 +36,6 @@ public slots:
 private:
   void setup_connections();
 
-  int x = 128;
-
   std::weak_ptr<BaseNode>   model;
   QPointer<GraphNodeWidget> p_gnw;
   DataPreview              *data_preview;

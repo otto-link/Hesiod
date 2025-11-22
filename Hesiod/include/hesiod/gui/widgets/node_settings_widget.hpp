@@ -2,6 +2,7 @@
    License. The full license is in the file LICENSE, distributed with this software. */
 #pragma once
 #include <QGridLayout>
+#include <QPointer>
 #include <QVBoxLayout>
 
 #include "hesiod/gui/widgets/graph_node_widget.hpp"
@@ -20,7 +21,8 @@ class NodeSettingsWidget : public QWidget
 
 public:
   // --- Constructor and Setup ---
-  NodeSettingsWidget(GraphNodeWidget *p_graph_node_widget, QWidget *parent = nullptr);
+  NodeSettingsWidget(QPointer<GraphNodeWidget> p_graph_node_widget,
+                     QWidget                  *parent = nullptr);
 
   void set_is_shown(bool new_state);
 
@@ -32,14 +34,14 @@ public slots:
 
 private:
   // --- Members ---
-  GraphNodeWidget         *p_graph_node_widget; // own by GraphManagerWidget
-  QVBoxLayout             *layout;
-  QGridLayout             *scroll_layout;
-  QScrollArea             *scroll_area;
-  std::vector<std::string> pinned_node_ids = {};
-  bool                     first_pass = true;
-  bool                     prevent_content_update = false;
-  bool                     is_shown = false;
+  QPointer<GraphNodeWidget> p_graph_node_widget; // own by GraphManagerWidget
+  QVBoxLayout              *layout;
+  QGridLayout              *scroll_layout;
+  QScrollArea              *scroll_area;
+  std::vector<std::string>  pinned_node_ids = {};
+  bool                      first_pass = true;
+  bool                      prevent_content_update = false;
+  bool                      is_shown = false;
 };
 
 } // namespace hesiod

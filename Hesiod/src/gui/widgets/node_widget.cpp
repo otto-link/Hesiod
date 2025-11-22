@@ -57,10 +57,6 @@ void NodeWidget::setup_connections()
                 });
 }
 
-QSize NodeWidget::sizeHint() const
-{
-  // TODO dynamic size
-  return QSize(x, 128);
-}
+QSize NodeWidget::sizeHint() const { return QSize(128, 128); }
 
 } // namespace hesiod

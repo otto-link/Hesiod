@@ -23,13 +23,13 @@
 namespace hesiod
 {
 
-NodeSettingsWidget::NodeSettingsWidget(GraphNodeWidget *p_graph_node_widget,
-                                       QWidget         *parent)
+NodeSettingsWidget::NodeSettingsWidget(QPointer<GraphNodeWidget> p_graph_node_widget,
+                                       QWidget                  *parent)
     : QWidget(parent), p_graph_node_widget(p_graph_node_widget)
 {
   Logger::log()->trace("NodeSettingsWidget::NodeSettingsWidget");
 
-  if (!p_graph_node_widget)
+  if (!this->p_graph_node_widget)
   {
     const std::string
         msg = "NodeSettingsWidget::NodeSettingsWidget: p_graph_node_widget is nullptr";
