@@ -19,11 +19,15 @@ class BaseNode; // forward
 // =====================================
 // GraphNode
 // =====================================
-class GraphNode : public gnode::Graph, public hmap::CoordFrame
+class GraphNode : public gnode::Graph,
+                  public hmap::CoordFrame,
+                  public std::enable_shared_from_this<GraphNode>
 {
 public:
   GraphNode() = delete;
   GraphNode(const std::string &id, const std::shared_ptr<GraphConfig> &config);
+
+  std::shared_ptr<GraphNode> get_shared();
 
   // --- Serialization ---
   void json_from(nlohmann::json const &json, GraphConfig *p_input_config = nullptr);

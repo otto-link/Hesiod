@@ -15,15 +15,19 @@
 namespace hesiod
 {
 
-GraphQListWidget::GraphQListWidget(GraphNode *p_graph_node, QWidget *parent)
+GraphQListWidget::GraphQListWidget(std::weak_ptr<GraphNode> p_graph_node, QWidget *parent)
     : QWidget(parent), p_graph_node(p_graph_node)
 {
   Logger::log()->trace("GraphQListWidget::GraphQListWidget");
 
+  auto gno = this->p_graph_node.lock();
+  if (!gno)
+    return;
+
   QGridLayout *layout = new QGridLayout(this);
   this->setLayout(layout);
 
-  QLabel *label = new QLabel(p_graph_node->get_id().c_str());
+  QLabel *label = new QLabel(gno->get_id().c_str());
   layout->addWidget(label, 0, 0);
 
   this->combobox = new QComboBox(this);
@@ -39,7 +43,13 @@ GraphQListWidget::GraphQListWidget(GraphNode *p_graph_node, QWidget *parent)
 
 std::string GraphQListWidget::get_current_bg_tag() const { return this->current_bg_tag; }
 
-GraphNode *GraphQListWidget::get_p_graph_node() { return this->p_graph_node; }
+GraphNode *GraphQListWidget::get_p_graph_node()
+{
+  auto gno = this->p_graph_node.lock();
+  if (!gno)
+    return nullptr;
+  return gno.get();
+}
 
 void GraphQListWidget::json_from(nlohmann::json const &json)
 {
@@ -60,6 +70,10 @@ void GraphQListWidget::on_combobox_changed()
   Logger::log()->trace("GraphQListWidget::on_combobox_changed: current tag: {}",
                        this->current_bg_tag);
 
+  auto gno = this->p_graph_node.lock();
+  if (!gno)
+    return;
+
   this->current_bg_tag = this->combobox->currentText().toStdString();
 
   // retrieve node ID from tag
@@ -68,7 +82,7 @@ void GraphQListWidget::on_combobox_changed()
 
   if (!ret)
   {
-    Q_EMIT this->bg_image_updated(this->p_graph_node->get_id(), QImage());
+    Q_EMIT this->bg_image_updated(gno->get_id(), QImage());
     Q_EMIT this->has_changed();
     return;
   }
@@ -83,8 +97,8 @@ void GraphQListWidget::on_combobox_changed()
   QImage               image;
   std::vector<uint8_t> img = {};
 
-  hmap::Heightmap *p_h = this->p_graph_node->get_node_ref_by_id(node_id)
-                             ->get_value_ref<hmap::Heightmap>(port_id);
+  hmap::Heightmap *p_h = gno->get_node_ref_by_id(node_id)->get_value_ref<hmap::Heightmap>(
+      port_id);
 
   if (p_h)
   {
@@ -102,12 +116,16 @@ void GraphQListWidget::on_combobox_changed()
     image = QImage();
   }
 
-  Q_EMIT this->bg_image_updated(this->p_graph_node->get_id(), image);
+  Q_EMIT this->bg_image_updated(gno->get_id(), image);
   Q_EMIT this->has_changed();
 }
 
 void GraphQListWidget::update_combobox()
 {
+  auto gno = this->p_graph_node.lock();
+  if (!gno)
+    return;
+
   // backup current tag selection (modified by itemChanged signal of
   // combobox)
   const std::string tag_bckp = this->current_bg_tag;
@@ -120,7 +138,7 @@ void GraphQListWidget::update_combobox()
   // list of possible data available to show on the canvas as Pixmap
   bool is_current_tag_in_combo = false;
 
-  for (auto &[id, node] : this->p_graph_node->get_nodes())
+  for (auto &[id, node] : gno->get_nodes())
     for (auto &port : node->get_ports())
     {
       // TODO allow other data types

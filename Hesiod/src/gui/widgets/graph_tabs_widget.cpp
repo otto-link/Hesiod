@@ -17,7 +17,8 @@
 namespace hesiod
 {
 
-GraphTabsWidget::GraphTabsWidget(GraphManager *p_graph_manager, QWidget *parent)
+GraphTabsWidget::GraphTabsWidget(std::weak_ptr<GraphManager> p_graph_manager,
+                                 QWidget                    *parent)
     : QWidget(parent), p_graph_manager(p_graph_manager)
 {
   Logger::log()->trace("GraphTabsWidget::GraphTabsWidget");
@@ -147,9 +148,13 @@ void GraphTabsWidget::on_new_node_created(const std::string &graph_id,
 {
   Logger::log()->trace("GraphTabsWidget::on_new_node_created");
 
+  auto gm = this->p_graph_manager.lock();
+  if (!gm)
+    return;
+
   // check if it's a Receive node to update its tag list
-  auto it_graph = this->p_graph_manager->get_graph_nodes().find(graph_id);
-  if (it_graph == this->p_graph_manager->get_graph_nodes().end())
+  auto it_graph = gm->get_graph_nodes().find(graph_id);
+  if (it_graph == gm->get_graph_nodes().end())
   {
     Logger::log()->critical("GraphTabsWidget::on_new_node_created: graph {} not found",
                             graph_id);
@@ -214,15 +219,19 @@ void GraphTabsWidget::update_receive_nodes_tag_list()
 {
   Logger::log()->trace("GraphTabsWidget::update_receive_nodes_tag_list");
 
+  auto gm = this->p_graph_manager.lock();
+  if (!gm)
+    return;
+
   // update the tag list for all the Receive nodes of the graphs
-  for (auto &[gid, graph] : this->p_graph_manager->get_graph_nodes())
+  for (auto &[gid, graph] : gm->get_graph_nodes())
     for (auto &[nid, node] : graph->get_nodes())
       if (node->get_label() == "Receive")
       {
         ReceiveNode *p_rnode = graph->get_node_ref_by_id<ReceiveNode>(nid);
 
         std::vector<std::string> tags = {};
-        for (auto &[tag, _] : this->p_graph_manager->get_broadcast_params())
+        for (auto &[tag, _] : gm->get_broadcast_params())
           tags.push_back(tag);
 
         if (p_rnode)
@@ -235,6 +244,10 @@ void GraphTabsWidget::update_tab_widget()
   Logger::log()->trace("GraphTabsWidget::update_tab_widget");
 
   if (!this->tab_widget)
+    return;
+
+  auto gm = this->p_graph_manager.lock();
+  if (!gm)
     return;
 
   // backup currently selected tab to set it back afterwards
@@ -252,7 +265,7 @@ void GraphTabsWidget::update_tab_widget()
   for (auto &[id, _] : this->graph_node_widget_map)
   {
     // ditch if the corresponding GraphNode no longer exists
-    GraphNode *p_graph_node = this->p_graph_manager->get_graph_ref_by_id(id);
+    GraphNode *p_graph_node = gm->get_graph_ref_by_id(id);
     if (!p_graph_node)
       id_to_erase.push_back(id);
   }
@@ -277,14 +290,14 @@ void GraphTabsWidget::update_tab_widget()
   }
 
   // repopulate tabs
-  for (auto &id : this->p_graph_manager->get_graph_order())
+  for (auto &id : gm->get_graph_order())
   {
     Logger::log()->trace("updating tab for graph: {}", id);
 
     // generate a graph editor if not already available
     if (!this->graph_node_widget_map.contains(id))
     {
-      GraphNode *p_graph_node = this->p_graph_manager->get_graph_ref_by_id(id);
+      GraphNode *p_graph_node = gm->get_graph_ref_by_id(id);
       if (!p_graph_node)
       {
         Logger::log()->error(
@@ -297,10 +310,10 @@ void GraphTabsWidget::update_tab_widget()
       this->graph_node_widget_map[id] = new GraphNodeWidget(p_graph_node, this);
 
       // connections / model
-      this->p_graph_manager->new_broadcast_tag = [this](const std::string &)
+      gm->new_broadcast_tag = [this](const std::string &)
       { this->update_receive_nodes_tag_list(); };
 
-      this->p_graph_manager->remove_broadcast_tag = [this](const std::string &)
+      gm->remove_broadcast_tag = [this](const std::string &)
       { this->update_receive_nodes_tag_list(); };
 
       // connections / GUI
@@ -331,7 +344,7 @@ void GraphTabsWidget::update_tab_widget()
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
 
-    auto *graph_widget = this->graph_node_widget_map.at(id);
+    QPointer<GraphNodeWidget> graph_widget = this->graph_node_widget_map.at(id);
     if (!graph_widget)
     {
       Logger::log()->error(

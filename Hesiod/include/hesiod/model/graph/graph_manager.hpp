@@ -20,12 +20,13 @@ class GraphConfig;
 // =====================================
 using GraphNodeMap = std::map<std::string, std::shared_ptr<GraphNode>>;
 
-class GraphManager
+class GraphManager : public std::enable_shared_from_this<GraphManager>
 {
 public:
   explicit GraphManager(const std::string &id = "");
 
-  void clear();
+  std::shared_ptr<GraphManager> get_shared();
+  void                          clear();
 
   // --- Accessors ---
   const BroadcastMap             &get_broadcast_params();

@@ -25,29 +25,26 @@ void ProjectUI::cleanup()
   Logger::log()->trace("ProjectUI::cleanup");
 
   QCoreApplication::processEvents();
-  this->graph_manager_widget.reset();
-  this->graph_tabs_widget.reset();
-  this->texture_downloader.reset();
 }
 
 GraphManagerWidget *ProjectUI::get_graph_manager_widget_ref()
 {
-  return this->graph_manager_widget.get();
+  return this->graph_manager_widget;
 }
 
 GraphTabsWidget *ProjectUI::get_graph_tabs_widget_ref()
 {
-  return this->graph_tabs_widget.get();
+  return this->graph_tabs_widget;
 }
 
 qtd::TextureDownloader *ProjectUI::get_texture_downloader_ref()
 {
-  return this->texture_downloader.get();
+  return this->texture_downloader;
 }
 
 QWidget *ProjectUI::get_widget()
 {
-  return static_cast<QWidget *>(this->graph_tabs_widget.get());
+  return static_cast<QWidget *>(this->graph_tabs_widget);
 }
 
 void ProjectUI::load_ui_state(const std::string &fname)
@@ -88,14 +85,14 @@ void ProjectUI::initialize(ProjectModel *project)
   // initialize UI components (only tabs assign to the current parent
   // widget, so that the graph manager and the texture downloader will
   // show as floating windows)
-  this->graph_manager_widget = std::make_unique<GraphManagerWidget>(p_graph_manager);
-  this->graph_tabs_widget = std::make_unique<GraphTabsWidget>(p_graph_manager, this);
+  this->graph_manager_widget = new GraphManagerWidget(p_graph_manager->get_shared());
+  this->graph_tabs_widget = new GraphTabsWidget(p_graph_manager->get_shared());
 
   this->graph_tabs_widget->set_show_node_settings_widget(
       HSD_CTX.app_settings.node_editor.show_node_settings_pan);
 
   if (HSD_CTX.app_settings.interface.enable_texture_downloader)
-    this->texture_downloader = std::make_unique<qtd::TextureDownloader>();
+    this->texture_downloader = new qtd::TextureDownloader();
 
   // connections
   this->setup_connections();
@@ -116,48 +113,48 @@ void ProjectUI::setup_connections()
   Logger::log()->trace("Project::setup_connections");
 
   // GraphManagerWidget -> GraphTabsWidget
-  this->connect(this->graph_manager_widget.get(),
+  this->connect(this->graph_manager_widget,
                 &GraphManagerWidget::graph_removed,
-                this->graph_tabs_widget.get(),
+                this->graph_tabs_widget,
                 &GraphTabsWidget::update_tab_widget);
 
-  this->connect(this->graph_manager_widget.get(),
+  this->connect(this->graph_manager_widget,
                 &GraphManagerWidget::list_reordered,
-                this->graph_tabs_widget.get(),
+                this->graph_tabs_widget,
                 &GraphTabsWidget::update_tab_widget);
 
-  this->connect(this->graph_manager_widget.get(),
+  this->connect(this->graph_manager_widget,
                 &GraphManagerWidget::new_graph_added,
-                this->graph_tabs_widget.get(),
+                this->graph_tabs_widget,
                 &GraphTabsWidget::update_tab_widget);
 
-  this->connect(this->graph_manager_widget.get(),
+  this->connect(this->graph_manager_widget,
                 &GraphManagerWidget::selected_graph_changed,
-                this->graph_tabs_widget.get(),
+                this->graph_tabs_widget,
                 &GraphTabsWidget::set_selected_tab);
 
   // GraphTabsWidget -> GraphManagerWidget
-  this->connect(this->graph_tabs_widget.get(),
+  this->connect(this->graph_tabs_widget,
                 &GraphTabsWidget::has_been_cleared,
-                this->graph_manager_widget.get(),
+                this->graph_manager_widget,
                 &GraphManagerWidget::update_combobox);
 
-  this->connect(this->graph_tabs_widget.get(),
+  this->connect(this->graph_tabs_widget,
                 &GraphTabsWidget::new_node_created,
                 this,
                 [this](const std::string &graph_id, const std::string & /* id */)
                 { this->graph_manager_widget->update_combobox(graph_id); });
 
-  this->connect(this->graph_tabs_widget.get(),
+  this->connect(this->graph_tabs_widget,
                 &GraphTabsWidget::node_deleted,
                 this,
                 [this](const std::string &graph_id, const std::string & /* id */)
                 { this->graph_manager_widget->update_combobox(graph_id); });
 
   // qtd::TextureDownloader -> GraphTabsWidget
-  this->connect(this->texture_downloader.get(),
+  this->connect(this->texture_downloader,
                 &qtd::TextureDownloader::textures_retrieved,
-                this->graph_tabs_widget.get(),
+                this->graph_tabs_widget,
                 &GraphTabsWidget::on_textures_request);
 }
 

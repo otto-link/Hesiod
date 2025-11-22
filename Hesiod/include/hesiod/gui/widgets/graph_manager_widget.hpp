@@ -1,14 +1,8 @@
 /* Copyright (c) 2025 Otto Link. Distributed under the terms of the GNU General Public
    License. The full license is in the file LICENSE, distributed with this software. */
-
-/**
- * @file graph_manager_widget.hpp
- * @author  Otto Link (otto.link.bv@gmail.com)
- * @brief
- *
- * @copyright Copyright (c) 2025
- */
 #pragma once
+#include <memory>
+
 #include <QAction>
 #include <QComboBox>
 #include <QListWidget>
@@ -38,7 +32,7 @@ class GraphQListWidget : public QWidget
   Q_OBJECT
 
 public:
-  GraphQListWidget(GraphNode *p_graph_node, QWidget *parent = nullptr);
+  GraphQListWidget(std::weak_ptr<GraphNode> p_graph_node, QWidget *parent = nullptr);
 
   // --- Accessors ---
   std::string get_current_bg_tag() const;
@@ -61,9 +55,9 @@ public slots:
 
 private:
   // --- Members ---
-  GraphNode  *p_graph_node;
-  QComboBox  *combobox;
-  std::string current_bg_tag; // == export_tag of GraphNode
+  std::weak_ptr<GraphNode> p_graph_node;
+  QComboBox               *combobox;
+  std::string              current_bg_tag; // == export_tag of GraphNode
 };
 
 // =====================================
@@ -74,7 +68,8 @@ class GraphManagerWidget : public QWidget
   Q_OBJECT
 
 public:
-  GraphManagerWidget(GraphManager *p_graph_manager, QWidget *parent = nullptr);
+  GraphManagerWidget(std::weak_ptr<GraphManager> p_graph_manager,
+                     QWidget                    *parent = nullptr);
 
   void clear();
 
@@ -124,11 +119,11 @@ private:
   void add_list_item(const std::string &id);
 
   // --- Members ---
-  GraphManager     *p_graph_manager;
-  CoordFrameWidget *coord_frame_widget;
-  QListWidget      *list_widget;
-  QPushButton      *apply_button;
-  bool              is_dirty = false;
+  std::weak_ptr<GraphManager> p_graph_manager;
+  CoordFrameWidget           *coord_frame_widget;
+  QListWidget                *list_widget;
+  QPushButton                *apply_button;
+  bool                        is_dirty = false;
 };
 
 } // namespace hesiod

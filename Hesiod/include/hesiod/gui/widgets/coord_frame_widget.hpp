@@ -1,14 +1,8 @@
 /* Copyright (c) 2025 Otto Link. Distributed under the terms of the GNU General Public
    License. The full license is in the file LICENSE, distributed with this software. */
-
-/**
- * @file coord_frame_widget.hpp
- * @author  Otto Link (otto.link.bv@gmail.com)
- * @brief
- *
- * @copyright Copyright (c) 2025
- */
 #pragma once
+#include <memory>
+
 #include <QGraphicsRectItem>
 #include <QGraphicsView>
 #include <QPixmap>
@@ -106,7 +100,8 @@ class CoordFrameWidget : public QGraphicsView
   Q_OBJECT
 
 public:
-  explicit CoordFrameWidget(GraphManager *p_graph_manager, QWidget *parent = nullptr);
+  explicit CoordFrameWidget(std::weak_ptr<GraphManager> p_graph_manager,
+                            QWidget                    *parent = nullptr);
 
   void clear();
 
@@ -129,7 +124,7 @@ protected:
   void wheelEvent(QWheelEvent *event) override;
 
 private:
-  GraphManager                      *p_graph_manager = nullptr;
+  std::weak_ptr<GraphManager>        p_graph_manager;
   std::map<std::string, FrameItem *> frames;
 };
 

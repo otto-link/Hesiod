@@ -23,11 +23,13 @@
 namespace hesiod
 {
 
-GraphManagerWidget::GraphManagerWidget(GraphManager *p_graph_manager, QWidget *parent)
+GraphManagerWidget::GraphManagerWidget(std::weak_ptr<GraphManager> p_graph_manager,
+                                       QWidget                    *parent)
     : QWidget(parent), p_graph_manager(p_graph_manager)
 {
-  if (!p_graph_manager)
-    throw std::runtime_error("p_graph_manager is nullptr");
+  auto gm = this->p_graph_manager.lock();
+  if (!gm)
+    return;
 
   this->setWindowTitle(tr("Hesiod - GraphManager"));
 
@@ -37,7 +39,7 @@ GraphManagerWidget::GraphManagerWidget(GraphManager *p_graph_manager, QWidget *p
   QGridLayout *layout = new QGridLayout(this);
 
   // left pan
-  this->coord_frame_widget = new CoordFrameWidget(p_graph_manager, this);
+  this->coord_frame_widget = new CoordFrameWidget(gm, this);
   layout->addWidget(this->coord_frame_widget, row, 0, 2, 1);
 
   // right pan
@@ -56,7 +58,7 @@ GraphManagerWidget::GraphManagerWidget(GraphManager *p_graph_manager, QWidget *p
   this->list_widget->setMinimumSize(MINIMUM_WIDTH, this->list_widget->height());
 
   // populate with graph editor names
-  for (auto &id : this->p_graph_manager->get_graph_order())
+  for (auto &id : gm->get_graph_order())
     this->add_list_item(id);
 
   layout->addWidget(this->list_widget, row++, 1, 1, 4);
@@ -131,13 +133,16 @@ GraphManagerWidget::GraphManagerWidget(GraphManager *p_graph_manager, QWidget *p
 
 void GraphManagerWidget::add_list_item(const std::string &id)
 {
+  auto gm = this->p_graph_manager.lock();
+  if (!gm)
+    return;
+
   // create the list item
   auto *item = new QListWidgetItem();
   item->setText(id.c_str());
 
   // create the custom widget to embed inside the item
-  GraphQListWidget *widget = new GraphQListWidget(
-      this->p_graph_manager->get_graph_nodes().at(id).get());
+  GraphQListWidget *widget = new GraphQListWidget(gm->get_graph_nodes().at(id));
 
   item->setSizeHint(widget->sizeHint());
 
@@ -160,7 +165,7 @@ void GraphManagerWidget::add_list_item(const std::string &id)
 
   // TODO FIX ARCHI
 
-  // this->connect(this->p_graph_manager->get_graph_nodes().at(id).get(),
+  // this->connect(gm->get_graph_nodes().at(id).get(),
   //               &GraphNode::update_finished, // TODO NOPE
   //               widget,
   //               [widget](const std::string & /* graph_id */)
@@ -224,8 +229,12 @@ void GraphManagerWidget::on_apply_changes()
 {
   Logger::log()->trace("GraphManagerWidget::on_apply_changes");
 
+  auto gm = this->p_graph_manager.lock();
+  if (!gm)
+    return;
+
   // retrieve coordinate frame parameters from the frames canvas
-  for (auto &[id, graph] : this->p_graph_manager->get_graph_nodes())
+  for (auto &[id, graph] : gm->get_graph_nodes())
   {
     Logger::log()->trace("id: {}", id);
 
@@ -243,8 +252,8 @@ void GraphManagerWidget::on_apply_changes()
   }
 
   // update the graph from bottom to top
-  for (auto &id : this->p_graph_manager->get_graph_order())
-    this->p_graph_manager->get_graph_ref_by_id(id)->update();
+  for (auto &id : gm->get_graph_order())
+    gm->get_graph_ref_by_id(id)->update();
 
   // clean state
   this->set_is_dirty(false);
@@ -257,8 +266,12 @@ void GraphManagerWidget::on_export()
   // TODO move to GraphManager
   Logger::log()->trace("GraphManagerWidget::on_export");
 
+  auto gm = this->p_graph_manager.lock();
+  if (!gm)
+    return;
+
   // define the export parameters using the GUI
-  FlattenConfig export_param = this->p_graph_manager->get_export_param();
+  FlattenConfig export_param = gm->get_export_param();
 
   if (export_param.export_path.empty())
     export_param.export_path = "export.png";
@@ -298,8 +311,8 @@ void GraphManagerWidget::on_export()
 
   export_param.ids = export_ids;
 
-  this->p_graph_manager->set_export_param(export_param);
-  this->p_graph_manager->export_flatten();
+  gm->set_export_param(export_param);
+  gm->export_flatten();
 }
 
 void GraphManagerWidget::on_item_double_clicked(QListWidgetItem *item)
@@ -315,6 +328,10 @@ void GraphManagerWidget::on_list_reordered(const QModelIndex &,
 {
   Logger::log()->trace("GraphManagerWidget::on_list_reordered");
 
+  auto gm = this->p_graph_manager.lock();
+  if (!gm)
+    return;
+
   // retrieve new graph order
   std::vector<std::string> new_graph_order = {};
 
@@ -322,7 +339,7 @@ void GraphManagerWidget::on_list_reordered(const QModelIndex &,
     new_graph_order.push_back(this->list_widget->item(i)->text().toStdString());
 
   // update storage
-  this->p_graph_manager->set_graph_order(new_graph_order);
+  gm->set_graph_order(new_graph_order);
 
   // update frames canvas
   this->coord_frame_widget->update_frames_z_depth();
@@ -333,8 +350,12 @@ void GraphManagerWidget::on_list_reordered(const QModelIndex &,
 
 void GraphManagerWidget::on_new_graph_request()
 {
+  auto gm = this->p_graph_manager.lock();
+  if (!gm)
+    return;
+
   // get ID from user
-  std::vector<std::string> invalid_graph_ids = this->p_graph_manager->get_graph_order();
+  std::vector<std::string> invalid_graph_ids = gm->get_graph_order();
 
   StringInputDialog id_dialog("Enter new graph ID", invalid_graph_ids);
   std::string       new_graph_id;
@@ -359,7 +380,7 @@ void GraphManagerWidget::on_new_graph_request()
 
   // create new graph
   auto graph = std::make_shared<hesiod::GraphNode>(new_graph_id, config);
-  this->p_graph_manager->add_graph_node(graph, new_graph_id);
+  gm->add_graph_node(graph, new_graph_id);
 
   // add to list widget
   this->add_list_item(new_graph_id);
@@ -372,17 +393,22 @@ void GraphManagerWidget::on_new_graph_request()
 
 void GraphManagerWidget::on_reseed(bool backward)
 {
-  if (!this->p_graph_manager)
+  auto gm = this->p_graph_manager.lock();
+  if (!gm)
     return;
 
-  this->p_graph_manager->reseed(backward);
+  gm->reseed(backward);
 }
 
 void GraphManagerWidget::reset()
 {
+  auto gm = this->p_graph_manager.lock();
+  if (!gm)
+    return;
+
   this->list_widget->clear();
 
-  for (auto &id : this->p_graph_manager->get_graph_order())
+  for (auto &id : gm->get_graph_order())
     this->add_list_item(id);
 
   this->coord_frame_widget->reset();
@@ -426,6 +452,10 @@ void GraphManagerWidget::show_context_menu(const QPoint &pos)
 {
   Logger::log()->trace("GraphManagerWidget::show_context_menu");
 
+  auto gm = this->p_graph_manager.lock();
+  if (!gm)
+    return;
+
   QListWidgetItem *item = this->list_widget->itemAt(pos);
 
   if (!item)
@@ -445,7 +475,7 @@ void GraphManagerWidget::show_context_menu(const QPoint &pos)
   if (selected_action == delete_action)
   {
     delete this->list_widget->takeItem(this->list_widget->row(item));
-    this->p_graph_manager->remove_graph_node(selected_id);
+    gm->remove_graph_node(selected_id);
     this->coord_frame_widget->remove_frame(selected_id);
 
     Q_EMIT this->graph_removed();

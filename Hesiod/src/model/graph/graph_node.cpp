@@ -105,6 +105,19 @@ void GraphNode::change_config_values(const GraphConfig &new_config)
   this->update();
 }
 
+std::shared_ptr<GraphNode> GraphNode::get_shared()
+{
+  try
+  {
+    return shared_from_this();
+  }
+  catch (...)
+  {
+    Logger::log()->critical("GraphNode::get_shared: object is not managed by shared_ptr");
+    return nullptr;
+  }
+}
+
 void GraphNode::json_from(nlohmann::json const &json, GraphConfig *p_input_config)
 {
   Logger::log()->trace("GraphNode::json_from, graph {}", this->get_id());

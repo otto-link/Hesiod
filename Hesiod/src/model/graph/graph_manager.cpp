@@ -181,6 +181,20 @@ GraphNode *GraphManager::get_graph_ref_by_id(const std::string &graph_id)
 
 std::string GraphManager::get_id() const { return this->id; }
 
+std::shared_ptr<GraphManager> GraphManager::get_shared()
+{
+  try
+  {
+    return shared_from_this();
+  }
+  catch (...)
+  {
+    Logger::log()->critical(
+        "GraphManager::get_shared: object is not managed by shared_ptr");
+    return nullptr;
+  }
+}
+
 bool GraphManager::is_graph_above(const std::string &graph_id,
                                   const std::string &ref_graph_id)
 {

@@ -1,14 +1,8 @@
 /* Copyright (c) 2025 Otto Link. Distributed under the terms of the GNU General Public
    License. The full license is in the file LICENSE, distributed with this software. */
-
-/**
- * @file graph_tabs_widget.hpp
- * @author  Otto Link (otto.link.bv@gmail.com)
- * @brief
- *
- * @copyright Copyright (c) 2025
- */
 #pragma once
+#include <memory>
+
 #include <QTabWidget>
 #include <QWidget>
 
@@ -30,7 +24,7 @@ class GraphTabsWidget : public QWidget
   Q_OBJECT
 
 public:
-  GraphTabsWidget(GraphManager *p_graph_manager, QWidget *parent = nullptr);
+  GraphTabsWidget(std::weak_ptr<GraphManager> p_graph_manager, QWidget *parent = nullptr);
 
   void clear();
   void set_show_node_settings_widget(bool new_state);
@@ -65,11 +59,11 @@ public slots:
 
 private:
   // --- Members ---
-  GraphManager                               *p_graph_manager; // own by MainWindow
-  QTabWidget                                 *tab_widget;      // own by this
-  std::map<std::string, GraphNodeWidget *>    graph_node_widget_map;
-  std::map<std::string, NodeSettingsWidget *> node_settings_widget_map;
-  bool                                        show_node_settings_widget;
+  std::weak_ptr<GraphManager>                      p_graph_manager; // own by MainWindow
+  QTabWidget                                      *tab_widget;      // own by this
+  std::map<std::string, QPointer<GraphNodeWidget>> graph_node_widget_map;
+  std::map<std::string, NodeSettingsWidget *>      node_settings_widget_map;
+  bool                                             show_node_settings_widget;
 };
 
 } // namespace hesiod

@@ -14,10 +14,15 @@
 namespace hesiod
 {
 
-CoordFrameWidget::CoordFrameWidget(GraphManager *p_graph_manager, QWidget *parent)
+CoordFrameWidget::CoordFrameWidget(std::weak_ptr<GraphManager> p_graph_manager,
+                                   QWidget                    *parent)
     : QGraphicsView(parent), p_graph_manager(p_graph_manager)
 {
   Logger::log()->trace("CoordFrameWidget::CoordFrameWidget");
+
+  auto gm = this->p_graph_manager.lock();
+  if (!gm)
+    return;
 
   // build layout
   this->setRenderHint(QPainter::Antialiasing);
@@ -43,7 +48,18 @@ CoordFrameWidget::CoordFrameWidget(GraphManager *p_graph_manager, QWidget *paren
 
 void CoordFrameWidget::add_frame(const std::string &id)
 {
-  GraphNodeMap graphs = this->p_graph_manager->get_graph_nodes();
+  auto gm = this->p_graph_manager.lock();
+  if (!gm)
+    return;
+
+  GraphNodeMap graphs = gm->get_graph_nodes();
+
+  auto it = graphs.find(id);
+  if (it == graphs.end())
+  {
+    Logger::log()->error("CoordFrameWidget::add_frame:: Graph ID not found: {}", id);
+    return;
+  }
 
   hmap::Vec2<float> origin = graphs.at(id)->get_origin();
   hmap::Vec2<float> size = graphs.at(id)->get_size();
@@ -54,7 +70,7 @@ void CoordFrameWidget::add_frame(const std::string &id)
                                        QPointF(size.x, size.y),
                                        angle);
   this->scene()->addItem(new_frame);
-  new_frame->set_z_depth(this->p_graph_manager->get_graph_order_index(id));
+  new_frame->set_z_depth(gm->get_graph_order_index(id));
 
   // keep track of frame item ptr
   this->frames[id] = new_frame;
@@ -107,13 +123,16 @@ void CoordFrameWidget::on_zoom_to_content()
 
 void CoordFrameWidget::remove_frame(const std::string &id)
 {
-  for (QGraphicsItem *item : this->scene()->items())
-    if (FrameItem *p_frame = dynamic_cast<FrameItem *>(item))
-      if (p_frame->get_id() == id)
-      {
-        this->scene()->removeItem(item);
-        this->frames.erase(id);
-      }
+  auto it = frames.find(id);
+  if (it == frames.end())
+    return;
+
+  FrameItem *item = it->second;
+
+  this->scene()->removeItem(item); // removes AND deletes because scene owns it
+  delete item;                     // explicitly delete for clarity and early free (safe)
+
+  frames.erase(it);
 
   this->update();
 }
@@ -122,8 +141,14 @@ void CoordFrameWidget::reset()
 {
   Logger::log()->trace("CoordFrameWidget::reset");
 
+  auto gm = this->p_graph_manager.lock();
+  if (!gm)
+    return;
+
   // store keys because the map is altered by remove_frame
-  std::vector<std::string> keys = {};
+  std::vector<std::string> keys;
+  keys.reserve(frames.size());
+
   for (auto &[id, _] : this->frames)
     keys.push_back(id);
 
@@ -131,7 +156,7 @@ void CoordFrameWidget::reset()
     this->remove_frame(id);
 
   // re-populate scene
-  for (auto &id : this->p_graph_manager->get_graph_order())
+  for (auto &id : gm->get_graph_order())
   {
     Logger::log()->trace("CoordFrameWidget::CoordFrameWidget: adding graph: {}", id);
     this->add_frame(id);
@@ -140,15 +165,17 @@ void CoordFrameWidget::reset()
 
 void CoordFrameWidget::update_frames_z_depth()
 {
-  for (size_t k = 0; k < p_graph_manager->get_graph_order().size(); ++k)
-  {
-    const std::string id = p_graph_manager->get_graph_order()[k];
-    this->frames.at(id)->set_z_depth((int)k);
 
-    Logger::log()->trace(
-        "CoordFrameWidget::update_frames_z_depth updated graph: {}, depth {}",
-        id,
-        k);
+  auto gm = this->p_graph_manager.lock();
+  if (!gm)
+    return;
+
+  for (size_t k = 0; k < gm->get_graph_order().size(); ++k)
+  {
+    const std::string id = gm->get_graph_order()[k];
+    auto              it = frames.find(id);
+    if (it != frames.end())
+      it->second->set_z_depth((int)k);
   }
 }
 
