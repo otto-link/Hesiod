@@ -82,12 +82,17 @@ public:
   void save_window_state() const;
 
 signals:
+  // --- UI
   void graph_removed();
   void has_changed();
   void list_reordered();
   void new_graph_added();
   void selected_graph_changed(const std::string &graph_id);
   void window_closed();
+
+  // --- Graph
+  void update_started();
+  void update_finished();
 
 public slots:
   // --- User Actions ---

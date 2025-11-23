@@ -343,6 +343,16 @@ void GraphTabsWidget::update_tab_widget()
                     &GraphNodeWidget::copy_buffer_has_changed,
                     this,
                     &GraphTabsWidget::on_copy_buffer_has_changed);
+
+      this->connect(this->graph_node_widget_map.at(id),
+                    &GraphNodeWidget::update_started,
+                    this,
+                    [this]() { Q_EMIT this->update_started(); });
+
+      this->connect(this->graph_node_widget_map.at(id),
+                    &GraphNodeWidget::update_finished,
+                    this,
+                    [this]() { Q_EMIT this->update_finished(); });
     }
 
     // build layout

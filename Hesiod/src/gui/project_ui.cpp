@@ -151,6 +151,16 @@ void ProjectUI::setup_connections()
                 [this](const std::string &graph_id, const std::string & /* id */)
                 { this->graph_manager_widget->update_combobox(graph_id); });
 
+  this->connect(this->graph_tabs_widget,
+                &GraphTabsWidget::update_started,
+                this,
+                [this]() { Q_EMIT this->graph_manager_widget->update_started(); });
+
+  this->connect(this->graph_tabs_widget,
+                &GraphTabsWidget::update_finished,
+                this,
+                [this]() { Q_EMIT this->graph_manager_widget->update_finished(); });
+
   // qtd::TextureDownloader -> GraphTabsWidget
   this->connect(this->texture_downloader,
                 &qtd::TextureDownloader::textures_retrieved,

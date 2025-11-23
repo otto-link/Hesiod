@@ -38,10 +38,15 @@ public:
   QSize sizeHint() const override;
 
 signals:
+  // --- UI
   void has_been_cleared(const std::string &graph_id);
   void has_changed();
   void new_node_created(const std::string &graph_id, const std::string &id);
   void node_deleted(const std::string &graph_id, const std::string &id);
+
+  // --- Graph
+  void update_started();
+  void update_finished();
 
 public slots:
   // --- From GraphNodeWidget signals ---

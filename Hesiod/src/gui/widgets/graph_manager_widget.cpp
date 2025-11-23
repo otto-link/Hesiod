@@ -163,13 +163,10 @@ void GraphManagerWidget::add_list_item(const std::string &id)
                 this,
                 [this]() { Q_EMIT this->has_changed(); });
 
-  // TODO FIX ARCHI
-
-  // this->connect(gm->get_graph_nodes().at(id).get(),
-  //               &GraphNode::update_finished, // TODO NOPE
-  //               widget,
-  //               [widget](const std::string & /* graph_id */)
-  //               { widget->on_combobox_changed(); });
+  this->connect(this,
+                &GraphManagerWidget::update_finished,
+                widget,
+                [widget]() { widget->on_combobox_changed(); });
 }
 
 void GraphManagerWidget::clear()
