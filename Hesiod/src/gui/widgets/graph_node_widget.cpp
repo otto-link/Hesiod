@@ -277,6 +277,9 @@ QWidget *GraphNodeWidget::create_toolbar_widget(QWidget                *parent,
                                                 BaseNode               *p_node,
                                                 attr::AttributesWidget *attr_widget)
 {
+  if (!p_node)
+    return nullptr;
+
   QWidget     *toolbar = new QWidget(parent);
   QHBoxLayout *layout = new QHBoxLayout(toolbar);
   layout->setContentsMargins(0, 0, 0, 0);
@@ -312,27 +315,30 @@ QWidget *GraphNodeWidget::create_toolbar_widget(QWidget                *parent,
 
   // --- connections
 
+  const std::string node_id = p_node->get_id();
+
+  // use node id + graph_node instead of the node pointer for safety
+  // (no lifetime warranty on p_node)
   this->connect(update_btn,
                 &QToolButton::pressed,
-                [this, p_node]()
+                [this, node_id]()
                 {
                   auto gno = this->p_graph_node.lock();
                   if (!gno)
                     return;
 
-                  gno->update(p_node->get_id());
+                  gno->update(node_id);
                 });
 
   this->connect(info_btn,
                 &QToolButton::pressed,
-                [this, p_node]()
+                [this, node_id]()
                 {
-                  // TODO ARCH p_node lifetime
                   auto gno = this->p_graph_node.lock();
                   if (!gno)
                     return;
 
-                  if (p_node)
+                  if (auto *p_node = gno->get_node_ref_by_id<BaseNode>(node_id))
                     this->on_node_info(p_node->get_id());
                 });
 
@@ -354,12 +360,20 @@ QWidget *GraphNodeWidget::create_toolbar_widget(QWidget                *parent,
 
   this->connect(help_btn,
                 &QToolButton::pressed,
-                [this, p_node]()
+                [this, node_id]()
                 {
-                  auto *popup = new DocumentationPopup(p_node->get_label(),
-                                                       p_node->get_documentation_html());
-                  popup->setAttribute(Qt::WA_DeleteOnClose);
-                  popup->show();
+                  auto gno = this->p_graph_node.lock();
+                  if (!gno)
+                    return;
+
+                  if (auto *p_node = gno->get_node_ref_by_id<BaseNode>(node_id))
+                  {
+                    auto *popup = new DocumentationPopup(
+                        p_node->get_label(),
+                        p_node->get_documentation_html());
+                    popup->setAttribute(Qt::WA_DeleteOnClose);
+                    popup->show();
+                  }
                 });
 
   return toolbar;
