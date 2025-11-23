@@ -1,6 +1,8 @@
 /* Copyright (c) 2025 Otto Link. Distributed under the terms of the GNU General Public
    License. The full license is in the file LICENSE, distributed with this software. */
 #pragma once
+#include <memory>
+
 #include <QScrollArea>
 
 #include "gnodegui/graph_viewer.hpp"
@@ -23,7 +25,7 @@ class GraphNodeWidget : public gngui::GraphViewer
 
 public:
   // --- Constructor and Setup ---
-  GraphNodeWidget(GraphNode *p_graph_node, QWidget *parent = nullptr);
+  GraphNodeWidget(std::weak_ptr<GraphNode> p_graph_node, QWidget *parent = nullptr);
 
   void automatic_node_layout();
   void clear_all();
@@ -114,7 +116,7 @@ private:
   void reselect_backup_ids();
 
   // --- Members ---
-  GraphNode                            *p_graph_node; // own by GraphManager
+  std::weak_ptr<GraphNode>              p_graph_node; // own by GraphManager
   std::vector<std::unique_ptr<QWidget>> data_viewers;
   bool                                  update_node_on_connection_finished = true;
   nlohmann::json                        json_copy_buffer;

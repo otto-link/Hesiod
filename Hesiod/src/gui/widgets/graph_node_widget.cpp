@@ -35,10 +35,16 @@
 namespace hesiod
 {
 
-GraphNodeWidget::GraphNodeWidget(GraphNode *p_graph_node, QWidget *parent)
-    : GraphViewer(p_graph_node->get_id(), parent), p_graph_node(p_graph_node)
+GraphNodeWidget::GraphNodeWidget(std::weak_ptr<GraphNode> p_graph_node, QWidget *parent)
+    : GraphViewer("", parent), p_graph_node(p_graph_node)
 {
   Logger::log()->trace("GraphNodeWidget::GraphNodeWidget: id: {}", this->get_id());
+
+  auto gno = this->p_graph_node.lock();
+  if (!gno)
+    return;
+
+  this->set_id(gno->get_id());
 
   // populate node catalog
   this->set_node_inventory(get_node_inventory());
@@ -48,6 +54,10 @@ GraphNodeWidget::GraphNodeWidget(GraphNode *p_graph_node, QWidget *parent)
 void GraphNodeWidget::add_import_texture_nodes(
     const std::vector<std::string> &texture_paths)
 {
+  auto gno = this->p_graph_node.lock();
+  if (!gno)
+    return;
+
   QRectF bbox = this->get_bounding_box();
 
   AppContext &ctx = HSD_CTX;
@@ -66,7 +76,7 @@ void GraphNodeWidget::add_import_texture_nodes(
                                                         QPointF(delta.x(), dy));
 
     // setup attributes
-    BaseNode *p_node = this->p_graph_node->get_node_ref_by_id<BaseNode>(node_id);
+    BaseNode *p_node = gno->get_node_ref_by_id<BaseNode>(node_id);
     if (p_node)
     {
       // p_node->json_from(json_node["settings"]);
@@ -93,10 +103,11 @@ void GraphNodeWidget::automatic_node_layout()
 {
   Logger::log()->trace("GraphNodeWidget::automatic_node_layout");
 
-  if (!this->p_graph_node)
+  auto gno = this->p_graph_node.lock();
+  if (!gno)
     return;
 
-  std::vector<gnode::Point> points = this->p_graph_node->compute_graph_layout_sugiyama();
+  std::vector<gnode::Point> points = gno->compute_graph_layout_sugiyama();
 
   AppContext &ctx = HSD_CTX;
   QPointF     delta = QPointF(ctx.app_settings.node_editor.auto_layout_dx,
@@ -106,7 +117,7 @@ void GraphNodeWidget::automatic_node_layout()
 
   size_t k = 0;
 
-  for (auto &[nid, _] : this->p_graph_node->get_nodes())
+  for (auto &[nid, _] : gno->get_nodes())
   {
     if (k > points.size() - 1)
     {
@@ -193,7 +204,11 @@ attr::AttributesWidget *GraphNodeWidget::create_node_attributes_widget(
 {
   Logger::log()->trace("GraphNodeWidget::create_node_attributes_widget: id {}", node_id);
 
-  BaseNode *p_node = this->p_graph_node->get_node_ref_by_id<BaseNode>(node_id);
+  auto gno = this->p_graph_node.lock();
+  if (!gno)
+    return nullptr;
+
+  BaseNode *p_node = gno->get_node_ref_by_id<BaseNode>(node_id);
   if (!p_node)
     return nullptr;
 
@@ -235,16 +250,24 @@ attr::AttributesWidget *GraphNodeWidget::create_node_attributes_widget(
                 &attr::AttributesWidget::value_changed,
                 [this, p_node]()
                 {
+                  auto gno = this->p_graph_node.lock();
+                  if (!gno)
+                    return;
+
                   std::string node_id = p_node->get_id();
-                  this->p_graph_node->update(node_id);
+                  gno->update(node_id);
                 });
 
   this->connect(attributes_widget,
                 &attr::AttributesWidget::update_button_released,
                 [this, p_node]()
                 {
+                  auto gno = this->p_graph_node.lock();
+                  if (!gno)
+                    return;
+
                   std::string node_id = p_node->get_id();
-                  this->p_graph_node->update(node_id);
+                  gno->update(node_id);
                 });
 
   return attributes_widget;
@@ -291,12 +314,24 @@ QWidget *GraphNodeWidget::create_toolbar_widget(QWidget                *parent,
 
   this->connect(update_btn,
                 &QToolButton::pressed,
-                [this, p_node]() { p_graph_node->update(p_node->get_id()); });
+                [this, p_node]()
+                {
+                  auto gno = this->p_graph_node.lock();
+                  if (!gno)
+                    return;
+
+                  gno->update(p_node->get_id());
+                });
 
   this->connect(info_btn,
                 &QToolButton::pressed,
                 [this, p_node]()
                 {
+                  // TODO ARCH p_node lifetime
+                  auto gno = this->p_graph_node.lock();
+                  if (!gno)
+                    return;
+
                   if (p_node)
                     this->on_node_info(p_node->get_id());
                 });
@@ -337,7 +372,8 @@ bool GraphNodeWidget::get_is_selecting_with_rubber_band() const
 
 GraphNode *GraphNodeWidget::get_p_graph_node()
 {
-  if (!this->p_graph_node)
+  auto gno = this->p_graph_node.lock();
+  if (!gno)
   {
     Logger::log()->critical(
         "GraphNodeWidget::get_p_graph_node: model graph_node reference is a "
@@ -345,7 +381,7 @@ GraphNode *GraphNodeWidget::get_p_graph_node()
     throw std::runtime_error("dangling ptr");
   }
 
-  return this->p_graph_node;
+  return gno.get();
 }
 
 void GraphNodeWidget::json_from(nlohmann::json const &json)
@@ -395,6 +431,10 @@ nlohmann::json GraphNodeWidget::json_import(nlohmann::json const &json, QPointF 
   // import used when copy/pasting only
   Logger::log()->trace("GraphNodeWidget::json_import");
 
+  auto gno = this->p_graph_node.lock();
+  if (!gno)
+    return nlohmann::json();
+
   // work on a copy of the json to modify the node IDs and return it
   nlohmann::json json_copy = json;
 
@@ -418,11 +458,11 @@ nlohmann::json GraphNodeWidget::json_import(nlohmann::json const &json, QPointF 
       json_node["id"] = node_id;
 
       // setup attributes
-      BaseNode *p_node = this->p_graph_node->get_node_ref_by_id<BaseNode>(node_id);
+      BaseNode *p_node = gno->get_node_ref_by_id<BaseNode>(node_id);
       p_node->json_from(json_node["settings"]);
       p_node->set_id(node_id);
 
-      this->p_graph_node->update(node_id);
+      gno->update(node_id);
     }
 
     // links
@@ -472,18 +512,22 @@ void GraphNodeWidget::on_connection_deleted(const std::string &id_out,
                        id_in,
                        port_id_in);
 
+  auto gno = this->p_graph_node.lock();
+  if (!gno)
+    return;
+
   this->set_enabled(false);
 
   // see GraphNodeWidget::on_node_deleted
   QCoreApplication::processEvents();
 
-  this->p_graph_node->remove_link(id_out, port_id_out, id_in, port_id_in);
+  gno->remove_link(id_out, port_id_out, id_in, port_id_in);
 
   // see GraphNodeWidget::on_node_deleted
   QCoreApplication::processEvents();
 
   if (!prevent_graph_update)
-    this->p_graph_node->update(id_in);
+    gno->update(id_in);
 
   this->set_enabled(true);
 }
@@ -493,6 +537,10 @@ void GraphNodeWidget::on_connection_dropped(const std::string &node_id,
                                             QPointF /*scene_pos*/)
 {
   Logger::log()->trace("GraphNodeWidget::on_connection_dropped: {}/{}", node_id, port_id);
+
+  auto gno = this->p_graph_node.lock();
+  if (!gno)
+    return;
 
   bool ret = this->execute_new_node_context_menu();
 
@@ -505,8 +553,8 @@ void GraphNodeWidget::on_connection_dropped(const std::string &node_id,
 
     const std::string node_to = this->last_node_created_id;
 
-    BaseNode *p_node_from = this->p_graph_node->get_node_ref_by_id<BaseNode>(node_id);
-    BaseNode *p_node_to = this->p_graph_node->get_node_ref_by_id<BaseNode>(node_to);
+    BaseNode *p_node_from = gno->get_node_ref_by_id<BaseNode>(node_id);
+    BaseNode *p_node_to = gno->get_node_ref_by_id<BaseNode>(node_to);
 
     if (p_node_to)
     {
@@ -548,12 +596,16 @@ void GraphNodeWidget::on_connection_finished(const std::string &id_out,
                        id_in,
                        port_id_in);
 
-  this->p_graph_node->new_link(id_out, port_id_out, id_in, port_id_in);
+  auto gno = this->p_graph_node.lock();
+  if (!gno)
+    return;
+
+  gno->new_link(id_out, port_id_out, id_in, port_id_in);
 
   // no update for instance during deserialization to avoid a full
   // graph update at each link creation
   if (this->update_node_on_connection_finished)
-    this->p_graph_node->update(id_in);
+    gno->update(id_in);
 }
 
 void GraphNodeWidget::on_graph_clear_request()
@@ -681,16 +733,24 @@ void GraphNodeWidget::on_graph_reload_request()
 {
   Logger::log()->trace("GraphNodeWidget::on_graph_reload_request");
 
-  this->p_graph_node->update();
+  auto gno = this->p_graph_node.lock();
+  if (!gno)
+    return;
+
+  gno->update();
 }
 
 void GraphNodeWidget::on_graph_settings_request()
 {
   Logger::log()->trace("GraphNodeWidget::on_graph_settings_request");
 
+  auto gno = this->p_graph_node.lock();
+  if (!gno)
+    return;
+
   // work on a copy of the model configuration before
   // apllying modifications
-  GraphConfig       new_config = *this->p_graph_node->get_config_ref();
+  GraphConfig       new_config = *gno->get_config_ref();
   GraphConfigDialog model_config_editor(new_config);
 
   int ret = model_config_editor.exec();
@@ -700,7 +760,7 @@ void GraphNodeWidget::on_graph_settings_request()
     this->backup_selected_ids();
 
     this->set_enabled(false);
-    this->p_graph_node->change_config_values(new_config);
+    gno->change_config_values(new_config);
     this->set_enabled(true);
 
     this->reselect_backup_ids();
@@ -727,7 +787,11 @@ void GraphNodeWidget::on_new_graphics_node_request(const std::string &node_id,
                        scene_pos.x(),
                        scene_pos.y());
 
-  BaseNode *p_node = this->p_graph_node->get_node_ref_by_id<BaseNode>(node_id);
+  auto gno = this->p_graph_node.lock();
+  if (!gno)
+    return;
+
+  BaseNode *p_node = gno->get_node_ref_by_id<BaseNode>(node_id);
   auto     *p_proxy = new gngui::TypedNodeProxy<BaseNode>(p_node->get_shared());
   auto     *widget = new NodeWidget(p_node->get_shared(), this);
 
@@ -740,11 +804,15 @@ std::string GraphNodeWidget::on_new_node_request(const std::string &node_type,
 {
   Logger::log()->trace("GraphNodeWidget::on_new_node_request: node_type {}", node_type);
 
+  auto gno = this->p_graph_node.lock();
+  if (!gno)
+    return "";
+
   if (node_type == "")
     return "";
 
   // add control node (compute)
-  std::string node_id = this->p_graph_node->add_node(node_type);
+  std::string node_id = gno->add_node(node_type);
 
   // add corresponding graphics node (GUI)
   this->on_new_graphics_node_request(node_id, scene_pos);
@@ -760,22 +828,15 @@ void GraphNodeWidget::on_node_deleted_request(const std::string &node_id)
 {
   Logger::log()->trace("GraphNodeWidget::on_node_deleted_request, node {}", node_id);
 
+  auto gno = this->p_graph_node.lock();
+  if (!gno)
+    return;
+
   this->set_enabled(false);
-
-  // make sure the Graphics node is destroyed before the Model node is
-  // destroyed to avoid lifetime issues (concerns NodeProxy)
-
-  // QCoreApplication::processEvents();
-
-  this->p_graph_node->remove_node(node_id);
-
-  // the model node are also QObjects, make sure they are deleted
-
-  // QCoreApplication::processEvents();
+  gno->remove_node(node_id);
+  this->set_enabled(true);
 
   Q_EMIT this->node_deleted(this->get_id(), node_id);
-
-  this->set_enabled(true);
 }
 
 void GraphNodeWidget::on_node_info(const std::string &node_id)
@@ -793,12 +854,16 @@ void GraphNodeWidget::on_node_pinned(const std::string &node_id, bool state)
 {
   Logger::log()->trace("GraphNodeWidget::on_node_pinned, node {}", node_id);
 
+  auto gno = this->p_graph_node.lock();
+  if (!gno)
+    return;
+
   this->unpin_nodes();
 
   if (!node_id.empty())
   {
     // TODO make a dedicated GraphViewer method
-    BaseNode *p_node = this->p_graph_node->get_node_ref_by_id<BaseNode>(node_id);
+    BaseNode *p_node = gno->get_node_ref_by_id<BaseNode>(node_id);
     if (!p_node)
       return;
 
@@ -814,14 +879,22 @@ void GraphNodeWidget::on_node_reload_request(const std::string &node_id)
 {
   Logger::log()->trace("GraphNodeWidget::on_node_reload_request, node [{}]", node_id);
 
-  this->p_graph_node->update(node_id);
+  auto gno = this->p_graph_node.lock();
+  if (!gno)
+    return;
+
+  gno->update(node_id);
 }
 
 void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF scene_pos)
 {
   Logger::log()->trace("GraphNodeWidget::on_node_right_clicked: id {}", node_id);
 
-  BaseNode            *p_node = this->p_graph_node->get_node_ref_by_id<BaseNode>(node_id);
+  auto gno = this->p_graph_node.lock();
+  if (!gno)
+    return;
+
+  BaseNode            *p_node = gno->get_node_ref_by_id<BaseNode>(node_id);
   gngui::GraphicsNode *p_gx_node = this->get_graphics_node_by_id(node_id);
 
   // --- safeguards
@@ -869,6 +942,10 @@ void GraphNodeWidget::on_nodes_copy_request(const std::vector<std::string> &id_l
 {
   Logger::log()->trace("GraphNodeWidget::on_nodes_copy_request");
 
+  auto gno = this->p_graph_node.lock();
+  if (!gno)
+    return;
+
   // dump the nodes data into the copy buffer (for the node positions,
   // save the node position relative to the mouse cursor)
   this->json_copy_buffer.clear();
@@ -895,7 +972,7 @@ void GraphNodeWidget::on_nodes_copy_request(const std::vector<std::string> &id_l
 
     // add attribute settings to set them back when pasting (not
     // required by GraphViewer::json_from)
-    BaseNode *p_node = this->p_graph_node->get_node_ref_by_id<BaseNode>(id_list[k]);
+    BaseNode *p_node = gno->get_node_ref_by_id<BaseNode>(id_list[k]);
     json_node["settings"] = p_node->json_to();
 
     this->json_copy_buffer["nodes"].push_back(json_node);
@@ -904,15 +981,15 @@ void GraphNodeWidget::on_nodes_copy_request(const std::vector<std::string> &id_l
   // backup links between copied nodes
   this->json_copy_buffer["links"] = nlohmann::json::array();
 
-  for (auto &link : this->p_graph_node->get_links())
+  for (auto &link : gno->get_links())
   {
     // only keep a link if both nodes are in copy buffer
     if (contains(id_list, link.from) && contains(id_list, link.to))
     {
       nlohmann::json json_link;
 
-      gnode::Node *p_from = this->p_graph_node->get_node_ref_by_id(link.from);
-      gnode::Node *p_to = this->p_graph_node->get_node_ref_by_id(link.to);
+      gnode::Node *p_from = gno->get_node_ref_by_id(link.from);
+      gnode::Node *p_to = gno->get_node_ref_by_id(link.to);
 
       json_link["node_out_id"] = link.from;
       json_link["node_in_id"] = link.to;
@@ -974,7 +1051,11 @@ void GraphNodeWidget::on_viewport_request()
 {
   Logger::log()->trace("GraphNodeWidget::on_viewport_request");
 
-  for (auto &[id, _] : this->p_graph_node->get_nodes())
+  auto gno = this->p_graph_node.lock();
+  if (!gno)
+    return;
+
+  for (auto &[id, _] : gno->get_nodes())
   {
     gngui::GraphicsNode *p_gfx = this->get_graphics_node_by_id(id);
     if (!p_gfx)
@@ -1031,6 +1112,10 @@ void GraphNodeWidget::set_json_copy_buffer(nlohmann::json const &new_json_copy_b
 
 void GraphNodeWidget::setup_connections()
 {
+  auto gno = this->p_graph_node.lock();
+  if (!gno)
+    return;
+
   // global actions
   this->connect(this,
                 &gngui::GraphViewer::graph_automatic_node_layout_request,
@@ -1161,27 +1246,25 @@ void GraphNodeWidget::setup_connections()
                 });
 
   // GraphNode
-  this->p_graph_node->update_started = [safe_this = QPointer(this)]()
+  gno->update_started = [safe_this = QPointer(this)]()
   {
     if (safe_this)
       Q_EMIT safe_this->update_started();
   };
 
-  this->p_graph_node->update_finished = [safe_this = QPointer(this)]()
+  gno->update_finished = [safe_this = QPointer(this)]()
   {
     if (safe_this)
       Q_EMIT safe_this->update_finished();
   };
 
-  this->p_graph_node->compute_started =
-      [safe_this = QPointer(this)](const std::string &node_id)
+  gno->compute_started = [safe_this = QPointer(this)](const std::string &node_id)
   {
     if (safe_this)
       Q_EMIT safe_this->compute_started(node_id);
   };
 
-  this->p_graph_node->compute_finished =
-      [safe_this = QPointer(this)](const std::string &node_id)
+  gno->compute_finished = [safe_this = QPointer(this)](const std::string &node_id)
   {
     if (safe_this)
       Q_EMIT safe_this->compute_finished(node_id);

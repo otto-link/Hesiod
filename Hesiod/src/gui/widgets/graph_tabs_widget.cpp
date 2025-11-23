@@ -307,7 +307,8 @@ void GraphTabsWidget::update_tab_widget()
       }
 
       // set 'this' as parent so the widget is owned by the widget tree.
-      this->graph_node_widget_map[id] = new GraphNodeWidget(p_graph_node, this);
+      this->graph_node_widget_map[id] = new GraphNodeWidget(p_graph_node->get_shared(),
+                                                            this);
 
       // connections / model
       gm->new_broadcast_tag = [safe_this = QPointer(this)](const std::string &)
