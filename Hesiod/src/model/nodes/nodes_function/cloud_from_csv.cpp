@@ -9,7 +9,6 @@
 
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
-#include "hesiod/model/nodes/base_node_gui.hpp"
 
 using namespace attr;
 

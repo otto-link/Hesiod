@@ -11,7 +11,6 @@
 
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
-#include "hesiod/model/nodes/base_node_gui.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
 
 using namespace attr;
@@ -88,8 +87,6 @@ void setup_mountain_tibesti_node(BaseNode &node)
   // disable post-processing remap by default
   node.get_attr_ref<RangeAttribute>("post_remap")->set_is_active(false);
   node.get_attr_ref<RangeAttribute>("post_remap")->save_initial_state();
-
-  add_wip_warning_label(node);
 }
 
 void compute_mountain_tibesti_node(BaseNode &node)

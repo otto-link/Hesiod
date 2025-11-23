@@ -16,8 +16,22 @@ QWidget *node_widget_factory(const std::string        &node_type,
   std::string msg = "";
 
   // adjust msg
-  std::vector<std::string> wip_nodes = {};
-  std::vector<std::string> deprecated_nodes = {};
+  std::vector<std::string> wip_nodes = {"CoastalErosionDiffusion",
+                                        "MountainCone",
+                                        "MountainInselberg",
+                                        "MountainStump",
+                                        "MountainTibesti",
+                                        "NormalMapToHeightmap",
+                                        "Strata",
+                                        "Recurve",
+                                        "Rifts",
+                                        "ShatteredPeak",
+                                        "WaterDepthFromMask"};
+  std::vector<std::string> deprecated_nodes = {"ColorizeCmap",
+                                               "Stratify",
+                                               "StratifyMultiscale",
+                                               "StratifyOblique",
+                                               "TextureAdvectionWarp"};
 
   if (contains<std::string>(wip_nodes, node_type))
     msg = "Work in progress\nNode subject to change";

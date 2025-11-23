@@ -8,7 +8,6 @@
 
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
-#include "hesiod/model/nodes/base_node_gui.hpp"
 #include "hesiod/model/nodes/node_factory.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
 #include "hesiod/model/utils.hpp"
@@ -37,7 +36,6 @@ void setup_export_cloud_node(BaseNode &node)
   node.set_attr_ordered_key({"fname", "auto_export"});
 
   // specialized GUI
-  add_export_button(node);
 }
 
 void compute_export_cloud_node(BaseNode &node)

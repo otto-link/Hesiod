@@ -152,4 +152,14 @@ enum MaskCombineMethod : int
   EXCLUSION,
 };
 
+// --- helpers
+
+void setup_background_image_for_cloud_attribute(BaseNode          &node,
+                                                const std::string &attribute_key,
+                                                const std::string &port_id);
+
+void setup_histogram_for_range_attribute(BaseNode          &node,
+                                         const std::string &attribute_key,
+                                         const std::string &port_id);
+
 } // namespace hesiod

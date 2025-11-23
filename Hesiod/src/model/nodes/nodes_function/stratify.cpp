@@ -8,7 +8,6 @@
 
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
-#include "hesiod/model/nodes/base_node_gui.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
 
 using namespace attr;
@@ -28,19 +27,13 @@ void setup_stratify_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<SeedAttribute>("seed", "seed");
-
   node.add_attr<IntAttribute>("n_strata", "n_strata", 3, 1, 16);
-
   node.add_attr<FloatAttribute>("strata_noise", "strata_noise", 0.f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("gamma", "gamma", 0.7f, 0.1f, 2.f);
-
   node.add_attr<FloatAttribute>("gamma_noise", "gamma_noise", 0.f, 0.f, 1.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"seed", "n_strata", "strata_noise", "gamma", "gamma_noise"});
-
-  add_deprecated_warning_label(node, "Use Strata node.");
 }
 
 void compute_stratify_node(BaseNode &node)

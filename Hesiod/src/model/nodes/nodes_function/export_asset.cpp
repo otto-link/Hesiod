@@ -10,7 +10,6 @@
 
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
-#include "hesiod/model/nodes/base_node_gui.hpp"
 #include "hesiod/model/nodes/node_factory.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
 
@@ -80,7 +79,6 @@ void setup_export_asset_node(BaseNode &node)
                              "detail_scaling"});
 
   // specialized GUI
-  add_export_button(node);
 }
 
 void compute_export_asset_node(BaseNode &node)

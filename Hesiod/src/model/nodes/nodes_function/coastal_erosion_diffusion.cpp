@@ -7,7 +7,6 @@
 
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
-#include "hesiod/model/nodes/base_node_gui.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
 
 using namespace attr;
@@ -36,8 +35,6 @@ void setup_coastal_erosion_diffusion_node(BaseNode &node)
   // attribute(s) order
   node.set_attr_ordered_key(
       {"additional_depth", "iterations", "_SEPARATOR_", "distributed"});
-
-  add_wip_warning_label(node);
 }
 
 void compute_coastal_erosion_diffusion_node(BaseNode &node)

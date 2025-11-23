@@ -9,7 +9,6 @@
 
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
-#include "hesiod/model/nodes/base_node_gui.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
 
 using namespace attr;
@@ -40,8 +39,6 @@ void setup_texture_advection_warp_node(BaseNode &node)
   node.set_attr_ordered_key({"advection_length", "value_persistence"});
 
   setup_pre_process_mask_attributes(node);
-
-  add_deprecated_warning_label(node, "Use StrataTextureAdvectionParticle node.");
 }
 
 void compute_texture_advection_warp_node(BaseNode &node)

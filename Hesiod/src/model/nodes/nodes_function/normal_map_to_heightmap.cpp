@@ -8,7 +8,6 @@
 
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
-#include "hesiod/model/nodes/base_node_gui.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
 
 using namespace attr;
@@ -35,8 +34,6 @@ void setup_normal_map_to_heightmap_node(BaseNode &node)
   node.set_attr_ordered_key({"poisson_solver", "iterations", "omega"});
 
   setup_post_process_heightmap_attributes(node);
-
-  add_wip_warning_label(node);
 }
 
 void compute_normal_map_to_heightmap_node(BaseNode &node)
