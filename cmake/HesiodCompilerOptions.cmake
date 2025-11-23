@@ -4,6 +4,7 @@ add_library(hesiod_options INTERFACE)
 target_compile_features(hesiod_options INTERFACE cxx_std_20)
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+  message(STATUS "GNU|Clang compiler")
 
   # Common flags
   target_compile_options(
@@ -40,6 +41,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 
   # LTO and function sections (optional)
   if(HESIOD_ENABLE_LTO)
+    message(STATUS "HESIOD_ENABLE_LTO is enabled")
     target_compile_options(hesiod_options INTERFACE -ffunction-sections
                                                     -fdata-sections -flto)
     target_link_options(hesiod_options INTERFACE -Wl,--gc-sections
@@ -47,12 +49,14 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
   endif()
 
   if(HESIOD_MINIMAL_NODE_SET)
+    message(STATUS "HESIOD_MINIMAL_NODE_SET is enabled")
     target_compile_definitions(hesiod_options INTERFACE HESIOD_MINIMAL_NODE_SET)
   endif()
 endif()
 
 # MSVC options
 if(MSVC)
+  message(STATUS "MSVC compiler")
   target_compile_options(hesiod_options INTERFACE /W4 /D
                                                   M_PI=3.14159265358979323846)
 endif()

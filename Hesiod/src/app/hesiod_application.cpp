@@ -12,6 +12,8 @@
 #include <QProgressDialog>
 #include <QStatusBar>
 
+#include "highmap/opencl/gpu_opencl.hpp"
+
 #include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/cli/batch_mode.hpp"
 #include "hesiod/gui/project_ui.hpp"
@@ -20,8 +22,11 @@
 #include "hesiod/gui/widgets/graph_manager_widget.hpp"
 #include "hesiod/gui/widgets/graph_tabs_widget.hpp"
 #include "hesiod/gui/widgets/gui_utils.hpp"
+#include "hesiod/gui/widgets/splash_screen.hpp"
 #include "hesiod/gui/widgets/tool_tip_blocker.hpp"
 #include "hesiod/logger.hpp"
+#include "hesiod/model/constants/cmap.hpp"
+#include "hesiod/model/constants/color_gradient.hpp"
 #include "hesiod/model/graph/graph_manager.hpp"
 #include "hesiod/model/graph/graph_node.hpp"
 #include "hesiod/model/utils.hpp"
@@ -35,6 +40,22 @@ HesiodApplication::HesiodApplication(int &argc, char **argv) : QApplication(argc
 {
   Logger::log()->trace("HesiodApplication::HesiodApplication");
 
+  SplashScreen *splash = new SplashScreen();
+
+  // start OpenCL
+  splash->show_message("Initializing OpenCL kernels...");
+
+  hmap::gpu::init_opencl();
+
+  // for colormaps loading
+  splash->show_message("Initializing color gradients...");
+
+  hesiod::CmapManager::get_instance();
+  hesiod::ColorGradientManager::get_instance();
+
+  // context
+  splash->show_message("Initializing application context...");
+
   this->context.initialize();
 
   // apply style
@@ -45,13 +66,19 @@ HesiodApplication::HesiodApplication(int &argc, char **argv) : QApplication(argc
   this->main_window = new MainWindow();
 
   // (after MainWindow creation)
+  splash->show_message("Loading default project...");
+
   this->load_project_model_and_ui();
 
   // others
+  splash->show_message("Opening UI...");
+
   this->setup_menu_bar();
   this->installEventFilter(new ToolTipBlocker);
 
   this->notify("Ready");
+
+  splash->close();
 }
 
 HesiodApplication::~HesiodApplication() = default;

@@ -2,15 +2,10 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 typedef unsigned int uint;
-#include "highmap/opencl/gpu_opencl.hpp"
 
 #include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/cli/batch_mode.hpp"
 #include "hesiod/logger.hpp"
-#include "hesiod/model/constants/cmap.hpp"
-#include "hesiod/model/constants/color_gradient.hpp"
-
-#include "hesiod/gui/project_ui.hpp"
 
 #if defined(DEBUG_BUILD)
 #define HSD_RMODE "Debug"
@@ -30,13 +25,6 @@ int main(int argc, char *argv[])
   hesiod::Logger::log()->info("Release mode: {}", std::string(HSD_RMODE));
 
   // ----------------------------------- initialization
-
-  // start OpenCL
-  hmap::gpu::init_opencl();
-
-  // for colormaps loading
-  hesiod::CmapManager::get_instance();
-  hesiod::ColorGradientManager::get_instance();
 
   // start QApplication even if headless (for QObject)
   qputenv("QT_LOGGING_RULES", HESIOD_QPUTENV_QT_LOGGING_RULES);

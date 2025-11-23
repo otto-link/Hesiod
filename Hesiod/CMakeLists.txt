@@ -83,28 +83,15 @@ target_link_libraries(
           qtexture_downloader)
 
 # ------------------------------
-# Copy data folder for dev
+# Copy data folder
 # ------------------------------
-set(HESIOD_DATA_DIR ${CMAKE_SOURCE_DIR}/Hesiod/data)
-add_custom_command(
-  TARGET ${PROJECT_NAME}
-  POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy_directory ${HESIOD_DATA_DIR}
-          $<TARGET_FILE_DIR:${PROJECT_NAME}>/data)
+file(COPY ${CMAKE_SOURCE_DIR}/Hesiod/data
+     DESTINATION ${EXECUTABLE_OUTPUT_PATH}/.)
 
-# Optional second location (if you need parent folder for some legacy reason)
-add_custom_command(
-  TARGET ${PROJECT_NAME}
-  POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy_directory ${HESIOD_DATA_DIR}
-          $<TARGET_FILE_DIR:${PROJECT_NAME}>/../data)
+file(COPY ${CMAKE_SOURCE_DIR}/Hesiod/data
+     DESTINATION ${EXECUTABLE_OUTPUT_PATH}/../.)
 
 # ------------------------------
 # Build information messages
 # ------------------------------
-message(
-  STATUS
-    "Build
-    type:
-    ${CMAKE_BUILD_TYPE}
-    ")
+message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
