@@ -40,9 +40,6 @@ void setup_export_heightmap_node(BaseNode &node)
 
   // attribute(s) order
   node.set_attr_ordered_key({"fname", "format", "auto_export"});
-
-  // specialized GUI
-  add_export_button(node);
 }
 
 void compute_export_heightmap_node(BaseNode &node)

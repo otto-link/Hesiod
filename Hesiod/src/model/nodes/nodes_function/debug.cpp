@@ -20,50 +20,6 @@ void setup_debug_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
 
   // no attribute(s)
-
-  // specialized GUI
-  auto lambda = [](BaseNode &node)
-  {
-    QLabel *label = new QLabel("DEBUG", &node);
-    label->setAlignment(Qt::AlignLeft);
-
-    node.connect(&node,
-                 &BaseNode::compute_finished,
-                 [label, &node]()
-                 {
-                   hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
-
-                   std::string msg = "DEBUG\n";
-
-                   if (p_in)
-                   {
-                     float min = p_in->min();
-                     float max = p_in->max();
-                     float avg = p_in->mean();
-
-                     msg += "- addr: " + ptr_as_string((void *)(p_in)) + "\n";
-                     msg += "- min: " + std::to_string(min) + "\n";
-                     msg += "- max: " + std::to_string(max) + "\n";
-                     msg += "- avg: " + std::to_string(avg) + "\n";
-                     msg += "- shape.x: " + std::to_string(p_in->shape.x) + "\n";
-                     msg += "- shape.y: " + std::to_string(p_in->shape.y) + "\n";
-                     msg += "- tiling.x: " + std::to_string(p_in->tiling.x) + "\n";
-                     msg += "- tiling.y: " + std::to_string(p_in->tiling.y) + "\n";
-                     msg += "- overlap: " + std::to_string(p_in->overlap) + "\n";
-                   }
-                   else
-                   {
-                     msg += "addr: nullptr\n";
-                   }
-
-                   label->setText(msg.c_str());
-                   label->adjustSize();
-                 });
-
-    return (QWidget *)label;
-  };
-
-  node.set_qwidget_fct(lambda);
 }
 
 void compute_debug_node(BaseNode &node)
@@ -73,7 +29,7 @@ void compute_debug_node(BaseNode &node)
 
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  // nothing here  on purpose
+  // nothing here on purpose, everything's made in the NodeWidget
 
   if (node.compute_finished)
     node.compute_finished(node.get_id());

@@ -442,6 +442,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string         &node_type,
 
   switch (str2int(node_type.c_str()))
   {
+    SETUP_NODE(Debug, debug);
     SETUP_NODE(ExportHeightmap, export_heightmap);
     SETUP_NODE(FloodingUniformLevel, flooding_uniform_level);
     SETUP_NODE(GaborWaveFbm, gabor_wave_fbm);
@@ -449,6 +450,8 @@ std::shared_ptr<gnode::Node> node_factory(const std::string         &node_type,
     SETUP_NODE(HydraulicStreamLog, hydraulic_stream_log);
     SETUP_NODE(Noise, noise);
     SETUP_NODE(Preview, preview);
+    SETUP_NODE(Toggle, toggle);
+    SETUP_NODE(Thru, thru);
 
 #ifndef HESIOD_MINIMAL_NODE_SET
     SETUP_NODE(Abs, abs);
@@ -498,7 +501,6 @@ std::shared_ptr<gnode::Node> node_factory(const std::string         &node_type,
     SETUP_NODE(ConvolveSVD, convolve_svd);
     SETUP_NODE(Crater, crater);
     SETUP_NODE(CurvatureMean, curvature_mean);
-    SETUP_NODE(Debug, debug);
     SETUP_NODE(Dendry, dendry);
     SETUP_NODE(DepressionFilling, depression_filling);
     SETUP_NODE(Detrend, detrend);
@@ -688,8 +690,6 @@ std::shared_ptr<gnode::Node> node_factory(const std::string         &node_type,
     SETUP_NODE(ThermalRidge, thermal_ridge);
     SETUP_NODE(ThermalSchott, thermal_schott);
     SETUP_NODE(ThermalScree, thermal_scree);
-    SETUP_NODE(Thru, thru);
-    SETUP_NODE(Toggle, toggle);
     SETUP_NODE(Unsphericity, unsphericity);
     SETUP_NODE(ValleyWidth, valley_width);
     SETUP_NODE(Vorolines, vorolines);

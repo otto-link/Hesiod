@@ -807,7 +807,7 @@ void GraphNodeWidget::on_new_graphics_node_request(const std::string &node_id,
 
   BaseNode *p_node = gno->get_node_ref_by_id<BaseNode>(node_id);
   auto     *p_proxy = new gngui::TypedNodeProxy<BaseNode>(p_node->get_shared());
-  auto     *widget = new NodeWidget(p_node->get_shared(), this);
+  auto *widget = node_widget_factory(p_node->get_caption(), p_node->get_shared(), this);
 
   this->add_node(p_proxy, scene_pos, node_id);
   this->get_graphics_node_by_id(node_id)->set_widget(widget);

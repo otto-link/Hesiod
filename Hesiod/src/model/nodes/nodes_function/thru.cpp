@@ -31,31 +31,6 @@ void setup_thru_node(BaseNode &node)
 
   // attribute(s) order
   node.set_attr_ordered_key({"block_update"});
-
-  // specialized GUI
-  auto lambda = [](BaseNode &node)
-  {
-    bool state = node.get_attr<BoolAttribute>("block_update");
-
-    QPushButton *button = new QPushButton("BLOCK UPDATE", &node);
-    button->setCheckable(true);
-    button->setChecked(state);
-    button->setStyleSheet("QPushButton:checked { background-color: red; }");
-
-    node.connect(button,
-                 &QPushButton::pressed,
-                 [&node, button]()
-                 {
-                   bool new_state = !node.get_attr<BoolAttribute>("block_update");
-                   node.get_attr_ref<BoolAttribute>("block_update")->set_value(new_state);
-                   button->setChecked(new_state);
-                   node.get_p_graph()->update(node.get_id());
-                 });
-
-    return (QWidget *)button;
-  };
-
-  node.set_qwidget_fct(lambda);
 }
 
 void compute_thru_node(BaseNode &node)
