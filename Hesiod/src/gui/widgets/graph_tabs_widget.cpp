@@ -310,11 +310,17 @@ void GraphTabsWidget::update_tab_widget()
       this->graph_node_widget_map[id] = new GraphNodeWidget(p_graph_node, this);
 
       // connections / model
-      gm->new_broadcast_tag = [this](const std::string &)
-      { this->update_receive_nodes_tag_list(); };
+      gm->new_broadcast_tag = [safe_this = QPointer(this)](const std::string &)
+      {
+        if (safe_this)
+          safe_this->update_receive_nodes_tag_list();
+      };
 
-      gm->remove_broadcast_tag = [this](const std::string &)
-      { this->update_receive_nodes_tag_list(); };
+      gm->remove_broadcast_tag = [safe_this = QPointer(this)](const std::string &)
+      {
+        if (safe_this)
+          safe_this->update_receive_nodes_tag_list();
+      };
 
       // connections / GUI
       this->connect(this->graph_node_widget_map.at(id),

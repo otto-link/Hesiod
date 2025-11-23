@@ -1161,15 +1161,31 @@ void GraphNodeWidget::setup_connections()
                 });
 
   // GraphNode
-  this->p_graph_node->update_started = [this]() { Q_EMIT this->update_started(); };
+  this->p_graph_node->update_started = [safe_this = QPointer(this)]()
+  {
+    if (safe_this)
+      Q_EMIT safe_this->update_started();
+  };
 
-  this->p_graph_node->update_finished = [this]() { Q_EMIT this->update_finished(); };
+  this->p_graph_node->update_finished = [safe_this = QPointer(this)]()
+  {
+    if (safe_this)
+      Q_EMIT safe_this->update_finished();
+  };
 
-  this->p_graph_node->compute_started = [this](const std::string &node_id)
-  { Q_EMIT this->compute_started(node_id); };
+  this->p_graph_node->compute_started =
+      [safe_this = QPointer(this)](const std::string &node_id)
+  {
+    if (safe_this)
+      Q_EMIT safe_this->compute_started(node_id);
+  };
 
-  this->p_graph_node->compute_finished = [this](const std::string &node_id)
-  { Q_EMIT this->compute_finished(node_id); };
+  this->p_graph_node->compute_finished =
+      [safe_this = QPointer(this)](const std::string &node_id)
+  {
+    if (safe_this)
+      Q_EMIT safe_this->compute_finished(node_id);
+  };
 }
 
 } // namespace hesiod

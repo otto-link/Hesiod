@@ -11,7 +11,7 @@ namespace hesiod
 
 SplashScreen::SplashScreen()
 {
-  QPixmap        pixmap("data/splash.png");
+  QPixmap pixmap("data/splash.png");
   this->setPixmap(pixmap);
   this->show();
   QApplication::processEvents();
@@ -31,7 +31,7 @@ void SplashScreen::close()
                    &QPropertyAnimation::finished,
                    this,
                    &QSplashScreen::deleteLater);
-  
+
   anim->start(QAbstractAnimation::DeleteWhenStopped);
 }
 
