@@ -77,7 +77,7 @@ bool helper_try_set_from_port(const BaseNode       &node,
   return true;
 }
 
-Viewer3D::Viewer3D(GraphNodeWidget *p_graph_node_widget_, QWidget *parent)
+Viewer3D::Viewer3D(QPointer<GraphNodeWidget> p_graph_node_widget_, QWidget *parent)
     : Viewer(p_graph_node_widget_, ViewerType::VIEWER3D, "3D Renderer", parent)
 {
   Logger::log()->trace("Viewer3D::Viewer3D");

@@ -2,6 +2,7 @@
    License. The full license is in the file LICENSE, distributed with this software. */
 #pragma once
 #include <QComboBox>
+#include <QPointer>
 #include <QWidget>
 
 #include "nlohmann/json.hpp"
@@ -24,7 +25,7 @@ class Viewer3D : public Viewer
 
 public:
   Viewer3D() = delete;
-  Viewer3D(GraphNodeWidget *p_graph_node_widget_, QWidget *parent = nullptr);
+  Viewer3D(QPointer<GraphNodeWidget> p_graph_node_widget_, QWidget *parent = nullptr);
 
   // --- Serialization ---
   void           json_from(nlohmann::json const &json) override;

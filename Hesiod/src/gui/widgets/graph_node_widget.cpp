@@ -156,7 +156,7 @@ void GraphNodeWidget::clear_data_viewers()
 {
   for (auto &viewer : this->data_viewers)
   {
-    if (Viewer *p_viewer = dynamic_cast<Viewer *>(viewer.get()))
+    if (Viewer *p_viewer = dynamic_cast<Viewer *>(viewer))
       p_viewer->clear();
   }
   this->data_viewers.clear();
@@ -239,7 +239,7 @@ void GraphNodeWidget::json_from(nlohmann::json const &json)
       // TODO add viewer-type specific handling
       this->on_viewport_request();
 
-      if (auto *p_viewer = dynamic_cast<Viewer3D *>(this->data_viewers.back().get()))
+      if (auto *p_viewer = dynamic_cast<Viewer3D *>(this->data_viewers.back()))
         p_viewer->json_from(viewer_json);
       else
         Logger::log()->error(
@@ -322,8 +322,8 @@ nlohmann::json GraphNodeWidget::json_to() const
   nlohmann::json json = GraphViewer::json_to();
 
   // add the viewports
-  for (auto &sp_widget : this->data_viewers)
-    if (auto *p_viewer = dynamic_cast<Viewer *>(sp_widget.get()))
+  for (auto &widget : this->data_viewers)
+    if (auto *p_viewer = dynamic_cast<Viewer *>(widget))
     {
       json["viewers"].push_back(p_viewer->json_to());
     }
@@ -890,10 +890,10 @@ void GraphNodeWidget::on_viewport_request()
     }
   }
 
-  this->data_viewers.push_back(std::make_unique<Viewer3D>(this));
+  this->data_viewers.push_back(new Viewer3D(this));
   this->data_viewers.back()->show();
 
-  Viewer *p_viewer = dynamic_cast<Viewer *>(this->data_viewers.back().get());
+  Viewer *p_viewer = dynamic_cast<Viewer *>(this->data_viewers.back());
 
   // remove the widget from the widget list if it is closed
   this->connect(p_viewer,
@@ -901,8 +901,7 @@ void GraphNodeWidget::on_viewport_request()
                 [this, p_viewer]()
                 {
                   std::erase_if(this->data_viewers,
-                                [p_viewer](const std::unique_ptr<QWidget> &sptr)
-                                { return sptr.get() == p_viewer; });
+                                [p_viewer](QWidget *ptr) { return ptr == p_viewer; });
                 });
 
   // set data of the currently selected node, if any
