@@ -2,6 +2,7 @@
    License. The full license is in the file LICENSE, distributed with this software. */
 #pragma once
 #include <QComboBox>
+#include <QPointer>
 #include <QPushButton>
 #include <QWidget>
 
@@ -32,10 +33,10 @@ class Viewer : public QWidget
 
 public:
   Viewer() = delete;
-  Viewer(GraphNodeWidget   *p_graph_node_widget_,
-         ViewerType         viewer_type_ = ViewerType::VIEWER3D,
-         const std::string &label_ = "Viewer",
-         QWidget           *parent = nullptr);
+  Viewer(QPointer<GraphNodeWidget> p_graph_node_widget_,
+         ViewerType                viewer_type_ = ViewerType::VIEWER3D,
+         const std::string        &label_ = "Viewer",
+         QWidget                  *parent = nullptr);
 
   virtual void clear();
   void         set_current_node_id(const std::string &new_id);
@@ -68,7 +69,7 @@ protected:
   virtual void            update_renderer();
 
   // --- Members ---
-  GraphNodeWidget                       *p_graph_node_widget;
+  QPointer<GraphNodeWidget>              p_graph_node_widget;
   ViewerType                             viewer_type;
   std::string                            label;
   std::string                            current_node_id = "";

@@ -14,10 +14,10 @@
 namespace hesiod
 {
 
-Viewer::Viewer(GraphNodeWidget   *p_graph_node_widget_,
-               ViewerType         viewer_type_,
-               const std::string &label_,
-               QWidget           *parent)
+Viewer::Viewer(QPointer<GraphNodeWidget> p_graph_node_widget_,
+               ViewerType                viewer_type_,
+               const std::string        &label_,
+               QWidget                  *parent)
     : QWidget(parent), p_graph_node_widget(p_graph_node_widget_),
       viewer_type(viewer_type_), label(label_)
 {
@@ -137,6 +137,9 @@ void Viewer::on_node_pinned_changed()
 {
   Logger::log()->trace("Viewer::on_node_pinned_changed");
 
+  if (!this->p_graph_node_widget)
+    return;
+
   if (this->current_node_id.empty())
   {
     // if there is no selection, don't bother
@@ -155,11 +158,10 @@ void Viewer::on_node_pinned_changed()
 
       // at this point, if a node a selected, use it now for the
       // viewport
-      GraphNodeWidget *p_gnw = this->p_graph_node_widget;
-
-      if (p_gnw)
+      if (this->p_graph_node_widget)
       {
-        const std::vector<std::string> selected_ids = p_gnw->get_selected_node_ids();
+        const std::vector<std::string> selected_ids = this->p_graph_node_widget
+                                                          ->get_selected_node_ids();
 
         if (selected_ids.size())
           this->on_node_selected(selected_ids.back());
@@ -180,14 +182,16 @@ void Viewer::on_node_selected(const std::string &new_id)
 {
   Logger::log()->trace("Viewer::on_node_selected {}", new_id);
 
+  if (!this->p_graph_node_widget)
+    return;
+
   // prevent any setup change if the current node is pinned
   if (this->is_node_pinned)
     return;
 
   // do not update selection if the rubber band selection tool is used
   // to avoid multiple useless viewport updates
-  GraphNodeWidget *p_gnw = this->p_graph_node_widget;
-  if (p_gnw && p_gnw->get_is_selecting_with_rubber_band())
+  if (this->p_graph_node_widget->get_is_selecting_with_rubber_band())
     return;
 
   this->set_current_node_id(new_id);
@@ -195,22 +199,16 @@ void Viewer::on_node_selected(const std::string &new_id)
 
 BaseNode *Viewer::safe_get_node()
 {
-  GraphNodeWidget *p_gw = this->p_graph_node_widget;
-  if (!p_gw)
-  {
-    Logger::log()->error(
-        "Viewer::safe_get_node: corresponding graph viewer is dangling ptr");
+  if (!this->p_graph_node_widget)
     return nullptr;
-  }
 
-  BaseNode *p_node = p_gw->get_p_graph_node()->get_node_ref_by_id<BaseNode>(
-      this->current_node_id);
-  if (!p_node)
-  {
-    Logger::log()->error(
-        "Viewer::safe_get_node: corresponding graph node is dangling ptr");
+  GraphNode *p_graph = this->p_graph_node_widget->get_p_graph_node(); // safe
+  if (!p_graph)
     return nullptr;
-  }
+
+  BaseNode *p_node = p_graph->get_node_ref_by_id<BaseNode>(this->current_node_id);
+  if (!p_node)
+    return nullptr;
 
   return p_node;
 }
@@ -251,6 +249,9 @@ void Viewer::set_current_node_id(const std::string &new_id)
 void Viewer::setup_connections()
 {
   Logger::log()->trace("Viewer::setup_connections");
+
+  if (!this->p_graph_node_widget)
+    return;
 
   // user actions w/ UI
   this->connect(this->p_graph_node_widget,
