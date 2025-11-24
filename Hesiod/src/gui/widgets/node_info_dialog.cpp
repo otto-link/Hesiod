@@ -18,6 +18,7 @@
 #include "hesiod/gui/widgets/node_info_dialog.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/graph/graph_node.hpp"
+#include "hesiod/model/nodes/data_info.hpp"
 #include "hesiod/model/utils.hpp"
 
 namespace hesiod
@@ -326,33 +327,18 @@ void NodeInfoDialog::update_ports_content()
 
     // data info
     {
-      // TODO make a dedicated function
       new_row.data_info = "-";
 
-      if (ptrs.node->get_data_type(k) == typeid(hmap::Heightmap).name())
-      {
-        auto *p_h = ptrs.node->get_value_ref<hmap::Heightmap>(new_row.caption);
-        if (p_h)
-          new_row.data_info = std::format("[{:.3e}, {:.3e}]", p_h->min(), p_h->max());
-      }
-      else if (ptrs.node->get_data_type(k) == typeid(hmap::Cloud).name())
-      {
-        auto *p_c = ptrs.node->get_value_ref<hmap::Cloud>(new_row.caption);
-        if (p_c)
-          new_row.data_info = std::format("[{:.3e}, {:.3e}], count: {}",
-                                          p_c->get_values_min(),
-                                          p_c->get_values_max(),
-                                          p_c->get_npoints());
-      }
-      else if (ptrs.node->get_data_type(k) == typeid(hmap::Path).name())
-      {
-        auto *p_c = ptrs.node->get_value_ref<hmap::Path>(new_row.caption);
-        if (p_c)
-          new_row.data_info = std::format("[{:.3e}, {:.3e}], count: {}",
-                                          p_c->get_values_min(),
-                                          p_c->get_values_max(),
-                                          p_c->get_npoints());
-      }
+      const std::string type_name = ptrs.node->get_data_type(k);
+
+      if (type_name == typeid(hmap::Array).name())
+        new_row.data_info = get_data_info<hmap::Array>(ptrs.node, new_row.caption);
+      else if (type_name == typeid(hmap::Heightmap).name())
+        new_row.data_info = get_data_info<hmap::Heightmap>(ptrs.node, new_row.caption);
+      else if (type_name == typeid(hmap::Cloud).name())
+        new_row.data_info = get_data_info<hmap::Cloud>(ptrs.node, new_row.caption);
+      else if (type_name == typeid(hmap::Path).name())
+        new_row.data_info = get_data_info<hmap::Path>(ptrs.node, new_row.caption);
     }
 
     rows.push_back(new_row);
