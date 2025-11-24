@@ -29,9 +29,6 @@ void setup_cloud_set_values_from_heightmap_node(BaseNode &node)
 
 void compute_cloud_set_values_from_heightmap_node(BaseNode &node)
 {
-  if (node.compute_started)
-    node.compute_finished(node.get_id());
-
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   hmap::Cloud     *p_cloud = node.get_value_ref<hmap::Cloud>("cloud");
@@ -47,9 +44,6 @@ void compute_cloud_set_values_from_heightmap_node(BaseNode &node)
     *p_out = *p_cloud;
     p_out->set_values_from_array(array);
   }
-
-  if (node.compute_finished)
-    node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

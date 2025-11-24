@@ -34,9 +34,6 @@ void setup_cloud_to_vectors_node(BaseNode &node)
 
 void compute_cloud_to_vectors_node(BaseNode &node)
 {
-  if (node.compute_started)
-    node.compute_finished(node.get_id());
-
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   hmap::Cloud *p_in = node.get_value_ref<hmap::Cloud>("cloud");
@@ -51,9 +48,6 @@ void compute_cloud_to_vectors_node(BaseNode &node)
     *p_y = p_in->get_y();
     *p_v = p_in->get_values();
   }
-
-  if (node.compute_finished)
-    node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

@@ -48,9 +48,6 @@ void setup_colorize_cmap_node(BaseNode &node)
 
 void compute_colorize_cmap_node(BaseNode &node)
 {
-  if (node.compute_started)
-    node.compute_finished(node.get_id());
-
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   hmap::Heightmap *p_level = node.get_value_ref<hmap::Heightmap>("level");
@@ -123,9 +120,6 @@ void compute_colorize_cmap_node(BaseNode &node)
                     node.get_attr<BoolAttribute>("reverse_colormap"),
                     p_noise);
   }
-
-  if (node.compute_finished)
-    node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

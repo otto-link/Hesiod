@@ -38,9 +38,6 @@ void setup_mix_texture_node(BaseNode &node)
 
 void compute_mix_texture_node(BaseNode &node)
 {
-  if (node.compute_started)
-    node.compute_finished(node.get_id());
-
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   hmap::HeightmapRGBA *p_in1 = node.get_value_ref<hmap::HeightmapRGBA>("texture1");
@@ -62,9 +59,6 @@ void compute_mix_texture_node(BaseNode &node)
     if (node.get_attr<BoolAttribute>("reset_output_alpha"))
       p_out->set_alpha(1.f);
   }
-
-  if (node.compute_finished)
-    node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

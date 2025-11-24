@@ -30,9 +30,6 @@ void setup_colorize_solid_node(BaseNode &node)
 
 void compute_colorize_solid_node(BaseNode &node)
 {
-  if (node.compute_started)
-    node.compute_finished(node.get_id());
-
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   hmap::HeightmapRGBA *p_out = node.get_value_ref<hmap::HeightmapRGBA>("texture");
@@ -43,9 +40,6 @@ void compute_colorize_solid_node(BaseNode &node)
     float color = k < 3 ? col3[k] : node.get_attr<FloatAttribute>("alpha");
     p_out->rgba[k] = hmap::Heightmap(CONFIG(node), color);
   }
-
-  if (node.compute_finished)
-    node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

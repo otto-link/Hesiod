@@ -34,9 +34,6 @@ void setup_cloud_random_weibull_node(BaseNode &node)
 
 void compute_cloud_random_weibull_node(BaseNode &node)
 {
-  if (node.compute_started)
-    node.compute_finished(node.get_id());
-
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   hmap::Cloud *p_out = node.get_value_ref<hmap::Cloud>("cloud");
@@ -50,9 +47,6 @@ void compute_cloud_random_weibull_node(BaseNode &node)
   if (node.get_attr_ref<RangeAttribute>("remap")->get_is_active())
     p_out->remap_values(node.get_attr<RangeAttribute>("remap")[0],
                         node.get_attr<RangeAttribute>("remap")[1]);
-
-  if (node.compute_finished)
-    node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

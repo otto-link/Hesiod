@@ -25,9 +25,6 @@ void setup_cloud_merge_node(BaseNode &node)
 
 void compute_cloud_merge_node(BaseNode &node)
 {
-  if (node.compute_started)
-    node.compute_finished(node.get_id());
-
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   hmap::Cloud *p_in1 = node.get_value_ref<hmap::Cloud>("cloud1");
@@ -40,9 +37,6 @@ void compute_cloud_merge_node(BaseNode &node)
     // convert the input
     *p_out = hmap::merge_cloud(*p_in1, *p_in2);
   }
-
-  if (node.compute_finished)
-    node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

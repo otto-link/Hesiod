@@ -41,9 +41,6 @@ void setup_export_texture_node(BaseNode &node)
 
 void compute_export_texture_node(BaseNode &node)
 {
-  if (node.compute_started)
-    node.compute_finished(node.get_id());
-
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   hmap::HeightmapRGBA *p_in = node.get_value_ref<hmap::HeightmapRGBA>("texture");
@@ -58,9 +55,6 @@ void compute_export_texture_node(BaseNode &node)
     else
       p_in->to_png(fname.string(), CV_8U);
   }
-
-  if (node.compute_finished)
-    node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

@@ -33,9 +33,6 @@ void setup_rotate_node(BaseNode &node)
 
 void compute_rotate_node(BaseNode &node)
 {
-  if (node.compute_started)
-    node.compute_finished(node.get_id());
-
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
@@ -58,9 +55,6 @@ void compute_rotate_node(BaseNode &node)
         },
         hmap::TransformMode::SINGLE_ARRAY); // mandatory
   }
-
-  if (node.compute_finished)
-    node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

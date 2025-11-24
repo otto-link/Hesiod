@@ -34,9 +34,6 @@ void setup_white_density_map_node(BaseNode &node)
 
 void compute_white_density_map_node(BaseNode &node)
 {
-  if (node.compute_started)
-    node.compute_finished(node.get_id());
-
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   hmap::Heightmap *p_density = node.get_value_ref<hmap::Heightmap>("density");
@@ -89,9 +86,6 @@ void compute_white_density_map_node(BaseNode &node)
                            node.get_attr_ref<RangeAttribute>("remap")->get_is_active(),
                            node.get_attr<RangeAttribute>("remap"));
   }
-
-  if (node.compute_finished)
-    node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

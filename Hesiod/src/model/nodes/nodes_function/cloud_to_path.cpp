@@ -31,9 +31,6 @@ void setup_cloud_to_path_node(BaseNode &node)
 
 void compute_cloud_to_path_node(BaseNode &node)
 {
-  if (node.compute_started)
-    node.compute_finished(node.get_id());
-
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   hmap::Cloud *p_in = node.get_value_ref<hmap::Cloud>("cloud");
@@ -50,9 +47,6 @@ void compute_cloud_to_path_node(BaseNode &node)
     if (node.get_attr<BoolAttribute>("reorder_nns"))
       p_out->reorder_nns();
   }
-
-  if (node.compute_finished)
-    node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

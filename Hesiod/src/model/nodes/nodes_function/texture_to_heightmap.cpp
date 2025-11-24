@@ -31,9 +31,6 @@ void setup_texture_to_heightmap_node(BaseNode &node)
 
 void compute_texture_to_heightmap_node(BaseNode &node)
 {
-  if (node.compute_started)
-    node.compute_finished(node.get_id());
-
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   hmap::HeightmapRGBA *p_tex = node.get_value_ref<hmap::HeightmapRGBA>("texture");
@@ -46,9 +43,6 @@ void compute_texture_to_heightmap_node(BaseNode &node)
     // post-process
     post_process_heightmap(node, *p_out);
   }
-
-  if (node.compute_finished)
-    node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

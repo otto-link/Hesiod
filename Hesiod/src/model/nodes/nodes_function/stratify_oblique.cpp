@@ -46,9 +46,6 @@ void setup_stratify_oblique_node(BaseNode &node)
 
 void compute_stratify_oblique_node(BaseNode &node)
 {
-  if (node.compute_started)
-    node.compute_finished(node.get_id());
-
   hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
 
   if (p_in)
@@ -100,9 +97,6 @@ void compute_stratify_oblique_node(BaseNode &node)
 
     p_out->smooth_overlap_buffers();
   }
-
-  if (node.compute_finished)
-    node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

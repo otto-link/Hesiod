@@ -66,9 +66,17 @@ BaseNode::BaseNode(const std::string &label, std::weak_ptr<GraphConfig> config)
 
 void BaseNode::compute()
 {
+  if (this->compute_started)
+    this->compute_finished(this->get_id());
+
   this->update_runtime_info(NodeRuntimeStep::NRS_UPDATE_START);
+
   this->compute_fct(*this);
+
   this->update_runtime_info(NodeRuntimeStep::NRS_UPDATE_END);
+
+  if (this->compute_finished)
+    this->compute_finished(this->get_id());
 }
 
 std::map<std::string, std::unique_ptr<attr::AbstractAttribute>> *BaseNode::

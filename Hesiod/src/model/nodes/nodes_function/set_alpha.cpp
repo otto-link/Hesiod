@@ -36,9 +36,6 @@ void setup_set_alpha_node(BaseNode &node)
 
 void compute_set_alpha_node(BaseNode &node)
 {
-  if (node.compute_started)
-    node.compute_finished(node.get_id());
-
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   hmap::HeightmapRGBA *p_in = node.get_value_ref<hmap::HeightmapRGBA>("texture in");
@@ -78,9 +75,6 @@ void compute_set_alpha_node(BaseNode &node)
       p_out->set_alpha(alpha);
     }
   }
-
-  if (node.compute_finished)
-    node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

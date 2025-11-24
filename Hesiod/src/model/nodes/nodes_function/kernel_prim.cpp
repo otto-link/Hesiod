@@ -38,9 +38,6 @@ void setup_kernel_prim_node(BaseNode &node)
 
 void compute_kernel_prim_node(BaseNode &node)
 {
-  if (node.compute_started)
-    node.compute_finished(node.get_id());
-
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   hmap::Array *p_out = node.get_value_ref<hmap::Array>("kernel");
@@ -57,9 +54,6 @@ void compute_kernel_prim_node(BaseNode &node)
 
   if (node.get_attr<BoolAttribute>("normalize"))
     *p_out /= p_out->sum();
-
-  if (node.compute_finished)
-    node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

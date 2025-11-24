@@ -19,10 +19,10 @@
 
 #include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/gui/widgets/custom_qmenu.hpp"
-#include "hesiod/gui/widgets/documentation_popup.hpp"
 #include "hesiod/gui/widgets/graph_config_dialog.hpp"
 #include "hesiod/gui/widgets/graph_node_widget.hpp"
 #include "hesiod/gui/widgets/gui_utils.hpp"
+#include "hesiod/gui/widgets/node_attributes_widget.hpp"
 #include "hesiod/gui/widgets/node_info_dialog.hpp"
 #include "hesiod/gui/widgets/node_widget.hpp"
 #include "hesiod/gui/widgets/select_string_dialog.hpp"
@@ -176,15 +176,13 @@ void GraphNodeWidget::closeEvent(QCloseEvent *event)
   gngui::GraphViewer::closeEvent(event);
 }
 
-QScrollArea *GraphNodeWidget::create_attributes_scroll(
-    QWidget                *parent,
-    attr::AttributesWidget *attr_widget)
+QScrollArea *GraphNodeWidget::create_attributes_scroll(QWidget *parent, QWidget *widget)
 {
   auto *scroll = new QScrollArea(parent);
-  scroll->setWidget(attr_widget);
+  scroll->setWidget(widget);
   scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-  int max_height = attr_widget->sizeHint().height();
+  int max_height = widget->sizeHint().height();
 
   if (QScreen *screen = this->screen())
   {
@@ -193,190 +191,9 @@ QScrollArea *GraphNodeWidget::create_attributes_scroll(
   }
 
   scroll->setMinimumHeight(max_height);
-  scroll->setMinimumWidth(attr_widget->width() + 16);
+  scroll->setMinimumWidth(widget->width() + 16);
 
   return scroll;
-}
-
-attr::AttributesWidget *GraphNodeWidget::create_node_attributes_widget(
-    QWidget           *parent,
-    const std::string &node_id)
-{
-  Logger::log()->trace("GraphNodeWidget::create_node_attributes_widget: id {}", node_id);
-
-  auto gno = this->p_graph_node.lock();
-  if (!gno)
-    return nullptr;
-
-  BaseNode *p_node = gno->get_node_ref_by_id<BaseNode>(node_id);
-  if (!p_node)
-    return nullptr;
-
-  // generate a fresh widget
-  bool        add_save_reset_state_buttons = false;
-  std::string window_title = "";
-
-  attr::AttributesWidget *attributes_widget = new attr::AttributesWidget(
-      p_node->get_attributes_ref(),
-      p_node->get_attr_ordered_key_ref(),
-      window_title,
-      add_save_reset_state_buttons,
-      parent);
-
-  attributes_widget->setAttribute(Qt::WA_DeleteOnClose);
-
-  // change the attribute widget layout spacing a posteriori
-  QLayout *retrieved_layout = qobject_cast<QLayout *>(attributes_widget->layout());
-  if (retrieved_layout)
-  {
-    retrieved_layout->setSpacing(4);
-    retrieved_layout->setContentsMargins(4, 0, 4, 0);
-
-    for (int i = 0; i < retrieved_layout->count(); ++i)
-    {
-      QWidget *child = retrieved_layout->itemAt(i)->widget();
-      if (!child)
-        continue;
-
-      if (auto *inner_layout = child->layout())
-      {
-        inner_layout->setSpacing(4);
-        inner_layout->setContentsMargins(4, 0, 4, 0);
-      }
-    }
-  }
-
-  this->connect(attributes_widget,
-                &attr::AttributesWidget::value_changed,
-                [this, p_node]()
-                {
-                  auto gno = this->p_graph_node.lock();
-                  if (!gno)
-                    return;
-
-                  std::string node_id = p_node->get_id();
-                  gno->update(node_id);
-                });
-
-  this->connect(attributes_widget,
-                &attr::AttributesWidget::update_button_released,
-                [this, p_node]()
-                {
-                  auto gno = this->p_graph_node.lock();
-                  if (!gno)
-                    return;
-
-                  std::string node_id = p_node->get_id();
-                  gno->update(node_id);
-                });
-
-  return attributes_widget;
-}
-
-QWidget *GraphNodeWidget::create_toolbar_widget(QWidget                *parent,
-                                                BaseNode               *p_node,
-                                                attr::AttributesWidget *attr_widget)
-{
-  if (!p_node)
-    return nullptr;
-
-  QWidget     *toolbar = new QWidget(parent);
-  QHBoxLayout *layout = new QHBoxLayout(toolbar);
-  layout->setContentsMargins(0, 0, 0, 0);
-
-  auto make_button = [&](QStyle::StandardPixmap icon, const QString &tooltip)
-  {
-    QToolButton *btn = new QToolButton;
-    btn->setToolTip(tooltip);
-    btn->setIcon(btn->style()->standardIcon(icon));
-    return btn;
-  };
-
-  auto *update_btn = make_button(QStyle::SP_BrowserReload, "Force Update");
-  auto *info_btn = make_button(QStyle::SP_FileDialogContentsView, "Node Information");
-  auto *bckp_btn = make_button(QStyle::SP_DriveHDIcon, "Backup State");
-  auto *revert_btn = make_button(QStyle::SP_DialogCloseButton, "Revert State");
-  auto *load_btn = make_button(QStyle::SP_DialogOpenButton, "Load Preset");
-  auto *save_btn = make_button(QStyle::SP_DialogSaveButton, "Save Preset");
-  auto *reset_btn = make_button(QStyle::SP_MediaSkipBackward, "Reset Settings");
-  auto *help_btn = make_button(QStyle::SP_DialogHelpButton, "Help!");
-
-  for (auto *btn : {update_btn,
-                    info_btn,
-                    bckp_btn,
-                    revert_btn,
-                    load_btn,
-                    save_btn,
-                    reset_btn,
-                    help_btn})
-    layout->addWidget(btn);
-
-  layout->addStretch();
-
-  // --- connections
-
-  const std::string node_id = p_node->get_id();
-
-  // use node id + graph_node instead of the node pointer for safety
-  // (no lifetime warranty on p_node)
-  this->connect(update_btn,
-                &QToolButton::pressed,
-                [this, node_id]()
-                {
-                  auto gno = this->p_graph_node.lock();
-                  if (!gno)
-                    return;
-
-                  gno->update(node_id);
-                });
-
-  this->connect(info_btn,
-                &QToolButton::pressed,
-                [this, node_id]()
-                {
-                  auto gno = this->p_graph_node.lock();
-                  if (!gno)
-                    return;
-
-                  if (auto *p_node = gno->get_node_ref_by_id<BaseNode>(node_id))
-                    this->on_node_info(p_node->get_id());
-                });
-
-  this->connect(bckp_btn,
-                &QToolButton::pressed,
-                [attr_widget]() { attr_widget->on_save_state(); });
-  this->connect(revert_btn,
-                &QToolButton::pressed,
-                [attr_widget]() { attr_widget->on_restore_save_state(); });
-  this->connect(load_btn,
-                &QToolButton::pressed,
-                [attr_widget]() { attr_widget->on_load_preset(); });
-  this->connect(save_btn,
-                &QToolButton::pressed,
-                [attr_widget]() { attr_widget->on_save_preset(); });
-  this->connect(reset_btn,
-                &QToolButton::pressed,
-                [attr_widget]() { attr_widget->on_restore_initial_state(); });
-
-  this->connect(help_btn,
-                &QToolButton::pressed,
-                [this, node_id]()
-                {
-                  auto gno = this->p_graph_node.lock();
-                  if (!gno)
-                    return;
-
-                  if (auto *p_node = gno->get_node_ref_by_id<BaseNode>(node_id))
-                  {
-                    auto *popup = new DocumentationPopup(
-                        p_node->get_label(),
-                        p_node->get_documentation_html());
-                    popup->setAttribute(Qt::WA_DeleteOnClose);
-                    popup->show();
-                  }
-                });
-
-  return toolbar;
 }
 
 bool GraphNodeWidget::get_is_selecting_with_rubber_band() const
@@ -904,51 +721,43 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
 {
   Logger::log()->trace("GraphNodeWidget::on_node_right_clicked: id {}", node_id);
 
+  // only show custom menu if clicked inside the top area of the node,
+  // outside the embedded widget
+  {
+    gngui::GraphicsNode *p_gx_node = this->get_graphics_node_by_id(node_id);
+    if (!p_gx_node)
+      return;
+
+    QPointF item_pos = scene_pos - p_gx_node->scenePos();
+    if (item_pos.y() >= p_gx_node->get_geometry().widget_pos.y())
+      return;
+  }
+
+  // settings widget
   auto gno = this->p_graph_node.lock();
   if (!gno)
     return;
 
-  BaseNode            *p_node = gno->get_node_ref_by_id<BaseNode>(node_id);
-  gngui::GraphicsNode *p_gx_node = this->get_graphics_node_by_id(node_id);
-
-  // --- safeguards
-
-  if (!p_node || !p_gx_node)
-    return;
-
-  // only show custom menu if clicked inside the top area of the node,
-  // outside the embedded widget
-  QPointF item_pos = scene_pos - p_gx_node->scenePos();
-  if (item_pos.y() >= p_gx_node->get_geometry().widget_pos.y())
-    return;
-
-  // settings widget
-  attr::AttributesWidget *attr_widget = this->create_node_attributes_widget(
-      this,
-      p_node->get_id());
+  QWidget *attr_widget = new NodeAttributesWidget(gno->get_shared(),
+                                                  node_id,
+                                                  /* p_graph_node_widget */ this,
+                                                  /* add_toolbar */ true,
+                                                  /* parent */ this);
   if (!attr_widget)
     return;
 
-  // --- create menu
-
+  // create menu
   CustomQMenu *menu = new CustomQMenu();
-
-  if (auto *toolbar = this->create_toolbar_widget(menu, p_node, attr_widget))
-  {
-    auto *toolbar_action = new QWidgetAction(menu);
-    toolbar_action->setDefaultWidget(toolbar);
-    menu->addAction(toolbar_action);
-    add_qmenu_spacer(menu, 8);
-  }
 
   {
     auto *scroll = this->create_attributes_scroll(menu, attr_widget);
     auto *scroll_action = new QWidgetAction(menu);
     scroll_action->setDefaultWidget(scroll);
     menu->addAction(scroll_action);
-    add_qmenu_spacer(menu, 8);
   }
 
+  menu->setWindowFlags(menu->windowFlags() | Qt::Popup);
+  menu->setAttribute(Qt::WA_NoMousePropagation, false);
   menu->popup(QCursor::pos());
 }
 

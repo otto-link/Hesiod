@@ -37,9 +37,6 @@ void setup_mixer_node(BaseNode &node)
 
 void compute_mixer_node(BaseNode &node)
 {
-  if (node.compute_started)
-    node.compute_finished(node.get_id());
-
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   hmap::Heightmap *p_in1 = node.get_value_ref<hmap::Heightmap>("input 1");
@@ -76,9 +73,6 @@ void compute_mixer_node(BaseNode &node)
         },
         node.get_config_ref()->hmap_transform_mode_cpu);
   }
-
-  if (node.compute_finished)
-    node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

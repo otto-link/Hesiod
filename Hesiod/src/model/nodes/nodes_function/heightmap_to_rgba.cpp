@@ -27,9 +27,6 @@ void setup_heightmap_to_rgba_node(BaseNode &node)
 
 void compute_heightmap_to_rgba_node(BaseNode &node)
 {
-  if (node.compute_started)
-    node.compute_finished(node.get_id());
-
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   hmap::Heightmap *p_r = node.get_value_ref<hmap::Heightmap>("R");
@@ -65,9 +62,6 @@ void compute_heightmap_to_rgba_node(BaseNode &node)
 
     *p_out = hmap::HeightmapRGBA(hr, hg, hb, ha);
   }
-
-  if (node.compute_finished)
-    node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

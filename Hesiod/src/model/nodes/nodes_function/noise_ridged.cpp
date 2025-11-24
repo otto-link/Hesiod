@@ -58,9 +58,6 @@ void setup_noise_ridged_node(BaseNode &node)
 
 void compute_noise_ridged_node(BaseNode &node)
 {
-  if (node.compute_started)
-    node.compute_finished(node.get_id());
-
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   // base noise function
@@ -122,9 +119,6 @@ void compute_noise_ridged_node(BaseNode &node)
                          0.f,
                          node.get_attr_ref<RangeAttribute>("remap")->get_is_active(),
                          node.get_attr<RangeAttribute>("remap"));
-
-  if (node.compute_finished)
-    node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

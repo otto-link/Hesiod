@@ -33,9 +33,6 @@ void setup_combine_mask_node(BaseNode &node)
 
 void compute_combine_mask_node(BaseNode &node)
 {
-  if (node.compute_started)
-    node.compute_finished(node.get_id());
-
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   hmap::Heightmap *p_in1 = node.get_value_ref<hmap::Heightmap>("input 1");
@@ -72,9 +69,6 @@ void compute_combine_mask_node(BaseNode &node)
 
     hmap::transform(*p_out, *p_in1, *p_in2, lambda);
   }
-
-  if (node.compute_finished)
-    node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

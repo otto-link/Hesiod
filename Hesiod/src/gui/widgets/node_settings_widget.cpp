@@ -14,6 +14,7 @@
 #include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/gui/widgets/data_preview.hpp"
 #include "hesiod/gui/widgets/gui_utils.hpp"
+#include "hesiod/gui/widgets/node_attributes_widget.hpp"
 #include "hesiod/gui/widgets/node_settings_widget.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/graph/graph_node.hpp"
@@ -53,12 +54,13 @@ void NodeSettingsWidget::initialize_layout()
 
   // Allow default constraint so Qt can compute sensible min/max sizes
   this->scroll_layout->setSizeConstraint(QLayout::SetDefaultConstraint);
-  this->scroll_layout->setContentsMargins(8, 0, 8, 0);
+  this->scroll_layout->setContentsMargins(8, 0, 256, 0);
   this->scroll_layout->setSpacing(0);
 
   // Make the scroll widget expand vertically so the scroll area will show scrollbars
   scroll_widget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
   scroll_widget->setLayout(this->scroll_layout);
+  scroll_widget->setMaximumHeight(QWIDGETSIZE_MAX);
 
   this->scroll_area->setWidgetResizable(true);
   this->scroll_area->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -273,17 +275,16 @@ void NodeSettingsWidget::update_content()
         });
 
     // attr widget
-    attr::AttributesWidget *attr_widget = this->p_graph_node_widget
-                                              ->create_node_attributes_widget(this,
-                                                                              node_id);
+    NodeAttributesWidget *widget = new NodeAttributesWidget(p_graph->get_shared(),
+                                                            node_id,
+                                                            this->p_graph_node_widget,
+                                                            /* add_toolbar */ false);
 
     this->connect(
-        attr_widget,
+        widget->get_attributes_widget_ref(),
         &attr::AttributesWidget::value_changed,
-        [this, p_node]()
+        [this, node_id]()
         {
-          std::string node_id = p_node->get_id();
-
           if (this->p_graph_node_widget)
             if (GraphNode *p_graph = this->p_graph_node_widget->get_p_graph_node())
             {
@@ -296,10 +297,10 @@ void NodeSettingsWidget::update_content()
             }
         });
 
-    if (!attr_widget)
+    if (!widget)
       continue;
 
-    this->scroll_layout->addWidget(attr_widget, row++, 0, 1, 2);
+    this->scroll_layout->addWidget(widget, row++, 0, 1, 2);
     this->scroll_layout->addWidget(new QLabel(), row++, 0);
   }
 }

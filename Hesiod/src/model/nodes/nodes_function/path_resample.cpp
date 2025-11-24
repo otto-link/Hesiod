@@ -28,9 +28,6 @@ void setup_path_resample_node(BaseNode &node)
 
 void compute_path_resample_node(BaseNode &node)
 {
-  if (node.compute_started)
-    node.compute_finished(node.get_id());
-
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   hmap::Path *p_in = node.get_value_ref<hmap::Path>("input");
@@ -44,9 +41,6 @@ void compute_path_resample_node(BaseNode &node)
     if (p_in->get_npoints() > 1)
       p_out->resample(node.get_attr<FloatAttribute>("delta"));
   }
-
-  if (node.compute_finished)
-    node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

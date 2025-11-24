@@ -59,9 +59,6 @@ void setup_texture_quilting_shuffle_node(BaseNode &node)
 
 void compute_texture_quilting_shuffle_node(BaseNode &node)
 {
-  if (node.compute_started)
-    node.compute_finished(node.get_id());
-
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   hmap::HeightmapRGBA *p_texture_guide = node.get_value_ref<hmap::HeightmapRGBA>(
@@ -178,9 +175,6 @@ void compute_texture_quilting_shuffle_node(BaseNode &node)
         *pt_out_vec[k] = hmap::HeightmapRGBA(r, g, b, a);
       }
   }
-
-  if (node.compute_finished)
-    node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

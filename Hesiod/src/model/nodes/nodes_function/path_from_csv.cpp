@@ -35,9 +35,6 @@ void setup_path_from_csv_node(BaseNode &node)
 
 void compute_path_from_csv_node(BaseNode &node)
 {
-  if (node.compute_started)
-    node.compute_finished(node.get_id());
-
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   hmap::Path *p_out = node.get_value_ref<hmap::Path>("path");
@@ -59,9 +56,6 @@ void compute_path_from_csv_node(BaseNode &node)
   {
     Logger::log()->error("compute_path_from_csv_node: could not load CSV file {}", fname);
   }
-
-  if (node.compute_finished)
-    node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

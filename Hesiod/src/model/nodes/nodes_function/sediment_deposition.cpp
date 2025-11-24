@@ -48,9 +48,6 @@ void setup_sediment_deposition_node(BaseNode &node)
 
 void compute_sediment_deposition_node(BaseNode &node)
 {
-  if (node.compute_started)
-    node.compute_finished(node.get_id());
-
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
@@ -101,9 +98,6 @@ void compute_sediment_deposition_node(BaseNode &node)
       p_deposition_map->remap();
     }
   }
-
-  if (node.compute_finished)
-    node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

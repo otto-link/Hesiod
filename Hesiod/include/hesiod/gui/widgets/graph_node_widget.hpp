@@ -7,8 +7,6 @@
 
 #include "gnodegui/graph_viewer.hpp"
 
-#include "attributes/widgets/attributes_widget.hpp"
-
 #include "hesiod/model/nodes/base_node.hpp"
 
 namespace hesiod
@@ -44,9 +42,6 @@ public:
   void       set_json_copy_buffer(nlohmann::json const &new_json_copy_buffer);
 
   void add_import_texture_nodes(const std::vector<std::string> &texture_paths);
-
-  attr::AttributesWidget *create_node_attributes_widget(QWidget           *parent,
-                                                        const std::string &node_id);
 
 signals:
   // TODO REMOVE GRAPH_ID
@@ -106,11 +101,7 @@ public slots:
   void on_new_graphics_node_request(const std::string &node_id, QPointF scene_pos);
 
 private:
-  QScrollArea *create_attributes_scroll(QWidget                *parent,
-                                        attr::AttributesWidget *attr_widget);
-  QWidget     *create_toolbar_widget(QWidget                *parent,
-                                     BaseNode               *p_node,
-                                     attr::AttributesWidget *attr_widget);
+  QScrollArea *create_attributes_scroll(QWidget *parent, QWidget *attr_widget);
 
   void backup_selected_ids();
   void reselect_backup_ids();

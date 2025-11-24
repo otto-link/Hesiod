@@ -35,9 +35,6 @@ void setup_path_find_node(BaseNode &node)
 
 void compute_path_find_node(BaseNode &node)
 {
-  if (node.compute_started)
-    node.compute_finished(node.get_id());
-
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   hmap::Path      *p_waypoints = node.get_value_ref<hmap::Path>("waypoints");
@@ -93,9 +90,6 @@ void compute_path_find_node(BaseNode &node)
       p_out->set_values_from_array(z, bbox);
     }
   }
-
-  if (node.compute_finished)
-    node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

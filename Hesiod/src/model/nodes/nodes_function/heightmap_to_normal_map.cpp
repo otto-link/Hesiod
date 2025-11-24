@@ -29,9 +29,6 @@ void setup_heightmap_to_normal_map_node(BaseNode &node)
 
 void compute_heightmap_to_normal_map_node(BaseNode &node)
 {
-  if (node.compute_started)
-    node.compute_finished(node.get_id());
-
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
@@ -55,9 +52,6 @@ void compute_heightmap_to_normal_map_node(BaseNode &node)
                                   nz,
                                   hmap::Array(p_in->shape, 1.f));
   }
-
-  if (node.compute_finished)
-    node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

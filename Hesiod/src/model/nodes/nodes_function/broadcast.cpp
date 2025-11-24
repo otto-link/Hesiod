@@ -29,9 +29,6 @@ void setup_broadcast_node(BaseNode &node)
 
 void compute_broadcast_node(BaseNode &node)
 {
-  if (node.compute_started)
-    node.compute_finished(node.get_id());
-
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
@@ -46,8 +43,6 @@ void compute_broadcast_node(BaseNode &node)
     if (!p_broadcast_node)
     {
       Logger::log()->error("compute_receive_node: Failed to cast to BroadcastNode");
-      if (node.compute_finished)
-        node.compute_finished(node.get_id());
       return;
     }
 
@@ -66,9 +61,6 @@ void compute_broadcast_node(BaseNode &node)
     if (p_broadcast_node->broadcast_node_updated)
       p_broadcast_node->broadcast_node_updated(graph_id, broadcast_tag);
   }
-
-  if (node.compute_finished)
-    node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

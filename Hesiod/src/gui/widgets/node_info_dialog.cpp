@@ -230,6 +230,7 @@ void NodeInfoDialog::update_content()
   Logger::log()->trace("NodeInfoDialog::update_content");
   this->update_ports_content();
   this->update_info_content();
+  this->update();
 }
 
 void NodeInfoDialog::update_info_content()

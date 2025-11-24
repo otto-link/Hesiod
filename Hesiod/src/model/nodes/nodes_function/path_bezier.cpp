@@ -32,9 +32,6 @@ void setup_path_bezier_node(BaseNode &node)
 
 void compute_path_bezier_node(BaseNode &node)
 {
-  if (node.compute_started)
-    node.compute_finished(node.get_id());
-
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   hmap::Path *p_in = node.get_value_ref<hmap::Path>("input");
@@ -50,9 +47,6 @@ void compute_path_bezier_node(BaseNode &node)
       p_out->bezier(node.get_attr<FloatAttribute>("curvature_ratio"),
                     node.get_attr<IntAttribute>("edge_divisions"));
   }
-
-  if (node.compute_finished)
-    node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

@@ -37,9 +37,6 @@ void setup_coastal_erosion_diffusion_node(BaseNode &node)
 
 void compute_coastal_erosion_diffusion_node(BaseNode &node)
 {
-  if (node.compute_started)
-    node.compute_finished(node.get_id());
-
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   hmap::Heightmap *p_z = node.get_value_ref<hmap::Heightmap>("elevation_in");
@@ -83,9 +80,6 @@ void compute_coastal_erosion_diffusion_node(BaseNode &node)
     p_depth_out->smooth_overlap_buffers();
     p_mask->smooth_overlap_buffers();
   }
-
-  if (node.compute_finished)
-    node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

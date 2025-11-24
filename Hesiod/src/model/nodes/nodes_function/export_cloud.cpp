@@ -40,9 +40,6 @@ void setup_export_cloud_node(BaseNode &node)
 
 void compute_export_cloud_node(BaseNode &node)
 {
-  if (node.compute_started)
-    node.compute_finished(node.get_id());
-
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   hmap::Cloud *p_in = node.get_value_ref<hmap::Cloud>("input");
@@ -54,9 +51,6 @@ void compute_export_cloud_node(BaseNode &node)
 
     p_in->to_csv(fname.string());
   }
-
-  if (node.compute_finished)
-    node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

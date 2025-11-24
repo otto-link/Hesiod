@@ -27,9 +27,6 @@ void setup_cloud_remap_values_node(BaseNode &node)
 
 void compute_cloud_remap_values_node(BaseNode &node)
 {
-  if (node.compute_started)
-    node.compute_finished(node.get_id());
-
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   hmap::Cloud *p_in = node.get_value_ref<hmap::Cloud>("input");
@@ -43,9 +40,6 @@ void compute_cloud_remap_values_node(BaseNode &node)
     p_out->remap_values(node.get_attr<RangeAttribute>("remap")[0],
                         node.get_attr<RangeAttribute>("remap")[1]);
   }
-
-  if (node.compute_finished)
-    node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod

@@ -28,9 +28,6 @@ void setup_cloud_set_values_from_border_distance_node(BaseNode &node)
 
 void compute_cloud_set_values_from_border_distance_node(BaseNode &node)
 {
-  if (node.compute_started)
-    node.compute_finished(node.get_id());
-
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   hmap::Cloud *p_in = node.get_value_ref<hmap::Cloud>("cloud");
@@ -42,9 +39,6 @@ void compute_cloud_set_values_from_border_distance_node(BaseNode &node)
     *p_out = *p_in;
     p_out->set_values_from_border_distance();
   }
-
-  if (node.compute_finished)
-    node.compute_finished(node.get_id());
 }
 
 } // namespace hesiod
