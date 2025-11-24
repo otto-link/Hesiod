@@ -24,6 +24,7 @@ class GraphNodeWidget : public gngui::GraphViewer
 public:
   // --- Constructor and Setup ---
   GraphNodeWidget(std::weak_ptr<GraphNode> p_graph_node, QWidget *parent = nullptr);
+  ~GraphNodeWidget();
 
   void automatic_node_layout();
   void clear_all();
@@ -107,14 +108,14 @@ private:
   void reselect_backup_ids();
 
   // --- Members ---
-  std::weak_ptr<GraphNode> p_graph_node; // own by GraphManager
-  std::vector<QWidget *>   data_viewers;
-  bool                     update_node_on_connection_finished = true;
-  nlohmann::json           json_copy_buffer;
-  std::string              last_node_created_id = "";
-  bool                     is_selecting_with_rubber_band = false;
-  std::filesystem::path    last_import_path;
-  std::vector<std::string> selected_ids;
+  std::weak_ptr<GraphNode>       p_graph_node; // own by GraphManager
+  std::vector<QPointer<QWidget>> data_viewers;
+  bool                           update_node_on_connection_finished = true;
+  nlohmann::json                 json_copy_buffer;
+  std::string                    last_node_created_id = "";
+  bool                           is_selecting_with_rubber_band = false;
+  std::filesystem::path          last_import_path;
+  std::vector<std::string>       selected_ids;
 };
 
 } // namespace hesiod

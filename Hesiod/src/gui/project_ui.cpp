@@ -18,11 +18,15 @@ namespace hesiod
 ProjectUI::ProjectUI(QWidget *parent) : QWidget(parent)
 {
   Logger::log()->trace("Project::Project");
+  this->setAttribute(Qt::WA_DeleteOnClose);
 }
 
 void ProjectUI::cleanup()
 {
   Logger::log()->trace("ProjectUI::cleanup");
+
+  this->graph_manager_widget->deleteLater();
+  this->graph_tabs_widget->deleteLater();
 
   QCoreApplication::processEvents();
 }
@@ -85,8 +89,9 @@ void ProjectUI::initialize(ProjectModel *project)
   // initialize UI components (only tabs assign to the current parent
   // widget, so that the graph manager and the texture downloader will
   // show as floating windows)
-  this->graph_manager_widget = new GraphManagerWidget(p_graph_manager->get_shared());
-  this->graph_tabs_widget = new GraphTabsWidget(p_graph_manager->get_shared());
+  this->graph_manager_widget = new GraphManagerWidget(p_graph_manager->get_shared(),
+                                                      this);
+  this->graph_tabs_widget = new GraphTabsWidget(p_graph_manager->get_shared(), this);
 
   this->graph_tabs_widget->set_show_node_settings_widget(
       HSD_CTX.app_settings.node_editor.show_node_settings_pan);

@@ -146,7 +146,7 @@ void Viewer3D::setup_layout()
   int row_count = get_row_count(grid);
 
   // add viewer
-  this->p_renderer = new qtr::RenderWidget("", this);
+  this->p_renderer = new qtr::RenderWidget("");
   grid->addWidget(dynamic_cast<QWidget *>(p_renderer), row_count, 0, 1, col_count);
 }
 

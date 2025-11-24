@@ -40,7 +40,7 @@ public:
 private:
   GraphManagerWidget     *graph_manager_widget;
   GraphTabsWidget        *graph_tabs_widget;
-  qtd::TextureDownloader *texture_downloader;
+  qtd::TextureDownloader *texture_downloader = nullptr;
 };
 
 } // namespace hesiod

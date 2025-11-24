@@ -6232,6 +6232,111 @@
             }
         }
     },
+    "IslandLandMask": {
+        "category": "Primtive/Geological",
+        "description": "No description available",
+        "label": "IslandLandMask",
+        "parameters": {
+            "center": {
+                "description": "No description",
+                "key": "center",
+                "label": "center",
+                "type": "Vec2Float"
+            },
+            "displacement": {
+                "description": "No description",
+                "key": "displacement",
+                "label": "displacement",
+                "type": "Float"
+            },
+            "kw": {
+                "description": "No description",
+                "key": "kw",
+                "label": "kw",
+                "type": "Float"
+            },
+            "lacunarity": {
+                "description": "No description",
+                "key": "lacunarity",
+                "label": "lacunarity",
+                "type": "Float"
+            },
+            "noise_type": {
+                "description": "No description",
+                "key": "noise_type",
+                "label": "noise_type",
+                "type": "Enumeration"
+            },
+            "octaves": {
+                "description": "No description",
+                "key": "octaves",
+                "label": "octaves",
+                "type": "Integer"
+            },
+            "persistence": {
+                "description": "No description",
+                "key": "persistence",
+                "label": "persistence",
+                "type": "Float"
+            },
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "Gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "Invert Output",
+                "type": "Bool"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "Remap Range",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "Saturation Range",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "Smoothing Radius",
+                "type": "Float"
+            },
+            "radius": {
+                "description": "No description",
+                "key": "radius",
+                "label": "radius",
+                "type": "Float"
+            },
+            "seed": {
+                "description": "No description",
+                "key": "seed",
+                "label": "seed",
+                "type": "Random seed number"
+            },
+            "weight": {
+                "description": "No description",
+                "key": "weight",
+                "label": "weight",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "out": {
+                "caption": "out",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "output"
+            }
+        }
+    },
     "KernelDiskSmooth": {
         "category": "Primitive/Kernel",
         "description": "No description available",

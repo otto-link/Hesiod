@@ -25,6 +25,7 @@ class GraphTabsWidget : public QWidget
 
 public:
   GraphTabsWidget(std::weak_ptr<GraphManager> p_graph_manager, QWidget *parent = nullptr);
+  ~GraphTabsWidget();
 
   void clear();
   void set_show_node_settings_widget(bool new_state);

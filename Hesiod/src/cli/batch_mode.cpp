@@ -3,6 +3,8 @@
  * this software. */
 #include <filesystem>
 
+#include <QTimer>
+
 #include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/cli/batch_mode.hpp"
 #include "hesiod/gui/project_ui.hpp"
@@ -164,8 +166,6 @@ void run_snapshot_generation()
 
   for (auto &[node_type, _] : inventory)
   {
-    // Logger::log()->trace("node type: {}", node_type);
-
     const std::string fname = ex_path + node_type + ".hsd";
 
     if (std::filesystem::exists(fname))
@@ -174,21 +174,28 @@ void run_snapshot_generation()
 
       app->load_project_model_and_ui(fname);
 
-      GraphTabsWidget *p_gm = app->get_project_ui_ref()->get_graph_tabs_widget_ref();
+      GraphTabsWidget *p_gtw = app->get_project_ui_ref()->get_graph_tabs_widget_ref();
 
-      if (p_gm)
+      if (p_gtw)
       {
-        p_gm->zoom_to_content();
+        p_gtw->zoom_to_content();
 
         // TODO refit again, not working...
         auto post_render_callback = [&]() { return; };
 
-        QWidget *widget = dynamic_cast<QWidget *>(p_gm);
+        QWidget *widget = dynamic_cast<QWidget *>(p_gtw);
 
         render_widget_screenshot(widget,
                                  node_type + "_hsd_example.png",
                                  size,
                                  post_render_callback);
+
+        QCoreApplication::processEvents();
+
+        // to avoid Qt panicking...
+        QEventLoop loop;
+        QTimer::singleShot(10, &loop, &QEventLoop::quit);
+        loop.exec();
       }
     }
   }

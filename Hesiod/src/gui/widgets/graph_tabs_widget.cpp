@@ -41,6 +41,15 @@ GraphTabsWidget::GraphTabsWidget(std::weak_ptr<GraphManager> p_graph_manager,
   this->update_tab_widget();
 }
 
+GraphTabsWidget::~GraphTabsWidget()
+{
+  Logger::log()->trace("GraphTabsWidget::~GraphTabsWidget");
+
+  for (auto &[_, gnw] : this->graph_node_widget_map)
+    if (gnw)
+      gnw->deleteLater();
+}
+
 void GraphTabsWidget::clear()
 {
   Logger::log()->trace("GraphTabsWidget::clear");

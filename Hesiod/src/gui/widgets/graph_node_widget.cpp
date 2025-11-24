@@ -45,10 +45,19 @@ GraphNodeWidget::GraphNodeWidget(std::weak_ptr<GraphNode> p_graph_node, QWidget 
     return;
 
   this->set_id(gno->get_id());
+  this->setAttribute(Qt::WA_DeleteOnClose);
 
   // populate node catalog
   this->set_node_inventory(get_node_inventory());
   this->setup_connections();
+}
+
+GraphNodeWidget::~GraphNodeWidget()
+{
+  Logger::log()->trace("GraphNodeWidget::~GraphNodeWidget");
+
+  // clean-up, viewer are not owned by this
+  this->clear_data_viewers();
 }
 
 void GraphNodeWidget::add_import_texture_nodes(
@@ -154,10 +163,14 @@ void GraphNodeWidget::clear_all()
 
 void GraphNodeWidget::clear_data_viewers()
 {
-  for (auto &viewer : this->data_viewers)
+  for (auto viewer : this->data_viewers)
   {
-    if (Viewer *p_viewer = dynamic_cast<Viewer *>(viewer))
-      p_viewer->clear();
+    if (viewer)
+      if (Viewer *p_viewer = dynamic_cast<Viewer *>(viewer.get()))
+      {
+        p_viewer->clear();
+        p_viewer->deleteLater();
+      }
   }
   this->data_viewers.clear();
 }
@@ -239,15 +252,17 @@ void GraphNodeWidget::json_from(nlohmann::json const &json)
       // TODO add viewer-type specific handling
       this->on_viewport_request();
 
-      if (auto *p_viewer = dynamic_cast<Viewer3D *>(this->data_viewers.back()))
+      if (auto *p_viewer = dynamic_cast<Viewer3D *>(this->data_viewers.back().get()))
+      {
         p_viewer->json_from(viewer_json);
+      }
       else
         Logger::log()->error(
             "GraphNodeWidget::json_from: could not retrieve viewer reference");
     }
   }
 
-  // Qt mystery, this needs to be delayed to be effective
+  // defer
   QTimer::singleShot(0,
                      this,
                      [this]()
@@ -322,11 +337,12 @@ nlohmann::json GraphNodeWidget::json_to() const
   nlohmann::json json = GraphViewer::json_to();
 
   // add the viewports
-  for (auto &widget : this->data_viewers)
-    if (auto *p_viewer = dynamic_cast<Viewer *>(widget))
-    {
-      json["viewers"].push_back(p_viewer->json_to());
-    }
+  for (auto widget : this->data_viewers)
+    if (widget)
+      if (auto *p_viewer = dynamic_cast<Viewer *>(widget.get()))
+      {
+        json["viewers"].push_back(p_viewer->json_to());
+      }
 
   return json;
 }
@@ -890,10 +906,10 @@ void GraphNodeWidget::on_viewport_request()
     }
   }
 
-  this->data_viewers.push_back(new Viewer3D(this));
+  this->data_viewers.push_back(new Viewer3D(this)); // no parent, independant window
   this->data_viewers.back()->show();
 
-  Viewer *p_viewer = dynamic_cast<Viewer *>(this->data_viewers.back());
+  Viewer *p_viewer = dynamic_cast<Viewer *>(this->data_viewers.back().get());
 
   // remove the widget from the widget list if it is closed
   this->connect(p_viewer,

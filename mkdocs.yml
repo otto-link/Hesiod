@@ -112,6 +112,7 @@ nav:
     - 'node_reference/nodes/ImportHeightmap.md'
     - 'node_reference/nodes/ImportTexture.md'
     - 'node_reference/nodes/Inverse.md'
+    - 'node_reference/nodes/IslandLandMask.md'
     - 'node_reference/nodes/KernelDiskSmooth.md'
     - 'node_reference/nodes/KernelGabor.md'
     - 'node_reference/nodes/KernelPrim.md'

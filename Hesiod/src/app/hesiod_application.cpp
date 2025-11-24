@@ -98,7 +98,7 @@ AppContext &HesiodApplication::get_context() { return this->context; }
 
 const AppContext &HesiodApplication::get_context() const { return this->context; }
 
-ProjectUI *HesiodApplication::get_project_ui_ref() { return this->project_ui; }
+ProjectUI *HesiodApplication::get_project_ui_ref() { return this->project_ui.get(); }
 
 QApplication &HesiodApplication::get_qapp() { return *static_cast<QApplication *>(this); }
 
@@ -114,11 +114,21 @@ void HesiodApplication::load_project_model_and_ui(const std::string &fname)
 
   this->cleanup();
 
-  // model
+  // --- model
+
   this->context.load_project_model(actual_fname);
 
-  // UI
-  this->project_ui = new ProjectUI();
+  // --- UI
+
+  // remove first old central widget (if any) so it doesn't linger
+  if (QWidget *old = this->main_window->takeCentralWidget())
+  {
+    old->setParent(nullptr);
+    old->deleteLater();
+  }
+
+  this->project_ui = std::make_unique<ProjectUI>();
+
   this->project_ui->initialize(this->context.project_model.get());
   this->project_ui->load_ui_state(actual_fname);
 
@@ -129,6 +139,8 @@ void HesiodApplication::load_project_model_and_ui(const std::string &fname)
       this->context.app_settings.window.show_graph_manager_widget);
   this->project_ui->get_texture_downloader_ref()->setVisible(
       this->context.app_settings.window.show_texture_downloader_widget);
+
+  // --- connections
 
   // ProjectUI -> Project
   this->connect(this->project_ui->get_graph_manager_widget_ref(),

@@ -27,6 +27,7 @@ Viewer::Viewer(QPointer<GraphNodeWidget> p_graph_node_widget_,
 
   this->setMinimumSize(ctx.app_settings.viewer.width, ctx.app_settings.viewer.height);
   this->setWindowTitle(this->label.c_str());
+  this->setAttribute(Qt::WA_DeleteOnClose);
 }
 
 void Viewer::clear()
