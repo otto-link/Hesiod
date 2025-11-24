@@ -42,11 +42,10 @@ FlattenConfigDialog::FlattenConfigDialog(FlattenConfig &export_param, QWidget *p
 
         QString fname;
 
-        fname = QFileDialog::getSaveFileName(
-            this,
-            this->export_param.export_path.filename().string().c_str(),
-            path.string().c_str(),
-            "*.png");
+        fname = QFileDialog::getSaveFileName(this,
+                                             "Select Export File",
+                                             path.string().c_str(),
+                                             "*.png");
 
         if (!fname.isNull() && !fname.isEmpty())
           this->export_param.export_path = fname.toStdString();
