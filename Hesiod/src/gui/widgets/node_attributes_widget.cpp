@@ -139,6 +139,9 @@ void NodeAttributesWidget::setup_connections()
 {
   Logger::log()->trace("NodeAttributesWidget::setup_connections");
 
+  if (!this->attributes_widget)
+    return;
+
   this->connect(this->attributes_widget,
                 &attr::AttributesWidget::value_changed,
                 [this]()
@@ -186,7 +189,7 @@ void NodeAttributesWidget::setup_layout()
                                                        parent);
 
   // change the attribute widget layout spacing a posteriori
-  QLayout *retrieved_layout = qobject_cast<QLayout *>(attributes_widget->layout());
+  QLayout *retrieved_layout = attributes_widget->layout();
   if (retrieved_layout)
   {
     retrieved_layout->setSpacing(4);
@@ -212,10 +215,7 @@ void NodeAttributesWidget::setup_layout()
   main_layout->setContentsMargins(0, 0, 0, 0);
 
   if (this->add_toolbar)
-  {
-    QWidget *toolbar = this->create_toolbar();
-    main_layout->addWidget(toolbar);
-  }
+    main_layout->addWidget(this->create_toolbar());
 
   main_layout->addWidget(this->attributes_widget);
 }
