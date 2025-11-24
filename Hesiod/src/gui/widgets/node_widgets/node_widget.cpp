@@ -3,9 +3,11 @@
  * this software. */
 #include <QLabel>
 
+#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/gui/widgets/data_preview.hpp"
 #include "hesiod/gui/widgets/graph_node_widget.hpp"
 #include "hesiod/gui/widgets/gui_utils.hpp"
+#include "hesiod/gui/widgets/node_attributes_widget.hpp"
 #include "hesiod/gui/widgets/node_widget.hpp"
 #include "hesiod/logger.hpp"
 
@@ -30,10 +32,10 @@ void NodeWidget::on_compute_started() { this->data_preview->clear_preview(); }
 
 void NodeWidget::setup_connections()
 {
-  if (!p_gnw)
+  if (!this->p_gnw)
     return;
 
-  this->connect(p_gnw,
+  this->connect(this->p_gnw,
                 &GraphNodeWidget::compute_started,
                 this,
                 [this](const std::string &id)
@@ -45,7 +47,7 @@ void NodeWidget::setup_connections()
                   }
                 });
 
-  this->connect(p_gnw,
+  this->connect(this->p_gnw,
                 &GraphNodeWidget::compute_finished,
                 this,
                 [this](const std::string &id)
@@ -60,6 +62,9 @@ void NodeWidget::setup_connections()
 
 void NodeWidget::setup_layout()
 {
+  if (!this->p_gnw)
+    return;
+
   this->layout = new QVBoxLayout(this);
   this->setLayout(this->layout);
   this->layout->setSpacing(0);
@@ -67,6 +72,24 @@ void NodeWidget::setup_layout()
 
   this->data_preview = new DataPreview(model, this);
   this->layout->addWidget(this->data_preview);
+
+  if (HSD_CTX.app_settings.interface.enable_node_settings_in_node_body)
+  {
+    GraphNode *p_graph = this->p_gnw->get_p_graph_node(); // lifetime safe
+
+    if (p_graph)
+    {
+      auto m = this->model.lock();
+      if (m)
+      {
+        QWidget *attr_widget = new NodeAttributesWidget(p_graph->get_shared(),
+                                                        /* node_id */ m->get_id(),
+                                                        this->p_gnw,
+                                                        /* add_toolbar */ false);
+        this->layout->addWidget(attr_widget);
+      }
+    }
+  }
 
   if (!this->msg.empty())
   {
