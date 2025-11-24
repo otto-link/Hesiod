@@ -33,8 +33,8 @@ DataPreview::DataPreview(std::weak_ptr<BaseNode> model, QWidget *parent)
                        p_model->get_id());
 
   AppContext &ctx = HSD_CTX;
-  const auto  shape = hmap::Vec2<int>(ctx.app_settings.node_editor.preview_h,
-                                     ctx.app_settings.node_editor.preview_w);
+  const auto  shape = hmap::Vec2<int>(ctx.app_settings.node_editor.preview_w,
+                                     ctx.app_settings.node_editor.preview_h);
 
   this->setFixedSize(QSize(shape.x, shape.y));
   this->setAlignment(Qt::AlignLeft | Qt::AlignTop);
@@ -56,9 +56,8 @@ DataPreview::DataPreview(std::weak_ptr<BaseNode> model, QWidget *parent)
 void DataPreview::clear_preview()
 {
   AppContext &ctx = HSD_CTX;
-  const auto  shape = hmap::Vec2<int>(ctx.app_settings.node_editor.preview_h,
-                                     ctx.app_settings.node_editor.preview_w);
-  this->resize(shape.x, shape.y);
+  const auto  shape = hmap::Vec2<int>(ctx.app_settings.node_editor.preview_w,
+                                     ctx.app_settings.node_editor.preview_h);
 
   QImage image = QImage(shape.x, shape.y, QImage::Format_Grayscale8);
   image.fill(Qt::transparent);
@@ -136,9 +135,8 @@ void DataPreview::update_preview()
   const std::string data_type = p_model->get_data_type(preview_port_index);
 
   AppContext &ctx = HSD_CTX;
-  const auto  shape = hmap::Vec2<int>(ctx.app_settings.node_editor.preview_h,
-                                     ctx.app_settings.node_editor.preview_w);
-  this->resize(shape.x, shape.y);
+  const auto  shape = hmap::Vec2<int>(ctx.app_settings.node_editor.preview_w,
+                                     ctx.app_settings.node_editor.preview_h);
 
   Logger::log()->trace("DataPreview::update_preview, data_type: {}", data_type);
 

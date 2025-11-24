@@ -99,6 +99,11 @@ void NodeWidget::setup_layout()
   }
 }
 
-QSize NodeWidget::sizeHint() const { return QSize(128, 128); }
+QSize NodeWidget::sizeHint() const
+{
+  AppContext &ctx = HSD_CTX;
+  return QSize(ctx.app_settings.node_editor.preview_w,
+               ctx.app_settings.node_editor.preview_h);
+}
 
 } // namespace hesiod

@@ -4,6 +4,7 @@
 #include <QComboBox>
 #include <QDialogButtonBox>
 #include <QGridLayout>
+#include <QPushButton>
 
 #include "hesiod/gui/widgets/graph_config_dialog.hpp"
 #include "hesiod/gui/widgets/gui_utils.hpp"
@@ -118,6 +119,11 @@ GraphConfigDialog::GraphConfigDialog(GraphConfig &config, QWidget *parent)
 
   row++;
 
+  // --- tool tips
+  this->slider_shape->setToolTip("Adjust graph shape (2^n)");
+  this->slider_tiling->setToolTip("Adjust tiling (2^n)");
+  this->slider_overlap->setToolTip("Adjust overlap fraction");
+
   // --- transform modes
   auto add_transform_combobox =
       [this, layout, &row](const std::string &label_text, hmap::TransformMode &mode)
@@ -154,6 +160,7 @@ GraphConfigDialog::GraphConfigDialog(GraphConfig &config, QWidget *parent)
   QDialogButtonBox *button_box = new QDialogButtonBox(QDialogButtonBox::Ok |
                                                           QDialogButtonBox::Cancel,
                                                       this);
+  button_box->button(QDialogButtonBox::Ok)->setDefault(true);
   layout->addWidget(button_box, row, 0, 1, 3);
 
   this->connect(button_box, &QDialogButtonBox::accepted, this, &QDialog::accept);
