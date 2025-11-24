@@ -253,6 +253,9 @@ void Viewer::setup_connections()
   if (!this->p_graph_node_widget)
     return;
 
+  // close with corresponding GraphNode
+  this->connect(this->p_graph_node_widget, &QObject::destroyed, this, &QWidget::close);
+
   // user actions w/ UI
   this->connect(this->p_graph_node_widget,
                 &gngui::GraphViewer::node_deleted,
