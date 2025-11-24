@@ -1,6 +1,7 @@
 /* Copyright (c) 2025 Otto Link. Distributed under the terms of the GNU General Public
    License. The full license is in the file LICENSE, distributed with this software. */
 #pragma once
+#include <QPointer>
 #include <QWidget>
 
 #include "nlohmann/json.hpp"
@@ -38,9 +39,9 @@ public:
   qtd::TextureDownloader *get_texture_downloader_ref();
 
 private:
-  GraphManagerWidget     *graph_manager_widget;
-  GraphTabsWidget        *graph_tabs_widget;
-  qtd::TextureDownloader *texture_downloader = nullptr;
+  GraphManagerWidget              *graph_manager_widget;
+  GraphTabsWidget                 *graph_tabs_widget;
+  QPointer<qtd::TextureDownloader> texture_downloader;
 };
 
 } // namespace hesiod

@@ -28,6 +28,9 @@ void ProjectUI::cleanup()
   this->graph_manager_widget->deleteLater();
   this->graph_tabs_widget->deleteLater();
 
+  if (this->texture_downloader)
+    this->texture_downloader->deleteLater();
+
   QCoreApplication::processEvents();
 }
 
@@ -43,7 +46,7 @@ GraphTabsWidget *ProjectUI::get_graph_tabs_widget_ref()
 
 qtd::TextureDownloader *ProjectUI::get_texture_downloader_ref()
 {
-  return this->texture_downloader;
+  return this->texture_downloader.get();
 }
 
 QWidget *ProjectUI::get_widget()
@@ -97,8 +100,11 @@ void ProjectUI::initialize(ProjectModel *project)
       HSD_CTX.app_settings.node_editor.show_node_settings_pan);
 
   if (HSD_CTX.app_settings.interface.enable_texture_downloader)
-    this->texture_downloader = new qtd::TextureDownloader();
-
+    {
+      // no parent, top-level window (managed by a QPointer)
+      this->texture_downloader = new qtd::TextureDownloader();
+    }
+  
   // connections
   this->setup_connections();
 }
