@@ -28,7 +28,6 @@ void setup_texture_advection_warp_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("advection_length", "advection_length", 0.05f, 0.f, 0.2f);
-
   node.add_attr<FloatAttribute>("value_persistence",
                                 "value_persistence",
                                 0.95f,

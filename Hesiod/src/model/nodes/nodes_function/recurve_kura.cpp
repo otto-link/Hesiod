@@ -25,7 +25,6 @@ void setup_recurve_kura_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("a", "a", 2.f, 0.01f, 4.f);
-
   node.add_attr<FloatAttribute>("b", "b", 2.f, 0.01f, 4.f);
 }
 

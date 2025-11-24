@@ -25,13 +25,9 @@ void setup_shape_index_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("radius", "radius", 0.01f, 0.f, 0.2f);
-
   node.add_attr<BoolAttribute>("inverse", "inverse", false);
-
   node.add_attr<BoolAttribute>("smoothing", "smoothing", false);
-
   node.add_attr<FloatAttribute>("smoothing_radius", "smoothing_radius", 0.05f, 0.f, 0.2f);
-
   node.add_attr<BoolAttribute>("GPU", "GPU", HSD_DEFAULT_GPU_MODE);
 
   // attribute(s) order

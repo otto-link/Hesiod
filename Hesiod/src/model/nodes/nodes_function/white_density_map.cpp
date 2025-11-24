@@ -25,9 +25,7 @@ void setup_white_density_map_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<SeedAttribute>("seed", "seed");
-
   node.add_attr<BoolAttribute>("inverse", "inverse", false);
-
   node.add_attr<RangeAttribute>("remap", "remap");
 
   // attribute(s) order

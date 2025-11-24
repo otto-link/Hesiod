@@ -25,7 +25,6 @@ void setup_make_periodic_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("overlap", "overlap", 0.25f, 0.05f, 0.5f);
-
   node.add_attr<EnumAttribute>("periodicity_type",
                                "periodicity_type",
                                enum_mappings.periodicity_type_map,

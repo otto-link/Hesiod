@@ -24,13 +24,11 @@ void setup_path_smooth_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<IntAttribute>("navg", "navg", 1, 1, 10);
-
   node.add_attr<FloatAttribute>("averaging_intensity",
                                 "averaging_intensity",
                                 1.f,
                                 0.f,
                                 1.f);
-
   node.add_attr<FloatAttribute>("inertia", "inertia", 0.f, 0.f, 1.f);
 
   // attribute(s) order

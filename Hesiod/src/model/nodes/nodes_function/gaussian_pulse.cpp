@@ -28,7 +28,6 @@ void setup_gaussian_pulse_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("radius", "radius", 0.1f, 0.f, 1.f);
-
   node.add_attr<Vec2FloatAttribute>("center", "center");
 
   // attribute(s) order

@@ -26,25 +26,17 @@ void setup_stamping_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("kernel_radius", "kernel_radius", 0.1f, 0.01f, 0.5f);
-
   node.add_attr<BoolAttribute>("kernel_scale_radius", "kernel_scale_radius", false);
-
   node.add_attr<BoolAttribute>("kernel_scale_amplitude", "kernel_scale_amplitude", true);
-
   node.add_attr<EnumAttribute>("blend_method",
                                "blend_method",
                                enum_mappings.stamping_blend_method_map,
                                "maximum");
   node.add_attr<SeedAttribute>("seed", "seed");
-
   node.add_attr<FloatAttribute>("k_smoothing", "k_smoothing", 0.1f, 0.01f, 1.f);
-
   node.add_attr<BoolAttribute>("kernel_flip", "kernel_flip", false);
-
   node.add_attr<BoolAttribute>("kernel_rotate", "kernel_rotate", false);
-
   node.add_attr<BoolAttribute>("inverse", "inverse", false);
-
   node.add_attr<RangeAttribute>("remap", "remap");
 
   // attribute(s) order

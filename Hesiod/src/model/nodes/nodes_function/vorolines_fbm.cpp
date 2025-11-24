@@ -33,25 +33,15 @@ void setup_vorolines_fbm_node(BaseNode &node)
                                enum_mappings.voronoi_return_type_map,
                                "F1: squared distance to the closest point");
   node.add_attr<FloatAttribute>("density", "density", 8.f, 0.f, 100.f);
-
   node.add_attr<SeedAttribute>("seed", "seed");
-
   node.add_attr<FloatAttribute>("k_smoothing", "k_smoothing", 0.f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("exp_sigma", "exp_sigma", 0.1f, 0.f, 0.1f);
-
   node.add_attr<FloatAttribute>("angle", "angle", 0.f, 0.f, 180.f);
-
   node.add_attr<FloatAttribute>("angle_span", "angle_span", 90.f, 0.f, 180.f);
-
   node.add_attr<BoolAttribute>("sqrt_output", "sqrt_output", true);
-
   node.add_attr<IntAttribute>("octaves", "octaves", 8, 0, 32);
-
   node.add_attr<FloatAttribute>("weight", "weight", 0.7f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("persistence", "persistence", 0.5f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("lacunarity", "lacunarity", 2.f, 0.01f, 4.f);
 
   // attribute(s) order

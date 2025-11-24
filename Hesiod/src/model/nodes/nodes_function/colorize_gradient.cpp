@@ -28,11 +28,8 @@ void setup_colorize_gradient_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<ColorGradientAttribute>("gradient", "gradient");
-
   node.add_attr<BoolAttribute>("reverse_colormap", "reverse_colormap", false);
-
   node.add_attr<BoolAttribute>("reverse_alpha", "reverse_alpha", false);
-
   node.add_attr<BoolAttribute>("clamp_alpha", "clamp_alpha", true);
 
   // attribute(s) order

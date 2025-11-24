@@ -27,25 +27,15 @@ void setup_strata_node(BaseNode &node)
 
   // attribute(s)
   std::vector<float> kw_default;
-
   node.add_attr<FloatAttribute>("angle", "angle", 0.f, -180.f, 180.f);
-
   node.add_attr<FloatAttribute>("slope", "slope", 2.f, 0.01f, 10.f);
-
   node.add_attr<FloatAttribute>("kz", "kz", 1.f, 0.f, FLT_MAX);
-
   node.add_attr<FloatAttribute>("gamma", "gamma", 0.5f, 0.01f, 2.f);
-
   node.add_attr<SeedAttribute>("seed", "seed");
-
   node.add_attr<BoolAttribute>("linear_gamma", "linear_gamma", true);
-
   node.add_attr<IntAttribute>("octaves", "octaves", 6, 0, 32);
-
   node.add_attr<FloatAttribute>("lacunarity", "lacunarity", 2.f, 0.01f, 4.f);
-
   node.add_attr<FloatAttribute>("gamma_noise_ratio", "gamma_noise_ratio", 0.5f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("noise_amp", "noise_amp", 0.4f, 0.f, 1.f);
 
   kw_default = {4.f, 4.f};
@@ -58,23 +48,16 @@ void setup_strata_node(BaseNode &node)
                                  0.f,
                                  32.f,
                                  false);
-
   node.add_attr<FloatAttribute>("ridge_angle_shift",
                                 "ridge_angle_shift",
                                 45.f,
                                 -180.f,
                                 180.f);
-
   node.add_attr<FloatAttribute>("ridge_noise_amp", "ridge_noise_amp", 0.4f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("ridge_clamp_vmin", "ridge_clamp_vmin", 0.5f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("ridge_remap_vmin", "ridge_remap_vmin", 0.6f, 0.f, 1.f);
-
   node.add_attr<BoolAttribute>("apply_elevation_mask", "apply_elevation_mask", true);
-
   node.add_attr<BoolAttribute>("apply_ridge_mask", "apply_ridge_mask", true);
-
   node.add_attr<FloatAttribute>("mask_gamma", "mask_gamma", 1.f, 0.01f, 4.f);
 
   // attribute(s) order

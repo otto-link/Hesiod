@@ -32,17 +32,13 @@ void setup_stratify_multiscale_node(BaseNode &node)
   std::vector<float> strata_noise = {0.5f, 0.5f};
   std::vector<float> gamma_list = {0.6f, 0.5f};
   std::vector<float> gamma_noise = {0.2f, 0.2f};
-
   node.add_attr<VecIntAttribute>("n_strata", "n_strata", n_strata, 1, 32);
-
   node.add_attr<VecFloatAttribute>("strata_noise",
                                    "strata_noise",
                                    strata_noise,
                                    0.f,
                                    1.f);
-
   node.add_attr<VecFloatAttribute>("gamma_list", "gamma_list", gamma_list, 0.01f, 5.f);
-
   node.add_attr<VecFloatAttribute>("gamma_noise", "gamma_noise", gamma_noise, 0.f, 1.f);
 
   // attribute(s) order

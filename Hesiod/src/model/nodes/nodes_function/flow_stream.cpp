@@ -27,27 +27,18 @@ void setup_flow_stream_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("elevation_ratio", "elevation_ratio", 0.5f, 0.f, 0.95f);
-
   node.add_attr<FloatAttribute>("distance_exponent", "distance_exponent", 2.f, 0.1f, 4.f);
-
   node.add_attr<FloatAttribute>("upward_penalization",
                                 "upward_penalization",
                                 100.f,
                                 1.f,
                                 FLT_MAX);
-
   node.add_attr<FloatAttribute>("riverbank_slope", "riverbank_slope", 1.f, 0.f, 16.f);
-
   node.add_attr<FloatAttribute>("river_radius", "river_radius", 0.001f, 0.001f, 0.1f);
-
   node.add_attr<FloatAttribute>("depth", "depth", 0.01f, 0.f, 0.2f);
-
   node.add_attr<FloatAttribute>("merging_radius", "merging_radius", 0.001f, 0.f, 0.1f);
-
   node.add_attr<FloatAttribute>("riverbed_slope", "riverbed_slope", 0.01f, 0.f, 0.1f);
-
   node.add_attr<FloatAttribute>("noise_ratio", "noise_ratio", 0.9f, 0.f, 1.f);
-
   node.add_attr<SeedAttribute>("seed", "seed");
 
   // attribute(s) order

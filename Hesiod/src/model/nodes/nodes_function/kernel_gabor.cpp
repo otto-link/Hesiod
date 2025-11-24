@@ -25,11 +25,8 @@ void setup_kernel_gabor_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("radius", "radius", 0.1f, 0.001f, 0.2f);
-
   node.add_attr<BoolAttribute>("normalize", "normalize", false);
-
   node.add_attr<FloatAttribute>("kw", "kw", 2.f, 0.01f, FLT_MAX);
-
   node.add_attr<FloatAttribute>("angle", "angle", 0.f, -180.f, 180.f);
 
   // attribute(s) order

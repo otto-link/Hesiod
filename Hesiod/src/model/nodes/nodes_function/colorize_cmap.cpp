@@ -31,13 +31,9 @@ void setup_colorize_cmap_node(BaseNode &node)
       "colormap",
       hesiod::CmapManager::get_instance().get_colormap_name_mapping());
   node.add_attr<BoolAttribute>("reverse_colormap", "reverse_colormap", false);
-
   node.add_attr<BoolAttribute>("reverse_alpha", "reverse_alpha", false);
-
   node.add_attr<BoolAttribute>("clamp_alpha", "clamp_alpha", true);
-
   node.add_attr<RangeAttribute>("saturate_input", "saturate_input", false);
-
   node.add_attr<RangeAttribute>("saturate_alpha", "saturate_alpha", false);
 
   // attribute(s) order

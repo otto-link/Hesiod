@@ -28,29 +28,17 @@ void setup_mountain_inselberg_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("elevation", "elevation", 0.7f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("scale", "scale", 0.75f, 0.01f, FLT_MAX);
-
   node.add_attr<SeedAttribute>("seed", "seed");
-
   node.add_attr<IntAttribute>("octaves", "octaves", 8, 0, 32);
-
   node.add_attr<FloatAttribute>("rugosity", "rugosity", 0.2f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("angle", "angle", 45.f, -180.f, 180.f);
-
   node.add_attr<FloatAttribute>("k_smoothing", "k_smoothing", 0.1f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("gamma", "gamma", 1.f, 0.01f, 4.f);
-
   node.add_attr<BoolAttribute>("round_shape", "round_shape", false);
-
   node.add_attr<BoolAttribute>("add_deposition", "add_deposition", true);
-
   node.add_attr<FloatAttribute>("base_noise_amp", "base_noise_amp", 0.25f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("bulk_amp", "bulk_amp", 0.2f, 0.f, 1.f);
-
   node.add_attr<Vec2FloatAttribute>("center", "center");
 
   // attribute(s) order

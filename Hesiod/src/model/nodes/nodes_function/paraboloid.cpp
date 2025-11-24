@@ -26,21 +26,13 @@ void setup_paraboloid_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("angle", "angle", 0.f, -180.f, 180.f);
-
   node.add_attr<FloatAttribute>("a", "a", 1.f, 0.01f, 5.f);
-
   node.add_attr<FloatAttribute>("b", "b", 1.f, 0.01f, 5.f);
-
   node.add_attr<FloatAttribute>("v0", "v0", 0.f, -2.f, 2.f);
-
   node.add_attr<BoolAttribute>("reverse_x", "reverse_x", false);
-
   node.add_attr<BoolAttribute>("reverse_y", "reverse_y", false);
-
   node.add_attr<Vec2FloatAttribute>("center", "center");
-
   node.add_attr<BoolAttribute>("inverse", "inverse", false);
-
   node.add_attr<RangeAttribute>("remap", "remap");
 
   // attribute(s) order

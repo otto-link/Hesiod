@@ -923,8 +923,9 @@ void GraphNodeWidget::on_node_right_clicked(const std::string &node_id, QPointF 
     return;
 
   // settings widget
-  attr::AttributesWidget *attr_widget = create_node_attributes_widget(this,
-                                                                      p_node->get_id());
+  attr::AttributesWidget *attr_widget = this->create_node_attributes_widget(
+      this,
+      p_node->get_id());
   if (!attr_widget)
     return;
 

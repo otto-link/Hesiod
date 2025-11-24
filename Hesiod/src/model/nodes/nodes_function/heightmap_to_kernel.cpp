@@ -27,11 +27,8 @@ void setup_heightmap_to_kernel_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("radius", "radius", 0.1f, 0.001f, 0.2f);
-
   node.add_attr<BoolAttribute>("normalize", "normalize", false);
-
   node.add_attr<BoolAttribute>("envelope", "envelope", false);
-
   node.add_attr<EnumAttribute>("envelope_kernel",
                                "envelope_kernel",
                                enum_mappings.kernel_type_map,

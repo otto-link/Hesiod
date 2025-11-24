@@ -26,9 +26,7 @@ void setup_plateau_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("radius", "radius", 0.05f, 0.01f, 0.5f);
-
   node.add_attr<FloatAttribute>("factor", "factor", 4.f, 0.01f, 10.f);
-
   node.add_attr<BoolAttribute>("GPU", "GPU", HSD_DEFAULT_GPU_MODE);
 
   // attribute(s) order

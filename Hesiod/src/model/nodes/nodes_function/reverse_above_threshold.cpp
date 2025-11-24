@@ -33,9 +33,7 @@ void setup_reverse_above_theshold_node(BaseNode &node)
                                 0.5f,
                                 -FLT_MAX,
                                 FLT_MAX);
-
   node.add_attr<FloatAttribute>("scaling", "scaling", 0.5f, 0.f, 2.f);
-
   node.add_attr<FloatAttribute>("transition_extent", "transition_extent", 0.1f, 0.f, 1.f);
 
   // attribute(s) order

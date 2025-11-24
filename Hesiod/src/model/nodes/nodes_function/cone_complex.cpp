@@ -30,57 +30,44 @@ void setup_cone_complex_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("radius", "radius", 0.5f, 0.01f, FLT_MAX);
-
   node.add_attr<FloatAttribute>("alpha", "alpha", 1.2f, 0.01f, 4.f);
-
   node.add_attr<BoolAttribute>("smooth_profile", "smooth_profile", true);
-
   node.add_attr<FloatAttribute>("valley_amp", "valley_amp", 0.2f, 0.f, 2.f);
-
   node.add_attr<IntAttribute>("valley_nb", "valley_nb", 5, 0, 32);
-
   node.add_attr<FloatAttribute>("valley_decay_ratio",
                                 "valley_decay_ratio",
                                 0.5f,
                                 0.f,
                                 1.f);
-
   node.add_attr<FloatAttribute>("valley_angle0",
                                 "valley_angle0",
                                 0.f,
                                 -180.f,
                                 180.f,
                                 "{:.1f}°");
-
   node.add_attr<EnumAttribute>("erosion_profile",
                                "erosion_profile",
                                enum_mappings.erosion_profile_map,
                                "Triangle Grenier");
   node.add_attr<FloatAttribute>("erosion_delta", "erosion_delta", 0.01f, 0.f, 0.2f);
-
   node.add_attr<FloatAttribute>("radial_waviness_amp",
                                 "radial_waviness_amp",
                                 0.05f,
                                 0.f,
                                 0.5f);
-
   node.add_attr<FloatAttribute>("radial_waviness_kw",
                                 "radial_waviness_kw",
                                 2.f,
                                 0.f,
                                 16.f);
-
   node.add_attr<FloatAttribute>("bias_angle",
                                 "bias_angle",
                                 30.f,
                                 -180.f,
                                 180.f,
                                 "{:.1f}°");
-
   node.add_attr<FloatAttribute>("bias_amp", "bias_amp", 0.1f, 0.f, 2.f);
-
   node.add_attr<FloatAttribute>("bias_exponent", "bias_exponent", 1.f, 0.01f, 4.f);
-
   node.add_attr<Vec2FloatAttribute>("center", "center");
 
   // attribute(s) order

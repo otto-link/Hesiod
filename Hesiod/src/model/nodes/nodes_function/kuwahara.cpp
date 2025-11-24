@@ -25,7 +25,6 @@ void setup_kuwahara_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("radius", "radius", 0.05f, 0.f, 0.2f);
-
   node.add_attr<FloatAttribute>("mix_ratio", "mix_ratio", 1.f, 0.f, 1.f);
 }
 

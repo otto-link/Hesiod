@@ -26,13 +26,9 @@ void setup_directional_blur_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("radius", "radius", 0.05f, 0.f, 0.2f);
-
   node.add_attr<FloatAttribute>("angle", "angle", 0.f, -180.f, 180.f);
-
   node.add_attr<FloatAttribute>("intensity", "intensity", 1.f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("spread", "spread", 1.f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("stretch", "stretch", 1.f, 0.f, 4.f);
 
   // attribute(s) order

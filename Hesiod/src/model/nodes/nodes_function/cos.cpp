@@ -25,11 +25,8 @@ void setup_cos_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("frequency", "frequency", 1.f, 0.f, FLT_MAX);
-
   node.add_attr<FloatAttribute>("phase_shift", "phase_shift", 0.f, 0.f, 6.28f);
-
   node.add_attr<BoolAttribute>("inverse", "inverse", false);
-
   node.add_attr<RangeAttribute>("remap", "remap");
 
   // attribute(s) order

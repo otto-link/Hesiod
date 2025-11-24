@@ -26,11 +26,8 @@ void setup_abs_smooth_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("mu", "mu", 0.05f, 0.001f, 0.4f);
-
   node.add_attr<FloatAttribute>("vshift", "vshift", 0.5f, 0.f, 1.f);
-
   node.add_attr<BoolAttribute>("inverse", "inverse", false);
-
   node.add_attr<RangeAttribute>("remap", "remap");
 
   // attribute(s) order

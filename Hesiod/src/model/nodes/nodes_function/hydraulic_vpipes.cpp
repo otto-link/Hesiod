@@ -29,17 +29,11 @@ void setup_hydraulic_vpipes_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<IntAttribute>("iterations", "iterations", 50, 1, INT_MAX);
-
   node.add_attr<FloatAttribute>("water_height", "water_height", 0.01f, 0.01f, 0.5f);
-
   node.add_attr<FloatAttribute>("c_capacity", "c_capacity", 0.1f, 0.01f, 0.5f);
-
   node.add_attr<FloatAttribute>("c_erosion", "c_erosion", 0.01f, 0.f, 0.5f);
-
   node.add_attr<FloatAttribute>("c_deposition", "c_deposition", 0.01f, 0.f, 0.5f);
-
   node.add_attr<FloatAttribute>("rain_rate", "rain_rate", 0.f, 0.f, 0.1f);
-
   node.add_attr<FloatAttribute>("evap_rate", "evap_rate", 0.01f, 0.01f, 0.1f);
 
   // attribute(s) order

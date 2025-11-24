@@ -26,7 +26,6 @@ void setup_translate_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<Vec2FloatAttribute>("center", "center");
-
   node.add_attr<BoolAttribute>("periodic", "periodic", false);
 
   // attribute(s) order

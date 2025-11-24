@@ -26,13 +26,9 @@ void setup_slope_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("angle", "angle", 0.f, -180.f, 180.f);
-
   node.add_attr<FloatAttribute>("talus_global", "talus_global", 2.f, 0.01f, FLT_MAX);
-
   node.add_attr<Vec2FloatAttribute>("center", "center");
-
   node.add_attr<BoolAttribute>("inverse", "inverse", false);
-
   node.add_attr<RangeAttribute>("remap", "remap");
 
   // attribute(s) order

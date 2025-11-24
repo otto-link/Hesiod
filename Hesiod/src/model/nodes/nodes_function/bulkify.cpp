@@ -27,11 +27,9 @@ void setup_bulkify_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("amplitude", "amplitude", 1.f, -1.f, 4.f);
-
   node.add_attr<EnumAttribute>("bulk_type",
                                "bulk_type",
                                enum_mappings.primitive_type_map);
-
   node.add_attr<Vec2FloatAttribute>("center", "center");
 
   // attribute(s) order

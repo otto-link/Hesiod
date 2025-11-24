@@ -26,11 +26,8 @@ void setup_hydraulic_stream_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("c_erosion", "c_erosion", 0.05f, 0.01f, 0.1f);
-
   node.add_attr<FloatAttribute>("talus_ref", "talus_ref", 0.1f, 0.01f, 10.f);
-
   node.add_attr<FloatAttribute>("radius", "radius", 0.f, 0.f, 0.05f);
-
   node.add_attr<FloatAttribute>("clipping_ratio", "clipping_ratio", 10.f, 0.1f, 100.f);
 
   // attribute(s) order

@@ -26,9 +26,7 @@ void setup_select_valley_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("radius", "radius", 0.05f, 0.001f, 0.2f);
-
   node.add_attr<BoolAttribute>("ridge_select", "ridge_select", false);
-
   node.add_attr<BoolAttribute>("GPU", "GPU", HSD_DEFAULT_GPU_MODE);
 
   // attribute(s) order

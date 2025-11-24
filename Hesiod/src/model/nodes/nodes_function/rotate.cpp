@@ -25,7 +25,6 @@ void setup_rotate_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("angle", "angle", 0.f, -180.f, 180.f);
-
   node.add_attr<BoolAttribute>("zoom_in", "zoom_in", true);
 
   // attribute(s) order

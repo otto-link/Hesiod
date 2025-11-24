@@ -25,13 +25,9 @@ void setup_recast_cliff_directional_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("angle", "angle", 45.f, -180.f, 180.f);
-
   node.add_attr<FloatAttribute>("talus_global", "talus_global", 1.f, 0.f, 5.f);
-
   node.add_attr<FloatAttribute>("radius", "radius", 0.1f, 0.01f, 0.5f);
-
   node.add_attr<FloatAttribute>("amplitude", "amplitude", 0.1f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("gain", "gain", 2.f, 0.01f, 10.f);
 
   // attribute(s) order

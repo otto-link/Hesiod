@@ -26,9 +26,7 @@ void setup_rugosity_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("radius", "radius", 0.1f, 0.f, 0.5f);
-
   node.add_attr<BoolAttribute>("clamp_max", "clamp_max", false);
-
   node.add_attr<FloatAttribute>("vc_max", "vc_max", 1.f, 0.f, 10.f);
 
   // attribute(s) order

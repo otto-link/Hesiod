@@ -26,21 +26,13 @@ void setup_caldera_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("radius", "radius", 0.25f, 0.01f, 1.f);
-
   node.add_attr<FloatAttribute>("sigma_inner", "sigma_inner", 0.05f, 0.f, 0.3f);
-
   node.add_attr<FloatAttribute>("sigma_outer", "sigma_outer", 0.1f, 0.f, 0.3f);
-
   node.add_attr<FloatAttribute>("noise_r_amp", "noise_r_amp", 0.1f, 0.f, 0.3f);
-
   node.add_attr<FloatAttribute>("z_bottom", "z_bottom", 0.5f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("noise_ratio_z", "noise_ratio_z", 0.1f, 0.f, 1.f);
-
   node.add_attr<Vec2FloatAttribute>("center", "center");
-
   node.add_attr<BoolAttribute>("inverse", "inverse", false);
-
   node.add_attr<RangeAttribute>("remap", "remap");
 
   // attribute(s) order

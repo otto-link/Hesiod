@@ -27,17 +27,13 @@ void setup_sediment_deposition_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("talus_global", "talus_global", 0.2f, 0.f, FLT_MAX);
-
   node.add_attr<FloatAttribute>("max_deposition", "max_deposition", 0.001f, 0.f, 0.1f);
-
   node.add_attr<IntAttribute>("iterations", "iterations", 1, 1, 20);
-
   node.add_attr<IntAttribute>("thermal_subiterations",
                               "thermal_subiterations",
                               50,
                               1,
                               INT_MAX);
-
   node.add_attr<BoolAttribute>("scale_talus_with_elevation",
                                "scale_talus_with_elevation",
                                true);

@@ -24,9 +24,7 @@ void setup_select_angle_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("angle", "angle", 0.f, 0.f, 360.f);
-
   node.add_attr<FloatAttribute>("sigma", "sigma", 90.f, 0.f, 180.f);
-
   node.add_attr<FloatAttribute>("radius", "radius", 0.f, 0.f, 0.2f);
 
   // attribute(s) order

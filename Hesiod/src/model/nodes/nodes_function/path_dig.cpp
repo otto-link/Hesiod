@@ -25,17 +25,13 @@ void setup_path_dig_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("width", "width", 0.001f, 0.f, 0.1f);
-
   node.add_attr<FloatAttribute>("decay", "decay", 0.001f, 0.f, 0.1f);
-
   node.add_attr<FloatAttribute>("flattening_radius",
                                 "flattening_radius",
                                 0.001f,
                                 0.f,
                                 0.1f);
-
   node.add_attr<FloatAttribute>("depth", "depth", 0.f, -0.2f, 0.2f);
-
   node.add_attr<BoolAttribute>("force_downhill", "force_downhill", false);
 
   // attribute(s) order

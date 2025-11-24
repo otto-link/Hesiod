@@ -28,9 +28,7 @@ void setup_smooth_fill_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("radius", "radius", 0.05f, 0.001f, 0.2f);
-
   node.add_attr<FloatAttribute>("k", "k", 0.01f, 0.01f, 1.f);
-
   node.add_attr<BoolAttribute>("normalized_map", "normalized_map", true);
 
   // attribute(s) order

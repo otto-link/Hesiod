@@ -24,7 +24,6 @@ void setup_path_bezier_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("curvature_ratio", "curvature_ratio", 0.3f, 0.f, 1.f);
-
   node.add_attr<IntAttribute>("edge_divisions", "edge_divisions", 10, 1, 32);
 
   // attribute(s) order

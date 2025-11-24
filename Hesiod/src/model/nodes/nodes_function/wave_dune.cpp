@@ -25,13 +25,9 @@ void setup_wave_dune_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("kw", "kw", 2.f, 0.01f, FLT_MAX);
-
   node.add_attr<FloatAttribute>("angle", "angle", 0.f, -180.f, 180.f);
-
   node.add_attr<FloatAttribute>("xtop", "xtop", 0.7f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("xbottom", "xbottom", 0.9f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("phase_shift", "phase_shift", 0.f, -180.f, 180.f);
 
   // attribute(s) order

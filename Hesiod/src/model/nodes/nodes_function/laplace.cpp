@@ -26,7 +26,6 @@ void setup_laplace_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("sigma", "sigma", 0.125f, 0.f, 0.125f);
-
   node.add_attr<IntAttribute>("iterations", "iterations", 1, 1, 10);
 
   // attribute(s) order

@@ -25,7 +25,6 @@ void setup_morphological_top_hat_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("radius", "radius", 0.01f, 0.f, 0.05f);
-
   node.add_attr<BoolAttribute>("top_hat", "top_hat", "top_hat", "black_hat", true);
 
   // attribute(s) order

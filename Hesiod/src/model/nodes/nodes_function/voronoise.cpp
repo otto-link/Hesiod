@@ -27,15 +27,10 @@ void setup_voronoise_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<WaveNbAttribute>("kw", "kw");
-
   node.add_attr<SeedAttribute>("seed", "seed");
-
   node.add_attr<FloatAttribute>("u", "u", 0.5f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("v", "v", 0.5f, 0.f, 1.f);
-
   node.add_attr<BoolAttribute>("inverse", "inverse", false);
-
   node.add_attr<RangeAttribute>("remap", "remap");
 
   // attribute(s) order

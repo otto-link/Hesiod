@@ -25,7 +25,6 @@ void setup_relative_distance_from_skeleton_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("search_radius", "search_radius", 0.2f, 0.f, 0.5f);
-
   node.add_attr<FloatAttribute>("threshold", "threshold", 0.f, -1.f, 1.f);
 
   // attribute(s) order

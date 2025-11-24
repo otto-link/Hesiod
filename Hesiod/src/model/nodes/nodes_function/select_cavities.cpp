@@ -24,7 +24,6 @@ void setup_select_cavities_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("radius", "radius", 0.05f, 0.001f, 0.2f);
-
   node.add_attr<BoolAttribute>("concave", "concave", true);
 
   // attribute(s) order

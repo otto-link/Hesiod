@@ -34,29 +34,17 @@ void setup_hydraulic_particle_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<SeedAttribute>("seed", "seed");
-
   node.add_attr<FloatAttribute>("particle_density", "particle_density", 1.f, 0.f, 4.f);
-
   node.add_attr<FloatAttribute>("c_capacity", "c_capacity", 10.f, 0.1f, 100.f);
-
   node.add_attr<FloatAttribute>("c_erosion", "c_erosion", 0.05f, 0.f, 0.1f);
-
   node.add_attr<FloatAttribute>("c_deposition", "c_deposition", 0.005f, 0.f, 0.05f);
-
   node.add_attr<FloatAttribute>("c_inertia", "c_inertia", 0.3f, 0.01f, 2.f);
-
   node.add_attr<FloatAttribute>("drag_rate", "drag_rate", 0.001f, 0.f, 0.02f);
-
   node.add_attr<FloatAttribute>("evap_rate", "evap_rate", 0.001f, 0.f, 0.05f);
-
   node.add_attr<BoolAttribute>("post_filtering", "post_filtering", true);
-
   node.add_attr<BoolAttribute>("post_filtering_local", "post_filtering_local", false);
-
   node.add_attr<BoolAttribute>("deposition_only", "deposition_only", false);
-
   node.add_attr<BoolAttribute>("downscale", "downscale", false);
-
   node.add_attr<FloatAttribute>("kc", "kc", 512.f, 0.f, FLT_MAX);
 
   // attribute(s) order

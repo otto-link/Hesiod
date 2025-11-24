@@ -27,41 +27,29 @@ void setup_hydraulic_procedural_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<SeedAttribute>("seed", "seed");
-
   node.add_attr<FloatAttribute>("ridge_wavelength",
                                 "ridge_wavelength",
                                 0.1f,
                                 0.01f,
                                 0.2f);
-
   node.add_attr<FloatAttribute>("ridge_scaling", "ridge_scaling", 0.3f, 0.01f, 1.f);
-
   node.add_attr<EnumAttribute>("erosion_profile",
                                "erosion_profile",
                                enum_mappings.erosion_profile_map,
                                "Triangle smooth");
   node.add_attr<FloatAttribute>("delta", "delta", 0.2f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("noise_ratio", "noise_ratio", 0.2f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("density_factor", "density_factor", 1.f, 0.1f, 10.f);
-
   node.add_attr<FloatAttribute>("kernel_width_ratio",
                                 "kernel_width_ratio",
                                 2.f,
                                 0.1f,
                                 8.f);
-
   node.add_attr<FloatAttribute>("phase_smoothing", "phase_smoothing", 2.f, 0.f, 10.f);
-
   node.add_attr<FloatAttribute>("phase_noise_amp", "phase_noise_amp", 0.f, 0.f, 6.f);
-
   node.add_attr<BoolAttribute>("reverse_phase", "reverse_phase", false);
-
   node.add_attr<BoolAttribute>("rotate90", "rotate90", false);
-
   node.add_attr<BoolAttribute>("use_default_mask", "use_default_mask", true);
-
   node.add_attr<FloatAttribute>("slope_mask", "slope_mask", 6.f, 0.f, 32.f);
 
   // attribute(s) order

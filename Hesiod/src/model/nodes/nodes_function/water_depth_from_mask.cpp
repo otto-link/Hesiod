@@ -30,7 +30,6 @@ void setup_water_depth_from_mask_node(BaseNode &node)
                                 0.f,
                                 0.1f,
                                 "{:.3f}");
-
   node.add_attr<FloatAttribute>("tolerance",
                                 "tolerance",
                                 1e-5f,
@@ -38,9 +37,7 @@ void setup_water_depth_from_mask_node(BaseNode &node)
                                 1e-2f,
                                 "{:.3e}",
                                 true);
-
   node.add_attr<IntAttribute>("iterations", "iterations", 500, 1, INT_MAX);
-
   node.add_attr<FloatAttribute>("omega", "omega", 1.8f, 1e-3f, 1.9f);
 
   // attribute(s) order

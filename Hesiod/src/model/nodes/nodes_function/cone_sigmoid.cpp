@@ -28,9 +28,7 @@ void setup_cone_sigmoid_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("radius", "radius", 0.5f, 0.01f, FLT_MAX);
-
   node.add_attr<FloatAttribute>("alpha", "alpha", 1.f, 0.01f, 4.f);
-
   node.add_attr<Vec2FloatAttribute>("center", "center");
 
   // attribute(s) order

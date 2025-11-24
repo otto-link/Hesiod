@@ -27,11 +27,8 @@ void setup_mean_shift_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("radius", "radius", 0.05f, 0.01f, 0.2f);
-
   node.add_attr<FloatAttribute>("talus_global", "talus_global", 16.f, 0.f, FLT_MAX);
-
   node.add_attr<IntAttribute>("iterations", "iterations", 4, 1, 10);
-
   node.add_attr<BoolAttribute>("talus_weighted", "talus_weighted", true);
 
   // attribute(s) order

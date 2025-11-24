@@ -25,7 +25,6 @@ void setup_saturate_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("k_smoothing", "k_smoothing", 0.1f, 0.01, 1.f);
-
   node.add_attr<RangeAttribute>("range", "range");
 
   // link histogram for RangeAttribute

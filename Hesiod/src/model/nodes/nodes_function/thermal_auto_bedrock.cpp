@@ -28,13 +28,10 @@ void setup_thermal_auto_bedrock_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("talus_global", "talus_global", 2.f, 0.f, FLT_MAX);
-
   node.add_attr<IntAttribute>("iterations", "iterations", 100, 1, INT_MAX);
-
   node.add_attr<BoolAttribute>("scale_talus_with_elevation",
                                "scale_talus_with_elevation",
                                true);
-
   node.add_attr<BoolAttribute>("GPU", "GPU", HSD_DEFAULT_GPU_MODE);
 
   // attribute(s) order

@@ -24,11 +24,8 @@ void setup_hydraulic_blur_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("radius", "radius", 0.1f, 0.01f, 0.5f);
-
   node.add_attr<FloatAttribute>("vmax", "vmax", 0.5f, -1.f, 2.f);
-
   node.add_attr<FloatAttribute>("k_smoothing", "k_smoothing", 0.1f, 0.f, 1.f);
-
   node.add_attr<RangeAttribute>("remap", "remap");
 
   // attribute(s) order

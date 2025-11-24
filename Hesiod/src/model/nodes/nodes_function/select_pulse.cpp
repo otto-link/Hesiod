@@ -24,7 +24,6 @@ void setup_select_pulse_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("value", "value", 0.5f, -1.f, 1.f);
-
   node.add_attr<FloatAttribute>("sigma", "sigma", 0.1f, 0.f, 1.f);
 
   // attribute(s) order

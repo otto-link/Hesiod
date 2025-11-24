@@ -26,9 +26,7 @@ void setup_transfer_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("radius", "radius", 0.05f, 0.f, 0.2f);
-
   node.add_attr<FloatAttribute>("amplitude", "amplitude", 0.5f, -2.f, 4.f);
-
   node.add_attr<BoolAttribute>("target_prefiltering", "target_prefiltering", false);
 
   // attribute(s) order

@@ -24,9 +24,7 @@ void setup_flooding_lake_system_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<IntAttribute>("iterations", "iterations", 1000, 1, INT_MAX);
-
   node.add_attr<FloatAttribute>("epsilon", "epsilon", 1e-1, 1e-5, 1e-1, "{:.3e}", true);
-
   node.add_attr<FloatAttribute>("mininal_radius", "mininal_radius", 0.05f, 0.f, 0.5f);
 
   // attribute(s) order

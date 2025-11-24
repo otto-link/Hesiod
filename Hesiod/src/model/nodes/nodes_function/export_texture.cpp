@@ -31,7 +31,6 @@ void setup_export_texture_node(BaseNode &node)
                                    "PNG (*.png)",
                                    true);
   node.add_attr<BoolAttribute>("16 bit", "16 bit", false);
-
   node.add_attr<BoolAttribute>("auto_export", "auto_export", false);
 
   // attribute(s) order

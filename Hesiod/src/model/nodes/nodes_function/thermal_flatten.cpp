@@ -25,13 +25,10 @@ void setup_thermal_flatten_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("talus_global", "talus_global", 1.f, 0.f, FLT_MAX);
-
   node.add_attr<IntAttribute>("iterations", "iterations", 100, 1, INT_MAX);
-
   node.add_attr<BoolAttribute>("scale_talus_with_elevation",
                                "scale_talus_with_elevation",
                                false);
-
   node.add_attr<FloatAttribute>("post_filter_radius",
                                 "post_filter_radius",
                                 0.01f,

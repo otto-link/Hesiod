@@ -24,13 +24,9 @@ void setup_heightmap_to_mask_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<BoolAttribute>("inverse", "inverse", false);
-
   node.add_attr<BoolAttribute>("smoothing", "smoothing", false);
-
   node.add_attr<FloatAttribute>("smoothing_radius", "smoothing_radius", 0.05f, 0.f, 0.2f);
-
   node.add_attr<RangeAttribute>("saturate_range", "saturate_range");
-
   node.add_attr<FloatAttribute>("saturate_k", "saturate_k", 0.01f, 0.01f, 1.f);
 
   // attribute(s) order

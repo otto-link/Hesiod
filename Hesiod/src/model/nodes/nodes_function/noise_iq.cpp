@@ -32,23 +32,14 @@ void setup_noise_iq_node(BaseNode &node)
   node.add_attr<EnumAttribute>("noise_type",
                                "noise_type",
                                enum_mappings.noise_type_map_fbm);
-
   node.add_attr<WaveNbAttribute>("kw", "kw");
-
   node.add_attr<SeedAttribute>("seed", "seed");
-
   node.add_attr<IntAttribute>("octaves", "octaves", 8, 0, 32);
-
   node.add_attr<FloatAttribute>("weight", "weight", 0.7f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("persistence", "persistence", 0.5f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("lacunarity", "lacunarity", 2.f, 0.01f, 4.f);
-
   node.add_attr<FloatAttribute>("gradient_scale", "gradient_scale", 0.05f, 0.01f, 0.1f);
-
   node.add_attr<BoolAttribute>("inverse", "inverse", false);
-
   node.add_attr<RangeAttribute>("remap", "remap");
 
   // attribute(s) order

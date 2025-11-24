@@ -24,9 +24,7 @@ void setup_recast_cracks_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("cut_min", "cut_min", 0.05f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("cut_max", "cut_max", 0.5f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("k_smoothing", "k_smoothing", 0.01f, 0.f, 1.f);
 }
 

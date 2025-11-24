@@ -29,9 +29,7 @@ void setup_gavoronoise_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<WaveNbAttribute>("kw", "kw");
-
   node.add_attr<SeedAttribute>("seed", "seed");
-
   node.add_attr<FloatAttribute>("amplitude", "amplitude", 0.05f, 0.001f, 0.2f);
 
   node.add_attr<WaveNbAttribute>("kw_multiplier",
@@ -41,29 +39,19 @@ void setup_gavoronoise_node(BaseNode &node)
                                  32.f,
                                  true);
   node.add_attr<FloatAttribute>("angle", "angle", 0.f, -180.f, 180.f);
-
   node.add_attr<FloatAttribute>("angle_spread_ratio",
                                 "angle_spread_ratio",
                                 1.f,
                                 0.f,
                                 1.f);
-
   node.add_attr<FloatAttribute>("slope_strength", "slope_strength", 0.5f, 0.f, 8.f);
-
   node.add_attr<FloatAttribute>("branch_strength", "branch_strength", 2.f, 0.f, 8.f);
-
   node.add_attr<FloatAttribute>("z_cut_min", "z_cut_min", 0.2f, -1.f, 2.f);
-
   node.add_attr<FloatAttribute>("z_cut_max", "z_cut_max", 1.f, -1.f, 2.f);
-
   node.add_attr<IntAttribute>("octaves", "octaves", 8, 0, 32);
-
   node.add_attr<FloatAttribute>("persistence", "persistence", 0.4f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("lacunarity", "lacunarity", 2.f, 0.01f, 4.f);
-
   node.add_attr<BoolAttribute>("inverse", "inverse", false);
-
   node.add_attr<RangeAttribute>("remap", "remap");
 
   // attribute(s) order

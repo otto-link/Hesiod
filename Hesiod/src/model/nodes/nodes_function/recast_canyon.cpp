@@ -26,7 +26,6 @@ void setup_recast_canyon_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("vcut", "vcut", 0.5f, -1.f, 2.f);
-
   node.add_attr<FloatAttribute>("gamma", "gamma", 4.f, 0.01f, 10.f);
 
   // attribute(s) order

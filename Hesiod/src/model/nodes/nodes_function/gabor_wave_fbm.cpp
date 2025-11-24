@@ -29,23 +29,16 @@ void setup_gabor_wave_fbm_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<WaveNbAttribute>("kw", "kw");
-
   node.add_attr<SeedAttribute>("seed", "seed");
-
   node.add_attr<FloatAttribute>("angle", "angle", 0.f, -180.f, 180.f);
-
   node.add_attr<FloatAttribute>("angle_spread_ratio",
                                 "angle_spread_ratio",
                                 1.f,
                                 0.f,
                                 1.f);
-
   node.add_attr<IntAttribute>("octaves", "octaves", 8, 0, 32);
-
   node.add_attr<FloatAttribute>("weight", "weight", 0.7f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("persistence", "persistence", 0.5f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("lacunarity", "lacunarity", 2.f, 0.01f, 4.f);
 
   // attribute(s) order

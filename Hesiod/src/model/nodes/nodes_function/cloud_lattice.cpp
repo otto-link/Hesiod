@@ -23,25 +23,20 @@ void setup_cloud_lattice_node(BaseNode &node)
 
   // attribute(s)
   std::vector<float> default_value = {0.1f, 0.1f};
-
   node.add_attr<IntAttribute>("npoints", "npoints", 50, 1, INT_MAX);
-
   node.add_attr<WaveNbAttribute>("stagger_ratio",
                                  "stagger_ratio",
                                  default_value,
                                  0.f,
                                  1.f,
                                  true);
-
   node.add_attr<WaveNbAttribute>("jitter_ratio",
                                  "jitter_ratio",
                                  default_value,
                                  0.f,
                                  1.f,
                                  true);
-
   node.add_attr<SeedAttribute>("seed", "seed");
-
   node.add_attr<RangeAttribute>("remap", "remap");
 
   // attribute(s) order

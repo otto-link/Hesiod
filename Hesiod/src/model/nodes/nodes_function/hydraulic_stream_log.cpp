@@ -29,37 +29,29 @@ void setup_hydraulic_stream_log_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("c_erosion", "c_erosion", 0.1f, 0.01f, 1.f);
-
   node.add_attr<FloatAttribute>("talus_ref", "talus_ref", 0.1f, 0.01f, 10.f);
-
   node.add_attr<FloatAttribute>("deposition_radius",
                                 "deposition_radius",
                                 0.1f,
                                 0.f,
                                 0.2f);
-
   node.add_attr<FloatAttribute>("deposition_scale_ratio",
                                 "deposition_scale_ratio",
                                 1.f,
                                 0.f,
                                 1.f);
-
   node.add_attr<FloatAttribute>("gradient_power", "gradient_power", 0.8f, 0.1f, 2.f);
-
   node.add_attr<FloatAttribute>("gradient_scaling_ratio",
                                 "gradient_scaling_ratio",
                                 1.f,
                                 0.f,
                                 1.f);
-
   node.add_attr<FloatAttribute>("gradient_prefilter_radius",
                                 "gradient_prefilter_radius",
                                 0.1f,
                                 0.f,
                                 0.2f);
-
   node.add_attr<FloatAttribute>("saturation_ratio", "saturation_ratio", 1.f, 0.01f, 1.f);
-
   node.add_attr<BoolAttribute>("GPU", "GPU", HSD_DEFAULT_GPU_MODE);
 
   // attribute(s) order

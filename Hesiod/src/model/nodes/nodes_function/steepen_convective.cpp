@@ -25,11 +25,8 @@ void setup_steepen_convective_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("angle", "angle", 0.f, -180.f, 180.f);
-
   node.add_attr<IntAttribute>("iterations", "iterations", 1, 1, 10);
-
   node.add_attr<FloatAttribute>("radius", "radius", 0.1f, 0.f, 0.5f);
-
   node.add_attr<FloatAttribute>("dt", "dt", 0.1f, 0.f, 1.f);
 
   // attribute(s) order

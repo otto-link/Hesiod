@@ -25,9 +25,7 @@ void setup_warp_downslope_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("amount", "amount", 0.02f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("radius", "radius", 0.05f, 0.f, 0.2f);
-
   node.add_attr<BoolAttribute>("reverse", "reverse", true);
 }
 

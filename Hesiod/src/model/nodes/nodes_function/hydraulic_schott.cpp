@@ -26,39 +26,29 @@ void setup_hydraulic_schott_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<IntAttribute>("iterations", "iterations", 100, 1, INT_MAX);
-
   node.add_attr<FloatAttribute>("c_erosion", "c_erosion", 1.f, 0.f, 2.f);
-
   node.add_attr<FloatAttribute>("c_deposition", "c_deposition", 0.4f, 0.f, 2.f);
-
   node.add_attr<FloatAttribute>("c_thermal", "c_thermal", 0.1f, 0.f, 2.f);
-
   node.add_attr<FloatAttribute>("talus_global", "talus_global", 1.5f, 0.f, 16.f);
-
   node.add_attr<BoolAttribute>("scale_talus_with_elevation",
                                "scale_talus_with_elevation",
                                false);
-
   node.add_attr<FloatAttribute>("flow_acc_exponent",
                                 "flow_acc_exponent",
                                 0.8f,
                                 0.01f,
                                 1.f);
-
   node.add_attr<FloatAttribute>("flow_acc_exponent_depo",
                                 "flow_acc_exponent_depo",
                                 0.8f,
                                 0.01f,
                                 1.f);
-
   node.add_attr<FloatAttribute>("flow_routing_exponent",
                                 "flow_routing_exponent",
                                 1.3f,
                                 0.01f,
                                 2.f);
-
   node.add_attr<FloatAttribute>("thermal_weight", "thermal_weight", 0.f, 0.f, 5.f);
-
   node.add_attr<FloatAttribute>("deposition_weight", "deposition_weight", 1.f, 0.f, 5.f);
 
   // attribute(s) order

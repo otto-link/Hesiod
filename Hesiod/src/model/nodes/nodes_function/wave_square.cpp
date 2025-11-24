@@ -25,9 +25,7 @@ void setup_wave_square_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("kw", "kw", 2.f, 0.01f, FLT_MAX);
-
   node.add_attr<FloatAttribute>("angle", "angle", 0.f, 0.f, 180.f);
-
   node.add_attr<FloatAttribute>("phase_shift", "phase_shift", 0.f, -1.f, 1.f);
 
   // attribute(s) order

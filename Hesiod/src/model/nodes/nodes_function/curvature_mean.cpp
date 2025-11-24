@@ -27,9 +27,7 @@ void setup_curvature_mean_node(BaseNode &node)
   // attribute(s)
   std::vector<std::string> choices = {"positive", "negative", "both"};
   node.add_attr<ChoiceAttribute>("values_kept", "values_kept", choices);
-
   node.add_attr<BoolAttribute>("clamp_max", "clamp_max", false);
-
   node.add_attr<FloatAttribute>("vc_max", "vc_max", 1.f, 0.f, FLT_MAX, "{:.4f}");
 
   // attribute(s) order

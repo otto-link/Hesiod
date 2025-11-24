@@ -24,7 +24,6 @@ void setup_rescale_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("scaling", "scaling", 1.f, 0.0001f, FLT_MAX, "{:.4f}");
-
   node.add_attr<BoolAttribute>("centered", "centered", false);
 
   // attribute(s) order

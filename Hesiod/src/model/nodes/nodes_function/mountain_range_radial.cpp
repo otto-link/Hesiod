@@ -34,31 +34,20 @@ void setup_mountain_range_radial_node(BaseNode &node)
                                  0.f,
                                  FLT_MAX,
                                  true);
-
   node.add_attr<SeedAttribute>("seed", "seed");
-
   node.add_attr<FloatAttribute>("half_width", "half_width", 0.2f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("angle_spread_ratio",
                                 "angle_spread_ratio",
                                 0.5f,
                                 0.f,
                                 1.f);
-
   node.add_attr<FloatAttribute>("core_size_ratio", "core_size_ratio", 0.2f, 0.01f, 2.f);
-
   node.add_attr<Vec2FloatAttribute>("center", "center");
-
   node.add_attr<IntAttribute>("octaves", "octaves", 8, 0, 32);
-
   node.add_attr<FloatAttribute>("weight", "weight", 0.7f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("persistence", "persistence", 0.5f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("lacunarity", "lacunarity", 2.f, 0.01f, 4.f);
-
   node.add_attr<BoolAttribute>("inverse", "inverse", false);
-
   node.add_attr<RangeAttribute>("remap", "remap");
 
   // attribute(s) order

@@ -32,11 +32,8 @@ void setup_expand_shrink_node(BaseNode &node)
                                "kernel",
                                enum_mappings.kernel_type_map,
                                "cubic_pulse");
-
   node.add_attr<FloatAttribute>("radius", "radius", 0.05f, 0.01f, 0.2f);
-
   node.add_attr<BoolAttribute>("shrink", "shrink", "shrink", "expand", false);
-
   node.add_attr<IntAttribute>("iterations", "iterations", 1, 1, 10);
 
   // attribute(s) order

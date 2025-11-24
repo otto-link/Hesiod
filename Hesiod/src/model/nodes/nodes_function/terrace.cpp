@@ -27,11 +27,8 @@ void setup_terrace_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<IntAttribute>("nlevels", "nlevels", 4, 1, 32);
-
   node.add_attr<FloatAttribute>("gain", "gain", 0.8f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("noise_ratio", "noise_ratio", 0.1f, 0.f, 0.5f);
-
   node.add_attr<SeedAttribute>("seed", "seed");
 
   // attribute(s) order

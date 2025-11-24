@@ -28,19 +28,12 @@ void setup_badlands_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("elevation", "elevation", 0.4f, 0.f, 1.f);
-
   node.add_attr<WaveNbAttribute>("kw", "kw");
-
   node.add_attr<SeedAttribute>("seed", "seed");
-
   node.add_attr<IntAttribute>("octaves", "octaves", 8, 0, 32);
-
   node.add_attr<FloatAttribute>("rugosity", "rugosity", 0.2f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("angle", "angle", 30.f, -180.f, 180.f);
-
   node.add_attr<FloatAttribute>("k_smoothing", "k_smoothing", 0.1f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("base_noise_amp", "base_noise_amp", 0.2f, 0.f, 1.f);
 
   // attribute(s) order

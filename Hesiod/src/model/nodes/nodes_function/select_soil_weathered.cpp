@@ -27,15 +27,10 @@ void setup_select_soil_weathered_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("radius_curvature", "radius_curvature", 0.f, 0.f, 0.1f);
-
   node.add_attr<FloatAttribute>("radius_gradient", "radius_gradient", 0.005f, 0.f, 0.1f);
-
   node.add_attr<FloatAttribute>("gradient_gain", "gradient_gain", 1.f, 0.01f, 10.f);
-
   node.add_attr<FloatAttribute>("curvature_weight", "curvature_weight", 1.f, -1.f, 1.f);
-
   node.add_attr<FloatAttribute>("gradient_weight", "gradient_weight", 0.2f, -1.f, 1.f);
-
   node.add_attr<EnumAttribute>("curvature_clamp_mode",
                                "curvature_clamp_mode",
                                enum_mappings.clamping_mode_map,

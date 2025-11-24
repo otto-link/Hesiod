@@ -29,9 +29,7 @@ void setup_kernel_prim_node(BaseNode &node)
                                "kernel",
                                enum_mappings.kernel_type_map,
                                "cubic_pulse");
-
   node.add_attr<FloatAttribute>("radius", "radius", 0.1f, 0.001f, 0.2f);
-
   node.add_attr<BoolAttribute>("normalize", "normalize", false);
 
   // attribute(s) order

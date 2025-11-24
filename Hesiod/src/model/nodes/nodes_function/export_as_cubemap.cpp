@@ -35,13 +35,9 @@ void setup_export_as_cubemap_node(BaseNode &node)
                               64,
                               32,
                               INT_MAX);
-
   node.add_attr<FloatAttribute>("overlap", "overlap", 0.25f, 0.1f, 5.f);
-
   node.add_attr<IntAttribute>("ir", "ir", 16, 1, INT_MAX);
-
   node.add_attr<BoolAttribute>("splitted", "splitted", false);
-
   node.add_attr<BoolAttribute>("auto_export", "auto_export", false);
 
   // attribute(s) order

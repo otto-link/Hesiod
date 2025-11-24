@@ -28,17 +28,11 @@ void setup_crater_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("radius", "radius", 0.1f, 0.01f, 1.f);
-
   node.add_attr<FloatAttribute>("depth", "depth", 0.2f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("lip_decay", "lip_decay", 0.1f, 0.01f, 1.f);
-
   node.add_attr<FloatAttribute>("lip_height_ratio", "lip_height_ratio", 2.f, 0.01f, 10.f);
-
   node.add_attr<Vec2FloatAttribute>("center", "center");
-
   node.add_attr<BoolAttribute>("inverse", "inverse", false);
-
   node.add_attr<RangeAttribute>("remap", "remap");
 
   // attribute(s) order

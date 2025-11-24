@@ -26,15 +26,10 @@ void setup_clamp_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<RangeAttribute>("clamp", "clamp");
-
   node.add_attr<BoolAttribute>("smooth_min", "smooth_min", false);
-
   node.add_attr<FloatAttribute>("k_min", "k_min", 0.05f, 0.01f, 1.f);
-
   node.add_attr<BoolAttribute>("smooth_max", "smooth_max", false);
-
   node.add_attr<FloatAttribute>("k_max", "k_max", 0.05f, 0.01f, 1.f);
-
   node.add_attr<BoolAttribute>("remap", "remap", false);
 
   // link histogram for RangeAttribute

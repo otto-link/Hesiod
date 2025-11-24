@@ -25,7 +25,6 @@ void setup_radial_displacement_to_xy_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("smoothing", "smoothing", 1.f, 0.f, 10.f);
-
   node.add_attr<Vec2FloatAttribute>("center", "center");
 
   // attribute(s) order

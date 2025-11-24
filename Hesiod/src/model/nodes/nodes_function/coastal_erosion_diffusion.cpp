@@ -27,9 +27,7 @@ void setup_coastal_erosion_diffusion_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("additional_depth", "additional_depth", 0.05f, 0.f, 0.2f);
-
   node.add_attr<IntAttribute>("iterations", "iterations", 10, 0, INT_MAX);
-
   node.add_attr<BoolAttribute>("distributed", "distributed", true);
 
   // attribute(s) order

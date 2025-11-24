@@ -25,9 +25,7 @@ void setup_normal_map_to_heightmap_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<BoolAttribute>("poisson_solver", "poisson_solver", false);
-
   node.add_attr<IntAttribute>("iterations", "iterations", 500, 1, INT_MAX);
-
   node.add_attr<FloatAttribute>("omega", "omega", 1.5f, 1e-3f, 2.f);
 
   // attribute(s) order

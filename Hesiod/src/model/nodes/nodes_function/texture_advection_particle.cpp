@@ -30,25 +30,17 @@ void setup_texture_advection_particle_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<SeedAttribute>("seed", "seed");
-
   node.add_attr<FloatAttribute>("particle_density", "particle_density", 0.5f, 0.f, 1.f);
-
   node.add_attr<IntAttribute>("iterations", "iterations", 1, 1, 100);
-
   node.add_attr<FloatAttribute>("advection_length", "advection_length", 0.1f, 0.f, 0.2f);
-
   node.add_attr<FloatAttribute>("value_persistence",
                                 "value_persistence",
                                 0.99f,
                                 0.8f,
                                 1.f);
-
   node.add_attr<FloatAttribute>("inertia", "inertia", 0.f, 0.f, 1.f);
-
   node.add_attr<BoolAttribute>("reverse", "reverse", false);
-
   node.add_attr<BoolAttribute>("post_filtering", "post_filtering", false);
-
   node.add_attr<FloatAttribute>("post_filtering_sigma",
                                 "post_filtering_sigma",
                                 0.07f,

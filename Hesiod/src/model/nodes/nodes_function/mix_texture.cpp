@@ -30,7 +30,6 @@ void setup_mix_texture_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<BoolAttribute>("use_sqrt_avg", "use_sqrt_avg", true);
-
   node.add_attr<BoolAttribute>("reset_output_alpha", "reset_output_alpha", true);
 
   // attribute(s) order

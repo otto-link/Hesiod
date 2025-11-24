@@ -33,7 +33,6 @@ void setup_export_asset_node(BaseNode &node)
                                    std::filesystem::path("export"),
                                    "*",
                                    true);
-
   node.add_attr<BoolAttribute>("auto_export", "Automatic Export", false);
 
   {
@@ -49,7 +48,6 @@ void setup_export_asset_node(BaseNode &node)
 
     std::string default_export_format = "GL Transmission Format v. 2 (binary) - *.glb";
     std::string default_mesh_type = "triangles";
-
     node.add_attr<EnumAttribute>("export_format",
                                  "Export Format:",
                                  export_format_map,
@@ -59,7 +57,6 @@ void setup_export_asset_node(BaseNode &node)
                                  export_mesh_map,
                                  default_mesh_type);
   }
-
   node.add_attr<FloatAttribute>("max_error", "Max Error", 5e-4f, 0.f, 0.01f);
   node.add_attr<FloatAttribute>("elevation_scaling", "Elevation Scale", 0.2f, 0.f, 1.f);
   node.add_attr<FloatAttribute>("detail_scaling", "Normal Map Scale", 1.f, 0.f, 4.f);

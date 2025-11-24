@@ -28,7 +28,6 @@ void setup_path_sdf_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<BoolAttribute>("remap", "remap", false);
-
   node.add_attr<BoolAttribute>("inverse", "inverse", false);
 }
 

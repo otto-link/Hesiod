@@ -35,21 +35,14 @@ void setup_export_cloud_to_ply_node(BaseNode &node)
                                    "Stanford PLY (*.ply)",
                                    true);
   node.add_attr<BoolAttribute>("auto_export", "auto_export", false);
-
   node.add_attr<StringAttribute>("label1", "", "data1");
   node.add_attr<StringAttribute>("label2", "", "data2");
   node.add_attr<StringAttribute>("label3", "", "data3");
-
   node.add_attr<FloatAttribute>("xmin", "xmin", 0.f, -FLT_MAX, FLT_MAX);
-
   node.add_attr<FloatAttribute>("xmax", "xmax", 1.f, -FLT_MAX, FLT_MAX);
-
   node.add_attr<FloatAttribute>("ymin", "ymin", 0.f, -FLT_MAX, FLT_MAX);
-
   node.add_attr<FloatAttribute>("ymax", "ymax", 1.f, -FLT_MAX, FLT_MAX);
-
   node.add_attr<FloatAttribute>("zmin", "zmin", 0.f, -FLT_MAX, FLT_MAX);
-
   node.add_attr<FloatAttribute>("zmax", "zmax", 1.f, -FLT_MAX, FLT_MAX);
 
   // attribute(s) order

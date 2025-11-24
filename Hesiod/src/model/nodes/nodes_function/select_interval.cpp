@@ -24,7 +24,6 @@ void setup_select_interval_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("value1", "value1", 0.f, -0.5f, 1.5f);
-
   node.add_attr<FloatAttribute>("value2", "value2", 0.5f, -0.5f, 1.5f);
 
   // attribute(s) order

@@ -28,7 +28,6 @@ void setup_mix_normal_map_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("detail_scaling", "detail_scaling", 1.f, 0.f, 4.f);
-
   node.add_attr<EnumAttribute>("blending_method",
                                "blending_method",
                                hmap::normal_map_blending_method_as_string);

@@ -24,7 +24,6 @@ void setup_select_rivers_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("talus_ref", "talus_ref", 0.1f, 0.01f, 10.f);
-
   node.add_attr<FloatAttribute>("clipping_ratio", "clipping_ratio", 50.f, 0.1f, 100.f);
 
   // attribute(s) order

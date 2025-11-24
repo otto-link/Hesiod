@@ -25,9 +25,7 @@ void setup_depression_filling_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<IntAttribute>("iterations", "iterations", 1000, 1, INT_MAX);
-
   node.add_attr<FloatAttribute>("epsilon", "epsilon", 1e-4, 1e-5, 1e-1, "{:.3e}", true);
-
   node.add_attr<BoolAttribute>("remap fill map", "remap fill map", true);
 
   // attribute(s) order

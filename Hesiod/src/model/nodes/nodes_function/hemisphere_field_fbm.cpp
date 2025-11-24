@@ -30,31 +30,20 @@ void setup_hemisphere_field_fbm_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<WaveNbAttribute>("kw", "kw");
-
   node.add_attr<SeedAttribute>("seed", "seed");
-
   node.add_attr<FloatAttribute>("rmin", "rmin", 0.05f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("rmax", "rmax", 0.8f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("amplitude_random_ratio",
                                 "amplitude_random_ratio",
                                 0.5f,
                                 0.f,
                                 1.f);
-
   node.add_attr<FloatAttribute>("shift", "shift", 0.1f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("density", "density", 0.1f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("jitter.x", "jitter.x", 1.f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("jitter.y", "jitter.y", 1.f, 0.f, 1.f);
-
   node.add_attr<IntAttribute>("octaves", "octaves", 8, 0, 32);
-
   node.add_attr<FloatAttribute>("persistence", "persistence", 0.5f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("lacunarity", "lacunarity", 2.f, 0.01f, 4.f);
 
   // attribute(s) order

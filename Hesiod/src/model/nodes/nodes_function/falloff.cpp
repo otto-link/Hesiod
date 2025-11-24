@@ -26,7 +26,6 @@ void setup_falloff_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("strength", "strength", 1.f, 0.f, 4.f);
-
   node.add_attr<EnumAttribute>("distance_function",
                                "distance_function",
                                enum_mappings.distance_function_map,

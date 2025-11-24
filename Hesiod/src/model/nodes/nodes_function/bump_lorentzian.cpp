@@ -29,9 +29,7 @@ void setup_bump_lorentzian_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("width_factor", "width_factor", 0.2f, 0.01f, 2.f);
-
   node.add_attr<FloatAttribute>("radius", "radius", 0.7072f, 0.01f, FLT_MAX);
-
   node.add_attr<Vec2FloatAttribute>("center", "center");
 
   // attribute(s) order

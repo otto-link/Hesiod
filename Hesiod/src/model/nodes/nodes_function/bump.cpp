@@ -29,7 +29,6 @@ void setup_bump_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("gain", "gain", 1.f, 0.01f, 10.f);
-
   node.add_attr<Vec2FloatAttribute>("center", "center");
 
   // attribute(s) order

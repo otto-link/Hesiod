@@ -26,13 +26,9 @@ void setup_normal_displacement_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("radius", "radius", 0.05f, 0.f, 0.2f);
-
   node.add_attr<FloatAttribute>("amount", "amount", 5.f, 0.f, 20.f);
-
   node.add_attr<BoolAttribute>("reverse", "reverse", false);
-
   node.add_attr<IntAttribute>("iterations", "iterations", 3, 1, 10);
-
   node.add_attr<BoolAttribute>("GPU", "GPU", HSD_DEFAULT_GPU_MODE);
 
   // attribute(s) order

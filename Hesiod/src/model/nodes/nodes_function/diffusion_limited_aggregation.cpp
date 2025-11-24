@@ -24,23 +24,16 @@ void setup_diffusion_limited_aggregation_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<SeedAttribute>("seed", "seed");
-
   node.add_attr<FloatAttribute>("scale", "scale", 0.01f, 0.005f, 0.1f);
-
   node.add_attr<FloatAttribute>("seeding_radius", "seeding_radius", 0.4f, 0.1f, 0.5f);
-
   node.add_attr<FloatAttribute>("seeding_outer_radius_ratio",
                                 "seeding_outer_radius_ratio",
                                 0.2f,
                                 0.01f,
                                 0.5f);
-
   node.add_attr<FloatAttribute>("slope", "slope", 8.f, 0.1f, FLT_MAX);
-
   node.add_attr<FloatAttribute>("noise_ratio", "noise_ratio", 0.2f, 0.f, 1.f);
-
   node.add_attr<BoolAttribute>("inverse", "inverse", false);
-
   node.add_attr<RangeAttribute>("remap", "remap");
 
   // attribute(s) order

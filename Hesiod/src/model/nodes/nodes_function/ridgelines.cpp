@@ -26,11 +26,8 @@ void setup_ridgelines_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("talus_global", "talus_global", 4.f, -FLT_MAX, FLT_MAX);
-
   node.add_attr<FloatAttribute>("k_smoothing", "k_smoothing", 1.f, 0.01f, 2.f);
-
   node.add_attr<FloatAttribute>("width", "width", 0.1f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("vmin", "vmin", 0.f, -1.f, 1.f);
 }
 

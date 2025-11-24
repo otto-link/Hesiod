@@ -22,13 +22,9 @@ void setup_cloud_random_power_law_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("distance_min", "distance_min", 0.01f, 0.001f, 0.2f);
-
   node.add_attr<FloatAttribute>("distance_max", "distance_max", 0.15f, 0.001f, 1.f);
-
   node.add_attr<FloatAttribute>("alpha", "alpha", 0.5f, 0.01f, 4.f);
-
   node.add_attr<SeedAttribute>("seed", "seed");
-
   node.add_attr<RangeAttribute>("remap", "remap");
 
   // attribute(s) order

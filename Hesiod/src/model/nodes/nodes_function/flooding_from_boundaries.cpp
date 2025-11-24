@@ -24,13 +24,9 @@ void setup_flooding_from_boundaries_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("elevation", "elevation", 0.2f, -1.f, 2.f);
-
   node.add_attr<BoolAttribute>("from_east", "from_east", true);
-
   node.add_attr<BoolAttribute>("from_west", "from_west", true);
-
   node.add_attr<BoolAttribute>("from_north", "from_north", true);
-
   node.add_attr<BoolAttribute>("from_south", "from_south", true);
 
   // attribute(s) order

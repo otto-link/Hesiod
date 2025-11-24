@@ -25,7 +25,6 @@ void setup_sharpen_cone_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("radius", "radius", 0.1f, 0.f, 0.5f);
-
   node.add_attr<FloatAttribute>("scale", "scale", 0.1f, 0.f, 2.f);
 
   // attribute(s) order

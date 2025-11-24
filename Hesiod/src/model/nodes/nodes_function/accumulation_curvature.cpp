@@ -26,9 +26,7 @@ void setup_accumulation_curvature_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("radius", "radius", 0.02f, 0.f, 0.2f);
-
   node.add_attr<BoolAttribute>("clamp_max", "clamp_max", false);
-
   node.add_attr<FloatAttribute>("vc_max", "vc_max", 0.05f, 0.f, 0.2f);
 
   // attribute(s) order

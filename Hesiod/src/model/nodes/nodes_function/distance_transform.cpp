@@ -30,7 +30,6 @@ void setup_distance_transform_node(BaseNode &node)
                                enum_mappings.distance_transform_type_map,
                                "Approx. (fast)");
   node.add_attr<BoolAttribute>("reverse_input", "reverse_input", false);
-
   node.add_attr<FloatAttribute>("threshold", "threshold", 0.f, -1.f, 2.f);
 
   // attribute(s) order

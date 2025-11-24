@@ -24,7 +24,6 @@ void setup_valley_width_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("radius", "radius", 0.1f, 0.f, 0.2f);
-
   node.add_attr<BoolAttribute>("ridge_select", "ridge_select", false);
 
   node.add_attr<RangeAttribute>("remap",

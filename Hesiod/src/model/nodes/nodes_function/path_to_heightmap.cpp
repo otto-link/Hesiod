@@ -24,13 +24,9 @@ void setup_path_to_heightmap_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<BoolAttribute>("filled", "filled", false);
-
   node.add_attr<BoolAttribute>("remap", "remap", true);
-
   node.add_attr<BoolAttribute>("inverse", "inverse", false);
-
   node.add_attr<BoolAttribute>("smoothing", "smoothing", false);
-
   node.add_attr<FloatAttribute>("smoothing_radius", "smoothing_radius", 0.05f, 0.f, 0.2f);
 
   // attribute(s) order

@@ -26,9 +26,7 @@ void setup_path_find_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("elevation_ratio", "elevation_ratio", 0.1f, 0.f, 0.9f);
-
   node.add_attr<FloatAttribute>("distance_exponent", "distance_exponent", 1.f, 0.5f, 2.f);
-
   node.add_attr<IntAttribute>("downsampling", "downsampling", 4, 1, 10);
 
   // attribute(s) order

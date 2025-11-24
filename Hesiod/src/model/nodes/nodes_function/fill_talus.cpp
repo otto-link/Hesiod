@@ -24,9 +24,7 @@ void setup_fill_talus_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("slope", "slope", 4.f, 0.1f, FLT_MAX);
-
   node.add_attr<FloatAttribute>("noise_ratio", "noise_ratio", 0.2f, 0.f, 1.f);
-
   node.add_attr<SeedAttribute>("seed", "seed");
 
   // attribute(s) order

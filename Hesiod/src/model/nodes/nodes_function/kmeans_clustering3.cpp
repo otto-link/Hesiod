@@ -28,17 +28,11 @@ void setup_kmeans_clustering3_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<SeedAttribute>("seed", "seed");
-
   node.add_attr<IntAttribute>("nclusters", "nclusters", 6, 1, 16);
-
   node.add_attr<FloatAttribute>("weights.x", "weights.x", 1.f, 0.01f, 2.f);
-
   node.add_attr<FloatAttribute>("weights.y", "weights.y", 1.f, 0.01f, 2.f);
-
   node.add_attr<FloatAttribute>("weights.z", "weights.z", 1.f, 0.01f, 2.f);
-
   node.add_attr<BoolAttribute>("normalize_inputs", "normalize_inputs", true);
-
   node.add_attr<BoolAttribute>("compute_scoring", "compute_scoring", true);
 
   // attribute(s) order

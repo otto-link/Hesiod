@@ -29,13 +29,9 @@ void setup_rift_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("angle", "angle", 0.f, -180.f, 180.f);
-
   node.add_attr<FloatAttribute>("slope", "slope", 8.f, 0.01f, FLT_MAX);
-
   node.add_attr<FloatAttribute>("width", "width", 0.1f, 0.f, 1.f);
-
   node.add_attr<BoolAttribute>("sharp_bottom", "sharp_bottom", false);
-
   node.add_attr<Vec2FloatAttribute>("center", "center");
 
   // attribute(s) order

@@ -30,33 +30,19 @@ void setup_polygon_field_fbm_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<WaveNbAttribute>("kw", "kw");
-
   node.add_attr<SeedAttribute>("seed", "seed");
-
   node.add_attr<FloatAttribute>("rmin", "rmin", 0.05f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("rmax", "rmax", 0.8f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("clamping_dist", "clamping_dist", 0.1f, 0.f, FLT_MAX);
-
   node.add_attr<FloatAttribute>("clamping_k", "clamping_k", 0.01f, 0.f, 0.2f);
-
   node.add_attr<FloatAttribute>("shift", "shift", 0.1f, 0.f, 1.f);
-
   node.add_attr<IntAttribute>("n_vertices_min", "n_vertices_min", 3, 3, 64);
-
   node.add_attr<IntAttribute>("n_vertices_max", "n_vertices_max", 8, 3, 64);
-
   node.add_attr<FloatAttribute>("density", "density", 0.1f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("jitter.x", "jitter.x", 1.f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("jitter.y", "jitter.y", 1.f, 0.f, 1.f);
-
   node.add_attr<IntAttribute>("octaves", "octaves", 8, 0, 32);
-
   node.add_attr<FloatAttribute>("persistence", "persistence", 0.5f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("lacunarity", "lacunarity", 2.f, 0.01f, 4.f);
 
   // attribute(s) order

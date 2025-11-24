@@ -28,11 +28,8 @@ void setup_cone_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("slope", "slope", 4.f, 0.01f, FLT_MAX);
-
   node.add_attr<FloatAttribute>("apex_elevation", "apex_elevation", 1.f, 0.f, FLT_MAX);
-
   node.add_attr<BoolAttribute>("smooth_profile", "smooth_profile", false);
-
   node.add_attr<Vec2FloatAttribute>("center", "center");
 
   // attribute(s) order

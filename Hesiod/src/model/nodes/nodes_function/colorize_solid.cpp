@@ -22,7 +22,6 @@ void setup_colorize_solid_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<ColorAttribute>("color", "color", 0.5f, 0.5f, 0.5f, 1.f);
-
   node.add_attr<FloatAttribute>("alpha", "alpha", 1.f, 0.f, 1.f);
 
   // attribute(s) order

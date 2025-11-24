@@ -26,9 +26,7 @@ void setup_thermal_schott_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("talus_global", "talus_global", 1.f, 0.f, FLT_MAX);
-
   node.add_attr<IntAttribute>("iterations", "iterations", 10, 1, INT_MAX);
-
   node.add_attr<BoolAttribute>("scale_talus_with_elevation",
                                "scale_talus_with_elevation",
                                false);

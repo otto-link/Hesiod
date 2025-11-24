@@ -25,9 +25,7 @@ void setup_kernel_disk_smooth_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("radius", "radius", 0.1f, 0.001f, 0.2f);
-
   node.add_attr<BoolAttribute>("normalize", "normalize", false);
-
   node.add_attr<FloatAttribute>("r_cutoff", "r_cutoff", 0.9f, 0.f, 1.f);
 
   // attribute(s) order

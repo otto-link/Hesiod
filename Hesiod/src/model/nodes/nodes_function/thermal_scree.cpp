@@ -29,13 +29,9 @@ void setup_thermal_scree_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("talus_global", "talus_global", 2.f, 0.f, FLT_MAX);
-
   node.add_attr<FloatAttribute>("zmax", "zmax", 0.5f, -1.f, 2.f);
-
   node.add_attr<IntAttribute>("iterations", "iterations", 500, 1, INT_MAX);
-
   node.add_attr<BoolAttribute>("talus_constraint", "talus_constraint", true);
-
   node.add_attr<BoolAttribute>("scale_talus_with_elevation",
                                "scale_talus_with_elevation",
                                true);

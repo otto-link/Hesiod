@@ -26,9 +26,7 @@ void setup_select_multiband3_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("ratio1", "ratio1", 0.2f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("ratio2", "ratio2", 0.5f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("overlap", "overlap", 0.5f, 0.f, 1.f);
 
   // attribute(s) order

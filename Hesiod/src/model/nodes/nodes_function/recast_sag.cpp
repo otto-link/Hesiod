@@ -25,7 +25,6 @@ void setup_recast_sag_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("vref", "vref", 0.5f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("k", "k", 0.01f, 0.001f, 1.f);
 }
 

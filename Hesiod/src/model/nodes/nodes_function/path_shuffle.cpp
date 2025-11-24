@@ -24,11 +24,8 @@ void setup_path_shuffle_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("dx", "dx", 0.f, -0.5f, 0.5f);
-
   node.add_attr<FloatAttribute>("dy", "dy", 0.f, -0.5f, 0.5f);
-
   node.add_attr<FloatAttribute>("dv", "dv", 0.f, -0.5f, 0.5f);
-
   node.add_attr<SeedAttribute>("seed", "seed");
 
   // attribute(s) order

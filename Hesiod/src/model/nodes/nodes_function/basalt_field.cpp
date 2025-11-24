@@ -28,69 +28,51 @@ void setup_basalt_field_node(BaseNode &node)
 
   // attribute(s)
   std::vector<float> kw = {5.f, 5.f};
-
   node.add_attr<WaveNbAttribute>("kw", "kw", kw, 0.f, FLT_MAX, true);
-
   node.add_attr<SeedAttribute>("seed", "seed");
-
   node.add_attr<FloatAttribute>("warp_kw", "warp_kw", 4.f, 0.f, FLT_MAX);
-
   node.add_attr<FloatAttribute>("large_scale_warp_amp",
                                 "large_scale_warp_amp",
                                 0.2f,
                                 0.f,
                                 1.f);
-
   node.add_attr<FloatAttribute>("large_scale_gain", "large_scale_gain", 8., 0.f, 10.f);
-
   node.add_attr<FloatAttribute>("large_scale_amp", "large_scale_amp", 0.15f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("medium_scale_kw_ratio",
                                 "medium_scale_kw_ratio",
                                 3.f,
                                 0.f,
                                 FLT_MAX);
-
   node.add_attr<FloatAttribute>("medium_scale_warp_amp",
                                 "medium_scale_warp_amp",
                                 0.1f,
                                 0.f,
                                 1.f);
-
   node.add_attr<FloatAttribute>("medium_scale_gain", "medium_scale_gain", 8.f, 0.f, 10.f);
-
   node.add_attr<FloatAttribute>("medium_scale_amp", "medium_scale_amp", 0.12f, 0.f, 0.2f);
-
   node.add_attr<FloatAttribute>("small_scale_kw_ratio",
                                 "small_scale_kw_ratio",
                                 5.f,
                                 0.f,
                                 FLT_MAX);
-
   node.add_attr<FloatAttribute>("small_scale_amp", "small_scale_amp", 0.1f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("small_scale_overlay_amp",
                                 "small_scale_overlay_amp",
                                 0.005f,
                                 0.f,
                                 0.01f);
-
   node.add_attr<FloatAttribute>("rugosity_kw_ratio",
                                 "rugosity_kw_ratio",
                                 1.5f,
                                 0.f,
                                 FLT_MAX);
-
   node.add_attr<FloatAttribute>("rugosity_amp", "rugosity_amp", 1.f, 0.f, 2.f);
-
   node.add_attr<BoolAttribute>("flatten_activate", "flatten_activate", true);
-
   node.add_attr<FloatAttribute>("flatten_kw_ratio",
                                 "flatten_kw_ratio",
                                 0.5f,
                                 0.f,
                                 FLT_MAX);
-
   node.add_attr<FloatAttribute>("flatten_amp", "flatten_amp", 0.f, 0.f, 1.f);
 
   // attribute(s) order

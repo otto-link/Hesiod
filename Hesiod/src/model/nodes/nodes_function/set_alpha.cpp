@@ -27,9 +27,7 @@ void setup_set_alpha_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("alpha", "alpha", 1.f, 0.f, 1.f);
-
   node.add_attr<BoolAttribute>("reverse", "reverse", false);
-
   node.add_attr<BoolAttribute>("clamp", "clamp", true);
 
   // attribute(s) order

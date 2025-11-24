@@ -24,9 +24,7 @@ void setup_scan_mask_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("contrast", "contrast", 0.5f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("brightness", "brightness", 0.5f, 0.f, 1.f);
-
   node.add_attr<BoolAttribute>("remap", "remap", false);
 }
 

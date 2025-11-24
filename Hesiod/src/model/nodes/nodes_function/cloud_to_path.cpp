@@ -23,7 +23,6 @@ void setup_cloud_to_path_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<BoolAttribute>("closed", "closed", false);
-
   node.add_attr<BoolAttribute>("reorder_nns", "reorder_nns", false);
 
   // attribute(s) order

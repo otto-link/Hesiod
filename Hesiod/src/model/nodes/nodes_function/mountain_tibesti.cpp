@@ -30,33 +30,21 @@ void setup_mountain_tibesti_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("elevation", "elevation", 0.5f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("scale", "scale", 1.f, 0.01f, FLT_MAX);
-
   node.add_attr<SeedAttribute>("seed", "seed");
-
   node.add_attr<IntAttribute>("octaves", "octaves", 8, 0, 32);
-
   node.add_attr<FloatAttribute>("peak_kw", "peak_kw", 22.f, 0.01f, FLT_MAX);
-
   node.add_attr<FloatAttribute>("rugosity", "rugosity", 0.f, 0.f, 1.f);
-
   node.add_attr<FloatAttribute>("angle", "angle", 30.f, -180.f, 180.f, "{:.0f}°");
-
   node.add_attr<FloatAttribute>("angle_spread_ratio",
                                 "angle_spread_ratio",
                                 0.25f,
                                 0.f,
                                 1.f);
-
   node.add_attr<FloatAttribute>("gamma", "gamma", 1.5f, 0.01f, 4.f);
-
   node.add_attr<BoolAttribute>("add_deposition", "add_deposition", true);
-
   node.add_attr<FloatAttribute>("bulk_amp", "bulk_amp", 0.5f, 0.f, 2.f);
-
   node.add_attr<FloatAttribute>("base_noise_amp", "base_noise_amp", 0.05f, 0.f, 1.f);
-
   node.add_attr<Vec2FloatAttribute>("center", "center");
 
   // attribute(s) order
