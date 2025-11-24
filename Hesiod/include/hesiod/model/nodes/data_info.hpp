@@ -21,15 +21,28 @@ template <typename T> std::string get_data_info(BaseNode *node, const std::strin
 
   if constexpr (std::is_same_v<T, hmap::Heightmap>)
   {
-    return std::format("[{:.3e}, {:.3e}]", p_val->min(), p_val->max());
+    return std::format("[{:.2e}, {:.2e}]", p_val->min(), p_val->max());
+  }
+  else if constexpr (std::is_same_v<T, hmap::HeightmapRGBA>)
+  {
+    return std::format("R: [{:.2e}, {:.2e}], G: [{:.2e}, {:.2e}], B: [{:.2e}, {:.2e}], "
+                       "A: [{:.2e}, {:.2e}]",
+                       p_val.r->min(),
+                       p_val.r->max(),
+                       p_val.g->min(),
+                       p_val.g->max(),
+                       p_val.b->min(),
+                       p_val.b->max(),
+                       p_val.a->min(),
+                       p_val.a->max());
   }
   else if constexpr (std::is_same_v<T, hmap::Array>)
   {
-    return std::format("[{:.3e}, {:.3e}]", p_val->min(), p_val->max());
+    return std::format("[{:.2e}, {:.2e}]", p_val->min(), p_val->max());
   }
   else if constexpr (std::is_same_v<T, hmap::Cloud> || std::is_same_v<T, hmap::Path>)
   {
-    return std::format("[{:.3e}, {:.3e}], count: {}",
+    return std::format("[{:.2e}, {:.2e}], count: {}",
                        p_val->get_values_min(),
                        p_val->get_values_max(),
                        p_val->get_npoints());
