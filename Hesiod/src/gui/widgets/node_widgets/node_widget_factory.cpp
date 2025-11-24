@@ -17,6 +17,7 @@ QWidget *node_widget_factory(const std::string        &node_type,
 
   // adjust msg
   std::vector<std::string> wip_nodes = {"CoastalErosionDiffusion",
+                                        "Island",
                                         "MountainCone",
                                         "MountainInselberg",
                                         "MountainStump",
