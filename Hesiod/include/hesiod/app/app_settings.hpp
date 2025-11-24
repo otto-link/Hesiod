@@ -44,6 +44,7 @@ struct AppSettings
     std::string default_startup_project_file = "data/default.hsd";
     std::string quick_start_html_file = "data/quick_start.html";
     std::string node_documentation_path = "data/node_documentation.json";
+    std::string git_version_file = "data/git_version.txt";
     bool        save_backup_file = true;
   } global;
 
