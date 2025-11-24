@@ -1,11 +1,9 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-#include <QCoreApplication>
-
+#include "hesiod/model/project_model.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/graph/graph_manager.hpp"
-#include "hesiod/model/project_model.hpp"
 #include "hesiod/model/utils.hpp"
 
 namespace hesiod
@@ -21,8 +19,9 @@ void ProjectModel::cleanup()
 {
   Logger::log()->trace("ProjectModel::cleanup");
 
-  QCoreApplication::processEvents();
   this->graph_manager.reset();
+  this->graph_manager = std::make_unique<GraphManager>();
+
   this->path = std::filesystem::path();
   this->name = std::string();
   this->bake_config = BakeConfig();
@@ -110,7 +109,7 @@ void ProjectModel::set_path(const std::string &new_path)
 void ProjectModel::set_name(const std::string &new_name)
 {
   this->name = new_name;
-  this->path = this->path.parent_path() / this->name / ".hsd";
+  this->path = this->path.parent_path() / (this->name + ".hsd");
 
   if (this->project_name_changed)
     this->project_name_changed();
