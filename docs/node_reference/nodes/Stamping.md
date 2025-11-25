@@ -40,7 +40,7 @@ Primitive/Coherent
 |kernel_scale_amplitude|Bool|Determine whether the kernel amplitude is scaled with the point values.|
 |kernel_scale_radius|Bool|Determine whether the kernel radius is scaled with the point values.|
 |remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
-|seed|Random seed number|Random seed number.|
+|Seed|Random seed number|Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.|
 
 # Example
 

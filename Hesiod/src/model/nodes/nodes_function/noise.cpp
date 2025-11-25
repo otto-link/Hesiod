@@ -29,8 +29,8 @@ void setup_noise_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<EnumAttribute>("noise_type", "noise_type", enum_mappings.noise_type_map);
-  node.add_attr<WaveNbAttribute>("kw", "kw");
-  node.add_attr<SeedAttribute>("seed", "seed");
+  node.add_attr<WaveNbAttribute>("kw", "Spatial Frequency");
+  node.add_attr<SeedAttribute>("seed", "Seed");
   node.add_attr<BoolAttribute>("GPU", "GPU", HSD_DEFAULT_GPU_MODE);
 
   // attribute(s) order

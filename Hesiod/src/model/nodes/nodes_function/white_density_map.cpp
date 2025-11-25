@@ -24,7 +24,7 @@ void setup_white_density_map_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  node.add_attr<SeedAttribute>("seed", "seed");
+  node.add_attr<SeedAttribute>("seed", "Seed");
   node.add_attr<BoolAttribute>("inverse", "inverse", false);
   node.add_attr<RangeAttribute>("remap", "remap");
 

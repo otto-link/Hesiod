@@ -29,7 +29,7 @@ void setup_texture_advection_particle_node(BaseNode &node)
   node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  node.add_attr<SeedAttribute>("seed", "seed");
+  node.add_attr<SeedAttribute>("seed", "Seed");
   node.add_attr<FloatAttribute>("particle_density", "particle_density", 0.5f, 0.f, 1.f);
   node.add_attr<IntAttribute>("iterations", "iterations", 1, 1, 100);
   node.add_attr<FloatAttribute>("advection_length", "advection_length", 0.1f, 0.f, 0.2f);

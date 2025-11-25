@@ -18,9 +18,9 @@ Primitive/Function
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|dx|Heightmap|Optional X-displacement noise field for coordinate perturbation.|
-|dy|Heightmap|Optional Y-displacement noise field for coordinate perturbation.|
-|envelope|Heightmap|Optional mask controlling the effective region of the generated cone.|
+|dx|Heightmap|Displacement with respect to the domain size (x-direction).|
+|dy|Heightmap|Displacement with respect to the domain size (y-direction).|
+|envelope|Heightmap|Heightmap used as a post-process amplitude multiplier for the generated noise.|
 
 # Outputs
 

@@ -31,7 +31,7 @@ void setup_mountain_tibesti_node(BaseNode &node)
   // attribute(s)
   node.add_attr<FloatAttribute>("elevation", "elevation", 0.5f, 0.f, 1.f);
   node.add_attr<FloatAttribute>("scale", "scale", 1.f, 0.01f, FLT_MAX);
-  node.add_attr<SeedAttribute>("seed", "seed");
+  node.add_attr<SeedAttribute>("seed", "Seed");
   node.add_attr<IntAttribute>("octaves", "octaves", 8, 0, 32);
   node.add_attr<FloatAttribute>("peak_kw", "peak_kw", 22.f, 0.01f, FLT_MAX);
   node.add_attr<FloatAttribute>("rugosity", "rugosity", 0.f, 0.f, 1.f);

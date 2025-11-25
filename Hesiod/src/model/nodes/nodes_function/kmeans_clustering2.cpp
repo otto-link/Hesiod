@@ -26,7 +26,7 @@ void setup_kmeans_clustering2_node(BaseNode &node)
   node.add_port<std::vector<hmap::Heightmap>>(gnode::PortType::OUT, "scoring");
 
   // attribute(s)
-  node.add_attr<SeedAttribute>("seed", "seed");
+  node.add_attr<SeedAttribute>("seed", "Seed");
   node.add_attr<IntAttribute>("nclusters", "nclusters", 4, 1, 16);
   node.add_attr<FloatAttribute>("weights.x", "weights.x", 1.f, 0.01f, 2.f);
   node.add_attr<FloatAttribute>("weights.y", "weights.y", 1.f, 0.01f, 2.f);

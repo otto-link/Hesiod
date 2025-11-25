@@ -23,7 +23,7 @@ void setup_cloud_random_density_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<IntAttribute>("npoints", "npoints", 50, 1, INT_MAX);
-  node.add_attr<SeedAttribute>("seed", "seed");
+  node.add_attr<SeedAttribute>("seed", "Seed");
   node.add_attr<RangeAttribute>("remap", "remap");
 
   // attribute(s) order

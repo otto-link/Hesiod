@@ -36,7 +36,7 @@ WIP
 |gamma|Float|Reference value for the gamma correction applied to each strata, influence the cliff elevation profile.|
 |gamma_noise|Float|Noise range for the gamma value.|
 |n_strata|Integer|Numbner of strata.|
-|seed|Random seed number|Random seed number.|
+|Seed|Random seed number|Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.|
 |strata_noise|Float|Noise range for the strata elevations.|
 |talus_global|Float|Step slope.|
 

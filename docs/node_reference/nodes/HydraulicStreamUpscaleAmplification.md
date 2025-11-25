@@ -33,7 +33,7 @@ WIP
 | :--- | :--- | :--- |
 |c_erosion|Float|TODO|
 |clipping_ratio|Float|TODO|
-|persistence|Float|TODO|
+|persistence|Float|The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.|
 |radius|Float|TODO|
 |talus_ref|Float|Reference talus, with small values of talus_ref leading to thinner flow streams.|
 |upscaling_levels|Integer|TODO|

@@ -18,8 +18,8 @@ Operator/Transform
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|dx|Heightmap|Displacement with respect to the domain size (y-direction).|
-|dy|Heightmap|Control parameter, acts as a multiplier for the weight parameter.|
+|dx|Heightmap|Displacement with respect to the domain size (x-direction).|
+|dy|Heightmap|Displacement with respect to the domain size (y-direction).|
 |input|Heightmap|Displacement with respect to the domain size (x-direction).|
 
 # Outputs

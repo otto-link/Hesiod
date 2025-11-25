@@ -30,8 +30,12 @@ void setup_dendry_node(BaseNode &node)
   // attribute(s)
   node.add_attr<IntAttribute>("subsampling", "subsampling", 4, 1, 8);
 
-  node.add_attr<WaveNbAttribute>("kw", "kw", std::vector<float>(2, 8.f), 0.f, FLT_MAX);
-  node.add_attr<SeedAttribute>("seed", "seed");
+  node.add_attr<WaveNbAttribute>("kw",
+                                 "Spatial Frequency",
+                                 std::vector<float>(2, 8.f),
+                                 0.f,
+                                 FLT_MAX);
+  node.add_attr<SeedAttribute>("seed", "Seed");
   node.add_attr<FloatAttribute>("eps", "eps", 0.2f, 0.f, 1.f);
   node.add_attr<IntAttribute>("resolution", "resolution", 1, 1, 8);
   node.add_attr<FloatAttribute>("displacement", "displacement", 0.075f, 0.f, 0.2f);

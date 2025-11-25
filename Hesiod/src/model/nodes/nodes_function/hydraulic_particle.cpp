@@ -33,7 +33,7 @@ void setup_hydraulic_particle_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "deposition", CONFIG(node));
 
   // attribute(s)
-  node.add_attr<SeedAttribute>("seed", "seed");
+  node.add_attr<SeedAttribute>("seed", "Seed");
   node.add_attr<FloatAttribute>("particle_density", "particle_density", 1.f, 0.f, 4.f);
   node.add_attr<FloatAttribute>("c_capacity", "c_capacity", 10.f, 0.1f, 100.f);
   node.add_attr<FloatAttribute>("c_erosion", "c_erosion", 0.05f, 0.f, 0.1f);

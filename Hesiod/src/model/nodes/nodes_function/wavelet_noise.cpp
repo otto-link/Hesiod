@@ -27,8 +27,8 @@ void setup_wavelet_noise_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  node.add_attr<WaveNbAttribute>("kw", "kw");
-  node.add_attr<SeedAttribute>("seed", "seed");
+  node.add_attr<WaveNbAttribute>("kw", "Spatial Frequency");
+  node.add_attr<SeedAttribute>("seed", "Seed");
   node.add_attr<FloatAttribute>("kw_multiplier", "kw_multiplier", 2.f, 0.f, FLT_MAX);
   node.add_attr<FloatAttribute>("vorticity", "vorticity", 0.f, 0.f, 10.f);
   node.add_attr<FloatAttribute>("density", "density", 1.f, 0.f, 1.f);

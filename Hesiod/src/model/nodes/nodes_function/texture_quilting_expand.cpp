@@ -38,7 +38,7 @@ void setup_texture_quilting_expand_node(BaseNode &node)
   node.add_attr<FloatAttribute>("expansion_ratio", "expansion_ratio", 2.f, 1.f, FLT_MAX);
   node.add_attr<FloatAttribute>("patch_width", "patch_width", 0.3f, 0.1f, 1.f);
   node.add_attr<FloatAttribute>("overlap", "overlap", 0.9f, 0.05f, 0.95f);
-  node.add_attr<SeedAttribute>("seed", "seed");
+  node.add_attr<SeedAttribute>("seed", "Seed");
   node.add_attr<BoolAttribute>("patch_flip", "patch_flip", true);
   node.add_attr<BoolAttribute>("patch_rotate", "patch_rotate", true);
   node.add_attr<BoolAttribute>("patch_transpose", "patch_transpose", true);

@@ -30,7 +30,7 @@ void setup_mountain_stump_node(BaseNode &node)
   node.add_attr<FloatAttribute>("elevation", "elevation", 0.7f, 0.f, 1.f);
   node.add_attr<FloatAttribute>("scale", "scale", 0.75f, 0.01f, FLT_MAX);
   node.add_attr<FloatAttribute>("ridge_amp", "ridge_amp", 0.75f, 0.f, FLT_MAX);
-  node.add_attr<SeedAttribute>("seed", "seed");
+  node.add_attr<SeedAttribute>("seed", "Seed");
   node.add_attr<IntAttribute>("octaves", "octaves", 8, 0, 32);
   node.add_attr<FloatAttribute>("peak_kw", "peak_kw", 6.f, 0.01f, FLT_MAX);
   node.add_attr<FloatAttribute>("rugosity", "rugosity", 0.f, 0.f, 1.f);

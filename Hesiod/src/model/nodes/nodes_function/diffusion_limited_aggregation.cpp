@@ -23,7 +23,7 @@ void setup_diffusion_limited_aggregation_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  node.add_attr<SeedAttribute>("seed", "seed");
+  node.add_attr<SeedAttribute>("seed", "Seed");
   node.add_attr<FloatAttribute>("scale", "scale", 0.01f, 0.005f, 0.1f);
   node.add_attr<FloatAttribute>("seeding_radius", "seeding_radius", 0.4f, 0.1f, 0.5f);
   node.add_attr<FloatAttribute>("seeding_outer_radius_ratio",

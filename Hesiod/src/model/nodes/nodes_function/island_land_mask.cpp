@@ -26,7 +26,7 @@ void setup_island_land_mask_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("radius", "radius", 0.2f, 0.f, 1.f);
-  node.add_attr<SeedAttribute>("seed", "seed");
+  node.add_attr<SeedAttribute>("seed", "Seed");
   node.add_attr<FloatAttribute>("displacement", "displacement", 0.4f, 0.f, FLT_MAX);
   node.add_attr<EnumAttribute>("noise_type", "noise_type", enum_mappings.noise_type_map);
   node.add_attr<FloatAttribute>("kw", "kw", 4.f, 0.f, FLT_MAX);

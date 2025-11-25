@@ -36,7 +36,7 @@ Operator/Resynthesis
 |patch_rotate|Bool|Allow patch 90 degree rotation.|
 |patch_transpose|Bool|Allow patch tranposition.|
 |patch_width|Float|Decide on the size (with respect to the domain size) of the patches that will be used to create the new heightmap. This determines the level of detail and texture in the final result.|
-|seed|Random seed number|Random seed number.|
+|Seed|Random seed number|Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.|
 
 # Example
 

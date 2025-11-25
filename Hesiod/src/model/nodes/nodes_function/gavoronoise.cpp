@@ -28,8 +28,8 @@ void setup_gavoronoise_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  node.add_attr<WaveNbAttribute>("kw", "kw");
-  node.add_attr<SeedAttribute>("seed", "seed");
+  node.add_attr<WaveNbAttribute>("kw", "Spatial Frequency");
+  node.add_attr<SeedAttribute>("seed", "Seed");
   node.add_attr<FloatAttribute>("amplitude", "amplitude", 0.05f, 0.001f, 0.2f);
 
   node.add_attr<WaveNbAttribute>("kw_multiplier",

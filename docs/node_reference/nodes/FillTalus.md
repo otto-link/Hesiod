@@ -31,7 +31,7 @@ WIP
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |noise_ratio|Float|Noise ratio, added to the downslope.|
-|seed|Random seed number|Random seed number.|
+|Seed|Random seed number|Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.|
 |slope|Float|Downslope used for filling.|
 
 # Example

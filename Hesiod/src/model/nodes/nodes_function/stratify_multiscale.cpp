@@ -26,7 +26,7 @@ void setup_stratify_multiscale_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  node.add_attr<SeedAttribute>("seed", "seed");
+  node.add_attr<SeedAttribute>("seed", "Seed");
 
   std::vector<int>   n_strata = {4, 4};
   std::vector<float> strata_noise = {0.5f, 0.5f};

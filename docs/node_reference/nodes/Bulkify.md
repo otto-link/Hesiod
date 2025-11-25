@@ -18,8 +18,8 @@ Filter/Recurve
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|dx|Heightmap|No description|
-|dy|Heightmap|No description|
+|dx|Heightmap|Displacement with respect to the domain size (x-direction).|
+|dy|Heightmap|Displacement with respect to the domain size (y-direction).|
 |input|Heightmap|No description|
 
 # Outputs

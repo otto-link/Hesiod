@@ -31,70 +31,86 @@ void setup_island_node(BaseNode &node)
   // attribute(s)
   std::vector<float> kw = {4.f, 4.f};
 
-  node.add_attr<SeedAttribute>("seed", "seed");
-  node.add_attr<FloatAttribute>("noise_amp", "noise_amp", 0.07f, 0.f, 2.f);
-  node.add_attr<WaveNbAttribute>("noise_kw", "noise_kw", kw, 0.f, FLT_MAX, true);
-  node.add_attr<IntAttribute>("noise_octaves", "noise_octaves", 8, INT_MAX);
-  node.add_attr<FloatAttribute>("noise_rugosity", "noise_rugosity", 0.7f, 0.f, 1.f);
-  node.add_attr<FloatAttribute>("noise_angle", "noise_angle", 45.f, -180.f, 180.f);
+  node.add_attr<SeedAttribute>("seed", "Seed");
+  node.add_attr<FloatAttribute>("noise_amp", "Amplitude", 0.07f, 0.f, 2.f);
+  node.add_attr<WaveNbAttribute>("noise_kw", "Spatial Frequency", kw, 0.f, FLT_MAX, true);
+  node.add_attr<IntAttribute>("noise_octaves", "Octaves", 8, INT_MAX);
+  node.add_attr<FloatAttribute>("noise_rugosity", "Rugosity", 0.7f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>("noise_angle", "Direction Angle", 45.f, -180.f, 180.f);
   node.add_attr<FloatAttribute>("noise_k_smoothing",
-                                "noise_k_smoothing",
+                                "Smoothing Coefficient",
                                 0.05f,
                                 0.f,
                                 1.f);
-  node.add_attr<FloatAttribute>("elevation_scale", "elevation_scale", 0.4f, 0.f, 2.f);
-  node.add_attr<BoolAttribute>("filter_distance", "filter_distance", true);
-  node.add_attr<FloatAttribute>("filter_radius", "filter_radius", 0.01f, 0.f, 0.2f);
-  node.add_attr<FloatAttribute>("slope_min", "slope_min", 0.05f, 0.f, 32.f);
-  node.add_attr<FloatAttribute>("slope_max", "slope_max", 1.5f, 0.f, 32.f);
-  node.add_attr<FloatAttribute>("slope_start", "slope_start", 0.5f, 0.f, 4.f);
-  node.add_attr<FloatAttribute>("slope_end", "slope_end", 1.5f, 0.f, 4.f);
+  node.add_attr<FloatAttribute>("elevation_scale",
+                                "Elevation Scaling Factor",
+                                0.4f,
+                                0.f,
+                                2.f);
+  node.add_attr<FloatAttribute>("filter_radius", "Smoothing Radius", 0.01f, 0.f, 0.2f);
+  node.add_attr<FloatAttribute>("slope_min", "Lower Slope Limit", 0.05f, 0.f, 32.f);
+  node.add_attr<FloatAttribute>("slope_max", "Upper Slope Limit", 1.5f, 0.f, 32.f);
+  node.add_attr<FloatAttribute>("slope_start", "Shoreline Slope", 0.5f, 0.f, 4.f);
+  node.add_attr<FloatAttribute>("slope_end", "Apex Slope", 1.5f, 0.f, 4.f);
   node.add_attr<FloatAttribute>("slope_noise_intensity",
-                                "slope_noise_intensity",
+                                "Slope Noise Intensity",
                                 0.f,
                                 0.f,
                                 100.f);
-  node.add_attr<FloatAttribute>("k_smooth", "k_smooth", 0.05f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>("k_smooth", "Smoothing Coefficient", 0.05f, 0.f, 1.f);
   node.add_attr<FloatAttribute>("radial_noise_intensity",
-                                "radial_noise_intensity",
+                                "Radial Noise Intensity",
                                 0.5f,
                                 0.f,
                                 2.f);
   node.add_attr<FloatAttribute>("radial_profile_gain",
-                                "radial_profile_gain",
+                                "Radial Profile Gain",
                                 1.f,
                                 0.01f,
                                 10.f);
-  node.add_attr<FloatAttribute>("water_decay", "water_decay", 0.1f, 0.f, 1.f);
-  node.add_attr<FloatAttribute>("water_depth", "water_depth", 0.3f, 0.f, FLT_MAX);
-  node.add_attr<FloatAttribute>("lee_angle", "lee_angle", 30.f, -180.f, 180.f);
-  node.add_attr<FloatAttribute>("lee_amp", "lee_amp", 0.f, 0.f, 1.f);
-  node.add_attr<FloatAttribute>("uplift_amp", "uplift_amp", 0.f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>("water_decay", "Water Decay Rate", 0.1f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>("water_depth", "Water Depth Level", 0.3f, 0.f, FLT_MAX);
+  node.add_attr<FloatAttribute>("lee_angle", "Lee-Side Angle", 30.f, -180.f, 180.f);
+  node.add_attr<FloatAttribute>("lee_amp", "Lee-Side Amplitude", 0.f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>("uplift_amp", "Uplift Amplitude", 0.f, 0.f, 1.f);
 
   // attribute(s) order
-  node.set_attr_ordered_key({"seed",
+  node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Core Parameters",
+                             "elevation_scale",
+                             "filter_radius",
+                             "slope_start",
+                             "slope_end",
+                             "radial_profile_gain",
+                             "_GROUPBOX_END_",
+                             //
+                             "_GROUPBOX_BEGIN_Large-Scale Deformations",
+                             "lee_angle",
+                             "lee_amp",
+                             "uplift_amp",
+                             "_GROUPBOX_END_",
+                             //
+                             "_GROUPBOX_BEGIN_Water Parameters",
+                             "water_decay",
+                             "water_depth",
+                             "_GROUPBOX_END_",
+                             //
+                             "_GROUPBOX_BEGIN_Morphology Controls",
+                             "slope_min",
+                             "slope_max",
+                             "slope_noise_intensity",
+                             "k_smooth",
+                             "_GROUPBOX_END_",
+                             //
+                             "_GROUPBOX_BEGIN_Noise Generation",
+                             "radial_noise_intensity",
+                             "seed",
                              "noise_amp",
                              "noise_kw",
                              "noise_octaves",
                              "noise_rugosity",
                              "noise_angle",
                              "noise_k_smoothing",
-                             "elevation_scale",
-                             "filter_distance",
-                             "filter_radius",
-                             "slope_min",
-                             "slope_max",
-                             "slope_start",
-                             "slope_end",
-                             "slope_noise_intensity",
-                             "k_smooth",
-                             "radial_noise_intensity",
-                             "radial_profile_gain",
-                             "water_decay",
-                             "water_depth",
-                             "lee_angle",
-                             "lee_amp",
-                             "uplift_amp"});
+                             "_GROUPBOX_END_"});
 
   setup_post_process_heightmap_attributes(node);
 
@@ -117,9 +133,7 @@ void compute_island_node(BaseNode &node)
   hmap::Heightmap *p_depth = node.get_value_ref<hmap::Heightmap>("water_depth");
   hmap::Heightmap *p_mask = node.get_value_ref<hmap::Heightmap>("inland_mask");
 
-  int ir = std::max(
-      1,
-      (int)(node.get_attr<FloatAttribute>("filter_radius") * p_out->shape.x));
+  int ir = (int)(node.get_attr<FloatAttribute>("filter_radius") * p_out->shape.x);
 
   float scale = node.get_attr<FloatAttribute>("elevation_scale");
 
@@ -141,7 +155,7 @@ void compute_island_node(BaseNode &node)
               *pa_land,
               pa_dr,
               scale,
-              node.get_attr<BoolAttribute>("filter_distance"),
+              (ir != 0),
               ir,
               scale * node.get_attr<FloatAttribute>("slope_min"),
               scale * node.get_attr<FloatAttribute>("slope_max"),
@@ -171,7 +185,7 @@ void compute_island_node(BaseNode &node)
               node.get_attr<FloatAttribute>("noise_angle"),
               node.get_attr<FloatAttribute>("noise_k_smoothing"),
               scale,
-              node.get_attr<BoolAttribute>("filter_distance"),
+              (ir != 0),
               ir,
               scale * node.get_attr<FloatAttribute>("slope_min"),
               scale * node.get_attr<FloatAttribute>("slope_max"),

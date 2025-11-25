@@ -29,8 +29,8 @@ void setup_hemisphere_field_fbm_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  node.add_attr<WaveNbAttribute>("kw", "kw");
-  node.add_attr<SeedAttribute>("seed", "seed");
+  node.add_attr<WaveNbAttribute>("kw", "Spatial Frequency");
+  node.add_attr<SeedAttribute>("seed", "Seed");
   node.add_attr<FloatAttribute>("rmin", "rmin", 0.05f, 0.f, 1.f);
   node.add_attr<FloatAttribute>("rmax", "rmax", 0.8f, 0.f, 1.f);
   node.add_attr<FloatAttribute>("amplitude_random_ratio",

@@ -170,13 +170,13 @@
                 "type": "Float"
             },
             "kw": {
-                "description": "No description",
+                "description": "Base spatial frequencies in the X and Y directions. The frequencies are defined with respect to the entire domain: for example, kw = 2 produces two full oscillations across the domain width (and similarly for the Y direction).",
                 "key": "kw",
-                "label": "kw",
+                "label": "Spatial Frequency",
                 "type": "Wavenumber"
             },
             "octaves": {
-                "description": "No description",
+                "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
                 "label": "octaves",
                 "type": "Integer"
@@ -218,9 +218,9 @@
                 "type": "Float"
             },
             "seed": {
-                "description": "No description",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             }
         },
@@ -228,19 +228,19 @@
             "dx": {
                 "caption": "dx",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Displacement with respect to the domain size (x-direction).",
                 "type": "input"
             },
             "dy": {
                 "caption": "dy",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Displacement with respect to the domain size (y-direction).",
                 "type": "input"
             },
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "out": {
@@ -275,9 +275,9 @@
                 "type": "Float"
             },
             "kw": {
-                "description": "Noise wavenumbers (kx, ky) for each directions.",
+                "description": "Base spatial frequencies in the X and Y directions. The frequencies are defined with respect to the entire domain: for example, kw = 2 produces two full oscillations across the domain width (and similarly for the Y direction).",
                 "key": "kw",
-                "label": "kw",
+                "label": "Spatial Frequency",
                 "type": "Wavenumber"
             },
             "large_scale_amp": {
@@ -365,9 +365,9 @@
                 "type": "Float"
             },
             "seed": {
-                "description": "Random seed number.",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             },
             "small_scale_amp": {
@@ -411,7 +411,7 @@
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "Output noise amplitude envelope.",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "out": {
@@ -852,13 +852,13 @@
             "dx": {
                 "caption": "dx",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Displacement with respect to the domain size (x-direction).",
                 "type": "input"
             },
             "dy": {
                 "caption": "dy",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Displacement with respect to the domain size (y-direction).",
                 "type": "input"
             },
             "input": {
@@ -945,7 +945,7 @@
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "Output noise amplitude envelope.",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "output": {
@@ -1032,7 +1032,7 @@
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "Output noise amplitude envelope.",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "output": {
@@ -1322,9 +1322,9 @@
                 "type": "Value range"
             },
             "seed": {
-                "description": "Random seed number",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             },
             "stagger_ratio": {
@@ -1393,9 +1393,9 @@
                 "type": "Value range"
             },
             "seed": {
-                "description": "Random seed number.",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             }
         },
@@ -1426,9 +1426,9 @@
                 "type": "Value range"
             },
             "seed": {
-                "description": "Random seed number.",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             }
         },
@@ -1471,9 +1471,9 @@
                 "type": "Value range"
             },
             "seed": {
-                "description": "No description",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             }
         },
@@ -1522,9 +1522,9 @@
                 "type": "Value range"
             },
             "seed": {
-                "description": "Random seed number.",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             }
         },
@@ -1567,9 +1567,9 @@
                 "type": "Value range"
             },
             "seed": {
-                "description": "Random seed number.",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             }
         },
@@ -1762,9 +1762,9 @@
                 "type": "Float"
             },
             "seed": {
-                "description": "No description",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             }
         },
@@ -2187,19 +2187,19 @@
             "dx": {
                 "caption": "dx",
                 "data_type": "Heightmap",
-                "description": "Optional X-displacement noise field for coordinate perturbation.",
+                "description": "Displacement with respect to the domain size (x-direction).",
                 "type": "input"
             },
             "dy": {
                 "caption": "dy",
                 "data_type": "Heightmap",
-                "description": "Optional Y-displacement noise field for coordinate perturbation.",
+                "description": "Displacement with respect to the domain size (y-direction).",
                 "type": "input"
             },
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "Optional mask controlling the effective region of the generated cone.",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "output": {
@@ -2346,19 +2346,19 @@
             "dx": {
                 "caption": "dx",
                 "data_type": "Heightmap",
-                "description": "Optional X-displacement noise field for coordinate perturbation.",
+                "description": "Displacement with respect to the domain size (x-direction).",
                 "type": "input"
             },
             "dy": {
                 "caption": "dy",
                 "data_type": "Heightmap",
-                "description": "Optional Y-displacement noise field for coordinate perturbation.",
+                "description": "Displacement with respect to the domain size (y-direction).",
                 "type": "input"
             },
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "Optional mask controlling the effective region of the generated cone.",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "output": {
@@ -2427,19 +2427,19 @@
             "dx": {
                 "caption": "dx",
                 "data_type": "Heightmap",
-                "description": "Optional X-displacement noise field for coordinate perturbation.",
+                "description": "Displacement with respect to the domain size (x-direction).",
                 "type": "input"
             },
             "dy": {
                 "caption": "dy",
                 "data_type": "Heightmap",
-                "description": "Optional Y-displacement noise field for coordinate perturbation.",
+                "description": "Displacement with respect to the domain size (y-direction).",
                 "type": "input"
             },
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "Optional mask controlling the effective region of the generated cone.",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "output": {
@@ -2773,9 +2773,9 @@
                 "type": "Bool"
             },
             "kw": {
-                "description": "Noise wavenumbers (kx, ky) for each directions.",
+                "description": "Base spatial frequencies in the X and Y directions. The frequencies are defined with respect to the entire domain: for example, kw = 2 produces two full oscillations across the domain width (and similarly for the Y direction).",
                 "key": "kw",
-                "label": "kw",
+                "label": "Spatial Frequency",
                 "type": "Wavenumber"
             },
             "noise_amplitude_proportion": {
@@ -2803,9 +2803,9 @@
                 "type": "Integer"
             },
             "seed": {
-                "description": "Random seed number.",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             },
             "slope_power": {
@@ -2843,7 +2843,7 @@
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "Output noise amplitude envelope.",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "out": {
@@ -2949,9 +2949,9 @@
                 "type": "Float"
             },
             "seed": {
-                "description": "The seed for the random number generator.",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             },
             "seeding_outer_radius_ratio": {
@@ -3891,9 +3891,9 @@
                 "type": "Float"
             },
             "seed": {
-                "description": "Random seed number.",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             },
             "slope": {
@@ -4122,9 +4122,9 @@
                 "type": "Float"
             },
             "seed": {
-                "description": "TODO",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             },
             "upward_penalization": {
@@ -4212,25 +4212,25 @@
                 "type": "Float"
             },
             "kw": {
-                "description": "Defines the wavenumber, which controls the frequency of the Gabor wavelets in the noise function.",
+                "description": "Base spatial frequencies in the X and Y directions. The frequencies are defined with respect to the entire domain: for example, kw = 2 produces two full oscillations across the domain width (and similarly for the Y direction).",
                 "key": "kw",
-                "label": "kw",
+                "label": "Spatial Frequency",
                 "type": "Wavenumber"
             },
             "lacunarity": {
-                "description": "Controls the frequency scaling between successive octaves of the fractal noise. Higher values create larger gaps between frequencies.",
+                "description": "The frequency scaling factor for successive noise octaves. Higher values increase the frequency of each successive octave.",
                 "key": "lacunarity",
                 "label": "lacunarity",
                 "type": "Float"
             },
             "octaves": {
-                "description": "Specifies the number of noise layers (octaves) used in the fractal Brownian motion. More octaves add finer details.",
+                "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
                 "label": "octaves",
                 "type": "Integer"
             },
             "persistence": {
-                "description": "Controls how much each successive octave contributes to the final noise pattern. Higher values result in more prominent fine details.",
+                "description": "The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.",
                 "key": "persistence",
                 "label": "persistence",
                 "type": "Float"
@@ -4266,13 +4266,13 @@
                 "type": "Float"
             },
             "seed": {
-                "description": "Sets the random seed for noise generation, ensuring reproducibility.",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             },
             "weight": {
-                "description": "Adjusts the intensity of the noise contribution at each point.",
+                "description": "Controls how much higher FBM octaves contribute to the noise based on local elevation. A higher weight suppresses high-frequency octaves at low elevations and increases their influence at higher elevations, producing terrain where fine details appear mainly near peaks while lower areas remain smoother.",
                 "key": "weight",
                 "label": "weight",
                 "type": "Float"
@@ -4294,19 +4294,19 @@
             "dx": {
                 "caption": "dx",
                 "data_type": "Heightmap",
-                "description": "Optional input to control horizontal displacement in the noise generation.",
+                "description": "Displacement with respect to the domain size (x-direction).",
                 "type": "input"
             },
             "dy": {
                 "caption": "dy",
                 "data_type": "Heightmap",
-                "description": "Optional input to control vertical displacement in the noise generation.",
+                "description": "Displacement with respect to the domain size (y-direction).",
                 "type": "input"
             },
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "Modulates the noise amplitude across the heightmap.",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "output": {
@@ -4645,7 +4645,7 @@
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "output": {
@@ -4692,9 +4692,9 @@
                 "type": "Bool"
             },
             "kw": {
-                "description": "Wave number vector that determines the base frequency of the noise.",
+                "description": "Base spatial frequencies in the X and Y directions. The frequencies are defined with respect to the entire domain: for example, kw = 2 produces two full oscillations across the domain width (and similarly for the Y direction).",
                 "key": "kw",
-                "label": "kw",
+                "label": "Spatial Frequency",
                 "type": "Wavenumber"
             },
             "kw_multiplier": {
@@ -4704,19 +4704,19 @@
                 "type": "Wavenumber"
             },
             "lacunarity": {
-                "description": "Controls the frequency scaling between successive octaves in the fractal noise function. Higher values create larger gaps between frequencies.",
+                "description": "The frequency scaling factor for successive noise octaves. Higher values increase the frequency of each successive octave.",
                 "key": "lacunarity",
                 "label": "lacunarity",
                 "type": "Float"
             },
             "octaves": {
-                "description": "Number of noise layers (octaves) used in fractal Brownian motion (fBm). More octaves add finer details.",
+                "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
                 "label": "octaves",
                 "type": "Integer"
             },
             "persistence": {
-                "description": "Determines how much each successive octave contributes to the final noise pattern. Higher values amplify finer details.",
+                "description": "The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.",
                 "key": "persistence",
                 "label": "persistence",
                 "type": "Float"
@@ -4728,9 +4728,9 @@
                 "type": "Value range"
             },
             "seed": {
-                "description": "Sets the random seed for reproducible noise generation.",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             },
             "slope_strength": {
@@ -4768,19 +4768,19 @@
             "dx": {
                 "caption": "dx",
                 "data_type": "Heightmap",
-                "description": "Optional input for perturbing noise in the X-direction.",
+                "description": "Displacement with respect to the domain size (x-direction).",
                 "type": "input"
             },
             "dy": {
                 "caption": "dy",
                 "data_type": "Heightmap",
-                "description": "Optional input for perturbing noise in the Y-direction.",
+                "description": "Displacement with respect to the domain size (y-direction).",
                 "type": "input"
             },
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "Modulates the amplitude of the noise across the heightmap.",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "output": {
@@ -4831,13 +4831,13 @@
             "dx": {
                 "caption": "dx",
                 "data_type": "Heightmap",
-                "description": "Gradient with respect to the x-direction.",
+                "description": "Displacement with respect to the domain size (x-direction).",
                 "type": "output"
             },
             "dy": {
                 "caption": "dy",
                 "data_type": "Heightmap",
-                "description": "Gradient with respect to the y-direction.",
+                "description": "Displacement with respect to the domain size (y-direction).",
                 "type": "output"
             },
             "input": {
@@ -5167,25 +5167,25 @@
                 "type": "Float"
             },
             "kw": {
-                "description": "No description",
+                "description": "Base spatial frequencies in the X and Y directions. The frequencies are defined with respect to the entire domain: for example, kw = 2 produces two full oscillations across the domain width (and similarly for the Y direction).",
                 "key": "kw",
-                "label": "kw",
+                "label": "Spatial Frequency",
                 "type": "Wavenumber"
             },
             "lacunarity": {
-                "description": "No description",
+                "description": "The frequency scaling factor for successive noise octaves. Higher values increase the frequency of each successive octave.",
                 "key": "lacunarity",
                 "label": "lacunarity",
                 "type": "Float"
             },
             "octaves": {
-                "description": "No description",
+                "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
                 "label": "octaves",
                 "type": "Integer"
             },
             "persistence": {
-                "description": "No description",
+                "description": "The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.",
                 "key": "persistence",
                 "label": "persistence",
                 "type": "Float"
@@ -5233,9 +5233,9 @@
                 "type": "Float"
             },
             "seed": {
-                "description": "No description",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             },
             "shift": {
@@ -5261,19 +5261,19 @@
             "dx": {
                 "caption": "dx",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Displacement with respect to the domain size (x-direction).",
                 "type": "input"
             },
             "dy": {
                 "caption": "dy",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Displacement with respect to the domain size (y-direction).",
                 "type": "input"
             },
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "output": {
@@ -5476,9 +5476,9 @@
                 "type": "Bool"
             },
             "seed": {
-                "description": "Random seed number.",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             }
         },
@@ -5599,9 +5599,9 @@
                 "type": "Bool"
             },
             "seed": {
-                "description": "TODO",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             },
             "slope_mask": {
@@ -5959,7 +5959,7 @@
                 "type": "Float"
             },
             "persistence": {
-                "description": "TODO",
+                "description": "The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.",
                 "key": "persistence",
                 "label": "persistence",
                 "type": "Float"
@@ -6232,6 +6232,207 @@
             }
         }
     },
+    "Island": {
+        "category": "Primtive/Geological",
+        "description": "This function generates a procedural island heightmap from a binary land mask by combining a distance-based radial profile with fractal noise modulation.",
+        "label": "Island",
+        "parameters": {
+            "elevation_scale": {
+                "description": "Global elevation scale.",
+                "key": "elevation_scale",
+                "label": "Elevation Scaling Factor",
+                "type": "Float"
+            },
+            "filter_radius": {
+                "description": "Radius of the smoothing filter applied to the distance transform with respect to a unit domain.",
+                "key": "filter_radius",
+                "label": "Smoothing Radius",
+                "type": "Float"
+            },
+            "k_smooth": {
+                "description": "Smoothing factor applied to the final radial profile for continuity.",
+                "key": "k_smooth",
+                "label": "Smoothing Coefficient",
+                "type": "Float"
+            },
+            "lee_amp": {
+                "description": "Strength of lee-side erosion.",
+                "key": "lee_amp",
+                "label": "Lee-Side Amplitude",
+                "type": "Float"
+            },
+            "lee_angle": {
+                "description": "Direction (angle) used to compute lee-side erosion.",
+                "key": "lee_angle",
+                "label": "Lee-Side Angle",
+                "type": "Float"
+            },
+            "noise_amp": {
+                "description": "Overall amplitude of the noise added to the terrain surface.",
+                "key": "noise_amp",
+                "label": "Amplitude",
+                "type": "Float"
+            },
+            "noise_angle": {
+                "description": "Rotation angle of the noise field, allowing oriented terrain features.",
+                "key": "noise_angle",
+                "label": "Direction Angle",
+                "type": "Float"
+            },
+            "noise_k_smoothing": {
+                "description": "Smoothing factor.",
+                "key": "noise_k_smoothing",
+                "label": "Smoothing Coefficient",
+                "type": "Float"
+            },
+            "noise_kw": {
+                "description": "Base spatial frequencies in the X and Y directions.",
+                "key": "noise_kw",
+                "label": "Spatial Frequency",
+                "type": "Wavenumber"
+            },
+            "noise_octaves": {
+                "description": "Number of FBM layers used to build the noise (more octaves means more detail).",
+                "key": "noise_octaves",
+                "label": "Octaves",
+                "type": "Integer"
+            },
+            "noise_rugosity": {
+                "description": "Persistence-like factor controlling roughness decay between FBM octaves.",
+                "key": "noise_rugosity",
+                "label": "Rugosity",
+                "type": "Float"
+            },
+            "post_gain": {
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
+                "key": "post_gain",
+                "label": "Gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
+                "key": "post_inverse",
+                "label": "Invert Output",
+                "type": "Bool"
+            },
+            "post_remap": {
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
+                "key": "post_remap",
+                "label": "Remap Range",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "Modifies the amplitude of elevations by first clamping them to a given interval and then scaling them so that the restricted interval matches the original input range. This enhances contrast in elevation variations while maintaining overall structure.",
+                "key": "post_saturate",
+                "label": "Saturation Range",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
+                "key": "post_smoothing_radius",
+                "label": "Smoothing Radius",
+                "type": "Float"
+            },
+            "radial_noise_intensity": {
+                "description": "Strength of radial displacement noise applied to deform the island outline.",
+                "key": "radial_noise_intensity",
+                "label": "Radial Noise Intensity",
+                "type": "Float"
+            },
+            "radial_profile_gain": {
+                "description": "Exponent controlling how quickly elevation falls off from center to shore.",
+                "key": "radial_profile_gain",
+                "label": "Radial Profile Gain",
+                "type": "Float"
+            },
+            "seed": {
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
+                "key": "seed",
+                "label": "Seed",
+                "type": "Random seed number"
+            },
+            "slope_end": {
+                "description": "Slope at the summit.",
+                "key": "slope_end",
+                "label": "Apex Slope",
+                "type": "Float"
+            },
+            "slope_max": {
+                "description": "Maximum slope value allowed in the radial profile.",
+                "key": "slope_max",
+                "label": "Upper Slope Limit",
+                "type": "Float"
+            },
+            "slope_min": {
+                "description": "Minimum slope value used in shaping the radial profile.",
+                "key": "slope_min",
+                "label": "Lower Slope Limit",
+                "type": "Float"
+            },
+            "slope_noise_intensity": {
+                "description": "Amount of noise applied to locally vary the slope and break uniform gradients.",
+                "key": "slope_noise_intensity",
+                "label": "Slope Noise Intensity",
+                "type": "Float"
+            },
+            "slope_start": {
+                "description": "Slope at the shoreline.",
+                "key": "slope_start",
+                "label": "Shoreline Slope",
+                "type": "Float"
+            },
+            "uplift_amp": {
+                "description": "Amplitude of uplift deformation.",
+                "key": "uplift_amp",
+                "label": "Uplift Amplitude",
+                "type": "Float"
+            },
+            "water_decay": {
+                "description": "Water depth decay with the distance to the shoreline.",
+                "key": "water_decay",
+                "label": "Water Decay Rate",
+                "type": "Float"
+            },
+            "water_depth": {
+                "description": "Maximum deth of water.",
+                "key": "water_depth",
+                "label": "Water Depth Level",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "dr": {
+                "caption": "dr",
+                "data_type": "Heightmap",
+                "description": "Input radial noise. Optional, if not set, the embedded default noise generator is used.",
+                "type": "input"
+            },
+            "inland_mask": {
+                "caption": "inland_mask",
+                "data_type": "Heightmap",
+                "description": "Output buffer receiving a mask of inland pixels (non-coastal land).",
+                "type": "output"
+            },
+            "land_mask": {
+                "caption": "land_mask",
+                "data_type": "Heightmap",
+                "description": "Binary mask defining the island’s footprint; nonzero pixels are considered land. Consider using the node IslandLandMask to generate this mask.",
+                "type": "input"
+            },
+            "out": {
+                "caption": "out",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "output"
+            },
+            "water_depth": {
+                "caption": "water_depth",
+                "data_type": "Heightmap",
+                "description": "Output water depth map representing flooded areas.",
+                "type": "output"
+            }
+        }
+    },
     "IslandLandMask": {
         "category": "Primtive/Geological",
         "description": "No description available",
@@ -6250,13 +6451,13 @@
                 "type": "Float"
             },
             "kw": {
-                "description": "No description",
+                "description": "Base spatial frequencies in the X and Y directions. The frequencies are defined with respect to the entire domain: for example, kw = 2 produces two full oscillations across the domain width (and similarly for the Y direction).",
                 "key": "kw",
                 "label": "kw",
                 "type": "Float"
             },
             "lacunarity": {
-                "description": "No description",
+                "description": "The frequency scaling factor for successive noise octaves. Higher values increase the frequency of each successive octave.",
                 "key": "lacunarity",
                 "label": "lacunarity",
                 "type": "Float"
@@ -6268,43 +6469,43 @@
                 "type": "Enumeration"
             },
             "octaves": {
-                "description": "No description",
+                "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
                 "label": "octaves",
                 "type": "Integer"
             },
             "persistence": {
-                "description": "No description",
+                "description": "The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.",
                 "key": "persistence",
                 "label": "persistence",
                 "type": "Float"
             },
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "Invert Output",
                 "type": "Bool"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "Remap Range",
                 "type": "Value range"
             },
             "post_saturate": {
-                "description": "No description",
+                "description": "Modifies the amplitude of elevations by first clamping them to a given interval and then scaling them so that the restricted interval matches the original input range. This enhances contrast in elevation variations while maintaining overall structure.",
                 "key": "post_saturate",
                 "label": "Saturation Range",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "Smoothing Radius",
                 "type": "Float"
@@ -6316,13 +6517,13 @@
                 "type": "Float"
             },
             "seed": {
-                "description": "No description",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             },
             "weight": {
-                "description": "No description",
+                "description": "Controls how much higher FBM octaves contribute to the noise based on local elevation. A higher weight suppresses high-frequency octaves at low elevations and increases their influence at higher elevations, producing terrain where fine details appear mainly near peaks while lower areas remain smoother.",
                 "key": "weight",
                 "label": "weight",
                 "type": "Float"
@@ -6382,7 +6583,7 @@
                 "type": "Float"
             },
             "kw": {
-                "description": "Kernel wavenumber (spatial frequency).",
+                "description": "Base spatial frequencies in the X and Y directions. The frequencies are defined with respect to the entire domain: for example, kw = 2 produces two full oscillations across the domain width (and similarly for the Y direction).",
                 "key": "kw",
                 "label": "kw",
                 "type": "Float"
@@ -6466,9 +6667,9 @@
                 "type": "Bool"
             },
             "seed": {
-                "description": "Random seed number.",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             },
             "weights.x": {
@@ -6535,9 +6736,9 @@
                 "type": "Bool"
             },
             "seed": {
-                "description": "Random seed number.",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             },
             "weights.x": {
@@ -7381,7 +7582,7 @@
                 "type": "Float"
             },
             "octaves": {
-                "description": "No description",
+                "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
                 "label": "octaves",
                 "type": "Integer"
@@ -7441,9 +7642,9 @@
                 "type": "Float"
             },
             "seed": {
-                "description": "No description",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             }
         },
@@ -7451,19 +7652,19 @@
             "dx": {
                 "caption": "dx",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Displacement with respect to the domain size (x-direction).",
                 "type": "input"
             },
             "dy": {
                 "caption": "dy",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Displacement with respect to the domain size (y-direction).",
                 "type": "input"
             },
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "out": {
@@ -7528,7 +7729,7 @@
                 "type": "Float"
             },
             "octaves": {
-                "description": "No description",
+                "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
                 "label": "octaves",
                 "type": "Integer"
@@ -7582,9 +7783,9 @@
                 "type": "Float"
             },
             "seed": {
-                "description": "No description",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             }
         },
@@ -7592,19 +7793,19 @@
             "dx": {
                 "caption": "dx",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Displacement with respect to the domain size (x-direction).",
                 "type": "input"
             },
             "dy": {
                 "caption": "dy",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Displacement with respect to the domain size (y-direction).",
                 "type": "input"
             },
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "out": {
@@ -7651,7 +7852,7 @@
                 "type": "Bool"
             },
             "kw": {
-                "description": "The wave numbers (frequency components) that define the base frequency of the noise function.",
+                "description": "Base spatial frequencies in the X and Y directions. The frequencies are defined with respect to the entire domain: for example, kw = 2 produces two full oscillations across the domain width (and similarly for the Y direction).",
                 "key": "kw",
                 "label": "kw",
                 "type": "Wavenumber"
@@ -7681,13 +7882,13 @@
                 "type": "Value range"
             },
             "seed": {
-                "description": "Sets the seed for random noise generation, ensuring reproducibility.",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             },
             "weight": {
-                "description": "Initial weight for noise contribution. Higher values amplify the primary terrain features.",
+                "description": "Controls how much higher FBM octaves contribute to the noise based on local elevation. A higher weight suppresses high-frequency octaves at low elevations and increases their influence at higher elevations, producing terrain where fine details appear mainly near peaks while lower areas remain smoother.",
                 "key": "weight",
                 "label": "weight",
                 "type": "Float"
@@ -7709,19 +7910,19 @@
             "dx": {
                 "caption": "dx",
                 "data_type": "Heightmap",
-                "description": "Optional input for perturbing the terrain in the X-direction.",
+                "description": "Displacement with respect to the domain size (x-direction).",
                 "type": "input"
             },
             "dy": {
                 "caption": "dy",
                 "data_type": "Heightmap",
-                "description": "Optional input for perturbing the terrain in the Y-direction.",
+                "description": "Displacement with respect to the domain size (y-direction).",
                 "type": "input"
             },
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "Modulates the amplitude of the mountain range across the heightmap.",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "output": {
@@ -7780,7 +7981,7 @@
                 "type": "Float"
             },
             "octaves": {
-                "description": "No description",
+                "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
                 "label": "octaves",
                 "type": "Integer"
@@ -7840,9 +8041,9 @@
                 "type": "Float"
             },
             "seed": {
-                "description": "No description",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             }
         },
@@ -7850,19 +8051,19 @@
             "dx": {
                 "caption": "dx",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Displacement with respect to the domain size (x-direction).",
                 "type": "input"
             },
             "dy": {
                 "caption": "dy",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Displacement with respect to the domain size (y-direction).",
                 "type": "input"
             },
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "out": {
@@ -7927,7 +8128,7 @@
                 "type": "Float"
             },
             "octaves": {
-                "description": "No description",
+                "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
                 "label": "octaves",
                 "type": "Integer"
@@ -7981,9 +8182,9 @@
                 "type": "Float"
             },
             "seed": {
-                "description": "No description",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             }
         },
@@ -7991,19 +8192,19 @@
             "dx": {
                 "caption": "dx",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Displacement with respect to the domain size (x-direction).",
                 "type": "input"
             },
             "dy": {
                 "caption": "dy",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Displacement with respect to the domain size (y-direction).",
                 "type": "input"
             },
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "out": {
@@ -8026,9 +8227,9 @@
                 "type": "Bool"
             },
             "kw": {
-                "description": "Noise wavenumbers (kx, ky) for each directions.",
+                "description": "Base spatial frequencies in the X and Y directions. The frequencies are defined with respect to the entire domain: for example, kw = 2 produces two full oscillations across the domain width (and similarly for the Y direction).",
                 "key": "kw",
-                "label": "kw",
+                "label": "Spatial Frequency",
                 "type": "Wavenumber"
             },
             "noise_type": {
@@ -8068,9 +8269,9 @@
                 "type": "Float"
             },
             "seed": {
-                "description": "Random seed number.",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             }
         },
@@ -8090,7 +8291,7 @@
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "Output noise amplitude envelope.",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "out": {
@@ -8113,13 +8314,13 @@
                 "type": "Bool"
             },
             "kw": {
-                "description": "Noise wavenumbers (kx, ky) for each directions.",
+                "description": "Base spatial frequencies in the X and Y directions. The frequencies are defined with respect to the entire domain: for example, kw = 2 produces two full oscillations across the domain width (and similarly for the Y direction).",
                 "key": "kw",
-                "label": "kw",
+                "label": "Spatial Frequency",
                 "type": "Wavenumber"
             },
             "lacunarity": {
-                "description": "Wavenumber ratio between each octaves.",
+                "description": "The frequency scaling factor for successive noise octaves. Higher values increase the frequency of each successive octave.",
                 "key": "lacunarity",
                 "label": "lacunarity",
                 "type": "Float"
@@ -8131,13 +8332,13 @@
                 "type": "Enumeration"
             },
             "octaves": {
-                "description": "Number of octaves.",
+                "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
                 "label": "octaves",
                 "type": "Integer"
             },
             "persistence": {
-                "description": "Octave persistence.",
+                "description": "The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.",
                 "key": "persistence",
                 "label": "persistence",
                 "type": "Float"
@@ -8173,13 +8374,13 @@
                 "type": "Float"
             },
             "seed": {
-                "description": "Random seed number.",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             },
             "weight": {
-                "description": "Octave weighting.",
+                "description": "Controls how much higher FBM octaves contribute to the noise based on local elevation. A higher weight suppresses high-frequency octaves at low elevations and increases their influence at higher elevations, producing terrain where fine details appear mainly near peaks while lower areas remain smoother.",
                 "key": "weight",
                 "label": "weight",
                 "type": "Float"
@@ -8207,7 +8408,7 @@
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "Output noise amplitude envelope.",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "output": {
@@ -8236,13 +8437,13 @@
                 "type": "Bool"
             },
             "kw": {
-                "description": "Noise wavenumbers (kx, ky) for each directions.",
+                "description": "Base spatial frequencies in the X and Y directions. The frequencies are defined with respect to the entire domain: for example, kw = 2 produces two full oscillations across the domain width (and similarly for the Y direction).",
                 "key": "kw",
-                "label": "kw",
+                "label": "Spatial Frequency",
                 "type": "Wavenumber"
             },
             "lacunarity": {
-                "description": "Wavenumber ratio between each octaves.",
+                "description": "The frequency scaling factor for successive noise octaves. Higher values increase the frequency of each successive octave.",
                 "key": "lacunarity",
                 "label": "lacunarity",
                 "type": "Float"
@@ -8254,13 +8455,13 @@
                 "type": "Enumeration"
             },
             "octaves": {
-                "description": "Number of octaves.",
+                "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
                 "label": "octaves",
                 "type": "Integer"
             },
             "persistence": {
-                "description": "Octave persistence.",
+                "description": "The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.",
                 "key": "persistence",
                 "label": "persistence",
                 "type": "Float"
@@ -8272,13 +8473,13 @@
                 "type": "Value range"
             },
             "seed": {
-                "description": "Random seed number.",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             },
             "weight": {
-                "description": "Octave weighting.",
+                "description": "Controls how much higher FBM octaves contribute to the noise based on local elevation. A higher weight suppresses high-frequency octaves at low elevations and increases their influence at higher elevations, producing terrain where fine details appear mainly near peaks while lower areas remain smoother.",
                 "key": "weight",
                 "label": "weight",
                 "type": "Float"
@@ -8306,7 +8507,7 @@
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "Output noise amplitude envelope.",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "output": {
@@ -8335,13 +8536,13 @@
                 "type": "Bool"
             },
             "kw": {
-                "description": "Noise wavenumbers (kx, ky) for each directions.",
+                "description": "Base spatial frequencies in the X and Y directions. The frequencies are defined with respect to the entire domain: for example, kw = 2 produces two full oscillations across the domain width (and similarly for the Y direction).",
                 "key": "kw",
-                "label": "kw",
+                "label": "Spatial Frequency",
                 "type": "Wavenumber"
             },
             "lacunarity": {
-                "description": "Wavenumber ratio between each octaves.",
+                "description": "The frequency scaling factor for successive noise octaves. Higher values increase the frequency of each successive octave.",
                 "key": "lacunarity",
                 "label": "lacunarity",
                 "type": "Float"
@@ -8353,13 +8554,13 @@
                 "type": "Enumeration"
             },
             "octaves": {
-                "description": "Number of octaves.",
+                "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
                 "label": "octaves",
                 "type": "Integer"
             },
             "persistence": {
-                "description": "Octave persistence.",
+                "description": "The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.",
                 "key": "persistence",
                 "label": "persistence",
                 "type": "Float"
@@ -8371,13 +8572,13 @@
                 "type": "Value range"
             },
             "seed": {
-                "description": "Random seed number.",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             },
             "weight": {
-                "description": "Octave weighting.",
+                "description": "Controls how much higher FBM octaves contribute to the noise based on local elevation. A higher weight suppresses high-frequency octaves at low elevations and increases their influence at higher elevations, producing terrain where fine details appear mainly near peaks while lower areas remain smoother.",
                 "key": "weight",
                 "label": "weight",
                 "type": "Float"
@@ -8405,7 +8606,7 @@
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "Output noise amplitude envelope.",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "output": {
@@ -8428,13 +8629,13 @@
                 "type": "Bool"
             },
             "kw": {
-                "description": "Noise wavenumbers (kx, ky) for each directions.",
+                "description": "Base spatial frequencies in the X and Y directions. The frequencies are defined with respect to the entire domain: for example, kw = 2 produces two full oscillations across the domain width (and similarly for the Y direction).",
                 "key": "kw",
-                "label": "kw",
+                "label": "Spatial Frequency",
                 "type": "Wavenumber"
             },
             "lacunarity": {
-                "description": "Wavenumber ratio between each octaves.",
+                "description": "The frequency scaling factor for successive noise octaves. Higher values increase the frequency of each successive octave.",
                 "key": "lacunarity",
                 "label": "lacunarity",
                 "type": "Float"
@@ -8446,13 +8647,13 @@
                 "type": "Float"
             },
             "octaves": {
-                "description": "Number of octaves.",
+                "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
                 "label": "octaves",
                 "type": "Integer"
             },
             "persistence": {
-                "description": "Octave persistence.",
+                "description": "The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.",
                 "key": "persistence",
                 "label": "persistence",
                 "type": "Float"
@@ -8464,13 +8665,13 @@
                 "type": "Value range"
             },
             "seed": {
-                "description": "Random seed number.",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             },
             "weight": {
-                "description": "Octave weighting.",
+                "description": "Controls how much higher FBM octaves contribute to the noise based on local elevation. A higher weight suppresses high-frequency octaves at low elevations and increases their influence at higher elevations, producing terrain where fine details appear mainly near peaks while lower areas remain smoother.",
                 "key": "weight",
                 "label": "weight",
                 "type": "Float"
@@ -8498,7 +8699,7 @@
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "Output noise amplitude envelope.",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "output": {
@@ -8521,13 +8722,13 @@
                 "type": "Bool"
             },
             "kw": {
-                "description": "Noise wavenumbers (kx, ky) for each directions.",
+                "description": "Base spatial frequencies in the X and Y directions. The frequencies are defined with respect to the entire domain: for example, kw = 2 produces two full oscillations across the domain width (and similarly for the Y direction).",
                 "key": "kw",
-                "label": "kw",
+                "label": "Spatial Frequency",
                 "type": "Wavenumber"
             },
             "lacunarity": {
-                "description": "Wavenumber ratio between each octaves.",
+                "description": "The frequency scaling factor for successive noise octaves. Higher values increase the frequency of each successive octave.",
                 "key": "lacunarity",
                 "label": "lacunarity",
                 "type": "Float"
@@ -8539,13 +8740,13 @@
                 "type": "Enumeration"
             },
             "octaves": {
-                "description": "Number of octaves.",
+                "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
                 "label": "octaves",
                 "type": "Integer"
             },
             "persistence": {
-                "description": "Octave persistence.",
+                "description": "The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.",
                 "key": "persistence",
                 "label": "persistence",
                 "type": "Float"
@@ -8557,13 +8758,13 @@
                 "type": "Value range"
             },
             "seed": {
-                "description": "Random seed number.",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             },
             "weight": {
-                "description": "Octave weighting.",
+                "description": "Controls how much higher FBM octaves contribute to the noise based on local elevation. A higher weight suppresses high-frequency octaves at low elevations and increases their influence at higher elevations, producing terrain where fine details appear mainly near peaks while lower areas remain smoother.",
                 "key": "weight",
                 "label": "weight",
                 "type": "Float"
@@ -8591,7 +8792,7 @@
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "Output noise amplitude envelope.",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "output": {
@@ -8620,13 +8821,13 @@
                 "type": "Float"
             },
             "kw": {
-                "description": "Noise wavenumbers (kx, ky) for each directions.",
+                "description": "Base spatial frequencies in the X and Y directions. The frequencies are defined with respect to the entire domain: for example, kw = 2 produces two full oscillations across the domain width (and similarly for the Y direction).",
                 "key": "kw",
-                "label": "kw",
+                "label": "Spatial Frequency",
                 "type": "Wavenumber"
             },
             "lacunarity": {
-                "description": "Wavenumber ratio between each octaves.",
+                "description": "The frequency scaling factor for successive noise octaves. Higher values increase the frequency of each successive octave.",
                 "key": "lacunarity",
                 "label": "lacunarity",
                 "type": "Float"
@@ -8638,13 +8839,13 @@
                 "type": "Enumeration"
             },
             "octaves": {
-                "description": "Number of octaves.",
+                "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
                 "label": "octaves",
                 "type": "Integer"
             },
             "persistence": {
-                "description": "Octave persistence.",
+                "description": "The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.",
                 "key": "persistence",
                 "label": "persistence",
                 "type": "Float"
@@ -8656,13 +8857,13 @@
                 "type": "Value range"
             },
             "seed": {
-                "description": "Random seed number.",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             },
             "weight": {
-                "description": "Octave weighting.",
+                "description": "Controls how much higher FBM octaves contribute to the noise based on local elevation. A higher weight suppresses high-frequency octaves at low elevations and increases their influence at higher elevations, producing terrain where fine details appear mainly near peaks while lower areas remain smoother.",
                 "key": "weight",
                 "label": "weight",
                 "type": "Float"
@@ -8690,7 +8891,7 @@
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "Output noise amplitude envelope.",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "output": {
@@ -8713,13 +8914,13 @@
                 "type": "Bool"
             },
             "kw": {
-                "description": "Noise wavenumbers (kx, ky) for each directions.",
+                "description": "Base spatial frequencies in the X and Y directions. The frequencies are defined with respect to the entire domain: for example, kw = 2 produces two full oscillations across the domain width (and similarly for the Y direction).",
                 "key": "kw",
-                "label": "kw",
+                "label": "Spatial Frequency",
                 "type": "Wavenumber"
             },
             "lacunarity": {
-                "description": "Wavenumber ratio between each octaves.",
+                "description": "The frequency scaling factor for successive noise octaves. Higher values increase the frequency of each successive octave.",
                 "key": "lacunarity",
                 "label": "lacunarity",
                 "type": "Float"
@@ -8731,13 +8932,13 @@
                 "type": "Enumeration"
             },
             "octaves": {
-                "description": "Number of octaves.",
+                "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
                 "label": "octaves",
                 "type": "Integer"
             },
             "persistence": {
-                "description": "Octave persistence.",
+                "description": "The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.",
                 "key": "persistence",
                 "label": "persistence",
                 "type": "Float"
@@ -8749,9 +8950,9 @@
                 "type": "Value range"
             },
             "seed": {
-                "description": "Random seed number.",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             },
             "warp_scale": {
@@ -8761,7 +8962,7 @@
                 "type": "Float"
             },
             "weight": {
-                "description": "Octave weighting.",
+                "description": "Controls how much higher FBM octaves contribute to the noise based on local elevation. A higher weight suppresses high-frequency octaves at low elevations and increases their influence at higher elevations, producing terrain where fine details appear mainly near peaks while lower areas remain smoother.",
                 "key": "weight",
                 "label": "weight",
                 "type": "Float"
@@ -8789,7 +8990,7 @@
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "Output noise amplitude envelope.",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "output": {
@@ -9035,7 +9236,7 @@
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "Output noise amplitude envelope.",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "output": {
@@ -9313,15 +9514,15 @@
                 "type": "Integer"
             },
             "persistence": {
-                "description": "Noise persistence (with iteration number).",
+                "description": "The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.",
                 "key": "persistence",
                 "label": "persistence",
                 "type": "Float"
             },
             "seed": {
-                "description": "Random seed number.",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             },
             "sigma": {
@@ -9397,9 +9598,9 @@
                 "type": "Float"
             },
             "seed": {
-                "description": "Random seed number",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             }
         },
@@ -9467,13 +9668,13 @@
             "dx": {
                 "caption": "dx",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Displacement with respect to the domain size (x-direction).",
                 "type": "input"
             },
             "dy": {
                 "caption": "dy",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Displacement with respect to the domain size (y-direction).",
                 "type": "input"
             },
             "path": {
@@ -9514,9 +9715,9 @@
                 "type": "Float"
             },
             "seed": {
-                "description": "No description",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             }
         },
@@ -9726,9 +9927,9 @@
                 "type": "Float"
             },
             "kw": {
-                "description": "No description",
+                "description": "Base spatial frequencies in the X and Y directions. The frequencies are defined with respect to the entire domain: for example, kw = 2 produces two full oscillations across the domain width (and similarly for the Y direction).",
                 "key": "kw",
-                "label": "kw",
+                "label": "Spatial Frequency",
                 "type": "Wavenumber"
             },
             "n_vertices_max": {
@@ -9786,9 +9987,9 @@
                 "type": "Float"
             },
             "seed": {
-                "description": "Random seed number.",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             },
             "shift": {
@@ -9826,7 +10027,7 @@
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "output": {
@@ -9879,13 +10080,13 @@
                 "type": "Float"
             },
             "kw": {
-                "description": "No description",
+                "description": "Base spatial frequencies in the X and Y directions. The frequencies are defined with respect to the entire domain: for example, kw = 2 produces two full oscillations across the domain width (and similarly for the Y direction).",
                 "key": "kw",
-                "label": "kw",
+                "label": "Spatial Frequency",
                 "type": "Wavenumber"
             },
             "lacunarity": {
-                "description": "No description",
+                "description": "The frequency scaling factor for successive noise octaves. Higher values increase the frequency of each successive octave.",
                 "key": "lacunarity",
                 "label": "lacunarity",
                 "type": "Float"
@@ -9903,13 +10104,13 @@
                 "type": "Integer"
             },
             "octaves": {
-                "description": "No description",
+                "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
                 "label": "octaves",
                 "type": "Integer"
             },
             "persistence": {
-                "description": "No description",
+                "description": "The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.",
                 "key": "persistence",
                 "label": "persistence",
                 "type": "Float"
@@ -9957,9 +10158,9 @@
                 "type": "Float"
             },
             "seed": {
-                "description": "Random seed number.",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             },
             "shift": {
@@ -9997,7 +10198,7 @@
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "output": {
@@ -10157,9 +10358,9 @@
                 "type": "Float"
             },
             "seed": {
-                "description": "TODO",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             }
         },
@@ -10244,9 +10445,9 @@
                 "type": "Float"
             },
             "seed": {
-                "description": "Random seed number.",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             }
         },
@@ -10307,9 +10508,9 @@
                 "type": "Float"
             },
             "seed": {
-                "description": "Random seed number.",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             }
         },
@@ -10356,13 +10557,13 @@
             "dx": {
                 "caption": "dx",
                 "data_type": "Heightmap",
-                "description": "Displacement for  the x-direction.",
+                "description": "Displacement with respect to the domain size (x-direction).",
                 "type": "output"
             },
             "dy": {
                 "caption": "dy",
                 "data_type": "Heightmap",
-                "description": "Displacement for  the y-direction.",
+                "description": "Displacement with respect to the domain size (y-direction).",
                 "type": "output"
             }
         }
@@ -11034,9 +11235,9 @@
                 "type": "Bool"
             },
             "seed": {
-                "description": "Random seed number.",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             }
         },
@@ -11200,7 +11401,7 @@
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "output": {
@@ -11271,9 +11472,9 @@
                 "type": "Float"
             },
             "kw": {
-                "description": "No description",
+                "description": "Base spatial frequencies in the X and Y directions. The frequencies are defined with respect to the entire domain: for example, kw = 2 produces two full oscillations across the domain width (and similarly for the Y direction).",
                 "key": "kw",
-                "label": "kw",
+                "label": "Spatial Frequency",
                 "type": "Wavenumber"
             },
             "mask_activate": {
@@ -11373,9 +11574,9 @@
                 "type": "Bool"
             },
             "seed": {
-                "description": "No description",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             }
         },
@@ -11383,13 +11584,13 @@
             "dx": {
                 "caption": "dx",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Displacement with respect to the domain size (x-direction).",
                 "type": "input"
             },
             "dy": {
                 "caption": "dy",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Displacement with respect to the domain size (y-direction).",
                 "type": "input"
             },
             "input": {
@@ -11467,13 +11668,13 @@
             "dx": {
                 "caption": "dx",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Displacement with respect to the domain size (x-direction).",
                 "type": "output"
             },
             "dy": {
                 "caption": "dy",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Displacement with respect to the domain size (y-direction).",
                 "type": "output"
             }
         }
@@ -13032,7 +13233,7 @@
                 "type": "Float"
             },
             "octaves": {
-                "description": "No description",
+                "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
                 "label": "octaves",
                 "type": "Integer"
@@ -13086,9 +13287,9 @@
                 "type": "Float"
             },
             "seed": {
-                "description": "No description",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             }
         },
@@ -13096,19 +13297,19 @@
             "dx": {
                 "caption": "dx",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Displacement with respect to the domain size (x-direction).",
                 "type": "input"
             },
             "dy": {
                 "caption": "dy",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Displacement with respect to the domain size (y-direction).",
                 "type": "input"
             },
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "out": {
@@ -13761,9 +13962,9 @@
                 "type": "Value range"
             },
             "seed": {
-                "description": "Random seed number.",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             }
         },
@@ -13972,7 +14173,7 @@
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "output": {
@@ -14025,7 +14226,7 @@
                 "type": "Float"
             },
             "lacunarity": {
-                "description": "No description",
+                "description": "The frequency scaling factor for successive noise octaves. Higher values increase the frequency of each successive octave.",
                 "key": "lacunarity",
                 "label": "lacunarity",
                 "type": "Float"
@@ -14081,11 +14282,11 @@
             "noise_kw": {
                 "description": "No description",
                 "key": "noise_kw",
-                "label": "noise_kw",
+                "label": "Spatial Frequency",
                 "type": "Wavenumber"
             },
             "octaves": {
-                "description": "No description",
+                "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
                 "label": "octaves",
                 "type": "Integer"
@@ -14163,9 +14364,9 @@
                 "type": "Float"
             },
             "seed": {
-                "description": "No description",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             },
             "slope": {
@@ -14220,9 +14421,9 @@
                 "type": "Integer"
             },
             "seed": {
-                "description": "Random seed number.",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             },
             "strata_noise": {
@@ -14283,9 +14484,9 @@
                 "type": "Vector of integers"
             },
             "seed": {
-                "description": "TODO",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             },
             "strata_noise": {
@@ -14352,9 +14553,9 @@
                 "type": "Integer"
             },
             "seed": {
-                "description": "Random seed number.",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             },
             "strata_noise": {
@@ -14451,9 +14652,9 @@
                 "type": "Float"
             },
             "seed": {
-                "description": "Random seed used for generating noise when noise_ratio > 0.",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             }
         },
@@ -14562,9 +14763,9 @@
                 "type": "Bool"
             },
             "seed": {
-                "description": "No description",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             },
             "value_persistence": {
@@ -14730,9 +14931,9 @@
                 "type": "Float"
             },
             "seed": {
-                "description": "TODO",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             }
         },
@@ -14853,9 +15054,9 @@
                 "type": "Float"
             },
             "seed": {
-                "description": "TODO",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             }
         },
@@ -15639,13 +15840,13 @@
             "dx": {
                 "caption": "dx",
                 "data_type": "Heightmap",
-                "description": "Displacement with respect to the domain size (y-direction).",
+                "description": "Displacement with respect to the domain size (x-direction).",
                 "type": "input"
             },
             "dy": {
                 "caption": "dy",
                 "data_type": "Heightmap",
-                "description": "Control parameter, acts as a multiplier for the weight parameter.",
+                "description": "Displacement with respect to the domain size (y-direction).",
                 "type": "input"
             },
             "input": {
@@ -15830,9 +16031,9 @@
                 "type": "Enumeration"
             },
             "seed": {
-                "description": "Random seed number.",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             },
             "sqrt_output": {
@@ -15858,7 +16059,7 @@
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "out": {
@@ -15905,19 +16106,19 @@
                 "type": "Float"
             },
             "lacunarity": {
-                "description": "No description",
+                "description": "The frequency scaling factor for successive noise octaves. Higher values increase the frequency of each successive octave.",
                 "key": "lacunarity",
                 "label": "lacunarity",
                 "type": "Float"
             },
             "octaves": {
-                "description": "No description",
+                "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
                 "label": "octaves",
                 "type": "Integer"
             },
             "persistence": {
-                "description": "No description",
+                "description": "The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.",
                 "key": "persistence",
                 "label": "persistence",
                 "type": "Float"
@@ -15959,9 +16160,9 @@
                 "type": "Enumeration"
             },
             "seed": {
-                "description": "Random seed number.",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             },
             "sqrt_output": {
@@ -15971,7 +16172,7 @@
                 "type": "Bool"
             },
             "weight": {
-                "description": "No description",
+                "description": "Controls how much higher FBM octaves contribute to the noise based on local elevation. A higher weight suppresses high-frequency octaves at low elevations and increases their influence at higher elevations, producing terrain where fine details appear mainly near peaks while lower areas remain smoother.",
                 "key": "weight",
                 "label": "weight",
                 "type": "Float"
@@ -15993,7 +16194,7 @@
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "out": {
@@ -16034,9 +16235,9 @@
                 "type": "Float"
             },
             "kw": {
-                "description": "Wavenumber controlling the spatial frequency (cell size) of the Voronoi pattern.",
+                "description": "Base spatial frequencies in the X and Y directions. The frequencies are defined with respect to the entire domain: for example, kw = 2 produces two full oscillations across the domain width (and similarly for the Y direction).",
                 "key": "kw",
-                "label": "kw",
+                "label": "Spatial Frequency",
                 "type": "Wavenumber"
             },
             "post_gain": {
@@ -16076,9 +16277,9 @@
                 "type": "Enumeration"
             },
             "seed": {
-                "description": "Seed value for the random generator affecting jitter and cell layout.",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             },
             "sqrt_output": {
@@ -16098,19 +16299,19 @@
             "dx": {
                 "caption": "dx",
                 "data_type": "Heightmap",
-                "description": "X-axis displacement map for directional warping of the Voronoi pattern.",
+                "description": "Displacement with respect to the domain size (x-direction).",
                 "type": "input"
             },
             "dy": {
                 "caption": "dy",
                 "data_type": "Heightmap",
-                "description": "Y-axis displacement map for directional warping of the Voronoi pattern.",
+                "description": "Displacement with respect to the domain size (y-direction).",
                 "type": "input"
             },
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "Heightmap used to modulate the visibility or strength of the Voronoi pattern.",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "out": {
@@ -16151,25 +16352,25 @@
                 "type": "Float"
             },
             "kw": {
-                "description": "Base wavenumber that controls the frequency of the initial Voronoi pattern.",
+                "description": "Base spatial frequencies in the X and Y directions. The frequencies are defined with respect to the entire domain: for example, kw = 2 produces two full oscillations across the domain width (and similarly for the Y direction).",
                 "key": "kw",
-                "label": "kw",
+                "label": "Spatial Frequency",
                 "type": "Wavenumber"
             },
             "lacunarity": {
-                "description": "Frequency multiplier between successive octaves in the fBm process.",
+                "description": "The frequency scaling factor for successive noise octaves. Higher values increase the frequency of each successive octave.",
                 "key": "lacunarity",
                 "label": "lacunarity",
                 "type": "Float"
             },
             "octaves": {
-                "description": "Number of fBm layers to combine for added detail and complexity.",
+                "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
                 "label": "octaves",
                 "type": "Integer"
             },
             "persistence": {
-                "description": "Amplitude scaling factor applied to each successive octave.",
+                "description": "The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.",
                 "key": "persistence",
                 "label": "persistence",
                 "type": "Float"
@@ -16211,9 +16412,9 @@
                 "type": "Enumeration"
             },
             "seed": {
-                "description": "Seed for random generation, affecting jitter and point distribution.",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             },
             "sqrt_output": {
@@ -16223,7 +16424,7 @@
                 "type": "Bool"
             },
             "weight": {
-                "description": "Weight multiplier applied to the final fBm result for scaling the output.",
+                "description": "Controls how much higher FBM octaves contribute to the noise based on local elevation. A higher weight suppresses high-frequency octaves at low elevations and increases their influence at higher elevations, producing terrain where fine details appear mainly near peaks while lower areas remain smoother.",
                 "key": "weight",
                 "label": "weight",
                 "type": "Float"
@@ -16239,19 +16440,19 @@
             "dx": {
                 "caption": "dx",
                 "data_type": "Heightmap",
-                "description": "Displacement map along X-axis to warp the input coordinates.",
+                "description": "Displacement with respect to the domain size (x-direction).",
                 "type": "input"
             },
             "dy": {
                 "caption": "dy",
                 "data_type": "Heightmap",
-                "description": "Displacement map along Y-axis to warp the input coordinates.",
+                "description": "Displacement with respect to the domain size (y-direction).",
                 "type": "input"
             },
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "Optional modulation map to attenuate or mask the fBm pattern locally.",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "output": {
@@ -16274,9 +16475,9 @@
                 "type": "Bool"
             },
             "kw": {
-                "description": "TODO",
+                "description": "Base spatial frequencies in the X and Y directions. The frequencies are defined with respect to the entire domain: for example, kw = 2 produces two full oscillations across the domain width (and similarly for the Y direction).",
                 "key": "kw",
-                "label": "kw",
+                "label": "Spatial Frequency",
                 "type": "Wavenumber"
             },
             "remap": {
@@ -16286,9 +16487,9 @@
                 "type": "Value range"
             },
             "seed": {
-                "description": "TODO",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             },
             "u": {
@@ -16308,19 +16509,19 @@
             "dx": {
                 "caption": "dx",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Displacement with respect to the domain size (x-direction).",
                 "type": "input"
             },
             "dy": {
                 "caption": "dy",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Displacement with respect to the domain size (y-direction).",
                 "type": "input"
             },
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "Output noise amplitude envelope.",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "output": {
@@ -16391,9 +16592,9 @@
                 "type": "Enumeration"
             },
             "seed": {
-                "description": "Random seed number.",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             },
             "sqrt_output": {
@@ -16431,7 +16632,7 @@
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "out": {
@@ -16716,7 +16917,7 @@
             "water_depth": {
                 "caption": "water_depth",
                 "data_type": "Heightmap",
-                "description": "Input water depth map used to compute the extension of flooded zones.",
+                "description": "Output water depth map representing flooded areas.",
                 "type": "input"
             }
         }
@@ -16733,7 +16934,7 @@
                 "type": "Float"
             },
             "kw": {
-                "description": "Noise wavenumbers (kx, ky) for each directions.",
+                "description": "Base spatial frequencies in the X and Y directions. The frequencies are defined with respect to the entire domain: for example, kw = 2 produces two full oscillations across the domain width (and similarly for the Y direction).",
                 "key": "kw",
                 "label": "kw",
                 "type": "Float"
@@ -16797,7 +16998,7 @@
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "output": {
@@ -16820,7 +17021,7 @@
                 "type": "Float"
             },
             "kw": {
-                "description": "Noise wavenumbers (kx, ky) for each directions.",
+                "description": "Base spatial frequencies in the X and Y directions. The frequencies are defined with respect to the entire domain: for example, kw = 2 produces two full oscillations across the domain width (and similarly for the Y direction).",
                 "key": "kw",
                 "label": "kw",
                 "type": "Float"
@@ -16872,7 +17073,7 @@
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "output": {
@@ -16895,7 +17096,7 @@
                 "type": "Float"
             },
             "kw": {
-                "description": "Noise wavenumbers (kx, ky) for each directions.",
+                "description": "Base spatial frequencies in the X and Y directions. The frequencies are defined with respect to the entire domain: for example, kw = 2 produces two full oscillations across the domain width (and similarly for the Y direction).",
                 "key": "kw",
                 "label": "kw",
                 "type": "Float"
@@ -16947,7 +17148,7 @@
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "output": {
@@ -16970,7 +17171,7 @@
                 "type": "Float"
             },
             "kw": {
-                "description": "Noise wavenumbers (kx, ky) for each directions.",
+                "description": "Base spatial frequencies in the X and Y directions. The frequencies are defined with respect to the entire domain: for example, kw = 2 produces two full oscillations across the domain width (and similarly for the Y direction).",
                 "key": "kw",
                 "label": "kw",
                 "type": "Float"
@@ -17028,7 +17229,7 @@
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "output": {
@@ -17051,9 +17252,9 @@
                 "type": "Float"
             },
             "kw": {
-                "description": "No description",
+                "description": "Base spatial frequencies in the X and Y directions. The frequencies are defined with respect to the entire domain: for example, kw = 2 produces two full oscillations across the domain width (and similarly for the Y direction).",
                 "key": "kw",
-                "label": "kw",
+                "label": "Spatial Frequency",
                 "type": "Wavenumber"
             },
             "kw_multiplier": {
@@ -17063,19 +17264,19 @@
                 "type": "Float"
             },
             "lacunarity": {
-                "description": "No description",
+                "description": "The frequency scaling factor for successive noise octaves. Higher values increase the frequency of each successive octave.",
                 "key": "lacunarity",
                 "label": "lacunarity",
                 "type": "Float"
             },
             "octaves": {
-                "description": "No description",
+                "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
                 "label": "octaves",
                 "type": "Integer"
             },
             "persistence": {
-                "description": "No description",
+                "description": "The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.",
                 "key": "persistence",
                 "label": "persistence",
                 "type": "Float"
@@ -17111,9 +17312,9 @@
                 "type": "Float"
             },
             "seed": {
-                "description": "No description",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             },
             "vorticity": {
@@ -17123,7 +17324,7 @@
                 "type": "Float"
             },
             "weight": {
-                "description": "No description",
+                "description": "Controls how much higher FBM octaves contribute to the noise based on local elevation. A higher weight suppresses high-frequency octaves at low elevations and increases their influence at higher elevations, producing terrain where fine details appear mainly near peaks while lower areas remain smoother.",
                 "key": "weight",
                 "label": "weight",
                 "type": "Float"
@@ -17139,19 +17340,19 @@
             "dx": {
                 "caption": "dx",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Displacement with respect to the domain size (x-direction).",
                 "type": "input"
             },
             "dy": {
                 "caption": "dy",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Displacement with respect to the domain size (y-direction).",
                 "type": "input"
             },
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "output": {
@@ -17180,9 +17381,9 @@
                 "type": "Value range"
             },
             "seed": {
-                "description": "Random seed number.",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             }
         },
@@ -17190,7 +17391,7 @@
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "Output noise amplitude envelope.",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "output": {
@@ -17219,9 +17420,9 @@
                 "type": "Value range"
             },
             "seed": {
-                "description": "Random seed number.",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             }
         },
@@ -17235,7 +17436,7 @@
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "Output noise amplitude envelope.",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "output": {
@@ -17270,9 +17471,9 @@
                 "type": "Value range"
             },
             "seed": {
-                "description": "Random seed number.",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             }
         },
@@ -17280,7 +17481,7 @@
             "envelope": {
                 "caption": "envelope",
                 "data_type": "Heightmap",
-                "description": "Output noise amplitude envelope.",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
                 "type": "input"
             },
             "output": {
@@ -17303,13 +17504,13 @@
                 "type": "Float"
             },
             "kw": {
-                "description": "TODO",
+                "description": "Base spatial frequencies in the X and Y directions. The frequencies are defined with respect to the entire domain: for example, kw = 2 produces two full oscillations across the domain width (and similarly for the Y direction).",
                 "key": "kw",
                 "label": "kw",
                 "type": "Float"
             },
             "octaves": {
-                "description": "TODO",
+                "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
                 "label": "octaves",
                 "type": "Integer"
@@ -17321,13 +17522,13 @@
                 "type": "Float"
             },
             "seed": {
-                "description": "TODO",
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "seed",
+                "label": "Seed",
                 "type": "Random seed number"
             },
             "weight": {
-                "description": "TODO",
+                "description": "Controls how much higher FBM octaves contribute to the noise based on local elevation. A higher weight suppresses high-frequency octaves at low elevations and increases their influence at higher elevations, producing terrain where fine details appear mainly near peaks while lower areas remain smoother.",
                 "key": "weight",
                 "label": "weight",
                 "type": "Float"
@@ -17435,31 +17636,31 @@
                 "type": "Enumeration"
             },
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "Invert Output",
                 "type": "Bool"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "Remap Range",
                 "type": "Value range"
             },
             "post_saturate": {
-                "description": "No description",
+                "description": "Modifies the amplitude of elevations by first clamping them to a given interval and then scaling them so that the restricted interval matches the original input range. This enhances contrast in elevation variations while maintaining overall structure.",
                 "key": "post_saturate",
                 "label": "Saturation Range",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "Smoothing Radius",
                 "type": "Float"
@@ -17526,13 +17727,13 @@
             "dx": {
                 "caption": "dx",
                 "data_type": "Heightmap",
-                "description": "Displacement with respect to the domain size (y-direction).",
+                "description": "Displacement with respect to the domain size (x-direction).",
                 "type": "input"
             },
             "dy": {
                 "caption": "dy",
                 "data_type": "Heightmap",
-                "description": "Control parameter, acts as a multiplier for the weight parameter.",
+                "description": "Displacement with respect to the domain size (y-direction).",
                 "type": "input"
             },
             "input": {

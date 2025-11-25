@@ -33,7 +33,7 @@ Geometry/Path
 |dv|Float|No description|
 |dx|Float|No description|
 |dy|Float|No description|
-|seed|Random seed number|No description|
+|Seed|Random seed number|Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.|
 
 # Example
 

@@ -194,7 +194,7 @@ void run_snapshot_generation()
 
         // to avoid Qt panicking...
         QEventLoop loop;
-        QTimer::singleShot(10, &loop, &QEventLoop::quit);
+        QTimer::singleShot(50, &loop, &QEventLoop::quit);
         loop.exec();
       }
     }

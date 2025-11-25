@@ -31,7 +31,7 @@ void setup_strata_node(BaseNode &node)
   node.add_attr<FloatAttribute>("slope", "slope", 2.f, 0.01f, 10.f);
   node.add_attr<FloatAttribute>("kz", "kz", 1.f, 0.f, FLT_MAX);
   node.add_attr<FloatAttribute>("gamma", "gamma", 0.5f, 0.01f, 2.f);
-  node.add_attr<SeedAttribute>("seed", "seed");
+  node.add_attr<SeedAttribute>("seed", "Seed");
   node.add_attr<BoolAttribute>("linear_gamma", "linear_gamma", true);
   node.add_attr<IntAttribute>("octaves", "octaves", 6, 0, 32);
   node.add_attr<FloatAttribute>("lacunarity", "lacunarity", 2.f, 0.01f, 4.f);
@@ -39,7 +39,7 @@ void setup_strata_node(BaseNode &node)
   node.add_attr<FloatAttribute>("noise_amp", "noise_amp", 0.4f, 0.f, 1.f);
 
   kw_default = {4.f, 4.f};
-  node.add_attr<WaveNbAttribute>("noise_kw", "noise_kw", kw_default, 0.f, 32.f, true);
+  node.add_attr<WaveNbAttribute>("noise_kw", "Spatial Frequency", kw_default, 0.f, 32.f, true);
 
   kw_default = {4.f, 1.5f};
   node.add_attr<WaveNbAttribute>("ridge_noise_kw",

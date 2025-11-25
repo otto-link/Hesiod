@@ -34,7 +34,7 @@ void setup_mountain_range_radial_node(BaseNode &node)
                                  0.f,
                                  FLT_MAX,
                                  true);
-  node.add_attr<SeedAttribute>("seed", "seed");
+  node.add_attr<SeedAttribute>("seed", "Seed");
   node.add_attr<FloatAttribute>("half_width", "half_width", 0.2f, 0.f, 1.f);
   node.add_attr<FloatAttribute>("angle_spread_ratio",
                                 "angle_spread_ratio",

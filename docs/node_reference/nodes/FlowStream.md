@@ -40,7 +40,7 @@ WIP
 |river_radius|Float|TODO|
 |riverbank_slope|Float|TODO|
 |riverbed_slope|Float|TODO|
-|seed|Random seed number|TODO|
+|Seed|Random seed number|Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.|
 |upward_penalization|Float|TODO|
 
 # Example

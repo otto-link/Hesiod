@@ -18,8 +18,8 @@ Erosion/Hydraulic
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|dx|Heightmap|No description|
-|dy|Heightmap|No description|
+|dx|Heightmap|Displacement with respect to the domain size (x-direction).|
+|dy|Heightmap|Displacement with respect to the domain size (y-direction).|
 |input|Heightmap|No description|
 |mask|Heightmap|No description|
 
@@ -42,7 +42,7 @@ Erosion/Hydraulic
 |elevation_noise_shift|Float|No description|
 |k_smooth_bottom|Float|No description|
 |k_smooth_top|Float|No description|
-|kw|Wavenumber|No description|
+|Spatial Frequency|Wavenumber|Base spatial frequencies in the X and Y directions. The frequencies are defined with respect to the entire domain: for example, kw = 2 produces two full oscillations across the domain width (and similarly for the Y direction).|
 |mask_activate|Bool|No description|
 |mask_gain|Float|No description|
 |mask_gamma|Float|No description|
@@ -59,7 +59,7 @@ Erosion/Hydraulic
 |radial_spread_amp|Float|No description|
 |remap_vmin|Float|No description|
 |reverse_mask|Bool|No description|
-|seed|Random seed number|No description|
+|Seed|Random seed number|Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.|
 
 # Example
 

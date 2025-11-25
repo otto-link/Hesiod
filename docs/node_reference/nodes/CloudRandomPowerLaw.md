@@ -28,7 +28,7 @@ Geometry/Cloud
 |distance_max|Float|No description|
 |distance_min|Float|No description|
 |remap|Value range|Remap the point values to a specified range, defaulting to [0, 1].|
-|seed|Random seed number|Random seed number.|
+|Seed|Random seed number|Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.|
 
 # Example
 

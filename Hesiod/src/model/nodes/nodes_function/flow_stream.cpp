@@ -39,7 +39,7 @@ void setup_flow_stream_node(BaseNode &node)
   node.add_attr<FloatAttribute>("merging_radius", "merging_radius", 0.001f, 0.f, 0.1f);
   node.add_attr<FloatAttribute>("riverbed_slope", "riverbed_slope", 0.01f, 0.f, 0.1f);
   node.add_attr<FloatAttribute>("noise_ratio", "noise_ratio", 0.9f, 0.f, 1.f);
-  node.add_attr<SeedAttribute>("seed", "seed");
+  node.add_attr<SeedAttribute>("seed", "Seed");
 
   // attribute(s) order
   node.set_attr_ordered_key({"elevation_ratio",

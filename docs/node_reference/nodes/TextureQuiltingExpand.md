@@ -47,7 +47,7 @@ Texture
 |patch_rotate|Bool|TODO|
 |patch_transpose|Bool|TODO|
 |patch_width|Float|TODO|
-|seed|Random seed number|TODO|
+|Seed|Random seed number|Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.|
 
 # Example
 

@@ -20,7 +20,7 @@ Primitive/Function
 | :--- | :--- | :--- |
 |dx|Heightmap|Displacement with respect to the domain size (x-direction).|
 |dy|Heightmap|Displacement with respect to the domain size (y-direction).|
-|envelope|Heightmap|Output noise amplitude envelope.|
+|envelope|Heightmap|Heightmap used as a post-process amplitude multiplier for the generated noise.|
 
 # Outputs
 

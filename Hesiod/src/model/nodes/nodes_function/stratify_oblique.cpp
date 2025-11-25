@@ -26,7 +26,7 @@ void setup_stratify_oblique_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  node.add_attr<SeedAttribute>("seed", "seed");
+  node.add_attr<SeedAttribute>("seed", "Seed");
   node.add_attr<IntAttribute>("n_strata", "n_strata", 3, 1, 16);
   node.add_attr<FloatAttribute>("strata_noise", "strata_noise", 0.f, 0.f, 1.f);
   node.add_attr<FloatAttribute>("gamma", "gamma", 0.7f, 0.01f, 5.f);

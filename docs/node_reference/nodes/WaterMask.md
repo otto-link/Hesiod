@@ -19,7 +19,7 @@ Hydrology
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |elevation|Heightmap|Elevation map corresponding to the water depth grid.|
-|water_depth|Heightmap|Input water depth map used to compute the extension of flooded zones.|
+|water_depth|Heightmap|Output water depth map representing flooded areas.|
 
 # Outputs
 

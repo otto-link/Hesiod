@@ -34,7 +34,7 @@ Geometry/Path
 |iterations|Integer|Number of meandering iterations.|
 |noise_ratio|Float|Randomness ratio.|
 |ratio|Float|Meander amplitude ratio.|
-|seed|Random seed number|Random seed number|
+|Seed|Random seed number|Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.|
 
 # Example
 

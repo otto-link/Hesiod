@@ -24,7 +24,7 @@ void setup_cloud_random_weibull_node(BaseNode &node)
   node.add_attr<FloatAttribute>("distance_min", "distance_min", 0.01f, 0.001f, 0.2f);
   node.add_attr<FloatAttribute>("lambda", "lambda", 0.1f, 0.001f, 1.f);
   node.add_attr<FloatAttribute>("k", "k", 1.5f, 0.01f, 4.f);
-  node.add_attr<SeedAttribute>("seed", "seed");
+  node.add_attr<SeedAttribute>("seed", "Seed");
   node.add_attr<RangeAttribute>("remap", "remap");
 
   // attribute(s) order

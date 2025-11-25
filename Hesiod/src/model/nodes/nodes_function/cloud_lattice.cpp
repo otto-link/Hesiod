@@ -36,7 +36,7 @@ void setup_cloud_lattice_node(BaseNode &node)
                                  0.f,
                                  1.f,
                                  true);
-  node.add_attr<SeedAttribute>("seed", "seed");
+  node.add_attr<SeedAttribute>("seed", "Seed");
   node.add_attr<RangeAttribute>("remap", "remap");
 
   // attribute(s) order

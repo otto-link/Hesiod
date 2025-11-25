@@ -43,7 +43,7 @@ WIP
 |ridge_scaling|Float|TODO|
 |ridge_wavelength|Float|TODO|
 |rotate90|Bool|TODO|
-|seed|Random seed number|TODO|
+|Seed|Random seed number|Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.|
 |slope_mask|Float|TODO|
 |use_default_mask|Bool|TODO|
 

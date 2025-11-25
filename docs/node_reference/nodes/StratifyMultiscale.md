@@ -35,7 +35,7 @@ WIP
 |gamma_list|Vector of floats|TODO|
 |gamma_noise|Vector of floats|TODO|
 |n_strata|Vector of integers|TODO|
-|seed|Random seed number|TODO|
+|Seed|Random seed number|Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.|
 |strata_noise|Vector of floats|TODO|
 
 # Example

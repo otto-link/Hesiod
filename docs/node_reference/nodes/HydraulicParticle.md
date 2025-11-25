@@ -47,7 +47,7 @@ Erosion/Hydraulic
 |particle_density|Float|TODO|
 |post_filtering|Bool|TODO|
 |post_filtering_local|Bool|TODO|
-|seed|Random seed number|Random seed number.|
+|Seed|Random seed number|Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.|
 
 # Example
 

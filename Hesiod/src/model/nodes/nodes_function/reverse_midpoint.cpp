@@ -24,7 +24,7 @@ void setup_reverse_midpoint_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("noise_scale", "noise_scale", 1.f, 0.01f, 2.f);
-  node.add_attr<SeedAttribute>("seed", "seed");
+  node.add_attr<SeedAttribute>("seed", "Seed");
   node.add_attr<BoolAttribute>("inverse", "inverse", false);
   node.add_attr<BoolAttribute>("remap", "remap", true);
 

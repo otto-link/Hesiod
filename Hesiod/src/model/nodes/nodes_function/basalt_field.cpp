@@ -28,8 +28,8 @@ void setup_basalt_field_node(BaseNode &node)
 
   // attribute(s)
   std::vector<float> kw = {5.f, 5.f};
-  node.add_attr<WaveNbAttribute>("kw", "kw", kw, 0.f, FLT_MAX, true);
-  node.add_attr<SeedAttribute>("seed", "seed");
+  node.add_attr<WaveNbAttribute>("kw", "Spatial Frequency", kw, 0.f, FLT_MAX, true);
+  node.add_attr<SeedAttribute>("seed", "Seed");
   node.add_attr<FloatAttribute>("warp_kw", "warp_kw", 4.f, 0.f, FLT_MAX);
   node.add_attr<FloatAttribute>("large_scale_warp_amp",
                                 "large_scale_warp_amp",

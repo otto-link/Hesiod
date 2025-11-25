@@ -40,7 +40,7 @@ Filter/Recurve
 |mask_type|Choice|Specifies how the internal mask is computed: 'Elevation' uses height, 'Gradient Norm' uses slope, and 'Elevation mid-range' selects the middle portion of the height range. This parameter is ignored when a 'mask' input is connected.|
 |nlevels|Integer|Number of discrete elevation steps (terraces) to apply to the input heightmap.|
 |noise_ratio|Float|Ratio between deterministic and noisy placement of terrace levels; 0 uses only uniform levels, 1 uses full noise-based variation.|
-|seed|Random seed number|Random seed used for generating noise when noise_ratio > 0.|
+|Seed|Random seed number|Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.|
 
 # Example
 

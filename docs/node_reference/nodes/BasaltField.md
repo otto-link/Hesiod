@@ -20,7 +20,7 @@ Primitive/Geological
 | :--- | :--- | :--- |
 |dx|Heightmap|Displacement with respect to the domain size (x-direction).|
 |dy|Heightmap|Displacement with respect to the domain size (y-direction).|
-|envelope|Heightmap|Output noise amplitude envelope.|
+|envelope|Heightmap|Heightmap used as a post-process amplitude multiplier for the generated noise.|
 
 # Outputs
 
@@ -35,7 +35,7 @@ Primitive/Geological
 |flatten_activate|Bool|No description|
 |flatten_amp|Float|No description|
 |flatten_kw_ratio|Float|No description|
-|kw|Wavenumber|Noise wavenumbers (kx, ky) for each directions.|
+|Spatial Frequency|Wavenumber|Base spatial frequencies in the X and Y directions. The frequencies are defined with respect to the entire domain: for example, kw = 2 produces two full oscillations across the domain width (and similarly for the Y direction).|
 |large_scale_amp|Float|No description|
 |large_scale_gain|Float|No description|
 |large_scale_warp_amp|Float|No description|
@@ -50,7 +50,7 @@ Primitive/Geological
 |Smoothing Radius|Float|Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.|
 |rugosity_amp|Float|No description|
 |rugosity_kw_ratio|Float|No description|
-|seed|Random seed number|Random seed number.|
+|Seed|Random seed number|Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.|
 |small_scale_amp|Float|No description|
 |small_scale_kw_ratio|Float|No description|
 |small_scale_overlay_amp|Float|No description|

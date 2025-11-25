@@ -37,7 +37,7 @@ Erosion/Stratify
 |gamma|Float|No description|
 |gamma_noise_ratio|Float|No description|
 |kz|Float|No description|
-|lacunarity|Float|No description|
+|lacunarity|Float|The frequency scaling factor for successive noise octaves. Higher values increase the frequency of each successive octave.|
 |linear_gamma|Bool|No description|
 |mask_activate|Bool|No description|
 |mask_gain|Float|No description|
@@ -46,8 +46,8 @@ Erosion/Stratify
 |mask_radius|Float|No description|
 |mask_type|Choice|No description|
 |noise_amp|Float|No description|
-|noise_kw|Wavenumber|No description|
-|octaves|Integer|No description|
+|Spatial Frequency|Wavenumber|No description|
+|octaves|Integer|The number of octaves for fractal noise generation. More octaves add finer details to the terrain.|
 |Gain|Float|Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.|
 |Invert Output|Bool|Inverts the output values after processing, flipping low and high values across the midrange.|
 |Mix Factor|Float|Mixing factor for blending input and output values. A value of 0 uses only the input, 1 uses only the output, and intermediate values perform a linear interpolation.|
@@ -60,7 +60,7 @@ Erosion/Stratify
 |ridge_noise_amp|Float|No description|
 |ridge_noise_kw|Wavenumber|No description|
 |ridge_remap_vmin|Float|No description|
-|seed|Random seed number|No description|
+|Seed|Random seed number|Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.|
 |slope|Float|No description|
 
 # Example

@@ -100,11 +100,11 @@ void ProjectUI::initialize(ProjectModel *project)
       HSD_CTX.app_settings.node_editor.show_node_settings_pan);
 
   if (HSD_CTX.app_settings.interface.enable_texture_downloader)
-    {
-      // no parent, top-level window (managed by a QPointer)
-      this->texture_downloader = new qtd::TextureDownloader();
-    }
-  
+  {
+    // no parent, top-level window (managed by a QPointer)
+    this->texture_downloader = new qtd::TextureDownloader();
+  }
+
   // connections
   this->setup_connections();
 }

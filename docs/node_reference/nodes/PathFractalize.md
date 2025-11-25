@@ -32,8 +32,8 @@ Geometry/Path
 | :--- | :--- | :--- |
 |iterations|Integer|Number of mid-point displacement iterations.|
 |orientation|Integer|Displacement orientation (0 for random inward/outward displacement, 1 to inflate the path and -1 to deflate the path).|
-|persistence|Float|Noise persistence (with iteration number).|
-|seed|Random seed number|Random seed number.|
+|persistence|Float|The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.|
+|Seed|Random seed number|Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.|
 |sigma|Float|Half-width of the random Gaussian displacement, normalized by the distance between points.|
 
 # Example

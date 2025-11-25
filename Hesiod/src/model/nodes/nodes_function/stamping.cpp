@@ -32,7 +32,7 @@ void setup_stamping_node(BaseNode &node)
                                "blend_method",
                                enum_mappings.stamping_blend_method_map,
                                "maximum");
-  node.add_attr<SeedAttribute>("seed", "seed");
+  node.add_attr<SeedAttribute>("seed", "Seed");
   node.add_attr<FloatAttribute>("k_smoothing", "k_smoothing", 0.1f, 0.01f, 1.f);
   node.add_attr<BoolAttribute>("kernel_flip", "kernel_flip", false);
   node.add_attr<BoolAttribute>("kernel_rotate", "kernel_rotate", false);

@@ -28,8 +28,8 @@ void setup_gabor_wave_fbm_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  node.add_attr<WaveNbAttribute>("kw", "kw");
-  node.add_attr<SeedAttribute>("seed", "seed");
+  node.add_attr<WaveNbAttribute>("kw", "Spatial Frequency");
+  node.add_attr<SeedAttribute>("seed", "Seed");
   node.add_attr<FloatAttribute>("angle", "angle", 0.f, -180.f, 180.f);
   node.add_attr<FloatAttribute>("angle_spread_ratio",
                                 "angle_spread_ratio",

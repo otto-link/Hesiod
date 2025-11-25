@@ -19,7 +19,7 @@ Primitive/Function
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |dr|Heightmap|Displacement with respect to the domain size (normal direction).|
-|envelope|Heightmap|No description|
+|envelope|Heightmap|Heightmap used as a post-process amplitude multiplier for the generated noise.|
 
 # Outputs
 
@@ -32,7 +32,7 @@ Primitive/Function
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |angle|Float|Angle in the horizontal plane.|
-|kw|Float|Noise wavenumbers (kx, ky) for each directions.|
+|kw|Float|Base spatial frequencies in the X and Y directions. The frequencies are defined with respect to the entire domain: for example, kw = 2 produces two full oscillations across the domain width (and similarly for the Y direction).|
 |phase_shift|Float|Phase shift.|
 |Gain|Float|Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.|
 |Invert Output|Bool|Inverts the output values after processing, flipping low and high values across the midrange.|

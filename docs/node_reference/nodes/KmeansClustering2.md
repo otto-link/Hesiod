@@ -35,7 +35,7 @@ Features/Clustering
 |compute_scoring|Bool|Determine whether scoring is computed.|
 |nclusters|Integer|Number of clusters.|
 |normalize_inputs|Bool|Determine whether the feature amplitudes are normalized before the clustering.|
-|seed|Random seed number|Random seed number.|
+|Seed|Random seed number|Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.|
 |weights.x|Float|Weight of the first feature.|
 |weights.y|Float|Weight of the second feature.|
 

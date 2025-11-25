@@ -24,8 +24,8 @@ Math
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|dx|Heightmap|Displacement for  the x-direction.|
-|dy|Heightmap|Displacement for  the y-direction.|
+|dx|Heightmap|Displacement with respect to the domain size (x-direction).|
+|dy|Heightmap|Displacement with respect to the domain size (y-direction).|
 
 # Parameters
 

@@ -28,10 +28,10 @@ void setup_rifts_node(BaseNode &node)
 
   // attribute(s)
   std::vector<float> kw_default = {4.f, 1.2f};
-  node.add_attr<WaveNbAttribute>("kw", "kw", kw_default, 0.f, 32.f, false);
+  node.add_attr<WaveNbAttribute>("kw", "Spatial Frequency", kw_default, 0.f, 32.f, false);
   node.add_attr<FloatAttribute>("angle", "angle", 0.f, -180.f, 180.f);
   node.add_attr<FloatAttribute>("amplitude", "amplitude", 0.1f, 0.f, 1.f);
-  node.add_attr<SeedAttribute>("seed", "seed");
+  node.add_attr<SeedAttribute>("seed", "Seed");
   node.add_attr<FloatAttribute>("k_smooth_bottom", "k_smooth_bottom", 0.05f, 0.f, 0.3f);
   node.add_attr<FloatAttribute>("k_smooth_top", "k_smooth_top", 0.05f, 0.f, 0.3f);
   node.add_attr<FloatAttribute>("radial_spread_amp",

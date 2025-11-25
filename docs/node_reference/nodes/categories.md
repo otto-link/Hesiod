@@ -39,7 +39,7 @@ Node Categories
 |Primitive|Geological|Badlands, BasaltField, Caldera, Crater, MountainCone, MountainInselberg, MountainRangeRadial, MountainStump, MountainTibesti, ShatteredPeak|
 |Primitive|Kernel|KernelDiskSmooth, KernelGabor, KernelPrim|
 |Primitive|Random|White, WhiteDensityMap, WhiteSparse|
-|Primtive|Geological|IslandLandMask|
+|Primtive|Geological|Island, IslandLandMask|
 |Routing||Broadcast, Receive, Thru, Toggle|
 |Texture||ColorizeCmap, ColorizeGradient, ColorizeSolid, MixNormalMap, MixTexture, SetAlpha, TextureAdvectionParticle, TextureQuiltingExpand, TextureQuiltingShuffle, TextureSplitChannels, TextureToHeightmap, TextureUvChecker|
 |WIP||Detrend, DiffusionLimitedAggregation, DirectionalBlur, ExportAsCubemap, FillTalus, FlowStream, HydraulicBlur, HydraulicMusgrave, HydraulicProcedural, HydraulicSchott, HydraulicStream, HydraulicStreamUpscaleAmplification, HydraulicVpipes, Kuwahara, MeanShift, MedianPseudo, ReverseMidpoint, SedimentDeposition, Stratify, StratifyMultiscale, StratifyOblique, TextureAdvectionWarp, ThermalFlatten, ThermalRib, ThermalSchott, WarpDownslope, Wrinkle|

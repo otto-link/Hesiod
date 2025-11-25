@@ -45,7 +45,7 @@ Texture
 |post_filtering|Bool|No description|
 |post_filtering_sigma|Float|No description|
 |reverse|Bool|No description|
-|seed|Random seed number|No description|
+|Seed|Random seed number|Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.|
 |value_persistence|Float|No description|
 
 # Example

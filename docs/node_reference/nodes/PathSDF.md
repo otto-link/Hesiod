@@ -18,8 +18,8 @@ Geometry/Path
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|dx|Heightmap|TODO|
-|dy|Heightmap|TODO|
+|dx|Heightmap|Displacement with respect to the domain size (x-direction).|
+|dy|Heightmap|Displacement with respect to the domain size (y-direction).|
 |path|Path|Input path.|
 
 # Outputs

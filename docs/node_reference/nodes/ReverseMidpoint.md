@@ -33,7 +33,7 @@ WIP
 |inverse|Bool|Toggle inversion of the output values.|
 |noise_scale|Float|Added noise scaling.|
 |remap|Bool|Remap the operator's output to a specified range, defaulting to [0, 1].|
-|seed|Random seed number|Random seed number.|
+|Seed|Random seed number|Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.|
 
 # Example
 

@@ -33,8 +33,8 @@ void setup_voronoi_node(BaseNode &node)
                                "return_type",
                                enum_mappings.voronoi_return_type_map,
                                "F1: squared distance to the closest point");
-  node.add_attr<WaveNbAttribute>("kw", "kw");
-  node.add_attr<SeedAttribute>("seed", "seed");
+  node.add_attr<WaveNbAttribute>("kw", "Spatial Frequency");
+  node.add_attr<SeedAttribute>("seed", "Seed");
   node.add_attr<FloatAttribute>("jitter.x", "jitter.x", 1.f, 0.f, 1.f);
   node.add_attr<FloatAttribute>("jitter.y", "jitter.y", 1.f, 0.f, 1.f);
   node.add_attr<FloatAttribute>("k_smoothing", "k_smoothing", 0.f, 0.f, 1.f);
