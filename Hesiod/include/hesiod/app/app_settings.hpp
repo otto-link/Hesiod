@@ -76,8 +76,9 @@ struct AppSettings
 
   struct Viewer
   {
-    int width = 512;
-    int height = 512;
+    int  width = 512;
+    int  height = 512;
+    bool add_heighmap_skirt = true;
   } viewer;
 
   struct Window // main window

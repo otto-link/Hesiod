@@ -92,6 +92,7 @@ void AppSettings::json_from(nlohmann::json const &json)
 
   json_safe_get(json, "viewer.width", viewer.width);
   json_safe_get(json, "viewer.height", viewer.height);
+  json_safe_get(json, "viewer.add_heighmap_skirt", viewer.add_heighmap_skirt);
 
   // window
   {
@@ -156,6 +157,7 @@ nlohmann::json AppSettings::json_to() const
 
   json["viewer.width"] = viewer.width;
   json["viewer.height"] = viewer.height;
+  json["viewer.add_heighmap_skirt"] = viewer.add_heighmap_skirt;
 
   json["window.x"] = window.x;
   json["window.y"] = window.y;

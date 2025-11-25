@@ -107,6 +107,11 @@ void AppSettingsWindow::setup_layout()
   this->bind_bool("Enable tool tips", ctx.app_settings.interface.enable_tool_tips);
   this->bind_bool("Enable texture downloader",
                   ctx.app_settings.interface.enable_texture_downloader);
+
+  this->add_title("Viewport");
+
+  this->bind_bool("Add border skirt to the heightmap",
+                  ctx.app_settings.viewer.add_heighmap_skirt);
 }
 
 } // namespace hesiod

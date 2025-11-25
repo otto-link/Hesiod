@@ -8,6 +8,7 @@
 
 #include "qtr/render_widget.hpp"
 
+#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/gui/widgets/graph_node_widget.hpp"
 #include "hesiod/gui/widgets/gui_utils.hpp"
 #include "hesiod/gui/widgets/viewers/render_helpers.hpp"
@@ -190,7 +191,14 @@ void Viewer3D::update_renderer()
           {
             auto arr = h.to_array();
             if (this->p_renderer)
-              this->p_renderer->set_heightmap_geometry(arr.vector, h.shape.x, h.shape.y);
+            {
+              bool add_skirt = HSD_CTX.app_settings.viewer.add_heighmap_skirt;
+
+              this->p_renderer->set_heightmap_geometry(arr.vector,
+                                                       h.shape.x,
+                                                       h.shape.y,
+                                                       add_skirt);
+            }
           }))
   {
     this->p_renderer->reset_heightmap_geometry();
@@ -208,11 +216,12 @@ void Viewer3D::update_renderer()
             auto ah = h.to_array(); // elevation
             auto aw = w.to_array(); // water depth
 
+            // water elevation
             ah += aw;
 
             // extend the water depth by one-cell to avoid truncated
             // cells at the interface water/ground
-            float hmin = ah.min();
+            float dh = 1e3f;
 
             for (int j = 0; j < h.shape.y; ++j)
               for (int i = 0; i < h.shape.x; ++i)
@@ -220,7 +229,7 @@ void Viewer3D::update_renderer()
                 if (aw(i, j) <= 0.f)
                   ah(i, j) = 0.f;
                 else
-                  ah(i, j) += hmin;
+                  ah(i, j) += dh;
               }
 
             ah = hmap::dilation_expand_border_only(ah, 1);
@@ -234,7 +243,7 @@ void Viewer3D::update_renderer()
                 if (ah(i, j) <= 0.f)
                   ah(i, j) = cut_value;
                 else
-                  ah(i, j) -= hmin;
+                  ah(i, j) -= dh;
               }
 
             // send to renderer
