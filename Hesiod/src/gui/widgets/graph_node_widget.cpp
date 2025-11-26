@@ -307,8 +307,6 @@ nlohmann::json GraphNodeWidget::json_import(nlohmann::json const &json, QPointF 
       BaseNode *p_node = gno->get_node_ref_by_id<BaseNode>(node_id);
       p_node->json_from(json_node["settings"]);
       p_node->set_id(node_id);
-
-      gno->update(node_id);
     }
 
     // links
@@ -321,11 +319,17 @@ nlohmann::json GraphNodeWidget::json_import(nlohmann::json const &json, QPointF 
         node_id_from = copy_id_map.at(node_id_from);
         node_id_to = copy_id_map.at(node_id_to);
 
-        this->add_link(node_id_from,
-                       json_link["port_out_id"],
-                       node_id_to,
-                       json_link["port_in_id"]);
+        std::string port_out_id = json_link["port_out_id"];
+        std::string port_in_id = json_link["port_in_id"];
+
+        // add graphics link
+        this->add_link(node_id_from, port_out_id, node_id_to, port_in_id);
+
+        // add model link
+        gno->new_link(node_id_from, port_out_id, node_id_to, port_in_id);
       }
+
+    gno->update();
   }
 
   return json_copy;
