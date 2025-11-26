@@ -137,8 +137,12 @@ void HesiodApplication::load_project_model_and_ui(const std::string &fname)
   // reset other visibility state
   this->project_ui->get_graph_manager_widget_ref()->setVisible(
       this->context.app_settings.window.show_graph_manager_widget);
-  this->project_ui->get_texture_downloader_ref()->setVisible(
-      this->context.app_settings.window.show_texture_downloader_widget);
+
+  if (this->context.app_settings.interface.enable_texture_downloader)
+  {
+    this->project_ui->get_texture_downloader_ref()->setVisible(
+        this->context.app_settings.window.show_texture_downloader_widget);
+  }
 
   // --- connections
 
@@ -582,13 +586,13 @@ void HesiodApplication::setup_menu_bar()
       this->context.app_settings.window.show_graph_manager_widget);
   view_menu->addAction(show_layout_manager);
 
-  view_menu->addSeparator();
-
+  // texture dld
   auto *show_texture_downloader = new QAction("Texture downloader", this);
-  show_texture_downloader->setCheckable(true);
-  show_texture_downloader->setChecked(
-      this->context.app_settings.window.show_texture_downloader_widget);
-  view_menu->addAction(show_texture_downloader);
+  if (this->context.app_settings.interface.enable_texture_downloader)
+  {
+    view_menu->addSeparator();
+    view_menu->addAction(show_texture_downloader);
+  }
 
   view_menu->addSeparator();
 
@@ -664,17 +668,20 @@ void HesiodApplication::setup_menu_bar()
         show_layout_manager->setChecked(!state);
       });
 
-  this->connect(
-      show_texture_downloader,
-      &QAction::triggered,
-      this,
-      [this, show_texture_downloader]()
-      {
-        bool state = this->project_ui->get_texture_downloader_ref()->isVisible();
-        this->context.app_settings.window.show_texture_downloader_widget = !state;
-        this->project_ui->get_texture_downloader_ref()->setVisible(!state);
-        show_texture_downloader->setChecked(!state);
-      });
+  if (this->context.app_settings.interface.enable_texture_downloader)
+  {
+    this->connect(
+        show_texture_downloader,
+        &QAction::triggered,
+        this,
+        [this, show_texture_downloader]()
+        {
+          bool state = this->project_ui->get_texture_downloader_ref()->isVisible();
+          this->context.app_settings.window.show_texture_downloader_widget = !state;
+          this->project_ui->get_texture_downloader_ref()->setVisible(!state);
+          show_texture_downloader->setChecked(!state);
+        });
+  }
 
   // graphs
   this->connect(
