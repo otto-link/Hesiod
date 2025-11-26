@@ -12758,37 +12758,37 @@
     },
     "SelectSoilWeathered": {
         "category": "Mask/ForTexturing",
-        "description": "No description available",
+        "description": "Generates a soil-weathering selection mask by combining curvature and gradient analysis from the input heightmap. This node can be for instance chained with ColorizeGradient for texturing.",
         "label": "SelectSoilWeathered",
         "parameters": {
             "curvature_clamp_mode": {
-                "description": "No description",
+                "description": "Clamping mode applied to curvature values before mixing. Determines how positive and negative curvature values are limited. Positive curvature corresponds to convex terrain features such as bumps or ridges, while negative curvature corresponds to concave forms such as rifts, valleys, or depressions. Use the clamping mode to keep or suppress one of these curvature types depending on the effect you want to emphasize.",
                 "key": "curvature_clamp_mode",
-                "label": "curvature_clamp_mode",
+                "label": "Curvature Clamp Mode",
                 "type": "Enumeration"
             },
             "curvature_clamping": {
-                "description": "No description",
+                "description": "Maximum absolute curvature value allowed after clamping. Smaller values will saturate the curvature contrast.",
                 "key": "curvature_clamping",
-                "label": "curvature_clamping",
+                "label": "Curvature Clamp Limit",
                 "type": "Float"
             },
             "curvature_weight": {
-                "description": "No description",
+                "description": "Weight applied to the curvature component in the final weathering mix. Can be negative to invert curvature contribution.",
                 "key": "curvature_weight",
-                "label": "curvature_weight",
+                "label": "Curvature Weight",
                 "type": "Float"
             },
             "gradient_gain": {
-                "description": "No description",
+                "description": "Controls how sensitive the gradient contribution is to slope intensity. A higher gain produces a steeper, more contrast-like transition from 0 to 1, making the influence of slope change more abruptly.",
                 "key": "gradient_gain",
-                "label": "gradient_gain",
+                "label": "Gradient Gain",
                 "type": "Float"
             },
             "gradient_weight": {
-                "description": "No description",
+                "description": "Weight applied to the gradient component in the final weathering mix. Can be negative to invert the gradient contribution. Increasing the gradient weight will result in stronger selection based solely on elevation slope, independently of curvature, i.e. bumps, or ridge detection.",
                 "key": "gradient_weight",
-                "label": "gradient_weight",
+                "label": "Gradient Weight",
                 "type": "Float"
             },
             "post_gain": {
@@ -12822,15 +12822,15 @@
                 "type": "Float"
             },
             "radius_curvature": {
-                "description": "No description",
+                "description": "Radius used for curvature computation. Larger radii capture broader-scale curvature.",
                 "key": "radius_curvature",
-                "label": "radius_curvature",
+                "label": "Curvature Radius",
                 "type": "Float"
             },
             "radius_gradient": {
-                "description": "No description",
+                "description": "Radius used to compute local gradient magnitudes, defining the neighborhood size influencing slope estimation. Larger radii yield smooth gradients.",
                 "key": "radius_gradient",
-                "label": "radius_gradient",
+                "label": "Gradient Radius",
                 "type": "Float"
             }
         },
@@ -12838,13 +12838,13 @@
             "input": {
                 "caption": "input",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Input heightmap used to compute curvature and gradient contributions.",
                 "type": "input"
             },
             "output": {
                 "caption": "output",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Output soil-weathered mask combining curvature and gradient effects.",
                 "type": "output"
             }
         }

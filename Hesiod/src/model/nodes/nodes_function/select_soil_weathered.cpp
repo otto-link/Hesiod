@@ -26,17 +26,17 @@ void setup_select_soil_weathered_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  node.add_attr<FloatAttribute>("radius_curvature", "radius_curvature", 0.f, 0.f, 0.1f);
-  node.add_attr<FloatAttribute>("radius_gradient", "radius_gradient", 0.005f, 0.f, 0.1f);
-  node.add_attr<FloatAttribute>("gradient_gain", "gradient_gain", 1.f, 0.01f, 10.f);
-  node.add_attr<FloatAttribute>("curvature_weight", "curvature_weight", 1.f, -1.f, 1.f);
-  node.add_attr<FloatAttribute>("gradient_weight", "gradient_weight", 0.2f, -1.f, 1.f);
+  node.add_attr<FloatAttribute>("radius_curvature", "Curvature Radius", 0.f, 0.f, 0.1f);
+  node.add_attr<FloatAttribute>("radius_gradient", "Gradient Radius", 0.005f, 0.f, 0.1f);
+  node.add_attr<FloatAttribute>("gradient_gain", "Gradient Gain", 1.f, 0.01f, 10.f);
+  node.add_attr<FloatAttribute>("curvature_weight", "Curvature Weight", 1.f, -1.f, 1.f);
+  node.add_attr<FloatAttribute>("gradient_weight", "Gradient Weight", 0.2f, -1.f, 1.f);
   node.add_attr<EnumAttribute>("curvature_clamp_mode",
-                               "curvature_clamp_mode",
+                               "Curvature Clamp Mode",
                                enum_mappings.clamping_mode_map,
                                "Keep positive & clamp");
   node.add_attr<FloatAttribute>("curvature_clamping",
-                                "curvature_clamping",
+                                "Curvature Clamp Limit",
                                 1.f,
                                 0.f,
                                 FLT_MAX,
