@@ -54,6 +54,7 @@ private slots:
   void on_load();
   void on_load_ready_made();
   void on_new();
+  void on_project_settings();
   void on_quit();
   void on_save();
   void on_save_as();

@@ -23,6 +23,7 @@
 #include "hesiod/gui/widgets/graph_manager_widget.hpp"
 #include "hesiod/gui/widgets/graph_tabs_widget.hpp"
 #include "hesiod/gui/widgets/gui_utils.hpp"
+#include "hesiod/gui/widgets/project_settings_dialog.hpp"
 #include "hesiod/gui/widgets/splash_screen.hpp"
 #include "hesiod/gui/widgets/tool_tip_blocker.hpp"
 #include "hesiod/logger.hpp"
@@ -396,6 +397,12 @@ void HesiodApplication::on_project_name_changed()
   this->main_window->setWindowTitle(title.c_str());
 }
 
+void HesiodApplication::on_project_settings()
+{
+  auto *dialog = new ProjectSettingsDialog(this->context.project_model.get());
+  dialog->exec();
+}
+
 void HesiodApplication::on_quit()
 {
   Logger::log()->trace("HesiodApplication::on_quit");
@@ -598,6 +605,11 @@ void HesiodApplication::setup_menu_bar()
   quit->setShortcut(tr("Ctrl+Q"));
   file_menu->addAction(quit);
 
+  QMenu *project_menu = this->main_window->menuBar()->addMenu("&Project");
+
+  auto *project_settings_action = new QAction("Project Settings", this);
+  project_menu->addAction(project_settings_action);
+
   QMenu *graph_menu = this->main_window->menuBar()->addMenu("&Graph");
 
   auto *new_graph = new QAction("New graph", this);
@@ -670,6 +682,11 @@ void HesiodApplication::setup_menu_bar()
                 &QAction::triggered,
                 this,
                 &HesiodApplication::on_export_batch);
+
+  this->connect(project_settings_action,
+                &QAction::triggered,
+                this,
+                &HesiodApplication::on_project_settings);
 
   this->connect(quick_help,
                 &QAction::triggered,

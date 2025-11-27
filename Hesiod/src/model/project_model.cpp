@@ -30,6 +30,8 @@ void ProjectModel::cleanup()
 
 BakeConfig ProjectModel::get_bake_config() const { return this->bake_config; }
 
+std::string ProjectModel::get_comment() const { return this->comment; }
+
 GraphManager *ProjectModel::get_graph_manager_ref() { return this->graph_manager.get(); }
 
 bool ProjectModel::get_is_dirty() const { return this->is_dirty; }
@@ -47,6 +49,8 @@ void ProjectModel::initialize()
 void ProjectModel::json_from(nlohmann::json const &json)
 {
   Logger::log()->trace("ProjectModel::json_from");
+
+  json_safe_get(json, "comment", this->comment);
 
   // bake
   if (json.contains("bake_config"))
@@ -69,6 +73,7 @@ nlohmann::json ProjectModel::json_to() const
   Logger::log()->trace("ProjectModel::json_to");
 
   nlohmann::json json;
+  json["comment"] = this->comment;
   json["bake_config"] = this->bake_config.json_to();
   json["graph_manager"] = this->graph_manager->json_to();
   return json;
@@ -79,6 +84,11 @@ void ProjectModel::on_has_changed() { this->set_is_dirty(true); }
 void ProjectModel::set_bake_config(const BakeConfig &new_bake_config)
 {
   this->bake_config = new_bake_config;
+}
+
+void ProjectModel::set_comment(const std::string &new_comment)
+{
+  this->comment = new_comment;
 }
 
 void ProjectModel::set_is_dirty(bool new_state)
