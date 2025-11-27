@@ -13,7 +13,7 @@ This function generates a procedural island heightmap from a binary land mask by
 # Category
 
 
-Primtive/Geological
+Primitive/Geological
 # Inputs
 
 |Name|Type|Description|

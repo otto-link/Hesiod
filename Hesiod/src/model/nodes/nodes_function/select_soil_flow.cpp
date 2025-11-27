@@ -26,12 +26,12 @@ void setup_select_soil_flow_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  node.add_attr<FloatAttribute>("radius_gradient", "radius_gradient", 0.f, 0.f, 0.1f);
-  node.add_attr<FloatAttribute>("gradient_weight", "gradient_weight", 1.f, 0.f, 1.f);
-  node.add_attr<FloatAttribute>("flow_weight", "flow_weight", 0.01f, 0.f, 1.f);
-  node.add_attr<FloatAttribute>("talus_ref", "talus_ref", 10.f, 0.01f, 32.f);
-  node.add_attr<FloatAttribute>("clipping_ratio", "clipping_ratio", 50.f, 0.1f, 100.f);
-  node.add_attr<FloatAttribute>("flow_gamma", "flow_gamma", 1.f, 0.01f, 4.f);
+  node.add_attr<FloatAttribute>("radius_gradient", "Gradient Radius", 0.f, 0.f, 0.1f);
+  node.add_attr<FloatAttribute>("gradient_weight", "Gradient Weight", 1.f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>("flow_weight", "Flow Weight", 0.01f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>("talus_ref", "Ref. Talus", 10.f, 0.01f, 32.f);
+  node.add_attr<FloatAttribute>("clipping_ratio", "Clipping Ratio", 50.f, 0.1f, 100.f);
+  node.add_attr<FloatAttribute>("flow_gamma", "Flow Distrib. Exponent", 1.f, 0.01f, 4.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Main Parameters",

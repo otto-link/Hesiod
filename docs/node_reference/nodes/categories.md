@@ -36,10 +36,9 @@ Node Categories
 |Primitive|Authoring|Brush, Ridgelines|
 |Primitive|Coherent|Dendry, GaborWaveFbm, Gavoronoise, HemisphereFieldFbm, Noise, NoiseFbm, NoiseIq, NoiseJordan, NoiseParberry, NoisePingpong, NoiseRidged, NoiseSwiss, PolygonField, PolygonFieldFbm, Stamping, Vorolines, VorolinesFbm, Voronoi, VoronoiFbm, Voronoise, Vororand, WaveletNoise|
 |Primitive|Function|Bump, BumpLorentzian, Cone, ConeComplex, ConeSigmoid, Constant, GaussianPulse, Paraboloid, Rift, Slope, Step, WaveDune, WaveSine, WaveSquare, WaveTriangular|
-|Primitive|Geological|Badlands, BasaltField, Caldera, Crater, MountainCone, MountainInselberg, MountainRangeRadial, MountainStump, MountainTibesti, ShatteredPeak|
+|Primitive|Geological|Badlands, BasaltField, Caldera, Crater, Island, IslandLandMask, MountainCone, MountainInselberg, MountainRangeRadial, MountainStump, MountainTibesti, ShatteredPeak|
 |Primitive|Kernel|KernelDiskSmooth, KernelGabor, KernelPrim|
 |Primitive|Random|White, WhiteDensityMap, WhiteSparse|
-|Primtive|Geological|Island, IslandLandMask|
 |Routing||Broadcast, Receive, Thru, Toggle|
 |Texture||ColorizeCmap, ColorizeGradient, ColorizeSolid, MixNormalMap, MixTexture, SetAlpha, TextureAdvectionParticle, TextureQuiltingExpand, TextureQuiltingShuffle, TextureSplitChannels, TextureToHeightmap, TextureUvChecker|
 |WIP||Detrend, DiffusionLimitedAggregation, DirectionalBlur, ExportAsCubemap, FillTalus, FlowStream, HydraulicBlur, HydraulicMusgrave, HydraulicProcedural, HydraulicSchott, HydraulicStream, HydraulicStreamUpscaleAmplification, HydraulicVpipes, Kuwahara, MeanShift, MedianPseudo, ReverseMidpoint, SedimentDeposition, Stratify, StratifyMultiscale, StratifyOblique, TextureAdvectionWarp, ThermalFlatten, ThermalRib, ThermalSchott, WarpDownslope, Wrinkle|

@@ -13,7 +13,7 @@ No description available
 # Category
 
 
-Primtive/Geological
+Primitive/Geological
 # Outputs
 
 |Name|Type|Description|

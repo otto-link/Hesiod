@@ -6233,7 +6233,7 @@
         }
     },
     "Island": {
-        "category": "Primtive/Geological",
+        "category": "Primitive/Geological",
         "description": "This function generates a procedural island heightmap from a binary land mask by combining a distance-based radial profile with fractal noise modulation.",
         "label": "Island",
         "parameters": {
@@ -6434,7 +6434,7 @@
         }
     },
     "IslandLandMask": {
-        "category": "Primtive/Geological",
+        "category": "Primitive/Geological",
         "description": "No description available",
         "label": "IslandLandMask",
         "parameters": {
@@ -12671,31 +12671,31 @@
     },
     "SelectSoilFlow": {
         "category": "Mask/ForTexturing",
-        "description": "No description available",
+        "description": "Computes a soil–flow selection map based on the terrain gradient and the flow-accumulation map. This node can be for instance chained with ColorizeGradient for texturing.",
         "label": "SelectSoilFlow",
         "parameters": {
             "clipping_ratio": {
-                "description": "No description",
+                "description": "Flow accumulation clipping ratio. Smaller values will saturate the flow contrast.",
                 "key": "clipping_ratio",
-                "label": "clipping_ratio",
+                "label": "Clipping Ratio",
                 "type": "Float"
             },
             "flow_gamma": {
-                "description": "No description",
+                "description": "Power-law (gamma) exponent applied to the flow values. Lower gamma flattens the distribution, higher gamma increases contrast and steepens the transition between low and high values.",
                 "key": "flow_gamma",
-                "label": "flow_gamma",
+                "label": "Flow Distrib. Exponent",
                 "type": "Float"
             },
             "flow_weight": {
-                "description": "No description",
+                "description": "Weight applied to the flow component in the final mix.",
                 "key": "flow_weight",
-                "label": "flow_weight",
+                "label": "Flow Weight",
                 "type": "Float"
             },
             "gradient_weight": {
-                "description": "No description",
+                "description": "Weight applied to the gradient component in the final mix.",
                 "key": "gradient_weight",
-                "label": "gradient_weight",
+                "label": "Gradient Weight",
                 "type": "Float"
             },
             "post_gain": {
@@ -12729,15 +12729,15 @@
                 "type": "Float"
             },
             "radius_gradient": {
-                "description": "No description",
+                "description": "Radius used to compute local gradient magnitudes, defining the neighborhood size influencing slope estimation. Larger radii yield smooth gradients.",
                 "key": "radius_gradient",
-                "label": "radius_gradient",
+                "label": "Gradient Radius",
                 "type": "Float"
             },
             "talus_ref": {
-                "description": "No description",
+                "description": "Reference talus value for river extraction.",
                 "key": "talus_ref",
-                "label": "talus_ref",
+                "label": "Ref. Talus",
                 "type": "Float"
             }
         },
@@ -12745,13 +12745,13 @@
             "input": {
                 "caption": "input",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Input heightmap used to compute curvature and gradient contributions.",
                 "type": "input"
             },
             "output": {
                 "caption": "output",
                 "data_type": "Heightmap",
-                "description": "No description",
+                "description": "Output soil-flow mask combining flow and gradient effects.",
                 "type": "output"
             }
         }
