@@ -46,6 +46,9 @@ void AppSettings::json_from(nlohmann::json const &json)
                 "interface.enable_texture_downloader",
                 interface.enable_texture_downloader);
   json_safe_get(json, "interface.enable_tool_tips", interface.enable_tool_tips);
+  json_safe_get(json,
+                "interface.enable_example_selector_at_startup",
+                interface.enable_example_selector_at_startup);
 
   // OpenCL device
   {
@@ -139,6 +142,8 @@ nlohmann::json AppSettings::json_to() const
       interface.enable_node_settings_in_node_body;
   json["interface.enable_texture_downloader"] = interface.enable_texture_downloader;
   json["interface.enable_tool_tips"] = interface.enable_tool_tips;
+  json["interface.enable_example_selector_at_startup"] =
+      interface.enable_example_selector_at_startup;
 
   json["node_editor.gpu_device_name"] = node_editor.gpu_device_name;
   json["node_editor.default_resolution"] = node_editor.default_resolution;

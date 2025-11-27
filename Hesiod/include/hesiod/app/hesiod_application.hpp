@@ -34,7 +34,7 @@ public:
   HesiodApplication(int &argc, char **argv);
   ~HesiodApplication();
 
-  void load_project_model_and_ui(const std::string &fname = "");
+  void load_project_model_and_ui(const std::string &fname = "", bool keep_name = true);
   void save_project_model_and_ui(const std::string &fname);
   void save_backup(const std::string &fname);
   void show();
@@ -52,6 +52,7 @@ private slots:
   void on_application_settings_action();
   void on_export_batch();
   void on_load();
+  void on_load_ready_made();
   void on_new();
   void on_quit();
   void on_save();

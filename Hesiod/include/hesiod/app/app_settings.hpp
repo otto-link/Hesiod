@@ -45,6 +45,7 @@ struct AppSettings
     std::string quick_start_html_file = "data/quick_start.html";
     std::string node_documentation_path = "data/node_documentation.json";
     std::string git_version_file = "data/git_version.txt";
+    std::string ready_made_path = "data/bootstraps";
     bool        save_backup_file = true;
   } global;
 
@@ -54,6 +55,7 @@ struct AppSettings
     bool enable_node_settings_in_node_body = false;
     bool enable_texture_downloader = true;
     bool enable_tool_tips = true;
+    bool enable_example_selector_at_startup = true;
   } interface;
 
   struct NodeEditor

@@ -107,6 +107,8 @@ void AppSettingsWindow::setup_layout()
   this->bind_bool("Enable tool tips", ctx.app_settings.interface.enable_tool_tips);
   this->bind_bool("Enable texture downloader",
                   ctx.app_settings.interface.enable_texture_downloader);
+  this->bind_bool("Enable example selector at startup",
+                  ctx.app_settings.interface.enable_example_selector_at_startup);
 
   this->add_title("Viewport");
 

@@ -19,6 +19,7 @@
 #include "hesiod/gui/project_ui.hpp"
 #include "hesiod/gui/widgets/bake_config_dialog.hpp"
 #include "hesiod/gui/widgets/documentation_popup.hpp"
+#include "hesiod/gui/widgets/example_selector_dialog.hpp"
 #include "hesiod/gui/widgets/graph_manager_widget.hpp"
 #include "hesiod/gui/widgets/graph_tabs_widget.hpp"
 #include "hesiod/gui/widgets/gui_utils.hpp"
@@ -66,9 +67,22 @@ HesiodApplication::HesiodApplication(int &argc, char **argv) : QApplication(argc
   this->main_window = new MainWindow();
 
   // (after MainWindow creation)
-  splash->show_message("Loading default project...");
+  splash->show_message("Loading project...");
 
-  this->load_project_model_and_ui();
+  std::string fname = "";
+
+  if (this->context.app_settings.interface.enable_example_selector_at_startup)
+  {
+    std::string path = this->context.app_settings.global.ready_made_path;
+    auto       *ex_dialog = new ExampleSelectorDialog(QString::fromStdString(path));
+    bool        ret = ex_dialog->exec();
+
+    if (ret)
+      fname = ex_dialog->selected_file().toStdString();
+  }
+
+  bool keep_name = false; // project name not kept
+  this->load_project_model_and_ui(fname, keep_name);
 
   // others
   splash->show_message("Opening UI...");
@@ -102,7 +116,8 @@ ProjectUI *HesiodApplication::get_project_ui_ref() { return this->project_ui.get
 
 QApplication &HesiodApplication::get_qapp() { return *static_cast<QApplication *>(this); }
 
-void HesiodApplication::load_project_model_and_ui(const std::string &fname)
+void HesiodApplication::load_project_model_and_ui(const std::string &fname,
+                                                  bool               keep_name)
 {
   Logger::log()->trace("HesiodApplication::load_project_model_and_ui: fname [{}]", fname);
 
@@ -166,7 +181,8 @@ void HesiodApplication::load_project_model_and_ui(const std::string &fname)
   this->main_window->setup_connections_with_project();
 
   // rename whether fname is empty or not
-  this->context.project_model->set_path(fname);
+  if (keep_name)
+    this->context.project_model->set_path(fname);
 
   this->notify("Project loaded successfully.");
 }
@@ -334,6 +350,22 @@ void HesiodApplication::on_load()
 
   if (!load_fname.isNull() && !load_fname.isEmpty())
     this->load_project_model_and_ui(load_fname.toStdString());
+}
+
+void HesiodApplication::on_load_ready_made()
+{
+  Logger::log()->trace("HesiodApplication::on_load_ready_made");
+
+  std::string path = this->context.app_settings.global.ready_made_path;
+  auto       *ex_dialog = new ExampleSelectorDialog(QString::fromStdString(path));
+  bool        ret = ex_dialog->exec();
+
+  if (ret)
+  {
+    std::string fname = ex_dialog->selected_file().toStdString();
+    bool        keep_name = false;
+    this->load_project_model_and_ui(fname, keep_name);
+  }
 }
 
 void HesiodApplication::on_new()
@@ -534,6 +566,9 @@ void HesiodApplication::setup_menu_bar()
   load_action->setShortcut(tr("Ctrl+O"));
   file_menu->addAction(load_action);
 
+  auto *rmade_action = new QAction("Open Ready-made Example", this);
+  file_menu->addAction(rmade_action);
+
   auto *save = new QAction("Save", this);
   save->setShortcut(tr("Ctrl+S"));
   file_menu->addAction(save);
@@ -554,7 +589,7 @@ void HesiodApplication::setup_menu_bar()
 
   file_menu->addSeparator();
 
-  auto *settings_action = new QAction("Application settings", this);
+  auto *settings_action = new QAction("Application Settings", this);
   file_menu->addAction(settings_action);
 
   file_menu->addSeparator();
@@ -570,24 +605,24 @@ void HesiodApplication::setup_menu_bar()
 
   graph_menu->addSeparator();
 
-  auto *reseed = new QAction("Advance random seeds", this);
+  auto *reseed = new QAction("Advance Random Seeds", this);
   reseed->setShortcut(tr("Alt+R"));
   graph_menu->addAction(reseed);
 
-  auto *reseed_back = new QAction("Reverse random seeds", this);
+  auto *reseed_back = new QAction("Reverse Random Seeds", this);
   reseed_back->setShortcut(tr("Alt+Shift+R"));
   graph_menu->addAction(reseed_back);
 
   QMenu *view_menu = this->main_window->menuBar()->addMenu("&View");
 
-  auto *show_layout_manager = new QAction("Graph layout manager", this);
+  auto *show_layout_manager = new QAction("Graph Layout Manager", this);
   show_layout_manager->setCheckable(true);
   show_layout_manager->setChecked(
       this->context.app_settings.window.show_graph_manager_widget);
   view_menu->addAction(show_layout_manager);
 
   // texture dld
-  auto *show_texture_downloader = new QAction("Texture downloader", this);
+  auto *show_texture_downloader = new QAction("Texture Downloader", this);
   if (this->context.app_settings.interface.enable_texture_downloader)
   {
     view_menu->addSeparator();
@@ -596,7 +631,7 @@ void HesiodApplication::setup_menu_bar()
 
   view_menu->addSeparator();
 
-  auto *show_node_settings_pan_action = new QAction("Show node settings pan", this);
+  auto *show_node_settings_pan_action = new QAction("Show Node Settings Pan", this);
   show_node_settings_pan_action->setCheckable(true);
   {
     bool state = this->context.app_settings.node_editor.show_node_settings_pan;
@@ -607,7 +642,7 @@ void HesiodApplication::setup_menu_bar()
 
   QMenu *help = this->main_window->menuBar()->addMenu("&Help");
 
-  auto *quick_help = new QAction("Quick help", this);
+  auto *quick_help = new QAction("Quick Help", this);
   help->addAction(quick_help);
 
   help->addSeparator();
@@ -619,6 +654,10 @@ void HesiodApplication::setup_menu_bar()
 
   this->connect(new_action, &QAction::triggered, this, &HesiodApplication::on_new);
   this->connect(load_action, &QAction::triggered, this, &HesiodApplication::on_load);
+  this->connect(rmade_action,
+                &QAction::triggered,
+                this,
+                &HesiodApplication::on_load_ready_made);
 
   this->connect(save, &QAction::triggered, this, &HesiodApplication::on_save);
   this->connect(save_as, &QAction::triggered, this, &HesiodApplication::on_save_as);

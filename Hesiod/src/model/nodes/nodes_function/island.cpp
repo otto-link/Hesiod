@@ -148,8 +148,6 @@ void compute_island_node(BaseNode &node)
         hmap::Array *pa_depth = p_arrays[3];
         hmap::Array *pa_mask = p_arrays[4];
 
-        // TODO replace apex elevation by global scale (centered on zero)
-
         if (pa_dr)
         {
           *pa_out = hmap::gpu::island(
