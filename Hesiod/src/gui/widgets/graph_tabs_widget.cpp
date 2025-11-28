@@ -33,9 +33,12 @@ GraphTabsWidget::GraphTabsWidget(std::weak_ptr<GraphManager> p_graph_manager,
   GN_STYLE->node.color_category = ctx.style_settings.category_color_map;
 
   QHBoxLayout *layout = new QHBoxLayout(this);
+  layout->setContentsMargins(2, 2, 2, 2);
+  layout->setSpacing(0);
   this->setLayout(layout);
 
   this->tab_widget = new QTabWidget(this);
+  this->tab_widget->setTabPosition(QTabWidget::West);
   layout->addWidget(this->tab_widget);
 
   this->update_tab_widget();

@@ -32,15 +32,17 @@ QRadioButton {
 QStatusBar {
     background-color: COLOR_BG_PRIMARY;
     color: COLOR_HOVER;
-    /* border-top: 1px solid COLOR_TEXT_DISABLED; */
-    padding: 4px 8px;
+    /* border-top: 1px solid COLOR_BORDER; */
+    border: 1px solid COLOR_BORDER;
+    padding: 16px 8px 32px 64px;
+    border-radius: 6px;
 }
 
 /* QTabWidget --------------------------------------------------------------- */
 QTabWidget::pane {
     color: COLOR_TEXT_PRIMARY;
     border: 1px solid COLOR_BORDER;
-    top: -1px;
+    top: 1px;
     background: COLOR_BG_PRIMARY;
 }
 
@@ -48,7 +50,12 @@ QTabBar::tab {
     color: COLOR_TEXT_PRIMARY;
     background: COLOR_BG_PRIMARY;
     border: 1px solid COLOR_BORDER;
-    padding: 5px 20px;
+    padding: 16px 4px;
+    min-height: 128px;
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
 }
 
 QTabBar::tab:selected {
@@ -151,7 +158,7 @@ QLineEdit {
 QMenuBar {
     background-color: COLOR_BG_PRIMARY;
     padding: 2px;
-    border: 0px solid COLOR_BORDER;
+    border: 1px solid COLOR_BORDER;
     color: COLOR_TEXT_PRIMARY;
     selection-background-color: COLOR_PRESSED;
 }
@@ -264,10 +271,10 @@ QSlider::handle:vertical {
 /* QTextEdit --------------------------------------------------------------- */
 QTextEdit,
 QPlainTextEdit {
-    background-color: COLOR_BORDER;
+    background-color: COLOR_BG_DEEP;
     color: COLOR_TEXT_PRIMARY;
     border-radius: 4px;
-    border: 1px solid COLOR_BORDER;
+    border: 0px solid COLOR_BORDER;
 }
 
 /* QToolTip ---------------------------------------------------------------- */
@@ -280,6 +287,7 @@ QToolTip {
 
 /* QProgressBar ------------------------------------------------------------ */
 QProgressBar {
+    background-color: COLOR_BG_PRIMARY;
     border: 1px solid COLOR_BORDER;
     border-radius: 4px;
     text-align: center;

@@ -23,6 +23,7 @@ void apply_global_style(QApplication &app)
   AppContext &ctx = HSD_CTX;
 
   std::map<std::string, QColor> place_holders = {
+      {"COLOR_BG_DEEP", ctx.app_settings.colors.bg_deep},
       {"COLOR_BG_PRIMARY", ctx.app_settings.colors.bg_primary},
       {"COLOR_BG_SECONDARY", ctx.app_settings.colors.bg_secondary},
       {"COLOR_TEXT_PRIMARY", ctx.app_settings.colors.text_primary},
