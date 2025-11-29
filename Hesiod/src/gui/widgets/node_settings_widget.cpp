@@ -1,24 +1,14 @@
 /* Copyright (c) 2025 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-#include <stdexcept>
-
 #include <QLabel>
-#include <QPointer>
-#include <QPushButton>
-#include <QScrollBar>
-
-#include "attributes/widgets/abstract_widget.hpp"
-#include "attributes/widgets/attributes_widget.hpp"
+#include <QVBoxLayout>
 
 #include "hesiod/app/hesiod_application.hpp"
-#include "hesiod/gui/widgets/data_preview.hpp"
 #include "hesiod/gui/widgets/gui_utils.hpp"
 #include "hesiod/gui/widgets/node_attributes_widget.hpp"
 #include "hesiod/gui/widgets/node_settings_widget.hpp"
 #include "hesiod/logger.hpp"
-#include "hesiod/model/graph/graph_node.hpp"
-#include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/utils.hpp"
 
 namespace hesiod
@@ -31,278 +21,149 @@ NodeSettingsWidget::NodeSettingsWidget(QPointer<GraphNodeWidget> p_graph_node_wi
   Logger::log()->trace("NodeSettingsWidget::NodeSettingsWidget");
 
   if (!this->p_graph_node_widget)
-  {
-    const std::string
-        msg = "NodeSettingsWidget::NodeSettingsWidget: p_graph_node_widget is nullptr";
-    Logger::log()->critical(msg);
-    throw std::invalid_argument(msg);
-  }
+    return;
+
+  this->setMinimumWidth(360); // TODO fix this
+  this->setMaximumWidth(360);
+
+  this->setup_layout();
+  this->setup_connections();
+  this->update_content();
 }
-
-void NodeSettingsWidget::initialize_layout()
-{
-  Logger::log()->trace("NodeSettingsWidget::initialize_layout");
-
-  this->layout = new QVBoxLayout(this);
-
-  this->scroll_area = new QScrollArea(this);
-  QWidget *scroll_widget = new QWidget(this->scroll_area);
-
-  // central layout that hosts all settings rows
-  this->scroll_layout = new QGridLayout(scroll_widget);
-  this->scroll_layout->setAlignment(Qt::AlignTop);
-
-  // Allow default constraint so Qt can compute sensible min/max sizes
-  this->scroll_layout->setSizeConstraint(QLayout::SetDefaultConstraint);
-  this->scroll_layout->setContentsMargins(8, 0, 256, 0);
-  this->scroll_layout->setSpacing(0);
-
-  // Make the scroll widget expand vertically so the scroll area will show scrollbars
-  scroll_widget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::MinimumExpanding);
-  scroll_widget->setLayout(this->scroll_layout);
-  scroll_widget->setMaximumHeight(QWIDGETSIZE_MAX);
-
-  this->scroll_area->setWidgetResizable(true);
-  this->scroll_area->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-  this->scroll_area->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-  this->scroll_area->setWidget(scroll_widget);
-
-  // make sure the single column stretches to occupy the width
-  this->scroll_layout->setColumnStretch(0, 1);
-
-  this->layout->addWidget(this->scroll_area);
-  this->setLayout(this->layout);
-}
-
-void NodeSettingsWidget::set_is_shown(bool new_state) { this->is_shown = new_state; }
 
 void NodeSettingsWidget::setup_connections()
 {
   Logger::log()->trace("NodeSettingsWidget::setup_connections");
 
   if (!this->p_graph_node_widget)
-  {
-    Logger::log()->error(
-        "NodeSettingsWidget::setup_connections: p_graph_node_widget is nullptr");
     return;
-  }
+
+  // GraphNodeWidget -> this (make sure the dialog is closed when
+  // the graph is destroyed or if the node is deleted)
+  this->connect(this->p_graph_node_widget,
+                &QObject::destroyed,
+                this,
+                [this]()
+                {
+                  this->p_graph_node_widget = nullptr;
+                  this->deleteLater();
+                });
 
   // connect selection changes -> update UI
-  this->connect(p_graph_node_widget,
+  this->connect(this->p_graph_node_widget,
                 &gngui::GraphViewer::selection_has_changed,
                 this,
                 &NodeSettingsWidget::update_content);
 
-  this->connect(p_graph_node_widget,
+  this->connect(this->p_graph_node_widget,
                 &GraphNodeWidget::update_finished,
                 this,
                 &NodeSettingsWidget::update_content);
+}
+
+void NodeSettingsWidget::setup_layout()
+{
+  Logger::log()->trace("NodeSettingsWidget::setup_layout");
+
+  auto *layout = new QVBoxLayout();
+  layout->setContentsMargins(0, 0, 0, 0);
+  layout->setSpacing(4);
+  this->setLayout(layout);
+
+  const int margin = 6;
+
+  // --- attributes widget
+
+  {
+    auto *container = new QWidget();
+    this->attr_layout = new QVBoxLayout(container);
+    this->attr_layout->setContentsMargins(margin, 0, margin, 0);
+    this->attr_layout->setSpacing(2);
+
+    auto *scroll = new QScrollArea();
+    scroll->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    scroll->setWidget(container);
+    scroll->setWidgetResizable(true);
+    scroll->setFrameShape(QFrame::NoFrame);
+    scroll->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    layout->addWidget(scroll);
+  }
 }
 
 void NodeSettingsWidget::update_content()
 {
   Logger::log()->trace("NodeSettingsWidget::update_content");
 
-  if (!this->is_shown)
-    return;
-
-  if (this->prevent_content_update)
-  {
-    Logger::log()->trace("NodeSettingsWidget::update_content: prevented");
-    return;
-  }
-
-  // create widget content here (not in the constructor) to ensure the
-  // the parent widget is setup
-  if (this->first_pass)
-  {
-    this->initialize_layout();
-    this->setup_connections();
-    this->first_pass = false;
-  }
-
-  // some guard access
   if (!this->p_graph_node_widget)
-  {
-    Logger::log()->error(
-        "NodeSettingsWidget::update_content: p_graph_node_widget is nullptr");
     return;
-  }
 
-  if (!this->scroll_layout)
-  {
-    Logger::log()->error("NodeSettingsWidget::update_content: scroll_layout is nullptr");
+  clear_layout(this->attr_layout);
+
+  // lifetime safe getter
+  GraphNode *p_gno = this->p_graph_node_widget->get_p_graph_node();
+  if (!p_gno)
     return;
-  }
 
-  auto p_graph = this->p_graph_node_widget->get_p_graph_node();
-  if (!p_graph)
-  {
-    Logger::log()->warn(
-        "NodeSettingsWidget::update_content: get_p_graph_node returned nullptr");
-    return;
-  }
+  this->attr_layout->addWidget(new QLabel()); // space
 
-  // style
-  QString style = QString("QScrollArea {"
-                          "   border: 1px solid %1;"
-                          "   border-radius: 6px;"
-                          "   padding: 6px;"
-                          "}")
-                      .arg(HSD_CTX.app_settings.colors.border.name());
-
-  this->scroll_area->setStyleSheet(style);
-
-  // for scroll_area size
-  this->scroll_area->setMinimumWidth(332);
-
-  QWidget *parent = this->parentWidget();
-  if (parent)
-    this->scroll_area->setMinimumHeight((int)(0.9f * parent->size().height()));
-  else
-    this->scroll_area->setMinimumHeight(512);
-
-  // empty and delete items of current layout
-  clear_layout(this->scroll_layout);
-  int row = 0;
-
+  // refill based on selected nodes (and pinned nodes)
   std::vector<std::string> selected_ids = this->p_graph_node_widget
                                               ->get_selected_node_ids();
   std::vector<std::string> all_ids = merge_unique(this->pinned_node_ids, selected_ids);
 
-  // header label
-  QLabel *title_label = new QLabel("Node settings", /*parent=*/this->parentWidget());
-  title_label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-  this->scroll_layout->addWidget(title_label, row++, 0);
-
   for (auto &node_id : all_ids)
   {
-    // Defensive retrieval of node reference
-    BaseNode *p_node = p_graph->get_node_ref_by_id<BaseNode>(node_id);
-
+    BaseNode *p_node = p_gno->get_node_ref_by_id<BaseNode>(node_id);
     if (!p_node)
     {
-      Logger::log()->trace(
-          "NodeSettingsWidget::update_content: reference to node {} is nullptr",
-          node_id);
+      remove_all_occurrences(this->pinned_node_ids, node_id);
       continue;
     }
 
-    // separator (with parent so Qt will manage its lifetime)
-    const QString txt = QString::fromStdString(p_node->get_caption() + " (" + node_id +
-                                               ")");
-    QWidget      *separator_widget = new QWidget(/*parent=*/this);
-    QHBoxLayout  *sep_layout = new QHBoxLayout(separator_widget);
-    sep_layout->setSpacing(0);
-    sep_layout->setContentsMargins(0, 0, 0, 0);
+    const QString node_caption = QString::fromStdString(p_node->get_caption());
 
-    QFrame *left_line = new QFrame(separator_widget);
-    left_line->setFrameShape(QFrame::HLine);
-    left_line->setFrameShadow(QFrame::Sunken);
-
-    QLabel *sep_label = new QLabel(txt, separator_widget);
-    sep_label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
-
-    QFrame *right_line = new QFrame(separator_widget);
-    right_line->setFrameShape(QFrame::HLine);
-    right_line->setFrameShadow(QFrame::Sunken);
-
-    sep_layout->addWidget(left_line);
-    sep_layout->addWidget(sep_label);
-    sep_layout->addWidget(right_line);
-
-    sep_layout->setStretch(0, 1);
-    sep_layout->setStretch(2, 6);
-
-    this->scroll_layout->addWidget(separator_widget, row++, 0, 1, 2);
-
-    // data thumbnail
-    {
-      const int    width = 48;
-      QLabel      *label_preview = new QLabel(/*parent=*/this);
-      DataPreview *p_data_preview = new DataPreview(p_node->get_shared());
-      QPixmap      preview_pixmap = p_data_preview->get_preview_pixmap();
-
-      if (!preview_pixmap.isNull())
-      {
-        QPixmap scaled_pixmap = preview_pixmap.scaled(width,
-                                                      width,
-                                                      Qt::KeepAspectRatio,
-                                                      Qt::SmoothTransformation);
-        label_preview->setPixmap(scaled_pixmap);
-        label_preview->setScaledContents(true);
-        label_preview->setFixedSize(width, width);
-        label_preview->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-        this->scroll_layout->addWidget(label_preview, row, 0, Qt::AlignLeft);
-      }
-    }
+    auto *label = new QLabel(node_caption);
+    this->attr_layout->addWidget(label);
+    // this->attr_layout->addWidget(new QLabel()); // space
 
     // pinned checkbox button
-    QPushButton *button_pin = new QPushButton("Pin this node", this);
-    button_pin->setCheckable(true);
-    button_pin->setChecked(contains(this->pinned_node_ids, node_id));
-    this->scroll_layout->addWidget(button_pin, row++, 1);
+    {
+      QCheckBox *button_pin = new QCheckBox("Pin this node", this);
+      button_pin->setCheckable(true);
+      button_pin->setChecked(contains(this->pinned_node_ids, node_id));
+      this->attr_layout->addWidget(button_pin);
 
-    this->scroll_layout->addWidget(new QLabel(), row++, 0);
+      this->connect(button_pin,
+                    &QCheckBox::toggled,
+                    this,
+                    [this, button_pin, node_id]
+                    {
+                      if (button_pin->isChecked())
+                      {
+                        if (!contains(this->pinned_node_ids, node_id))
+                          this->pinned_node_ids.push_back(node_id);
+                      }
+                      else
+                      {
+                        remove_all_occurrences(this->pinned_node_ids, node_id);
+                      }
+                    });
+    }
 
-    // Use QPointer in the lambda to defend against deletion
-    QPointer<QPushButton> bp(button_pin);
-    this->connect(
-        button_pin,
-        &QPushButton::toggled,
-        this,
-        [this, bp, node_id]()
-        {
-          if (!bp)
-          {
-            Logger::log()->warn(
-                "NodeSettingsWidget: pin button destroyed before toggle handler");
-            return;
-          }
-
-          if (bp->isChecked())
-          {
-            if (!contains(this->pinned_node_ids, node_id))
-              this->pinned_node_ids.push_back(node_id);
-          }
-          else
-          {
-            remove_all_occurrences(this->pinned_node_ids, node_id);
-          }
-
-          Logger::log()->trace("NodeSettingsWidget: pinned nodes now count={}",
-                               this->pinned_node_ids.size());
-        });
-
-    // attr widget
-    NodeAttributesWidget *widget = new NodeAttributesWidget(p_graph->get_shared(),
-                                                            node_id,
-                                                            this->p_graph_node_widget,
-                                                            /* add_toolbar */ false);
-
-    this->connect(
-        widget->get_attributes_widget_ref(),
-        &attr::AttributesWidget::value_changed,
-        [this, node_id]()
-        {
-          if (this->p_graph_node_widget)
-            if (GraphNode *p_graph = this->p_graph_node_widget->get_p_graph_node())
-            {
-              // block update of the widget if the modification
-              // comes from within (settings change can also comes
-              // from the node settings context menu)
-              this->prevent_content_update = true;
-              p_graph->update(node_id);
-              this->prevent_content_update = false;
-            }
-        });
-
-    if (!widget)
+    auto *attr_widget = new NodeAttributesWidget(p_gno->get_shared(),
+                                                 node_id,
+                                                 this->p_graph_node_widget,
+                                                 /* add_toolbar */ false,
+                                                 /* parent */ nullptr);
+    if (!attr_widget)
       continue;
 
-    this->scroll_layout->addWidget(widget, row++, 0, 1, 2);
-    this->scroll_layout->addWidget(new QLabel(), row++, 0);
+    this->attr_layout->addWidget(attr_widget);
+    this->attr_layout->addWidget(new QLabel()); // space
   }
+
+  this->attr_layout->addStretch();
 }
 
 } // namespace hesiod

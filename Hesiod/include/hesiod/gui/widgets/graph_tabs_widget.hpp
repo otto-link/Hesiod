@@ -3,18 +3,17 @@
 #pragma once
 #include <memory>
 
+#include <QHBoxLayout>
 #include <QTabWidget>
 #include <QWidget>
 
 #include "nlohmann/json.hpp"
 
-#include "hesiod/gui/widgets/node_settings_widget.hpp"
-
 namespace hesiod
 {
 
 class GraphManager; // forward
-class GraphNodeWidget;
+class GraphEditorWidget;
 
 // =====================================
 // GraphTabsWidget
@@ -58,18 +57,17 @@ public slots:
   void on_textures_request(const std::vector<std::string> &texture_paths);
 
   void set_selected_tab(const std::string &graph_id);
-  void show_viewport();
   void update_receive_nodes_tag_list();
   void update_tab_widget();
   void zoom_to_content();
 
 private:
   // --- Members ---
-  std::weak_ptr<GraphManager>                      p_graph_manager; // own by MainWindow
-  QTabWidget                                      *tab_widget;      // own by this
-  std::map<std::string, QPointer<GraphNodeWidget>> graph_node_widget_map;
-  std::map<std::string, NodeSettingsWidget *>      node_settings_widget_map;
-  bool                                             show_node_settings_widget;
+  std::weak_ptr<GraphManager>                        p_graph_manager; // own by MainWindow
+  QTabWidget                                        *tab_widget;      // own by this
+  std::map<std::string, QPointer<GraphEditorWidget>> graph_editor_widget_map;
+  bool                                               show_node_settings_widget;
+  QHBoxLayout                                       *main_layout;
 };
 
 } // namespace hesiod

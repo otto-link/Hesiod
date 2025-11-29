@@ -39,11 +39,19 @@ QStatusBar {
 }
 
 /* QTabWidget --------------------------------------------------------------- */
+QTabWidget {
+    background: transparent;
+}
+
 QTabWidget::pane {
     color: COLOR_TEXT_PRIMARY;
-    border: 1px solid COLOR_BORDER;
-    top: 1px;
     background: COLOR_BG_PRIMARY;
+    background-clip: padding;
+    border: 1px solid COLOR_BORDER;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
 }
 
 QTabBar::tab {
@@ -51,7 +59,7 @@ QTabBar::tab {
     background: COLOR_BG_PRIMARY;
     border: 1px solid COLOR_BORDER;
     padding: 16px 4px;
-    min-height: 128px;
+    min-height: 80px;
     border-top-left-radius: 6px;
     border-bottom-left-radius: 6px;
     border-top-right-radius: 0px;
@@ -59,7 +67,7 @@ QTabBar::tab {
 }
 
 QTabBar::tab:selected {
-    background: COLOR_ACCENT;
+    background: COLOR_BORDER;
     margin-bottom: -1px;
 }
 
@@ -77,7 +85,7 @@ QGroupBox  {
     border: 1px solid COLOR_BORDER;
     margin-top: 30px;
     margin-bottom: 4px;
-    font-size: 14px;
+    /* font-size: 14px; */
     border-radius: 6px;
     padding: 4px 8px;
 }
@@ -106,6 +114,11 @@ QCheckBox::indicator {
 
 QCheckBox::indicator:checked {
     background-color: COLOR_TEXT_PRIMARY;
+}
+
+/* QSplitter --------------------------------------------------------------- */
+QSplitter::handle:vertical {
+    border-top: 1px solid COLOR_BORDER;
 }
 
 /* QTableView checkbox indicators */
@@ -161,6 +174,7 @@ QMenuBar {
     border: 1px solid COLOR_BORDER;
     color: COLOR_TEXT_PRIMARY;
     selection-background-color: COLOR_PRESSED;
+    border-radius: 4px;
 }
 
 QMenu {

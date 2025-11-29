@@ -17,6 +17,7 @@
 #include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/cli/batch_mode.hpp"
 #include "hesiod/gui/project_ui.hpp"
+#include "hesiod/gui/widgets/about_dialog.hpp"
 #include "hesiod/gui/widgets/bake_config_dialog.hpp"
 #include "hesiod/gui/widgets/documentation_popup.hpp"
 #include "hesiod/gui/widgets/example_selector_dialog.hpp"
@@ -768,21 +769,8 @@ void HesiodApplication::show()
 
 void HesiodApplication::show_about()
 {
-  std::string msg = "Hesiod v";
-  msg += std::to_string(HESIOD_VERSION_MAJOR) + ".";
-  msg += std::to_string(HESIOD_VERSION_MINOR) + ".";
-  msg += std::to_string(HESIOD_VERSION_PATCH) + "\n";
-  msg += "A desktop application for node-based "
-         "procedural terrain "
-         "generation.\nhttps://github.com/otto-link/Hesiod";
-
-  QMessageBox msg_box;
-  msg_box.setText(msg.c_str());
-  QPixmap icon(this->context.app_settings.global.icon_path.c_str());
-  msg_box.setIconPixmap(
-      icon.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-
-  msg_box.exec();
+  auto *dlg = new AboutDialog();
+  dlg->exec();
 }
 
 void HesiodApplication::show_quick_help()

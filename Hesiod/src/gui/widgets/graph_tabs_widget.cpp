@@ -6,6 +6,7 @@
 #include "gnodegui/style.hpp"
 
 #include "hesiod/app/hesiod_application.hpp"
+#include "hesiod/gui/widgets/graph_editor_widget.hpp"
 #include "hesiod/gui/widgets/graph_node_widget.hpp"
 #include "hesiod/gui/widgets/graph_tabs_widget.hpp"
 #include "hesiod/gui/widgets/node_settings_widget.hpp"
@@ -32,15 +33,14 @@ GraphTabsWidget::GraphTabsWidget(std::weak_ptr<GraphManager> p_graph_manager,
   GN_STYLE->node.color_port_data = ctx.style_settings.data_color_map;
   GN_STYLE->node.color_category = ctx.style_settings.category_color_map;
 
-  QHBoxLayout *layout = new QHBoxLayout(this);
-  layout->setContentsMargins(2, 2, 2, 2);
-  layout->setSpacing(0);
-  this->setLayout(layout);
+  this->main_layout = new QHBoxLayout(this);
+  this->main_layout->setContentsMargins(2, 2, 2, 2);
+  this->main_layout->setSpacing(0);
+  this->setLayout(this->main_layout);
 
   this->tab_widget = new QTabWidget(this);
   this->tab_widget->setTabPosition(QTabWidget::West);
-  layout->addWidget(this->tab_widget);
-
+  this->main_layout->addWidget(this->tab_widget);
   this->update_tab_widget();
 }
 
@@ -48,9 +48,11 @@ GraphTabsWidget::~GraphTabsWidget()
 {
   Logger::log()->trace("GraphTabsWidget::~GraphTabsWidget");
 
-  for (auto &[_, gnw] : this->graph_node_widget_map)
-    if (gnw)
-      gnw->deleteLater();
+  // TODO do this wia Qt connect
+
+  for (auto &[_, gew] : this->graph_editor_widget_map)
+    if (gew)
+      gew->deleteLater();
 }
 
 void GraphTabsWidget::clear()
@@ -61,24 +63,16 @@ void GraphTabsWidget::clear()
   while (this->tab_widget->count() > 0)
     this->tab_widget->removeTab(0);
 
-  for (auto &[id, gnw] : this->graph_node_widget_map)
+  for (auto &[id, gew] : this->graph_editor_widget_map)
   {
-    if (gnw)
+    if (gew && gew->get_graph_node_widget())
     {
-      gnw->clear_graphic_scene();
-      gnw->close();
+      gew->get_graph_node_widget()->clear_graphic_scene();
+      gew->get_graph_node_widget()->close();
     }
   }
 
-  this->graph_node_widget_map.clear();
-
-  // also clear settings widgets map (close widgets first)
-  for (auto &[id, sw] : this->node_settings_widget_map)
-  {
-    if (sw)
-      sw->close();
-  }
-  this->node_settings_widget_map.clear();
+  this->graph_editor_widget_map.clear();
 }
 
 std::string GraphTabsWidget::get_selected_graph_id() const
@@ -96,9 +90,9 @@ void GraphTabsWidget::on_textures_request(const std::vector<std::string> &textur
 
   std::string graph_id = this->get_selected_graph_id();
 
-  GraphNodeWidget *gnw = this->graph_node_widget_map.at(graph_id);
-  if (gnw)
-    gnw->add_import_texture_nodes(texture_paths);
+  QPointer<GraphEditorWidget> gew = this->graph_editor_widget_map.at(graph_id);
+  if (gew && gew->get_graph_node_widget())
+    gew->get_graph_node_widget()->add_import_texture_nodes(texture_paths);
   else
     Logger::log()->error("GraphTabsWidget::on_textures_request: dangling ptr");
 }
@@ -108,33 +102,18 @@ void GraphTabsWidget::json_from(nlohmann::json const &json)
   this->update_tab_widget();
 
   if (json.contains("graph_node_widgets"))
-  {
-    for (auto &[id, gnw] : this->graph_node_widget_map)
-    {
-      if (json["graph_node_widgets"].contains(id))
-      {
-        if (gnw)
-          gnw->json_from(json["graph_node_widgets"][id]);
-      }
-      else
-      {
-        Logger::log()->error("Missing graph node widgets json element by key \"{}\"", id);
-      }
-    }
-  }
-  else
-  {
-    Logger::log()->error("Missing graph_node_widgets in json");
-  }
+    for (auto &[id, gew] : this->graph_editor_widget_map)
+      if (gew)
+        gew->json_from(json["graph_node_widgets"]);
 }
 
 nlohmann::json GraphTabsWidget::json_to() const
 {
   nlohmann::json json;
 
-  for (auto &[id, gnw] : this->graph_node_widget_map)
-    if (gnw)
-      json["graph_node_widgets"][id] = gnw->json_to();
+  for (auto &[id, gew] : this->graph_editor_widget_map)
+    if (gew)
+      json["graph_node_widgets"] = gew->json_to();
 
   return json;
 }
@@ -144,9 +123,9 @@ void GraphTabsWidget::on_copy_buffer_has_changed(const nlohmann::json &new_json)
   Logger::log()->trace("GraphTabsWidget::on_copy_buffer_has_changed");
 
   // redispatch the copy buffer to all the graphs
-  for (auto &[_, gnw] : this->graph_node_widget_map)
-    if (gnw)
-      gnw->set_json_copy_buffer(new_json);
+  for (auto &[_, gew] : this->graph_editor_widget_map)
+    if (gew && gew->get_graph_node_widget())
+      gew->get_graph_node_widget()->set_json_copy_buffer(new_json);
 }
 
 void GraphTabsWidget::on_has_been_cleared(const std::string &graph_id)
@@ -200,9 +179,11 @@ void GraphTabsWidget::set_show_node_settings_widget(bool new_state)
   this->show_node_settings_widget = new_state;
 
   // pass info to each node settings widget
-  for (auto &[_, nsw] : this->node_settings_widget_map)
-    if (nsw)
-      nsw->set_is_shown(new_state);
+  for (auto &[id, gew] : this->graph_editor_widget_map)
+  {
+    if (gew && gew->get_graph_node_widget())
+      gew->get_node_settings_widget()->setVisible(new_state);
+  }
 
   this->update_tab_widget();
 }
@@ -215,14 +196,6 @@ void GraphTabsWidget::set_selected_tab(const std::string &graph_id)
     if (tab_label.toStdString() == graph_id)
       this->tab_widget->setCurrentIndex(i);
   }
-}
-
-void GraphTabsWidget::show_viewport()
-{
-  Logger::log()->trace("GraphTabsWidget::show_viewport");
-
-  if (!this->graph_node_widget_map.empty() && this->graph_node_widget_map.begin()->second)
-    this->graph_node_widget_map.begin()->second->on_viewport_request();
 }
 
 QSize GraphTabsWidget::sizeHint() const { return QSize(1024, 1024); }
@@ -274,7 +247,7 @@ void GraphTabsWidget::update_tab_widget()
   // clean-up stored GraphNodeWidget
   std::vector<std::string> id_to_erase = {};
 
-  for (auto &[id, _] : this->graph_node_widget_map)
+  for (auto &[id, _] : this->graph_editor_widget_map)
   {
     // ditch if the corresponding GraphNode no longer exists
     GraphNode *p_graph_node = gm->get_graph_ref_by_id(id);
@@ -284,20 +257,12 @@ void GraphTabsWidget::update_tab_widget()
 
   for (auto &id : id_to_erase)
   {
-    if (auto it = this->graph_node_widget_map.find(id);
-        it != this->graph_node_widget_map.end())
+    if (auto it = this->graph_editor_widget_map.find(id);
+        it != this->graph_editor_widget_map.end())
     {
       if (it->second)
         it->second->close();
-      this->graph_node_widget_map.erase(it);
-    }
-
-    if (auto it2 = this->node_settings_widget_map.find(id);
-        it2 != this->node_settings_widget_map.end())
-    {
-      if (it2->second)
-        it2->second->close();
-      this->node_settings_widget_map.erase(it2);
+      this->graph_editor_widget_map.erase(it);
     }
   }
 
@@ -307,8 +272,10 @@ void GraphTabsWidget::update_tab_widget()
     Logger::log()->trace("updating tab for graph: {}", id);
 
     // generate a graph editor if not already available
-    if (!this->graph_node_widget_map.contains(id))
+    if (!this->graph_editor_widget_map.contains(id))
     {
+      // TODO use gnodewidget getter / safe
+
       GraphNode *p_graph_node = gm->get_graph_ref_by_id(id);
       if (!p_graph_node)
       {
@@ -319,8 +286,8 @@ void GraphTabsWidget::update_tab_widget()
       }
 
       // set 'this' as parent so the widget is owned by the widget tree.
-      this->graph_node_widget_map[id] = new GraphNodeWidget(p_graph_node->get_shared(),
-                                                            this);
+      this->graph_editor_widget_map[id] = new GraphEditorWidget(
+          p_graph_node->get_shared());
 
       // connections / model
       gm->new_broadcast_tag = [safe_this = QPointer(this)](const std::string &)
@@ -336,32 +303,32 @@ void GraphTabsWidget::update_tab_widget()
       };
 
       // connections / GUI
-      this->connect(this->graph_node_widget_map.at(id),
+      this->connect(this->graph_editor_widget_map.at(id)->get_graph_node_widget(),
                     &GraphNodeWidget::has_been_cleared,
                     this,
                     &GraphTabsWidget::on_has_been_cleared);
 
-      this->connect(this->graph_node_widget_map.at(id),
+      this->connect(this->graph_editor_widget_map.at(id)->get_graph_node_widget(),
                     &GraphNodeWidget::new_node_created,
                     this,
                     &GraphTabsWidget::on_new_node_created);
 
-      this->connect(this->graph_node_widget_map.at(id),
+      this->connect(this->graph_editor_widget_map.at(id)->get_graph_node_widget(),
                     &GraphNodeWidget::node_deleted,
                     this,
                     &GraphTabsWidget::on_node_deleted);
 
-      this->connect(this->graph_node_widget_map.at(id),
+      this->connect(this->graph_editor_widget_map.at(id)->get_graph_node_widget(),
                     &GraphNodeWidget::copy_buffer_has_changed,
                     this,
                     &GraphTabsWidget::on_copy_buffer_has_changed);
 
-      this->connect(this->graph_node_widget_map.at(id),
+      this->connect(this->graph_editor_widget_map.at(id)->get_graph_node_widget(),
                     &GraphNodeWidget::update_started,
                     this,
                     [this]() { Q_EMIT this->update_started(); });
 
-      this->connect(this->graph_node_widget_map.at(id),
+      this->connect(this->graph_editor_widget_map.at(id)->get_graph_node_widget(),
                     &GraphNodeWidget::update_finished,
                     this,
                     [this]() { Q_EMIT this->update_finished(); });
@@ -373,46 +340,8 @@ void GraphTabsWidget::update_tab_widget()
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
 
-    QPointer<GraphNodeWidget> graph_widget = this->graph_node_widget_map.at(id);
-    if (!graph_widget)
-    {
-      Logger::log()->error(
-          "GraphTabsWidget::update_tab_widget: graph widget for '{}' is nullptr",
-          id);
-      continue;
-    }
-
     // Give main area most of the space
-    layout->addWidget(graph_widget, 3);
-
-    if (this->show_node_settings_widget)
-    {
-      // either reuse or create the settings widget. parent it to the tab so that when
-      // the tab is destroyed the widget is as well (but keep pointer in the map).
-      NodeSettingsWidget *settings_widget = nullptr;
-
-      auto it = this->node_settings_widget_map.find(id);
-      if (it == this->node_settings_widget_map.end() || it->second == nullptr)
-      {
-        settings_widget = new NodeSettingsWidget(graph_widget, tab);
-        this->node_settings_widget_map[id] = settings_widget;
-      }
-      else
-      {
-        settings_widget = it->second;
-        // ensure parent is the current tab (in case it was created with different parent)
-        if (settings_widget->parentWidget() != tab)
-          settings_widget->setParent(tab);
-      }
-
-      // Make settings compact vertically and constrain width
-      settings_widget->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Maximum);
-      settings_widget->setMinimumWidth(300);
-
-      // Add without stretch so it keeps its preferred width
-      layout->addWidget(settings_widget, 0);
-      settings_widget->update_content();
-    }
+    layout->addWidget(this->graph_editor_widget_map.at(id), 3);
 
     tab->setLayout(layout);
     this->tab_widget->addTab(tab, QString::fromStdString(id));
@@ -425,10 +354,10 @@ void GraphTabsWidget::update_tab_widget()
 
 void GraphTabsWidget::zoom_to_content()
 {
-  for (auto &[id, gnw] : this->graph_node_widget_map)
+  for (auto &[id, gew] : this->graph_editor_widget_map)
   {
-    if (gnw)
-      gnw->zoom_to_content();
+    if (gew && gew->get_graph_node_widget())
+      gew->get_graph_node_widget()->zoom_to_content();
   }
 }
 

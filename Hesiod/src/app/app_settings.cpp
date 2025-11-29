@@ -18,17 +18,17 @@ void AppSettings::json_from(nlohmann::json const &json)
                 "model.allow_broadcast_receive_within_same_graph",
                 model.allow_broadcast_receive_within_same_graph);
 
-  json_safe_get(json, "colors.bg_deep", colors.bg_deep);
-  json_safe_get(json, "colors.bg_primary", colors.bg_primary);
-  json_safe_get(json, "colors.bg_secondary", colors.bg_secondary);
-  json_safe_get(json, "colors.text_primary", colors.text_primary);
-  json_safe_get(json, "colors.text_disabled", colors.text_disabled);
-  json_safe_get(json, "colors.accent", colors.accent);
-  json_safe_get(json, "colors.accent_bw", colors.accent_bw);
-  json_safe_get(json, "colors.border", colors.border);
-  json_safe_get(json, "colors.hover", colors.hover);
-  json_safe_get(json, "colors.pressed", colors.pressed);
-  json_safe_get(json, "colors.separator", colors.separator);
+  // json_safe_get(json, "colors.bg_deep", colors.bg_deep);
+  // json_safe_get(json, "colors.bg_primary", colors.bg_primary);
+  // json_safe_get(json, "colors.bg_secondary", colors.bg_secondary);
+  // json_safe_get(json, "colors.text_primary", colors.text_primary);
+  // json_safe_get(json, "colors.text_disabled", colors.text_disabled);
+  // json_safe_get(json, "colors.accent", colors.accent);
+  // json_safe_get(json, "colors.accent_bw", colors.accent_bw);
+  // json_safe_get(json, "colors.border", colors.border);
+  // json_safe_get(json, "colors.hover", colors.hover);
+  // json_safe_get(json, "colors.pressed", colors.pressed);
+  // json_safe_get(json, "colors.separator", colors.separator);
 
   json_safe_get(json, "global.icon_path", global.icon_path);
   json_safe_get(json,
@@ -120,17 +120,17 @@ nlohmann::json AppSettings::json_to() const
   json["model.allow_broadcast_receive_within_same_graph"] =
       model.allow_broadcast_receive_within_same_graph;
 
-  json["colors.bg_deep"] = colors.bg_deep.name().toStdString();
-  json["colors.bg_primary"] = colors.bg_primary.name().toStdString();
-  json["colors.bg_secondary"] = colors.bg_secondary.name().toStdString();
-  json["colors.text_primary"] = colors.text_primary.name().toStdString();
-  json["colors.text_disabled"] = colors.text_disabled.name().toStdString();
-  json["colors.accent"] = colors.accent.name().toStdString();
-  json["colors.accent_bw"] = colors.accent_bw.name().toStdString();
-  json["colors.border"] = colors.border.name().toStdString();
-  json["colors.hover"] = colors.hover.name().toStdString();
-  json["colors.pressed"] = colors.pressed.name().toStdString();
-  json["colors.separator"] = colors.separator.name().toStdString();
+  // json["colors.bg_deep"] = colors.bg_deep.name().toStdString();
+  // json["colors.bg_primary"] = colors.bg_primary.name().toStdString();
+  // json["colors.bg_secondary"] = colors.bg_secondary.name().toStdString();
+  // json["colors.text_primary"] = colors.text_primary.name().toStdString();
+  // json["colors.text_disabled"] = colors.text_disabled.name().toStdString();
+  // json["colors.accent"] = colors.accent.name().toStdString();
+  // json["colors.accent_bw"] = colors.accent_bw.name().toStdString();
+  // json["colors.border"] = colors.border.name().toStdString();
+  // json["colors.hover"] = colors.hover.name().toStdString();
+  // json["colors.pressed"] = colors.pressed.name().toStdString();
+  // json["colors.separator"] = colors.separator.name().toStdString();
 
   json["global.icon_path"] = global.icon_path;
   json["global.default_startup_project_file"] = global.default_startup_project_file;

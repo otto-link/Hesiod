@@ -1,7 +1,6 @@
 /* Copyright (c) 2025 Otto Link. Distributed under the terms of the GNU General Public
    License. The full license is in the file LICENSE, distributed with this software. */
 #pragma once
-#include <QGridLayout>
 #include <QPointer>
 #include <QVBoxLayout>
 
@@ -17,31 +16,19 @@ class GraphNode; // forward
 // =====================================
 class NodeSettingsWidget : public QWidget
 {
-  Q_OBJECT
-
 public:
-  // --- Constructor and Setup ---
   NodeSettingsWidget(QPointer<GraphNodeWidget> p_graph_node_widget,
                      QWidget                  *parent = nullptr);
 
-  void set_is_shown(bool new_state);
-
-  void initialize_layout();
+private:
   void setup_connections();
-
-public slots:
+  void setup_layout();
   void update_content();
 
-private:
   // --- Members ---
   QPointer<GraphNodeWidget> p_graph_node_widget; // own by GraphManagerWidget
-  QVBoxLayout              *layout;
-  QGridLayout              *scroll_layout;
-  QScrollArea              *scroll_area;
-  std::vector<std::string>  pinned_node_ids = {};
-  bool                      first_pass = true;
-  bool                      prevent_content_update = false;
-  bool                      is_shown = false;
+  QVBoxLayout              *attr_layout;
+  std::vector<std::string>  pinned_node_ids;
 };
 
 } // namespace hesiod

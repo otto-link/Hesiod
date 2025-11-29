@@ -111,7 +111,7 @@ void MainWindow::setup_progress_bar()
             margin: 0px;
         }}
     )",
-      ctx.app_settings.colors.bg_primary.name().toStdString(),
+      ctx.app_settings.colors.bg_deep.name().toStdString(),
       ctx.app_settings.colors.bg_secondary.name().toStdString());
 
   this->progress_bar->setStyleSheet(sheet.c_str());
