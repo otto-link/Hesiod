@@ -93,7 +93,7 @@ void ProjectUI::initialize(ProjectModel *project)
   // widget, so that the graph manager and the texture downloader will
   // show as floating windows)
   this->graph_manager_widget = new GraphManagerWidget(p_graph_manager->get_shared(),
-                                                      this);
+                                                      /* parent */ nullptr); // top window
   this->graph_tabs_widget = new GraphTabsWidget(p_graph_manager->get_shared(), this);
 
   this->graph_tabs_widget->set_show_node_settings_widget(

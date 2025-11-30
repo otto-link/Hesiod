@@ -719,6 +719,7 @@ void HesiodApplication::setup_menu_bar()
       this,
       [this, show_layout_manager]()
       {
+        Logger::log()->debug("HERE");
         bool state = this->project_ui->get_graph_manager_widget_ref()->isVisible();
         this->context.app_settings.window.show_graph_manager_widget = !state;
         this->project_ui->get_graph_manager_widget_ref()->setVisible(!state);
