@@ -42,17 +42,8 @@ GraphTabsWidget::GraphTabsWidget(std::weak_ptr<GraphManager> p_graph_manager,
   this->tab_widget->setTabPosition(QTabWidget::West);
   this->main_layout->addWidget(this->tab_widget);
   this->update_tab_widget();
-}
 
-GraphTabsWidget::~GraphTabsWidget()
-{
-  Logger::log()->trace("GraphTabsWidget::~GraphTabsWidget");
-
-  // TODO do this wia Qt connect
-
-  for (auto &[_, gew] : this->graph_editor_widget_map)
-    if (gew)
-      gew->deleteLater();
+  this->setup_connections(); // "permanent" ones
 }
 
 void GraphTabsWidget::clear()
@@ -198,6 +189,28 @@ void GraphTabsWidget::set_selected_tab(const std::string &graph_id)
   }
 }
 
+void GraphTabsWidget::setup_connections()
+{
+  Logger::log()->trace("GraphTabsWidget::setup_connections");
+
+  auto gm = this->p_graph_manager.lock();
+  if (!gm)
+    return;
+
+  // connections / model
+  gm->new_broadcast_tag = [safe_this = QPointer(this)](const std::string &)
+  {
+    if (safe_this)
+      safe_this->update_receive_nodes_tag_list();
+  };
+
+  gm->remove_broadcast_tag = [safe_this = QPointer(this)](const std::string &)
+  {
+    if (safe_this)
+      safe_this->update_receive_nodes_tag_list();
+  };
+}
+
 QSize GraphTabsWidget::sizeHint() const { return QSize(1024, 1024); }
 
 void GraphTabsWidget::update_receive_nodes_tag_list()
@@ -274,8 +287,6 @@ void GraphTabsWidget::update_tab_widget()
     // generate a graph editor if not already available
     if (!this->graph_editor_widget_map.contains(id))
     {
-      // TODO use gnodewidget getter / safe
-
       GraphNode *p_graph_node = gm->get_graph_ref_by_id(id);
       if (!p_graph_node)
       {
@@ -288,19 +299,6 @@ void GraphTabsWidget::update_tab_widget()
       // set 'this' as parent so the widget is owned by the widget tree.
       this->graph_editor_widget_map[id] = new GraphEditorWidget(
           p_graph_node->get_shared());
-
-      // connections / model
-      gm->new_broadcast_tag = [safe_this = QPointer(this)](const std::string &)
-      {
-        if (safe_this)
-          safe_this->update_receive_nodes_tag_list();
-      };
-
-      gm->remove_broadcast_tag = [safe_this = QPointer(this)](const std::string &)
-      {
-        if (safe_this)
-          safe_this->update_receive_nodes_tag_list();
-      };
 
       // connections / GUI
       this->connect(this->graph_editor_widget_map.at(id)->get_graph_node_widget(),

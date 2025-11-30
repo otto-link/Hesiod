@@ -24,7 +24,6 @@ class GraphTabsWidget : public QWidget
 
 public:
   GraphTabsWidget(std::weak_ptr<GraphManager> p_graph_manager, QWidget *parent = nullptr);
-  ~GraphTabsWidget();
 
   void clear();
   void set_show_node_settings_widget(bool new_state);
@@ -62,6 +61,8 @@ public slots:
   void zoom_to_content();
 
 private:
+  void setup_connections();
+
   // --- Members ---
   std::weak_ptr<GraphManager>                        p_graph_manager; // own by MainWindow
   QTabWidget                                        *tab_widget;      // own by this
