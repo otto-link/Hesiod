@@ -70,8 +70,8 @@ struct AppSettings
     float       position_delta_when_duplicating_node = 200.f;
     float       auto_layout_dx = 256.f;
     float       auto_layout_dy = 384.f;
-    bool        show_node_settings_pan = false;
-    bool        show_viewer = false;
+    bool        show_node_settings_pan = true;
+    bool        show_viewer = true;
     int         max_bake_resolution = 8192 * 4;
     bool        disable_during_update = false;
     bool        enable_node_groups = true;
