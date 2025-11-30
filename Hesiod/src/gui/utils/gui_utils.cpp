@@ -11,6 +11,7 @@
 
 #include "hesiod/gui/widgets/gui_utils.hpp"
 #include "hesiod/logger.hpp"
+#include "hesiod/model/utils.hpp"
 
 namespace hesiod
 {
@@ -97,6 +98,17 @@ void resize_font(QWidget *widget, int relative_size_modification)
   QFont font = widget->font();
   font.setPointSize(font.pointSize() + relative_size_modification);
   widget->setFont(font);
+}
+
+void set_style(QWidget *widget, const std::string &style)
+{
+  if (!widget)
+    return;
+
+  const std::string id = ptr_as_string(widget);
+  widget->setObjectName(id);
+  std::string css_style = std::format("#{} > QWidget {{ {} }}", id, style);
+  widget->setStyleSheet(css_style.c_str());
 }
 
 float slider_pos_to_float(int pos, float min, float max, int slider_steps)

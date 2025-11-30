@@ -649,7 +649,6 @@ void HesiodApplication::setup_menu_bar()
   {
     bool state = this->context.app_settings.node_editor.show_viewer;
     show_viewer_action->setChecked(state);
-    this->project_ui->get_graph_tabs_widget_ref()->set_show_viewer(state);
     view_menu->addAction(show_viewer_action);
   }
 
@@ -658,7 +657,6 @@ void HesiodApplication::setup_menu_bar()
   {
     bool state = this->context.app_settings.node_editor.show_node_settings_pan;
     show_node_settings_pan_action->setChecked(state);
-    this->project_ui->get_graph_tabs_widget_ref()->set_show_node_settings_widget(state);
     view_menu->addAction(show_node_settings_pan_action);
   }
 

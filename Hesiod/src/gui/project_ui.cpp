@@ -96,8 +96,15 @@ void ProjectUI::initialize(ProjectModel *project)
                                                       /* parent */ nullptr); // top window
   this->graph_tabs_widget = new GraphTabsWidget(p_graph_manager->get_shared(), this);
 
-  this->graph_tabs_widget->set_show_node_settings_widget(
-      HSD_CTX.app_settings.node_editor.show_node_settings_pan);
+  {
+    bool state = HSD_CTX.app_settings.node_editor.show_node_settings_pan;
+    this->graph_tabs_widget->set_show_node_settings_widget(state);
+  }
+
+  {
+    bool state = HSD_CTX.app_settings.node_editor.show_viewer;
+    this->get_graph_tabs_widget_ref()->set_show_viewer(state);
+  }
 
   if (HSD_CTX.app_settings.interface.enable_texture_downloader)
   {

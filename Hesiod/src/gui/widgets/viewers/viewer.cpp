@@ -3,6 +3,7 @@
  * this software. */
 #include <QGridLayout>
 #include <QTimer>
+#include <QVBoxLayout>
 
 #include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/gui/widgets/graph_node_widget.hpp"
@@ -82,8 +83,6 @@ void Viewer::json_from(nlohmann::json const &json)
       this->view_param_map[key] = param;
     }
   }
-
-  this->update_widgets();
 
   // only set the node selection at the very end, once everything is
   // settled
@@ -203,7 +202,7 @@ void Viewer::on_visibility_change(bool new_state)
 {
   // update only if it is made visible and defer it for OpenGL to settle
   if (new_state)
-    QTimer::singleShot(0, this, [this]() { this->update_widgets(); });
+    QTimer::singleShot(0, [this]() { this->update_widgets(); });
 }
 
 BaseNode *Viewer::safe_get_node()
@@ -270,8 +269,15 @@ void Viewer::setup_connections()
   // with itself (visibility)
   this->connect(this, &Viewer::visibility_changed, this, &Viewer::on_visibility_change);
 
-  // close with corresponding GraphNode
-  this->connect(this->p_graph_node_widget, &QObject::destroyed, this, &QWidget::close);
+  // close with corresponding GraphNode (only if it's a top window without a parent)
+  this->connect(this->p_graph_node_widget,
+                &QObject::destroyed,
+                this,
+                [safe_this = QPointer(this)]()
+                {
+                  if (safe_this)
+                    safe_this->deleteLater();
+                });
 
   // user actions w/ UI
   this->connect(this->p_graph_node_widget,
@@ -305,7 +311,7 @@ void Viewer::setup_connections()
                   QOverload<int>::of(&QComboBox::currentIndexChanged),
                   [this, combo, name]()
                   {
-                    if (!this->prevent_combo_connections)
+                    if (!this->prevent_combo_connections && combo->currentIndex() != 0)
                     {
                       std::string port_id = combo->currentText().toStdString();
                       this->view_param.port_ids[name] = port_id;
@@ -331,28 +337,40 @@ void Viewer::setup_layout()
   // create and assign new layout
   QGridLayout *layout = new QGridLayout(this);
   layout->setContentsMargins(2, 0, 2, 0);
+  layout->setSpacing(0);
   this->setLayout(layout);
 
-  this->button_pin_current_node = new QPushButton("Pin current node");
+  auto *container = new QWidget(this);
+  auto *param_layout = new QVBoxLayout(container);
+  param_layout->setContentsMargins(8, 16, 8, 16);
+  param_layout->setSpacing(4);
+
+  std::string color = HSD_CTX.app_settings.colors.bg_deep.name().toStdString();
+  set_style(this, std::format("background: {};", color));
+
+  // container->setStyleSheet(std::format("background: {};", color).c_str());
+
+  this->button_pin_current_node = new QPushButton("Pin Current Node");
   this->button_pin_current_node->setCheckable(true);
-
-  layout->addWidget(this->button_pin_current_node, 0, 0);
-
-  int col = 0;
-  int row = 1;
+  resize_font(this->button_pin_current_node, -1);
+  param_layout->addWidget(this->button_pin_current_node);
 
   for (auto &[name, _] : view_param.port_ids)
   {
-    QLabel    *label = new QLabel(name.c_str());
     QComboBox *combo = new QComboBox();
+    set_style(combo, std::format("background: {};", color));
+    resize_font(combo, -1);
 
-    layout->addWidget(label, row, col);
-    layout->addWidget(combo, row + 1, col);
-    col++;
-
+    param_layout->addWidget(combo);
     this->combo_map[name] = combo;
   }
+
+  param_layout->addStretch();
+
+  // (0, 0) is for specialized render widget
+  layout->addWidget(container, 0, 1);
 }
+
 void Viewer::showEvent(QShowEvent *event)
 {
   Q_EMIT visibility_changed(true);
@@ -414,15 +432,17 @@ void Viewer::update_widgets()
   // renderer and override of the view_param values through combo cpnnections)
   this->prevent_combo_connections = true;
 
-  for (auto &[_, combo] : this->combo_map)
+  for (auto &[name, combo] : this->combo_map)
   {
     combo->clear();
+
+    std::string place_holder = "Choose " + name + "...";
+    combo->addItem(place_holder.c_str());
 
     for (auto &option : combo_options)
       combo->addItem(option.c_str());
 
-    combo->addItem("");
-    combo->setCurrentIndex(-1);
+    combo->setCurrentIndex(0);
   }
 
   // set values
@@ -440,8 +460,9 @@ void Viewer::update_widgets()
 
   this->prevent_combo_connections = false;
 
-  // manually update renderer
-  this->update_renderer();
+  // manually update renderer (only if visible)
+  if (this->isVisible())
+    this->update_renderer();
 }
 
 } // namespace hesiod

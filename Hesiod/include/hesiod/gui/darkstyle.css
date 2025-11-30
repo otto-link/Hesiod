@@ -139,7 +139,7 @@ QComboBox {
     padding: 4px;
     color: COLOR_TEXT_PRIMARY;
     background-color: COLOR_BG_SECONDARY;
-    selection-background-color: COLOR_BORDER;
+    selection-background-color: COLOR_BG_SECONDARY;
 }
 
 /* QFrame ------------------------------------------------------------------ */

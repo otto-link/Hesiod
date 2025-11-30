@@ -22,6 +22,9 @@ int get_row_count(QGridLayout *layout);
 
 void resize_font(QWidget *widget, int relative_size_modification);
 
+// to the widget only, block propagation
+void set_style(QWidget *widget, const std::string &style);
+
 void render_widget_screenshot(QWidget              *widget,
                               const std::string    &fname,
                               const QSize          &size = QSize(),

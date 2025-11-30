@@ -8,6 +8,7 @@
 #include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/gui/widgets/graph_editor_widget.hpp"
 #include "hesiod/gui/widgets/graph_node_widget.hpp"
+#include "hesiod/gui/widgets/gui_utils.hpp"
 #include "hesiod/gui/widgets/node_settings_widget.hpp"
 #include "hesiod/gui/widgets/viewers/viewer_3d.hpp"
 #include "hesiod/logger.hpp"
@@ -57,10 +58,9 @@ void GraphEditorWidget::json_from(nlohmann::json const &json)
       if (json.contains(graph_id) &&
           json[graph_id].contains("graph_editor_widget.viewer3d"))
       {
-        // defer to let OpenGL context setup
+        // defer to let OpenGL context settle
         QTimer::singleShot(
             0,
-            this,
             [this, json, graph_id]()
             { this->viewer->json_from(json[graph_id]["graph_editor_widget.viewer3d"]); });
       }
@@ -127,11 +127,9 @@ void GraphEditorWidget::setup_layout()
   {
     this->node_settings_widget = new NodeSettingsWidget(this->graph_node_widget);
 
-    this->node_settings_widget->setObjectName("NodeSettingsRoot");
-    std::string style = std::format(
-        "#NodeSettingsRoot > QWidget {{ border-left: 1px solid {}; }}",
-        HSD_CTX.app_settings.colors.border.name().toStdString());
-    this->node_settings_widget->setStyleSheet(style.c_str());
+    std::string color = HSD_CTX.app_settings.colors.border.name().toStdString();
+    set_style(this->node_settings_widget,
+              std::format("border-left: 1px solid {};", color));
 
     layout->addWidget(this->node_settings_widget, 0, 1);
 

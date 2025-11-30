@@ -142,13 +142,11 @@ void Viewer3D::setup_layout()
 
   // retrieve layout and add specific widget
   QGridLayout *grid = dynamic_cast<QGridLayout *>(this->layout());
-
-  int col_count = get_column_count(grid);
-  int row_count = get_row_count(grid);
+  int          row_count = get_row_count(grid);
 
   // add viewer
   this->p_renderer = new qtr::RenderWidget("");
-  grid->addWidget(dynamic_cast<QWidget *>(p_renderer), row_count, 0, 1, col_count);
+  grid->addWidget(dynamic_cast<QWidget *>(p_renderer), 0, 0, row_count, 1);
 }
 
 void Viewer3D::update_renderer()

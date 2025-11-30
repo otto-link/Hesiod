@@ -146,7 +146,7 @@ void GraphNodeWidget::automatic_node_layout()
       p_gfx_node->setPos(scene_pos);
   }
 
-  QTimer::singleShot(0, this, [this]() { this->zoom_to_content(); });
+  QTimer::singleShot(0, [this]() { this->zoom_to_content(); });
 }
 
 void GraphNodeWidget::backup_selected_ids()
@@ -254,7 +254,10 @@ void GraphNodeWidget::json_from(nlohmann::json const &json)
 
       if (auto *p_viewer = dynamic_cast<Viewer3D *>(this->data_viewers.back().get()))
       {
-        p_viewer->json_from(viewer_json);
+        // defer to let OpenGL context settle
+        QTimer::singleShot(0,
+                           [p_viewer, viewer_json]()
+                           { p_viewer->json_from(viewer_json); });
       }
       else
         Logger::log()->error(
@@ -264,7 +267,6 @@ void GraphNodeWidget::json_from(nlohmann::json const &json)
 
   // defer
   QTimer::singleShot(0,
-                     this,
                      [this]()
                      {
                        this->update();
@@ -562,7 +564,6 @@ void GraphNodeWidget::on_graph_import_request()
 
       // Qt mystery, this needs to be delayed to be effective
       QTimer::singleShot(0,
-                         this,
                          [p_gfx_node]()
                          {
                            if (p_gfx_node)
@@ -935,7 +936,6 @@ void GraphNodeWidget::reselect_backup_ids()
 {
   QTimer::singleShot(
       0,
-      this,
       [this]()
       {
         for (size_t k = 0; k < this->selected_ids.size(); ++k)

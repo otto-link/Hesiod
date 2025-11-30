@@ -173,7 +173,7 @@ void GraphTabsWidget::set_show_node_settings_widget(bool new_state)
   // pass info to each node settings widget
   for (auto &[id, gew] : this->graph_editor_widget_map)
   {
-    if (gew && gew->get_graph_node_widget())
+    if (gew && gew->get_node_settings_widget())
       gew->get_node_settings_widget()->setVisible(new_state);
   }
 }
@@ -185,8 +185,8 @@ void GraphTabsWidget::set_show_viewer(bool new_state)
   // pass info to each node settings widget
   for (auto &[id, gew] : this->graph_editor_widget_map)
   {
-    if (gew && gew->get_graph_node_widget())
-      gew->get_viewer()->setVisible(new_state);
+    if (gew && gew->get_viewer())
+      gew->get_viewer()->setVisible(show_viewer);
   }
 }
 

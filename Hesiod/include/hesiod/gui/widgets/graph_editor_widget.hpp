@@ -39,7 +39,7 @@ private:
   std::weak_ptr<GraphNode> p_graph_node;
   GraphNodeWidget         *graph_node_widget;
   NodeSettingsWidget      *node_settings_widget;
-  Viewer3D                *viewer;
+  Viewer3D                *viewer = nullptr;
 };
 
 } // namespace hesiod
