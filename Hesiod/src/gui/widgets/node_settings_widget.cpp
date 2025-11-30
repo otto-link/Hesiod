@@ -6,6 +6,7 @@
 
 #include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/gui/widgets/gui_utils.hpp"
+#include "hesiod/gui/widgets/icon_check_box.hpp"
 #include "hesiod/gui/widgets/node_attributes_widget.hpp"
 #include "hesiod/gui/widgets/node_settings_widget.hpp"
 #include "hesiod/logger.hpp"
@@ -123,13 +124,12 @@ void NodeSettingsWidget::update_content()
 
     const QString node_caption = QString::fromStdString(p_node->get_caption());
 
-    auto *label = new QLabel(node_caption);
-    this->attr_layout->addWidget(label);
-    // this->attr_layout->addWidget(new QLabel()); // space
-
     // pinned checkbox button
     {
-      QCheckBox *button_pin = new QCheckBox("Pin this node", this);
+      auto *button_pin = new IconCheckBox(this);
+      button_pin->set_label(node_caption);
+      button_pin->set_icons(QIcon("data/icons/push_pin_64dp_D9D9D9.png"),
+                            QIcon("data/icons/push_pin_64dp_5E81AC.png"));
       button_pin->setCheckable(true);
       button_pin->setChecked(contains(this->pinned_node_ids, node_id));
       this->attr_layout->addWidget(button_pin);
