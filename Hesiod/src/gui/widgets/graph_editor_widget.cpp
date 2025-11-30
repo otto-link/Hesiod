@@ -1,12 +1,15 @@
 /* Copyright (c) 2025 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-#include <QHBoxLayout>
+#include <QGridLayout>
+#include <QSplitter>
+#include <QTimer>
 
 #include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/gui/widgets/graph_editor_widget.hpp"
 #include "hesiod/gui/widgets/graph_node_widget.hpp"
 #include "hesiod/gui/widgets/node_settings_widget.hpp"
+#include "hesiod/gui/widgets/viewers/viewer_3d.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/graph/graph_node.hpp"
 
@@ -37,6 +40,8 @@ NodeSettingsWidget *GraphEditorWidget::get_node_settings_widget() const
   return this->node_settings_widget;
 }
 
+Viewer3D *GraphEditorWidget::get_viewer() const { return this->viewer; }
+
 void GraphEditorWidget::json_from(nlohmann::json const &json)
 {
   // GraphNodeWidget
@@ -45,6 +50,21 @@ void GraphEditorWidget::json_from(nlohmann::json const &json)
     const std::string graph_id = this->graph_node_widget->get_id();
     if (json.contains(graph_id))
       this->graph_node_widget->json_from(json[graph_id]);
+
+    // Viewer3D
+    if (this->viewer)
+    {
+      if (json.contains(graph_id) &&
+          json[graph_id].contains("graph_editor_widget.viewer3d"))
+      {
+        // defer to let OpenGL context setup
+        QTimer::singleShot(
+            0,
+            this,
+            [this, json, graph_id]()
+            { this->viewer->json_from(json[graph_id]["graph_editor_widget.viewer3d"]); });
+      }
+    }
   }
 }
 
@@ -54,7 +74,14 @@ nlohmann::json GraphEditorWidget::json_to() const
 
   // GraphNodeWidget
   if (this->graph_node_widget)
-    json[this->graph_node_widget->get_id()] = this->graph_node_widget->json_to();
+  {
+    const std::string graph_id = this->graph_node_widget->get_id();
+    json[graph_id] = this->graph_node_widget->json_to();
+
+    // Viewer3D
+    if (this->viewer)
+      json[graph_id]["graph_editor_widget.viewer3d"] = this->viewer->json_to();
+  }
 
   return json;
 }
@@ -77,26 +104,40 @@ void GraphEditorWidget::setup_layout()
   if (!gno)
     return;
 
-  QHBoxLayout *layout = new QHBoxLayout();
+  auto *layout = new QGridLayout();
   layout->setContentsMargins(0, 0, 0, 0);
   layout->setSpacing(0);
   this->setLayout(layout);
 
-  this->graph_node_widget = new GraphNodeWidget(gno->get_shared());
-  layout->addWidget(this->graph_node_widget);
+  // left pan with splitter
+  {
+    QSplitter *splitter = new QSplitter(Qt::Vertical);
+    splitter->setChildrenCollapsible(false);
 
-  this->node_settings_widget = new NodeSettingsWidget(this->graph_node_widget);
+    this->graph_node_widget = new GraphNodeWidget(gno->get_shared());
+    this->viewer = new Viewer3D(this->graph_node_widget);
 
-  this->node_settings_widget->setObjectName("NodeSettingsRoot");
-  std::string style = std::format(
-      "#NodeSettingsRoot > QWidget {{ border-left: 1px solid {}; }}",
-      HSD_CTX.app_settings.colors.border.name().toStdString());
-  this->node_settings_widget->setStyleSheet(style.c_str());
+    splitter->addWidget(this->viewer);
+    splitter->addWidget(this->graph_node_widget);
 
-  layout->addWidget(this->node_settings_widget);
+    layout->addWidget(splitter, 0, 0);
+  }
 
-  this->node_settings_widget->setVisible(
-      HSD_CTX.app_settings.node_editor.show_node_settings_pan);
+  // right pan
+  {
+    this->node_settings_widget = new NodeSettingsWidget(this->graph_node_widget);
+
+    this->node_settings_widget->setObjectName("NodeSettingsRoot");
+    std::string style = std::format(
+        "#NodeSettingsRoot > QWidget {{ border-left: 1px solid {}; }}",
+        HSD_CTX.app_settings.colors.border.name().toStdString());
+    this->node_settings_widget->setStyleSheet(style.c_str());
+
+    layout->addWidget(this->node_settings_widget, 0, 1);
+
+    this->node_settings_widget->setVisible(
+        HSD_CTX.app_settings.node_editor.show_node_settings_pan);
+  }
 }
 
 } // namespace hesiod

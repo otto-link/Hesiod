@@ -11,6 +11,7 @@ namespace hesiod
 class GraphNode; // forward
 class GraphNodeWidget;
 class NodeSettingsWidget;
+class Viewer3D;
 
 // =====================================
 // GraphEditorWidget
@@ -29,6 +30,7 @@ public:
 
   GraphNodeWidget    *get_graph_node_widget() const;
   NodeSettingsWidget *get_node_settings_widget() const;
+  Viewer3D           *get_viewer() const;
 
 private:
   void setup_connections();
@@ -37,6 +39,7 @@ private:
   std::weak_ptr<GraphNode> p_graph_node;
   GraphNodeWidget         *graph_node_widget;
   NodeSettingsWidget      *node_settings_widget;
+  Viewer3D                *viewer;
 };
 
 } // namespace hesiod

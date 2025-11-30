@@ -71,6 +71,7 @@ struct AppSettings
     float       auto_layout_dx = 256.f;
     float       auto_layout_dy = 384.f;
     bool        show_node_settings_pan = false;
+    bool        show_viewer = false;
     int         max_bake_resolution = 8192 * 4;
     bool        disable_during_update = false;
     bool        enable_node_groups = true;

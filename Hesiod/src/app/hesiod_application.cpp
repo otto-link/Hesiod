@@ -644,6 +644,15 @@ void HesiodApplication::setup_menu_bar()
 
   view_menu->addSeparator();
 
+  auto *show_viewer_action = new QAction("Show Viewer in Main Window", this);
+  show_viewer_action->setCheckable(true);
+  {
+    bool state = this->context.app_settings.node_editor.show_viewer;
+    show_viewer_action->setChecked(state);
+    this->project_ui->get_graph_tabs_widget_ref()->set_show_viewer(state);
+    view_menu->addAction(show_viewer_action);
+  }
+
   auto *show_node_settings_pan_action = new QAction("Show Node Settings Pan", this);
   show_node_settings_pan_action->setCheckable(true);
   {
@@ -699,6 +708,18 @@ void HesiodApplication::setup_menu_bar()
   this->connect(quit, &QAction::triggered, this, &HesiodApplication::on_quit);
 
   // satellite widgets
+
+  this->connect(show_viewer_action,
+                &QAction::triggered,
+                this,
+                [this, show_viewer_action]()
+                {
+                  bool new_state = !this->context.app_settings.node_editor.show_viewer;
+                  this->context.app_settings.node_editor.show_viewer = new_state;
+                  show_viewer_action->setChecked(new_state);
+                  this->project_ui->get_graph_tabs_widget_ref()->set_show_viewer(
+                      new_state);
+                });
 
   this->connect(
       show_node_settings_pan_action,

@@ -10,6 +10,7 @@
 #include "hesiod/gui/widgets/graph_node_widget.hpp"
 #include "hesiod/gui/widgets/graph_tabs_widget.hpp"
 #include "hesiod/gui/widgets/node_settings_widget.hpp"
+#include "hesiod/gui/widgets/viewers/viewer_3d.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/graph/graph_manager.hpp"
 #include "hesiod/model/graph/graph_node.hpp"
@@ -175,8 +176,18 @@ void GraphTabsWidget::set_show_node_settings_widget(bool new_state)
     if (gew && gew->get_graph_node_widget())
       gew->get_node_settings_widget()->setVisible(new_state);
   }
+}
 
-  this->update_tab_widget();
+void GraphTabsWidget::set_show_viewer(bool new_state)
+{
+  this->show_viewer = new_state;
+
+  // pass info to each node settings widget
+  for (auto &[id, gew] : this->graph_editor_widget_map)
+  {
+    if (gew && gew->get_graph_node_widget())
+      gew->get_viewer()->setVisible(new_state);
+  }
 }
 
 void GraphTabsWidget::set_selected_tab(const std::string &graph_id)
@@ -248,105 +259,108 @@ void GraphTabsWidget::update_tab_widget()
   if (!gm)
     return;
 
-  // backup currently selected tab to set it back afterwards
+  // backup currently selected tab label
   QString current_tab_label;
-  if (this->tab_widget->count() > 0 && this->tab_widget->currentIndex() >= 0)
-    current_tab_label = this->tab_widget->tabText(this->tab_widget->currentIndex());
+  int     current_index = this->tab_widget->currentIndex();
+  if (current_index >= 0 && this->tab_widget->count() > 0)
+    current_tab_label = this->tab_widget->tabText(current_index);
 
-  // remove everything
-  while (this->tab_widget->count() > 0)
-    this->tab_widget->removeTab(0);
+  // --- Remove tabs for graphs that no longer exist
 
-  // clean-up stored GraphNodeWidget
-  std::vector<std::string> id_to_erase = {};
-
-  for (auto &[id, _] : this->graph_editor_widget_map)
+  for (int i = this->tab_widget->count() - 1; i >= 0; --i)
   {
-    // ditch if the corresponding GraphNode no longer exists
-    GraphNode *p_graph_node = gm->get_graph_ref_by_id(id);
-    if (!p_graph_node)
-      id_to_erase.push_back(id);
-  }
+    QString     tab_label = this->tab_widget->tabText(i);
+    std::string id = tab_label.toStdString();
 
-  for (auto &id : id_to_erase)
-  {
-    if (auto it = this->graph_editor_widget_map.find(id);
-        it != this->graph_editor_widget_map.end())
+    if (!gm->get_graph_ref_by_id(id))
     {
-      if (it->second)
-        it->second->close();
-      this->graph_editor_widget_map.erase(it);
+      QWidget *tab = this->tab_widget->widget(i);
+      this->tab_widget->removeTab(i);
+      if (tab)
+        tab->deleteLater();
+
+      // remove corresponding GraphEditorWidget
+      auto it = this->graph_editor_widget_map.find(id);
+      if (it != this->graph_editor_widget_map.end())
+      {
+        if (it->second)
+          it->second->close();
+        this->graph_editor_widget_map.erase(it);
+      }
     }
   }
 
-  // repopulate tabs
+  // --- Add new tabs for graphs that are not yet in tab_widget
+
   for (auto &id : gm->get_graph_order())
   {
-    Logger::log()->trace("updating tab for graph: {}", id);
+    if (this->graph_editor_widget_map.contains(id))
+      continue; // widget already exists
 
-    // generate a graph editor if not already available
-    if (!this->graph_editor_widget_map.contains(id))
+    Logger::log()->trace("creating GraphEditorWidget for {}", id);
+    GraphNode *p_graph_node = gm->get_graph_ref_by_id(id);
+    if (!p_graph_node)
     {
-      GraphNode *p_graph_node = gm->get_graph_ref_by_id(id);
-      if (!p_graph_node)
-      {
-        Logger::log()->error(
-            "GraphTabsWidget::update_tab_widget: graph '{}' not found, skipping",
-            id);
-        continue;
-      }
-
-      // set 'this' as parent so the widget is owned by the widget tree.
-      this->graph_editor_widget_map[id] = new GraphEditorWidget(
-          p_graph_node->get_shared());
-
-      // connections / GUI
-      this->connect(this->graph_editor_widget_map.at(id)->get_graph_node_widget(),
-                    &GraphNodeWidget::has_been_cleared,
-                    this,
-                    &GraphTabsWidget::on_has_been_cleared);
-
-      this->connect(this->graph_editor_widget_map.at(id)->get_graph_node_widget(),
-                    &GraphNodeWidget::new_node_created,
-                    this,
-                    &GraphTabsWidget::on_new_node_created);
-
-      this->connect(this->graph_editor_widget_map.at(id)->get_graph_node_widget(),
-                    &GraphNodeWidget::node_deleted,
-                    this,
-                    &GraphTabsWidget::on_node_deleted);
-
-      this->connect(this->graph_editor_widget_map.at(id)->get_graph_node_widget(),
-                    &GraphNodeWidget::copy_buffer_has_changed,
-                    this,
-                    &GraphTabsWidget::on_copy_buffer_has_changed);
-
-      this->connect(this->graph_editor_widget_map.at(id)->get_graph_node_widget(),
-                    &GraphNodeWidget::update_started,
-                    this,
-                    [this]() { Q_EMIT this->update_started(); });
-
-      this->connect(this->graph_editor_widget_map.at(id)->get_graph_node_widget(),
-                    &GraphNodeWidget::update_finished,
-                    this,
-                    [this]() { Q_EMIT this->update_finished(); });
+      Logger::log()->error(
+          "GraphTabsWidget::update_tab_widget: graph '{}' not found, skipping",
+          id);
+      continue;
     }
 
-    // build layout
+    // Create GraphEditorWidget
+    GraphEditorWidget *editor_widget = new GraphEditorWidget(p_graph_node->get_shared());
+    this->graph_editor_widget_map[id] = editor_widget;
+
+    // Connect signals
+    auto *gnw = editor_widget->get_graph_node_widget();
+    this->connect(gnw,
+                  &GraphNodeWidget::has_been_cleared,
+                  this,
+                  &GraphTabsWidget::on_has_been_cleared);
+    this->connect(gnw,
+                  &GraphNodeWidget::new_node_created,
+                  this,
+                  &GraphTabsWidget::on_new_node_created);
+    this->connect(gnw,
+                  &GraphNodeWidget::node_deleted,
+                  this,
+                  &GraphTabsWidget::on_node_deleted);
+    this->connect(gnw,
+                  &GraphNodeWidget::copy_buffer_has_changed,
+                  this,
+                  &GraphTabsWidget::on_copy_buffer_has_changed);
+    this->connect(gnw,
+                  &GraphNodeWidget::update_started,
+                  this,
+                  [this]() { emit update_started(); });
+    this->connect(gnw,
+                  &GraphNodeWidget::update_finished,
+                  this,
+                  [this]() { emit update_finished(); });
+
+    // Create tab container
     QWidget *tab = new QWidget();
     auto    *layout = new QHBoxLayout(tab);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
-
-    // Give main area most of the space
-    layout->addWidget(this->graph_editor_widget_map.at(id), 3);
-
+    layout->addWidget(editor_widget, 3);
     tab->setLayout(layout);
-    this->tab_widget->addTab(tab, QString::fromStdString(id));
 
-    // restore selection if this tab was selected previously
-    if (!current_tab_label.isEmpty() && current_tab_label.toStdString() == id)
-      this->tab_widget->setCurrentWidget(tab);
+    this->tab_widget->addTab(tab, QString::fromStdString(id));
+  }
+
+  // --- Restore previous tab selection
+
+  if (!current_tab_label.isEmpty())
+  {
+    for (int i = 0; i < this->tab_widget->count(); ++i)
+    {
+      if (this->tab_widget->tabText(i) == current_tab_label)
+      {
+        this->tab_widget->setCurrentIndex(i);
+        break;
+      }
+    }
   }
 }
 

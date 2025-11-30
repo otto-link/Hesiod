@@ -27,6 +27,7 @@ public:
 
   void clear();
   void set_show_node_settings_widget(bool new_state);
+  void set_show_viewer(bool new_state);
 
   // --- Serialization ---
   void           json_from(nlohmann::json const &json);
@@ -68,6 +69,7 @@ private:
   QTabWidget                                        *tab_widget;      // own by this
   std::map<std::string, QPointer<GraphEditorWidget>> graph_editor_widget_map;
   bool                                               show_node_settings_widget;
+  bool                                               show_viewer;
   QHBoxLayout                                       *main_layout;
 };
 

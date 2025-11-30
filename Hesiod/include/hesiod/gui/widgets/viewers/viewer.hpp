@@ -52,6 +52,7 @@ Q_SIGNALS:
   void clear_view_request();
   void current_node_id_changed(const std::string &new_id);
   void node_pinned(const std::string &node_id, bool state);
+  void visibility_changed(bool new_state);
   void widget_close();
 
 public Q_SLOTS:
@@ -59,9 +60,13 @@ public Q_SLOTS:
   void on_node_deselected(const std::string &new_id);
   void on_node_pinned_changed();
   void on_node_selected(const std::string &new_id);
+  void on_visibility_change(bool new_state);
 
 protected:
-  void      closeEvent(QCloseEvent *event) override;
+  void closeEvent(QCloseEvent *event) override;
+  void hideEvent(QHideEvent *event) override;
+  void showEvent(QShowEvent *event) override;
+
   BaseNode *safe_get_node();
 
   // --- Should be pure virtual but kept to avoid UB ---

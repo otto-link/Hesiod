@@ -2,6 +2,7 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include <QGridLayout>
+#include <QTimer>
 
 #include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/gui/widgets/graph_node_widget.hpp"
@@ -198,6 +199,13 @@ void Viewer::on_node_selected(const std::string &new_id)
   this->set_current_node_id(new_id);
 }
 
+void Viewer::on_visibility_change(bool new_state)
+{
+  // update only if it is made visible and defer it for OpenGL to settle
+  if (new_state)
+    QTimer::singleShot(0, this, [this]() { this->update_widgets(); });
+}
+
 BaseNode *Viewer::safe_get_node()
 {
   if (!this->p_graph_node_widget)
@@ -243,6 +251,11 @@ void Viewer::set_current_node_id(const std::string &new_id)
     }
   }
 
+  // stop here, don't need to update the renderer data if it's not
+  // visible
+  if (!this->isVisible())
+    return;
+
   this->update_widgets();
   Q_EMIT this->current_node_id_changed(this->current_node_id);
 }
@@ -253,6 +266,9 @@ void Viewer::setup_connections()
 
   if (!this->p_graph_node_widget)
     return;
+
+  // with itself (visibility)
+  this->connect(this, &Viewer::visibility_changed, this, &Viewer::on_visibility_change);
 
   // close with corresponding GraphNode
   this->connect(this->p_graph_node_widget, &QObject::destroyed, this, &QWidget::close);
@@ -336,6 +352,17 @@ void Viewer::setup_layout()
 
     this->combo_map[name] = combo;
   }
+}
+void Viewer::showEvent(QShowEvent *event)
+{
+  Q_EMIT visibility_changed(true);
+  QWidget::showEvent(event);
+}
+
+void Viewer::hideEvent(QHideEvent *event)
+{
+  Q_EMIT visibility_changed(false);
+  QWidget::hideEvent(event);
 }
 
 void Viewer::update_renderer()
