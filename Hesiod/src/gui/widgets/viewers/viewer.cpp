@@ -8,6 +8,7 @@
 #include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/gui/widgets/graph_node_widget.hpp"
 #include "hesiod/gui/widgets/gui_utils.hpp"
+#include "hesiod/gui/widgets/icon_check_box.hpp"
 #include "hesiod/gui/widgets/viewers/viewer.hpp"
 #include "hesiod/gui/widgets/viewers/viewer_3d.hpp"
 #include "hesiod/logger.hpp"
@@ -301,7 +302,7 @@ void Viewer::setup_connections()
                 &GraphNodeWidget::on_node_pinned);
 
   this->connect(this->button_pin_current_node,
-                &QPushButton::clicked,
+                &QCheckBox::toggled,
                 this,
                 &Viewer::on_node_pinned_changed);
 
@@ -348,9 +349,9 @@ void Viewer::setup_layout()
   std::string color = HSD_CTX.app_settings.colors.bg_deep.name().toStdString();
   set_style(this, std::format("background: {};", color));
 
-  // container->setStyleSheet(std::format("background: {};", color).c_str());
-
-  this->button_pin_current_node = new QPushButton("Pin Current Node");
+  this->button_pin_current_node = new IconCheckBox(this);
+  this->button_pin_current_node->set_icons(QIcon("data/icons/push_pin_64dp_D9D9D9.png"),
+                                           QIcon("data/icons/push_pin_64dp_5E81AC.png"));
   this->button_pin_current_node->setCheckable(true);
   resize_font(this->button_pin_current_node, -1);
   param_layout->addWidget(this->button_pin_current_node);
@@ -410,8 +411,9 @@ void Viewer::update_widgets()
     std::string new_title = this->label + " - " + p_node->get_caption() + "(" +
                             p_node->get_id() + ")";
     this->setWindowTitle(new_title.c_str());
+    this->button_pin_current_node->set_label(p_node->get_caption().c_str());
   }
-
+  
   // --- update combo content
 
   // retriece possible values, corresponding to the node port IDs

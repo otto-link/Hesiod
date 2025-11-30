@@ -15,6 +15,7 @@ namespace hesiod
 {
 
 class GraphNodeWidget; // forward
+class IconCheckBox;
 
 enum ViewerType : int
 {
@@ -83,7 +84,7 @@ protected:
   std::map<std::string, QComboBox *>     combo_map;
   bool                                   prevent_combo_connections = false;
   bool                                   is_node_pinned = false;
-  QPushButton                           *button_pin_current_node;
+  IconCheckBox                          *button_pin_current_node;
 };
 
 // helper
