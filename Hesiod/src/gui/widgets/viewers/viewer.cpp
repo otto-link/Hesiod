@@ -343,7 +343,7 @@ void Viewer::setup_layout()
 
   auto *container = new QWidget(this);
   auto *param_layout = new QVBoxLayout(container);
-  param_layout->setContentsMargins(8, 16, 8, 16);
+  param_layout->setContentsMargins(8, 32, 8, 16);
   param_layout->setSpacing(4);
 
   std::string color = HSD_CTX.app_settings.colors.bg_deep.name().toStdString();
@@ -413,7 +413,7 @@ void Viewer::update_widgets()
     this->setWindowTitle(new_title.c_str());
     this->button_pin_current_node->set_label(p_node->get_caption().c_str());
   }
-  
+
   // --- update combo content
 
   // retriece possible values, corresponding to the node port IDs
