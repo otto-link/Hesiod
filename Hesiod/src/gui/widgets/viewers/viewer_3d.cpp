@@ -134,6 +134,19 @@ nlohmann::json Viewer3D::json_to() const
   return json;
 }
 
+void Viewer3D::resizeEvent(QResizeEvent *)
+{
+  int padding = 8;
+
+  int   x = this->p_renderer->width() - this->combo_container->width() - padding;
+  int   y = this->p_renderer->height() - this->combo_container->height() - padding;
+  QSize s = this->combo_container->sizeHint();
+  int   w = s.width();
+  int   h = s.height();
+
+  this->combo_container->setGeometry(x, y, w, h);
+}
+
 void Viewer3D::setup_layout()
 {
   Logger::log()->trace("Viewer3D::setup_layout");
@@ -147,6 +160,10 @@ void Viewer3D::setup_layout()
   // add viewer
   this->p_renderer = new qtr::RenderWidget("");
   grid->addWidget(dynamic_cast<QWidget *>(p_renderer), 0, 0, row_count, 1);
+
+  this->combo_container->setParent(this->p_renderer);
+  this->combo_container->setStyleSheet(
+      "background: rgba(0, 0, 0, 25); border-radius : 6px;");
 }
 
 void Viewer3D::update_renderer()

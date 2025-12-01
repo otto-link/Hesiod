@@ -85,6 +85,7 @@ protected:
   bool                                   prevent_combo_connections = false;
   bool                                   is_node_pinned = false;
   IconCheckBox                          *button_pin_current_node;
+  QWidget                               *combo_container;
 };
 
 // helper

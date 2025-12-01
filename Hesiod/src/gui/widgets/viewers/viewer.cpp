@@ -341,13 +341,10 @@ void Viewer::setup_layout()
   layout->setSpacing(0);
   this->setLayout(layout);
 
-  auto *container = new QWidget(this);
-  auto *param_layout = new QVBoxLayout(container);
-  param_layout->setContentsMargins(8, 32, 8, 16);
+  this->combo_container = new QWidget(this);
+  auto *param_layout = new QVBoxLayout(this->combo_container);
+  param_layout->setContentsMargins(8, 8, 8, 8);
   param_layout->setSpacing(4);
-
-  std::string color = HSD_CTX.app_settings.colors.bg_deep.name().toStdString();
-  set_style(this, std::format("background: {};", color));
 
   this->button_pin_current_node = new IconCheckBox(this);
   this->button_pin_current_node->set_icons(QIcon("data/icons/push_pin_64dp_D9D9D9.png"),
@@ -359,9 +356,9 @@ void Viewer::setup_layout()
   for (auto &[name, _] : view_param.port_ids)
   {
     QComboBox *combo = new QComboBox();
-    set_style(combo, std::format("background: {};", color));
+    set_style(combo, "background: transparent;");
     resize_font(combo, -1);
-
+    
     param_layout->addWidget(combo);
     this->combo_map[name] = combo;
   }
@@ -369,19 +366,20 @@ void Viewer::setup_layout()
   param_layout->addStretch();
 
   // (0, 0) is for specialized render widget
-  layout->addWidget(container, 0, 1);
+  layout->addWidget(this->combo_container, 0, 1);
 }
 
 void Viewer::showEvent(QShowEvent *event)
 {
-  Q_EMIT visibility_changed(true);
   QWidget::showEvent(event);
+  Q_EMIT visibility_changed(true);
+  this->resizeEvent(nullptr);
 }
 
 void Viewer::hideEvent(QHideEvent *event)
 {
-  Q_EMIT visibility_changed(false);
   QWidget::hideEvent(event);
+  Q_EMIT visibility_changed(false);
 }
 
 void Viewer::update_renderer()
@@ -431,7 +429,7 @@ void Viewer::update_widgets()
 
   // update combobox content (prevent render update triggered by the
   // value change to avoid a series of unecessary updates of the
-  // renderer and override of the view_param values through combo cpnnections)
+  // renderer and override of the view_param values through combo connections)
   this->prevent_combo_connections = true;
 
   for (auto &[name, combo] : this->combo_map)
@@ -455,8 +453,14 @@ void Viewer::update_widgets()
       QComboBox *combo = it->second;
       int        idx = combo->findText(QString::fromStdString(value));
 
-      if (idx >= 0)
+      std::string color = HSD_CTX.app_settings.colors.text_primary.name().toStdString();
+
+      if (idx > 0)
         combo->setCurrentIndex(idx);
+      else
+        color = HSD_CTX.app_settings.colors.text_secondary.name().toStdString();
+
+      combo->setStyleSheet(std::format("color: {};", color).c_str());
     }
   }
 

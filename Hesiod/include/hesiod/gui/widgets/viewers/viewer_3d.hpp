@@ -34,6 +34,9 @@ public:
   void clear() override;
   void setup_layout() override;
 
+protected:
+  void resizeEvent(QResizeEvent *) override;
+
 private:
   ViewerNodeParam get_default_view_param() const override;
   void            update_renderer() override;

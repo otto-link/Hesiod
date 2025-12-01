@@ -28,7 +28,7 @@ struct AppSettings
     QColor bg_primary{"#2B2B2B"};
     QColor bg_secondary{"#4B4B4B"};
     QColor text_primary{"#F4F4F5"};
-    QColor text_secondary{"#A4A4A5"};
+    QColor text_secondary{"#949495"};
     QColor text_disabled{"#3C3C3C"};
     QColor accent{"#5E81AC"};
     QColor accent_bw{"#FFFFFF"};
