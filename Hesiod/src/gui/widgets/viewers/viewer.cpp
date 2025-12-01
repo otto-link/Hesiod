@@ -358,7 +358,7 @@ void Viewer::setup_layout()
     QComboBox *combo = new QComboBox();
     set_style(combo, "background: transparent;");
     resize_font(combo, -1);
-    
+
     param_layout->addWidget(combo);
     this->combo_map[name] = combo;
   }
