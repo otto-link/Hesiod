@@ -61,10 +61,10 @@
                         "id": "3",
                         "label": "Preview",
                         "runtime_info": {
-                            "eval_count": 1,
+                            "eval_count": 2,
                             "time_creation": 1764510137388,
-                            "time_last_update": 1764510137995,
-                            "update_time": 0.005375999957323074
+                            "time_last_update": 1764712100054,
+                            "update_time": 0.008503999561071396
                         }
                     },
                     {
@@ -81,10 +81,10 @@
                         "id": "4",
                         "label": "FloodingUniformLevel",
                         "runtime_info": {
-                            "eval_count": 1,
+                            "eval_count": 2,
                             "time_creation": 1764510137388,
-                            "time_last_update": 1764510137994,
-                            "update_time": 4.184820175170898
+                            "time_last_update": 1764712100054,
+                            "update_time": 4.198093891143799
                         }
                     },
                     {
@@ -220,10 +220,10 @@
                             "vmin": 0.0
                         },
                         "runtime_info": {
-                            "eval_count": 1,
+                            "eval_count": 2,
                             "time_creation": 1764510137393,
-                            "time_last_update": 1764510137990,
-                            "update_time": 530.7998046875
+                            "time_last_update": 1764712100050,
+                            "update_time": 491.5726013183594
                         },
                         "saturation_ratio": {
                             "label": "saturation_ratio",
@@ -355,10 +355,10 @@
                             "vmin": 0.0
                         },
                         "runtime_info": {
-                            "eval_count": 1,
+                            "eval_count": 2,
                             "time_creation": 1764510137413,
-                            "time_last_update": 1764510137459,
-                            "update_time": 41.243141174316406
+                            "time_last_update": 1764712099558,
+                            "update_time": 47.10001754760742
                         },
                         "seed": {
                             "label": "seed",
@@ -407,19 +407,19 @@
                 "current_link_type": 2,
                 "graph_editor_widget.viewer3d": {
                     "current_node_id": "3",
-                    "height": 616,
+                    "height": 512,
                     "is_node_pinned": false,
                     "label": "3D Renderer",
                     "renderer": {
-                        "add_ambiant_occlusion": false,
+                        "add_ambiant_occlusion": true,
                         "add_atmospheric_scattering": false,
                         "add_fog": false,
                         "add_water_foam": true,
                         "add_water_waves": true,
-                        "alpha_x": 0.685555636882782,
-                        "alpha_y": -0.6561110615730286,
-                        "ambiant_occlusion_radius": 3,
-                        "ambiant_occlusion_strength": 5.0,
+                        "alpha_x": 0.3555557131767273,
+                        "alpha_y": -7.756110668182373,
+                        "ambiant_occlusion_radius": 0.029999999329447746,
+                        "ambiant_occlusion_strength": 0.8009999990463257,
                         "angle_spread_ratio": 0.0,
                         "animate_waves": false,
                         "apply_tonemap": false,
@@ -432,9 +432,9 @@
                             "fov": 0.7850000262260437,
                             "near_plane": 0.10000000149011612,
                             "position": {
-                                "x": -2.361060380935669,
-                                "y": 3.165515899658203,
-                                "z": 3.0667412281036377
+                                "x": -1.865933895111084,
+                                "y": 0.6962226629257202,
+                                "z": 0.18320608139038086
                             },
                             "target": {
                                 "x": 0.0,
@@ -457,7 +457,7 @@
                             "y": 0.8500000238418579,
                             "z": 0.800000011920929
                         },
-                        "distance": 5.0,
+                        "distance": 1.9999998807907104,
                         "foam_color": {
                             "x": 1.0,
                             "y": 1.0,
@@ -474,7 +474,7 @@
                         "fog_scattering_ratio": 0.699999988079071,
                         "fog_strength": 0.5,
                         "gamma_correction": 2.0,
-                        "height": 525,
+                        "height": 512,
                         "hmap_h": 0.4000000059604645,
                         "hmap_h0": 0.0,
                         "hmap_w": 2.0,
@@ -545,7 +545,7 @@
                         "width": 1523,
                         "wireframe_mode": false,
                         "x": 2,
-                        "y": 91
+                        "y": 0
                     },
                     "view_param_map": {
                         "3": {
@@ -584,15 +584,8 @@
                     {
                         "link_type": 2,
                         "node_in_id": "3",
-                        "node_out_id": "4",
-                        "port_in_id": "water_depth",
-                        "port_out_id": "water_depth"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "5",
-                        "node_out_id": "6",
-                        "port_in_id": "input",
+                        "node_out_id": "5",
+                        "port_in_id": "elevation",
                         "port_out_id": "output"
                     },
                     {
@@ -604,26 +597,26 @@
                     },
                     {
                         "link_type": 2,
-                        "node_in_id": "3",
-                        "node_out_id": "5",
-                        "port_in_id": "elevation",
+                        "node_in_id": "5",
+                        "node_out_id": "6",
+                        "port_in_id": "input",
                         "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "3",
+                        "node_out_id": "4",
+                        "port_in_id": "water_depth",
+                        "port_out_id": "water_depth"
                     }
                 ],
                 "nodes": [
                     {
-                        "caption": "Preview",
-                        "id": "3",
+                        "caption": "GaborWaveFbm",
+                        "id": "6",
                         "is_widget_visible": true,
-                        "scene_position.x": 270.1703796386719,
-                        "scene_position.y": -318.4334716796875
-                    },
-                    {
-                        "caption": "FloodingUniformLevel",
-                        "id": "4",
-                        "is_widget_visible": true,
-                        "scene_position.x": 26.787607192993164,
-                        "scene_position.y": -168.27957153320313
+                        "scene_position.x": -411.5465393066406,
+                        "scene_position.y": -341.77099609375
                     },
                     {
                         "caption": "HydraulicStreamLog",
@@ -633,15 +626,22 @@
                         "scene_position.y": -293.3157653808594
                     },
                     {
-                        "caption": "GaborWaveFbm",
-                        "id": "6",
+                        "caption": "FloodingUniformLevel",
+                        "id": "4",
                         "is_widget_visible": true,
-                        "scene_position.x": -411.5465393066406,
-                        "scene_position.y": -341.77099609375
+                        "scene_position.x": 26.787607192993164,
+                        "scene_position.y": -168.27957153320313
+                    },
+                    {
+                        "caption": "Preview",
+                        "id": "3",
+                        "is_widget_visible": true,
+                        "scene_position.x": 270.1703796386719,
+                        "scene_position.y": -318.4334716796875
                     }
                 ]
             }
         }
     },
-    "saved_at": "2025-11-30_14-42-48"
+    "saved_at": "2025-12-02_22-48-45"
 }

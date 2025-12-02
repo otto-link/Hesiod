@@ -244,10 +244,10 @@
                             "vmin": 0.0
                         },
                         "runtime_info": {
-                            "eval_count": 35,
+                            "eval_count": 36,
                             "time_creation": 1764019422978,
-                            "time_last_update": 1764532482889,
-                            "update_time": 45.26559829711914
+                            "time_last_update": 1764712155675,
+                            "update_time": 28.32091522216797
                         },
                         "sigma": {
                             "label": "Falloff Exponent",
@@ -273,10 +273,10 @@
                         "id": "14",
                         "label": "FloodingUniformLevel",
                         "runtime_info": {
-                            "eval_count": 151,
+                            "eval_count": 152,
                             "time_creation": 1764020226089,
-                            "time_last_update": 1764532483961,
-                            "update_time": 4.938738822937012
+                            "time_last_update": 1764712156650,
+                            "update_time": 5.362748146057129
                         }
                     },
                     {
@@ -284,10 +284,10 @@
                         "id": "15",
                         "label": "Preview",
                         "runtime_info": {
-                            "eval_count": 338,
+                            "eval_count": 339,
                             "time_creation": 1764020288037,
-                            "time_last_update": 1764532484604,
-                            "update_time": 0.00784900039434433
+                            "time_last_update": 1764712157237,
+                            "update_time": 0.007935999892652035
                         }
                     },
                     {
@@ -423,10 +423,10 @@
                             "vmin": 0.0
                         },
                         "runtime_info": {
-                            "eval_count": 116,
+                            "eval_count": 117,
                             "time_creation": 1764021618362,
-                            "time_last_update": 1764532483807,
-                            "update_time": 509.7942810058594
+                            "time_last_update": 1764712156524,
+                            "update_time": 467.58380126953125
                         },
                         "saturation_ratio": {
                             "label": "saturation_ratio",
@@ -575,10 +575,10 @@
                             "vmin": 0.0
                         },
                         "runtime_info": {
-                            "eval_count": 18,
+                            "eval_count": 19,
                             "time_creation": 1764021930692,
-                            "time_last_update": 1764532482809,
-                            "update_time": 197.15020751953125
+                            "time_last_update": 1764712155619,
+                            "update_time": 143.614990234375
                         },
                         "seed": {
                             "label": "seed",
@@ -601,10 +601,10 @@
                         "id": "18",
                         "label": "Toggle",
                         "runtime_info": {
-                            "eval_count": 42,
+                            "eval_count": 43,
                             "time_creation": 1764021934888,
-                            "time_last_update": 1764532482894,
-                            "update_time": 2.2482869625091553
+                            "time_last_update": 1764712155679,
+                            "update_time": 1.6368930339813232
                         },
                         "toggle": {
                             "label": "toggle",
@@ -726,10 +726,10 @@
                             "vmin": 0.0
                         },
                         "runtime_info": {
-                            "eval_count": 13,
+                            "eval_count": 14,
                             "time_creation": 1764022104172,
-                            "time_last_update": 1764532482844,
-                            "update_time": 34.831459045410156
+                            "time_last_update": 1764712155647,
+                            "update_time": 28.366212844848633
                         },
                         "seed": {
                             "label": "seed",
@@ -921,10 +921,10 @@
                             "vmin": 0.009999999776482582
                         },
                         "runtime_info": {
-                            "eval_count": 27,
+                            "eval_count": 28,
                             "time_creation": 1764099198512,
-                            "time_last_update": 1764532483297,
-                            "update_time": 403.158203125
+                            "time_last_update": 1764712156056,
+                            "update_time": 377.0434265136719
                         },
                         "seed": {
                             "label": "Noise Seed Value",
@@ -1018,10 +1018,10 @@
                         "id": "24",
                         "label": "Thru",
                         "runtime_info": {
-                            "eval_count": 25,
+                            "eval_count": 26,
                             "time_creation": 1764155936801,
-                            "time_last_update": 1764532483809,
-                            "update_time": 2.048546075820923
+                            "time_last_update": 1764712156525,
+                            "update_time": 1.8091169595718384
                         }
                     },
                     {
@@ -1088,10 +1088,10 @@
                             "vmin": 0.0
                         },
                         "runtime_info": {
-                            "eval_count": 35,
+                            "eval_count": 36,
                             "time_creation": 1764155978734,
-                            "time_last_update": 1764532484315,
-                            "update_time": 46.39240646362305
+                            "time_last_update": 1764712156971,
+                            "update_time": 36.96872329711914
                         }
                     },
                     {
@@ -1202,10 +1202,10 @@
                             "value": false
                         },
                         "runtime_info": {
-                            "eval_count": 37,
+                            "eval_count": 38,
                             "time_creation": 1764156028796,
-                            "time_last_update": 1764532484411,
-                            "update_time": 47.087894439697266
+                            "time_last_update": 1764712157049,
+                            "update_time": 37.788028717041016
                         }
                     },
                     {
@@ -1221,10 +1221,10 @@
                             "value": true
                         },
                         "runtime_info": {
-                            "eval_count": 209,
+                            "eval_count": 210,
                             "time_creation": 1764156039923,
-                            "time_last_update": 1764532484604,
-                            "update_time": 192.80519104003906
+                            "time_last_update": 1764712157237,
+                            "update_time": 187.802490234375
                         },
                         "use_sqrt_avg": {
                             "label": "use_sqrt_avg",
@@ -1335,10 +1335,10 @@
                             "vmin": 0.0
                         },
                         "runtime_info": {
-                            "eval_count": 97,
+                            "eval_count": 98,
                             "time_creation": 1764156113987,
-                            "time_last_update": 1764532484269,
-                            "update_time": 254.89743041992188
+                            "time_last_update": 1764712156934,
+                            "update_time": 243.56710815429688
                         },
                         "talus_ref": {
                             "label": "talus_ref",
@@ -1512,10 +1512,10 @@
                             "value": false
                         },
                         "runtime_info": {
-                            "eval_count": 177,
+                            "eval_count": 178,
                             "time_creation": 1764156139729,
-                            "time_last_update": 1764532484364,
-                            "update_time": 49.192413330078125
+                            "time_last_update": 1764712157011,
+                            "update_time": 40.49550247192383
                         }
                     },
                     {
@@ -1634,10 +1634,10 @@
                             "vmin": 0.0
                         },
                         "runtime_info": {
-                            "eval_count": 40,
+                            "eval_count": 41,
                             "time_creation": 1764156368857,
-                            "time_last_update": 1764532483937,
-                            "update_time": 128.38925170898438
+                            "time_last_update": 1764712156627,
+                            "update_time": 101.60264587402344
                         }
                     },
                     {
@@ -1694,10 +1694,10 @@
                             "value": false
                         },
                         "runtime_info": {
-                            "eval_count": 43,
+                            "eval_count": 44,
                             "time_creation": 1764156381165,
-                            "time_last_update": 1764532484014,
-                            "update_time": 52.28958511352539
+                            "time_last_update": 1764712156690,
+                            "update_time": 40.2907829284668
                         }
                     },
                     {
@@ -1808,10 +1808,10 @@
                             "vmin": 0.0
                         },
                         "runtime_info": {
-                            "eval_count": 9,
+                            "eval_count": 10,
                             "time_creation": 1764171510726,
-                            "time_last_update": 1764532482612,
-                            "update_time": 32.431793212890625
+                            "time_last_update": 1764712155475,
+                            "update_time": 31.52413558959961
                         },
                         "seed": {
                             "label": "Seed",
@@ -1938,10 +1938,10 @@
                             "value": false
                         },
                         "runtime_info": {
-                            "eval_count": 11,
+                            "eval_count": 12,
                             "time_creation": 1764177062768,
-                            "time_last_update": 1764532483956,
-                            "update_time": 19.01372718811035
+                            "time_last_update": 1764712156645,
+                            "update_time": 17.62446403503418
                         },
                         "smooth_max": {
                             "label": "smooth_max",
@@ -1965,10 +1965,10 @@
                         "id": "9",
                         "label": "MakeBinary",
                         "runtime_info": {
-                            "eval_count": 57,
+                            "eval_count": 58,
                             "time_creation": 1764018927020,
-                            "time_last_update": 1764532482892,
-                            "update_time": 2.1580090522766113
+                            "time_last_update": 1764712155677,
+                            "update_time": 1.950510025024414
                         },
                         "threshold": {
                             "label": "threshold",
@@ -2015,15 +2015,15 @@
                     "is_node_pinned": false,
                     "label": "3D Renderer",
                     "renderer": {
-                        "add_ambiant_occlusion": false,
+                        "add_ambiant_occlusion": true,
                         "add_atmospheric_scattering": false,
                         "add_fog": false,
                         "add_water_foam": true,
                         "add_water_waves": true,
-                        "alpha_x": 0.6105555891990662,
-                        "alpha_y": -0.4361111521720886,
-                        "ambiant_occlusion_radius": 3,
-                        "ambiant_occlusion_strength": 5.0,
+                        "alpha_x": 0.5855554938316345,
+                        "alpha_y": -8.036109924316406,
+                        "ambiant_occlusion_radius": 0.029999999329447746,
+                        "ambiant_occlusion_strength": 0.8050000071525574,
                         "angle_spread_ratio": 0.0,
                         "animate_waves": false,
                         "apply_tonemap": false,
@@ -2036,9 +2036,9 @@
                             "fov": 0.7850000262260437,
                             "near_plane": 0.10000000149011612,
                             "position": {
-                                "x": -1.7304972410202026,
-                                "y": 2.8666138648986816,
-                                "z": 3.7132070064544678
+                                "x": -0.944165050983429,
+                                "y": 0.636641263961792,
+                                "z": -0.17388609051704407
                             },
                             "target": {
                                 "x": 0.0,
@@ -2061,7 +2061,7 @@
                             "y": 0.8500000238418579,
                             "z": 0.800000011920929
                         },
-                        "distance": 5.0,
+                        "distance": 1.1519532203674316,
                         "foam_color": {
                             "x": 1.0,
                             "y": 1.0,
@@ -2146,7 +2146,7 @@
                         "waves_kw": 256.0,
                         "waves_normal_amplitude": 0.019999999552965164,
                         "waves_speed": 0.20000000298023224,
-                        "width": 1363,
+                        "width": 1523,
                         "wireframe_mode": false,
                         "x": 2,
                         "y": 0
@@ -2161,29 +2161,141 @@
                 "links": [
                     {
                         "link_type": 2,
-                        "node_in_id": "15",
-                        "node_out_id": "14",
-                        "port_in_id": "water_depth",
-                        "port_out_id": "water_depth"
+                        "node_in_id": "30",
+                        "node_out_id": "34",
+                        "port_in_id": "noise",
+                        "port_out_id": "output"
                     },
                     {
                         "link_type": 2,
-                        "node_in_id": "26",
-                        "node_out_id": "14",
-                        "port_in_id": "water_depth",
-                        "port_out_id": "water_depth"
+                        "node_in_id": "32",
+                        "node_out_id": "31",
+                        "port_in_id": "alpha",
+                        "port_out_id": "output"
                     },
                     {
                         "link_type": 2,
-                        "node_in_id": "14",
+                        "node_in_id": "28",
+                        "node_out_id": "27",
+                        "port_in_id": "texture3",
+                        "port_out_id": "texture"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "28",
+                        "node_out_id": "32",
+                        "port_in_id": "texture2",
+                        "port_out_id": "texture"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "32",
+                        "node_out_id": "31",
+                        "port_in_id": "level",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "31",
                         "node_out_id": "24",
                         "port_in_id": "input",
                         "port_out_id": "output"
                     },
                     {
                         "link_type": 2,
-                        "node_in_id": "24",
-                        "node_out_id": "16",
+                        "node_in_id": "28",
+                        "node_out_id": "30",
+                        "port_in_id": "texture1",
+                        "port_out_id": "texture"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "30",
+                        "node_out_id": "29",
+                        "port_in_id": "level",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "27",
+                        "node_out_id": "24",
+                        "port_in_id": "level",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "15",
+                        "node_out_id": "28",
+                        "port_in_id": "texture",
+                        "port_out_id": "texture"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "27",
+                        "node_out_id": "26",
+                        "port_in_id": "alpha",
+                        "port_out_id": "mask"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "26",
+                        "node_out_id": "24",
+                        "port_in_id": "elevation",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "15",
+                        "node_out_id": "24",
+                        "port_in_id": "elevation",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "9",
+                        "node_out_id": "12",
+                        "port_in_id": "input",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "18",
+                        "node_out_id": "17",
+                        "port_in_id": "input B",
+                        "port_out_id": "out"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "18",
+                        "node_out_id": "9",
+                        "port_in_id": "input A",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "12",
+                        "node_out_id": "19",
+                        "port_in_id": "input",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "23",
+                        "node_out_id": "18",
+                        "port_in_id": "land_mask",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "16",
+                        "node_out_id": "23",
+                        "port_in_id": "input",
+                        "port_out_id": "out"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "35",
+                        "node_out_id": "24",
                         "port_in_id": "input",
                         "port_out_id": "output"
                     },
@@ -2196,257 +2308,47 @@
                     },
                     {
                         "link_type": 2,
-                        "node_in_id": "35",
+                        "node_in_id": "24",
+                        "node_out_id": "16",
+                        "port_in_id": "input",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "14",
                         "node_out_id": "24",
                         "port_in_id": "input",
-                        "port_out_id": "output"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "16",
-                        "node_out_id": "23",
-                        "port_in_id": "input",
-                        "port_out_id": "out"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "23",
-                        "node_out_id": "18",
-                        "port_in_id": "land_mask",
-                        "port_out_id": "output"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "12",
-                        "node_out_id": "19",
-                        "port_in_id": "input",
-                        "port_out_id": "output"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "18",
-                        "node_out_id": "9",
-                        "port_in_id": "input A",
-                        "port_out_id": "output"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "18",
-                        "node_out_id": "17",
-                        "port_in_id": "input B",
-                        "port_out_id": "out"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "9",
-                        "node_out_id": "12",
-                        "port_in_id": "input",
-                        "port_out_id": "output"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "15",
-                        "node_out_id": "24",
-                        "port_in_id": "elevation",
                         "port_out_id": "output"
                     },
                     {
                         "link_type": 2,
                         "node_in_id": "26",
-                        "node_out_id": "24",
-                        "port_in_id": "elevation",
-                        "port_out_id": "output"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "27",
-                        "node_out_id": "26",
-                        "port_in_id": "alpha",
-                        "port_out_id": "mask"
+                        "node_out_id": "14",
+                        "port_in_id": "water_depth",
+                        "port_out_id": "water_depth"
                     },
                     {
                         "link_type": 2,
                         "node_in_id": "15",
-                        "node_out_id": "28",
-                        "port_in_id": "texture",
-                        "port_out_id": "texture"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "27",
-                        "node_out_id": "24",
-                        "port_in_id": "level",
-                        "port_out_id": "output"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "30",
-                        "node_out_id": "29",
-                        "port_in_id": "level",
-                        "port_out_id": "output"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "28",
-                        "node_out_id": "30",
-                        "port_in_id": "texture1",
-                        "port_out_id": "texture"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "31",
-                        "node_out_id": "24",
-                        "port_in_id": "input",
-                        "port_out_id": "output"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "32",
-                        "node_out_id": "31",
-                        "port_in_id": "level",
-                        "port_out_id": "output"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "28",
-                        "node_out_id": "32",
-                        "port_in_id": "texture2",
-                        "port_out_id": "texture"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "28",
-                        "node_out_id": "27",
-                        "port_in_id": "texture3",
-                        "port_out_id": "texture"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "32",
-                        "node_out_id": "31",
-                        "port_in_id": "alpha",
-                        "port_out_id": "output"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "30",
-                        "node_out_id": "34",
-                        "port_in_id": "noise",
-                        "port_out_id": "output"
+                        "node_out_id": "14",
+                        "port_in_id": "water_depth",
+                        "port_out_id": "water_depth"
                     }
                 ],
                 "nodes": [
                     {
-                        "caption": "Clamp",
-                        "id": "35",
+                        "caption": "NoiseFbm",
+                        "id": "34",
                         "is_widget_visible": true,
-                        "scene_position.x": 690.9935302734375,
-                        "scene_position.y": -1020.8914794921875
-                    },
-                    {
-                        "caption": "Island",
-                        "id": "23",
-                        "is_widget_visible": true,
-                        "scene_position.x": -109.87166595458984,
-                        "scene_position.y": -464.6652526855469
-                    },
-                    {
-                        "caption": "GaborWaveFbm",
-                        "id": "19",
-                        "is_widget_visible": true,
-                        "scene_position.x": -908.9957275390625,
-                        "scene_position.y": -577.0389404296875
-                    },
-                    {
-                        "caption": "Toggle",
-                        "id": "18",
-                        "is_widget_visible": true,
-                        "scene_position.x": -321.2585144042969,
-                        "scene_position.y": -422.3633117675781
-                    },
-                    {
-                        "caption": "IslandLandMask",
-                        "id": "17",
-                        "is_widget_visible": true,
-                        "scene_position.x": -687.6619873046875,
-                        "scene_position.y": -122.902099609375
-                    },
-                    {
-                        "caption": "HydraulicStreamLog",
-                        "id": "16",
-                        "is_widget_visible": true,
-                        "scene_position.x": 82.37560272216797,
-                        "scene_position.y": -466.4979248046875
-                    },
-                    {
-                        "caption": "ZeroedEdges",
-                        "id": "12",
-                        "is_widget_visible": true,
-                        "scene_position.x": -686.80126953125,
-                        "scene_position.y": -622.6522827148438
-                    },
-                    {
-                        "caption": "MakeBinary",
-                        "id": "9",
-                        "is_widget_visible": true,
-                        "scene_position.x": -499.5040588378906,
-                        "scene_position.y": -604.5070190429688
-                    },
-                    {
-                        "caption": "FloodingUniformLevel",
-                        "id": "14",
-                        "is_widget_visible": true,
-                        "scene_position.x": 685.8615112304688,
-                        "scene_position.y": -108.65354919433594
-                    },
-                    {
-                        "caption": "Preview",
-                        "id": "15",
-                        "is_widget_visible": true,
-                        "scene_position.x": 2340.211669921875,
-                        "scene_position.y": -550.5330200195313
-                    },
-                    {
-                        "caption": "Thru",
-                        "id": "24",
-                        "is_widget_visible": true,
-                        "scene_position.x": 377.729736328125,
-                        "scene_position.y": -432.73492431640625
-                    },
-                    {
-                        "caption": "WaterMask",
-                        "id": "26",
-                        "is_widget_visible": true,
-                        "scene_position.x": 1057.2318115234375,
-                        "scene_position.y": -23.84507179260254
+                        "scene_position.x": 1034.1881103515625,
+                        "scene_position.y": -921.0426635742188
                     },
                     {
                         "caption": "ColorizeGradient",
-                        "id": "27",
+                        "id": "32",
                         "is_widget_visible": true,
-                        "scene_position.x": 1357.4073486328125,
-                        "scene_position.y": -99.20285034179688
-                    },
-                    {
-                        "caption": "MixTexture",
-                        "id": "28",
-                        "is_widget_visible": true,
-                        "scene_position.x": 1928.5592041015625,
-                        "scene_position.y": -503.624267578125
-                    },
-                    {
-                        "caption": "SelectSoilFlow",
-                        "id": "29",
-                        "is_widget_visible": true,
-                        "scene_position.x": 1015.1131591796875,
-                        "scene_position.y": -1208.55322265625
-                    },
-                    {
-                        "caption": "ColorizeGradient",
-                        "id": "30",
-                        "is_widget_visible": true,
-                        "scene_position.x": 1297.889892578125,
-                        "scene_position.y": -1031.83056640625
+                        "scene_position.x": 1311.6561279296875,
+                        "scene_position.y": -554.3419799804688
                     },
                     {
                         "caption": "SelectSoilWeathered",
@@ -2457,21 +2359,119 @@
                     },
                     {
                         "caption": "ColorizeGradient",
-                        "id": "32",
+                        "id": "30",
                         "is_widget_visible": true,
-                        "scene_position.x": 1311.6561279296875,
-                        "scene_position.y": -554.3419799804688
+                        "scene_position.x": 1297.889892578125,
+                        "scene_position.y": -1031.83056640625
                     },
                     {
-                        "caption": "NoiseFbm",
-                        "id": "34",
+                        "caption": "SelectSoilFlow",
+                        "id": "29",
                         "is_widget_visible": true,
-                        "scene_position.x": 1034.1881103515625,
-                        "scene_position.y": -921.0426635742188
+                        "scene_position.x": 1015.1131591796875,
+                        "scene_position.y": -1208.55322265625
+                    },
+                    {
+                        "caption": "MixTexture",
+                        "id": "28",
+                        "is_widget_visible": true,
+                        "scene_position.x": 1928.5592041015625,
+                        "scene_position.y": -503.624267578125
+                    },
+                    {
+                        "caption": "ColorizeGradient",
+                        "id": "27",
+                        "is_widget_visible": true,
+                        "scene_position.x": 1357.4073486328125,
+                        "scene_position.y": -99.20285034179688
+                    },
+                    {
+                        "caption": "WaterMask",
+                        "id": "26",
+                        "is_widget_visible": true,
+                        "scene_position.x": 1057.2318115234375,
+                        "scene_position.y": -23.84507179260254
+                    },
+                    {
+                        "caption": "Thru",
+                        "id": "24",
+                        "is_widget_visible": true,
+                        "scene_position.x": 377.729736328125,
+                        "scene_position.y": -432.73492431640625
+                    },
+                    {
+                        "caption": "Preview",
+                        "id": "15",
+                        "is_widget_visible": true,
+                        "scene_position.x": 2340.211669921875,
+                        "scene_position.y": -550.5330200195313
+                    },
+                    {
+                        "caption": "FloodingUniformLevel",
+                        "id": "14",
+                        "is_widget_visible": true,
+                        "scene_position.x": 685.8615112304688,
+                        "scene_position.y": -108.65354919433594
+                    },
+                    {
+                        "caption": "MakeBinary",
+                        "id": "9",
+                        "is_widget_visible": true,
+                        "scene_position.x": -499.5040588378906,
+                        "scene_position.y": -604.5070190429688
+                    },
+                    {
+                        "caption": "ZeroedEdges",
+                        "id": "12",
+                        "is_widget_visible": true,
+                        "scene_position.x": -686.80126953125,
+                        "scene_position.y": -622.6522827148438
+                    },
+                    {
+                        "caption": "HydraulicStreamLog",
+                        "id": "16",
+                        "is_widget_visible": true,
+                        "scene_position.x": 82.37560272216797,
+                        "scene_position.y": -466.4979248046875
+                    },
+                    {
+                        "caption": "IslandLandMask",
+                        "id": "17",
+                        "is_widget_visible": true,
+                        "scene_position.x": -687.6619873046875,
+                        "scene_position.y": -122.902099609375
+                    },
+                    {
+                        "caption": "Toggle",
+                        "id": "18",
+                        "is_widget_visible": true,
+                        "scene_position.x": -321.2585144042969,
+                        "scene_position.y": -422.3633117675781
+                    },
+                    {
+                        "caption": "GaborWaveFbm",
+                        "id": "19",
+                        "is_widget_visible": true,
+                        "scene_position.x": -908.9957275390625,
+                        "scene_position.y": -577.0389404296875
+                    },
+                    {
+                        "caption": "Island",
+                        "id": "23",
+                        "is_widget_visible": true,
+                        "scene_position.x": -109.87166595458984,
+                        "scene_position.y": -464.6652526855469
+                    },
+                    {
+                        "caption": "Clamp",
+                        "id": "35",
+                        "is_widget_visible": true,
+                        "scene_position.x": 690.9935302734375,
+                        "scene_position.y": -1020.8914794921875
                     }
                 ]
             }
         }
     },
-    "saved_at": "2025-11-30_20-55-20"
+    "saved_at": "2025-12-02_22-49-50"
 }

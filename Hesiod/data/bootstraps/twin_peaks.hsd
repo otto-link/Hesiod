@@ -338,10 +338,10 @@
                             "vmin": 0.0
                         },
                         "runtime_info": {
-                            "eval_count": 1,
+                            "eval_count": 2,
                             "time_creation": 1764532526440,
-                            "time_last_update": 1764532526601,
-                            "update_time": 104.95173645019531
+                            "time_last_update": 1764712195059,
+                            "update_time": 96.46062469482422
                         },
                         "scale": {
                             "label": "scale",
@@ -479,10 +479,10 @@
                             "vmin": 0.0
                         },
                         "runtime_info": {
-                            "eval_count": 1,
+                            "eval_count": 2,
                             "time_creation": 1764532526440,
-                            "time_last_update": 1764532526647,
-                            "update_time": 45.672489166259766
+                            "time_last_update": 1764712195096,
+                            "update_time": 36.56702423095703
                         },
                         "seed": {
                             "label": "seed",
@@ -504,10 +504,10 @@
                         "id": "12",
                         "label": "Thru",
                         "runtime_info": {
-                            "eval_count": 1,
+                            "eval_count": 2,
                             "time_creation": 1764532526442,
-                            "time_last_update": 1764532527309,
-                            "update_time": 1.9745270013809204
+                            "time_last_update": 1764712195708,
+                            "update_time": 1.6311759948730469
                         }
                     },
                     {
@@ -546,10 +546,10 @@
                             "value": false
                         },
                         "runtime_info": {
-                            "eval_count": 1,
+                            "eval_count": 2,
                             "time_creation": 1764532526442,
-                            "time_last_update": 1764532527715,
-                            "update_time": 50.92549133300781
+                            "time_last_update": 1764712196040,
+                            "update_time": 36.49628829956055
                         },
                         "saturate_alpha": {
                             "is_active": false,
@@ -612,10 +612,10 @@
                             "value": false
                         },
                         "runtime_info": {
-                            "eval_count": 1,
+                            "eval_count": 2,
                             "time_creation": 1764532526447,
-                            "time_last_update": 1764532527773,
-                            "update_time": 57.87551498413086
+                            "time_last_update": 1764712196082,
+                            "update_time": 41.774776458740234
                         },
                         "saturate_alpha": {
                             "is_active": false,
@@ -710,10 +710,10 @@
                             "vmin": -1.0
                         },
                         "runtime_info": {
-                            "eval_count": 1,
+                            "eval_count": 2,
                             "time_creation": 1764532526450,
-                            "time_last_update": 1764532526763,
-                            "update_time": 16.1224308013916
+                            "time_last_update": 1764712195197,
+                            "update_time": 12.146307945251465
                         },
                         "swap_inputs": {
                             "label": "swap_inputs",
@@ -788,10 +788,10 @@
                             "vmin": 0.0
                         },
                         "runtime_info": {
-                            "eval_count": 1,
+                            "eval_count": 2,
                             "time_creation": 1764532526451,
-                            "time_last_update": 1764532527415,
-                            "update_time": 106.39683532714844
+                            "time_last_update": 1764712195796,
+                            "update_time": 87.49108123779297
                         }
                     },
                     {
@@ -799,10 +799,10 @@
                         "id": "21",
                         "label": "Preview",
                         "runtime_info": {
-                            "eval_count": 1,
+                            "eval_count": 2,
                             "time_creation": 1764532526452,
-                            "time_last_update": 1764532528009,
-                            "update_time": 0.007060000207275152
+                            "time_last_update": 1764712196302,
+                            "update_time": 0.00685499981045723
                         }
                     },
                     {
@@ -818,10 +818,10 @@
                             "value": true
                         },
                         "runtime_info": {
-                            "eval_count": 1,
+                            "eval_count": 2,
                             "time_creation": 1764532526452,
-                            "time_last_update": 1764532528009,
-                            "update_time": 179.90032958984375
+                            "time_last_update": 1764712196302,
+                            "update_time": 179.15869140625
                         },
                         "use_sqrt_avg": {
                             "label": "use_sqrt_avg",
@@ -940,10 +940,10 @@
                             "vmin": 0.0
                         },
                         "runtime_info": {
-                            "eval_count": 1,
+                            "eval_count": 2,
                             "time_creation": 1764532526456,
-                            "time_last_update": 1764532526747,
-                            "update_time": 20.604639053344727
+                            "time_last_update": 1764712195185,
+                            "update_time": 17.433443069458008
                         },
                         "seed": {
                             "label": "seed",
@@ -1025,10 +1025,10 @@
                             "vmin": 0.0
                         },
                         "runtime_info": {
-                            "eval_count": 1,
+                            "eval_count": 2,
                             "time_creation": 1764532526457,
-                            "time_last_update": 1764532527664,
-                            "update_time": 249.30763244628906
+                            "time_last_update": 1764712196004,
+                            "update_time": 208.15158081054688
                         },
                         "talus_ref": {
                             "label": "talus_ref",
@@ -1076,10 +1076,10 @@
                             "value": false
                         },
                         "runtime_info": {
-                            "eval_count": 1,
+                            "eval_count": 2,
                             "time_creation": 1764532526458,
-                            "time_last_update": 1764532527829,
-                            "update_time": 56.27720642089844
+                            "time_last_update": 1764712196123,
+                            "update_time": 41.07530212402344
                         },
                         "saturate_alpha": {
                             "is_active": false,
@@ -1262,10 +1262,10 @@
                             "vmin": 0.0
                         },
                         "runtime_info": {
-                            "eval_count": 1,
+                            "eval_count": 2,
                             "time_creation": 1764532526461,
-                            "time_last_update": 1764532526726,
-                            "update_time": 79.72840118408203
+                            "time_last_update": 1764712195167,
+                            "update_time": 71.22127532958984
                         },
                         "scale": {
                             "label": "scale",
@@ -1351,10 +1351,10 @@
                             "vmin": -1.0
                         },
                         "runtime_info": {
-                            "eval_count": 1,
+                            "eval_count": 2,
                             "time_creation": 1764532526462,
-                            "time_last_update": 1764532526778,
-                            "update_time": 14.58111572265625
+                            "time_last_update": 1764712195210,
+                            "update_time": 13.469622611999512
                         },
                         "swap_inputs": {
                             "label": "swap_inputs",
@@ -1474,10 +1474,10 @@
                             "value": false
                         },
                         "runtime_info": {
-                            "eval_count": 1,
+                            "eval_count": 2,
                             "time_creation": 1764532526463,
-                            "time_last_update": 1764532526799,
-                            "update_time": 20.952116012573242
+                            "time_last_update": 1764712195230,
+                            "update_time": 19.522436141967773
                         },
                         "smooth_max": {
                             "label": "smooth_max",
@@ -1629,10 +1629,10 @@
                             "vmin": 0.0
                         },
                         "runtime_info": {
-                            "eval_count": 1,
+                            "eval_count": 2,
                             "time_creation": 1764532526465,
-                            "time_last_update": 1764532527307,
-                            "update_time": 492.17633056640625
+                            "time_last_update": 1764712195707,
+                            "update_time": 461.52752685546875
                         },
                         "saturation_ratio": {
                             "label": "saturation_ratio",
@@ -1730,10 +1730,10 @@
                             "vmin": 0.0
                         },
                         "runtime_info": {
-                            "eval_count": 1,
+                            "eval_count": 2,
                             "time_creation": 1764532526468,
-                            "time_last_update": 1764532526496,
-                            "update_time": 24.831560134887695
+                            "time_last_update": 1764712194963,
+                            "update_time": 18.40299415588379
                         }
                     },
                     {
@@ -1804,10 +1804,10 @@
                             "vmin": -1.0
                         },
                         "runtime_info": {
-                            "eval_count": 1,
+                            "eval_count": 2,
                             "time_creation": 1764532526470,
-                            "time_last_update": 1764532526814,
-                            "update_time": 15.526044845581055
+                            "time_last_update": 1764712195245,
+                            "update_time": 15.030631065368652
                         },
                         "swap_inputs": {
                             "label": "swap_inputs",
@@ -1853,15 +1853,15 @@
                     "is_node_pinned": false,
                     "label": "3D Renderer",
                     "renderer": {
-                        "add_ambiant_occlusion": false,
+                        "add_ambiant_occlusion": true,
                         "add_atmospheric_scattering": false,
                         "add_fog": false,
                         "add_water_foam": true,
                         "add_water_waves": true,
-                        "alpha_x": 0.6105555891990662,
-                        "alpha_y": -0.4361111521720886,
-                        "ambiant_occlusion_radius": 3,
-                        "ambiant_occlusion_strength": 5.0,
+                        "alpha_x": 0.29555559158325195,
+                        "alpha_y": -8.671112060546875,
+                        "ambiant_occlusion_radius": 0.03400000184774399,
+                        "ambiant_occlusion_strength": 0.796999990940094,
                         "angle_spread_ratio": 0.0,
                         "animate_waves": false,
                         "apply_tonemap": false,
@@ -1874,9 +1874,9 @@
                             "fov": 0.7850000262260437,
                             "near_plane": 0.10000000149011612,
                             "position": {
-                                "x": -1.7304972410202026,
-                                "y": 2.8666138648986816,
-                                "z": 3.7132070064544678
+                                "x": -0.9536721110343933,
+                                "y": 0.42431771755218506,
+                                "z": -1.0162017345428467
                             },
                             "target": {
                                 "x": 0.0,
@@ -1899,7 +1899,7 @@
                             "y": 0.8500000238418579,
                             "z": 0.800000011920929
                         },
-                        "distance": 5.0,
+                        "distance": 1.4567779302597046,
                         "foam_color": {
                             "x": 1.0,
                             "y": 1.0,
@@ -1984,7 +1984,7 @@
                         "waves_kw": 256.0,
                         "waves_normal_amplitude": 0.019999999552965164,
                         "waves_speed": 0.20000000298023224,
-                        "width": 1363,
+                        "width": 1523,
                         "wireframe_mode": false,
                         "x": 2,
                         "y": 0
@@ -1999,149 +1999,23 @@
                 "links": [
                     {
                         "link_type": 2,
-                        "node_in_id": "26",
-                        "node_out_id": "20",
-                        "port_in_id": "level",
-                        "port_out_id": "output"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "26",
-                        "node_out_id": "24",
-                        "port_in_id": "noise",
-                        "port_out_id": "output"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "23",
-                        "node_out_id": "26",
-                        "port_in_id": "texture3",
-                        "port_out_id": "texture"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "25",
-                        "node_out_id": "12",
+                        "node_in_id": "12",
+                        "node_out_id": "6",
                         "port_in_id": "input",
                         "port_out_id": "output"
                     },
                     {
                         "link_type": 2,
-                        "node_in_id": "26",
-                        "node_out_id": "25",
-                        "port_in_id": "alpha",
-                        "port_out_id": "output"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "19",
-                        "node_out_id": "24",
-                        "port_in_id": "noise",
-                        "port_out_id": "output"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "18",
-                        "node_out_id": "24",
-                        "port_in_id": "noise",
-                        "port_out_id": "output"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "21",
-                        "node_out_id": "12",
-                        "port_in_id": "elevation",
-                        "port_out_id": "output"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "21",
-                        "node_out_id": "23",
-                        "port_in_id": "texture",
-                        "port_out_id": "texture"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "23",
-                        "node_out_id": "19",
-                        "port_in_id": "texture2",
-                        "port_out_id": "texture"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "23",
-                        "node_out_id": "18",
-                        "port_in_id": "texture1",
-                        "port_out_id": "texture"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "19",
-                        "node_out_id": "20",
-                        "port_in_id": "alpha",
-                        "port_out_id": "output"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "18",
-                        "node_out_id": "20",
-                        "port_in_id": "alpha",
-                        "port_out_id": "output"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "20",
-                        "node_out_id": "12",
+                        "node_in_id": "6",
+                        "node_out_id": "8",
                         "port_in_id": "input",
                         "port_out_id": "output"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "18",
-                        "node_out_id": "12",
-                        "port_in_id": "level",
-                        "port_out_id": "output"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "19",
-                        "node_out_id": "12",
-                        "port_in_id": "level",
-                        "port_out_id": "output"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "5",
-                        "node_out_id": "4",
-                        "port_in_id": "input",
-                        "port_out_id": "output"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "4",
-                        "node_out_id": "3",
-                        "port_in_id": "input 2",
-                        "port_out_id": "out"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "4",
-                        "node_out_id": "2",
-                        "port_in_id": "input 1",
-                        "port_out_id": "output"
-                    },
-                    {
-                        "link_type": 2,
-                        "node_in_id": "2",
-                        "node_out_id": "0",
-                        "port_in_id": "input 2",
-                        "port_out_id": "out"
                     },
                     {
                         "link_type": 2,
                         "node_in_id": "8",
-                        "node_out_id": "7",
-                        "port_in_id": "input 1",
+                        "node_out_id": "5",
+                        "port_in_id": "input 2",
                         "port_out_id": "output"
                     },
                     {
@@ -2154,129 +2028,164 @@
                     {
                         "link_type": 2,
                         "node_in_id": "8",
-                        "node_out_id": "5",
+                        "node_out_id": "7",
+                        "port_in_id": "input 1",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "2",
+                        "node_out_id": "0",
                         "port_in_id": "input 2",
+                        "port_out_id": "out"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "4",
+                        "node_out_id": "2",
+                        "port_in_id": "input 1",
                         "port_out_id": "output"
                     },
                     {
                         "link_type": 2,
-                        "node_in_id": "6",
-                        "node_out_id": "8",
+                        "node_in_id": "4",
+                        "node_out_id": "3",
+                        "port_in_id": "input 2",
+                        "port_out_id": "out"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "5",
+                        "node_out_id": "4",
                         "port_in_id": "input",
                         "port_out_id": "output"
                     },
                     {
                         "link_type": 2,
-                        "node_in_id": "12",
-                        "node_out_id": "6",
+                        "node_in_id": "19",
+                        "node_out_id": "12",
+                        "port_in_id": "level",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "18",
+                        "node_out_id": "12",
+                        "port_in_id": "level",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "20",
+                        "node_out_id": "12",
                         "port_in_id": "input",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "18",
+                        "node_out_id": "20",
+                        "port_in_id": "alpha",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "19",
+                        "node_out_id": "20",
+                        "port_in_id": "alpha",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "23",
+                        "node_out_id": "18",
+                        "port_in_id": "texture1",
+                        "port_out_id": "texture"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "23",
+                        "node_out_id": "19",
+                        "port_in_id": "texture2",
+                        "port_out_id": "texture"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "21",
+                        "node_out_id": "23",
+                        "port_in_id": "texture",
+                        "port_out_id": "texture"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "21",
+                        "node_out_id": "12",
+                        "port_in_id": "elevation",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "18",
+                        "node_out_id": "24",
+                        "port_in_id": "noise",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "19",
+                        "node_out_id": "24",
+                        "port_in_id": "noise",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "26",
+                        "node_out_id": "25",
+                        "port_in_id": "alpha",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "25",
+                        "node_out_id": "12",
+                        "port_in_id": "input",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "23",
+                        "node_out_id": "26",
+                        "port_in_id": "texture3",
+                        "port_out_id": "texture"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "26",
+                        "node_out_id": "24",
+                        "port_in_id": "noise",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "26",
+                        "node_out_id": "20",
+                        "port_in_id": "level",
                         "port_out_id": "output"
                     }
                 ],
                 "nodes": [
                     {
-                        "caption": "ColorizeCmap",
-                        "id": "26",
+                        "caption": "Thru",
+                        "id": "12",
                         "is_widget_visible": true,
-                        "scene_position.x": 1759.1273193359375,
-                        "scene_position.y": -283.2100830078125
-                    },
-                    {
-                        "caption": "SelectRivers",
-                        "id": "25",
-                        "is_widget_visible": true,
-                        "scene_position.x": 1503.1273193359375,
-                        "scene_position.y": -475.2100830078125
-                    },
-                    {
-                        "caption": "NoiseFbm",
-                        "id": "24",
-                        "is_widget_visible": true,
-                        "scene_position.x": 1503.1273193359375,
-                        "scene_position.y": 676.7899169921875
-                    },
-                    {
-                        "caption": "MixTexture",
-                        "id": "23",
-                        "is_widget_visible": true,
-                        "scene_position.x": 2015.1273193359375,
-                        "scene_position.y": 292.7899169921875
-                    },
-                    {
-                        "caption": "Preview",
-                        "id": "21",
-                        "is_widget_visible": true,
-                        "scene_position.x": 2271.12744140625,
-                        "scene_position.y": 868.7899169921875
-                    },
-                    {
-                        "caption": "MorphologicalGradient",
-                        "id": "20",
-                        "is_widget_visible": true,
-                        "scene_position.x": 1503.1273193359375,
-                        "scene_position.y": -91.2100830078125
-                    },
-                    {
-                        "caption": "ColorizeCmap",
-                        "id": "19",
-                        "is_widget_visible": true,
-                        "scene_position.x": 1759.1273193359375,
-                        "scene_position.y": 292.7899169921875
-                    },
-                    {
-                        "caption": "ColorizeCmap",
-                        "id": "18",
-                        "is_widget_visible": true,
-                        "scene_position.x": 1759.1273193359375,
-                        "scene_position.y": 868.7899169921875
-                    },
-                    {
-                        "caption": "Clamp",
-                        "id": "5",
-                        "is_widget_visible": true,
-                        "scene_position.x": 479.1273498535156,
-                        "scene_position.y": 100.7899169921875
-                    },
-                    {
-                        "caption": "Blend",
-                        "id": "4",
-                        "is_widget_visible": true,
-                        "scene_position.x": 223.12734985351563,
-                        "scene_position.y": 100.7899169921875
-                    },
-                    {
-                        "caption": "ShatteredPeak",
-                        "id": "3",
-                        "is_widget_visible": true,
-                        "scene_position.x": -32.872650146484375,
+                        "scene_position.x": 1247.1273193359375,
                         "scene_position.y": 292.7899169921875
                     },
                     {
                         "caption": "Blend",
-                        "id": "2",
+                        "id": "8",
                         "is_widget_visible": true,
-                        "scene_position.x": -32.872650146484375,
-                        "scene_position.y": -91.2100830078125
-                    },
-                    {
-                        "caption": "Badlands",
-                        "id": "1",
-                        "is_widget_visible": true,
-                        "scene_position.x": -288.8726501464844,
-                        "scene_position.y": 292.7899169921875
-                    },
-                    {
-                        "caption": "ShatteredPeak",
-                        "id": "0",
-                        "is_widget_visible": true,
-                        "scene_position.x": -288.8726501464844,
-                        "scene_position.y": -91.2100830078125
-                    },
-                    {
-                        "caption": "HydraulicStreamLog",
-                        "id": "6",
-                        "is_widget_visible": true,
-                        "scene_position.x": 991.1273193359375,
+                        "scene_position.x": 735.1273193359375,
                         "scene_position.y": 292.7899169921875
                     },
                     {
@@ -2287,22 +2196,113 @@
                         "scene_position.y": 484.7899169921875
                     },
                     {
-                        "caption": "Blend",
-                        "id": "8",
+                        "caption": "HydraulicStreamLog",
+                        "id": "6",
                         "is_widget_visible": true,
-                        "scene_position.x": 735.1273193359375,
+                        "scene_position.x": 991.1273193359375,
                         "scene_position.y": 292.7899169921875
                     },
                     {
-                        "caption": "Thru",
-                        "id": "12",
+                        "caption": "ShatteredPeak",
+                        "id": "0",
                         "is_widget_visible": true,
-                        "scene_position.x": 1247.1273193359375,
+                        "scene_position.x": -288.8726501464844,
+                        "scene_position.y": -91.2100830078125
+                    },
+                    {
+                        "caption": "Badlands",
+                        "id": "1",
+                        "is_widget_visible": true,
+                        "scene_position.x": -288.8726501464844,
                         "scene_position.y": 292.7899169921875
+                    },
+                    {
+                        "caption": "Blend",
+                        "id": "2",
+                        "is_widget_visible": true,
+                        "scene_position.x": -32.872650146484375,
+                        "scene_position.y": -91.2100830078125
+                    },
+                    {
+                        "caption": "ShatteredPeak",
+                        "id": "3",
+                        "is_widget_visible": true,
+                        "scene_position.x": -32.872650146484375,
+                        "scene_position.y": 292.7899169921875
+                    },
+                    {
+                        "caption": "Blend",
+                        "id": "4",
+                        "is_widget_visible": true,
+                        "scene_position.x": 223.12734985351563,
+                        "scene_position.y": 100.7899169921875
+                    },
+                    {
+                        "caption": "Clamp",
+                        "id": "5",
+                        "is_widget_visible": true,
+                        "scene_position.x": 479.1273498535156,
+                        "scene_position.y": 100.7899169921875
+                    },
+                    {
+                        "caption": "ColorizeCmap",
+                        "id": "18",
+                        "is_widget_visible": true,
+                        "scene_position.x": 1759.1273193359375,
+                        "scene_position.y": 868.7899169921875
+                    },
+                    {
+                        "caption": "ColorizeCmap",
+                        "id": "19",
+                        "is_widget_visible": true,
+                        "scene_position.x": 1759.1273193359375,
+                        "scene_position.y": 292.7899169921875
+                    },
+                    {
+                        "caption": "MorphologicalGradient",
+                        "id": "20",
+                        "is_widget_visible": true,
+                        "scene_position.x": 1503.1273193359375,
+                        "scene_position.y": -91.2100830078125
+                    },
+                    {
+                        "caption": "Preview",
+                        "id": "21",
+                        "is_widget_visible": true,
+                        "scene_position.x": 2271.12744140625,
+                        "scene_position.y": 868.7899169921875
+                    },
+                    {
+                        "caption": "MixTexture",
+                        "id": "23",
+                        "is_widget_visible": true,
+                        "scene_position.x": 2015.1273193359375,
+                        "scene_position.y": 292.7899169921875
+                    },
+                    {
+                        "caption": "NoiseFbm",
+                        "id": "24",
+                        "is_widget_visible": true,
+                        "scene_position.x": 1503.1273193359375,
+                        "scene_position.y": 676.7899169921875
+                    },
+                    {
+                        "caption": "SelectRivers",
+                        "id": "25",
+                        "is_widget_visible": true,
+                        "scene_position.x": 1503.1273193359375,
+                        "scene_position.y": -475.2100830078125
+                    },
+                    {
+                        "caption": "ColorizeCmap",
+                        "id": "26",
+                        "is_widget_visible": true,
+                        "scene_position.x": 1759.1273193359375,
+                        "scene_position.y": -283.2100830078125
                     }
                 ]
             }
         }
     },
-    "saved_at": "2025-11-30_20-55-57"
+    "saved_at": "2025-12-02_22-50-24"
 }
