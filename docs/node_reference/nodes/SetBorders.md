@@ -13,7 +13,7 @@ TODO
 # Category
 
 
-Math/Boundaries
+Boundaries
 # Inputs
 
 |Name|Type|Description|

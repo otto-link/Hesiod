@@ -783,7 +783,7 @@
         }
     },
     "Bulkify": {
-        "category": "Filter/Recurve",
+        "category": "Boundaries",
         "description": "No description available",
         "label": "Bulkify",
         "parameters": {
@@ -3835,7 +3835,7 @@
         }
     },
     "Falloff": {
-        "category": "Math/Boundaries",
+        "category": "Boundaries",
         "description": "Falloff is an operator that enforces values close to zero at the domain edges.",
         "label": "Falloff",
         "parameters": {
@@ -13033,7 +13033,7 @@
         }
     },
     "SetBorders": {
-        "category": "Math/Boundaries",
+        "category": "Boundaries",
         "description": "TODO",
         "label": "SetBorders",
         "parameters": {
@@ -17625,7 +17625,7 @@
         }
     },
     "ZeroedEdges": {
-        "category": "Math/Boundaries",
+        "category": "Boundaries",
         "description": "An operator that enforces values close to zero at the domain edges.",
         "label": "ZeroedEdges",
         "parameters": {

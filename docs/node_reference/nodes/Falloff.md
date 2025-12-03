@@ -13,7 +13,7 @@ Falloff is an operator that enforces values close to zero at the domain edges.
 # Category
 
 
-Math/Boundaries
+Boundaries
 # Inputs
 
 |Name|Type|Description|

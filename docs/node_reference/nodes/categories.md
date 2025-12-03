@@ -6,6 +6,7 @@ Node Categories
 
 |Primary|Secondary|Nodes|
 | :--- | :--- | :--- |
+|Boundaries||Bulkify, Falloff, SetBorders, ZeroedEdges|
 |Converter||HeightmapToKernel, HeightmapToMask, HeightmapToNormalMap, HeightmapToRGBA, NormalMapToHeightmap|
 |Debug||Debug, Preview|
 |Erosion|Hydraulic|HydraulicParticle, HydraulicStreamLog, Rifts|
@@ -16,7 +17,7 @@ Node Categories
 |Features|Landform|AccumulationCurvature, RelativeElevation, Unsphericity, ValleyWidth|
 |Filter|Range|Clamp, Remap, Rescale, ShiftElevation|
 |Filter|Recast|ExpandShrink, Fold, NormalDisplacement, RecastCanyon, RecastCliff, RecastCliffDirectional, RecastCracks, RecastSag, SteepenConvective|
-|Filter|Recurve|Bulkify, Gain, GammaCorrection, GammaCorrectionLocal, Plateau, Recurve, RecurveKura, RecurveS, ReverseAboveThreshold, Saturate, Terrace|
+|Filter|Recurve|Gain, GammaCorrection, GammaCorrectionLocal, Plateau, Recurve, RecurveKura, RecurveS, ReverseAboveThreshold, Saturate, Terrace|
 |Filter|Smoothing|Laplace, Median3x3, ShapeIndex, SharpenCone, SmoothCpulse, SmoothFill, SmoothFillHoles, SmoothFillSmearPeaks|
 |Geometry|Cloud|Cloud, CloudFromCsv, CloudLattice, CloudMerge, CloudRandom, CloudRandomDensity, CloudRandomDistance, CloudRandomPowerLaw, CloudRandomWeibull, CloudRemapValues, CloudSDF, CloudSetValuesFromBorderDistance, CloudSetValuesFromHeightmap, CloudSetValuesFromMinDistance, CloudShuffle, CloudToArrayInterp, CloudToPath, CloudToVectors|
 |Geometry|Path|Path, PathBezier, PathBezierRound, PathBspline, PathDecasteljau, PathDig, PathFind, PathFractalize, PathFromCsv, PathMeanderize, PathResample, PathSDF, PathShuffle, PathSmooth, PathToCloud, PathToHeightmap|
@@ -25,7 +26,6 @@ Node Categories
 |Mask|ForTexturing|SelectSoilFlow, SelectSoilWeathered|
 |Mask|Selector|SelectAngle, SelectBlobLog, SelectCavities, SelectGt, SelectInterval, SelectInwardOutward, SelectMidrange, SelectMultiband3, SelectPulse, SelectRivers, SelectSlope, SelectTransitions, SelectValley|
 |Math|Base|Abs, AbsSmooth, Cos, GaussianDecay, Inverse, Lerp, Reverse, Smoothstep|
-|Math|Boundaries|Falloff, SetBorders, ZeroedEdges|
 |Math|Convolution|ConvolveSVD|
 |Math|Gradient|Gradient, GradientAngle, GradientNorm, GradientTalus|
 |Operator|Blend|Blend, Blend3, BlendPoissonBf, Mixer, Transfer|

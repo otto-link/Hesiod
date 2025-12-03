@@ -150,7 +150,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Border", "Operator/Morphology"},
       {"Brush", "Primitive/Authoring"},
       {"Broadcast", "Routing"},
-      {"Bulkify", "Filter/Recurve"},
+      {"Bulkify", "Boundaries"},
       {"Bump", "Primitive/Function"},
       {"BumpLorentzian", "Primitive/Function"},
       {"Caldera", "Primitive/Geological"},
@@ -206,7 +206,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"ExportPath", "IO/Files"},
       {"ExportPointsToPly", "IO/Files"},
       {"ExportTexture", "IO/Files"},
-      {"Falloff", "Math/Boundaries"},
+      {"Falloff", "Boundaries"},
       {"FillTalus", "WIP"}, // Operator/Transform
       {"FloodingFromBoundaries", "Hydrology"},
       {"FloodingFromPoint", "Hydrology"},
@@ -348,7 +348,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"SelectTransitions", "Mask/Selector"},
       {"SelectValley", "Mask/Selector"},
       {"SetAlpha", "Texture"},
-      {"SetBorders", "Math/Boundaries"},
+      {"SetBorders", "Boundaries"},
       {"ShapeIndex", "Filter/Smoothing"},
       {"SharpenCone", "Filter/Smoothing"},
       {"ShatteredPeak", "Primitive/Geological"},
@@ -410,7 +410,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"WhiteDensityMap", "Primitive/Random"},
       {"WhiteSparse", "Primitive/Random"},
       {"Wrinkle", "WIP"}, // Filter/Recast
-      {"ZeroedEdges", "Math/Boundaries"},
+      {"ZeroedEdges", "Boundaries"},
       {"Zoom", "Operator/Transform"},
       {"ZScore", "Features"},
   };
