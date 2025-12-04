@@ -58,7 +58,7 @@ The algorithm:
 
 Applies a **drying factor** to an existing water depth field. This function:
 
-- Multiplies each water depth value by a user-defined `dry_out_ratio` (e.g., 0.9 to reduce
+- Multiplies each water depth value by a user-defined `dry_out_ratio` (e.g., 0.1 to reduce
   by 10%).
 - Optionally applies drying **only where a mask is non-zero**, allowing selective
   reduction.
