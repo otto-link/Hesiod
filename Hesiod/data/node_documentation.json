@@ -1937,6 +1937,87 @@
             }
         }
     },
+    "CoastalErosionProfile": {
+        "category": "Erosion/Water",
+        "description": "Applies a coastal erosion profile to a terrain elevation field, carving a shoreline shape using ground- and water-distance transforms and optional post-filtering.",
+        "label": "CoastalErosionProfile",
+        "parameters": {
+            "apply_post_filter": {
+                "description": "If true, applies Laplacian smoothing restricted to the shoreline region after the coastal profile is applied.",
+                "key": "apply_post_filter",
+                "label": "Enable Shore Smoothing",
+                "type": "Bool"
+            },
+            "distributed": {
+                "description": "If true, distributes the computation for parallel processing of the erosion profile (may lead to artifacts in some configurations).",
+                "key": "distributed",
+                "label": "Enable Parallel Processing",
+                "type": "Bool"
+            },
+            "scarp_extent_ratio": {
+                "description": "Ratio in [0,1] defining how much of the ground-side profile is a vertical scarp instead of a sloped shore.",
+                "key": "scarp_extent_ratio",
+                "label": "Scarp Strength",
+                "type": "Float"
+            },
+            "shore_ground_extent": {
+                "description": "Horizontal extent over which the ground-side coastal profile is applied, with respect to a unit domain.",
+                "key": "shore_ground_extent",
+                "label": "Ground Shore Width",
+                "type": "Float"
+            },
+            "shore_water_extent_ratio": {
+                "description": "Ratio controlling how far the underwater slope extends relative to the shore width.",
+                "key": "shore_water_extent_ratio",
+                "label": "Water Shore Width Ratio",
+                "type": "Float"
+            },
+            "slope_shore": {
+                "description": "Ground-side slope magnitude of the coastal profile, in elevation units per domain width.",
+                "key": "slope_shore",
+                "label": "Shore Slope",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "elevation": {
+                "caption": "elevation",
+                "data_type": "Heightmap",
+                "description": "Output modified terrain elevation after applying the coastal erosion profile.",
+                "type": "output"
+            },
+            "elevation_in": {
+                "caption": "elevation_in",
+                "data_type": "Heightmap",
+                "description": "Input terrain elevation to which the coastal profile will be applied.",
+                "type": "input"
+            },
+            "mask": {
+                "caption": "mask",
+                "data_type": "Heightmap",
+                "description": "Optional mask defining where the coastal transformation is allowed to operate.",
+                "type": "input"
+            },
+            "shore_mask": {
+                "caption": "shore_mask",
+                "data_type": "Heightmap",
+                "description": "Output mask (values in [0,1]) indicating the shoreline region influenced by the coastal transformation.",
+                "type": "output"
+            },
+            "water_depth": {
+                "caption": "water_depth",
+                "data_type": "Heightmap",
+                "description": "Output water depth map, adjusted to preserve water surface height after terrain changes.",
+                "type": "output"
+            },
+            "water_depth_in": {
+                "caption": "water_depth_in",
+                "data_type": "Heightmap",
+                "description": "Input water depth map used to maintain water surface height consistency.",
+                "type": "input"
+            }
+        }
+    },
     "ColorizeCmap": {
         "category": "Texture",
         "description": "ColorizeCmap generates a texture based on colormaps to assign colors to data values.",

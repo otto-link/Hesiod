@@ -175,6 +175,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"CloudToPath", "Geometry/Cloud"},
       {"CloudToVectors", "Geometry/Cloud"},
       {"CoastalErosionDiffusion", "Erosion/Water"},
+      {"CoastalErosionProfile", "Erosion/Water"},
       {"ColorizeCmap", "Texture"},
       {"ColorizeGradient", "Texture"},
       {"ColorizeSolid", "Texture"},
@@ -492,6 +493,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string         &node_type,
     SETUP_NODE(CloudToPath, cloud_to_path);
     SETUP_NODE(CloudToVectors, cloud_to_vectors);
     SETUP_NODE(CoastalErosionDiffusion, coastal_erosion_diffusion);
+    SETUP_NODE(CoastalErosionProfile, coastal_erosion_profile);
     SETUP_NODE(ColorizeCmap, colorize_cmap);
     SETUP_NODE(ColorizeGradient, colorize_gradient);
     SETUP_NODE(ColorizeSolid, colorize_solid);

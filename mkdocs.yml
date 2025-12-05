@@ -45,6 +45,7 @@ nav:
     - 'node_reference/nodes/CloudToPath.md'
     - 'node_reference/nodes/CloudToVectors.md'
     - 'node_reference/nodes/CoastalErosionDiffusion.md'
+    - 'node_reference/nodes/CoastalErosionProfile.md'
     - 'node_reference/nodes/ColorizeCmap.md'
     - 'node_reference/nodes/ColorizeGradient.md'
     - 'node_reference/nodes/ColorizeSolid.md'
