@@ -252,6 +252,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Kuwahara", "WIP"}, // Filter/Smoothing
       {"Laplace", "Filter/Smoothing"},
       {"Lerp", "Math/Base"},
+      // {"LevelSetCurvature", "Features"},
       {"MakeBinary", "Operator/Morphology"},
       {"MakePeriodic", "Operator/Tiling"},
       {"MakePeriodicStitching", "Operator/Tiling"},
@@ -563,6 +564,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string         &node_type,
     SETUP_NODE(Kuwahara, kuwahara);
     SETUP_NODE(Laplace, laplace);
     SETUP_NODE(Lerp, lerp);
+    SETUP_NODE(LevelSetCurvature, level_set_curvature);
     SETUP_NODE(MakeBinary, make_binary);
     SETUP_NODE(MakePeriodic, make_periodic);
     SETUP_NODE(MakePeriodicStitching, make_periodic_stitching);
