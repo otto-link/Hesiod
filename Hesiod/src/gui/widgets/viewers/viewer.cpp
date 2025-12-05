@@ -3,6 +3,7 @@
  * this software. */
 #include <QGridLayout>
 #include <QTimer>
+#include <QToolButton>
 #include <QVBoxLayout>
 
 #include "hesiod/app/hesiod_application.hpp"
@@ -342,16 +343,17 @@ void Viewer::setup_layout()
   this->setLayout(layout);
 
   this->combo_container = new QWidget(this);
-  auto *param_layout = new QVBoxLayout(this->combo_container);
+  auto *param_layout = new QGridLayout(this->combo_container);
   param_layout->setContentsMargins(8, 8, 8, 8);
   param_layout->setSpacing(4);
+  int row = 0;
 
   this->button_pin_current_node = new IconCheckBox(this);
   this->button_pin_current_node->set_icons(QIcon("data/icons/push_pin_64dp_D9D9D9.png"),
                                            QIcon("data/icons/push_pin_64dp_5E81AC.png"));
   this->button_pin_current_node->setCheckable(true);
   resize_font(this->button_pin_current_node, -1);
-  param_layout->addWidget(this->button_pin_current_node);
+  param_layout->addWidget(this->button_pin_current_node, row++, 0, 1, 2);
 
   for (auto &[name, _] : view_param.port_ids)
   {
@@ -359,11 +361,21 @@ void Viewer::setup_layout()
     set_style(combo, "background: transparent;");
     resize_font(combo, -1);
 
-    param_layout->addWidget(combo);
+    if (view_param.icons.contains(name))
+      {
+	QToolButton *btn = new QToolButton();
+	btn->setIcon(QIcon(view_param.icons.at(name).c_str()));
+	btn->setIconSize(QSize(12, 12));
+	btn->setStyleSheet("background: transparent; border: 0px;");
+        param_layout->addWidget(btn, row, 0);
+      }
+    
+    param_layout->addWidget(combo, row, 1);
     this->combo_map[name] = combo;
+    row++;
   }
 
-  param_layout->addStretch();
+  // param_layout->rowStretch();
 
   // (0, 0) is for specialized render widget
   layout->addWidget(this->combo_container, 0, 1);
