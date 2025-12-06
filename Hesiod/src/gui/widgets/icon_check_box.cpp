@@ -45,6 +45,12 @@ void IconCheckBox::set_icons(const QIcon &unchecked_icon, const QIcon &checked_i
   this->update();
 }
 
+void IconCheckBox::set_icon_size(int new_size)
+{
+  this->icon_size = new_size;
+  this->update();
+}
+
 void IconCheckBox::set_label(const QString &text)
 {
   this->label_text = text;

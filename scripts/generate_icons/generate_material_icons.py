@@ -13,10 +13,12 @@ OUT_DIR = "Hesiod/data/icons/"
 ICONS = ["bookmark", "check", "file_open", "hdr_strong", "help", "home", "info", "landscape", "palette",
          "push_pin", "refresh", "restore", "save", "scatter_plot", "settings_backup_restore",
          "u_turn_left", "visibility", "visibility_off", "waves"]
-ICONS_ACCENT = ["push_pin"]
+ICONS_ACCENT = ["push_pin", "visibility"]
+ICONS_DISABLED = ["push_pin", "visibility_off"]
 
-COLOR = '#D9D9D9'
+COLOR = '#F4F4F5'
 COLOR_ACCENT = '#5E81AC'
+COLOR_DISABLED = '#949495'
 
 # ----------------------------
 # Functions
@@ -72,6 +74,11 @@ if __name__ == "__main__":
             fname_accent = os.path.join(OUT_DIR, f"{icon}_accent.svg")
             shutil.copy(fname, fname_accent)
             recolor_svg_file(fname_accent, COLOR_ACCENT)
+            
+        if icon in ICONS_DISABLED:
+            fname_accent = os.path.join(OUT_DIR, f"{icon}_disabled.svg")
+            shutil.copy(fname, fname_accent)
+            recolor_svg_file(fname_accent, COLOR_DISABLED)
             
         recolor_svg_file(fname, COLOR)
 
