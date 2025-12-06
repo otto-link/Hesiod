@@ -362,14 +362,14 @@ void Viewer::setup_layout()
     resize_font(combo, -1);
 
     if (view_param.icons.contains(name))
-      {
-	QToolButton *btn = new QToolButton();
-	btn->setIcon(QIcon(view_param.icons.at(name).c_str()));
-	btn->setIconSize(QSize(12, 12));
-	btn->setStyleSheet("background: transparent; border: 0px;");
-        param_layout->addWidget(btn, row, 0);
-      }
-    
+    {
+      QToolButton *btn = new QToolButton();
+      btn->setIcon(QIcon(view_param.icons.at(name).c_str()));
+      btn->setIconSize(QSize(12, 12));
+      btn->setStyleSheet("background: transparent; border: 0px;");
+      param_layout->addWidget(btn, row, 0);
+    }
+
     param_layout->addWidget(combo, row, 1);
     this->combo_map[name] = combo;
     row++;

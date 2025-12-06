@@ -119,7 +119,7 @@ ViewerNodeParam Viewer3D::get_default_view_param() const
       {"points", "data/icons/scatter_plot_24dp_D9D9D9_FILL0_wght400_GRAD0_opsz24.png"},
       {"path", "data/icons/conversion_path_24dp_D9D9D9_FILL0_wght400_GRAD0_opsz24.png"},
   };
-  
+
   return wp;
 }
 

@@ -103,6 +103,11 @@ AboutDialog::AboutDialog()
   // ok button
   {
     QDialogButtonBox *button_box = new QDialogButtonBox(QDialogButtonBox::Ok);
+
+    QPushButton *ok_button = button_box->button(QDialogButtonBox::Ok);
+    ok_button->setIcon(
+        QIcon("data/icons/check_24dp_D9D9D9_FILL0_wght400_GRAD0_opsz24.png"));
+
     this->connect(button_box, &QDialogButtonBox::accepted, this, &QDialog::accept);
     layout->addWidget(button_box, 0, Qt::AlignHCenter);
   }

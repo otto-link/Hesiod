@@ -43,6 +43,13 @@ HesiodApplication::HesiodApplication(int &argc, char **argv) : QApplication(argc
 {
   Logger::log()->trace("HesiodApplication::HesiodApplication");
 
+  // force icons visibility in the menu bar
+  this->setAttribute(Qt::AA_DontShowIconsInMenus, false);
+  QStyle *style = QApplication::style();
+  style->setProperty("iconInMenu", true);
+  QApplication::setStyle(style);
+
+  // launch splash
   SplashScreen *splash = new SplashScreen();
 
   // start OpenCL
@@ -561,7 +568,21 @@ void HesiodApplication::setup_menu_bar()
 {
   Logger::log()->trace("HesiodApplication::setup_menu_bar");
 
-  // --- create menu
+  // --- leftmost Help
+
+  QMenu *help = this->main_window->menuBar()->addMenu("");
+  help->setIcon(QIcon("data/hesiod_icon.png"));
+
+  auto *quick_help = new QAction("Quick Help", this);
+  help->addAction(quick_help);
+
+  help->addSeparator();
+
+  auto *about = new QAction("&About", this);
+  help->addAction(about);
+
+  // --- file
+
   QMenu *file_menu = this->main_window->menuBar()->addMenu("&File");
 
   auto *new_action = new QAction("New", this);
@@ -606,6 +627,8 @@ void HesiodApplication::setup_menu_bar()
   quit->setShortcut(tr("Ctrl+Q"));
   file_menu->addAction(quit);
 
+  // --- project
+
   QMenu *project_menu = this->main_window->menuBar()->addMenu("&Project");
 
   auto *project_settings_action = new QAction("Project Settings", this);
@@ -625,6 +648,8 @@ void HesiodApplication::setup_menu_bar()
   auto *reseed_back = new QAction("Reverse Random Seeds", this);
   reseed_back->setShortcut(tr("Alt+Shift+R"));
   graph_menu->addAction(reseed_back);
+
+  // --- view
 
   QMenu *view_menu = this->main_window->menuBar()->addMenu("&View");
 
@@ -659,16 +684,6 @@ void HesiodApplication::setup_menu_bar()
     show_node_settings_pan_action->setChecked(state);
     view_menu->addAction(show_node_settings_pan_action);
   }
-
-  QMenu *help = this->main_window->menuBar()->addMenu("&Help");
-
-  auto *quick_help = new QAction("Quick Help", this);
-  help->addAction(quick_help);
-
-  help->addSeparator();
-
-  auto *about = new QAction("&About", this);
-  help->addAction(about);
 
   // --- connections
 
