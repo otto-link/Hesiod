@@ -1,6 +1,9 @@
 /* Copyright (c) 2025 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include <QDir>
+#include <QFileInfo>
+
 #include "highmap/opencl/gpu_opencl.hpp"
 
 #include "hesiod/app/app_settings.hpp"
@@ -9,6 +12,46 @@
 
 namespace hesiod
 {
+
+AppSettings::Icons::Icons()
+{
+  Logger::log()->trace("AppSettings::Icons::Icons");
+
+  // populate icons
+  std::string path = "data/icons";
+  QDir        dir(path.c_str());
+  if (!dir.exists())
+  {
+    Logger::log()->error("AppSettings::Icons::Icons: directory does not exist: {}", path);
+    return;
+  }
+
+  // Filter for .svg files
+  QStringList filters;
+  filters << "*.svg";
+  QFileInfoList file_list = dir.entryInfoList(filters,
+                                              QDir::Files | QDir::NoDotAndDotDot);
+
+  for (const QFileInfo &file_info : file_list)
+  {
+    QString fileName = file_info.baseName(); // name without extension
+    QIcon   icon(file_info.absoluteFilePath());
+    this->icons_map[fileName.toStdString()] = icon;
+  }
+}
+
+QIcon AppSettings::Icons::get(const std::string &name) const
+{
+  if (!this->icons_map.contains(name))
+  {
+    Logger::log()->error("AppSettings::Icons::get: unknown icon: {}", name);
+    return QIcon();
+  }
+  else
+  {
+    return this->icons_map.at(name);
+  }
+}
 
 void AppSettings::json_from(nlohmann::json const &json)
 {

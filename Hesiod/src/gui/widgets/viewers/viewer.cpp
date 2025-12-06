@@ -349,8 +349,8 @@ void Viewer::setup_layout()
   int row = 0;
 
   this->button_pin_current_node = new IconCheckBox(this);
-  this->button_pin_current_node->set_icons(QIcon("data/icons/push_pin_64dp_D9D9D9.png"),
-                                           QIcon("data/icons/push_pin_64dp_5E81AC.png"));
+  this->button_pin_current_node->set_icons(HSD_ICON("push_pin"),
+                                           HSD_ICON("push_pin_accent"));
   this->button_pin_current_node->setCheckable(true);
   resize_font(this->button_pin_current_node, -1);
   param_layout->addWidget(this->button_pin_current_node, row++, 0, 1, 2);
@@ -364,8 +364,8 @@ void Viewer::setup_layout()
     if (view_param.icons.contains(name))
     {
       QToolButton *btn = new QToolButton();
-      btn->setIcon(QIcon(view_param.icons.at(name).c_str()));
-      btn->setIconSize(QSize(12, 12));
+      btn->setIcon(view_param.icons.at(name));
+      btn->setIconSize(QSize(14, 14));
       btn->setStyleSheet("background: transparent; border: 0px;");
       param_layout->addWidget(btn, row, 0);
     }
