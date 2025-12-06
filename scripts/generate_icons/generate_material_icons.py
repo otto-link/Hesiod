@@ -7,13 +7,16 @@ import shutil
 # Config
 # ----------------------------
 GITHUB_BASE_URL = "https://raw.githubusercontent.com/marella/material-design-icons/main/svg/outlined"
+
+OUT_DIR = "Hesiod/data/icons/"
+
 ICONS = ["bookmark", "check", "file_open", "hdr_strong", "help", "home", "info", "landscape", "palette",
          "push_pin", "refresh", "restore", "save", "scatter_plot", "settings_backup_restore",
          "u_turn_left", "visibility", "visibility_off", "waves"]
 ICONS_ACCENT = ["push_pin"]
-COLORS = ["#D9D9D9", "#5E81AC"]
-SUFFIX = ["", "_ACCENT"]
-OUT_DIR = "Hesiod/data/icons/"
+
+COLOR = '#D9D9D9'
+COLOR_ACCENT = '#5E81AC'
 
 # ----------------------------
 # Functions
@@ -35,54 +38,6 @@ def recolor_svg_file(file_path, color):
     except Exception as e:
         print(f"Error recoloring {file_path}: {e}")
 
-# ----------------------------
-# Ensure output directory exists
-# ----------------------------
-
-
-
-
-# # ----------------------------
-# # Download & recolor SVGs
-# # ----------------------------
-
-# for icon in ICONS:
-#     svg_url = f"{GITHUB_BASE_URL}/{icon}.svg"  # default size 24px
-#     response = requests.get(svg_url)
-#     if response.status_code != 200:
-#         print(f"Failed to download {icon}: {response.status_code}")
-#         continue
-#     original_svg = response.text
-
-#     for color, suffix in zip(COLORS, SUFFIX):
-#         print(f"exporting to color {color}")
-        
-#         safe_color = color.lstrip("#")
-#         filename = f"{icon}.svg"
-#         out_path = os.path.join(OUT_DIR, filename)
-
-#         # with open(out_path, "w", encoding="utf-8") as f:
-#         #     f.write(original_svg)
-        
-#         # # Replace 'currentColor' with desired hex color
-#         # svg_colored = original_svg.replace("currentColor", color)
-
-#         colored_svg = original_svg.replace('<path ', f'<path fill="{color}" ')
-
-#         filename_base = os.path.splitext(os.path.basename(filename))[0]
-#         filename_colored = f"{filename_base}{suffix}.svg"
-        
-#         with open(os.path.join(OUT_DIR, filename_colored), "w", encoding="utf-8") as f:
-#             f.write(colored_svg)
-
-#         print(filename_colored)
-            
-#         # recolor_svg(out_path, f"{os.path.basename(out_path)}_{color}.svg", color)
-
-# print("Done. Check the folder:", OUT_DIR)
-
-COLOR = '#D9D9D9'
-COLOR_ACCENT = '#5E81AC'
 
 if __name__ == "__main__":
     os.makedirs(OUT_DIR, exist_ok=True)
