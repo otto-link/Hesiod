@@ -346,6 +346,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"SelectRivers", "Mask/Selector"},
       {"SelectSlope", "Mask/Selector"},
       {"SelectSoilFlow", "Mask/ForTexturing"},
+      {"SelectSoilRocks", "Mask/ForTexturing"},
       {"SelectSoilWeathered", "Mask/ForTexturing"},
       {"SelectTransitions", "Mask/Selector"},
       {"SelectValley", "Mask/Selector"},
@@ -656,6 +657,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string         &node_type,
     SETUP_NODE(SelectRivers, select_rivers);
     SETUP_NODE(SelectSlope, select_slope);
     SETUP_NODE(SelectSoilFlow, select_soil_flow);
+    SETUP_NODE(SelectSoilRocks, select_soil_rocks);
     SETUP_NODE(SelectSoilWeathered, select_soil_weathered);
     SETUP_NODE(SelectTransitions, select_transitions);
     SETUP_NODE(SelectValley, select_valley);

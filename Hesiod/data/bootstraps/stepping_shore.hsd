@@ -1921,7 +1921,7 @@
                         },
                         "return_type": {
                             "choice": "Edge distance squared",
-                            "label": "return_type",
+                            "label": "",
                             "type": 4,
                             "type_string": "Enumeration",
                             "value": 6

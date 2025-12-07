@@ -11079,6 +11079,18 @@
                 "label": "Invert Output",
                 "type": "Bool"
             },
+            "post_mix": {
+                "description": "No description",
+                "key": "post_mix",
+                "label": "Mix Factor",
+                "type": "Float"
+            },
+            "post_mix_method": {
+                "description": "No description",
+                "key": "post_mix_method",
+                "label": "Mix Method",
+                "type": "Enumeration"
+            },
             "post_remap": {
                 "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
@@ -12833,6 +12845,105 @@
                 "caption": "output",
                 "data_type": "Heightmap",
                 "description": "Output soil-flow mask combining flow and gradient effects.",
+                "type": "output"
+            }
+        }
+    },
+    "SelectSoilRocks": {
+        "category": "Mask/ForTexturing",
+        "description": "No description available",
+        "label": "SelectSoilRocks",
+        "parameters": {
+            "curvature_clamp_mode": {
+                "description": "No description",
+                "key": "curvature_clamp_mode",
+                "label": "Clamp Mode",
+                "type": "Enumeration"
+            },
+            "curvature_clamping": {
+                "description": "No description",
+                "key": "curvature_clamping",
+                "label": "Clamp Limit",
+                "type": "Float"
+            },
+            "k_saturation": {
+                "description": "No description",
+                "key": "k_saturation",
+                "label": "Saturation Smoothing",
+                "type": "Float"
+            },
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "Gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "Invert Output",
+                "type": "Bool"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "Remap Range",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "Saturation Range",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "Smoothing Radius",
+                "type": "Float"
+            },
+            "rmax": {
+                "description": "No description",
+                "key": "rmax",
+                "label": "Max Radius",
+                "type": "Float"
+            },
+            "rmin": {
+                "description": "No description",
+                "key": "rmin",
+                "label": "Min Radius",
+                "type": "Float"
+            },
+            "saturation_limit": {
+                "description": "No description",
+                "key": "saturation_limit",
+                "label": "Saturation Limit",
+                "type": "Float"
+            },
+            "smaller_scales_weight": {
+                "description": "No description",
+                "key": "smaller_scales_weight",
+                "label": "Smaller-Scale Influence",
+                "type": "Float"
+            },
+            "steps": {
+                "description": "No description",
+                "key": "steps",
+                "label": "Sampling Steps",
+                "type": "Integer"
+            }
+        },
+        "ports": {
+            "input": {
+                "caption": "input",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "Heightmap",
+                "description": "No description",
                 "type": "output"
             }
         }
@@ -16354,7 +16465,7 @@
             "return_type": {
                 "description": "Determines the output type.",
                 "key": "return_type",
-                "label": "return_type",
+                "label": "",
                 "type": "Enumeration"
             },
             "seed": {
@@ -16489,7 +16600,7 @@
             "return_type": {
                 "description": "Defines the type of Voronoi information returned.",
                 "key": "return_type",
-                "label": "return_type",
+                "label": "",
                 "type": "Enumeration"
             },
             "seed": {
