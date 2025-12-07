@@ -28,7 +28,7 @@ Erosion/Water
 | :--- | :--- | :--- |
 |elevation|Heightmap|Output modified terrain elevation after applying the coastal erosion profile.|
 |shore_mask|Heightmap|Output mask (values in [0,1]) indicating the shoreline region influenced by the coastal transformation.|
-|water_depth|Heightmap|Output water depth map, adjusted to preserve water surface height after terrain changes.|
+|water_depth|Heightmap|Output water depth map representing flooded areas.|
 
 # Parameters
 
