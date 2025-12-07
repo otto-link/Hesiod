@@ -39,10 +39,10 @@ void setup_voronoi_fbm_node(BaseNode &node)
   node.add_attr<FloatAttribute>("k_smoothing", "k_smoothing", 0.5f, 0.f, 1.f);
   node.add_attr<FloatAttribute>("exp_sigma", "exp_sigma", 0.1f, 0.f, 0.3f);
   node.add_attr<BoolAttribute>("sqrt_output", "sqrt_output", false);
-  node.add_attr<IntAttribute>("octaves", "octaves", 8, 0, 32);
-  node.add_attr<FloatAttribute>("weight", "weight", 0.7f, 0.f, 1.f);
-  node.add_attr<FloatAttribute>("persistence", "persistence", 0.5f, 0.f, 1.f);
-  node.add_attr<FloatAttribute>("lacunarity", "lacunarity", 2.f, 0.01f, 4.f);
+  node.add_attr<IntAttribute>("octaves", "Octaves", 8, 0, 32);
+  node.add_attr<FloatAttribute>("weight", "Weight", 0.7f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>("persistence", "Persistence", 0.5f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>("lacunarity", "Lacunarity", 2.f, 0.01f, 4.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Noise Type",

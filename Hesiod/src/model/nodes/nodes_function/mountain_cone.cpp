@@ -31,7 +31,7 @@ void setup_mountain_cone_node(BaseNode &node)
   node.add_attr<FloatAttribute>("scale", "scale", 1.f, 0.01f, FLT_MAX);
   node.add_attr<FloatAttribute>("ridge_amp", "ridge_amp", 0.4f, 0.f, FLT_MAX);
   node.add_attr<SeedAttribute>("seed", "Seed");
-  node.add_attr<IntAttribute>("octaves", "octaves", 8, 0, 32);
+  node.add_attr<IntAttribute>("octaves", "Octaves", 8, 0, 32);
   node.add_attr<FloatAttribute>("peak_kw", "peak_kw", 4.f, 0.01f, FLT_MAX);
   node.add_attr<FloatAttribute>("rugosity", "rugosity", 0.f, 0.f, 1.f);
   node.add_attr<FloatAttribute>("angle", "angle", 45.f, -180.f, 180.f);

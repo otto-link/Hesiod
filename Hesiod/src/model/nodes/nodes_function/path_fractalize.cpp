@@ -27,7 +27,7 @@ void setup_path_fractalize_node(BaseNode &node)
   node.add_attr<SeedAttribute>("seed", "Seed");
   node.add_attr<FloatAttribute>("sigma", "sigma", 0.3f, 0.f, 1.f);
   node.add_attr<IntAttribute>("orientation", "orientation", 0, 0, 1);
-  node.add_attr<FloatAttribute>("persistence", "persistence", 1.f, 0.01f, 4.f);
+  node.add_attr<FloatAttribute>("persistence", "Persistence", 1.f, 0.01f, 4.f);
 
   // attribute(s) order
   node.set_attr_ordered_key(

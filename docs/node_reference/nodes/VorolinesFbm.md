@@ -37,9 +37,9 @@ Primitive/Coherent
 |density|Float|No description|
 |exp_sigma|Float|No description|
 |k_smoothing|Float|No description|
-|lacunarity|Float|The frequency scaling factor for successive noise octaves. Higher values increase the frequency of each successive octave.|
-|octaves|Integer|The number of octaves for fractal noise generation. More octaves add finer details to the terrain.|
-|persistence|Float|The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.|
+|Lacunarity|Float|The frequency scaling factor for successive noise octaves. Higher values increase the frequency of each successive octave.|
+|Octaves|Integer|The number of octaves for fractal noise generation. More octaves add finer details to the terrain.|
+|Persistence|Float|The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.|
 |Gain|Float|Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.|
 |Invert Output|Bool|Inverts the output values after processing, flipping low and high values across the midrange.|
 |Remap Range|Value range|Linearly remaps the output values to a specified target range (default is [0, 1]).|
@@ -48,7 +48,7 @@ Primitive/Coherent
 |return_type|Enumeration|No description|
 |Seed|Random seed number|Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.|
 |sqrt_output|Bool|No description|
-|weight|Float|Controls how much higher FBM octaves contribute to the noise based on local elevation. A higher weight suppresses high-frequency octaves at low elevations and increases their influence at higher elevations, producing terrain where fine details appear mainly near peaks while lower areas remain smoother.|
+|Weight|Float|Controls how much higher FBM octaves contribute to the noise based on local elevation. A higher weight suppresses high-frequency octaves at low elevations and increases their influence at higher elevations, producing terrain where fine details appear mainly near peaks while lower areas remain smoother.|
 
 # Example
 

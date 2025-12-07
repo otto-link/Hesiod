@@ -33,8 +33,8 @@ void setup_strata_node(BaseNode &node)
   node.add_attr<FloatAttribute>("gamma", "gamma", 0.5f, 0.01f, 2.f);
   node.add_attr<SeedAttribute>("seed", "Seed");
   node.add_attr<BoolAttribute>("linear_gamma", "linear_gamma", true);
-  node.add_attr<IntAttribute>("octaves", "octaves", 4, 0, 32);
-  node.add_attr<FloatAttribute>("lacunarity", "lacunarity", 2.f, 0.01f, 4.f);
+  node.add_attr<IntAttribute>("octaves", "Octaves", 4, 0, 32);
+  node.add_attr<FloatAttribute>("lacunarity", "Lacunarity", 2.f, 0.01f, 4.f);
   node.add_attr<FloatAttribute>("gamma_noise_ratio", "gamma_noise_ratio", 0.5f, 0.f, 1.f);
   node.add_attr<FloatAttribute>("noise_amp", "noise_amp", 0.4f, 0.f, 1.f);
 

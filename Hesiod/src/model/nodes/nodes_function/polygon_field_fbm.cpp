@@ -41,9 +41,9 @@ void setup_polygon_field_fbm_node(BaseNode &node)
   node.add_attr<FloatAttribute>("density", "density", 0.1f, 0.f, 1.f);
   node.add_attr<FloatAttribute>("jitter.x", "jitter.x", 1.f, 0.f, 1.f);
   node.add_attr<FloatAttribute>("jitter.y", "jitter.y", 1.f, 0.f, 1.f);
-  node.add_attr<IntAttribute>("octaves", "octaves", 8, 0, 32);
-  node.add_attr<FloatAttribute>("persistence", "persistence", 0.5f, 0.f, 1.f);
-  node.add_attr<FloatAttribute>("lacunarity", "lacunarity", 2.f, 0.01f, 4.f);
+  node.add_attr<IntAttribute>("octaves", "Octaves", 8, 0, 32);
+  node.add_attr<FloatAttribute>("persistence", "Persistence", 0.5f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>("lacunarity", "Lacunarity", 2.f, 0.01f, 4.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"kw",

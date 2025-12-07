@@ -37,7 +37,7 @@ Erosion/Stratify
 |gamma|Float|No description|
 |gamma_noise_ratio|Float|No description|
 |kz|Float|No description|
-|lacunarity|Float|The frequency scaling factor for successive noise octaves. Higher values increase the frequency of each successive octave.|
+|Lacunarity|Float|The frequency scaling factor for successive noise octaves. Higher values increase the frequency of each successive octave.|
 |linear_gamma|Bool|No description|
 |mask_activate|Bool|No description|
 |mask_gain|Float|No description|
@@ -47,7 +47,7 @@ Erosion/Stratify
 |mask_type|Choice|No description|
 |noise_amp|Float|No description|
 |Spatial Frequency|Wavenumber|No description|
-|octaves|Integer|The number of octaves for fractal noise generation. More octaves add finer details to the terrain.|
+|Octaves|Integer|The number of octaves for fractal noise generation. More octaves add finer details to the terrain.|
 |Gain|Float|Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.|
 |Invert Output|Bool|Inverts the output values after processing, flipping low and high values across the midrange.|
 |Mix Factor|Float|Mixing factor for blending input and output values. A value of 0 uses only the input, 1 uses only the output, and intermediate values perform a linear interpolation.|

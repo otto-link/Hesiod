@@ -48,9 +48,9 @@ void setup_gavoronoise_node(BaseNode &node)
   node.add_attr<FloatAttribute>("branch_strength", "branch_strength", 2.f, 0.f, 8.f);
   node.add_attr<FloatAttribute>("z_cut_min", "z_cut_min", 0.2f, -1.f, 2.f);
   node.add_attr<FloatAttribute>("z_cut_max", "z_cut_max", 1.f, -1.f, 2.f);
-  node.add_attr<IntAttribute>("octaves", "octaves", 8, 0, 32);
-  node.add_attr<FloatAttribute>("persistence", "persistence", 0.4f, 0.f, 1.f);
-  node.add_attr<FloatAttribute>("lacunarity", "lacunarity", 2.f, 0.01f, 4.f);
+  node.add_attr<IntAttribute>("octaves", "Octaves", 8, 0, 32);
+  node.add_attr<FloatAttribute>("persistence", "Persistence", 0.4f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>("lacunarity", "Lacunarity", 2.f, 0.01f, 4.f);
   node.add_attr<BoolAttribute>("inverse", "inverse", false);
   node.add_attr<RangeAttribute>("remap", "remap");
 
