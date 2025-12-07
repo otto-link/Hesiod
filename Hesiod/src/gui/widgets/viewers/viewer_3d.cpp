@@ -268,9 +268,9 @@ void Viewer3D::update_renderer()
   }
 
   // --- icons
-  
+
   this->update_param_visibility_icons();
-  
+
   // --- route/send data to renderer
 
   bool flip_y = false;

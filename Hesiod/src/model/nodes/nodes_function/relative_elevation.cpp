@@ -29,7 +29,7 @@ void setup_relative_elevation_node(BaseNode &node)
   // attribute(s) order
   node.set_attr_ordered_key({"radius"});
 
-  setup_post_process_heightmap_attributes(node);
+  setup_post_process_heightmap_attributes(node, true);
 }
 
 void compute_relative_elevation_node(BaseNode &node)
@@ -58,7 +58,7 @@ void compute_relative_elevation_node(BaseNode &node)
 
     // post-process
     p_out->smooth_overlap_buffers();
-    post_process_heightmap(node, *p_out);
+    post_process_heightmap(node, *p_out, p_in);
   }
 }
 
