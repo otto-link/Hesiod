@@ -912,10 +912,12 @@ void GraphNodeWidget::on_viewport_request()
   }
 
   this->data_viewers.push_back(new Viewer3D(this)); // no parent, independant window
+  Logger::log()->trace("ok0");
   this->data_viewers.back()->show();
-
+  Logger::log()->trace("ok1");
   Viewer *p_viewer = dynamic_cast<Viewer *>(this->data_viewers.back().get());
-
+  Logger::log()->trace("ok2");
+  
   // remove the widget from the widget list if it is closed
   this->connect(p_viewer,
                 &Viewer::widget_close,
@@ -924,6 +926,7 @@ void GraphNodeWidget::on_viewport_request()
                   std::erase_if(this->data_viewers,
                                 [p_viewer](QWidget *ptr) { return ptr == p_viewer; });
                 });
+  Logger::log()->trace("ok3");
 
   // set data of the currently selected node, if any
   std::vector<std::string> selected_ids = this->get_selected_node_ids();
