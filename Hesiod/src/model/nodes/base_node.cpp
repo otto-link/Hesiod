@@ -107,8 +107,6 @@ std::shared_ptr<const GraphConfig> BaseNode::get_config_ref() const
   return ptr;
 }
 
-// DataPreview *BaseNode::get_data_preview_ref() { return this->data_preview; }
-
 std::string BaseNode::get_documentation_html() const
 {
   std::string html;
@@ -230,6 +228,69 @@ std::string BaseNode::get_documentation_short() const
   }
 
   return str;
+}
+
+std::string BaseNode::get_documentation_short_html() const
+{
+  std::string html = "<div><font size=\"-1\">";
+
+  std::string font_color_tag = std::format(
+      "<font color='{}'>",
+      HSD_CTX.app_settings.colors.text_secondary.name().toStdString());
+
+  try
+  {
+    html += "<b>" + this->get_label() + "</b><br>";
+
+    // category and description
+    if (this->documentation.contains("category"))
+    {
+      html += "<i>" + this->documentation["category"].get<std::string>() + "</i>";
+    }
+
+    // main description
+    html += font_color_tag;
+    html += std::format(
+        "<p>{}</p>",
+        this->documentation.value("description", "No description available"));
+    html += "</font>";
+
+    // ports
+    if (this->documentation.contains("ports") && this->documentation["ports"].is_object())
+    {
+      // html += "Ports";
+      html += font_color_tag;
+      html += "<ul>";
+
+      for (const auto &[key, port] : this->documentation["ports"].items())
+      {
+        const std::string caption = port.value("caption", key);
+        const std::string type = port.value("type", "Unknown");
+        const std::string dtype = port.value("data_type", "Unknown");
+        const std::string description = port.value("description", "No description");
+
+        html += "<li>";
+        html += "<b>" + caption + "</b>";
+        html += " &mdash; ";
+        html += "<i>" + type + "</i>";
+        html += " (" + dtype + ")<br>";
+	html += description;
+        html += "</li>";
+      }
+      html += "</ul></font>";
+    }
+
+    html += "</div>";
+  }
+  catch (const std::exception &e)
+  {
+    Logger::log()->error(
+        "BaseNode::get_documentation_html: Error generating documentation HTML: {}",
+        e.what());
+    html = "<p>Error generating documentation</p>";
+  }
+
+  return html;
 }
 
 std::string BaseNode::get_id() const { return gnode::Node::get_id(); }

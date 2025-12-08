@@ -45,14 +45,6 @@ gngui::PortType BaseNode::get_port_type(int port_index) const
     return gngui::PortType::OUT;
 }
 
-std::string BaseNode::get_tool_tip_text()
-{
-  std::string str = "ID: " + this->get_caption() + "/" + this->get_id();
-  str += "\n\n";
-
-  str += this->get_documentation_short();
-
-  return str;
-}
+std::string BaseNode::get_tool_tip_text() { return this->get_documentation_short_html(); }
 
 } // namespace hesiod
