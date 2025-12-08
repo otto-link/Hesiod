@@ -164,6 +164,14 @@ void run_snapshot_generation()
 
   auto *app = static_cast<hesiod::HesiodApplication *>(QCoreApplication::instance());
 
+  // deactivate viewport and node settings pan in graph viewer
+  const bool bckp_snsp = app->get_context()
+                             .app_settings.node_editor.show_node_settings_pan;
+  const bool bckp_sw = app->get_context().app_settings.node_editor.show_viewer;
+
+  app->get_context().app_settings.node_editor.show_node_settings_pan = false;
+  app->get_context().app_settings.node_editor.show_viewer = false;
+
   for (auto &[node_type, _] : inventory)
   {
     const std::string fname = ex_path + node_type + ".hsd";
@@ -199,6 +207,9 @@ void run_snapshot_generation()
       }
     }
   }
+
+  app->get_context().app_settings.node_editor.show_node_settings_pan = bckp_snsp;
+  app->get_context().app_settings.node_editor.show_viewer = bckp_sw;
 }
 
 } // namespace hesiod::cli
