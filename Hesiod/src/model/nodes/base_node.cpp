@@ -617,7 +617,7 @@ void BaseNode::update_runtime_info(NodeRuntimeStep step)
     this->runtime_info.eval_count++;
 
     // elapsed
-    auto t1 = std::chrono::high_resolution_clock::now();
+    auto t1 = std::chrono::steady_clock::now();
     this->runtime_info
         .update_time = (float)std::chrono::duration_cast<std::chrono::nanoseconds>(
                            t1 - this->runtime_info.timer_t0)
