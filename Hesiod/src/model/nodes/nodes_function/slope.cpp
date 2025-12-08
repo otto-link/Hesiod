@@ -70,7 +70,6 @@ void compute_slope_node(BaseNode &node)
   // post-process
   post_process_heightmap(node,
                          *p_out,
-
                          node.get_attr<BoolAttribute>("inverse"),
                          false, // smooth
                          0,

@@ -40,7 +40,8 @@ ProjectSettingsDialog::ProjectSettingsDialog(ProjectModel *p_project_model,
   // path
   {
     QFont   f("DejaVu Sans Mono", 9);
-    QLabel *label = new QLabel(QString::fromStdString(this->p_project_model->get_path().string()));
+    QLabel *label = new QLabel(
+        QString::fromStdString(this->p_project_model->get_path().string()));
     label->setFont(f);
     layout->addWidget(label);
   }

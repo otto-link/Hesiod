@@ -1217,6 +1217,105 @@
             }
         }
     },
+    "ClampOblique": {
+        "category": "Filter/Range",
+        "description": "Clamps the input heightmap against an oblique plane defined by angle, slope, and center, with optional smoothing.",
+        "label": "ClampOblique",
+        "parameters": {
+            "angle": {
+                "description": "Angle of the oblique plane, defining its orientation.",
+                "key": "angle",
+                "label": "Angle",
+                "type": "Float"
+            },
+            "center": {
+                "description": "Center point of the oblique plane used for clamping.",
+                "key": "center",
+                "label": "Center",
+                "type": "Vec2Float"
+            },
+            "k": {
+                "description": "Smoothness factor controlling the softness of the clamp (0 for a sharp clamp).",
+                "key": "k",
+                "label": "Smoothing",
+                "type": "Float"
+            },
+            "post_gain": {
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
+                "key": "post_gain",
+                "label": "Gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
+                "key": "post_inverse",
+                "label": "Invert Output",
+                "type": "Bool"
+            },
+            "post_mix": {
+                "description": "Mixing factor for blending input and output values. A value of 0 uses only the input, 1 uses only the output, and intermediate values perform a linear interpolation.",
+                "key": "post_mix",
+                "label": "Mix Factor",
+                "type": "Float"
+            },
+            "post_mix_method": {
+                "description": "Method used to combine input and output values. Options include linear interpolation (default), min, max, smooth min, smooth max, add, and subtract.",
+                "key": "post_mix_method",
+                "label": "Mix Method",
+                "type": "Enumeration"
+            },
+            "post_remap": {
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
+                "key": "post_remap",
+                "label": "Remap Range",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "Modifies the amplitude of elevations by first clamping them to a given interval and then scaling them so that the restricted interval matches the original input range. This enhances contrast in elevation variations while maintaining overall structure.",
+                "key": "post_saturate",
+                "label": "Saturation Range",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
+                "key": "post_smoothing_radius",
+                "label": "Smoothing Radius",
+                "type": "Float"
+            },
+            "slope": {
+                "description": "Slope intensity of the oblique plane used for clamping.",
+                "key": "slope",
+                "label": "Slope",
+                "type": "Float"
+            },
+            "use_max_operator": {
+                "description": "If enabled, applies a max-clamp; otherwise applies a min-clamp.",
+                "key": "use_max_operator",
+                "label": "Clamp Mode",
+                "type": "Bool"
+            },
+            "vmax": {
+                "description": "Offset applied to the generated oblique plane before clamping.",
+                "key": "vmax",
+                "label": "Clamp Value",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "input": {
+                "caption": "input",
+                "data_type": "Heightmap",
+                "description": "Input heightmap or scalar field to be clamped against the oblique plane.",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "Heightmap",
+                "description": "Resulting heightmap after applying the oblique clamping operation.",
+                "type": "output"
+            }
+        }
+    },
     "Closing": {
         "category": "Operator/Morphology",
         "description": "Closing is a combination of dilation followed by erosion. It is primarily used for closing small holes or gaps in mask.",

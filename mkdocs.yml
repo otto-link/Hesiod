@@ -25,6 +25,7 @@ nav:
     - 'node_reference/nodes/BumpLorentzian.md'
     - 'node_reference/nodes/Caldera.md'
     - 'node_reference/nodes/Clamp.md'
+    - 'node_reference/nodes/ClampOblique.md'
     - 'node_reference/nodes/Closing.md'
     - 'node_reference/nodes/Cloud.md'
     - 'node_reference/nodes/CloudFromCsv.md'

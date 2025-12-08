@@ -15,7 +15,7 @@ Node Categories
 |Erosion|Water|CoastalErosionDiffusion, CoastalErosionProfile|
 |Features|Clustering|KmeansClustering2, KmeansClustering3|
 |Features|Landform|AccumulationCurvature, RelativeElevation, Unsphericity, ValleyWidth|
-|Filter|Range|Clamp, Remap, Rescale, ShiftElevation|
+|Filter|Range|Clamp, ClampOblique, Remap, Rescale, ShiftElevation|
 |Filter|Recast|ExpandShrink, Fold, NormalDisplacement, RecastCanyon, RecastCliff, RecastCliffDirectional, RecastCracks, RecastSag, SteepenConvective|
 |Filter|Recurve|Gain, GammaCorrection, GammaCorrectionLocal, Plateau, Recurve, RecurveKura, RecurveS, ReverseAboveThreshold, Saturate, Terrace|
 |Filter|Smoothing|Laplace, Median3x3, ShapeIndex, SharpenCone, SmoothCpulse, SmoothFill, SmoothFillHoles, SmoothFillSmearPeaks|

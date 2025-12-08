@@ -917,7 +917,7 @@ void GraphNodeWidget::on_viewport_request()
   Logger::log()->trace("ok1");
   Viewer *p_viewer = dynamic_cast<Viewer *>(this->data_viewers.back().get());
   Logger::log()->trace("ok2");
-  
+
   // remove the widget from the widget list if it is closed
   this->connect(p_viewer,
                 &Viewer::widget_close,
