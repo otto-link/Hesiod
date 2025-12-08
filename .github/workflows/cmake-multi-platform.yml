@@ -2,7 +2,7 @@ name: CMake on multiple platforms
 
 on:
   push:
-    branches: [ "main", "dev", "new_arch"]
+    branches: [ "main", "dev", "v0.5.0-rc"]
   pull_request:
     branches: [ "main", "dev" ]
 
