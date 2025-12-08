@@ -6,11 +6,13 @@
 #include <iostream>
 #include <sstream>
 
+#include <QDesktopServices>
 #include <QFileDialog>
 #include <QMenuBar>
 #include <QMessageBox>
 #include <QProgressDialog>
 #include <QStatusBar>
+#include <QUrl>
 
 #include "highmap/opencl/gpu_opencl.hpp"
 
@@ -394,6 +396,12 @@ void HesiodApplication::on_new()
   }
 }
 
+void HesiodApplication::on_online_help()
+{
+  QDesktopServices::openUrl(
+      QUrl(this->context.app_settings.global.online_help_url.c_str()));
+}
+
 void HesiodApplication::on_project_name_changed()
 {
   std::string title = this->context.project_model->get_name() + " [" +
@@ -576,6 +584,10 @@ void HesiodApplication::setup_menu_bar()
   auto *quick_help = new QAction("Quick Help", this);
   help->addAction(quick_help);
 
+  auto *online_help = new QAction("Online Help", this);
+  online_help->setIcon(HSD_ICON("link"));
+  help->addAction(online_help);
+
   help->addSeparator();
 
   auto *about = new QAction("&About", this);
@@ -587,6 +599,7 @@ void HesiodApplication::setup_menu_bar()
 
   auto *new_action = new QAction("New", this);
   new_action->setShortcut(tr("Ctrl+N"));
+  new_action->setIcon(HSD_ICON("add"));
   file_menu->addAction(new_action);
 
   file_menu->addSeparator();
@@ -596,14 +609,17 @@ void HesiodApplication::setup_menu_bar()
   file_menu->addAction(load_action);
 
   auto *rmade_action = new QAction("Open Ready-made Example", this);
+  rmade_action->setIcon(HSD_ICON("landscape"));
   file_menu->addAction(rmade_action);
 
   auto *save = new QAction("Save", this);
   save->setShortcut(tr("Ctrl+S"));
+  save->setIcon(HSD_ICON("save"));
   file_menu->addAction(save);
 
   auto *save_as = new QAction("Save As", this);
   save_as->setShortcut(tr("Ctrl+Shift+S"));
+  save_as->setIcon(HSD_ICON("save_as"));
   file_menu->addAction(save_as);
 
   auto *save_copy = new QAction("Save a copy", this);
@@ -619,12 +635,14 @@ void HesiodApplication::setup_menu_bar()
   file_menu->addSeparator();
 
   auto *settings_action = new QAction("Application Settings", this);
+  settings_action->setIcon(HSD_ICON("settings"));
   file_menu->addAction(settings_action);
 
   file_menu->addSeparator();
 
   auto *quit = new QAction("Quit", this);
   quit->setShortcut(tr("Ctrl+Q"));
+  quit->setIcon(HSD_ICON("exit_to_app"));
   file_menu->addAction(quit);
 
   // --- project
@@ -632,11 +650,13 @@ void HesiodApplication::setup_menu_bar()
   QMenu *project_menu = this->main_window->menuBar()->addMenu("&Project");
 
   auto *project_settings_action = new QAction("Project Settings", this);
+  project_settings_action->setIcon(HSD_ICON("tune"));
   project_menu->addAction(project_settings_action);
 
   QMenu *graph_menu = this->main_window->menuBar()->addMenu("&Graph");
 
   auto *new_graph = new QAction("New graph", this);
+  new_graph->setIcon(HSD_ICON("account_tree"));
   graph_menu->addAction(new_graph);
 
   graph_menu->addSeparator();
@@ -715,6 +735,10 @@ void HesiodApplication::setup_menu_bar()
                 &QAction::triggered,
                 this,
                 &HesiodApplication::show_quick_help);
+  this->connect(online_help,
+                &QAction::triggered,
+                this,
+                &HesiodApplication::on_online_help);
   this->connect(about, &QAction::triggered, this, &HesiodApplication::show_about);
 
   // quit

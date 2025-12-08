@@ -274,7 +274,7 @@ std::string BaseNode::get_documentation_short_html() const
         html += " &mdash; ";
         html += "<i>" + type + "</i>";
         html += " (" + dtype + ")<br>";
-	html += description;
+        html += description;
         html += "</li>";
       }
       html += "</ul></font>";

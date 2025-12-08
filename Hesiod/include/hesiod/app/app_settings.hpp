@@ -61,6 +61,7 @@ struct AppSettings
     std::string git_version_file = "data/git_version.txt";
     std::string ready_made_path = "data/bootstraps";
     bool        save_backup_file = true;
+    std::string online_help_url = "https://hesioddoc.readthedocs.io/en/latest/";
   } global;
 
   struct Interface

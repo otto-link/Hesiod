@@ -10,9 +10,13 @@ GITHUB_BASE_URL = "https://raw.githubusercontent.com/marella/material-design-ico
 
 OUT_DIR = "Hesiod/data/icons/"
 
-ICONS = ["bookmark", "check", "file_open", "hdr_strong", "help", "home", "info", "landscape", "palette",
-         "push_pin", "refresh", "restore", "save", "scatter_plot", "settings_backup_restore",
-         "u_turn_left", "visibility", "visibility_off", "waves"]
+ICONS = [
+    "account_tree", "add", "bookmark", "check", "exit_to_app", "file_open",
+    "hdr_strong", "help", "home", "info", "landscape", "link", "palette",
+    "push_pin", "refresh", "restore", "save", "save_as", "scatter_plot",
+    "settings", "settings_backup_restore", "tune", "u_turn_left", "visibility",
+    "visibility_off", "waves"
+]
 ICONS_ACCENT = ["push_pin", "visibility"]
 ICONS_DISABLED = ["push_pin", "visibility_off"]
 
@@ -24,19 +28,20 @@ COLOR_DISABLED = '#949495'
 # Functions
 # ----------------------------
 
+
 def recolor_svg_file(file_path, color):
     try:
         with open(file_path, "r", encoding="utf-8") as f:
             content = f.read()
-        
+
         # Replace <path with <path fill="COLOR"
         colored_content = content.replace('<path ', f'<path fill="{color}" ')
-        
+
         with open(file_path, "w", encoding="utf-8") as f:
             f.write(colored_content)
-        
+
         print(f"File recolored successfully: {file_path}")
-    
+
     except Exception as e:
         print(f"Error recoloring {file_path}: {e}")
 
@@ -54,9 +59,9 @@ if __name__ == "__main__":
         shutil.copy(fname, fname_dst)
 
         recolor_svg_file(fname_dst, COLOR)
-        
+
     # --- download non-material icons
-    
+
     for icon in ICONS:
         svg_url = f"{GITHUB_BASE_URL}/{icon}.svg"  # default size 24px
         response = requests.get(svg_url)
@@ -66,7 +71,7 @@ if __name__ == "__main__":
         svg_content = response.text
 
         fname = os.path.join(OUT_DIR, f"{icon}.svg")
-      
+
         with open(fname, "w", encoding="utf-8") as f:
             f.write(svg_content)
 
@@ -74,12 +79,10 @@ if __name__ == "__main__":
             fname_accent = os.path.join(OUT_DIR, f"{icon}_accent.svg")
             shutil.copy(fname, fname_accent)
             recolor_svg_file(fname_accent, COLOR_ACCENT)
-            
+
         if icon in ICONS_DISABLED:
             fname_accent = os.path.join(OUT_DIR, f"{icon}_disabled.svg")
             shutil.copy(fname, fname_accent)
             recolor_svg_file(fname_accent, COLOR_DISABLED)
-            
+
         recolor_svg_file(fname, COLOR)
-
-
