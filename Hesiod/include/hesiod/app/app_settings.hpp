@@ -2,8 +2,14 @@
    License. The full license is in the file LICENSE, distributed with this software. */
 #pragma once
 #include <QColor>
+#include <QIcon>
 
 #include "nlohmann/json.hpp"
+
+#define HSD_ICON(name)                                                                   \
+  static_cast<hesiod::HesiodApplication *>(QCoreApplication::instance())                 \
+      ->get_context()                                                                    \
+      .app_settings.icons.get(name)
 
 namespace hesiod
 {
@@ -38,6 +44,14 @@ struct AppSettings
     QColor separator{"#ABABAB"};
   } colors;
 
+  struct Icons
+  {
+    explicit Icons();
+    QIcon get(const std::string &name) const;
+
+    std::map<std::string, QIcon> icons_map; // populated in ctor
+  } icons;
+
   struct Global
   {
     std::string icon_path = "data/hesiod_icon.png";
@@ -47,6 +61,7 @@ struct AppSettings
     std::string git_version_file = "data/git_version.txt";
     std::string ready_made_path = "data/bootstraps";
     bool        save_backup_file = true;
+    std::string online_help_url = "https://hesioddoc.readthedocs.io/en/latest/";
   } global;
 
   struct Interface

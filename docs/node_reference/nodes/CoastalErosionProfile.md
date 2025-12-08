@@ -28,7 +28,7 @@ Erosion/Water
 | :--- | :--- | :--- |
 |elevation|Heightmap|Output modified terrain elevation after applying the coastal erosion profile.|
 |shore_mask|Heightmap|Output mask (values in [0,1]) indicating the shoreline region influenced by the coastal transformation.|
-|water_depth|Heightmap|Output water depth map, adjusted to preserve water surface height after terrain changes.|
+|water_depth|Heightmap|Output water depth map representing flooded areas.|
 
 # Parameters
 
@@ -44,4 +44,10 @@ Erosion/Water
 # Example
 
 
-No example available.
+![img](../../images/nodes/CoastalErosionProfile_hsd_example.png)
+
+Corresponding Hesiod file: [CoastalErosionProfile.hsd](../../examples/CoastalErosionProfile.hsd). Use [Ctrl+I] in the node editor to import a hsd file within your current project. 
+
+> **Note:** Example files are kept up-to-date with the latest version of [Hesiod](https://github.com/otto-link/Hesiod).
+> If you find an error, please [open an issue](https://github.com/otto-link/Hesiod/issues).
+

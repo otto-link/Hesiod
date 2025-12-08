@@ -30,7 +30,7 @@ void setup_voronoi_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<EnumAttribute>("return_type",
-                               "return_type",
+                               "",
                                enum_mappings.voronoi_return_type_map,
                                "F1: squared distance to the closest point");
   node.add_attr<WaveNbAttribute>("kw", "Spatial Frequency");
@@ -42,15 +42,22 @@ void setup_voronoi_node(BaseNode &node)
   node.add_attr<BoolAttribute>("sqrt_output", "sqrt_output", false);
 
   // attribute(s) order
-  node.set_attr_ordered_key({"return_type",
-                             "_SEPARATOR_",
+  node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Noise Type",
+                             "return_type",
+                             "_GROUPBOX_END_",
+                             //
+                             "_GROUPBOX_BEGIN_Frequency and Structure",
                              "kw",
                              "seed",
                              "jitter.x",
                              "jitter.y",
+                             "_GROUPBOX_END_",
+                             //
+                             "_GROUPBOX_BEGIN_Output Shaping",
                              "k_smoothing",
                              "exp_sigma",
-                             "sqrt_output"});
+                             "sqrt_output",
+                             "_GROUPBOX_END_"});
 
   setup_post_process_heightmap_attributes(node);
 }

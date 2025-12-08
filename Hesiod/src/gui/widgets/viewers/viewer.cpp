@@ -59,6 +59,12 @@ ViewerNodeParam Viewer::get_default_view_param() const
   return ViewerNodeParam();
 }
 
+bool Viewer::get_param_visibility_state(const std::string & /* param_name */) const
+{
+  // by default, always returns true
+  return true;
+}
+
 void Viewer::json_from(nlohmann::json const &json)
 {
   Logger::log()->trace("Viewer::json_from");
@@ -349,11 +355,11 @@ void Viewer::setup_layout()
   int row = 0;
 
   this->button_pin_current_node = new IconCheckBox(this);
-  this->button_pin_current_node->set_icons(QIcon("data/icons/push_pin_64dp_D9D9D9.png"),
-                                           QIcon("data/icons/push_pin_64dp_5E81AC.png"));
+  this->button_pin_current_node->set_icons(HSD_ICON("push_pin"),
+                                           HSD_ICON("push_pin_accent"));
   this->button_pin_current_node->setCheckable(true);
   resize_font(this->button_pin_current_node, -1);
-  param_layout->addWidget(this->button_pin_current_node, row++, 0, 1, 2);
+  param_layout->addWidget(this->button_pin_current_node, row++, 0, 1, 3);
 
   for (auto &[name, _] : view_param.port_ids)
   {
@@ -361,16 +367,36 @@ void Viewer::setup_layout()
     set_style(combo, "background: transparent;");
     resize_font(combo, -1);
 
+    int icon_size = 16;
+
     if (view_param.icons.contains(name))
-      {
-	QToolButton *btn = new QToolButton();
-	btn->setIcon(QIcon(view_param.icons.at(name).c_str()));
-	btn->setIconSize(QSize(12, 12));
-	btn->setStyleSheet("background: transparent; border: 0px;");
-        param_layout->addWidget(btn, row, 0);
-      }
-    
-    param_layout->addWidget(combo, row, 1);
+    {
+      QToolButton *btn = new QToolButton();
+      btn->setIcon(view_param.icons.at(name));
+      btn->setIconSize(QSize(icon_size, icon_size));
+      btn->setStyleSheet("background: transparent; border: 0px;");
+      param_layout->addWidget(btn, row, 0);
+    }
+
+    {
+      auto *btn = new IconCheckBox(this);
+      this->visibility_icons_map[name] = btn;
+
+      btn->set_icons(HSD_ICON("visibility_off_disabled"), HSD_ICON("visibility"));
+      btn->setCheckable(true);
+      btn->set_icon_size(icon_size);
+      btn->setStyleSheet("background: transparent; border: 0px;");
+      param_layout->addWidget(btn, row, 1);
+
+      this->connect(btn,
+                    &QCheckBox::toggled,
+                    this,
+                    [safe_this = QPointer(this), name](bool is_checked) {
+                      Q_EMIT safe_this->view_param_visibility_changed(name, is_checked);
+                    });
+    }
+
+    param_layout->addWidget(combo, row, 2);
     this->combo_map[name] = combo;
     row++;
   }
@@ -392,6 +418,14 @@ void Viewer::hideEvent(QHideEvent *event)
 {
   QWidget::hideEvent(event);
   Q_EMIT visibility_changed(false);
+}
+
+void Viewer::update_param_visibility_icons()
+{
+  Logger::log()->trace("Viewer::update_param_visibility_icons");
+
+  for (auto &[name, btn] : visibility_icons_map)
+    btn->setChecked(this->get_param_visibility_state(name));
 }
 
 void Viewer::update_renderer()

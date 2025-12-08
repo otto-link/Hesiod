@@ -1,0 +1,2675 @@
+{
+    "Hesiod version": "v0.5.0",
+    "bake_config": {
+        "force_auto_export": true,
+        "force_distributed": true,
+        "nvariants": 0,
+        "rename_export_files": true,
+        "resolution": 1024
+    },
+    "comment": "",
+    "graph_manager": {
+        "export_param": {
+            "export_path": "",
+            "ids": [],
+            "overlap": 0.5,
+            "shape.x": 1024,
+            "shape.y": 1024,
+            "tiling.x": 4,
+            "tiling.y": 4
+        },
+        "graph_nodes": {
+            "graph": {
+                "id": "graph",
+                "id_count": 35,
+                "links": [
+                    {
+                        "node_id_from": "8",
+                        "node_id_to": "9",
+                        "port_id_from": "output",
+                        "port_id_to": "level"
+                    },
+                    {
+                        "node_id_from": "9",
+                        "node_id_to": "10",
+                        "port_id_from": "texture",
+                        "port_id_to": "texture"
+                    },
+                    {
+                        "node_id_from": "14",
+                        "node_id_to": "13",
+                        "port_id_from": "texture",
+                        "port_id_to": "texture"
+                    },
+                    {
+                        "node_id_from": "11",
+                        "node_id_to": "14",
+                        "port_id_from": "output",
+                        "port_id_to": "level"
+                    },
+                    {
+                        "node_id_from": "16",
+                        "node_id_to": "8",
+                        "port_id_from": "output",
+                        "port_id_to": "input"
+                    },
+                    {
+                        "node_id_from": "16",
+                        "node_id_to": "10",
+                        "port_id_from": "output",
+                        "port_id_to": "elevation"
+                    },
+                    {
+                        "node_id_from": "16",
+                        "node_id_to": "11",
+                        "port_id_from": "output",
+                        "port_id_to": "input"
+                    },
+                    {
+                        "node_id_from": "16",
+                        "node_id_to": "13",
+                        "port_id_from": "output",
+                        "port_id_to": "elevation"
+                    },
+                    {
+                        "node_id_from": "18",
+                        "node_id_to": "17",
+                        "port_id_from": "texture",
+                        "port_id_to": "texture"
+                    },
+                    {
+                        "node_id_from": "20",
+                        "node_id_to": "18",
+                        "port_id_from": "output",
+                        "port_id_to": "level"
+                    },
+                    {
+                        "node_id_from": "16",
+                        "node_id_to": "20",
+                        "port_id_from": "output",
+                        "port_id_to": "input"
+                    },
+                    {
+                        "node_id_from": "16",
+                        "node_id_to": "17",
+                        "port_id_from": "output",
+                        "port_id_to": "elevation"
+                    },
+                    {
+                        "node_id_from": "15",
+                        "node_id_to": "22",
+                        "port_id_from": "out",
+                        "port_id_to": "input A"
+                    },
+                    {
+                        "node_id_from": "22",
+                        "node_id_to": "23",
+                        "port_id_from": "output",
+                        "port_id_to": "input"
+                    },
+                    {
+                        "node_id_from": "23",
+                        "node_id_to": "16",
+                        "port_id_from": "output",
+                        "port_id_to": "input"
+                    },
+                    {
+                        "node_id_from": "21",
+                        "node_id_to": "22",
+                        "port_id_from": "out",
+                        "port_id_to": "input B"
+                    },
+                    {
+                        "node_id_from": "23",
+                        "node_id_to": "25",
+                        "port_id_from": "output",
+                        "port_id_to": "input"
+                    },
+                    {
+                        "node_id_from": "25",
+                        "node_id_to": "26",
+                        "port_id_from": "output",
+                        "port_id_to": "input"
+                    },
+                    {
+                        "node_id_from": "26",
+                        "node_id_to": "27",
+                        "port_id_from": "output",
+                        "port_id_to": "level"
+                    },
+                    {
+                        "node_id_from": "26",
+                        "node_id_to": "27",
+                        "port_id_from": "output",
+                        "port_id_to": "alpha"
+                    },
+                    {
+                        "node_id_from": "25",
+                        "node_id_to": "28",
+                        "port_id_from": "output",
+                        "port_id_to": "level"
+                    },
+                    {
+                        "node_id_from": "28",
+                        "node_id_to": "29",
+                        "port_id_from": "texture",
+                        "port_id_to": "texture1"
+                    },
+                    {
+                        "node_id_from": "27",
+                        "node_id_to": "29",
+                        "port_id_from": "texture",
+                        "port_id_to": "texture2"
+                    },
+                    {
+                        "node_id_from": "29",
+                        "node_id_to": "30",
+                        "port_id_from": "texture",
+                        "port_id_to": "texture"
+                    },
+                    {
+                        "node_id_from": "25",
+                        "node_id_to": "30",
+                        "port_id_from": "output",
+                        "port_id_to": "elevation"
+                    },
+                    {
+                        "node_id_from": "25",
+                        "node_id_to": "31",
+                        "port_id_from": "output",
+                        "port_id_to": "level"
+                    },
+                    {
+                        "node_id_from": "25",
+                        "node_id_to": "32",
+                        "port_id_from": "output",
+                        "port_id_to": "elevation"
+                    },
+                    {
+                        "node_id_from": "31",
+                        "node_id_to": "34",
+                        "port_id_from": "texture",
+                        "port_id_to": "texture"
+                    },
+                    {
+                        "node_id_from": "25",
+                        "node_id_to": "34",
+                        "port_id_from": "output",
+                        "port_id_to": "elevation"
+                    },
+                    {
+                        "node_id_from": "34",
+                        "node_id_to": "32",
+                        "port_id_from": "output",
+                        "port_id_to": "texture"
+                    }
+                ],
+                "model_config": {
+                    "overlap": 0.5,
+                    "shape.x": 1024,
+                    "shape.y": 1024,
+                    "tiling.x": 4,
+                    "tiling.y": 4
+                },
+                "nodes": [
+                    {
+                        "comment": "",
+                        "id": "10",
+                        "label": "Preview",
+                        "runtime_info": {
+                            "eval_count": 32,
+                            "time_creation": 1765189469268,
+                            "time_last_update": 1765195916957,
+                            "update_time": 0.00469100009649992
+                        }
+                    },
+                    {
+                        "comment": "",
+                        "curvature_clamp_mode": {
+                            "choice": "Keep positive & clamp",
+                            "label": "Clamp Mode",
+                            "type": 4,
+                            "type_string": "Enumeration",
+                            "value": 0
+                        },
+                        "curvature_clamping": {
+                            "label": "Clamp Limit",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 3.4028234663852886e+38,
+                            "vmin": 0.0
+                        },
+                        "id": "11",
+                        "k_saturation": {
+                            "label": "Saturation Smoothing",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.10000000149011612,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        },
+                        "label": "SelectSoilRocks",
+                        "post_gain": {
+                            "label": "Gain",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 10.0,
+                            "vmin": 0.009999999776482582
+                        },
+                        "post_inverse": {
+                            "label": "Invert Output",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "post_remap": {
+                            "is_active": true,
+                            "label": "Remap Range",
+                            "type": 11,
+                            "type_string": "Value range",
+                            "value": [
+                                0.0,
+                                1.0
+                            ],
+                            "vmax": 2.0,
+                            "vmin": -1.0
+                        },
+                        "post_saturate": {
+                            "is_active": false,
+                            "label": "Saturation Range",
+                            "type": 11,
+                            "type_string": "Value range",
+                            "value": [
+                                0.0,
+                                1.0
+                            ],
+                            "vmax": 2.0,
+                            "vmin": -1.0
+                        },
+                        "post_smoothing_radius": {
+                            "label": "Smoothing Radius",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.0,
+                            "vmax": 0.05000000074505806,
+                            "vmin": 0.0
+                        },
+                        "rmax": {
+                            "label": "Max Radius",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.10000000149011612,
+                            "vmax": 0.20000000298023224,
+                            "vmin": 0.0
+                        },
+                        "rmin": {
+                            "label": "Min Radius",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.0,
+                            "vmax": 0.20000000298023224,
+                            "vmin": 0.0
+                        },
+                        "runtime_info": {
+                            "eval_count": 27,
+                            "time_creation": 1765189539926,
+                            "time_last_update": 1765195916226,
+                            "update_time": 117.40506744384766
+                        },
+                        "saturation_limit": {
+                            "label": "Saturation Limit",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.30000001192092896,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        },
+                        "smaller_scales_weight": {
+                            "label": "Smaller-Scale Influence",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 2.0,
+                            "vmin": 0.0
+                        },
+                        "steps": {
+                            "label": "Sampling Steps",
+                            "type": 10,
+                            "type_string": "Integer",
+                            "value": 4,
+                            "vmax": 8,
+                            "vmin": 2
+                        }
+                    },
+                    {
+                        "comment": "",
+                        "id": "13",
+                        "label": "Preview",
+                        "runtime_info": {
+                            "eval_count": 56,
+                            "time_creation": 1765189469268,
+                            "time_last_update": 1765195917146,
+                            "update_time": 0.006351000163704157
+                        }
+                    },
+                    {
+                        "clamp_alpha": {
+                            "label": "clamp_alpha",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": true
+                        },
+                        "comment": "Only two colors interpolated: grass and rocks",
+                        "gradient": {
+                            "label": "gradient",
+                            "type": 3,
+                            "type_string": "Color gradient",
+                            "value": [
+                                {
+                                    "color": [
+                                        0.16470588743686676,
+                                        0.42352941632270813,
+                                        0.07058823853731155,
+                                        1.0
+                                    ],
+                                    "position": 0.0
+                                },
+                                {
+                                    "color": [
+                                        1.0,
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "position": 1.0
+                                }
+                            ]
+                        },
+                        "id": "14",
+                        "label": "ColorizeGradient",
+                        "reverse_alpha": {
+                            "label": "reverse_alpha",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "reverse_colormap": {
+                            "label": "reverse_colormap",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "runtime_info": {
+                            "eval_count": 53,
+                            "time_creation": 1765189457464,
+                            "time_last_update": 1765195916771,
+                            "update_time": 30.99835968017578
+                        }
+                    },
+                    {
+                        "add_deposition": {
+                            "label": "add_deposition",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": true
+                        },
+                        "angle": {
+                            "label": "angle",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 45.0,
+                            "vmax": 180.0,
+                            "vmin": -180.0
+                        },
+                        "base_noise_amp": {
+                            "label": "base_noise_amp",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.15000000596046448,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        },
+                        "bulk_amp": {
+                            "label": "bulk_amp",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.25,
+                            "vmax": 2.0,
+                            "vmin": 0.0
+                        },
+                        "center": {
+                            "label": "center",
+                            "type": 16,
+                            "type_string": "Vec2Float",
+                            "value": [
+                                0.5,
+                                0.5
+                            ],
+                            "xmax": 1.0,
+                            "xmin": 0.0,
+                            "ymax": 1.0,
+                            "ymin": 0.0
+                        },
+                        "comment": "",
+                        "elevation": {
+                            "label": "elevation",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.699999988079071,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        },
+                        "gamma": {
+                            "label": "gamma",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 4.0,
+                            "vmin": 0.009999999776482582
+                        },
+                        "id": "15",
+                        "k_smoothing": {
+                            "label": "k_smoothing",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.10000000149011612,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        },
+                        "label": "ShatteredPeak",
+                        "octaves": {
+                            "label": "Octaves",
+                            "type": 10,
+                            "type_string": "Integer",
+                            "value": 8,
+                            "vmax": 32,
+                            "vmin": 0
+                        },
+                        "peak_kw": {
+                            "label": "peak_kw",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 4.0,
+                            "vmax": 3.4028234663852886e+38,
+                            "vmin": 0.009999999776482582
+                        },
+                        "post_gain": {
+                            "label": "Gain",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 10.0,
+                            "vmin": 0.009999999776482582
+                        },
+                        "post_inverse": {
+                            "label": "Invert Output",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "post_remap": {
+                            "is_active": false,
+                            "label": "Remap Range",
+                            "type": 11,
+                            "type_string": "Value range",
+                            "value": [
+                                0.0,
+                                1.0
+                            ],
+                            "vmax": 2.0,
+                            "vmin": -1.0
+                        },
+                        "post_saturate": {
+                            "is_active": false,
+                            "label": "Saturation Range",
+                            "type": 11,
+                            "type_string": "Value range",
+                            "value": [
+                                0.0,
+                                1.0
+                            ],
+                            "vmax": 2.0,
+                            "vmin": -1.0
+                        },
+                        "post_smoothing_radius": {
+                            "label": "Smoothing Radius",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.0,
+                            "vmax": 0.05000000074505806,
+                            "vmin": 0.0
+                        },
+                        "rugosity": {
+                            "label": "rugosity",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.0,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        },
+                        "runtime_info": {
+                            "eval_count": 7,
+                            "time_creation": 1765189605478,
+                            "time_last_update": 1765195805737,
+                            "update_time": 82.4780502319336
+                        },
+                        "scale": {
+                            "label": "scale",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 3.4028234663852886e+38,
+                            "vmin": 0.009999999776482582
+                        },
+                        "seed": {
+                            "label": "Seed",
+                            "type": 12,
+                            "type_string": "Random seed number",
+                            "value": 4
+                        }
+                    },
+                    {
+                        "block_update": {
+                            "label": "block_update",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "comment": "Just a statepoint (optional), to keep things organized and separated between the heightmap generation (upstream of this node) and the texture generation(s), downstream of this node",
+                        "id": "16",
+                        "label": "Thru",
+                        "runtime_info": {
+                            "eval_count": 21,
+                            "time_creation": 1765189612144,
+                            "time_last_update": 1765195915825,
+                            "update_time": 2.408745050430298
+                        }
+                    },
+                    {
+                        "comment": "",
+                        "id": "17",
+                        "label": "Preview",
+                        "runtime_info": {
+                            "eval_count": 47,
+                            "time_creation": 1765189469268,
+                            "time_last_update": 1765195917328,
+                            "update_time": 0.009561999700963497
+                        }
+                    },
+                    {
+                        "clamp_alpha": {
+                            "label": "clamp_alpha",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": true
+                        },
+                        "comment": "",
+                        "gradient": {
+                            "label": "gradient",
+                            "type": 3,
+                            "type_string": "Color gradient",
+                            "value": [
+                                {
+                                    "color": [
+                                        0.16470588743686676,
+                                        0.42352941632270813,
+                                        0.07058823853731155,
+                                        1.0
+                                    ],
+                                    "position": 0.0
+                                },
+                                {
+                                    "color": [
+                                        1.0,
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "position": 1.0
+                                }
+                            ]
+                        },
+                        "id": "18",
+                        "label": "ColorizeGradient",
+                        "reverse_alpha": {
+                            "label": "reverse_alpha",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "reverse_colormap": {
+                            "label": "reverse_colormap",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "runtime_info": {
+                            "eval_count": 44,
+                            "time_creation": 1765189457464,
+                            "time_last_update": 1765195916882,
+                            "update_time": 31.615276336669922
+                        }
+                    },
+                    {
+                        "clipping_ratio": {
+                            "label": "Clipping Ratio",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 50.0,
+                            "vmax": 100.0,
+                            "vmin": 0.10000000149011612
+                        },
+                        "comment": "",
+                        "flow_gamma": {
+                            "label": "Flow Distrib. Exponent",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 4.0,
+                            "vmin": 0.009999999776482582
+                        },
+                        "flow_weight": {
+                            "label": "Flow Weight",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.5383687615394592,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        },
+                        "gradient_weight": {
+                            "label": "Gradient Weight",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        },
+                        "id": "20",
+                        "label": "SelectSoilFlow",
+                        "post_gain": {
+                            "label": "Gain",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 10.0,
+                            "vmin": 0.009999999776482582
+                        },
+                        "post_inverse": {
+                            "label": "Invert Output",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "post_remap": {
+                            "is_active": true,
+                            "label": "Remap Range",
+                            "type": 11,
+                            "type_string": "Value range",
+                            "value": [
+                                0.0,
+                                1.0
+                            ],
+                            "vmax": 2.0,
+                            "vmin": -1.0
+                        },
+                        "post_saturate": {
+                            "is_active": false,
+                            "label": "Saturation Range",
+                            "type": 11,
+                            "type_string": "Value range",
+                            "value": [
+                                0.0,
+                                1.0
+                            ],
+                            "vmax": 2.0,
+                            "vmin": -1.0
+                        },
+                        "post_smoothing_radius": {
+                            "label": "Smoothing Radius",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.0,
+                            "vmax": 0.05000000074505806,
+                            "vmin": 0.0
+                        },
+                        "radius_gradient": {
+                            "label": "Gradient Radius",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.0,
+                            "vmax": 0.10000000149011612,
+                            "vmin": 0.0
+                        },
+                        "runtime_info": {
+                            "eval_count": 27,
+                            "time_creation": 1765189647696,
+                            "time_last_update": 1765195916550,
+                            "update_time": 242.26953125
+                        },
+                        "talus_ref": {
+                            "label": "Ref. Talus",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 10.0,
+                            "vmax": 32.0,
+                            "vmin": 0.009999999776482582
+                        }
+                    },
+                    {
+                        "add_deposition": {
+                            "label": "add_deposition",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": true
+                        },
+                        "angle": {
+                            "label": "angle",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 30.0,
+                            "vmax": 180.0,
+                            "vmin": -180.0
+                        },
+                        "angle_spread_ratio": {
+                            "label": "angle_spread_ratio",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.25,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        },
+                        "base_noise_amp": {
+                            "label": "base_noise_amp",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.05000000074505806,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        },
+                        "bulk_amp": {
+                            "label": "bulk_amp",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.5,
+                            "vmax": 2.0,
+                            "vmin": 0.0
+                        },
+                        "center": {
+                            "label": "center",
+                            "type": 16,
+                            "type_string": "Vec2Float",
+                            "value": [
+                                0.5,
+                                0.5
+                            ],
+                            "xmax": 1.0,
+                            "xmin": 0.0,
+                            "ymax": 1.0,
+                            "ymin": 0.0
+                        },
+                        "comment": "",
+                        "elevation": {
+                            "label": "elevation",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.5,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        },
+                        "gamma": {
+                            "label": "gamma",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.5,
+                            "vmax": 4.0,
+                            "vmin": 0.009999999776482582
+                        },
+                        "id": "21",
+                        "label": "MountainTibesti",
+                        "octaves": {
+                            "label": "Octaves",
+                            "type": 10,
+                            "type_string": "Integer",
+                            "value": 8,
+                            "vmax": 32,
+                            "vmin": 0
+                        },
+                        "peak_kw": {
+                            "label": "peak_kw",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 22.0,
+                            "vmax": 3.4028234663852886e+38,
+                            "vmin": 0.009999999776482582
+                        },
+                        "post_gain": {
+                            "label": "Gain",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 10.0,
+                            "vmin": 0.009999999776482582
+                        },
+                        "post_inverse": {
+                            "label": "Invert Output",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "post_remap": {
+                            "is_active": false,
+                            "label": "Remap Range",
+                            "type": 11,
+                            "type_string": "Value range",
+                            "value": [
+                                0.0,
+                                1.0
+                            ],
+                            "vmax": 2.0,
+                            "vmin": -1.0
+                        },
+                        "post_saturate": {
+                            "is_active": false,
+                            "label": "Saturation Range",
+                            "type": 11,
+                            "type_string": "Value range",
+                            "value": [
+                                0.0,
+                                1.0
+                            ],
+                            "vmax": 2.0,
+                            "vmin": -1.0
+                        },
+                        "post_smoothing_radius": {
+                            "label": "Smoothing Radius",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.0,
+                            "vmax": 0.05000000074505806,
+                            "vmin": 0.0
+                        },
+                        "rugosity": {
+                            "label": "rugosity",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.0,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        },
+                        "runtime_info": {
+                            "eval_count": 6,
+                            "time_creation": 1765189771797,
+                            "time_last_update": 1765195805937,
+                            "update_time": 83.3929672241211
+                        },
+                        "scale": {
+                            "label": "scale",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 3.4028234663852886e+38,
+                            "vmin": 0.009999999776482582
+                        },
+                        "seed": {
+                            "label": "Seed",
+                            "type": 12,
+                            "type_string": "Random seed number",
+                            "value": 4
+                        }
+                    },
+                    {
+                        "comment": "Switch between branches A and B",
+                        "id": "22",
+                        "label": "Toggle",
+                        "runtime_info": {
+                            "eval_count": 13,
+                            "time_creation": 1765195543949,
+                            "time_last_update": 1765195915568,
+                            "update_time": 2.4910569190979004
+                        },
+                        "toggle": {
+                            "label": "toggle",
+                            "label_false": "B",
+                            "label_true": "A",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": true
+                        }
+                    },
+                    {
+                        "amplitude": {
+                            "label": "amplitude",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.09574472904205322,
+                            "vmax": 4.0,
+                            "vmin": -1.0
+                        },
+                        "bulk_type": {
+                            "choice": "Biquad Pulse",
+                            "label": "bulk_type",
+                            "type": 4,
+                            "type_string": "Enumeration",
+                            "value": 0
+                        },
+                        "center": {
+                            "label": "center",
+                            "type": 16,
+                            "type_string": "Vec2Float",
+                            "value": [
+                                0.5,
+                                0.5
+                            ],
+                            "xmax": 1.0,
+                            "xmin": 0.0,
+                            "ymax": 1.0,
+                            "ymin": 0.0
+                        },
+                        "comment": "Add a small bulk to the heightmap to facilitate water evacuation for hydrology operators",
+                        "id": "23",
+                        "label": "Bulkify",
+                        "post_gain": {
+                            "label": "Gain",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 10.0,
+                            "vmin": 0.009999999776482582
+                        },
+                        "post_inverse": {
+                            "label": "Invert Output",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "post_mix": {
+                            "label": "Mix Factor",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        },
+                        "post_mix_method": {
+                            "choice": "replace",
+                            "label": "Mix Method",
+                            "type": 4,
+                            "type_string": "Enumeration",
+                            "value": 11
+                        },
+                        "post_remap": {
+                            "is_active": true,
+                            "label": "Remap Range",
+                            "type": 11,
+                            "type_string": "Value range",
+                            "value": [
+                                0.0,
+                                1.0
+                            ],
+                            "vmax": 2.0,
+                            "vmin": -1.0
+                        },
+                        "post_saturate": {
+                            "is_active": false,
+                            "label": "Saturation Range",
+                            "type": 11,
+                            "type_string": "Value range",
+                            "value": [
+                                0.0,
+                                1.0
+                            ],
+                            "vmax": 2.0,
+                            "vmin": -1.0
+                        },
+                        "post_smoothing_radius": {
+                            "label": "Smoothing Radius",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.0,
+                            "vmax": 0.05000000074505806,
+                            "vmin": 0.0
+                        },
+                        "runtime_info": {
+                            "eval_count": 12,
+                            "time_creation": 1765195662207,
+                            "time_last_update": 1765195915729,
+                            "update_time": 23.985515594482422
+                        }
+                    },
+                    {
+                        "block_update": {
+                            "label": "block_update",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "comment": "The nodes downstream are using more low-level selection node to build up texturing",
+                        "id": "25",
+                        "label": "Thru",
+                        "runtime_info": {
+                            "eval_count": 2,
+                            "time_creation": 1765195943281,
+                            "time_last_update": 1765195949499,
+                            "update_time": 3.782633066177368
+                        }
+                    },
+                    {
+                        "comment": "Slope norm: tweak the gain and saturation range to change the contrast, intensity of the coloring",
+                        "id": "26",
+                        "label": "MorphologicalGradient",
+                        "post_gain": {
+                            "label": "Gain",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 10.0,
+                            "vmin": 0.009999999776482582
+                        },
+                        "post_inverse": {
+                            "label": "Invert Output",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "post_remap": {
+                            "is_active": true,
+                            "label": "Remap Range",
+                            "type": 11,
+                            "type_string": "Value range",
+                            "value": [
+                                0.0,
+                                1.0
+                            ],
+                            "vmax": 2.0,
+                            "vmin": -1.0
+                        },
+                        "post_saturate": {
+                            "is_active": true,
+                            "label": "Saturation Range",
+                            "type": 11,
+                            "type_string": "Value range",
+                            "value": [
+                                0.11702127754688263,
+                                0.7127659320831299
+                            ],
+                            "vmax": 2.0,
+                            "vmin": -1.0
+                        },
+                        "post_smoothing_radius": {
+                            "label": "Smoothing Radius",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.0,
+                            "vmax": 0.05000000074505806,
+                            "vmin": 0.0
+                        },
+                        "radius": {
+                            "label": "radius",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.009999999776482582,
+                            "vmax": 0.05000000074505806,
+                            "vmin": 0.0
+                        },
+                        "runtime_info": {
+                            "eval_count": 16,
+                            "time_creation": 1765196014237,
+                            "time_last_update": 1765196383013,
+                            "update_time": 95.70075225830078
+                        }
+                    },
+                    {
+                        "clamp_alpha": {
+                            "label": "clamp_alpha",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": true
+                        },
+                        "comment": "Generate a texture whose color is based on the slope value and also its transparency => flat regions won't show up",
+                        "gradient": {
+                            "label": "gradient",
+                            "type": 3,
+                            "type_string": "Color gradient",
+                            "value": [
+                                {
+                                    "color": [
+                                        0.0,
+                                        0.0,
+                                        0.0,
+                                        1.0
+                                    ],
+                                    "position": 0.0
+                                },
+                                {
+                                    "color": [
+                                        1.0,
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "position": 1.0
+                                }
+                            ]
+                        },
+                        "id": "27",
+                        "label": "ColorizeGradient",
+                        "reverse_alpha": {
+                            "label": "reverse_alpha",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "reverse_colormap": {
+                            "label": "reverse_colormap",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "runtime_info": {
+                            "eval_count": 17,
+                            "time_creation": 1765196027131,
+                            "time_last_update": 1765196383165,
+                            "update_time": 34.791473388671875
+                        }
+                    },
+                    {
+                        "clamp_alpha": {
+                            "label": "clamp_alpha",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": true
+                        },
+                        "comment": "Base ground texture, colored by the elevation from greenish to brownish",
+                        "gradient": {
+                            "label": "gradient",
+                            "type": 3,
+                            "type_string": "Color gradient",
+                            "value": [
+                                {
+                                    "color": [
+                                        0.16470588743686676,
+                                        0.42352941632270813,
+                                        0.07058823853731155,
+                                        1.0
+                                    ],
+                                    "position": 0.0
+                                },
+                                {
+                                    "color": [
+                                        0.6705882549285889,
+                                        0.4901960790157318,
+                                        0.19607843458652496,
+                                        1.0
+                                    ],
+                                    "position": 0.7310924530029297
+                                }
+                            ]
+                        },
+                        "id": "28",
+                        "label": "ColorizeGradient",
+                        "reverse_alpha": {
+                            "label": "reverse_alpha",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "reverse_colormap": {
+                            "label": "reverse_colormap",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "runtime_info": {
+                            "eval_count": 12,
+                            "time_creation": 1765196141749,
+                            "time_last_update": 1765196413734,
+                            "update_time": 39.292320251464844
+                        }
+                    },
+                    {
+                        "comment": "Mix both textures: the steep regions are colored in gray (rock-like) and overlaid on the base green/brown texture",
+                        "id": "29",
+                        "label": "MixTexture",
+                        "reset_output_alpha": {
+                            "label": "reset_output_alpha",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": true
+                        },
+                        "runtime_info": {
+                            "eval_count": 22,
+                            "time_creation": 1765196205051,
+                            "time_last_update": 1765196413998,
+                            "update_time": 124.65870666503906
+                        },
+                        "use_sqrt_avg": {
+                            "label": "use_sqrt_avg",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": true
+                        }
+                    },
+                    {
+                        "comment": "",
+                        "id": "30",
+                        "label": "Preview",
+                        "runtime_info": {
+                            "eval_count": 22,
+                            "time_creation": 1765196217537,
+                            "time_last_update": 1765196414203,
+                            "update_time": 0.005237999837845564
+                        }
+                    },
+                    {
+                        "clamp_alpha": {
+                            "label": "clamp_alpha",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": true
+                        },
+                        "comment": "",
+                        "gradient": {
+                            "label": "gradient",
+                            "type": 3,
+                            "type_string": "Color gradient",
+                            "value": [
+                                {
+                                    "color": [
+                                        0.33725491166114807,
+                                        0.364705890417099,
+                                        0.43529412150382996,
+                                        1.0
+                                    ],
+                                    "position": 0.0
+                                },
+                                {
+                                    "color": [
+                                        0.8470588326454163,
+                                        0.8745098114013672,
+                                        0.9490196108818054,
+                                        1.0
+                                    ],
+                                    "position": 0.06666667014360428
+                                },
+                                {
+                                    "color": [
+                                        0.5490196347236633,
+                                        0.5803921818733215,
+                                        0.6509804129600525,
+                                        1.0
+                                    ],
+                                    "position": 0.13333334028720856
+                                },
+                                {
+                                    "color": [
+                                        0.16470588743686676,
+                                        0.1764705926179886,
+                                        0.24313725531101227,
+                                        1.0
+                                    ],
+                                    "position": 0.20000000298023224
+                                },
+                                {
+                                    "color": [
+                                        0.03529411926865578,
+                                        0.03921568766236305,
+                                        0.06666667014360428,
+                                        1.0
+                                    ],
+                                    "position": 0.2666666805744171
+                                },
+                                {
+                                    "color": [
+                                        0.772549033164978,
+                                        0.8039215803146362,
+                                        0.8745098114013672,
+                                        1.0
+                                    ],
+                                    "position": 0.3333333432674408
+                                },
+                                {
+                                    "color": [
+                                        0.09019608050584793,
+                                        0.10196078568696976,
+                                        0.15294118225574493,
+                                        1.0
+                                    ],
+                                    "position": 0.4000000059604645
+                                },
+                                {
+                                    "color": [
+                                        0.615686297416687,
+                                        0.6470588445663452,
+                                        0.7215686440467834,
+                                        1.0
+                                    ],
+                                    "position": 0.46666666865348816
+                                },
+                                {
+                                    "color": [
+                                        0.6745098233222961,
+                                        0.7058823704719543,
+                                        0.7882353067398071,
+                                        1.0
+                                    ],
+                                    "position": 0.5333333611488342
+                                },
+                                {
+                                    "color": [
+                                        0.8039215803146362,
+                                        0.8352941274642944,
+                                        0.8980392217636108,
+                                        1.0
+                                    ],
+                                    "position": 0.6000000238418579
+                                },
+                                {
+                                    "color": [
+                                        0.3843137323856354,
+                                        0.4117647111415863,
+                                        0.49803921580314636,
+                                        1.0
+                                    ],
+                                    "position": 0.6666666865348816
+                                },
+                                {
+                                    "color": [
+                                        0.4431372582912445,
+                                        0.47058823704719543,
+                                        0.545098066329956,
+                                        1.0
+                                    ],
+                                    "position": 0.7333333492279053
+                                },
+                                {
+                                    "color": [
+                                        0.49803921580314636,
+                                        0.5254902243614197,
+                                        0.615686297416687,
+                                        1.0
+                                    ],
+                                    "position": 0.800000011920929
+                                },
+                                {
+                                    "color": [
+                                        0.7372549176216125,
+                                        0.7686274647712708,
+                                        0.843137264251709,
+                                        1.0
+                                    ],
+                                    "position": 0.8666666746139526
+                                },
+                                {
+                                    "color": [
+                                        0.2549019753932953,
+                                        0.27843138575553894,
+                                        0.3529411852359772,
+                                        1.0
+                                    ],
+                                    "position": 0.9333333373069763
+                                },
+                                {
+                                    "color": [
+                                        0.5686274766921997,
+                                        0.5960784554481506,
+                                        0.686274528503418,
+                                        1.0
+                                    ],
+                                    "position": 1.0
+                                }
+                            ]
+                        },
+                        "id": "31",
+                        "label": "ColorizeGradient",
+                        "reverse_alpha": {
+                            "label": "reverse_alpha",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "reverse_colormap": {
+                            "label": "reverse_colormap",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "runtime_info": {
+                            "eval_count": 18,
+                            "time_creation": 1765196488941,
+                            "time_last_update": 1765196893060,
+                            "update_time": 52.82240295410156
+                        }
+                    },
+                    {
+                        "comment": "",
+                        "id": "32",
+                        "label": "Preview",
+                        "runtime_info": {
+                            "eval_count": 37,
+                            "time_creation": 1765196507057,
+                            "time_last_update": 1765196896034,
+                            "update_time": 0.004778999835252762
+                        }
+                    },
+                    {
+                        "advection_length": {
+                            "label": "advection_length",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.10000000894069672,
+                            "vmax": 0.20000000298023224,
+                            "vmin": 0.0
+                        },
+                        "comment": "Resource intensive... but permits to smear the input texture using the flow paths",
+                        "id": "34",
+                        "inertia": {
+                            "label": "inertia",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.0,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        },
+                        "iterations": {
+                            "label": "iterations",
+                            "type": 10,
+                            "type_string": "Integer",
+                            "value": 1,
+                            "vmax": 100,
+                            "vmin": 1
+                        },
+                        "label": "TextureAdvectionParticle",
+                        "mask_activate": {
+                            "label": "mask_activate",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "mask_gain": {
+                            "label": "mask_gain",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 10.0,
+                            "vmin": 0.0
+                        },
+                        "mask_inverse": {
+                            "label": "mask_inverse",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "mask_radius": {
+                            "label": "mask_radius",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.009999999776482582,
+                            "vmax": 0.20000000298023224,
+                            "vmin": 0.0
+                        },
+                        "mask_type": {
+                            "choice_list": [
+                                "Elevation",
+                                "Elevation mid-range",
+                                "Gradient norm"
+                            ],
+                            "label": "mask_type",
+                            "type": 1,
+                            "type_string": "Choice",
+                            "value": "Elevation"
+                        },
+                        "particle_density": {
+                            "label": "particle_density",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 1.0,
+                            "vmin": 0.0
+                        },
+                        "post_filtering": {
+                            "label": "post_filtering",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": true
+                        },
+                        "post_filtering_sigma": {
+                            "label": "post_filtering_sigma",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.07000000029802322,
+                            "vmax": 0.125,
+                            "vmin": 0.0
+                        },
+                        "reverse": {
+                            "label": "reverse",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "runtime_info": {
+                            "eval_count": 24,
+                            "time_creation": 1765196681545,
+                            "time_last_update": 1765196895849,
+                            "update_time": 2670.541259765625
+                        },
+                        "seed": {
+                            "label": "Seed",
+                            "type": 12,
+                            "type_string": "Random seed number",
+                            "value": 0
+                        },
+                        "value_persistence": {
+                            "label": "value_persistence",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 1.0,
+                            "vmin": 0.800000011920929
+                        }
+                    },
+                    {
+                        "comment": "",
+                        "curvature_clamp_mode": {
+                            "choice": "Keep positive & clamp",
+                            "label": "Curvature Clamp Mode",
+                            "type": 4,
+                            "type_string": "Enumeration",
+                            "value": 0
+                        },
+                        "curvature_clamping": {
+                            "label": "Curvature Clamp Limit",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 3.4028234663852886e+38,
+                            "vmin": 0.0
+                        },
+                        "curvature_weight": {
+                            "label": "Curvature Weight",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 1.0,
+                            "vmin": -1.0
+                        },
+                        "gradient_gain": {
+                            "label": "Gradient Gain",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 10.0,
+                            "vmin": 0.009999999776482582
+                        },
+                        "gradient_weight": {
+                            "label": "Gradient Weight",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.20000000298023224,
+                            "vmax": 1.0,
+                            "vmin": -1.0
+                        },
+                        "id": "8",
+                        "label": "SelectSoilWeathered",
+                        "post_gain": {
+                            "label": "Gain",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 1.0,
+                            "vmax": 10.0,
+                            "vmin": 0.009999999776482582
+                        },
+                        "post_inverse": {
+                            "label": "Invert Output",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "post_remap": {
+                            "is_active": true,
+                            "label": "Remap Range",
+                            "type": 11,
+                            "type_string": "Value range",
+                            "value": [
+                                0.0,
+                                1.0
+                            ],
+                            "vmax": 2.0,
+                            "vmin": -1.0
+                        },
+                        "post_saturate": {
+                            "is_active": false,
+                            "label": "Saturation Range",
+                            "type": 11,
+                            "type_string": "Value range",
+                            "value": [
+                                0.0,
+                                1.0
+                            ],
+                            "vmax": 2.0,
+                            "vmin": -1.0
+                        },
+                        "post_smoothing_radius": {
+                            "label": "Smoothing Radius",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.0,
+                            "vmax": 0.05000000074505806,
+                            "vmin": 0.0
+                        },
+                        "radius_curvature": {
+                            "label": "Curvature Radius",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.0,
+                            "vmax": 0.10000000149011612,
+                            "vmin": 0.0
+                        },
+                        "radius_gradient": {
+                            "label": "Gradient Radius",
+                            "log_scale": false,
+                            "type": 6,
+                            "type_string": "Float",
+                            "value": 0.004999999888241291,
+                            "vmax": 0.10000000149011612,
+                            "vmin": 0.0
+                        },
+                        "runtime_info": {
+                            "eval_count": 24,
+                            "time_creation": 1765189450570,
+                            "time_last_update": 1765195916028,
+                            "update_time": 110.89958190917969
+                        }
+                    },
+                    {
+                        "clamp_alpha": {
+                            "label": "clamp_alpha",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": true
+                        },
+                        "comment": "",
+                        "gradient": {
+                            "label": "gradient",
+                            "type": 3,
+                            "type_string": "Color gradient",
+                            "value": [
+                                {
+                                    "color": [
+                                        0.16470588743686676,
+                                        0.42352941632270813,
+                                        0.07058823853731155,
+                                        1.0
+                                    ],
+                                    "position": 0.0
+                                },
+                                {
+                                    "color": [
+                                        1.0,
+                                        1.0,
+                                        1.0,
+                                        1.0
+                                    ],
+                                    "position": 1.0
+                                }
+                            ]
+                        },
+                        "id": "9",
+                        "label": "ColorizeGradient",
+                        "reverse_alpha": {
+                            "label": "reverse_alpha",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "reverse_colormap": {
+                            "label": "reverse_colormap",
+                            "label_false": "",
+                            "label_true": "",
+                            "type": 0,
+                            "type_string": "Bool",
+                            "value": false
+                        },
+                        "runtime_info": {
+                            "eval_count": 30,
+                            "time_creation": 1765189457464,
+                            "time_last_update": 1765195916663,
+                            "update_time": 30.817907333374023
+                        }
+                    }
+                ],
+                "origin": [
+                    0.0,
+                    0.0
+                ],
+                "rotation_angle": 0.0,
+                "size": [
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "graph_order": [
+            "graph"
+        ],
+        "id_count": 0
+    },
+    "graph_manager_widget": {
+        "frames": {
+            "graph": {
+                "current_bg_tag": "NONE"
+            }
+        }
+    },
+    "graph_tabs_widget": {
+        "graph_node_widgets": {
+            "graph": {
+                "comments": [],
+                "current_link_type": 2,
+                "graph_editor_widget.viewer3d": {
+                    "current_node_id": "13",
+                    "height": 512,
+                    "is_node_pinned": false,
+                    "label": "3D Renderer",
+                    "renderer": {
+                        "add_ambiant_occlusion": true,
+                        "add_atmospheric_scattering": false,
+                        "add_fog": false,
+                        "add_water_foam": true,
+                        "add_water_waves": true,
+                        "alpha_x": 0.4805559515953064,
+                        "alpha_y": -32.68608474731445,
+                        "ambiant_occlusion_radius": 0.029999999329447746,
+                        "ambiant_occlusion_strength": 0.8009999990463257,
+                        "angle_spread_ratio": 0.0,
+                        "animate_waves": false,
+                        "apply_tonemap": false,
+                        "auto_rotate_camera": false,
+                        "auto_rotate_light": false,
+                        "bypass_shadow_map": false,
+                        "bypass_texture_albedo": false,
+                        "camera": {
+                            "far_plane": 100.0,
+                            "fov": 0.7850000262260437,
+                            "near_plane": 0.10000000149011612,
+                            "position": {
+                                "x": -1.598477840423584,
+                                "y": 0.6134063601493835,
+                                "z": 0.4165777862071991
+                            },
+                            "target": {
+                                "x": -0.022346995770931244,
+                                "y": -0.24684260785579681,
+                                "z": -0.07207881659269333
+                            },
+                            "up": {
+                                "x": 0.0,
+                                "y": 1.0,
+                                "z": 0.0
+                            }
+                        },
+                        "color_deep_water": {
+                            "x": 0.0,
+                            "y": 0.15000000596046448,
+                            "z": 0.3499999940395355
+                        },
+                        "color_shallow_water": {
+                            "x": 0.25,
+                            "y": 0.8500000238418579,
+                            "z": 0.800000011920929
+                        },
+                        "distance": 1.8609142303466797,
+                        "foam_color": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        },
+                        "foam_depth": 0.004999999888241291,
+                        "fog_color": {
+                            "x": 1.0,
+                            "y": 1.0,
+                            "z": 1.0
+                        },
+                        "fog_density": 50.0,
+                        "fog_height": 0.10000000149011612,
+                        "fog_scattering_ratio": 0.699999988079071,
+                        "fog_strength": 0.5,
+                        "gamma_correction": 2.0,
+                        "height": 512,
+                        "hmap_h": 0.4000000059604645,
+                        "hmap_h0": 0.0,
+                        "hmap_w": 2.0,
+                        "light": {
+                            "position": {
+                                "x": -6.122223854064941,
+                                "y": 4.997701168060303,
+                                "z": 6.127100467681885
+                            },
+                            "target": {
+                                "x": 0.0,
+                                "y": 0.0,
+                                "z": 0.0
+                            }
+                        },
+                        "light_distance": 10.0,
+                        "light_phi": -0.7850000262260437,
+                        "light_theta": 0.5233333706855774,
+                        "mie_color": {
+                            "x": 1.0,
+                            "y": 0.800000011920929,
+                            "z": 0.699999988079071
+                        },
+                        "normal_map_scaling": 1.0,
+                        "normal_visualization": false,
+                        "pan_offset": {
+                            "x": -0.07546352595090866,
+                            "y": -0.24684260785579681
+                        },
+                        "rayleigh_color": {
+                            "x": 0.4000000059604645,
+                            "y": 0.6000000238418579,
+                            "z": 1.0
+                        },
+                        "render_hmap": true,
+                        "render_path": true,
+                        "render_plane": true,
+                        "render_points": true,
+                        "render_rocks": true,
+                        "render_trees": true,
+                        "render_type": 1,
+                        "render_water": true,
+                        "scale_h": 1.0,
+                        "scattering_density": 0.10000000149011612,
+                        "shadow_strength": 0.8999999761581421,
+                        "target": {
+                            "x": 0.0,
+                            "y": 0.0,
+                            "z": 0.0
+                        },
+                        "title": "",
+                        "viewer2d_settings.cmap": 3,
+                        "viewer2d_settings.hillshading": true,
+                        "viewer2d_settings.offset": {
+                            "x": 0.0,
+                            "y": 0.0
+                        },
+                        "viewer2d_settings.sun_azimuth": 1.5700000524520874,
+                        "viewer2d_settings.sun_zenith": 1.0466667413711548,
+                        "viewer2d_settings.zoom": 0.8999999761581421,
+                        "water_color_depth": 0.014999999664723873,
+                        "water_spec_strength": 0.5,
+                        "waves_alpha": 0.5233333706855774,
+                        "waves_amplitude": 0.004999999888241291,
+                        "waves_kw": 256.0,
+                        "waves_normal_amplitude": 0.019999999552965164,
+                        "waves_speed": 0.20000000298023224,
+                        "width": 1523,
+                        "wireframe_mode": false,
+                        "x": 2,
+                        "y": 0
+                    },
+                    "view_param_map": {
+                        "10": {
+                            "color": "texture",
+                            "elevation": "elevation",
+                            "normal_map": "normal map",
+                            "path": "path",
+                            "points": "cloud",
+                            "water_depth": "water_depth"
+                        },
+                        "11": {
+                            "color": "",
+                            "elevation": "output",
+                            "normal_map": "",
+                            "path": "",
+                            "points": "",
+                            "water_depth": ""
+                        },
+                        "12": {
+                            "color": "",
+                            "elevation": "output",
+                            "normal_map": "",
+                            "path": "",
+                            "points": "",
+                            "water_depth": ""
+                        },
+                        "13": {
+                            "color": "texture",
+                            "elevation": "elevation",
+                            "normal_map": "normal map",
+                            "path": "path",
+                            "points": "cloud",
+                            "water_depth": "water_depth"
+                        },
+                        "14": {
+                            "color": "texture",
+                            "elevation": "level",
+                            "normal_map": "",
+                            "path": "",
+                            "points": "",
+                            "water_depth": ""
+                        },
+                        "15": {
+                            "color": "",
+                            "elevation": "out",
+                            "normal_map": "",
+                            "path": "",
+                            "points": "",
+                            "water_depth": ""
+                        },
+                        "16": {
+                            "color": "",
+                            "elevation": "output",
+                            "normal_map": "",
+                            "path": "",
+                            "points": "",
+                            "water_depth": ""
+                        },
+                        "17": {
+                            "color": "texture",
+                            "elevation": "elevation",
+                            "normal_map": "normal map",
+                            "path": "path",
+                            "points": "cloud",
+                            "water_depth": "water_depth"
+                        },
+                        "18": {
+                            "color": "texture",
+                            "elevation": "level",
+                            "normal_map": "",
+                            "path": "",
+                            "points": "",
+                            "water_depth": ""
+                        },
+                        "19": {
+                            "color": "",
+                            "elevation": "output",
+                            "normal_map": "",
+                            "path": "",
+                            "points": "",
+                            "water_depth": ""
+                        },
+                        "20": {
+                            "color": "",
+                            "elevation": "output",
+                            "normal_map": "",
+                            "path": "",
+                            "points": "",
+                            "water_depth": ""
+                        },
+                        "21": {
+                            "color": "",
+                            "elevation": "out",
+                            "normal_map": "",
+                            "path": "",
+                            "points": "",
+                            "water_depth": ""
+                        },
+                        "22": {
+                            "color": "",
+                            "elevation": "output",
+                            "normal_map": "",
+                            "path": "",
+                            "points": "",
+                            "water_depth": ""
+                        },
+                        "23": {
+                            "color": "",
+                            "elevation": "output",
+                            "normal_map": "",
+                            "path": "",
+                            "points": "",
+                            "water_depth": ""
+                        },
+                        "24": {
+                            "color": "",
+                            "elevation": "out",
+                            "normal_map": "",
+                            "path": "",
+                            "points": "",
+                            "water_depth": ""
+                        },
+                        "25": {
+                            "color": "",
+                            "elevation": "output",
+                            "normal_map": "",
+                            "path": "",
+                            "points": "",
+                            "water_depth": ""
+                        },
+                        "26": {
+                            "color": "",
+                            "elevation": "output",
+                            "normal_map": "",
+                            "path": "",
+                            "points": "",
+                            "water_depth": ""
+                        },
+                        "27": {
+                            "color": "texture",
+                            "elevation": "level",
+                            "normal_map": "",
+                            "path": "",
+                            "points": "",
+                            "water_depth": ""
+                        },
+                        "28": {
+                            "color": "texture",
+                            "elevation": "level",
+                            "normal_map": "",
+                            "path": "",
+                            "points": "",
+                            "water_depth": ""
+                        },
+                        "29": {
+                            "color": "texture",
+                            "elevation": "",
+                            "normal_map": "",
+                            "path": "",
+                            "points": "",
+                            "water_depth": ""
+                        },
+                        "3": {
+                            "color": "texture",
+                            "elevation": "elevation",
+                            "normal_map": "normal map",
+                            "path": "path",
+                            "points": "cloud",
+                            "water_depth": "water_depth"
+                        },
+                        "30": {
+                            "color": "texture",
+                            "elevation": "elevation",
+                            "normal_map": "normal map",
+                            "path": "path",
+                            "points": "cloud",
+                            "water_depth": "water_depth"
+                        },
+                        "31": {
+                            "color": "texture",
+                            "elevation": "level",
+                            "normal_map": "",
+                            "path": "",
+                            "points": "",
+                            "water_depth": ""
+                        },
+                        "32": {
+                            "color": "texture",
+                            "elevation": "elevation",
+                            "normal_map": "normal map",
+                            "path": "path",
+                            "points": "cloud",
+                            "water_depth": "water_depth"
+                        },
+                        "33": {
+                            "color": "",
+                            "elevation": "output",
+                            "normal_map": "",
+                            "path": "",
+                            "points": "",
+                            "water_depth": ""
+                        },
+                        "34": {
+                            "color": "output",
+                            "elevation": "elevation",
+                            "normal_map": "",
+                            "path": "",
+                            "points": "",
+                            "water_depth": ""
+                        },
+                        "5": {
+                            "color": "",
+                            "elevation": "output",
+                            "normal_map": "",
+                            "path": "",
+                            "points": "",
+                            "water_depth": ""
+                        },
+                        "6": {
+                            "color": "",
+                            "elevation": "output",
+                            "normal_map": "",
+                            "path": "",
+                            "points": "",
+                            "water_depth": ""
+                        },
+                        "7": {
+                            "color": "",
+                            "elevation": "out",
+                            "normal_map": "",
+                            "path": "",
+                            "points": "",
+                            "water_depth": ""
+                        },
+                        "8": {
+                            "color": "",
+                            "elevation": "output",
+                            "normal_map": "",
+                            "path": "",
+                            "points": "",
+                            "water_depth": ""
+                        },
+                        "9": {
+                            "color": "texture",
+                            "elevation": "level",
+                            "normal_map": "",
+                            "path": "",
+                            "points": "",
+                            "water_depth": ""
+                        }
+                    },
+                    "viewer_type": 0,
+                    "width": 1527,
+                    "x": 0,
+                    "y": 0
+                },
+                "groups": [],
+                "id": "graph",
+                "links": [
+                    {
+                        "link_type": 2,
+                        "node_in_id": "32",
+                        "node_out_id": "34",
+                        "port_in_id": "texture",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "34",
+                        "node_out_id": "25",
+                        "port_in_id": "elevation",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "34",
+                        "node_out_id": "31",
+                        "port_in_id": "texture",
+                        "port_out_id": "texture"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "32",
+                        "node_out_id": "25",
+                        "port_in_id": "elevation",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "31",
+                        "node_out_id": "25",
+                        "port_in_id": "level",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "30",
+                        "node_out_id": "25",
+                        "port_in_id": "elevation",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "30",
+                        "node_out_id": "29",
+                        "port_in_id": "texture",
+                        "port_out_id": "texture"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "29",
+                        "node_out_id": "27",
+                        "port_in_id": "texture2",
+                        "port_out_id": "texture"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "29",
+                        "node_out_id": "28",
+                        "port_in_id": "texture1",
+                        "port_out_id": "texture"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "28",
+                        "node_out_id": "25",
+                        "port_in_id": "level",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "27",
+                        "node_out_id": "26",
+                        "port_in_id": "alpha",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "27",
+                        "node_out_id": "26",
+                        "port_in_id": "level",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "26",
+                        "node_out_id": "25",
+                        "port_in_id": "input",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "25",
+                        "node_out_id": "23",
+                        "port_in_id": "input",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "22",
+                        "node_out_id": "21",
+                        "port_in_id": "input B",
+                        "port_out_id": "out"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "16",
+                        "node_out_id": "23",
+                        "port_in_id": "input",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "23",
+                        "node_out_id": "22",
+                        "port_in_id": "input",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "22",
+                        "node_out_id": "15",
+                        "port_in_id": "input A",
+                        "port_out_id": "out"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "9",
+                        "node_out_id": "8",
+                        "port_in_id": "level",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "10",
+                        "node_out_id": "9",
+                        "port_in_id": "texture",
+                        "port_out_id": "texture"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "13",
+                        "node_out_id": "14",
+                        "port_in_id": "texture",
+                        "port_out_id": "texture"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "14",
+                        "node_out_id": "11",
+                        "port_in_id": "level",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "8",
+                        "node_out_id": "16",
+                        "port_in_id": "input",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "10",
+                        "node_out_id": "16",
+                        "port_in_id": "elevation",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "11",
+                        "node_out_id": "16",
+                        "port_in_id": "input",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "13",
+                        "node_out_id": "16",
+                        "port_in_id": "elevation",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "17",
+                        "node_out_id": "18",
+                        "port_in_id": "texture",
+                        "port_out_id": "texture"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "18",
+                        "node_out_id": "20",
+                        "port_in_id": "level",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "20",
+                        "node_out_id": "16",
+                        "port_in_id": "input",
+                        "port_out_id": "output"
+                    },
+                    {
+                        "link_type": 2,
+                        "node_in_id": "17",
+                        "node_out_id": "16",
+                        "port_in_id": "elevation",
+                        "port_out_id": "output"
+                    }
+                ],
+                "nodes": [
+                    {
+                        "caption": "TextureAdvectionParticle",
+                        "id": "34",
+                        "is_widget_visible": true,
+                        "scene_position.x": 1267.133047786345,
+                        "scene_position.y": 1454.1856570319737
+                    },
+                    {
+                        "caption": "Preview",
+                        "id": "32",
+                        "is_widget_visible": true,
+                        "scene_position.x": 1604.3186679005626,
+                        "scene_position.y": 1438.5001875216183
+                    },
+                    {
+                        "caption": "ColorizeGradient",
+                        "id": "31",
+                        "is_widget_visible": true,
+                        "scene_position.x": 989.3148477463928,
+                        "scene_position.y": 1411.4277521903546
+                    },
+                    {
+                        "caption": "Preview",
+                        "id": "30",
+                        "is_widget_visible": true,
+                        "scene_position.x": 1757.3842164502469,
+                        "scene_position.y": 568.9239871342611
+                    },
+                    {
+                        "caption": "MixTexture",
+                        "id": "29",
+                        "is_widget_visible": true,
+                        "scene_position.x": 1451.9843012127023,
+                        "scene_position.y": 657.5077626991131
+                    },
+                    {
+                        "caption": "ColorizeGradient",
+                        "id": "28",
+                        "is_widget_visible": true,
+                        "scene_position.x": 1146.4636893059123,
+                        "scene_position.y": 451.3809079314931
+                    },
+                    {
+                        "caption": "ColorizeGradient",
+                        "id": "27",
+                        "is_widget_visible": true,
+                        "scene_position.x": 1136.3073606028956,
+                        "scene_position.y": 830.3028432540707
+                    },
+                    {
+                        "caption": "MorphologicalGradient",
+                        "id": "26",
+                        "is_widget_visible": true,
+                        "scene_position.x": 746.4873318849885,
+                        "scene_position.y": 724.9836577688283
+                    },
+                    {
+                        "caption": "Thru",
+                        "id": "25",
+                        "is_widget_visible": true,
+                        "scene_position.x": 427.13221580868037,
+                        "scene_position.y": 638.4915946961942
+                    },
+                    {
+                        "caption": "Bulkify",
+                        "id": "23",
+                        "is_widget_visible": true,
+                        "scene_position.x": 187.17846393353602,
+                        "scene_position.y": -628.0803076029014
+                    },
+                    {
+                        "caption": "Toggle",
+                        "id": "22",
+                        "is_widget_visible": true,
+                        "scene_position.x": -64.85725381679671,
+                        "scene_position.y": -648.0141265754463
+                    },
+                    {
+                        "caption": "SelectSoilWeathered",
+                        "id": "8",
+                        "is_widget_visible": true,
+                        "scene_position.x": 876.0487060546875,
+                        "scene_position.y": -482.3096923828125
+                    },
+                    {
+                        "caption": "ColorizeGradient",
+                        "id": "9",
+                        "is_widget_visible": true,
+                        "scene_position.x": 1152.1842041015625,
+                        "scene_position.y": -475.00732421875
+                    },
+                    {
+                        "caption": "Preview",
+                        "id": "10",
+                        "is_widget_visible": true,
+                        "scene_position.x": 1400.3508902905921,
+                        "scene_position.y": -583.1094360351563
+                    },
+                    {
+                        "caption": "SelectSoilRocks",
+                        "id": "11",
+                        "is_widget_visible": true,
+                        "scene_position.x": 849.8838500976563,
+                        "scene_position.y": -928.6237182617188
+                    },
+                    {
+                        "caption": "Preview",
+                        "id": "13",
+                        "is_widget_visible": true,
+                        "scene_position.x": 1375.045697204192,
+                        "scene_position.y": -1128.5068359375
+                    },
+                    {
+                        "caption": "ColorizeGradient",
+                        "id": "14",
+                        "is_widget_visible": true,
+                        "scene_position.x": 1114.19775390625,
+                        "scene_position.y": -990.851318359375
+                    },
+                    {
+                        "caption": "ShatteredPeak",
+                        "id": "15",
+                        "is_widget_visible": true,
+                        "scene_position.x": -433.3828687013546,
+                        "scene_position.y": -800.8717185869782
+                    },
+                    {
+                        "caption": "Thru",
+                        "id": "16",
+                        "is_widget_visible": true,
+                        "scene_position.x": 425.36394627915047,
+                        "scene_position.y": -587.3859602595946
+                    },
+                    {
+                        "caption": "Preview",
+                        "id": "17",
+                        "is_widget_visible": true,
+                        "scene_position.x": 1423.807068557548,
+                        "scene_position.y": -49.13954542728979
+                    },
+                    {
+                        "caption": "ColorizeGradient",
+                        "id": "18",
+                        "is_widget_visible": true,
+                        "scene_position.x": 1174.9989380886677,
+                        "scene_position.y": 64.55949021724143
+                    },
+                    {
+                        "caption": "SelectSoilFlow",
+                        "id": "20",
+                        "is_widget_visible": true,
+                        "scene_position.x": 954.7905640652302,
+                        "scene_position.y": 37.73817826655784
+                    },
+                    {
+                        "caption": "MountainTibesti",
+                        "id": "21",
+                        "is_widget_visible": true,
+                        "scene_position.x": -429.4894272516241,
+                        "scene_position.y": -440.3080443479887
+                    }
+                ]
+            }
+        }
+    },
+    "saved_at": "2025-12-08_13-30-31"
+}

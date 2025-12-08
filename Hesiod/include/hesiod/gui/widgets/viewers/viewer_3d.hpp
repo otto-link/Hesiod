@@ -32,7 +32,12 @@ public:
   nlohmann::json json_to() const override;
 
   void clear() override;
+  bool get_param_visibility_state(const std::string &param_name) const override;
   void setup_layout() override;
+  void setup_connections() override;
+
+public slots:
+  void on_view_param_visibility_changed(const std::string &param_name, bool new_state);
 
 protected:
   void resizeEvent(QResizeEvent *) override;
@@ -42,7 +47,7 @@ private:
   void            update_renderer() override;
 
   ViewerType         viewer_type;
-  qtr::RenderWidget *p_renderer;
+  qtr::RenderWidget *p_renderer = nullptr;
 };
 
 } // namespace hesiod

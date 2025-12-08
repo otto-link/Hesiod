@@ -3,6 +3,8 @@
 #pragma once
 #include <memory>
 
+#include <QIcon>
+
 #include "nlohmann/json.hpp"
 
 namespace hesiod
@@ -16,7 +18,7 @@ struct ViewerNodeParam
   // defines how the node port data are assigned for graphic representation with this
   // viewer
   std::map<std::string, std::string> port_ids = {};
-  std::map<std::string, std::string> icons = {};
+  std::map<std::string, QIcon>       icons = {};
 
   void           json_from(nlohmann::json const &json);
   nlohmann::json json_to() const;

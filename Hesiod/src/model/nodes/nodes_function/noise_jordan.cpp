@@ -29,15 +29,13 @@ void setup_noise_jordan_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "out", CONFIG(node));
 
   // attribute(s)
-  node.add_attr<EnumAttribute>("noise_type",
-                               "noise_type",
-                               enum_mappings.noise_type_map_fbm);
+  node.add_attr<EnumAttribute>("noise_type", "Type", enum_mappings.noise_type_map_fbm);
   node.add_attr<WaveNbAttribute>("kw", "Spatial Frequency");
   node.add_attr<SeedAttribute>("seed", "Seed");
-  node.add_attr<IntAttribute>("octaves", "octaves", 8, 0, 32);
-  node.add_attr<FloatAttribute>("weight", "weight", 0.7f, 0.f, 1.f);
-  node.add_attr<FloatAttribute>("persistence", "persistence", 0.5f, 0.f, 1.f);
-  node.add_attr<FloatAttribute>("lacunarity", "lacunarity", 2.f, 0.01f, 4.f);
+  node.add_attr<IntAttribute>("octaves", "Octaves", 8, 0, 32);
+  node.add_attr<FloatAttribute>("weight", "Weight", 0.7f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>("persistence", "Persistence", 0.5f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>("lacunarity", "Lacunarity", 2.f, 0.01f, 4.f);
   node.add_attr<FloatAttribute>("warp0", "warp0", 0.2f, 0.f, 1.f);
   node.add_attr<FloatAttribute>("damp0", "damp0", 1.f, 0.f, 1.f);
   node.add_attr<FloatAttribute>("warp_scale", "warp_scale", 0.2f, 0.f, 1.f);

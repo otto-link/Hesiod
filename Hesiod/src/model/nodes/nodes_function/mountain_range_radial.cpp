@@ -43,10 +43,10 @@ void setup_mountain_range_radial_node(BaseNode &node)
                                 1.f);
   node.add_attr<FloatAttribute>("core_size_ratio", "core_size_ratio", 0.2f, 0.01f, 2.f);
   node.add_attr<Vec2FloatAttribute>("center", "center");
-  node.add_attr<IntAttribute>("octaves", "octaves", 8, 0, 32);
-  node.add_attr<FloatAttribute>("weight", "weight", 0.7f, 0.f, 1.f);
-  node.add_attr<FloatAttribute>("persistence", "persistence", 0.5f, 0.f, 1.f);
-  node.add_attr<FloatAttribute>("lacunarity", "lacunarity", 2.f, 0.01f, 4.f);
+  node.add_attr<IntAttribute>("octaves", "Octaves", 8, 0, 32);
+  node.add_attr<FloatAttribute>("weight", "Weight", 0.7f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>("persistence", "Persistence", 0.5f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>("lacunarity", "Lacunarity", 2.f, 0.01f, 4.f);
   node.add_attr<BoolAttribute>("inverse", "inverse", false);
   node.add_attr<RangeAttribute>("remap", "remap");
 

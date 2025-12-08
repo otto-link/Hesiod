@@ -293,9 +293,10 @@ QPlainTextEdit {
 
 /* QToolTip ---------------------------------------------------------------- */
 QToolTip {
-    color: COLOR_TEXT_PRIMARY;
     background-color: COLOR_BG_PRIMARY;
+    color: COLOR_TEXT_PRIMARY;
     padding: 4px;
+    border-radius: 0px;
     border: 1px solid COLOR_BG_SECONDARY;
 }
 

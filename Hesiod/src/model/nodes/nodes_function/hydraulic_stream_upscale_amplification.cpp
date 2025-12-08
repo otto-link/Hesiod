@@ -30,7 +30,7 @@ void setup_hydraulic_stream_upscale_amplification_node(BaseNode &node)
   node.add_attr<FloatAttribute>("radius", "radius", 0.f, 0.f, 0.05f);
   node.add_attr<FloatAttribute>("clipping_ratio", "clipping_ratio", 10.f, 0.1f, 100.f);
   node.add_attr<IntAttribute>("upscaling_levels", "upscaling_levels", 1, 0, 4);
-  node.add_attr<FloatAttribute>("persistence", "persistence", 0.5f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>("persistence", "Persistence", 0.5f, 0.f, 1.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"c_erosion",

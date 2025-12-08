@@ -40,7 +40,7 @@ Primitive/Geological
 |elevation|Float|No description|
 |gamma|Float|No description|
 |k_smoothing|Float|No description|
-|octaves|Integer|The number of octaves for fractal noise generation. More octaves add finer details to the terrain.|
+|Octaves|Integer|The number of octaves for fractal noise generation. More octaves add finer details to the terrain.|
 |Gain|Float|Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.|
 |Invert Output|Bool|Inverts the output values after processing, flipping low and high values across the midrange.|
 |Remap Range|Value range|Linearly remaps the output values to a specified target range (default is [0, 1]).|

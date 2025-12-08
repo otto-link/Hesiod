@@ -128,8 +128,7 @@ void NodeSettingsWidget::update_content()
     {
       auto *button_pin = new IconCheckBox(this);
       button_pin->set_label(node_caption);
-      button_pin->set_icons(QIcon("data/icons/push_pin_64dp_D9D9D9.png"),
-                            QIcon("data/icons/push_pin_64dp_5E81AC.png"));
+      button_pin->set_icons(HSD_ICON("push_pin"), HSD_ICON("push_pin_accent"));
       button_pin->setCheckable(true);
       button_pin->setChecked(contains(this->pinned_node_ids, node_id));
       this->attr_layout->addWidget(button_pin);

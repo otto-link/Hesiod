@@ -40,9 +40,11 @@ public:
          QWidget                  *parent = nullptr);
 
   virtual void clear();
+  virtual bool get_param_visibility_state(const std::string &param_name) const;
   void         set_current_node_id(const std::string &new_id);
   virtual void setup_connections();
   virtual void setup_layout();
+  void         update_param_visibility_icons();
   void         update_widgets();
 
   // --- Serialization ---
@@ -53,6 +55,7 @@ Q_SIGNALS:
   void clear_view_request();
   void current_node_id_changed(const std::string &new_id);
   void node_pinned(const std::string &node_id, bool state);
+  void view_param_visibility_changed(const std::string &param_name, bool new_state);
   void visibility_changed(bool new_state);
   void widget_close();
 
@@ -82,6 +85,7 @@ protected:
   ViewerNodeParam                        view_param;
   std::map<std::string, ViewerNodeParam> view_param_map; // storage per node id
   std::map<std::string, QComboBox *>     combo_map;
+  std::map<std::string, IconCheckBox *>  visibility_icons_map;
   bool                                   prevent_combo_connections = false;
   bool                                   is_node_pinned = false;
   IconCheckBox                          *button_pin_current_node;

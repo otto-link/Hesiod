@@ -65,6 +65,7 @@ public:
   nlohmann::json get_documentation() const;
   std::string    get_documentation_html() const;
   std::string    get_documentation_short() const;
+  std::string    get_documentation_short_html() const;
   void           update_attributes_tool_tip();
 
   // --- Proxy (most of it) ---

@@ -16,6 +16,7 @@ public:
   explicit IconCheckBox(QWidget *parent = nullptr);
 
   void set_icons(const QIcon &unchecked_icon, const QIcon &checked_icon);
+  void set_icon_size(int new_size);
   void set_label(const QString &text);
 
 protected:

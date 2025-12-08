@@ -5,6 +5,7 @@
 #include <QStyle>
 #include <QToolButton>
 
+#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/gui/widgets/documentation_popup.hpp"
 #include "hesiod/gui/widgets/node_attributes_widget.hpp"
 #include "hesiod/logger.hpp"
@@ -46,21 +47,14 @@ QWidget *NodeAttributesWidget::create_toolbar()
     return btn;
   };
 
-  auto *update_btn = make_button(QIcon("data/icons/refresh_64dp_D9D9D9.png"),
-                                 "Force Update");
-  auto *info_btn = make_button(QIcon("data/icons/info_64dp_D9D9D9.png"),
-                               "Node Information");
-  auto *bckp_btn = make_button(QIcon("data/icons/bookmark_64dp_D9D9D9.png"),
-                               "Backup State");
-  auto *revert_btn = make_button(QIcon("data/icons/u_turn_left_64dp_D9D9D9.png"),
-                                 "Revert State");
-  auto *load_btn = make_button(QIcon("data/icons/file_open_64dp_D9D9D9.png"),
-                               "Load Preset");
-  auto *save_btn = make_button(QIcon("data/icons/save_64dp_D9D9D9.png"), "Save Preset");
-  auto *reset_btn = make_button(
-      QIcon("data/icons/settings_backup_restore_64dp_D9D9D9.png"),
-      "Reset Settings");
-  auto *help_btn = make_button(QIcon("data/icons/help_64dp_D9D9D9.png"), "Help!");
+  auto *update_btn = make_button(HSD_ICON("refresh"), "Force Update");
+  auto *info_btn = make_button(HSD_ICON("info"), "Node Information");
+  auto *bckp_btn = make_button(HSD_ICON("bookmark"), "Backup State");
+  auto *revert_btn = make_button(HSD_ICON("u_turn_left"), "Revert State");
+  auto *load_btn = make_button(HSD_ICON("file_open"), "Load Preset");
+  auto *save_btn = make_button(HSD_ICON("save"), "Save Preset");
+  auto *reset_btn = make_button(HSD_ICON("settings_backup_restore"), "Reset Settings");
+  auto *help_btn = make_button(HSD_ICON("help"), "Help!");
 
   for (auto *btn : {update_btn,
                     info_btn,

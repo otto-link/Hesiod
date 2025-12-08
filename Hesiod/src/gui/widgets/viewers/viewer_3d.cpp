@@ -78,6 +78,10 @@ bool helper_try_set_from_port(const BaseNode       &node,
   return true;
 }
 
+// =====================================
+// Viewer3D - class definition
+// =====================================
+
 Viewer3D::Viewer3D(QPointer<GraphNodeWidget> p_graph_node_widget_, QWidget *parent)
     : Viewer(p_graph_node_widget_, ViewerType::VIEWER3D, "3D Renderer", parent)
 {
@@ -87,6 +91,7 @@ Viewer3D::Viewer3D(QPointer<GraphNodeWidget> p_graph_node_widget_, QWidget *pare
   this->setup_layout();
   this->update_widgets();
   this->setup_connections();
+  this->update_param_visibility_icons();
 }
 
 void Viewer3D::clear()
@@ -112,15 +117,38 @@ ViewerNodeParam Viewer3D::get_default_view_param() const
   };
 
   wp.icons = {
-      {"elevation", "data/icons/landscape_24dp_D9D9D9_FILL0_wght400_GRAD0_opsz24.png"},
-      {"water_depth", "data/icons/waves_24dp_D9D9D9_FILL0_wght400_GRAD0_opsz24.png"},
-      {"color", "data/icons/palette_24dp_D9D9D9_FILL0_wght400_GRAD0_opsz24.png"},
-      {"normal_map", "data/icons/hdr_strong_24dp_D9D9D9_FILL0_wght400_GRAD0_opsz24.png"},
-      {"points", "data/icons/scatter_plot_24dp_D9D9D9_FILL0_wght400_GRAD0_opsz24.png"},
-      {"path", "data/icons/conversion_path_24dp_D9D9D9_FILL0_wght400_GRAD0_opsz24.png"},
+      {"elevation", HSD_ICON("landscape")},
+      {"water_depth", HSD_ICON("waves")},
+      {"color", HSD_ICON("palette")},
+      {"normal_map", HSD_ICON("hdr_strong")},
+      {"points", HSD_ICON("scatter_plot")},
+      {"path", HSD_ICON("conversion_path")},
   };
-  
+
   return wp;
+}
+
+bool Viewer3D::get_param_visibility_state(const std::string &param_name) const
+{
+  if (!this->p_renderer)
+    return true;
+
+  if (param_name == "elevation")
+    return this->p_renderer->get_render_hmap();
+  else if (param_name == "water_depth")
+    return this->p_renderer->get_render_water();
+  else if (param_name == "points")
+    return this->p_renderer->get_render_points();
+  else if (param_name == "path")
+    return this->p_renderer->get_render_path();
+  else if (param_name == "color")
+    return !this->p_renderer->get_bypass_texture_albedo();
+  else if (param_name == "normal_map")
+  {
+    // TODO nothing here
+  }
+
+  return true;
 }
 
 void Viewer3D::json_from(nlohmann::json const &json)
@@ -130,6 +158,8 @@ void Viewer3D::json_from(nlohmann::json const &json)
   Viewer::json_from(json);
   if (p_renderer)
     p_renderer->json_from(json["renderer"]);
+
+  this->update_param_visibility_icons();
 }
 
 nlohmann::json Viewer3D::json_to() const
@@ -143,6 +173,28 @@ nlohmann::json Viewer3D::json_to() const
   return json;
 }
 
+void Viewer3D::on_view_param_visibility_changed(const std::string &param_name,
+                                                bool               new_state)
+{
+  if (!this->p_renderer)
+    return;
+
+  if (param_name == "elevation")
+    this->p_renderer->set_render_hmap(new_state);
+  else if (param_name == "water_depth")
+    this->p_renderer->set_render_water(new_state);
+  else if (param_name == "points")
+    this->p_renderer->set_render_points(new_state);
+  else if (param_name == "path")
+    this->p_renderer->set_render_path(new_state);
+  else if (param_name == "color")
+    this->p_renderer->set_bypass_texture_albedo(!new_state);
+  else if (param_name == "normal_map")
+  {
+    // TODO nothing here
+  }
+}
+
 void Viewer3D::resizeEvent(QResizeEvent *)
 {
   int padding = 8;
@@ -154,6 +206,19 @@ void Viewer3D::resizeEvent(QResizeEvent *)
   int   h = s.height();
 
   this->combo_container->setGeometry(x, y, w, h);
+}
+
+void Viewer3D::setup_connections()
+{
+  Logger::log()->trace("Viewer3D::setup_connections");
+
+  Viewer::setup_connections();
+
+  // add parameters visibility events
+  this->connect(this,
+                &Viewer::view_param_visibility_changed,
+                this,
+                &Viewer3D::on_view_param_visibility_changed);
 }
 
 void Viewer3D::setup_layout()
@@ -201,6 +266,10 @@ void Viewer3D::update_renderer()
     this->p_renderer->clear();
     return;
   }
+
+  // --- icons
+
+  this->update_param_visibility_icons();
 
   // --- route/send data to renderer
 

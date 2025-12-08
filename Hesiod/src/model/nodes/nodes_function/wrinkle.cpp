@@ -38,8 +38,8 @@ void setup_wrinkle_node(BaseNode &node)
   node.add_attr<FloatAttribute>("radius", "radius", 0.f, 0.f, 0.2f);
   node.add_attr<FloatAttribute>("kw", "kw", 2.f, 0.f, FLT_MAX);
   node.add_attr<SeedAttribute>("seed", "Seed");
-  node.add_attr<IntAttribute>("octaves", "octaves", 8, 0, 32);
-  node.add_attr<FloatAttribute>("weight", "weight", 1.f, 0.f, 1.f);
+  node.add_attr<IntAttribute>("octaves", "Octaves", 8, 0, 32);
+  node.add_attr<FloatAttribute>("weight", "Weight", 1.f, 0.f, 1.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({"wrinkle_amplitude",

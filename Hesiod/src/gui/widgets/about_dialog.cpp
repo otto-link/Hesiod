@@ -50,11 +50,10 @@ AboutDialog::AboutDialog()
     auto *container = new QWidget();
     auto *link_layout = new QHBoxLayout(container);
 
-    auto add_link = [this, link_layout](const QString &icon_path, const QString &url)
+    auto add_link = [this, link_layout](const QIcon &icon, const QString &url)
     {
       QPushButton *icon_button = new QPushButton();
-      QPixmap      icon_pixmap(icon_path);
-      icon_button->setIcon(QIcon(icon_pixmap));
+      icon_button->setIcon(icon);
       icon_button->setIconSize(QSize(20, 20));
       icon_button->setFlat(true);
       icon_button->setCursor(Qt::PointingHandCursor);
@@ -72,11 +71,11 @@ AboutDialog::AboutDialog()
     };
 
     // links
-    add_link("data/icons/home.png", "https://hesioddoc.readthedocs.io/en/latest");
-    add_link("data/icons/discord.png", "https://discord.gg/HBgFCjdV8W");
-    add_link("data/icons/github.png", "https://github.com/otto-link/Hesiod");
-    add_link("data/icons/sourceforge.png", "https://sourceforge.net/projects/hesiod");
-    add_link("data/icons/youtube.png",
+    add_link(HSD_ICON("home"), "https://hesioddoc.readthedocs.io/en/latest");
+    add_link(HSD_ICON("discord"), "https://discord.gg/HBgFCjdV8W");
+    add_link(HSD_ICON("github"), "https://github.com/otto-link/Hesiod");
+    add_link(HSD_ICON("sourceforge"), "https://sourceforge.net/projects/hesiod");
+    add_link(HSD_ICON("youtube"),
              "https://www.youtube.com/playlist?list=PLvla2FXp5tDxbPypf_Mp66gWzX_Lga3DK");
 
     layout->addWidget(container, 0, Qt::AlignHCenter);
@@ -103,6 +102,10 @@ AboutDialog::AboutDialog()
   // ok button
   {
     QDialogButtonBox *button_box = new QDialogButtonBox(QDialogButtonBox::Ok);
+
+    QPushButton *ok_button = button_box->button(QDialogButtonBox::Ok);
+    ok_button->setIcon(HSD_ICON("check"));
+
     this->connect(button_box, &QDialogButtonBox::accepted, this, &QDialog::accept);
     layout->addWidget(button_box, 0, Qt::AlignHCenter);
   }

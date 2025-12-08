@@ -41,11 +41,11 @@ Primitive/Coherent
 |jitter.x|Float|No description|
 |jitter.y|Float|No description|
 |Spatial Frequency|Wavenumber|Base spatial frequencies in the X and Y directions. The frequencies are defined with respect to the entire domain: for example, kw = 2 produces two full oscillations across the domain width (and similarly for the Y direction).|
-|lacunarity|Float|The frequency scaling factor for successive noise octaves. Higher values increase the frequency of each successive octave.|
+|Lacunarity|Float|The frequency scaling factor for successive noise octaves. Higher values increase the frequency of each successive octave.|
 |n_vertices_max|Integer|No description|
 |n_vertices_min|Integer|No description|
-|octaves|Integer|The number of octaves for fractal noise generation. More octaves add finer details to the terrain.|
-|persistence|Float|The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.|
+|Octaves|Integer|The number of octaves for fractal noise generation. More octaves add finer details to the terrain.|
+|Persistence|Float|The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.|
 |Gain|Float|Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.|
 |Invert Output|Bool|Inverts the output values after processing, flipping low and high values across the midrange.|
 |Remap Range|Value range|Linearly remaps the output values to a specified target range (default is [0, 1]).|

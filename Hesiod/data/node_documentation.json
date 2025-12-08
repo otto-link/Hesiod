@@ -178,7 +178,7 @@
             "octaves": {
                 "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
-                "label": "octaves",
+                "label": "Octaves",
                 "type": "Integer"
             },
             "post_gain": {
@@ -2007,7 +2007,7 @@
             "water_depth": {
                 "caption": "water_depth",
                 "data_type": "Heightmap",
-                "description": "Output water depth map, adjusted to preserve water surface height after terrain changes.",
+                "description": "Output water depth map representing flooded areas.",
                 "type": "output"
             },
             "water_depth_in": {
@@ -4301,19 +4301,19 @@
             "lacunarity": {
                 "description": "The frequency scaling factor for successive noise octaves. Higher values increase the frequency of each successive octave.",
                 "key": "lacunarity",
-                "label": "lacunarity",
+                "label": "Lacunarity",
                 "type": "Float"
             },
             "octaves": {
                 "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
-                "label": "octaves",
+                "label": "Octaves",
                 "type": "Integer"
             },
             "persistence": {
                 "description": "The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.",
                 "key": "persistence",
-                "label": "persistence",
+                "label": "Persistence",
                 "type": "Float"
             },
             "post_gain": {
@@ -4355,7 +4355,7 @@
             "weight": {
                 "description": "Controls how much higher FBM octaves contribute to the noise based on local elevation. A higher weight suppresses high-frequency octaves at low elevations and increases their influence at higher elevations, producing terrain where fine details appear mainly near peaks while lower areas remain smoother.",
                 "key": "weight",
-                "label": "weight",
+                "label": "Weight",
                 "type": "Float"
             }
         },
@@ -4787,19 +4787,19 @@
             "lacunarity": {
                 "description": "The frequency scaling factor for successive noise octaves. Higher values increase the frequency of each successive octave.",
                 "key": "lacunarity",
-                "label": "lacunarity",
+                "label": "Lacunarity",
                 "type": "Float"
             },
             "octaves": {
                 "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
-                "label": "octaves",
+                "label": "Octaves",
                 "type": "Integer"
             },
             "persistence": {
                 "description": "The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.",
                 "key": "persistence",
-                "label": "persistence",
+                "label": "Persistence",
                 "type": "Float"
             },
             "remap": {
@@ -5256,19 +5256,19 @@
             "lacunarity": {
                 "description": "The frequency scaling factor for successive noise octaves. Higher values increase the frequency of each successive octave.",
                 "key": "lacunarity",
-                "label": "lacunarity",
+                "label": "Lacunarity",
                 "type": "Float"
             },
             "octaves": {
                 "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
-                "label": "octaves",
+                "label": "Octaves",
                 "type": "Integer"
             },
             "persistence": {
                 "description": "The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.",
                 "key": "persistence",
-                "label": "persistence",
+                "label": "Persistence",
                 "type": "Float"
             },
             "post_gain": {
@@ -6042,7 +6042,7 @@
             "persistence": {
                 "description": "The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.",
                 "key": "persistence",
-                "label": "persistence",
+                "label": "Persistence",
                 "type": "Float"
             },
             "radius": {
@@ -6540,25 +6540,25 @@
             "lacunarity": {
                 "description": "The frequency scaling factor for successive noise octaves. Higher values increase the frequency of each successive octave.",
                 "key": "lacunarity",
-                "label": "lacunarity",
+                "label": "Lacunarity",
                 "type": "Float"
             },
             "noise_type": {
                 "description": "No description",
                 "key": "noise_type",
-                "label": "noise_type",
+                "label": "Type",
                 "type": "Enumeration"
             },
             "octaves": {
                 "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
-                "label": "octaves",
+                "label": "Octaves",
                 "type": "Integer"
             },
             "persistence": {
                 "description": "The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.",
                 "key": "persistence",
-                "label": "persistence",
+                "label": "Persistence",
                 "type": "Float"
             },
             "post_gain": {
@@ -6606,7 +6606,7 @@
             "weight": {
                 "description": "Controls how much higher FBM octaves contribute to the noise based on local elevation. A higher weight suppresses high-frequency octaves at low elevations and increases their influence at higher elevations, producing terrain where fine details appear mainly near peaks while lower areas remain smoother.",
                 "key": "weight",
-                "label": "weight",
+                "label": "Weight",
                 "type": "Float"
             }
         },
@@ -7665,7 +7665,7 @@
             "octaves": {
                 "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
-                "label": "octaves",
+                "label": "Octaves",
                 "type": "Integer"
             },
             "peak_kw": {
@@ -7812,7 +7812,7 @@
             "octaves": {
                 "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
-                "label": "octaves",
+                "label": "Octaves",
                 "type": "Integer"
             },
             "post_gain": {
@@ -7941,19 +7941,19 @@
             "lacunarity": {
                 "description": "The frequency scaling factor for successive noise octaves. Higher values increase the frequency of each successive octave.",
                 "key": "lacunarity",
-                "label": "lacunarity",
+                "label": "Lacunarity",
                 "type": "Float"
             },
             "octaves": {
                 "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
-                "label": "octaves",
+                "label": "Octaves",
                 "type": "Integer"
             },
             "persistence": {
                 "description": "The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.",
                 "key": "persistence",
-                "label": "persistence",
+                "label": "Persistence",
                 "type": "Float"
             },
             "remap": {
@@ -7971,7 +7971,7 @@
             "weight": {
                 "description": "Controls how much higher FBM octaves contribute to the noise based on local elevation. A higher weight suppresses high-frequency octaves at low elevations and increases their influence at higher elevations, producing terrain where fine details appear mainly near peaks while lower areas remain smoother.",
                 "key": "weight",
-                "label": "weight",
+                "label": "Weight",
                 "type": "Float"
             }
         },
@@ -8064,7 +8064,7 @@
             "octaves": {
                 "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
-                "label": "octaves",
+                "label": "Octaves",
                 "type": "Integer"
             },
             "peak_kw": {
@@ -8211,7 +8211,7 @@
             "octaves": {
                 "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
-                "label": "octaves",
+                "label": "Octaves",
                 "type": "Integer"
             },
             "peak_kw": {
@@ -8316,7 +8316,7 @@
             "noise_type": {
                 "description": "Base primitive noise. Available values: OpenSimplex2, OpenSimplex2S, Perlin, Perlin (billow), Perlin (half), Value, Value (cubic), Value (delaunay), Value (linear), Worley, Worley (doube), Worley (value).",
                 "key": "noise_type",
-                "label": "noise_type",
+                "label": "Type",
                 "type": "Enumeration"
             },
             "post_gain": {
@@ -8403,25 +8403,25 @@
             "lacunarity": {
                 "description": "The frequency scaling factor for successive noise octaves. Higher values increase the frequency of each successive octave.",
                 "key": "lacunarity",
-                "label": "lacunarity",
+                "label": "Lacunarity",
                 "type": "Float"
             },
             "noise_type": {
                 "description": "Base primitive noise. Available values: OpenSimplex2, OpenSimplex2S, Perlin, Perlin (billow), Perlin (half), Value, Value (cubic), Worley, Worley (doube), Worley (value).",
                 "key": "noise_type",
-                "label": "noise_type",
+                "label": "Type",
                 "type": "Enumeration"
             },
             "octaves": {
                 "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
-                "label": "octaves",
+                "label": "Octaves",
                 "type": "Integer"
             },
             "persistence": {
                 "description": "The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.",
                 "key": "persistence",
-                "label": "persistence",
+                "label": "Persistence",
                 "type": "Float"
             },
             "post_gain": {
@@ -8463,7 +8463,7 @@
             "weight": {
                 "description": "Controls how much higher FBM octaves contribute to the noise based on local elevation. A higher weight suppresses high-frequency octaves at low elevations and increases their influence at higher elevations, producing terrain where fine details appear mainly near peaks while lower areas remain smoother.",
                 "key": "weight",
-                "label": "weight",
+                "label": "Weight",
                 "type": "Float"
             }
         },
@@ -8526,25 +8526,25 @@
             "lacunarity": {
                 "description": "The frequency scaling factor for successive noise octaves. Higher values increase the frequency of each successive octave.",
                 "key": "lacunarity",
-                "label": "lacunarity",
+                "label": "Lacunarity",
                 "type": "Float"
             },
             "noise_type": {
                 "description": "Base primitive noise. Available values: OpenSimplex2, OpenSimplex2S, Perlin, Perlin (billow), Perlin (half), Value, Value (cubic), Worley, Worley (doube), Worley (value).",
                 "key": "noise_type",
-                "label": "noise_type",
+                "label": "Type",
                 "type": "Enumeration"
             },
             "octaves": {
                 "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
-                "label": "octaves",
+                "label": "Octaves",
                 "type": "Integer"
             },
             "persistence": {
                 "description": "The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.",
                 "key": "persistence",
-                "label": "persistence",
+                "label": "Persistence",
                 "type": "Float"
             },
             "remap": {
@@ -8562,7 +8562,7 @@
             "weight": {
                 "description": "Controls how much higher FBM octaves contribute to the noise based on local elevation. A higher weight suppresses high-frequency octaves at low elevations and increases their influence at higher elevations, producing terrain where fine details appear mainly near peaks while lower areas remain smoother.",
                 "key": "weight",
-                "label": "weight",
+                "label": "Weight",
                 "type": "Float"
             }
         },
@@ -8625,25 +8625,25 @@
             "lacunarity": {
                 "description": "The frequency scaling factor for successive noise octaves. Higher values increase the frequency of each successive octave.",
                 "key": "lacunarity",
-                "label": "lacunarity",
+                "label": "Lacunarity",
                 "type": "Float"
             },
             "noise_type": {
                 "description": "Base primitive noise. Available values: OpenSimplex2, OpenSimplex2S, Perlin, Perlin (billow), Perlin (half), Value, Value (cubic), Worley, Worley (doube), Worley (value).",
                 "key": "noise_type",
-                "label": "noise_type",
+                "label": "Type",
                 "type": "Enumeration"
             },
             "octaves": {
                 "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
-                "label": "octaves",
+                "label": "Octaves",
                 "type": "Integer"
             },
             "persistence": {
                 "description": "The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.",
                 "key": "persistence",
-                "label": "persistence",
+                "label": "Persistence",
                 "type": "Float"
             },
             "remap": {
@@ -8661,7 +8661,7 @@
             "weight": {
                 "description": "Controls how much higher FBM octaves contribute to the noise based on local elevation. A higher weight suppresses high-frequency octaves at low elevations and increases their influence at higher elevations, producing terrain where fine details appear mainly near peaks while lower areas remain smoother.",
                 "key": "weight",
-                "label": "weight",
+                "label": "Weight",
                 "type": "Float"
             }
         },
@@ -8718,7 +8718,7 @@
             "lacunarity": {
                 "description": "The frequency scaling factor for successive noise octaves. Higher values increase the frequency of each successive octave.",
                 "key": "lacunarity",
-                "label": "lacunarity",
+                "label": "Lacunarity",
                 "type": "Float"
             },
             "mu": {
@@ -8730,13 +8730,13 @@
             "octaves": {
                 "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
-                "label": "octaves",
+                "label": "Octaves",
                 "type": "Integer"
             },
             "persistence": {
                 "description": "The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.",
                 "key": "persistence",
-                "label": "persistence",
+                "label": "Persistence",
                 "type": "Float"
             },
             "remap": {
@@ -8754,7 +8754,7 @@
             "weight": {
                 "description": "Controls how much higher FBM octaves contribute to the noise based on local elevation. A higher weight suppresses high-frequency octaves at low elevations and increases their influence at higher elevations, producing terrain where fine details appear mainly near peaks while lower areas remain smoother.",
                 "key": "weight",
-                "label": "weight",
+                "label": "Weight",
                 "type": "Float"
             }
         },
@@ -8811,25 +8811,25 @@
             "lacunarity": {
                 "description": "The frequency scaling factor for successive noise octaves. Higher values increase the frequency of each successive octave.",
                 "key": "lacunarity",
-                "label": "lacunarity",
+                "label": "Lacunarity",
                 "type": "Float"
             },
             "noise_type": {
                 "description": "Base primitive noise. Available values: OpenSimplex2, OpenSimplex2S, Perlin, Perlin (billow), Perlin (half), Value, Value (cubic), Worley, Worley (doube), Worley (value).",
                 "key": "noise_type",
-                "label": "noise_type",
+                "label": "Type",
                 "type": "Enumeration"
             },
             "octaves": {
                 "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
-                "label": "octaves",
+                "label": "Octaves",
                 "type": "Integer"
             },
             "persistence": {
                 "description": "The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.",
                 "key": "persistence",
-                "label": "persistence",
+                "label": "Persistence",
                 "type": "Float"
             },
             "remap": {
@@ -8847,7 +8847,7 @@
             "weight": {
                 "description": "Controls how much higher FBM octaves contribute to the noise based on local elevation. A higher weight suppresses high-frequency octaves at low elevations and increases their influence at higher elevations, producing terrain where fine details appear mainly near peaks while lower areas remain smoother.",
                 "key": "weight",
-                "label": "weight",
+                "label": "Weight",
                 "type": "Float"
             }
         },
@@ -8910,25 +8910,25 @@
             "lacunarity": {
                 "description": "The frequency scaling factor for successive noise octaves. Higher values increase the frequency of each successive octave.",
                 "key": "lacunarity",
-                "label": "lacunarity",
+                "label": "Lacunarity",
                 "type": "Float"
             },
             "noise_type": {
                 "description": "Base primitive noise. Available values: OpenSimplex2, OpenSimplex2S, Perlin, Perlin (billow), Perlin (half), Value, Value (cubic), Worley, Worley (doube), Worley (value).",
                 "key": "noise_type",
-                "label": "noise_type",
+                "label": "Type",
                 "type": "Enumeration"
             },
             "octaves": {
                 "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
-                "label": "octaves",
+                "label": "Octaves",
                 "type": "Integer"
             },
             "persistence": {
                 "description": "The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.",
                 "key": "persistence",
-                "label": "persistence",
+                "label": "Persistence",
                 "type": "Float"
             },
             "remap": {
@@ -8946,7 +8946,7 @@
             "weight": {
                 "description": "Controls how much higher FBM octaves contribute to the noise based on local elevation. A higher weight suppresses high-frequency octaves at low elevations and increases their influence at higher elevations, producing terrain where fine details appear mainly near peaks while lower areas remain smoother.",
                 "key": "weight",
-                "label": "weight",
+                "label": "Weight",
                 "type": "Float"
             }
         },
@@ -9003,25 +9003,25 @@
             "lacunarity": {
                 "description": "The frequency scaling factor for successive noise octaves. Higher values increase the frequency of each successive octave.",
                 "key": "lacunarity",
-                "label": "lacunarity",
+                "label": "Lacunarity",
                 "type": "Float"
             },
             "noise_type": {
                 "description": "Base primitive noise. Available values: OpenSimplex2, OpenSimplex2S, Perlin, Perlin (billow), Perlin (half), Value, Value (cubic), Worley, Worley (doube), Worley (value).",
                 "key": "noise_type",
-                "label": "noise_type",
+                "label": "Type",
                 "type": "Enumeration"
             },
             "octaves": {
                 "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
-                "label": "octaves",
+                "label": "Octaves",
                 "type": "Integer"
             },
             "persistence": {
                 "description": "The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.",
                 "key": "persistence",
-                "label": "persistence",
+                "label": "Persistence",
                 "type": "Float"
             },
             "remap": {
@@ -9045,7 +9045,7 @@
             "weight": {
                 "description": "Controls how much higher FBM octaves contribute to the noise based on local elevation. A higher weight suppresses high-frequency octaves at low elevations and increases their influence at higher elevations, producing terrain where fine details appear mainly near peaks while lower areas remain smoother.",
                 "key": "weight",
-                "label": "weight",
+                "label": "Weight",
                 "type": "Float"
             }
         },
@@ -9597,7 +9597,7 @@
             "persistence": {
                 "description": "The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.",
                 "key": "persistence",
-                "label": "persistence",
+                "label": "Persistence",
                 "type": "Float"
             },
             "seed": {
@@ -10169,7 +10169,7 @@
             "lacunarity": {
                 "description": "The frequency scaling factor for successive noise octaves. Higher values increase the frequency of each successive octave.",
                 "key": "lacunarity",
-                "label": "lacunarity",
+                "label": "Lacunarity",
                 "type": "Float"
             },
             "n_vertices_max": {
@@ -10187,13 +10187,13 @@
             "octaves": {
                 "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
-                "label": "octaves",
+                "label": "Octaves",
                 "type": "Integer"
             },
             "persistence": {
                 "description": "The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.",
                 "key": "persistence",
-                "label": "persistence",
+                "label": "Persistence",
                 "type": "Float"
             },
             "post_gain": {
@@ -11078,6 +11078,18 @@
                 "key": "post_inverse",
                 "label": "Invert Output",
                 "type": "Bool"
+            },
+            "post_mix": {
+                "description": "Mixing factor for blending input and output values. A value of 0 uses only the input, 1 uses only the output, and intermediate values perform a linear interpolation.",
+                "key": "post_mix",
+                "label": "Mix Factor",
+                "type": "Float"
+            },
+            "post_mix_method": {
+                "description": "Method used to combine input and output values. Options include linear interpolation (default), min, max, smooth min, smooth max, add, and subtract.",
+                "key": "post_mix_method",
+                "label": "Mix Method",
+                "type": "Enumeration"
             },
             "post_remap": {
                 "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
@@ -12837,6 +12849,105 @@
             }
         }
     },
+    "SelectSoilRocks": {
+        "category": "Mask/ForTexturing",
+        "description": "Computes a multi-scale soil/rock mask using curvature analysis across progressively larger smoothing radii.",
+        "label": "SelectSoilRocks",
+        "parameters": {
+            "curvature_clamp_mode": {
+                "description": "Defines how curvature values are clamped before accumulation across scales.",
+                "key": "curvature_clamp_mode",
+                "label": "Clamp Mode",
+                "type": "Enumeration"
+            },
+            "curvature_clamping": {
+                "description": "Threshold used to clamp curvature values at each scale.",
+                "key": "curvature_clamping",
+                "label": "Clamp Limit",
+                "type": "Float"
+            },
+            "k_saturation": {
+                "description": "Controls the smoothness of the saturation response applied after curvature aggregation.",
+                "key": "k_saturation",
+                "label": "Saturation Smoothing",
+                "type": "Float"
+            },
+            "post_gain": {
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
+                "key": "post_gain",
+                "label": "Gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
+                "key": "post_inverse",
+                "label": "Invert Output",
+                "type": "Bool"
+            },
+            "post_remap": {
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
+                "key": "post_remap",
+                "label": "Remap Range",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "Modifies the amplitude of elevations by first clamping them to a given interval and then scaling them so that the restricted interval matches the original input range. This enhances contrast in elevation variations while maintaining overall structure.",
+                "key": "post_saturate",
+                "label": "Saturation Range",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
+                "key": "post_smoothing_radius",
+                "label": "Smoothing Radius",
+                "type": "Float"
+            },
+            "rmax": {
+                "description": "Maximum smoothing radius used when evaluating curvature across logarithmic scales.",
+                "key": "rmax",
+                "label": "Max Radius",
+                "type": "Float"
+            },
+            "rmin": {
+                "description": "Minimum smoothing radius.",
+                "key": "rmin",
+                "label": "Min Radius",
+                "type": "Float"
+            },
+            "saturation_limit": {
+                "description": "Limits the maximum saturation effect applied during the output shaping stage.",
+                "key": "saturation_limit",
+                "label": "Saturation Limit",
+                "type": "Float"
+            },
+            "smaller_scales_weight": {
+                "description": "Weight applied when descending to smaller smoothing radii, allowing fine-scale features to contribute more or less strongly.",
+                "key": "smaller_scales_weight",
+                "label": "Smaller-Scale Influence",
+                "type": "Float"
+            },
+            "steps": {
+                "description": "Number of logarithmic scales evaluated between rmin and rmax.",
+                "key": "steps",
+                "label": "Sampling Steps",
+                "type": "Integer"
+            }
+        },
+        "ports": {
+            "input": {
+                "caption": "input",
+                "data_type": "Heightmap",
+                "description": "Input heightmap or scalar field used to compute curvature across scales.",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "Heightmap",
+                "description": "Computed multi-scale soil/rock selection mask.",
+                "type": "output"
+            }
+        }
+    },
     "SelectSoilWeathered": {
         "category": "Mask/ForTexturing",
         "description": "Generates a soil-weathering selection mask by combining curvature and gradient analysis from the input heightmap. This node can be for instance chained with ColorizeGradient for texturing.",
@@ -13316,7 +13427,7 @@
             "octaves": {
                 "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
-                "label": "octaves",
+                "label": "Octaves",
                 "type": "Integer"
             },
             "peak_kw": {
@@ -14309,7 +14420,7 @@
             "lacunarity": {
                 "description": "The frequency scaling factor for successive noise octaves. Higher values increase the frequency of each successive octave.",
                 "key": "lacunarity",
-                "label": "lacunarity",
+                "label": "Lacunarity",
                 "type": "Float"
             },
             "linear_gamma": {
@@ -14369,7 +14480,7 @@
             "octaves": {
                 "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
-                "label": "octaves",
+                "label": "Octaves",
                 "type": "Integer"
             },
             "post_gain": {
@@ -16189,19 +16300,19 @@
             "lacunarity": {
                 "description": "The frequency scaling factor for successive noise octaves. Higher values increase the frequency of each successive octave.",
                 "key": "lacunarity",
-                "label": "lacunarity",
+                "label": "Lacunarity",
                 "type": "Float"
             },
             "octaves": {
                 "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
-                "label": "octaves",
+                "label": "Octaves",
                 "type": "Integer"
             },
             "persistence": {
                 "description": "The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.",
                 "key": "persistence",
-                "label": "persistence",
+                "label": "Persistence",
                 "type": "Float"
             },
             "post_gain": {
@@ -16255,7 +16366,7 @@
             "weight": {
                 "description": "Controls how much higher FBM octaves contribute to the noise based on local elevation. A higher weight suppresses high-frequency octaves at low elevations and increases their influence at higher elevations, producing terrain where fine details appear mainly near peaks while lower areas remain smoother.",
                 "key": "weight",
-                "label": "weight",
+                "label": "Weight",
                 "type": "Float"
             }
         },
@@ -16354,7 +16465,7 @@
             "return_type": {
                 "description": "Determines the output type.",
                 "key": "return_type",
-                "label": "return_type",
+                "label": "",
                 "type": "Enumeration"
             },
             "seed": {
@@ -16441,19 +16552,19 @@
             "lacunarity": {
                 "description": "The frequency scaling factor for successive noise octaves. Higher values increase the frequency of each successive octave.",
                 "key": "lacunarity",
-                "label": "lacunarity",
+                "label": "Lacunarity",
                 "type": "Float"
             },
             "octaves": {
                 "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
-                "label": "octaves",
+                "label": "Octaves",
                 "type": "Integer"
             },
             "persistence": {
                 "description": "The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.",
                 "key": "persistence",
-                "label": "persistence",
+                "label": "Persistence",
                 "type": "Float"
             },
             "post_gain": {
@@ -16489,7 +16600,7 @@
             "return_type": {
                 "description": "Defines the type of Voronoi information returned.",
                 "key": "return_type",
-                "label": "return_type",
+                "label": "",
                 "type": "Enumeration"
             },
             "seed": {
@@ -16507,7 +16618,7 @@
             "weight": {
                 "description": "Controls how much higher FBM octaves contribute to the noise based on local elevation. A higher weight suppresses high-frequency octaves at low elevations and increases their influence at higher elevations, producing terrain where fine details appear mainly near peaks while lower areas remain smoother.",
                 "key": "weight",
-                "label": "weight",
+                "label": "Weight",
                 "type": "Float"
             }
         },
@@ -17347,19 +17458,19 @@
             "lacunarity": {
                 "description": "The frequency scaling factor for successive noise octaves. Higher values increase the frequency of each successive octave.",
                 "key": "lacunarity",
-                "label": "lacunarity",
+                "label": "Lacunarity",
                 "type": "Float"
             },
             "octaves": {
                 "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
-                "label": "octaves",
+                "label": "Octaves",
                 "type": "Integer"
             },
             "persistence": {
                 "description": "The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.",
                 "key": "persistence",
-                "label": "persistence",
+                "label": "Persistence",
                 "type": "Float"
             },
             "post_gain": {
@@ -17407,7 +17518,7 @@
             "weight": {
                 "description": "Controls how much higher FBM octaves contribute to the noise based on local elevation. A higher weight suppresses high-frequency octaves at low elevations and increases their influence at higher elevations, producing terrain where fine details appear mainly near peaks while lower areas remain smoother.",
                 "key": "weight",
-                "label": "weight",
+                "label": "Weight",
                 "type": "Float"
             }
         },
@@ -17593,7 +17704,7 @@
             "octaves": {
                 "description": "The number of octaves for fractal noise generation. More octaves add finer details to the terrain.",
                 "key": "octaves",
-                "label": "octaves",
+                "label": "Octaves",
                 "type": "Integer"
             },
             "radius": {
@@ -17611,7 +17722,7 @@
             "weight": {
                 "description": "Controls how much higher FBM octaves contribute to the noise based on local elevation. A higher weight suppresses high-frequency octaves at low elevations and increases their influence at higher elevations, producing terrain where fine details appear mainly near peaks while lower areas remain smoother.",
                 "key": "weight",
-                "label": "weight",
+                "label": "Weight",
                 "type": "Float"
             },
             "wrinkle_amplitude": {

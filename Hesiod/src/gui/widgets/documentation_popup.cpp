@@ -9,7 +9,9 @@
 #include <QUrl>
 #include <QWidget>
 
+#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/gui/widgets/documentation_popup.hpp"
+#include "hesiod/gui/widgets/gui_utils.hpp"
 
 namespace hesiod
 {
@@ -26,6 +28,16 @@ DocumentationPopup::DocumentationPopup(const std::string &title,
 
   // Create a QTextBrowser
   QTextBrowser *text_browser = new QTextBrowser(this);
+
+  std::string color = HSD_CTX.app_settings.colors.accent.name().toStdString();
+  std::string style = std::format(
+      "a {{ color: {}; font-weight: bold; text-decoration: none; }}"
+      "a:visited {{ color: {}; }}",
+      color,
+      color);
+
+  text_browser->document()->setDefaultStyleSheet(style.c_str());
+
   text_browser->setHtml(html_source.c_str());
   text_browser->setOpenExternalLinks(true); // handled manually
 
