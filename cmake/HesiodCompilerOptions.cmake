@@ -57,6 +57,6 @@ endif()
 # MSVC options
 if(MSVC)
   message(STATUS "MSVC compiler")
-  target_compile_options(hesiod_options INTERFACE /W4 /D
-                                                  M_PI=3.14159265358979323846)
+  target_compile_options(hesiod_options INTERFACE /W4)
+  add_compile_definitions(M_PI=3.14159265358979323846)
 endif()

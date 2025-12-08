@@ -26,7 +26,7 @@ struct NodeRuntimeInfo
   virtual void           json_from(nlohmann::json const &json);
   virtual nlohmann::json json_to() const;
 
-  std::chrono::high_resolution_clock::time_point timer_t0;
+  std::chrono::steady_clock::time_point timer_t0;
 };
 
 } // namespace hesiod

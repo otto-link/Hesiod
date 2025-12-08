@@ -546,7 +546,7 @@ void BaseNode::update_runtime_info(NodeRuntimeStep step)
 
   case NodeRuntimeStep::NRS_UPDATE_START:
   {
-    this->runtime_info.timer_t0 = std::chrono::system_clock::now();
+    this->runtime_info.timer_t0 = std::chrono::steady_clock::now();
   }
   break;
 

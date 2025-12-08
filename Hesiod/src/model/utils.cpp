@@ -217,7 +217,7 @@ std::vector<std::string> split_string(const std::string &string, char delimiter)
   return result;
 }
 
-std::string timestamp(std::chrono::high_resolution_clock::time_point tp)
+std::string timestamp(std::chrono::system_clock::time_point tp)
 {
   std::time_t t = std::chrono::system_clock::to_time_t(tp);
 
