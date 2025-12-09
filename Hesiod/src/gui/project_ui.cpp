@@ -2,6 +2,7 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include <QCoreApplication>
+#include <QTimer>
 
 #include "hesiod/app/app_settings.hpp"
 #include "hesiod/app/hesiod_application.hpp"
@@ -103,7 +104,9 @@ void ProjectUI::initialize(ProjectModel *project)
 
   {
     bool state = HSD_CTX.app_settings.node_editor.show_viewer;
-    this->get_graph_tabs_widget_ref()->set_show_viewer(state);
+    QTimer::singleShot(0,
+                       [this, state]()
+                       { this->get_graph_tabs_widget_ref()->set_show_viewer(state); });
   }
 
   if (HSD_CTX.app_settings.interface.enable_texture_downloader)
