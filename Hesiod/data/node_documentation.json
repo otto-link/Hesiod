@@ -5982,103 +5982,97 @@
     },
     "HydraulicStreamLog": {
         "category": "Erosion/Hydraulic",
-        "description": "HydraulicStream is an hydraulic erosion operator using the flow stream approach and an infinite flow direction algorithm for simulating the erosion processes. Simulate water flow across the terrain using the infinite flow direction algorithm. As water flows over the terrain, flow accumulation representing the volume of water that passes through each point on the map, is computed to evaluate the erosive power of the water flow. Deposition is mimicked using convolution filters.",
+        "description": "HydraulicStream is a hydraulic erosion operator using a flow-stream formulation and an infinite flow-direction algorithm (D∞). Erosion intensity is driven by flow accumulation, terrain gradient, moisture, and optional bedrock limits. Deposition is simulated using convolution kernels whose radius and scale control smoothing and sediment redistribution.",
         "label": "HydraulicStreamLog",
         "parameters": {
-            "GPU": {
-                "description": "Toogle GPU acceleration on or off.",
-                "key": "GPU",
-                "label": "GPU",
-                "type": "Bool"
-            },
             "c_erosion": {
-                "description": "Erosion intensity.",
+                "description": "Erosion coefficient controlling the overall strength of erosion during flow simulation.",
                 "key": "c_erosion",
-                "label": "c_erosion",
+                "label": "Erosion Strength",
                 "type": "Float"
             },
             "deposition_radius": {
-                "description": "TODO",
+                "description": "Deposition kernel radius. Values > 0 apply smoothing to sediment deposition, simulating lateral diffusion.",
                 "key": "deposition_radius",
-                "label": "deposition_radius",
+                "label": "Deposition Radius",
                 "type": "Float"
             },
             "deposition_scale_ratio": {
-                "description": "TODO",
+                "description": "Scaling factor controlling how much sediment is deposited after erosion.",
                 "key": "deposition_scale_ratio",
-                "label": "deposition_scale_ratio",
+                "label": "Sediment Amount Scale",
                 "type": "Float"
             },
             "gradient_power": {
-                "description": "TODO",
+                "description": "Exponent applied to the terrain gradient to modulate erosion intensity. Higher values increase sensitivity to steep slopes.",
                 "key": "gradient_power",
-                "label": "gradient_power",
+                "label": "Influence Power",
                 "type": "Float"
             },
             "gradient_prefilter_radius": {
-                "description": "TODO",
+                "description": "Radius of the smoothing filter applied to the gradient field prior to erosion. Helps stabilize erosion on noisy terrain.",
                 "key": "gradient_prefilter_radius",
-                "label": "gradient_prefilter_radius",
+                "label": "Prefilter Radius",
                 "type": "Float"
             },
             "gradient_scaling_ratio": {
-                "description": "TODO",
+                "description": "Scaling factor applied to gradient-based erosion intensity, adjusting how strongly slope contributes to erosion.",
                 "key": "gradient_scaling_ratio",
-                "label": "gradient_scaling_ratio",
+                "label": "Influence Scale",
                 "type": "Float"
             },
             "post_gain": {
-                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
+                "description": "Power-law transformation applied after erosion/deposition. Adjusts contrast by compressing or expanding parts of the signal.",
                 "key": "post_gain",
                 "label": "Gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
+                "description": "Invert the output values after processing. Low values become high and vice-versa.",
                 "key": "post_inverse",
                 "label": "Invert Output",
                 "type": "Bool"
             },
             "post_mix": {
-                "description": "Mixing factor for blending input and output values. A value of 0 uses only the input, 1 uses only the output, and intermediate values perform a linear interpolation.",
+                "description": "Blend factor between the input terrain and the processed terrain. 0 = input only, 1 = processed only.",
                 "key": "post_mix",
                 "label": "Mix Factor",
                 "type": "Float"
             },
             "post_mix_method": {
-                "description": "Method used to combine input and output values. Options include linear interpolation (default), min, max, smooth min, smooth max, add, and subtract.",
+                "description": "Method used to combine input and output: linear interpolation, min, max, smooth min, smooth max, add, subtract.",
                 "key": "post_mix_method",
                 "label": "Mix Method",
                 "type": "Enumeration"
             },
             "post_remap": {
-                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
+                "description": "Linear remapping of the final output into a target range (default [0, 1]).",
                 "key": "post_remap",
                 "label": "Remap Range",
                 "type": "Value range"
             },
             "post_saturate": {
-                "description": "Modifies the amplitude of elevations by first clamping them to a given interval and then scaling them so that the restricted interval matches the original input range. This enhances contrast in elevation variations while maintaining overall structure.",
+                "description": "Clamp elevation values to an interval and rescale them back to the full range to enhance contrast.",
                 "key": "post_saturate",
                 "label": "Saturation Range",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
+                "description": "Radius of the final smoothing pass applied after all erosion operations. 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "Smoothing Radius",
                 "type": "Float"
             },
             "saturation_ratio": {
-                "description": "Flow accumulation clipping ratio.",
+                "description": "Flow accumulation saturation threshold. Controls clipping of water flux to avoid runaway erosion.",
                 "key": "saturation_ratio",
-                "label": "saturation_ratio",
+                "label": "Water Saturation Threshold",
                 "type": "Float"
             },
             "talus_ref": {
-                "description": "Reference talus, with small values of talus_ref  leading to thinner flow streams.",
+                "description": "Reference talus angle. Lower values produce thinner flow streams by increasing directional concentration.",
                 "key": "talus_ref",
-                "label": "talus_ref",
+                "label": "Slope Threshold",
                 "type": "Float"
             }
         },
@@ -6086,37 +6080,37 @@
             "deposition": {
                 "caption": "deposition",
                 "data_type": "Heightmap",
-                "description": "Deposition map (in [0, 1]).",
+                "description": "Sediment deposition map, normalized in [0, 1].",
                 "type": "output"
             },
             "erosion": {
                 "caption": "erosion",
                 "data_type": "Heightmap",
-                "description": "Erosion map (in [0, 1]).",
+                "description": "Erosion intensity map, normalized in [0, 1].",
                 "type": "output"
             },
             "flow_map": {
                 "caption": "flow_map",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Flow accumulation map computed using the infinite flow direction algorithm.",
                 "type": "output"
             },
             "input": {
                 "caption": "input",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Input elevation map to erode.",
                 "type": "input"
             },
             "mask": {
                 "caption": "mask",
                 "data_type": "Heightmap",
-                "description": "Mask defining the filtering intensity (expected in [0, 1]).",
+                "description": "Mask controlling the local intensity of erosion (expected in [0, 1]).",
                 "type": "input"
             },
             "output": {
                 "caption": "output",
                 "data_type": "Heightmap",
-                "description": "TODO",
+                "description": "Final terrain after erosion, deposition, and post-processing.",
                 "type": "output"
             }
         }

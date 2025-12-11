@@ -28,44 +28,52 @@ void setup_hydraulic_stream_log_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "flow_map", CONFIG(node));
 
   // attribute(s)
-  node.add_attr<FloatAttribute>("c_erosion", "c_erosion", 0.1f, 0.01f, 1.f);
-  node.add_attr<FloatAttribute>("talus_ref", "talus_ref", 0.1f, 0.01f, 10.f);
+  node.add_attr<FloatAttribute>("c_erosion", "Erosion Strength", 0.1f, 0.01f, 1.f);
+  node.add_attr<FloatAttribute>("talus_ref", "Slope Threshold", 0.1f, 0.01f, 10.f);
+  node.add_attr<FloatAttribute>("saturation_ratio",
+                                "Water Saturation Threshold",
+                                1.f,
+                                0.01f,
+                                1.f);
   node.add_attr<FloatAttribute>("deposition_radius",
-                                "deposition_radius",
+                                "Deposition Radius",
                                 0.1f,
                                 0.f,
                                 0.2f);
   node.add_attr<FloatAttribute>("deposition_scale_ratio",
-                                "deposition_scale_ratio",
+                                "Sediment Amount Scale",
                                 1.f,
                                 0.f,
                                 1.f);
-  node.add_attr<FloatAttribute>("gradient_power", "gradient_power", 0.8f, 0.1f, 2.f);
+  node.add_attr<FloatAttribute>("gradient_power", "Influence Power", 0.8f, 0.1f, 2.f);
   node.add_attr<FloatAttribute>("gradient_scaling_ratio",
-                                "gradient_scaling_ratio",
+                                "Influence Scale",
                                 1.f,
                                 0.f,
                                 1.f);
   node.add_attr<FloatAttribute>("gradient_prefilter_radius",
-                                "gradient_prefilter_radius",
+                                "Prefilter Radius",
                                 0.1f,
                                 0.f,
                                 0.2f);
-  node.add_attr<FloatAttribute>("saturation_ratio", "saturation_ratio", 1.f, 0.01f, 1.f);
-  node.add_attr<BoolAttribute>("GPU", "GPU", HSD_DEFAULT_GPU_MODE);
 
   // attribute(s) order
-  node.set_attr_ordered_key({"c_erosion",
-                             "deposition_radius",
-                             "deposition_scale_ratio",
+  node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Core Erosion Controls",
+                             "c_erosion",
+                             "talus_ref",
+                             "saturation_ratio",
+                             "_GROUPBOX_END_",
+                             //
+                             "_GROUPBOX_BEGIN_Slope-Based Controls",
                              "gradient_power",
                              "gradient_scaling_ratio",
                              "gradient_prefilter_radius",
-                             "_TEXT_Some text",
-                             "saturation_ratio",
-                             "talus_ref",
-                             // "_SEPARATOR_",
-                             "GPU"});
+                             "_GROUPBOX_END_",
+                             //
+                             "_GROUPBOX_BEGIN_Deposition Controls",
+                             "deposition_radius",
+                             "deposition_scale_ratio",
+                             "_GROUPBOX_END_"});
 
   setup_post_process_heightmap_attributes(node, true);
 }
@@ -95,68 +103,34 @@ void compute_hydraulic_stream_log_node(BaseNode &node)
     deposition_ir = std::max(1, deposition_ir);
     gradient_ir = std::max(1, gradient_ir);
 
-    if (node.get_attr<BoolAttribute>("GPU"))
-    {
-      hmap::transform(
-          {p_out, p_mask, p_erosion_map, p_deposition_map, p_flow_map},
-          [&node, deposition_ir, gradient_ir](std::vector<hmap::Array *> p_arrays)
-          {
-            hmap::Array *pa_out = p_arrays[0];
-            hmap::Array *pa_mask = p_arrays[1];
-            hmap::Array *pa_erosion_map = p_arrays[2];
-            hmap::Array *pa_deposition_map = p_arrays[3];
-            hmap::Array *pa_flow_map = p_arrays[4];
+    hmap::transform(
+        {p_out, p_mask, p_erosion_map, p_deposition_map, p_flow_map},
+        [&node, deposition_ir, gradient_ir](std::vector<hmap::Array *> p_arrays)
+        {
+          hmap::Array *pa_out = p_arrays[0];
+          hmap::Array *pa_mask = p_arrays[1];
+          hmap::Array *pa_erosion_map = p_arrays[2];
+          hmap::Array *pa_deposition_map = p_arrays[3];
+          hmap::Array *pa_flow_map = p_arrays[4];
 
-            hmap::gpu::hydraulic_stream_log(
-                *pa_out,
-                node.get_attr<FloatAttribute>("c_erosion"),
-                node.get_attr<FloatAttribute>("talus_ref"),
-                pa_mask,
-                deposition_ir,
-                node.get_attr<FloatAttribute>("deposition_scale_ratio"),
-                node.get_attr<FloatAttribute>("gradient_power"),
-                node.get_attr<FloatAttribute>("gradient_scaling_ratio"),
-                gradient_ir,
-                node.get_attr<FloatAttribute>("saturation_ratio"),
-                nullptr,
-                nullptr,
-                pa_erosion_map,
-                pa_deposition_map,
-                pa_flow_map);
-          },
-          node.get_config_ref()->hmap_transform_mode_gpu);
-    }
-    else
-    {
-      hmap::transform(
-          {p_out, p_mask, p_erosion_map, p_deposition_map, p_flow_map},
-          [&node, deposition_ir, gradient_ir](std::vector<hmap::Array *> p_arrays)
-          {
-            hmap::Array *pa_out = p_arrays[0];
-            hmap::Array *pa_mask = p_arrays[1];
-            hmap::Array *pa_erosion_map = p_arrays[2];
-            hmap::Array *pa_deposition_map = p_arrays[3];
-            hmap::Array *pa_flow_map = p_arrays[4];
-
-            hmap::hydraulic_stream_log(
-                *pa_out,
-                node.get_attr<FloatAttribute>("c_erosion"),
-                node.get_attr<FloatAttribute>("talus_ref"),
-                pa_mask,
-                deposition_ir,
-                node.get_attr<FloatAttribute>("deposition_scale_ratio"),
-                node.get_attr<FloatAttribute>("gradient_power"),
-                node.get_attr<FloatAttribute>("gradient_scaling_ratio"),
-                gradient_ir,
-                node.get_attr<FloatAttribute>("saturation_ratio"),
-                nullptr,
-                nullptr,
-                pa_erosion_map,
-                pa_deposition_map,
-                pa_flow_map);
-          },
-          node.get_config_ref()->hmap_transform_mode_cpu);
-    }
+          hmap::gpu::hydraulic_stream_log(
+              *pa_out,
+              node.get_attr<FloatAttribute>("c_erosion"),
+              node.get_attr<FloatAttribute>("talus_ref"),
+              pa_mask,
+              deposition_ir,
+              node.get_attr<FloatAttribute>("deposition_scale_ratio"),
+              node.get_attr<FloatAttribute>("gradient_power"),
+              node.get_attr<FloatAttribute>("gradient_scaling_ratio"),
+              gradient_ir,
+              node.get_attr<FloatAttribute>("saturation_ratio"),
+              nullptr,
+              nullptr,
+              pa_erosion_map,
+              pa_deposition_map,
+              pa_flow_map);
+        },
+        node.get_config_ref()->hmap_transform_mode_gpu);
 
     p_out->smooth_overlap_buffers();
 
