@@ -1,6 +1,7 @@
 /* Copyright (c) 2025 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include <QDesktopServices>
 #include <QLayout>
 #include <QStyle>
 #include <QToolButton>
@@ -55,6 +56,7 @@ QWidget *NodeAttributesWidget::create_toolbar()
   auto *save_btn = make_button(HSD_ICON("save"), "Save Preset");
   auto *reset_btn = make_button(HSD_ICON("settings_backup_restore"), "Reset Settings");
   auto *help_btn = make_button(HSD_ICON("help"), "Help!");
+  auto *doc_btn = make_button(HSD_ICON("link"), "Online Documentation");
 
   for (auto *btn : {update_btn,
                     info_btn,
@@ -63,7 +65,8 @@ QWidget *NodeAttributesWidget::create_toolbar()
                     load_btn,
                     save_btn,
                     reset_btn,
-                    help_btn})
+                    help_btn,
+                    doc_btn})
     layout->addWidget(btn);
 
   // layout->addStretch();
@@ -128,6 +131,24 @@ QWidget *NodeAttributesWidget::create_toolbar()
                     popup->show();
                   }
                 });
+
+  this->connect(
+      doc_btn,
+      &QToolButton::pressed,
+      [this]()
+      {
+        auto gno = this->p_graph_node.lock();
+        if (!gno)
+          return;
+
+        if (auto *p_node = gno->get_node_ref_by_id<BaseNode>(this->node_id))
+        {
+          std::string
+              url = "https://hesioddoc.readthedocs.io/en/latest/node_reference/nodes/" +
+                    p_node->get_label();
+          QDesktopServices::openUrl(QUrl(url.c_str()));
+        }
+      });
 
   return toolbar;
 }
