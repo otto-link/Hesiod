@@ -41,6 +41,8 @@ void NodeSettingsWidget::setup_connections()
 
   // GraphNodeWidget -> this (make sure the dialog is closed when
   // the graph is destroyed or if the node is deleted)
+
+  // TODO fix, unsafe
   this->connect(this->p_graph_node_widget,
                 &QObject::destroyed,
                 this,
