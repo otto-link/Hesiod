@@ -8395,6 +8395,153 @@
             }
         }
     },
+    "Multisteps": {
+        "category": "Primitive/Geological",
+        "description": "Generates a multi-step height profile along a rotated axis, optionally modulated by control and noise fields.",
+        "label": "Multisteps",
+        "parameters": {
+            "angle": {
+                "description": "Rotation angle (in degrees) that orients the step axis within the domain.",
+                "key": "angle",
+                "label": "Rotation Angle",
+                "type": "Float"
+            },
+            "center": {
+                "description": "2D center point of the rotated step axis, expressed in normalized domain coordinates.",
+                "key": "center",
+                "label": "Center",
+                "type": "Vec2Float"
+            },
+            "elevation_exponent": {
+                "description": "Exponent controlling the vertical shaping of each step. Values greater than 1 sharpen heights, while values below 1 soften them.",
+                "key": "elevation_exponent",
+                "label": "Elevation Exponent",
+                "type": "Float"
+            },
+            "kw": {
+                "description": "Base spatial frequencies in the X and Y directions. The frequencies are defined with respect to the entire domain: for example, kw = 2 produces two full oscillations across the domain width (and similarly for the Y direction).",
+                "key": "kw",
+                "label": "Spatial Frequency",
+                "type": "Wavenumber"
+            },
+            "noise_amp": {
+                "description": "Amplitude of the noise modulation applied along the step axis. Higher values increase deformation intensity.",
+                "key": "noise_amp",
+                "label": "Amplitude",
+                "type": "Float"
+            },
+            "noise_inflate": {
+                "description": "Controls how noise affects the step profile. ‘Inflate’ pushes elevations outward, while ‘Deflate’ pulls them inward.",
+                "key": "noise_inflate",
+                "label": "",
+                "type": "Bool"
+            },
+            "noise_rugosity": {
+                "description": "Smoothness of the noise field. Lower values produce rougher, high-frequency variations; higher values smooth the noise.",
+                "key": "noise_rugosity",
+                "label": "Smoothness",
+                "type": "Float"
+            },
+            "nsteps": {
+                "description": "Total number of geometric steps composing the profile.",
+                "key": "nsteps",
+                "label": "Number of Steps",
+                "type": "Integer"
+            },
+            "outer_slope": {
+                "description": "Slope of the function outside the normalized [0, 1] axis range, defining how values behave beyond the step region.",
+                "key": "outer_slope",
+                "label": "Outer Slope",
+                "type": "Float"
+            },
+            "post_gain": {
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
+                "key": "post_gain",
+                "label": "Gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
+                "key": "post_inverse",
+                "label": "Invert Output",
+                "type": "Bool"
+            },
+            "post_remap": {
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
+                "key": "post_remap",
+                "label": "Remap Range",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "Modifies the amplitude of elevations by first clamping them to a given interval and then scaling them so that the restricted interval matches the original input range. This enhances contrast in elevation variations while maintaining overall structure.",
+                "key": "post_saturate",
+                "label": "Saturation Range",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
+                "key": "post_smoothing_radius",
+                "label": "Smoothing Radius",
+                "type": "Float"
+            },
+            "r": {
+                "description": "Geometric ratio between successive step widths. Values above 1 create increasingly wide steps.",
+                "key": "r",
+                "label": "Step Width Ratio",
+                "type": "Float"
+            },
+            "scale": {
+                "description": "Overall scale of the step axis, determining the spatial expansion of the stepped pattern.",
+                "key": "scale",
+                "label": "Overall Scale",
+                "type": "Float"
+            },
+            "seed": {
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
+                "key": "seed",
+                "label": "Seed",
+                "type": "Random seed number"
+            },
+            "shape_gain": {
+                "description": "Gain controlling the sharpness of transitions within each step. Higher values produce steeper intra-step transitions.",
+                "key": "shape_gain",
+                "label": "Transition Shape Gain",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "control": {
+                "caption": "control",
+                "data_type": "Heightmap",
+                "description": "Optional control field used to modulate step height or shape along the axis.",
+                "type": "input"
+            },
+            "dx": {
+                "caption": "dx",
+                "data_type": "Heightmap",
+                "description": "Displacement with respect to the domain size (x-direction).",
+                "type": "input"
+            },
+            "dy": {
+                "caption": "dy",
+                "data_type": "Heightmap",
+                "description": "Displacement with respect to the domain size (y-direction).",
+                "type": "input"
+            },
+            "envelope": {
+                "caption": "envelope",
+                "data_type": "Heightmap",
+                "description": "Heightmap used as a post-process amplitude multiplier for the generated noise.",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "Heightmap",
+                "description": "Resulting heightmap containing the generated multi-step profile after optional modulation and post-processing.",
+                "type": "output"
+            }
+        }
+    },
     "Noise": {
         "category": "Primitive/Coherent",
         "description": "Noise node generates coherent and random-looking patterns.",

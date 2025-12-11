@@ -141,6 +141,7 @@ nav:
     - 'node_reference/nodes/MountainRangeRadial.md'
     - 'node_reference/nodes/MountainStump.md'
     - 'node_reference/nodes/MountainTibesti.md'
+    - 'node_reference/nodes/Multisteps.md'
     - 'node_reference/nodes/Noise.md'
     - 'node_reference/nodes/NoiseFbm.md'
     - 'node_reference/nodes/NoiseIq.md'

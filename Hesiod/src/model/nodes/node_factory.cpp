@@ -272,6 +272,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"MountainRangeRadial", "Primitive/Geological"},
       {"MountainStump", "Primitive/Geological"},
       {"MountainTibesti", "Primitive/Geological"},
+      {"Multisteps", "Primitive/Geological"},
       {"Noise", "Primitive/Coherent"},
       {"NoiseFbm", "Primitive/Coherent"},
       {"NoiseIq", "Primitive/Coherent"},
@@ -587,6 +588,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string         &node_type,
     SETUP_NODE(MountainRangeRadial, mountain_range_radial);
     SETUP_NODE(MountainStump, mountain_stump);
     SETUP_NODE(MountainTibesti, mountain_tibesti);
+    SETUP_NODE(Multisteps, multisteps);
     SETUP_NODE(NoiseFbm, noise_fbm);
     SETUP_NODE(NoiseIq, noise_iq);
     SETUP_NODE(NoiseJordan, noise_iq);

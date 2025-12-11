@@ -3,6 +3,7 @@
 #pragma once
 #include <chrono>
 #include <functional>
+#include <stdexcept>
 
 #include "gnode/node.hpp"
 #include "gnodegui/node_proxy.hpp"
@@ -87,6 +88,8 @@ public:
 
   template <typename T> auto get_attr(const std::string &key) const -> decltype(auto)
   {
+    if (!this->attr.contains(key))
+      std::invalid_argument("unknown attribute key: " + key);
     return this->attr.at(key)->get_ref<T>()->get_value();
   }
 

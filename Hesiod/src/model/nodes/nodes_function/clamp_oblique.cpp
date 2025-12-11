@@ -24,7 +24,7 @@ void setup_clamp_oblique_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("vmax", "Clamp Value", 0.5f, -FLT_MAX, FLT_MAX);
-  node.add_attr<FloatAttribute>("angle", "Angle", 0.f, -180.f, 180.f, "{:.2f}°");
+  node.add_attr<FloatAttribute>("angle", "Angle", 0.f, -180.f, 180.f, "{:.1f}°");
   node.add_attr<FloatAttribute>("slope", "Slope", 0.2f, 0.f, 4.f);
   node.add_attr<Vec2FloatAttribute>("center", "Center");
   node.add_attr<BoolAttribute>("use_max_operator", "Clamp Mode", "Max", "Min", true);

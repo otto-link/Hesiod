@@ -36,7 +36,7 @@ Node Categories
 |Primitive|Authoring|Brush, Ridgelines|
 |Primitive|Coherent|Dendry, GaborWaveFbm, Gavoronoise, HemisphereFieldFbm, Noise, NoiseFbm, NoiseIq, NoiseJordan, NoiseParberry, NoisePingpong, NoiseRidged, NoiseSwiss, PolygonField, PolygonFieldFbm, Stamping, Vorolines, VorolinesFbm, Voronoi, VoronoiFbm, Voronoise, Vororand, WaveletNoise|
 |Primitive|Function|Bump, BumpLorentzian, Cone, ConeComplex, ConeSigmoid, Constant, GaussianPulse, Paraboloid, Rift, Slope, Step, WaveDune, WaveSine, WaveSquare, WaveTriangular|
-|Primitive|Geological|Badlands, BasaltField, Caldera, Crater, Island, IslandLandMask, MountainCone, MountainInselberg, MountainRangeRadial, MountainStump, MountainTibesti, ShatteredPeak|
+|Primitive|Geological|Badlands, BasaltField, Caldera, Crater, Island, IslandLandMask, MountainCone, MountainInselberg, MountainRangeRadial, MountainStump, MountainTibesti, Multisteps, ShatteredPeak|
 |Primitive|Kernel|KernelDiskSmooth, KernelGabor, KernelPrim|
 |Primitive|Random|White, WhiteDensityMap, WhiteSparse|
 |Routing||Broadcast, Receive, Thru, Toggle|
