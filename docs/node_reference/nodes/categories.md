@@ -21,7 +21,7 @@ Node Categories
 |Filter|Smoothing|Laplace, Median3x3, ShapeIndex, SharpenCone, SmoothCpulse, SmoothFill, SmoothFillHoles, SmoothFillSmearPeaks|
 |Geometry|Cloud|Cloud, CloudFromCsv, CloudLattice, CloudMerge, CloudRandom, CloudRandomDensity, CloudRandomDistance, CloudRandomPowerLaw, CloudRandomWeibull, CloudRemapValues, CloudSDF, CloudSetValuesFromBorderDistance, CloudSetValuesFromHeightmap, CloudSetValuesFromMinDistance, CloudShuffle, CloudToArrayInterp, CloudToPath, CloudToVectors|
 |Geometry|Path|Path, PathBezier, PathBezierRound, PathBspline, PathDecasteljau, PathDecimate, PathDig, PathFind, PathFractalize, PathFromCsv, PathMeanderize, PathResample, PathSDF, PathShuffle, PathSmooth, PathToCloud, PathToHeightmap|
-|Hydrology||FloodingFromBoundaries, FloodingFromPoint, FloodingLakeSystem, FloodingUniformLevel, MergeWaterDepths, WaterDepthDryOut, WaterDepthFromMask, WaterMask|
+|Hydrology||FlatbedCarve, FloodingFromBoundaries, FloodingFromPoint, FloodingLakeSystem, FloodingUniformLevel, MergeWaterDepths, WaterDepthDryOut, WaterDepthFromMask, WaterMask|
 |IO|Files|ExportAsset, ExportCloud, ExportCloudToPly, ExportHeightmap, ExportNormalMap, ExportPath, ExportPointsToPly, ExportTexture, ImportHeightmap, ImportTexture|
 |Mask|ForTexturing|SelectSoilFlow, SelectSoilRocks, SelectSoilWeathered|
 |Mask|Selector|SelectAngle, SelectBlobLog, SelectCavities, SelectGt, SelectInterval, SelectInwardOutward, SelectMidrange, SelectMultiband3, SelectPulse, SelectRivers, SelectSlope, SelectTransitions, SelectValley|

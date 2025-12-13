@@ -4098,6 +4098,93 @@
             }
         }
     },
+    "FlatbedCarve": {
+        "category": "Hydrology",
+        "description": "Carves and blends a flatbed shape along a path into an existing heightmap using a smooth radial falloff. The operator is typically used to create river beds, channels, or flattened corridors that follow a user-defined path.",
+        "label": "FlatbedCarve",
+        "parameters": {
+            "bottom_extent": {
+                "description": "Radius of the flatbed region measured from the path centerline, defining the half-width of the carved bed.",
+                "key": "bottom_extent",
+                "label": "Bed Half-Width",
+                "type": "Float"
+            },
+            "depth": {
+                "description": "Vertical depth of the bed carved below the surrounding terrain.",
+                "key": "depth",
+                "label": "Bed Depth",
+                "type": "Float"
+            },
+            "falloff_distance_ratio": {
+                "description": "Relative width of the smooth transition region outside the bed, expressed as a ratio of the bed half-width.",
+                "key": "falloff_distance_ratio",
+                "label": "Falloff Width Ratio",
+                "type": "Float"
+            },
+            "outer_slope": {
+                "description": "Linear slope applied beyond the falloff region to smoothly reconnect the bed to the surrounding terrain.",
+                "key": "outer_slope",
+                "label": "Outer Linear Slope",
+                "type": "Float"
+            },
+            "preserve_bedshape": {
+                "description": "Preserves the original bed profile when radial noise is applied, preventing distortion of the flatbed shape.",
+                "key": "preserve_bedshape",
+                "label": "Preserve Bed Shape",
+                "type": "Bool"
+            },
+            "radial_profile": {
+                "description": "Radial profile function used to define the cross-sectional shape of the bed (e.g. smoothstep, linear).",
+                "key": "radial_profile",
+                "label": "Profile Type",
+                "type": "Enumeration"
+            },
+            "radial_profile_parameter": {
+                "description": "Shape parameter controlling the curvature or sharpness of the selected radial profile.",
+                "key": "radial_profile_parameter",
+                "label": "Profile Sharpness",
+                "type": "Float"
+            },
+            "vmin": {
+                "description": "Minimum height value assigned to the bed bottom, defining the base elevation of the carved region.",
+                "key": "vmin",
+                "label": "Bed Base Height",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "dr": {
+                "caption": "dr",
+                "data_type": "Heightmap",
+                "description": "Optional radial noise map used to perturb the bed shape.",
+                "type": "input"
+            },
+            "input": {
+                "caption": "input",
+                "data_type": "Heightmap",
+                "description": "Input heightmap to be modified by the flatbed carving operation.",
+                "type": "input"
+            },
+            "mask": {
+                "caption": "mask",
+                "data_type": "Heightmap",
+                "description": "Output falloff mask representing the influence region of the flatbed carve.",
+                "type": "output"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "Heightmap",
+                "description": "Resulting heightmap after carving and blending the flatbed along the path.",
+                "type": "output"
+            },
+            "path": {
+                "caption": "path",
+                "data_type": "Path",
+                "description": "Path defining the centerline along which the flatbed is carved.",
+                "type": "input"
+            }
+        }
+    },
     "FloodingFromBoundaries": {
         "category": "Hydrology",
         "description": "No description available",
@@ -6022,43 +6109,43 @@
                 "type": "Float"
             },
             "post_gain": {
-                "description": "Power-law transformation applied after erosion/deposition. Adjusts contrast by compressing or expanding parts of the signal.",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "Invert the output values after processing. Low values become high and vice-versa.",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "Invert Output",
                 "type": "Bool"
             },
             "post_mix": {
-                "description": "Blend factor between the input terrain and the processed terrain. 0 = input only, 1 = processed only.",
+                "description": "Mixing factor for blending input and output values. A value of 0 uses only the input, 1 uses only the output, and intermediate values perform a linear interpolation.",
                 "key": "post_mix",
                 "label": "Mix Factor",
                 "type": "Float"
             },
             "post_mix_method": {
-                "description": "Method used to combine input and output: linear interpolation, min, max, smooth min, smooth max, add, subtract.",
+                "description": "Method used to combine input and output values. Options include linear interpolation (default), min, max, smooth min, smooth max, add, and subtract.",
                 "key": "post_mix_method",
                 "label": "Mix Method",
                 "type": "Enumeration"
             },
             "post_remap": {
-                "description": "Linear remapping of the final output into a target range (default [0, 1]).",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "Remap Range",
                 "type": "Value range"
             },
             "post_saturate": {
-                "description": "Clamp elevation values to an interval and rescale them back to the full range to enhance contrast.",
+                "description": "Modifies the amplitude of elevations by first clamping them to a given interval and then scaling them so that the restricted interval matches the original input range. This enhances contrast in elevation variations while maintaining overall structure.",
                 "key": "post_saturate",
                 "label": "Saturation Range",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "Radius of the final smoothing pass applied after all erosion operations. 0 disables smoothing.",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "Smoothing Radius",
                 "type": "Float"

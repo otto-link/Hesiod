@@ -134,6 +134,13 @@ static struct EnumMappings
       {"Cubic Pulse", hmap::PrimitiveType::PRIM_CUBIC_PULSE},
       {"Smooth Cosine", hmap::PrimitiveType::PRIM_SMOOTH_COSINE}};
 
+  const std::map<std::string, int> radial_profile_map = {
+      {"Gain", hmap::RadialProfile::RP_GAIN},
+      {"Linear", hmap::RadialProfile::RP_LINEAR},
+      {"Power Law", hmap::RadialProfile::RP_POW},
+      {"Smoothstep", hmap::RadialProfile::RP_SMOOTHSTEP},
+      {"Smoothstep Upper", hmap::RadialProfile::RP_SMOOTHSTEP_UPPER}};
+
   const std::map<std::string, int> stamping_blend_method_map = {
       {"add", hmap::StampingBlendMethod::ADD},
       {"maximum", hmap::StampingBlendMethod::MAXIMUM},

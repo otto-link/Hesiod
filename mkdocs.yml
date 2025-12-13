@@ -80,6 +80,7 @@ nav:
     - 'node_reference/nodes/ExportTexture.md'
     - 'node_reference/nodes/Falloff.md'
     - 'node_reference/nodes/FillTalus.md'
+    - 'node_reference/nodes/FlatbedCarve.md'
     - 'node_reference/nodes/FloodingFromBoundaries.md'
     - 'node_reference/nodes/FloodingFromPoint.md'
     - 'node_reference/nodes/FloodingLakeSystem.md'
