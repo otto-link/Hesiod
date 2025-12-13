@@ -159,6 +159,7 @@ nav:
     - 'node_reference/nodes/PathBezierRound.md'
     - 'node_reference/nodes/PathBspline.md'
     - 'node_reference/nodes/PathDecasteljau.md'
+    - 'node_reference/nodes/PathDecimate.md'
     - 'node_reference/nodes/PathDig.md'
     - 'node_reference/nodes/PathFind.md'
     - 'node_reference/nodes/PathFractalize.md'

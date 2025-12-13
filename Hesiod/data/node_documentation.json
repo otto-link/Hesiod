@@ -9709,6 +9709,33 @@
             }
         }
     },
+    "PathDecimate": {
+        "category": "Geometry/Path",
+        "description": "No description available",
+        "label": "PathDecimate",
+        "parameters": {
+            "npoints": {
+                "description": "No description",
+                "key": "npoints",
+                "label": "npoints",
+                "type": "Integer"
+            }
+        },
+        "ports": {
+            "input": {
+                "caption": "input",
+                "data_type": "Path",
+                "description": "No description",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "Path",
+                "description": "No description",
+                "type": "output"
+            }
+        }
+    },
     "PathDig": {
         "category": "Geometry/Path",
         "description": "TODO",

@@ -20,7 +20,7 @@ Node Categories
 |Filter|Recurve|Gain, GammaCorrection, GammaCorrectionLocal, Plateau, Recurve, RecurveKura, RecurveS, ReverseAboveThreshold, Saturate, Terrace|
 |Filter|Smoothing|Laplace, Median3x3, ShapeIndex, SharpenCone, SmoothCpulse, SmoothFill, SmoothFillHoles, SmoothFillSmearPeaks|
 |Geometry|Cloud|Cloud, CloudFromCsv, CloudLattice, CloudMerge, CloudRandom, CloudRandomDensity, CloudRandomDistance, CloudRandomPowerLaw, CloudRandomWeibull, CloudRemapValues, CloudSDF, CloudSetValuesFromBorderDistance, CloudSetValuesFromHeightmap, CloudSetValuesFromMinDistance, CloudShuffle, CloudToArrayInterp, CloudToPath, CloudToVectors|
-|Geometry|Path|Path, PathBezier, PathBezierRound, PathBspline, PathDecasteljau, PathDig, PathFind, PathFractalize, PathFromCsv, PathMeanderize, PathResample, PathSDF, PathShuffle, PathSmooth, PathToCloud, PathToHeightmap|
+|Geometry|Path|Path, PathBezier, PathBezierRound, PathBspline, PathDecasteljau, PathDecimate, PathDig, PathFind, PathFractalize, PathFromCsv, PathMeanderize, PathResample, PathSDF, PathShuffle, PathSmooth, PathToCloud, PathToHeightmap|
 |Hydrology||FloodingFromBoundaries, FloodingFromPoint, FloodingLakeSystem, FloodingUniformLevel, MergeWaterDepths, WaterDepthDryOut, WaterDepthFromMask, WaterMask|
 |IO|Files|ExportAsset, ExportCloud, ExportCloudToPly, ExportHeightmap, ExportNormalMap, ExportPath, ExportPointsToPly, ExportTexture, ImportHeightmap, ImportTexture|
 |Mask|ForTexturing|SelectSoilFlow, SelectSoilRocks, SelectSoilWeathered|
