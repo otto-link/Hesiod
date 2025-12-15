@@ -27,11 +27,12 @@ void setup_abs_smooth_node(BaseNode &node)
   // attribute(s)
   node.add_attr<FloatAttribute>("mu", "mu", 0.05f, 0.001f, 0.4f);
   node.add_attr<FloatAttribute>("vshift", "vshift", 0.5f, 0.f, 1.f);
-  node.add_attr<BoolAttribute>("inverse", "inverse", false);
-  node.add_attr<RangeAttribute>("remap", "remap");
 
   // attribute(s) order
-  node.set_attr_ordered_key({"mu", "vshift", "_SEPARATOR_", "inverse", "remap"});
+  node.set_attr_ordered_key(
+      {"_GROUPBOX_BEGIN_Main Parameters", "mu", "vshift", "_GROUPBOX_END_"});
+
+  setup_post_process_heightmap_attributes(node, true, false);
 }
 
 void compute_abs_smooth_node(BaseNode &node)
@@ -53,21 +54,13 @@ void compute_abs_smooth_node(BaseNode &node)
 
           *pa_out = hmap::abs_smooth(*pa_in,
                                      node.get_attr<FloatAttribute>("mu"),
-                                     node.get_attr<FloatAttribute>("vshift"));
+                                     node.get_attr<FloatAttribute>("vshift")) -
+                    node.get_attr<FloatAttribute>("vshift");
         },
         node.get_config_ref()->hmap_transform_mode_cpu);
 
     // post-process
-    post_process_heightmap(node,
-                           *p_out,
-                           node.get_attr<BoolAttribute>("inverse"),
-                           false, // smooth
-                           0,
-                           false, // saturate
-                           {0.f, 0.f},
-                           0.f,
-                           node.get_attr_ref<RangeAttribute>("remap")->get_is_active(),
-                           node.get_attr<RangeAttribute>("remap"));
+    post_process_heightmap(node, *p_out, p_in);
   }
 }
 

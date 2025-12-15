@@ -30,7 +30,11 @@ void setup_accumulation_curvature_node(BaseNode &node)
   node.add_attr<FloatAttribute>("vc_max", "vc_max", 0.05f, 0.f, 0.2f);
 
   // attribute(s) order
-  node.set_attr_ordered_key({"radius", "clamp_max", "vc_max"});
+  node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Main Parameters",
+                             "radius",
+                             "clamp_max",
+                             "vc_max",
+                             "_GROUPBOX_END_"});
 
   setup_post_process_heightmap_attributes(node);
 }
