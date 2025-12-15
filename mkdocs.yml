@@ -67,6 +67,7 @@ nav:
     - 'node_reference/nodes/Dilation.md'
     - 'node_reference/nodes/DirectionalBlur.md'
     - 'node_reference/nodes/DistanceTransform.md'
+    - 'node_reference/nodes/Equalize.md'
     - 'node_reference/nodes/Erosion.md'
     - 'node_reference/nodes/ExpandShrink.md'
     - 'node_reference/nodes/ExportAsCubemap.md'

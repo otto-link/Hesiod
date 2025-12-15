@@ -32,18 +32,18 @@ Filter
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |Propagation Direction (D8)|Integer|Propagation direction following the D8 grid convention. Values range from 0 to 7, each corresponding to one of the eight neighboring directions on a 2D grid.|
-|mask_activate|Bool|Enables masking of the projection effect using the provided mask input.|
-|mask_gain|Float|Gain applied to the mask values, allowing amplification or attenuation of the mask influence.|
-|mask_inverse|Bool|Inverts the mask values, swapping masked and unmasked regions.|
-|mask_radius|Float|Radius used to smooth or expand the mask influence spatially.|
-|mask_type|Choice|Defines how the mask is interpreted or combined with the projection effect.|
-|Gain|Float|Applies a power-law gain to the output values, reshaping the distribution by compressing or expanding value ranges.|
-|Invert Output|Bool|Inverts the processed output values after projection and post-processing.|
-|Mix Factor|Float|Blending factor between the original input and the processed output. A value of 0 keeps the input unchanged, while 1 outputs only the processed result.|
-|Mix Method|Enumeration|Method used to combine input and output values, such as linear interpolation, minimum, maximum, smooth min/max, addition, or subtraction.|
-|Remap Range|Value range|Linearly remaps the output values to a target range, allowing normalization or range adjustment.|
-|Saturation Range|Value range|Clamps values to a specified range and rescales them to enhance contrast while preserving the overall structure.|
-|Smoothing Radius|Float|Radius used for post-processing smoothing to reduce high-frequency artifacts. A value of 0 disables smoothing.|
+|mask_activate|Bool|Enables or disables the internal mask. If the node's 'mask' input is connected, this setting is bypassed and the input mask is used instead.|
+|mask_gain|Float|Controls the intensity or influence of the internal mask. Bypassed if the 'mask' input is connected.|
+|mask_inverse|Bool|Inverts the internal mask, applying the operator where the mask is low. Ignored if a 'mask' input is provided.|
+|mask_radius|Float|Defines the smoothing radius for the internal mask. A value of 0 disables smoothing. This is bypassed if the 'mask' input is used.|
+|mask_type|Choice|Specifies how the internal mask is computed: 'Elevation' uses height, 'Gradient Norm' uses slope, and 'Elevation mid-range' selects the middle portion of the height range. This parameter is ignored when a 'mask' input is connected.|
+|Gain|Float|Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.|
+|Invert Output|Bool|Inverts the output values after processing, flipping low and high values across the midrange.|
+|Mix Factor|Float|Mixing factor for blending input and output values. A value of 0 uses only the input, 1 uses only the output, and intermediate values perform a linear interpolation.|
+|Mix Method|Enumeration|Method used to combine input and output values. Options include linear interpolation (default), min, max, smooth min, smooth max, add, and subtract.|
+|Remap Range|Value range|Linearly remaps the output values to a specified target range (default is [0, 1]).|
+|Saturation Range|Value range|Modifies the amplitude of elevations by first clamping them to a given interval and then scaling them so that the restricted interval matches the original input range. This enhances contrast in elevation variations while maintaining overall structure.|
+|Smoothing Radius|Float|Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.|
 |Slope|Float|Talus attenuation coefficient controlling how quickly projected values decay with distance along the propagation direction. Higher values result in shorter propagation ranges.|
 
 # Example

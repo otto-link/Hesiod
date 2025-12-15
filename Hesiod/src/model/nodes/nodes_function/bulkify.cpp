@@ -41,7 +41,7 @@ void setup_bulkify_node(BaseNode &node)
                              "center",
                              "_GROUPBOX_END_"});
 
-  setup_post_process_heightmap_attributes(node, true);
+  setup_post_process_heightmap_attributes(node, true, false);
 }
 
 void compute_bulkify_node(BaseNode &node)
@@ -79,6 +79,7 @@ void compute_bulkify_node(BaseNode &node)
         node.get_config_ref()->hmap_transform_mode_cpu);
 
     p_out->remap(p_in->min(), p_in->max());
+    post_process_heightmap(node, *p_out, p_in);
   }
 }
 

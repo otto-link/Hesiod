@@ -75,7 +75,7 @@ void setup_hydraulic_stream_log_node(BaseNode &node)
                              "deposition_scale_ratio",
                              "_GROUPBOX_END_"});
 
-  setup_post_process_heightmap_attributes(node, true);
+  setup_post_process_heightmap_attributes(node, true, false);
 }
 
 void compute_hydraulic_stream_log_node(BaseNode &node)

@@ -64,11 +64,7 @@ void setup_mountain_stump_node(BaseNode &node)
                              "base_noise_amp",
                              "_GROUPBOX_END_"});
 
-  setup_post_process_heightmap_attributes(node);
-
-  // disable post-processing remap by default
-  node.get_attr_ref<RangeAttribute>("post_remap")->set_is_active(false);
-  node.get_attr_ref<RangeAttribute>("post_remap")->save_initial_state();
+  setup_post_process_heightmap_attributes(node, false, false);
 }
 
 void compute_mountain_stump_node(BaseNode &node)

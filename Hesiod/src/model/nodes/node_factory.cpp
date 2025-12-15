@@ -197,6 +197,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Dilation", "Operator/Morphology"},
       {"DirectionalBlur", "WIP"}, // Filter/Smoothing
       {"DistanceTransform", "Operator/Morphology"},
+      {"Equalize", "Filter/Recurve"},
       {"Erosion", "Operator/Morphology"},
       {"ExpandShrink", "Filter/Recast"},
       {"ExportAsset", "IO/Files"},
@@ -520,6 +521,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string         &node_type,
     SETUP_NODE(Dilation, dilation);
     SETUP_NODE(DirectionalBlur, directional_blur);
     SETUP_NODE(DistanceTransform, distance_transform);
+    SETUP_NODE(Equalize, equalize);
     SETUP_NODE(Erosion, erosion);
     SETUP_NODE(ExpandShrink, expand_shrink);
     SETUP_NODE(ExportAsset, export_asset);
