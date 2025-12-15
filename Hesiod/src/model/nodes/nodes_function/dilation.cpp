@@ -24,11 +24,10 @@ void setup_dilation_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  node.add_attr<FloatAttribute>("radius", "radius", 0.01f, 0.f, 0.05f);
-  node.add_attr<BoolAttribute>("GPU", "GPU", HSD_DEFAULT_GPU_MODE);
+  node.add_attr<FloatAttribute>("radius", "radius", 0.01f, 0.f, 0.2f);
 
   // attribute(s) order
-  node.set_attr_ordered_key({"radius", "_SEPARATOR_", "GPU"});
+  node.set_attr_ordered_key({"radius"});
 }
 
 void compute_dilation_node(BaseNode &node)
@@ -43,20 +42,16 @@ void compute_dilation_node(BaseNode &node)
 
     int ir = std::max(1, (int)(node.get_attr<FloatAttribute>("radius") * p_out->shape.x));
 
-    if (node.get_attr<BoolAttribute>("GPU"))
-    {
-      hmap::transform(*p_out,
-                      *p_in,
-                      [&ir](hmap::Array &out, hmap::Array &in)
-                      { out = hmap::gpu::dilation(in, ir); });
-    }
-    else
-    {
-      hmap::transform(*p_out,
-                      *p_in,
-                      [&ir](hmap::Array &out, hmap::Array &in)
-                      { out = hmap::dilation(in, ir); });
-    }
+    hmap::transform(
+        {p_out, p_in},
+        [&ir](std::vector<hmap::Array *> p_arrays)
+        {
+          hmap::Array *pa_out = p_arrays[0];
+          hmap::Array *pa_in = p_arrays[1];
+
+          *pa_out = hmap::gpu::dilation(*pa_in, ir);
+        },
+        node.get_config_ref()->hmap_transform_mode_gpu);
 
     p_out->smooth_overlap_buffers();
   }

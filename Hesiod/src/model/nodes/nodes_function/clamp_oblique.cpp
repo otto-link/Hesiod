@@ -43,7 +43,7 @@ void setup_clamp_oblique_node(BaseNode &node)
                              "k",
                              "_GROUPBOX_END_"});
 
-  setup_post_process_heightmap_attributes(node, true);
+  setup_post_process_heightmap_attributes(node, true, false);
 }
 
 void compute_clamp_oblique_node(BaseNode &node)
