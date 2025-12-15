@@ -47,7 +47,9 @@ void post_process_heightmap(BaseNode        &node,
                             hmap::Heightmap &h,
                             hmap::Heightmap *p_in = nullptr);
 
-void setup_post_process_heightmap_attributes(BaseNode &node, bool add_mix = false);
+void setup_post_process_heightmap_attributes(BaseNode &node,
+                                             bool      add_mix = false,
+                                             bool      remap_active_state = true);
 
 // --- mask preprocessing
 

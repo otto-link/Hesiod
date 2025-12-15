@@ -10751,6 +10751,117 @@
             }
         }
     },
+    "ProjectTalus": {
+        "category": "Filter",
+        "description": "Projects heightmap values along a discrete grid direction using talus-based attenuation. Values propagate outward following the D8 convention and decay with distance according to a talus coefficient. The operation is typically used for slope-dependent diffusion, debris flow approximation, or directional spreading effects.",
+        "label": "ProjectTalus",
+        "parameters": {
+            "direction": {
+                "description": "Propagation direction following the D8 grid convention. Values range from 0 to 7, each corresponding to one of the eight neighboring directions on a 2D grid.",
+                "key": "direction",
+                "label": "Propagation Direction (D8)",
+                "type": "Integer"
+            },
+            "mask_activate": {
+                "description": "Enables masking of the projection effect using the provided mask input.",
+                "key": "mask_activate",
+                "label": "mask_activate",
+                "type": "Bool"
+            },
+            "mask_gain": {
+                "description": "Gain applied to the mask values, allowing amplification or attenuation of the mask influence.",
+                "key": "mask_gain",
+                "label": "mask_gain",
+                "type": "Float"
+            },
+            "mask_inverse": {
+                "description": "Inverts the mask values, swapping masked and unmasked regions.",
+                "key": "mask_inverse",
+                "label": "mask_inverse",
+                "type": "Bool"
+            },
+            "mask_radius": {
+                "description": "Radius used to smooth or expand the mask influence spatially.",
+                "key": "mask_radius",
+                "label": "mask_radius",
+                "type": "Float"
+            },
+            "mask_type": {
+                "description": "Defines how the mask is interpreted or combined with the projection effect.",
+                "key": "mask_type",
+                "label": "mask_type",
+                "type": "Choice"
+            },
+            "post_gain": {
+                "description": "Applies a power-law gain to the output values, reshaping the distribution by compressing or expanding value ranges.",
+                "key": "post_gain",
+                "label": "Gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "Inverts the processed output values after projection and post-processing.",
+                "key": "post_inverse",
+                "label": "Invert Output",
+                "type": "Bool"
+            },
+            "post_mix": {
+                "description": "Blending factor between the original input and the processed output. A value of 0 keeps the input unchanged, while 1 outputs only the processed result.",
+                "key": "post_mix",
+                "label": "Mix Factor",
+                "type": "Float"
+            },
+            "post_mix_method": {
+                "description": "Method used to combine input and output values, such as linear interpolation, minimum, maximum, smooth min/max, addition, or subtraction.",
+                "key": "post_mix_method",
+                "label": "Mix Method",
+                "type": "Enumeration"
+            },
+            "post_remap": {
+                "description": "Linearly remaps the output values to a target range, allowing normalization or range adjustment.",
+                "key": "post_remap",
+                "label": "Remap Range",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "Clamps values to a specified range and rescales them to enhance contrast while preserving the overall structure.",
+                "key": "post_saturate",
+                "label": "Saturation Range",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "Radius used for post-processing smoothing to reduce high-frequency artifacts. A value of 0 disables smoothing.",
+                "key": "post_smoothing_radius",
+                "label": "Smoothing Radius",
+                "type": "Float"
+            },
+            "slope": {
+                "description": "Talus attenuation coefficient controlling how quickly projected values decay with distance along the propagation direction. Higher values result in shorter propagation ranges.",
+                "key": "slope",
+                "label": "Slope",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "input": {
+                "caption": "input",
+                "data_type": "Heightmap",
+                "description": "Input heightmap whose values are projected along the selected direction.",
+                "type": "input"
+            },
+            "mask": {
+                "caption": "mask",
+                "data_type": "Heightmap",
+                "description": "Optional mask controlling where the projection effect is applied.",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "Heightmap",
+                "description": "Resulting heightmap after directional projection and talus-based attenuation.",
+                "type": "output"
+            }
+        }
+    },
     "QuiltingBlend": {
         "category": "Operator/Resynthesis",
         "description": "TODO",

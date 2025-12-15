@@ -177,6 +177,7 @@ nav:
     - 'node_reference/nodes/PolygonFieldFbm.md'
     - 'node_reference/nodes/PostProcess.md'
     - 'node_reference/nodes/Preview.md'
+    - 'node_reference/nodes/ProjectTalus.md'
     - 'node_reference/nodes/QuiltingBlend.md'
     - 'node_reference/nodes/QuiltingExpand.md'
     - 'node_reference/nodes/QuiltingShuffle.md'
