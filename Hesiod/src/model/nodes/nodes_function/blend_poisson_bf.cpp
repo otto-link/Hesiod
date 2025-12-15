@@ -27,7 +27,7 @@ void setup_blend_poisson_bf_node(BaseNode &node)
   // attribute(s)
   node.add_attr<IntAttribute>("iterations", "iterations", 500, 1, INT_MAX);
   node.add_attr<BoolAttribute>("inverse", "inverse", false);
-  node.add_attr<RangeAttribute>("remap", "remap");
+  node.add_attr<RangeAttribute>("remap", "remap", false);
 
   // attribute(s) order
   node.set_attr_ordered_key({"iterations", "_SEPARATOR_", "inverse", "remap"});

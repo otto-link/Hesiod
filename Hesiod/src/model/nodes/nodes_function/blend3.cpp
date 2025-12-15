@@ -45,7 +45,7 @@ void setup_blend3_node(BaseNode &node)
   node.add_attr<BoolAttribute>("swap_inputs_12", "swap_inputs_12", false);
   node.add_attr<BoolAttribute>("swap_inputs_23", "swap_inputs_23", false);
   node.add_attr<BoolAttribute>("inverse", "inverse", false);
-  node.add_attr<RangeAttribute>("remap", "remap");
+  node.add_attr<RangeAttribute>("remap", "remap", false);
 
   // attribute(s) order
   node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Main Parameters",

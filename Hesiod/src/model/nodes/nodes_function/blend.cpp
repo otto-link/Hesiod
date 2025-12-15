@@ -36,7 +36,7 @@ void setup_blend_node(BaseNode &node)
   node.add_attr<FloatAttribute>("input2_weight", "input2_weight", 1.f, 0.f, 1.f);
   node.add_attr<BoolAttribute>("swap_inputs", "swap_inputs", false);
   node.add_attr<BoolAttribute>("inverse", "inverse", false);
-  node.add_attr<RangeAttribute>("remap", "remap");
+  node.add_attr<RangeAttribute>("remap", "remap", false);
 
   // attribute(s) order
   node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Main Parameters",
