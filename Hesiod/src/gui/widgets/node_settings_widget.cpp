@@ -39,19 +39,6 @@ void NodeSettingsWidget::setup_connections()
   if (!this->p_graph_node_widget)
     return;
 
-  // GraphNodeWidget -> this (make sure the dialog is closed when
-  // the graph is destroyed or if the node is deleted)
-
-  // TODO fix, unsafe
-  this->connect(this->p_graph_node_widget,
-                &QObject::destroyed,
-                this,
-                [this]()
-                {
-                  this->p_graph_node_widget = nullptr;
-                  this->deleteLater();
-                });
-
   // connect selection changes -> update UI
   this->connect(this->p_graph_node_widget,
                 &gngui::GraphViewer::selection_has_changed,
