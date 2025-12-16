@@ -85,6 +85,7 @@ static struct EnumMappings
       {"cone", hmap::KernelType::CONE},
       {"cone_smooth", hmap::KernelType::CONE_SMOOTH},
       {"cubic_pulse", hmap::KernelType::CUBIC_PULSE},
+      {"cupola", hmap::KernelType::CUPOLA},
       {"disk", hmap::KernelType::DISK},
       {"lorentzian", hmap::KernelType::LORENTZIAN},
       {"smooth_cosine", hmap::KernelType::SMOOTH_COSINE},
