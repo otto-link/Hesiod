@@ -108,6 +108,44 @@ void GraphNodeWidget::add_import_texture_nodes(
   }
 }
 
+void GraphNodeWidget::apply_new_config(int new_resolution)
+{
+  Logger::log()->trace("GraphNodeWidget::apply_new_config: res {}", new_resolution);
+
+  auto gno = this->p_graph_node.lock();
+  if (!gno)
+    return;
+
+  GraphConfig *p_config = gno->get_config_ref();
+  if (!p_config)
+    return;
+
+  if (new_resolution != p_config->shape.x || new_resolution != p_config->shape.y)
+  {
+    p_config->shape = {new_resolution, new_resolution};
+    this->apply_new_config(*p_config);
+  }
+}
+
+void GraphNodeWidget::apply_new_config(const GraphConfig &new_config)
+{
+  Logger::log()->trace("GraphNodeWidget::apply_new_config");
+
+  auto gno = this->p_graph_node.lock();
+  if (!gno)
+    return;
+
+  this->backup_selected_ids();
+
+  this->set_enabled(false);
+  gno->change_config_values(new_config);
+  this->set_enabled(true);
+
+  this->reselect_backup_ids();
+
+  Q_EMIT this->config_changed();
+}
+
 void GraphNodeWidget::automatic_node_layout()
 {
   Logger::log()->trace("GraphNodeWidget::automatic_node_layout");
@@ -608,15 +646,7 @@ void GraphNodeWidget::on_graph_settings_request()
   int ret = model_config_editor.exec();
 
   if (ret)
-  {
-    this->backup_selected_ids();
-
-    this->set_enabled(false);
-    gno->change_config_values(new_config);
-    this->set_enabled(true);
-
-    this->reselect_backup_ids();
-  }
+    this->apply_new_config(new_config);
 }
 
 void GraphNodeWidget::on_new_graphics_node_request(const std::string &node_id,

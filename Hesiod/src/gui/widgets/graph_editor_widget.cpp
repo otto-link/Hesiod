@@ -8,6 +8,7 @@
 #include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/gui/widgets/graph_editor_widget.hpp"
 #include "hesiod/gui/widgets/graph_node_widget.hpp"
+#include "hesiod/gui/widgets/graph_toolbar.hpp"
 #include "hesiod/gui/widgets/gui_utils.hpp"
 #include "hesiod/gui/widgets/node_settings_widget.hpp"
 #include "hesiod/gui/widgets/viewers/viewer_3d.hpp"
@@ -131,10 +132,16 @@ void GraphEditorWidget::setup_layout()
     set_style(this->node_settings_widget,
               std::format("border-left: 1px solid {};", color));
 
-    layout->addWidget(this->node_settings_widget, 0, 1);
+    layout->addWidget(this->node_settings_widget, 0, 1, 2, 1);
 
     this->node_settings_widget->setVisible(
         HSD_CTX.app_settings.node_editor.show_node_settings_pan);
+  }
+
+  // bottom toolbar
+  {
+    auto *graph_toolbar = new GraphToolbar(this->graph_node_widget);
+    layout->addWidget(graph_toolbar, 1, 0);
   }
 }
 

@@ -27,7 +27,7 @@ GraphConfigDialog::GraphConfigDialog(GraphConfig &config, QWidget *parent)
   layout->addWidget(label_shape_text, row, 0);
 
   this->slider_shape = new QSlider(Qt::Horizontal, this);
-  this->slider_shape->setRange(8, 12); // 256 -> 4096
+  this->slider_shape->setRange(9, 12); // 512 -> 4096
   this->slider_shape->setSingleStep(1);
   this->slider_shape->setPageStep(1);
   int pos = static_cast<int>(std::log2(this->config.shape.x));

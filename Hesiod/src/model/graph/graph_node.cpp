@@ -105,6 +105,8 @@ void GraphNode::change_config_values(const GraphConfig &new_config)
   this->update();
 }
 
+GraphConfig *GraphNode::get_config_ref() { return this->config.get(); }
+
 std::shared_ptr<GraphNode> GraphNode::get_shared()
 {
   try

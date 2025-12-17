@@ -44,6 +44,9 @@ public:
 
   void add_import_texture_nodes(const std::vector<std::string> &texture_paths);
 
+  void apply_new_config(int new_resolution);
+  void apply_new_config(const GraphConfig &new_config);
+
 signals:
   // TODO REMOVE GRAPH_ID
 
@@ -56,6 +59,7 @@ signals:
   // --- Graph update ---
   void compute_started(const std::string &node_id);
   void compute_finished(const std::string &node_id);
+  void config_changed();
   void update_started();
   void update_finished();
   void update_progress(const std::string &node_id, float progress);
