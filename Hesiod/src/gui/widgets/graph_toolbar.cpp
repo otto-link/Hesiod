@@ -57,10 +57,11 @@ void GraphToolbar::setup_layout()
   this->resolution_group->setExclusive(true);
 
   AppContext &ctx = HSD_CTX;
-  std::string style =
-      "QPushButton { background: COLOR_BG_DEEP; color: COLOR_TEXT_PRIMARY; border: 0px; "
-      "border-radius: 6px; } QPushButton:checked { color: COLOR_ACCENT; "
-      "font-weight: bold; } QPushButton:hover { color: COLOR_BW_ACCENT; }";
+  std::string style = "QPushButton { background: COLOR_BG_DEEP; color: "
+                      "COLOR_TEXT_PRIMARY; border: 0px; "
+                      "border-radius: 6px; } QPushButton:checked { color: COLOR_ACCENT; "
+                      "font-weight: bold; } QPushButton:hover { color: COLOR_BW_ACCENT; "
+                      "font-weight: bold; }";
 
   replace_all(style,
               "COLOR_BG_DEEP",
