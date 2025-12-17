@@ -30,9 +30,12 @@ Operator/Morphology
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|GPU|Bool|Toogle GPU acceleration on or off.|
+|Gain|Float|No description|
+|Invert Output|Bool|No description|
+|Remap Range|Value range|No description|
+|Saturation Range|Value range|No description|
+|Smoothing Radius|Float|No description|
 |radius|Float|Filter radius with respect to the domain size.|
-|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
 
 # Example
 

@@ -30,7 +30,6 @@ Operator/Morphology
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|GPU|Bool|Toogle GPU acceleration on or off.|
 |radius|Float|Filter radius with respect to the domain size.|
 
 # Example

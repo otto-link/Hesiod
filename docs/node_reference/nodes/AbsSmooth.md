@@ -30,9 +30,14 @@ Math/Base
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|inverse|Bool|Toggle inversion of the output values.|
 |mu|Float|Smoothing intensity.|
-|remap|Value range|Remap the operator's output to a specified range, defaulting to [0, 1].|
+|Gain|Float|No description|
+|Invert Output|Bool|No description|
+|Mix Factor|Float|No description|
+|Mix Method|Enumeration|No description|
+|Remap Range|Value range|No description|
+|Saturation Range|Value range|No description|
+|Smoothing Radius|Float|No description|
 |vshift|Float|Reference value for the zero-equivalent value of the absolute value.|
 
 # Example

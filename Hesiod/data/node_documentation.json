@@ -31,23 +31,53 @@
         "description": "Apply a smooth absolute value function to every values. The smooth absolute operator computes the absolute value of an input while providing a smooth transition around zero, ensuring continuity and smoothness in the output.",
         "label": "AbsSmooth",
         "parameters": {
-            "inverse": {
-                "description": "Toggle inversion of the output values.",
-                "key": "inverse",
-                "label": "inverse",
-                "type": "Bool"
-            },
             "mu": {
                 "description": "Smoothing intensity.",
                 "key": "mu",
                 "label": "mu",
                 "type": "Float"
             },
-            "remap": {
-                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap",
-                "label": "remap",
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "Gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "Invert Output",
+                "type": "Bool"
+            },
+            "post_mix": {
+                "description": "No description",
+                "key": "post_mix",
+                "label": "Mix Factor",
+                "type": "Float"
+            },
+            "post_mix_method": {
+                "description": "No description",
+                "key": "post_mix_method",
+                "label": "Mix Method",
+                "type": "Enumeration"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "Remap Range",
                 "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "Saturation Range",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "Smoothing Radius",
+                "type": "Float"
             },
             "vshift": {
                 "description": "Reference value for the zero-equivalent value of the absolute value.",
@@ -664,23 +694,41 @@
         "description": "Highlights terrain boundaries by subtracting the eroded version of a DEM from the original. Useful for detecting ridges, valleys, and sharp elevation transitions in terrain analysis.",
         "label": "Border",
         "parameters": {
-            "GPU": {
-                "description": "Toogle GPU acceleration on or off.",
-                "key": "GPU",
-                "label": "GPU",
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "Gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "Invert Output",
                 "type": "Bool"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "Remap Range",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "Saturation Range",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "Smoothing Radius",
+                "type": "Float"
             },
             "radius": {
                 "description": "Filter radius with respect to the domain size.",
                 "key": "radius",
                 "label": "radius",
                 "type": "Float"
-            },
-            "remap": {
-                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap",
-                "label": "remap",
-                "type": "Value range"
             }
         },
         "ports": {
@@ -1321,12 +1369,6 @@
         "description": "Closing is a combination of dilation followed by erosion. It is primarily used for closing small holes or gaps in mask.",
         "label": "Closing",
         "parameters": {
-            "GPU": {
-                "description": "Toogle GPU acceleration on or off.",
-                "key": "GPU",
-                "label": "GPU",
-                "type": "Bool"
-            },
             "radius": {
                 "description": "Filter radius with respect to the domain size.",
                 "key": "radius",
@@ -3167,12 +3209,6 @@
         "description": "Dilation expands the boundaries of objects in an image and fills in small gaps or holes in those objects. Use Cases: (+) Filling gaps: Dilation can be used to fill small gaps or holes in objects, making them more solid. (+) Merging objects: Dilation can help merge nearby objects or connect broken segments in an image.",
         "label": "Dilation",
         "parameters": {
-            "GPU": {
-                "description": "Toogle GPU acceleration on or off.",
-                "key": "GPU",
-                "label": "GPU",
-                "type": "Bool"
-            },
             "radius": {
                 "description": "Filter radius with respect to the domain size.",
                 "key": "radius",
@@ -6893,6 +6929,39 @@
             "out": {
                 "caption": "out",
                 "data_type": "Heightmap",
+                "description": "No description",
+                "type": "output"
+            }
+        }
+    },
+    "KernelCupola": {
+        "category": "Primitive/Kernel",
+        "description": "No description available",
+        "label": "KernelCupola",
+        "parameters": {
+            "normalize": {
+                "description": "No description",
+                "key": "normalize",
+                "label": "normalize",
+                "type": "Bool"
+            },
+            "r_cutoff": {
+                "description": "No description",
+                "key": "r_cutoff",
+                "label": "r_cutoff",
+                "type": "Float"
+            },
+            "radius": {
+                "description": "No description",
+                "key": "radius",
+                "label": "radius",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "kernel": {
+                "caption": "kernel",
+                "data_type": "Array",
                 "description": "No description",
                 "type": "output"
             }
