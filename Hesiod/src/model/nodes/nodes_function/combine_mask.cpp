@@ -29,6 +29,11 @@ void setup_combine_mask_node(BaseNode &node)
                                "method",
                                enum_mappings.mask_combine_method_map,
                                "intersection");
+  node.add_attr<BoolAttribute>("swap_inputs", "swap_inputs", false);
+
+  // attribute(s) order
+  node.set_attr_ordered_key(
+      {"_GROUPBOX_BEGIN_Main Parameters", "method", "swap_inputs", "_GROUPBOX_END_"});
 }
 
 void compute_combine_mask_node(BaseNode &node)
@@ -40,6 +45,10 @@ void compute_combine_mask_node(BaseNode &node)
 
   if (p_in1 && p_in2)
   {
+    // adjust inputs
+    if (node.get_attr<BoolAttribute>("swap_inputs"))
+      std::swap(p_in1, p_in2);
+
     hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
     std::function<void(hmap::Array &, hmap::Array &, hmap::Array &)> lambda;
