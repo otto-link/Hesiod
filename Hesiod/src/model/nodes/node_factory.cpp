@@ -387,12 +387,8 @@ std::map<std::string, std::string> get_node_inventory()
       {"TextureToHeightmap", "Texture"},
       {"TextureUvChecker", "Texture"},
       {"Thermal", "Erosion/Thermal"},
-      {"ThermalAutoBedrock", "Erosion/Thermal"},
       {"ThermalFlatten", "WIP"}, // "Erosion/Thermal"
-      {"ThermalInflate", "Erosion/Thermal"},
-      {"ThermalRib", "WIP"}, // "Erosion/Thermal"
-      {"ThermalRidge", "Erosion/Thermal"},
-      {"ThermalSchott", "WIP"}, // "Erosion/Thermal"
+      // {"ThermalRib", "WIP"}, // "Erosion/Thermal"
       {"ThermalScree", "Erosion/Thermal"},
       {"Thru", "Routing"},
       {"Toggle", "Routing"},
@@ -707,12 +703,8 @@ std::shared_ptr<gnode::Node> node_factory(const std::string         &node_type,
     SETUP_NODE(Transfer, transfer);
     SETUP_NODE(Translate, translate);
     SETUP_NODE(Thermal, thermal);
-    SETUP_NODE(ThermalAutoBedrock, thermal_auto_bedrock);
     SETUP_NODE(ThermalFlatten, thermal_flatten);
-    SETUP_NODE(ThermalInflate, thermal_inflate);
     SETUP_NODE(ThermalRib, thermal_rib);
-    SETUP_NODE(ThermalRidge, thermal_ridge);
-    SETUP_NODE(ThermalSchott, thermal_schott);
     SETUP_NODE(ThermalScree, thermal_scree);
     SETUP_NODE(Unsphericity, unsphericity);
     SETUP_NODE(ValleyWidth, valley_width);
