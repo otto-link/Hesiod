@@ -395,6 +395,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Transfer", "Operator/Blend"},
       {"Translate", "Operator/Transform"},
       {"Unsphericity", "Features/Landform"},
+      {"ValleyFill", "Erosion/Thermal"},
       {"ValleyWidth", "Features/Landform"},
       {"Vorolines", "Primitive/Coherent"},
       {"VorolinesFbm", "Primitive/Coherent"},
@@ -707,6 +708,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string         &node_type,
     SETUP_NODE(ThermalRib, thermal_rib);
     SETUP_NODE(ThermalScree, thermal_scree);
     SETUP_NODE(Unsphericity, unsphericity);
+    SETUP_NODE(ValleyFill, valley_fill);
     SETUP_NODE(ValleyWidth, valley_width);
     SETUP_NODE(Vorolines, vorolines);
     SETUP_NODE(VorolinesFbm, vorolines_fbm);

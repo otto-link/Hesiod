@@ -72,9 +72,6 @@ void compute_thermal_node(BaseNode &node)
     hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
     hmap::Heightmap *p_deposition_map = node.get_value_ref<hmap::Heightmap>("deposition");
 
-    // copy the input heightmap
-    *p_out = *p_in;
-
     float talus = node.get_attr<FloatAttribute>("talus_global") / (float)p_out->shape.x;
     int   iterations = int(node.get_attr<FloatAttribute>("duration") * p_out->shape.x);
 
@@ -87,21 +84,18 @@ void compute_thermal_node(BaseNode &node)
     }
 
     hmap::transform(
-        {p_out, p_mask, &talus_map, p_deposition_map},
+        {p_out, p_in, p_mask, &talus_map, p_deposition_map},
         [&node, talus, iterations](std::vector<hmap::Array *> p_arrays)
         {
           hmap::Array *pa_out = p_arrays[0];
-          hmap::Array *pa_mask = p_arrays[1];
-          hmap::Array *pa_talus_map = p_arrays[2];
-          hmap::Array *pa_deposition_map = p_arrays[3];
+          hmap::Array *pa_in = p_arrays[1];
+          hmap::Array *pa_mask = p_arrays[2];
+          hmap::Array *pa_talus_map = p_arrays[3];
+          hmap::Array *pa_deposition_map = p_arrays[4];
 
           const std::string type = node.get_attr<ChoiceAttribute>("type");
 
-          // {"Standard",
-          //                                       "Ridge",
-          //                                       "Bedrock",
-          //                                       "Schott",
-          //                                       "Inflate"
+          *pa_out = *pa_in;
 
           if (type == "Standard")
           {
