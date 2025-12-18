@@ -30,7 +30,7 @@ void setup_thermal_inflate_node(BaseNode &node)
   node.add_attr<IntAttribute>("iterations", "iterations", 500, 1, INT_MAX);
   node.add_attr<BoolAttribute>("scale_talus_with_elevation",
                                "scale_talus_with_elevation",
-                               true);
+                               false);
 
   // attribute(s) order
   node.set_attr_ordered_key({"talus_global", "iterations", "scale_talus_with_elevation"});
