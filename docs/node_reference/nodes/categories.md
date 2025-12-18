@@ -11,7 +11,7 @@ Node Categories
 |Debug||Debug, Preview|
 |Erosion|Hydraulic|HydraulicParticle, HydraulicStreamLog, Rifts|
 |Erosion|Stratify|Strata|
-|Erosion|Thermal|Thermal, ThermalAutoBedrock, ThermalInflate, ThermalRidge, ThermalScree|
+|Erosion|Thermal|Thermal, ThermalScree, ValleyFill|
 |Erosion|Water|CoastalErosionDiffusion, CoastalErosionProfile|
 |Features|Clustering|KmeansClustering2, KmeansClustering3|
 |Features|Landform|AccumulationCurvature, RelativeElevation, Unsphericity, ValleyWidth|
@@ -41,4 +41,4 @@ Node Categories
 |Primitive|Random|White, WhiteDensityMap, WhiteSparse|
 |Routing||Broadcast, Receive, Thru, Toggle|
 |Texture||ColorizeCmap, ColorizeGradient, ColorizeSolid, MixNormalMap, MixTexture, SetAlpha, TextureAdvectionParticle, TextureQuiltingExpand, TextureQuiltingShuffle, TextureSplitChannels, TextureToHeightmap, TextureUvChecker|
-|WIP||Detrend, DiffusionLimitedAggregation, DirectionalBlur, ExportAsCubemap, FillTalus, FlowStream, HydraulicBlur, HydraulicMusgrave, HydraulicProcedural, HydraulicSchott, HydraulicStream, HydraulicStreamUpscaleAmplification, HydraulicVpipes, Kuwahara, MeanShift, MedianPseudo, ReverseMidpoint, SedimentDeposition, Stratify, StratifyMultiscale, StratifyOblique, TextureAdvectionWarp, ThermalFlatten, ThermalRib, ThermalSchott, WarpDownslope, Wrinkle|
+|WIP||Detrend, DiffusionLimitedAggregation, DirectionalBlur, ExportAsCubemap, FillTalus, FlowStream, HydraulicBlur, HydraulicMusgrave, HydraulicProcedural, HydraulicSchott, HydraulicStream, HydraulicStreamUpscaleAmplification, HydraulicVpipes, Kuwahara, MeanShift, MedianPseudo, ReverseMidpoint, SedimentDeposition, Stratify, StratifyMultiscale, StratifyOblique, TextureAdvectionWarp, ThermalFlatten, WarpDownslope, Wrinkle|

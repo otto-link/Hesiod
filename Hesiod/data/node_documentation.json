@@ -38,43 +38,43 @@
                 "type": "Float"
             },
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "Invert Output",
                 "type": "Bool"
             },
             "post_mix": {
-                "description": "No description",
+                "description": "Mixing factor for blending input and output values. A value of 0 uses only the input, 1 uses only the output, and intermediate values perform a linear interpolation.",
                 "key": "post_mix",
                 "label": "Mix Factor",
                 "type": "Float"
             },
             "post_mix_method": {
-                "description": "No description",
+                "description": "Method used to combine input and output values. Options include linear interpolation (default), min, max, smooth min, smooth max, add, and subtract.",
                 "key": "post_mix_method",
                 "label": "Mix Method",
                 "type": "Enumeration"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "Remap Range",
                 "type": "Value range"
             },
             "post_saturate": {
-                "description": "No description",
+                "description": "Modifies the amplitude of elevations by first clamping them to a given interval and then scaling them so that the restricted interval matches the original input range. This enhances contrast in elevation variations while maintaining overall structure.",
                 "key": "post_saturate",
                 "label": "Saturation Range",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "Smoothing Radius",
                 "type": "Float"
@@ -695,31 +695,31 @@
         "label": "Border",
         "parameters": {
             "post_gain": {
-                "description": "No description",
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
                 "type": "Float"
             },
             "post_inverse": {
-                "description": "No description",
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
                 "label": "Invert Output",
                 "type": "Bool"
             },
             "post_remap": {
-                "description": "No description",
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
                 "key": "post_remap",
                 "label": "Remap Range",
                 "type": "Value range"
             },
             "post_saturate": {
-                "description": "No description",
+                "description": "Modifies the amplitude of elevations by first clamping them to a given interval and then scaling them so that the restricted interval matches the original input range. This enhances contrast in elevation variations while maintaining overall structure.",
                 "key": "post_saturate",
                 "label": "Saturation Range",
                 "type": "Value range"
             },
             "post_smoothing_radius": {
-                "description": "No description",
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
                 "key": "post_smoothing_radius",
                 "label": "Smoothing Radius",
                 "type": "Float"
@@ -16075,29 +16075,71 @@
         "description": "Thermal is an erosion operator used to simulate the process of thermal erosion, which is a type of erosion that occurs due to temperature fluctuations causing the breakdown and movement of soil and rock materials.",
         "label": "Thermal",
         "parameters": {
-            "GPU": {
-                "description": "Toogle GPU acceleration on or off.",
-                "key": "GPU",
-                "label": "GPU",
+            "duration": {
+                "description": "Controls the number of erosion iterations or the simulated time span during which thermal erosion is applied. Higher values increase slope relaxation and material transport.",
+                "key": "duration",
+                "label": "Duration",
+                "type": "Float"
+            },
+            "post_gain": {
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
+                "key": "post_gain",
+                "label": "Gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
+                "key": "post_inverse",
+                "label": "Invert Output",
                 "type": "Bool"
             },
-            "iterations": {
-                "description": "Number of iterations.",
-                "key": "iterations",
-                "label": "iterations",
-                "type": "Integer"
+            "post_mix": {
+                "description": "Mixing factor for blending input and output values. A value of 0 uses only the input, 1 uses only the output, and intermediate values perform a linear interpolation.",
+                "key": "post_mix",
+                "label": "Mix Factor",
+                "type": "Float"
+            },
+            "post_mix_method": {
+                "description": "Method used to combine input and output values. Options include linear interpolation (default), min, max, smooth min, smooth max, add, and subtract.",
+                "key": "post_mix_method",
+                "label": "Mix Method",
+                "type": "Enumeration"
+            },
+            "post_remap": {
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
+                "key": "post_remap",
+                "label": "Remap Range",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "Modifies the amplitude of elevations by first clamping them to a given interval and then scaling them so that the restricted interval matches the original input range. This enhances contrast in elevation variations while maintaining overall structure.",
+                "key": "post_saturate",
+                "label": "Saturation Range",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
+                "key": "post_smoothing_radius",
+                "label": "Smoothing Radius",
+                "type": "Float"
             },
             "scale_talus_with_elevation": {
                 "description": "Scales the talus amplitude based on heightmap elevation, reducing it at lower elevations and maintaining the nominal value at higher elevations.",
                 "key": "scale_talus_with_elevation",
-                "label": "scale_talus_with_elevation",
+                "label": "Scale with Elevation",
                 "type": "Bool"
             },
             "talus_global": {
-                "description": "Repose slope.",
+                "description": "Defines the critical talus angle (repose slope) above which material becomes unstable and moves downslope during thermal erosion.",
                 "key": "talus_global",
-                "label": "talus_global",
+                "label": "Slope",
                 "type": "Float"
+            },
+            "type": {
+                "description": "No description",
+                "key": "type",
+                "label": "",
+                "type": "Choice"
             }
         },
         "ports": {
@@ -16123,63 +16165,6 @@
                 "caption": "output",
                 "data_type": "Heightmap",
                 "description": "Eroded heightmap.",
-                "type": "output"
-            }
-        }
-    },
-    "ThermalAutoBedrock": {
-        "category": "Erosion/Thermal",
-        "description": "TODO",
-        "label": "ThermalAutoBedrock",
-        "parameters": {
-            "GPU": {
-                "description": "Toogle GPU acceleration on or off.",
-                "key": "GPU",
-                "label": "GPU",
-                "type": "Bool"
-            },
-            "iterations": {
-                "description": "TODO",
-                "key": "iterations",
-                "label": "iterations",
-                "type": "Integer"
-            },
-            "scale_talus_with_elevation": {
-                "description": "Scales the talus amplitude based on heightmap elevation, reducing it at lower elevations and maintaining the nominal value at higher elevations.",
-                "key": "scale_talus_with_elevation",
-                "label": "scale_talus_with_elevation",
-                "type": "Bool"
-            },
-            "talus_global": {
-                "description": "TODO",
-                "key": "talus_global",
-                "label": "talus_global",
-                "type": "Float"
-            }
-        },
-        "ports": {
-            "deposition": {
-                "caption": "deposition",
-                "data_type": "Heightmap",
-                "description": "Deposition map (in [0, 1]).",
-                "type": "output"
-            },
-            "input": {
-                "caption": "input",
-                "data_type": "Heightmap",
-                "description": "TODO",
-                "type": "input"
-            },
-            "mask": {
-                "caption": "mask",
-                "data_type": "Heightmap",
-                "description": "Mask defining the filtering intensity (expected in [0, 1]).",
-                "type": "input"
-            },
-            "output": {
-                "caption": "output",
-                "data_type": "Heightmap",
-                "description": "TODO",
                 "type": "output"
             }
         }
@@ -16219,186 +16204,6 @@
                 "caption": "input",
                 "data_type": "Heightmap",
                 "description": "TODO",
-                "type": "input"
-            },
-            "output": {
-                "caption": "output",
-                "data_type": "Heightmap",
-                "description": "TODO",
-                "type": "output"
-            }
-        }
-    },
-    "ThermalInflate": {
-        "category": "Erosion/Thermal",
-        "description": "TODO",
-        "label": "ThermalInflate",
-        "parameters": {
-            "iterations": {
-                "description": "TODO",
-                "key": "iterations",
-                "label": "iterations",
-                "type": "Integer"
-            },
-            "scale_talus_with_elevation": {
-                "description": "Scales the talus amplitude based on heightmap elevation, reducing it at lower elevations and maintaining the nominal value at higher elevations.",
-                "key": "scale_talus_with_elevation",
-                "label": "scale_talus_with_elevation",
-                "type": "Bool"
-            },
-            "talus_global": {
-                "description": "TODO",
-                "key": "talus_global",
-                "label": "talus_global",
-                "type": "Float"
-            }
-        },
-        "ports": {
-            "input": {
-                "caption": "input",
-                "data_type": "Heightmap",
-                "description": "TODO",
-                "type": "input"
-            },
-            "mask": {
-                "caption": "mask",
-                "data_type": "Heightmap",
-                "description": "Mask defining the filtering intensity (expected in [0, 1]).",
-                "type": "input"
-            },
-            "output": {
-                "caption": "output",
-                "data_type": "Heightmap",
-                "description": "TODO",
-                "type": "output"
-            }
-        }
-    },
-    "ThermalRib": {
-        "category": "WIP",
-        "description": "ThermalRib performs thermal erosion using a 'rib' algorithm (taken from Geomorph)",
-        "label": "ThermalRib",
-        "parameters": {
-            "iterations": {
-                "description": "Number of iterations.",
-                "key": "iterations",
-                "label": "iterations",
-                "type": "Integer"
-            }
-        },
-        "ports": {
-            "bedrock": {
-                "caption": "bedrock",
-                "data_type": "Heightmap",
-                "description": "Bedrock elevation, erosion process cannot carve the heightmap further down this point.",
-                "type": "input"
-            },
-            "input": {
-                "caption": "input",
-                "data_type": "Heightmap",
-                "description": "Input heightmap.",
-                "type": "input"
-            },
-            "output": {
-                "caption": "output",
-                "data_type": "Heightmap",
-                "description": "Eroded heightmap.",
-                "type": "output"
-            }
-        }
-    },
-    "ThermalRidge": {
-        "category": "Erosion/Thermal",
-        "description": "Applies a thermal erosion effect that simulates the collapse of unstable slopes by moving material from steep areas to lower regions, generating ridged features.",
-        "label": "ThermalRidge",
-        "parameters": {
-            "iterations": {
-                "description": "Number of thermal erosion iterations to apply. More iterations result in more pronounced erosion and smoothing of steep slopes.",
-                "key": "iterations",
-                "label": "iterations",
-                "type": "Integer"
-            },
-            "remap": {
-                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap",
-                "label": "remap",
-                "type": "Value range"
-            },
-            "scale_talus_with_elevation": {
-                "description": "Scales the talus threshold based on elevation, reducing it at lower heights and preserving it at higher altitudes, to simulate realistic slope behavior.",
-                "key": "scale_talus_with_elevation",
-                "label": "scale_talus_with_elevation",
-                "type": "Bool"
-            },
-            "talus_global": {
-                "description": "Global talus angle threshold controlling the maximum slope before material starts to move. Higher values result in steeper terrain preservation.",
-                "key": "talus_global",
-                "label": "talus_global",
-                "type": "Float"
-            }
-        },
-        "ports": {
-            "deposition": {
-                "caption": "deposition",
-                "data_type": "Heightmap",
-                "description": "Heightmap showing the amount of material deposited during erosion, scaled in the range [0, 1].",
-                "type": "output"
-            },
-            "input": {
-                "caption": "input",
-                "data_type": "Heightmap",
-                "description": "The input heightmap to which thermal erosion will be applied.",
-                "type": "input"
-            },
-            "mask": {
-                "caption": "mask",
-                "data_type": "Heightmap",
-                "description": "Mask defining the filtering intensity (expected in [0, 1]).",
-                "type": "input"
-            },
-            "output": {
-                "caption": "output",
-                "data_type": "Heightmap",
-                "description": "The resulting heightmap after thermal ridge erosion has been applied.",
-                "type": "output"
-            }
-        }
-    },
-    "ThermalSchott": {
-        "category": "WIP",
-        "description": "TODO",
-        "label": "ThermalSchott",
-        "parameters": {
-            "iterations": {
-                "description": "TODO",
-                "key": "iterations",
-                "label": "iterations",
-                "type": "Integer"
-            },
-            "scale_talus_with_elevation": {
-                "description": "Scales the talus amplitude based on heightmap elevation, reducing it at lower elevations and maintaining the nominal value at higher elevations.",
-                "key": "scale_talus_with_elevation",
-                "label": "scale_talus_with_elevation",
-                "type": "Bool"
-            },
-            "talus_global": {
-                "description": "TODO",
-                "key": "talus_global",
-                "label": "talus_global",
-                "type": "Float"
-            }
-        },
-        "ports": {
-            "input": {
-                "caption": "input",
-                "data_type": "Heightmap",
-                "description": "TODO",
-                "type": "input"
-            },
-            "mask": {
-                "caption": "mask",
-                "data_type": "Heightmap",
-                "description": "Mask defining the filtering intensity (expected in [0, 1]).",
                 "type": "input"
             },
             "output": {
@@ -16741,6 +16546,105 @@
                 "caption": "output",
                 "data_type": "Heightmap",
                 "description": "Shape index.",
+                "type": "output"
+            }
+        }
+    },
+    "ValleyFill": {
+        "category": "Erosion/Thermal",
+        "description": "Fill valleys using thermal scree deposition and height-based blending.",
+        "label": "ValleyFill",
+        "parameters": {
+            "duration": {
+                "description": "Controls the number of erosion iterations or the simulated time span during which thermal erosion is applied. Higher values increase slope relaxation and material transport.",
+                "key": "duration",
+                "label": "Duration",
+                "type": "Float"
+            },
+            "gamma": {
+                "description": "Gamma applied to the height-based mixing mask.",
+                "key": "gamma",
+                "label": "Deposition Gamma",
+                "type": "Float"
+            },
+            "post_gain": {
+                "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
+                "key": "post_gain",
+                "label": "Gain",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
+                "key": "post_inverse",
+                "label": "Invert Output",
+                "type": "Bool"
+            },
+            "post_mix": {
+                "description": "Mixing factor for blending input and output values. A value of 0 uses only the input, 1 uses only the output, and intermediate values perform a linear interpolation.",
+                "key": "post_mix",
+                "label": "Mix Factor",
+                "type": "Float"
+            },
+            "post_mix_method": {
+                "description": "Method used to combine input and output values. Options include linear interpolation (default), min, max, smooth min, smooth max, add, and subtract.",
+                "key": "post_mix_method",
+                "label": "Mix Method",
+                "type": "Enumeration"
+            },
+            "post_remap": {
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
+                "key": "post_remap",
+                "label": "Remap Range",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "Modifies the amplitude of elevations by first clamping them to a given interval and then scaling them so that the restricted interval matches the original input range. This enhances contrast in elevation variations while maintaining overall structure.",
+                "key": "post_saturate",
+                "label": "Saturation Range",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
+                "key": "post_smoothing_radius",
+                "label": "Smoothing Radius",
+                "type": "Float"
+            },
+            "ratio": {
+                "description": "Blend ratio controlling valley influence.",
+                "key": "ratio",
+                "label": "Deposition Ratio",
+                "type": "Float"
+            },
+            "scale_talus_with_elevation": {
+                "description": "Defines the critical talus angle (repose slope) above which material becomes unstable and moves downslope during thermal erosion.",
+                "key": "scale_talus_with_elevation",
+                "label": "Scale with Elevation",
+                "type": "Bool"
+            },
+            "talus_global": {
+                "description": "Selects the thermal erosion variant or behavior model, controlling how material is redistributed when slopes exceed the talus angle.",
+                "key": "talus_global",
+                "label": "Slope",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "input": {
+                "caption": "input",
+                "data_type": "Heightmap",
+                "description": "Input heightmap.",
+                "type": "input"
+            },
+            "mask": {
+                "caption": "mask",
+                "data_type": "Heightmap",
+                "description": "Mask defining the filtering intensity (expected in [0, 1]).",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "Heightmap",
+                "description": "Eroded heightmap.",
                 "type": "output"
             }
         }
