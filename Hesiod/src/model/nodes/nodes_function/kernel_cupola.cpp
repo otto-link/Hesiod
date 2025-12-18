@@ -47,8 +47,6 @@ void compute_kernel_cupola_node(BaseNode &node)
 
   *p_out = hmap::cupola(kernel_shape, node.get_attr<FloatAttribute>("r_cutoff"));
 
-  p_out->dump();
-  
   if (node.get_attr<BoolAttribute>("normalize"))
     *p_out /= p_out->sum();
 }
