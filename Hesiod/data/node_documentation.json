@@ -2322,6 +2322,12 @@
                 "key": "method",
                 "label": "method",
                 "type": "Enumeration"
+            },
+            "swap_inputs": {
+                "description": "No description",
+                "key": "swap_inputs",
+                "label": "swap_inputs",
+                "type": "Bool"
             }
         },
         "ports": {

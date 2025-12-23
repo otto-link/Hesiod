@@ -32,6 +32,7 @@ Mask
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |method|Enumeration|Combining method. Available values: exclusion, intersection, union.|
+|swap_inputs|Bool|No description|
 
 # Example
 

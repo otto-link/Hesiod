@@ -32,7 +32,7 @@ void setup_warp_node(BaseNode &node)
   // attribute(s) order
   node.set_attr_ordered_key({"scaling.x", "scaling.y"});
 
-  setup_post_process_heightmap_attributes(node, true);
+  setup_post_process_heightmap_attributes(node, true, false);
 }
 
 void compute_warp_node(BaseNode &node)
