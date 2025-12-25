@@ -34,6 +34,7 @@ WIP
 |angle|Float|No description|
 |intensity|Float|No description|
 |Gain|Float|Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.|
+|Gamma|Float|No description|
 |Invert Output|Bool|Inverts the output values after processing, flipping low and high values across the midrange.|
 |Mix Factor|Float|Mixing factor for blending input and output values. A value of 0 uses only the input, 1 uses only the output, and intermediate values perform a linear interpolation.|
 |Mix Method|Enumeration|Method used to combine input and output values. Options include linear interpolation (default), min, max, smooth min, smooth max, add, and subtract.|

@@ -43,6 +43,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -116,6 +122,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -215,6 +227,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -356,6 +374,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -700,6 +724,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -790,6 +820,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -857,6 +893,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -946,6 +988,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -1019,6 +1067,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -1195,6 +1249,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -1292,6 +1352,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -1759,6 +1825,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -2374,6 +2446,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -2489,6 +2567,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -2620,6 +2704,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -2708,6 +2798,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -2909,6 +3005,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -3260,6 +3362,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -3345,6 +3453,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -3444,6 +3558,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -3588,6 +3708,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -4649,6 +4775,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -4805,6 +4937,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -4925,6 +5063,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -4998,6 +5142,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -5210,6 +5360,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -5300,6 +5456,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -5349,6 +5511,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -5602,6 +5770,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -6255,6 +6429,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -6522,6 +6702,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -6592,6 +6778,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -6709,6 +6901,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -6886,6 +7084,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -7479,6 +7683,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -7597,6 +7807,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -7785,6 +8001,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -7860,6 +8082,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -7915,6 +8143,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -8032,6 +8266,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -8173,6 +8413,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -8433,6 +8679,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -8580,6 +8832,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -8715,6 +8973,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -8826,6 +9090,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -8929,6 +9199,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -9667,6 +9943,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -10559,6 +10841,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -10730,6 +11018,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -10833,6 +11127,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -10970,6 +11270,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -11649,6 +11955,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -11710,6 +12022,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -11859,6 +12177,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -12068,6 +12392,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -12251,6 +12581,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -12422,6 +12758,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -12483,6 +12825,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -12552,6 +12900,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -12731,6 +13085,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -12792,6 +13152,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -12857,6 +13223,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -12914,6 +13286,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -12969,6 +13347,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -13040,6 +13424,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -13097,6 +13487,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -13152,6 +13548,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -13229,6 +13631,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -13298,6 +13706,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -13353,6 +13767,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -13436,6 +13856,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -13515,6 +13941,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -13628,6 +14060,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -13689,6 +14127,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -13758,6 +14202,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -14081,6 +14531,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -14309,6 +14765,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -14426,6 +14888,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -14537,6 +15005,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -14640,6 +15114,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -14831,6 +15311,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -14949,6 +15435,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -15126,6 +15618,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -16015,6 +16513,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -16087,10 +16591,46 @@
                 "label": "Duration",
                 "type": "Float"
             },
+            "mask_activate": {
+                "description": "No description",
+                "key": "mask_activate",
+                "label": "mask_activate",
+                "type": "Bool"
+            },
+            "mask_gain": {
+                "description": "No description",
+                "key": "mask_gain",
+                "label": "mask_gain",
+                "type": "Float"
+            },
+            "mask_inverse": {
+                "description": "No description",
+                "key": "mask_inverse",
+                "label": "mask_inverse",
+                "type": "Bool"
+            },
+            "mask_radius": {
+                "description": "No description",
+                "key": "mask_radius",
+                "label": "mask_radius",
+                "type": "Float"
+            },
+            "mask_type": {
+                "description": "No description",
+                "key": "mask_type",
+                "label": "mask_type",
+                "type": "Choice"
+            },
             "post_gain": {
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -16396,6 +16936,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -16567,6 +17113,12 @@
                 "label": "Duration",
                 "type": "Float"
             },
+            "elevation_max_ratio": {
+                "description": "No description",
+                "key": "elevation_max_ratio",
+                "label": "Scree Max Elevation",
+                "type": "Float"
+            },
             "gamma": {
                 "description": "Gamma applied to the height-based mixing mask.",
                 "key": "gamma",
@@ -16577,6 +17129,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -16735,6 +17293,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -16864,6 +17428,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -16979,6 +17549,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -17114,6 +17690,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -17296,6 +17878,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -17387,6 +17975,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -17611,6 +18205,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -17684,6 +18284,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -17773,6 +18379,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -17848,6 +18460,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -17921,6 +18539,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -18020,6 +18644,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {
@@ -18313,6 +18943,12 @@
                 "label": "Gain",
                 "type": "Float"
             },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
             "post_inverse": {
                 "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
                 "key": "post_inverse",
@@ -18374,6 +19010,12 @@
                 "description": "Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.",
                 "key": "post_gain",
                 "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
                 "type": "Float"
             },
             "post_inverse": {

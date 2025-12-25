@@ -36,6 +36,7 @@ Mask/ForTexturing
 |Gradient Gain|Float|Controls how sensitive the gradient contribution is to slope intensity. A higher gain produces a steeper, more contrast-like transition from 0 to 1, making the influence of slope change more abruptly.|
 |Gradient Weight|Float|Weight applied to the gradient component in the final weathering mix. Can be negative to invert the gradient contribution. Increasing the gradient weight will result in stronger selection based solely on elevation slope, independently of curvature, i.e. bumps, or ridge detection.|
 |Gain|Float|Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.|
+|Gamma|Float|No description|
 |Invert Output|Bool|Inverts the output values after processing, flipping low and high values across the midrange.|
 |Remap Range|Value range|Linearly remaps the output values to a specified target range (default is [0, 1]).|
 |Saturation Range|Value range|Modifies the amplitude of elevations by first clamping them to a given interval and then scaling them so that the restricted interval matches the original input range. This enhances contrast in elevation variations while maintaining overall structure.|
