@@ -28,13 +28,18 @@ void setup_valley_fill_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  node.add_attr<FloatAttribute>("talus_global", "Slope", 2.f, 0.f, FLT_MAX);
-  node.add_attr<FloatAttribute>("duration", "Duration", 1.f, 0.05f, 6.f);
+  node.add_attr<FloatAttribute>("talus_global", "Slope", 1.f, 0.f, FLT_MAX);
+  node.add_attr<FloatAttribute>("duration", "Duration", 2.f, 0.05f, 6.f);
   node.add_attr<FloatAttribute>("ratio", "Deposition Ratio", 0.8f, 0.f, 1.f);
   node.add_attr<FloatAttribute>("gamma", "Deposition Gamma", 2.f, 0.01f, 4.f);
   node.add_attr<BoolAttribute>("scale_talus_with_elevation",
                                "Scale with Elevation",
                                true);
+  node.add_attr<FloatAttribute>("elevation_max_ratio",
+                                "Scree Max Elevation",
+                                0.7f,
+                                0.f,
+                                2.f);
 
   // attribute(s) order
   node.set_attr_ordered_key({
@@ -46,6 +51,7 @@ void setup_valley_fill_node(BaseNode &node)
       "_GROUPBOX_BEGIN_Deposition Profile",
       "ratio",
       "gamma",
+      "elevation_max_ratio",
       "_GROUPBOX_END_",
       //
       "_GROUPBOX_BEGIN_Deposition Dynamics",
@@ -99,7 +105,8 @@ void compute_valley_fill_node(BaseNode &node)
                                  node.get_attr<FloatAttribute>("gamma"),
                                  node.get_attr<FloatAttribute>("ratio"),
                                  zmin,
-                                 zmax);
+                                 zmax,
+                                 node.get_attr<FloatAttribute>("elevation_max_ratio"));
         },
         node.get_config_ref()->hmap_transform_mode_gpu);
 
