@@ -29,13 +29,7 @@ void setup_thermal_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "deposition", CONFIG(node));
 
   // attribute(s)
-  std::vector<std::string> choices = {
-      "Standard",
-      "Bedrock",
-      "Ridge",
-      "Inflate",
-      // "Schott"
-  };
+  std::vector<std::string> choices = {"Standard", "Bedrock", "Ridge", "Inflate"};
   node.add_attr<ChoiceAttribute>("type", "", choices);
 
   node.add_attr<FloatAttribute>("talus_global", "Slope", 1.f, 0.f, FLT_MAX);
@@ -121,12 +115,6 @@ void compute_thermal_node(BaseNode &node)
                                             *pa_talus_map,
                                             iterations,
                                             pa_deposition_map);
-          }
-          else if (type == "Schott")
-          {
-            float intensity = 0.05f * talus;
-            hmap::thermal_schott(*pa_out, *pa_talus_map, pa_mask, iterations, intensity);
-            *pa_deposition_map = 0.f;
           }
           else if (type == "Inflate")
           {
