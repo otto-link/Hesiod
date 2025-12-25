@@ -28,20 +28,31 @@ void setup_thermal_scree_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "deposition", CONFIG(node));
 
   // attribute(s)
-  node.add_attr<FloatAttribute>("talus_global", "talus_global", 2.f, 0.f, FLT_MAX);
-  node.add_attr<FloatAttribute>("zmax", "zmax", 0.5f, -1.f, 2.f);
-  node.add_attr<IntAttribute>("iterations", "iterations", 500, 1, INT_MAX);
-  node.add_attr<BoolAttribute>("talus_constraint", "talus_constraint", true);
+  node.add_attr<FloatAttribute>("talus_global", "Slope", 2.f, 0.f, FLT_MAX);
+  node.add_attr<FloatAttribute>("zmax", "Scree Max Elevation", 0.5f, -1.f, 2.f);
+  node.add_attr<FloatAttribute>("duration", "Duration", 0.3f, 0.05f, 6.f);
+  node.add_attr<BoolAttribute>("talus_constraint", "Talus Constraint", true);
   node.add_attr<BoolAttribute>("scale_talus_with_elevation",
-                               "scale_talus_with_elevation",
+                               "Scale with Elevation",
                                true);
 
   // attribute(s) order
-  node.set_attr_ordered_key({"talus_global",
+  node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Slope Constraints",
+                             "talus_global",
+                             "scale_talus_with_elevation",
+                             "_GROUPBOX_END_",
+                             //
+                             "_GROUPBOX_BEGIN_Deposition Profile",
                              "zmax",
-                             "iterations",
                              "talus_constraint",
-                             "scale_talus_with_elevation"});
+                             "_GROUPBOX_END_",
+                             //
+                             "_GROUPBOX_BEGIN_Deposition Dynamics",
+                             "duration",
+                             "_GROUPBOX_END_"});
+
+  setup_pre_process_mask_attributes(node);
+  setup_post_process_heightmap_attributes(node, true, false);
 }
 
 void compute_thermal_scree_node(BaseNode &node)
@@ -57,10 +68,14 @@ void compute_thermal_scree_node(BaseNode &node)
     hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
     hmap::Heightmap *p_deposition_map = node.get_value_ref<hmap::Heightmap>("deposition");
 
+    // prepare mask
+    std::shared_ptr<hmap::Heightmap> sp_mask = pre_process_mask(node, p_mask, *p_in);
+
     // copy the input heightmap
     *p_out = *p_in;
 
     float talus = node.get_attr<FloatAttribute>("talus_global") / (float)p_out->shape.x;
+    int   iterations = int(node.get_attr<FloatAttribute>("duration") * p_out->shape.x);
 
     hmap::Heightmap talus_map = hmap::Heightmap(CONFIG(node), talus);
 
@@ -80,7 +95,7 @@ void compute_thermal_scree_node(BaseNode &node)
 
     hmap::transform(
         {p_out, p_mask, &talus_map, p_zmax, p_deposition_map},
-        [&node, &talus](std::vector<hmap::Array *> p_arrays)
+        [&node, talus, iterations](std::vector<hmap::Array *> p_arrays)
         {
           hmap::Array *pa_out = p_arrays[0];
           hmap::Array *pa_mask = p_arrays[1];
@@ -92,13 +107,15 @@ void compute_thermal_scree_node(BaseNode &node)
                                    pa_mask,
                                    *pa_talus_map,
                                    *pa_zmax,
-                                   node.get_attr<IntAttribute>("iterations"),
+                                   iterations,
                                    node.get_attr<BoolAttribute>("talus_constraint"),
                                    pa_deposition_map);
         },
         node.get_config_ref()->hmap_transform_mode_gpu);
 
+    // post-process
     p_out->smooth_overlap_buffers();
+    post_process_heightmap(node, *p_out, p_in);
 
     if (p_deposition_map)
     {
