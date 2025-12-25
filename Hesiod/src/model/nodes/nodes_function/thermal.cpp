@@ -51,6 +51,7 @@ void setup_thermal_node(BaseNode &node)
       "_GROUPBOX_END_",
   });
 
+  setup_pre_process_mask_attributes(node);
   setup_post_process_heightmap_attributes(node, true, false);
 }
 
@@ -66,6 +67,10 @@ void compute_thermal_node(BaseNode &node)
     hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
     hmap::Heightmap *p_deposition_map = node.get_value_ref<hmap::Heightmap>("deposition");
 
+    // prepare mask
+    std::shared_ptr<hmap::Heightmap> sp_mask = pre_process_mask(node, p_mask, *p_in);
+
+    // inputs
     float talus = node.get_attr<FloatAttribute>("talus_global") / (float)p_out->shape.x;
     int   iterations = int(node.get_attr<FloatAttribute>("duration") * p_out->shape.x);
 
