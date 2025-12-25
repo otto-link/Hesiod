@@ -129,7 +129,28 @@ void post_process_heightmap(BaseNode &node, hmap::Heightmap &h, hmap::Heightmap 
   if (node.get_attr<BoolAttribute>("post_inverse"))
     h.inverse();
 
-  // saturate
+  // gamma
+  float post_gamma = node.get_attr<FloatAttribute>("post_gamma");
+
+  if (post_gamma != 1.f)
+  {
+    float hmin = h.min();
+    float hmax = h.max();
+    h.remap(0.f, 1.f, hmin, hmax);
+
+    hmap::transform(
+        {&h},
+        [post_gamma](std::vector<hmap::Array *> p_arrays)
+        {
+          hmap::Array *pa = p_arrays[0];
+          hmap::gamma_correction(*pa, post_gamma);
+        },
+        node.get_config_ref()->hmap_transform_mode_cpu);
+
+    h.remap(hmin, hmax, 0.f, 1.f);
+  }
+
+  // gain
   float post_gain = node.get_attr<FloatAttribute>("post_gain");
 
   if (post_gain != 1.f)
@@ -216,6 +237,7 @@ void setup_post_process_heightmap_attributes(BaseNode &node,
   }
 
   node.add_attr<BoolAttribute>("post_inverse", "Invert Output", false);
+  node.add_attr<FloatAttribute>("post_gamma", "Gamma", 1.f, 0.01f, 10.f);
   node.add_attr<FloatAttribute>("post_gain", "Gain", 1.f, 0.01f, 10.f);
   node.add_attr<FloatAttribute>("post_smoothing_radius",
                                 "Smoothing Radius",
@@ -236,6 +258,7 @@ void setup_post_process_heightmap_attributes(BaseNode &node,
   }
 
   p_keys->push_back("post_inverse");
+  p_keys->push_back("post_gamma");
   p_keys->push_back("post_gain");
   p_keys->push_back("post_smoothing_radius");
   p_keys->push_back("post_remap");
