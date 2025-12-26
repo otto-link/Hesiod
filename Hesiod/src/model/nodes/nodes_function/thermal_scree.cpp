@@ -31,7 +31,7 @@ void setup_thermal_scree_node(BaseNode &node)
   node.add_attr<FloatAttribute>("talus_global", "Slope", 2.f, 0.f, FLT_MAX);
   node.add_attr<FloatAttribute>("zmax", "Scree Max Elevation", 0.5f, -1.f, 2.f);
   node.add_attr<FloatAttribute>("duration", "Duration", 0.3f, 0.05f, 6.f);
-  node.add_attr<BoolAttribute>("talus_constraint", "Talus Constraint", true);
+  // node.add_attr<BoolAttribute>("talus_constraint", "Talus Constraint", true);
   node.add_attr<BoolAttribute>("scale_talus_with_elevation",
                                "Scale with Elevation",
                                true);
@@ -44,7 +44,7 @@ void setup_thermal_scree_node(BaseNode &node)
                              //
                              "_GROUPBOX_BEGIN_Deposition Profile",
                              "zmax",
-                             "talus_constraint",
+                             // "talus_constraint",
                              "_GROUPBOX_END_",
                              //
                              "_GROUPBOX_BEGIN_Deposition Dynamics",
@@ -103,13 +103,14 @@ void compute_thermal_scree_node(BaseNode &node)
           hmap::Array *pa_zmax = p_arrays[3];
           hmap::Array *pa_deposition_map = p_arrays[4];
 
-          hmap::gpu::thermal_scree(*pa_out,
-                                   pa_mask,
-                                   *pa_talus_map,
-                                   *pa_zmax,
-                                   iterations,
-                                   node.get_attr<BoolAttribute>("talus_constraint"),
-                                   pa_deposition_map);
+          hmap::gpu::thermal_scree(
+              *pa_out,
+              pa_mask,
+              *pa_talus_map,
+              *pa_zmax,
+              iterations,
+              false, // node.get_attr<BoolAttribute>("talus_constraint"),
+              pa_deposition_map);
         },
         node.get_config_ref()->hmap_transform_mode_gpu);
 
