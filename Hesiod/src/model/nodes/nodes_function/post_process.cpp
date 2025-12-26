@@ -29,7 +29,9 @@ void setup_post_process_node(BaseNode &node)
   // attribute(s) order
   node.set_attr_ordered_key({});
 
-  setup_post_process_heightmap_attributes(node, false, false);
+  setup_post_process_heightmap_attributes(
+      node,
+      {.add_mix = false, .remap_active_state = false});
 }
 
 void compute_post_process_node(BaseNode &node)

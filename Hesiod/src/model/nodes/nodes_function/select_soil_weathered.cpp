@@ -58,7 +58,8 @@ void setup_select_soil_weathered_node(BaseNode &node)
                              "gradient_gain",
                              "_GROUPBOX_END_"});
 
-  setup_post_process_heightmap_attributes(node);
+  setup_post_process_heightmap_attributes(node,
+                                          {.add_mix = true, .remap_active_state = true});
 }
 
 void compute_select_soil_weathered_node(BaseNode &node)

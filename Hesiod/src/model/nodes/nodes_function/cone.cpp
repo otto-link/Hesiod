@@ -35,7 +35,8 @@ void setup_cone_node(BaseNode &node)
   // attribute(s) order
   node.set_attr_ordered_key({"slope", "apex_elevation", "smooth_profile", "center"});
 
-  setup_post_process_heightmap_attributes(node);
+  setup_post_process_heightmap_attributes(node,
+                                          {.add_mix = true, .remap_active_state = true});
 
   // disable post-processing remap by default
   node.get_attr_ref<RangeAttribute>("post_remap")->set_is_active(false);

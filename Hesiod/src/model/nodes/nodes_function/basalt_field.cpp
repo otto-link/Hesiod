@@ -100,7 +100,9 @@ void setup_basalt_field_node(BaseNode &node)
                              "flatten_kw_ratio",
                              "flatten_amp"});
 
-  setup_post_process_heightmap_attributes(node, false, false);
+  setup_post_process_heightmap_attributes(
+      node,
+      {.add_mix = false, .remap_active_state = false});
 }
 
 void compute_basalt_field_node(BaseNode &node)

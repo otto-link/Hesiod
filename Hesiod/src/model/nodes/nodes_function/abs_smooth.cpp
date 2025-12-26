@@ -32,7 +32,8 @@ void setup_abs_smooth_node(BaseNode &node)
   node.set_attr_ordered_key(
       {"_GROUPBOX_BEGIN_Main Parameters", "mu", "vshift", "_GROUPBOX_END_"});
 
-  setup_post_process_heightmap_attributes(node, true, false);
+  setup_post_process_heightmap_attributes(node,
+                                          {.add_mix = true, .remap_active_state = false});
 }
 
 void compute_abs_smooth_node(BaseNode &node)

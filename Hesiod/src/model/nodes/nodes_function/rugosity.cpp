@@ -32,7 +32,8 @@ void setup_rugosity_node(BaseNode &node)
   // attribute(s) order
   node.set_attr_ordered_key({"radius", "clamp_max", "vc_max"});
 
-  setup_post_process_heightmap_attributes(node);
+  setup_post_process_heightmap_attributes(node,
+                                          {.add_mix = true, .remap_active_state = true});
 }
 
 void compute_rugosity_node(BaseNode &node)

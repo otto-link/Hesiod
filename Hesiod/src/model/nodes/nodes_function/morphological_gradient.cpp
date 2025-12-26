@@ -29,7 +29,8 @@ void setup_morphological_gradient_node(BaseNode &node)
   // attribute(s) order
   node.set_attr_ordered_key({"radius"});
 
-  setup_post_process_heightmap_attributes(node);
+  setup_post_process_heightmap_attributes(node,
+                                          {.add_mix = true, .remap_active_state = true});
 }
 
 void compute_morphological_gradient_node(BaseNode &node)

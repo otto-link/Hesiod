@@ -61,7 +61,8 @@ void setup_hemisphere_field_fbm_node(BaseNode &node)
                              "persistence",
                              "lacunarity"});
 
-  setup_post_process_heightmap_attributes(node);
+  setup_post_process_heightmap_attributes(node,
+                                          {.add_mix = true, .remap_active_state = true});
 }
 
 void compute_hemisphere_field_fbm_node(BaseNode &node)

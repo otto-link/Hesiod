@@ -64,7 +64,8 @@ void setup_mountain_inselberg_node(BaseNode &node)
                              "base_noise_amp",
                              "_GROUPBOX_END_"});
 
-  setup_post_process_heightmap_attributes(node);
+  setup_post_process_heightmap_attributes(node,
+                                          {.add_mix = true, .remap_active_state = false});
 
   // disable post-processing remap by default
   node.get_attr_ref<RangeAttribute>("post_remap")->set_is_active(false);

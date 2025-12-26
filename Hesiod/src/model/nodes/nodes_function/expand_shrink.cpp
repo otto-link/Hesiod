@@ -45,7 +45,8 @@ void setup_expand_shrink_node(BaseNode &node)
                              "_GROUPBOX_END_"});
 
   setup_pre_process_mask_attributes(node);
-  setup_post_process_heightmap_attributes(node, true);
+  setup_post_process_heightmap_attributes(node,
+                                          {.add_mix = true, .remap_active_state = false});
 }
 
 void compute_expand_shrink_node(BaseNode &node)

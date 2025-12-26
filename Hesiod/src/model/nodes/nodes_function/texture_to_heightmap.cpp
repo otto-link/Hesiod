@@ -26,7 +26,8 @@ void setup_texture_to_heightmap_node(BaseNode &node)
   // attribute(s)
 
   // attribute(s) order
-  setup_post_process_heightmap_attributes(node);
+  setup_post_process_heightmap_attributes(node,
+                                          {.add_mix = true, .remap_active_state = true});
 }
 
 void compute_texture_to_heightmap_node(BaseNode &node)

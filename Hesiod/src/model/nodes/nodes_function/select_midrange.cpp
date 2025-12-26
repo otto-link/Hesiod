@@ -28,7 +28,8 @@ void setup_select_midrange_node(BaseNode &node)
   // attribute(s) order
   node.set_attr_ordered_key({"gain"});
 
-  setup_post_process_heightmap_attributes(node);
+  setup_post_process_heightmap_attributes(node,
+                                          {.add_mix = true, .remap_active_state = true});
 }
 
 void compute_select_midrange_node(BaseNode &node)

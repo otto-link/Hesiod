@@ -47,7 +47,9 @@ void setup_badlands_node(BaseNode &node)
                              "k_smoothing",
                              "base_noise_amp"});
 
-  setup_post_process_heightmap_attributes(node, false, false);
+  setup_post_process_heightmap_attributes(
+      node,
+      {.add_mix = false, .remap_active_state = false});
 }
 
 void compute_badlands_node(BaseNode &node)

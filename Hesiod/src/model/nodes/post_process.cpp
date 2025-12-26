@@ -219,15 +219,14 @@ void post_process_heightmap(BaseNode &node, hmap::Heightmap &h, hmap::Heightmap 
   }
 }
 
-void setup_post_process_heightmap_attributes(BaseNode &node,
-                                             bool      add_mix,
-                                             bool      remap_active_state)
+void setup_post_process_heightmap_attributes(BaseNode                   &node,
+                                             PostProcessHeightmapOptions options)
 {
   Logger::log()->trace("setup_post_process_heightmap_attributes: [{}]/[{}]",
                        node.get_node_type(),
                        node.get_id());
 
-  if (add_mix)
+  if (options.add_mix)
   {
     node.add_attr<EnumAttribute>("post_mix_method",
                                  "Mix Method",
@@ -244,14 +243,14 @@ void setup_post_process_heightmap_attributes(BaseNode &node,
                                 0.f,
                                 0.f,
                                 0.05f);
-  node.add_attr<RangeAttribute>("post_remap", "Remap Range", remap_active_state);
+  node.add_attr<RangeAttribute>("post_remap", "Remap Range", options.remap_active_state);
   node.add_attr<RangeAttribute>("post_saturate", "Saturation Range", false);
 
   std::vector<std::string> *p_keys = node.get_attr_ordered_key_ref();
 
   p_keys->push_back("_GROUPBOX_BEGIN_Post-Processing");
 
-  if (add_mix)
+  if (options.add_mix)
   {
     p_keys->push_back("post_mix_method");
     p_keys->push_back("post_mix");

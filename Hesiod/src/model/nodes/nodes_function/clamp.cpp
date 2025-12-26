@@ -39,7 +39,8 @@ void setup_clamp_node(BaseNode &node)
   node.set_attr_ordered_key(
       {"clamp", "smooth_min", "k_min", "smooth_max", "k_max", "remap"});
 
-  setup_post_process_heightmap_attributes(node, true);
+  setup_post_process_heightmap_attributes(node,
+                                          {.add_mix = true, .remap_active_state = false});
 }
 
 void compute_clamp_node(BaseNode &node)

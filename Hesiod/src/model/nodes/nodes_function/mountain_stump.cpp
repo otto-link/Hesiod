@@ -64,7 +64,9 @@ void setup_mountain_stump_node(BaseNode &node)
                              "base_noise_amp",
                              "_GROUPBOX_END_"});
 
-  setup_post_process_heightmap_attributes(node, false, false);
+  setup_post_process_heightmap_attributes(
+      node,
+      {.add_mix = false, .remap_active_state = false});
 }
 
 void compute_mountain_stump_node(BaseNode &node)

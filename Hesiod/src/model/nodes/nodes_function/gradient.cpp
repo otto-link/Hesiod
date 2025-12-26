@@ -25,7 +25,8 @@ void setup_gradient_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "dx", CONFIG(node));
   node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "dy", CONFIG(node));
 
-  setup_post_process_heightmap_attributes(node);
+  setup_post_process_heightmap_attributes(node,
+                                          {.add_mix = true, .remap_active_state = true});
 }
 
 void compute_gradient_node(BaseNode &node)

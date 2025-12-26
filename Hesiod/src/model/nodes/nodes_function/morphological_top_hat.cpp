@@ -31,7 +31,8 @@ void setup_morphological_top_hat_node(BaseNode &node)
   node.set_attr_ordered_key(
       {"_GROUPBOX_BEGIN_Main Parameters", "radius", "top_hat", "_GROUPBOX_END_"});
 
-  setup_post_process_heightmap_attributes(node);
+  setup_post_process_heightmap_attributes(node,
+                                          {.add_mix = true, .remap_active_state = true});
 }
 
 void compute_morphological_top_hat_node(BaseNode &node)

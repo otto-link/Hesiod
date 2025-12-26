@@ -32,7 +32,8 @@ void setup_select_valley_node(BaseNode &node)
   // attribute(s) order
   node.set_attr_ordered_key({"radius", "ridge_select", "_SEPARATOR_", "GPU"});
 
-  setup_post_process_heightmap_attributes(node);
+  setup_post_process_heightmap_attributes(node,
+                                          {.add_mix = true, .remap_active_state = false});
 }
 
 void compute_select_valley_node(BaseNode &node)

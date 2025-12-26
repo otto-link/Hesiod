@@ -71,7 +71,8 @@ void setup_multisteps_node(BaseNode &node)
                              "noise_inflate",
                              "_GROUPBOX_END_"});
 
-  setup_post_process_heightmap_attributes(node);
+  setup_post_process_heightmap_attributes(node,
+                                          {.add_mix = true, .remap_active_state = true});
 }
 
 void compute_multisteps_node(BaseNode &node)

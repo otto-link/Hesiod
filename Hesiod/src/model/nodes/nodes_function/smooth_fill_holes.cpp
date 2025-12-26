@@ -31,7 +31,8 @@ void setup_smooth_fill_holes_node(BaseNode &node)
   node.set_attr_ordered_key({"radius"});
 
   setup_pre_process_mask_attributes(node);
-  setup_post_process_heightmap_attributes(node, true);
+  setup_post_process_heightmap_attributes(node,
+                                          {.add_mix = true, .remap_active_state = false});
 }
 
 void compute_smooth_fill_holes_node(BaseNode &node)

@@ -21,7 +21,9 @@ void setup_inverse_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
-  setup_post_process_heightmap_attributes(node, false, false);
+  setup_post_process_heightmap_attributes(
+      node,
+      {.add_mix = false, .remap_active_state = false});
 }
 
 void compute_inverse_node(BaseNode &node)

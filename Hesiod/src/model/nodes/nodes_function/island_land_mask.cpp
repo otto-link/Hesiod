@@ -48,7 +48,8 @@ void setup_island_land_mask_node(BaseNode &node)
                              "lacunarity",
                              "center"});
 
-  setup_post_process_heightmap_attributes(node);
+  setup_post_process_heightmap_attributes(node,
+                                          {.add_mix = true, .remap_active_state = true});
 }
 
 void compute_island_land_mask_node(BaseNode &node)

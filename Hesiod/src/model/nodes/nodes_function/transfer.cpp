@@ -33,7 +33,8 @@ void setup_transfer_node(BaseNode &node)
   node.set_attr_ordered_key({"radius", "amplitude", "target_prefiltering"});
 
   setup_pre_process_mask_attributes(node);
-  setup_post_process_heightmap_attributes(node);
+  setup_post_process_heightmap_attributes(node,
+                                          {.add_mix = true, .remap_active_state = false});
 }
 
 void compute_transfer_node(BaseNode &node)

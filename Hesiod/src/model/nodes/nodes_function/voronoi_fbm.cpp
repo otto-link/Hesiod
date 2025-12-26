@@ -69,7 +69,8 @@ void setup_voronoi_fbm_node(BaseNode &node)
                              "lacunarity",
                              "_GROUPBOX_END_"});
 
-  setup_post_process_heightmap_attributes(node);
+  setup_post_process_heightmap_attributes(node,
+                                          {.add_mix = true, .remap_active_state = true});
 }
 
 void compute_voronoi_fbm_node(BaseNode &node)

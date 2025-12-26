@@ -52,7 +52,8 @@ void setup_thermal_node(BaseNode &node)
   });
 
   setup_pre_process_mask_attributes(node);
-  setup_post_process_heightmap_attributes(node, true, false);
+  setup_post_process_heightmap_attributes(node,
+                                          {.add_mix = true, .remap_active_state = false});
 }
 
 void compute_thermal_node(BaseNode &node)

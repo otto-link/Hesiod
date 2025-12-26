@@ -92,7 +92,8 @@ void setup_strata_node(BaseNode &node)
                              "mask_gamma"});
 
   setup_pre_process_mask_attributes(node);
-  setup_post_process_heightmap_attributes(node, true);
+  setup_post_process_heightmap_attributes(node,
+                                          {.add_mix = true, .remap_active_state = false});
 }
 
 void compute_strata_node(BaseNode &node)
