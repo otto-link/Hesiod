@@ -328,7 +328,6 @@ std::map<std::string, std::string> get_node_inventory()
       {"RelativeElevation", "Features/Landform"},
       {"Remap", "Filter/Range"},
       {"Rescale", "Filter/Range"},
-      {"Reverse", "Math/Base"},
       {"ReverseAboveThreshold", "Filter/Recurve"},
       {"ReverseMidpoint", "WIP"}, // Primitive/Authoring
       {"Ridgelines", "Primitive/Authoring"},
@@ -643,7 +642,6 @@ std::shared_ptr<gnode::Node> node_factory(const std::string         &node_type,
     SETUP_NODE(RelativeElevation, relative_elevation);
     SETUP_NODE(Remap, remap);
     SETUP_NODE(Rescale, rescale);
-    SETUP_NODE(Reverse, reverse);
     SETUP_NODE(ReverseAboveThreshold, reverse_above_theshold);
     SETUP_NODE(ReverseMidpoint, reverse_midpoint);
     SETUP_NODE(Ridgelines, ridgelines);

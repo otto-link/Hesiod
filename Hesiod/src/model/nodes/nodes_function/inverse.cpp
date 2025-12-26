@@ -21,7 +21,7 @@ void setup_inverse_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
 
-  setup_post_process_heightmap_attributes(node);
+  setup_post_process_heightmap_attributes(node, false, false);
 }
 
 void compute_inverse_node(BaseNode &node)
@@ -34,14 +34,18 @@ void compute_inverse_node(BaseNode &node)
   {
     hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
 
+    float vmin = p_in->min();
+    float vmax = p_in->max();
+
     hmap::transform(
         {p_out, p_in},
-        [](std::vector<hmap::Array *> p_arrays)
+        [vmin, vmax](std::vector<hmap::Array *> p_arrays)
         {
           hmap::Array *pa_out = p_arrays[0];
           hmap::Array *pa_in = p_arrays[1];
 
-          *pa_out = -*pa_in;
+          *pa_out = -(*pa_in - vmin) / (vmax - vmin); // in [0..1]
+          *pa_out = vmin + (vmax - vmin) * (*pa_out); // in [vmin..vmax]
         },
         node.get_config_ref()->hmap_transform_mode_cpu);
 
