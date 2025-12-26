@@ -40,11 +40,7 @@ void setup_thermal_scree_node(BaseNode &node)
   node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Slope Constraints",
                              "talus_global",
                              "scale_talus_with_elevation",
-                             "_GROUPBOX_END_",
-                             //
-                             "_GROUPBOX_BEGIN_Deposition Profile",
                              "zmax",
-                             // "talus_constraint",
                              "_GROUPBOX_END_",
                              //
                              "_GROUPBOX_BEGIN_Deposition Dynamics",
@@ -103,14 +99,12 @@ void compute_thermal_scree_node(BaseNode &node)
           hmap::Array *pa_zmax = p_arrays[3];
           hmap::Array *pa_deposition_map = p_arrays[4];
 
-          hmap::gpu::thermal_scree(
-              *pa_out,
-              pa_mask,
-              *pa_talus_map,
-              *pa_zmax,
-              iterations,
-              false, // node.get_attr<BoolAttribute>("talus_constraint"),
-              pa_deposition_map);
+          hmap::gpu::thermal_scree(*pa_out,
+                                   pa_mask,
+                                   *pa_talus_map,
+                                   *pa_zmax,
+                                   iterations,
+                                   pa_deposition_map);
         },
         node.get_config_ref()->hmap_transform_mode_gpu);
 
