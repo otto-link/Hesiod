@@ -25,7 +25,7 @@ Node Categories
 |IO|Files|ExportAsset, ExportCloud, ExportCloudToPly, ExportHeightmap, ExportNormalMap, ExportPath, ExportPointsToPly, ExportTexture, ImportHeightmap, ImportTexture|
 |Mask|ForTexturing|SelectSoilFlow, SelectSoilRocks, SelectSoilWeathered|
 |Mask|Selector|SelectAngle, SelectBlobLog, SelectCavities, SelectGt, SelectInterval, SelectInwardOutward, SelectMidrange, SelectMultiband3, SelectPulse, SelectRivers, SelectSlope, SelectTransitions, SelectValley|
-|Math|Base|Abs, AbsSmooth, Cos, GaussianDecay, Inverse, Lerp, Reverse, Smoothstep|
+|Math|Base|Abs, AbsSmooth, Cos, GaussianDecay, Inverse, Lerp, Smoothstep|
 |Math|Convolution|ConvolveSVD|
 |Math|Gradient|Gradient, GradientAngle, GradientNorm, GradientTalus|
 |Operator|Blend|Blend, Blend3, BlendPoissonBf, Mixer, Transfer|
@@ -36,7 +36,7 @@ Node Categories
 |Primitive|Authoring|Brush, Ridgelines|
 |Primitive|Coherent|Dendry, GaborWaveFbm, Gavoronoise, HemisphereFieldFbm, Noise, NoiseFbm, NoiseIq, NoiseJordan, NoiseParberry, NoisePingpong, NoiseRidged, NoiseSwiss, PolygonField, PolygonFieldFbm, Stamping, Vorolines, VorolinesFbm, Voronoi, VoronoiFbm, Voronoise, Vororand, WaveletNoise|
 |Primitive|Function|Bump, BumpLorentzian, Cone, ConeComplex, ConeSigmoid, Constant, GaussianPulse, Paraboloid, Rift, Slope, Step, WaveDune, WaveSine, WaveSquare, WaveTriangular|
-|Primitive|Geological|Badlands, BasaltField, Caldera, Crater, Island, IslandLandMask, MountainCone, MountainInselberg, MountainRangeRadial, MountainStump, MountainTibesti, Multisteps, ShatteredPeak|
+|Primitive|Geological|Badlands, BasaltField, Caldera, Crater, Island, IslandLandMask, MountainCone, MountainInselberg, MountainRangeRadial, MountainStump, MountainTibesti, Multisteps, Plates, ShatteredPeak|
 |Primitive|Kernel|KernelCupola, KernelDiskSmooth, KernelGabor, KernelPrim|
 |Primitive|Random|White, WhiteDensityMap, WhiteSparse|
 |Routing||Broadcast, Receive, Thru, Toggle|

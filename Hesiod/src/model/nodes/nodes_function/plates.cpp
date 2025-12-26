@@ -1,0 +1,96 @@
+/* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
+ * Public License. The full license is in the file LICENSE, distributed with
+ * this software. */
+#include "highmap/opencl/gpu_opencl.hpp"
+#include "highmap/primitives.hpp"
+
+#include "attributes.hpp"
+
+#include "hesiod/app/enum_mappings.hpp"
+#include "hesiod/logger.hpp"
+#include "hesiod/model/nodes/base_node.hpp"
+#include "hesiod/model/nodes/post_process.hpp"
+
+using namespace attr;
+
+namespace hesiod
+{
+
+void setup_plates_node(BaseNode &node)
+{
+  Logger::log()->trace("setup node {}", node.get_label());
+
+  // port(s)
+  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "envelope");
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+
+  // attribute(s)
+  std::vector<float> kw = {4.f, 4.f};
+  node.add_attr<WaveNbAttribute>("kw", "Spatial Frequency", kw, 0.f, FLT_MAX, true);
+  node.add_attr<FloatAttribute>("slope", "Slope", 2.f, 0.f, FLT_MAX);
+  node.add_attr<IntAttribute>("direction", "Propagation Direction (D8)", 0, 0, 7);
+  node.add_attr<SeedAttribute>("seed", "Seed");
+  node.add_attr<FloatAttribute>("mix_ratio", "Mix", 0.9f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>("base_noise_amp", "Amplitude", 0.05f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>("rugosity", "Smoothness", 0.5f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>("kw_multiplier", "Frequency Scale", 2.f, 0.f, 16.f);
+
+  // attribute(s) order
+  node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Base Primitive",
+                             "kw",
+                             "seed",
+                             "_GROUPBOX_END_",
+                             //
+                             "_GROUPBOX_BEGIN_Plates",
+                             "slope",
+                             "direction",
+                             "mix_ratio",
+                             "_GROUPBOX_END_",
+                             //
+                             "_GROUPBOX_BEGIN_Noise Parameters",
+                             "base_noise_amp",
+                             "rugosity",
+                             "kw_multiplier",
+                             "_GROUPBOX_END_"});
+
+  setup_post_process_heightmap_attributes(node,
+                                          {.add_mix = true, .remap_active_state = true});
+}
+
+void compute_plates_node(BaseNode &node)
+{
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
+
+  // base noise function
+  hmap::Heightmap *p_env = node.get_value_ref<hmap::Heightmap>("envelope");
+  hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
+
+  float talus = node.get_attr<FloatAttribute>("slope") / float(p_out->shape.x);
+
+  hmap::transform(
+      {p_out},
+      [&node, talus](std::vector<hmap::Array *> p_arrays,
+                     hmap::Vec2<int>            shape,
+                     hmap::Vec4<float>          bbox)
+      {
+        hmap::Array *pa_out = p_arrays[0];
+
+        *pa_out = hmap::gpu::plates(shape,
+                                    node.get_attr<WaveNbAttribute>("kw"),
+                                    node.get_attr<SeedAttribute>("seed"),
+                                    talus,
+                                    node.get_attr<IntAttribute>("direction"),
+                                    node.get_attr<FloatAttribute>("mix_ratio"),
+                                    node.get_attr<FloatAttribute>("base_noise_amp"),
+                                    node.get_attr<FloatAttribute>("kw_multiplier"),
+                                    node.get_attr<FloatAttribute>("rugosity"),
+                                    bbox);
+      },
+      node.get_config_ref()->hmap_transform_mode_gpu);
+
+  // post-process
+  post_apply_enveloppe(node, *p_out, p_env);
+  post_process_heightmap(node, *p_out);
+}
+
+} // namespace hesiod
