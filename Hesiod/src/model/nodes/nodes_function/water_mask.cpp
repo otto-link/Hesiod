@@ -68,7 +68,7 @@ void compute_water_mask_node(BaseNode &node)
             *pa_mask = hmap::water_mask(*pa_depth);
           }
         },
-        node.get_config_ref()->hmap_transform_mode_cpu);
+        node.get_config_ref()->hmap_transform_mode_gpu);
 
     // post-process
     p_mask->smooth_overlap_buffers();

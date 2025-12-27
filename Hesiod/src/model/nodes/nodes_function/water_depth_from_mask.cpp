@@ -25,23 +25,31 @@ void setup_water_depth_from_mask_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FloatAttribute>("mask_threshold",
-                                "mask_threshold",
+                                "Mask Activation Threshold",
                                 0.01f,
                                 0.f,
-                                0.1f,
+                                1.f,
                                 "{:.3f}");
   node.add_attr<FloatAttribute>("tolerance",
-                                "tolerance",
-                                1e-5f,
+                                "Convergence Tolerance",
                                 1e-6f,
-                                1e-2f,
+                                1e-8f,
+                                1e-4f,
                                 "{:.3e}",
                                 true);
-  node.add_attr<IntAttribute>("iterations", "iterations", 500, 1, INT_MAX);
-  node.add_attr<FloatAttribute>("omega", "omega", 1.8f, 1e-3f, 1.9f);
+  node.add_attr<IntAttribute>("iterations", "Max Iterations", 500, 1, INT_MAX);
+  node.add_attr<FloatAttribute>("omega", "Relaxation Factor", 1.8f, 1e-3f, 1.9f);
 
   // attribute(s) order
-  node.set_attr_ordered_key({"mask_threshold", "tolerance", "iterations", "omega"});
+  node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Interpolation Domain",
+                             "mask_threshold",
+                             "_GROUPBOX_END_",
+                             //
+                             "_GROUPBOX_BEGIN_Solver Parameters",
+                             "tolerance",
+                             "iterations",
+                             "omega",
+                             "_GROUPBOX_END_"});
 }
 
 void compute_water_depth_from_mask_node(BaseNode &node)
