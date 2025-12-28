@@ -18026,6 +18026,12 @@
                 "label": "Smoothing Radius",
                 "type": "Float"
             },
+            "preserve_elevation_range": {
+                "description": "No description",
+                "key": "preserve_elevation_range",
+                "label": "Preserve Input Range",
+                "type": "Bool"
+            },
             "ratio": {
                 "description": "Blend ratio controlling valley influence.",
                 "key": "ratio",
@@ -18046,6 +18052,12 @@
             }
         },
         "ports": {
+            "deposition": {
+                "caption": "deposition",
+                "data_type": "Heightmap",
+                "description": "No description",
+                "type": "output"
+            },
             "input": {
                 "caption": "input",
                 "data_type": "Heightmap",
