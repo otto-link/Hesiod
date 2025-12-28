@@ -40,8 +40,8 @@ Erosion/Hydraulic
 |Influence Power|Float|Exponent applied to the terrain gradient to modulate erosion intensity. Higher values increase sensitivity to steep slopes.|
 |Prefilter Radius|Float|Radius of the smoothing filter applied to the gradient field prior to erosion. Helps stabilize erosion on noisy terrain.|
 |Influence Scale|Float|Scaling factor applied to gradient-based erosion intensity, adjusting how strongly slope contributes to erosion.|
-|Gain|Float|Set the gain. Gain is a power law transformation altering the distribution of signal values, compressing or expanding certain regions of the signal depending on the exponent of the power law.|
-|Gamma|Float|No description|
+|Gain|Float|Mid-centered gain transformation applied to the elevation values. This is a non-linear recurve operator centered around the mid elevation (typically 0.5). Increasing the gain pushes values toward the minimum and maximum elevations, creating flatter low/high regions with a steeper transition around the midpoint.|
+|Gamma|Float|Standard gamma correction applied to the elevation values. This is a monotonic power-law remapping that shifts emphasis toward low or high elevations, making the overall shape sharper or bulkier without changing its ordering.|
 |Invert Output|Bool|Inverts the output values after processing, flipping low and high values across the midrange.|
 |Mix Factor|Float|Mixing factor for blending input and output values. A value of 0 uses only the input, 1 uses only the output, and intermediate values perform a linear interpolation.|
 |Mix Method|Enumeration|Method used to combine input and output values. Options include linear interpolation (default), min, max, smooth min, smooth max, add, and subtract.|

@@ -31,10 +31,10 @@ Hydrology
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|iterations|Integer|No description|
-|mask_threshold|Float|No description|
-|omega|Float|No description|
-|tolerance|Float|No description|
+|Max Iterations|Integer|No description|
+|Mask Activation Threshold|Float|No description|
+|Relaxation Factor|Float|No description|
+|Convergence Tolerance|Float|No description|
 
 # Example
 

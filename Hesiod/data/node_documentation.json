@@ -13767,7 +13767,13 @@
             "concave": {
                 "description": "Decides whether concave or convex features are detected.",
                 "key": "concave",
-                "label": "concave",
+                "label": "",
+                "type": "Bool"
+            },
+            "post_filter": {
+                "description": "No description",
+                "key": "post_filter",
+                "label": "Enable Smoothing",
                 "type": "Bool"
             },
             "post_gain": {
@@ -13821,7 +13827,7 @@
             "radius": {
                 "description": "Detection radius with respect to the domain size.",
                 "key": "radius",
-                "label": "radius",
+                "label": "Selection Scale",
                 "type": "Float"
             }
         },
@@ -14901,12 +14907,6 @@
         "description": "Identifies and selects valley-like regions in the heightmap based on curvature analysis. The selection can be inverted, and additional parameters allow fine-tuning of the selection process. The output is a mask representing the relative width of the valley. The value is 1 at the valley center and decreases to 0 at the edges of the valley.",
         "label": "SelectValley",
         "parameters": {
-            "GPU": {
-                "description": "Enables or disables GPU acceleration for faster processing.",
-                "key": "GPU",
-                "label": "GPU",
-                "type": "Bool"
-            },
             "post_gain": {
                 "description": "Mid-centered gain transformation applied to the elevation values. This is a non-linear recurve operator centered around the mid elevation (typically 0.5). Increasing the gain pushes values toward the minimum and maximum elevations, creating flatter low/high regions with a steeper transition around the midpoint.",
                 "key": "post_gain",
@@ -19058,25 +19058,25 @@
             "iterations": {
                 "description": "No description",
                 "key": "iterations",
-                "label": "iterations",
+                "label": "Max Iterations",
                 "type": "Integer"
             },
             "mask_threshold": {
                 "description": "No description",
                 "key": "mask_threshold",
-                "label": "mask_threshold",
+                "label": "Mask Activation Threshold",
                 "type": "Float"
             },
             "omega": {
                 "description": "No description",
                 "key": "omega",
-                "label": "omega",
+                "label": "Relaxation Factor",
                 "type": "Float"
             },
             "tolerance": {
                 "description": "No description",
                 "key": "tolerance",
-                "label": "tolerance",
+                "label": "Convergence Tolerance",
                 "type": "Float"
             }
         },
