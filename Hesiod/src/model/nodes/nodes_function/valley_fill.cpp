@@ -26,11 +26,13 @@ void setup_valley_fill_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
   node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
   node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "deposition", CONFIG(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("talus_global", "Slope", 1.f, 0.f, FLT_MAX);
   node.add_attr<FloatAttribute>("duration", "Duration", 2.f, 0.05f, 6.f);
   node.add_attr<FloatAttribute>("ratio", "Deposition Ratio", 0.8f, 0.f, 1.f);
+  node.add_attr<BoolAttribute>("preserve_elevation_range", "Preserve Input Range", true);
   node.add_attr<FloatAttribute>("gamma", "Deposition Gamma", 2.f, 0.01f, 4.f);
   node.add_attr<BoolAttribute>("scale_talus_with_elevation",
                                "Scale with Elevation",
@@ -52,6 +54,7 @@ void setup_valley_fill_node(BaseNode &node)
       "ratio",
       "gamma",
       "elevation_max_ratio",
+      "preserve_elevation_range",
       "_GROUPBOX_END_",
       //
       "_GROUPBOX_BEGIN_Deposition Dynamics",
@@ -73,6 +76,7 @@ void compute_valley_fill_node(BaseNode &node)
   {
     hmap::Heightmap *p_mask = node.get_value_ref<hmap::Heightmap>("mask");
     hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
+    hmap::Heightmap *p_deposition_map = node.get_value_ref<hmap::Heightmap>("deposition");
 
     float talus = node.get_attr<FloatAttribute>("talus_global") / (float)p_out->shape.x;
     int   iterations = int(node.get_attr<FloatAttribute>("duration") * p_out->shape.x);
@@ -89,13 +93,14 @@ void compute_valley_fill_node(BaseNode &node)
     float zmax = p_in->max();
 
     hmap::transform(
-        {p_out, p_in, p_mask, &talus_map},
+        {p_out, p_in, p_mask, &talus_map, p_deposition_map},
         [&node, talus, iterations, zmin, zmax](std::vector<hmap::Array *> p_arrays)
         {
           hmap::Array *pa_out = p_arrays[0];
           hmap::Array *pa_in = p_arrays[1];
           hmap::Array *pa_mask = p_arrays[2];
           hmap::Array *pa_talus_map = p_arrays[3];
+          hmap::Array *pa_deposition_map = p_arrays[4];
 
           *pa_out = *pa_in;
 
@@ -107,13 +112,17 @@ void compute_valley_fill_node(BaseNode &node)
                                  node.get_attr<FloatAttribute>("ratio"),
                                  zmin,
                                  zmax,
-                                 node.get_attr<FloatAttribute>("elevation_max_ratio"));
+                                 node.get_attr<FloatAttribute>("elevation_max_ratio"),
+                                 node.get_attr<BoolAttribute>("preserve_elevation_range"),
+                                 pa_deposition_map);
         },
         node.get_config_ref()->hmap_transform_mode_gpu);
 
     // post-process
     p_out->smooth_overlap_buffers();
     post_process_heightmap(node, *p_out, p_in);
+
+    p_deposition_map->remap();
   }
 }
 
