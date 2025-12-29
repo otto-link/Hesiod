@@ -125,12 +125,12 @@ void compute_thermal_node(BaseNode &node)
           else if (type == "Olsen")
           {
             hmap::gpu::thermal_olsen(*pa_out, pa_mask, *pa_talus_map, iterations);
-            *pa_deposition_map = 0.f;
+            *pa_deposition_map = *pa_out - *pa_in;
           }
           else if (type == "Inflate")
           {
             hmap::gpu::thermal_inflate(*pa_out, pa_mask, *pa_talus_map, iterations);
-            *pa_deposition_map = 0.f;
+            *pa_deposition_map = *pa_out - *pa_in;
           }
         },
         node.get_config_ref()->hmap_transform_mode_gpu);
