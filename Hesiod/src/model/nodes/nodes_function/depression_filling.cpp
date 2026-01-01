@@ -24,12 +24,11 @@ void setup_depression_filling_node(BaseNode &node)
   node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "fill map", CONFIG(node));
 
   // attribute(s)
-  node.add_attr<IntAttribute>("iterations", "iterations", 1000, 1, INT_MAX);
-  node.add_attr<FloatAttribute>("epsilon", "epsilon", 1e-4, 1e-5, 1e-1, "{:.3e}", true);
   node.add_attr<BoolAttribute>("remap fill map", "remap fill map", true);
 
   // attribute(s) order
-  node.set_attr_ordered_key({"iterations", "epsilon", "remap fill map"});
+  node.set_attr_ordered_key(
+      {"_GROUPBOX_BEGIN_Main Parameters", "remap fill map", "_GROUPBOX_END_"});
 }
 
 void compute_depression_filling_node(BaseNode &node)
@@ -43,21 +42,16 @@ void compute_depression_filling_node(BaseNode &node)
     hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
     hmap::Heightmap *p_fill_map = node.get_value_ref<hmap::Heightmap>("fill map");
 
-    float epsilon_normalized = node.get_attr<FloatAttribute>("epsilon") /
-                               (float)p_in->shape.x;
-
     hmap::transform(
         {p_out, p_in},
-        [&node, epsilon_normalized](std::vector<hmap::Array *> p_arrays)
+        [&node](std::vector<hmap::Array *> p_arrays)
         {
           hmap::Array *pa_out = p_arrays[0];
           hmap::Array *pa_in = p_arrays[1];
 
           *pa_out = *pa_in;
 
-          hmap::depression_filling(*pa_out,
-                                   node.get_attr<IntAttribute>("iterations"),
-                                   epsilon_normalized);
+          hmap::depression_filling_priority_flood(*pa_out);
         },
         hmap::TransformMode::SINGLE_ARRAY); // forced, not tileable
 
