@@ -32,6 +32,7 @@ QWidget *node_widget_factory(const std::string        &node_type,
                                                "Stratify",
                                                "StratifyMultiscale",
                                                "StratifyOblique",
+                                               "ThermalRidge",
                                                "TextureAdvectionWarp"};
 
   if (contains<std::string>(wip_nodes, node_type))

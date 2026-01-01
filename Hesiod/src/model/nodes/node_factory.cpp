@@ -177,7 +177,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"CloudToVectors", "Geometry/Cloud"},
       {"CoastalErosionDiffusion", "Erosion/Water"},
       {"CoastalErosionProfile", "Erosion/Water"},
-      {"ColorizeCmap", "Texture"},
+      {"ColorizeCmap", "WIP/DEPRECATED"}, // TODO DEPRECARED TO REMOVE
       {"ColorizeGradient", "Texture"},
       {"ColorizeSolid", "Texture"},
       {"CombineMask", "Mask"},
@@ -375,12 +375,12 @@ std::map<std::string, std::string> get_node_inventory()
       {"SteepenConvective", "Filter/Recast"},
       {"Step", "Primitive/Function"},
       {"Strata", "Erosion/Stratify"},
-      {"Stratify", "WIP"},           // "Erosion/Stratify"},
-      {"StratifyOblique", "WIP"},    // "Erosion/Stratify"},
-      {"StratifyMultiscale", "WIP"}, // "Erosion/Stratify"},
+      {"Stratify", "WIP/DEPRECATED"},
+      {"StratifyOblique", "WIP/DEPRECATED"},
+      {"StratifyMultiscale", "WIP/DEPRECATED"},
       {"Terrace", "Filter/Recurve"},
       {"TextureAdvectionParticle", "Texture"},
-      {"TextureAdvectionWarp", "WIP"}, // "Texture"},
+      {"TextureAdvectionWarp", "WIP/DEPRECATED"},
       {"TextureQuiltingExpand", "Texture"},
       {"TextureQuiltingShuffle", "Texture"},
       {"TextureSplitChannels", "Texture"},
@@ -389,6 +389,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Thermal", "Erosion/Thermal"},
       {"ThermalFlatten", "WIP"}, // "Erosion/Thermal"
       // {"ThermalRib", "WIP"}, // "Erosion/Thermal"
+      {"ThermalRidge", "WIP/DEPRECATED"},
       {"ThermalScree", "Erosion/Thermal"},
       {"Thru", "Routing"},
       {"Toggle", "Routing"},
@@ -706,6 +707,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string         &node_type,
     SETUP_NODE(Thermal, thermal);
     SETUP_NODE(ThermalFlatten, thermal_flatten);
     SETUP_NODE(ThermalRib, thermal_rib);
+    SETUP_NODE(ThermalRidge, thermal_ridge);
     SETUP_NODE(ThermalScree, thermal_scree);
     SETUP_NODE(Unsphericity, unsphericity);
     SETUP_NODE(ValleyFill, valley_fill);
