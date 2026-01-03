@@ -409,6 +409,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"WaterDepthDryOut", "Hydrology"},
       {"WaterDepthFromMask", "Hydrology"},
       {"WaterMask", "Hydrology"},
+      {"WatershedRidge", "Erosion/Hydraulic"},
       {"WaveDune", "Primitive/Function"},
       {"WaveletNoise", "Primitive/Coherent"},
       {"WaveSine", "Primitive/Function"},
@@ -723,6 +724,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string         &node_type,
     SETUP_NODE(WaterDepthDryOut, water_depth_dry_out);
     SETUP_NODE(WaterDepthFromMask, water_depth_from_mask);
     SETUP_NODE(WaterMask, water_mask);
+    SETUP_NODE(WatershedRidge, watershed_ridge);
     SETUP_NODE(WaveDune, wave_dune);
     SETUP_NODE(WaveletNoise, wavelet_noise);
     SETUP_NODE(WaveSine, wave_sine);
