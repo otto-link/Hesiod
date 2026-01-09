@@ -63,10 +63,10 @@ void compute_watershed_ridge_node(BaseNode &node)
           hmap::Array *pa_out = p_arrays[0];
           hmap::Array *pa_in = p_arrays[1];
           hmap::Array *pa_mask = p_arrays[2];
-	  
+
           *pa_out = hmap::watershed_ridge(
               *pa_in,
-	      pa_mask,
+              pa_mask,
               node.get_attr<FloatAttribute>("amplitude"),
               node.get_attr<BoolAttribute>("smooth_ridge_crest"),
               node.get_attr<FloatAttribute>("edt_exponent"));

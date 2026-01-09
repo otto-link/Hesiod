@@ -25,11 +25,12 @@ void setup_white_sparse_node(BaseNode &node)
   // attribute(s)
   node.add_attr<SeedAttribute>("seed", "Seed");
   node.add_attr<FloatAttribute>("density", "density", 0.1f, 0.f, 1.f);
-  node.add_attr<BoolAttribute>("inverse", "inverse", false);
-  node.add_attr<RangeAttribute>("remap", "remap");
 
   // attribute(s) order
   node.set_attr_ordered_key({"seed", "density", "_SEPARATOR_", "inverse", "remap"});
+
+  setup_post_process_heightmap_attributes(node,
+                                          {.add_mix = true, .remap_active_state = true});
 }
 
 void compute_white_sparse_node(BaseNode &node)
@@ -56,35 +57,9 @@ void compute_white_sparse_node(BaseNode &node)
       },
       node.get_config_ref()->hmap_transform_mode_cpu);
 
-  // add envelope
-  if (p_env)
-  {
-    float hmin = p_out->min();
-    hmap::transform(
-        {p_out, p_env},
-        [&hmin](std::vector<hmap::Array *> p_arrays)
-        {
-          hmap::Array *pa_a = p_arrays[0];
-          hmap::Array *pa_b = p_arrays[1];
-
-          *pa_a -= hmin;
-          *pa_a *= *pa_b;
-        },
-        node.get_config_ref()->hmap_transform_mode_cpu);
-  }
-
   // post-process
-  post_process_heightmap(node,
-                         *p_out,
-
-                         node.get_attr<BoolAttribute>("inverse"),
-                         false, // smooth
-                         0,
-                         false, // saturate
-                         {0.f, 0.f},
-                         0.f,
-                         node.get_attr_ref<RangeAttribute>("remap")->get_is_active(),
-                         node.get_attr<RangeAttribute>("remap"));
+  post_apply_enveloppe(node, *p_out, p_env);
+  post_process_heightmap(node, *p_out);
 }
 
 } // namespace hesiod
