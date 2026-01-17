@@ -21,8 +21,8 @@ void setup_curvature_mean_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
 
   // attribute(s)
   std::vector<std::string> choices = {"positive", "negative", "both"};
@@ -41,21 +41,19 @@ void compute_curvature_mean_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
+  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
     int nx = p_out->shape.x; // for gradient scaling
 
-    hmap::transform(
+    hmap::for_each_tile(
         {p_out, p_in},
-        [&node, nx](std::vector<hmap::Array *> p_arrays)
+        [&node, nx](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
         {
-          hmap::Array *pa_out = p_arrays[0];
-          hmap::Array *pa_in = p_arrays[1];
-
+          auto [pa_out, pa_in] = unpack<2>(p_arrays);
           // compute mean curvature and scale it
           *pa_out = hmap::curvature_mean(*pa_in) * nx;
 
@@ -80,7 +78,7 @@ void compute_curvature_mean_node(BaseNode &node)
           else
             hmap::clamp(*pa_out, -vc_max, vc_max);
         },
-        node.get_config_ref()->hmap_transform_mode_cpu);
+        node.cfg().cm_cpu);
 
     p_out->smooth_overlap_buffers();
 

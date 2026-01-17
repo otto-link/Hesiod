@@ -1,8 +1,6 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-
-#include "highmap/heightmap.hpp"
 #include "highmap/kernels.hpp"
 
 #include "attributes.hpp"
@@ -40,20 +38,20 @@ void compute_mix_normal_map_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::HeightmapRGBA *p_in1 = node.get_value_ref<hmap::HeightmapRGBA>("normal map base");
-  hmap::HeightmapRGBA *p_in2 = node.get_value_ref<hmap::HeightmapRGBA>(
-      "normal map detail");
+  // hmap::HeightmapRGBA *p_in1 = node.get_value_ref<hmap::HeightmapRGBA>("normal map
+  // base"); hmap::HeightmapRGBA *p_in2 = node.get_value_ref<hmap::HeightmapRGBA>(
+  //     "normal map detail");
 
-  if (p_in1 && p_in2)
-  {
-    hmap::HeightmapRGBA *p_out = node.get_value_ref<hmap::HeightmapRGBA>("normal map");
+  // if (p_in1 && p_in2)
+  // {
+  //   hmap::HeightmapRGBA *p_out = node.get_value_ref<hmap::HeightmapRGBA>("normal map");
 
-    *p_out = hmap::mix_normal_map_rgba(
-        *p_in1,
-        *p_in2,
-        node.get_attr<FloatAttribute>("detail_scaling"),
-        (hmap::NormalMapBlendingMethod)node.get_attr<EnumAttribute>("blending_method"));
-  }
+  //   *p_out = hmap::mix_normal_map_rgba(
+  //       *p_in1,
+  //       *p_in2,
+  //       node.get_attr<FloatAttribute>("detail_scaling"),
+  //       (hmap::NormalMapBlendingMethod)node.get_attr<EnumAttribute>("blending_method"));
+  // }
 }
 
 } // namespace hesiod

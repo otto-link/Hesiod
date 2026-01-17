@@ -1,7 +1,6 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-
 #include "attributes.hpp"
 
 #include "hesiod/logger.hpp"
@@ -32,14 +31,14 @@ void compute_colorize_solid_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::HeightmapRGBA *p_out = node.get_value_ref<hmap::HeightmapRGBA>("texture");
-  std::vector<float>   col3 = node.get_attr<ColorAttribute>("color");
+  // hmap::HeightmapRGBA *p_out = node.get_value_ref<hmap::HeightmapRGBA>("texture");
+  // std::vector<float>   col3 = node.get_attr<ColorAttribute>("color");
 
-  for (int k = 0; k < 4; k++)
-  {
-    float color = k < 3 ? col3[k] : node.get_attr<FloatAttribute>("alpha");
-    p_out->rgba[k] = hmap::Heightmap(CONFIG(node), color);
-  }
+  // for (int k = 0; k < 4; k++)
+  // {
+  //   float color = k < 3 ? col3[k] : node.get_attr<FloatAttribute>("alpha");
+  //   p_out->rgba[k] = hmap::VirtualArray(CONFIG2(node), color);
+  // }
 }
 
 } // namespace hesiod

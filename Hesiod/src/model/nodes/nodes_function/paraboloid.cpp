@@ -19,10 +19,10 @@ void setup_paraboloid_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dx");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "envelope");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dx");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dy");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "envelope");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("angle", "angle", 0.f, -180.f, 180.f);
@@ -32,20 +32,12 @@ void setup_paraboloid_node(BaseNode &node)
   node.add_attr<BoolAttribute>("reverse_x", "reverse_x", false);
   node.add_attr<BoolAttribute>("reverse_y", "reverse_y", false);
   node.add_attr<Vec2FloatAttribute>("center", "center");
-  node.add_attr<BoolAttribute>("inverse", "inverse", false);
-  node.add_attr<RangeAttribute>("remap", "remap");
-
   // attribute(s) order
-  node.set_attr_ordered_key({"angle",
-                             "a",
-                             "b",
-                             "v0",
-                             "reverse_x",
-                             "reverse_y",
-                             "center",
-                             "_SEPARATOR_",
-                             "inverse",
-                             "remap"});
+  node.set_attr_ordered_key(
+      {"angle", "a", "b", "v0", "reverse_x", "reverse_y", "center"});
+
+  setup_post_process_heightmap_attributes(node,
+                                          {.add_mix = false, .remap_active_state = true});
 }
 
 void compute_paraboloid_node(BaseNode &node)
@@ -53,22 +45,18 @@ void compute_paraboloid_node(BaseNode &node)
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   // base noise function
-  hmap::Heightmap *p_dx = node.get_value_ref<hmap::Heightmap>("dx");
-  hmap::Heightmap *p_dy = node.get_value_ref<hmap::Heightmap>("dy");
-  hmap::Heightmap *p_env = node.get_value_ref<hmap::Heightmap>("envelope");
-  hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
+  hmap::VirtualArray *p_dx = node.get_value_ref<hmap::VirtualArray>("dx");
+  hmap::VirtualArray *p_dy = node.get_value_ref<hmap::VirtualArray>("dy");
+  hmap::VirtualArray *p_env = node.get_value_ref<hmap::VirtualArray>("envelope");
+  hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
-  hmap::transform(
+  hmap::for_each_tile(
       {p_out, p_dx, p_dy},
-      [&node](std::vector<hmap::Array *> p_arrays,
-              hmap::Vec2<int>            shape,
-              hmap::Vec4<float>          bbox)
+      [&node](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &region)
       {
-        hmap::Array *pa_out = p_arrays[0];
-        hmap::Array *pa_dx = p_arrays[1];
-        hmap::Array *pa_dy = p_arrays[2];
+        auto [pa_out, pa_dx, pa_dy] = unpack<3>(p_arrays);
 
-        *pa_out = hmap::paraboloid(shape,
+        *pa_out = hmap::paraboloid(region.shape,
                                    node.get_attr<FloatAttribute>("angle"),
                                    node.get_attr<FloatAttribute>("a"),
                                    node.get_attr<FloatAttribute>("b"),
@@ -79,23 +67,13 @@ void compute_paraboloid_node(BaseNode &node)
                                    pa_dy,
                                    nullptr,
                                    node.get_attr<Vec2FloatAttribute>("center"),
-                                   bbox);
+                                   region.bbox);
       },
-      node.get_config_ref()->hmap_transform_mode_cpu);
+      node.cfg().cm_cpu);
 
   // post-process
   post_apply_enveloppe(node, *p_out, p_env);
-
-  post_process_heightmap(node,
-                         *p_out,
-                         node.get_attr<BoolAttribute>("inverse"),
-                         false, // smooth
-                         0,
-                         false, // saturate
-                         {0.f, 0.f},
-                         0.f,
-                         node.get_attr_ref<RangeAttribute>("remap")->get_is_active(),
-                         node.get_attr<RangeAttribute>("remap"));
+  post_process_heightmap(node, *p_out);
 }
 
 } // namespace hesiod

@@ -20,10 +20,8 @@ void setup_heightmap_to_kernel_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "heightmap");
-  node.add_port<hmap::Array>(gnode::PortType::OUT,
-                             "kernel",
-                             node.get_config_ref()->shape);
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "heightmap");
+  node.add_port<hmap::Array>(gnode::PortType::OUT, "kernel", node.cfg().shape);
 
   // attribute(s)
   node.add_attr<FloatAttribute>("radius", "radius", 0.1f, 0.001f, 0.2f);
@@ -43,7 +41,7 @@ void compute_heightmap_to_kernel_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("heightmap");
+  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("heightmap");
 
   if (p_in)
   {
@@ -51,11 +49,10 @@ void compute_heightmap_to_kernel_node(BaseNode &node)
 
     int ir = std::max(
         1,
-        (int)(node.get_attr<FloatAttribute>("radius") * node.get_config_ref()->shape.x));
+        (int)(node.get_attr<FloatAttribute>("radius") * node.cfg().shape.x));
     hmap::Vec2<int> kernel_shape = {2 * ir + 1, 2 * ir + 1};
 
-    hmap::Array array = p_in->to_array();
-    *p_out = array.resample_to_shape(kernel_shape);
+    *p_out = p_in->to_array(kernel_shape, node.cfg().cm_cpu);
 
     if (node.get_attr<BoolAttribute>("envelope"))
     {

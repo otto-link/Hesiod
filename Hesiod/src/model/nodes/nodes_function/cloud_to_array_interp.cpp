@@ -1,7 +1,6 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-
 #include "attributes.hpp"
 
 #include "hesiod/logger.hpp"
@@ -19,9 +18,9 @@ void setup_cloud_to_array_interp_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Cloud>(gnode::PortType::IN, "cloud");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dx");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "heightmap", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dx");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dy");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "heightmap", CONFIG2(node));
 }
 
 void compute_cloud_to_array_interp_node(BaseNode &node)
@@ -32,36 +31,47 @@ void compute_cloud_to_array_interp_node(BaseNode &node)
 
   if (p_cloud)
   {
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("heightmap");
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("heightmap");
 
     if (p_cloud->get_npoints() > 0)
     {
-      hmap::Heightmap *p_dx = node.get_value_ref<hmap::Heightmap>("dx");
-      hmap::Heightmap *p_dy = node.get_value_ref<hmap::Heightmap>("dy");
+      hmap::VirtualArray *p_dx = node.get_value_ref<hmap::VirtualArray>("dx");
+      hmap::VirtualArray *p_dy = node.get_value_ref<hmap::VirtualArray>("dy");
 
-      hmap::fill(*p_out,
-                 p_dx,
-                 p_dy,
-                 [&node, p_cloud](hmap::Vec2<int>   shape,
-                                  hmap::Vec4<float> bbox,
-                                  hmap::Array      *p_noise_x,
-                                  hmap::Array      *p_noise_y)
-                 {
-                   hmap::Array       array(shape);
-                   hmap::Vec4<float> bbox_points = {0.f, 1.f, 0.f, 1.f};
+      hmap::for_each_tile(
+          {p_out, p_dx, p_dy},
+          [&node, p_cloud](std::vector<hmap::Array *> p_arrays,
+                           const hmap::TileRegion    &region)
+          {
+            hmap::Array *pa_out = p_arrays[0];
+            hmap::Array *pa_dx = p_arrays[1];
+            hmap::Array *pa_dy = p_arrays[2];
 
-                   p_cloud->to_array_interp(array,
-                                            bbox_points,
-                                            hmap::InterpolationMethod2D::DELAUNAY,
-                                            p_noise_x,
-                                            p_noise_y,
-                                            bbox);
-                   return array;
-                 });
+            hmap::Vec4<float> bbox_points = {0.f, 1.f, 0.f, 1.f};
+
+            *pa_out = 0.f;
+
+            p_cloud->to_array_interp(*pa_out,
+                                     bbox_points,
+                                     hmap::InterpolationMethod2D::DELAUNAY,
+                                     pa_dx,
+                                     pa_dy,
+                                     region.bbox);
+          },
+          node.cfg().cm_cpu);
     }
     else
+    {
       // fill with zeroes
-      hmap::transform(*p_out, [](hmap::Array &array) { array = 0.f; });
+      hmap::for_each_tile(
+          {p_out},
+          [](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
+          {
+            hmap::Array *pa_out = p_arrays[0];
+            *pa_out = 0.f;
+          },
+          node.cfg().cm_cpu);
+    }
   }
 }
 

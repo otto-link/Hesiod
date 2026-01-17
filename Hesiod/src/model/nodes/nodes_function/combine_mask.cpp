@@ -20,9 +20,9 @@ void setup_combine_mask_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input 1");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input 2");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input 1");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input 2");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<EnumAttribute>("method",
@@ -40,8 +40,8 @@ void compute_combine_mask_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in1 = node.get_value_ref<hmap::Heightmap>("input 1");
-  hmap::Heightmap *p_in2 = node.get_value_ref<hmap::Heightmap>("input 2");
+  hmap::VirtualArray *p_in1 = node.get_value_ref<hmap::VirtualArray>("input 1");
+  hmap::VirtualArray *p_in2 = node.get_value_ref<hmap::VirtualArray>("input 2");
 
   if (p_in1 && p_in2)
   {
@@ -49,34 +49,48 @@ void compute_combine_mask_node(BaseNode &node)
     if (node.get_attr<BoolAttribute>("swap_inputs"))
       std::swap(p_in1, p_in2);
 
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
-    std::function<void(hmap::Array &, hmap::Array &, hmap::Array &)> lambda;
+    std::function<void(std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)>
+        lambda;
 
     int method = node.get_attr<EnumAttribute>("method");
 
     switch (method)
     {
     case MaskCombineMethod::UNION:
-      lambda = [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
-      { m = hmap::maximum(a1, a2); };
+      lambda = [](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
+      {
+        hmap::Array &m = *p_arrays[0];
+        hmap::Array &a1 = *p_arrays[1];
+        hmap::Array &a2 = *p_arrays[2];
+        m = hmap::maximum(a1, a2);
+      };
       break;
 
     case MaskCombineMethod::INTERSECTION:
-      lambda = [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
-      { m = hmap::minimum(a1, a2); };
+      lambda = [](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
+      {
+        hmap::Array &m = *p_arrays[0];
+        hmap::Array &a1 = *p_arrays[1];
+        hmap::Array &a2 = *p_arrays[2];
+        m = hmap::minimum(a1, a2);
+      };
       break;
 
     case MaskCombineMethod::EXCLUSION:
-      lambda = [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2)
+      lambda = [](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
       {
+        hmap::Array &m = *p_arrays[0];
+        hmap::Array &a1 = *p_arrays[1];
+        hmap::Array &a2 = *p_arrays[2];
         m = a1 - a2;
         hmap::clamp_min(m, 0.f);
       };
       break;
     }
 
-    hmap::transform(*p_out, *p_in1, *p_in2, lambda);
+    hmap::for_each_tile({p_out, p_in1, p_in2}, lambda, node.cfg().cm_cpu);
   }
 }
 

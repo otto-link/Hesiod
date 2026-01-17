@@ -1,7 +1,6 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-
 #include "highmap/export.hpp"
 
 #include "attributes.hpp"
@@ -22,7 +21,7 @@ void setup_export_as_cubemap_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
 
   // attribute(s)
   node.add_attr<FilenameAttribute>("fname",
@@ -56,11 +55,11 @@ void compute_export_as_cubemap_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
+  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
 
   if (p_in && node.get_attr<BoolAttribute>("auto_export"))
   {
-    hmap::Array z = p_in->to_array();
+    hmap::Array z = p_in->to_array(node.cfg().cm_cpu);
 
     std::filesystem::path fname = node.get_attr<FilenameAttribute>("fname");
     fname = ensure_extension(fname, ".png");

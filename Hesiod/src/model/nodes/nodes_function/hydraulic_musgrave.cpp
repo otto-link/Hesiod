@@ -19,9 +19,9 @@ void setup_hydraulic_musgrave_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "moisture");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "moisture");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<IntAttribute>("iterations", "iterations", 100, 1, INT_MAX);
@@ -38,41 +38,52 @@ void setup_hydraulic_musgrave_node(BaseNode &node)
                              "c_deposition",
                              "water_level",
                              "evap_rate"});
+
+  setup_post_process_heightmap_attributes(node,
+                                          {.add_mix = true, .remap_active_state = true});
 }
 
 void compute_hydraulic_musgrave_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
+  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_moisture_map = node.get_value_ref<hmap::Heightmap>("moisture");
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
+    hmap::VirtualArray *p_moisture_map = node.get_value_ref<hmap::VirtualArray>(
+        "moisture");
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
-    // copy the input heightmap
-    *p_out = *p_in;
+    hmap::for_each_tile(
+        {p_out, p_in, p_moisture_map},
+        [&node](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &region)
+        {
+          hmap::Array *pa_out = p_arrays[0];
+          hmap::Array *pa_in = p_arrays[1];
+          hmap::Array *pa_moisutre_map = p_arrays[2];
 
-    hmap::Heightmap moisture_map = p_moisture_map ? *p_moisture_map
-                                                  : hmap::Heightmap(CONFIG(node), 1.f);
+          *pa_out = *pa_in;
 
-    hmap::transform(*p_out,
-                    moisture_map,
-                    [&node](hmap::Array &h_out, hmap::Array moisture_map_array)
-                    {
-                      hmap::hydraulic_musgrave(
-                          h_out,
-                          moisture_map_array,
-                          node.get_attr<IntAttribute>("iterations"),
-                          node.get_attr<FloatAttribute>("c_capacity"),
-                          node.get_attr<FloatAttribute>("c_erosion"),
-                          node.get_attr<FloatAttribute>("c_deposition"),
-                          node.get_attr<FloatAttribute>("water_level"),
-                          node.get_attr<FloatAttribute>("evap_rate"));
-                    });
+          hmap::Array moisture_map_array(region.shape, 1.f);
+          if (pa_moisutre_map)
+            moisture_map_array = *pa_moisutre_map;
+
+          hmap::hydraulic_musgrave(*pa_out,
+                                   moisture_map_array,
+                                   node.get_attr<IntAttribute>("iterations"),
+                                   node.get_attr<FloatAttribute>("c_capacity"),
+                                   node.get_attr<FloatAttribute>("c_erosion"),
+                                   node.get_attr<FloatAttribute>("c_deposition"),
+                                   node.get_attr<FloatAttribute>("water_level"),
+                                   node.get_attr<FloatAttribute>("evap_rate"));
+        },
+        node.cfg().cm_cpu);
 
     p_out->smooth_overlap_buffers();
+
+    // post-process
+    post_process_heightmap(node, *p_out, p_in);
   }
 }
 

@@ -21,9 +21,9 @@ void setup_blend_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input 1");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input 2");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input 1");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input 2");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<EnumAttribute>("blending_method",
@@ -35,8 +35,6 @@ void setup_blend_node(BaseNode &node)
   node.add_attr<FloatAttribute>("input1_weight", "input1_weight", 1.f, 0.f, 1.f);
   node.add_attr<FloatAttribute>("input2_weight", "input2_weight", 1.f, 0.f, 1.f);
   node.add_attr<BoolAttribute>("swap_inputs", "swap_inputs", false);
-  node.add_attr<BoolAttribute>("inverse", "inverse", false);
-  node.add_attr<RangeAttribute>("remap", "remap", false);
 
   // attribute(s) order
   node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Main Parameters",
@@ -49,20 +47,19 @@ void setup_blend_node(BaseNode &node)
                              "input1_weight",
                              "input2_weight",
                              "swap_inputs",
-                             "_GROUPBOX_END_",
-                             //
-                             "_GROUPBOX_BEGIN_Post-processing",
-                             "inverse",
-                             "remap",
                              "_GROUPBOX_END_"});
+
+  setup_post_process_heightmap_attributes(
+      node,
+      {.add_mix = false, .remap_active_state = false});
 }
 
 void compute_blend_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in1 = node.get_value_ref<hmap::Heightmap>("input 1");
-  hmap::Heightmap *p_in2 = node.get_value_ref<hmap::Heightmap>("input 2");
+  hmap::VirtualArray *p_in1 = node.get_value_ref<hmap::VirtualArray>("input 1");
+  hmap::VirtualArray *p_in2 = node.get_value_ref<hmap::VirtualArray>("input 2");
 
   if (p_in1 && p_in2)
   {
@@ -71,13 +68,14 @@ void compute_blend_node(BaseNode &node)
       std::swap(p_in1, p_in2);
 
     // compute output
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
     float k = node.get_attr<FloatAttribute>("k");
     int ir = std::max(1, (int)(node.get_attr<FloatAttribute>("radius") * p_out->shape.x));
     int method = node.get_attr<EnumAttribute>("blending_method");
 
-    blend_heightmaps(*p_out,
+    blend_heightmaps(node,
+                     *p_out,
                      *p_in1,
                      *p_in2,
                      static_cast<BlendingMethod>(method),
@@ -87,16 +85,7 @@ void compute_blend_node(BaseNode &node)
                      node.get_attr<FloatAttribute>("input2_weight"));
 
     // post-process
-    post_process_heightmap(node,
-                           *p_out,
-                           node.get_attr<BoolAttribute>("inverse"),
-                           false, // smooth
-                           0,
-                           false, // saturate
-                           {0.f, 0.f},
-                           0.f,
-                           node.get_attr_ref<RangeAttribute>("remap")->get_is_active(),
-                           node.get_attr<RangeAttribute>("remap"));
+    post_process_heightmap(node, *p_out);
   }
 }
 

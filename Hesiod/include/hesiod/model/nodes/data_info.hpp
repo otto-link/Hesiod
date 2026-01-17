@@ -19,9 +19,11 @@ template <typename T> std::string get_data_info(BaseNode *node, const std::strin
   if (!p_val)
     return "-";
 
-  if constexpr (std::is_same_v<T, hmap::Heightmap>)
+  if constexpr (std::is_same_v<T, hmap::VirtualArray>)
   {
-    return std::format("[{:.2e}, {:.2e}]", p_val->min(), p_val->max());
+    return std::format("[{:.2e}, {:.2e}]",
+                       p_val->min(node->cfg().cm_cpu),
+                       p_val->max(node->cfg().cm_cpu));
   }
   else if constexpr (std::is_same_v<T, hmap::HeightmapRGBA>)
   {

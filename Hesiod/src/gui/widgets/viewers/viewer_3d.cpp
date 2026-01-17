@@ -275,14 +275,13 @@ void Viewer3D::update_renderer()
 
   bool flip_y = false;
 
-  // elevation
-  if (!helper_try_set_from_port<hmap::Heightmap>(
+  if (!helper_try_set_from_port<hmap::VirtualArray>(
           *p_node,
           this->view_param.port_ids.at("elevation"),
-          typeid(hmap::Heightmap),
-          [this](const hmap::Heightmap &h)
+          typeid(hmap::VirtualArray),
+          [this, p_node](const hmap::VirtualArray &h)
           {
-            auto arr = h.to_array();
+            auto arr = h.to_array(p_node->get_config_ref()->cm_cpu);
             if (this->p_renderer)
             {
               bool add_skirt = HSD_CTX.app_settings.viewer.add_heighmap_skirt;

@@ -20,9 +20,9 @@ void setup_directional_blur_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "angle");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "angle");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("radius", "radius", 0.05f, 0.f, 0.2f);
@@ -42,18 +42,18 @@ void compute_directional_blur_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
+  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_angle = node.get_value_ref<hmap::Heightmap>("angle");
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
+    hmap::VirtualArray *p_angle = node.get_value_ref<hmap::VirtualArray>("angle");
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
     int ir = std::max(1, (int)(node.get_attr<FloatAttribute>("radius") * p_out->shape.x));
 
-    hmap::transform(
+    hmap::for_each_tile(
         {p_out, p_in, p_angle},
-        [&node, ir](std::vector<hmap::Array *> p_arrays)
+        [&node, ir](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
         {
           hmap::Array *pa_out = p_arrays[0];
           hmap::Array *pa_in = p_arrays[1];
@@ -72,7 +72,7 @@ void compute_directional_blur_node(BaseNode &node)
                                  node.get_attr<FloatAttribute>("stretch"),
                                  node.get_attr<FloatAttribute>("spread"));
         },
-        node.get_config_ref()->hmap_transform_mode_cpu);
+        node.cfg().cm_cpu);
 
     p_out->smooth_overlap_buffers();
 

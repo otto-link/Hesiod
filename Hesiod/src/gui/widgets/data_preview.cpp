@@ -11,7 +11,6 @@
 #include "highmap/colorize.hpp"
 #include "highmap/geometry/cloud.hpp"
 #include "highmap/geometry/path.hpp"
-#include "highmap/heightmap.hpp"
 #include "highmap/tensor.hpp"
 
 #include "hesiod/app/hesiod_application.hpp"
@@ -154,18 +153,21 @@ void DataPreview::update_preview()
   if (blind_ptr)
   {
     // ---- Heightmap or Array ----
-    if (data_type == typeid(hmap::Heightmap).name() ||
+    if (data_type == typeid(hmap::VirtualArray).name() ||
         data_type == typeid(hmap::Array).name())
     {
       hmap::Array array;
 
-      if (data_type == typeid(hmap::Heightmap).name())
+      if (data_type == typeid(hmap::VirtualArray).name())
       {
-        const hmap::Heightmap *p_h = static_cast<const hmap::Heightmap *>(blind_ptr);
-        if (p_h)
-          array = p_h->to_array(shape);
+        const hmap::VirtualArray *p_va = static_cast<const hmap::VirtualArray *>(
+            blind_ptr);
+        if (p_va)
+        {
+          array = p_va->to_array(shape, p_model->get_config_ref()->cm_cpu);
+        }
         else
-          Logger::log()->error("DataPreview::update_preview: Heightmap nullptr");
+          Logger::log()->error("DataPreview::update_preview: VirtualArray nullptr");
       }
       else
       {

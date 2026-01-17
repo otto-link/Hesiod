@@ -3,8 +3,6 @@
  * this software. */
 #include <QLabel>
 
-#include "highmap/heightmap.hpp"
-
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/utils.hpp"
@@ -17,7 +15,7 @@ void setup_debug_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
 
   // no attribute(s)
 }

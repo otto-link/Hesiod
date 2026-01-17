@@ -19,10 +19,10 @@ void setup_hydraulic_schott_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "flow_map", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "mask");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "flow_map", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<IntAttribute>("iterations", "iterations", 100, 1, INT_MAX);
@@ -72,38 +72,40 @@ void compute_hydraulic_schott_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
+  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_mask = node.get_value_ref<hmap::Heightmap>("mask");
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
-    hmap::Heightmap *p_flow_map = node.get_value_ref<hmap::Heightmap>("flow_map");
-
-    // copy the input heightmap
-    *p_out = *p_in;
+    hmap::VirtualArray *p_mask = node.get_value_ref<hmap::VirtualArray>("mask");
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
+    hmap::VirtualArray *p_flow_map = node.get_value_ref<hmap::VirtualArray>("flow_map");
 
     // talus
     float talus = node.get_attr<FloatAttribute>("talus_global") / (float)p_out->shape.x;
-    hmap::Heightmap talus_map = hmap::Heightmap(CONFIG(node), talus);
+    hmap::VirtualArray talus_map = hmap::VirtualArray(CONFIG2(node));
+    talus_map.fill(talus, node.cfg().cm_cpu);
 
     if (node.get_attr<BoolAttribute>("scale_talus_with_elevation"))
     {
-      talus_map = *p_in;
-      talus_map.remap(talus / 100.f, talus);
+      talus_map.copy_from(*p_in, node.cfg().cm_cpu);
+      talus_map.remap(talus / 100.f, talus, node.cfg().cm_cpu);
     }
 
     // use a flat flow map as input
-    hmap::Heightmap flow_map = hmap::Heightmap(CONFIG(node), 1.f);
+    hmap::VirtualArray flow_map = hmap::VirtualArray(CONFIG2(node));
 
-    hmap::transform(
-        {p_out, &talus_map, p_mask, &flow_map},
-        [&node](std::vector<hmap::Array *> p_arrays)
+    hmap::for_each_tile(
+        {p_out, p_in, &talus_map, p_mask, &flow_map},
+        [&node](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
         {
           hmap::Array *pa_out = p_arrays[0];
-          hmap::Array *pa_talus = p_arrays[1];
-          hmap::Array *pa_mask = p_arrays[2];
-          hmap::Array *pa_flow_map = p_arrays[3];
+          hmap::Array *pa_in = p_arrays[1];
+          hmap::Array *pa_talus = p_arrays[2];
+          hmap::Array *pa_mask = p_arrays[3];
+          hmap::Array *pa_flow_map = p_arrays[4];
+
+          *pa_out = *pa_in;
+          *pa_flow_map = 1.f;
 
           hmap::gpu::hydraulic_schott(
               *pa_out,
@@ -120,13 +122,13 @@ void compute_hydraulic_schott_node(BaseNode &node)
               node.get_attr<FloatAttribute>("deposition_weight"),
               pa_flow_map);
         },
-        hmap::TransformMode::SINGLE_ARRAY);
+        node.cfg().cm_gpu);
 
     p_out->smooth_overlap_buffers();
 
     if (p_flow_map)
     {
-      *p_flow_map = flow_map;
+      p_flow_map->copy_from(flow_map, node.cfg().cm_cpu);
       p_flow_map->smooth_overlap_buffers();
     }
   }

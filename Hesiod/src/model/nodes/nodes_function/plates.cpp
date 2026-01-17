@@ -21,8 +21,8 @@ void setup_plates_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "envelope");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "envelope");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
 
   // attribute(s)
   std::vector<float> kw = {4.f, 4.f};
@@ -62,20 +62,18 @@ void compute_plates_node(BaseNode &node)
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   // base noise function
-  hmap::Heightmap *p_env = node.get_value_ref<hmap::Heightmap>("envelope");
-  hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
+  hmap::VirtualArray *p_env = node.get_value_ref<hmap::VirtualArray>("envelope");
+  hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
   float talus = node.get_attr<FloatAttribute>("slope") / float(p_out->shape.x);
 
-  hmap::transform(
+  hmap::for_each_tile(
       {p_out},
-      [&node, talus](std::vector<hmap::Array *> p_arrays,
-                     hmap::Vec2<int>            shape,
-                     hmap::Vec4<float>          bbox)
+      [&node, talus](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &region)
       {
-        hmap::Array *pa_out = p_arrays[0];
+        auto [pa_out] = unpack<1>(p_arrays);
 
-        *pa_out = hmap::gpu::plates(shape,
+        *pa_out = hmap::gpu::plates(region.shape,
                                     node.get_attr<WaveNbAttribute>("kw"),
                                     node.get_attr<SeedAttribute>("seed"),
                                     talus,
@@ -84,9 +82,9 @@ void compute_plates_node(BaseNode &node)
                                     node.get_attr<FloatAttribute>("base_noise_amp"),
                                     node.get_attr<FloatAttribute>("kw_multiplier"),
                                     node.get_attr<FloatAttribute>("rugosity"),
-                                    bbox);
+                                    region.bbox);
       },
-      node.get_config_ref()->hmap_transform_mode_gpu);
+      node.cfg().cm_gpu);
 
   // post-process
   post_apply_enveloppe(node, *p_out, p_env);

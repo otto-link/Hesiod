@@ -19,8 +19,8 @@ void setup_recast_cracks_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("cut_min", "cut_min", 0.05f, 0.f, 1.f);
@@ -32,23 +32,21 @@ void compute_recast_cracks_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
+  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
-    // copy the input heightmap
-    *p_out = *p_in;
+    float hmin = p_in->min(node.cfg().cm_cpu);
+    float hmax = p_in->max(node.cfg().cm_cpu);
 
-    float hmin = p_in->min();
-    float hmax = p_in->max();
-
-    hmap::transform(
-        {p_out},
-        [&node, hmin, hmax](std::vector<hmap::Array *> p_arrays)
+    hmap::for_each_tile(
+        {p_out, p_in},
+        [&node, hmin, hmax](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
         {
-          hmap::Array *pa_out = p_arrays[0];
+          auto [pa_out, pa_in] = unpack<2>(p_arrays);
+          *pa_out = *pa_in;
 
           hmap::recast_cracks(*pa_out,
                               node.get_attr<FloatAttribute>("cut_min"),
@@ -57,7 +55,7 @@ void compute_recast_cracks_node(BaseNode &node)
                               hmin,
                               hmax);
         },
-        node.get_config_ref()->hmap_transform_mode_gpu);
+        node.cfg().cm_gpu);
 
     p_out->smooth_overlap_buffers();
   }

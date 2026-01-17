@@ -1,7 +1,6 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-#include "highmap/heightmap.hpp"
 #include "highmap/opencl/gpu_opencl.hpp"
 #include "highmap/primitives.hpp"
 
@@ -22,7 +21,7 @@ void setup_island_land_mask_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "out", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "out", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("radius", "radius", 0.2f, 0.f, 1.f);
@@ -57,18 +56,16 @@ void compute_island_land_mask_node(BaseNode &node)
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   // base noise function
-  hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("out");
+  hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("out");
 
-  hmap::transform(
+  hmap::for_each_tile(
       {p_out},
-      [&node](std::vector<hmap::Array *> p_arrays,
-              hmap::Vec2<int>            shape,
-              hmap::Vec4<float>          bbox)
+      [&node](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &region)
       {
-        hmap::Array *pa_out = p_arrays[0];
+        auto [pa_out] = unpack<1>(p_arrays);
 
         *pa_out = hmap::island_land_mask(
-            shape,
+            region.shape,
             node.get_attr<FloatAttribute>("radius"),
             node.get_attr<SeedAttribute>("seed"),
             node.get_attr<FloatAttribute>("displacement"),
@@ -79,9 +76,9 @@ void compute_island_land_mask_node(BaseNode &node)
             node.get_attr<FloatAttribute>("persistence"),
             node.get_attr<FloatAttribute>("lacunarity"),
             node.get_attr<Vec2FloatAttribute>("center"),
-            bbox);
+            region.bbox);
       },
-      node.get_config_ref()->hmap_transform_mode_cpu);
+      node.cfg().cm_cpu);
 
   // post-process
   post_process_heightmap(node, *p_out);

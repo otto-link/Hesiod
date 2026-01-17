@@ -1,9 +1,7 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-
 #include "highmap/export.hpp"
-#include "highmap/heightmap.hpp"
 
 #include "attributes.hpp"
 
@@ -23,7 +21,7 @@ void setup_export_tiled_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
 
   // attribute(s)
   node.add_attr<FilenameAttribute>("fname",
@@ -56,7 +54,7 @@ void compute_export_tiled_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
+  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
 
   if (p_in && node.get_attr<BoolAttribute>("auto_export"))
   {
@@ -75,10 +73,10 @@ void compute_export_tiled_node(BaseNode &node)
     // export
     hmap::export_tiled(fname.string(),
                        "png",
-                       p_in->to_array(),
+                       p_in->to_array(node.cfg().cm_cpu),
                        tiling,
                        node.get_attr<IntAttribute>("leading_zeros"),
-		       bit_depth,
+                       bit_depth,
                        node.get_attr<BoolAttribute>("overlapping_edges"),
                        node.get_attr<BoolAttribute>("reverse_tile_y_indexing"));
   }

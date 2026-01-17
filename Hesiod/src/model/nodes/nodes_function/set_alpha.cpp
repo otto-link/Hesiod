@@ -21,8 +21,8 @@ void setup_set_alpha_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture in");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "alpha");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "noise");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "alpha");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "noise");
   node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture out", CONFIG(node));
 
   // attribute(s)
@@ -40,41 +40,43 @@ void compute_set_alpha_node(BaseNode &node)
 
   hmap::HeightmapRGBA *p_in = node.get_value_ref<hmap::HeightmapRGBA>("texture in");
 
-  if (p_in)
-  {
-    hmap::Heightmap     *p_alpha = node.get_value_ref<hmap::Heightmap>("alpha");
-    hmap::Heightmap     *p_noise = node.get_value_ref<hmap::Heightmap>("noise");
-    hmap::HeightmapRGBA *p_out = node.get_value_ref<hmap::HeightmapRGBA>("texture out");
+  // if (p_in)
+  // {
+  //   hmap::VirtualArray  *p_alpha = node.get_value_ref<hmap::VirtualArray>("alpha");
+  //   hmap::VirtualArray  *p_noise = node.get_value_ref<hmap::VirtualArray>("noise");
+  //   hmap::HeightmapRGBA *p_out = node.get_value_ref<hmap::HeightmapRGBA>("texture
+  //   out");
 
-    *p_out = *p_in;
+  //   *p_out = *p_in;
 
-    if (p_alpha)
-    {
-      hmap::Heightmap alpha_copy = *p_alpha;
+  //   if (p_alpha)
+  //   {
+  //     hmap::VirtualArray alpha_copy = *p_alpha;
 
-      if (p_noise)
-        hmap::transform(alpha_copy,
-                        *p_noise,
-                        [](hmap::Array &x, hmap::Array &y) { x += y; });
+  //     if (p_noise)
+  //       hmap::for_each_tile(alpha_copy,
+  //                           *p_noise,
+  //                           [](hmap::Array &x, hmap::Array &y) { x += y; });
 
-      if (node.get_attr<BoolAttribute>("clamp"))
-        hmap::transform(alpha_copy, [](hmap::Array &x) { hmap::clamp(x, 0.f, 1.f); });
+  //     if (node.get_attr<BoolAttribute>("clamp"))
+  //       hmap::for_each_tile(alpha_copy, [](hmap::Array &x) { hmap::clamp(x, 0.f, 1.f);
+  //       });
 
-      if (node.get_attr<BoolAttribute>("reverse"))
-        alpha_copy.inverse();
+  //     if (node.get_attr<BoolAttribute>("reverse"))
+  //       alpha_copy.inverse();
 
-      p_out->set_alpha(alpha_copy);
-    }
-    else
-    {
-      float alpha = node.get_attr<FloatAttribute>("alpha");
+  //     p_out->set_alpha(alpha_copy);
+  //   }
+  //   else
+  //   {
+  //     float alpha = node.get_attr<FloatAttribute>("alpha");
 
-      if (node.get_attr<BoolAttribute>("reverse"))
-        alpha = 1.f - alpha;
+  //     if (node.get_attr<BoolAttribute>("reverse"))
+  //       alpha = 1.f - alpha;
 
-      p_out->set_alpha(alpha);
-    }
-  }
+  //     p_out->set_alpha(alpha);
+  //   }
+  // }
 }
 
 } // namespace hesiod

@@ -19,10 +19,10 @@ void setup_lerp_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "a");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "b");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "t");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "a");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "b");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "t");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("t", "t", 0.5f, 0.f, 1.f);
@@ -32,18 +32,18 @@ void compute_lerp_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_a = node.get_value_ref<hmap::Heightmap>("a");
-  hmap::Heightmap *p_b = node.get_value_ref<hmap::Heightmap>("b");
+  hmap::VirtualArray *p_a = node.get_value_ref<hmap::VirtualArray>("a");
+  hmap::VirtualArray *p_b = node.get_value_ref<hmap::VirtualArray>("b");
 
   if (p_a && p_b)
   {
-    hmap::Heightmap *p_t = node.get_value_ref<hmap::Heightmap>("t");
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
+    hmap::VirtualArray *p_t = node.get_value_ref<hmap::VirtualArray>("t");
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
     if (p_t)
-      hmap::transform(
+      hmap::for_each_tile(
           {p_out, p_a, p_b, p_t},
-          [](std::vector<hmap::Array *> p_arrays)
+          [](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
           {
             hmap::Array *pa_out = p_arrays[0];
             hmap::Array *pa_a = p_arrays[1];
@@ -52,11 +52,11 @@ void compute_lerp_node(BaseNode &node)
 
             *pa_out = hmap::lerp(*pa_a, *pa_b, *pa_t);
           },
-          node.get_config_ref()->hmap_transform_mode_cpu);
+          node.cfg().cm_cpu);
     else
-      hmap::transform(
+      hmap::for_each_tile(
           {p_out, p_a, p_b},
-          [&node](std::vector<hmap::Array *> p_arrays)
+          [&node](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
           {
             hmap::Array *pa_out = p_arrays[0];
             hmap::Array *pa_a = p_arrays[1];
@@ -64,7 +64,7 @@ void compute_lerp_node(BaseNode &node)
 
             *pa_out = hmap::lerp(*pa_a, *pa_b, node.get_attr<FloatAttribute>("t"));
           },
-          node.get_config_ref()->hmap_transform_mode_cpu);
+          node.cfg().cm_cpu);
   }
 }
 

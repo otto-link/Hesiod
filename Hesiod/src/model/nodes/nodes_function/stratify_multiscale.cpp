@@ -20,10 +20,10 @@ void setup_stratify_multiscale_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "noise");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "noise");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "mask");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<SeedAttribute>("seed", "Seed");
@@ -50,73 +50,74 @@ void compute_stratify_multiscale_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
+  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
 
-  if (p_in)
-  {
-    hmap::Heightmap *p_noise = node.get_value_ref<hmap::Heightmap>("noise");
-    hmap::Heightmap *p_mask = node.get_value_ref<hmap::Heightmap>("mask");
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
+  // if (p_in)
+  // {
+  //   hmap::VirtualArray *p_noise = node.get_value_ref<hmap::VirtualArray>("noise");
+  //   hmap::VirtualArray *p_mask = node.get_value_ref<hmap::VirtualArray>("mask");
+  //   hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
-    // copy the input heightmap
-    *p_out = *p_in;
+  //   // copy the input heightmap
+  //   *p_out = *p_in;
 
-    float zmin = p_out->min();
-    float zmax = p_out->max();
+  //   float zmin = p_out->min(node.cfg().cm_cpu);
+  //   float zmax = p_out->max(node.cfg().cm_cpu);
 
-    // make sure the input vectors have the same size and adjust their
-    // content if needed (attribute widgets do not communicate, use a
-    // workaround to avoid issues with possibly different vector
-    // sizes). Everything is driven by the "n_strata" vector
+  //   // make sure the input vectors have the same size and adjust their
+  //   // content if needed (attribute widgets do not communicate, use a
+  //   // workaround to avoid issues with possibly different vector
+  //   // sizes). Everything is driven by the "n_strata" vector
 
-    // TODO find a way to add an "update_widget" method to the AbstractAttribute
+  //   // TODO find a way to add an "update_widget" method to the AbstractAttribute
 
-    std::vector<int>   n_strata = node.get_attr<VecIntAttribute>("n_strata");
-    std::vector<float> strata_noise(n_strata.size());
-    std::vector<float> gamma_list(n_strata.size());
-    std::vector<float> gamma_noise(n_strata.size());
+  //   std::vector<int>   n_strata = node.get_attr<VecIntAttribute>("n_strata");
+  //   std::vector<float> strata_noise(n_strata.size());
+  //   std::vector<float> gamma_list(n_strata.size());
+  //   std::vector<float> gamma_noise(n_strata.size());
 
-    for (size_t k = 0; k < n_strata.size(); k++)
-    {
-      if (k >= node.get_attr<VecFloatAttribute>("strata_noise").size())
-        strata_noise[k] = 0.f;
-      else
-        strata_noise[k] = node.get_attr<VecFloatAttribute>("strata_noise")[k];
+  //   for (size_t k = 0; k < n_strata.size(); k++)
+  //   {
+  //     if (k >= node.get_attr<VecFloatAttribute>("strata_noise").size())
+  //       strata_noise[k] = 0.f;
+  //     else
+  //       strata_noise[k] = node.get_attr<VecFloatAttribute>("strata_noise")[k];
 
-      if (k >= node.get_attr<VecFloatAttribute>("gamma_list").size())
-        gamma_list[k] = 2.f;
-      else
-        gamma_list[k] = node.get_attr<VecFloatAttribute>("gamma_list")[k];
+  //     if (k >= node.get_attr<VecFloatAttribute>("gamma_list").size())
+  //       gamma_list[k] = 2.f;
+  //     else
+  //       gamma_list[k] = node.get_attr<VecFloatAttribute>("gamma_list")[k];
 
-      if (k >= node.get_attr<VecFloatAttribute>("gamma_noise").size())
-        gamma_noise[k] = 0.f;
-      else
-        gamma_noise[k] = node.get_attr<VecFloatAttribute>("gamma_noise")[k];
-    }
+  //     if (k >= node.get_attr<VecFloatAttribute>("gamma_noise").size())
+  //       gamma_noise[k] = 0.f;
+  //     else
+  //       gamma_noise[k] = node.get_attr<VecFloatAttribute>("gamma_noise")[k];
+  //   }
 
-    // eventually compute
-    hmap::transform(*p_out,
-                    p_mask,
-                    p_noise,
-                    [&node, zmin, zmax, n_strata, strata_noise, gamma_list, gamma_noise](
-                        hmap::Array &h_out,
-                        hmap::Array *p_mask_array,
-                        hmap::Array *p_noise_array)
-                    {
-                      hmap::stratify_multiscale(h_out,
-                                                zmin,
-                                                zmax,
-                                                n_strata,
-                                                strata_noise,
-                                                gamma_list,
-                                                gamma_noise,
-                                                node.get_attr<SeedAttribute>("seed"),
-                                                p_mask_array,
-                                                p_noise_array);
-                    });
+  //   // eventually compute
+  //   hmap::for_each_tile(
+  //       *p_out,
+  //       p_mask,
+  //       p_noise,
+  //       [&node, zmin, zmax, n_strata, strata_noise, gamma_list, gamma_noise](
+  //           hmap::Array &h_out,
+  //           hmap::Array *p_mask_array,
+  //           hmap::Array *p_noise_array)
+  //       {
+  //         hmap::stratify_multiscale(h_out,
+  //                                   zmin,
+  //                                   zmax,
+  //                                   n_strata,
+  //                                   strata_noise,
+  //                                   gamma_list,
+  //                                   gamma_noise,
+  //                                   node.get_attr<SeedAttribute>("seed"),
+  //                                   p_mask_array,
+  //                                   p_noise_array);
+  //       });
 
-    p_out->smooth_overlap_buffers();
-  }
+  //   p_out->smooth_overlap_buffers();
+  // }
 }
 
 } // namespace hesiod

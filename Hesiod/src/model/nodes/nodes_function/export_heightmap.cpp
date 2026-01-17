@@ -1,9 +1,7 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-
 #include "highmap/export.hpp"
-#include "highmap/heightmap.hpp"
 
 #include "attributes.hpp"
 
@@ -23,7 +21,7 @@ void setup_export_heightmap_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
 
   // attribute(s)
   node.add_attr<FilenameAttribute>("fname",
@@ -45,7 +43,7 @@ void compute_export_heightmap_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
+  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
 
   if (p_in && node.get_attr<BoolAttribute>("auto_export"))
   {
@@ -56,21 +54,21 @@ void compute_export_heightmap_node(BaseNode &node)
     case ExportFormat::PNG8BIT:
     {
       fname = ensure_extension(fname, ".png");
-      p_in->to_array().to_png_grayscale(fname.string(), CV_8U);
+      p_in->to_array(node.cfg().cm_cpu).to_png_grayscale(fname.string(), CV_8U);
     }
     break;
 
     case ExportFormat::PNG16BIT:
     {
       fname = ensure_extension(fname, ".png");
-      p_in->to_array().to_png_grayscale(fname.string(), CV_16U);
+      p_in->to_array(node.cfg().cm_cpu).to_png_grayscale(fname.string(), CV_16U);
     }
     break;
 
     case ExportFormat::RAW16BIT:
     {
       fname = ensure_extension(fname, ".raw");
-      p_in->to_array().to_raw_16bit(fname.string());
+      p_in->to_array(node.cfg().cm_cpu).to_raw_16bit(fname.string());
     }
     break;
     }

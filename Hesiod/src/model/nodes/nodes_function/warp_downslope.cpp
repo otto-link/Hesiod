@@ -19,9 +19,9 @@ void setup_warp_downslope_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "mask");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("amount", "amount", 0.02f, 0.f, 1.f);
@@ -33,34 +33,30 @@ void compute_warp_downslope_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
+  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_mask = node.get_value_ref<hmap::Heightmap>("mask");
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
+    hmap::VirtualArray *p_mask = node.get_value_ref<hmap::VirtualArray>("mask");
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
     int ir = (int)(node.get_attr<FloatAttribute>("radius") * p_out->shape.x);
 
-    // --- work on a single array (as a temporary solution?)
-    hmap::Array z_array = p_in->to_array();
+    hmap::for_each_tile(
+        {p_out, p_in, p_mask},
+        [&node, ir](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
+        {
+          auto [pa_out, pa_in, pa_mask] = unpack<3>(p_arrays);
 
-    hmap::Array  mask_array;
-    hmap::Array *p_mask_array = nullptr;
+          *pa_out = *pa_in;
 
-    if (p_mask)
-    {
-      mask_array = p_mask->to_array();
-      p_mask_array = &mask_array;
-    }
-
-    hmap::warp_downslope(z_array,
-                         p_mask_array,
-                         node.get_attr<FloatAttribute>("amount"),
-                         ir,
-                         node.get_attr<BoolAttribute>("reverse"));
-
-    p_out->from_array_interp_nearest(z_array);
+          hmap::warp_downslope(*pa_out,
+                               pa_mask,
+                               node.get_attr<FloatAttribute>("amount"),
+                               ir,
+                               node.get_attr<BoolAttribute>("reverse"));
+        },
+        node.cfg().cm_single_array);
   }
 }
 

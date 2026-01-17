@@ -19,10 +19,10 @@ void setup_zoom_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dx");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dx");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dy");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("zoom_factor", "zoom_factor", 2.f, 1.f, 10.f);
@@ -39,43 +39,31 @@ void compute_zoom_node(BaseNode &node)
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   // base noise function
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
+  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_dx = node.get_value_ref<hmap::Heightmap>("dx");
-    hmap::Heightmap *p_dy = node.get_value_ref<hmap::Heightmap>("dy");
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
+    hmap::VirtualArray *p_dx = node.get_value_ref<hmap::VirtualArray>("dx");
+    hmap::VirtualArray *p_dy = node.get_value_ref<hmap::VirtualArray>("dy");
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
-    // --- work on a single array (as a temporary solution?)
-    hmap::Array z_array = p_in->to_array();
+    hmap::for_each_tile(
+        {p_out, p_in, p_dx, p_dy},
+        [&node](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
+        {
+          auto [pa_out, pa_in, pa_dx, pa_dy] = unpack<4>(p_arrays);
 
-    hmap::Array  dx_array, dy_array;
-    hmap::Array *p_dx_array = nullptr, *p_dy_array = nullptr;
-
-    if (p_dx)
-    {
-      dx_array = p_dx->to_array();
-      p_dx_array = &dx_array;
-    }
-
-    if (p_dy)
-    {
-      dy_array = p_dy->to_array();
-      p_dy_array = &dy_array;
-    }
-
-    z_array = hmap::zoom(z_array,
-                         node.get_attr<FloatAttribute>("zoom_factor"),
-                         node.get_attr<BoolAttribute>("periodic"),
-                         node.get_attr<Vec2FloatAttribute>("center"),
-                         p_dx_array,
-                         p_dy_array);
-
-    p_out->from_array_interp_nearest(z_array);
+          *pa_out = hmap::zoom(*pa_in,
+                               node.get_attr<FloatAttribute>("zoom_factor"),
+                               node.get_attr<BoolAttribute>("periodic"),
+                               node.get_attr<Vec2FloatAttribute>("center"),
+                               pa_dx,
+                               pa_dy);
+        },
+        node.cfg().cm_single_array);
 
     if (node.get_attr<BoolAttribute>("remap"))
-      p_out->remap();
+      p_out->remap(0.f, 1.f, node.cfg().cm_cpu);
   }
 }
 

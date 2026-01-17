@@ -20,18 +20,16 @@ void setup_path_to_heightmap_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Path>(gnode::PortType::IN, "path");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "heightmap", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "heightmap", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<BoolAttribute>("filled", "filled", false);
-  node.add_attr<BoolAttribute>("remap", "remap", true);
-  node.add_attr<BoolAttribute>("inverse", "inverse", false);
-  node.add_attr<BoolAttribute>("smoothing", "smoothing", false);
-  node.add_attr<FloatAttribute>("smoothing_radius", "smoothing_radius", 0.05f, 0.f, 0.2f);
 
   // attribute(s) order
-  node.set_attr_ordered_key(
-      {"filled", "_SEPARATOR_", "remap", "inverse", "smoothing", "smoothing_radius"});
+  node.set_attr_ordered_key({"filled"});
+
+  setup_post_process_heightmap_attributes(node,
+                                          {.add_mix = false, .remap_active_state = true});
 }
 
 void compute_path_to_heightmap_node(BaseNode &node)
@@ -42,19 +40,20 @@ void compute_path_to_heightmap_node(BaseNode &node)
 
   if (p_path)
   {
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("heightmap");
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("heightmap");
 
     if (p_path->get_npoints() > 1)
     {
       if (!node.get_attr<BoolAttribute>("filled"))
       {
-        hmap::fill(*p_out,
-                   [p_path](hmap::Vec2<int> shape, hmap::Vec4<float> bbox)
-                   {
-                     hmap::Array z = hmap::Array(shape);
-                     p_path->to_array(z, bbox);
-                     return z;
-                   });
+        hmap::for_each_tile(
+            {p_out},
+            [p_path](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &region)
+            {
+              hmap::Array *pa_out = p_arrays[0];
+              p_path->to_array(*pa_out, region.bbox);
+            },
+            node.cfg().cm_cpu);
       }
       else
       {
@@ -63,24 +62,24 @@ void compute_path_to_heightmap_node(BaseNode &node)
         hmap::Vec4<float> bbox = hmap::Vec4<float>(0.f, 1.f, 0.f, 1.f);
 
         p_path->to_array(z_array, bbox, true);
-        p_out->from_array_interp_nearest(z_array);
+        p_out->from_array(z_array, node.cfg().cm_cpu);
       }
 
       // post-process
-      post_process_heightmap(node,
-                             *p_out,
-                             node.get_attr<BoolAttribute>("inverse"),
-                             node.get_attr<BoolAttribute>("smoothing"),
-                             node.get_attr<FloatAttribute>("smoothing_radius"),
-                             false, // saturate
-                             {0.f, 0.f},
-                             0.f,
-                             node.get_attr<BoolAttribute>("remap"),
-                             {0.f, 1.f});
+      post_process_heightmap(node, *p_out);
     }
     else
+    {
       // fill with zeros
-      hmap::transform(*p_out, [](hmap::Array &x) { x = 0.f; });
+      hmap::for_each_tile(
+          {p_out},
+          [](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
+          {
+            hmap::Array *pa_out = p_arrays[0];
+            *pa_out = 0.f;
+          },
+          node.cfg().cm_cpu);
+    }
   }
 }
 

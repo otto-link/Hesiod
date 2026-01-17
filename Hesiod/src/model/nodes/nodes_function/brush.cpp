@@ -2,7 +2,6 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include "highmap/colorize.hpp"
-#include "highmap/heightmap.hpp"
 
 #include "attributes.hpp"
 
@@ -20,8 +19,8 @@ void setup_brush_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "background");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "out", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "background");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "out", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<ArrayAttribute>("hmap", "Heightmap", hmap::Vec2<int>(512, 512));
@@ -37,14 +36,14 @@ void setup_brush_node(BaseNode &node)
 
   auto lambda = [&node, port_id]()
   {
-    hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>(port_id);
+    hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>(port_id);
 
     if (!p_in)
       return QImage();
 
     // generate a preview of the heightmap
     hmap::Vec2<int> shape_preview = hmap::Vec2<int>(256, 256);
-    hmap::Array     array = p_in->to_array(shape_preview);
+    hmap::Array     array = p_in->to_array(shape_preview, node.cfg().cm_cpu);
 
     std::vector<uint8_t> img(shape_preview.x * shape_preview.y);
 
@@ -67,10 +66,10 @@ void compute_brush_node(BaseNode &node)
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   // base noise function
-  hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("out");
+  hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("out");
 
   hmap::Array array = node.get_attr<ArrayAttribute>("hmap");
-  p_out->from_array_interp(array);
+  p_out->from_array(array, node.cfg().cm_cpu);
 
   // post-process
   post_process_heightmap(node, *p_out);

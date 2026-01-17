@@ -19,9 +19,9 @@ void setup_flooding_from_point_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "elevation");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "elevation");
   node.add_port<hmap::Cloud>(gnode::PortType::IN, "cloud");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "water_depth", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "water_depth", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("depth_min", "depth_min", 0.01f, 0.f, 1.f);
@@ -34,31 +34,33 @@ void compute_flooding_from_point_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("elevation");
-  hmap::Cloud     *p_cloud = node.get_value_ref<hmap::Cloud>("cloud");
+  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("elevation");
+  hmap::Cloud        *p_cloud = node.get_value_ref<hmap::Cloud>("cloud");
 
   if (p_in && p_cloud)
   {
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("water_depth");
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("water_depth");
 
-    hmap::transform(
+    hmap::for_each_tile(
         {p_out, p_in},
         [&node, p_cloud](std::vector<hmap::Array *> p_arrays,
-                         hmap::Vec2<int>            shape,
-                         hmap::Vec4<float>          bbox)
+                         const hmap::TileRegion    &region)
         {
-          hmap::Array *pa_out = p_arrays[0];
-          hmap::Array *pa_in = p_arrays[1];
-
+          auto [pa_out, pa_in] = unpack<2>(p_arrays);
           // convert point positions to cell indices
           std::vector<int> i, j;
 
           for (const auto &p : p_cloud->points)
           {
-            int ip = static_cast<int>((p.x - bbox.a) / (bbox.b - bbox.a) * (shape.x - 1));
-            int jp = static_cast<int>((p.y - bbox.c) / (bbox.d - bbox.c) * (shape.y - 1));
+            int ip = static_cast<int>((p.x - region.bbox.x) /
+                                      (region.bbox.y - region.bbox.x) *
+                                      (region.shape.x - 1));
+            int jp = static_cast<int>((p.y - region.bbox.z) /
+                                      (region.bbox.w - region.bbox.z) *
+                                      (region.shape.y - 1));
 
-            if (ip >= 0 && ip <= shape.x - 1 && jp >= 0 && jp <= shape.y - 1)
+            if (ip >= 0 && ip <= region.shape.x - 1 && jp >= 0 &&
+                jp <= region.shape.y - 1)
             {
               i.push_back(ip);
               j.push_back(jp);
@@ -70,7 +72,7 @@ void compute_flooding_from_point_node(BaseNode &node)
                                               j,
                                               node.get_attr<FloatAttribute>("depth_min"));
         },
-        hmap::TransformMode::SINGLE_ARRAY); // forced, not tileable
+        node.cfg().cm_single_array); // forced, not tileable
   }
 }
 

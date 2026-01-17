@@ -19,8 +19,8 @@ void setup_quilting_shuffle_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("patch_width", "patch_width", 0.3f, 0.1f, 1.f);
@@ -49,11 +49,11 @@ void compute_quilting_shuffle_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
+  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
     int ir = std::max(
         1,
@@ -62,7 +62,7 @@ void compute_quilting_shuffle_node(BaseNode &node)
 
     // --- work on a single array (i.e. not-tiled algo)
 
-    hmap::Array in_array = p_in->to_array();
+    hmap::Array in_array = p_in->to_array(node.cfg().cm_cpu);
     hmap::Array out_array = hmap::Array(p_out->shape);
 
     out_array = hmap::quilting_shuffle(
@@ -76,7 +76,7 @@ void compute_quilting_shuffle_node(BaseNode &node)
         node.get_attr<BoolAttribute>("patch_transpose"),
         node.get_attr<FloatAttribute>("filter_width_ratio"));
 
-    p_out->from_array_interp_nearest(out_array);
+    p_out->from_array(out_array, node.cfg().cm_cpu);
   }
 }
 

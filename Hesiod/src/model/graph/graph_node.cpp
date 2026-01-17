@@ -373,9 +373,9 @@ void GraphNode::setup_new_broadcast_node(BaseNode *p_node)
   // always available, full of zeros in worst case scenario
   const std::string tag = this->get_node_ref_by_id<BroadcastNode>(p_node->get_id())
                               ->get_broadcast_tag();
-  const hmap::CoordFrame *t_source = dynamic_cast<hmap::CoordFrame *>(this);
-  const hmap::Heightmap  *h_source = this->get_node_ref_by_id(p_node->get_id())
-                                        ->get_value_ref<hmap::Heightmap>("thru");
+  const hmap::CoordFrame   *t_source = dynamic_cast<hmap::CoordFrame *>(this);
+  const hmap::VirtualArray *h_source = this->get_node_ref_by_id(p_node->get_id())
+                                           ->get_value_ref<hmap::VirtualArray>("thru");
 
   if (this->new_broadcast_tag)
     this->new_broadcast_tag(tag, t_source, h_source);

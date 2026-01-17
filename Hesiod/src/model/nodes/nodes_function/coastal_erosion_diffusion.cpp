@@ -19,43 +19,37 @@ void setup_coastal_erosion_diffusion_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "elevation_in");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "water_depth_in");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "elevation", CONFIG(node));
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "water_depth", CONFIG(node));
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "water_mask", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "elevation_in");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "water_depth_in");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "elevation", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "water_depth", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "water_mask", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("additional_depth", "additional_depth", 0.05f, 0.f, 0.2f);
   node.add_attr<IntAttribute>("iterations", "iterations", 10, 0, INT_MAX);
-  node.add_attr<BoolAttribute>("distributed", "distributed", true);
 
   // attribute(s) order
-  node.set_attr_ordered_key(
-      {"additional_depth", "iterations", "_SEPARATOR_", "distributed"});
+  node.set_attr_ordered_key({"additional_depth", "iterations"});
 }
 
 void compute_coastal_erosion_diffusion_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_z = node.get_value_ref<hmap::Heightmap>("elevation_in");
-  hmap::Heightmap *p_depth = node.get_value_ref<hmap::Heightmap>("water_depth_in");
+  hmap::VirtualArray *p_z = node.get_value_ref<hmap::VirtualArray>("elevation_in");
+  hmap::VirtualArray *p_depth = node.get_value_ref<hmap::VirtualArray>("water_depth_in");
 
   if (p_z && p_depth)
   {
-    hmap::Heightmap *p_z_out = node.get_value_ref<hmap::Heightmap>("elevation");
-    hmap::Heightmap *p_depth_out = node.get_value_ref<hmap::Heightmap>("water_depth");
-    hmap::Heightmap *p_mask = node.get_value_ref<hmap::Heightmap>("water_mask");
+    hmap::VirtualArray *p_z_out = node.get_value_ref<hmap::VirtualArray>("elevation");
+    hmap::VirtualArray *p_depth_out = node.get_value_ref<hmap::VirtualArray>(
+        "water_depth");
+    hmap::VirtualArray *p_mask = node.get_value_ref<hmap::VirtualArray>("water_mask");
 
-    hmap::TransformMode transform_mode = node.get_attr<BoolAttribute>("distributed")
-                                             ? node.get_config_ref()
-                                                   ->hmap_transform_mode_cpu
-                                             : hmap::TransformMode::SINGLE_ARRAY;
-
-    hmap::transform(
+    hmap::for_each_tile(
         {p_depth, p_z, p_depth_out, p_z_out, p_mask},
-        [&node](std::vector<hmap::Array *> p_arrays)
+        [&node](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
         {
           hmap::Array *pa_depth = p_arrays[0];
           hmap::Array *pa_z = p_arrays[1];
@@ -73,7 +67,7 @@ void compute_coastal_erosion_diffusion_node(BaseNode &node)
               node.get_attr<IntAttribute>("iterations"),
               pa_mask);
         },
-        transform_mode);
+        node.cfg().cm_cpu);
 
     p_z_out->smooth_overlap_buffers();
     p_depth_out->smooth_overlap_buffers();

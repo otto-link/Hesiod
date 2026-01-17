@@ -19,8 +19,8 @@ void setup_select_midrange_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("gain", "gain", 1.f, 0.01f, 10.f);
@@ -36,24 +36,26 @@ void compute_select_midrange_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
+  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
-    float vmin = p_in->min();
-    float vmax = p_in->max();
+    float vmin = p_in->min(node.cfg().cm_cpu);
+    float vmax = p_in->max(node.cfg().cm_cpu);
 
-    hmap::transform(*p_out,
-                    *p_in,
-                    [&node, vmin, vmax](hmap::Array &array)
-                    {
-                      return hmap::select_midrange(array,
-                                                   node.get_attr<FloatAttribute>("gain"),
-                                                   vmin,
-                                                   vmax);
-                    });
+    hmap::for_each_tile(
+        {p_out, p_in},
+        [&node, vmin, vmax](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
+        {
+          auto [pa_out, pa_in] = unpack<2>(p_arrays);
+          *pa_out = hmap::select_midrange(*pa_in,
+                                          node.get_attr<FloatAttribute>("gain"),
+                                          vmin,
+                                          vmax);
+        },
+        node.cfg().cm_cpu);
 
     // post-process
     post_process_heightmap(node, *p_out);

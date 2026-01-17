@@ -68,9 +68,9 @@ public:
   std::function<void(const std::string &graph_id, const std::string &tag)>
                                               broadcast_node_updated;
   std::function<void(const std::string &tag)> remove_broadcast_tag;
-  std::function<void(const std::string      &tag,
-                     const hmap::CoordFrame *t_source,
-                     const hmap::Heightmap  *h_source)>
+  std::function<void(const std::string        &tag,
+                     const hmap::CoordFrame   *t_source,
+                     const hmap::VirtualArray *h_source)>
       new_broadcast_tag;
 
 private:

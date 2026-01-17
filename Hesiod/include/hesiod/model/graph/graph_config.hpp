@@ -7,6 +7,7 @@
 
 #include "highmap/algebra.hpp"
 #include "highmap/heightmap.hpp"
+#include "highmap/virtual_array/virtual_array.hpp"
 
 namespace hesiod
 {
@@ -21,14 +22,28 @@ struct GraphConfig
   nlohmann::json json_to() const;
 
   void log_debug() const;
-  void set_shape(const hmap::Vec2<int> &new_shape) { this->shape = new_shape; }
+  void set_shape(const hmap::Vec2<int> &new_shape);
+
+  void update_parameters();
 
   // --- Members
-  hmap::Vec2<int>     shape;
-  hmap::Vec2<int>     tiling;
-  float               overlap;
-  hmap::TransformMode hmap_transform_mode_cpu = hmap::TransformMode::DISTRIBUTED;
-  hmap::TransformMode hmap_transform_mode_gpu = hmap::TransformMode::SINGLE_ARRAY;
+
+  hmap::Vec2<int> shape;
+  hmap::Vec2<int> tiling;
+  float           overlap;
+
+  hmap::ComputeMode cm_gpu = {.mode = hmap::ForEachMode::VA_SINGLE_ARRAY,
+                              .trim_storage = false};
+  hmap::ComputeMode cm_cpu = {.mode = hmap::ForEachMode::VA_DISTRIBUTED,
+                              .trim_storage = false};
+  hmap::ComputeMode cm_single_array = {.mode = hmap::ForEachMode::VA_SINGLE_ARRAY,
+                                       .trim_storage = false};
+
+  hmap::StorageMode storage_mode = hmap::StorageMode::VA_DISK_LRU;
+
+  // computed from tiling and overlap
+  glm::ivec2 tile_shape;
+  int        halo;
 };
 
 } // namespace hesiod

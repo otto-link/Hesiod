@@ -21,7 +21,7 @@ void setup_normal_map_to_heightmap_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "normal map");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<BoolAttribute>("poisson_solver", "poisson_solver", false);
@@ -43,7 +43,7 @@ void compute_normal_map_to_heightmap_node(BaseNode &node)
 
   if (p_nmap)
   {
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
     hmap::Tensor ts = hmap::Tensor(p_nmap->shape, 3);
     ts.set_slice(0, p_nmap->rgba[0].to_array());
@@ -65,7 +65,7 @@ void compute_normal_map_to_heightmap_node(BaseNode &node)
 
     hmap::remap(z);
 
-    p_out->from_array_interp(z);
+    p_out->from_array(z, node.cfg().cm_cpu);
 
     // post-process
     post_process_heightmap(node, *p_out);

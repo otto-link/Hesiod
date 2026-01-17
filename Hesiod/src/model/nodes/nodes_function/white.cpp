@@ -19,8 +19,8 @@ void setup_white_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "envelope");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "envelope");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<SeedAttribute>("seed", "Seed");
@@ -37,22 +37,21 @@ void compute_white_node(BaseNode &node)
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   // base noise function
-  hmap::Heightmap *p_env = node.get_value_ref<hmap::Heightmap>("envelope");
-  hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
+  hmap::VirtualArray *p_env = node.get_value_ref<hmap::VirtualArray>("envelope");
+  hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
   int seed = (int)node.get_attr<SeedAttribute>("seed");
 
-  hmap::transform(
+  hmap::for_each_tile(
       {p_out},
-      [&seed](std::vector<hmap::Array *> p_arrays,
-              hmap::Vec2<int>            shape,
-              hmap::Vec4<float>)
+      [&node, &seed](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &region)
       {
-        hmap::Array *pa_out = p_arrays[0];
+        auto [pa_out] = unpack<1>(p_arrays);
 
-        *pa_out = hmap::white(shape, 0.f, 1.f, (uint)seed++);
+        uint tile_seed = node.get_attr<SeedAttribute>("seed") + region.key.hash();
+        *pa_out = hmap::white(region.shape, 0.f, 1.f, tile_seed);
       },
-      node.get_config_ref()->hmap_transform_mode_cpu);
+      node.cfg().cm_cpu);
 
   // post-process
   post_apply_enveloppe(node, *p_out, p_env);

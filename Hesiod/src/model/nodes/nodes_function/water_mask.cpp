@@ -19,9 +19,9 @@ void setup_water_mask_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "elevation");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "water_depth");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "mask", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "elevation");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "water_depth");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "mask", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("additional_depth",
@@ -42,16 +42,16 @@ void compute_water_mask_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_z = node.get_value_ref<hmap::Heightmap>("elevation");
-  hmap::Heightmap *p_depth = node.get_value_ref<hmap::Heightmap>("water_depth");
+  hmap::VirtualArray *p_z = node.get_value_ref<hmap::VirtualArray>("elevation");
+  hmap::VirtualArray *p_depth = node.get_value_ref<hmap::VirtualArray>("water_depth");
 
   if (p_z && p_depth)
   {
-    hmap::Heightmap *p_mask = node.get_value_ref<hmap::Heightmap>("mask");
+    hmap::VirtualArray *p_mask = node.get_value_ref<hmap::VirtualArray>("mask");
 
-    hmap::transform(
+    hmap::for_each_tile(
         {p_depth, p_z, p_mask},
-        [&node](std::vector<hmap::Array *> p_arrays)
+        [&node](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
         {
           hmap::Array *pa_depth = p_arrays[0];
           hmap::Array *pa_z = p_arrays[1];
@@ -68,7 +68,7 @@ void compute_water_mask_node(BaseNode &node)
             *pa_mask = hmap::water_mask(*pa_depth);
           }
         },
-        node.get_config_ref()->hmap_transform_mode_gpu);
+        node.cfg().cm_gpu);
 
     // post-process
     p_mask->smooth_overlap_buffers();

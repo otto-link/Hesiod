@@ -1,9 +1,7 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-
 #include "highmap/erosion.hpp"
-#include "highmap/heightmap.hpp"
 
 #include "attributes.hpp"
 
@@ -22,11 +20,11 @@ void setup_noise_jordan_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dx");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "control");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "envelope");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "out", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dx");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dy");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "control");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "envelope");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "out", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<EnumAttribute>("noise_type", "Type", enum_mappings.noise_type_map_fbm);
@@ -40,8 +38,6 @@ void setup_noise_jordan_node(BaseNode &node)
   node.add_attr<FloatAttribute>("damp0", "damp0", 1.f, 0.f, 1.f);
   node.add_attr<FloatAttribute>("warp_scale", "warp_scale", 0.2f, 0.f, 1.f);
   node.add_attr<FloatAttribute>("damp_scale", "damp_scale", 1.f, 0.f, 1.f);
-  node.add_attr<BoolAttribute>("inverse", "inverse", false);
-  node.add_attr<RangeAttribute>("remap", "remap");
 
   // attribute(s) order
   node.set_attr_ordered_key({"noise_type",
@@ -56,10 +52,10 @@ void setup_noise_jordan_node(BaseNode &node)
                              "warp0",
                              "damp0",
                              "warp_scale",
-                             "damp_scale",
-                             "_SEPARATOR_",
-                             "inverse",
-                             "remap"});
+                             "damp_scale"});
+
+  setup_post_process_heightmap_attributes(node,
+                                          {.add_mix = false, .remap_active_state = true});
 }
 
 void compute_noise_jordan_node(BaseNode &node)
@@ -67,67 +63,42 @@ void compute_noise_jordan_node(BaseNode &node)
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   // base noise function
-  hmap::Heightmap *p_dx = node.get_value_ref<hmap::Heightmap>("dx");
-  hmap::Heightmap *p_dy = node.get_value_ref<hmap::Heightmap>("dy");
-  hmap::Heightmap *p_ctrl = node.get_value_ref<hmap::Heightmap>("control");
-  hmap::Heightmap *p_env = node.get_value_ref<hmap::Heightmap>("envelope");
-  hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
+  hmap::VirtualArray *p_dx = node.get_value_ref<hmap::VirtualArray>("dx");
+  hmap::VirtualArray *p_dy = node.get_value_ref<hmap::VirtualArray>("dy");
+  hmap::VirtualArray *p_ctrl = node.get_value_ref<hmap::VirtualArray>("control");
+  hmap::VirtualArray *p_env = node.get_value_ref<hmap::VirtualArray>("envelope");
+  hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
-  hmap::fill(*p_out,
-             p_dx,
-             p_dy,
-             p_ctrl,
-             [&node](hmap::Vec2<int>   shape,
-                     hmap::Vec4<float> bbox,
-                     hmap::Array      *p_noise_x,
-                     hmap::Array      *p_noise_y,
-                     hmap::Array      *p_ctrl)
-             {
-               return hmap::noise_jordan(
-                   (hmap::NoiseType)node.get_attr<EnumAttribute>("noise_type"),
-                   shape,
-                   node.get_attr<WaveNbAttribute>("kw"),
-                   node.get_attr<SeedAttribute>("seed"),
-                   node.get_attr<IntAttribute>("octaves"),
-                   node.get_attr<FloatAttribute>("weight"),
-                   node.get_attr<FloatAttribute>("persistence"),
-                   node.get_attr<FloatAttribute>("lacunarity"),
-                   node.get_attr<FloatAttribute>("warp0"),
-                   node.get_attr<FloatAttribute>("damp0"),
-                   node.get_attr<FloatAttribute>("warp_scale"),
-                   node.get_attr<FloatAttribute>("damp_scale"),
-                   p_ctrl,
-                   p_noise_x,
-                   p_noise_y,
-                   nullptr,
-                   bbox);
-             });
+  hmap::for_each_tile(
+      {p_out, p_dx, p_dy, p_ctrl},
+      [&node](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &region)
+      {
+        auto [pa_out, pa_dx, pa_dy, pa_ctrl] = unpack<4>(p_arrays);
 
-  // add envelope
-  if (p_env)
-  {
-    float hmin = p_out->min();
-    hmap::transform(*p_out,
-                    *p_env,
-                    [&hmin](hmap::Array &a, hmap::Array &b)
-                    {
-                      a -= hmin;
-                      a *= b;
-                    });
-  }
+        *pa_out = hmap::noise_jordan(
+            (hmap::NoiseType)node.get_attr<EnumAttribute>("noise_type"),
+            region.shape,
+            node.get_attr<WaveNbAttribute>("kw"),
+            node.get_attr<SeedAttribute>("seed"),
+            node.get_attr<IntAttribute>("octaves"),
+            node.get_attr<FloatAttribute>("weight"),
+            node.get_attr<FloatAttribute>("persistence"),
+            node.get_attr<FloatAttribute>("lacunarity"),
+            node.get_attr<FloatAttribute>("warp0"),
+            node.get_attr<FloatAttribute>("damp0"),
+            node.get_attr<FloatAttribute>("warp_scale"),
+            node.get_attr<FloatAttribute>("damp_scale"),
+            pa_ctrl,
+            pa_dx,
+            pa_dy,
+            nullptr,
+            region.bbox);
+      },
+      node.cfg().cm_cpu);
 
   // post-process
-  post_process_heightmap(node,
-                         *p_out,
-
-                         node.get_attr<BoolAttribute>("inverse"),
-                         false, // smooth
-                         0,
-                         false, // saturate
-                         {0.f, 0.f},
-                         0.f,
-                         node.get_attr_ref<RangeAttribute>("remap")->get_is_active(),
-                         node.get_attr<RangeAttribute>("remap"));
+  post_apply_enveloppe(node, *p_out, p_env);
+  post_process_heightmap(node, *p_out);
 }
 
 } // namespace hesiod

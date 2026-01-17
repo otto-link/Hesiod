@@ -19,9 +19,9 @@ void setup_convolve_svd_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
   node.add_port<hmap::Array>(gnode::PortType::IN, "kernel");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<IntAttribute>("rank", "rank", 4, 1, 8);
@@ -37,19 +37,23 @@ void compute_convolve_svd_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
-  hmap::Array     *p_kernel = node.get_value_ref<hmap::Array>("kernel");
+  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
+  hmap::Array        *p_kernel = node.get_value_ref<hmap::Array>("kernel");
 
   if (p_in && p_kernel)
   {
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
-    hmap::transform(
-        *p_out,
-        *p_in,
-        [&node, p_kernel](hmap::Array &out, hmap::Array &in) {
-          out = hmap::convolve2d_svd(in, *p_kernel, node.get_attr<IntAttribute>("rank"));
-        });
+    hmap::for_each_tile(
+        {p_out, p_in},
+        [&node, p_kernel](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
+        {
+          auto [pa_out, pa_in] = unpack<2>(p_arrays);
+          *pa_out = hmap::convolve2d_svd(*pa_in,
+                                         *p_kernel,
+                                         node.get_attr<IntAttribute>("rank"));
+        },
+        node.cfg().cm_cpu);
 
     p_out->smooth_overlap_buffers();
 

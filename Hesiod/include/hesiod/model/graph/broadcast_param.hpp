@@ -13,6 +13,7 @@
 #include <string>
 
 #include "highmap/coord_frame.hpp"
+#include "highmap/virtual_array/virtual_array.hpp"
 
 namespace hesiod
 {
@@ -22,8 +23,8 @@ namespace hesiod
 // =====================================
 struct BroadcastParam
 {
-  const hmap::CoordFrame *t_source = nullptr;
-  const hmap::Heightmap  *p_h = nullptr;
+  const hmap::CoordFrame   *t_source = nullptr;
+  const hmap::VirtualArray *p_va = nullptr;
 };
 
 using BroadcastMap = std::map<std::string, BroadcastParam>;

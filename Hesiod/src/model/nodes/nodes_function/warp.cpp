@@ -20,10 +20,10 @@ void setup_warp_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dx");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dx");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dy");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("scaling.x", "scaling.x", 1.f, -2.f, 2.f);
@@ -40,30 +40,31 @@ void compute_warp_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
+  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_dx = node.get_value_ref<hmap::Heightmap>("dx");
-    hmap::Heightmap *p_dy = node.get_value_ref<hmap::Heightmap>("dy");
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
-
-    *p_out = *p_in;
+    hmap::VirtualArray *p_dx = node.get_value_ref<hmap::VirtualArray>("dx");
+    hmap::VirtualArray *p_dy = node.get_value_ref<hmap::VirtualArray>("dy");
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
     float sx = node.get_attr<FloatAttribute>("scaling.x");
     float sy = node.get_attr<FloatAttribute>("scaling.y");
 
-    hmap::transform(
-        {p_out, p_dx, p_dy},
-        [sx, sy](std::vector<hmap::Array *> p_arrays)
+    hmap::for_each_tile(
+        {p_out, p_in, p_dx, p_dy},
+        [sx, sy](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
         {
           hmap::Array *pa_out = p_arrays[0];
-          hmap::Array dx = p_arrays[1] ? sx * (*p_arrays[1]) : hmap::Array(pa_out->shape);
-          hmap::Array dy = p_arrays[2] ? sy * (*p_arrays[2]) : hmap::Array(pa_out->shape);
+          hmap::Array *pa_in = p_arrays[1];
+          hmap::Array dx = p_arrays[2] ? sx * (*p_arrays[1]) : hmap::Array(pa_out->shape);
+          hmap::Array dy = p_arrays[3] ? sy * (*p_arrays[2]) : hmap::Array(pa_out->shape);
+
+          *pa_out = *pa_in;
 
           hmap::gpu::warp(*pa_out, &dx, &dy);
         },
-        node.get_config_ref()->hmap_transform_mode_gpu);
+        node.cfg().cm_gpu);
 
     // post-process
     post_process_heightmap(node, *p_out, p_in);

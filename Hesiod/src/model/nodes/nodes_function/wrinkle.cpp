@@ -19,9 +19,9 @@ void setup_wrinkle_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "mask");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("wrinkle_amplitude",
@@ -56,26 +56,26 @@ void compute_wrinkle_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
+  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_mask = node.get_value_ref<hmap::Heightmap>("mask");
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
-
-    // copy the input heightmap
-    *p_out = *p_in;
+    hmap::VirtualArray *p_mask = node.get_value_ref<hmap::VirtualArray>("mask");
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
     int ir = std::max(1, (int)(node.get_attr<FloatAttribute>("radius") * p_out->shape.x));
 
-    hmap::transform(
-        *p_out,
-        p_mask,
-        [&node, &ir](hmap::Array &x, hmap::Vec4<float> bbox, hmap::Array *p_mask)
+    hmap::for_each_tile(
+        {p_out, p_in, p_mask},
+        [&node, &ir](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &region)
         {
-          hmap::wrinkle(x,
+          auto [pa_out, pa_in, pa_mask] = unpack<3>(p_arrays);
+
+          *pa_out = *pa_in;
+
+          hmap::wrinkle(*pa_out,
                         node.get_attr<FloatAttribute>("wrinkle_amplitude"),
-                        p_mask,
+                        pa_mask,
                         node.get_attr<FloatAttribute>("wrinkle_angle"),
                         node.get_attr<FloatAttribute>("displacement_amplitude"),
                         ir,
@@ -83,8 +83,9 @@ void compute_wrinkle_node(BaseNode &node)
                         node.get_attr<SeedAttribute>("seed"),
                         node.get_attr<IntAttribute>("octaves"),
                         node.get_attr<FloatAttribute>("weight"),
-                        bbox);
-        });
+                        region.bbox);
+        },
+        node.cfg().cm_cpu);
 
     p_out->smooth_overlap_buffers();
   }

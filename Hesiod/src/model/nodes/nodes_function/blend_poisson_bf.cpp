@@ -19,15 +19,17 @@ void setup_blend_poisson_bf_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input 1");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input 2");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input 1");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input 2");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "mask");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<IntAttribute>("iterations", "iterations", 500, 1, INT_MAX);
-  node.add_attr<BoolAttribute>("inverse", "inverse", false);
-  node.add_attr<RangeAttribute>("remap", "remap", false);
+
+  setup_post_process_heightmap_attributes(
+      node,
+      {.add_mix = false, .remap_active_state = false});
 
   // attribute(s) order
   node.set_attr_ordered_key({"iterations", "_SEPARATOR_", "inverse", "remap"});
@@ -37,17 +39,17 @@ void compute_blend_poisson_bf_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in1 = node.get_value_ref<hmap::Heightmap>("input 1");
-  hmap::Heightmap *p_in2 = node.get_value_ref<hmap::Heightmap>("input 2");
+  hmap::VirtualArray *p_in1 = node.get_value_ref<hmap::VirtualArray>("input 1");
+  hmap::VirtualArray *p_in2 = node.get_value_ref<hmap::VirtualArray>("input 2");
 
   if (p_in1 && p_in2)
   {
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
-    hmap::Heightmap *p_mask = node.get_value_ref<hmap::Heightmap>("mask");
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
+    hmap::VirtualArray *p_mask = node.get_value_ref<hmap::VirtualArray>("mask");
 
-    hmap::transform(
+    hmap::for_each_tile(
         {p_out, p_in1, p_in2, p_mask},
-        [&node](std::vector<hmap::Array *> p_arrays)
+        [&node](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
         {
           hmap::Array *pa_out = p_arrays[0];
           hmap::Array *pa_in1 = p_arrays[1];
@@ -59,21 +61,12 @@ void compute_blend_poisson_bf_node(BaseNode &node)
                                                 node.get_attr<IntAttribute>("iterations"),
                                                 pa_mask);
         },
-        node.get_config_ref()->hmap_transform_mode_gpu);
+        node.cfg().cm_gpu);
 
     p_out->smooth_overlap_buffers();
 
     // post-process
-    post_process_heightmap(node,
-                           *p_out,
-                           node.get_attr<BoolAttribute>("inverse"),
-                           false, // smooth
-                           0,
-                           false, // saturate
-                           {0.f, 0.f},
-                           0.f,
-                           node.get_attr_ref<RangeAttribute>("remap")->get_is_active(),
-                           node.get_attr<RangeAttribute>("remap"));
+    post_process_heightmap(node, *p_out);
   }
 }
 

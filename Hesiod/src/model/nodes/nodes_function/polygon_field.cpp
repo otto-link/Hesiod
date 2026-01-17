@@ -20,13 +20,13 @@ void setup_polygon_field_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dx");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dr");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "density");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "size");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "envelope");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dx");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dy");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dr");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "density");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "size");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "envelope");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<WaveNbAttribute>("kw", "Spatial Frequency");
@@ -65,19 +65,17 @@ void compute_polygon_field_node(BaseNode &node)
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   // base noise function
-  hmap::Heightmap *p_dx = node.get_value_ref<hmap::Heightmap>("dx");
-  hmap::Heightmap *p_dy = node.get_value_ref<hmap::Heightmap>("dy");
-  hmap::Heightmap *p_dr = node.get_value_ref<hmap::Heightmap>("dr");
-  hmap::Heightmap *p_density = node.get_value_ref<hmap::Heightmap>("density");
-  hmap::Heightmap *p_size = node.get_value_ref<hmap::Heightmap>("size");
-  hmap::Heightmap *p_env = node.get_value_ref<hmap::Heightmap>("envelope");
-  hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
+  hmap::VirtualArray *p_dx = node.get_value_ref<hmap::VirtualArray>("dx");
+  hmap::VirtualArray *p_dy = node.get_value_ref<hmap::VirtualArray>("dy");
+  hmap::VirtualArray *p_dr = node.get_value_ref<hmap::VirtualArray>("dr");
+  hmap::VirtualArray *p_density = node.get_value_ref<hmap::VirtualArray>("density");
+  hmap::VirtualArray *p_size = node.get_value_ref<hmap::VirtualArray>("size");
+  hmap::VirtualArray *p_env = node.get_value_ref<hmap::VirtualArray>("envelope");
+  hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
-  hmap::transform(
+  hmap::for_each_tile(
       {p_out, p_dx, p_dy, p_dr, p_density, p_size},
-      [&node](std::vector<hmap::Array *> p_arrays,
-              hmap::Vec2<int>            shape,
-              hmap::Vec4<float>          bbox)
+      [&node](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &region)
       {
         hmap::Array *pa_out = p_arrays[0];
         hmap::Array *pa_dx = p_arrays[1];
@@ -89,7 +87,7 @@ void compute_polygon_field_node(BaseNode &node)
         hmap::Vec2<float> jitter(node.get_attr<FloatAttribute>("jitter.x"),
                                  node.get_attr<FloatAttribute>("jitter.y"));
 
-        *pa_out = hmap::gpu::polygon_field(shape,
+        *pa_out = hmap::gpu::polygon_field(region.shape,
                                            node.get_attr<WaveNbAttribute>("kw"),
                                            node.get_attr<SeedAttribute>("seed"),
                                            node.get_attr<FloatAttribute>("rmin"),
@@ -106,9 +104,9 @@ void compute_polygon_field_node(BaseNode &node)
                                            pa_dr,
                                            pa_density,
                                            pa_size,
-                                           bbox);
+                                           region.bbox);
       },
-      node.get_config_ref()->hmap_transform_mode_gpu);
+      node.cfg().cm_gpu);
 
   // post-process
   post_apply_enveloppe(node, *p_out, p_env);

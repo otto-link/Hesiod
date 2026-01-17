@@ -24,13 +24,13 @@ void setup_hydraulic_particle_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "bedrock");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "moisture");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "erosion", CONFIG(node));
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "deposition", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "bedrock");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "moisture");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "mask");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "erosion", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "deposition", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<SeedAttribute>("seed", "Seed");
@@ -62,26 +62,31 @@ void setup_hydraulic_particle_node(BaseNode &node)
                              "_SEPARATOR_",
                              "downscale",
                              "kc"});
+
+  setup_post_process_heightmap_attributes(node,
+                                          {.add_mix = true, .remap_active_state = true});
 }
 
 void compute_hydraulic_particle_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
+  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_bedrock = node.get_value_ref<hmap::Heightmap>("bedrock");
-    hmap::Heightmap *p_moisture_map = node.get_value_ref<hmap::Heightmap>("moisture");
-    hmap::Heightmap *p_mask = node.get_value_ref<hmap::Heightmap>("mask");
+    hmap::VirtualArray *p_bedrock = node.get_value_ref<hmap::VirtualArray>("bedrock");
+    hmap::VirtualArray *p_moisture_map = node.get_value_ref<hmap::VirtualArray>(
+        "moisture");
+    hmap::VirtualArray *p_mask = node.get_value_ref<hmap::VirtualArray>("mask");
 
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
-    hmap::Heightmap *p_erosion_map = node.get_value_ref<hmap::Heightmap>("erosion");
-    hmap::Heightmap *p_deposition_map = node.get_value_ref<hmap::Heightmap>("deposition");
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
+    hmap::VirtualArray *p_erosion_map = node.get_value_ref<hmap::VirtualArray>("erosion");
+    hmap::VirtualArray *p_deposition_map = node.get_value_ref<hmap::VirtualArray>(
+        "deposition");
 
     // copy the input heightmap
-    *p_out = *p_in;
+    p_out->copy_from(*p_in, node.cfg().cm_cpu);
 
     // set the bedrock at the input heightmap to prevent any erosion,
     // if requested
@@ -94,9 +99,10 @@ void compute_hydraulic_particle_node(BaseNode &node)
 
     if (!node.get_attr<BoolAttribute>("downscale"))
     {
-      hmap::transform(
+      hmap::for_each_tile(
           {p_out, p_bedrock, p_moisture_map, p_mask, p_erosion_map, p_deposition_map},
-          [&node, &nparticles](std::vector<hmap::Array *> p_arrays)
+          [&node, &nparticles](std::vector<hmap::Array *> p_arrays,
+                               const hmap::TileRegion &)
           {
             hmap::Array *pa_out = p_arrays[0];
             hmap::Array *pa_bedrock = p_arrays[1];
@@ -121,7 +127,7 @@ void compute_hydraulic_particle_node(BaseNode &node)
                                           node.get_attr<FloatAttribute>("evap_rate"),
                                           node.get_attr<BoolAttribute>("post_filtering"));
           },
-          node.get_config_ref()->hmap_transform_mode_gpu);
+          node.cfg().cm_gpu);
     }
     else
     {
@@ -129,11 +135,10 @@ void compute_hydraulic_particle_node(BaseNode &node)
       nparticles = (int)(node.get_attr<FloatAttribute>("kc") / p_out->shape.x *
                          nparticles);
 
-      hmap::transform(
+      hmap::for_each_tile(
           {p_out, p_bedrock, p_moisture_map, p_mask, p_erosion_map, p_deposition_map},
           [&node, nparticles](std::vector<hmap::Array *> p_arrays,
-                              hmap::Vec2<int>            shape,
-                              hmap::Vec4<float>)
+                              const hmap::TileRegion    &region)
           {
             hmap::Array *pa_out = p_arrays[0];
             hmap::Array *pa_bedrock = p_arrays[1];
@@ -143,7 +148,7 @@ void compute_hydraulic_particle_node(BaseNode &node)
             hmap::Array *pa_deposition_map = p_arrays[5];
 
             auto lambda = [&node,
-                           shape,
+                           &region,
                            nparticles,
                            pa_mask,
                            pa_bedrock,
@@ -203,34 +208,35 @@ void compute_hydraulic_particle_node(BaseNode &node)
 
               // resample output fields to their original shape
               if (pa_erosion_map)
-                *pa_erosion_map = coarse_arrays[3].resample_to_shape_bicubic(shape);
+                *pa_erosion_map = coarse_arrays[3].resample_to_shape_bicubic(
+                    region.shape);
               if (pa_deposition_map)
-                *pa_deposition_map = coarse_arrays[4].resample_to_shape_bicubic(shape);
+                *pa_deposition_map = coarse_arrays[4].resample_to_shape_bicubic(
+                    region.shape);
             };
 
             hmap::downscale_transform(*pa_out,
                                       node.get_attr<FloatAttribute>("kc"),
                                       lambda);
           },
-          hmap::TransformMode::SINGLE_ARRAY);
+          node.cfg().cm_single_array);
     }
 
     p_out->smooth_overlap_buffers();
 
     p_erosion_map->smooth_overlap_buffers();
-    p_erosion_map->remap();
+    p_erosion_map->remap(0.f, 1.f, node.cfg().cm_cpu);
 
     p_deposition_map->smooth_overlap_buffers();
-    p_deposition_map->remap();
+    p_deposition_map->remap(0.f, 1.f, node.cfg().cm_cpu);
 
     // clean-up erosion and deposition surfaces
     if (node.get_attr<BoolAttribute>("post_filtering_local"))
     {
-      hmap::transform(
+      hmap::for_each_tile(
           {p_out, p_erosion_map, p_deposition_map},
           [&node, nparticles](std::vector<hmap::Array *> p_arrays,
-                              hmap::Vec2<int>,
-                              hmap::Vec4<float>)
+                              const hmap::TileRegion &)
           {
             hmap::Array *pa_out = p_arrays[0];
             hmap::Array *pa_erosion_map = p_arrays[1];
@@ -244,8 +250,11 @@ void compute_hydraulic_particle_node(BaseNode &node)
             hmap::gpu::smooth_cpulse(mask, 2);
             hmap::gpu::smooth_cpulse(*pa_out, 32, &mask);
           },
-          node.get_config_ref()->hmap_transform_mode_gpu);
+          node.cfg().cm_gpu);
     }
+
+    // post-process
+    post_process_heightmap(node, *p_out, p_in);
   }
 }
 

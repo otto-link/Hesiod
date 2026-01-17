@@ -22,10 +22,10 @@ void setup_expand_shrink_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "mask");
   node.add_port<hmap::Array>(gnode::PortType::IN, "kernel");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<EnumAttribute>("kernel",
@@ -53,18 +53,15 @@ void compute_expand_shrink_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
+  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_mask = node.get_value_ref<hmap::Heightmap>("mask");
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
+    hmap::VirtualArray *p_mask = node.get_value_ref<hmap::VirtualArray>("mask");
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
     // prepare mask
-    std::shared_ptr<hmap::Heightmap> sp_mask = pre_process_mask(node, p_mask, *p_in);
-
-    // copy the input heightmap
-    *p_out = *p_in;
+    std::shared_ptr<hmap::VirtualArray> sp_mask = pre_process_mask(node, p_mask, *p_in);
 
     // kernel definition - use input kernel by default, if not switch
     // to built-in kernels
@@ -91,33 +88,43 @@ void compute_expand_shrink_node(BaseNode &node)
 
     if (node.get_attr<BoolAttribute>("shrink"))
     {
-      hmap::transform(
-          {p_out, p_mask},
-          [&node, &kernel_array](std::vector<hmap::Array *> p_arrays)
+      hmap::for_each_tile(
+          {p_out, p_in, p_mask},
+          [&node, &kernel_array](std::vector<hmap::Array *> p_arrays,
+                                 const hmap::TileRegion &)
           {
             hmap::Array *pa_out = p_arrays[0];
-            hmap::Array *pa_mask = p_arrays[1];
+            hmap::Array *pa_in = p_arrays[1];
+            hmap::Array *pa_mask = p_arrays[2];
+
+            *pa_out = *pa_in;
+
             hmap::gpu::shrink(*pa_out,
                               kernel_array,
                               pa_mask,
                               node.get_attr<IntAttribute>("iterations"));
           },
-          node.get_config_ref()->hmap_transform_mode_gpu);
+          node.cfg().cm_gpu);
     }
     else
     {
-      hmap::transform(
-          {p_out, p_mask},
-          [&node, &kernel_array](std::vector<hmap::Array *> p_arrays)
+      hmap::for_each_tile(
+          {p_out, p_in, p_mask},
+          [&node, &kernel_array](std::vector<hmap::Array *> p_arrays,
+                                 const hmap::TileRegion &)
           {
             hmap::Array *pa_out = p_arrays[0];
-            hmap::Array *pa_mask = p_arrays[1];
+            hmap::Array *pa_in = p_arrays[1];
+            hmap::Array *pa_mask = p_arrays[2];
+
+            *pa_out = *pa_in;
+
             hmap::gpu::expand(*pa_out,
                               kernel_array,
                               pa_mask,
                               node.get_attr<IntAttribute>("iterations"));
           },
-          node.get_config_ref()->hmap_transform_mode_gpu);
+          node.cfg().cm_gpu);
     }
 
     p_out->smooth_overlap_buffers();

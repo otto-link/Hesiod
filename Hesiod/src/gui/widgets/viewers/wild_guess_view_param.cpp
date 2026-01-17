@@ -5,7 +5,6 @@
 
 #include "highmap/geometry/cloud.hpp"
 #include "highmap/geometry/path.hpp"
-#include "highmap/heightmap.hpp"
 
 #include "hesiod/gui/widgets/viewers/viewer.hpp"
 #include "hesiod/logger.hpp"
@@ -69,14 +68,14 @@ void wild_guess_view_param(ViewerNodeParam &view_param,
     if (key == "elevation")
     {
       value = helper_get_preferred_port_inout(node,
-                                              typeid(hmap::Heightmap),
+                                              typeid(hmap::VirtualArray),
                                               "water_depth");
     }
 
     if (key == "water_depth")
     {
       value = helper_get_preferred_port_label(node,
-                                              typeid(hmap::Heightmap),
+                                              typeid(hmap::VirtualArray),
                                               "water_depth");
     }
 

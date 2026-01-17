@@ -18,8 +18,8 @@ void setup_broadcast_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "thru", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "thru", CONFIG2(node));
 
   // attribute(s)
 
@@ -31,12 +31,12 @@ void compute_broadcast_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
+  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_thru = node.get_value_ref<hmap::Heightmap>("thru");
-    *p_thru = *p_in;
+    hmap::VirtualArray *p_thru = node.get_value_ref<hmap::VirtualArray>("thru");
+    p_thru->copy_from(*p_in, node.get_config_ref()->cm_cpu);
 
     BroadcastNode *p_broadcast_node = dynamic_cast<BroadcastNode *>(&node);
 
@@ -47,7 +47,6 @@ void compute_broadcast_node(BaseNode &node)
     }
 
     std::string broadcast_tag = p_broadcast_node->get_broadcast_tag();
-
     std::string graph_id = node.get_graph_id();
     std::string node_id = node.get_id();
 

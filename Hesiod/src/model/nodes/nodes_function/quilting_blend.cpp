@@ -19,11 +19,11 @@ void setup_quilting_blend_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input 1");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input 2");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input 3");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input 4");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input 1");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input 2");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input 3");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input 4");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("patch_width", "patch_width", 0.3f, 0.1f, 1.f);
@@ -52,19 +52,19 @@ void compute_quilting_blend_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in1 = node.get_value_ref<hmap::Heightmap>("input 1");
-  hmap::Heightmap *p_in2 = node.get_value_ref<hmap::Heightmap>("input 2");
-  hmap::Heightmap *p_in3 = node.get_value_ref<hmap::Heightmap>("input 3");
-  hmap::Heightmap *p_in4 = node.get_value_ref<hmap::Heightmap>("input 4");
+  hmap::VirtualArray *p_in1 = node.get_value_ref<hmap::VirtualArray>("input 1");
+  hmap::VirtualArray *p_in2 = node.get_value_ref<hmap::VirtualArray>("input 2");
+  hmap::VirtualArray *p_in3 = node.get_value_ref<hmap::VirtualArray>("input 3");
+  hmap::VirtualArray *p_in4 = node.get_value_ref<hmap::VirtualArray>("input 4");
 
-  std::vector<hmap::Heightmap *> ptr_list = {};
+  std::vector<hmap::VirtualArray *> ptr_list = {};
   for (auto &ptr : {p_in1, p_in2, p_in3, p_in4})
     if (ptr)
       ptr_list.push_back(ptr);
 
   if ((int)ptr_list.size())
   {
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
     int ir = std::max(
         1,
@@ -78,7 +78,7 @@ void compute_quilting_blend_node(BaseNode &node)
 
     for (auto &ptr : {p_in1, p_in2, p_in3, p_in4})
       if (ptr)
-        arrays.push_back(std::move(ptr->to_array()));
+        arrays.push_back(std::move(ptr->to_array(node.cfg().cm_cpu)));
 
     for (auto &a : arrays)
       p_arrays.push_back(&a);
@@ -93,7 +93,7 @@ void compute_quilting_blend_node(BaseNode &node)
         node.get_attr<BoolAttribute>("patch_transpose"),
         node.get_attr<FloatAttribute>("filter_width_ratio"));
 
-    p_out->from_array_interp_nearest(out_array);
+    p_out->from_array(out_array, node.cfg().cm_cpu);
   }
 }
 

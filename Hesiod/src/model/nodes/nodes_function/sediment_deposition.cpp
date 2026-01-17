@@ -20,10 +20,10 @@ void setup_sediment_deposition_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "deposition", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "mask");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "deposition", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("talus_global", "talus_global", 0.2f, 0.f, FLT_MAX);
@@ -50,52 +50,54 @@ void compute_sediment_deposition_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
+  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_mask = node.get_value_ref<hmap::Heightmap>("mask");
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
-    hmap::Heightmap *p_deposition_map = node.get_value_ref<hmap::Heightmap>("deposition");
-
-    // copy the input heightmap
-    *p_out = *p_in;
+    hmap::VirtualArray *p_mask = node.get_value_ref<hmap::VirtualArray>("mask");
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
+    hmap::VirtualArray *p_deposition_map = node.get_value_ref<hmap::VirtualArray>(
+        "deposition");
 
     float talus = node.get_attr<FloatAttribute>("talus_global") / (float)p_out->shape.x;
 
-    hmap::Heightmap talus_map = hmap::Heightmap(CONFIG(node), talus);
+    hmap::VirtualArray talus_map = hmap::VirtualArray(CONFIG2(node));
+    talus_map.fill(talus, node.cfg().cm_cpu);
 
     if (node.get_attr<BoolAttribute>("scale_talus_with_elevation"))
     {
-      talus_map = *p_in;
-      talus_map.remap(talus / 100.f, talus);
+      talus_map.copy_from(*p_in, node.cfg().cm_cpu);
+      talus_map.remap(talus / 100.f, talus, node.cfg().cm_cpu);
     }
 
-    hmap::transform(*p_out,
-                    p_mask,
-                    &talus_map,
-                    p_deposition_map,
-                    [&node, &talus](hmap::Array &h_out,
-                                    hmap::Array *p_mask_array,
-                                    hmap::Array *p_talus_array,
-                                    hmap::Array *p_deposition_array)
-                    {
-                      hmap::sediment_deposition(
-                          h_out,
-                          p_mask_array,
-                          *p_talus_array,
-                          p_deposition_array,
-                          node.get_attr<FloatAttribute>("max_deposition"),
-                          node.get_attr<IntAttribute>("iterations"),
-                          node.get_attr<IntAttribute>("thermal_subiterations"));
-                    });
+    hmap::for_each_tile(
+        {p_out, p_in, p_mask, &talus_map, p_deposition_map},
+        [&node, &talus](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
+        {
+          hmap::Array *pa_out = p_arrays[0];
+          hmap::Array *pa_in = p_arrays[1];
+          hmap::Array *pa_mask = p_arrays[2];
+          hmap::Array *pa_talus = p_arrays[3];
+          hmap::Array *pa_deposition_map = p_arrays[4];
+
+          *pa_out = *pa_in;
+
+          hmap::sediment_deposition(*pa_out,
+                                    pa_mask,
+                                    *pa_talus,
+                                    pa_deposition_map,
+                                    node.get_attr<FloatAttribute>("max_deposition"),
+                                    node.get_attr<IntAttribute>("iterations"),
+                                    node.get_attr<IntAttribute>("thermal_subiterations"));
+        },
+        node.cfg().cm_cpu);
 
     p_out->smooth_overlap_buffers();
 
     if (p_deposition_map)
     {
       p_deposition_map->smooth_overlap_buffers();
-      p_deposition_map->remap();
+      p_deposition_map->remap(0.f, 1.f, node.cfg().cm_cpu);
     }
   }
 }

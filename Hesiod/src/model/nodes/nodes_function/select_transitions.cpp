@@ -19,33 +19,39 @@ void setup_select_transitions_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input 1");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input 2");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "blend");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input 1");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input 2");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "blend");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
 
   setup_post_process_heightmap_attributes(node,
-                                          {.add_mix = true, .remap_active_state = true});
+                                          {.add_mix = false, .remap_active_state = true});
 }
 
 void compute_select_transitions_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in1 = node.get_value_ref<hmap::Heightmap>("input 1");
-  hmap::Heightmap *p_in2 = node.get_value_ref<hmap::Heightmap>("input 2");
-  hmap::Heightmap *p_blend = node.get_value_ref<hmap::Heightmap>("blend");
+  hmap::VirtualArray *p_in1 = node.get_value_ref<hmap::VirtualArray>("input 1");
+  hmap::VirtualArray *p_in2 = node.get_value_ref<hmap::VirtualArray>("input 2");
+  hmap::VirtualArray *p_blend = node.get_value_ref<hmap::VirtualArray>("blend");
 
   if (p_in1 && p_in2 && p_blend)
   {
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
-    hmap::transform(*p_out,
-                    *p_in1,
-                    *p_in2,
-                    *p_blend,
-                    [](hmap::Array &m, hmap::Array &a1, hmap::Array &a2, hmap::Array &a3)
-                    { m = hmap::select_transitions(a1, a2, a3); });
+    hmap::for_each_tile(
+        {p_out, p_in1, p_in2, p_blend},
+        [](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
+        {
+          hmap::Array &m = *p_arrays[0];
+          hmap::Array &a1 = *p_arrays[1];
+          hmap::Array &a2 = *p_arrays[2];
+          hmap::Array &a3 = *p_arrays[3];
+
+          m = hmap::select_transitions(a1, a2, a3);
+        },
+        node.cfg().cm_cpu);
 
     // post-process
     post_process_heightmap(node, *p_out);

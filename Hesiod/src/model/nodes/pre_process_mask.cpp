@@ -3,7 +3,6 @@
  * this software. */
 #include "highmap/filters.hpp"
 #include "highmap/gradient.hpp"
-#include "highmap/heightmap.hpp"
 #include "highmap/opencl/gpu_opencl.hpp"
 #include "highmap/range.hpp"
 
@@ -16,21 +15,23 @@ using namespace attr;
 namespace hesiod
 {
 
-std::shared_ptr<hmap::Heightmap> pre_process_mask(BaseNode         &node,
-                                                  hmap::Heightmap *&p_mask,
-                                                  hmap::Heightmap  &h)
+std::shared_ptr<hmap::VirtualArray> pre_process_mask(BaseNode            &node,
+                                                     hmap::VirtualArray *&p_mask,
+                                                     hmap::VirtualArray  &h)
 {
   // do not modify any existing input mask and return a dummy shared
   // pointer that will not be used
   if (p_mask || !node.get_attr<BoolAttribute>("mask_activate"))
-    return std::make_shared<hmap::Heightmap>();
+    return std::make_shared<hmap::VirtualArray>();
 
   // create mask storage and assign to current mask pointer
-  std::shared_ptr<hmap::Heightmap> sp_mask = std::make_shared<hmap::Heightmap>(
-      node.get_config_ref()->shape,
-      node.get_config_ref()->tiling,
-      node.get_config_ref()->overlap);
+  std::shared_ptr<hmap::VirtualArray> sp_mask = std::make_shared<hmap::VirtualArray>(
+      node.cfg().shape,
+      node.cfg().tiling,
+      node.cfg().overlap);
   p_mask = sp_mask.get();
+
+  const GraphConfig &cfg = *node.get_config_ref();
 
   // --- mask definition
 
@@ -39,38 +40,38 @@ std::shared_ptr<hmap::Heightmap> pre_process_mask(BaseNode         &node,
 
   if (mask_type == "Elevation")
   {
-    *p_mask = h;
-    p_mask->remap();
+    hmap::copy_data(h, *p_mask, cfg.cm_cpu);
+    p_mask->remap(0.f, 1.f, cfg.cm_cpu);
   }
   else if (mask_type == "Elevation mid-range")
   {
-    *p_mask = h;
-    p_mask->remap();
+    hmap::copy_data(h, *p_mask, cfg.cm_cpu);
+    p_mask->remap(0.f, 1.f, cfg.cm_cpu);
 
     // mask <- h * (1 - h)
-    hmap::transform(
+    hmap::for_each_tile(
         {p_mask},
-        [](std::vector<hmap::Array *> p_arrays)
+        [](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
         {
           hmap::Array *pa_out = p_arrays[0];
           *pa_out *= (1.f - *pa_out);
         },
-        node.get_config_ref()->hmap_transform_mode_cpu);
+        cfg.cm_cpu);
   }
   else if (mask_type == "Gradient norm")
   {
-    hmap::transform(
+    hmap::for_each_tile(
         {p_mask, &h},
-        [](std::vector<hmap::Array *> p_arrays)
+        [](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
         {
           hmap::Array *pa_out = p_arrays[0];
           hmap::Array *pa_in = p_arrays[1];
 
           *pa_out = hmap::gradient_norm(*pa_in);
         },
-        node.get_config_ref()->hmap_transform_mode_cpu);
+        cfg.cm_cpu);
 
-    p_mask->remap();
+    p_mask->remap(0.f, 1.f, cfg.cm_cpu);
   }
   else
   {
@@ -80,17 +81,17 @@ std::shared_ptr<hmap::Heightmap> pre_process_mask(BaseNode         &node,
   // filter
   if (ir > 0)
   {
-    hmap::transform(
+    hmap::for_each_tile(
         {p_mask},
-        [&ir](std::vector<hmap::Array *> p_arrays)
+        [&ir](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
         {
           hmap::Array *pa_out = p_arrays[0];
           hmap::gpu::smooth_cpulse(*pa_out, ir);
         },
-        node.get_config_ref()->hmap_transform_mode_gpu);
+        cfg.cm_gpu);
 
     p_mask->smooth_overlap_buffers();
-    p_mask->remap();
+    p_mask->remap(0.f, 1.f, cfg.cm_cpu);
   }
 
   // --- apply gain to the mask
@@ -99,18 +100,18 @@ std::shared_ptr<hmap::Heightmap> pre_process_mask(BaseNode         &node,
 
   if (mask_gain != 1.f)
   {
-    hmap::transform(
+    hmap::for_each_tile(
         {p_mask},
-        [mask_gain](std::vector<hmap::Array *> p_arrays)
+        [mask_gain](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
         {
           hmap::Array *pa = p_arrays[0];
           hmap::gain(*pa, mask_gain);
         },
-        node.get_config_ref()->hmap_transform_mode_cpu);
+        cfg.cm_cpu);
   }
 
   if (node.get_attr<BoolAttribute>("mask_inverse"))
-    p_mask->inverse();
+    p_mask->inverse(cfg.cm_cpu);
 
   return sp_mask;
 }

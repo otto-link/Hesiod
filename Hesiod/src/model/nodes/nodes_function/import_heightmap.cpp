@@ -19,7 +19,7 @@ void setup_import_heightmap_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<FilenameAttribute>("fname",
@@ -34,14 +34,14 @@ void setup_import_heightmap_node(BaseNode &node)
   node.set_attr_ordered_key({"fname", "flip_y"});
 
   setup_post_process_heightmap_attributes(node,
-                                          {.add_mix = true, .remap_active_state = true});
+                                          {.add_mix = false, .remap_active_state = true});
 }
 
 void compute_import_heightmap_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
+  hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
   const std::string fname = node.get_attr<FilenameAttribute>("fname").string();
   std::ifstream     f(fname.c_str());
@@ -50,7 +50,7 @@ void compute_import_heightmap_node(BaseNode &node)
   {
     hmap::Array z = hmap::Array(node.get_attr<FilenameAttribute>("fname").string(),
                                 node.get_attr<BoolAttribute>("flip_y"));
-    p_out->from_array_interp_bicubic(z);
+    p_out->from_array(z, node.cfg().cm_cpu);
 
     // post-process
     post_process_heightmap(node, *p_out);

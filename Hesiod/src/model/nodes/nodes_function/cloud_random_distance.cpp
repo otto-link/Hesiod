@@ -1,7 +1,6 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-
 #include "attributes.hpp"
 
 #include "hesiod/logger.hpp"
@@ -18,7 +17,7 @@ void setup_cloud_random_distance_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "density");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "density");
   node.add_port<hmap::Cloud>(gnode::PortType::OUT, "cloud");
 
   // attribute(s)
@@ -36,28 +35,58 @@ void compute_cloud_random_distance_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_density = node.get_value_ref<hmap::Heightmap>("density");
-  hmap::Cloud     *p_out = node.get_value_ref<hmap::Cloud>("cloud");
+  hmap::VirtualArray *p_density = node.get_value_ref<hmap::VirtualArray>("density");
+  hmap::Cloud        *p_cloud = node.get_value_ref<hmap::Cloud>("cloud");
 
   if (p_density)
   {
     // TODO distribute
-    hmap::Array density_array = p_density->to_array();
+    hmap::Array density_array = p_density->to_array(node.cfg().cm_cpu);
 
-    *p_out = hmap::random_cloud_distance(node.get_attr<FloatAttribute>("distance_min"),
-                                         node.get_attr<FloatAttribute>("distance_max"),
-                                         density_array,
-                                         node.get_attr<SeedAttribute>("seed"));
+    *p_cloud = hmap::random_cloud_distance(node.get_attr<FloatAttribute>("distance_min"),
+                                           node.get_attr<FloatAttribute>("distance_max"),
+                                           density_array,
+                                           node.get_attr<SeedAttribute>("seed"));
+
+    std::vector<hmap::Cloud> clouds;
+    std::mutex               mtx;
+
+    hmap::for_each_tile(
+        {p_density},
+        [&node, &clouds, &mtx](std::vector<hmap::Array *> p_arrays,
+                               const hmap::TileRegion    &region)
+        {
+          auto [pa_density] = unpack<1>(p_arrays);
+
+          uint tile_seed = node.get_attr<SeedAttribute>("seed") + region.key.hash();
+
+          float dmin = node.get_attr<FloatAttribute>("distance_min");
+          float dmax = node.get_attr<FloatAttribute>("distance_max");
+
+          hmap::Cloud c = hmap::random_cloud_distance(dmin,
+                                                      dmax,
+                                                      *pa_density,
+                                                      tile_seed,
+                                                      region.bbox);
+
+          std::lock_guard<std::mutex> lock(mtx);
+          clouds.emplace_back(c);
+        },
+        node.cfg().cm_cpu);
+
+    // merge per tile clouds
+    *p_cloud = merge_clouds(clouds);
   }
   else
   {
-    *p_out = hmap::random_cloud_distance(node.get_attr<FloatAttribute>("distance_min"),
-                                         node.get_attr<SeedAttribute>("seed"));
+    *p_cloud = hmap::random_cloud_distance(node.get_attr<FloatAttribute>("distance_min"),
+                                           node.get_attr<SeedAttribute>("seed"));
   }
 
-  if (node.get_attr_ref<RangeAttribute>("remap")->get_is_active())
-    p_out->remap_values(node.get_attr<RangeAttribute>("remap")[0],
-                        node.get_attr<RangeAttribute>("remap")[1]);
+  if (node.get_attr_ref<RangeAttribute>("remap")->get_is_active() &&
+      p_cloud->get_npoints() > 0)
+    p_cloud->remap_values(node.get_attr<RangeAttribute>("remap")[0],
+                          node.get_attr<RangeAttribute>("remap")[1]);
 }
 
 } // namespace hesiod

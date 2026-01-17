@@ -2,7 +2,6 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include "highmap/blending.hpp"
-#include "highmap/heightmap.hpp"
 #include "highmap/range.hpp"
 
 #include "hesiod/model/nodes/base_node.hpp"
@@ -10,14 +9,15 @@
 namespace hesiod
 {
 
-void blend_heightmaps(hmap::Heightmap &h_out,
-                      hmap::Heightmap &h1,
-                      hmap::Heightmap &h2,
-                      BlendingMethod   method,
-                      float            k,
-                      int              ir,
-                      float            w1,
-                      float            w2)
+void blend_heightmaps(BaseNode           &node,
+                      hmap::VirtualArray &h_out,
+                      hmap::VirtualArray &h1,
+                      hmap::VirtualArray &h2,
+                      BlendingMethod      method,
+                      float               k,
+                      int                 ir,
+                      float               w1,
+                      float               w2)
 {
   std::function<void(hmap::Array &, hmap::Array &, hmap::Array &)> lambda;
 
@@ -94,7 +94,17 @@ void blend_heightmaps(hmap::Heightmap &h_out,
     break;
   }
 
-  hmap::transform(h_out, h1, h2, lambda);
+  auto lambda_tile =
+      [&lambda](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
+  {
+    hmap::Array &m = *p_arrays[0];
+    hmap::Array &a1 = *p_arrays[1];
+    hmap::Array &a2 = *p_arrays[2];
+
+    lambda(m, a1, a2);
+  };
+
+  hmap::for_each_tile({&h_out, &h1, &h2}, lambda_tile, node.cfg().cm_cpu);
 
   if (method == BlendingMethod::GRADIENTS)
     h_out.smooth_overlap_buffers();

@@ -21,10 +21,10 @@ void setup_texture_split_channels_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "R", CONFIG(node));
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "G", CONFIG(node));
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "B", CONFIG(node));
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "A", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "R", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "G", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "B", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "A", CONFIG2(node));
 
   // attribute(s)
 
@@ -37,18 +37,18 @@ void compute_texture_split_channels_node(BaseNode &node)
 
   hmap::HeightmapRGBA *p_tex = node.get_value_ref<hmap::HeightmapRGBA>("texture");
 
-  if (p_tex)
-  {
-    hmap::Heightmap *p_r = node.get_value_ref<hmap::Heightmap>("R");
-    hmap::Heightmap *p_g = node.get_value_ref<hmap::Heightmap>("G");
-    hmap::Heightmap *p_b = node.get_value_ref<hmap::Heightmap>("B");
-    hmap::Heightmap *p_a = node.get_value_ref<hmap::Heightmap>("A");
+  // if (p_tex)
+  // {
+  //   hmap::VirtualArray *p_r = node.get_value_ref<hmap::VirtualArray>("R");
+  //   hmap::VirtualArray *p_g = node.get_value_ref<hmap::VirtualArray>("G");
+  //   hmap::VirtualArray *p_b = node.get_value_ref<hmap::VirtualArray>("B");
+  //   hmap::VirtualArray *p_a = node.get_value_ref<hmap::VirtualArray>("A");
 
-    *p_r = p_tex->rgba[0];
-    *p_g = p_tex->rgba[1];
-    *p_b = p_tex->rgba[2];
-    *p_a = p_tex->rgba[3];
-  }
+  //   *p_r = p_tex->rgba[0];
+  //   *p_g = p_tex->rgba[1];
+  //   *p_b = p_tex->rgba[2];
+  //   *p_a = p_tex->rgba[3];
+  // }
 }
 
 } // namespace hesiod

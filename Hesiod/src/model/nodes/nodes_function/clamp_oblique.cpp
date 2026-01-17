@@ -19,8 +19,8 @@ void setup_clamp_oblique_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("vmax", "Clamp Value", 0.5f, -FLT_MAX, FLT_MAX);
@@ -52,32 +52,29 @@ void compute_clamp_oblique_node(BaseNode &node)
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   // base noise function
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
+  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
-    hmap::transform({p_out, p_in},
-                    [&node](std::vector<hmap::Array *> p_arrays,
-                            hmap::Vec2<int> /* shape */,
-                            hmap::Vec4<float> bbox)
-                    {
-                      hmap::Array *pa_out = p_arrays[0];
-                      hmap::Array *pa_in = p_arrays[1];
+    hmap::for_each_tile(
+        {p_out, p_in},
+        [&node](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &region)
+        {
+          auto [pa_out, pa_in] = unpack<2>(p_arrays);
+          *pa_out = *pa_in;
 
-                      *pa_out = *pa_in;
-
-                      hmap::clamp_oblique_plane(
-                          *pa_out,
-                          node.get_attr<FloatAttribute>("vmax"),
-                          node.get_attr<FloatAttribute>("angle"),
-                          node.get_attr<FloatAttribute>("slope"),
-                          node.get_attr<BoolAttribute>("use_max_operator"),
-                          node.get_attr<FloatAttribute>("k"),
-                          node.get_attr<Vec2FloatAttribute>("center"),
-                          bbox);
-                    });
+          hmap::clamp_oblique_plane(*pa_out,
+                                    node.get_attr<FloatAttribute>("vmax"),
+                                    node.get_attr<FloatAttribute>("angle"),
+                                    node.get_attr<FloatAttribute>("slope"),
+                                    node.get_attr<BoolAttribute>("use_max_operator"),
+                                    node.get_attr<FloatAttribute>("k"),
+                                    node.get_attr<Vec2FloatAttribute>("center"),
+                                    region.bbox);
+        },
+        node.cfg().cm_cpu);
 
     // post-process
     post_process_heightmap(node, *p_out, p_in);

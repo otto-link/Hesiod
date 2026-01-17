@@ -21,9 +21,9 @@ void setup_strata_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "mask");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
 
   // attribute(s)
   std::vector<float> kw_default;
@@ -100,32 +100,27 @@ void compute_strata_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
+  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_mask = node.get_value_ref<hmap::Heightmap>("mask");
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
+    hmap::VirtualArray *p_mask = node.get_value_ref<hmap::VirtualArray>("mask");
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
     // prepare mask
-    std::shared_ptr<hmap::Heightmap> sp_mask = pre_process_mask(node, p_mask, *p_in);
-
-    // copy the input heightmap
-    *p_out = *p_in;
+    std::shared_ptr<hmap::VirtualArray> sp_mask = pre_process_mask(node, p_mask, *p_in);
 
     // remap to [0, 1] as required by this filter
-    float hmin = p_out->min();
-    float hmax = p_out->max();
-    p_out->remap(0.f, 1.f, hmin, hmax);
+    float hmin = p_out->min(node.cfg().cm_cpu);
+    float hmax = p_out->max(node.cfg().cm_cpu);
+    p_out->remap(0.f, 1.f, hmin, hmax, node.cfg().cm_cpu);
 
-    hmap::transform(
-        {p_out, p_mask},
-        [&node](std::vector<hmap::Array *> p_arrays,
-                hmap::Vec2<int> /* shape */,
-                hmap::Vec4<float> bbox)
+    hmap::for_each_tile(
+        {p_out, p_in, p_mask},
+        [&node](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &region)
         {
-          hmap::Array *pa_out = p_arrays[0];
-          hmap::Array *pa_mask = p_arrays[1];
+          auto [pa_out, pa_in, pa_mask] = unpack<3>(p_arrays);
+          *pa_out = *pa_in;
 
           hmap::gpu::strata(*pa_out,
                             node.get_attr<FloatAttribute>("angle"),
@@ -148,14 +143,14 @@ void compute_strata_node(BaseNode &node)
                             node.get_attr<BoolAttribute>("apply_ridge_mask"),
                             node.get_attr<FloatAttribute>("mask_gamma"),
                             pa_mask,
-                            bbox);
+                            region.bbox);
         },
-        node.get_config_ref()->hmap_transform_mode_gpu);
+        node.cfg().cm_gpu);
 
     p_out->smooth_overlap_buffers();
 
     // remap to original range
-    p_out->remap(hmin, hmax, 0.f, 1.f);
+    p_out->remap(hmin, hmax, 0.f, 1.f, node.cfg().cm_cpu);
 
     // post-process
     post_process_heightmap(node, *p_out, p_in);

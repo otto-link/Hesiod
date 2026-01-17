@@ -21,11 +21,11 @@ void setup_voronoi_fbm_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dx");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "control");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "envelope");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dx");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dy");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "control");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "envelope");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<EnumAttribute>("return_type",
@@ -70,7 +70,7 @@ void setup_voronoi_fbm_node(BaseNode &node)
                              "_GROUPBOX_END_"});
 
   setup_post_process_heightmap_attributes(node,
-                                          {.add_mix = true, .remap_active_state = true});
+                                          {.add_mix = false, .remap_active_state = true});
 }
 
 void compute_voronoi_fbm_node(BaseNode &node)
@@ -78,22 +78,17 @@ void compute_voronoi_fbm_node(BaseNode &node)
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   // base voronoi function
-  hmap::Heightmap *p_dx = node.get_value_ref<hmap::Heightmap>("dx");
-  hmap::Heightmap *p_dy = node.get_value_ref<hmap::Heightmap>("dy");
-  hmap::Heightmap *p_ctrl = node.get_value_ref<hmap::Heightmap>("control");
-  hmap::Heightmap *p_env = node.get_value_ref<hmap::Heightmap>("envelope");
-  hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
+  hmap::VirtualArray *p_dx = node.get_value_ref<hmap::VirtualArray>("dx");
+  hmap::VirtualArray *p_dy = node.get_value_ref<hmap::VirtualArray>("dy");
+  hmap::VirtualArray *p_ctrl = node.get_value_ref<hmap::VirtualArray>("control");
+  hmap::VirtualArray *p_env = node.get_value_ref<hmap::VirtualArray>("envelope");
+  hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
-  hmap::transform(
+  hmap::for_each_tile(
       {p_out, p_ctrl, p_dx, p_dy},
-      [&node](std::vector<hmap::Array *> p_arrays,
-              hmap::Vec2<int>            shape,
-              hmap::Vec4<float>          bbox)
+      [&node](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &region)
       {
-        hmap::Array *pa_out = p_arrays[0];
-        hmap::Array *pa_ctrl = p_arrays[1];
-        hmap::Array *pa_dx = p_arrays[2];
-        hmap::Array *pa_dy = p_arrays[3];
+        auto [pa_out, pa_ctrl, pa_dx, pa_dy] = unpack<4>(p_arrays);
 
         hmap::VoronoiReturnType rtype = (hmap::VoronoiReturnType)
                                             node.get_attr<EnumAttribute>("return_type");
@@ -101,7 +96,7 @@ void compute_voronoi_fbm_node(BaseNode &node)
         hmap::Vec2<float> jitter(node.get_attr<FloatAttribute>("jitter.x"),
                                  node.get_attr<FloatAttribute>("jitter.y"));
 
-        *pa_out = hmap::gpu::voronoi_fbm(shape,
+        *pa_out = hmap::gpu::voronoi_fbm(region.shape,
                                          node.get_attr<WaveNbAttribute>("kw"),
                                          node.get_attr<SeedAttribute>("seed"),
                                          jitter,
@@ -115,22 +110,22 @@ void compute_voronoi_fbm_node(BaseNode &node)
                                          pa_ctrl,
                                          pa_dx,
                                          pa_dy,
-                                         bbox);
+                                         region.bbox);
       },
-      node.get_config_ref()->hmap_transform_mode_gpu);
+      node.cfg().cm_gpu);
 
   // apply square root
-  p_out->remap();
+  p_out->remap(0.f, 1.f, node.cfg().cm_cpu);
 
   if (node.get_attr<BoolAttribute>("sqrt_output"))
-    hmap::transform(
+    hmap::for_each_tile(
         {p_out},
-        [](std::vector<hmap::Array *> p_arrays)
+        [](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
         {
           hmap::Array *pa_out = p_arrays[0];
           *pa_out = hmap::sqrt(*pa_out);
         },
-        node.get_config_ref()->hmap_transform_mode_cpu);
+        node.cfg().cm_cpu);
 
   // post-process
   post_apply_enveloppe(node, *p_out, p_env);

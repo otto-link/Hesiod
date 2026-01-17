@@ -20,7 +20,7 @@ void setup_receive_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
 
   // attribute(s)
 
@@ -37,8 +37,8 @@ void compute_receive_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
-  std::string      tag = node.get_attr<ChoiceAttribute>("tag");
+  hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
+  std::string         tag = node.get_attr<ChoiceAttribute>("tag");
 
   // cast to specialized node
   ReceiveNode *p_receive_node = dynamic_cast<ReceiveNode *>(&node);
@@ -69,13 +69,13 @@ void compute_receive_node(BaseNode &node)
     BroadcastParam broadcast_param = p_receive_node->get_p_broadcast_params()->at(tag);
 
     // retrieve various pointers for this broadcast
-    const hmap::CoordFrame *t_source = broadcast_param.t_source;
-    const hmap::Heightmap  *p_h = broadcast_param.p_h;
-    hmap::CoordFrame       *t_target = p_receive_node->get_p_coord_frame();
+    const hmap::CoordFrame   *t_source = broadcast_param.t_source;
+    const hmap::VirtualArray *p_va = broadcast_param.p_va;
+    hmap::CoordFrame         *t_target = p_receive_node->get_p_coord_frame();
 
-    if (t_source && p_h && t_target)
+    if (t_source && p_va && t_target)
     {
-      hmap::interpolate_heightmap(*p_h, *p_out, *t_source, *t_target);
+      // hmap::interpolate_heightmap(*p_h, *p_out, *t_source, *t_target);
     }
     else
     {

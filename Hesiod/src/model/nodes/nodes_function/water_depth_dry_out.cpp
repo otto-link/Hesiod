@@ -19,9 +19,9 @@ void setup_water_depth_dry_out_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "depth");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "water_depth", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "depth");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "mask");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "water_depth", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("dry_out_ratio",
@@ -39,31 +39,28 @@ void compute_water_depth_dry_out_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("depth");
+  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("depth");
 
   if (p_in)
   {
-    hmap::Heightmap *p_mask = node.get_value_ref<hmap::Heightmap>("mask");
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("water_depth");
+    hmap::VirtualArray *p_mask = node.get_value_ref<hmap::VirtualArray>("mask");
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("water_depth");
 
-    // copy the input heightmap
-    *p_out = *p_in;
+    float depth_max = p_in->max(node.cfg().cm_cpu);
 
-    float depth_max = p_in->max();
-
-    hmap::transform(
-        {p_out, p_mask},
-        [&node, depth_max](std::vector<hmap::Array *> p_arrays)
+    hmap::for_each_tile(
+        {p_out, p_in, p_mask},
+        [&node, depth_max](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
         {
-          hmap::Array *pa_out = p_arrays[0];
-          hmap::Array *pa_mask = p_arrays[1];
+          auto [pa_out, pa_in, pa_mask] = unpack<3>(p_arrays);
+          *pa_out = *pa_in;
 
           hmap::water_depth_dry_out(*pa_out,
                                     node.get_attr<FloatAttribute>("dry_out_ratio"),
                                     pa_mask,
                                     depth_max);
         },
-        node.get_config_ref()->hmap_transform_mode_cpu);
+        node.cfg().cm_cpu);
   }
 }
 

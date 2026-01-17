@@ -243,7 +243,6 @@ std::map<std::string, std::string> get_node_inventory()
       {"HydraulicStream", "WIP"},     // "Erosion/Hydraulic"
       {"HydraulicStreamLog", "Erosion/Hydraulic"},
       {"HydraulicStreamUpscaleAmplification", "WIP"}, // "Erosion/Hydraulic"
-      {"HydraulicVpipes", "WIP"},                     // "Erosion/Hydraulic"
       {"ImportHeightmap", "IO/Files"},
       {"ImportTexture", "IO/Files"},
       {"Inverse", "Math/Base"},
@@ -376,9 +375,6 @@ std::map<std::string, std::string> get_node_inventory()
       {"SteepenConvective", "Filter/Recast"},
       {"Step", "Primitive/Function"},
       {"Strata", "Erosion/Stratify"},
-      {"Stratify", "WIP/DEPRECATED"},
-      {"StratifyOblique", "WIP/DEPRECATED"},
-      {"StratifyMultiscale", "WIP/DEPRECATED"},
       {"Terrace", "Filter/Recurve"},
       {"TextureAdvectionParticle", "Texture"},
       {"TextureAdvectionWarp", "WIP/DEPRECATED"},
@@ -389,8 +385,6 @@ std::map<std::string, std::string> get_node_inventory()
       {"TextureUvChecker", "Texture"},
       {"Thermal", "Erosion/Thermal"},
       {"ThermalFlatten", "WIP"}, // "Erosion/Thermal"
-      // {"ThermalRib", "WIP"}, // "Erosion/Thermal"
-      {"ThermalRidge", "WIP/DEPRECATED"},
       {"ThermalScree", "Erosion/Thermal"},
       {"Thru", "Routing"},
       {"Toggle", "Routing"},
@@ -462,6 +456,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string         &node_type,
     SETUP_NODE(HydraulicStreamLog, hydraulic_stream_log);
     SETUP_NODE(Noise, noise);
     SETUP_NODE(Preview, preview);
+    SETUP_NODE(SmoothCpulse, smooth_cpulse);
     SETUP_NODE(Toggle, toggle);
     SETUP_NODE(Thru, thru);
 
@@ -564,7 +559,6 @@ std::shared_ptr<gnode::Node> node_factory(const std::string         &node_type,
     SETUP_NODE(HydraulicStream, hydraulic_stream);
     SETUP_NODE(HydraulicStreamUpscaleAmplification,
                hydraulic_stream_upscale_amplification);
-    SETUP_NODE(HydraulicVpipes, hydraulic_vpipes);
     SETUP_NODE(ImportHeightmap, import_heightmap);
     SETUP_NODE(ImportTexture, import_texture);
     SETUP_NODE(Inverse, inverse);
@@ -684,7 +678,6 @@ std::shared_ptr<gnode::Node> node_factory(const std::string         &node_type,
     SETUP_NODE(ShiftElevation, shift_elevation);
     SETUP_NODE(Skeleton, skeleton);
     SETUP_NODE(Slope, slope);
-    SETUP_NODE(SmoothCpulse, smooth_cpulse);
     SETUP_NODE(SmoothFill, smooth_fill);
     SETUP_NODE(SmoothFillHoles, smooth_fill_holes);
     SETUP_NODE(SmoothFillSmearPeaks, smooth_fill_smear_peaks);
@@ -694,9 +687,6 @@ std::shared_ptr<gnode::Node> node_factory(const std::string         &node_type,
     SETUP_NODE(SteepenConvective, steepen_convective);
     SETUP_NODE(Step, step);
     SETUP_NODE(Strata, strata);
-    SETUP_NODE(Stratify, stratify);
-    SETUP_NODE(StratifyOblique, stratify_oblique);
-    SETUP_NODE(StratifyMultiscale, stratify_multiscale);
     SETUP_NODE(Terrace, terrace);
     SETUP_NODE(TextureAdvectionParticle, texture_advection_particle);
     SETUP_NODE(TextureAdvectionWarp, texture_advection_warp);
@@ -709,8 +699,6 @@ std::shared_ptr<gnode::Node> node_factory(const std::string         &node_type,
     SETUP_NODE(Translate, translate);
     SETUP_NODE(Thermal, thermal);
     SETUP_NODE(ThermalFlatten, thermal_flatten);
-    SETUP_NODE(ThermalRib, thermal_rib);
-    SETUP_NODE(ThermalRidge, thermal_ridge);
     SETUP_NODE(ThermalScree, thermal_scree);
     SETUP_NODE(Unsphericity, unsphericity);
     SETUP_NODE(ValleyFill, valley_fill);

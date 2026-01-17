@@ -19,77 +19,59 @@ void setup_gamma_correction_local_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "mask");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("radius", "radius", 0.05f, 0.01f, 0.2f);
   node.add_attr<FloatAttribute>("gamma", "gamma", 2.f, 0.01f, 10.f);
   node.add_attr<FloatAttribute>("k", "k", 0.1f, 0.f, 0.5f);
-  node.add_attr<BoolAttribute>("GPU", "GPU", HSD_DEFAULT_GPU_MODE);
 
   // attribute(s) order
-  node.set_attr_ordered_key({"radius", "gamma", "k", "_SEPARATOR_", "GPU"});
+  node.set_attr_ordered_key({"radius", "gamma", "k"});
+
+  setup_post_process_heightmap_attributes(node,
+                                          {.add_mix = true, .remap_active_state = false});
 }
 
 void compute_gamma_correction_local_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
+  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_mask = node.get_value_ref<hmap::Heightmap>("mask");
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
-
-    // copy the input heightmap
-    *p_out = *p_in;
+    hmap::VirtualArray *p_mask = node.get_value_ref<hmap::VirtualArray>("mask");
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
     int ir = std::max(1, (int)(node.get_attr<FloatAttribute>("radius") * p_out->shape.x));
 
-    float hmin = p_out->min();
-    float hmax = p_out->max();
-    p_out->remap(0.f, 1.f, hmin, hmax);
+    float hmin = p_out->min(node.cfg().cm_cpu);
+    float hmax = p_out->max(node.cfg().cm_cpu);
+    p_out->remap(0.f, 1.f, hmin, hmax, node.cfg().cm_cpu);
 
-    if (node.get_attr<BoolAttribute>("GPU"))
-    {
-      hmap::transform(
-          {p_out, p_mask},
-          [&node, &ir](std::vector<hmap::Array *> p_arrays)
-          {
-            hmap::Array *pa_out = p_arrays[0];
-            hmap::Array *pa_mask = p_arrays[1];
+    hmap::for_each_tile(
+        {p_out, p_in, p_mask},
+        [&node, &ir](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
+        {
+          auto [pa_out, pa_in, pa_mask] = unpack<3>(p_arrays);
+          *pa_out = *pa_in;
 
-            hmap::gpu::gamma_correction_local(*pa_out,
-                                              node.get_attr<FloatAttribute>("gamma"),
-                                              ir,
-                                              pa_mask,
-                                              node.get_attr<FloatAttribute>("k"));
-          },
-          node.get_config_ref()->hmap_transform_mode_gpu);
-    }
-    else
-    {
-      hmap::transform(
-          {p_out, p_mask},
-          [&node, &ir](std::vector<hmap::Array *> p_arrays)
-          {
-            hmap::Array *pa_out = p_arrays[0];
-            hmap::Array *pa_mask = p_arrays[1];
+          hmap::gpu::gamma_correction_local(*pa_out,
+                                            node.get_attr<FloatAttribute>("gamma"),
+                                            ir,
+                                            pa_mask,
+                                            node.get_attr<FloatAttribute>("k"));
+        },
+        node.cfg().cm_gpu);
 
-            hmap::gamma_correction_local(*pa_out,
-                                         node.get_attr<FloatAttribute>("gamma"),
-                                         ir,
-                                         pa_mask,
-                                         node.get_attr<FloatAttribute>("k"));
-          },
-          node.get_config_ref()->hmap_transform_mode_cpu);
-    }
-
-    p_out->remap(hmin, hmax, 0.f, 1.f);
+    p_out->remap(hmin, hmax, 0.f, 1.f, node.cfg().cm_cpu);
     p_out->smooth_overlap_buffers();
+
+    // post-process
+    post_process_heightmap(node, *p_out, p_in);
   }
 }
 

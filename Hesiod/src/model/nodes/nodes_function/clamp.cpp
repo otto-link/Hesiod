@@ -1,8 +1,6 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-
-#include "highmap/heightmap.hpp"
 #include "highmap/range.hpp"
 
 #include "attributes.hpp"
@@ -21,8 +19,8 @@ void setup_clamp_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<RangeAttribute>("clamp", "clamp");
@@ -47,14 +45,11 @@ void compute_clamp_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
+  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
-
-    // copy the input heightmap
-    *p_out = *p_in;
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
     // retrieve parameters
     hmap::Vec2<float> crange = node.get_attr<RangeAttribute>("clamp");
@@ -66,58 +61,70 @@ void compute_clamp_node(BaseNode &node)
     // compute
     if (!smooth_min && !smooth_max)
     {
-      hmap::transform(
-          {p_out},
-          [&crange](std::vector<hmap::Array *> p_arrays)
+      hmap::for_each_tile(
+          {p_out, p_in},
+          [&crange](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
           {
             hmap::Array *pa_out = p_arrays[0];
+            hmap::Array *pa_in = p_arrays[1];
+            *pa_out = *pa_in;
             hmap::clamp(*pa_out, crange.x, crange.y);
           },
-          node.get_config_ref()->hmap_transform_mode_cpu);
+          node.cfg().cm_cpu);
     }
     else
     {
       if (smooth_min)
-        hmap::transform(
-            {p_out},
-            [&crange, &k_min](std::vector<hmap::Array *> p_arrays)
+        hmap::for_each_tile(
+            {p_out, p_in},
+            [&crange, &k_min](std::vector<hmap::Array *> p_arrays,
+                              const hmap::TileRegion &)
             {
               hmap::Array *pa_out = p_arrays[0];
+              hmap::Array *pa_in = p_arrays[1];
+              *pa_out = *pa_in;
               hmap::clamp_min_smooth(*pa_out, crange.x, k_min);
             },
-            node.get_config_ref()->hmap_transform_mode_cpu);
+            node.cfg().cm_cpu);
       else
-        hmap::transform(
-            {p_out},
-            [&crange](std::vector<hmap::Array *> p_arrays)
+        hmap::for_each_tile(
+            {p_out, p_in},
+            [&crange](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
             {
               hmap::Array *pa_out = p_arrays[0];
+              hmap::Array *pa_in = p_arrays[1];
+              *pa_out = *pa_in;
               hmap::clamp_min(*pa_out, crange.x);
             },
-            node.get_config_ref()->hmap_transform_mode_cpu);
+            node.cfg().cm_cpu);
 
       if (smooth_max)
-        hmap::transform(
-            {p_out},
-            [&crange, &k_max](std::vector<hmap::Array *> p_arrays)
+        hmap::for_each_tile(
+            {p_out, p_in},
+            [&crange, &k_max](std::vector<hmap::Array *> p_arrays,
+                              const hmap::TileRegion &)
             {
               hmap::Array *pa_out = p_arrays[0];
+              hmap::Array *pa_in = p_arrays[1];
+              *pa_out = *pa_in;
               hmap::clamp_max_smooth(*pa_out, crange.y, k_max);
             },
-            node.get_config_ref()->hmap_transform_mode_cpu);
+            node.cfg().cm_cpu);
       else
-        hmap::transform(
-            {p_out},
-            [&crange](std::vector<hmap::Array *> p_arrays)
+        hmap::for_each_tile(
+            {p_out, p_in},
+            [&crange](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
             {
               hmap::Array *pa_out = p_arrays[0];
+              hmap::Array *pa_in = p_arrays[1];
+              *pa_out = *pa_in;
               hmap::clamp_max(*pa_out, crange.y);
             },
-            node.get_config_ref()->hmap_transform_mode_cpu);
+            node.cfg().cm_cpu);
     }
 
     if (node.get_attr<BoolAttribute>("remap"))
-      p_out->remap();
+      p_out->remap(0.f, 1.f, node.cfg().cm_cpu);
 
     // post-process
     post_process_heightmap(node, *p_out, p_in);

@@ -20,9 +20,9 @@ void setup_falloff_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dr");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dr");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("strength", "strength", 1.f, 0.f, 4.f);
@@ -30,58 +30,50 @@ void setup_falloff_node(BaseNode &node)
                                "distance_function",
                                enum_mappings.distance_function_map,
                                "Euclidian");
-  node.add_attr<RangeAttribute>("remap", "remap");
 
   // attribute(s) order
-  node.set_attr_ordered_key({"strength", "distance_function", "remap"});
+  node.set_attr_ordered_key({"strength", "distance_function"});
+
+  setup_post_process_heightmap_attributes(node,
+                                          {.add_mix = false, .remap_active_state = true});
 }
 
 void compute_falloff_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
+  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_dr = node.get_value_ref<hmap::Heightmap>("dr");
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
-
-    // copy the input heightmap
-    *p_out = *p_in;
+    hmap::VirtualArray *p_dr = node.get_value_ref<hmap::VirtualArray>("dr");
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
     float strength = node.get_attr<FloatAttribute>("strength");
 
     if (!p_dr)
-      hmap::transform(
-          *p_out,
-          [&node, &strength](hmap::Array &z, hmap::Vec4<float> bbox)
+      hmap::for_each_tile(
+          {p_out, p_in, p_dr},
+          [&node, &strength](std::vector<hmap::Array *> p_arrays,
+                             const hmap::TileRegion    &region)
           {
+            hmap::Array *pa_out = p_arrays[0];
+            hmap::Array *pa_in = p_arrays[1];
+            hmap::Array *pa_dr = p_arrays[2];
+
+            *pa_out = *pa_in;
+
             hmap::falloff(
-                z,
+                *pa_out,
                 strength,
                 (hmap::DistanceFunction)node.get_attr<EnumAttribute>("distance_function"),
-                nullptr,
-                bbox);
-          });
+                pa_dr,
+                region.bbox);
+          },
+          node.cfg().cm_cpu);
 
-    else
-      hmap::transform(
-          *p_out,
-          *p_dr,
-          [&node, &strength](hmap::Array &z, hmap::Array &dr, hmap::Vec4<float> bbox)
-          {
-            hmap::falloff(
-                z,
-                strength,
-                (hmap::DistanceFunction)node.get_attr<EnumAttribute>("distance_function"),
-                &dr,
-                bbox);
-          });
-
-    if (node.get_attr_ref<RangeAttribute>("remap")->get_is_active())
-      p_out->remap(node.get_attr<RangeAttribute>("remap")[0],
-                   node.get_attr<RangeAttribute>("remap")[1]);
+    // post-process
+    post_process_heightmap(node, *p_out);
   }
 }
 

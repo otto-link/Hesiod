@@ -1,9 +1,7 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-
 #include "highmap/geometry/cloud.hpp"
-#include "highmap/heightmap.hpp"
 
 #include "attributes.hpp"
 
@@ -20,7 +18,7 @@ void setup_cloud_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "background");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "background");
   node.add_port<hmap::Cloud>(gnode::PortType::OUT, "cloud");
 
   // attribute(s)

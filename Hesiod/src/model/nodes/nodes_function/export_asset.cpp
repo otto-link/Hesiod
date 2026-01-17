@@ -1,7 +1,6 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-
 #include "highmap/export.hpp"
 #include "highmap/gradient.hpp"
 #include "highmap/tensor.hpp"
@@ -23,7 +22,7 @@ void setup_export_asset_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "elevation");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "elevation");
   node.add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture");
   node.add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "normal map details");
 
@@ -82,67 +81,69 @@ void compute_export_asset_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_elev = node.get_value_ref<hmap::Heightmap>("elevation");
+  // hmap::VirtualArray *p_elev = node.get_value_ref<hmap::VirtualArray>("elevation");
 
-  if (p_elev && node.get_attr<BoolAttribute>("auto_export"))
-  {
-    hmap::HeightmapRGBA *p_color = node.get_value_ref<hmap::HeightmapRGBA>("texture");
-    hmap::HeightmapRGBA *p_nmap = node.get_value_ref<hmap::HeightmapRGBA>(
-        "normal map details");
+  // if (p_elev && node.get_attr<BoolAttribute>("auto_export"))
+  // {
+  //   hmap::HeightmapRGBA *p_color = node.get_value_ref<hmap::HeightmapRGBA>("texture");
+  //   hmap::HeightmapRGBA *p_nmap = node.get_value_ref<hmap::HeightmapRGBA>(
+  //       "normal map details");
 
-    hmap::Array array = p_elev->to_array();
-    std::string fname = node.get_attr<FilenameAttribute>("fname").string();
+  //   hmap::Array array = p_elev->to_array(node.cfg().cm_cpu)
+  //                           std::string fname =
+  //                           node.get_attr<FilenameAttribute>("fname")
+  //                                                   .string();
 
-    // --- if available export RGBA to an image file
+  //   // --- if available export RGBA to an image file
 
-    std::string texture_fname = "";
+  //   std::string texture_fname = "";
 
-    if (p_color)
-    {
-      texture_fname = fname + ".png";
-      p_color->to_png(texture_fname, CV_16U);
-    }
+  //   if (p_color)
+  //   {
+  //     texture_fname = fname + ".png";
+  //     p_color->to_png(texture_fname, CV_16U);
+  //   }
 
-    // --- blend details normal map with base normal map
+  //   // --- blend details normal map with base normal map
 
-    std::string nmap_fname = fname + "_nmap.png";
+  //   std::string nmap_fname = fname + "_nmap.png";
 
-    // TODO optimize / distribute this
-    hmap::Tensor nvec = hmap::normal_map(p_elev->to_array());
+  //   // TODO optimize / distribute this
+  //   hmap::Tensor nvec = hmap::normal_map(p_elev->to_array());
 
-    hmap::HeightmapRGBA normal_map = hmap::HeightmapRGBA(p_elev->shape,
-                                                         p_elev->tiling,
-                                                         p_elev->overlap,
-                                                         nvec.get_slice(0),
-                                                         nvec.get_slice(1),
-                                                         nvec.get_slice(2),
-                                                         hmap::Array(p_elev->shape, 1.f));
+  //   hmap::HeightmapRGBA normal_map = hmap::HeightmapRGBA(p_elev->shape,
+  //                                                        p_elev->tiling,
+  //                                                        p_elev->overlap,
+  //                                                        nvec.get_slice(0),
+  //                                                        nvec.get_slice(1),
+  //                                                        nvec.get_slice(2),
+  //                                                        hmap::Array(p_elev->shape, 1.f));
 
-    if (p_nmap)
-    {
-      normal_map = hmap::mix_normal_map_rgba(
-          normal_map,
-          *p_nmap,
-          node.get_attr<FloatAttribute>("detail_scaling"),
-          (hmap::NormalMapBlendingMethod)node.get_attr<EnumAttribute>("blending_method"));
-    }
+  //   if (p_nmap)
+  //   {
+  //     normal_map = hmap::mix_normal_map_rgba(
+  //         normal_map,
+  //         *p_nmap,
+  //         node.get_attr<FloatAttribute>("detail_scaling"),
+  //         (hmap::NormalMapBlendingMethod)node.get_attr<EnumAttribute>("blending_method"));
+  //   }
 
-    normal_map.to_png(nmap_fname, CV_16U);
+  //   normal_map.to_png(nmap_fname, CV_16U);
 
-    // --- export
+  //   // --- export
 
-    hmap::export_asset(
-        fname,
-        array,
-        (hmap::MeshType)node.get_attr<EnumAttribute>("mesh_type"),
-        (hmap::AssetExportFormat)node.get_attr<EnumAttribute>("export_format"),
-        node.get_attr<FloatAttribute>("elevation_scaling"),
-        texture_fname,
-        nmap_fname,
-        node.get_attr<FloatAttribute>("max_error"));
-  }
+  //   hmap::export_asset(
+  //       fname,
+  //       array,
+  //       (hmap::MeshType)node.get_attr<EnumAttribute>("mesh_type"),
+  //       (hmap::AssetExportFormat)node.get_attr<EnumAttribute>("export_format"),
+  //       node.get_attr<FloatAttribute>("elevation_scaling"),
+  //       texture_fname,
+  //       nmap_fname,
+  //       node.get_attr<FloatAttribute>("max_error"));
+  // }
 
-  // not output, do not propagate
+  // // not output, do not propagate
 }
 
 } // namespace hesiod

@@ -1,7 +1,6 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-#include "highmap/heightmap.hpp"
 #include "highmap/opencl/gpu_opencl.hpp"
 #include "highmap/primitives.hpp"
 
@@ -23,11 +22,11 @@ void setup_island_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "land_mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dr");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "out", CONFIG(node));
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "water_depth", CONFIG(node));
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "inland_mask", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "land_mask");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dr");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "out", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "water_depth", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "inland_mask", CONFIG2(node));
 
   // attribute(s)
   std::vector<float> kw = {4.f, 4.f};
@@ -126,22 +125,22 @@ void compute_island_node(BaseNode &node)
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   // base noise function
-  hmap::Heightmap *p_land = node.get_value_ref<hmap::Heightmap>("land_mask");
+  hmap::VirtualArray *p_land = node.get_value_ref<hmap::VirtualArray>("land_mask");
   if (!p_land)
     return;
 
-  hmap::Heightmap *p_dr = node.get_value_ref<hmap::Heightmap>("dr");
-  hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("out");
-  hmap::Heightmap *p_depth = node.get_value_ref<hmap::Heightmap>("water_depth");
-  hmap::Heightmap *p_mask = node.get_value_ref<hmap::Heightmap>("inland_mask");
+  hmap::VirtualArray *p_dr = node.get_value_ref<hmap::VirtualArray>("dr");
+  hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("out");
+  hmap::VirtualArray *p_depth = node.get_value_ref<hmap::VirtualArray>("water_depth");
+  hmap::VirtualArray *p_mask = node.get_value_ref<hmap::VirtualArray>("inland_mask");
 
   int ir = (int)(node.get_attr<FloatAttribute>("filter_radius") * p_out->shape.x);
 
   float scale = node.get_attr<FloatAttribute>("elevation_scale");
 
-  hmap::transform(
+  hmap::for_each_tile(
       {p_out, p_land, p_dr, p_depth, p_mask},
-      [&node, ir, scale](std::vector<hmap::Array *> p_arrays)
+      [&node, ir, scale](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
       {
         hmap::Array *pa_out = p_arrays[0];
         hmap::Array *pa_land = p_arrays[1];
@@ -206,7 +205,7 @@ void compute_island_node(BaseNode &node)
 
         pa_depth->infos("depth");
       },
-      node.get_config_ref()->hmap_transform_mode_gpu);
+      node.cfg().cm_gpu);
 
   // post-process
   p_out->smooth_overlap_buffers();

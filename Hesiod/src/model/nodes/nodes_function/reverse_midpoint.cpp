@@ -20,16 +20,17 @@ void setup_reverse_midpoint_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Path>(gnode::PortType::IN, "path");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "heightmap", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "heightmap", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("noise_scale", "noise_scale", 1.f, 0.01f, 2.f);
   node.add_attr<SeedAttribute>("seed", "Seed");
-  node.add_attr<BoolAttribute>("inverse", "inverse", false);
-  node.add_attr<BoolAttribute>("remap", "remap", true);
 
   // attribute(s) order
-  node.set_attr_ordered_key({"noise_scale", "seed", "_SEPARATOR_", "inverse", "remap"});
+  node.set_attr_ordered_key({"noise_scale", "seed"});
+
+  setup_post_process_heightmap_attributes(node,
+                                          {.add_mix = false, .remap_active_state = true});
 }
 
 void compute_reverse_midpoint_node(BaseNode &node)
@@ -40,7 +41,7 @@ void compute_reverse_midpoint_node(BaseNode &node)
 
   if (p_path)
   {
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("heightmap");
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("heightmap");
 
     if (p_path->get_npoints() > 1)
     {
@@ -53,23 +54,23 @@ void compute_reverse_midpoint_node(BaseNode &node)
                                              node.get_attr<FloatAttribute>("noise_scale"),
                                              0.f); // threshold
 
-      p_out->from_array_interp_nearest(z);
+      p_out->from_array(z, node.cfg().cm_cpu);
 
       // post-process
-      post_process_heightmap(node,
-                             *p_out,
-                             node.get_attr<BoolAttribute>("inverse"),
-                             false, // smooth
-                             0,
-                             false, // saturate
-                             {0.f, 0.f},
-                             0.f,
-                             node.get_attr<BoolAttribute>("remap"),
-                             {0.f, 1.f});
+      post_process_heightmap(node, *p_out);
     }
     else
-      // fill with zeroes
-      hmap::transform(*p_out, [](hmap::Array &array) { array = 0.f; });
+    {
+      // fill with zeros
+      hmap::for_each_tile(
+          {p_out},
+          [](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
+          {
+            hmap::Array *pa_out = p_arrays[0];
+            *pa_out = 0.f;
+          },
+          node.cfg().cm_cpu);
+    }
   }
 }
 

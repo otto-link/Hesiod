@@ -23,7 +23,8 @@ GraphConfigDialog::GraphConfigDialog(GraphConfig &config, QWidget *parent)
   int row = 0;
 
   // --- shape
-  QLabel *label_shape_text = new QLabel("shape", this);
+
+  QLabel *label_shape_text = new QLabel("Sxshape", this);
   layout->addWidget(label_shape_text, row, 0);
 
   this->slider_shape = new QSlider(Qt::Horizontal, this);
@@ -53,7 +54,8 @@ GraphConfigDialog::GraphConfigDialog(GraphConfig &config, QWidget *parent)
   row++;
 
   // --- tiling
-  QLabel *label_tiling_text = new QLabel("tiling", this);
+
+  QLabel *label_tiling_text = new QLabel("Tiling", this);
   layout->addWidget(label_tiling_text, row, 0);
 
   this->slider_tiling = new QSlider(Qt::Horizontal, this);
@@ -84,6 +86,7 @@ GraphConfigDialog::GraphConfigDialog(GraphConfig &config, QWidget *parent)
         int val = 1 << exp; // 2^exp
         this->config.tiling.x = val;
         this->config.tiling.y = val;
+        this->config.update_parameters();
         this->label_tiling->setText(
             QString("%1x%2").arg(this->config.tiling.x).arg(this->config.tiling.y));
       });
@@ -91,7 +94,8 @@ GraphConfigDialog::GraphConfigDialog(GraphConfig &config, QWidget *parent)
   row++;
 
   // --- overlap
-  QLabel *label_overlap_text = new QLabel("overlap", this);
+
+  QLabel *label_overlap_text = new QLabel("Overlap", this);
   layout->addWidget(label_overlap_text, row, 0);
 
   this->slider_overlap = new QSlider(Qt::Horizontal, this);
@@ -115,24 +119,51 @@ GraphConfigDialog::GraphConfigDialog(GraphConfig &config, QWidget *parent)
                                                 this->steps);
                   this->label_overlap->setText(QString::number(v, 'f', 2));
                   this->config.overlap = v;
+                  this->config.update_parameters();
                 });
 
   row++;
 
   // --- tool tips
+
   this->slider_shape->setToolTip("Adjust graph shape (2^n)");
   this->slider_tiling->setToolTip("Adjust tiling (2^n)");
   this->slider_overlap->setToolTip("Adjust overlap fraction");
 
-  // --- transform modes
-  auto add_transform_combobox =
-      [this, layout, &row](const std::string &label_text, hmap::TransformMode &mode)
+  // --- memory
+
+  QLabel *label_memory_text = new QLabel("Cache Data on Disk", this);
+  layout->addWidget(label_memory_text, row, 0);
+
+  this->checkbox_memory = new QCheckBox(this);
+  this->checkbox_memory->setChecked(this->config.cm_cpu.trim_storage);
+  layout->addWidget(this->checkbox_memory, row, 1);
+
+  this->checkbox_memory->setToolTip(
+      "Reduce memory footprint by caching node data on disk");
+
+  this->connect(this->checkbox_memory,
+                &QCheckBox::toggled,
+                [this](bool checked)
+                {
+                  this->config.cm_cpu.trim_storage = checked;
+                  this->config.cm_gpu.trim_storage = checked;
+                  this->config.cm_single_array.trim_storage = checked;
+                  this->config.update_parameters();
+                });
+
+  row++;
+
+  // --- compute modes
+
+  auto add_compute_combobox =
+      [this, layout, &row](const std::string &label_text, hmap::ForEachMode &mode)
   {
     QLabel *label = new QLabel(label_text.c_str(), this);
     layout->addWidget(label, row, 0);
 
     QComboBox *combobox = new QComboBox(this);
-    for (auto &[name, id] : hmap::transform_mode_as_string)
+    for (auto &[name, id] : hmap::for_each_mode_as_string)
     {
       combobox->addItem(QString::fromStdString(name));
       if (id == static_cast<int>(mode))
@@ -144,19 +175,20 @@ GraphConfigDialog::GraphConfigDialog(GraphConfig &config, QWidget *parent)
                   [this, combobox, &mode]()
                   {
                     std::string current_choice = combobox->currentText().toStdString();
-                    Logger::log()->trace("Selected transform mode: {}", current_choice);
-                    mode = static_cast<hmap::TransformMode>(
-                        hmap::transform_mode_as_string.at(current_choice));
+                    Logger::log()->trace("Selected compute mode: {}", current_choice);
+                    mode = static_cast<hmap::ForEachMode>(
+                        hmap::for_each_mode_as_string.at(current_choice));
                   });
 
     layout->addWidget(combobox, row, 1, 1, 3);
     row++;
   };
 
-  add_transform_combobox("CPU", this->config.hmap_transform_mode_cpu);
-  add_transform_combobox("GPU", this->config.hmap_transform_mode_gpu);
+  add_compute_combobox("CPU", this->config.cm_cpu.mode);
+  add_compute_combobox("GPU", this->config.cm_gpu.mode);
 
   // --- buttons
+
   QDialogButtonBox *button_box = new QDialogButtonBox(QDialogButtonBox::Ok |
                                                           QDialogButtonBox::Cancel,
                                                       this);

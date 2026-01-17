@@ -19,9 +19,7 @@ void setup_kernel_gabor_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Array>(gnode::PortType::OUT,
-                             "kernel",
-                             node.get_config_ref()->shape);
+  node.add_port<hmap::Array>(gnode::PortType::OUT, "kernel", node.cfg().shape);
 
   // attribute(s)
   node.add_attr<FloatAttribute>("radius", "radius", 0.1f, 0.001f, 0.2f);
@@ -39,9 +37,8 @@ void compute_kernel_gabor_node(BaseNode &node)
 
   hmap::Array *p_out = node.get_value_ref<hmap::Array>("kernel");
 
-  int ir = std::max(
-      1,
-      (int)(node.get_attr<FloatAttribute>("radius") * node.get_config_ref()->shape.x));
+  int ir = std::max(1,
+                    (int)(node.get_attr<FloatAttribute>("radius") * node.cfg().shape.x));
 
   // kernel definition
   hmap::Vec2<int> kernel_shape = {2 * ir + 1, 2 * ir + 1};

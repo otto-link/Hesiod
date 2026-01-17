@@ -1,9 +1,7 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-
 #include "highmap/geometry/path.hpp"
-#include "highmap/heightmap.hpp"
 
 #include "attributes.hpp"
 
@@ -22,13 +20,14 @@ void setup_path_sdf_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Path>(gnode::PortType::IN, "path");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dx");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "sdf", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dx");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dy");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "sdf", CONFIG2(node));
 
   // attribute(s)
-  node.add_attr<BoolAttribute>("remap", "remap", false);
-  node.add_attr<BoolAttribute>("inverse", "inverse", false);
+
+  setup_post_process_heightmap_attributes(node,
+                                          {.add_mix = false, .remap_active_state = true});
 }
 
 void compute_path_sdf_node(BaseNode &node)
@@ -39,40 +38,46 @@ void compute_path_sdf_node(BaseNode &node)
 
   if (p_path)
   {
-    hmap::Heightmap *p_dx = node.get_value_ref<hmap::Heightmap>("dx");
-    hmap::Heightmap *p_dy = node.get_value_ref<hmap::Heightmap>("dy");
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("sdf");
+    hmap::VirtualArray *p_dx = node.get_value_ref<hmap::VirtualArray>("dx");
+    hmap::VirtualArray *p_dy = node.get_value_ref<hmap::VirtualArray>("dy");
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("sdf");
 
     if (p_path->get_npoints() > 1)
     {
-      hmap::fill(
-          *p_out,
-          p_dx,
-          p_dy,
-          [p_path](hmap::Vec2<int>   shape,
-                   hmap::Vec4<float> bbox,
-                   hmap::Array      *p_noise_x,
-                   hmap::Array      *p_noise_y)
+      hmap::for_each_tile(
+          {p_out, p_dx, p_dy},
+          [&node, p_path](std::vector<hmap::Array *> p_arrays,
+                          const hmap::TileRegion    &region)
           {
+            hmap::Array *pa_out = p_arrays[0];
+            hmap::Array *pa_dx = p_arrays[1];
+            hmap::Array *pa_dy = p_arrays[2];
+
             hmap::Vec4<float> bbox_full = hmap::Vec4<float>(0.f, 1.f, 0.f, 1.f);
-            return p_path->to_array_sdf(shape, bbox_full, p_noise_x, p_noise_y, bbox);
-          });
+
+            *pa_out = p_path->to_array_sdf(region.shape,
+                                           bbox_full,
+                                           pa_dx,
+                                           pa_dy,
+                                           region.bbox);
+          },
+          node.cfg().cm_cpu);
 
       // post-process
-      post_process_heightmap(node,
-                             *p_out,
-                             node.get_attr<BoolAttribute>("inverse"),
-                             false, // smoothing,
-                             0,
-                             false, // saturate
-                             {0.f, 0.f},
-                             0.f,
-                             node.get_attr<BoolAttribute>("remap"),
-                             {0.f, 1.f});
+      post_process_heightmap(node, *p_out);
     }
     else
+    {
       // fill with zeros
-      hmap::transform(*p_out, [](hmap::Array x) { x = 0.f; });
+      hmap::for_each_tile(
+          {p_out},
+          [](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
+          {
+            hmap::Array *pa_out = p_arrays[0];
+            *pa_out = 0.f;
+          },
+          node.cfg().cm_cpu);
+    }
   }
 }
 

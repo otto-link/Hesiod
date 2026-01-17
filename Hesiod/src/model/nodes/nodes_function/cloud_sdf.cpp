@@ -1,7 +1,6 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-
 #include "attributes.hpp"
 
 #include "hesiod/logger.hpp"
@@ -19,43 +18,55 @@ void setup_cloud_sdf_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Cloud>(gnode::PortType::IN, "cloud");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dx");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "sdf", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dx");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dy");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "sdf", CONFIG2(node));
 
   setup_post_process_heightmap_attributes(node,
-                                          {.add_mix = true, .remap_active_state = true});
+                                          {.add_mix = false, .remap_active_state = true});
 }
 
 void compute_cloud_sdf_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Cloud     *p_cloud = node.get_value_ref<hmap::Cloud>("cloud");
-  hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("sdf");
+  hmap::Cloud        *p_cloud = node.get_value_ref<hmap::Cloud>("cloud");
+  hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("sdf");
 
   if (!p_cloud || p_cloud->get_npoints() == 0)
   {
     // fill with zeros
-    hmap::transform(*p_out, [](hmap::Array &x) { x = 0.f; });
+    hmap::for_each_tile(
+        {p_out},
+        [](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
+        {
+          hmap::Array *pa_out = p_arrays[0];
+          *pa_out = 0.f;
+        },
+        node.cfg().cm_cpu);
   }
   else
   {
-    hmap::Heightmap *p_dx = node.get_value_ref<hmap::Heightmap>("dx");
-    hmap::Heightmap *p_dy = node.get_value_ref<hmap::Heightmap>("dy");
+    hmap::VirtualArray *p_dx = node.get_value_ref<hmap::VirtualArray>("dx");
+    hmap::VirtualArray *p_dy = node.get_value_ref<hmap::VirtualArray>("dy");
 
-    hmap::fill(
-        *p_out,
-        p_dx,
-        p_dy,
-        [&node, p_cloud](hmap::Vec2<int>   shape,
-                         hmap::Vec4<float> bbox,
-                         hmap::Array      *p_noise_x,
-                         hmap::Array      *p_noise_y)
+    hmap::for_each_tile(
+        {p_out, p_dx, p_dy},
+        [&node, p_cloud](std::vector<hmap::Array *> p_arrays,
+                         const hmap::TileRegion    &region)
         {
+          hmap::Array *pa_out = p_arrays[0];
+          hmap::Array *pa_dx = p_arrays[1];
+          hmap::Array *pa_dy = p_arrays[2];
+
           hmap::Vec4<float> bbox_full = hmap::Vec4<float>(0.f, 1.f, 0.f, 1.f);
-          return p_cloud->to_array_sdf(shape, bbox_full, p_noise_x, p_noise_y, bbox);
-        });
+          *pa_out = p_cloud->to_array_sdf(region.shape,
+                                          bbox_full,
+                                          pa_dx,
+                                          pa_dy,
+                                          region.bbox);
+        },
+        node.cfg().cm_cpu);
 
     // post-process
     post_process_heightmap(node, *p_out);

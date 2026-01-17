@@ -1,9 +1,12 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General Public
    License. The full license is in the file LICENSE, distributed with this software. */
 #pragma once
+#include <array>
 #include <chrono>
 #include <functional>
 #include <stdexcept>
+#include <tuple>
+#include <utility>
 
 #include "gnode/node.hpp"
 #include "gnodegui/node_proxy.hpp"
@@ -15,6 +18,7 @@
 
 // clang-format off
 #define CONFIG(obj) obj.get_config_ref()->shape, obj.get_config_ref()->tiling, obj.get_config_ref()->overlap
+#define CONFIG2(obj) obj.get_config_ref()->shape, obj.get_config_ref()->tile_shape, obj.get_config_ref()->halo, obj.get_config_ref()->storage_mode
 // clang-format on
 
 namespace hesiod
@@ -38,6 +42,7 @@ public:
   std::shared_ptr<BaseNode> get_shared();
 
   // --- Configuration ---
+  const GraphConfig                 &cfg() const;
   std::shared_ptr<const GraphConfig> get_config_ref() const;
   void                               propagate_config_change();
 
@@ -165,5 +170,18 @@ void setup_background_image_for_cloud_attribute(BaseNode          &node,
 void setup_histogram_for_range_attribute(BaseNode          &node,
                                          const std::string &attribute_key,
                                          const std::string &port_id);
+
+// unpack vectors
+template <std::size_t N, typename T, std::size_t... Is>
+auto unpack_impl(const std::vector<T *> &v, std::index_sequence<Is...>)
+{
+  assert(v.size() >= N);
+  return std::make_tuple(v[Is]...);
+}
+
+template <std::size_t N, typename T> auto unpack(const std::vector<T *> &v)
+{
+  return unpack_impl<N>(v, std::make_index_sequence<N>{});
+}
 
 } // namespace hesiod

@@ -21,11 +21,11 @@ void setup_multisteps_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dx");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "control");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "envelope");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dx");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dy");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "control");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "envelope");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("angle", "Rotation Angle", 0.f, -180.f, 180.f, "{:.1f}°");
@@ -80,27 +80,25 @@ void compute_multisteps_node(BaseNode &node)
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   // base noise function
-  hmap::Heightmap *p_dx = node.get_value_ref<hmap::Heightmap>("dx");
-  hmap::Heightmap *p_dy = node.get_value_ref<hmap::Heightmap>("dy");
-  hmap::Heightmap *p_ctrl = node.get_value_ref<hmap::Heightmap>("control");
-  hmap::Heightmap *p_env = node.get_value_ref<hmap::Heightmap>("envelope");
-  hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
+  hmap::VirtualArray *p_dx = node.get_value_ref<hmap::VirtualArray>("dx");
+  hmap::VirtualArray *p_dy = node.get_value_ref<hmap::VirtualArray>("dy");
+  hmap::VirtualArray *p_ctrl = node.get_value_ref<hmap::VirtualArray>("control");
+  hmap::VirtualArray *p_env = node.get_value_ref<hmap::VirtualArray>("envelope");
+  hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
   if (p_dx || p_dy)
   {
     // use input noise
-    hmap::transform(
+    hmap::for_each_tile(
         {p_out, p_ctrl, p_dx, p_dy},
-        [&node](std::vector<hmap::Array *> p_arrays,
-                hmap::Vec2<int>            shape,
-                hmap::Vec4<float>          bbox)
+        [&node](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &region)
         {
           hmap::Array *pa_out = p_arrays[0];
           hmap::Array *pa_ctrl = p_arrays[1];
           hmap::Array *pa_dx = p_arrays[2];
           hmap::Array *pa_dy = p_arrays[3];
 
-          *pa_out = hmap::multisteps(shape,
+          *pa_out = hmap::multisteps(region.shape,
                                      node.get_attr<FloatAttribute>("angle"),
                                      node.get_attr<FloatAttribute>("r"),
                                      node.get_attr<IntAttribute>("nsteps"),
@@ -112,24 +110,22 @@ void compute_multisteps_node(BaseNode &node)
                                      pa_dx,
                                      pa_dy,
                                      node.get_attr<Vec2FloatAttribute>("center"),
-                                     bbox);
+                                     region.bbox);
         },
-        node.get_config_ref()->hmap_transform_mode_cpu);
+        node.cfg().cm_cpu);
   }
   else
   {
     // use built-in noise
-    hmap::transform(
+    hmap::for_each_tile(
         {p_out, p_ctrl},
-        [&node](std::vector<hmap::Array *> p_arrays,
-                hmap::Vec2<int>            shape,
-                hmap::Vec4<float>          bbox)
+        [&node](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &region)
         {
           hmap::Array *pa_out = p_arrays[0];
           hmap::Array *pa_ctrl = p_arrays[1];
 
           *pa_out = hmap::gpu::multisteps(
-              shape,
+              region.shape,
               node.get_attr<FloatAttribute>("angle"),
               node.get_attr<SeedAttribute>("seed"),
               node.get_attr<WaveNbAttribute>("kw"),
@@ -144,9 +140,9 @@ void compute_multisteps_node(BaseNode &node)
               node.get_attr<FloatAttribute>("outer_slope"),
               pa_ctrl,
               node.get_attr<Vec2FloatAttribute>("center"),
-              bbox);
+              region.bbox);
         },
-        node.get_config_ref()->hmap_transform_mode_gpu);
+        node.cfg().cm_gpu);
   }
 
   // post-process

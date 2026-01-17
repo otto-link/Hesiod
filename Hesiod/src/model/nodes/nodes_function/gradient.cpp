@@ -1,9 +1,7 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-
 #include "highmap/gradient.hpp"
-#include "highmap/heightmap.hpp"
 
 #include "attributes.hpp"
 
@@ -21,9 +19,9 @@ void setup_gradient_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "dx", CONFIG(node));
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "dy", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "dx", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "dy", CONFIG2(node));
 
   setup_post_process_heightmap_attributes(node,
                                           {.add_mix = true, .remap_active_state = true});
@@ -33,34 +31,34 @@ void compute_gradient_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
+  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_dx = node.get_value_ref<hmap::Heightmap>("dx");
-    hmap::Heightmap *p_dy = node.get_value_ref<hmap::Heightmap>("dy");
+    hmap::VirtualArray *p_dx = node.get_value_ref<hmap::VirtualArray>("dx");
+    hmap::VirtualArray *p_dy = node.get_value_ref<hmap::VirtualArray>("dy");
 
-    hmap::transform(
+    hmap::for_each_tile(
         {p_dx, p_in},
-        [](std::vector<hmap::Array *> p_arrays)
+        [](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
         {
           hmap::Array *pa_dx = p_arrays[0];
           hmap::Array *pa_in = p_arrays[1];
 
           hmap::gradient_x(*pa_in, *pa_dx);
         },
-        node.get_config_ref()->hmap_transform_mode_cpu);
+        node.cfg().cm_cpu);
 
-    hmap::transform(
+    hmap::for_each_tile(
         {p_dy, p_in},
-        [](std::vector<hmap::Array *> p_arrays)
+        [](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
         {
           hmap::Array *pa_dy = p_arrays[0];
           hmap::Array *pa_in = p_arrays[1];
 
           hmap::gradient_y(*pa_in, *pa_dy);
         },
-        node.get_config_ref()->hmap_transform_mode_cpu);
+        node.cfg().cm_cpu);
 
     p_dx->smooth_overlap_buffers();
     p_dy->smooth_overlap_buffers();

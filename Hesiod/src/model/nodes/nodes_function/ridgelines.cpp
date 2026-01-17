@@ -20,9 +20,9 @@ void setup_ridgelines_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Path>(gnode::PortType::IN, "path");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dx");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "heightmap", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dx");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dy");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "heightmap", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("talus_global", "talus_global", 4.f, -FLT_MAX, FLT_MAX);
@@ -39,12 +39,12 @@ void compute_ridgelines_node(BaseNode &node)
 
   if (p_path)
   {
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("heightmap");
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("heightmap");
 
     if (p_path->get_npoints() > 1)
     {
-      hmap::Heightmap *p_dx = node.get_value_ref<hmap::Heightmap>("dx");
-      hmap::Heightmap *p_dy = node.get_value_ref<hmap::Heightmap>("dy");
+      hmap::VirtualArray *p_dx = node.get_value_ref<hmap::VirtualArray>("dx");
+      hmap::VirtualArray *p_dy = node.get_value_ref<hmap::VirtualArray>("dy");
 
       std::vector<float> xs, ys, zs = {};
 
@@ -59,36 +59,45 @@ void compute_ridgelines_node(BaseNode &node)
         zs.push_back(p_path->points[k + 1].v);
       }
 
-      hmap::fill(*p_out,
-                 p_dx,
-                 p_dy,
-                 [&node, p_path, xs, ys, zs](hmap::Vec2<int>   shape,
-                                             hmap::Vec4<float> bbox,
-                                             hmap::Array      *p_noise_x,
-                                             hmap::Array      *p_noise_y)
-                 {
-                   hmap::Array       array(shape);
-                   hmap::Vec4<float> bbox_points = {0.f, 1.f, 0.f, 1.f};
+      hmap::for_each_tile(
+          {p_out, p_dx, p_dy},
+          [&node, p_path, xs, ys, zs](std::vector<hmap::Array *> p_arrays,
+                                      const hmap::TileRegion    &region)
+          {
+            hmap::Array *pa_out = p_arrays[0];
+            hmap::Array *pa_dx = p_arrays[1];
+            hmap::Array *pa_dy = p_arrays[2];
 
-                   array = hmap::ridgelines(shape,
-                                            xs,
-                                            ys,
-                                            zs,
-                                            node.get_attr<FloatAttribute>("talus_global"),
-                                            node.get_attr<FloatAttribute>("k_smoothing"),
-                                            node.get_attr<FloatAttribute>("width"),
-                                            node.get_attr<FloatAttribute>("vmin"),
-                                            bbox_points,
-                                            p_noise_x,
-                                            p_noise_y,
-                                            nullptr, // stretching
-                                            bbox);
-                   return array;
-                 });
+            hmap::Vec4<float> bbox_points = {0.f, 1.f, 0.f, 1.f};
+
+            *pa_out = hmap::ridgelines(region.shape,
+                                       xs,
+                                       ys,
+                                       zs,
+                                       node.get_attr<FloatAttribute>("talus_global"),
+                                       node.get_attr<FloatAttribute>("k_smoothing"),
+                                       node.get_attr<FloatAttribute>("width"),
+                                       node.get_attr<FloatAttribute>("vmin"),
+                                       bbox_points,
+                                       pa_dx,
+                                       pa_dy,
+                                       nullptr, // stretching
+                                       region.bbox);
+          },
+          node.cfg().cm_cpu);
     }
     else
-      // fill with zeroes
-      hmap::transform(*p_out, [](hmap::Array &array) { array = 0.f; });
+    {
+      // fill with zeros
+      hmap::for_each_tile(
+          {p_out},
+          [](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
+          {
+            hmap::Array *pa_out = p_arrays[0];
+            *pa_out = 0.f;
+          },
+          node.cfg().cm_cpu);
+    }
   }
 }
 

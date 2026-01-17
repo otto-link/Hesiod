@@ -32,11 +32,11 @@ void AppContext::settings_json_from(nlohmann::json const &json)
   else
     Logger::log()->error("AppContext::settings_json_from: could not parse app_settings");
 
-  if (json.contains("style_settings"))
-    this->style_settings.json_from(json["style_settings"]);
-  else
-    Logger::log()->error(
-        "AppContext::settings_json_from: could not parse style_settings");
+  // if (json.contains("style_settings"))
+  //   this->style_settings.json_from(json["style_settings"]);
+  // else
+  //   Logger::log()->error(
+  //       "AppContext::settings_json_from: could not parse style_settings");
 }
 
 nlohmann::json AppContext::settings_json_to() const

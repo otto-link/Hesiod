@@ -21,11 +21,11 @@ void setup_flatbed_carve_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
   node.add_port<hmap::Path>(gnode::PortType::IN, "path");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dr");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "mask", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dr");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "mask", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("bottom_extent", "Bed Half-Width", 0.02f, 0.f, 0.2f);
@@ -76,24 +76,23 @@ void compute_flatbed_carve_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Path      *p_path = node.get_value_ref<hmap::Path>("path");
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
+  hmap::Path         *p_path = node.get_value_ref<hmap::Path>("path");
+  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
 
   if (p_path && p_in)
     if (p_path->get_npoints() > 1)
     {
-      hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
-      hmap::Heightmap *p_mask = node.get_value_ref<hmap::Heightmap>("mask");
-      hmap::Heightmap *p_dr = node.get_value_ref<hmap::Heightmap>("dr");
+      hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
+      hmap::VirtualArray *p_mask = node.get_value_ref<hmap::VirtualArray>("mask");
+      hmap::VirtualArray *p_dr = node.get_value_ref<hmap::VirtualArray>("dr");
 
       float width = node.get_attr<FloatAttribute>("bottom_extent") * p_out->shape.x;
       float falloff = width * node.get_attr<FloatAttribute>("falloff_distance_ratio");
 
-      hmap::transform(
+      hmap::for_each_tile(
           {p_out, p_in, p_dr, p_mask},
           [&node, width, falloff, p_path](std::vector<hmap::Array *> p_arrays,
-                                          hmap::Vec2<int> /* shape */,
-                                          hmap::Vec4<float> bbox)
+                                          const hmap::TileRegion    &region)
           {
             hmap::Array *pa_out = p_arrays[0];
             hmap::Array *pa_in = p_arrays[1];
@@ -115,8 +114,9 @@ void compute_flatbed_carve_node(BaseNode &node)
                 node.get_attr<FloatAttribute>("radial_profile_parameter"),
                 pa_mask,
                 pa_dr,
-                bbox);
-          });
+                region.bbox);
+          },
+          node.cfg().cm_cpu);
 
       p_out->smooth_overlap_buffers();
       p_mask->smooth_overlap_buffers();

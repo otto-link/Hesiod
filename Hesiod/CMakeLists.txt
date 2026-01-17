@@ -31,6 +31,7 @@ if(HESIOD_MINIMAL_NODE_SET)
       "${NODES_FCT_DIR}/noise.cpp"
       "${NODES_FCT_DIR}/preview.cpp"
       "${NODES_FCT_DIR}/receive.cpp"
+      "${NODES_FCT_DIR}/smooth_cpulse.cpp"
       "${NODES_FCT_DIR}/thru.cpp"
       "${NODES_FCT_DIR}/toggle.cpp")
 

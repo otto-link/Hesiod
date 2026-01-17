@@ -19,10 +19,10 @@ void setup_hydraulic_stream_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "erosion", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "mask");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "erosion", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("c_erosion", "c_erosion", 0.05f, 0.01f, 0.1f);
@@ -38,26 +38,26 @@ void compute_hydraulic_stream_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
+  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
-    hmap::Heightmap *p_mask = node.get_value_ref<hmap::Heightmap>("mask");
-    hmap::Heightmap *p_erosion_map = node.get_value_ref<hmap::Heightmap>("erosion");
-
-    // copy the input heightmap
-    *p_out = *p_in;
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
+    hmap::VirtualArray *p_mask = node.get_value_ref<hmap::VirtualArray>("mask");
+    hmap::VirtualArray *p_erosion_map = node.get_value_ref<hmap::VirtualArray>("erosion");
 
     int ir = (int)(node.get_attr<FloatAttribute>("radius") * p_out->shape.x);
 
-    hmap::transform(
-        {p_out, p_mask, p_erosion_map},
-        [&node, &ir](std::vector<hmap::Array *> p_arrays)
+    hmap::for_each_tile(
+        {p_out, p_in, p_mask, p_erosion_map},
+        [&node, &ir](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
         {
           hmap::Array *pa_out = p_arrays[0];
-          hmap::Array *pa_mask = p_arrays[1];
-          hmap::Array *pa_erosion_map = p_arrays[2];
+          hmap::Array *pa_in = p_arrays[1];
+          hmap::Array *pa_mask = p_arrays[2];
+          hmap::Array *pa_erosion_map = p_arrays[3];
+
+          *pa_out = *pa_in;
 
           hmap::hydraulic_stream(*pa_out,
                                  pa_mask,
@@ -69,12 +69,12 @@ void compute_hydraulic_stream_node(BaseNode &node)
                                  ir,
                                  node.get_attr<FloatAttribute>("clipping_ratio"));
         },
-        node.get_config_ref()->hmap_transform_mode_cpu);
+        node.cfg().cm_cpu);
 
     p_out->smooth_overlap_buffers();
 
     p_erosion_map->smooth_overlap_buffers();
-    p_erosion_map->remap();
+    p_erosion_map->remap(0.f, 1.f, node.cfg().cm_cpu);
   }
 }
 

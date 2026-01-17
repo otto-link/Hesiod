@@ -19,10 +19,10 @@ void setup_select_multiband3_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "low", CONFIG(node));
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "mid", CONFIG(node));
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "high", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "low", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "mid", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "high", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("ratio1", "ratio1", 0.2f, 0.f, 1.f);
@@ -33,43 +33,41 @@ void setup_select_multiband3_node(BaseNode &node)
   node.set_attr_ordered_key({"ratio1", "ratio2", "overlap"});
 
   setup_post_process_heightmap_attributes(node,
-                                          {.add_mix = true, .remap_active_state = true});
+                                          {.add_mix = false, .remap_active_state = true});
 }
 
 void compute_select_multiband3_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
+  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_low = node.get_value_ref<hmap::Heightmap>("low");
-    hmap::Heightmap *p_mid = node.get_value_ref<hmap::Heightmap>("mid");
-    hmap::Heightmap *p_high = node.get_value_ref<hmap::Heightmap>("high");
+    hmap::VirtualArray *p_low = node.get_value_ref<hmap::VirtualArray>("low");
+    hmap::VirtualArray *p_mid = node.get_value_ref<hmap::VirtualArray>("mid");
+    hmap::VirtualArray *p_high = node.get_value_ref<hmap::VirtualArray>("high");
 
-    float vmin = p_in->min();
-    float vmax = p_in->max();
+    float vmin = p_in->min(node.cfg().cm_cpu);
+    float vmax = p_in->max(node.cfg().cm_cpu);
 
-    hmap::transform(*p_in,
-                    *p_low,
-                    *p_mid,
-                    *p_high,
-                    [&node, vmin, vmax](hmap::Array &in,
-                                        hmap::Array &low,
-                                        hmap::Array &mid,
-                                        hmap::Array &high)
-                    {
-                      hmap::select_multiband3(in,
-                                              low,
-                                              mid,
-                                              high,
-                                              node.get_attr<FloatAttribute>("ratio1"),
-                                              node.get_attr<FloatAttribute>("ratio2"),
-                                              node.get_attr<FloatAttribute>("overlap"),
-                                              vmin,
-                                              vmax);
-                    });
+    hmap::for_each_tile(
+        {p_in, p_low, p_mid, p_high},
+        [&node, vmin, vmax](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
+        {
+          auto [pa_in, pa_low, pa_mid, pa_high] = unpack<4>(p_arrays);
+
+          hmap::select_multiband3(*pa_in,
+                                  *pa_low,
+                                  *pa_mid,
+                                  *pa_high,
+                                  node.get_attr<FloatAttribute>("ratio1"),
+                                  node.get_attr<FloatAttribute>("ratio2"),
+                                  node.get_attr<FloatAttribute>("overlap"),
+                                  vmin,
+                                  vmax);
+        },
+        node.cfg().cm_cpu);
 
     // post-process
     post_process_heightmap(node, *p_low);

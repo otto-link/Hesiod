@@ -20,10 +20,10 @@ void setup_stratify_oblique_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "noise");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "noise");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "mask");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<SeedAttribute>("seed", "Seed");
@@ -46,57 +46,58 @@ void setup_stratify_oblique_node(BaseNode &node)
 
 void compute_stratify_oblique_node(BaseNode &node)
 {
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
+  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
 
-  if (p_in)
-  {
-    hmap::Heightmap *p_noise = node.get_value_ref<hmap::Heightmap>("noise");
-    hmap::Heightmap *p_mask = node.get_value_ref<hmap::Heightmap>("mask");
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
+  // if (p_in)
+  // {
+  //   hmap::VirtualArray *p_noise = node.get_value_ref<hmap::VirtualArray>("noise");
+  //   hmap::VirtualArray *p_mask = node.get_value_ref<hmap::VirtualArray>("mask");
+  //   hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
-    // copy the input heightmap
-    *p_out = *p_in;
+  //   // copy the input heightmap
+  //   *p_out = *p_in;
 
-    float zmin = p_out->min();
-    float zmax = p_out->max();
+  //   float zmin = p_out->min(node.cfg().cm_cpu);
+  //   float zmax = p_out->max(node.cfg().cm_cpu);
 
-    auto hs = hmap::linspace_jitted(zmin,
-                                    zmax,
-                                    node.get_attr<IntAttribute>("n_strata") + 1,
-                                    node.get_attr<FloatAttribute>("strata_noise"),
-                                    node.get_attr<SeedAttribute>("seed"));
+  //   auto hs = hmap::linspace_jitted(zmin,
+  //                                   zmax,
+  //                                   node.get_attr<IntAttribute>("n_strata") + 1,
+  //                                   node.get_attr<FloatAttribute>("strata_noise"),
+  //                                   node.get_attr<SeedAttribute>("seed"));
 
-    float gmin = std::max(0.01f,
-                          node.get_attr<FloatAttribute>("gamma") *
-                              (1.f - node.get_attr<FloatAttribute>("gamma_noise")));
-    float gmax = node.get_attr<FloatAttribute>("gamma") *
-                 (1.f + node.get_attr<FloatAttribute>("gamma_noise"));
+  //   float gmin = std::max(0.01f,
+  //                         node.get_attr<FloatAttribute>("gamma") *
+  //                             (1.f - node.get_attr<FloatAttribute>("gamma_noise")));
+  //   float gmax = node.get_attr<FloatAttribute>("gamma") *
+  //                (1.f + node.get_attr<FloatAttribute>("gamma_noise"));
 
-    auto gs = hmap::random_vector(gmin,
-                                  gmax,
-                                  node.get_attr<IntAttribute>("n_strata"),
-                                  node.get_attr<SeedAttribute>("seed"));
+  //   auto gs = hmap::random_vector(gmin,
+  //                                 gmax,
+  //                                 node.get_attr<IntAttribute>("n_strata"),
+  //                                 node.get_attr<SeedAttribute>("seed"));
 
-    float talus = node.get_attr<FloatAttribute>("talus_global") / (float)p_out->shape.x;
+  //   float talus = node.get_attr<FloatAttribute>("talus_global") /
+  //   (float)p_out->shape.x;
 
-    hmap::transform(*p_out,
-                    p_mask,
-                    p_noise,
-                    [&node, &hs, &gs, &talus](hmap::Array &h_out,
-                                              hmap::Array *p_mask_array,
-                                              hmap::Array *p_noise_array)
-                    {
-                      hmap::stratify_oblique(h_out,
-                                             p_mask_array,
-                                             hs,
-                                             gs,
-                                             talus,
-                                             node.get_attr<FloatAttribute>("angle"),
-                                             p_noise_array);
-                    });
+  //   hmap::for_each_tile(*p_out,
+  //                       p_mask,
+  //                       p_noise,
+  //                       [&node, &hs, &gs, &talus](hmap::Array &h_out,
+  //                                                 hmap::Array *p_mask_array,
+  //                                                 hmap::Array *p_noise_array)
+  //                       {
+  //                         hmap::stratify_oblique(h_out,
+  //                                                p_mask_array,
+  //                                                hs,
+  //                                                gs,
+  //                                                talus,
+  //                                                node.get_attr<FloatAttribute>("angle"),
+  //                                                p_noise_array);
+  //                       });
 
-    p_out->smooth_overlap_buffers();
-  }
+  //   p_out->smooth_overlap_buffers();
+  // }
 }
 
 } // namespace hesiod

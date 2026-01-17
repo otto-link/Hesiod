@@ -19,13 +19,13 @@ void setup_hydraulic_vpipes_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "bedrock");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "moisture");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "erosion", CONFIG(node));
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "deposition", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "bedrock");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "moisture");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "mask");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "erosion", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "deposition", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<IntAttribute>("iterations", "iterations", 50, 1, INT_MAX);
@@ -50,63 +50,65 @@ void compute_hydraulic_vpipes_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
+  // hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
 
-  if (p_in)
-  {
-    hmap::Heightmap *p_bedrock = node.get_value_ref<hmap::Heightmap>("bedrock");
-    hmap::Heightmap *p_moisture_map = node.get_value_ref<hmap::Heightmap>("moisture");
-    hmap::Heightmap *p_mask = node.get_value_ref<hmap::Heightmap>("mask");
+  // if (p_in)
+  // {
+  //   hmap::VirtualArray *p_bedrock = node.get_value_ref<hmap::VirtualArray>("bedrock");
+  //   hmap::VirtualArray *p_moisture_map = node.get_value_ref<hmap::VirtualArray>(
+  //       "moisture");
+  //   hmap::VirtualArray *p_mask = node.get_value_ref<hmap::VirtualArray>("mask");
 
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
-    hmap::Heightmap *p_erosion_map = node.get_value_ref<hmap::Heightmap>("erosion");
-    hmap::Heightmap *p_deposition_map = node.get_value_ref<hmap::Heightmap>("deposition");
+  //   hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
+  //   hmap::VirtualArray *p_erosion_map =
+  //   node.get_value_ref<hmap::VirtualArray>("erosion"); hmap::VirtualArray
+  //   *p_deposition_map = node.get_value_ref<hmap::VirtualArray>(
+  //       "deposition");
 
-    // copy the input heightmap
-    *p_out = *p_in;
+  //   hmap::for_each_tile({p_out,
+  // 	p_in,
+  // 	  p_bedrock,
+  //                       p_moisture_map,
+  //                       p_mask,
+  //                       p_erosion_map,
+  //                       p_deposition_map},
+  //       [&node](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &region)
+  //       {
+  //         hmap::Array *pa_out = p_arrays[0];
+  //         hmap::Array *pa_in = p_arrays[1];
+  //         hmap::Array *pa_bedrock = p_arrays[2];
+  // 	  hmap::Array *pa_moisture_map = p_arrays[2];
 
-    hmap::transform(*p_out,
-                    p_bedrock,
-                    p_moisture_map,
-                    p_mask,
-                    p_erosion_map,
-                    p_deposition_map,
-                    [&node](hmap::Array &h_out,
-                            hmap::Array *p_bedrock_array,
-                            hmap::Array *p_moisture_map_array,
-                            hmap::Array *p_mask_array,
-                            hmap::Array *p_erosion_map_array,
-                            hmap::Array *p_deposition_map_array)
-                    {
-                      hydraulic_vpipes(h_out,
-                                       p_mask_array,
-                                       node.get_attr<IntAttribute>("iterations"),
-                                       p_bedrock_array,
-                                       p_moisture_map_array,
-                                       p_erosion_map_array,
-                                       p_deposition_map_array,
-                                       node.get_attr<FloatAttribute>("water_height"),
-                                       node.get_attr<FloatAttribute>("c_capacity"),
-                                       node.get_attr<FloatAttribute>("c_erosion"),
-                                       node.get_attr<FloatAttribute>("c_deposition"),
-                                       node.get_attr<FloatAttribute>("rain_rate"),
-                                       node.get_attr<FloatAttribute>("evap_rate"));
-                    });
+  // 	  hmap::hydraulic_vpipes(*pa_out,
+  //                                          pa_mask,
+  //                                          node.get_attr<IntAttribute>("iterations"),
+  //                                          pa_bedrock,
+  //                                          pa_moisture_map,
+  //                                          pa_erosion_map,
+  //                                          pa_deposition_map,
+  //                                          node.get_attr<FloatAttribute>("water_height"),
+  //                                          node.get_attr<FloatAttribute>("c_capacity"),
+  //                                          node.get_attr<FloatAttribute>("c_erosion"),
+  //                                          node.get_attr<FloatAttribute>("c_deposition"),
+  //                                          node.get_attr<FloatAttribute>("rain_rate"),
+  //                                          node.get_attr<FloatAttribute>("evap_rate"));
+  //                       },
+  //       node.cfg().cm_cpu);
 
-    p_out->smooth_overlap_buffers();
+  //   p_out->smooth_overlap_buffers();
 
-    if (p_erosion_map)
-    {
-      p_erosion_map->smooth_overlap_buffers();
-      p_erosion_map->remap();
-    }
+  //   if (p_erosion_map)
+  //   {
+  //     p_erosion_map->smooth_overlap_buffers();
+  //     p_erosion_map->remap(0.f, 1.f, node.cfg().cm_cpu);
+  //   }
 
-    if (p_deposition_map)
-    {
-      p_deposition_map->smooth_overlap_buffers();
-      p_deposition_map->remap();
-    }
-  }
+  //   if (p_deposition_map)
+  //   {
+  //     p_deposition_map->smooth_overlap_buffers();
+  //     p_deposition_map->remap(0.f, 1.f, node.cfg().cm_cpu);
+  //   }
+  // }
 }
 
 } // namespace hesiod

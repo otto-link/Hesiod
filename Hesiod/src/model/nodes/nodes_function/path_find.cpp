@@ -20,8 +20,8 @@ void setup_path_find_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Path>(gnode::PortType::IN, "waypoints");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "heightmap");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask nogo");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "heightmap");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "mask nogo");
   node.add_port<hmap::Path>(gnode::PortType::OUT, "path");
 
   // attribute(s)
@@ -37,13 +37,13 @@ void compute_path_find_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Path      *p_waypoints = node.get_value_ref<hmap::Path>("waypoints");
-  hmap::Heightmap *p_hmap = node.get_value_ref<hmap::Heightmap>("heightmap");
+  hmap::Path         *p_waypoints = node.get_value_ref<hmap::Path>("waypoints");
+  hmap::VirtualArray *p_hmap = node.get_value_ref<hmap::VirtualArray>("heightmap");
 
   if (p_waypoints && p_hmap)
   {
-    hmap::Heightmap *p_mask = node.get_value_ref<hmap::Heightmap>("mask nogo");
-    hmap::Path      *p_out = node.get_value_ref<hmap::Path>("path");
+    hmap::VirtualArray *p_mask = node.get_value_ref<hmap::VirtualArray>("mask nogo");
+    hmap::Path         *p_out = node.get_value_ref<hmap::Path>("path");
 
     // copy the input heightmap
     *p_out = *p_waypoints;
@@ -61,7 +61,7 @@ void compute_path_find_node(BaseNode &node)
       Logger::log()->trace("working shape: ({}, {})", shape_wrk.x, shape_wrk.y);
 
       // work on a single array (as a temporary solution?)
-      hmap::Array z = p_hmap->to_array();
+      hmap::Array z = p_hmap->to_array(node.cfg().cm_cpu);
       hmap::Array zw = z.resample_to_shape_nearest(shape_wrk);
 
       // handle masking
@@ -70,7 +70,7 @@ void compute_path_find_node(BaseNode &node)
 
       if (p_mask)
       {
-        mask_array = p_mask->to_array();
+        mask_array = p_mask->to_array(node.cfg().cm_cpu);
         mask_array = mask_array.resample_to_shape_nearest(shape_wrk);
         p_mask_array = &mask_array;
       }

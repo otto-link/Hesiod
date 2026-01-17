@@ -11,7 +11,6 @@
 
 #include "highmap/geometry/cloud.hpp"
 #include "highmap/geometry/path.hpp"
-#include "highmap/heightmap.hpp"
 
 #include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/gui/widgets/gui_utils.hpp"
@@ -333,8 +332,8 @@ void NodeInfoDialog::update_ports_content()
 
       if (type_name == typeid(hmap::Array).name())
         new_row.data_info = get_data_info<hmap::Array>(ptrs.node, new_row.caption);
-      else if (type_name == typeid(hmap::Heightmap).name())
-        new_row.data_info = get_data_info<hmap::Heightmap>(ptrs.node, new_row.caption);
+      else if (type_name == typeid(hmap::VirtualArray).name())
+        new_row.data_info = get_data_info<hmap::VirtualArray>(ptrs.node, new_row.caption);
       else if (type_name == typeid(hmap::Cloud).name())
         new_row.data_info = get_data_info<hmap::Cloud>(ptrs.node, new_row.caption);
       else if (type_name == typeid(hmap::Path).name())

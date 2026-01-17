@@ -20,79 +20,45 @@ void setup_shape_index_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("radius", "radius", 0.01f, 0.f, 0.2f);
-  node.add_attr<BoolAttribute>("inverse", "inverse", false);
-  node.add_attr<BoolAttribute>("smoothing", "smoothing", false);
-  node.add_attr<FloatAttribute>("smoothing_radius", "smoothing_radius", 0.05f, 0.f, 0.2f);
-  node.add_attr<BoolAttribute>("GPU", "GPU", HSD_DEFAULT_GPU_MODE);
 
   // attribute(s) order
-  node.set_attr_ordered_key({"radius",
-                             "_SEPARATOR_",
-                             "inverse",
-                             "smoothing",
-                             "smoothing_radius",
-                             "_SEPARATOR_",
-                             "GPU"});
+  node.set_attr_ordered_key({"radius"});
+
+  setup_post_process_heightmap_attributes(node,
+                                          {.add_mix = false, .remap_active_state = true});
 }
 
 void compute_shape_index_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
+  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
     // zero radius accepted
     int ir = std::max(0, (int)(node.get_attr<FloatAttribute>("radius") * p_out->shape.x));
 
-    if (node.get_attr<BoolAttribute>("GPU"))
-    {
-      hmap::transform(
-          {p_out, p_in},
-          [&ir](std::vector<hmap::Array *> p_arrays)
-          {
-            hmap::Array *pa_out = p_arrays[0];
-            hmap::Array *pa_in = p_arrays[1];
-
-            *pa_out = hmap::gpu::shape_index(*pa_in, ir);
-          },
-          node.get_config_ref()->hmap_transform_mode_gpu);
-    }
-    else
-    {
-      hmap::transform(
-          {p_out, p_in},
-          [&ir](std::vector<hmap::Array *> p_arrays)
-          {
-            hmap::Array *pa_out = p_arrays[0];
-            hmap::Array *pa_in = p_arrays[1];
-
-            *pa_out = hmap::shape_index(*pa_in, ir);
-          },
-          node.get_config_ref()->hmap_transform_mode_cpu);
-    }
+    hmap::for_each_tile(
+        {p_out, p_in},
+        [&ir](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
+        {
+          auto [pa_out, pa_in] = unpack<2>(p_arrays);
+          *pa_out = hmap::gpu::shape_index(*pa_in, ir);
+        },
+        node.cfg().cm_gpu);
 
     p_out->smooth_overlap_buffers();
 
     // post-process
-    post_process_heightmap(node,
-                           *p_out,
-                           node.get_attr<BoolAttribute>("inverse"),
-                           node.get_attr<BoolAttribute>("smoothing"),
-                           node.get_attr<FloatAttribute>("smoothing_radius"),
-                           false, // saturate
-                           {0.f, 0.f},
-                           0.f,
-                           false, // remap
-                           {0.f, 0.f});
+    post_process_heightmap(node, *p_out);
   }
 }
 

@@ -10,6 +10,7 @@
 #include "highmap/geometry/cloud.hpp"
 #include "highmap/geometry/path.hpp"
 #include "highmap/heightmap.hpp"
+#include "highmap/virtual_array/virtual_array.hpp"
 
 #include "attributes/seed_attribute.hpp"
 
@@ -62,6 +63,21 @@ BaseNode::BaseNode(const std::string &label, std::weak_ptr<GraphConfig> config)
     Logger::log()->warn("Missing documentation for node: {}", label);
     this->documentation = nlohmann::json::object();
   }
+}
+
+const GraphConfig &BaseNode::cfg() const
+{
+  auto ptr = config.lock();
+
+  if (!ptr)
+  {
+    Logger::log()->critical("BaseNode::get_category: Config ptr is nullptr, node: {}/{}",
+                            this->get_caption(),
+                            this->get_id());
+    throw std::runtime_error("Config ptr is nullptr.");
+  }
+
+  return *ptr;
 }
 
 void BaseNode::compute()
@@ -482,6 +498,8 @@ void BaseNode::propagate_config_change()
                        this->get_caption(),
                        this->get_id());
 
+  const GraphConfig &cfg = *this->get_config_ref();
+
   // go through the data and modify is needed (only outputs hold data)
   for (int k = 0; k < this->get_nports(); k++)
     if (this->get_port_type(k) == gngui::PortType::OUT)
@@ -492,23 +510,19 @@ void BaseNode::propagate_config_change()
       {
         auto *p_v = this->get_value_ref<hmap::Heightmap>(k);
         if (p_v)
-          *p_v = hmap::Heightmap(this->get_config_ref()->shape,
-                                 this->get_config_ref()->tiling,
-                                 this->get_config_ref()->overlap);
+          *p_v = hmap::Heightmap(cfg.shape, cfg.tiling, cfg.overlap);
       }
       else if (type == typeid(hmap::HeightmapRGBA).name())
       {
         auto *p_v = this->get_value_ref<hmap::HeightmapRGBA>(k);
         if (p_v)
-          *p_v = hmap::HeightmapRGBA(this->get_config_ref()->shape,
-                                     this->get_config_ref()->tiling,
-                                     this->get_config_ref()->overlap);
+          *p_v = hmap::HeightmapRGBA(cfg.shape, cfg.tiling, cfg.overlap);
       }
       else if (type == typeid(hmap::Array).name())
       {
         auto *p_v = this->get_value_ref<hmap::Array>(k);
         if (p_v)
-          *p_v = hmap::Array(this->get_config_ref()->shape);
+          *p_v = hmap::Array(cfg.shape);
       }
       else if (type == typeid(std::vector<hmap::Heightmap>).name())
       {
@@ -516,9 +530,19 @@ void BaseNode::propagate_config_change()
         if (p_v)
         {
           for (auto &h : *p_v)
-            h = hmap::Heightmap(this->get_config_ref()->shape,
-                                this->get_config_ref()->tiling,
-                                this->get_config_ref()->overlap);
+            h = hmap::Heightmap(cfg.shape, cfg.tiling, cfg.overlap);
+        }
+      }
+      else if (type == typeid(hmap::VirtualArray).name())
+      {
+        auto *p_v = this->get_value_ref<hmap::VirtualArray>(k);
+        if (p_v)
+        {
+          auto va = hmap::VirtualArray(cfg.shape,
+                                       cfg.tile_shape,
+                                       cfg.halo,
+                                       cfg.storage_mode);
+          p_v->copy_from(va, cfg.cm_cpu);
         }
       }
     }

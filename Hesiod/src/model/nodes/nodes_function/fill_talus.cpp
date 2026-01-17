@@ -19,8 +19,8 @@ void setup_fill_talus_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("slope", "slope", 4.f, 0.1f, FLT_MAX);
@@ -35,25 +35,27 @@ void compute_fill_talus_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
+  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
     float talus = node.get_attr<FloatAttribute>("slope") / (float)p_out->shape.x;
 
-    // copy the input heightmap
-    *p_out = *p_in;
+    hmap::for_each_tile(
+        {p_out, p_in},
+        [&node, &talus](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
+        {
+          auto [pa_out, pa_in] = unpack<2>(p_arrays);
+          *pa_out = *pa_in;
 
-    hmap::transform(*p_out,
-                    [&node, &talus](hmap::Array &x)
-                    {
-                      hmap::fill_talus(x,
-                                       talus,
-                                       node.get_attr<SeedAttribute>("seed"),
-                                       node.get_attr<FloatAttribute>("noise_ratio"));
-                    });
+          hmap::fill_talus(*pa_in,
+                           talus,
+                           node.get_attr<SeedAttribute>("seed"),
+                           node.get_attr<FloatAttribute>("noise_ratio"));
+        },
+        node.cfg().cm_cpu);
 
     p_out->smooth_overlap_buffers();
   }

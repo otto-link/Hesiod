@@ -19,9 +19,9 @@ void setup_merge_water_depths_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "depth1");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "depth2");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "water_depth", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "depth1");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "depth2");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "water_depth", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("k_smooth", "k_smooth", 0.f, 0.f, 0.1f, "{:.4f}");
@@ -34,16 +34,16 @@ void compute_merge_water_depths_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in1 = node.get_value_ref<hmap::Heightmap>("depth1");
-  hmap::Heightmap *p_in2 = node.get_value_ref<hmap::Heightmap>("depth2");
+  hmap::VirtualArray *p_in1 = node.get_value_ref<hmap::VirtualArray>("depth1");
+  hmap::VirtualArray *p_in2 = node.get_value_ref<hmap::VirtualArray>("depth2");
 
   if (p_in1 && p_in2)
   {
-    hmap::Heightmap *p_depth = node.get_value_ref<hmap::Heightmap>("water_depth");
+    hmap::VirtualArray *p_depth = node.get_value_ref<hmap::VirtualArray>("water_depth");
 
-    hmap::transform(
+    hmap::for_each_tile(
         {p_depth, p_in1, p_in2},
-        [&node](std::vector<hmap::Array *> p_arrays)
+        [&node](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
         {
           hmap::Array *pa_depth = p_arrays[0];
           hmap::Array *pa_in1 = p_arrays[1];
@@ -53,7 +53,7 @@ void compute_merge_water_depths_node(BaseNode &node)
                                                *pa_in2,
                                                node.get_attr<FloatAttribute>("k_smooth"));
         },
-        node.get_config_ref()->hmap_transform_mode_cpu);
+        node.cfg().cm_cpu);
 
     p_depth->smooth_overlap_buffers();
   }

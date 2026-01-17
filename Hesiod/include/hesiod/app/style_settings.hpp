@@ -10,6 +10,7 @@
 #include "highmap/geometry/cloud.hpp"
 #include "highmap/geometry/path.hpp"
 #include "highmap/heightmap.hpp"
+#include "highmap/virtual_array/virtual_array.hpp"
 
 #include "nlohmann/json.hpp"
 
@@ -29,6 +30,7 @@ struct StyleSettings
       {typeid(hmap::Array).name(), QColor(255, 121, 198, 255)},
       {typeid(hmap::Cloud).name(), QColor(139, 233, 253, 255)},
       {typeid(hmap::Heightmap).name(), QColor(248, 248, 242, 255)},
+      {typeid(hmap::VirtualArray).name(), QColor(248, 248, 242, 255)},
       {typeid(std::vector<hmap::Heightmap>).name(), QColor(255, 85, 85, 255)},
       {typeid(hmap::HeightmapRGBA).name(), QColor(189, 147, 249, 255)},
       {typeid(hmap::Path).name(), QColor(255, 184, 108, 255)},

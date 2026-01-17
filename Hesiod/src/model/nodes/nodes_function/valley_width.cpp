@@ -19,61 +19,48 @@ void setup_valley_width_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("radius", "radius", 0.1f, 0.f, 0.2f);
   node.add_attr<BoolAttribute>("ridge_select", "ridge_select", false);
 
-  node.add_attr<RangeAttribute>("remap",
-                                "remap",
-                                std::vector<float>({0.f, 1.f}),
-                                0.f,
-                                1.f);
-
   // attribute(s) order
-  node.set_attr_ordered_key({"radius", "ridge_select", "_SEPARATOR_", "remap"});
+  node.set_attr_ordered_key({"radius", "ridge_select"});
+
+  setup_post_process_heightmap_attributes(
+      node,
+      {.add_mix = false, .remap_active_state = false});
 }
 
 void compute_valley_width_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
+  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
     int ir = std::max(1, (int)(node.get_attr<FloatAttribute>("radius") * p_out->shape.x));
 
-    hmap::transform(
+    hmap::for_each_tile(
         {p_out, p_in},
-        [&node, ir](std::vector<hmap::Array *> p_arrays)
+        [&node, ir](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
         {
-          hmap::Array *pa_out = p_arrays[0];
-          hmap::Array *pa_in = p_arrays[1];
-
+          auto [pa_out, pa_in] = unpack<2>(p_arrays);
           *pa_out = hmap::valley_width(*pa_in,
                                        ir,
                                        node.get_attr<BoolAttribute>("ridge_select"));
         },
-        node.get_config_ref()->hmap_transform_mode_cpu);
+        node.cfg().cm_cpu);
 
     p_out->smooth_overlap_buffers();
 
     // post-process
-    post_process_heightmap(node,
-                           *p_out,
-                           false, // inverse
-                           false, // smooth
-                           0,
-                           false, // saturate
-                           {0.f, 0.f},
-                           0.f,
-                           node.get_attr_ref<RangeAttribute>("remap")->get_is_active(),
-                           node.get_attr<RangeAttribute>("remap"));
+    post_process_heightmap(node, *p_out);
   }
 }
 

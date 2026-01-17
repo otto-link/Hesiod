@@ -115,8 +115,13 @@ void run_batch_mode(const std::string     &filename,
   // override some parameters on request
   if (p_input_model_config)
   {
-    config.hmap_transform_mode_cpu = p_input_model_config->hmap_transform_mode_cpu;
-    config.hmap_transform_mode_gpu = p_input_model_config->hmap_transform_mode_gpu;
+    config.cm_cpu.mode = p_input_model_config->cm_cpu.mode;
+    config.cm_gpu.mode = p_input_model_config->cm_gpu.mode;
+
+    // force memory release after each node computation
+    config.cm_cpu.trim_storage = true;
+    config.cm_gpu.trim_storage = true;
+    config.cm_single_array.trim_storage = true;
   }
 
   if (shape.x || shape.y || tiling.x || tiling.y || overlap >= 0.f)
@@ -126,6 +131,7 @@ void run_batch_mode(const std::string     &filename,
     config.overlap = overlap >= 0.f
                          ? overlap
                          : ((config.tiling.x == 1 && config.tiling.y == 1) ? 0.f : 0.5f);
+    config.update_parameters();
 
     Logger::log()->info("graph configurations will be overriden:");
     Logger::log()->info("compute shape: {{{}, {}}}", config.shape.x, config.shape.y);

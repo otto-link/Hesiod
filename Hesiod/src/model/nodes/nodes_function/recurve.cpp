@@ -21,9 +21,9 @@ void setup_recurve_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "mask");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
 
   // attribute(s)
   std::vector<float> default_values = {0.f, 0.25f, 0.5f, 0.75f, 1.f};
@@ -34,26 +34,27 @@ void compute_recurve_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
+  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_mask = node.get_value_ref<hmap::Heightmap>("mask");
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
+    hmap::VirtualArray *p_mask = node.get_value_ref<hmap::VirtualArray>("mask");
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
     if (node.get_attr<VecFloatAttribute>("values").size() >= 3)
     {
-      float hmin = p_in->min();
-      float hmax = p_in->max();
+      float hmin = p_in->min(node.cfg().cm_cpu);
+      float hmax = p_in->max(node.cfg().cm_cpu);
 
       std::vector<float> t = hmap::linspace(
           0.f,
           1.f,
           node.get_attr<VecFloatAttribute>("values").size());
 
-      hmap::transform(
+      hmap::for_each_tile(
           {p_out, p_in, p_mask},
-          [&node, t, hmin, hmax](std::vector<hmap::Array *> p_arrays)
+          [&node, t, hmin, hmax](std::vector<hmap::Array *> p_arrays,
+                                 const hmap::TileRegion &)
           {
             hmap::Array *pa_out = p_arrays[0];
             hmap::Array *pa_in = p_arrays[1];
@@ -68,7 +69,7 @@ void compute_recurve_node(BaseNode &node)
                           pa_mask);
             hmap::remap(*pa_out, hmin, hmax, 0.f, 1.f);
           },
-          node.get_config_ref()->hmap_transform_mode_cpu);
+          node.cfg().cm_cpu);
     }
     else
     {

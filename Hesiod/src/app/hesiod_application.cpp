@@ -325,8 +325,8 @@ void HesiodApplication::on_export_batch()
 
       if (bake_settings.force_distributed)
       {
-        bake_config.hmap_transform_mode_cpu = hmap::TransformMode::DISTRIBUTED;
-        bake_config.hmap_transform_mode_gpu = hmap::TransformMode::DISTRIBUTED;
+        bake_config.cm_cpu.mode = hmap::ForEachMode::VA_DISTRIBUTED;
+        bake_config.cm_gpu.mode = hmap::ForEachMode::VA_DISTRIBUTED;
       }
 
       // run batch node

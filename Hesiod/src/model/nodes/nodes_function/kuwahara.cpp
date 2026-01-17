@@ -19,36 +19,44 @@ void setup_kuwahara_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "mask");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("radius", "radius", 0.05f, 0.f, 0.2f);
   node.add_attr<FloatAttribute>("mix_ratio", "mix_ratio", 1.f, 0.f, 1.f);
+
+  setup_post_process_heightmap_attributes(node,
+                                          {.add_mix = true, .remap_active_state = true});
 }
 
 void compute_kuwahara_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
+  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_mask = node.get_value_ref<hmap::Heightmap>("mask");
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
-
-    // copy the input heightmap
-    *p_out = *p_in;
+    hmap::VirtualArray *p_mask = node.get_value_ref<hmap::VirtualArray>("mask");
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
     int ir = std::max(1, (int)(node.get_attr<FloatAttribute>("radius") * p_out->shape.x));
 
-    hmap::transform(
-        *p_out,
-        p_mask,
-        [&node, &ir](hmap::Array &x, hmap::Array *p_mask)
-        { hmap::kuwahara(x, ir, p_mask, node.get_attr<FloatAttribute>("mix_ratio")); });
+    hmap::for_each_tile(
+        {p_out, p_in, p_mask},
+        [&node, &ir](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
+        {
+          auto [pa_out, pa_in, pa_mask] = unpack<3>(p_arrays);
+          *pa_out = *pa_in;
+
+          hmap::kuwahara(*pa_out,
+                         ir,
+                         pa_mask,
+                         node.get_attr<FloatAttribute>("mix_ratio"));
+        },
+        node.cfg().cm_cpu);
 
     p_out->smooth_overlap_buffers();
   }

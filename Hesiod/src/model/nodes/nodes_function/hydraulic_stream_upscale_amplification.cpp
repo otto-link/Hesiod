@@ -1,9 +1,7 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-
 #include "highmap/erosion.hpp"
-#include "highmap/heightmap.hpp"
 
 #include "attributes.hpp"
 
@@ -20,9 +18,9 @@ void setup_hydraulic_stream_upscale_amplification_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "mask");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("c_erosion", "c_erosion", 0.01f, 0.001f, 0.1f);
@@ -46,32 +44,33 @@ void compute_hydraulic_stream_upscale_amplification_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
+  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_mask = node.get_value_ref<hmap::Heightmap>("mask");
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
-
-    // copy the input heightmap
-    *p_out = *p_in;
+    hmap::VirtualArray *p_mask = node.get_value_ref<hmap::VirtualArray>("mask");
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
     int ir = (int)(node.get_attr<FloatAttribute>("radius") * p_out->shape.x);
 
-    hmap::transform(*p_out,
-                    p_mask,
-                    [&node, &ir](hmap::Array &h_out, hmap::Array *p_mask_array)
-                    {
-                      hmap::hydraulic_stream_upscale_amplification(
-                          h_out,
-                          p_mask_array,
-                          node.get_attr<FloatAttribute>("c_erosion"),
-                          node.get_attr<FloatAttribute>("talus_ref"),
-                          node.get_attr<IntAttribute>("upscaling_levels"),
-                          node.get_attr<FloatAttribute>("persistence"),
-                          ir,
-                          node.get_attr<FloatAttribute>("clipping_ratio"));
-                    });
+    hmap::for_each_tile(
+        {p_out, p_in, p_mask},
+        [&node, &ir](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
+        {
+          auto [pa_out, pa_in, pa_mask] = unpack<3>(p_arrays);
+          *pa_out = *pa_in;
+
+          hmap::hydraulic_stream_upscale_amplification(
+              *pa_out,
+              pa_mask,
+              node.get_attr<FloatAttribute>("c_erosion"),
+              node.get_attr<FloatAttribute>("talus_ref"),
+              node.get_attr<IntAttribute>("upscaling_levels"),
+              node.get_attr<FloatAttribute>("persistence"),
+              ir,
+              node.get_attr<FloatAttribute>("clipping_ratio"));
+        },
+        node.cfg().cm_cpu);
 
     p_out->smooth_overlap_buffers();
   }

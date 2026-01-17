@@ -19,8 +19,8 @@ void setup_flooding_lake_system_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "elevation");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "water_depth", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "elevation");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "water_depth", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("mininal_radius", "mininal_radius", 0.05f, 0.f, 0.5f);
@@ -34,25 +34,24 @@ void compute_flooding_lake_system_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("elevation");
+  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("elevation");
 
   if (p_in)
   {
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("water_depth");
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("water_depth");
 
     int   ir = node.get_attr<FloatAttribute>("mininal_radius") * (float)p_in->shape.x;
     float surface_threshold = M_PI * ir * ir;
 
-    hmap::transform(
+    hmap::for_each_tile(
         {p_out, p_in},
-        [&node, surface_threshold](std::vector<hmap::Array *> p_arrays)
+        [&node, surface_threshold](std::vector<hmap::Array *> p_arrays,
+                                   const hmap::TileRegion &)
         {
-          hmap::Array *pa_out = p_arrays[0];
-          hmap::Array *pa_in = p_arrays[1];
-
+          auto [pa_out, pa_in] = unpack<2>(p_arrays);
           *pa_out = hmap::flooding_lake_system(*pa_in, surface_threshold);
         },
-        hmap::TransformMode::SINGLE_ARRAY); // forced, not tileable
+        node.cfg().cm_single_array); // forced, not tileable
   }
 }
 

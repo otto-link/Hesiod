@@ -1,7 +1,6 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-
 #include "highmap/export.hpp"
 
 #include "attributes.hpp"
@@ -22,7 +21,7 @@ void setup_export_normal_map_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
 
   // attribute(s)
   node.add_attr<FilenameAttribute>("fname",
@@ -43,7 +42,7 @@ void compute_export_normal_map_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
+  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
 
   if (p_in && node.get_attr<BoolAttribute>("auto_export"))
   {
@@ -51,9 +50,13 @@ void compute_export_normal_map_node(BaseNode &node)
     fname = ensure_extension(fname, ".png");
 
     if (node.get_attr<BoolAttribute>("16bit"))
-      hmap::export_normal_map_png(fname.string(), p_in->to_array(), CV_16U);
+      hmap::export_normal_map_png(fname.string(),
+                                  p_in->to_array(node.cfg().cm_cpu),
+                                  CV_16U);
     else
-      hmap::export_normal_map_png(fname.string(), p_in->to_array(), CV_8U);
+      hmap::export_normal_map_png(fname.string(),
+                                  p_in->to_array(node.cfg().cm_cpu),
+                                  CV_8U);
   }
 }
 

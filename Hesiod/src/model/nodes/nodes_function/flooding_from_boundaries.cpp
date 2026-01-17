@@ -19,8 +19,8 @@ void setup_flooding_from_boundaries_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "water_depth", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "water_depth", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("elevation", "elevation", 0.2f, -1.f, 2.f);
@@ -38,19 +38,17 @@ void compute_flooding_from_boundaries_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
+  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("water_depth");
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("water_depth");
 
-    hmap::transform(
+    hmap::for_each_tile(
         {p_out, p_in},
-        [&node](std::vector<hmap::Array *> p_arrays)
+        [&node](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
         {
-          hmap::Array *pa_out = p_arrays[0];
-          hmap::Array *pa_in = p_arrays[1];
-
+          auto [pa_out, pa_in] = unpack<2>(p_arrays);
           *pa_out = hmap::flooding_from_boundaries(
               *pa_in,
               node.get_attr<FloatAttribute>("elevation"),
@@ -59,7 +57,7 @@ void compute_flooding_from_boundaries_node(BaseNode &node)
               node.get_attr<BoolAttribute>("from_north"),
               node.get_attr<BoolAttribute>("from_south"));
         },
-        hmap::TransformMode::SINGLE_ARRAY); // forced, not tileable
+        node.cfg().cm_single_array); // forced, not tileable
   }
 }
 

@@ -19,9 +19,9 @@ void setup_radial_displacement_to_xy_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dr");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "dx", CONFIG(node));
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "dy", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dr");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "dx", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "dy", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("smoothing", "smoothing", 1.f, 0.f, 10.f);
@@ -35,26 +35,29 @@ void compute_radial_displacement_to_xy_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_dr = node.get_value_ref<hmap::Heightmap>("dr");
+  hmap::VirtualArray *p_dr = node.get_value_ref<hmap::VirtualArray>("dr");
 
   if (p_dr)
   {
-    hmap::Heightmap *p_dx = node.get_value_ref<hmap::Heightmap>("dx");
-    hmap::Heightmap *p_dy = node.get_value_ref<hmap::Heightmap>("dy");
+    hmap::VirtualArray *p_dx = node.get_value_ref<hmap::VirtualArray>("dx");
+    hmap::VirtualArray *p_dy = node.get_value_ref<hmap::VirtualArray>("dy");
 
-    hmap::transform(
-        *p_dr,
-        *p_dx,
-        *p_dy,
-        [&node](hmap::Array &dr, hmap::Array &dx, hmap::Array &dy, hmap::Vec4<float> bbox)
+    hmap::for_each_tile(
+        {p_dr, p_dx, p_dy},
+        [&node](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &region)
         {
-          hmap::radial_displacement_to_xy(dr,
-                                          dx,
-                                          dy,
+          hmap::Array *pa_dr = p_arrays[0];
+          hmap::Array *pa_dx = p_arrays[1];
+          hmap::Array *pa_dy = p_arrays[2];
+
+          hmap::radial_displacement_to_xy(*pa_dr,
+                                          *pa_dx,
+                                          *pa_dy,
                                           node.get_attr<FloatAttribute>("smoothing"),
                                           node.get_attr<Vec2FloatAttribute>("center"),
-                                          bbox);
-        });
+                                          region.bbox);
+        },
+        node.cfg().cm_cpu);
   }
 }
 

@@ -2,13 +2,13 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include "highmap/colorize.hpp"
-#include "highmap/heightmap.hpp"
 #include "highmap/operator.hpp"
 
 #include "attributes.hpp"
 
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
+#include "highmap/virtual_array/virtual_array.hpp"
 
 using namespace attr;
 
@@ -24,14 +24,14 @@ void setup_background_image_for_cloud_attribute(BaseNode          &node,
 
   auto lambda = [&node, port_id]()
   {
-    hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>(port_id);
+    hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>(port_id);
 
     if (!p_in)
       return QImage();
 
     // generate a preview of the heightmap
     hmap::Vec2<int> shape_preview = hmap::Vec2<int>(256, 256);
-    hmap::Array     array = p_in->to_array(shape_preview);
+    hmap::Array     array = p_in->to_array(shape_preview, node.cfg().cm_cpu);
 
     std::vector<uint8_t> img(shape_preview.x * shape_preview.y);
 

@@ -22,7 +22,7 @@ void setup_stamping_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Cloud>(gnode::PortType::IN, "cloud");
   node.add_port<hmap::Array>(gnode::PortType::IN, "kernel");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("kernel_radius", "kernel_radius", 0.1f, 0.01f, 0.5f);
@@ -36,9 +36,6 @@ void setup_stamping_node(BaseNode &node)
   node.add_attr<FloatAttribute>("k_smoothing", "k_smoothing", 0.1f, 0.01f, 1.f);
   node.add_attr<BoolAttribute>("kernel_flip", "kernel_flip", false);
   node.add_attr<BoolAttribute>("kernel_rotate", "kernel_rotate", false);
-  node.add_attr<BoolAttribute>("inverse", "inverse", false);
-  node.add_attr<RangeAttribute>("remap", "remap");
-
   // attribute(s) order
   node.set_attr_ordered_key({"kernel_radius",
                              "kernel_scale_radius",
@@ -47,10 +44,10 @@ void setup_stamping_node(BaseNode &node)
                              "seed",
                              "k_smoothing",
                              "kernel_flip",
-                             "kernel_rotate",
-                             "_SEPARATOR_",
-                             "inverse",
-                             "remap"});
+                             "kernel_rotate"});
+
+  setup_post_process_heightmap_attributes(node,
+                                          {.add_mix = false, .remap_active_state = true});
 }
 
 void compute_stamping_node(BaseNode &node)
@@ -62,7 +59,7 @@ void compute_stamping_node(BaseNode &node)
 
   if (p_cloud && p_kernel)
   {
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
     std::vector<float> xp = p_cloud->get_x();
     std::vector<float> yp = p_cloud->get_y();
@@ -73,40 +70,35 @@ void compute_stamping_node(BaseNode &node)
         (int)(node.get_attr<FloatAttribute>("kernel_radius") * p_out->shape.x));
     uint seed = node.get_attr<SeedAttribute>("seed");
 
-    hmap::fill(*p_out,
-               [&node, &xp, &yp, &zp, p_kernel, ir, &seed](hmap::Vec2<int>   shape,
-                                                           hmap::Vec4<float> bbox)
-               {
-                 return stamping(shape,
-                                 xp,
-                                 yp,
-                                 zp,
-                                 *p_kernel,
-                                 ir,
-                                 node.get_attr<BoolAttribute>("kernel_scale_radius"),
-                                 node.get_attr<BoolAttribute>("kernel_scale_amplitude"),
-                                 (hmap::StampingBlendMethod)node.get_attr<EnumAttribute>(
-                                     "blend_method"),
-                                 seed++,
-                                 node.get_attr<FloatAttribute>("k_smoothing"),
-                                 node.get_attr<BoolAttribute>("kernel_flip"),
-                                 node.get_attr<BoolAttribute>("kernel_rotate"),
-                                 bbox);
-               });
+    hmap::for_each_tile(
+        {p_out},
+        [&node, &xp, &yp, &zp, p_kernel, ir, &seed](std::vector<hmap::Array *> p_arrays,
+                                                    const hmap::TileRegion    &region)
+        {
+          auto [pa_out] = unpack<1>(p_arrays);
+
+          *pa_out = hmap::stamping(
+              region.shape,
+              xp,
+              yp,
+              zp,
+              *p_kernel,
+              ir,
+              node.get_attr<BoolAttribute>("kernel_scale_radius"),
+              node.get_attr<BoolAttribute>("kernel_scale_amplitude"),
+              (hmap::StampingBlendMethod)node.get_attr<EnumAttribute>("blend_method"),
+              seed++,
+              node.get_attr<FloatAttribute>("k_smoothing"),
+              node.get_attr<BoolAttribute>("kernel_flip"),
+              node.get_attr<BoolAttribute>("kernel_rotate"),
+              region.bbox);
+        },
+        node.cfg().cm_cpu);
 
     p_out->smooth_overlap_buffers();
 
     // post-process
-    post_process_heightmap(node,
-                           *p_out,
-                           node.get_attr<BoolAttribute>("inverse"),
-                           false, // smooth
-                           0,
-                           false, // saturate
-                           {0.f, 0.f},
-                           0.f,
-                           node.get_attr_ref<RangeAttribute>("remap")->get_is_active(),
-                           node.get_attr<RangeAttribute>("remap"));
+    post_process_heightmap(node, *p_out);
   }
 }
 

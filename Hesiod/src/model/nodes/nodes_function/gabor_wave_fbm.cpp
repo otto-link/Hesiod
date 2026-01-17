@@ -20,12 +20,12 @@ void setup_gabor_wave_fbm_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dx");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "dy");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "control");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "envelope");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "angle");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dx");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dy");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "control");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "envelope");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "angle");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<WaveNbAttribute>("kw", "Spatial Frequency");
@@ -64,18 +64,16 @@ void compute_gabor_wave_fbm_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_dx = node.get_value_ref<hmap::Heightmap>("dx");
-  hmap::Heightmap *p_dy = node.get_value_ref<hmap::Heightmap>("dy");
-  hmap::Heightmap *p_ctrl = node.get_value_ref<hmap::Heightmap>("control");
-  hmap::Heightmap *p_env = node.get_value_ref<hmap::Heightmap>("envelope");
-  hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
-  hmap::Heightmap *p_angle = node.get_value_ref<hmap::Heightmap>("angle");
+  hmap::VirtualArray *p_dx = node.get_value_ref<hmap::VirtualArray>("dx");
+  hmap::VirtualArray *p_dy = node.get_value_ref<hmap::VirtualArray>("dy");
+  hmap::VirtualArray *p_ctrl = node.get_value_ref<hmap::VirtualArray>("control");
+  hmap::VirtualArray *p_env = node.get_value_ref<hmap::VirtualArray>("envelope");
+  hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
+  hmap::VirtualArray *p_angle = node.get_value_ref<hmap::VirtualArray>("angle");
 
-  hmap::transform(
+  hmap::for_each_tile(
       {p_out, p_ctrl, p_dx, p_dy, p_angle},
-      [&node](std::vector<hmap::Array *> p_arrays,
-              hmap::Vec2<int>            shape,
-              hmap::Vec4<float>          bbox)
+      [&node](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &region)
       {
         hmap::Array *pa_out = p_arrays[0];
         hmap::Array *pa_ctrl = p_arrays[1];
@@ -83,13 +81,13 @@ void compute_gabor_wave_fbm_node(BaseNode &node)
         hmap::Array *pa_dy = p_arrays[3];
         hmap::Array *pa_angle = p_arrays[4];
 
-        hmap::Array angle_deg(shape, node.get_attr<FloatAttribute>("angle"));
+        hmap::Array angle_deg(region.shape, node.get_attr<FloatAttribute>("angle"));
 
         if (pa_angle)
           angle_deg += (*pa_angle) * 180.f / M_PI;
 
         *pa_out = hmap::gpu::gabor_wave_fbm(
-            shape,
+            region.shape,
             node.get_attr<WaveNbAttribute>("kw"),
             node.get_attr<SeedAttribute>("seed"),
             angle_deg,
@@ -101,9 +99,9 @@ void compute_gabor_wave_fbm_node(BaseNode &node)
             pa_ctrl,
             pa_dx,
             pa_dy,
-            bbox);
+            region.bbox);
       },
-      node.get_config_ref()->hmap_transform_mode_gpu);
+      node.cfg().cm_gpu);
 
   // post-process
   post_apply_enveloppe(node, *p_out, p_env);

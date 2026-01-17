@@ -19,9 +19,9 @@ void setup_median3x3_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "mask");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<BoolAttribute>("GPU", "GPU", HSD_DEFAULT_GPU_MODE);
@@ -31,18 +31,18 @@ void compute_median3x3_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
+  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_mask = node.get_value_ref<hmap::Heightmap>("mask");
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
+    hmap::VirtualArray *p_mask = node.get_value_ref<hmap::VirtualArray>("mask");
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
     if (node.get_attr<BoolAttribute>("GPU"))
     {
-      hmap::transform(
+      hmap::for_each_tile(
           {p_out, p_in, p_mask},
-          [](std::vector<hmap::Array *> p_arrays)
+          [](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
           {
             hmap::Array *pa_out = p_arrays[0];
             hmap::Array *pa_in = p_arrays[1];
@@ -52,13 +52,13 @@ void compute_median3x3_node(BaseNode &node)
 
             hmap::gpu::median_3x3(*pa_in, pa_mask);
           },
-          node.get_config_ref()->hmap_transform_mode_gpu);
+          node.cfg().cm_gpu);
     }
     else
     {
-      hmap::transform(
+      hmap::for_each_tile(
           {p_out, p_in, p_mask},
-          [](std::vector<hmap::Array *> p_arrays)
+          [](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
           {
             hmap::Array *pa_out = p_arrays[0];
             hmap::Array *pa_in = p_arrays[1];
@@ -68,7 +68,7 @@ void compute_median3x3_node(BaseNode &node)
 
             hmap::median_3x3(*pa_in, pa_mask);
           },
-          node.get_config_ref()->hmap_transform_mode_gpu);
+          node.cfg().cm_gpu);
     }
 
     p_out->smooth_overlap_buffers();

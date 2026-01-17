@@ -19,9 +19,9 @@ void setup_recurve_kura_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Heightmap>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::Heightmap>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "mask");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("a", "a", 2.f, 0.01f, 4.f);
@@ -32,32 +32,33 @@ void compute_recurve_kura_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Heightmap *p_in = node.get_value_ref<hmap::Heightmap>("input");
+  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
 
   if (p_in)
   {
-    hmap::Heightmap *p_mask = node.get_value_ref<hmap::Heightmap>("mask");
-    hmap::Heightmap *p_out = node.get_value_ref<hmap::Heightmap>("output");
+    hmap::VirtualArray *p_mask = node.get_value_ref<hmap::VirtualArray>("mask");
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
-    // copy the input heightmap
-    *p_out = *p_in;
+    float hmin = p_out->min(node.cfg().cm_cpu);
+    float hmax = p_out->max(node.cfg().cm_cpu);
 
-    float hmin = p_out->min();
-    float hmax = p_out->max();
+    p_out->remap(0.f, 1.f, hmin, hmax, node.cfg().cm_cpu);
 
-    p_out->remap(0.f, 1.f, hmin, hmax);
+    hmap::for_each_tile(
+        {p_out, p_in, p_mask},
+        [&node](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
+        {
+          auto [pa_out, pa_in, pa_mask] = unpack<3>(p_arrays);
+          *pa_out = *pa_in;
 
-    hmap::transform(*p_out,
-                    p_mask,
-                    [&node](hmap::Array &x, hmap::Array *p_mask)
-                    {
-                      hmap::recurve_kura(x,
-                                         node.get_attr<FloatAttribute>("a"),
-                                         node.get_attr<FloatAttribute>("b"),
-                                         p_mask);
-                    });
+          hmap::recurve_kura(*pa_out,
+                             node.get_attr<FloatAttribute>("a"),
+                             node.get_attr<FloatAttribute>("b"),
+                             pa_mask);
+        },
+        node.cfg().cm_cpu);
 
-    p_out->remap(hmin, hmax, 0.f, 1.f);
+    p_out->remap(hmin, hmax, 0.f, 1.f, node.cfg().cm_cpu);
   }
 }
 
