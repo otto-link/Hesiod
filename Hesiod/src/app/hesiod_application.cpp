@@ -682,6 +682,7 @@ void HesiodApplication::setup_menu_bar()
 
   // texture dld
   auto *show_texture_downloader = new QAction("Texture Downloader", this);
+  show_texture_downloader->setIcon(HSD_ICON("cloud_download"));
   if (this->context.app_settings.interface.enable_texture_downloader)
   {
     view_menu->addSeparator();
