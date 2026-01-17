@@ -69,7 +69,7 @@ ExampleSelectorDialog::ExampleSelectorDialog(const QString &examples_path,
 
   auto *btn_layout = new QHBoxLayout();
   auto *ok_btn = new QPushButton("Open Ready-Made", this);
-  auto *cancel_btn = new QPushButton("Cancel", this);
+  auto *cancel_btn = new QPushButton("Start New Project", this);
   btn_layout->addStretch();
   btn_layout->addWidget(ok_btn);
   btn_layout->addWidget(cancel_btn);

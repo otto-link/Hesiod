@@ -630,6 +630,7 @@ void HesiodApplication::setup_menu_bar()
 
   auto *export_batch = new QAction("Bake and Export (High Resolution)", this);
   export_batch->setShortcut(tr("Alt+E"));
+  export_batch->setIcon(HSD_ICON("bakery_dining"));
   file_menu->addAction(export_batch);
 
   file_menu->addSeparator();
