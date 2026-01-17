@@ -11,6 +11,7 @@
 #include "hesiod/logger.hpp"
 #include "hesiod/model/graph/broadcast_param.hpp"
 #include "hesiod/model/graph/graph_node.hpp"
+#include "hesiod/model/nodes/base_node.hpp"
 
 namespace hesiod
 {
@@ -97,15 +98,17 @@ void GraphQListWidget::on_combobox_changed()
   QImage               image;
   std::vector<uint8_t> img = {};
 
-  hmap::Heightmap *p_h = gno->get_node_ref_by_id(node_id)->get_value_ref<hmap::Heightmap>(
-      port_id);
+  BaseNode *p_node = gno->get_node_ref_by_id<BaseNode>(node_id);
+  if (!p_node)
+    return;
+
+  hmap::VirtualArray *p_h = p_node->get_value_ref<hmap::VirtualArray>(port_id);
 
   if (p_h)
   {
     // TODO hardcoded
-    hmap::Vec2<int> shape_img(512, 512);
-
-    hmap::Array array = p_h->to_array(shape_img);
+    glm::ivec2  shape_img(256, 256);
+    hmap::Array array = p_h->to_array(shape_img, p_node->cfg().cm_cpu);
     img = hmap::colorize(array, array.min(), array.max(), hmap::Cmap::TURBO, true)
               .to_img_8bit();
     image = QImage(img.data(), shape_img.x, shape_img.y, QImage::Format_RGB888);
@@ -144,7 +147,7 @@ void GraphQListWidget::update_combobox()
       // TODO allow other data types
 
       // only allow heighmap (for now)
-      if (port->get_data_type() == typeid(hmap::Heightmap).name())
+      if (port->get_data_type() == typeid(hmap::VirtualArray).name())
       {
         const std::string tag = node->get_label() + "/" + node->get_id() + "/" +
                                 port->get_label();

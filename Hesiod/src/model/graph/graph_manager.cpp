@@ -85,8 +85,18 @@ void GraphManager::export_flatten()
 {
   Logger::log()->trace("GraphManager::export_flatten");
 
+  // create config
+  auto export_cfg = GraphConfig();
+  export_cfg.shape = export_param.shape;
+  export_cfg.tiling = export_param.tiling;
+  export_cfg.overlap = export_param.overlap;
+  export_cfg.update_parameters();
+
   // target heightmap
-  hmap::Heightmap h_export(export_param.shape, export_param.tiling, export_param.overlap);
+  hmap::VirtualArray h_export(export_cfg.shape,
+                              export_cfg.tile_shape,
+                              export_cfg.halo,
+                              export_cfg.storage_mode);
 
   // compute global bounding box
   hmap::Vec4<float> bbox_global(std::numeric_limits<float>::max(),
@@ -105,8 +115,8 @@ void GraphManager::export_flatten()
   }
 
   // retrieve for each graph the selected tag and the corresponding data
-  std::vector<const hmap::Heightmap *>  h_sources;
-  std::vector<const hmap::CoordFrame *> t_sources;
+  std::vector<const hmap::VirtualArray *> h_sources;
+  std::vector<const hmap::CoordFrame *>   t_sources;
 
   for (auto ids : this->export_param.ids)
   {
@@ -114,9 +124,9 @@ void GraphManager::export_flatten()
     std::string node_id = std::get<1>(ids);
     std::string port_id = std::get<2>(ids);
 
-    hmap::Heightmap *p_h = this->graph_nodes.at(graph_id)
-                               ->get_node_ref_by_id(node_id)
-                               ->get_value_ref<hmap::Heightmap>(port_id);
+    hmap::VirtualArray *p_h = this->graph_nodes.at(graph_id)
+                                  ->get_node_ref_by_id(node_id)
+                                  ->get_value_ref<hmap::VirtualArray>(port_id);
 
     hmap::CoordFrame *p_t = dynamic_cast<hmap::CoordFrame *>(
         this->graph_nodes.at(graph_id).get());
@@ -130,16 +140,21 @@ void GraphManager::export_flatten()
   float             rotation_angle = 0.f;
   hmap::CoordFrame  frame_export(origin, size, rotation_angle);
 
-  hmap::flatten_heightmap(h_sources, h_export, t_sources, frame_export);
+  hmap::flatten_heightmap(h_sources,
+                          h_export,
+                          t_sources,
+                          frame_export,
+                          export_cfg.cm_cpu);
 
   // raw heightmap
   const std::string fname = export_param.export_path.string();
-  h_export.to_array().to_png_grayscale(fname, CV_16U);
+  h_export.to_array(export_cfg.cm_cpu).to_png_grayscale(fname, CV_16U);
 
   // will hillshading
   const std::filesystem::path fname_hs = insert_before_extension(export_param.export_path,
                                                                  "_preview");
-  h_export.to_array().to_png(fname_hs.string(), hmap::Cmap::TERRAIN, true);
+  h_export.to_array(export_cfg.cm_cpu)
+      .to_png(fname_hs.string(), hmap::Cmap::TERRAIN, true);
 }
 
 const BroadcastMap &GraphManager::get_broadcast_params()

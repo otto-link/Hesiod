@@ -75,7 +75,7 @@ void compute_receive_node(BaseNode &node)
 
     if (t_source && p_va && t_target)
     {
-      // hmap::interpolate_heightmap(*p_h, *p_out, *t_source, *t_target);
+      hmap::interpolate_heightmap(*p_va, *p_out, *t_source, *t_target, node.cfg().cm_cpu);
     }
     else
     {
