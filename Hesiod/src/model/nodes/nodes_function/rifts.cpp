@@ -137,7 +137,7 @@ void compute_rifts_node(BaseNode &node)
     p_out->smooth_overlap_buffers();
 
     // remap to original range
-    p_out->remap(hmin, hmax, 0.f, 1.f, node.cfg().cm_gpu);
+    p_out->remap(hmin, hmax, node.cfg().cm_cpu);
 
     // post-process
     post_process_heightmap(node, *p_out, p_in);

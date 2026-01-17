@@ -102,8 +102,6 @@ void compute_hydraulic_stream_log_node(BaseNode &node)
     deposition_ir = std::max(1, deposition_ir);
     gradient_ir = std::max(1, gradient_ir);
 
-    LOG_DEBUG("%d %d", gradient_ir, deposition_ir);
-
     hmap::for_each_tile(
         {p_out, p_in, p_mask, p_erosion_map, p_deposition_map, p_flow_map},
         [&node, deposition_ir, gradient_ir](std::vector<hmap::Array *> p_arrays,
@@ -140,13 +138,13 @@ void compute_hydraulic_stream_log_node(BaseNode &node)
     p_out->smooth_overlap_buffers();
 
     p_erosion_map->smooth_overlap_buffers();
-    p_erosion_map->remap(0.f, 1.f, node.cfg().cm_gpu);
+    p_erosion_map->remap(0.f, 1.f, node.cfg().cm_cpu);
 
     p_deposition_map->smooth_overlap_buffers();
-    p_deposition_map->remap(0.f, 1.f, node.cfg().cm_gpu);
+    p_deposition_map->remap(0.f, 1.f, node.cfg().cm_cpu);
 
     p_flow_map->smooth_overlap_buffers();
-    p_flow_map->remap(0.f, 1.f, node.cfg().cm_gpu);
+    p_flow_map->remap(0.f, 1.f, node.cfg().cm_cpu);
 
     // post-process
     post_process_heightmap(node, *p_out, p_in);

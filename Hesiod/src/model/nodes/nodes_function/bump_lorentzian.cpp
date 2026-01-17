@@ -53,7 +53,7 @@ void compute_bump_lorentzian_node(BaseNode &node)
       {p_out, p_dx, p_dy, p_ctrl},
       [&node](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &region)
       {
-        auto [pa_out, pa_ctrl, pa_dx, pa_dy] = unpack<4>(p_arrays);
+        auto [pa_out, pa_dx, pa_dy, pa_ctrl] = unpack<4>(p_arrays);
 
         *pa_out = hmap::bump_lorentzian(region.shape,
                                         node.get_attr<FloatAttribute>("width_factor"),

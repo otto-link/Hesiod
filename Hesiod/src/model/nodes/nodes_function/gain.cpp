@@ -48,13 +48,12 @@ void compute_gain_node(BaseNode &node)
         {
           auto [pa_out, pa_in, pa_mask] = unpack<3>(p_arrays);
           *pa_out = *pa_in;
-          hmap::remap(*pa_out, 0.f, 1.f, hmin, hmax);
 
+          hmap::remap(*pa_out, 0.f, 1.f, hmin, hmax);
           hmap::gain(*pa_out, node.get_attr<FloatAttribute>("gain"), pa_mask);
+          hmap::remap(*pa_out, hmin, hmax, 0.f, 1.f);
         },
         node.cfg().cm_cpu);
-
-    p_out->remap(hmin, hmax, 0.f, 1.f, node.cfg().cm_cpu);
   }
 }
 

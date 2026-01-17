@@ -113,7 +113,7 @@ void compute_mountain_tibesti_node(BaseNode &node)
       },
       node.cfg().cm_gpu);
 
-  p_out->remap(0.f, node.get_attr<FloatAttribute>("elevation"), node.cfg().cm_gpu);
+  p_out->remap(0.f, node.get_attr<FloatAttribute>("elevation"), node.cfg().cm_cpu);
 
   // post-process
   post_apply_enveloppe(node, *p_out, p_env);

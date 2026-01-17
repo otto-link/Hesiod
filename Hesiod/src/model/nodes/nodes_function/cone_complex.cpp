@@ -113,10 +113,10 @@ void compute_cone_complex_node(BaseNode &node)
   hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
   hmap::for_each_tile(
-      {p_out, p_ctrl, p_dx, p_dy},
+      {p_out, p_dx, p_dy, p_ctrl},
       [&node](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &region)
       {
-        auto [pa_out, pa_ctrl, pa_dx, pa_dy] = unpack<4>(p_arrays);
+        auto [pa_out, pa_dx, pa_dy, pa_ctrl] = unpack<4>(p_arrays);
 
         *pa_out = hmap::cone_complex(
             region.shape,

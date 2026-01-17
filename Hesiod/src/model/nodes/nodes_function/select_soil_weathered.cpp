@@ -90,7 +90,7 @@ void compute_select_soil_weathered_node(BaseNode &node)
         },
         node.cfg().cm_gpu);
 
-    grad_norm.remap(0.f, 1.f, node.cfg().cm_gpu);
+    grad_norm.remap(0.f, 1.f, node.cfg().cm_cpu);
 
     // gain
     hmap::for_each_tile(

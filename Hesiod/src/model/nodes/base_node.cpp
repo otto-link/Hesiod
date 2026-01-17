@@ -325,7 +325,7 @@ float BaseNode::get_memory_usage() const
     if (this->get_port_type(k) == gngui::PortType::IN)
       continue;
 
-    if (this->get_data_type(k) == typeid(hmap::Heightmap).name())
+    if (this->get_data_type(k) == typeid(hmap::VirtualArray).name())
     {
       count += unit;
     }

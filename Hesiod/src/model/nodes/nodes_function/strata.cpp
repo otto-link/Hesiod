@@ -4,12 +4,14 @@
 #include "highmap/erosion.hpp"
 #include "highmap/opencl/gpu_opencl.hpp"
 #include "highmap/primitives.hpp"
+#include "highmap/range.hpp"
 
 #include "attributes.hpp"
 
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
+#include "hesiod/model/utils.hpp"
 
 using namespace attr;
 
@@ -110,17 +112,20 @@ void compute_strata_node(BaseNode &node)
     // prepare mask
     std::shared_ptr<hmap::VirtualArray> sp_mask = pre_process_mask(node, p_mask, *p_in);
 
-    // remap to [0, 1] as required by this filter
-    float hmin = p_out->min(node.cfg().cm_cpu);
-    float hmax = p_out->max(node.cfg().cm_cpu);
-    p_out->remap(0.f, 1.f, hmin, hmax, node.cfg().cm_cpu);
+    float hmin = p_in->min(node.cfg().cm_cpu);
+    float hmax = p_in->max(node.cfg().cm_cpu);
 
     hmap::for_each_tile(
         {p_out, p_in, p_mask},
-        [&node](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &region)
+        [&node, hmin, hmax](std::vector<hmap::Array *> p_arrays,
+                            const hmap::TileRegion    &region)
         {
           auto [pa_out, pa_in, pa_mask] = unpack<3>(p_arrays);
+
           *pa_out = *pa_in;
+
+          // remap to [0, 1] as required by this filter
+          hmap::remap(*pa_out, 0.f, 1.f, hmin, hmax);
 
           hmap::gpu::strata(*pa_out,
                             node.get_attr<FloatAttribute>("angle"),
@@ -148,9 +153,7 @@ void compute_strata_node(BaseNode &node)
         node.cfg().cm_gpu);
 
     p_out->smooth_overlap_buffers();
-
-    // remap to original range
-    p_out->remap(hmin, hmax, 0.f, 1.f, node.cfg().cm_cpu);
+    p_out->remap(hmin, hmax, node.cfg().cm_cpu);
 
     // post-process
     post_process_heightmap(node, *p_out, p_in);

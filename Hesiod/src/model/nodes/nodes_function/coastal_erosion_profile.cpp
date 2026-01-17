@@ -45,7 +45,7 @@ void setup_coastal_erosion_profile_node(BaseNode &node)
   node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Shore Geometry",
                              "shore_ground_extent",
                              "shore_water_extent_ratio",
-                             "_GROUPBOX_END_"
+                             "_GROUPBOX_END_",
                              //
                              "_GROUPBOX_BEGIN_Profile Shape",
                              "scarp_extent_ratio",

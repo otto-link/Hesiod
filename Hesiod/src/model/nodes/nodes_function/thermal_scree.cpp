@@ -85,7 +85,7 @@ void compute_thermal_scree_node(BaseNode &node)
 
     if (!p_zmax)
     {
-      zmax.fill(node.get_attr<FloatAttribute>("zmax"), node.cfg().cm_gpu);
+      zmax.fill(node.get_attr<FloatAttribute>("zmax"), node.cfg().cm_cpu);
       p_zmax = &zmax;
     }
 

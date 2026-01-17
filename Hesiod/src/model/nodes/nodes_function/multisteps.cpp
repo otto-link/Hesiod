@@ -90,7 +90,7 @@ void compute_multisteps_node(BaseNode &node)
   {
     // use input noise
     hmap::for_each_tile(
-        {p_out, p_ctrl, p_dx, p_dy},
+        {p_out, p_dx, p_dy, p_ctrl},
         [&node](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &region)
         {
           hmap::Array *pa_out = p_arrays[0];
