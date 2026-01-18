@@ -21,36 +21,6 @@ void AppContext::initialize()
   this->load_node_documentation();
 }
 
-void AppContext::settings_json_from(nlohmann::json const &json)
-{
-  Logger::log()->trace("AppContext::settings_json_from");
-
-  // --- settings
-
-  if (json.contains("app_settings"))
-    this->app_settings.json_from(json["app_settings"]);
-  else
-    Logger::log()->error("AppContext::settings_json_from: could not parse app_settings");
-
-  // TODO add again
-
-  // if (json.contains("style_settings"))
-  //   this->style_settings.json_from(json["style_settings"]);
-  // else
-  //   Logger::log()->error(
-  //       "AppContext::settings_json_from: could not parse style_settings");
-}
-
-nlohmann::json AppContext::settings_json_to() const
-{
-  Logger::log()->trace("AppContext::settings_json_to");
-
-  nlohmann::json json;
-  json["app_settings"] = this->app_settings.json_to();
-  json["style_settings"] = this->style_settings.json_to();
-  return json;
-}
-
 void AppContext::load_node_documentation()
 {
   Logger::log()->trace("AppContext::load_node_documentation");
@@ -110,6 +80,13 @@ void AppContext::new_project()
   Logger::log()->trace("AppContext::new_project");
   this->project_model = std::make_unique<ProjectModel>();
 }
+  
+void AppContext::reset_settings()
+{
+  // reset to default values
+  this->app_settings = AppSettings();
+  this->style_settings = StyleSettings();
+}
 
 void AppContext::save_project_model(const std::string &fname) const
 {
@@ -130,7 +107,35 @@ void AppContext::save_settings() const
   bool        merge_with_existing_content = true;
   json_to_file(json, fname, merge_with_existing_content);
 }
+  
+void AppContext::settings_json_from(nlohmann::json const &json)
+{
+  Logger::log()->trace("AppContext::settings_json_from");
 
+  // --- settings
+
+  if (json.contains("app_settings"))
+    this->app_settings.json_from(json["app_settings"]);
+  else
+    Logger::log()->error("AppContext::settings_json_from: could not parse app_settings");
+
+  if (json.contains("style_settings"))
+    this->style_settings.json_from(json["style_settings"]);
+  else
+    Logger::log()->error(
+        "AppContext::settings_json_from: could not parse style_settings");
+}
+
+nlohmann::json AppContext::settings_json_to() const
+{
+  Logger::log()->trace("AppContext::settings_json_to");
+
+  nlohmann::json json;
+  json["app_settings"] = this->app_settings.json_to();
+  json["style_settings"] = this->style_settings.json_to();
+  return json;
+}
+  
 // --- HELPERS ---
 
 std::string get_config_file_path(const QString &app_name, bool portable_mode)

@@ -27,6 +27,7 @@ public:
   nlohmann::json settings_json_to() const;
   void           load_settings();
   void           save_settings() const;
+  void           reset_settings();
 
   // --- Project management
   void new_project();

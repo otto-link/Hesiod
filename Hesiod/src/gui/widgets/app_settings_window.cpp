@@ -1,7 +1,9 @@
 /* Copyright (c) 2025 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include <QColorDialog>
 #include <QFormLayout>
+#include <QMessageBox>
 #include <QPushButton>
 
 #include "hesiod/app/hesiod_application.hpp"
@@ -18,7 +20,6 @@ AppSettingsWindow::AppSettingsWindow(QWidget *parent) : QWidget(parent)
   Logger::log()->trace("AppSettingsWindow::AppSettingsWindow");
 
   this->setWindowTitle("Hesiod - Application settings");
-
   this->setup_layout();
 }
 
@@ -35,7 +36,7 @@ void AppSettingsWindow::add_description(const std::string &description, int max_
   label->setStyleSheet(style.c_str());
   resize_font(label, -1);
 
-  layout->addRow(label);
+  this->layout->addRow(label);
 }
 
 void AppSettingsWindow::add_title(const std::string &text, int font_size_delta)
@@ -51,7 +52,7 @@ void AppSettingsWindow::add_title(const std::string &text, int font_size_delta)
   label->setStyleSheet(style.c_str());
   resize_font(label, font_size_delta);
 
-  layout->addRow(label);
+  this->layout->addRow(label);
 }
 
 void AppSettingsWindow::bind_bool(const std::string &label, bool &state)
@@ -64,7 +65,38 @@ void AppSettingsWindow::bind_bool(const std::string &label, bool &state)
                 this,
                 [&state](bool value) { state = value; });
 
-  layout->addRow(label.c_str(), check_box);
+  this->layout->addRow(label.c_str(), check_box);
+}
+
+void AppSettingsWindow::bind_qcolor(const std::string &label, QColor &color)
+{
+  auto *button = new QPushButton(this);
+  button->setFlat(true);
+  button->setMinimumHeight(24);
+
+  button->setStyleSheet(
+      QString("background-color: %1; border: 1px solid #444;").arg(color.name()));
+
+  this->connect(
+      button,
+      &QPushButton::clicked,
+      this,
+      [this, button, &color]()
+      {
+        QColor new_color = QColorDialog::getColor(color,
+                                                  this,
+                                                  "Select color",
+                                                  QColorDialog::ShowAlphaChannel);
+
+        if (!new_color.isValid())
+          return;
+
+        color = new_color;
+        button->setStyleSheet(
+            QString("background-color: %1; border: 1px solid #444;").arg(color.name()));
+      });
+
+  this->layout->addRow(label.c_str(), button);
 }
 
 void AppSettingsWindow::setup_layout()
@@ -114,6 +146,45 @@ void AppSettingsWindow::setup_layout()
 
   this->bind_bool("Add border skirt to the heightmap",
                   ctx.app_settings.viewer.add_heighmap_skirt);
+
+  // --- Reset
+
+  this->add_description("\n");
+
+  auto *reset_button = new QPushButton("Reset Settings");
+  reset_button->setMinimumHeight(32);
+
+  reset_button->setStyleSheet("font-weight: bold; "
+                              "background-color: #552222; "
+                              "color: white;");
+
+  this->connect(reset_button,
+                &QPushButton::clicked,
+                this,
+                [this, &ctx]()
+                {
+                  QMessageBox::StandardButton reply = QMessageBox::warning(
+                      this,
+                      "Reset Settings",
+                      "This will reset all application settings to their "
+                      "default values.\n\n"
+                      "This action cannot be undone.",
+                      QMessageBox::Yes | QMessageBox::Cancel,
+                      QMessageBox::Cancel);
+
+                  if (reply != QMessageBox::Yes)
+                    return;
+
+                  ctx.reset_settings();
+
+                  QMessageBox::information(
+                      this,
+                      "Settings Reset",
+                      "Settings have been reset.\n"
+                      "Please restart the application for all changes to take effect.");
+                });
+
+  this->layout->addRow(reset_button);
 }
 
 } // namespace hesiod
