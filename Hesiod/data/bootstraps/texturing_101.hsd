@@ -189,7 +189,7 @@
                         "node_id_from": "31",
                         "node_id_to": "34",
                         "port_id_from": "texture",
-                        "port_id_to": "texture"
+                        "port_id_to": "input"
                     },
                     {
                         "node_id_from": "25",
@@ -200,7 +200,7 @@
                     {
                         "node_id_from": "34",
                         "node_id_to": "32",
-                        "port_id_from": "output",
+                        "port_id_from": "texture",
                         "port_id_to": "texture"
                     }
                 ],
@@ -2299,7 +2299,7 @@
                         "node_in_id": "32",
                         "node_out_id": "34",
                         "port_in_id": "texture",
-                        "port_out_id": "output"
+                        "port_out_id": "texture"
                     },
                     {
                         "link_type": 2,
@@ -2312,7 +2312,7 @@
                         "link_type": 2,
                         "node_in_id": "34",
                         "node_out_id": "31",
-                        "port_in_id": "texture",
+                        "port_in_id": "input",
                         "port_out_id": "texture"
                     },
                     {
