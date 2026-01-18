@@ -21,7 +21,7 @@ void setup_saturate_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("k_smoothing", "k_smoothing", 0.1f, 0.01, 1.f);

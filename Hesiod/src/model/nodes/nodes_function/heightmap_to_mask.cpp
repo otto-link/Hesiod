@@ -20,7 +20,7 @@ void setup_heightmap_to_mask_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "mask", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "mask", CONFIG(node));
 
   // attribute(s)
 

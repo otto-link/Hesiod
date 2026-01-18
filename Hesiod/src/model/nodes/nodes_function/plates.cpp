@@ -22,7 +22,7 @@ void setup_plates_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "envelope");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
   std::vector<float> kw = {4.f, 4.f};

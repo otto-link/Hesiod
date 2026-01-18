@@ -22,7 +22,7 @@ void setup_path_sdf_node(BaseNode &node)
   node.add_port<hmap::Path>(gnode::PortType::IN, "path");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dx");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dy");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "sdf", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "sdf", CONFIG(node));
 
   // attribute(s)
 

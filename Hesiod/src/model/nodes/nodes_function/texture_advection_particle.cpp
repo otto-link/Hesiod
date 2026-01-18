@@ -5,6 +5,7 @@
 
 #include "highmap/filters.hpp"
 #include "highmap/transform.hpp"
+#include "highmap/virtual_array/virtual_texture.hpp"
 
 #include "attributes.hpp"
 
@@ -23,10 +24,10 @@ void setup_texture_advection_particle_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "elevation");
-  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture");
+  node.add_port<hmap::VirtualTexture>(gnode::PortType::IN, "input");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "advection_mask");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualTexture>(gnode::PortType::OUT, "texture", CONFIG_TEX(node));
 
   // attribute(s)
   node.add_attr<SeedAttribute>("seed", "Seed");
@@ -73,65 +74,66 @@ void compute_texture_advection_particle_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::VirtualArray  *p_z = node.get_value_ref<hmap::VirtualArray>("elevation");
-  hmap::HeightmapRGBA *p_tex = node.get_value_ref<hmap::HeightmapRGBA>("texture");
+  hmap::VirtualArray   *p_z = node.get_value_ref<hmap::VirtualArray>("elevation");
+  hmap::VirtualTexture *p_tex = node.get_value_ref<hmap::VirtualTexture>("input");
 
-  // if (p_z && p_tex)
-  // {
-  //   hmap::VirtualArray *p_advection_mask = node.get_value_ref<hmap::VirtualArray>(
-  //       "advection_mask");
-  //   hmap::VirtualArray  *p_mask = node.get_value_ref<hmap::VirtualArray>("mask");
-  //   hmap::HeightmapRGBA *p_out = node.get_value_ref<hmap::HeightmapRGBA>("output");
+  if (p_z && p_tex)
+  {
+    hmap::VirtualArray *p_advection_mask = node.get_value_ref<hmap::VirtualArray>(
+        "advection_mask");
+    hmap::VirtualArray   *p_mask = node.get_value_ref<hmap::VirtualArray>("mask");
+    hmap::VirtualTexture *p_out = node.get_value_ref<hmap::VirtualTexture>("texture");
 
-  //   // prepare mask
-  //   std::shared_ptr<hmap::VirtualArray> sp_mask = pre_process_mask(node, p_mask, *p_z);
+    // prepare mask
+    std::shared_ptr<hmap::VirtualArray> sp_mask = pre_process_mask(node, p_mask, *p_z);
 
-  //   // number of particles based on the input particle density
-  //   int nparticles = (int)(node.get_attr<FloatAttribute>("particle_density") *
-  //                          p_out->shape.x * p_out->shape.y);
+    // number of particles based on the input particle density
+    int nparticles = (int)(node.get_attr<FloatAttribute>("particle_density") *
+                           p_out->shape.x * p_out->shape.y);
 
-  //   // apply advection separetely to each RGBA channels
-  //   auto lambda = [&node, nparticles](hmap::VirtualArray *p_z,
-  //                                     hmap::VirtualArray *p_field,
-  //                                     hmap::VirtualArray *p_advection_mask,
-  //                                     hmap::VirtualArray *p_mask,
-  //                                     hmap::VirtualArray *p_field_out)
-  //   {
-  //     hmap::for_each_tile(
-  //         {p_field_out, p_z, p_field, p_advection_mask, p_mask},
-  //         [&node, nparticles](std::vector<hmap::Array *> p_arrays,
-  //                             const hmap::TileRegion &)
-  //         {
-  //           hmap::Array *pa_field_out = p_arrays[0];
-  //           hmap::Array *pa_z = p_arrays[1];
-  //           hmap::Array *pa_field = p_arrays[2];
-  //           hmap::Array *pa_advection_mask = p_arrays[3];
-  //           hmap::Array *pa_mask = p_arrays[4];
+    // apply advection separetely to each RGBA channels
+    auto lambda = [&node, nparticles](hmap::VirtualArray *p_field_out,
+                                      hmap::VirtualArray *p_z,
+                                      hmap::VirtualArray *p_field,
+                                      hmap::VirtualArray *p_advection_mask,
+                                      hmap::VirtualArray *p_mask)
+    {
+      hmap::for_each_tile(
+          {p_field_out, p_z, p_field, p_advection_mask, p_mask},
+          [&node, nparticles](std::vector<hmap::Array *> p_arrays,
+                              const hmap::TileRegion &)
+          {
+            auto [pa_field_out, pa_z, pa_field, pa_advection_mask, pa_mask] = unpack<5>(
+                p_arrays);
 
-  //           *pa_field_out = hmap::gpu::advection_particle(
-  //               *pa_z,
-  //               *pa_field,
-  //               node.get_attr<IntAttribute>("iterations"),
-  //               nparticles,
-  //               node.get_attr<SeedAttribute>("seed"),
-  //               node.get_attr<BoolAttribute>("reverse"),
-  //               node.get_attr<BoolAttribute>("post_filtering"),
-  //               node.get_attr<FloatAttribute>("post_filtering_sigma"),
-  //               node.get_attr<FloatAttribute>("advection_length"),
-  //               node.get_attr<FloatAttribute>("value_persistence"),
-  //               node.get_attr<FloatAttribute>("inertia"),
-  //               pa_advection_mask,
-  //               pa_mask);
-  //         },
-  //         node.cfg().cm_gpu);
-  //   };
+            *pa_field_out = hmap::gpu::advection_particle(
+                *pa_z,
+                *pa_field,
+                node.get_attr<IntAttribute>("iterations"),
+                nparticles,
+                node.get_attr<SeedAttribute>("seed"),
+                node.get_attr<BoolAttribute>("reverse"),
+                node.get_attr<BoolAttribute>("post_filtering"),
+                node.get_attr<FloatAttribute>("post_filtering_sigma"),
+                node.get_attr<FloatAttribute>("advection_length"),
+                node.get_attr<FloatAttribute>("value_persistence"),
+                node.get_attr<FloatAttribute>("inertia"),
+                pa_advection_mask,
+                pa_mask);
+          },
+          node.cfg().cm_gpu);
+    };
 
-  //   for (int nch = 0; nch < 4; nch++)
-  //   {
-  //     lambda(p_z, &(p_tex->rgba[nch]), p_advection_mask, p_mask, &(p_out->rgba[nch]));
-  //     p_out->rgba[nch].smooth_overlap_buffers();
-  //   }
-  // }
+    for (int nch = 0; nch < 4; nch++)
+    {
+      lambda(&(p_out->channel(nch)),
+             p_z,
+             &(p_tex->channel(nch)),
+             p_advection_mask,
+             p_mask);
+      p_out->channel(nch).smooth_overlap_buffers();
+    }
+  }
 }
 
 } // namespace hesiod

@@ -24,7 +24,7 @@ void setup_blend3_node(BaseNode &node)
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input 1");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input 2");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input 3");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
   node.add_attr<EnumAttribute>("blending_method1",

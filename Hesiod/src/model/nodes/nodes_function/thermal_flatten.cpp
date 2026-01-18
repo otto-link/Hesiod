@@ -21,7 +21,7 @@ void setup_thermal_flatten_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("talus_global", "talus_global", 1.f, 0.f, FLT_MAX);
@@ -52,7 +52,7 @@ void compute_thermal_flatten_node(BaseNode &node)
 
     float talus = node.get_attr<FloatAttribute>("talus_global") / (float)p_out->shape.x;
 
-    hmap::VirtualArray talus_map = hmap::VirtualArray(CONFIG2(node));
+    hmap::VirtualArray talus_map = hmap::VirtualArray(CONFIG(node));
     talus_map.fill(talus, node.cfg().cm_cpu);
 
     if (node.get_attr<BoolAttribute>("scale_talus_with_elevation"))

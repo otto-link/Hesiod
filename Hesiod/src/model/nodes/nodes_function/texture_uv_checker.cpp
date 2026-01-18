@@ -4,6 +4,7 @@
 #include <fstream>
 
 #include "highmap/tensor.hpp"
+#include "highmap/virtual_array/virtual_texture.hpp"
 
 #include "attributes.hpp"
 
@@ -21,7 +22,7 @@ void setup_texture_uv_checker_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture", CONFIG(node));
+  node.add_port<hmap::VirtualTexture>(gnode::PortType::OUT, "texture", CONFIG_TEX(node));
 
   // attribute(s)
   std::vector<std::string> choices = {"4x4", "8x8", "16x16"};
@@ -32,45 +33,31 @@ void compute_texture_uv_checker_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  // hmap::HeightmapRGBA *p_out = node.get_value_ref<hmap::HeightmapRGBA>("texture");
+  hmap::VirtualTexture *p_out = node.get_value_ref<hmap::VirtualTexture>("texture");
 
-  // // generated with https://uvchecker.vinzi.xyz/
+  // generated with https://uvchecker.vinzi.xyz/
 
-  // std::string fname;
+  std::string fname;
 
-  // if (node.get_attr<ChoiceAttribute>("size") == "4x4")
-  //   fname = "data/uv_checker_2k_04x04.png";
-  // else if (node.get_attr<ChoiceAttribute>("size") == "8x8")
-  //   fname = "data/uv_checker_2k_08x08.png";
-  // else if (node.get_attr<ChoiceAttribute>("size") == "16x16")
-  //   fname = "data/uv_checker_2k_16x16.png";
+  if (node.get_attr<ChoiceAttribute>("size") == "4x4")
+    fname = "data/uv_checker_2k_04x04.png";
+  else if (node.get_attr<ChoiceAttribute>("size") == "8x8")
+    fname = "data/uv_checker_2k_08x08.png";
+  else if (node.get_attr<ChoiceAttribute>("size") == "16x16")
+    fname = "data/uv_checker_2k_16x16.png";
 
-  // // if the file exists, keep going
-  // std::ifstream f(fname.c_str());
-  // if (f.good())
-  // {
-  //   // load rgba data
-  //   bool         flip_j = true;
-  //   hmap::Tensor tensor4(fname, flip_j);
-  //   tensor4 = tensor4.resample_to_shape_xy(node.cfg().shape);
+  // if the file exists, keep going
+  std::ifstream f(fname.c_str());
+  if (f.good())
+  {
+    // load rgba data
+    bool         flip_j = true;
+    hmap::Tensor tensor4(fname, flip_j);
+    tensor4 = tensor4.resample_to_shape_xy(node.cfg().shape);
 
-  //   hmap::VirtualArray r(CONFIG2(node));
-  //   hmap::VirtualArray g(CONFIG2(node));
-  //   hmap::VirtualArray b(CONFIG2(node));
-  //   hmap::VirtualArray a(CONFIG2(node));
-
-  //   hmap::Array ra = tensor4.get_slice(0);
-  //   hmap::Array ga = tensor4.get_slice(1);
-  //   hmap::Array ba = tensor4.get_slice(2);
-  //   hmap::Array aa = tensor4.get_slice(3);
-
-  //   r.from_array_interp(ra);
-  //   g.from_array_interp(ga);
-  //   b.from_array_interp(ba);
-  //   a.from_array_interp(aa);
-
-  //   *p_out = hmap::HeightmapRGBA(r, g, b, a);
-  // }
+    for (int nch = 0; nch < 4; ++nch)
+      p_out->channel(nch).from_array(tensor4.get_slice(nch), node.cfg().cm_cpu);
+  }
 }
 
 } // namespace hesiod

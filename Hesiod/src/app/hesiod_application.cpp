@@ -30,7 +30,6 @@
 #include "hesiod/gui/widgets/splash_screen.hpp"
 #include "hesiod/gui/widgets/tool_tip_blocker.hpp"
 #include "hesiod/logger.hpp"
-#include "hesiod/model/constants/cmap.hpp"
 #include "hesiod/model/constants/color_gradient.hpp"
 #include "hesiod/model/graph/graph_manager.hpp"
 #include "hesiod/model/graph/graph_node.hpp"
@@ -62,7 +61,6 @@ HesiodApplication::HesiodApplication(int &argc, char **argv) : QApplication(argc
   // for colormaps loading
   splash->show_message("Initializing color gradients...");
 
-  hesiod::CmapManager::get_instance();
   hesiod::ColorGradientManager::get_instance();
 
   // context

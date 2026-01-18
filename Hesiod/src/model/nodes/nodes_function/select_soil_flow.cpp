@@ -23,7 +23,7 @@ void setup_select_soil_flow_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("radius_gradient", "Gradient Radius", 0.f, 0.f, 0.1f);

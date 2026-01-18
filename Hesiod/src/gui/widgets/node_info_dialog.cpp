@@ -334,6 +334,9 @@ void NodeInfoDialog::update_ports_content()
         new_row.data_info = get_data_info<hmap::Array>(ptrs.node, new_row.caption);
       else if (type_name == typeid(hmap::VirtualArray).name())
         new_row.data_info = get_data_info<hmap::VirtualArray>(ptrs.node, new_row.caption);
+      else if (type_name == typeid(hmap::VirtualTexture).name())
+        new_row.data_info = get_data_info<hmap::VirtualTexture>(ptrs.node,
+                                                                new_row.caption);
       else if (type_name == typeid(hmap::Cloud).name())
         new_row.data_info = get_data_info<hmap::Cloud>(ptrs.node, new_row.caption);
       else if (type_name == typeid(hmap::Path).name())

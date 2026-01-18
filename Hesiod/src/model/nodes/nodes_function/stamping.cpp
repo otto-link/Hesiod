@@ -22,7 +22,7 @@ void setup_stamping_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Cloud>(gnode::PortType::IN, "cloud");
   node.add_port<hmap::Array>(gnode::PortType::IN, "kernel");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("kernel_radius", "kernel_radius", 0.1f, 0.01f, 0.5f);

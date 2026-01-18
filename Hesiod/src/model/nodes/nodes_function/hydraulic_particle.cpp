@@ -28,9 +28,9 @@ void setup_hydraulic_particle_node(BaseNode &node)
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "bedrock");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "moisture");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "erosion", CONFIG2(node));
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "deposition", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "erosion", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "deposition", CONFIG(node));
 
   // attribute(s)
   node.add_attr<SeedAttribute>("seed", "Seed");

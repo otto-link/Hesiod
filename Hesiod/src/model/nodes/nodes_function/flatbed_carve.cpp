@@ -24,8 +24,8 @@ void setup_flatbed_carve_node(BaseNode &node)
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
   node.add_port<hmap::Path>(gnode::PortType::IN, "path");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dr");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "mask", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "mask", CONFIG(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("bottom_extent", "Bed Half-Width", 0.02f, 0.f, 0.2f);

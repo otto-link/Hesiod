@@ -22,7 +22,7 @@ void setup_zoom_node(BaseNode &node)
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dx");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dy");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("zoom_factor", "zoom_factor", 2.f, 1.f, 10.f);

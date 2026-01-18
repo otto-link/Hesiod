@@ -19,7 +19,7 @@ void setup_broadcast_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "thru", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "thru", CONFIG(node));
 
   // attribute(s)
 

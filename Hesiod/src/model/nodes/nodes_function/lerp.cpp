@@ -22,7 +22,7 @@ void setup_lerp_node(BaseNode &node)
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "a");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "b");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "t");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("t", "t", 0.5f, 0.f, 1.f);

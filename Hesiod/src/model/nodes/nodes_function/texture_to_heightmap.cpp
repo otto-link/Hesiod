@@ -1,8 +1,8 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-#include "highmap/gradient.hpp"
-#include "highmap/range.hpp"
+#include "highmap/colorize.hpp"
+#include "highmap/virtual_array/virtual_texture.hpp"
 
 #include "attributes.hpp"
 
@@ -20,8 +20,8 @@ void setup_texture_to_heightmap_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "texture");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "elevation", CONFIG2(node));
+  node.add_port<hmap::VirtualTexture>(gnode::PortType::IN, "texture");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "elevation", CONFIG(node));
 
   // attribute(s)
 
@@ -34,16 +34,16 @@ void compute_texture_to_heightmap_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  // hmap::HeightmapRGBA *p_tex = node.get_value_ref<hmap::HeightmapRGBA>("texture");
+  hmap::VirtualTexture *p_tex = node.get_value_ref<hmap::VirtualTexture>("texture");
 
-  // if (p_tex)
-  // {
-  //   hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("elevation");
-  //   *p_out = p_tex->luminance();
+  if (p_tex)
+  {
+    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("elevation");
+    hmap::luminance(*p_out, *p_tex, node.cfg().cm_cpu);
 
-  //   // post-process
-  //   post_process_heightmap(node, *p_out);
-  // }
+    // post-process
+    post_process_heightmap(node, *p_out);
+  }
 }
 
 } // namespace hesiod

@@ -22,9 +22,9 @@ void setup_coastal_erosion_profile_node(BaseNode &node)
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "elevation_in");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "water_depth_in");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "elevation", CONFIG2(node));
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "water_depth", CONFIG2(node));
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "shore_mask", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "elevation", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "water_depth", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "shore_mask", CONFIG(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("shore_ground_extent",

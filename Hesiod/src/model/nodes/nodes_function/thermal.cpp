@@ -25,8 +25,8 @@ void setup_thermal_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "deposition", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "deposition", CONFIG(node));
 
   // attribute(s)
   std::vector<std::string> choices = {"Standard", "Bedrock", "Olsen", "Ridge", "Inflate"};
@@ -76,7 +76,7 @@ void compute_thermal_node(BaseNode &node)
     float talus = node.get_attr<FloatAttribute>("talus_global") / (float)p_out->shape.x;
     int   iterations = int(node.get_attr<FloatAttribute>("duration") * p_out->shape.x);
 
-    hmap::VirtualArray talus_map = hmap::VirtualArray(CONFIG2(node));
+    hmap::VirtualArray talus_map = hmap::VirtualArray(CONFIG(node));
     talus_map.fill(talus, node.cfg().cm_cpu);
 
     if (node.get_attr<BoolAttribute>("scale_talus_with_elevation"))

@@ -19,7 +19,7 @@ void setup_import_heightmap_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
   node.add_attr<FilenameAttribute>("fname",
@@ -50,7 +50,8 @@ void compute_import_heightmap_node(BaseNode &node)
   {
     hmap::Array z = hmap::Array(node.get_attr<FilenameAttribute>("fname").string(),
                                 node.get_attr<BoolAttribute>("flip_y"));
-    p_out->from_array(z, node.cfg().cm_cpu);
+
+    p_out->from_array(z.resample_to_shape_bicubic(p_out->shape), node.cfg().cm_cpu);
 
     // post-process
     post_process_heightmap(node, *p_out);

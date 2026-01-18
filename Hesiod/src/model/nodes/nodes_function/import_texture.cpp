@@ -4,6 +4,7 @@
 #include <fstream>
 
 #include "highmap/tensor.hpp"
+#include "highmap/virtual_array/virtual_texture.hpp"
 
 #include "attributes.hpp"
 
@@ -21,7 +22,7 @@ void setup_import_texture_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture", CONFIG(node));
+  node.add_port<hmap::VirtualTexture>(gnode::PortType::OUT, "texture", CONFIG_TEX(node));
 
   // attribute(s)
   node.add_attr<FilenameAttribute>("fname",
@@ -40,35 +41,25 @@ void compute_import_texture_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  // hmap::HeightmapRGBA *p_out = node.get_value_ref<hmap::HeightmapRGBA>("texture");
+  hmap::VirtualTexture *p_tex = node.get_value_ref<hmap::VirtualTexture>("texture");
 
-  // std::string fname = node.get_attr<FilenameAttribute>("fname").string();
+  std::string fname = node.get_attr<FilenameAttribute>("fname").string();
 
-  // // if the file exists, keep going
-  // std::ifstream f(fname.c_str());
-  // if (f.good())
-  // {
-  //   // load rgba data
-  //   hmap::Tensor tensor4(fname, node.get_attr<BoolAttribute>("flip_y"));
-  //   tensor4 = tensor4.resample_to_shape_xy(node.cfg().shape);
+  // if the file exists, keep going
+  std::ifstream f(fname.c_str());
+  if (f.good())
+  {
+    // load rgba data
+    hmap::Tensor tensor4(fname, node.get_attr<BoolAttribute>("flip_y"));
+    tensor4 = tensor4.resample_to_shape_xy(node.cfg().shape);
 
-  //   hmap::VirtualArray r(CONFIG2(node));
-  //   hmap::VirtualArray g(CONFIG2(node));
-  //   hmap::VirtualArray b(CONFIG2(node));
-  //   hmap::VirtualArray a(CONFIG2(node));
+    hmap::Array ra = tensor4.get_slice(0);
+    hmap::Array ga = tensor4.get_slice(1);
+    hmap::Array ba = tensor4.get_slice(2);
+    hmap::Array aa = tensor4.get_slice(3);
 
-  //   hmap::Array ra = tensor4.get_slice(0);
-  //   hmap::Array ga = tensor4.get_slice(1);
-  //   hmap::Array ba = tensor4.get_slice(2);
-  //   hmap::Array aa = tensor4.get_slice(3);
-
-  //   r.from_array(ra, node.cfg().cm_cpu);
-  //   g.from_array(ga, node.cfg().cm_cpu);
-  //   b.from_array(ba, node.cfg().cm_cpu);
-  //   a.from_array(aa, node.cfg().cm_cpu);
-
-  //   *p_out = hmap::HeightmapRGBA(r, g, b, a);
-  // }
+    p_tex->from_arrays({&ra, &ga, &ba, &aa}, node.cfg().cm_cpu);
+  }
 }
 
 } // namespace hesiod

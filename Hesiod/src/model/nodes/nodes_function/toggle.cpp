@@ -20,7 +20,7 @@ void setup_toggle_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input A");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input B");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
   node.add_attr<BoolAttribute>("toggle", "toggle", "A", "B", true);

@@ -21,7 +21,7 @@ void setup_wave_triangular_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dr");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "envelope");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("kw", "kw", 2.f, 0.01f, FLT_MAX);

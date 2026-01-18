@@ -22,7 +22,7 @@ void setup_ridgelines_node(BaseNode &node)
   node.add_port<hmap::Path>(gnode::PortType::IN, "path");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dx");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dy");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "heightmap", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "heightmap", CONFIG(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("talus_global", "talus_global", 4.f, -FLT_MAX, FLT_MAX);

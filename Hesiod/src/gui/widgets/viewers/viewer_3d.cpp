@@ -281,7 +281,7 @@ void Viewer3D::update_renderer()
           typeid(hmap::VirtualArray),
           [this, p_node](const hmap::VirtualArray &h)
           {
-            auto arr = h.to_array(p_node->get_config_ref()->cm_cpu);
+            auto arr = h.to_array(p_node->cfg().cm_cpu);
             if (this->p_renderer)
             {
               bool add_skirt = HSD_CTX.app_settings.viewer.add_heighmap_skirt;
@@ -297,16 +297,16 @@ void Viewer3D::update_renderer()
   }
 
   // water
-  if (!helper_try_set_from_port<hmap::Heightmap>(
+  if (!helper_try_set_from_port<hmap::VirtualArray>(
           *p_node,
           this->view_param.port_ids.at("elevation"),
           this->view_param.port_ids.at("water_depth"),
-          typeid(hmap::Heightmap),
-          [this](const hmap::Heightmap &h, const hmap::Heightmap &w)
+          typeid(hmap::VirtualArray),
+          [this, p_node](const hmap::VirtualArray &h, const hmap::VirtualArray &w)
           {
             // TODO do this somewhere else?
-            auto ah = h.to_array(); // elevation
-            auto aw = w.to_array(); // water depth
+            auto ah = h.to_array(p_node->cfg().cm_cpu); // elevation
+            auto aw = w.to_array(p_node->cfg().cm_cpu); // water depth
 
             // water elevation
             ah += aw;
@@ -350,25 +350,25 @@ void Viewer3D::update_renderer()
   }
 
   // color
-  if (!(helper_try_set_from_port<hmap::Heightmap>(
+  if (!(helper_try_set_from_port<hmap::VirtualArray>(
             *p_node,
             this->view_param.port_ids.at("color"),
-            typeid(hmap::Heightmap),
-            [this](const hmap::Heightmap &h)
+            typeid(hmap::VirtualTexture),
+            [this, p_node](const hmap::VirtualArray &h)
             {
-              auto arr = h.to_array();
+              auto arr = h.to_array(p_node->cfg().cm_cpu);
               auto img = generate_selector_image(arr);
 
               if (this->p_renderer)
                 this->p_renderer->set_texture(QTR_TEX_ALBEDO, img, h.shape.x);
             }) ||
-        helper_try_set_from_port<hmap::HeightmapRGBA>(
+        helper_try_set_from_port<hmap::VirtualTexture>(
             *p_node,
             this->view_param.port_ids.at("color"),
-            typeid(hmap::HeightmapRGBA),
-            [this, flip_y](const hmap::HeightmapRGBA &rgba)
+            typeid(hmap::VirtualTexture),
+            [this, p_node, flip_y](const hmap::VirtualTexture &rgba)
             {
-              auto img = rgba.to_img_8bit(rgba.shape, flip_y);
+              auto img = rgba.to_img_8bit(rgba.shape, p_node->cfg().cm_cpu, flip_y);
 
               if (this->p_renderer)
                 this->p_renderer->set_texture(QTR_TEX_ALBEDO, img, rgba.shape.x);
@@ -378,13 +378,13 @@ void Viewer3D::update_renderer()
   }
 
   // normal map
-  if (!helper_try_set_from_port<hmap::HeightmapRGBA>(
+  if (!helper_try_set_from_port<hmap::VirtualTexture>(
           *p_node,
           this->view_param.port_ids.at("normal_map"),
-          typeid(hmap::HeightmapRGBA),
-          [this, flip_y](const hmap::HeightmapRGBA &rgba)
+          typeid(hmap::VirtualTexture),
+          [this, p_node, flip_y](const hmap::VirtualTexture &rgba)
           {
-            auto img = rgba.to_img_8bit(rgba.shape, flip_y);
+            auto img = rgba.to_img_8bit(rgba.shape, p_node->cfg().cm_cpu, flip_y);
 
             if (this->p_renderer)
               this->p_renderer->set_texture(QTR_TEX_NORMAL, img, rgba.shape.x);

@@ -23,8 +23,8 @@ void setup_smooth_fill_node(BaseNode &node)
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "mask");
 
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "deposition", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "deposition", CONFIG(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("radius", "radius", 0.05f, 0.001f, 0.2f);

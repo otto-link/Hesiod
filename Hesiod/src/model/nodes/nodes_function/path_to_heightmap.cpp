@@ -20,7 +20,7 @@ void setup_path_to_heightmap_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Path>(gnode::PortType::IN, "path");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "heightmap", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "heightmap", CONFIG(node));
 
   // attribute(s)
   node.add_attr<BoolAttribute>("filled", "filled", false);

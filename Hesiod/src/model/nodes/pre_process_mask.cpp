@@ -27,8 +27,9 @@ std::shared_ptr<hmap::VirtualArray> pre_process_mask(BaseNode            &node,
   // create mask storage and assign to current mask pointer
   std::shared_ptr<hmap::VirtualArray> sp_mask = std::make_shared<hmap::VirtualArray>(
       node.cfg().shape,
-      node.cfg().tiling,
-      node.cfg().overlap);
+      node.cfg().tile_shape,
+      node.cfg().halo,
+      node.cfg().storage_mode);
   p_mask = sp_mask.get();
 
   const GraphConfig &cfg = *node.get_config_ref();
@@ -64,8 +65,7 @@ std::shared_ptr<hmap::VirtualArray> pre_process_mask(BaseNode            &node,
         {p_mask, &h},
         [](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
         {
-          hmap::Array *pa_out = p_arrays[0];
-          hmap::Array *pa_in = p_arrays[1];
+          auto [pa_out, pa_in] = unpack<2>(p_arrays);
 
           *pa_out = hmap::gradient_norm(*pa_in);
         },

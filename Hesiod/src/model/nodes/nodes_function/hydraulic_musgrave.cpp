@@ -21,7 +21,7 @@ void setup_hydraulic_musgrave_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "moisture");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
   node.add_attr<IntAttribute>("iterations", "iterations", 100, 1, INT_MAX);

@@ -20,7 +20,7 @@ void setup_flooding_lake_system_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "elevation");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "water_depth", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "water_depth", CONFIG(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("mininal_radius", "mininal_radius", 0.05f, 0.f, 0.5f);

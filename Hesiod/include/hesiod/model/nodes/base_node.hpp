@@ -17,8 +17,8 @@
 #include "hesiod/model/nodes/node_runtime_info.hpp"
 
 // clang-format off
-#define CONFIG(obj) obj.get_config_ref()->shape, obj.get_config_ref()->tiling, obj.get_config_ref()->overlap
-#define CONFIG2(obj) obj.get_config_ref()->shape, obj.get_config_ref()->tile_shape, obj.get_config_ref()->halo, obj.get_config_ref()->storage_mode
+#define CONFIG(obj) obj.get_config_ref()->shape, obj.get_config_ref()->tile_shape, obj.get_config_ref()->halo, obj.get_config_ref()->storage_mode
+#define CONFIG_TEX(obj) obj.get_config_ref()->shape, obj.get_config_ref()->tile_shape, obj.get_config_ref()->halo, 4, obj.get_config_ref()->storage_mode
 // clang-format on
 
 namespace hesiod

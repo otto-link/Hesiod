@@ -5,6 +5,7 @@
 
 #include "highmap/geometry/cloud.hpp"
 #include "highmap/geometry/path.hpp"
+#include "highmap/virtual_array/virtual_texture.hpp"
 
 #include "hesiod/gui/widgets/viewers/viewer.hpp"
 #include "hesiod/logger.hpp"
@@ -82,14 +83,14 @@ void wild_guess_view_param(ViewerNodeParam &view_param,
     if (key == "color")
     {
       value = helper_get_preferred_port_label(node,
-                                              typeid(hmap::HeightmapRGBA),
+                                              typeid(hmap::VirtualTexture),
                                               "texture");
     }
 
     if (key == "normal_map")
     {
       value = helper_get_preferred_port_label(node,
-                                              typeid(hmap::HeightmapRGBA),
+                                              typeid(hmap::VirtualTexture),
                                               "normal map");
     }
 

@@ -22,7 +22,7 @@ void setup_normal_displacement_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("radius", "radius", 0.05f, 0.f, 0.2f);
@@ -53,9 +53,7 @@ void compute_normal_displacement_node(BaseNode &node)
           {p_out, p_in, p_mask},
           [&node, &ir](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
           {
-            hmap::Array *pa_out = p_arrays[0];
-            hmap::Array *pa_in = p_arrays[1];
-            hmap::Array *pa_mask = p_arrays[2];
+            auto [pa_out, pa_in, pa_mask] = unpack<3>(p_arrays);
 
             *pa_out = *pa_in;
 

@@ -21,7 +21,7 @@ void setup_merge_water_depths_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "depth1");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "depth2");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "water_depth", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "water_depth", CONFIG(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("k_smooth", "k_smooth", 0.f, 0.f, 0.1f, "{:.4f}");

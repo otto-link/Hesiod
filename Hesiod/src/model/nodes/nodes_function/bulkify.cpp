@@ -23,7 +23,7 @@ void setup_bulkify_node(BaseNode &node)
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dx");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dy");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("amplitude", "amplitude", 1.f, -1.f, 4.f);
@@ -61,10 +61,7 @@ void compute_bulkify_node(BaseNode &node)
         {p_out, p_in, p_dx, p_dy},
         [&node](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &region)
         {
-          hmap::Array *pa_out = p_arrays[0];
-          hmap::Array *pa_in = p_arrays[1];
-          hmap::Array *pa_dx = p_arrays[2];
-          hmap::Array *pa_dy = p_arrays[3];
+          auto [pa_out, pa_in, pa_dx, pa_dy] = unpack<4>(p_arrays);
 
           *pa_out = hmap::bulkify(
               *pa_in,

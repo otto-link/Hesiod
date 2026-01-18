@@ -22,7 +22,7 @@ void setup_select_transitions_node(BaseNode &node)
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input 1");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input 2");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "blend");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG(node));
 
   setup_post_process_heightmap_attributes(node,
                                           {.add_mix = false, .remap_active_state = true});

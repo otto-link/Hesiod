@@ -21,7 +21,7 @@ void setup_island_land_mask_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "out", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "out", CONFIG(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("radius", "radius", 0.2f, 0.f, 1.f);

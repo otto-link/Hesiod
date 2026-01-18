@@ -30,11 +30,10 @@ std::string map_type_name(const std::string &typeid_name)
   static const std::unordered_map<std::string, std::string> type_name_map = {
       {typeid(hmap::Array).name(), "Array"},
       {typeid(hmap::Cloud).name(), "Cloud"},
-      {typeid(hmap::Heightmap).name(), "Heightmap"},
-      {typeid(hmap::HeightmapRGBA).name(), "HeightmapRGBA"},
+      {typeid(hmap::VirtualArray).name(), "VirtualArray"},
+      {typeid(hmap::VirtualTexture).name(), "VirtualTexture"},
       {typeid(hmap::Path).name(), "Path"},
-      {typeid(std::vector<float>).name(), "vector<float>"},
-      {typeid(std::vector<hmap::Heightmap>).name(), "vector<Heightmap>"}};
+      {typeid(std::vector<float>).name(), "vector<float>"}};
 
   auto it = type_name_map.find(typeid_name);
   return (it != type_name_map.end()) ? it->second : typeid_name;
@@ -329,7 +328,7 @@ float BaseNode::get_memory_usage() const
     {
       count += unit;
     }
-    else if (this->get_data_type(k) == typeid(hmap::HeightmapRGBA).name())
+    else if (this->get_data_type(k) == typeid(hmap::VirtualTexture).name())
     {
       count += 4.f * unit;
     }
@@ -342,12 +341,6 @@ float BaseNode::get_memory_usage() const
       auto *p_d = this->get_value_ref<std::vector<float>>(k);
       if (p_d)
         count += sizeof(float) * p_d->size();
-    }
-    else if (this->get_data_type(k) == typeid(std::vector<hmap::Heightmap>).name())
-    {
-      auto *p_d = this->get_value_ref<std::vector<hmap::Heightmap>>(k);
-      if (p_d)
-        count += unit * p_d->size();
     }
     else if (this->get_data_type(k) == typeid(hmap::Cloud).name())
     {
@@ -506,32 +499,21 @@ void BaseNode::propagate_config_change()
     {
       const std::string type = this->get_data_type(k);
 
-      if (type == typeid(hmap::Heightmap).name())
+      if (type == typeid(hmap::VirtualTexture).name())
       {
-        auto *p_v = this->get_value_ref<hmap::Heightmap>(k);
+        auto *p_v = this->get_value_ref<hmap::VirtualTexture>(k);
         if (p_v)
-          *p_v = hmap::Heightmap(cfg.shape, cfg.tiling, cfg.overlap);
-      }
-      else if (type == typeid(hmap::HeightmapRGBA).name())
-      {
-        auto *p_v = this->get_value_ref<hmap::HeightmapRGBA>(k);
-        if (p_v)
-          *p_v = hmap::HeightmapRGBA(cfg.shape, cfg.tiling, cfg.overlap);
+          *p_v = hmap::VirtualTexture(cfg.shape,
+                                      cfg.tile_shape,
+                                      cfg.halo,
+                                      4, // RGBA
+                                      cfg.storage_mode);
       }
       else if (type == typeid(hmap::Array).name())
       {
         auto *p_v = this->get_value_ref<hmap::Array>(k);
         if (p_v)
           *p_v = hmap::Array(cfg.shape);
-      }
-      else if (type == typeid(std::vector<hmap::Heightmap>).name())
-      {
-        auto *p_v = this->get_value_ref<std::vector<hmap::Heightmap>>(k);
-        if (p_v)
-        {
-          for (auto &h : *p_v)
-            h = hmap::Heightmap(cfg.shape, cfg.tiling, cfg.overlap);
-        }
       }
       else if (type == typeid(hmap::VirtualArray).name())
       {

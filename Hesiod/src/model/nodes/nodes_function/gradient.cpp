@@ -20,8 +20,8 @@ void setup_gradient_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "dx", CONFIG2(node));
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "dy", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "dx", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "dy", CONFIG(node));
 
   setup_post_process_heightmap_attributes(node,
                                           {.add_mix = true, .remap_active_state = true});

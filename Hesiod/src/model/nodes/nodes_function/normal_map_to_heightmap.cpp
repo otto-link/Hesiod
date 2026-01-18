@@ -3,6 +3,7 @@
  * this software. */
 #include "highmap/gradient.hpp"
 #include "highmap/range.hpp"
+#include "highmap/virtual_array/virtual_texture.hpp"
 
 #include "attributes.hpp"
 
@@ -20,8 +21,8 @@ void setup_normal_map_to_heightmap_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "normal map");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
+  node.add_port<hmap::VirtualTexture>(gnode::PortType::IN, "normal map");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
   node.add_attr<BoolAttribute>("poisson_solver", "poisson_solver", false);
@@ -39,16 +40,15 @@ void compute_normal_map_to_heightmap_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::HeightmapRGBA *p_nmap = node.get_value_ref<hmap::HeightmapRGBA>("normal map");
+  hmap::VirtualTexture *p_nmap = node.get_value_ref<hmap::VirtualTexture>("normal map");
 
   if (p_nmap)
   {
     hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
     hmap::Tensor ts = hmap::Tensor(p_nmap->shape, 3);
-    ts.set_slice(0, p_nmap->rgba[0].to_array());
-    ts.set_slice(1, p_nmap->rgba[1].to_array());
-    ts.set_slice(2, p_nmap->rgba[2].to_array());
+    for (int nch = 0; nch < 3; ++nch)
+      ts.set_slice(nch, p_nmap->channel(nch).to_array(node.cfg().cm_cpu));
 
     hmap::Array z;
 
@@ -63,9 +63,8 @@ void compute_normal_map_to_heightmap_node(BaseNode &node)
       z = hmap::normal_map_to_heightmap(ts);
     }
 
-    hmap::remap(z);
-
     p_out->from_array(z, node.cfg().cm_cpu);
+    p_out->remap(0.f, 1.f, node.cfg().cm_cpu);
 
     // post-process
     post_process_heightmap(node, *p_out);

@@ -22,8 +22,8 @@ void setup_hydraulic_procedural_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "ridge_mask", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "ridge_mask", CONFIG(node));
 
   // attribute(s)
   node.add_attr<SeedAttribute>("seed", "Seed");

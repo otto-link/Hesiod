@@ -21,7 +21,7 @@ void setup_water_depth_from_mask_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "elevation");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "water_mask");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "water_depth", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "water_depth", CONFIG(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("mask_threshold",

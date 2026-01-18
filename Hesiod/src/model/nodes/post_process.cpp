@@ -68,8 +68,7 @@ void post_process_heightmap(BaseNode           &node,
         {&h, p_in},
         [t](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
         {
-          hmap::Array *pa_out = p_arrays[0];
-          hmap::Array *pa_in = p_arrays[1];
+          auto [pa_out, pa_in] = unpack<2>(p_arrays);
 
           *pa_out = hmap::lerp(*pa_in, *pa_out, t);
         },

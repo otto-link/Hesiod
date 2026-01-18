@@ -24,7 +24,7 @@ void setup_mixer_node(BaseNode &node)
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input 3");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input 4");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "t");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("gain_factor", "gain_factor", 1.f, 0.001f, 10.f);

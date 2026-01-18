@@ -20,7 +20,7 @@ void setup_brush_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "background");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "out", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "out", CONFIG(node));
 
   // attribute(s)
   node.add_attr<ArrayAttribute>("hmap", "Heightmap", hmap::Vec2<int>(512, 512));

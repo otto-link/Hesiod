@@ -22,7 +22,7 @@ void setup_blend_poisson_bf_node(BaseNode &node)
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input 1");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input 2");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
   node.add_attr<IntAttribute>("iterations", "iterations", 500, 1, INT_MAX);

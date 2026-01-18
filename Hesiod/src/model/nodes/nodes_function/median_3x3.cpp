@@ -21,7 +21,7 @@ void setup_median3x3_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
   node.add_attr<BoolAttribute>("GPU", "GPU", HSD_DEFAULT_GPU_MODE);
@@ -44,9 +44,7 @@ void compute_median3x3_node(BaseNode &node)
           {p_out, p_in, p_mask},
           [](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
           {
-            hmap::Array *pa_out = p_arrays[0];
-            hmap::Array *pa_in = p_arrays[1];
-            hmap::Array *pa_mask = p_arrays[2];
+            auto [pa_out, pa_in, pa_mask] = unpack<3>(p_arrays);
 
             *pa_out = *pa_in;
 
@@ -60,9 +58,7 @@ void compute_median3x3_node(BaseNode &node)
           {p_out, p_in, p_mask},
           [](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
           {
-            hmap::Array *pa_out = p_arrays[0];
-            hmap::Array *pa_in = p_arrays[1];
-            hmap::Array *pa_mask = p_arrays[2];
+            auto [pa_out, pa_in, pa_mask] = unpack<3>(p_arrays);
 
             *pa_out = *pa_in;
 

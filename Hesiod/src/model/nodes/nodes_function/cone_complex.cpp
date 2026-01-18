@@ -24,7 +24,7 @@ void setup_cone_complex_node(BaseNode &node)
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dy");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "control");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "envelope");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("radius", "radius", 0.5f, 0.01f, FLT_MAX);

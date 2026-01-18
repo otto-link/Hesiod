@@ -1,6 +1,8 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include "highmap/virtual_array/virtual_texture.hpp"
+
 #include "attributes.hpp"
 
 #include "hesiod/logger.hpp"
@@ -17,7 +19,7 @@ void setup_colorize_solid_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "texture", CONFIG(node));
+  node.add_port<hmap::VirtualTexture>(gnode::PortType::OUT, "texture", CONFIG_TEX(node));
 
   // attribute(s)
   node.add_attr<ColorAttribute>("color", "color", 0.5f, 0.5f, 0.5f, 1.f);
@@ -31,14 +33,14 @@ void compute_colorize_solid_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  // hmap::HeightmapRGBA *p_out = node.get_value_ref<hmap::HeightmapRGBA>("texture");
-  // std::vector<float>   col3 = node.get_attr<ColorAttribute>("color");
+  hmap::VirtualTexture *p_tex = node.get_value_ref<hmap::VirtualTexture>("texture");
+  std::vector<float>    col3 = node.get_attr<ColorAttribute>("color");
 
-  // for (int k = 0; k < 4; k++)
-  // {
-  //   float color = k < 3 ? col3[k] : node.get_attr<FloatAttribute>("alpha");
-  //   p_out->rgba[k] = hmap::VirtualArray(CONFIG2(node), color);
-  // }
+  for (int nch = 0; nch < 4; ++nch)
+  {
+    float v = nch < 3 ? col3[nch] : node.get_attr<FloatAttribute>("alpha");
+    p_tex->fill(nch, v, node.cfg().cm_cpu);
+  }
 }
 
 } // namespace hesiod

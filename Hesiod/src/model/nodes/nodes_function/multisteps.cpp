@@ -25,7 +25,7 @@ void setup_multisteps_node(BaseNode &node)
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dy");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "control");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "envelope");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("angle", "Rotation Angle", 0.f, -180.f, 180.f, "{:.1f}°");
@@ -93,10 +93,7 @@ void compute_multisteps_node(BaseNode &node)
         {p_out, p_dx, p_dy, p_ctrl},
         [&node](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &region)
         {
-          hmap::Array *pa_out = p_arrays[0];
-          hmap::Array *pa_ctrl = p_arrays[1];
-          hmap::Array *pa_dx = p_arrays[2];
-          hmap::Array *pa_dy = p_arrays[3];
+          auto [pa_out, pa_dx, pa_dy, pa_ctrl] = unpack<4>(p_arrays);
 
           *pa_out = hmap::multisteps(region.shape,
                                      node.get_attr<FloatAttribute>("angle"),

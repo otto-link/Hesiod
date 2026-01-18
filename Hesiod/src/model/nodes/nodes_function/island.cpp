@@ -24,9 +24,9 @@ void setup_island_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "land_mask");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dr");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "out", CONFIG2(node));
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "water_depth", CONFIG2(node));
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "inland_mask", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "out", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "water_depth", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "inland_mask", CONFIG(node));
 
   // attribute(s)
   std::vector<float> kw = {4.f, 4.f};

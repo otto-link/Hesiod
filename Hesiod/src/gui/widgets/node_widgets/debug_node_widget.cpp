@@ -51,23 +51,18 @@ void DebugNodeWidget::on_compute_finished()
 
   if (auto m = this->model.lock())
   {
-    hmap::Heightmap *p_in = m->get_value_ref<hmap::Heightmap>("input");
+    hmap::VirtualArray *p_in = m->get_value_ref<hmap::VirtualArray>("input");
 
     std::string msg = "input:\n";
 
     if (p_in)
     {
-      float min = p_in->min();
-      float max = p_in->max();
+      float min = p_in->min(m->cfg().cm_cpu);
+      float max = p_in->max(m->cfg().cm_cpu);
 
       msg += "- addr: " + ptr_as_string((void *)(p_in)) + "\n";
       msg += "- min: " + std::to_string(min) + "\n";
       msg += "- max: " + std::to_string(max) + "\n";
-      msg += "- shape.x: " + std::to_string(p_in->shape.x) + "\n";
-      msg += "- shape.y: " + std::to_string(p_in->shape.y) + "\n";
-      msg += "- tiling.x: " + std::to_string(p_in->tiling.x) + "\n";
-      msg += "- tiling.y: " + std::to_string(p_in->tiling.y) + "\n";
-      msg += "- overlap: " + std::to_string(p_in->overlap) + "\n";
     }
     else
     {

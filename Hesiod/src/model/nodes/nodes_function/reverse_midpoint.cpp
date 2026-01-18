@@ -20,7 +20,7 @@ void setup_reverse_midpoint_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::Path>(gnode::PortType::IN, "path");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "heightmap", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "heightmap", CONFIG(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("noise_scale", "noise_scale", 1.f, 0.01f, 2.f);

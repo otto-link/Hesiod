@@ -20,8 +20,8 @@ void setup_rotate_displacement_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "delta");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "dx", CONFIG2(node));
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "dy", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "dx", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "dy", CONFIG(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("angle", "angle", 0.f, -180.f, 180.f);

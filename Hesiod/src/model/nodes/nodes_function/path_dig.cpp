@@ -21,7 +21,7 @@ void setup_path_dig_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::Path>(gnode::PortType::IN, "path");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("width", "width", 0.001f, 0.f, 0.1f);

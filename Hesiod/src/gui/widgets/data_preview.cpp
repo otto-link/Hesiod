@@ -164,7 +164,7 @@ void DataPreview::update_preview()
             blind_ptr);
         if (p_va)
         {
-          array = p_va->to_array(shape, p_model->get_config_ref()->cm_cpu);
+          array = p_va->to_array(shape, p_model->cfg().cm_cpu);
         }
         else
           Logger::log()->error("DataPreview::update_preview: VirtualArray nullptr");
@@ -202,18 +202,18 @@ void DataPreview::update_preview()
         break;
       }
     }
-    // ---- RGBA ----
-    else if (data_type == typeid(hmap::HeightmapRGBA).name())
+    // ---- Texture ----
+    else if (data_type == typeid(hmap::VirtualTexture).name())
     {
-      const hmap::HeightmapRGBA *p_h = static_cast<const hmap::HeightmapRGBA *>(
+      const hmap::VirtualTexture *p_h = static_cast<const hmap::VirtualTexture *>(
           blind_ptr);
       if (p_h)
       {
-        img = p_h->to_img_8bit(shape);
+        img = p_h->to_img_8bit(shape, p_model->cfg().cm_cpu);
         img_format = QImage::Format_RGBA8888;
       }
       else
-        Logger::log()->error("DataPreview::update_preview: HeightmapRGBA nullptr");
+        Logger::log()->error("DataPreview::update_preview: VirtualTexture nullptr");
     }
     // ---- Cloud ----
     else if (data_type == typeid(hmap::Cloud).name())

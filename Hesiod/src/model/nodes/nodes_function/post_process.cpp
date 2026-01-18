@@ -21,7 +21,7 @@ void setup_post_process_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "in");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "out", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "out", CONFIG(node));
 
   // attribute(s)
 

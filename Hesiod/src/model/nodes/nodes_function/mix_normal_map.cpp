@@ -2,11 +2,11 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include "highmap/kernels.hpp"
+#include "highmap/virtual_array/virtual_texture.hpp"
 
 #include "attributes.hpp"
 
 #include "hesiod/logger.hpp"
-#include "hesiod/model/constants/cmap.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
 
@@ -20,9 +20,11 @@ void setup_mix_normal_map_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "normal map base");
-  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::IN, "normal map detail");
-  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "normal map", CONFIG(node));
+  node.add_port<hmap::VirtualTexture>(gnode::PortType::IN, "normal map base");
+  node.add_port<hmap::VirtualTexture>(gnode::PortType::IN, "normal map detail");
+  node.add_port<hmap::VirtualTexture>(gnode::PortType::OUT,
+                                      "normal map",
+                                      CONFIG_TEX(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("detail_scaling", "detail_scaling", 1.f, 0.f, 4.f);
@@ -38,20 +40,23 @@ void compute_mix_normal_map_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  // hmap::HeightmapRGBA *p_in1 = node.get_value_ref<hmap::HeightmapRGBA>("normal map
-  // base"); hmap::HeightmapRGBA *p_in2 = node.get_value_ref<hmap::HeightmapRGBA>(
-  //     "normal map detail");
+  hmap::VirtualTexture *p_in1 = node.get_value_ref<hmap::VirtualTexture>(
+      "normal map base");
+  hmap::VirtualTexture *p_in2 = node.get_value_ref<hmap::VirtualTexture>(
+      "normal map detail");
 
-  // if (p_in1 && p_in2)
-  // {
-  //   hmap::HeightmapRGBA *p_out = node.get_value_ref<hmap::HeightmapRGBA>("normal map");
+  if (p_in1 && p_in2)
+  {
+    hmap::VirtualTexture *p_out = node.get_value_ref<hmap::VirtualTexture>("normal map");
 
-  //   *p_out = hmap::mix_normal_map_rgba(
-  //       *p_in1,
-  //       *p_in2,
-  //       node.get_attr<FloatAttribute>("detail_scaling"),
-  //       (hmap::NormalMapBlendingMethod)node.get_attr<EnumAttribute>("blending_method"));
-  // }
+    hmap::mix_normal_map(
+        *p_out,
+        *p_in1,
+        *p_in2,
+        node.cfg().cm_cpu,
+        node.get_attr<FloatAttribute>("detail_scaling"),
+        (hmap::NormalMapBlendingMethod)node.get_attr<EnumAttribute>("blending_method"));
+  }
 }
 
 } // namespace hesiod

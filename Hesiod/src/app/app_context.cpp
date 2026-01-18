@@ -80,7 +80,7 @@ void AppContext::new_project()
   Logger::log()->trace("AppContext::new_project");
   this->project_model = std::make_unique<ProjectModel>();
 }
-  
+
 void AppContext::reset_settings()
 {
   // reset to default values
@@ -107,7 +107,7 @@ void AppContext::save_settings() const
   bool        merge_with_existing_content = true;
   json_to_file(json, fname, merge_with_existing_content);
 }
-  
+
 void AppContext::settings_json_from(nlohmann::json const &json)
 {
   Logger::log()->trace("AppContext::settings_json_from");
@@ -135,7 +135,7 @@ nlohmann::json AppContext::settings_json_to() const
   json["style_settings"] = this->style_settings.json_to();
   return json;
 }
-  
+
 // --- HELPERS ---
 
 std::string get_config_file_path(const QString &app_name, bool portable_mode)

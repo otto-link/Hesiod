@@ -20,9 +20,9 @@ void setup_select_multiband3_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "low", CONFIG2(node));
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "mid", CONFIG2(node));
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "high", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "low", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "mid", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "high", CONFIG(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("ratio1", "ratio1", 0.2f, 0.f, 1.f);

@@ -1,6 +1,8 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include "highmap/virtual_array/virtual_texture.hpp"
+
 #include "attributes.hpp"
 
 #include "hesiod/logger.hpp"
@@ -21,50 +23,38 @@ void setup_heightmap_to_rgba_node(BaseNode &node)
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "G");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "B");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "A");
-  node.add_port<hmap::HeightmapRGBA>(gnode::PortType::OUT, "RGBA", CONFIG(node));
+  node.add_port<hmap::VirtualTexture>(gnode::PortType::OUT, "RGBA", CONFIG_TEX(node));
 }
 
 void compute_heightmap_to_rgba_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  // hmap::VirtualArray *p_r = node.get_value_ref<hmap::VirtualArray>("R");
-  // hmap::VirtualArray *p_g = node.get_value_ref<hmap::VirtualArray>("G");
-  // hmap::VirtualArray *p_b = node.get_value_ref<hmap::VirtualArray>("B");
-  // hmap::VirtualArray *p_a = node.get_value_ref<hmap::VirtualArray>("A");
+  hmap::VirtualArray *p_r = node.get_value_ref<hmap::VirtualArray>("R");
+  hmap::VirtualArray *p_g = node.get_value_ref<hmap::VirtualArray>("G");
+  hmap::VirtualArray *p_b = node.get_value_ref<hmap::VirtualArray>("B");
+  hmap::VirtualArray *p_a = node.get_value_ref<hmap::VirtualArray>("A");
 
-  // if (p_r || p_g || p_b || p_a)
-  // {
-  //   hmap::HeightmapRGBA *p_out = node.get_value_ref<hmap::HeightmapRGBA>("RGBA");
+  if (p_r || p_g || p_b || p_a)
+  {
+    hmap::VirtualTexture *p_tex = node.get_value_ref<hmap::VirtualTexture>("RGBA");
 
-  //   hmap::Vec2<int> shape;
-  //   hmap::Vec2<int> tiling;
-  //   float           overlap = 0.f;
+    // clear texture
+    for (int nch = 0; nch < p_tex->channels(); ++nch)
+    {
+      float v = nch == 3 ? 1.f : 0.f;
+      p_tex->fill(nch, v, node.cfg().cm_cpu);
+    }
 
-  //   for (auto ptr : {p_r, p_g, p_b, p_a})
-  //     if (ptr)
-  //     {
-  //       shape = ptr->shape;
-  //       tiling = ptr->tiling;
-  //       overlap = ptr->overlap;
-  //       break;
-  //     }
-
-  //   hmap::VirtualArray hr = p_r == nullptr
-  //                               ? hmap::VirtualArray(shape, tiling, overlap, 0.f)
-  //                               : *p_r;
-  //   hmap::VirtualArray hg = p_g == nullptr
-  //                               ? hmap::VirtualArray(shape, tiling, overlap, 0.f)
-  //                               : *p_g;
-  //   hmap::VirtualArray hb = p_b == nullptr
-  //                               ? hmap::VirtualArray(shape, tiling, overlap, 0.f)
-  //                               : *p_b;
-  //   hmap::VirtualArray ha = p_a == nullptr
-  //                               ? hmap::VirtualArray(shape, tiling, overlap, 1.f)
-  //                               : *p_a;
-
-  //   *p_out = hmap::HeightmapRGBA(hr, hg, hb, ha);
-  // }
+    if (p_r)
+      p_tex->channel(0).copy_from(*p_r, node.cfg().cm_cpu);
+    if (p_g)
+      p_tex->channel(1).copy_from(*p_g, node.cfg().cm_cpu);
+    if (p_b)
+      p_tex->channel(2).copy_from(*p_b, node.cfg().cm_cpu);
+    if (p_a)
+      p_tex->channel(3).copy_from(*p_a, node.cfg().cm_cpu);
+  }
 }
 
 } // namespace hesiod

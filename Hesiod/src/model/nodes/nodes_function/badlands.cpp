@@ -23,7 +23,7 @@ void setup_badlands_node(BaseNode &node)
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dx");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dy");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "envelope");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "out", CONFIG2(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "out", CONFIG(node));
 
   // attribute(s)
   node.add_attr<FloatAttribute>("elevation", "elevation", 0.4f, 0.f, 1.f);
