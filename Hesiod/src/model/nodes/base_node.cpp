@@ -9,7 +9,6 @@
 
 #include "highmap/geometry/cloud.hpp"
 #include "highmap/geometry/path.hpp"
-#include "highmap/heightmap.hpp"
 #include "highmap/virtual_array/virtual_array.hpp"
 
 #include "attributes/seed_attribute.hpp"

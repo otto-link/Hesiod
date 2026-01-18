@@ -6,7 +6,6 @@
 #include "nlohmann/json.hpp"
 
 #include "highmap/algebra.hpp"
-#include "highmap/heightmap.hpp"
 #include "highmap/virtual_array/virtual_array.hpp"
 
 namespace hesiod
